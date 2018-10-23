@@ -1,0 +1,8 @@
+build/
+coverage/
+lib/
+dist/
+mocks/
+node_modules/
+demos/assets/
+demos/index.html

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>hexagon demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'amap://styles/5a64d4f1af910091f9cc3367dfc4a1dc', // 样式URL
+  center: [ 116.2825, 39.9 ],
+  pitch: 0,
+  zoom: 3
+});
+scene.on('load', () => {
+  $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
+    scene.LineLayer({
+      zIndex: 2
+    })
+     .source(data, { // lng1,lat1,lng2,lat2
+       type: 'csv',
+       x: 'lng1',
+       y: 'lat1',
+       x1: 'lng2',
+       y1: 'lat2'
+     })
+    .shape('arc')
+    .size(2.0)
+    .color('value', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    .render();
+  });
+});
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+
+  <title>hexagon demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id = 'gui' style="position:absolute;top:0px;right:0px;z-index:2;"></div>
+<div id="map"></div>
+ <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+const gui = new dat.GUI({ autoPlace: false });
+const customContainer = document.getElementById('gui');
+customContainer.appendChild(gui.domElement);
+const province = { 全国: '00', 新疆维吾尔自治区: '65', 西藏自治区: '54', 内蒙古自治区: '15', 青海省: '63', 四川省: '51', 黑龙江省: '23', 甘肃省: '62', 云南省: '53', 广西壮族自治区: '45', 湖南省: '43', 陕西省: '61', 广东省: '44', 吉林省: '22', 河北省: '13', 湖北省: '42', 贵州省: '52', 山东省: '37', 江西省: '36', 河南省: '41', 辽宁省: '21', 山西省: '14', 安徽省: '34', 福建省: '35', 浙江省: '33', 江苏省: '32', 重庆市: '50', 宁夏回族自治区: '64', 海南省: '46', 台湾省: '71', 北京市: '11', 天津市: '12', 上海市: '31', 香港特别行政区: '81', 澳门特别行政区: '82' };
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'amap://styles/5a64d4f1af910091f9cc3367dfc4a1dc', // 样式URL
+  center: [ 120.4047, 30.0679 ],
+  pitch: 0,
+  zoom: 4
+
+});
+window.scene = scene;
+scene.on('load', () => {
+
+  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
+    citylayer = scene.PolygonLayer()
+    .source(city)
+    .color('pm2_5_24h', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    .shape('fill')
+   // .active({ fill: 'red' })
+    .style({
+      opacity: 1
+    })
+    .render();
+  });
+});
+
+</script>
+</body>
+</html>
+
