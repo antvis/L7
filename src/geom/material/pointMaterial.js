@@ -18,5 +18,8 @@ export default function PointMaterial(options) {
       TEXCOORD_0: !!options.u_texture
     }
   });
+  if (options.shape === false) {
+    material.blending = THREE.AdditiveBlending;
+  }
   return material;
 }

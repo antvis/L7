@@ -18,9 +18,8 @@ export class RasterBuffer extends BufferBase {
     const size = this.get('size');
     const texture = new THREE.DataTexture(new Float32Array(raster.data), raster.width, raster.height, THREE.LuminanceFormat, THREE.FloatType);
     texture.generateMipmaps = true;
-    // texture.minFilter = THREE.NearestFilter;
     texture.needsUpdate = true;
-    const colors = this.get('rampColors') || defaultRampColors;
+    const colors = this.get('rampColors');
     const colorImageData = this.getColorRamp(colors);
     const colorTexture = this._getTexture(colorImageData);
     this.bufferStruct.position = positions;
@@ -29,7 +28,7 @@ export class RasterBuffer extends BufferBase {
     this.bufferStruct.u_extent = [ coordinates[0][0], coordinates[0][1], coordinates[1][0], coordinates[1][1] ];
 
     this.bufferStruct.u_colorTexture = colorTexture; // 颜色表‘=
-    const triangles = this._buildTriangles(raster, size);
+    const triangles = this._buildTriangles(raster, size, this.bufferStruct.u_extent);
     const attributes = {
       vertices: new Float32Array(triangles.vertices),
       uvs: new Float32Array(triangles.uvs),
@@ -79,39 +78,35 @@ export class RasterBuffer extends BufferBase {
     texture1.needsUpdate = true;
     return texture1;
   }
-  _buildTriangles(raster, size = 1) {
+  _buildTriangles(raster, size = 1, extent) {
+    // const extent = [ 73.482190241, 3.82501784112, 135.106618732, 57.6300459963 ]
     const { width, height } = raster;
-    const halfSize = size / 2;
     const indices = [];
     const vertices = [];
-    const normals = [];
     const uvs = [];
-
     const gridX = Math.floor(width / size);
     const gridY = Math.floor(height / size);
     const gridX1 = gridX + 1;
     const gridY1 = gridY + 1;
+    const stepX = (extent[2] - extent[0]) / gridX1;
+    const stepY = (extent[3] - extent[1]) / gridY1;
     for (let i = 0; i < gridY1; i++) {
-      const y = i * size - halfSize;
+      const y = i * size;
       for (let j = 0; j < gridX1; j++) {
-        const x = j * size - halfSize;
-        vertices.push(x / gridX, -y / gridY, 0);
+        const x = j * size;
+        vertices.push(extent[0] + x * stepX, (height - y) * stepY + extent[1], 0);
         uvs.push(j / gridX);
-			  uvs.push(i / gridY);
+        uvs.push(i / gridY);
       }
     }
-
     for (let iy = 0; iy < gridY; iy++) {
-
       for (let ix = 0; ix < gridX; ix++) {
-
         const a = ix + gridX1 * iy;
         const b = ix + gridX1 * (iy + 1);
         const c = (ix + 1) + gridX1 * (iy + 1);
         const d = (ix + 1) + gridX1 * iy;
         indices.push(a, b, d);
         indices.push(b, c, d);
-
       }
 
     }

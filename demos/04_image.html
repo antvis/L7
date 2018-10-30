@@ -14,30 +14,42 @@
 </head>
 
 <body>
-<div id = 'gui' style="position:absolute;top:0px;right:0px;z-index:2;"></div>
 <div id="map"></div>
  <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
-<script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-const gui = new dat.GUI({ autoPlace: false });
-const customContainer = document.getElementById('gui');
-customContainer.appendChild(gui.domElement);
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'amap://styles/ba3e9759545cd618392ef073c0dfda8c?isPublic=true', // 样式URL
-  center: [ 120.4047, 30.0679 ],
+  mapStyle: 'dark', // 样式URL
+  center: [ 110.770672, 34.159869 ],
   pitch: 45,
-  zoom: 4
+  zoom: 5,
+  minZoom: 4,
+  maxZoom: 10
 });
 
 scene.on('load', () => {
+  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
+    citylayer = scene.PolygonLayer({
+      zIndex: 10
+    })
+    .source(city)
+    .color('#fff')
+    .shape('line')
+   // .active({ fill: 'red' })
+    .style({
+      opacity: 1
+    })
+    .render();
+  });
+// https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png
   const imageLayer = scene.ImageLayer().
       source({
         url: 'https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png',
         extent: [ 73, 18, 136, 54 ]
+
       })
       .render();
 

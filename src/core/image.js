@@ -1,15 +1,16 @@
 import * as THREE from './three';
+import EventEmitter from 'wolfy87-eventemitter';
 import { getImage } from '../util/ajax';
-export default class LoadImage {
+export default class LoadImage extends EventEmitter {
   constructor() {
-
+    super();
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.imageWidth = 64;
     this.canvas.width = this.imageWidth * 8;
     this.canvas.height = this.imageWidth * 8;
     this.images = [];
-    this.imagesCount = -1;
+    this.imagesCount = 0;
     this.imagePos = {};
   }
   addImage(id, opt) {
@@ -29,6 +30,9 @@ export default class LoadImage {
         texture.needsUpdate = true;
         this.texture = texture;
         this.imagePos[id] = { x: x / 512, y: y / 512 };
+        if (this.images.length === this.imagesCount) {
+          this.emit('imageLoaded');
+        }
       });
     } else {
       const { width, height, channels } = opt;
@@ -40,8 +44,11 @@ export default class LoadImage {
       image.id = id;
       this.images.push(image);
       this.ctx.drawImage(image, x, y, 64, 64);
-      this.texture = new CanvasTexture(this.canvas);
+      this.texture = new THREE.CanvasTexture(this.canvas);
       this.imagePos[id] = { x: x >> 9, y: y >> 9 };
+      if (this.images.length === this.imagesCount) {
+        this.emit('imageLoaded');
+      }
     }
 
   }

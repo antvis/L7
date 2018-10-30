@@ -5,7 +5,6 @@ import Base from './base';
 import LoadImage from './image';
 import Utils from '../util';
 import { MapProvider } from '../map/provider';
-import { MapBox } from '../map/mapbox';
 import AMap from '../map/AMap';
 import Global from '../global';
 export default class Scene extends Base {
@@ -28,26 +27,19 @@ export default class Scene extends Base {
     this._engine._picking.add(object);
   }
   _initMap() {
-    const mapType = this.mapType = this.get('mapType');
     this.mapContainer = this.get('id');
     this._container = document.getElementById(this.mapContainer);
-    let Map = null;
-    if (mapType === 'mapbox') {
-      Map = new MapBox(this.mapContainer, this.get('map'));
-
-    } else {
-      Map = new MapProvider(this.mapContainer, this._attrs);
-    }
+    const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.on('mapLoad', () => {
       this._initEngine(Map.renderDom);
       const sceneMap = new AMap(Map.map);
+      // eslint-disable-next-line
       Utils.assign(this.__proto__, sceneMap.__proto__);
       this.map = Map.map;
       Map.asyncCamera(this._engine);
-            // this._addLight();
       this.initLayer();
-        //   this.zoomAsync();
       this.emit('load');
+      this.emit('loaded');
     });
 
   }

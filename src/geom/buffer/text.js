@@ -1,7 +1,6 @@
 import BufferBase from './bufferBase';
-import { Texture2D } from '../../core/three';
-import { TextureFilter, TextureWrapMode } from '@ali/r3-base';
 import { getJSON, getImage } from '../../util/ajax';
+import * as THREE from '../../core/three';
 import Global from '../../global';
 const Space = 1;
 export default class TextBuffer extends BufferBase {
@@ -14,13 +13,10 @@ export default class TextBuffer extends BufferBase {
     };
     const coordinates = this.get('coordinates');
     const properties = this.get('properties');
-    const style = this.get('style');
-    const { size = 24 } = style;
     const chars = [];
-    const positions = [];
-    const uvs = [];
     properties.forEach(element => {
       const text = element.shape;
+
       for (let j = 0; j < text.length; j++) {
         const code = text.charCodeAt(j);
         if (chars.indexOf(code) === -1) {
@@ -29,30 +25,32 @@ export default class TextBuffer extends BufferBase {
       }
     });
     this.on('SourceLoaded', () => {
-      let indexCount = 0;
+      const textureElements = [];
+      const colors = [];
+      const originPoints = [];
+      const textSizes = [];
+      const textOffsets = [];
       properties.forEach((element, index) => {
         const text = element.shape;
-
+        const size = element.size;
         const pos = coordinates[index];
-        const dimensions = this._measureText(text, size);
         // const pen = { x: pos[0] - dimensions.advance / 2, y: pos[1] };
-        const pen = { x: pos[0], y: pos[1] };
-        const vertexElements = [];
-        const textureElements = [];
+        const pen = { x: 0, y: 0 };
         for (let i = 0; i < text.length; i++) {
           const chr = text.charCodeAt(i);
-          const offset = dimensions.advance / text.length * i;
-          this._drawGlyph(chr, pen, size, vertexElements, textureElements, offset);
-        }
 
-        uvs.push(textureElements);
-        indexCount += vertexElements.length;
-        positions.push(vertexElements);
+          const color = element.color;
+          this._drawGlyph(pos, chr, pen, size, colors, textureElements, originPoints, textSizes, textOffsets, color);
+        }
       });
-      this.bufferStruct.uv = uvs;
-      this.bufferStruct.position = positions;
       this.bufferStruct.style = properties;
-      this.bufferStruct.indexCount = indexCount;
+      this.attributes = {
+        originPoints,
+        textSizes,
+        textOffsets,
+        colors,
+        textureElements
+      };
       this.emit('completed');
     });
     this._loadTextInfo(chars);
@@ -75,19 +73,32 @@ export default class TextBuffer extends BufferBase {
       this.emit('SourceLoaded');
     });
   }
-  _drawGlyph(chr, pen, size, vertexElements, textureElements, offset) {
+  /**
+   * 计算每个标注词语的位置
+   * @param {*} pos 文字三维空间坐标
+   * @param {*} chr 字符
+   * @param {*} pen 字符在词语的偏移量
+   * @param {*} size 字体大小
+   * @param {*} colors 颜色
+   * @param {*} textureElements  纹理坐标
+   * @param {*} originPoints 初始位置数据
+   * @param {*} textSizes 文字大小数组
+   * @param {*} textOffsets 字体偏移量数据
+   * @param {*} color 文字颜色
+   */
+  _drawGlyph(pos, chr, pen, size, colors, textureElements, originPoints, textSizes, textOffsets, color) {
     const metrics = this.metrics;
     const metric = metrics.chars[chr];
     if (!metric) return;
 
     const scale = size / metrics.size;
 
-    const factor = 1;
-
     let width = metric[0];
     let height = metric[1];
+
     const horiBearingX = metric[2];
     const horiBearingY = metric[3];
+
     const horiAdvance = metric[4];
     const posX = metric[5];
     const posY = metric[6];
@@ -98,35 +109,66 @@ export default class TextBuffer extends BufferBase {
       width += buffer * 2;
       height += buffer * 2;
 
-            // Add a quad (= two triangles) per glyph.
-      const w1 = (horiBearingX - buffer) * scale + offset;
-      const w2 = (horiBearingX - buffer + width) * scale + offset;
-      const h1 = -horiBearingY * scale;
-      const h2 = (height - horiBearingY) * scale;
-      vertexElements.push(
-                [ (factor * (pen.x + w1)), (factor * (pen.y + h1)), w1, h1 ],
-                [ (factor * (pen.x + w2)), (factor * (pen.y + h1)), w2, h1 ],
-                [ (factor * (pen.x + w1)), (factor * (pen.y + h2)), w1, h2 ],
+    // Add a quad (= two triangles) per glyph.
+      const originX = (horiBearingX - buffer + width / 2) * scale;
+      // const originY = -(height / 2  - horiBearingY) * scale;
+      const originY = (height / 2 - horiBearingY) * scale;
+      // const originY = 0;
+      const offsetWidth = width / 2 * scale / (1.0 - horiBearingX * 1.5 / horiAdvance);
+      const offsetHeight = (horiAdvance / 2) * scale;
 
-                [ (factor * (pen.x + w2)), (factor * (pen.y + h1)), w2, h1 ],
-                [ (factor * (pen.x + w1)), (factor * (pen.y + h2)), w1, h2 ],
-                [ (factor * (pen.x + w2)), (factor * (pen.y + h2)), w2, h2 ]
-            );
+      const offsetX = pen.x;
+      const offsetY = pen.y;
+      originPoints.push(
+      pos[0] + originX, pos[1] + originY, 0,
+      pos[0] + originX, pos[1] + originY, 0,
+      pos[0] + originX, pos[1] + originY, 0,
+      pos[0] + originX, pos[1] + originY, 0,
+      pos[0] + originX, pos[1] + originY, 0,
+      pos[0] + originX, pos[1] + originY, 0,
+   );
 
+      textSizes.push(
+      offsetWidth, offsetHeight,
+      -offsetWidth, offsetHeight,
+      -offsetWidth, -offsetHeight,
+      offsetWidth, offsetHeight,
+      -offsetWidth, -offsetHeight,
+      offsetWidth, -offsetHeight,
+      );
+      textOffsets.push(
+      offsetX, offsetY,
+      offsetX, offsetY,
+      offsetX, offsetY,
+      offsetX, offsetY,
+      offsetX, offsetY,
+      offsetX, offsetY,
+    );
+
+      colors.push(
+      ...color,
+      ...color,
+      ...color,
+      ...color,
+      ...color,
+      ...color,
+    );
       textureElements.push(
-                [ posX, posY + height ],
-                [ posX + width, posY + height ],
-                [ posX, posY ],
 
-                [ posX + width, posY + height ],
-                [ posX, posY ],
-                [ posX + width, posY ]
-            );
+        posX + width, posY,
+        posX, posY,
+        posX, posY + height,
+
+        posX + width, posY,
+        posX, posY + height,
+        posX + width, posY + height
+      );
     }
 
     pen.x = pen.x + (horiAdvance + Space) * scale;
 
   }
+
 
   _measureText(text, size) {
     const dimensions = {
@@ -145,13 +187,10 @@ export default class TextBuffer extends BufferBase {
   }
   _creatTexture(image) {
     this.bufferStruct.textSize = [ image.width, image.height ];
-    const texture = new Texture2D('textTexure', image, {
-      magFilter: TextureFilter.LINEAR,
-      minFilter: TextureFilter.LINEAR,
-      wrapS: TextureWrapMode.CLAMP_TO_EDGE,
-      wrapT: TextureWrapMode.CLAMP_TO_EDGE
-    });
+    const texture = new THREE.Texture(image);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.needsUpdate = true;
     return texture;
   }
-
 }

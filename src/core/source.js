@@ -2,12 +2,11 @@
  * @Author: ThinkGIS
  * @Date: 2018-06-08 11:19:06
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-10-23 16:20:56
+ * @Last Modified time: 2018-10-30 11:13:39
  */
 const Base = require('./base');
 const Controller = require('./controller/index');
 import { aProjectFlat } from '../geo/project';
-const MAXZOOM = 0;
 export default class Source extends Base {
   getDefaultCfg() {
     return {
@@ -83,14 +82,9 @@ export default class Source extends Base {
     });
   }
   _coorConvert(geo) {
-    const maptype = this.get('mapType');
-    if (maptype === 'AMAP') {
-      const ll = aProjectFlat(geo);
-      return [ ll.x, -ll.y, geo[2] || 0 ];
-    }
 
-    // const ll = projectFlat(geo, Math.pow(2, MAXZOOM));
-    // return [ ll[0], -ll[1], geo[2] || 0 ];
+    const ll = aProjectFlat(geo);
+    return [ ll.x, -ll.y, geo[2] || 0 ];
 
   }
 

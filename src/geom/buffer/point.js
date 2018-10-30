@@ -22,7 +22,7 @@ export default class PointBuffer extends BufferBase {
       case 'Model':this._ModelBuffer();
         break;
       default:
-        this._3dRegularBuffer();
+        this._2dRegularBuffer();
 
     }
   }

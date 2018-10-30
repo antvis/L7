@@ -69,24 +69,12 @@ export default class BufferBase extends Base {
     const normals = new Float32Array(indexCount * 3);
     const colors = new Float32Array(indexCount * 4);
     const pickingIds = new Float32Array(indexCount);
-
-   // TODO:拾取
-   // const pickingIds;
-   // if (polygon.pickingId) {
-   //   // One component per vertex per face (1 x 3 = 3)
-   //   pickingIds = new Float32Array(polygon.facesCount * 3);
-   // }
-
     const pA = new THREE.Vector3();
     const pB = new THREE.Vector3();
     const pC = new THREE.Vector3();
 
     const cb = new THREE.Vector3();
     const ab = new THREE.Vector3();
-
-    let index;
-
-
     let lastIndex = 0;
     indices.forEach((indice, pIndex) => {
       for (let i = 0; i < indice.length / 3; i++) {
@@ -188,7 +176,6 @@ export default class BufferBase extends Base {
     return attributes;
   }
   _toPolygonLineAttributes(polygonline) {
-    console.log(polygonline);
     const { style, indices, position, indexCount } = polygonline;
     const vertices = new Float32Array(indexCount * 3);
     const colors = new Float32Array(indexCount * 4);

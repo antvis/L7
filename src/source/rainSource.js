@@ -10,7 +10,6 @@ export class RainSource extends imageSource {
     this._loadData();
   }
   _genaratePoints() {
-    const extent = this.get('extent');
     const numParticles = 512 * 512;
 
     const particleRes = this.particleRes = Math.ceil(Math.sqrt(numParticles));

@@ -20,13 +20,12 @@
 <script src="../build/L7.js"></script>
 <script>
 
-const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'amap://styles/5a64d4f1af910091f9cc3367dfc4a1dc', // 样式URL
+  mapStyle: 'light', // 样式URL
   center: [ 120.19382669582967, 30.258134 ],
   pitch: 0,
-  zoom: 12.6
+  zoom: 14.6
 });
 window.scene = scene;
 scene.on('load', () => {
@@ -36,11 +35,11 @@ scene.on('load', () => {
     })
     .source(data)
     .shape('2d:circle')
-    .size('value', [ 8, 80 ]) // default 1
+    .size('value', [ 8, 500 ]) // default 1
     .filter('value', field_8 => {
       return field_8 * 1 > 500;
     })
-    .color('type', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    .color('type', [ '#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404' ].reverse())
     .style({
       stroke: 'rgb(255,255,255)',
       strokeWidth: 1,

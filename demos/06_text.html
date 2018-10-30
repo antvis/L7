@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
-  <title>hexagon demo</title>
+  <title>point_circle</title>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
@@ -20,24 +20,30 @@
 <script src="../build/L7.js"></script>
 <script>
 
-const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 116.2825, 39.9 ],
+  center: [ 120.19382669582967, 30.258134 ],
   pitch: 0,
-  zoom: 5,
-  minZoom: 5,
-  maxZoom: 10
+  zoom: 3
 });
+window.scene = scene;
 scene.on('load', () => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/lZGtNaYGNHtAIkcjVvfp.json', data => {
-    scene.LineLayer({
+  $.get('./data/provincePoint.geojson', data => {
+    scene.PointLayer({
       zIndex: 2
     })
-     .source(data)
-    .color('#3CB4F0')
-    .render();
+    .source(data)
+    .shape('name', 'text')
+    .size(10) // default 1
+    .color('name', [ '#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404' ].reverse())
+    .style({
+      stroke: '#999',
+      strokeWidth: 2,
+      color: '#fff',
+      opacity: 0.9
+    })
+     .render();
   });
 });
 

@@ -1,5 +1,6 @@
 import Source from '../core/source';
 import FeatureIndex from '../geo/featureIndex';
+import Util from '../util';
 import { csvParse } from 'd3-dsv';
 export default class CSVSource extends Source {
   prepareData() {
@@ -10,7 +11,8 @@ export default class CSVSource extends Source {
     const y1 = this.get('y1');
     this.propertiesData = [];// 临时使用
     this.geoData = [];
-    const csvdata = csvParse(data);
+    let csvdata = data;
+    Util.isArray(csvdata) || (csvdata = csvParse(data));
     this.propertiesData = csvdata;
     csvdata.forEach((col, featureIndex) => {
 

@@ -60,14 +60,14 @@ export default class Layer extends Base {
     this.layerId = layerId;
     this._activeIds = null;
     // todo 用户参数
-    this._object3D.position.z = layerId * 1000;
+    this._object3D.position.z = layerId;
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
 
   }
   /**
-   * 将图层添加加到Object
-   * @param {*} object
+   * 将图层添加加到 Object
+   * @param {*} object three 物体
    */
   add(object) {
     this.layerMesh = object;
@@ -136,7 +136,7 @@ export default class Layer extends Base {
   }
 
   style(field, cfg) {
-    const colorItem = [ 'fill', 'stroke' ];
+    const colorItem = [ 'fill', 'stroke', 'color' ];
     let styleOptions = this.get('styleOptions');
     if (!styleOptions) {
       styleOptions = {};
@@ -153,7 +153,7 @@ export default class Layer extends Base {
     styleOptions.fields = fields;
     Util.assign(styleOptions, cfg);
     for (const item in cfg) {
-      if (colorItem.indexOf(item) != -1) {
+      if (colorItem.indexOf(item) !== -1) {
         styleOptions[item] = ColorUtil.color2RGBA(styleOptions[item]);
       }
       styleOptions[item] = styleOptions[item];
@@ -474,6 +474,9 @@ export default class Layer extends Base {
       filterData.forEach((item,index)=>{
         const color = [ ...this.StyleData[index].color ];
         if (item.hasOwnProperty('filter') && item.filter === false) {
+          color[0] = 0;
+          color[1] = 0;
+          color[2] = 0;
           color[3] = 0;
         }
           colorAttr.array[index*4+0]=color[0];
