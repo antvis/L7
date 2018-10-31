@@ -29,16 +29,6 @@ class Base extends EventEmitter {
   set(name, value) {
     this._attrs[name] = value;
   }
-
-  /**
-   * @protected
-   * @param {Boolean} visible 是否可见
-   * 显示、隐藏
-   */
-  changeVisible(/* visible */) {
-
-  }
-
   destroy() {
     this._attrs = {};
     this.removeAllListeners();
