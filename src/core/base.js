@@ -3,8 +3,8 @@
  * @author dxq613@gmail.com
  */
 
-const EventEmitter = require('wolfy87-eventemitter');
-const Util = require('../util');
+import EventEmitter from 'wolfy87-eventemitter';
+import Util from '../util';
 
 class Base extends EventEmitter {
 
@@ -46,4 +46,4 @@ class Base extends EventEmitter {
   }
 }
 
-module.exports = Base;
+export default Base;

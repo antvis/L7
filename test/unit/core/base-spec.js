@@ -1,6 +1,8 @@
- const expect = require('chai').expect;
+import {
+  expect
+} from 'chai';
+import Base from '../../../src/core/base';
 
-const Base = require('../../../src/core/base');
 describe('core base Test', function() {
   const base1 = new Base();
   it('test getDefaultcfg', function() {

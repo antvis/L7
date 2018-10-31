@@ -3,12 +3,6 @@
     "transform-remove-strict-mode"
   ],
   "presets": [
-    [
-      "env",
-      {
-        "loose": true,
-        "modules": false
-      }
-    ]
+    "@babel/preset-env"
   ]
 }
