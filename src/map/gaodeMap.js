@@ -55,7 +55,7 @@ export default class GaodeMap {
 
   }
   containerToLngLat(pixel) {
-    const ll = new AMap.Pixel(pixel.x,pixel.y);
+    const ll = new AMap.Pixel(pixel.x, pixel.y);
     return this.map.containerToLngLat(ll);
   }
   setMapStyle(style) {

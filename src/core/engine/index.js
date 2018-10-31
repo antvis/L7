@@ -28,9 +28,9 @@ export default class Engine extends EventEmitter {
 
   }
   run() {
-    
-      this.update();
-      this.engineID = requestAnimationFrame(this.run.bind(this));
+
+    this.update();
+    this.engineID = requestAnimationFrame(this.run.bind(this));
   }
   stop() {
     cancelAnimationFrame(this.engineID);
