@@ -1,8 +1,9 @@
 module.exports = {
   babelrc: {
     presets: [
+      '@babel/env',
       'es2015',
-      'stage-0'
+      'stage-0',
     ],
     sourceMaps: 'inline'
   },
