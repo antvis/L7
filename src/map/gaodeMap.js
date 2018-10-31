@@ -1,4 +1,4 @@
-export default class AMap {
+export default class GaodeMap {
   constructor(map) {
     this.map = map;
   }
@@ -55,7 +55,8 @@ export default class AMap {
 
   }
   containerToLngLat(pixel) {
-    return this.map.containerToLngLat(pixel);
+    const ll = new AMap.Pixel(pixel.x,pixel.y);
+    return this.map.containerToLngLat(ll);
   }
   setMapStyle(style) {
     return this.map.setMapStyle(style);

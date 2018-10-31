@@ -1,0 +1,40 @@
+
+.top-right{
+    right: 10px;
+    position:absolute;
+}
+.bottom-right{
+    right: 0;
+    bottom: 10px;
+    position:absolute;
+}
+.info-panel {
+    width: 250px;
+    background: #fff;
+    box-shadow: 0 0 4px rgba(0,0,0,.15);
+    margin: 24px;
+    padding: 12px 24px;
+    outline: none;
+    z-index: 10;
+}
+.info-panel h4 {
+    font-size: 1em;
+    font-weight: 500;
+    margin: 8px 0;
+}
+.tooltip {
+    position:absolute;
+    pointer-events: none;
+    transition: opacity .2s;
+    padding: 4px;
+    background: rgba(0,0,0,.8);
+    color: #fff;
+    max-width: 300px;
+    font-size: 10px;
+    z-index: 9;
+}
+.tooltip p {
+ padding: 0;
+ margin: 0;
+
+}

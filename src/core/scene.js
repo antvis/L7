@@ -5,7 +5,7 @@ import Base from './base';
 import LoadImage from './image';
 import Utils from '../util';
 import { MapProvider } from '../map/provider';
-import AMap from '../map/AMap';
+import GaodeMap from '../map/gaodeMap';
 import Global from '../global';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -32,7 +32,7 @@ export default class Scene extends Base {
     const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.on('mapLoad', () => {
       this._initEngine(Map.renderDom);
-      const sceneMap = new AMap(Map.map);
+      const sceneMap = new GaodeMap(Map.map);
       // eslint-disable-next-line
       Utils.assign(this.__proto__, sceneMap.__proto__);
       this.map = Map.map;

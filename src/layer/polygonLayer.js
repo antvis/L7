@@ -24,9 +24,7 @@ export default class PolygonLayer extends Layer {
     });
 
     const { attributes } = buffer;
-
     geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-    // geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
     geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
     geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
     this.geometry = geometry;
@@ -38,13 +36,11 @@ export default class PolygonLayer extends Layer {
         u_opacity: 1.0
       });
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-      // geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
       polygonMesh = new THREE.Mesh(geometry, material);
     }
 
     this.add(polygonMesh);
     this.update();
-
     return this;
   }
   update() {

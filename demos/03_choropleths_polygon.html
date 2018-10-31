@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
 
   <title>hexagon demo</title>
   <style>
@@ -14,8 +15,15 @@
 </head>
 
 <body>
-<div id = 'gui' style="position:absolute;top:0px;right:0px;z-index:2;"></div>
 <div id="map"></div>
+<div  id ="info" class ="tooltip">
+</div> 
+<div class='info-panel top-right'>
+ <h4>全国各地市空气质量指数</h4>
+ <p>城市：<span id="city" class="lnglat"></span></p>
+ <p>AQI<span id="aqi" class="lnglat"></span></p>
+ 
+<div>
  <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
@@ -33,7 +41,7 @@ window.scene = scene;
 scene.on('load', () => {
 
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
-    citylayer = scene.PolygonLayer()
+    const citylayer = scene.PolygonLayer()
     .source(city)
     .color('pm2_5_24h', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
     .shape('fill')
@@ -42,6 +50,10 @@ scene.on('load', () => {
       opacity: 1
     })
     .render();
+    citylayer.on('move',(e)=>{
+      $("#info").css({'left': e.pixel.x,'top':e.pixel.y});
+       $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.aqi || 0}</span></p>`);
+    })
   });
 });
 

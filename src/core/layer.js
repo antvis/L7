@@ -415,9 +415,21 @@ export default class Layer extends Base {
   }
   _addPickingEvents() {
     // TODO: Find a way to properly remove this listener on destroy
-    this.scene.on('pick', (point2d, point3d, intersects) => {
+    this.scene.on('pick', (e) => {
       // Re-emit click event from the layer
-      this.emit('click', this, point2d, point3d, intersects);
+      const { featureId, point2d, point3d, intersects } = e;
+      if(intersects.length === 0)
+        return;
+      const source = this.layerSource.get('data');
+      const feature = source.features[featureId];
+      const lnglat = this.scene.containerToLngLat(point2d);
+      const target = {
+        feature,
+        pixel:point2d,
+        lnglat:{lng:lnglat.lng,lat:lnglat.lat}
+      }
+      this.emit('click', target);
+      this.emit('move', target);
     });
   }
   /**
@@ -535,7 +547,8 @@ export default class Layer extends Base {
       colorAttr.needsUpdate =true
     });
   }
-  destroy() {
+  despose() {
+    this.destroy();
     if(this._object3D && this._object3D.children){
       let child;
       for(let i =0;i<this._object3D.children.length;i++){

@@ -15,4 +15,18 @@ export function aProjectFlat(lnglat) {
   y = scale * (c * y + d) - 106744817;
   return { x, y };
 }
+export function world2LngLat(x, y) {
+  const scale = 256 << 20;
+  let d = Math.PI / 180;
+  const a = 0.5 / Math.PI,
+    b = 0.5,
+    c = -0.5 / Math.PI;
+  d = 0.5;
+  x = ((x + 215440491) / scale - b) / a;
+  y = ((y + 106744817) / scale - d) / c;
+  y = (Math.atan(Math.pow(Math.E,y)) - (Math.PI / 4)) *2;
+  const lat  = y /d;
+  const lng = x / d;
+  return [lng,lat];
+}
 
