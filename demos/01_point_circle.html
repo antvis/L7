@@ -36,6 +36,7 @@ scene.on('load', () => {
     .source(data)
     .shape('2d:circle')
     .size('value', [ 8, 500 ]) // default 1
+    .active(true)
     .filter('value', field_8 => {
       return field_8 * 1 > 500;
     })

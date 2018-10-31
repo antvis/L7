@@ -10,7 +10,6 @@ void main() {
         gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
      }else {
       vec4 color = texture2D(u_texture,v_texCoord) * v_color;
-      color = vec4(color.rgb * vlightWeight, color.w);
       gl_FragColor = color;
      }
    #else

@@ -6,42 +6,41 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
-
-  <title>hexagon demo</title>
+  <title>point_circle</title>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
 </head>
 
 <body>
-<div id = 'gui' style="position:absolute;top:0px;right:0px;z-index:2;"></div>
 <div id="map"></div>
- <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
+
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'light', // 样式URL
-  center: [ 120.4047, 30.0679 ],
-  pitch: 0,
-  zoom: 4
-
+  center: [ 116.155185, 39.96644],
+  pitch: 25,
+  zoom: 9.6
 });
 window.scene = scene;
 scene.on('load', () => {
-
-  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
-    citylayer = scene.PolygonLayer()
-    .source(city)
-    .color('pm2_5_24h', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
-    .shape('fill')
-    .active({ fill: '#fff' })
-    .style({
-      opacity: 1
+  $.get('./data/spot.geojson', data => {
+    scene.PointLayer({
+      zIndex: 2
     })
-    .render();
+    .source(data)
+    .shape('3d:hexagon')
+    .size('level',(level)=>{
+      return [10000,10000,Math.pow(10,level)];
+    }) // default 1
+    .active(true)
+    .color('level', [ '#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404' ])
+     .render();
   });
 });
 

@@ -85,12 +85,12 @@ export function arc(geo, index) {
  * @param {int} index  原始数据index
  * @return {object} 顶点坐标,索引坐标
  */
-export function defaultLine(geo) {
+export function defaultLine(geo,index) {
   const indexArray = [];
   const positions = [];
-  geo.slice(0, geo.length - 1).forEach((coor, index) => {
+  geo.slice(0, geo.length - 1).forEach((coor, i) => {
 
-    positions.push(coor, geo[index + 1]);
+    positions.push(coor, geo[i + 1]);
     indexArray.push(index, index);
   });
 

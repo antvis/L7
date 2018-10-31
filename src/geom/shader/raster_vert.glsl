@@ -12,7 +12,13 @@ void main() {
    float value = texture2D(u_texture,uv)[0];
     v_texCoord = uv;
    value = clamp(value,u_min,u_max);
+
+   float value1 =  (value - u_min) / (u_max -u_min);
+    vec2 ramp_pos = vec2(
+        fract(16.0 * (1.0 - value1)),
+        floor(16.0 * (1.0 - value1)) / 16.0);
+    v_color = texture2D(u_colorTexture,ramp_pos);
    vec2 range = u_extent.zw - u_extent.xy;
-   gl_Position =  matModelViewProjection * vec4(position.xy, value*100.0, 1.0);
+   gl_Position =  matModelViewProjection * vec4(position.xy, 0., 1.0);
 
 }
