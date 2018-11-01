@@ -10,7 +10,7 @@ export default class PolygonLayer extends Layer {
   }
   render() {
     this.type = 'polygon';
-    const { opacity} = this.get('styleOptions');
+    const { opacity } = this.get('styleOptions');
     this.init();
     const source = this.layerSource;
     const geometry = this.geometry = new THREE.BufferGeometry();
@@ -35,7 +35,7 @@ export default class PolygonLayer extends Layer {
     if (this.shape === 'line') {
       polygonMesh = new THREE.LineSegments(geometry, lineMaterial);
     } else {
-     
+
       const material = new PolygonMaterial({
         u_opacity: opacity
       });
