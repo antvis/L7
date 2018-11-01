@@ -26,8 +26,8 @@ const scene = new L7.Scene({
   mapStyle: 'light', // 样式URL
   center: [ 120.1243238, 30.27331571 ],
   pitch: 0,
-  zoom: 19,
-  minZoom: 16
+  zoom: 10,
+  minZoom: 9
 });
 window.scene = scene;
 scene.image.addImage('bike', './image/Bike.png');
@@ -44,11 +44,18 @@ scene.on('load', () => {
     .size(128.0)
     .shape('image:bike')
     .color('#0198BD')
-    .style({
-      stroke: 'rgb(255,255,255)',
-      strokeWidth: 0,
-      opacity: 1.0
+     .render();
+  });
+  $.get('./data/fence.json', data => {
+    scene.PolygonLayer({
+      zIndex: 3
     })
+     .source(data)
+    .shape('fill')
+    .color('#0198BD')
+     .style({
+       opacity:0.8
+     })
      .render();
   });
 });
