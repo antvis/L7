@@ -1,17 +1,19 @@
+const path = require('path');
+
 module.exports = {
   babelrc: {
     presets: [
-      '@babel/env',
-      'es2015',
-      'stage-0',
-    ],
-    sourceMaps: 'inline'
+      "@babel/preset-env"
+    ]
   },
   extensions: ['.js'],
   include: [
-    'node_modules/**/src/gl-matrix/**/*.js '
+    'src/**/*.js',
+    'test/**/*.js',
+    'node_modules/**/*.js'
   ],
-  exclude: [
-    'bower_components/**/*.js',
-  ]
+  // exclude: [
+  //   'node_modules/**/*.js'
+  // ]
 }
+  
