@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { LoadImage } from '../../../src/core/image';
+import  LoadImage from '../../../src/core/image';
 describe('core LoadImage Test', function() {
 
   it('test create', function() {

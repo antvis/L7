@@ -10,11 +10,12 @@ export default class PolygonLayer extends Layer {
   }
   render() {
     this.type = 'polygon';
+    const { opacity} = this.get('styleOptions');
     this.init();
     const source = this.layerSource;
     const geometry = this.geometry = new THREE.BufferGeometry();
     const lineMaterial = new LineMaterial({
-      u_opacity: 1.0
+      u_opacity: opacity
     }
     );
     const buffer = this.buffer = new PolygonBuffer({
@@ -34,8 +35,9 @@ export default class PolygonLayer extends Layer {
     if (this.shape === 'line') {
       polygonMesh = new THREE.LineSegments(geometry, lineMaterial);
     } else {
+     
       const material = new PolygonMaterial({
-        u_opacity: 1.0
+        u_opacity: opacity
       });
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
       // geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));

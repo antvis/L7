@@ -2,9 +2,9 @@
  * @Author: ThinkGIS
  * @Date: 2018-06-08 11:19:06
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-10-30 11:13:39
+ * @Last Modified time: 2018-11-01 11:50:43
  */
-const Base = require('./base');
+import Base from './base';
 const Controller = require('./controller/index');
 import { aProjectFlat } from '../geo/project';
 export default class Source extends Base {
