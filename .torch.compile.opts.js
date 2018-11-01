@@ -10,10 +10,8 @@ module.exports = {
   include: [
     'src/**/*.js',
     'test/**/*.js',
-    'node_modules/**/*.js'
+    'node_modules/three/'
   ],
-  // exclude: [
-  //   'node_modules/**/*.js'
-  // ]
+   exclude: [],
 }
   

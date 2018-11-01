@@ -24,12 +24,12 @@ module.exports = {
           }
         }
       },
-      {
-        test: /\.glsl$/,
-        use: {
-          loader: 'glsl-shaders-loader'
-        }
-      },
+      // {
+      //   test: /\.glsl$/,
+      //   use: {
+      //     loader: 'glsl-shaders-loader'
+      //   }
+      // },
       {
         test: /global\.js$/,
         use: {
