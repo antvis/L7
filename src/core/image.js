@@ -1,11 +1,14 @@
 import * as THREE from './three';
 import EventEmitter from 'wolfy87-eventemitter';
 import { getImage } from '../util/ajax';
+// 将图片标注绘制在512*512的画布上，每个大小 64*64 支持 64种图片
 export default class LoadImage extends EventEmitter {
   constructor() {
     super();
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
+    this.ctx.fillStyle="#FF0000";
+    this.ctx.fillRect(0,0,512,512);
     this.imageWidth = 64;
     this.canvas.width = this.imageWidth * 8;
     this.canvas.height = this.imageWidth * 8;
@@ -18,7 +21,7 @@ export default class LoadImage extends EventEmitter {
     const imageCount = this.imagesCount;
     const x = imageCount % 8 * 64;
     const y = parseInt(imageCount / 8) * 64;
-
+    this.imagePos[id] = { x: x / 512, y: y / 512 };
     if (typeof opt === 'string') {
       getImage({ url: opt }, (err, img) => {
         img.id = id;
@@ -29,7 +32,6 @@ export default class LoadImage extends EventEmitter {
         texture.minFilter = THREE.LinearFilter;
         texture.needsUpdate = true;
         this.texture = texture;
-        this.imagePos[id] = { x: x / 512, y: y / 512 };
         if (this.images.length === this.imagesCount) {
           this.emit('imageLoaded');
         }

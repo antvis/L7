@@ -26,35 +26,43 @@ const scene = new L7.Scene({
   mapStyle: 'light', // 样式URL
   center: [ 120.1243238, 30.27331571 ],
   pitch: 0,
-  zoom: 10,
+  zoom: 14,
   minZoom: 9
 });
 window.scene = scene;
 scene.image.addImage('bike', './image/Bike.png');
-scene.on('load', () => {
-  $.get('./data/bike.json', data => {
+scene.on('loaded', () => {
+  $.get('./data/pointbike.json', data => {
     scene.PointLayer({
       zIndex: 2
     })
-     .source(data.object, {
-       type: 'array',
-       y: 'distY',
-       x: 'distX'
-     })
-    .size(128.0)
+    .source(data)
+     .color('#0198BD')
+    .size(40.0)
     .shape('image:bike')
-    .color('#0198BD')
-     .render();
+    .render();
   });
   $.get('./data/fence.json', data => {
     scene.PolygonLayer({
-      zIndex: 3
+      zIndex: 0
     })
      .source(data)
     .shape('fill')
     .color('#0198BD')
      .style({
-       opacity:0.8
+       opacity:0.6
+     })
+     .render();
+  });
+  $.getJSON('./data/pointZone.json', data => {
+    scene.PolygonLayer({
+      zIndex: 1
+    })
+     .source(data)
+    .shape('fill')
+    .color("#F04850")
+     .style({
+       opacity:1.0
      })
      .render();
   });

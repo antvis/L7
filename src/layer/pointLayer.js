@@ -19,6 +19,12 @@ export default class PointLayer extends Layer {
   render() {
     this.type = 'point';
     this.init();
+    if(this.shapeType === 'text'){
+      this._textPoint();
+      return;
+    }
+    this._prepareRender(this.shapeType);
+    return;
     switch (this.shapeType) {
       case 'model':
         this._staticModelPoint();
@@ -42,10 +48,62 @@ export default class PointLayer extends Layer {
     }
     return this;
   }
+  _prepareRender(){
+
+    const source = this.layerSource;
+    const { opacity, strokeWidth, stroke } = this.get('styleOptions');
+    this._buffer = new PointBuffer({
+      type: this.shapeType,
+      imagePos: this.scene.image.imagePos,
+      coordinates: source.geoData,
+      properties: this.StyleData
+    });
+    const geometry = this.geometry = new THREE.BufferGeometry();
+    let mtl;
+    if(this.shapeType=='3d'){
+      mtl = new PolygonMaterial({
+        u_opacity: opacity
+      });
+    } else{
+     mtl = new PointMaterial({
+      u_opacity: opacity,
+      u_strokeWidth: strokeWidth,
+      u_stroke: stroke,
+      shape: this.shapeType || false,
+      u_texture: this.scene.image.texture
+    },{
+      SHAPE:(this.shapeType !=='image'),
+      TEXCOORD_0: (this.shapeType ==='image')
+    });
+   }
+   
+    const { attributes } = this._buffer;
+    geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
+    geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
+    geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
+    geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
+    if(this.shapeType ==='image'){
+      geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
+    }else if(this.shapeType=='2d'){
+      geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapes, 1));
+    } else if(this.shapeType=='3d')
+    {
+
+      geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
+    }
+    let mesh;
+     if(this.shapeType!=='3d'){
+      mesh = new THREE.Points(geometry, mtl);
+     }else{
+       mesh = new THREE.Mesh(geometry, mtl);
+     }
+
+  
+    this.add(mesh);
+  }
   _imagePoint() {
     const { opacity, strokeWidth, stroke } = this.get('styleOptions');
     const source = this.layerSource;
-    this.scene.image.on('imageLoaded', () => {
       const geometry = new THREE.BufferGeometry();
       const buffer = new PointBuffer({
         imagePos: this.scene.image.imagePos,
@@ -66,9 +124,8 @@ export default class PointLayer extends Layer {
       geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
       geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
       const mesh = new THREE.Points(geometry, mtl);
+      console.log(mesh);
       this.add(mesh);
-
-    });
     return this;
   }
   // sdf 绘制多边形
@@ -81,7 +138,7 @@ export default class PointLayer extends Layer {
       coordinates: source.geoData,
       properties: this.StyleData
     });
-    this.buffer = buffer;
+    this._buffer = buffer;
     const geometry = new THREE.BufferGeometry();
     const mtl = new PointMaterial({
       u_opacity: opacity,
@@ -96,10 +153,7 @@ export default class PointLayer extends Layer {
     geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapes, 1));
     geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
     const mesh = new THREE.Points(geometry, mtl);
-    this.remove(this.layerMesh);
     this.add(mesh);
-    this.layerMesh = mesh;
-    this.updateFilter(this.StyleData);
 
   }
   _shapePoint() {

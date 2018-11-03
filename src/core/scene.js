@@ -5,7 +5,7 @@ import Base from './base';
 import LoadImage from './image';
 import Utils from '../util';
 import { MapProvider } from '../map/provider';
-import GaodeMap from '../map/gaodeMap';
+import GaodeMap  from '../map/gaodeMap';
 import Global from '../global';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -14,6 +14,7 @@ export default class Scene extends Base {
   constructor(cfg) {
     super(cfg);
     this._initMap();
+    this._initAttribution();
     this.addImage();
     this._layers = [];
   }
@@ -34,11 +35,13 @@ export default class Scene extends Base {
       this._initEngine(Map.renderDom);
       const sceneMap = new GaodeMap(Map.map);
       // eslint-disable-next-line
-      Utils.assign(this.__proto__, sceneMap.__proto__);
+      Object.getOwnPropertyNames(sceneMap.__proto__).forEach((key)=>{
+        if('key' !== 'constructor')
+        this.__proto__[key]=sceneMap.__proto__[key];
+      })
       this.map = Map.map;
       Map.asyncCamera(this._engine);
       this.initLayer();
-      this.emit('load');
       this.emit('loaded');
     });
 
@@ -53,11 +56,22 @@ export default class Scene extends Base {
       };
     }
   }
+  _initAttribution() {
+    var message ='<a href="http://antv.alipay.com/zh-cn/index.html title="Large-scale WebGL-powered Geospatial Data Visualization">AntV | L7  </a>'
+    var element = document.createElement('div');
+    
+    element.innerHTML = message;
+    element.style.cssText += 'position: absolute; pointer-events:none;background: rgba(255, 255, 255, 0.7);font-size: 11px;z-index:100; padding:4px;bottom: 0;right:0;';
+    this._container.appendChild(element);
+  }
   addImage() {
     this.image = new LoadImage();
   }
   _initEvent() {
 
+  }
+  getLayers(){
+    return this._layers;
   }
   _addLight() {
     const scene = this._engine._scene;

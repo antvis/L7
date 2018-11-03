@@ -28,7 +28,7 @@ const scene = new L7.Scene({
   zoom: 9.6
 });
 window.scene = scene;
-scene.on('load', () => {
+scene.on('loaded', () => {
   $.get('./data/spot.geojson', data => {
     scene.PointLayer({
       zIndex: 2

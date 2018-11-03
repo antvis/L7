@@ -37,7 +37,7 @@ export default class Layer extends Base {
       attrs: {},
       // 样式配置项
       styleOptions: {
-        stroke: 'rgb(255,255,255)',
+        stroke: [1.0,1.0,1.0,1.0],
         strokeWidth: 1.0,
         opacity: 1.0
       },
@@ -60,7 +60,7 @@ export default class Layer extends Base {
     this.layerId = layerId;
     this._activeIds = null;
     // todo 用户参数
-    this._object3D.position.z = layerId;
+    this._object3D.position.z = this.get('zIndex')*100;
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
 
@@ -71,6 +71,10 @@ export default class Layer extends Base {
    */
   add(object) {
     this.layerMesh = object;
+    // 更新
+    if(this._needUpdateFilter) {
+      this._updateFilter();
+    }
     this._object3D.add(object);
     this._addPickMesh(object);
   }
@@ -94,6 +98,7 @@ export default class Layer extends Base {
     return this;
   }
   color(field, values) {
+    this._needUpdateColor = true;//标识颜色是否需要更新
     this._createAttrOption('color', field, values, Global.colors);
     return this;
   }
@@ -162,6 +167,7 @@ export default class Layer extends Base {
     return this;
   }
   filter(field, values) {
+    this._needUpdateFilter = true;
     this._createAttrOption('filter', field, values, true);
     return this;
   }
@@ -211,10 +217,12 @@ export default class Layer extends Base {
     }
     this._setAttrOptions(attrName, attrCfg);
   }
+  // 初始化图层
   init() {
     this._initAttrs();
     this._scaleByZoom();
     this._mapping();
+  
     const activeHander = this._addActiveFeature.bind(this);
     if (this.get('allowActive')) {
 
@@ -250,29 +258,34 @@ export default class Layer extends Base {
 
 
   _initAttrs() {
-    const self = this;
-    const attrs = this.get('attrs');
     const attrOptions = this.get('attrOptions');
     for (const type in attrOptions) {
       if (attrOptions.hasOwnProperty(type)) {
-        const option = attrOptions[type];
-        const className = Util.upperFirst(type);
-        const fields = parseFields(option.field);
-        const scales = [];
-        for (let i = 0; i < fields.length; i++) {
-          const field = fields[i];
-          const scale = self._createScale(field);
-
-          if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
-            option.values = Global.colors;
-          }
-          scales.push(scale);
-        }
-        option.scales = scales;
-        const attr = new Attr[className](option);
-        attrs[type] = attr;
+        this._updateAttr(type)
       }
     }
+  }
+  _updateAttr(type){
+    const self = this;
+    const attrs = this.get('attrs');
+    const attrOptions = this.get('attrOptions');
+    const option = attrOptions[type];
+    option.neadUpdate = true;
+    const className = Util.upperFirst(type);
+    const fields = parseFields(option.field);
+    const scales = [];
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const scale = self._createScale(field);
+
+      if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
+        option.values = Global.colors;
+      }
+      scales.push(scale);
+    }
+    option.scales = scales;
+    const attr = new Attr[className](option);
+    attrs[type] = attr;
   }
   _updateSize(zoom) {
     const sizeOption = this.get('attrOptions').size;
@@ -303,6 +316,7 @@ export default class Layer extends Base {
       for (const k in attrs) {
         if (attrs.hasOwnProperty(k)) {
           const attr = attrs[k];
+          attr.needUpdate = false;
           const names = attr.names;
           const values = self._getAttrValues(attr, record);
           if (names.length > 1) { // position 之类的生成多个字段的属性
@@ -323,26 +337,29 @@ export default class Layer extends Base {
     this.StyleData = mappedData;
     return mappedData;
   }
-  _updateMap(attrName) {
+  _updateMaping() {
     const self = this;
     const attrs = self.get('attrs');
 
     const data = this.layerSource.propertiesData;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
-      if (attrs.hasOwnProperty(attrName)) {
-        const attr = attrs[attrName];
-        const names = attr.names;
-        const values = self._getAttrValues(attr, record);
-        if (names.length > 1) { // position 之类的生成多个字段的属性
-          for (let j = 0; j < values.length; j++) {
-            const val = values[j];
-            const name = names[j];
-            this.StyleData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-          }
-        } else {
-          this.StyleData[i][names[0]] = values.length === 1 ? values[0] : values;
+      for (const attrName in attrs) {
+        if (attrs.hasOwnProperty(attrName) && attrs[attrName].neadUpdate) {
+          const attr = attrs[attrName];
+          const names = attr.names;
+          const values = self._getAttrValues(attr, record);
+          if (names.length > 1) { // position 之类的生成多个字段的属性
+            for (let j = 0; j < values.length; j++) {
+              const val = values[j];
+              const name = names[j];
+              this.StyleData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
+            }
+          } else {
+            this.StyleData[i][names[0]] = values.length === 1 ? values[0] : values;
 
+          }
+          attr.neadUpdate = true;
         }
       }
     }
@@ -429,7 +446,7 @@ export default class Layer extends Base {
         lnglat:{lng:lnglat.lng,lat:lnglat.lat}
       }
       this.emit('click', target);
-      this.emit('move', target);
+      // this.emit('move', target);
     });
   }
   /**
@@ -438,7 +455,7 @@ export default class Layer extends Base {
    * @param {*} style  更新的要素样式
    */
   updateStyle(featureStyleId, style) {
-    const {indices} = this.buffer.bufferStruct;
+    const {indices} = this._buffer.bufferStruct;
    
     if (this._activeIds) {
       this.resetStyle();
@@ -474,11 +491,18 @@ export default class Layer extends Base {
     });
 
   }
+  _updateColor(){
+   
+    this._updateMaping();
+    
+  }
    /**
    * 用于过滤数据
    * @param {*} filterData  数据过滤标识符
    */
-  updateFilter(filterData) {
+  _updateFilter() {
+    this._updateMaping();
+    const filterData = this.StyleData;
     this._activeIds = null; // 清空选中元素
     let dataIndex = 0;
     const colorAttr =  this.layerMesh.geometry.attributes.a_color;
@@ -499,13 +523,12 @@ export default class Layer extends Base {
       colorAttr.needsUpdate =true;
       return;
     }
-    const {indices} = this.buffer.bufferStruct;
+    const {indices} = this._buffer.bufferStruct;
      indices.forEach((vertIndexs, i) => {
       const color = [ ...this.StyleData[i].color ];
       if (filterData[i].hasOwnProperty('filter') && filterData[i].filter === false) {
         color[3] = 0;
       }
-
       vertIndexs.forEach(() => {
         colorAttr.array[dataIndex*4+0]=color[0];
         colorAttr.array[dataIndex*4+1]=color[1];
@@ -515,12 +538,14 @@ export default class Layer extends Base {
       });
       colorAttr.needsUpdate =true;
     });
+    this._needUpdateFilter = false;
+    this._needUpdateColor = false;
   }
   /**
    * 重置高亮要素
    */
   resetStyle() {
-    const {indices} = this.buffer.bufferStruct;
+    const {indices} = this._buffer.bufferStruct;
     const colorAttr =  this.layerMesh.geometry.attributes.a_color;
     let dataIndex = 0;
     const id = this._activeIds[0];
@@ -547,6 +572,9 @@ export default class Layer extends Base {
       colorAttr.needsUpdate =true
     });
   }
+  /**
+   * 销毁Layer对象
+   */
   despose() {
     this.destroy();
     if(this._object3D && this._object3D.children){

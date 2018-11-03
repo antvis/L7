@@ -9,42 +9,61 @@ export default class PolygonLayer extends Layer {
     return this;
   }
   render() {
-    this.type = 'polygon';
-    const { opacity } = this.get('styleOptions');
-    this.init();
-    const source = this.layerSource;
-    const geometry = this.geometry = new THREE.BufferGeometry();
-    const lineMaterial = new LineMaterial({
-      u_opacity: opacity
+    if(!this._hasRender) { // 首次渲染
+      this._hasRender = true;
+      this._prepareRender();
+    } else{
+      console.time('update');
+      this._initAttrs();
+      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter():null;
+      console.timeEnd('update');
     }
-    );
-    const buffer = this.buffer = new PolygonBuffer({
+
+    
+    return this;
+  }
+  _prepareRender(){
+    this.init();
+    this.type = 'polygon';
+    
+    const source = this.layerSource;
+    this._buffer = new PolygonBuffer({
       shape: this.shape,
       coordinates: source.geoData,
       properties: this.StyleData
     });
-
-    const { attributes } = buffer;
-    geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-    geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-    geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-    this.geometry = geometry;
-    let polygonMesh = '';
-    if (this.shape === 'line') {
-      polygonMesh = new THREE.LineSegments(geometry, lineMaterial);
-    } else {
-
-      const material = new PolygonMaterial({
-        u_opacity: opacity
-      });
-      geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-      polygonMesh = new THREE.Mesh(geometry, material);
+    const { attributes } = this._buffer;
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
+    this.geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
+    this.geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
+    if(this.shape =='line') {
+      this._renderLine()
+    }else{
+      this._renderPolygon();
     }
-
-    this.add(polygonMesh);
-    this.update();
-    return this;
   }
+  _renderLine(){
+    const { opacity } = this.get('styleOptions');
+    const lineMaterial = new LineMaterial({
+      u_opacity: opacity
+    });
+    const polygonLine = new THREE.LineSegments(this.geometry, lineMaterial);
+    this.add(polygonLine);
+    
+  }
+  _renderPolygon(){
+    const { opacity } = this.get('styleOptions');
+    const material = new PolygonMaterial({
+      u_opacity: opacity
+    });
+    const { attributes } = this._buffer;
+    this.geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
+    const polygonMesh = new THREE.Mesh(this.geometry, material);
+    this.add(polygonMesh);
+   
+  }
+ 
   update() {
     this.updateFilter(this.StyleData);
     // 动态更新相关属性

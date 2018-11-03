@@ -1,20 +1,5 @@
 import PickingScene from './pickingScene';
 import * as THREE from '../../three';
-// TODO: Look into a way of setting this up without passing in a renderer and
-// camera from the engine
-
-// TODO: Add a basic indicator on or around the mouse pointer when it is over
-// something pickable / clickable
-//
-// A simple transparent disc or ring at the mouse point should work to start, or
-// even just changing the cursor to the CSS 'pointer' style
-//
-// Probably want this on mousemove with a throttled update as not to spam the
-// picking method
-//
-// Relies upon the picking method not redrawing the scene every call due to
-// the way TileLayer invalidates the picking scene
-
 let nextId = 1;
 
 class Picking {
@@ -52,7 +37,7 @@ class Picking {
 
     this._mouseUpHandler = this._onMouseUp.bind(this);
     this._world._container.addEventListener('mouseup', this._mouseUpHandler, false);
-    this._world._container.addEventListener('mousemove', this._mouseUpHandler, false);
+    this._world._container.addEventListener('mousemove', this._onWorldMove.bind(this), false);
   }
 
   _onMouseUp(event) {
@@ -70,6 +55,7 @@ class Picking {
   }
 
   _onWorldMove() {
+
     this._needUpdate = true;
   }
 
@@ -85,26 +71,17 @@ class Picking {
 
     this._needUpdate = true;
   }
-
-  // TODO: Make this only re-draw the scene if both an update is needed and the
-  // camera has moved since the last update
-  //
-  // Otherwise it re-draws the scene on every click due to the way LOD updates
-  // work in TileLayer – spamming this.add() and this.remove()
-  //
-  // TODO: Pause updates during map move / orbit / zoom as this is unlikely to
-  // be a point in time where the user cares for picking functionality
   _update(point) {
-    // if (this._needUpdate) {
     const texture = this._pickingTexture;
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);//  this._pickingTexture this._pickingScene
-      // Read the rendering texture
+    if (this._needUpdate) {
 
+    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+    this._needUpdate = false;
+    }
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
-      // this._needUpdate = false;
-    // }
+      
   }
   _updateRender() {
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
@@ -115,7 +92,7 @@ class Picking {
     // Interpret the pixel as an ID
     const id = (this.pixelBuffer[2] * 255 * 255) + (this.pixelBuffer[1] * 255) + (this.pixelBuffer[0]);
     // Skip if ID is 16646655 (white) as the background returns this
-    if (id === 16646655) {
+    if (id === 16646655 || this.pixelBuffer[3]===0  ) {
       return;
     }
 

@@ -1,5 +1,5 @@
 export default class GaodeMap {
-  constructor(map) {
+  constructor(map)  {
     this.map = map;
   }
   getZoom() {

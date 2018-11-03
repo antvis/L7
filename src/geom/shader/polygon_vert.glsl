@@ -1,7 +1,7 @@
 precision highp float;
-#define ambientRatio 0.65
-#define diffuseRatio 0.6
-#define specularRatio  0.4
+#define ambientRatio 0.2
+#define diffuseRatio 0.5
+#define specularRatio 0.3
 attribute vec4 a_color; 
 attribute vec4 a_idColor;
 attribute vec2 faceUv;
@@ -17,13 +17,12 @@ void main() {
   // vec3 lightDir = normalize(vec3(0.05,-0.001,-1));
   vec3 halfDir = normalize(viewDir+lightDir);
   // //lambert
-  float lambert = 0.5 * dot(worldNormal, lightDir);
+  float lambert = dot(worldNormal, lightDir);
     //specular
   float specular = pow( max(0.0, dot(worldNormal, halfDir)), 32.0);
     //sum to light weight
   float lightWeight = ambientRatio + diffuseRatio * lambert + specularRatio * specular;
   v_texCoord = faceUv;
-  v_color =vec4(a_color.rgb * lightWeight, a_color.w);
-
+  v_color =vec4(a_color.rgb * lightWeight, a_color.w); 
   gl_Position =  matModelViewProjection * vec4(position, 1.0);
 }

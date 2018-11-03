@@ -81,7 +81,7 @@ export class MapProvider extends Base {
     this.canvasContainer = canvasContainer;
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText += 'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
-    this.renderDom.id = 'canvaslayer';
+    this.renderDom.id = 'l7_canvaslayer';
     canvasContainer.appendChild(this.renderDom);
   }
 }

@@ -30,7 +30,7 @@ const scene = new L7.Scene({
   minZoom: 5,
   maxZoom: 10
 });
-scene.on('load', () => {
+scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/lZGtNaYGNHtAIkcjVvfp.json', data => {
     scene.LineLayer({
       zIndex: 2

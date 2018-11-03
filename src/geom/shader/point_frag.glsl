@@ -26,9 +26,7 @@ void main() {
     //  vec3 targetColor = mix( v_color.rgb, halo, haloWeight );
    //  gl_FragColor= vec4(v_color.rgb, alpha * v_color.a);;
     //  gl_FragColor = vec4( targetColor, alpha );
-    if(v_color.a == 0.)
-      discard;
-    vec4 pcolor = v_color * u_opacity;
+   
     #ifdef TEXCOORD_0
     vec2 pos =  v_uv + gl_PointCoord / 512.0 * 64.0;
     pos.y = 1.0 - pos.y;
@@ -36,6 +34,9 @@ void main() {
     gl_FragColor =textureColor;
     return;
     #endif
+     if(v_color.a == 0.)
+      discard;
+    vec4 pcolor = v_color * u_opacity;
     float ro = v_rs.x;
     float ri = v_rs.y;
     float d = 0.0;

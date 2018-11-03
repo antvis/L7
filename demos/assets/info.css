@@ -17,10 +17,21 @@
     outline: none;
     z-index: 10;
 }
+.info-panel p {
+  margin: 0px;
+}
+
 .info-panel h4 {
     font-size: 1em;
     font-weight: 500;
     margin: 8px 0;
+}
+.info-panel label {
+    display: inline-block;
+    width: 30px;
+    margin-right: 10%;
+    color: #5a666d;
+    margin-bottom: 4px;
 }
 .tooltip {
     position:absolute;

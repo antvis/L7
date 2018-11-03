@@ -28,9 +28,9 @@ const scene = new L7.Scene({
   zoom: 14.6
 });
 window.scene = scene;
-scene.on('load', () => {
+scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', data => {
-    scene.PointLayer({
+    const circleLayer = scene.PointLayer({
       zIndex: 2
     })
     .source(data)
@@ -47,6 +47,9 @@ scene.on('load', () => {
       opacity: 0.9
     })
      .render();
+
+   //circleLayer.size('value', [ 8, 1000 ]).render();
+     
   });
 });
 

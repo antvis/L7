@@ -10,18 +10,31 @@
 
   <title>hexagon demo</title>
   <style>
+  body {margin: 0;}
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
 </head>
 
 <body>
 <div id="map"></div>
-<div  id ="info" class ="tooltip">
+<div  id ="info" class ="tooltip" style="display:none">
 </div> 
 <div class='info-panel top-right'>
  <h4>全国各地市空气质量指数</h4>
- <p>城市：<span id="city" class="lnglat"></span></p>
- <p>AQI<span id="aqi" class="lnglat"></span></p>
+ <p>
+ <label>min</label><input name="minaqi" type="range" step="1" min="0" max="120" value=0> <label></label>
+ </p>
+  <p>
+ <label>max</label><input name="maxaqi" type="range" step="1" min="0" max="120" value="120"><label></label>
+ </p>
+ <p><label>color</label><select>
+  <option value ="blue">blue</option>
+  <option value ="red">red</option>
+  <option value="orange">orange</option>
+  <option value="green">green</option>
+   <option value="yellow">yellow</option>
+    <option value="purple">purple</option>
+</select> </p>
  
 <div>
  <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
@@ -29,6 +42,15 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
+const colorObj ={
+  blue: ["#E8FCFF", "#CFF6FF", "#98E3FA", "#65CEF7", "#3CB4F0", "#2894E0", "#1A76C7", "#105CB3", "#0D408C", "#002466"],
+  red: ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"],
+  orange:["#FFF7EB", "#FFECD4", "#FAD09D", "#F7B16A", "#F08D41", "#DB6C2C", "#C2491D", "#AD2B11", "#871D0C", "#610800"],
+  green:["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"],
+  yellow:["#FFFFE8", "#FFFECC", "#FAF896", "#F7E463", "#F0CE3A", "#DBB125", "#C29117", "#AD7410", "#87500C", "#613000"],
+  purple:["#FCF2FF", "#F5DEFF", "#DDB3F2", "#BE7BE3", "#9B4ECF", "#7737B3", "#5B2899", "#411C85", "#270F5E", "#100338"]
+}
+
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'light', // 样式URL
@@ -38,22 +60,37 @@ const scene = new L7.Scene({
 
 });
 window.scene = scene;
-scene.on('load', () => {
+scene.on('loaded', () => {
 
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
     const citylayer = scene.PolygonLayer()
     .source(city)
-    .color('pm2_5_24h', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    .color('pm2_5_24h',colorObj.blue)
     .shape('fill')
-    .active({ fill: '#fff' })
+    .active({ fill: "#5B2899" })
     .style({
       opacity: 1
     })
     .render();
-    citylayer.on('move',(e)=>{
-      $("#info").css({'left': e.pixel.x,'top':e.pixel.y});
-       $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.aqi || 0}</span></p>`);
+    citylayer.on('click',(e)=>{
+      $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
+      $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.aqi || 0}</span></p>`);
     })
+     $('.info-panel input').change(function(){
+        $(this).next().text($(this).val());
+        const min = $('.info-panel input').val();
+        const max = $($('.info-panel input')[1]).val();
+        citylayer.filter('pm2_5_24h',(value)=>{
+           return (value>=min && value<=max) 
+        }).render();
+      })
+
+      $('.info-panel select').change(function(){
+        const color = $(this).val();
+        citylayer.color('pm2_5_24h',colorObj[color]).render();
+        citylayer.active({ fill: "red" }).render();
+      })
+        
   });
 });
 
