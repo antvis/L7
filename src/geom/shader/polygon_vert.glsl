@@ -1,7 +1,7 @@
 precision highp float;
-#define ambientRatio 0.2
-#define diffuseRatio 0.5
-#define specularRatio 0.3
+#define ambientRatio 0.5
+#define diffuseRatio 0.3
+#define specularRatio 0.2
 attribute vec4 a_color; 
 attribute vec4 a_idColor;
 attribute vec2 faceUv;
@@ -13,8 +13,8 @@ void main() {
   vec3 worldNormal = vec3(vec4(normal,1.0) * modelMatrix);
   // //cal light weight
   vec3 viewDir = normalize(cameraPosition - worldPos);
-  vec3 lightDir = normalize(vec3(1, -1.5, 2));
-  // vec3 lightDir = normalize(vec3(0.05,-0.001,-1));
+  vec3 lightDir = normalize(vec3(1, -10.5, 12));
+  //vec3 lightDir = normalize(vec3(0.05,-0.001,-1));
   vec3 halfDir = normalize(viewDir+lightDir);
   // //lambert
   float lambert = dot(worldNormal, lightDir);

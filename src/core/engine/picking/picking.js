@@ -9,6 +9,7 @@ class Picking {
     this._camera = camera;
     this._raycaster = new THREE.Raycaster();
     this.scene = scene;
+    this._envents=[];
 
     // TODO: Match this with the line width used in the picking layers
     this._raycaster.linePrecision = 3;
@@ -37,14 +38,15 @@ class Picking {
 
     this._mouseUpHandler = this._onMouseUp.bind(this);
     this._world._container.addEventListener('mouseup', this._mouseUpHandler, false);
+    this._world._container.addEventListener('mousemove', this._mouseUpHandler, false);
     this._world._container.addEventListener('mousemove', this._onWorldMove.bind(this), false);
   }
 
   _onMouseUp(event) {
     // Only react to main button click
-    if (event.button !== 0) {
-      return;
-    }
+    // if (event.button !== 0) {
+    //   return;
+    // }
 
     const point = { x: event.clientX, y: event.clientY };
     const normalisedPoint = { x: 0, y: 0 };
@@ -72,6 +74,7 @@ class Picking {
     this._needUpdate = true;
   }
   _update(point) {
+
     const texture = this._pickingTexture;
     if (this._needUpdate) {
 
@@ -82,6 +85,20 @@ class Picking {
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
       
+  }
+  // 添加dom事件 支持 mousedown ,mouseenter mouseleave mousemove mouseover mouseout mouse up
+  on(type){
+    
+    this._mouseUpHandler = this._onMouseUp.bind(this);
+    this._world._container.addEventListener(type, this._mouseUpHandler, false);
+    this._envents.push([type,this._mouseUpHandler])
+  }
+  off(type,hander){
+    this._world._container.removeEventListener(type, this._mouseUpHandler, false);
+    this._envents = this._envents.filter((item)=>{
+        return item[0]==='type' && hander ===item[1];
+    })
+    
   }
   _updateRender() {
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
@@ -115,7 +132,7 @@ class Picking {
     //
     // TODO: Look into the leak potential for passing so much by reference here
     const item = {
-      featureId: id,
+      featureId: id-1,
       point2d: _point2d,
       point3d: _point3d,
       intersects
@@ -147,8 +164,10 @@ class Picking {
     // TODO: Find a way to properly remove these listeners as they stay
     // active at the moment
     window.removeEventListener('resize', this._resizeHandler, false);
-    this._world._container.removeEventListener('mouseup', this._mouseUpHandler, false);
-
+    this._envents.forEach((event)=>{
+      this._world._container.removeEventListener(event[0], event[1], false);
+    })
+  
     this._world.off('move', this._onWorldMove);
 
     if (this._pickingScene.children) {

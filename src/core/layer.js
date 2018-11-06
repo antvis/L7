@@ -80,6 +80,7 @@ export default class Layer extends Base {
   }
   remove(object) {
     this._object3D.remove(object);
+    
   }
   _getUniqueId() {
     return id++;
@@ -239,10 +240,10 @@ export default class Layer extends Base {
     const data = this.layerSource.get('data');
     const selectFeatureIds = [];
     let featureStyleId = 0;
-    /* eslint-disable */
+    /* eslint-disable */  // 如果是mutiPolygon 一个要素会对应多个geometry
     turfMeta.flattenEach(data, (currentFeature, featureIndex, multiFeatureIndex) => {
     /* eslint-disable */
-      if (featureIndex === featureId) {
+      if (featureIndex === (featureId)) {
         selectFeatureIds.push(featureStyleId);
       }
       featureStyleId++;
@@ -250,6 +251,7 @@ export default class Layer extends Base {
         return;
       }
     });
+  
     if (this.StyleData[selectFeatureIds[0]].hasOwnProperty('filter') && this.StyleData[selectFeatureIds[0]].filter === false) { return; }
     const style = Util.assign({}, this.StyleData[featureId]);
     style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
@@ -337,6 +339,7 @@ export default class Layer extends Base {
     this.StyleData = mappedData;
     return mappedData;
   }
+  // 更新地图映射
   _updateMaping() {
     const self = this;
     const attrs = self.get('attrs');
@@ -464,6 +467,7 @@ export default class Layer extends Base {
     
     const id = featureStyleId[0];
     let dataIndex = 0;
+    // 计算第一个要素对应的颜色位置
     if(indices){ 
       // 面图层和
         for (let i = 0; i < id; i++) {
@@ -479,7 +483,7 @@ export default class Layer extends Base {
         vertindex = indices[index];
       const color = style.color;
       const colorAttr =this.layerMesh.geometry.attributes.a_color;
-      colorAttr.dynamic =true;
+      // colorAttr.dynamic =true;
       vertindex.forEach(() => {
         colorAttr.array[dataIndex*4+0]=color[0];
         colorAttr.array[dataIndex*4+1]=color[1];
@@ -501,11 +505,13 @@ export default class Layer extends Base {
    * @param {*} filterData  数据过滤标识符
    */
   _updateFilter() {
+    console.log('updateFilter');
     this._updateMaping();
     const filterData = this.StyleData;
     this._activeIds = null; // 清空选中元素
     let dataIndex = 0;
     const colorAttr =  this.layerMesh.geometry.attributes.a_color;
+    const pickAttr = this.layerMesh.geometry.attributes.pickingId;
     if(this.layerMesh.type =='Points'){ //点图层更新
       filterData.forEach((item,index)=>{
         const color = [ ...this.StyleData[index].color ];
@@ -514,29 +520,38 @@ export default class Layer extends Base {
           color[1] = 0;
           color[2] = 0;
           color[3] = 0;
-        }
+          pickAttr.array[index] = 0;
+         
+        } else {
           colorAttr.array[index*4+0]=color[0];
           colorAttr.array[index*4+1]=color[1];
           colorAttr.array[index*4+2]=color[2];
           colorAttr.array[index*4+3]=color[3];
+          pickAttr.array[index] = index;
+        }
       })
       colorAttr.needsUpdate =true;
+      pickAttr.needsUpdate =true;
       return;
     }
     const {indices} = this._buffer.bufferStruct;
      indices.forEach((vertIndexs, i) => {
       const color = [ ...this.StyleData[i].color ];
+      let pickid = this.StyleData[i].id;
       if (filterData[i].hasOwnProperty('filter') && filterData[i].filter === false) {
         color[3] = 0;
+        pickid =0;
       }
       vertIndexs.forEach(() => {
         colorAttr.array[dataIndex*4+0]=color[0];
         colorAttr.array[dataIndex*4+1]=color[1];
         colorAttr.array[dataIndex*4+2]=color[2];
         colorAttr.array[dataIndex*4+3]=color[3];
-        dataIndex++;
+         pickAttr.array[dataIndex] = pickid;
+         dataIndex++;
       });
       colorAttr.needsUpdate =true;
+      pickAttr.needsUpdate =true;
     });
     this._needUpdateFilter = false;
     this._needUpdateColor = false;
@@ -562,14 +577,17 @@ export default class Layer extends Base {
       if(indices){
        vertindex = indices[index];
       }
+      const pickAttr = this.layerMesh.geometry.attributes.pickingId;
       vertindex.forEach(() => {
         colorAttr.array[dataIndex*4+0]=color[0];
         colorAttr.array[dataIndex*4+1]=color[1];
         colorAttr.array[dataIndex*4+2]=color[2];
         colorAttr.array[dataIndex*4+3]=color[3];
+        // pickAttr.array[dataIndex]= index;
         dataIndex++;
       });
       colorAttr.needsUpdate =true
+      // pickAttr.needsUpdate =true
     });
   }
   /**

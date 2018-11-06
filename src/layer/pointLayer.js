@@ -5,6 +5,7 @@ import PointMaterial from '../geom/material/pointMaterial';
 import PolygonMaterial from '../geom/material/polygonMaterial';
 import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
+import PickingMaterial from '../core/engine/picking/pickingMaterial';
 
 /**
  * point shape 2d circle, traingle text,image
@@ -19,37 +20,20 @@ export default class PointLayer extends Layer {
   render() {
     this.type = 'point';
     this.init();
-    if(this.shapeType === 'text'){
-      this._textPoint();
-      return;
-    }
+    if(!this._hasRender){
     this._prepareRender(this.shapeType);
-    return;
-    switch (this.shapeType) {
-      case 'model':
-        this._staticModelPoint();
-        break;
-      case 'image':
-        this._imagePoint();
-        break;
-      case '2d':
-        this._2dPoint();
-        break;
-      case 'text':
-        this._textPoint();
-        break;
-      case '3d':
-        this._shapePoint();
-        break;
-      default:
-        this._2dPoint();
-        break;
-
+      this._hasRender = true;
+    } else{
+      this._initAttrs();
+      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter():null;
     }
     return this;
   }
   _prepareRender(){
-
+    if(this.shapeType === 'text'){ // 绘制文本图层
+      this._textPoint();
+      return;
+    }
     const source = this.layerSource;
     const { opacity, strokeWidth, stroke } = this.get('styleOptions');
     this._buffer = new PointBuffer({
@@ -60,11 +44,12 @@ export default class PointLayer extends Layer {
     });
     const geometry = this.geometry = new THREE.BufferGeometry();
     let mtl;
-    if(this.shapeType=='3d'){
+    if(this.shapeType!=='image'){
       mtl = new PolygonMaterial({
         u_opacity: opacity
       });
     } else{
+     
      mtl = new PointMaterial({
       u_opacity: opacity,
       u_strokeWidth: strokeWidth,
@@ -80,104 +65,23 @@ export default class PointLayer extends Layer {
     const { attributes } = this._buffer;
     geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
     geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-    geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
     geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
     if(this.shapeType ==='image'){
       geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
-    }else if(this.shapeType=='2d'){
-      geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapes, 1));
-    } else if(this.shapeType=='3d')
-    {
-
+      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
+    }else{
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
     }
     let mesh;
-     if(this.shapeType!=='3d'){
+     if(this.shapeType=='image'){
       mesh = new THREE.Points(geometry, mtl);
      }else{
+      const pickmaterial = new PickingMaterial();
        mesh = new THREE.Mesh(geometry, mtl);
+
      }
 
-  
     this.add(mesh);
-  }
-  _imagePoint() {
-    const { opacity, strokeWidth, stroke } = this.get('styleOptions');
-    const source = this.layerSource;
-      const geometry = new THREE.BufferGeometry();
-      const buffer = new PointBuffer({
-        imagePos: this.scene.image.imagePos,
-        type: this.shapeType,
-        coordinates: source.geoData,
-        properties: this.StyleData
-      });
-      const mtl = new PointMaterial({
-        u_opacity: opacity,
-        u_strokeWidth: strokeWidth,
-        u_stroke: stroke,
-        u_texture: this.scene.image.texture
-      });
-      const { attributes } = buffer;
-      geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-      geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-      geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
-      geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-      const mesh = new THREE.Points(geometry, mtl);
-      console.log(mesh);
-      this.add(mesh);
-    return this;
-  }
-  // sdf 绘制多边形
-  _2dPoint() {
-    const source = this.layerSource;
-    const { opacity, strokeWidth, stroke } = this.get('styleOptions');
-
-    const buffer = new PointBuffer({
-      type: this.shapeType,
-      coordinates: source.geoData,
-      properties: this.StyleData
-    });
-    this._buffer = buffer;
-    const geometry = new THREE.BufferGeometry();
-    const mtl = new PointMaterial({
-      u_opacity: opacity,
-      u_strokeWidth: strokeWidth,
-      u_stroke: stroke,
-      shape: this.shapeType || false
-    });
-    const { attributes } = buffer;
-    geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-    geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-    geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapes, 1));
-    geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-    const mesh = new THREE.Points(geometry, mtl);
-    this.add(mesh);
-
-  }
-  _shapePoint() {
-    const source = this.layerSource;
-    const geometry = new THREE.BufferGeometry();
-    const material = new PolygonMaterial({
-      u_opacity: 1.0
-    });
-    const buffer = new PointBuffer({
-      type: this.shapeType,
-      coordinates: source.geoData,
-      properties: this.StyleData
-    });
-    this.buffer = buffer;
-    const { attributes } = buffer;
-    geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-    geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-    geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-    geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-
-    const mesh = new THREE.Mesh(geometry, material);
-    this.remove(this.layerMesh);
-    this.add(mesh);
-
   }
   _textPoint() {
     const source = this.layerSource;
@@ -215,36 +119,6 @@ export default class PointLayer extends Layer {
     });
 
   }
-  _getPointScale() {
-    const zoom = this.scene.map.getZoom();
-    const size = this.get('styleOptions').size * Math.pow(2, 18 - zoom);
-    const out = new THREE.Matrix4();
-    out.scale([ size, size, size ]);
-    return out;
-  }
-  _customPoint() {
-  }
-  // todo add pickUP
-  _staticModelPoint() {
 
-    const source = this.layerSource;
-    this.resourceLoader.once('batchLoaded', e => {
-      const gltfs = e.data;
-      source.geoData.forEach((pt, index) => {
-        const { size, shape } = this.StyleData[index];
-        const model = gltfs[shape].asset.rootScene.nodes[0];
-        const gltfNode = model.clone();
-        gltfNode.position = [ pt[0], pt[1], pt[2] ];
-        gltfNode.rotateByAngles(90, 0, 0);
-        gltfNode.scale = [ size, size, size ];
-        this.layerNode.addChild(gltfNode);
-        this._animations(gltfNode, gltfs[shape]);
-
-      });
-
-
-    });
-
-  }
 }
 

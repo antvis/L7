@@ -40,32 +40,37 @@ scene.on('loaded', () => {
      .color('#0198BD')
     .size(40.0)
     .shape('image:bike')
-    .render();
+    //.render();
   });
   $.get('./data/fence.json', data => {
     scene.PolygonLayer({
       zIndex: 0
     })
-     .source(data)
-    .shape('fill')
+    .source(data)
+    .shape('line')
     .color('#0198BD')
      .style({
-       opacity:0.6
+       opacity:0.5
      })
      .render();
   });
   $.getJSON('./data/pointZone.json', data => {
-    scene.PolygonLayer({
+    const fenceLayer = scene.PolygonLayer({
       zIndex: 1
     })
      .source(data)
     .shape('fill')
+    .active({fill:'blue'})
     .color("#F04850")
      .style({
        opacity:1.0
      })
      .render();
+      fenceLayer.on('click',(e)=>{
+        console.log(e.feature.properties._id);
+      })
   });
+ 
 });
 
 </script>

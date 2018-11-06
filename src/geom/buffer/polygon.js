@@ -24,6 +24,7 @@ export default class PolygonBuffer extends BufferBase {
         });
       }
       positions.push(extrudeData.positions);
+      if (shape !== 'line')
       faceUv.push(...extrudeData.faceUv);
       indexCount += extrudeData.positionsIndex.length;
       positionsIndex.push(extrudeData.positionsIndex);

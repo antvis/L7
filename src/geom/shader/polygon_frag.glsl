@@ -5,6 +5,10 @@ varying vec2 v_texCoord;
 varying  vec4 v_color;
 varying float vlightWeight;
 void main() {
+   if(v_color.w == 0.0) {
+     discard;
+     return;
+   }
    #ifdef TEXCOORD_0
      if(v_texCoord.x == -1.0) {
         gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);

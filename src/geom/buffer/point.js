@@ -1,5 +1,6 @@
 import BufferBase from './bufferBase';
 import { regularShape } from '../shape/index';
+import Util from '../../util'
 import * as THREE from '../../core/three';
 const shapeObj = {
   circle: 30,
@@ -15,7 +16,7 @@ export default class PointBuffer extends BufferBase {
     switch (type) {
       case 'image' : this._imageBuffer();
         break;
-      case '2d': this._2dRegularBuffer();
+      case '2d': this._3dRegularBuffer();
         break;
       case '3d': this._3dRegularBuffer();
         break;
@@ -61,16 +62,22 @@ export default class PointBuffer extends BufferBase {
   _3dRegularBuffer() {
     const coordinates = this.get('coordinates');
     const properties = this.get('properties');
+    const type = this.get('type');
     const positions = [];
     const positionsIndex = [];
     let indexCount = 0;
     this.bufferStruct.style = properties;
     coordinates.forEach((geo, index) => {
       const m1 = new THREE.Matrix4();
-      const { size, shape } = properties[index];
-      const vert = regularShape[shape]('extrude');
+      let { size, shape } = properties[index];
+      let shapeType ='extrude'
+      if( type==='2d' ||(type==='3d'&& size[2]===0) ){
+        shapeType ='fill';
+        Util.isArray (size) || (size=[size,size,0]);
+        geo[2] +=Math.random()*100;
+      }
+      const vert = regularShape[shape](shapeType);
       m1.setPosition(new THREE.Vector3(...geo));
-      size[2] += Math.random() * 1000;
       m1.scale(new THREE.Vector3(...size));
       vert.positions = vert.positions.map(coor => {
         const vector = new THREE.Vector4(...coor, 1);

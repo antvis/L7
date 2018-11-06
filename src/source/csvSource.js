@@ -20,7 +20,7 @@ export default class CSVSource extends Source {
       if (x1 && y1) {
         coordinates = [[ col[x], col[y] ], [ col[x1], col[y1] ]];
       }
-      col._id = featureIndex;
+      col._id = featureIndex+1;
       this._coordProject(coordinates);
       this.geoData.push(this._coordProject(coordinates));
     });

@@ -3,6 +3,7 @@ import Layer from '../core/layer';
 import PolygonBuffer from '../geom/buffer/polygon';
 import PolygonMaterial from '../geom/material/polygonMaterial';
 import { LineMaterial } from '../geom/material/lineMaterial';
+import PickingMaterial from '../core/engine/picking/pickingMaterial';
 export default class PolygonLayer extends Layer {
   shape(type) {
     this.shape = type;
@@ -13,10 +14,9 @@ export default class PolygonLayer extends Layer {
       this._hasRender = true;
       this._prepareRender();
     } else{
-      console.time('update');
+      
       this._initAttrs();
       (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter():null;
-      console.timeEnd('update');
     }
 
     
@@ -59,6 +59,7 @@ export default class PolygonLayer extends Layer {
     });
     const { attributes } = this._buffer;
     this.geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
+    const pickmaterial = new PickingMaterial();
     const polygonMesh = new THREE.Mesh(this.geometry, material);
     this.add(polygonMesh);
    

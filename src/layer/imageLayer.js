@@ -13,6 +13,7 @@ export default class imageLayer extends Layer {
   render() {
     this.init();
     const source = this.layerSource;
+    const { opacity } = this.get('styleOptions');
     // 加载 完成事件
     source.on('imageLoaded', () => {
       const buffer = new ImageBuffer({
@@ -22,7 +23,7 @@ export default class imageLayer extends Layer {
       this.initGeometry(buffer.attributes);
       const material = new ImageMaterial({
         u_texture: buffer.texture,
-        u_opacity: 1.0
+        u_opacity: opacity
       });
       const imageMesh = new THREE.Mesh(this.geometry, material);
       this.add(imageMesh);

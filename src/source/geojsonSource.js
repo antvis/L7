@@ -12,7 +12,7 @@ export default class GeojsonSource extends Source {
     turfMeta.flattenEach(data, (currentFeature, featureIndex) => {
       const coord = getCoords(cleanCoords(currentFeature));
       this.geoData.push(this._coordProject(coord));
-      currentFeature.properties._id = featureIndex;
+      currentFeature.properties._id = featureIndex+1;
       this.propertiesData.push(currentFeature.properties);
     });
   }

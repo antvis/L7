@@ -14,8 +14,5 @@ export default function PolygonMaterial(options) {
       TEXCOORD_0: !!options.u_texture
     }
   });
-  material.roughness = 1;
-  material.metalness = 0.1;
-  material.envMapIntensity = 3;
   return material;
 }

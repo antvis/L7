@@ -24,32 +24,21 @@ const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
   center: [ 110.770672, 34.159869 ],
-  pitch: 45,
+  pitch: 0,
   zoom: 5,
   minZoom: 4,
-  maxZoom: 10
+  maxZoom: 6
 });
 
 scene.on('loaded', () => {
-  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
-    citylayer = scene.PolygonLayer({
-      zIndex: 10
-    })
-    .source(city)
-    .color('#fff')
-    .shape('line')
-   // .active({ fill: 'red' })
-    .style({
-      opacity: 1
-    })
-    .render();
-  });
 // https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png
   const imageLayer = scene.ImageLayer().
       source({
         url: 'https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png',
         extent: [ 73, 18, 136, 54 ]
-
+      })
+      .style({
+        opacity:0.8,
       })
       .render();
 
