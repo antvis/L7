@@ -4,7 +4,7 @@ export { Scene } from 'three/src/scenes/Scene.js';
 export { WebGLRenderer } from 'three/src/renderers/WebGLRenderer.js';
 export { CanvasTexture } from 'three/src/textures/CanvasTexture.js';
 export { Object3D } from 'three/src/core/Object3D.js';
-export {Clock } from 'three/src/core/Clock';
+export { Clock } from 'three/src/core/Clock';
 export { Points } from 'three/src/objects/Points.js';
 export { LineSegments } from 'three/src/objects/LineSegments.js';
 export { Mesh } from 'three/src/objects/Mesh.js';

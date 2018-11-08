@@ -9,7 +9,7 @@ class Picking {
     this._camera = camera;
     this._raycaster = new THREE.Raycaster();
     this.scene = scene;
-    this._envents=[];
+    this._envents = [];
 
     // TODO: Match this with the line width used in the picking layers
     this._raycaster.linePrecision = 3;
@@ -78,27 +78,27 @@ class Picking {
     const texture = this._pickingTexture;
     if (this._needUpdate) {
 
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-    this._needUpdate = false;
+      this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+      this._needUpdate = false;
     }
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
-      
+
   }
   // 添加dom事件 支持 mousedown ,mouseenter mouseleave mousemove mouseover mouseout mouse up
-  on(type){
-    
+  on(type) {
+
     this._mouseUpHandler = this._onMouseUp.bind(this);
     this._world._container.addEventListener(type, this._mouseUpHandler, false);
-    this._envents.push([type,this._mouseUpHandler])
+    this._envents.push([ type, this._mouseUpHandler ]);
   }
-  off(type,hander){
+  off(type, hander) {
     this._world._container.removeEventListener(type, this._mouseUpHandler, false);
-    this._envents = this._envents.filter((item)=>{
-        return item[0]==='type' && hander ===item[1];
-    })
-    
+    this._envents = this._envents.filter(item => {
+      return item[0] === 'type' && hander === item[1];
+    });
+
   }
   _updateRender() {
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
@@ -109,7 +109,7 @@ class Picking {
     // Interpret the pixel as an ID
     const id = (this.pixelBuffer[2] * 255 * 255) + (this.pixelBuffer[1] * 255) + (this.pixelBuffer[0]);
     // Skip if ID is 16646655 (white) as the background returns this
-    if (id === 16646655 || this.pixelBuffer[3]===0  ) {
+    if (id === 16646655 || this.pixelBuffer[3] === 0) {
       return;
     }
 
@@ -132,7 +132,7 @@ class Picking {
     //
     // TODO: Look into the leak potential for passing so much by reference here
     const item = {
-      featureId: id-1,
+      featureId: id - 1,
       point2d: _point2d,
       point3d: _point3d,
       intersects
@@ -164,10 +164,10 @@ class Picking {
     // TODO: Find a way to properly remove these listeners as they stay
     // active at the moment
     window.removeEventListener('resize', this._resizeHandler, false);
-    this._envents.forEach((event)=>{
+    this._envents.forEach(event => {
       this._world._container.removeEventListener(event[0], event[1], false);
-    })
-  
+    });
+
     this._world.off('move', this._onWorldMove);
 
     if (this._pickingScene.children) {

@@ -42,11 +42,14 @@ scene.on('loaded', () => {
      })
     .shape('arc')
     .size(2.0)
-    .color('value', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    .color('rgba(41,66,166,255)')
+    .style({
+      opacity:0.5,
+    })
+    .animate({enable:true})
     .render();
   });
 });
-
 </script>
 </body>
 </html>

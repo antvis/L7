@@ -1,6 +1,6 @@
 import BufferBase from './bufferBase';
 import { regularShape } from '../shape/index';
-import Util from '../../util'
+import Util from '../../util';
 import * as THREE from '../../core/three';
 const shapeObj = {
   circle: 30,
@@ -70,11 +70,11 @@ export default class PointBuffer extends BufferBase {
     coordinates.forEach((geo, index) => {
       const m1 = new THREE.Matrix4();
       let { size, shape } = properties[index];
-      let shapeType ='extrude'
-      if( type==='2d' ||(type==='3d'&& size[2]===0) ){
-        shapeType ='fill';
-        Util.isArray (size) || (size=[size,size,0]);
-        geo[2] +=Math.random()*100;
+      let shapeType = 'extrude';
+      if (type === '2d' || (type === '3d' && size[2] === 0)) {
+        shapeType = 'fill';
+        Util.isArray(size) || (size = [ size, size, 0 ]);
+        geo[2] += Math.random() * 100;
       }
       const vert = regularShape[shape](shapeType);
       m1.setPosition(new THREE.Vector3(...geo));

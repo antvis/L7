@@ -19,25 +19,34 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-
-const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 116.2825, 39.9 ],
-  pitch: 0,
-  zoom: 5,
-  minZoom: 5,
-  maxZoom: 10
+  center: [ 121.500361, 31.252063 ],
+  pitch: 64.75753604193972,
+  zoom: 14.83,
+  minZoom: 10,
+  maxZoom: 20
 });
 scene.on('loaded', () => {
-  // $.get('https://gw.alipayobjects.com/os/rmsportal/lZGtNaYGNHtAIkcjVvfp.json', data => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/lZGtNaYGNHtAIkcjVvfp.json', data => {
+  $.get('./data/taxiPolyline.json', data => {
     scene.LineLayer({
       zIndex: 2
     })
      .source(data)
-    .color('#3CB4F0')
+    .color('#F08D41')
+    .animate({enable:true})
+    .render();
+  });
+   $.get('./data/2.geojson', data => {
+    scene.PolygonLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .shape('extrude')
+    .size('floor',[0,3000])
+    .color('rgba(240,240,240,1.0)')
+     .animate({enable:true})
     .render();
   });
 });

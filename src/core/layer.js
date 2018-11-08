@@ -37,15 +37,18 @@ export default class Layer extends Base {
       attrs: {},
       // 样式配置项
       styleOptions: {
-        stroke: [1.0,1.0,1.0,1.0],
+        stroke: [ 1.0, 1.0, 1.0, 1.0 ],
         strokeWidth: 1.0,
-        opacity: 1.0
+        opacity: 1.0,
+        texture:false
       },
       // 选中时的配置项
       selectedOptions: null,
       // active 时的配置项
       activedOptions: null,
-      animateOptions: null
+      animateOptions: {
+        enable:false,
+      }
     };
   }
   constructor(scene, cfg) {
@@ -60,7 +63,7 @@ export default class Layer extends Base {
     this.layerId = layerId;
     this._activeIds = null;
     // todo 用户参数
-    this._object3D.position.z = this.get('zIndex')*100;
+    this._object3D.position.z = this.get('zIndex') * 100;
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
 
@@ -71,8 +74,11 @@ export default class Layer extends Base {
    */
   add(object) {
     this.layerMesh = object;
+    this.layerMesh.onBeforeRender=()=>{
+      this.layerMesh.material.setUniformsValue('u_time',this.scene._engine.clock.getElapsedTime())
+    }
     // 更新
-    if(this._needUpdateFilter) {
+    if (this._needUpdateFilter) {
       this._updateFilter();
     }
     this._object3D.add(object);
@@ -80,7 +86,7 @@ export default class Layer extends Base {
   }
   remove(object) {
     this._object3D.remove(object);
-    
+
   }
   _getUniqueId() {
     return id++;
@@ -99,7 +105,7 @@ export default class Layer extends Base {
     return this;
   }
   color(field, values) {
-    this._needUpdateColor = true;//标识颜色是否需要更新
+    this._needUpdateColor = true;// 标识颜色是否需要更新
     this._createAttrOption('color', field, values, Global.colors);
     return this;
   }
@@ -172,8 +178,24 @@ export default class Layer extends Base {
     this._createAttrOption('filter', field, values, true);
     return this;
   }
-  animate(callback) {
-    this.set('animateOptions', callback);
+  animate(field,cfg) {
+    let styleOptions = this.get('animateOptions');
+    if (!styleOptions) {
+      styleOptions = {};
+      this.set('animateOptions', animateOptions);
+    }
+    if (Util.isObject(field)) {
+      cfg = field;
+      field = null;
+    }
+    let fields;
+    if (field) {
+      fields = parseFields(field);
+    }
+    styleOptions.fields = fields;
+    Util.assign(styleOptions, cfg);
+    this.set('styleOptions', styleOptions);
+    return this;
     return this;
   }
   texture() {
@@ -223,7 +245,7 @@ export default class Layer extends Base {
     this._initAttrs();
     this._scaleByZoom();
     this._mapping();
-  
+
     const activeHander = this._addActiveFeature.bind(this);
     if (this.get('allowActive')) {
 

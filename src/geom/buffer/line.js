@@ -64,16 +64,12 @@ export default class LineBuffer extends BufferBase {
         inposs[i * 4 + 2] = bufferStruct.instances[i][2];
         inposs[i * 4 + 3] = bufferStruct.instances[i][3];
       }
-      if (propertiesData) {
-        const time = propertiesData[index].time;
-        times[i] = time;
-      }
+   
     }
     return {
       vertices,
       colors,
       inposs,
-      times
     };
   }
 }

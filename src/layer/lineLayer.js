@@ -14,15 +14,18 @@ export default class MeshlineLayer extends Layer {
       properties: StyleData,
       propertiesData: source.propertiesData
     });
+    const { opacity} = this.get('styleOptions');
+    const animateOptions= this.get('animateOptions');
     const geometry = new THREE.BufferGeometry();
     const { attributes } = buffer;
     const shape = buffer.shape;
     if (shape === 'arc') {
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-      geometry.addAttribute('a_instance', new THREE.Float32BufferAttribute(attributes.inposs, 4));
+      geometry.addAttribute('a_instance', new THREE.Float32BufferAttribute(attributes.inposs, 4))
+      console.log(opacity)
       const material = new ArcLineMaterial({
-        u_opacity: 1.0
+        u_opacity: opacity
       });
       const mesh = new THREE.Line(geometry, material);
       this.add(mesh);
@@ -30,18 +33,22 @@ export default class MeshlineLayer extends Layer {
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
       const material = new LineMaterial({
-        u_opacity: 1.0
+        u_opacity: opacity
       });
       const mesh = new THREE.Mesh(geometry, material);
       this.add(mesh);
-    } else {
+    } else { // 直线
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-      geometry.addAttribute('a_time', new THREE.Float32BufferAttribute(attributes.times, 1));
+      
       const material = new LineMaterial({
-        u_opacity: 1.0,
-        u_time: 1000
+        u_opacity: opacity,
+        u_time: 0
       });
+      if(animateOptions.enable){
+        material.setDefinesvalue('ANIMATE',true)
+      }
+      
       const mesh = new THREE.LineSegments(geometry, material);
       this.add(mesh);
     }

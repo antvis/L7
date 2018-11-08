@@ -7,8 +7,8 @@ export default class LoadImage extends EventEmitter {
     super();
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.ctx.fillStyle="#FF0000";
-    this.ctx.fillRect(0,0,512,512);
+    this.ctx.fillStyle = '#FF0000';
+    this.ctx.fillRect(0, 0, 512, 512);
     this.imageWidth = 64;
     this.canvas.width = this.imageWidth * 8;
     this.canvas.height = this.imageWidth * 8;

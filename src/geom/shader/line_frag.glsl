@@ -1,12 +1,14 @@
     precision highp float;
  
     varying vec4 v_color;
-    // varying float vTime;
+    varying float vTime;
     void main() {
-    // if (vTime > 1.0 || vTime < 0.0) {
-    //     discard;
-    //  }  
-    gl_FragColor = v_color;
- 
-    //   gl_FragColor.a = gl_FragColor.a * vTime;
-    }
+      vec4 color = v_color;
+      #ifdef ANIMATE 
+        if (vTime > 1.0 || vTime < 0.0) {
+            discard;
+      } 
+      color.a= color.a * vTime;
+      #endif
+      gl_FragColor =color;
+}

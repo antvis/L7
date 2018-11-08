@@ -65,7 +65,7 @@ scene.on('loaded', () => {
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
     const citylayer = scene.PolygonLayer()
     .source(city)
-    .color('pm2_5_24h',colorObj.blue)
+    .color('pm2_5_24h',["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"],)
     .shape('fill')
     .active({ fill: "#5B2899" })
     .style({
@@ -76,21 +76,6 @@ scene.on('loaded', () => {
       $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
       $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.aqi || 0}</span></p>`);
     })
-     $('.info-panel input').change(function(){
-        $(this).next().text($(this).val());
-        const min = $('.info-panel input').val();
-        const max = $($('.info-panel input')[1]).val();
-        citylayer.filter('pm2_5_24h',(value)=>{
-           return (value>=min && value<=max) 
-        }).render();
-      })
-
-      $('.info-panel select').change(function(){
-        const color = $(this).val();
-        citylayer.color('pm2_5_24h',colorObj[color]).render();
-        citylayer.active({ fill: "red" }).render();
-      })
-        
   });
 });
 

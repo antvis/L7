@@ -20,17 +20,17 @@ export default class PointLayer extends Layer {
   render() {
     this.type = 'point';
     this.init();
-    if(!this._hasRender){
-    this._prepareRender(this.shapeType);
+    if (!this._hasRender) {
+      this._prepareRender(this.shapeType);
       this._hasRender = true;
-    } else{
+    } else {
       this._initAttrs();
-      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter():null;
+      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter() : null;
     }
     return this;
   }
-  _prepareRender(){
-    if(this.shapeType === 'text'){ // 绘制文本图层
+  _prepareRender() {
+    if (this.shapeType === 'text') { // 绘制文本图层
       this._textPoint();
       return;
     }
@@ -44,42 +44,42 @@ export default class PointLayer extends Layer {
     });
     const geometry = this.geometry = new THREE.BufferGeometry();
     let mtl;
-    if(this.shapeType!=='image'){
+    if (this.shapeType !== 'image') {
       mtl = new PolygonMaterial({
         u_opacity: opacity
       });
-    } else{
-     
-     mtl = new PointMaterial({
-      u_opacity: opacity,
-      u_strokeWidth: strokeWidth,
-      u_stroke: stroke,
-      shape: this.shapeType || false,
-      u_texture: this.scene.image.texture
-    },{
-      SHAPE:(this.shapeType !=='image'),
-      TEXCOORD_0: (this.shapeType ==='image')
-    });
-   }
-   
+    } else {
+
+      mtl = new PointMaterial({
+        u_opacity: opacity,
+        u_strokeWidth: strokeWidth,
+        u_stroke: stroke,
+        shape: this.shapeType || false,
+        u_texture: this.scene.image.texture
+      }, {
+        SHAPE: (this.shapeType !== 'image'),
+        TEXCOORD_0: (this.shapeType === 'image')
+      });
+    }
+
     const { attributes } = this._buffer;
     geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
     geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
     geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-    if(this.shapeType ==='image'){
+    if (this.shapeType === 'image') {
       geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    }else{
+    } else {
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
     }
     let mesh;
-     if(this.shapeType=='image'){
+    if (this.shapeType == 'image') {
       mesh = new THREE.Points(geometry, mtl);
-     }else{
+    } else {
       const pickmaterial = new PickingMaterial();
-       mesh = new THREE.Mesh(geometry, mtl);
+      mesh = new THREE.Mesh(geometry, mtl);
 
-     }
+    }
 
     this.add(mesh);
   }

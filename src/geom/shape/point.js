@@ -29,7 +29,7 @@ export function diamond(type) {
   return polygonShape[type]([ points ]);
 }
 
-export function square (type){
+export function square(type) {
   return diamond(type);
 }
 

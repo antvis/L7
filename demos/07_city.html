@@ -22,10 +22,11 @@
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'light', // 样式URL
+  mapStyle: 'dark', // 样式URL
   center: [120.174865, 30.245345],
   pitch: 45,
-  zoom: 12.63
+  zoom: 14.63,
+  minZoom:10
 });
 window.scene = scene;
 scene.on('loaded', () => {
@@ -71,8 +72,8 @@ scene.on('loaded', () => {
     })
     .source(data)
     .shape('extrude')
-    .size('floor',[10,3000])
-    .color('rgb(250,250,250)')
+    .size('floor',[10,1000])
+    .color('rgba(250,250,250,0.9)')
     .render();
   });
 });

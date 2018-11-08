@@ -8,6 +8,7 @@ export default class PolygonBuffer extends BufferBase {
     const shape = this.get('shape');
     const positions = [];
     const faceUv = [];
+    const sizes = [];
     const positionsIndex = [];
     let indexCount = 0;
     this.bufferStruct.style = properties;
@@ -24,8 +25,16 @@ export default class PolygonBuffer extends BufferBase {
         });
       }
       positions.push(extrudeData.positions);
-      if (shape !== 'line')
-      faceUv.push(...extrudeData.faceUv);
+
+      if (shape !== 'line') { 
+       // faceUv.push(...extrudeData.faceUv);
+        const count = extrudeData.faceUv.length /2;
+        for(let i=0;i<count;i++){
+          faceUv.push(extrudeData.faceUv[i*2]*0.1,extrudeData.faceUv[i*2+1] * heightValue/3000);
+          sizes.push((1.0 - extrudeData.faceUv[i*2+1]) * heightValue)
+        }
+
+       }
       indexCount += extrudeData.positionsIndex.length;
       positionsIndex.push(extrudeData.positionsIndex);
     });
@@ -34,6 +43,7 @@ export default class PolygonBuffer extends BufferBase {
     this.bufferStruct.indexCount = indexCount;
     this.bufferStruct.style = properties;
     this.bufferStruct.faceUv = faceUv;
+    this.bufferStruct.sizes = sizes;
     if (shape !== 'line') {
       this.attributes = this._toPolygonAttributes(this.bufferStruct);
       this.faceTexture = this._generateTexture();

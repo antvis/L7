@@ -169,7 +169,8 @@ export default class BufferBase extends Base {
       normals,
       colors,
       pickingIds,
-      faceUv: new Float32Array(polygon.faceUv)
+      faceUv: new Float32Array(polygon.faceUv),
+      sizes:new Float32Array(polygon.sizes)
 
     };
 
@@ -253,7 +254,8 @@ export default class BufferBase extends Base {
         context.fillRect(x, y, 2, 4);
       }
     }
-
+    context.fillStyle = '#105CB3';
+    context.fillRect(0,60, 32, 64);
     // build a bigger canvas and copy the small one in it
     // This is a trick to upscale the texture without filtering
     const canvas2 = document.createElement('canvas');
