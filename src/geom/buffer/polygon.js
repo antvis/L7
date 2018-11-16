@@ -26,15 +26,22 @@ export default class PolygonBuffer extends BufferBase {
       }
       positions.push(extrudeData.positions);
 
-      if (shape !== 'line') { 
+      if (shape !== 'line') {
        // faceUv.push(...extrudeData.faceUv);
-        const count = extrudeData.faceUv.length /2;
-        for(let i=0;i<count;i++){
-          faceUv.push(extrudeData.faceUv[i*2]*0.1,extrudeData.faceUv[i*2+1] * heightValue/3000);
-          sizes.push((1.0 - extrudeData.faceUv[i*2+1]) * heightValue)
+        const count = extrudeData.faceUv.length / 2;
+        for (let i = 0; i < count; i++) {
+          // uv 系数生成等大小的窗户
+          let x = extrudeData.faceUv[i * 2];
+          let y = extrudeData.faceUv[i * 2 + 1];
+          if (x !== -1) {
+            x = x * 0.1;
+            y = y * heightValue / 3000;
+          }
+          faceUv.push(x, y);
+          sizes.push((1.0 - extrudeData.faceUv[i * 2 + 1]) * heightValue);
         }
 
-       }
+      }
       indexCount += extrudeData.positionsIndex.length;
       positionsIndex.push(extrudeData.positionsIndex);
     });

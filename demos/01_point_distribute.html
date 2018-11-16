@@ -28,7 +28,7 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/mUQPWCYaxOfiSznuANvG.txt', data => {
+  $.get('./data/mUQPWCYaxOfiSznuANvG.txt', data => {
     scene.PointLayer({
       zIndex: 2
     })

@@ -15,8 +15,8 @@
 <body>
 <div id="map"></div>
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://unpkg.com/supercluster@4.1.1/dist/supercluster.min.js"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
-<script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
 
@@ -31,47 +31,75 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.image.addImage('bike', './image/Bike.png');
+scene.image.addImage('marker', './image/marker.png');
 scene.on('loaded', () => {
   $.get('./data/pointbike.json', data => {
+    var extent = [ 110,29.2378,122.189,33.3173]
+    var dataindex = supercluster({radius:80});
+    dataindex.load(data.features);
+  
+    var clusterData = dataindex.getClusters(extent,13);
+      console.log(clusterData);
     scene.PointLayer({
-      zIndex: 2
+      zIndex: 4
     })
-    .source(data)
-     .color('#0198BD')
-    .size(40.0)
-    .shape('image:bike')
-    //.render();
+    .source({
+      "type": "FeatureCollection",
+      "features":clusterData
+      })
+     .color('#6492E9')
+    .size('point_count',[1,30])
+    .shape('2d:circle')
+    .style({
+       opacity:0.8
+     })
+    .render();
   });
   $.get('./data/fence.json', data => {
-    scene.PolygonLayer({
+    scene.LineLayer({
+      zIndex: 5
+    })
+    .source(data)
+    .shape('meshLine')
+    .size([2,0])
+    .color('#2F54EB')
+     .style({
+       opacity:1.0,
+     })
+     .render();
+      scene.PolygonLayer({
       zIndex: 0
     })
     .source(data)
-    .shape('line')
-    .color('#0198BD')
-     .style({
-       opacity:0.5
-     })
-     .render();
-  });
-  $.getJSON('./data/pointZone.json', data => {
-    const fenceLayer = scene.PolygonLayer({
-      zIndex: 1
-    })
-     .source(data)
     .shape('fill')
-    .active({fill:'blue'})
-    .color("#F04850")
+    .size([2,0])
+    .color('#2F54EB')
+    .style({
+       opacity:0.05,
+     })
+    .render();
+  });
+ 
+  
+  $.getJSON('./data/pointZone.json', data => {
+    const fenceLayer = scene.LineLayer({
+      zIndex: 1,
+      minZoom:16,
+    })
+    .source(data)
+    .size([1.5,0])
+    .shape('meshLine')
+    .color("#2F54EB")
      .style({
-       opacity:1.0
+       opacity:1.0,
+       'lineType':'solid'
      })
      .render();
-      fenceLayer.on('click',(e)=>{
-        console.log(e.feature.properties._id);
-      })
+
   });
  
 });
+
 
 </script>
 </body>

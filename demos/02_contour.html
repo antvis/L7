@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
-  <title>point_circle</title>
+  <title>hexagon demo</title>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
@@ -17,33 +17,36 @@
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
+<script src="./assets/geotiff.browserify.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
 
+const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 120.19382669582967, 30.258134 ],
-  pitch: 0,
-  zoom: 3
+  center: [ 102.615023, 23.107799],
+  pitch: 15,
+  zoom: 14,
 });
-window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/provincePoint.geojson', data => {
-    scene.PointLayer({
+  $.get('./data/contour.geojson', data => {
+    scene.LineLayer({
       zIndex: 2
     })
     .source(data)
-    .shape('name', 'text')
-    .size(10) // default 1
-    .color('#fff')
-    .style({
-      stroke: '#999',
-      strokeWidth: 2,
-      opacity: 0.85
+    .shape('meshLine')
+    .size('ELEV',(value)=>{
+        return [1,(value-1000)*7];
     })
-     .render();
+    .shape('meshLine')      
+    .color('ELEV',["#E8FCFF", "#CFF6FF", "#A1E9ff", "#65CEF7", "#3CB1F0", "#2894E0", "#1772c2", "#105CB3", "#0D408C", "#002466"].reverse())
+    .style({
+            'lineType':'solid'
+            })
+    .render();
   });
+
 });
 
 </script>

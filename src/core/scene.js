@@ -3,7 +3,6 @@ import * as THREE from './three';
 import * as layers from '../layer';
 import Base from './base';
 import LoadImage from './image';
-import Utils from '../util';
 import { MapProvider } from '../map/provider';
 import GaodeMap from '../map/gaodeMap';
 import Global from '../global';
@@ -54,6 +53,10 @@ export default class Scene extends Base {
         return layer;
       };
     }
+  }
+  on(type, hander) {
+    if (this.map) { this.map.on(type, hander); }
+    super.on(type, hander);
   }
   _initAttribution() {
     const message = '<a href="http://antv.alipay.com/zh-cn/index.html title="Large-scale WebGL-powered Geospatial Data Visualization">AntV | L7  </a>';

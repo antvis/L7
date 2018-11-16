@@ -22,10 +22,10 @@
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'dark', // 样式URL
-  center: [120.174865, 30.245345],
-  pitch: 45,
-  zoom: 14.63,
+  mapStyle: 'light', // 样式URL
+  center: [120.173104,  30.244072],
+  pitch: 66.50572,
+  zoom: 15.79,
   minZoom:10
 });
 window.scene = scene;
@@ -36,7 +36,7 @@ scene.on('loaded', () => {
     })
     .source(data)
     .shape('fill')
-    .color('rgb(71,148,218)')
+    .color('rgb(79,174,234)')
     .render();
   });
   $.get('./data/land.geojson', data => {
@@ -45,7 +45,7 @@ scene.on('loaded', () => {
     })
     .source(data)
     .shape('fill')
-    .color('rgb(176,211,122)')
+    .color('rgb(156,194,116)')
     .render();
   });
    $.get('./data/river.geojson', data => {
@@ -53,16 +53,9 @@ scene.on('loaded', () => {
       zIndex: 2
     })
     .source(data)
-    .color('rgb(126,204,243)')
-    .render();
-  });
-  
-  $.get('./data/road.geojson', data => {
-    scene.LineLayer({
-      zIndex: 2
-    })
-    .source(data)
-    .color('rgb(245,227,199)')
+    .shape('meshLine')
+    .size([3,0])
+    .color('rgb(79,174,234)')
     .render();
   });
   
@@ -72,8 +65,8 @@ scene.on('loaded', () => {
     })
     .source(data)
     .shape('extrude')
-    .size('floor',[10,1000])
-    .color('rgba(250,250,250,0.9)')
+    .size('floor',[10,2000])
+    .color('rgba(242,246,250,0.96)')
     .render();
   });
 });

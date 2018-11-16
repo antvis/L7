@@ -23,22 +23,24 @@
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 110.770672, 34.159869 ],
+  center: [ 121.2680, 30.3628 ],
   pitch: 0,
-  zoom: 5,
+  zoom: 15,
   minZoom: 4,
-  maxZoom: 6
+  maxZoom: 18
 });
 
 scene.on('loaded', () => {
 // https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png
+// 
   const imageLayer = scene.ImageLayer().
       source({
-        url: 'https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png',
-        extent: [ 73, 18, 136, 54 ]
+        url: './image/hangzhoubay.jpg',
+       // extent: [ 73, 18, 136, 54 ]
+      extent: [ 121.1680, 30.2828, 121.3840, 30.4219 ]
       })
       .style({
-        opacity:0.8,
+        opacity:1.0,
       })
       .render();
 

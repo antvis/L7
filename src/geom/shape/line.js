@@ -1,4 +1,5 @@
 import { Vector3 } from '../../core/three';
+import getNormal from 'polyline-normals';
 /**
  * shape meshLine
  * @param {array} geo  坐标点
@@ -62,21 +63,43 @@ export function meshLine(geo, props, index) {
  * @return {object} 顶点坐标，起始点坐标，索引坐标
  */
 
-export function arc(geo, index) {
+export function arc(geo, props, positionsIndex) {
   const segNum = 50;
   const posArray = [];
   const instanceArray = [];
+  const sizes = [];
+  const colors = [];
+  const { size, color } = props;
   const defaultInstance = [ geo[0][0], geo[0][1], geo[1][0], geo[1][1] ];
   const indexArray = [];
-  for (let i = 1; i < segNum; i++) {
-    posArray.push([ i - 1, i - 1, i - 1 ]);
-    posArray.push([ i, i, i ]);
-    indexArray.push(index);
-    indexArray.push(index);
-    instanceArray.push(defaultInstance);
-    instanceArray.push(defaultInstance);
+  let c = 0;
+  let index = positionsIndex;
+  for (let i = 0; i < segNum; i++) {
+    posArray.push(i, 1, i);
+    posArray.push(i, -1, i);
+    instanceArray.push(...defaultInstance);
+    instanceArray.push(...defaultInstance);
+    sizes.push(size, size);
+    colors.push(...color);
+    colors.push(...color);
+    if (i !== segNum - 1) {
+      indexArray[c++] = index + 0;
+      indexArray[c++] = index + 1;
+      indexArray[c++] = index + 2;
+      indexArray[c++] = index + 1;
+      indexArray[c++] = index + 3;
+      indexArray[c++] = index + 2;
+    }
+    index += 2;
+
   }
-  return { positions: posArray, indexes: indexArray, instances: instanceArray };
+  return {
+    positions: posArray,
+    indexArray,
+    instances: instanceArray,
+    colors,
+    sizes
+  };
 }
 
 /**
@@ -95,4 +118,59 @@ export function defaultLine(geo, index) {
   });
 
   return { positions, indexes: indexArray };
+}
+export function Line(path, props, positionsIndex, dash = false) {
+  if (path.length === 1) path = path[0];// 面坐标转线坐标
+  const positions = [];
+  const normal = [];
+  const miter = [];
+  const colors = [];
+  const indexArray = [];
+  const normals = getNormal(path);
+  const attrDistance = [];
+  const sizes = [];
+  let c = 0;
+  let index = positionsIndex;
+  const { size, color } = props;
+  path.forEach((point, pointIndex, list) => {
+    const i = index;
+    colors.push(...color);
+    colors.push(...color);
+    sizes.push(size[0]);
+    sizes.push(size[0]);
+    if (pointIndex !== list.length - 1) {
+      indexArray[c++] = i + 0;
+      indexArray[c++] = i + 3;
+      indexArray[c++] = i + 1;
+      indexArray[c++] = i + 0;
+      indexArray[c++] = i + 2;
+      indexArray[c++] = i + 3;
+    }
+    point[2] = size[1];
+    positions.push(...point);
+    positions.push(...point);
+    if (dash) {
+      const d = pointIndex / (list.length - 1);
+      attrDistance.push(d, d);
+    }
+    index += 2;
+  });
+  normals.forEach(n => {
+    const norm = n[0];
+    const m = n[1];
+    normal.push(norm[0], norm[1], 0);
+    normal.push(norm[0], norm[1], 0);
+    miter.push(-m);
+    miter.push(m);
+  });
+  return {
+    positions,
+    normal,
+    indexArray,
+    miter,
+    colors,
+    sizes,
+    attrDistance
+  };
+
 }

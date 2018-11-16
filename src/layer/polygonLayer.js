@@ -3,7 +3,6 @@ import Layer from '../core/layer';
 import PolygonBuffer from '../geom/buffer/polygon';
 import PolygonMaterial from '../geom/material/polygonMaterial';
 import { LineMaterial } from '../geom/material/lineMaterial';
-import PickingMaterial from '../core/engine/picking/pickingMaterial';
 export default class PolygonLayer extends Layer {
   shape(type) {
     this.shape = type;
@@ -17,6 +16,14 @@ export default class PolygonLayer extends Layer {
 
       this._initAttrs();
       (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter() : null;
+      const { opacity, baseColor, brightColor, windowColor } = this.get('styleOptions');
+      this.layerMesh.material.upDateUninform({
+        u_opacity: opacity,
+        u_baseColor: baseColor,
+        u_brightColor: brightColor,
+        u_windowColor: windowColor
+      });
+
     }
 
 
@@ -53,22 +60,25 @@ export default class PolygonLayer extends Layer {
 
   }
   _renderPolygon() {
-    const animateOptions= this.get('animateOptions');
-    const { opacity } = this.get('styleOptions');
+    const animateOptions = this.get('animateOptions');
+    const { opacity, baseColor, brightColor, windowColor } = this.get('styleOptions');
     const material = new PolygonMaterial({
       u_opacity: opacity,
+      u_baseColor: baseColor,
+      u_brightColor: brightColor,
+      u_windowColor: windowColor
     });
-  
+
     const { attributes } = this._buffer;
-    console.log(attributes);
     this.geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-    if(animateOptions.enable){
-      material.setDefinesvalue('ANIMATE',true)
+    if (animateOptions.enable) {
+      material.setDefinesvalue('ANIMATE', true);
+
       this.geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
       this.geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
     }
- 
-    const pickmaterial = new PickingMaterial();
+
+   // const pickmaterial = new PickingMaterial();
     const polygonMesh = new THREE.Mesh(this.geometry, material);
     this.add(polygonMesh);
   }

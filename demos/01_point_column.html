@@ -22,24 +22,28 @@
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'light', // 样式URL
-  center: [ 116.155185, 39.96644],
-  pitch: 25,
-  zoom: 9.6
+  mapStyle: 'dark', // 样式URL
+  center: [ 120.037828998113099, 30.086317611850635 ],
+  pitch: 36.002858,
+  zoom: 5.44
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/spot.geojson', data => {
+  $.get('./data/rainfall.json', data => {
     scene.PointLayer({
       zIndex: 2
     })
-    .source(data)
-    .shape('3d:hexagon')
-    .size('level',(level)=>{
-      return [10000,10000,Math.pow(10,level)];
-    }) // default 1
-    .active(true)
-    .color('level', [ '#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404' ])
+    .source(data.list, {
+      type: 'array',
+      x: 'j',
+      y: 'w',
+    })
+    .shape('3d:circle')
+    .size('t',(level)=> {
+      return [4,4,(level+40)];
+    }) 
+    .active(false)
+    .color('t', ["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
      .render();
   });
 });

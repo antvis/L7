@@ -1,3 +1,4 @@
+
 precision highp float;
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718
@@ -18,15 +19,7 @@ const float u_gamma = 0.08;
 const vec3 halo = vec3( 1.0 ); 
 
 void main() {
-    //vec4 tcolor = texture2D(u_texture, v_uv + gl_PointCoord / 2048.0 * 30.0);
-    // float alpha = smoothstep(u_buffer - u_gamma, u_buffer + u_gamma, tcolor.x);
-
-    //  float haloWeight = smoothstep( 0.0, 1.0, 1.0 - tcolor.r );
-    //  haloWeight = step( 0.8, tcolor.r );
-    //  vec3 targetColor = mix( v_color.rgb, halo, haloWeight );
-   //  gl_FragColor= vec4(v_color.rgb, alpha * v_color.a);;
-    //  gl_FragColor = vec4( targetColor, alpha );
-   
+    // 纹理坐标
     #ifdef TEXCOORD_0
     vec2 pos =  v_uv + gl_PointCoord / 512.0 * 64.0;
     pos.y = 1.0 - pos.y;

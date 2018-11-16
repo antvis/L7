@@ -35,20 +35,31 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/oOzMjBOaxFROWLBYeqTB.json', city => {
+  $.getJSON('./data/chinandvohexagon.geojson', city => {
     citylayer = scene.PolygonLayer()
     .source(city)
-    .color('gdp', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    .color('sum', ["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"])
     .shape('extrude')
-    .filter('gdp', gdp => {
-      return gdp > 0;
+  
+    .size('max',(value)=>{
+       return value * 1000;
     })
-    .size('gdp', [ 1000, 5000000 ])
-   // .active({ fill: 'red' })
+     .active(true)
     .style({
-      opacity: 1
+      opacity: 1.0
     })
     .render();
+
+
+    const citylayer2 = scene.PolygonLayer()
+      .source(city)
+      .shape('line')
+      .color('#fff')
+      .style({
+        opacity: 1
+       })
+      .render();
+
   });
 });
 

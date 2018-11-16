@@ -8,7 +8,7 @@
       mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
       v_color = a_color;
       #ifdef ANIMATE 
-      vTime = 1.0- (mod(u_time*100.,3600.)- position.z) / 100.;
+        vTime = 1.0- (mod(u_time*100.,3600.)- position.z) / 100.;
       #endif
       gl_Position = matModelViewProjection * vec4(position.xy,0., 1.0);
     }

@@ -3,8 +3,10 @@
   varying vec4 v_color;
   
   void main() {
-
-    gl_FragColor = v_color;
-    gl_FragColor.a = v_color.a*u_opacity;
+      if(v_color.a == 0.){
+        discard;
+      }
+      gl_FragColor = v_color;
+      gl_FragColor.a = v_color.a*u_opacity;
 
   }

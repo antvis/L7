@@ -11,7 +11,6 @@ export default function extrudePolygon(points, extrude) {
   const p1 = points[0][0];
   const p2 = points[0][points[0].length - 1];
   const faceUv = [];
-  const sizes =[];
   if (p1[0] === p2[0] && p1[1] === p2[1]) {
     points[0] = points[0].slice(0, points[0].length - 1);
   }
@@ -23,6 +22,7 @@ export default function extrudePolygon(points, extrude) {
 
   const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   cells = triangles;
+  // 顶部纹理
   triangles.forEach(() => {
     faceUv.push(-1, -1);
   });
@@ -40,7 +40,7 @@ export default function extrudePolygon(points, extrude) {
   function full() {
     // 顶部坐标
     for (let i = 0; i < pointCount; i++) {
-      positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 1 ]); 
+      positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 1 ]);
     }
     for (let i = 0; i < pointCount; i++) {
       positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 0 ]);

@@ -13,10 +13,11 @@ export default class TextBuffer extends BufferBase {
     };
     const coordinates = this.get('coordinates');
     const properties = this.get('properties');
+    const { textOffset = [ 0, 0 ] } = this.get('style');
     const chars = [];
     properties.forEach(element => {
-      const text = element.shape;
-
+      let text = element.shape || '';
+      text = text.toString();
       for (let j = 0; j < text.length; j++) {
         const code = text.charCodeAt(j);
         if (chars.indexOf(code) === -1) {
@@ -24,6 +25,7 @@ export default class TextBuffer extends BufferBase {
         }
       }
     });
+    this._loadTextInfo(chars);
     this.on('SourceLoaded', () => {
       const textureElements = [];
       const colors = [];
@@ -31,11 +33,12 @@ export default class TextBuffer extends BufferBase {
       const textSizes = [];
       const textOffsets = [];
       properties.forEach((element, index) => {
-        const text = element.shape;
         const size = element.size;
         const pos = coordinates[index];
         // const pen = { x: pos[0] - dimensions.advance / 2, y: pos[1] };
-        const pen = { x: 0, y: 0 };
+        const pen = { x: textOffset[0], y: textOffset[1] };
+        let text = element.shape || '';
+        text = text.toString();
         for (let i = 0; i < text.length; i++) {
           const chr = text.charCodeAt(i);
 
@@ -53,11 +56,10 @@ export default class TextBuffer extends BufferBase {
       };
       this.emit('completed');
     });
-    this._loadTextInfo(chars);
+
   }
 
   _loadTextInfo(chars) {
-
     getJSON({
       url: `${Global.sdfHomeUrl}/getsdfdata?chars=${chars.join('|')}`
     }, (e, info) => {
@@ -111,8 +113,8 @@ export default class TextBuffer extends BufferBase {
 
     // Add a quad (= two triangles) per glyph.
       const originX = (horiBearingX - buffer + width / 2) * scale;
-      // const originY = -(height / 2  - horiBearingY) * scale;
-      const originY = (height / 2 - horiBearingY) * scale;
+      const originY = -(height / 2 - horiBearingY) * scale;
+      // const originY = (height / 2 - horiBearingY) * scale;
       // const originY = 0;
       const offsetWidth = width / 2 * scale / (1.0 - horiBearingX * 1.5 / horiAdvance);
       const offsetHeight = (horiAdvance / 2) * scale;

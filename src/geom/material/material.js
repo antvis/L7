@@ -2,6 +2,7 @@
 import * as THREE from '../../core/three';
 export default class Material extends THREE.ShaderMaterial {
   setUniformsValue(name, value) {
+    if (!this.uniforms[name]) { return; }
     this.uniforms[name].value = value;
     this.uniforms.needsUpdate = true;
   }
@@ -17,5 +18,12 @@ export default class Material extends THREE.ShaderMaterial {
       }
     }
     return uniforms;
+  }
+  upDateUninform(option) {
+    for (const key in option) {
+      if (key.substr(0, 2) === 'u_') {
+        this.setUniformsValue(key, option[key]);
+      }
+    }
   }
 }

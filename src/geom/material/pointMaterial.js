@@ -12,7 +12,7 @@ export default class PointMaterial extends Material {
         u_strokeWidth: { value: 1 }
       },
       defines: {
-        SHAPE: true,
+        SHAPE: false,
         TEXCOORD_0: false
       }
     };

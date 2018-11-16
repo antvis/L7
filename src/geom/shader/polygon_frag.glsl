@@ -1,6 +1,9 @@
 precision highp float;
 uniform float u_opacity;
 uniform sampler2D u_texture;
+uniform vec4 u_baseColor;
+uniform vec4 u_brightColor;
+uniform vec4 u_windowColor;
 uniform float u_time;
 varying vec2 v_texCoord;
 varying  vec4 v_color;
@@ -20,13 +23,14 @@ void main() {
      discard;
      return;
    }
-    vec3 baseColor = vec3(0.0078,0.054,0.06);
-    vec3 brightColor = vec3(0.312,0.283,0.935);
-    vec3 windowColor = vec3(0.038,0.078,0.115);
+    vec3 baseColor = u_baseColor.xyz;
+    vec3 brightColor = u_brightColor.xyz;
+    vec3 windowColor = u_windowColor.xyz;
     float targetColId = 5.;
    #ifdef ANIMATE 
-     if(v_texCoord.x < 0.0) { //顶部颜色
-        gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
+     if(v_texCoord.x < 0.) { //顶部颜色
+       //gl_FragColor = vec4(1.0,0.,0.,1.0);  // v_color.w * u_opacity
+       gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
      }else { // 侧面颜色
         //vec4 color = texture2D(u_texture,v_texCoord) * v_color;
         vec2 st = v_texCoord; 
@@ -40,7 +44,7 @@ void main() {
         float ux = floor(UvScale.x/tStep);
         float uy = floor(UvScale.y/tStep);
         float n = random(vec2(ux,uy));
-        float lightP = u_time /2.0;
+        float lightP = u_time;
         float head = 1.0- step(0.005,st.y);
         /*step3*/
         // 将窗户颜色和墙面颜色区别开来
@@ -52,8 +56,7 @@ void main() {
         float sCol = step(targetColId - 0.5, curColId) - step(targetColId + 0.5, curColId);
         
         float mLightP = mod(lightP, 2.);
-        float sRow = step(mLightP - 0.1, st.y) - step(mLightP, st.y);
-        //vec3 color = mix(baseColor, windowColor, s);
+        float sRow = step(mLightP - 0.2, st.y) - step(mLightP, st.y);
         if(ux == targetColId){
             n =0.;
         }
@@ -63,7 +66,7 @@ void main() {
         if (st.y<0.01){
         color = baseColor;
          }
-        if(head ==1.0) {
+        if(head ==1.0) { // 顶部亮线
             color = brightColor;
         }
         gl_FragColor = vec4(color * v_lightWeight,1.0); 
@@ -71,6 +74,6 @@ void main() {
      }
    #else
        gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
-    #endif
+   #endif
  
 }

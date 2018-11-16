@@ -40,14 +40,14 @@ export default class Layer extends Base {
         stroke: [ 1.0, 1.0, 1.0, 1.0 ],
         strokeWidth: 1.0,
         opacity: 1.0,
-        texture:false
+        texture: false
       },
       // 选中时的配置项
       selectedOptions: null,
       // active 时的配置项
       activedOptions: null,
       animateOptions: {
-        enable:false,
+        enable: false
       }
     };
   }
@@ -62,8 +62,6 @@ export default class Layer extends Base {
     const layerId = this._getUniqueId();
     this.layerId = layerId;
     this._activeIds = null;
-    // todo 用户参数
-    this._object3D.position.z = this.get('zIndex') * 100;
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
 
@@ -74,9 +72,16 @@ export default class Layer extends Base {
    */
   add(object) {
     this.layerMesh = object;
-    this.layerMesh.onBeforeRender=()=>{
-      this.layerMesh.material.setUniformsValue('u_time',this.scene._engine.clock.getElapsedTime())
-    }
+    this._visibleWithZoom();
+    this.scene.on('zoomchange', () => {
+      this._visibleWithZoom();
+    });
+    this.layerMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      this.layerMesh.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
+      this.layerMesh.material.setUniformsValue('u_zoom', zoom);
+
+    };
     // 更新
     if (this._needUpdateFilter) {
       this._updateFilter();
@@ -148,7 +153,7 @@ export default class Layer extends Base {
   }
 
   style(field, cfg) {
-    const colorItem = [ 'fill', 'stroke', 'color' ];
+    const colorItem = [ 'fill', 'stroke', 'color', 'baseColor', 'brightColor', 'windowColor' ];
     let styleOptions = this.get('styleOptions');
     if (!styleOptions) {
       styleOptions = {};
@@ -178,10 +183,10 @@ export default class Layer extends Base {
     this._createAttrOption('filter', field, values, true);
     return this;
   }
-  animate(field,cfg) {
-    let styleOptions = this.get('animateOptions');
-    if (!styleOptions) {
-      styleOptions = {};
+  animate(field, cfg) {
+    let animateOptions = this.get('animateOptions');
+    if (!animateOptions) {
+      animateOptions = {};
       this.set('animateOptions', animateOptions);
     }
     if (Util.isObject(field)) {
@@ -192,10 +197,9 @@ export default class Layer extends Base {
     if (field) {
       fields = parseFields(field);
     }
-    styleOptions.fields = fields;
-    Util.assign(styleOptions, cfg);
-    this.set('styleOptions', styleOptions);
-    return this;
+    animateOptions.fields = fields;
+    Util.assign(animateOptions, cfg);
+    this.set('animateOptions', animateOptions);
     return this;
   }
   texture() {
@@ -577,6 +581,18 @@ export default class Layer extends Base {
     });
     this._needUpdateFilter = false;
     this._needUpdateColor = false;
+  }
+  _visibleWithZoom(){
+    const zoom =this.scene.getZoom();
+    const minZoom = this.get('minZoom');
+    const maxZoom = this.get('maxZoom');
+    // z-fighting
+    this._object3D.position.z = this._object3D.renderOrder * Math.pow(2,22-zoom);
+    if(zoom<minZoom || zoom > maxZoom){
+      this._object3D.visible =false;
+    }else if(this.get('visible')){
+      this._object3D.visible =true;
+    }
   }
   /**
    * 重置高亮要素
