@@ -63,15 +63,11 @@ export default class PointBuffer extends BufferBase {
       } else{
          Util.isArray(size) || (size = [ size, size, size ]);
       }
+      if(regularShape[shape]!==null) {
+        shape='square';
+      }
       const vert = regularShape[shape](shapeType);
       shapes.push(vert.positions);
-      m1.setPosition(new THREE.Vector3(...geo));
-      m1.scale(new THREE.Vector3(...size));
-      // vert.positions = vert.positions.map(coor => {
-      //   const vector = new THREE.Vector4(...coor, 1);
-      //   vector.applyMatrix4(m1);
-      //   return vector.toArray();
-      // });// 旋转矩阵
       positions.push(geo);
       sizes.push(size);
       positionsIndex.push(vert.positionsIndex);

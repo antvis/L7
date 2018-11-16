@@ -5,6 +5,7 @@ import PointMaterial from '../geom/material/pointMaterial';
 import PolygonMaterial from '../geom/material/polygonMaterial';
 import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
+import radar from '../geom/shader/radar_frag.glsl';
 
 /**
  * point shape 2d circle, traingle text,image
@@ -50,7 +51,10 @@ export default class PointLayer extends Layer {
         u_opacity: opacity,
         u_zoom: this.scene.getZoom()
       });
+      mtl.fragmentShader = radar;
       mtl.setDefinesvalue('SHAPE', true);
+
+      
     } else { // sdf 绘制点
       mtl = new PointMaterial({
         u_opacity: opacity,

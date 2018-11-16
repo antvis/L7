@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>point_circle</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [ 120.037828998113099, 30.086317611850635 ],
+  pitch: 36.002858,
+  zoom: 5.44
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  $.get('./data/waringData.json', data => {
+    scene.PointLayer({
+      zIndex: 2
+    })
+    .source(data, {
+      type: 'array',
+      x: 'lon',
+      y: 'lat',
+    })
+    .shape('2d:square')
+    .size(20) 
+    .active(false)
+    .color('blue')
+    .render();
+  });
+});
+
+</script>
+</body>
+</html>
+
