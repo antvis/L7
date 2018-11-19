@@ -5,9 +5,9 @@ import ImageBuffer from '../geom/buffer/image';
 // import ImageGeometry from '../geom/bufferGeometry/image';
 import ImageMaterial from '../geom/material/imageMaterial';
 export default class imageLayer extends Layer {
-  source(data,cfg = {}) {
+  source(data, cfg = {}) {
     cfg.mapType = this.get('mapType');
-    cfg.data =data;
+    cfg.data = data;
     this.layerSource = new imageSource(cfg);
     return this;
   }

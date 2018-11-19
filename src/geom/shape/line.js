@@ -123,7 +123,7 @@ export function defaultLine(geo, index) {
 export function Line(path, props, positionsIndex, dash = false) {
   if (path.length === 1) path = path[0];// 面坐标转线坐标
   const positions = [];
-  const pickingIds =[];
+  const pickingIds = [];
   const normal = [];
   const miter = [];
   const colors = [];
@@ -133,7 +133,7 @@ export function Line(path, props, positionsIndex, dash = false) {
   const sizes = [];
   let c = 0;
   let index = positionsIndex;
-  const { size, color,id } = props;
+  const { size, color, id } = props;
   path.forEach((point, pointIndex, list) => {
     const i = index;
     colors.push(...color);

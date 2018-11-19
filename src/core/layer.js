@@ -6,7 +6,6 @@ import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
 import * as source from '../source/index';
-import * as turfMeta from '@turf/meta';
 import PickingMaterial from '../core/engine/picking/pickingMaterial';
 import Attr from '../attr/index';
 import Util from '../util';
@@ -76,7 +75,7 @@ export default class Layer extends Base {
     this.scene.on('zoomchange', () => {
       this._visibleWithZoom();
     });
-    
+
     this.layerMesh.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
       this.layerMesh.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
@@ -265,11 +264,11 @@ export default class Layer extends Base {
     const { featureId } = e;
 
     const activeStyle = this.get('activedOptions');
-    const selectFeatureIds =this.layerSource.getSelectFeatureId(featureId);
+    const selectFeatureIds = this.layerSource.getSelectFeatureId(featureId);
     if (this.StyleData[selectFeatureIds[0]].hasOwnProperty('filter') && this.StyleData[selectFeatureIds[0]].filter === false) { return; }
     const style = Util.assign({}, this.StyleData[featureId]);
     style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
-    this.updateStyle([featureId], style);
+    this.updateStyle([ featureId ], style);
   }
 
 
@@ -277,11 +276,11 @@ export default class Layer extends Base {
     const attrOptions = this.get('attrOptions');
     for (const type in attrOptions) {
       if (attrOptions.hasOwnProperty(type)) {
-        this._updateAttr(type)
+        this._updateAttr(type);
       }
     }
   }
-  _updateAttr(type){
+  _updateAttr(type) {
     const self = this;
     const attrs = this.get('attrs');
     const attrOptions = this.get('attrOptions');
@@ -419,17 +418,17 @@ export default class Layer extends Base {
     }
   }
   /**
-   * 
-   * @param {*} overwrite 
-   * @param {*} callback 
+   *
+   * @param {*} overwrite
+   * @param {*} callback
    */
-  on(type,callback) {
+  on(type, callback) {
 
     this._addPickingEvents();
     super.on(type, callback);
   }
   getPickingId() {
-      return this.scene._engine._picking.getNextId();
+    return this.scene._engine._picking.getNextId();
   }
   addToPicking(object) {
     this.scene._engine._picking.add(object);
@@ -437,18 +436,18 @@ export default class Layer extends Base {
   removeFromPicking(object) {
     this.scene._engine._picking.remove(object);
   }
-  _addPickMesh(mesh){
+  _addPickMesh(mesh) {
     this._pickingMesh = new THREE.Object3D();
     this._visibleWithZoom();
     this.scene.on('zoomchange', () => {
       this._visibleWithZoom();
     });
-   
+
     this.addToPicking(this._pickingMesh);
     const pickmaterial = new PickingMaterial({
-      u_zoom:this.scene.getZoom()
+      u_zoom: this.scene.getZoom()
     });
-    pickmaterial.setDefinesvalue(this.type,true);
+    pickmaterial.setDefinesvalue(this.type, true);
     this._pickingMesh.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
       this._pickingMesh.material.setUniformsValue('u_zoom', zoom);
@@ -462,19 +461,18 @@ export default class Layer extends Base {
   }
   _addPickingEvents() {
     // TODO: Find a way to properly remove this listener on destroy
-    this.scene.on('pick', (e) => {
+    this.scene.on('pick', e => {
       // Re-emit click event from the layer
       const { featureId, point2d, point3d, intersects } = e;
-      if(intersects.length === 0)
-        return;
+      if (intersects.length === 0) { return; }
       const source = this.layerSource.get('data');
       const feature = source.features[featureId];
       const lnglat = this.scene.containerToLngLat(point2d);
       const target = {
         feature,
-        pixel:point2d,
-        lnglat:{lng:lnglat.lng,lat:lnglat.lat}
-      }
+        pixel: point2d,
+        lnglat: { lng: lnglat.lng, lat: lnglat.lat }
+      };
       this.emit('click', target);
       // this.emit('move', target);
     });
@@ -485,32 +483,32 @@ export default class Layer extends Base {
    * @param {*} style  更新的要素样式
    */
   updateStyle(featureStyleId, style) {
-      if (this._activeIds) {
-        this.resetStyle();
+    if (this._activeIds) {
+      this.resetStyle();
+    }
+    this._activeIds = featureStyleId;
+    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
+    const color = style.color;
+    const colorAttr = this.layerMesh.geometry.attributes.a_color;
+    const firstId = pickingId.indexOf(featureStyleId[0] + 1);
+    for (let i = firstId; i < pickingId.length; i++) {
+      if (pickingId[i] == featureStyleId[0] + 1) {
+        colorAttr.array[i * 4 + 0] = color[0];
+        colorAttr.array[i * 4 + 1] = color[1];
+        colorAttr.array[i * 4 + 2] = color[2];
+        colorAttr.array[i * 4 + 3] = color[3];
+      } else {
+        break;
       }
-      this._activeIds = featureStyleId;
-      const pickingId =this.layerMesh.geometry.attributes.pickingId.array;
-      const color = style.color;
-      const colorAttr =this.layerMesh.geometry.attributes.a_color;
-      const firstId = pickingId.indexOf(featureStyleId[0]+1);
-      for(let i = firstId;i<pickingId.length;i++){
-         if(pickingId[i]==featureStyleId[0]+1){
-            colorAttr.array[i*4+0]=color[0];
-            colorAttr.array[i*4+1]=color[1];
-            colorAttr.array[i*4+2]=color[2];
-            colorAttr.array[i*4+3]=color[3];
-         } else{
-           break;
-         }
-      }
-      colorAttr.needsUpdate =true
-      return;
+    }
+    colorAttr.needsUpdate = true;
+    return;
   }
 
-  _updateColor(){
-   
+  _updateColor() {
+
     this._updateMaping();
-    
+
   }
    /**
    * 用于过滤数据
@@ -520,88 +518,88 @@ export default class Layer extends Base {
     this._updateMaping();
     const filterData = this.StyleData;
     this._activeIds = null; // 清空选中元素
-    const colorAttr =  this.layerMesh.geometry.attributes.a_color;
+    const colorAttr = this.layerMesh.geometry.attributes.a_color;
     const pickAttr = this.layerMesh.geometry.attributes.pickingId;
-    pickAttr.array.forEach((id,index)=>{
+    pickAttr.array.forEach((id, index) => {
       id = Math.abs(id);
-      const color = [ ...this.StyleData[id-1].color ];
-      id =Math.abs(id);
-      const item = filterData[id-1];
+      const color = [ ...this.StyleData[id - 1].color ];
+      id = Math.abs(id);
+      const item = filterData[id - 1];
       if (item.hasOwnProperty('filter') && item.filter === false) {
-        colorAttr.array[index*4+0]=0;
-        colorAttr.array[index*4+1]=0;
-        colorAttr.array[index*4+2]=0;
-        colorAttr.array[index*4+3]=0;
+        colorAttr.array[index * 4 + 0] = 0;
+        colorAttr.array[index * 4 + 1] = 0;
+        colorAttr.array[index * 4 + 2] = 0;
+        colorAttr.array[index * 4 + 3] = 0;
         pickAttr.array[index] = -id;
       } else {
-        colorAttr.array[index*4+0]=color[0];
-        colorAttr.array[index*4+1]=color[1];
-        colorAttr.array[index*4+2]=color[2];
-        colorAttr.array[index*4+3]=color[3];
+        colorAttr.array[index * 4 + 0] = color[0];
+        colorAttr.array[index * 4 + 1] = color[1];
+        colorAttr.array[index * 4 + 2] = color[2];
+        colorAttr.array[index * 4 + 3] = color[3];
         pickAttr.array[index] = id;
       }
-    })
-    colorAttr.needsUpdate =true;
-    pickAttr.needsUpdate =true;
+    });
+    colorAttr.needsUpdate = true;
+    pickAttr.needsUpdate = true;
     this._needUpdateFilter = false;
     this._needUpdateColor = false;
   }
-  _visibleWithZoom(){
-    const zoom =this.scene.getZoom();
+  _visibleWithZoom() {
+    const zoom = this.scene.getZoom();
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
     // z-fighting
     let offset = 0;
-    if(this.type==='point'){
+    if (this.type === 'point') {
       offset = 5;
-    } else if(this.type === 'polyline'){
+    } else if (this.type === 'polyline') {
       offset = 2;
     }
-    this._object3D.position.z = offset * Math.pow(2,20-zoom);
-    if(zoom<minZoom || zoom > maxZoom){
-      this._object3D.visible =false;
-    }else if(this.get('visible')){
-      this._object3D.visible =true;
+    this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
+    if (zoom < minZoom || zoom > maxZoom) {
+      this._object3D.visible = false;
+    } else if (this.get('visible')) {
+      this._object3D.visible = true;
     }
   }
   /**
    * 重置高亮要素
    */
   resetStyle() {
-      const pickingId =this.layerMesh.geometry.attributes.pickingId.array;
-      const colorAttr =this.layerMesh.geometry.attributes.a_color;
-      this._activeIds.forEach((index,value) => {
-        const color = this.StyleData[index].color;
-        const firstId = pickingId.indexOf(index+1);
-        for(let i = firstId;i<pickingId.length;i++){
-          if(pickingId[i]==index+1){
-          colorAttr.array[i*4+0]=color[0];
-          colorAttr.array[i*4+1]=color[1];
-          colorAttr.array[i*4+2]=color[2];
-          colorAttr.array[i*4+3]=color[3];
-          }
+    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
+    const colorAttr = this.layerMesh.geometry.attributes.a_color;
+    this._activeIds.forEach((index, value) => {
+      const color = this.StyleData[index].color;
+      const firstId = pickingId.indexOf(index + 1);
+      for (let i = firstId; i < pickingId.length; i++) {
+        if (pickingId[i] == index + 1) {
+          colorAttr.array[i * 4 + 0] = color[0];
+          colorAttr.array[i * 4 + 1] = color[1];
+          colorAttr.array[i * 4 + 2] = color[2];
+          colorAttr.array[i * 4 + 3] = color[3];
         }
-      })
-      colorAttr.needsUpdate =true;
+      }
+    });
+    colorAttr.needsUpdate = true;
   }
   /**
    * 销毁Layer对象
    */
   despose() {
     this.destroy();
-    if(this._object3D && this._object3D.children){
+    if (this._object3D && this._object3D.children) {
       let child;
-      for(let i =0;i<this._object3D.children.length;i++){
-         child = this._object3D.children[i];
-         if(!child){
-           continue;
-         }
-         this.remove(child);
-         if(child.geometry){
-           child.geometry.dispose();
-           child.geometry = null;
-         }
-         if (child.material) {
+      for (let i = 0; i < this._object3D.children.length; i++) {
+        child = this._object3D.children[i];
+        if (!child) {
+          continue;
+        }
+        this.remove(child);
+        if (child.geometry) {
+          child.geometry.dispose();
+          child.geometry = null;
+        }
+        if (child.material) {
           if (child.material.map) {
             child.material.map.dispose();
             child.material.map = null;
@@ -612,7 +610,7 @@ export default class Layer extends Base {
         }
       }
     }
-    this._object3D =null;
+    this._object3D = null;
     this.scene = null;
   }
 }

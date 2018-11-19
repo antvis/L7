@@ -35,9 +35,9 @@ export default function extrudePolygon(points, extrude) {
   }
   function full() {
       // 顶部纹理
-  triangles.forEach(() => {
-    faceUv.push(-1, -1);
-  });
+    triangles.forEach(() => {
+      faceUv.push(-1, -1);
+    });
     // 顶部坐标
 
     for (let i = 0; i < pointCount; i++) {

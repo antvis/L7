@@ -2,7 +2,7 @@ import Source from '../core/source';
 import { getImage } from '../util/ajax';
 export default class ImageSource extends Source {
   prepareData() {
-    this.type='image';
+    this.type = 'image';
     const extent = this.get('extent');
     const lb = this._coorConvert(extent.slice(0, 2));
     const tr = this._coorConvert(extent.slice(2, 4));
