@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
-  <title>hexagon demo</title>
+  <title>city demo</title>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
@@ -41,18 +41,31 @@ var buildLayer =null;
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 121.500361, 31.252063 ],
-  pitch: 64.75753604193972,
-  zoom: 14.83,
-  minZoom: 10,
-  maxZoom: 20
+  center: [ 121.507674, 31.223043 ],
+  pitch: 65.59312320916906,
+  zoom: 16.4,
+  minZoom: 15,
+  maxZoom: 18
 });
 scene.on('loaded', () => {
-  $.get('./data/taxiPolyline.json', data => {
+  $.get('./data/cityPoint.json', data => {
+    scene.PointLayer({
+      zIndex: 10
+    })
+    .source(data)
+    .shape('2d:warn')
+    .size(90)
+    .color('#F00')
+    .style({
+      shape:'warn'
+    })
+    .render();
+  });
+  $.get('./data/road.json', data => {
     scene.LineLayer({
       zIndex: 2
     })
-     .source(data)
+    .source(data)
     .color('#F08D41')
     .animate({enable:true})
     .render();
@@ -64,13 +77,13 @@ scene.on('loaded', () => {
     .source(data)
     .shape('extrude')
     .size('floor',[0,2000])
-    .color('rgb(240,240,240)')
+    .color('rgba(242,246,250,1.0)')
      .animate({enable:true})
      .style({
-       opacity:0.8,
-       baseColor:'#3CB4F0',
-       windowColor:'#65CEF7',
-       brightColor:'#98E3FA',
+       opacity:1.0,
+       baseColor:'rgb(25,25,165)',
+       windowColor:'rgb(30,60,89)',
+       brightColor:'rgb(155,217,255)',
 
      })
     .render();

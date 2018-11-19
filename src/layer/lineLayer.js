@@ -3,7 +3,7 @@ import Layer from '../core/layer';
 import * as THREE from '../core/three';
 import { LineBuffer } from '../geom/buffer/index';
 import { LineMaterial, ArcLineMaterial, MeshLineMaterial, DashLineMaterial } from '../geom/material/lineMaterial';
-export default class MeshlineLayer extends Layer {
+export default class LineLayer extends Layer {
   shape(type) {
     this.shapeType = type;
     return this;
@@ -14,17 +14,17 @@ export default class MeshlineLayer extends Layer {
     const source = this.layerSource;
     const StyleData = this.StyleData;
     const style = this.get('styleOptions');
-    const buffer = new LineBuffer({
+    const buffer =this._buffer = new LineBuffer({
       coordinates: source.geoData,
       properties: StyleData,
       shapeType: this.shapeType,
       style
     });
     const { opacity } = this.get('styleOptions');
-
     const animateOptions = this.get('animateOptions');
     const geometry = new THREE.BufferGeometry();
     const { attributes } = buffer;
+  
     if (this.shapeType === 'arc') {
       geometry.setIndex(attributes.indexArray);
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
@@ -35,19 +35,17 @@ export default class MeshlineLayer extends Layer {
         u_opacity: opacity,
         u_zoom: this.scene.getZoom()
       });
-      // const mesh = new THREE.Line(geometry, material);
       const mesh = new THREE.Mesh(geometry, material);
       this.add(mesh);
-    } else if (this.shapeType === 'meshLine') {
+    } else if (this.shapeType === 'line') {
+      
       geometry.setIndex(attributes.indexArray);
+      geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normal, 3));
       geometry.addAttribute('a_miter', new THREE.Float32BufferAttribute(attributes.miter, 1));
-
-
-      // geometry.setIndex(new THREE.BufferAttribute(new THREE.Float32BufferAttribute(attributes.indexArray, 1)));
       const lineType = style.lineType;
       let material;
 
@@ -67,7 +65,6 @@ export default class MeshlineLayer extends Layer {
       const mesh = new THREE.Mesh(geometry, material);
       this.add(mesh);
     } else { // 直线
-
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
       const material = new LineMaterial({

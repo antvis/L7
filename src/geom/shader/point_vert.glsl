@@ -17,7 +17,7 @@ void main() {
    v_color = a_color;
 
    gl_Position =  matModelViewProjection  * vec4(position, 1.0);
-  gl_PointSize = a_size;
+   gl_PointSize = a_size;
    v_rs = vec2(a_size / 2.0, a_size / 2.0- u_strokeWidth);
     #ifdef TEXCOORD_0
       

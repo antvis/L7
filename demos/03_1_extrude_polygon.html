@@ -44,7 +44,10 @@ scene.on('loaded', () => {
     .size('max',(value)=>{
        return value * 1000;
     })
-     .active(true)
+    .filter('max',(v)=>{
+      return v*1 > 6000 ? true : false;
+    })
+    .active(true)
     .style({
       opacity: 1.0
     })

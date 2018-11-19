@@ -119,9 +119,11 @@ export function defaultLine(geo, index) {
 
   return { positions, indexes: indexArray };
 }
+// mesh line
 export function Line(path, props, positionsIndex, dash = false) {
   if (path.length === 1) path = path[0];// 面坐标转线坐标
   const positions = [];
+  const pickingIds =[];
   const normal = [];
   const miter = [];
   const colors = [];
@@ -131,11 +133,13 @@ export function Line(path, props, positionsIndex, dash = false) {
   const sizes = [];
   let c = 0;
   let index = positionsIndex;
-  const { size, color } = props;
+  const { size, color,id } = props;
   path.forEach((point, pointIndex, list) => {
     const i = index;
     colors.push(...color);
     colors.push(...color);
+    pickingIds.push(id);
+    pickingIds.push(id);
     sizes.push(size[0]);
     sizes.push(size[0]);
     if (pointIndex !== list.length - 1) {
@@ -170,6 +174,7 @@ export function Line(path, props, positionsIndex, dash = false) {
     miter,
     colors,
     sizes,
+    pickingIds,
     attrDistance
   };
 

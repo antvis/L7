@@ -4,11 +4,13 @@ import Util from '../util';
 import { csvParse } from 'd3-dsv';
 export default class CSVSource extends Source {
   prepareData() {
+    this.type = 'csv';
     const data = this.get('data');
     const x = this.get('x');
     const y = this.get('y');
     const x1 = this.get('x1');
     const y1 = this.get('y1');
+    const coords = this.get('coordinates')
     this.propertiesData = [];// 临时使用
     this.geoData = [];
     let csvdata = data;
@@ -16,10 +18,15 @@ export default class CSVSource extends Source {
     this.propertiesData = csvdata;
     csvdata.forEach((col, featureIndex) => {
 
+      if(col['coordinates']){
+        coordinates = col['coordinates'];
+      }
       let coordinates = [ col[x], col[y] ];
       if (x1 && y1) {
         coordinates = [[ col[x], col[y] ], [ col[x1], col[y1] ]];
       }
+     if(coords&& col['coords'])
+       coordinates =col['coords'];
       col._id = featureIndex + 1;
       this._coordProject(coordinates);
       this.geoData.push(this._coordProject(coordinates));
@@ -29,6 +36,9 @@ export default class CSVSource extends Source {
   featureIndex() {
     const data = this.get('data');
     this.featureIndex = new FeatureIndex(data);
+  }
+  getSelectFeatureId(featureId){
+    return [featureId];
   }
   _getCoord(geo) {
     if (geo.geometry) {

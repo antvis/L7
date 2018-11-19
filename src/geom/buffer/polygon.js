@@ -35,7 +35,7 @@ export default class PolygonBuffer extends BufferBase {
           let y = extrudeData.faceUv[i * 2 + 1];
           if (x !== -1) {
             x = x * 0.1;
-            y = y * heightValue / 3000;
+            y = y * heightValue / 2000;
           }
           faceUv.push(x, y);
           sizes.push((1.0 - extrudeData.faceUv[i * 2 + 1]) * heightValue);

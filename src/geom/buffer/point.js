@@ -50,6 +50,7 @@ export default class PointBuffer extends BufferBase {
     const positions = [];
     const shapes = [];
     const sizes =[];
+    const uvs=[];
     const positionsIndex = [];
     let indexCount = 0;
     this.bufferStruct.style = properties;
@@ -57,13 +58,15 @@ export default class PointBuffer extends BufferBase {
       const m1 = new THREE.Matrix4();
       let { size, shape } = properties[index];
       let shapeType = 'extrude';
+     
       if (type === '2d' || (type === '3d' && size[2] === 0)) {
         shapeType = 'fill';
         Util.isArray(size) || (size = [ size, size, 0 ]);
       } else{
          Util.isArray(size) || (size = [ size, size, size ]);
       }
-      if(regularShape[shape]!==null) {
+      if(regularShape[shape]==null) {
+        uvs.push(0,0,1,0,1,1,1,1,0,1,0,0)
         shape='square';
       }
       const vert = regularShape[shape](shapeType);
@@ -78,6 +81,7 @@ export default class PointBuffer extends BufferBase {
     this.bufferStruct.indexCount = indexCount;
     this.bufferStruct.shapes = shapes;
     this.bufferStruct.sizes = sizes;
+    this.bufferStruct.faceUv = uvs;
     this.attributes = this._toPointShapeAttributes(this.bufferStruct);
   }
 

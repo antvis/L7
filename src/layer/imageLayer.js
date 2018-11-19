@@ -5,13 +5,15 @@ import ImageBuffer from '../geom/buffer/image';
 // import ImageGeometry from '../geom/bufferGeometry/image';
 import ImageMaterial from '../geom/material/imageMaterial';
 export default class imageLayer extends Layer {
-  source(cfg = {}) {
+  source(data,cfg = {}) {
     cfg.mapType = this.get('mapType');
+    cfg.data =data;
     this.layerSource = new imageSource(cfg);
     return this;
   }
   render() {
     this.init();
+    this.type = 'image';
     const source = this.layerSource;
     const { opacity } = this.get('styleOptions');
     // 加载 完成事件

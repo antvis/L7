@@ -52,11 +52,11 @@ $.getJSON('./data/onebelt/seaway.geojson', contourData => {
  
         const layer = scene.LineLayer({
             zIndex:2}
-        )
+           )
             .source(contourData)
             .color('rgb(79,147,234)')
             .size([ 1.5, 0 ])
-            .shape('meshLine')
+            .shape('line')
             .style({
                 'lineType':'solid'
             })
@@ -69,7 +69,7 @@ $.getJSON('./data/onebelt/landway.json', contourData => {
             .source(contourData)
             .color('rgb(11,94,69)')
             .size([ 1.5, 0 ])
-            .shape('meshLine')
+            .shape('line')
             .style({
                // 'lineType':'solid'
             })

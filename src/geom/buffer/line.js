@@ -9,7 +9,7 @@ export default class LineBuffer extends BufferBase {
     const positions = [];
     const positionsIndex = [];
     const instances = [];
-    if (shapeType === 'meshLine') {
+    if (shapeType === 'line') {
       this.attributes = this._getMeshLineAttributes();
       return;
     } else if (shapeType === 'arc') {
@@ -80,6 +80,7 @@ export default class LineBuffer extends BufferBase {
     const properties = this.get('properties');
     const { lineType } = this.get('style');
     const positions = [];
+    const pickingIds =[];
     const normal = [];
     const miter = [];
     const colors = [];
@@ -97,6 +98,7 @@ export default class LineBuffer extends BufferBase {
       indexArray.push(...attr.indexArray);
       sizes.push(...attr.sizes);
       attrDistance.push(...attr.attrDistance);
+      pickingIds.push(...attr.pickingIds);
     });
     return {
       positions,
@@ -104,6 +106,7 @@ export default class LineBuffer extends BufferBase {
       miter,
       colors,
       indexArray,
+      pickingIds,
       sizes,
       attrDistance
     };

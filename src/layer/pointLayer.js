@@ -6,10 +6,11 @@ import PolygonMaterial from '../geom/material/polygonMaterial';
 import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
 import radar from '../geom/shader/radar_frag.glsl';
+import warn from '../geom/shader/warn_frag.glsl';
 
 /**
  * point shape 2d circle, traingle text,image
- * shape 3d   cube，column, sphere
+ * shape 3d   cube，column, sphere 
  * shape Model ,自定义
  * image
  *
@@ -37,7 +38,7 @@ export default class PointLayer extends Layer {
       return;
     }
     const source = this.layerSource;
-    const { opacity, strokeWidth, stroke } = this.get('styleOptions');
+    const { opacity, strokeWidth, stroke ,shape} = this.get('styleOptions');
     this._buffer = new PointBuffer({
       type: this.shapeType,
       imagePos: this.scene.image.imagePos,
@@ -51,9 +52,16 @@ export default class PointLayer extends Layer {
         u_opacity: opacity,
         u_zoom: this.scene.getZoom()
       });
-      mtl.fragmentShader = radar;
       mtl.setDefinesvalue('SHAPE', true);
-
+      if(shape=='radar') {
+        mtl.fragmentShader = radar;
+       
+      }
+      if(shape=='warn') {
+        mtl.fragmentShader = warn;
+      }
+     
+    
       
     } else { // sdf 绘制点
       mtl = new PointMaterial({
@@ -69,30 +77,35 @@ export default class PointLayer extends Layer {
     }
 
     const { attributes } = this._buffer;
-    console.log(attributes);
     geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
     geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
     geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
     if (this.shapeType === 'image') {
       geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    } else { // 多边形面
+    } else if(this.shapeType=== undefined)
+    {
+      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
+    }
+     else { // 多边形面
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
       geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapePositions, 3));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.a_size, 3));
+      if(shape) {
+        geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
+      }
     }
     let mesh;
     if (this.shapeType === 'image') {
       mesh = new THREE.Points(geometry, mtl);
     } else if (this.shapeType === undefined) { // 散点图
+    
       mesh = new THREE.Points(geometry, mtl);
-      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-
 
     } else {
       mesh = new THREE.Mesh(geometry, mtl);
     }
-
+   
     this.add(mesh);
   }
   _textPoint() {

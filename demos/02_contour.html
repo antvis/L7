@@ -31,19 +31,17 @@ const scene = new L7.Scene({
 });
 scene.on('loaded', () => {
   $.get('./data/contour.geojson', data => {
+   // data.features = data.features.slice(0,1);
     scene.LineLayer({
       zIndex: 2
     })
     .source(data)
-    .shape('meshLine')
     .size('ELEV',(value)=>{
         return [1,(value-1000)*7];
     })
-    .shape('meshLine')      
+    .active(true)
+    .shape('line')      
     .color('ELEV',["#E8FCFF", "#CFF6FF", "#A1E9ff", "#65CEF7", "#3CB1F0", "#2894E0", "#1772c2", "#105CB3", "#0D408C", "#002466"].reverse())
-    .style({
-            'lineType':'solid'
-            })
     .render();
   });
 
