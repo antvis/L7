@@ -14,7 +14,7 @@ export default class LineLayer extends Layer {
     const source = this.layerSource;
     const StyleData = this.StyleData;
     const style = this.get('styleOptions');
-    const buffer =this._buffer = new LineBuffer({
+    const buffer = this._buffer = new LineBuffer({
       coordinates: source.geoData,
       properties: StyleData,
       shapeType: this.shapeType,
@@ -24,7 +24,7 @@ export default class LineLayer extends Layer {
     const animateOptions = this.get('animateOptions');
     const geometry = new THREE.BufferGeometry();
     const { attributes } = buffer;
-  
+
     if (this.shapeType === 'arc') {
       geometry.setIndex(attributes.indexArray);
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
@@ -38,7 +38,7 @@ export default class LineLayer extends Layer {
       const mesh = new THREE.Mesh(geometry, material);
       this.add(mesh);
     } else if (this.shapeType === 'line') {
-      
+
       geometry.setIndex(attributes.indexArray);
       geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));

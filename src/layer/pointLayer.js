@@ -10,7 +10,7 @@ import warn from '../geom/shader/warn_frag.glsl';
 
 /**
  * point shape 2d circle, traingle text,image
- * shape 3d   cube，column, sphere 
+ * shape 3d   cube，column, sphere
  * shape Model ,自定义
  * image
  *
@@ -38,7 +38,7 @@ export default class PointLayer extends Layer {
       return;
     }
     const source = this.layerSource;
-    const { opacity, strokeWidth, stroke ,shape} = this.get('styleOptions');
+    const { opacity, strokeWidth, stroke, shape } = this.get('styleOptions');
     this._buffer = new PointBuffer({
       type: this.shapeType,
       imagePos: this.scene.image.imagePos,
@@ -53,16 +53,15 @@ export default class PointLayer extends Layer {
         u_zoom: this.scene.getZoom()
       });
       mtl.setDefinesvalue('SHAPE', true);
-      if(shape=='radar') {
+      if (shape === 'radar') {
         mtl.fragmentShader = radar;
-       
+
       }
-      if(shape=='warn') {
+      if (shape === 'warn') {
         mtl.fragmentShader = warn;
       }
-     
-    
-      
+
+
     } else { // sdf 绘制点
       mtl = new PointMaterial({
         u_opacity: opacity,
@@ -83,15 +82,13 @@ export default class PointLayer extends Layer {
     if (this.shapeType === 'image') {
       geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    } else if(this.shapeType=== undefined)
-    {
+    } else if (this.shapeType === undefined) {
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    }
-     else { // 多边形面
+    } else { // 多边形面
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
       geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapePositions, 3));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.a_size, 3));
-      if(shape) {
+      if (shape) {
         geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
       }
     }
@@ -99,13 +96,13 @@ export default class PointLayer extends Layer {
     if (this.shapeType === 'image') {
       mesh = new THREE.Points(geometry, mtl);
     } else if (this.shapeType === undefined) { // 散点图
-    
+
       mesh = new THREE.Points(geometry, mtl);
 
     } else {
       mesh = new THREE.Mesh(geometry, mtl);
     }
-   
+
     this.add(mesh);
   }
   _textPoint() {

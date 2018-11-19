@@ -6,7 +6,7 @@ import FeatureIndex from '../geo/featureIndex';
 
 export default class GeojsonSource extends Source {
   prepareData() {
-    this.type ='geojson';
+    this.type = 'geojson';
     const data = this.get('data');
     this.propertiesData = [];
     this.geoData = [];
@@ -21,10 +21,11 @@ export default class GeojsonSource extends Source {
     const data = this.get('data');
     this.featureIndex = new FeatureIndex(data);
   }
-  getSelectFeatureId(featureId){
+  getSelectFeatureId(featureId) {
     const data = this.get('data');
-    const selectFeatureIds =[];
+    const selectFeatureIds = [];
     let featureStyleId = 0;
+     /* eslint-disable */
     turfMeta.flattenEach(data, (currentFeature, featureIndex, multiFeatureIndex) => {
       /* eslint-disable */
         if (featureIndex === (featureId)) {

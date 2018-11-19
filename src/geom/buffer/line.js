@@ -80,7 +80,7 @@ export default class LineBuffer extends BufferBase {
     const properties = this.get('properties');
     const { lineType } = this.get('style');
     const positions = [];
-    const pickingIds =[];
+    const pickingIds = [];
     const normal = [];
     const miter = [];
     const colors = [];

@@ -169,7 +169,7 @@ export default class BufferBase extends Base {
   }
   _toPointShapeAttributes(polygon) {
     // Three components per vertex per face (3 x 3 = 9)
-    const { style, indices, position, indexCount, shapes,sizes } = polygon;
+    const { style, indices, position, indexCount, shapes, sizes } = polygon;
     const vertices = new Float32Array(indexCount * 3);
     const shapePositions = new Float32Array(indexCount * 3);
     const a_size = new Float32Array(indexCount * 3);
@@ -245,7 +245,7 @@ export default class BufferBase extends Base {
         shapePositions[lastIndex * 9 + 3] = bx;
         shapePositions[lastIndex * 9 + 4] = by;
         shapePositions[lastIndex * 9 + 5] = bz;
-       
+
         a_size[lastIndex * 9 + 3] = size[0];
         a_size[lastIndex * 9 + 4] = size[1];
         a_size[lastIndex * 9 + 5] = size[2];
@@ -296,7 +296,7 @@ export default class BufferBase extends Base {
       pickingIds,
       shapePositions,
       a_size,
-      faceUv: new Float32Array(polygon.faceUv),
+      faceUv: new Float32Array(polygon.faceUv)
 
     };
 

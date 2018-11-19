@@ -1,7 +1,7 @@
 import Source from '../core/source';
 export default class RasterSource extends Source {
   prepareData() {
-    this.type='raster';
+    this.type = 'raster';
     const extent = this.get('extent');
     const lb = this._coorConvert(extent.slice(0, 2));
     const tr = this._coorConvert(extent.slice(2, 4));
