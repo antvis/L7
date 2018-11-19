@@ -76,6 +76,7 @@ export default class Layer extends Base {
     this.scene.on('zoomchange', () => {
       this._visibleWithZoom();
     });
+    
     this.layerMesh.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
       this.layerMesh.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
@@ -262,26 +263,13 @@ export default class Layer extends Base {
 
   _addActiveFeature(e) {
     const { featureId } = e;
+
     const activeStyle = this.get('activedOptions');
-    const data = this.layerSource.get('data');
-    const selectFeatureIds = [];
-    let featureStyleId = 0;
-    /* eslint-disable */  // 如果是mutiPolygon 一个要素会对应多个geometry
-    turfMeta.flattenEach(data, (currentFeature, featureIndex, multiFeatureIndex) => {
-    /* eslint-disable */
-      if (featureIndex === (featureId)) {
-        selectFeatureIds.push(featureStyleId);
-      }
-      featureStyleId++;
-      if (featureIndex > featureId) {
-        return;
-      }
-    });
-  
+    const selectFeatureIds =this.layerSource.getSelectFeatureId(featureId);
     if (this.StyleData[selectFeatureIds[0]].hasOwnProperty('filter') && this.StyleData[selectFeatureIds[0]].filter === false) { return; }
     const style = Util.assign({}, this.StyleData[featureId]);
     style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
-    this.updateStyle(selectFeatureIds, style);
+    this.updateStyle([featureId], style);
   }
 
 
@@ -451,8 +439,21 @@ export default class Layer extends Base {
   }
   _addPickMesh(mesh){
     this._pickingMesh = new THREE.Object3D();
+    this._visibleWithZoom();
+    this.scene.on('zoomchange', () => {
+      this._visibleWithZoom();
+    });
+   
     this.addToPicking(this._pickingMesh);
-    const pickmaterial = new PickingMaterial();
+    const pickmaterial = new PickingMaterial({
+      u_zoom:this.scene.getZoom()
+    });
+    pickmaterial.setDefinesvalue(this.type,true);
+    this._pickingMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      this._pickingMesh.material.setUniformsValue('u_zoom', zoom);
+
+    };
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     this._pickingMesh.add(pickingMesh);
   }
@@ -484,43 +485,28 @@ export default class Layer extends Base {
    * @param {*} style  更新的要素样式
    */
   updateStyle(featureStyleId, style) {
-    const {indices} = this._buffer.bufferStruct;
-   
-    if (this._activeIds) {
-      this.resetStyle();
-    }
-    this._activeIds = featureStyleId;
-    
-    const id = featureStyleId[0];
-    let dataIndex = 0;
-    // 计算第一个要素对应的颜色位置
-    if(indices){ 
-      // 面图层和
-        for (let i = 0; i < id; i++) {
-          dataIndex += indices[i].length;
-        }
-     } else {
-      dataIndex = id;
-     }
- 
-    featureStyleId.forEach((index,value) => {
-      let vertindex =[value]
-      if(indices)
-        vertindex = indices[index];
+      if (this._activeIds) {
+        this.resetStyle();
+      }
+      this._activeIds = featureStyleId;
+      const pickingId =this.layerMesh.geometry.attributes.pickingId.array;
       const color = style.color;
       const colorAttr =this.layerMesh.geometry.attributes.a_color;
-      // colorAttr.dynamic =true;
-      vertindex.forEach(() => {
-        colorAttr.array[dataIndex*4+0]=color[0];
-        colorAttr.array[dataIndex*4+1]=color[1];
-        colorAttr.array[dataIndex*4+2]=color[2];
-        colorAttr.array[dataIndex*4+3]=color[3];
-        dataIndex++;
-      });
+      const firstId = pickingId.indexOf(featureStyleId[0]+1);
+      for(let i = firstId;i<pickingId.length;i++){
+         if(pickingId[i]==featureStyleId[0]+1){
+            colorAttr.array[i*4+0]=color[0];
+            colorAttr.array[i*4+1]=color[1];
+            colorAttr.array[i*4+2]=color[2];
+            colorAttr.array[i*4+3]=color[3];
+         } else{
+           break;
+         }
+      }
       colorAttr.needsUpdate =true
-    });
-
+      return;
   }
+
   _updateColor(){
    
     this._updateMaping();
@@ -531,54 +517,32 @@ export default class Layer extends Base {
    * @param {*} filterData  数据过滤标识符
    */
   _updateFilter() {
-    console.log('updateFilter');
     this._updateMaping();
     const filterData = this.StyleData;
     this._activeIds = null; // 清空选中元素
-    let dataIndex = 0;
     const colorAttr =  this.layerMesh.geometry.attributes.a_color;
     const pickAttr = this.layerMesh.geometry.attributes.pickingId;
-    if(this.layerMesh.type =='Points'){ //点图层更新
-      filterData.forEach((item,index)=>{
-        const color = [ ...this.StyleData[index].color ];
-        if (item.hasOwnProperty('filter') && item.filter === false) {
-          color[0] = 0;
-          color[1] = 0;
-          color[2] = 0;
-          color[3] = 0;
-          pickAttr.array[index] = 0;
-         
-        } else {
-          colorAttr.array[index*4+0]=color[0];
-          colorAttr.array[index*4+1]=color[1];
-          colorAttr.array[index*4+2]=color[2];
-          colorAttr.array[index*4+3]=color[3];
-          pickAttr.array[index] = index;
-        }
-      })
-      colorAttr.needsUpdate =true;
-      pickAttr.needsUpdate =true;
-      return;
-    }
-    const {indices} = this._buffer.bufferStruct;
-     indices.forEach((vertIndexs, i) => {
-      const color = [ ...this.StyleData[i].color ];
-      let pickid = this.StyleData[i].id;
-      if (filterData[i].hasOwnProperty('filter') && filterData[i].filter === false) {
-        color[3] = 0;
-        pickid =0;
+    pickAttr.array.forEach((id,index)=>{
+      id = Math.abs(id);
+      const color = [ ...this.StyleData[id-1].color ];
+      id =Math.abs(id);
+      const item = filterData[id-1];
+      if (item.hasOwnProperty('filter') && item.filter === false) {
+        colorAttr.array[index*4+0]=0;
+        colorAttr.array[index*4+1]=0;
+        colorAttr.array[index*4+2]=0;
+        colorAttr.array[index*4+3]=0;
+        pickAttr.array[index] = -id;
+      } else {
+        colorAttr.array[index*4+0]=color[0];
+        colorAttr.array[index*4+1]=color[1];
+        colorAttr.array[index*4+2]=color[2];
+        colorAttr.array[index*4+3]=color[3];
+        pickAttr.array[index] = id;
       }
-      vertIndexs.forEach(() => {
-        colorAttr.array[dataIndex*4+0]=color[0];
-        colorAttr.array[dataIndex*4+1]=color[1];
-        colorAttr.array[dataIndex*4+2]=color[2];
-        colorAttr.array[dataIndex*4+3]=color[3];
-         pickAttr.array[dataIndex] = pickid;
-         dataIndex++;
-      });
-      colorAttr.needsUpdate =true;
-      pickAttr.needsUpdate =true;
-    });
+    })
+    colorAttr.needsUpdate =true;
+    pickAttr.needsUpdate =true;
     this._needUpdateFilter = false;
     this._needUpdateColor = false;
   }
@@ -587,7 +551,13 @@ export default class Layer extends Base {
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
     // z-fighting
-    this._object3D.position.z = this._object3D.renderOrder * Math.pow(2,22-zoom);
+    let offset = 0;
+    if(this.type==='point'){
+      offset = 5;
+    } else if(this.type === 'polyline'){
+      offset = 2;
+    }
+    this._object3D.position.z = offset * Math.pow(2,20-zoom);
     if(zoom<minZoom || zoom > maxZoom){
       this._object3D.visible =false;
     }else if(this.get('visible')){
@@ -598,35 +568,21 @@ export default class Layer extends Base {
    * 重置高亮要素
    */
   resetStyle() {
-    const {indices} = this._buffer.bufferStruct;
-    const colorAttr =  this.layerMesh.geometry.attributes.a_color;
-    let dataIndex = 0;
-    const id = this._activeIds[0];
-    if(indices){
-      for (let i = 0; i < id; i++) {
-        dataIndex += indices[i].length;
-      }
-    } else {
-      dataIndex = id;
-    }
-    this._activeIds.forEach((index,value) => {
-      const color = this.StyleData[index].color;
-      let vertindex = [value];
-      if(indices){
-       vertindex = indices[index];
-      }
-      const pickAttr = this.layerMesh.geometry.attributes.pickingId;
-      vertindex.forEach(() => {
-        colorAttr.array[dataIndex*4+0]=color[0];
-        colorAttr.array[dataIndex*4+1]=color[1];
-        colorAttr.array[dataIndex*4+2]=color[2];
-        colorAttr.array[dataIndex*4+3]=color[3];
-        // pickAttr.array[dataIndex]= index;
-        dataIndex++;
-      });
-      colorAttr.needsUpdate =true
-      // pickAttr.needsUpdate =true
-    });
+      const pickingId =this.layerMesh.geometry.attributes.pickingId.array;
+      const colorAttr =this.layerMesh.geometry.attributes.a_color;
+      this._activeIds.forEach((index,value) => {
+        const color = this.StyleData[index].color;
+        const firstId = pickingId.indexOf(index+1);
+        for(let i = firstId;i<pickingId.length;i++){
+          if(pickingId[i]==index+1){
+          colorAttr.array[i*4+0]=color[0];
+          colorAttr.array[i*4+1]=color[1];
+          colorAttr.array[i*4+2]=color[2];
+          colorAttr.array[i*4+3]=color[3];
+          }
+        }
+      })
+      colorAttr.needsUpdate =true;
   }
   /**
    * 销毁Layer对象

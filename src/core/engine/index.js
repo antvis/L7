@@ -12,10 +12,6 @@ export default class Engine extends EventEmitter {
     this._renderer = new Renderer(container).renderer;
     this._world = world;
     this._picking = Picking(this._world, this._renderer, this._camera, this._scene);
-    // this._renderer.context.getExtension('OES_texture_float');
-    // this._renderer.context.getExtension('OES_texture_float_linear');
-    // this._renderer.context.getExtension('OES_texture_half_float');
-    // this._renderer.context.getExtension('OES_texture_half_float_linear');
     this.clock = new THREE.Clock();
   }
   _initPostProcessing() {

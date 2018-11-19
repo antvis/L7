@@ -77,7 +77,6 @@ class Picking {
 
     const texture = this._pickingTexture;
     if (this._needUpdate) {
-
       this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
       this._needUpdate = false;
     }

@@ -14,6 +14,8 @@ precision highp float;
 
 #define MOV(a,b,c,d,t) (vec2(a*cos(t)+b*cos(0.1*(t)), c*sin(t)+d*cos(0.1*(t))))
 uniform float u_time;
+varying vec2 v_texCoord;
+varying  vec4 v_color;
 float movingLine(vec2 uv, vec2 center, float radius)
 {
     //angle of the line
@@ -61,14 +63,14 @@ float _cross(vec2 uv, vec2 center, float radius)
 void main()
 {
     vec3 finalColor;
-	vec2 uv = gl_PointCoord.xy * 2.0 - 1.0;
+	vec2 uv = v_texCoord * 2.0 - 1.0;
     vec2 c = vec2(0.,0.);
     finalColor = vec3( 0.3 * _cross(uv, c, 0.6) );
     finalColor += ( circle(uv, c, 0.2, 0.01)
                    + circle(uv, c, 0.4, 0.01) ) * blue1;
     finalColor += (circle(uv, c, 0.6, 0.02) );
-    finalColor += movingLine(uv, c, 0.6) * blue3;
-    finalColor += circle(uv, c, 0.1, 0.01) * blue3;
+    finalColor += movingLine(uv, c, 0.6) * v_color.xyz;
+    finalColor += circle(uv, c, 0.1, 0.01) * v_color.xyz;
 
     float alpha = 1.0;
     if(finalColor==vec3(0.)) alpha = 0.;

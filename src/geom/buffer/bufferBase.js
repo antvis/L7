@@ -296,6 +296,7 @@ export default class BufferBase extends Base {
       pickingIds,
       shapePositions,
       a_size,
+      faceUv: new Float32Array(polygon.faceUv),
 
     };
 

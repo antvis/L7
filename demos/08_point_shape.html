@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
-  <title>hexagon demo</title>
+  <title>point_circle</title>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
@@ -20,36 +20,43 @@
 <script src="../build/L7.js"></script>
 <script>
 
-const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 116.2825, 39.9 ],
+  center: [ 120.037828998113099, 30.086317611850635 ],
   pitch: 0,
-  zoom: 3
+  zoom: 5.44
 });
+window.scene = scene;
+var colorObj={
+    '黄色':'yellow',
+    '蓝色':'blue',
+    '橙色':'orange'
+
+}
 scene.on('loaded', () => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
-    scene.LineLayer({
+  $.get('./data/waringData.json', data => {
+    scene.PointLayer({
       zIndex: 2
     })
-     .source(data, { // lng1,lat1,lng2,lat2
-       type: 'csv',
-       x: 'lng1',
-       y: 'lat1',
-       x1: 'lng2',
-       y1: 'lat2'
-     })
-    .shape('arc')
-    .size(0.8)
-    .color('rgb(13,64,140)') 
-    .style({
-      opacity:0.6,
+    .source(data, {
+      type: 'array',
+      x: 'lon',
+      y: 'lat',
     })
-   // .animate({enable:true})
+    .shape('2d:radar')
+    .size(80 ) 
+    .active(false)
+    .color('signallevel',(v)=>{
+       return colorObj[v];
+    })
+    .style({
+        shape:'radar'
+    })
     .render();
   });
 });
+
 </script>
 </body>
 </html>

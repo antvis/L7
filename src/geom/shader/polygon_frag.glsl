@@ -51,26 +51,26 @@ void main() {
         float sU = step(tStart, u) - step(tEnd, u);
         float sV = step(tStart, v) - step(tEnd, v);
         float s = sU * sV;
-      
+   
         float curColId = floor(UvScale.x / tStep);
-        float sCol = step(targetColId - 0.5, curColId) - step(targetColId + 0.5, curColId);
+        float sCol = step(targetColId - 0.2, curColId) - step(targetColId + 0.2, curColId);
         
         float mLightP = mod(lightP, 2.);
         float sRow = step(mLightP - 0.2, st.y) - step(mLightP, st.y);
         if(ux == targetColId){
             n =0.;
         }
-        vec3 color = mix(baseColor, getWindowColor(n,0.6,brightColor,windowColor), s);
+    
+        vec3 color = mix(baseColor, getWindowColor(n,0.8,brightColor,windowColor), s);
         float sFinal = s * sCol * sRow;
         color += mix(baseColor, brightColor, sFinal);
-        if (st.y<0.01){
-        color = baseColor;
-         }
-        if(head ==1.0) { // 顶部亮线
-            color = brightColor;
-        }
+        // if (st.y<0.01){
+        // color = baseColor;
+        //  }
+        // if(head ==1.0) { // 顶部亮线
+        //     color = brightColor;
+        // }
         gl_FragColor = vec4(color * v_lightWeight,1.0); 
-      //gl_FragColor = color;
      }
    #else
        gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);

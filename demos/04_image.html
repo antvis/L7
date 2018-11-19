@@ -34,9 +34,8 @@ scene.on('loaded', () => {
 // https://gw.alipayobjects.com/zos/rmsportal/wAQqmdcWOPdomuKUyHDF.png
 // 
   const imageLayer = scene.ImageLayer().
-      source({
-        url: './image/hangzhoubay.jpg',
-       // extent: [ 73, 18, 136, 54 ]
+      source('./image/hangzhoubay.jpg',{
+       
       extent: [ 121.1680, 30.2828, 121.3840, 30.4219 ]
       })
       .style({

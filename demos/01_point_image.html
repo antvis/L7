@@ -47,7 +47,8 @@ scene.on('loaded', () => {
       "type": "FeatureCollection",
       "features":clusterData
       })
-     .color('#6492E9')
+    .color('#6492E9')
+    .active(true)
     .size('point_count',[1,30])
     .shape('2d:circle')
     .style({
@@ -60,7 +61,7 @@ scene.on('loaded', () => {
       zIndex: 5
     })
     .source(data)
-    .shape('meshLine')
+    .shape('line')
     .size([2,0])
     .color('#2F54EB')
      .style({
