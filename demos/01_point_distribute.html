@@ -28,7 +28,8 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/mUQPWCYaxOfiSznuANvG.txt', data => {
+  // ./data/mUQPWCYaxOfiSznuANvG.txt
+  $.get('./data/00.csv', data => {
     scene.PointLayer({
       zIndex: 2
     })

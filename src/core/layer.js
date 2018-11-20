@@ -105,6 +105,7 @@ export default class Layer extends Base {
     const { type = dataType } = cfg;
     cfg.data = data;
     cfg.mapType = this.get('mapType');
+
     this.layerSource = new source[type](cfg);
 
     return this;
@@ -447,13 +448,13 @@ export default class Layer extends Base {
     const pickmaterial = new PickingMaterial({
       u_zoom: this.scene.getZoom()
     });
-    pickmaterial.setDefinesvalue(this.type, true);
-    this._pickingMesh.onBeforeRender = () => {
-      const zoom = this.scene.getZoom();
-      this._pickingMesh.material.setUniformsValue('u_zoom', zoom);
-
-    };
+   
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
+    pickmaterial.setDefinesvalue(this.type, true);
+    pickingMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      pickingMesh.material.setUniformsValue('u_zoom', zoom);
+    };
     this._pickingMesh.add(pickingMesh);
   }
   _setPickingId() {
@@ -555,7 +556,7 @@ export default class Layer extends Base {
     } else if (this.type === 'polyline') {
       offset = 2;
     }
-    this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
+   this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
     if (zoom < minZoom || zoom > maxZoom) {
       this._object3D.visible = false;
     } else if (this.get('visible')) {

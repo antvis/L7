@@ -21,10 +21,6 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-const gui = new dat.GUI({ autoPlace: false });
-const customContainer = document.getElementById('gui');
-customContainer.appendChild(gui.domElement);
-const province = { 全国: '00', 新疆维吾尔自治区: '65', 西藏自治区: '54', 内蒙古自治区: '15', 青海省: '63', 四川省: '51', 黑龙江省: '23', 甘肃省: '62', 云南省: '53', 广西壮族自治区: '45', 湖南省: '43', 陕西省: '61', 广东省: '44', 吉林省: '22', 河北省: '13', 湖北省: '42', 贵州省: '52', 山东省: '37', 江西省: '36', 河南省: '41', 辽宁省: '21', 山西省: '14', 安徽省: '34', 福建省: '35', 浙江省: '33', 江苏省: '32', 重庆市: '50', 宁夏回族自治区: '64', 海南省: '46', 台湾省: '71', 北京市: '11', 天津市: '12', 上海市: '31', 香港特别行政区: '81', 澳门特别行政区: '82' };
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
@@ -43,9 +39,6 @@ scene.on('loaded', () => {
   
     .size('max',(value)=>{
        return value * 1000;
-    })
-    .filter('max',(v)=>{
-      return v*1 > 6000 ? true : false;
     })
     .active(true)
     .style({
