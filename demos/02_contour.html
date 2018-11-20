@@ -25,9 +25,9 @@ const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 102.615023, 23.107799],
+  center: [ 102.602992, 23.107329],
   pitch: 15,
-  zoom: 14,
+  zoom: 14.82,
 });
 scene.on('loaded', () => {
   $.get('./data/contour.geojson', data => {

@@ -33,10 +33,10 @@ export default class Scene extends Base {
     Map.on('mapLoad', () => {
       this._initEngine(Map.renderDom);
       const sceneMap = new GaodeMap(Map.map);
-      Object.getOwnPropertyNames(sceneMap.prototype).forEach(key => {
-        if (key !== 'constructor') {
-          this.prototype[key] = sceneMap.prototype[key];
-        }
+      // eslint-disable-next-line
+      Object.getOwnPropertyNames(sceneMap.__proto__).forEach((key)=>{
+         // eslint-disable-next-line
+        if ('key' !== 'constructor') { this.__proto__[key] = sceneMap.__proto__[key]; }
       });
       this.map = Map.map;
       Map.asyncCamera(this._engine);

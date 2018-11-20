@@ -1,5 +1,5 @@
 import BufferBase from './bufferBase';
-import { getJSON, getImage } from '../../util/ajax';
+import { getJSON } from '../../util/ajax';
 import * as THREE from '../../core/three';
 import Global from '../../global';
 const Space = 1;
@@ -68,12 +68,17 @@ export default class TextBuffer extends BufferBase {
     });
   }
   _loadTextTexture(url) {
-    getImage({
-      url: `${Global.sdfHomeUrl}${url}`
-    }, (e, image) => {
-      this.bufferStruct.textTexture = this._creatTexture(image);
+
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    img.onload = () => {
+      this.bufferStruct.textTexture = this._creatTexture(img);
       this.emit('SourceLoaded');
-    });
+    };
+    img.src = url;
+
   }
   /**
    * 计算每个标注词语的位置

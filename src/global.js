@@ -22,7 +22,7 @@ const Global = {
   // 指定固定 tick 数的逼近值
   snapCountArray: [ 0, 1, 1.2, 1.5, 1.6, 2, 2.2, 2.4, 2.5, 3, 4, 5, 6, 7.5, 8, 10 ],
   size: 10000,
-  sdfHomeUrl: 'http://visualtest.amap.com',
+  sdfHomeUrl: 'https://sdf.amap.com',
   scales: {
   }
 };

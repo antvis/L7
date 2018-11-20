@@ -418,10 +418,6 @@ export default class Layer extends Base {
       });
     }
   }
-  /**
-   * @param {*} type 类型
-   * @param {*} callback 回调函数
-   */
   on(type, callback) {
 
     this._addPickingEvents();
@@ -463,7 +459,7 @@ export default class Layer extends Base {
     // TODO: Find a way to properly remove this listener on destroy
     this.scene.on('pick', e => {
       // Re-emit click event from the layer
-      const { featureId, point2d, /* point3d, */intersects } = e;
+      const { featureId, point2d, intersects } = e;
       if (intersects.length === 0) { return; }
       const source = this.layerSource.get('data');
       const feature = source.features[featureId];
