@@ -1,7 +1,7 @@
 import BufferBase from './bufferBase';
 import { regularShape } from '../shape/index';
 import Util from '../../util';
-import * as THREE from '../../core/three';
+// import * as THREE from '../../core/three';
 export default class PointBuffer extends BufferBase {
   geometryBuffer() {
     const type = this.get('type');
