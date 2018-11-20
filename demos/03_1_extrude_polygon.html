@@ -24,20 +24,22 @@
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 120.4047, 30.0679 ],
-  pitch: 35,
-  zoom: 4
+  center: [104.838088,34.075889 ],
+  pitch: 27,
+  zoom: 4.5,
+  rotation:4.183582
 
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.getJSON('./data/chinandvohexagon.geojson', city => {
+  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/xxvoBnsYNEPiAXGRmlPD.json', city => {
     citylayer = scene.PolygonLayer()
     .source(city)
     .color('sum', ["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"])
     .shape('extrude')
   
     .size('max',(value)=>{
+       if(value<0)value =0;
        return value * 1000;
     })
     .active(true)
