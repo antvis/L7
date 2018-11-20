@@ -19,6 +19,6 @@ void main() {
         floor(16.0 * (1.0 - value1)) / 16.0);
     v_color = texture2D(u_colorTexture,ramp_pos);
    vec2 range = u_extent.zw - u_extent.xy;
-   gl_Position =  matModelViewProjection * vec4(position.xy, value, 1.0);
+   gl_Position =  matModelViewProjection * vec4(position.xy, value*100., 1.0);
 
 }

@@ -1,7 +1,7 @@
 {
-  "name": "@ali/l7",
-  "version": "0.1.1",
-  "description": "the Grammar of Graphics in Javascript",
+  "name": "@antv/l7",
+  "version": "1.0.0",
+  "description": "Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "build/l7.js",
   "browser": "build/l7.js",
   "module": "lib/index.js",
@@ -15,7 +15,8 @@
   },
   "keywords": [
     "l7",
-    "chart"
+    "gis",
+    "geometry"
   ],
   "author": "https://github.com/orgs/antvis/people",
   "license": "MIT",
@@ -107,6 +108,7 @@
     "fecha": "^2.3.3",
     "gl-matrix": "^2.4.1",
     "lodash": "^4.17.5",
+    "polyline-normals": "^2.0.2",
     "rbush": "^2.0.2",
     "three": "^0.96.0",
     "venn.js": "^0.2.20",

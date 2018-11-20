@@ -63,7 +63,7 @@ export default class Scene extends Base {
     const element = document.createElement('div');
 
     element.innerHTML = message;
-    element.style.cssText += 'position: absolute; pointer-events:none;background: rgba(255, 255, 255, 0.7);font-size: 11px;z-index:100; padding:4px;bottom: 0;right:0;';
+    element.style.cssText += 'position: absolute; pointer-events:none;background: rgba(255, 255, 255, 0.7);font-size: 11px;z-index:100; padding:4px;bottom: 0;right:0px;';
     this._container.appendChild(element);
   }
   addImage() {

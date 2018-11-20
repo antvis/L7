@@ -9,7 +9,7 @@ export default function PickingMaterial(options) {
     },
     vertexShader: picking_vert,
     fragmentShader: picking_frag,
-    transparent: true
+    transparent: false
   });
   return material;
 }

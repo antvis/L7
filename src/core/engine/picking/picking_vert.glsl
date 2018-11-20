@@ -14,7 +14,7 @@ void main() {
     float scale = pow(2.0,(20.0 - u_zoom));
     vec3 newposition =  position;
     #ifdef point 
-        newposition =position + a_size * scale* a_shape;
+        newposition =position + a_size * scale * a_shape;
     #endif
     #ifdef polyline
       newposition = position.xyz + vec3(normal * a_size * pow(2.0,20.0-u_zoom) / 2.0 * a_miter);
