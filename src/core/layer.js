@@ -419,9 +419,8 @@ export default class Layer extends Base {
     }
   }
   /**
-   *
-   * @param {*} overwrite
-   * @param {*} callback
+   * @param {*} type 类型
+   * @param {*} callback 回调函数
    */
   on(type, callback) {
 
@@ -448,7 +447,7 @@ export default class Layer extends Base {
     const pickmaterial = new PickingMaterial({
       u_zoom: this.scene.getZoom()
     });
-   
+
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickmaterial.setDefinesvalue(this.type, true);
     pickingMesh.onBeforeRender = () => {
@@ -464,7 +463,7 @@ export default class Layer extends Base {
     // TODO: Find a way to properly remove this listener on destroy
     this.scene.on('pick', e => {
       // Re-emit click event from the layer
-      const { featureId, point2d, point3d, intersects } = e;
+      const { featureId, point2d, /* point3d, */intersects } = e;
       if (intersects.length === 0) { return; }
       const source = this.layerSource.get('data');
       const feature = source.features[featureId];
@@ -493,7 +492,7 @@ export default class Layer extends Base {
     const colorAttr = this.layerMesh.geometry.attributes.a_color;
     const firstId = pickingId.indexOf(featureStyleId[0] + 1);
     for (let i = firstId; i < pickingId.length; i++) {
-      if (pickingId[i] == featureStyleId[0] + 1) {
+      if (pickingId[i] === featureStyleId[0] + 1) {
         colorAttr.array[i * 4 + 0] = color[0];
         colorAttr.array[i * 4 + 1] = color[1];
         colorAttr.array[i * 4 + 2] = color[2];
@@ -556,7 +555,7 @@ export default class Layer extends Base {
     } else if (this.type === 'polyline') {
       offset = 2;
     }
-   this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
+    this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
     if (zoom < minZoom || zoom > maxZoom) {
       this._object3D.visible = false;
     } else if (this.get('visible')) {
@@ -569,11 +568,11 @@ export default class Layer extends Base {
   resetStyle() {
     const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
     const colorAttr = this.layerMesh.geometry.attributes.a_color;
-    this._activeIds.forEach((index, value) => {
+    this._activeIds.forEach(index => {
       const color = this.StyleData[index].color;
       const firstId = pickingId.indexOf(index + 1);
       for (let i = firstId; i < pickingId.length; i++) {
-        if (pickingId[i] == index + 1) {
+        if (pickingId[i] === index + 1) {
           colorAttr.array[i * 4 + 0] = color[0];
           colorAttr.array[i * 4 + 1] = color[1];
           colorAttr.array[i * 4 + 2] = color[2];
