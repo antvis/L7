@@ -7,7 +7,7 @@ import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
 import radar from '../geom/shader/radar_frag.glsl';
 import warn from '../geom/shader/warn_frag.glsl';
-import pickingMaterial from '../core/engine/picking/pickingMaterial';
+// import pickingMaterial from '../core/engine/picking/pickingMaterial';
 
 /**
  * point shape 2d circle, traingle text,image
@@ -58,7 +58,7 @@ export default class PointLayer extends Layer {
     //     u_zoom: this.scene.getZoom()
     //   })
     // mtl.setDefinesvalue('point', true);
-    mtl.setDefinesvalue('SHAPE', true);
+      mtl.setDefinesvalue('SHAPE', true);
       if (shape === 'radar') {
         mtl.fragmentShader = radar;
 

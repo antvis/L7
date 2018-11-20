@@ -21,8 +21,7 @@ export default class CSVSource extends Source {
       if (col.coordinates) {
         coordinates = col.coordinates;
       }
-      if(x && y)
-        coordinates = [ col[x], col[y] ];
+      if (x && y) { coordinates = [ col[x], col[y] ]; }
       if (x1 && y1) {
         coordinates = [[ col[x], col[y] ], [ col[x1], col[y1] ]];
       }

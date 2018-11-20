@@ -25,19 +25,17 @@ export default class GeojsonSource extends Source {
     const data = this.get('data');
     const selectFeatureIds = [];
     let featureStyleId = 0;
-     /* eslint-disable */
-    turfMeta.flattenEach(data, (currentFeature, featureIndex, multiFeatureIndex) => {
-      /* eslint-disable */
-        if (featureIndex === (featureId)) {
-          selectFeatureIds.push(featureStyleId);
-        }
-        featureStyleId++;
-        if (featureIndex > featureId) {
-          return;
-        }
-      });
+    turfMeta.flattenEach(data, (currentFeature, featureIndex/* , multiFeatureIndex*/) => {
+      if (featureIndex === (featureId)) {
+        selectFeatureIds.push(featureStyleId);
+      }
+      featureStyleId++;
+      if (featureIndex > featureId) {
+        return;
+      }
+    });
     return selectFeatureIds;
-    
+
   }
 
 }
