@@ -7,7 +7,6 @@ import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
 import radar from '../geom/shader/radar_frag.glsl';
 import warn from '../geom/shader/warn_frag.glsl';
-// import pickingMaterial from '../core/engine/picking/pickingMaterial';
 
 /**
  * point shape 2d circle, traingle text,image
