@@ -30,6 +30,5 @@ self.addEventListener('message', e => {
   }
 });
 self.addEventListener('error', function(e) {
-  /* eslint-disable */
-  console.log('filename:' + e.filename + '\nmessage:' + e.message + '\nline:' + e.lineno);
+  console.error('filename:' + e.filename + '\nmessage:' + e.message + '\nline:' + e.lineno);
 });
