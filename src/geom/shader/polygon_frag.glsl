@@ -15,8 +15,8 @@ varying float v_size;
 
 vec3 getWindowColor(float n, float hot, vec3 brightColor, vec3 darkColor) {
     float s = step(hot, n);
-    //vec3 color = mix(brightColor,brightColor - vec3(0.4,0.4,0.4),n);
-    vec3 color = mix(brightColor,vec3(1.0,1.0,1.0),n);
+    vec3 color = mix(brightColor,vec3(0.9,0.9,1.0),n);
+
     return mix(darkColor, color, s);
 }
 float random (vec2 st) {
@@ -87,7 +87,7 @@ void main() {
         if(ux == targetColId){
             n =0.;
         }
-        float timeP = min(0.95, abs ( sin(u_time/6.0) ) );
+        float timeP = min(0.75, abs ( sin(u_time/6.0) ) );
         float hot = smoothstep(1.0,0.0,timeP);
         vec3 color = mix(baseColor, getWindowColor(n,hot,brightColor,windowColor), s);
         //vec3 color = mix(baseColor, getWindowColor(n,hot,brightColor,windowColor), 1.0);
