@@ -8,6 +8,7 @@ export default class PolygonBuffer extends BufferBase {
     const shape = this.get('shape');
     const positions = [];
     const faceUv = [];
+    const sizes = [];
     const positionsIndex = [];
     let indexCount = 0;
     this.bufferStruct.style = properties;
@@ -24,7 +25,23 @@ export default class PolygonBuffer extends BufferBase {
         });
       }
       positions.push(extrudeData.positions);
-      faceUv.push(...extrudeData.faceUv);
+
+      if (shape !== 'line') {
+       // faceUv.push(...extrudeData.faceUv);
+        const count = extrudeData.faceUv.length / 2;
+        for (let i = 0; i < count; i++) {
+          // uv 系数生成等大小的窗户
+          let x = extrudeData.faceUv[i * 2];
+          let y = extrudeData.faceUv[i * 2 + 1];
+          if (x !== -1) {
+            x = x * 0.1;
+            y = y * heightValue / 2000;
+          }
+          faceUv.push(x, y);
+          sizes.push((1.0 - extrudeData.faceUv[i * 2 + 1]) * heightValue);
+        }
+
+      }
       indexCount += extrudeData.positionsIndex.length;
       positionsIndex.push(extrudeData.positionsIndex);
     });
@@ -33,6 +50,7 @@ export default class PolygonBuffer extends BufferBase {
     this.bufferStruct.indexCount = indexCount;
     this.bufferStruct.style = properties;
     this.bufferStruct.faceUv = faceUv;
+    this.bufferStruct.sizes = sizes;
     if (shape !== 'line') {
       this.attributes = this._toPolygonAttributes(this.bufferStruct);
       this.faceTexture = this._generateTexture();

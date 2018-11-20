@@ -1,11 +1,14 @@
 import Base from '../core/base';
+import * as Theme from '../theme/index';
+import Util from '../util';
+import { scene } from '../global';
 const DEG2RAD = Math.PI / 180;
 export class MapProvider extends Base {
   getDefaultCfg() {
-    return {
+    return Util.assign(scene, {
       resizeEnable: true,
       viewMode: '3D'
-    };
+    });
   }
   constructor(container, cfg) {
     super(cfg);
@@ -17,7 +20,20 @@ export class MapProvider extends Base {
     }, 100);
 
   }
+
   initMap() {
+    const mapStyle = this.get('mapStyle');
+    switch (mapStyle) {
+      case 'dark' :
+        this.set('mapStyle', Theme.DarkTheme.mapStyle);
+        break;
+      case 'light':
+        this.set('mapStyle', Theme.LightTheme.mapStyle);
+        break;
+      default:
+        this.set('mapStyle', Theme.LightTheme.mapStyle);
+    }
+    this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
     this.map = new AMap.Map(this.container, this._attrs);
 
   }
@@ -65,7 +81,7 @@ export class MapProvider extends Base {
     this.canvasContainer = canvasContainer;
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText += 'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
-    this.renderDom.id = 'canvaslayer';
+    this.renderDom.id = 'l7_canvaslayer';
     canvasContainer.appendChild(this.renderDom);
   }
 }

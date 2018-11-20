@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>point_circle</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [ 120.19382669582967, 30.258134 ],
+  pitch: 0,
+  zoom: 3
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  $.get('./data/provincePoint.geojson', data => {
+    scene.PointLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .shape('name', 'text')
+    .size(10) // default 1
+    .color('#fff')
+    .style({
+      stroke: '#999',
+      strokeWidth: 2,
+      opacity: 0.85
+    })
+     .render();
+  });
+});
+
+</script>
+</body>
+</html>
+

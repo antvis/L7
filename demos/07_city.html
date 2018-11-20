@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+   <link rel="stylesheet" href="./assets/info.css">
+  <title>city</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map">
+ <div  id ="info" class ="tooltip" style="display:none">
+</div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'light', // 样式URL
+  center: [120.173104,  30.244072],
+  pitch: 66.50572,
+  zoom: 15.79,
+  minZoom:10
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  $.get('./data/water.geojson', data => {
+    scene.PolygonLayer({
+      zIndex: 0
+    })
+    .source(data)
+    .shape('fill')
+    .color('rgb(79,174,234)')
+    .render();
+  });
+  $.get('./data/land.geojson', data => {
+    scene.PolygonLayer({
+      zIndex: 0
+    })
+    .source(data)
+    .shape('fill')
+    .color('rgb(156,194,116)')
+    .render();
+  });
+   $.get('./data/river.geojson', data => {
+    scene.LineLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .shape('line')
+    .size([3,0])
+    .color('rgb(79,174,234)')
+    .render();
+  });
+  
+   $.get('./data/build.geojson', data => {
+    citylayer = scene.PolygonLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .shape('extrude')
+    .active({fill:'red'})
+    .size('floor',[10,2000])
+    .color('rgba(242,246,250,0.96)')
+    .render();
+    citylayer.on('click',(e)=>{
+      $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
+      $("#info").html(`<p>楼高<span">${e.feature.properties.floor || 0}</span></p>`);
+    })
+  });
+});
+
+</script>
+</body>
+</html>
+

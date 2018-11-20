@@ -1,4 +1,5 @@
 import EventEmitter from 'wolfy87-eventemitter';
+import * as THREE from '../three';
 import Scene from './scene';
 import Camera from './camera';
 import Renderer from './renderer';
@@ -11,8 +12,7 @@ export default class Engine extends EventEmitter {
     this._renderer = new Renderer(container).renderer;
     this._world = world;
     this._picking = Picking(this._world, this._renderer, this._camera, this._scene);
-    this._renderer.context.getExtension('OES_texture_float');
-    this._renderer.context.getExtension('OES_texture_float_linear');
+    this.clock = new THREE.Clock();
   }
   _initPostProcessing() {
 
@@ -26,10 +26,9 @@ export default class Engine extends EventEmitter {
 
   }
   run() {
-    this.engineID = requestAnimationFrame(() => {
-      this.update();
-      this.engineID = requestAnimationFrame(this.run.bind(this));
-    });
+
+    this.update();
+    this.engineID = requestAnimationFrame(this.run.bind(this));
   }
   stop() {
     cancelAnimationFrame(this.engineID);

@@ -3,8 +3,8 @@
  * @author dxq613@gmail.com
  */
 
-const EventEmitter = require('wolfy87-eventemitter');
-const Util = require('../util');
+import EventEmitter from 'wolfy87-eventemitter';
+import Util from '../util';
 
 class Base extends EventEmitter {
 
@@ -29,16 +29,6 @@ class Base extends EventEmitter {
   set(name, value) {
     this._attrs[name] = value;
   }
-
-  /**
-   * @protected
-   * @param {Boolean} visible 是否可见
-   * 显示、隐藏
-   */
-  changeVisible(/* visible */) {
-
-  }
-
   destroy() {
     this._attrs = {};
     this.removeAllListeners();
@@ -46,4 +36,4 @@ class Base extends EventEmitter {
   }
 }
 
-module.exports = Base;
+export default Base;

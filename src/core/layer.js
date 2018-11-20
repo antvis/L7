@@ -6,7 +6,6 @@ import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
 import * as source from '../source/index';
-import * as turfMeta from '@turf/meta';
 import PickingMaterial from '../core/engine/picking/pickingMaterial';
 import Attr from '../attr/index';
 import Util from '../util';
@@ -37,15 +36,18 @@ export default class Layer extends Base {
       attrs: {},
       // 样式配置项
       styleOptions: {
-        stroke: 'rgb(255,255,255)',
+        stroke: [ 1.0, 1.0, 1.0, 1.0 ],
         strokeWidth: 1.0,
-        opacity: 1.0
+        opacity: 1.0,
+        texture: false
       },
       // 选中时的配置项
       selectedOptions: null,
       // active 时的配置项
       activedOptions: null,
-      animateOptions: null
+      animateOptions: {
+        enable: false
+      }
     };
   }
   constructor(scene, cfg) {
@@ -59,23 +61,37 @@ export default class Layer extends Base {
     const layerId = this._getUniqueId();
     this.layerId = layerId;
     this._activeIds = null;
-    // todo 用户参数
-    this._object3D.position.z = layerId * 1000;
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
 
   }
   /**
-   * 将图层添加加到Object
-   * @param {*} object
+   * 将图层添加加到 Object
+   * @param {*} object three 物体
    */
   add(object) {
     this.layerMesh = object;
+    this._visibleWithZoom();
+    this.scene.on('zoomchange', () => {
+      this._visibleWithZoom();
+    });
+
+    this.layerMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      this.layerMesh.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
+      this.layerMesh.material.setUniformsValue('u_zoom', zoom);
+
+    };
+    // 更新
+    if (this._needUpdateFilter) {
+      this._updateFilter();
+    }
     this._object3D.add(object);
     this._addPickMesh(object);
   }
   remove(object) {
     this._object3D.remove(object);
+
   }
   _getUniqueId() {
     return id++;
@@ -89,11 +105,13 @@ export default class Layer extends Base {
     const { type = dataType } = cfg;
     cfg.data = data;
     cfg.mapType = this.get('mapType');
+
     this.layerSource = new source[type](cfg);
 
     return this;
   }
   color(field, values) {
+    this._needUpdateColor = true;// 标识颜色是否需要更新
     this._createAttrOption('color', field, values, Global.colors);
     return this;
   }
@@ -136,7 +154,7 @@ export default class Layer extends Base {
   }
 
   style(field, cfg) {
-    const colorItem = [ 'fill', 'stroke' ];
+    const colorItem = [ 'fill', 'stroke', 'color', 'baseColor', 'brightColor', 'windowColor' ];
     let styleOptions = this.get('styleOptions');
     if (!styleOptions) {
       styleOptions = {};
@@ -153,7 +171,7 @@ export default class Layer extends Base {
     styleOptions.fields = fields;
     Util.assign(styleOptions, cfg);
     for (const item in cfg) {
-      if (colorItem.indexOf(item) != -1) {
+      if (colorItem.indexOf(item) !== -1) {
         styleOptions[item] = ColorUtil.color2RGBA(styleOptions[item]);
       }
       styleOptions[item] = styleOptions[item];
@@ -162,11 +180,27 @@ export default class Layer extends Base {
     return this;
   }
   filter(field, values) {
+    this._needUpdateFilter = true;
     this._createAttrOption('filter', field, values, true);
     return this;
   }
-  animate(callback) {
-    this.set('animateOptions', callback);
+  animate(field, cfg) {
+    let animateOptions = this.get('animateOptions');
+    if (!animateOptions) {
+      animateOptions = {};
+      this.set('animateOptions', animateOptions);
+    }
+    if (Util.isObject(field)) {
+      cfg = field;
+      field = null;
+    }
+    let fields;
+    if (field) {
+      fields = parseFields(field);
+    }
+    animateOptions.fields = fields;
+    Util.assign(animateOptions, cfg);
+    this.set('animateOptions', animateOptions);
     return this;
   }
   texture() {
@@ -211,10 +245,12 @@ export default class Layer extends Base {
     }
     this._setAttrOptions(attrName, attrCfg);
   }
+  // 初始化图层
   init() {
     this._initAttrs();
     this._scaleByZoom();
     this._mapping();
+
     const activeHander = this._addActiveFeature.bind(this);
     if (this.get('allowActive')) {
 
@@ -227,52 +263,45 @@ export default class Layer extends Base {
 
   _addActiveFeature(e) {
     const { featureId } = e;
+
     const activeStyle = this.get('activedOptions');
-    const data = this.layerSource.get('data');
-    const selectFeatureIds = [];
-    let featureStyleId = 0;
-    /* eslint-disable */
-    turfMeta.flattenEach(data, (currentFeature, featureIndex, multiFeatureIndex) => {
-    /* eslint-disable */
-      if (featureIndex === featureId) {
-        selectFeatureIds.push(featureStyleId);
-      }
-      featureStyleId++;
-      if (featureIndex > featureId) {
-        return;
-      }
-    });
+    const selectFeatureIds = this.layerSource.getSelectFeatureId(featureId);
     if (this.StyleData[selectFeatureIds[0]].hasOwnProperty('filter') && this.StyleData[selectFeatureIds[0]].filter === false) { return; }
     const style = Util.assign({}, this.StyleData[featureId]);
     style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
-    this.updateStyle(selectFeatureIds, style);
+    this.updateStyle([ featureId ], style);
   }
 
 
   _initAttrs() {
-    const self = this;
-    const attrs = this.get('attrs');
     const attrOptions = this.get('attrOptions');
     for (const type in attrOptions) {
       if (attrOptions.hasOwnProperty(type)) {
-        const option = attrOptions[type];
-        const className = Util.upperFirst(type);
-        const fields = parseFields(option.field);
-        const scales = [];
-        for (let i = 0; i < fields.length; i++) {
-          const field = fields[i];
-          const scale = self._createScale(field);
-
-          if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
-            option.values = Global.colors;
-          }
-          scales.push(scale);
-        }
-        option.scales = scales;
-        const attr = new Attr[className](option);
-        attrs[type] = attr;
+        this._updateAttr(type);
       }
     }
+  }
+  _updateAttr(type) {
+    const self = this;
+    const attrs = this.get('attrs');
+    const attrOptions = this.get('attrOptions');
+    const option = attrOptions[type];
+    option.neadUpdate = true;
+    const className = Util.upperFirst(type);
+    const fields = parseFields(option.field);
+    const scales = [];
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const scale = self._createScale(field);
+
+      if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
+        option.values = Global.colors;
+      }
+      scales.push(scale);
+    }
+    option.scales = scales;
+    const attr = new Attr[className](option);
+    attrs[type] = attr;
   }
   _updateSize(zoom) {
     const sizeOption = this.get('attrOptions').size;
@@ -303,6 +332,7 @@ export default class Layer extends Base {
       for (const k in attrs) {
         if (attrs.hasOwnProperty(k)) {
           const attr = attrs[k];
+          attr.needUpdate = false;
           const names = attr.names;
           const values = self._getAttrValues(attr, record);
           if (names.length > 1) { // position 之类的生成多个字段的属性
@@ -323,26 +353,30 @@ export default class Layer extends Base {
     this.StyleData = mappedData;
     return mappedData;
   }
-  _updateMap(attrName) {
+  // 更新地图映射
+  _updateMaping() {
     const self = this;
     const attrs = self.get('attrs');
 
     const data = this.layerSource.propertiesData;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
-      if (attrs.hasOwnProperty(attrName)) {
-        const attr = attrs[attrName];
-        const names = attr.names;
-        const values = self._getAttrValues(attr, record);
-        if (names.length > 1) { // position 之类的生成多个字段的属性
-          for (let j = 0; j < values.length; j++) {
-            const val = values[j];
-            const name = names[j];
-            this.StyleData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-          }
-        } else {
-          this.StyleData[i][names[0]] = values.length === 1 ? values[0] : values;
+      for (const attrName in attrs) {
+        if (attrs.hasOwnProperty(attrName) && attrs[attrName].neadUpdate) {
+          const attr = attrs[attrName];
+          const names = attr.names;
+          const values = self._getAttrValues(attr, record);
+          if (names.length > 1) { // position 之类的生成多个字段的属性
+            for (let j = 0; j < values.length; j++) {
+              const val = values[j];
+              const name = names[j];
+              this.StyleData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
+            }
+          } else {
+            this.StyleData[i][names[0]] = values.length === 1 ? values[0] : values;
 
+          }
+          attr.neadUpdate = true;
         }
       }
     }
@@ -385,17 +419,17 @@ export default class Layer extends Base {
     }
   }
   /**
-   * 
-   * @param {*} overwrite 
-   * @param {*} callback 
+   *
+   * @param {*} overwrite
+   * @param {*} callback
    */
-  on(type,callback) {
+  on(type, callback) {
 
     this._addPickingEvents();
     super.on(type, callback);
   }
   getPickingId() {
-      return this.scene._engine._picking.getNextId();
+    return this.scene._engine._picking.getNextId();
   }
   addToPicking(object) {
     this.scene._engine._picking.add(object);
@@ -403,11 +437,24 @@ export default class Layer extends Base {
   removeFromPicking(object) {
     this.scene._engine._picking.remove(object);
   }
-  _addPickMesh(mesh){
+  _addPickMesh(mesh) {
     this._pickingMesh = new THREE.Object3D();
+    this._visibleWithZoom();
+    this.scene.on('zoomchange', () => {
+      this._visibleWithZoom();
+    });
+
     this.addToPicking(this._pickingMesh);
-    const pickmaterial = new PickingMaterial();
+    const pickmaterial = new PickingMaterial({
+      u_zoom: this.scene.getZoom()
+    });
+   
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
+    pickmaterial.setDefinesvalue(this.type, true);
+    pickingMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      pickingMesh.material.setUniformsValue('u_zoom', zoom);
+    };
     this._pickingMesh.add(pickingMesh);
   }
   _setPickingId() {
@@ -415,9 +462,20 @@ export default class Layer extends Base {
   }
   _addPickingEvents() {
     // TODO: Find a way to properly remove this listener on destroy
-    this.scene.on('pick', (point2d, point3d, intersects) => {
+    this.scene.on('pick', e => {
       // Re-emit click event from the layer
-      this.emit('click', this, point2d, point3d, intersects);
+      const { featureId, point2d, point3d, intersects } = e;
+      if (intersects.length === 0) { return; }
+      const source = this.layerSource.get('data');
+      const feature = source.features[featureId];
+      const lnglat = this.scene.containerToLngLat(point2d);
+      const target = {
+        feature,
+        pixel: point2d,
+        lnglat: { lng: lnglat.lng, lat: lnglat.lat }
+      };
+      this.emit('click', target);
+      // this.emit('move', target);
     });
   }
   /**
@@ -426,126 +484,123 @@ export default class Layer extends Base {
    * @param {*} style  更新的要素样式
    */
   updateStyle(featureStyleId, style) {
-    const {indices} = this.buffer.bufferStruct;
-   
     if (this._activeIds) {
       this.resetStyle();
     }
     this._activeIds = featureStyleId;
-    
-    const id = featureStyleId[0];
-    let dataIndex = 0;
-    if(indices){ 
-      // 面图层和
-        for (let i = 0; i < id; i++) {
-          dataIndex += indices[i].length;
-        }
-     } else {
-      dataIndex = id;
-     }
- 
-    featureStyleId.forEach((index,value) => {
-      let vertindex =[value]
-      if(indices)
-        vertindex = indices[index];
-      const color = style.color;
-      const colorAttr =this.layerMesh.geometry.attributes.a_color;
-      colorAttr.dynamic =true;
-      vertindex.forEach(() => {
-        colorAttr.array[dataIndex*4+0]=color[0];
-        colorAttr.array[dataIndex*4+1]=color[1];
-        colorAttr.array[dataIndex*4+2]=color[2];
-        colorAttr.array[dataIndex*4+3]=color[3];
-        dataIndex++;
-      });
-      colorAttr.needsUpdate =true
-    });
+    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
+    const color = style.color;
+    const colorAttr = this.layerMesh.geometry.attributes.a_color;
+    const firstId = pickingId.indexOf(featureStyleId[0] + 1);
+    for (let i = firstId; i < pickingId.length; i++) {
+      if (pickingId[i] == featureStyleId[0] + 1) {
+        colorAttr.array[i * 4 + 0] = color[0];
+        colorAttr.array[i * 4 + 1] = color[1];
+        colorAttr.array[i * 4 + 2] = color[2];
+        colorAttr.array[i * 4 + 3] = color[3];
+      } else {
+        break;
+      }
+    }
+    colorAttr.needsUpdate = true;
+    return;
+  }
+
+  _updateColor() {
+
+    this._updateMaping();
 
   }
    /**
    * 用于过滤数据
    * @param {*} filterData  数据过滤标识符
    */
-  updateFilter(filterData) {
+  _updateFilter() {
+    this._updateMaping();
+    const filterData = this.StyleData;
     this._activeIds = null; // 清空选中元素
-    let dataIndex = 0;
-    const colorAttr =  this.layerMesh.geometry.attributes.a_color;
-    if(this.layerMesh.type =='Points'){ //点图层更新
-      filterData.forEach((item,index)=>{
-        const color = [ ...this.StyleData[index].color ];
-        if (item.hasOwnProperty('filter') && item.filter === false) {
-          color[3] = 0;
-        }
-          colorAttr.array[index*4+0]=color[0];
-          colorAttr.array[index*4+1]=color[1];
-          colorAttr.array[index*4+2]=color[2];
-          colorAttr.array[index*4+3]=color[3];
-      })
-      colorAttr.needsUpdate =true;
-      return;
-    }
-    const {indices} = this.buffer.bufferStruct;
-     indices.forEach((vertIndexs, i) => {
-      const color = [ ...this.StyleData[i].color ];
-      if (filterData[i].hasOwnProperty('filter') && filterData[i].filter === false) {
-        color[3] = 0;
+    const colorAttr = this.layerMesh.geometry.attributes.a_color;
+    const pickAttr = this.layerMesh.geometry.attributes.pickingId;
+    pickAttr.array.forEach((id, index) => {
+      id = Math.abs(id);
+      const color = [ ...this.StyleData[id - 1].color ];
+      id = Math.abs(id);
+      const item = filterData[id - 1];
+      if (item.hasOwnProperty('filter') && item.filter === false) {
+        colorAttr.array[index * 4 + 0] = 0;
+        colorAttr.array[index * 4 + 1] = 0;
+        colorAttr.array[index * 4 + 2] = 0;
+        colorAttr.array[index * 4 + 3] = 0;
+        pickAttr.array[index] = -id;
+      } else {
+        colorAttr.array[index * 4 + 0] = color[0];
+        colorAttr.array[index * 4 + 1] = color[1];
+        colorAttr.array[index * 4 + 2] = color[2];
+        colorAttr.array[index * 4 + 3] = color[3];
+        pickAttr.array[index] = id;
       }
-
-      vertIndexs.forEach(() => {
-        colorAttr.array[dataIndex*4+0]=color[0];
-        colorAttr.array[dataIndex*4+1]=color[1];
-        colorAttr.array[dataIndex*4+2]=color[2];
-        colorAttr.array[dataIndex*4+3]=color[3];
-        dataIndex++;
-      });
-      colorAttr.needsUpdate =true;
     });
+    colorAttr.needsUpdate = true;
+    pickAttr.needsUpdate = true;
+    this._needUpdateFilter = false;
+    this._needUpdateColor = false;
+  }
+  _visibleWithZoom() {
+    const zoom = this.scene.getZoom();
+    const minZoom = this.get('minZoom');
+    const maxZoom = this.get('maxZoom');
+    // z-fighting
+    let offset = 0;
+    if (this.type === 'point') {
+      offset = 5;
+    } else if (this.type === 'polyline') {
+      offset = 2;
+    }
+   this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
+    if (zoom < minZoom || zoom > maxZoom) {
+      this._object3D.visible = false;
+    } else if (this.get('visible')) {
+      this._object3D.visible = true;
+    }
   }
   /**
    * 重置高亮要素
    */
   resetStyle() {
-    const {indices} = this.buffer.bufferStruct;
-    const colorAttr =  this.layerMesh.geometry.attributes.a_color;
-    let dataIndex = 0;
-    const id = this._activeIds[0];
-    if(indices){
-      for (let i = 0; i < id; i++) {
-        dataIndex += indices[i].length;
-      }
-    } else {
-      dataIndex = id;
-    }
-    this._activeIds.forEach((index,value) => {
+    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
+    const colorAttr = this.layerMesh.geometry.attributes.a_color;
+    this._activeIds.forEach((index, value) => {
       const color = this.StyleData[index].color;
-      let vertindex = [value];
-      if(indices){
-       vertindex = indices[index];
+      const firstId = pickingId.indexOf(index + 1);
+      for (let i = firstId; i < pickingId.length; i++) {
+        if (pickingId[i] == index + 1) {
+          colorAttr.array[i * 4 + 0] = color[0];
+          colorAttr.array[i * 4 + 1] = color[1];
+          colorAttr.array[i * 4 + 2] = color[2];
+          colorAttr.array[i * 4 + 3] = color[3];
+        }
       }
-      vertindex.forEach(() => {
-        colorAttr.array[dataIndex*4+0]=color[0];
-        colorAttr.array[dataIndex*4+1]=color[1];
-        colorAttr.array[dataIndex*4+2]=color[2];
-        colorAttr.array[dataIndex*4+3]=color[3];
-        dataIndex++;
-      });
-      colorAttr.needsUpdate =true
     });
+    colorAttr.needsUpdate = true;
   }
-  destroy() {
-    if(this._object3D && this._object3D.children){
+  /**
+   * 销毁Layer对象
+   */
+  despose() {
+    this.destroy();
+    if (this._object3D && this._object3D.children) {
       let child;
-      for(let i =0;i<this._object3D.children.length;i++){
-         child = this._object3D.children[i];
-         if(!child){
-           continue;
-         }
-         this.remove(child);
-         if(child.geometry){
-           child.geometry.dispose();
-           child.geometry = null;
-         }
-         if (child.material) {
+      for (let i = 0; i < this._object3D.children.length; i++) {
+        child = this._object3D.children[i];
+        if (!child) {
+          continue;
+        }
+        this.remove(child);
+        if (child.geometry) {
+          child.geometry.dispose();
+          child.geometry = null;
+        }
+        if (child.material) {
           if (child.material.map) {
             child.material.map.dispose();
             child.material.map = null;
@@ -556,7 +611,7 @@ export default class Layer extends Base {
         }
       }
     }
-    this._object3D =null;
+    this._object3D = null;
     this.scene = null;
   }
 }

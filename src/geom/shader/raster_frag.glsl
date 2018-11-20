@@ -1,18 +1,18 @@
 
 precision highp float;
 uniform sampler2D u_texture;
+uniform sampler2D u_colorTexture;
 uniform vec2 u_dimension;
 varying vec2 v_texCoord;
 varying vec4 v_color;
 uniform float u_min;
 uniform float u_max;
+uniform vec4 u_extent;
 #define PI 3.141592653589793
 
 void main() {
-     float value = texture2D(u_texture,v_texCoord)[0];
-     if(value > u_max || u_min > value ) {
-        discard;
-      }
+
+    
       vec2 u_latrange = vec2(3.83718,53.5636);
       float u_zoom = 7.0;
       float u_maxzoom= 10.0;
@@ -51,12 +51,10 @@ void main() {
       // We multiply both the accent and shade color by a clamped intensity value
       // so that intensities >= 0.5 do not additionally affect the color values
       // while intensity values < 0.5 make the overall color more transparent.
-      vec4 accent_color = (1.0 - accent) * u_accent * clamp(intensity * 2.0, 0.0, 1.0);
+      vec4 accent_color = (1.0 - accent) * v_color * clamp(intensity * 2.0, 0.0, 1.0);
       float shade = abs(mod((aspect + azimuth) / PI + 0.5, 2.0) - 1.0);
       vec4 shade_color = mix(u_shadow, u_highlight, shade) * sin(scaledSlope) * clamp(intensity * 2.0, 0.0, 1.0);
-      gl_FragColor = v_color * (1.0 - shade_color.a) + shade_color;
-
-
-      gl_FragColor =v_color;
+      //gl_FragColor = v_color * (1.0 - shade_color.a) + shade_color;
+      gl_FragColor = v_color;
 
 }

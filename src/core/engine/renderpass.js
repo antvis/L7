@@ -10,7 +10,7 @@ export class RenderPass {
     this._init(cfg);
   }
 
-  _init(cfg) {
+  _init() {
     this.scene = new THREE.Scene();
     const parameters = { minFilter: THREE.NearestFilter,
       magFilter: THREE.NearestFilter,
@@ -19,7 +19,7 @@ export class RenderPass {
       depthBuffer: false
     };
     const size = this.renderer.getSize();
-    this.pass = new THREE.WebGLRenderTarget(512, 512, parameters);
+    this.pass = new THREE.WebGLRenderTarget(size.width, size.height, parameters);
     this.originClearColor = this.renderer.getClearColor();
     this.originClearAlpha = this.renderer.getClearAlpha();
     this.texture = this.pass.texture;

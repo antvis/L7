@@ -6,46 +6,82 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
 
   <title>hexagon demo</title>
   <style>
+  body {margin: 0;}
 	#map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
 </head>
 
 <body>
-<div id = 'gui' style="position:absolute;top:0px;right:0px;z-index:2;"></div>
 <div id="map"></div>
+<div  id ="info" class ="tooltip" style="display:none">
+</div> 
  <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-const gui = new dat.GUI({ autoPlace: false });
-const customContainer = document.getElementById('gui');
-customContainer.appendChild(gui.domElement);
-const province = { 全国: '00', 新疆维吾尔自治区: '65', 西藏自治区: '54', 内蒙古自治区: '15', 青海省: '63', 四川省: '51', 黑龙江省: '23', 甘肃省: '62', 云南省: '53', 广西壮族自治区: '45', 湖南省: '43', 陕西省: '61', 广东省: '44', 吉林省: '22', 河北省: '13', 湖北省: '42', 贵州省: '52', 山东省: '37', 江西省: '36', 河南省: '41', 辽宁省: '21', 山西省: '14', 安徽省: '34', 福建省: '35', 浙江省: '33', 江苏省: '32', 重庆市: '50', 宁夏回族自治区: '64', 海南省: '46', 台湾省: '71', 北京市: '11', 天津市: '12', 上海市: '31', 香港特别行政区: '81', 澳门特别行政区: '82' };
+const colorObj ={
+  blue: ["#E8FCFF", "#CFF6FF", "#98E3FA", "#65CEF7", "#3CB4F0", "#2894E0", "#1A76C7", "#105CB3", "#0D408C", "#002466"],
+  red: ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"],
+  orange:["#FFF7EB", "#FFECD4", "#FAD09D", "#F7B16A", "#F08D41", "#DB6C2C", "#C2491D", "#AD2B11", "#871D0C", "#610800"],
+  green:["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"],
+  yellow:["#FFFFE8", "#FFFECC", "#FAF896", "#F7E463", "#F0CE3A", "#DBB125", "#C29117", "#AD7410", "#87500C", "#613000"],
+  purple:["#FCF2FF", "#F5DEFF", "#DDB3F2", "#BE7BE3", "#9B4ECF", "#7737B3", "#5B2899", "#411C85", "#270F5E", "#100338"],
+}
+
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'amap://styles/5a64d4f1af910091f9cc3367dfc4a1dc', // 样式URL
+  mapStyle: 'light', // 样式URL
   center: [ 120.4047, 30.0679 ],
   pitch: 0,
   zoom: 4
 
 });
 window.scene = scene;
-scene.on('load', () => {
-
+scene.on('loaded', () => {
+  var colors = ["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"];
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
-    citylayer = scene.PolygonLayer()
+    const citylayer = scene.PolygonLayer()
     .source(city)
-    .color('pm2_5_24h', [ '#002466', '#0D408C', '#105CB3', '#1A76C7', '#2894E0', '#3CB4F0', '#65CEF7', '#98E3FA', '#CFF6FF', '#E8FCFF' ])
+    //.color('pm2_5_24h',["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"])
+    .color('pm2_5_24h',(p)=>{
+        if(p>120){
+          return colors[5];
+        } else if(p>65){
+          return colors[4];
+        } else if(p>30) {
+          return colors[3];
+        } else if(p>15){
+          return colors[2];
+        } else if(p>8){
+          return colors[1];
+        }else {
+          return colors[0];
+        }
+    })
     .shape('fill')
-   // .active({ fill: 'red' })
+    .active(true)
     .style({
       opacity: 1
     })
     .render();
+     const citylayer2 = scene.PolygonLayer()
+      .source(city)
+      .shape('line')
+      .color('#fff')
+      .style({
+        opacity: 0.1
+       })
+      .render();
+
+    citylayer.on('click',(e)=>{
+      $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
+      $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.pm2_5_24h || 0}</span></p>`);
+    })
   });
 });
 

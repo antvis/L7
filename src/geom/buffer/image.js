@@ -32,7 +32,7 @@ export default class ImageBuffer extends BufferBase {
     this.texture = texture;
 
   }
-  _getTexture(name, image) {
+  _getTexture(image) {
     const texture = new THREE.Texture(image);
     texture.magFilter = THREE.LinearFilter;
     texture.minFilter = THREE.LinearFilter;
