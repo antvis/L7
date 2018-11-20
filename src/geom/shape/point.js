@@ -29,6 +29,10 @@ export function diamond(type) {
   return polygonShape[type]([ points ]);
 }
 
+export function square(type) {
+  return diamond(type);
+}
+
 /**
  * @param {enum} type  渲染类型
  * @param {boolean} extrude  是否进行高度拉伸

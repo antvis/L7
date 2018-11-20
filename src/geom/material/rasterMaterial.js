@@ -1,5 +1,4 @@
 import Material from './material';
-import * as THREE from '../../core/three';
 import raster_frag from '../shader/raster_frag.glsl';
 import raster_vert from '../shader/raster_vert.glsl';
 export default function ImageMaterial(options) {

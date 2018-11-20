@@ -1,7 +1,10 @@
-#ifdef GL_ES
+
 precision highp float;
-#endif
 varying vec4 worldId;
 void main() {
+    if(worldId.x == 0. &&worldId.y == 0. && worldId.z==0.){
+        discard;
+        return;
+    }
     gl_FragColor = worldId;
 }

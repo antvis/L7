@@ -5,14 +5,17 @@ import ImageBuffer from '../geom/buffer/image';
 // import ImageGeometry from '../geom/bufferGeometry/image';
 import ImageMaterial from '../geom/material/imageMaterial';
 export default class imageLayer extends Layer {
-  source(cfg = {}) {
+  source(data, cfg = {}) {
     cfg.mapType = this.get('mapType');
+    cfg.data = data;
     this.layerSource = new imageSource(cfg);
     return this;
   }
   render() {
     this.init();
+    this.type = 'image';
     const source = this.layerSource;
+    const { opacity } = this.get('styleOptions');
     // 加载 完成事件
     source.on('imageLoaded', () => {
       const buffer = new ImageBuffer({
@@ -22,7 +25,7 @@ export default class imageLayer extends Layer {
       this.initGeometry(buffer.attributes);
       const material = new ImageMaterial({
         u_texture: buffer.texture,
-        u_opacity: 1.0
+        u_opacity: opacity
       });
       const imageMesh = new THREE.Mesh(this.geometry, material);
       this.add(imageMesh);

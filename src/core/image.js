@@ -1,15 +1,20 @@
 import * as THREE from './three';
+import EventEmitter from 'wolfy87-eventemitter';
 import { getImage } from '../util/ajax';
-export default class LoadImage {
+// 将图片标注绘制在512*512的画布上，每个大小 64*64 支持 64种图片
+export default class LoadImage extends EventEmitter {
   constructor() {
-
-    this.canvas = document.createElement('canvas');
-    this.ctx = this.canvas.getContext('2d');
+    super();
     this.imageWidth = 64;
+    this.canvas = document.createElement('canvas');
+    this.canvas.style.cssText += 'height: 512px;width: 512px;';
     this.canvas.width = this.imageWidth * 8;
     this.canvas.height = this.imageWidth * 8;
+    this.ctx = this.canvas.getContext('2d');
+
+
     this.images = [];
-    this.imagesCount = -1;
+    this.imagesCount = 0;
     this.imagePos = {};
   }
   addImage(id, opt) {
@@ -17,18 +22,21 @@ export default class LoadImage {
     const imageCount = this.imagesCount;
     const x = imageCount % 8 * 64;
     const y = parseInt(imageCount / 8) * 64;
-
+    this.imagePos[id] = { x: x / 512, y: y / 512 };
+    this.texture = new THREE.Texture(this.canvas);
     if (typeof opt === 'string') {
       getImage({ url: opt }, (err, img) => {
         img.id = id;
         this.images.push(img);
         this.ctx.drawImage(img, x, y, 64, 64);
-        const texture = new THREE.Texture(this.canvas);
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
-        texture.needsUpdate = true;
-        this.texture = texture;
-        this.imagePos[id] = { x: x / 512, y: y / 512 };
+
+        this.texture.magFilter = THREE.LinearFilter;
+        this.texture.minFilter = THREE.LinearFilter;
+        this.texture.needsUpdate = true;
+
+        if (this.images.length === this.imagesCount) {
+          this.emit('imageLoaded');
+        }
       });
     } else {
       const { width, height, channels } = opt;
@@ -40,8 +48,11 @@ export default class LoadImage {
       image.id = id;
       this.images.push(image);
       this.ctx.drawImage(image, x, y, 64, 64);
-      this.texture = new CanvasTexture(this.canvas);
+      this.texture = new THREE.CanvasTexture(this.canvas);
       this.imagePos[id] = { x: x >> 9, y: y >> 9 };
+      if (this.images.length === this.imagesCount) {
+        this.emit('imageLoaded');
+      }
     }
 
   }

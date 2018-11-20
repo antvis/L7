@@ -15,4 +15,3 @@ export function aProjectFlat(lnglat) {
   y = scale * (c * y + d) - 106744817;
   return { x, y };
 }
-

@@ -12,6 +12,7 @@ export default class RasterLayer extends Layer {
     return this;
   }
   render() {
+    this.type = 'raster';
     this.init();
     const source = this.layerSource;
     // 加载 完成事件

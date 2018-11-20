@@ -44,6 +44,6 @@ module.exports = {
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin()
   ]
 };

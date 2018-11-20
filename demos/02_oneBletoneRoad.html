@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>one belt one road </title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'light', // 样式URL
+  center: [ 120.3672, 36.0968 ],
+  pitch: 0,
+  zoom: 3
+});
+
+scene.on('loaded', () => {
+scene.image.addImage('marker', './data/onebelt/marker.png');
+scene.image.addImage('local', './image/local.png');
+
+
+$.getJSON('./data/onebelt/regions.json', region => {
+  const color = [ 'rgb(22,32,101)', 'rgb(28,43,127)', 'rgb(36,68,142)', 'rgb(45,94,158)', 'rgb(53,119,174)', 'rgb(61,145,190)', 'rgb(70,170,206)', 'rgb(98,190,210)', 'rgb(138,205,206)', 'rgb(179,221,204)', 'rgb(220,236,201)' ];
+  var points = region.features.map((feature)=>{
+       return feature.properties;
+  })
+  
+  const layer = scene.PolygonLayer({
+      zIndex:1,
+  })
+    .source(region)
+    .color('cname',(value)=>{
+        return (value =='中国' ? 'rgba(46,149,169,0.45)': 'rgba(227,244,244,0.1)');
+    })
+    .shape('fill')
+    .render();
+});
+$.getJSON('./data/onebelt/seaway.geojson', contourData => {
+ 
+        const layer = scene.LineLayer({
+            zIndex:2}
+           )
+            .source(contourData)
+            .color('rgb(79,147,234)')
+            .size([ 1.5, 0 ])
+            .shape('line')
+            .style({
+                'lineType':'solid'
+            })
+            .render();
+});
+$.getJSON('./data/onebelt/landway.json', contourData => {
+        const landlayer = scene.LineLayer(
+            {zIndex:2}
+         )
+            .source(contourData)
+            .color('rgb(11,94,69)')
+            .size([ 1.5, 0 ])
+            .shape('line')
+            .style({
+               // 'lineType':'solid'
+            })
+            .render();
+});
+$.getJSON('./data/onebelt/city.geojson', city => {
+    var makerLayer = scene.PointLayer({
+      zIndex: 4
+    })
+    .source(city)
+    .size(20.0)
+    .shape('image:local')
+    .color('#0D408C')
+    .render();
+
+    var makerText = scene.PointLayer({
+      zIndex: 8,
+      minZoom:5,
+    })
+    .source(city)
+    .size(14.0)
+    .shape('name', 'text')
+    .color('rgba(0,0,0,0.85)')
+    .style({
+        textOffset:[-20,22],
+         stroke: '#fff',
+         strokeWidth: 4,
+    })
+    .render();
+})
+
+})
+</script>
+</body>
+</html>

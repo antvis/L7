@@ -9,44 +9,80 @@ export default class PolygonLayer extends Layer {
     return this;
   }
   render() {
-    this.type = 'polygon';
-    this.init();
-    const source = this.layerSource;
-    const geometry = this.geometry = new THREE.BufferGeometry();
-    const lineMaterial = new LineMaterial({
-      u_opacity: 1.0
+    if (!this._hasRender) { // 首次渲染
+      this._hasRender = true;
+      this._prepareRender();
+    } else {
+
+      this._initAttrs();
+      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter() : null;
+      const { opacity, baseColor, brightColor, windowColor } = this.get('styleOptions');
+      this.layerMesh.material.upDateUninform({
+        u_opacity: opacity,
+        u_baseColor: baseColor,
+        u_brightColor: brightColor,
+        u_windowColor: windowColor
+      });
+
     }
-    );
-    const buffer = this.buffer = new PolygonBuffer({
+
+
+    return this;
+  }
+  _prepareRender() {
+    this.init();
+    this.type = 'polygon';
+
+    const source = this.layerSource;
+    this._buffer = new PolygonBuffer({
       shape: this.shape,
       coordinates: source.geoData,
       properties: this.StyleData
     });
-
-    const { attributes } = buffer;
-
-    geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-    // geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-    geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-    geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-    this.geometry = geometry;
-    let polygonMesh = '';
+    const { attributes } = this._buffer;
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
+    this.geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
+    this.geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
     if (this.shape === 'line') {
-      polygonMesh = new THREE.LineSegments(geometry, lineMaterial);
+      this._renderLine();
     } else {
-      const material = new PolygonMaterial({
-        u_opacity: 1.0
-      });
-      geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-      // geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
-      polygonMesh = new THREE.Mesh(geometry, material);
+      this._renderPolygon();
+    }
+  }
+  _renderLine() {
+    const { opacity } = this.get('styleOptions');
+    const lineMaterial = new LineMaterial({
+      u_opacity: opacity
+    });
+    const polygonLine = new THREE.LineSegments(this.geometry, lineMaterial);
+    this.add(polygonLine);
+
+  }
+  _renderPolygon() {
+    const animateOptions = this.get('animateOptions');
+    const { opacity, baseColor, brightColor, windowColor } = this.get('styleOptions');
+    const material = new PolygonMaterial({
+      u_opacity: opacity,
+      u_baseColor: baseColor,
+      u_brightColor: brightColor,
+      u_windowColor: windowColor
+    });
+
+    const { attributes } = this._buffer;
+    this.geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
+    if (animateOptions.enable) {
+      material.setDefinesvalue('ANIMATE', true);
+
+      this.geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
+      this.geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
     }
 
+   // const pickmaterial = new PickingMaterial();
+    const polygonMesh = new THREE.Mesh(this.geometry, material);
     this.add(polygonMesh);
-    this.update();
-
-    return this;
   }
+
   update() {
     this.updateFilter(this.StyleData);
     // 动态更新相关属性

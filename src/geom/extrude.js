@@ -22,9 +22,7 @@ export default function extrudePolygon(points, extrude) {
 
   const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   cells = triangles;
-  triangles.forEach(() => {
-    faceUv.push(-1, -1);
-  });
+
   const pointCount = flattengeo.vertices.length / 3;
   const { vertices } = flattengeo;
   extrude ? full() : flat();
@@ -32,11 +30,16 @@ export default function extrudePolygon(points, extrude) {
 
   function flat() {
     for (let i = 0; i < pointCount; i++) {
-
       positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 0 ]);
     }
   }
   function full() {
+      // 顶部纹理
+    triangles.forEach(() => {
+      faceUv.push(-1, -1);
+    });
+    // 顶部坐标
+
     for (let i = 0; i < pointCount; i++) {
       positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 1 ]);
     }

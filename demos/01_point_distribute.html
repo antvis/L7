@@ -19,18 +19,17 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-
-const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'amap://styles/5a64d4f1af910091f9cc3367dfc4a1dc', // 样式URL
+  mapStyle: 'dark', // 样式URL
   center: [ 121.51222019389274, 31.23572578718841 ],
   pitch: 0,
   zoom: 11
 });
 window.scene = scene;
-scene.on('load', () => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/mUQPWCYaxOfiSznuANvG.txt', data => {
+scene.on('loaded', () => {
+  // ./data/mUQPWCYaxOfiSznuANvG.txt
+  $.get('./data/00.csv', data => {
     scene.PointLayer({
       zIndex: 2
     })
@@ -39,33 +38,8 @@ scene.on('load', () => {
        y: 'lat',
        x: 'lng'
      })
-    .shape('2d:circle')
-    .size(2.0)
-     /**
-    .size('name*zoom', function(name, zoom) {
-      if (zoom < 7) {
-        return 1;
-      } else if (zoom < 9) {
-        return 10;
-      } else if (zoom < 12) {
-        return 15;
-      }
-      return 50;
-
-    })
-
-  .color('count', function(count) {
-    if (count < 3) {
-      return color1[0];
-    } else if (count < 15) {
-      return color1[1];
-    }
-    return color1[2];
-
-
-  })
-  **/
-   .color('#0198BD')
+    .size(1.0)
+   .color('#0D408C')
     .style({
       stroke: 'rgb(255,255,255)',
       strokeWidth: 0,
