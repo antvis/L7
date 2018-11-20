@@ -48,19 +48,6 @@ const scene = new L7.Scene({
   maxZoom: 18
 });
 scene.on('loaded', () => {
-  $.get('./data/cityPoint.json', data => {
-    scene.PointLayer({
-      zIndex: 10
-    })
-    .source(data)
-    .shape('2d:warn')
-    .size(90)
-    .color('#F00')
-    .style({
-      shape:'warn'
-    })
-    .render();
-  });
   $.get('./data/road.json', data => {
     scene.LineLayer({
       zIndex: 2
@@ -81,7 +68,7 @@ scene.on('loaded', () => {
      .animate({enable:true})
      .style({
        opacity:1.0,
-       baseColor:'rgb(25,25,165)',
+       baseColor:'rgb(16,16,16)',
        windowColor:'rgb(30,60,89)',
        brightColor:'rgb(155,217,255)',
 

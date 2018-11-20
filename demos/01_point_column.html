@@ -23,13 +23,13 @@
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 120.037828998113099, 30.086317611850635 ],
-  pitch: 36.002858,
-  zoom: 5.44
+  center: [104.838088,34.075889 ],
+  pitch: 35,
+  zoom: 4.88,
+  rotation:4.183582
 });
-window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/rainfall.json', data => {
+  $.get('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json', data => {
     scene.PointLayer({
       zIndex: 2
     })
@@ -40,14 +40,13 @@ scene.on('loaded', () => {
     })
     .shape('3d:circle')
     .size('t',(level)=> {
-      return [4,4,(level+40)];
+      return [2,2,(level*3+20)];
     }) 
     .active(true)
     .color('t', ["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
      .render();
   });
 });
-
 </script>
 </body>
 </html>
