@@ -62,11 +62,14 @@ export default class PolygonLayer extends Layer {
   _renderPolygon() {
     const animateOptions = this.get('animateOptions');
     const { opacity, baseColor, brightColor, windowColor } = this.get('styleOptions');
+    const camera = this.map.getCameraState();
     const material = new PolygonMaterial({
       u_opacity: opacity,
       u_baseColor: baseColor,
       u_brightColor: brightColor,
-      u_windowColor: windowColor
+      u_windowColor: windowColor,
+      u_near: camera.near,
+      u_far: camera.far
     });
 
     const { attributes } = this._buffer;
