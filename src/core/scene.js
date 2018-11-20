@@ -35,6 +35,7 @@ export default class Scene extends Base {
       const sceneMap = new GaodeMap(Map.map);
       // eslint-disable-next-line
       Object.getOwnPropertyNames(sceneMap.__proto__).forEach((key)=>{
+         // eslint-disable-next-line
         if ('key' !== 'constructor') { this.__proto__[key] = sceneMap.__proto__[key]; }
       });
       this.map = Map.map;
