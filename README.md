@@ -1,6 +1,6 @@
 # L7 Large-scale WebGL-powered Geospatial Data Visualization
 
-![L7 官网](http://antv.alipay.com/zh-cn/l7/1.x/index.html)
+[L7官网](http://antv.alipay.com/zh-cn/l7/1.x/index.html)
 
 
 ## 安装
@@ -39,7 +39,7 @@ import L7 from '@antv/l7';
 // 新建Scene
 ```
 
-![L7 官网](http://antv.alipay.com/zh-cn/l7/1.x/index.html)
+[L7官网](http://antv.alipay.com/zh-cn/l7/1.x/index.html)
 
 
 
