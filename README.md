@@ -39,7 +39,7 @@ import L7 from '@antv/l7';
 // 新建Scene
 ```
 
-![L7 官网](http://antv.alipay.com/zh-cn/l7/1.x/index.html)
+![L7 官网](http://antv.alipay.com/zh-cn/l7/1.x/index.html)
 
 
 
