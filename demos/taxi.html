@@ -20,23 +20,6 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-const gui = new dat.GUI({ autoPlace: false });
-const customContainer = document.getElementById('gui');
-customContainer.appendChild(gui.domElement);
-var palette = {
-  baseColor: '#3CB4F0', // CSS string
-  windowColor: '#65CEF7', // RGB array
-  brightColor: '#98E3FA', // RGB with alpha
-};
-gui.addColor(palette, 'baseColor').onChange(()=>{
-  changeStyle();
-});
-gui.addColor(palette, 'windowColor').onChange(()=>{
-  changeStyle();
-});
-gui.addColor(palette, 'brightColor').onChange(()=>{
-  changeStyle();
-});
 var buildLayer =null;
 const scene = new L7.Scene({
   id: 'map',
@@ -53,7 +36,8 @@ scene.on('loaded', () => {
       zIndex: 2
     })
     .source(data)
-    .color('#F08D41')
+    //.color('#F08D41')
+    .color('#ff893a')
     .animate({enable:true})
     .render();
   });
@@ -70,8 +54,8 @@ scene.on('loaded', () => {
        opacity:1.0,
        baseColor:'rgb(16,16,16)',
        windowColor:'rgb(30,60,89)',
-       brightColor:'rgb(155,217,255)',
-
+       //brightColor:'rgb(155,217,255)'
+       brightColor:'rgb(255,176,38)'
      })
     .render();
     
