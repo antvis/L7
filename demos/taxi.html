@@ -48,7 +48,7 @@ const scene = new L7.Scene({
   maxZoom: 18
 });
 scene.on('loaded', () => {
-  $.get('./data/road.json', data => {
+  $.get('https://gw.alipayobjects.com/os/rmsportal/kNDVHmyUWAKhWmWXmjxM.json', data => {
     scene.LineLayer({
       zIndex: 2
     })
