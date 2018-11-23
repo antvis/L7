@@ -7,9 +7,9 @@
 ### 
 ### 加载高德地图
 
-L7 目前底图采用高德地图，因此使用之前你还需还需要使用开发者 Key，你可以使用适用于『Web端』开发者 Key。如果没有可以点击 [这里申请](https://lbs.amap.com/dev/key/)。
+L7 目前底图采用高德地图，因此使用之前你还需要使用开发者 Key，你可以使用适用于『Web端』开发者 Key。如果没有可以点击 [这里申请](https://lbs.amap.com/dev/key/)。
 申请开发者 Key 是免费的。如果指定错误的版本号和开发者 Key，将无法加载 L7。目前最新版本请参考[这里](https://lbs.amap.com/api/loca-api/changelog)，如果不指定版本号，则使用最新版本。
- 在您的也面引入高德地图API
+ 在你的页面引入高德地图API
 ```html
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=您申请的key值"></script>
 ```
