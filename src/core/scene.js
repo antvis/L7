@@ -1,5 +1,4 @@
 import Engine from './engine';
-import * as THREE from './three';
 import * as layers from '../layer';
 import Base from './base';
 import LoadImage from './image';
@@ -19,6 +18,7 @@ export default class Scene extends Base {
   }
 
   _initEngine(mapContainer) {
+    this._el = mapContainer;
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
   }
@@ -77,16 +77,34 @@ export default class Scene extends Base {
     return this._layers;
   }
   _addLight() {
-    const scene = this._engine._scene;
-    const ambientLight = new THREE.AmbientLight(0xaaaaaa);
-    scene.add(ambientLight);
+    // const scene = this._engine._scene;
+    // //const ambientLight = new THREE.AmbientLight(0xaaaaaa);
+    // scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    scene.add(directionalLight);
+    // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    // scene.add(directionalLight);
   }
   _addLayer() {
 
   }
+  _registEvents(){
+    const events = [
+      'mouseout',
+      'mouseover',
+      'mousemove',
+      'mousedown',
+      'mouseleave',
+      'mouseup',
+      'click',
+      'dblclick'
+    ];
+    events.forEach((event)=>{
+      this._el.addEventListener(event, e => {
+        
+      }, false);
+    })
+  }
+  // 代理map事件
   removeLayer(layer) {
     const layerIndex = this._layers.indexOf(layer);
     if (layerIndex > -1) {
