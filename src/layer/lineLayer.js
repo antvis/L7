@@ -60,15 +60,15 @@ export default class LineLayer extends Layer {
         if (animateOptions.enable) {
 
           material.setDefinesvalue('ANIMATE', true);
-          const {duration,interval,trailLength,repeat = Infinity} = animateOptions;
+          const { duration, interval, trailLength, repeat = Infinity } = animateOptions;
           this.animateDuration = this.scene._engine.clock.getElapsedTime() + duration * repeat;
           material.upDateUninform({
             u_duration: duration,
             u_interval: interval,
-            u_trailLength:trailLength,
+            u_trailLength: trailLength
           });
-          
-    
+
+
         }
       } else {
         geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
@@ -95,8 +95,8 @@ export default class LineLayer extends Layer {
     }
     return this;
   }
-  _preRender(){
-    if(this.animateDuration>0 && this.animateDuration< this.scene._engine.clock.getElapsedTime()){
+  _preRender() {
+    if (this.animateDuration > 0 && this.animateDuration < this.scene._engine.clock.getElapsedTime()) {
       this.layerMesh.material.setDefinesvalue('ANIMATE', false);
       this.emit('animateEnd');
       this.animateDuration = Infinity;
