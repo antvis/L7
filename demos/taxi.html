@@ -41,7 +41,7 @@ scene.on('loaded', () => {
     .animate({enable:true})
     .render();
   });
-   $.get('./data/2.geojson', data => {
+   $.get('https://gw.alipayobjects.com/os/rmsportal/vmvAxgsEwbpoSWbSYvix.json', data => {
    buildLayer =  scene.PolygonLayer({
       zIndex: 2
     })

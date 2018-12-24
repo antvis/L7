@@ -39,6 +39,10 @@ export default class CSVSource extends Source {
   getSelectFeatureId(featureId) {
     return [ featureId ];
   }
+  getSelectFeature(featureId) {
+    return this.propertiesData[featureId];
+
+  }
   _getCoord(geo) {
     if (geo.geometry) {
       // GeoJSON feature

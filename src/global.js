@@ -4,7 +4,7 @@
  */
 // const Global = {};
 const Global = {
-  version: '____L7_VERSION____',
+  version: '1.0.0',
   scene: {
     mapType: 'AMAP',
     zoom: 5,
@@ -22,6 +22,11 @@ const Global = {
   // 指定固定 tick 数的逼近值
   snapCountArray: [ 0, 1, 1.2, 1.5, 1.6, 2, 2.2, 2.4, 2.5, 3, 4, 5, 6, 7.5, 8, 10 ],
   size: 10000,
+  shape: 'circle',
+  pointShape: {
+    '2d': [ 'circle', 'square', 'hexagon', 'triangle' ],
+    '3d': [ 'cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn' ]
+  },
   sdfHomeUrl: 'https://sdf.amap.com',
   scales: {
   }

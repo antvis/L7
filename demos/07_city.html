@@ -38,6 +38,7 @@ scene.on('loaded', () => {
     })
     .source(data)
     .shape('fill')
+    .active({fill:'blue'})
     .color('rgb(79,174,234)')
     .render();
   });
@@ -71,10 +72,12 @@ scene.on('loaded', () => {
     .size('floor',[10,2000])
     .color('rgba(242,246,250,0.96)')
     .render();
+    /**
     citylayer.on('click',(e)=>{
       $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
       $("#info").html(`<p>楼高<span">${e.feature.properties.floor || 0}</span></p>`);
     })
+    **/
   });
 });
 

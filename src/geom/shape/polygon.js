@@ -55,8 +55,9 @@ export function extrudeline(points) {
   vertIndex.push(vertCount, 0);
   vertIndex.push(vertCount, vertCount + pointCount);
   vertIndex.push(vertCount + pointCount, pointCount);
-  return {
-    positions,
-    positionsIndex: vertIndex
-  };
+  const newPositions = [];
+  vertIndex.forEach(index => {
+    newPositions.push(positions[index]);
+  });
+  return newPositions;
 }

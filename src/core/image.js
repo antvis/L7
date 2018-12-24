@@ -5,30 +5,32 @@ import { getImage } from '../util/ajax';
 export default class LoadImage extends EventEmitter {
   constructor() {
     super();
-    this.imageWidth = 64;
+    const pixelRatio = window.devicePixelRatio || 1;
+    this.imageWidth = 64 * pixelRatio;
     this.canvas = document.createElement('canvas');
     this.canvas.style.cssText += 'height: 512px;width: 512px;';
     this.canvas.width = this.imageWidth * 8;
     this.canvas.height = this.imageWidth * 8;
     this.ctx = this.canvas.getContext('2d');
-
-
     this.images = [];
     this.imagesCount = 0;
     this.imagePos = {};
+    this.imagesIds = [];
   }
   addImage(id, opt) {
     this.imagesCount ++;
+    this.imagesIds.push(id);
     const imageCount = this.imagesCount;
-    const x = imageCount % 8 * 64;
-    const y = parseInt(imageCount / 8) * 64;
-    this.imagePos[id] = { x: x / 512, y: y / 512 };
+    const x = imageCount % 8 * this.imageWidth;
+    const y = parseInt(imageCount / 8) * this.imageWidth;
+    this.imagePos[id] = { x: x / this.canvas.width, y: y / this.canvas.height };
     this.texture = new THREE.Texture(this.canvas);
     if (typeof opt === 'string') {
       getImage({ url: opt }, (err, img) => {
         img.id = id;
+
         this.images.push(img);
-        this.ctx.drawImage(img, x, y, 64, 64);
+        this.ctx.drawImage(img, x, y, this.imageWidth, this.imageWidth);
 
         this.texture.magFilter = THREE.LinearFilter;
         this.texture.minFilter = THREE.LinearFilter;
@@ -47,7 +49,7 @@ export default class LoadImage extends EventEmitter {
       image.data = data;
       image.id = id;
       this.images.push(image);
-      this.ctx.drawImage(image, x, y, 64, 64);
+      this.ctx.drawImage(image, x, y, this.imageWidth, this.imageWidth);
       this.texture = new THREE.CanvasTexture(this.canvas);
       this.imagePos[id] = { x: x >> 9, y: y >> 9 };
       if (this.images.length === this.imagesCount) {

@@ -23,29 +23,34 @@
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 120.19382669582967, 30.258134 ],
+  center: [104.838088,34.075889 ],
   pitch: 0,
-  zoom: 3
+  zoom: 9,
+  minZoom: 8,
+  rotation:0
 });
-window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/provincePoint.geojson', data => {
+  scene.image.addImage('local', 'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png');
+  $.get('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json', data => {
     scene.PointLayer({
       zIndex: 2
     })
-    .source(data)
-    .shape('name', 'text')
-    .size(12) // default 1
+    .source(data.list, {
+      type: 'array',
+      x: 'j',
+      y: 'w',
+    })
+    .shape('m','text')
+    .size(20) 
     .color('#fff')
     .style({
-      stroke: '#999',
-      strokeWidth: 2,
-      opacity: 0.85
+        stroke:'#fff',
+        strokeWidth:1.0,
+        opacity:1.0,
     })
-     .render();
+    .render();
   });
 });
-
 </script>
 </body>
 </html>
