@@ -32,7 +32,7 @@ export default class PointLayer extends Layer {
     return this;
   }
   _prepareRender() {
-    const { opacity, strokeWidth, stroke, strokeOpacity, shape, fill } = this.get('styleOptions');
+    const { stroke, fill } = this.get('styleOptions');
     if (this.shapeType === 'text') { // 绘制文本图层
 
       this._textPoint();
@@ -58,14 +58,18 @@ export default class PointLayer extends Layer {
         }
         break;
       case 'image':// 绘制图片标注
-        const imageAttribute = PointBuffer.ImageBuffer(source.geoData, this.StyleData, { imagePos: this.scene.image.imagePos });
-        const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
-        this.add(imageMesh);
-        break;
+        {
+          const imageAttribute = PointBuffer.ImageBuffer(source.geoData, this.StyleData, { imagePos: this.scene.image.imagePos });
+          const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
+          this.add(imageMesh);
+          break;
+        }
       case 'normal' : // 原生点
-        const normalAttribute = PointBuffer.NormalBuffer(source.geoData, this.StyleData, style);
-        const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
-        this.add(normalPointMesh);
+        {
+          const normalAttribute = PointBuffer.NormalBuffer(source.geoData, this.StyleData, style);
+          const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
+          this.add(normalPointMesh);
+        }
     }
   }
   _getShape() {
@@ -82,7 +86,7 @@ export default class PointLayer extends Layer {
 
     if (pointShape['2d'].indexOf(shape) !== -1 || pointShape['3d'].indexOf(shape) !== -1) {
       return 'fill';
-    } else if (shape == 'text') {
+    } else if (shape === 'text') {
       return 'text';
     } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
       return 'image';

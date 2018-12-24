@@ -65,6 +65,7 @@ export default class Layer extends Base {
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
+    this._addPickingEvents();
 
   }
   /**
@@ -260,11 +261,11 @@ export default class Layer extends Base {
     const resetHander = this._resetStyle.bind(this);
     if (this.get('allowActive')) {
 
-      this.on('active', activeHander);
+      this.on('mousemove', activeHander);
       this.on('mouseleave', resetHander);
 
     } else {
-      this.off('active', activeHander);
+      this.off('mousemove', activeHander);
       this.off('mouseleave', resetHander);
     }
   }
@@ -427,11 +428,11 @@ export default class Layer extends Base {
       });
     }
   }
-  on(type, callback) {
+  // on(type, callback) {
 
-    this._addPickingEvents();
-    super.on(type, callback);
-  }
+  //   this._addPickingEvents();
+  //   super.on(type, callback);
+  // }
   getPickingId() {
     return this.scene._engine._picking.getNextId();
   }
@@ -469,8 +470,8 @@ export default class Layer extends Base {
   _addPickingEvents() {
     // TODO: Find a way to properly remove this listener on destroy
     this.scene.on('pick-' + this.layerId, e => {
-      const { featureId, point2d,type} = e;
-
+      const { featureId, point2d, type } = e;
+     
       if (featureId < -100 && this._activeIds !== null) {
         this.emit('mouseleave');
         return;
@@ -484,23 +485,9 @@ export default class Layer extends Base {
         pixel: point2d,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
-      if(featureId>=0) {
-        
-        switch(type) {
-          case 'mouseup':
-           this.emit('click', target);
-           break;
-           case 'mousemove':
-           this.emit('mousemove', target);
-           this.emit('active', target);
-           break;
-          default:
-           //this.emit('click', target);
-  
-        }
+      if (featureId >= 0) {
+        this.emit(type, target);
       }
-     
-
 
     });
   }
@@ -642,7 +629,7 @@ export default class Layer extends Base {
     this._object3D = null;
     this.scene = null;
   }
-  _preRender(){
+  _preRender() {
 
   }
 }

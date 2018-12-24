@@ -154,11 +154,11 @@ export function Line(path, props, positionsIndex) {
     positions.push(...point);
     positions.push(...point);
 
-    if(pointIndex===0){
-      attrDistance.push(0, 0); 
-    } else{
-      const d  = attrDistance[pointIndex * 2-1] + lineSegmentDistance(path[pointIndex-1],path[pointIndex]);
-      attrDistance.push(d,d);
+    if (pointIndex === 0) {
+      attrDistance.push(0, 0);
+    } else {
+      const d = attrDistance[pointIndex * 2 - 1] + lineSegmentDistance(path[pointIndex - 1], path[pointIndex]);
+      attrDistance.push(d, d);
     }
 
     index += 2;
@@ -171,9 +171,9 @@ export function Line(path, props, positionsIndex) {
     miter.push(-m);
     miter.push(m);
   });
-  attrDistance = attrDistance.map((d)=>{
-    return d / attrDistance[attrDistance.length-1];
-  })
+  attrDistance = attrDistance.map(d => {
+    return d / attrDistance[attrDistance.length - 1];
+  });
   return {
     positions,
     normal,
@@ -186,9 +186,9 @@ export function Line(path, props, positionsIndex) {
   };
 
 }
-function lineSegmentDistance(end,start) {
-    const dx = start[0] - end[0];
-    const dy = start[1] - end[1];
-    const dz = start[2] - end[2];
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+function lineSegmentDistance(end, start) {
+  const dx = start[0] - end[0];
+  const dy = start[1] - end[1];
+  const dz = start[2] - end[2];
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }

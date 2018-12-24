@@ -36,25 +36,32 @@ class Picking {
     this._resizeHandler = this._resizeTexture.bind(this);
     window.addEventListener('resize', this._resizeHandler, false);
 
-    this._mouseUpHandler = this._onMouseUp.bind(this);
-    this._world._container.addEventListener('mouseup', this._mouseUpHandler, false);
-    this._world._container.addEventListener('mousemove', this._mouseUpHandler, false);
-    this._world._container.addEventListener('mousemove', this._onWorldMove.bind(this), false);
+    // this._mouseUpHandler = this._onMouseUp.bind(this);
+    // this._world._container.addEventListener('mouseup', this._mouseUpHandler, false);
+    // this._world._container.addEventListener('mousemove', this._mouseUpHandler, false);
+    // this._world._container.addEventListener('mousemove', this._onWorldMove.bind(this), false);
   }
-
+  pickdata(event) {
+    const point = { x: event.clientX, y: event.clientY, type: event.type };
+    const normalisedPoint = { x: 0, y: 0 };
+    normalisedPoint.x = (point.x / this._width) * 2 - 1;
+    normalisedPoint.y = -(point.y / this._height) * 2 + 1;
+    this._pickAllObject(point, normalisedPoint);
+  }
   _onMouseUp(event) {
     // Only react to main button click
     // if (event.button !== 0) {
     //   return;
     // }
 
-    const point = { x: event.clientX, y: event.clientY,type:event.type};
+    const point = { x: event.clientX, y: event.clientY, type: event.type };
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
     this._pickAllObject(point, normalisedPoint);
     // this._pick(point, normalisedPoint);
   }
+  
 
   _onWorldMove() {
 
@@ -111,7 +118,7 @@ class Picking {
       item.type = point.type;
       this._world.emit('pick', item);
       this._world.emit('pick-' + object.name, item);
-      
+
     });
   }
   _updateRender() {
@@ -152,8 +159,8 @@ class Picking {
       point3d: _point3d,
       intersects
     };
-    return  item
-   
+    return item;
+
   }
 
   // Add mesh to picking scene
