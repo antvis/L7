@@ -29,8 +29,6 @@ const scene = new L7.Scene({
 
 scene.on('loaded', () => {
 scene.image.addImage('local', 'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png');
-
-
 $.getJSON('https://gw.alipayobjects.com/os/rmsportal/UpapMomPYUeiBjbHNAma.json', region => {
   const color = [ 'rgb(22,32,101)', 'rgb(28,43,127)', 'rgb(36,68,142)', 'rgb(45,94,158)', 'rgb(53,119,174)', 'rgb(61,145,190)', 'rgb(70,170,206)', 'rgb(98,190,210)', 'rgb(138,205,206)', 'rgb(179,221,204)', 'rgb(220,236,201)' ];
   var points = region.features.map((feature)=>{
@@ -70,7 +68,7 @@ $.getJSON('https://gw.alipayobjects.com/os/rmsportal/dzpMOiLYBKxpdmsgBLoE.json',
             .size([ 1.5, 0 ])
             .shape('line')
             .style({
-               // 'lineType':'solid'
+               'lineType':'dash'
             })
             .render();
 });

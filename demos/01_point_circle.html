@@ -35,7 +35,9 @@ const scene = new L7.Scene({
   mapStyle: 'light', // 样式URL
   center: [ 120.19382669582967, 30.258134 ],
   pitch: 0,
-  zoom: 12
+  zoom: 12,
+  maxZoom:14,
+  minZoom:11,
 });
 window.scene = scene;
 scene.on('loaded', () => {
@@ -53,7 +55,7 @@ scene.on('loaded', () => {
     .shape('2d:circle')
      .size('value', [ 2, 80]) // default 1
      //.size('value', [ 10, 300]) // default 1
-    .active(true)
+    .active(false)
      .filter('value', field_8 => {
       return field_8 * 1 > 500;
      })
@@ -65,7 +67,9 @@ scene.on('loaded', () => {
     })
      .render();
      
-     
+    circleLayer.on('click',(e)=>{
+    console.log(e);
+  })
   });
     
 });
