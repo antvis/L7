@@ -18,7 +18,6 @@ export default class Scene extends Base {
   }
 
   _initEngine(mapContainer) {
-    this._el = mapContainer;
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
   }
@@ -41,6 +40,7 @@ export default class Scene extends Base {
       this.map = Map.map;
       Map.asyncCamera(this._engine);
       this.initLayer();
+      this._registEvents();
       this.emit('loaded');
     });
 
@@ -87,7 +87,7 @@ export default class Scene extends Base {
   _addLayer() {
 
   }
-  _registEvents(){
+  _registEvents() {
     const events = [
       'mouseout',
       'mouseover',
@@ -98,11 +98,12 @@ export default class Scene extends Base {
       'click',
       'dblclick'
     ];
-    events.forEach((event)=>{
-      this._el.addEventListener(event, e => {
-        
+    events.forEach(event => {
+      this._container.addEventListener(event, e => {
+        // 要素拾取
+        this._engine._picking.pickdata(e);
       }, false);
-    })
+    });
   }
   // 代理map事件
   removeLayer(layer) {
