@@ -48,12 +48,12 @@ class Picking {
     //   return;
     // }
 
-    const point = { x: event.clientX, y: event.clientY };
+    const point = { x: event.clientX, y: event.clientY,type:event.type};
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
-
-    this._pick(point, normalisedPoint);
+    this._pickAllObject(point, normalisedPoint);
+    // this._pick(point, normalisedPoint);
   }
 
   _onWorldMove() {
@@ -76,10 +76,10 @@ class Picking {
   _update(point) {
 
     const texture = this._pickingTexture;
-    if (this._needUpdate) {
-      this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-      this._needUpdate = false;
-    }
+   // if (this._needUpdate) {
+    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+      // this._needUpdate = false;
+    // }
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
@@ -99,17 +99,33 @@ class Picking {
     });
 
   }
+  _filterObject(id) {
+    this._pickingScene.children.forEach((object, index) => {
+      index === id ? object.visible = true : object.visible = false;
+    });
+  }
+  _pickAllObject(point, normalisedPoint) {
+    this._pickingScene.children.forEach((object, index) => {
+      this._filterObject(index);
+      const item = this._pick(point, normalisedPoint, object.name);
+      item.type = point.type;
+      this._world.emit('pick', item);
+      this._world.emit('pick-' + object.name, item);
+      
+    });
+  }
   _updateRender() {
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
   }
 
-  _pick(point, normalisedPoint) {
+  _pick(point, normalisedPoint, layerId) {
     this._update(point);
     // Interpret the pixel as an ID
-    const id = (this.pixelBuffer[2] * 255 * 255) + (this.pixelBuffer[1] * 255) + (this.pixelBuffer[0]);
+    let id = (this.pixelBuffer[2] * 255 * 255) + (this.pixelBuffer[1] * 255) + (this.pixelBuffer[0]);
     // Skip if ID is 16646655 (white) as the background returns this
     if (id === 16646655 || this.pixelBuffer[3] === 0) {
-      return;
+      id = -999;
+      // return;
     }
 
     this._raycaster.setFromCamera(normalisedPoint, this._camera);
@@ -118,7 +134,6 @@ class Picking {
     //
     // TODO: Only perform intersection test on the relevant picking mesh
     const intersects = this._raycaster.intersectObjects(this._pickingScene.children, true);
-
     const _point2d = { x: point.x, y: point.y };
 
     let _point3d;
@@ -131,13 +146,14 @@ class Picking {
     //
     // TODO: Look into the leak potential for passing so much by reference here
     const item = {
+      layerId,
       featureId: id - 1,
       point2d: _point2d,
       point3d: _point3d,
       intersects
     };
-    this._world.emit('pick', item);
-    // this._world.emit('pick-' + id, _point2d, _point3d, intersects);
+    return  item
+   
   }
 
   // Add mesh to picking scene

@@ -1,8 +1,17 @@
 
 // import Util from './util';
 import Scene from './core/scene';
-const version = '0.0.1';
+import Global from './global';
+
+const version = Global.version;
+const track = function(enable) {
+  Global.trackable = enable;
+};
+require('./track');
 export {
   version,
-  Scene
+  Scene,
+  track
+
 };
+

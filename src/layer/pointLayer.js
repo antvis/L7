@@ -1,12 +1,11 @@
 import Layer from '../core/layer';
 import * as THREE from '../core/three';
-import PointBuffer from '../geom/buffer/point';
-import PointMaterial from '../geom/material/pointMaterial';
-import PolygonMaterial from '../geom/material/polygonMaterial';
+import * as drawPoint from '../layer/render/point';
+import { pointShape } from '../global';
+// import PointBuffer from '../geom/buffer/point';
 import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
-import radar from '../geom/shader/radar_frag.glsl';
-import warn from '../geom/shader/warn_frag.glsl';
+import * as PointBuffer from '../geom/buffer/point/index';
 
 
 /**
@@ -33,83 +32,64 @@ export default class PointLayer extends Layer {
     return this;
   }
   _prepareRender() {
+    const { opacity, strokeWidth, stroke, strokeOpacity, shape, fill } = this.get('styleOptions');
     if (this.shapeType === 'text') { // 绘制文本图层
 
       this._textPoint();
       return;
     }
     const source = this.layerSource;
-    const { opacity, strokeWidth, stroke, shape } = this.get('styleOptions');
-    this._buffer = new PointBuffer({
-      type: this.shapeType,
-      imagePos: this.scene.image.imagePos,
-      coordinates: source.geoData,
-      properties: this.StyleData
-    });
-    const geometry = this.geometry = new THREE.BufferGeometry();
-    let mtl;
-    if (this.shapeType === '2d' || this.shapeType === '3d') {
-      mtl = new PolygonMaterial({
-        u_opacity: opacity,
-        u_zoom: this.scene.getZoom()
-      });
-    //   mtl= new pickingMaterial({
-    //     u_opacity: opacity,
-    //     u_zoom: this.scene.getZoom()
-    //   })
-    // mtl.setDefinesvalue('point', true);
-      mtl.setDefinesvalue('SHAPE', true);
-      if (shape === 'radar') {
-        mtl.fragmentShader = radar;
+    const style = this.get('styleOptions');
+    const pointShapeType = this._getShape();
 
-      }
-      if (shape === 'warn') {
-        mtl.fragmentShader = warn;
-      }
-
-
-    } else { // sdf 绘制点
-      mtl = new PointMaterial({
-        u_opacity: opacity,
-        u_strokeWidth: strokeWidth,
-        u_stroke: stroke,
-        shape: this.shapeType || false,
-        u_texture: this.scene.image.texture
-      }, {
-        SHAPE: (this.shapeType !== 'image'),
-        TEXCOORD_0: (this.shapeType === 'image')
-      });
+    switch (pointShapeType) {
+      case 'fill' :// 填充图形
+        {
+          if (fill !== 'none') { // 是否填充
+            const attributes = PointBuffer.FillBuffer(source.geoData, this.StyleData, style);
+            const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
+            this.add(meshfill);
+          }
+          if (stroke !== 'none') { // 是否绘制边界
+            const lineAttribute = PointBuffer.StrokeBuffer(source.geoData, this.StyleData, style);
+            const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
+            this.add(meshStroke, 'line');
+          }
+        }
+        break;
+      case 'image':// 绘制图片标注
+        const imageAttribute = PointBuffer.ImageBuffer(source.geoData, this.StyleData, { imagePos: this.scene.image.imagePos });
+        const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
+        this.add(imageMesh);
+        break;
+      case 'normal' : // 原生点
+        const normalAttribute = PointBuffer.NormalBuffer(source.geoData, this.StyleData, style);
+        const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
+        this.add(normalPointMesh);
     }
-
-    const { attributes } = this._buffer;
-    geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-    geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-    geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
-    if (this.shapeType === 'image') {
-      geometry.addAttribute('uv', new THREE.Float32BufferAttribute(attributes.uvs, 2));
-      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    } else if (this.shapeType === undefined) {
-      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-    } else { // 多边形面
-      geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
-      geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapePositions, 3));
-      geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.a_size, 3));
-      if (shape) {
-        geometry.addAttribute('faceUv', new THREE.Float32BufferAttribute(attributes.faceUv, 2));
+  }
+  _getShape() {
+    let shape = null;
+    if (!this.StyleData[0].hasOwnProperty('shape')) {
+      return 'normal';
+    }
+    for (let i = 0; i < this.StyleData.length; i++) {
+      shape = this.StyleData[i].shape;
+      if (shape !== undefined) {
+        break;
       }
     }
-    let mesh;
-    if (this.shapeType === 'image') {
-      mesh = new THREE.Points(geometry, mtl);
-    } else if (this.shapeType === undefined) { // 散点图
 
-      mesh = new THREE.Points(geometry, mtl);
-
-    } else {
-      mesh = new THREE.Mesh(geometry, mtl);
+    if (pointShape['2d'].indexOf(shape) !== -1 || pointShape['3d'].indexOf(shape) !== -1) {
+      return 'fill';
+    } else if (shape == 'text') {
+      return 'text';
+    } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
+      return 'image';
     }
+    return 'normal';
 
-    this.add(mesh);
+
   }
   _textPoint() {
     const source = this.layerSource;
@@ -133,11 +113,11 @@ export default class PointLayer extends Layer {
       const material = new TextMaterial({
         name: this.layerId,
         u_texture: buffer.bufferStruct.textTexture,
-        u_strokeWidth: 1,
+        u_strokeWidth: styleOptions.strokeWidth,
         u_stroke: stroke,
         u_textSize: buffer.bufferStruct.textSize,
-        u_gamma: 0.11,
-        u_buffer: 0.8,
+        u_gamma: 2 * 1.4142 / 64,
+        u_buffer: 0.65,
         u_color: color,
         u_glSize: [ width, height ]
       });
