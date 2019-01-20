@@ -42,6 +42,7 @@ export default class Layer extends Base {
         strokeOpacity: 1.0,
         texture: false
       },
+      destroyed: false,
       // 选中时的配置项
       selectedOptions: null,
       // active 时的配置项
@@ -65,7 +66,7 @@ export default class Layer extends Base {
     scene._engine._scene.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
-    this._addPickingEvents();
+    this._initEvents();
 
   }
   /**
@@ -77,9 +78,8 @@ export default class Layer extends Base {
     type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
 
     this._visibleWithZoom();
-    this.scene.on('zoomchange', () => {
-      this._visibleWithZoom();
-    });
+    this._zoomchangeHander = this._visibleWithZoom.bind(this);
+    this.scene.on('zoomchange', this._zoomchangeHander);
 
     object.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
@@ -97,7 +97,6 @@ export default class Layer extends Base {
   }
   remove(object) {
     this._object3D.remove(object);
-
   }
   _getUniqueId() {
     return id++;
@@ -113,6 +112,12 @@ export default class Layer extends Base {
     cfg.mapType = this.get('mapType');
 
     this.layerSource = new source[type](cfg);
+    // this.scene.workerPool.runTask({
+    //   command: 'geojson',
+    //   data: cfg
+    // }).then(data => {
+    //   console.log(data);
+    // });
 
     return this;
   }
@@ -445,10 +450,10 @@ export default class Layer extends Base {
   _addPickMesh(mesh) {
     this._pickingMesh = new THREE.Object3D();
     this._pickingMesh.name = this.layerId;
-    this._visibleWithZoom();
-    this.scene.on('zoomchange', () => {
-      this._visibleWithZoom();
-    });
+    // this._visibleWithZoom();
+    // this.scene.on('zoomchange', () => {
+    //   this._visibleWithZoom();
+    // });
 
     this.addToPicking(this._pickingMesh);
     const pickmaterial = new PickingMaterial({
@@ -467,16 +472,13 @@ export default class Layer extends Base {
   _setPickingId() {
     this._pickingId = this.getPickingId();
   }
-  _addPickingEvents() {
-    // TODO: Find a way to properly remove this listener on destroy
+  _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
       const { featureId, point2d, type } = e;
-     
       if (featureId < -100 && this._activeIds !== null) {
         this.emit('mouseleave');
         return;
       }
-      // if (intersects.length === 0) { return; }
       const feature = this.layerSource.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
       const target = {
@@ -555,8 +557,6 @@ export default class Layer extends Base {
     });
     colorAttr.needsUpdate = true;
     pickAttr.needsUpdate = true;
-    // this._needUpdateFilter = false;
-    // this._needUpdateColor = false;
   }
   _visibleWithZoom() {
     const zoom = this.scene.getZoom();
@@ -601,8 +601,8 @@ export default class Layer extends Base {
   /**
    * 销毁Layer对象
    */
-  despose() {
-    this.destroy();
+  destroy() {
+    this.removeAllListeners();
     if (this._object3D && this._object3D.children) {
       let child;
       for (let i = 0; i < this._object3D.children.length; i++) {
@@ -612,7 +612,7 @@ export default class Layer extends Base {
         }
         this.remove(child);
         if (child.geometry) {
-          child.geometry.dispose();
+          // child.geometry.dispose();
           child.geometry = null;
         }
         if (child.material) {
@@ -624,10 +624,14 @@ export default class Layer extends Base {
           child.material.dispose();
           child.material = null;
         }
+        child = null;
       }
     }
     this._object3D = null;
-    this.scene = null;
+    this.scene._engine._scene.remove(this._object3D);
+    this.scene._engine._picking.remove(this._pickingMesh);
+    this.scene.off('zoomchange', this._zoomchangeHander);
+    this.destroyed = true;
   }
   _preRender() {
 

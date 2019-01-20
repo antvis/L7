@@ -31,6 +31,16 @@ module.exports = {
         }
       },
       {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            inline: true,
+            fallback: false
+          }
+        }
+      },
+      {
         test: /global\.js$/,
         use: {
           loader: 'string-replace-loader',

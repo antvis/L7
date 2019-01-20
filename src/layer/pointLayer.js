@@ -55,8 +55,8 @@ export default class PointLayer extends Layer {
             const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
             this.add(meshStroke, 'line');
           }
+          break;
         }
-        break;
       case 'image':// 绘制图片标注
         {
           const imageAttribute = PointBuffer.ImageBuffer(source.geoData, this.StyleData, { imagePos: this.scene.image.imagePos });
@@ -69,9 +69,13 @@ export default class PointLayer extends Layer {
           const normalAttribute = PointBuffer.NormalBuffer(source.geoData, this.StyleData, style);
           const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
           this.add(normalPointMesh);
+          break;
         }
+      default:
+        return null;
     }
   }
+
   _getShape() {
     let shape = null;
     if (!this.StyleData[0].hasOwnProperty('shape')) {
@@ -83,7 +87,6 @@ export default class PointLayer extends Layer {
         break;
       }
     }
-
     if (pointShape['2d'].indexOf(shape) !== -1 || pointShape['3d'].indexOf(shape) !== -1) {
       return 'fill';
     } else if (shape === 'text') {
