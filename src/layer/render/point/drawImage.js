@@ -18,6 +18,7 @@ export default function DrawImage(attributes, style) {
     SHAPE: false,
     TEXCOORD_0: true
   });
+  material.depthTest = false;
   const strokeMesh = new THREE.Points(geometry, material);
   return strokeMesh;
 }
