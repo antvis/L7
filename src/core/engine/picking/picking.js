@@ -61,8 +61,6 @@ class Picking {
     this._pickAllObject(point, normalisedPoint);
     // this._pick(point, normalisedPoint);
   }
-  
-
   _onWorldMove() {
 
     this._needUpdate = true;
@@ -74,7 +72,6 @@ class Picking {
 
     this._width = size.width;
     this._height = size.height;
-
     this._pickingTexture.setSize(this._width, this._height);
     this._pixelBuffer = new Uint8Array(4 * this._width * this._height);
 
@@ -203,15 +200,6 @@ class Picking {
         }
 
         this._pickingScene.remove(child);
-
-        // Probably not a good idea to dispose of geometry due to it being
-        // shared with the non-picking scene
-        // if (child.geometry) {
-        //   // Dispose of mesh and materials
-        //   child.geometry.dispose();
-        //   child.geometry = null;
-        // }
-
         if (child.material) {
           if (child.material.map) {
             child.material.map.dispose();

@@ -86,16 +86,16 @@ scene.on('loaded', () => {
       opacity: 1
     })
     .render();
-    /**
+    
      const citylayer2 = scene.PolygonLayer()
       .source(city)
       .shape('line')
       .color('#fff')
       .style({
-        opacity: 0.1
+        opacity: 1.0
        })
-     // .render();
-     **/
+      .render();
+    
 
     citylayer.on('click',(e)=>{
       $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});

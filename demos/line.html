@@ -46,38 +46,16 @@ scene.on('loaded', () => {
         interval:1,
         duration:2,
         trailLength:0.1,
-        repeat:10,
+        repeat:1,
     })
     .render();
 
 
    linelayer.on('animateEnd',()=>{
-     console.log('动画结束');
+     scene.removeLayer(linelayer);
+     //linelayer.hide();
    }) 
-  $.get('./data/yunqi.geojson', data => {
-    citylayer = scene.PolygonLayer({
-      zIndex: 2
-    })
-    .source(data)
-    .shape('fill')
-    .active({fill:'red'})
-    .size('floor',[10,2000])
-    .color('rgba(242,246,250,0.96)')
-    .render();
-    })
-
-   $.get('./data/test.json', data => {
-    citylayer2 = scene.PolygonLayer({
-      zIndex: 2
-    })
-    .source(data)
-    .shape('fill')
-    .active({fill:'red'})
-   // .size('floor',[10,2000])
-    .color('red')
-    .render();
-   })
-
+ 
 })
 </script>
 </body>

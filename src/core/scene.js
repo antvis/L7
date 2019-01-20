@@ -2,6 +2,7 @@ import Engine from './engine';
 import * as layers from '../layer';
 import Base from './base';
 import LoadImage from './image';
+import WorkerPool from './worker';
 import { MapProvider } from '../map/provider';
 import GaodeMap from '../map/gaodeMap';
 import Global from '../global';
@@ -20,6 +21,7 @@ export default class Scene extends Base {
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
+    this.workerPool = new WorkerPool();
   }
     // 为pickup场景添加 object 对象
   addPickMesh(object) {
@@ -58,6 +60,11 @@ export default class Scene extends Base {
   on(type, hander) {
     if (this.map) { this.map.on(type, hander); }
     super.on(type, hander);
+  }
+  off(type, hander) {
+    if (this.map) { this.map.off(type, hander); }
+
+    super.off(type, hander);
   }
   _initAttribution() {
     const message = '<a href="http://antv.alipay.com/zh-cn/index.html title="Large-scale WebGL-powered Geospatial Data Visualization">AntV | L7  </a>';
@@ -105,13 +112,13 @@ export default class Scene extends Base {
       }, false);
     });
   }
-  // 代理map事件
   removeLayer(layer) {
     const layerIndex = this._layers.indexOf(layer);
     if (layerIndex > -1) {
       this._layers.splice(layerIndex, 1);
     }
     layer.destroy();
+    layer = null;
   }
 
 }

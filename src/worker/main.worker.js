@@ -1,13 +1,4 @@
-const extrude = require('geometry-extrude');
-// import { geoJsonSourceWorker } from './geojsonSourceWorker';
-/**
- * workerOption
- * {
- *  type:
- *  data:
- *
- * }
- */
+
 self.addEventListener('message', e => {
   const res = e.data;
   // res = {
@@ -17,12 +8,8 @@ self.addEventListener('message', e => {
   let result;
   switch (res.command) {
     case 'geojson':
-      result = extrude.extrudeGeoJSON(res.data.data, res.data.options).polygon;
-      self.postMessage(result, [ result.indices.buffer, result.normal.buffer, result.position.buffer, result.uv.buffer ]);
-      break;
-    case 'POLYLINE-EXTRUDE':
-      result = extrude.extrudeGeoJSON(res.data.data, res.data.options).polyline;
-      self.postMessage(result, [ result.indices.buffer, result.normal.buffer, result.position.buffer, result.uv.buffer ]);
+      result = res;
+      self.postMessage(result);
       break;
     default:
       self.postMessage(result);
