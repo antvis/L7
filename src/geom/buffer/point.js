@@ -68,10 +68,10 @@ export default class PointBuffer extends BufferBase {
     this.bufferStruct.style = properties;
     coordinates.forEach((geo, index) => {
       let { size, shape } = properties[index];
-      let shapeType = '';
+      // let shapeType = '';
 
       if (type === '2d' || (type === '3d' && size[2] === 0)) {
-        shapeType = 'fill';
+        // let shapeType = 'fill';
         Util.isArray(size) || (size = [ size, size, 0 ]);
       } else {
         Util.isArray(size) || (size = [ size, size, size ]);
@@ -80,7 +80,6 @@ export default class PointBuffer extends BufferBase {
         uvs.push(0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0);
         shape = 'square';
       }
-      // const vert = regularShape[shape](shapeType);
       properties[index].size = size;
 
       const [ vert, polygonLine ] = this._getShape(properties[index], style, lineAttribute.miter.length);

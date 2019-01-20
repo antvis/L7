@@ -1,4 +1,6 @@
-
+/**
+ * 原生点绘制
+ */
 import * as THREE from '../../../core/three';
 import PointMaterial from '../../../geom/material/pointMaterial';
 export default function DrawNormal(attributes, style) {
