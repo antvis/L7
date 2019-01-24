@@ -4,7 +4,7 @@
  */
 
 import EventEmitter from 'wolfy87-eventemitter';
-import Util from '../util';
+import { assign } from '../util';
 
 class Base extends EventEmitter {
 
@@ -19,7 +19,7 @@ class Base extends EventEmitter {
     };
     const defaultCfg = this.getDefaultCfg();
     this._attrs = attrs;
-    Util.assign(attrs, defaultCfg, cfg);
+    assign(attrs, defaultCfg, cfg);
   }
 
   get(name) {

@@ -1,5 +1,9 @@
 import BufferBase from './bufferBase';
 import { regularShape } from '../shape/index';
+import * as polygonPath from '../shape/path';
+import * as polygonShape from '../shape/polygon';
+import * as lineShape from '../shape/line';
+import { pointShape } from '../../global';
 import Util from '../../util';
 export default class PointBuffer extends BufferBase {
   geometryBuffer() {
@@ -43,8 +47,17 @@ export default class PointBuffer extends BufferBase {
     this.attributes = this._toPointsAttributes(this.bufferStruct);
   }
   _3dRegularBuffer() {
+    const lineAttribute = {
+      shapes: [],
+      normal: [],
+      miter: [],
+      indexArray: [],
+      sizes: [],
+      positions: []
+    };
     const coordinates = this.get('coordinates');
     const properties = this.get('properties');
+    const style = this.get('style');
     const type = this.get('type');
     const positions = [];
     const shapes = [];
@@ -55,10 +68,10 @@ export default class PointBuffer extends BufferBase {
     this.bufferStruct.style = properties;
     coordinates.forEach((geo, index) => {
       let { size, shape } = properties[index];
-      let shapeType = 'extrude';
+      // let shapeType = '';
 
       if (type === '2d' || (type === '3d' && size[2] === 0)) {
-        shapeType = 'fill';
+        // let shapeType = 'fill';
         Util.isArray(size) || (size = [ size, size, 0 ]);
       } else {
         Util.isArray(size) || (size = [ size, size, size ]);
@@ -67,7 +80,19 @@ export default class PointBuffer extends BufferBase {
         uvs.push(0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0);
         shape = 'square';
       }
-      const vert = regularShape[shape](shapeType);
+      properties[index].size = size;
+
+      const [ vert, polygonLine ] = this._getShape(properties[index], style, lineAttribute.miter.length);
+      polygonLine.miter.forEach(() => {
+        lineAttribute.positions.push(...geo);
+        lineAttribute.sizes.push(...size);
+      });
+
+      lineAttribute.shapes.push(...polygonLine.positions);
+      lineAttribute.normal.push(...polygonLine.normal);
+      lineAttribute.miter.push(...polygonLine.miter);
+      lineAttribute.indexArray.push(...polygonLine.indexArray);
+
       shapes.push(vert.positions);
       positions.push(geo);
       sizes.push(size);
@@ -81,6 +106,21 @@ export default class PointBuffer extends BufferBase {
     this.bufferStruct.sizes = sizes;
     this.bufferStruct.faceUv = uvs;
     this.attributes = this._toPointShapeAttributes(this.bufferStruct);
+    this.lineAttribute = lineAttribute;
+  }
+  _getShape(props, style, positionsIndex) {
+    const { shape } = props;
+    const { stroke, strokeWidth } = style;
+    const path = polygonPath[shape]();
+    let polygon = null;
+    let polygonLine = null;
+    if (pointShape['3d'].indexOf(shape) === -1) {
+      polygon = polygonShape.fill([ path ]);
+      polygonLine = lineShape.Line(path, { size: [ strokeWidth, 0 ], color: stroke }, positionsIndex);
+    } else {
+      polygon = polygonShape.extrude([ path ]);
+    }
+    return [ polygon, polygonLine ];
   }
 
 }

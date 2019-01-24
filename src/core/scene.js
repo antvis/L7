@@ -1,8 +1,8 @@
 import Engine from './engine';
-import * as THREE from './three';
 import * as layers from '../layer';
 import Base from './base';
 import LoadImage from './image';
+import WorkerPool from './worker';
 import { MapProvider } from '../map/provider';
 import GaodeMap from '../map/gaodeMap';
 import Global from '../global';
@@ -21,6 +21,7 @@ export default class Scene extends Base {
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
+    this.workerPool = new WorkerPool();
   }
     // 为pickup场景添加 object 对象
   addPickMesh(object) {
@@ -41,6 +42,7 @@ export default class Scene extends Base {
       this.map = Map.map;
       Map.asyncCamera(this._engine);
       this.initLayer();
+      this._registEvents();
       this.emit('loaded');
     });
 
@@ -58,6 +60,11 @@ export default class Scene extends Base {
   on(type, hander) {
     if (this.map) { this.map.on(type, hander); }
     super.on(type, hander);
+  }
+  off(type, hander) {
+    if (this.map) { this.map.off(type, hander); }
+
+    super.off(type, hander);
   }
   _initAttribution() {
     const message = '<a href="http://antv.alipay.com/zh-cn/index.html title="Large-scale WebGL-powered Geospatial Data Visualization">AntV | L7  </a>';
@@ -77,15 +84,33 @@ export default class Scene extends Base {
     return this._layers;
   }
   _addLight() {
-    const scene = this._engine._scene;
-    const ambientLight = new THREE.AmbientLight(0xaaaaaa);
-    scene.add(ambientLight);
+    // const scene = this._engine._scene;
+    // //const ambientLight = new THREE.AmbientLight(0xaaaaaa);
+    // scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    scene.add(directionalLight);
+    // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    // scene.add(directionalLight);
   }
   _addLayer() {
 
+  }
+  _registEvents() {
+    const events = [
+      'mouseout',
+      'mouseover',
+      'mousemove',
+      'mousedown',
+      'mouseleave',
+      'mouseup',
+      'click',
+      'dblclick'
+    ];
+    events.forEach(event => {
+      this._container.addEventListener(event, e => {
+        // 要素拾取
+        this._engine._picking.pickdata(e);
+      }, false);
+    });
   }
   removeLayer(layer) {
     const layerIndex = this._layers.indexOf(layer);
@@ -93,6 +118,7 @@ export default class Scene extends Base {
       this._layers.splice(layerIndex, 1);
     }
     layer.destroy();
+    layer = null;
   }
 
 }
