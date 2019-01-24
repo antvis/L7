@@ -120,7 +120,7 @@ export function defaultLine(geo, index) {
   return { positions, indexes: indexArray };
 }
 // mesh line
-export function Line(path, props, positionsIndex, dash = false) {
+export function Line(path, props, positionsIndex) {
   if (path.length === 1) path = path[0];// 面坐标转线坐标
   const positions = [];
   const pickingIds = [];
@@ -129,7 +129,7 @@ export function Line(path, props, positionsIndex, dash = false) {
   const colors = [];
   const indexArray = [];
   const normals = getNormal(path);
-  const attrDistance = [];
+  let attrDistance = [];
   const sizes = [];
   let c = 0;
   let index = positionsIndex;
@@ -153,10 +153,14 @@ export function Line(path, props, positionsIndex, dash = false) {
     point[2] = size[1];
     positions.push(...point);
     positions.push(...point);
-    if (dash) {
-      const d = pointIndex / (list.length - 1);
+
+    if (pointIndex === 0) {
+      attrDistance.push(0, 0);
+    } else {
+      const d = attrDistance[pointIndex * 2 - 1] + lineSegmentDistance(path[pointIndex - 1], path[pointIndex]);
       attrDistance.push(d, d);
     }
+
     index += 2;
   });
   normals.forEach(n => {
@@ -166,6 +170,9 @@ export function Line(path, props, positionsIndex, dash = false) {
     normal.push(norm[0], norm[1], 0);
     miter.push(-m);
     miter.push(m);
+  });
+  attrDistance = attrDistance.map(d => {
+    return d / attrDistance[attrDistance.length - 1];
   });
   return {
     positions,
@@ -178,4 +185,10 @@ export function Line(path, props, positionsIndex, dash = false) {
     attrDistance
   };
 
+}
+function lineSegmentDistance(end, start) {
+  const dx = start[0] - end[0];
+  const dy = start[1] - end[1];
+  const dz = start[2] - end[2];
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }

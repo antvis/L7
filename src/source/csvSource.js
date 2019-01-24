@@ -1,6 +1,5 @@
 import Source from '../core/source';
 import FeatureIndex from '../geo/featureIndex';
-import Util from '../util';
 import { csvParse } from 'd3-dsv';
 export default class CSVSource extends Source {
   prepareData() {
@@ -14,15 +13,15 @@ export default class CSVSource extends Source {
     this.propertiesData = [];// 临时使用
     this.geoData = [];
     let csvdata = data;
-    Util.isArray(csvdata) || (csvdata = csvParse(data));
+    Array.isArray(csvdata) || (csvdata = csvParse(data));
     this.propertiesData = csvdata;
     csvdata.forEach((col, featureIndex) => {
       let coordinates = [];
       if (col.coordinates) {
         coordinates = col.coordinates;
       }
-      if (x && y) { coordinates = [ col[x], col[y] ]; }
-      if (x1 && y1) {
+      if (x && y) { coordinates = [ col[x], col[y] ]; } // 点数据
+      if (x1 && y1) { // 弧线 或者线段
         coordinates = [[ col[x], col[y] ], [ col[x1], col[y1] ]];
       }
       if (coords && col.coords) { coordinates = col.coords; }
@@ -38,6 +37,10 @@ export default class CSVSource extends Source {
   }
   getSelectFeatureId(featureId) {
     return [ featureId ];
+  }
+  getSelectFeature(featureId) {
+    return this.propertiesData[featureId];
+
   }
   _getCoord(geo) {
     if (geo.geometry) {

@@ -45,7 +45,10 @@ export function MeshLineMaterial(options) {
     uniforms: {
       u_opacity: { value: options.u_opacity || 1.0 },
       u_time: { value: options.u_time || 0 },
-      u_zoom: { value: options.u_zoom }
+      u_zoom: { value: options.u_zoom },
+      u_duration: { value: options.u_duration || 2.0 },
+      u_interval: { value: options.u_interval || 1.0 },
+      u_trailLength: { value: options.u_trailLength || 0.2 }
     },
     vertexShader: meshline_vert,
     fragmentShader: meshline_frag,

@@ -46,6 +46,7 @@ export default class LineLayer extends Layer {
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
       geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normal, 3));
       geometry.addAttribute('a_miter', new THREE.Float32BufferAttribute(attributes.miter, 1));
+      geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
       const lineType = style.lineType;
       let material;
 
@@ -55,6 +56,20 @@ export default class LineLayer extends Layer {
           u_opacity: opacity,
           u_zoom: this.scene.getZoom()
         });
+
+        if (animateOptions.enable) {
+
+          material.setDefinesvalue('ANIMATE', true);
+          const { duration, interval, trailLength, repeat = Infinity } = animateOptions;
+          this.animateDuration = this.scene._engine.clock.getElapsedTime() + duration * repeat;
+          material.upDateUninform({
+            u_duration: duration,
+            u_interval: interval,
+            u_trailLength: trailLength
+          });
+
+
+        }
       } else {
         geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
         material = new DashLineMaterial({
@@ -79,5 +94,12 @@ export default class LineLayer extends Layer {
       this.add(mesh);
     }
     return this;
+  }
+  _preRender() {
+    if (this.animateDuration > 0 && this.animateDuration < this.scene._engine.clock.getElapsedTime()) {
+      this.layerMesh.material.setDefinesvalue('ANIMATE', false);
+      this.emit('animateEnd');
+      this.animateDuration = Infinity;
+    }
   }
 }
