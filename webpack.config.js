@@ -4,7 +4,7 @@ const pkg = require('./package.json');
 module.exports = {
   devtool: 'cheap-source-map',
   entry: {
-    L7: './src/index.js'
+    l7: './src/index.js'
   },
   output: {
     filename: '[name].js',
@@ -28,6 +28,16 @@ module.exports = {
         test: /\.glsl$/,
         use: {
           loader: 'glsl-shaders-loader'
+        }
+      },
+      {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            inline: true,
+            fallback: false
+          }
         }
       },
       {
