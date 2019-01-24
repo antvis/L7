@@ -92,7 +92,7 @@ export default class TextBuffer extends BufferBase {
   /**
    * 计算每个标注词语的位置
    * @param {*} pos 文字三维空间坐标
-   * @param {*} chr 字符
+   * @param {*} text 字符
    * @param {*} pen 字符在词语的偏移量
    * @param {*} size 字体大小
    * @param {*} colors 颜色
@@ -114,10 +114,10 @@ export default class TextBuffer extends BufferBase {
     let width = 24; // metric[0];
     let height = 24;// metric[1];
 
-    const horiBearingX = metric[2];
+    // const horiBearingX = metric[2];
     // const horiBearingY = metric[3];
 
-    const horiAdvance = metric[4];
+   //  const horiAdvance = metric[4];
     // const posX = metric[5];
     // const posY = metric[6];
     const posX = x;
