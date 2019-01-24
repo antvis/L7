@@ -37,5 +37,9 @@ export default class GeojsonSource extends Source {
     return selectFeatureIds;
 
   }
+  getSelectFeature(featureId){
+    const data = this.get('data');
+    return  data.features[featureId];
+  }
 
 }

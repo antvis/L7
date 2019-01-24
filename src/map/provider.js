@@ -23,6 +23,7 @@ export class MapProvider extends Base {
 
   initMap() {
     const mapStyle = this.get('mapStyle');
+
     switch (mapStyle) {
       case 'dark' :
         this.set('mapStyle', Theme.DarkTheme.mapStyle);
@@ -31,7 +32,7 @@ export class MapProvider extends Base {
         this.set('mapStyle', Theme.LightTheme.mapStyle);
         break;
       default:
-        this.set('mapStyle', Theme.LightTheme.mapStyle);
+        this.set('mapStyle', mapStyle);
     }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
     this.map = new AMap.Map(this.container, this._attrs);
