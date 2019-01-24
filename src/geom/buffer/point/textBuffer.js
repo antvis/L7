@@ -1,10 +1,9 @@
 
 
 import { getJSON } from '../../../util/ajax';
-import * as THREE from '../../../core/three';
 import EventEmitter from 'wolfy87-eventemitter';
 import Global from '../../../global';
-const Space = 1;
+// const Space = 1;
 const metrics = {
   buffer: 3,
   family: 'ios9',
@@ -75,7 +74,7 @@ function loadTextTexture(url, cb) {
    * 计算每个标注词语的位置
    * @param {*} chars 文本信息
    * @param {*} pos 文字三维空间坐标
-   * @param {*} chr 字符
+   * @param {*} text 字符
    * @param {*} pen 字符在词语的偏移量
    * @param {*} size 字体大小
    * @param {*} colors 颜色
@@ -157,26 +156,26 @@ function drawGlyph(chars, pos, text, pen, size, colors, textureElements, originP
 }
 
 
-function measureText(text, size) {
-  const dimensions = {
-    advance: 0
-  };
-  const metrics = this.metrics;
-  const scale = size / metrics.size;
-  for (let i = 0; i < text.length; i++) {
-    const code = text.charCodeAt(i);
-    const horiAdvance = metrics.chars[code][4];
+// function measureText(text, size) {
+//   const dimensions = {
+//     advance: 0
+//   };
+//   const metrics = this.metrics;
+//   const scale = size / metrics.size;
+//   for (let i = 0; i < text.length; i++) {
+//     const code = text.charCodeAt(i);
+//     const horiAdvance = metrics.chars[code][4];
 
-    dimensions.advance += (horiAdvance + Space) * scale;
-  }
+//     dimensions.advance += (horiAdvance + Space) * scale;
+//   }
 
-  return dimensions;
-}
-function creatTexture(image) {
-  this.bufferStruct.textSize = [ image.width, image.height ];
-  const texture = new THREE.Texture(image);
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.ClampToEdgeWrapping;
-  texture.needsUpdate = true;
-  return texture;
-}
+//   return dimensions;
+// }
+// function creatTexture(image) {
+//   this.bufferStruct.textSize = [ image.width, image.height ];
+//   const texture = new THREE.Texture(image);
+//   texture.minFilter = THREE.LinearFilter;
+//   texture.magFilter = THREE.ClampToEdgeWrapping;
+//   texture.needsUpdate = true;
+//   return texture;
+// }
