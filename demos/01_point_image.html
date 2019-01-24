@@ -127,6 +127,10 @@ scene.on('loaded', () => {
      .render();
 
   });
+
+  scene.on('zoomchange',(e)=>{
+    console.log(e);
+  })
  
 });
 
