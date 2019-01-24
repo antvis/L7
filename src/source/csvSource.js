@@ -20,8 +20,8 @@ export default class CSVSource extends Source {
       if (col.coordinates) {
         coordinates = col.coordinates;
       }
-      if (x && y) { coordinates = [ col[x], col[y] ]; }
-      if (x1 && y1) {
+      if (x && y) { coordinates = [ col[x], col[y] ]; } // 点数据
+      if (x1 && y1) { // 弧线 或者线段
         coordinates = [[ col[x], col[y] ], [ col[x1], col[y1] ]];
       }
       if (coords && col.coords) { coordinates = col.coords; }
