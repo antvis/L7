@@ -83,14 +83,6 @@ export default class Scene extends Base {
   getLayers() {
     return this._layers;
   }
-  _addLight() {
-    // const scene = this._engine._scene;
-    // //const ambientLight = new THREE.AmbientLight(0xaaaaaa);
-    // scene.add(ambientLight);
-
-    // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    // scene.add(directionalLight);
-  }
   _addLayer() {
 
   }
@@ -102,11 +94,12 @@ export default class Scene extends Base {
       'mousedown',
       'mouseleave',
       'mouseup',
+      'rightclick',
       'click',
       'dblclick'
     ];
     events.forEach(event => {
-      this._container.addEventListener(event, e => {
+      this.map.on(event, e => {
         // 要素拾取
         this._engine._picking.pickdata(e);
       }, false);
