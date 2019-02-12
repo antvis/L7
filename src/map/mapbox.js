@@ -4,7 +4,7 @@ import { scene } from '../global';
 import * as THREE from '../core/three';
 const WORLD_SIZE = 512;
 const MERCATOR_A = 6378137.0;
-const WORLD_SCALE = 1.0;
+const WORLD_SCALE = 1 / 100;
 const PROJECTION_WORLD_SIZE = WORLD_SIZE / (MERCATOR_A * Math.PI) / 2;
 export default class MapBox extends Base {
   getDefaultCfg() {
@@ -53,7 +53,7 @@ export default class MapBox extends Base {
     const camera = engine._camera;
     // Build a projection matrix, paralleling the code found in Mapbox GL JS
     const fov = 0.6435011087932844;
-    const cameraToCenterDistance = 0.5 / Math.tan(fov / 2) * this.map.transform.height;
+    const cameraToCenterDistance = 0.5 / Math.tan(fov / 2) * this.map.transform.height * WORLD_SCALE;
     const halfFov = fov / 2;
     const groundAngle = Math.PI / 2 + this.map.transform._pitch;
     const topHalfSurfaceDistance = Math.sin(halfFov) * cameraToCenterDistance / Math.sin(Math.PI - groundAngle - halfFov);
@@ -62,31 +62,36 @@ export default class MapBox extends Base {
     const furthestDistance = Math.cos(Math.PI / 2 - this.map.transform._pitch) * topHalfSurfaceDistance + cameraToCenterDistance;
 
     // Add a bit extra to avoid precision problems when a fragment's distance is exactly `furthestDistance`
-    const farZ = furthestDistance * 1.01;
+    let farZ = furthestDistance * 1.1;
+    if (this.pitch > 50) {
+      farZ = 1000;
+    }
     const { x, y } = this.map.transform.point;
     camera.projectionMatrix = this.makePerspectiveMatrix(fov, this.map.transform.width / this.map.transform.height, 1, farZ);
     const cameraWorldMatrix = new THREE.Matrix4();
     const cameraTranslateZ = new THREE.Matrix4().makeTranslation(0, 0, cameraToCenterDistance);
     const cameraRotateX = new THREE.Matrix4().makeRotationX(this.map.transform._pitch);
     const cameraRotateZ = new THREE.Matrix4().makeRotationZ(this.map.transform.angle);
-
+    const cameraTranslateXY = new THREE.Matrix4().makeTranslation(x * WORLD_SCALE, -y * WORLD_SCALE, 0);
     // const cameraTranslateCenter = new THREE.Matrix4().makeTranslation(0, 0, cameraToCenterDistance);
     // Unlike the Mapbox GL JS camera, separate camera translation and rotation out into its world matrix
     // If this is applied directly to the projection matrix, it will work OK but break raycasting
     cameraWorldMatrix
         .premultiply(cameraTranslateZ)
         .premultiply(cameraRotateX)
-        .premultiply(cameraRotateZ);
+        .premultiply(cameraRotateZ)
+        .premultiply(cameraTranslateXY);
+
     camera.matrixWorld.copy(cameraWorldMatrix);
 
-    const zoomPow = this.map.transform.scale;
+    const zoomPow = this.map.transform.scale * WORLD_SCALE;
     // Handle scaling and translation of objects in the map in the world's matrix transform, not the camera
     const scale = new THREE.Matrix4();
     const translateCenter = new THREE.Matrix4();
     const translateMap = new THREE.Matrix4();
     const rotateMap = new THREE.Matrix4();
     scale
-        .makeScale(zoomPow, zoomPow, zoomPow);
+        .makeScale(zoomPow, zoomPow, 1.0);
     translateCenter
         .makeTranslation(WORLD_SIZE / 2, -WORLD_SIZE / 2, 0);
     translateMap
@@ -97,8 +102,7 @@ export default class MapBox extends Base {
     scene.matrix
         .premultiply(rotateMap)
         .premultiply(translateCenter)
-        .premultiply(scale)
-        .premultiply(translateMap);
+        .premultiply(scale);
   }
   makePerspectiveMatrix(fovy, aspect, near, far) {
     const out = new THREE.Matrix4();
