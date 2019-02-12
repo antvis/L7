@@ -21,7 +21,7 @@ export default class GaodeMap {
     return this.map.getStatus();
   }
   getScale() {
-    return this.getScale();
+    return this.map.getScale();
   }
   setZoom(zoom) {
     return this.map.setZoom(zoom);

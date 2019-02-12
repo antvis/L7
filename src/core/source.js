@@ -1,12 +1,6 @@
-/*
- * @Author: ThinkGIS
- * @Date: 2018-06-08 11:19:06
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-11-01 11:50:43
- */
 import Base from './base';
 const Controller = require('./controller/index');
-import { aProjectFlat } from '../geo/project';
+import { getMap } from '../map/index';
 export default class Source extends Base {
   getDefaultCfg() {
     return {
@@ -50,6 +44,8 @@ export default class Source extends Base {
   }
   _initControllers() {
     const defs = this.get('defs');
+    const mapType = this.get('mapType');
+    this.projectFlat = getMap(mapType).project;
     const scaleController = new Controller.Scale({
       defs
     });
@@ -83,8 +79,8 @@ export default class Source extends Base {
   }
   _coorConvert(geo) {
 
-    const ll = aProjectFlat(geo);
-    return [ ll.x, -ll.y, geo[2] || 0 ];
+    const ll = this.projectFlat(geo);
+    return [ ll.x, ll.y, geo[2] || 0 ];
 
   }
 
