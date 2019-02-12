@@ -63,7 +63,8 @@ export default class Layer extends Base {
     const layerId = this._getUniqueId();
     this.layerId = layerId;
     this._activeIds = null;
-    scene._engine._scene.add(this._object3D);
+    const world = scene._engine.world;
+    world.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
     this._initEvents();
@@ -110,7 +111,6 @@ export default class Layer extends Base {
     const { type = dataType } = cfg;
     cfg.data = data;
     cfg.mapType = this.get('mapType');
-
     this.layerSource = new source[type](cfg);
     // this.scene.workerPool.runTask({
     //   command: 'geojson',
