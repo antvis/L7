@@ -38,10 +38,12 @@ export default class MapBox extends Base {
     this.engine = engine;
     const camera = engine._camera;
     const scene = engine.world;
+    const pickScene = engine._picking.world;
     camera.matrixAutoUpdate = false;
     scene.position.x = scene.position.y = WORLD_SIZE / 2;
     scene.matrixAutoUpdate = false;
-    scene.autoUpdate = false;
+    pickScene.position.x = pickScene.position.y = WORLD_SIZE / 2;
+    pickScene.matrixAutoUpdate = false;
     this.updateCamera();
     this.map.on('move', () => {
       this.updateCamera();
@@ -50,6 +52,7 @@ export default class MapBox extends Base {
   updateCamera() {
     const engine = this.engine;
     const scene = engine.world;
+    const pickScene = engine._picking.world;
     const camera = engine._camera;
     // Build a projection matrix, paralleling the code found in Mapbox GL JS
     const fov = 0.6435011087932844;
@@ -91,7 +94,7 @@ export default class MapBox extends Base {
     const translateMap = new THREE.Matrix4();
     const rotateMap = new THREE.Matrix4();
     scale
-        .makeScale(zoomPow, zoomPow, 1.0);
+        .makeScale(zoomPow / 100, zoomPow / 100, 1.0);
     translateCenter
         .makeTranslation(WORLD_SIZE / 2, -WORLD_SIZE / 2, 0);
     translateMap
@@ -100,6 +103,11 @@ export default class MapBox extends Base {
         .makeRotationZ(Math.PI);
     scene.matrix = new THREE.Matrix4();
     scene.matrix
+        .premultiply(rotateMap)
+        .premultiply(translateCenter)
+        .premultiply(scale);
+    pickScene.matrix = new THREE.Matrix4();
+    pickScene.matrix
         .premultiply(rotateMap)
         .premultiply(translateCenter)
         .premultiply(scale);
@@ -140,6 +148,7 @@ export default class MapBox extends Base {
     scene.getZoom = () => { return map.getZoom(); };
     scene.getCenter = () => { return map.getCenter(); };
     scene.getPitch = () => { return map.getPitch(); };
+    scene.containerToLngLat = point => { return map.unproject(point); };
 
   }
 }
