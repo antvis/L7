@@ -13,7 +13,7 @@ export default class Scene extends Base {
   constructor(cfg) {
     super(cfg);
     this._initMap();
-    this._initAttribution();
+    // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
     this._layers = [];
   }
