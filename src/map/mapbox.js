@@ -94,7 +94,7 @@ export default class MapBox extends Base {
     const translateMap = new THREE.Matrix4();
     const rotateMap = new THREE.Matrix4();
     scale
-        .makeScale(zoomPow / 100, zoomPow / 100, 1.0);
+        .makeScale(zoomPow, zoomPow, 1.0);
     translateCenter
         .makeTranslation(WORLD_SIZE / 2, -WORLD_SIZE / 2, 0);
     translateMap
