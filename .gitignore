@@ -69,7 +69,6 @@ lib
 
 *.sw*
 *.un~
-demos/mapbox.html
 demos/gd.html
 demos/data
 demos/image
