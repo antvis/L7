@@ -1,5 +1,5 @@
 import Engine from './engine';
-import * as layers from '../layer';
+import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
 import WorkerPool from './worker';
@@ -48,14 +48,14 @@ export default class Scene extends Base {
 
   }
   initLayer() {
-    for (const methodName in layers) {
-      this[methodName] = cfg => {
-        cfg ? cfg.mapType = this.mapType : cfg = { mapType: this.mapType };
-        const layer = new layers[methodName](this, cfg);
+    for (const key in LAYER_MAP) {
+      Scene.prototype[key] = cfg => {
+        const layer = new LAYER_MAP[key](this, cfg);
         this._layers.push(layer);
         return layer;
       };
     }
+
   }
   on(type, hander) {
     if (this.map) { this.map.on(type, hander); }
@@ -82,14 +82,6 @@ export default class Scene extends Base {
   }
   getLayers() {
     return this._layers;
-  }
-  _addLight() {
-    // const scene = this._engine._scene;
-    // //const ambientLight = new THREE.AmbientLight(0xaaaaaa);
-    // scene.add(ambientLight);
-
-    // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    // scene.add(directionalLight);
   }
   _addLayer() {
 
