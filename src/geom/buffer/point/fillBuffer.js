@@ -3,7 +3,7 @@ import * as THREE from '../../../core/three';
 import * as polygonShape from '../../shape/polygon';
 import * as polygonPath from '../../shape/path';
 import Util from '../../../util';
-export default function fillBuffer(coordinates, properties) {
+export default function fillBuffer(layerData) {
   const attribute = {
     vertices: [],
     normals: [],
@@ -14,8 +14,8 @@ export default function fillBuffer(coordinates, properties) {
     faceUv: []
 
   };
-  coordinates.forEach((geo, index) => {
-    let { size, shape, color, id } = properties[index];
+  layerData.forEach(item => {
+    let { size, shape, color, id, coordinates } = item;
     let polygon = null;
     const path = polygonPath[shape]();
     if (pointShape['2d'].indexOf(shape) !== -1) {
@@ -27,7 +27,7 @@ export default function fillBuffer(coordinates, properties) {
     } else {
       throw new Error('Invalid shape type: ' + shape);
     }
-    toPointShapeAttributes(polygon, geo, { size, shape, color, id }, attribute);
+    toPointShapeAttributes(polygon, coordinates, { size, shape, color, id }, attribute);
 
   });
   return attribute;

@@ -46,12 +46,12 @@ export default class PointLayer extends Layer {
       case 'fill' :// 填充图形
         {
           if (fill !== 'none') { // 是否填充
-            const attributes = PointBuffer.FillBuffer(source.geoData, this.StyleData, style);
+            const attributes = PointBuffer.FillBuffer(this.layerData, style);
             const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
             this.add(meshfill);
           }
           if (stroke !== 'none') { // 是否绘制边界
-            const lineAttribute = PointBuffer.StrokeBuffer(source.geoData, this.StyleData, style);
+            const lineAttribute = PointBuffer.StrokeBuffer(this.layerData, style);
             const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
             this.add(meshStroke, 'line');
           }
@@ -59,14 +59,14 @@ export default class PointLayer extends Layer {
         }
       case 'image':// 绘制图片标注
         {
-          const imageAttribute = PointBuffer.ImageBuffer(source.geoData, this.StyleData, { imagePos: this.scene.image.imagePos });
+          const imageAttribute = PointBuffer.ImageBuffer(this.layerData, { imagePos: this.scene.image.imagePos });
           const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
           this.add(imageMesh);
           break;
         }
       case 'normal' : // 原生点
         {
-          const normalAttribute = PointBuffer.NormalBuffer(source.geoData, this.StyleData, style);
+          const normalAttribute = PointBuffer.NormalBuffer(this.layerData, style);
           const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
           this.add(normalPointMesh);
           break;
@@ -78,11 +78,11 @@ export default class PointLayer extends Layer {
 
   _getShape() {
     let shape = null;
-    if (!this.StyleData[0].hasOwnProperty('shape')) {
+    if (!this.layerData[0].hasOwnProperty('shape')) {
       return 'normal';
     }
-    for (let i = 0; i < this.StyleData.length; i++) {
-      shape = this.StyleData[i].shape;
+    for (let i = 0; i < this.layerData.length; i++) {
+      shape = this.layerData[i].shape;
       if (shape !== undefined) {
         break;
       }
@@ -103,8 +103,7 @@ export default class PointLayer extends Layer {
     const styleOptions = this.get('styleOptions');
     const buffer = new TextBuffer({
       type: this.shapeType,
-      coordinates: source.geoData,
-      properties: this.StyleData,
+      layerData: this.layerData,
       style: this.get('styleOptions')
     });
 
