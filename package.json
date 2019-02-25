@@ -107,6 +107,7 @@
     "lodash": "^4.17.5",
     "polyline-normals": "^2.0.2",
     "rbush": "^2.0.2",
+    "simple-statistics": "^7.0.1",
     "three": "^0.96.0",
     "venn.js": "^0.2.20",
     "viewport-mercator-project": "^5.2.0",

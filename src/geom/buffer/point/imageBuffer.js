@@ -1,4 +1,4 @@
-export default function ImageBuffer(coordinates, properties, opt) {
+export default function ImageBuffer(layerData, opt) {
   const attributes = {
     vertices: [],
     colors: [],
@@ -7,10 +7,10 @@ export default function ImageBuffer(coordinates, properties, opt) {
     pickingIds: [],
     uv: []
   };
-  coordinates.forEach((pos, index) => {
-    const { color, size, id, shape } = properties[index];
+  layerData.forEach(item => {
+    const { color, size, id, shape, coordinates } = item;
     const { x, y } = opt.imagePos[shape];
-    attributes.vertices.push(...pos);
+    attributes.vertices.push(...coordinates);
     attributes.colors.push(...color);
     attributes.pickingIds.push(id);
     attributes.sizes.push(size * window.devicePixelRatio); //
