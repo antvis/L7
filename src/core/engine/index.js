@@ -11,6 +11,9 @@ export default class Engine extends EventEmitter {
     this._camera = new Camera(container).camera;
     this._renderer = new Renderer(container).renderer;
     this._world = world;
+    // for MapBox
+    this.world = new THREE.Group();
+    this._scene.add(this.world);
     this._picking = Picking(this._world, this._renderer, this._camera, this._scene);
     this.clock = new THREE.Clock();
   }

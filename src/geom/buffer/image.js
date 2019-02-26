@@ -4,8 +4,9 @@ import * as THREE from '../../core/three';
 
 export default class ImageBuffer extends BufferBase {
   geometryBuffer() {
-    const coordinates = this.get('coordinates');
-    const images = this.get('image');
+    const layerData = this.get('layerData');
+    const coordinates = layerData[0].coordinates;
+    const images = layerData[0].images;
     const positions = [ ...coordinates[0],
       coordinates[1][0], coordinates[0][1], 0,
       ...coordinates[1],

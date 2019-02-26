@@ -1,17 +1,15 @@
-/*
- * @Author: ThinkGIS
- * @Date: 2018-06-08 11:19:06
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-11-01 11:50:43
- */
+
 import Base from './base';
 const Controller = require('./controller/index');
-import { aProjectFlat } from '../geo/project';
+import { getTransform, getParser } from '../source';
+import { getMap } from '../map/index';
 export default class Source extends Base {
   getDefaultCfg() {
     return {
       data: null,
       defs: {},
+      parser: {},
+      transforms: [],
       scales: {
       },
       options: {}
@@ -19,26 +17,40 @@ export default class Source extends Base {
   }
   constructor(cfg) {
     super(cfg);
-
+    const transform = this.get('transforms');
+    this._transforms = transform || [];
     this._initControllers();
-    this.prepareData();
+    // 数据解析
+    this._excuteParser();
+    // 数据转换 统计，聚合，分类
+    this._executeTrans();
+    // 坐标转换
+    this._projectCoords();
   }
-
-  // 标准化数据
-  prepareData() {
+  _excuteParser() {
+    const parser = this.get('parser');
+    const { type = 'geojson' } = parser;
     const data = this.get('data');
-    this.propertiesData = [];// 临时使用
-    this.geoData = [];
-
-    data.coordinates.forEach(geo => {
-      const coord = this._coordProject(geo);
-      this.geoData.push(coord);
-      this.propertiesData.push([]);
+    this.data = getParser(type)(data, parser);
+  }
+  /**
+   * 数据统计
+   */
+  _executeTrans() {
+    const trans = this._transforms;
+    trans.forEach(tran => {
+      const { type } = tran;
+      this.data = getTransform(type)(this.data, tran);
+    });
+    this._transforms = trans;
+  }
+  _projectCoords() {
+    this.data.dataArray.forEach(data => {
+      data.coordinates = this._coordProject(data.coordinates);
     });
   }
-
   createScale(field) {
-    const data = this.propertiesData;
+    const data = this.data.dataArray;
     const scales = this.get('scales');
     let scale = scales[field];
     const scaleController = this.get('scaleController');
@@ -50,6 +62,8 @@ export default class Source extends Base {
   }
   _initControllers() {
     const defs = this.get('defs');
+    const mapType = this.get('mapType');
+    this.projectFlat = getMap(mapType).project;
     const scaleController = new Controller.Scale({
       defs
     });
@@ -83,9 +97,14 @@ export default class Source extends Base {
   }
   _coorConvert(geo) {
 
-    const ll = aProjectFlat(geo);
-    return [ ll.x, -ll.y, geo[2] || 0 ];
+    const ll = this.projectFlat(geo);
+    return [ ll.x, ll.y, geo[2] || 0 ];
 
+  }
+  getSelectFeature(featureId) {
+    const data = this.get('data');
+    // 如果是GeoJSON 数据返回原数
+    return data.features ? data.features[featureId] : this.data.dataArray[featureId];
   }
 
 }

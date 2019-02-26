@@ -3,7 +3,7 @@ import * as polygonShape from '../../shape/polygon';
 import * as lineShape from '../../shape/line';
 import { pointShape } from '../../../global';
 import Util from '../../../util';
-export default function StrokeBuffer(coordinates, properties, style) {
+export default function StrokeBuffer(layerData, style) {
   const attribute = {
     shapes: [],
     normal: [],
@@ -15,8 +15,8 @@ export default function StrokeBuffer(coordinates, properties, style) {
     colors: []
   };
   const { stroke, strokeWidth } = style;
-  coordinates.forEach((geo, index) => {
-    let { size, shape, id } = properties[index];
+  layerData.forEach(item => {
+    let { size, shape, id, coordinates } = item;
     const path = polygonPath[shape]();
     const positionsIndex = attribute.miter.length;
     let polygon = null;
@@ -33,7 +33,7 @@ export default function StrokeBuffer(coordinates, properties, style) {
     } else {
       throw new Error('Invalid shape type: ' + shape);
     }
-    polygonLineBuffer(polygon, geo, size, attribute);
+    polygonLineBuffer(polygon, coordinates, size, attribute);
 
   });
   return attribute;
