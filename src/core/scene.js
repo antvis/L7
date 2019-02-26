@@ -101,7 +101,8 @@ export default class Scene extends Base {
       'dblclick'
     ];
     events.forEach(event => {
-      this.map.on(event, e => {
+
+      this._container.addEventListener(event, e => {
         // 要素拾取
         this._engine._picking.pickdata(e);
       }, false);
