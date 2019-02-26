@@ -9,10 +9,7 @@ class Picking {
     this._camera = camera;
     this._raycaster = new THREE.Raycaster();
     this.scene = scene;
-    this._envents = [];
-
-    // TODO: Match this with the line width used in the picking layers
-    this._raycaster.linePrecision = 3;
+    this._raycaster.linePrecision = 10;
     this._pickingScene = PickingScene;
     const size = this._renderer.getSize();
     this._width = size.width;
@@ -21,7 +18,7 @@ class Picking {
       magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,
       stencilBuffer: false,
-      depthBuffer: false
+      depthBuffer: true
     };
 
     this._pickingTexture = new THREE.WebGLRenderTarget(this._width, this._height, parameters);
@@ -35,37 +32,14 @@ class Picking {
   _initEvents() {
     this._resizeHandler = this._resizeTexture.bind(this);
     window.addEventListener('resize', this._resizeHandler, false);
-
-    // this._mouseUpHandler = this._onMouseUp.bind(this);
-    // this._world._container.addEventListener('mouseup', this._mouseUpHandler, false);
-    // this._world._container.addEventListener('mousemove', this._mouseUpHandler, false);
-    // this._world._container.addEventListener('mousemove', this._onWorldMove.bind(this), false);
   }
   pickdata(event) {
-    const point = { x: event.offsetX, y: event.offsetY, type: event.type };
+    const point = { x: event.pixel.x, y: event.pixel.y, type: event.type };
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
     this._pickAllObject(point, normalisedPoint);
   }
-  _onMouseUp(event) {
-    // Only react to main button click
-    // if (event.button !== 0) {
-    //   return;
-    // }
-    const point = { x: event.clientX, y: event.clientY, type: event.type };
-    const normalisedPoint = { x: 0, y: 0 };
-    normalisedPoint.x = (point.x / this._width) * 2 - 1;
-    normalisedPoint.y = -(point.y / this._height) * 2 + 1;
-    this._pickAllObject(point, normalisedPoint);
-    // this._pick(point, normalisedPoint);
-  }
-  _onWorldMove() {
-
-    this._needUpdate = true;
-  }
-
-  // TODO: Ensure this doesn't get out of sync issue with the renderer resize
   _resizeTexture() {
     const size = this._renderer.getSize();
 
@@ -79,27 +53,10 @@ class Picking {
   _update(point) {
 
     const texture = this._pickingTexture;
-   // if (this._needUpdate) {
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-      // this._needUpdate = false;
-    // }
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
-
-  }
-  // 添加dom事件 支持 mousedown ,mouseenter mouseleave mousemove mouseover mouseout mouse up
-  on(type) {
-
-    this._mouseUpHandler = this._onMouseUp.bind(this);
-    this._world._container.addEventListener(type, this._mouseUpHandler, false);
-    this._envents.push([ type, this._mouseUpHandler ]);
-  }
-  off(type, hander) {
-    this._world._container.removeEventListener(type, this._mouseUpHandler, false);
-    this._envents = this._envents.filter(item => {
-      return item[0] === 'type' && hander === item[1];
-    });
 
   }
   _filterObject(id) {
@@ -123,9 +80,7 @@ class Picking {
 
   _pick(point, normalisedPoint, layerId) {
     this._update(point);
-    // Interpret the pixel as an ID
     let id = (this.pixelBuffer[2] * 255 * 255) + (this.pixelBuffer[1] * 255) + (this.pixelBuffer[0]);
-    // Skip if ID is 16646655 (white) as the background returns this
     if (id === 16646655 || this.pixelBuffer[3] === 0) {
       id = -999;
       // return;
@@ -133,9 +88,6 @@ class Picking {
 
     this._raycaster.setFromCamera(normalisedPoint, this._camera);
 
-    // Perform ray intersection on picking scene
-    //
-    // TODO: Only perform intersection test on the relevant picking mesh
     const intersects = this._raycaster.intersectObjects(this._pickingScene.children, true);
     const _point2d = { x: point.x, y: point.y };
 
@@ -143,11 +95,6 @@ class Picking {
     if (intersects.length > 0) {
       _point3d = intersects[0].point;
     }
-
-    // Pass along as much data as possible for now until we know more about how
-    // people use the picking API and what the returned data should be
-    //
-    // TODO: Look into the leak potential for passing so much by reference here
     const item = {
       layerId,
       featureId: id - 1,
