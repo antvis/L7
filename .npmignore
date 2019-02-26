@@ -70,8 +70,11 @@ test
 *.un~
 .idea
 bin
+bundler
 demos
 docs
+lib
+src
 temp
 webpack-dev.config.js
 webpack.config.js

@@ -7,7 +7,6 @@ import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
 import * as PointBuffer from '../geom/buffer/point/index';
 
-
 /**
  * point shape 2d circle, traingle text,image
  * shape 3d   cube，column, sphere
