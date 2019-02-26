@@ -42,7 +42,7 @@ class Picking {
     // this._world._container.addEventListener('mousemove', this._onWorldMove.bind(this), false);
   }
   pickdata(event) {
-    const point = { x: event.clientX, y: event.clientY, type: event.type };
+    const point = { x: event.offsetX, y: event.offsetY, type: event.type };
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
