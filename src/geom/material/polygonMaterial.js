@@ -1,6 +1,5 @@
-import polygon_frag from '../shader/polygon_frag.glsl';
-import polygon_vert from '../shader/polygon_vert.glsl';
 import Material from './material';
+import { getModule } from '../../util/shaderModule';
 // export default function PolygonMaterial(options) {
 //   const material = new Material({
 //     uniforms: {
@@ -48,8 +47,10 @@ export default class PolygonMaterial extends Material {
     this.uniforms = Object.assign(uniforms, this.setUniform(_uniforms));
     this.type = 'PolygonMaterial';
     this.defines = Object.assign(defines, _defines);
-    this.vertexShader = polygon_vert;
-    this.fragmentShader = polygon_frag;
+
+    const { vs, fs } = getModule('polygon');
+    this.vertexShader = vs;
+    this.fragmentShader = fs;
     this.transparent = true;
   }
 }
