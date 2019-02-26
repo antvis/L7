@@ -6,6 +6,7 @@ import WorkerPool from './worker';
 import { MapProvider } from '../map/provider';
 import GaodeMap from '../map/gaodeMap';
 import Global from '../global';
+import { compileBuiltinModules } from '../geom/shader';
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -22,6 +23,7 @@ export default class Scene extends Base {
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
     this.workerPool = new WorkerPool();
+    compileBuiltinModules();
   }
     // 为pickup场景添加 object 对象
   addPickMesh(object) {
@@ -94,11 +96,12 @@ export default class Scene extends Base {
       'mousedown',
       'mouseleave',
       'mouseup',
+      'rightclick',
       'click',
       'dblclick'
     ];
     events.forEach(event => {
-      this._container.addEventListener(event, e => {
+      this.map.on(event, e => {
         // 要素拾取
         this._engine._picking.pickdata(e);
       }, false);

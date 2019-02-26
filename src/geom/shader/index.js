@@ -1,14 +1,12 @@
 import point_frag from '../shader/point_frag.glsl';
 import point_vert from '../shader/point_vert.glsl';
-const shaderslib = {
-  pointShader: {
-    fragment: point_frag,
-    vertex: point_vert
-  }
-};
-// for (const programName in shaderslib) {
-//   const program = shaderslib[programName];
-//   program.fragment = ShaderFactory.parseIncludes(program.fragment);
-//   program.vertex = ShaderFactory.parseIncludes(program.vertex);
-// }
-export default shaderslib;
+import polygon_frag from '../shader/polygon_frag.glsl';
+import polygon_vert from '../shader/polygon_vert.glsl';
+import common from './common.glsl';
+import { registerModule } from '../../util/shaderModule';
+
+export function compileBuiltinModules() {
+  registerModule('point', { vs: point_vert, fs: point_frag });
+  registerModule('common', { vs: common, fs: common });
+  registerModule('polygon', { vs: polygon_vert, fs: polygon_frag });
+}
