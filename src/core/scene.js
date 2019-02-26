@@ -1,11 +1,12 @@
 import Engine from './engine';
-import * as layers from '../layer';
+import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
 import WorkerPool from './worker';
 import { MapProvider } from '../map/provider';
 import GaodeMap from '../map/gaodeMap';
 import Global from '../global';
+import { compileBuiltinModules } from '../geom/shader';
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -13,7 +14,7 @@ export default class Scene extends Base {
   constructor(cfg) {
     super(cfg);
     this._initMap();
-    this._initAttribution();
+    // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
     this._layers = [];
   }
@@ -22,6 +23,7 @@ export default class Scene extends Base {
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
     this.workerPool = new WorkerPool();
+    compileBuiltinModules();
   }
     // 为pickup场景添加 object 对象
   addPickMesh(object) {
@@ -48,14 +50,14 @@ export default class Scene extends Base {
 
   }
   initLayer() {
-    for (const methodName in layers) {
-      this[methodName] = cfg => {
-        cfg ? cfg.mapType = this.mapType : cfg = { mapType: this.mapType };
-        const layer = new layers[methodName](this, cfg);
+    for (const key in LAYER_MAP) {
+      Scene.prototype[key] = cfg => {
+        const layer = new LAYER_MAP[key](this, cfg);
         this._layers.push(layer);
         return layer;
       };
     }
+
   }
   on(type, hander) {
     if (this.map) { this.map.on(type, hander); }
