@@ -34,7 +34,7 @@ class Picking {
     window.addEventListener('resize', this._resizeHandler, false);
   }
   pickdata(event) {
-    const point = { x: event.pixel.x, y: event.pixel.y, type: event.type };
+    const point = { x: event.offsetX, y: event.offsetY, type: event.type };
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
