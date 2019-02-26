@@ -9,7 +9,7 @@ const metrics = {
   family: 'ios9',
   size: 24
 };
-export default function TextBuffer(coordinates, properties, style) {
+export default function TextBuffer(layerData, style) {
   EventEmitter.call(this);
   const attributes = {
     originPoints: [],
@@ -21,7 +21,7 @@ export default function TextBuffer(coordinates, properties, style) {
   const { textOffset = [ 0, 0 ] } = style;
   const chars = [];
   const textChars = {};
-  properties.forEach(element => {
+  layerData.forEach(element => {
     let text = element.shape || '';
     text = text.toString();
     for (let j = 0; j < text.length; j++) {
@@ -33,9 +33,9 @@ export default function TextBuffer(coordinates, properties, style) {
     }
   });
   loadTextInfo(chars, (chars, texture) => {
-    properties.forEach((element, index) => {
+    layerData.forEach(element => {
       const size = element.size;
-      const pos = coordinates[index];
+      const pos = layerData.coordinates;
       const pen = { x: textOffset[0], y: textOffset[1] };
       let text = element.shape || '';
       text = text.toString();

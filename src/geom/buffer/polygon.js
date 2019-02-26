@@ -3,22 +3,21 @@ import BufferBase from './bufferBase';
 export default class PolygonBuffer extends BufferBase {
 
   geometryBuffer() {
-    const coordinates = this.get('coordinates');
-    const properties = this.get('properties');
+    const layerData = this.get('layerData');
     const shape = this.get('shape');
     const positions = [];
     const faceUv = [];
     const sizes = [];
     const positionsIndex = [];
     let indexCount = 0;
-    this.bufferStruct.style = properties;
-    const isExtrude = properties[0].hasOwnProperty('size');
+    this.bufferStruct.style = layerData;
+    const isExtrude = layerData[0].hasOwnProperty('size');
     // indices, normals, colors, UVs
-    coordinates.forEach((geo, index) => {
-      const heightValue = properties[index].size;
-      let extrudeData = polygonShape[shape](geo);
+    layerData.forEach(item => {
+      const heightValue = item.size;
+      let extrudeData = polygonShape[shape](item.coordinates);
       if (isExtrude && shape === 'extrude') {
-        extrudeData = polygonShape.extrude(geo);
+        extrudeData = polygonShape.extrude(item.coordinates);
         extrudeData.positions = extrudeData.positions.map(pos => {
           pos[2] *= heightValue;
           return pos;
@@ -48,7 +47,7 @@ export default class PolygonBuffer extends BufferBase {
     this.bufferStruct.indices = positionsIndex;
     this.bufferStruct.position = positions;
     this.bufferStruct.indexCount = indexCount;
-    this.bufferStruct.style = properties;
+    this.bufferStruct.style = layerData;
     this.bufferStruct.faceUv = faceUv;
     this.bufferStruct.sizes = sizes;
     if (shape !== 'line') {
