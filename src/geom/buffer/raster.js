@@ -3,8 +3,8 @@ import { colorScales } from '../../attr/colorscales';
 import * as THREE from '../../core/three';
 export class RasterBuffer extends BufferBase {
   geometryBuffer() {
-    const coordinates = this.get('coordinates');
-
+    const layerData = this.get('layerData');
+    const { coordinates, width, data, height } = layerData.dataArray[0];
     const positions = [
       ...coordinates[0],
       coordinates[1][0], coordinates[0][1], 0,
@@ -14,9 +14,8 @@ export class RasterBuffer extends BufferBase {
       coordinates[0][0], coordinates[1][1], 0
     ];
     const imgPosUv = [ 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 ];
-    const raster = this.get('raster');
     const size = this.get('size');
-    const texture = new THREE.DataTexture(new Float32Array(raster.data), raster.width, raster.height, THREE.LuminanceFormat, THREE.FloatType);
+    const texture = new THREE.DataTexture(new Float32Array(data), width, height, THREE.LuminanceFormat, THREE.FloatType);
     texture.generateMipmaps = true;
     texture.needsUpdate = true;
     const colors = this.get('rampColors');
@@ -28,7 +27,7 @@ export class RasterBuffer extends BufferBase {
     this.bufferStruct.u_extent = [ coordinates[0][0], coordinates[0][1], coordinates[1][0], coordinates[1][1] ];
 
     this.bufferStruct.u_colorTexture = colorTexture; // 颜色表‘=
-    const triangles = this._buildTriangles(raster, size, this.bufferStruct.u_extent);
+    const triangles = this._buildTriangles(width, height, size, this.bufferStruct.u_extent);
     const attributes = {
       vertices: new Float32Array(triangles.vertices),
       uvs: new Float32Array(triangles.uvs),
@@ -78,9 +77,8 @@ export class RasterBuffer extends BufferBase {
     texture1.needsUpdate = true;
     return texture1;
   }
-  _buildTriangles(raster, size = 1, extent) {
+  _buildTriangles(width, height, size = 1, extent) {
     // const extent = [ 73.482190241, 3.82501784112, 135.106618732, 57.6300459963 ]
-    const { width, height } = raster;
     const indices = [];
     const vertices = [];
     const uvs = [];

@@ -1,16 +1,10 @@
 import Layer from '../core/layer';
 import * as THREE from '../core/three';
-import RasterSource from '../source/rasterSource';
 import RasterMaterial from '../geom/material/rasterMaterial';
 import { RasterBuffer } from '../geom/buffer/raster';
 
 export default class RasterLayer extends Layer {
-  source(data, cfg = {}) {
-    cfg.mapType = this.get('mapType');
-    cfg.data = data;
-    this.layerSource = new RasterSource(cfg);
-    return this;
-  }
+
   render() {
     this.type = 'raster';
     this.init();
@@ -18,18 +12,18 @@ export default class RasterLayer extends Layer {
     // 加载 完成事件
     const styleOptions = this.get('styleOptions');
     const buffer = new RasterBuffer({
-      coordinates: source.geoData,
-      raster: source.rasterData,
+      layerData: source.data,
       rampColors: styleOptions.rampColors
     });
     this.initGeometry(buffer.attributes);
+    const rasterConfig = source.data.dataArray[0];
     const material = new RasterMaterial({
       u_texture: buffer.bufferStruct.u_raster,
       u_colorTexture: buffer.bufferStruct.u_colorTexture,
       u_opacity: 1.0,
       u_extent: buffer.bufferStruct.u_extent,
-      u_min: source.rasterData.min,
-      u_max: source.rasterData.max,
+      u_min: rasterConfig.min,
+      u_max: rasterConfig.max,
       u_dimension: buffer.attributes.dimension
 
     });

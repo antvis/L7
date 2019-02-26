@@ -1,7 +1,8 @@
 
 precision highp float;
 
-#pragma import "common"
+#define PI 3.14159265359
+#define TWO_PI 6.28318530718
 
 uniform float u_strokeWidth;
 uniform vec4 u_stroke;

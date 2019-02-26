@@ -13,12 +13,11 @@ export default class TextBuffer extends BufferBase {
       family: 'ios9',
       size: 24
     };
-    const coordinates = this.get('coordinates');
-    const properties = this.get('properties');
+    const layerData = this.get('layerData');
     const { textOffset = [ 0, 0 ] } = this.get('style');
     const chars = [];
     const textChars = {};
-    properties.forEach(element => {
+    layerData.forEach(element => {
       let text = element.shape || '';
       text = text.toString();
       for (let j = 0; j < text.length; j++) {
@@ -39,9 +38,9 @@ export default class TextBuffer extends BufferBase {
       const originPoints = [];
       const textSizes = [];
       const textOffsets = [];
-      properties.forEach((element, index) => {
+      layerData.forEach(element => {
         const size = element.size;
-        const pos = coordinates[index];
+        const pos = element.coordinates;
         // const pen = { x: pos[0] - dimensions.advance / 2, y: pos[1] };
         const pen = { x: textOffset[0], y: textOffset[1] };
         let text = element.shape || '';
@@ -53,7 +52,7 @@ export default class TextBuffer extends BufferBase {
           this._drawGlyph(pos, text[i], pen, size, colors, textureElements, originPoints, textSizes, textOffsets, color);
         }
       });
-      this.bufferStruct.style = properties;
+      this.bufferStruct.style = layerData;
       this.attributes = {
         originPoints,
         textSizes,

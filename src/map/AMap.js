@@ -1,18 +1,34 @@
 import Base from '../core/base';
+import { scene } from '../global';
 import * as Theme from '../theme/index';
 import Util from '../util';
-import { scene } from '../global';
 const DEG2RAD = Math.PI / 180;
-export class MapProvider extends Base {
+export default class GaodeMap extends Base {
   getDefaultCfg() {
     return Util.assign(scene, {
       resizeEnable: true,
       viewMode: '3D'
     });
   }
-  constructor(container, cfg) {
+  static project(lnglat) {
+    const maxs = 85.0511287798;
+    const lat = Math.max(Math.min(maxs, lnglat[1]), -maxs);
+    const scale = 256 << 20;
+    let d = Math.PI / 180;
+    let x = lnglat[0] * d;
+    let y = lat * d;
+    y = Math.log(Math.tan((Math.PI / 4) + (y / 2)));
+    const a = 0.5 / Math.PI,
+      b = 0.5,
+      c = -0.5 / Math.PI;
+    d = 0.5;
+    x = scale * (a * x + b) - 215440491;
+    y = -(scale * (c * y + d) - 106744817);
+    return { x, y };
+  }
+  constructor(cfg) {
     super(cfg);
-    this.container = container;
+    this.container = this.get('id');
     this.initMap();
     this.addOverLayer();
     setTimeout(() => {
@@ -84,5 +100,32 @@ export class MapProvider extends Base {
     this.renderDom.style.cssText += 'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
     canvasContainer.appendChild(this.renderDom);
+  }
+  mixMap(scene) {
+    const map = this.map;
+    scene.getZoom = () => { return map.getZoom(); };
+    scene.getCenter = () => { return map.getCenter(); };
+    scene.getSize = () => { return map.getSize(); };
+    scene.getPitch = () => { return map.getPitch(); };
+    scene.getRotation = () => { return map.getRotation(); };
+    scene.getStatus = () => { return map.getStatus(); };
+    scene.getScale = () => { return map.getScale(); };
+    scene.getZoom = () => { return map.getZoom(); };
+    scene.setZoom = () => { return map.setZoom(); };
+    scene.setBounds = () => { return map.setBounds(); };
+    scene.setRotation = () => { return map.setRotation(); };
+    scene.zoomIn = () => { return map.zoomIn(); };
+    scene.setRotation = () => { return map.setRotation(); };
+    scene.zoomOut = () => { return map.zoomOut(); };
+    scene.panTo = () => { return map.panTo(); };
+    scene.panBy = () => { return map.panBy(); };
+    scene.setPitch = () => { return map.setPitch(); };
+    scene.pixelToLngLat = () => { return map.pixelToLngLat(); };
+    scene.lngLatToPixel = () => { return map.lngLatToPixel(); };
+    scene.setMapStyle = () => { return map.setMapStyle(); };
+    scene.containerToLngLat = pixel => {
+      const ll = new AMap.Pixel(pixel.x, pixel.y);
+      return map.containerToLngLat(ll);
+    };
   }
 }
