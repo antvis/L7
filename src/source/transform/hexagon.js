@@ -27,7 +27,10 @@ export function pointToHexbin(data, option) {
       const columns = getColumn(hex, option.field);
       hex[option.method] = statistics[option.method](columns);
     }
+    const item = {};
+    item[option.method] = hex[option.method];
     return {
+      ...item,
       coordinates: unProjectFlat([ hex.x, hex.y ]),
       id: index + 1
     };
