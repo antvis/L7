@@ -33,8 +33,11 @@ const scene = new L7.Scene({
 scene.on('loaded', () => {
   const imageLayer = scene.ImageLayer().
       source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',{
-       
-      extent: [ 121.1680, 30.2828, 121.3840, 30.4219 ]
+       parser:{
+            type:'image',
+            extent: [ 121.1680, 30.2828, 121.3840, 30.4219 ]
+       }
+   
       })
       .style({
         opacity:1.0,

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+    <link rel="stylesheet" href="./assets/info.css">
+  <title>point_circle</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  .amap-maps {
+     cursor: auto !important
+  }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+const colorObj ={
+  blue: ["#E8FCFF", "#CFF6FF", "#A1E9ff", "#65CEF7", "#3CB1F0", "#2894E0", "#1772c2", "#105CB3", "#0D408C", "#002466"].reverse(),
+  red: ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"].reverse(),
+  orange:["#FFF7EB", "#FFECD4", "#FAD09D", "#F7B16A", "#F08D41", "#DB6C2C", "#C2491D", "#AD2B11", "#871D0C", "#610800"].reverse(),
+  green:["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"].reverse(),
+  yellow:["#FFFFE8", "#FFFECC", "#FAF896", "#F7E463", "#F0CE3A", "#DBB125", "#C29117", "#AD7410", "#87500C", "#613000"].reverse(),
+  purple:["#FCF2FF", "#F5DEFF", "#DDB3F2", "#BE7BE3", "#9B4ECF", "#7737B3", "#5B2899", "#411C85", "#270F5E", "#100338"].reverse()
+}
+
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'light', // 样式URL
+  center: [ 120.19382669582967, 30.258134 ],
+  pitch: 0,
+  zoom: 4,
+  maxZoom:14,
+  minZoom:4,
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv', data => {
+    
+   
+    const circleLayer = scene.PointLayer({
+      zIndex: 2
+    })
+    .source(data,{
+      type: 'csv',
+      x: 'lng',
+      y: 'lat',
+    })
+    .size(1.0)
+    .color('#0D408C')
+    .style({
+      stroke: 'rgb(255,255,255)',
+      strokeWidth: 1,
+      opacity: 1.
+    })
+     .render();
+     
+    circleLayer.on('click',(e)=>{
+    console.log(e);
+  })
+  });
+    
+});
+
+</script>
+</body>
+</html>
+

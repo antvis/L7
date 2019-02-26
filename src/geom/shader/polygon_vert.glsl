@@ -15,7 +15,7 @@ varying float v_size;
 
 void main() {
    float scale = pow(2.0,(20.0 - u_zoom));
-  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
+  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix * 100.;
   vec3 newposition =  position;
   // newposition.x -= 128.0;
    #ifdef SHAPE 
