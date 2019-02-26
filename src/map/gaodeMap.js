@@ -26,6 +26,9 @@ export default class GaodeMap {
   setZoom(zoom) {
     return this.map.setZoom(zoom);
   }
+  setCenter(lnglat) {
+    return this.map.setCenter(lnglat);
+  }
   setBounds(bounds) {
     return this.map.setBounds(bounds);
   }
