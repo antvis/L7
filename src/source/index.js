@@ -7,7 +7,7 @@ import json from './parser/json';
 import raster from './parser/raster';
 
 import { registerTransform, registerParser } from './factory';
-import { aggregatorToGrid } from './transform/grid-aggregator';
+import { aggregatorToGrid } from './transform/grid';
 import { map } from './transform/map';
 
 registerParser('geojson', geojson);
