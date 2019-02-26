@@ -11,6 +11,8 @@ class Picking {
     this.scene = scene;
     this._raycaster.linePrecision = 10;
     this._pickingScene = PickingScene;
+    this.world = new THREE.Group();
+    this._pickingScene.add(this.world);
     const size = this._renderer.getSize();
     this._width = size.width;
     this._height = size.height;
@@ -34,8 +36,7 @@ class Picking {
     window.addEventListener('resize', this._resizeHandler, false);
   }
   pickdata(event) {
-    const point = { x: event.pixel.x, y: event.pixel.y, type: event.type };
-
+    const point = { x: event.offsetX, y: event.offsetY, type: event.type };
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
@@ -61,12 +62,12 @@ class Picking {
 
   }
   _filterObject(id) {
-    this._pickingScene.children.forEach((object, index) => {
+    this.world.children.forEach((object, index) => {
       index === id ? object.visible = true : object.visible = false;
     });
   }
   _pickAllObject(point, normalisedPoint) {
-    this._pickingScene.children.forEach((object, index) => {
+    this.world.children.forEach((object, index) => {
       this._filterObject(index);
       const item = this._pick(point, normalisedPoint, object.name);
       item.type = point.type;
@@ -86,7 +87,6 @@ class Picking {
       id = -999;
       // return;
     }
-
     this._raycaster.setFromCamera(normalisedPoint, this._camera);
 
     const intersects = this._raycaster.intersectObjects(this._pickingScene.children, true);
@@ -111,13 +111,14 @@ class Picking {
   //
   // Picking ID should already be added as an attribute
   add(mesh) {
-    this._pickingScene.add(mesh);
+    this.world.add(mesh);
+
     this._needUpdate = true;
   }
 
   // Remove mesh from picking scene
   remove(mesh) {
-    this._pickingScene.remove(mesh);
+    this.world.remove(mesh);
     this._needUpdate = true;
   }
 

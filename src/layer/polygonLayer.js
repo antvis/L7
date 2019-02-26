@@ -21,11 +21,9 @@ export default class PolygonLayer extends Layer {
   _prepareRender() {
     this.init();
     this.type = 'polygon';
-    const source = this.layerSource;
     this._buffer = new PolygonBuffer({
       shape: this.shape,
-      coordinates: source.geoData,
-      properties: this.StyleData
+      layerData: this.layerData
     });
     this.add(this._getLayerRender());
   }

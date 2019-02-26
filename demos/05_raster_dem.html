@@ -48,13 +48,14 @@ scene.on('loaded', () => {
 
       const layer = scene.RasterLayer({ zIndex: 2 }).
       source(values, {
-        type: 'raster',
-        width: n,
-        height: m,
-        min: 0,
-        max: 8000,
-        extent: [ 73.482190241, 3.82501784112, 135.106618732, 57.6300459963 ]
-
+        parser: {
+          type: 'raster',
+          width: n,
+          height: m,
+          min: 0,
+          max: 8000,
+          extent: [ 73.482190241, 3.82501784112, 135.106618732, 57.6300459963 ]
+        }
       })
        .style({
          rampColors: {
