@@ -2,7 +2,6 @@ precision highp float;
 attribute vec4 a_color;
 attribute float a_size;
 attribute float a_shape;
-attribute vec4 a_idColor;
 uniform vec4 u_stroke;
 uniform float u_strokeWidth;
 uniform float u_opacity;
