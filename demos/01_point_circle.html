@@ -10,6 +10,9 @@
   <title>point_circle</title>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
+  .amap-maps {
+     cursor: auto !important
+  }
   </style>
 </head>
 
@@ -55,15 +58,15 @@ scene.on('loaded', () => {
     .shape('2d:circle')
      .size('value', [ 2, 80]) // default 1
      //.size('value', [ 10, 300]) // default 1
-    .active(false)
+    .active(true)
      .filter('value', field_8 => {
       return field_8 * 1 > 500;
      })
-    .color('type', colorObj.red)
+    .color('type', colorObj.blue)
     .style({
       stroke: 'rgb(255,255,255)',
       strokeWidth: 1,
-      opacity: 0.9
+      opacity: 1.
     })
      .render();
      
