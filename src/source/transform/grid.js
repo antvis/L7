@@ -5,12 +5,6 @@ import * as statistics from './statistics';
 
 const R_EARTH = 6378000;
 
-/**
- * 计算方格密度图
- * @param {*} data 经纬度数据 和属性数据
- * @param {*} size 半径大小 单位 km
- * @return
- */
 export function aggregatorToGrid(data, option) {
   const dataArray = data.dataArray;
   const { size = 10 } = option;
