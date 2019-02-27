@@ -20,7 +20,7 @@ export function pointToHexbin(data, option) {
     .y(d => d.coordinates[1]);
   const hexbinBins = newHexbin(screenPoints);
   const result = {
-    size: pixlSize
+    radius: pixlSize
   };
   result.dataArray = hexbinBins.map((hex, index) => {
     if (option.field && option.method) {
@@ -31,8 +31,9 @@ export function pointToHexbin(data, option) {
     item[option.method] = hex[option.method];
     return {
       ...item,
+      count: hex.length,
       coordinates: unProjectFlat([ hex.x, hex.y ]),
-      id: index + 1
+      _id: index + 1
     };
   });
   return result;
