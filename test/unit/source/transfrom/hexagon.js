@@ -18,6 +18,5 @@ describe('hexagon  Test', function() {
     };
     const hexgonGrid = pointToHexbin(data, { size: 100, field: 'v', method: 'sum' });
     expect(hexgonGrid.dataArray.length).eql(567);
-    console.log(hexgonGrid);
   });
 });
