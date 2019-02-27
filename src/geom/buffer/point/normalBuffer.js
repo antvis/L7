@@ -6,7 +6,7 @@ export default function NormalBuffer(layerData) {
     pickingIds: []
   };
   layerData.forEach(item => {
-    const { color, size, id, coordinates} = item;
+    const { color, size, id, coordinates } = item;
     attributes.vertices.push(...coordinates);
     attributes.colors.push(...color);
     attributes.pickingIds.push(id);

@@ -7,3 +7,4 @@ node_modules/
 demos/assets/
 demos/index.html
 demos/*
+src/core/three.js
