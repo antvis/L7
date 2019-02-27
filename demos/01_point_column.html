@@ -34,9 +34,11 @@ scene.on('loaded', () => {
       zIndex: 2
     })
     .source(data.list, {
-      type: 'array',
-      x: 'j',
-      y: 'w',
+      parser:{
+        type: 'json',
+        x: 'j',
+        y: 'w',
+      }
     })
     .shape('cylinder')
     .size('t',(level)=> {

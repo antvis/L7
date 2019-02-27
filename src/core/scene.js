@@ -3,9 +3,10 @@ import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
 import WorkerPool from './worker';
-import { MapProvider } from '../map/provider';
-import GaodeMap from '../map/gaodeMap';
+// import { MapProvider } from '../map/AMap';
+import { getMap } from '../map/index';
 import Global from '../global';
+import { compileBuiltinModules } from '../geom/shader';
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -22,6 +23,7 @@ export default class Scene extends Base {
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
     this.workerPool = new WorkerPool();
+    compileBuiltinModules();
   }
     // 为pickup场景添加 object 对象
   addPickMesh(object) {
@@ -29,16 +31,14 @@ export default class Scene extends Base {
   }
   _initMap() {
     this.mapContainer = this.get('id');
-    this._container = document.getElementById(this.mapContainer);
-    const Map = new MapProvider(this.mapContainer, this._attrs);
+    this.mapType = this.get('mapType') || 'amap';
+    const MapProvider = getMap(this.mapType);
+    const Map = new MapProvider(this._attrs);
+    Map.mixMap(this);
+    this._container = document.getElementById(Map.container);
+    // const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.on('mapLoad', () => {
       this._initEngine(Map.renderDom);
-      const sceneMap = new GaodeMap(Map.map);
-      // eslint-disable-next-line
-      Object.getOwnPropertyNames(sceneMap.__proto__).forEach((key)=>{
-         // eslint-disable-next-line
-        if ('key' !== 'constructor') { this.__proto__[key] = sceneMap.__proto__[key]; }
-      });
       this.map = Map.map;
       Map.asyncCamera(this._engine);
       this.initLayer();
@@ -94,12 +94,15 @@ export default class Scene extends Base {
       'mousedown',
       'mouseleave',
       'mouseup',
+      'rightclick',
       'click',
       'dblclick'
     ];
     events.forEach(event => {
+
       this._container.addEventListener(event, e => {
         // 要素拾取
+        e.pixel || (e.pixel = e.point);
         this._engine._picking.pickdata(e);
       }, false);
     });
