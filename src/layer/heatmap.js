@@ -36,7 +36,6 @@ export default class HeatMapLayer extends Layer {
     };
     const Mesh = new DrawHexagon(this._buffer, config);
     this.add(Mesh);
-    
   }
   _drawGrid() {
     this.type = 'heatmap';
