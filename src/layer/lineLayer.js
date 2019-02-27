@@ -11,11 +11,10 @@ export default class LineLayer extends Layer {
     this.type = 'polyline';
     this.init();
     const source = this.layerSource;
-    const StyleData = this.StyleData;
+    const layerData = this.layerData;
     const style = this.get('styleOptions');
     const buffer = this._buffer = new LineBuffer({
-      coordinates: source.geoData,
-      properties: StyleData,
+      layerData,
       shapeType: this.shapeType,
       style
     });

@@ -9,7 +9,7 @@ export default class HeatmapLayer extends Layer {
 
   render() {
     this.init();
-    const bbox = this._calBoundingBox(this.layerSource.geoData);
+    const bbox = this._calBoundingBox(this.layerData);
     const colors = this.get('styleOptions').rampColors;
     this.colorRamp = createColorRamp(colors);
     this._createIntensityPass(bbox);
@@ -17,13 +17,11 @@ export default class HeatmapLayer extends Layer {
   }
 
   _createIntensityPass(bbox) {
-    const source = this.layerSource;
     const style = this.get('styleOptions');
-    const StyleData = this.StyleData;
+    const data = this.layerData;
     // get attributes data
     const buffer = new HeatmapBuffer({
-      coordinates: source.geoData,
-      properties: StyleData
+      data
     });
     const attributes = buffer.attributes;
     // create geometery
@@ -78,13 +76,13 @@ export default class HeatmapLayer extends Layer {
     this.add(mesh);
   }
 
-  _calBoundingBox(positions) {
+  _calBoundingBox(data) {
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
-    for (let i = 0; i < positions.length; i++) {
-      const p = positions[i];
+    for (let i = 0; i < data.length; i++) {
+      const p = data[i].coordinates;
       if (p[0] < minX) {
         minX = p[0];
       } else if (p[0] > maxX) {
