@@ -109,7 +109,7 @@
     "polyline-normals": "^2.0.2",
     "rbush": "^2.0.2",
     "simple-statistics": "^7.0.1",
-    "three": "^0.96.0",
+    "three": "^0.101.1",
     "venn.js": "^0.2.20",
     "viewport-mercator-project": "^5.2.0",
     "webworkify-webpack": "^2.1.3",
