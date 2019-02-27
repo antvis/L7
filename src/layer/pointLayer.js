@@ -13,7 +13,6 @@ import * as PointBuffer from '../geom/buffer/point/index';
  * shape 3d   cube，column, sphere
  * shape Model ,自定义
  * image
- *
  */
 
 export default class PointLayer extends Layer {
