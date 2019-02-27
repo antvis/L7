@@ -1,4 +1,3 @@
-
 import Layer from '../core/layer';
 import * as THREE from '../core/three';
 import { LineBuffer } from '../geom/buffer/index';
