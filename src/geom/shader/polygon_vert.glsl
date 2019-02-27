@@ -3,7 +3,6 @@ precision highp float;
 #define diffuseRatio 0.4
 #define specularRatio 0.1
 attribute vec4 a_color; 
-attribute vec4 a_idColor;
 attribute vec2 faceUv;
 attribute vec3 a_shape;
 attribute vec3 a_size;
