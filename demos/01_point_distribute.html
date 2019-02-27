@@ -34,9 +34,11 @@ scene.on('loaded', () => {
       zIndex: 2
     })
      .source(data, {
-       type: 'csv',
-       y: 'lat',
-       x: 'lng'
+       parser:{
+          type: 'csv',
+          y: 'lat',
+          x: 'lng'
+       }
      })
     .size(1.0)
    .color('#0D408C')

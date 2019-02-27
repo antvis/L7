@@ -5,7 +5,7 @@
 import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
-import * as source from '../source/index';
+import source from './source';
 import PickingMaterial from '../core/engine/picking/pickingMaterial';
 import Attr from '../attr/index';
 import Util from '../util';
@@ -63,7 +63,8 @@ export default class Layer extends Base {
     const layerId = this._getUniqueId();
     this.layerId = layerId;
     this._activeIds = null;
-    scene._engine._scene.add(this._object3D);
+    const world = scene._engine.world;
+    world.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
     this._initEvents();
@@ -106,12 +107,9 @@ export default class Layer extends Base {
     this._object3D.visible = this.get('visible');
   }
   source(data, cfg = {}) {
-    const dataType = this._getDataType(data);
-    const { type = dataType } = cfg;
     cfg.data = data;
-    cfg.mapType = this.get('mapType');
-
-    this.layerSource = new source[type](cfg);
+    cfg.mapType = this.scene.mapType;
+    this.layerSource = new source(cfg);
     // this.scene.workerPool.runTask({
     //   command: 'geojson',
     //   data: cfg
@@ -279,10 +277,10 @@ export default class Layer extends Base {
     const { featureId } = e;
     if (featureId < 0) return;
     const activeStyle = this.get('activedOptions');
-    const selectFeatureIds = this.layerSource.getSelectFeatureId(featureId);
+    // const selectFeatureIds = this.layerSource.getSelectFeatureId(featureId);
     // 如果数据不显示状态则不进行高亮
-    if (this.StyleData[selectFeatureIds[0]].hasOwnProperty('filter') && this.StyleData[selectFeatureIds[0]].filter === false) { return; }
-    const style = Util.assign({}, this.StyleData[featureId]);
+    if (this.layerData[featureId].hasOwnProperty('filter') && this.layerData[featureId].filter === false) { return; }
+    const style = Util.assign({}, this.layerData[featureId]);
     style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
     this.updateStyle([ featureId ], style);
   }
@@ -321,7 +319,7 @@ export default class Layer extends Base {
   _updateSize(zoom) {
     const sizeOption = this.get('attrOptions').size;
     const fields = parseFields(sizeOption.field);
-    const data = this.layerSource.propertiesData;
+    const data = this.layerSource.data.dataArray;
     if (!this.zoomSizeCache) this.zoomSizeCache = {};
     if (!this.zoomSizeCache[zoom]) {
       this.zoomSizeCache[zoom] = [];
@@ -339,7 +337,8 @@ export default class Layer extends Base {
     const self = this;
     const attrs = self.get('attrs');
     const mappedData = [];
-    const data = this.layerSource.propertiesData;
+    // const data = this.layerSource.propertiesData;
+    const data = this.layerSource.data.dataArray;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       const newRecord = {};
@@ -362,18 +361,17 @@ export default class Layer extends Base {
           }
         }
       }
+      newRecord.coordinates = record.coordinates;
       mappedData.push(newRecord);
     }
-
-    this.StyleData = mappedData;
-    return mappedData;
+    this.layerData = mappedData;
   }
   // 更新地图映射
   _updateMaping() {
     const self = this;
     const attrs = self.get('attrs');
 
-    const data = this.layerSource.propertiesData;
+    const data = this.layerSource.data.dataArray;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       for (const attrName in attrs) {
@@ -385,10 +383,10 @@ export default class Layer extends Base {
             for (let j = 0; j < values.length; j++) {
               const val = values[j];
               const name = names[j];
-              this.StyleData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
+              this.layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
             }
           } else {
-            this.StyleData[i][names[0]] = values.length === 1 ? values[0] : values;
+            this.layerData[i][names[0]] = values.length === 1 ? values[0] : values;
 
           }
           attr.neadUpdate = true;
@@ -468,6 +466,7 @@ export default class Layer extends Base {
       pickingMesh.material.setUniformsValue('u_zoom', zoom);
     };
     this._pickingMesh.add(pickingMesh);
+
   }
   _setPickingId() {
     this._pickingId = this.getPickingId();
@@ -532,13 +531,13 @@ export default class Layer extends Base {
    */
   _updateFilter(object) {
     this._updateMaping();
-    const filterData = this.StyleData;
+    const filterData = this.layerData;
     this._activeIds = null; // 清空选中元素
     const colorAttr = object.geometry.attributes.a_color;
     const pickAttr = object.geometry.attributes.pickingId;
     pickAttr.array.forEach((id, index) => {
       id = Math.abs(id);
-      const color = [ ...this.StyleData[id - 1].color ];
+      const color = [ ...this.layerData[id - 1].color ];
       id = Math.abs(id);
       const item = filterData[id - 1];
       if (item.hasOwnProperty('filter') && item.filter === false) {
@@ -584,7 +583,7 @@ export default class Layer extends Base {
     const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
     const colorAttr = this.layerMesh.geometry.attributes.a_color;
     this._activeIds.forEach(index => {
-      const color = this.StyleData[index].color;
+      const color = this.layerData[index].color;
       const firstId = pickingId.indexOf(index + 1);
       for (let i = firstId; i < pickingId.length; i++) {
         if (pickingId[i] === index + 1) {
