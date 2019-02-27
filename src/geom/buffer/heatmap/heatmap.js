@@ -1,6 +1,6 @@
-import BufferBase from './bufferBase';
-import { colorScales } from '../../attr/colorscales';
-import * as THREE from '../../core/three';
+import BufferBase from '../bufferBase';
+import { colorScales } from '../../../attr/colorscales';
+import * as THREE from '../../../core/three';
 
 
 export default class HeatmapBuffer extends BufferBase {
