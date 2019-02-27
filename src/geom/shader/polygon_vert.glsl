@@ -3,7 +3,6 @@ precision highp float;
 #define diffuseRatio 0.4
 #define specularRatio 0.1
 attribute vec4 a_color; 
-attribute vec4 a_idColor;
 attribute vec2 faceUv;
 attribute vec3 a_shape;
 attribute vec3 a_size;
@@ -15,7 +14,7 @@ varying float v_size;
 
 void main() {
    float scale = pow(2.0,(20.0 - u_zoom));
-  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
+  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix * 100.;
   vec3 newposition =  position;
   // newposition.x -= 128.0;
    #ifdef SHAPE 

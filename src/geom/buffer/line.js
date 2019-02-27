@@ -3,8 +3,7 @@ import { lineShape } from '../shape';
 
 export default class LineBuffer extends BufferBase {
   geometryBuffer() {
-    const coordinates = this.get('coordinates');
-    const properties = this.get('properties');
+    const layerData = this.get('layerData');
     const shapeType = this.shapeType = this.get('shapeType');
     const positions = [];
     const positionsIndex = [];
@@ -16,16 +15,16 @@ export default class LineBuffer extends BufferBase {
       this.attributes = this._getArcLineAttributes();
       return;
     }
-    coordinates.forEach((geo, index) => {
-      const props = properties[index];
-      const attrData = this._getShape(geo, props, index);
+    layerData.forEach((item, index) => {
+      const props = item;
+      const attrData = this._getShape(item.coordinates, props, index);
       positions.push(...attrData.positions);
       positionsIndex.push(...attrData.indexes);
       if (attrData.hasOwnProperty('instances')) {
         instances.push(...attrData.instances);
       }
     });
-    this.bufferStruct.style = properties;
+    this.bufferStruct.style = layerData;
     this.bufferStruct.verts = positions;
     this.bufferStruct.indexs = positionsIndex;
     if (instances.length > 0) {
@@ -50,17 +49,16 @@ export default class LineBuffer extends BufferBase {
 
   }
   _getArcLineAttributes() {
-    const coordinates = this.get('coordinates');
-    const properties = this.get('properties');
+    const layerData = this.get('layerData');
     const positions = [];
     const colors = [];
     const indexArray = [];
     const sizes = [];
     const instances = [];
-    coordinates.forEach((geo, index) => {
-      const props = properties[index];
+    layerData.forEach(item => {
+      const props = item;
       const positionCount = positions.length / 3;
-      const attrData = this._getShape(geo, props, positionCount);
+      const attrData = this._getShape(item.coordinates, props, positionCount);
       positions.push(...attrData.positions);
       colors.push(...attrData.colors);
       indexArray.push(...attrData.indexArray);
@@ -76,8 +74,7 @@ export default class LineBuffer extends BufferBase {
     };
   }
   _getMeshLineAttributes() {
-    const coordinates = this.get('coordinates');
-    const properties = this.get('properties');
+    const layerData = this.get('layerData');
     const { lineType } = this.get('style');
     const positions = [];
     const pickingIds = [];
@@ -87,10 +84,10 @@ export default class LineBuffer extends BufferBase {
     const indexArray = [];
     const sizes = [];
     const attrDistance = [];
-    coordinates.forEach((geo, index) => {
-      const props = properties[index];
+    layerData.forEach(item => {
+      const props = item;
       const positionCount = positions.length / 3;
-      const attr = lineShape.Line(geo, props, positionCount, (lineType !== 'soild'));
+      const attr = lineShape.Line(item.coordinates, props, positionCount, (lineType !== 'soild'));
       positions.push(...attr.positions);
       normal.push(...attr.normal);
       miter.push(...attr.miter);
