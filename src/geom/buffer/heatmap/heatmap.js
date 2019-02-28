@@ -60,9 +60,9 @@ function getColorRamp(name) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
-  canvas.width = 256;
-  canvas.height = 1;
-  const gradient = ctx.createLinearGradient(0, 0, 256, 0);
+  canvas.width = 1;
+  canvas.height = 256;
+  const gradient = ctx.createLinearGradient(0, 0, 0, 256);
   let data = null;
   if (typeof (colorscale) === 'string') {
     colorscale = colorScales[name];
@@ -76,21 +76,23 @@ function getColorRamp(name) {
       gradient.addColorStop(value, colorscale.colors[i]);
     }
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 256, 1);
-    data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
+    ctx.fillRect(0, 0, 1, 256);
+    data = new Uint8ClampedArray(ctx.getImageData(0, 0, 1, 256).data);
   }
   if (Object.prototype.toString.call(colorscale) === '[object Uint8Array]') {
-    data = ctx.createImageData(256, 1);
+    data = ctx.createImageData(1, 256);
   }
 
-  return new ImageData(data, 16, 16);
+  return new ImageData(data, 1, 256);
 
 }
 
 function getTexture(image) {
   const texture = new THREE.Texture(image);
-  texture.magFilter = THREE.LinearFilter;
-  texture.minFilter = THREE.LinearFilter;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.magFilter = THREE.NearestFilter;
+  texture.minFilter = THREE.NearestFilter;
   texture.format = THREE.RGBAFormat;
   texture.type = THREE.UnsignedByteType;
   texture.needsUpdate = true;
