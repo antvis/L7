@@ -37,16 +37,30 @@ function createIntensityPass(layer, bbox) {
   const passOrth = new THREE.OrthographicCamera(bbox.width / -2, bbox.width / 2, bbox.height / 2, bbox.height / -2, 1, 10000);
   passOrth.position.set(bbox.minX + bbox.width / 2, bbox.minY + bbox.height / 2, 1000);
     // renderpass
+  const renderer = layer.scene._engine._renderer;
+  // get extension for bilinear texture interpolation:https://threejs.org/docs/#api/en/textures/DataTexture
+  const gl = renderer.domElement.getContext('webgl') ||
+    renderer.domElement.getContext('experimental-webgl');
+  gl.getExtension('OES_texture_float_linear');
   const renderpass = new Renderpass({
-    renderer: layer.scene._engine._renderer,
+    renderer,
     camera: passOrth,
     size: {
-      width: 10000,
-      height: 10000 * (bbox.height / bbox.width)
+      width: 2000,
+      height: 2000 * (bbox.height / bbox.width)
     },
     clear: {
       clearColor: 0x000000,
-      clearAlpha: 1.0
+      clearAlpha: 0.0
+    },
+    renderCfg: {
+      wrapS: THREE.ClampToEdgeWrapping,
+      wrapT: THREE.ClampToEdgeWrapping,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      format: THREE.RGBAFormat,
+      stencilBuffer: false,
+      depthBuffer: false
     }
   });
   renderpass.add(mesh);
@@ -56,8 +70,12 @@ function createIntensityPass(layer, bbox) {
   render();
   function render() {
     requestAnimationFrame(render);
+    const zoom = scene.getZoom();
+    mesh.material.uniforms.u_zoom.value = zoom;
+    const passWidth = Math.min(10000, Math.pow(zoom, 2.0) * 200);
+    const passHeight = passWidth * (bbox.height / bbox.width);
+    renderpass.pass.setSize(passWidth, passHeight);
     renderpass.render();
-    mesh.material.uniforms.u_zoom.value = scene.getZoom();
   }
 }
 function createColorizePass(layer, bbox) {
