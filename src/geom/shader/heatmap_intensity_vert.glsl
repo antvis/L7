@@ -16,7 +16,7 @@ void main(){
     vec2 extrude_dir = normalize(vec2(extrude_x,extrude_y));
     float S = sqrt(-2.0 * log(ZERO / a_weight / u_intensity / GAUSS_COEF)) / 3.0;
     v_extrude = extrude_dir * S;
-    vec2 extrude =  v_extrude * u_radius * pow(2.0,20.0-min(u_zoom,9.0)); 
+    vec2 extrude =  v_extrude * u_radius * pow(2.0,20.0-u_zoom); 
     vec4 pos = vec4( position.xy+ extrude, 0.0, 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * pos;
 }

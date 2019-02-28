@@ -27,7 +27,8 @@ export function HeatmapColorizeMaterial(opt) {
       u_colorRamp: { value: opt.colorRamp }
     },
     vertexShader: heatmap_colorize_vert,
-    fragmentShader: heatmap_colorize_frag
+    fragmentShader: heatmap_colorize_frag,
+    transparent: true
   });
   return material;
 }
