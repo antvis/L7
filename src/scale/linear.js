@@ -4,9 +4,9 @@
  */
 
 
-const Base = require('./base');
-const Util = require('../util');
-const numberAuto = require('./auto/number');
+import Base from './base';
+import Util from '../util';
+import numberAuto from './auto/number';
 
 /**
  * 线性度量
@@ -192,4 +192,4 @@ class Linear extends Base {
   }
 }
 
-module.exports = Linear;
+export default Linear;
