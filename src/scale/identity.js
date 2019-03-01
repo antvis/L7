@@ -3,8 +3,8 @@
  * @author dxq613@gmail.com
  */
 
-const Base = require('./base');
-const Util = require('../util');
+import Base from './base';
+import Util from '../util';
 
 class Identity extends Base {
 
@@ -54,4 +54,4 @@ class Identity extends Base {
   }
 }
 
-module.exports = Identity;
+export default Identity;

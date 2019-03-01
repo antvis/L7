@@ -25,7 +25,7 @@ export default class Scene extends Base {
     this.workerPool = new WorkerPool();
     compileBuiltinModules();
   }
-    // 为pickup场景添加 object 对象
+  // 为pickup场景添加 object 对象
   addPickMesh(object) {
     this._engine._picking.add(object);
   }

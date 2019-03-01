@@ -2,10 +2,9 @@
  * @fileOverview the color attribute of core
  * @author huangtonger@aliyun.com
  */
-
-const ColorUtil = require('./color-util');
-const Base = require('./base');
-const Util = require('../util');
+import ColorUtil from './color-util';
+import Base from './base';
+import Util from '../util';
 
 /**
  * 视觉通道 color
@@ -38,4 +37,4 @@ class Color extends Base {
   }
 }
 
-module.exports = Color;
+export default Color;

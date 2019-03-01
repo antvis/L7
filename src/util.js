@@ -3,7 +3,7 @@
  * @author dxq613@gmail.com
  * @see https://github.com/lodash/lodash
  */
-const Utils = require('@antv/util');
+import Utils from '@antv/util';
 
 const Util = Utils.mix({}, Utils, {
   assign: Utils.mix, // simple mix
@@ -52,4 +52,4 @@ Util.Array = {
   remove: Utils.pull
 };
 
-module.exports = Util;
+export default Util;

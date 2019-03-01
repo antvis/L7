@@ -2,8 +2,7 @@
  * @fileOverview 颜色计算的辅助方法
  * @author dxq613@gmail.com
  */
-
-const Util = require('../util');
+import Util from '../util';
 const RGB_REG = /rgba?\(([\s.,0-9]+)\)/;
 // const RGBA_REG = /rgba\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(\d+)\s*\)/;
 
@@ -80,7 +79,7 @@ const ColorUtil = {
     }
     return rst;
   },
- // 转成 WebGl color buffer
+  // 转成 WebGl color buffer
   color2Arr(str) {
     const rgba = this.toRGB(str);
     return rgba.map(v => v / 255);
@@ -112,4 +111,4 @@ const ColorUtil = {
   }
 };
 
-module.exports = ColorUtil;
+export default ColorUtil;
