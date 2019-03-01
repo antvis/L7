@@ -12,7 +12,7 @@ export default class HeatmapBuffer extends BufferBase {
     // const indices = [];
 
     // 组织顶点数据
-    data.forEach((d, index) => {
+    data.forEach(d => {
       // const totalIndex = index * 4;
       const coord = d.coordinates;
       const weight = d.size;
