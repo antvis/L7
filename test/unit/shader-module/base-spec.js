@@ -24,9 +24,8 @@ describe('test shader module', function() {
 
   it('should import a module correctly.', function() {
     const { vs, fs } = getModule('module1');
-
     expect(vs).eq('#define PI 3.14');
-    expect(fs).eq('');
+    expect(fs.replace(/(\s+)|(\n)+|(\r\n)+/g, '')).eqls('#ifdefGL_FRAGMENT_PRECISION_HIGHprecisionhighpfloat;#elseprecisionmediumpfloat;#endif');
   });
 
 });

@@ -35,4 +35,4 @@ export {
   BufferAttribute
 } from 'three/src/core/BufferAttribute.js';
 
-// export * from '../../build/Three.js';
+// export * from '../../build/three.js';
