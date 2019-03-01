@@ -1,3 +1,4 @@
+import Source from '../core//source';
 this.addEventListener('message', e => {
   const res = e.data;
   // res = {
