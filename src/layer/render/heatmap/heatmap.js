@@ -72,7 +72,7 @@ function createIntensityPass(layer, bbox) {
     requestAnimationFrame(render);
     const zoom = scene.getZoom();
     mesh.material.uniforms.u_zoom.value = zoom;
-    const passWidth = Math.min(10000, Math.pow(zoom, 2.0) * 200);
+    const passWidth = Math.min(10000, Math.pow(zoom, 2.0) * 300);
     const passHeight = passWidth * (bbox.height / bbox.width);
     renderpass.pass.setSize(passWidth, passHeight);
     renderpass.render();

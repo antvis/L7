@@ -84,8 +84,8 @@ export default class Layer extends Base {
 
     object.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
-      object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
-      object.material.setUniformsValue('u_zoom', zoom);
+      // object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
+      // object.material.setUniformsValue('u_zoom', zoom);
       this._preRender();
 
     };
