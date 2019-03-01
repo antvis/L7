@@ -3,8 +3,8 @@
  * @author dxq613@gmail.com
  */
 
-const Linear = require('./linear');
-const Util = require('../util');
+import Linear from './linear';
+import Util from '../util';
 
 // 计算log
 function log(a, b) {
@@ -157,4 +157,4 @@ class Log extends Linear {
   }
 }
 
-module.exports = Log;
+export default Log;

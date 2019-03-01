@@ -3,13 +3,13 @@
  * @author dxq613@gmail.com
  */
 
-const Util = require('../util');
+import Util from '../util';
 
 /**
  * 度量的构造函数
  * @class Scale
  */
-class Scale {
+class Base {
 
   /**
    * 获取默认的配置属性
@@ -183,4 +183,4 @@ class Scale {
   }
 }
 
-module.exports = Scale;
+export default Base;

@@ -34,7 +34,7 @@ export default function extrudePolygon(points, extrude) {
     }
   }
   function full() {
-      // 顶部纹理
+    // 顶部纹理
     triangles.forEach(() => {
       faceUv.push(-1, -1);
     });
@@ -85,11 +85,11 @@ export function extrudePolygonLine(points, extrude) {
   extrude === 0 ? flat() : full();
 
   function flat() {
-    points[0].forEach(p => { positions.push([ p[0], p[1], 0 ]); });  // top
+    points[0].forEach(p => { positions.push([ p[0], p[1], 0 ]); }); // top
   }
   function full() {
     points[0].forEach(p => { positions.push([ p[0], p[1], 1 ]); }); // top
-    points[0].forEach(p => { positions.push([ p[0], p[1], 0 ]); });  // bottom
+    points[0].forEach(p => { positions.push([ p[0], p[1], 0 ]); }); // bottom
     for (let i = 0; i < n; i++) {
       if (i === (n - 1)) {
         cells.push(i + n, n, i);
