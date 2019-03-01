@@ -1,10 +1,19 @@
 
-const Base = require('./base');
-Base.Color = require('./color');
-Base.Size = require('./size');
-Base.Opacity = require('./opacity');
-Base.Shape = require('./shape');
-Base.Position = require('./position');
-Base.Symbol = require('./symbol');
-Base.Filter = require('./filter');
-module.exports = Base;
+import Base from './base';
+import Color from './color';
+import Size from './size';
+import Opacity from './opacity';
+import Shape from './shape';
+import Position from './position';
+import Symbol from './symbol';
+import Filter from './filter';
+
+Base.Color = Color;
+Base.Size = Size;
+Base.Opacity = Opacity;
+Base.Shape = Shape;
+Base.Position = Position;
+Base.Symbol = Symbol;
+Base.Filter = Filter;
+
+export default Base;

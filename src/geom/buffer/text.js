@@ -116,7 +116,7 @@ export default class TextBuffer extends BufferBase {
     // const horiBearingX = metric[2];
     // const horiBearingY = metric[3];
 
-   //  const horiAdvance = metric[4];
+    //  const horiAdvance = metric[4];
     // const posX = metric[5];
     // const posY = metric[6];
     const posX = x;
@@ -128,7 +128,7 @@ export default class TextBuffer extends BufferBase {
       width += buffer * 2;
       height += buffer * 2;
 
-    // Add a quad (= two triangles) per glyph.
+      // Add a quad (= two triangles) per glyph.
       // const originX = (horiBearingX - buffer + width / 2) * scale;
       // const originY = -(height - horiBearingY) * scale;
       const originX = 0;
@@ -144,13 +144,13 @@ export default class TextBuffer extends BufferBase {
       const offsetX = pen.x;
       const offsetY = pen.y;
       originPoints.push(
-      pos[0] + originX, pos[1] + originY, 0,
-      pos[0] + originX, pos[1] + originY, 0,
-      pos[0] + originX, pos[1] + originY, 0,
-      pos[0] + originX, pos[1] + originY, 0,
-      pos[0] + originX, pos[1] + originY, 0,
-      pos[0] + originX, pos[1] + originY, 0,
-   );
+        pos[0] + originX, pos[1] + originY, 0,
+        pos[0] + originX, pos[1] + originY, 0,
+        pos[0] + originX, pos[1] + originY, 0,
+        pos[0] + originX, pos[1] + originY, 0,
+        pos[0] + originX, pos[1] + originY, 0,
+        pos[0] + originX, pos[1] + originY, 0,
+      );
 
       // textSizes.push(
       // offsetWidth, offsetHeight,
@@ -169,31 +169,31 @@ export default class TextBuffer extends BufferBase {
         ((bx - buffer) * scale), (height - by) * scale,
         ((bx - buffer) * scale), -by * scale,
 
-         ((bx - buffer + width) * scale), (height - by) * scale,
-         ((bx - buffer) * scale), -by * scale,
-         ((bx - buffer + width) * scale), -by * scale,
+        ((bx - buffer + width) * scale), (height - by) * scale,
+        ((bx - buffer) * scale), -by * scale,
+        ((bx - buffer + width) * scale), -by * scale,
 
 
       );
 
 
       textOffsets.push(
-      offsetX, offsetY,
-      offsetX, offsetY,
-      offsetX, offsetY,
-      offsetX, offsetY,
-      offsetX, offsetY,
-      offsetX, offsetY,
-    );
+        offsetX, offsetY,
+        offsetX, offsetY,
+        offsetX, offsetY,
+        offsetX, offsetY,
+        offsetX, offsetY,
+        offsetX, offsetY,
+      );
 
       colors.push(
-      ...color,
-      ...color,
-      ...color,
-      ...color,
-      ...color,
-      ...color,
-    );
+        ...color,
+        ...color,
+        ...color,
+        ...color,
+        ...color,
+        ...color,
+      );
       textureElements.push(
 
         posX + width, posY,

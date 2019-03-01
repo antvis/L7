@@ -11,7 +11,11 @@
     "G2": true,
     "_": true,
     "mapboxgl":true,
-    "dat" : true
+    "dat" : true,
+  },
+  "env": {
+    "browser": true,
+    "node": true
   },
   "parser": "babel-eslint",
   "parserOptions": {

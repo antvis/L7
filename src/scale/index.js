@@ -3,15 +3,23 @@
  * @author dxq613@gmail.com
  */
 
-const Util = require('../util');
-const Base = require('./base');
-Base.Linear = require('./linear');
-Base.Identity = require('./identity');
-Base.Cat = require('./category');
-Base.Time = require('./time');
-Base.TimeCat = require('./time-cat');
-Base.Log = require('./log');
-Base.Pow = require('./pow');
+import Util from '../util';
+import Base from './base';
+import Linear from './linear';
+import Identity from './identity';
+import Cat from './category';
+import Time from './time';
+import TimeCat from './time-cat';
+import Log from './log';
+import Pow from './pow';
+
+Base.Linear = Linear;
+Base.Identity = Identity;
+Base.Cat = Cat;
+Base.Time = Time;
+Base.TimeCat = TimeCat;
+Base.Log = Log;
+Base.Pow = Pow;
 
 for (const k in Base) {
   if (Base.hasOwnProperty(k)) {
@@ -28,4 +36,4 @@ Base.isCategory = function(type) {
   return CAT_ARR.indexOf(type) >= 0;
 };
 
-module.exports = Base;
+export default Base;
