@@ -1,4 +1,3 @@
-import Worker from '../worker/main.worker.js';
 class WorkerPool {
   constructor(workerCount) {
     this.workerCount = workerCount || Math.max(Math.floor(window.navigator.hardwareConcurrency / 2), 1);
