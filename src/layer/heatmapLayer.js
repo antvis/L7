@@ -2,6 +2,7 @@ import Layer from '../core/layer';
 import gridBuffer from '../geom/buffer/heatmap/grid';
 import DrawGrid from './render/heatmap/gird';
 import DrawHexagon from './render/heatmap/hexagon';
+import drawHeatmap from './render/heatmap/heatmap';
 import hexagonBuffer from '../geom/buffer/heatmap/hexagon';
 
 export default class HeatMapLayer extends Layer {
@@ -15,6 +16,7 @@ export default class HeatMapLayer extends Layer {
   }
   _prepareRender() {
     this.init();
+    this.type = 'heatmap';
     switch (this.shapeType) {
       case 'grid' :
         this._drawGrid();
@@ -23,7 +25,7 @@ export default class HeatMapLayer extends Layer {
         this._drawHexagon();
         break;
       default:
-        this._drawGrid();
+        drawHeatmap(this);
     }
   }
   _drawHexagon() {
@@ -38,7 +40,6 @@ export default class HeatMapLayer extends Layer {
     this.add(Mesh);
   }
   _drawGrid() {
-    this.type = 'heatmap';
     const style = this.get('styleOptions');
     const { xOffset, yOffset } = this.layerSource.data;
     this._buffer = new gridBuffer(this.layerData);
