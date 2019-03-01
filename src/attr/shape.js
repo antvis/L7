@@ -4,7 +4,7 @@
  */
 
 
-const Base = require('./base');
+import Base from './base';
 
 /**
  * 视觉通道 Shape
@@ -26,7 +26,7 @@ class Shape extends Base {
     const index = Math.round((values.length - 1) * percent);
     return values[index];
   }
-    /**
+  /**
    * @override
    */
   _getAttrValue(scale, value) {
@@ -41,4 +41,4 @@ class Shape extends Base {
   }
 }
 
-module.exports = Shape;
+export default Shape;
