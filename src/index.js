@@ -7,7 +7,7 @@ const version = Global.version;
 const track = function(enable) {
   Global.trackable = enable;
 };
-require('./track');
+import './track';
 export {
   version,
   Scene,

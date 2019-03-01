@@ -3,8 +3,8 @@
  * @author huangtonger@aliyun.com
  */
 
-const Base = require('./base');
-const Util = require('../util');
+import Base from './base';
+import Util from '../util';
 
 /**
  * 视觉通道 size
@@ -20,7 +20,7 @@ class Size extends Base {
   }
 
   mapping() {
-   // 重构
+    // 重构
     const self = this;
     const outputs = [];
     const scales = self.scales;
@@ -62,4 +62,4 @@ class Size extends Base {
 
 }
 
-module.exports = Size;
+export default Size;
