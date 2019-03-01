@@ -21,7 +21,6 @@ export default function DrawAnimate(attributes, style) {
     ANIMATE: true
   });
   const fillPolygonMesh = new THREE.Mesh(geometry, material);
-  this.fillPolygonMesh = fillPolygonMesh;
   return fillPolygonMesh;
 }
 
