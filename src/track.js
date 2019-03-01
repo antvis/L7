@@ -2,7 +2,7 @@
  * @fileOverview track g2
  * @author dxq613@gmail.com
  */
-const Global = require('./global');
+import Global from './global';
 const SERVER_URL = 'https://kcart.alipay.com/web/bi.do';
 
 // 延迟发送请求

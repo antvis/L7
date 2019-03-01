@@ -4,9 +4,9 @@
  */
 
 
-const Base = require('./base');
-const Util = require('../util');
-const catAuto = require('./auto/cat');
+import Base from './base';
+import Util from '../util';
+import catAuto from './auto/cat';
 
 /**
  * 度量的构造函数
@@ -132,4 +132,4 @@ class Category extends Base {
   }
 }
 
-module.exports = Category;
+export default Category;

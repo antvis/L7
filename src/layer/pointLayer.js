@@ -1,12 +1,12 @@
 import Layer from '../core/layer';
 import * as THREE from '../core/three';
 import * as drawPoint from '../layer/render/point';
-import { pointShape } from '../global';
+import Global from '../global';
 // import PointBuffer from '../geom/buffer/point';
 import TextBuffer from '../geom/buffer/text';
 import TextMaterial from '../geom/material/textMaterial';
 import * as PointBuffer from '../geom/buffer/point/index';
-
+const { pointShape } = Global;
 /**
  * point shape 2d circle, traingle text,image
  * shape 3d   cube，column, sphere
@@ -36,39 +36,38 @@ export default class PointLayer extends Layer {
       this._textPoint();
       return;
     }
-    const source = this.layerSource;
     const style = this.get('styleOptions');
     const pointShapeType = this._getShape();
 
     switch (pointShapeType) {
       case 'fill' :// 填充图形
-        {
-          if (fill !== 'none') { // 是否填充
-            const attributes = PointBuffer.FillBuffer(this.layerData, style);
-            const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
-            this.add(meshfill);
-          }
-          if (stroke !== 'none') { // 是否绘制边界
-            const lineAttribute = PointBuffer.StrokeBuffer(this.layerData, style);
-            const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
-            this.add(meshStroke, 'line');
-          }
-          break;
+      {
+        if (fill !== 'none') { // 是否填充
+          const attributes = PointBuffer.FillBuffer(this.layerData, style);
+          const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
+          this.add(meshfill);
         }
+        if (stroke !== 'none') { // 是否绘制边界
+          const lineAttribute = PointBuffer.StrokeBuffer(this.layerData, style);
+          const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
+          this.add(meshStroke, 'line');
+        }
+        break;
+      }
       case 'image':// 绘制图片标注
-        {
-          const imageAttribute = PointBuffer.ImageBuffer(this.layerData, { imagePos: this.scene.image.imagePos });
-          const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
-          this.add(imageMesh);
-          break;
-        }
+      {
+        const imageAttribute = PointBuffer.ImageBuffer(this.layerData, { imagePos: this.scene.image.imagePos });
+        const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
+        this.add(imageMesh);
+        break;
+      }
       case 'normal' : // 原生点
-        {
-          const normalAttribute = PointBuffer.NormalBuffer(this.layerData, style);
-          const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
-          this.add(normalPointMesh);
-          break;
-        }
+      {
+        const normalAttribute = PointBuffer.NormalBuffer(this.layerData, style);
+        const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
+        this.add(normalPointMesh);
+        break;
+      }
       default:
         return null;
     }
@@ -97,7 +96,6 @@ export default class PointLayer extends Layer {
 
   }
   _textPoint() {
-    const source = this.layerSource;
     const styleOptions = this.get('styleOptions');
     const buffer = new TextBuffer({
       type: this.shapeType,

@@ -3,8 +3,9 @@ import { regularShape } from '../shape/index';
 import * as polygonPath from '../shape/path';
 import * as polygonShape from '../shape/polygon';
 import * as lineShape from '../shape/line';
-import { pointShape } from '../../global';
+import Global from '../../global';
 import Util from '../../util';
+const { pointShape } = Global;
 export default class PointBuffer extends BufferBase {
   geometryBuffer() {
     const type = this.get('type');
