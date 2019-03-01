@@ -31,7 +31,6 @@ export default class RasterLayer extends Layer {
     const rasterMesh = new THREE.Mesh(this.geometry, material);
     this.add(rasterMesh);
     return this;
-
   }
 
   animateFunc() {
