@@ -9,7 +9,7 @@ import source from './source';
 import PickingMaterial from '../core/engine/picking/pickingMaterial';
 import Attr from '../attr/index';
 import Util from '../util';
-const Global = require('../global');
+import Global from '../global';
 let id = 1;
 function parseFields(field) {
   if (Util.isArray(field)) {
@@ -183,7 +183,6 @@ export default class Layer extends Base {
       if (colorItem.indexOf(item) !== -1 && styleOptions[item] !== 'none') {
         styleOptions[item] = ColorUtil.color2RGBA(styleOptions[item]);
       }
-      styleOptions[item] = styleOptions[item];
     }
     this.set('styleOptions', styleOptions);
     return this;
@@ -525,7 +524,7 @@ export default class Layer extends Base {
     this._updateMaping();
 
   }
-   /**
+  /**
    *  用于过滤数据
    * @param {*} object  需要过滤的mesh
    */

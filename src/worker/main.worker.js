@@ -1,5 +1,4 @@
-
-self.addEventListener('message', e => {
+this.addEventListener('message', e => {
   const res = e.data;
   // res = {
   //   command : 'POLYGON-EXTRUDE',
@@ -16,6 +15,8 @@ self.addEventListener('message', e => {
       break;
   }
 });
-self.addEventListener('error', function(e) {
-  console.error('filename:' + e.filename + '\nmessage:' + e.message + '\nline:' + e.lineno);
+this.addEventListener('error', function(e) {
+  console.error(
+    'filename:' + e.filename + '\nmessage:' + e.message + '\nline:' + e.lineno
+  );
 });

@@ -1,7 +1,8 @@
 import * as polygonPath from '../../shape/path';
 import * as polygonShape from '../../shape/polygon';
 import * as lineShape from '../../shape/line';
-import { pointShape } from '../../../global';
+import Global from '../../../global';
+const { pointShape } = Global;
 import Util from '../../../util';
 export default function StrokeBuffer(layerData, style) {
   const attribute = {
@@ -26,7 +27,7 @@ export default function StrokeBuffer(layerData, style) {
     } else if (pointShape['3d'].indexOf(shape) !== -1) {
       Util.isArray(size) || (size = [ size, size, size ]);
       const polygonExtrudePath = polygonShape.extrudeline([ path ]);
-            // TODO 3d line
+      // TODO 3d line
       polygon = lineShape.Line([ polygonExtrudePath ], { size: [ strokeWidth, 0 ], color: stroke, id }, positionsIndex);
 
 

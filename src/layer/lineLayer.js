@@ -11,7 +11,6 @@ export default class LineLayer extends Layer {
   render() {
     this.type = 'polyline';
     this.init();
-    const source = this.layerSource;
     const layerData = this.layerData;
     const style = this.get('styleOptions');
     const buffer = this._buffer = new LineBuffer({

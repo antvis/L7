@@ -2,8 +2,7 @@
  * @fileOverview 计算分类的的坐标点
  * @author dxq613@gmail.com
  */
-
-const Util = require('../../util');
+import Util from '../../util';
 const MAX_COUNT = 8;
 const SUB_COUNT = 4; // 控制个数不能过小
 
@@ -32,7 +31,7 @@ function getGreatestFactor(count, number) {
   return i;
 }
 
-module.exports = function(info) {
+export default function(info) {
   const rst = {};
   const ticks = [];
   const maxCount = info.maxCount || MAX_COUNT;
@@ -70,4 +69,4 @@ module.exports = function(info) {
   rst.categories = categories;
   rst.ticks = ticks;
   return rst;
-};
+}

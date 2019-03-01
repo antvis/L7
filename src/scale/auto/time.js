@@ -3,8 +3,8 @@
  * @author dxq613@gmail.com
  */
 
-const Util = require('../../util');
-const AutoUtil = require('./util');
+import Util from '../../util';
+import AutoUtil from './util';
 
 const MAX_COUNT = 6;
 const SNAP_ARRAY = [ 1, 2, 4, 6, 8, 12 ];
@@ -48,7 +48,7 @@ function diffMinus(min, max) {
   return Math.ceil((max - min) / (60 * 1000));
 }
 
-module.exports = function(info) {
+export default function(info) {
   const minInterval = info.minInterval;
   const ticks = [];
   let min = info.min;
@@ -158,4 +158,4 @@ module.exports = function(info) {
     ticks,
     count: ticks.length
   };
-};
+}
