@@ -1,4 +1,3 @@
-import { polygonPath } from '../../shape/path';
 import { fill } from '../../shape/polygon';
 export default function hexagonBuffer(layerData) {
   const attribute = {

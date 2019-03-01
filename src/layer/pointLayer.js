@@ -37,7 +37,6 @@ export default class PointLayer extends Layer {
       this._textPoint();
       return;
     }
-    const source = this.layerSource;
     const style = this.get('styleOptions');
     const pointShapeType = this._getShape();
 
@@ -98,7 +97,6 @@ export default class PointLayer extends Layer {
 
   }
   _textPoint() {
-    const source = this.layerSource;
     const styleOptions = this.get('styleOptions');
     const buffer = new TextBuffer({
       type: this.shapeType,
