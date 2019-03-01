@@ -27,7 +27,7 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/earthquakes.geojson', data => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/08c6ea00-dc5f-4bb0-b0b5-52bde5edf0a3.json', data => {
     scene.HeatmapLayer({
       zIndex: 2
     })
