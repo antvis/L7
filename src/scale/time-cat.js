@@ -3,11 +3,11 @@
  * @author dxq613@gmail.com
  */
 
-const Category = require('./category');
-const Util = require('../util');
-const fecha = require('fecha');
-const catAuto = require('./auto/cat');
-const TimeUtil = require('./time-util');
+import Category from './category';
+import Util from '../util';
+import fecha from 'fecha';
+import TimeUtil from './time-util';
+import catAuto from './auto/cat';
 
 /**
  * 度量的构造函数
@@ -166,4 +166,4 @@ class TimeCategory extends Category {
   }
 }
 
-module.exports = TimeCategory;
+export default TimeCategory;

@@ -70,7 +70,7 @@ function loadTextTexture(url, cb) {
   img.src = url;
 
 }
-  /**
+/**
    * 计算每个标注词语的位置
    * @param {*} chars 文本信息
    * @param {*} pos 文字三维空间坐标
@@ -109,18 +109,18 @@ function drawGlyph(chars, pos, text, pen, size, colors, textureElements, originP
       pos[0] + originX, pos[1] + originY, 0,
       pos[0] + originX, pos[1] + originY, 0,
       pos[0] + originX, pos[1] + originY, 0,
-   );
+    );
     const bx = 0;
     const by = metrics.size / 2 + buffer;
     textSizes.push(
-        ((bx - buffer + width) * scale), (height - by) * scale,
-        ((bx - buffer) * scale), (height - by) * scale,
-        ((bx - buffer) * scale), -by * scale,
+      ((bx - buffer + width) * scale), (height - by) * scale,
+      ((bx - buffer) * scale), (height - by) * scale,
+      ((bx - buffer) * scale), -by * scale,
 
-         ((bx - buffer + width) * scale), (height - by) * scale,
-         ((bx - buffer) * scale), -by * scale,
-         ((bx - buffer + width) * scale), -by * scale,
-      );
+      ((bx - buffer + width) * scale), (height - by) * scale,
+      ((bx - buffer) * scale), -by * scale,
+      ((bx - buffer + width) * scale), -by * scale,
+    );
 
 
     textOffsets.push(
@@ -142,14 +142,14 @@ function drawGlyph(chars, pos, text, pen, size, colors, textureElements, originP
     );
     textureElements.push(
 
-        posX + width, posY,
-        posX, posY,
-        posX, posY + height,
+      posX + width, posY,
+      posX, posY,
+      posX, posY + height,
 
-        posX + width, posY,
-        posX, posY + height,
-        posX + width, posY + height
-      );
+      posX + width, posY,
+      posX, posY + height,
+      posX + width, posY + height
+    );
   }
   pen.x = pen.x + size * 1.8;
 

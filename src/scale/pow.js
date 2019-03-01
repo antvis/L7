@@ -4,8 +4,8 @@
  */
 
 
-const Linear = require('./linear');
-const Util = require('../util');
+import Linear from './linear';
+import Util from '../util';
 
 // 求以a为次幂，结果为b的基数，如 x^^a = b;求x
 function calBase(a, b) {
@@ -111,4 +111,4 @@ class Pow extends Linear {
   }
 }
 
-module.exports = Pow;
+export default Pow;

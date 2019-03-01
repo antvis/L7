@@ -1,4 +1,4 @@
-const Util = require('./common');
+import Util from './common';
 
 const TABLE = document.createElement('table');
 const TABLE_TR = document.createElement('tr');
@@ -13,7 +13,7 @@ const CONTAINERS = {
   '*': document.createElement('div')
 };
 
-module.exports = {
+export default {
   getBoundingClientRect(node, defaultValue) {
     if (node && node.getBoundingClientRect) {
       const rect = node.getBoundingClientRect();

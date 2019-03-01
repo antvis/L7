@@ -2,7 +2,7 @@ const PRECISION = 0.00001; // 常量，据的精度，小于这个精度认为�
 const RADIAN = Math.PI / 180;
 const DEGREE = 180 / Math.PI;
 
-module.exports = {
+export default {
   isFunction: require('lodash/isFunction'),
   isObject: require('lodash/isObject'),
   isBoolean: require('lodash/isBoolean'),

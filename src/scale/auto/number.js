@@ -3,13 +3,13 @@
  * @author dxq613@gmail.com
  */
 
-const Util = require('../../util');
-const AutoUtil = require('./util');
+import Util from '../../util';
+import AutoUtil from './util';
 const MIN_COUNT = 5;
 const MAX_COUNT = 7;
-const Global = require('../../global');
+import Global from '../../global';
 
-module.exports = function(info) {
+export default function(info) {
   let min = info.min;
   let max = info.max;
   let interval = info.interval;
@@ -116,4 +116,4 @@ module.exports = function(info) {
     count,
     ticks
   };
-};
+}

@@ -1,4 +1,4 @@
-const Util = require('../util/index');
+import Util from '../util/index';
 
 const regexTags = /[MLHVQTCSAZ]([^MLHVQTCSAZ]*)/ig;
 const regexDot = /[^\s\,]+/ig;
@@ -138,13 +138,14 @@ function parsePattern(color, self) {
   } else {
     img.onload = onload;
     // Fix onload() bug in IE9
+    // eslint-disable-next-line
     img.src = img.src;
   }
 
   return pattern;
 }
 
-module.exports = {
+export default {
   parsePath(path) {
     path = path || [];
     if (Util.isArray(path)) {

@@ -5,7 +5,7 @@
  * @Last Modified time: 2018-07-15 17:26:40
  */
 
-const Base = require('./base');
+import Base from './base';
 
 /**
  * 视觉通道 symbol
@@ -19,4 +19,4 @@ class Filter extends Base {
     this.gradient = null;
   }
 }
-module.exports = Filter;
+export default Filter;
