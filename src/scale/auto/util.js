@@ -85,7 +85,8 @@ function arrayCeiling(values, value) {
 
 const Util = {
   // 获取逼近的数值
-  snapFactorTo(v, arr, snapType) { // 假设 v = -512,isFloor = true
+  snapFactorTo(v, arr, snapType) {
+    // 假设 v = -512,isFloor = true
     if (isNaN(v)) {
       return NaN;
     }
@@ -112,7 +113,7 @@ const Util = {
     if (Math.abs(factor) < 1 && rst.toString().length > DECIMAL_LENGTH) {
       const decimalVal = parseInt(1 / factor);
       const symbol = factor > 0 ? 1 : -1;
-      rst = v / decimalVal * symbol;
+      rst = (v / decimalVal) * symbol;
     }
     return rst;
   },
@@ -174,4 +175,4 @@ const Util = {
   }
 };
 
-module.exports = Util;
+export default Util;

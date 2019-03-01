@@ -18,7 +18,7 @@ export default class LoadImage extends EventEmitter {
     this.imagesIds = [];
   }
   addImage(id, opt) {
-    this.imagesCount ++;
+    this.imagesCount++;
     this.imagesIds.push(id);
     const imageCount = this.imagesCount;
     const x = imageCount % 8 * this.imageWidth;

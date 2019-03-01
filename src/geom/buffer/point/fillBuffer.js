@@ -1,8 +1,9 @@
-import { pointShape } from '../../../global';
+import Global from '../../../global';
 import * as THREE from '../../../core/three';
 import * as polygonShape from '../../shape/polygon';
 import * as polygonPath from '../../shape/path';
 import Util from '../../../util';
+const { pointShape } = Global;
 export default function fillBuffer(layerData) {
   const attribute = {
     vertices: [],

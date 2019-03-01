@@ -3,7 +3,7 @@
  * @author huangtonger@aliyun.com
  */
 
-const Base = require('./base');
+import Base from './base';
 
 /**
  * 视觉通道 Opacity
@@ -18,4 +18,4 @@ class Opacity extends Base {
   }
 }
 
-module.exports = Opacity;
+export default Opacity;

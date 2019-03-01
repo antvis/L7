@@ -2,8 +2,8 @@
  * @fileOverview the Attribute base class
  * @author huangtonger@aliyun.com
  */
-const ColorUtil = require('./color-util');
-const Util = require('../util');
+import ColorUtil from './color-util';
+import Util from '../util';
 
 function toScaleString(scale, value) {
   if (Util.isString(value)) {
@@ -171,7 +171,7 @@ class AttributeBase {
     }
     if (this.type === 'color' && !Util.isArray(values)) {
       values = ColorUtil.toRGB(values).map(e => e / 255);
-     // values[3] = values[3] * 255;
+      // values[3] = values[3] * 255;
     }
     if (!Util.isArray(values)) {
       values = [ values ];
@@ -196,4 +196,4 @@ class AttributeBase {
   }
 }
 
-module.exports = AttributeBase;
+export default AttributeBase;
