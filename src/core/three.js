@@ -23,16 +23,16 @@ export { Vector2 } from 'three/src/math/Vector2.js';
 export { ShaderMaterial } from 'three/src/materials/ShaderMaterial.js';
 export { DataTexture } from 'three/src/textures/DataTexture.js';
 export {
-	Float64BufferAttribute,
-	Float32BufferAttribute,
-	Uint32BufferAttribute,
-	Int32BufferAttribute,
-	Uint16BufferAttribute,
-	Int16BufferAttribute,
-	Uint8ClampedBufferAttribute,
-	Uint8BufferAttribute,
-	Int8BufferAttribute,
-	BufferAttribute
+  Float64BufferAttribute,
+  Float32BufferAttribute,
+  Uint32BufferAttribute,
+  Int32BufferAttribute,
+  Uint16BufferAttribute,
+  Int16BufferAttribute,
+  Uint8ClampedBufferAttribute,
+  Uint8BufferAttribute,
+  Int8BufferAttribute,
+  BufferAttribute
 } from 'three/src/core/BufferAttribute.js';
 
 // export * from '../../build/three.js';

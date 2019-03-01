@@ -1,5 +1,5 @@
-const CommonUtil = require('./common');
-const DomUtil = require('./dom');
+import CommonUtil from './common';
+import DomUtil from './dom';
 
 const Util = {};
 
@@ -22,4 +22,4 @@ CommonUtil.merge(Util, CommonUtil, DomUtil, {
   }
 });
 
-module.exports = Util;
+export default Util;
