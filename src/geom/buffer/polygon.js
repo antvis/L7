@@ -26,7 +26,7 @@ export default class PolygonBuffer extends BufferBase {
       positions.push(extrudeData.positions);
 
       if (shape !== 'line') {
-       // faceUv.push(...extrudeData.faceUv);
+        // faceUv.push(...extrudeData.faceUv);
         const count = extrudeData.faceUv.length / 2;
         for (let i = 0; i < count; i++) {
           // uv 系数生成等大小的窗户

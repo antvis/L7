@@ -1,11 +1,11 @@
 import Base from '../core/base';
-import { scene } from '../global';
+import Global from '../global';
 import * as Theme from '../theme/index';
 import Util from '../util';
 const DEG2RAD = Math.PI / 180;
 export default class GaodeMap extends Base {
   getDefaultCfg() {
-    return Util.assign(scene, {
+    return Util.assign(Global.scene, {
       resizeEnable: true,
       viewMode: '3D'
     });

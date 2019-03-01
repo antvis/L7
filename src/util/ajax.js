@@ -6,7 +6,7 @@ class AJAXError extends Error {
     this.status = status;
     this.url = url;
 
-        // work around for https://github.com/Rich-Harris/buble/issues/40
+    // work around for https://github.com/Rich-Harris/buble/issues/40
     this.name = this.constructor.name;
     this.message = message;
   }
@@ -88,8 +88,8 @@ function sameOrigin(url) {
 const transparentPngUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAUAAarVyFEAAAAASUVORK5CYII=';
 
 export const getImage = function(requestParameters, callback) {
-    // request the image with XHR to work around caching issues
-    // see https://github.com/mapbox/mapbox-gl-js/issues/1470
+  // request the image with XHR to work around caching issues
+  // see https://github.com/mapbox/mapbox-gl-js/issues/1470
   return getArrayBuffer(requestParameters, (err, imgData) => {
     if (err) {
       callback(err);
