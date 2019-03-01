@@ -2,7 +2,7 @@ import Engine from './engine';
 import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
-import WorkerPool from './worker';
+// import WorkerPool from './worker';
 // import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
 import Global from '../global';
@@ -22,7 +22,7 @@ export default class Scene extends Base {
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
     this._engine.run();
-    this.workerPool = new WorkerPool();
+    // this.workerPool = new WorkerPool();
     compileBuiltinModules();
   }
   // 为pickup场景添加 object 对象
