@@ -23,7 +23,6 @@ export { Vector4 } from 'three/src/math/Vector4.js';
 export { Vector3 } from 'three/src/math/Vector3.js';
 export { Vector2 } from 'three/src/math/Vector2.js';
 export { ShaderMaterial } from 'three/src/materials/ShaderMaterial.js';
-export { MeshBasicMaterial } from 'three/src/materials/MeshBasicMaterial.js';
 export { DataTexture } from 'three/src/textures/DataTexture.js';
 export { Color } from 'three/src/math/Color.js';
 export {
