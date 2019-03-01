@@ -42,33 +42,33 @@ export default class PointLayer extends Layer {
 
     switch (pointShapeType) {
       case 'fill' :// 填充图形
-      {
-        if (fill !== 'none') { // 是否填充
-          const attributes = PointBuffer.FillBuffer(this.layerData, style);
-          const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
-          this.add(meshfill);
+        {
+          if (fill !== 'none') { // 是否填充
+            const attributes = PointBuffer.FillBuffer(this.layerData, style);
+            const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
+            this.add(meshfill);
+          }
+          if (stroke !== 'none') { // 是否绘制边界
+            const lineAttribute = PointBuffer.StrokeBuffer(this.layerData, style);
+            const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
+            this.add(meshStroke, 'line');
+          }
+          break;
         }
-        if (stroke !== 'none') { // 是否绘制边界
-          const lineAttribute = PointBuffer.StrokeBuffer(this.layerData, style);
-          const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
-          this.add(meshStroke, 'line');
-        }
-        break;
-      }
       case 'image':// 绘制图片标注
-      {
-        const imageAttribute = PointBuffer.ImageBuffer(this.layerData, { imagePos: this.scene.image.imagePos });
-        const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
-        this.add(imageMesh);
-        break;
-      }
+        {
+          const imageAttribute = PointBuffer.ImageBuffer(this.layerData, { imagePos: this.scene.image.imagePos });
+          const imageMesh = drawPoint.DrawImage(imageAttribute, { ...style, texture: this.scene.image.texture });
+          this.add(imageMesh);
+          break;
+        }
       case 'normal' : // 原生点
-      {
-        const normalAttribute = PointBuffer.NormalBuffer(this.layerData, style);
-        const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
-        this.add(normalPointMesh);
-        break;
-      }
+        {
+          const normalAttribute = PointBuffer.NormalBuffer(this.layerData, style);
+          const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
+          this.add(normalPointMesh);
+          break;
+        }
       default:
         return null;
     }
