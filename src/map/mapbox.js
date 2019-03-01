@@ -1,6 +1,6 @@
 import Base from '../core/base';
 import Util from '../util';
-import { scene } from '../global';
+import Global from '../global';
 import * as THREE from '../core/three';
 const WORLD_SIZE = 512;
 const MERCATOR_A = 6378137.0;
@@ -8,7 +8,7 @@ const WORLD_SCALE = 1 / 100;
 const PROJECTION_WORLD_SIZE = WORLD_SIZE / (MERCATOR_A * Math.PI) / 2;
 export default class MapBox extends Base {
   getDefaultCfg() {
-    return Util.assign(scene, {
+    return Util.assign(Global.scene, {
       resizeEnable: true,
       viewMode: '3D'
     });
@@ -80,10 +80,10 @@ export default class MapBox extends Base {
     // Unlike the Mapbox GL JS camera, separate camera translation and rotation out into its world matrix
     // If this is applied directly to the projection matrix, it will work OK but break raycasting
     cameraWorldMatrix
-        .premultiply(cameraTranslateZ)
-        .premultiply(cameraRotateX)
-        .premultiply(cameraRotateZ)
-        .premultiply(cameraTranslateXY);
+      .premultiply(cameraTranslateZ)
+      .premultiply(cameraRotateX)
+      .premultiply(cameraRotateZ)
+      .premultiply(cameraTranslateXY);
 
     camera.matrixWorld.copy(cameraWorldMatrix);
 
@@ -94,23 +94,23 @@ export default class MapBox extends Base {
     const translateMap = new THREE.Matrix4();
     const rotateMap = new THREE.Matrix4();
     scale
-        .makeScale(zoomPow, zoomPow, 1.0);
+      .makeScale(zoomPow, zoomPow, 1.0);
     translateCenter
-        .makeTranslation(WORLD_SIZE / 2, -WORLD_SIZE / 2, 0);
+      .makeTranslation(WORLD_SIZE / 2, -WORLD_SIZE / 2, 0);
     translateMap
-        .makeTranslation(-this.map.transform.x, this.map.transform.y, 0);
+      .makeTranslation(-this.map.transform.x, this.map.transform.y, 0);
     rotateMap
-        .makeRotationZ(Math.PI);
+      .makeRotationZ(Math.PI);
     scene.matrix = new THREE.Matrix4();
     scene.matrix
-        .premultiply(rotateMap)
-        .premultiply(translateCenter)
-        .premultiply(scale);
+      .premultiply(rotateMap)
+      .premultiply(translateCenter)
+      .premultiply(scale);
     pickScene.matrix = new THREE.Matrix4();
     pickScene.matrix
-        .premultiply(rotateMap)
-        .premultiply(translateCenter)
-        .premultiply(scale);
+      .premultiply(rotateMap)
+      .premultiply(translateCenter)
+      .premultiply(scale);
   }
   makePerspectiveMatrix(fovy, aspect, near, far) {
     const out = new THREE.Matrix4();

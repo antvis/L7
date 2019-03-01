@@ -4,8 +4,8 @@
  */
 
 
-const Util = require('../util');
-const Base = require('./base');
+import Base from './base';
+import Util from '../util';
 
 class Position extends Base {
   constructor(cfg) {
@@ -88,4 +88,4 @@ class Position extends Base {
   }
 }
 
-module.exports = Position;
+export default Position;

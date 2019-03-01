@@ -19,14 +19,14 @@ function hexagon() {
   return polygonPath(6);
 }
 export {
-    circle,
-    square,
-    triangle,
-    hexagon,
-    circle as cylinder,
-    triangle as triangleColumn,
-    hexagon as hexagonColumn,
-    square as squareColumn
+  circle,
+  square,
+  triangle,
+  hexagon,
+  circle as cylinder,
+  triangle as triangleColumn,
+  hexagon as hexagonColumn,
+  square as squareColumn
 };
 
 export function polygonPath(pointCount) {
