@@ -33,4 +33,4 @@ const Global = {
 };
 
 
-module.exports = Global;
+export default Global;

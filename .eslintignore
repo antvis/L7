@@ -1,4 +1,5 @@
 build/
+bundler/
 coverage/
 lib/
 dist/
@@ -7,3 +8,5 @@ node_modules/
 demos/assets/
 demos/index.html
 demos/*
+rollup/*
+webpack/*

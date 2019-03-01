@@ -3,11 +3,11 @@
  * @author dxq613@gmail.com
  */
 
-const Linear = require('./linear');
-const Util = require('../util');
-const timeAuto = require('./auto/time');
-const fecha = require('fecha');
-const TimeUtil = require('./time-util');
+import Linear from './linear';
+import Util from '../util';
+import timeAuto from './auto/time';
+import fecha from 'fecha';
+import TimeUtil from './time-util';
 
 /**
  * 时间度量的构造函数
@@ -126,4 +126,4 @@ class Time extends Linear {
   }
 }
 
-module.exports = Time;
+export default Time;

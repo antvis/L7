@@ -1,4 +1,4 @@
 import Scale from './scale';
-export {
+export default {
   Scale
 };
