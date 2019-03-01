@@ -1,6 +1,6 @@
 
 import Base from './base';
-const Controller = require('./controller/index');
+import Controller from './controller/index';
 import { getTransform, getParser } from '../source';
 import { getMap } from '../map/index';
 export default class Source extends Base {
