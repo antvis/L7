@@ -5,9 +5,9 @@ export default function csv(data, cfg) {
   const resultdata = [];
   csvdata.forEach((col, featureIndex) => {
     let coordinates = [];
-    if (x && y) { coordinates = [ col[x], col[y] ]; } // 点数据
+    if (x && y) { coordinates = [ col[x] * 1, col[y] * 1 ]; } // 点数据
     if (x1 && y1) { // 弧线 或者线段
-      coordinates = [[ col[x], col[y] ], [ col[x1], col[y1] ]];
+      coordinates = [[ col[x] * 1, col[y] * 1 ], [ col[x1] * 1, col[y1] * 1 ]];
     }
     col._id = featureIndex + 1;
     const dataItem = {
