@@ -2,6 +2,7 @@
 import Base from './base';
 import Controller from './controller/index';
 import { getTransform, getParser } from '../source';
+import { extent } from '../util/geo';
 import { getMap } from '../map/index';
 export default class Source extends Base {
   getDefaultCfg() {
@@ -32,6 +33,7 @@ export default class Source extends Base {
     const { type = 'geojson' } = parser;
     const data = this.get('data');
     this.data = getParser(type)(data, parser);
+    this.data.extent = extent(this.data.dataArray);
   }
   /**
    * 数据统计
@@ -40,7 +42,8 @@ export default class Source extends Base {
     const trans = this._transforms;
     trans.forEach(tran => {
       const { type } = tran;
-      this.data = getTransform(type)(this.data, tran);
+      const data = getTransform(type)(this.data, tran);
+      Object.assign(this.data, data);
     });
     this._transforms = trans;
   }
