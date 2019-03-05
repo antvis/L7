@@ -214,6 +214,10 @@ export default class Layer extends Base {
   texture() {
 
   }
+  fitBounds() {
+    const extent = this.layerSource.data.extent;
+    this.scene.fitBounds(extent);
+  }
   hide() {
     this._visible(false);
     return this;
@@ -472,10 +476,10 @@ export default class Layer extends Base {
   }
   _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
-      const { featureId, point2d, type } = e;
+      let { featureId, point2d, type } = e;
       if (featureId < -100 && this._activeIds !== null) {
-        this.emit('mouseleave');
-        return;
+        type = 'mouseleave';
+        featureId = this._activeIds[0];
       }
       const feature = this.layerSource.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
@@ -483,6 +487,7 @@ export default class Layer extends Base {
         featureId,
         feature,
         pixel: point2d,
+        type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
       if (featureId >= 0) {
