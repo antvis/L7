@@ -280,12 +280,12 @@ export default class Layer extends Base {
     const { featureId } = e;
     if (featureId < 0) return;
     const activeStyle = this.get('activedOptions');
-    // const selectFeatureIds = this.layerSource.getSelectFeatureId(featureId);
+    const selectFeatureIndexId = this.layerSource.getSeletFeatureIndex(featureId);
     // 如果数据不显示状态则不进行高亮
     if (this.layerData[featureId].hasOwnProperty('filter') && this.layerData[featureId].filter === false) { return; }
-    const style = Util.assign({}, this.layerData[featureId]);
+    const style = Util.assign({}, this.layerData[selectFeatureIndexId]); // 要素ID 和dataId不是对应关系
     style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
-    this.updateStyle([ featureId ], style);
+    this.updateStyle([ featureId ], style, selectFeatureIndexId);
   }
 
 
@@ -351,6 +351,7 @@ export default class Layer extends Base {
           const attr = attrs[k];
           attr.needUpdate = false;
           const names = attr.names;
+
           const values = self._getAttrValues(attr, record);
           if (names.length > 1) { // position 之类的生成多个字段的属性
             for (let j = 0; j < values.length; j++) {
@@ -509,9 +510,9 @@ export default class Layer extends Base {
     const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
     const color = style.color;
     const colorAttr = this.layerMesh.geometry.attributes.a_color;
-    const firstId = pickingId.indexOf(featureStyleId[0] + 1);
+    const firstId = pickingId.indexOf(featureStyleId[0]);
     for (let i = firstId; i < pickingId.length; i++) {
-      if (pickingId[i] === featureStyleId[0] + 1) {
+      if (pickingId[i] === featureStyleId[0]) {
         colorAttr.array[i * 4 + 0] = color[0];
         colorAttr.array[i * 4 + 1] = color[1];
         colorAttr.array[i * 4 + 2] = color[2];
@@ -583,14 +584,14 @@ export default class Layer extends Base {
    * 重置高亮要素
    */
   _resetStyle() {
-
     const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
     const colorAttr = this.layerMesh.geometry.attributes.a_color;
     this._activeIds.forEach(index => {
-      const color = this.layerData[index].color;
-      const firstId = pickingId.indexOf(index + 1);
+      const selectFeatureIndexId = this.layerSource.getSeletFeatureIndex(index);
+      const color = this.layerData[selectFeatureIndexId].color;
+      const firstId = pickingId.indexOf(index);
       for (let i = firstId; i < pickingId.length; i++) {
-        if (pickingId[i] === index + 1) {
+        if (pickingId[i] === index) {
           colorAttr.array[i * 4 + 0] = color[0];
           colorAttr.array[i * 4 + 1] = color[1];
           colorAttr.array[i * 4 + 2] = color[2];
