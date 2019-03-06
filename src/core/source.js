@@ -1,4 +1,3 @@
-
 import Base from './base';
 import Controller from './controller/index';
 import { getTransform, getParser } from '../source';
@@ -11,8 +10,7 @@ export default class Source extends Base {
       defs: {},
       parser: {},
       transforms: [],
-      scales: {
-      },
+      scales: {},
       options: {}
     };
   }
@@ -84,7 +82,6 @@ export default class Source extends Base {
     return geo;
   }
   _coordProject(geo) {
-
     if (Array.isArray(geo[0][0])) {
       return geo.map(coor => {
         return this._coordProject(coor);
@@ -92,22 +89,36 @@ export default class Source extends Base {
     }
     if (!Array.isArray(geo[0])) {
       return this._coorConvert(geo);
-
     }
     return geo.map(coor => {
       return this._coorConvert(coor);
     });
   }
   _coorConvert(geo) {
-
     const ll = this.projectFlat(geo);
     return [ ll.x, ll.y, geo[2] || 0 ];
-
   }
   getSelectFeature(featureId) {
     const data = this.get('data');
     // 如果是GeoJSON 数据返回原数
-    return data.features ? data.features[featureId] : this.data.dataArray[featureId];
+    // 颜色编码从1开始，要素索引从0开始，所以颜色转变要素需要减1
+    return data.features
+      ? data.features[featureId - 1]
+      : this.data.dataArray[featureId - 1];
   }
-
+  getSeletFeatureIndex(featureId) {
+    const data = this.get('data');
+    if (!data.features) {
+      return featureId - 1;
+    }
+    let featureIndex = 0;
+    for (let i = 0; i < this.data.dataArray.length; i++) {
+      const item = this.data.dataArray[i];
+      if (item._id === featureId) {
+        break;
+      }
+      featureIndex++;
+    }
+    return featureIndex;
+  }
 }
