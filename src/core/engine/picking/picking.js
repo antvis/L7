@@ -98,7 +98,7 @@ class Picking {
     }
     const item = {
       layerId,
-      featureId: id - 1,
+      featureId: id,
       point2d: _point2d,
       point3d: _point3d,
       intersects
