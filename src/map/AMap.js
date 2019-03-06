@@ -17,7 +17,7 @@ export default class GaodeMap extends Base {
     let d = Math.PI / 180;
     let x = lnglat[0] * d;
     let y = lat * d;
-    y = Math.log(Math.tan((Math.PI / 4) + (y / 2)));
+    y = Math.log(Math.tan(Math.PI / 4 + y / 2));
     const a = 0.5 / Math.PI,
       b = 0.5,
       c = -0.5 / Math.PI;
@@ -34,14 +34,13 @@ export default class GaodeMap extends Base {
     setTimeout(() => {
       this.emit('mapLoad');
     }, 100);
-
   }
 
   initMap() {
     const mapStyle = this.get('mapStyle');
 
     switch (mapStyle) {
-      case 'dark' :
+      case 'dark':
         this.set('mapStyle', Theme.DarkTheme.mapStyle);
         break;
       case 'light':
@@ -52,7 +51,6 @@ export default class GaodeMap extends Base {
     }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
     this.map = new AMap.Map(this.container, this._attrs);
-
   }
   asyncCamera(engine) {
     this._engine = engine;
@@ -64,7 +62,7 @@ export default class GaodeMap extends Base {
       let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
       pitch *= DEG2RAD;
       rotation *= DEG2RAD;
-      camera.fov = 180 * fov / Math.PI;
+      camera.fov = (180 * fov) / Math.PI;
       camera.aspect = aspect;
       camera.near = near;
       camera.far = far;
@@ -97,32 +95,78 @@ export default class GaodeMap extends Base {
     const canvasContainer = document.getElementById(this.container);
     this.canvasContainer = canvasContainer;
     this.renderDom = document.createElement('div');
-    this.renderDom.style.cssText += 'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
+    this.renderDom.style.cssText +=
+      'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
     canvasContainer.appendChild(this.renderDom);
   }
   mixMap(scene) {
     const map = this.map;
-    scene.getZoom = () => { return map.getZoom(); };
-    scene.getCenter = () => { return map.getCenter(); };
-    scene.getSize = () => { return map.getSize(); };
-    scene.getPitch = () => { return map.getPitch(); };
-    scene.getRotation = () => { return map.getRotation(); };
-    scene.getStatus = () => { return map.getStatus(); };
-    scene.getScale = () => { return map.getScale(); };
-    scene.getZoom = () => { return map.getZoom(); };
-    scene.setZoom = () => { return map.setZoom(); };
-    scene.setBounds = () => { return map.setBounds(); };
-    scene.setRotation = () => { return map.setRotation(); };
-    scene.zoomIn = () => { return map.zoomIn(); };
-    scene.setRotation = () => { return map.setRotation(); };
-    scene.zoomOut = () => { return map.zoomOut(); };
-    scene.panTo = () => { return map.panTo(); };
-    scene.panBy = () => { return map.panBy(); };
-    scene.setPitch = () => { return map.setPitch(); };
-    scene.pixelToLngLat = () => { return map.pixelToLngLat(); };
-    scene.lngLatToPixel = () => { return map.lngLatToPixel(); };
-    scene.setMapStyle = () => { return map.setMapStyle(); };
+    scene.getZoom = () => {
+      return map.getZoom();
+    };
+    scene.getCenter = () => {
+      return map.getCenter();
+    };
+    scene.getSize = () => {
+      return map.getSize();
+    };
+    scene.getPitch = () => {
+      return map.getPitch();
+    };
+    scene.getRotation = () => {
+      return map.getRotation();
+    };
+    scene.getStatus = () => {
+      return map.getStatus();
+    };
+    scene.getScale = () => {
+      return map.getScale();
+    };
+    scene.getZoom = () => {
+      return map.getZoom();
+    };
+    scene.setZoom = () => {
+      return map.setZoom();
+    };
+    scene.setBounds = () => {
+      return map.setBounds();
+    };
+    scene.setRotation = () => {
+      return map.setRotation();
+    };
+    scene.zoomIn = () => {
+      return map.zoomIn();
+    };
+    scene.setRotation = () => {
+      return map.setRotation();
+    };
+    scene.zoomOut = () => {
+      return map.zoomOut();
+    };
+    scene.panTo = () => {
+      return map.panTo();
+    };
+    scene.panBy = () => {
+      return map.panBy();
+    };
+    scene.setPitch = () => {
+      return map.setPitch();
+    };
+    scene.pixelToLngLat = () => {
+      return map.pixelToLngLat();
+    };
+    scene.lngLatToPixel = () => {
+      return map.lngLatToPixel();
+    };
+    scene.setMapStyle = () => {
+      return map.setMapStyle();
+    };
+    scene.fitBounds = extent => {
+      return map.setBounds(
+        new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ])
+      );
+    };
     scene.containerToLngLat = pixel => {
       const ll = new AMap.Pixel(pixel.x, pixel.y);
       return map.containerToLngLat(ll);
