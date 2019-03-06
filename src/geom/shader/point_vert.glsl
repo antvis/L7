@@ -1,4 +1,5 @@
 precision highp float;
+attribute float pickingId;
 attribute vec4 a_color;
 attribute float a_size;
 attribute float a_shape;
