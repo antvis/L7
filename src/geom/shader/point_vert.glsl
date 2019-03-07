@@ -11,7 +11,8 @@ varying vec4 v_color;
 varying vec2 v_rs;
 varying vec2 v_uv;
 varying float v_shape;
-
+varying vec4 worldId;
+#include pick_color
 void main() {
   mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
    v_color = a_color;
@@ -26,5 +27,6 @@ void main() {
     #ifdef SHAPE
       v_shape = a_shape;
     #endif
+    worldId = id_toPickColor(pickingId);
 }
 
