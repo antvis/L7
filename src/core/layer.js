@@ -6,7 +6,8 @@ import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
 import source from './source';
-import PickingMaterial from '../core/engine/picking/pickingMaterial';
+import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
+// import PickingMaterial from '../core/engine/picking/pickingMaterial';
 import Attr from '../attr/index';
 import Util from '../util';
 import Global from '../global';
@@ -458,9 +459,12 @@ export default class Layer extends Base {
     // });
 
     this.addToPicking(this._pickingMesh);
-    const pickmaterial = new PickingMaterial({
-      u_zoom: this.scene.getZoom()
-    });
+    const pickmaterial = mesh.material.clone();
+    pickmaterial.fragmentShader = pickingFragmentShader;
+    // const pickmaterial = new PickingMaterial({
+    //   u_zoom: this.scene.getZoom(),
+    //   vs: mesh.material.
+    // });
 
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = this.layerId;
