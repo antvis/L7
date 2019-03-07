@@ -6,6 +6,7 @@ const moduleCache = {};
 const rawContentCache = {};
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision = '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
+// const globalDefaultAttribute = 'attribute float pickingId;\n varying vec4 worldId;\n';
 const includeRegExp = /#pragma include (["^+"]?["\ "[a-zA-Z_0-9](.*)"]*?)/g;
 
 function processModule(rawContent, includeList, type) {
