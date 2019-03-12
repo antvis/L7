@@ -1,7 +1,7 @@
 import Material from './material';
-import raster_frag from '../shader/raster_frag.glsl';
-import raster_vert from '../shader/raster_vert.glsl';
+import { getModule } from '../../util/shaderModule';
 export default function ImageMaterial(options) {
+  const { vs, fs } = getModule('raster');
   const material = new Material({
     uniforms: {
       u_opacity: { value: options.u_opacity },
@@ -13,8 +13,8 @@ export default function ImageMaterial(options) {
       u_dimension: { value: options.u_dimension }
 
     },
-    vertexShader: raster_vert,
-    fragmentShader: raster_frag,
+    vertexShader: vs,
+    fragmentShader: fs,
     transparent: false
   });
   // material.roughness = 1;

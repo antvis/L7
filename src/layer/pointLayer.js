@@ -32,11 +32,15 @@ export default class PointLayer extends Layer {
   _prepareRender() {
     const { stroke, fill } = this.get('styleOptions');
     if (this.shapeType === 'text') { // 绘制文本图层
-
       this._textPoint();
       return;
     }
     const style = this.get('styleOptions');
+    const activeOption = this.get('activedOptions');
+    const config = {
+      ...style,
+      activeColor: activeOption.fill
+    };
     const pointShapeType = this._getShape();
 
     switch (pointShapeType) {
@@ -44,12 +48,12 @@ export default class PointLayer extends Layer {
         {
           if (fill !== 'none') { // 是否填充
             const attributes = PointBuffer.FillBuffer(this.layerData, style);
-            const meshfill = drawPoint.DrawFill(attributes, this.get('styleOptions'));
+            const meshfill = drawPoint.DrawFill(attributes, config);
             this.add(meshfill);
           }
           if (stroke !== 'none') { // 是否绘制边界
             const lineAttribute = PointBuffer.StrokeBuffer(this.layerData, style);
-            const meshStroke = drawPoint.DrawStroke(lineAttribute, this.get('styleOptions'));
+            const meshStroke = drawPoint.DrawStroke(lineAttribute, config);
             this.add(meshStroke, 'line');
           }
           break;
@@ -64,7 +68,7 @@ export default class PointLayer extends Layer {
       case 'normal' : // 原生点
         {
           const normalAttribute = PointBuffer.NormalBuffer(this.layerData, style);
-          const normalPointMesh = drawPoint.DrawNormal(normalAttribute, style);
+          const normalPointMesh = drawPoint.DrawNormal(normalAttribute, config);
           this.add(normalPointMesh);
           break;
         }

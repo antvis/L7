@@ -112,15 +112,18 @@ export default class LineBuffer extends BufferBase {
   _toAttributes(bufferStruct) {
     const vertCount = bufferStruct.verts.length;
     const vertices = new Float32Array(vertCount * 3);
+    const pickingIds = new Float32Array(vertCount);
     const inposs = new Float32Array(vertCount * 4);
     const colors = new Float32Array(vertCount * 4);
     for (let i = 0; i < vertCount; i++) {
       const index = bufferStruct.indexs[i];
       const color = bufferStruct.style[index].color;
+      const id = bufferStruct.style[index].id;
       vertices[i * 3] = bufferStruct.verts[i][0];
       vertices[i * 3 + 1] = bufferStruct.verts[i][1];
       vertices[i * 3 + 2] = bufferStruct.verts[i][2];
       colors[i * 4] = color[0];
+      pickingIds[i] = id;
       colors[i * 4 + 1] = color[1];
       colors[i * 4 + 2] = color[2];
       colors[i * 4 + 3] = color[3];
@@ -133,6 +136,7 @@ export default class LineBuffer extends BufferBase {
 
     }
     return {
+      pickingIds,
       vertices,
       colors,
       inposs
