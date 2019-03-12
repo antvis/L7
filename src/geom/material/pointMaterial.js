@@ -1,14 +1,14 @@
 import * as THREE from '../../core/three';
 import Material from './material';
 import { getModule } from '../../util/shaderModule';
-
 export default class PointMaterial extends Material {
   getDefaultParameters() {
     return {
       uniforms: {
         u_opacity: { value: 1 },
         u_stroke: { value: [ 1.0, 1.0, 1.0, 1.0 ] },
-        u_strokeWidth: { value: 1 }
+        u_strokeWidth: { value: 1 },
+        u_activeId: { value: 0 }
       },
       defines: {
         SHAPE: false,
@@ -26,11 +26,9 @@ export default class PointMaterial extends Material {
     this.vertexShader = vs;
     this.fragmentShader = fs;
     this.transparent = true;
-    if (!_uniforms.shape) { this.blending = THREE.AdditiveBlending; }
-    if (_uniforms.u_texture) {
+    if (!this.uniforms.shape) { this.blending = THREE.AdditiveBlending; }
+    if (this.uniforms.u_texture) {
       this.defines.TEXCOORD_0 = true;
     }
   }
-
-
 }
