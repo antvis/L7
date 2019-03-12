@@ -1,19 +1,17 @@
 import * as THREE from '../../core/three';
 import Material from './material';
-import heatmap_intensity_vert from '../shader/heatmap_intensity_vert.glsl';
-import heatmap_intensity_frag from '../shader/heatmap_intensity_frag.glsl';
-import heatmap_colorize_vert from '../shader/heatmap_colorize_vert.glsl';
-import heatmap_colorize_frag from '../shader/heatmap_colorize_frag.glsl';
+import { getModule } from '../../util/shaderModule';
 
 export function HeatmapIntensityMaterial(opt) {
+  const { vs, fs } = getModule('heatmap_intensity');
   const material = new Material({
     uniforms: {
       u_intensity: { value: opt.intensity },
       u_radius: { value: opt.radius },
       u_zoom: { value: opt.zoom }
     },
-    vertexShader: heatmap_intensity_vert,
-    fragmentShader: heatmap_intensity_frag,
+    vertexShader: vs,
+    fragmentShader: fs,
     transparent: true,
     blending: THREE.AdditiveBlending
   });
@@ -21,13 +19,14 @@ export function HeatmapIntensityMaterial(opt) {
 }
 
 export function HeatmapColorizeMaterial(opt) {
+  const { vs, fs } = getModule('heatmap_color');
   const material = new Material({
     uniforms: {
       u_texture: { value: opt.texture },
       u_colorRamp: { value: opt.colorRamp }
     },
-    vertexShader: heatmap_colorize_vert,
-    fragmentShader: heatmap_colorize_frag,
+    vertexShader: vs,
+    fragmentShader: fs,
     transparent: true
   });
   return material;
