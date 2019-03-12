@@ -1,5 +1,4 @@
 precision highp float;
-attribute float pickingId;
 #define ambientRatio 0.5
 #define diffuseRatio 0.4
 #define specularRatio 0.1
@@ -12,9 +11,8 @@ varying vec2 v_texCoord;
 varying  vec4 v_color;
 varying float v_lightWeight;
 varying float v_size;
-varying vec4 worldId;
-#pragma include "pick_color"
-
+uniform float u_activeId;
+uniform vec4 u_activeColor;
 void main() {
    float scale = pow(2.0,(20.0 - u_zoom));
   mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
@@ -27,6 +25,9 @@ void main() {
    v_texCoord = faceUv;
   if(normal == vec3(0.,0.,1.)){
      v_color = a_color;
+    if(pickingId == u_activeId) {
+        v_color = u_activeColor;
+     }
      gl_Position =  matModelViewProjection  * vec4(newposition, 1.0);
      return;
   }
@@ -48,6 +49,9 @@ void main() {
   v_lightWeight = lightWeight;
   // v_size = a_size;
   v_color =vec4(a_color.rgb*lightWeight, a_color.w); 
+   if(pickingId == u_activeId) {
+     v_color = u_activeColor;
+   }
   gl_Position =  matModelViewProjection * vec4(newposition, 1.0);
   
 
