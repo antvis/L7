@@ -11,7 +11,9 @@ export default class PolygonMaterial extends Material {
         u_brightColor: { value: [ 1.0, 0, 0, 1.0 ] },
         u_windowColor: { value: [ 1.0, 0, 0, 1.0 ] },
         u_near: { value: 0.0 },
-        u_far: { value: 1.0 }
+        u_far: { value: 1.0 },
+        u_activeId: { value: 0 },
+        u_activeColor: { value: [ 1.0, 0, 0, 1.0 ] }
       },
       defines: {
 

@@ -12,6 +12,7 @@ varying vec2 v_texCoord;
 varying  vec4 v_color;
 varying float v_lightWeight;
 varying float v_size;
+varying vec4 worldId;
 
 vec3 getWindowColor(float n, float hot, vec3 brightColor, vec3 darkColor) {
     float s = step(hot, n);
@@ -106,7 +107,7 @@ void main() {
         gl_FragColor = vec4(foggedColor,1.0); 
      }
    #else
-       gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
+      gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
    #endif
  
 }

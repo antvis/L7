@@ -19,18 +19,21 @@ export default class LineLayer extends Layer {
     });
     const { opacity } = this.get('styleOptions');
     const animateOptions = this.get('animateOptions');
+    const activeOption = this.get('activedOptions');
     const geometry = new THREE.BufferGeometry();
     const { attributes } = buffer;
 
     if (this.shapeType === 'arc') {
       geometry.setIndex(attributes.indexArray);
+      geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
       geometry.addAttribute('a_instance', new THREE.Float32BufferAttribute(attributes.instances, 4));
       geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
       const material = new ArcLineMaterial({
         u_opacity: opacity,
-        u_zoom: this.scene.getZoom()
+        u_zoom: this.scene.getZoom(),
+        activeColor: activeOption.fill
       });
       const mesh = new THREE.Mesh(geometry, material);
       this.add(mesh);
@@ -51,7 +54,8 @@ export default class LineLayer extends Layer {
 
         material = new MeshLineMaterial({
           u_opacity: opacity,
-          u_zoom: this.scene.getZoom()
+          u_zoom: this.scene.getZoom(),
+          activeColor: activeOption.fill
         });
 
         if (animateOptions.enable) {
@@ -71,17 +75,20 @@ export default class LineLayer extends Layer {
         geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
         material = new DashLineMaterial({
           u_opacity: opacity,
-          u_zoom: this.scene.getZoom()
+          u_zoom: this.scene.getZoom(),
+          activeColor: activeOption.fill
         });
       }
       const mesh = new THREE.Mesh(geometry, material);
       this.add(mesh);
     } else { // 直线
+      geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
       geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
       geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
       const material = new LineMaterial({
         u_opacity: opacity,
-        u_time: 0
+        u_time: 0,
+        activeColor: activeOption.fill
       });
       if (animateOptions.enable) {
         material.setDefinesvalue('ANIMATE', true);
