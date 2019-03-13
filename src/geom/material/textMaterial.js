@@ -1,7 +1,8 @@
 import Material from './material';
-import text_frag from '../shader/text_frag.glsl';
-import text_vert from '../shader/text_vert.glsl';
+import { getModule } from '../../util/shaderModule';
+
 export default function TextMaterial(options) {
+  const { vs, fs } = getModule('text');
   const material = new Material({
     uniforms: {
       u_opacity: { value: options.u_opacity || 1.0 },
@@ -16,8 +17,8 @@ export default function TextMaterial(options) {
       u_glSize: { value: options.u_glSize }
 
     },
-    vertexShader: text_vert,
-    fragmentShader: text_frag,
+    vertexShader: vs,
+    fragmentShader: fs,
     transparent: true
   });
   return material;
