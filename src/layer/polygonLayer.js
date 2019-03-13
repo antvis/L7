@@ -35,13 +35,18 @@ export default class PolygonLayer extends Layer {
     const animateOptions = this.get('animateOptions');
     const { attributes } = this._buffer;
     const style = this.get('styleOptions');
+    const activeOption = this.get('activedOptions');
+    const config = {
+      ...style,
+      activeColor: activeOption.fill
+    };
     if (this.shape === 'line') {
       return drawPolygon.DrawLine(attributes, style);
     } else if (animateOptions.enable) {
       const { near, far } = this.map.getCameraState();
       return drawPolygon.DrawAnimate(attributes, { ...style, near, far });
     }
-    return drawPolygon.DrawFill(attributes, style);
+    return drawPolygon.DrawFill(attributes, config);
 
   }
 
