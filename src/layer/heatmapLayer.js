@@ -30,23 +30,27 @@ export default class HeatMapLayer extends Layer {
   }
   _drawHexagon() {
     const style = this.get('styleOptions');
+    const activeOption = this.get('activedOptions');
     const { radius } = this.layerSource.data;
     this._buffer = new hexagonBuffer(this.layerData);
     const config = {
       ...style,
-      radius
+      radius,
+      activeColor: activeOption.fill
     };
     const Mesh = new DrawHexagon(this._buffer, config);
     this.add(Mesh);
   }
   _drawGrid() {
     const style = this.get('styleOptions');
+    const activeOption = this.get('activedOptions');
     const { xOffset, yOffset } = this.layerSource.data;
     this._buffer = new gridBuffer(this.layerData);
     const config = {
       ...style,
       xOffset,
-      yOffset
+      yOffset,
+      activeColor: activeOption.fill
     };
     const girdMesh = new DrawGrid(this._buffer, config);
     this.add(girdMesh);
