@@ -6,7 +6,8 @@ import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
 import source from './source';
-import PickingMaterial from '../core/engine/picking/pickingMaterial';
+import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
+// import PickingMaterial from '../core/engine/picking/pickingMaterial';
 import Attr from '../attr/index';
 import Util from '../util';
 import Global from '../global';
@@ -46,7 +47,9 @@ export default class Layer extends Base {
       // 选中时的配置项
       selectedOptions: null,
       // active 时的配置项
-      activedOptions: null,
+      activedOptions: {
+        fill: [ 1.0, 0, 0, 1.0 ]
+      },
       animateOptions: {
         enable: false
       }
@@ -82,19 +85,20 @@ export default class Layer extends Base {
     this._zoomchangeHander = this._visibleWithZoom.bind(this);
     this.scene.on('zoomchange', this._zoomchangeHander);
 
-    object.onBeforeRender = () => {
+    object.onBeforeRender = () => { // 每次渲染前改变状态
       const zoom = this.scene.getZoom();
       object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
       object.material.setUniformsValue('u_zoom', zoom);
-      this._preRender();
 
     };
     // 更新
-    if (this._needUpdateFilter) {
+    if (this._needUpdateFilter) { // 动态更新数据过滤
       this._updateFilter(object);
     }
     this._object3D.add(object);
-    if (type === 'fill') { this._addPickMesh(object); }
+    if (type === 'fill') {
+      this._addPickMesh(object);// 不对边界线进行拾取
+    }
   }
   remove(object) {
     this._object3D.remove(object);
@@ -152,12 +156,13 @@ export default class Layer extends Base {
   active(enable, cfg) {
     if (enable === false) {
       this.set('allowActive', false);
-    } else if (Util.isObject(enable)) {
+    } else if (Util.isObject(enable) && enable.fill) {
       this.set('allowActive', true);
+      if (enable.fill) enable.fill = ColorUtil.color2RGBA(enable.fill);
       this.set('activedOptions', enable);
     } else {
       this.set('allowActive', true);
-      this.set('activedOptions', cfg || { fill: Global.activeColor });
+      this.set('activedOptions', cfg || { fill: ColorUtil.color2RGBA(Global.activeColor) });
     }
     return this;
   }
@@ -278,14 +283,8 @@ export default class Layer extends Base {
 
   _addActiveFeature(e) {
     const { featureId } = e;
-    if (featureId < 0) return;
-    const activeStyle = this.get('activedOptions');
-    const selectFeatureIndexId = this.layerSource.getSeletFeatureIndex(featureId);
-    // 如果数据不显示状态则不进行高亮
-    if (this.layerData[featureId].hasOwnProperty('filter') && this.layerData[featureId].filter === false) { return; }
-    const style = Util.assign({}, this.layerData[selectFeatureIndexId]); // 要素ID 和dataId不是对应关系
-    style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
-    this.updateStyle([ featureId ], style, selectFeatureIndexId);
+    this._activeIds = featureId;
+    this.layerMesh.material.setUniformsValue('u_activeId', featureId);
   }
 
 
@@ -456,11 +455,14 @@ export default class Layer extends Base {
     // this.scene.on('zoomchange', () => {
     //   this._visibleWithZoom();
     // });
-
     this.addToPicking(this._pickingMesh);
-    const pickmaterial = new PickingMaterial({
-      u_zoom: this.scene.getZoom()
-    });
+    const pickmaterial = mesh.material.clone();
+
+    pickmaterial.fragmentShader = pickingFragmentShader;
+    // const pickmaterial = new PickingMaterial({
+    //   u_zoom: this.scene.getZoom(),
+    //   vs: mesh.material.
+    // });
 
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = this.layerId;
@@ -478,9 +480,9 @@ export default class Layer extends Base {
   _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
-      if (featureId < -100 && this._activeIds !== null) {
+      if (featureId < 0 && this._activeIds !== null) {
         type = 'mouseleave';
-        featureId = this._activeIds[0];
+        // featureId = this._activeIds;
       }
       const feature = this.layerSource.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
@@ -491,7 +493,7 @@ export default class Layer extends Base {
         type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
-      if (featureId >= 0) {
+      if (featureId >= 0 || this._activeIds !== null) { // 拾取到元素，或者离开元素
         this.emit(type, target);
       }
 
@@ -584,23 +586,8 @@ export default class Layer extends Base {
    * 重置高亮要素
    */
   _resetStyle() {
-    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
-    const colorAttr = this.layerMesh.geometry.attributes.a_color;
-    this._activeIds.forEach(index => {
-      const selectFeatureIndexId = this.layerSource.getSeletFeatureIndex(index);
-      const color = this.layerData[selectFeatureIndexId].color;
-      const firstId = pickingId.indexOf(index);
-      for (let i = firstId; i < pickingId.length; i++) {
-        if (pickingId[i] === index) {
-          colorAttr.array[i * 4 + 0] = color[0];
-          colorAttr.array[i * 4 + 1] = color[1];
-          colorAttr.array[i * 4 + 2] = color[2];
-          colorAttr.array[i * 4 + 3] = color[3];
-        }
-      }
-    });
-    colorAttr.needsUpdate = true;
     this._activeIds = null;
+    this.layerMesh.material.setUniformsValue('u_activeId', 0);
   }
   /**
    * 销毁Layer对象

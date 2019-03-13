@@ -11,10 +11,12 @@ varying vec2 v_texCoord;
 varying  vec4 v_color;
 varying float v_lightWeight;
 varying float v_size;
-
+uniform float u_activeId;
+uniform vec4 u_activeColor;
 void main() {
    float scale = pow(2.0,(20.0 - u_zoom));
-  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix * 100.;
+  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
+  worldId = id_toPickColor(pickingId);
   vec3 newposition =  position;
   // newposition.x -= 128.0;
    #ifdef SHAPE 
@@ -23,6 +25,9 @@ void main() {
    v_texCoord = faceUv;
   if(normal == vec3(0.,0.,1.)){
      v_color = a_color;
+    if(pickingId == u_activeId) {
+        v_color = u_activeColor;
+     }
      gl_Position =  matModelViewProjection  * vec4(newposition, 1.0);
      return;
   }
@@ -44,5 +49,10 @@ void main() {
   v_lightWeight = lightWeight;
   // v_size = a_size;
   v_color =vec4(a_color.rgb*lightWeight, a_color.w); 
+   if(pickingId == u_activeId) {
+     v_color = u_activeColor;
+   }
   gl_Position =  matModelViewProjection * vec4(newposition, 1.0);
+  
+
 }
