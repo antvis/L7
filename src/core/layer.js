@@ -89,7 +89,10 @@ export default class Layer extends Base {
       const zoom = this.scene.getZoom();
       object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
       object.material.setUniformsValue('u_zoom', zoom);
+    };
 
+    object.onAfterRender = () => { // 每次渲染后改变状态
+      this.afterRender();
     };
     // 更新
     if (this._needUpdateFilter) { // 动态更新数据过滤
@@ -120,7 +123,6 @@ export default class Layer extends Base {
     // }).then(data => {
     //   console.log(data);
     // });
-
     return this;
   }
   color(field, values) {
@@ -624,7 +626,11 @@ export default class Layer extends Base {
     this.scene.off('zoomchange', this._zoomchangeHander);
     this.destroyed = true;
   }
-  _preRender() {
+  preRender() {
+
+  }
+
+  afterRender() {
 
   }
 }
