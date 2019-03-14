@@ -57,7 +57,7 @@ export default class HeatMapLayer extends Layer {
   }
 
   afterRender() {
-    if (this.shapeType !== 'grid' || this.shapeType !== 'hexagon') {
+    if (this.shapeType !== 'grid' && this.shapeType !== 'hexagon') {
       updateIntensityPass(this);
     }
   }
