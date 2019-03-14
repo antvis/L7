@@ -1,7 +1,7 @@
 import Base from './base';
 import Controller from './controller/index';
 import { getTransform, getParser } from '../source';
-import { extent } from '../util/geo';
+import { extent, tranfrormCoord } from '../util/geo';
 import { getMap } from '../map/index';
 export default class Source extends Base {
   getDefaultCfg() {
@@ -47,7 +47,8 @@ export default class Source extends Base {
   }
   _projectCoords() {
     this.data.dataArray.forEach(data => {
-      data.coordinates = this._coordProject(data.coordinates);
+      // data.coordinates = this._coordProject(data.coordinates);
+      data.coordinates = tranfrormCoord(data.coordinates, this._coorConvert.bind(this));
     });
   }
   createScale(field) {
