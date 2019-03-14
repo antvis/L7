@@ -76,7 +76,7 @@ export function updateIntensityPass(layer) {
   const zoom = layer.scene.getZoom();
   const bbox = layer.dataBbox;
   mesh.material.uniforms.u_zoom.value = zoom;
-  const passWidth = Math.min(5000, Math.pow(zoom, 2.0) * 300);
+  const passWidth = Math.min(8000, Math.pow(zoom, 2.0) * 250);
   const passHeight = passWidth * (bbox.height / bbox.width);
   layer.intensityPass.pass.setSize(passWidth, passHeight);
   layer.intensityPass.render();
@@ -116,7 +116,7 @@ function calBoundingBox(data) {
   minX -= ((maxX - minX) * 0.5);
   maxX += ((maxX - minX) * 0.5);
   minY -= ((maxY - minY) * 0.5);
-  maxY -= ((maxY - minY) * 0.5);
+  maxY += ((maxY - minY) * 0.5);
 
   const width = maxX - minX;
   const height = maxY - minY;

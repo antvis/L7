@@ -18,83 +18,25 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-const data1 = {
-  type: 'FeatureCollection',
-  features: [{
-    type: 'Feature',
-    properties: {
-      value: 550,
-      address: '浙江省'
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [ 120.5751451280382, 29.98157497829861 ]
-    }
-  },
-  {
-    type: 'Feature',
-    properties: {
-      value: 2100,
-      address: '广东省'
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [ 113.818805, 22.664838 ]
-    }
-  },
-  {
-    type: 'Feature',
-    properties: {
-      value: 420,
-      address: '北京'
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [ 116.40899441189237, 39.940829535590275 ]
-    }
-  },
-  {
-    type: 'Feature',
-    properties: {
-      value: 2000,
-      address: '辽宁省'
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [ 122.689323, 40.80727 ]
-    }
-  },
-  {
-    type: 'Feature',
-    properties: {
-      value: 7000,
-      address: '河南省'
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [ 112.903898, 34.075266 ]
-    }
-  }
-  ]
-};
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [ 120.5751451280382, 29.98157497829861 ],
+  center: [ -155, 60 ],
   pitch: 0,
   zoom: 4.5
 });
+ 
 window.scene = scene;
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/basement_prod/08c6ea00-dc5f-4bb0-b0b5-52bde5edf0a3.json', data => {
     scene.HeatmapLayer({
       zIndex: 2
     })
-    .source(data1)
-    .size('value', [ 0, 1 ]) // weight映射通道
+    .source(data)
+    .size('mag', [ 0, 1 ]) // weight映射通道
     .style({
-      intensity: 3,
-      radius: 20,
+      intensity: 2,
+      radius: 30,
       rampColors: {
         colors: [ 'rgba(33,102,172,0.0)', 'rgb(103,169,207)', 'rgb(209,229,240)', 'rgb(253,219,199)', 'rgb(239,138,98)', 'rgb(178,24,43,1.0)' ],
         positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
