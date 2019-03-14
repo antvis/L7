@@ -24,3 +24,16 @@ function calcExtent(extent, coords) {
   }
   return extent;
 }
+
+export function tranfrormCoord(data, cb) {
+  return transform(data, cb);
+}
+function transform(item, cb) {
+  if (Array.isArray(item[0])) {
+    return item.map(coord => {
+      return transform(coord, cb);
+    });
+  }
+  return cb(item);
+
+}
