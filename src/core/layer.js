@@ -89,6 +89,7 @@ export default class Layer extends Base {
       const zoom = this.scene.getZoom();
       object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
       object.material.setUniformsValue('u_zoom', zoom);
+      this._preRender();
 
     };
     // 更新
@@ -280,7 +281,11 @@ export default class Layer extends Base {
       this.off('mouseleave', resetHander);
     }
   }
-
+  setActive(id, color) {
+    this._activeIds = id;
+    this.layerMesh.material.setUniformsValue('u_activeId', id);
+    this.layerMesh.material.setUniformsValue('u_activeColor', ColorUtil.color2RGBA(color));
+  }
   _addActiveFeature(e) {
     const { featureId } = e;
     this._activeIds = featureId;
@@ -624,7 +629,7 @@ export default class Layer extends Base {
     this.scene.off('zoomchange', this._zoomchangeHander);
     this.destroyed = true;
   }
-  _preRender() {
+  preRender() {
 
   }
 }
