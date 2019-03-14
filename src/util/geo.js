@@ -12,15 +12,15 @@ export function extent(data) {
   return extent;
 }
 function calcExtent(extent, coords) {
-  coords.forEach(coord => {
-    if (Array.isArray(coord[0])) {
+  if (Array.isArray(coords[0])) {
+    coords.forEach(coord => {
       calcExtent(extent, coord);
-    } else {
-      if (extent[0] > coord[0]) extent[0] = coord[0];
-      if (extent[1] > coord[1]) extent[1] = coord[1];
-      if (extent[2] < coord[0]) extent[2] = coord[0];
-      if (extent[3] < coord[1]) extent[3] = coord[1];
-    }
-  });
+    });
+  } else {
+    if (extent[0] > coords[0]) extent[0] = coords[0];
+    if (extent[1] > coords[1]) extent[1] = coords[1];
+    if (extent[2] < coords[0]) extent[2] = coords[0];
+    if (extent[3] < coords[1]) extent[3] = coords[1];
+  }
   return extent;
 }
