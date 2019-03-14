@@ -2,7 +2,7 @@ import Layer from '../core/layer';
 import gridBuffer from '../geom/buffer/heatmap/grid';
 import DrawGrid from './render/heatmap/gird';
 import DrawHexagon from './render/heatmap/hexagon';
-import drawHeatmap from './render/heatmap/heatmap';
+import { drawHeatmap, updateIntensityPass } from './render/heatmap/heatmap';
 import hexagonBuffer from '../geom/buffer/heatmap/hexagon';
 
 export default class HeatMapLayer extends Layer {
@@ -54,6 +54,12 @@ export default class HeatMapLayer extends Layer {
     };
     const girdMesh = new DrawGrid(this._buffer, config);
     this.add(girdMesh);
+  }
+
+  afterRender() {
+    if (this.shapeType !== 'grid' || this.shapeType !== 'hexagon') {
+      updateIntensityPass(this);
+    }
   }
 
 }
