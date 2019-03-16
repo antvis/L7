@@ -36,8 +36,10 @@ export default class RenderPass {
   }
 
   render() {
+
     this.renderer.setClearColor(this.clearColor, this.clearAlpha);
     this.renderer.render(this.scene, this.camera, this.pass, true);
+    this.renderer.setRenderTarget(null);
     this.renderer.setClearColor(this.originClearColor, this.originClearAlpha);
   }
 }
