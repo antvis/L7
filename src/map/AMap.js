@@ -159,8 +159,8 @@ export default class GaodeMap extends Base {
     scene.lngLatToPixel = () => {
       return map.lngLatToPixel();
     };
-    scene.setMapStyle = () => {
-      return map.setMapStyle();
+    scene.setMapStyle = style => {
+      return map.setMapStyle(style);
     };
     scene.fitBounds = extent => {
       return map.setBounds(
