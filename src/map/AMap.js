@@ -126,38 +126,36 @@ export default class GaodeMap extends Base {
     scene.getZoom = () => {
       return map.getZoom();
     };
-    scene.setZoom = () => {
-      return map.setZoom();
+    scene.setZoom = zoom => {
+      return map.setZoom(zoom);
     };
-    scene.setBounds = () => {
-      return map.setBounds();
+    scene.setBounds = extent => {
+      return map.setBounds(new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ]));
     };
-    scene.setRotation = () => {
-      return map.setRotation();
+    scene.setRotation = rotation => {
+      return map.setRotation(rotation);
     };
     scene.zoomIn = () => {
       return map.zoomIn();
     };
-    scene.setRotation = () => {
-      return map.setRotation();
-    };
     scene.zoomOut = () => {
       return map.zoomOut();
     };
-    scene.panTo = () => {
-      return map.panTo();
+    scene.panTo = lnglat => {
+      return map.panTo(new AMap.LngLat(lnglat[0], lnglat[1]));
     };
-    scene.panBy = () => {
-      return map.panBy();
+    scene.panBy = (x, y) => {
+      return map.panBy(x, y);
     };
-    scene.setPitch = () => {
-      return map.setPitch();
+    scene.setPitch = pitch => {
+      return map.setPitch(pitch);
     };
-    scene.pixelToLngLat = () => {
-      return map.pixelToLngLat();
+    scene.pixelToLngLat = pixel => {
+      const ll = new AMap.Pixel(pixel[0], pixel[1]);
+      return map.pixelToLngLat(ll);
     };
-    scene.lngLatToPixel = () => {
-      return map.lngLatToPixel();
+    scene.lngLatToPixel = lnglat => {
+      return map.lngLatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
     };
     scene.setMapStyle = style => {
       return map.setMapStyle(style);
