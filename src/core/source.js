@@ -10,6 +10,7 @@ export default class Source extends Base {
       defs: {},
       parser: {},
       transforms: [],
+      scaledefs: {},
       scales: {},
       options: {}
     };
@@ -18,13 +19,16 @@ export default class Source extends Base {
     super(cfg);
     const transform = this.get('transforms');
     this._transforms = transform || [];
-    this._initControllers();
+    const mapType = this.get('mapType');
+    this.projectFlat = getMap(mapType).project;
     // 数据解析
     this._excuteParser();
     // 数据转换 统计，聚合，分类
     this._executeTrans();
     // 坐标转换
     this._projectCoords();
+
+    this._initControllers();
   }
   _excuteParser() {
     const parser = this.get('parser');
@@ -63,11 +67,11 @@ export default class Source extends Base {
     return scale;
   }
   _initControllers() {
-    const defs = this.get('defs');
-    const mapType = this.get('mapType');
-    this.projectFlat = getMap(mapType).project;
+    const scales = this.get('scaledefs');
     const scaleController = new Controller.Scale({
-      defs
+      defs: {
+        ...scales
+      }
     });
     this.set('scaleController', scaleController);
   }
