@@ -4,6 +4,7 @@ attribute vec4 a_color;
 uniform float u_xOffset;
 uniform float u_yOffset;
 uniform float u_coverage;
+uniform float u_opacity;
 uniform float u_activeId;
 uniform vec4 u_activeColor;
 varying vec4 v_color;
@@ -11,6 +12,7 @@ varying vec4 v_color;
 void main() {
    mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
    v_color = a_color;
+   v_color.a *= u_opacity;
     if(pickingId == u_activeId) {
      v_color = u_activeColor;
    }
