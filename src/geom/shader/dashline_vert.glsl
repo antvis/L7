@@ -3,6 +3,7 @@ attribute float a_miter;
 attribute vec4 a_color;
 attribute float a_size;
 uniform float u_zoom;
+uniform float u_opacity;
 varying vec4 v_color;
 attribute float a_distance;
 varying float v_lineU;
@@ -13,6 +14,7 @@ void main() {
  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
  vec3 pointPos = position.xyz + vec3(normal * a_size * pow(2.0,20.0-u_zoom) / 2.0 * a_miter);
  v_color = a_color;
+ v_color.a *= u_opacity;
   if(pickingId == u_activeId) {
     v_color = u_activeColor;
   }
