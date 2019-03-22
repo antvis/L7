@@ -23,7 +23,8 @@ export function HeatmapColorizeMaterial(opt) {
   const material = new Material({
     uniforms: {
       u_texture: { value: opt.texture },
-      u_colorRamp: { value: opt.colorRamp }
+      u_colorRamp: { value: opt.colorRamp },
+      u_opacity: { value: opt.opacity }
     },
     vertexShader: vs,
     fragmentShader: fs,

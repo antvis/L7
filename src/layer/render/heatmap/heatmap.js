@@ -84,10 +84,12 @@ export function updateIntensityPass(layer) {
 
 function createColorizePass(layer, bbox) {
     // create plane geometry
+  const style = layer.get('styleOptions');
   const geometery = new THREE.PlaneBufferGeometry(bbox.width, bbox.height);
   const material = new HeatmapColorizeMaterial({
     texture: layer.intensityPass.texture,
-    colorRamp: layer.colorRamp
+    colorRamp: layer.colorRamp,
+    opacity: style.opacity
   });
   const mesh = new THREE.Mesh(geometery, material);
   mesh.position.set(bbox.minX + bbox.width / 2, bbox.minY + bbox.height / 2, 0.0);
