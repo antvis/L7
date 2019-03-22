@@ -1,5 +1,4 @@
 precision highp float;
-uniform float u_opacity;
 uniform sampler2D u_texture;
 uniform vec4 u_baseColor;
 uniform vec4 u_brightColor;
@@ -58,7 +57,7 @@ void main() {
    #ifdef ANIMATE 
      if(v_texCoord.x < 0.) { //顶部颜色
        vec3 foggedColor = fog(baseColor.xyz + vec3(0.12*0.9,0.2*0.9,0.3*0.9),fogColor,depth);
-       gl_FragColor = vec4( foggedColor, v_color.w * u_opacity);
+       gl_FragColor = vec4( foggedColor, v_color.w);
      }else { // 侧面颜色
         vec2 st = v_texCoord; 
         vec2  UvScale = v_texCoord;
@@ -107,7 +106,7 @@ void main() {
         gl_FragColor = vec4(foggedColor,1.0); 
      }
    #else
-      gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
+      gl_FragColor = vec4(v_color.xyz , v_color.w);
    #endif
  
 }

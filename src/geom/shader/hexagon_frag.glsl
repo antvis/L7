@@ -4,5 +4,4 @@
     void main() {
       vec4 color = v_color;
       gl_FragColor = color;
-      gl_FragColor.a =color.a*u_opacity;
 }
