@@ -13,14 +13,14 @@
 </head>
 <body>
 <div id="map"></div>
-<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=f28fca5384129d180ad82915156a9baf&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'dark', // 样式URL
+  mapStyle: 'amap://styles/c9f1d10cae34f8ab05e425462c5a58d7', // 样式URL
   center: [ -155, 60 ],
   pitch: 0,
   zoom: 4.5
@@ -35,11 +35,12 @@ scene.on('loaded', () => {
     .source(data)
     .size('mag', [ 0, 1 ]) // weight映射通道
     .style({
-      intensity: 100,
-      radius: 30,
+      intensity: 10,
+      radius: 10,
+      opacity:1,
       rampColors: {
-        colors: [ 'rgba(33,102,172,0.0)', 'rgb(103,169,207)', 'rgb(209,229,240)', 'rgb(253,219,199)', 'rgb(239,138,98)', 'rgb(178,24,43,1.0)' ],
-        positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
+        colors: [ '#ffda45ff', '#fde725ff', '#ffc934ff', '#ffb824ff', '#ffb824ff', '#fa8100ff' ],
+        positions: [ 0, 0.2, 0.4, 0.6, 0.9, 1.0 ]
       }
     })
     .render();

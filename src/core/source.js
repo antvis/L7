@@ -45,6 +45,10 @@ export default class Source extends Base {
     });
     this._transforms = trans;
   }
+  transform(option) {
+    const data = getTransform(option.type)(this.data, option);
+    Object.assign(this.data, data);
+  }
   _projectCoords() {
     this.data.dataArray.forEach(data => {
       // data.coordinates = this._coordProject(data.coordinates);
@@ -54,6 +58,7 @@ export default class Source extends Base {
   createScale(field) {
     const data = this.data.dataArray;
     const scales = this.get('scales');
+    console.log(scales);
     let scale = scales[field];
     const scaleController = this.get('scaleController');
     if (!scale) {
