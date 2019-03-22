@@ -46,13 +46,14 @@ window.scene = scene;
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', data => {
     const circleLayer = scene.PointLayer({
-      zIndex: 2
+      zIndex: 2,
     })
     .source(data,{
-      scale:{
-        min:0,
-        max:1000,
-        type:'linear'
+       scaledefs:{
+         value:{
+            type:'log'
+         }
+       
       }
     })
     .shape('2d:circle')
@@ -69,7 +70,9 @@ scene.on('loaded', () => {
       opacity: 1.
     })
      .render();
-     
+     console.log(circleLayer);
+     var a = circleLayer.getLendgendCfg('type','color');
+     console.log(a);
     circleLayer.on('click',(e)=>{
     console.log(e);
   })

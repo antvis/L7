@@ -7,6 +7,7 @@ attribute vec2 faceUv;
 attribute vec3 a_shape;
 attribute vec3 a_size;
 uniform float u_zoom;
+uniform float u_opacity;
 varying vec2 v_texCoord;
 varying  vec4 v_color;
 varying float v_lightWeight;
@@ -25,6 +26,7 @@ void main() {
    v_texCoord = faceUv;
   if(normal == vec3(0.,0.,1.)){
      v_color = a_color;
+    v_color.a *= u_opacity;
     if(pickingId == u_activeId) {
         v_color = u_activeColor;
      }
