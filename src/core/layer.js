@@ -643,7 +643,7 @@ export default class Layer extends Base {
    * @param {*} type 图例类型 color, size
    * @return {*} 图例配置项
    */
-  getLendgendCfg(field, type = 'color') {
+  getLegendCfg(field, type = 'color') {
     // todo heatmap
     if (this.type === 'heatmap' && this.shapeType === 'heatmap') {
       return this.get('styleOptions').rampColors;
