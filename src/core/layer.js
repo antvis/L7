@@ -286,7 +286,10 @@ export default class Layer extends Base {
   setActive(id, color) {
     this._activeIds = id;
     this.layerMesh.material.setUniformsValue('u_activeId', id);
-    this.layerMesh.material.setUniformsValue('u_activeColor', ColorUtil.color2RGBA(color));
+    if (!Array.isArray(color)) {
+      color = ColorUtil.color2RGBA(color);
+    }
+    this.layerMesh.material.setUniformsValue('u_activeColor', color);
   }
   _addActiveFeature(e) {
     const { featureId } = e;
@@ -493,9 +496,11 @@ export default class Layer extends Base {
       }
       const feature = this.layerSource.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
+      const style = this.layerData[featureId - 1];
       const target = {
         featureId,
         feature,
+        style,
         pixel: point2d,
         type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
@@ -630,6 +635,34 @@ export default class Layer extends Base {
     this.scene._engine._picking.remove(this._pickingMesh);
     this.scene.off('zoomchange', this._zoomchangeHander);
     this.destroyed = true;
+  }
+
+  /**
+   * 获取图例配置项
+   * @param {*} field 字段
+   * @param {*} type 图例类型 color, size
+   * @return {*} 图例配置项
+   */
+  getLendgendCfg(field, type = 'color') {
+    // todo heatmap
+    if (this.type === 'heatmap' && this.shapeType === 'heatmap') {
+      return this.get('styleOptions').rampColors;
+    }
+    const scales = this.get('scales');
+    const scale = scales[field];
+    const colorAttrs = this.get('attrs')[type];
+    const lengendCfg = {};
+    if (scale) {
+      const ticks = scale.ticks;
+      lengendCfg.value = ticks;
+      lengendCfg.type = scale.type;
+      const values = ticks.map(value => {
+        const v = this._getAttrValues(colorAttrs, { [field]: value });
+        return type === 'color' ? ColorUtil.colorArray2RGBA(v) : v;
+      });
+      lengendCfg[type] = values;
+    }
+    return lengendCfg;
   }
   preRender() {
 
