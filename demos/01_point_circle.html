@@ -48,16 +48,12 @@ scene.on('loaded', () => {
     const circleLayer = scene.PointLayer({
       zIndex: 2,
     })
-    .source(data,{
-       scaledefs:{
-         value:{
-            type:'log'
-         }
-       
-      }
+    .source(data)
+    .shape('circle')
+    .size('value', [ 2, 30]) // default 1
+    .scale('value', {
+      type:'log',
     })
-    .shape('2d:circle')
-     .size('value', [ 2, 80]) // default 1
      //.size('value', [ 10, 300]) // default 1
     .active(true)
      .filter('value', field_8 => {
