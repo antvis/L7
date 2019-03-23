@@ -1,5 +1,4 @@
 import Base from './base';
-import Controller from './controller/index';
 import { getTransform, getParser } from '../source';
 import { extent, tranfrormCoord } from '../util/geo';
 import { getMap } from '../map/index';
@@ -28,7 +27,6 @@ export default class Source extends Base {
     // 坐标转换
     this._projectCoords();
 
-    this._initControllers();
   }
   _excuteParser() {
     const parser = this.get('parser');
@@ -55,27 +53,6 @@ export default class Source extends Base {
       data.coordinates = tranfrormCoord(data.coordinates, this._coorConvert.bind(this));
     });
   }
-  createScale(field) {
-    const data = this.data.dataArray;
-    const scales = this.get('scales');
-    let scale = scales[field];
-    const scaleController = this.get('scaleController');
-    if (!scale) {
-      scale = scaleController.createScale(field, data);
-      scales[field] = scale;
-    }
-    return scale;
-  }
-  _initControllers() {
-    const scales = this.get('scaledefs');
-    const scaleController = new Controller.Scale({
-      defs: {
-        ...scales
-      }
-    });
-    this.set('scaleController', scaleController);
-  }
-
   _getCoord(geo) {
     if (geo.geometry) {
       // GeoJSON feature
