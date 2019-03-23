@@ -5,6 +5,7 @@
 import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
+import Controller from './controller/index';
 import source from './source';
 import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
 // import PickingMaterial from '../core/engine/picking/pickingMaterial';
@@ -31,8 +32,10 @@ export default class Layer extends Base {
       minZoom: 0,
       maxZoom: 22,
       rotation: 0,
+      option: {},
       attrOptions: {
       },
+      scaleOptions: {},
       scales: {},
       attrs: {},
       // 样式配置项
@@ -140,6 +143,16 @@ export default class Layer extends Base {
     this._createAttrOption('size', field, values, Global.size);
     return this;
   }
+  scale(field, cfg) {
+    const options = this.get('scaleOptions');
+    const scaleDefs = options;
+    if (Util.isObject(field)) {
+      Util.mix(scaleDefs, field);
+    } else {
+      scaleDefs[field] = cfg;
+    }
+    return this;
+  }
   shape(field, values) {
     if (field.split(':').length === 2) {
       this.shapeType = field.split(':')[0];
@@ -195,11 +208,13 @@ export default class Layer extends Base {
     this.set('styleOptions', styleOptions);
     return this;
   }
+
   filter(field, values) {
     this._needUpdateFilter = true;
     this._createAttrOption('filter', field, values, true);
     return this;
   }
+
   animate(field, cfg) {
     let animateOptions = this.get('animateOptions');
     if (!animateOptions) {
@@ -235,10 +250,11 @@ export default class Layer extends Base {
     return this;
   }
   _createScale(field) {
+    // TODO scale更新
     const scales = this.get('scales');
     let scale = scales[field];
     if (!scale) {
-      scale = this.layerSource.createScale(field);
+      scale = this.createScale(field);
       scales[field] = scale;
     }
     return scale;
@@ -265,8 +281,30 @@ export default class Layer extends Base {
     }
     this._setAttrOptions(attrName, attrCfg);
   }
+  _initControllers() {
+    const scales = this.get('scaleOptions');
+    const scaleController = new Controller.Scale({
+      defs: {
+        ...scales
+      }
+    });
+    this.set('scaleController', scaleController);
+  }
+
+  createScale(field) {
+    const data = this.layerSource.data.dataArray;
+    const scales = this.get('scales');
+    let scale = scales[field];
+    const scaleController = this.get('scaleController');
+    if (!scale) {
+      scale = scaleController.createScale(field, data);
+      scales[field] = scale;
+    }
+    return scale;
+  }
   // 初始化图层
   init() {
+    this._initControllers();
     this._initAttrs();
     this._scaleByZoom();
     this._mapping();
@@ -283,6 +321,7 @@ export default class Layer extends Base {
       this.off('mouseleave', resetHander);
     }
   }
+
   setActive(id, color) {
     this._activeIds = id;
     this.layerMesh.material.setUniformsValue('u_activeId', id);
@@ -291,6 +330,7 @@ export default class Layer extends Base {
     }
     this.layerMesh.material.setUniformsValue('u_activeColor', color);
   }
+
   _addActiveFeature(e) {
     const { featureId } = e;
     this._activeIds = featureId;
@@ -306,6 +346,7 @@ export default class Layer extends Base {
       }
     }
   }
+
   _updateAttr(type) {
     const self = this;
     const attrs = this.get('attrs');
@@ -345,6 +386,7 @@ export default class Layer extends Base {
     }
     this.emit('sizeUpdated', this.zoomSizeCache[zoom]);
   }
+
   _mapping() {
     const self = this;
     const attrs = self.get('attrs');
@@ -379,6 +421,7 @@ export default class Layer extends Base {
     }
     this.layerData = mappedData;
   }
+
   // 更新地图映射
   _updateMaping() {
     const self = this;
@@ -407,6 +450,7 @@ export default class Layer extends Base {
       }
     }
   }
+
   // 获取属性映射的值
   _getAttrValues(attr, record) {
     const scales = attr.scales;
