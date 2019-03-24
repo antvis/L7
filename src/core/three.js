@@ -14,7 +14,9 @@ export { WebGLRenderTarget } from 'three/src/renderers/WebGLRenderTarget.js';
 export { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera.js';
 export { OrthographicCamera } from 'three/src/cameras/OrthographicCamera.js';
 export { BufferGeometry } from 'three/src/core/BufferGeometry.js';
+export { InstancedBufferGeometry } from 'three/src/core/InstancedBufferGeometry';
 export { PlaneBufferGeometry } from 'three/src/geometries/PlaneGeometry.js';
+export { BoxBufferGeometry } from 'three/src/geometries/BoxGeometry.js';
 export { Raycaster } from 'three/src/core/Raycaster.js';
 export { Matrix4 } from 'three/src/math/Matrix4.js';
 export { Matrix3 } from 'three/src/math/Matrix3.js';
@@ -38,4 +40,5 @@ export {
   BufferAttribute
 } from 'three/src/core/BufferAttribute.js';
 
+export { InstancedBufferAttribute } from 'three/src/core/InstancedBufferAttribute'
 // export * from '../../build/three.js';
