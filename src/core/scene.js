@@ -2,6 +2,7 @@ import Engine from './engine';
 import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
+import FontAtlasManager from '../geom/buffer/point/text/font-manager';
 // import WorkerPool from './worker';
 // import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
@@ -16,6 +17,7 @@ export default class Scene extends Base {
     this._initMap();
     // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
+    this.fontAtlasManager = new FontAtlasManager();
     this._layers = [];
   }
 

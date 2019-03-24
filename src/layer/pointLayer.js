@@ -1,10 +1,9 @@
 import Layer from '../core/layer';
-import * as THREE from '../core/three';
 import * as drawPoint from '../layer/render/point';
+import TextBuffer2 from '../geom/buffer/point/text';
+import DrawText from './render/point/drawText';
 import Global from '../global';
 // import PointBuffer from '../geom/buffer/point';
-import TextBuffer from '../geom/buffer/text';
-import TextMaterial from '../geom/material/textMaterial';
 import * as PointBuffer from '../geom/buffer/point/index';
 const { pointShape } = Global;
 /**
@@ -101,37 +100,18 @@ export default class PointLayer extends Layer {
   }
   _textPoint() {
     const styleOptions = this.get('styleOptions');
-    const buffer = new TextBuffer({
-      type: this.shapeType,
-      layerData: this.layerData,
-      style: this.get('styleOptions')
-    });
-
-    buffer.on('completed', () => {
-      const { color, stroke } = styleOptions;
-      const geometry = new THREE.BufferGeometry();
-      geometry.addAttribute('position', new THREE.Float32BufferAttribute(buffer.attributes.originPoints, 3));
-      geometry.addAttribute('uv', new THREE.Float32BufferAttribute(buffer.attributes.textureElements, 2));
-      geometry.addAttribute('a_txtsize', new THREE.Float32BufferAttribute(buffer.attributes.textSizes, 2));
-      geometry.addAttribute('a_txtOffsets', new THREE.Float32BufferAttribute(buffer.attributes.textOffsets, 2));
-      geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(buffer.attributes.colors, 4));
-      const { width, height } = this.scene.getSize();
-      const material = new TextMaterial({
-        name: this.layerId,
-        u_texture: buffer.bufferStruct.textTexture,
-        u_strokeWidth: styleOptions.strokeWidth,
-        u_stroke: stroke,
-        u_textSize: buffer.bufferStruct.textSize,
-        u_gamma: 2 * 1.4142 / 64,
-        u_buffer: 0.65,
-        u_color: color,
-        u_glSize: [ width, height ]
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      this.add(mesh);
-
-    });
-
+    const activeOption = this.get('activedOptions');
+    const { width, height } = this.scene.getSize();
+    const textCfg = {
+      ...styleOptions,
+      width,
+      height,
+      activeColor: activeOption.fill
+    };
+    const buffer2 = new TextBuffer2(this.layerData, this.scene.fontAtlasManager);
+    const testMesh = new DrawText(buffer2, textCfg);
+    this.add(testMesh);
+    return;
   }
 
 }

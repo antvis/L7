@@ -151,31 +151,7 @@ function drawGlyph(chars, pos, text, pen, size, colors, textureElements, originP
       posX + width, posY + height
     );
   }
-  pen.x = pen.x + size * 1.8;
+  pen.x = pen.x + size;
 
 }
 
-
-// function measureText(text, size) {
-//   const dimensions = {
-//     advance: 0
-//   };
-//   const metrics = this.metrics;
-//   const scale = size / metrics.size;
-//   for (let i = 0; i < text.length; i++) {
-//     const code = text.charCodeAt(i);
-//     const horiAdvance = metrics.chars[code][4];
-
-//     dimensions.advance += (horiAdvance + Space) * scale;
-//   }
-
-//   return dimensions;
-// }
-// function creatTexture(image) {
-//   this.bufferStruct.textSize = [ image.width, image.height ];
-//   const texture = new THREE.Texture(image);
-//   texture.minFilter = THREE.LinearFilter;
-//   texture.magFilter = THREE.ClampToEdgeWrapping;
-//   texture.needsUpdate = true;
-//   return texture;
-// }
