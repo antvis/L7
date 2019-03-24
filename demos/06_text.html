@@ -25,22 +25,24 @@ const scene = new L7.Scene({
   mapStyle: 'dark', // 样式URL
   center: [ 120.19382669582967, 30.258134 ],
   pitch: 0,
-  zoom: 3
+  zoom: 1
 });
 window.scene = scene;
 scene.on('loaded', () => {
   $.get('./data/provincePoint.geojson', data => {
+   // data.features = data.features.slice(0,1);
     scene.PointLayer({
       zIndex: 2
     })
     .source(data)
     .shape('name', 'text')
-    .size(12) // default 1
-    .color('#fff')
+    .active(true)
+    .size(48) // default 1
+    .color('name')
     .style({
       stroke: '#999',
-      strokeWidth: 2,
-      opacity: 0.85
+      strokeWidth: 0,
+      opacity: 1.0
     })
      .render();
   });
