@@ -6,7 +6,6 @@ precision highp float;
 
 uniform float u_strokeWidth;
 uniform vec4 u_stroke;
-uniform float u_opacity;
 uniform sampler2D u_texture;
 
 varying vec2 v_rs;
@@ -29,7 +28,7 @@ void main() {
     #endif
      if(v_color.a == 0.)
       discard;
-    vec4 pcolor = v_color * u_opacity;
+    vec4 pcolor = v_color;
     float ro = v_rs.x;
     float ri = v_rs.y;
     float d = 0.0;
@@ -54,7 +53,7 @@ void main() {
             gl_FragColor = vec4(u_stroke.xyz,u_stroke.a*(ro- dis2center));
             return;
         }else if(dis2center>ri){
-            gl_FragColor= u_stroke * alpha ;
+            gl_FragColor= u_stroke;
             return;
         }
     }
@@ -71,7 +70,6 @@ void main() {
         } else{
             gl_FragColor= pcolor;
         }
-    gl_FragColor *= u_opacity;
     
 }
 
