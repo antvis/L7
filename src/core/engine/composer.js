@@ -3,7 +3,7 @@
 
 import * as THREE from '../three';
 import CopyShader from './CopyShader';
-import ShaderPass from './ShaderPass';
+import ShaderPass from './shaderpass';
 import MaskPass, {ClearMaskPass} from './MaskPass';
 
 /**
