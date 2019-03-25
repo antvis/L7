@@ -2,9 +2,9 @@
 /* eslint-disable */
 
 import * as THREE from '../three';
-import CopyShader from './CopyShader';
-import ShaderPass from './shaderpass';
-import MaskPass, {ClearMaskPass} from './MaskPass';
+import CopyShader from './copy-shader';
+import ShaderPass from './shader-pass';
+import MaskPass, {ClearMaskPass} from './mask-pass';
 
 /**
  * @author alteredq / http://alteredqualia.com/
