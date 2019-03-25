@@ -31,8 +31,6 @@ RenderPass.prototype = {
 	render: function ( renderer, writeBuffer, readBuffer, delta ) {
 
     this.scene.overrideMaterial = this.overrideMaterial;
-    const oldAutoClear = renderer.autoClear;
-    // renderer.autoClear = false;
 		if ( this.clearColor ) {
 
 			this.oldClearColor.copy( renderer.getClearColor() );
@@ -43,7 +41,7 @@ RenderPass.prototype = {
 		}
 
     renderer.render( this.scene, this.camera, readBuffer, this.clear );
-    // if(this.clear)renderer.clear( renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil );
+
 
 		if ( this.clearColor ) {
 
@@ -52,7 +50,6 @@ RenderPass.prototype = {
 		}
 
     this.scene.overrideMaterial = null;
-    renderer.autoClear = oldAutoClear;
 
 	}
 
