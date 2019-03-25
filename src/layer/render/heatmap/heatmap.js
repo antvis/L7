@@ -78,7 +78,7 @@ export function updateIntensityPass(layer) {
   mesh.material.uniforms.u_zoom.value = zoom;
   const passWidth = Math.min(8000, Math.pow(zoom, 2.0) * 250);
   const passHeight = passWidth * (bbox.height / bbox.width);
-  layer.intensityPass.pass.setSize(passWidth, passHeight);
+  layer.intensityPass.setSize(passWidth, passHeight);
   layer.intensityPass.render();
 }
 
