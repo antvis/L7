@@ -11,7 +11,7 @@ export default class ShaderPass extends RenderPass {
   }
 
   _init(cfg) {
-    super(cfg);
+    super._init(cfg);
     this.camera = new THREE.OrthographicCamera(-this.size.width / 2, this.size.width / 2, this.size.height / 2, -this.size.height / 2, 0, 100);
     this.material = new THREE.ShaderMaterial({
       vertexShader: this.vertexShader,
