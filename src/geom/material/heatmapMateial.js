@@ -13,6 +13,7 @@ export function HeatmapIntensityMaterial(opt) {
     vertexShader: vs,
     fragmentShader: fs,
     transparent: true,
+    depthTest: false,
     blending: THREE.AdditiveBlending
   });
   return material;
@@ -23,7 +24,8 @@ export function HeatmapColorizeMaterial(opt) {
   const material = new Material({
     uniforms: {
       u_texture: { value: opt.texture },
-      u_colorRamp: { value: opt.colorRamp }
+      u_colorRamp: { value: opt.colorRamp },
+      u_opacity: { value: opt.opacity }
     },
     vertexShader: vs,
     fragmentShader: fs,
