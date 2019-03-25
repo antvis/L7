@@ -2,9 +2,9 @@ import HeatmapBuffer from '../../../geom/buffer/heatmap/heatmap';
 import { createColorRamp } from '../../../geom/buffer/heatmap/heatmap';
 import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMateial';
 // import Renderpass from '../../../core/engine/renderpass.bak';
-import RenderPass from '../../../core/engine/renderpass';
-import ShaderPass from '../../../core/engine/ShaderPass';
-import EffectComposer from '../../../core/engine/EffectComposer';
+import RenderPass from '../../../core/engine/render-pass';
+import ShaderPass from '../../../core/engine/shader-pass';
+import EffectComposer from '../../../core/engine/effect-composer';
 import * as THREE from '../../../core/three';
 
 export function drawHeatmap(layer) {
