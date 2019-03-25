@@ -16,6 +16,7 @@ export { OrthographicCamera } from 'three/src/cameras/OrthographicCamera.js';
 export { BufferGeometry } from 'three/src/core/BufferGeometry.js';
 export { PlaneBufferGeometry } from 'three/src/geometries/PlaneGeometry.js';
 export { Raycaster } from 'three/src/core/Raycaster.js';
+export { UniformsUtils } from 'three/src/renderers/shaders/UniformsUtils.js';
 export { Matrix4 } from 'three/src/math/Matrix4.js';
 export { Matrix3 } from 'three/src/math/Matrix3.js';
 export { Line } from 'three/src/objects/Line.js';

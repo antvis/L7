@@ -1,7 +1,7 @@
 // jscs:disable
 /* eslint-disable */
 
-import THREE from 'three';
+import * as THREE from '../three';
 
 /**
  * @author alteredq / http://alteredqualia.com/
@@ -92,6 +92,3 @@ ClearMaskPass.prototype = {
 
 export default MaskPass;
 export {ClearMaskPass as ClearMaskPass};
-
-THREE.MaskPass = MaskPass;
-THREE.ClearMaskPass = ClearMaskPass;
