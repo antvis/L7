@@ -8,7 +8,7 @@ export default class PointLineMaterial extends Material {
         u_stroke: { value: [ 1.0, 1.0, 1.0, 1.0 ] },
         u_strokeWidth: { value: 1.0 },
         u_zoom: { value: 10 },
-        u_activeId: { value: 0 },
+        u_activeId: { value: -1 },
         u_activeColor: { value: [ 1.0, 0, 0, 1.0 ] }
 
       }

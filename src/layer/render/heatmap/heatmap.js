@@ -2,7 +2,7 @@ import HeatmapBuffer from '../../../geom/buffer/heatmap/heatmap';
 import { createColorRamp } from '../../../geom/buffer/heatmap/heatmap';
 import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMateial';
 // import Renderpass from '../../../core/engine/renderpass.bak';
-import Renderpass from '../../../core/engine/renderPass';
+import RenderPass from '../../../core/engine/renderpass';
 import ShaderPass from '../../../core/engine/ShaderPass';
 import EffectComposer from '../../../core/engine/EffectComposer';
 import * as THREE from '../../../core/three';
@@ -49,7 +49,7 @@ function heatmapPass(layer) {
     const zoom = layer.scene.getZoom();
     mesh.material.setUniformsValue('u_zoom', zoom);
   };
-  const pass = new Renderpass(scene, camera);
+  const pass = new RenderPass(scene, camera);
   return pass;
 }
 function copyPass(layer) {
