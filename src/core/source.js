@@ -1,5 +1,4 @@
 import Base from './base';
-import Controller from './controller/index';
 import { getTransform, getParser } from '../source';
 import { extent, tranfrormCoord } from '../util/geo';
 import { getMap } from '../map/index';
@@ -10,6 +9,7 @@ export default class Source extends Base {
       defs: {},
       parser: {},
       transforms: [],
+      scaledefs: {},
       scales: {},
       options: {}
     };
@@ -18,13 +18,15 @@ export default class Source extends Base {
     super(cfg);
     const transform = this.get('transforms');
     this._transforms = transform || [];
-    this._initControllers();
+    const mapType = this.get('mapType');
+    this.projectFlat = getMap(mapType).project;
     // 数据解析
     this._excuteParser();
     // 数据转换 统计，聚合，分类
     this._executeTrans();
     // 坐标转换
     this._projectCoords();
+
   }
   _excuteParser() {
     const parser = this.get('parser');
@@ -55,27 +57,6 @@ export default class Source extends Base {
       data.coordinates = tranfrormCoord(data.coordinates, this._coorConvert.bind(this));
     });
   }
-  createScale(field) {
-    const data = this.data.dataArray;
-    const scales = this.get('scales');
-    let scale = scales[field];
-    const scaleController = this.get('scaleController');
-    if (!scale) {
-      scale = scaleController.createScale(field, data);
-      scales[field] = scale;
-    }
-    return scale;
-  }
-  _initControllers() {
-    const defs = this.get('defs');
-    const mapType = this.get('mapType');
-    this.projectFlat = getMap(mapType).project;
-    const scaleController = new Controller.Scale({
-      defs
-    });
-    this.set('scaleController', scaleController);
-  }
-
   _getCoord(geo) {
     if (geo.geometry) {
       // GeoJSON feature
