@@ -13,6 +13,7 @@ export function HeatmapIntensityMaterial(opt) {
     vertexShader: vs,
     fragmentShader: fs,
     transparent: true,
+    depthTest: false,
     blending: THREE.AdditiveBlending
   });
   return material;

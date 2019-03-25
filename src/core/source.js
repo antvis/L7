@@ -58,7 +58,6 @@ export default class Source extends Base {
   createScale(field) {
     const data = this.data.dataArray;
     const scales = this.get('scales');
-    console.log(scales);
     let scale = scales[field];
     const scaleController = this.get('scaleController');
     if (!scale) {
