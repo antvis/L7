@@ -18,6 +18,7 @@ export { InstancedBufferGeometry } from 'three/src/core/InstancedBufferGeometry'
 export { PlaneBufferGeometry } from 'three/src/geometries/PlaneGeometry.js';
 export { BoxBufferGeometry } from 'three/src/geometries/BoxGeometry.js';
 export { Raycaster } from 'three/src/core/Raycaster.js';
+export { UniformsUtils } from 'three/src/renderers/shaders/UniformsUtils.js';
 export { Matrix4 } from 'three/src/math/Matrix4.js';
 export { Matrix3 } from 'three/src/math/Matrix3.js';
 export { Line } from 'three/src/objects/Line.js';
