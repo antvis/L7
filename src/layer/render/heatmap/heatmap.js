@@ -3,7 +3,7 @@ import { createColorRamp } from '../../../geom/buffer/heatmap/heatmap';
 import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMateial';
 // import Renderpass from '../../../core/engine/renderpass.bak';
 import RenderPass from '../../../core/engine/renderpass';
-import ShaderPass from '../../../core/engine/ShaderPass';
+import ShaderPass from '../../../core/engine/shaderpass';
 import EffectComposer from '../../../core/engine/EffectComposer';
 import * as THREE from '../../../core/three';
 
