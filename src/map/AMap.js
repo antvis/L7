@@ -55,8 +55,6 @@ export default class GaodeMap extends Base {
   asyncCamera(engine) {
     this._engine = engine;
     const camera = engine._camera;
-    const scene = engine._scene;
-    const pickScene = engine._picking._pickingScene;
     this.map.on('camerachange', e => {
       const mapCamera = e.camera;
       let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
@@ -70,15 +68,16 @@ export default class GaodeMap extends Base {
       camera.position.z = height * Math.cos(pitch);
       camera.position.x = height * Math.sin(pitch) * Math.sin(rotation);
       camera.position.y = -height * Math.sin(pitch) * Math.cos(rotation);
-
       camera.up.x = -Math.cos(pitch) * Math.sin(rotation);
       camera.up.y = Math.cos(pitch) * Math.cos(rotation);
       camera.up.z = Math.sin(pitch);
       camera.lookAt(0, 0, 0);
-      scene.position.x = -e.camera.position.x;
-      scene.position.y = e.camera.position.y;
-      pickScene.position.x = -e.camera.position.x;
-      pickScene.position.y = e.camera.position.y;
+      camera.position.x += e.camera.position.x;
+      camera.position.y += -e.camera.position.y;
+      // scene.position.x = -e.camera.position.x;
+      // scene.position.y = e.camera.position.y;
+      // pickScene.position.x = -e.camera.position.x;
+      // pickScene.position.y = e.camera.position.y;
     });
   }
 
@@ -128,6 +127,10 @@ export default class GaodeMap extends Base {
     };
     scene.setZoom = zoom => {
       return map.setZoom(zoom);
+    };
+    scene.setZoomAndCenter = (zoom, center) => {
+      const lnglat = new AMap.LngLat(center[0], center[1]);
+      return map.setZoomAndCenter(zoom, lnglat);
     };
     scene.setBounds = extent => {
       return map.setBounds(new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ]));

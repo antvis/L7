@@ -16,14 +16,16 @@ export default class Engine extends EventEmitter {
     this._scene.add(this.world);
     this._picking = Picking(this._world, this._renderer, this._camera, this._scene);
     this.clock = new THREE.Clock();
+    this.composerLayers = [];
   }
   _initPostProcessing() {
-
+    this.composerLayers.forEach(layer => {
+      layer.visible && layer.render();
+    });
   }
   update() {
-
     this._renderer.render(this._scene, this._camera);
-
+    this._initPostProcessing();
   }
   destroy() {
 
