@@ -1,7 +1,7 @@
 // jscs:disable
 /* eslint-disable */
 
-import THREE from 'three';
+import * as THREE from '../three';
 
 /**
  * @author alteredq / http://alteredqualia.com/
@@ -51,4 +51,3 @@ var CopyShader = {
 };
 
 export default CopyShader;
-THREE.CopyShader = CopyShader;

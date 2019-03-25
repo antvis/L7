@@ -1,7 +1,7 @@
 // jscs:disable
 /* eslint-disable */
 
-import THREE from 'three';
+import * as THREE from '../three';
 
 /**
  * @author alteredq / http://alteredqualia.com/
@@ -37,7 +37,7 @@ var ShaderPass = function( shader, textureID ) {
 
 	this.enabled = true;
 	this.needsSwap = true;
-	this.clear = false;
+	this.clear = true;
 
 
 	this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
@@ -51,17 +51,14 @@ var ShaderPass = function( shader, textureID ) {
 ShaderPass.prototype = {
 
 	render: function( renderer, writeBuffer, readBuffer, delta ) {
-
 		if ( this.uniforms[ this.textureID ] ) {
-
-			this.uniforms[ this.textureID ].value = readBuffer;
+			this.uniforms[ this.textureID ].value = readBuffer.texture;
 
 		}
-
+    renderer.autoClear = false;
 		this.quad.material = this.material;
 
 		if ( this.renderToScreen ) {
-
 			renderer.render( this.scene, this.camera );
 
 		} else {
@@ -69,10 +66,9 @@ ShaderPass.prototype = {
 			renderer.render( this.scene, this.camera, writeBuffer, this.clear );
 
 		}
-
+		renderer.autoClear = true;
 	}
 
 };
 
 export default ShaderPass;
-THREE.ShaderPass = ShaderPass;
