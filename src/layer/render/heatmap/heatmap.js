@@ -1,21 +1,32 @@
 import HeatmapBuffer from '../../../geom/buffer/heatmap/heatmap';
 import { createColorRamp } from '../../../geom/buffer/heatmap/heatmap';
 import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMateial';
-import Renderpass from '../../../core/engine/renderpass';
+// import Renderpass from '../../../core/engine/renderpass.bak';
+import Renderpass from '../../../core/engine/renderPass';
+import ShaderPass from '../../../core/engine/ShaderPass';
+import EffectComposer from '../../../core/engine/EffectComposer';
 import * as THREE from '../../../core/three';
 
 export function drawHeatmap(layer) {
-  const bbox = calBoundingBox(layer.layerData);
-  layer.dataBbox = bbox;
+
   const colors = layer.get('styleOptions').rampColors;
   layer.colorRamp = createColorRamp(colors);
-  createIntensityPass(layer, bbox);
-  createColorizePass(layer, bbox);
+  const heatmap = new heatmapPass(layer);
+  const copy = new copyPass(layer);
+  copy.renderToScreen = true;
+  const composer = new EffectComposer(layer.scene._engine._renderer, layer.scene._container);
+  composer.addPass(heatmap);
+  composer.addPass(copy);
+  layer.add(composer);
+
 }
 
-function createIntensityPass(layer, bbox) {
+
+function heatmapPass(layer) {
+  const scene = new THREE.Scene();
   const style = layer.get('styleOptions');
   const data = layer.layerData;
+  const camera = layer.scene._engine._camera;
     // get attributes data
   const buffer = new HeatmapBuffer({
     data
@@ -27,109 +38,26 @@ function createIntensityPass(layer, bbox) {
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_dir', new THREE.Float32BufferAttribute(attributes.dirs, 2));
   geometry.addAttribute('a_weight', new THREE.Float32BufferAttribute(attributes.weights, 1));
-    // set material
   const material = new HeatmapIntensityMaterial({
     intensity: style.intensity,
     radius: style.radius,
     zoom: layer.scene.getZoom()
   });
   const mesh = new THREE.Mesh(geometry, material);
-  // set camera
-  const passOrth = new THREE.OrthographicCamera(bbox.width / -2, bbox.width / 2, bbox.height / 2, bbox.height / -2, 1, 10000);
-  passOrth.position.set(bbox.minX + bbox.width / 2, bbox.minY + bbox.height / 2, 1000);
-  // renderpass
-  const renderer = layer.scene._engine._renderer;
-  // get extension for bilinear texture interpolation:https://threejs.org/docs/#api/en/textures/DataTexture
-  /* const gl = renderer.domElement.getContext('webgl') ||
-    renderer.domElement.getContext('experimental-webgl');
-  gl.getExtension('OES_texture_float_linear');*/
-  const renderpass = new Renderpass({
-    renderer,
-    camera: passOrth,
-    size: {
-      width: 2000,
-      height: 2000 * (bbox.height / bbox.width)
-    },
-    clear: {
-      clearColor: 0x000000,
-      clearAlpha: 0.0
-    },
-    renderCfg: {
-      wrapS: THREE.ClampToEdgeWrapping,
-      wrapT: THREE.ClampToEdgeWrapping,
-      minFilter: THREE.LinearFilter,
-      magFilter: THREE.LinearFilter,
-      format: THREE.RGBAFormat,
-      stencilBuffer: false,
-      depthBuffer: false
-    }
-  });
-  renderpass.add(mesh);
-  renderpass.render();
-  layer.intensityPass = renderpass;
-  layer.intensityMesh = mesh;
-  updateIntensityPass(layer);
+  scene.add(mesh);
+  scene.onBeforeRender = () => { // 每次渲染前改变状态
+    const zoom = layer.scene.getZoom();
+    mesh.material.setUniformsValue('u_zoom', zoom);
+  };
+  const pass = new Renderpass(scene, camera);
+  return pass;
 }
-
-export function updateIntensityPass(layer) {
-  const mesh = layer.intensityMesh;
-  const zoom = layer.scene.getZoom();
-  const bbox = layer.dataBbox;
-  mesh.material.uniforms.u_zoom.value = zoom;
-  const passWidth = Math.min(8000, Math.pow(zoom, 2.0) * 250);
-  const passHeight = passWidth * (bbox.height / bbox.width);
-  layer.intensityPass.pass.setSize(passWidth, passHeight);
-  layer.intensityPass.render();
-}
-
-function createColorizePass(layer, bbox) {
-    // create plane geometry
+function copyPass(layer) {
   const style = layer.get('styleOptions');
-  const geometery = new THREE.PlaneBufferGeometry(bbox.width, bbox.height);
   const material = new HeatmapColorizeMaterial({
-    texture: layer.intensityPass.texture,
     colorRamp: layer.colorRamp,
     opacity: style.opacity
   });
-  const mesh = new THREE.Mesh(geometery, material);
-  mesh.position.set(bbox.minX + bbox.width / 2, bbox.minY + bbox.height / 2, 0.0);
-  layer.add(mesh);
-}
-
-function calBoundingBox(data) {
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  for (let i = 0; i < data.length; i++) {
-    const p = data[i].coordinates;
-    if (p[0] < minX) {
-      minX = p[0];
-    } else if (p[0] > maxX) {
-      maxX = p[0];
-    }
-    if (p[1] < minY) {
-      minY = p[1];
-    } else if (p[1] > maxY) {
-      maxY = p[1];
-    }
-  }
-
-  minX -= ((maxX - minX) * 0.5);
-  maxX += ((maxX - minX) * 0.5);
-  minY -= ((maxY - minY) * 0.5);
-  maxY += ((maxY - minY) * 0.5);
-
-  const width = maxX - minX;
-  const height = maxY - minY;
-
-
-  return {
-    minX,
-    maxX,
-    minY,
-    maxY,
-    width,
-    height
-  };
+  const copyPass = new ShaderPass(material, 'u_texture');
+  return copyPass;
 }

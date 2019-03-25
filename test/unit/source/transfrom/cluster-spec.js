@@ -17,13 +17,7 @@ describe('hexagon  Test', function() {
       dataArray,
       extent: [ -180, -85, 180, 85 ]
     };
-    console.time('cluster');
     const grid = cluster(data, { radius: 40, field: 'v', zoom: 13 });
-    console.log(grid);
-    console.timeEnd('cluster');
     expect(grid.dataArray.length).eql(26);
-    console.time('cluster');
-    cluster(data, {zoom:14});
-    console.timeEnd('cluster');
   });
 });
