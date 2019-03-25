@@ -84,6 +84,9 @@ const ColorUtil = {
     const rgba = this.toRGB(str);
     return rgba.map(v => v / 255);
   },
+  colorArray2RGBA(arr) {
+    return `rgba(${arr[0] * 255},${arr[1] * 255},${arr[2] * 255},${arr[3]})`;
+  },
   color2RGBA(str) {
     return this.color2Arr(str);
   },
