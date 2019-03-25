@@ -82,8 +82,14 @@ export default class Layer extends Base {
     * @param {*} type mesh类型是区别是填充还是边线
    */
   add(object, type = 'fill') {
-    type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
+     // composer合图层绘制
+    if (object.type === 'composer') {
+      this._object3D = object;
+      this.scene._engine.composerLayers.push(object);
+      return;
+    }
 
+    type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
     this._visibleWithZoom();
     this._zoomchangeHander = this._visibleWithZoom.bind(this);
     this.scene.on('zoomchange', this._zoomchangeHander);
@@ -108,6 +114,12 @@ export default class Layer extends Base {
     }
   }
   remove(object) {
+    if (object.type === 'composer') {
+      this.scene._engine.composerLayers = this.scene._engine.composerLayers.filter(layer => {
+        return (layer !== object);
+      });
+      return;
+    }
     this._object3D.remove(object);
   }
   _getUniqueId() {
@@ -650,6 +662,11 @@ export default class Layer extends Base {
    */
   destroy() {
     this.removeAllListeners();
+    if (this._object3D.type === 'composer') {
+      this.remove(this._object3D);
+
+      return;
+    }
     if (this._object3D && this._object3D.children) {
       let child;
       for (let i = 0; i < this._object3D.children.length; i++) {
