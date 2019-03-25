@@ -1,13 +1,14 @@
 import * as THREE from '../three';
+import Util from '../../util';
 
 export default class RenderPass {
   constructor(cfg) {
-    this.scene;
-    this.camera = cfg.camera;
-    this.renderer = cfg.renderer;
-    this.clearColor = cfg.clear.clearColor;
-    this.clearAlpha = cfg.clear.clearAlpha;
-    this.size = cfg.size ? cfg.size : cfg.renderer.getSize();
+    const defaultCfg = this._getDefaultCfg();
+    Util.assign(this, defaultCfg, cfg);
+    this._init();
+  }
+
+  _getDefaultCfg() {
     const defaultRenderCfg = {
       minFilter: THREE.NearestFilter,
       magFilter: THREE.NearestFilter,
@@ -15,16 +16,30 @@ export default class RenderPass {
       stencilBuffer: false,
       depthBuffer: false
     };
-    this.renderCfg = cfg.renderCfg ? cfg.renderCfg : defaultRenderCfg;
-    this._init(cfg);
+    return {
+      size: null,
+      renderCfg: defaultRenderCfg,
+      clearColor: 0x000000,
+      clearAlpha: 0.0,
+      renderToScreen: false,
+      renderTarget: true
+    };
   }
 
   _init() {
     this.scene = new THREE.Scene();
-    this.pass = new THREE.WebGLRenderTarget(this.size.width, this.size.height, this.renderCfg);
+    if (this.renderTarget) {
+      const size = this.size ? this.size : this.renderer.getSize();
+      this.renderTarget = new THREE.WebGLRenderTarget(size.width, size.height, this.renderCfg);
+      this.texture = this.renderTarget.texture;
+    }
     this.originClearColor = this.renderer.getClearColor();
     this.originClearAlpha = this.renderer.getClearAlpha();
-    this.texture = this.pass.texture;
+  }
+
+  setSize(width, height) {
+    this.size = { width, height };
+    this.renderTarget && this.renderTarget.setSize(width, height);
   }
 
   add(mesh) {
@@ -36,10 +51,14 @@ export default class RenderPass {
   }
 
   render() {
-
     this.renderer.setClearColor(this.clearColor, this.clearAlpha);
-    this.renderer.render(this.scene, this.camera, this.pass, true);
-    this.renderer.setRenderTarget(null);
+    if (this.renderToScreen) {
+      this.renderer.setRenderTarget(null);
+      this.renderer.render(this.scene, this.camera);
+    } else {
+      this.renderTarget && this.renderer.render(this.scene, this.camera, this.renderTarget, true);
+      this.renderer.setRenderTarget(null);
+    }
     this.renderer.setClearColor(this.originClearColor, this.originClearAlpha);
   }
 }
