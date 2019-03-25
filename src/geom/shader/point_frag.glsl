@@ -54,7 +54,6 @@ void main() {
             return;
         }else if(dis2center>ri){
             gl_FragColor= u_stroke;
-            gl_FragColor.a = * u_stroke;
             return;
         }
     }

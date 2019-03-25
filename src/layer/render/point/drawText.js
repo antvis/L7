@@ -18,8 +18,8 @@ export default function DrawText(attributes, style) {
     u_strokeWidth: strokeWidth,
     u_stroke: stroke,
     u_textTextureSize: [ attributes.fontAtlas.width, attributes.fontAtlas.height ],
-    u_gamma: 0.02,
-    u_buffer: 0.75,
+    u_gamma: 0.1,
+    u_buffer: 0.68,
     u_opacity: opacity,
     u_glSize: [ width, height ],
     u_activeColor: activeColor
