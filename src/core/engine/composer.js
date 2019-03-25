@@ -1,10 +1,10 @@
 // jscs:disable
 /* eslint-disable */
 
-import THREE from '../three';
-import CopyShader from './CopyShader';
-import ShaderPass from './ShaderPass';
-import MaskPass, {ClearMaskPass} from './MaskPass';
+import * as THREE from '../three';
+import CopyShader from './copy-shader';
+import ShaderPass from './shader-pass';
+import MaskPass, {ClearMaskPass} from './mask-pass';
 
 /**
  * @author alteredq / http://alteredqualia.com/
@@ -50,7 +50,8 @@ EffectComposer.prototype = {
 		this.writeBuffer = tmp;
 
 	},
-
+	visible:true,
+	type:'composer',
 	addPass: function ( pass ) {
 
 		this.passes.push( pass );
@@ -71,7 +72,6 @@ EffectComposer.prototype = {
 		var maskActive = false;
 
 		var pass, i, il = this.passes.length;
-
 		for ( i = 0; i < il; i ++ ) {
 
 			pass = this.passes[ i ];
@@ -147,4 +147,3 @@ EffectComposer.prototype = {
 };
 
 export default EffectComposer;
-THREE.EffectComposer = EffectComposer;
