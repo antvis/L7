@@ -112,6 +112,8 @@ export default class Layer extends Base {
     if (type === 'fill') {
       this._addPickMesh(object);// 不对边界线进行拾取
     }
+    this.scene._engine.update();
+    setTimeout(() => this.scene._engine.update(), 500);
   }
   remove(object) {
     if (object.type === 'composer') {
