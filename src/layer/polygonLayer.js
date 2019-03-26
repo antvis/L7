@@ -44,6 +44,7 @@ export default class PolygonLayer extends Layer {
       return drawPolygon.DrawLine(attributes, style);
     } else if (animateOptions.enable) {
       const { near, far } = this.map.getCameraState();
+      this.scene.startAnimate();
       return drawPolygon.DrawAnimate(attributes, { ...style, near, far });
     }
     return drawPolygon.DrawFill(attributes, config);
