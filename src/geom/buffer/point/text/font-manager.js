@@ -1,7 +1,6 @@
 import TinySDF from '@mapbox/tiny-sdf';
 import { buildMapping } from '../../../../util/font-util';
 import * as THREE from '../../../../core/three';
-import * as logImage from 'console-image';
 import LRUCache from './lru-cache';
 export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'sans-serif';
@@ -147,8 +146,9 @@ export default class FontAtlasManager {
 
   _updateTexture({ data: canvas }) {
     this._texture = new THREE.CanvasTexture(canvas);
-    // this._texture.wrapS = THREE.ClampToEdgeWrapping;
-    // this._texture.wrapT = THREE.ClampToEdgeWrapping;
+    this._texture.wrapS = THREE.ClampToEdgeWrapping;
+    this._texture.wrapT = THREE.ClampToEdgeWrapping;
+    this._texture.minFilter = THREE.LinearFilter;
     this._texture.flipY = false;
     this._texture.needUpdate = true;
   }
@@ -207,7 +207,6 @@ export default class FontAtlasManager {
         ctx.fillText(char, mapping[char].x, mapping[char].y + fontSize * BASELINE_SCALE);
       }
     }
-    logImage(canvas);
     return {
       xOffset,
       yOffset,
