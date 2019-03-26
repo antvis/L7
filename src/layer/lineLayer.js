@@ -61,6 +61,7 @@ export default class LineLayer extends Layer {
         if (animateOptions.enable) {
 
           material.setDefinesvalue('ANIMATE', true);
+          this.scene.startAnimate();
           const { duration, interval, trailLength, repeat = Infinity } = animateOptions;
           this.animateDuration = this.scene._engine.clock.getElapsedTime() + duration * repeat;
           material.upDateUninform({
@@ -92,6 +93,7 @@ export default class LineLayer extends Layer {
       });
       if (animateOptions.enable) {
         material.setDefinesvalue('ANIMATE', true);
+        this.scene.startAnimate();
       }
 
       const mesh = new THREE.LineSegments(geometry, material);
@@ -99,10 +101,11 @@ export default class LineLayer extends Layer {
     }
     return this;
   }
-  _preRender() {
+  preRender() {
     if (this.animateDuration > 0 && this.animateDuration < this.scene._engine.clock.getElapsedTime()) {
       this.layerMesh.material.setDefinesvalue('ANIMATE', false);
       this.emit('animateEnd');
+      this.scene.stopAnimate();
       this.animateDuration = Infinity;
     }
   }
