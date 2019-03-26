@@ -19,10 +19,11 @@ void main(){
   mat4 matModelViewProjection=projectionMatrix*modelViewMatrix;
   vec4 cur_position=matModelViewProjection*vec4(a_position.xy,0,1);
   gl_Position=cur_position / cur_position.w+ vec4(a_textSize*position.xy/u_glSize, 0., 0.)+vec4(a_textOffset/u_glSize * 2.0,0,0);
-  v_color=vec4(a_color.rgb,a_color.a*u_opacity);
-  if(pickingId == u_activeId) {
-     v_color = u_activeColor;
-   }
+  // v_color=vec4(a_color.rgb,a_color.a*u_opacity);
+  // if(pickingId == u_activeId) {
+  //    v_color = u_activeColor;
+  //  }
+  v_color = a_color;
   v_texcoord=(textUv.xy + vec2(uv.x,1.-uv.y) * textUv.zw)/u_textTextureSize;
   worldId = id_toPickColor(pickingId);
   
