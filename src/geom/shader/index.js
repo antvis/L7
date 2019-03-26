@@ -31,7 +31,7 @@ import heatmap_intensity_vert from '../shader/heatmap_intensity_vert.glsl';
 
 // 文本
 import text_frag from '../shader/text_frag.glsl';
-import text_vert from '../shader/text_vert2.glsl';
+import text_vert from '../shader/text_vert.glsl';
 
 // 图像
 import image_vert from '../shader/image_vert.glsl';
