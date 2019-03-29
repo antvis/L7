@@ -9,7 +9,7 @@ export default class PolygonLayer extends Layer {
   render() {
     if (!this._hasRender) { // 首次渲染
       this._hasRender = true;
-      this._prepareRender();
+      this.draw();
     } else {
 
       this._initAttrs();
@@ -18,7 +18,7 @@ export default class PolygonLayer extends Layer {
     }
     return this;
   }
-  _prepareRender() {
+  draw() {
     this.init();
     this.type = 'polygon';
     this._buffer = new PolygonBuffer({
@@ -29,7 +29,6 @@ export default class PolygonLayer extends Layer {
   }
   update() {
     this.updateFilter(this.layerMesh);
-    // 动态更新相关属性
   }
   _getLayerRender() {
     const animateOptions = this.get('animateOptions');

@@ -15,7 +15,7 @@ varying vec4 v_color;
 void main() {
  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
  float scale = pow(2.0,(20.0 - u_zoom));
- vec3 newposition = position + (a_size + vec3(u_strokeWidth/2.,u_strokeWidth/2.,0)) * scale* a_shape;
+ vec3 newposition = position + (a_size + vec3(u_strokeWidth/2.,u_strokeWidth/2.,0)) * scale* a_shape + vec3(0., a_size.y * scale / 4., 0.);;
    #ifdef ANIMATE 
         vTime = 1.0- (mod(u_time*50.,3600.)- position.z) / 100.;
    #endif
