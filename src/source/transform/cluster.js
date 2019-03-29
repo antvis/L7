@@ -38,10 +38,9 @@ export function cluster(data, option) {
     };
   });
   data.dataArray = resultData;
-  data.pointIndex = pointIndex;
-  return data;
+  return { data, pointIndex };
 }
-function formatData(clusterPoint) {
+export function formatData(clusterPoint) {
   return clusterPoint.map((point, index) => {
     return {
       coordinates: point.geometry.coordinates,
