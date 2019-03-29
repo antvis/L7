@@ -128,6 +128,9 @@ export default class GaodeMap extends Base {
     scene.setZoom = zoom => {
       return map.setZoom(zoom);
     };
+    scene.getBounds = () => {
+      return map.getBounds();
+    };
     scene.setZoomAndCenter = (zoom, center) => {
       const lnglat = new AMap.LngLat(center[0], center[1]);
       return map.setZoomAndCenter(zoom, lnglat);

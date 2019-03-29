@@ -21,7 +21,7 @@ void main() {
   vec3 newposition =  position;
   // newposition.x -= 128.0;
    #ifdef SHAPE 
-    newposition =position + a_size * scale* a_shape;
+    newposition =position + a_size * scale* a_shape + vec3(0., a_size.y * scale / 4., 0.);
   #endif
    v_texCoord = faceUv;
   if(normal == vec3(0.,0.,1.)){
