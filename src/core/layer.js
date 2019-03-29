@@ -8,7 +8,7 @@ import ColorUtil from '../attr/color-util';
 import Controller from './controller/index';
 import source from './source';
 import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
-// import PickingMaterial from '../core/engine/picking/pickingMaterial';
+import { getInteraction } from '../interaction/index';
 import Attr from '../attr/index';
 import Util from '../util';
 import Global from '../global';
@@ -53,6 +53,7 @@ export default class Layer extends Base {
       activedOptions: {
         fill: [ 1.0, 0, 0, 1.0 ]
       },
+      interactions: {},
       animateOptions: {
         enable: false
       }
@@ -66,6 +67,7 @@ export default class Layer extends Base {
     this._pickObject3D = new THREE.Object3D();
     this._object3D.visible = this.get('visible');
     this._object3D.renderOrder = this.get('zIndex') || 0;
+    this._mapEventHandlers = [];
     const layerId = this._getUniqueId();
     this.layerId = layerId;
     this._activeIds = null;
@@ -88,12 +90,8 @@ export default class Layer extends Base {
       this.scene._engine.composerLayers.push(object);
       return;
     }
-
     type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
     this._visibleWithZoom();
-    this._zoomchangeHander = this._visibleWithZoom.bind(this);
-    this.scene.on('zoomchange', this._zoomchangeHander);
-
     object.onBeforeRender = () => { // 每次渲染前改变状态
       const zoom = this.scene.getZoom();
       object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
@@ -113,7 +111,7 @@ export default class Layer extends Base {
       this._addPickMesh(object);// 不对边界线进行拾取
     }
     this.scene._engine.update();
-    setTimeout(() => this.scene._engine.update(), 500);
+    setTimeout(() => this.scene._engine.update(), 200);
   }
   remove(object) {
     if (object.type === 'composer') {
@@ -132,8 +130,13 @@ export default class Layer extends Base {
     this._object3D.visible = this.get('visible');
   }
   source(data, cfg = {}) {
+    if (data instanceof source) {
+      this.layerSource = data;
+      return this;
+    }
     cfg.data = data;
     cfg.mapType = this.scene.mapType;
+    cfg.zoom = this.scene.getZoom();
     this.layerSource = new source(cfg);
     // this.scene.workerPool.runTask({
     //   command: 'geojson',
@@ -263,6 +266,10 @@ export default class Layer extends Base {
     this._visible(true);
     return this;
   }
+  setData(data, cfg) {
+    this.layerSource.setData(data, cfg);
+    this.repaint();
+  }
   _createScale(field) {
     // TODO scale更新
     const scales = this.get('scales');
@@ -316,24 +323,52 @@ export default class Layer extends Base {
     }
     return scale;
   }
+  // 重绘 度量， 映射，顶点构建
+  repaint() {
+    this.set('scales', {});
+    this._initControllers();
+    this._initAttrs();
+    this._mapping();
+    this.redraw();
+  }
   // 初始化图层
   init() {
     this._initControllers();
     this._initAttrs();
     this._scaleByZoom();
+    this._initInteraction();
+    this._initMapEvent();
+
     this._mapping();
-
-    const activeHander = this._addActiveFeature.bind(this);
-    const resetHander = this._resetStyle.bind(this);
+  }
+  _initInteraction() {
     if (this.get('allowActive')) {
-
-      this.on('mousemove', activeHander);
-      this.on('mouseleave', resetHander);
-
-    } else {
-      this.off('mousemove', activeHander);
-      this.off('mouseleave', resetHander);
+      this.interaction('active');
     }
+  }
+  _initMapEvent() {
+    // zoomchange  mapmove resize
+    const EVENT_TYPES = [ 'zoomchange', 'dragend' ];
+    Util.each(EVENT_TYPES, type => {
+      const handler = Util.wrapBehavior(this, `${type}`);
+      this.map.on(`${type}`, handler);
+      this._mapEventHandlers.push({ type, handler });
+    });
+  }
+  clearMapEvent() {
+    const eventHandlers = this._mapEventHandlers;
+    Util.each(eventHandlers, eh => {
+      this.map.off(eh.type, eh.handler);
+    });
+  }
+  zoomchange(ev) {
+    // 地图缩放等级变化
+    this._visibleWithZoom(ev);
+  }
+  dragend() {
+
+  }
+  resize() {
   }
 
   setActive(id, color) {
@@ -483,17 +518,6 @@ export default class Layer extends Base {
     const values = attr.mapping(...params);
     return values;
   }
-
-  // temp
-  _getDataType(data) {
-    if (data.hasOwnProperty('type')) {
-      const type = data.type;
-      if (type === 'FeatureCollection') {
-        return 'geojson';
-      }
-    }
-    return 'basic';
-  }
   _scaleByZoom() {
     if (this._zoomScale) {
       this.map.on('zoomend', () => {
@@ -502,11 +526,7 @@ export default class Layer extends Base {
       });
     }
   }
-  // on(type, callback) {
 
-  //   this._addPickingEvents();
-  //   super.on(type, callback);
-  // }
   getPickingId() {
     return this.scene._engine._picking.getNextId();
   }
@@ -519,19 +539,9 @@ export default class Layer extends Base {
   _addPickMesh(mesh) {
     this._pickingMesh = new THREE.Object3D();
     this._pickingMesh.name = this.layerId;
-    // this._visibleWithZoom();
-    // this.scene.on('zoomchange', () => {
-    //   this._visibleWithZoom();
-    // });
     this.addToPicking(this._pickingMesh);
     const pickmaterial = mesh.material.clone();
-
     pickmaterial.fragmentShader = pickingFragmentShader;
-    // const pickmaterial = new PickingMaterial({
-    //   u_zoom: this.scene.getZoom(),
-    //   vs: mesh.material.
-    // });
-
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = this.layerId;
     pickmaterial.setDefinesvalue(this.type, true);
@@ -542,9 +552,6 @@ export default class Layer extends Base {
     this._pickingMesh.add(pickingMesh);
 
   }
-  _setPickingId() {
-    this._pickingId = this.getPickingId();
-  }
   _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
@@ -552,6 +559,7 @@ export default class Layer extends Base {
         type = 'mouseleave';
         // featureId = this._activeIds;
       }
+      this._activeIds = featureId;
       const feature = this.layerSource.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
       const style = this.layerData[featureId - 1];
@@ -568,39 +576,6 @@ export default class Layer extends Base {
       }
 
     });
-  }
-  /**
-   * 更新active操作
-   * @param {*} featureStyleId 需要更新的要素Id
-   * @param {*} style  更新的要素样式
-   */
-  updateStyle(featureStyleId, style) {
-    if (this._activeIds) {
-      this._resetStyle();
-    }
-    this._activeIds = featureStyleId;
-    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
-    const color = style.color;
-    const colorAttr = this.layerMesh.geometry.attributes.a_color;
-    const firstId = pickingId.indexOf(featureStyleId[0]);
-    for (let i = firstId; i < pickingId.length; i++) {
-      if (pickingId[i] === featureStyleId[0]) {
-        colorAttr.array[i * 4 + 0] = color[0];
-        colorAttr.array[i * 4 + 1] = color[1];
-        colorAttr.array[i * 4 + 2] = color[2];
-        colorAttr.array[i * 4 + 3] = color[3];
-      } else {
-        break;
-      }
-    }
-    colorAttr.needsUpdate = true;
-    return;
-  }
-
-  _updateColor() {
-
-    this._updateMaping();
-
   }
   /**
    *  用于过滤数据
@@ -642,6 +617,8 @@ export default class Layer extends Base {
     let offset = 0;
     if (this.type === 'point') {
       offset = 5;
+      this.shapeType = 'text' && (offset = 10);
+
     } else if (this.type === 'polyline') {
       offset = 2;
     }
@@ -652,6 +629,51 @@ export default class Layer extends Base {
       this._object3D.visible = true;
     }
   }
+  // 重新构建mesh
+  redraw() {
+    this._object3D.children.forEach(child => {
+      this._object3D.remove(child);
+    });
+    this.removeFromPicking(this._pickingMesh);
+    this.draw();
+  }
+  // 更新mesh
+  updateDraw() {
+
+  }
+
+  // interaction 方法
+  clearAllInteractions() {
+    const interactions = this.get('interactions');
+    Util.each(interactions, (interaction, key) => {
+      interaction.destory();
+      delete interactions[key];
+    });
+    return this;
+  }
+  clearInteraction(type) {
+    const interactions = this.get('interactions');
+    if (interactions[type]) {
+      interactions[type].destory();
+      delete interactions[type];
+    }
+    return this;
+  }
+  interaction(type, cfg = {}) {
+    cfg.layer = this;
+    const Ctor = getInteraction(type);
+    const interaction = new Ctor(cfg);
+    this._setInteraction(type, interaction);
+    return this;
+  }
+  _setInteraction(type, interaction) {
+    const interactions = this.get('interactions');
+    if (interactions[type]) {
+      interactions[type].destory();
+    }
+    interactions[type] = interaction;
+  }
+
   /**
    * 重置高亮要素
    */
@@ -664,6 +686,8 @@ export default class Layer extends Base {
    */
   destroy() {
     this.removeAllListeners();
+    this.clearAllInteractions();
+    this.clearMapEvent();
     if (this._object3D.type === 'composer') {
       this.remove(this._object3D);
 
@@ -696,7 +720,6 @@ export default class Layer extends Base {
     this._object3D = null;
     this.scene._engine._scene.remove(this._object3D);
     this.scene._engine._picking.remove(this._pickingMesh);
-    this.scene.off('zoomchange', this._zoomchangeHander);
     this.destroyed = true;
   }
 
