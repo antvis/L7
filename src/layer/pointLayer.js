@@ -18,7 +18,7 @@ export default class PointLayer extends Layer {
     this.type = 'point';
     this.init();
     if (!this._hasRender) {
-      this._prepareRender(this.shapeType);
+      this.draw();
       this._hasRender = true;
     } else {
       this._initAttrs();
@@ -28,7 +28,7 @@ export default class PointLayer extends Layer {
     }
     return this;
   }
-  _prepareRender() {
+  draw() {
     const { stroke, fill } = this.get('styleOptions');
     const style = this.get('styleOptions');
     const activeOption = this.get('activedOptions');
@@ -37,6 +37,7 @@ export default class PointLayer extends Layer {
       activeColor: activeOption.fill
     };
     const pointShapeType = this._getShape();
+    this.shapeType = pointShapeType;
     switch (pointShapeType) {
       case 'fill': { // 填充图形
         if (fill !== 'none') {
@@ -111,5 +112,34 @@ export default class PointLayer extends Layer {
       return 'image';
     }
     return 'text';
+  }
+  zoomchange(ev) {
+    super.zoomchange(ev);
+    this._updateData();
+  }
+  dragend(ev) {
+    super.dragend(ev);
+    this._updateData();
+
+  }
+  _updateData() {
+    if (this.layerSource.get('isCluster')) {
+      const bounds = this.scene.getBounds().toBounds();
+      const SW = bounds.getSouthWest();
+      const NE = bounds.getNorthEast();
+      const zoom = this.scene.getZoom();
+      const step = Math.max(NE.lng - SW.lng, NE.lat - SW.lat) / 2;
+      const bbox = [ SW.lng, SW.lat, NE.lng, NE.lat ];
+      // const bbox = [ SW.lng - step, SW.lat - step, NE.lng + step, NE.lat + step ];
+      const cfg = this.layerSource.get('cluster');
+      const preBox = cfg.bbox;
+      const preZoom = cfg.zoom;
+      if (!(preBox && preBox[0] < bbox[0] && preBox[1] < bbox[1] && preBox[2] > bbox[2] && preBox[3] < bbox[3] && // 当前范围在范围内
+         (Math.abs(zoom - preZoom)) < 1)) {
+        const newbbox = [ SW.lng - step, SW.lat - step, NE.lng + step, NE.lat + step ];
+        this.layerSource.updateCusterData(Math.floor(zoom), newbbox);
+        this.repaint();
+      }
+    }
   }
 }
