@@ -37,7 +37,7 @@ export default function DrawText(attributes, style) {
       attributes.fontAtlas.width,
       attributes.fontAtlas.height
     ],
-    u_gamma: 0.2,
+    u_gamma: (1.0 / 12.0) * (1.4142135623730951 / (2.0)),
     u_buffer: 0.75,
     u_opacity: opacity,
     u_glSize: [ width, height ],
