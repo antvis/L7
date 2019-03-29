@@ -23,5 +23,21 @@ export default function DrawLine(attributes, style) {
     ANIMATE: animate
   });
   const arcMesh = new THREE.Mesh(geometry, lineMaterial);
+  if (animate) {
+    this.scene.startAnimate();
+    const {
+      duration,
+      interval,
+      trailLength,
+      repeat = Infinity
+    } = style;
+    this.animateDuration =
+    this.scene._engine.clock.getElapsedTime() + duration * repeat;
+    lineMaterial.upDateUninform({
+      u_duration: duration,
+      u_interval: interval,
+      u_trailLength: trailLength
+    });
+  }
   return arcMesh;
 }
