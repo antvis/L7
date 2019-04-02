@@ -135,9 +135,9 @@ export default class PointLayer extends Layer {
       const preBox = cfg.bbox;
       const preZoom = cfg.zoom;
       if (!(preBox && preBox[0] < bbox[0] && preBox[1] < bbox[1] && preBox[2] > bbox[2] && preBox[3] < bbox[3] && // 当前范围在范围内
-         (Math.abs(zoom - preZoom)) < 1)) {
+         (Math.abs(zoom - preZoom)) < 0.5)) {
         const newbbox = [ SW.lng - step, SW.lat - step, NE.lng + step, NE.lat + step ];
-        this.layerSource.updateCusterData(Math.floor(zoom), newbbox);
+        this.layerSource.updateCusterData(Math.floor(zoom - 1), newbbox);
         this.repaint();
       }
     }

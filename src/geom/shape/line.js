@@ -94,7 +94,7 @@ export function Line(path, props, positionsIndex) {
       indexArray[c++] = i + 2;
       indexArray[c++] = i + 3;
     }
-    point[2] = size[1];
+    // point[2] = size[1];
     positions.push(...point);
     positions.push(...point);
 
