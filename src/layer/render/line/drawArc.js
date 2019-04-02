@@ -1,6 +1,7 @@
 import * as THREE from '../../../core/three';
 import { ArcLineMaterial } from '../../../geom/material/lineMaterial';
-export default function DrawArcLine(attributes, style) {
+export default function DrawArcLine(attributes, cfg, layer) {
+  const { style, activeOption } = cfg;
   const { opacity, zoom } = style;
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(attributes.indexArray);
@@ -10,10 +11,11 @@ export default function DrawArcLine(attributes, style) {
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
   const lineMaterial = new ArcLineMaterial({
     u_opacity: opacity,
-    u_zoom: zoom
+    u_zoom: zoom,
+    activeColor: activeOption.fill
   }, {
     SHAPE: false
   });
   const arcMesh = new THREE.Mesh(geometry, lineMaterial);
-  return arcMesh;
+  layer.add(arcMesh);
 }
