@@ -1,6 +1,6 @@
 import Supercluster from 'supercluster';
 export function cluster(data, option) {
-  const { radius = 40, maxZoom = 16, minZoom = 0, field, zoom = 2 } = option;
+  const { radius = 80, maxZoom = 18, minZoom = 0, field, zoom = 2 } = option;
   if (data.pointIndex) {
     const clusterPoint = data.pointIndex.getClusters(data.extent, zoom);
     data.dataArray = formatData(clusterPoint);

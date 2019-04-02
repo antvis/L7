@@ -557,7 +557,6 @@ export default class Layer extends Base {
       let { featureId, point2d, type } = e;
       if (featureId < 0 && this._activeIds !== null) {
         type = 'mouseleave';
-        // featureId = this._activeIds;
       }
       this._activeIds = featureId;
       const feature = this.layerSource.getSelectFeature(featureId);
@@ -579,7 +578,7 @@ export default class Layer extends Base {
   }
   /**
    *  用于过滤数据
-   * @param {*} object  需要过滤的mesh
+   * @param {*} object  更新颜色和数据过滤
    */
   _updateFilter(object) {
     this._updateMaping();
@@ -629,6 +628,7 @@ export default class Layer extends Base {
       this._object3D.visible = true;
     }
   }
+
   // 重新构建mesh
   redraw() {
     this._object3D.children.forEach(child => {
