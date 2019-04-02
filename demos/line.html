@@ -46,11 +46,9 @@ scene.on('loaded', () => {
         interval:1,
         duration:2,
         trailLength:0.1,
-        repeat:1,
+        repeat:1000,
     })
     .render();
-
-
    linelayer.on('animateEnd',()=>{
      scene.removeLayer(linelayer);
      //linelayer.hide();
