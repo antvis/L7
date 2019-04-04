@@ -41,3 +41,73 @@ export function buildMapping({
     canvasHeight: nextPowOfTwo(yOffset + (row + 1) * rowHeight)
   };
 }
+
+function buildRowMapping(mapping, columns, yOffset) {
+  for (let i = 0; i < columns.length; i++) {
+    const { icon, xOffset } = columns[i];
+    mapping[icon.id] = Object.assign({}, icon, {
+      x: xOffset,
+      y: yOffset,
+      image: icon.image
+    });
+  }
+}
+export function resizeImage(ctx, imageData, width, height) {
+  const { naturalWidth, naturalHeight } = imageData;
+  if (width === naturalWidth && height === naturalHeight) {
+    return imageData;
+  }
+
+  ctx.canvas.height = height;
+  ctx.canvas.width = width;
+
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  // image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight
+  ctx.drawImage(imageData, 0, 0, naturalWidth, naturalHeight, 0, 0, width, height);
+
+  return ctx.canvas;
+}
+
+export function buildIconMaping({ icons, buffer, maxCanvasWidth }) {
+  let xOffset = 0;
+  let yOffset = 0;
+  let rowHeight = 0;
+  let columns = [];
+  const mapping = {};
+  for (let i = 0; i < icons.length; i++) {
+    const icon = icons[i];
+    if (!mapping[icon.id]) {
+      const { height, width } = icon;
+
+      // fill one row
+      if (xOffset + width + buffer > maxCanvasWidth) {
+        buildRowMapping(mapping, columns, yOffset);
+
+        xOffset = 0;
+        yOffset = rowHeight + yOffset + buffer;
+        rowHeight = 0;
+        columns = [];
+      }
+
+      columns.push({
+        icon,
+        xOffset
+      });
+
+      xOffset = xOffset + width + buffer;
+      rowHeight = Math.max(rowHeight, height);
+    }
+  }
+
+  if (columns.length > 0) {
+    buildRowMapping(mapping, columns, yOffset);
+  }
+
+  const canvasHeight = nextPowOfTwo(rowHeight + yOffset + buffer);
+
+  return {
+    mapping,
+    canvasHeight
+  };
+}
