@@ -141,6 +141,9 @@ export default class GaodeMap extends Base {
     scene.setRotation = rotation => {
       return map.setRotation(rotation);
     };
+    scene.setStatus = status => {
+      return map.setStatus(status);
+    };
     scene.zoomIn = () => {
       return map.zoomIn();
     };

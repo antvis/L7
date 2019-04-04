@@ -7,6 +7,7 @@ import FontAtlasManager from '../geom/buffer/point/text/font-manager';
 // import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
 import Global from '../global';
+import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -46,6 +47,12 @@ export default class Scene extends Base {
       Map.asyncCamera(this._engine);
       this.initLayer();
       this._registEvents();
+      const hash = this.get('hash');
+      if (hash) {
+        const Ctor = getInteraction('hash');
+        const interaction = new Ctor({ layer: this });
+        interaction._onHashChange();
+      }
       this.emit('loaded');
     });
 

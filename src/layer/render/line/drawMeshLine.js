@@ -33,7 +33,7 @@ export default function DrawLine(attributes, cfg, layer) {
     } = animateOptions;
     layer.animateDuration =
     layer.scene._engine.clock.getElapsedTime() + duration * repeat;
-    lineMaterial.upDateUninform({
+    lineMaterial.updateUninform({
       u_duration: duration,
       u_interval: interval,
       u_trailLength: trailLength
