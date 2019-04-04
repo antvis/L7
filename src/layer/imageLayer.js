@@ -4,8 +4,7 @@ import ImageBuffer from '../geom/buffer/image';
 // import ImageGeometry from '../geom/bufferGeometry/image';
 import ImageMaterial from '../geom/material/imageMaterial';
 export default class imageLayer extends Layer {
-  render() {
-    this.init();
+  draw() {
     this.type = 'image';
     const source = this.layerSource;
     const { opacity } = this.get('styleOptions');

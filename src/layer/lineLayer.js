@@ -7,12 +7,6 @@ export default class LineLayer extends Layer {
     this.shapeType = type;
     return this;
   }
-  render() {
-    this.type = 'polyline';
-    this.init();
-    this.draw();
-    return this;
-  }
   preRender() {
     if (
       this.animateDuration > 0 &&
@@ -25,6 +19,7 @@ export default class LineLayer extends Layer {
     }
   }
   draw() {
+    this.type = 'polyline';
     const layerData = this.layerData;
     const style = this.get('styleOptions');
     const animateOptions = this.get('animateOptions');
