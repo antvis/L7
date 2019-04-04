@@ -1,7 +1,7 @@
 import TinySDF from '@mapbox/tiny-sdf';
-import { buildMapping } from '../../../../util/font-util';
-import * as THREE from '../../../../core/three';
-import LRUCache from './lru-cache';
+import { buildMapping } from '../../util/font-util';
+import * as THREE from '../../core/three';
+import LRUCache from '../../util/lru-cache';
 export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'sans-serif';
 export const DEFAULT_FONT_WEIGHT = 'normal';

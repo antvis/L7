@@ -10,6 +10,7 @@ import source from './source';
 import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
 import { getInteraction } from '../interaction/index';
 import Attr from '../attr/index';
+import diff from '../util/diff';
 import Util from '../util';
 import Global from '../global';
 let id = 1;
@@ -36,6 +37,7 @@ export default class Layer extends Base {
       attrOptions: {
       },
       scaleOptions: {},
+      preScaleOptions: null,
       scales: {},
       attrs: {},
       // 样式配置项
@@ -84,10 +86,11 @@ export default class Layer extends Base {
     * @param {*} type mesh类型是区别是填充还是边线
    */
   add(object, type = 'fill') {
-     // composer合图层绘制
+    // composer合图层绘制
     if (object.type === 'composer') {
       this._object3D = object;
       this.scene._engine.composerLayers.push(object);
+      setTimeout(() => this.scene._engine.update(), 500);
       return;
     }
     type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
@@ -102,16 +105,11 @@ export default class Layer extends Base {
     object.onAfterRender = () => { // 每次渲染后改变状态
       this.afterRender();
     };
-    // 更新
-    if (this._needUpdateFilter) { // 动态更新数据过滤
-      this._updateFilter(object);
-    }
     this._object3D.add(object);
     if (type === 'fill') {
       this._addPickMesh(object);// 不对边界线进行拾取
     }
-    this.scene._engine.update();
-    setTimeout(() => this.scene._engine.update(), 200);
+    setTimeout(() => this.scene._engine.update(), 500);
   }
   remove(object) {
     if (object.type === 'composer') {
@@ -147,7 +145,6 @@ export default class Layer extends Base {
     return this;
   }
   color(field, values) {
-    this._needUpdateColor = true;// 标识颜色是否需要更新
     this._createAttrOption('color', field, values, Global.colors);
     return this;
   }
@@ -227,7 +224,6 @@ export default class Layer extends Base {
   }
 
   filter(field, values) {
-    this._needUpdateFilter = true;
     this._createAttrOption('filter', field, values, true);
     return this;
   }
@@ -323,6 +319,11 @@ export default class Layer extends Base {
     }
     return scale;
   }
+  render() {
+    this.init();
+    this.scene._engine.update();
+    return this;
+  }
   // 重绘 度量， 映射，顶点构建
   repaint() {
     this.set('scales', {});
@@ -335,11 +336,7 @@ export default class Layer extends Base {
   init() {
     this._initControllers();
     this._initAttrs();
-    this._scaleByZoom();
-    this._initInteraction();
-    this._initMapEvent();
-
-    this._mapping();
+    this._updateDraw();
   }
   _initInteraction() {
     if (this.get('allowActive')) {
@@ -388,12 +385,62 @@ export default class Layer extends Base {
 
 
   _initAttrs() {
+    // 对比 options变化判断如何更新
     const attrOptions = this.get('attrOptions');
     for (const type in attrOptions) {
       if (attrOptions.hasOwnProperty(type)) {
         this._updateAttr(type);
       }
     }
+  }
+  _setPreOption() {
+    const nextAttrs = this.get('attrOptions');
+    const nextStyle = this.get('styleOptions');
+    this.set('preAttrOptions', Util.clone(nextAttrs));
+    this.set('preStyleOption', Util.clone(nextStyle));
+  }
+  _updateDraw() {
+    const preAttrs = this.get('preAttrOptions');
+    const nextAttrs = this.get('attrOptions');
+    const preStyle = this.get('preStyleOption');
+    const nextStyle = this.get('styleOptions');
+    if (preAttrs === undefined && preStyle === undefined) {
+      this._mapping();
+      this._setPreOption();
+      this._scaleByZoom();
+      this._initInteraction();
+      this._initMapEvent();
+      this.draw();
+      return;
+    }
+    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
+      this._updateAttributes(this.layerMesh);
+    }
+    // 更新数据过滤 filter
+    if (!Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
+      // 更新color；
+      this._updateAttributes(this.layerMesh);
+    }
+    // 更新Size
+    if (!Util.isEqual(preAttrs.size, nextAttrs.size)) {
+      // 更新color；
+      this._updateSize();
+    }
+    // 更新形状
+    if (!Util.isEqual(preAttrs.shape, nextAttrs.shape)) {
+      // 更新color；
+      this._updateShape();
+    }
+    if (!Util.isEqual(preStyle, nextStyle)) {
+      // 判断新增，修改，删除
+      const newStyle = {};
+      Util.each(diff(preStyle, nextStyle), ({ type, key, value }) => {
+        (type !== 'remove') && (newStyle[key] = value);
+        // newStyle[key] = type === 'remove' ? null : value;
+      });
+      this._updateStyle(newStyle);
+    }
+    this._setPreOption();
   }
 
   _updateAttr(type) {
@@ -435,7 +482,14 @@ export default class Layer extends Base {
     }
     this.emit('sizeUpdated', this.zoomSizeCache[zoom]);
   }
+  _updateStyle(option) {
+    const newOption = { };
+    for (const key in option) {
+      newOption['u_' + key] = option[key];
+    }
+    this.layerMesh.material.updateUninform(newOption);
 
+  }
   _mapping() {
     const self = this;
     const attrs = self.get('attrs');
@@ -445,13 +499,12 @@ export default class Layer extends Base {
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       const newRecord = {};
+
       newRecord.id = data[i]._id;
       for (const k in attrs) {
         if (attrs.hasOwnProperty(k)) {
           const attr = attrs[k];
-          attr.needUpdate = false;
           const names = attr.names;
-
           const values = self._getAttrValues(attr, record);
           if (names.length > 1) { // position 之类的生成多个字段的属性
             for (let j = 0; j < values.length; j++) {
@@ -467,6 +520,12 @@ export default class Layer extends Base {
       }
       newRecord.coordinates = record.coordinates;
       mappedData.push(newRecord);
+    }
+    // 通过透明度过滤数据
+    if (attrs.hasOwnProperty('filter')) {
+      mappedData.forEach(item => {
+        item.filter === false && (item.color[3] = 0);
+      });
     }
     this.layerData = mappedData;
   }
@@ -580,7 +639,7 @@ export default class Layer extends Base {
    *  用于过滤数据
    * @param {*} object  更新颜色和数据过滤
    */
-  _updateFilter(object) {
+  _updateAttributes(object) {
     this._updateMaping();
     const filterData = this.layerData;
     this._activeIds = null; // 清空选中元素
@@ -621,7 +680,7 @@ export default class Layer extends Base {
     } else if (this.type === 'polyline') {
       offset = 2;
     }
-    this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
+    this._object3D.position && (this._object3D.position.z = offset * Math.pow(2, 20 - zoom));
     if (zoom < minZoom || zoom > maxZoom) {
       this._object3D.visible = false;
     } else if (this.get('visible')) {

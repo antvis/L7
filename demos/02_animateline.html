@@ -88,7 +88,6 @@ scene.on('loaded', () => {
         // then update the map
          linelayer.setData(geojson);
         }
-        console.log( geojson.features[0].geometry.coordinates.length)
         // Request the next frame of the animation.
         animation = requestAnimationFrame(animateLine);
       }
