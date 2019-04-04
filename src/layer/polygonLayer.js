@@ -6,18 +6,6 @@ export default class PolygonLayer extends Layer {
     this.shape = type;
     return this;
   }
-  render() {
-    if (!this._hasRender) { // 首次渲染
-      this._hasRender = true;
-      this.draw();
-    } else {
-
-      this._initAttrs();
-      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter(this.layerMesh) : null;
-      // TODO update Style;
-    }
-    return this;
-  }
   draw() {
     this.init();
     this.type = 'polygon';
