@@ -14,21 +14,8 @@ const { pointShape } = Global;
  */
 
 export default class PointLayer extends Layer {
-  render() {
-    this.type = 'point';
-    this.init();
-    if (!this._hasRender) {
-      this.draw();
-      this._hasRender = true;
-    } else {
-      this._initAttrs();
-      this._needUpdateFilter || this._needUpdateColor
-        ? this._updateFilter()
-        : null;
-    }
-    return this;
-  }
   draw() {
+    this.type = 'point';
     const { stroke, fill } = this.get('styleOptions');
     const style = this.get('styleOptions');
     const activeOption = this.get('activedOptions');

@@ -10,12 +10,7 @@ export default class HeatMapLayer extends Layer {
     this.shapeType = type;
     return this;
   }
-  render() {
-    this.draw();
-    return this;
-  }
   draw() {
-    this.init();
     this.type = 'heatmap';
     switch (this.shapeType) {
       case 'grid' :
