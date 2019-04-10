@@ -1,4 +1,4 @@
-import Supercluster from 'supercluster';
+import Supercluster from 'supercluster/dist/supercluster';
 export function cluster(data, option) {
   const { radius = 80, maxZoom = 18, minZoom = 0, field, zoom = 2 } = option;
   if (data.pointIndex) {
