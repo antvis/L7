@@ -20,7 +20,7 @@ uniform float u_trailLength;
 
 void main() {
  mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
- vec3 pointPos = position.xyz + vec3(normal * a_size * pow(2.0,20.0-u_zoom) / 2.0 * a_miter);
+ vec3 pointPos = vec3(position.xy,0.) + vec3(normal * a_size * pow(2.0,20.0-u_zoom) / 2.0 * a_miter);
  v_color = a_color;
  if(pickingId == u_activeId) {
     v_color = u_activeColor;
@@ -30,8 +30,9 @@ void main() {
      float alpa =1.0 - fract( mod(1.0- a_distance,u_interval)* (1.0/u_interval) + u_time / u_duration);
      alpa = (alpa + u_trailLength -1.0) / u_trailLength;
      vTime = clamp(alpa,0.,1.);
+      // vTime = (28800. + mod(u_time* 1000.,28800.)- position.z) / 100.;
   #endif
  worldId = id_toPickColor(pickingId);
-gl_Position = matModelViewProjection * vec4(pointPos, 1.0);
+ gl_Position = matModelViewProjection * vec4(pointPos.xy, 0., 1.0);
 
 }

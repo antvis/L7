@@ -5,9 +5,8 @@ import { RasterBuffer } from '../geom/buffer/raster';
 
 export default class RasterLayer extends Layer {
 
-  render() {
+  draw() {
     this.type = 'raster';
-    this.init();
     const source = this.layerSource;
     // 加载 完成事件
     const styleOptions = this.get('styleOptions');

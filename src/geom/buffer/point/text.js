@@ -29,12 +29,11 @@ function drawGlyph(layerData, fontAtlasManager) {
     const size = element.size;
     const pos = element.coordinates;
     let text = element.shape || '';
+    text = text.toString();
     const pen = {
       x: (-text.length * size) / 2,
       y: 0
     };
-    text = text.toString();
-
     for (let i = 0; i < text.length; i++) {
       const metric = mapping[text[i]];
       const { x, y, width, height } = metric;
