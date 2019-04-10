@@ -10,12 +10,7 @@ export default class HeatMapLayer extends Layer {
     this.shapeType = type;
     return this;
   }
-  render() {
-    this._prepareRender();
-    return this;
-  }
-  _prepareRender() {
-    this.init();
+  draw() {
     this.type = 'heatmap';
     switch (this.shapeType) {
       case 'grid' :
@@ -55,11 +50,5 @@ export default class HeatMapLayer extends Layer {
     const girdMesh = new DrawGrid(this._buffer, config);
     this.add(girdMesh);
   }
-
-  // afterRender() {
-  //   if (this.shapeType !== 'grid' && this.shapeType !== 'hexagon') {
-  //     updateIntensityPass(this);
-  //   }
-  // }
 
 }
