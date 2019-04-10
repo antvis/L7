@@ -6,19 +6,7 @@ export default class PolygonLayer extends Layer {
     this.shape = type;
     return this;
   }
-  render() {
-    if (!this._hasRender) { // 首次渲染
-      this._hasRender = true;
-      this._prepareRender();
-    } else {
-
-      this._initAttrs();
-      (this._needUpdateFilter || this._needUpdateColor) ? this._updateFilter(this.layerMesh) : null;
-      // TODO update Style;
-    }
-    return this;
-  }
-  _prepareRender() {
+  draw() {
     this.init();
     this.type = 'polygon';
     this._buffer = new PolygonBuffer({
@@ -29,7 +17,6 @@ export default class PolygonLayer extends Layer {
   }
   update() {
     this.updateFilter(this.layerMesh);
-    // 动态更新相关属性
   }
   _getLayerRender() {
     const animateOptions = this.get('animateOptions');

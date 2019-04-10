@@ -14,4 +14,5 @@ registerLayer('RasterLayer', RasterLayer);
 registerLayer('HeatmapLayer', HeatmapLayer);
 
 export { LAYER_MAP } from './factory';
+export { registerLayer };
 
