@@ -9,7 +9,7 @@ export default class imageLayer extends Layer {
     const source = this.layerSource;
     const { opacity } = this.get('styleOptions');
     // 加载 完成事件
-    source.data.images.then(images => {
+    source.originData.images.then(images => {
       this.layerData[0].images = images;
       const buffer = new ImageBuffer({
         layerData: this.layerData
