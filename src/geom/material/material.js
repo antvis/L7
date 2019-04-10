@@ -19,7 +19,7 @@ export default class Material extends THREE.ShaderMaterial {
     }
     return uniforms;
   }
-  upDateUninform(option) {
+  updateUninform(option) {
     for (const key in option) {
       if (key.substr(0, 2) === 'u_') {
         this.setUniformsValue(key, option[key]);

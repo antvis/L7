@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { pointData } from '../../../asset/data/point';
 import { cluster } from '../../../../src/source/transform/cluster';
-describe('hexagon  Test', function() {
+describe('cluster  Test', function() {
 
   it('pointToCuster', function() {
     const dataArray = pointData.map(item => {
@@ -17,7 +17,7 @@ describe('hexagon  Test', function() {
       dataArray,
       extent: [ -180, -85, 180, 85 ]
     };
-    const grid = cluster(data, { radius: 40, field: 'v', zoom: 13 });
-    expect(grid.dataArray.length).eql(26);
+    const grid = cluster(data, { radius: 40, field: 'v', zoom: 13, bbox: [ -180, -85, 180, 85 ] });
+    expect(grid.data.dataArray.length).eql(26);
   });
 });
