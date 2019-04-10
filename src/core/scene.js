@@ -7,6 +7,7 @@ import FontAtlasManager from '../geom/buffer/point/text/font-manager';
 // import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
 import Global from '../global';
+import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -46,6 +47,12 @@ export default class Scene extends Base {
       Map.asyncCamera(this._engine);
       this.initLayer();
       this._registEvents();
+      const hash = this.get('hash');
+      if (hash) {
+        const Ctor = getInteraction('hash');
+        const interaction = new Ctor({ layer: this });
+        interaction._onHashChange();
+      }
       this.emit('loaded');
     });
 
@@ -68,14 +75,6 @@ export default class Scene extends Base {
     if (this.map) { this.map.off(type, hander); }
 
     super.off(type, hander);
-  }
-  _initAttribution() {
-    const message = '<a href="http://antv.alipay.com/zh-cn/index.html title="Large-scale WebGL-powered Geospatial Data Visualization">AntV | L7  </a>';
-    const element = document.createElement('div');
-
-    element.innerHTML = message;
-    element.style.cssText += 'position: absolute; pointer-events:none;background: rgba(255, 255, 255, 0.7);font-size: 11px;z-index:100; padding:4px;bottom: 0;right:0px;';
-    this._container.appendChild(element);
   }
   addImage() {
     this.image = new LoadImage();
