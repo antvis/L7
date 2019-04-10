@@ -1,6 +1,8 @@
 import Base from './base';
 import { getTransform, getParser } from '../source';
+import { cluster, formatData } from '../source/transform/cluster';
 import { extent, tranfrormCoord } from '../util/geo';
+import { clone } from '@antv/util';
 import { getMap } from '../map/index';
 export default class Source extends Base {
   getDefaultCfg() {
@@ -21,18 +23,40 @@ export default class Source extends Base {
     const mapType = this.get('mapType');
     this.projectFlat = getMap(mapType).project;
     // 数据解析
+    this._init();
+
+  }
+  _init() {
     this._excuteParser();
+    const isCluster = this.get('isCluster') || false;
+    isCluster && this._executeCluster();
     // 数据转换 统计，聚合，分类
     this._executeTrans();
     // 坐标转换
     this._projectCoords();
-
   }
+  setData(data, cfg = {}) {
+    Object.assign(this._attrs, cfg);
+    const transform = this.get('transforms');
+    this._transforms = transform || [];
+    this.set('data', data);
+    this._init();
+  }
+  // 数据更新
+  updateTransfrom(cfg) {
+    const { transforms } = cfg;
+    this._transforms = transforms;
+    this.data = clone(this.originData);
+    this._executeTrans();
+    this._projectCoords();
+  }
+
   _excuteParser() {
     const parser = this.get('parser');
     const { type = 'geojson' } = parser;
     const data = this.get('data');
-    this.data = getParser(type)(data, parser);
+    this.originData = getParser(type)(data, parser);
+    this.data = clone(this.originData);
     this.data.extent = extent(this.data.dataArray);
   }
   /**
@@ -50,6 +74,24 @@ export default class Source extends Base {
   transform(option) {
     const data = getTransform(option.type)(this.data, option);
     Object.assign(this.data, data);
+  }
+  _executeCluster() {
+    const clusterCfg = this.get('Cluster') || {};
+    const zoom = this.get('zoom');
+    clusterCfg.zoom = Math.floor(zoom);
+    this.set('cluster', clusterCfg);
+    const clusterData = cluster(this.data, clusterCfg);
+    this.data = clusterData.data;
+    this.pointIndex = clusterData.pointIndex;
+  }
+  updateCusterData(zoom, bbox) {
+    const clusterPoint = this.pointIndex.getClusters(bbox, zoom);
+    this.data.dataArray = formatData(clusterPoint);
+    const clusterCfg = this.get('Cluster') || {};
+    clusterCfg.zoom = Math.floor(zoom);
+    clusterCfg.bbox = bbox;
+    this.set('cluster', clusterCfg);
+    this._projectCoords();
   }
   _projectCoords() {
     this.data.dataArray.forEach(data => {
