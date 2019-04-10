@@ -16,6 +16,6 @@ $ npm run dev
 $ npm run demos
 ```
 visit online demo 
-http://site.alipay.net/datavis/L7/demos/index.html
+https://antv.alipay.com/zh-cn/l7/1.x/demo/index.html
 
 ## How to Contribute
