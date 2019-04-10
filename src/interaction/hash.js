@@ -1,5 +1,5 @@
 import Interaction from './base';
-import throttle from '@antv/util/src/throttle.js';
+import { throttle } from '@antv/util';
 export default class Hash extends Interaction {
   constructor(cfg) {
     super({
