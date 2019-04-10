@@ -130,7 +130,8 @@ export default class Source extends Base {
     const data = this.get('data');
     // 如果是GeoJSON 数据返回原数
     // 颜色编码从1开始，要素索引从0开始，所以颜色转变要素需要减1
-    return data.features
+    const isCluster = this.get('isCluster') || false;
+    return (data.features && !isCluster)
       ? data.features[featureId - 1]
       : this.data.dataArray[featureId - 1];
   }
