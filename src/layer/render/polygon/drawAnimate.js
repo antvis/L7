@@ -25,7 +25,7 @@ export default function DrawAnimate(attributes, style) {
 }
 
 DrawAnimate.prototype.updateStyle = function(style) {
-  this.fillPolygonMesh.material.upDateUninform({
+  this.fillPolygonMesh.material.updateUninform({
     u_opacity: style.opacity,
     u_baseColor: style.baseColor,
     u_brightColor: style.brightColor,
