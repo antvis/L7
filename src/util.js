@@ -1,4 +1,4 @@
-import Utils from '@antv/util';
+import * as Utils from '@antv/util';
 
 const Util = Utils.mix({}, Utils, {
   assign: Utils.mix, // simple mix
