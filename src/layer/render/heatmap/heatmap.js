@@ -10,7 +10,8 @@ import * as THREE from '../../../core/three';
 export function drawHeatmap(layer) {
 
   const colors = layer.get('styleOptions').rampColors;
-  layer.colorRamp = createColorRamp(colors);
+
+  layer.rampColors = createColorRamp(colors);
   const heatmap = new heatmapPass(layer);
   const copy = new copyPass(layer);
   copy.renderToScreen = true;
@@ -18,31 +19,42 @@ export function drawHeatmap(layer) {
   composer.addPass(heatmap);
   composer.addPass(copy);
   layer.add(composer);
+  layer.scene._engine.update();
+  layer._updateStyle = style => {
+    if (style.rampColors) {
+      style.rampColors = createColorRamp(style.rampColors);
+    }
+    const newOption = { };
+    for (const key in style) {
+      newOption['u_' + key] = style[key];
+    }
+    heatmap.scene.children[0].material.updateUninform(newOption);
+    copy.scene.children[0].material.updateUninform(newOption);
+  };
 
 }
-
 
 function heatmapPass(layer) {
   const scene = new THREE.Scene();
   const style = layer.get('styleOptions');
   const data = layer.layerData;
   const camera = layer.scene._engine._camera;
-    // get attributes data
+  // get attributes data
   const buffer = new HeatmapBuffer({
     data
   });
   const attributes = buffer.attributes;
-    // create geometery
+  // create geometery
   const geometry = new THREE.BufferGeometry();
-    // geometry.setIndex(attributes.indices);
+  // geometry.setIndex(attributes.indices);
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_dir', new THREE.Float32BufferAttribute(attributes.dirs, 2));
   geometry.addAttribute('a_weight', new THREE.Float32BufferAttribute(attributes.weights, 1));
   const material = new HeatmapIntensityMaterial({
-    intensity: style.intensity,
-    radius: style.radius,
-    zoom: layer.scene.getZoom()
-  });
+    u_intensity: style.intensity,
+    u_radius: style.radius,
+    u_zoom: layer.scene.getZoom()
+  }, {});
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
   scene.onBeforeRender = () => { // 每次渲染前改变状态
@@ -55,9 +67,9 @@ function heatmapPass(layer) {
 function copyPass(layer) {
   const style = layer.get('styleOptions');
   const material = new HeatmapColorizeMaterial({
-    colorRamp: layer.colorRamp,
-    opacity: style.opacity
-  });
+    u_rampColors: layer.rampColors,
+    u_opacity: style.opacity
+  }, {});
   const copyPass = new ShaderPass(material, 'u_texture');
   return copyPass;
 }
