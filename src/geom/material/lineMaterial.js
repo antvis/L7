@@ -55,7 +55,8 @@ export function MeshLineMaterial(options) {
     },
     vertexShader: vs,
     fragmentShader: fs,
-    transparent: true
+    transparent: true,
+    blending: THREE.AdditiveBlending
   });
   return material;
 }

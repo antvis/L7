@@ -33,7 +33,7 @@ export function polygonPath(pointCount) {
   const step = Math.PI * 2 / pointCount;
   const line = [];
   for (let i = 0; i < pointCount; i++) {
-    line.push(step * i);
+    line.push(step * i - Math.PI / 12);
   }
   const path = line.map(t => {
     const x = Math.sin(t + Math.PI / 4),
