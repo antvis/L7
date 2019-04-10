@@ -16,7 +16,8 @@ void main() {
   }
   #ifdef ANIMATE 
     vTime = 1.0- (mod(u_time*50.,3600.)- position.z) / 100.;
+    //  vTime = 1.0- (28800. + mod(u_time* 10.,28800.)- position.z / 1000.) / 100.;
   #endif
-  gl_Position = matModelViewProjection * vec4(position.xy,0., 1.0);
+  gl_Position = matModelViewProjection * vec4(position.xy, 0., 1.0);
   worldId = id_toPickColor(pickingId);
 }

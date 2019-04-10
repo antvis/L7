@@ -22,8 +22,8 @@ describe('test shader module', function() {
   registerModule('common', commonModule);
   registerModule('module1', module1);
   it('should import a module correctly.', function() {
-   // expect(vs).eq('#define PI 3.14');
-   // expect(fs.replace(/(\s+)|(\n)+|(\r\n)+/g, '')).eqls('#ifdefGL_FRAGMENT_PRECISION_HIGHprecisionhighpfloat;#elseprecisionmediumpfloat;#endif');
+    // expect(vs).eq('#define PI 3.14');
+    // expect(fs.replace(/(\s+)|(\n)+|(\r\n)+/g, '')).eqls('#ifdefGL_FRAGMENT_PRECISION_HIGHprecisionhighpfloat;#elseprecisionmediumpfloat;#endif');
   });
 
 });

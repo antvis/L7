@@ -24,7 +24,7 @@
 <script src="../build/L7.js"></script>
 <script>
 const colorObj ={
-  blue: ["#E8FCFF", "#CFF6FF", "#A1E9ff", "#65CEF7", "#3CB1F0", "#2894E0", "#1772c2", "#105CB3", "#0D408C", "#002466"].reverse(),
+  blue: ["#E8FCFF", "#CFF6FF", "#A1E9ff", "#65CEF7", "#3CB1F0", "#2894E0", "#1772c2", "#105CB3", "#0D408C", "#002466"],
   red: ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"].reverse(),
   orange:["#FFF7EB", "#FFECD4", "#FAD09D", "#F7B16A", "#F08D41", "#DB6C2C", "#C2491D", "#AD2B11", "#871D0C", "#610800"].reverse(),
   green:["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"].reverse(),
@@ -35,43 +35,53 @@ const colorObj ={
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'light', // 样式URL
+  mapStyle: 'dark', // 样式URL
   center: [ 120.19382669582967, 30.258134 ],
   pitch: 0,
   zoom: 12,
-  maxZoom:14,
-  minZoom:11,
+  maxZoom:20,
+  minZoom:0,
 });
 window.scene = scene;
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', data => {
     const circleLayer = scene.PointLayer({
-      zIndex: 2,
+      zIndex: 0,
     })
-    .source(data)
-    .shape('circle')
-    .size('value', [ 2, 30]) // default 1
-    .scale('value', {
-      type:'log',
+    .source(data,{
+       isCluster:true
     })
+    .shape('hexagon')
+    .size('point_count', [ 5, 40]) // default 1
      //.size('value', [ 10, 300]) // default 1
     .active(true)
-     .filter('value', field_8 => {
-      return field_8 * 1 > 500;
-     })
-    .color('type', colorObj.blue)
+    .color('point_count',colorObj.blue)
     .style({
       stroke: 'rgb(255,255,255)',
       strokeWidth: 1,
-      opacity: 1.
+      opacity: 1
     })
      .render();
-     console.log(circleLayer);
-     var a = circleLayer.getLegendCfg('type','color');
-     console.log(a);
-    circleLayer.on('click',(e)=>{
-    console.log(e);
-  })
+  window.circleLayer = circleLayer;
+   const layerText =  scene.PointLayer({
+      zIndex: 3
+    })
+    .source(circleLayer.layerSource)
+    .shape('point_count', 'text')
+    .active(true)
+    .filter('point_count',(p)=>{
+      return p > 50
+    })
+    .size('point_count', [ 5, 20]) // default 1
+    .color('#fff')
+    .style({
+      stroke: '#999',
+      strokeWidth: 0,
+      opacity: 1.0
+    })
+     .render();
+    console.log(layerText);
+
   });
     
 });
