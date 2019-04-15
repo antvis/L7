@@ -31,11 +31,19 @@ const colorObj ={
   yellow:["#FFFFE8", "#FFFECC", "#FAF896", "#F7E463", "#F0CE3A", "#DBB125", "#C29117", "#AD7410", "#87500C", "#613000"].reverse(),
   purple:["#FCF2FF", "#F5DEFF", "#DDB3F2", "#BE7BE3", "#9B4ECF", "#7737B3", "#5B2899", "#411C85", "#270F5E", "#100338"].reverse()
 }
-
+ var mapinstance = new AMap.Map('map',{
+    center: [ 120.19382669582967, 30.258134 ],
+     viewMode: '3D',
+  pitch: 0,
+  zoom: 12,
+  maxZoom:20,
+  minZoom:0,
+ });
 
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
+  map:mapinstance,
   center: [ 120.19382669582967, 30.258134 ],
   pitch: 0,
   zoom: 12,
