@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
+
+  <title>hexagon demo</title>
+  <style>
+  body {margin: 0;}
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+ <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [104.838088,34.075889 ],
+  pitch: 0,
+  zoom: 4.5,
+
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  // https://gw.alipayobjects.com/os/basement_prod/24883cde-3352-4e53-af52-f6e59d4fe2c8.json
+  //tile  https://gw.alipayobjects.com/os/basement_prod/c400bd4e-5b46-4769-b969-c1f09feaf908.json
+  $.getJSON('https://gw.alipayobjects.com/os/basement_prod/c400bd4e-5b46-4769-b969-c1f09feaf908.json', city => {
+     city.type = "FeatureCollection";
+    city.features = city.features.map((item)=>{
+     return {
+        type: "Feature",
+        properties:item.tags,
+        "geometry":{
+           "type": "Polygon",
+           "coordinates":item.geometry
+        }
+        }
+    })
+    
+    console.log(city.features[0]);
+    const citylayer = scene.PolygonLayer()
+    .source(city)
+    .color('Code',["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"])
+    .shape('fill')
+    .active(true)
+    .style({
+      opacity: 1
+    })
+    .render();
+    console.log(citylayer);
+   /**
+     const citylayer2 = scene.PolygonLayer()
+      .source(city)
+      .shape('line')
+      .color('#fff')
+      .style({
+        opacity: 1.0
+       })
+       .render();
+    **/
+  });
+});
+
+</script>
+</body>
+</html>
+
