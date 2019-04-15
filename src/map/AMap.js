@@ -28,7 +28,7 @@ export default class GaodeMap extends Base {
   }
   constructor(cfg) {
     super(cfg);
-    this.container = this.get('id');
+    this.container = document.getElementById(this.get('id'));
     this.initMap();
     this.addOverLayer();
     setTimeout(() => {
@@ -38,7 +38,6 @@ export default class GaodeMap extends Base {
 
   initMap() {
     const mapStyle = this.get('mapStyle');
-
     switch (mapStyle) {
       case 'dark':
         this.set('mapStyle', Theme.DarkTheme.mapStyle);
@@ -50,7 +49,14 @@ export default class GaodeMap extends Base {
         this.set('mapStyle', mapStyle);
     }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
-    this.map = new AMap.Map(this.container, this._attrs);
+    const map = this.get('map');
+    if (map instanceof AMap.Map) {
+      this.map = map;
+      this.container = map.getContainer();
+      this.map.setMapStyle(this.get('mapStyle'));
+    } else {
+      this.map = new AMap.Map(this.container, this._attrs);
+    }
   }
   asyncCamera(engine) {
     this._engine = engine;
@@ -74,10 +80,6 @@ export default class GaodeMap extends Base {
       camera.lookAt(0, 0, 0);
       camera.position.x += e.camera.position.x;
       camera.position.y += -e.camera.position.y;
-      // scene.position.x = -e.camera.position.x;
-      // scene.position.y = e.camera.position.y;
-      // pickScene.position.x = -e.camera.position.x;
-      // pickScene.position.y = e.camera.position.y;
     });
   }
 
@@ -91,7 +93,7 @@ export default class GaodeMap extends Base {
     return this.projectFlat(this.getCenter());
   }
   addOverLayer() {
-    const canvasContainer = document.getElementById(this.container);
+    const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
     this.canvasContainer = canvasContainer;
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
