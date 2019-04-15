@@ -39,7 +39,7 @@ export default class Scene extends Base {
     const MapProvider = getMap(this.mapType);
     const Map = new MapProvider(this._attrs);
     Map.mixMap(this);
-    this._container = document.getElementById(Map.container);
+    this._container = Map.container;
     // const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.on('mapLoad', () => {
       this.map = Map.map;
