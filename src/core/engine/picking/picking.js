@@ -87,21 +87,11 @@ class Picking {
       id = -999;
       // return;
     }
-    this._raycaster.setFromCamera(normalisedPoint, this._camera);
-
-    const intersects = this._raycaster.intersectObjects(this._pickingScene.children, true);
     const _point2d = { x: point.x, y: point.y };
-
-    let _point3d;
-    if (intersects.length > 0) {
-      _point3d = intersects[0].point;
-    }
     const item = {
       layerId,
       featureId: id,
-      point2d: _point2d,
-      point3d: _point3d,
-      intersects
+      point2d: _point2d
     };
     return item;
 
