@@ -59,11 +59,11 @@ scene.on('loaded', () => {
     .source(data,{
        isCluster:true
     })
-    .shape('hexagon')
+    .shape('circle')
     .size('point_count', [ 5, 40]) // default 1
      //.size('value', [ 10, 300]) // default 1
     .active(true)
-    .color('point_count',colorObj.blue)
+    .color('point_count',["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
     .style({
       stroke: 'rgb(255,255,255)',
       strokeWidth: 1,
