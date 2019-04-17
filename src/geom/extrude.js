@@ -19,18 +19,18 @@ export default function extrudePolygon(points, extrude) {
   const flattengeo = earcut.flatten(points);
   const positions = [];
   let cells = [];
-
+  const { dimensions } = flattengeo;
   const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   cells = triangles;
 
-  const pointCount = flattengeo.vertices.length / 3;
+  const pointCount = flattengeo.vertices.length / dimensions;
   const { vertices } = flattengeo;
   extrude ? full() : flat();
 
 
   function flat() {
     for (let i = 0; i < pointCount; i++) {
-      positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 0 ]);
+      positions.push([ vertices[ i * dimensions ], vertices[i * dimensions + 1 ], 0 ]);
     }
   }
   function full() {
@@ -41,10 +41,10 @@ export default function extrudePolygon(points, extrude) {
     // 顶部坐标
 
     for (let i = 0; i < pointCount; i++) {
-      positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 1 ]);
+      positions.push([ vertices[ i * dimensions ], vertices[i * dimensions + 1 ], 1 ]);
     }
     for (let i = 0; i < pointCount; i++) {
-      positions.push([ vertices[ i * 3 ], vertices[i * 3 + 1 ], 0 ]);
+      positions.push([ vertices[ i * dimensions ], vertices[i * dimensions + 1 ], 0 ]);
     }
     for (let i = 0; i < n; i++) {
       if (i === (n - 1)) {
