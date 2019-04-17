@@ -41,7 +41,12 @@ float sdRect(vec2 p, vec2 sz) {
   float inside = min(max(d.x, d.y), 0.);
   return outside + inside;
 }
-
+float circle(in vec2 _st, in float _radius){
+    vec2 dist = _st-vec2(0.5);
+	return 1.-smoothstep(_radius-(_radius*0.01),
+                         _radius+(_radius*0.01),
+                         dot(dist,dist)*4.0);
+}
 
 void main() {
    if(v_color.w == 0.0) {
@@ -106,6 +111,12 @@ void main() {
         gl_FragColor = vec4(foggedColor,1.0); 
      }
    #else
+      // #ifdef SHAPE 
+      //   vec2 st = gl_FragCoord.xy / v_size ;
+	    //   vec3 color = vec3(circle(st,0.5));
+	    //   gl_FragColor = vec4(color, 1.0 );
+      //   return;
+      //  #endif
       gl_FragColor = vec4(v_color.xyz , v_color.w);
    #endif
  
