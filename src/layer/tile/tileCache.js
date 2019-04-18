@@ -1,20 +1,15 @@
 import LRUCache from '../../util/lru-cache';
 export default class TileCache {
-  constructor(limit = 50) {
+  constructor(limit = 500) {
     this._cache = new LRUCache(limit);
   }
 
-  getTile(z, x, y) {
-    const key = this._generateKey(z, x, y);
+  getTile(key) {
     return this._cache.get(key);
   }
 
-  setTile(tile, z, x, y) {
-    const key = this._generateKey(z, x, y);
+  setTile(tile, key) {
     this._cache.set(key, tile);
-  }
-  _generateKey(z, x, y) {
-    return [ z, x, y ].join('_');
   }
   destory() {
     this._cache.clear();
