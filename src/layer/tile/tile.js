@@ -1,13 +1,13 @@
 import * as THREE from '../../core/three';
 import { toLngLatBounds, toBounds } from '@antv/geo-coord';
-import { sphericalMercator } from '@antv/geo-coord/lib/geo/projection/spherical-mercator';
 const r2d = 180 / Math.PI;
 const tileURLRegex = /\{([zxy])\}/g;
 
-export class Tile {
-  constructor(layer, z, x, y) {
+export default class Tile {
+  constructor(key, url, layer) {
     this.layer = layer;
-    this._tile = [ x, y, z ];
+    this._tile = key.split('_').map(v => v * 1);
+    this._path = url;
     this._tileLnglatBounds = this._tileLnglatBounds(this._tile);
 
     this._tileBounds = this._tileBounds(this._tileLnglatBounds);
@@ -16,6 +16,7 @@ export class Tile {
 
     this._centerLnglat = this._tileLnglatBounds.getCenter();
     this.Object3D = new THREE.Object3D();
+    this.requestTileAsync();
 
 
   }
@@ -33,16 +34,19 @@ export class Tile {
   }
    // 经纬度范围转瓦片范围
   _tileBounds(lnglatBound) {
-    const nw = sphericalMercator.project(lnglatBound.getTopLeft());
-    const se = sphericalMercator.project(lnglatBound.getBottomRight());
-
-    return toBounds(nw, se);
+    const ne = this.layer.scene.project([ lnglatBound.getNorthWest().lng, lnglatBound.getNorthEast().lat ]);
+    const sw = this.layer.scene.project([ lnglatBound.getSouthEast().lng, lnglatBound.getSouthWest().lat ]);
+    return toBounds(sw, ne);
   }
+  getMesh() {
+    return this.Object3D;
+  }
+
 
   // Get tile bounds in WGS84 coordinates
   _tileLnglatBounds(tile) {
-    const e = this._tile2lon(tile[0] + 1, tile[2]);
-    const w = this._tile2lon(tile[0], tile[2]);
+    const e = this._tile2lng(tile[0] + 1, tile[2]);
+    const w = this._tile2lng(tile[0], tile[2]);
     const s = this._tile2lat(tile[1] + 1, tile[2]);
     const n = this._tile2lat(tile[1], tile[2]);
     return toLngLatBounds([ w, n ], [ e, s ]);
