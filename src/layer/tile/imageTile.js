@@ -7,7 +7,7 @@ export default class ImageTile extends Tile {
     // Making this asynchronous really speeds up the LOD framerate
     setTimeout(() => {
       if (!this._mesh) {
-        this._mesh = this._createMesh();
+       // this._mesh = this._createMesh();
         this._requestTile();
       }
     }, 0);
@@ -20,7 +20,6 @@ export default class ImageTile extends Tile {
     };
 
     const url = this._getTileURL(urlParams);
-
     const image = document.createElement('img');
 
     image.addEventListener('load', () => {
@@ -40,11 +39,11 @@ export default class ImageTile extends Tile {
     this._image = image;
   }
   _getBufferData(images) {
-    const NW = this._tileBounds.getTopLeft().to;
+    const NW = this._tileBounds.getTopLeft();
     const SE = this._tileBounds.getBottomRight();
-    const coordinate = [[ NW.x, NW.y ], [ SE.x, SE.y ]];
+    const coordinates = [[ NW.x, NW.y, 0 ], [ SE.x, SE.y, 0 ]];
     return [{
-      coordinate,
+      coordinates,
       images
     }];
   }
@@ -56,10 +55,10 @@ export default class ImageTile extends Tile {
     const buffer = new ImageBuffer({
       layerData: this._layerData
     });
-
-    const style = this.get('styleOptions');
+    buffer.attributes.texture = buffer.texture;
+    const style = this.layer.get('styleOptions');
     const mesh = DrawImage(buffer.attributes, style);
-    this.Object3D.push(mesh);
+    this.Object3D.add(mesh);
     return this.Object3D;
   }
   _abortRequest() {
