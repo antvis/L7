@@ -33,7 +33,7 @@ export default class Source extends Base {
     // 数据转换 统计，聚合，分类
     this._executeTrans();
     // 坐标转换
-    // this._projectCoords();
+    this._projectCoords();
   }
   setData(data, cfg = {}) {
     Object.assign(this._attrs, cfg);
