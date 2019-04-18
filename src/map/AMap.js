@@ -103,6 +103,7 @@ export default class GaodeMap extends Base {
   }
   mixMap(scene) {
     const map = this.map;
+    scene.project = GaodeMap.project;
     scene.getZoom = () => {
       return map.getZoom();
     };

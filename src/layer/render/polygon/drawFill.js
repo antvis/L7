@@ -1,6 +1,6 @@
 import * as THREE from '../../../core/three';
-// import PolygonMaterial from '../../../geom/material/polygonMaterial';
-import TileMaterial from '../../../geom/material/tile/polygon';
+import PolygonMaterial from '../../../geom/material/polygonMaterial';
+// import TileMaterial from '../../../geom/material/tile/polygon';
 
 export default function DrawPolygonFill(attributes, style) {
   const { opacity, activeColor } = style;
@@ -15,7 +15,7 @@ export default function DrawPolygonFill(attributes, style) {
   // }, {
   //   SHAPE: false
   // });
-  const material = new TileMaterial({
+  const material = new PolygonMaterial({
     u_opacity: opacity,
     u_activeColor: activeColor
   }, {
