@@ -3,6 +3,7 @@ import { getCoords } from '@turf/invariant';
 
 export default function geoJSON(data) {
   const resultData = [];
+  // 数据为空时处理
   turfMeta.flattenEach(data, (currentFeature, featureIndex) => { // 多个polygon 拆成一个
     const coord = getCoords(currentFeature);
     const dataItem = {
