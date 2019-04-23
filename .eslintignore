@@ -11,3 +11,4 @@ demos/*
 rollup/*
 webpack/*
 src/core/three.js
+testdemo/*
