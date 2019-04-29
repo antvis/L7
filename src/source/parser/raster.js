@@ -4,7 +4,7 @@ export default function raster(data, cfg) {
     _id: 1,
     dataArray: [
       {
-        data,
+        data: Array.from(data),
         width,
         height,
         min,
