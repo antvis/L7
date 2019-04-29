@@ -15,17 +15,16 @@ export class RasterBuffer extends BufferBase {
     ];
     const imgPosUv = [ 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 ];
     const size = this.get('size');
+
     const texture = new THREE.DataTexture(new Float32Array(data), width, height, THREE.LuminanceFormat, THREE.FloatType);
-    texture.generateMipmaps = true;
     texture.needsUpdate = true;
     const colors = this.get('rampColors');
     const colorImageData = this.getColorRamp(colors);
-    const colorTexture = this._getTexture(colorImageData);
+    const colorTexture = this._getTexture(colorImageData); // 颜色纹理
     this.bufferStruct.position = positions;
     this.bufferStruct.uv = imgPosUv;
     this.bufferStruct.u_raster = texture;//
     this.bufferStruct.u_extent = [ coordinates[0][0], coordinates[0][1], coordinates[1][0], coordinates[1][1] ];
-
     this.bufferStruct.u_colorTexture = colorTexture; // 颜色表‘=
     const triangles = this._buildTriangles(width, height, size, this.bufferStruct.u_extent);
     const attributes = {
@@ -68,16 +67,23 @@ export class RasterBuffer extends BufferBase {
     return new ImageData(data, 16, 16);
 
   }
+
+  /**
+   * 颜色纹理
+   * @param {*} image 颜色图片
+   * @return {texture} texture
+   */
   _getTexture(image) {
     const texture1 = new THREE.Texture(image);
     texture1.magFilter = THREE.LinearFilter;
     texture1.minFilter = THREE.LinearFilter;
     texture1.format = THREE.RGBAFormat;
     texture1.type = THREE.UnsignedByteType;
+    texture1.generateMipmaps = true;
     texture1.needsUpdate = true;
     return texture1;
   }
-  _buildTriangles(width, height, size = 1, extent) {
+  _buildTriangles(width, height, size = 2, extent) {
     // const extent = [ 73.482190241, 3.82501784112, 135.106618732, 57.6300459963 ]
     const indices = [];
     const vertices = [];
