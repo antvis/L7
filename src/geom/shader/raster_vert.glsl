@@ -1,6 +1,7 @@
 precision highp float;
 uniform vec4 u_extent;
 uniform sampler2D u_texture;
+uniform float u_opacity;
 uniform float u_size;
 uniform sampler2D u_colorTexture;
 uniform float u_min;
