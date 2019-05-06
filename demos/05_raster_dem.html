@@ -26,9 +26,9 @@ const scene = new L7.Scene({
   id: 'map',
   viewMode: '3D',
   mapStyle: 'amap://styles/ba3e9759545cd618392ef073c0dfda8c?isPublic=true', // 样式URL
-  center: [ 110.770672, 34.159869 ],
+  center: [ 110.770672, 44.159869 ],
   pitch: 0,
-  zoom: 4
+  zoom: 3
 });
 
 scene.on('loaded', () => {
@@ -42,10 +42,9 @@ scene.on('loaded', () => {
       const blob = this.response;
       const tiff = GeoTIFF.parse(blob);
       const image = tiff.getImage();
-      const values = image.readRasters()[0];
+      const values = image.readRasters()[0].values();
       const m = image.getHeight();
       const n = image.getWidth();
-
       const layer = scene.RasterLayer({ zIndex: 2 }).
       source(values, {
         parser: {
@@ -64,7 +63,7 @@ scene.on('loaded', () => {
          }
        })
       .render();
-
+      console.log(layer);
      
     }
   };
