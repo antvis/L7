@@ -9,7 +9,8 @@ export default function ImageMaterial(options) {
     },
     vertexShader: vs,
     fragmentShader: fs,
-    transparent: true
+    transparent: true,
+    depthTest: false
   });
   return material;
 }

@@ -1,137 +1,82 @@
-// import * as THREE from '../../core/three';
-// import Tile from './tile';
-// export default class ImageTile extends Tile {
-//   constructor(layer, z, x, y) {
 
-//   }
-//   requestTileAsync() {
-//     // Making this asynchronous really speeds up the LOD framerate
-//     setTimeout(() => {
-//       if (!this._mesh) {
-//         this._mesh = this._createMesh();
-//         this._requestTile();
-//       }
-//     }, 0);
-//   }
-//   _requestTile() {
-//     const urlParams = {
-//       x: this._tile[0],
-//       y: this._tile[1],
-//       z: this._tile[2]
-//     };
+import Tile from './tile';
+import ImageBuffer from '../../geom/buffer/image';
+import DrawImage from '../render/image/drawImage';
+export default class ImageTile extends Tile {
+  requestTileAsync() {
+    // Making this asynchronous really speeds up the LOD framerate
+    setTimeout(() => {
+      if (!this._mesh) {
+       // this._mesh = this._createMesh();
+        this._requestTile();
+      }
+    }, 0);
+  }
+  _requestTile() {
+    const urlParams = {
+      x: this._tile[0],
+      y: this._tile[1],
+      z: this._tile[2]
+    };
 
-//     const url = this._getTileURL(urlParams);
+    const url = this._getTileURL(urlParams);
+    const image = document.createElement('img');
 
-//     const image = document.createElement('img');
+    image.addEventListener('load', () => {
 
-//     image.addEventListener('load', event => {
-//       const texture = new THREE.Texture();
+      this._createMesh(image);
+      this._ready = true;
+    }, false);
 
-//       texture.image = image;
-//       texture.needsUpdate = true;
+    // image.addEventListener('progress', event => {}, false);
+    // image.addEventListener('error', event => {}, false);
 
-//       // Silky smooth images when tilted
-//       texture.magFilter = THREE.LinearFilter;
-//       texture.minFilter = THREE.LinearMipMapLinearFilter;
+    image.crossOrigin = '';
 
-//       // TODO: Set this to renderer.getMaxAnisotropy() / 4
-//       texture.anisotropy = 4;
+    // Load image
+    image.src = url;
 
-//       texture.needsUpdate = true;
+    this._image = image;
+  }
+  _getBufferData(images) {
+    const NW = this._tileBounds.getTopLeft();
+    const SE = this._tileBounds.getBottomRight();
+    const coordinates = [[ NW.x, NW.y, 0 ], [ SE.x, SE.y, 0 ]];
+    return [{
+      coordinates,
+      images
+    }];
+  }
+  _createMesh(image) {
+    if (!this._center) {
+      return;
+    }
+    this._layerData = this._getBufferData(image);
+    const buffer = new ImageBuffer({
+      layerData: this._layerData
+    });
+    buffer.attributes.texture = buffer.texture;
+    const style = this.layer.get('styleOptions');
+    const mesh = DrawImage(buffer.attributes, style);
+    this.Object3D.add(mesh);
+    return this.Object3D;
+  }
+  _abortRequest() {
+    if (!this._image) {
+      return;
+    }
 
-//       // Something went wrong and the tile or its material is missing
-//       //
-//       // Possibly removed by the cache before the image loaded
-//       if (!this._mesh || !this._mesh.children[0] || !this._mesh.children[0].material) {
-//         return;
-//       }
+    this._image.src = '';
+  }
 
-//       this._mesh.children[0].material.map = texture;
-//       this._mesh.children[0].material.needsUpdate = true;
+  destroy() {
+    // Cancel any pending requests
+    this._abortRequest();
 
-//       this._texture = texture;
-//       this._ready = true;
-//     }, false);
+    // Clear image reference
+    this._image = null;
 
-//     // image.addEventListener('progress', event => {}, false);
-//     // image.addEventListener('error', event => {}, false);
+    super.destroy();
+  }
 
-//     image.crossOrigin = '';
-
-//     // Load image
-//     image.src = url;
-
-//     this._image = image;
-//   }
-
-//   _createMesh() {
-//     // Something went wrong and the tile
-//     //
-//     // Possibly removed by the cache before loaded
-//     if (!this._center) {
-//       return;
-//     }
-
-//     const mesh = new THREE.Object3D();
-//     const geom = new THREE.PlaneBufferGeometry(this._side, this._side, 1);
-
-//     let material;
-//     if (!this._world._environment._skybox) {
-//       material = new THREE.MeshBasicMaterial({
-//         depthWrite: false
-//       });
-
-//       // const material = new THREE.MeshPhongMaterial({
-//       //   depthWrite: false
-//       // });
-//     } else {
-//       // Other MeshStandardMaterial settings
-//       //
-//       // material.envMapIntensity will change the amount of colour reflected(?)
-//       // from the environment map–can be greater than 1 for more intensity
-
-//       material = new THREE.MeshStandardMaterial({
-//         depthWrite: false
-//       });
-//       material.roughness = 1;
-//       material.metalness = 0.1;
-//       material.envMap = this._world._environment._skybox.getRenderTarget();
-//     }
-
-//     const localMesh = new THREE.Mesh(geom, material);
-//     localMesh.rotation.x = -90 * Math.PI / 180;
-
-//     localMesh.receiveShadow = true;
-
-//     mesh.add(localMesh);
-//     mesh.renderOrder = 0.1;
-
-//     mesh.position.x = this._center[0];
-//     mesh.position.z = this._center[1];
-
-//     // const box = new BoxHelper(localMesh);
-//     // mesh.add(box);
-//     //
-//     // mesh.add(this._createDebugMesh());
-
-//     return mesh;
-//   }
-//   _abortRequest() {
-//     if (!this._image) {
-//       return;
-//     }
-
-//     this._image.src = '';
-//   }
-
-//   destroy() {
-//     // Cancel any pending requests
-//     this._abortRequest();
-
-//     // Clear image reference
-//     this._image = null;
-
-//     super.destroy();
-//   }
-
-// }
+}
