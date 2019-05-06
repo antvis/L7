@@ -6,9 +6,9 @@
  */
 
 export default class LRUCache {
-  constructor(limit = 5) {
+  constructor(limit = 50, destroy = () => {}) {
     this.limit = limit;
-
+    this.destroy = destroy;
     this.clear();
   }
 
@@ -48,6 +48,7 @@ export default class LRUCache {
 
   delete(key) {
     const value = this._cache[key];
+    this.destroy(value);
     if (value) {
       this._deleteCache(key);
       this._deleteOrder(key);
