@@ -60,7 +60,31 @@ export default class Tile {
     const n = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
     return r2d * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
   }
-  destory() {
+  destroy() {
+    if (this._object3D && this._object3D.children) {
+      let child;
+      for (let i = 0; i < this._object3D.children.length; i++) {
+        child = this._object3D.children[i];
+        if (!child) {
+          continue;
+        }
+        this.remove(child);
+        if (child.geometry) {
+          // child.geometry.dispose();
+          child.geometry = null;
+        }
+        if (child.material) {
+          if (child.material.map) {
+            child.material.map.dispose();
+            child.material.map = null;
+          }
 
+          child.material.dispose();
+          child.material = null;
+        }
+        child = null;
+      }
+    }
+    this._object3D = null;
   }
 }
