@@ -1,12 +1,13 @@
 import Layer from '../../core/layer';
 import * as THREE from '../../core/three';
 import TileCache from './tileCache';
+import { throttle } from '@antv/util';
 import { toLngLat } from '@antv/geo-coord';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 export default class TileLayer extends Layer {
   constructor(scene, cfg) {
     super(scene, cfg);
-    this._tileCache = new TileCache();
+    this._tileCache = new TileCache(50, this._destroyTile);
     this._crs = epsg3857;
     this._tiles = new THREE.Object3D();
     this._tileKeys = [];
@@ -31,6 +32,7 @@ export default class TileLayer extends Layer {
   }
   zoomchange(ev) {
     super.zoomchange(ev);
+    throttle(this._calculateLOD, 200);
     this._calculateLOD();
   }
   dragend(ev) {
@@ -43,22 +45,34 @@ export default class TileLayer extends Layer {
     const SE = viewPort.getSouthEast();
     const NW = viewPort.getNorthWest();
     const zoom = Math.round(this.scene.getZoom()) - 1;
-    const NWPonint = this._crs.lngLatToPoint(toLngLat(NW.lng, NW.lat), zoom);
-    const SEPonint = this._crs.lngLatToPoint(toLngLat(SE.lng, SE.lat), zoom);
-    const minXY = NWPonint.divideBy(256).round();
-    const maxXY = SEPonint.divideBy(256).round();
+    const tileCount = Math.pow(2, zoom);
+    const center = this.scene.getCenter();
+    const NWPoint = this._crs.lngLatToPoint(toLngLat(NW.lng, NW.lat), zoom);
+    const SEPoint = this._crs.lngLatToPoint(toLngLat(SE.lng, SE.lat), zoom);
+    const centerPoint = this._crs.lngLatToPoint(toLngLat(center.lng, center.lat), zoom);
+    const centerXY = centerPoint.divideBy(256).round();
+    const minXY = NWPoint.divideBy(256).round();
+    const maxXY = SEPoint.divideBy(256).round();
     // console.log(NW.lng, NW.lat, SE.lng, SE.lat, NWPonint, SEPonint);
     let updateTileList = [];
     this.tileList = [];
     const halfx = Math.floor((maxXY.x - minXY.x) / 2) + 1;
     const halfy = Math.floor((maxXY.y - minXY.y) / 2) + 1;
-    for (let i = minXY.x - halfx; i < maxXY.x + halfx; i++) {
-      for (let j = minXY.y - halfy; j < maxXY.y + halfy; j++) {
-        const key = [ i, j, zoom ].join('_');
-        this.tileList.push(key);
-        if (this._tileKeys.indexOf(key) === -1) {
-          updateTileList.push(key);
+    if (!(centerPoint.x > NWPoint.x && centerPoint.x < SEPoint.x)) { // 地图循环的问题
+      for (let i = 0; i < minXY.x; i++) {
+        for (let j = Math.min(0, minXY.y - halfy); j < Math.max(maxXY.y + halfy, tileCount); j++) {
+          this._updateTileList(updateTileList, i, j, zoom);
         }
+      }
+      for (let i = maxXY.x; i < tileCount; i++) {
+        for (let j = Math.min(0, minXY.y - halfy); j < Math.max(maxXY.y + halfy, tileCount); j++) {
+          this._updateTileList(updateTileList, i, j, zoom);
+        }
+      }
+    }
+    for (let i = Math.max(0, minXY.x - halfx); i < Math.min(maxXY.x + halfx, tileCount); i++) {
+      for (let j = Math.max(0, minXY.y - halfy); j < Math.min(maxXY.y + halfy, tileCount); j++) {
+        this._updateTileList(updateTileList, i, j, zoom);
       }
     }
     // 过滤掉已经存在的
@@ -67,14 +81,21 @@ export default class TileLayer extends Layer {
     updateTileList = updateTileList.sort((a, b) => {
       const tile1 = a.split('_');
       const tile2 = b.split('_');
-      const d1 = Math.pow((tile1[0] - halfx), 2) + Math.pow((tile1[1] - halfy));
-      const d2 = Math.pow((tile2[0] - halfy), 2) + Math.pow((tile2[1] - halfy));
+      const d1 = Math.pow((tile1[0] * 1 - centerXY.x), 2) + Math.pow((tile1[1] * 1 - centerXY.y), 2);
+      const d2 = Math.pow((tile2[0] * 1 - centerXY.x), 2) + Math.pow((tile2[1] * 1 - centerXY.y), 2);
       return d1 - d2;
     });
     updateTileList.forEach(key => {
       this._requestTile(key, this);
     });
     this._removeOutTiles();
+  }
+  _updateTileList(updateTileList, x, y, z) {
+    const key = [ x, y, z ].join('_');
+    this.tileList.push(key);
+    if (this._tileKeys.indexOf(key) === -1) {
+      updateTileList.push(key);
+    }
   }
   _requestTile(key, layer) {
     let tile = this._tileCache.getTile(key);
@@ -109,8 +130,8 @@ export default class TileLayer extends Layer {
       this._tiles.remove(this._tiles.children[i]);
     }
   }
-  _destroyTile() {
-
+  _destroyTile(tile) {
+    tile.destroy();
   }
   desttroy() {
   }
