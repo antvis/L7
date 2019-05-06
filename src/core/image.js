@@ -28,14 +28,11 @@ export default class LoadImage extends EventEmitter {
     if (typeof opt === 'string') {
       getImage({ url: opt }, (err, img) => {
         img.id = id;
-
         this.images.push(img);
         this.ctx.drawImage(img, x, y, this.imageWidth, this.imageWidth);
-
         this.texture.magFilter = THREE.LinearFilter;
         this.texture.minFilter = THREE.LinearFilter;
         this.texture.needsUpdate = true;
-
         if (this.images.length === this.imagesCount) {
           this.emit('imageLoaded');
         }
