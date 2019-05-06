@@ -16,7 +16,7 @@ function triangle() {
   return polygonPath(3);
 }
 function hexagon() {
-  return polygonPath(6);
+  return polygonPath(6, 1);
 }
 export {
   circle,
@@ -29,11 +29,11 @@ export {
   square as squareColumn
 };
 
-export function polygonPath(pointCount) {
+export function polygonPath(pointCount, start = 0) {
   const step = Math.PI * 2 / pointCount;
   const line = [];
   for (let i = 0; i < pointCount; i++) {
-    line.push(step * i - Math.PI / 12);
+    line.push(step * i - start * Math.PI / 12);
   }
   const path = line.map(t => {
     const x = Math.sin(t + Math.PI / 4),

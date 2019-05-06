@@ -679,6 +679,8 @@ export default class Layer extends Base {
 
     } else if (this.type === 'polyline') {
       offset = 2;
+    } else if (this.type === 'polygon') {
+      offset = 1;
     }
     this._object3D.position && (this._object3D.position.z = offset * Math.pow(2, 20 - zoom));
     if (zoom < minZoom || zoom > maxZoom) {
