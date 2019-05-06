@@ -30,6 +30,7 @@ void main() {
     if(pickingId == u_activeId) {
         v_color = u_activeColor;
      }
+      v_size = a_size.x * scale;
      gl_Position =  matModelViewProjection  * vec4(newposition, 1.0);
      return;
   }
@@ -49,7 +50,7 @@ void main() {
   float lightWeight = ambientRatio + diffuseRatio * lambert + specularRatio * specular;
   v_texCoord = faceUv;
   v_lightWeight = lightWeight;
-  // v_size = a_size;
+ 
   v_color =vec4(a_color.rgb*lightWeight, a_color.w); 
    if(pickingId == u_activeId) {
      v_color = u_activeColor;
