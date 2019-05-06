@@ -1,7 +1,7 @@
 import LRUCache from '../../util/lru-cache';
 export default class TileCache {
-  constructor(limit = 500) {
-    this._cache = new LRUCache(limit);
+  constructor(limit = 50, tileDestroy) {
+    this._cache = new LRUCache(limit, tileDestroy);
   }
 
   getTile(key) {
