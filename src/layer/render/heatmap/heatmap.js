@@ -68,7 +68,7 @@ function copyPass(layer) {
   const style = layer.get('styleOptions');
   const material = new HeatmapColorizeMaterial({
     u_rampColors: layer.rampColors,
-    u_opacity: style.opacity
+    u_opacity: style.opacity || 1.0
   }, {});
   const copyPass = new ShaderPass(material, 'u_texture');
   return copyPass;
