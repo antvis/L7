@@ -23,7 +23,7 @@ export default class ImageTile extends Tile {
     const image = document.createElement('img');
 
     image.addEventListener('load', () => {
-
+      this._isLoaded = true;
       this._createMesh(image);
       this._ready = true;
     }, false);
@@ -58,8 +58,8 @@ export default class ImageTile extends Tile {
     buffer.attributes.texture = buffer.texture;
     const style = this.layer.get('styleOptions');
     const mesh = DrawImage(buffer.attributes, style);
-    this.Object3D.add(mesh);
-    return this.Object3D;
+    this._object3D.add(mesh);
+    return this._object3D;
   }
   _abortRequest() {
     if (!this._image) {

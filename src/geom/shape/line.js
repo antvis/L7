@@ -65,7 +65,10 @@ export function defaultLine(geo, index) {
 }
 // mesh line
 export function Line(path, props, positionsIndex) {
-  if (path.length === 1) path = path[0];// 面坐标转线坐标
+   // 区分path是面还是线
+  if (Array.isArray(path[0][0])) {
+    path = path[0]; // 面坐标转线坐标
+  }
   const positions = [];
   const pickingIds = [];
   const normal = [];
@@ -77,7 +80,8 @@ export function Line(path, props, positionsIndex) {
   const sizes = [];
   let c = 0;
   let index = positionsIndex;
-  const { size, color, id } = props;
+  let { size, color, id } = props;
+  !Array.isArray(size) && (size = [ size ]);
   path.forEach((point, pointIndex, list) => {
     const i = index;
     colors.push(...color);
