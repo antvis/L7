@@ -38,15 +38,17 @@ export default class GaodeMap extends Base {
 
   initMap() {
     const mapStyle = this.get('mapStyle');
-    switch (mapStyle) {
-      case 'dark':
-        this.set('mapStyle', Theme.DarkTheme.mapStyle);
-        break;
-      case 'light':
-        this.set('mapStyle', Theme.LightTheme.mapStyle);
-        break;
-      default:
-        this.set('mapStyle', mapStyle);
+    if (mapStyle) {
+      switch (mapStyle) {
+        case 'dark':
+          this.set('mapStyle', Theme.DarkTheme.mapStyle);
+          break;
+        case 'light':
+          this.set('mapStyle', Theme.LightTheme.mapStyle);
+          break;
+        default:
+          this.set('mapStyle', mapStyle);
+      }
     }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
     const map = this.get('map');
