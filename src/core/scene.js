@@ -25,7 +25,8 @@ export default class Scene extends Base {
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
-    this.registerMapEvent();
+    // this.registerMapEvent();
+    this._engine.run();
     // this.workerPool = new WorkerPool();
     compileBuiltinModules();
   }
@@ -73,7 +74,6 @@ export default class Scene extends Base {
   }
   off(type, hander) {
     if (this.map) { this.map.off(type, hander); }
-
     super.off(type, hander);
   }
   addImage() {

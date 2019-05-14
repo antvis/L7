@@ -39,7 +39,7 @@ export default class LineLayer extends Layer {
     if (this.shapeType === 'arc') {
       DrawArc(attributes, layerCfg, this);
     } else {
-      DrawLine(attributes, layerCfg, this);
+      this.add(DrawLine(attributes, layerCfg, this));
     }
   }
 }
