@@ -309,7 +309,7 @@ export default class Layer extends Base {
   }
 
   createScale(field) {
-    const data = this.layerSource.data.dataArray;
+    const data = this.layerSource ? this.layerSource.data.dataArray : null;
     const scales = this.get('scales');
     let scale = scales[field];
     const scaleController = this.get('scaleController');
@@ -404,7 +404,7 @@ export default class Layer extends Base {
     const nextAttrs = this.get('attrOptions');
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
-    if (preAttrs === undefined && preStyle === undefined) {
+    if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
       this._mapping();
       this._setPreOption();
       this._scaleByZoom();
@@ -490,12 +490,13 @@ export default class Layer extends Base {
     this.layerMesh.material.updateUninform(newOption);
 
   }
-  _mapping() {
+  _mapping(source) {
     const self = this;
     const attrs = self.get('attrs');
     const mappedData = [];
     // const data = this.layerSource.propertiesData;
-    const data = this.layerSource.data.dataArray;
+    let data;
+    source ? data = source.data.dataArray : data = this.layerSource.data.dataArray;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       const newRecord = {};
@@ -528,14 +529,16 @@ export default class Layer extends Base {
       });
     }
     this.layerData = mappedData;
+    return mappedData;
   }
 
   // 更新地图映射
-  _updateMaping() {
+  _updateMaping(source, layer) {
     const self = this;
     const attrs = self.get('attrs');
 
-    const data = this.layerSource.data.dataArray;
+    const data = source ? source.data.dataArray : this.layerSource.data.dataArray;
+    const layerData = layer || this.layerData;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       for (const attrName in attrs) {
@@ -547,10 +550,10 @@ export default class Layer extends Base {
             for (let j = 0; j < values.length; j++) {
               const val = values[j];
               const name = names[j];
-              this.layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
+              layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
             }
           } else {
-            this.layerData[i][names[0]] = values.length === 1 ? values[0] : values;
+            layerData[i][names[0]] = values.length === 1 ? values[0] : values;
 
           }
           attr.neadUpdate = true;
@@ -668,6 +671,7 @@ export default class Layer extends Base {
     pickAttr.needsUpdate = true;
   }
   _visibleWithZoom() {
+    if (this._object3D === null) return;
     const zoom = this.scene.getZoom();
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
@@ -751,7 +755,6 @@ export default class Layer extends Base {
     this.clearMapEvent();
     if (this._object3D.type === 'composer') {
       this.remove(this._object3D);
-
       return;
     }
     if (this._object3D && this._object3D.children) {
@@ -778,8 +781,19 @@ export default class Layer extends Base {
         child = null;
       }
     }
+    this.layerMesh.geometry = null;
+    this.layerMesh.material.dispose();
+    this.layerMesh.material = null;
+    if (this._pickingMesh) {
+      this._pickingMesh.children[0].geometry = null;
+      this._pickingMesh.children[0].material.dispose();
+      this._pickingMesh.children[0].material = null;
+    }
+    this._buffer = null;
     this._object3D = null;
     this.scene._engine._scene.remove(this._object3D);
+    this.layerData.length = 0;
+    this.layerSource = null;
     this.scene._engine._picking.remove(this._pickingMesh);
     this.destroyed = true;
   }
