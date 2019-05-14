@@ -87,6 +87,7 @@ export default class LineBuffer extends BufferBase {
     layerData.forEach(item => {
       const props = item;
       const positionCount = positions.length / 3;
+      // TODO 处理多个线段的情况
       const attr = lineShape.Line(item.coordinates, props, positionCount, (lineType !== 'soild'));
       positions.push(...attr.positions);
       normal.push(...attr.normal);

@@ -1,6 +1,6 @@
 import HeatmapBuffer from '../../../geom/buffer/heatmap/heatmap';
 import { createColorRamp } from '../../../geom/buffer/heatmap/heatmap';
-import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMateial';
+import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMaterial';
 // import Renderpass from '../../../core/engine/renderpass.bak';
 import RenderPass from '../../../core/engine/render-pass';
 import ShaderPass from '../../../core/engine/shader-pass';
