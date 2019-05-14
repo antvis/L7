@@ -48,10 +48,10 @@ export default class LRUCache {
 
   delete(key) {
     const value = this._cache[key];
-    this.destroy(value);
     if (value) {
       this._deleteCache(key);
       this._deleteOrder(key);
+      this.destroy(value);
     }
   }
 

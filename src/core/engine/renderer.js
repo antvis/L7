@@ -9,7 +9,8 @@ export default class Renderer {
   initRender() {
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true
+      alpha: true,
+      autoClear: false
     });
     this.renderer.setClearColor(0xff0000, 0.0);
     this.pixelRatio = window.devicePixelRatio;
