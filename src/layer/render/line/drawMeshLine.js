@@ -40,5 +40,5 @@ export default function DrawLine(attributes, cfg, layer) {
     });
     lineMaterial.setDefinesvalue('ANIMATE', true);
   }
-  layer.add(lineMesh);
+  return lineMesh;
 }

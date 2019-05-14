@@ -24,11 +24,14 @@ export default class Engine extends EventEmitter {
     });
   }
   update() {
+    this._renderer.clear();
     this._renderer.render(this._scene, this._camera);
     this._initPostProcessing();
   }
   destroy() {
-
+  }
+  renderScene(scene) {
+    this._renderer.render(scene, this._camera);
   }
   run() {
     this.update();
