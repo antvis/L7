@@ -45,6 +45,11 @@ import raster_frag from '../shader/raster_frag.glsl';
 import tile_polygon_vert from '../shader/tile/polygon_vert.glsl';
 import tile_polygon_frag from '../shader/tile/polygon_frag.glsl';
 
+// mask
+import mask_quard_vert from '../shader/tile/mask_quard_vert.glsl';
+import mask_quard_frag from '../shader/tile/mask_quard_frag.glsl';
+
+
 import common from './common.glsl';
 import { registerModule } from '../../util/shaderModule';
 import pick_color from './shaderChunks/pick_color.glsl';
@@ -65,5 +70,6 @@ export function compileBuiltinModules() {
   registerModule('image', { vs: image_vert, fs: image_frag });
   registerModule('raster', { vs: raster_vert, fs: raster_frag });
   registerModule('tilepolygon', { vs: tile_polygon_vert, fs: tile_polygon_frag });
+  registerModule('mask_quard', { vs: mask_quard_vert, fs: mask_quard_frag });
 
 }

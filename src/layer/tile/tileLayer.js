@@ -1,5 +1,7 @@
 import Layer from '../../core/layer';
+import source from '../../core/source';
 import * as THREE from '../../core/three';
+import Util from '../../util';
 import TileCache from './tileCache';
 import { throttle } from '@antv/util';
 import { toLngLat } from '@antv/geo-coord';
@@ -12,16 +14,28 @@ export default class TileLayer extends Layer {
     this._tiles = new THREE.Object3D();
     this._tileKeys = [];
     this.tileList = [];
-
-
   }
-  source(url) {
+  source(url, cfg = {}) {
     this.url = url;
+    this.sourceCfg = cfg;
     return this;
   }
+  tileSource(data) {
+    super.source(data, this.sourceCfg);
+    if (data instanceof source) {
+      return data;
+    }
+    this.sourceCfg.data = data;
+    this.sourceCfg.mapType = this.scene.mapType;
+    this.sourceCfg.zoom = this.scene.getZoom();
+    return new source(this.sourceCfg);
+  }
   render() {
+    this._initControllers();
     this._initMapEvent();
+    this._initAttrs();
     this.draw();
+    return this;
   }
   draw() {
     this._object3D.add(this._tiles);
@@ -29,6 +43,44 @@ export default class TileLayer extends Layer {
   }
   drawTile() {
 
+  }
+  _mapping(source) {
+
+    const attrs = this.get('attrs');
+    const mappedData = [];
+    // const data = this.layerSource.propertiesData;
+    const data = source.data.dataArray;
+    for (let i = 0; i < data.length; i++) {
+      const record = data[i];
+      const newRecord = {};
+      newRecord.id = data[i]._id;
+      for (const k in attrs) {
+        if (attrs.hasOwnProperty(k)) {
+          const attr = attrs[k];
+          const names = attr.names;
+          const values = this._getAttrValues(attr, record);
+          if (names.length > 1) { // position 之类的生成多个字段的属性
+            for (let j = 0; j < values.length; j++) {
+              const val = values[j];
+              const name = names[j];
+              newRecord[name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
+            }
+          } else {
+            newRecord[names[0]] = values.length === 1 ? values[0] : values;
+
+          }
+        }
+      }
+      newRecord.coordinates = record.coordinates;
+      mappedData.push(newRecord);
+    }
+    // 通过透明度过滤数据
+    if (attrs.hasOwnProperty('filter')) {
+      mappedData.forEach(item => {
+        item.filter === false && (item.color[3] = 0);
+      });
+    }
+    return mappedData;
   }
   zoomchange(ev) {
     super.zoomchange(ev);
@@ -56,8 +108,9 @@ export default class TileLayer extends Layer {
     // console.log(NW.lng, NW.lat, SE.lng, SE.lat, NWPonint, SEPonint);
     let updateTileList = [];
     this.tileList = [];
-    const halfx = Math.floor((maxXY.x - minXY.x) / 2) + 1;
-    const halfy = Math.floor((maxXY.y - minXY.y) / 2) + 1;
+    const halfx = 1;
+    const halfy = 1;
+
     if (!(centerPoint.x > NWPoint.x && centerPoint.x < SEPoint.x)) { // 地图循环的问题
       for (let i = 0; i < minXY.x; i++) {
         for (let j = Math.min(0, minXY.y - halfy); j < Math.max(maxXY.y + halfy, tileCount); j++) {
@@ -90,10 +143,11 @@ export default class TileLayer extends Layer {
     });
     this._removeOutTiles();
   }
+
   _updateTileList(updateTileList, x, y, z) {
     const key = [ x, y, z ].join('_');
     this.tileList.push(key);
-    if (this._tileKeys.indexOf(key) === -1) {
+    if (this._tileKeys.indexOf(key) === -1 && updateTileList.indexOf(key) === -1) {
       updateTileList.push(key);
     }
   }
@@ -101,14 +155,21 @@ export default class TileLayer extends Layer {
     let tile = this._tileCache.getTile(key);
     if (!tile) {
       tile = this._createTile(key, layer);
-      const mesh = tile.getMesh();
-      mesh.name = key;
-      this._tileCache.setTile(tile, key);
+      tile.on('tileLoaded', () => {
+        if (this.tileList.indexOf(key) === -1) {
+          return;
+        }
+        const mesh = tile.getMesh();
+        mesh.name = key;
+        this._tileCache.setTile(tile, key);
+        this._tileKeys.push(key);
+        mesh.children.length !== 0 && this._tiles.add(tile.getMesh());
+        this.scene._engine.update();
+      });
+    } else {
+      this._tiles.add(tile.getMesh());
       this._tileKeys.push(key);
-      // this.scene._engine.update();
     }
-    this._tiles.add(tile.getMesh());
-    this._tileKeys.push(key);
   }
   // 移除视野外的tile
   _removeOutTiles() {
@@ -116,6 +177,8 @@ export default class TileLayer extends Layer {
       const tile = this._tiles.children[i];
       const key = tile.name;
       if (this.tileList.indexOf(key) === -1) {
+        const tileObj = this._tileCache.getTile(key);
+        tileObj && tileObj._abortRequest();
         this._tiles.remove(tile);
       }
       this._tileKeys = [].concat(this.tileList);
