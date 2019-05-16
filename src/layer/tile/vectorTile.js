@@ -1,23 +1,20 @@
 import Tile from './tile';
 import { getArrayBuffer } from '../../util/ajax';
-import PBF from 'pbf';
-import * as VectorParser from '@mapbox/vector-tile';
+import { destoryObject } from '../../util/object3d-util';
 import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';
-import { LineBuffer } from '../../geom/buffer/index';
-import DrawLine from '../../layer/render/line/drawMeshLine';
-
+import { getRender } from '../render/index';
 export default class VectorTile extends Tile {
-  requestTileAsync() {
+  requestTileAsync(done) {
     // Making this asynchronous really speeds up the LOD framerate
     setTimeout(() => {
       if (!this._mesh) {
        // this._mesh = this._createMesh();
-        this._requestTile();
+        this._requestTile(done);
       }
     }, 0);
   }
-  _requestTile() {
+  _requestTile(done) {
     const urlParams = {
       x: this._tile[0],
       y: this._tile[1],
@@ -31,47 +28,18 @@ export default class VectorTile extends Tile {
         return;
       }
       this._isLoaded = true;
-      this._parserData(data.data);
+      done(data.data);
     });
   }
   _creatSource(data) {
-    this.source = this.layer.tileSource(data);
-  }
-  _parserData(data) {
-    const tile = new VectorParser.VectorTile(new PBF(data));
-    // CHN_Cities_L   CHN_Cities   CHN_L
-    const layerName = 'county4326';
-    const features = [];
-    const vectorLayer = tile.layers[layerName];
-    for (let i = 0; i < vectorLayer.length; i++) {
-      const feature = vectorLayer.feature(i);
-      features.push(feature.toGeoJSON(this._tile[0], this._tile[1], this._tile[2]));
-    }
-    const geodata = {
-      type: 'FeatureCollection',
-      features
-    };
-    this._creatSource(geodata);
-    this._createMesh();
+    this.source = this.layer.tileSource(data, {
+      parser: {
+        tile: this._tile
+      }
+    });
   }
   _createMesh() {
-    this.layerData = this.layer._mapping(this.source);
-    const style = this.layer.get('styleOptions');
-    const buffer = new LineBuffer({
-      layerData: this.layerData,
-      style,
-      shapeType: 'line'
-
-    });
-    const animateOptions = this.layer.get('animateOptions');
-    const activeOption = this.layer.get('activedOptions');
-    const layerCfg = {
-      zoom: this.layer.scene.getZoom(),
-      style,
-      animateOptions,
-      activeOption
-    };
-    this.mesh = new DrawLine(buffer.attributes, layerCfg, this.layer);
+    this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(this.layerData, this.layer);
     this.mesh.onBeforeRender = renderer => {
       this._renderMask(renderer);
     };
@@ -130,12 +98,12 @@ export default class VectorTile extends Tile {
     this.xhrRequest.abort();
   }
   destroy() {
-
-    this.mesh.destroy();
-    // if (this.maskScene) {
-    //   this.maskScene.children[0].geometry = null;
-    //   this.maskScene.children[0].material.dispose();
-    //   this.maskScene.children[0].material = null;
-    // }
+    super.destroy();
+    destoryObject(this.maskScene);
+    this._object3D = null;
+    this.maskScene = null;
+    this.layerData = null;
+    this.source.destroy();
+    this.source = null;
   }
 }

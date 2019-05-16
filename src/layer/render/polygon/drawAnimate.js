@@ -1,7 +1,15 @@
 import * as THREE from '../../../core/three';
+import PolygonBuffer from '../../../geom/buffer/polygon';
 import PolygonMaterial from '../../../geom/material/polygonMaterial';
-export default function DrawAnimate(attributes, style) {
-  const { opacity, baseColor, brightColor, windowColor, near, far } = style;
+export default function DrawAnimate(layerData, layer) {
+  const style = layer.get('styleOptions');
+  const { near, far } = layer.map.getCameraState();
+  layer.scene.startAnimate();
+  const { attributes } = new PolygonBuffer({
+    shape: 'extrude',
+    layerData
+  });
+  const { opacity, baseColor, brightColor, windowColor } = style;
   const geometry = new THREE.BufferGeometry();
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
