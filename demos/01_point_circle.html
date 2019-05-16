@@ -66,7 +66,7 @@ scene.on('loaded', () => {
     .color('point_count',["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
     .style({
       stroke: 'rgb(255,255,255)',
-      strokeWidth: 1,
+      strokeWidth: 2,
       opacity: 1
     })
      .render();
@@ -76,7 +76,7 @@ scene.on('loaded', () => {
     })
     .source(circleLayer.layerSource)
     .shape('point_count', 'text')
-    .active(true)
+    .active(false)
     .filter('point_count',(p)=>{
       return p > 50
     })
@@ -84,10 +84,10 @@ scene.on('loaded', () => {
     .color('#fff')
     .style({
       stroke: '#999',
-      strokeWidth: 0,
+      strokeWidth: 1,
       opacity: 1.0
     })
-     .render();
+    .render();
     console.log(layerText);
 
   });

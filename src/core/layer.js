@@ -11,6 +11,7 @@ import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
 import { getInteraction } from '../interaction/index';
 import Attr from '../attr/index';
 import diff from '../util/diff';
+import { updateObjecteUniform } from '../util/object3d-util';
 import Util from '../util';
 import Global from '../global';
 let id = 1;
@@ -97,8 +98,10 @@ export default class Layer extends Base {
     this._visibleWithZoom();
     object.onBeforeRender = () => { // 每次渲染前改变状态
       const zoom = this.scene.getZoom();
-      object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
-      object.material.setUniformsValue('u_zoom', zoom);
+      updateObjecteUniform(this._object3D, {
+        u_time: this.scene._engine.clock.getElapsedTime(),
+        u_zoom: zoom
+      });
       this.preRender();
     };
 
@@ -374,13 +377,13 @@ export default class Layer extends Base {
     if (!Array.isArray(color)) {
       color = ColorUtil.color2RGBA(color);
     }
-    this.layerMesh.material.setUniformsValue('u_activeColor', color);
+    updateObjecteUniform(this._object3D, { u_activeColor: color });
   }
 
   _addActiveFeature(e) {
     const { featureId } = e;
     this._activeIds = featureId;
-    this.layerMesh.material.setUniformsValue('u_activeId', featureId);
+    updateObjecteUniform(this._object3D, { u_activeId: featureId });
   }
 
 
@@ -487,8 +490,7 @@ export default class Layer extends Base {
     for (const key in option) {
       newOption['u_' + key] = option[key];
     }
-    this.layerMesh.material.updateUninform(newOption);
-
+    updateObjecteUniform(this._object3D, newOption);
   }
   _mapping(source) {
     const self = this;
@@ -606,10 +608,9 @@ export default class Layer extends Base {
     pickmaterial.fragmentShader = pickingFragmentShader;
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = this.layerId;
-    pickmaterial.setDefinesvalue(this.type, true);
     pickingMesh.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
-      pickingMesh.material.setUniformsValue('u_zoom', zoom);
+      updateObjecteUniform(pickingMesh, { u_zoom: zoom });
     };
     this._pickingMesh.add(pickingMesh);
 
@@ -621,13 +622,14 @@ export default class Layer extends Base {
         type = 'mouseleave';
       }
       this._activeIds = featureId;
-      const feature = this.layerSource.getSelectFeature(featureId);
+      // TODO 瓦片图层获取选中数据信息
+      // const feature = this.layerSource.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
-      const style = this.layerData[featureId - 1];
+      // const style = this.layerData[featureId - 1];
       const target = {
         featureId,
-        feature,
-        style,
+        // feature,
+        // style,
         pixel: point2d,
         type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
@@ -738,13 +740,16 @@ export default class Layer extends Base {
     }
     interactions[type] = interaction;
   }
+  styleCfg() {
+
+  }
 
   /**
    * 重置高亮要素
    */
   _resetStyle() {
     this._activeIds = null;
-    this.layerMesh.material.setUniformsValue('u_activeId', 0);
+    updateObjecteUniform(this._object3D, { u_activeId: 0 });
   }
   /**
    * 销毁Layer对象

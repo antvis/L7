@@ -1,9 +1,15 @@
 
 import * as THREE from '../../../core/three';
+import * as PointBuffer from '../../../geom/buffer/point/index';
 import PointMaterial from '../../../geom/material/pointMaterial';
-export default function DrawImage(attributes, style) {
+export default function DrawImage(layerData, layer) {
   const geometry = new THREE.BufferGeometry();
-  const { strokeWidth, stroke, opacity, texture } = style;
+  const style = layer.get('styleOptions');
+  const { strokeWidth, stroke, opacity } = style;
+  const texture = layer.scene.image.texture;
+  const attributes = PointBuffer.ImageBuffer(layerData, {
+    imagePos: this.scene.image.imagePos
+  });
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
   geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
