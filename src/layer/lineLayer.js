@@ -1,7 +1,5 @@
 import Layer from '../core/layer';
-import DrawLine from './render/line/drawMeshLine';
-import DrawArc from './render/line/drawArc';
-import { LineBuffer } from '../geom/buffer/index';
+import { getRender } from './render/';
 export default class LineLayer extends Layer {
   shape(type) {
     this.shapeType = type;
@@ -19,27 +17,7 @@ export default class LineLayer extends Layer {
     }
   }
   draw() {
-    this.type = 'polyline';
-    const layerData = this.layerData;
-    const style = this.get('styleOptions');
-    const animateOptions = this.get('animateOptions');
-    const activeOption = this.get('activedOptions');
-    const layerCfg = {
-      zoom: this.scene.getZoom(),
-      style,
-      animateOptions,
-      activeOption
-    };
-    const buffer = (this._buffer = new LineBuffer({
-      layerData,
-      shapeType: this.shapeType,
-      style
-    }));
-    const { attributes } = buffer;
-    if (this.shapeType === 'arc') {
-      DrawArc(attributes, layerCfg, this);
-    } else {
-      this.add(DrawLine(attributes, layerCfg, this));
-    }
+    this.type = 'line';
+    this.add(getRender('line', this.shapeType || 'line')(this.layerData, this, this.layerSource));
   }
 }

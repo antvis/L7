@@ -1,7 +1,15 @@
 import * as THREE from '../../../core/three';
 import TextMaterial from '../../../geom/material/textMaterial';
+import TextBuffer from '../../../geom/buffer/point/text';
 
-export default function DrawText(attributes, style) {
+export default function DrawText(layerData, layer) {
+  const style = layer.get('styleOptions');
+  const activeOption = layer.get('activedOptions');
+  const { width, height } = layer.scene.getSize();
+  const attributes = new TextBuffer(
+    layerData,
+    layer.scene.fontAtlasManager
+  );
   const geometry = new THREE.BufferGeometry();
   geometry.addAttribute(
     'position',
@@ -27,9 +35,9 @@ export default function DrawText(attributes, style) {
     'pickingId',
     new THREE.Float32BufferAttribute(attributes.pickingIds, 1)
   );
-  const { strokeWidth, width, stroke, height, opacity, activeColor } = style;
+  const { strokeWidth, stroke, opacity } = style;
   const material = new TextMaterial({
-    name: this.layerId,
+    name: layer.layerId,
     u_texture: attributes.texture,
     u_strokeWidth: strokeWidth,
     u_stroke: stroke,
@@ -41,7 +49,7 @@ export default function DrawText(attributes, style) {
     u_buffer: 0.75,
     u_opacity: opacity,
     u_glSize: [ width, height ],
-    u_activeColor: activeColor
+    u_activeColor: activeOption.fill
   });
   const mesh = new THREE.Mesh(geometry, material);
   return mesh;
