@@ -150,4 +150,8 @@ export default class Source extends Base {
     }
     return featureIndex;
   }
+  destroy() {
+    this.data = null;
+    this.originData = null;
+  }
 }
