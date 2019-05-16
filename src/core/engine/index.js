@@ -10,11 +10,11 @@ export default class Engine extends EventEmitter {
     this._scene = Scene;
     this._camera = new Camera(container).camera;
     this._renderer = new Renderer(container).renderer;
-    this._world = world;
+    this._world = world;// 地图场景实例
     // for MapBox
     this.world = new THREE.Group();
     this._scene.add(this.world);
-    this._picking = Picking(this._world, this._renderer, this._camera, this._scene);
+    this._picking = Picking(this._world, this._renderer, this._camera);
     this.clock = new THREE.Clock();
     this.composerLayers = [];
   }
@@ -30,6 +30,7 @@ export default class Engine extends EventEmitter {
   }
   destroy() {
   }
+  // 渲染第三方Scene对象
   renderScene(scene) {
     this._renderer.render(scene, this._camera);
   }

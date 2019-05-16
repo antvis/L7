@@ -6,9 +6,13 @@
  * @desc [description] 绘制点图层的面状填充，圆，三角形，六边形
 */
 import * as THREE from '../../../core/three';
+import * as PointBuffer from '../../../geom/buffer/point/index';
+import DrawStroke from './drawStroke';
 import PolygonMaterial from '../../../geom/material/polygonMaterial';
-export default function DrawFill(attributes, style) {
-  const { opacity, activeColor } = style;
+export default function DrawFill(layerData, layer) {
+  const style = layer.get('styleOptions');
+  const activeOption = layer.get('activedOptions');
+  const attributes = PointBuffer.FillBuffer(layerData, style);
   const geometry = new THREE.BufferGeometry();
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
@@ -17,14 +21,19 @@ export default function DrawFill(attributes, style) {
   geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapePositions, 3));
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.a_size, 3));
   const material = new PolygonMaterial({
-    u_opacity: opacity,
-    u_activeColor: activeColor
+    u_opacity: style.opacity,
+    u_activeColor: activeOption.fill
   }, {
     SHAPE: true
   });
   material.setDefinesvalue('SHAPE', true);
   material.depthTest = false;
   const fillMesh = new THREE.Mesh(geometry, material);
+  if (style.stroke !== 'none') {
+    // 是否绘制边界
+    const meshStroke = DrawStroke(layerData, layer);
+    fillMesh.add(meshStroke);
+  }
   return fillMesh;
 
 }

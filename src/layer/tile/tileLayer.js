@@ -1,9 +1,9 @@
 import Layer from '../../core/layer';
 import source from '../../core/source';
 import * as THREE from '../../core/three';
-import Util from '../../util';
 import TileCache from './tileCache';
-import { throttle } from '@antv/util';
+import pickingFragmentShader from '../../core/engine/picking/picking_frag.glsl';
+import { throttle, deepMix } from '@antv/util';
 import { toLngLat } from '@antv/geo-coord';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 export default class TileLayer extends Layer {
@@ -12,28 +12,43 @@ export default class TileLayer extends Layer {
     this._tileCache = new TileCache(50, this._destroyTile);
     this._crs = epsg3857;
     this._tiles = new THREE.Object3D();
+    this._pickTiles = new THREE.Object3D();
+    this._pickTiles.name = this.layerId;
+    this.scene._engine._picking.add(this._pickTiles);
+    this._tiles.frustumCulled = false;
     this._tileKeys = [];
     this.tileList = [];
+  }
+  shape(field, values) {
+    const layerType = this.get('layerType');
+    if (layerType === 'point') {
+      return super.shape(field, values);
+    }
+    this.shape = field;
+    return this;
   }
   source(url, cfg = {}) {
     this.url = url;
     this.sourceCfg = cfg;
+    this.sourceCfg.mapType = this.scene.mapType;
     return this;
   }
-  tileSource(data) {
-    super.source(data, this.sourceCfg);
+  tileSource(data, cfg) {
     if (data instanceof source) {
       return data;
     }
-    this.sourceCfg.data = data;
-    this.sourceCfg.mapType = this.scene.mapType;
-    this.sourceCfg.zoom = this.scene.getZoom();
-    return new source(this.sourceCfg);
+    const tileSourceCfg = {
+      data,
+      zoom: this.scene.getZoom()
+    };
+    deepMix(tileSourceCfg, this.sourceCfg, cfg);
+    return new source(tileSourceCfg);
   }
   render() {
     this._initControllers();
     this._initMapEvent();
     this._initAttrs();
+    this._initInteraction();
     this.draw();
     return this;
   }
@@ -43,44 +58,6 @@ export default class TileLayer extends Layer {
   }
   drawTile() {
 
-  }
-  _mapping(source) {
-
-    const attrs = this.get('attrs');
-    const mappedData = [];
-    // const data = this.layerSource.propertiesData;
-    const data = source.data.dataArray;
-    for (let i = 0; i < data.length; i++) {
-      const record = data[i];
-      const newRecord = {};
-      newRecord.id = data[i]._id;
-      for (const k in attrs) {
-        if (attrs.hasOwnProperty(k)) {
-          const attr = attrs[k];
-          const names = attr.names;
-          const values = this._getAttrValues(attr, record);
-          if (names.length > 1) { // position 之类的生成多个字段的属性
-            for (let j = 0; j < values.length; j++) {
-              const val = values[j];
-              const name = names[j];
-              newRecord[name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-            }
-          } else {
-            newRecord[names[0]] = values.length === 1 ? values[0] : values;
-
-          }
-        }
-      }
-      newRecord.coordinates = record.coordinates;
-      mappedData.push(newRecord);
-    }
-    // 通过透明度过滤数据
-    if (attrs.hasOwnProperty('filter')) {
-      mappedData.forEach(item => {
-        item.filter === false && (item.color[3] = 0);
-      });
-    }
-    return mappedData;
   }
   zoomchange(ev) {
     super.zoomchange(ev);
@@ -163,13 +140,30 @@ export default class TileLayer extends Layer {
         mesh.name = key;
         this._tileCache.setTile(tile, key);
         this._tileKeys.push(key);
-        mesh.children.length !== 0 && this._tiles.add(tile.getMesh());
-        this.scene._engine.update();
+        if (mesh.children.length !== 0) {
+          this._tiles.add(tile.getMesh());
+          this._addPickTile(tile.getMesh());
+        }
       });
     } else {
       this._tiles.add(tile.getMesh());
+      this._addPickTile(tile.getMesh());
       this._tileKeys.push(key);
+      this.scene._engine.update();
     }
+  }
+  _addPickTile(meshobj) {
+    const mesh = meshobj.children[0];
+    const pickmaterial = mesh.material.clone();
+    pickmaterial.fragmentShader = pickingFragmentShader;
+    const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
+    pickingMesh.name = this.layerId;
+    pickingMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      pickingMesh.material.setUniformsValue('u_zoom', zoom);
+    };
+    this._pickTiles.add(pickingMesh);
+
   }
   // 移除视野外的tile
   _removeOutTiles() {
@@ -195,6 +189,7 @@ export default class TileLayer extends Layer {
   }
   _destroyTile(tile) {
     tile.destroy();
+    tile = null;
   }
   desttroy() {
   }
