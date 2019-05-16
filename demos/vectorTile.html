@@ -35,15 +35,26 @@ const scene = new L7.Scene({
 window.scene = scene;
 scene.on('loaded', () => {
   const layer = scene.VectorTileLayer({
-    zIndex:0
+    zIndex:0,
+    layerType:'polygon'
   })
   //.source('https://pre-lbs-show.taobao.com/gettile?x={x}&y={y}&z={z}&pipeId=pipe_vt_test')
   // https://mvt.amap.com/district/CHN2/8/203/105/4096?key=
-  .source('http://localhost:5000/test.mbtile/{z}/{x}/{y}.pbf')
+  .source('http://localhost:5000/test.mbtile/{z}/{x}/{y}.pbf',{
+    parser:{
+      type: 'mvt',
+      sourceLayer:'county4326',
+      idField:'OBJECTID',
+      maxZoom: 10,
+    }
+  })
   .shape('line')
+  .active({fill:'red'})
   .color('red')
   .render();
-
+  layer.on('click',(feature)=>{
+    console.log(feature);
+  })
    console.log(layer);
   });
 
