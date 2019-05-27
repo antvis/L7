@@ -3,7 +3,6 @@ import source from '../../core/source';
 import * as THREE from '../../core/three';
 import Global from '../../global';
 const { pointShape } = Global;
-import { updateObjecteUniform } from '../../util/object3d-util';
 import TileCache from './tileCache';
 import pickingFragmentShader from '../../core/engine/picking/picking_frag.glsl';
 import { throttle, deepMix } from '@antv/util';
@@ -208,17 +207,15 @@ export default class TileLayer extends Layer {
     this._pickTiles.add(pickingMesh);
 
   }
-  getSelectFeature(id) {
-    let feat = null;
-    this._tileKeys.forEach(key => {
-      const tile = this._tileCache.getTile(key);
-      const feature = tile ? tile.getSelectFeature(id) : null;
-      if (feature !== null) {
-        feat = feature;
-        return;
-      }
-    });
-    return { feature: feat };
+  // 根据距离优先级查找
+  getSelectFeature(id, lnglat) {
+    const zoom = Math.round(this.scene.getZoom()) - 1;
+    const tilePoint = this._crs.lngLatToPoint(toLngLat(lnglat.lng, lnglat.lat), zoom);
+    const tileXY = tilePoint.divideBy(256).round();
+    const key = [ tileXY.x, tileXY.y, zoom ].join('_');
+    const tile = this._tileCache.getTile(key);
+    const feature = tile ? tile.getSelectFeature(id) : null;
+    return { feature };
   }
   _pruneTiles() {
     let tile;
