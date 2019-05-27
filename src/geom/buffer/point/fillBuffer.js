@@ -29,6 +29,12 @@ export default function fillBuffer(layerData) {
       throw new Error('Invalid shape type: ' + shape);
     }
     toPointShapeAttributes(polygon, coordinates, { size, shape, color, id }, attribute);
+    // toPointShapeAttributes(polygon, null, {}, attribute);
+    // instanced attributes
+    // attribute.vertices.push(...coordinates);
+    // attribute.a_size.push(...size);
+    // attribute.colors.push(...color);
+    // attribute.pickingIds.push(id);
 
   });
   return attribute;
@@ -77,6 +83,9 @@ function toPointShapeAttributes(polygon, geo, style, attribute) {
     attribute.normals.push(nx, ny, nz, nx, ny, nz, nx, ny, nz);
     attribute.colors.push(...color, ...color, ...color);
     attribute.pickingIds.push(id, id, id);
+
+    // attribute.shapePositions.push(ax, ay, az, bx, by, bz, cx, cy, cz);
+    // attribute.normals.push(nx, ny, nz, nx, ny, nz, nx, ny, nz);
 
   }
 }
