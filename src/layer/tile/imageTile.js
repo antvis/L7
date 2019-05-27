@@ -2,7 +2,6 @@
 import Tile from './tile';
 import ImageBuffer from '../../geom/buffer/image';
 import DrawImage from '../render/image/drawImage';
-import * as THREE from '../../core/three';
 export default class ImageTile extends Tile {
   requestTileAsync() {
     // Making this asynchronous really speeds up the LOD framerate

@@ -168,7 +168,6 @@ export default class Layer extends Base {
     } else {
       scaleDefs[field] = cfg;
     }
-    console.log(options);
     return this;
   }
   shape(field, values) {
@@ -627,8 +626,8 @@ export default class Layer extends Base {
       }
       this._activeIds = featureId;
       // TODO 瓦片图层获取选中数据信息
-      const { feature, style } = this.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
+      const { feature, style } = this.getSelectFeature(featureId, lnglat);
       // const style = this.layerData[featureId - 1];
       const target = {
         featureId,
