@@ -16,7 +16,7 @@ void main() {
   mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
    v_color = a_color;
    v_color.a *= u_opacity;
-    if(pickingId == u_activeId) {
+  if(pickingId == u_activeId) {
      v_color = u_activeColor;
    }
    gl_Position =  matModelViewProjection  * vec4(position, 1.0);

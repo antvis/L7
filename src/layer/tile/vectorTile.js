@@ -1,6 +1,6 @@
 import Tile from './tile';
 import { getArrayBuffer } from '../../util/ajax';
-import { destoryObject } from '../../util/object3d-util';
+import { destoryObject, updateObjecteUniform } from '../../util/object3d-util';
 import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';
 import { getRender } from '../render/index';
@@ -39,6 +39,9 @@ export default class VectorTile extends Tile {
     });
   }
   _createMesh() {
+    if (this.layer.get('layerType') === 'point') {
+      this.layer.shape = this.layer._getShape(this.layerData);
+    }
     this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(this.layerData, this.layer);
     this.mesh.onBeforeRender = renderer => {
       this._renderMask(renderer);
@@ -52,6 +55,14 @@ export default class VectorTile extends Tile {
     return this._object3D;
   }
   _renderMask(renderer) {
+    const zoom = this.layer.scene.getZoom();
+    updateObjecteUniform(this.mesh, {
+      u_time: this.layer.scene._engine.clock.getElapsedTime(),
+      u_zoom: zoom
+    });
+    if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
+      return;
+    }
     const maskScene = new THREE.Scene();
     this.maskScene = maskScene;
     const tileMesh = this._tileMaskMesh();
@@ -96,6 +107,13 @@ export default class VectorTile extends Tile {
     }
 
     this.xhrRequest.abort();
+  }
+  getSelectFeature(id) {
+    const featureIndex = this.source.originData.featureKeys[id];
+    if (featureIndex) {
+      return this.source.originData.dataArray[featureIndex];
+    }
+    return null;
   }
   destroy() {
     super.destroy();
