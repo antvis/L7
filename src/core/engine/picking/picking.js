@@ -71,9 +71,9 @@ class Picking {
 
     });
   }
-  _updateRender() {
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-  }
+  // _updateRender() {
+  //   this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+  // }
 
   _pick(point, normalisedPoint, layerId) {
     this._update(point);
