@@ -22,7 +22,8 @@ export default function DrawFill(layerData, layer) {
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.a_size, 3));
   const material = new PolygonMaterial({
     u_opacity: style.opacity,
-    u_activeColor: activeOption.fill
+    u_activeColor: activeOption.fill,
+    u_zoom: layer.scene.getZoom()
   }, {
     SHAPE: true
   });
