@@ -37,10 +37,10 @@ export default class Tile extends Base {
     this._object3D.onBeforeRender = () => {
     };
     this._isLoaded = false;
-    this._initControllers();
     this.requestTileAsync(data => this._init(data));
   }
   _init(data) {
+    this._initControllers();
     this._creatSource(data);
     this._initTileAttrs();
     this._mapping();

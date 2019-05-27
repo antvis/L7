@@ -13,7 +13,5 @@ export default function NormalBuffer(layerData) {
     attributes.sizes.push(size);
 
   });
-
-
   return attributes;
 }

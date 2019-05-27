@@ -25,39 +25,58 @@
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'light', // 样式URL
-  center: [120.05859375,30.29701788337204 ],
+  mapStyle: 'dark', // 样式URL
+  center: [116.5909,39.9225 ],
   pitch: 0,
   hash:true,
-  zoom: 11,
+  zoom: 14,
 
 });
 window.scene = scene;
 scene.on('loaded', () => {
   const layer = scene.VectorTileLayer({
     zIndex:0,
-    layerType:'polygon'
+    layerType:'point'
   })
   //.source('https://pre-lbs-show.taobao.com/gettile?x={x}&y={y}&z={z}&pipeId=pipe_vt_test')
+ 
+  // http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/point/{z}/{x}/{y}.pbf
   // https://mvt.amap.com/district/CHN2/8/203/105/4096?key=
-  .source('http://localhost:5000/test.mbtile/{z}/{x}/{y}.pbf',{
+  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/point2/{z}/{x}/{y}.pbf',{
     parser:{
       type: 'mvt',
-      sourceLayer:'county4326',
-      idField:'OBJECTID',
-      maxZoom: 10,
+      sourceLayer:'layer',
+      //idField:'OBJECTID',   
+      maxZoom: 17,
     }
   })
-  .shape('line')
-  .active({fill:'red'})
-  .color('red')
-  .render();
-  layer.on('click',(feature)=>{
-    console.log(feature);
+  .scale({
+    total:{
+      min:0,
+      max:1000000,
+      type:'log'
+    }
   })
+  // cylinder
+  .shape('hexagon')
+  .size(2)
+  .active(false)
+  .color('total',  ['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'].reverse())
+  //.color('#0D408C')
+  .style({
+    opacity:1.0
+  })
+  .render(
+  );
+  //layer.on('mousemove',(feature)=>{
+   // console.log(feature);
+ // })
    console.log(layer);
   });
-
+//OBJECTID',(id)=>{
+    // const index = id % 8;
+     //return ['#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2'][index];
+  //}
 </script>
 </body>
 </html>
