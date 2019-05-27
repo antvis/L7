@@ -50,6 +50,7 @@ class Picking {
   }
   _update(point) {
     const texture = this._pickingTexture;
+    // this._pickingTexture
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
