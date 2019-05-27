@@ -2,6 +2,7 @@
 import Tile from './tile';
 import ImageBuffer from '../../geom/buffer/image';
 import DrawImage from '../render/image/drawImage';
+import * as THREE from '../../core/three';
 export default class ImageTile extends Tile {
   requestTileAsync() {
     // Making this asynchronous really speeds up the LOD framerate
@@ -13,30 +14,34 @@ export default class ImageTile extends Tile {
     }, 0);
   }
   _requestTile() {
-    const urlParams = {
-      x: this._tile[0],
-      y: this._tile[1],
-      z: this._tile[2]
-    };
+    const image = this._createDebugMesh();
+    this._createMesh(image);
+    this.emit('tileLoaded');
+    // return;
+    // const urlParams = {
+    //   x: this._tile[0],
+    //   y: this._tile[1],
+    //   z: this._tile[2]
+    // };
 
-    const url = this._getTileURL(urlParams);
-    const image = document.createElement('img');
+    // const url = this._getTileURL(urlParams);
+    // const image = document.createElement('img');
 
-    image.addEventListener('load', () => {
-      this._isLoaded = true;
-      this._createMesh(image);
-      this._ready = true;
-    }, false);
+    // image.addEventListener('load', () => {
+    //   this._isLoaded = true;
+    //   this._createMesh(image);
+    //   this._ready = true;
+    // }, false);
 
-    // image.addEventListener('progress', event => {}, false);
-    // image.addEventListener('error', event => {}, false);
+    // // image.addEventListener('progress', event => {}, false);
+    // // image.addEventListener('error', event => {}, false);
 
-    image.crossOrigin = '';
+    // image.crossOrigin = '';
 
-    // Load image
-    image.src = url;
+    // // Load image
+    // image.src = url;
 
-    this._image = image;
+    // this._image = image;
   }
   _getBufferData(images) {
     const NW = this._tileBounds.getTopLeft();
@@ -61,6 +66,18 @@ export default class ImageTile extends Tile {
     this._object3D.add(mesh);
     return this._object3D;
   }
+  _createDebugMesh() {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 256;
+    canvas.height = 256;
+    context.font = 'Bold 20px Helvetica Neue, Verdana, Arial';
+    context.fillStyle = '#ff0000';
+    context.fillText(this._tile.join('/'), 20, 20);
+    context.rect(0, 0, 256, 256);
+    context.stroke();
+    return canvas;
+  }
   _abortRequest() {
     if (!this._image) {
       return;
@@ -68,7 +85,9 @@ export default class ImageTile extends Tile {
 
     this._image.src = '';
   }
-
+  getSelectFeature() {
+    return {};
+  }
   destroy() {
     // Cancel any pending requests
     this._abortRequest();

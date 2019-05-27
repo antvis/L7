@@ -168,6 +168,7 @@ export default class Layer extends Base {
     } else {
       scaleDefs[field] = cfg;
     }
+    console.log(options);
     return this;
   }
   shape(field, values) {
@@ -373,11 +374,14 @@ export default class Layer extends Base {
 
   setActive(id, color) {
     this._activeIds = id;
-    this.layerMesh.material.setUniformsValue('u_activeId', id);
     if (!Array.isArray(color)) {
       color = ColorUtil.color2RGBA(color);
     }
-    updateObjecteUniform(this._object3D, { u_activeColor: color });
+    updateObjecteUniform(this._object3D, {
+      u_activeColor: color,
+      u_activeId: id
+    });
+    this.scene._engine.update();
   }
 
   _addActiveFeature(e) {
@@ -623,22 +627,30 @@ export default class Layer extends Base {
       }
       this._activeIds = featureId;
       // TODO 瓦片图层获取选中数据信息
-      // const feature = this.layerSource.getSelectFeature(featureId);
+      const { feature, style } = this.getSelectFeature(featureId);
       const lnglat = this.scene.containerToLngLat(point2d);
       // const style = this.layerData[featureId - 1];
       const target = {
         featureId,
-        // feature,
-        // style,
+        feature,
+        style,
         pixel: point2d,
         type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
-      if (featureId >= 0 || this._activeIds !== null) { // 拾取到元素，或者离开元素
+      if (featureId >= 0 || this._activeIds >= 0) { // 拾取到元素，或者离开元素
         this.emit(type, target);
       }
 
     });
+  }
+  getSelectFeature(featureId) {
+    const feature = this.layerSource.getSelectFeature(featureId);
+    const style = this.layerData[featureId - 1];
+    return {
+      feature,
+      style
+    };
   }
   /**
    *  用于过滤数据

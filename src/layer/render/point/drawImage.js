@@ -8,7 +8,7 @@ export default function DrawImage(layerData, layer) {
   const { strokeWidth, stroke, opacity } = style;
   const texture = layer.scene.image.texture;
   const attributes = PointBuffer.ImageBuffer(layerData, {
-    imagePos: this.scene.image.imagePos
+    imagePos: layer.scene.image.imagePos
   });
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));

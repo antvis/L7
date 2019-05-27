@@ -20,11 +20,11 @@ const vec3 halo = vec3( 1.0 );
 void main() {
     // 纹理坐标
     #ifdef TEXCOORD_0
-    vec2 pos =  v_uv + gl_PointCoord / 512.0 * 64.0;
-    pos.y = 1.0 - pos.y;
-    vec4 textureColor = texture2D(u_texture, pos);
-    gl_FragColor =textureColor;
-    return;
+        vec2 pos =  v_uv + gl_PointCoord / 512.0 * 64.0;
+        pos.y = 1.0 - pos.y;
+        vec4 textureColor = texture2D(u_texture, pos);
+        gl_FragColor =textureColor;
+        return;
     #endif
      if(v_color.a == 0.)
       discard;
