@@ -75,7 +75,7 @@ export default class LineBuffer extends BufferBase {
   }
   _getMeshLineAttributes() {
     const layerData = this.get('layerData');
-    const { lineType } = this.get('style');
+    const { dashArray } = this.get('style');
     const positions = [];
     const pickingIds = [];
     const normal = [];
@@ -84,10 +84,11 @@ export default class LineBuffer extends BufferBase {
     const indexArray = [];
     const sizes = [];
     const attrDistance = [];
+    const attrDashArray = [];
     layerData.forEach(item => {
       const props = item;
       const positionCount = positions.length / 3;
-      const attr = lineShape.Line(item.coordinates, props, positionCount, (lineType !== 'soild'));
+      const attr = lineShape.Line(item.coordinates, props, positionCount, dashArray);
       positions.push(...attr.positions);
       normal.push(...attr.normal);
       miter.push(...attr.miter);
@@ -96,6 +97,7 @@ export default class LineBuffer extends BufferBase {
       sizes.push(...attr.sizes);
       attrDistance.push(...attr.attrDistance);
       pickingIds.push(...attr.pickingIds);
+      attrDashArray.push(...attr.dashArray);
     });
     return {
       positions,
@@ -105,7 +107,8 @@ export default class LineBuffer extends BufferBase {
       indexArray,
       pickingIds,
       sizes,
-      attrDistance
+      attrDistance,
+      attrDashArray
     };
   }
 
