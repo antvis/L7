@@ -65,8 +65,11 @@ export function defaultLine(geo, index) {
   return { positions, indexes: indexArray };
 }
 // mesh line
+
 export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
-  if (path.length === 1) path = path[0];// 面坐标转线坐标
+  if (Array.isArray(path[0][0])) {
+    path = path[0]; // 面坐标转线坐标
+  }
   const positions = [];
   const pickingIds = [];
   const normal = [];
@@ -78,12 +81,13 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
 
   let attrDistance = [];
   const sizes = [];
-  const { size, color, id } = props;
+  let { size, color, id } = props;
+  !Array.isArray(size) && (size = [ size ]);
   attrPos.forEach((point, pointIndex) => {
     colors.push(...color);
     pickingIds.push(id);
     sizes.push(size[0]);
-    point[2] = size[1];
+    point[2] = size[1] || 0;
     positions.push(...point);
 
     if (pointIndex === 0 || pointIndex === 1) {
@@ -109,7 +113,6 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
   attrDistance = attrDistance.map(d => {
     return d / totalLength;
   });
-
   return {
     positions,
     normal,
