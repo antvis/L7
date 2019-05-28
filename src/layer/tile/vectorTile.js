@@ -43,14 +43,19 @@ export default class VectorTile extends Tile {
       this.layer.shape = this.layer._getShape(this.layerData);
     }
     this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(this.layerData, this.layer);
-    this.mesh.onBeforeRender = renderer => {
-      this._renderMask(renderer);
-    };
-    this.mesh.onAfterRender = renderer => {
-      const context = renderer.context;
-      context.disable(context.STENCIL_TEST);
-    };
-    this._object3D.add(this.mesh);
+    if (this.mesh.type !== 'composer') { // 热力图的情况
+      this.mesh.onBeforeRender = renderer => {
+        this._renderMask(renderer);
+      };
+      this.mesh.onAfterRender = renderer => {
+        const context = renderer.context;
+        context.disable(context.STENCIL_TEST);
+      };
+      this._object3D.add(this.mesh);
+    } else {
+      this._object3D = this.mesh;
+    }
+
     this.emit('tileLoaded');
     return this._object3D;
   }
