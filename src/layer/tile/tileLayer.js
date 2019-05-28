@@ -178,6 +178,12 @@ export default class TileLayer extends Layer {
         mesh.name = key;
         this._tileCache.setTile(tile, key);
         this._tileKeys.push(key);
+        if (mesh.type === 'composer') {
+          this.scene._engine.composerLayers.push(mesh);
+          this.scene._engine.update();
+          this._pruneTiles();
+          return;
+        }
         if (mesh.children.length !== 0) {
           this._tiles.add(tile.getMesh());
           this._addPickTile(tile.getMesh());
@@ -186,6 +192,12 @@ export default class TileLayer extends Layer {
         this._pruneTiles();
       });
     } else {
+      if (tile.getMesh().type === 'composer') {
+        this.scene._engine.composerLayers.push(tile.getMesh());
+        this.scene._engine.update();
+        this._pruneTiles();
+        return;
+      }
       this._tiles.add(tile.getMesh());
       t.active = true;
       this._addPickTile(tile.getMesh());
@@ -287,6 +299,11 @@ export default class TileLayer extends Layer {
         if (tileObj) {
           tileObj._abortRequest();
           this._tiles.remove(tileObj.getMesh());
+        }
+        if (tileObj && tileObj.getMesh().type === 'composer') {
+          this.scene._engine.composerLayers = this.scene._engine.composerLayers.filter(obj => {
+            return obj.name !== tileObj.getMesh().name;
+          });
         }
         delete this.tileList[key];
       }
