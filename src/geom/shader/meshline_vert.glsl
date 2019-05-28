@@ -6,7 +6,7 @@ attribute float a_dash_array;
 
 uniform float u_zoom;
 uniform float u_time : 0;
-uniform float u_activeId : 1;
+uniform float u_activeId : 0;
 uniform vec4 u_activeColor : [ 1.0, 0, 0, 1.0 ];
 
 varying float v_time;
