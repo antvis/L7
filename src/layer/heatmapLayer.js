@@ -1,9 +1,5 @@
 import Layer from '../core/layer';
-import gridBuffer from '../geom/buffer/heatmap/grid';
-import DrawGrid from './render/heatmap/gird';
-import DrawHexagon from './render/heatmap/hexagon';
-import { drawHeatmap } from './render/heatmap/heatmap';
-import hexagonBuffer from '../geom/buffer/heatmap/hexagon';
+import { getRender } from './render/';
 
 export default class HeatMapLayer extends Layer {
   shape(type) {
@@ -12,43 +8,6 @@ export default class HeatMapLayer extends Layer {
   }
   draw() {
     this.type = 'heatmap';
-    switch (this.shapeType) {
-      case 'grid' :
-        this._drawGrid();
-        break;
-      case 'hexagon' :
-        this._drawHexagon();
-        break;
-      default:
-        drawHeatmap(this);
-    }
+    this.add(getRender('heatmap', this.shapeType || 'heatmap')(this.layerData, this, this.layerSource));
   }
-  _drawHexagon() {
-    const style = this.get('styleOptions');
-    const activeOption = this.get('activedOptions');
-    const { radius } = this.layerSource.data;
-    this._buffer = new hexagonBuffer(this.layerData);
-    const config = {
-      ...style,
-      radius,
-      activeColor: activeOption.fill
-    };
-    const Mesh = new DrawHexagon(this._buffer, config);
-    this.add(Mesh);
-  }
-  _drawGrid() {
-    const style = this.get('styleOptions');
-    const activeOption = this.get('activedOptions');
-    const { xOffset, yOffset } = this.layerSource.data;
-    this._buffer = new gridBuffer(this.layerData);
-    const config = {
-      ...style,
-      xOffset,
-      yOffset,
-      activeColor: activeOption.fill
-    };
-    const girdMesh = new DrawGrid(this._buffer, config);
-    this.add(girdMesh);
-  }
-
 }

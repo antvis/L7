@@ -7,6 +7,7 @@ import RasterLayer from './rasterLayer';
 import HeatmapLayer from './heatmapLayer';
 import TileLayer from './tile/tileLayer';
 import ImageTileLayer from './tile/imageTileLayer';
+import VectorTileLayer from './tile/VectorTileLayer';
 
 registerLayer('PolygonLayer', PolygonLayer);
 registerLayer('PointLayer', PointLayer);
@@ -16,7 +17,8 @@ registerLayer('RasterLayer', RasterLayer);
 registerLayer('HeatmapLayer', HeatmapLayer);
 registerLayer('TileLayer', TileLayer);
 registerLayer('ImageTileLayer', ImageTileLayer);
+registerLayer('VectorTileLayer', VectorTileLayer);
 
-export { LAYER_MAP } from './factory';
+export { LAYER_MAP, getLayer } from './factory';
 export { registerLayer };
 

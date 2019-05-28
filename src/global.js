@@ -5,7 +5,7 @@
 // const Global = {};
 const FONT_FAMILY = '"-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto,"Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",SimSun, "sans-serif"';
 const Global = {
-  version: '1.0.0',
+  version: '1.11.1',
   scene: {
     mapType: 'AMAP',
     zoom: 5,
