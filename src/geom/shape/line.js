@@ -1,4 +1,5 @@
-import getNormal from 'polyline-normals';
+import getNormals from '../../util/polyline-normals';
+import flatten from '@antv/util/lib/flatten';
 
 /**
  * shape arc
@@ -64,8 +65,8 @@ export function defaultLine(geo, index) {
   return { positions, indexes: indexArray };
 }
 // mesh line
-export function Line(path, props, positionsIndex) {
-   // 区分path是面还是线
+
+export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
   if (Array.isArray(path[0][0])) {
     path = path[0]; // 面坐标转线坐标
   }
@@ -74,63 +75,54 @@ export function Line(path, props, positionsIndex) {
   const normal = [];
   const miter = [];
   const colors = [];
-  const indexArray = [];
-  const normals = getNormal(path);
+  const dashArray = [];
+
+  const { normals, attrIndex, attrPos } = getNormals(path, false, positionsIndex);
+
   let attrDistance = [];
   const sizes = [];
-  let c = 0;
-  let index = positionsIndex;
   let { size, color, id } = props;
   !Array.isArray(size) && (size = [ size ]);
-  path.forEach((point, pointIndex, list) => {
-    const i = index;
-    colors.push(...color);
+  attrPos.forEach((point, pointIndex) => {
     colors.push(...color);
     pickingIds.push(id);
-    pickingIds.push(id);
     sizes.push(size[0]);
-    sizes.push(size[0]);
-    if (pointIndex !== list.length - 1) {
-      indexArray[c++] = i + 0;
-      indexArray[c++] = i + 3;
-      indexArray[c++] = i + 1;
-      indexArray[c++] = i + 0;
-      indexArray[c++] = i + 2;
-      indexArray[c++] = i + 3;
-    }
-    // point[2] = size[1];
-    positions.push(...point);
+    point[2] = size[1] || 0;
     positions.push(...point);
 
-    if (pointIndex === 0) {
-      attrDistance.push(0, 0);
+    if (pointIndex === 0 || pointIndex === 1) {
+      attrDistance.push(0);
+    } else if (pointIndex % 2 === 0) {
+      attrDistance.push(attrDistance[pointIndex - 2]
+        + lineSegmentDistance(attrPos[pointIndex - 2], attrPos[pointIndex]));
     } else {
-      const d = attrDistance[pointIndex * 2 - 1] + lineSegmentDistance(path[pointIndex - 1], path[pointIndex]);
-      attrDistance.push(d, d);
+      attrDistance.push(attrDistance[pointIndex - 1]);
     }
-
-    index += 2;
   });
+
+  const totalLength = attrDistance[attrDistance.length - 1];
+  const ratio = lengthPerDashSegment / totalLength;
   normals.forEach(n => {
     const norm = n[0];
     const m = n[1];
     normal.push(norm[0], norm[1], 0);
-    normal.push(norm[0], norm[1], 0);
-    miter.push(-m);
     miter.push(m);
+    dashArray.push(ratio);
   });
+
   attrDistance = attrDistance.map(d => {
-    return d / attrDistance[attrDistance.length - 1];
+    return d / totalLength;
   });
   return {
     positions,
     normal,
-    indexArray,
+    indexArray: flatten(attrIndex),
     miter,
     colors,
     sizes,
     pickingIds,
-    attrDistance
+    attrDistance,
+    dashArray
   };
 
 }
