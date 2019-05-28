@@ -13,7 +13,7 @@ export default class Hash extends Interaction {
     this._updateHash();
   }
   reset() {
-    this.layer._resetStyle();
+    // this.layer._resetStyle();
   }
   _getHashString() {
     const center = this.layer.getCenter(),
