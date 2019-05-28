@@ -20,15 +20,19 @@ export default function DrawLine(layerData, layer) {
   geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normal, 3));
   geometry.addAttribute('a_miter', new THREE.Float32BufferAttribute(attributes.miter, 1));
   geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
+  geometry.addAttribute('a_dash_array', new THREE.Float32BufferAttribute(attributes.attrDashArray, 1));
 
   const lineMaterial = new MeshLineMaterial({
     u_opacity: style.opacity,
     u_zoom: layer.scene.getZoom(),
     u_time: 0,
+    u_dash_offset: style.dashOffset,
+    u_dash_ratio: style.dashRatio,
     activeColor: activeOption.fill
   }, {
     SHAPE: false,
-    ANIMATE: false
+    ANIMATE: false,
+    DASHLINE: style.lineType === 'dash'
   });
 
   const lineMesh = new THREE.Mesh(geometry, lineMaterial);

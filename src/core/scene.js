@@ -25,8 +25,8 @@ export default class Scene extends Base {
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
-    // this.registerMapEvent();
-    this._engine.run();
+    this.registerMapEvent();
+    // this._engine.run();
     // this.workerPool = new WorkerPool();
     compileBuiltinModules();
   }

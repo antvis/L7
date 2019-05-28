@@ -20,6 +20,17 @@ export default function DrawFill(layerData, layer) {
   geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
   geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapePositions, 3));
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.a_size, 3));
+
+  // const instancedGeometry = new THREE.InstancedBufferGeometry();
+
+  // instancedGeometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
+  // instancedGeometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(attributes.shapePositions, 3));
+  // // instanced attributes
+  // instancedGeometry.addAttribute('position', new THREE.InstancedBufferAttribute(new Float32Array(attributes.vertices), 3));
+  // instancedGeometry.addAttribute('a_color', new THREE.InstancedBufferAttribute(new Float32Array(attributes.colors), 4));
+  // instancedGeometry.addAttribute('pickingId', new THREE.InstancedBufferAttribute(new Float32Array(attributes.pickingIds), 1));
+  // instancedGeometry.addAttribute('a_size', new THREE.InstancedBufferAttribute(new Float32Array(attributes.a_size), 3));
+
   const material = new PolygonMaterial({
     u_opacity: style.opacity,
     u_activeColor: activeOption.fill,
@@ -35,6 +46,7 @@ export default function DrawFill(layerData, layer) {
     const meshStroke = DrawStroke(layerData, layer);
     fillMesh.add(meshStroke);
   }
+  // const fillMesh = new THREE.Mesh(instancedGeometry, material);
   return fillMesh;
 
 }
