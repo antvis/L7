@@ -56,7 +56,9 @@ export default class Source extends Base {
     const { type = 'geojson' } = parser;
     const data = this.get('data');
     this.originData = getParser(type)(data, parser);
-    this.data = clone(this.originData);
+    this.data = {
+      dataArray: clone(this.originData.dataArray)
+    };
     this.data.extent = extent(this.data.dataArray);
   }
   /**
@@ -149,5 +151,9 @@ export default class Source extends Base {
       featureIndex++;
     }
     return featureIndex;
+  }
+  destroy() {
+    this.data = null;
+    this.originData = null;
   }
 }

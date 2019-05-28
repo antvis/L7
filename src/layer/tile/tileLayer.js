@@ -1,126 +1,325 @@
 import Layer from '../../core/layer';
+import source from '../../core/source';
 import * as THREE from '../../core/three';
+import Global from '../../global';
+const { pointShape } = Global;
 import TileCache from './tileCache';
-import { throttle } from '@antv/util';
-import { toLngLat } from '@antv/geo-coord';
+import pickingFragmentShader from '../../core/engine/picking/picking_frag.glsl';
+import { throttle, deepMix } from '@antv/util';
+import { toLngLat, Bounds, Point } from '@antv/geo-coord';
+import { wrapNum } from '@antv/geo-coord/lib/util/index';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 export default class TileLayer extends Layer {
   constructor(scene, cfg) {
-    super(scene, cfg);
-    this._tileCache = new TileCache(50, this._destroyTile);
+    super(scene, {
+      ...cfg,
+      keepBuffer: 2
+    });
+    this._tileCache = new TileCache(100, this._destroyTile);
     this._crs = epsg3857;
     this._tiles = new THREE.Object3D();
+    this._pickTiles = new THREE.Object3D();
+    this._pickTiles.name = this.layerId;
+    this.scene._engine._picking.add(this._pickTiles);
+    this._tiles.frustumCulled = false;
     this._tileKeys = [];
-    this.tileList = [];
-
-
+    this.tileList = {};
   }
-  source(url) {
-    this.url = url;
+  shape(field, values) {
+    const layerType = this.get('layerType');
+    if (layerType === 'point') {
+      return super.shape(field, values);
+    }
+    this.shape = field;
     return this;
   }
+  source(url, cfg = {}) {
+    this.url = url;
+    this.sourceCfg = cfg;
+    this.sourceCfg.mapType = this.scene.mapType;
+    return this;
+  }
+  tileSource(data, cfg) {
+    if (data instanceof source) {
+      return data;
+    }
+    const tileSourceCfg = {
+      data,
+      zoom: this.scene.getZoom()
+    };
+    deepMix(tileSourceCfg, this.sourceCfg, cfg);
+    return new source(tileSourceCfg);
+  }
   render() {
+    // this._initControllers();
     this._initMapEvent();
+    // this._initAttrs();
+    this._initInteraction();
     this.draw();
+    return this;
   }
   draw() {
     this._object3D.add(this._tiles);
     this._calculateLOD();
   }
+
   drawTile() {
 
   }
+
   zoomchange(ev) {
     super.zoomchange(ev);
     throttle(this._calculateLOD, 200);
     this._calculateLOD();
   }
+
   dragend(ev) {
     super.dragend(ev);
     this._calculateLOD();
 
   }
   _calculateLOD() {
-    const viewPort = this.scene.getBounds().toBounds();
-    const SE = viewPort.getSouthEast();
-    const NW = viewPort.getNorthWest();
+    /**
+     * 加载完成 active
+     * 需要显示 current
+     * 是否保留 retain
+     */
+    this.updateTileList = [];
     const zoom = Math.round(this.scene.getZoom()) - 1;
-    const tileCount = Math.pow(2, zoom);
     const center = this.scene.getCenter();
-    const NWPoint = this._crs.lngLatToPoint(toLngLat(NW.lng, NW.lat), zoom);
-    const SEPoint = this._crs.lngLatToPoint(toLngLat(SE.lng, SE.lat), zoom);
     const centerPoint = this._crs.lngLatToPoint(toLngLat(center.lng, center.lat), zoom);
     const centerXY = centerPoint.divideBy(256).round();
-    const minXY = NWPoint.divideBy(256).round();
-    const maxXY = SEPoint.divideBy(256).round();
-    // console.log(NW.lng, NW.lat, SE.lng, SE.lat, NWPonint, SEPonint);
-    let updateTileList = [];
-    this.tileList = [];
-    const halfx = Math.floor((maxXY.x - minXY.x) / 2) + 1;
-    const halfy = Math.floor((maxXY.y - minXY.y) / 2) + 1;
-    if (!(centerPoint.x > NWPoint.x && centerPoint.x < SEPoint.x)) { // 地图循环的问题
-      for (let i = 0; i < minXY.x; i++) {
-        for (let j = Math.min(0, minXY.y - halfy); j < Math.max(maxXY.y + halfy, tileCount); j++) {
-          this._updateTileList(updateTileList, i, j, zoom);
-        }
-      }
-      for (let i = maxXY.x; i < tileCount; i++) {
-        for (let j = Math.min(0, minXY.y - halfy); j < Math.max(maxXY.y + halfy, tileCount); j++) {
-          this._updateTileList(updateTileList, i, j, zoom);
+    const pixelBounds = this._getPixelBounds();
+    const tileRange = this._pxBoundsToTileRange(pixelBounds);
+    const margin = this.get('keepBuffer');
+    this.noPruneRange = new Bounds(tileRange.getBottomLeft().subtract([ margin, -margin ]),
+    tileRange.getTopRight().add([ margin, -margin ]));
+    if (!(isFinite(tileRange.min.x) &&
+    isFinite(tileRange.min.y) &&
+    isFinite(tileRange.max.x) &&
+    isFinite(tileRange.max.y))) { throw new Error('Attempted to load an infinite number of tiles'); }
+    for (let j = tileRange.min.y; j <= tileRange.max.y; j++) {
+      for (let i = tileRange.min.x; i <= tileRange.max.x; i++) {
+        const coords = [ i, j, zoom ];
+        const tile = this.tileList[coords.join('_')];
+        if (tile) {
+          tile.current = true;
+        } else {
+          this.tileList[coords.join('_')] = {
+            current: true,
+            coords
+          };
+          this.updateTileList.push(coords);
         }
       }
     }
-    for (let i = Math.max(0, minXY.x - halfx); i < Math.min(maxXY.x + halfx, tileCount); i++) {
-      for (let j = Math.max(0, minXY.y - halfy); j < Math.min(maxXY.y + halfy, tileCount); j++) {
-        this._updateTileList(updateTileList, i, j, zoom);
-      }
-    }
-    // 过滤掉已经存在的
-    // tileList = tileList.filter(tile => {
-    // })
-    updateTileList = updateTileList.sort((a, b) => {
-      const tile1 = a.split('_');
-      const tile2 = b.split('_');
+    this.updateTileList.sort((a, b) => {
+      const tile1 = a;
+      const tile2 = b;
       const d1 = Math.pow((tile1[0] * 1 - centerXY.x), 2) + Math.pow((tile1[1] * 1 - centerXY.y), 2);
       const d2 = Math.pow((tile2[0] * 1 - centerXY.x), 2) + Math.pow((tile2[1] * 1 - centerXY.y), 2);
       return d1 - d2;
     });
-    updateTileList.forEach(key => {
-      this._requestTile(key, this);
+    this._pruneTiles();
+    // 更新瓦片数据
+    this.updateTileList.forEach(coords => {
+      const key = coords.join('_');
+      if (this.tileList[key].current) {
+        this._requestTile(key, this);
+      }
     });
-    this._removeOutTiles();
   }
-  _updateTileList(updateTileList, x, y, z) {
+  _getShape(layerData) {
+    let shape = null;
+    if (!layerData[0].hasOwnProperty('shape')) {
+      return 'normal';
+    }
+    for (let i = 0; i < layerData.length; i++) {
+      shape = layerData[i].shape;
+      if (shape !== undefined) {
+        break;
+      }
+    }
+    if (
+      pointShape['2d'].indexOf(shape) !== -1 ||
+      pointShape['3d'].indexOf(shape) !== -1
+    ) {
+      return 'fill';
+    } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
+      return 'image';
+    }
+    return 'text';
+  }
+  _updateTileList(x, y, z) {
     const key = [ x, y, z ].join('_');
-    this.tileList.push(key);
-    if (this._tileKeys.indexOf(key) === -1) {
-      updateTileList.push(key);
+    const tile = this.tileList[key];
+    if (tile) {
+      tile.current = true;
+    } else {
+      this.tileList[key] = {
+        current: true,
+        active: false,
+        coords: key.split('_')
+      };
+      this.updateTileList.push(key);
     }
   }
   _requestTile(key, layer) {
+    const t = this.tileList[key];
+    if (!t) {
+      return;
+    }
     let tile = this._tileCache.getTile(key);
     if (!tile) {
       tile = this._createTile(key, layer);
-      const mesh = tile.getMesh();
-      mesh.name = key;
-      this._tileCache.setTile(tile, key);
+      tile.on('tileLoaded', () => {
+        t.active = true;
+        const mesh = tile.getMesh();
+        mesh.name = key;
+        this._tileCache.setTile(tile, key);
+        this._tileKeys.push(key);
+        if (mesh.type === 'composer') {
+          this.scene._engine.composerLayers.push(mesh);
+          this.scene._engine.update();
+          this._pruneTiles();
+          return;
+        }
+        if (mesh.children.length !== 0) {
+          this._tiles.add(tile.getMesh());
+          this._addPickTile(tile.getMesh());
+        }
+        this.scene._engine.update();
+        this._pruneTiles();
+      });
+    } else {
+      if (tile.getMesh().type === 'composer') {
+        this.scene._engine.composerLayers.push(tile.getMesh());
+        this.scene._engine.update();
+        this._pruneTiles();
+        return;
+      }
+      this._tiles.add(tile.getMesh());
+      t.active = true;
+      this._addPickTile(tile.getMesh());
       this._tileKeys.push(key);
-      // this.scene._engine.update();
+      this.scene._engine.update();
+      this._pruneTiles();
     }
-    this._tiles.add(tile.getMesh());
-    this._tileKeys.push(key);
+  }
+  _addPickTile(meshobj) {
+    const mesh = meshobj.children[0];
+    const pickmaterial = mesh.material.clone();
+    pickmaterial.fragmentShader = pickingFragmentShader;
+    const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
+    pickingMesh.name = this.layerId;
+    pickingMesh.onBeforeRender = () => {
+      const zoom = this.scene.getZoom();
+      pickingMesh.material.setUniformsValue('u_zoom', zoom);
+    };
+    this._pickTiles.add(pickingMesh);
+
+  }
+  // 根据距离优先级查找
+  getSelectFeature(id, lnglat) {
+    const zoom = Math.round(this.scene.getZoom()) - 1;
+    const tilePoint = this._crs.lngLatToPoint(toLngLat(lnglat.lng, lnglat.lat), zoom);
+    const tileXY = tilePoint.divideBy(256).round();
+    const key = [ tileXY.x, tileXY.y, zoom ].join('_');
+    const tile = this._tileCache.getTile(key);
+    const feature = tile ? tile.getSelectFeature(id) : null;
+    return { feature };
+  }
+  _pruneTiles() {
+    let tile;
+    const zoom = Math.round(this.scene.getZoom()) - 1;
+    for (const key in this.tileList) {
+      const c = this.tileList[key].coords;
+      if (c[2] !== zoom || !this.noPruneRange.contains(new Point(c[0], c[1]))) {
+        this.tileList[key].current = false;
+      }
+    }
+
+    for (const key in this.tileList) {
+      tile = this.tileList[key];
+      tile.retain = tile.current;
+    }
+    for (const key in this.tileList) {
+      tile = this.tileList[key];
+      if (tile.current && !tile.active) {
+        const [ x, y, z ] = key.split('_').map(v => v * 1);
+        if (!this._retainParent(x, y, z, z - 5)) {
+          this._retainChildren(x, y, z, z + 2);
+        }
+      }
+
+    }
+    this._removeOutTiles();
+  }
+  _retainParent(x, y, z, minZoom) {
+    const x2 = Math.floor(x / 2);
+    const y2 = Math.floor(y / 2);
+    const z2 = z - 1;
+    const tile = this.tileList[[ x2, y2, z2 ].join('_')];
+    if (tile && tile.active) {
+      tile.retain = true;
+      return true;
+    } else if (tile && tile.loaded) {
+      tile.retain = true;
+    }
+    if (z2 > minZoom) {
+      return this._retainParent(x2, y2, z2, minZoom);
+    }
+
+    return false;
+
+  }
+  _retainChildren(x, y, z, maxZoom) {
+    for (let i = 2 * x; i < 2 * x + 2; i++) {
+      for (let j = 2 * y; j < 2 * y + 2; j++) {
+        const key = [ i, j, z + 1 ].join('_');
+        const tile = this.tileList[key];
+        if (tile && tile.active) {
+          tile.retain = true;
+          continue;
+        } else if (tile && tile.loaded) {
+          tile.retain = true;
+        }
+
+        if (z + 1 < maxZoom) {
+          this._retainChildren(i, j, z + 1, maxZoom);
+        }
+      }
+    }
   }
   // 移除视野外的tile
   _removeOutTiles() {
-    for (let i = this._tiles.children.length - 1; i >= 0; i--) {
-      const tile = this._tiles.children[i];
-      const key = tile.name;
-      if (this.tileList.indexOf(key) === -1) {
-        this._tiles.remove(tile);
+    for (const key in this.tileList) {
+      if (!this.tileList[key].retain) {
+        const tileObj = this._tileCache.getTile(key);
+        if (tileObj) {
+          tileObj._abortRequest();
+          this._tiles.remove(tileObj.getMesh());
+        }
+        if (tileObj && tileObj.getMesh().type === 'composer') {
+          this.scene._engine.composerLayers = this.scene._engine.composerLayers.filter(obj => {
+            return obj.name !== tileObj.getMesh().name;
+          });
+        }
+        delete this.tileList[key];
       }
-      this._tileKeys = [].concat(this.tileList);
     }
+    if (this._tiles.children.length > Object.keys(this.tileList).length) {
+      this._tiles.children.forEach(tile => {
+        const key = tile.name;
+        if (!this.tileList[key]) {
+          this._tiles.remove(tile);
+        }
+      });
+    } // 移除 空的geom
+    this.scene._engine.update();
   }
+
+
   _removeTiles() {
     if (!this._tiles || !this._tiles.children) {
       return;
@@ -130,9 +329,51 @@ export default class TileLayer extends Layer {
       this._tiles.remove(this._tiles.children[i]);
     }
   }
+  _getPixelBounds() {
+    const viewPort = this.scene.getBounds().toBounds();
+    const NE = viewPort.getNorthEast();
+    const SW = viewPort.getSouthWest();
+    const zoom = Math.round(this.scene.getZoom()) - 1;
+    const center = this.scene.getCenter();
+    const NEPoint = this._crs.lngLatToPoint(toLngLat(NE.lng, NE.lat), zoom);
+    const SWPoint = this._crs.lngLatToPoint(toLngLat(SW.lng, SW.lat), zoom);
+    const centerPoint = this._crs.lngLatToPoint(toLngLat(center.lng, center.lat), zoom);
+    const topHeight = centerPoint.y - NEPoint.y;
+    const bottomHeight = SWPoint.y - centerPoint.y;
+    // 跨日界线的情况
+    let leftWidth;
+    let rightWidth;
+    if (center.lng - NE.lng > 0 || center.lng - SW.lng < 0) {
+      const width = Math.pow(2, zoom) * 256 / 360 * (180 - NE.lng) + Math.pow(2, zoom) * 256 / 360 * (SW.lng + 180);
+      if (center.lng - NE.lng > 0) { // 日界线在右侧
+        leftWidth = Math.pow(2, zoom) * 256 / 360 * (center.lng - NE.lng);
+        rightWidth = width - leftWidth;
+      } else {
+        rightWidth = Math.pow(2, zoom) * 256 / 360 * (SW.lng - center.lng);
+        leftWidth = width - rightWidth;
+      }
+    } else { // 不跨日界线
+      leftWidth = Math.pow(2, zoom) * 256 / 360 * (center.lng - SW.lng);
+      rightWidth = Math.pow(2, zoom) * 256 / 360 * (NE.lng - center.lng);
+    }
+    const pixelBounds = new Bounds(centerPoint.subtract(leftWidth, topHeight), centerPoint.add(rightWidth, bottomHeight));
+    return pixelBounds;
+  }
+  _pxBoundsToTileRange(pixelBounds) {
+    return new Bounds(
+      pixelBounds.min.divideBy(256).floor(),
+      pixelBounds.max.divideBy(256).ceil().subtract([ 1, 1 ])
+    );
+  }
+  _wrapCoords(coords) {
+    const wrapX = [ 0, Math.pow(2, coords[2]) ];
+    const newX = wrapNum(coords[0], wrapX);
+    return [ newX, coords[1], coords[2] ];
+  }
   _destroyTile(tile) {
     tile.destroy();
+    tile = null;
   }
-  desttroy() {
+  destroy() {
   }
 }

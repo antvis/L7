@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
+
+  <title>hexagon demo</title>
+  <style>
+  body {margin: 0;}
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+ <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [116.5909,39.9225 ],
+  pitch: 0,
+  hash:true,
+  zoom: 14,
+
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  const layer = scene.VectorTileLayer({
+    zIndex:0,
+    layerType:'point'
+  })
+  //.source('https://pre-lbs-show.taobao.com/gettile?x={x}&y={y}&z={z}&pipeId=pipe_vt_test')
+ 
+  // http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/point/{z}/{x}/{y}.pbf
+  // https://mvt.amap.com/district/CHN2/8/203/105/4096?key=
+  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/point2/{z}/{x}/{y}.pbf',{
+    parser:{
+      type: 'mvt',
+      sourceLayer:'layer',
+      //idField:'OBJECTID',   
+      maxZoom: 17,
+    }
+  })
+  .scale({
+    total:{
+      min:0,
+      max:1000000,
+      type:'log'
+    }
+  })
+  // cylinder
+  .shape('hexagon')
+  .size(2)
+  .active({fill:'red'})
+  .color('total',  ['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'].reverse())
+  //.color('#0D408C')
+  .style({
+    opacity:1.0
+  })
+  .render(
+  );
+  layer.on('mousemove',(feature)=>{
+   console.log(feature);
+  })
+   console.log(layer);
+  });
+//OBJECTID',(id)=>{
+    // const index = id % 8;
+     //return ['#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2'][index];
+  //}
+</script>
+</body>
+</html>
+
