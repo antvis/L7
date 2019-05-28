@@ -18,6 +18,13 @@ function addNext(out, normal, length) {
   out.push([[ normal[0], normal[1] ], length ]);
 }
 
+function lineSegmentDistance(end, start) {
+  const dx = start[0] - end[0];
+  const dy = start[1] - end[1];
+  const dz = start[2] - end[2];
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
 export default function(points, closed, indexOffset) {
   const lineA = [ 0, 0 ];
   const lineB = [ 0, 0 ];
@@ -33,7 +40,7 @@ export default function(points, closed, indexOffset) {
   const out = [];
   const attrPos = [];
   const attrIndex = [];
-  const attrCounters = [ 0, 0 ];
+  const attrDistance = [ 0, 0 ];
   if (closed) {
     points = points.slice();
     points.push(points[0]);
@@ -46,8 +53,7 @@ export default function(points, closed, indexOffset) {
     const last = points[i - 1];
     const cur = points[i];
     const next = i < points.length - 1 ? points[i + 1] : null;
-
-    attrCounters.push(i / total, i / total);
+    const d = lineSegmentDistance(cur, last) + attrDistance[attrDistance.length - 1];
 
     direction(lineA, cur, last);
 
@@ -68,6 +74,7 @@ export default function(points, closed, indexOffset) {
        // reset normal
       normal(_normal, lineA);
       extrusions(attrPos, out, cur, _normal, 1);
+      attrDistance.push(d, d);
       attrIndex.push(
         _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ] : [ index, index + 2, index + 3 ]);
 
@@ -84,7 +91,6 @@ export default function(points, closed, indexOffset) {
       const bevel = miterLen > miterLimit;
       if (bevel) {
         miterLen = miterLimit;
-        attrCounters.push(i / total);
 
         // next two points in our first segment
         addNext(out, _normal, -flip);
@@ -103,12 +109,14 @@ export default function(points, closed, indexOffset) {
 
         addNext(out, _normal, -flip);
         attrPos.push(cur);
+        attrDistance.push(d, d, d);
 
         // the miter is now the normal for our next join
         count += 3;
       } else {
         // next two points for our miter join
         extrusions(attrPos, out, cur, miter, miterLen);
+        attrDistance.push(d, d);
         attrIndex.push(_lastFlip === 1
           ? [ index + 1, index + 3, index + 2 ] : [ index, index + 2, index + 3 ]);
 
@@ -126,6 +134,6 @@ export default function(points, closed, indexOffset) {
     normals: out,
     attrIndex,
     attrPos,
-    attrCounters
+    attrDistance
   };
 }
