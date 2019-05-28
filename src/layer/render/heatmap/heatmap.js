@@ -1,24 +1,23 @@
 import HeatmapBuffer from '../../../geom/buffer/heatmap/heatmap';
 import { createColorRamp } from '../../../geom/buffer/heatmap/heatmap';
-import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMateial';
+import { HeatmapIntensityMaterial, HeatmapColorizeMaterial } from '../../../geom/material/heatmapMaterial';
 // import Renderpass from '../../../core/engine/renderpass.bak';
 import RenderPass from '../../../core/engine/render-pass';
 import ShaderPass from '../../../core/engine/shader-pass';
 import EffectComposer from '../../../core/engine/effect-composer';
 import * as THREE from '../../../core/three';
 
-export function drawHeatmap(layer) {
+export default function DrawHeatmap(layerdata, layer) {
 
   const colors = layer.get('styleOptions').rampColors;
 
   layer.rampColors = createColorRamp(colors);
-  const heatmap = new heatmapPass(layer);
+  const heatmap = new heatmapPass(layerdata, layer);
   const copy = new copyPass(layer);
   copy.renderToScreen = true;
   const composer = new EffectComposer(layer.scene._engine._renderer, layer.scene._container);
   composer.addPass(heatmap);
   composer.addPass(copy);
-  layer.add(composer);
   layer.scene._engine.update();
   layer._updateStyle = style => {
     if (style.rampColors) {
@@ -31,13 +30,14 @@ export function drawHeatmap(layer) {
     heatmap.scene.children[0].material.updateUninform(newOption);
     copy.scene.children[0].material.updateUninform(newOption);
   };
+  return composer;
 
 }
 
-function heatmapPass(layer) {
+function heatmapPass(layerdata, layer) {
   const scene = new THREE.Scene();
   const style = layer.get('styleOptions');
-  const data = layer.layerData;
+  const data = layerdata;
   const camera = layer.scene._engine._camera;
   // get attributes data
   const buffer = new HeatmapBuffer({

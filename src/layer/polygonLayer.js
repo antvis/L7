@@ -1,6 +1,5 @@
 import Layer from '../core/layer';
-import * as drawPolygon from './render/polygon';
-import PolygonBuffer from '../geom/buffer/polygon';
+import { getRender } from './render/';
 export default class PolygonLayer extends Layer {
   shape(type) {
     this.shape = type;
@@ -9,33 +8,13 @@ export default class PolygonLayer extends Layer {
   draw() {
     this.init();
     this.type = 'polygon';
-    this._buffer = new PolygonBuffer({
-      shape: this.shape,
-      layerData: this.layerData
-    });
-    this.add(this._getLayerRender());
+    const animateOptions = this.get('animateOptions');
+    if (animateOptions.enable) {
+      this.shape = 'animate';
+    }
+    this.add(getRender(this.type, this.shape)(this.layerData, this));
   }
   update() {
     this.updateFilter(this.layerMesh);
   }
-  _getLayerRender() {
-    const animateOptions = this.get('animateOptions');
-    const { attributes } = this._buffer;
-    const style = this.get('styleOptions');
-    const activeOption = this.get('activedOptions');
-    const config = {
-      ...style,
-      activeColor: activeOption.fill
-    };
-    if (this.shape === 'line') {
-      return drawPolygon.DrawLine(attributes, style);
-    } else if (animateOptions.enable) {
-      const { near, far } = this.map.getCameraState();
-      this.scene.startAnimate();
-      return drawPolygon.DrawAnimate(attributes, { ...style, near, far });
-    }
-    return drawPolygon.DrawFill(attributes, config);
-
-  }
-
 }
