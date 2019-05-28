@@ -83,7 +83,7 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
     colors.push(...color);
     pickingIds.push(id);
     sizes.push(size[0]);
-    point[2] = size[1];
+    point[2] = size[1] || 0;
     positions.push(...point);
 
     if (pointIndex === 0 || pointIndex === 1) {
@@ -109,7 +109,6 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
   attrDistance = attrDistance.map(d => {
     return d / totalLength;
   });
-
   return {
     positions,
     normal,
