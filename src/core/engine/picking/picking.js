@@ -3,13 +3,10 @@ import * as THREE from '../../three';
 let nextId = 1;
 
 class Picking {
-  constructor(world, renderer, camera, scene) {
+  constructor(world, renderer, camera) {
     this._world = world;
     this._renderer = renderer;
     this._camera = camera;
-    this._raycaster = new THREE.Raycaster();
-    this.scene = scene;
-    this._raycaster.linePrecision = 10;
     this._pickingScene = PickingScene;
     this.world = new THREE.Group();
     this._pickingScene.add(this.world);
@@ -49,12 +46,11 @@ class Picking {
     this._height = size.height;
     this._pickingTexture.setSize(this._width, this._height);
     this._pixelBuffer = new Uint8Array(4 * this._width * this._height);
-
     this._needUpdate = true;
   }
   _update(point) {
-
     const texture = this._pickingTexture;
+    // this._pickingTexture
     this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
@@ -76,9 +72,9 @@ class Picking {
 
     });
   }
-  _updateRender() {
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-  }
+  // _updateRender() {
+  //   this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+  // }
 
   _pick(point, normalisedPoint, layerId) {
     this._update(point);
@@ -124,8 +120,6 @@ class Picking {
     this._envents.forEach(event => {
       this._world._container.removeEventListener(event[0], event[1], false);
     });
-
-    this._world.off('move', this._onWorldMove);
 
     if (this._pickingScene.children) {
       // Remove everything else in the layer

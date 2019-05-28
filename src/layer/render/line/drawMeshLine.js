@@ -1,7 +1,16 @@
 import * as THREE from '../../../core/three';
+import { LineBuffer } from '../../../geom/buffer/index';
 import { MeshLineMaterial } from '../../../geom/material/lineMaterial';
-export default function DrawLine(attributes, cfg, layer) {
-  const { style, animateOptions, activeOption, zoom } = cfg;
+export default function DrawLine(layerData, layer) {
+
+  const style = layer.get('styleOptions');
+  const animateOptions = layer.get('animateOptions');
+  const activeOption = layer.get('activedOptions');
+  const { attributes } = new LineBuffer({
+    layerData,
+    shapeType: 'line',
+    style
+  });
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(attributes.indexArray);
   geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
@@ -15,7 +24,7 @@ export default function DrawLine(attributes, cfg, layer) {
 
   const lineMaterial = new MeshLineMaterial({
     u_opacity: style.opacity,
-    u_zoom: zoom,
+    u_zoom: layer.scene.getZoom(),
     u_time: 0,
     u_dash_offset: style.dashOffset,
     u_dash_ratio: style.dashRatio,
@@ -44,5 +53,5 @@ export default function DrawLine(attributes, cfg, layer) {
     });
     lineMaterial.setDefinesvalue('ANIMATE', true);
   }
-  layer.add(lineMesh);
+  return lineMesh;
 }

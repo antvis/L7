@@ -29,8 +29,7 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.get('./data/provincePoint.geojson', data => {
-   // data.features = data.features.slice(0,1);
+  $.get('./data/provincePoint.json', data => {
     scene.PointLayer({
       zIndex: 2
     })

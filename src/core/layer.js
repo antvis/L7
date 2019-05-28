@@ -11,6 +11,7 @@ import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
 import { getInteraction } from '../interaction/index';
 import Attr from '../attr/index';
 import diff from '../util/diff';
+import { updateObjecteUniform } from '../util/object3d-util';
 import Util from '../util';
 import Global from '../global';
 let id = 1;
@@ -97,8 +98,10 @@ export default class Layer extends Base {
     this._visibleWithZoom();
     object.onBeforeRender = () => { // 每次渲染前改变状态
       const zoom = this.scene.getZoom();
-      object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
-      object.material.setUniformsValue('u_zoom', zoom);
+      updateObjecteUniform(this._object3D, {
+        u_time: this.scene._engine.clock.getElapsedTime(),
+        u_zoom: zoom
+      });
       this.preRender();
     };
 
@@ -309,7 +312,7 @@ export default class Layer extends Base {
   }
 
   createScale(field) {
-    const data = this.layerSource.data.dataArray;
+    const data = this.layerSource ? this.layerSource.data.dataArray : null;
     const scales = this.get('scales');
     let scale = scales[field];
     const scaleController = this.get('scaleController');
@@ -370,17 +373,20 @@ export default class Layer extends Base {
 
   setActive(id, color) {
     this._activeIds = id;
-    this.layerMesh.material.setUniformsValue('u_activeId', id);
     if (!Array.isArray(color)) {
       color = ColorUtil.color2RGBA(color);
     }
-    this.layerMesh.material.setUniformsValue('u_activeColor', color);
+    updateObjecteUniform(this._object3D, {
+      u_activeColor: color,
+      u_activeId: id
+    });
+    this.scene._engine.update();
   }
 
   _addActiveFeature(e) {
     const { featureId } = e;
     this._activeIds = featureId;
-    this.layerMesh.material.setUniformsValue('u_activeId', featureId);
+    updateObjecteUniform(this._object3D, { u_activeId: featureId });
   }
 
 
@@ -404,7 +410,7 @@ export default class Layer extends Base {
     const nextAttrs = this.get('attrOptions');
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
-    if (preAttrs === undefined && preStyle === undefined) {
+    if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
       this._mapping();
       this._setPreOption();
       this._scaleByZoom();
@@ -487,15 +493,15 @@ export default class Layer extends Base {
     for (const key in option) {
       newOption['u_' + key] = option[key];
     }
-    this.layerMesh.material.updateUninform(newOption);
-
+    updateObjecteUniform(this._object3D, newOption);
   }
-  _mapping() {
+  _mapping(source) {
     const self = this;
     const attrs = self.get('attrs');
     const mappedData = [];
     // const data = this.layerSource.propertiesData;
-    const data = this.layerSource.data.dataArray;
+    let data;
+    source ? data = source.data.dataArray : data = this.layerSource.data.dataArray;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       const newRecord = {};
@@ -528,14 +534,16 @@ export default class Layer extends Base {
       });
     }
     this.layerData = mappedData;
+    return mappedData;
   }
 
   // 更新地图映射
-  _updateMaping() {
+  _updateMaping(source, layer) {
     const self = this;
     const attrs = self.get('attrs');
 
-    const data = this.layerSource.data.dataArray;
+    const data = source ? source.data.dataArray : this.layerSource.data.dataArray;
+    const layerData = layer || this.layerData;
     for (let i = 0; i < data.length; i++) {
       const record = data[i];
       for (const attrName in attrs) {
@@ -547,10 +555,10 @@ export default class Layer extends Base {
             for (let j = 0; j < values.length; j++) {
               const val = values[j];
               const name = names[j];
-              this.layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
+              layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
             }
           } else {
-            this.layerData[i][names[0]] = values.length === 1 ? values[0] : values;
+            layerData[i][names[0]] = values.length === 1 ? values[0] : values;
 
           }
           attr.neadUpdate = true;
@@ -603,10 +611,9 @@ export default class Layer extends Base {
     pickmaterial.fragmentShader = pickingFragmentShader;
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = this.layerId;
-    pickmaterial.setDefinesvalue(this.type, true);
     pickingMesh.onBeforeRender = () => {
       const zoom = this.scene.getZoom();
-      pickingMesh.material.setUniformsValue('u_zoom', zoom);
+      updateObjecteUniform(pickingMesh, { u_zoom: zoom });
     };
     this._pickingMesh.add(pickingMesh);
 
@@ -618,9 +625,10 @@ export default class Layer extends Base {
         type = 'mouseleave';
       }
       this._activeIds = featureId;
-      const feature = this.layerSource.getSelectFeature(featureId);
+      // TODO 瓦片图层获取选中数据信息
       const lnglat = this.scene.containerToLngLat(point2d);
-      const style = this.layerData[featureId - 1];
+      const { feature, style } = this.getSelectFeature(featureId, lnglat);
+      // const style = this.layerData[featureId - 1];
       const target = {
         featureId,
         feature,
@@ -629,11 +637,19 @@ export default class Layer extends Base {
         type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
-      if (featureId >= 0 || this._activeIds !== null) { // 拾取到元素，或者离开元素
+      if (featureId >= 0 || this._activeIds >= 0) { // 拾取到元素，或者离开元素
         this.emit(type, target);
       }
 
     });
+  }
+  getSelectFeature(featureId) {
+    const feature = this.layerSource.getSelectFeature(featureId);
+    const style = this.layerData[featureId - 1];
+    return {
+      feature,
+      style
+    };
   }
   /**
    *  用于过滤数据
@@ -668,6 +684,7 @@ export default class Layer extends Base {
     pickAttr.needsUpdate = true;
   }
   _visibleWithZoom() {
+    if (this._object3D === null) return;
     const zoom = this.scene.getZoom();
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
@@ -734,13 +751,16 @@ export default class Layer extends Base {
     }
     interactions[type] = interaction;
   }
+  styleCfg() {
+
+  }
 
   /**
    * 重置高亮要素
    */
   _resetStyle() {
     this._activeIds = null;
-    this.layerMesh.material.setUniformsValue('u_activeId', 0);
+    updateObjecteUniform(this._object3D, { u_activeId: 0 });
   }
   /**
    * 销毁Layer对象
@@ -751,7 +771,6 @@ export default class Layer extends Base {
     this.clearMapEvent();
     if (this._object3D.type === 'composer') {
       this.remove(this._object3D);
-
       return;
     }
     if (this._object3D && this._object3D.children) {
@@ -778,8 +797,19 @@ export default class Layer extends Base {
         child = null;
       }
     }
+    this.layerMesh.geometry = null;
+    this.layerMesh.material.dispose();
+    this.layerMesh.material = null;
+    if (this._pickingMesh) {
+      this._pickingMesh.children[0].geometry = null;
+      this._pickingMesh.children[0].material.dispose();
+      this._pickingMesh.children[0].material = null;
+    }
+    this._buffer = null;
     this._object3D = null;
     this.scene._engine._scene.remove(this._object3D);
+    this.layerData.length = 0;
+    this.layerSource = null;
     this.scene._engine._picking.remove(this._pickingMesh);
     this.destroyed = true;
   }
