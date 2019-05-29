@@ -22,12 +22,14 @@ import DrawPointImage from './point/drawImage';
 import DrawPointNormal from './point/drawNormal';
 import DrawPointStroke from './point/drawStroke';
 import DrawPointText from './point/drawText';
+import DrawPointCircle from './point/drawCircle';
 
 registerRender('point', 'fill', DrawPointFill);
 registerRender('point', 'image', DrawPointImage);
 registerRender('point', 'normal', DrawPointNormal);
 registerRender('point', 'stroke', DrawPointStroke);
 registerRender('point', 'text', DrawPointText);
+registerRender('point', 'circle', DrawPointCircle);
 
 // heatmap
 
