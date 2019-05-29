@@ -28,6 +28,11 @@ export default class PointLayer extends Layer {
         break;
       }
     }
+
+    // 2D circle 特殊处理
+    if (shape === 'circle') {
+      return 'circle';
+    }
     if (
       pointShape['2d'].indexOf(shape) !== -1 ||
       pointShape['3d'].indexOf(shape) !== -1
