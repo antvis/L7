@@ -77,27 +77,17 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
   const colors = [];
   const dashArray = [];
 
-  const { normals, attrIndex, attrPos } = getNormals(path, false, positionsIndex);
+  const { normals, attrIndex, attrPos, attrDistance } = getNormals(path, false, positionsIndex);
 
-  let attrDistance = [];
   const sizes = [];
   let { size, color, id } = props;
   !Array.isArray(size) && (size = [ size ]);
-  attrPos.forEach((point, pointIndex) => {
+  attrPos.forEach(point => {
     colors.push(...color);
     pickingIds.push(id);
     sizes.push(size[0]);
     point[2] = size[1] || 0;
     positions.push(...point);
-
-    if (pointIndex === 0 || pointIndex === 1) {
-      attrDistance.push(0);
-    } else if (pointIndex % 2 === 0) {
-      attrDistance.push(attrDistance[pointIndex - 2]
-        + lineSegmentDistance(attrPos[pointIndex - 2], attrPos[pointIndex]));
-    } else {
-      attrDistance.push(attrDistance[pointIndex - 1]);
-    }
   });
 
   const totalLength = attrDistance[attrDistance.length - 1];
@@ -110,9 +100,6 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
     dashArray.push(ratio);
   });
 
-  attrDistance = attrDistance.map(d => {
-    return d / totalLength;
-  });
   return {
     positions,
     normal,
@@ -121,14 +108,10 @@ export function Line(path, props, positionsIndex, lengthPerDashSegment = 200) {
     colors,
     sizes,
     pickingIds,
-    attrDistance,
+    attrDistance: attrDistance.map(d => {
+      return d / totalLength;
+    }),
     dashArray
   };
+}
 
-}
-function lineSegmentDistance(end, start) {
-  const dx = start[0] - end[0];
-  const dy = start[1] - end[1];
-  const dz = start[2] - end[2];
-  return Math.sqrt(dx * dx + dy * dy + dz * dz);
-}
