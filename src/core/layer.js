@@ -7,9 +7,6 @@ import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
 import Controller from './controller/index';
 import source from './source';
-import pickingFragmentShader from '../core/engine/picking/picking_frag.glsl';
-import { getInteraction } from '../interaction/index';
-import Attr from '../attr/index';
 import diff from '../util/diff';
 import { updateObjecteUniform } from '../util/object3d-util';
 import Util from '../util';
@@ -24,7 +21,6 @@ function parseFields(field) {
   }
   return [ field ];
 }
-
 export default class Layer extends Base {
   getDefaultCfg() {
     return {
@@ -110,7 +106,8 @@ export default class Layer extends Base {
     };
     this._object3D.add(object);
     if (type === 'fill') {
-      this._addPickMesh(object);// 不对边界线进行拾取
+      this.get('pickingController').addPickMesh(object);
+      // this._addPickMesh(object);// 不对边界线进行拾取
     }
     setTimeout(() => this.scene._engine.update(), 500);
   }
@@ -302,26 +299,14 @@ export default class Layer extends Base {
     this._setAttrOptions(attrName, attrCfg);
   }
   _initControllers() {
-    const scales = this.get('scaleOptions');
-    const scaleController = new Controller.Scale({
-      defs: {
-        ...scales
-      }
-    });
-    this.set('scaleController', scaleController);
+    const mappingCtr = new Controller.Mapping({ layer: this });
+    const pickCtr = new Controller.Picking({ layer: this });
+    const interactionCtr = new Controller.Interaction({ layer: this });
+    this.set('mappingController', mappingCtr);
+    this.set('pickingController', pickCtr);
+    this.set('interacionController', interactionCtr);
   }
 
-  createScale(field) {
-    const data = this.layerSource ? this.layerSource.data.dataArray : null;
-    const scales = this.get('scales');
-    let scale = scales[field];
-    const scaleController = this.get('scaleController');
-    if (!scale) {
-      scale = scaleController.createScale(field, data);
-      scales[field] = scale;
-    }
-    return scale;
-  }
   render() {
     this.init();
     this.scene._engine.update();
@@ -331,19 +316,19 @@ export default class Layer extends Base {
   repaint() {
     this.set('scales', {});
     this._initControllers();
-    this._initAttrs();
-    this._mapping();
+    // this._initAttrs();
+    // this._mapping();
     this.redraw();
   }
   // 初始化图层
   init() {
     this._initControllers();
-    this._initAttrs();
+    // this._initAttrs();
     this._updateDraw();
   }
   _initInteraction() {
     if (this.get('allowActive')) {
-      this.interaction('active');
+      this.get('interacionController').addInteraction('active');
     }
   }
   _initMapEvent() {
@@ -389,16 +374,6 @@ export default class Layer extends Base {
     updateObjecteUniform(this._object3D, { u_activeId: featureId });
   }
 
-
-  _initAttrs() {
-    // 对比 options变化判断如何更新
-    const attrOptions = this.get('attrOptions');
-    for (const type in attrOptions) {
-      if (attrOptions.hasOwnProperty(type)) {
-        this._updateAttr(type);
-      }
-    }
-  }
   _setPreOption() {
     const nextAttrs = this.get('attrOptions');
     const nextStyle = this.get('styleOptions');
@@ -411,7 +386,7 @@ export default class Layer extends Base {
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
-      this._mapping();
+      // this._mapping();
       this._setPreOption();
       this._scaleByZoom();
       this._initInteraction();
@@ -449,28 +424,6 @@ export default class Layer extends Base {
     this._setPreOption();
   }
 
-  _updateAttr(type) {
-    const self = this;
-    const attrs = this.get('attrs');
-    const attrOptions = this.get('attrOptions');
-    const option = attrOptions[type];
-    option.neadUpdate = true;
-    const className = Util.upperFirst(type);
-    const fields = parseFields(option.field);
-    const scales = [];
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      const scale = self._createScale(field);
-
-      if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
-        option.values = Global.colors;
-      }
-      scales.push(scale);
-    }
-    option.scales = scales;
-    const attr = new Attr[className](option);
-    attrs[type] = attr;
-  }
   _updateSize(zoom) {
     const sizeOption = this.get('attrOptions').size;
     const fields = parseFields(sizeOption.field);
@@ -495,96 +448,6 @@ export default class Layer extends Base {
     }
     updateObjecteUniform(this._object3D, newOption);
   }
-  _mapping(source) {
-    const self = this;
-    const attrs = self.get('attrs');
-    const mappedData = [];
-    // const data = this.layerSource.propertiesData;
-    let data;
-    source ? data = source.data.dataArray : data = this.layerSource.data.dataArray;
-    for (let i = 0; i < data.length; i++) {
-      const record = data[i];
-      const newRecord = {};
-
-      newRecord.id = data[i]._id;
-      for (const k in attrs) {
-        if (attrs.hasOwnProperty(k)) {
-          const attr = attrs[k];
-          const names = attr.names;
-          const values = self._getAttrValues(attr, record);
-          if (names.length > 1) { // position 之类的生成多个字段的属性
-            for (let j = 0; j < values.length; j++) {
-              const val = values[j];
-              const name = names[j];
-              newRecord[name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-            }
-          } else {
-            newRecord[names[0]] = values.length === 1 ? values[0] : values;
-
-          }
-        }
-      }
-      newRecord.coordinates = record.coordinates;
-      mappedData.push(newRecord);
-    }
-    // 通过透明度过滤数据
-    if (attrs.hasOwnProperty('filter')) {
-      mappedData.forEach(item => {
-        item.filter === false && (item.color[3] = 0);
-      });
-    }
-    this.layerData = mappedData;
-    return mappedData;
-  }
-
-  // 更新地图映射
-  _updateMaping(source, layer) {
-    const self = this;
-    const attrs = self.get('attrs');
-
-    const data = source ? source.data.dataArray : this.layerSource.data.dataArray;
-    const layerData = layer || this.layerData;
-    for (let i = 0; i < data.length; i++) {
-      const record = data[i];
-      for (const attrName in attrs) {
-        if (attrs.hasOwnProperty(attrName) && attrs[attrName].neadUpdate) {
-          const attr = attrs[attrName];
-          const names = attr.names;
-          const values = self._getAttrValues(attr, record);
-          if (names.length > 1) { // position 之类的生成多个字段的属性
-            for (let j = 0; j < values.length; j++) {
-              const val = values[j];
-              const name = names[j];
-              layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-            }
-          } else {
-            layerData[i][names[0]] = values.length === 1 ? values[0] : values;
-
-          }
-          attr.neadUpdate = true;
-        }
-      }
-    }
-  }
-
-  // 获取属性映射的值
-  _getAttrValues(attr, record) {
-    const scales = attr.scales;
-    const params = [];
-    for (let i = 0; i < scales.length; i++) {
-      const scale = scales[i];
-      const field = scale.field;
-      if (scale.type === 'identity') {
-        params.push(scale.value);
-      } else {
-        params.push(record[field]);
-      }
-    }
-    const indexZoom = params.indexOf('zoom');
-    indexZoom !== -1 ? params[indexZoom] = attr.zoom : null;
-    const values = attr.mapping(...params);
-    return values;
-  }
   _scaleByZoom() {
     if (this._zoomScale) {
       this.map.on('zoomend', () => {
@@ -594,30 +457,6 @@ export default class Layer extends Base {
     }
   }
 
-  getPickingId() {
-    return this.scene._engine._picking.getNextId();
-  }
-  addToPicking(object) {
-    this.scene._engine._picking.add(object);
-  }
-  removeFromPicking(object) {
-    this.scene._engine._picking.remove(object);
-  }
-  _addPickMesh(mesh) {
-    this._pickingMesh = new THREE.Object3D();
-    this._pickingMesh.name = this.layerId;
-    this.addToPicking(this._pickingMesh);
-    const pickmaterial = mesh.material.clone();
-    pickmaterial.fragmentShader = pickingFragmentShader;
-    const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
-    pickingMesh.name = this.layerId;
-    pickingMesh.onBeforeRender = () => {
-      const zoom = this.scene.getZoom();
-      updateObjecteUniform(pickingMesh, { u_zoom: zoom });
-    };
-    this._pickingMesh.add(pickingMesh);
-
-  }
   _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
@@ -656,7 +495,7 @@ export default class Layer extends Base {
    * @param {*} object  更新颜色和数据过滤
    */
   _updateAttributes(object) {
-    this._updateMaping();
+    this.get('mappingController').update();
     const filterData = this.layerData;
     this._activeIds = null; // 清空选中元素
     const colorAttr = object.geometry.attributes.a_color;
@@ -720,37 +559,6 @@ export default class Layer extends Base {
 
   }
 
-  // interaction 方法
-  clearAllInteractions() {
-    const interactions = this.get('interactions');
-    Util.each(interactions, (interaction, key) => {
-      interaction.destory();
-      delete interactions[key];
-    });
-    return this;
-  }
-  clearInteraction(type) {
-    const interactions = this.get('interactions');
-    if (interactions[type]) {
-      interactions[type].destory();
-      delete interactions[type];
-    }
-    return this;
-  }
-  interaction(type, cfg = {}) {
-    cfg.layer = this;
-    const Ctor = getInteraction(type);
-    const interaction = new Ctor(cfg);
-    this._setInteraction(type, interaction);
-    return this;
-  }
-  _setInteraction(type, interaction) {
-    const interactions = this.get('interactions');
-    if (interactions[type]) {
-      interactions[type].destory();
-    }
-    interactions[type] = interaction;
-  }
   styleCfg() {
 
   }
