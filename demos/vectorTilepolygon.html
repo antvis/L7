@@ -52,8 +52,9 @@ scene.on('loaded', () => {
       maxZoom: 17,
     }
   })
-  //.scale()
-  // cylinder
+  .filter('province',name =>{
+    return name =='山东省'
+  })
   .shape('fill')
   .size(2)
   .active({fill:'red'})
