@@ -1,10 +1,10 @@
 import Layer from '../../core/layer';
 import source from '../../core/source';
 import * as THREE from '../../core/three';
+import Controller from '../../core/controller/index';
 import Global from '../../global';
 const { pointShape } = Global;
 import TileCache from './tileCache';
-import pickingFragmentShader from '../../core/engine/picking/picking_frag.glsl';
 import { throttle, deepMix } from '@antv/util';
 import { toLngLat, Bounds, Point } from '@antv/geo-coord';
 import { wrapNum } from '@antv/geo-coord/lib/util/index';
@@ -18,9 +18,9 @@ export default class TileLayer extends Layer {
     this._tileCache = new TileCache(100, this._destroyTile);
     this._crs = epsg3857;
     this._tiles = new THREE.Object3D();
-    this._pickTiles = new THREE.Object3D();
-    this._pickTiles.name = this.layerId;
-    this.scene._engine._picking.add(this._pickTiles);
+    // this._pickTiles = new THREE.Object3D();
+    // this._pickTiles.name = this.layerId;
+    // this.scene._engine._picking.add(this._pickTiles);
     this._tiles.frustumCulled = false;
     this._tileKeys = [];
     this.tileList = {};
@@ -50,8 +50,14 @@ export default class TileLayer extends Layer {
     deepMix(tileSourceCfg, this.sourceCfg, cfg);
     return new source(tileSourceCfg);
   }
+  _initControllers() {
+    const pickCtr = new Controller.Picking({ layer: this });
+    const interactionCtr = new Controller.Interaction({ layer: this });
+    this.set('pickingController', pickCtr);
+    this.set('interacionController', interactionCtr);
+  }
   render() {
-    // this._initControllers();
+    this._initControllers();
     this._initMapEvent();
     // this._initAttrs();
     this._initInteraction();
@@ -84,6 +90,13 @@ export default class TileLayer extends Layer {
      * 需要显示 current
      * 是否保留 retain
      */
+    const minZoom = this.get('minZoom');
+    const maxZoom = this.get('maxZoom');
+    const currentZoom = this.scene.getZoom();
+    if (currentZoom < minZoom || currentZoom > maxZoom) {
+      this._removeOutTiles();
+      return;
+    }
     this.updateTileList = [];
     const zoom = Math.round(this.scene.getZoom()) - 1;
     const center = this.scene.getCenter();
@@ -207,17 +220,9 @@ export default class TileLayer extends Layer {
     }
   }
   _addPickTile(meshobj) {
+    const pickCtr = this.get('pickingController');
     const mesh = meshobj.children[0];
-    const pickmaterial = mesh.material.clone();
-    pickmaterial.fragmentShader = pickingFragmentShader;
-    const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
-    pickingMesh.name = this.layerId;
-    pickingMesh.onBeforeRender = () => {
-      const zoom = this.scene.getZoom();
-      pickingMesh.material.setUniformsValue('u_zoom', zoom);
-    };
-    this._pickTiles.add(pickingMesh);
-
+    pickCtr.addPickMesh(mesh);
   }
   // 根据距离优先级查找
   getSelectFeature(id, lnglat) {
@@ -373,6 +378,10 @@ export default class TileLayer extends Layer {
   _destroyTile(tile) {
     tile.destroy();
     tile = null;
+  }
+  _updateAttributes() {
+      // 更新mapping
+      // 更新attribute
   }
   destroy() {
   }
