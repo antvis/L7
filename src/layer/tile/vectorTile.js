@@ -32,17 +32,18 @@ export default class VectorTile extends Tile {
     });
   }
   _creatSource(data) {
-    this.source = this.layer.tileSource(data, {
+    this.layerSource = this.layer.tileSource(data, {
       parser: {
         tile: this._tile
       }
     });
   }
   _createMesh() {
+    const layerData = this.layerData;
     if (this.layer.get('layerType') === 'point') {
-      this.layer.shape = this.layer._getShape(this.layerData);
+      this.layer.shape = this.layer._getShape(layerData);
     }
-    this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(this.layerData, this.layer);
+    this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(layerData, this.layer);
     if (this.mesh.type !== 'composer') { // 热力图的情况
       this.mesh.onBeforeRender = renderer => {
         this._renderMask(renderer);
@@ -114,9 +115,9 @@ export default class VectorTile extends Tile {
     this.xhrRequest.abort();
   }
   getSelectFeature(id) {
-    const featureIndex = this.source.originData.featureKeys[id];
+    const featureIndex = this.layerSource.originData.featureKeys[id];
     if (featureIndex) {
-      return this.source.originData.dataArray[featureIndex];
+      return this.layerSource.originData.dataArray[featureIndex];
     }
     return null;
   }
@@ -126,7 +127,7 @@ export default class VectorTile extends Tile {
     this._object3D = null;
     this.maskScene = null;
     this.layerData = null;
-    this.source.destroy();
-    this.source = null;
+    this.layerSource.destroy();
+    this.layerSource = null;
   }
 }
