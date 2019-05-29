@@ -6,6 +6,8 @@ import grid_frag from '../shader/grid_frag.glsl';
 import grid_vert from '../shader/grid_vert.glsl';
 import hexagon_frag from '../shader/hexagon_frag.glsl';
 import hexagon_vert from '../shader/hexagon_vert.glsl';
+import circle_frag from './circle_frag.glsl';
+import circle_vert from './circle_vert.glsl';
 
 // 点的边线
 import point_line_frag from '../shader/point_meshLine_frag.glsl';
@@ -53,6 +55,7 @@ export function compileBuiltinModules() {
   registerModule('point', { vs: point_vert, fs: point_frag });
   registerModule('common', { vs: common, fs: common });
   registerModule('pick_color', { vs: pick_color, fs: pick_color });
+  registerModule('circle', { vs: circle_vert, fs: circle_frag });
   registerModule('polygon', { vs: polygon_vert, fs: polygon_frag });
   registerModule('grid', { vs: grid_vert, fs: grid_frag });
   registerModule('hexagon', { vs: hexagon_vert, fs: hexagon_frag });
