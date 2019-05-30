@@ -17,20 +17,20 @@ void main() {
   // unpack picking_id
   float picking_id = a_packed_data.w;
 
-  // unpack data(radius(8-bit), extrude(4-bit))
+  // unpack data(extrude(4-bit), radius(16-bit))
   float compressed = a_packed_data.z;
 
   // extrude(4-bit)
   vec2 extrude;
-  extrude.y = floor(compressed * SHIFT_RIGHT10);
-  compressed -= extrude.y * SHIFT_LEFT10;
-  extrude.y = extrude.y - 1.;
-
-  extrude.x = floor(compressed * SHIFT_RIGHT8);
-  compressed -= extrude.x * SHIFT_LEFT8;
+  extrude.x = floor(compressed * SHIFT_RIGHT20);
+  compressed -= extrude.x * SHIFT_LEFT20;
   extrude.x = extrude.x - 1.;
 
-  // radius(8-bit)
+  extrude.y = floor(compressed * SHIFT_RIGHT18);
+  compressed -= extrude.y * SHIFT_LEFT18;
+  extrude.y = extrude.y - 1.;
+
+  // radius(16-bit)
   float radius = compressed;
   v_radius = radius;
 
