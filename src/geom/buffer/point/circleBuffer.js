@@ -1,10 +1,7 @@
 import { packUint8ToFloat } from '../../../util/vertex-compress';
 
-// const LEFT_SHIFT2 = 4.0;
-// const LEFT_SHIFT4 = 16.0;
-const LEFT_SHIFT8 = 256.0;
-const LEFT_SHIFT10 = 1024.0;
-// const LEFT_SHIFT12 = 4096.0;
+const LEFT_SHIFT18 = 262144.0;
+const LEFT_SHIFT20 = 1048576.0;
 
 export default function circleBuffer(layerData) {
   const index = [];
@@ -29,14 +26,15 @@ export default function circleBuffer(layerData) {
       [ 1, 1 ],
       [ -1, 1 ]
     ].forEach(extrude => {
-      // vec4(color, color, (8-bit size, 4-bit extrude), id)
+      // vec4(color, color, (4-bit extrude, 16-bit size), id)
       aPackedData.push(
         ...packedColor,
-        size + (extrude[0] + 1) * LEFT_SHIFT8 + (extrude[1] + 1) * LEFT_SHIFT10,
+        (extrude[0] + 1) * LEFT_SHIFT20 + (extrude[1] + 1) * LEFT_SHIFT18 + size,
         id
       );
     });
 
+    // TODO：如果使用相对瓦片坐标，还可以进一步压缩
     aPosition.push(...coordinates, ...coordinates, ...coordinates, ...coordinates);
     index.push(...[ 0, 1, 2, 0, 2, 3 ].map(n => n + i * 4));
   });
