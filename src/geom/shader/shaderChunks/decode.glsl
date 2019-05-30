@@ -1,11 +1,7 @@
-#define SHIFT_RIGHT2 0.25
-#define SHIFT_RIGHT4 0.0625
-#define SHIFT_RIGHT8 1.0 / 256.0
-#define SHIFT_RIGHT10 1.0 / 1024.0
-#define SHIFT_LEFT2 4.0
-#define SHIFT_LEFT4 16.0
-#define SHIFT_LEFT8 256.0
-#define SHIFT_LEFT10 1024.0
+#define SHIFT_RIGHT18 1.0 / 262144.0
+#define SHIFT_RIGHT20 1.0 / 1048576.0
+#define SHIFT_LEFT18 262144.0
+#define SHIFT_LEFT20 1048576.0
 
 vec2 unpack_float(const float packedValue) {
   int packedIntValue = int(packedValue);
