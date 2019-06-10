@@ -56,6 +56,7 @@ void main() {
      v_color = u_activeColor;
    }
   gl_Position =  matModelViewProjection * vec4(newposition, 1.0);
+  // gl_Position.z +=1.0 * gl_Position.w;
   
 
 }

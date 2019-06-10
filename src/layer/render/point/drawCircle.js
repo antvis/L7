@@ -9,14 +9,11 @@ export default function drawCircle(layerData, layer) {
   const style = layer.get('styleOptions');
   const activeOption = layer.get('activedOptions');
 
-  const { aColor, aExtrude, aPickingId, aPosition, index, aRadius } = PointBuffer.CircleBuffer(layerData, style);
+  const { aPosition, aPackedData, index } = PointBuffer.CircleBuffer(layerData, style);
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(index);
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(aPosition, 3));
-  geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(aColor, 4));
-  geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(aPickingId, 1));
-  geometry.addAttribute('a_shape', new THREE.Float32BufferAttribute(aExtrude, 2));
-  geometry.addAttribute('a_radius', new THREE.Float32BufferAttribute(aRadius, 1));
+  geometry.addAttribute('a_packed_data', new THREE.Float32BufferAttribute(aPackedData, 4));
 
   const material = new CircleMaterial({
     u_opacity: style.opacity,
@@ -28,5 +25,8 @@ export default function drawCircle(layerData, layer) {
   });
   material.depthTest = false;
   const fillMesh = new THREE.Mesh(geometry, material);
+  aPosition.length = 0;
+  aPackedData.length = 0;
+  index.length = 0;
   return fillMesh;
 }
