@@ -9,10 +9,14 @@ export default class LRUCache {
   constructor(limit = 50, destroy = () => {}) {
     this.limit = limit;
     this.destroy = destroy;
+    this._order = [];
     this.clear();
   }
 
   clear() {
+    this._order.forEach(key => {
+      this.delete(key);
+    });
     this._cache = {};
     // access/update order, first item is oldest, last item is newest
     this._order = [];

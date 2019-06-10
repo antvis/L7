@@ -21,7 +21,9 @@ export default class Tile extends Base {
     this._center = this._tileBounds.getCenter();
 
     this._centerLnglat = this._tileLnglatBounds.getCenter();
-    this._object3D = new THREE.Object3D();
+    this._object3D = new THREE.Object3D({ name: key });
+    this._object3D.frustumCulled = false;
+    // this._object3D.name = key;
     this._object3D.onBeforeRender = () => {
     };
     this._isLoaded = false;
@@ -29,14 +31,28 @@ export default class Tile extends Base {
   }
   _init(data) {
     this._creatSource(data);
+    if (this.layerSource.data === null) {
+      return;
+    }
+    this._initControllers();
+    this._createMesh();
+  }
+  repaint() {
     this._initControllers();
     this._createMesh();
   }
   _initControllers() {
-    this.mapping = new Controller.Mapping({
+    const mappingCtr = new Controller.Mapping({
       layer: this.layer,
       mesh: this
     });
+    const bufferCtr = new Controller.Buffer({
+      layer: this.layer,
+      mesh: this
+    });
+    this.set('mappingController', mappingCtr);
+    this.set('bufferController', bufferCtr);
+
   }
   _createMesh() {}
   _getTileURL(urlParams) {
@@ -98,10 +114,16 @@ export default class Tile extends Base {
 
     return false;
   }
-  _preRender() {
+  updateColor() {
+    const bufferCtr = this.get('bufferController');
+    this.get('mappingController').update();
+    bufferCtr._updateColorAttributes(this.getMesh().children[0]);
   }
-  repaint() {
-
+  updateStyle() {
+    const bufferCtr = this.get('bufferController');
+    bufferCtr._updateStyle(this.getMesh().children[0]);
+  }
+  _preRender() {
   }
   destroy() {
     super.destroy();
