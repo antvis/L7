@@ -29,15 +29,11 @@ export default class PointLayer extends Layer {
       }
     }
 
-    // 2D circle 特殊处理
-    if (shape === 'circle') {
-      return 'circle';
-    }
     if (
       pointShape['2d'].indexOf(shape) !== -1 ||
       pointShape['3d'].indexOf(shape) !== -1
     ) {
-      return 'fill';
+      return shape === 'circle' ? 'circle' : 'fill';
     } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
       return 'image';
     }
@@ -45,11 +41,15 @@ export default class PointLayer extends Layer {
   }
   zoomchange(ev) {
     super.zoomchange(ev);
-    this._updateData();
+    requestAnimationFrame(() => {
+      this._updateData();
+    });
   }
   dragend(ev) {
     super.dragend(ev);
-    this._updateData();
+    requestAnimationFrame(() => {
+      this._updateData();
+    });
 
   }
   _updateData() {

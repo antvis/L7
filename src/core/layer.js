@@ -107,7 +107,6 @@ export default class Layer extends Base {
     this._object3D.add(object);
     if (type === 'fill') {
       this.get('pickingController').addPickMesh(object);
-      // this._addPickMesh(object);// 不对边界线进行拾取
     }
     setTimeout(() => this.scene._engine.update(), 500);
   }
@@ -315,7 +314,8 @@ export default class Layer extends Base {
   // 重绘 度量， 映射，顶点构建
   repaint() {
     this.set('scales', {});
-    this._initControllers();
+    const mappingCtr = new Controller.Mapping({ layer: this });
+    this.set('mappingController', mappingCtr);
     // this._initAttrs();
     // this._mapping();
     this.redraw();
@@ -467,7 +467,6 @@ export default class Layer extends Base {
       // TODO 瓦片图层获取选中数据信息
       const lnglat = this.scene.containerToLngLat(point2d);
       const { feature, style } = this.getSelectFeature(featureId, lnglat);
-      // const style = this.layerData[featureId - 1];
       const target = {
         featureId,
         feature,
@@ -533,7 +532,7 @@ export default class Layer extends Base {
       offset = 5;
       this.shapeType = 'text' && (offset = 10);
 
-    } else if (this.type === 'polyline') {
+    } else if (this.type === 'polyline' || this.type === 'line') {
       offset = 2;
     } else if (this.type === 'polygon') {
       offset = 1;
@@ -551,7 +550,7 @@ export default class Layer extends Base {
     this._object3D.children.forEach(child => {
       this._object3D.remove(child);
     });
-    this.removeFromPicking(this._pickingMesh);
+    this.get('pickingController').removeAllMesh();
     this.draw();
   }
   // 更新mesh
