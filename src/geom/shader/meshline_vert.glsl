@@ -33,6 +33,7 @@ void main() {
   float extrude_scale = pow(2.0, 20.0 - u_zoom);
   vec3 offset = vec3(normal * a_size * extrude_scale / 2.0 * a_miter);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xy + offset.xy, 0., 1.0);
+  // gl_Position.z -=0.8 * gl_Position.w;
 
   #ifdef ANIMATE
     float alpha =1.0 - fract( mod(1.0- a_distance,u_interval)* (1.0/u_interval) + u_time / u_duration);
