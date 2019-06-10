@@ -1,11 +1,13 @@
 import Layer from '../../core/layer';
+import Util from '../../util';
+import diff from '../../util/diff';
 import source from '../../core/source';
 import * as THREE from '../../core/three';
 import Controller from '../../core/controller/index';
 import Global from '../../global';
 const { pointShape } = Global;
 import TileCache from './tileCache';
-import { throttle, deepMix } from '@antv/util';
+import { deepMix } from '@antv/util';
 import { toLngLat, Bounds, Point } from '@antv/geo-coord';
 import { wrapNum } from '@antv/geo-coord/lib/util/index';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
@@ -13,17 +15,17 @@ export default class TileLayer extends Layer {
   constructor(scene, cfg) {
     super(scene, {
       ...cfg,
+      minSourceZoom: 0,
+      maxSOurceZoom: 18,
       keepBuffer: 2
     });
-    this._tileCache = new TileCache(100, this._destroyTile);
+    this._tileCache = new TileCache(50, this._destroyTile);
     this._crs = epsg3857;
     this._tiles = new THREE.Object3D();
-    // this._pickTiles = new THREE.Object3D();
-    // this._pickTiles.name = this.layerId;
-    // this.scene._engine._picking.add(this._pickTiles);
     this._tiles.frustumCulled = false;
     this._tileKeys = [];
     this.tileList = {};
+    this.type = this.get('layerType');
   }
   shape(field, values) {
     const layerType = this.get('layerType');
@@ -37,6 +39,8 @@ export default class TileLayer extends Layer {
     this.url = url;
     this.sourceCfg = cfg;
     this.sourceCfg.mapType = this.scene.mapType;
+    this.set('minSourceZoom', this.sourceCfg.parser && this.sourceCfg.parser.minZoom || 0);
+    this.set('maxSourceZoom', this.sourceCfg.parser && this.sourceCfg.parser.maxZoom || 18);
     return this;
   }
   tileSource(data, cfg) {
@@ -57,31 +61,39 @@ export default class TileLayer extends Layer {
     this.set('interacionController', interactionCtr);
   }
   render() {
-    this._initControllers();
-    this._initMapEvent();
-    // this._initAttrs();
-    this._initInteraction();
-    this.draw();
+
+    if (this.type !== 'image') {
+      this._initControllers();
+    }
+    this._visibleWithZoom();
+    this._updateDraw();
+    this.scene._engine.update();
     return this;
   }
   draw() {
     this._object3D.add(this._tiles);
     this._calculateLOD();
   }
-
   drawTile() {
 
   }
 
   zoomchange(ev) {
     super.zoomchange(ev);
-    throttle(this._calculateLOD, 200);
+    this._visibleWithZoom();
+    requestAnimationFrame(() => {
+      this._calculateLOD();
+    });
+    // throttle(this._calculateLOD, 200);
     this._calculateLOD();
   }
 
   dragend(ev) {
     super.dragend(ev);
-    this._calculateLOD();
+    requestAnimationFrame(() => {
+      this._calculateLOD();
+    });
+    // this._calculateLOD();
 
   }
   _calculateLOD() {
@@ -90,17 +102,22 @@ export default class TileLayer extends Layer {
      * 需要显示 current
      * 是否保留 retain
      */
+    const zoom = Math.floor(this.scene.getZoom()) - 1;
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
+    const minSourceZoom = this.get('minSourceZoom');
+    const maxSourceZoom = this.get('maxSourceZoom');
     const currentZoom = this.scene.getZoom();
-    if (currentZoom < minZoom || currentZoom > maxZoom) {
-      this._removeOutTiles();
+    this.tileZoom = zoom > maxSourceZoom ? maxSourceZoom : zoom;
+    if (currentZoom < minZoom || currentZoom > maxZoom || currentZoom < minSourceZoom) {
+      this._removeTiles();
+      this.hide();
       return;
     }
+    this.show();
     this.updateTileList = [];
-    const zoom = Math.round(this.scene.getZoom()) - 1;
     const center = this.scene.getCenter();
-    const centerPoint = this._crs.lngLatToPoint(toLngLat(center.lng, center.lat), zoom);
+    const centerPoint = this._crs.lngLatToPoint(toLngLat(center.lng, center.lat), this.tileZoom);
     const centerXY = centerPoint.divideBy(256).round();
     const pixelBounds = this._getPixelBounds();
     const tileRange = this._pxBoundsToTileRange(pixelBounds);
@@ -113,7 +130,7 @@ export default class TileLayer extends Layer {
     isFinite(tileRange.max.y))) { throw new Error('Attempted to load an infinite number of tiles'); }
     for (let j = tileRange.min.y; j <= tileRange.max.y; j++) {
       for (let i = tileRange.min.x; i <= tileRange.max.x; i++) {
-        const coords = [ i, j, zoom ];
+        const coords = [ i, j, this.tileZoom ];
         const tile = this.tileList[coords.join('_')];
         if (tile) {
           tile.current = true;
@@ -157,7 +174,7 @@ export default class TileLayer extends Layer {
       pointShape['2d'].indexOf(shape) !== -1 ||
       pointShape['3d'].indexOf(shape) !== -1
     ) {
-      return 'fill';
+      return shape === 'circle' ? 'circle' : 'fill';
     } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
       return 'image';
     }
@@ -211,6 +228,7 @@ export default class TileLayer extends Layer {
         this._pruneTiles();
         return;
       }
+      tile.updateColor();
       this._tiles.add(tile.getMesh());
       t.active = true;
       this._addPickTile(tile.getMesh());
@@ -220,13 +238,17 @@ export default class TileLayer extends Layer {
     }
   }
   _addPickTile(meshobj) {
+    if (this.type === 'image') {
+      return;
+    }
     const pickCtr = this.get('pickingController');
     const mesh = meshobj.children[0];
+    mesh.name = meshobj.name;
     pickCtr.addPickMesh(mesh);
   }
   // 根据距离优先级查找
   getSelectFeature(id, lnglat) {
-    const zoom = Math.round(this.scene.getZoom()) - 1;
+    const zoom = this.tileZoom;
     const tilePoint = this._crs.lngLatToPoint(toLngLat(lnglat.lng, lnglat.lat), zoom);
     const tileXY = tilePoint.divideBy(256).round();
     const key = [ tileXY.x, tileXY.y, zoom ].join('_');
@@ -236,7 +258,7 @@ export default class TileLayer extends Layer {
   }
   _pruneTiles() {
     let tile;
-    const zoom = Math.round(this.scene.getZoom()) - 1;
+    const zoom = this.tileZoom;
     for (const key in this.tileList) {
       const c = this.tileList[key].coords;
       if (c[2] !== zoom || !this.noPruneRange.contains(new Point(c[0], c[1]))) {
@@ -303,6 +325,8 @@ export default class TileLayer extends Layer {
         const tileObj = this._tileCache.getTile(key);
         if (tileObj) {
           tileObj._abortRequest();
+          const pickCtr = this.get('pickingController');
+          pickCtr && pickCtr.removePickMeshByName(tileObj.getMesh().name);
           this._tiles.remove(tileObj.getMesh());
         }
         if (tileObj && tileObj.getMesh().type === 'composer') {
@@ -321,6 +345,7 @@ export default class TileLayer extends Layer {
         }
       });
     } // 移除 空的geom
+
     this.scene._engine.update();
   }
 
@@ -333,12 +358,17 @@ export default class TileLayer extends Layer {
     for (let i = this._tiles.children.length - 1; i >= 0; i--) {
       this._tiles.remove(this._tiles.children[i]);
     }
+    this.tileList = [];
+    this._tileKeys = [];
+    this._tileCache.destory();
+    const pickCtr = this.get('pickingController');
+    pickCtr.removeAllMesh();
   }
   _getPixelBounds() {
     const viewPort = this.scene.getBounds().toBounds();
     const NE = viewPort.getNorthEast();
     const SW = viewPort.getSouthWest();
-    const zoom = Math.round(this.scene.getZoom()) - 1;
+    const zoom = this.tileZoom;
     const center = this.scene.getCenter();
     const NEPoint = this._crs.lngLatToPoint(toLngLat(NE.lng, NE.lat), zoom);
     const SWPoint = this._crs.lngLatToPoint(toLngLat(SW.lng, SW.lat), zoom);
@@ -379,9 +409,62 @@ export default class TileLayer extends Layer {
     tile.destroy();
     tile = null;
   }
-  _updateAttributes() {
-      // 更新mapping
-      // 更新attribute
+  _updateDraw() {
+    const preAttrs = this.get('preAttrOptions');
+    const nextAttrs = this.get('attrOptions');
+    const preStyle = this.get('preStyleOption');
+    const nextStyle = this.get('styleOptions');
+    if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
+      // this._mapping();
+      this._setPreOption();
+      this._scaleByZoom();
+      // this._initInteraction();
+      this._initMapEvent();
+      this.draw();
+      this._setPreOption();
+      return;
+    }
+    if (!this._tiles.children.length > 0) {
+      this._setPreOption();
+      return;
+    }
+    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
+      this._tiles.children.forEach(tile => {
+        this._tileCache.getTile(tile.name).updateColor();
+        this.scene._engine.update();
+      });
+    }
+    // 更新数据过滤 filter
+    if (!Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
+      // 更新color；
+      this._tiles.children(tile => {
+        this._tileCache.get(tile.name).updateColor();
+      });
+    }
+    // 更新Size
+    if (!Util.isEqual(preAttrs.size, nextAttrs.size)) {
+      // this._tiles.children(tile => {
+      //   this._tileCache.get(tile.name).updateSize();
+      // });
+    }
+    // 更新形状
+    if (!Util.isEqual(preAttrs.shape, nextAttrs.shape)) {
+      // this._tiles.children(tile => {
+      //   this._tileCache.get(tile.name).updateShape();
+      // });
+    }
+    if (!Util.isEqual(preStyle, nextStyle)) {
+      // 判断新增，修改，删除
+      const newStyle = {};
+      Util.each(diff(preStyle, nextStyle), ({ type, key, value }) => {
+        (type !== 'remove') && (newStyle[key] = value);
+        // newStyle[key] = type === 'remove' ? null : value;
+      });
+      this._tiles.children(tile => {
+        this._tileCache.get(tile.name).updateStyle();
+      });
+    }
+    this._setPreOption();
   }
   destroy() {
   }

@@ -20,13 +20,15 @@ export default class Mapping {
     this._mapping();
   }
   update() {
+    this.mesh.set('scales', {});
+    this._initTileAttrs();
     this._updateMaping();
   }
   _initControllers() {
-    const scales = this.layer.get('scaleOptions');
+    const scalesOption = this.layer.get('scaleOptions');
     const scaleController = new ScaleController({
       defs: {
-        ...scales
+        ...scalesOption
       }
     });
     this.mesh.set('scaleController', scaleController);
@@ -101,7 +103,10 @@ export default class Mapping {
     // 通过透明度过滤数据
     if (attrs.hasOwnProperty('filter')) {
       mappedData.forEach(item => {
-        item.filter === false && (item.color[3] = 0);
+        if (item.filter === false) {
+          (item.color[3] = 0);
+          item.id = -item.id;
+        }
       });
     }
     this.mesh.layerData = mappedData;

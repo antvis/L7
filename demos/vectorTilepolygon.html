@@ -30,7 +30,7 @@ const scene = new L7.Scene({
   center: [116.5909,39.9225 ],
   pitch: 0,
   hash:true,
-  zoom: 14,
+  zoom: 4,
 
 });
 window.scene = scene;
@@ -44,29 +44,29 @@ scene.on('loaded', () => {
  
   // http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/point/{z}/{x}/{y}.pbf
   // https://mvt.amap.com/district/CHN2/8/203/105/4096?key=
-  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/china/{z}/{x}/{y}.pbf',{
+  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/china/village/{z}/{x}/{y}.pbf',{
     parser:{
       type: 'mvt',
       sourceLayer:'layer',
-      idField:'adcode',   
+      idField:'code',   
       maxZoom: 17,
     }
   })
-  .filter('province',name =>{
-    return name =='山东省'
+  .scale({
+    total:{
+      type:'linear',
+      min:0,
+      max:5000
+    }
   })
   .shape('fill')
   .size(2)
-  .active({fill:'red'})
-  .color('name',name => {
-    //var colorHash = new ColorHash();
-    return colorHash.hex(name)
-  })
+  .active(false)
+  .color('total', ['#ffffe5','#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506'])
   .style({
     opacity:1.0
   })
-  .render(
-  );
+  .render();
   layer.on('mousemove',(feature)=>{
    console.log(feature);
   })

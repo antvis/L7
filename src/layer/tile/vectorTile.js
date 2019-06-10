@@ -32,6 +32,7 @@ export default class VectorTile extends Tile {
     });
   }
   _creatSource(data) {
+    if (!data) return null;
     this.layerSource = this.layer.tileSource(data, {
       parser: {
         tile: this._tile
@@ -50,6 +51,7 @@ export default class VectorTile extends Tile {
       };
       this.mesh.onAfterRender = renderer => {
         const context = renderer.context;
+        context.clear(context.STENCIL_BUFFER_BIT);
         context.disable(context.STENCIL_TEST);
       };
       this._object3D.add(this.mesh);
@@ -66,9 +68,9 @@ export default class VectorTile extends Tile {
       u_time: this.layer.scene._engine.clock.getElapsedTime(),
       u_zoom: zoom
     });
-    if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
-      return;
-    }
+    // if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
+    //   return;
+    // }
     const maskScene = new THREE.Scene();
     this.maskScene = maskScene;
     const tileMesh = this._tileMaskMesh();

@@ -19,5 +19,6 @@ void main() {
     //  vTime = 1.0- (28800. + mod(u_time* 10.,28800.)- position.z / 1000.) / 100.;
   #endif
   gl_Position = matModelViewProjection * vec4(position.xy, 0., 1.0);
+  gl_Position.z += 2. * gl_Position.w;
   worldId = id_toPickColor(pickingId);
 }
