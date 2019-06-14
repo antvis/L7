@@ -16,19 +16,20 @@ export default function mvt(data, cfg) {
     if (geofeature.geometry.type === 'Polygon' && geofeature.geometry.coordinates[0].length < 20) {
       continue;
     }
-    const newfc = {
-      geometry: geofeature.geometry,
-      type: 'Feature',
-      properties: {
-        total: geofeature.properties.total,
-        province: geofeature.properties.province,
-        bc_grade: geofeature.properties.bc_grade
-      }
+    // const newfc = {
+    //   geometry: geofeature.geometry,
+    //   type: 'Feature',
+    //   properties: {
+    //     total: geofeature.properties.total,
+    //     province: geofeature.properties.province,
+    //     bc_grade: geofeature.properties.bc_grade,
+    //     code: geofeature.properties.code || geofeature.properties.adcode
+    //   }
 
-    };
-    features.push(newfc);
-
+    // };
+    features.push(geofeature);
   }
+  // console.log(features);
   const geodata = {
     type: 'FeatureCollection',
     features
