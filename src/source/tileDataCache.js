@@ -1,5 +1,5 @@
-import LRUCache from '../../util/lru-cache';
-export default class TileCache {
+import LRUCache from '../util/lru-cache';
+export default class TileDataCache {
   constructor(limit = 50, tileDestroy) {
     this._cache = new LRUCache(limit, tileDestroy);
   }
@@ -11,13 +11,10 @@ export default class TileCache {
   setTile(tile, key) {
     this._cache.set(key, tile);
   }
+  removeTile(key) {
+    return this._cache.delete(key);
+  }
   destory() {
     this._cache.clear();
-  }
-  setNeedUpdate() {
-    this._cache._order.forEach(key => {
-      const tile = this._cache.get(key);
-      tile.needUpdate = true;
-    });
   }
 }

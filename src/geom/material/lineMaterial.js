@@ -17,8 +17,8 @@ export function LineMaterial(options) {
     },
     vertexShader: vs,
     fragmentShader: fs,
-    transparent: true,
-    blending: THREE.AdditiveBlending
+    transparent: true
+   // blending: THREE.AdditiveBlending
   });
   return material;
 }
@@ -50,8 +50,8 @@ export function MeshLineMaterial(options, defines) {
     defines,
     vertexShader: vs,
     fragmentShader: fs,
-    transparent: true,
-    blending: THREE.AdditiveBlending
+    transparent: true
+    // blending: THREE.AdditiveBlending
   });
   return material;
 }
