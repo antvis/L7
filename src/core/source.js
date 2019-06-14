@@ -58,7 +58,7 @@ export default class Source extends Base {
     this.originData = getParser(type)(data, parser);
     // this.data = {
     //   dataArray: clone(this.originData.dataArray)
-    // };
+    // }; // TODO 关闭数据备份
     this.data = this.originData;
     if (this.data !== null) {
       this.data.extent = extent(this.data.dataArray);

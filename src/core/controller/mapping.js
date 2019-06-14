@@ -34,8 +34,8 @@ export default class Mapping {
     this.mesh.set('scaleController', scaleController);
   }
   _createScale(field) {
-    // TODO scale更新
     const scales = this.mesh.get('scales');
+    this._initControllers(); // scale更新
     let scale = scales[field];
     if (!scale) {
       scale = this.createScale(field);
