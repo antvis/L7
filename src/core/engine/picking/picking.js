@@ -50,8 +50,7 @@ class Picking {
   }
   _update(point) {
     const texture = this._pickingTexture;
-    // this._pickingTexture
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+    this._renderer.render(this._pickingScene, this._camera, texture);
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
@@ -62,8 +61,23 @@ class Picking {
       index === id ? object.visible = true : object.visible = false;
     });
   }
+  _layerIsVisable(object) {
+    const layers = this._world.getLayers();
+    let isVisable = false;
+    for (let i = 0; i < layers.length; i++) {
+      const layer = layers[i];
+      if (object.name === layer.layerId) {
+        isVisable = layer.get('visible');
+        break;
+      }
+    }
+    return isVisable;
+  }
   _pickAllObject(point, normalisedPoint) {
     this.world.children.forEach((object, index) => {
+      if (!this._layerIsVisable(object)) {
+        return;
+      }
       this._filterObject(index);
       const item = this._pick(point, normalisedPoint, object.name);
       item.type = point.type;

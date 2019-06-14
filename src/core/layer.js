@@ -460,13 +460,15 @@ export default class Layer extends Base {
   _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
-      if (featureId < 0 && this._activeIds !== null) {
-        type = 'mouseleave';
-      }
-      this._activeIds = featureId;
       // TODO 瓦片图层获取选中数据信息
       const lnglat = this.scene.containerToLngLat(point2d);
-      const { feature, style } = this.getSelectFeature(featureId, lnglat);
+      let feature = null;
+      let style = null;
+      if (featureId !== -999) {
+        const res = this.getSelectFeature(featureId, lnglat);
+        feature = res.feature;
+        style = res.style;
+      }
       const target = {
         featureId,
         feature,
@@ -475,9 +477,14 @@ export default class Layer extends Base {
         type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
-      if (featureId >= 0 || this._activeIds >= 0) { // 拾取到元素，或者离开元素
+      if (featureId >= 0) { // 拾取到元素，或者离开元素
         this.emit(type, target);
       }
+      if (featureId < 0 && this._activeIds >= 0) {
+        type = 'mouseleave';
+        this.emit(type, target);
+      }
+      this._activeIds = featureId;
 
     });
   }
@@ -538,7 +545,7 @@ export default class Layer extends Base {
       offset = 1;
     }
     this._object3D.position && (this._object3D.position.z = offset * Math.pow(2, 20 - zoom));
-    if (zoom < minZoom || zoom > maxZoom) {
+    if (zoom < minZoom || zoom >= maxZoom) {
       this._object3D.visible = false;
     } else if (this.get('visible')) {
       this._object3D.visible = true;

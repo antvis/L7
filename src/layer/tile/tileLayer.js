@@ -1,13 +1,12 @@
 import Layer from '../../core/layer';
 import Util from '../../util';
 import diff from '../../util/diff';
-import source from '../../core/source';
+import TileSource from '../../source/tileSource';
 import * as THREE from '../../core/three';
 import Controller from '../../core/controller/index';
 import Global from '../../global';
 const { pointShape } = Global;
 import TileCache from './tileCache';
-import { deepMix } from '@antv/util';
 import { toLngLat, Bounds, Point } from '@antv/geo-coord';
 import { wrapNum } from '@antv/geo-coord/lib/util/index';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
@@ -35,24 +34,15 @@ export default class TileLayer extends Layer {
     this.shape = field;
     return this;
   }
-  source(url, cfg = {}) {
-    this.url = url;
-    this.sourceCfg = cfg;
-    this.sourceCfg.mapType = this.scene.mapType;
-    this.set('minSourceZoom', this.sourceCfg.parser && this.sourceCfg.parser.minZoom || 0);
-    this.set('maxSourceZoom', this.sourceCfg.parser && this.sourceCfg.parser.maxZoom || 18);
-    return this;
-  }
-  tileSource(data, cfg) {
-    if (data instanceof source) {
-      return data;
+  source(data, cfg = {}) {
+    if (data instanceof TileSource) {
+      data.set('mapType', this.scene.mapType);
+      this.tileSource = data;
+    } else {
+      cfg.mapType = this.scene.mapType;
+      this.tileSource = new TileSource(data, cfg);
     }
-    const tileSourceCfg = {
-      data,
-      zoom: this.scene.getZoom()
-    };
-    deepMix(tileSourceCfg, this.sourceCfg, cfg);
-    return new source(tileSourceCfg);
+    return this;
   }
   _initControllers() {
     const pickCtr = new Controller.Picking({ layer: this });
@@ -61,10 +51,6 @@ export default class TileLayer extends Layer {
     this.set('interacionController', interactionCtr);
   }
   render() {
-
-    if (this.type !== 'image') {
-      this._initControllers();
-    }
     this._visibleWithZoom();
     this._updateDraw();
     this.scene._engine.update();
@@ -84,7 +70,6 @@ export default class TileLayer extends Layer {
     requestAnimationFrame(() => {
       this._calculateLOD();
     });
-    // throttle(this._calculateLOD, 200);
     this._calculateLOD();
   }
 
@@ -93,9 +78,9 @@ export default class TileLayer extends Layer {
     requestAnimationFrame(() => {
       this._calculateLOD();
     });
-    // this._calculateLOD();
 
   }
+
   _calculateLOD() {
     /**
      * 加载完成 active
@@ -109,16 +94,18 @@ export default class TileLayer extends Layer {
     const maxSourceZoom = this.get('maxSourceZoom');
     const currentZoom = this.scene.getZoom();
     this.tileZoom = zoom > maxSourceZoom ? maxSourceZoom : zoom;
-    if (currentZoom < minZoom || currentZoom > maxZoom || currentZoom < minSourceZoom) {
+    if (currentZoom < minZoom || currentZoom >= maxZoom || currentZoom < minSourceZoom) {
       this._removeTiles();
-      this.hide();
+      this._object3D.visible = false;
       return;
+    } else if (this.get('visible')) {
+      this._object3D.visible = true;
     }
     this.show();
     this.updateTileList = [];
     const center = this.scene.getCenter();
     const centerPoint = this._crs.lngLatToPoint(toLngLat(center.lng, center.lat), this.tileZoom);
-    const centerXY = centerPoint.divideBy(256).round();
+    const centerXY = centerPoint.divideBy(256).floor();
     const pixelBounds = this._getPixelBounds();
     const tileRange = this._pxBoundsToTileRange(pixelBounds);
     const margin = this.get('keepBuffer');
@@ -228,7 +215,10 @@ export default class TileLayer extends Layer {
         this._pruneTiles();
         return;
       }
-      tile.updateColor();
+      if (tile.needUpdate) {
+        tile.updateColor();
+        tile.needUpdate = false;
+      }
       this._tiles.add(tile.getMesh());
       t.active = true;
       this._addPickTile(tile.getMesh());
@@ -249,8 +239,9 @@ export default class TileLayer extends Layer {
   // 根据距离优先级查找
   getSelectFeature(id, lnglat) {
     const zoom = this.tileZoom;
+
     const tilePoint = this._crs.lngLatToPoint(toLngLat(lnglat.lng, lnglat.lat), zoom);
-    const tileXY = tilePoint.divideBy(256).round();
+    const tileXY = tilePoint.divideBy(256).floor();
     const key = [ tileXY.x, tileXY.y, zoom ].join('_');
     const tile = this._tileCache.getTile(key);
     const feature = tile ? tile.getSelectFeature(id) : null;
@@ -351,6 +342,7 @@ export default class TileLayer extends Layer {
 
 
   _removeTiles() {
+    this.hide();
     if (!this._tiles || !this._tiles.children) {
       return;
     }
@@ -415,30 +407,26 @@ export default class TileLayer extends Layer {
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
-      // this._mapping();
       this._setPreOption();
       this._scaleByZoom();
-      // this._initInteraction();
+      this._initControllers();
+      this._initInteraction();
       this._initMapEvent();
       this.draw();
       this._setPreOption();
       return;
     }
-    if (!this._tiles.children.length > 0) {
-      this._setPreOption();
+    if (!this._tiles.children.length > 0 || !this._object3D.visible) {
       return;
     }
-    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
+     // 更新数据颜色 过滤 filter
+    if (!Util.isEqual(preAttrs.color, nextAttrs.color) || !Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
+      this._tileCache.setNeedUpdate();
       this._tiles.children.forEach(tile => {
-        this._tileCache.getTile(tile.name).updateColor();
+        const tileObj = this._tileCache.getTile(tile.name);
+        tileObj.updateColor();
+        tileObj.needUpdate = false;
         this.scene._engine.update();
-      });
-    }
-    // 更新数据过滤 filter
-    if (!Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
-      // 更新color；
-      this._tiles.children(tile => {
-        this._tileCache.get(tile.name).updateColor();
       });
     }
     // 更新Size
