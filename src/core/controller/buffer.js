@@ -18,10 +18,18 @@ export default class BufferController {
     const colorAttr = this.mesh.mesh.geometry.attributes.a_color;
     const pickAttr = this.mesh.mesh.geometry.attributes.pickingId;
     pickAttr.array.forEach((id, index) => {
-      id = Math.abs(id);
-      const color = colorKey[id];
-      id = Math.abs(id);
-      const item = filterData[id - 1];
+      let newId = Math.abs(id);
+      let item = null;
+      let color = null;
+      if (this.mesh.layerSource.data.featureKeys) { // hash数据映射
+        newId = this.mesh.layerSource.data.featureKeys[newId].index;
+        item = filterData[newId];
+        color = colorKey[item.id];
+      } else {
+        item = filterData[newId - 1];
+        color = colorKey[newId];
+      }
+
       if (item.hasOwnProperty('filter') && item.filter === false) {
         colorAttr.array[index * 4 + 0] = 0;
         colorAttr.array[index * 4 + 1] = 0;

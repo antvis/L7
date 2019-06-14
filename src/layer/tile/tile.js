@@ -30,16 +30,30 @@ export default class Tile extends Base {
     this.requestTileAsync(data => this._init(data));
   }
   _init(data) {
-    this._creatSource(data);
+    // this._creatSource(data); // 获取Source
+    this.layerSource = data;
+
     if (this.layerSource.data === null) {
+      this.isValid = false;
       return;
     }
+    this.isValid = true;
     this._initControllers();
     this._createMesh();
   }
   repaint() {
     this._initControllers();
     this._createMesh();
+  }
+  requestTileAsync(done) {
+    const data = this.layer.tileSource.getTileData(this._tile[0], this._tile[1], this._tile[2]);
+    if (data.loaded) {
+      done(data.data);
+    } else {
+      data.data.then(data => {
+        done(data);
+      });
+    }
   }
   _initControllers() {
     const mappingCtr = new Controller.Mapping({

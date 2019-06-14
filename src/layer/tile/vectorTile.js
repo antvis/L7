@@ -5,15 +5,15 @@ import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';
 import { getRender } from '../render/index';
 export default class VectorTile extends Tile {
-  requestTileAsync(done) {
-    // Making this asynchronous really speeds up the LOD framerate
-    setTimeout(() => {
-      if (!this._mesh) {
-       // this._mesh = this._createMesh();
-        this._requestTile(done);
-      }
-    }, 0);
-  }
+  // requestTileAsync(done) {
+  //   // Making this asynchronous really speeds up the LOD framerate
+  //   setTimeout(() => {
+  //     if (!this._mesh) {
+  //      // this._mesh = this._createMesh();
+  //       this._requestTile(done);
+  //     }
+  //   }, 0);
+  // }
   _requestTile(done) {
     const urlParams = {
       x: this._tile[0],
@@ -58,8 +58,9 @@ export default class VectorTile extends Tile {
     } else {
       this._object3D = this.mesh;
     }
-
-    this.emit('tileLoaded');
+    setTimeout(() => {
+      this.emit('tileLoaded');
+    }, 0);
     return this._object3D;
   }
   _renderMask(renderer) {
@@ -88,7 +89,7 @@ export default class VectorTile extends Tile {
     // config the stencil buffer to collect data for testing
     this.layer.scene._engine.renderScene(maskScene);
     context.colorMask(true, true, true, true);
-    context.depthMask(true);
+    context.depthMask(false);
     renderer.clearDepth();
 
 		// only render where stencil is set to 1
@@ -117,8 +118,9 @@ export default class VectorTile extends Tile {
     this.xhrRequest.abort();
   }
   getSelectFeature(id) {
-    const featureIndex = this.layerSource.originData.featureKeys[id];
-    if (featureIndex) {
+    const featurekey = this.layerSource.originData.featureKeys[id];
+    if (featurekey && featurekey.index !== undefined) {
+      const featureIndex = featurekey.index;
       return this.layerSource.originData.dataArray[featureIndex];
     }
     return null;
@@ -129,7 +131,5 @@ export default class VectorTile extends Tile {
     this._object3D = null;
     this.maskScene = null;
     this.layerData = null;
-    this.layerSource.destroy();
-    this.layerSource = null;
   }
 }
