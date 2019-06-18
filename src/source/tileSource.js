@@ -78,7 +78,7 @@ export default class TileSource extends Source {
     });
   }
   tileDestroy(tile) {
-    if (!tile || !tile.data || tile.loading) {
+    if (!tile || !tile.data || tile.loading || !tile.data.data.dataArray) {
       return;
     }
     const tileData = tile.data;
