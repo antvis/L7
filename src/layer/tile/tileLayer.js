@@ -90,8 +90,8 @@ export default class TileLayer extends Layer {
     const zoom = Math.floor(this.scene.getZoom()) - 1;
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
-    const minSourceZoom = this.get('minSourceZoom');
-    const maxSourceZoom = this.get('maxSourceZoom');
+    const minSourceZoom = this.tileSource.get('minSourceZoom');
+    const maxSourceZoom = this.tileSource.get('maxSourceZoom');
     const currentZoom = this.scene.getZoom();
     this.tileZoom = zoom > maxSourceZoom ? maxSourceZoom : zoom;
     if (currentZoom < minZoom || currentZoom >= maxZoom || currentZoom < minSourceZoom) {
