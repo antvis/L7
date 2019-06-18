@@ -55,7 +55,7 @@ export default class VectorTile extends Tile {
         context.disable(context.STENCIL_TEST);
       };
       this._object3D.add(this.mesh);
-    } else {
+    } else { // 如果是热力图
       this._object3D = this.mesh;
     }
     setTimeout(() => {
