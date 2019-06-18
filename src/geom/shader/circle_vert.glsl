@@ -5,7 +5,7 @@ uniform float u_stroke_width : 2;
 uniform float u_activeId : 0;
 uniform vec4 u_activeColor : [ 1.0, 0, 0, 1.0 ];
 
-varying vec3 v_data;
+varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
 
@@ -22,13 +22,16 @@ void main() {
 
   // extrude(4-bit)
   vec2 extrude;
-  extrude.x = floor(compressed * SHIFT_RIGHT20);
-  compressed -= extrude.x * SHIFT_LEFT20;
+  extrude.x = floor(compressed * SHIFT_RIGHT23);
+  compressed -= extrude.x * SHIFT_LEFT23;
   extrude.x = extrude.x - 1.;
 
-  extrude.y = floor(compressed * SHIFT_RIGHT18);
-  compressed -= extrude.y * SHIFT_LEFT18;
+  extrude.y = floor(compressed * SHIFT_RIGHT21);
+  compressed -= extrude.y * SHIFT_LEFT21;
   extrude.y = extrude.y - 1.;
+
+  float shape_type = floor(compressed * SHIFT_RIGHT17);
+  compressed -= shape_type * SHIFT_LEFT17;
 
   // radius(16-bit)
   float radius = compressed;
@@ -42,7 +45,7 @@ void main() {
   float antialiasblur = 1.0 / (radius + u_stroke_width);
 
   // construct point coords
-  v_data = vec3(extrude, antialiasblur);
+  v_data = vec4(extrude, antialiasblur, shape_type);
 
   // picking
   if(picking_id == u_activeId) {
