@@ -23,7 +23,7 @@ const Global = {
   shape: 'circle',
   snapArray: [ 0, 1, 2, 4, 5, 10 ],
   pointShape: {
-    '2d': [ 'circle', 'square', 'hexagon', 'triangle' ],
+    '2d': [ 'circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica' ],
     '3d': [ 'cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn' ]
   },
   sdfHomeUrl: 'https://sdf.amap.com',
