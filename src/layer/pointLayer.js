@@ -30,13 +30,9 @@ export default class PointLayer extends Layer {
     }
 
     // 2D circle 特殊处理
-    if (shape === 'circle') {
+    if (pointShape['2d'].indexOf(shape) !== -1) {
       return 'circle';
-    }
-    if (
-      pointShape['2d'].indexOf(shape) !== -1 ||
-      pointShape['3d'].indexOf(shape) !== -1
-    ) {
+    } else if (pointShape['3d'].indexOf(shape) !== -1) {
       return 'fill';
     } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
       return 'image';
