@@ -59,7 +59,14 @@ scene.on('loaded', () => {
     .source(data,{
        isCluster:true
     })
-    .shape('circle')
+    // .shape('circle')
+    .shape('point_count', [ 'circle', 'triangle', 'hexagon' ])
+    // .shape('triangle')
+    // .shape('square')
+    // .shape('hexagon')
+    // .shape('octogon')
+    // .shape('hexagram')
+    // .shape('pentagon')
     .size('point_count', [ 5, 40]) // default 1
      //.size('value', [ 10, 300]) // default 1
     .active(true)
