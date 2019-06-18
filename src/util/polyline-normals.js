@@ -88,7 +88,28 @@ export default function(points, closed, indexOffset) {
 
       // get orientation
       let flip = (dot(tangent, _normal) < 0) ? -1 : 1;
-      const bevel = miterLen > miterLimit;
+      const bevel = Math.abs(miterLen) > miterLimit;
+
+      // 处理前后两条线段重合的情况，这种情况不需要使用任何接头（miter/bevel）。
+      // 理论上这种情况下 miterLen = Infinity，本应通过 isFinite(miterLen) 判断，
+      // 但是 AMap 投影变换后丢失精度，只能通过一个阈值（1000）判断。
+      if (Math.abs(miterLen) > 1000) {
+        normal(_normal, lineA);
+        extrusions(attrPos, out, cur, _normal, 1);
+        attrDistance.push(d, d);
+        attrIndex.push(
+          _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ]
+          : [ index, index + 2, index + 3 ]
+        );
+
+        // 避免在 Material 中使用 THREE.DoubleSide
+        attrIndex.push([ index + 2, index + 3, index + 4 ]);
+
+        count += 2;
+        _lastFlip = -1;
+        continue;
+      }
+
       if (bevel) {
         miterLen = miterLimit;
 
