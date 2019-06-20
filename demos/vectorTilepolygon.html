@@ -36,7 +36,13 @@ const scene = new L7.Scene({
 window.scene = scene;
 var colorHash = new ColorHash();
 
+
 scene.on('loaded', () => {
+  scene.ImageTileLayer({
+    zIndex:4
+  })
+  .source('http://t1.tianditu.com/DataServer?T=cva_w&X={x}&Y={y}&L={z}&tk=174705aebfe31b79b3587279e211cb9a')
+  .render();
 
   const provinceSource = new L7.TileSource('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/china/province/{z}/{x}/{y}.pbf',{
     parser:{
@@ -46,10 +52,24 @@ scene.on('loaded', () => {
       maxZoom: 5,
     }
 })
-console.log(provinceSource);
+// 
+
+ $.getJSON('https://gw.alipayobjects.com/os/basement_prod/b402ae15-c1ab-499b-834c-708e7c1a13be.json', city => {
+   
+    const citylayer = scene.PolygonLayer()
+    .source(city)
+    .color('total', ['#ffffe5','#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506'])
+    .shape('line')
+    .size(2)
+    .active(true)
+    .style({
+      opacity: 1.0
+    })
+    .render();
+ });
   const layer = scene.VectorTileLayer({
     zIndex:0,
-    layerType:'line'
+    layerType:'polygon'
   })
   .source(provinceSource)
   .scale({
@@ -59,7 +79,7 @@ console.log(provinceSource);
       max:5000000
     }
   })
-  .shape('line')
+  .shape('fill')
   .size(2)
   .active(false)
   .color('total', ['#ffffe5','#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506'])
