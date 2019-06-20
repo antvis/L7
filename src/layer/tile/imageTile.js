@@ -70,6 +70,7 @@ export default class ImageTile extends Tile {
     context.font = 'Bold 20px Helvetica Neue, Verdana, Arial';
     context.fillStyle = '#ff0000';
     context.fillText(this._tile.join('/'), 20, 20);
+    context.strokeStyle = 'red';
     context.rect(0, 0, 256, 256);
     context.stroke();
     return canvas;

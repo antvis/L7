@@ -69,9 +69,9 @@ export default class VectorTile extends Tile {
       u_time: this.layer.scene._engine.clock.getElapsedTime(),
       u_zoom: zoom
     });
-    // if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
-    //   return;
-    // }
+    if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
+      return;
+    }
     const maskScene = new THREE.Scene();
     this.maskScene = maskScene;
     const tileMesh = this._tileMaskMesh();
