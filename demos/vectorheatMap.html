@@ -25,55 +25,49 @@
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'dark', // 样式URL
+  mapStyle: 'light', // 样式URL
   center: [116.5909,39.9225 ],
   pitch: 0,
   hash:true,
-  zoom: 14,
+  zoom: 16,
 
 });
 window.scene = scene;
 scene.on('loaded', () => {
   const layer = scene.VectorTileLayer({
     zIndex:0,
-    layerType:'heatmap'
+    layerType:'point'
   })
-  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/point2/{z}/{x}/{y}.pbf',{
+  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/china/all_point/{z}/{x}/{y}.pbf',{
     parser:{
       type: 'mvt',
       sourceLayer:'layer',
-      maxZoom: 17,
+      maxZoom:14,
     }
   })
   .scale({
-    total:{
-      min:0,
-      max:1000000,
-      type:'log'
+    bc_grade:{
+      type:'cat',
+      values:[1, 2 ,3, 4]
+    },
+    open_mode:{
+      type:'cat',
+      values:['线上','线下','自助']
     }
   })
-  .shape('heatmap')
-  .size('total',[ 0, 1])
+  .active(false)
+  // 'circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'
+  .shape('open_mode', ['circle','hexagon','hexagram'])
+  .size('bc_grade', [2,15])
+  .color('bc_grade', ['#ffffcc','#d9f0a3','#addd8e','#78c679','#31a354','#006837'])
   .style({
-      intensity: 10,
-      radius: 10,
-      opacity:1,
-      rampColors: {
-        colors: [ '#ffda45ff', '#fde725ff', '#ffc934ff', '#ffb824ff', '#ffb824ff', '#fa8100ff' ],
-        positions: [ 0, 0.2, 0.4, 0.6, 0.9, 1.0 ]
-      }
-    })
+     stroke: '#fff',
+     strokeWidth: 1.0,
+     strokeOpacity:1.,
+  })
   .render(
   );
-  layer.on('mousemove',(feature)=>{
-   console.log(feature);
-  })
-   console.log(layer);
   });
-//OBJECTID',(id)=>{
-    // const index = id % 8;
-     //return ['#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2'][index];
-  //}
 </script>
 </body>
 </html>

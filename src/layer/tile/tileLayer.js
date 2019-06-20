@@ -157,11 +157,10 @@ export default class TileLayer extends Layer {
         break;
       }
     }
-    if (
-      pointShape['2d'].indexOf(shape) !== -1 ||
-      pointShape['3d'].indexOf(shape) !== -1
-    ) {
-      return shape === 'circle' ? 'circle' : 'fill';
+    if (pointShape['2d'].indexOf(shape) !== -1) {
+      return 'circle';
+    } else if (pointShape['3d'].indexOf(shape) !== -1) {
+      return 'fill';
     } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
       return 'image';
     }
