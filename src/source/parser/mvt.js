@@ -3,7 +3,6 @@ import * as VectorParser from '@mapbox/vector-tile';
 import geojson from './geojson';
 export default function mvt(data, cfg) {
   const tile = new VectorParser.VectorTile(new PBF(data));
-  // CHN_Cities_L   CHN_Cities   CHN_L
   const layerName = cfg.sourceLayer;
   const features = [];
   const vectorLayer = tile.layers[layerName];
@@ -16,17 +15,6 @@ export default function mvt(data, cfg) {
     if (geofeature.geometry.type === 'Polygon' && geofeature.geometry.coordinates[0].length < 20) {
       continue;
     }
-    // const newfc = {
-    //   geometry: geofeature.geometry,
-    //   type: 'Feature',
-    //   properties: {
-    //     total: geofeature.properties.total,
-    //     province: geofeature.properties.province,
-    //     bc_grade: geofeature.properties.bc_grade,
-    //     code: geofeature.properties.code || geofeature.properties.adcode
-    //   }
-
-    // };
     features.push(geofeature);
   }
   // console.log(features);
