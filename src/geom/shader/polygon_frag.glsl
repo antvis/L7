@@ -100,7 +100,7 @@ void main() {
         // if(head ==1.0) { // 顶部亮线
         //     color = brightColor;
         // }
-        color = v_color.rgb;
+        color = color * v_color.rgb;
 
         vec3 foggedColor = fog(color,fogColor,depth);
          
