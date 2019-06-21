@@ -1,12 +1,12 @@
 precision highp float;
 
-uniform vec4 u_baseColor;
-uniform vec4 u_brightColor;
-uniform vec4 u_windowColor;
-uniform float u_zoom;
-uniform float u_time;
-uniform float u_near;
-uniform float u_far;
+uniform vec4 u_baseColor : [ 1.0, 0, 0, 1.0 ];
+uniform vec4 u_brightColor : [ 1.0, 0, 0, 1.0 ];
+uniform vec4 u_windowColor : [ 1.0, 0, 0, 1.0 ];
+uniform float u_zoom : 0;
+uniform float u_time : 0;
+uniform float u_near : 0;
+uniform float u_far : 1;
 
 #ifdef ANIMATE
 varying vec2 v_texCoord;

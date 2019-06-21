@@ -14,7 +14,7 @@ varying vec2 v_texCoord;
 
 varying vec4 v_color;
 
-uniform float u_zoom;
+uniform float u_zoom : 0;
 uniform float u_opacity : 1.0;
 uniform float u_activeId : 0;
 uniform vec4 u_activeColor : [1.0, 0.0, 0.0, 1.0];
