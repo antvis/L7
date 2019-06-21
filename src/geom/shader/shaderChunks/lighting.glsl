@@ -12,6 +12,8 @@ uniform int u_num_of_spot_lights : 0;
 #define MAX_NUM_OF_DIRECTIONAL_LIGHTS 3
 #define MAX_NUM_OF_SPOT_LIGHTS 3
 
+#pragma include "common"
+
 struct DirectionalLight {
   vec3 direction;
   vec3 ambient;
@@ -37,7 +39,7 @@ uniform DirectionalLight u_directional_lights[MAX_NUM_OF_DIRECTIONAL_LIGHTS];
 uniform SpotLight u_spot_lights[MAX_NUM_OF_SPOT_LIGHTS];
 
 vec3 calc_directional_light(DirectionalLight light, vec3 normal, vec3 viewDir) {
-  vec3 lightDir = normalize(-light.direction);
+  vec3 lightDir = normalize(light.direction);
   // diffuse shading
   float diff = max(dot(normal, lightDir), 0.0);
   // Blinn-Phong specular shading
