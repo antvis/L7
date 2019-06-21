@@ -69,24 +69,24 @@ scene.on('loaded', () => {
     .source(data)
     .shape('extrude')
     .active({fill:'red'})
-    // .style({
-    //   lights: [
-    //     {
-    //       type: 'directional',
-    //       direction: [ 1, -10.5, 12 ],
-    //       ambient: [ 0.2, 0.2, 0.2 ],
-    //       diffuse: 'red',
-    //       specular: [ 0.1, 0.1, 0.1 ]
-    //     },
-    //     {
-    //       type: 'directional',
-    //       direction: [ 1, 10.5, 12 ],
-    //       ambient: [ 0.2, 0.2, 0.2 ],
-    //       diffuse: 'green',
-    //       specular: [ 0.1, 0.1, 0.1 ]
-    //     },
-    //   ]
-    // })
+    .style({
+      lights: [
+        {
+          type: 'directional',
+          direction: [ 1, 10.5, 12 ],
+          ambient: [ 0.2, 0.2, 0.2 ],
+          diffuse: 'red',
+          specular: [ 0.1, 0.1, 0.1 ]
+        },
+        {
+          type: 'directional',
+          direction: [ 1, -10.5, 12 ],
+          ambient: [ 0.2, 0.2, 0.2 ],
+          diffuse: 'green',
+          specular: [ 0.1, 0.1, 0.1 ]
+        },
+      ]
+    })
     .size('floor',[10,2000])
     .color('rgba(242,246,250,0.96)')
     .render();
