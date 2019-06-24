@@ -32,35 +32,35 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/XHMbjQwrSrajvLLvMPbK.json', data => {
-    scene.PolygonLayer({
-      zIndex: 0
-    })
-    .source(data)
-    .shape('fill')
-    .active({fill:'blue'})
-    .color('rgb(79,174,234)')
-    .render();
-  });
-  $.get('https://gw.alipayobjects.com/os/rmsportal/VifgwJEyBIXnDrjCwWdK.json', data => {
-    scene.PolygonLayer({
-      zIndex: 0
-    })
-    .source(data)
-    .shape('fill')
-    .color('rgb(156,194,116)')
-    .render();
-  });
-   $.get('https://gw.alipayobjects.com/os/rmsportal/ZseLNWMOPGrgqQYfvtli.json', data => {
-    scene.LineLayer({
-      zIndex: 2
-    })
-    .source(data)
-    .shape('line')
-    .size([3,0])
-    .color('rgb(79,174,234)')
-    .render();
-  });
+  // $.get('https://gw.alipayobjects.com/os/rmsportal/XHMbjQwrSrajvLLvMPbK.json', data => {
+  //   scene.PolygonLayer({
+  //     zIndex: 0
+  //   })
+  //   .source(data)
+  //   .shape('fill')
+  //   .active({fill:'blue'})
+  //   .color('rgb(79,174,234)')
+  //   .render();
+  // });
+  // $.get('https://gw.alipayobjects.com/os/rmsportal/VifgwJEyBIXnDrjCwWdK.json', data => {
+  //   scene.PolygonLayer({
+  //     zIndex: 0
+  //   })
+  //   .source(data)
+  //   .shape('fill')
+  //   .color('rgb(156,194,116)')
+  //   .render();
+  // });
+  //  $.get('https://gw.alipayobjects.com/os/rmsportal/ZseLNWMOPGrgqQYfvtli.json', data => {
+  //   scene.LineLayer({
+  //     zIndex: 2
+  //   })
+  //   .source(data)
+  //   .shape('line')
+  //   .size([3,0])
+  //   .color('rgb(79,174,234)')
+  //   .render();
+  // });
   
    $.get('https://gw.alipayobjects.com/os/rmsportal/ggFwDClGjjvpSMBIrcEx.json', data => {
     citylayer = scene.PolygonLayer({
@@ -69,6 +69,24 @@ scene.on('loaded', () => {
     .source(data)
     .shape('extrude')
     .active({fill:'red'})
+    .style({
+      lights: [
+        {
+          type: 'directional',
+          direction: [ 1, 10.5, 12 ],
+          ambient: [ 0.2, 0.2, 0.2 ],
+          diffuse: 'red',
+          specular: [ 0.1, 0.1, 0.1 ]
+        },
+        {
+          type: 'directional',
+          direction: [ 1, -10.5, 12 ],
+          ambient: [ 0.2, 0.2, 0.2 ],
+          diffuse: 'green',
+          specular: [ 0.1, 0.1, 0.1 ]
+        },
+      ]
+    })
     .size('floor',[10,2000])
     .color('rgba(242,246,250,0.96)')
     .render();
