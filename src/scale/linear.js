@@ -177,7 +177,8 @@ class Linear extends Base {
       return 0;
     }
 
-    const percent = (value - min) / (max - min);
+    const percent = Math.min(1, Math.max(0, (value - min) / (max - min))); // 数据控制到 0-1 范围
+    // const percent = (value - min) / (max - min);
     const rangeMin = this.rangeMin();
     const rangeMax = this.rangeMax();
     return rangeMin + percent * (rangeMax - rangeMin);

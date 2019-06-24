@@ -34,6 +34,7 @@ const scene = new L7.Scene({
 });
 window.scene = scene;
 scene.on('loaded', () => {
+
   const layer = scene.VectorTileLayer({
     zIndex:0,
     layerType:'point'
@@ -46,25 +47,28 @@ scene.on('loaded', () => {
     parser:{
       type: 'mvt',
       sourceLayer:'layer',
-      //idField:'OBJECTID',   
-      maxZoom: 17,
+     // idField:'adcode',   
+      maxZoom: 14,
+      minZoom: 13,
     }
   })
   .scale({
     total:{
       min:0,
-      max:1000000,
+      max:100000,
       type:'log'
     }
   })
-  // cylinder
-  .shape('hexagon')
-  .size(2)
+  .shape('normal')
+  .size(1)
   .active({fill:'red'})
   .color('total',  ['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'].reverse())
   //.color('#0D408C')
   .style({
-    opacity:1.0
+     stroke: 'rgba(255,255,255,0.8)',
+     strokeWidth: 1,
+     strokeOpacity:0.6,
+     opacity: 1
   })
   .render(
   );
@@ -73,10 +77,6 @@ scene.on('loaded', () => {
   })
    console.log(layer);
   });
-//OBJECTID',(id)=>{
-    // const index = id % 8;
-     //return ['#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2'][index];
-  //}
 </script>
 </body>
 </html>

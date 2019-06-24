@@ -105,7 +105,9 @@ export default class Scene extends Base {
       this._container.addEventListener(event, e => {
         // 要素拾取
         e.pixel || (e.pixel = e.point);
-        this._engine._picking.pickdata(e);
+        requestAnimationFrame(() => {
+          this._engine._picking.pickdata(e);
+        });
       }, false);
     });
   }

@@ -35,15 +35,15 @@ const scene = new L7.Scene({
 window.scene = scene;
 scene.on('loaded', () => {
   scene.ImageTileLayer({
-    zIndex:0
+    zIndex:4
   })
-  .source('http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}')
+  .source('http://t1.tianditu.com/DataServer?T=cva_w&X={x}&Y={y}&L={z}&tk=174705aebfe31b79b3587279e211cb9a')
   .render();
 
    $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
     const citylayer = scene.PolygonLayer(
       {
-        zIndex:4
+        zIndex:0
       }
     )
     .source(city)
