@@ -9,6 +9,7 @@ import * as THREE from '../../../core/three';
 import * as PointBuffer from '../../../geom/buffer/point/index';
 import DrawStroke from './drawStroke';
 import PolygonMaterial from '../../../geom/material/polygonMaterial';
+import { generateLightingUniforms } from '../../../util/shaderModule';
 export default function DrawFill(layerData, layer) {
   const style = layer.get('styleOptions');
   const activeOption = layer.get('activedOptions');
@@ -34,9 +35,11 @@ export default function DrawFill(layerData, layer) {
   const material = new PolygonMaterial({
     u_opacity: style.opacity,
     u_activeColor: activeOption.fill,
-    u_zoom: layer.scene.getZoom()
+    u_zoom: layer.scene.getZoom(),
+    ...generateLightingUniforms(style.lights)
   }, {
-    SHAPE: true
+    SHAPE: true,
+    LIGHTING: true
   });
   material.setDefinesvalue('SHAPE', true);
   material.depthTest = false;
