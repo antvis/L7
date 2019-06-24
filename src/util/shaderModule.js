@@ -178,7 +178,8 @@ export function wrapUniforms(uniforms) {
 
 const DEFAULT_LIGHT = {
   type: 'directional',
-  direction: [ 1, 10.5, 12 ],
+  // direction: [ 1, 10.5, 12 ],
+  direction: [ 0, -10.5, 1 ],
   ambient: [ 0.2, 0.2, 0.2 ],
   diffuse: [ 0.6, 0.6, 0.6 ],
   specular: [ 0.1, 0.1, 0.1 ]
