@@ -52,12 +52,14 @@ import common from './common.glsl';
 import { registerModule } from '../../util/shaderModule';
 import pick_color from './shaderChunks/pick_color.glsl';
 import decode from './shaderChunks/decode.glsl';
+import lighting from './shaderChunks/lighting.glsl';
 import sdf_2d from './shaderChunks/sdf_2d.glsl';
 
 export function compileBuiltinModules() {
   registerModule('point', { vs: point_vert, fs: point_frag });
   registerModule('common', { vs: common, fs: common });
   registerModule('decode', { vs: decode, fs: '' });
+  registerModule('lighting', { vs: lighting, fs: '' });
   registerModule('sdf_2d', { vs: '', fs: sdf_2d });
   registerModule('pick_color', { vs: pick_color, fs: pick_color });
   registerModule('circle', { vs: circle_vert, fs: circle_frag });
