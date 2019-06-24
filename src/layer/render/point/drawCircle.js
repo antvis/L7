@@ -25,5 +25,8 @@ export default function drawCircle(layerData, layer) {
   });
   material.depthTest = false;
   const fillMesh = new THREE.Mesh(geometry, material);
+  aPosition.length = 0;
+  aPackedData.length = 0;
+  index.length = 0;
   return fillMesh;
 }

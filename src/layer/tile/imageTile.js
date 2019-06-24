@@ -16,7 +16,6 @@ export default class ImageTile extends Tile {
     const image = this._createDebugMesh();
     this._createMesh(image);
     this.emit('tileLoaded');
-    // return;
     // const urlParams = {
     //   x: this._tile[0],
     //   y: this._tile[1],
@@ -29,11 +28,9 @@ export default class ImageTile extends Tile {
     // image.addEventListener('load', () => {
     //   this._isLoaded = true;
     //   this._createMesh(image);
+    //   this.emit('tileLoaded');
     //   this._ready = true;
     // }, false);
-
-    // // image.addEventListener('progress', event => {}, false);
-    // // image.addEventListener('error', event => {}, false);
 
     // image.crossOrigin = '';
 
@@ -73,6 +70,7 @@ export default class ImageTile extends Tile {
     context.font = 'Bold 20px Helvetica Neue, Verdana, Arial';
     context.fillStyle = '#ff0000';
     context.fillText(this._tile.join('/'), 20, 20);
+    context.strokeStyle = 'red';
     context.rect(0, 0, 256, 256);
     context.stroke();
     return canvas;
@@ -83,6 +81,9 @@ export default class ImageTile extends Tile {
     }
 
     this._image.src = '';
+  }
+  updateColor() {
+
   }
   getSelectFeature() {
     return {};
