@@ -2,21 +2,9 @@ import * as THREE from '../../core/three';
 import Base from '../../core/base';
 import { destoryObject } from '../../util/object3d-util';
 import Controller from '../../core/controller/index';
-import Util from '../../util';
-import Global from '../../global';
-import Attr from '../../attr/index';
 import { toLngLatBounds, toBounds } from '@antv/geo-coord';
 const r2d = 180 / Math.PI;
 const tileURLRegex = /\{([zxy])\}/g;
-function parseFields(field) {
-  if (Util.isArray(field)) {
-    return field;
-  }
-  if (Util.isString(field)) {
-    return field.split('*');
-  }
-  return [ field ];
-}
 export default class Tile extends Base {
   constructor(key, url, layer) {
     super({
@@ -33,134 +21,52 @@ export default class Tile extends Base {
     this._center = this._tileBounds.getCenter();
 
     this._centerLnglat = this._tileLnglatBounds.getCenter();
-    this._object3D = new THREE.Object3D();
+    this._object3D = new THREE.Object3D({ name: key });
+    this._object3D.frustumCulled = false;
+    // this._object3D.name = key;
     this._object3D.onBeforeRender = () => {
     };
     this._isLoaded = false;
     this.requestTileAsync(data => this._init(data));
   }
   _init(data) {
+    // this._creatSource(data); // 获取Source
+    this.layerSource = data;
+
+    if (this.layerSource.data === null) {
+      this.isValid = false;
+      return;
+    }
+    this.isValid = true;
     this._initControllers();
-    this._creatSource(data);
-    this._initTileAttrs();
-    this._mapping();
     this._createMesh();
   }
-  _initControllers() {
-    const scales = this.layer.get('scaleOptions');
-    const scaleController = new Controller.Scale({
-      defs: {
-        ...scales
-      }
-    });
-    this.set('scaleController', scaleController);
+  repaint() {
+    this._initControllers();
+    this._createMesh();
   }
-  _createScale(field) {
-    // TODO scale更新
-    const scales = this.get('scales');
-    let scale = scales[field];
-    if (!scale) {
-      scale = this.createScale(field);
-      scales[field] = scale;
-    }
-    return scale;
-  }
-  createScale(field) {
-    const data = this.source.data.dataArray;
-    const scales = this.get('scales');
-    let scale = scales[field];
-    const scaleController = this.get('scaleController');
-    if (!scale) {
-      scale = scaleController.createScale(field, data);
-      scales[field] = scale;
-    }
-    return scale;
-  }
-  // 获取属性映射的值
-  _getAttrValues(attr, record) {
-    const scales = attr.scales;
-    const params = [];
-    for (let i = 0; i < scales.length; i++) {
-      const scale = scales[i];
-      const field = scale.field;
-      if (scale.type === 'identity') {
-        params.push(scale.value);
-      } else {
-        params.push(record[field]);
-      }
-    }
-    const indexZoom = params.indexOf('zoom');
-    indexZoom !== -1 ? params[indexZoom] = attr.zoom : null;
-    const values = attr.mapping(...params);
-    return values;
-  }
-  _mapping() {
-
-    const attrs = this.get('attrs');
-    const mappedData = [];
-    // const data = this.layerSource.propertiesData;
-    const data = this.source.data.dataArray;
-    for (let i = 0; i < data.length; i++) {
-      const record = data[i];
-      const newRecord = {};
-      newRecord.id = data[i]._id;
-      for (const k in attrs) {
-        if (attrs.hasOwnProperty(k)) {
-          const attr = attrs[k];
-          const names = attr.names;
-          const values = this._getAttrValues(attr, record);
-          if (names.length > 1) { // position 之类的生成多个字段的属性
-            for (let j = 0; j < values.length; j++) {
-              const val = values[j];
-              const name = names[j];
-              newRecord[name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-            }
-          } else {
-            newRecord[names[0]] = values.length === 1 ? values[0] : values;
-
-          }
-        }
-      }
-      newRecord.coordinates = record.coordinates;
-      mappedData.push(newRecord);
-    }
-    // 通过透明度过滤数据
-    if (attrs.hasOwnProperty('filter')) {
-      mappedData.forEach(item => {
-        item.filter === false && (item.color[3] = 0);
+  requestTileAsync(done) {
+    const data = this.layer.tileSource.getTileData(this._tile[0], this._tile[1], this._tile[2]);
+    if (data.loaded) {
+      done(data.data);
+    } else {
+      data.data.then(data => {
+        done(data);
       });
     }
-    this.layerData = mappedData;
   }
-  _initTileAttrs() {
-    const attrOptions = this.layer.get('attrOptions');
-    for (const type in attrOptions) {
-      if (attrOptions.hasOwnProperty(type)) {
-        this._updateTileAttr(type);
-      }
-    }
-  }
-  _updateTileAttr(type) {
-    const self = this;
-    const attrs = this.get('attrs');
-    const attrOptions = this.layer.get('attrOptions');
-    const option = attrOptions[type];
-    option.neadUpdate = true;
-    const className = Util.upperFirst(type);
-    const fields = parseFields(option.field);
-    const scales = [];
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      const scale = self._createScale(field);
+  _initControllers() {
+    const mappingCtr = new Controller.Mapping({
+      layer: this.layer,
+      mesh: this
+    });
+    const bufferCtr = new Controller.Buffer({
+      layer: this.layer,
+      mesh: this
+    });
+    this.set('mappingController', mappingCtr);
+    this.set('bufferController', bufferCtr);
 
-      if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
-        option.values = Global.colors;
-      }
-      scales.push(scale);
-    }
-    option.scales = scales;
-    const attr = new Attr[className](option);
-    attrs[type] = attr;
   }
   _createMesh() {}
   _getTileURL(urlParams) {
@@ -221,6 +127,15 @@ export default class Tile extends Base {
     }
 
     return false;
+  }
+  updateColor() {
+    const bufferCtr = this.get('bufferController');
+    this.get('mappingController').update();
+    bufferCtr._updateColorAttributes(this.getMesh().children[0]);
+  }
+  updateStyle() {
+    const bufferCtr = this.get('bufferController');
+    bufferCtr._updateStyle(this.getMesh().children[0]);
   }
   _preRender() {
   }

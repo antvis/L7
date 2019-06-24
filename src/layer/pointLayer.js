@@ -41,11 +41,15 @@ export default class PointLayer extends Layer {
   }
   zoomchange(ev) {
     super.zoomchange(ev);
-    this._updateData();
+    requestAnimationFrame(() => {
+      this._updateData();
+    });
   }
   dragend(ev) {
     super.dragend(ev);
-    this._updateData();
+    requestAnimationFrame(() => {
+      this._updateData();
+    });
 
   }
   _updateData() {
