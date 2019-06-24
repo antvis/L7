@@ -1,6 +1,7 @@
 import * as THREE from '../../../core/three';
 import PolygonBuffer from '../../../geom/buffer/polygon';
 import PolygonMaterial from '../../../geom/material/polygonMaterial';
+import { generateLightingUniforms } from '../../../util/shaderModule';
 
 export default function DrawPolygonFill(layerData, layer) {
   const style = layer.get('styleOptions');
@@ -9,7 +10,7 @@ export default function DrawPolygonFill(layerData, layer) {
     ...style,
     activeColor: activeOption.fill
   };
-  const { opacity, activeColor } = config;
+  const { opacity, activeColor, lights } = config;
   const { attributes } = new PolygonBuffer({
     shape: layer.shape,
     layerData
@@ -21,9 +22,11 @@ export default function DrawPolygonFill(layerData, layer) {
   geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
   const material = new PolygonMaterial({
     u_opacity: opacity,
-    u_activeColor: activeColor
+    u_activeColor: activeColor,
+    ...generateLightingUniforms(lights)
   }, {
-    SHAPE: false
+    SHAPE: false,
+    LIGHTING: true
   });
   const fillPolygonMesh = new THREE.Mesh(geometry, material);
   delete attributes.vertices;
