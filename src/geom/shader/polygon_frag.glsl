@@ -1,16 +1,18 @@
 precision highp float;
-uniform sampler2D u_texture;
-uniform vec4 u_baseColor;
-uniform vec4 u_brightColor;
-uniform vec4 u_windowColor;
-uniform float u_zoom;
-uniform float u_time;
-uniform float u_near;
-uniform float u_far;
+
+uniform vec4 u_baseColor : [ 1.0, 0, 0, 1.0 ];
+uniform vec4 u_brightColor : [ 1.0, 0, 0, 1.0 ];
+uniform vec4 u_windowColor : [ 1.0, 0, 0, 1.0 ];
+uniform float u_zoom : 0;
+uniform float u_time : 0;
+uniform float u_near : 0;
+uniform float u_far : 1;
+
+#ifdef ANIMATE
 varying vec2 v_texCoord;
-varying  vec4 v_color;
-varying float v_lightWeight;
-varying float v_size;
+#endif
+
+varying vec4 v_color;
 varying vec4 worldId;
 
 vec3 getWindowColor(float n, float hot, vec3 brightColor, vec3 darkColor) {
@@ -40,12 +42,6 @@ float sdRect(vec2 p, vec2 sz) {
   float outside = length(max(d, 0.));
   float inside = min(max(d.x, d.y), 0.);
   return outside + inside;
-}
-float circle(in vec2 _st, in float _radius){
-    vec2 dist = _st-vec2(0.5);
-	return 1.-smoothstep(_radius-(_radius*0.01),
-                         _radius+(_radius*0.01),
-                         dot(dist,dist)*4.0);
 }
 
 void main() {
@@ -104,19 +100,13 @@ void main() {
         // if(head ==1.0) { // 顶部亮线
         //     color = brightColor;
         // }
-        color = color * v_lightWeight;
+        color = color * v_color.rgb;
 
         vec3 foggedColor = fog(color,fogColor,depth);
          
         gl_FragColor = vec4(foggedColor,1.0); 
      }
    #else
-      // #ifdef SHAPE 
-      //   vec2 st = gl_FragCoord.xy / v_size ;
-	    //   vec3 color = vec3(circle(st,0.5));
-	    //   gl_FragColor = vec4(color, 1.0 );
-      //   return;
-      //  #endif
       gl_FragColor = vec4(v_color.xyz , v_color.w);
    #endif
  
