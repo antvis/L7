@@ -5,15 +5,15 @@ import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';
 import { getRender } from '../render/index';
 export default class VectorTile extends Tile {
-  requestTileAsync(done) {
-    // Making this asynchronous really speeds up the LOD framerate
-    setTimeout(() => {
-      if (!this._mesh) {
-       // this._mesh = this._createMesh();
-        this._requestTile(done);
-      }
-    }, 0);
-  }
+  // requestTileAsync(done) {
+  //   // Making this asynchronous really speeds up the LOD framerate
+  //   setTimeout(() => {
+  //     if (!this._mesh) {
+  //      // this._mesh = this._createMesh();
+  //       this._requestTile(done);
+  //     }
+  //   }, 0);
+  // }
   _requestTile(done) {
     const urlParams = {
       x: this._tile[0],
@@ -32,31 +32,35 @@ export default class VectorTile extends Tile {
     });
   }
   _creatSource(data) {
-    this.source = this.layer.tileSource(data, {
+    if (!data) return null;
+    this.layerSource = this.layer.tileSource(data, {
       parser: {
         tile: this._tile
       }
     });
   }
   _createMesh() {
+    const layerData = this.layerData;
     if (this.layer.get('layerType') === 'point') {
-      this.layer.shape = this.layer._getShape(this.layerData);
+      this.layer.shape = this.layer._getShape(layerData);
     }
-    this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(this.layerData, this.layer);
+    this.mesh = getRender(this.layer.get('layerType'), this.layer.shape)(layerData, this.layer);
     if (this.mesh.type !== 'composer') { // 热力图的情况
       this.mesh.onBeforeRender = renderer => {
         this._renderMask(renderer);
       };
       this.mesh.onAfterRender = renderer => {
         const context = renderer.context;
+        context.clear(context.STENCIL_BUFFER_BIT);
         context.disable(context.STENCIL_TEST);
       };
       this._object3D.add(this.mesh);
-    } else {
+    } else { // 如果是热力图
       this._object3D = this.mesh;
     }
-
-    this.emit('tileLoaded');
+    setTimeout(() => {
+      this.emit('tileLoaded');
+    }, 0);
     return this._object3D;
   }
   _renderMask(renderer) {
@@ -85,7 +89,7 @@ export default class VectorTile extends Tile {
     // config the stencil buffer to collect data for testing
     this.layer.scene._engine.renderScene(maskScene);
     context.colorMask(true, true, true, true);
-    context.depthMask(true);
+    context.depthMask(false);
     renderer.clearDepth();
 
 		// only render where stencil is set to 1
@@ -114,9 +118,10 @@ export default class VectorTile extends Tile {
     this.xhrRequest.abort();
   }
   getSelectFeature(id) {
-    const featureIndex = this.source.originData.featureKeys[id];
-    if (featureIndex) {
-      return this.source.originData.dataArray[featureIndex];
+    const featurekey = this.layerSource.originData.featureKeys[id];
+    if (featurekey && featurekey.index !== undefined) {
+      const featureIndex = featurekey.index;
+      return this.layerSource.originData.dataArray[featureIndex];
     }
     return null;
   }
@@ -126,7 +131,5 @@ export default class VectorTile extends Tile {
     this._object3D = null;
     this.maskScene = null;
     this.layerData = null;
-    this.source.destroy();
-    this.source = null;
   }
 }

@@ -29,6 +29,10 @@ export default function DrawPolygonFill(layerData, layer) {
     LIGHTING: true
   });
   const fillPolygonMesh = new THREE.Mesh(geometry, material);
+  delete attributes.vertices;
+  delete attributes.colors;
+  delete attributes.pickingIds;
+  delete attributes.normals;
   return fillPolygonMesh;
 }
 

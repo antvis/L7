@@ -20,7 +20,7 @@ export default class Source extends Base {
     super(cfg);
     const transform = this.get('transforms');
     this._transforms = transform || [];
-    const mapType = this.get('mapType');
+    const mapType = this.get('mapType') || 'AMap';
     this.projectFlat = getMap(mapType).project;
     // 数据解析
     this._init();
@@ -56,10 +56,13 @@ export default class Source extends Base {
     const { type = 'geojson' } = parser;
     const data = this.get('data');
     this.originData = getParser(type)(data, parser);
-    this.data = {
-      dataArray: clone(this.originData.dataArray)
-    };
-    this.data.extent = extent(this.data.dataArray);
+    // this.data = {
+    //   dataArray: clone(this.originData.dataArray)
+    // }; // TODO 关闭数据备份
+    this.data = this.originData;
+    if (this.data !== null) {
+      this.data.extent = extent(this.data.dataArray);
+    }
   }
   /**
    * 数据统计
@@ -96,6 +99,9 @@ export default class Source extends Base {
     this._projectCoords();
   }
   _projectCoords() {
+    if (this.data === null) {
+      return;
+    }
     this.data.dataArray.forEach(data => {
       // data.coordinates = this._coordProject(data.coordinates);
       data.coordinates = tranfrormCoord(data.coordinates, this._coorConvert.bind(this));
