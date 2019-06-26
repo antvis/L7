@@ -2,10 +2,12 @@ import Engine from './engine';
 import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
-// import WorkerPool from './worker';
+import FontAtlasManager from '../geom/buffer/point/text/font-manager';
+import WorkerPool from '../worker/worker_pool';
 // import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
 import Global from '../global';
+import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -16,13 +18,16 @@ export default class Scene extends Base {
     this._initMap();
     // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
+    this.fontAtlasManager = new FontAtlasManager();
     this._layers = [];
+    this.animateCount = 0;
   }
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
-    this._engine.run();
-    // this.workerPool = new WorkerPool();
+    this.registerMapEvent();
+    // this._engine.run();
+    this.workerPool = new WorkerPool();
     compileBuiltinModules();
   }
   // 为pickup场景添加 object 对象
@@ -35,14 +40,20 @@ export default class Scene extends Base {
     const MapProvider = getMap(this.mapType);
     const Map = new MapProvider(this._attrs);
     Map.mixMap(this);
-    this._container = document.getElementById(Map.container);
+    this._container = Map.container;
     // const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.on('mapLoad', () => {
-      this._initEngine(Map.renderDom);
       this.map = Map.map;
+      this._initEngine(Map.renderDom);
       Map.asyncCamera(this._engine);
       this.initLayer();
       this._registEvents();
+      const hash = this.get('hash');
+      if (hash) {
+        const Ctor = getInteraction('hash');
+        const interaction = new Ctor({ layer: this });
+        interaction._onHashChange();
+      }
       this.emit('loaded');
     });
 
@@ -63,16 +74,7 @@ export default class Scene extends Base {
   }
   off(type, hander) {
     if (this.map) { this.map.off(type, hander); }
-
     super.off(type, hander);
-  }
-  _initAttribution() {
-    const message = '<a href="http://antv.alipay.com/zh-cn/index.html title="Large-scale WebGL-powered Geospatial Data Visualization">AntV | L7  </a>';
-    const element = document.createElement('div');
-
-    element.innerHTML = message;
-    element.style.cssText += 'position: absolute; pointer-events:none;background: rgba(255, 255, 255, 0.7);font-size: 11px;z-index:100; padding:4px;bottom: 0;right:0px;';
-    this._container.appendChild(element);
   }
   addImage() {
     this.image = new LoadImage();
@@ -103,7 +105,9 @@ export default class Scene extends Base {
       this._container.addEventListener(event, e => {
         // 要素拾取
         e.pixel || (e.pixel = e.point);
-        this._engine._picking.pickdata(e);
+        requestAnimationFrame(() => {
+          this._engine._picking.pickdata(e);
+        });
       }, false);
     });
   }
@@ -114,6 +118,32 @@ export default class Scene extends Base {
     }
     layer.destroy();
     layer = null;
+  }
+  startAnimate() {
+    if (this.animateCount === 0) {
+      this.unRegsterMapEvent();
+      this._engine.run();
+    }
+    this.animateCount++;
+  }
+  stopAnimate() {
+    if (this.animateCount === 1) {
+      this._engine.stop();
+      this.registerMapEvent();
+    }
+    this.animateCount++;
+  }
+  // 地图状态变化时更新可视化渲染
+  registerMapEvent() {
+    this._updateRender = () => this._engine.update();
+    this.map.on('mousemove', this._updateRender);
+    this.map.on('mapmove', this._updateRender);
+    this.map.on('camerachange', this._updateRender);
+  }
+  unRegsterMapEvent() {
+    this.map.off('mousemove', this._updateRender);
+    this.map.off('mapmove', this._updateRender);
+    this.map.off('camerachange', this._updateRender);
   }
 
 }

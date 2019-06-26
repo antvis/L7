@@ -41,7 +41,7 @@ scene.on('loaded', () => {
       features.push(greatCircle);
     }
     var fc = turf.featureCollection(features);
-    scene.LineLayer({
+    const layer = scene.LineLayer({
       zIndex: 2
     })
      .source(fc)
@@ -51,6 +51,7 @@ scene.on('loaded', () => {
     })
    //.animate({enable:true})
     .render();
+    console.log(layer);
     /**
     scene.LineLayer({
       zIndex: 2

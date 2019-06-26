@@ -5,9 +5,10 @@
 import Base from './base';
 import * as THREE from './three';
 import ColorUtil from '../attr/color-util';
+import Controller from './controller/index';
 import source from './source';
-import PickingMaterial from '../core/engine/picking/pickingMaterial';
-import Attr from '../attr/index';
+import diff from '../util/diff';
+import { updateObjecteUniform } from '../util/object3d-util';
 import Util from '../util';
 import Global from '../global';
 let id = 1;
@@ -20,7 +21,6 @@ function parseFields(field) {
   }
   return [ field ];
 }
-
 export default class Layer extends Base {
   getDefaultCfg() {
     return {
@@ -30,8 +30,11 @@ export default class Layer extends Base {
       minZoom: 0,
       maxZoom: 22,
       rotation: 0,
+      option: {},
       attrOptions: {
       },
+      scaleOptions: {},
+      preScaleOptions: null,
       scales: {},
       attrs: {},
       // 样式配置项
@@ -46,7 +49,10 @@ export default class Layer extends Base {
       // 选中时的配置项
       selectedOptions: null,
       // active 时的配置项
-      activedOptions: null,
+      activedOptions: {
+        fill: [ 1.0, 0, 0, 1.0 ]
+      },
+      interactions: {},
       animateOptions: {
         enable: false
       }
@@ -60,6 +66,7 @@ export default class Layer extends Base {
     this._pickObject3D = new THREE.Object3D();
     this._object3D.visible = this.get('visible');
     this._object3D.renderOrder = this.get('zIndex') || 0;
+    this._mapEventHandlers = [];
     const layerId = this._getUniqueId();
     this.layerId = layerId;
     this._activeIds = null;
@@ -76,27 +83,40 @@ export default class Layer extends Base {
     * @param {*} type mesh类型是区别是填充还是边线
    */
   add(object, type = 'fill') {
-    type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
-
-    this._visibleWithZoom();
-    this._zoomchangeHander = this._visibleWithZoom.bind(this);
-    this.scene.on('zoomchange', this._zoomchangeHander);
-
-    object.onBeforeRender = () => {
-      const zoom = this.scene.getZoom();
-      object.material.setUniformsValue('u_time', this.scene._engine.clock.getElapsedTime());
-      object.material.setUniformsValue('u_zoom', zoom);
-      this._preRender();
-
-    };
-    // 更新
-    if (this._needUpdateFilter) {
-      this._updateFilter(object);
+    // composer合图层绘制
+    if (object.type === 'composer') {
+      this._object3D = object;
+      this.scene._engine.composerLayers.push(object);
+      setTimeout(() => this.scene._engine.update(), 500);
+      return;
     }
+    type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
+    this._visibleWithZoom();
+    object.onBeforeRender = () => { // 每次渲染前改变状态
+      const zoom = this.scene.getZoom();
+      updateObjecteUniform(this._object3D, {
+        u_time: this.scene._engine.clock.getElapsedTime(),
+        u_zoom: zoom
+      });
+      this.preRender();
+    };
+
+    object.onAfterRender = () => { // 每次渲染后改变状态
+      this.afterRender();
+    };
     this._object3D.add(object);
-    if (type === 'fill') { this._addPickMesh(object); }
+    if (type === 'fill') {
+      this.get('pickingController').addPickMesh(object);
+    }
+    setTimeout(() => this.scene._engine.update(), 500);
   }
   remove(object) {
+    if (object.type === 'composer') {
+      this.scene._engine.composerLayers = this.scene._engine.composerLayers.filter(layer => {
+        return (layer !== object);
+      });
+      return;
+    }
     this._object3D.remove(object);
   }
   _getUniqueId() {
@@ -107,20 +127,20 @@ export default class Layer extends Base {
     this._object3D.visible = this.get('visible');
   }
   source(data, cfg = {}) {
+    if (data instanceof source) {
+      this.layerSource = data;
+      return this;
+    }
     cfg.data = data;
     cfg.mapType = this.scene.mapType;
+    cfg.zoom = this.scene.getZoom();
     this.layerSource = new source(cfg);
-    // this.scene.workerPool.runTask({
-    //   command: 'geojson',
-    //   data: cfg
-    // }).then(data => {
+    // this.scene.workerPool.runTask(cfg).then(data => {
     //   console.log(data);
     // });
-
     return this;
   }
   color(field, values) {
-    this._needUpdateColor = true;// 标识颜色是否需要更新
     this._createAttrOption('color', field, values, Global.colors);
     return this;
   }
@@ -131,6 +151,16 @@ export default class Layer extends Base {
     }
     if (Util.isArray(fields) && !values) values = fields;
     this._createAttrOption('size', field, values, Global.size);
+    return this;
+  }
+  scale(field, cfg) {
+    const options = this.get('scaleOptions');
+    const scaleDefs = options;
+    if (Util.isObject(field)) {
+      Util.mix(scaleDefs, field);
+    } else {
+      scaleDefs[field] = cfg;
+    }
     return this;
   }
   shape(field, values) {
@@ -152,12 +182,13 @@ export default class Layer extends Base {
   active(enable, cfg) {
     if (enable === false) {
       this.set('allowActive', false);
-    } else if (Util.isObject(enable)) {
+    } else if (Util.isObject(enable) && enable.fill) {
       this.set('allowActive', true);
+      if (enable.fill) enable.fill = ColorUtil.color2RGBA(enable.fill);
       this.set('activedOptions', enable);
     } else {
       this.set('allowActive', true);
-      this.set('activedOptions', cfg || { fill: Global.activeColor });
+      this.set('activedOptions', cfg || { fill: ColorUtil.color2RGBA(Global.activeColor) });
     }
     return this;
   }
@@ -187,11 +218,12 @@ export default class Layer extends Base {
     this.set('styleOptions', styleOptions);
     return this;
   }
+
   filter(field, values) {
-    this._needUpdateFilter = true;
     this._createAttrOption('filter', field, values, true);
     return this;
   }
+
   animate(field, cfg) {
     let animateOptions = this.get('animateOptions');
     if (!animateOptions) {
@@ -214,6 +246,10 @@ export default class Layer extends Base {
   texture() {
 
   }
+  fitBounds() {
+    const extent = this.layerSource.data.extent;
+    this.scene.fitBounds(extent);
+  }
   hide() {
     this._visible(false);
     return this;
@@ -222,11 +258,16 @@ export default class Layer extends Base {
     this._visible(true);
     return this;
   }
+  setData(data, cfg) {
+    this.layerSource.setData(data, cfg);
+    this.repaint();
+  }
   _createScale(field) {
+    // TODO scale更新
     const scales = this.get('scales');
     let scale = scales[field];
     if (!scale) {
-      scale = this.layerSource.createScale(field);
+      scale = this.createScale(field);
       scales[field] = scale;
     }
     return scale;
@@ -253,68 +294,133 @@ export default class Layer extends Base {
     }
     this._setAttrOptions(attrName, attrCfg);
   }
+  _initControllers() {
+    const mappingCtr = new Controller.Mapping({ layer: this });
+    const pickCtr = new Controller.Picking({ layer: this });
+    const interactionCtr = new Controller.Interaction({ layer: this });
+    this.set('mappingController', mappingCtr);
+    this.set('pickingController', pickCtr);
+    this.set('interacionController', interactionCtr);
+  }
+
+  render() {
+    this.init();
+    this.scene._engine.update();
+    return this;
+  }
+  // 重绘 度量， 映射，顶点构建
+  repaint() {
+    this.set('scales', {});
+    const mappingCtr = new Controller.Mapping({ layer: this });
+    this.set('mappingController', mappingCtr);
+    // this._initAttrs();
+    // this._mapping();
+    this.redraw();
+  }
   // 初始化图层
   init() {
-    this._initAttrs();
-    this._scaleByZoom();
-    this._mapping();
-
-    const activeHander = this._addActiveFeature.bind(this);
-    const resetHander = this._resetStyle.bind(this);
+    this._initControllers();
+    // this._initAttrs();
+    this._updateDraw();
+  }
+  _initInteraction() {
     if (this.get('allowActive')) {
-
-      this.on('mousemove', activeHander);
-      this.on('mouseleave', resetHander);
-
-    } else {
-      this.off('mousemove', activeHander);
-      this.off('mouseleave', resetHander);
+      this.get('interacionController').addInteraction('active');
     }
+  }
+  _initMapEvent() {
+    // zoomchange  mapmove resize
+    const EVENT_TYPES = [ 'zoomchange', 'dragend' ];
+    Util.each(EVENT_TYPES, type => {
+      const handler = Util.wrapBehavior(this, `${type}`);
+      this.map.on(`${type}`, handler);
+      this._mapEventHandlers.push({ type, handler });
+    });
+  }
+  clearMapEvent() {
+    const eventHandlers = this._mapEventHandlers;
+    Util.each(eventHandlers, eh => {
+      this.map.off(eh.type, eh.handler);
+    });
+  }
+  zoomchange(ev) {
+    // 地图缩放等级变化
+    this._visibleWithZoom(ev);
+  }
+  dragend() {
+
+  }
+  resize() {
+  }
+
+  setActive(id, color) {
+    this._activeIds = id;
+    if (!Array.isArray(color)) {
+      color = ColorUtil.color2RGBA(color);
+    }
+    updateObjecteUniform(this._object3D, {
+      u_activeColor: color,
+      u_activeId: id
+    });
+    this.scene._engine.update();
   }
 
   _addActiveFeature(e) {
     const { featureId } = e;
-    if (featureId < 0) return;
-    const activeStyle = this.get('activedOptions');
-    // const selectFeatureIds = this.layerSource.getSelectFeatureId(featureId);
-    // 如果数据不显示状态则不进行高亮
-    if (this.layerData[featureId].hasOwnProperty('filter') && this.layerData[featureId].filter === false) { return; }
-    const style = Util.assign({}, this.layerData[featureId]);
-    style.color = ColorUtil.toRGB(activeStyle.fill).map(e => e / 255);
-    this.updateStyle([ featureId ], style);
+    this._activeIds = featureId;
+    updateObjecteUniform(this._object3D, { u_activeId: featureId });
   }
 
-
-  _initAttrs() {
-    const attrOptions = this.get('attrOptions');
-    for (const type in attrOptions) {
-      if (attrOptions.hasOwnProperty(type)) {
-        this._updateAttr(type);
-      }
+  _setPreOption() {
+    const nextAttrs = this.get('attrOptions');
+    const nextStyle = this.get('styleOptions');
+    this.set('preAttrOptions', Util.clone(nextAttrs));
+    this.set('preStyleOption', Util.clone(nextStyle));
+  }
+  _updateDraw() {
+    const preAttrs = this.get('preAttrOptions');
+    const nextAttrs = this.get('attrOptions');
+    const preStyle = this.get('preStyleOption');
+    const nextStyle = this.get('styleOptions');
+    if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
+      // this._mapping();
+      this._setPreOption();
+      this._scaleByZoom();
+      this._initInteraction();
+      this._initMapEvent();
+      this.draw();
+      return;
     }
-  }
-  _updateAttr(type) {
-    const self = this;
-    const attrs = this.get('attrs');
-    const attrOptions = this.get('attrOptions');
-    const option = attrOptions[type];
-    option.neadUpdate = true;
-    const className = Util.upperFirst(type);
-    const fields = parseFields(option.field);
-    const scales = [];
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      const scale = self._createScale(field);
-
-      if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
-        option.values = Global.colors;
-      }
-      scales.push(scale);
+    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
+      this._updateAttributes(this.layerMesh);
     }
-    option.scales = scales;
-    const attr = new Attr[className](option);
-    attrs[type] = attr;
+    // 更新数据过滤 filter
+    if (!Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
+      // 更新color；
+      this._updateAttributes(this.layerMesh);
+    }
+    // 更新Size
+    if (!Util.isEqual(preAttrs.size, nextAttrs.size)) {
+      // 更新color；
+      this._updateSize();
+    }
+    // 更新形状
+    if (!Util.isEqual(preAttrs.shape, nextAttrs.shape)) {
+      // 更新color；
+      this._updateShape();
+    }
+    if (!Util.isEqual(preStyle, nextStyle)) {
+      // 判断新增，修改，删除
+      const newStyle = {};
+      Util.each(diff(preStyle, nextStyle), ({ type, key, value }) => {
+        (type !== 'remove') && (newStyle[key] = value);
+        // newStyle[key] = type === 'remove' ? null : value;
+      });
+      this._updateStyle(newStyle);
+    }
+    this._setPreOption();
   }
+
   _updateSize(zoom) {
     const sizeOption = this.get('attrOptions').size;
     const fields = parseFields(sizeOption.field);
@@ -332,95 +438,12 @@ export default class Layer extends Base {
     }
     this.emit('sizeUpdated', this.zoomSizeCache[zoom]);
   }
-  _mapping() {
-    const self = this;
-    const attrs = self.get('attrs');
-    const mappedData = [];
-    // const data = this.layerSource.propertiesData;
-    const data = this.layerSource.data.dataArray;
-    for (let i = 0; i < data.length; i++) {
-      const record = data[i];
-      const newRecord = {};
-      newRecord.id = data[i]._id;
-      for (const k in attrs) {
-        if (attrs.hasOwnProperty(k)) {
-          const attr = attrs[k];
-          attr.needUpdate = false;
-          const names = attr.names;
-          const values = self._getAttrValues(attr, record);
-          if (names.length > 1) { // position 之类的生成多个字段的属性
-            for (let j = 0; j < values.length; j++) {
-              const val = values[j];
-              const name = names[j];
-              newRecord[name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-            }
-          } else {
-            newRecord[names[0]] = values.length === 1 ? values[0] : values;
-
-          }
-        }
-      }
-      newRecord.coordinates = record.coordinates;
-      mappedData.push(newRecord);
+  _updateStyle(option) {
+    const newOption = { };
+    for (const key in option) {
+      newOption['u_' + key] = option[key];
     }
-    this.layerData = mappedData;
-  }
-  // 更新地图映射
-  _updateMaping() {
-    const self = this;
-    const attrs = self.get('attrs');
-
-    const data = this.layerSource.data.dataArray;
-    for (let i = 0; i < data.length; i++) {
-      const record = data[i];
-      for (const attrName in attrs) {
-        if (attrs.hasOwnProperty(attrName) && attrs[attrName].neadUpdate) {
-          const attr = attrs[attrName];
-          const names = attr.names;
-          const values = self._getAttrValues(attr, record);
-          if (names.length > 1) { // position 之类的生成多个字段的属性
-            for (let j = 0; j < values.length; j++) {
-              const val = values[j];
-              const name = names[j];
-              this.layerData[i][name] = (Util.isArray(val) && val.length === 1) ? val[0] : val; // 只有一个值时返回第一个属性值
-            }
-          } else {
-            this.layerData[i][names[0]] = values.length === 1 ? values[0] : values;
-
-          }
-          attr.neadUpdate = true;
-        }
-      }
-    }
-  }
-  // 获取属性映射的值
-  _getAttrValues(attr, record) {
-    const scales = attr.scales;
-    const params = [];
-    for (let i = 0; i < scales.length; i++) {
-      const scale = scales[i];
-      const field = scale.field;
-      if (scale.type === 'identity') {
-        params.push(scale.value);
-      } else {
-        params.push(record[field]);
-      }
-    }
-    const indexZoom = params.indexOf('zoom');
-    indexZoom !== -1 ? params[indexZoom] = attr.zoom : null;
-    const values = attr.mapping(...params);
-    return values;
-  }
-
-  // temp
-  _getDataType(data) {
-    if (data.hasOwnProperty('type')) {
-      const type = data.type;
-      if (type === 'FeatureCollection') {
-        return 'geojson';
-      }
-    }
-    return 'basic';
+    updateObjecteUniform(this._object3D, newOption);
   }
   _scaleByZoom() {
     if (this._zoomScale) {
@@ -430,106 +453,52 @@ export default class Layer extends Base {
       });
     }
   }
-  // on(type, callback) {
 
-  //   this._addPickingEvents();
-  //   super.on(type, callback);
-  // }
-  getPickingId() {
-    return this.scene._engine._picking.getNextId();
-  }
-  addToPicking(object) {
-    this.scene._engine._picking.add(object);
-  }
-  removeFromPicking(object) {
-    this.scene._engine._picking.remove(object);
-  }
-  _addPickMesh(mesh) {
-    this._pickingMesh = new THREE.Object3D();
-    this._pickingMesh.name = this.layerId;
-    // this._visibleWithZoom();
-    // this.scene.on('zoomchange', () => {
-    //   this._visibleWithZoom();
-    // });
-
-    this.addToPicking(this._pickingMesh);
-    const pickmaterial = new PickingMaterial({
-      u_zoom: this.scene.getZoom()
-    });
-
-    const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
-    pickingMesh.name = this.layerId;
-    pickmaterial.setDefinesvalue(this.type, true);
-    pickingMesh.onBeforeRender = () => {
-      const zoom = this.scene.getZoom();
-      pickingMesh.material.setUniformsValue('u_zoom', zoom);
-    };
-    this._pickingMesh.add(pickingMesh);
-
-  }
-  _setPickingId() {
-    this._pickingId = this.getPickingId();
-  }
   _initEvents() {
     this.scene.on('pick-' + this.layerId, e => {
-      const { featureId, point2d, type } = e;
-      if (featureId < -100 && this._activeIds !== null) {
-        this.emit('mouseleave');
-        return;
-      }
-      const feature = this.layerSource.getSelectFeature(featureId);
+      let { featureId, point2d, type } = e;
+      // TODO 瓦片图层获取选中数据信息
       const lnglat = this.scene.containerToLngLat(point2d);
+      let feature = null;
+      let style = null;
+      if (featureId !== -999) {
+        const res = this.getSelectFeature(featureId, lnglat);
+        feature = res.feature;
+        style = res.style;
+      }
       const target = {
         featureId,
         feature,
+        style,
         pixel: point2d,
+        type,
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
-      if (featureId >= 0) {
+      if (featureId >= 0) { // 拾取到元素，或者离开元素
         this.emit(type, target);
       }
+      if (featureId < 0 && this._activeIds >= 0) {
+        type = 'mouseleave';
+        this.emit(type, target);
+      }
+      this._activeIds = featureId;
 
     });
   }
-  /**
-   * 更新active操作
-   * @param {*} featureStyleId 需要更新的要素Id
-   * @param {*} style  更新的要素样式
-   */
-  updateStyle(featureStyleId, style) {
-    if (this._activeIds) {
-      this._resetStyle();
-    }
-    this._activeIds = featureStyleId;
-    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
-    const color = style.color;
-    const colorAttr = this.layerMesh.geometry.attributes.a_color;
-    const firstId = pickingId.indexOf(featureStyleId[0] + 1);
-    for (let i = firstId; i < pickingId.length; i++) {
-      if (pickingId[i] === featureStyleId[0] + 1) {
-        colorAttr.array[i * 4 + 0] = color[0];
-        colorAttr.array[i * 4 + 1] = color[1];
-        colorAttr.array[i * 4 + 2] = color[2];
-        colorAttr.array[i * 4 + 3] = color[3];
-      } else {
-        break;
-      }
-    }
-    colorAttr.needsUpdate = true;
-    return;
-  }
-
-  _updateColor() {
-
-    this._updateMaping();
-
+  getSelectFeature(featureId) {
+    const feature = this.layerSource.getSelectFeature(featureId);
+    const style = this.layerData[featureId - 1];
+    return {
+      feature,
+      style
+    };
   }
   /**
    *  用于过滤数据
-   * @param {*} object  需要过滤的mesh
+   * @param {*} object  更新颜色和数据过滤
    */
-  _updateFilter(object) {
-    this._updateMaping();
+  _updateAttributes(object) {
+    this.get('mappingController').update();
     const filterData = this.layerData;
     this._activeIds = null; // 清空选中元素
     const colorAttr = object.geometry.attributes.a_color;
@@ -557,6 +526,7 @@ export default class Layer extends Base {
     pickAttr.needsUpdate = true;
   }
   _visibleWithZoom() {
+    if (this._object3D === null) return;
     const zoom = this.scene.getZoom();
     const minZoom = this.get('minZoom');
     const maxZoom = this.get('maxZoom');
@@ -564,43 +534,56 @@ export default class Layer extends Base {
     let offset = 0;
     if (this.type === 'point') {
       offset = 5;
-    } else if (this.type === 'polyline') {
+      this.shapeType = 'text' && (offset = 10);
+
+    } else if (this.type === 'polyline' || this.type === 'line') {
       offset = 2;
+    } else if (this.type === 'polygon') {
+      offset = 1;
     }
-    this._object3D.position.z = offset * Math.pow(2, 20 - zoom);
-    if (zoom < minZoom || zoom > maxZoom) {
+    this._object3D.position && (this._object3D.position.z = offset * Math.pow(2, 20 - zoom));
+    if (zoom < minZoom || zoom >= maxZoom) {
       this._object3D.visible = false;
     } else if (this.get('visible')) {
       this._object3D.visible = true;
     }
   }
+
+  // 重新构建mesh
+  redraw() {
+    this._object3D.children.forEach(child => {
+      this._object3D.remove(child);
+    });
+    this.get('pickingController').removeAllMesh();
+    this.draw();
+  }
+  // 更新mesh
+  updateDraw() {
+
+  }
+
+  styleCfg() {
+
+  }
+
   /**
    * 重置高亮要素
    */
   _resetStyle() {
-
-    const pickingId = this.layerMesh.geometry.attributes.pickingId.array;
-    const colorAttr = this.layerMesh.geometry.attributes.a_color;
-    this._activeIds.forEach(index => {
-      const color = this.layerData[index].color;
-      const firstId = pickingId.indexOf(index + 1);
-      for (let i = firstId; i < pickingId.length; i++) {
-        if (pickingId[i] === index + 1) {
-          colorAttr.array[i * 4 + 0] = color[0];
-          colorAttr.array[i * 4 + 1] = color[1];
-          colorAttr.array[i * 4 + 2] = color[2];
-          colorAttr.array[i * 4 + 3] = color[3];
-        }
-      }
-    });
-    colorAttr.needsUpdate = true;
     this._activeIds = null;
+    updateObjecteUniform(this._object3D, { u_activeId: 0 });
   }
   /**
    * 销毁Layer对象
    */
   destroy() {
     this.removeAllListeners();
+    this.clearAllInteractions();
+    this.clearMapEvent();
+    if (this._object3D.type === 'composer') {
+      this.remove(this._object3D);
+      return;
+    }
     if (this._object3D && this._object3D.children) {
       let child;
       for (let i = 0; i < this._object3D.children.length; i++) {
@@ -625,13 +608,55 @@ export default class Layer extends Base {
         child = null;
       }
     }
+    this.layerMesh.geometry = null;
+    this.layerMesh.material.dispose();
+    this.layerMesh.material = null;
+    if (this._pickingMesh) {
+      this._pickingMesh.children[0].geometry = null;
+      this._pickingMesh.children[0].material.dispose();
+      this._pickingMesh.children[0].material = null;
+    }
+    this._buffer = null;
     this._object3D = null;
     this.scene._engine._scene.remove(this._object3D);
+    this.layerData.length = 0;
+    this.layerSource = null;
     this.scene._engine._picking.remove(this._pickingMesh);
-    this.scene.off('zoomchange', this._zoomchangeHander);
     this.destroyed = true;
   }
-  _preRender() {
+
+  /**
+   * 获取图例配置项
+   * @param {*} field 字段
+   * @param {*} type 图例类型 color, size
+   * @return {*} 图例配置项
+   */
+  getLegendCfg(field, type = 'color') {
+    // todo heatmap
+    if (this.type === 'heatmap' && this.shapeType === 'heatmap') {
+      return this.get('styleOptions').rampColors;
+    }
+    const scales = this.get('scales');
+    const scale = scales[field];
+    const colorAttrs = this.get('attrs')[type];
+    const lengendCfg = {};
+    if (scale) {
+      const ticks = scale.ticks;
+      lengendCfg.value = ticks;
+      lengendCfg.type = scale.type;
+      const values = ticks.map(value => {
+        const v = this._getAttrValues(colorAttrs, { [field]: value });
+        return type === 'color' ? ColorUtil.colorArray2RGBA(v) : v;
+      });
+      lengendCfg[type] = values;
+    }
+    return lengendCfg;
+  }
+  preRender() {
+
+  }
+
+  afterRender() {
 
   }
 }

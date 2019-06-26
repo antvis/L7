@@ -12,8 +12,13 @@ export { Mesh } from 'three/src/objects/Mesh.js';
 export { Texture } from 'three/src/textures/Texture.js';
 export { WebGLRenderTarget } from 'three/src/renderers/WebGLRenderTarget.js';
 export { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera.js';
+export { OrthographicCamera } from 'three/src/cameras/OrthographicCamera.js';
 export { BufferGeometry } from 'three/src/core/BufferGeometry.js';
+export { InstancedBufferGeometry } from 'three/src/core/InstancedBufferGeometry';
+export { PlaneBufferGeometry } from 'three/src/geometries/PlaneGeometry.js';
+export { BoxBufferGeometry } from 'three/src/geometries/BoxGeometry.js';
 export { Raycaster } from 'three/src/core/Raycaster.js';
+export { UniformsUtils } from 'three/src/renderers/shaders/UniformsUtils.js';
 export { Matrix4 } from 'three/src/math/Matrix4.js';
 export { Matrix3 } from 'three/src/math/Matrix3.js';
 export { Line } from 'three/src/objects/Line.js';
@@ -22,6 +27,7 @@ export { Vector3 } from 'three/src/math/Vector3.js';
 export { Vector2 } from 'three/src/math/Vector2.js';
 export { ShaderMaterial } from 'three/src/materials/ShaderMaterial.js';
 export { DataTexture } from 'three/src/textures/DataTexture.js';
+export { Color } from 'three/src/math/Color.js';
 export {
   Float64BufferAttribute,
   Float32BufferAttribute,
@@ -35,4 +41,5 @@ export {
   BufferAttribute
 } from 'three/src/core/BufferAttribute.js';
 
+export { InstancedBufferAttribute } from 'three/src/core/InstancedBufferAttribute'
 // export * from '../../build/three.js';
