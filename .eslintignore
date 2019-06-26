@@ -8,9 +8,7 @@ node_modules/
 demos/assets/
 demos/index.html
 demos/*
-<<<<<<< HEAD
 rollup/*
 webpack/*
-=======
 src/core/three.js
->>>>>>> master
+testdemo/*

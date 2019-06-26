@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>heatmap</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=f28fca5384129d180ad82915156a9baf&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'amap://styles/c9f1d10cae34f8ab05e425462c5a58d7', // 样式URL
+  center: [ -155, 60 ],
+  pitch: 0,
+  zoom: 4.5
+});
+ 
+window.scene = scene;
+scene.on('loaded', () => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/08c6ea00-dc5f-4bb0-b0b5-52bde5edf0a3.json', data => {
+    scene.HeatmapLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .size('mag', [ 0, 1 ]) // weight映射通道
+    .style({
+      intensity: 10,
+      radius: 10,
+      opacity:1,
+      rampColors: {
+        colors: [ '#ffda45ff', '#fde725ff', '#ffc934ff', '#ffb824ff', '#ffb824ff', '#fa8100ff' ],
+        positions: [ 0, 0.2, 0.4, 0.6, 0.9, 1.0 ]
+      }
+    })
+    .render();
+    /*scene.PointLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .shape('2d:circle')
+    .size(2) // weight映射通道
+    .color('red')
+    .render();*/
+  });
+});
+</script>
+</body>
+</html>
+

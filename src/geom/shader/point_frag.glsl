@@ -6,32 +6,29 @@ precision highp float;
 
 uniform float u_strokeWidth;
 uniform vec4 u_stroke;
-uniform float u_opacity;
 uniform sampler2D u_texture;
 
 varying vec2 v_rs;
 varying vec2 v_uv;
 varying vec4 v_color;
 varying float v_shape;
-
 const float u_buffer = 0.75;
 // const float u_gamma = 2.0 * 1.4142 / 10.0;
 const float u_gamma = 0.08;
 // const float u_scale = 128.0;
 const vec3 halo = vec3( 1.0 ); 
-
 void main() {
     // 纹理坐标
     #ifdef TEXCOORD_0
-    vec2 pos =  v_uv + gl_PointCoord / 512.0 * 64.0;
-    pos.y = 1.0 - pos.y;
-    vec4 textureColor = texture2D(u_texture, pos);
-    gl_FragColor =textureColor;
-    return;
+        vec2 pos =  v_uv + gl_PointCoord / 512.0 * 64.0;
+        pos.y = 1.0 - pos.y;
+        vec4 textureColor = texture2D(u_texture, pos);
+        gl_FragColor =textureColor;
+        return;
     #endif
      if(v_color.a == 0.)
       discard;
-    vec4 pcolor = v_color * u_opacity;
+    vec4 pcolor = v_color;
     float ro = v_rs.x;
     float ri = v_rs.y;
     float d = 0.0;
@@ -56,7 +53,7 @@ void main() {
             gl_FragColor = vec4(u_stroke.xyz,u_stroke.a*(ro- dis2center));
             return;
         }else if(dis2center>ri){
-            gl_FragColor= u_stroke * alpha ;
+            gl_FragColor= u_stroke;
             return;
         }
     }
@@ -73,6 +70,6 @@ void main() {
         } else{
             gl_FragColor= pcolor;
         }
-    gl_FragColor *= u_opacity;
+    
 }
 
