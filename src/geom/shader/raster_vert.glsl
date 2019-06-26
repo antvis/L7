@@ -1,6 +1,7 @@
 precision highp float;
 uniform vec4 u_extent;
 uniform sampler2D u_texture;
+uniform float u_opacity;
 uniform float u_size;
 uniform sampler2D u_colorTexture;
 uniform float u_min;
@@ -18,6 +19,7 @@ void main() {
         fract(16.0 * (1.0 - value1)),
         floor(16.0 * (1.0 - value1)) / 16.0);
     v_color = texture2D(u_colorTexture,ramp_pos);
+    v_color.a *= u_opacity;
    vec2 range = u_extent.zw - u_extent.xy;
    gl_Position =  matModelViewProjection * vec4(position.xy, value*100., 1.0);
 

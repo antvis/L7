@@ -1,31 +1,49 @@
-precision highp float;
 attribute float a_miter;
 attribute vec4 a_color;
 attribute float a_size;
 attribute float a_distance;
+attribute float a_dash_array;
+
 uniform float u_zoom;
+uniform float u_time : 0;
+uniform float u_activeId : 0;
+uniform vec4 u_activeColor : [ 1.0, 0, 0, 1.0 ];
+
+varying float v_time;
 varying vec4 v_color;
-uniform float u_time;
-varying float vTime;
-//  animate 
+varying float v_distance;
+varying float v_dash_array;
+varying vec2 v_normal;
+
 #ifdef ANIMATE 
-uniform float u_duration;  // 动画持续时间
-uniform float u_interval;
-uniform float u_repeat;
-uniform float u_trailLength;
+uniform float u_duration : 2.0;
+uniform float u_interval : 1.0;
+uniform float u_trailLength : 0.2;
 #endif
 
-
 void main() {
- mat4 matModelViewProjection = projectionMatrix * modelViewMatrix;
- vec3 pointPos = position.xyz + vec3(normal * a_size * pow(2.0,20.0-u_zoom) / 2.0 * a_miter);
- v_color = a_color;
-  #ifdef ANIMATE 
-    //mod(a_distance,0.2) * 5.
-     float alpa =1.0 - fract( mod(1.0- a_distance,u_interval)* (1.0/u_interval) + u_time / u_duration);
-     alpa = (alpa + u_trailLength -1.0) / u_trailLength;
-     vTime = clamp(alpa,0.,1.);
-  #endif
-gl_Position = matModelViewProjection * vec4(pointPos, 1.0);
+  v_color = a_color;
+  v_distance = a_distance;
+  v_dash_array = a_dash_array;
 
+  // anti-alias
+  v_normal = vec2(normal * sign(a_miter));
+
+  // extrude along normal
+  float extrude_scale = pow(2.0, 20.0 - u_zoom);
+  vec3 offset = vec3(normal * a_size * extrude_scale / 2.0 * a_miter);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xy + offset.xy, 0., 1.0);
+  // gl_Position.z -=0.8 * gl_Position.w;
+
+  #ifdef ANIMATE
+    float alpha =1.0 - fract( mod(1.0- a_distance,u_interval)* (1.0/u_interval) + u_time / u_duration);
+    alpha = (alpha + u_trailLength -1.0) / u_trailLength;
+    v_time = clamp(alpha,0.,1.);
+  #endif
+
+  // picking
+  if(pickingId == u_activeId) {
+    v_color = u_activeColor;
+  }
+  worldId = id_toPickColor(pickingId);
 }
