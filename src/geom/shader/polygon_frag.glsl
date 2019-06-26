@@ -1,17 +1,19 @@
 precision highp float;
-uniform float u_opacity;
-uniform sampler2D u_texture;
-uniform vec4 u_baseColor;
-uniform vec4 u_brightColor;
-uniform vec4 u_windowColor;
-uniform float u_zoom;
-uniform float u_time;
-uniform float u_near;
-uniform float u_far;
+
+uniform vec4 u_baseColor : [ 1.0, 0, 0, 1.0 ];
+uniform vec4 u_brightColor : [ 1.0, 0, 0, 1.0 ];
+uniform vec4 u_windowColor : [ 1.0, 0, 0, 1.0 ];
+uniform float u_zoom : 0;
+uniform float u_time : 0;
+uniform float u_near : 0;
+uniform float u_far : 1;
+
+#ifdef ANIMATE
 varying vec2 v_texCoord;
-varying  vec4 v_color;
-varying float v_lightWeight;
-varying float v_size;
+#endif
+
+varying vec4 v_color;
+varying vec4 worldId;
 
 vec3 getWindowColor(float n, float hot, vec3 brightColor, vec3 darkColor) {
     float s = step(hot, n);
@@ -42,7 +44,6 @@ float sdRect(vec2 p, vec2 sz) {
   return outside + inside;
 }
 
-
 void main() {
    if(v_color.w == 0.0) {
      discard;
@@ -57,7 +58,7 @@ void main() {
    #ifdef ANIMATE 
      if(v_texCoord.x < 0.) { //顶部颜色
        vec3 foggedColor = fog(baseColor.xyz + vec3(0.12*0.9,0.2*0.9,0.3*0.9),fogColor,depth);
-       gl_FragColor = vec4( foggedColor, v_color.w * u_opacity);
+       gl_FragColor = vec4( foggedColor, v_color.w);
      }else { // 侧面颜色
         vec2 st = v_texCoord; 
         vec2  UvScale = v_texCoord;
@@ -99,14 +100,14 @@ void main() {
         // if(head ==1.0) { // 顶部亮线
         //     color = brightColor;
         // }
-        color = color * v_lightWeight;
+        color = color * v_color.rgb;
 
         vec3 foggedColor = fog(color,fogColor,depth);
          
         gl_FragColor = vec4(foggedColor,1.0); 
      }
    #else
-       gl_FragColor = vec4(v_color.xyz , v_color.w * u_opacity);
+      gl_FragColor = vec4(v_color.xyz , v_color.w);
    #endif
  
 }
