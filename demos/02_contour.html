@@ -30,8 +30,7 @@ const scene = new L7.Scene({
   zoom: 14.82,
 });
 scene.on('loaded', () => {
-  $.get('./data/contour.geojson', data => {
-   // data.features = data.features.slice(0,1);
+  $.get('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json', data => {
     scene.LineLayer({
       zIndex: 2
     })

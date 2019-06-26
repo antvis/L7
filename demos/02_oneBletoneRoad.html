@@ -59,6 +59,7 @@ $.getJSON('https://gw.alipayobjects.com/os/rmsportal/kwUdcXnxQtexeGRvTGtA.json',
             })
             .render();
 });
+
 $.getJSON('https://gw.alipayobjects.com/os/rmsportal/dzpMOiLYBKxpdmsgBLoE.json', contourData => {
         const landlayer = scene.LineLayer(
             {zIndex:2}
@@ -72,6 +73,7 @@ $.getJSON('https://gw.alipayobjects.com/os/rmsportal/dzpMOiLYBKxpdmsgBLoE.json',
             })
             .render();
 });
+
 $.getJSON('https://gw.alipayobjects.com/os/rmsportal/opYqFyDGyGUAUXkLUhBV.json', city => {
     var makerLayer = scene.PointLayer({
       zIndex: 4
@@ -81,7 +83,6 @@ $.getJSON('https://gw.alipayobjects.com/os/rmsportal/opYqFyDGyGUAUXkLUhBV.json',
     .shape('image:local')
     .color('#0D408C')
     .render();
-
     var makerText = scene.PointLayer({
       zIndex: 8,
       minZoom:5,
@@ -96,6 +97,7 @@ $.getJSON('https://gw.alipayobjects.com/os/rmsportal/opYqFyDGyGUAUXkLUhBV.json',
          strokeWidth: 4,
     })
     .render();
+      return
 })
 
 })

@@ -75,7 +75,7 @@ export default class LineBuffer extends BufferBase {
   }
   _getMeshLineAttributes() {
     const layerData = this.get('layerData');
-    const { lineType } = this.get('style');
+    const { dashArray } = this.get('style');
     const positions = [];
     const pickingIds = [];
     const normal = [];
@@ -84,10 +84,11 @@ export default class LineBuffer extends BufferBase {
     const indexArray = [];
     const sizes = [];
     const attrDistance = [];
+    const attrDashArray = [];
     layerData.forEach(item => {
       const props = item;
       const positionCount = positions.length / 3;
-      const attr = lineShape.Line(item.coordinates, props, positionCount, (lineType !== 'soild'));
+      const attr = lineShape.Line(item.coordinates, props, positionCount, dashArray);
       positions.push(...attr.positions);
       normal.push(...attr.normal);
       miter.push(...attr.miter);
@@ -96,6 +97,7 @@ export default class LineBuffer extends BufferBase {
       sizes.push(...attr.sizes);
       attrDistance.push(...attr.attrDistance);
       pickingIds.push(...attr.pickingIds);
+      attrDashArray.push(...attr.dashArray);
     });
     return {
       positions,
@@ -105,22 +107,26 @@ export default class LineBuffer extends BufferBase {
       indexArray,
       pickingIds,
       sizes,
-      attrDistance
+      attrDistance,
+      attrDashArray
     };
   }
 
   _toAttributes(bufferStruct) {
     const vertCount = bufferStruct.verts.length;
     const vertices = new Float32Array(vertCount * 3);
+    const pickingIds = new Float32Array(vertCount);
     const inposs = new Float32Array(vertCount * 4);
     const colors = new Float32Array(vertCount * 4);
     for (let i = 0; i < vertCount; i++) {
       const index = bufferStruct.indexs[i];
       const color = bufferStruct.style[index].color;
+      const id = bufferStruct.style[index].id;
       vertices[i * 3] = bufferStruct.verts[i][0];
       vertices[i * 3 + 1] = bufferStruct.verts[i][1];
       vertices[i * 3 + 2] = bufferStruct.verts[i][2];
       colors[i * 4] = color[0];
+      pickingIds[i] = id;
       colors[i * 4 + 1] = color[1];
       colors[i * 4 + 2] = color[2];
       colors[i * 4 + 3] = color[3];
@@ -133,6 +139,7 @@ export default class LineBuffer extends BufferBase {
 
     }
     return {
+      pickingIds,
       vertices,
       colors,
       inposs

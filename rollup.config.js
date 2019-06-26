@@ -24,11 +24,11 @@ const config = [
       indent: false,
       chunkFileNames: 'shared.js'
     },
-    experimentalCodeSplitting: true,
-    treeshake: production,
+    // experimentalCodeSplitting: true,
+    treeshake: false,
     plugins: [
       glsl(
-        [ './src/geom/shader/*.glsl', './src/core/engine/picking/*.glsl' ],
+        [ './src/geom/shader/*.glsl', './src/core/engine/picking/*.glsl', './src/geom/shader/**/*.glsl' ],
         production
       ),
       minified ? terser() : false,

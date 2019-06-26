@@ -23,7 +23,7 @@ export default class ImageBuffer extends BufferBase {
     const uv = [ 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 ];
     const texture = new THREE.Texture(image);
     texture.magFilter = THREE.LinearFilter;
-    texture.minFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
     texture.needsUpdate = true;
     const attributes = {
       vertices: new Float32Array(positions),

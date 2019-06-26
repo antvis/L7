@@ -3,13 +3,10 @@ import * as THREE from '../../three';
 let nextId = 1;
 
 class Picking {
-  constructor(world, renderer, camera, scene) {
+  constructor(world, renderer, camera) {
     this._world = world;
     this._renderer = renderer;
     this._camera = camera;
-    this._raycaster = new THREE.Raycaster();
-    this.scene = scene;
-    this._raycaster.linePrecision = 10;
     this._pickingScene = PickingScene;
     this.world = new THREE.Group();
     this._pickingScene.add(this.world);
@@ -49,13 +46,11 @@ class Picking {
     this._height = size.height;
     this._pickingTexture.setSize(this._width, this._height);
     this._pixelBuffer = new Uint8Array(4 * this._width * this._height);
-
     this._needUpdate = true;
   }
   _update(point) {
-
     const texture = this._pickingTexture;
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+    this._renderer.render(this._pickingScene, this._camera, texture);
     this.pixelBuffer = new Uint8Array(4);
     this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
 
@@ -66,8 +61,23 @@ class Picking {
       index === id ? object.visible = true : object.visible = false;
     });
   }
+  _layerIsVisable(object) {
+    const layers = this._world.getLayers();
+    let isVisable = false;
+    for (let i = 0; i < layers.length; i++) {
+      const layer = layers[i];
+      if (object.name === layer.layerId) {
+        isVisable = layer.get('visible');
+        break;
+      }
+    }
+    return isVisable;
+  }
   _pickAllObject(point, normalisedPoint) {
     this.world.children.forEach((object, index) => {
+      if (!this._layerIsVisable(object)) {
+        return;
+      }
       this._filterObject(index);
       const item = this._pick(point, normalisedPoint, object.name);
       item.type = point.type;
@@ -76,9 +86,9 @@ class Picking {
 
     });
   }
-  _updateRender() {
-    this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-  }
+  // _updateRender() {
+  //   this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
+  // }
 
   _pick(point, normalisedPoint, layerId) {
     this._update(point);
@@ -87,21 +97,11 @@ class Picking {
       id = -999;
       // return;
     }
-    this._raycaster.setFromCamera(normalisedPoint, this._camera);
-
-    const intersects = this._raycaster.intersectObjects(this._pickingScene.children, true);
     const _point2d = { x: point.x, y: point.y };
-
-    let _point3d;
-    if (intersects.length > 0) {
-      _point3d = intersects[0].point;
-    }
     const item = {
       layerId,
-      featureId: id - 1,
-      point2d: _point2d,
-      point3d: _point3d,
-      intersects
+      featureId: id,
+      point2d: _point2d
     };
     return item;
 
@@ -134,8 +134,6 @@ class Picking {
     this._envents.forEach(event => {
       this._world._container.removeEventListener(event[0], event[1], false);
     });
-
-    this._world.off('move', this._onWorldMove);
 
     if (this._pickingScene.children) {
       // Remove everything else in the layer
