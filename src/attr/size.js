@@ -42,10 +42,11 @@ class Size extends Base {
   _scaling(scale, v) {
     if (scale.type === 'identity') {
       return v;
-    } else if (scale.type === 'linear') {
-      const percent = scale.scale(v);
-      return this.getLinearValue(percent);
     }
+    const percent = scale.scale(v);
+    return this.getLinearValue(percent);
+
+    // else if (scale.type === 'linear') {
   }
 
   getLinearValue(percent) {

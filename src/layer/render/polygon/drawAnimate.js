@@ -1,7 +1,17 @@
 import * as THREE from '../../../core/three';
+import PolygonBuffer from '../../../geom/buffer/polygon';
 import PolygonMaterial from '../../../geom/material/polygonMaterial';
-export default function DrawAnimate(attributes, style) {
-  const { opacity, baseColor, brightColor, windowColor, near, far } = style;
+import { generateLightingUniforms } from '../../../util/shaderModule';
+
+export default function DrawAnimate(layerData, layer) {
+  const style = layer.get('styleOptions');
+  const { near, far } = layer.map.getCameraState();
+  layer.scene.startAnimate();
+  const { attributes } = new PolygonBuffer({
+    shape: 'extrude',
+    layerData
+  });
+  const { opacity, baseColor, brightColor, windowColor, lights } = style;
   const geometry = new THREE.BufferGeometry();
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
@@ -15,9 +25,11 @@ export default function DrawAnimate(attributes, style) {
     u_brightColor: brightColor,
     u_windowColor: windowColor,
     u_near: near,
-    u_far: far
+    u_far: far,
+    ...generateLightingUniforms(lights)
   }, {
     SHAPE: false,
+    LIGHTING: true,
     ANIMATE: true
   });
   const fillPolygonMesh = new THREE.Mesh(geometry, material);
@@ -25,7 +37,7 @@ export default function DrawAnimate(attributes, style) {
 }
 
 DrawAnimate.prototype.updateStyle = function(style) {
-  this.fillPolygonMesh.material.upDateUninform({
+  this.fillPolygonMesh.material.updateUninform({
     u_opacity: style.opacity,
     u_baseColor: style.baseColor,
     u_brightColor: style.brightColor,

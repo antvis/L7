@@ -39,7 +39,7 @@ scene.on('loaded', () => {
     //.color('#F08D41')
     .color('#ff893a')
     .animate({enable:true})
-    .render();
+    //.render();
   });
    $.get('https://gw.alipayobjects.com/os/rmsportal/vmvAxgsEwbpoSWbSYvix.json', data => {
    buildLayer =  scene.PolygonLayer({
@@ -55,7 +55,23 @@ scene.on('loaded', () => {
        baseColor:'rgb(16,16,16)',
        windowColor:'rgb(30,60,89)',
        //brightColor:'rgb(155,217,255)'
-       brightColor:'rgb(255,176,38)'
+       brightColor:'rgb(255,176,38)',
+       lights: [
+        {
+          type: 'directional',
+          direction: [ 1, 10.5, 12 ],
+          ambient: [ 0.2, 0.2, 0.2 ],
+          diffuse: 'red',
+          specular: [ 0.1, 0.1, 0.1 ]
+        },
+        {
+          type: 'directional',
+          direction: [ 1, -10.5, 12 ],
+          ambient: [ 0.2, 0.2, 0.2 ],
+          diffuse: 'green',
+          specular: [ 0.1, 0.1, 0.1 ]
+        },
+      ]
      })
     .render();
     

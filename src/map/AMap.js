@@ -17,7 +17,7 @@ export default class GaodeMap extends Base {
     let d = Math.PI / 180;
     let x = lnglat[0] * d;
     let y = lat * d;
-    y = Math.log(Math.tan((Math.PI / 4) + (y / 2)));
+    y = Math.log(Math.tan(Math.PI / 4 + y / 2));
     const a = 0.5 / Math.PI,
       b = 0.5,
       c = -0.5 / Math.PI;
@@ -28,43 +28,47 @@ export default class GaodeMap extends Base {
   }
   constructor(cfg) {
     super(cfg);
-    this.container = this.get('id');
+    this.container = document.getElementById(this.get('id'));
     this.initMap();
     this.addOverLayer();
     setTimeout(() => {
       this.emit('mapLoad');
     }, 100);
-
   }
 
   initMap() {
     const mapStyle = this.get('mapStyle');
-
-    switch (mapStyle) {
-      case 'dark' :
-        this.set('mapStyle', Theme.DarkTheme.mapStyle);
-        break;
-      case 'light':
-        this.set('mapStyle', Theme.LightTheme.mapStyle);
-        break;
-      default:
-        this.set('mapStyle', mapStyle);
+    if (mapStyle) {
+      switch (mapStyle) {
+        case 'dark':
+          this.set('mapStyle', Theme.DarkTheme.mapStyle);
+          break;
+        case 'light':
+          this.set('mapStyle', Theme.LightTheme.mapStyle);
+          break;
+        default:
+          this.set('mapStyle', mapStyle);
+      }
     }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
-    this.map = new AMap.Map(this.container, this._attrs);
-
+    const map = this.get('map');
+    if (map instanceof AMap.Map) {
+      this.map = map;
+      this.container = map.getContainer();
+      this.map.setMapStyle(this.get('mapStyle'));
+    } else {
+      this.map = new AMap.Map(this.container, this._attrs);
+    }
   }
   asyncCamera(engine) {
     this._engine = engine;
     const camera = engine._camera;
-    const scene = engine._scene;
-    const pickScene = engine._picking._pickingScene;
     this.map.on('camerachange', e => {
       const mapCamera = e.camera;
       let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
       pitch *= DEG2RAD;
       rotation *= DEG2RAD;
-      camera.fov = 180 * fov / Math.PI;
+      camera.fov = (180 * fov) / Math.PI;
       camera.aspect = aspect;
       camera.near = near;
       camera.far = far;
@@ -72,15 +76,12 @@ export default class GaodeMap extends Base {
       camera.position.z = height * Math.cos(pitch);
       camera.position.x = height * Math.sin(pitch) * Math.sin(rotation);
       camera.position.y = -height * Math.sin(pitch) * Math.cos(rotation);
-
       camera.up.x = -Math.cos(pitch) * Math.sin(rotation);
       camera.up.y = Math.cos(pitch) * Math.cos(rotation);
       camera.up.z = Math.sin(pitch);
       camera.lookAt(0, 0, 0);
-      scene.position.x = -e.camera.position.x;
-      scene.position.y = e.camera.position.y;
-      pickScene.position.x = -e.camera.position.x;
-      pickScene.position.y = e.camera.position.y;
+      camera.position.x += e.camera.position.x;
+      camera.position.y += -e.camera.position.y;
     });
   }
 
@@ -94,35 +95,90 @@ export default class GaodeMap extends Base {
     return this.projectFlat(this.getCenter());
   }
   addOverLayer() {
-    const canvasContainer = document.getElementById(this.container);
+    const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
     this.canvasContainer = canvasContainer;
     this.renderDom = document.createElement('div');
-    this.renderDom.style.cssText += 'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
+    this.renderDom.style.cssText +=
+      'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
     canvasContainer.appendChild(this.renderDom);
   }
   mixMap(scene) {
     const map = this.map;
-    scene.getZoom = () => { return map.getZoom(); };
-    scene.getCenter = () => { return map.getCenter(); };
-    scene.getSize = () => { return map.getSize(); };
-    scene.getPitch = () => { return map.getPitch(); };
-    scene.getRotation = () => { return map.getRotation(); };
-    scene.getStatus = () => { return map.getStatus(); };
-    scene.getScale = () => { return map.getScale(); };
-    scene.getZoom = () => { return map.getZoom(); };
-    scene.setZoom = () => { return map.setZoom(); };
-    scene.setBounds = () => { return map.setBounds(); };
-    scene.setRotation = () => { return map.setRotation(); };
-    scene.zoomIn = () => { return map.zoomIn(); };
-    scene.setRotation = () => { return map.setRotation(); };
-    scene.zoomOut = () => { return map.zoomOut(); };
-    scene.panTo = () => { return map.panTo(); };
-    scene.panBy = () => { return map.panBy(); };
-    scene.setPitch = () => { return map.setPitch(); };
-    scene.pixelToLngLat = () => { return map.pixelToLngLat(); };
-    scene.lngLatToPixel = () => { return map.lngLatToPixel(); };
-    scene.setMapStyle = () => { return map.setMapStyle(); };
+    scene.project = GaodeMap.project;
+    scene.getZoom = () => {
+      return map.getZoom();
+    };
+    scene.getCenter = () => {
+      return map.getCenter();
+    };
+    scene.getSize = () => {
+      return map.getSize();
+    };
+    scene.getPitch = () => {
+      return map.getPitch();
+    };
+    scene.getRotation = () => {
+      return map.getRotation();
+    };
+    scene.getStatus = () => {
+      return map.getStatus();
+    };
+    scene.getScale = () => {
+      return map.getScale();
+    };
+    scene.getZoom = () => {
+      return map.getZoom();
+    };
+    scene.setZoom = zoom => {
+      return map.setZoom(zoom);
+    };
+    scene.getBounds = () => {
+      return map.getBounds();
+    };
+    scene.setZoomAndCenter = (zoom, center) => {
+      const lnglat = new AMap.LngLat(center[0], center[1]);
+      return map.setZoomAndCenter(zoom, lnglat);
+    };
+    scene.setBounds = extent => {
+      return map.setBounds(new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ]));
+    };
+    scene.setRotation = rotation => {
+      return map.setRotation(rotation);
+    };
+    scene.setStatus = status => {
+      return map.setStatus(status);
+    };
+    scene.zoomIn = () => {
+      return map.zoomIn();
+    };
+    scene.zoomOut = () => {
+      return map.zoomOut();
+    };
+    scene.panTo = lnglat => {
+      return map.panTo(new AMap.LngLat(lnglat[0], lnglat[1]));
+    };
+    scene.panBy = (x, y) => {
+      return map.panBy(x, y);
+    };
+    scene.setPitch = pitch => {
+      return map.setPitch(pitch);
+    };
+    scene.pixelToLngLat = pixel => {
+      const ll = new AMap.Pixel(pixel[0], pixel[1]);
+      return map.pixelToLngLat(ll);
+    };
+    scene.lngLatToPixel = lnglat => {
+      return map.lngLatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
+    };
+    scene.setMapStyle = style => {
+      return map.setMapStyle(style);
+    };
+    scene.fitBounds = extent => {
+      return map.setBounds(
+        new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ])
+      );
+    };
     scene.containerToLngLat = pixel => {
       const ll = new AMap.Pixel(pixel.x, pixel.y);
       return map.containerToLngLat(ll);
