@@ -1,8 +1,10 @@
 import fs from 'fs';
 // import sourcemaps from 'rollup-plugin-sourcemaps';
+import json from 'rollup-plugin-json';
 import buble from 'rollup-plugin-buble';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import builtins from 'rollup-plugin-node-builtins';
 import { createFilter } from 'rollup-pluginutils';
 import { terser } from 'rollup-plugin-terser';
 const { BUILD, MINIFY } = process.env;
@@ -25,13 +27,18 @@ const config = [
       chunkFileNames: 'shared.js'
     },
     // experimentalCodeSplitting: true,
-    treeshake: false,
+    treeshake: production,
+    onwarn(warning, warn) {
+      if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+      warn(warning);
+    },
     plugins: [
       glsl(
         [ './src/geom/shader/*.glsl', './src/core/engine/picking/*.glsl', './src/geom/shader/**/*.glsl' ],
         production
       ),
       minified ? terser() : false,
+      json(),
       buble({
         transforms: { dangerousForOf: true },
         objectAssign: 'Object.assign'
@@ -41,10 +48,9 @@ const config = [
         preferBuiltins: false
       }),
       commonjs({
-        // global keyword handling causes Webpack compatibility issues, so we disabled it:
-        // https://github.com/mapbox/mapbox-gl-js/pull/6956
         ignoreGlobal: true
-      })
+      }),
+      builtins()
     ]
   },
   {
@@ -62,9 +68,6 @@ const config = [
     },
     treeshake: false,
     plugins: [
-      // Ingest the sourcemaps produced in the first step of the build.
-      // This is the only reason we use Rollup for this second pass
-      // sourcemaps()
     ]
   }
 ];
