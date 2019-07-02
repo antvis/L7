@@ -47,6 +47,10 @@ export default class Tile extends Base {
   }
   requestTileAsync(done) {
     // 获取数据
+    this.layer.workerTileSource.loadTile({
+      tile: this._tile,
+      url: this.layer.tileSource.getRequestUrl(this._tile[0], this._tile[1], this._tile[2])
+    });
     const data = this.layer.tileSource.getTileData(this._tile[0], this._tile[1], this._tile[2]);
     if (data.loaded) {
       done(data.data);
