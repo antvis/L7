@@ -1,5 +1,5 @@
 import Tile from './tile';
-import { getArrayBuffer } from '../../util/ajax';
+
 import { destoryObject, updateObjecteUniform } from '../../util/object3d-util';
 import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';

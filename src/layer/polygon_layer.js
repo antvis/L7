@@ -6,7 +6,7 @@ export default class PolygonLayer extends Layer {
     return this;
   }
   draw() {
-    this.init();
+    // this.init();
     this.type = 'polygon';
     const animateOptions = this.get('animateOptions');
     if (animateOptions.enable) {

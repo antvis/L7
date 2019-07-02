@@ -2,6 +2,7 @@ import Layer from '../../core/layer';
 import Util from '../../util';
 import diff from '../../util/diff';
 import TileSource from '../../source/tile_source';
+import TileWorkerSource from '../../source/tile_worker_source';
 import * as THREE from '../../core/three';
 import Controller from '../../core/controller/index';
 import Global from '../../global';
@@ -26,6 +27,9 @@ export default class TileLayer extends Layer {
     this.tileList = {};
     this.type = this.get('layerType');
     this.workerPool = this.scene.workerPool;
+    this.workerTileSource = new TileWorkerSource({
+      workerPool: this.scene.workerPool
+    });
   }
   shape(field, values) {
     const layerType = this.get('layerType');
@@ -41,13 +45,12 @@ export default class TileLayer extends Layer {
       this.tileSource = data;
     } else {
       cfg.mapType = this.scene.mapType;
-      this.workerPool.runTask({
-        data,
-        cfg
-      }).then(res => {
-          console.log(res);
-      });
       this.tileSource = new TileSource(data, cfg);
+      this.sourceCfg = {
+        ...cfg,
+        url: data
+      };
+      this.workerTileSource.set('sourceCfg', this.sourceCfg);
     }
     return this;
   }
@@ -412,8 +415,9 @@ export default class TileLayer extends Layer {
     const nextAttrs = this.get('attrOptions');
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
+    this.workerTileSource.set('attrs', nextAttrs);
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
-      this._setPreOption();
+      // this._setPreOption();
       this._scaleByZoom();
       this._initControllers();
       this._initInteraction();
