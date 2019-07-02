@@ -9,8 +9,6 @@ export default class TileSource extends Source {
     this.urlTemplate = url;
     this._tileDataCache = new TileDataCache(50, this.tileDestroy);
     this.type = 'tile';
-
-
   }
   getTileData(x, y, z) {
     const key = [ x, y, z ].join('_');
@@ -66,6 +64,11 @@ export default class TileSource extends Source {
     });
 
   }
+  getRequestUrl(x, y, z) {
+    const urlParams = { x, y, z };
+    return this._getTileURL(urlParams);
+
+  }
   _getTileURL(urlParams) {
     if (!urlParams.s) {
       // Default to a random choice of a, b or c
@@ -78,15 +81,11 @@ export default class TileSource extends Source {
     });
   }
   tileDestroy(tile) {
-    if (!tile || !tile.data || tile.loading || !tile.data.data.dataArray) {
+    if (!tile || !tile.data || tile.loading || !tile.data.data || !tile.data.data.dataArray) {
       return;
     }
     const tileData = tile.data;
     tileData.destroy();
-    tileData.data.dataArray.length = 0;
-    tileData.data.featureKeys = null;
-    tileData.originData.dataArray.length = 0;
-    tileData.originData.featureKeys = null;
   }
 
 }

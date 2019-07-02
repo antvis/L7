@@ -17,7 +17,7 @@ class AJAXError extends Error {
 }
 
 function makeRequest(requestParameters) {
-  const xhr = new window.XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
 
   xhr.open('GET', requestParameters.url, true);
   for (const k in requestParameters.headers) {
