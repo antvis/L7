@@ -23,7 +23,7 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-
+window.L7 = L7;
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
@@ -38,30 +38,23 @@ var colorHash = new ColorHash();
 
 
 scene.on('loaded', () => {
- 
   const layer = scene.VectorTileLayer({
     zIndex:0,
     layerType:'polygon'
   })
-  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/china/province/{z}/{x}/{y}.pbf',{
+  // http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/county/{z}/{x}/{y}.pbf
+  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/county/{z}/{x}/{y}.pbf',{
     parser:{
       type: 'mvt',
-      sourceLayer:'layer',
-      idField:'code',   
-      maxZoom: 5,
+      sourceLayer:'county',
+      idField:'id',   
+      maxZoom: 9,
     }
 })
-  .scale({
-    total:{
-      type:'linear',
-      min:0,
-      max:5000000
-    }
-  })
-  .shape('fill')
+  .shape('line')
   .size(2)
   .active(false)
-  .color('total', ['#ffffe5','#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506'])
+  .color('red')
   .style({
     opacity:1.0
   })

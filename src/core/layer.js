@@ -274,13 +274,13 @@ export default class Layer extends Base {
   }
   _setAttrOptions(attrName, attrCfg) {
     const options = this.get('attrOptions');
-
     if (attrName === 'size' && this._zoomScale) {
       attrCfg.zoom = this.map.getZoom();
     }
     options[attrName] = attrCfg;
   }
   _createAttrOption(attrName, field, cfg, defaultValues) {
+   
     const attrCfg = {};
     attrCfg.field = field;
     if (cfg) {
@@ -384,8 +384,8 @@ export default class Layer extends Base {
     const nextStyle = this.get('styleOptions');
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
       // this._mapping();
+      // this._scaleByZoom();
       this._setPreOption();
-      this._scaleByZoom();
       this._initInteraction();
       this._initMapEvent();
       this.draw();
