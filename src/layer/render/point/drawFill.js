@@ -43,6 +43,7 @@ export default function DrawFill(layerData, layer) {
   });
   material.setDefinesvalue('SHAPE', true);
   material.depthTest = false;
+  material.setBending(style.blending);
   const fillMesh = new THREE.Mesh(geometry, material);
   if (style.stroke !== 'none') {
     // 是否绘制边界
