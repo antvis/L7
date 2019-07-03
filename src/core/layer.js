@@ -43,7 +43,8 @@ export default class Layer extends Base {
         strokeWidth: 1.0,
         opacity: 1.0,
         strokeOpacity: 1.0,
-        texture: false
+        texture: false,
+        blending: 'normal'
       },
       destroyed: false,
       // 选中时的配置项
