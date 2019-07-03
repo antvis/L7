@@ -43,7 +43,6 @@ return {
   ]
  }
 }
-console.log(pointOnCircle(10))
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'light', // 样式URL
@@ -76,7 +75,7 @@ scene.on('loaded', () => {
       circleLayer.setData(pointOnCircle(timestamp / 1000));
       requestAnimationFrame(animateMarker);
   }
-   //animateMarker(0);
+   animateMarker(0);
    
    /**
    const layerText =  scene.PointLayer({

@@ -24,6 +24,7 @@ export default function drawCircle(layerData, layer) {
     u_stroke_opacity: style.strokeOpacity
   });
   material.depthTest = false;
+  material.setBending(style.blending);
   const fillMesh = new THREE.Mesh(geometry, material);
   aPosition.length = 0;
   aPackedData.length = 0;

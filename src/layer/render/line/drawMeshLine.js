@@ -34,7 +34,7 @@ export default function DrawLine(layerData, layer) {
     ANIMATE: false,
     DASHLINE: style.lineType === 'dash'
   });
-
+  lineMaterial.setBending(style.blending);
   const lineMesh = new THREE.Mesh(geometry, lineMaterial);
   if (animateOptions.enable) {
     layer.scene.startAnimate();
