@@ -33,9 +33,9 @@ export default class VectorTileSource extends Base {
     console.log(params);
     const workerTile = new WorkerTile(params);
     workerTile.abort = this.loadVectorData(params, (err, response) => {
-  
-    })
-   
+
+    });
+
 
   }
   abortTile() {
