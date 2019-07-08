@@ -1,6 +1,6 @@
 import Base from '../core/base';
 
-export default class VectorTileSource extends Base{
+export default class VectorTileSource extends Base {
   constructor(cfg, workerController) {
     super({
       type: 'vector',
@@ -10,10 +10,10 @@ export default class VectorTileSource extends Base{
   }
   loadTile(tile, callback) {
     const params = {
-      id: tile,
+      id: tile
     };
     this.workerController.send('loadTile', params, done.bind(this));
-    function done(err,data) {
+    function done(err, data) {
       callback();
     }
   }
