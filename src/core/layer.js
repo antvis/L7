@@ -69,6 +69,7 @@ export default class Layer extends Base {
     this._object3D.renderOrder = this.get('zIndex') || 0;
     this._mapEventHandlers = [];
     const layerId = this._getUniqueId();
+    this.set('layerId', layerId);
     this.layerId = layerId;
     this._activeIds = null;
     const world = scene._engine.world;
@@ -127,7 +128,19 @@ export default class Layer extends Base {
     this.set('visible', visible);
     this._object3D.visible = this.get('visible');
   }
+  // 兼容瓦片source，非瓦片source
+
   source(data, cfg = {}) {
+    // 根据Source类型判断，是不是瓦片图层
+    if (this.scene.getTileSource(data)) {
+      this.set('layerType', 'tile');
+      this.set('sourceOption', {
+        id: data,
+        ...cfg
+      });
+      return this;
+    }
+
     if (data instanceof source) {
       this.layerSource = data;
       return this;
@@ -136,9 +149,6 @@ export default class Layer extends Base {
     cfg.mapType = this.scene.mapType;
     cfg.zoom = this.scene.getZoom();
     this.layerSource = new source(cfg);
-    // this.scene.workerPool.runTask(cfg).then(data => {
-    //   console.log(data);
-    // });
     return this;
   }
   color(field, values) {
@@ -281,7 +291,7 @@ export default class Layer extends Base {
     options[attrName] = attrCfg;
   }
   _createAttrOption(attrName, field, cfg, defaultValues) {
-   
+
     const attrCfg = {};
     attrCfg.field = field;
     if (cfg) {
@@ -305,6 +315,10 @@ export default class Layer extends Base {
   }
 
   render() {
+    if (this.get('layerType') === 'tile') {
+      this.scene.style.update(this._attrs);
+      return this;
+    }
     this.init();
     this.scene._engine.update();
     return this;

@@ -2,7 +2,6 @@ import Layer from '../../core/layer';
 import Util from '../../util';
 import diff from '../../util/diff';
 import TileSource from '../../source/tile_source';
-import TileWorkerSource from '../../source/tile_worker_source';
 import * as THREE from '../../core/three';
 import Controller from '../../core/controller/index';
 import Global from '../../global';
@@ -27,9 +26,6 @@ export default class TileLayer extends Layer {
     this.tileList = {};
     this.type = this.get('layerType');
     this.workerPool = this.scene.workerPool;
-    this.workerTileSource = new TileWorkerSource({
-      workerPool: this.scene.workerPool
-    });
   }
   shape(field, values) {
     const layerType = this.get('layerType');
