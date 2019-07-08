@@ -1,45 +1,60 @@
-import Source from '../core/source';
-// import Controller from '../core/controller/index';
-import { getArrayBuffer } from '../util/ajax';
+import VectorTileWorkerSource from '../source/vector_tile_worker_source';
+import Actor from './actor';
+
+
+// 统一管理workerSource 实例化
 export default class Worker {
   constructor(self) {
     this.self = self;
-    this.self.addEventListener('message', cfg => {
-      this.loadTile(cfg.data);
-    });
+    this.actor = new Actor(self, this);
+    this.workerSourceTypes = {
+      vector: VectorTileWorkerSource
+    };
+    this.workerSources = {};
+    this.self.registerWorkerSource = (name, WorkerSource) => {
+      if (this.workerSourceTypes[name]) {
+        throw new Error(`Worker source with name "${name}" already registered.`);
+      }
+      this.workerSourceTypes[name] = WorkerSource;
+    };
   }
 
   loadTile(cfg) {
-   // const tileSource = new TileSource(cfg.data, cfg.cfg);
-    getArrayBuffer({ url: cfg.url }, (err, data) => {
-      if (err) {
-        this.self.postMessage(null);
-        return;
-      }
-      const tileData = this._generateSource(cfg, data.data);
-      console.log(tileData);
-      const uInt8Array = new Uint8Array(1024 * 1024 * 32); // 32MB
-      for (let i = 0; i < uInt8Array.length; ++i) {
-        uInt8Array[i] = i;
-      }
 
-      console.time('postmessage');
-      const b = function() {
-        return 'update';
-      };
-      this.self.postMessage({ a: 
-        uInt8Array.buffer,
-        update: b
-       }, [ uInt8Array.buffer, b ]);
-      console.timeEnd('postmessage');
-    });
   }
-  _generateSource(cfg, data) {
-    const tileData = new Source({
-      ...cfg.sourceCfg,
-      data
-    });
-    return tileData;
+  setLayers(mapId, layercfgs,callback) {
+    
+  }
+  updateLayers(id, params, callback) {
+
+  }
+  /**
+   * 获取workerSource
+   * @param {string} mapId WorkerPool Id
+   * @param {string} type 瓦片类型 目前支持Vector
+   * @param {string} source souce ID
+   * @return {*} WorkerSource
+   */
+  getWorkerSource(mapId, type, source) {
+    if (!this.workerSources[mapId]) {
+      this.workerSources[mapId] = {};
+    }
+    if (!this.workerSources[mapId][type]) {
+      this.workerSources[mapId][type] = {};
+    }
+
+    if (!this.workerSources[mapId][type][source]) {
+      // use a wrapped actor so that we can attach a target mapId param
+      // to any messages invoked by the WorkerSource
+      const actor = {
+        send: (type, data, callback) => {
+          this.actor.send(type, data, callback, mapId);
+        }
+      };
+
+      this.workerSources[mapId][type][source] = new this.workerSourceTypes[type](actor, this.getLayerIndex(mapId));
+    }
+    return this.workerSources[mapId][type][source];
   }
 }
 self.worker = new Worker(self);
