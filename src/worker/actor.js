@@ -13,7 +13,7 @@ export default class Actor {
     this.mapId = mapId;
     this.callbacks = {};
     this.callbackID = 0;
-    bindAll(['receive'], this);
+    bindAll([ 'receive' ], this);
     this.target.addEventListener('message', this.receive, false);
 
   }
