@@ -176,6 +176,10 @@ export default class Layer extends Base {
     this._createAttrOption('shape', field, values, Global.shape);
     return this;
   }
+  pattern(field, values) {
+    this._createAttrOption('pattern', field, values, Global.pattern);
+    return this;
+  }
   /**
    * 是否允许使用默认的图形激活交互
    * @param  {Boolean} enable 是否允许激活开关
