@@ -22,8 +22,8 @@ export default class Worker {
   loadTile(cfg) {
 
   }
-  setLayers(mapId, layercfgs,callback) {
-    
+  setLayers(mapId, layercfgs, callback) {
+
   }
   updateLayers(id, params, callback) {
 
