@@ -7,6 +7,7 @@ import Shape from './shape';
 import Position from './position';
 import Symbol from './symbol';
 import Filter from './filter';
+import Pattern from './pattern';
 
 Base.Color = Color;
 Base.Size = Size;
@@ -15,5 +16,6 @@ Base.Shape = Shape;
 Base.Position = Position;
 Base.Symbol = Symbol;
 Base.Filter = Filter;
+Base.Pattern = Pattern;
 
 export default Base;
