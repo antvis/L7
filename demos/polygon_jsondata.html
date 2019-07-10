@@ -21,14 +21,18 @@
 <script src="./assets/dat.gui.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-const scene = new L7.Scene({
-  id: 'map',
-  mapStyle: 'dark', // 样式URL
-  center: [121.576757,31.279873 ],
-  pitch: 0,
-  zoom: 12,
-  rotation:0
+var mapinstance = new AMap.Map('map',{
+    center: [121.576757,31.279873 ],
+    viewMode: '3D',
+    pitch: 0,
+    zoom: 12,
+    maxZoom:20,
+    minZoom:0,
+ });
 
+const scene = new L7.Scene({
+   map:mapinstance,
+   //mapStyle: 'dark', // 样式URL
 });
 const testdata = [
     {

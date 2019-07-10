@@ -108,7 +108,8 @@ export default class Layer extends Base {
     if (type === 'fill') {
       this.get('pickingController').addPickMesh(object);
     }
-    setTimeout(() => this.scene._engine.update(), 500);
+    this.scene._engine.update();
+    // setTimeout(() => this.scene._engine.update(), 200);
   }
   remove(object) {
     if (object.type === 'composer') {
