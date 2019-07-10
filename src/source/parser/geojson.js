@@ -1,7 +1,9 @@
 import * as turfMeta from '@turf/meta';
 import { getCoords } from '@turf/invariant';
 import { djb2hash } from '../../util/bkdr-hash';
+import rewind from '@mapbox/geojson-rewind';
 export default function geoJSON(data, cfg) {
+  rewind(data, true);
   const resultData = [];
   const featureKeys = {};
   data.features = data.features.filter(item => {

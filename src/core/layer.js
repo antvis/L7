@@ -110,7 +110,8 @@ export default class Layer extends Base {
     if (type === 'fill') {
       this.get('pickingController').addPickMesh(object);
     }
-    setTimeout(() => this.scene._engine.update(), 500);
+    this.scene._engine.update();
+    // setTimeout(() => this.scene._engine.update(), 200);
   }
   remove(object) {
     if (object.type === 'composer') {
@@ -182,6 +183,10 @@ export default class Layer extends Base {
     values === 'text' ? this.shapeType = values : null;
 
     this._createAttrOption('shape', field, values, Global.shape);
+    return this;
+  }
+  pattern(field, values) {
+    this._createAttrOption('pattern', field, values, Global.pattern);
     return this;
   }
   /**
