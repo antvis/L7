@@ -41,7 +41,6 @@ export default class Scene extends Base {
     const Map = new MapProvider(this._attrs);
     Map.mixMap(this);
     this._container = Map.container;
-    // const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.on('mapLoad', () => {
       this.map = Map.map;
       this._initEngine(Map.renderDom);
@@ -55,8 +54,8 @@ export default class Scene extends Base {
         interaction._onHashChange();
       }
       this.emit('loaded');
+      this._engine.update();
     });
-
   }
   initLayer() {
     for (const key in LAYER_MAP) {
