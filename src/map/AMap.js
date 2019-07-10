@@ -55,7 +55,7 @@ export default class GaodeMap extends Base {
     if (map instanceof AMap.Map) {
       this.map = map;
       this.container = map.getContainer();
-      this.map.setMapStyle(this.get('mapStyle'));
+      this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
     }
@@ -82,6 +82,7 @@ export default class GaodeMap extends Base {
       camera.lookAt(0, 0, 0);
       camera.position.x += e.camera.position.x;
       camera.position.y += -e.camera.position.y;
+      this._engine.update();
     });
   }
 
