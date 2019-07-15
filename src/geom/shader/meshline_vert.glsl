@@ -20,7 +20,6 @@ uniform float u_duration : 2.0;
 uniform float u_interval : 1.0;
 uniform float u_trailLength : 0.2;
 #endif
-
 void main() {
   v_color = a_color;
   v_distance = a_distance;
