@@ -70,6 +70,7 @@ export default class Layer extends Base {
     this._mapEventHandlers = [];
     const layerId = this._getUniqueId();
     this.set('layerId', layerId);
+    this.set('mapType', this.scene.mapType);
     this.layerId = layerId;
     this._activeIds = null;
     const world = scene._engine.world;
@@ -77,7 +78,6 @@ export default class Layer extends Base {
     this.layerMesh = null;
     this.layerLineMesh = null;
     this._initEvents();
-
   }
   /**
    * 将图层添加加到 Object
@@ -139,6 +139,10 @@ export default class Layer extends Base {
         id: data,
         ...cfg
       });
+      this.scene.style.addLayer(this);
+      // 初始化tiles
+      this.tiles = new THREE.Object3D();
+      this._object3D.add(this.tiles);
       return this;
     }
 

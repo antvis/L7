@@ -1,5 +1,7 @@
 import Base from '../../core/base';
-import * as THREE from '../../core/three';
+// import * as from '../../core/three';
+import { Vector3 } from 'three/src/math/Vector3';
+import { Texture } from 'three/src/textures/Texture';
 import { faceNormals } from '../normals';
 import extrude from '../extrude';
 
@@ -69,12 +71,12 @@ export default class BufferBase extends Base {
     const normals = new Float32Array(indexCount * 3);
     const colors = new Float32Array(indexCount * 4);
     const pickingIds = new Float32Array(indexCount);
-    const pA = new THREE.Vector3();
-    const pB = new THREE.Vector3();
-    const pC = new THREE.Vector3();
+    const pA = new Vector3();
+    const pB = new Vector3();
+    const pC = new Vector3();
 
-    const cb = new THREE.Vector3();
-    const ab = new THREE.Vector3();
+    const cb = new Vector3();
+    const ab = new Vector3();
     let lastIndex = 0;
     indices.forEach((indice, pIndex) => {
       for (let i = 0; i < indice.length / 3; i++) {
@@ -176,12 +178,12 @@ export default class BufferBase extends Base {
     const normals = new Float32Array(indexCount * 3);
     const colors = new Float32Array(indexCount * 4);
     const pickingIds = new Float32Array(indexCount);
-    const pA = new THREE.Vector3();
-    const pB = new THREE.Vector3();
-    const pC = new THREE.Vector3();
+    const pA = new Vector3();
+    const pB = new Vector3();
+    const pC = new Vector3();
 
-    const cb = new THREE.Vector3();
-    const ab = new THREE.Vector3();
+    const cb = new Vector3();
+    const ab = new Vector3();
     let lastIndex = 0;
     indices.forEach((indice, pIndex) => {
       for (let i = 0; i < indice.length / 3; i++) {
@@ -395,7 +397,7 @@ export default class BufferBase extends Base {
     // then draw the image
     context2.drawImage(canvas, 0, 0, canvas2.width, canvas2.height);
     // return the just built canvas2
-    const texture = new THREE.Texture(canvas2);
+    const texture = new Texture(canvas2);
     // texture.anisotropy = renderer.getMaxAnisotropy();
     texture.needsUpdate = true;
 

@@ -48,7 +48,6 @@ export default class WorkerController {
 
 
   send(type, data, callback, targetID) {
-    console.log('消息发送', data);
     if (typeof targetID !== 'number' || isNaN(targetID)) {
       // Use round robin to send requests to web workers.
       targetID = this.currentActor = (this.currentActor + 1) % this.actors.length;

@@ -46,7 +46,7 @@ export default class TileLayer extends Layer {
         ...cfg,
         url: data
       };
-      this.workerTileSource.set('sourceCfg', this.sourceCfg);
+     
     }
     return this;
   }
@@ -411,7 +411,6 @@ export default class TileLayer extends Layer {
     const nextAttrs = this.get('attrOptions');
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
-    this.workerTileSource.set('attrs', nextAttrs);
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
       // this._setPreOption();
       this._scaleByZoom();
