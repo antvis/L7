@@ -73,3 +73,4 @@ export default class PointLayer extends Layer {
     }
   }
 }
+PointLayer.type = 'point';
