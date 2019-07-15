@@ -1,8 +1,6 @@
 import * as THREE from '../../core/three';
 import Material from './material';
 import { getModule, wrapUniforms } from '../../util/shaderModule';
-import arcline_frag from '../shader/arcline_frag.glsl';
-import arcline_vert from '../shader/arcline_vert.glsl';
 import merge from '@antv/util/lib/deep-mix';
 
 export function LineMaterial(options) {
@@ -23,17 +21,22 @@ export function LineMaterial(options) {
   return material;
 }
 export function ArcLineMaterial(options) {
+  let moduleName = 'arcline';
+  if (options.shapeType === 'greatCircle') {
+    moduleName = 'greatcircle';
+  }
+  const { vs, fs } = getModule(moduleName);
   const material = new Material({
     uniforms: {
       u_opacity: { value: options.u_opacity || 1.0 },
-      segmentNumber: { value: 49 },
+      segmentNumber: { value: 29 },
       u_time: { value: 0 },
       u_zoom: { value: options.u_zoom || 10 },
       u_activeId: { value: options.activeId || 0 },
       u_activeColor: { value: options.activeColor || [ 1.0, 0, 0, 1.0 ] }
     },
-    vertexShader: arcline_vert,
-    fragmentShader: arcline_frag,
+    vertexShader: vs,
+    fragmentShader: fs,
     transparent: true,
     blending: THREE.AdditiveBlending
   });
