@@ -136,12 +136,6 @@ export default class Layer extends Base {
     cfg.mapType = this.scene.mapType;
     cfg.zoom = this.scene.getZoom();
     this.layerSource = new source(cfg);
-    // this.scene.workerPool.runTask({
-    //   command: 'geojson',
-    //   data: cfg
-    // }).then(data => {
-    //   console.log(data);
-    // });
     return this;
   }
   color(field, values) {
