@@ -9,12 +9,13 @@ import flatten from '@antv/util/lib/flatten';
  */
 
 export function arc(geo, props, positionsIndex) {
-  const segNum = 50;
+  const segNum = 30;
   const posArray = [];
   const instanceArray = [];
   const sizes = [];
   const colors = [];
-  const { size, color } = props;
+  const pickingIds = [];
+  const { size, color, id } = props;
   const defaultInstance = [ geo[0][0], geo[0][1], geo[1][0], geo[1][1] ];
   const indexArray = [];
   let c = 0;
@@ -27,6 +28,8 @@ export function arc(geo, props, positionsIndex) {
     sizes.push(size, size);
     colors.push(...color);
     colors.push(...color);
+    pickingIds.push(id);
+    pickingIds.push(id);
     if (i !== segNum - 1) {
       indexArray[c++] = index + 0;
       indexArray[c++] = index + 1;
@@ -39,6 +42,7 @@ export function arc(geo, props, positionsIndex) {
 
   }
   return {
+    pickingIds,
     positions: posArray,
     indexArray,
     instances: instanceArray,
