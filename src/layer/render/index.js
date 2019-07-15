@@ -15,6 +15,7 @@ import DrawArcLine from './line/drawArc';
 
 registerRender('line', 'line', DrawMeshLine);
 registerRender('line', 'arc', DrawArcLine);
+registerRender('line', 'greatCircle', DrawArcLine);
 
 // point
 import DrawPointFill from './point/drawFill';
