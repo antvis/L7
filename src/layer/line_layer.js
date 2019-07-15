@@ -21,3 +21,4 @@ export default class LineLayer extends Layer {
     this.add(getRender('line', this.shapeType || 'line')(this.layerData, this, this.layerSource));
   }
 }
+LineLayer.type = 'line';

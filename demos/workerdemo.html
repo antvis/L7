@@ -36,7 +36,7 @@ const scene = new L7.Scene({
 scene.on('loaded', () => {
   scene.addTileSource('test',{
      url:'http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/county/{z}/{x}/{y}.pbf',
-     type:'mvt',
+     type:'vector',
      minZoom: 0,
      maxZoom:9
   })
@@ -50,14 +50,39 @@ scene.on('loaded', () => {
       idField:'id'
     }
    })
-  .shape('line')
-  .size(2)
+   .scale({
+    'OBJECTID':{
+      min:0,
+      max:3000,
+      type:'linear'
+    }
+  })
+  .shape('fill')
   .active(false)
-  .color('red')
+  .color('OBJECTID',['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'])
+  .style({
+    opacity:1.0
+  })
+.render();
+ const layer2 = scene.PolygonLayer({
+    zIndex:10,
+  }) 
+  .source('test',{
+    parser:{
+      type: 'mvt',
+      sourceLayer:'county',
+      idField:'id'
+    }
+   })
+  .shape('line')
+  .size(1)
+  .active(false)
+  .color('#fff')
   .style({
     opacity:1.0
   })
  .render();
+
 
 });
 
