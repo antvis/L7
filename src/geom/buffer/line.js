@@ -76,6 +76,7 @@ export default class LineBuffer extends BufferBase {
   _getMeshLineAttributes() {
     const layerData = this.get('layerData');
     const { dashArray } = this.get('style');
+    const imagePos = this.get('imagePos');
     const positions = [];
     const pickingIds = [];
     const normal = [];
@@ -85,10 +86,16 @@ export default class LineBuffer extends BufferBase {
     const sizes = [];
     const attrDistance = [];
     const attrDashArray = [];
+    const textureCoord = [];
+    const totalDistance = [];
     layerData.forEach(item => {
       const props = item;
       const positionCount = positions.length / 3;
-      const attr = lineShape.Line(item.coordinates, props, positionCount, dashArray);
+      let patternPos = { x: 0, y: 0 };
+      if (item.pattern && imagePos[item.pattern]) {
+        patternPos = imagePos[item.pattern];
+      }
+      const attr = lineShape.Line(item.coordinates, props, positionCount, dashArray, patternPos);
       positions.push(...attr.positions);
       normal.push(...attr.normal);
       miter.push(...attr.miter);
@@ -98,6 +105,8 @@ export default class LineBuffer extends BufferBase {
       attrDistance.push(...attr.attrDistance);
       pickingIds.push(...attr.pickingIds);
       attrDashArray.push(...attr.dashArray);
+      textureCoord.push(...attr.textureCoordArray);
+      totalDistance.push(...attr.totalDistances);
     });
     return {
       positions,
@@ -108,7 +117,9 @@ export default class LineBuffer extends BufferBase {
       pickingIds,
       sizes,
       attrDistance,
-      attrDashArray
+      attrDashArray,
+      textureCoord,
+      totalDistance
     };
   }
 
