@@ -1,15 +1,22 @@
 import * as THREE from '../../../core/three';
 import { LineBuffer } from '../../../geom/buffer/index';
 import { MeshLineMaterial } from '../../../geom/material/lineMaterial';
+
 export default function DrawLine(layerData, layer) {
 
   const style = layer.get('styleOptions');
   const animateOptions = layer.get('animateOptions');
   const activeOption = layer.get('activedOptions');
+  // const pattern = style.pattern;
+  // const texture = layer.scene.image.singleImages[pattern];
+  const hasPattern = layerData.some(layer => {
+    return layer.pattern;
+  });
   const { attributes } = new LineBuffer({
     layerData,
     shapeType: 'line',
-    style
+    style,
+    imagePos: layer.scene.image.imagePos
   });
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(attributes.indexArray);
@@ -21,6 +28,8 @@ export default function DrawLine(layerData, layer) {
   geometry.addAttribute('a_miter', new THREE.Float32BufferAttribute(attributes.miter, 1));
   geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
   geometry.addAttribute('a_dash_array', new THREE.Float32BufferAttribute(attributes.attrDashArray, 1));
+  geometry.addAttribute('a_texture_coord', new THREE.Float32BufferAttribute(attributes.textureCoord, 2));
+  geometry.addAttribute('a_total_distance', new THREE.Float32BufferAttribute(attributes.totalDistance, 1));
 
   const lineMaterial = new MeshLineMaterial({
     u_opacity: style.opacity,
@@ -28,11 +37,14 @@ export default function DrawLine(layerData, layer) {
     u_time: 0,
     u_dash_offset: style.dashOffset,
     u_dash_ratio: style.dashRatio,
-    activeColor: activeOption.fill
+    activeColor: activeOption.fill,
+    u_pattern_spacing: style.patternSpacing || 0,
+    u_texture: hasPattern ? layer.scene.image.texture : null
   }, {
     SHAPE: false,
     ANIMATE: false,
-    DASHLINE: style.lineType === 'dash'
+    DASHLINE: style.lineType === 'dash',
+    TEXTURE: hasPattern
   });
 
   const lineMesh = new THREE.Mesh(geometry, lineMaterial);
