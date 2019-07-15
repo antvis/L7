@@ -1,7 +1,6 @@
 import { polygonShape } from '../shape';
 import BufferBase from './bufferBase';
 export default class PolygonBuffer extends BufferBase {
-
   geometryBuffer() {
     const layerData = this.get('layerData');
     const shape = this.get('shape');
@@ -52,7 +51,6 @@ export default class PolygonBuffer extends BufferBase {
     this.bufferStruct.sizes = sizes;
     if (shape !== 'line') {
       this.attributes = this._toPolygonAttributes(this.bufferStruct);
-      this.faceTexture = this._generateTexture();
     } else {
       this.attributes = this._toPolygonLineAttributes(this.bufferStruct);
 
