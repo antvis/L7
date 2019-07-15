@@ -1,8 +1,14 @@
 import Layer from '../core/layer';
 import { getRender } from './render';
 export default class PolygonLayer extends Layer {
+  constructor(scene, cfg) {
+    super(scene, cfg);
+    this.set('type', 'polygon');
+  }
   shape(type) {
     this.shape = type;
+    this.set('shape', type);
+    this.set('shapeType', 'polygon');
     return this;
   }
   draw() {
@@ -18,3 +24,4 @@ export default class PolygonLayer extends Layer {
     this.updateFilter(this.layerMesh);
   }
 }
+PolygonLayer.type = 'polygon';
