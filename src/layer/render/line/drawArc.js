@@ -1,5 +1,5 @@
 import * as THREE from '../../../core/three';
-import { LineBuffer } from '../../../geom/buffer/index';
+import LineBuffer from '../../../geom/buffer/line';
 import { ArcLineMaterial } from '../../../geom/material/lineMaterial';
 export default function DrawArcLine(layerdata, layer) {
   const style = this.get('styleOptions');

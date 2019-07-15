@@ -27,6 +27,7 @@ export default class Tile extends Base {
     this._object3D.onBeforeRender = () => {
     };
     this._isLoaded = false;
+    console.time(this._tile);
     this.requestTileAsync(data => this._init(data));
   }
   _init(data) {
@@ -40,17 +41,13 @@ export default class Tile extends Base {
     this.isValid = true;
     this._initControllers();
     this._createMesh();
+    console.timeEnd(this._tile);
   }
   repaint() {
     this._initControllers();
     this._createMesh();
   }
   requestTileAsync(done) {
-    // 获取数据
-    // this.layer.workerTileSource.loadTile({
-    //   tile: this._tile,
-    //   url: this.layer.tileSource.getRequestUrl(this._tile[0], this._tile[1], this._tile[2])
-    // });
     const data = this.layer.tileSource.getTileData(this._tile[0], this._tile[1], this._tile[2]);
     if (data.loaded) {
       done(data.data);
