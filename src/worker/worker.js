@@ -1,7 +1,5 @@
 import VectorTileWorkerSource from '../source/vector_tile_worker_source';
 import Actor from './actor';
-
-
 // 统一管理workerSource 实例化
 export default class Worker {
   constructor(self) {
@@ -17,13 +15,26 @@ export default class Worker {
       }
       this.workerSourceTypes[name] = WorkerSource;
     };
+    this.layerStyles = {};
   }
 
-  loadTile(cfg) {
-
+  loadTile(mapId, params, callback) {
+    this.getWorkerSource(mapId, params.type, params.sourceID).loadTile(params, callback);
+  }
+  abortTile(mapId, params, callback) {
+    this.getWorkerSource(mapId, params.type, params.sourceID).abortTile(params, callback);
+  }
+  removeTile(mapId, params, callback) {
+    this.getWorkerSource(mapId, params.type, params.sourceID).removeTile(params, callback);
   }
   setLayers(mapId, layercfgs, callback) {
-
+    this.layerStyles[mapId] = layercfgs; // mapid layerID
+    if (this.workerSources[mapId]) {
+      for (const sourceId in this.workerSources[mapId].vector) {
+        this.workerSources[mapId].vector[sourceId].layerStyle = layercfgs;
+      }
+    }
+    callback();
   }
   updateLayers(id, params, callback) {
 
@@ -42,7 +53,6 @@ export default class Worker {
     if (!this.workerSources[mapId][type]) {
       this.workerSources[mapId][type] = {};
     }
-
     if (!this.workerSources[mapId][type][source]) {
       // use a wrapped actor so that we can attach a target mapId param
       // to any messages invoked by the WorkerSource
@@ -51,8 +61,7 @@ export default class Worker {
           this.actor.send(type, data, callback, mapId);
         }
       };
-
-      this.workerSources[mapId][type][source] = new this.workerSourceTypes[type](actor, this.getLayerIndex(mapId));
+      this.workerSources[mapId][type][source] = new this.workerSourceTypes[type](actor, this.layerStyles[mapId]);
     }
     return this.workerSources[mapId][type][source];
   }
