@@ -67,7 +67,7 @@ export default function(points, closed, indexOffset) {
       extrusions(attrPos, out, last, _normal, 1);
     }
 
-    attrIndex.push([ index + 0, index + 3, index + 1 ]);
+    attrIndex.push([ index + 0, index + 2, index + 1 ]);
 
      // no miter, simple segment
     if (!next) {
@@ -75,9 +75,7 @@ export default function(points, closed, indexOffset) {
       normal(_normal, lineA);
       extrusions(attrPos, out, cur, _normal, 1);
       attrDistance.push(d, d);
-      attrIndex.push(
-        _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ] : [ index, index + 2, index + 3 ]);
-
+      attrIndex.push([ index + 1, index + 2, index + 3 ]);
       count += 2;
     } else {
       // get unit dir of next line
@@ -87,7 +85,7 @@ export default function(points, closed, indexOffset) {
       let miterLen = computeMiter(tangent, miter, lineA, lineB, 1);
 
       // get orientation
-      let flip = (dot(tangent, _normal) < 0) ? -1 : 1;
+      const flip = (dot(tangent, _normal) < 0) ? -1 : 1;
       const bevel = Math.abs(miterLen) > miterLimit;
 
       // 处理前后两条线段重合的情况，这种情况不需要使用任何接头（miter/bevel）。
@@ -114,38 +112,39 @@ export default function(points, closed, indexOffset) {
         miterLen = miterLimit;
 
         // next two points in our first segment
-        addNext(out, _normal, -flip);
-        attrPos.push(cur);
-        addNext(out, miter, miterLen * flip);
-        attrPos.push(cur);
+        extrusions(attrPos, out, cur, _normal, 1);
 
-        attrIndex.push(_lastFlip !== -flip
-          ? [ index + 1, index + 3, index + 2 ] : [ index, index + 2, index + 3 ]);
+        attrIndex.push([ index + 1, index + 2, index + 3 ]);
 
         // now add the bevel triangle
-        attrIndex.push([ index + 2, index + 3, index + 4 ]);
+        attrIndex.push(flip === 1 ? [ index + 2, index + 4, index + 5 ] : [ index + 4, index + 5, index + 3 ]);
 
         normal(tmp, lineB);
         copy(_normal, tmp); // store normal for next round
 
-        addNext(out, _normal, -flip);
-        attrPos.push(cur);
-        attrDistance.push(d, d, d);
+        extrusions(attrPos, out, cur, _normal, 1);
+        attrDistance.push(d, d, d, d);
 
         // the miter is now the normal for our next join
-        count += 3;
+        count += 4;
       } else {
-        // next two points for our miter join
-        extrusions(attrPos, out, cur, miter, miterLen);
-        attrDistance.push(d, d);
-        attrIndex.push(_lastFlip === 1
-          ? [ index + 1, index + 3, index + 2 ] : [ index, index + 2, index + 3 ]);
+        // next two points in our first segment
+        extrusions(attrPos, out, cur, _normal, 1);
+        attrIndex.push([ index + 1, index + 2, index + 3 ]);
 
-        flip = -1;
+        // now add the miter triangles
+        addNext(out, miter, miterLen * -flip);
+        attrPos.push(cur);
+        attrIndex.push([ index + 2, index + 4, index + 3 ]);
+        attrIndex.push([ index + 4, index + 5, index + 6 ]);
+        normal(tmp, lineB);
+        copy(_normal, tmp); // store normal for next round
+
+        extrusions(attrPos, out, cur, _normal, 1);
+        attrDistance.push(d, d, d, d, d);
 
         // the miter is now the normal for our next join
-        copy(_normal, miter);
-        count += 2;
+        count += 5;
       }
       _lastFlip = flip;
     }
