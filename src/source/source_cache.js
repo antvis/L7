@@ -88,7 +88,7 @@ export default class SouceCache extends Base {
   _calculateTileIDs() {
     this._tileMap = {};
     this.updateTileList = [];
-    const zoom = Math.floor(this.scene.getZoom()); // zoom - 1
+    const zoom = Math.floor(this.scene.getZoom()) - 1; // zoom - 1
     const minSourceZoom = this.get('minZoom');
     const maxSourceZoom = this.get('maxZoom');
     this.tileZoom = zoom > maxSourceZoom ? maxSourceZoom : zoom;

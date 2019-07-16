@@ -60,7 +60,7 @@ export default function extrudePolygon(points, extrude) {
       }
     }
   }
-
+  points = [];
   return {
     positions,
     faceUv,
@@ -100,6 +100,7 @@ export function extrudePolygonLine(points, extrude) {
       }
     }
   }
+  points = [];
   return {
     positions,
     positionsIndex: cells
