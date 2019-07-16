@@ -31,6 +31,7 @@ export default class VectorTileMesh {
       this.layer.shape = this.layer._getShape(layerData);
     }
     this.mesh = getRender(this.layer.get('type'), this.layer.shape)(null, this.layer, data.attributes);
+    this.mesh.frustumCulled = false;
     if (this.mesh.type !== 'composer') { // 热力图的情况
       this.mesh.onBeforeRender = renderer => {
         this._renderMask(renderer);
@@ -86,7 +87,7 @@ export default class VectorTileMesh {
     const br = [ tilebound.getBottomRight().x, tilebound.getBottomRight().y, 0 ];
     const tl = [ tilebound.getTopLeft().x, tilebound.getTopLeft().y, 0 ];
     const tr = [ tilebound.getTopRight().x, tilebound.getTopRight().y, 0 ];
-    const positions = [ ...bl, ...tr, ...br, ...bl, ...tl, ...tr ];
+    const positions = new Float32Array([ ...bl, ...tr, ...br, ...bl, ...tl, ...tr ]);
     const geometry = new THREE.BufferGeometry();
     geometry.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     const maskMaterial = new MaskMaterial();

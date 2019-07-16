@@ -263,9 +263,6 @@ export default class Layer extends Base {
     this.set('animateOptions', animateOptions);
     return this;
   }
-  texture() {
-
-  }
   fitBounds() {
     const extent = this.layerSource.data.extent;
     this.scene.fitBounds(extent);
