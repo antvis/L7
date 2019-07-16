@@ -166,7 +166,7 @@ export default class BufferBase extends Base {
       sizes: new Float32Array(polygon.sizes)
 
     };
-
+    polygon = {};
     return attributes;
   }
   _toPointShapeAttributes(polygon) {
@@ -331,7 +331,7 @@ export default class BufferBase extends Base {
       colors,
       pickingIds
     };
-
+    polygonline = {};
     return attributes;
   }
 
@@ -363,6 +363,7 @@ export default class BufferBase extends Base {
       pickingIds
 
     };
+    point = {};
     return attributes;
   }
   _generateTexture() {

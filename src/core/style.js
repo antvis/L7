@@ -1,6 +1,6 @@
 import Base from '../core/base';
 import WorkerPool from '../worker/worker_pool';
-import { throttle } from '@antv/util';
+import throttle from '../util/throttle';
 import { toLngLat, Bounds } from '@antv/geo-coord';
 import SourceCache from '../source/source_cache';
 import WorkerController from '../worker/worker_controller';
@@ -66,13 +66,13 @@ export default class Style extends Base {
 
   }
   addMapEvent() {
-    this.mapEventHander = () => {
+    this.mapEventHander = throttle(() => {
       requestAnimationFrame(() => {
         for (const key in this._sourceCaches) {
           this._sourceCaches[key].update(this.layers, this.sourceStyles[key]);
         }
       });
-    };
+    }, 200);
     this.scene.map.on('zoomchange', this.mapEventHander);
     this.scene.map.on('dragend', this.mapEventHander);
   }

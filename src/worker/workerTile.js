@@ -30,6 +30,7 @@ export default class WorkerTile {
         type: 'FeatureCollection',
         features
       };
+      delete data.layers[sourcelayer];
       for (let i = 0; i < sourceStyle[sourcelayer].length; i++) {
         const style = sourceStyle[sourcelayer][i];
         style.sourceOption.parser.type = 'geojson';
