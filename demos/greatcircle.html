@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/PqLCOJpqoOUfuPRacUzE.css" />
+    <title>弧线图</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+ <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+ </style>
+<script>
+  var scene = new L7.Scene({
+    id: 'map',
+    mapStyle: 'dark', // 样式URL
+    center: [116.2825, 39.9],
+    pitch: 0,
+    zoom: 4
+  });
+  scene.on('loaded', function() {
+    $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', function(data) {
+    
+      scene.LineLayer({
+        zIndex: 2
+      }).source(data, {
+        parser:{
+          type:'csv',
+          x: 'lng1',
+          y: 'lat1',
+          x1: 'lng2',
+          y1: 'lat2'
+        }
+      }
+      ).color('rgb(13,64,140)').style({
+        opacity: 0.6
+      })
+      .shape('greatCircle')
+      .size(1)
+      .render();
+    });
+  });
+</script>
+</body>
+</html>
