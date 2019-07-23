@@ -14,7 +14,6 @@ export default function extrudePolygon(points, extrude) {
   if (p1[0] === p2[0] && p1[1] === p2[1]) {
     points[0] = points[0].slice(0, points[0].length - 1);
   }
-
   const n = points[0].length;
   const flattengeo = earcut.flatten(points);
   const positions = [];

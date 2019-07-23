@@ -4,6 +4,7 @@ export default class PolygonBuffer extends BufferBase {
   geometryBuffer() {
     const layerData = this.get('layerData');
     const shape = this.get('shape');
+    const needFaceUv = this.get('faceUv');
     const positions = [];
     const faceUv = [];
     const sizes = [];
@@ -24,7 +25,7 @@ export default class PolygonBuffer extends BufferBase {
       }
       positions.push(extrudeData.positions);
 
-      if (shape !== 'line') {
+      if (needFaceUv) {
         // faceUv.push(...extrudeData.faceUv);
         const count = extrudeData.faceUv.length / 2;
         for (let i = 0; i < count; i++) {
@@ -53,7 +54,6 @@ export default class PolygonBuffer extends BufferBase {
       this.attributes = this._toPolygonAttributes(this.bufferStruct);
     } else {
       this.attributes = this._toPolygonLineAttributes(this.bufferStruct);
-
 
     }
   }
