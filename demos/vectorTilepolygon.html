@@ -47,14 +47,21 @@ scene.on('loaded', () => {
     parser:{
       type: 'mvt',
       sourceLayer:'county',
-      idField:'id',   
-      maxZoom: 9,
+      idField:'id',
+      maxZoom: 9
     }
-})
+  })
+  .scale({
+    'OBJECTID':{
+      min:0,
+      max:3000,
+      type:'linear'
+    }
+  })
   .shape('fill')
   .size(2)
   .active(false)
-  .color('red')
+  .color('OBJECTID',['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'])
   .style({
     opacity:1.0
   })

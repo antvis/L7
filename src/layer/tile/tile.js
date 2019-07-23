@@ -27,7 +27,6 @@ export default class Tile extends Base {
     this._object3D.onBeforeRender = () => {
     };
     this._isLoaded = false;
-    console.time(this._tile);
     this.requestTileAsync(data => this._init(data));
   }
   _init(data) {
@@ -41,7 +40,6 @@ export default class Tile extends Base {
     this.isValid = true;
     this._initControllers();
     this._createMesh();
-    console.timeEnd(this._tile);
   }
   repaint() {
     this._initControllers();

@@ -8,7 +8,7 @@ export default class Renderer {
   }
   initRender() {
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: false,
       alpha: true,
       autoClear: false
     });
@@ -17,7 +17,7 @@ export default class Renderer {
     this.renderer.setPixelRatio(this.pixelRatio);
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = false;
     this.container.appendChild(this.renderer.domElement);
   }
   updateSize() {
