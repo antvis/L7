@@ -45,6 +45,9 @@ export {
 export { InstancedBufferAttribute } from 'three/src/core/InstancedBufferAttribute'
 // export * from '../../build/three.js';
 function Float32BufferAttribute( array, itemSize, normalized ) {
+  if(Array.isArray( array )){
+    array = new Float32Array( array )
+  }
 	BufferAttribute.call( this, array, itemSize, normalized );
 
 }

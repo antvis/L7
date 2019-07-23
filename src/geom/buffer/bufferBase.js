@@ -65,18 +65,12 @@ export default class BufferBase extends Base {
     return mergedAttributes;
   }
   _toPolygonAttributes(polygon) {
+
   // Three components per vertex per face (3 x 3 = 9)
     const { style, indices, position, indexCount } = polygon;
     const vertices = new Float32Array(indexCount * 3);
-    const normals = new Float32Array(indexCount * 3);
     const colors = new Float32Array(indexCount * 4);
     const pickingIds = new Float32Array(indexCount);
-    const pA = new Vector3();
-    const pB = new Vector3();
-    const pC = new Vector3();
-
-    const cb = new Vector3();
-    const ab = new Vector3();
     let lastIndex = 0;
     indices.forEach((indice, pIndex) => {
       for (let i = 0; i < indice.length / 3; i++) {
@@ -94,72 +88,48 @@ export default class BufferBase extends Base {
         const cx = position[pIndex][index][0];
         const cy = position[pIndex][index][1];
         const cz = position[pIndex][index][2];
+        vertices.set([ ax, ay, az, bx, by, bz, cx, cy, cz ], lastIndex * 9);
+        colors.set([ color[0], color[1], color[2], color[3], color[0], color[1], color[2], color[3], color[0], color[1], color[2], color[3] ], lastIndex * 12);
+        pickingIds.fill(_pickingId, lastIndex * 3 + 0, lastIndex * 3 + 3);
+        // vertices[lastIndex * 9 + 0] = ax;
+        // vertices[lastIndex * 9 + 1] = ay;
+        // vertices[lastIndex * 9 + 2] = az;
 
-        pA.set(ax, ay, az);
-        pB.set(bx, by, bz);
-        pC.set(cx, cy, cz);
-
-        cb.subVectors(pC, pB);
-        ab.subVectors(pA, pB);
-        cb.cross(ab);
-
-        cb.normalize();
-
-        const nx = cb.x;
-        const ny = cb.y;
-        const nz = cb.z;
-
-        vertices[lastIndex * 9 + 0] = ax;
-        vertices[lastIndex * 9 + 1] = ay;
-        vertices[lastIndex * 9 + 2] = az;
-
-        normals[lastIndex * 9 + 0] = nx;
-        normals[lastIndex * 9 + 1] = ny;
-        normals[lastIndex * 9 + 2] = nz;
-
-        colors[lastIndex * 12 + 0] = color[0];
-        colors[lastIndex * 12 + 1] = color[1];
-        colors[lastIndex * 12 + 2] = color[2];
-        colors[lastIndex * 12 + 3] = color[3];
+        // colors[lastIndex * 12 + 0] = color[0];
+        // colors[lastIndex * 12 + 1] = color[1];
+        // colors[lastIndex * 12 + 2] = color[2];
+        // colors[lastIndex * 12 + 3] = color[3];
 
 
-        vertices[lastIndex * 9 + 3] = bx;
-        vertices[lastIndex * 9 + 4] = by;
-        vertices[lastIndex * 9 + 5] = bz;
+        // vertices[lastIndex * 9 + 3] = bx;
+        // vertices[lastIndex * 9 + 4] = by;
+        // vertices[lastIndex * 9 + 5] = bz;
 
-        normals[lastIndex * 9 + 3] = nx;
-        normals[lastIndex * 9 + 4] = ny;
-        normals[lastIndex * 9 + 5] = nz;
+        // colors[lastIndex * 12 + 4] = color[0];
+        // colors[lastIndex * 12 + 5] = color[1];
+        // colors[lastIndex * 12 + 6] = color[2];
+        // colors[lastIndex * 12 + 7] = color[3];
 
-        colors[lastIndex * 12 + 4] = color[0];
-        colors[lastIndex * 12 + 5] = color[1];
-        colors[lastIndex * 12 + 6] = color[2];
-        colors[lastIndex * 12 + 7] = color[3];
+        // vertices[lastIndex * 9 + 6] = cx;
+        // vertices[lastIndex * 9 + 7] = cy;
+        // vertices[lastIndex * 9 + 8] = cz;
 
-        vertices[lastIndex * 9 + 6] = cx;
-        vertices[lastIndex * 9 + 7] = cy;
-        vertices[lastIndex * 9 + 8] = cz;
+        // colors[lastIndex * 12 + 8] = color[0];
+        // colors[lastIndex * 12 + 9] = color[1];
+        // colors[lastIndex * 12 + 10] = color[2];
+        // colors[lastIndex * 12 + 11] = color[3];
 
-        normals[lastIndex * 9 + 6] = nx;
-        normals[lastIndex * 9 + 7] = ny;
-        normals[lastIndex * 9 + 8] = nz;
-
-        colors[lastIndex * 12 + 8] = color[0];
-        colors[lastIndex * 12 + 9] = color[1];
-        colors[lastIndex * 12 + 10] = color[2];
-        colors[lastIndex * 12 + 11] = color[3];
-
-        pickingIds[lastIndex * 3 + 0] = _pickingId;
-        pickingIds[lastIndex * 3 + 1] = _pickingId;
-        pickingIds[lastIndex * 3 + 2] = _pickingId;
+        // pickingIds[lastIndex * 3 + 0] = _pickingId;
+        // pickingIds[lastIndex * 3 + 1] = _pickingId;
+        // pickingIds[lastIndex * 3 + 2] = _pickingId;
 
         lastIndex++;
+       
       }
     });
-
+    console.timeEnd(indexCount+':buffer');
     const attributes = {
       vertices,
-      normals,
       colors,
       pickingIds,
       faceUv: new Float32Array(polygon.faceUv),

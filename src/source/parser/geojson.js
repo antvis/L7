@@ -4,9 +4,8 @@ import { djb2hash } from '../../util/bkdr-hash';
 import rewind from '@mapbox/geojson-rewind';
 export default function geoJSON(data, cfg) {
    // 矢量瓦片图层不做 rewind
-  if (!cfg.hasOwnProperty('sourceLayer')) {
-    rewind(data, true);
-  }
+
+  rewind(data, true);
   const resultData = [];
   const featureKeys = {};
   data.features = data.features.filter(item => {

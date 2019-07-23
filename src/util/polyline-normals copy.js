@@ -7,16 +7,15 @@
 import { direction, normal, computeMiter } from 'polyline-miter-util';
 import { create, copy, dot } from 'gl-vec2';
 
-function extrusions(positions, out, miters, point, normal, scale) {
-  addNext(out, miters, normal, -scale);
-  addNext(out, miters, normal, scale);
-  positions.push(...point);
-  positions.push(...point);
+function extrusions(positions, out, point, normal, scale) {
+  addNext(out, normal, -scale);
+  addNext(out, normal, scale);
+  positions.push(point);
+  positions.push(point);
 }
 
-function addNext(out, miters, normal, length) {
-  out.push(normal[0], normal[1], 0);
-  miters.push(length);
+function addNext(out, normal, length) {
+  out.push([[ normal[0], normal[1] ], length ]);
 }
 
 function lineSegmentDistance(end, start) {
@@ -41,7 +40,6 @@ export default function(points, closed, indexOffset) {
   const out = [];
   const attrPos = [];
   const attrIndex = [];
-  const miters = [];
   const attrDistance = [ 0, 0 ];
   if (closed) {
     points = points.slice();
@@ -66,18 +64,18 @@ export default function(points, closed, indexOffset) {
 
     if (!_started) {
       _started = true;
-      extrusions(attrPos, out, miters, last, _normal, 1);
+      extrusions(attrPos, out, last, _normal, 1);
     }
 
-    attrIndex.push(index + 0, index + 2, index + 1);
+    attrIndex.push([ index + 0, index + 2, index + 1 ]);
 
      // no miter, simple segment
     if (!next) {
        // reset normal
       normal(_normal, lineA);
-      extrusions(attrPos, out, miters, cur, _normal, 1);
+      extrusions(attrPos, out, cur, _normal, 1);
       attrDistance.push(d, d);
-      attrIndex.push(index + 1, index + 2, index + 3);
+      attrIndex.push([ index + 1, index + 2, index + 3 ]);
       count += 2;
     } else {
       // get unit dir of next line
@@ -95,14 +93,15 @@ export default function(points, closed, indexOffset) {
       // 但是 AMap 投影变换后丢失精度，只能通过一个阈值（1000）判断。
       if (Math.abs(miterLen) > 1000) {
         normal(_normal, lineA);
-        extrusions(attrPos, out, miters, cur, _normal, 1);
+        extrusions(attrPos, out, cur, _normal, 1);
         attrDistance.push(d, d);
-        const indexData = _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ]
-        : [ index, index + 2, index + 3 ];
-        attrIndex.push(...indexData);
+        attrIndex.push(
+          _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ]
+          : [ index, index + 2, index + 3 ]
+        );
 
         // 避免在 Material 中使用 THREE.DoubleSide
-        attrIndex.push(index + 2, index + 3, index + 4);
+        attrIndex.push([ index + 2, index + 3, index + 4 ]);
 
         count += 2;
         _lastFlip = -1;
@@ -113,35 +112,35 @@ export default function(points, closed, indexOffset) {
         miterLen = miterLimit;
 
         // next two points in our first segment
-        extrusions(attrPos, out, miters, cur, _normal, 1);
+        extrusions(attrPos, out, cur, _normal, 1);
 
-        attrIndex.push(index + 1, index + 2, index + 3);
+        attrIndex.push([ index + 1, index + 2, index + 3 ]);
 
         // now add the bevel triangle
-        attrIndex.push(...(flip === 1 ? [ index + 2, index + 4, index + 5 ] : [ index + 4, index + 5, index + 3 ]));
+        attrIndex.push(flip === 1 ? [ index + 2, index + 4, index + 5 ] : [ index + 4, index + 5, index + 3 ]);
 
         normal(tmp, lineB);
         copy(_normal, tmp); // store normal for next round
 
-        extrusions(attrPos, out, miters, cur, _normal, 1);
+        extrusions(attrPos, out, cur, _normal, 1);
         attrDistance.push(d, d, d, d);
 
         // the miter is now the normal for our next join
         count += 4;
       } else {
         // next two points in our first segment
-        extrusions(attrPos, out, miters, cur, _normal, 1);
-        attrIndex.push(index + 1, index + 2, index + 3);
+        extrusions(attrPos, out, cur, _normal, 1);
+        attrIndex.push([ index + 1, index + 2, index + 3 ]);
 
         // now add the miter triangles
-        addNext(out, miters, miter, miterLen * -flip);
-        attrPos.push(...cur);
-        attrIndex.push(index + 2, index + 4, index + 3);
-        attrIndex.push(index + 4, index + 5, index + 6);
+        addNext(out, miter, miterLen * -flip);
+        attrPos.push(cur);
+        attrIndex.push([ index + 2, index + 4, index + 3 ]);
+        attrIndex.push([ index + 4, index + 5, index + 6 ]);
         normal(tmp, lineB);
         copy(_normal, tmp); // store normal for next round
 
-        extrusions(attrPos, out, miters, cur, _normal, 1);
+        extrusions(attrPos, out, cur, _normal, 1);
         attrDistance.push(d, d, d, d, d);
 
         // the miter is now the normal for our next join
@@ -155,7 +154,6 @@ export default function(points, closed, indexOffset) {
     normals: out,
     attrIndex,
     attrPos,
-    attrDistance,
-    miters
+    attrDistance
   };
 }
