@@ -10,7 +10,7 @@ export default class SouceCache extends Base {
       cacheLimit: 50,
       minZoom: 0,
       maxZoom: 18,
-      keepBuffer: 1,
+      keepBuffer: 0,
       ...cfg
     });
     this._tileMap = {};// 视野内瓦片坐标序列
@@ -88,7 +88,7 @@ export default class SouceCache extends Base {
   _calculateTileIDs() {
     this._tileMap = {};
     this.updateTileList = [];
-    const zoom = Math.floor(this.scene.getZoom()) - 1; // zoom - 1
+    const zoom = Math.floor(this.scene.getZoom());  // - window.window.devicePixelRatio + 1; // zoom - 1
     const minSourceZoom = this.get('minZoom');
     const maxSourceZoom = this.get('maxZoom');
     this.tileZoom = zoom > maxSourceZoom ? maxSourceZoom : zoom;

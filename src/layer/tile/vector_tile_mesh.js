@@ -1,6 +1,7 @@
 import { destoryObject, updateObjecteUniform } from '../../util/object3d-util';
 import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';
+import { aProjectFlat } from '../../geo/project';
 import { toLngLatBounds, toBounds } from '@antv/geo-coord';
 import { getRender } from '../render/index';
 const r2d = 180 / Math.PI;
@@ -18,8 +19,10 @@ export default class VectorTileMesh {
 
     this._centerLnglat = this._tileLnglatBounds.getCenter();
     this._init(data);
+
     this.maskScene = new THREE.Scene();
     const tileMesh = this._tileMaskMesh();
+    // this._object3D.add(tileMesh);
     this.maskScene.add(tileMesh);
   }
   _init(data) {
@@ -30,8 +33,8 @@ export default class VectorTileMesh {
     if (this.layer.get('type') === 'point') {
       this.layer.shape = this.layer._getShape(layerData);
     }
-    this.mesh = getRender(this.layer.get('type'), this.layer.shape)(null, this.layer, data.attributes);
-    this.mesh.frustumCulled = false;
+    this.mesh = getRender(this.layer.get('type'), this.layer.shape)(null, this.layer, data.buffer);
+    // this._setTilePositon();
     if (this.mesh.type !== 'composer') { // 热力图的情况
       this.mesh.onBeforeRender = renderer => {
         this._renderMask(renderer);
@@ -52,14 +55,9 @@ export default class VectorTileMesh {
   }
 
   _renderMask(renderer) {
-    const zoom = this.layer.scene.getZoom();
-    updateObjecteUniform(this.mesh, {
-      u_time: this.layer.scene._engine.clock.getElapsedTime(),
-      u_zoom: zoom
-    });
-    if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
-      return;
-    }
+    // if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
+    //   return;
+    // }
     const context = renderer.context;
     renderer.autoClear = false;
     renderer.clearDepth();
@@ -80,6 +78,16 @@ export default class VectorTileMesh {
 
     context.stencilFunc(context.EQUAL, 1, 0xffffffff);  // draw if == 1
     context.stencilOp(context.KEEP, context.KEEP, context.KEEP);
+  }
+  _setTilePositon() {
+    const tr = this._tileLnglatBounds.getNorthWest();
+    const zoom = this.layer.scene.getZoom();
+    // const centerPoint = this.layer.scene.crs.lngLatToPoint(tr, 20);
+    const position = aProjectFlat([ tr.lng, tr.lat ]);
+    // this.mesh.position.x = position.x;
+    // this.mesh.position.y = position.y;
+    // this.mesh.scale.x = 2 << (20 - this._tile[2]);
+    // this.mesh.scale.y = 2 << (20 - this._tile[2]);
   }
   _tileMaskMesh() {
     const tilebound = this._tileBounds;

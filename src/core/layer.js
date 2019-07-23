@@ -479,6 +479,7 @@ export default class Layer extends Base {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
       // TODO 瓦片图层获取选中数据信息
+
       const lnglat = this.scene.containerToLngLat(point2d);
       let feature = null;
       let style = null;
