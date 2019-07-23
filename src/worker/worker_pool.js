@@ -35,5 +35,4 @@ export default class WorkerPool {
   }
 }
 
-WorkerPool.workerCount = 1;
-// Math.max(Math.floor(window.navigator.hardwareConcurrency / 2), 1);
+WorkerPool.workerCount = Math.max(Math.floor(window.navigator.hardwareConcurrency / 2), 1);

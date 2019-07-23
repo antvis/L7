@@ -16,37 +16,33 @@ export default class WorkerTile {
     const sourceLayerData = {};
     // 数据源解析
     for (const sourcelayer in sourceStyle) { // sourceLayer
-      const features = [];
       const vectorLayer = data.layers[sourcelayer];
       if (vectorLayer === undefined) {
         return null;
       }
-      for (let i = 0; i < vectorLayer.length; i++) {
-        const feature = vectorLayer.feature(i);
-        const geofeature = feature.toGeoJSON(tile[0], tile[1], tile[2]);
-        features.push(geofeature);
-      }
-      const geodata = {
-        type: 'FeatureCollection',
-        features
-      };
-      delete data.layers[sourcelayer];
+      const style = sourceStyle[sourcelayer][0];
+      style.sourceOption.parser.type = 'vector';
+      style.sourceOption.parser.tile = tile;
+      const tileSource2 = new Source({
+        ...style.sourceOption,
+        mapType: style.mapType,
+        projected: true,
+        data: data.layers[sourcelayer]
+      });
+
       for (let i = 0; i < sourceStyle[sourcelayer].length; i++) {
         const style = sourceStyle[sourcelayer][i];
-        style.sourceOption.parser.type = 'geojson';
-        const tileSource = new Source({
-          ...style.sourceOption,
-          mapType: style.mapType,
-          data: geodata
-        });
-        const tileMapping = new TileMapping(tileSource, style);
+        const tileMapping = new TileMapping(tileSource2, style);
         const geometryBuffer = getBuffer(style.type, style.shape);
         const buffer = new geometryBuffer({
           layerData: tileMapping.layerData,
           shape: style.shape
         });
         sourceLayerData[style.layerId] = {
-          attributes: buffer.attributes,
+          buffer: {
+            attributes: buffer.attributes,
+            indexArray: buffer.indexArray
+          },
           // layerData: tileMapping.layerData,
           // sourceData: tileSource.data,
           layerId: style.layerId,

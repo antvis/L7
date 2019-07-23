@@ -1,8 +1,8 @@
 import * as THREE from '../../../core/three';
-import LineBuffer from '../../../geom/buffer/line';
 import { MeshLineMaterial } from '../../../geom/material/lineMaterial';
+import { getBuffer } from '../../../geom/buffer/';
 
-export default function DrawLine(layerData, layer) {
+export default function DrawLine(layerData, layer, buffer) {
 
   const style = layer.get('styleOptions');
   const animateOptions = layer.get('animateOptions');
@@ -12,25 +12,31 @@ export default function DrawLine(layerData, layer) {
   const hasPattern = layerData.some(layer => {
     return layer.pattern;
   });
-  const { attributes } = new LineBuffer({
-    layerData,
-    shapeType: 'line',
-    style,
-    imagePos: layer.scene.image.imagePos
-  });
+  if (!buffer) {
+    const geometryBuffer = getBuffer(layer.type, layer.shapeType);
+    buffer = new geometryBuffer({
+      layerData,
+      shapeType: 'line',
+      style,
+      imagePos: layer.scene.image.imagePos
+    });
+
+  }
+  const { attributes, indexArray } = buffer;
+
+
   const geometry = new THREE.BufferGeometry();
-  geometry.setIndex(attributes.indexArray);
+  geometry.setIndex(new THREE.Uint32BufferAttribute(indexArray, 1));
   geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-  geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normal, 3));
-  geometry.addAttribute('a_miter', new THREE.Float32BufferAttribute(attributes.miter, 1));
+  geometry.addAttribute('normal', new THREE.Float32BufferAttribute(attributes.normals, 3));
+  geometry.addAttribute('a_miter', new THREE.Float32BufferAttribute(attributes.miters, 1));
   geometry.addAttribute('a_distance', new THREE.Float32BufferAttribute(attributes.attrDistance, 1));
-  geometry.addAttribute('a_dash_array', new THREE.Float32BufferAttribute(attributes.attrDashArray, 1));
-  geometry.addAttribute('a_texture_coord', new THREE.Float32BufferAttribute(attributes.textureCoord, 2));
-  geometry.addAttribute('a_total_distance', new THREE.Float32BufferAttribute(attributes.totalDistance, 1));
-
+  geometry.addAttribute('a_dash_array', new THREE.Float32BufferAttribute(attributes.dashArray, 1));
+  geometry.addAttribute('a_texture_coord', new THREE.Float32BufferAttribute(attributes.patterns, 2));
+  geometry.addAttribute('a_total_distance', new THREE.Float32BufferAttribute(attributes.totalDistances, 1));
   const lineMaterial = new MeshLineMaterial({
     u_opacity: style.opacity,
     u_zoom: layer.scene.getZoom(),
