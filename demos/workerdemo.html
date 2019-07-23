@@ -58,12 +58,13 @@ scene.on('loaded', () => {
     }
   })
   .shape('fill')
+  .size(1000000)
   .active(false)
   .color('OBJECTID',['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'])
   .style({
     opacity:1.0
   })
-.render();
+ .render();
  const layer2 = scene.PolygonLayer({
     zIndex:10,
   }) 
@@ -81,7 +82,7 @@ scene.on('loaded', () => {
   .style({
     opacity:1.0
   })
- .render();
+  .render();
 
 
 });

@@ -77,12 +77,7 @@ export default class Scene extends Base {
     return this.style.getSource(id);
   }
   on(type, hander) {
-
-    if (this.map && type !== 'loaded') {
-      this.map.on(type, hander);
-      return;
-
-    }
+    if (this.map) { this.map.on(type, hander); }
     super.on(type, hander);
   }
   off(type, hander) {
