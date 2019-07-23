@@ -9,7 +9,7 @@ export default function DrawPolygonLine(layerData, layer, buffer) {
     activeColor: activeOption.fill
   };
   const { opacity } = config;
-  let attributes = buffer;
+  let { attributes, indexArray } = buffer;
   if (!attributes) {
     attributes = new PolygonBuffer({
       shape: layer.shape,
@@ -17,7 +17,10 @@ export default function DrawPolygonLine(layerData, layer, buffer) {
     }).attributes;
   }
   const geometry = new THREE.BufferGeometry();
-  geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
+  if (indexArray) {
+    geometry.setIndex(new THREE.Uint32BufferAttribute(indexArray, 1));
+  }
+  geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
   geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
   const lineMaterial = new LineMaterial({
