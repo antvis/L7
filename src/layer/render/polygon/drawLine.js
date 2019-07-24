@@ -1,5 +1,5 @@
 import * as THREE from '../../../core/three';
-import PolygonBuffer from '../../../geom/buffer/polygon';
+import { getBuffer } from '../../../geom/buffer/';
 import { LineMaterial } from '../../../geom/material/lineMaterial';
 export default function DrawPolygonLine(layerData, layer, buffer) {
   const style = layer.get('styleOptions');
@@ -9,13 +9,14 @@ export default function DrawPolygonLine(layerData, layer, buffer) {
     activeColor: activeOption.fill
   };
   const { opacity } = config;
-  let { attributes, indexArray } = buffer;
-  if (!attributes) {
-    attributes = new PolygonBuffer({
-      shape: layer.shape,
+  if (!buffer) {
+    const geometryBuffer = getBuffer(layer.type, layer.shape);
+    buffer = new geometryBuffer({
       layerData
-    }).attributes;
+    });
+
   }
+  const { attributes, indexArray } = buffer;
   const geometry = new THREE.BufferGeometry();
   if (indexArray) {
     geometry.setIndex(new THREE.Uint32BufferAttribute(indexArray, 1));
