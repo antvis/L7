@@ -105,38 +105,3 @@ export function extrudePolygonLine(points, extrude) {
     positionsIndex: cells
   };
 }
-
-export function fillPolygon(points) {
-  const flattengeo = earcut.flatten(points);
-  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
-  return {
-    positions: flattengeo.vertices,
-    indexArray: triangles
-  };
-}
-
-export function extrude_Polygon(points) {
-  const p1 = points[0][0];
-  const p2 = points[0][points[0].length - 1];
-  if (p1[0] === p2[0] && p1[1] === p2[1]) {
-    points[0] = points[0].slice(0, points[0].length - 1);
-  }
-  const n = points[0].length;
-  const flattengeo = earcut.flatten(points);
-  const positions = [];
-  const indexArray = [];
-  positions.push(...flattengeo.vertices);
-  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
-  indexArray.push(...triangles);
-  for (let i = 0; i < n; i++) {
-    const prePoint = flattengeo.vertices.slice(i * 3, i * 3 + 3);
-    const nextPoint = flattengeo.vertices.slice(i * 3 + 3, i * 3 + 6);
-    const indexOffset = positions.length;
-    positions.push(prePoint[0], prePoint[1], 1, nextPoint[0], nextPoint[1], 1, prePoint[0], prePoint[1], 0, nextPoint[0], nextPoint[1], 0);
-    indexArray.push([ 1, 2, 0, 3, 2, 1 ].map(v => { return v + indexOffset; }));
-  }
-  return {
-    positions: flattengeo.vertices,
-    indexArray: triangles
-  };
-}

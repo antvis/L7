@@ -38,7 +38,8 @@ import DrawGrid from './heatmap/gird';
 import DrawHeatmap from './heatmap/heatmap';
 import DrawHexagon from './heatmap/hexagon';
 
-registerRender('heatmap', 'grid', DrawGrid);
+registerRender('heatmap', 'square', DrawGrid);
+registerRender('heatmap', 'squareColumn', DrawGrid);
 registerRender('heatmap', 'heatmap', DrawHeatmap);
 registerRender('heatmap', 'hexagon', DrawHexagon);
 
