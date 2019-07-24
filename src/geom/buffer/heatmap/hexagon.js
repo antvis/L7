@@ -1,4 +1,4 @@
-import { fill } from '../../shape/polygon';
+import { fill, extrude } from '../../shape/polygon';
 export default function hexagonBuffer(layerData) {
   const attribute = {
     vertices: [],
