@@ -1,27 +1,41 @@
 import * as THREE from '../../../core/three';
-import hexagonBuffer from '../../../geom/buffer/heatmap/hexagon';
 import GridMaterial from '../../../geom/material/hexagon';
-export default function DrawHexagon(layerdata, layer, source) {
+import { getBuffer } from '../../../geom/buffer/';
+import { generateLightingUniforms } from '../../../util/shaderModule';
+export default function DrawHexagon(layerData, layer, source) {
   const style = layer.get('styleOptions');
   const { fill } = layer.get('activedOptions');
   const { radius } = source.data;
-  const attributes = new hexagonBuffer(layerdata);
-  const { opacity, angle, coverage } = style;
-  const geometry = new THREE.BufferGeometry();
-  geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.vertices, 3));
-  geometry.addAttribute('miter', new THREE.Float32BufferAttribute(attributes.miter, 2));
-  geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
-  geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
+  const { opacity, angle = 0, coverage, lights } = style;
+  const geometryBuffer = getBuffer(layer.type, 'shape');
+  const buffer = new geometryBuffer({
+    layerData,
+    shapeType: layer.shapeType
+  });
+  const { attributes, instanceGeometry } = buffer;
+  const instancedGeometry = new THREE.InstancedBufferGeometry();
+  instancedGeometry.setIndex(instanceGeometry.indexArray);
+  instancedGeometry.addAttribute('miter', new THREE.Float32BufferAttribute(instanceGeometry.positions, 3));
+  if (instanceGeometry.normals) {
+    instancedGeometry.addAttribute('normal', new THREE.Float32BufferAttribute(instanceGeometry.normals, 3));
+  }
+  instancedGeometry.addAttribute('position', new THREE.InstancedBufferAttribute(new Float32Array(attributes.positions), 3));
+  instancedGeometry.addAttribute('a_color', new THREE.InstancedBufferAttribute(new Float32Array(attributes.colors), 4));
+  instancedGeometry.addAttribute('pickingId', new THREE.InstancedBufferAttribute(new Float32Array(attributes.pickingIds), 1));
+  instancedGeometry.addAttribute('a_size', new THREE.InstancedBufferAttribute(new Float32Array(attributes.sizes), 1));
+
   const material = new GridMaterial({
     u_opacity: opacity,
     u_radius: radius,
     u_angle: angle / 180 * Math.PI,
     u_coverage: coverage,
-    u_activeColor: fill
+    u_activeColor: fill,
+    ...generateLightingUniforms(lights)
   }, {
-    SHAPE: false
+    SHAPE: false,
+    LIGHTING: !!instanceGeometry.normals
   });
-  const hexgonMesh = new THREE.Mesh(geometry, material);
+  const hexgonMesh = new THREE.Mesh(instancedGeometry, material);
   return hexgonMesh;
 }
 
