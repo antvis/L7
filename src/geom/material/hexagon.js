@@ -1,5 +1,6 @@
 import Material from './material';
-import { getModule } from '../../util/shaderModule';
+import { getModule, wrapUniforms } from '../../util/shaderModule';
+import merge from '@antv/util/lib/deep-mix';
 export default class hexagonMaterial extends Material {
   getDefaultParameters() {
     return {
@@ -19,9 +20,9 @@ export default class hexagonMaterial extends Material {
   }
   constructor(_uniforms, _defines, parameters) {
     super(parameters);
-    const { uniforms, defines } = this.getDefaultParameters();
-    const { vs, fs } = getModule('hexagon');
-    this.uniforms = Object.assign(uniforms, this.setUniform(_uniforms));
+    const { defines } = this.getDefaultParameters();
+    const { vs, fs, uniforms } = getModule('hexagon');
+    this.uniforms = wrapUniforms(merge(uniforms, _uniforms));
     this.type = 'hexagonMaterial';
     this.defines = Object.assign(defines, _defines);
     this.vertexShader = vs;

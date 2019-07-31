@@ -8,6 +8,8 @@ export default class HeatMapLayer extends Layer {
   }
   draw() {
     this.type = 'heatmap';
-    this.add(getRender('heatmap', this.shapeType || 'heatmap')(this.layerData, this, this.layerSource));
+    if (!this.shapeType) this.shapeType = 'heatmap';
+    const renderType = this.shapeType === 'heatmap' ? 'heatmap' : 'shape';
+    this.add(getRender('heatmap', renderType)(this.layerData, this, this.layerSource));
   }
 }
