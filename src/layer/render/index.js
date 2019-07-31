@@ -3,6 +3,7 @@ import { registerRender, getRender } from './factory';
 import DrawFill from './polygon/drawFill';
 import DrawLine from './polygon/drawLine';
 import DrawAnimate from './polygon/drawAnimate';
+import Draw3DShape from './point/draw_3d_shape';
 
 registerRender('polygon', 'fill', DrawFill);
 registerRender('polygon', 'extrude', DrawFill);
@@ -31,6 +32,7 @@ registerRender('point', 'normal', DrawPointNormal);
 registerRender('point', 'stroke', DrawPointStroke);
 registerRender('point', 'text', DrawPointText);
 registerRender('point', 'circle', DrawPointCircle);
+registerRender('point', 'shape', Draw3DShape);
 
 // heatmap
 
@@ -41,7 +43,7 @@ import DrawHexagon from './heatmap/hexagon';
 registerRender('heatmap', 'square', DrawGrid);
 registerRender('heatmap', 'squareColumn', DrawGrid);
 registerRender('heatmap', 'heatmap', DrawHeatmap);
-registerRender('heatmap', 'hexagon', DrawHexagon);
+registerRender('heatmap', 'shape', DrawHexagon);
 
 // image
 
