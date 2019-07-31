@@ -1,5 +1,5 @@
 import earcut from 'earcut';
-
+import * as THREE from '../core/three';
 /**
  * 计算是否拉伸
  * @param {Array} points  点坐标数组
@@ -125,18 +125,45 @@ export function extrude_Polygon(points) {
   const flattengeo = earcut.flatten(points);
   const positions = [];
   const indexArray = [];
+  const normals = [];
+  // 设置顶部z值
+  for (let j = 0; j < flattengeo.vertices.length / 3; j++) {
+    flattengeo.vertices[j * 3 + 2] = 1;
+    normals.push(0, 0, 1);
+  }
   positions.push(...flattengeo.vertices);
   const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   indexArray.push(...triangles);
   for (let i = 0; i < n; i++) {
     const prePoint = flattengeo.vertices.slice(i * 3, i * 3 + 3);
-    const nextPoint = flattengeo.vertices.slice(i * 3 + 3, i * 3 + 6);
-    const indexOffset = positions.length;
+    let nextPoint = flattengeo.vertices.slice(i * 3 + 3, i * 3 + 6);
+    nextPoint.length === 0 && (nextPoint = flattengeo.vertices.slice(0, 3));
+    const indexOffset = positions.length / 3;
     positions.push(prePoint[0], prePoint[1], 1, nextPoint[0], nextPoint[1], 1, prePoint[0], prePoint[1], 0, nextPoint[0], nextPoint[1], 0);
-    indexArray.push([ 1, 2, 0, 3, 2, 1 ].map(v => { return v + indexOffset; }));
+    const normal = computeNormal([ nextPoint[0], nextPoint[1], 1 ], [ prePoint[0], prePoint[1], 0 ], [ prePoint[0], prePoint[1], 1 ]);
+    normals.push(...normal, ...normal, ...normal, ...normal);
+    indexArray.push(...[ 1, 2, 0, 3, 2, 1 ].map(v => { return v + indexOffset; }));
   }
   return {
-    positions: flattengeo.vertices,
-    indexArray: triangles
+    positions,
+    indexArray,
+    normals
   };
 }
+
+function computeNormal(v1, v2, v3) {
+  const pA = new THREE.Vector3();
+  const pB = new THREE.Vector3();
+  const pC = new THREE.Vector3();
+  const cb = new THREE.Vector3();
+  const ab = new THREE.Vector3();
+  pA.set(...v1);
+  pB.set(...v2);
+  pC.set(...v3);
+  cb.subVectors(pC, pB);
+  ab.subVectors(pA, pB);
+  cb.cross(ab);
+  cb.normalize();
+  const { x, y, z } = cb;
+  return [ x, y, z ];
+};
