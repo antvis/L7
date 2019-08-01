@@ -166,4 +166,4 @@ function computeNormal(v1, v2, v3) {
   cb.normalize();
   const { x, y, z } = cb;
   return [ x, y, z ];
-};
+}
