@@ -53,16 +53,19 @@ scene.on('loaded', () => {
         },
         {
         type: 'grid',
-        size: 15000,
+        size: 160000,
         field:'v',
         method:'sum'
       }
       ]
     })
-    .shape('grid')
+    .shape('squareColumn')
+    .size('count',(value)=>{
+       return value * 1000;
+    })
     .active({fill:'red'})
     .style({
-      coverage: 0.8
+      coverage: 0.6
     })
     .color('count', ["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
      .render();
