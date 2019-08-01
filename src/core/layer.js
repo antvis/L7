@@ -39,11 +39,12 @@ export default class Layer extends Base {
       attrs: {},
       // 样式配置项
       styleOptions: {
-        stroke: 'none',
+        stroke: [ 1, 1, 1, 1 ],
         strokeWidth: 1.0,
         opacity: 1.0,
         strokeOpacity: 1.0,
-        texture: false
+        texture: false,
+        blending: 'normal'
       },
       destroyed: false,
       // 选中时的配置项
@@ -68,6 +69,8 @@ export default class Layer extends Base {
     this._object3D.renderOrder = this.get('zIndex') || 0;
     this._mapEventHandlers = [];
     const layerId = this._getUniqueId();
+    this.set('layerId', layerId);
+    this.set('mapType', this.scene.mapType);
     this.layerId = layerId;
     this._activeIds = null;
     const world = scene._engine.world;
@@ -75,7 +78,6 @@ export default class Layer extends Base {
     this.layerMesh = null;
     this.layerLineMesh = null;
     this._initEvents();
-
   }
   /**
    * 将图层添加加到 Object
@@ -127,7 +129,23 @@ export default class Layer extends Base {
     this.set('visible', visible);
     this._object3D.visible = this.get('visible');
   }
+  // 兼容瓦片source，非瓦片source
+
   source(data, cfg = {}) {
+    // 根据Source类型判断，是不是瓦片图层
+    if (this.scene.getTileSource(data)) {
+      this.set('layerType', 'tile');
+      this.set('sourceOption', {
+        id: data,
+        ...cfg
+      });
+      this.scene.style.addLayer(this);
+      // 初始化tiles
+      this.tiles = new THREE.Object3D();
+      this._object3D.add(this.tiles);
+      return this;
+    }
+
     if (data instanceof source) {
       this.layerSource = data;
       return this;
@@ -245,9 +263,6 @@ export default class Layer extends Base {
     this.set('animateOptions', animateOptions);
     return this;
   }
-  texture() {
-
-  }
   fitBounds() {
     const extent = this.layerSource.data.extent;
     this.scene.fitBounds(extent);
@@ -276,13 +291,13 @@ export default class Layer extends Base {
   }
   _setAttrOptions(attrName, attrCfg) {
     const options = this.get('attrOptions');
-
     if (attrName === 'size' && this._zoomScale) {
       attrCfg.zoom = this.map.getZoom();
     }
     options[attrName] = attrCfg;
   }
   _createAttrOption(attrName, field, cfg, defaultValues) {
+
     const attrCfg = {};
     attrCfg.field = field;
     if (cfg) {
@@ -306,6 +321,10 @@ export default class Layer extends Base {
   }
 
   render() {
+    if (this.get('layerType') === 'tile') {
+      this.scene.style.update(this._attrs);
+      return this;
+    }
     this.init();
     this.scene._engine.update();
     return this;
@@ -386,8 +405,8 @@ export default class Layer extends Base {
     const nextStyle = this.get('styleOptions');
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
       // this._mapping();
+      // this._scaleByZoom();
       this._setPreOption();
-      this._scaleByZoom();
       this._initInteraction();
       this._initMapEvent();
       this.draw();
@@ -460,6 +479,7 @@ export default class Layer extends Base {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
       // TODO 瓦片图层获取选中数据信息
+
       const lnglat = this.scene.containerToLngLat(point2d);
       let feature = null;
       let style = null;
