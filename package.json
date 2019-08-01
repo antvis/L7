@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "build/l7.js",
   "browser": "build/l7.js",
@@ -65,11 +65,11 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "build-dev": "rollup -c --environment BUILD:dev && npm run demos-web",
+    "build-dev": "rollup -c --environment BUILD:dev",
     "watch-dev": "rollup -c --environment BUILD:dev --watch & npm run demos-web ",
     "build-prod": "rollup -c --environment BUILD:production",
     "build-prod-min": "rollup -c --environment BUILD:production,MINIFY:true",
-    "build": "webpack",
+    "build": "rollup -c --environment BUILD:production",
     "build-lib": "babel src --out-dir lib",
     "bundler": "electron ./bundler/app.js",
     "ci": "npm run lint && npm run test",
@@ -83,7 +83,7 @@
     "demos": "electron ./demos/app.js",
     "demos-web": "node ./demos/app.js --web --port 2046",
     "dev": "npm run watch & npm run demos-web",
-    "dist": "npm run mkdir-dist && npm run build && npm run compress",
+    "dist": "npm run build-dev && npm run build-prod  && npm run build-prod-min",
     "lint": "eslint --ext .html,.js ./",
     "lint-fix": "eslint --ext .html,.js --fix ./",
     "mkdir-dist": "node ./bin/mkdir-dist.js",
