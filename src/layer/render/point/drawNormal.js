@@ -3,7 +3,7 @@
  */
 import * as THREE from '../../../core/three';
 import * as PointBuffer from '../../../geom/buffer/point/index';
-import PointMaterial from '../../../geom/material/pointMaterial';
+import PointMaterial from '../../../geom/material/normal_point';
 
 export default function DrawNormal(layerData, layer) {
   const geometry = new THREE.BufferGeometry();
@@ -19,10 +19,7 @@ export default function DrawNormal(layerData, layer) {
     u_opacity: opacity,
     u_activeColor: activeOption.fill
   }, {
-    SHAPE: false,
-    TEXCOORD_0: false
   }, style);
-  material.setBending(style.blending);
   const strokeMesh = new THREE.Points(geometry, material);
   return strokeMesh;
 }

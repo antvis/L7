@@ -1,6 +1,8 @@
 import TileMapping from '../core/controller/tile_mapping';
 import { getBuffer } from '../geom/buffer/index';
 import Source from '../core/source';
+import Global from '../global';
+const { pointShape } = Global;
 
 export default class WorkerTile {
   constructor(params) {
@@ -33,6 +35,9 @@ export default class WorkerTile {
       for (let i = 0; i < sourceStyle[sourcelayer].length; i++) {
         const style = sourceStyle[sourcelayer][i];
         const tileMapping = new TileMapping(tileSource2, style);
+        if (style.type === 'point') {
+          style.shape = this._getPointShape(tileMapping);
+        }
         const geometryBuffer = getBuffer(style.type, style.shape);
         const buffer = new geometryBuffer({
           layerData: tileMapping.layerData,
@@ -45,6 +50,7 @@ export default class WorkerTile {
           },
           // layerData: tileMapping.layerData,
           // sourceData: tileSource.data,
+          shape: style.shape,
           layerId: style.layerId,
           sourcelayer,
           tileId: this.tileID
@@ -65,5 +71,29 @@ export default class WorkerTile {
       sourceStyles[sourceID][sourcelayer].push(layerStyles[layerId]);
     }
     return sourceStyles;
+  }
+  _getPointShape(tileMapping) {
+    let shape = null;
+    if (!tileMapping.layerData[0].hasOwnProperty('shape')) {
+      return 'normal';
+    }
+    for (let i = 0; i < tileMapping.layerData.length; i++) {
+      shape = tileMapping.layerData[i].shape;
+      if (shape !== undefined) {
+        break;
+      }
+    }
+
+    // 2D circle 特殊处理
+    if (pointShape['2d'].indexOf(shape) !== -1) {
+      return 'fill';
+    } else if (pointShape['3d'].indexOf(shape) !== -1) {
+      return 'extrude';
+    }
+    // TODO 图片支持
+    //  else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
+    //   return 'image';
+    // }
+    return 'text';
   }
 }
