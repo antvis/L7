@@ -2,7 +2,6 @@
 import Material from './material';
 import * as THREE from '../../core/three';
 import { getModule } from '../../util/shaderModule';
-import picking_frag from '../../core/engine/picking//picking_frag.glsl';
 export default class PointMaterial extends Material {
   getDefaultParameters() {
     return {
