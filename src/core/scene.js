@@ -27,8 +27,8 @@ export default class Scene extends Base {
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
-    // this.registerMapEvent();
-    this._engine.run();
+    this.registerMapEvent();
+    // this._engine.run();
     compileBuiltinModules();
   }
   // 为pickup场景添加 object 对象
