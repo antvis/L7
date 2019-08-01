@@ -36,9 +36,9 @@ export default class Worker {
     }
     callback();
   }
-  updateLayers(id, params, callback) {
+  // updateLayers(id, params, callback) {
 
-  }
+  // }
   /**
    * 获取workerSource
    * @param {string} mapId WorkerPool Id
