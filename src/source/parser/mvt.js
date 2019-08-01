@@ -12,12 +12,8 @@ export default function mvt(data, cfg) {
   for (let i = 0; i < vectorLayer.length; i++) {
     const feature = vectorLayer.feature(i);
     const geofeature = feature.toGeoJSON(cfg.tile[0], cfg.tile[1], cfg.tile[2]);
-    if (geofeature.geometry.type === 'Polygon' && geofeature.geometry.coordinates[0].length < 20) {
-      continue;
-    }
     features.push(geofeature);
   }
-  // console.log(features);
   const geodata = {
     type: 'FeatureCollection',
     features

@@ -21,6 +21,8 @@ void main(){
     v_color=u_activeColor;
   }
   v_texcoord=uv/u_textTextureSize;
-  worldId=id_toPickColor(pickingId);
+ #ifdef PICK
+    worldId = id_toPickColor(pickingId);
+   #endif
   
 }

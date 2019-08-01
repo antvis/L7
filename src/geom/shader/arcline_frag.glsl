@@ -6,6 +6,7 @@
       if(v_color.a == 0.){
         discard;
       }
+      #pragma include "pick"
       gl_FragColor = v_color;
       gl_FragColor.a = v_color.a*u_opacity;
 

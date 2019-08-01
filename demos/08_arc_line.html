@@ -31,47 +31,26 @@ const scene = new L7.Scene({
 });
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
-    const rows = data.split('\n');
-    var features =[];
-    for(var i =1;i<rows.length-1;i++){
-       var row = rows[i].split(',');
-      var start = turf.point([row[4], row[5]]);
-      var end = turf.point([row[6], row[7]]);
-      var greatCircle = turf.greatCircle(start, end, {'npoints': 50});
-      features.push(greatCircle);
-    }
-    var fc = turf.featureCollection(features);
-    const layer = scene.LineLayer({
-      zIndex: 2
-    })
-     .source(fc)
-    .color('rgb(13,64,140)') 
-    .style({
-      opacity:0.6,
-    })
-   //.animate({enable:true})
-    .render();
-    console.log(layer);
-    /**
+
     scene.LineLayer({
       zIndex: 2
     })
      .source(data, { // lng1,lat1,lng2,lat2
-       type: 'csv',
+       parser:{
+         type: 'csv',
        x: 'lng1',
        y: 'lat1',
        x1: 'lng2',
        y1: 'lat2'
-     })
+     }})
     .shape('arc')
     .size(0.8)
     .color('rgb(13,64,140)') 
     .style({
       opacity:0.6,
     })
-   //.animate({enable:true})
     .render();
-    **/
+
   });
 });
 </script>
