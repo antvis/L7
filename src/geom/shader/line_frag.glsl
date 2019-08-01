@@ -11,4 +11,5 @@
       color.a= color.a * vTime * 1.5;
       #endif
       gl_FragColor = color;
+        #pragma include "pick"
 }

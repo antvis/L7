@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/PqLCOJpqoOUfuPRacUzE.css" />
+    <title>气泡图</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script src="../build/l7.js"></script>
+ <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+ </style>
+<script>
+  var scene = new L7.Scene({
+    id: 'map',
+    mapStyle: 'light', // 样式URL
+    center: [120.19382669582967, 30.258134],
+    pitch: 0,
+    zoom: 12
+  });
+  window.scene = scene;
+  scene.on('loaded', function() {
+    $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', function(data) {
+      scene.PointLayer({
+          zIndex: 2
+        }).source(data, {
+          scale: {
+            min: 0,
+            max: 1000,
+            type: 'linear'
+          }
+        }).shape('circle').size('value', [5, 80]) // default 1
+        .active(true).filter('value', function(field_8) {
+          return field_8 * 1 > 500;
+        }).color('type', ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"].reverse()).style({
+          stroke: 'rgb(255,255,255)',
+          strokeWidth: 1,
+          opacity: 0.9
+        }).render();
+    });
+  });
+</script>
+</body>
+</html>

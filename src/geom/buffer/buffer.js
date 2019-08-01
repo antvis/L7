@@ -74,7 +74,14 @@ export default class BufferBase extends Base {
         this.attributes.pickingIds[start1 + i] = id;
       }
       if (feature.hasOwnProperty('size')) {
-        this.attributes.sizes[start1 + i ] = size[0] || size;
+        let size2 = size;
+        if (Array.isArray(size) && size.length === 2) {
+          size2 = [ size[0] ];
+        }
+        if (!Array.isArray(size)) {
+          size2 = [ size ];
+        }
+        this.attributes.sizes.set(size2, (start1 + i) * size2.length);
       }
       if (feature.hasOwnProperty('pattern')) {
 

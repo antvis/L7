@@ -1,8 +1,13 @@
-import BufferBase from './bufferBase';
+// import BufferBase from './bufferBase';
 import { colorScales } from '../../attr/colorscales';
 import * as THREE from '../../core/three';
-export class RasterBuffer extends BufferBase {
-  geometryBuffer() {
+import Base from '../../core/base';
+export class RasterBuffer extends Base {
+  constructor(cfg) {
+    super(cfg);
+    this.init();
+  }
+  init() {
     const layerData = this.get('layerData');
     const { coordinates, width, data, height } = layerData.dataArray[0];
     const positions = [
@@ -21,12 +26,12 @@ export class RasterBuffer extends BufferBase {
     const colors = this.get('rampColors');
     const colorImageData = this.getColorRamp(colors);
     const colorTexture = this._getTexture(colorImageData); // 颜色纹理
-    this.bufferStruct.position = positions;
-    this.bufferStruct.uv = imgPosUv;
-    this.bufferStruct.u_raster = texture;//
-    this.bufferStruct.u_extent = [ coordinates[0][0], coordinates[0][1], coordinates[1][0], coordinates[1][1] ];
-    this.bufferStruct.u_colorTexture = colorTexture; // 颜色表‘=
-    const triangles = this._buildTriangles(width, height, size, this.bufferStruct.u_extent);
+    this.position = positions;
+    this.uv = imgPosUv;
+    this.u_raster = texture;//
+    this.u_extent = [ coordinates[0][0], coordinates[0][1], coordinates[1][0], coordinates[1][1] ];
+    this.u_colorTexture = colorTexture; // 颜色表‘=
+    const triangles = this._buildTriangles(width, height, size, this.u_extent);
     const attributes = {
       vertices: new Float32Array(triangles.vertices),
       uvs: new Float32Array(triangles.uvs),

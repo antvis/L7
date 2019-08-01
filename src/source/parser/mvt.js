@@ -14,7 +14,6 @@ export default function mvt(data, cfg) {
     const geofeature = feature.toGeoJSON(cfg.tile[0], cfg.tile[1], cfg.tile[2]);
     features.push(geofeature);
   }
-  // console.log(features);
   const geodata = {
     type: 'FeatureCollection',
     features
