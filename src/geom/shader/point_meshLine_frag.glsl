@@ -11,4 +11,5 @@ void main() {
     } 
     #endif
     gl_FragColor = v_color;
+    #pragma include "pick"
 }

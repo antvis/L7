@@ -3,9 +3,10 @@
  * @author dxq613
  */
 // const Global = {};
+import version from './util/version';
 const FONT_FAMILY = '"-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto,"Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",SimSun, "sans-serif"';
 const Global = {
-  version: '1.2.0-beta.3',
+  version,
   scene: {
     mapType: 'AMAP',
     zoom: 5,

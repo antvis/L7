@@ -13,6 +13,7 @@ export function aggregatorToGrid(data, option) {
   return {
     yOffset: gridOffset.xOffset / 360 * (256 << 20) / 2,
     xOffset: gridOffset.xOffset / 360 * (256 << 20) / 2,
+    radius: gridOffset.xOffset / 360 * (256 << 20) / 2,
     dataArray: layerData
   };
 }
