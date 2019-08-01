@@ -13,8 +13,8 @@ const production = BUILD === 'production';
 const outputFile = !production
   ? 'build/L7.js'
   : minified
-  ? 'build/l7.js'
-  : 'build/l7-unminified.js';
+  ? 'build/L7-min.js'
+  : 'build/L7-unminified.js';
 
 const config = [
   {

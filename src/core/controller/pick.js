@@ -1,6 +1,5 @@
 import Util from '../../util';
 import * as THREE from '../three';
-import pickingFragmentShader from '../engine/picking/picking_frag.glsl';
 import { updateObjecteUniform, destoryObject } from '../../util/object3d-util';
 export default class PickContoller {
   constructor(cfg) {

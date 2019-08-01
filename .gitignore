@@ -76,3 +76,6 @@ demos/image
 demos/hexagon.html
 demos/model
 testdemo
+webpack-dev.config.js
+webpack.config.js
+.si.yml

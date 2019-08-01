@@ -1,7 +1,6 @@
 import { destoryObject, updateObjecteUniform } from '../../util/object3d-util';
 import * as THREE from '../../core/three';
 import MaskMaterial from '../../geom/material/tile/maskMaterial';
-import { aProjectFlat } from '../../geo/project';
 import { toLngLatBounds, toBounds } from '@antv/geo-coord';
 import { getRender } from '../render/index';
 const r2d = 180 / Math.PI;
