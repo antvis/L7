@@ -10,12 +10,11 @@ $ npm install
 $ npm run test-live
 
 # build watching file changes and run demos
-$ npm run dev
+$ npm run start
 
 # run demos
 $ npm run demos
 ```
-visit online demo 
-https://antv.alipay.com/zh-cn/l7/1.x/demo/index.html
+
 
 ## How to Contribute
