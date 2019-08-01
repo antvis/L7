@@ -1,9 +1,13 @@
-import BufferBase from './bufferBase';
+// import BufferBase from './bufferBase';
 import Util from '../../util';
 import * as THREE from '../../core/three';
-
-export default class ImageBuffer extends BufferBase {
-  geometryBuffer() {
+import Base from '../../core/base';
+export default class ImageBuffer extends Base {
+  constructor(cfg) {
+    super(cfg);
+    this.init();
+  }
+  init() {
     const layerData = this.get('layerData');
     const coordinates = layerData[0].coordinates;
     const images = layerData[0].images;
