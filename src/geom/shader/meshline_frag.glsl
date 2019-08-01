@@ -45,4 +45,5 @@ void main() {
   // anti-alias
   float blur = 1. - smoothstep(u_blur, 1., length(v_normal));
   gl_FragColor.a *= blur;
+  #pragma include "pick"
 }

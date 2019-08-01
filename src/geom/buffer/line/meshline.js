@@ -19,11 +19,13 @@ export default class MeshLineBuffer extends BufferBase {
   }
   _calculateFeatures() {
     const layerData = this.get('layerData');
-
     // 计算长
     layerData.forEach(feature => {
       const bufferInfo = {};
-      const { coordinates } = feature;
+      let { coordinates } = feature;
+      if (Array.isArray(coordinates[0][0])) {
+        coordinates = coordinates[0];
+      }
       const { normals, attrIndex, attrPos, attrDistance, miters } = getNormals(coordinates, false, this.verticesCount);
       bufferInfo.normals = normals;
       bufferInfo.arrayIndex = attrIndex;

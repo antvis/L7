@@ -11,15 +11,17 @@ const LEFT_SHIFT21 = 2097152.0;
 const LEFT_SHIFT23 = 8388608.0;
 // const LEFT_SHIFT24 = 16777216.0;
 
-export default function circleBuffer(layerData) {
+export default function FillBuffer(data) {
   const index = [];
   const aPosition = [];
   const aPackedData = [];
-
+  const { layerData } = data;
   layerData.forEach(({ size = 0, color, id, coordinates, shape }, i) => {
-
     const shapeIndex = pointShape['2d'].indexOf(shape) || 0;
-
+    let newCoord = coordinates;
+    if (coordinates.length === 1) {
+      newCoord = coordinates[0][0];
+    }
     if (isNaN(size)) {
       size = 0;
     }
@@ -46,14 +48,15 @@ export default function circleBuffer(layerData) {
         id
       );
     });
-
     // TODO：如果使用相对瓦片坐标，还可以进一步压缩
-    aPosition.push(...coordinates, ...coordinates, ...coordinates, ...coordinates);
+    aPosition.push(...newCoord, ...newCoord, ...newCoord, ...newCoord);
     index.push(...[ 0, 1, 2, 0, 2, 3 ].map(n => n + i * 4));
   });
   return {
-    aPosition,
-    index,
-    aPackedData
+    attributes: {
+      aPosition: new Float32Array(aPosition),
+      aPackedData: new Float32Array(aPackedData)
+    },
+    indexArray: new Int32Array(index)
   };
 }
