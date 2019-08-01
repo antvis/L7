@@ -10,10 +10,14 @@ const { pointShape } = Global;
  */
 
 export default class PointLayer extends Layer {
+  constructor(scene, cfg) {
+    super(scene, cfg);
+    this.set('type', 'point');
+  }
   draw() {
     this.type = 'point';
     this.shapeType = this._getShape();
-    const mesh = getRender(this.type, this.shapeType)(this.layerData, this, this.layerSource);
+    const mesh = getRender(this.type, this.shapeType)(this.layerData, this);
     this.add(mesh);
   }
 
@@ -31,9 +35,9 @@ export default class PointLayer extends Layer {
 
     // 2D circle 特殊处理
     if (pointShape['2d'].indexOf(shape) !== -1) {
-      return 'circle';
-    } else if (pointShape['3d'].indexOf(shape) !== -1) {
       return 'fill';
+    } else if (pointShape['3d'].indexOf(shape) !== -1) {
+      return 'extrude';
     } else if (this.scene.image.imagesIds.indexOf(shape) !== -1) {
       return 'image';
     }

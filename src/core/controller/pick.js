@@ -38,7 +38,8 @@ export default class PickContoller {
   }
   addPickMesh(mesh) {
     const pickmaterial = mesh.material.clone();
-    pickmaterial.fragmentShader = pickingFragmentShader;
+    pickmaterial.defines.PICK = true;
+    // pickmaterial.fragmentShader = pickingFragmentShader;
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = mesh.name;
     pickingMesh.onBeforeRender = () => {
