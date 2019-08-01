@@ -13,7 +13,6 @@ import ArcLineBuffer from './line/arcline';
 
 // heatmap
 
-import Grid3D from './heatmap/grid_3d';
 import Hexagon3D from './heatmap/hexagon_3d';
 
 // 3D Shape
