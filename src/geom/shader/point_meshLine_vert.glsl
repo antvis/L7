@@ -30,6 +30,8 @@ if(v_pickingId == u_activeId) {
  //vec3 pointPos = newposition.xyz + vec3(normal * u_strokeWidth * pow(2.0,20.0-u_zoom) / 2.0 * a_miter);
  vec3 pointPos = newposition.xyz + vec3(normal * u_strokeWidth * scale / 2.0 * a_miter);
  gl_Position = matModelViewProjection * vec4(pointPos, 1.0);
- worldId = id_toPickColor(pickingId);
+#ifdef PICK
+worldId = id_toPickColor(pickingId);
+#endif
 
 }

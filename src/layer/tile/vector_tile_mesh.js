@@ -29,15 +29,15 @@ export default class VectorTileMesh {
     this._createMesh(data);
   }
   _createMesh(data) {
-    const layerData = data.layerData;
-    if (this.layer.get('type') === 'point') {
-      this.layer.shape = this.layer._getShape(layerData);
-    }
-    this.mesh = getRender(this.layer.get('type'), this.layer.shape)(null, this.layer, data.buffer);
-    // this._setTilePositon();
+    this.mesh = getRender(this.layer.get('type'), data.shape)(null, this.layer, data.buffer);
     if (this.mesh.type !== 'composer') { // 热力图的情况
       this.mesh.onBeforeRender = renderer => {
         this._renderMask(renderer);
+        const zoom = this.layer.scene.getZoom();
+        updateObjecteUniform(this._object3D, {
+          u_time: this.layer.scene._engine.clock.getElapsedTime(),
+          u_zoom: zoom
+        });
       };
       this.mesh.onAfterRender = renderer => {
         const context = renderer.context;
@@ -55,9 +55,9 @@ export default class VectorTileMesh {
   }
 
   _renderMask(renderer) {
-    // if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
-    //   return;
-    // }
+    if (this.layer.get('layerType') === 'point') { // 点图层目前不需要mask
+      return;
+    }
     const context = renderer.context;
     renderer.autoClear = false;
     renderer.clearDepth();
@@ -78,16 +78,6 @@ export default class VectorTileMesh {
 
     context.stencilFunc(context.EQUAL, 1, 0xffffffff);  // draw if == 1
     context.stencilOp(context.KEEP, context.KEEP, context.KEEP);
-  }
-  _setTilePositon() {
-    const tr = this._tileLnglatBounds.getNorthWest();
-    const zoom = this.layer.scene.getZoom();
-    // const centerPoint = this.layer.scene.crs.lngLatToPoint(tr, 20);
-    const position = aProjectFlat([ tr.lng, tr.lat ]);
-    // this.mesh.position.x = position.x;
-    // this.mesh.position.y = position.y;
-    // this.mesh.scale.x = 2 << (20 - this._tile[2]);
-    // this.mesh.scale.y = 2 << (20 - this._tile[2]);
   }
   _tileMaskMesh() {
     const tilebound = this._tileBounds;

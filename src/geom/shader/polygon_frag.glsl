@@ -13,7 +13,7 @@ varying vec2 v_texCoord;
 #endif
 
 varying vec4 v_color;
-varying vec4 worldId;
+
 
 vec3 getWindowColor(float n, float hot, vec3 brightColor, vec3 darkColor) {
     float s = step(hot, n);
@@ -109,5 +109,6 @@ void main() {
    #else
       gl_FragColor = vec4(v_color.xyz , v_color.w);
    #endif
+    #pragma include "pick"
  
 }

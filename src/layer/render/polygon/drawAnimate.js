@@ -1,5 +1,4 @@
 import * as THREE from '../../../core/three';
-import PolygonBuffer from '../../../geom/buffer/polygon';
 import PolygonMaterial from '../../../geom/material/polygonMaterial';
 import { getBuffer } from '../../../geom/buffer/';
 import { generateLightingUniforms } from '../../../util/shaderModule';
