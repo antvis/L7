@@ -1,7 +1,6 @@
 import Base from '../core/base';
 import WorkerPool from '../worker/worker_pool';
 import throttle from '../util/throttle';
-import { toLngLat, Bounds } from '@antv/geo-coord';
 import SourceCache from '../source/source_cache';
 import WorkerController from '../worker/worker_controller';
 // 统一管理所有的Source

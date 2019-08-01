@@ -78,3 +78,6 @@ src
 temp
 webpack-dev.config.js
 webpack.config.js
+testdemo
+rollup
+.si.yml  

@@ -46,7 +46,7 @@ export default class TileLayer extends Layer {
         ...cfg,
         url: data
       };
-     
+
     }
     return this;
   }
