@@ -39,7 +39,7 @@ export default class Layer extends Base {
       attrs: {},
       // 样式配置项
       styleOptions: {
-        stroke: 'none',
+        stroke: [ 1, 1, 1, 1 ],
         strokeWidth: 1.0,
         opacity: 1.0,
         strokeOpacity: 1.0,

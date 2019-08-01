@@ -13,7 +13,7 @@ export default function vector(data, cfg) {
       return [ x1, -y2, 0 ];
     });
   }
-
+  let index = 0;
   for (let i = 0; i < data.length; i++) {
     const feature = data.feature(i);
     const coords = feature.loadGeometry();
@@ -23,7 +23,7 @@ export default function vector(data, cfg) {
       const value = properties[cfg.idField];
       id = djb2hash(value) % 1000019;
       featureKeys[id] = {
-        index: i++,
+        index,
         idField: value
       };
     }
@@ -32,6 +32,7 @@ export default function vector(data, cfg) {
       const geo = geocoords[j].map(coord => {
         return covertP20(coord);
       });
+      index++;
       resultdata.push({
         ...properties,
         _id: feature.id || id,

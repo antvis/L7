@@ -1,10 +1,14 @@
-import BufferBase from '../bufferBase';
+// import BufferBase from '../bufferBase';
 import { colorScales } from '../../../attr/colorscales';
 import * as THREE from '../../../core/three';
+import Base from '../../../core/base';
 
-
-export default class HeatmapBuffer extends BufferBase {
-  geometryBuffer() {
+export default class HeatmapBuffer extends Base {
+  constructor(cfg) {
+    super(cfg);
+    this.init();
+  }
+  init() {
     const data = this.get('data');
     const positions = [];
     const dirs = [];

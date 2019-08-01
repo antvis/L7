@@ -37,5 +37,7 @@ void main() {
     
   gl_Position = matModelViewProjection * vec4(x, y, z, 1.0);
 
-   worldId = id_toPickColor(pickingId);
+   #ifdef PICK
+    worldId = id_toPickColor(pickingId);
+   #endif
 }
