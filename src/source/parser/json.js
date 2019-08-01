@@ -1,5 +1,6 @@
 import rewind from '@mapbox/geojson-rewind';
 export default function json(data, cfg) {
+
   const { x, y, x1, y1, coordinates } = cfg;
   const resultdata = [];
   data.forEach((col, featureIndex) => {
@@ -11,11 +12,10 @@ export default function json(data, cfg) {
     if (coordinates) {
       const geometry = {
         type: 'Polygon',
-        coordinates: col[coordinates]
+        coordinates: [ ...col[coordinates] ]
       };
       rewind(geometry, true);
       coords = geometry.coordinates;
-      delete col[coordinates];
     }
 
     col._id = featureIndex + 1;

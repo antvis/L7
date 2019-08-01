@@ -17,10 +17,10 @@ export default class RasterLayer extends Layer {
     this.initGeometry(buffer.attributes);
     const rasterConfig = source.data.dataArray[0];
     const material = new RasterMaterial({
-      u_texture: buffer.bufferStruct.u_raster,
-      u_colorTexture: buffer.bufferStruct.u_colorTexture,
+      u_texture: buffer.u_raster,
+      u_colorTexture: buffer.u_colorTexture,
       u_opacity: 1.0,
-      u_extent: buffer.bufferStruct.u_extent,
+      u_extent: buffer.u_extent,
       u_min: rasterConfig.min,
       u_max: rasterConfig.max,
       u_dimension: buffer.attributes.dimension
