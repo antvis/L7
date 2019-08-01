@@ -81,7 +81,6 @@ scene.on('loaded', () => {
         }
     })
     .shape('fill')
-    .pattern('id1')
     .active(true)
     .style({
       opacity: 1
@@ -97,7 +96,10 @@ scene.on('loaded', () => {
        })
       //.render();
     
-    console.log(citylayer);
+
+    citylayer.on('mouseleave',(e)=>{
+      console.log(e);
+    })
     citylayer.on('click',(e)=>{
       $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
       $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.pm2_5_24h || 0}</span></p>`);

@@ -3,12 +3,13 @@ import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
 import FontAtlasManager from '../geom/buffer/point/text/font-manager';
-// import WorkerPool from './worker';
 // import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
 import Global from '../global';
 import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
+import Style from './style';
+import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -16,6 +17,7 @@ export default class Scene extends Base {
   constructor(cfg) {
     super(cfg);
     this._initMap();
+    this.crs = epsg3857;
     // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
     this.fontAtlasManager = new FontAtlasManager();
@@ -25,8 +27,8 @@ export default class Scene extends Base {
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
-    this.registerMapEvent();
-    // this._engine.run();
+    // this.registerMapEvent();
+    this._engine.run();
     compileBuiltinModules();
   }
   // 为pickup场景添加 object 对象
@@ -52,6 +54,7 @@ export default class Scene extends Base {
         const interaction = new Ctor({ layer: this });
         interaction._onHashChange();
       }
+      this.style = new Style(this, {});
       this.emit('loaded');
       this._engine.update();
     });
@@ -65,6 +68,13 @@ export default class Scene extends Base {
       };
     }
 
+  }
+  // 添加 Tile Source
+  addTileSource(id, Sourcecfg) {
+    this.style.addSource(id, Sourcecfg);
+  }
+  getTileSource(id) {
+    return this.style.getSource(id);
   }
   on(type, hander) {
     if (this.map) { this.map.on(type, hander); }
