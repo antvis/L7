@@ -116,7 +116,7 @@ export default class TileLayer extends Layer {
     const tileRange = this._pxBoundsToTileRange(pixelBounds);
     const margin = this.get('keepBuffer');
     this.noPruneRange = new Bounds(tileRange.getBottomLeft().subtract([ margin, -margin ]),
-    tileRange.getTopRight().add([ margin, -margin ]));
+      tileRange.getTopRight().add([ margin, -margin ]));
     if (!(isFinite(tileRange.min.x) &&
     isFinite(tileRange.min.y) &&
     isFinite(tileRange.max.x) &&
@@ -424,7 +424,7 @@ export default class TileLayer extends Layer {
     if (!this._tiles.children.length > 0 || !this._object3D.visible) {
       return;
     }
-     // 更新数据颜色 过滤 filter
+    // 更新数据颜色 过滤 filter
     if (!Util.isEqual(preAttrs.color, nextAttrs.color) || !Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
       this._tileCache.setNeedUpdate();
       this._tiles.children.forEach(tile => {
