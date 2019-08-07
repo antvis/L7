@@ -3,6 +3,7 @@ import WorkerPool from '../worker/worker_pool';
 import throttle from '../util/throttle';
 import SourceCache from '../source/source_cache';
 import WorkerController from '../worker/worker_controller';
+const omitOption = [ 'mappingController', 'interacionController', 'pickingController', 'interactions', 'eventController' ];
 // 统一管理所有的Source
 // 统一管理地图样式
 export default class Style extends Base {
@@ -34,8 +35,15 @@ export default class Style extends Base {
   // 设置
   _addTileStyle(layerCfg) {
     const layerid = layerCfg.layerId;
-    this.layerStyles[layerid] = layerCfg;
+    const newLayerCfg = {};
+    for (const key in layerCfg) { // 过滤不可传递对象
+      if (omitOption.indexOf(key) === -1) {
+        newLayerCfg[key] = layerCfg[key];
+      }
+    }
+    this.layerStyles[layerid] = newLayerCfg;
     this._layerStyleGroupBySourceID();
+
     this.WorkerController.broadcast('setLayers', this.layerStyles);
     // TODO 更新 style
 

@@ -23,10 +23,16 @@ export default class VectorTileMesh {
     const tileMesh = this._tileMaskMesh();
     // this._object3D.add(tileMesh);
     this.maskScene.add(tileMesh);
+    this._bufferData = data;
   }
   _init(data) {
     this._createMesh(data);
+
   }
+  getFeatureIndex(id) {
+    return this._bufferData.featureKey.indexOf(id);
+  }
+
   _createMesh(data) {
     this.mesh = getRender(this.layer.get('type'), data.shape)(null, this.layer, data.buffer);
     if (this.mesh.type !== 'composer') { // 热力图的情况
@@ -121,6 +127,7 @@ export default class VectorTileMesh {
     const n = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
     return r2d * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
   }
+
   destroy() {
     destoryObject(this._object3D);
     destoryObject(this.maskScene);
