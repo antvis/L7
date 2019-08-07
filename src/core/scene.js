@@ -182,7 +182,7 @@ export default class Scene extends Base {
     this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
   }
- // control
+  // control
 
   addControl(ctr) {
     this.get('controlController').addControl(ctr);

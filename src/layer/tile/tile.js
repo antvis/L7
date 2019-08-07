@@ -80,7 +80,7 @@ export default class Tile extends Base {
       return urlParams[key];
     });
   }
-   // 经纬度范围转瓦片范围
+  // 经纬度范围转瓦片范围
   _tileBounds(lnglatBound) {
     const ne = this.layer.scene.project([ lnglatBound.getNorthEast().lng, lnglatBound.getNorthEast().lat ]);
     const sw = this.layer.scene.project([ lnglatBound.getSouthWest().lng, lnglatBound.getSouthWest().lat ]);

@@ -112,7 +112,7 @@ export default class BufferBase extends Base {
       prePoint[0], prePoint[1], 0,
       nextPoint[0], nextPoint[1], 0
     ],
-      positionOffset * 3);
+    positionOffset * 3);
     const indexArray = [ 1, 2, 0, 3, 2, 1 ].map(v => { return v + positionOffset; });
     if (this.get('uv')) {
       this.attributes.uv.set([ 0.1, 0, 0, 0, 0.1, size / 2000, 0, size / 2000 ], positionOffset * 2);
