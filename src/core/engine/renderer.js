@@ -8,7 +8,7 @@ export default class Renderer {
   }
   initRender() {
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: false,
       alpha: true,
       autoClear: false
     });
