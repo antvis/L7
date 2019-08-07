@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>point_distribute</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [ 121.51222019389274, 31.23572578718841 ],
+  pitch: 0,
+  zoom: 11
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  // ./data/mUQPWCYaxOfiSznuANvG.txt
+  $.get('./data/00.csv', data => {
+    scene.PointLayer({
+      zIndex: 2
+    })
+     .source(data, {
+       parser:{
+          type: 'csv',
+          y: 'lat',
+          x: 'lng'
+       }
+     })
+    .size(1.0)
+   .color('#0D408C')
+    .style({
+      stroke: 'rgb(255,255,255)',
+      strokeWidth: 0,
+      opacity: 1.0,
+      bending:'additive'
+    })
+     .render();
+  });
+});
+
+</script>
+</body>
+</html>
+
