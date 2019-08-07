@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
+
+  <title>hexagon demo</title>
+  <style>
+  body {margin: 0;}
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+ <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/color-hash.js"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+window.L7 = L7;
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [116.5909,39.9225 ],
+  pitch: 0,
+  hash:true,
+  zoom: 4,
+
+});
+window.scene = scene;
+var colorHash = new ColorHash();
+
+
+scene.on('loaded', () => {
+  const layer = scene.VectorTileLayer({
+    zIndex:0,
+    layerType:'polygon'
+  })
+  // http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/county/{z}/{x}/{y}.pbf
+  .source('http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/thinkgis/tile/county/{z}/{x}/{y}.pbf',{
+    parser:{
+      type: 'mvt',
+      sourceLayer:'county',
+      idField:'id',
+      maxZoom: 9
+    }
+  })
+  .scale({
+    'OBJECTID':{
+      min:0,
+      max:3000,
+      type:'linear'
+    }
+  })
+  .shape('fill')
+  .size(2)
+  .active(false)
+  .color('OBJECTID',['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'])
+  .style({
+    opacity:1.0
+  })
+ .render();
+
+  });
+ 
+</script>
+</body>
+</html>
+

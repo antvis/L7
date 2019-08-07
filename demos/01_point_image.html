@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+   <link rel="stylesheet" href="./assets/info.css">
+  <title>point_distribute</title>
+  <style>
+  body {
+    margin:0px;
+  }
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<div class ='info'>
+ <div class="input-card" style='width: 12rem;'>
+        <div class="input-item">
+          <input type="radio" name='func' checked=true value=0><span class="input-text">全部</span>
+          <input type="radio" name='func'  value=0><span class="input-text">可用车</span>
+          <input type="radio" name='func' value=1><span class="input-text">不可用</span>
+        </div>
+  </div>
+ </div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://unpkg.com/supercluster@4.1.1/dist/supercluster.min.js"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'light', // 样式URL
+  center: [ 120.1243238, 30.27331571 ],
+  pitch: 0,
+  zoom: 14,
+  minZoom: 9
+});
+window.scene = scene;
+scene.on('loaded', () => {
+
+  $.get('./data/pointbike.json', data => {
+    var extent = [ 110,29.2378,122.189,33.3173]
+    var dataindex = supercluster({radius:80});
+    dataindex.load(data.features);
+  
+    var clusterData = dataindex.getClusters(extent,13);
+    scene.PointLayer({
+      zIndex: 4,
+      maxZoom:15.5
+    })
+    .source({
+      "type": "FeatureCollection",
+      "features":clusterData
+      })
+    .color('#6492E9')
+    .size('point_count',[1,30])
+    .shape('2d:circle')
+    .style({
+       opacity:0.8
+     })
+    .render();
+
+     // 自行车数据
+   scene.PointLayer({
+      zIndex: 4,
+      minZoom:15.5,
+
+    })
+    .source(data)
+    .color('power',(v)=>{
+      return  v > 5 ? '#4F93EA' :'#F5684A' 
+    })
+    .active({fill:'#91C25B'})
+    .size(8)
+    .shape('2d:circle')
+    .style({
+       opacity:0.7
+     })
+    .render();
+
+  });
+ 
+  $.get('./data/fence.json', data => {
+    scene.LineLayer({
+      zIndex: 5
+    })
+    .source(data)
+    .shape('line')
+    .size([2,0])
+    .color('#2F54EB')
+     .style({
+       opacity:1.0,
+     })
+     .render();
+      scene.PolygonLayer({
+      zIndex: 0
+    })
+    .source(data)
+    .shape('fill')
+    .size([2,0])
+    .color('#2F54EB')
+    .style({
+       opacity:0.05,
+     })
+    .render();
+  });
+ 
+  
+  $.getJSON('./data/pointZone.json', data => {
+    const fenceLayer = scene.LineLayer({
+      zIndex: 1,
+      minZoom:16,
+    })
+    .source(data)
+    .size([1.5,0])
+    .shape('line')
+    .color("#2F54EB")
+    .style({
+       opacity:1.0,
+     })
+     .render();
+
+  });
+
+  scene.on('zoomchange',(e)=>{
+    console.log(e);
+  })
+ 
+});
+
+
+</script>
+</body>
+</html>
+
