@@ -21,7 +21,7 @@ L7 目前底图采用高德地图，因此使用之前你还需要使用开发�
 
 ```html
 <!-- 引入在线资源 -->
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.0.0/dist/l7.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.2.2/dist/l7.min.js"></script>
 ```
   
 ### 通过 npm 安装
@@ -61,5 +61,3 @@ $ npm run start
 $ npm run demos
 ```
 
-
-## How to Contribute
