@@ -1,8 +1,11 @@
 import Base from '../core/base';
 import TileCache from '../layer/tile/tile_cache';
 import VectorTileSource from './vector_tile_source';
+import PBF from 'pbf';
+import * as VectorParser from '@mapbox/vector-tile';
 import { toLngLat, Bounds, Point } from '@antv/geo-coord';
 import VectorTileMesh from '../layer/tile/vector_tile_mesh';
+import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 // 统一管理 source 添加，管理，更新
 export default class SouceCache extends Base {
   constructor(scene, cfg) {
@@ -18,10 +21,10 @@ export default class SouceCache extends Base {
     this.scene = scene;
     // TODO 销毁函数
     this._tileCache = new TileCache(this.get('cacheLimit'), this._destroyTile.bind(this));
+    this._crs = epsg3857;
     this.layers = this.scene.getLayers();
     this._source = new VectorTileSource(cfg, this.scene.style.WorkerController);
     this.layersTiles = {}; // 存储当前source所有layer的瓦片
-    // this._tiles = new THREE.Object3D();
   }
   getLayerById(id) {
     const layers = this.scene.getLayers();
@@ -31,17 +34,14 @@ export default class SouceCache extends Base {
       }
     }
   }
+
   /**
    * 移除视野外的瓦片，计算新增的瓦片数据
    * @param {*}tileMap 瓦片列表
    */
 
   update() {
-    // if (!layercfg && this.layercfg) return;
-    // this._layercfg = layercfg;
     this._calculateTileIDs();
-    // this.updateList = this._getNewTiles(this._tileMap);// 计算新增瓦片
-    // this._pruneTiles();
     for (let i = 0; i < this.updateTileList.length; i++) {
       // 瓦片相关参数
       const tileId = this.updateTileList[i].join('_');
@@ -51,10 +51,11 @@ export default class SouceCache extends Base {
       if (tiles !== undefined) {
         tileinfo.active = true;
         tileinfo.loaded = true;
-        for (const layerId in tiles) {
+        for (const layerId in tiles.mesh) {
           const layer = this.getLayerById(layerId);
-          const tileMesh = tiles[layerId];
+          const tileMesh = tiles.mesh[layerId];
           layer.tiles.add(tileMesh.getMesh());
+          this._addPickMesh(layer, tileMesh.getMesh());
           this.scene._engine.update();
         }
         this._pruneTiles();
@@ -73,16 +74,49 @@ export default class SouceCache extends Base {
 
   _renderTile(tileinfo, data) {
     const tileId = tileinfo.id;
-    const tiles = {};
-    for (const layerId in data) {
+    const tiles = {
+      rawData: data.rawTileData,
+      mesh: {}
+    };
+    for (const layerId in data.buffer) {
       const layer = this.getLayerById(layerId);
-      const tileMesh = new VectorTileMesh(layer, data[layerId]);
-      tiles[layerId] = tileMesh;
+      const tileMesh = new VectorTileMesh(layer, data.buffer[layerId]);
+      tiles.mesh[layerId] = tileMesh;
       layer.tiles.add(tileMesh.getMesh());
+      this._addPickMesh(layer, tileMesh.getMesh());
       this.scene._engine.update();
     }
 
     this._tileCache.setTile(tiles, tileId);
+  }
+  getSelectFeature(featureId, layerId, lnglat) {
+    const zoom = this.tileZoom;
+    const tilePoint = this._crs.lngLatToPoint(toLngLat(lnglat.lng, lnglat.lat), zoom);
+    const tileXY = tilePoint.divideBy(256).floor();
+    const tile = this._getParentTile(tileXY.x, tileXY.y, zoom, zoom - 3);
+    const layer = this.getLayerById(layerId);
+    const sourceLayer = layer.get('sourceOption').parser.sourceLayer;
+    const featureIndex = tile.mesh[layerId].getFeatureIndex(featureId);
+    const feature = this._getVectorFeature(tile.rawData, sourceLayer, featureIndex);
+    return feature ? feature.toGeoJSON(tileXY.x, tileXY.y, zoom) : { };
+  }
+  _getParentTile(x, y, z, minZoom) {
+    if (z < minZoom) return null;
+    const key = [ x, y, z ].join('_');
+    const tile = this._tileCache.getTile(key);
+    if (!tile) {
+      return this._getParentTile(Math.floor(x / 2), Math.floor(y / 2), z - 1);
+    }
+    return tile;
+  }
+
+  _getVectorFeature(rawTile, sourceLayer, featureIndex) {
+    const vectorTile = new VectorParser.VectorTile(new PBF(rawTile));
+    if (featureIndex < 0) {
+      return;
+    }
+    return vectorTile.layers[sourceLayer].feature(featureIndex);
+
   }
   // 计算视野内的瓦片坐标
   _calculateTileIDs() {
@@ -266,6 +300,16 @@ export default class SouceCache extends Base {
       }
     }
   }
+   // 地图拾取
+  _addPickMesh(layer, meshObj) {
+    if (this.type === 'image') {
+      return;
+    }
+    const pickCtr = layer.get('pickingController');
+    const mesh = meshObj.children[0];
+    mesh.name = meshObj.name;
+    pickCtr.addPickMesh(mesh);
+  }
   _removeOutTiles() {
     // 移除视野外的tile
     for (const key in this.tileList) {
@@ -286,6 +330,8 @@ export default class SouceCache extends Base {
         const key = tile.name;
         if (!this.tileList[key]) {
           layers[i].tiles.remove(tile);
+          const pickCtr = layers[i].get('pickingController');
+          pickCtr && pickCtr.removePickMeshByName(key);
         }
       });
     }
@@ -295,5 +341,4 @@ export default class SouceCache extends Base {
     this._unloadTile(key);
   }
   // 移除视野外的tile
-
 }

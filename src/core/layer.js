@@ -77,7 +77,7 @@ export default class Layer extends Base {
     world.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
-    this._initEvents();
+    // this._initEvents();
   }
   /**
    * 将图层添加加到 Object
@@ -269,10 +269,12 @@ export default class Layer extends Base {
   }
   hide() {
     this._visible(false);
+    this.scene._engine.update();
     return this;
   }
   show() {
     this._visible(true);
+    this.scene._engine.update();
     return this;
   }
   setData(data, cfg) {
@@ -312,16 +314,21 @@ export default class Layer extends Base {
     this._setAttrOptions(attrName, attrCfg);
   }
   _initControllers() {
-    const mappingCtr = new Controller.Mapping({ layer: this });
     const pickCtr = new Controller.Picking({ layer: this });
     const interactionCtr = new Controller.Interaction({ layer: this });
-    this.set('mappingController', mappingCtr);
+    const eventCtr = new Controller.Event({ layer: this });
     this.set('pickingController', pickCtr);
     this.set('interacionController', interactionCtr);
+    this.set('eventController', eventCtr);
   }
-
+  _mapping() {
+    const mappingCtr = new Controller.Mapping({ layer: this });
+    this.set('mappingController', mappingCtr);
+  }
   render() {
     if (this.get('layerType') === 'tile') {
+      this._initControllers();
+      this._initInteraction();
       this.scene.style.update(this._attrs);
       return this;
     }
@@ -332,16 +339,13 @@ export default class Layer extends Base {
   // 重绘 度量， 映射，顶点构建
   repaint() {
     this.set('scales', {});
-    const mappingCtr = new Controller.Mapping({ layer: this });
-    this.set('mappingController', mappingCtr);
-    // this._initAttrs();
-    // this._mapping();
+    this._mapping();
     this.redraw();
   }
   // 初始化图层
   init() {
     this._initControllers();
-    // this._initAttrs();
+    this._mapping();
     this._updateDraw();
   }
   _initInteraction() {
@@ -479,7 +483,6 @@ export default class Layer extends Base {
     this.scene.on('pick-' + this.layerId, e => {
       let { featureId, point2d, type } = e;
       // TODO 瓦片图层获取选中数据信息
-
       const lnglat = this.scene.containerToLngLat(point2d);
       let feature = null;
       let style = null;
@@ -507,8 +510,16 @@ export default class Layer extends Base {
 
     });
   }
-  getSelectFeature(featureId) {
-    const feature = this.layerSource.getSelectFeature(featureId);
+  getSelectFeature(featureId, lnglat) {
+    // return {};
+    if (this.get('layerType') === 'tile') {
+      const sourceCache = this.getSourceCache(this.get('sourceOption').id);
+      const feature = sourceCache.getSelectFeature(featureId, this.layerId, lnglat);
+      return {
+        feature
+      };
+    }
+    const feature = this.layerSource && this.layerSource.getSelectFeature(featureId) || {};
     const style = this.layerData[featureId - 1];
     return {
       feature,
@@ -680,6 +691,11 @@ export default class Layer extends Base {
 
   afterRender() {
 
+  }
+
+  // tileLayer
+  getSourceCache(id) {
+    return this.scene.style.getSource(id);
   }
 }
 
