@@ -1,6 +1,6 @@
 {
   "extends": [
-    "egg"
+    "eslint-config-egg"
   ],
   "globals": {
     "$": true,
