@@ -2,7 +2,6 @@ import TileMapping from '../core/controller/tile_mapping';
 import { getBuffer } from '../geom/buffer/index';
 import Source from '../core/source';
 import Global from '../global';
-import { feature } from '_@turf_helpers@6.1.4@@turf/helpers';
 const { pointShape } = Global;
 
 export default class WorkerTile {
