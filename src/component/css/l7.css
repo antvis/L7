@@ -82,6 +82,9 @@
 
 /* control positioning */
 
+.l7-control-container {
+	font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
 .l7-control {
 	position: relative;
 	z-index: 800;
@@ -197,12 +200,12 @@
 	border-radius: 5px;
 	}
 .l7-control-layers-toggle {
-	background-image: url(images/layers.png);
+	background-image: url(../images/layers.png);
 	width: 36px;
 	height: 36px;
 	}
 .l7-retina .l7-control-layers-toggle {
-	background-image: url(images/layers-2x.png);
+	background-image: url(../images/layers-2x.png);
 	background-size: 26px 26px;
 	}
 .l7-touch .l7-control-layers-toggle {
