@@ -128,7 +128,6 @@ export default class Scene extends Base {
       'dblclick'
     ];
     events.forEach(event => {
-     
       this._container.addEventListener(event, e => {
         // 要素拾取
         if (e.target.nodeName !== 'CANVAS') return;
@@ -139,6 +138,7 @@ export default class Scene extends Base {
       }, true);
     });
   }
+
   removeLayer(layer) {
     const layerIndex = this._layers.indexOf(layer);
     if (layerIndex > -1) {
@@ -154,6 +154,7 @@ export default class Scene extends Base {
     }
     this.animateCount++;
   }
+
   stopAnimate() {
     if (this.animateCount === 1) {
       this._engine.stop();
@@ -168,16 +169,19 @@ export default class Scene extends Base {
     this.map.on('mapmove', this._updateRender);
     this.map.on('camerachange', this._updateRender);
   }
+
   unRegsterMapEvent() {
     this.map.off('mousemove', this._updateRender);
     this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
   }
  // control
+
   addControl(ctr) {
     this.get('controlController').addControl(ctr);
     return this;
   }
+
   removeControl(ctr) {
     this.get('controlController').removeControl(ctr);
   }
