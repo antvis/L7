@@ -37,7 +37,7 @@ export default class Popup extends Base {
       this._container.appendChild(this._content);
       if (this.get('className')) {
         this.get('className').split(' ').forEach(name =>
-              this._container.classList.add(name));
+          this._container.classList.add(name));
       }
     }
     if (this.get('maxWidth') && this._container.style.maxWidth !== this.get('maxWidth')) {
