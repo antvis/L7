@@ -1,15 +1,12 @@
 import fs from 'fs';
-// import sourcemaps from 'rollup-plugin-sourcemaps';
-// import postcss from 'postcss';
 import json from 'rollup-plugin-json';
 import buble from 'rollup-plugin-buble';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import builtins from 'rollup-plugin-node-builtins';
 import { createFilter } from 'rollup-pluginutils';
-import imageInliner from 'postcss-image-inliner';
 import postcss from 'rollup-plugin-postcss';
-import postcssImport from 'postcss-import';
+import url from 'postcss-url';
 import { terser } from 'rollup-plugin-terser';
 const { BUILD, MINIFY } = process.env;
 const minified = MINIFY === 'true';
@@ -45,11 +42,7 @@ const config = [
       json(),
       // css({ raw: './build/l7.css' }),
       postcss({
-        modules: true,
-        plugins: [
-          postcssImport(),
-          imageInliner({ assetPaths: [ '**/images/' ] })
-        ]
+        plugins: [ url({ url: 'inline' }) ]
       }),
       // url({ url: 'inline' }),
       buble({
