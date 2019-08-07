@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+
+  <title>hexagon demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+ <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [ 121.2680, 30.3628 ],
+  pitch: 0,
+  zoom: 15,
+  minZoom: 4,
+  maxZoom: 18
+});
+
+scene.on('loaded', () => {
+  const imageLayer = scene.ImageLayer().
+      source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',{
+       parser:{
+            type:'image',
+            extent: [ 121.1680, 30.2828, 121.3840, 30.4219 ]
+       }
+   
+      })
+      .style({
+        opacity:1.0,
+      })
+      .render();
+
+});
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+    <link rel="stylesheet" href="./assets/info.css">
+  <title>point_circle</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  .amap-maps {
+     cursor: auto !important
+  }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+var radius = 0.2;
+ 
+function pointOnCircle(angle) {
+return {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         120.19382669582967 + Math.cos(angle) * radius,
+          30.258134 + Math.sin(angle) * radius
+        ]
+      }
+    }
+  ]
+ }
+}
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'light', // 样式URL
+  center: [ 120.19382669582967, 30.258134 ],
+  pitch: 0,
+  zoom: 2,
+  maxZoom:20,
+  hash:true,
+  minZoom:0,
+});
+window.scene = scene;
+scene.on('loaded', () => {
+    const circleLayer = scene.PointLayer({
+      zIndex: 0,
+    })
+    .source(pointOnCircle(0))
+    .shape('circle')
+    .size(10) // default 1
+    .active(true)
+    .color('#2894E0')
+    .style({
+      stroke: 'rgb(255,255,255)',
+      strokeWidth: 1,
+      opacity: 0.8
+    })
+     .render();
+
+  function animateMarker(timestamp) {
+   
+      circleLayer.setData(pointOnCircle(timestamp / 1000));
+      requestAnimationFrame(animateMarker);
+  }
+   animateMarker(0);
+   
+   /**
+   const layerText =  scene.PointLayer({
+      zIndex: 3
+    })
+    .source(circleLayer.layerSource)
+    .shape('point_count', 'text')
+    .active(true)
+    .size('point_count', [ 0, 16]) // default 1
+    .color('#f00')
+    .style({
+      stroke: '#999',
+      strokeWidth: 0,
+      opacity: 1.0
+    })
+     .render();
+    console.log(layerText);
+
+  });
+  **/
+    
+});
+
+</script>
+</body>
+</html>
+
