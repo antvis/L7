@@ -53,7 +53,7 @@ export default class Layers extends Control {
     const className = 'l7-control-layers',
       container = this._container = DOM.create('div', className),
       collapsed = this.get('collapsed');
-    
+
     // makes this work on IE touch devices by stopping it from firing a mouseout event when the touch is released
     container.setAttribute('aria-haspopup', true);
 
