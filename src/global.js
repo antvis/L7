@@ -11,8 +11,8 @@ const Global = {
     mapType: 'AMAP',
     zoom: 5,
     center: [ 107.622, 39.266 ],
-    minZoom: 0,
-    maxZoom: 22,
+    minZoom: 3,
+    maxZoom: 18,
     pitch: 0,
     hash: false
   },
