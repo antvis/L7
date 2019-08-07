@@ -51,6 +51,8 @@
     "rollup": "^1.16.2",
     "rollup-plugin-buble": "^0.19.6",
     "rollup-plugin-commonjs": "^9.2.1",
+    "rollup-plugin-css-porter": "^1.0.2",
+    "rollup-plugin-image": "^1.0.2",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^4.0.1",
