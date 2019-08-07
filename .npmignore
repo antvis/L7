@@ -73,7 +73,6 @@ bin
 bundler
 demos
 docs
-lib
 src
 temp
 webpack-dev.config.js
