@@ -41,7 +41,7 @@ export default class Grid3D extends BufferBase {
     this._encodeArray(feature, 4);
     this.attributes.positions.set([ x, y, size, x, y, size, x, y, size, x, y, size ], this._offset * 3);
     this.attributes.miters.set([ -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1 ], this._offset * 3);
-    this.attributes.normals.set([ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 ], this._offset * 3);  // top normal
+    this.attributes.normals.set([ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 ], this._offset * 3); // top normal
     const indexArray = [ 0, 2, 1, 2, 3, 1 ].map(v => { return v + this._offset; });
     this.indexArray.set(indexArray, this._offset * 1.5);
     this._offset += 4;
@@ -60,7 +60,7 @@ export default class Grid3D extends BufferBase {
       -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, // left
       0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, // top
       1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0 // right
-    ], this._offset * 3);  // top normal
+    ], this._offset * 3); // top normal
 
     for (let i = 0; i < 4; i++) {
       this.attributes.positions.set([ x, y, 1, x, y, 1, x, y, 1, x, y, 1 ], this._offset * 3);
@@ -77,7 +77,7 @@ export default class Grid3D extends BufferBase {
       prePoint[0], prePoint[1], 0,
       nextPoint[0], nextPoint[1], 0
     ],
-      positionOffset * 3);
+    positionOffset * 3);
     const indexArray = [ 0, 1, 2, 1, 3, 2 ].map(v => { return v + positionOffset; });
     if (this.get('uv')) {
       // temp  点亮城市demo
