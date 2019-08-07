@@ -43,5 +43,23 @@ import L7 from '@antv/l7';
 
 
 
+# L7
 
-`因为相信，所以看见，L7 涵盖地理、数据、 图形、可视化、图像等多个技术领域，需要支撑各个业务领域的需求，而各个业务领域又会拥有独特的数据逻辑，业务逻辑，L7 建设才刚刚起步，还有很多功能需要持续打磨，还有很多技术难题需要攻克，我们将持续投入争取尽快开源发布正式版，欢迎更多的团队、同学参与进来。`
+
+## Development
+
+```bash
+$ npm install
+
+# run test case
+$ npm run test-live
+
+# build watching file changes and run demos
+$ npm run start
+
+# run demos
+$ npm run demos
+```
+
+
+## How to Contribute
