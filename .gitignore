@@ -65,7 +65,6 @@ dist
 temp
 .DS_Store
 .idea 
-lib
 
 *.sw*
 *.un~
