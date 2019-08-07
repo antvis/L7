@@ -1,0 +1,11 @@
+before_deploy:
+  - tnpm install
+  - tnpm run build
+  - rm -rf ./vis/
+  - mkdir vis
+  - cp -r demos build vis/ 
+  - cd ./vis/
+  - node ./demos/list.js
+options:
+  dist: 'vis'
+  branch: 'dev'

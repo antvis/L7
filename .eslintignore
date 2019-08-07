@@ -1,0 +1,14 @@
+build/
+bundler/
+coverage/
+lib/
+dist/
+mocks/
+node_modules/
+demos/assets/
+demos/index.html
+demos/*
+rollup/*
+webpack/*
+src/core/three.js
+testdemo/*
