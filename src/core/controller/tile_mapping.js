@@ -107,11 +107,6 @@ export default class TileMapping extends Base {
     this.layerData = mappedData;
   }
 
-  /**
-   * 更新数据maping
-   * @param {*} layerSource 数据源
-   * @param {*} layer map
-   */
   _updateMaping() {
     const attrs = this.get('attrs');
 
