@@ -11,7 +11,6 @@ export function circle(type) {
 }
 /**
  * @param {enum} type  渲染类型
- * @param {boolean} extrude  是否进行高度拉伸
  * @return {object} 顶点坐标和索引坐标
  */
 export function triangle(type) {
@@ -21,7 +20,6 @@ export function triangle(type) {
 
 /**
  * @param {enum} type  渲染类型
- * @param {boolean} extrude  是否进行高度拉伸
  * @return {object} 顶点坐标和索引坐标
  */
 export function diamond(type) {
@@ -35,7 +33,6 @@ export function square(type) {
 
 /**
  * @param {enum} type  渲染类型
- * @param {boolean} extrude  是否进行高度拉伸
  * @return {object} 顶点坐标和索引坐标
  */
 export function hexagon(type) {

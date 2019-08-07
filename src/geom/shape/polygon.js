@@ -2,7 +2,6 @@ import extrudePolygon from '../extrude';
 /**
  * 计算平面的 polygon的顶点坐标和索引
  * @param {Array} points 顶点坐标
- * @param {*} extrude 是否拉伸
  * @return {object} 顶点坐标和顶点索引
  */
 export function fill(points) {
@@ -12,7 +11,6 @@ export function fill(points) {
 /**
  * 计算 extrude 的 polygon的顶点坐标和索引
  * @param {Array} points 顶点坐标
- * @param {*} extrude 是否拉伸
  * @return {object} 顶点坐标和顶点索引
  */
 export function extrude(points) {

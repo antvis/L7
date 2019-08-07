@@ -3,7 +3,7 @@ import { getCoords } from '@turf/invariant';
 import { djb2hash } from '../../util/bkdr-hash';
 import rewind from '@mapbox/geojson-rewind';
 export default function geoJSON(data, cfg) {
-   // 矢量瓦片图层不做 rewind
+  // 矢量瓦片图层不做 rewind
 
   rewind(data, true);
   const resultData = [];
