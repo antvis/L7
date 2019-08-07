@@ -14,7 +14,9 @@ const Global = {
     minZoom: 3,
     maxZoom: 18,
     pitch: 0,
-    hash: false
+    hash: false,
+    zoomControl: true,
+    scaleControl: true
   },
   animate: true,
   height: 0,

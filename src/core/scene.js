@@ -9,7 +9,8 @@ import Global from '../global';
 import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
 import Style from './style';
-import Control from './controller/control';
+import Controller from './controller/control';
+import * as Control from '../component/control';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -34,8 +35,14 @@ export default class Scene extends Base {
     compileBuiltinModules();
   }
   _initContoller() {
-    const controlCtr = new Control({ scene: this });
+    const controlCtr = new Controller({ scene: this });
     this.set('controlController', controlCtr);
+    if (this.get('zoomControl')) {
+      new Control.Zoom().addTo(this);
+    }
+    if (this.get('scaleControl')) {
+      new Control.Scale().addTo(this);
+    }
   }
   // 为pickup场景添加 object 对象
   addPickMesh(object) {
