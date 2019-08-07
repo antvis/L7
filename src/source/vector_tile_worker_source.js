@@ -41,14 +41,14 @@ export default class VectorTileWorkerSource {
         this.loaded[uid] = workerTile;
         return callback(err);
       }
-      // const rawTileData = response.rawData;
       workerTile.vectorTile = response.vectorTile;
+      const rawTileData = response.rawData;
       workerTile.parse(response.vectorTile, this.layerStyle, this.actor, (err, result) => {
         if (err || !result) return callback(err);
         // Transferring a copy of rawTileData because the worker needs to retain its copy.
         callback(null, {
-          // rawTileData: rawTileData.slice(0),
-          ...result
+          buffer: result,
+          rawTileData: rawTileData.slice(0)
         });
       });
 

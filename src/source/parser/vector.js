@@ -3,7 +3,7 @@ const Extent = 4096;
 export default function vector(data, cfg) {
   const tile = cfg.tile;
   const resultdata = [];
-  const featureKeys = {};
+  const featureKeys = new Int32Array(data.length);
   const x0 = Extent * tile[0];
   const y0 = Extent * tile[1];
   function covertP20(points) {
@@ -13,29 +13,24 @@ export default function vector(data, cfg) {
       return [ x1, -y2, 0 ];
     });
   }
-  let index = 0;
   for (let i = 0; i < data.length; i++) {
     const feature = data.feature(i);
     const coords = feature.loadGeometry();
     const properties = feature.properties;
     let id = i + 1;
-    if (cfg.idField && properties[cfg.idField]) {
-      const value = properties[cfg.idField];
+    if (feature.id || (cfg.idField && properties[cfg.idField])) {
+      const value = feature.id || properties[cfg.idField];
       id = djb2hash(value) % 1000019;
-      featureKeys[id] = {
-        index,
-        idField: value
-      };
+      featureKeys[i] = id;
     }
     const geocoords = classifyRings(coords);
     for (let j = 0; j < geocoords.length; j++) {
       const geo = geocoords[j].map(coord => {
         return covertP20(coord);
       });
-      index++;
       resultdata.push({
         ...properties,
-        _id: feature.id || id,
+        _id: id,
         coordinates: geo
       });
     }
@@ -45,6 +40,7 @@ export default function vector(data, cfg) {
     dataArray: resultdata,
     featureKeys
   };
+
 
 }
 function signedArea(ring) {

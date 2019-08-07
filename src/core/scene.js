@@ -9,6 +9,7 @@ import Global from '../global';
 import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
 import Style from './style';
+import Control from './controller/control';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 export default class Scene extends Base {
   getDefaultCfg() {
@@ -18,6 +19,7 @@ export default class Scene extends Base {
     super(cfg);
     this._initMap();
     this.crs = epsg3857;
+    this._initContoller();
     // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
     this.fontAtlasManager = new FontAtlasManager();
@@ -30,6 +32,10 @@ export default class Scene extends Base {
     this.registerMapEvent();
     // this._engine.run();
     compileBuiltinModules();
+  }
+  _initContoller() {
+    const controlCtr = new Control({ scene: this });
+    this.set('controlController', controlCtr);
   }
   // 为pickup场景添加 object 对象
   addPickMesh(object) {
@@ -93,8 +99,21 @@ export default class Scene extends Base {
   getLayers() {
     return this._layers;
   }
+  getLayer(id) {
+    let res = false;
+    this._layers.forEach(layer => {
+      if (layer.layerId === id) {
+        res = layer;
+        return;
+      }
+    });
+    return res;
+  }
   _addLayer() {
 
+  }
+  getContainer() {
+    return this._container;
   }
   _registEvents() {
     const events = [
@@ -109,14 +128,15 @@ export default class Scene extends Base {
       'dblclick'
     ];
     events.forEach(event => {
-
+     
       this._container.addEventListener(event, e => {
         // 要素拾取
+        if (e.target.nodeName !== 'CANVAS') return;
         e.pixel || (e.pixel = e.point);
         requestAnimationFrame(() => {
           this._engine._picking.pickdata(e);
         });
-      }, false);
+      }, true);
     });
   }
   removeLayer(layer) {
@@ -153,5 +173,12 @@ export default class Scene extends Base {
     this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
   }
-
+ // control
+  addControl(ctr) {
+    this.get('controlController').addControl(ctr);
+    return this;
+  }
+  removeControl(ctr) {
+    this.get('controlController').removeControl(ctr);
+  }
 }

@@ -33,7 +33,7 @@ class Picking {
     window.addEventListener('resize', this._resizeHandler, false);
   }
   pickdata(event) {
-    const point = { x: event.offsetX, y: event.offsetY, type: event.type };
+    const point = { x: event.offsetX, y: event.offsetY, type: event.type, _parent: event };
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
@@ -74,6 +74,7 @@ class Picking {
     return isVisable;
   }
   _pickAllObject(point, normalisedPoint) {
+
     this.world.children.forEach((object, index) => {
       if (!this._layerIsVisable(object)) {
         return;
@@ -81,15 +82,12 @@ class Picking {
       this._filterObject(index);
       const item = this._pick(point, normalisedPoint, object.name);
       item.type = point.type;
+      item._parent = point._parent;
       this._world.emit('pick', item);
       this._world.emit('pick-' + object.name, item);
 
     });
   }
-  // _updateRender() {
-  //   this._renderer.render(this._pickingScene, this._camera, this._pickingTexture);
-  // }
-
   _pick(point, normalisedPoint, layerId) {
     this._update(point);
     let id = (this.pixelBuffer[2] * 255 * 255) + (this.pixelBuffer[1] * 255) + (this.pixelBuffer[0]);
