@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>city demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  #timepannel {
+    background: white;
+    z-index: 10;
+    position: absolute;
+    right:50px;
+    padding: 10px;
+  }
+  </style>
+</head>
+
+<body>
+ <div id ='timepannel'>时间: 6时</div>
+<div id="map">
+
+</div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=f28fca5384129d180ad82915156a9baf&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+var buildLayer =null;
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'amap://styles/c9f1d10cae34f8ab05e425462c5a58d7', // 样式URL
+  center: [120.102915,30.261396],
+  pitch: 0,
+  zoom: 12,
+  minZoom: 5,
+  maxZoom: 18
+});
+scene.on('loaded', () => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/a0f3363f-4f95-4145-9161-cca6b9134277.json',(data)=>{
+    let startTime = 3600 * 6;
+    const interval = 3600;
+    const mapData = {
+      "type": "FeatureCollection",
+      "features": []
+    };
+    mapData.features = data.features.filter((feature)=>{
+      const time = feature.properties.time;
+      const type = feature.properties.type
+      return time >= startTime && time <= (startTime + interval)
+       
+    })
+    const linelayer = scene.LineLayer({
+      zIndex: 2
+    })
+    .shape('line')
+    .size([2,0])
+    .source(mapData)
+    .color('type',function(type){
+      return type ==='pjc_end' ? '#2b83ba' :'#d7191c'
+    })
+    .animate({
+        enable:true,
+        interval:0.8,
+        duration:2,
+        trailLength:0.2,
+    })
+    .render();
+   setInterval(()=>{
+    startTime += interval 
+    document.getElementById('timepannel').innerHTML=`时间:${startTime / 3600}时`
+    mapData.features = data.features.filter((feature)=>{
+      const time = feature.properties.time;
+       const type = feature.properties.type
+      return time >= startTime && time <= (startTime + interval)
+    })
+    if(startTime == interval * 24) {
+      startTime = 3600 * 6;
+    }
+    //if( mapData.features.length ==0) return;
+    linelayer.setData(mapData);
+    
+   },2000)
+ });
+})
+</script>
+</body>
+</html>
+
