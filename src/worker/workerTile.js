@@ -2,6 +2,7 @@ import TileMapping from '../core/controller/tile_mapping';
 import { getBuffer } from '../geom/buffer/index';
 import Source from '../core/source';
 import Global from '../global';
+import { feature } from '_@turf_helpers@6.1.4@@turf/helpers';
 const { pointShape } = Global;
 
 export default class WorkerTile {
@@ -25,16 +26,15 @@ export default class WorkerTile {
       const style = sourceStyle[sourcelayer][0];
       style.sourceOption.parser.type = 'vector';
       style.sourceOption.parser.tile = tile;
-      const tileSource2 = new Source({
+      const tileSource = new Source({
         ...style.sourceOption,
         mapType: style.mapType,
         projected: true,
         data: data.layers[sourcelayer]
       });
-
       for (let i = 0; i < sourceStyle[sourcelayer].length; i++) {
         const style = sourceStyle[sourcelayer][i];
-        const tileMapping = new TileMapping(tileSource2, style);
+        const tileMapping = new TileMapping(tileSource, style);
         if (style.type === 'point') {
           style.shape = this._getPointShape(tileMapping);
         }
@@ -53,11 +53,13 @@ export default class WorkerTile {
           shape: style.shape,
           layerId: style.layerId,
           sourcelayer,
-          tileId: this.tileID
+          tileId: this.tileID,
+          featureKey: tileSource.data.featureKeys.slice(0)
         };
       }
     }
     this.status = 'done';
+
     callback(null, { ...sourceLayerData });
   }
   _layerStyleGroupBySourceID(layerStyles) {

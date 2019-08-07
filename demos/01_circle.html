@@ -13,6 +13,7 @@
 <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<link rel=stylesheet type=text/css href='../build/l7.css'>
 <script src="../build/l7.js"></script>
  <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
@@ -28,7 +29,7 @@
   window.scene = scene;
   scene.on('loaded', function() {
     $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', function(data) {
-      scene.PointLayer({
+     const layer =  scene.PointLayer({
           zIndex: 2
         }).source(data, {
           scale: {
@@ -44,7 +45,16 @@
           strokeWidth: 1,
           opacity: 0.9
         }).render();
+        layer.on('click',(e) => {
+           const { lnglat, feature } = e;
+         const popup = new L7.Popup()
+          .setLnglat([lnglat.lng, lnglat.lat])
+          .setHTML('hello').addTo(scene);
+        }) 
+
     });
+  
+  
   });
 </script>
 </body>

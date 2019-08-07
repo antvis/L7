@@ -1,10 +1,5 @@
 import { serialize } from './worker_transform';
-function bindAll(fns, context) {
-  fns.forEach(fn => {
-    if (!context[fn]) { return; }
-    context[fn] = context[fn].bind(context);
-  });
-}
+import { bindAll } from '../util/event';
 
 export default class Actor {
   constructor(target, parent, mapId) {

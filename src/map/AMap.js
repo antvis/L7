@@ -170,7 +170,7 @@ export default class GaodeMap extends Base {
       return map.pixelToLngLat(ll);
     };
     scene.lngLatToPixel = lnglat => {
-      return map.lngLatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
+      return map.lnglatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
     };
     scene.setMapStyle = style => {
       return map.setMapStyle(style);
@@ -183,6 +183,10 @@ export default class GaodeMap extends Base {
     scene.containerToLngLat = pixel => {
       const ll = new AMap.Pixel(pixel.x, pixel.y);
       return map.containerToLngLat(ll);
+    };
+    scene.lngLatToContainer = lnglat => {
+      const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
+      return map.lngLatToContainer(ll);
     };
   }
 }
