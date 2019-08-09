@@ -57,11 +57,11 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xy + offset.xy, 0., 1.0);
   // gl_Position.z -=0.8 * gl_Position.w;
 
-  #ifdef ANIMATE
-    float alpha =1.0 - fract( mod(1.0- distance_ratio,u_interval)* (1.0/u_interval) + u_time / u_duration);
-    alpha = (alpha + u_trailLength -1.0) / u_trailLength;
-    v_time = clamp(alpha,0.,1.);
-  #endif
+  // #ifdef ANIMATE
+  //   float alpha =1.0 - fract( mod(1.0- distance_ratio,u_interval)* (1.0/u_interval) + u_time / u_duration);
+  //   alpha = (alpha + u_trailLength -1.0) / u_trailLength;
+  //   v_time = clamp(alpha,0.,1.);
+  // #endif
 
   // picking
   if(pickingId == u_activeId) {
