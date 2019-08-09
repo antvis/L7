@@ -20,6 +20,12 @@ varying float v_texture_y;
 varying float v_texture_percent;
 #endif
 
+#ifdef ANIMATE 
+uniform float u_duration : 2.0;
+uniform float u_interval : 1.0;
+uniform float u_trailLength : 0.2;
+#endif
+
 void main() {
   #ifdef TEXTURE
     float texture_y_fract = fract(v_texture_y);
@@ -40,6 +46,9 @@ void main() {
     gl_FragColor.a *= u_opacity;
   #endif
   #ifdef ANIMATE 
+   float alpha =1.0 - fract( mod(1.0- v_distance_ratio,u_interval)* (1.0/u_interval) + u_time / u_duration);
+    alpha = (alpha + u_trailLength -1.0) / u_trailLength;
+    v_time = clamp(alpha,0.,1.);
     gl_FragColor.a *= v_time;
   #endif
   // anti-alias
