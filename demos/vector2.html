@@ -114,6 +114,11 @@ scene.on('loaded', () => {
     "标注": layer3,
   };
  const layerContr =  new L7.Control.Layers({overlayers}).addTo(scene);
+ const popup = new L7.Popup({anchor:'left'}).setText('hello world')
+ const marker = new L7.Marker({color:'red'})
+ .setLnglat([104.838088,34.075889 ])
+ .setPopup(popup)
+ .addTo(scene);
  
 });
 
