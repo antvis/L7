@@ -36,13 +36,13 @@ scene.on('loaded', () => {
       zIndex: 2
     })
     .source(data)
-    .size(2)
+    .size(1)
     .color('#ff893a')
     .animate({
-        enable:false,
+        enable:true,
         interval:0.2,
         duration:5,
-        trailLength:0.1
+        trailLength:0.2
         })
     .render();
   });
