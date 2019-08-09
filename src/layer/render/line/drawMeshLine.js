@@ -70,6 +70,7 @@ export default function DrawLine(layerData, layer, buffer) {
       u_trailLength: trailLength
     });
     lineMaterial.setDefinesvalue('ANIMATE', true);
+    lineMaterial.setDefinesvalue('DASHLINE', true);
   }
   return lineMesh;
 }
