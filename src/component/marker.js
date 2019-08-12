@@ -53,7 +53,7 @@ export default class Marker extends Base {
   addTo(scene) {
     this.remove();
     this._scene = scene;
-    this._scene.getContainer().appendChild(this.get('element'));
+    this._scene.getMarkerContainer().appendChild(this.get('element'));
     this._scene.on('camerachange', this._update);
     this.setDraggable(this.get('draggable'));
     this._update();
@@ -124,7 +124,7 @@ export default class Marker extends Base {
 
   }
   _onMapClick() {
-    this._scene.emit('click'); // 触发map点击事件，关闭其他popup
+    // this._scene.emit('click'); // 触发map点击事件，关闭其他popup
     const element = this.get('element');
 
     if (this._popup && element) {
