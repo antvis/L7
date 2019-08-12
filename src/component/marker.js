@@ -42,12 +42,8 @@ export default class Marker extends Base {
 
     }
     DOM.addClass(element, 'l7-marker');
-    element.addEventListener('dragstart', e => {
-      e.preventDefault();
-    });
     element.addEventListener('click', e => {
-      e.preventDefault();
-      this._onMapClick();
+      this._onMapClick(e);
     });
     applyAnchorClass(element, this.get('anchor'), 'marker');
 
@@ -61,7 +57,6 @@ export default class Marker extends Base {
     this._scene.on('camerachange', this._update);
     this.setDraggable(this.get('draggable'));
     this._update();
-    // this._scene.on('click', this._onMapClick);
     return this;
   }
 
@@ -141,6 +136,33 @@ export default class Marker extends Base {
     const pos = this._pos = this._scene.lngLatToContainer(this._lngLat);
     this.get('element').style.left = pos.x + 'px';
     this.get('element').style.top = pos.y + 'px';
+
+  }
+  _bubbleUp() {
+    const eventsName = [
+      'mouseout',
+      'mouseover',
+      'mousemove',
+      'mousedown',
+      'mouseleave',
+      'mouseup',
+      'rightclick',
+      'click',
+      'dblclick',
+      'wheel'
+    ];
+    const element = this.get('element');
+    eventsName.forEach(event => {
+      element.addEventListener(event, e => {
+        this._scene.emit(event, e);
+      });
+    });
+  }
+
+  _addDragHandler() {
+
+  }
+  _onUp() {
 
   }
 }

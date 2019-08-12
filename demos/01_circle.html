@@ -13,7 +13,6 @@
 <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
-<link rel=stylesheet type=text/css href='../build/l7.css'>
 <script src="../build/l7.js"></script>
  <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
@@ -24,6 +23,8 @@
     mapStyle: 'light', // 样式URL
     center: [120.19382669582967, 30.258134],
     pitch: 0,
+    minZoom:5,
+    maxZoom:15,
     zoom: 12
   });
   window.scene = scene;
@@ -45,6 +46,14 @@
           strokeWidth: 1,
           opacity: 0.9
         }).render();
+
+        const popup = new L7.Popup({anchor:'left'}).setText('hello world')
+        const marker = new L7.Marker({color:'blue'})
+        .setLnglat( [120.19382669582967, 30.258134])
+        .setPopup(popup)
+        .addTo(scene);
+
+
         layer.on('click',(e) => {
            const { lnglat, feature } = e;
          const popup = new L7.Popup()

@@ -20,7 +20,6 @@ export default class Scene extends Base {
     super(cfg);
     this._initMap();
     this.crs = epsg3857;
-    this._initContoller();
     // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
     this.fontAtlasManager = new FontAtlasManager();
@@ -68,6 +67,7 @@ export default class Scene extends Base {
         interaction._onHashChange();
       }
       this.style = new Style(this, {});
+      this._initContoller();
       this.emit('loaded');
       this._engine.update();
     });

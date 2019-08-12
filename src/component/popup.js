@@ -18,13 +18,13 @@ export default class Popup extends Base {
     if (this.get('closeOnClick')) {
       this._scene.on('click', this._onClickClose);
     }
-    this._scene.on('mapmove', this._update);
+    this._scene.on('camerachange', this._update);
     this._update();
   }
   setLnglat(lngLat) {
     this.lngLat = lngLat;
     if (this._scene) {
-      this._scene.on('mapmove', this._update);
+      this._scene.on('camerachange', this._update);
     }
     this._update(lngLat);
     return this;
@@ -123,7 +123,7 @@ export default class Popup extends Base {
       delete this._container;
     }
     if (this._scene) {
-      this._scene.off('mapmove', this._update);
+      this._scene.off('camerachange', this._update);
       this._scene.off('click', this._onClickClose);
       delete this._scene;
     }
