@@ -25,7 +25,7 @@
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'light', // 样式URL
+  mapStyle: 'dark', // 样式URL
   center: [104.838088,34.075889 ],
   pitch: 0,
   hash:false,
@@ -42,7 +42,7 @@ scene.on('loaded', () => {
   attributeCtr.addTo(scene);
 
   scene.addTileSource('test',{
-     url:'http://127.0.0.1:8080/{z}/{x}/{y}.pbf',
+     url:' https://mvt.amap.com/district/CHN2/{z}/{x}/{y}/4096?key=608d75903d29ad471362f8c58c550daf',
      type:'vector',
      minZoom: 0,
      maxZoom:9
@@ -54,8 +54,8 @@ scene.on('loaded', () => {
   .source('test',{
     parser:{
       type: 'mvt',
-      sourceLayer:'boundaries_admin_3',
-      idField:'id'
+      sourceLayer:'CHN_Cities',
+      idField:'adcode'
     }
    })
   .shape('fill')
@@ -70,20 +70,21 @@ scene.on('loaded', () => {
            const { lnglat, feature } = e;
          const popup = new L7.Popup()
           .setLnglat([lnglat.lng, lnglat.lat])
-          .setHTML(feature.properties.id).addTo(scene);
+          .setHTML(feature.properties.NAME_CHN.toString()).addTo(scene);
   }) 
- const layer2 = scene.PolygonLayer({
+
+ const layer2 = scene.LineLayer({
     zIndex:10,
   }) 
   .source('test',{
     parser:{
       type: 'mvt',
-      sourceLayer:'boundaries_admin_3',
-      idField:'id'
+      sourceLayer:'CHN_L',
+      idField:'adcode'
     }
    })
   .shape('line')
-  .size(1)
+  .size(2)
   .active(false)
   .color('#fff')
   .style({
@@ -91,6 +92,7 @@ scene.on('loaded', () => {
   })
   .render();
 
+/**
   const layer3 = scene.PointLayer({
     zIndex:10,
   }) 
@@ -109,13 +111,15 @@ scene.on('loaded', () => {
     opacity:1.0
   })
   .render();
+  **/
   const overlayers = {
     "行政区划": layer,
-    "标注": layer3,
+    "行政区边界": layer2,
   };
+  
  const layerContr =  new L7.Control.Layers({overlayers}).addTo(scene);
  const popup = new L7.Popup({anchor:'left'}).setText('hello world')
- const marker = new L7.Marker({color:'red'})
+ const marker = new L7.Marker({color:'blue'})
  .setLnglat([104.838088,34.075889 ])
  .setPopup(popup)
  .addTo(scene);
