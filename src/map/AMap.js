@@ -33,7 +33,7 @@ export default class GaodeMap extends Base {
     this.addOverLayer();
     setTimeout(() => {
       this.emit('mapLoad');
-    }, 100);
+    }, 10);
   }
 
   initMap() {
