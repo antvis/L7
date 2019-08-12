@@ -31,6 +31,22 @@
   });
   window.scene = scene;
   scene.on('loaded', function() {
+    $.getJSON('https://gw.alipayobjects.com/os/rmsportal/UpapMomPYUeiBjbHNAma.json', region => {
+      const color = [ 'rgb(22,32,101)', 'rgb(28,43,127)', 'rgb(36,68,142)', 'rgb(45,94,158)', 'rgb(53,119,174)', 'rgb(61,145,190)', 'rgb(70,170,206)', 'rgb(98,190,210)', 'rgb(138,205,206)', 'rgb(179,221,204)', 'rgb(220,236,201)' ];
+      var points = region.features.map((feature)=>{
+          return feature.properties;
+      })
+      
+      const layer = scene.PolygonLayer({
+          zIndex:1,
+      })
+        .source(region)
+        .color('cname',(value)=>{
+            return (value =='中国' ? 'rgba(46,149,169,0.45)': 'rgba(227,244,244,0.1)');
+        })
+        .shape('fill')
+        .render();
+    });
     $.getJSON('https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json', function(data) {
       console.log(data);
         data.nodes.forEach(item=>{
@@ -38,7 +54,6 @@
             const total = item.gdp.Agriculture + item.gdp.Industry + item.gdp.Service;
             
             const size =Math.max(Math.min(parseInt(total / 20000), 150),40)
-            console.log(item.name, size);
             var data = [{
             item: 'Agriculture',
             count: item.gdp.Agriculture,
