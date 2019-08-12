@@ -59,6 +59,7 @@ export default class GaodeMap extends Base {
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
     }
+    this.amapContainer = this.map.getContainer().getElementsByClassName('amap-maps')[0];
   }
   asyncCamera(engine) {
     this._engine = engine;
@@ -96,13 +97,17 @@ export default class GaodeMap extends Base {
     return this.projectFlat(this.getCenter());
   }
   addOverLayer() {
-    const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
-    this.canvasContainer = canvasContainer;
+    // const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
+    // this.canvasContainer = canvasContainer;
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
       'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
-    canvasContainer.appendChild(this.renderDom);
+
+    this.amapContainer.appendChild(this.renderDom);
+    this.l7_marker_Container = document.createElement('div');
+    this.l7_marker_Container.className = 'l7_marker';
+    this.amapContainer.appendChild(this.l7_marker_Container);
   }
   mixMap(scene) {
     const map = this.map;

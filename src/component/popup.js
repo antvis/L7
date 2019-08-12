@@ -34,13 +34,17 @@ export default class Popup extends Base {
     const hasPosition = this.lngLat;
     if (!this._scene || !hasPosition || !this._content) { return; }
     if (!this._container) {
-      this._container = this.creatDom('div', 'l7-popup', this._scene.getContainer());
+      this._container = this.creatDom('div', 'l7-popup', this._scene.getMarkerContainer().parentNode);
+
       this._tip = this.creatDom('div', 'l7-popup-tip', this._container);
       this._container.appendChild(this._content);
       if (this.get('className')) {
         this.get('className').split(' ').forEach(name =>
           this._container.classList.add(name));
       }
+      this._container.addEventListener('mousedown', e => {
+        e.stopPropagation();
+      });
     }
     if (this.get('maxWidth') && this._container.style.maxWidth !== this.get('maxWidth')) {
       this._container.style.maxWidth = this.get('maxWidth');
