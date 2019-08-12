@@ -14,7 +14,7 @@ varying float v_time;
 varying vec4 v_color;
 varying float v_dash_array;
 varying vec2 v_normal;
-#ifdef DASHLINE
+#if defined DASHLINE  || defined ANIMATE
 varying float v_distance_ratio;
 #endif
 
@@ -37,7 +37,7 @@ void main() {
   v_color = a_color;
   v_dash_array = a_dash_array;
   float distance_ratio = a_distance / a_total_distance;
-  #ifdef DASHLINE
+#if defined DASHLINE  || defined ANIMATE
     v_distance_ratio = distance_ratio;
   #endif
   #ifdef TEXTURE
@@ -56,12 +56,6 @@ void main() {
   vec3 offset = vec3(normal * a_size * extrude_scale / 2.0 * a_miter);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xy + offset.xy, 0., 1.0);
   // gl_Position.z -=0.8 * gl_Position.w;
-
-  // #ifdef ANIMATE
-  //   float alpha =1.0 - fract( mod(1.0- distance_ratio,u_interval)* (1.0/u_interval) + u_time / u_duration);
-  //   alpha = (alpha + u_trailLength -1.0) / u_trailLength;
-  //   v_time = clamp(alpha,0.,1.);
-  // #endif
 
   // picking
   if(pickingId == u_activeId) {
