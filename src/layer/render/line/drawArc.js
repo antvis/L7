@@ -17,10 +17,10 @@ export default function DrawArcLine(layerData, layer, buffer) {
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(new THREE.Uint32BufferAttribute(indexArray, 1));
   geometry.addAttribute('position', new THREE.Float32BufferAttribute(attributes.positions, 3));
+  geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));
   geometry.addAttribute('a_color', new THREE.Float32BufferAttribute(attributes.colors, 4));
   geometry.addAttribute('a_instance', new THREE.Float32BufferAttribute(attributes.instanceArray, 4));
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
-
   const lineMaterial = new ArcLineMaterial({
     u_opacity: style.opacity,
     u_zoom: layer.scene.getZoom(),

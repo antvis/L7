@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>city demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  #timepannel {
+    background: white;
+    z-index: 10;
+    position: absolute;
+    right:50px;
+    padding: 10px;
+  }
+  </style>
+</head>
+
+<body>
+ <div id ='timepannel'>时间: 6时</div>
+<div id="map">
+
+</div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=f28fca5384129d180ad82915156a9baf&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+var buildLayer =null;
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'amap://styles/c9f1d10cae34f8ab05e425462c5a58d7', // 样式URL
+  center: [120.102915,30.261396],
+  pitch: 0,
+  zoom: 3,
+  minZoom: 5,
+  maxZoom: 18
+});
+scene.on('loaded', () => {
+  scene.image.addImage('arrow', '/demos/assets/arrow.png');
+  scene.image.addImage('right', '/demos/assets/right.png');
+  $.get('https://gw.alipayobjects.com/os/basement_prod/3ed18d7c-bce4-48ca-8716-5248b584481d.json',(data)=>{
+
+    const linelayer = scene.LineLayer({
+      zIndex: 2
+    })
+    .shape('line')
+    .size(10)
+    .source(data)
+    .color('#2b83ba')
+    .pattern('arrow')
+    .style({
+          patternSpacing: 20
+        })
+    .render();
+ });
+})
+</script>
+</body>
+</html>
+

@@ -18,17 +18,23 @@
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.2.0-beta.1/build/l7.js"></script>
+<script src="../build/l7.js"></script>
 <script>
 var buildLayer =null;
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [120.173104,  30.244072],
-  pitch: 66.50572,
-  zoom: 15.79,
-  minZoom:10
+  center: [
+          120.15935897827148,
+          30.261736090037477
+        ],
+  pitch:0,
+  zoom: 5,
+  showBuildingBlock:false,
+  minZoom: 0,
+  maxZoom: 18
 });
+
 
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json', data => {
@@ -36,16 +42,18 @@ scene.on('loaded', () => {
       zIndex: 2
     })
     .source(data)
-    .size(2)
+    .size(1)
+    .shape('line')
     .color('#ff893a')
     .animate({
-        enable:false,
-        interval:0.2,
-        duration:5,
-        trailLength:0.1
+        enable:true,
+        interval:0.4,
+        duration:1,
+        trailLength:0.8
         })
     .render();
   });
+
    $.get('https://gw.alipayobjects.com/os/rmsportal/ggFwDClGjjvpSMBIrcEx.json', data => {
    buildLayer =  scene.PolygonLayer({
       zIndex: 2
@@ -65,6 +73,7 @@ scene.on('loaded', () => {
     
     
   });
+  
 });
 
 </script>
