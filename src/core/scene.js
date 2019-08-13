@@ -28,8 +28,8 @@ export default class Scene extends Base {
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
-    this.registerMapEvent();
-    this._engine.run();
+    this.registerMapEvent(); // 和高德地图同步状态
+    // this._engine.run();
     compileBuiltinModules();
   }
   _initContoller() {
@@ -53,13 +53,13 @@ export default class Scene extends Base {
     const Map = new MapProvider(this._attrs);
     Map.mixMap(this);
     this._container = Map.container;
-    this._markerContainier = Map.l7_marker_Container;
     Map.on('mapLoad', () => {
       this.map = Map.map;
+      this._markerContainier = Map.l7_marker_Container;
       this._initEngine(Map.renderDom);
       Map.asyncCamera(this._engine);
       this.initLayer();
-      // this._registEvents();
+      this._registEvents();
       const hash = this.get('hash');
       if (hash) {
         const Ctor = getInteraction('hash');
@@ -174,14 +174,14 @@ export default class Scene extends Base {
   // 地图状态变化时更新可视化渲染
   registerMapEvent() {
     this._updateRender = () => this._engine.update();
-    this.map.on('mousemove', this._updateRender);
-    // this.map.on('mapmove', this._updateRender);
+    // this.map.on('mousemove', this._updateRender);
+    this.map.on('mapmove', this._updateRender);
     this.map.on('camerachange', this._updateRender);
   }
 
   unRegsterMapEvent() {
-    this.map.off('mousemove', this._updateRender);
-    // this.map.off('mapmove', this._updateRender);
+    // this.map.off('mousemove', this._updateRender);
+    this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
   }
   // control
