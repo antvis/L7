@@ -9,9 +9,9 @@ export default function DrawLine(layerData, layer, buffer) {
   const activeOption = layer.get('activedOptions');
   // const pattern = style.pattern;
   // const texture = layer.scene.image.singleImages[pattern];
-  const hasPattern = layerData.some(layer => {
-    return layer.pattern;
-  });
+  // const hasPattern = layerData.some(layer => {
+  //   return layer.pattern;
+  // });
   if (!buffer) {
     const geometryBuffer = getBuffer(layer.type, layer.shapeType);
     buffer = new geometryBuffer({
@@ -22,7 +22,7 @@ export default function DrawLine(layerData, layer, buffer) {
     });
 
   }
-  const { attributes, indexArray } = buffer;
+  const { attributes, indexArray, hasPattern } = buffer;
 
 
   const geometry = new THREE.BufferGeometry();
@@ -70,6 +70,7 @@ export default function DrawLine(layerData, layer, buffer) {
       u_trailLength: trailLength
     });
     lineMaterial.setDefinesvalue('ANIMATE', true);
+    // lineMaterial.setDefinesvalue('DASHLINE', true);
   }
   return lineMesh;
 }

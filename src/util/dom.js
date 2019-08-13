@@ -1,4 +1,14 @@
 import * as Util from './util';
+const docStyle = window.document.documentElement.style;
+function testProp(props) {
+  if (!docStyle) return props[0];
+  for (let i = 0; i < props.length; i++) {
+    if (props[i] in docStyle) {
+      return props[i];
+    }
+  }
+  return props[0];
+}
 export function create(tagName, className, container) {
   const el = document.createElement(tagName);
   el.className = className || '';
@@ -77,4 +87,10 @@ export function empty(el) {
   while (el.firstChild) {
     el.removeChild(el.firstChild);
   }
+}
+
+const transformProp = testProp([ 'transform', 'WebkitTransform' ]);
+
+export function setTransform(el, value) {
+  el.style[transformProp] = value;
 }
