@@ -7,6 +7,9 @@ export default class MeshLineBuffer extends BufferBase {
       this._calculateLine(feature);
       delete feature.bufferInfo;
     });
+    this.hasPattern = layerData.some(layer => {
+      return layer.pattern;
+    });
   }
   _initAttributes() {
     super._initAttributes();

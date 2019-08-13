@@ -6,7 +6,8 @@ uniform float u_dash_ratio : 0.0;
 uniform float u_blur : 0.9;
 
 varying vec4 v_color;
-#ifdef DASHLINE
+uniform float u_time : 0;
+#if defined DASHLINE  || defined ANIMATE
 varying float v_distance_ratio;
 #endif
 varying float v_dash_array;
@@ -18,6 +19,12 @@ uniform sampler2D u_texture;
 varying vec2 v_uv;
 varying float v_texture_y;
 varying float v_texture_percent;
+#endif
+
+#ifdef ANIMATE 
+uniform float u_duration : 2.0;
+uniform float u_interval : 1.0;
+uniform float u_trailLength : 0.2;
 #endif
 
 void main() {
@@ -35,12 +42,15 @@ void main() {
   #endif
 
   #ifdef DASHLINE
-    gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset, v_dash_array) - (v_dash_array * u_dash_ratio));
+    gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset + u_time / 10., v_dash_array) - (v_dash_array * u_dash_ratio));
   #else
     gl_FragColor.a *= u_opacity;
   #endif
   #ifdef ANIMATE 
-    gl_FragColor.a *= v_time;
+   float alpha =1.0 - fract( mod(1.0- v_distance_ratio,u_interval)* (1.0/u_interval) + u_time / u_duration);
+    alpha = (alpha + u_trailLength -1.0) / u_trailLength;
+    alpha = smoothstep(0., 1., alpha);
+   gl_FragColor.a *= alpha;
   #endif
   // anti-alias
   float blur = 1. - smoothstep(u_blur, 1., length(v_normal));
