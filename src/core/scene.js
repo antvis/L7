@@ -29,7 +29,7 @@ export default class Scene extends Base {
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
     this.registerMapEvent();
-    // this._engine.run();
+    this._engine.run();
     compileBuiltinModules();
   }
   _initContoller() {
@@ -59,7 +59,7 @@ export default class Scene extends Base {
       this._initEngine(Map.renderDom);
       Map.asyncCamera(this._engine);
       this.initLayer();
-      this._registEvents();
+      // this._registEvents();
       const hash = this.get('hash');
       if (hash) {
         const Ctor = getInteraction('hash');
@@ -69,7 +69,6 @@ export default class Scene extends Base {
       this.style = new Style(this, {});
       this._initContoller();
       this.emit('loaded');
-      this._engine.update();
     });
   }
   initLayer() {
@@ -176,13 +175,13 @@ export default class Scene extends Base {
   registerMapEvent() {
     this._updateRender = () => this._engine.update();
     this.map.on('mousemove', this._updateRender);
-    this.map.on('mapmove', this._updateRender);
+    // this.map.on('mapmove', this._updateRender);
     this.map.on('camerachange', this._updateRender);
   }
 
   unRegsterMapEvent() {
     this.map.off('mousemove', this._updateRender);
-    this.map.off('mapmove', this._updateRender);
+    // this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
   }
   // control
