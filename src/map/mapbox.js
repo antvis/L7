@@ -26,7 +26,7 @@ export default class MapBox extends Base {
     this.addOverLayer();
     setTimeout(() => {
       this.emit('mapLoad');
-    }, 100);
+    }, 10);
 
   }
 

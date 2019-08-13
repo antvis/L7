@@ -30,10 +30,6 @@ export default class GaodeMap extends Base {
     super(cfg);
     this.container = document.getElementById(this.get('id'));
     this.initMap();
-    this.addOverLayer();
-    setTimeout(() => {
-      this.emit('mapLoad');
-    }, 100);
   }
 
   initMap() {
@@ -56,34 +52,42 @@ export default class GaodeMap extends Base {
       this.map = map;
       this.container = map.getContainer();
       this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
+      this.addOverLayer();
+      this.emit('mapLoad');
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
+      this.map.on('complete', () => {
+        this.addOverLayer();
+        this.emit('mapLoad');
+      });
     }
+
   }
   asyncCamera(engine) {
     this._engine = engine;
-    const camera = engine._camera;
-    this.map.on('camerachange', e => {
-      const mapCamera = e.camera;
-      let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
-      pitch *= DEG2RAD;
-      rotation *= DEG2RAD;
-      camera.fov = (180 * fov) / Math.PI;
-      camera.aspect = aspect;
-      camera.near = near;
-      camera.far = far;
-      camera.updateProjectionMatrix();
-      camera.position.z = height * Math.cos(pitch);
-      camera.position.x = height * Math.sin(pitch) * Math.sin(rotation);
-      camera.position.y = -height * Math.sin(pitch) * Math.cos(rotation);
-      camera.up.x = -Math.cos(pitch) * Math.sin(rotation);
-      camera.up.y = Math.cos(pitch) * Math.cos(rotation);
-      camera.up.z = Math.sin(pitch);
-      camera.lookAt(0, 0, 0);
-      camera.position.x += e.camera.position.x;
-      camera.position.y += -e.camera.position.y;
-      this._engine.update();
-    });
+    this.updateCamera();
+    this.map.on('camerachange', this.updateCamera.bind(this));
+  }
+  updateCamera() {
+    const camera = this._engine._camera;
+    const mapCamera = this.map.getCameraState();
+    let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
+    pitch *= DEG2RAD;
+    rotation *= DEG2RAD;
+    camera.fov = (180 * fov) / Math.PI;
+    camera.aspect = aspect;
+    camera.near = near;
+    camera.far = far;
+    camera.updateProjectionMatrix();
+    camera.position.z = height * Math.cos(pitch);
+    camera.position.x = height * Math.sin(pitch) * Math.sin(rotation);
+    camera.position.y = -height * Math.sin(pitch) * Math.cos(rotation);
+    camera.up.x = -Math.cos(pitch) * Math.sin(rotation);
+    camera.up.y = Math.cos(pitch) * Math.cos(rotation);
+    camera.up.z = Math.sin(pitch);
+    camera.lookAt(0, 0, 0);
+    camera.position.x += mapCamera.position.x;
+    camera.position.y += -mapCamera.position.y;
   }
 
   projectFlat(lnglat) {
@@ -96,13 +100,18 @@ export default class GaodeMap extends Base {
     return this.projectFlat(this.getCenter());
   }
   addOverLayer() {
-    const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
-    this.canvasContainer = canvasContainer;
+    // const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
+    // this.canvasContainer = canvasContainer;
+    this.amapContainer = this.map.getContainer().getElementsByClassName('amap-maps')[0];
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
       'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
-    canvasContainer.appendChild(this.renderDom);
+
+    this.amapContainer.appendChild(this.renderDom);
+    this.l7_marker_Container = document.createElement('div');
+    this.l7_marker_Container.className = 'l7_marker';
+    this.amapContainer.appendChild(this.l7_marker_Container);
   }
   mixMap(scene) {
     const map = this.map;

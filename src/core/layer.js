@@ -89,7 +89,6 @@ export default class Layer extends Base {
     if (object.type === 'composer') {
       this._object3D = object;
       this.scene._engine.composerLayers.push(object);
-      setTimeout(() => this.scene._engine.update(), 500);
       return;
     }
     type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
@@ -110,8 +109,6 @@ export default class Layer extends Base {
     if (type === 'fill') {
       this.get('pickingController').addPickMesh(object);
     }
-    this.scene._engine.update();
-    // setTimeout(() => this.scene._engine.update(), 200);
   }
   remove(object) {
     if (object.type === 'composer') {
