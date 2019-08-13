@@ -20,8 +20,6 @@ export default class Scene extends Base {
     super(cfg);
     this._initMap();
     this.crs = epsg3857;
-    this._initContoller();
-    // this._initAttribution(); // 暂时取消，后面作为组件去加载
     this.addImage();
     this.fontAtlasManager = new FontAtlasManager();
     this._layers = [];
@@ -31,7 +29,7 @@ export default class Scene extends Base {
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
     this.registerMapEvent();
-    // this._engine.run();
+    this._engine.run();
     compileBuiltinModules();
   }
   _initContoller() {
@@ -55,12 +53,13 @@ export default class Scene extends Base {
     const Map = new MapProvider(this._attrs);
     Map.mixMap(this);
     this._container = Map.container;
+    this._markerContainier = Map.l7_marker_Container;
     Map.on('mapLoad', () => {
       this.map = Map.map;
       this._initEngine(Map.renderDom);
       Map.asyncCamera(this._engine);
       this.initLayer();
-      this._registEvents();
+      // this._registEvents();
       const hash = this.get('hash');
       if (hash) {
         const Ctor = getInteraction('hash');
@@ -68,8 +67,8 @@ export default class Scene extends Base {
         interaction._onHashChange();
       }
       this.style = new Style(this, {});
+      this._initContoller();
       this.emit('loaded');
-      this._engine.update();
     });
   }
   initLayer() {
@@ -122,6 +121,9 @@ export default class Scene extends Base {
   getContainer() {
     return this._container;
   }
+  getMarkerContainer() {
+    return this._markerContainier;
+  }
   _registEvents() {
     const events = [
       'mouseout',
@@ -173,13 +175,13 @@ export default class Scene extends Base {
   registerMapEvent() {
     this._updateRender = () => this._engine.update();
     this.map.on('mousemove', this._updateRender);
-    this.map.on('mapmove', this._updateRender);
+    // this.map.on('mapmove', this._updateRender);
     this.map.on('camerachange', this._updateRender);
   }
 
   unRegsterMapEvent() {
     this.map.off('mousemove', this._updateRender);
-    this.map.off('mapmove', this._updateRender);
+    // this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
   }
   // control
