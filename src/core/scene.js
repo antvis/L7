@@ -21,6 +21,7 @@ export default class Scene extends Base {
     this.fontAtlasManager = new FontAtlasManager();
     this._layers = [];
     this.animateCount = 0;
+    this.inited = false;
   }
 
   _initEngine(mapContainer) {
@@ -44,16 +45,24 @@ export default class Scene extends Base {
       this.map = Map.map;
       this._initEngine(Map.renderDom);
       Map.asyncCamera(this._engine);
-      this.initLayer();
-      this._registEvents();
-      const hash = this.get('hash');
-      if (hash) {
-        const Ctor = getInteraction('hash');
-        const interaction = new Ctor({ layer: this });
-        interaction._onHashChange();
-      }
-      this.emit('loaded');
-      this._engine.update();
+
+      // 等待相机同步之后再进行首次渲染
+      Map.on('cameraloaded', () => {
+        if (!this.inited) {
+          this.initLayer();
+          this._registEvents();
+          const hash = this.get('hash');
+          if (hash) {
+            const Ctor = getInteraction('hash');
+            const interaction = new Ctor({ layer: this });
+            interaction._onHashChange();
+          }
+          this.emit('loaded');
+          this.inited = true;
+        }
+        this._engine.update();
+        this.emit('cameraloaded');
+      });
     });
   }
   initLayer() {
