@@ -1,3 +1,8 @@
+/**
+ * tiny-sdf 中每个 glyph 的宽度（加上 buffer 24 + 3 + 3 = 30）
+ */
+const glyphSizeInSDF = 30;
+
 export function nextPowOfTwo(number) {
   return Math.pow(2, Math.ceil(Math.log2(number)));
 }
@@ -17,18 +22,23 @@ export function buildMapping({
   Array.from(characterSet).forEach((char, i) => {
     if (!mapping[char]) {
       const width = getFontWidth(char, i);
-      if (x + width + buffer * 2 > maxCanvasWidth) {
+      if (x + glyphSizeInSDF > maxCanvasWidth) {
+      // if (x + width + buffer * 2 > maxCanvasWidth) {
         x = 0;
         row++;
       }
       mapping[char] = {
-        x: x + buffer,
-        y: yOffset + row * (fontHeight + buffer * 2) + buffer,
-        width,
-        height: fontHeight,
-        mask: true
+        // x: x + buffer,
+        x,
+        y: yOffset + row * glyphSizeInSDF,
+        // y: yOffset + row * (fontHeight + buffer * 2) + buffer,
+        width: glyphSizeInSDF,
+        // height: fontHeight,
+        height: glyphSizeInSDF,
+        advance: width
       };
-      x += width + buffer * 2;
+      // x += width + buffer * 2;
+      x += glyphSizeInSDF;
     }
   });
 
