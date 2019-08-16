@@ -14,7 +14,7 @@ const Util = Utils.mix({}, Utils, {
 Util.Array = {
   groupToMap: Utils.groupToMap,
   group: Utils.group,
-  merge: Utils.merge,
+  merge: Util.merge,
   values: Utils.valuesOfKey,
   getRange: Utils.getRange,
   firstValue: Utils.firstValue,
