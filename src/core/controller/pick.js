@@ -1,6 +1,5 @@
 import Util from '../../util';
 import * as THREE from '../three';
-import pickingFragmentShader from '../engine/picking/picking_frag.glsl';
 import { updateObjecteUniform, destoryObject } from '../../util/object3d-util';
 export default class PickContoller {
   constructor(cfg) {
@@ -38,7 +37,8 @@ export default class PickContoller {
   }
   addPickMesh(mesh) {
     const pickmaterial = mesh.material.clone();
-    pickmaterial.fragmentShader = pickingFragmentShader;
+    pickmaterial.defines.PICK = true;
+    // pickmaterial.fragmentShader = pickingFragmentShader;
     const pickingMesh = new THREE[mesh.type](mesh.geometry, pickmaterial);
     pickingMesh.name = mesh.name;
     pickingMesh.onBeforeRender = () => {
