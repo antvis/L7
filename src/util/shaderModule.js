@@ -10,7 +10,8 @@ const moduleCache = {};
 const rawContentCache = {};
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision = '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
-const globalDefaultAttribute = 'attribute float pickingId;\n varying vec4 worldId;\n';
+const globalDefaultAttribute = 'attribute float pickingId;\n  #ifdef PICK \n varying vec4 worldId; \n #endif \n';
+const globalFSDefaultAttribute = '#ifdef PICK \n varying vec4 worldId; \n #endif \n';
 const globalDefaultInclude = '#pragma include "pick_color"\n';
 const includeRegExp = /#pragma include (["^+"]?["\ "[a-zA-Z_0-9](.*)"]*?)/g;
 const uniformRegExp = /uniform\s+(bool|float|int|vec2|vec3|vec4|ivec2|ivec3|ivec4|mat2|mat3|mat4|sampler2D|samplerCube)\s+([\s\S]*?);/g;
@@ -137,9 +138,10 @@ export function getModule(moduleName) {
   }
 
   let rawVS = rawContentCache[moduleName][SHADER_TYPE.VS];
-  const rawFS = rawContentCache[moduleName][SHADER_TYPE.FS];
+  let rawFS = rawContentCache[moduleName][SHADER_TYPE.FS];
 
   rawVS = globalDefaultAttribute + globalDefaultInclude + rawVS;
+  rawFS = globalFSDefaultAttribute + rawFS;
 
   const { content: vs, includeList: vsIncludeList } = processModule(rawVS, [], SHADER_TYPE.VS);
   let { content: fs, includeList: fsIncludeList } = processModule(rawFS, [], SHADER_TYPE.FS);

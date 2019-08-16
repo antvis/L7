@@ -1,5 +1,5 @@
 import Interaction from './base';
-import { throttle } from '@antv/util';
+import throttle from '../util/throttle';
 export default class Hash extends Interaction {
   constructor(cfg) {
     super({
@@ -7,7 +7,7 @@ export default class Hash extends Interaction {
       ...cfg
     });
     window.addEventListener('hashchange', this._onHashChange.bind(this), false);
-    this._updateHash = throttle(this._updateHashUnthrottled.bind(this), 20 * 1000 / 100);
+    this._updateHash = throttle(this._updateHashUnthrottled.bind(this), 30 * 1000 / 100);
   }
   end() {
     this._updateHash();

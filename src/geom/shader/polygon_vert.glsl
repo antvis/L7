@@ -16,7 +16,7 @@ varying vec4 v_color;
 
 uniform float u_zoom : 0;
 uniform float u_opacity : 1.0;
-uniform float u_activeId : 0;
+uniform float u_activeId : -1;
 uniform vec4 u_activeColor : [1.0, 0.0, 0.0, 1.0];
 
 #pragma include "lighting"
@@ -37,7 +37,7 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position + offset, 1.);
 
   #ifdef LIGHTING
-    if (normal != vec3(0., 0., 1.)) {
+    if (normal != vec3(0., 0., 1.0)) {
       vec3 viewDir = normalize(cameraPosition - position);
       v_color.rgb *= calc_lighting(position, normal, viewDir);
     }
@@ -46,5 +46,7 @@ void main() {
   if(pickingId == u_activeId) {
     v_color = u_activeColor;
   }
-  worldId = id_toPickColor(pickingId);
+   #ifdef PICK
+    worldId = id_toPickColor(pickingId);
+   #endif
 }

@@ -13,6 +13,10 @@ import circle_vert from './circle_vert.glsl';
 import point_line_frag from '../shader/point_meshLine_frag.glsl';
 import point_line_vert from '../shader/point_meshLine_vert.glsl';
 
+// 原生点
+import normal_point_frag from './normal_point_frag.glsl';
+import normal_point_vert from './normal_point_vert.glsl';
+
 // 有宽度的线
 import mesh_line_frag from '../shader/meshline_frag.glsl';
 import mesh_line_vert from '../shader/meshline_vert.glsl';
@@ -59,6 +63,7 @@ import { registerModule } from '../../util/shaderModule';
 import pick_color from './shaderChunks/pick_color.glsl';
 import decode from './shaderChunks/decode.glsl';
 import lighting from './shaderChunks/lighting.glsl';
+import pick from './shaderChunks/pick.glsl';
 import sdf_2d from './shaderChunks/sdf_2d.glsl';
 import project from './shaderChunks/project.glsl';
 
@@ -67,6 +72,7 @@ export function compileBuiltinModules() {
   registerModule('common', { vs: common, fs: common });
   registerModule('decode', { vs: decode, fs: '' });
   registerModule('lighting', { vs: lighting, fs: '' });
+  registerModule('pick', { vs: '', fs: pick });
   registerModule('sdf_2d', { vs: '', fs: sdf_2d });
   registerModule('project', { vs: project, fs: '' });
   registerModule('pick_color', { vs: pick_color, fs: pick_color });
@@ -75,6 +81,7 @@ export function compileBuiltinModules() {
   registerModule('grid', { vs: grid_vert, fs: grid_frag });
   registerModule('hexagon', { vs: hexagon_vert, fs: hexagon_frag });
   registerModule('pointline', { vs: point_line_vert, fs: point_line_frag });
+  registerModule('pointnormal', { vs: normal_point_vert, fs: normal_point_frag });
   registerModule('meshline', { vs: mesh_line_vert, fs: mesh_line_frag });
   registerModule('arcline', { vs: arc_line_vert, fs: arc_line_frag });
   registerModule('greatcircle', { vs: great_circle_line_vert, fs: arc_line_frag });

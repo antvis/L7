@@ -11,7 +11,8 @@ varying float v_radius;
 #pragma include "sdf_2d"
 
 void main() {
-  int shape = int(floor(v_data.w + 0.5));
+  // int shape = int(floor(v_data.w + 0.5));
+   int shape = 0;
 
   lowp float antialiasblur = v_data.z;
   float antialiased_blur = -max(u_blur, antialiasblur);
@@ -57,5 +58,6 @@ void main() {
     inner_df
   );
 
-  gl_FragColor = opacity_t * mix(v_color * u_opacity, u_stroke_color * u_stroke_opacity, color_t);
+  gl_FragColor = opacity_t * mix(v_color * u_opacity, u_stroke_color * u_stroke_opacity * v_color.a, color_t);
+  #pragma include "pick"
 }

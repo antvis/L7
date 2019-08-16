@@ -55,7 +55,7 @@ export default class LRUCache {
     if (value) {
       this._deleteCache(key);
       this._deleteOrder(key);
-      this.destroy(value);
+      this.destroy(value, key);
     }
   }
 
