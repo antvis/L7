@@ -71,9 +71,9 @@ export default function(points, closed, indexOffset) {
 
     attrIndex.push(index + 0, index + 2, index + 1);
 
-     // no miter, simple segment
+    // no miter, simple segment
     if (!next) {
-       // reset normal
+      // reset normal
       normal(_normal, lineA);
       extrusions(attrPos, out, miters, cur, _normal, 1);
       attrDistance.push(d, d);
@@ -98,7 +98,7 @@ export default function(points, closed, indexOffset) {
         extrusions(attrPos, out, miters, cur, _normal, 1);
         attrDistance.push(d, d);
         const indexData = _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ]
-        : [ index, index + 2, index + 3 ];
+          : [ index, index + 2, index + 3 ];
         attrIndex.push(...indexData);
 
         // 避免在 Material 中使用 THREE.DoubleSide
