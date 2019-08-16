@@ -7,7 +7,7 @@ export default class ImageTile extends Tile {
     // Making this asynchronous really speeds up the LOD framerate
     setTimeout(() => {
       if (!this._mesh) {
-       // this._mesh = this._createMesh();
+        // this._mesh = this._createMesh();
         this._requestTile();
       }
     }, 0);
