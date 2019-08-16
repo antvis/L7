@@ -15,6 +15,7 @@ export function BKDRHash(str) {
   return hash;
 }
 export function djb2hash(str) {
+  str = str.toString();
   let hash = 5381,
     i = str.length;
 

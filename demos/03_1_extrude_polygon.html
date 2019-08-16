@@ -31,6 +31,7 @@ const scene = new L7.Scene({
 
 });
 window.scene = scene;
+
 scene.on('loaded', () => {
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/xxvoBnsYNEPiAXGRmlPD.json', city => {
     citylayer = scene.PolygonLayer()
@@ -39,7 +40,7 @@ scene.on('loaded', () => {
     .shape('extrude')
   
     .size('max',(value)=>{
-       if(value<0)value =0;
+       if(value<0)value =1;
        return value * 1000;
     })
     .active(true)
@@ -48,7 +49,6 @@ scene.on('loaded', () => {
     })
     .render();
 
-
     const citylayer2 = scene.PolygonLayer()
       .source(city)
       .shape('line')
@@ -56,7 +56,7 @@ scene.on('loaded', () => {
       .style({
         opacity: 1
        })
-      .render();
+       .render();
 
   });
 });

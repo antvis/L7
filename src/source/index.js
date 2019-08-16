@@ -6,6 +6,7 @@ import csv from './parser/csv';
 import json from './parser/json';
 import raster from './parser/raster';
 import mvt from './parser/mvt';
+import vector from './parser/vector';
 
 import { registerTransform, registerParser } from './factory';
 import { aggregatorToGrid } from './transform/grid';
@@ -18,6 +19,7 @@ registerParser('csv', csv);
 registerParser('json', json);
 registerParser('raster', raster);
 registerParser('mvt', mvt);
+registerParser('vector', vector);
 // 注册transform
 
 registerTransform('grid', aggregatorToGrid);
