@@ -33,7 +33,9 @@ export default class Source extends Base {
     // 数据转换 统计，聚合，分类
     this._executeTrans();
     // 坐标转换
-    this._projectCoords();
+    if (!this.get('projected')) {
+      this._projectCoords();
+    }
   }
   setData(data, cfg = {}) {
     Object.assign(this._attrs, cfg);
@@ -60,7 +62,7 @@ export default class Source extends Base {
     //   dataArray: clone(this.originData.dataArray)
     // }; // TODO 关闭数据备份
     this.data = this.originData;
-    if (this.data !== null) {
+    if (this.data !== null && !this.get('projected')) {
       this.data.extent = extent(this.data.dataArray);
     }
   }
