@@ -3,7 +3,7 @@ import Global from '../../global';
 import ScaleController from './scale';
 import Attr from '../../attr/index';
 export default class Mapping {
-   /** 初始化mapping
+  /** 初始化mapping
     *  初始化mapping
     * @param {*} cfg 配置
     * @param {*} cfg.layer layer对象
