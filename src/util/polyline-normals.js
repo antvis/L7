@@ -26,12 +26,15 @@ function lineSegmentDistance(end, start) {
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
+function isPointEqual(a, b) {
+  return a[0] === b[0] && a[1] === b[1];
+}
+
 export default function(points, closed, indexOffset) {
   const lineA = [ 0, 0 ];
   const lineB = [ 0, 0 ];
   const tangent = [ 0, 0 ];
   const miter = [ 0, 0 ];
-  let _lastFlip = -1;
   let _started = false;
   let _normal = null;
   const tmp = create();
@@ -54,8 +57,20 @@ export default function(points, closed, indexOffset) {
     const index = count;
     const last = points[i - 1];
     const cur = points[i];
-    const next = i < points.length - 1 ? points[i + 1] : null;
-    const d = lineSegmentDistance(cur, last) + attrDistance[attrDistance.length - 1];
+    let next = i < points.length - 1 ? points[i + 1] : null;
+    // 如果当前点和前一点相同，跳过
+    if (isPointEqual(last, cur)) {
+      continue;
+    }
+    if (next) {
+      let nextIndex = i + 1;
+      // 找到不相同的下一点
+      while (next && isPointEqual(cur, next)) {
+        next = nextIndex < points.length - 1 ? points[++nextIndex] : null;
+      }
+    }
+    const lineDistance = lineSegmentDistance(cur, last);
+    const d = lineDistance + attrDistance[attrDistance.length - 1];
 
     direction(lineA, cur, last);
 
@@ -94,18 +109,17 @@ export default function(points, closed, indexOffset) {
       // 理论上这种情况下 miterLen = Infinity，本应通过 isFinite(miterLen) 判断，
       // 但是 AMap 投影变换后丢失精度，只能通过一个阈值（1000）判断。
       if (Math.abs(miterLen) > 1000) {
-        normal(_normal, lineA);
         extrusions(attrPos, out, miters, cur, _normal, 1);
-        attrDistance.push(d, d);
-        const indexData = _lastFlip === 1 ? [ index + 1, index + 3, index + 2 ]
-          : [ index, index + 2, index + 3 ];
-        attrIndex.push(...indexData);
+        attrIndex.push(index + 1, index + 2, index + 3);
+        attrIndex.push(index + 2, index + 4, index + 3);
+        normal(tmp, lineB);
+        copy(_normal, tmp); // store normal for next round
 
-        // 避免在 Material 中使用 THREE.DoubleSide
-        attrIndex.push(index + 2, index + 3, index + 4);
+        extrusions(attrPos, out, miters, cur, _normal, 1);
+        attrDistance.push(d, d, d, d);
 
-        count += 2;
-        _lastFlip = -1;
+        // the miter is now the normal for our next join
+        count += 4;
         continue;
       }
 
@@ -147,7 +161,6 @@ export default function(points, closed, indexOffset) {
         // the miter is now the normal for our next join
         count += 5;
       }
-      _lastFlip = flip;
     }
   }
 
