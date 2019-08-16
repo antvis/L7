@@ -29,6 +29,8 @@ void main() {
     #ifdef SHAPE
       v_shape = a_shape;
     #endif
+   #ifdef PICK
     worldId = id_toPickColor(pickingId);
+   #endif
 }
 

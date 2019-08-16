@@ -39,11 +39,12 @@ export default class Layer extends Base {
       attrs: {},
       // 样式配置项
       styleOptions: {
-        stroke: 'none',
+        stroke: [ 1, 1, 1, 1 ],
         strokeWidth: 1.0,
         opacity: 1.0,
         strokeOpacity: 1.0,
-        texture: false
+        texture: false,
+        blending: 'normal'
       },
       destroyed: false,
       // 选中时的配置项
@@ -68,14 +69,15 @@ export default class Layer extends Base {
     this._object3D.renderOrder = this.get('zIndex') || 0;
     this._mapEventHandlers = [];
     const layerId = this._getUniqueId();
+    this.set('layerId', layerId);
+    this.set('mapType', this.scene.mapType);
     this.layerId = layerId;
     this._activeIds = null;
     const world = scene._engine.world;
     world.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
-    this._initEvents();
-
+    // this._initEvents();
   }
   /**
    * 将图层添加加到 Object
@@ -127,7 +129,23 @@ export default class Layer extends Base {
     this.set('visible', visible);
     this._object3D.visible = this.get('visible');
   }
+  // 兼容瓦片source，非瓦片source
+
   source(data, cfg = {}) {
+    // 根据Source类型判断，是不是瓦片图层
+    if (this.scene.getTileSource(data)) {
+      this.set('layerType', 'tile');
+      this.set('sourceOption', {
+        id: data,
+        ...cfg
+      });
+      this.scene.style.addLayer(this);
+      // 初始化tiles
+      this.tiles = new THREE.Object3D();
+      this._object3D.add(this.tiles);
+      return this;
+    }
+
     if (data instanceof source) {
       this.layerSource = data;
       return this;
@@ -245,19 +263,18 @@ export default class Layer extends Base {
     this.set('animateOptions', animateOptions);
     return this;
   }
-  texture() {
-
-  }
   fitBounds() {
     const extent = this.layerSource.data.extent;
     this.scene.fitBounds(extent);
   }
   hide() {
     this._visible(false);
+    this.scene._engine.update();
     return this;
   }
   show() {
     this._visible(true);
+    this.scene._engine.update();
     return this;
   }
   setData(data, cfg) {
@@ -276,13 +293,13 @@ export default class Layer extends Base {
   }
   _setAttrOptions(attrName, attrCfg) {
     const options = this.get('attrOptions');
-
     if (attrName === 'size' && this._zoomScale) {
       attrCfg.zoom = this.map.getZoom();
     }
     options[attrName] = attrCfg;
   }
   _createAttrOption(attrName, field, cfg, defaultValues) {
+
     const attrCfg = {};
     attrCfg.field = field;
     if (cfg) {
@@ -297,15 +314,24 @@ export default class Layer extends Base {
     this._setAttrOptions(attrName, attrCfg);
   }
   _initControllers() {
-    const mappingCtr = new Controller.Mapping({ layer: this });
     const pickCtr = new Controller.Picking({ layer: this });
     const interactionCtr = new Controller.Interaction({ layer: this });
-    this.set('mappingController', mappingCtr);
+    const eventCtr = new Controller.Event({ layer: this });
     this.set('pickingController', pickCtr);
     this.set('interacionController', interactionCtr);
+    this.set('eventController', eventCtr);
   }
-
+  _mapping() {
+    const mappingCtr = new Controller.Mapping({ layer: this });
+    this.set('mappingController', mappingCtr);
+  }
   render() {
+    if (this.get('layerType') === 'tile') {
+      this._initControllers();
+      this._initInteraction();
+      this.scene.style.update(this._attrs);
+      return this;
+    }
     this.init();
     this.scene._engine.update();
     return this;
@@ -313,16 +339,13 @@ export default class Layer extends Base {
   // 重绘 度量， 映射，顶点构建
   repaint() {
     this.set('scales', {});
-    const mappingCtr = new Controller.Mapping({ layer: this });
-    this.set('mappingController', mappingCtr);
-    // this._initAttrs();
-    // this._mapping();
+    this._mapping();
     this.redraw();
   }
   // 初始化图层
   init() {
     this._initControllers();
-    // this._initAttrs();
+    this._mapping();
     this._updateDraw();
   }
   _initInteraction() {
@@ -386,8 +409,8 @@ export default class Layer extends Base {
     const nextStyle = this.get('styleOptions');
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
       // this._mapping();
+      // this._scaleByZoom();
       this._setPreOption();
-      this._scaleByZoom();
       this._initInteraction();
       this._initMapEvent();
       this.draw();
@@ -487,8 +510,16 @@ export default class Layer extends Base {
 
     });
   }
-  getSelectFeature(featureId) {
-    const feature = this.layerSource.getSelectFeature(featureId);
+  getSelectFeature(featureId, lnglat) {
+    // return {};
+    if (this.get('layerType') === 'tile') {
+      const sourceCache = this.getSourceCache(this.get('sourceOption').id);
+      const feature = sourceCache.getSelectFeature(featureId, this.layerId, lnglat);
+      return {
+        feature
+      };
+    }
+    const feature = this.layerSource && this.layerSource.getSelectFeature(featureId) || {};
     const style = this.layerData[featureId - 1];
     return {
       feature,
@@ -660,6 +691,11 @@ export default class Layer extends Base {
 
   afterRender() {
 
+  }
+
+  // tileLayer
+  getSourceCache(id) {
+    return this.scene.style.getSource(id);
   }
 }
 

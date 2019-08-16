@@ -61,6 +61,8 @@ void main() {
     if(pickingId == u_activeId) {
         v_color = u_activeColor;
     }
+   #ifdef PICK
     worldId = id_toPickColor(pickingId);
+   #endif
 
 }

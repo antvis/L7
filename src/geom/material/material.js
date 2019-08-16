@@ -1,5 +1,10 @@
 
 import * as THREE from '../../core/three';
+const blendingEnum = {
+  normal: 'NormalBlending',
+  additive: 'AdditiveBlending',
+  subtractive: 'SubtractiveBlending'
+};
 export default class Material extends THREE.ShaderMaterial {
   setUniformsValue(name, value) {
     if (!this.uniforms[name]) { return; }
@@ -25,5 +30,8 @@ export default class Material extends THREE.ShaderMaterial {
         this.setUniformsValue(key, option[key]);
       }
     }
+  }
+  setBending(type) {
+    this.blending = THREE[blendingEnum[type]] || THREE.NormalBlending;
   }
 }

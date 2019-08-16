@@ -7,6 +7,9 @@ export default function PickingMaterial(options) {
     uniforms: {
       u_zoom: { value: options.u_zoom || 1 }
     },
+    defines: {
+      PICK: true
+    },
     vertexShader: options.vs,
     fragmentShader: picking_frag,
     transparent: false

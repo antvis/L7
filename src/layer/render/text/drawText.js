@@ -6,7 +6,6 @@ import ColorUtil from '../../../attr/color-util';
 export default function DrawText(layerData, layer, updateGeometry = false) {
   const style = layer.get('styleOptions');
   const activeOption = layer.get('activedOptions');
-
   const { strokeWidth, strokeColor, opacity,
     fontFamily, fontWeight, spacing, textAnchor, textOffset, padding } = style;
 
