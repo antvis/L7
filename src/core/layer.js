@@ -4,10 +4,10 @@
  */
 import Base from './base';
 import * as THREE from './three';
-import ColorUtil from '../attr/color-util';
 import Controller from './controller/index';
 import source from './source';
 import diff from '../util/diff';
+import ColorUtil from '../attr/color-util';
 import { updateObjecteUniform } from '../util/object3d-util';
 import Util from '../util';
 import Global from '../global';
@@ -666,25 +666,8 @@ export default class Layer extends Base {
    * @return {*} 图例配置项
    */
   getLegendCfg(field, type = 'color') {
-    // todo heatmap
-    if (this.type === 'heatmap' && this.shapeType === 'heatmap') {
-      return this.get('styleOptions').rampColors;
-    }
-    const scales = this.get('scales');
-    const scale = scales[field];
-    const colorAttrs = this.get('attrs')[type];
-    const lengendCfg = {};
-    if (scale) {
-      const ticks = scale.ticks;
-      lengendCfg.value = ticks;
-      lengendCfg.type = scale.type;
-      const values = ticks.map(value => {
-        const v = this._getAttrValues(colorAttrs, { [field]: value });
-        return type === 'color' ? ColorUtil.colorArray2RGBA(v) : v;
-      });
-      lengendCfg[type] = values;
-    }
-    return lengendCfg;
+    const mapCtr = this.get('mappingController');
+    return mapCtr.getLegendCfg(field, type);
   }
   preRender() {
 
