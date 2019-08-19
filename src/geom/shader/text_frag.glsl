@@ -1,32 +1,31 @@
-precision mediump float;
-uniform sampler2D u_texture;
-varying vec4 v_color;
-uniform vec4 u_stroke;
-uniform float u_strokeWidth;
-uniform float u_buffer;
-uniform float u_gamma;
-uniform float u_opacity;
-varying vec2 v_texcoord;
-varying float v_size;
-void main(){
-    float dist=texture2D(u_texture,vec2(v_texcoord.x,v_texcoord.y)).a;
-    float alpha;
+#define SDF_PX 8.0
+#define EDGE_GAMMA 0.105 / float(DEVICE_PIXEL_RATIO)
 
-    if(u_strokeWidth==0.){
-        alpha=smoothstep(u_buffer-u_gamma,u_buffer+u_gamma,dist);
-        gl_FragColor=vec4(v_color.rgb,alpha*v_color.a);
-    }else{
-        if(dist<=u_buffer-u_gamma){
-            alpha=smoothstep(u_strokeWidth-u_gamma,u_strokeWidth+u_gamma,dist);
-            gl_FragColor=vec4(u_stroke.rgb,alpha*u_stroke.a);
-        }else if(dist<u_buffer){
-            alpha=smoothstep(u_buffer-u_gamma,u_buffer+u_gamma,dist);
-            gl_FragColor=vec4(alpha*v_color.rgb+(1.-alpha)*u_stroke.rgb,1.*v_color.a*alpha+(1.-alpha)*u_stroke.a);
-        }else{
-            alpha=1.;
-            gl_FragColor=vec4(v_color.rgb,alpha*v_color.a);
-        }
-        
-    }
-      #pragma include "pick"
+uniform sampler2D u_sdf_map;
+uniform float u_gamma_scale : 0.5;
+uniform float u_font_size : 24;
+uniform float u_font_opacity : 1.0;
+uniform vec4 u_halo_color : [0, 0, 0, 1];
+uniform float u_halo_width : 2.0;
+uniform float u_halo_blur : 0.5;
+
+varying vec4 v_color;
+varying vec2 v_uv;
+varying float v_gamma_scale;
+
+void main() {
+  // get sdf from atlas
+  float dist = texture2D(u_sdf_map, v_uv).a;
+
+  float fontScale = u_font_size / 24.0;
+
+  lowp float buff = (6.0 - u_halo_width / fontScale) / SDF_PX;
+  highp float gamma = (u_halo_blur * 1.19 / SDF_PX + EDGE_GAMMA) / (fontScale * u_gamma_scale);
+  
+  highp float gamma_scaled = gamma * v_gamma_scale;
+
+  highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
+
+  gl_FragColor = mix(v_color * u_font_opacity, u_halo_color, smoothstep(0., .5, 1. - dist)) * alpha;
+  #pragma include "pick"
 }
