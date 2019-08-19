@@ -8,5 +8,6 @@ export default class Select extends Interaction {
   }
   process(ev) {
     this.layer._addActiveFeature(ev);
+    this.layer.scene._engine.update();
   }
 }

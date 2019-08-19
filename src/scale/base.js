@@ -64,23 +64,6 @@ class Base {
 
   }
 
-  /**
-   * 获取该度量的ticks,返回的是多个对象，
-   *   - text: tick 的文本
-   *   - value: 对应的度量转换后的值
-   * <code>
-   *   [
-   *     {text: 0,value:0}
-   *     {text: 1,value:0.2}
-   *     {text: 2,value:0.4}
-   *     {text: 3,value:0.6}
-   *     {text: 4,value:0.8}
-   *     {text: 5,value:1}
-   *   ]
-   * </code>
-   * @param {Number} count 输出tick的个数的近似值，默认是 10
-   * @return {Array} 返回 ticks 数组
-   */
   getTicks() {
     const self = this;
     const ticks = self.ticks;
@@ -172,7 +155,6 @@ class Base {
   /**
    * 更改度量的属性信息
    * @param  {Object} info 属性信息
-   * @chainable
    * @return {Scale} 返回自身的引用
    */
   change(info) {

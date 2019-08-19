@@ -1,6 +1,6 @@
 import TinySDF from '@mapbox/tiny-sdf';
 import { buildMapping } from '../../util/font-util';
-import * as THREE from '../../core/three';
+import * as THREE from '../three';
 import LRUCache from '../../util/lru-cache';
 export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'sans-serif';
@@ -10,8 +10,8 @@ export const DEFAULT_BUFFER = 3;
 export const DEFAULT_CUTOFF = 0.25;
 export const DEFAULT_RADIUS = 8;
 const MAX_CANVAS_WIDTH = 1024;
-const BASELINE_SCALE = 0.9;
-const HEIGHT_SCALE = 1.2;
+const BASELINE_SCALE = 1.0;
+const HEIGHT_SCALE = 1.0;
 const CACHE_LIMIT = 3;
 const cache = new LRUCache(CACHE_LIMIT);
 
@@ -36,9 +36,9 @@ function getDefaultCharacterSet() {
 
 function setTextStyle(ctx, fontFamily, fontSize, fontWeight) {
   ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-  ctx.fillStyle = '#000';
-  ctx.textBaseline = 'baseline';
-  ctx.textAlign = 'left';
+  ctx.fillStyle = 'black';
+  ctx.textBaseline = 'middle';
+  // ctx.textAlign = 'left';
 }
 function getNewChars(key, characterSet) {
   const cachedFontAtlas = cache.get(key);
@@ -146,10 +146,10 @@ export default class FontAtlasManager {
 
   _updateTexture({ data: canvas }) {
     this._texture = new THREE.CanvasTexture(canvas);
-    this._texture.wrapS = THREE.ClampToEdgeWrapping;
-    this._texture.wrapT = THREE.ClampToEdgeWrapping;
     this._texture.minFilter = THREE.LinearFilter;
+    this._texture.magFilter = THREE.LinearFilter;
     this._texture.flipY = false;
+    this._texture.format = THREE.AlphaFormat;
     this._texture.needUpdate = true;
   }
 
@@ -200,7 +200,8 @@ export default class FontAtlasManager {
 
       for (const char of characterSet) {
         populateAlphaChannel(tinySDF.draw(char), imageData);
-        ctx.putImageData(imageData, mapping[char].x - buffer, mapping[char].y - buffer);
+        // 考虑到描边，需要保留 sdf 的 buffer，不能像 deck.gl 一样直接减去
+        ctx.putImageData(imageData, mapping[char].x, mapping[char].y);
       }
     } else {
       for (const char of characterSet) {
