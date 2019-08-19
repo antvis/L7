@@ -30,5 +30,6 @@ export default function DrawArcLine(layerData, layer, buffer) {
     SHAPE: false
   });
   const arcMesh = new THREE.Mesh(geometry, lineMaterial);
+  arcMesh.frustumCulled = false;
   return arcMesh;
 }
