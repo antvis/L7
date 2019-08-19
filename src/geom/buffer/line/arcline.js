@@ -5,6 +5,9 @@ export default class ArcLineBuffer extends BufferBase {
     layerData.forEach((feature, index) => {
       this._calculateArc(feature, index);
     });
+    this.hasPattern = layerData.some(layer => {
+      return layer.pattern;
+    });
   }
   _initAttributes() {
     super._initAttributes();

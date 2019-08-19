@@ -14,16 +14,19 @@ export default class Mapping {
     if (!this.mesh) this.mesh = this.layer;
     this._init();
   }
+
   _init() {
     this._initControllers();
     this._initTileAttrs();
     this._mapping();
   }
+
   update() {
     this.mesh.set('scales', {});
     this._initTileAttrs();
     this._updateMaping();
   }
+
   _initControllers() {
     const scalesOption = this.layer.get('scaleOptions');
     const scaleController = new ScaleController({
@@ -33,6 +36,7 @@ export default class Mapping {
     });
     this.mesh.set('scaleController', scaleController);
   }
+
   _createScale(field) {
     const scales = this.mesh.get('scales');
     this._initControllers(); // scale更新
@@ -43,6 +47,7 @@ export default class Mapping {
     }
     return scale;
   }
+
   createScale(field) {
     const data = this.mesh.layerSource.data.dataArray;
     const scales = this.mesh.get('scales');
@@ -72,6 +77,7 @@ export default class Mapping {
     const values = attr.mapping(...params);
     return values;
   }
+
   _mapping() {
     const attrs = this.mesh.get('attrs');
     const mappedData = [];
@@ -80,6 +86,11 @@ export default class Mapping {
       const record = data[i];
       const newRecord = {};
       newRecord.id = data[i]._id;
+      if (attrs.hasOwnProperty('filter')) {
+        const attr = attrs.filter;
+        const values = this._getAttrValues(attr, record);
+        if (!values[0]) continue;
+      }
       for (const k in attrs) {
         if (attrs.hasOwnProperty(k)) {
           const attr = attrs[k];
@@ -100,23 +111,9 @@ export default class Mapping {
       newRecord.coordinates = record.coordinates;
       mappedData.push(newRecord);
     }
-    // 通过透明度过滤数据
-    if (attrs.hasOwnProperty('filter')) {
-      mappedData.forEach(item => {
-        if (item.filter === false) {
-          (item.color[3] = 0);
-          item.id = -item.id;
-        }
-      });
-    }
     this.mesh.layerData = mappedData;
   }
 
-  /**
-   * 更新数据maping
-   * @param {*} layerSource 数据源
-   * @param {*} layer map
-   */
   _updateMaping() {
     const attrs = this.mesh.get('attrs');
 
