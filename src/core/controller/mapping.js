@@ -86,6 +86,11 @@ export default class Mapping {
       const record = data[i];
       const newRecord = {};
       newRecord.id = data[i]._id;
+      if (attrs.hasOwnProperty('filter')) {
+        const attr = attrs.filter;
+        const values = this._getAttrValues(attr, record);
+        if (!values[0]) continue;
+      }
       for (const k in attrs) {
         if (attrs.hasOwnProperty(k)) {
           const attr = attrs[k];
@@ -105,15 +110,6 @@ export default class Mapping {
       }
       newRecord.coordinates = record.coordinates;
       mappedData.push(newRecord);
-    }
-    // 通过透明度过滤数据
-    if (attrs.hasOwnProperty('filter')) {
-      mappedData.forEach(item => {
-        if (item.filter === false) {
-          (item.color[3] = 0);
-          item.id = -item.id;
-        }
-      });
     }
     this.mesh.layerData = mappedData;
   }
