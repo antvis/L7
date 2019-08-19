@@ -1,6 +1,6 @@
 {
   "extends": [
-    "egg"
+    "eslint-config-egg"
   ],
   "globals": {
     "$": true,
@@ -44,6 +44,7 @@
       "error",
       "never"
     ],
+    "jsdoc/require-param": 0,
     "linebreak-style": [
       0
     ]

@@ -156,7 +156,7 @@ class AttributeBase {
 
   /**
    * 映射数据
-   * @param {*} param1...paramn 多个数值
+   * @param {*} params 多个数值
    * @return {Array} 映射的值组成的数组
    */
   mapping(...params) {
