@@ -53,4 +53,10 @@ import DrawImage from './image/drawImage';
 
 registerRender('image', 'image', DrawImage);
 
+// image
+
+import DrawText from './text/drawText';
+
+registerRender('text', 'text', DrawText);
+
 export { getRender };

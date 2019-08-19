@@ -9,8 +9,10 @@ export default class Active extends Interaction {
   }
   process(ev) {
     this.layer._addActiveFeature(ev);
+    this.layer.scene._engine.update();
   }
   reset() {
     this.layer._resetStyle();
+    this.layer.scene._engine.update();
   }
 }
