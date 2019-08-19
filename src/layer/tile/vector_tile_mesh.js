@@ -37,7 +37,7 @@ export default class VectorTileMesh {
     this.mesh = getRender(this.layer.get('type'), data.shape)(null, this.layer, data.buffer);
     if (this.mesh.type !== 'composer') { // 热力图的情况
       this.mesh.onBeforeRender = renderer => {
-        // this._renderMask(renderer);
+        this._renderMask(renderer);
         const zoom = this.layer.scene.getZoom();
         updateObjecteUniform(this._object3D, {
           u_time: this.layer.scene._engine.clock.getElapsedTime(),
