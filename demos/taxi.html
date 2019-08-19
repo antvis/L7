@@ -31,16 +31,23 @@ const scene = new L7.Scene({
   maxZoom: 18
 });
 scene.on('loaded', () => {
-  $.get('https://gw.alipayobjects.com/os/rmsportal/kNDVHmyUWAKhWmWXmjxM.json', data => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json', data => {
     scene.LineLayer({
       zIndex: 2
     })
     .source(data)
-    //.color('#F08D41')
+    .size([2, 0])
+     .shape('line')
     .color('#ff893a')
-    .animate({enable:true})
-    //.render();
+    .animate({
+        enable:true,
+        interval:0.2,
+        duration:5,
+        trailLength:0.1
+        })
+    .render();
   });
+
    $.get('https://gw.alipayobjects.com/os/rmsportal/vmvAxgsEwbpoSWbSYvix.json', data => {
    buildLayer =  scene.PolygonLayer({
       zIndex: 2

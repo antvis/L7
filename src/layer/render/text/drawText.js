@@ -29,9 +29,8 @@ export default function DrawText(layerData, layer, updateGeometry = false) {
     fontAtlas
   } = new TextBuffer(
     layerData,
-    layer.layerSource.data.dataArray,
+    layerData,
     {
-      textField: layer.textField,
       fontFamily,
       fontWeight,
       spacing,

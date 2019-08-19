@@ -1,6 +1,7 @@
 import Base from '../core/base';
 import { bindAll } from '../util/event';
 import * as DOM from '../util/dom';
+import { applyAnchorClass, anchorTranslate } from '../util/anchor';
 export default class Popup extends Base {
   constructor(cfg) {
     super({
@@ -17,41 +18,50 @@ export default class Popup extends Base {
     if (this.get('closeOnClick')) {
       this._scene.on('click', this._onClickClose);
     }
-    this._scene.on('mapmove', this._update);
+    this._scene.on('camerachange', this._update);
     this._update();
   }
   setLnglat(lngLat) {
     this.lngLat = lngLat;
     if (this._scene) {
-      this._scene.on('mapmove', this._update);
+      this._scene.on('camerachange', this._update);
     }
     this._update(lngLat);
     return this;
   }
+
   _update() {
     const hasPosition = this.lngLat;
     if (!this._scene || !hasPosition || !this._content) { return; }
     if (!this._container) {
-      this._container = this.creatDom('div', 'l7-popup', this._scene.getContainer());
-      // this._tip = this.creatDom('div', 'l7-popup-tip', this._container);
+      this._container = this.creatDom('div', 'l7-popup', this._scene.getMarkerContainer().parentNode);
+
+      this._tip = this.creatDom('div', 'l7-popup-tip', this._container);
       this._container.appendChild(this._content);
       if (this.get('className')) {
         this.get('className').split(' ').forEach(name =>
           this._container.classList.add(name));
       }
+      this._container.addEventListener('mousedown', e => {
+        e.stopPropagation();
+      });
     }
     if (this.get('maxWidth') && this._container.style.maxWidth !== this.get('maxWidth')) {
       this._container.style.maxWidth = this.get('maxWidth');
     }
 
     this._updatePosition();
+    DOM.setTransform(this._container, `${anchorTranslate[this.get('anchor')]}`);
+    applyAnchorClass(this._container, this.get('anchor'), 'popup');
   }
+
   _updatePosition() {
     if (!this._scene) { return; }
     const pos = this._scene.lngLatToContainer(this.lngLat);
     this._container.style.left = pos.x + 'px';
     this._container.style.top = pos.y + 'px';
   }
+
   setHTML(html) {
     const frag = window.document.createDocumentFragment();
     const temp = window.document.createElement('body');
@@ -117,11 +127,14 @@ export default class Popup extends Base {
       delete this._container;
     }
     if (this._scene) {
-      this._scene.off('mapmove', this._update);
+      this._scene.off('camerachange', this._update);
       this._scene.off('click', this._onClickClose);
       delete this._scene;
     }
     this.emit('close');
     return this;
+  }
+  isOpen() {
+    return !!this._scene;
   }
 }
