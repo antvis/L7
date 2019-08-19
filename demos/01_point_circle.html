@@ -53,23 +53,16 @@ const scene = new L7.Scene({
 window.scene = scene;
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', data => {
+    console.log(data);
     const circleLayer = scene.PointLayer({
       zIndex: 0,
     })
     .source(data,{
        isCluster:true
     })
-    // .shape('circle')
-    .shape('point_count', [ 'circle', 'triangle', 'hexagon' ])
-    // .shape('triangle')
-    // .shape('square')
-    // .shape('hexagon')
-    // .shape('octogon')
-    // .shape('hexagram')
-    // .shape('pentagon')
+    .shape('circle')
     .size('point_count', [ 5, 40]) // default 1
-     //.size('value', [ 10, 300]) // default 1
-    .active(true)
+    .active(false)
     .color('point_count',["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
     .style({
       stroke: 'rgb(255,255,255)',
@@ -77,30 +70,30 @@ scene.on('loaded', () => {
       opacity: 1
     })
      .render();
-  window.circleLayer = circleLayer;
-   const layerText =  scene.PointLayer({
-      zIndex: 3
+
+  scene.TextLayer({
+      zIndex: 5
     })
-    .source(circleLayer.layerSource)
+     .source(circleLayer.layerSource)
     .shape('point_count', 'text')
-    .active(false)
-    .filter('point_count',(p)=>{
-      return p > 50
-    })
-    .size('point_count', [ 5, 20]) // default 1
-    .color('#fff')
+    .active(true)
+    .size('point_count', [ 10, 20, 24 ])
+    .color('#FFF')
     .style({
-      stroke: '#999',
-      strokeWidth: 1,
+      // fontFamily: 'Monaco, monospace', // 字体
+      fontWeight: 200,
+      textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+      textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
+      spacing: 2, // 字符间距
+      padding: [ 4, 4 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+      strokeColor: 'white', // 描边颜色
+      strokeWidth: 1, // 描边宽度
       opacity: 1.0
     })
     .render();
-    console.log(layerText);
-
-  });
     
 });
-
+});
 </script>
 </body>
 </html>
