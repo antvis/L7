@@ -64,7 +64,6 @@ scene.on('loaded', () => {
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
     const citylayer = scene.PolygonLayer()
     .source(city)
-    //.color('pm2_5_24h',["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"])
     .color('pm2_5_24h',(p)=>{
         if(p>120){
           return colors[5];
@@ -94,8 +93,7 @@ scene.on('loaded', () => {
       .style({
         opacity: 1.0
        })
-      //.render();
-    
+      .render();
 
     citylayer.on('mouseleave',(e)=>{
       console.log(e);

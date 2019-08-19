@@ -77,7 +77,6 @@ export default class Layer extends Base {
     world.add(this._object3D);
     this.layerMesh = null;
     this.layerLineMesh = null;
-    // this._initEvents();
   }
   /**
    * 将图层添加加到 Object
@@ -145,6 +144,9 @@ export default class Layer extends Base {
 
     if (data instanceof source) {
       this.layerSource = data;
+      this.layerSource.on('SourceUpdate', () => {
+        this.repaint();
+      });
       return this;
     }
     cfg.data = data;
@@ -563,13 +565,15 @@ export default class Layer extends Base {
     // z-fighting
     let offset = 0;
     if (this.type === 'point') {
-      offset = 3;
-      this.shapeType = 'text' && (offset = 10);
+      offset = 5;
 
     } else if (this.type === 'polyline' || this.type === 'line') {
       offset = 2;
     } else if (this.type === 'polygon') {
       offset = 1;
+    }
+    if (this.type === 'text') {
+      offset = 10;
     }
     this._object3D.position && (this._object3D.position.z = offset * Math.pow(2, 20 - zoom));
     if (zoom < minZoom || zoom >= maxZoom) {
