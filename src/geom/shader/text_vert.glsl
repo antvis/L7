@@ -1,28 +1,39 @@
-precision mediump float;
-attribute vec2 a_txtsize;
-attribute vec2 a_txtOffsets;
-uniform float u_opacity;
+attribute vec2 a_pos;
+attribute vec2 a_tex;
+attribute vec2 a_offset;
 attribute vec4 a_color;
-uniform vec2 u_textTextureSize;// 纹理大小
-uniform vec2 u_glSize;
-varying vec2 v_texcoord;
-varying vec4 v_color;
-varying float v_size;
-uniform float u_activeId;
-uniform vec4 u_activeColor;
+attribute float a_size;
 
-void main(){
-  mat4 matModelViewProjection=projectionMatrix*modelViewMatrix;
-  vec4 cur_position=matModelViewProjection*vec4(position.xy,0,1);
-  v_size = 12. / u_glSize.x;
-  gl_Position=cur_position/cur_position.w+vec4((a_txtOffsets+a_txtsize)/u_glSize*2.,0.,0.);
-  v_color=vec4(a_color.rgb,a_color.a*u_opacity);
-  if(pickingId==u_activeId){
-    v_color=u_activeColor;
+uniform vec2 u_sdf_map_size;
+uniform vec2 u_viewport_size;
+
+uniform float u_activeId : 0;
+uniform vec4 u_activeColor : [1.0, 0.0, 0.0, 1.0];
+
+varying vec2 v_uv;
+varying float v_gamma_scale;
+varying vec4 v_color;
+
+void main() {
+  v_color = a_color;
+  v_uv = a_tex / u_sdf_map_size;
+
+  // 文本缩放比例
+  float fontScale = a_size / 24.;
+
+  // 投影到屏幕空间 + 偏移量
+  vec4 projected_position = projectionMatrix * modelViewMatrix * vec4(a_pos, 0., 1.);
+  gl_Position = vec4(projected_position.xy / projected_position.w
+    + a_offset * fontScale / u_viewport_size * 2., 0.0, 1.0);
+
+  v_gamma_scale = gl_Position.w;
+
+  if (pickingId == u_activeId) {
+    v_color = u_activeColor;
   }
-  v_texcoord=uv/u_textTextureSize;
- #ifdef PICK
+
+  #ifdef PICK
     worldId = id_toPickColor(pickingId);
-   #endif
+  #endif
   
 }
