@@ -38,7 +38,8 @@ export function ArcLineMaterial(options) {
     vertexShader: vs,
     fragmentShader: fs,
     transparent: true,
-    blending: THREE.AdditiveBlending
+    blending: THREE.AdditiveBlending,
+    side: THREE.DoubleSide
   });
   return material;
 }
