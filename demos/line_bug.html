@@ -7,55 +7,127 @@
   <meta name="geometry" content="diagram">
   <link rel="stylesheet" href="./assets/common.css">
   <title>city demo</title>
+
+</head>
   <style>
 	#map { position:absolute; top:0; bottom:0; width:100%; }
-  #timepannel {
-    background: white;
-    z-index: 10;
-    position: absolute;
-    right:50px;
-    padding: 10px;
-  }
   </style>
-</head>
-
 <body>
- <div id ='timepannel'>时间: 6时</div>
 <div id="map">
-
 </div>
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=f28fca5384129d180ad82915156a9baf&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="../build/L7.js"></script>
 <script>
-var buildLayer =null;
+function parseCSV (data) {
+  const lines = data.split('\n')
+  const header = lines[0]
+  const columns = header.split(',')
+  return lines.slice(1).filter(l => l).map(line => {
+    const obj = {}
+    line.split(',').forEach((value, i) => {
+      const name = columns[i]
+      obj[name] = value;
+    })
+    return obj
+  })
+}
+
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'amap://styles/c9f1d10cae34f8ab05e425462c5a58d7', // 样式URL
-  center: [120.102915,30.261396],
-  pitch: 0,
-  zoom: 3,
-  minZoom: 5,
-  maxZoom: 18
+  mapStyle: 'dark', // 样式URL
+  center: [-73.95115, 40.76628  ],
+  pitch: 56,
+  zoom: 13.67,
+  rotation:255.1,
+  hash:true
 });
-scene.on('loaded', () => {
-  scene.image.addImage('arrow', '/demos/assets/arrow.png');
-  scene.image.addImage('right', '/demos/assets/right.png');
-  $.get('https://gw.alipayobjects.com/os/basement_prod/3ed18d7c-bce4-48ca-8716-5248b584481d.json',(data)=>{
+scene.on('loaded',()=>{
+  Promise.all([
+  fetch('https://gw.alipayobjects.com/os/basement_prod/9acd4831-5655-41a5-b0a0-831603e0092d.json').then(d => d.text()).then(JSON.parse),
+  fetch('https://gw.alipayobjects.com/os/basement_prod/dbe4e40b-3fbf-4a20-b36b-7a8bd3b8aef2.csv').then(d => d.text()),
+  fetch('https://gw.alipayobjects.com/os/basement_prod/89d20ef7-77df-44ca-a238-6e3679ab3ae4.csv').then(d => d.text())
+]).then(function onLoad ([coordinates, trips, stations]) {
+  const stationArray = parseCSV(stations);
+  const stationObj = {};
+  stationArray.forEach((st)=>{
+    stationObj[st.station_id] = {
+      x:st.longitude* 1,
+      y:st.latitude * 1,
+    }
+  })
+   const tripsArray = parseCSV(trips);
+   const triplines = [];
+   tripsArray.forEach(trip=>{
+    if(stationObj[trip.start_station] && stationObj[trip.end_station]) {
+     const line = {
+       x: stationObj[trip.start_station].x,
+       y: stationObj[trip.start_station].y,
+       x1: stationObj[trip.end_station].x,
+       y1: stationObj[trip.end_station].y,
+       duration: trip.duration,
+     }
+     triplines.push(line);
+    }
+   })
 
-    const linelayer = scene.LineLayer({
-      zIndex: 2
+ const triplayer =  scene.LineLayer({
+      zIndex: 1
     })
-    .shape('line')
-    .size(10)
-    .source(data)
-    .color('#2b83ba')
-    .pattern('arrow')
+    .source(triplines.slice(0,500),{
+      parser:{
+        type:'json',
+        x:'x',
+        y:'y',
+        x1:'x1',
+        y1:'y1'
+      }
+    })
+    .shape('arc')
+    .size(2)
+    .color('#fec44f')
     .style({
-          patternSpacing: 20
-        })
+       opacity:0.9,
+     })
     .render();
- });
+
+    const road =  scene.LineLayer({
+      zIndex: 0
+    })
+    .source(coordinates)
+    .shape('line')
+    .size(1.5)
+    
+    .color('#eee')
+    .style({
+       opacity:1,
+     })
+    .render();
+   
+
+    const station =  scene.PointLayer({
+      zIndex: 0
+    })
+    .source(stations,{
+      parser:{
+        type:'csv',
+        x:'longitude',
+        y:'latitude'
+      }
+    })
+    .shape('circle')
+    .active(true)
+    .size(5)
+    .color('#fec44f')
+    .style({
+       opacity:0.9,
+     })
+    .render();
+
+
+})
+
+
 })
 </script>
 </body>
