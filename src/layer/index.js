@@ -8,6 +8,7 @@ import HeatmapLayer from './heatmap_layer';
 import TileLayer from './tile/tile_layer';
 import ImageTileLayer from './tile/image_tile_layer';
 import VectorTileLayer from './tile/vector_tile_layer';
+import TextLayer from './text_layer';
 
 registerLayer('PolygonLayer', PolygonLayer);
 registerLayer('PointLayer', PointLayer);
@@ -18,6 +19,7 @@ registerLayer('HeatmapLayer', HeatmapLayer);
 registerLayer('TileLayer', TileLayer);
 registerLayer('ImageTileLayer', ImageTileLayer);
 registerLayer('VectorTileLayer', VectorTileLayer);
+registerLayer('TextLayer', TextLayer);
 
 export { LAYER_MAP, getLayer } from './factory';
 export { registerLayer };
