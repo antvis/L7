@@ -14,14 +14,13 @@ export default function TextBuffer(
   mvpMatrix
 ) {
   const {
-    textField,
     fontWeight,
     fontFamily
   } = options;
   const characterSet = [];
   sourceData.forEach(element => {
     // shape 存储了 text-field
-    let text = element[textField] || '';
+    let text = element.shape || '';
     text = text.toString();
     for (let j = 0; j < text.length; j++) {
       // 去重
@@ -41,7 +40,6 @@ export default function TextBuffer(
 function drawGlyph(
   layerData, sourceData,
   {
-    textField,
     spacing = 2,
     textAnchor = 'center',
     textOffset = [ 0, 0 ],
@@ -68,7 +66,7 @@ function drawGlyph(
   layerData.forEach((feature, i) => {
     const { size, coordinates } = feature;
     // 根据字段获取文本
-    const text = `${sourceData[i][textField] || ''}`;
+    const text = `${layerData[i].shape || ''}`;
     // sdf 中默认字号为 24
     const fontScale = size / 24;
 

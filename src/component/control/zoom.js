@@ -12,8 +12,9 @@ export default class Zoom extends Control {
       ...cfg
     });
     bindAll([ '_updateDisabled', '_zoomIn', '_zoomOut' ], this);
+    this._disabled = false;
   }
-  onAdd() {
+  onAdd(scene) {
     const zoomName = 'l7-control-zoom';
     const container = DOM.create('div', zoomName + ' l7-bar');
 
@@ -21,14 +22,14 @@ export default class Zoom extends Control {
       zoomName + '-in', container, this._zoomIn);
     this._zoomOutButton = this._createButton(this.get('zoomOutText'), this.get('zoomOutTitle'),
       zoomName + '-out', container, this._zoomOut);
+    scene.on('zoomend', this._updateDisabled);
+    scene.on('zoomchange', this._updateDisabled);
     this._updateDisabled();
-    this._scene.on('zoomend', this._updateDisabled);
-    this._scene.on('zoomchange', this._updateDisabled);
     return container;
   }
-  onRemove() {
-    this._scene.off('zoomend', this._updateDisabled);
-    this._scene.off('zoomchange', this._updateDisabled);
+  onRemove(scene) {
+    scene.off('zoomend', this._updateDisabled);
+    scene.off('zoomchange', this._updateDisabled);
   }
   disable() {
     this._disabled = true;
@@ -63,11 +64,10 @@ export default class Zoom extends Control {
     const className = 'l7-disabled';
     DOM.removeClass(this._zoomInButton, className);
     DOM.removeClass(this._zoomOutButton, className);
-
-    if (this._disabled || scene.getZoom() === scene.get('minZoom')) {
+    if (this._disabled || scene.getZoom() <= scene.get('minZoom')) {
       DOM.addClass(this._zoomOutButton, className);
     }
-    if (this._disabled || scene._zoom === scene.get('maxZoom')) {
+    if (this._disabled || scene.getZoom() >= scene.get('maxZoom')) {
       DOM.addClass(this._zoomInButton, className);
     }
   }
