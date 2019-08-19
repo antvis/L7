@@ -53,7 +53,7 @@ export default class GaodeMap extends Base {
       this.container = map.getContainer();
       this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
       this.addOverLayer();
-      this.emit('mapLoad');
+      setTimeout(() => { this.emit('mapLoad'); }, 50);
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
       this.map.on('complete', () => {

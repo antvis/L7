@@ -20,7 +20,7 @@
 <script>
   var scene = new L7.Scene({
     id: 'map',
-    mapStyle: 'light', // 样式URL
+    mapStyle: 'dark', // 样式URL
     center: [120.19382669582967, 30.258134],
     pitch: 0,
     minZoom:5,
@@ -47,6 +47,33 @@
           opacity: 0.9
         }).render();
 
+    scene.TextLayer({
+      zIndex: 5
+    })
+     .source(data)
+    .shape('name', 'text')
+    .active(true)
+    .filter('value', function(v) {
+          return v * 1 > 10000;
+    })
+    .size(20)
+    .color('#FFF')
+    .style({
+      // fontFamily: 'Monaco, monospace', // 字体
+      fontWeight: 500,
+      textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+      textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
+      spacing: 2, // 字符间距
+      padding: [ 4, 4 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+      strokeColor: 'white', // 描边颜色
+      strokeWidth: 1, // 描边宽度
+      opacity: 1.0
+    })
+    .render();
+        
+        
+        
+        
         const popup = new L7.Popup({anchor:'left'}).setText('hello world')
         const marker = new L7.Marker({color:'blue'})
         .setLnglat( [120.19382669582967, 30.258134])
