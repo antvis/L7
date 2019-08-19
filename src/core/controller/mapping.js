@@ -2,6 +2,7 @@ import Util from '../../util';
 import Global from '../../global';
 import ScaleController from './scale';
 import Attr from '../../attr/index';
+import ColorUtil from '../../attr/color-util';
 export default class Mapping {
   /** 初始化mapping
     *  初始化mapping
@@ -181,5 +182,32 @@ export default class Mapping {
       return field.split('*');
     }
     return [ field ];
+  }
+  /**
+   * 获取图例配置项
+   * @param {*} field 字段
+   * @param {*} type 图例类型 color, size
+   * @return {*} 图例配置项
+   */
+  getLegendCfg(field, type = 'color') {
+    // todo heatmap
+    if (this.layer.type === 'heatmap' && this.layer.shapeType === 'heatmap') {
+      return this.get('styleOptions').rampColors;
+    }
+    const scales = this.layer.get('scales');
+    const scale = scales[field];
+    const colorAttrs = this.layer.get('attrs')[type];
+    const lengendCfg = {};
+    if (scale) {
+      const ticks = scale.ticks;
+      lengendCfg.value = ticks;
+      lengendCfg.type = scale.type;
+      const values = ticks.map(value => {
+        const v = this._getAttrValues(colorAttrs, { [field]: value });
+        return type === 'color' ? ColorUtil.colorArray2RGBA(v) : v;
+      });
+      lengendCfg[type] = values;
+    }
+    return lengendCfg;
   }
 }
