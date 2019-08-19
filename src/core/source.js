@@ -8,11 +8,8 @@ export default class Source extends Base {
   getDefaultCfg() {
     return {
       data: null,
-      defs: {},
       parser: {},
       transforms: [],
-      scaledefs: {},
-      scales: {},
       options: {}
     };
   }
@@ -99,6 +96,7 @@ export default class Source extends Base {
     clusterCfg.bbox = bbox;
     this.set('cluster', clusterCfg);
     this._projectCoords();
+    this.emit('SourceUpdate');
   }
   _projectCoords() {
     if (this.data === null) {
