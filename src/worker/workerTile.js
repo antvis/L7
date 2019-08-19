@@ -40,7 +40,8 @@ export default class WorkerTile {
         const geometryBuffer = getBuffer(style.type, style.shape);
         const buffer = new geometryBuffer({
           layerData: tileMapping.layerData,
-          shape: style.shape
+          shape: style.shape,
+          style
         });
         sourceLayerData[style.layerId] = {
           buffer: {
