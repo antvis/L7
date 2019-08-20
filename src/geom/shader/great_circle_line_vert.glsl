@@ -10,6 +10,9 @@ uniform vec4 u_activeColor : [ 1.0, 0, 0, 1.0 ];
 uniform mat4 matModelViewProjection;
 uniform float segmentNumber;  
 varying vec4 v_color;
+#ifdef ANIMATE
+varying float v_distance_ratio;
+#endif
 #pragma include "project"
 float maps (float value, float start1, float stop1, float start2, float stop2) {
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
@@ -78,9 +81,9 @@ void main() {
     float segmentRatio = getSegmentRatio(segmentIndex);
     float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
     float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
-    
-   
-   
+     #ifdef ANIMATE
+      v_distance_ratio = segmentIndex / segmentNumber;
+    #endif
     vec3 curr = vec3(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0);
     vec3 next = vec3(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0);
     vec2 offset = getExtrusionOffset((ProjectFlat(next.xy) - ProjectFlat(curr.xy)) * indexDir, position.y);
