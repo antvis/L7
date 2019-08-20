@@ -54,7 +54,7 @@ window.scene = scene;
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', data => {
     console.log(data);
-    const circleLayer = scene.PointLayer({
+    const circleLayer = = scene.PointLayer({
       zIndex: 0,
     })
     .source(data,{
@@ -76,7 +76,6 @@ scene.on('loaded', () => {
     })
      .source(circleLayer.layerSource)
     .shape('point_count', 'text')
-    .active(true)
     .size('point_count', [ 10, 20, 24 ])
     .color('#FFF')
     .style({
