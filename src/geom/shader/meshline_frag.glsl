@@ -42,7 +42,11 @@ void main() {
   #endif
 
   #ifdef DASHLINE
-    gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset + u_time / 10., v_dash_array) - (v_dash_array * u_dash_ratio));
+    float time = u_time;
+    #ifdef ANIMATE 
+      time =0;
+    #endif
+    gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset + time / 10., v_dash_array) - (v_dash_array * u_dash_ratio));
   #else
     gl_FragColor.a *= u_opacity;
   #endif
