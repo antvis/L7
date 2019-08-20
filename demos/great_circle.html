@@ -46,11 +46,17 @@ scene.on('loaded', () => {
       
      })
     .shape('greatCircle')
-    .size(0.8)
+    .size(0.5)
     .color('rgb(13,64,140)') 
     .style({
-      opacity:0.6,
+      opacity:1.,
     })
+     .animate({
+        enable: true,
+        interval: 0.05,
+        duration: 1,
+        trailLength: 0.01
+      })
     .render();
   });
 });
