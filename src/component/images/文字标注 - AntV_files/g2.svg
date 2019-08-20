@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="20px" viewBox="0 0 24 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>G2 ICON</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="23.843149%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FF8680" offset="0%"></stop>
+            <stop stop-color="#FF4E49" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="视觉稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="导航" transform="translate(-227.000000, -1244.000000)">
+            <g id="Group" transform="translate(-181.000000, 763.000000)">
+                <g id="Group-4" transform="translate(377.000000, 64.000000)">
+                    <g id="G2-ICON" transform="translate(31.000000, 417.981132)">
+                        <g id="Group-17">
+                            <path d="M16.4316994,16.3018868 L16.9222789,17.6844661 C17.1069639,18.2049561 16.8347402,18.7766135 16.3142501,18.9612985 C16.2068763,18.9993979 16.0937812,19.0188679 15.9798483,19.0188679 L7.11436794,19.0188679 L7.11436794,19.0188679 C6.56208319,19.0188679 6.11436794,18.5711527 6.11436794,18.0188679 C6.11436794,17.904935 6.13383798,17.7918399 6.17193735,17.6844661 L6.66251677,16.3018868 L16.4316994,16.3018868 Z" id="Combined-Shape" fill="#FF4E49"></path>
+                            <rect id="Rectangle-4" fill="url(#linearGradient-1)" x="0" y="0" width="24" height="15.8490566" rx="2"></rect>
+                        </g>
+                        <rect id="Rectangle-10" fill="#FFFFFF" x="4.98113208" y="2.71698113" width="3.16981132" height="9.96226415" rx="1.58490566"></rect>
+                        <rect id="Rectangle-10" fill="#FFFFFF" x="10.4150943" y="6.33962264" width="3.16981132" height="6.33962264" rx="1.58490566"></rect>
+                        <rect id="Rectangle-10" fill="#FFFFFF" x="15.8490566" y="7.24528302" width="3.16981132" height="5.43396226" rx="1.58490566"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
