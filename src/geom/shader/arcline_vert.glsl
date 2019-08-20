@@ -9,6 +9,11 @@ uniform vec4 u_activeColor : [ 1.0, 0, 0, 1.0 ];
 uniform mat4 matModelViewProjection;
 uniform float segmentNumber;  
 varying vec4 v_color;
+#ifdef ANIMATE
+varying float v_distance_ratio;
+#endif
+
+
 float maps (float value, float start1, float stop1, float start2, float stop2) {
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
@@ -51,10 +56,13 @@ void main() {
     float segmentRatio = getSegmentRatio(segmentIndex);
     float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
     float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
-    
+    v_distance_ratio = segmentIndex / segmentNumber;
     vec3 curr = getPos(source, target, segmentRatio);
     vec3 next = getPos(source, target, nextSegmentRatio);
     vec2 offset = getExtrusionOffset((next.xy - curr.xy) * indexDir, position.y);
+    #ifdef ANIMATE
+      v_distance_ratio = segmentIndex / segmentNumber;
+    #endif
     gl_Position =matModelViewProjection * vec4(vec3(curr + vec3(offset, 0.0)),1.0);
     v_color = a_color;
       // picking
