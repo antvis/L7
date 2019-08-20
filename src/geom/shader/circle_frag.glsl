@@ -12,7 +12,7 @@ varying float v_radius;
 
 void main() {
   // int shape = int(floor(v_data.w + 0.5));
-   int shape = 0;
+   int shape = int(v_data.w);
 
   lowp float antialiasblur = v_data.z;
   float antialiased_blur = -max(u_blur, antialiasblur);

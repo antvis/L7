@@ -29,6 +29,26 @@ export default function DrawArcLine(layerData, layer, buffer) {
   }, {
     SHAPE: false
   });
+
+  const animateOptions = layer.get('animateOptions');
+  if (animateOptions.enable) {
+    layer.scene.startAnimate();
+    const {
+      duration = 2,
+      interval = 0.5,
+      trailLength = 0.5,
+      repeat = Infinity
+    } = animateOptions;
+    layer.animateDuration =
+    layer.scene._engine.clock.getElapsedTime() + duration * repeat;
+    lineMaterial.updateUninform({
+      u_duration: duration,
+      u_interval: interval,
+      u_trailLength: trailLength
+    });
+    lineMaterial.setDefinesvalue('ANIMATE', true);
+    // lineMaterial.setDefinesvalue('DASHLINE', true);
+  }
   const arcMesh = new THREE.Mesh(geometry, lineMaterial);
   arcMesh.frustumCulled = false;
   return arcMesh;
