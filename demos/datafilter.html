@@ -48,7 +48,7 @@ $.getJSON('https://gw.alipayobjects.com/os/basement_prod/7bb614db-bac0-48d7-93e7
     const highlight = scene.LineLayer()
     .source(city)
     .color('#fff')
-    .filter(false)
+    .filter('unit_price', (price)=> { return price > 40000})
     .shape('line')
     .size(4)
     .render()

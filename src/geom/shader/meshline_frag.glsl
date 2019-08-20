@@ -42,9 +42,9 @@ void main() {
   #endif
 
   #ifdef DASHLINE
-    float time = u_time;
+    float time = 0;
     #ifdef ANIMATE 
-      time =0;
+      time =u_time;
     #endif
     gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset + time / 10., v_dash_array) - (v_dash_array * u_dash_ratio));
   #else
