@@ -18,14 +18,19 @@ export default class Mapping {
 
   _init() {
     this._initControllers();
-    this._initTileAttrs();
+    this._initAttrs();
     this._mapping();
   }
 
   update() {
     this.mesh.set('scales', {});
-    this._initTileAttrs();
+    this._initAttrs();
     this._updateMaping();
+  }
+  reMapping() {
+    this.mesh.set('scales', {});
+    this._initAttrs();
+    this._mapping();
   }
 
   _initControllers() {
@@ -144,7 +149,7 @@ export default class Mapping {
   }
 
 
-  _initTileAttrs() {
+  _initAttrs() {
     const attrOptions = this.layer.get('attrOptions');
     for (const type in attrOptions) {
       if (attrOptions.hasOwnProperty(type)) {
