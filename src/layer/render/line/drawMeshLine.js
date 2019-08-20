@@ -7,11 +7,6 @@ export default function DrawLine(layerData, layer, buffer) {
   const style = layer.get('styleOptions');
   const animateOptions = layer.get('animateOptions');
   const activeOption = layer.get('activedOptions');
-  // const pattern = style.pattern;
-  // const texture = layer.scene.image.singleImages[pattern];
-  // const hasPattern = layerData.some(layer => {
-  //   return layer.pattern;
-  // });
   if (!buffer) {
     const geometryBuffer = getBuffer(layer.type, layer.shapeType);
     buffer = new geometryBuffer({
@@ -53,6 +48,7 @@ export default function DrawLine(layerData, layer, buffer) {
     TEXTURE: hasPattern
   });
   lineMaterial.setBending(style.blending);
+
   const lineMesh = new THREE.Mesh(geometry, lineMaterial);
   if (animateOptions.enable) {
     layer.scene.startAnimate();

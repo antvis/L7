@@ -48,6 +48,7 @@
     scene.on('loaded', () => {
       scene.image.addImage('arrow', '/demos/assets/arrow.png');
       scene.image.addImage('right', '/demos/assets/right.png');
+      scene.image.addImage('plane','https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*LzsbQZeK_2kAAAAAAAAAAABkARQnAQ')
 
       const mapData = {
         "type": "FeatureCollection",
@@ -67,7 +68,7 @@
           }
         }, {
           "type": "Feature",
-          "properties": { "type": 'arrow' },
+          "properties": { "type": 'plane' },
           "geometry": {
             "type": "LineString",
             "coordinates": [
@@ -87,6 +88,7 @@
         .size([10, 0])
         .source(mapData)
         .color('#fff')
+        .active(true)
         .pattern('type', function (type) {
           return type;
         })
