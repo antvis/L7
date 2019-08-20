@@ -4,6 +4,7 @@ import DrawFill from './polygon/drawFill';
 import DrawLine from './polygon/drawLine';
 import DrawAnimate from './polygon/drawAnimate';
 import Draw3DShape from './point/draw_3d_shape';
+import DrawText from './text/drawText';
 
 registerRender('polygon', 'fill', DrawFill);
 registerRender('polygon', 'extrude', DrawFill);
@@ -31,10 +32,11 @@ import DrawHexagon from './heatmap/hexagon';
 registerRender('point', 'image', DrawPointImage);
 registerRender('point', 'normal', DrawPointNormal);
 registerRender('point', 'stroke', DrawPointStroke);
-registerRender('point', 'text', DrawPointText);
+registerRender('point', 'text', DrawText);
 registerRender('point', 'fill', DrawPointCircle);
 registerRender('point', 'shape', Draw3DShape);
 registerRender('point', 'extrude', Draw3DShape);
+
 
 // heatmap
 
@@ -54,8 +56,6 @@ import DrawImage from './image/drawImage';
 registerRender('image', 'image', DrawImage);
 
 // image
-
-import DrawText from './text/drawText';
 
 registerRender('text', 'text', DrawText);
 
