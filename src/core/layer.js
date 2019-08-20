@@ -81,16 +81,15 @@ export default class Layer extends Base {
   /**
    * 将图层添加加到 Object
    * @param {*} object three 物体
-    * @param {*} type mesh类型是区别是填充还是边线
    */
-  add(object, type = 'fill') {
+  add(object) {
     // composer合图层绘制
     if (object.type === 'composer') {
       this._object3D = object;
       this.scene._engine.composerLayers.push(object);
       return;
     }
-    type === 'fill' ? this.layerMesh = object : this.layerLineMesh = object;
+    this.layerMesh = object;
     this._visibleWithZoom();
     object.onBeforeRender = () => { // 每次渲染前改变状态
       const zoom = this.scene.getZoom();
@@ -105,9 +104,8 @@ export default class Layer extends Base {
       this.afterRender();
     };
     this._object3D.add(object);
-    if (type === 'fill') {
-      this.get('pickingController').addPickMesh(object);
-    }
+    this.get('pickingController').addPickMesh(object);
+
   }
   remove(object) {
     if (object.type === 'composer') {
@@ -279,6 +277,7 @@ export default class Layer extends Base {
   setData(data, cfg) {
     this.layerSource.setData(data, cfg);
     this.repaint();
+    this.scene._engine.update();
   }
   _createScale(field) {
     // TODO scale更新
@@ -331,7 +330,7 @@ export default class Layer extends Base {
       this.scene.style.update(this._attrs);
       return this;
     }
-    this.init();
+    this._updateDraw();
     this.scene._engine.update();
     return this;
   }
@@ -345,7 +344,6 @@ export default class Layer extends Base {
   init() {
     this._initControllers();
     this._mapping();
-    this._updateDraw();
   }
   _initInteraction() {
     if (this.get('allowActive')) {
@@ -379,6 +377,7 @@ export default class Layer extends Base {
 
   setActive(id, color) {
     this._activeIds = id;
+    if (!color) color = Global.activeColor;
     if (!Array.isArray(color)) {
       color = ColorUtil.color2RGBA(color);
     }
@@ -407,31 +406,35 @@ export default class Layer extends Base {
     const preStyle = this.get('preStyleOption');
     const nextStyle = this.get('styleOptions');
     if (preAttrs === undefined && preStyle === undefined) { // 首次渲染
-      // this._mapping();
-      // this._scaleByZoom();
       this._setPreOption();
+      this.init();
       this._initInteraction();
       this._initMapEvent();
+      if (this.layerData.length === 0) {
+        return;
+      }
       this.draw();
       return;
     }
-    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
-      this._updateAttributes(this.layerMesh);
-    }
     // 更新数据过滤 filter
     if (!Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
-      // 更新color；
+      this.repaint();
+      this._setPreOption();
+      return;
+    }
+
+    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
       this._updateAttributes(this.layerMesh);
     }
     // 更新Size
     if (!Util.isEqual(preAttrs.size, nextAttrs.size)) {
       // 更新color；
-      this._updateSize();
+      this.repaint();
     }
     // 更新形状
     if (!Util.isEqual(preAttrs.shape, nextAttrs.shape)) {
       // 更新color；
-      this._updateShape();
+      this.repaint();
     }
     if (!Util.isEqual(preStyle, nextStyle)) {
       // 判断新增，修改，删除
@@ -442,7 +445,6 @@ export default class Layer extends Base {
       });
       this._updateStyle(newStyle);
     }
-    this._setPreOption();
   }
 
   _updateSize(zoom) {
@@ -524,6 +526,9 @@ export default class Layer extends Base {
       feature,
       style
     };
+  }
+  _updateFilter() {
+    this.get('mappingController').reMapping();
   }
   /**
    *  用于过滤数据
