@@ -20,7 +20,7 @@ class Picking {
       depthBuffer: true
     };
 
-    this._pickingTexture = new THREE.WebGLRenderTarget(this._width, this._height, parameters);
+    this._pickingTexture = new THREE.WebGLRenderTarget(this._width / 10, this._height / 10, parameters);
 
     this._nextId = 1;
 
