@@ -33,9 +33,8 @@ export default class LoadImage extends EventEmitter {
         this.texture.magFilter = THREE.LinearFilter;
         this.texture.minFilter = THREE.LinearFilter;
         this.texture.needsUpdate = true;
-        if (this.images.length === this.imagesCount) {
-          this.emit('imageLoaded');
-        }
+        this.emit('imageLoaded');
+
       });
     } else {
       const { width, height, channels } = opt;
@@ -49,9 +48,8 @@ export default class LoadImage extends EventEmitter {
       this.ctx.drawImage(image, x, y, this.imageWidth, this.imageWidth);
       this.texture = new THREE.CanvasTexture(this.canvas);
       this.imagePos[id] = { x: x >> 9, y: y >> 9 };
-      if (this.images.length === this.imagesCount) {
-        this.emit('imageLoaded');
-      }
+      this.texture.needsUpdate = true;
+      this.emit('imageLoaded');
     }
 
   }
