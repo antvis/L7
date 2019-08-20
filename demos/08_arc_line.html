@@ -46,6 +46,12 @@ scene.on('loaded', () => {
     .shape('arc')
     .size(0.8)
     .color('rgb(13,64,140)') 
+    .animate({
+        enable: true,
+        interval: 0.1,
+        duration: 3,
+        trailLength: 0.1
+      })
     .style({
       opacity:0.6,
     })

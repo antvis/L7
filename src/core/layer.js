@@ -591,15 +591,6 @@ export default class Layer extends Base {
     this.get('pickingController').removeAllMesh();
     this.draw();
   }
-  // 更新mesh
-  updateDraw() {
-
-  }
-
-  styleCfg() {
-
-  }
-
   /**
    * 重置高亮要素
    */

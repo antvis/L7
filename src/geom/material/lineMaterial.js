@@ -25,16 +25,16 @@ export function ArcLineMaterial(options) {
   if (options.shapeType === 'greatCircle') {
     moduleName = 'greatcircle';
   }
-  const { vs, fs } = getModule(moduleName);
+  const { vs, fs, uniforms } = getModule(moduleName);
   const material = new Material({
-    uniforms: {
-      u_opacity: { value: options.u_opacity || 1.0 },
-      segmentNumber: { value: 29 },
-      u_time: { value: 0 },
-      u_zoom: { value: options.u_zoom || 10 },
-      u_activeId: { value: options.activeId || 0 },
-      u_activeColor: { value: options.activeColor || [ 1.0, 0, 0, 1.0 ] }
-    },
+    uniforms: wrapUniforms(merge(uniforms, {
+      u_opacity: options.u_opacity,
+      segmentNumber: 29,
+      u_time: 0,
+      u_zoom: options.u_zoom,
+      u_activeId: options.activeId,
+      u_activeColor: options.activeColor
+    })),
     vertexShader: vs,
     fragmentShader: fs,
     transparent: true,
