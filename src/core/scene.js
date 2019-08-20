@@ -20,7 +20,6 @@ export default class Scene extends Base {
     super(cfg);
     this._initMap();
     this.crs = epsg3857;
-    this.addImage();
     this.fontAtlasManager = new FontAtlasManager();
     this._layers = [];
     this.animateCount = 0;
@@ -29,6 +28,7 @@ export default class Scene extends Base {
 
   _initEngine(mapContainer) {
     this._engine = new Engine(mapContainer, this);
+    this.addImage();// 初始化图标加载器
     this.registerMapEvent(); // 和高德地图同步状态
     // this._engine.run();
     compileBuiltinModules();
@@ -99,6 +99,9 @@ export default class Scene extends Base {
   }
   addImage() {
     this.image = new LoadImage();
+    this.image.on('imageLoaded', () => {
+      this._engine.update();
+    });
   }
   _initEvent() {
 
