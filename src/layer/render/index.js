@@ -24,7 +24,6 @@ registerRender('line', 'greatCircle', DrawArcLine);
 import DrawPointImage from './point/drawImage';
 import DrawPointNormal from './point/drawNormal';
 import DrawPointStroke from './point/drawStroke';
-import DrawPointText from './point/drawText';
 import DrawPointCircle from './point/drawCircle';
 import DrawHexagon from './heatmap/hexagon';
 
