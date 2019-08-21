@@ -23,6 +23,6 @@ void main() {
 
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
 
-  gl_FragColor = mix(v_color * u_font_opacity, u_halo_color, smoothstep(0., .5, 1. - dist)) * alpha;
+  gl_FragColor = mix(v_color * u_font_opacity, u_halo_color, smoothstep(0., 0.5, 1. - dist)) * alpha;
   #pragma include "pick"
 }
