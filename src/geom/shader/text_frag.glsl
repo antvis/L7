@@ -1,6 +1,3 @@
-#define SDF_PX 8.0
-#define EDGE_GAMMA 0.205 / float(DEVICE_PIXEL_RATIO)
-
 uniform sampler2D u_sdf_map;
 uniform float u_gamma_scale : 0.5;
 uniform float u_font_size : 24;
@@ -15,7 +12,7 @@ varying float v_gamma_scale;
 
 void main() {
   // get sdf from atlas
-  float dist = texture2D(u_sdf_map, v_uv).w;
+  float dist = texture2D(u_sdf_map, v_uv).a;
 
   float fontScale = u_font_size / 24.0;
 

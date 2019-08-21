@@ -41,6 +41,9 @@ export default class Scene extends Base {
     if (this.get('scaleControl')) {
       new Control.Scale().addTo(this);
     }
+    if (this.get('attributionControl')) {
+      new Control.Attribution().addTo(this);
+    }
   }
   // 为pickup场景添加 object 对象
   addPickMesh(object) {

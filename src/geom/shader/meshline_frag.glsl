@@ -42,14 +42,15 @@ void main() {
   #endif
 
   #ifdef DASHLINE
-    float time = 0;
+    float time = 0.;
     #ifdef ANIMATE 
-      time =u_time;
+      time = u_time / 1000. ;
     #endif
-    gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset + time / 10., v_dash_array) - (v_dash_array * u_dash_ratio));
+    gl_FragColor.a *= u_opacity * ceil(mod(v_distance_ratio + u_dash_offset + time, v_dash_array) - (v_dash_array * u_dash_ratio));
   #else
     gl_FragColor.a *= u_opacity;
   #endif
+  
   #ifdef ANIMATE 
    float alpha =1.0 - fract( mod(1.0- v_distance_ratio,u_interval)* (1.0/u_interval) + u_time / u_duration);
     alpha = (alpha + u_trailLength -1.0) / u_trailLength;
