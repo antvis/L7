@@ -6,7 +6,8 @@ export default function TextMaterial(_uniforms) {
   const { vs, fs, uniforms } = getModule('text');
   const material = new Material({
     defines: {
-      DEVICE_PIXEL_RATIO: window.devicePixelRatio
+      SDF_PX: '8.0',
+      EDGE_GAMMA: 0.105 / window.devicePixelRatio
     },
     uniforms: wrapUniforms(merge(uniforms, _uniforms)),
     vertexShader: vs,
