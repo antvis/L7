@@ -16,7 +16,8 @@ const Global = {
     pitch: 0,
     hash: false,
     zoomControl: true,
-    scaleControl: true
+    scaleControl: true,
+    attributionControl: true
   },
   animate: true,
   height: 0,

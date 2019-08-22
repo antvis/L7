@@ -54,3 +54,4 @@ export default function DrawText(layerData, layer) {
   const mesh = new THREE.Mesh(geometry, material);
   return mesh;
 }
+
