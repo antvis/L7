@@ -38,18 +38,18 @@ const scene = new L7.Scene({
 // 高德数据服务  https://mvt.amap.com/district/CHN2/{z}/{x}/{y}/4096?key=608d75903d29ad471362f8c58c550daf
 scene.on('loaded', () => {
   
-  const attributeCtr = new L7.Control.Attribution();
-  attributeCtr.addTo(scene);
 
   scene.addTileSource('test',{
      url:' https://mvt.amap.com/district/CHN2/{z}/{x}/{y}/4096?key=608d75903d29ad471362f8c58c550daf',
      type:'vector',
      minZoom: 0,
      maxZoom:9
+     
   })
   
   const layer = scene.PolygonLayer({
     zIndex:0,
+    attribution:'高德地图'
   }) 
   .source('test',{
     parser:{
@@ -66,13 +66,20 @@ scene.on('loaded', () => {
     opacity:1.0
   })
  .render();
+ let id =0;
+
  layer.on('click',(e) => {
            const { lnglat, feature } = e;
-         const popup = new L7.Popup()
+           console.log(lnglat);
+         const popup = new L7.Popup({
+           id:id++
+         })
           .setLnglat([lnglat.lng, lnglat.lat])
-          .setHTML(feature.properties.NAME_CHN.toString()).addTo(scene);
+          .setText(feature.properties.NAME_CHN.toString()).addTo(scene);
   }) 
-
+scene.on('click',(e)=>{
+  console.log(e);
+})
  const layer2 = scene.LineLayer({
     zIndex:10,
   }) 
