@@ -345,12 +345,12 @@
 	border-radius: 5px;
 	}
 .l7-control-layers-toggle {
-	background-image: url(../images/layers.png);
+	background-image: url(../images/layers.svg);
 	width: 36px;
 	height: 36px;
 	}
 .l7-retina .l7-control-layers-toggle {
-	background-image: url(../images/layers-2x.png);
+	background-image: url(../images/layers.svg);
 	background-size: 26px 26px;
 	}
 .l7-touch .l7-control-layers-toggle {
