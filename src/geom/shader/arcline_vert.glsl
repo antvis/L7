@@ -56,7 +56,6 @@ void main() {
     float segmentRatio = getSegmentRatio(segmentIndex);
     float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
     float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
-    v_distance_ratio = segmentIndex / segmentNumber;
     vec3 curr = getPos(source, target, segmentRatio);
     vec3 next = getPos(source, target, nextSegmentRatio);
     vec2 offset = getExtrusionOffset((next.xy - curr.xy) * indexDir, position.y);
