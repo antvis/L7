@@ -11,15 +11,18 @@ export default class Popup extends Base {
       anchor: 'bottom',
       ...cfg
     });
+
     bindAll([ '_update', '_onClickClose', 'remove' ], this);
   }
   addTo(scene) {
     this._scene = scene;
-    if (this.get('closeOnClick')) {
-      this._scene.on('click', this._onClickClose);
-    }
     this._scene.on('camerachange', this._update);
     this._update();
+    if (this.get('closeOnClick')) {
+      setTimeout(() => { // TODO 事件冲突
+        this._scene.on('click', this._onClickClose);
+      }, 30);
+    }
   }
   setLnglat(lngLat) {
     this.lngLat = lngLat;

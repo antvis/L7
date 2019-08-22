@@ -3,7 +3,6 @@ import { LAYER_MAP } from '../layer';
 import Base from './base';
 import LoadImage from './image';
 import FontAtlasManager from './atlas/font-manager';
-// import { MapProvider } from '../map/AMap';
 import { getMap } from '../map/index';
 import Global from '../global';
 import { getInteraction } from '../interaction/index';
@@ -41,6 +40,9 @@ export default class Scene extends Base {
     }
     if (this.get('scaleControl')) {
       new Control.Scale().addTo(this);
+    }
+    if (this.get('attributionControl')) {
+      new Control.Attribution().addTo(this);
     }
   }
   // 为pickup场景添加 object 对象
@@ -145,9 +147,7 @@ export default class Scene extends Base {
         // 要素拾取
         if (e.target.nodeName !== 'CANVAS') return;
         e.pixel || (e.pixel = e.point);
-        requestAnimationFrame(() => {
-          this._engine._picking.pickdata(e);
-        });
+        this._engine._picking.pickdata(e);
       }, true);
     });
   }

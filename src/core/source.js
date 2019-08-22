@@ -40,6 +40,7 @@ export default class Source extends Base {
     this._transforms = transform || [];
     this.set('data', data);
     this._init();
+    this.emit('SourceUpdate');
   }
   // 数据更新
   updateTransfrom(cfg) {
