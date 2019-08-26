@@ -608,7 +608,7 @@ export default class Layer extends Base {
    */
   destroy() {
     this.removeAllListeners();
-    this.clearAllInteractions();
+    this.get('interacionController').clearAllInteractions();
     this.clearMapEvent();
     if (this._object3D.type === 'composer') {
       this.remove(this._object3D);
@@ -639,7 +639,6 @@ export default class Layer extends Base {
       }
     }
     this.layerMesh.geometry = null;
-    this.layerMesh.material.dispose();
     this.layerMesh.material = null;
     if (this._pickingMesh) {
       this._pickingMesh.children[0].geometry = null;
