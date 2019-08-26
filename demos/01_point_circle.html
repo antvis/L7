@@ -54,7 +54,7 @@ window.scene = scene;
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', data => {
     console.log(data);
-    const circleLayer = = scene.PointLayer({
+    const circleLayer  = scene.PointLayer({
       zIndex: 0,
     })
     .source(data,{
@@ -70,8 +70,8 @@ scene.on('loaded', () => {
       opacity: 1
     })
      .render();
-
-  scene.TextLayer({
+   
+   scene.PointLayer({
       zIndex: 5
     })
      .source(circleLayer.layerSource)
@@ -91,7 +91,8 @@ scene.on('loaded', () => {
     })
     .render();
     
-});
+  
+ });
 });
 </script>
 </body>
