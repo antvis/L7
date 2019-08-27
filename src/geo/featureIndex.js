@@ -2,7 +2,7 @@ import rbush from 'rbush';
 import turfBox from '@turf/bbox';
 export default class FeatureIndex {
   constructor(data) {
-    this.tree = rbush();
+    this.tree = new rbush();
     this.rawData = data;
     data.features.forEach(feature => {
       this.insert(feature);
