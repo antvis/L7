@@ -137,9 +137,6 @@ export default class GaodeMap extends Base {
     scene.getScale = () => {
       return map.getScale();
     };
-    scene.getZoom = () => {
-      return map.getZoom();
-    };
     scene.setZoom = zoom => {
       return map.setZoom(zoom);
     };
