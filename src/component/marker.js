@@ -80,7 +80,7 @@ export default class Marker extends Base {
     if (this._popup) this._popup.setLnglat(this._lngLat);
     return this;
   }
-  getLngLat() {
+  getLnglat() {
     return this._lngLat;
   }
 
