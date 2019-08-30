@@ -1,4 +1,5 @@
 import fs from 'fs';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import json from 'rollup-plugin-json';
 import buble from 'rollup-plugin-buble';
 import resolve from 'rollup-plugin-node-resolve';
@@ -74,7 +75,7 @@ const config = [
     },
     treeshake: false,
     plugins: [
-      // css()
+      sourcemaps()
     ]
   }
 ];
