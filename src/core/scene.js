@@ -130,6 +130,13 @@ export default class Scene extends Base {
   getMarkerContainer() {
     return this._markerContainier;
   }
+  map2Png() {
+    this.scene._engine.update();
+    const vis = this.scene._engine._renderer.domElement.toDataURL();
+    const map = this.scene.map.getContainer().getElementsByClassName('amap-layer')[0].toDataURL();
+    return [ map, vis ];
+
+  }
   _registEvents() {
     const events = [
       'mouseout',
