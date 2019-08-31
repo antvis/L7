@@ -46,7 +46,7 @@ export default class GaodeMap extends Base {
           this.set('mapStyle', mapStyle);
       }
     }
-    this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
+    this.set('zooms', [this.get('minZoom'), this.get('maxZoom')]);
     const map = this.get('map');
     if (map instanceof AMap.Map) {
       this.map = map;
@@ -143,6 +143,23 @@ export default class GaodeMap extends Base {
     scene.getBounds = () => {
       return map.getBounds();
     };
+    scene.setMapStyle = style => {
+
+      switch (style) {
+        case 'dark':
+          this.set('mapStyle', Theme.DarkTheme.mapStyle);
+          break;
+        case 'light':
+          this.set('mapStyle', Theme.LightTheme.mapStyle);
+          break;
+        case 'blank':
+          map.setFeature([]);
+          break;
+        default:
+          this.set('mapStyle', style);
+      }
+      return map.setMapStyle(this.get('mapStyle'));
+    };
     scene.setZoomAndCenter = (zoom, center) => {
       const lnglat = new AMap.LngLat(center[0], center[1]);
       return map.setZoomAndCenter(zoom, lnglat);
@@ -151,7 +168,7 @@ export default class GaodeMap extends Base {
       return map.setFeature(features);
     };
     scene.setBounds = extent => {
-      return map.setBounds(new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ]));
+      return map.setBounds(new AMap.Bounds([extent[0], extent[1]], [extent[2], extent[3]]));
     };
     scene.setRotation = rotation => {
       return map.setRotation(rotation);
