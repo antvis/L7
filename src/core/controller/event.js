@@ -40,6 +40,10 @@ export default class EventContoller {
         lnglat: { lng: lnglat.lng, lat: lnglat.lat }
       };
       if (featureId >= 0) { // 拾取到元素，或者离开元素
+        if (type.substr(0, 5) === 'touch') {
+          type = 'click';
+          this.layer.emit('mousemove', target);
+        }
         this.layer.emit(type, target);
         this._selectedId = featureId;
       }
