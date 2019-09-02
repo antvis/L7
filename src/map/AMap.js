@@ -74,7 +74,7 @@ export default class GaodeMap extends Base {
   }
   asyncCamera(engine) {
     this._engine = engine;
-    this.updateCamera(); 
+    this.updateCamera();
     this.map.on('camerachange', this.updateCamera.bind(this));
   }
   updateCamera() {
