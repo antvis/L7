@@ -78,3 +78,4 @@ lib
 webpack-dev.config.js
 webpack.config.js
 .si.yml
+git_log.sh
