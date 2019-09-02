@@ -42,21 +42,30 @@ export default class GaodeMap extends Base {
         case 'light':
           this.set('mapStyle', Theme.LightTheme.mapStyle);
           break;
+        case 'blank':
+          this.set('mapStyle', 'blank');
+          break;
         default:
           this.set('mapStyle', mapStyle);
       }
     }
-    this.set('zooms', [this.get('minZoom'), this.get('maxZoom')]);
+    this.set('zooms', [ this.get('minZoom'), this.get('maxZoom')]);
     const map = this.get('map');
     if (map instanceof AMap.Map) {
       this.map = map;
       this.container = map.getContainer();
       this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
+      if (this.get('mapStyle') === 'blank') {
+        map.setFeatures([]);
+      }
       this.addOverLayer();
       setTimeout(() => { this.emit('mapLoad'); }, 50);
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
       this.map.on('complete', () => {
+        if (this.get('mapStyle') === 'blank') {
+          map.setFeatures([]);
+        }
         this.addOverLayer();
         this.emit('mapLoad');
       });
@@ -152,13 +161,14 @@ export default class GaodeMap extends Base {
         case 'light':
           this.set('mapStyle', Theme.LightTheme.mapStyle);
           break;
-        case 'blank':
-          map.setFeature([]);
-          break;
         default:
           this.set('mapStyle', style);
       }
-      return map.setMapStyle(this.get('mapStyle'));
+      map.setMapStyle(this.get('mapStyle'));
+      if (style === 'blank') {
+        map.setFeatures([]);
+      }
+      return;
     };
     scene.setZoomAndCenter = (zoom, center) => {
       const lnglat = new AMap.LngLat(center[0], center[1]);
