@@ -42,6 +42,9 @@ export default class GaodeMap extends Base {
         case 'light':
           this.set('mapStyle', Theme.LightTheme.mapStyle);
           break;
+        case 'blank':
+          this.set('mapStyle', 'blank');
+          break;
         default:
           this.set('mapStyle', mapStyle);
       }
@@ -52,11 +55,17 @@ export default class GaodeMap extends Base {
       this.map = map;
       this.container = map.getContainer();
       this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
+      if (this.get('mapStyle') === 'blank') {
+        map.setFeatures([]);
+      }
       this.addOverLayer();
       setTimeout(() => { this.emit('mapLoad'); }, 50);
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
       this.map.on('complete', () => {
+        if (this.get('mapStyle') === 'blank') {
+          map.setFeatures([]);
+        }
         this.addOverLayer();
         this.emit('mapLoad');
       });
@@ -143,9 +152,30 @@ export default class GaodeMap extends Base {
     scene.getBounds = () => {
       return map.getBounds();
     };
+    scene.setMapStyle = style => {
+
+      switch (style) {
+        case 'dark':
+          this.set('mapStyle', Theme.DarkTheme.mapStyle);
+          break;
+        case 'light':
+          this.set('mapStyle', Theme.LightTheme.mapStyle);
+          break;
+        default:
+          this.set('mapStyle', style);
+      }
+      map.setMapStyle(this.get('mapStyle'));
+      if (style === 'blank') {
+        map.setFeatures([]);
+      }
+      return;
+    };
     scene.setZoomAndCenter = (zoom, center) => {
       const lnglat = new AMap.LngLat(center[0], center[1]);
       return map.setZoomAndCenter(zoom, lnglat);
+    };
+    scene.setFeature = features => {
+      return map.setFeature(features);
     };
     scene.setBounds = extent => {
       return map.setBounds(new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ]));
