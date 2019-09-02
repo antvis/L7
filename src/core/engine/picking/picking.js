@@ -33,7 +33,14 @@ class Picking {
     window.addEventListener('resize', this._resizeHandler, false);
   }
   pickdata(event) {
-    const point = { x: event.offsetX, y: event.offsetY, type: event.type, _parent: event };
+    let point = { x: event.offsetX, y: event.offsetY, type: event.type, _parent: event };
+    if (event.type.substr(0, 5) === 'touch') {
+      if (event.touches.length === 0) {
+        return;
+      }
+      const touch = event.touches[0];
+      point = { x: touch.clientX, y: touch.clientY, type: event.type, _parent: touch };
+    }
     const normalisedPoint = { x: 0, y: 0 };
     normalisedPoint.x = (point.x / this._width) * 2 - 1;
     normalisedPoint.y = -(point.y / this._height) * 2 + 1;
