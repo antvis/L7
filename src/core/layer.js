@@ -480,37 +480,6 @@ export default class Layer extends Base {
     }
   }
 
-  _initEvents() {
-    this.scene.on('pick-' + this.layerId, e => {
-      let { featureId, point2d, type } = e;
-      // TODO 瓦片图层获取选中数据信息
-      const lnglat = this.scene.containerToLngLat(point2d);
-      let feature = null;
-      let style = null;
-      if (featureId !== -999) {
-        const res = this.getSelectFeature(featureId, lnglat);
-        feature = res.feature;
-        style = res.style;
-      }
-      const target = {
-        featureId,
-        feature,
-        style,
-        pixel: point2d,
-        type,
-        lnglat: { lng: lnglat.lng, lat: lnglat.lat }
-      };
-      if (featureId >= 0) { // 拾取到元素，或者离开元素
-        this.emit(type, target);
-      }
-      if (featureId < 0 && this._activeIds >= 0) {
-        type = 'mouseleave';
-        this.emit(type, target);
-      }
-      this._activeIds = featureId;
-
-    });
-  }
   getSelectFeature(featureId, lnglat) {
     // return {};
     if (this.get('layerType') === 'tile') {
