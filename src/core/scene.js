@@ -144,6 +144,9 @@ export default class Scene extends Base {
       'mousemove',
       'mousedown',
       'mouseleave',
+      'touchstart',
+      'touchmove',
+      'touchend',
       'mouseup',
       'rightclick',
       'click',
@@ -153,7 +156,6 @@ export default class Scene extends Base {
       this._container.addEventListener(event, e => {
         // 要素拾取
         if (e.target.nodeName !== 'CANVAS') return;
-        e.pixel || (e.pixel = e.point);
         this._engine._picking.pickdata(e);
       }, true);
     });
