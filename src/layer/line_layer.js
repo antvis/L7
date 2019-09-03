@@ -5,9 +5,10 @@ export default class LineLayer extends Layer {
     super(scene, cfg);
     this.set('type', 'line');
   }
-  shape(type) {
-    this.shapeType = type;
-    this.set('shape', type);
+  shape(field, values) {
+    super.shape(field, values);
+    this.shapeType = field;
+    this.set('shape', field);
     return this;
   }
   preRender() {
