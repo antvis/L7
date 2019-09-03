@@ -35,7 +35,7 @@ void main() {
   // extrude along normal
   float extrude_scale = pow(2.0, 20.0 - u_zoom);
   v_color = a_color;
-  v_dash_array = a_dash_array;
+  v_dash_array = a_dash_array * pow(2.0, 20.0 - u_zoom);
   float distance_ratio = a_distance / a_total_distance;
 #if defined DASHLINE  || defined ANIMATE
     v_distance_ratio = distance_ratio;
