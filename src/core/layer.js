@@ -423,7 +423,6 @@ export default class Layer extends Base {
       !Util.isEqual(preAttrs.shape, nextAttrs.shape)
     ) {
       this.repaint();
-      this._setPreOption();
     }
     if (!Util.isEqual(preStyle, nextStyle)) {
       // 判断新增，修改，删除
@@ -434,6 +433,7 @@ export default class Layer extends Base {
       });
       this._updateStyle(newStyle);
     }
+    this._setPreOption();
   }
 
   _updateSize(zoom) {
@@ -470,7 +470,6 @@ export default class Layer extends Base {
   }
 
   getSelectFeature(featureId, lnglat) {
-    // return {};
     if (this.get('layerType') === 'tile') {
       const sourceCache = this.getSourceCache(this.get('sourceOption').id);
       const feature = sourceCache.getSelectFeature(featureId, this.layerId, lnglat);
@@ -487,27 +486,6 @@ export default class Layer extends Base {
   }
   _updateFilter() {
     this.get('mappingController').reMapping();
-  }
-  /**
-   *  用于过滤数据
-   * @param {*} object  更新颜色和数据过滤
-   */
-  _updateAttributes(object) {
-    this.get('mappingController').update();
-    this._activeIds = null; // 清空选中元素
-    const colorAttr = object.geometry.attributes.a_color;
-    const pickAttr = object.geometry.attributes.pickingId;
-    pickAttr.array.forEach((id, index) => {
-      id = Math.abs(id);
-      const color = [ ...this.layerData[ id - 1 ].color ];
-      id = Math.abs(id);
-      colorAttr.array[index * 4 + 0] = color[0];
-      colorAttr.array[index * 4 + 1] = color[1];
-      colorAttr.array[index * 4 + 2] = color[2];
-      colorAttr.array[index * 4 + 3] = color[3];
-      // pickAttr.array[index] = id;
-    });
-    colorAttr.needsUpdate = true;
   }
   _visibleWithZoom() {
     if (this._object3D === null) return;
