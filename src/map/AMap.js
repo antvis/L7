@@ -3,6 +3,7 @@ import Global from '../global';
 import * as Theme from '../theme/index';
 import Util from '../util';
 const DEG2RAD = Math.PI / 180;
+const defaultMapFeatures = ['bg', 'point', 'road', 'building' ];
 export default class GaodeMap extends Base {
   getDefaultCfg() {
     return Util.assign(Global.scene, {
@@ -57,6 +58,8 @@ export default class GaodeMap extends Base {
       this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
       if (this.get('mapStyle') === 'blank') {
         map.setFeatures([]);
+      } else {
+        map.setFeatures(defaultMapFeatures);
       }
       this.addOverLayer();
       setTimeout(() => { this.emit('mapLoad'); }, 50);
@@ -65,6 +68,8 @@ export default class GaodeMap extends Base {
       this.map.on('complete', () => {
         if (this.get('mapStyle') === 'blank') {
           this.map.setFeatures([]);
+        } else {
+          this.map.setFeatures(defaultMapFeatures);
         }
         this.addOverLayer();
         this.emit('mapLoad');
@@ -223,6 +228,10 @@ export default class GaodeMap extends Base {
     scene.lngLatToContainer = lnglat => {
       const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
       return map.lngLatToContainer(ll);
+    };
+    scene.lngLatToGeodeticCoord = lnglat => {
+      const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
+      return map.lngLatToGeodeticCoord(ll);
     };
   }
 }
