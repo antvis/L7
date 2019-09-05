@@ -3,8 +3,22 @@ import TextMaterial from '../../../geom/material/textMaterial';
 import TextBuffer from '../../../geom/buffer/point/text';
 import ColorUtil from '../../../attr/color-util';
 import CollisionIndex from '../../../util/collision-index';
+const defaultTextStyle = {
+  fontWeight: 500,
+  textAnchor: 'center',
+  textOffset: [ 0, 0 ],
+  spacing: 2,
+  padding: [ 4, 4 ],
+  strokeColor: 'white',
+  strokeWidth: 2,
+  strokeOpacity: 1.0
+};
 export default function DrawText(layerData, layer) {
-  const style = layer.get('styleOptions');
+  const style = {
+    ...defaultTextStyle,
+    ...layer.get('styleOptions')
+  };
+  layer.set('styleOptions', style);
   const activeOption = layer.get('activedOptions');
   const { strokeWidth, strokeColor, opacity } = style;
 

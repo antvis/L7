@@ -71,6 +71,10 @@ scene.on('loaded', () => {
       opacity: 1
     })
     .render();
+ var highlight = scene.LineLayer().source(city).color('red').filter('name',(name)=>{
+   return name === '上海'
+
+ }).shape('line').size(2).render();
 
 /**
   const colorsEnum = ['blue','red','orange','green','purple','purple']
