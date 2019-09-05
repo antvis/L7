@@ -3,7 +3,6 @@
 [官方网站](http://antv.alipay.com/l7)
 
 [![版本](https://badgen.net/npm/v/@antv/l7)](https://www.npmjs.com/@antv/l7)
-[![版本](https://badgen.net/npm/v/@antv/l7)](https://www.npmjs.com/@antv/l7)
 [![NPM downloads](http://img.shields.io/npm/dm/@antv/l7.svg)](http://npmjs.com/@antv/l7)
 ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
 
