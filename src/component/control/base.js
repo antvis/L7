@@ -23,6 +23,7 @@ export default class Control extends Base {
   }
   addTo(scene) {
     this.remove();
+    this.isShow = true;
     this._scene = scene;
     const container = this._container = this.onAdd(scene);
     const pos = this.get('position');
@@ -35,6 +36,16 @@ export default class Control extends Base {
       corner.appendChild(container);
     }
     return this;
+  }
+  hide() {
+    const container = this._container;
+    DOM.addClass(container, 'l7-control-hide');
+    this.isShow = false;
+  }
+  show() {
+    const container = this._container;
+    DOM.removeClass(container, 'l7-control-hide');
+    this.isShow = true;
   }
   remove() {
     if (!this._scene) {

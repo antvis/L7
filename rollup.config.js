@@ -41,11 +41,9 @@ const config = [
       ),
       minified ? terser() : false,
       json(),
-      // css({ raw: './build/l7.css' }),
       postcss({
         plugins: [ url({ url: 'inline' }) ]
       }),
-      // url({ url: 'inline' }),
       buble({
         transforms: { dangerousForOf: true },
         objectAssign: 'Object.assign'

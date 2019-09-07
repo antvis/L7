@@ -36,13 +36,17 @@ export default class Scene extends Base {
     const controlCtr = new Controller({ scene: this });
     this.set('controlController', controlCtr);
     if (this.get('zoomControl')) {
-      new Control.Zoom().addTo(this);
+      const zoomControl = new Control.Zoom().addTo(this);
+      this.set('zoomControl', zoomControl);
+
     }
     if (this.get('scaleControl')) {
-      new Control.Scale().addTo(this);
+      const scaleControl = new Control.Scale().addTo(this);
+      this.set('scaleControl', scaleControl);
     }
     if (this.get('attributionControl')) {
-      new Control.Attribution().addTo(this);
+      const attributionControl = new Control.Attribution().addTo(this);
+      this.set('attributionControl', attributionControl);
     }
   }
   // 为pickup场景添加 object 对象

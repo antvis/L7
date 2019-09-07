@@ -21,6 +21,7 @@ export default class imageLayer extends Layer {
       });
       const imageMesh = new THREE.Mesh(this.geometry, material);
       this.add(imageMesh);
+      this.scene._engine.update();
 
     });
     return this;
