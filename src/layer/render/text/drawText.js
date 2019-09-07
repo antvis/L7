@@ -34,10 +34,10 @@ export default function DrawText(layerData, layer) {
   const material = new TextMaterial({
     name: layer.layerId,
     u_sdf_map: texture,
-    u_halo_color: ColorUtil.toRGB(strokeColor).map(e => e / 255),
-    u_halo_width: strokeWidth,
+    u_strokeColor: ColorUtil.toRGB(strokeColor).map(e => e / 255),
+    u_strokeWidth: strokeWidth,
     u_halo_blur: 0.5,
-    u_font_opacity: opacity,
+    u_opacity: opacity,
     u_sdf_map_size: [ fontAtlas.width, fontAtlas.height ],
     u_viewport_size: [ width, height ],
     u_activeColor: activeOption.fill
