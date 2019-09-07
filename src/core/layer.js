@@ -416,24 +416,12 @@ export default class Layer extends Base {
       this.draw();
       return;
     }
-    // 更新数据过滤 filter
-    if (!Util.isEqual(preAttrs.filter, nextAttrs.filter)) {
-      this.repaint();
-      this._setPreOption();
-      return;
-    }
 
-    if (!Util.isEqual(preAttrs.color, nextAttrs.color)) {
-      this._updateAttributes(this.layerMesh);
-    }
-    // 更新Size
-    if (!Util.isEqual(preAttrs.size, nextAttrs.size)) {
-      // 更新color；
-      this.repaint();
-    }
-    // 更新形状
-    if (!Util.isEqual(preAttrs.shape, nextAttrs.shape)) {
-      // 更新color；
+    if (!Util.isEqual(preAttrs.filter, nextAttrs.filter) ||
+      !Util.isEqual(preAttrs.color, nextAttrs.color) ||
+      !Util.isEqual(preAttrs.size, nextAttrs.size) ||
+      !Util.isEqual(preAttrs.shape, nextAttrs.shape)
+    ) {
       this.repaint();
     }
     if (!Util.isEqual(preStyle, nextStyle)) {
@@ -445,6 +433,7 @@ export default class Layer extends Base {
       });
       this._updateStyle(newStyle);
     }
+    this._setPreOption();
   }
 
   _updateSize(zoom) {
@@ -481,7 +470,6 @@ export default class Layer extends Base {
   }
 
   getSelectFeature(featureId, lnglat) {
-    // return {};
     if (this.get('layerType') === 'tile') {
       const sourceCache = this.getSourceCache(this.get('sourceOption').id);
       const feature = sourceCache.getSelectFeature(featureId, this.layerId, lnglat);
@@ -498,38 +486,6 @@ export default class Layer extends Base {
   }
   _updateFilter() {
     this.get('mappingController').reMapping();
-  }
-  /**
-   *  用于过滤数据
-   * @param {*} object  更新颜色和数据过滤
-   */
-  _updateAttributes(object) {
-    this.get('mappingController').update();
-    const filterData = this.layerData;
-    this._activeIds = null; // 清空选中元素
-    const colorAttr = object.geometry.attributes.a_color;
-    const pickAttr = object.geometry.attributes.pickingId;
-    pickAttr.array.forEach((id, index) => {
-      id = Math.abs(id);
-      const color = [ ...this.layerData[id - 1].color ];
-      id = Math.abs(id);
-      const item = filterData[id - 1];
-      if (item.hasOwnProperty('filter') && item.filter === false) {
-        colorAttr.array[index * 4 + 0] = 0;
-        colorAttr.array[index * 4 + 1] = 0;
-        colorAttr.array[index * 4 + 2] = 0;
-        colorAttr.array[index * 4 + 3] = 0;
-        pickAttr.array[index] = -id; // 通过Id数据过滤 id<0 不显示
-      } else {
-        colorAttr.array[index * 4 + 0] = color[0];
-        colorAttr.array[index * 4 + 1] = color[1];
-        colorAttr.array[index * 4 + 2] = color[2];
-        colorAttr.array[index * 4 + 3] = color[3];
-        pickAttr.array[index] = id;
-      }
-    });
-    colorAttr.needsUpdate = true;
-    pickAttr.needsUpdate = true;
   }
   _visibleWithZoom() {
     if (this._object3D === null) return;

@@ -3,6 +3,7 @@ import Global from '../global';
 import * as Theme from '../theme/index';
 import Util from '../util';
 const DEG2RAD = Math.PI / 180;
+const defaultMapFeatures = [ 'bg', 'point', 'road', 'building' ];
 export default class GaodeMap extends Base {
   getDefaultCfg() {
     return Util.assign(Global.scene, {
@@ -34,38 +35,33 @@ export default class GaodeMap extends Base {
 
   initMap() {
     const mapStyle = this.get('mapStyle');
-    if (mapStyle) {
-      switch (mapStyle) {
-        case 'dark':
-          this.set('mapStyle', Theme.DarkTheme.mapStyle);
-          break;
-        case 'light':
-          this.set('mapStyle', Theme.LightTheme.mapStyle);
-          break;
-        case 'blank':
-          this.set('mapStyle', 'blank');
-          break;
-        default:
-          this.set('mapStyle', mapStyle);
-      }
-    }
+    // if (mapStyle) {
+    //   switch (mapStyle) {
+    //     case 'dark':
+    //       this.set('mapStyle', Theme.DarkTheme.mapStyle);
+    //       break;
+    //     case 'light':
+    //       this.set('mapStyle', Theme.LightTheme.mapStyle);
+    //       break;
+    //     case 'blank':
+    //       this.set('mapStyle', 'blank');
+    //       break;
+    //     default:
+    //       this.set('mapStyle', mapStyle);
+    //   }
+    // }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
     const map = this.get('map');
     if (map instanceof AMap.Map) {
       this.map = map;
       this.container = map.getContainer();
-      this.get('mapStyle') && this.map.setMapStyle(this.get('mapStyle'));
-      if (this.get('mapStyle') === 'blank') {
-        map.setFeatures([]);
-      }
+      this.setMapStyle(mapStyle);
       this.addOverLayer();
       setTimeout(() => { this.emit('mapLoad'); }, 50);
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
       this.map.on('complete', () => {
-        if (this.get('mapStyle') === 'blank') {
-          map.setFeatures([]);
-        }
+        this.setMapStyle(mapStyle);
         this.addOverLayer();
         this.emit('mapLoad');
       });
@@ -122,6 +118,27 @@ export default class GaodeMap extends Base {
     this.l7_marker_Container.className = 'l7_marker';
     this.amapContainer.appendChild(this.l7_marker_Container);
   }
+  setMapStyle(style) {
+    const map = this.map;
+    switch (style) {
+      case 'dark':
+        this.set('mapStyle', Theme.DarkTheme.mapStyle);
+        break;
+      case 'light':
+        this.set('mapStyle', Theme.LightTheme.mapStyle);
+        break;
+      default:
+        this.set('mapStyle', style);
+    }
+
+    map.setMapStyle(this.get('mapStyle'));
+    if (style === 'blank') {
+      map.setFeatures([]);
+    } else {
+      map.setFeatures(defaultMapFeatures);
+    }
+    return;
+  }
   mixMap(scene) {
     const map = this.map;
     scene.project = GaodeMap.project;
@@ -153,22 +170,7 @@ export default class GaodeMap extends Base {
       return map.getBounds();
     };
     scene.setMapStyle = style => {
-
-      switch (style) {
-        case 'dark':
-          this.set('mapStyle', Theme.DarkTheme.mapStyle);
-          break;
-        case 'light':
-          this.set('mapStyle', Theme.LightTheme.mapStyle);
-          break;
-        default:
-          this.set('mapStyle', style);
-      }
-      map.setMapStyle(this.get('mapStyle'));
-      if (style === 'blank') {
-        map.setFeatures([]);
-      }
-      return;
+      return this.setMapStyle(style);
     };
     scene.setZoomAndCenter = (zoom, center) => {
       const lnglat = new AMap.LngLat(center[0], center[1]);
@@ -208,9 +210,6 @@ export default class GaodeMap extends Base {
     scene.lngLatToPixel = lnglat => {
       return map.lnglatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
     };
-    scene.setMapStyle = style => {
-      return map.setMapStyle(style);
-    };
     scene.fitBounds = extent => {
       return map.setBounds(
         new AMap.Bounds([ extent[0], extent[1] ], [ extent[2], extent[3] ])
@@ -223,6 +222,10 @@ export default class GaodeMap extends Base {
     scene.lngLatToContainer = lnglat => {
       const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
       return map.lngLatToContainer(ll);
+    };
+    scene.lngLatToGeodeticCoord = lnglat => {
+      const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
+      return map.lngLatToGeodeticCoord(ll);
     };
   }
 }

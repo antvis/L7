@@ -169,7 +169,6 @@ export default class Mapping {
     for (let i = 0; i < fields.length; i++) {
       const field = fields[i];
       const scale = self._createScale(field);
-
       if (type === 'color' && Util.isNil(option.values)) { // 设置 color 的默认色值
         option.values = Global.colors;
       }
