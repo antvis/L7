@@ -3,8 +3,22 @@ import TextMaterial from '../../../geom/material/textMaterial';
 import TextBuffer from '../../../geom/buffer/point/text';
 import ColorUtil from '../../../attr/color-util';
 import CollisionIndex from '../../../util/collision-index';
+const defaultTextStyle = {
+  fontWeight: 500,
+  textAnchor: 'center',
+  textOffset: [ 0, 0 ],
+  spacing: 2,
+  padding: [ 4, 4 ],
+  strokeColor: 'white',
+  strokeWidth: 2,
+  strokeOpacity: 1.0
+};
 export default function DrawText(layerData, layer) {
-  const style = layer.get('styleOptions');
+  const style = {
+    ...defaultTextStyle,
+    ...layer.get('styleOptions')
+  };
+  layer.set('styleOptions', style);
   const activeOption = layer.get('activedOptions');
   const { strokeWidth, strokeColor, opacity } = style;
 
@@ -20,10 +34,10 @@ export default function DrawText(layerData, layer) {
   const material = new TextMaterial({
     name: layer.layerId,
     u_sdf_map: texture,
-    u_halo_color: ColorUtil.toRGB(strokeColor).map(e => e / 255),
-    u_halo_width: strokeWidth,
+    u_strokeColor: ColorUtil.toRGB(strokeColor).map(e => e / 255),
+    u_strokeWidth: strokeWidth,
     u_halo_blur: 0.5,
-    u_font_opacity: opacity,
+    u_opacity: opacity,
     u_sdf_map_size: [ fontAtlas.width, fontAtlas.height ],
     u_viewport_size: [ width, height ],
     u_activeColor: activeOption.fill
