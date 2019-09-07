@@ -64,7 +64,24 @@ scene.on('loaded', () => {
   $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
     const citylayer = scene.PolygonLayer()
     .source(city)
-    .color('pm2_5_24h',(p)=>{
+    .color('pm2_5_24h',colorObj['green'])
+    .shape('fill')
+    .active(true)
+    .style({
+      opacity: 1
+    })
+    .render();
+ var highlight = scene.LineLayer().source(city).color('red').filter('name',(name)=>{
+   return name === '上海'
+
+ }).shape('line').size(2).render();
+
+/**
+  const colorsEnum = ['blue','red','orange','green','purple','purple']
+    setInterval(()=>{
+      const index = parseInt(Math.random() * 5)
+      const colors = colorObj[colorsEnum[index]]
+      citylayer.color('pm2_5_24h',(p)=>{
         if(p>120){
           return colors[5];
         } else if(p>65){
@@ -78,13 +95,12 @@ scene.on('loaded', () => {
         }else {
           return colors[0];
         }
-    })
-    .shape('fill')
-    .active(true)
-    .style({
-      opacity: 1
-    })
-    .render();
+    }).render()
+       
+    },10000)
+    **/
+
+
     
      const citylayer2 = scene.PolygonLayer()
       .source(city)
@@ -113,7 +129,6 @@ scene.on('loaded', () => {
       $('.info-panel select').change(function(){
         const color = $(this).val();
         citylayer.color('pm2_5_24h',colorObj[color]).render();
-         console.timeEnd('color')
       })
   });
 });

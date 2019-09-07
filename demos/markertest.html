@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/PqLCOJpqoOUfuPRacUzE.css" />
+    <title>绘制动效Marker</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+  <script src="../build/L7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antvdemo/assets/js/g.min.js"></script>\
+<script>
+  var scene = new L7.Scene({
+    id: 'map',
+    mapStyle: 'amap://styles/normal', // 样式URL
+    center: [121.178655,31.24608],
+    pitch: 0,
+    zoom: 12
+  });
+  
+  scene.on('loaded', function() {
+    scene.map.on('mousemove',(e)=>{
+      console.log('mousemove', e.pixel, e.lnglat.lng,  e.lnglat.lat);
+       console.log('lngLatToContainer', scene.map.lngLatToContainer([120.178655,30.24608]),120.178655,30.24608)
+    })
+    var el = document.createElement('div');
+    el.style.width = '100px';
+    var canvas = new G.Canvas({
+      containerDOM: el,
+      width: 100,
+      height: 100,
+      renderer: 'canvas'
+    });
+    var group = canvas.addGroup();
+    var shape1 = group.addShape('circle', {
+      zIndex: 3,
+      attrs: {
+        x: 50,
+        y: 50,
+        r: 50,
+        stroke: 'rgb(255,200, 200)',
+        lineWidth: 1,
+        opacity: 1
+      }
+    });
+    var shape2 = group.addShape('circle', {
+      zIndex: 2,
+      attrs: {
+        x: 50,
+        y: 50,
+        r: 50,
+        stroke: 'rgb(255,200, 200)',
+        lineWidth: 1,
+        opacity: 1
+      }
+    });
+    var shape3 = group.addShape('circle', {
+      zIndex: 1,
+      attrs: {
+        x: 50,
+        y: 50,
+        r: 50,
+        stroke: 'rgb(255,0, 0)',
+        lineWidth: 1,
+        opacity: 1
+      }
+    });
+    var shape = group.addShape('circle', {
+      zIndex: 5,
+      attrs: {
+        x: 50,
+        y: 50,
+        r: 20,
+        fill: 'red',
+        stroke: '#fff',
+        lineWidth: 2
+      }
+    });
+
+    function updateMarker() {
+      var t = performance.now() % duration / duration;
+      shape.attr('lineWidth', 2 + 4 * (1 - t));
+      //shape2.attr('opacity', 1 - t );
+      shape1.attr('r', 40 * 0.7 * t + 5);
+      shape2.attr('r', 40 * 0.7 * t + 10);
+      shape3.attr('r', 40 * 0.7 * t + 15);
+      requestAnimationFrame(updateMarker);
+      canvas.draw();
+    }
+
+    var duration = 1000;
+    updateMarker();
+    new L7.Marker({
+      color: 'blue',
+      element: el
+    }).setLnglat([120.178655,30.24608]).addTo(scene);
+  });
+</script>
+</body>
+</html>
