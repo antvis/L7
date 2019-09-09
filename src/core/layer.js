@@ -211,7 +211,7 @@ export default class Layer extends Base {
   }
 
   style(field, cfg) {
-    const colorItem = [ 'fill', 'stroke', 'color', 'baseColor', 'brightColor', 'windowColor' ];
+    const colorItem = [ 'fill', 'stroke', 'strokeColor', 'color', 'baseColor', 'brightColor', 'windowColor' ];
     let styleOptions = this.get('styleOptions');
     if (!styleOptions) {
       styleOptions = {};

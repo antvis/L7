@@ -34,9 +34,9 @@ export default function drawCircle(layerData, layer, buffer) {
     u_opacity: style.opacity,
     u_activeColor: activeOption.fill,
     u_zoom: layer.scene.getZoom(),
-    u_stroke_color: style.stroke,
-    u_stroke_width: style.strokeWidth,
-    u_stroke_opacity: style.strokeOpacity
+    u_stroke: style.stroke,
+    u_strokeWidth: style.strokeWidth,
+    u_strokeOpacity: style.strokeOpacity
   });
   material.depthTest = false;
   material.setBending(style.blending);

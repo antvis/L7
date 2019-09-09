@@ -8,7 +8,6 @@ export default class EventContoller {
   }
   _init() {
     this.layer.scene.on('pick-' + this.layer.layerId, e => {
-
       let { featureId, point2d, type } = e;
       if (type === 'click') {
         return;
