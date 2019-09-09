@@ -1,8 +1,8 @@
 uniform float u_blur : 0;
 uniform float u_opacity : 1;
-uniform float u_stroke_width : 1;
-uniform vec4 u_stroke_color : [1, 1, 1, 1];
-uniform float u_stroke_opacity : 1;
+uniform float u_strokeWidth : 1;
+uniform vec4 u_stroke : [1, 1, 1, 1];
+uniform float u_strokeOpacity : 1;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -16,7 +16,7 @@ void main() {
 
   lowp float antialiasblur = v_data.z;
   float antialiased_blur = -max(u_blur, antialiasblur);
-  float r = v_radius / (v_radius + u_stroke_width);
+  float r = v_radius / (v_radius + u_strokeWidth);
 
   float outer_df;
   float inner_df;
@@ -52,12 +52,12 @@ void main() {
 
   float opacity_t = smoothstep(0.0, antialiased_blur, outer_df);
 
-  float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(
+  float color_t = u_strokeWidth < 0.01 ? 0.0 : smoothstep(
     antialiased_blur,
     0.0,
     inner_df
   );
 
-  gl_FragColor = opacity_t * mix(v_color * u_opacity, u_stroke_color * u_stroke_opacity * v_color.a, color_t);
+  gl_FragColor = opacity_t * mix(v_color * u_opacity, u_stroke * u_strokeOpacity * v_color.a, color_t);
   #pragma include "pick"
 }

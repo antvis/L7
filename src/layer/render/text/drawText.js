@@ -9,7 +9,7 @@ const defaultTextStyle = {
   textOffset: [ 0, 0 ],
   spacing: 2,
   padding: [ 4, 4 ],
-  strokeColor: 'white',
+  stroke: 'white',
   strokeWidth: 2,
   strokeOpacity: 1.0
 };
@@ -20,7 +20,7 @@ export default function DrawText(layerData, layer) {
   };
   layer.set('styleOptions', style);
   const activeOption = layer.get('activedOptions');
-  const { strokeWidth, strokeColor, opacity } = style;
+  const { strokeWidth, stroke, opacity } = style;
 
   const { width, height } = layer.scene.getSize();
   const { geometry, texture, fontAtlas } = _updateGeometry(layerData, layer);
@@ -34,7 +34,7 @@ export default function DrawText(layerData, layer) {
   const material = new TextMaterial({
     name: layer.layerId,
     u_sdf_map: texture,
-    u_strokeColor: ColorUtil.toRGB(strokeColor).map(e => e / 255),
+    u_stroke: ColorUtil.toRGB(stroke).map(e => e / 255),
     u_strokeWidth: strokeWidth,
     u_halo_blur: 0.5,
     u_opacity: opacity,
