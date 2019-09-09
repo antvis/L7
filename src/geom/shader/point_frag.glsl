@@ -24,6 +24,7 @@ void main(){
     pos.y=1.-pos.y;
     vec4 textureColor=texture2D(u_texture,pos);
     gl_FragColor=textureColor;
+    #pragma include "pick"
     return;
     #endif
     if(v_color.a==0.)
@@ -70,6 +71,7 @@ void main(){
     }else{
         gl_FragColor=pcolor;
     }
+    #pragma include "pick"
     
 }
 
