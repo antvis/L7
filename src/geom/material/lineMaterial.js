@@ -2,7 +2,6 @@ import * as THREE from '../../core/three';
 import Material from './material';
 import { getModule, wrapUniforms } from '../../util/shaderModule';
 import merge from '@antv/util/lib/deep-mix';
-
 export function LineMaterial(options) {
   const { vs, fs } = getModule('line');
   const material = new Material({
@@ -15,11 +14,12 @@ export function LineMaterial(options) {
     },
     vertexShader: vs,
     fragmentShader: fs,
-    transparent: true
-    // blending: THREE.AdditiveBlending
+    transparent: true,
+    blending: THREE[Material.blendingEnum[options.blending]]
   });
   return material;
 }
+// 弧线绘制 大圆航线 3D弧线
 export function ArcLineMaterial(options) {
   let moduleName = 'arcline';
   if (options.shapeType === 'greatCircle') {
@@ -29,7 +29,7 @@ export function ArcLineMaterial(options) {
   const material = new Material({
     uniforms: wrapUniforms(merge(uniforms, {
       u_opacity: options.u_opacity,
-      segmentNumber: 29,
+      segmentNumber: 30,
       u_time: 0,
       u_zoom: options.u_zoom,
       u_activeId: options.activeId,
@@ -38,8 +38,8 @@ export function ArcLineMaterial(options) {
     vertexShader: vs,
     fragmentShader: fs,
     transparent: true,
-    blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    blending: THREE[Material.blendingEnum[options.blending]]
   });
   return material;
 }
@@ -55,7 +55,6 @@ export function MeshLineMaterial(options, defines) {
     vertexShader: vs,
     fragmentShader: fs,
     transparent: true
-    // blending: THREE.AdditiveBlending
   });
   return material;
 }
