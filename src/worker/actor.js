@@ -72,4 +72,7 @@ export default class Actor {
     }
 
   }
+  remove() {
+    this.target.removeEventListener('message', this.receive, false);
+  }
 }
