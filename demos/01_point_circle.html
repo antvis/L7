@@ -91,6 +91,9 @@ scene.on('loaded', () => {
     })
     .render();
     
+    setTimeout(()=>{
+      scene.destroy();
+    },2000)
   
  });
 });
