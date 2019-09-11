@@ -163,6 +163,7 @@ export default class Scene extends Base {
     }
     layer.destroy();
     layer = null;
+    this._engine.update();
   }
   startAnimate() {
     if (this.animateCount === 0) {
@@ -203,6 +204,9 @@ export default class Scene extends Base {
 
   removeControl(ctr) {
     this.get('controlController').removeControl(ctr);
+  }
+  render() {
+    this._engine.update();
   }
   destroy() {
     super.destroy();

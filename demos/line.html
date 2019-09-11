@@ -31,59 +31,47 @@
 var buildLayer =null;
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'amap://styles/c9f1d10cae34f8ab05e425462c5a58d7', // 样式URL
-  center: [120.102915,30.261396],
+  mapStyle: 'normal', // 样式URL
+  center: [120.1998700000, 30.2638300000],
   pitch: 0,
-  zoom: 12,
+  zoom: 14,
   minZoom: 5,
   maxZoom: 18
 });
 scene.on('loaded', () => {
-  $.get('https://gw.alipayobjects.com/os/basement_prod/a0f3363f-4f95-4145-9161-cca6b9134277.json',(data)=>{
-    let startTime = 3600 * 6;
-    const interval = 3600;
-    const mapData = {
-      "type": "FeatureCollection",
-      "features": []
-    };
-    mapData.features = data.features.filter((feature)=>{
-      const time = feature.properties.time;
-      const type = feature.properties.type
-      return time >= startTime && time <= (startTime + interval)
-       
-    })
-    const linelayer = scene.LineLayer({
-      zIndex: 2
-    })
-    .shape('line')
-    .size([2,0])
-    .source(mapData)
-    .color('type',function(type){
-      return type ==='pjc_end' ? '#2b83ba' :'#d7191c'
-    })
-    .animate({
-        enable:true,
-        interval:0.8,
-        duration:2,
-        trailLength:0.2,
-    })
-    .render();
-   setInterval(()=>{
-    startTime += interval 
-    document.getElementById('timepannel').innerHTML=`时间:${startTime / 3600}时`
-    mapData.features = data.features.filter((feature)=>{
-      const time = feature.properties.time;
-       const type = feature.properties.type
-      return time >= startTime && time <= (startTime + interval)
-    })
-    if(startTime == interval * 24) {
-      startTime = 3600 * 6;
-    }
-    //if( mapData.features.length ==0) return;
-    linelayer.setData(mapData);
-    
-   },2000)
- });
+  const layer = scene.LineLayer({
+        zIndex: 3
+      }).source([{
+        'x': 120.1998700000,
+        'y': 30.2638300000,
+        'x1': 119.575328,
+        'y1': 30.106775
+      }],{
+        parser: {
+          type: 'json',
+          x: 'x',
+          y: 'y',
+          x1: 'x1',
+          y1: 'y1'
+        }
+      }).shape('greatCircle').size(2).color('rgb(13,64,140)').animate({
+        enable: false,
+        interval: 1,
+        duration: 2,
+        trailLength: 0.8
+      }).style({
+        opacity: 1
+      }).render()
+      console.log(layer);
+      new L7.Marker({
+      color: 'red'
+    }).setLnglat([120.1998700000, 30.2638300000]).addTo(scene);
+      scene.map.add(new AMap.Marker({
+        position: new AMap.LngLat(120.1998700000, 30.2638300000),
+         // icon: icon, // 添加 Icon 实例
+          zoom: 13,
+          //offset: new AMap.Pixel(-0.2 * this.rem, -0.4 * this.rem)
+      }))
 })
 </script>
 </body>

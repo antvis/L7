@@ -1,6 +1,7 @@
 import * as THREE from '../../../core/three';
 import { ArcLineMaterial } from '../../../geom/material/lineMaterial';
 import { getBuffer } from '../../../geom/buffer/';
+
 export default function DrawArcLine(layerData, layer, buffer) {
   const style = layer.get('styleOptions');
   const activeOption = layer.get('activedOptions');
@@ -47,7 +48,6 @@ export default function DrawArcLine(layerData, layer, buffer) {
       u_trailLength: trailLength
     });
     lineMaterial.setDefinesvalue('ANIMATE', true);
-    // lineMaterial.setDefinesvalue('DASHLINE', true);
   }
   const arcMesh = new THREE.Mesh(geometry, lineMaterial);
   arcMesh.frustumCulled = false;
