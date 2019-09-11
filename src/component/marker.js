@@ -6,7 +6,7 @@ export default class Marker extends Base {
   constructor(cfg) {
     super({
       element: '', // DOM element
-      anchor: 'center',
+      anchor: 'bottom',
       offset: [ 0, 0 ],
       color: '#2f54eb',
       draggable: false,
