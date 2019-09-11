@@ -10,7 +10,6 @@ export default class Attribution extends Control {
     this._attributions = {};
   }
   onAdd(scene) {
-    scene.attributionControl = this;
     this._container = DOM.create('div', 'l7-control-attribution');
     const layers = scene.getLayers();
     for (const i in layers) {
