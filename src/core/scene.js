@@ -11,6 +11,7 @@ import Style from './style';
 import Controller from './controller/control';
 import * as Control from '../component/control';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
+const EventNames = [ 'mouseout', 'mouseover', 'mousemove', 'mousedown', 'mouseleave', 'mouseleave', 'mouseleave', 'touchstart', 'touchmove', 'touchend', 'mouseup', 'rightclick', 'click', 'dblclick' ];
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -22,7 +23,6 @@ export default class Scene extends Base {
     this.fontAtlasManager = new FontAtlasManager();
     this._layers = [];
     this.animateCount = 0;
-    this.inited = false;
   }
 
   _initEngine(mapContainer) {
@@ -142,26 +142,17 @@ export default class Scene extends Base {
 
   }
   _registEvents() {
-    const events = [
-      'mouseout',
-      'mouseover',
-      'mousemove',
-      'mousedown',
-      'mouseleave',
-      'touchstart',
-      'touchmove',
-      'touchend',
-      'mouseup',
-      'rightclick',
-      'click',
-      'dblclick'
-    ];
-    events.forEach(event => {
-      this._container.addEventListener(event, e => {
-        // 要素拾取
-        if (e.target.nodeName !== 'CANVAS') return;
-        this._engine._picking.pickdata(e);
-      }, true);
+    this._eventHander = e => {
+      if (e.target.nodeName !== 'CANVAS') return;
+      this._engine._picking.pickdata(e);
+    };
+    EventNames.forEach(event => {
+      this._container.addEventListener(event, this._eventHander, true);
+    });
+  }
+  _unRegistEvents() {
+    EventNames.forEach(event => {
+      this._container.removeEventListener(event, this._eventHander, true);
     });
   }
 
@@ -194,12 +185,14 @@ export default class Scene extends Base {
     // this.map.on('mousemove', this._updateRender);
     this.map.on('mapmove', this._updateRender);
     this.map.on('camerachange', this._updateRender);
+    window.addEventListener('onresize', this._updateRender);
   }
 
   unRegsterMapEvent() {
     // this.map.off('mousemove', this._updateRender);
     this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
+    window.removeEventListener('onresize', this._updateRender);
   }
   // control
 
@@ -210,5 +203,23 @@ export default class Scene extends Base {
 
   removeControl(ctr) {
     this.get('controlController').removeControl(ctr);
+  }
+  destroy() {
+    super.destroy();
+    this._layers.forEach(layer => {
+      layer.destroy();
+    });
+    this._layers.length = 0;
+    this.image = null;
+    this.fontAtlasManager = null;
+    this.style.destroy();
+    this.style = null;
+    this._engine.destroy();
+    this._engine = null;
+    this.map.destroy();
+    this.unRegsterMapEvent();
+    this._unRegistEvents();
+
+
   }
 }

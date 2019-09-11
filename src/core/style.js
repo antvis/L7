@@ -87,6 +87,10 @@ export default class Style extends Base {
     this.scene.map.off('zoomchange', this.mapEventHander);
     this.scene.map.off('dragend', this.mapEventHander);
   }
+  destroy() {
+    this.WorkerController.remove();
+
+  }
   // 计算视野内的瓦片坐标
 
 }
