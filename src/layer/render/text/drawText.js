@@ -1,7 +1,6 @@
 import * as THREE from '../../../core/three';
 import TextMaterial from '../../../geom/material/textMaterial';
 import TextBuffer from '../../../geom/buffer/point/text';
-import ColorUtil from '../../../attr/color-util';
 import CollisionIndex from '../../../util/collision-index';
 const defaultTextStyle = {
   fontWeight: 500,
@@ -21,7 +20,6 @@ export default function DrawText(layerData, layer) {
   layer.set('styleOptions', style);
   const activeOption = layer.get('activedOptions');
   const { strokeWidth, stroke, opacity } = style;
-
   const { width, height } = layer.scene.getSize();
   const { geometry, texture, fontAtlas } = _updateGeometry(layerData, layer);
   layer.scene.on('camerachange', () => {
@@ -34,7 +32,7 @@ export default function DrawText(layerData, layer) {
   const material = new TextMaterial({
     name: layer.layerId,
     u_sdf_map: texture,
-    u_stroke: ColorUtil.toRGB(stroke).map(e => e / 255),
+    u_stroke: stroke,
     u_strokeWidth: strokeWidth,
     u_halo_blur: 0.5,
     u_opacity: opacity,
@@ -43,7 +41,6 @@ export default function DrawText(layerData, layer) {
     u_activeColor: activeOption.fill
   });
   const mesh = new THREE.Mesh(geometry, material);
-
   // 更新 viewport
   window.addEventListener('resize', () => {
     const { width, height } = layer.scene.getSize();
