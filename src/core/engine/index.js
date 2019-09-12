@@ -4,6 +4,7 @@ import Scene from './scene';
 import Camera from './camera';
 import Renderer from './renderer';
 import Picking from './picking/picking';
+import { destoryObject } from '../../util/object3d-util';
 export default class Engine extends EventEmitter {
   constructor(container, world) {
     super();
@@ -29,6 +30,18 @@ export default class Engine extends EventEmitter {
     this._initPostProcessing();
   }
   destroy() {
+    destoryObject(this._scene);
+    this.composerLayers.forEach(layer => {
+      layer.distory();
+    });
+    destoryObject(this.composerLayers);
+
+    this._picking.destroy();
+    this._picking = null;
+    this._world = null;
+    this.clock = null;
+    this._camera = null;
+    this._renderer = null;
   }
   // 渲染第三方Scene对象
   renderScene(scene) {

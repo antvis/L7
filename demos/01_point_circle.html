@@ -91,6 +91,9 @@ scene.on('loaded', () => {
     })
     .render();
     
+    setTimeout(()=>{
+      scene.setMapStyle('grey');
+    },2000)
   
  });
 });

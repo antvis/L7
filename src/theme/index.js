@@ -1,3 +1,4 @@
-import DarkTheme from './dark';
-import LightTheme from './light';
-export { DarkTheme, LightTheme };
+import darkTheme from './dark';
+import lightTheme from './light';
+import blankTheme from './blank';
+export { darkTheme, lightTheme, blankTheme };

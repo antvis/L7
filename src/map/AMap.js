@@ -35,21 +35,21 @@ export default class GaodeMap extends Base {
 
   initMap() {
     const mapStyle = this.get('mapStyle');
-    // if (mapStyle) {
-    //   switch (mapStyle) {
-    //     case 'dark':
-    //       this.set('mapStyle', Theme.DarkTheme.mapStyle);
-    //       break;
-    //     case 'light':
-    //       this.set('mapStyle', Theme.LightTheme.mapStyle);
-    //       break;
-    //     case 'blank':
-    //       this.set('mapStyle', 'blank');
-    //       break;
-    //     default:
-    //       this.set('mapStyle', mapStyle);
-    //   }
-    // }
+    if (mapStyle) {
+      switch (mapStyle) {
+        case 'dark':
+          this.set('mapStyle', Theme.darkTheme.mapStyle);
+          break;
+        case 'light':
+          this.set('mapStyle', Theme.lightTheme.mapStyle);
+          break;
+        case 'blank':
+          this.set('mapStyle', Theme.blankTheme.mapStyle);
+          break;
+        default:
+          this.set('mapStyle', mapStyle);
+      }
+    }
     this.set('zooms', [ this.get('minZoom'), this.get('maxZoom') ]);
     const map = this.get('map');
     if (map instanceof AMap.Map) {
@@ -110,7 +110,7 @@ export default class GaodeMap extends Base {
     this.amapContainer = this.map.getContainer().getElementsByClassName('amap-maps')[0];
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
-      'position: absolute;top: 0; z-index:1;height: 100%;width: 100%;pointer-events: none;';
+      'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
 
     this.amapContainer.appendChild(this.renderDom);
@@ -122,10 +122,13 @@ export default class GaodeMap extends Base {
     const map = this.map;
     switch (style) {
       case 'dark':
-        this.set('mapStyle', Theme.DarkTheme.mapStyle);
+        this.set('mapStyle', Theme.darkTheme.mapStyle);
         break;
       case 'light':
-        this.set('mapStyle', Theme.LightTheme.mapStyle);
+        this.set('mapStyle', Theme.lightTheme.mapStyle);
+        break;
+      case 'blank':
+        this.set('mapStyle', Theme.blankTheme.mapStyle);
         break;
       default:
         this.set('mapStyle', style);
@@ -134,7 +137,8 @@ export default class GaodeMap extends Base {
     map.setMapStyle(this.get('mapStyle'));
     if (style === 'blank') {
       map.setFeatures([]);
-    } else {
+    } else
+    if (map.getFeatures().length === 0) {
       map.setFeatures(defaultMapFeatures);
     }
     return;
