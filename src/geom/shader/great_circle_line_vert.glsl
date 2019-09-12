@@ -19,7 +19,7 @@ float maps (float value, float start1, float stop1, float start2, float stop2) {
 }
 
 float getSegmentRatio(float index) {
-    return smoothstep(0.0, 1.0, index / (segmentNumber - 1.0));
+    return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
 }
 
 float paraboloid(vec2 source, vec2 target, float ratio) {

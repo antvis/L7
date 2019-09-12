@@ -48,7 +48,17 @@
         .render();
     });
     $.getJSON('https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json', function(data) {
-      console.log(data);
+        scene.PointLayer()
+        .source(data.nodes,{
+          parser:{ 
+            type:'json',
+            coordinates:'coordinates',
+          }
+        })
+        .shape('circle')
+        .color('#f00')
+        .size(8)
+        .render();
         data.nodes.forEach(item=>{
             const el = document.createElement('div');
             const total = item.gdp.Agriculture + item.gdp.Industry + item.gdp.Service;
