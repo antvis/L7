@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
+
+  <title>hexagon demo</title>
+  <style>
+  body {margin: 0;}
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+
+ <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+<script src="../build/L7.js"></script>
+<script>
+const colorObj ={
+  blue: ["#E8FCFF", "#CFF6FF", "#98E3FA", "#65CEF7", "#3CB4F0", "#2894E0", "#1A76C7", "#105CB3", "#0D408C", "#002466"],
+  red: ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"],
+  orange:["#FFF7EB", "#FFECD4", "#FAD09D", "#F7B16A", "#F08D41", "#DB6C2C", "#C2491D", "#AD2B11", "#871D0C", "#610800"],
+  green:["#FAFFF0", "#EBF7D2", "#C8E695", "#A5D660", "#7DC238", "#59A616", "#3F8C0B", "#237804", "#125200", "#082B00"],
+  yellow:["#FFFFE8", "#FFFECC", "#FAF896", "#F7E463", "#F0CE3A", "#DBB125", "#C29117", "#AD7410", "#87500C", "#613000"],
+  purple:["#FCF2FF", "#F5DEFF", "#DDB3F2", "#BE7BE3", "#9B4ECF", "#7737B3", "#5B2899", "#411C85", "#270F5E", "#100338"],
+}
+
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'blank', // 样式URL
+  center: [70.838088,34.075889 ],
+  pitch: 0,
+  zoom: 3,
+
+});
+window.scene = scene;
+scene.on('loaded', () => {
+  Promise.all([
+  fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/world.geo.json').then(d => d.json()),
+  fetch('https://gw.alipayobjects.com/os/basement_prod/4472780b-fea1-4fc2-9e4b-3ca716933dc7.json').then(d => d.text()),
+  fetch('https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json').then(d => d.text())
+]).then(function onLoad ([world, dot, fiyline]) {
+const dotData  = eval(dot);
+function bezier3(arr, t) {
+  var ut = 1 - t
+  return (arr[0] * ut + arr[1] * t) * ut + (arr[1] * ut + arr[2] * t) * t
+}
+const fiylineData = eval(fiyline).map(item=>{
+  const latlngs = [];
+  const latlng1 = item.from.split(',').map(e => {return e *1});
+  const latlng2 = item.to.split(',').map(e => {return e *1});
+  const offsetX = latlng2[1] - latlng1[1],
+    offsetY = latlng2[0] - latlng1[0];
+  const r = Math.sqrt( Math.pow(offsetX, 2) + Math.pow(offsetY, 2) ),
+    theta = Math.atan2(offsetY, offsetX);
+
+  const thetaOffset = (3.14/10);
+
+  const r2 = (r/2)/(Math.cos(thetaOffset)),
+    theta2 = theta + thetaOffset;
+
+  const midpointX = (r2 * Math.cos(theta2)) + latlng1[1],
+    midpointY = (r2 * Math.sin(theta2)) + latlng1[0];
+
+  const midpointLatLng = [midpointY, midpointX];
+  const x = [latlng1[0],midpointLatLng[0], latlng2[0]];
+  const y = [latlng1[1],midpointLatLng[1], latlng2[1]];
+  const coords = []
+  for(let i = 0; i<=1;i+=0.02) {
+    coords.push([bezier3(x,i),bezier3(y,i)])
+  }
+ coords.push(latlng2)
+  return turf.lineString(coords)
+});
+console.log(fiylineData);
+const citylayer = scene.PolygonLayer()
+    .source(world)
+    .color('#98E3FA')
+    .shape('fill')
+    .active({
+      fill:'#2894E0'
+    })
+    .style({
+      opacity: 1
+    })
+    .render();
+ 
+     const citylayer2 = scene.PolygonLayer()
+      .source(world)
+      .shape('line')
+      .color('#fff')
+      .style({
+        opacity: 1.0
+       })
+      .render();
+
+      const pointLayer = scene.PointLayer()
+        .source(dotData,{
+          parser:{
+            type:'json',
+            x:'lng',
+            y:'lat'
+          }
+        })
+        .shape('circle')
+        .color('#1A76C7')
+        .size(10)
+        .style({
+          opacity:0.5
+        })
+        .render();
+
+       const pointLayerText = scene.PointLayer()
+        .source(dotData,{
+          parser:{
+            type:'json',
+            x:'lng',
+            y:'lat'
+          }
+        })
+        .shape('area','text')
+        .color('#fff')
+        .style({
+          stroke: '#3CB4F0',
+          strokeWidth:2,
+          textAnchor: 'top',
+          textOffset:[0,30]
+        })
+        .size(15)
+        .render();
+
+    const line= scene.LineLayer()
+        .source(turf.featureCollection(fiylineData))
+        .shape('line')
+        .color('#3CB4F0')
+        .size(2)
+        .style({
+          blending:'additive'
+        })
+        .animate({
+        enable: true,
+        interval: 0.2,
+        duration: 2,
+        trailLength: 0.4
+      })
+        .render();
+       
+
+});
+})
+
+</script>
+</body>
+</html>
+

@@ -5,6 +5,7 @@ import * as THREE from '../three';
 import CopyShader from './copy-shader';
 import ShaderPass from './shader-pass';
 import MaskPass, {ClearMaskPass} from './mask-pass';
+import { destoryObject } from '../../util/object3d-util';
 
 /**
  * @author alteredq / http://alteredqualia.com/
@@ -142,6 +143,10 @@ EffectComposer.prototype = {
 		this.renderTarget1.setSize( width, height );
 		this.renderTarget2.setSize( width, height );
 
+	},
+	destory: function () {
+		this.renderTarget1.dispose();
+		this.renderTarget2.dispose();
 	}
 
 };

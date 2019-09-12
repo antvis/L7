@@ -1,5 +1,6 @@
 import PickingScene from './pickingScene';
 import * as THREE from '../../three';
+import { destoryObject } from '../../../util/object3d-util';
 let nextId = 1;
 
 class Picking {
@@ -136,32 +137,7 @@ class Picking {
     // TODO: Find a way to properly remove these listeners as they stay
     // active at the moment
     window.removeEventListener('resize', this._resizeHandler, false);
-    this._envents.forEach(event => {
-      this._world._container.removeEventListener(event[0], event[1], false);
-    });
-
-    if (this._pickingScene.children) {
-      // Remove everything else in the layer
-      let child;
-      for (let i = this._pickingScene.children.length - 1; i >= 0; i--) {
-        child = this._pickingScene.children[i];
-
-        if (!child) {
-          continue;
-        }
-
-        this._pickingScene.remove(child);
-        if (child.material) {
-          if (child.material.map) {
-            child.material.map.dispose();
-            child.material.map = null;
-          }
-
-          child.material.dispose();
-          child.material = null;
-        }
-      }
-    }
+    destoryObject(this._pickingScene);
 
     this._pickingScene = null;
     this._pickingTexture = null;

@@ -23,6 +23,7 @@ export default class Popup extends Base {
         this._scene.on('click', this._onClickClose);
       }, 30);
     }
+    return this;
   }
   setLnglat(lngLat) {
     this.lngLat = lngLat;

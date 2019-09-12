@@ -27,7 +27,6 @@ export default class PointMaterial extends Material {
     this.vertexShader = vs;
     this.fragmentShader = fs;
     this.transparent = true;
-
     if (!this.uniforms.shape) { this.blending = THREE.AdditiveBlending; }
     if (this.uniforms.u_texture) {
       this.defines.TEXCOORD_0 = true;
