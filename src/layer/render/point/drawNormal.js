@@ -17,7 +17,8 @@ export default function DrawNormal(layerData, layer) {
   geometry.addAttribute('a_size', new THREE.Float32BufferAttribute(attributes.sizes, 1));
   const material = new PointMaterial({
     u_opacity: opacity,
-    u_activeColor: activeOption.fill
+    u_activeColor: activeOption.fill,
+    blending: style.blending
   }, {
   }, style);
   const strokeMesh = new THREE.Points(geometry, material);

@@ -26,6 +26,7 @@ export default function DrawFill(layerData, layer) {
     u_opacity: style.opacity,
     u_activeColor: activeOption.fill,
     u_zoom: layer.scene.getZoom(),
+    blending: style.blending,
     ...generateLightingUniforms(style.lights)
   }, {
     SHAPE: true,

@@ -27,7 +27,8 @@ export default class PointMaterial extends Material {
     this.vertexShader = vs;
     this.fragmentShader = fs;
     this.transparent = true;
-
-    this.blending = THREE.AdditiveBlending;
+    if (_uniforms) {
+      this.blending = THREE[Material.blendingEnum[_uniforms.blending]];
+    }
   }
 }

@@ -26,11 +26,11 @@ export default function DrawArcLine(layerData, layer, buffer) {
     u_opacity: style.opacity,
     u_zoom: layer.scene.getZoom(),
     activeColor: activeOption.fill,
-    shapeType: layer.shapeType
+    shapeType: layer.shapeType,
+    blending: style.blending
   }, {
     SHAPE: false
   });
-
   const animateOptions = layer.get('animateOptions');
   if (animateOptions.enable) {
     layer.scene.startAnimate();
