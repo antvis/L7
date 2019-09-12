@@ -38,13 +38,13 @@ export default class GaodeMap extends Base {
     if (mapStyle) {
       switch (mapStyle) {
         case 'dark':
-          this.set('mapStyle', Theme.DarkTheme.mapStyle);
+          this.set('mapStyle', Theme.darkTheme.mapStyle);
           break;
         case 'light':
-          this.set('mapStyle', Theme.LightTheme.mapStyle);
+          this.set('mapStyle', Theme.lightTheme.mapStyle);
           break;
         case 'blank':
-          this.set('mapStyle', 'blank');
+          this.set('mapStyle', Theme.blankTheme.mapStyle);
           break;
         default:
           this.set('mapStyle', mapStyle);
@@ -122,10 +122,13 @@ export default class GaodeMap extends Base {
     const map = this.map;
     switch (style) {
       case 'dark':
-        this.set('mapStyle', Theme.DarkTheme.mapStyle);
+        this.set('mapStyle', Theme.darkTheme.mapStyle);
         break;
       case 'light':
-        this.set('mapStyle', Theme.LightTheme.mapStyle);
+        this.set('mapStyle', Theme.lightTheme.mapStyle);
+        break;
+      case 'blank':
+        this.set('mapStyle', Theme.blankTheme.mapStyle);
         break;
       default:
         this.set('mapStyle', style);
@@ -134,7 +137,8 @@ export default class GaodeMap extends Base {
     map.setMapStyle(this.get('mapStyle'));
     if (style === 'blank') {
       map.setFeatures([]);
-    } else {
+    } else
+    if (map.getFeatures().length === 0) {
       map.setFeatures(defaultMapFeatures);
     }
     return;
