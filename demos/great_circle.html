@@ -33,7 +33,8 @@ scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
     
     scene.LineLayer({
-      zIndex: 2
+      zIndex: 2,
+      blending:'additive'
     })
      .source(data, { 
        parser:{
@@ -50,6 +51,7 @@ scene.on('loaded', () => {
     .color('rgb(13,64,140)') 
     .style({
       opacity:1.,
+       blending:'additive'
     })
      .animate({
         enable: true,

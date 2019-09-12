@@ -40,15 +40,14 @@ export default function DrawLine(layerData, layer, buffer) {
     u_dash_ratio: style.dashRatio,
     activeColor: activeOption.fill,
     u_pattern_spacing: style.patternSpacing || 0,
-    u_texture: hasPattern ? layer.scene.image.texture : null
+    u_texture: hasPattern ? layer.scene.image.texture : null,
+    blending: style.blending
   }, {
     SHAPE: false,
     ANIMATE: false,
     DASHLINE: style.lineType === 'dash',
     TEXTURE: hasPattern
   });
-  lineMaterial.setBending(style.blending);
-
   const lineMesh = new THREE.Mesh(geometry, lineMaterial);
   if (animateOptions.enable) {
     layer.scene.startAnimate();
