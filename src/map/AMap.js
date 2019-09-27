@@ -3,7 +3,6 @@ import Global from '../global';
 import * as Theme from '../theme/index';
 import Util from '../util';
 const DEG2RAD = Math.PI / 180;
-const defaultMapFeatures = [ 'bg', 'point', 'road', 'building' ];
 export default class GaodeMap extends Base {
   getDefaultCfg() {
     return Util.assign(Global.scene, {
@@ -105,12 +104,10 @@ export default class GaodeMap extends Base {
     return this.projectFlat(this.getCenter());
   }
   addOverLayer() {
-    // const canvasContainer = this.container instanceof HTMLElement ? this.container : document.getElementById(this.container);
-    // this.canvasContainer = canvasContainer;
     this.amapContainer = this.map.getContainer().getElementsByClassName('amap-maps')[0];
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
-      'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;';
+      'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;background: white;';
     this.renderDom.id = 'l7_canvaslayer';
 
     this.amapContainer.appendChild(this.renderDom);
@@ -136,10 +133,7 @@ export default class GaodeMap extends Base {
 
     map.setMapStyle(this.get('mapStyle'));
     if (style === 'blank') {
-      map.setFeatures([]);
-    } else
-    if (map.getFeatures().length === 0) {
-      map.setFeatures(defaultMapFeatures);
+      map.setLayers([]);
     }
     return;
   }
