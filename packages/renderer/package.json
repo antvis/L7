@@ -1,0 +1,27 @@
+{
+  "name": "@l7/renderer",
+  "version": "0.0.1",
+  "description": "",
+  "main": "/dist/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "esm",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "build": "BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=build babel src --watch --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+  },
+  "author": "xiaoiver",
+  "license": "ISC",
+  "dependencies": {
+    "@l7/core": "^0.0.1",
+    "inversify": "^5.0.1",
+    "inversify-logging": "^0.2.1",
+    "regl": "^1.3.11"
+  }
+}

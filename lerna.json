@@ -1,0 +1,21 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "publish": {
+      "npmClient": "yarn",
+      "ignoreChanges": ["*.md"],
+      "verifyAccess": false,
+      "verifyRegistry": false,
+      "allowBranch": [
+        "master",
+        "develop"
+      ],
+      "message": "chore: publish"
+    }
+  },
+  "version": "0.0.1",
+  "npmClient": "yarn",
+  "useWorkspaces": true
+}
