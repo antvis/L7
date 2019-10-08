@@ -1,0 +1,29 @@
+{
+  "name": "@l7/scene",
+  "version": "0.0.1",
+  "description": "",
+  "main": "/dist/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "esm",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "build": "BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=build babel src --watch --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+  },
+  "author": "xiaoiver",
+  "license": "ISC",
+  "dependencies": {
+    "@l7/core": "^0.0.1",
+    "@l7/maps": "^0.0.1",
+    "@l7/renderer": "^0.0.1",
+    "inversify": "^5.0.1",
+    "inversify-inject-decorators": "^3.1.0",
+    "reflect-metadata": "^0.1.13"
+  }
+}
