@@ -1,0 +1,39 @@
+{
+  "name": "@l7/layers",
+  "version": "0.0.1",
+  "description": "",
+  "main": "/dist/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "esm",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "build": "BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=build babel src --watch --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+  },
+  "author": "xiaoiver",
+  "license": "ISC",
+  "dependencies": {
+    "@l7/core": "^0.0.1",
+    "@l7/source": "^0.0.1",
+    "@turf/meta": "^6.0.2",
+    "d3-array": "^2.3.1",
+    "d3-scale": "^3.1.0",
+    "earcut": "^2.2.1",
+    "eventemitter3": "^3.1.0",
+    "lodash": "^4.17.15",
+    "tapable": "^2.0.0-beta.8"
+  },
+  "devDependencies": {
+    "@types/d3-array": "^2.0.0",
+    "@types/d3-scale": "^2.1.1",
+    "@types/earcut": "^2.1.0",
+    "@types/gl-matrix": "^2.4.5",
+    "@types/lodash": "^4.14.138"
+  }
+}

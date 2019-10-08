@@ -1,0 +1,34 @@
+{
+  "name": "@l7/maps",
+  "version": "0.0.1",
+  "description": "",
+  "main": "/dist/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "esm",
+    "typings/index.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "build": "BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=build babel src --watch --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+  },
+  "author": "xiaoiver",
+  "license": "ISC",
+  "dependencies": {
+    "@l7/core": "^0.0.1",
+    "gl-matrix": "^3.1.0",
+    "inversify": "^5.0.1",
+    "mapbox-gl": "^1.2.1",
+    "viewport-mercator-project": "^6.2.1"
+  },
+  "devDependencies": {
+    "@types/gl-matrix": "^2.4.5",
+    "@types/mapbox-gl": "^0.54.3",
+    "@types/viewport-mercator-project": "^6.1.0"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@l7/utils",
+  "version": "0.0.1",
+  "description": "",
+  "main": "/dist/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "sideEffects": true,
+  "files": [
+    "lib",
+    "esm",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "build": "BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=build babel src --watch --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+  },
+  "author": "lzxue",
+  "license": "ISC",
+  "dependencies": {
+    "@turf/helpers": "^6.1.4",
+    "eventemitter3": "^3.1.0",
+    "gl-matrix": "^3.1.0",
+    "inversify": "^5.0.1",
+    "inversify-inject-decorators": "^3.1.0",
+    "inversify-logging": "^0.2.1",
+    "lodash": "^4.17.15",
+    "reflect-metadata": "^0.1.13",
+    "tapable": "^2.0.0-beta.8"
+  },
+  "devDependencies": {
+    "@types/gl-matrix": "^2.4.5",
+    "@types/lodash": "^4.14.138"
+  }
+}
