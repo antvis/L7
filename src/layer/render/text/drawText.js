@@ -10,7 +10,8 @@ const defaultTextStyle = {
   padding: [ 4, 4 ],
   stroke: 'white',
   strokeWidth: 2,
-  strokeOpacity: 1.0
+  strokeOpacity: 1.0,
+  textAllowOverlap: false
 };
 export default function DrawText(layerData, layer) {
   const style = {
@@ -19,16 +20,19 @@ export default function DrawText(layerData, layer) {
   };
   layer.set('styleOptions', style);
   const activeOption = layer.get('activedOptions');
-  const { strokeWidth, stroke, opacity } = style;
+  const { strokeWidth, stroke, opacity, textAllowOverlap } = style;
   const { width, height } = layer.scene.getSize();
   const { geometry, texture, fontAtlas } = _updateGeometry(layerData, layer);
-  layer.scene.on('camerachange', () => {
+  const updateGeometryHander = () => {
     const { geometry } = _updateGeometry(layerData, layer);
     layer.layerMesh.geometry = geometry;
     layer.layerMesh.geometry.needsUpdate = true;
-  });
-
-
+  };
+  if (!textAllowOverlap) {
+    layer.scene.on('camerachange', updateGeometryHander);
+  } else {
+    layer.scene.off('camerachange', updateGeometryHander);
+  }
   const material = new TextMaterial({
     name: layer.layerId,
     u_sdf_map: texture,
@@ -56,7 +60,7 @@ export default function DrawText(layerData, layer) {
 function _updateGeometry(layerData, layer) {
   const style = layer.get('styleOptions');
   const {
-    fontFamily, fontWeight, spacing, textAnchor, textOffset, padding } = style;
+    fontFamily, fontWeight, spacing, textAnchor, textOffset, padding, textAllowOverlap } = style;
   const { width, height } = layer.scene.getSize();
   const collisionIndex = new CollisionIndex(width, height);
   const { _camera: { projectionMatrix, matrixWorldInverse } } = layer.scene._engine;
@@ -85,7 +89,8 @@ function _updateGeometry(layerData, layer) {
       spacing,
       textAnchor,
       textOffset,
-      padding
+      padding,
+      textAllowOverlap
     },
     layer.scene.fontAtlasManager,
     collisionIndex,
