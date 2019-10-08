@@ -107,7 +107,7 @@ export default class GaodeMap extends Base {
     this.amapContainer = this.map.getContainer().getElementsByClassName('amap-maps')[0];
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
-      'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;background: white;';
+      'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;';
     this.renderDom.id = 'l7_canvaslayer';
 
     this.amapContainer.appendChild(this.renderDom);
@@ -130,7 +130,6 @@ export default class GaodeMap extends Base {
       default:
         this.set('mapStyle', style);
     }
-
     map.setMapStyle(this.get('mapStyle'));
     if (style === 'blank') {
       map.setLayers([]);
