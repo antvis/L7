@@ -108,6 +108,9 @@
 	right: 0;
 	top: 0;
 	border: 0;
+	padding: 0;
+	font-size: 25px;
+	line-height: 20px;
 	border-radius: 0 3px 0 0;
 	cursor: pointer;
 	background-color: transparent;

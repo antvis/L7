@@ -43,7 +43,8 @@ function drawGlyph(
     spacing = 2,
     textAnchor = 'center',
     textOffset = [ 0, 0 ],
-    padding = [ 4, 4 ]
+    padding = [ 4, 4 ],
+    textAllowOverlap
   },
   fontAtlasManager,
   collisionIndex,
@@ -87,7 +88,7 @@ function drawGlyph(
       }, mvpMatrix);
 
       // 无碰撞则加入空间索引
-      if (box && box.length) {
+      if (textAllowOverlap || box && box.length) {
         // TODO：featureIndex
         collisionIndex.insertCollisionBox(box, 0);
 
