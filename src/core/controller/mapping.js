@@ -142,7 +142,6 @@ export default class Mapping {
             layerData[i][names[0]] = values.length === 1 ? values[0] : values;
 
           }
-          attr.neadUpdate = true;
         }
       }
     }
@@ -162,7 +161,6 @@ export default class Mapping {
     const attrs = this.mesh.get('attrs');
     const attrOptions = this.layer.get('attrOptions');
     const option = attrOptions[type];
-    option.neadUpdate = true;
     const className = Util.upperFirst(type);
     const fields = this._parseFields(option.field);
     const scales = [];
@@ -174,8 +172,8 @@ export default class Mapping {
       }
       scales.push(scale);
     }
-    option.scales = scales;
-    const attr = new Attr[className](option);
+    // option.scales = scales;
+    const attr = new Attr[className]({ ...option, scales });
     attrs[type] = attr;
   }
   _parseFields(field) {
