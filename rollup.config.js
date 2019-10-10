@@ -16,15 +16,14 @@ const outputFile = !production
   ? 'build/L7.js'
   : minified
     ? 'build/L7-min.js'
-    : 'build/L7-unminified.js';
-
+    : 'build/L7.js';
 const config = [
   {
     input: [ 'src/index.js', 'src/worker/worker.js' ],
     output: {
       dir: 'rollup/build/l7',
       format: 'amd',
-      sourcemap: 'inline',
+      sourcemap: true,
       indent: false,
       chunkFileNames: 'shared.js'
     },
@@ -55,7 +54,8 @@ const config = [
       commonjs({
         ignoreGlobal: true
       }),
-      builtins()
+      builtins(),
+      sourcemaps()
     ]
   },
   {
@@ -64,7 +64,7 @@ const config = [
       name: 'L7',
       file: outputFile,
       format: 'umd',
-      sourcemap: production ? true : 'inline',
+      sourcemap: true,
       indent: false,
       intro: fs.readFileSync(
         require.resolve('./rollup/bundle_prelude.js'),

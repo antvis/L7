@@ -11,7 +11,7 @@ export default class Popup extends Base {
       anchor: 'bottom',
       ...cfg
     });
-
+    this.timeout = 0;
     bindAll([ '_update', '_onClickClose', 'remove' ], this);
   }
   addTo(scene) {
@@ -19,8 +19,8 @@ export default class Popup extends Base {
     this._scene.on('camerachange', this._update);
     this._update();
     if (this.get('closeOnClick')) {
-      setTimeout(() => { // TODO 事件冲突
-        this._scene.on('click', this._onClickClose);
+      this.timeout = setTimeout(() => { // TODO 事件冲突
+        this._scene && this._scene.on('click', this._onClickClose);
       }, 30);
     }
     return this;
@@ -135,6 +135,7 @@ export default class Popup extends Base {
       this._scene.off('click', this._onClickClose);
       delete this._scene;
     }
+    clearTimeout(this.timeout);
     this.emit('close');
     return this;
   }
