@@ -338,6 +338,9 @@ export default class Layer extends Base {
   repaint() {
     this.set('scales', {});
     this._mapping();
+    if (this.layerData.length === 0) {
+      return;
+    }
     this.redraw();
   }
   // 初始化图层
@@ -416,7 +419,6 @@ export default class Layer extends Base {
       this.draw();
       return;
     }
-
     if (!Util.isEqual(preAttrs.filter, nextAttrs.filter) ||
       !Util.isEqual(preAttrs.color, nextAttrs.color) ||
       !Util.isEqual(preAttrs.size, nextAttrs.size) ||
