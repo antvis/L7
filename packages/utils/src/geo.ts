@@ -1,5 +1,6 @@
 import { BBox } from '@turf/helpers';
-
+const originShift = (2 * Math.PI * 6378137) / 2.0;
+type Point = [number, number] | [number, number, number];
 /**
  * 计算地理数据范围
  * @param {dataArray} data 地理坐标数据
@@ -45,4 +46,94 @@ function transform(item: any[], cb: (item: any[]) => any): any {
     });
   }
   return cb(item);
+}
+export function lngLatToMeters(lnglat: Point): Point;
+export function lngLatToMeters(
+  lnglat: Point,
+  validate: boolean = true,
+  accuracy = { enable: true, decimal: 1 },
+) {
+  lnglat = validateLngLat(lnglat, validate);
+  const lng = lnglat[0];
+  const lat = lnglat[1];
+  let x = (lng * originShift) / 180.0;
+  let y =
+    Math.log(Math.tan(((90 + lat) * Math.PI) / 360.0)) / (Math.PI / 180.0);
+  y = (y * originShift) / 180.0;
+  if (accuracy.enable) {
+    x = Number(x.toFixed(accuracy.decimal));
+    y = Number(y.toFixed(accuracy.decimal));
+  }
+  return lnglat.length === 3 ? [x, y, lnglat[2]] : [x, y];
+}
+
+export function metersToLngLat(meters: Point, decimal = 6) {
+  const x = meters[0];
+  const y = meters[1];
+  let lng = (x / originShift) * 180.0;
+  let lat = (y / originShift) * 180.0;
+  lat =
+    (180 / Math.PI) *
+    (2 * Math.atan(Math.exp((lat * Math.PI) / 180.0)) - Math.PI / 2.0);
+  if (decimal !== undefined && decimal !== null) {
+    lng = Number(lng.toFixed(decimal));
+    lat = Number(lat.toFixed(decimal));
+  }
+  return meters.length === 3 ? [lng, lat, meters[2]] : [lng, lat];
+}
+export function longitude(lng: number) {
+  if (lng === undefined || lng === null) {
+    throw new Error('lng is required');
+  }
+
+  // lngitudes cannot extends beyond +/-90 degrees
+  if (lng > 180 || lng < -180) {
+    lng = lng % 360;
+    if (lng > 180) {
+      lng = -360 + lng;
+    }
+    if (lng < -180) {
+      lng = 360 + lng;
+    }
+    if (lng === 0) {
+      lng = 0;
+    }
+  }
+  return lng;
+}
+export function latitude(lat: number) {
+  if (lat === undefined || lat === null) {
+    throw new Error('lat is required');
+  }
+
+  if (lat > 90 || lat < -90) {
+    lat = lat % 180;
+    if (lat > 90) {
+      lat = -180 + lat;
+    }
+    if (lat < -90) {
+      lat = 180 + lat;
+    }
+    if (lat === 0) {
+      lat = 0;
+    }
+  }
+  return lat;
+}
+export function validateLngLat(lnglat: Point, validate: boolean): Point {
+  if (validate === false) {
+    return lnglat;
+  }
+
+  const lng = longitude(lnglat[0]);
+  let lat = latitude(lnglat[1]);
+
+  // Global Mercator does not support latitudes within 85 to 90 degrees
+  if (lat > 85) {
+    lat = 85;
+  }
+  if (lat < -85) {
+    lat = -85;
+  }
+  return lnglat.length === 3 ? [lng, lat, lnglat[2]] : [lng, lat];
 }

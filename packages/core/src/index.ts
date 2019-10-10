@@ -35,6 +35,7 @@ export {
 };
 
 /** 暴露服务接口供其他 packages 实现 */
+export * from './services/layer/ILayerStyleService';
 export * from './services/layer/ILayerService';
 export * from './services/source/ISourceService';
 export * from './services/map/IMapService';
