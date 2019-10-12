@@ -9,6 +9,7 @@ const TYPES = {
   IMapService: Symbol.for('IMapService'),
   IRendererService: Symbol.for('IRendererService'),
   IShaderModuleService: Symbol.for('IShaderModuleService'),
+  IInteractionService: Symbol.for('IInteractionService'),
 
   /** multi-pass */
   ClearPass: Symbol.for('ClearPass'),

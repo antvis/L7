@@ -1,32 +1,29 @@
-import {
-  gl,
-  IFramebuffer,
-  ILayer,
-  IPostProcessingPass,
-  IPostProcessor,
-} from '@l7/core';
-import regl from 'regl';
-import ReglFramebuffer from './ReglFramebuffer';
-import ReglTexture2D from './ReglTexture2D';
+import { injectable } from 'inversify';
+import { lazyInject } from '../../../index';
+import { TYPES } from '../../../types';
+import { ILayer } from '../../layer/ILayerService';
+import { gl } from '../gl';
+import { IFramebuffer } from '../IFramebuffer';
+import { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
+import { IRendererService } from '../IRendererService';
 
 /**
  * ported from Three.js EffectComposer
+ * 后处理负责 pingpong read/write framebuffer，最后一个 pass 默认输出到屏幕
  */
-export default class ReglPostProcessor implements IPostProcessor {
+@injectable()
+export default class PostProcessor implements IPostProcessor {
+  @lazyInject(TYPES.IRendererService)
+  protected readonly rendererService: IRendererService;
+
   private passes: IPostProcessingPass[] = [];
   private readFBO: IFramebuffer;
   private writeFBO: IFramebuffer;
 
-  private screenRenderTarget: regl.DrawCommand;
-  private offscreenRenderTarget: regl.DrawCommand;
-  private inputRenderTarget: regl.DrawCommand;
-
-  private reGl: regl.Regl;
-
-  constructor(reGl: regl.Regl) {
-    this.reGl = reGl;
-    this.readFBO = new ReglFramebuffer(reGl, {
-      color: new ReglTexture2D(reGl, {
+  constructor() {
+    const { createFramebuffer, createTexture2D } = this.rendererService;
+    this.readFBO = createFramebuffer({
+      color: createTexture2D({
         width: 1,
         height: 1,
         wrapS: gl.CLAMP_TO_EDGE,
@@ -34,26 +31,13 @@ export default class ReglPostProcessor implements IPostProcessor {
       }),
     });
 
-    this.writeFBO = new ReglFramebuffer(reGl, {
-      color: new ReglTexture2D(reGl, {
+    this.writeFBO = createFramebuffer({
+      color: createTexture2D({
         width: 1,
         height: 1,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
       }),
-    });
-
-    this.screenRenderTarget = reGl({
-      framebuffer: null,
-    });
-
-    this.offscreenRenderTarget = reGl({
-      // since post-processor will swap read/write fbos, we must retrieve it dynamically
-      framebuffer: () => (this.writeFBO as ReglFramebuffer).get(),
-    });
-
-    this.inputRenderTarget = reGl({
-      framebuffer: () => (this.readFBO as ReglFramebuffer).get(),
     });
   }
 
@@ -63,26 +47,6 @@ export default class ReglPostProcessor implements IPostProcessor {
 
   public getWriteFBO() {
     return this.writeFBO;
-  }
-
-  public renderToPostProcessor(renderCommand: () => void) {
-    this.inputRenderTarget(() => {
-      this.reGl.clear({
-        color: [0, 0, 0, 0],
-        depth: 1,
-        stencil: 0,
-        framebuffer: (this.getReadFBO() as ReglFramebuffer).get(),
-      });
-      renderCommand();
-    });
-  }
-
-  public useScreenRenderTarget(callback: () => void) {
-    this.screenRenderTarget({}, callback);
-  }
-
-  public useOffscreenRenderTarget(callback: () => void) {
-    this.offscreenRenderTarget({}, callback);
   }
 
   public async render(layer: ILayer) {
