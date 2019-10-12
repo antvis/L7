@@ -23,7 +23,7 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
   protected readonly shaderModule: IShaderModuleService;
 
   @lazyInject(TYPES.IRendererService)
-  protected readonly renderer: IRendererService;
+  protected readonly rendererService: IRendererService;
 
   protected config: Partial<InitializationOptions> | undefined;
 
@@ -51,7 +51,7 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
   }
 
   public init() {
-    const { createAttribute, createBuffer, createModel } = this.renderer;
+    const { createAttribute, createBuffer, createModel } = this.rendererService;
     const { vs, fs, uniforms } = this.setupShaders();
 
     this.model = createModel({
@@ -81,19 +81,31 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
 
   public render(layer: ILayer) {
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
+    const { renderToFramebuffer } = this.rendererService;
 
-    const useRenderTarget = (this.renderToScreen
-      ? postProcessor.useScreenRenderTarget
-      : postProcessor.useOffscreenRenderTarget
-    ).bind(postProcessor);
+    renderToFramebuffer(
+      this.renderToScreen ? null : postProcessor.getWriteFBO(),
+      () => {
+        this.model.draw({
+          uniforms: {
+            u_Texture: postProcessor.getReadFBO(),
+          },
+        });
+      },
+    );
 
-    useRenderTarget(async () => {
-      this.model.draw({
-        uniforms: {
-          u_Texture: postProcessor.getReadFBO(),
-        },
-      });
-    });
+    // const useRenderTarget = (this.renderToScreen
+    //   ? postProcessor.useScreenRenderTarget
+    //   : postProcessor.useOffscreenRenderTarget
+    // ).bind(postProcessor);
+
+    // useRenderTarget(async () => {
+    //   this.model.draw({
+    //     uniforms: {
+    //       u_Texture: postProcessor.getReadFBO(),
+    //     },
+    //   });
+    // });
   }
 
   public isEnabled() {

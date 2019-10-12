@@ -2,9 +2,13 @@ import { ILayer } from '../layer/ILayerService';
 import { IAttribute, IAttributeInitializationOptions } from './IAttribute';
 import { IBuffer, IBufferInitializationOptions } from './IBuffer';
 import { IElements, IElementsInitializationOptions } from './IElements';
-import { IFramebuffer } from './IFramebuffer';
+import {
+  IFramebuffer,
+  IFramebufferInitializationOptions,
+} from './IFramebuffer';
 import { IModel, IModelInitializationOptions } from './IModel';
 import { IMultiPassRenderer, IPass } from './IMultiPassRenderer';
+import { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
 
 export interface IRenderConfig {
   /**
@@ -32,7 +36,13 @@ export interface IRendererService {
   createAttribute(options: IAttributeInitializationOptions): IAttribute;
   createBuffer(options: IBufferInitializationOptions): IBuffer;
   createElements(options: IElementsInitializationOptions): IElements;
-  createMultiPassRenderer(layer: ILayer): IMultiPassRenderer;
+  createTexture2D(options: ITexture2DInitializationOptions): ITexture2D;
+  createFramebuffer(options: IFramebufferInitializationOptions): IFramebuffer;
+  renderToFramebuffer(
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => void,
+  ): void;
   getViewportSize(): { width: number; height: number };
+  getContainer(): HTMLElement | null;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
 }
