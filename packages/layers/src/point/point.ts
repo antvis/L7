@@ -7,12 +7,11 @@ import {
 } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import ExtrudeBuffer from './buffers/ExtrudeBuffer';
-import FillBuffer from './buffers/FillBuffer';
-import polygon_frag from './shaders/polygon_frag.glsl';
-import polygon_vert from './shaders/polygon_vert.glsl';
+import extrude_frag from './shaders/extrude_frag.glsl';
+import extrude_vert from './shaders/extrude_vert.glsl';
 
-export default class PolygonLayer extends BaseLayer {
-  public name: string = 'PolygonLayer';
+export default class PointLayer extends BaseLayer {
+  public name: string = 'PointLayer';
 
   @lazyInject(TYPES.IShaderModuleService)
   private readonly shaderModule: IShaderModuleService;
@@ -32,20 +31,18 @@ export default class PolygonLayer extends BaseLayer {
   }
 
   protected buildModels(): void {
-    this.shaderModule.registerModule('polygon', {
-      vs: polygon_vert,
-      fs: polygon_frag,
+    this.shaderModule.registerModule('point', {
+      vs: extrude_vert,
+      fs: extrude_frag,
     });
 
     this.models = [];
-    const { vs, fs, uniforms } = this.shaderModule.getModule('polygon');
-    // const buffer = new ExtrudeBuffer({
-    //   data: this.getEncodedData(),
-    // });
-    // buffer.computeVertexNormals();
-    const buffer = new FillBuffer({
+    const { vs, fs, uniforms } = this.shaderModule.getModule('point');
+    const buffer = new ExtrudeBuffer({
       data: this.getEncodedData(),
     });
+    buffer.computeVertexNormals('miters', false);
+    console.log(buffer); // TODO: normal
     const {
       createAttribute,
       createBuffer,
@@ -76,6 +73,20 @@ export default class PolygonLayer extends BaseLayer {
               type: gl.FLOAT,
             }),
             size: 4,
+          }),
+          a_size: createAttribute({
+            buffer: createBuffer({
+              data: buffer.attributes.sizes,
+              type: gl.FLOAT,
+            }),
+            size: 3,
+          }),
+          a_shape: createAttribute({
+            buffer: createBuffer({
+              data: buffer.attributes.miters,
+              type: gl.FLOAT,
+            }),
+            size: 3,
           }),
         },
         uniforms: {

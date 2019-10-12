@@ -1,6 +1,7 @@
+import { IParserCfg, ITransform } from '@l7/core';
 import { IParserData } from './interface';
 type ParserFunction = (data: any, cfg?: any) => IParserData;
-type transformFunction = (data: IParserData, cfg?: object) => IParserData;
+type transformFunction = (data: IParserData, cfg?: any) => IParserData;
 const TRANSFORMS: {
   [type: string]: transformFunction;
 } = {};
