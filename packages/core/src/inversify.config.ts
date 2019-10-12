@@ -6,6 +6,7 @@ import getDecorators from 'inversify-inject-decorators';
 import { TYPES } from './types';
 
 /** Service interfaces */
+import { IIconService} from './services/asset/IIconService';
 import { ICameraService } from './services/camera/ICameraService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
@@ -14,6 +15,7 @@ import { ILogService } from './services/log/ILogService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
 /** Service implements */
+import IconService from './services/asset/IconService';
 import CameraService from './services/camera/CameraService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
@@ -43,6 +45,10 @@ container
 container
   .bind<ICoordinateSystemService>(TYPES.ICoordinateSystemService)
   .to(CoordinateSystemService)
+  .inSingletonScope();
+container
+  .bind<IIconService>(TYPES.IIconService)
+  .to(IconService)
   .inSingletonScope();
 container
   .bind<IShaderModuleService>(TYPES.IShaderModuleService)

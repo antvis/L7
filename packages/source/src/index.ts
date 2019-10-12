@@ -4,11 +4,15 @@ import geojson from './parser/geojson';
 import image from './parser/image';
 import json from './parser/json';
 import Source from './source';
+import { cluster } from './transform/cluster';
+import { aggregatorToGrid } from './transform/grid';
 export default Source;
 registerParser('geojson', geojson);
 registerParser('image', image);
 registerParser('csv', csv);
 registerParser('json', json);
+registerTransform('cluster', cluster);
+registerTransform('grid', aggregatorToGrid);
 export {
   getTransform,
   registerTransform,

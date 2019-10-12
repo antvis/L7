@@ -22,13 +22,6 @@ export default class StyleAttribute implements ILayerStyleAttribute {
     this.scales = scales;
     this.values = values;
     this.names = this.parseFields(field) || [];
-    // 设置 range  TODO 2维映射
-    // this.scales.forEach((scale) => {
-    //   scale.scale.range(values);
-    //   if (scale.type === StyleScaleType.VARIABLE) {
-    //     this.type = StyleScaleType.VARIABLE;
-    //   }
-    // });
     if (callback) {
       this.type = StyleScaleType.VARIABLE;
     }

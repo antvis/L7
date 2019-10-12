@@ -36,6 +36,7 @@ export default class ScaleController {
       field,
       scale: undefined,
       type: StyleScaleType.VARIABLE,
+      option: scaleOption,
     };
     if (!data || !data.length) {
       // 数据为空
@@ -69,6 +70,7 @@ export default class ScaleController {
       Object.assign(cfg, scaleOption);
       scaleOption = cfg; // 更新scale配置
       scale.scale = this.generateScale(type, cfg);
+      scale.option = scaleOption;
     }
     return scale;
   }
@@ -100,10 +102,10 @@ export default class ScaleController {
 
   private generateScale(type: ScaleTypes, scaleOption: IScaleOption) {
     // @ts-ignore
-    const scale = scaleMap[type]();
+    let scale = scaleMap[type]();
     if (scaleOption.hasOwnProperty('domain')) {
       // 处理同一字段映射不同视觉通道的问题
-      scale.copy().domain(scaleOption.domain);
+      scale = scale.copy().domain(scaleOption.domain);
     }
     // TODO 其他属性支持
     return scale;
