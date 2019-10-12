@@ -40,7 +40,7 @@ export default class DataEncodePlugin implements ILayerPlugin {
         const attribute = layer.styleAttributes[attributeName];
         const scales: any[] = [];
         attribute.names.forEach((field: string) => {
-          scales.push(this.getOrCreateScale(attribute, dataArray));
+          scales.push(this.getOrCreateScale(attribute, field, dataArray));
         });
         attribute.setScales(scales);
       });
@@ -54,9 +54,9 @@ export default class DataEncodePlugin implements ILayerPlugin {
 
   private getOrCreateScale(
     attribute: ILayerStyleAttribute,
+    field: string,
     data: any[],
   ): IStyleScale {
-    const { field } = attribute;
     let scale = this.scaleCache[field as string];
     if (!scale) {
       scale = this.scaleController.createScale(field as string, data);
@@ -84,10 +84,10 @@ export default class DataEncodePlugin implements ILayerPlugin {
       // TODO: 数据过滤
       Object.keys(attributes).forEach((attributeName: string) => {
         const attribute = attributes[attributeName];
-        const { type } = attribute;
-        if (type === StyleScaleType.CONSTANT) {
-          return;
-        }
+        // const { type } = attribute; // TODO: 支持常量 或变量
+        // if (type === StyleScaleType.CONSTANT) {
+        //   return;
+        // }
         let values = this.getAttrValue(attribute, record);
         if (attributeName === 'color') {
           values = values.map((c: unknown) => {
@@ -109,7 +109,7 @@ export default class DataEncodePlugin implements ILayerPlugin {
     const params: unknown[] = [];
 
     scales.forEach((scale) => {
-      const { field, type, value } = scale;
+      const { field, type } = scale;
       if (type === StyleScaleType.CONSTANT) {
         params.push(scale.field);
       } else {

@@ -45,6 +45,7 @@ export * from './services/camera/ICameraService';
 export * from './services/config/IConfigService';
 export * from './services/scene/ISceneService';
 export * from './services/shader/IShaderModuleService';
+export * from './services/asset/IIconService';
 
 /** 全部渲染服务接口 */
 export * from './services/renderer/IAttribute';

@@ -31,6 +31,7 @@ export interface IStyleScale {
   scale: any;
   field: string;
   type: StyleScaleType;
+  option: IScaleOption;
 }
 
 export interface ILayerGlobalConfig {
@@ -44,12 +45,13 @@ export interface ILayerGlobalConfig {
 type CallBack = (...args: any[]) => any;
 export type StyleAttributeField = string | string[];
 export type StyleAttributeOption = string | number | boolean | any[] | CallBack;
+export type StyleAttrField = string | string[] | number | number[];
 export interface ILayerStyleAttribute {
   type: string;
   names: string[];
   field: StyleAttributeField;
   values?: any[];
-  scales?: any[];
+  scales?: IStyleScale[];
   setScales: (scales: IStyleScale[]) => void;
   callback?: (...args: any[]) => [];
   mapping?(...params: unknown[]): unknown[];
@@ -77,9 +79,9 @@ export interface ILayer {
   };
   multiPassRenderer: IMultiPassRenderer;
   init(): ILayer;
-  size(field: string, value?: StyleAttributeOption): ILayer;
-  color(field: string, value?: StyleAttributeOption): ILayer;
-  shape(field: string, value?: StyleAttributeOption): ILayer;
+  size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   // filter(field: string, value: StyleAttributeOption): ILayer;
   // active(option: ActiveOption): ILayer;

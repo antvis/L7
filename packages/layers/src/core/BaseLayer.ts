@@ -1,5 +1,6 @@
 import {
   IGlobalConfigService,
+  IIconService,
   ILayer,
   ILayerInitializationOptions,
   ILayerPlugin,
@@ -50,7 +51,9 @@ export default class BaseLayer implements ILayer {
     data: any;
     options?: ISourceCFG;
   };
-  public styleOption: ILayerStyleOptions;
+  public styleOption: ILayerStyleOptions = {
+    opacity: 1.0,
+  };
   // 样式属性
   public styleAttributes: {
     [key: string]: Required<ILayerStyleAttribute>;
@@ -66,6 +69,9 @@ export default class BaseLayer implements ILayer {
 
   @lazyInject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
+
+  @lazyInject(TYPES.IIconService)
+  private readonly iconService: IIconService;
 
   constructor(initializationOptions: Partial<ILayerInitializationOptions>) {
     this.initializationOptions = initializationOptions;

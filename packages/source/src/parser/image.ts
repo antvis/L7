@@ -3,7 +3,10 @@ import { IParserData } from '../interface';
 interface IImageCfg {
   extent: [number, number, number, number];
 }
-export default function image(data: string | [], cfg: IImageCfg): IParserData {
+export default function image(
+  data: string | string[],
+  cfg: IImageCfg,
+): IParserData {
   const { extent } = cfg;
 
   const resultData: IParserData = {
