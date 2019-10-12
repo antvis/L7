@@ -77,6 +77,7 @@ export default class BaseLayer implements ILayer {
     this.buildModels();
     return this;
   }
+
   public color(field: StyleAttributeField, values?: any) {
     this.createStyleAttribute(
       'color',
@@ -86,6 +87,7 @@ export default class BaseLayer implements ILayer {
     );
     return this;
   }
+
   public size(field: StyleAttributeField, values?: any) {
     this.createStyleAttribute(
       'size',
@@ -95,6 +97,7 @@ export default class BaseLayer implements ILayer {
     );
     return this;
   }
+
   public shape(field: StyleAttributeField, values?: any) {
     this.createStyleAttribute(
       'shape',
@@ -108,6 +111,10 @@ export default class BaseLayer implements ILayer {
   public source(data: any, options?: ISourceCFG) {
     this.layerSource = new Source(data, options);
     return this;
+  }
+
+  public style(styleAttributes: any) {
+    //
   }
 
   public render(): ILayer {

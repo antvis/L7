@@ -19,14 +19,6 @@ export default class PolygonLayer extends BaseLayer {
   @lazyInject(TYPES.IRendererService)
   private readonly renderer: IRendererService;
 
-  public style(options: any) {
-    // this.layerStyleService.update(options);
-    // this.styleOptions = {
-    //   ...this.styleOptions,
-    //   ...options,
-    // };
-  }
-
   protected renderModels() {
     this.models.forEach((model) =>
       model.draw({

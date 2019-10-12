@@ -92,6 +92,7 @@ export interface ILayerPlugin {
  */
 export interface ILayerInitializationOptions {
   enableMultiPassRenderer: boolean;
+  enablePicking: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 }
 
