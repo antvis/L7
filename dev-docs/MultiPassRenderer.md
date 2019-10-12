@@ -45,6 +45,7 @@ ClearPass -> RenderPass -> [ ...其他后处理 Pass ] -> CopyPass
 ```
 
 目前各内置 Pass 说明如下：
+
 | Pass 名称 | 类型 | 参数 | 说明 |
 | -------- | --- | ------------- | --------- |
 | ClearPass  | normal | 无 | 清除 framebuffer，clearColor 为 [0, 0, 0, 0] |
@@ -54,8 +55,9 @@ ClearPass -> RenderPass -> [ ...其他后处理 Pass ] -> CopyPass
 | BlurVPass  | post-processing | `blurRadius` 垂直方向模糊半径，默认值为 `8.0` | 同上 |
 
 后续待实现 Pass 如下：
-* [] PickingPass 负责拾取
-* [] ShadowPass 负责生成 shadowMap，供 PCF、CSM 等实时阴影技术使用
+
+- [ ] PickingPass 负责拾取
+- [ ] ShadowPass 负责生成 shadowMap，供 PCF、CSM 等实时阴影技术使用
 
 ## 使用方法
 
