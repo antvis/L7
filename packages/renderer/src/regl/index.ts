@@ -3,7 +3,6 @@
  * @see https://github.com/regl-project/regl/blob/gh-pages/API.md
  */
 import {
-  gl,
   IAttribute,
   IAttributeInitializationOptions,
   IBuffer,
@@ -11,20 +10,22 @@ import {
   IClearOptions,
   IElements,
   IElementsInitializationOptions,
-  ILayer,
+  IFramebuffer,
+  IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
-  IMultiPassRenderer,
   IRendererService,
+  ITexture2D,
+  ITexture2DInitializationOptions,
 } from '@l7/core';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import regl from 'regl';
 import ReglAttribute from './ReglAttribute';
 import ReglBuffer from './ReglBuffer';
 import ReglElements from './ReglElements';
 import ReglFramebuffer from './ReglFramebuffer';
 import ReglModel from './ReglModel';
-import ReglMultiPassRenderer from './ReglMultiPassRenderer';
+import ReglTexture2D from './ReglTexture2D';
 
 /**
  * regl renderer
@@ -32,8 +33,10 @@ import ReglMultiPassRenderer from './ReglMultiPassRenderer';
 @injectable()
 export default class ReglRendererService implements IRendererService {
   private gl: regl.Regl;
+  private $container: HTMLDivElement | null;
 
   public async init($container: HTMLDivElement): Promise<void> {
+    this.$container = $container;
     // tslint:disable-next-line:typedef
     this.gl = await new Promise((resolve, reject) => {
       regl({
@@ -67,31 +70,43 @@ export default class ReglRendererService implements IRendererService {
     });
   }
 
-  public createModel = (options: IModelInitializationOptions): IModel => {
-    return new ReglModel(this.gl, options);
-  };
+  public createModel = (options: IModelInitializationOptions): IModel =>
+    new ReglModel(this.gl, options);
 
   public createAttribute = (
     options: IAttributeInitializationOptions,
-  ): IAttribute => {
-    return new ReglAttribute(this.gl, options);
-  };
+  ): IAttribute => new ReglAttribute(this.gl, options);
 
-  public createBuffer = (options: IBufferInitializationOptions): IBuffer => {
-    return new ReglBuffer(this.gl, options);
-  };
+  public createBuffer = (options: IBufferInitializationOptions): IBuffer =>
+    new ReglBuffer(this.gl, options);
 
   public createElements = (
     options: IElementsInitializationOptions,
-  ): IElements => {
-    return new ReglElements(this.gl, options);
+  ): IElements => new ReglElements(this.gl, options);
+
+  public createTexture2D = (
+    options: ITexture2DInitializationOptions,
+  ): ITexture2D => new ReglTexture2D(this.gl, options);
+
+  public createFramebuffer = (options: IFramebufferInitializationOptions) =>
+    new ReglFramebuffer(this.gl, options);
+
+  public renderToFramebuffer = (
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => void,
+  ) => {
+    const useFramebuffer = this.gl({
+      // since post-processor will swap read/write fbos, we must retrieve it dynamically
+      framebuffer: framebuffer
+        ? () => (framebuffer as ReglFramebuffer).get()
+        : null,
+    });
+
+    // TODO: pass other options
+    useFramebuffer({}, drawCommands);
   };
 
-  public createMultiPassRenderer = (layer: ILayer): IMultiPassRenderer => {
-    return new ReglMultiPassRenderer(this.gl, layer);
-  };
-
-  public clear(options: IClearOptions) {
+  public clear = (options: IClearOptions) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
     const { color, depth, stencil, framebuffer = null } = options;
     const reglClearOptions: regl.ClearOptions = {
@@ -106,9 +121,9 @@ export default class ReglRendererService implements IRendererService {
         : (framebuffer as ReglFramebuffer).get();
 
     this.gl.clear(reglClearOptions);
-  }
+  };
 
-  public viewport({
+  public viewport = ({
     x,
     y,
     width,
@@ -118,17 +133,21 @@ export default class ReglRendererService implements IRendererService {
     y: number;
     width: number;
     height: number;
-  }) {
+  }) => {
     // use WebGL context directly
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
     this.gl._gl.viewport(x, y, width, height);
     this.gl._refresh();
-  }
+  };
 
-  public getViewportSize() {
+  public getViewportSize = () => {
     return {
       width: this.gl._gl.drawingBufferWidth,
       height: this.gl._gl.drawingBufferHeight,
     };
-  }
+  };
+
+  public getContainer = () => {
+    return this.$container;
+  };
 }
