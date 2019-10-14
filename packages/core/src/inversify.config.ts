@@ -10,6 +10,7 @@ import { IIconService} from './services/asset/IIconService';
 import { ICameraService } from './services/camera/ICameraService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
+import { IInteractionService } from './services/interaction/IInteractionService';
 import { ILayerService } from './services/layer/ILayerService';
 import { ILogService } from './services/log/ILogService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
@@ -19,6 +20,7 @@ import IconService from './services/asset/IconService';
 import CameraService from './services/camera/CameraService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
+import InteractionService from './services/interaction/InteractionService';
 import LayerService from './services/layer/LayerService';
 import LayerStyleService from './services/layer/LayerStyleService';
 import LogService from './services/log/LogService';
@@ -57,6 +59,10 @@ container
 container
   .bind<ILogService>(TYPES.ILogService)
   .to(LogService)
+  .inSingletonScope();
+container
+  .bind<IInteractionService>(TYPES.IInteractionService)
+  .to(InteractionService)
   .inSingletonScope();
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module

@@ -1,45 +1,44 @@
+import { injectable } from 'inversify';
+import { ILayer } from '../../layer/ILayerService';
 import {
-  ILayer,
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
   IPostProcessor,
   PassType,
-} from '@l7/core';
-import regl from 'regl';
-import ReglPostProcessor from './ReglPostProcessor';
+} from '../IMultiPassRenderer';
+import PostProcessor from './PostProcessor';
 
 /**
  * ported from Three.js EffectComposer
  * @example
- * const renderer = new MultiPassRenderer(gl, [
- *   new ClearPass(gl),
- *   new RenderPass(gl, {
+ * const renderer = new MultiPassRenderer([
+ *   new ClearPass(),
+ *   new RenderPass({
  *     models: [
  *       new Model(),
  *       new Model(),
  *     ],
  *   }),
- *   new CopyPass(gl, {
+ *   new CopyPass({
  *     renderToScreen: true,
  *   }),
- *   new TAAPass(gl),
+ *   new TAAPass(),
  * ]);
  * renderer.render();
  * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/apuvbf#dRM8W
  */
-export default class ReglMultiPassRenderer implements IMultiPassRenderer {
+@injectable()
+export default class MultiPassRenderer implements IMultiPassRenderer {
   private passes: IPass[] = [];
   private postProcessor: IPostProcessor;
 
-  private reGl: regl.Regl;
   private layer: ILayer;
   private renderFlag: boolean;
 
-  constructor(reGl: regl.Regl, layer: ILayer) {
-    this.reGl = reGl;
+  constructor(layer: ILayer) {
     this.layer = layer;
-    this.postProcessor = new ReglPostProcessor(reGl);
+    this.postProcessor = new PostProcessor();
   }
 
   public setRenderFlag(renderFlag: boolean) {
