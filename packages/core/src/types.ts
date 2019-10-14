@@ -10,6 +10,7 @@ const TYPES = {
   IRendererService: Symbol.for('IRendererService'),
   IShaderModuleService: Symbol.for('IShaderModuleService'),
   IIconService: Symbol.for('IIconService'),
+  IInteractionService: Symbol.for('IInteractionService'),
 
   /** multi-pass */
   ClearPass: Symbol.for('ClearPass'),

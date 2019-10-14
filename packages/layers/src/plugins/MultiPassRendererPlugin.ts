@@ -9,6 +9,8 @@ import {
   IPostProcessingPass,
   IRendererService,
   lazyInject,
+  MultiPassRenderer,
+  PixelPickingPass,
   RenderPass,
   TYPES,
 } from '@l7/core';
@@ -19,6 +21,20 @@ const builtinPostProcessingPassMap: {
   blurH: BlurHPass,
   blurV: BlurVPass,
 };
+
+/**
+ * 'blurH' -> ['blurH', {}]
+ */
+function normalizePasses(
+  passes: Array<string | [string, { [key: string]: unknown }]>,
+) {
+  return passes.map((pass: string | [string, { [key: string]: unknown }]) => {
+    if (typeof pass === 'string') {
+      pass = [pass, {}];
+    }
+    return pass;
+  });
+}
 
 /**
  * 根据 Layer 配置的 passes 创建 MultiPassRenderer 并渲染
@@ -83,28 +99,23 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     layer: ILayer,
     passes: Array<string | [string, { [key: string]: unknown }]>,
   ) {
-    const multiPassRenderer = this.rendererService.createMultiPassRenderer(
-      layer,
-    );
-    // TODO: PickingPass
-    multiPassRenderer.add(new ClearPass());
-    multiPassRenderer.add(new RenderPass());
+    const multiPassRenderer = new MultiPassRenderer(layer);
 
-    const normalizedPasses: Array<
-      [string, { [key: string]: unknown }]
-    > = passes.map((pass: string | [string, { [key: string]: unknown }]) => {
-      if (typeof pass === 'string') {
-        pass = [pass, {}];
-      }
-      return pass;
-    });
+    multiPassRenderer.add(new ClearPass());
+
+    if (layer.getInitializationOptions().enablePicking) {
+      multiPassRenderer.add(new PixelPickingPass());
+    }
+    multiPassRenderer.add(new RenderPass());
 
     // post processing
     // TODO: pass initialization params
-    normalizedPasses.forEach((pass: [string, { [key: string]: unknown }]) => {
-      const PostProcessingPassClazz = builtinPostProcessingPassMap[pass[0]];
-      multiPassRenderer.add(new PostProcessingPassClazz(pass[1]));
-    });
+    normalizePasses(passes).forEach(
+      (pass: [string, { [key: string]: unknown }]) => {
+        const PostProcessingPassClazz = builtinPostProcessingPassMap[pass[0]];
+        multiPassRenderer.add(new PostProcessingPassClazz(pass[1]));
+      },
+    );
     // 末尾为固定的 CopyPass
     multiPassRenderer.add(new CopyPass());
 

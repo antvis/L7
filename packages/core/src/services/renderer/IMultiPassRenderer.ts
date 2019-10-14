@@ -31,9 +31,6 @@ export interface IPostProcessingPass extends IPass {
 export interface IPostProcessor {
   getReadFBO(): IFramebuffer;
   getWriteFBO(): IFramebuffer;
-  useScreenRenderTarget(renderCommand: () => void): void;
-  useOffscreenRenderTarget(renderCommand: () => void): void;
-  renderToPostProcessor(renderCommand: () => void): void;
   resize(viewportWidth: number, viewportHeight: number): void;
   add(pass: IPostProcessingPass, layer: ILayer): void;
   render(layer: ILayer): Promise<unknown>;
