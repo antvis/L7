@@ -5,6 +5,7 @@ import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IGlobalConfig, IGlobalConfigService } from '../config/IConfigService';
+import { IInteractionService } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
 import { IMapCamera, IMapService } from '../map/IMapService';
@@ -37,6 +38,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
+
+  @inject(TYPES.IInteractionService)
+  private readonly interactionService: IInteractionService;
 
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModule: IShaderModuleService;
@@ -110,6 +114,9 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 初始化 ShaderModule
       this.shaderModule.registerBuiltinModules();
 
+      // 初始化 container 上的交互
+      this.interactionService.init();
+
       // TODO：init renderer
       this.logger.info('renderer loaded');
     });
@@ -141,6 +148,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.inited = false;
     this.layerService.clean();
     this.configService.reset();
+    this.interactionService.destroy();
     window.removeEventListener('resize', this.handleWindowResized, false);
   }
 

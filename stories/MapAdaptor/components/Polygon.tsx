@@ -83,6 +83,17 @@ export default class Mapbox extends React.Component {
     this.scene = scene;
     console.log(layer);
     /*** 运行时修改样式属性 ***/
+    // const gui = new dat.GUI();
+    // this.gui = gui;
+    // const pointFolder = gui.addFolder('Polygon 样式属性');
+    // pointFolder
+    //   .add(layer.styleOptions, 'opacity')
+    //   .onChange((opacity: number) => {
+    //     layer.style({
+    //       opacity,
+    //     });
+    //     scene.render();
+    //   });
   }
 
   public render() {
