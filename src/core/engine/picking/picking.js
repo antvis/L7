@@ -20,12 +20,14 @@ class Picking {
       stencilBuffer: false,
       depthBuffer: true
     };
+    this.pixelBuffer = new Uint8Array(4);
 
-    this._pickingTexture = new THREE.WebGLRenderTarget(this._width / 10, this._height / 10, parameters);
+    this._pickingTexture = new THREE.WebGLRenderTarget(1, 1, parameters);
+
 
     this._nextId = 1;
 
-    this._resizeTexture();
+    // this._resizeTexture();
     this._initEvents();
   }
 
@@ -52,16 +54,15 @@ class Picking {
 
     this._width = size.width;
     this._height = size.height;
-    this._pickingTexture.setSize(this._width, this._height);
-    this._pixelBuffer = new Uint8Array(4 * this._width * this._height);
+    this._pickingTexture.setSize(1, 1);
     this._needUpdate = true;
   }
   _update(point) {
     const texture = this._pickingTexture;
+    this._camera.setViewOffset(this._width, this._height, point.x, point.y, 1, 1);
     this._renderer.render(this._pickingScene, this._camera, texture);
-    this.pixelBuffer = new Uint8Array(4);
-    this._renderer.readRenderTargetPixels(texture, point.x, this._height - point.y, 1, 1, this.pixelBuffer);
-
+    this._camera.clearViewOffset();
+    this._renderer.readRenderTargetPixels(texture, 0, 0, 1, 1, this.pixelBuffer);
 
   }
   _filterObject(id) {
@@ -81,17 +82,29 @@ class Picking {
     }
     return isVisable;
   }
+  _layerisListened(object, type) {
+    const layers = this._world.getLayers();
+    let isListened = false;
+    for (let i = 0; i < layers.length; i++) {
+      const layer = layers[i];
+      if (object.name === layer.layerId) {
+        isListened = layer.getListeners(type).length > 0;
+        break;
+      }
+    }
+    return isListened;
+  }
   _pickAllObject(point, normalisedPoint) {
 
     this.world.children.forEach((object, index) => {
-      if (!this._layerIsVisable(object)) {
+      if (!this._layerIsVisable(object) || !this._layerisListened(object, point.type)) {
         return;
       }
       this._filterObject(index);
       const item = this._pick(point, normalisedPoint, object.name);
       item.type = point.type;
       item._parent = point._parent;
-      this._world.emit('pick', item);
+      // this._world.emit('pick', item);
       this._world.emit('pick-' + object.name, item);
 
     });

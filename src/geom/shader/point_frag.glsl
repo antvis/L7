@@ -13,19 +13,35 @@ varying vec2 v_uv;
 varying vec4 v_color;
 varying float v_shape;
 const float u_buffer=.75;
+uniform vec4 u_activeColor;
 // const float u_gamma = 2.0 * 1.4142 / 10.0;
 const float u_gamma=.08;
 // const float u_scale = 128.0;
 const vec3 halo=vec3(1.);
 void main(){
-    // 纹理坐标
-    #ifdef TEXCOORD_0
-    vec2 pos=v_uv+gl_PointCoord/512.*64.;
+  #ifdef TEXCOORD_0
+    vec2 pos=v_uv+gl_PointCoord / 512.*64.;
     pos.y=1.-pos.y;
     vec4 textureColor=texture2D(u_texture,pos);
-    gl_FragColor=textureColor;
-    #pragma include "pick"
-    return;
+    // 纹理坐标
+     #ifdef PICK
+            if(worldId.x == 0. &&worldId.y == 0. && worldId.z==0. && textureColor == vec4(0.)){
+                    discard;
+                    return;
+                }
+            gl_FragColor = worldId;
+           
+         return;
+      #endif
+
+     
+        // vec4 textureColor=texture2D(u_texture,pos);
+        if(v_color == vec4(0.)){
+             gl_FragColor= textureColor; 
+        }else {
+              gl_FragColor= step(0.01, textureColor.x) * v_color;
+        }
+        return;
     #endif
     if(v_color.a==0.)
     discard;

@@ -115,6 +115,7 @@ export function fillPolygon(points) {
   };
 }
 
+// 绘制3d
 export function extrude_Polygon(points) {
   const p1 = points[0][0];
   const p2 = points[0][points[0].length - 1];
