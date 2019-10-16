@@ -60,7 +60,11 @@ export default class DataEncodePlugin implements ILayerPlugin {
     let scale = this.scaleCache[field as string];
     if (!scale) {
       scale = this.scaleController.createScale(field as string, data);
-      if (scale.type === StyleScaleType.VARIABLE) {
+      if (
+        scale.type === StyleScaleType.VARIABLE &&
+        attribute.values &&
+        attribute.values.length > 0
+      ) {
         scale.scale.range(attribute.values);
       }
       this.scaleCache[field as string] = scale;

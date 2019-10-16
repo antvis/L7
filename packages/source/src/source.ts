@@ -36,6 +36,9 @@ export default class Source extends EventEmitter {
     this.hooks.init.tap('parser', () => {
       this.excuteParser();
     });
+    this.hooks.init.tap('transform', () => {
+      this.executeTrans();
+    });
     this.init();
   }
 
@@ -60,6 +63,5 @@ export default class Source extends EventEmitter {
   }
   private init() {
     this.hooks.init.call(this);
-    // this.excuteParser(); // 数据解析
   }
 }

@@ -1,6 +1,6 @@
 import { BBox } from '@turf/helpers';
 const originShift = (2 * Math.PI * 6378137) / 2.0;
-type Point = [number, number] | [number, number, number];
+export type Point = [number, number] | [number, number, number];
 /**
  * 计算地理数据范围
  * @param {dataArray} data 地理坐标数据
@@ -136,4 +136,21 @@ export function validateLngLat(lnglat: Point, validate: boolean): Point {
     lat = -85;
   }
   return lnglat.length === 3 ? [lng, lat, lnglat[2]] : [lng, lat];
+}
+export function aProjectFlat(lnglat: number[]) {
+  const maxs = 85.0511287798;
+  const lat = Math.max(Math.min(maxs, lnglat[1]), -maxs);
+  const scale = 256 << 20;
+  let d = Math.PI / 180;
+  let x = lnglat[0] * d;
+  let y = lat * d;
+  y = Math.log(Math.tan(Math.PI / 4 + y / 2));
+
+  const a = 0.5 / Math.PI;
+  const b = 0.5;
+  const c = -0.5 / Math.PI;
+  d = 0.5;
+  x = scale * (a * x + b) - 215440491;
+  y = scale * (c * y + d) - 106744817;
+  return [parseInt(x.toString(), 10), parseInt(y.toString(), 10)];
 }

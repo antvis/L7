@@ -1,4 +1,4 @@
-import { ISourceCFG } from '@l7/source';
+import { ISourceCFG } from '@l7/core';
 import { AsyncParallelHook, SyncHook } from 'tapable';
 import { IModel } from '../renderer/IModel';
 import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';

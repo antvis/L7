@@ -29,7 +29,9 @@
     "earcut": "^2.2.1",
     "eventemitter3": "^3.1.0",
     "gl-matrix": "^3.1.0",
+    "gl-vec2": "^1.3.0",
     "lodash": "^4.17.15",
+    "polyline-miter-util": "^1.0.1",
     "tapable": "^2.0.0-beta.8"
   },
   "devDependencies": {

@@ -46,7 +46,9 @@ export default class StyleAttribute implements ILayerStyleAttribute {
     if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
       this.type = StyleScaleType.VARIABLE;
       scales.forEach((scale) => {
-        scale.scale.range(this.values);
+        if (this.values.length > 0) {
+          scale.scale.range(this.values);
+        }
       });
     } else {
       // 设置attribute 常量值

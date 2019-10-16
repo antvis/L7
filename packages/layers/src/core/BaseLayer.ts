@@ -10,12 +10,13 @@ import {
   IMultiPassRenderer,
   IRendererService,
   ISource,
+  ISourceCFG,
   lazyInject,
   StyleAttributeField,
   StyleAttributeOption,
   TYPES,
 } from '@l7/core';
-import Source, { ISourceCFG } from '@l7/source';
+import Source from '@l7/source';
 import { isFunction } from 'lodash';
 import { SyncHook } from 'tapable';
 import DataEncodePlugin from '../plugins/DataEncodePlugin';
