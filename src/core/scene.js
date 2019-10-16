@@ -11,7 +11,8 @@ import Style from './style';
 import Controller from './controller/control';
 import * as Control from '../component/control';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
-const EventNames = [ 'mouseout', 'mouseover', 'mousemove', 'mousedown', 'mouseleave', 'mouseleave', 'mouseleave', 'touchstart', 'touchmove', 'touchend', 'mouseup', 'rightclick', 'click', 'dblclick' ];
+import throttle from '../util/throttle';
+const EventNames = [ 'mouseout', 'mouseover', 'mousemove', 'mousedown', 'mouseleave', 'touchstart', 'touchmove', 'touchend', 'mouseup', 'rightclick', 'click', 'dblclick' ];
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -146,16 +147,16 @@ export default class Scene extends Base {
       if (e.target.nodeName !== 'CANVAS') return;
       this._engine._picking.pickdata(e);
     };
+    this._throttleHander = throttle(this._eventHander, 50);
     EventNames.forEach(event => {
-      this._container.addEventListener(event, this._eventHander, true);
+      this._container.addEventListener(event, this._throttleHander, true);
     });
   }
   _unRegistEvents() {
     EventNames.forEach(event => {
-      this._container.removeEventListener(event, this._eventHander, true);
+      this._container.removeEventListener(event, this._throttleHander, true);
     });
   }
-
   removeLayer(layer) {
     const layerIndex = this._layers.indexOf(layer);
     if (layerIndex > -1) {
