@@ -59,6 +59,8 @@ export default class BaseLayer implements ILayer {
   public styleAttributes: {
     [key: string]: Required<ILayerStyleAttribute>;
   } = {};
+  @lazyInject(TYPES.IIconService)
+  protected readonly iconService: IIconService;
 
   protected layerSource: Source;
 
@@ -70,9 +72,6 @@ export default class BaseLayer implements ILayer {
 
   @lazyInject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
-
-  @lazyInject(TYPES.IIconService)
-  private readonly iconService: IIconService;
 
   constructor(initializationOptions: Partial<ILayerInitializationOptions>) {
     this.initializationOptions = initializationOptions;
