@@ -1,5 +1,8 @@
 import { inject, injectable } from 'inversify';
+import { TYPES } from '../../types';
 import { buildIconMaping } from '../../utils/font_util';
+import { gl } from '../renderer/gl';
+import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import {
   IIcon,
@@ -13,23 +16,24 @@ const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
 @injectable()
 export default class IconService implements IIconService {
+  public canvasHeight: number;
+  private textrure: ITexture2D;
   private canvas: HTMLCanvasElement;
   private iconData: IIcon[];
   private iconMap: IICONMap;
-  private canvasHeigth: number;
-  private textrure: ITexture2D;
   private ctx: CanvasRenderingContext2D;
-
-  constructor() {
+  public init() {
     this.iconData = [];
     this.iconMap = {};
     this.canvas = document.createElement('canvas');
-    // this.texture =
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
-  public async addImage(id: string, image: IImage) {
-    const imagedata = (await this.loadImage(image)) as HTMLImageElement;
+  public addImage(id: string, image: IImage) {
+    let imagedata = new Image();
+    this.loadImage(image).then((img) => {
+      imagedata = img as HTMLImageElement;
+    });
     this.iconData.push({
       id,
       image: imagedata,
@@ -42,28 +46,35 @@ export default class IconService implements IIconService {
       MAX_CANVAS_WIDTH,
     );
     this.iconMap = mapping;
-    this.canvasHeigth = canvasHeight;
+    this.canvasHeight = canvasHeight;
     this.updateIconAtlas();
   }
 
   public getTexture(): ITexture2D {
-    throw new Error('Method not implemented.');
+    return this.textrure;
   }
 
   public getIconMap() {
     return this.iconMap;
   }
+  public getCanvas() {
+    return this.canvas;
+  }
 
   private updateIconAtlas() {
     this.canvas.width = MAX_CANVAS_WIDTH;
-    this.canvas.height = this.canvasHeigth;
+    this.canvas.height = this.canvasHeight;
     Object.keys(this.iconMap).forEach((item: string) => {
       const { x, y, image } = this.iconMap[item];
       this.ctx.drawImage(image, x, y, imageSize, imageSize);
     });
-    // this.texture.magFilter = THREE.LinearFilter;
-    // this.texture.minFilter = THREE.LinearFilter;
-    // this.texture.needsUpdate = true;
+    // const { createTexture2D } = this.rendererService;
+    // this.textrure = createTexture2D({
+    //   data: this.canvas,
+    //   width: this.canvas.width,
+    //   height: this.canvasHeight,
+    //   mag: gl.LINEAR,
+    // });
   }
 
   private loadImage(url: IImage) {
@@ -73,6 +84,7 @@ export default class IconService implements IIconService {
         return;
       }
       const image = new Image();
+      image.crossOrigin = 'anonymous';
       image.onload = () => {
         resolve(image);
       };

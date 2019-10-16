@@ -85,10 +85,9 @@ export default class DataEncodePlugin implements ILayerPlugin {
         id: record._id,
         coordinates: record.coordinates,
       };
-      // TODO: 数据过滤
       Object.keys(attributes).forEach((attributeName: string) => {
         const attribute = attributes[attributeName];
-        // const { type } = attribute; // TODO: 支持常量 或变量
+        // const { type } = attribute;
         // if (type === StyleScaleType.CONSTANT) {
         //   return;
         // }

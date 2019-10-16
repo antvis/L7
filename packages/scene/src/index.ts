@@ -1,5 +1,6 @@
 import {
   container,
+  IImage,
   ILayer,
   IMapConfig,
   IMapService,
@@ -73,10 +74,14 @@ class Scene {
   public render(): void {
     this.sceneService.render();
   }
-
+  public addImage(id: string, img: IImage) {
+    this.sceneService.addImage(id, img);
+  }
   public destroy() {
     this.sceneService.destroy();
   }
+
+  // 资源管理
 }
 
 export { Scene };
