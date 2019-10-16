@@ -107,7 +107,7 @@ export default function(
             : null;
       }
     }
-    const lineDistance = lineSegmentDistance(cur, last); // TODO: 根据平面坐标计算距离
+    const lineDistance = lineSegmentDistance(cur, last);
     const d = lineDistance + attrDistance[attrDistance.length - 1];
     direction(lineA, cur, last);
     if (!lineNormal) {
