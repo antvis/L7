@@ -8,6 +8,7 @@ export const CameraUniform = {
   Zoom: 'u_Zoom',
   ZoomScale: 'u_ZoomScale',
   FocalDistance: 'u_FocalDistance',
+  CameraPosition: 'u_CameraPosition',
 };
 
 export interface IViewport {

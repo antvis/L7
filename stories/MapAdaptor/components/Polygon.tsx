@@ -27,7 +27,9 @@ export default class Mapbox extends React.Component {
       features: [
         {
           type: 'Feature',
-          properties: {},
+          properties: {
+            name: 'test',
+          },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -53,21 +55,13 @@ export default class Mapbox extends React.Component {
     });
     const layer = new PolygonLayer({
       enableMultiPassRenderer: true,
-      passes: [
-        'blurH',
-        [
-          'blurV',
-          {
-            blurRadius: 8,
-          },
-        ],
-      ],
-      enablePicking: true,
+      passes: [],
     });
 
     // TODO: new GeoJSONSource()
     layer
       .source(await response.json())
+      .size('name', [0, 10000, 50000, 30000, 100000])
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -75,12 +69,19 @@ export default class Mapbox extends React.Component {
         '#FFD591',
         '#FF7A45',
         '#CF1D49',
-      ]);
+      ])
+      .shape('fill')
+      .style({
+        opacity: 0.8,
+      });
     scene.addLayer(layer);
-    scene.render();
-
+    function run() {
+      scene.render();
+      requestAnimationFrame(run);
+    }
+    requestAnimationFrame(run);
     this.scene = scene;
-
+    console.log(layer);
     /*** 运行时修改样式属性 ***/
     // const gui = new dat.GUI();
     // this.gui = gui;

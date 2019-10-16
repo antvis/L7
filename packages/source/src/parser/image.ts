@@ -1,13 +1,20 @@
+import { getImage } from '@l7/utils';
 import { IParserData } from '../interface';
-
 interface IImageCfg {
   extent: [number, number, number, number];
 }
-export default function image(data: string | [], cfg: IImageCfg): IParserData {
+export default function image(
+  data: string | string[],
+  cfg: IImageCfg,
+): IParserData {
   const { extent } = cfg;
-
+  const images = new Promise((resolve) => {
+    loadData(data, (res: any) => {
+      resolve(res);
+    });
+  });
   const resultData: IParserData = {
-    images: loadData(data),
+    images,
     _id: 1,
     dataArray: [
       {
@@ -18,16 +25,26 @@ export default function image(data: string | [], cfg: IImageCfg): IParserData {
   };
   return resultData;
 }
-function loadData(data: string | string[]): Promise<Response | Response[]> {
+function loadData(data: string | string[], done: any) {
   const url = data;
+  const imageDatas: HTMLImageElement[] = [];
   if (typeof url === 'string') {
-    const imageRequest = new Request(url);
-    return fetch(imageRequest);
-  } else {
-    const fetchs = url.map((item: string) => {
-      const imageRequest = new Request(item);
-      return fetch(imageRequest);
+    getImage({ url }, (err: string, img: HTMLImageElement) => {
+      imageDatas.push(img);
+      done(imageDatas);
     });
-    return Promise.all(fetchs);
+  } else {
+    const imageCount = url.length;
+    let imageindex = 0;
+    url.forEach((item) => {
+      getImage({ url: item }, (err: any, img: HTMLImageElement) => {
+        imageindex++;
+        imageDatas.push(img);
+        if (imageindex === imageCount) {
+          done(imageDatas);
+        }
+      });
+    });
   }
+  return image;
 }
