@@ -1,9 +1,10 @@
-import { ILayerStyleOptions } from '@l7/core';
+import { IICONMap, ILayerStyleOptions } from '@l7/core';
 import { lngLatToMeters } from '@l7/utils';
 import { vec3 } from 'gl-matrix';
+import { IExtrudeGeomety } from '../point/shape/extrude';
 interface IBufferCfg {
   data: unknown[];
-  imagePos?: unknown;
+  iconMap?: IICONMap;
   style?: ILayerStyleOptions;
 }
 export type Position = number[];
@@ -26,6 +27,7 @@ export interface IEncodeFeature {
   coordinates: unknown;
   bufferInfo: unknown;
 }
+
 export default class Buffer {
   public attributes: {
     [key: string]: Float32Array;
@@ -33,14 +35,14 @@ export default class Buffer {
   public verticesCount: number = 0;
   public indexArray: Uint32Array = new Uint32Array(0);
   public indexCount: number = 0;
-
+  public instanceGeometry: IExtrudeGeomety;
   protected data: unknown[];
-  protected imagePos: unknown;
+  protected iconMap: IICONMap;
   protected style: any;
 
-  constructor({ data, imagePos, style }: IBufferCfg) {
+  constructor({ data, iconMap, style }: IBufferCfg) {
     this.data = data;
-    this.imagePos = imagePos;
+    this.iconMap = iconMap as IICONMap;
     this.style = style;
     this.init();
   }
@@ -126,7 +128,7 @@ export default class Buffer {
     const { color, id, pattern, size } = feature;
     const bufferInfo = feature.bufferInfo as IBufferInfo;
     const { verticesOffset } = bufferInfo;
-    const imagePos = this.imagePos;
+    const imagePos = this.iconMap;
     const start1 = verticesOffset;
     for (let i = 0; i < num; i++) {
       if (color) {

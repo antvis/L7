@@ -60,3 +60,15 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
     index: indexArray,
   };
 }
+export function fillPolygon(points: IPath[]) {
+  const flattengeo = earcut.flatten(points);
+  const triangles = earcut(
+    flattengeo.vertices,
+    flattengeo.holes,
+    flattengeo.dimensions,
+  );
+  return {
+    positions: flattengeo.vertices,
+    index: triangles,
+  };
+}

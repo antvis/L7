@@ -1,4 +1,6 @@
+import { lngLatToMeters, Point } from '@l7/utils';
 import BufferBase, { IEncodeFeature, Position } from '../../core/BaseBuffer';
+import getNormals from '../../utils/polylineNormal';
 interface IBufferInfo {
   normals: number[];
   arrayIndex: number[];
@@ -8,7 +10,7 @@ interface IBufferInfo {
   verticesOffset: number;
   indexOffset: number;
 }
-export default class FillBuffer extends BufferBase {
+export default class LineBuffer extends BufferBase {
   private hasPattern: boolean;
   protected buildFeatures() {
     const layerData = this.data as IEncodeFeature[];
@@ -32,13 +34,19 @@ export default class FillBuffer extends BufferBase {
   protected calculateFeatures() {
     const layerData = this.data as IEncodeFeature[];
     // 计算长
-    layerData.forEach((feature: IEncodeFeature) => {
-      let { coordinates } = feature;
+    layerData.forEach((feature: IEncodeFeature, index: number) => {
+      let coordinates = feature.coordinates as Position[] | Position[][];
       if (Array.isArray(coordinates[0][0])) {
-        coordinates = coordinates[0];
+        coordinates = coordinates[0] as Position[];
       }
+      // @ts-ignore
+      const projectCoord: number[][] = coordinates.map((item: Position[]) => {
+        // @ts-ignore
+        const p: Point = [...item];
+        return lngLatToMeters(p);
+      });
       const { normals, attrIndex, attrPos, attrDistance, miters } = getNormals(
-        coordinates,
+        coordinates as number[][],
         false,
         this.verticesCount,
       );

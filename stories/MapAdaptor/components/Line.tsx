@@ -36,15 +36,29 @@ export default class Point3D extends React.Component {
       pitch: 0,
       type: 'mapbox',
       style: 'mapbox://styles/mapbox/dark-v9',
-      zoom: 2,
+      zoom: 13,
     });
     const LineLayer = new Line({});
 
-    LineLayer.source(testdata)
-      .size(5)
-      .color('red')
+    LineLayer.source(await response.json())
+      .size(1)
       .shape('line')
-      .size(10);
+      .color(
+        'ELEV',
+        [
+          '#E8FCFF',
+          '#CFF6FF',
+          '#A1E9ff',
+          '#65CEF7',
+          '#3CB1F0',
+          '#2894E0',
+          '#1772c2',
+          '#105CB3',
+          '#0D408C',
+          '#002466',
+        ].reverse(),
+      )
+      .render();
     scene.addLayer(LineLayer);
     // function run() {
     //   scene.render();
