@@ -24,9 +24,9 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
   const { gridHash, gridOffset } = _pointsGridHash(dataArray, size);
   const layerData = _getGridLayerDataFromGridHash(gridHash, gridOffset, option);
   return {
-    yOffset: ((gridOffset.xOffset / 360) * (256 << 20)) / 2,
-    xOffset: ((gridOffset.xOffset / 360) * (256 << 20)) / 2,
-    radius: ((gridOffset.xOffset / 360) * (256 << 20)) / 2,
+    yOffset: gridOffset.yOffset / 1.8,
+    xOffset: gridOffset.xOffset / 1.8,
+    radius: gridOffset.xOffset,
     dataArray: layerData,
   };
 }
@@ -42,8 +42,8 @@ function _pointsGridHash(dataArray: any[], size: number) {
       latMax = pLat > latMax ? pLat : latMax;
     }
   }
-  // const centerLat = (latMin + latMax) / 2;
-  const centerLat = 34.54083;
+  const centerLat = (latMin + latMax) / 2;
+  // const centerLat = 34.54083;
   const gridOffset = _calculateGridLatLonOffset(size, centerLat);
   if (gridOffset.xOffset <= 0 || gridOffset.yOffset <= 0) {
     return { gridHash: {}, gridOffset };
