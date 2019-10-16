@@ -4,6 +4,7 @@ import { extractUniforms } from '../../utils/shader-module';
 import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 
 import decode from '../../shaders/decode.glsl';
+import lighting from '../../shaders/lighting.glsl';
 import projection from '../../shaders/projection.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 
@@ -21,6 +22,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('decode', { vs: decode, fs: '' });
     this.registerModule('projection', { vs: projection, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });
+    this.registerModule('lighting', { vs: lighting, fs: '' });
   }
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {

@@ -6,6 +6,7 @@ import {
   TYPES,
 } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
+import ExtrudeBuffer from './buffers/ExtrudeBuffer';
 import FillBuffer from './buffers/FillBuffer';
 import polygon_frag from './shaders/polygon_frag.glsl';
 import polygon_vert from './shaders/polygon_vert.glsl';
@@ -38,10 +39,13 @@ export default class PolygonLayer extends BaseLayer {
 
     this.models = [];
     const { vs, fs, uniforms } = this.shaderModule.getModule('polygon');
+    // const buffer = new ExtrudeBuffer({
+    //   data: this.getEncodedData(),
+    // });
+    // buffer.computeVertexNormals();
     const buffer = new FillBuffer({
       data: this.getEncodedData(),
     });
-
     const {
       createAttribute,
       createBuffer,
@@ -59,6 +63,13 @@ export default class PolygonLayer extends BaseLayer {
             }),
             size: 3,
           }),
+          a_normal: createAttribute({
+            buffer: createBuffer({
+              data: buffer.attributes.normals,
+              type: gl.FLOAT,
+            }),
+            size: 3,
+          }),
           a_color: createAttribute({
             buffer: createBuffer({
               data: buffer.attributes.colors,
@@ -67,7 +78,10 @@ export default class PolygonLayer extends BaseLayer {
             size: 4,
           }),
         },
-        uniforms,
+        uniforms: {
+          ...uniforms,
+          u_opacity: this.styleOption.opacity as number,
+        },
         fs,
         vs,
         count: buffer.indexArray.length,

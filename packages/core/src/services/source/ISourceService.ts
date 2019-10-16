@@ -12,7 +12,7 @@ type CallBack = (...args: any[]) => any;
 export interface ITransform {
   type: string;
   [key: string]: any;
-  callback: CallBack;
+  callback?: CallBack;
 }
 
 export interface ISourceCFG {

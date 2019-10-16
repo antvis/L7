@@ -1,18 +1,17 @@
-import { ILayerStyleAttribute } from '@l7/core';
-import { isNil } from 'lodash';
+import { ILayerStyleAttribute, IStyleScale, StyleScaleType } from '@l7/core';
+import { isNil, isString } from 'lodash';
 
 type CallBack = (...args: any[]) => any;
 
 export default class StyleAttribute implements ILayerStyleAttribute {
-  public type: string;
+  public type: StyleScaleType;
   public names: string[];
-  public scales: any[] = [];
+  public scales: IStyleScale[] = [];
   public values: any[] = [];
   public field: string;
   constructor(cfg: any) {
     const {
-      type = 'base',
-      names = [],
+      type = StyleScaleType.CONSTANT,
       scales = [],
       values = [],
       callback,
@@ -22,11 +21,10 @@ export default class StyleAttribute implements ILayerStyleAttribute {
     this.type = type;
     this.scales = scales;
     this.values = values;
-    this.names = names;
-    // 设置 range  TODO 2维映射
-    this.scales.forEach((scale) => {
-      scale.scale.range(values);
-    });
+    this.names = this.parseFields(field) || [];
+    if (callback) {
+      this.type = StyleScaleType.VARIABLE;
+    }
     this.callback = (...params: any[]): any[] => {
       /**
        * 当用户设置的 callback 返回 null 时, 应该返回默认 callback 中的值
@@ -44,7 +42,22 @@ export default class StyleAttribute implements ILayerStyleAttribute {
     };
   }
   public callback: CallBack = () => [];
-
+  public setScales(scales: IStyleScale[]): void {
+    if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
+      this.type = StyleScaleType.VARIABLE;
+      scales.forEach((scale) => {
+        if (this.values.length > 0) {
+          scale.scale.range(this.values);
+        }
+      });
+    } else {
+      // 设置attribute 常量值
+      this.values = scales.map((scale, index) => {
+        return scale.scale(this.names[index]);
+      });
+    }
+    this.scales = scales;
+  }
   public mapping(...params: unknown[]): unknown[] {
     return this.callback.apply(this, params);
   }
@@ -59,5 +72,19 @@ export default class StyleAttribute implements ILayerStyleAttribute {
       const value = scale.scale(param);
       return value;
     });
+  }
+  /**
+   * @example
+   * 'w*h' => ['w', 'h']
+   * 'w' => ['w']
+   */
+  private parseFields(field: string[] | string): string[] {
+    if (Array.isArray(field)) {
+      return field;
+    }
+    if (isString(field)) {
+      return field.split('*');
+    }
+    return [field];
   }
 }

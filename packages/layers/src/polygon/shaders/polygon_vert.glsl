@@ -1,6 +1,6 @@
 attribute vec4 a_color; 
 attribute vec3 a_Position;
-
+attribute vec3 a_normal;
 uniform mat4 u_ModelMatrix;
 
 varying vec4 v_color;

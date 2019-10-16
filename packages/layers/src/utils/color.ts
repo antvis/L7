@@ -1,11 +1,12 @@
+import * as d3 from 'd3-color';
 export function rgb2arr(str: string) {
-  const arr = [];
-  if (str.length === 4) {
-    str = `#${str[1]}${str[1]}${str[2]}${str[2]}${str[3]}${str[3]}`;
+  const color = d3.color(str) as d3.RGBColor;
+  const arr = [0, 0, 0, 0];
+  if (color != null) {
+    arr[0] = color.r / 255;
+    arr[1] = color.g / 255;
+    arr[2] = color.b / 255;
+    arr[3] = color.opacity;
   }
-  arr.push(parseInt(str.substr(1, 2), 16) / 255);
-  arr.push(parseInt(str.substr(3, 2), 16) / 255);
-  arr.push(parseInt(str.substr(5, 2), 16) / 255);
-  arr.push(1.0);
   return arr;
 }
