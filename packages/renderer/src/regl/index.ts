@@ -56,6 +56,7 @@ export default class ReglRendererService implements IRendererService {
           'EXT_SRGB', // baseColor emmisive
           'OES_texture_float', // shadow map
           'WEBGL_depth_texture',
+          'angle_instanced_arrays',
           'EXT_texture_filter_anisotropic', // VSM shadow map
         ],
         optionalExtensions: ['oes_texture_float_linear'],

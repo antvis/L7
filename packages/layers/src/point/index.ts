@@ -1,5 +1,6 @@
 import {
   gl,
+  ILayer,
   IRendererService,
   IShaderModuleService,
   lazyInject,
@@ -50,15 +51,15 @@ export default class PointLayer extends BaseLayer {
 
   private pointFeatures: IPointFeature[] = [];
 
-  public style(options: Partial<IPointLayerStyleOptions>) {
-    // this.layerStyleService.update(options);
-    // this.styleOptions = {
-    //   ...this.styleOptions,
-    //   ...options,
-    // };
-  }
+  // public style(options: Partial<IPointLayerStyleOptions>) {
+  //   // this.layerStyleService.update(options);
+  //   // this.styleOptions = {
+  //   //   ...this.styleOptions,
+  //   //   ...options,
+  //   // };
+  // }
 
-  public render() {
+  public render(): ILayer {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {

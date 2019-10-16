@@ -1,24 +1,4 @@
 export type DataType = string | object[] | object;
-export interface IParserCfg {
-  type: string;
-  x?: string;
-  y?: string;
-  x1?: string;
-  y1?: string;
-  coordinates?: string;
-  [key: string]: any;
-}
-type CallBack = (...args: any[]) => any;
-export interface ITransform {
-  type: string;
-  [key: string]: any;
-  callback: CallBack;
-}
-
-export interface ISourceCFG {
-  parser?: IParserCfg;
-  transforms?: ITransform[];
-}
 export interface IDictionary<TValue> {
   [key: string]: TValue;
 }

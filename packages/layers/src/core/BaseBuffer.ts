@@ -1,17 +1,22 @@
+import { IICONMap, ILayerStyleOptions } from '@l7/core';
+import { lngLatToMeters } from '@l7/utils';
+import { vec3 } from 'gl-matrix';
+import { IExtrudeGeomety } from '../point/shape/extrude';
 interface IBufferCfg {
   data: unknown[];
-  imagePos?: unknown;
-  uv?: boolean;
+  iconMap?: IICONMap;
+  style?: ILayerStyleOptions;
 }
-type Position = number[];
+export type Position = number[];
 type Color = [number, number, number, number];
 export interface IBufferInfo {
   vertices?: any;
   indexArray?: any;
   indexOffset: any;
-  verticesOffset: any;
+  verticesOffset: number;
   faceNum?: any;
   dimensions: number;
+  [key: string]: any;
 }
 export interface IEncodeFeature {
   color?: Color;
@@ -19,9 +24,10 @@ export interface IEncodeFeature {
   shape?: string | number;
   pattern?: string;
   id?: number;
-  coordinates: Position[][];
-  bufferInfo: IBufferInfo;
+  coordinates: unknown;
+  bufferInfo: unknown;
 }
+
 export default class Buffer {
   public attributes: {
     [key: string]: Float32Array;
@@ -29,17 +35,64 @@ export default class Buffer {
   public verticesCount: number = 0;
   public indexArray: Uint32Array = new Uint32Array(0);
   public indexCount: number = 0;
-
+  public instanceGeometry: IExtrudeGeomety;
   protected data: unknown[];
-  protected imagePos: unknown;
-  protected uv: boolean;
+  protected iconMap: IICONMap;
+  protected style: any;
 
-  constructor({ data, imagePos, uv }: IBufferCfg) {
+  constructor({ data, iconMap, style }: IBufferCfg) {
     this.data = data;
-    this.imagePos = imagePos;
-    this.uv = !!uv;
+    this.iconMap = iconMap as IICONMap;
+    this.style = style;
     this.init();
   }
+  public computeVertexNormals(
+    field: string = 'positions',
+    flag: boolean = true,
+  ) {
+    const normals = (this.attributes.normals = new Float32Array(
+      this.verticesCount * 3,
+    ));
+    const indexArray = this.indexArray;
+    const positions = this.attributes[field];
+    let vA;
+    let vB;
+    let vC;
+    const cb = vec3.create();
+    const ab = vec3.create();
+    const normal = vec3.create();
+    for (let i = 0, li = indexArray.length; i < li; i += 3) {
+      vA = indexArray[i + 0] * 3;
+      vB = indexArray[i + 1] * 3;
+      vC = indexArray[i + 2] * 3;
+      const [ax, ay] = flag
+        ? lngLatToMeters([positions[vA], positions[vA + 1]])
+        : [positions[vA], positions[vA + 1]];
+      const pA = vec3.fromValues(ax, ay, positions[vA + 2]);
+      const [bx, by] = flag
+        ? lngLatToMeters([positions[vB], positions[vB + 1]])
+        : [positions[vB], positions[vB + 1]];
+      const pB = vec3.fromValues(bx, by, positions[vB + 2]);
+      const [cx, cy] = flag
+        ? lngLatToMeters([positions[vC], positions[vC + 1]])
+        : [positions[vC], positions[vC + 1]];
+      const pC = vec3.fromValues(cx, cy, positions[vC + 2]);
+      vec3.sub(cb, pC, pB);
+      vec3.sub(ab, pA, pB);
+      vec3.cross(normal, cb, ab);
+      normals[vA] += cb[0];
+      normals[vA + 1] += cb[1];
+      normals[vA + 2] += cb[2];
+      normals[vB] += cb[0];
+      normals[vB + 1] += cb[1];
+      normals[vB + 2] += cb[2];
+      normals[vC] += cb[0];
+      normals[vC + 1] += cb[1];
+      normals[vC + 2] += cb[2];
+    }
+    this.normalizeNormals();
+  }
+
   // 计算每个要素顶点个数，记录索引位置
   protected calculateFeatures() {
     throw new Error('Method not implemented.');
@@ -47,11 +100,13 @@ export default class Buffer {
   protected buildFeatures() {
     throw new Error('Method not implemented.');
   }
+
   protected checkIsClosed(points: Position[][]) {
     const p1 = points[0][0];
     const p2 = points[0][points[0].length - 1];
     return p1[0] === p2[0] && p1[1] === p2[1];
   }
+
   protected concat(arrayType: Float32Array, arrays: any) {
     let totalLength = 0;
     for (const arr of arrays) {
@@ -71,8 +126,9 @@ export default class Buffer {
   }
   protected encodeArray(feature: IEncodeFeature, num: number) {
     const { color, id, pattern, size } = feature;
-    const { verticesOffset } = feature.bufferInfo;
-    const imagePos = this.imagePos;
+    const bufferInfo = feature.bufferInfo as IBufferInfo;
+    const { verticesOffset } = bufferInfo;
+    const imagePos = this.iconMap;
     const start1 = verticesOffset;
     for (let i = 0; i < num; i++) {
       if (color) {
@@ -88,7 +144,7 @@ export default class Buffer {
         let size2: number[] = [];
         if (Array.isArray(size) && size.length === 2) {
           // TODO 多维size支持
-          size2 = [size[0]];
+          size2 = [size[0], size[0], size[1]];
         }
         if (!Array.isArray(size)) {
           size2 = [size];
@@ -103,82 +159,35 @@ export default class Buffer {
       }
     }
   }
-  protected calculateWall(feature: IEncodeFeature) {
-    const size = feature.size;
-    const {
-      vertices,
-      indexOffset,
-      verticesOffset,
-      faceNum,
-      dimensions,
-    } = feature.bufferInfo;
-    this.encodeArray(feature, faceNum * 4);
-    for (let i = 0; i < faceNum; i++) {
-      const prePoint = vertices.slice(i * 3, i * 3 + 3);
-      const nextPoint = vertices.slice(i * 3 + 3, i * 3 + 6);
-      this.calculateExtrudeFace(
-        prePoint,
-        nextPoint,
-        verticesOffset + i * 4,
-        indexOffset + i * 6,
-        size as number,
-      );
-      feature.bufferInfo.verticesOffset += 4;
-      feature.bufferInfo.indexOffset += 6;
-    }
-  }
-
-  protected calculateExtrudeFace(
-    prePoint: number[],
-    nextPoint: number[],
-    positionOffset: number,
-    indexOffset: number | undefined,
-    size: number,
-  ) {
-    this.attributes.positions.set(
-      [
-        prePoint[0],
-        prePoint[1],
-        size,
-        nextPoint[0],
-        nextPoint[1],
-        size,
-        prePoint[0],
-        prePoint[1],
-        0,
-        nextPoint[0],
-        nextPoint[1],
-        0,
-      ],
-      positionOffset * 3,
-    );
-    const indexArray = [1, 2, 0, 3, 2, 1].map((v) => {
-      return v + positionOffset;
-    });
-    if (this.uv) {
-      this.attributes.uv.set(
-        [0.1, 0, 0, 0, 0.1, size / 2000, 0, size / 2000],
-        positionOffset * 2,
-      );
-    }
-    this.indexArray.set(indexArray, indexOffset);
-  }
-
-  private init() {
-    this.calculateFeatures();
-    this.initAttributes();
-    this.buildFeatures();
-  }
-
-  private initAttributes() {
+  protected initAttributes() {
     this.attributes.positions = new Float32Array(this.verticesCount * 3);
     this.attributes.colors = new Float32Array(this.verticesCount * 4);
     this.attributes.pickingIds = new Float32Array(this.verticesCount);
     this.attributes.sizes = new Float32Array(this.verticesCount);
     this.attributes.pickingIds = new Float32Array(this.verticesCount);
-    if (this.uv) {
-      this.attributes.uv = new Float32Array(this.verticesCount * 2);
-    }
     this.indexArray = new Uint32Array(this.indexCount);
+  }
+
+  private init() {
+    //  1. 计算 attribute 长度
+    this.calculateFeatures();
+    //  2. 初始化 attribute
+    this.initAttributes();
+    //  3. 拼接attribute
+    this.buildFeatures();
+  }
+
+  private normalizeNormals() {
+    const { normals } = this.attributes;
+    for (let i = 0, li = normals.length; i < li; i += 3) {
+      const normal = vec3.fromValues(
+        normals[i],
+        normals[i + 1],
+        normals[i + 2],
+      );
+      const newNormal = vec3.create();
+      vec3.normalize(newNormal, normal);
+      normals.set(newNormal, i);
+    }
   }
 }
