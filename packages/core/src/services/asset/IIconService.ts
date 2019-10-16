@@ -15,7 +15,10 @@ export interface IICONMap {
   [key: string]: IIconValue;
 }
 export interface IIconService {
+  canvasHeight: number;
+  init(): void;
   addImage(id: string, image: IImage): void;
   getTexture(): ITexture2D;
   getIconMap(): IICONMap;
+  getCanvas(): HTMLCanvasElement;
 }
