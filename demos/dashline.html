@@ -21,24 +21,41 @@
 <script>
 
 const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
+const testdata = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+              [91.58203125, 34.95799531086792],
+              [96.767578125, 34.379712580462204],
+              [99.228515625, 33.7243396617476],
+            ],
+          },
+        },
+      ],
+    };
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
   center: [ 102.602992, 23.107329],
   pitch: 15,
-  zoom: 14.82,
+  zoom: 4,
 });
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json', data => {
     scene.LineLayer({
       zIndex: 2
     })
-    .source(data)
-    .size('ELEV',(value)=>{
-      return [2,(value-1000)*7];
-    })
+    .source(testdata)
+    .size(20)
     .active(true)
     .shape('line')
+    .color('red')
+    /*
     .style({
       lineType: 'dash',
       dashArray: 20,
@@ -46,6 +63,7 @@ scene.on('loaded', () => {
       dashRatio: 0.5
     })
     .color('ELEV',["#E8FCFF", "#CFF6FF", "#A1E9ff", "#65CEF7", "#3CB1F0", "#2894E0", "#1772c2", "#105CB3", "#0D408C", "#002466"].reverse())
+    */
     .render();
   });
 });

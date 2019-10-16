@@ -8,7 +8,7 @@ export default function ImageBuffer(layerData, opt) {
     uv: []
   };
   layerData.forEach(item => {
-    const { color, size, id, shape, coordinates } = item;
+    const { color = [ 0, 0, 0, 0 ], size, id, shape, coordinates } = item;
     const { x, y } = opt.imagePos[shape];
     attributes.vertices.push(...coordinates);
     attributes.colors.push(...color);
