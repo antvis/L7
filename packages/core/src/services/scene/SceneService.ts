@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import { AsyncParallelHook, AsyncSeriesHook } from 'tapable';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
+import { IIconService, IImage } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IGlobalConfig, IGlobalConfigService } from '../config/IConfigService';
 import { IInteractionService } from '../interaction/IInteractionService';
@@ -12,7 +13,6 @@ import { IMapCamera, IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
-
 /**
  * will emit `loaded` `resize` `destroy` event
  */
@@ -45,6 +45,9 @@ export default class Scene extends EventEmitter implements ISceneService {
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModule: IShaderModuleService;
 
+  @inject(TYPES.IIconService)
+  private readonly iconService: IIconService;
+
   /**
    * 是否首次渲染
    */
@@ -76,6 +79,10 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public init(globalConfig: IGlobalConfig) {
     this.configService.setAndCheckConfig(globalConfig);
+    
+    // 初始化资源管理 字体，图片
+      this.iconService.init();
+
     /**
      * 初始化底图
      */
@@ -151,6 +158,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.interactionService.destroy();
     window.removeEventListener('resize', this.handleWindowResized, false);
   }
+  public addImage(id: string, img: IImage) {
+    this.iconService.addImage(id, img);
+  }
 
   private handleWindowResized = () => {
     this.emit('resize');
@@ -174,7 +184,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.render();
     }
   };
-
   private handleMapCameraChanged = (viewport: IViewport) => {
     this.cameraService.update(viewport);
     this.render();

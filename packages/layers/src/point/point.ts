@@ -1,5 +1,6 @@
 import {
   gl,
+  IIconService,
   IRendererService,
   IShaderModuleService,
   lazyInject,
@@ -7,8 +8,11 @@ import {
 } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import ExtrudeBuffer from './buffers/ExtrudeBuffer';
+import ImageBuffer from './buffers/ImageBuffer';
 import extrude_frag from './shaders/extrude_frag.glsl';
 import extrude_vert from './shaders/extrude_vert.glsl';
+import image_frag from './shaders/image_frag.glsl';
+import image_vert from './shaders/image_vert.glsl';
 
 export default class PointLayer extends BaseLayer {
   public name: string = 'PointLayer';
@@ -18,6 +22,7 @@ export default class PointLayer extends BaseLayer {
 
   @lazyInject(TYPES.IRendererService)
   private readonly renderer: IRendererService;
+
 
   protected renderModels() {
     this.models.forEach((model) =>
@@ -35,20 +40,28 @@ export default class PointLayer extends BaseLayer {
       vs: extrude_vert,
       fs: extrude_frag,
     });
+    this.shaderModule.registerModule('pointImage', {
+      vs: image_vert,
+      fs: image_frag,
+    });
 
     this.models = [];
-    const { vs, fs, uniforms } = this.shaderModule.getModule('point');
-    const buffer = new ExtrudeBuffer({
-      data: this.getEncodedData(),
-    });
-    buffer.computeVertexNormals('miters', false);
+    const { vs, fs, uniforms } = this.shaderModule.getModule('pointImage');
+    // const buffer = new ExtrudeBuffer({
+    //   data: this.getEncodedData(),
+    // });
+    // buffer.computeVertexNormals('miters', false);
     const {
       createAttribute,
       createBuffer,
       createElements,
+      createTexture2D,
       createModel,
     } = this.renderer;
-
+    const buffer = new ImageBuffer({
+      data: this.getEncodedData(),
+      iconMap: this.iconService.getIconMap(),
+    });
     this.models.push(
       createModel({
         attributes: {
@@ -78,27 +91,40 @@ export default class PointLayer extends BaseLayer {
               data: buffer.attributes.sizes,
               type: gl.FLOAT,
             }),
-            size: 3,
+            size: 1,
           }),
-          a_shape: createAttribute({
+          a_uv: createAttribute({
             buffer: createBuffer({
-              data: buffer.attributes.miters,
+              data: buffer.attributes.uv,
               type: gl.FLOAT,
             }),
-            size: 3,
+            size: 2,
           }),
+          // a_shape: createAttribute({
+          //   buffer: createBuffer({
+          //     data: buffer.attributes.miters,
+          //     type: gl.FLOAT,
+          //   }),
+          //   size: 3,
+          // }),
         },
         uniforms: {
           ...uniforms,
           u_opacity: this.styleOption.opacity as number,
+          u_texture: createTexture2D({
+            data: this.iconService.getCanvas(),
+            width: 1024,
+            height: this.iconService.canvasHeight,
+          }),
         },
         fs,
         vs,
-        count: buffer.indexArray.length,
-        elements: createElements({
-          data: buffer.indexArray,
-          type: gl.UNSIGNED_INT,
-        }),
+        primitive: gl.POINTS,
+        count: buffer.verticesCount,
+        // elements: createElements({
+        //   data: buffer.indexArray,
+        //   type: gl.UNSIGNED_INT,
+        // }),
       }),
     );
   }

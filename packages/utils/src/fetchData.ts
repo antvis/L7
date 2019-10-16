@@ -108,6 +108,7 @@ export const getImage = (requestParameters: any, callback: any) => {
       callback(err);
     } else if (imgData) {
       const img = new window.Image();
+      img.crossOrigin = 'anonymous';
       const URL = window.URL || window.webkitURL;
       img.onload = () => {
         callback(null, img);

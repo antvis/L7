@@ -7,6 +7,7 @@ import Point3D from './components/Point3D';
 import Line from './components/Line';
 import ImageLayer from './components/Image';
 import GridHeatMap from './components/GridHeatmap';
+import PointImage from './components/pointImage';
 // @ts-ignore
 import notes from './Map.md';
 
@@ -21,4 +22,5 @@ storiesOf('地图底图测试', module)
   .add('Point3D', () => <Point3D />)
   .add('Line', () => <Line />)
   .add('GridHeatMap', () => <GridHeatMap />)
-  .add('Image', () => <ImageLayer />);
+  .add('Image', () => <ImageLayer />)
+  .add('pointImage', () => <PointImage />);
