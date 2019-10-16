@@ -5,6 +5,7 @@ import PointMaterial from '../../../geom/material/pointMaterial';
 export default function DrawImage(layerData, layer) {
   const geometry = new THREE.BufferGeometry();
   const style = layer.get('styleOptions');
+  const activeOption = layer.get('activedOptions');
   const { strokeWidth, stroke, opacity } = style;
   const texture = layer.scene.image.texture;
   const attributes = PointBuffer.ImageBuffer(layerData, {
@@ -19,12 +20,14 @@ export default function DrawImage(layerData, layer) {
     u_opacity: opacity,
     u_strokeWidth: strokeWidth,
     u_stroke: stroke,
+    u_activeColor: activeOption.fill,
     u_texture: texture
   }, {
     SHAPE: false,
     TEXCOORD_0: true
   });
   material.depthTest = false;
+  material.setBending(style.blending);
   const strokeMesh = new THREE.Points(geometry, material);
   return strokeMesh;
 }

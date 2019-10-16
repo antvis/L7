@@ -21,9 +21,8 @@ void main() {
    }
    gl_Position =  matModelViewProjection  * vec4(position, 1.0);
    gl_PointSize = a_size;
-   v_rs = vec2(a_size / 2.0, a_size / 2.0- u_strokeWidth);
+   v_rs = vec2(a_size, a_size - u_strokeWidth);
     #ifdef TEXCOORD_0
-      
        v_uv = uv;
     #endif
     #ifdef SHAPE

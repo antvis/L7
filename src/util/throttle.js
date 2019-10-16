@@ -1,21 +1,11 @@
-export default function throttle(fn, time) {
-  let pending = false;
-  let timerId;
-
-  const later = () => {
-    timerId = null;
-    if (pending) {
-      fn();
-      timerId = setTimeout(later, time);
-      pending = false;
+export default function(fn, delay) {
+  let lastCall = 0;
+  return function(...args) {
+    const now = (new Date()).getTime();
+    if (now - lastCall < delay) {
+      return;
     }
-  };
-
-  return () => {
-    pending = true;
-    if (!timerId) {
-      later();
-    }
-    return timerId;
+    lastCall = now;
+    return fn(...args);
   };
 }

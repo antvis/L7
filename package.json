@@ -65,7 +65,7 @@
   },
   "scripts": {
     "build-dev": "rollup -c --environment BUILD:dev",
-    "watch-dev": "rollup -c --environment BUILD:dev --watch & npm run demos-web ",
+    "watch-dev": "rollup -c --environment BUILD:dev,MINIFY:false --watch & npm run demos-web ",
     "build-prod": "rollup -c --environment BUILD:production,MINIFY:false",
     "build-prod-min": "rollup -c --environment BUILD:production,MINIFY:true",
     "build": "rollup -c --environment BUILD:production",

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>city demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id = 'gui' style="position:absolute;top:0px;right:0px;z-index:2;"></div>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/l7.js"></script>
+<script>
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [
+          120.15935897827148,
+          30.261736090037477
+        ],
+  pitch:0,
+  zoom: 5,
+  showBuildingBlock:false,
+  minZoom: 0,
+  maxZoom: 18
+});
+
+
+scene.on('loaded', () => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json', data => {
+     let labelData = data.features.map((feature) => {
+        return feature.properties
+      })
+      labelData = labelData.filter((item) => {
+        return item.center !== undefined
+      })
+   const layer= scene.PolygonLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .shape('fill')
+     .active(true)
+    .color('name', ['#9e0142', '#d53e4f', '#f46d43', '#fdae61', '#fee08b', '#ffffbf', '#e6f598', '#abdda4', '#66c2a5', '#3288bd', '#5e4fa2'])
+    .render();
+
+    scene.PolygonLayer({
+      zIndex: 2
+    })
+    .source(data)
+    .active(true)
+    .size(1)
+    .shape('line')
+    .color('#ff893a')
+    .render();
+    scene.PointLayer()
+    .source(labelData, {
+      parser: {
+              type: 'json',
+              coordinates: 'center'
+          }
+    })
+    .shape('circle')
+     .active(true)
+    .size(14)
+    .color('red')
+    .render()
+
+    scene.PointLayer()
+    .source(labelData, {
+      parser: {
+              type: 'json',
+              coordinates: 'center'
+          }
+    })
+    .shape('name','text')
+     .active(true)
+    .size(14)
+    .color('red')
+    .style({
+      opacity: 1.0,
+      textAllowOverlap: true,
+      textAnchor: 'top',
+      textOffset: [0, 40]
+    })
+    .render()
+    
+    console.log(layer.getListeners('mousemove'));
+  });
+
+  
+    
+  
+});
+
+</script>
+</body>
+</html>
+
