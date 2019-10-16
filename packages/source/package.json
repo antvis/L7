@@ -22,6 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@l7/utils": "0.0.1",
+    "@l7/core": "0.0.1",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",

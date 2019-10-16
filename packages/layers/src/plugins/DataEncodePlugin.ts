@@ -4,7 +4,9 @@ import {
   ILayerPlugin,
   ILayerStyleAttribute,
   IParseDataItem,
+  IStyleScale,
   lazyInject,
+  StyleScaleType,
   TYPES,
 } from '@l7/core';
 import { isString } from 'lodash';
@@ -18,10 +20,7 @@ export default class DataEncodePlugin implements ILayerPlugin {
   private scaleController: ScaleController;
 
   private scaleCache: {
-    [fieldName: string]: {
-      field: string;
-      scale: any;
-    };
+    [fieldName: string]: IStyleScale;
   } = {};
 
   public apply(layer: ILayer) {
@@ -39,14 +38,12 @@ export default class DataEncodePlugin implements ILayerPlugin {
       // create scales by source data & config
       Object.keys(layer.styleAttributes).forEach((attributeName) => {
         const attribute = layer.styleAttributes[attributeName];
-        const fields = this.parseFields(attribute.field || '');
         const scales: any[] = [];
-        fields.forEach((field: string) => {
-          scales.push(this.getOrCreateScale(attribute, dataArray));
+        attribute.names.forEach((field: string) => {
+          scales.push(this.getOrCreateScale(attribute, field, dataArray));
         });
-        attribute.scales = scales;
+        attribute.setScales(scales);
       });
-
       // mapping with source data
       layer.setEncodedData(this.mapping(layer.styleAttributes, dataArray));
     });
@@ -55,33 +52,28 @@ export default class DataEncodePlugin implements ILayerPlugin {
     // layer.hooks.beforeRender.tap()
   }
 
-  private getOrCreateScale(attribute: ILayerStyleAttribute, data: any[]) {
-    const { field } = attribute;
+  private getOrCreateScale(
+    attribute: ILayerStyleAttribute,
+    field: string,
+    data: any[],
+  ): IStyleScale {
     let scale = this.scaleCache[field as string];
     if (!scale) {
       scale = this.scaleController.createScale(field as string, data);
-      scale.scale.range(attribute.values);
+      if (
+        scale.type === StyleScaleType.VARIABLE &&
+        attribute.values &&
+        attribute.values.length > 0
+      ) {
+        scale.scale.range(attribute.values);
+      }
       this.scaleCache[field as string] = scale;
     }
-    // scale: scale.scale.copy(),
-    return this.scaleCache[field as string];
+    return {
+      ...scale,
+      scale: scale.scale.copy(), // 存在相同字段映射不同通道的情况
+    };
   }
-
-  /**
-   * @example
-   * 'w*h' => ['w', 'h']
-   * 'w' => ['w']
-   */
-  private parseFields(field: string[] | string): string[] {
-    if (Array.isArray(field)) {
-      return field;
-    }
-    if (isString(field)) {
-      return field.split('*');
-    }
-    return [field];
-  }
-
   private mapping(
     attributes: {
       [attributeName: string]: ILayerStyleAttribute;
@@ -93,11 +85,13 @@ export default class DataEncodePlugin implements ILayerPlugin {
         id: record._id,
         coordinates: record.coordinates,
       };
-      // TODO 数据过滤
       Object.keys(attributes).forEach((attributeName: string) => {
         const attribute = attributes[attributeName];
+        // const { type } = attribute;
+        // if (type === StyleScaleType.CONSTANT) {
+        //   return;
+        // }
         let values = this.getAttrValue(attribute, record);
-
         if (attributeName === 'color') {
           values = values.map((c: unknown) => {
             return rgb2arr(c as string);
@@ -117,8 +111,11 @@ export default class DataEncodePlugin implements ILayerPlugin {
     const scales = attribute.scales || [];
     const params: unknown[] = [];
 
-    scales.forEach(({ field }) => {
-      if (record[field]) {
+    scales.forEach((scale) => {
+      const { field, type } = scale;
+      if (type === StyleScaleType.CONSTANT) {
+        params.push(scale.field);
+      } else {
         params.push(record[field]);
       }
     });

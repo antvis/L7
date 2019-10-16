@@ -1,20 +1,26 @@
 import {
   IGlobalConfigService,
+  IIconService,
   ILayer,
   ILayerInitializationOptions,
   ILayerPlugin,
   ILayerStyleAttribute,
+  ILayerStyleOptions,
   IModel,
   IMultiPassRenderer,
   IRendererService,
+  ISource,
+  ISourceCFG,
   lazyInject,
   StyleAttributeField,
+  StyleAttributeOption,
   TYPES,
 } from '@l7/core';
-import Source, { ISourceCFG } from '@l7/source';
+import Source from '@l7/source';
 import { isFunction } from 'lodash';
 import { SyncHook } from 'tapable';
 import DataEncodePlugin from '../plugins/DataEncodePlugin';
+import DataSourcePlugin from '../plugins/DataSourcePlugin';
 import MultiPassRendererPlugin from '../plugins/MultiPassRendererPlugin';
 import ShaderUniformPlugin from '../plugins/ShaderUniformPlugin';
 import StyleAttribute from './StyleAttribute';
@@ -37,15 +43,24 @@ export default class BaseLayer implements ILayer {
 
   // 插件集
   public plugins: ILayerPlugin[] = [
+    new DataSourcePlugin(),
     new DataEncodePlugin(),
     new MultiPassRendererPlugin(),
     new ShaderUniformPlugin(),
   ];
-
+  public sourceOption: {
+    data: any;
+    options?: ISourceCFG;
+  };
+  public styleOption: ILayerStyleOptions = {
+    opacity: 1.0,
+  };
   // 样式属性
   public styleAttributes: {
-    [key: string]: Partial<ILayerStyleAttribute>;
+    [key: string]: Required<ILayerStyleAttribute>;
   } = {};
+  @lazyInject(TYPES.IIconService)
+  protected readonly iconService: IIconService;
 
   protected layerSource: Source;
 
@@ -77,8 +92,10 @@ export default class BaseLayer implements ILayer {
     this.buildModels();
     return this;
   }
-
-  public color(field: StyleAttributeField, values?: any) {
+  public color(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+  ): ILayer {
     this.createStyleAttribute(
       'color',
       field,
@@ -88,7 +105,10 @@ export default class BaseLayer implements ILayer {
     return this;
   }
 
-  public size(field: StyleAttributeField, values?: any) {
+  public size(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+  ): ILayer {
     this.createStyleAttribute(
       'size',
       field,
@@ -98,7 +118,10 @@ export default class BaseLayer implements ILayer {
     return this;
   }
 
-  public shape(field: StyleAttributeField, values?: any) {
+  public shape(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+  ): ILayer {
     this.createStyleAttribute(
       'shape',
       field,
@@ -108,15 +131,17 @@ export default class BaseLayer implements ILayer {
     return this;
   }
 
-  public source(data: any, options?: ISourceCFG) {
-    this.layerSource = new Source(data, options);
+  public source(data: any, options?: ISourceCFG): ILayer {
+    this.sourceOption = {
+      data,
+      options,
+    };
     return this;
   }
-
-  public style(styleAttributes: any) {
-    //
+  public style(options: ILayerStyleOptions): ILayer {
+    this.styleOption = options;
+    return this;
   }
-
   public render(): ILayer {
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       this.multiPassRenderer.render();
@@ -131,11 +156,14 @@ export default class BaseLayer implements ILayer {
   }
 
   public getStyleAttributes(): {
-    [key: string]: Partial<ILayerStyleAttribute>;
+    [key: string]: Required<ILayerStyleAttribute>;
   } {
     return this.styleAttributes;
   }
 
+  public setSource(source: Source) {
+    this.layerSource = source;
+  }
   public getSource() {
     return this.layerSource;
   }

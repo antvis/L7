@@ -44,8 +44,8 @@ export default class ReglModel implements IModel {
       blend,
       stencil,
       cull,
+      instances,
     } = options;
-
     const reglUniforms: { [key: string]: IUniform } = {};
     if (uniforms) {
       this.uniforms = uniforms;
@@ -60,7 +60,6 @@ export default class ReglModel implements IModel {
     Object.keys(attributes).forEach((name: string) => {
       reglAttributes[name] = (attributes[name] as ReglAttribute).get();
     });
-
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
       frag: fs,
@@ -70,6 +69,9 @@ export default class ReglModel implements IModel {
         primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
       count,
     };
+    if (instances) {
+      drawParams.instances = instances;
+    }
 
     if (elements) {
       drawParams.elements = (elements as ReglElements).get();
