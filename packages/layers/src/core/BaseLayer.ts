@@ -59,6 +59,8 @@ export default class BaseLayer implements ILayer {
   public styleAttributes: {
     [key: string]: Required<ILayerStyleAttribute>;
   } = {};
+  @lazyInject(TYPES.IIconService)
+  protected readonly iconService: IIconService;
 
   protected layerSource: Source;
 
@@ -70,9 +72,6 @@ export default class BaseLayer implements ILayer {
 
   @lazyInject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
-
-  @lazyInject(TYPES.IIconService)
-  private readonly iconService: IIconService;
 
   constructor(initializationOptions: Partial<ILayerInitializationOptions>) {
     this.initializationOptions = initializationOptions;
@@ -140,7 +139,7 @@ export default class BaseLayer implements ILayer {
     return this;
   }
   public style(options: ILayerStyleOptions): ILayer {
-    this.styleOption = options; // TODO: merge 默认同类型
+    this.styleOption = options;
     return this;
   }
   public render(): ILayer {
