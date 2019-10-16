@@ -6,7 +6,7 @@ import getDecorators from 'inversify-inject-decorators';
 import { TYPES } from './types';
 
 /** Service interfaces */
-import { IIconService} from './services/asset/IIconService';
+import { IIconService } from './services/asset/IIconService';
 import { ICameraService } from './services/camera/ICameraService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';

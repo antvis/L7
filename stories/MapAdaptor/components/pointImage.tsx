@@ -2,8 +2,7 @@ import { Point } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 import data from './data.json';
-
-export default class Point3D extends React.Component {
+export default class PointImage extends React.Component {
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -39,12 +38,11 @@ export default class Point3D extends React.Component {
     };
     pointLayer
       .source(data)
-      .color('blue')
-      .shape('scalerank', [ 'triangleColumn', 'squareColumn', 'hexagonColumn' ,'cylinder' ])
-      .size([25, 10]);
+      // .color('blue')
+      .shape('00')
+      .size(14);
     scene.addLayer(pointLayer);
     scene.render();
-
   }
 
   public render() {

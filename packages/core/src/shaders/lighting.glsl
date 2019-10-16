@@ -1,7 +1,6 @@
 // Blinn-Phong model
 // apply lighting in vertex shader instead of fragment shader
 // @see https://learnopengl.com/Advanced-Lighting/Advanced-Lighting
-// TODO: support point light、spot light & sun light
 uniform float u_ambient : 1.0;
 uniform float u_diffuse : 1.0;
 uniform float u_specular : 1.0;
