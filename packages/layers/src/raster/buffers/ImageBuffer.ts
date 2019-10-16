@@ -4,14 +4,13 @@ interface IImageFeature extends IEncodeFeature {
 }
 export default class ImageBuffer extends BaseBuffer {
   protected calculateFeatures() {
-    const layerData = this.data as IImageFeature[];
-    this.verticesCount = 4;
+    this.verticesCount = 6;
     this.indexCount = 6;
   }
   protected buildFeatures() {
+    this.attributes.uv = new Float32Array(this.verticesCount * 2);
     const layerData = this.data as IImageFeature[];
     const coordinates = layerData[0].coordinates as Position[];
-    const images = layerData[0].images;
     const positions: number[] = [
       ...coordinates[0],
       0,

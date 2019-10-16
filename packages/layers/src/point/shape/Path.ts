@@ -1,11 +1,18 @@
 type IPosition = [number, number, number];
 export type IPath = IPosition[];
-export enum ShapeType {
-  CIRCLE = 'cylinder',
-  SQUARE = 'squareColumn',
-  TRIANGLE = 'triangleColumn',
-  HEXAGON = 'hexagonColumn',
-  PENTAGON = 'pentagonColumn',
+export enum ShapeType3D {
+  CYLINDER = 'cylinder',
+  SQUARECOLUMN = 'squareColumn',
+  TRIANGLECOLUMN = 'triangleColumn',
+  HEXAGONCOLUMN = 'hexagonColumn',
+  PENTAGONCOLUMN = 'pentagonColumn',
+}
+export enum ShapeType2D {
+  CIRCLE = 'circle',
+  SQUARE = 'square',
+  TRIANGLE = 'triangle',
+  HEXAGON = 'hexagon',
+  PENTAGON = 'pentagon',
 }
 
 /**
@@ -24,7 +31,7 @@ export function polygonPath(pointCount: number, start: number = 0): IPath {
     const y = Math.cos(t + Math.PI / 4);
     return [x, y, 0];
   });
-  path.push(path[0]);
+  // path.push(path[0]);
   return path;
 }
 
@@ -45,9 +52,14 @@ export function pentagon(): IPath {
 }
 
 export const geometryShape = {
-  [ShapeType.CIRCLE]: circle,
-  [ShapeType.HEXAGON]: hexagon,
-  [ShapeType.TRIANGLE]: triangle,
-  [ShapeType.SQUARE]: square,
-  [ShapeType.PENTAGON]: pentagon,
+  [ShapeType2D.CIRCLE]: circle,
+  [ShapeType2D.HEXAGON]: hexagon,
+  [ShapeType2D.TRIANGLE]: triangle,
+  [ShapeType2D.SQUARE]: square,
+  [ShapeType2D.PENTAGON]: pentagon,
+  [ShapeType3D.CYLINDER]: circle,
+  [ShapeType3D.HEXAGONCOLUMN]: hexagon,
+  [ShapeType3D.TRIANGLECOLUMN]: triangle,
+  [ShapeType3D.SQUARECOLUMN]: square,
+  [ShapeType3D.PENTAGONCOLUMN]: pentagon,
 };

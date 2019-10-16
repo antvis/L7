@@ -4,7 +4,7 @@ import BaseBuffer, {
   Position,
 } from '../../core/BaseBuffer';
 import extrudePolygon, { IExtrudeGeomety } from '../shape/extrude';
-import { geometryShape, ShapeType } from '../shape/Path';
+import { geometryShape, ShapeType2D, ShapeType3D } from '../shape/Path';
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
@@ -26,7 +26,7 @@ export default class ExtrudeBuffer extends BaseBuffer {
     this.indexOffset = 0;
     layerData.forEach((feature: IEncodeFeature) => {
       const { shape } = feature;
-      const { positions, index } = this.getGeometry(shape as ShapeType);
+      const { positions, index } = this.getGeometry(shape as ShapeType3D);
       this.verticesCount += positions.length / 3;
       this.indexCount += index.length;
     });
@@ -39,7 +39,7 @@ export default class ExtrudeBuffer extends BaseBuffer {
   }
   private calculateFill(feature: IEncodeFeature) {
     const { coordinates, shape } = feature;
-    const instanceGeometry = this.getGeometry(shape as ShapeType);
+    const instanceGeometry = this.getGeometry(shape as ShapeType3D);
     const numPoint = instanceGeometry.positions.length / 3;
     feature.bufferInfo = {
       verticesOffset: this.verticesOffset,
@@ -65,7 +65,7 @@ export default class ExtrudeBuffer extends BaseBuffer {
     this.indexOffset += indexArray.length;
   }
 
-  private getGeometry(shape: ShapeType): IExtrudeGeomety {
+  private getGeometry(shape: ShapeType3D): IExtrudeGeomety {
     if (this.geometryCache && this.geometryCache[shape]) {
       return this.geometryCache[shape];
     }

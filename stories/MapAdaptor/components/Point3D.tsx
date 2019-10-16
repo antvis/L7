@@ -46,10 +46,6 @@ export default class Point3D extends React.Component {
     // requestAnimationFrame(run);
     scene.render();
     this.scene = scene;
-    console.log(pointLayer);
- 
-    // @ts-ignore
-    window.layer = pointLayer;
   }
 
   public render() {

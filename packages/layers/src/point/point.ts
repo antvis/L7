@@ -42,7 +42,6 @@ export default class PointLayer extends BaseLayer {
       data: this.getEncodedData(),
     });
     buffer.computeVertexNormals('miters', false);
-    console.log(buffer); // TODO: normal
     const {
       createAttribute,
       createBuffer,
