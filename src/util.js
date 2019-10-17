@@ -1,6 +1,6 @@
 import * as Utils from '@antv/util';
 
-const Util = Utils.mix({}, Utils, {
+const Util = {
   assign: Utils.mix, // simple mix
   merge: Utils.deepMix, // deep mix
   cloneDeep: Utils.clone,
@@ -8,8 +8,9 @@ const Util = Utils.mix({}, Utils, {
   isNaN,
   snapEqual: Utils.isNumberEqual,
   remove: Utils.pull,
-  inArray: Utils.contains
-});
+  inArray: Utils.contains,
+  ...Utils
+};
 
 Util.Array = {
   groupToMap: Utils.groupToMap,
