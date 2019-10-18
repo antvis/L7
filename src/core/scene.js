@@ -12,7 +12,7 @@ import Controller from './controller/control';
 import * as Control from '../component/control';
 import { epsg3857 } from '@antv/geo-coord/lib/geo/crs/crs-epsg3857';
 import throttle from '../util/throttle';
-const EventNames = [ 'mouseout', 'mouseover', 'mousemove', 'mousedown', 'mouseleave', 'touchstart', 'touchmove', 'touchend', 'mouseup', 'rightclick', 'click', 'dblclick' ];
+const EventNames = [ 'mouseout', 'mouseover', 'mousedown', 'mouseleave', 'touchstart', 'touchmove', 'touchend', 'mouseup', 'rightclick', 'click', 'dblclick' ];
 export default class Scene extends Base {
   getDefaultCfg() {
     return Global.scene;
@@ -149,13 +149,16 @@ export default class Scene extends Base {
     };
     this._throttleHander = throttle(this._eventHander, 50);
     EventNames.forEach(event => {
-      this._container.addEventListener(event, this._throttleHander, true);
+      this._container.addEventListener(event, this._eventHander, true);
     });
+    // mousemove 事件截流
+    this._container.addEventListener('mousemove', this._throttleHander, true);
   }
   _unRegistEvents() {
     EventNames.forEach(event => {
-      this._container.removeEventListener(event, this._throttleHander, true);
+      this._container.removeEventListener(event, this._eventHander, true);
     });
+    this._container.removeEventListener('mousemove', this._throttleHander, true);
   }
   removeLayer(layer) {
     const layerIndex = this._layers.indexOf(layer);
