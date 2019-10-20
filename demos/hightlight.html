@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/PqLCOJpqoOUfuPRacUzE.css" />
+    <title>点击高亮</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+  var scene = new L7.Scene({
+    id: 'map',
+    mapStyle: 'light', // 样式URL
+    center: [114.0619, 22.5471],
+    pitch: 0,
+    zoom: 13
+  });
+
+  scene.on('loaded', function() {
+
+    $.getJSON('https://gw.alipayobjects.com/os/basement_prod/9a21b657-4887-4ad1-a657-ce1d6f3abbb5.json', function(city) {
+      var layer = scene.PolygonLayer().source(city).color('unit_price', ['#b2182b', '#ef8a62', '#fddbc7', '#d1e5f0', '#67a9cf', '#2166ac'].reverse()).shape('fill').active(false).style({
+        opacity: 1
+      }).render();
+      scene.PolygonLayer().source(city).color('#fff').shape('line').style({
+        opacity: 1
+      }).render();
+      layer.on('click', function(feature) {
+        layer.setActive(feature.featureId, 'red');
+      });
+    });
+  });
+</script>
+</body>
+</html>
