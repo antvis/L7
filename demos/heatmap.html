@@ -45,7 +45,9 @@ scene.on('loaded', () => {
     })
     .render();
     setTimeout(()=>{
-      scene.removeLayer(layer)
+       data.features = [];
+       layer.setData(data)
+ 
     },1000)
   
     /*scene.PointLayer({

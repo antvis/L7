@@ -339,6 +339,7 @@ export default class Layer extends Base {
     this.set('scales', {});
     this._mapping();
     if (this.layerData.length === 0) {
+      this.clearDraw();
       return;
     }
     this.redraw();
@@ -456,11 +457,16 @@ export default class Layer extends Base {
     this.emit('sizeUpdated', this.zoomSizeCache[zoom]);
   }
   _updateStyle(option) {
+
     const newOption = { };
     for (const key in option) {
       newOption['u_' + key] = option[key];
     }
     updateObjecteUniform(this._object3D, newOption);
+    if (option.hasOwnProperty('textAllowOverlap')) {
+      this.repaint();
+      this.scene._engine.update();
+    }
   }
   _scaleByZoom() {
     if (this._zoomScale) {
@@ -516,11 +522,21 @@ export default class Layer extends Base {
   }
 
   // 重新构建mesh
-  redraw() {
-    this._object3D.children.forEach(child => {
-      this._object3D.remove(child);
-    });
+  clearDraw() {
+    if (this._object3D.children) {
+      this._object3D.children.forEach(child => {
+        this._object3D.remove(child);
+      });
+    }
+    if (this._object3D.type === 'composer') {
+      const composerindex = this.scene._engine.composerLayers.indexOf(this._object3D);
+      this.scene._engine.composerLayers.splice(composerindex, 1);
+
+    }
     this.get('pickingController').removeAllMesh();
+  }
+  redraw() {
+    this.clearDraw();
     this.draw();
   }
   /**
