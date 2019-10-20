@@ -28,10 +28,13 @@ export default function DrawText(layerData, layer) {
     layer.layerMesh.geometry = geometry;
     layer.layerMesh.geometry.needsUpdate = true;
   };
-  if (!textAllowOverlap) {
+  if (!textAllowOverlap) { // 支持避让
     layer.scene.on('camerachange', updateGeometryHander);
+    if (layer.layerMesh.geometry) { updateGeometryHander(); }
+
   } else {
     layer.scene.off('camerachange', updateGeometryHander);
+    updateGeometryHander();
   }
   const material = new TextMaterial({
     name: layer.layerId,
