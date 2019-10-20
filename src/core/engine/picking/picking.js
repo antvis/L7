@@ -88,6 +88,10 @@ class Picking {
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i];
       if (object.name === layer.layerId) {
+        if (type === 'mouseup' || type === 'mousedown') {
+          isListened = layer.getListeners(type).length > 0 || layer.getListeners('click').length > 0;
+          break;
+        }
         isListened = layer.getListeners(type).length > 0;
         break;
       }
