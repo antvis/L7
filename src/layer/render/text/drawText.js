@@ -29,9 +29,9 @@ export default function DrawText(layerData, layer) {
     layer.layerMesh.geometry.needsUpdate = true;
   };
   if (!textAllowOverlap) { // 支持避让
-    layer.scene.on('camerachange', updateGeometryHander);
+    layer.on('camerachange', updateGeometryHander);
   } else {
-    layer.scene.off('camerachange', updateGeometryHander);
+    layer.off('camerachange', updateGeometryHander);
   }
   const material = new TextMaterial({
     name: layer.layerId,

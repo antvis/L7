@@ -1,4 +1,3 @@
-import PickingScene from './pickingScene';
 import * as THREE from '../../three';
 import { destoryObject } from '../../../util/object3d-util';
 let nextId = 1;
@@ -8,7 +7,7 @@ class Picking {
     this._world = world;
     this._renderer = renderer;
     this._camera = camera;
-    this._pickingScene = PickingScene;
+    this._pickingScene = new THREE.Scene();
     this.world = new THREE.Group();
     this._pickingScene.add(this.world);
     const size = this._renderer.getSize();
