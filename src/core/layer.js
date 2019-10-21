@@ -356,7 +356,7 @@ export default class Layer extends Base {
   }
   _initMapEvent() {
     // zoomchange  mapmove resize
-    const EVENT_TYPES = [ 'zoomchange', 'dragend' ];
+    const EVENT_TYPES = [ 'zoomchange', 'dragend', 'camerachange' ];
     Util.each(EVENT_TYPES, type => {
       const handler = Util.wrapBehavior(this, `${type}`);
       this.map.on(`${type}`, handler);
@@ -375,6 +375,9 @@ export default class Layer extends Base {
   }
   dragend() {
 
+  }
+  camerachange(e) {
+    this.emit('camerachange', e);
   }
   resize() {
   }
@@ -581,8 +584,11 @@ export default class Layer extends Base {
         child = null;
       }
     }
-    this.layerMesh.geometry = null;
-    this.layerMesh.material = null;
+    if (this.layerMesh) {
+      this.layerMesh.geometry = null;
+      this.layerMesh.material = null;
+
+    }
     if (this._pickingMesh) {
       this._pickingMesh.children[0].geometry = null;
       this._pickingMesh.children[0].material.dispose();

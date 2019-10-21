@@ -13,7 +13,6 @@ const MAX_CANVAS_WIDTH = 1024;
 const BASELINE_SCALE = 1.0;
 const HEIGHT_SCALE = 1.0;
 const CACHE_LIMIT = 3;
-const cache = new LRUCache(CACHE_LIMIT);
 
 const VALID_PROPS = [
   'fontFamily',
@@ -40,31 +39,6 @@ function setTextStyle(ctx, fontFamily, fontSize, fontWeight) {
   ctx.textBaseline = 'middle';
   // ctx.textAlign = 'left';
 }
-function getNewChars(key, characterSet) {
-  const cachedFontAtlas = cache.get(key);
-  if (!cachedFontAtlas) {
-    return characterSet;
-  }
-
-  const newChars = [];
-  const cachedMapping = cachedFontAtlas.mapping;
-  let cachedCharSet = Object.keys(cachedMapping);
-  cachedCharSet = new Set(cachedCharSet);
-
-  let charSet = characterSet;
-  if (charSet instanceof Array) {
-    charSet = new Set(charSet);
-  }
-
-  charSet.forEach(char => {
-    if (!cachedCharSet.has(char)) {
-      newChars.push(char);
-    }
-  });
-
-  return newChars;
-}
-
 function populateAlphaChannel(alphaChannel, imageData) {
   // populate distance value from tinySDF to image alpha channel
   for (let i = 0; i < alphaChannel.length; i++) {
@@ -92,6 +66,7 @@ export default class FontAtlasManager {
     // key is used for caching generated fontAtlas
     this._key = null;
     this._texture = new THREE.Texture();
+    this.cache = new LRUCache(CACHE_LIMIT);
   }
 
   get texture() {
@@ -99,7 +74,7 @@ export default class FontAtlasManager {
   }
 
   get mapping() {
-    const data = cache.get(this._key);
+    const data = this.cache.get(this._key);
     return data && data.mapping;
   }
 
@@ -122,8 +97,8 @@ export default class FontAtlasManager {
     const oldKey = this._key;
     this._key = this._getKey();
 
-    const charSet = getNewChars(this._key, this.props.characterSet);
-    const cachedFontAtlas = cache.get(this._key);
+    const charSet = this._getNewChars(this._key, this.props.characterSet);
+    const cachedFontAtlas = this.cache.get(this._key);
 
     // if a fontAtlas associated with the new settings is cached and
     // there are no new chars
@@ -141,7 +116,7 @@ export default class FontAtlasManager {
     this._updateTexture(fontAtlas);
 
     // update cache
-    cache.set(this._key, fontAtlas);
+    this.cache.set(this._key, fontAtlas);
   }
 
   _updateTexture({ data: canvas }) {
@@ -224,5 +199,29 @@ export default class FontAtlasManager {
       return `${fontFamily} ${fontWeight} ${fontSize} ${buffer} ${radius} ${cutoff}`;
     }
     return `${fontFamily} ${fontWeight} ${fontSize} ${buffer}`;
+  }
+  _getNewChars(key, characterSet) {
+    const cachedFontAtlas = this.cache.get(key);
+    if (!cachedFontAtlas) {
+      return characterSet;
+    }
+
+    const newChars = [];
+    const cachedMapping = cachedFontAtlas.mapping;
+    let cachedCharSet = Object.keys(cachedMapping);
+    cachedCharSet = new Set(cachedCharSet);
+
+    let charSet = characterSet;
+    if (charSet instanceof Array) {
+      charSet = new Set(charSet);
+    }
+
+    charSet.forEach(char => {
+      if (!cachedCharSet.has(char)) {
+        newChars.push(char);
+      }
+    });
+
+    return newChars;
   }
 }

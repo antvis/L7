@@ -1,6 +1,5 @@
 import EventEmitter from 'wolfy87-eventemitter';
 import * as THREE from '../three';
-import Scene from './scene';
 import Camera from './camera';
 import Renderer from './renderer';
 import Picking from './picking/picking';
@@ -8,7 +7,7 @@ import { destoryObject } from '../../util/object3d-util';
 export default class Engine extends EventEmitter {
   constructor(container, world) {
     super();
-    this._scene = Scene;
+    this._scene = new THREE.Scene();
     this._camera = new Camera(container).camera;
     this._renderer = new Renderer(container).renderer;
     this._world = world;// 地图场景实例
