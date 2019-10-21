@@ -61,6 +61,13 @@ export default class IconService implements IIconService {
     return this.canvas;
   }
 
+  public hasImage(id: string): boolean {
+    throw new Error('Method not implemented.');
+  }
+  public removeImage(id: string): void {
+    throw new Error('Method not implemented.');
+  }
+
   private updateIconAtlas() {
     this.canvas.width = MAX_CANVAS_WIDTH;
     this.canvas.height = this.canvasHeight;

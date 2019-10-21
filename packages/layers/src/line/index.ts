@@ -39,7 +39,6 @@ export default class LineLayer extends BaseLayer {
       data: this.getEncodedData(),
       style: this.styleOption,
     });
-    console.log(buffer);
     const {
       createAttribute,
       createBuffer,

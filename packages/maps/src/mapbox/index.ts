@@ -2,15 +2,18 @@
  * MapboxService
  */
 import {
+  Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  ILngLat,
   IMapConfig,
   IMapService,
+  IPoint,
   IViewport,
   TYPES,
 } from '@l7/core';
 import { inject, injectable } from 'inversify';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { Map } from 'mapbox-gl';
 import Viewport from './Viewport';
 
 mapboxgl.accessToken =
@@ -25,9 +28,69 @@ export default class MapboxService implements IMapService {
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 
-  private map: IMapboxInstance;
+  private map: Map & IMapboxInstance;
   private viewport: Viewport;
   private cameraChangedCallback: (viewport: IViewport) => void;
+  public getZoom(): number {
+    return this.map.getZoom();
+  }
+  public getCenter(): ILngLat {
+    return this.map.getCenter();
+  }
+  public getPitch(): number {
+    return this.map.getPitch();
+  }
+  public getRotation(): number {
+    return this.map.getBearing();
+  }
+  public getBounds(): Bounds {
+    return this.map.getBounds().toArray() as Bounds;
+  }
+  public setRotation(rotation: number): void {
+    this.map.setBearing(rotation);
+  }
+  public zoomIn(): void {
+    this.map.zoomIn();
+  }
+  public zoomOut(): void {
+    this.map.zoomOut();
+  }
+  public panTo(p: [number, number]): void {
+    this.map.panTo(p);
+  }
+  public panBy(pixel: [number, number]): void {
+    this.panTo(pixel);
+  }
+  public fitBounds(bound: Bounds): void {
+    this.map.fitBounds(bound);
+  }
+  public setMaxZoom(max: number): void {
+    this.map.setMaxZoom(max);
+  }
+  public setMinZoom(min: number): void {
+    this.map.setMinZoom(min);
+  }
+  public setZoomAndCenter(zoom: number, center: [number, number]): void {
+    this.map.flyTo({
+      zoom,
+      center,
+    });
+  }
+  public setMapStyle(style: string): void {
+    this.map.setStyle(style);
+  }
+  public pixelToLngLat(pixel: [number, number]): ILngLat {
+    return this.map.unproject(pixel);
+  }
+  public lngLatToPixel(lnglat: [number, number]): IPoint {
+    return this.map.project(lnglat);
+  }
+  public containerToLngLat(pixel: [number, number]): ILngLat {
+    throw new Error('Method not implemented.');
+  }
+  public lngLatToContainer(lnglat: [number, number]): IPoint {
+    throw new Error('Method not implemented.');
+  }
 
   public async init(mapConfig: IMapConfig): Promise<void> {
     const { id, ...rest } = mapConfig;

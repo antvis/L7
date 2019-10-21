@@ -2,12 +2,16 @@
  * AMapService
  */
 import {
+  Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  ILngLat,
   IMapCamera,
   IMapConfig,
   IMapService,
+  IPoint,
   IViewport,
+  Point,
   TYPES,
 } from '@l7/core';
 import { inject, injectable } from 'inversify';
@@ -17,6 +21,8 @@ const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.8';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
+/// <reference path="../../../../../node_modules/@types/amap-js-api/index.d.ts" />
+
 /**
  * AMapService
  */
@@ -25,11 +31,90 @@ export default class AMapService implements IMapService {
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 
-  private map: IAMapInstance;
+  private map: AMap.Map;
 
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+  public getZoom(): number {
+    return this.map.getZoom();
+  }
+  public getCenter(): ILngLat {
+    const center = this.map.getCenter();
+    return {
+      lng: center.getLng(),
+      lat: center.getLat(),
+    };
+  }
+  public getPitch(): number {
+    return this.map.getPitch();
+  }
+  public getRotation(): number {
+    return this.map.getRotation();
+  }
+  public getBounds(): Bounds {
+    // @ts-ignore
+    const amapBound = this.map.getBounds().toBounds();
+    const NE = amapBound.getNorthEast();
+    const SW = amapBound.getSouthWest();
+    return [[NE.getLng(), NE.getLat()], [SW.getLng(), SW.getLat()]];
+  }
+  public setRotation(rotation: number): number {
+    return this.setRotation(rotation);
+  }
+
+  public zoomIn(): void {
+    this.map.zoomIn();
+  }
+
+  public zoomOut(): void {
+    this.map.zoomOut();
+  }
+
+  public panTo(p: [number, number]): void {
+    this.map.panTo(p);
+  }
+  public panBy(pixel: [number, number]): void {
+    this.map.panTo(pixel);
+  }
+  public fitBounds(extent: Bounds): void {
+    this.map.setBounds(
+      new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
+    );
+  }
+  public setZoomAndCenter(zoom: number, center: [number, number]): void {
+    this.map.setZoomAndCenter(zoom, center);
+  }
+  public setMapStyle(style: string): void {
+    this.setMapStyle(style);
+  }
+  public pixelToLngLat(pixel: [number, number]): ILngLat {
+    const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
+    return { lng: lngLat.getLng(), lat: lngLat.getLat() };
+  }
+  public lngLatToPixel(lnglat: [number, number]): IPoint {
+    const p = this.map.lnglatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
+    return {
+      x: p.getX(),
+      y: p.getY(),
+    };
+  }
+  public containerToLngLat(pixel: [number, number]): ILngLat {
+    const ll = new AMap.Pixel(pixel[0], pixel[1]);
+    const lngLat = this.map.containerToLngLat(ll);
+    return {
+      lng: lngLat.getLng(),
+      lat: lngLat.getLat(),
+    };
+  }
+  public lngLatToContainer(lnglat: [number, number]): IPoint {
+    const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
+    const pixel = this.map.lngLatToContainer(ll);
+    return {
+      x: pixel.getX(),
+      y: pixel.getY(),
+    };
+  }
 
   public async init(mapConfig: IMapConfig): Promise<void> {
     const { id, style, ...rest } = mapConfig;
@@ -76,7 +161,7 @@ export default class AMapService implements IMapService {
       aspect,
       position,
     } = e.camera;
-    const { lng, lat } = this.map.getCenter();
+    const { lng, lat } = this.getCenter();
 
     if (this.cameraChangedCallback) {
       // resync viewport
