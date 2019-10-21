@@ -1,4 +1,5 @@
 import container, { lazyInject } from './inversify.config';
+import IconService from './services/asset/IconService';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
@@ -27,6 +28,7 @@ export {
    * 各个 Service 接口
    */
   SceneService,
+  IconService,
   packCircleVertex,
   /** pass */
   MultiPassRenderer,

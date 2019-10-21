@@ -27,6 +27,7 @@
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
+    "@types/amap-js-api": "^1.4.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/mapbox-gl": "^0.54.3",
     "@types/viewport-mercator-project": "^6.1.0"
