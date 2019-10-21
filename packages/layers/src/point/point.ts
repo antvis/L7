@@ -23,7 +23,6 @@ export default class PointLayer extends BaseLayer {
   @lazyInject(TYPES.IRendererService)
   private readonly renderer: IRendererService;
 
-
   protected renderModels() {
     this.models.forEach((model) =>
       model.draw({

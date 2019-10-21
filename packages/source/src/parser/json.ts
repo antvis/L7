@@ -1,5 +1,4 @@
 // @ts-ignore
-import rewind from '@mapbox/geojson-rewind';
 import {
   IJsonData,
   IJsonItem,
@@ -7,6 +6,8 @@ import {
   IParserCfg,
   IParserData,
 } from '@l7/core';
+// @ts-ignore
+import rewind from '@mapbox/geojson-rewind';
 export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
   const { x, y, x1, y1, coordinates } = cfg;
   const resultData: IParseDataItem[] = [];
