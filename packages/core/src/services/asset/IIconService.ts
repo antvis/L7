@@ -18,6 +18,8 @@ export interface IIconService {
   canvasHeight: number;
   init(): void;
   addImage(id: string, image: IImage): void;
+  hasImage(id: string): boolean;
+  removeImage(id: string): void;
   getTexture(): ITexture2D;
   getIconMap(): IICONMap;
   getCanvas(): HTMLCanvasElement;
