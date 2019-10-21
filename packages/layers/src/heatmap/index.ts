@@ -40,8 +40,6 @@ export default class HeatMapLayer extends BaseLayer {
     const buffer = new GridHeatMapBuffer({
       data: this.getEncodedData(),
     });
-    console.log(this.getSource());
-    console.log(buffer);
     const {
       createAttribute,
       createBuffer,

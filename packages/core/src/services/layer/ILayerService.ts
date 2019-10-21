@@ -1,8 +1,7 @@
-import { ISourceCFG } from '@l7/core';
 import { AsyncParallelHook, SyncHook } from 'tapable';
 import { IModel } from '../renderer/IModel';
 import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';
-import { ISource } from '../source/ISourceService';
+import { ISource, ISourceCFG } from '../source/ISourceService';
 import { ILayerStyleOptions } from './ILayerStyleService';
 export enum ScaleTypes {
   LINEAR = 'linear',

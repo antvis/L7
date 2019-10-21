@@ -21,8 +21,8 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@l7/utils": "0.0.1",
     "@l7/core": "0.0.1",
+    "@l7/utils": "0.0.1",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
@@ -35,6 +35,7 @@
     "inversify-logging": "^0.2.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
+    "supercluster": "^6.0.2",
     "tapable": "^2.0.0-beta.8"
   },
   "devDependencies": {

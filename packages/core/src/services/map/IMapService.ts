@@ -1,10 +1,41 @@
 import { IViewport } from '../camera/ICameraService';
-
+export type Point = [number, number];
+export type Bounds = [[number, number], [number, number]];
+export interface ILngLat {
+  lng: number;
+  lat: number;
+}
+export interface IPoint {
+  x: number;
+  y: number;
+}
 export interface IMapService {
   init(config: Partial<IMapConfig>): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
-}
+  // get map status method
+  getZoom(): number;
+  getCenter(): ILngLat;
+  getPitch(): number;
+  getRotation(): number;
+  getBounds(): Bounds;
 
+  // set Map status
+
+  setRotation(rotation: number): void;
+  zoomIn(): void;
+  zoomOut(): void;
+  panTo(p: Point): void;
+  panBy(pixel: Point): void;
+  fitBounds(bound: Bounds): void;
+  setZoomAndCenter(zoom: number, center: Point): void;
+  setMapStyle(style: string): void;
+
+  // conversion Method
+  pixelToLngLat(pixel: Point): ILngLat;
+  lngLatToPixel(lnglat: Point): IPoint;
+  containerToLngLat(pixel: Point): ILngLat;
+  lngLatToContainer(lnglat: Point): IPoint;
+}
 export enum MapType {
   amap = 'amap',
   mapbox = 'mapbox',
