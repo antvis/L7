@@ -75,13 +75,7 @@ export default class Mapbox extends React.Component {
         opacity: 0.8,
       });
     scene.addLayer(layer);
-    function run() {
-      scene.render();
-      requestAnimationFrame(run);
-    }
-    requestAnimationFrame(run);
-    this.scene = scene;
-    console.log(layer);
+    scene.render();
     /*** 运行时修改样式属性 ***/
     // const gui = new dat.GUI();
     // this.gui = gui;

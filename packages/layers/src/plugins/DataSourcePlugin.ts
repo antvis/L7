@@ -4,12 +4,12 @@ import {
   ILayerPlugin,
   ILayerStyleAttribute,
   IParseDataItem,
+  ISourceCFG,
   IStyleScale,
   lazyInject,
   StyleScaleType,
   TYPES,
 } from '@l7/core';
-import { ISourceCFG } from '@l7/core';
 import Source from '@l7/source';
 export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
