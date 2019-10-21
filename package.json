@@ -38,7 +38,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^3.0.4",
+    "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-styled-components": "^6.2.1",
     "lerna": "^3.16.4",
@@ -97,6 +97,7 @@
   ],
   "husky": {
     "hooks": {
+      "pre-commit": "npm run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
