@@ -1,4 +1,12 @@
-import { BBox } from '@turf/helpers';
+import {
+  BBox,
+  Coord,
+  degreesToRadians,
+  isObject,
+  radiansToLength,
+  Units,
+} from '@turf/helpers';
+
 const originShift = (2 * Math.PI * 6378137) / 2.0;
 export type Point = [number, number] | [number, number, number];
 /**
@@ -6,7 +14,7 @@ export type Point = [number, number] | [number, number, number];
  * @param {dataArray} data 地理坐标数据
  * @return {Array} dataExtent
  */
-export function extent(data: any[]) {
+export function extent(data: any[]): BBox {
   const dataExtent: BBox = [Infinity, Infinity, -Infinity, -Infinity];
   data.forEach((item) => {
     const { coordinates } = item;
@@ -150,7 +158,40 @@ export function aProjectFlat(lnglat: number[]) {
   const b = 0.5;
   const c = -0.5 / Math.PI;
   d = 0.5;
-  x = scale * (a * x + b) - 215440491;
-  y = scale * (c * y + d) - 106744817;
+  x = scale * (a * x + b);
+  y = scale * (c * y + d);
   return [parseInt(x.toString(), 10), parseInt(y.toString(), 10)];
+}
+export function unProjectFlat(px: number[]): [number, number] {
+  const a = 0.5 / Math.PI;
+  const b = 0.5;
+  const c = -0.5 / Math.PI;
+  let d = 0.5;
+  const scale = 256 << 20;
+  let [x, y] = px;
+  x = (x / scale - b) / a;
+  y = (y / scale - d) / c;
+  y = (Math.atan(Math.pow(Math.E, y)) - Math.PI / 4) * 2;
+  d = Math.PI / 180;
+  const lat = y / d;
+  const lng = x / d;
+  return [lng, lat];
+}
+export function lnglatDistance(
+  coordinates1: [number, number],
+  coordinates2: [number, number],
+  units?: Units,
+): number {
+  const dLat = degreesToRadians(coordinates2[1] - coordinates1[1]);
+  const dLon = degreesToRadians(coordinates2[0] - coordinates1[0]);
+  const lat1 = degreesToRadians(coordinates1[1]);
+  const lat2 = degreesToRadians(coordinates2[1]);
+  const a =
+    Math.pow(Math.sin(dLat / 2), 2) +
+    Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+
+  return radiansToLength(
+    2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
+    (units = 'meters'),
+  );
 }
