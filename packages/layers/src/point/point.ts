@@ -61,70 +61,87 @@ export default class PointLayer extends BaseLayer {
       data: this.getEncodedData(),
       iconMap: this.iconService.getIconMap(),
     });
-    this.models.push(
-      createModel({
-        attributes: {
-          a_Position: createAttribute({
-            buffer: createBuffer({
-              data: buffer.attributes.positions,
-              type: gl.FLOAT,
+    this.fontService.setFontOptions({
+      characterSet: ['人', '之', '初'],
+      fontFamily: 'sans-serif',
+      fontWeight: 'normal',
+    });
+    this.iconService.on('imageUpdate', () => {
+      this.models.push(
+        createModel({
+          attributes: {
+            a_Position: createAttribute({
+              buffer: createBuffer({
+                data: buffer.attributes.positions,
+                type: gl.FLOAT,
+              }),
+              size: 3,
             }),
-            size: 3,
-          }),
-          a_normal: createAttribute({
-            buffer: createBuffer({
-              data: buffer.attributes.normals,
-              type: gl.FLOAT,
+            a_normal: createAttribute({
+              buffer: createBuffer({
+                data: buffer.attributes.normals,
+                type: gl.FLOAT,
+              }),
+              size: 3,
             }),
-            size: 3,
-          }),
-          a_color: createAttribute({
-            buffer: createBuffer({
-              data: buffer.attributes.colors,
-              type: gl.FLOAT,
+            a_color: createAttribute({
+              buffer: createBuffer({
+                data: buffer.attributes.colors,
+                type: gl.FLOAT,
+              }),
+              size: 4,
             }),
-            size: 4,
-          }),
-          a_size: createAttribute({
-            buffer: createBuffer({
-              data: buffer.attributes.sizes,
-              type: gl.FLOAT,
+            a_size: createAttribute({
+              buffer: createBuffer({
+                data: buffer.attributes.sizes,
+                type: gl.FLOAT,
+              }),
+              size: 1,
             }),
-            size: 1,
-          }),
-          a_uv: createAttribute({
-            buffer: createBuffer({
-              data: buffer.attributes.uv,
-              type: gl.FLOAT,
+            a_uv: createAttribute({
+              buffer: createBuffer({
+                data: buffer.attributes.uv,
+                type: gl.FLOAT,
+              }),
+              size: 2,
             }),
-            size: 2,
-          }),
-          // a_shape: createAttribute({
-          //   buffer: createBuffer({
-          //     data: buffer.attributes.miters,
-          //     type: gl.FLOAT,
-          //   }),
-          //   size: 3,
+            // a_shape: createAttribute({
+            //   buffer: createBuffer({
+            //     data: buffer.attributes.miters,
+            //     type: gl.FLOAT,
+            //   }),
+            //   size: 3,
+            // }),
+          },
+          uniforms: {
+            ...uniforms,
+            u_opacity: this.styleOption.opacity as number,
+            u_texture: createTexture2D({
+              data: this.iconService.getCanvas(),
+              width: 1024,
+              height: this.iconService.canvasHeight,
+            }),
+          },
+          fs,
+          vs,
+          depth: { enable: false },
+          blend: {
+            enable: true,
+            func: {
+              srcRGB: gl.SRC_ALPHA,
+              srcAlpha: 1,
+              dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+              dstAlpha: 1,
+            },
+          },
+          primitive: gl.POINTS,
+          count: buffer.verticesCount,
+          // elements: createElements({
+          //   data: buffer.indexArray,
+          //   type: gl.UNSIGNED_INT,
           // }),
-        },
-        uniforms: {
-          ...uniforms,
-          u_opacity: this.styleOption.opacity as number,
-          u_texture: createTexture2D({
-            data: this.iconService.getCanvas(),
-            width: 1024,
-            height: this.iconService.canvasHeight,
-          }),
-        },
-        fs,
-        vs,
-        primitive: gl.POINTS,
-        count: buffer.verticesCount,
-        // elements: createElements({
-        //   data: buffer.indexArray,
-        //   type: gl.UNSIGNED_INT,
-        // }),
-      }),
-    );
+        }),
+      );
+    });
   }
 }

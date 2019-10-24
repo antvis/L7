@@ -3,8 +3,10 @@ import { inject, injectable } from 'inversify';
 import { AsyncParallelHook, AsyncSeriesHook } from 'tapable';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
+import { IFontService } from '../asset/IFontService';
 import { IIconService, IImage } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
+import { IControlService } from '../component/IControlService';
 import { IGlobalConfig, IGlobalConfigService } from '../config/IConfigService';
 import { IInteractionService } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
@@ -18,11 +20,18 @@ import { ISceneService } from './ISceneService';
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
-  @inject(TYPES.IIconService)
-  public readonly iconService: IIconService;
   /**
    * 使用各种 Service
    */
+  @inject(TYPES.IIconService)
+  private readonly iconService: IIconService;
+
+  @inject(TYPES.IFontService)
+  private readonly fontService: IFontService;
+
+  @inject(TYPES.IControlService)
+  private readonly controlService: IControlService;
+
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
@@ -78,8 +87,18 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public init(globalConfig: IGlobalConfig) {
     this.configService.setAndCheckConfig(globalConfig);
-    // 初始化资源管理 字体，图片
+
+    // 初始化资源管理 图片
     this.iconService.init();
+    // 字体资源
+    this.fontService.init();
+
+    this.controlService.init({
+      container: document.getElementById(
+        this.configService.getConfig().id || 'map',
+      ) as HTMLElement,
+    });
+
     /**
      * 初始化底图
      */
@@ -137,6 +156,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 首次渲染需要等待底图、相机初始化
       await this.hooks.init.promise(this.configService.getConfig());
+      // 初始化marker 容器
+      this.map.addMarkerContainer();
       this.emit('loaded');
       this.inited = true;
 
@@ -153,6 +174,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.layerService.clean();
     this.configService.reset();
     this.interactionService.destroy();
+    this.controlService.destroy();
+    this.removeAllListeners();
     window.removeEventListener('resize', this.handleWindowResized, false);
   }
   private handleWindowResized = () => {

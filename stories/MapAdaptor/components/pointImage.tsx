@@ -1,3 +1,5 @@
+import '!style-loader!css-loader!./css/l7.css';
+import { Marker, Popup, Scale, Zoom } from '@l7/component';
 import { Point } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
@@ -15,7 +17,7 @@ export default class PointImage extends React.Component {
       id: 'map',
       pitch: 0,
       type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
+      style: 'mapbox://styles/mapbox/dark-v10',
       zoom: 1,
     });
     scene.addImage(
@@ -23,26 +25,41 @@ export default class PointImage extends React.Component {
       'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*kzTMQqS2QdUAAAAAAAAAAABkARQnAQ',
     );
     const pointLayer = new Point({});
-    const p1 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [83.671875, 44.84029065139799],
-          },
-        },
-      ],
-    };
+
+    // console.log(zoomControl);
+    //
     pointLayer
       .source(data)
       // .color('blue')
       .shape('00')
-      .size(14);
+      .size(40);
     scene.addLayer(pointLayer);
     scene.render();
+    scene.on('loaded', () => {
+      const zoomControl = new Zoom({
+        position: 'bottomright',
+      });
+      const scaleControl = new Scale();
+      const popup = new Popup({
+        offsets: [0, 20],
+      })
+        .setLnglat({
+          lng: 120.19382669582967,
+          lat: 30.258134,
+        })
+        .setText('hello')
+        .addTo(scene);
+
+      const maker = new Marker();
+      maker
+        .setLnglat({
+          lng: 120.19382669582967,
+          lat: 30.258134,
+        })
+        .addTo(scene);
+      scene.addControl(zoomControl);
+      scene.addControl(scaleControl);
+    });
   }
 
   public render() {

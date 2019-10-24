@@ -1,10 +1,49 @@
-import {
-  IIcon,
-  IICONMap,
-  IIconService,
-  IIconValue,
-  IImage,
-} from '../services/asset/IIconService';
+import { IFontMappingOption } from '../services/asset/IFontService';
+import { IIcon, IICONMap } from '../services/asset/IIconService';
+/**
+ * tiny-sdf 中每个 glyph 的宽度（加上 buffer 24 + 3 + 3 = 30）
+ */
+const glyphSizeInSDF = 30;
+export function buildMapping({
+  characterSet,
+  getFontWidth,
+  fontHeight,
+  buffer,
+  maxCanvasWidth,
+  mapping = {},
+  xOffset = 0,
+  yOffset = 0,
+}: IFontMappingOption) {
+  let row = 0;
+  let x = xOffset;
+  Array.from(characterSet).forEach((char: string, i: number) => {
+    if (!mapping[char]) {
+      const width = getFontWidth(char, i);
+      if (x + glyphSizeInSDF > maxCanvasWidth) {
+        x = 0;
+        row++;
+      }
+      mapping[char] = {
+        x,
+        y: yOffset + row * glyphSizeInSDF,
+        width: glyphSizeInSDF,
+        height: glyphSizeInSDF,
+        advance: width,
+      };
+      x += glyphSizeInSDF;
+    }
+  });
+
+  const rowHeight = fontHeight + buffer * 2;
+
+  return {
+    mapping,
+    xOffset: x,
+    yOffset: yOffset + row * rowHeight,
+    canvasHeight: nextPowOfTwo(yOffset + (row + 1) * rowHeight),
+  };
+}
+
 export function buildIconMaping(
   icons: IIcon[],
   buffer: number,
