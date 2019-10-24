@@ -6,6 +6,7 @@ import json from './parser/json';
 import Source from './source';
 import { cluster } from './transform/cluster';
 import { aggregatorToGrid } from './transform/grid';
+import { pointToHexbin } from './transform/hexagon';
 export default Source;
 registerParser('geojson', geojson);
 registerParser('image', image);
@@ -13,6 +14,7 @@ registerParser('csv', csv);
 registerParser('json', json);
 registerTransform('cluster', cluster);
 registerTransform('grid', aggregatorToGrid);
+registerTransform('hexagon', pointToHexbin);
 export {
   getTransform,
   registerTransform,

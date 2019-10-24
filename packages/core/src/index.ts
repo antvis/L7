@@ -52,6 +52,10 @@ export * from './services/config/IConfigService';
 export * from './services/scene/ISceneService';
 export * from './services/shader/IShaderModuleService';
 export * from './services/asset/IIconService';
+export * from './services/asset/IFontService';
+export * from './services/component/IControlService';
+export * from './services/component/IMarkerService';
+export * from './services/component/IPopUpService';
 
 /** 全部渲染服务接口 */
 export * from './services/renderer/IAttribute';

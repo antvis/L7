@@ -69,3 +69,9 @@ function mean(x: number[]) {
 }
 
 export { sum, max, min, mean };
+export const statMap: { [key: string]: any } = {
+  min,
+  max,
+  mean,
+  sum,
+};

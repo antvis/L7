@@ -1,8 +1,7 @@
+import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { buildIconMaping } from '../../utils/font_util';
-import { gl } from '../renderer/gl';
-import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import {
   IIcon,
@@ -15,7 +14,7 @@ const BUFFER = 3;
 const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
 @injectable()
-export default class IconService implements IIconService {
+export default class IconService extends EventEmitter implements IIconService {
   public canvasHeight: number;
   private textrure: ITexture2D;
   private canvas: HTMLCanvasElement;
@@ -31,23 +30,20 @@ export default class IconService implements IIconService {
 
   public addImage(id: string, image: IImage) {
     let imagedata = new Image();
+    if (this.hasImage(id)) {
+      throw new Error('Image Id already exists');
+    }
+
     this.loadImage(image).then((img) => {
       imagedata = img as HTMLImageElement;
+      this.iconData.push({
+        id,
+        image: imagedata,
+        width: imageSize,
+        height: imageSize,
+      });
+      this.update();
     });
-    this.iconData.push({
-      id,
-      image: imagedata,
-      width: imageSize,
-      height: imageSize,
-    });
-    const { mapping, canvasHeight } = buildIconMaping(
-      this.iconData,
-      BUFFER,
-      MAX_CANVAS_WIDTH,
-    );
-    this.iconMap = mapping;
-    this.canvasHeight = canvasHeight;
-    this.updateIconAtlas();
   }
 
   public getTexture(): ITexture2D {
@@ -57,15 +53,32 @@ export default class IconService implements IIconService {
   public getIconMap() {
     return this.iconMap;
   }
+
   public getCanvas() {
     return this.canvas;
   }
 
   public hasImage(id: string): boolean {
-    throw new Error('Method not implemented.');
+    return this.iconMap.hasOwnProperty(id);
   }
+
   public removeImage(id: string): void {
-    throw new Error('Method not implemented.');
+    if (this.hasImage(id)) {
+      this.iconData = this.iconData.filter((icon) => {
+        return icon.id !== id;
+      });
+      delete this.iconMap[id];
+      this.update();
+    }
+  }
+  public destroy(): void {
+    this.iconData = [];
+    this.iconMap = {};
+  }
+  private update() {
+    this.updateIconMap();
+    this.updateIconAtlas();
+    this.emit('imageUpdate');
   }
 
   private updateIconAtlas() {
@@ -75,13 +88,16 @@ export default class IconService implements IIconService {
       const { x, y, image } = this.iconMap[item];
       this.ctx.drawImage(image, x, y, imageSize, imageSize);
     });
-    // const { createTexture2D } = this.rendererService;
-    // this.textrure = createTexture2D({
-    //   data: this.canvas,
-    //   width: this.canvas.width,
-    //   height: this.canvasHeight,
-    //   mag: gl.LINEAR,
-    // });
+  }
+
+  private updateIconMap() {
+    const { mapping, canvasHeight } = buildIconMaping(
+      this.iconData,
+      BUFFER,
+      MAX_CANVAS_WIDTH,
+    );
+    this.iconMap = mapping;
+    this.canvasHeight = canvasHeight;
   }
 
   private loadImage(url: IImage) {

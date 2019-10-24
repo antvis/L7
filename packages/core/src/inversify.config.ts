@@ -6,8 +6,10 @@ import getDecorators from 'inversify-inject-decorators';
 import { TYPES } from './types';
 
 /** Service interfaces */
+import { IFontService } from './services/asset/IFontService';
 import { IIconService } from './services/asset/IIconService';
 import { ICameraService } from './services/camera/ICameraService';
+import { IControlService } from './services/component/IControlService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
 import { IInteractionService } from './services/interaction/IInteractionService';
@@ -16,8 +18,10 @@ import { ILogService } from './services/log/ILogService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
 /** Service implements */
+import FontService from './services/asset/FontService';
 import IconService from './services/asset/IconService';
 import CameraService from './services/camera/CameraService';
+import ControlService from './services/component/ControlService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
 import InteractionService from './services/interaction/InteractionService';
@@ -25,7 +29,6 @@ import LayerService from './services/layer/LayerService';
 import LayerStyleService from './services/layer/LayerStyleService';
 import LogService from './services/log/LogService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
-
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#defaultscope
 const container = new Container();
 
@@ -63,6 +66,14 @@ container
 container
   .bind<IInteractionService>(TYPES.IInteractionService)
   .to(InteractionService)
+  .inSingletonScope();
+container
+  .bind<IFontService>(TYPES.IFontService)
+  .to(FontService)
+  .inSingletonScope();
+container
+  .bind<IControlService>(TYPES.IControlService)
+  .to(ControlService)
   .inSingletonScope();
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module

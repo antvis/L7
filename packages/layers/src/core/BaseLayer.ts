@@ -1,4 +1,5 @@
 import {
+  IFontService,
   IGlobalConfigService,
   IIconService,
   ILayer,
@@ -6,6 +7,7 @@ import {
   ILayerPlugin,
   ILayerStyleAttribute,
   ILayerStyleOptions,
+  IMapService,
   IModel,
   IMultiPassRenderer,
   IRendererService,
@@ -59,8 +61,12 @@ export default class BaseLayer implements ILayer {
   public styleAttributes: {
     [key: string]: Required<ILayerStyleAttribute>;
   } = {};
+
   @lazyInject(TYPES.IIconService)
   protected readonly iconService: IIconService;
+
+  @lazyInject(TYPES.IFontService)
+  protected readonly fontService: IFontService;
 
   protected layerSource: Source;
 
@@ -72,6 +78,9 @@ export default class BaseLayer implements ILayer {
 
   @lazyInject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
+
+  @lazyInject(TYPES.IMapService)
+  private readonly map: IMapService;
 
   constructor(initializationOptions: Partial<ILayerInitializationOptions>) {
     this.initializationOptions = initializationOptions;
@@ -149,6 +158,14 @@ export default class BaseLayer implements ILayer {
       this.renderModels();
     }
     return this;
+  }
+  /**
+   * zoom to layer Bounds
+   */
+  public fitBounds(): void {
+    const source = this.getSource();
+    const extent = source.extent;
+    this.map.fitBounds([[extent[0], extent[1]], [extent[2], extent[3]]]);
   }
 
   public destroy() {
