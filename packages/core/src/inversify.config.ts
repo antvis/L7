@@ -12,6 +12,7 @@ import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
 import { IInteractionService } from './services/interaction/IInteractionService';
 import { ILayerService } from './services/layer/ILayerService';
+import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
 import { ILogService } from './services/log/ILogService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
@@ -22,7 +23,7 @@ import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
 import InteractionService from './services/interaction/InteractionService';
 import LayerService from './services/layer/LayerService';
-import LayerStyleService from './services/layer/LayerStyleService';
+import StyleAttributeService from './services/layer/StyleAttributeService';
 import LogService from './services/log/LogService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 
@@ -40,6 +41,9 @@ container
   .bind<ILayerService>(TYPES.ILayerService)
   .to(LayerService)
   .inSingletonScope();
+container
+  .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
+  .to(StyleAttributeService);
 container
   .bind<ICameraService>(TYPES.ICameraService)
   .to(CameraService)
@@ -68,9 +72,9 @@ container
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
 decorate(injectable(), EventEmitter);
 
-// 支持 L7 使用 new 而非容器实例化的场景
-// @see https://github.com/inversify/inversify-inject-decorators
-const DECORATORS = getDecorators(container);
+// 支持 L7 使用 new 而非容器实例化的场景，同时禁止 lazyInject cache
+// @see https://github.com/inversify/inversify-inject-decorators#caching-vs-non-caching-behaviour
+const DECORATORS = getDecorators(container, false);
 
 interface IBabelPropertyDescriptor extends PropertyDescriptor {
   initializer(): any;
