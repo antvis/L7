@@ -9,7 +9,7 @@ export default class ReglElements implements IElements {
   private elements: regl.Elements;
 
   constructor(reGl: regl.Regl, options: IElementsInitializationOptions) {
-    const { data, usage, type } = options;
+    const { data, usage, type, count } = options;
 
     this.elements = reGl.elements({
       data,
@@ -18,6 +18,7 @@ export default class ReglElements implements IElements {
         | 'uint8'
         | 'uint16'
         | 'uint32',
+      count,
     });
   }
 

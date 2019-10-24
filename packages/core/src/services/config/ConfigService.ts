@@ -23,6 +23,7 @@ const defaultGlobalConfig: Partial<IGlobalConfig> = {
   ],
   size: 10000,
   shape: 'circle',
+  scales: {},
 };
 
 @injectable()
@@ -38,7 +39,8 @@ export default class GlobalConfigService implements IGlobalConfigService {
       ...this.config,
       ...config,
     };
-    // TODO: validate config
+    // TODO: validate config with JSON schema
+    // @see https://github.com/webpack/schema-utils
     return true;
   }
 

@@ -10,6 +10,7 @@ import {
   IMapService,
   IPoint,
   IViewport,
+  MapType,
   TYPES,
 } from '@l7/core';
 import { inject, injectable } from 'inversify';
@@ -20,6 +21,8 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
+let counter = 1;
+
 /**
  * AMapService
  */
@@ -29,8 +32,17 @@ export default class MapboxService implements IMapService {
   private readonly coordinateSystemService: ICoordinateSystemService;
 
   private map: Map & IMapboxInstance;
+
+  private $mapContainer: HTMLElement | null;
+  private $link: HTMLLinkElement;
+
   private viewport: Viewport;
+
   private cameraChangedCallback: (viewport: IViewport) => void;
+
+  public getType() {
+    return MapType.mapbox;
+  }
   public getZoom(): number {
     return this.map.getZoom();
   }
@@ -95,6 +107,9 @@ export default class MapboxService implements IMapService {
   public async init(mapConfig: IMapConfig): Promise<void> {
     const { id, ...rest } = mapConfig;
 
+    this.$mapContainer = document.getElementById(id);
+    this.$mapContainer!.classList.add(`${counter++}`);
+
     this.viewport = new Viewport();
 
     /**
@@ -112,11 +127,21 @@ export default class MapboxService implements IMapService {
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
 
-    const $link: HTMLLinkElement = document.createElement('link');
-    $link.href =
+    this.$link = document.createElement('link');
+    this.$link.href =
       'https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css';
-    $link.rel = 'stylesheet';
-    document.head.appendChild($link);
+    this.$link.rel = 'stylesheet';
+    document.head.appendChild(this.$link);
+  }
+
+  public destroy() {
+    document.head.removeChild(this.$link);
+    this.$mapContainer = null;
+    this.map.remove();
+  }
+
+  public getMapContainer() {
+    return this.$mapContainer;
   }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {

@@ -53,6 +53,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           // 其他参数，例如视口大小、DPR 等
           u_ViewportSize: [width, height],
           u_DevicePixelRatio: window.devicePixelRatio,
+          u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         }),
       );
 
