@@ -21,6 +21,7 @@ export interface IElementsInitializationOptions {
     | gl.TRIANGLES
     | gl.TRIANGLE_STRIP
     | gl.TRIANGLE_FAN;
+  count?: number;
 }
 
 export interface IElements {

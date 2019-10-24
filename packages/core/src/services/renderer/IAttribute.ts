@@ -26,5 +26,11 @@ export interface IAttributeInitializationOptions {
 }
 
 export interface IAttribute {
+  updateBuffer(options: {
+    // 用于替换的数据
+    data: number[] | number[][] | Uint8Array | Uint16Array | Uint32Array;
+    // 原 Buffer 替换位置，单位为 byte
+    offset: number;
+  }): void;
   destroy(): void;
 }
