@@ -1,7 +1,6 @@
 import {
   Bounds,
   container,
-  IconService,
   IIconService,
   IImage,
   ILayer,
@@ -19,13 +18,16 @@ import {
 } from '@l7/core';
 import { AMapService, MapboxService } from '@l7/maps';
 import { ReglRendererService } from '@l7/renderer';
-import { inject, injectable } from 'inversify';
 
 // 绑定渲染引擎服务
 container
   .bind<IRendererService>(TYPES.IRendererService)
   .to(ReglRendererService)
   .inSingletonScope();
+
+// 缓存当前地图类型，便于 DEMO 中切换底图时动态绑定
+let mapType: MapType;
+
 /**
  * 暴露 Scene API
  *
@@ -39,34 +41,34 @@ container
  * scene.render();
  */
 class Scene {
-  @inject(TYPES.IIconService)
-  protected readonly iconService: IIconService;
+  private iconService: IIconService;
   private sceneService: ISceneService;
   private mapService: IMapService;
+  private mapType: MapType;
   public constructor(config: IMapConfig & IRenderConfig) {
     const { type = MapType.amap } = config;
 
     // 根据用户传入参数绑定地图服务
-    let mapService: new (...args: any[]) => IMapService;
+    let mapServiceImpl: new (...args: any[]) => IMapService;
     if (type === MapType.mapbox) {
-      mapService = MapboxService;
+      mapServiceImpl = MapboxService;
     } else if (type === MapType.amap) {
-      mapService = AMapService;
+      mapServiceImpl = AMapService;
     } else {
       throw new Error('不支持的地图服务');
     }
-    // this.mapService = mapService;
+
     // DEMO 中切换底图实现时，需要重新绑定底图服务
     // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#containerrebindserviceidentifier-serviceidentifier
-    if (container.isBound(TYPES.IMapService)) {
-      container
-        .rebind<IMapService>(TYPES.IMapService)
-        .to(mapService)
-        .inSingletonScope();
-    } else {
+    if (!container.isBound(TYPES.IMapService)) {
       container
         .bind<IMapService>(TYPES.IMapService)
-        .to(mapService)
+        .to(mapServiceImpl)
+        .inSingletonScope();
+    } else if (type !== mapType) {
+      container
+        .rebind<IMapService>(TYPES.IMapService)
+        .to(mapServiceImpl)
         .inSingletonScope();
     }
 
@@ -75,6 +77,7 @@ class Scene {
     this.sceneService.init(config);
     this.mapService = container.get<IMapService>(TYPES.IMapService);
     this.iconService = container.get<IIconService>(TYPES.IIconService);
+    mapType = this.mapService.getType();
   }
 
   public addLayer(layer: ILayer): void {
@@ -150,6 +153,7 @@ class Scene {
 
   public destroy() {
     this.sceneService.destroy();
+    // TODO: 清理其他 Service 例如 IconService
   }
 
   // 资源管理

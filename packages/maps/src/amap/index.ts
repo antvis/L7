@@ -6,12 +6,11 @@ import {
   CoordinateSystem,
   ICoordinateSystemService,
   ILngLat,
-  IMapCamera,
   IMapConfig,
   IMapService,
   IPoint,
   IViewport,
-  Point,
+  MapType,
   TYPES,
 } from '@l7/core';
 import { inject, injectable } from 'inversify';
@@ -33,9 +32,16 @@ export default class AMapService implements IMapService {
 
   private map: AMap.Map;
 
+  private $mapContainer: HTMLElement | null;
+  private $jsapi: HTMLScriptElement;
+
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+
+  public getType() {
+    return MapType.amap;
+  }
   public getZoom(): number {
     return this.map.getZoom();
   }
@@ -119,6 +125,8 @@ export default class AMapService implements IMapService {
   public async init(mapConfig: IMapConfig): Promise<void> {
     const { id, style, ...rest } = mapConfig;
 
+    this.$mapContainer = document.getElementById(id);
+
     // tslint:disable-next-line:typedef
     await new Promise((resolve) => {
       // 异步加载高德地图
@@ -137,13 +145,22 @@ export default class AMapService implements IMapService {
       };
 
       const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=onLoad`;
-      const jsapi: HTMLScriptElement = document.createElement('script');
-      jsapi.charset = 'utf-8';
-      jsapi.src = url;
-      document.head.appendChild(jsapi);
+      this.$jsapi = document.createElement('script');
+      this.$jsapi.charset = 'utf-8';
+      this.$jsapi.src = url;
+      document.head.appendChild(this.$jsapi);
     });
 
     this.viewport = new Viewport();
+  }
+
+  public destroy() {
+    this.map.destroy();
+    document.head.removeChild(this.$jsapi);
+  }
+
+  public getMapContainer() {
+    return this.$mapContainer;
   }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
