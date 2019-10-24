@@ -28,6 +28,7 @@
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
     "d3-dsv": "^1.1.1",
+    "d3-hexbin": "^0.2.2",
     "eventemitter3": "^3.1.0",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@types/d3-dsv": "^1.0.36",
+    "@types/d3-hexbin": "^0.2.3",
     "@types/gl-matrix": "^2.4.5",
     "@types/lodash": "^4.14.138",
     "@types/viewport-mercator-project": "^6.1.0"

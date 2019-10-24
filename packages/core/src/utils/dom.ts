@@ -1,3 +1,5 @@
+const docStyle = window.document.documentElement.style;
+type ELType = HTMLElement | SVGElement;
 export function createRendererContainer(domId: string): HTMLDivElement | null {
   const $wrapper = document.getElementById(domId);
 

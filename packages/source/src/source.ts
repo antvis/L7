@@ -41,7 +41,6 @@ export default class Source extends EventEmitter {
     });
     this.init();
   }
-
   private excuteParser(): void {
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
