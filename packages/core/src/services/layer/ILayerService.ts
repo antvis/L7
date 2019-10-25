@@ -2,62 +2,33 @@ import { AsyncParallelHook, SyncHook } from 'tapable';
 import { IModel } from '../renderer/IModel';
 import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';
 import { ISource, ISourceCFG } from '../source/ISourceService';
-import { ILayerStyleOptions } from './ILayerStyleService';
-export enum ScaleTypes {
-  LINEAR = 'linear',
-  POWER = 'power',
-  LOG = 'log',
-  IDENTITY = 'identity',
-  TIME = 'time',
-  QUANTILE = 'quantile',
-  QUANTIZE = 'quantize',
-  THRESHOLD = 'threshold',
-  CAT = 'cat',
-}
-export enum StyleScaleType {
-  CONSTANT = 'constant',
-  VARIABLE = 'variable',
-}
-export interface IScaleOption {
-  field?: string;
-  type: ScaleTypes;
-  ticks?: any[];
-  nice?: boolean;
-  format?: () => any;
-  domain?: any[];
-}
-export interface IStyleScale {
-  scale: any;
-  field: string;
-  type: StyleScaleType;
-  option: IScaleOption;
-}
+import {
+  IEncodeFeature,
+  IScale,
+  IStyleAttributeService,
+  StyleAttrField,
+  StyleAttributeOption,
+} from './IStyleAttributeService';
 
 export interface ILayerGlobalConfig {
   colors: string[];
   size: number;
   shape: string;
   scales: {
-    [key: string]: IScaleOption;
+    [key: string]: IScale;
   };
 }
-type CallBack = (...args: any[]) => any;
-export type StyleAttributeField = string | string[];
-export type StyleAttributeOption = string | number | boolean | any[] | CallBack;
-export type StyleAttrField = string | string[] | number | number[];
-export interface ILayerStyleAttribute {
-  type: string;
-  names: string[];
-  field: StyleAttributeField;
-  values?: any[];
-  scales?: IStyleScale[];
-  setScales: (scales: IStyleScale[]) => void;
-  callback?: (...args: any[]) => [];
-  mapping?(...params: unknown[]): unknown[];
+
+export interface IPickedFeature {
+  x: number;
+  y: number;
+  lnglat?: { lng: number; lat: number };
+  feature?: unknown;
 }
 
 export interface ILayer {
-  name: string;
+  id: string; // 一个场景中同一类型 Layer 可能存在多个
+  name: string; // 代表 Layer 的类型
   // visible: boolean;
   // zIndex: number;
   // type: string;
@@ -67,16 +38,20 @@ export interface ILayer {
     init: SyncHook<unknown>;
     beforeRender: SyncHook<unknown>;
     afterRender: SyncHook<unknown>;
+    beforePickingEncode: SyncHook<unknown>;
+    afterPickingEncode: SyncHook<unknown>;
+    beforeHighlight: SyncHook<unknown>;
+    afterHighlight: SyncHook<unknown>;
+    beforeDestroy: SyncHook<unknown>;
+    afterDestroy: SyncHook<unknown>;
   };
   models: IModel[];
-  styleAttributes: {
-    [attributeName: string]: ILayerStyleAttribute;
-  };
   sourceOption: {
     data: any;
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+  styleAttributeService: IStyleAttributeService;
   init(): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -84,7 +59,7 @@ export interface ILayer {
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   // filter(field: string, value: StyleAttributeOption): ILayer;
   // active(option: ActiveOption): ILayer;
-  style(options: ILayerStyleOptions): ILayer;
+  style(options: unknown): ILayer;
   // hide(): ILayer;
   // show(): ILayer;
   // animate(field: string, option: any): ILayer;
@@ -94,11 +69,15 @@ export interface ILayer {
   addPlugin(plugin: ILayerPlugin): ILayer;
   getSource(): ISource;
   setSource(source: ISource): void;
-  setEncodedData(encodedData: Array<{ [key: string]: unknown }>): void;
-  getEncodedData(): Array<{ [key: string]: unknown }>;
-  getInitializationOptions(): Partial<ILayerInitializationOptions>;
+  setEncodedData(encodedData: IEncodeFeature[]): void;
+  getEncodedData(): IEncodeFeature[];
+  getStyleOptions(): Partial<ILayerInitializationOptions>;
+  isDirty(): boolean;
 }
 
+/**
+ * Layer 插件
+ */
 export interface ILayerPlugin {
   apply(layer: ILayer): void;
 }
@@ -108,8 +87,22 @@ export interface ILayerPlugin {
  */
 export interface ILayerInitializationOptions {
   enableMultiPassRenderer: boolean;
-  enablePicking: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
+
+  /**
+   * 开启拾取
+   */
+  enablePicking: boolean;
+  /**
+   * 开启高亮
+   */
+  enableHighlight: boolean;
+  /**
+   * 高亮颜色
+   */
+  highlightColor: string | number[];
+  onHover(pickedFeature: IPickedFeature): void;
+  onClick(pickedFeature: IPickedFeature): void;
 }
 
 /**
@@ -119,5 +112,5 @@ export interface ILayerService {
   add(layer: ILayer): void;
   initLayers(): void;
   renderLayers(): void;
-  clean(): void;
+  destroy(): void;
 }

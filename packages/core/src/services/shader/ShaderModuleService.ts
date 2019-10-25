@@ -5,6 +5,8 @@ import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 
 import decode from '../../shaders/decode.glsl';
 import lighting from '../../shaders/lighting.glsl';
+import pickingFrag from '../../shaders/picking.frag.glsl';
+import pickingVert from '../../shaders/picking.vert.glsl';
 import projection from '../../shaders/projection.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 
@@ -23,6 +25,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('projection', { vs: projection, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });
     this.registerModule('lighting', { vs: lighting, fs: '' });
+    this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
   }
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {

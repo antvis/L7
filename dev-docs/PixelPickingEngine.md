@@ -28,10 +28,10 @@ ClearPass -> PixelPickingPass -> RenderPass -> [ ...其他后处理 Pass ] -> Co
 ```
 
 PixelPickingPass 分解步骤如下：
-1. 逐要素编码（idx -> color），传入 attributes 渲染 Layer 到纹理。
+1. `ENCODE` 阶段。逐要素编码（idx -> color），传入 attributes 渲染 Layer 到纹理。
 2. 获取鼠标在视口中的位置。由于目前 L7 与地图结合的方案为双 Canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
 3. 读取纹理在指定位置的颜色，进行解码（color -> idx)，查找对应要素，作为 Layer `onHover/onClick` 回调参数传入。
-4. （可选）将待高亮要素对应的颜色传入 Vertex Shader 用于每个 Vertex 判断自身是否被选中，如果被选中，在 Fragment Shader 中将高亮颜色与计算颜色混合。
+4. `HIGHLIGHT` 阶段（可选）。将待高亮要素对应的颜色传入 Vertex Shader 用于每个 Vertex 判断自身是否被选中，如果被选中，在 Fragment Shader 中将高亮颜色与计算颜色混合。
 
 ## 使用方法
 
@@ -69,7 +69,8 @@ const layer = new PolygonLayer({
 ```typescript
 const layer = new PolygonLayer({
     enablePicking: true, // 开启拾取
-    highlightColor: 'red', // 设置高亮颜色
+    enableHighlight: true, // 开启高亮
+    highlightColor: [0, 0, 1, 1], // 设置高亮颜色为蓝色
 });
 ```
 
@@ -132,7 +133,7 @@ void main() {
 
 void main() {
   // 必须在末尾，保证后续不会再对 gl_FragColor 进行修改
-  gl_FragColor = highlightPickingColor(gl_FragColor);
+  gl_FragColor = filterPickingColor(gl_FragColor);
 }
 ```
 
@@ -141,7 +142,7 @@ void main() {
 | 方法名 | 应用 shader | 说明 |
 | -------- | --- | ------------- |
 | `setPickingColor` | `vertex` | 比较自身颜色编码与高亮颜色，判断是否被选中，传递结果给 fragment |
-| `highlightPickingColor` | `fragment` | 当前 fragment 被选中则使用高亮颜色混合，否则直接输出原始计算结果 |
+| `filterPickingColor` | `fragment` | 当前 fragment 被选中则使用高亮颜色混合，否则直接输出原始计算结果 |
 
 ## 参考资料
 
