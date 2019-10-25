@@ -29,8 +29,6 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
-let counter = 1;
-
 /**
  * AMapService
  */
@@ -166,7 +164,6 @@ export default class MapboxService implements IMapService {
   public async init(mapConfig: IMapConfig): Promise<void> {
     const { id, attributionControl = false, ...rest } = mapConfig;
     this.$mapContainer = document.getElementById(id);
-    this.$mapContainer!.classList.add(`${counter++}`);
 
     this.viewport = new Viewport();
 

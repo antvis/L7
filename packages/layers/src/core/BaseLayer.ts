@@ -213,7 +213,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     };
     return this;
   }
-  public style(options: unknown): ILayer {
+  public style(options: object): ILayer {
     // @ts-ignore
     this.styleOptions = {
       ...this.styleOptions,
