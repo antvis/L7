@@ -81,9 +81,9 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
 
   public render(layer: ILayer) {
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
-    const { renderToFramebuffer } = this.rendererService;
+    const { useFramebuffer } = this.rendererService;
 
-    renderToFramebuffer(
+    useFramebuffer(
       this.renderToScreen ? null : postProcessor.getWriteFBO(),
       () => {
         this.model.draw({

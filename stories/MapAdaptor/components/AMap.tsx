@@ -1,7 +1,8 @@
-import { PointLayer } from '@l7/layers';
+// @ts-ignore
+import { PolygonLayer } from '@l7/layers';
+// @ts-ignore
 import { Scene } from '@l7/scene';
 import * as React from 'react';
-import data from './data.json';
 
 export default class AMap extends React.Component {
   private scene: Scene;
@@ -10,18 +11,36 @@ export default class AMap extends React.Component {
     this.scene.destroy();
   }
 
-  public componentDidMount() {
+  public async componentDidMount() {
+    const response = await fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+    );
     const scene = new Scene({
-      center: [120.19382669582967, 30.258134],
+      center: [110.19382669582967, 50.258134],
       id: 'map',
       pitch: 0,
       style: 'dark',
       type: 'amap',
-      zoom: 1,
+      zoom: 3,
     });
-    const pointLayer = new PointLayer({});
-    pointLayer.source(data);
-    scene.addLayer(pointLayer);
+    const layer = new PolygonLayer({});
+
+    layer
+      .source(await response.json())
+      .size('name', [0, 10000, 50000, 30000, 100000])
+      .color('name', [
+        '#2E8AE6',
+        '#69D1AB',
+        '#DAF291',
+        '#FFD591',
+        '#FF7A45',
+        '#CF1D49',
+      ])
+      .shape('fill')
+      .style({
+        opacity: 0.8,
+      });
+    scene.addLayer(layer);
     scene.render();
     this.scene = scene;
   }

@@ -13,6 +13,7 @@ const TYPES = {
   IFontService: Symbol.for('IFontService'),
   IInteractionService: Symbol.for('IInteractionService'),
   IControlService: Symbol.for('IControlService'),
+  IStyleAttributeService: Symbol.for('IStyleAttributeService'),
 
   /** multi-pass */
   ClearPass: Symbol.for('ClearPass'),

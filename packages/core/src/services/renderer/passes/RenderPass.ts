@@ -22,9 +22,9 @@ export default class RenderPass implements IPass {
   }
 
   public render(layer: ILayer) {
-    const { renderToFramebuffer, clear } = this.rendererService;
+    const { useFramebuffer, clear } = this.rendererService;
     const readFBO = layer.multiPassRenderer.getPostProcessor().getReadFBO();
-    renderToFramebuffer(readFBO, () => {
+    useFramebuffer(readFBO, () => {
       clear({
         color: [0, 0, 0, 0],
         depth: 1,
