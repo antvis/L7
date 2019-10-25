@@ -14,6 +14,7 @@ import {
   IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
+  IReadPixelsOptions,
   IRendererService,
   ITexture2D,
   ITexture2DInitializationOptions,
@@ -92,19 +93,13 @@ export default class ReglRendererService implements IRendererService {
   public createFramebuffer = (options: IFramebufferInitializationOptions) =>
     new ReglFramebuffer(this.gl, options);
 
-  public renderToFramebuffer = (
+  public useFramebuffer = (
     framebuffer: IFramebuffer | null,
     drawCommands: () => void,
   ) => {
-    const useFramebuffer = this.gl({
-      // since post-processor will swap read/write fbos, we must retrieve it dynamically
-      framebuffer: framebuffer
-        ? () => (framebuffer as ReglFramebuffer).get()
-        : null,
-    });
-
-    // TODO: pass other options
-    useFramebuffer({}, drawCommands);
+    this.gl({
+      framebuffer: framebuffer ? (framebuffer as ReglFramebuffer).get() : null,
+    })(drawCommands);
   };
 
   public clear = (options: IClearOptions) => {
@@ -141,6 +136,20 @@ export default class ReglRendererService implements IRendererService {
     this.gl._refresh();
   };
 
+  public readPixels = (options: IReadPixelsOptions) => {
+    const { framebuffer, x, y, width, height } = options;
+    const readPixelsOptions: regl.ReadOptions = {
+      x,
+      y,
+      width,
+      height,
+    };
+    if (framebuffer) {
+      readPixelsOptions.framebuffer = (framebuffer as ReglFramebuffer).get();
+    }
+    return this.gl.read(readPixelsOptions);
+  };
+
   public getViewportSize = () => {
     return {
       width: this.gl._gl.drawingBufferWidth,
@@ -150,5 +159,10 @@ export default class ReglRendererService implements IRendererService {
 
   public getContainer = () => {
     return this.$container;
+  };
+
+  public destroy = () => {
+    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
+    this.gl.destroy();
   };
 }
