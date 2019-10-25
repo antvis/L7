@@ -67,10 +67,14 @@ export default class ReglModel implements IModel {
       vert: vs,
       primitive:
         primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
-      count,
     };
     if (instances) {
       drawParams.instances = instances;
+    }
+
+    // elements 中可能包含 count，此时不应传入
+    if (count) {
+      drawParams.count = count;
     }
 
     if (elements) {
@@ -133,9 +137,7 @@ export default class ReglModel implements IModel {
   }
 
   public destroy() {
-    // release all resources
-    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
-    this.reGl.destroy();
+    // don't need do anything since we will call `rendererService.cleanup()`
   }
 
   /**

@@ -140,7 +140,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 初始化 container 上的交互
       this.interactionService.init();
 
-      // TODO：init renderer
       this.logger.info('renderer loaded');
     });
 
@@ -169,13 +168,15 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public destroy() {
-    this.emit('destory');
+    this.emit('destroy');
     this.inited = false;
-    this.layerService.clean();
+    this.layerService.destroy();
     this.configService.reset();
     this.interactionService.destroy();
     this.controlService.destroy();
     this.removeAllListeners();
+    this.rendererService.destroy();
+    this.map.destroy();
     window.removeEventListener('resize', this.handleWindowResized, false);
   }
   private handleWindowResized = () => {
