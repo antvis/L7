@@ -44,7 +44,7 @@ export default class Marker {
     this.mapservice = mapService;
     mapService.getMarkerContainer().appendChild(element as HTMLElement);
     mapService.on('camerachange', this.update);
-    this.setDraggable(draggable);
+    // this.setDraggable(draggable);
     this.update();
     return this;
   }

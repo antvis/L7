@@ -30,16 +30,19 @@ export default class LayerService implements ILayerService {
   }
 
   public renderLayers() {
-    this.layers.forEach((layer) => {
-      // trigger hooks
-      layer.hooks.beforeRender.call(layer);
-      layer.render();
-      layer.hooks.afterRender.call(layer);
-    });
+    // TODO：脏检查，只渲染发生改变的 Layer
+    this.layers
+      // .filter((layer) => layer.isDirty())
+      .forEach((layer) => {
+        // trigger hooks
+        layer.hooks.beforeRender.call(layer);
+        layer.render();
+        layer.hooks.afterRender.call(layer);
+      });
   }
 
-  public clean() {
-    // TODO: destroy every layer first
+  public destroy() {
+    this.layers.forEach((layer) => layer.destroy());
     this.layers = [];
   }
 }

@@ -1,5 +1,4 @@
 import container, { lazyInject } from './inversify.config';
-import IconService from './services/asset/IconService';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
@@ -28,7 +27,6 @@ export {
    * 各个 Service 接口
    */
   SceneService,
-  IconService,
   packCircleVertex,
   /** pass */
   MultiPassRenderer,
@@ -41,8 +39,8 @@ export {
 };
 
 /** 暴露服务接口供其他 packages 实现 */
-export * from './services/layer/ILayerStyleService';
 export * from './services/layer/ILayerService';
+export * from './services/layer/IStyleAttributeService';
 export * from './services/source/ISourceService';
 export * from './services/map/IMapService';
 export * from './services/coordinate/ICoordinateSystemService';
@@ -56,6 +54,7 @@ export * from './services/asset/IFontService';
 export * from './services/component/IControlService';
 export * from './services/component/IMarkerService';
 export * from './services/component/IPopUpService';
+export * from './services/log/ILogService';
 
 /** 全部渲染服务接口 */
 export * from './services/renderer/IAttribute';

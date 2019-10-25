@@ -8,7 +8,7 @@ export function createRendererContainer(domId: string): HTMLDivElement | null {
     $container.style.cssText += `
       position: absolute;
       top: 0;
-      z-index:10;
+      z-index:2;
       height: 100%;
       width: 100%;
       pointer-events: none;

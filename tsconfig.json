@@ -3,6 +3,7 @@
     "noEmit": true,
     "strict": true,
     "strictPropertyInitialization": false,
+    "downlevelIteration": true,
     "jsx": "react",
     "target": "es5",
     "lib": ["es6", "dom"],
