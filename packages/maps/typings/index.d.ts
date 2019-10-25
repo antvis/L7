@@ -1,4 +1,7 @@
 /// <reference path="../../../node_modules/@types/amap-js-api/index.d.ts" />
+
+import { IControl } from 'mapbox-gl';
+
 interface Window {
   onLoad: () => void;
 }
@@ -8,23 +11,21 @@ interface IAMapEvent {
     near: number;
     far: number;
     height: number;
-    pitch: number; 
-    rotation: number; 
+    pitch: number;
+    rotation: number;
     aspect: number;
-    position: {x: number; y: number;};
-  }
+    position: { x: number; y: number };
+  };
 }
 
 interface IAMapInstance {
-  on(eventName: string, handler: (event: IAMapEvent) => void): void;
-  getZoom(): number;
-  getCenter(): {lat: number; lng: number};
-  [key:string]: Function;
+  get(key: string): unknown;
 }
 
 interface IMapboxInstance {
+  _controls: IControl[];
   transform: {
     width: number;
     height: number;
-  }
+  };
 }

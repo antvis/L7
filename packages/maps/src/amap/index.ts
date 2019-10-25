@@ -13,24 +13,25 @@ import {
   MapType,
   TYPES,
 } from '@l7/core';
+import { DOM } from '@l7/utils';
 import { inject, injectable } from 'inversify';
+import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import Viewport from './Viewport';
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.8';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
-/// <reference path="../../../../../node_modules/@types/amap-js-api/index.d.ts" />
-
 /**
  * AMapService
  */
 @injectable()
 export default class AMapService implements IMapService {
+  public map: AMap.Map & IAMapInstance;
+
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
-
-  private map: AMap.Map;
+  private markerContainer: HTMLElement;
 
   private $mapContainer: HTMLElement | null;
   private $jsapi: HTMLScriptElement;
@@ -38,6 +39,38 @@ export default class AMapService implements IMapService {
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+
+  // init
+  public addMarkerContainer(): void {
+    const mapContainer = this.map.getContainer();
+    if (mapContainer !== null) {
+      const amap = mapContainer.getElementsByClassName(
+        'amap-maps',
+      )[0] as HTMLElement;
+      this.markerContainer = DOM.create('div', 'l7_marker', amap);
+    }
+  }
+  public getMarkerContainer(): HTMLElement {
+    return this.markerContainer;
+  }
+
+  //  map event
+  public on(type: string, handle: (...args: any[]) => void): void {
+    this.map.on(type, handle);
+  }
+
+  public off(type: string, handle: (...args: any[]) => void): void {
+    this.map.off(type, handle);
+  }
+
+  public getContainer(): HTMLElement | null {
+    return this.map.getContainer();
+  }
+
+  public getSize(): [number, number] {
+    const size = this.map.getSize();
+    return [size.getWidth(), size.getHeight()];
+  }
 
   public getType() {
     return MapType.amap;
@@ -52,12 +85,15 @@ export default class AMapService implements IMapService {
       lat: center.getLat(),
     };
   }
+
   public getPitch(): number {
     return this.map.getPitch();
   }
+
   public getRotation(): number {
     return this.map.getRotation();
   }
+
   public getBounds(): Bounds {
     // @ts-ignore
     const amapBound = this.map.getBounds().toBounds();
@@ -65,8 +101,17 @@ export default class AMapService implements IMapService {
     const SW = amapBound.getSouthWest();
     return [[NE.getLng(), NE.getLat()], [SW.getLng(), SW.getLat()]];
   }
-  public setRotation(rotation: number): number {
-    return this.setRotation(rotation);
+
+  public getMinZoom(): number {
+    const zooms = this.map.get('zooms') as [number, number];
+    return zooms[0];
+  }
+  public getMaxZoom(): number {
+    const zooms = this.map.get('zooms') as [number, number];
+    return zooms[1];
+  }
+  public setRotation(rotation: number): void {
+    return this.map.setRotation(rotation);
   }
 
   public zoomIn(): void {
@@ -131,7 +176,7 @@ export default class AMapService implements IMapService {
     await new Promise((resolve) => {
       // 异步加载高德地图
       // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
-      window.onLoad = (): void => {
+      window.onload = (): void => {
         // @ts-ignore
         this.map = new AMap.Map(id, {
           mapStyle: style,

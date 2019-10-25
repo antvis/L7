@@ -1,3 +1,4 @@
+import { Map } from 'mapbox-gl';
 import { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
 export type Bounds = [[number, number], [number, number]];
@@ -10,9 +11,23 @@ export interface IPoint {
   y: number;
 }
 export interface IMapService {
+  map: AMap.Map | Map;
   init(config: Partial<IMapConfig>): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
+  // init map
+  addMarkerContainer(): void;
+  getMarkerContainer(): HTMLElement;
+  // MapEvent // 定义事件类型
+
+  on(type: string, hander: (...args: any[]) => void): void;
+  off(type: string, hander: (...args: any[]) => void): void;
+  // get dom
+  getContainer(): HTMLElement | null;
+  getSize(): [number, number];
+  // get map status method
+  getMinZoom(): number;
+  getMaxZoom(): number;
   // get map params
   getType(): MapType;
   getZoom(): number;
@@ -56,6 +71,11 @@ export interface IMapConfig {
   id: string;
 
   /**
+   * 地图
+   */
+  token?: string;
+
+  /**
    * 中心点
    */
   center?: [number, number];
@@ -79,6 +99,17 @@ export interface IMapConfig {
    * 底图样式
    */
   style?: string;
+  /**
+   * 最小缩放等级
+   */
+  minZoom?: number;
+
+  /**
+   * 最大缩放等级
+   */
+  maxZoom?: number;
+
+  attributionControl?: boolean;
 }
 
 /**

@@ -1,10 +1,12 @@
 import {
   IEncodeFeature,
+  IFontService,
   IGlobalConfigService,
   IIconService,
   ILayer,
   ILayerInitializationOptions,
   ILayerPlugin,
+  IMapService,
   IModel,
   IMultiPassRenderer,
   IRendererService,
@@ -121,6 +123,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @lazyInject(TYPES.IIconService)
   protected readonly iconService: IIconService;
 
+  @lazyInject(TYPES.IFontService)
+  protected readonly fontService: IFontService;
+
   protected layerSource: Source;
 
   private encodedData: IEncodeFeature[];
@@ -140,6 +145,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   @lazyInject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
+
+  @lazyInject(TYPES.IMapService)
+  private readonly map: IMapService;
 
   constructor(
     styleOptions: Partial<ILayerInitializationOptions & ChildLayerStyleOptions>,
@@ -220,6 +228,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
       this.renderModels();
     }
     return this;
+  }
+  /**
+   * zoom to layer Bounds
+   */
+  public fitBounds(): void {
+    const source = this.getSource();
+    const extent = source.extent;
+    this.map.fitBounds([[extent[0], extent[1]], [extent[2], extent[3]]]);
   }
 
   public destroy() {
