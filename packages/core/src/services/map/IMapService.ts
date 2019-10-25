@@ -13,6 +13,7 @@ export interface IPoint {
 export interface IMapService {
   map: AMap.Map | Map;
   init(config: Partial<IMapConfig>): void;
+  destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
   addMarkerContainer(): void;
@@ -27,14 +28,16 @@ export interface IMapService {
   // get map status method
   getMinZoom(): number;
   getMaxZoom(): number;
+  // get map params
+  getType(): MapType;
   getZoom(): number;
   getCenter(): ILngLat;
   getPitch(): number;
   getRotation(): number;
   getBounds(): Bounds;
+  getMapContainer(): HTMLElement | null;
 
-  // set Map status
-
+  // control with raw map
   setRotation(rotation: number): void;
   zoomIn(): void;
   zoomOut(): void;
@@ -44,12 +47,13 @@ export interface IMapService {
   setZoomAndCenter(zoom: number, center: Point): void;
   setMapStyle(style: string): void;
 
-  // conversion Method
+  // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
 }
+
 export enum MapType {
   amap = 'amap',
   mapbox = 'mapbox',
