@@ -1,14 +1,20 @@
+import EventEmitter from 'eventemitter3';
 import Hammer from 'hammerjs';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { ILogService } from '../log/ILogService';
-import { IRendererService } from '../renderer/IRendererService';
-import { IInteractionService } from './IInteractionService';
+import { IMapService } from '../map/IMapService';
+import { IInteractionService, InteractionEvent } from './IInteractionService';
 
+/**
+ * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
+ * 除此之外，后续如果支持非地图场景，事件监听就需要注册在 L7 canvas 上。
+ */
 @injectable()
-export default class InteractionService implements IInteractionService {
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
+export default class InteractionService extends EventEmitter
+  implements IInteractionService {
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
 
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
@@ -16,45 +22,46 @@ export default class InteractionService implements IInteractionService {
   private hammertime: HammerManager;
 
   public init() {
-    const $containter = this.rendererService.getContainer();
-    if ($containter) {
-      const hammertime = new Hammer($containter);
-      hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-      hammertime.get('pinch').set({ enable: true });
-
-      // hammertime.on('panstart', this.onPanstart);
-      hammertime.on('panmove', this.onPanmove);
-      // hammertime.on('panend', this.onPanend);
-      // hammertime.on('pinch', this.onPinch);
-
-      // $containter.addEventListener('wheel', this.onMousewheel);
-      this.hammertime = hammertime;
-    }
+    // 注册事件在地图底图上
+    this.addEventListenerOnMap();
   }
 
   public destroy() {
     if (this.hammertime) {
       this.hammertime.destroy();
     }
-    const $containter = this.rendererService.getContainer();
+    this.removeEventListenerOnMap();
+    this.off(InteractionEvent.Hover);
+  }
+
+  private addEventListenerOnMap() {
+    const $containter = this.mapService.getMapContainer();
     if ($containter) {
-      // $containter.removeEventListener('wheel', this.onMousewheel);
+      const hammertime = new Hammer($containter);
+      hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+      hammertime.get('pinch').set({ enable: true });
+
+      // hammertime.on('panstart', this.onPanstart);
+      // hammertime.on('panmove', this.onPanmove);
+      // hammertime.on('panend', this.onPanend);
+      // hammertime.on('pinch', this.onPinch);
+
+      $containter.addEventListener('mousemove', this.onHover);
+      this.hammertime = hammertime;
+
+      // TODO: 根据场景注册事件到 L7 canvas 上
+      this.logger.info('add event listeners on canvas');
     }
   }
 
-  private onPanmove = (e: HammerInput) => {
-    // @ts-ignore
-    // this.logger.info(e);
-    // if (this.isMoving) {
-    //   this.deltaX = e.center.x - this.lastX;
-    //   this.deltaY = e.center.y - this.lastY;
-    //   this.lastX = e.center.x;
-    //   this.lastY = e.center.y;
-    //   this.emit(Mouse.MOVE_EVENT, {
-    //     deltaX: this.deltaX,
-    //     deltaY: this.deltaY,
-    //     deltaZ: this.deltaZ
-    //   });
-    // }
+  private removeEventListenerOnMap() {
+    const $containter = this.mapService.getMapContainer();
+    if ($containter) {
+      $containter.removeEventListener('mousemove', this.onHover);
+    }
+  }
+
+  private onHover = ({ x, y }: MouseEvent) => {
+    this.emit(InteractionEvent.Hover, { x, y });
   };
 }

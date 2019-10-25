@@ -10,11 +10,13 @@ import {
   IMapService,
   IPoint,
   IViewport,
+  MapType,
   TYPES,
 } from '@l7/core';
 import { DOM } from '@l7/utils';
 import { inject, injectable } from 'inversify';
 import mapboxgl, { IControl, Map } from 'mapbox-gl';
+import { IMapboxInstance } from '../../typings/index';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;
@@ -27,6 +29,8 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
+let counter = 1;
+
 /**
  * AMapService
  */
@@ -38,6 +42,8 @@ export default class MapboxService implements IMapService {
   private viewport: Viewport;
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
+  private $mapContainer: HTMLElement | null;
+  private $link: HTMLLinkElement;
 
   // init
   public addMarkerContainer(): void {
@@ -67,6 +73,9 @@ export default class MapboxService implements IMapService {
   }
   // get mapStatus method
 
+  public getType() {
+    return MapType.mapbox;
+  }
   public getZoom(): number {
     return this.map.getZoom();
   }
@@ -156,6 +165,9 @@ export default class MapboxService implements IMapService {
 
   public async init(mapConfig: IMapConfig): Promise<void> {
     const { id, attributionControl = false, ...rest } = mapConfig;
+    this.$mapContainer = document.getElementById(id);
+    this.$mapContainer!.classList.add(`${counter++}`);
+
     this.viewport = new Viewport();
 
     /**
@@ -173,12 +185,22 @@ export default class MapboxService implements IMapService {
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
 
-    const $link: HTMLLinkElement = document.createElement('link');
-    $link.href =
+    this.$link = document.createElement('link');
+    this.$link.href =
       'https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css';
-    $link.rel = 'stylesheet';
-    document.head.appendChild($link);
     this.removeLogoControl();
+    this.$link.rel = 'stylesheet';
+    document.head.appendChild(this.$link);
+  }
+
+  public destroy() {
+    document.head.removeChild(this.$link);
+    this.$mapContainer = null;
+    this.map.remove();
+  }
+
+  public getMapContainer() {
+    return this.$mapContainer;
   }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
