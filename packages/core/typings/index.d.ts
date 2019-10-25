@@ -1,3 +1,4 @@
+
 declare module 'probe.gl' {
   class Log {
     constructor(options: { id: string });
@@ -9,3 +10,4 @@ declare module 'probe.gl' {
     error(message: string): () => any;
   }
 }
+/// <reference path="../../../node_modules/eventemitter3/index.d.ts" />

@@ -1,5 +1,5 @@
-import { IStyleAttribute } from '@l7/core';
 import { isNil } from 'lodash';
+import { IStyleAttribute } from '../layer/IStyleAttributeService';
 import { IAttribute } from '../renderer/IAttribute';
 import { IBuffer } from '../renderer/IBuffer';
 import {

@@ -27,7 +27,11 @@ module.exports = ({ config }) => {
       },
     ],
     enforce: 'pre',
-  });
+  },{
+    test: /\.stories\.css?$/,
+    use: ['style-loader', 'css-loader'],
+  },
+  );
 
   config.resolve.extensions.push('.ts', '.tsx', '.js', '.glsl');
 
