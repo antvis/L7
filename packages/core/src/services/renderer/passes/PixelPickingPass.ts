@@ -126,11 +126,17 @@ export default class PixelPickingPass implements IPass {
     const { width, height } = getViewportSize();
     const { enableHighlight } = this.layer.getStyleOptions();
 
+    const xInDevicePixel = x * window.devicePixelRatio;
+    const yInDevicePixel = y * window.devicePixelRatio;
+    if (xInDevicePixel > width || xInDevicePixel < 0 || yInDevicePixel > height || yInDevicePixel < 0) {
+      return;
+    }
+
     let pickedColors: Uint8Array | undefined;
     useFramebuffer(this.pickingFBO, () => {
       // avoid realloc
       pickedColors = readPixels({
-        x: Math.round(x * window.devicePixelRatio),
+        x: Math.round(xInDevicePixel),
         // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
         y: Math.round(height - (y + 1) * window.devicePixelRatio),
         width: 1,
@@ -171,10 +177,16 @@ export default class PixelPickingPass implements IPass {
     y: number;
     feature: unknown;
   }) {
-    // TODO: onClick
     const { onHover, onClick } = this.layer.getStyleOptions();
     if (onHover) {
       onHover({
+        x,
+        y,
+        feature,
+      });
+    }
+    if (onClick) {
+      onClick({
         x,
         y,
         feature,

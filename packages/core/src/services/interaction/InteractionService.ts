@@ -34,6 +34,10 @@ export default class InteractionService extends EventEmitter
     this.off(InteractionEvent.Hover);
   }
 
+  public triggerHover({ x, y }: { x: number; y: number }) {
+    this.emit(InteractionEvent.Hover, { x, y });
+  }
+
   private addEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {

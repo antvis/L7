@@ -3,12 +3,14 @@ import {
   IFontService,
   IGlobalConfigService,
   IIconService,
+  IInteractionService,
   ILayer,
   ILayerInitializationOptions,
   ILayerPlugin,
   IMapService,
   IModel,
   IMultiPassRenderer,
+  InteractionEvent,
   IRendererService,
   IShaderModuleService,
   ISourceCFG,
@@ -149,6 +151,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @lazyInject(TYPES.IMapService)
   private readonly map: IMapService;
 
+  @lazyInject(TYPES.IInteractionService)
+  private readonly interactionService: IInteractionService;
+
   constructor(
     styleOptions: Partial<ILayerInitializationOptions & ChildLayerStyleOptions>,
   ) {
@@ -276,6 +281,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   }
   public getEncodedData() {
     return this.encodedData;
+  }
+
+  public pick({ x, y }: { x: number; y: number }) {
+    this.interactionService.triggerHover({ x, y });
   }
 
   protected buildLayerModel(options: ILayerModelInitializationOptions): IModel {
