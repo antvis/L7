@@ -10,4 +10,5 @@ export interface IInteractionService {
     eventName: InteractionEvent,
     callback: (params: { x: number; y: number }) => void,
   ): void;
+  triggerHover({ x, y }: { x: number; y: number }): void;
 }

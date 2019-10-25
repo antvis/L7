@@ -73,6 +73,10 @@ export interface ILayer {
   getEncodedData(): IEncodeFeature[];
   getStyleOptions(): Partial<ILayerInitializationOptions>;
   isDirty(): boolean;
+  /**
+   * 直接调用拾取方法，在非鼠标交互场景中使用
+   */
+  pick(query: { x: number; y: number }): void;
 }
 
 /**

@@ -69,17 +69,10 @@ export default class AdvancedAPI extends React.Component {
       enablePicking: true,
       enableHighlight: true,
       highlightColor: [0, 0, 255],
+      pickingX: window.innerWidth / 2,
+      pickingY: window.innerHeight / 2,
     };
-    const pointFolder = gui.addFolder('拾取 & 高亮');
-    // pointFolder
-    //   .add(styleOptions, 'enablePicking')
-    //   .onChange((enablePicking: boolean) => {
-    //     // FIXME: 该配置项会影响到初始化阶段 PixelPickingPass 的添加，暂不支持在运行时更改
-    //     layer.style({
-    //       enablePicking,
-    //     });
-    //     scene.render();
-    //   });
+    const pointFolder = gui.addFolder('非鼠标 hover 交互');
     pointFolder
       .add(styleOptions, 'enableHighlight')
       .onChange((enableHighlight: boolean) => {
@@ -87,6 +80,18 @@ export default class AdvancedAPI extends React.Component {
           enableHighlight,
         });
         scene.render();
+      });
+    pointFolder
+      .add(styleOptions, 'pickingX', 0, window.innerWidth)
+      .onChange((pickingX: number) => {
+        layer.pick({ x: pickingX, y: styleOptions.pickingY });
+        // scene.render();
+      });
+    pointFolder
+      .add(styleOptions, 'pickingY', 0, window.innerHeight)
+      .onChange((pickingY: number) => {
+        layer.pick({ x: styleOptions.pickingX, y: pickingY });
+        // scene.render();
       });
     pointFolder
       .addColor(styleOptions, 'highlightColor')
