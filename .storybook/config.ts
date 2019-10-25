@@ -2,7 +2,6 @@ import { configure, addParameters } from '@storybook/react';
 import '@storybook/addon-console';
 import { create } from '@storybook/theming';
 import '!style-loader!css-loader!sass-loader!./iframe.scss';
-
 addParameters({
   options: {
     isFullscreen: false,
