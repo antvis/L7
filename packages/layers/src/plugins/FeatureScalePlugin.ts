@@ -71,8 +71,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     this.scaleCache = {};
     attributes.forEach((attribute) => {
       if (attribute.scale) {
-        attribute!.scale!.scalers = this.parseFields(
-          attribute!.scale!.field || '',
+        attribute.scale.scalers = this.parseFields(
+          attribute.scale.field || '',
         ).map((field: string) => ({
           field,
           func: this.getOrCreateScale(field, attribute, dataArray),
@@ -93,7 +93,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     this.scaleCache[field] = this.createScale(field, dataArray);
     (this.scaleCache[field] as {
       range: (c: unknown[]) => void;
-    }).range(attribute!.scale!.values);
+    }).range(attribute?.scale?.values || []);
     return this.scaleCache[field];
   }
 
@@ -114,7 +114,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private createScale(field: string, data?: IParseDataItem[]): unknown {
     // 首先查找全局默认配置例如 color
-    const scaleOption: IScale = this.configService.getConfig()!.scales![field];
+    const scaleOption: IScale | undefined = this.configService.getConfig()?.scales?.[field];
 
     if (!data || !data.length) {
       // 数据为空
@@ -122,7 +122,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         ? this.createDefaultScale(scaleOption)
         : d3.scaleOrdinal([field]);
     }
-    const firstValue = data!.find((d) => !isNil(d[field]))![field];
+    const firstValue = data.find((d) => !isNil(d[field]))?.[field];
     // 常量 Scale
     if (isNumber(field) || (isNil(firstValue) && !scaleOption)) {
       return d3.scaleOrdinal([field]);
@@ -152,7 +152,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     const cfg: IScale = {
       type,
     };
-    const values = data!.map((item) => item[field]);
+    const values = data?.map((item) => item[field]) || [];
     // 默认类型为 Quantile Scales https://github.com/d3/d3-scale#quantile-scales
     if (type !== ScaleTypes.CAT && type !== ScaleTypes.QUANTILE) {
       cfg.domain = extent(values);

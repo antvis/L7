@@ -53,9 +53,9 @@ export default class StyleAttribute implements IStyleAttribute {
     /**
      * 当用户设置的 callback 返回 null 时, 应该返回默认 callback 中的值
      */
-    if (this!.scale!.callback) {
+    if (this.scale?.callback) {
       // 使用用户返回的值处理
-      const ret = this!.scale!.callback(params);
+      const ret = this.scale?.callback(params);
       if (!isNil(ret)) {
         return [ret];
       }
@@ -68,10 +68,10 @@ export default class StyleAttribute implements IStyleAttribute {
   private defaultCallback = (params: unknown[]): unknown[] => {
     // 没有 params 的情况，是指没有指定 fields，直接返回配置的 values 常量
     if (params.length === 0) {
-      return this!.scale!.values;
+      return this.scale?.values || [];
     }
     return params.map((param, idx) => {
-      const scaleFunc = this.scale!.scalers![idx].func;
+      const scaleFunc = this.scale?.scalers![idx].func;
       // @ts-ignore
       const value = scaleFunc(param);
       return value;
