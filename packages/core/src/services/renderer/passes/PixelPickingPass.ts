@@ -148,7 +148,7 @@ export default class PixelPickingPass implements IPass {
       ) {
         this.logger.info('picked');
         const pickedFeatureIdx = decodePickingColor(pickedColors);
-        const rawFeature = this.layer.getSource()!.data!.dataArray[
+        const rawFeature = this.layer.getSource()?.data?.dataArray[
           pickedFeatureIdx
         ];
 
