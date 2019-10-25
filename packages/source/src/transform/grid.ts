@@ -2,13 +2,8 @@
  * 生成四边形热力图
  */
 import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@l7/core';
-import { max, mean, min, sum } from './statistics';
-const statMap: { [key: string]: any } = {
-  min,
-  max,
-  mean,
-  sum,
-};
+import { statMap } from './statistics';
+
 interface IGridHash {
   [key: string]: any;
 }
