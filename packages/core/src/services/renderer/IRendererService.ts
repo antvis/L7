@@ -29,6 +29,16 @@ export interface IClearOptions {
   framebuffer?: IFramebuffer | null;
 }
 
+export interface IReadPixelsOptions {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  // gl.bindFrameBuffer
+  framebuffer?: IFramebuffer;
+  data?: Uint8Array;
+}
+
 export interface IRendererService {
   init($container: HTMLDivElement): Promise<void>;
   clear(options: IClearOptions): void;
@@ -38,11 +48,13 @@ export interface IRendererService {
   createElements(options: IElementsInitializationOptions): IElements;
   createTexture2D(options: ITexture2DInitializationOptions): ITexture2D;
   createFramebuffer(options: IFramebufferInitializationOptions): IFramebuffer;
-  renderToFramebuffer(
+  useFramebuffer(
     framebuffer: IFramebuffer | null,
     drawCommands: () => void,
   ): void;
   getViewportSize(): { width: number; height: number };
   getContainer(): HTMLElement | null;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
+  readPixels(options: IReadPixelsOptions): Uint8Array;
+  destroy(): void;
 }
