@@ -1,11 +1,11 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { lazyInject } from '../../../index';
 import { TYPES } from '../../../types';
 import {
   IInteractionService,
   InteractionEvent,
 } from '../../interaction/IInteractionService';
-import { ILayer, ILayerService } from '../../layer/ILayerService';
+import { ILayer } from '../../layer/ILayerService';
 import { ILogService } from '../../log/ILogService';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
@@ -104,9 +104,9 @@ export default class PixelPickingPass implements IPass {
       const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
       this.layer.multiPassRenderer.setRenderFlag(false);
       // trigger hooks
-      layer.hooks.beforeRender.call(layer);
+      layer.hooks.beforeRender.call();
       layer.render();
-      layer.hooks.afterRender.call(layer);
+      layer.hooks.afterRender.call();
       this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
 
       this.alreadyInRendering = false;
@@ -144,8 +144,6 @@ export default class PixelPickingPass implements IPass {
         data: new Uint8Array(1 * 1 * 4),
         framebuffer: this.pickingFBO,
       });
-
-      this.logger.info('try to picking');
 
       if (
         pickedColors[0] !== 0 ||
@@ -213,12 +211,11 @@ export default class PixelPickingPass implements IPass {
     // TODO: highlight pass 需要 multipass
     const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
     this.layer.multiPassRenderer.setRenderFlag(false);
-    this.layer.hooks.beforeRender.call(this.layer);
-    // @ts-ignore
-    this.layer.hooks.beforeHighlight.call(this.layer, [r, g, b]);
+    this.layer.hooks.beforeRender.call();
+    this.layer.hooks.beforeHighlight.call([r, g, b]);
     this.layer.render();
-    this.layer.hooks.afterHighlight.call(this.layer);
-    this.layer.hooks.afterRender.call(this.layer);
+    this.layer.hooks.afterHighlight.call();
+    this.layer.hooks.afterRender.call();
     this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
   }
 }

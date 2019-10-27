@@ -35,9 +35,9 @@ export default class LayerService implements ILayerService {
       // .filter((layer) => layer.isDirty())
       .forEach((layer) => {
         // trigger hooks
-        layer.hooks.beforeRender.call(layer);
+        layer.hooks.beforeRender.call();
         layer.render();
-        layer.hooks.afterRender.call(layer);
+        layer.hooks.afterRender.call();
       });
   }
 

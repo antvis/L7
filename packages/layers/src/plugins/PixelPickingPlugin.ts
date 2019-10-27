@@ -71,8 +71,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
 
     layer.hooks.beforeHighlight.tap(
       'PixelPickingPlugin',
-      // @ts-ignore
-      (l: unknown, pickedColor: unknown) => {
+      (pickedColor: number[]) => {
         const { highlightColor } = layer.getStyleOptions();
         const highlightColorInArray =
           typeof highlightColor === 'string'
@@ -81,7 +80,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,
-            u_PickingColor: pickedColor as number[],
+            u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
           }),
         );
