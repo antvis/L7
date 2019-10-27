@@ -85,13 +85,11 @@ export default class AdvancedAPI extends React.Component {
       .add(styleOptions, 'pickingX', 0, window.innerWidth)
       .onChange((pickingX: number) => {
         layer.pick({ x: pickingX, y: styleOptions.pickingY });
-        // scene.render();
       });
     pointFolder
       .add(styleOptions, 'pickingY', 0, window.innerHeight)
       .onChange((pickingY: number) => {
         layer.pick({ x: styleOptions.pickingX, y: pickingY });
-        // scene.render();
       });
     pointFolder
       .addColor(styleOptions, 'highlightColor')

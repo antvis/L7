@@ -23,6 +23,18 @@ export function polygonTriangulation(feature: IEncodeFeature) {
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public name: string = 'PolygonLayer';
 
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
+  }
+
   protected renderModels() {
     const { opacity } = this.getStyleOptions();
     this.models.forEach((model) =>
