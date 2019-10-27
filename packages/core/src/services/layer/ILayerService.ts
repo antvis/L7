@@ -1,4 +1,4 @@
-import { AsyncParallelHook, SyncHook } from 'tapable';
+import { SyncBailHook, SyncHook } from 'tapable';
 import { IModel } from '../renderer/IModel';
 import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';
 import { ISource, ISourceCFG } from '../source/ISourceService';
@@ -31,19 +31,17 @@ export interface ILayer {
   name: string; // 代表 Layer 的类型
   // visible: boolean;
   // zIndex: number;
-  // type: string;
-  // id: number;
   plugins: ILayerPlugin[];
   hooks: {
-    init: SyncHook<unknown>;
-    beforeRender: SyncHook<unknown>;
-    afterRender: SyncHook<unknown>;
-    beforePickingEncode: SyncHook<unknown>;
-    afterPickingEncode: SyncHook<unknown>;
-    beforeHighlight: SyncHook<unknown>;
-    afterHighlight: SyncHook<unknown>;
-    beforeDestroy: SyncHook<unknown>;
-    afterDestroy: SyncHook<unknown>;
+    init: SyncBailHook<void, boolean | void>;
+    beforeRender: SyncBailHook<void, boolean | void>;
+    afterRender: SyncHook<void>;
+    beforePickingEncode: SyncHook<void>;
+    afterPickingEncode: SyncHook<void>;
+    beforeHighlight: SyncHook<[number[]]>;
+    afterHighlight: SyncHook<void>;
+    beforeDestroy: SyncHook<void>;
+    afterDestroy: SyncHook<void>;
   };
   models: IModel[];
   sourceOption: {
@@ -72,6 +70,10 @@ export interface ILayer {
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
   getStyleOptions(): Partial<ILayerInitializationOptions>;
+  /**
+   * JSON Schema 用于校验配置项
+   */
+  getConfigSchemaForValidation(): object;
   isDirty(): boolean;
   /**
    * 直接调用拾取方法，在非鼠标交互场景中使用

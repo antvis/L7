@@ -10,7 +10,6 @@ import {
   IMapService,
   IModel,
   IMultiPassRenderer,
-  InteractionEvent,
   IRendererService,
   IShaderModuleService,
   ISourceCFG,
@@ -24,7 +23,10 @@ import {
 } from '@l7/core';
 import Source from '@l7/source';
 import { isFunction } from 'lodash';
-import { SyncHook } from 'tapable';
+// @ts-ignore
+import mergeJsonSchemas from 'merge-json-schemas';
+import { SyncBailHook, SyncHook } from 'tapable';
+import ConfigSchemaValidationPlugin from '../plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from '../plugins/DataMappingPlugin';
 import DataSourcePlugin from '../plugins/DataSourcePlugin';
 import FeatureScalePlugin from '../plugins/FeatureScalePlugin';
@@ -33,6 +35,7 @@ import PixelPickingPlugin from '../plugins/PixelPickingPlugin';
 import RegisterStyleAttributePlugin from '../plugins/RegisterStyleAttributePlugin';
 import ShaderUniformPlugin from '../plugins/ShaderUniformPlugin';
 import UpdateStyleAttributePlugin from '../plugins/UpdateStyleAttributePlugin';
+import baseLayerSchema from './schema';
 
 export interface ILayerModelInitializationOptions {
   moduleName: string;
@@ -64,16 +67,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   // 生命周期钩子
   public hooks = {
-    init: new SyncHook(['layer']),
-    beforeRender: new SyncHook(['layer']),
-    afterRender: new SyncHook(['layer']),
-    beforePickingEncode: new SyncHook(['layer']),
-    afterPickingEncode: new SyncHook(['layer']),
-    // @ts-ignore
-    beforeHighlight: new SyncHook(['layer', 'pickedColor']),
-    afterHighlight: new SyncHook(['layer']),
-    beforeDestroy: new SyncHook(['layer']),
-    afterDestroy: new SyncHook(['layer']),
+    init: new SyncBailHook<void, boolean | void>(),
+    beforeRender: new SyncBailHook<void, boolean | void>(),
+    afterRender: new SyncHook<void>(),
+    beforePickingEncode: new SyncHook<void>(),
+    afterPickingEncode: new SyncHook<void>(),
+    beforeHighlight: new SyncHook<[number[]]>(['pickedColor']),
+    afterHighlight: new SyncHook<void>(),
+    beforeDestroy: new SyncHook<void>(),
+    afterDestroy: new SyncHook<void>(),
   };
 
   // 待渲染 model 列表
@@ -84,6 +86,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   // 插件集
   public plugins: ILayerPlugin[] = [
+    /**
+     * 校验传入参数配置项的正确性
+     * @see /dev-docs/ConfigSchemaValidation.md
+     */
+    new ConfigSchemaValidationPlugin(),
+    /**
+     * 获取 Source
+     */
     new DataSourcePlugin(),
     /**
      * 根据 StyleAttribute 创建 VertexAttribute
@@ -132,6 +142,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   private encodedData: IEncodeFeature[];
 
+  private configSchema: object;
+
   /**
    * 保存样式属性
    */
@@ -174,7 +186,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   }
 
   public init() {
-    this.hooks.init.call(this);
+    this.hooks.init.call();
     this.buildModels();
     return this;
   }
@@ -244,14 +256,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   }
 
   public destroy() {
-    this.hooks.beforeDestroy.call(this);
+    this.hooks.beforeDestroy.call();
 
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
     this.models.forEach((model) => model.destroy());
 
-    this.hooks.afterDestroy.call(this);
+    this.hooks.afterDestroy.call();
   }
 
   public isDirty() {
@@ -283,6 +295,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     return this.encodedData;
   }
 
+  public getConfigSchemaForValidation() {
+    if (!this.configSchema) {
+      // 相比 allOf, merge 有一些优势
+      // @see https://github.com/goodeggs/merge-json-schemas
+      this.configSchema = mergeJsonSchemas([
+        baseLayerSchema,
+        this.getConfigSchema(),
+      ]);
+    }
+    return this.configSchema;
+  }
+
   public pick({ x, y }: { x: number; y: number }) {
     this.interactionService.triggerHover({ x, y });
   }
@@ -311,6 +335,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
       vs,
       elements,
     });
+  }
+
+  protected getConfigSchema() {
+    throw new Error('Method not implemented.');
   }
 
   protected buildModels() {
