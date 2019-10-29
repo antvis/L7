@@ -22,7 +22,6 @@ module.exports = (api) => {
       '@babel/preset-typescript',
     ],
     plugins: [
-      '@babel/plugin-proposal-optional-chaining',
       [
         '@babel/plugin-proposal-decorators',
         {
@@ -36,6 +35,7 @@ module.exports = (api) => {
           loose: true,
         }
       ],
+      '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-syntax-dynamic-import',
       '@babel/plugin-transform-modules-commonjs',
       [

@@ -186,7 +186,7 @@ export default class TAAPass implements IPass {
     };
 
     this.accumulatingId = accumulatingId++;
-
+    // @ts-ignore
     this.timer = setTimeout(() => {
       accumulate(this.accumulatingId);
     }, 50);

@@ -31,14 +31,9 @@ export default class Mapbox extends React.Component {
     layer
       .source(await response.json())
       .size('name', [0, 10000, 50000, 30000, 100000])
-      .color('name', [
-        '#2E8AE6',
-        '#69D1AB',
-        '#DAF291',
-        '#FFD591',
-        '#FF7A45',
-        '#CF1D49',
-      ])
+      .color('name', () => {
+        return 'yellow';
+      })
       .shape('fill')
       .style({
         opacity: 0.8,
