@@ -10,7 +10,7 @@ import Mapbox from './components/Mapbox';
 // import PointImage from './components/pointImage';
 // @ts-ignore
 import notes from './Map.md';
-
+// @ts-ignore
 storiesOf('地图底图', module)
   .add('高德地图', () => <AMap />, {
     notes: { markdown: notes },
