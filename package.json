@@ -1,8 +1,8 @@
 {
   "private": true,
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
@@ -21,11 +21,10 @@
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.3",
-    "@types/storybook__addon-knobs": "^5.0.1",
     "@types/storybook__react": "^4.0.2",
     "@types/supercluster": "^5.0.1",
     "awesome-typescript-loader": "^5.2.1",
-    "babel-jest": "^24.8.0",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-const-enum": "^0.0.2",
     "babel-plugin-css-modules-transform": "^1.6.2",
@@ -110,5 +109,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.6.0"
   }
 }

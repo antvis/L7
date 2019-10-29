@@ -39,7 +39,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           featureIdx: number,
           vertex: number[],
         ) => {
-          return [vertex[0], vertex[1], 0];
+          return vertex.length === 3 ? vertex : [vertex[0], vertex[1], 0];
         },
       },
     });

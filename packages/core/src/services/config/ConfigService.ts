@@ -22,9 +22,21 @@ const defaultGlobalConfig: Partial<IGlobalConfig> = {
     'rgb(33,102,172)',
     'rgb(5,48,97)',
   ],
-  size: 10000,
+  size: 10,
   shape: 'circle',
   scales: {},
+  shape2d: [
+    'circle',
+    'triangle',
+    'square',
+    'pentagon',
+    'hexagon',
+    'octogon',
+    'hexagram',
+    'rhombus',
+    'vesica',
+  ],
+  shape3d: ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'],
 };
 
 // @see https://github.com/epoberezkin/ajv#options
