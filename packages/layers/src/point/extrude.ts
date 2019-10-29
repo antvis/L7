@@ -1,28 +1,10 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
-import pointFillFrag from './shaders/fill_frag.glsl';
-import pointFillVert from './shaders/fill_vert.glsl';
+import pointExtrudeFrag from './shaders/extrude_frag.glsl';
+import pointExtrudeVert from './shaders/extrude_vert.glsl';
+import { PointExtrudeTriangulation } from './triangulation';
 interface IPointLayerStyleOptions {
   opacity: number;
-}
-export function PointTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
-  return {
-    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-    extrude: [-1, -1, 1, -1, 1, 1, -1, 1],
-    indices: [0, 1, 2, 2, 3, 0],
-    size: coordinates.length,
-  };
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public name: string = 'PointLayer';
@@ -55,11 +37,10 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.registerBuiltinAttributes(this);
     this.models = [
       this.buildLayerModel({
-        moduleName: 'pointfill',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
-        triangulation: PointTriangulation,
-        depth: { enable: false },
+        moduleName: 'pointExtrude',
+        vertexShader: pointExtrudeVert,
+        fragmentShader: pointExtrudeFrag,
+        triangulation: PointExtrudeTriangulation,
         blend: {
           enable: true,
           func: {
@@ -74,31 +55,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   private registerBuiltinAttributes(layer: ILayer) {
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'extrude',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Extrude',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const extrude = [-1, -1, 1, -1, 1, 1, -1, 1];
-          const extrudeIndex = (attributeIdx % 4) * 2;
-          return [extrude[extrudeIndex], extrude[extrudeIndex + 1]];
-        },
-      },
-    });
-
     // point layer size;
     layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
@@ -111,42 +67,71 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 3,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size = 2 } = feature;
-          return [size as number];
+          const { size } = feature;
+          if (size) {
+            let buffersize: number[] = [];
+            if (Array.isArray(size)) {
+              // TODO 多维size支持
+              buffersize =
+                size.length === 2 ? [size[0], size[0], size[1]] : size;
+            }
+            if (!Array.isArray(size)) {
+              buffersize = [size];
+            }
+            return buffersize;
+          } else {
+            return [2, 2, 2];
+          }
         },
       },
     });
 
     // point layer size;
     layer.styleAttributeService.registerStyleAttribute({
-      name: 'shape',
+      name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Shape',
+        name: 'a_Normal',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 3,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+          normal: number[],
+        ) => {
+          return normal;
+        },
+      },
+    });
+    layer.styleAttributeService.registerStyleAttribute({
+      name: 'pos',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Pos',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { shape = 2 } = feature;
-          const shape2d = layer.configService.getConfig().shape2d as string[];
-          const shapeIndex = shape2d.indexOf(shape as string);
-          return [shapeIndex];
+        size: 3,
+        update: (feature: IEncodeFeature, featureIdx: number) => {
+          const coordinates = feature.coordinates as number[];
+          return [coordinates[0], coordinates[1], 0];
         },
       },
     });

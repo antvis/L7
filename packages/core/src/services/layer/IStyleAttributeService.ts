@@ -33,6 +33,24 @@ export interface IScale {
   domain?: any[];
 }
 
+export enum StyleScaleType {
+  CONSTANT = 'constant',
+  VARIABLE = 'variable',
+}
+export interface IScaleOption {
+  field?: string;
+  type: ScaleTypes;
+  ticks?: any[];
+  nice?: boolean;
+  format?: () => any;
+  domain?: any[];
+}
+export interface IStyleScale {
+  scale: any;
+  field: string;
+  type: StyleScaleType;
+  option: IScaleOption | undefined;
+}
 export enum AttributeType {
   Attribute,
   InstancedAttribute,
@@ -45,7 +63,7 @@ export interface IEncodeFeature {
   shape?: string | number;
   pattern?: string;
   id?: number;
-  coordinates: Position[][];
+  coordinates: Position | Position[] | Position[][];
 }
 
 export interface IVertexAttributeDescriptor
@@ -62,6 +80,8 @@ export interface IVertexAttributeDescriptor
     feature: IEncodeFeature,
     featureIdx: number,
     vertex: number[],
+    attributeIdx: number,
+    normal: number[],
   ) => number[];
 }
 
@@ -78,6 +98,8 @@ export interface IStyleAttributeInitializationOptions {
   scale?: {
     field: StyleAttributeField;
     values: unknown[];
+    names: string[];
+    type: StyleScaleType;
     callback?: (...args: any[]) => [];
     scalers?: Array<{
       field: string;
@@ -111,6 +133,7 @@ export type Triangulation = (
   vertices: number[];
   indices: number[];
   size: number;
+  normals?: number[];
 };
 
 export interface IStyleAttributeUpdateOptions {
