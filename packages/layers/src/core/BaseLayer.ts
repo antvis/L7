@@ -17,6 +17,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  lazyMultiInject,
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
@@ -27,15 +28,7 @@ import { isFunction } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
-import ConfigSchemaValidationPlugin from '../plugins/ConfigSchemaValidationPlugin';
-import DataMappingPlugin from '../plugins/DataMappingPlugin';
-import DataSourcePlugin from '../plugins/DataSourcePlugin';
-import FeatureScalePlugin from '../plugins/FeatureScalePlugin';
-import MultiPassRendererPlugin from '../plugins/MultiPassRendererPlugin';
-import PixelPickingPlugin from '../plugins/PixelPickingPlugin';
-import RegisterStyleAttributePlugin from '../plugins/RegisterStyleAttributePlugin';
-import ShaderUniformPlugin from '../plugins/ShaderUniformPlugin';
-import UpdateStyleAttributePlugin from '../plugins/UpdateStyleAttributePlugin';
+
 import baseLayerSchema from './schema';
 
 export interface ILayerModelInitializationOptions {
@@ -60,6 +53,8 @@ const defaultLayerInitializationOptions: Partial<
   enablePicking: false,
   enableHighlight: false,
   highlightColor: 'red',
+  enableTAA: false,
+  jitterScale: 1,
 };
 
 export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
@@ -85,46 +80,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   // 每个 Layer 都有一个
   public multiPassRenderer: IMultiPassRenderer;
 
-  // 插件集
-  public plugins: ILayerPlugin[] = [
-    /**
-     * 校验传入参数配置项的正确性
-     * @see /dev-docs/ConfigSchemaValidation.md
-     */
-    new ConfigSchemaValidationPlugin(),
-    /**
-     * 获取 Source
-     */
-    new DataSourcePlugin(),
-    /**
-     * 根据 StyleAttribute 创建 VertexAttribute
-     */
-    new RegisterStyleAttributePlugin(),
-    /**
-     * 根据 Source 创建 Scale
-     */
-    new FeatureScalePlugin(),
-    /**
-     * 使用 Scale 进行数据映射
-     */
-    new DataMappingPlugin(),
-    /**
-     * 负责属性更新
-     */
-    new UpdateStyleAttributePlugin(),
-    /**
-     * Multi Pass 自定义渲染管线
-     */
-    new MultiPassRendererPlugin(),
-    /**
-     * 传入相机坐标系参数
-     */
-    new ShaderUniformPlugin(),
-    /**
-     * 负责拾取过程中 Encode 以及 Highlight 阶段及结束后恢复
-     */
-    new PixelPickingPlugin(),
-  ];
+  // 注入插件集
+  @lazyMultiInject(TYPES.ILayerPlugin)
+  public plugins: ILayerPlugin[];
+
   public sourceOption: {
     data: any;
     options?: ISourceCFG;

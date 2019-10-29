@@ -171,9 +171,10 @@ export default class ReglModel implements IModel {
         enable: enable === undefined ? false : !!enable,
         func: {
           srcRGB: blendFuncMap[(func && func.srcRGB) || gl.SRC_ALPHA],
-          srcAlpha: func && func.srcAlpha,
+          srcAlpha: blendFuncMap[(func && func.srcAlpha) || gl.SRC_ALPHA],
           dstRGB: blendFuncMap[(func && func.dstRGB) || gl.ONE_MINUS_SRC_ALPHA],
-          dstAlpha: func && func.dstAlpha,
+          dstAlpha:
+            blendFuncMap[(func && func.dstAlpha) || gl.ONE_MINUS_SRC_ALPHA],
         },
         equation: {
           rgb: blendEquationMap[(equation && equation.rgb) || gl.FUNC_ADD],

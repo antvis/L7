@@ -8,6 +8,7 @@ import {
   lazyInject,
   TYPES,
 } from '@l7/core';
+import { inject, injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 
 function encodePickingColor(featureIdx: number): [number, number, number] {
@@ -24,8 +25,9 @@ const PickingStage = {
   HIGHLIGHT: 2.0,
 };
 
+@injectable()
 export default class PixelPickingPlugin implements ILayerPlugin {
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
   public apply(layer: ILayer) {
@@ -51,22 +53,28 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     });
     // 必须要与 PixelPickingPass 结合使用，因此必须开启 multiPassRenderer
     // if (layer.multiPassRenderer) {
-    layer.hooks.beforeRender.tap('PixelPickingPlugin', () => {
-      layer.models.forEach((model) =>
-        model.addUniforms({
-          u_PickingStage: PickingStage.ENCODE,
-        }),
-      );
+    layer.hooks.beforePickingEncode.tap('PixelPickingPlugin', () => {
+      const { enablePicking } = layer.getStyleOptions();
+      if (enablePicking) {
+        layer.models.forEach((model) =>
+          model.addUniforms({
+            u_PickingStage: PickingStage.ENCODE,
+          }),
+        );
+      }
     });
 
-    layer.hooks.afterRender.tap('PixelPickingPlugin', () => {
-      layer.models.forEach((model) =>
-        model.addUniforms({
-          u_PickingStage: PickingStage.NONE,
-          u_PickingColor: [0, 0, 0],
-          u_HighlightColor: [0, 0, 0, 0],
-        }),
-      );
+    layer.hooks.afterPickingEncode.tap('PixelPickingPlugin', () => {
+      const { enablePicking } = layer.getStyleOptions();
+      if (enablePicking) {
+        layer.models.forEach((model) =>
+          model.addUniforms({
+            u_PickingStage: PickingStage.NONE,
+            u_PickingColor: [0, 0, 0],
+            u_HighlightColor: [0, 0, 0, 0],
+          }),
+        );
+      }
     });
 
     layer.hooks.beforeHighlight.tap(

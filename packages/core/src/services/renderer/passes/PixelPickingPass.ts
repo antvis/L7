@@ -104,9 +104,9 @@ export default class PixelPickingPass implements IPass {
       const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
       this.layer.multiPassRenderer.setRenderFlag(false);
       // trigger hooks
-      layer.hooks.beforeRender.call();
+      layer.hooks.beforePickingEncode.call();
       layer.render();
-      layer.hooks.afterRender.call();
+      layer.hooks.afterPickingEncode.call();
       this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
 
       this.alreadyInRendering = false;
@@ -207,15 +207,28 @@ export default class PixelPickingPass implements IPass {
    */
   private highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     const [r, g, b] = pickedColors;
+    const { clear, useFramebuffer } = this.rendererService;
 
-    // TODO: highlight pass 需要 multipass
-    const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
-    this.layer.multiPassRenderer.setRenderFlag(false);
+    // 先输出到 PostProcessor
+    const readFBO = this.layer.multiPassRenderer.getPostProcessor().getReadFBO();
     this.layer.hooks.beforeRender.call();
-    this.layer.hooks.beforeHighlight.call([r, g, b]);
-    this.layer.render();
-    this.layer.hooks.afterHighlight.call();
-    this.layer.hooks.afterRender.call();
-    this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
+    useFramebuffer(readFBO, () => {
+      clear({
+        color: [0, 0, 0, 0],
+        depth: 1,
+        stencil: 0,
+        framebuffer: readFBO,
+      });
+
+      // TODO: highlight pass 需要 multipass
+      const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
+      this.layer.multiPassRenderer.setRenderFlag(false);
+      this.layer.hooks.beforeHighlight.call([r, g, b]);
+      this.layer.render();
+      this.layer.hooks.afterHighlight.call();
+      this.layer.hooks.afterRender.call();
+      this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
+    });
+    this.layer.multiPassRenderer.getPostProcessor().render(this.layer);
   }
 }
