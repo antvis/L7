@@ -107,6 +107,14 @@ export interface ILayerInitializationOptions {
    * 高亮颜色
    */
   highlightColor: string | number[];
+  /**
+   * 开启 TAA
+   */
+  enableTAA: boolean;
+  /**
+   * 相机抖动程度
+   */
+  jitterScale: number;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }

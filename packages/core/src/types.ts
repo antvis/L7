@@ -1,4 +1,5 @@
 const TYPES = {
+  ISceneService: Symbol.for('ISceneService'),
   IGlobalConfigService: Symbol.for('IGlobalConfigService'),
   ICameraService: Symbol.for('ICameraService'),
   ICoordinateSystemService: Symbol.for('ICoordinateSystemService'),
@@ -14,6 +15,7 @@ const TYPES = {
   IInteractionService: Symbol.for('IInteractionService'),
   IControlService: Symbol.for('IControlService'),
   IStyleAttributeService: Symbol.for('IStyleAttributeService'),
+  ILayerPlugin: Symbol.for('ILayerPlugin'),
 
   /** multi-pass */
   ClearPass: Symbol.for('ClearPass'),

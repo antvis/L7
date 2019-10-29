@@ -3,18 +3,19 @@ import {
   ILayer,
   ILayerPlugin,
   ILogService,
-  lazyInject,
   TYPES,
 } from '@l7/core';
+import { inject, injectable } from 'inversify';
 
 /**
  * Layer 初始化阶段以及重绘阶段首先校验传入参数，如果校验失败则中断后续插件处理。
  */
+@injectable()
 export default class ConfigSchemaValidationPlugin implements ILayerPlugin {
-  @lazyInject(TYPES.IGlobalConfigService)
+  @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.ILogService)
+  @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
   public apply(layer: ILayer) {
