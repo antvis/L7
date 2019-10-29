@@ -10,7 +10,7 @@ interface IPolygonLayerStyleOptions {
 
 export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
-  const flattengeo = earcut.flatten(coordinates);
+  const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
 
   return {
