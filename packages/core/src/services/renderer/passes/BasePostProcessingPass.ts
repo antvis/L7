@@ -93,19 +93,6 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
         });
       },
     );
-
-    // const useRenderTarget = (this.renderToScreen
-    //   ? postProcessor.useScreenRenderTarget
-    //   : postProcessor.useOffscreenRenderTarget
-    // ).bind(postProcessor);
-
-    // useRenderTarget(async () => {
-    //   this.model.draw({
-    //     uniforms: {
-    //       u_Texture: postProcessor.getReadFBO(),
-    //     },
-    //   });
-    // });
   }
 
   public isEnabled() {

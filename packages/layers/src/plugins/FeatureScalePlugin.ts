@@ -12,6 +12,7 @@ import {
 import { IParseDataItem } from '@l7/source';
 import { extent } from 'd3-array';
 import * as d3 from 'd3-scale';
+import { inject, injectable } from 'inversify';
 import { isNil, isNumber, isString, uniq } from 'lodash';
 
 const dateRegex = /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
@@ -31,11 +32,12 @@ const scaleMap = {
 /**
  * 根据 Source 原始数据为指定字段创建 Scale，保存在 StyleAttribute 上，供下游插件使用
  */
+@injectable()
 export default class FeatureScalePlugin implements ILayerPlugin {
-  @lazyInject(TYPES.IGlobalConfigService)
+  @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.ILogService)
+  @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
   private scaleCache: {

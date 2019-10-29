@@ -5,16 +5,17 @@ import {
   ILayer,
   ILayerPlugin,
   ILogService,
-  IStyleAttributeService,
   lazyInject,
   TYPES,
 } from '@l7/core';
+import { inject, injectable } from 'inversify';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
  */
+@injectable()
 export default class RegisterStyleAttributePlugin implements ILayerPlugin {
-  @lazyInject(TYPES.ILogService)
+  @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
   public apply(layer: ILayer) {
