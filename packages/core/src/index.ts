@@ -1,4 +1,4 @@
-import container, { lazyInject } from './inversify.config';
+import container, { lazyInject, lazyMultiInject } from './inversify.config';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
@@ -6,7 +6,7 @@ import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
 import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
 import CopyPass from './services/renderer/passes/post-processing/CopyPass';
 import RenderPass from './services/renderer/passes/RenderPass';
-import SceneService from './services/scene/SceneService';
+import TAAPass from './services/renderer/passes/TAAPass';
 import { TYPES } from './types';
 import { packCircleVertex } from './utils/vertex-compression';
 
@@ -19,14 +19,11 @@ export {
    * lazy inject，供各个 Layer 使用
    */
   lazyInject,
+  lazyMultiInject,
   /**
    * 各个 Service 接口标识符
    */
   TYPES,
-  /**
-   * 各个 Service 接口
-   */
-  SceneService,
   packCircleVertex,
   /** pass */
   MultiPassRenderer,
@@ -36,6 +33,7 @@ export {
   BlurHPass,
   BlurVPass,
   CopyPass,
+  TAAPass,
 };
 
 /** 暴露服务接口供其他 packages 实现 */

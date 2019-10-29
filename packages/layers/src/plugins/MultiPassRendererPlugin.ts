@@ -12,8 +12,10 @@ import {
   MultiPassRenderer,
   PixelPickingPass,
   RenderPass,
+  TAAPass,
   TYPES,
 } from '@l7/core';
+import { inject, injectable } from 'inversify';
 
 const builtinPostProcessingPassMap: {
   [key: string]: new (config?: { [key: string]: any }) => IPostProcessingPass;
@@ -47,11 +49,12 @@ function normalizePasses(
  *   ],
  * })
  */
+@injectable()
 export default class MultiPassRendererPlugin implements ILayerPlugin {
-  @lazyInject(TYPES.IGlobalConfigService)
+  @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
   private enabled: boolean;
@@ -97,13 +100,23 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     passes: Array<string | [string, { [key: string]: unknown }]>,
   ) {
     const multiPassRenderer = new MultiPassRenderer(layer);
+    const { enablePicking, enableTAA } = layer.getStyleOptions();
 
+    // clear first
     multiPassRenderer.add(new ClearPass());
 
-    if (layer.getStyleOptions().enablePicking) {
+    // picking pass if enabled
+    if (enablePicking) {
       multiPassRenderer.add(new PixelPickingPass());
     }
-    multiPassRenderer.add(new RenderPass());
+
+    // TAA pass if enabled
+    if (enableTAA) {
+      multiPassRenderer.add(new TAAPass());
+    } else {
+      // render all layers in this pass
+      multiPassRenderer.add(new RenderPass());
+    }
 
     // post processing
     normalizePasses(passes).forEach(
@@ -112,6 +125,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
         multiPassRenderer.add(new PostProcessingPassClazz(pass[1]));
       },
     );
+
     // 末尾为固定的 CopyPass
     multiPassRenderer.add(new CopyPass());
 

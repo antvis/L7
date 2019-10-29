@@ -9,13 +9,15 @@ import {
   lazyInject,
   TYPES,
 } from '@l7/core';
+import { inject, injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 
+@injectable()
 export default class DataMappingPlugin implements ILayerPlugin {
-  @lazyInject(TYPES.IGlobalConfigService)
+  @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.ILogService)
+  @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
   public apply(layer: ILayer) {
