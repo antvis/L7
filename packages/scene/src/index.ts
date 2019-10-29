@@ -17,12 +17,10 @@ import {
   MapType,
   Point,
   SceneEventList,
-  SceneService,
   TYPES,
 } from '@l7/core';
 import { AMapService, MapboxService } from '@l7/maps';
 import { ReglRendererService } from '@l7/renderer';
-import { inject, injectable } from 'inversify';
 import { Map } from 'mapbox-gl';
 
 // 绑定渲染引擎服务
@@ -83,7 +81,7 @@ class Scene {
     }
 
     // 依赖注入
-    this.sceneService = container.resolve(SceneService);
+    this.sceneService = container.get<ISceneService>(TYPES.ISceneService);
     this.sceneService.init(config);
     this.mapService = container.get<IMapService>(TYPES.IMapService);
     this.iconService = container.get<IIconService>(TYPES.IIconService);

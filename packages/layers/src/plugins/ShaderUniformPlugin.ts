@@ -9,6 +9,7 @@ import {
   lazyInject,
   TYPES,
 } from '@l7/core';
+import { inject, injectable } from 'inversify';
 
 /**
  * 在渲染之前需要获取当前 Shader 所需 Uniform，例如：
@@ -17,14 +18,15 @@ import {
  *    @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/doml91
  * 3. 当前 Layer 本身的样式属性
  */
+@injectable()
 export default class ShaderUniformPlugin implements ILayerPlugin {
-  @lazyInject(TYPES.ICameraService)
+  @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
 
-  @lazyInject(TYPES.ICoordinateSystemService)
+  @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
   public apply(layer: ILayer) {

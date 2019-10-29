@@ -5,7 +5,7 @@ import { Scene } from '@l7/scene';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
-export default class Mapbox extends React.Component {
+export default class TAA extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -34,16 +34,19 @@ export default class Mapbox extends React.Component {
       zoom: 3,
     });
     const layer = new PolygonLayer({
-      enablePicking: false,
-      passes: [
-        'blurH',
-        [
-          'blurV',
-          {
-            blurRadius: 8,
-          },
-        ],
-      ],
+      enablePicking: true,
+      enableHighlight: true,
+      enableTAA: true,
+      jitterScale: 1,
+      // passes: [
+      //   'blurH',
+      //   [
+      //     'blurV',
+      //     {
+      //       blurRadius: 8,
+      //     },
+      //   ],
+      // ],
     });
 
     layer
@@ -66,6 +69,23 @@ export default class Mapbox extends React.Component {
     scene.render();
 
     this.scene = scene;
+
+    /*** 运行时修改样式属性 ***/
+    const gui = new dat.GUI();
+    this.gui = gui;
+    const styleOptions = {
+      jitterScale: 1,
+    };
+    const pointFolder = gui.addFolder('TAA 配置');
+    pointFolder
+      .add(styleOptions, 'jitterScale', 0, 100)
+      .onChange((jitterScale: boolean) => {
+        layer.style({
+          jitterScale,
+        });
+        scene.render();
+      });
+    pointFolder.open();
   }
 
   public render() {
