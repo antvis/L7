@@ -16,6 +16,7 @@ import { IInteractionService } from './services/interaction/IInteractionService'
 import { ILayerService } from './services/layer/ILayerService';
 import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
 import { ILogService } from './services/log/ILogService';
+import { ISceneService } from './services/scene/ISceneService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
 /** Service implements */
@@ -29,6 +30,7 @@ import InteractionService from './services/interaction/InteractionService';
 import LayerService from './services/layer/LayerService';
 import StyleAttributeService from './services/layer/StyleAttributeService';
 import LogService from './services/log/LogService';
+import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#defaultscope
 const container = new Container();
@@ -36,6 +38,10 @@ const container = new Container();
 /**
  * bind services
  */
+container
+  .bind<ISceneService>(TYPES.ISceneService)
+  .to(SceneService)
+  .inSingletonScope();
 container
   .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
   .to(GlobalConfigService)
@@ -97,6 +103,26 @@ export const lazyInject = (
   serviceIdentifier: interfaces.ServiceIdentifier<any>,
 ) => {
   const original = DECORATORS.lazyInject(serviceIdentifier);
+  // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
+  // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
+  return function(
+    this: any,
+    proto: any,
+    key: string,
+    descriptor?: IBabelPropertyDescriptor,
+  ): void {
+    // make it work as usual
+    original.call(this, proto, key);
+    // return link to proto, so own value wont be 'undefined' after component's creation
+    descriptor!.initializer = () => {
+      return proto[key];
+    };
+  };
+};
+export const lazyMultiInject = (
+  serviceIdentifier: interfaces.ServiceIdentifier<any>,
+) => {
+  const original = DECORATORS.lazyMultiInject(serviceIdentifier);
   // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
   // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
   return function(
