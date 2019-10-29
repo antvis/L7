@@ -9,7 +9,7 @@ addParameters({
     showSearchBox: false,
     panelPosition: 'bottom',
     hierarchySeparator: /\./,
-    hierarchyRootSeparator: /\|/,
+    // hierarchyRootSeparator: /\|/,
     enableShortcuts: true,
     theme: create({
       base: 'light',
