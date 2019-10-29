@@ -9,6 +9,7 @@ import {
   ILayerPlugin,
   IMapService,
   IModel,
+  IModelInitializationOptions,
   IMultiPassRenderer,
   IRendererService,
   IShaderModuleService,
@@ -91,6 +92,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @lazyInject(TYPES.IStyleAttributeService)
   public styleAttributeService: IStyleAttributeService;
 
+  @lazyInject(TYPES.IGlobalConfigService)
+  public readonly configService: IGlobalConfigService;
+
   @lazyInject(TYPES.IIconService)
   protected readonly iconService: IIconService;
 
@@ -109,9 +113,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   private styleOptions: Partial<
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
-
-  @lazyInject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
 
   @lazyInject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
@@ -174,11 +175,51 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     return this;
   }
 
-  public size(field: StyleAttributeField, values?: StyleAttributeOption) {
+  public size(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.styleAttributeService.updateStyleAttribute(
+      'size',
+      {
+        // @ts-ignore
+        scale: {
+          field,
+          ...this.splitValuesAndCallbackInAttribute(
+            // @ts-ignore
+            values,
+            this.configService.getConfig().size,
+          ),
+        },
+      },
+      // @ts-ignore
+      updateOptions,
+    );
     return this;
   }
 
-  public shape(field: StyleAttributeField, values?: StyleAttributeOption) {
+  public shape(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.styleAttributeService.updateStyleAttribute(
+      'shape',
+      {
+        // @ts-ignore
+        scale: {
+          field,
+          ...this.splitValuesAndCallbackInAttribute(
+            // @ts-ignore
+            values,
+            this.configService.getConfig().shape,
+          ),
+        },
+      },
+      // @ts-ignore
+      updateOptions,
+    );
     return this;
   }
 
@@ -193,7 +234,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     // @ts-ignore
     this.styleOptions = {
       ...this.styleOptions,
-      ...options,
+      ...(options as object),
     };
     return this;
   }
@@ -270,8 +311,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     this.interactionService.triggerHover({ x, y });
   }
 
-  protected buildLayerModel(options: ILayerModelInitializationOptions): IModel {
-    const { moduleName, vertexShader, fragmentShader, triangulation } = options;
+  protected buildLayerModel(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ): IModel {
+    const {
+      moduleName,
+      vertexShader,
+      fragmentShader,
+      triangulation,
+      ...rest
+    } = options;
     this.shaderModuleService.registerModule(moduleName, {
       vs: vertexShader,
       fs: fragmentShader,
@@ -286,13 +336,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
       this.encodedData,
       triangulation,
     );
-
     return createModel({
       attributes,
       uniforms,
       fs,
       vs,
       elements,
+      ...rest,
     });
   }
 

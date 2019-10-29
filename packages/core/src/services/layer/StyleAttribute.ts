@@ -1,5 +1,8 @@
 import { isNil } from 'lodash';
-import { IStyleAttribute } from '../layer/IStyleAttributeService';
+import {
+  IStyleAttribute,
+  StyleScaleType,
+} from '../layer/IStyleAttributeService';
 import { IAttribute } from '../renderer/IAttribute';
 import { IBuffer } from '../renderer/IBuffer';
 import {
@@ -7,6 +10,7 @@ import {
   IEncodeFeature,
   IFeatureRange,
   IStyleAttributeInitializationOptions,
+  IStyleScale,
   IVertexAttributeDescriptor,
 } from './IStyleAttributeService';
 
@@ -14,6 +18,8 @@ export default class StyleAttribute implements IStyleAttribute {
   public name: string;
   public type: AttributeType;
   public scale?: {
+    type: StyleScaleType.CONSTANT;
+    names: string[];
     field: string | string[];
     values: unknown[];
     callback?: (...args: any[]) => [];

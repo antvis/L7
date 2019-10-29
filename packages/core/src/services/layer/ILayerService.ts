@@ -1,4 +1,5 @@
 import { SyncBailHook, SyncHook } from 'tapable';
+import { IGlobalConfigService } from '../config/IConfigService';
 import { IModel } from '../renderer/IModel';
 import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';
 import { ISource, ISourceCFG } from '../source/ISourceService';
@@ -14,6 +15,8 @@ export interface ILayerGlobalConfig {
   colors: string[];
   size: number;
   shape: string;
+  shape2d: string[];
+  shape3d: string[];
   scales: {
     [key: string]: IScale;
   };
@@ -31,6 +34,7 @@ export interface ILayer {
   name: string; // 代表 Layer 的类型
   // visible: boolean;
   // zIndex: number;
+  configService: IGlobalConfigService;
   plugins: ILayerPlugin[];
   hooks: {
     init: SyncBailHook<void, boolean | void>;

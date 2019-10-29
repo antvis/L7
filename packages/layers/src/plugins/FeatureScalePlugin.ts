@@ -5,8 +5,10 @@ import {
   ILogService,
   IScale,
   IStyleAttribute,
+  IStyleScale,
   lazyInject,
   ScaleTypes,
+  StyleScaleType,
   TYPES,
 } from '@l7/core';
 import { IParseDataItem } from '@l7/source';
@@ -40,8 +42,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
+ // key = field_attribute name
   private scaleCache: {
-    [field: string]: unknown;
+    [field: string]: IStyleScale;
   } = {};
 
   public apply(layer: ILayer) {
@@ -73,30 +76,65 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     this.scaleCache = {};
     attributes.forEach((attribute) => {
       if (attribute.scale) {
-        attribute.scale.scalers = this.parseFields(
-          attribute.scale.field || '',
-        ).map((field: string) => ({
-          field,
-          func: this.getOrCreateScale(field, attribute, dataArray),
-        }));
+        // 创建Scale
+        const attributeScale = attribute.scale;
+        attributeScale.names=  this.parseFields(attribute!.scale!.field || []);
+        const scales: IStyleScale[] = attributeScale.names
+        .map((field:string) => {
+           return this.getOrCreateScale(field, attribute, dataArray);
+        })
+
+        // 为scales 设置值区间
+        if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
+          attributeScale.type = StyleScaleType.VARIABLE;
+          scales.forEach((scale) => {
+            // 如果设置了回调干啥这不需要设置让range
+            if (!attributeScale.callback && attributeScale.values.length > 0) {
+              scale.scale.range(attributeScale.values);
+            }
+          });
+        } else {
+          // 设置attribute 常量值 常量直接在value取值
+
+          attributeScale.values = scales.map((scale, index) => {
+            return scale.scale(attributeScale.names[index]);
+          });
+        }
+
+        attributeScale.scalers = scales.map((scale: IStyleScale)=> {
+          return {
+            field: scale.field,
+            func: scale.scale,
+          }
+        });
+
         attribute.needRescale = false;
       }
+
     });
   }
-
   private getOrCreateScale(
     field: string,
     attribute: IStyleAttribute,
     dataArray: IParseDataItem[],
   ) {
-    if (this.scaleCache[field]) {
-      return this.scaleCache[field];
+    const scalekey = [field,attribute.name].join('_')
+    if (this.scaleCache[scalekey]) {
+      return this.scaleCache[scalekey];
     }
-    this.scaleCache[field] = this.createScale(field, dataArray);
-    (this.scaleCache[field] as {
-      range: (c: unknown[]) => void;
-    }).range(attribute?.scale?.values || []);
-    return this.scaleCache[field];
+    const styleScale = this.createScale(field, dataArray);
+    this.scaleCache[scalekey] = styleScale;
+
+    if (
+      styleScale.type === StyleScaleType.VARIABLE &&
+      attribute.scale?.values &&
+      attribute.scale?.values.length > 0
+    ) { // 只有变量初始化range
+      styleScale.scale.range(attribute.scale?.values);
+    }
+
+
+    return this.scaleCache[scalekey];
   }
 
   /**
@@ -114,28 +152,44 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     return [field];
   }
 
-  private createScale(field: string, data?: IParseDataItem[]): unknown {
+  private createScale(field: string, data?: IParseDataItem[]): IStyleScale {
     // 首先查找全局默认配置例如 color
     const scaleOption: IScale | undefined = this.configService.getConfig()?.scales?.[field];
 
+    const styleScale: IStyleScale = {
+        field,
+        scale: undefined,
+        type: StyleScaleType.VARIABLE,
+        option: scaleOption,
+      };
+
     if (!data || !data.length) {
-      // 数据为空
-      return scaleOption && scaleOption.type
-        ? this.createDefaultScale(scaleOption)
-        : d3.scaleOrdinal([field]);
+
+      if (scaleOption && scaleOption.type) {
+        styleScale.scale = this.createDefaultScale(scaleOption);
+      } else {
+        styleScale.scale = d3.scaleOrdinal([field]);
+        styleScale.type = StyleScaleType.CONSTANT;
+      }
+      return styleScale;
     }
-    const firstValue = data.find((d) => !isNil(d[field]))?.[field];
+    const firstValue = (data!.find((d) => !isNil(d[field])))?.[field]
     // 常量 Scale
     if (isNumber(field) || (isNil(firstValue) && !scaleOption)) {
-      return d3.scaleOrdinal([field]);
+      styleScale.scale = d3.scaleOrdinal([field]);
+      styleScale.type = StyleScaleType.CONSTANT;
     } else {
       // 根据数据类型判断 默认等分位，时间，和枚举类型
       const type =
         (scaleOption && scaleOption.type) || this.getDefaultType(firstValue);
-      return this.createDefaultScale(
-        this.createDefaultScaleConfig(type, field, data),
-      );
+
+      const cfg = this.createDefaultScaleConfig(type, field, data);
+      Object.assign(cfg, scaleOption);
+      styleScale.scale = this.createDefaultScale(cfg);
+      styleScale.option = cfg;
+
     }
+    return styleScale;
   }
 
   private getDefaultType(firstValue: unknown) {

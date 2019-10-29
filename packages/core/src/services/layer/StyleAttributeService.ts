@@ -37,6 +37,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     elements: Array<{
       featureIdx: number;
       vertices: number[];
+      normals: number[];
       offset: number;
     }>;
   } = {
@@ -105,7 +106,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const attributeToUpdate = this.attributes.find(
       (attribute) => attribute.name === attributeName,
     );
-    if (attributeToUpdate) {
+    if (attributeToUpdate && attributeToUpdate.descriptor) {
       const { descriptor } = attributeToUpdate;
       const { update, buffer, size = 0 } = descriptor;
       const bytesPerElement = bytesPerElementMap[buffer.type || gl.FLOAT];
@@ -122,7 +123,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         // 以 byte 为单位计算 buffer 中的偏移
         const bufferOffsetInBytes = offset * size * bytesPerElement;
         const updatedBufferData = featuresToUpdate
-          .map(({ featureIdx, vertices }) => {
+          .map(({ featureIdx, vertices, normals }, attributeIdx) => {
             const verticesNumForCurrentFeature =
               vertices.length / sizePerElement;
             const featureData: number[] = [];
@@ -131,6 +132,9 @@ export default class StyleAttributeService implements IStyleAttributeService {
               vertexIdx < verticesNumForCurrentFeature;
               vertexIdx++
             ) {
+              const normal = normals
+                ? normals!.slice(vertexIdx * 3, vertexIdx * 3 + 3)
+                : [];
               featureData.push(
                 ...update(
                   features[featureIdx],
@@ -139,6 +143,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
                     vertexIdx * sizePerElement,
                     vertexIdx * sizePerElement + sizePerElement,
                   ),
+                  attributeIdx,
+                  normal,
                 ),
               );
             }
@@ -168,10 +174,10 @@ export default class StyleAttributeService implements IStyleAttributeService {
     elements: IElements;
   } {
     const descriptors = this.attributes.map((attr) => attr.descriptor);
-
     let verticesNum = 0;
     const vertices: number[] = [];
     const indices: number[] = [];
+    const normals: number[] = [];
     let size = 3;
 
     features.forEach((feature, featureIdx) => {
@@ -179,10 +185,14 @@ export default class StyleAttributeService implements IStyleAttributeService {
       const {
         indices: indicesForCurrentFeature,
         vertices: verticesForCurrentFeature,
+        normals: normalsForCurrentFeature,
         size: vertexSize,
       } = triangulation(feature);
       indices.push(...indicesForCurrentFeature.map((i) => i + verticesNum));
       vertices.push(...verticesForCurrentFeature);
+      if (normalsForCurrentFeature) {
+        normals.push(...normalsForCurrentFeature);
+      }
       size = vertexSize;
       const verticesNumForCurrentFeature =
         verticesForCurrentFeature.length / vertexSize;
@@ -192,6 +202,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       this.featureLayout.elements.push({
         featureIdx,
         vertices: verticesForCurrentFeature,
+        normals: normalsForCurrentFeature as number[],
         offset: verticesNum,
       });
 
@@ -204,7 +215,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertexIdx++
       ) {
         descriptors.forEach((descriptor, attributeIdx) => {
-          if (descriptor.update) {
+          if (descriptor && descriptor.update) {
+            const normal = normalsForCurrentFeature?.slice(
+              vertexIdx * 3,
+              vertexIdx * 3 + 3,
+            )|| [];
             (descriptor.buffer.data as number[]).push(
               ...descriptor.update(
                 feature,
@@ -213,14 +228,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
                   vertexIdx * vertexSize,
                   vertexIdx * vertexSize + vertexSize,
                 ),
+                vertexIdx, // 当前顶点所在feature索引
+                normal,
                 // TODO: 传入顶点索引 vertexIdx
               ),
             );
-          }
-        });
-      }
-    });
-
+          } // end if
+        }); // end for each
+      } // end for
+    }); // end features for Each
     const {
       createAttribute,
       createBuffer,
@@ -232,18 +248,20 @@ export default class StyleAttributeService implements IStyleAttributeService {
     } = {};
 
     descriptors.forEach((descriptor, attributeIdx) => {
-      // IAttribute 参数透传
-      const { buffer, update, name, ...rest } = descriptor;
+      if (descriptor) {
+        // IAttribute 参数透传
+        const { buffer, update, name, ...rest } = descriptor;
 
-      const vertexAttribute = createAttribute({
-        // IBuffer 参数透传
-        buffer: createBuffer(buffer),
-        ...rest,
-      });
-      attributes[descriptor.name || ''] = vertexAttribute;
+        const vertexAttribute = createAttribute({
+          // IBuffer 参数透传
+          buffer: createBuffer(buffer),
+          ...rest,
+        });
+        attributes[descriptor.name || ''] = vertexAttribute;
 
-      // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-      this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+        // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+        this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+      }
     });
 
     const elements = createElements({
