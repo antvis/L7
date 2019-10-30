@@ -210,12 +210,20 @@ export default function(
       }
     }
   }
-
+  const pickData = [];
+  for (let i = 0; i < miters.length; i++) {
+    pickData.push(
+      attrPos[i * 3],
+      attrPos[i * 3 + 1],
+      attrPos[i * 3 + 1],
+      attrDistance[i],
+      miters[i],
+    );
+  }
   return {
     normals: out,
     attrIndex,
-    attrPos,
-    attrDistance,
-    miters,
+    attrPos: pickData, // [x,y,z, distance, miter ]
   };
 }
+// [x,y,z, distance, miter ]

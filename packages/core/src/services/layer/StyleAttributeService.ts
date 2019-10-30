@@ -246,7 +246,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const attributes: {
       [attributeName: string]: IAttribute;
     } = {};
-
     descriptors.forEach((descriptor, attributeIdx) => {
       if (descriptor) {
         // IAttribute 参数透传

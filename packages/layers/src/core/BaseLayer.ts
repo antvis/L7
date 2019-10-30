@@ -103,6 +103,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   protected layerSource: Source;
 
+  @lazyInject(TYPES.IRendererService)
+  protected readonly rendererService: IRendererService;
+
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
@@ -116,9 +119,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   @lazyInject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
-
-  @lazyInject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
 
   @lazyInject(TYPES.IMapService)
   private readonly map: IMapService;
