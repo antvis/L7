@@ -2,9 +2,6 @@ import container, { lazyInject, lazyMultiInject } from './inversify.config';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
-import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
-import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
-import CopyPass from './services/renderer/passes/post-processing/CopyPass';
 import RenderPass from './services/renderer/passes/RenderPass';
 import TAAPass from './services/renderer/passes/TAAPass';
 import { TYPES } from './types';
@@ -30,9 +27,6 @@ export {
   ClearPass,
   RenderPass,
   PixelPickingPass,
-  BlurHPass,
-  BlurVPass,
-  CopyPass,
   TAAPass,
 };
 
