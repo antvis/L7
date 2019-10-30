@@ -1,7 +1,7 @@
 import { IEncodeFeature } from '@l7/core';
 import { vec3 } from 'gl-matrix';
 import getNormals from '../utils/polylineNormal';
-import extrudePolygon, { IExtrudeGeomety } from './shape/extrude';
+import extrudePolygon, { fillPolygon, IExtrudeGeomety } from './shape/extrude';
 import {
   geometryShape,
   IPosition,
@@ -80,6 +80,67 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   };
 }
 
+export function HeatmapGridTriangulation(feature: IEncodeFeature) {
+  const { shape } = feature;
+
+  const { positions, index } = getHeatmapGeometry(shape as
+    | ShapeType2D
+    | ShapeType3D);
+  return {
+    vertices: positions, // [ x, y, z ]
+    indices: index,
+    normals: Array.from(computeVertexNormals(positions, index)),
+    size: 3,
+  };
+}
+
+/**
+ * 图片图层顶点构造
+ * @param feature 数据
+ */
+export function RasterImageTriangulation(feature: IEncodeFeature) {
+  const coordinates = feature.coordinates as IPosition[];
+  // [ x, y, z. uv.x, uv.y]
+  const positions: number[] = [
+    ...coordinates[0],
+    0,
+    0,
+    1,
+    coordinates[1][0],
+    coordinates[0][1],
+    0,
+    1,
+    1,
+    ...coordinates[1],
+    0,
+    1,
+    0,
+    ...coordinates[0],
+    0,
+    0,
+    1,
+    ...coordinates[1],
+    0,
+    1,
+    0,
+    coordinates[0][0],
+    coordinates[1][1],
+    0,
+    0,
+    0,
+  ];
+  const indexs = [0, 1, 2, 3, 4, 5];
+  return {
+    vertices: positions,
+    indices: indexs,
+    size: 5,
+  };
+}
+
+/**
+ * 点图层3d geomerty
+ * @param shape 3D形状
+ */
 function getGeometry(shape: ShapeType3D): IExtrudeGeomety {
   if (GeometryCache && GeometryCache[shape]) {
     return GeometryCache[shape];
@@ -144,4 +205,15 @@ function checkIsClosed(points: number[][][]) {
   const p1 = points[0][0];
   const p2 = points[0][points[0].length - 1];
   return p1[0] === p2[0] && p1[1] === p2[1];
+}
+
+function getHeatmapGeometry(shape: ShapeType2D | ShapeType3D): IExtrudeGeomety {
+  const path = geometryShape[shape]
+    ? geometryShape[shape]()
+    : geometryShape.circle();
+  // const geometry = ShapeType2D[str as ShapeType2D]
+  //   ? fillPolygon([path])
+  //   : extrudePolygon([path]);
+  const geometry = fillPolygon([path]);
+  return geometry;
 }
