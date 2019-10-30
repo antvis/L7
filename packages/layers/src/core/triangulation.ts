@@ -1,11 +1,21 @@
 import { IEncodeFeature } from '@l7/core';
 import { vec3 } from 'gl-matrix';
+import getNormals from '../utils/polylineNormal';
 import extrudePolygon, { IExtrudeGeomety } from './shape/extrude';
-import { geometryShape, ShapeType2D, ShapeType3D } from './shape/Path';
+import {
+  geometryShape,
+  IPosition,
+  ShapeType2D,
+  ShapeType3D,
+} from './shape/Path';
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
 const GeometryCache: IGeometryCache = {};
+/**
+ * 计算2D 填充点图顶点
+ * @param feature 映射feature
+ */
 export function PointFillTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
   return {
@@ -15,11 +25,55 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
   };
 }
 
+/**
+ * 计算3D 拉伸点图
+ * @param feature 映射feature
+ */
 export function PointExtrudeTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
   const { positions, index } = getGeometry(shape as ShapeType3D);
   return {
     vertices: positions,
+    indices: index,
+    normals: Array.from(computeVertexNormals(positions, index)),
+    size: 3,
+  };
+}
+
+/**
+ * 计算图片标注
+ * @param feature 映射feature
+ */
+export function PointImageTriangulation(feature: IEncodeFeature) {
+  const coordinates = feature.coordinates as number[];
+  return {
+    vertices: [...coordinates],
+    indices: [0],
+    size: coordinates.length,
+  };
+}
+
+/**
+ * 线三角化
+ * @param feature 映射feature
+ */
+export function LineTriangulation(feature: IEncodeFeature) {
+  const { coordinates } = feature;
+  const line = getNormals(coordinates as number[][], false, 0);
+  return {
+    vertices: line.attrPos, // [ x,y,z, distance, miter ]
+    indices: line.attrIndex,
+    normals: line.normals,
+    size: 5,
+  };
+}
+
+export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
+  const coordinates = feature.coordinates as IPosition[][];
+  const { positions, index } = extrudePolygon(coordinates);
+
+  return {
+    vertices: positions, // [ x, y, z ]
     indices: index,
     normals: Array.from(computeVertexNormals(positions, index)),
     size: 3,
@@ -37,6 +91,7 @@ function getGeometry(shape: ShapeType3D): IExtrudeGeomety {
   GeometryCache[shape] = geometry;
   return geometry;
 }
+
 function computeVertexNormals(
   positions: number[],
   indexArray: number[],
@@ -75,6 +130,7 @@ function computeVertexNormals(
   normalizeNormals(normals);
   return normals;
 }
+
 function normalizeNormals(normals: Float32Array) {
   for (let i = 0, li = normals.length; i < li; i += 3) {
     const normal = vec3.fromValues(normals[i], normals[i + 1], normals[i + 2]);
@@ -82,4 +138,10 @@ function normalizeNormals(normals: Float32Array) {
     vec3.normalize(newNormal, normal);
     normals.set(newNormal, i);
   }
+}
+
+function checkIsClosed(points: number[][][]) {
+  const p1 = points[0][0];
+  const p2 = points[0][points[0].length - 1];
+  return p1[0] === p2[0] && p1[1] === p2[1];
 }
