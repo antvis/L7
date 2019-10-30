@@ -1,8 +1,8 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
+import { PointExtrudeTriangulation } from '../core/triangulation';
 import pointExtrudeFrag from './shaders/extrude_frag.glsl';
 import pointExtrudeVert from './shaders/extrude_vert.glsl';
-import { PointExtrudeTriangulation } from './triangulation';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
