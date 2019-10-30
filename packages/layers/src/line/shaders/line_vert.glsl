@@ -12,6 +12,7 @@ uniform mat4 u_ModelMatrix;
 varying vec4 v_color;
 varying float v_dash_array;
 varying vec3 v_normal;
+
 #pragma include "projection"
 void main() {
   v_normal = a_Normal;
