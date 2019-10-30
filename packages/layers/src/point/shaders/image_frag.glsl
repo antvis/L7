@@ -6,7 +6,7 @@ void main(){
 //    pos.y= 1.- pos.y;
   vec4 textureColor=texture2D(u_texture,pos);
   if(v_color == vec4(0.)){
-        gl_FragColor= textureColor; 
+        gl_FragColor= textureColor;
   }else {
         gl_FragColor= step(0.01, textureColor.x) * v_color;
   }
