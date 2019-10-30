@@ -136,7 +136,11 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
     size: 5,
   };
 }
-
+/**
+ *  计算3D弧线顶点
+ * @param feature 映射数据
+ * @param segNum 弧线线段数
+ */
 export function LineArcTriangulation(feature: IEncodeFeature, segNum = 30) {
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
