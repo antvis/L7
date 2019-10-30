@@ -39,6 +39,11 @@ export default class Polygon3D extends React.Component {
     });
     this.scene = scene;
     const layer = new Polygon3DLayer({});
+<<<<<<< HEAD
+=======
+
+    // TODO: new GeoJSONSource()
+>>>>>>> bda6b6cfb06193f6ae83e505a9c8667811d80a2f
     layer
       .source(await response.json())
       .size('name', [0, 10000, 50000, 30000, 100000])
