@@ -2,6 +2,7 @@ import { container, ILayerPlugin, TYPES } from '@l7/core';
 import BaseLayer from './core/BaseLayer';
 import HeatMapGridLayer from './heatmap/grid';
 import LineLayer from './line/index';
+import ArcLineLayer from './line/arc';
 import Point3dLayer from './point/extrude';
 import PointImageLayer from './point/image';
 import PointLayer from './point/index';
@@ -72,6 +73,7 @@ export {
   Polygon3DLayer,
   ImageLayer,
   HeatMapGridLayer,
+  ArcLineLayer,
   // Line,
   // ImageLayer,
   // HeatMapLayer,
