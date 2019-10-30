@@ -5,7 +5,7 @@ import { Scene } from '@l7/scene';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
-export default class Mapbox extends React.Component {
+export default class Ink extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -38,15 +38,9 @@ export default class Mapbox extends React.Component {
       enableHighlight: true,
       passes: [
         [
-          'blurH',
+          'ink',
           {
-            blurRadius: 8,
-          },
-        ],
-        [
-          'blurV',
-          {
-            blurRadius: 8,
+            strength: 0.6,
           },
         ],
       ],
@@ -77,34 +71,18 @@ export default class Mapbox extends React.Component {
     const gui = new dat.GUI();
     this.gui = gui;
     const styleOptions = {
-      blurVRadius: 8,
-      blurHRadius: 8,
+      strength: 0.6,
     };
-    const pointFolder = gui.addFolder('Blur 配置');
+    const pointFolder = gui.addFolder('Ink 配置');
     pointFolder
-      .add(styleOptions, 'blurVRadius', 0, 100)
-      .onChange((blurRadius: number) => {
+      .add(styleOptions, 'strength', 0, 1)
+      .onChange((strength: number) => {
         layer.style({
           passes: [
             [
-              'blurV',
+              'ink',
               {
-                blurRadius,
-              },
-            ],
-          ],
-        });
-        scene.render();
-      });
-    pointFolder
-      .add(styleOptions, 'blurHRadius', 0, 100)
-      .onChange((blurRadius: number) => {
-        layer.style({
-          passes: [
-            [
-              'blurH',
-              {
-                blurRadius,
+                strength,
               },
             ],
           ],

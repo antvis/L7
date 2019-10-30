@@ -15,7 +15,7 @@ export interface IRenderConfig {
    * 是否开启 multi pass
    */
   enableMultiPassRenderer?: boolean;
-  passes?: IPass[];
+  passes?: Array<IPass<unknown>>;
 }
 
 export interface IClearOptions {

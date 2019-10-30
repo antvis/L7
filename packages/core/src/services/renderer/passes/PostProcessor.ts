@@ -16,7 +16,7 @@ export default class PostProcessor implements IPostProcessor {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
-  private passes: IPostProcessingPass[] = [];
+  private passes: Array<IPostProcessingPass<unknown>> = [];
   private readFBO: IFramebuffer;
   private writeFBO: IFramebuffer;
 
@@ -75,14 +75,29 @@ export default class PostProcessor implements IPostProcessor {
     });
   }
 
-  public add(pass: IPostProcessingPass, layer: ILayer) {
-    pass.init(layer);
+  public add<T>(
+    pass: IPostProcessingPass<T>,
+    layer: ILayer,
+    config?: Partial<T>,
+  ) {
+    pass.init(layer, config);
     this.passes.push(pass);
   }
 
-  public insert(pass: IPostProcessingPass, index: number, layer: ILayer) {
-    pass.init(layer);
+  public insert<T>(
+    pass: IPostProcessingPass<T>,
+    index: number,
+    layer: ILayer,
+    config?: Partial<T>,
+  ) {
+    pass.init(layer, config);
     this.passes.splice(index, 0, pass);
+  }
+
+  public getPostProcessingPassByName(
+    name: string,
+  ): IPostProcessingPass<unknown> | undefined {
+    return this.passes.find((p) => p.getName() === name);
   }
 
   private isLastEnabledPass(index: number): boolean {
