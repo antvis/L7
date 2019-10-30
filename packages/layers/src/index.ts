@@ -1,11 +1,13 @@
 import { container, ILayerPlugin, TYPES } from '@l7/core';
 import BaseLayer from './core/BaseLayer';
-import Point3dLayer from './point/extrude';
 // import HeatMapLayer from './heatmap';
-// import Line from './line';
+import LineLayer from './line/index';
+import Point3dLayer from './point/extrude';
+import PointImageLayer from './point/image';
 import PointLayer from './point/index';
 // import Point from './point/point';
 import PolygonLayer from './polygon';
+import Polygon3DLayer from './polygon/polygon3D';
 // import ImageLayer from './raster';
 
 import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
@@ -65,7 +67,9 @@ export {
   PointLayer,
   PolygonLayer,
   Point3dLayer,
-  // Point,
+  PointImageLayer,
+  LineLayer,
+  Polygon3DLayer,
   // Line,
   // ImageLayer,
   // HeatMapLayer,
