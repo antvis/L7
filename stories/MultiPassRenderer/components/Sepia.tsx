@@ -5,7 +5,7 @@ import { Scene } from '@l7/scene';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
-export default class Mapbox extends React.Component {
+export default class Sepia extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -36,20 +36,7 @@ export default class Mapbox extends React.Component {
     const layer = new PolygonLayer({
       enablePicking: true,
       enableHighlight: true,
-      passes: [
-        [
-          'blurH',
-          {
-            blurRadius: 8,
-          },
-        ],
-        [
-          'blurV',
-          {
-            blurRadius: 8,
-          },
-        ],
-      ],
+      passes: ['sepia'],
     });
 
     layer
@@ -77,40 +64,22 @@ export default class Mapbox extends React.Component {
     const gui = new dat.GUI();
     this.gui = gui;
     const styleOptions = {
-      blurVRadius: 8,
-      blurHRadius: 8,
+      amount: 0.5,
     };
-    const pointFolder = gui.addFolder('Blur 配置');
-    pointFolder
-      .add(styleOptions, 'blurVRadius', 0, 100)
-      .onChange((blurRadius: number) => {
-        layer.style({
-          passes: [
-            [
-              'blurV',
-              {
-                blurRadius,
-              },
-            ],
+    const pointFolder = gui.addFolder('Sepia 配置');
+    pointFolder.add(styleOptions, 'amount', 0, 1).onChange((amount: number) => {
+      layer.style({
+        passes: [
+          [
+            'sepia',
+            {
+              amount,
+            },
           ],
-        });
-        scene.render();
+        ],
       });
-    pointFolder
-      .add(styleOptions, 'blurHRadius', 0, 100)
-      .onChange((blurRadius: number) => {
-        layer.style({
-          passes: [
-            [
-              'blurH',
-              {
-                blurRadius,
-              },
-            ],
-          ],
-        });
-        scene.render();
-      });
+      scene.render();
+    });
     pointFolder.open();
   }
 

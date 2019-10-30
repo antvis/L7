@@ -1,34 +1,32 @@
 import { inject, injectable } from 'inversify';
 import { isNil } from 'lodash';
-import blur from '../../../../shaders/post-processing/blur.glsl';
+import ink from '../../../../shaders/post-processing/ink.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../../types';
 import { IRendererService } from '../../IRendererService';
 import { IUniform } from '../../IUniform';
 import BasePostProcessingPass from '../BasePostProcessingPass';
 
-export interface IBlurVPassConfig {
-  blurRadius: number;
+export interface IInkPassConfig {
+  strength: number;
 }
 
 @injectable()
-export default class BlurVPass extends BasePostProcessingPass<
-  IBlurVPassConfig
-> {
+export default class InkPass extends BasePostProcessingPass<IInkPassConfig> {
   @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getName() {
-    return 'blurV';
+    return 'ink';
   }
 
-  public setupShaders() {
-    this.shaderModule.registerModule('blur-pass', {
+  protected setupShaders() {
+    this.shaderModule.registerModule('ink-pass', {
       vs: quad,
-      fs: blur,
+      fs: ink,
     });
 
-    const { vs, fs, uniforms } = this.shaderModule.getModule('blur-pass');
+    const { vs, fs, uniforms } = this.shaderModule.getModule('ink-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {
@@ -42,7 +40,7 @@ export default class BlurVPass extends BasePostProcessingPass<
   }
 
   protected convertOptionsToUniforms(
-    options: Partial<IBlurVPassConfig>,
+    options: Partial<IInkPassConfig>,
   ): {
     [uniformName: string]: IUniform;
   } | void {
@@ -50,8 +48,8 @@ export default class BlurVPass extends BasePostProcessingPass<
       [key: string]: IUniform;
     } = {};
 
-    if (!isNil(options.blurRadius)) {
-      uniforms.u_BlurDir = [0, options.blurRadius];
+    if (!isNil(options.strength)) {
+      uniforms.u_Strength = options.strength;
     }
 
     return uniforms;

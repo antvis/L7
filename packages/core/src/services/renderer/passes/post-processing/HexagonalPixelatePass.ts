@@ -1,34 +1,37 @@
 import { inject, injectable } from 'inversify';
 import { isNil } from 'lodash';
-import blur from '../../../../shaders/post-processing/blur.glsl';
+import hexagonalPixelate from '../../../../shaders/post-processing/hexagonalpixelate.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../../types';
 import { IRendererService } from '../../IRendererService';
 import { IUniform } from '../../IUniform';
 import BasePostProcessingPass from '../BasePostProcessingPass';
 
-export interface IBlurVPassConfig {
-  blurRadius: number;
+export interface IHexagonalPixelatePassConfig {
+  center: [number, number];
+  scale: number;
 }
 
 @injectable()
-export default class BlurVPass extends BasePostProcessingPass<
-  IBlurVPassConfig
+export default class HexagonalPixelatePass extends BasePostProcessingPass<
+  IHexagonalPixelatePassConfig
 > {
   @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getName() {
-    return 'blurV';
+    return 'hexagonalPixelate';
   }
 
-  public setupShaders() {
-    this.shaderModule.registerModule('blur-pass', {
+  protected setupShaders() {
+    this.shaderModule.registerModule('hexagonalpixelate-pass', {
       vs: quad,
-      fs: blur,
+      fs: hexagonalPixelate,
     });
 
-    const { vs, fs, uniforms } = this.shaderModule.getModule('blur-pass');
+    const { vs, fs, uniforms } = this.shaderModule.getModule(
+      'hexagonalpixelate-pass',
+    );
     const { width, height } = this.rendererService.getViewportSize();
 
     return {
@@ -42,7 +45,7 @@ export default class BlurVPass extends BasePostProcessingPass<
   }
 
   protected convertOptionsToUniforms(
-    options: Partial<IBlurVPassConfig>,
+    options: Partial<IHexagonalPixelatePassConfig>,
   ): {
     [uniformName: string]: IUniform;
   } | void {
@@ -50,8 +53,12 @@ export default class BlurVPass extends BasePostProcessingPass<
       [key: string]: IUniform;
     } = {};
 
-    if (!isNil(options.blurRadius)) {
-      uniforms.u_BlurDir = [0, options.blurRadius];
+    if (!isNil(options.center)) {
+      uniforms.u_Center = options.center;
+    }
+
+    if (!isNil(options.scale)) {
+      uniforms.u_Scale = options.scale;
     }
 
     return uniforms;

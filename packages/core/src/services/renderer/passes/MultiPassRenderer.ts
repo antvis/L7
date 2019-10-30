@@ -30,7 +30,7 @@ import PostProcessor from './PostProcessor';
  */
 @injectable()
 export default class MultiPassRenderer implements IMultiPassRenderer {
-  private passes: IPass[] = [];
+  private passes: Array<IPass<unknown>> = [];
   private postProcessor: IPostProcessor;
 
   private layer: ILayer;
@@ -64,17 +64,21 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
     this.postProcessor.resize(width, height);
   }
 
-  public add(pass: IPass) {
+  public add<T>(pass: IPass<T>, config?: Partial<T>) {
     if (pass.getType() === PassType.PostProcessing) {
-      this.postProcessor.add(pass as IPostProcessingPass, this.layer);
+      this.postProcessor.add<T>(
+        pass as IPostProcessingPass<T>,
+        this.layer,
+        config,
+      );
     } else {
-      pass.init(this.layer);
+      pass.init(this.layer, config);
       this.passes.push(pass);
     }
   }
 
-  public insert(pass: IPass, index: number) {
-    pass.init(this.layer);
+  public insert<T>(pass: IPass<T>, config: Partial<T>, index: number) {
+    pass.init(this.layer, config);
     this.passes.splice(index, 0, pass);
   }
 }
