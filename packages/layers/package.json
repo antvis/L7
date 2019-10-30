@@ -24,6 +24,7 @@
     "@l7/utils": "^0.0.1",
     "@turf/meta": "^6.0.2",
     "@types/d3-color": "^1.2.2",
+    "inversify": "^5.0.1",
     "d3-array": "^2.3.1",
     "d3-color": "^1.4.0",
     "d3-scale": "^3.1.0",
