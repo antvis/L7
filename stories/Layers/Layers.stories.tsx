@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import ArcLineDemo from './components/Arcline';
 import GridHeatMap from './components/heatMapgrid';
 import LineLayer from './components/Line';
 import PointDemo from './components/Point';
@@ -15,5 +16,6 @@ storiesOf('图层', module)
   .add('图片标注', () => <PointImage />)
   .add('面3d图层', () => <Polygon3D />)
   .add('线图层', () => <LineLayer />)
+  .add('弧线', () => <ArcLineDemo />)
   .add('网格热力图', () => <GridHeatMap />)
   .add('图片', () => <ImageLayerDemo />);
