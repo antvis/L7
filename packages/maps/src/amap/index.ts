@@ -189,7 +189,7 @@ export default class AMapService implements IMapService {
         resolve();
       };
 
-      const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=onLoad`;
+      const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=onload`;
       this.$jsapi = document.createElement('script');
       this.$jsapi.charset = 'utf-8';
       this.$jsapi.src = url;
