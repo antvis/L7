@@ -1,13 +1,13 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
-import { LineTriangulation } from '../core/triangulation';
-import line_frag from './shaders/line_frag.glsl';
-import line_vert from './shaders/line_vert.glsl';
+import { PolygonExtrudeTriangulation } from '../core/triangulation';
+import pointExtrudeFrag from './shaders/polygon_frag.glsl';
+import pointExtrudeVert from './shaders/polygon_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
-export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'LineLayer';
+export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
+  public name: string = 'PolygonLayer';
 
   protected getConfigSchema() {
     return {
@@ -37,10 +37,10 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.registerBuiltinAttributes(this);
     this.models = [
       this.buildLayerModel({
-        moduleName: 'line',
-        vertexShader: line_vert,
-        fragmentShader: line_frag,
-        triangulation: LineTriangulation,
+        moduleName: 'polygonExtrude',
+        vertexShader: pointExtrudeVert,
+        fragmentShader: pointExtrudeFrag,
+        triangulation: PolygonExtrudeTriangulation,
         blend: {
           enable: true,
           func: {
@@ -55,31 +55,6 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   private registerBuiltinAttributes(layer: ILayer) {
-    // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { size } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
     // point layer size;
     layer.styleAttributeService.registerStyleAttribute({
       name: 'normal',
@@ -106,10 +81,10 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     layer.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
+      name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Miter',
+        name: 'a_Size',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -123,30 +98,8 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          return [vertex[4]];
-        },
-      },
-    });
-
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Distance',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [vertex[3]];
+          const { size } = feature;
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
