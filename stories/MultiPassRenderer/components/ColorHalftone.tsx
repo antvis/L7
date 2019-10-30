@@ -5,7 +5,7 @@ import { Scene } from '@l7/scene';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
-export default class Mapbox extends React.Component {
+export default class ColorHalftone extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -38,15 +38,9 @@ export default class Mapbox extends React.Component {
       enableHighlight: true,
       passes: [
         [
-          'blurH',
+          'colorHalftone',
           {
-            blurRadius: 8,
-          },
-        ],
-        [
-          'blurV',
-          {
-            blurRadius: 8,
+            size: 8,
           },
         ],
       ],
@@ -77,19 +71,21 @@ export default class Mapbox extends React.Component {
     const gui = new dat.GUI();
     this.gui = gui;
     const styleOptions = {
-      blurVRadius: 8,
-      blurHRadius: 8,
+      angle: 0,
+      size: 8,
+      centerX: 0.5,
+      centerY: 0.5,
     };
-    const pointFolder = gui.addFolder('Blur 配置');
+    const pointFolder = gui.addFolder('ColorHalftone 配置');
     pointFolder
-      .add(styleOptions, 'blurVRadius', 0, 100)
-      .onChange((blurRadius: number) => {
+      .add(styleOptions, 'centerX', 0, 1)
+      .onChange((centerX: number) => {
         layer.style({
           passes: [
             [
-              'blurV',
+              'colorHalftone',
               {
-                blurRadius,
+                center: [centerX, styleOptions.centerY],
               },
             ],
           ],
@@ -97,20 +93,46 @@ export default class Mapbox extends React.Component {
         scene.render();
       });
     pointFolder
-      .add(styleOptions, 'blurHRadius', 0, 100)
-      .onChange((blurRadius: number) => {
+      .add(styleOptions, 'centerY', 0, 1)
+      .onChange((centerY: number) => {
         layer.style({
           passes: [
             [
-              'blurH',
+              'colorHalftone',
               {
-                blurRadius,
+                center: [styleOptions.centerX, centerY],
               },
             ],
           ],
         });
         scene.render();
       });
+    pointFolder.add(styleOptions, 'angle', 0, 10).onChange((angle: number) => {
+      layer.style({
+        passes: [
+          [
+            'colorHalftone',
+            {
+              angle,
+            },
+          ],
+        ],
+      });
+      scene.render();
+    });
+    pointFolder.add(styleOptions, 'size', 0, 20).onChange((size: number) => {
+      layer.style({
+        passes: [
+          [
+            'colorHalftone',
+            {
+              size,
+            },
+          ],
+        ],
+      });
+      scene.render();
+    });
     pointFolder.open();
   }
 

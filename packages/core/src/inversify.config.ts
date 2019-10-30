@@ -32,6 +32,18 @@ import StyleAttributeService from './services/layer/StyleAttributeService';
 import LogService from './services/log/LogService';
 import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
+
+/** PostProcessing passes */
+import { IPostProcessingPass } from './services/renderer/IMultiPassRenderer';
+import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
+import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
+import ColorHalfTonePass from './services/renderer/passes/post-processing/ColorHalfTonePass';
+import CopyPass from './services/renderer/passes/post-processing/CopyPass';
+import HexagonalPixelatePass from './services/renderer/passes/post-processing/HexagonalPixelatePass';
+import InkPass from './services/renderer/passes/post-processing/InkPass';
+import NoisePass from './services/renderer/passes/post-processing/NoisePass';
+import SepiaPass from './services/renderer/passes/post-processing/SepiaPass';
+
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#defaultscope
 const container = new Container();
 
@@ -139,5 +151,52 @@ export const lazyMultiInject = (
     };
   };
 };
+
+// 绑定 post processing passes
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(CopyPass)
+  .whenTargetNamed('copy');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(BlurHPass)
+  .whenTargetNamed('blurH');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(BlurVPass)
+  .whenTargetNamed('blurV');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(NoisePass)
+  .whenTargetNamed('noise');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(SepiaPass)
+  .whenTargetNamed('sepia');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(ColorHalfTonePass)
+  .whenTargetNamed('colorHalftone');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(HexagonalPixelatePass)
+  .whenTargetNamed('hexagonalPixelate');
+container
+  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .to(InkPass)
+  .whenTargetNamed('ink');
+
+container
+  .bind<interfaces.Factory<IPostProcessingPass<unknown>>>(
+    TYPES.IFactoryPostProcessingPass,
+  )
+  .toFactory<IPostProcessingPass<unknown>>((context) => {
+    return (named: string) => {
+      return context.container.getNamed<IPostProcessingPass<unknown>>(
+        TYPES.INewablePostProcessingPass,
+        named,
+      );
+    };
+  });
 
 export default container;

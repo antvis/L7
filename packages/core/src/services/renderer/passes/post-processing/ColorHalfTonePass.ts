@@ -1,34 +1,38 @@
 import { inject, injectable } from 'inversify';
 import { isNil } from 'lodash';
-import blur from '../../../../shaders/post-processing/blur.glsl';
+import colorHalftone from '../../../../shaders/post-processing/colorhalftone.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../../types';
 import { IRendererService } from '../../IRendererService';
 import { IUniform } from '../../IUniform';
 import BasePostProcessingPass from '../BasePostProcessingPass';
 
-export interface IBlurVPassConfig {
-  blurRadius: number;
+export interface IColorHalftonePassConfig {
+  center: [number, number];
+  angle: number;
+  size: number;
 }
 
 @injectable()
-export default class BlurVPass extends BasePostProcessingPass<
-  IBlurVPassConfig
+export default class ColorHalftonePass extends BasePostProcessingPass<
+  IColorHalftonePassConfig
 > {
   @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getName() {
-    return 'blurV';
+    return 'colorHalftone';
   }
 
-  public setupShaders() {
-    this.shaderModule.registerModule('blur-pass', {
+  protected setupShaders() {
+    this.shaderModule.registerModule('colorhalftone-pass', {
       vs: quad,
-      fs: blur,
+      fs: colorHalftone,
     });
 
-    const { vs, fs, uniforms } = this.shaderModule.getModule('blur-pass');
+    const { vs, fs, uniforms } = this.shaderModule.getModule(
+      'colorhalftone-pass',
+    );
     const { width, height } = this.rendererService.getViewportSize();
 
     return {
@@ -42,7 +46,7 @@ export default class BlurVPass extends BasePostProcessingPass<
   }
 
   protected convertOptionsToUniforms(
-    options: Partial<IBlurVPassConfig>,
+    options: Partial<IColorHalftonePassConfig>,
   ): {
     [uniformName: string]: IUniform;
   } | void {
@@ -50,8 +54,16 @@ export default class BlurVPass extends BasePostProcessingPass<
       [key: string]: IUniform;
     } = {};
 
-    if (!isNil(options.blurRadius)) {
-      uniforms.u_BlurDir = [0, options.blurRadius];
+    if (!isNil(options.center)) {
+      uniforms.u_Center = options.center;
+    }
+
+    if (!isNil(options.angle)) {
+      uniforms.u_Angle = options.angle;
+    }
+
+    if (!isNil(options.size)) {
+      uniforms.u_Size = options.size;
     }
 
     return uniforms;

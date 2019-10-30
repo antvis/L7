@@ -28,7 +28,7 @@ import { isFunction } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
-
+import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import baseLayerSchema from './schema';
 
 export interface ILayerModelInitializationOptions {
@@ -230,11 +230,26 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     };
     return this;
   }
-  public style(options: object): ILayer {
-    // @ts-ignore
+  public style(options: object & Partial<ILayerInitializationOptions>): ILayer {
+    const { passes, ...rest } = options;
+
+    // passes 特殊处理
+    if (passes) {
+      normalizePasses(passes).forEach(
+        (pass: [string, { [key: string]: unknown }]) => {
+          const postProcessingPass = this.multiPassRenderer
+            .getPostProcessor()
+            .getPostProcessingPassByName(pass[0]);
+          if (postProcessingPass) {
+            postProcessingPass.updateOptions(pass[1]);
+          }
+        },
+      );
+    }
+
     this.styleOptions = {
       ...this.styleOptions,
-      ...(options as object),
+      ...rest,
     };
     return this;
   }
