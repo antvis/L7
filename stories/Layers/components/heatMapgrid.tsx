@@ -1,4 +1,4 @@
-import { HeatMapLayer } from '@l7/layers';
+import { HeatMapGridLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 
@@ -21,7 +21,7 @@ export default class GridHeatMap extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 16,
     });
-    const layer = new HeatMapLayer({});
+    const layer = new HeatMapGridLayer({});
     layer
       .source(await response.json(), {
         parser: {
@@ -43,9 +43,8 @@ export default class GridHeatMap extends React.Component {
       })
       .shape('circle')
       .style({
-        coverage: 0.5,
+        coverage: 0.8,
         angle: 0,
-        opacity: 1,
       })
       .color('count', [
         '#002466',
