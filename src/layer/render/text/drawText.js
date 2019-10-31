@@ -23,15 +23,15 @@ export default function DrawText(layerData, layer) {
   const { strokeWidth, stroke, opacity, textAllowOverlap } = style;
   const { width, height } = layer.scene.getSize();
   const { geometry, texture, fontAtlas } = _updateGeometry(layerData, layer);
-  const updateGeometryHander = () => {
+  layer.updateGeometryHander = () => {
     const { geometry } = _updateGeometry(layerData, layer);
     layer.layerMesh.geometry = geometry;
     layer.layerMesh.geometry.needsUpdate = true;
   };
   if (!textAllowOverlap) { // 支持避让
-    layer.on('camerachange', updateGeometryHander);
+    layer.on('camerachange', layer.updateGeometryHander);
   } else {
-    layer.off('camerachange', updateGeometryHander);
+    layer.off('camerachange', layer.updateGeometryHander);
   }
   const material = new TextMaterial({
     name: layer.layerId,

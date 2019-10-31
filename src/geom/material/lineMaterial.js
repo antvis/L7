@@ -54,7 +54,8 @@ export function MeshLineMaterial(options, defines) {
     defines,
     vertexShader: vs,
     fragmentShader: fs,
-    transparent: true
+    transparent: true,
+    blending: THREE[Material.blendingEnum[options.blending]]
   });
   return material;
 }

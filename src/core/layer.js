@@ -536,6 +536,10 @@ export default class Layer extends Base {
       this.scene._engine.composerLayers.splice(composerindex, 1);
 
     }
+    // 文本清除更新
+    if (this.updateGeometryHander) {
+      this.off('camerachange', this.updateGeometryHander);
+    }
     this.get('pickingController').removeAllMesh();
   }
   redraw() {
