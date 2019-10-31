@@ -213,6 +213,7 @@ export default class Scene extends Base {
     this._engine.update();
   }
   destroy() {
+    this.get('controlController').clearControlPos();
     super.destroy();
     this._layers.forEach(layer => {
       layer.destroy();

@@ -18,7 +18,6 @@ export default function DrawLine(layerData, layer, buffer) {
 
   }
   const { attributes, indexArray, hasPattern } = buffer;
-
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(new THREE.Uint32BufferAttribute(indexArray, 1));
   geometry.addAttribute('pickingId', new THREE.Float32BufferAttribute(attributes.pickingIds, 1));

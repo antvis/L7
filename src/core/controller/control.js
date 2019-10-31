@@ -29,7 +29,7 @@ export default class Control {
     createCorner('bottom', 'left');
     createCorner('bottom', 'right');
   }
-  _clearControlPos() {
+  clearControlPos() {
     for (const i in this._controlCorners) {
       DOM.remove(this._controlCorners[i]);
     }

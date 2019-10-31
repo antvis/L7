@@ -4,6 +4,10 @@ export default class LineLayer extends Layer {
   constructor(scene, cfg) {
     super(scene, cfg);
     this.set('type', 'line');
+    this.set('styleOptions', {
+      ... this.get('styleOptions'),
+      blending: 'additive'
+    });
   }
   shape(field, values) {
     super.shape(field, values);
