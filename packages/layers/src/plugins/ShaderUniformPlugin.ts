@@ -45,6 +45,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           [CameraUniform.Zoom]: this.cameraService.getZoom(),
           [CameraUniform.ZoomScale]: this.cameraService.getZoomScale(),
           [CameraUniform.FocalDistance]: this.cameraService.getFocalDistance(),
+          [CameraUniform.CameraPosition]: this.cameraService.getCameraPosition(),
           // 坐标系参数
           [CoordinateUniform.CoordinateSystem]: this.coordinateSystemService.getCoordinateSystem(),
           [CoordinateUniform.ViewportCenter]: this.coordinateSystemService.getViewportCenter(),
