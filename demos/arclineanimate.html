@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <title>hexagon demo</title>
+  <style>
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+<script src="./assets/jquery-3.2.1.min.js"></script>
+<script src="./assets/dat.gui.min.js"></script>
+<script src="../build/L7.js"></script>
+<script>
+
+const color1 = [ 'rgba(37, 140, 249, 0.8)', 'rgba(14, 241, 242, 0.8)', 'rgba(255, 255, 255, 0.8)' ];
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [ 116.2825, 39.9 ],
+  pitch: 20,
+  zoom: 3
+});
+scene.on('loaded', () => {
+ const data1 = [
+   {
+     lng1: 94.921875,
+     lat1:  36.31512514748051,
+     lng2: 145.546875,
+     lat2: 30.14512718337613
+   }
+ ]
+  const data2 = [
+   {
+     lng1: 117.0703125,
+     lat1:   45.82879925192134,
+     lng2: 106.875,
+     lat2:  15.623036831528264
+   }
+ ]
+  $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
+
+
+    let i =0;
+
+    addLayer(data1);
+    function addLayer(line) {
+      const layer = scene.LineLayer({
+          zIndex: 2
+        })
+        .source(line, { // lng1,lat1,lng2,lat2
+          parser:{
+          type: 'json',
+          x: 'lng1',
+          y: 'lat1',
+          x1: 'lng2',
+          y1: 'lat2'
+        }})
+        .shape('arc')
+        .size(2)
+        .color('red')
+        .animate({
+            enable: true,
+            interval: 1,
+            duration: 3,
+            trailLength: 0.1,
+            repeat:1
+          })
+        .style({
+          opacity:0.6,
+        })
+        .render();
+        i++;
+        const d = i%2 ===0 ? data1: data2;
+        layer.on('animateEnd',()=>{
+          scene.removeLayer(layer);
+          addLayer(d);
+        })
+    }
+
+  });
+});
+</script>
+</body>
+</html>
+

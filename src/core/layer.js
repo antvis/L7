@@ -91,10 +91,11 @@ export default class Layer extends Base {
     }
     this.layerMesh = object;
     this._visibleWithZoom();
+    const startTime = this.scene._engine.clock.getElapsedTime();
     object.onBeforeRender = () => { // 每次渲染前改变状态
       const zoom = this.scene.getZoom();
       updateObjecteUniform(this._object3D, {
-        u_time: this.scene._engine.clock.getElapsedTime(),
+        u_time: this.scene._engine.clock.getElapsedTime() - startTime,
         u_zoom: zoom
       });
       this.preRender();
@@ -541,6 +542,7 @@ export default class Layer extends Base {
       this.off('camerachange', this.updateGeometryHander);
     }
     this.get('pickingController').removeAllMesh();
+    this.scene._engine.update();
   }
   redraw() {
     this.clearDraw();
@@ -628,6 +630,10 @@ export default class Layer extends Base {
   // tileLayer
   getSourceCache(id) {
     return this.scene.style.getSource(id);
+  }
+  setHeight(height) {
+    this._object3D.position.z = height;
+    this.scene._engine.update();
   }
 }
 

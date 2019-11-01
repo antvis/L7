@@ -9,6 +9,7 @@ import * as THREE from '../three';
 
 var ShaderPass = function( shader, textureID ) {
 
+
 	this.textureID = ( textureID !== undefined ) ? textureID : "tDiffuse";
 
 	if ( shader instanceof THREE.ShaderMaterial ) {
@@ -42,7 +43,6 @@ var ShaderPass = function( shader, textureID ) {
 
 	this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 	this.scene = new THREE.Scene();
-
 	this.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null );
 	this.scene.add( this.quad );
 
@@ -54,7 +54,7 @@ ShaderPass.prototype = {
 		if ( this.uniforms[ this.textureID ] ) {
 			this.uniforms[ this.textureID ].value = readBuffer.texture;
 
-		}
+    }
     renderer.autoClear = false;
 		this.quad.material = this.material;
 

@@ -148,6 +148,10 @@ export default class GaodeMap extends Base {
     scene.getSize = () => {
       return map.getSize();
     };
+    scene.setCenter = center => {
+      const lnglat = new AMap.LngLat(center[0], center[1]);
+      return map.setCenter(lnglat);
+    };
     scene.getPitch = () => {
       return map.getPitch();
     };
