@@ -22,16 +22,19 @@ export default class HeatMapLayerDemo extends React.Component {
       style: 'mapbox://styles/mapbox/dark-v10',
       zoom: 2,
     });
-    const layer = new HeatMapLayer({});
+    const layer = new HeatMapLayer({
+      enableTAA: true,
+    });
     layer
       .source(await response.json())
       .size('mag', [0, 1]) // weight映射通道
       .style({
         intensity: 2,
         radius: 20,
-        opacity: 1,
+        opacity: 0.5,
         rampColors: {
           colors: [
+            'rgba(0,0,0,0)',
             '#2E8AE6',
             '#69D1AB',
             '#DAF291',
@@ -39,7 +42,7 @@ export default class HeatMapLayerDemo extends React.Component {
             '#FF7A45',
             '#CF1D49',
           ],
-          positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+          positions: [0, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0],
         },
       });
     scene.addLayer(layer);
