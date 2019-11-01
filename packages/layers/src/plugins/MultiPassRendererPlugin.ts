@@ -28,7 +28,9 @@ export function normalizePasses(
 }
 
 /**
- * 根据 Layer 配置的 passes 创建 MultiPassRenderer 并渲染
+ * 自定义渲染管线：
+ * ClearPass -> PixelPickingPass(可选) -> RenderPass/TAAPass -> PostProcessing -> CopyPass
+ * 根据 Layer 配置的 passes 创建 PostProcessing
  * @example
  * new PolygonLayer({
  *   enableMultiPassRenderer: true,

@@ -14,6 +14,7 @@ import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
+import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
 import PixelPickingPlugin from './plugins/PixelPickingPlugin';
 import RegisterStyleAttributePlugin from './plugins/RegisterStyleAttributePlugin';
@@ -57,6 +58,10 @@ container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(MultiPassRendererPlugin);
  * 传入相机坐标系参数
  */
 container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(ShaderUniformPlugin);
+/**
+ * 传入光照相关参数
+ */
+container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(LightingPlugin);
 /**
  * 负责拾取过程中 Encode 以及 Highlight 阶段及结束后恢复
  */
