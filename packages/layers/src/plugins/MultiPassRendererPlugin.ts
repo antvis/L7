@@ -1,33 +1,22 @@
 import {
-  BlurHPass,
-  BlurVPass,
   ClearPass,
-  CopyPass,
   IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IPostProcessingPass,
   IRendererService,
-  lazyInject,
   MultiPassRenderer,
   PixelPickingPass,
   RenderPass,
   TAAPass,
   TYPES,
 } from '@l7/core';
-import { inject, injectable } from 'inversify';
-
-const builtinPostProcessingPassMap: {
-  [key: string]: new (config?: { [key: string]: any }) => IPostProcessingPass;
-} = {
-  blurH: BlurHPass,
-  blurV: BlurVPass,
-};
+import { inject, injectable, interfaces, multiInject } from 'inversify';
 
 /**
  * 'blurH' -> ['blurH', {}]
  */
-function normalizePasses(
+export function normalizePasses(
   passes: Array<string | [string, { [key: string]: unknown }]>,
 ) {
   return passes.map((pass: string | [string, { [key: string]: unknown }]) => {
@@ -56,6 +45,11 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
 
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
+
+  @inject(TYPES.IFactoryPostProcessingPass)
+  private readonly postProcessingPassFactory: (
+    name: string,
+  ) => IPostProcessingPass<unknown>;
 
   private enabled: boolean;
 
@@ -110,7 +104,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
       multiPassRenderer.add(new PixelPickingPass());
     }
 
-    // TAA pass if enabled
+    // use TAA pass if enabled instead of render pass
     if (enableTAA) {
       multiPassRenderer.add(new TAAPass());
     } else {
@@ -121,13 +115,16 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     // post processing
     normalizePasses(passes).forEach(
       (pass: [string, { [key: string]: unknown }]) => {
-        const PostProcessingPassClazz = builtinPostProcessingPassMap[pass[0]];
-        multiPassRenderer.add(new PostProcessingPassClazz(pass[1]));
+        const [passName, initializationOptions] = pass;
+        multiPassRenderer.add(
+          this.postProcessingPassFactory(passName),
+          initializationOptions,
+        );
       },
     );
 
     // 末尾为固定的 CopyPass
-    multiPassRenderer.add(new CopyPass());
+    multiPassRenderer.add(this.postProcessingPassFactory('copy'));
 
     return multiPassRenderer;
   }

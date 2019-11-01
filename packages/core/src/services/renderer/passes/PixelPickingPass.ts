@@ -24,7 +24,7 @@ function decodePickingColor(color: Uint8Array): number {
  * @see https://github.com/antvis/L7/blob/next/dev-docs/PixelPickingEngine.md
  */
 @injectable()
-export default class PixelPickingPass implements IPass {
+export default class PixelPickingPass<InitializationOptions = {}> implements IPass<InitializationOptions> {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
@@ -51,6 +51,10 @@ export default class PixelPickingPass implements IPass {
 
   public getType() {
     return PassType.Normal;
+  }
+
+  public getName() {
+    return 'pixelPicking';
   }
 
   public init(layer: ILayer) {

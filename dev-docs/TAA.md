@@ -65,7 +65,7 @@ this.cameraService.jitterProjectionMatrix(
 
 ![](./screenshots/taa-step3.png)
 
-这里我们选择当前帧权重为 0.9，历史帧为 0.1，最终的混合结果供后续后处理模块继续处理：
+这里我们选择当前帧权重为 0.9，历史帧为 0.1：
 
 ```typescript
 useFramebuffer(this.outputRenderTarget, () => {
@@ -81,6 +81,23 @@ useFramebuffer(this.outputRenderTarget, () => {
     },
   });
 });
+```
+
+最后我们将最终的混合结果“拷贝”给后处理模块，实现渐进增强的效果：
+
+```typescript
+useFramebuffer(
+  layer.multiPassRenderer.getPostProcessor().getReadFBO(),
+  () => {
+    this.copyModel.draw({
+      uniforms: {
+        u_Texture: this.copyRenderTarget,
+      },
+    });
+  },
+);
+// 调用后处理模块应用后续效果
+layer.multiPassRenderer.getPostProcessor().render(layer);
 ```
 
 ## 最终效果

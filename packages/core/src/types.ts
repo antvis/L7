@@ -8,6 +8,7 @@ const TYPES = {
   ILayerStyleService: Symbol.for('ILayerStyleService'),
   ILogService: Symbol.for('ILogService'),
   IMapService: Symbol.for('IMapService'),
+  IFactoryMapService: Symbol.for('Factory<IMapService>'),
   IRendererService: Symbol.for('IRendererService'),
   IShaderModuleService: Symbol.for('IShaderModuleService'),
   IIconService: Symbol.for('IIconService'),
@@ -16,13 +17,8 @@ const TYPES = {
   IControlService: Symbol.for('IControlService'),
   IStyleAttributeService: Symbol.for('IStyleAttributeService'),
   ILayerPlugin: Symbol.for('ILayerPlugin'),
-
-  /** multi-pass */
-  ClearPass: Symbol.for('ClearPass'),
-  RenderPass: Symbol.for('RenderPass'),
-  CopyPass: Symbol.for('CopyPass'),
-  BlurHPass: Symbol.for('BlurHPass'),
-  BlurVPass: Symbol.for('BlurVPass'),
+  INewablePostProcessingPass: Symbol.for('Newable<IPostProcessingPass>'),
+  IFactoryPostProcessingPass: Symbol.for('Factory<IPostProcessingPass>'),
 };
 
 export { TYPES };

@@ -37,7 +37,12 @@ export default class Mapbox extends React.Component {
       enablePicking: true,
       enableHighlight: true,
       passes: [
-        'blurH',
+        [
+          'blurH',
+          {
+            blurRadius: 8,
+          },
+        ],
         [
           'blurV',
           {
@@ -67,6 +72,46 @@ export default class Mapbox extends React.Component {
     scene.render();
 
     this.scene = scene;
+
+    /*** 运行时修改样式属性 ***/
+    const gui = new dat.GUI();
+    this.gui = gui;
+    const styleOptions = {
+      blurVRadius: 8,
+      blurHRadius: 8,
+    };
+    const pointFolder = gui.addFolder('Blur 配置');
+    pointFolder
+      .add(styleOptions, 'blurVRadius', 0, 100)
+      .onChange((blurRadius: number) => {
+        layer.style({
+          passes: [
+            [
+              'blurV',
+              {
+                blurRadius,
+              },
+            ],
+          ],
+        });
+        scene.render();
+      });
+    pointFolder
+      .add(styleOptions, 'blurHRadius', 0, 100)
+      .onChange((blurRadius: number) => {
+        layer.style({
+          passes: [
+            [
+              'blurH',
+              {
+                blurRadius,
+              },
+            ],
+          ],
+        });
+        scene.render();
+      });
+    pointFolder.open();
   }
 
   public render() {
