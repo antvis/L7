@@ -1,4 +1,5 @@
 import {
+  ICameraService,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
