@@ -147,7 +147,7 @@ export default class Scene extends Base {
       if (e.target.nodeName !== 'CANVAS') return;
       this._engine._picking.pickdata(e);
     };
-    this._throttleHander = throttle(this._eventHander, 50);
+    this._throttleHander = throttle(this._eventHander, 30);
     EventNames.forEach(event => {
       this._container.addEventListener(event, this._eventHander, true);
     });

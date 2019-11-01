@@ -21,8 +21,8 @@ export default class LineLayer extends Layer {
       this.animateDuration < this.scene._engine.clock.getElapsedTime()
     ) {
       this.layerMesh.material.setDefinesvalue('ANIMATE', false);
-      this.emit('animateEnd');
       this.scene.stopAnimate();
+      this.emit('animateEnd');
       this.animateDuration = Infinity;
     }
   }
