@@ -4,6 +4,7 @@ import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
+import { IParseDataItem } from '../source/ISourceService'
 import { ILayer } from './ILayerService';
 import {
   IEncodeFeature,
@@ -48,8 +49,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public registerStyleAttribute(
     options: Partial<IStyleAttributeInitializationOptions>,
   ) {
-    let attributeToUpdate =
-      options.name && this.getLayerStyleAttribute(options.name);
+    let attributeToUpdate = this.getLayerStyleAttribute(options.name || '');
     if (attributeToUpdate) {
       attributeToUpdate.setProps(options);
     } else {
@@ -72,7 +72,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       });
     }
     const { scale } = options;
-    if (scale) {
+    if (scale && attributeToUpdate) {
       // TODO: 需要比较新旧值确定是否需要 rescale
       // 需要重新 scale，肯定也需要重新进行数据映射
       attributeToUpdate.scale = scale;
@@ -167,6 +167,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public createAttributesAndIndices(
     features: IEncodeFeature[],
     triangulation: Triangulation,
+    parserData: IParseDataItem[],
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -187,7 +188,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
-      } = triangulation(feature);
+      } = triangulation(feature, parserData[featureIdx]);
       indices.push(...indicesForCurrentFeature.map((i) => i + verticesNum));
       vertices.push(...verticesForCurrentFeature);
       if (normalsForCurrentFeature) {
@@ -278,7 +279,9 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public clearAllAttributes() {
     // 销毁关联的 vertex attribute buffer objects
     this.attributes.forEach((attribute) => {
-      attribute.vertexAttribute.destroy();
+      if (attribute.vertexAttribute) {
+        attribute.vertexAttribute.destroy();
+      }
     });
     this.attributes = [];
   }

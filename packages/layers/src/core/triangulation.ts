@@ -141,7 +141,8 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
  * @param feature 映射数据
  * @param segNum 弧线线段数
  */
-export function LineArcTriangulation(feature: IEncodeFeature, segNum = 30) {
+export function LineArcTriangulation(feature: IEncodeFeature) {
+  const segNum = 30;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
   const indexArray = [];
@@ -176,6 +177,35 @@ export function LineArcTriangulation(feature: IEncodeFeature, segNum = 30) {
     vertices: positions,
     indices: indexArray,
     size: 7,
+  };
+}
+
+export function HeatmapTriangulation(feature: IEncodeFeature) {
+  const coordinates = feature.coordinates as number[];
+  if (coordinates.length === 2) {
+    coordinates.push(0);
+  }
+  const size = feature.size as number;
+  const dir = addDir(-1, 1);
+  const dir1 = addDir(1, 1);
+  const dir2 = addDir(-1, -1);
+  const dir3 = addDir(1, -1);
+  // [x,y,z, dirx ,diry, weight]
+  const positions = [
+    ...coordinates,
+    ...dir,
+    ...coordinates,
+    ...dir2,
+    ...coordinates,
+    ...dir3,
+    ...coordinates,
+    ...dir1,
+  ];
+  const indexArray = [0, 1, 2, 3, 0, 2];
+  return {
+    vertices: positions,
+    indices: indexArray,
+    size: 5,
   };
 }
 
@@ -258,4 +288,10 @@ function getHeatmapGeometry(shape: ShapeType2D | ShapeType3D): IExtrudeGeomety {
   //   : extrudePolygon([path]);
   const geometry = fillPolygon([path]);
   return geometry;
+}
+// 热力图计算范围
+function addDir(dirX: number, dirY: number) {
+  const x = (dirX + 1) / 2;
+  const y = (dirY + 1) / 2;
+  return [x, y];
 }

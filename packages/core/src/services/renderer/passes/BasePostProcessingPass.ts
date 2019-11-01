@@ -4,7 +4,6 @@ import {
   IModel,
   IRendererService,
   IShaderModuleService,
-  lazyInject,
 } from '../../../index';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
@@ -18,11 +17,11 @@ import { IUniform } from '../IUniform';
  */
 @injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
-  implements IPostProcessingPass {
-  @lazyInject(TYPES.IShaderModuleService)
+  implements IPostProcessingPass<InitializationOptions> {
+  @inject(TYPES.IShaderModuleService)
   protected readonly shaderModule: IShaderModuleService;
 
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   protected config: Partial<InitializationOptions> | undefined;
@@ -42,15 +41,19 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
    */
   private model: IModel;
 
-  constructor(config?: Partial<InitializationOptions>) {
-    this.config = config;
+  private optionsToUpdate: Partial<InitializationOptions> = {};
+
+  public getName() {
+    return '';
   }
 
   public getType() {
     return PassType.PostProcessing;
   }
 
-  public init() {
+  public init(layer: ILayer, config?: Partial<InitializationOptions>) {
+    this.config = config;
+
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     const { vs, fs, uniforms } = this.setupShaders();
 
@@ -71,6 +74,7 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
       uniforms: {
         u_Texture: null,
         ...uniforms,
+        ...(this.config && this.convertOptionsToUniforms(this.config)),
       },
       depth: {
         enable: false,
@@ -81,7 +85,8 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
 
   public render(layer: ILayer) {
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
-    const { useFramebuffer } = this.rendererService;
+    const { useFramebuffer, getViewportSize } = this.rendererService;
+    const { width, height } = getViewportSize();
 
     useFramebuffer(
       this.renderToScreen ? null : postProcessor.getWriteFBO(),
@@ -89,6 +94,8 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
         this.model.draw({
           uniforms: {
             u_Texture: postProcessor.getReadFBO(),
+            u_ViewportSize: [width, height],
+            ...this.convertOptionsToUniforms(this.optionsToUpdate),
           },
         });
       },
@@ -107,11 +114,26 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     this.renderToScreen = renderToScreen;
   }
 
+  public updateOptions(config: Partial<InitializationOptions>) {
+    this.optionsToUpdate = {
+      ...this.optionsToUpdate,
+      ...config,
+    };
+  }
+
   protected setupShaders(): {
     vs: string;
     fs: string;
     uniforms?: { [key: string]: IUniform };
   } {
+    throw new Error('Method not implemented.');
+  }
+
+  protected convertOptionsToUniforms(
+    options: Partial<InitializationOptions>,
+  ): {
+    [uniformName: string]: IUniform;
+  } | void {
     throw new Error('Method not implemented.');
   }
 }

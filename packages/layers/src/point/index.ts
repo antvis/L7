@@ -44,7 +44,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 0,
+          u_Opacity: opacity || 1.0,
         },
       }),
     );
@@ -118,8 +118,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size = 2 } = feature;
-          return [size as number];
+          const { size } = feature;
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });

@@ -48,3 +48,16 @@ export type IJsonData = IJsonItem[];
 export interface ISource {
   data: IParserData;
 }
+export interface IRasterCfg {
+  extent: [number, number, number, number];
+  width: number;
+  height: number;
+  max: number;
+  min: number;
+}
+
+export interface IRasterParserDataItem extends IParseDataItem {
+  data: number[];
+  width: number;
+  height: number;
+}

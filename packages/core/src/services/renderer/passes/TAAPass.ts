@@ -38,7 +38,8 @@ let accumulatingId = 1;
  * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/ri52hv
  */
 @injectable()
-export default class TAAPass implements IPass {
+export default class TAAPass<InitializationOptions = {}>
+  implements IPass<InitializationOptions> {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
@@ -82,6 +83,10 @@ export default class TAAPass implements IPass {
 
   public getType() {
     return PassType.Normal;
+  }
+
+  public getName() {
+    return 'taa';
   }
 
   public init(layer: ILayer) {
@@ -258,13 +263,17 @@ export default class TAAPass implements IPass {
         });
       });
 
-      useFramebuffer(null, () => {
-        this.copyModel.draw({
-          uniforms: {
-            u_Texture: this.copyRenderTarget,
-          },
-        });
-      });
+      useFramebuffer(
+        layer.multiPassRenderer.getPostProcessor().getReadFBO(),
+        () => {
+          this.copyModel.draw({
+            uniforms: {
+              u_Texture: this.copyRenderTarget,
+            },
+          });
+        },
+      );
+      layer.multiPassRenderer.getPostProcessor().render(layer);
     }
 
     // 保存前序帧结果
