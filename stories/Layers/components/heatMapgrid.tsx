@@ -58,6 +58,7 @@ export default class GridHeatMap extends React.Component {
       ]);
     scene.addLayer(layer);
     scene.render();
+    this.scene = scene;
   }
 
   public render() {

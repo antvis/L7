@@ -50,13 +50,13 @@ ClearPass -> RenderPass -> [ ...其他后处理 Pass ] -> CopyPass
 | -------- | --- | ------------- | --------- |
 | ClearPass  | normal | 无 | 清除 framebuffer，clearColor 为 [0, 0, 0, 0] |
 | RenderPass | normal | 无 | 渲染到 framebuffer，作为后续后处理的输入 |
+| PickingPass | normal | 无 | 负责拾取，[详见](./PixelPickingEngine.md) |
+| TAAPass | normal | 无 | [详见](./TAA.md) |
 | CopyPass   | post-processing | 无 | 作为后处理最后一个 Pass，负责拷贝 framebuffer 到屏幕输出 |
-| BlurHPass  | post-processing | `blurRadius` 水平方向模糊半径，默认值为 `8.0` | [高斯模糊 blur9](https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/9.glsl) |
-| BlurVPass  | post-processing | `blurRadius` 垂直方向模糊半径，默认值为 `8.0` | 同上 |
 
+剩余后处理效果见最后一节。
 后续待实现 Pass 如下：
 
-- [ ] PickingPass 负责拾取
 - [ ] ShadowPass 负责生成 shadowMap，供 PCF、CSM 等实时阴影技术使用
 
 ## 使用方法
@@ -76,3 +76,92 @@ const layer = new PolygonLayer({
   ],
 });
 ```
+
+## 内置后处理效果
+
+参考了 [glfx](https://github.com/evanw/glfx.js) 中的一些常用图像处理效果。可以按照名称引用，顺序决定了各个效果的应用次序。例如我们想依次应用噪声和模糊效果：
+
+```typescript
+const layer = new PolygonLayer({
+  passes: [
+    [
+      'noise', // 使用 NoisePass
+      {
+        amount: 0.5,
+      },
+    ]
+    'blurH', // 使用 BlurHPass
+    'blurV', // 使用 BlurVPass
+  ],
+});
+```
+
+下面详细介绍各个后处理效果及其参数，在 DEMO 中也可以通过 GUI 任意调节参数。
+
+### 高斯模糊
+
+采用 [高斯模糊 blur9](https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/9.glsl)。
+
+名称：`blurH/blurV`
+
+参数：
+* `blurRadius` 水平/垂直方向模糊半径，默认值为 `8.0`
+
+效果如下：
+
+![](./screenshots/blurpass.png)
+
+### ColorHalftone
+
+CMYK halftone 效果
+
+名称：`colorHalftone`
+
+参数：
+* `angle` pattern 旋转角度，默认值为 0
+* `size` pattern 大小，默认值为 8
+* `center` `[x, y]` pattern 的中心，默认值为 `[0, 0]`
+
+效果如下：
+
+![](./screenshots/halftone.png)
+
+### 噪声
+
+噪声效果。
+
+名称：`noise`
+
+参数：
+* `amount` 噪声程度，范围 `[0, 1]`，默认值为 `0.5`
+
+效果如下：
+
+![](./screenshots/noise.png)
+
+### 六边形像素化处理
+
+六边形像素化处理。
+
+名称：`hexagonalPixelate`
+
+参数：
+* `scale` 六边形大小，默认值为 `10`
+* `center` `[x, y]` pattern 的中心，默认值为 `[0.5, 0.5]`
+
+效果如下：
+
+![](./screenshots/hexagonalPixelate.png)
+
+### Sepia
+
+Sepia 颜色映射。
+
+名称：`sepia`
+
+参数：
+* `amount` 程度，范围 `[0, 1]`，默认值为 `0.5`
+
+效果如下：
+
+![](./screenshots/sepia.png)

@@ -8,12 +8,17 @@ import { IRendererService } from '../IRendererService';
  * ClearPass
  */
 @injectable()
-export default class ClearPass implements IPass {
+export default class ClearPass<InitializationOptions = {}>
+  implements IPass<InitializationOptions> {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getType() {
     return PassType.Normal;
+  }
+
+  public getName() {
+    return 'clear';
   }
 
   public init() {
