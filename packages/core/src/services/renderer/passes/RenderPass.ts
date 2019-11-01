@@ -9,12 +9,17 @@ import { IRendererService } from '../IRendererService';
  * RenderPass，负责输出到后续 PostProcessor 的 readFBO 中
  */
 @injectable()
-export default class RenderPass implements IPass {
+export default class RenderPass<InitializationOptions = {}>
+  implements IPass<InitializationOptions> {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getType() {
     return PassType.Normal;
+  }
+
+  public getName() {
+    return 'render';
   }
 
   public init(layer: ILayer) {

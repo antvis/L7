@@ -21,6 +21,7 @@ import {
 } from '@l7/core';
 import { AMapService, MapboxService } from '@l7/maps';
 import { ReglRendererService } from '@l7/renderer';
+import { interfaces } from 'inversify';
 import { Map } from 'mapbox-gl';
 
 // 绑定渲染引擎服务
@@ -28,6 +29,24 @@ container
   .bind<IRendererService>(TYPES.IRendererService)
   .to(ReglRendererService)
   .inSingletonScope();
+// // 绑定地图服务 AMap & Mapbox
+// container
+//   .bind<IMapService>(TYPES.IMapService)
+//   .to(AMapService)
+//   .whenTargetNamed(MapType.amap)
+//   .inSingletonScope();
+// container
+//   .bind<IMapService>(TYPES.IMapService)
+//   .to(MapboxService)
+//   .inSingletonScope();
+// // 地图服务工厂，根据 name 返回指定服务
+// container
+//   .bind<interfaces.Factory<IMapService>>(TYPES.IFactoryMapService)
+//   .toFactory<IMapService>((context) => {
+//     return (named: string) => {
+//       return context.container.getNamed<IMapService>(TYPES.IMapService, named);
+//     };
+//   });
 
 // 缓存当前地图类型，便于 DEMO 中切换底图时动态绑定
 let mapType: MapType;
@@ -52,7 +71,6 @@ class Scene {
 
   private iconService: IIconService;
 
-  // private mapType: MapType;
   public constructor(config: IMapConfig & IRenderConfig) {
     const { type = MapType.amap } = config;
 

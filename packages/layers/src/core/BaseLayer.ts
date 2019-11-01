@@ -28,7 +28,7 @@ import { isFunction } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
-
+import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import baseLayerSchema from './schema';
 
 export interface ILayerModelInitializationOptions {
@@ -106,6 +106,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
+  @lazyInject(TYPES.IShaderModuleService)
+  protected readonly shaderModuleService: IShaderModuleService;
+
+  @lazyInject(TYPES.IMapService)
+  protected readonly map: IMapService;
+
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
@@ -116,12 +122,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   private styleOptions: Partial<
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
-
-  @lazyInject(TYPES.IShaderModuleService)
-  private readonly shaderModuleService: IShaderModuleService;
-
-  @lazyInject(TYPES.IMapService)
-  private readonly map: IMapService;
 
   @lazyInject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
@@ -230,11 +230,26 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     };
     return this;
   }
-  public style(options: object): ILayer {
-    // @ts-ignore
+  public style(options: object & Partial<ILayerInitializationOptions>): ILayer {
+    const { passes, ...rest } = options;
+
+    // passes 特殊处理
+    if (passes) {
+      normalizePasses(passes).forEach(
+        (pass: [string, { [key: string]: unknown }]) => {
+          const postProcessingPass = this.multiPassRenderer
+            .getPostProcessor()
+            .getPostProcessingPassByName(pass[0]);
+          if (postProcessingPass) {
+            postProcessingPass.updateOptions(pass[1]);
+          }
+        },
+      );
+    }
+
     this.styleOptions = {
       ...this.styleOptions,
-      ...(options as object),
+      ...rest,
     };
     return this;
   }
@@ -328,13 +343,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-
+    const parserData = this.getSource().data.dataArray;
     const {
       attributes,
       elements,
     } = this.styleAttributeService.createAttributesAndIndices(
       this.encodedData,
       triangulation,
+      parserData,
     );
     return createModel({
       attributes,

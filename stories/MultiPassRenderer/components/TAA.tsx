@@ -79,7 +79,7 @@ export default class TAA extends React.Component {
     const pointFolder = gui.addFolder('TAA 配置');
     pointFolder
       .add(styleOptions, 'jitterScale', 0, 100)
-      .onChange((jitterScale: boolean) => {
+      .onChange((jitterScale: number) => {
         layer.style({
           jitterScale,
         });

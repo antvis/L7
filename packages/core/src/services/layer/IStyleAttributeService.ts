@@ -4,6 +4,7 @@ import {
 } from '../renderer/IAttribute';
 import { IBufferInitializationOptions } from '../renderer/IBuffer';
 import { IElements } from '../renderer/IElements';
+import { IParseDataItem, IParserData } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 
 /**
@@ -64,6 +65,7 @@ export interface IEncodeFeature {
   pattern?: string;
   id?: number;
   coordinates: Position | Position[] | Position[][];
+  [key: string]: any;
 }
 
 export interface IVertexAttributeDescriptor
@@ -129,6 +131,7 @@ export interface IStyleAttribute extends IStyleAttributeInitializationOptions {
 
 export type Triangulation = (
   feature: IEncodeFeature,
+  parserData: IParseDataItem,
 ) => {
   vertices: number[];
   indices: number[];
@@ -158,6 +161,7 @@ export interface IStyleAttributeService {
   createAttributesAndIndices(
     encodedFeatures: IEncodeFeature[],
     triangulation: Triangulation,
+    parserData: IParseDataItem[],
   ): {
     attributes: {
       [attributeName: string]: IAttribute;

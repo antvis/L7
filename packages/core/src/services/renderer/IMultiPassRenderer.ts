@@ -12,9 +12,10 @@ export enum PassType {
  * 2. PostProcessing eg. CopyPass、BlurPass
  * 另外考虑到 Pass 之间严格的执行顺序，render 方法必须是异步的
  */
-export interface IPass {
+export interface IPass<InitializationOptions> {
+  getName(): string;
   getType(): PassType;
-  init(layer: ILayer): void;
+  init(layer: ILayer, config?: Partial<InitializationOptions>): void;
   render(layer: ILayer): void;
 }
 
@@ -22,24 +23,33 @@ export interface IPass {
  * PostProcessing，自动切换 renderTarget
  * 例如最后一个 PostProcessingPass 自动切换 renderTarget 为屏幕
  */
-export interface IPostProcessingPass extends IPass {
+export interface IPostProcessingPass<InitializationOptions>
+  extends IPass<InitializationOptions> {
   setRenderToScreen(renderToScreen: boolean): void;
   isEnabled(): boolean;
   setEnabled(enabled: boolean): void;
+  updateOptions(config: Partial<InitializationOptions>): void;
 }
 
 export interface IPostProcessor {
   getReadFBO(): IFramebuffer;
   getWriteFBO(): IFramebuffer;
   resize(viewportWidth: number, viewportHeight: number): void;
-  add(pass: IPostProcessingPass, layer: ILayer): void;
+  add<InitializationOptions>(
+    pass: IPostProcessingPass<InitializationOptions>,
+    layer: ILayer,
+    config?: Partial<InitializationOptions>,
+  ): void;
   render(layer: ILayer): Promise<unknown>;
+  getPostProcessingPassByName(
+    name: string,
+  ): IPostProcessingPass<unknown> | undefined;
 }
 
 export interface IMultiPassRenderer {
   getPostProcessor(): IPostProcessor;
   resize(viewportWidth: number, viewportHeight: number): void;
-  add(pass: IPass): void;
+  add<InitializationOptions>(pass: IPass<InitializationOptions>): void;
   render(): void;
   getRenderFlag(): boolean;
   setRenderFlag(enabled: boolean): void;

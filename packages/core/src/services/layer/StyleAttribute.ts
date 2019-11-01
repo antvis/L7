@@ -4,7 +4,6 @@ import {
   StyleScaleType,
 } from '../layer/IStyleAttributeService';
 import { IAttribute } from '../renderer/IAttribute';
-import { IBuffer } from '../renderer/IBuffer';
 import {
   AttributeType,
   IEncodeFeature,
@@ -44,8 +43,6 @@ export default class StyleAttribute implements IStyleAttribute {
     endIndex: Infinity,
   };
   public vertexAttribute: IAttribute;
-
-  private buffer: IBuffer;
 
   constructor(options: Partial<IStyleAttributeInitializationOptions>) {
     this.setProps(options);

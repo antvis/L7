@@ -39,7 +39,8 @@ export interface ITexture2DInitializationOptions {
     | number[][]
     | Uint8Array
     | Uint16Array
-    | Uint32Array;
+    | Uint32Array
+    | Uint8ClampedArray;
 
   /**
    * 纹理参数

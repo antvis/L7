@@ -3,6 +3,7 @@ import { uniq } from 'lodash';
 import { extractUniforms } from '../../utils/shader-module';
 import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 
+import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
@@ -21,6 +22,7 @@ export default class ShaderModuleService implements IShaderModuleService {
   private rawContentCache: { [key: string]: IModuleParams } = {};
 
   public registerBuiltinModules() {
+    this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
     this.registerModule('projection', { vs: projection, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });
