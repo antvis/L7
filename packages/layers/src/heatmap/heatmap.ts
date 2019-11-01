@@ -1,6 +1,7 @@
 import {
   AttributeType,
   gl,
+  ICameraService,
   IEncodeFeature,
   IFramebuffer,
   ILayer,
@@ -12,6 +13,7 @@ import {
   lazyInject,
   TYPES,
 } from '@l7/core';
+import { mat4 } from 'gl-matrix';
 import BaseLayer from '../core/BaseLayer';
 import { HeatmapTriangulation } from '../core/triangulation';
 import { generateColorRamp, IColorRamp } from '../utils/color';
@@ -34,6 +36,8 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public name: string = 'HeatMapLayer';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
+  @lazyInject(TYPES.ICameraService)
+  protected readonly camera: ICameraService;
   protected heatmapFramerBuffer: IFramebuffer;
   private intensityModel: IModel;
   private colorModel: IModel;
@@ -72,7 +76,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     this.intensityModel = this.buildHeatMapIntensity();
     this.models = [this.intensityModel];
     // this.colorModel = this.buildHeatmapColor();
-    this.colorModel = this.buildHeatmapColor();
+    this.colorModel = this.build3dHeatMap();
     this.models.push(this.colorModel);
     const { rampColors } = this.getStyleOptions();
     const imageData = generateColorRamp(rampColors as IColorRamp);
@@ -251,12 +255,18 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   private draw3DHeatMap() {
     const { opacity } = this.getStyleOptions();
     const mapbounds = this.map.getBounds();
+    const invert = mat4.invert(
+      mat4.create(),
+      // @ts-ignore
+      mat4.fromValues(...this.camera.getViewProjectionMatrix()),
+    ) as mat4;
     this.colorModel.draw({
       uniforms: {
         u_Opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
         u_texture: this.heatmapFramerBuffer,
         u_extent: [-179.9476, -60.0959, 179.9778, 79.5651],
+        u_InverseViewProjectionMatrix: [...invert],
       },
     });
   }
