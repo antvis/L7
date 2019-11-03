@@ -17,7 +17,7 @@
 
 <body>
 <div id="map"></div>
-<div  id ="info" class ="tooltip" style="display:none"></div> 
+<div  id ="info" class ="tooltip" style="display:none"></div>
 <div class='info-panel top-right'>
  <p>
  <label>min</label><input name="minaqi" type="range" step="1" min="0" max="200" value=0> <label>0</label>
@@ -96,16 +96,17 @@ scene.on('loaded', () => {
           return colors[0];
         }
     }).render()
-       
+
     },10000)
     **/
 
 
-    
-     const citylayer2 = scene.PolygonLayer()
+
+     const citylayer2 = scene.LineLayer()
       .source(city)
       .shape('line')
-      .color('#fff')
+      .color('#f00')
+      .size(2)
       .style({
         opacity: 1.0
        })
@@ -123,7 +124,7 @@ scene.on('loaded', () => {
         const min = $('.info-panel input').val();
         const max = $($('.info-panel input')[1]).val();
         citylayer.filter('pm2_5_24h',(value)=>{
-           return (value>=min && value<=max) 
+           return (value>=min && value<=max)
         }).render();
       })
       $('.info-panel select').change(function(){

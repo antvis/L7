@@ -45,12 +45,6 @@ export default function DrawText(layerData, layer) {
     u_activeColor: activeOption.fill
   });
   const mesh = new THREE.Mesh(geometry, material);
-  // 更新 viewport
-  window.addEventListener('resize', () => {
-    const { width, height } = layer.scene.getSize();
-    material.uniforms.u_viewport_size.value = [ width, height ];
-    material.uniforms.needsUpdate = true;
-  }, false);
 
   // 关闭视锥裁剪
   mesh.frustumCulled = false;

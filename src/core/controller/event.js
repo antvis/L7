@@ -22,7 +22,7 @@ export default class EventContoller {
         }
       }
       // TODO 瓦片图层获取选中数据信息
-      const lnglat = this.layer.scene.containerToLngLat(point2d);
+      const lnglat = this.layer.scene.containerToLngLat(point2d) || {};
       let feature = null;
       let style = null;
       if (featureId !== -999) {

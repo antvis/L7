@@ -3,7 +3,6 @@ import { MeshLineMaterial } from '../../../geom/material/lineMaterial';
 import { getBuffer } from '../../../geom/buffer/';
 
 export default function DrawLine(layerData, layer, buffer) {
-
   const style = layer.get('styleOptions');
   const animateOptions = layer.get('animateOptions');
   const activeOption = layer.get('activedOptions');
@@ -39,7 +38,7 @@ export default function DrawLine(layerData, layer, buffer) {
     activeColor: activeOption.fill,
     u_pattern_spacing: style.patternSpacing || 0,
     u_texture: hasPattern ? layer.scene.image.texture : null,
-    blending: style.blending
+    blending: style.blending || 'normal'
   }, {
     SHAPE: false,
     ANIMATE: false,
@@ -63,7 +62,6 @@ export default function DrawLine(layerData, layer, buffer) {
       u_trailLength: trailLength
     });
     lineMaterial.setDefinesvalue('ANIMATE', true);
-    // lineMaterial.setDefinesvalue('DASHLINE', true);
   }
   return lineMesh;
 }

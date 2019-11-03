@@ -27,7 +27,7 @@ export default function DrawImage(layerData, layer) {
     TEXCOORD_0: true
   });
   material.depthTest = false;
-  material.setBending(style.blending);
+  material.setBending(style.blending || 'normal');
   const strokeMesh = new THREE.Points(geometry, material);
   return strokeMesh;
 }

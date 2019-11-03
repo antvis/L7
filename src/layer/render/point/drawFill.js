@@ -26,7 +26,7 @@ export default function DrawFill(layerData, layer) {
     u_opacity: style.opacity,
     u_activeColor: activeOption.fill,
     u_zoom: layer.scene.getZoom(),
-    blending: style.blending,
+    blending: style.blending || 'normal',
     ...generateLightingUniforms(style.lights)
   }, {
     SHAPE: true,
@@ -34,7 +34,7 @@ export default function DrawFill(layerData, layer) {
   });
   material.setDefinesvalue('SHAPE', true);
   material.depthTest = false;
-  material.setBending(style.blending);
+  material.setBending(style.blending || 'normal');
   const fillMesh = new THREE.Mesh(geometry, material);
   if (style.stroke !== 'none') {
     // 是否绘制边界

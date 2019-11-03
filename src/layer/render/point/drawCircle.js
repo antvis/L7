@@ -39,7 +39,7 @@ export default function drawCircle(layerData, layer, buffer) {
     u_strokeOpacity: style.strokeOpacity
   });
   material.depthTest = false;
-  material.setBending(style.blending);
+  material.setBending(style.blending || 'normal');
   const fillMesh = new THREE.Mesh(geometry, material);
   return fillMesh;
 }

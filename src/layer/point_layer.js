@@ -56,6 +56,12 @@ export default class PointLayer extends Layer {
     });
 
   }
+  resize() {
+    super.resize();
+    if (this.shapeType === 'text') {
+      this.repaint();
+    }
+  }
   _updateData() {
     if (this.layerSource.get('isCluster')) {
       const bounds = this.scene.getBounds().toBounds();

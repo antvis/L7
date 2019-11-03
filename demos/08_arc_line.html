@@ -32,7 +32,7 @@ const scene = new L7.Scene({
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
 
-    scene.LineLayer({
+    const layer = scene.LineLayer({
       zIndex: 2
     })
      .source(data, { // lng1,lat1,lng2,lat2
@@ -45,7 +45,7 @@ scene.on('loaded', () => {
      }})
     .shape('arc')
     .size(0.8)
-    .color('rgb(13,64,140)') 
+    .color('rgb(13,64,140)')
     .animate({
         enable: true,
         interval: 0.1,
@@ -56,6 +56,10 @@ scene.on('loaded', () => {
       opacity:0.6,
     })
     .render();
+
+    layer.style({
+      blending:'normal'
+    }).render();
 
   });
 });
