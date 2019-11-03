@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "1.3.18",
+  "version": "1.3.20",
   "description": "Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "build/L7.js",
   "homepage": "https://github.com/antvis/l7",

@@ -43,8 +43,7 @@ export default class Layer extends Base {
         strokeWidth: 1.0,
         opacity: 1.0,
         strokeOpacity: 1.0,
-        texture: false,
-        blending: 'normal'
+        texture: false
       },
       destroyed: false,
       // 选中时的配置项
@@ -357,7 +356,7 @@ export default class Layer extends Base {
   }
   _initMapEvent() {
     // zoomchange  mapmove resize
-    const EVENT_TYPES = [ 'zoomchange', 'dragend', 'camerachange' ];
+    const EVENT_TYPES = [ 'zoomchange', 'dragend', 'camerachange', 'resize' ];
     Util.each(EVENT_TYPES, type => {
       const handler = Util.wrapBehavior(this, `${type}`);
       this.map.on(`${type}`, handler);
@@ -377,12 +376,12 @@ export default class Layer extends Base {
   dragend() {
 
   }
+  resize() {
+
+  }
   camerachange(e) {
     this.emit('camerachange', e);
   }
-  resize() {
-  }
-
   setActive(id, color) {
     this._activeIds = id;
     if (!color) color = Global.activeColor;
@@ -431,6 +430,7 @@ export default class Layer extends Base {
     ) {
       this.repaint();
     }
+
     if (!Util.isEqual(preStyle, nextStyle)) {
       // 判断新增，修改，删除
       const newStyle = {};
@@ -470,6 +470,9 @@ export default class Layer extends Base {
     if (option.hasOwnProperty('textAllowOverlap')) {
       this.repaint();
       this.scene._engine.update();
+    }
+    if (option.hasOwnProperty('blending')) {
+      this.layerMesh && this.layerMesh.material.setBending(option.blending);
     }
   }
   _scaleByZoom() {

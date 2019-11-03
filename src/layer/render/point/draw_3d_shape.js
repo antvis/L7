@@ -30,7 +30,7 @@ export default function Draw3DShape(layerData, layer) {
     LIGHTING: true
   });
   material.setDefinesvalue('SHAPE', true);
-  material.setBending(style.blending);
+  material.setBending(style.blending || 'normal');
   const fillMesh = new THREE.Mesh(geometry, material);
   return fillMesh;
 }

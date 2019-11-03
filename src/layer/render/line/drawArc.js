@@ -27,7 +27,7 @@ export default function DrawArcLine(layerData, layer, buffer) {
     u_zoom: layer.scene.getZoom(),
     activeColor: activeOption.fill,
     shapeType: layer.shapeType,
-    blending: style.blending
+    blending: style.blending || 'additive'
   }, {
     SHAPE: false
   });
