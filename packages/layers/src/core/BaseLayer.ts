@@ -351,7 +351,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     } = this.styleAttributeService.createAttributesAndIndices(
       this.encodedData,
       triangulation,
-      parserData,
     );
     return createModel({
       attributes,
