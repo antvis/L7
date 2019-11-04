@@ -4,6 +4,7 @@ import {
 } from '../renderer/IAttribute';
 import { IBufferInitializationOptions } from '../renderer/IBuffer';
 import { IElements } from '../renderer/IElements';
+import { IParseDataItem, IParserData } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 
 /**
@@ -64,6 +65,7 @@ export interface IEncodeFeature {
   pattern?: string;
   id?: number;
   coordinates: Position | Position[] | Position[][];
+  [key: string]: any;
 }
 
 export interface IVertexAttributeDescriptor

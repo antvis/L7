@@ -193,7 +193,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   }
 
   private getDefaultType(firstValue: unknown) {
-    let type = ScaleTypes.QUANTIZE;
+    let type = ScaleTypes.LINEAR;
     if (typeof firstValue === 'string') {
       type = dateRegex.test(firstValue) ? ScaleTypes.TIME : ScaleTypes.CAT;
     }

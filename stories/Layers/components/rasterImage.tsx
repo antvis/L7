@@ -29,8 +29,8 @@ export default class ImageLayerDemo extends React.Component {
       },
     );
     scene.addLayer(layer);
-    console.log(layer);
     scene.render();
+    this.scene = scene;
   }
 
   public render() {
