@@ -23,6 +23,7 @@
     "@l7/source": "^0.0.1",
     "@l7/utils": "^0.0.1",
     "@mapbox/martini": "^0.1.0",
+    "reflect-metadata": "^0.1.13",
     "@turf/meta": "^6.0.2",
     "@types/d3-color": "^1.2.2",
     "d3-array": "^2.3.1",

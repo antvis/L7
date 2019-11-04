@@ -1,6 +1,12 @@
 module.exports = {
   preset: 'ts-jest',
   clearMocks: true,
+  collectCoverageFrom: [
+    'packages/**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/__tests__/**',
+    '!**/*.d.ts'
+  ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'clover'],
   coverageThreshold: {

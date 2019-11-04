@@ -21,6 +21,16 @@ export default class CameraService implements ICameraService {
    */
   private jitteredProjectionMatrix: number[] | undefined;
 
+  /**
+   * ViewMatrix 逆矩阵，用于计算相机位置
+   */
+  private viewMatrixInverse: number[];
+
+  /**
+   * 相机位置
+   */
+  private cameraPosition: number[];
+
   public init() {
     //
   }
@@ -30,6 +40,18 @@ export default class CameraService implements ICameraService {
    */
   public update(viewport: IViewport) {
     this.viewport = viewport;
+
+    // 计算逆矩阵
+    this.viewMatrixInverse = (mat4.invert(
+      mat4.create(),
+      (this.getViewMatrix() as unknown) as mat4,
+    ) as unknown) as number[];
+
+    this.cameraPosition = [
+      this.viewMatrixInverse[12],
+      this.viewMatrixInverse[13],
+      this.viewMatrixInverse[14],
+    ];
   }
 
   public getProjectionMatrix(): number[] {
@@ -68,6 +90,10 @@ export default class CameraService implements ICameraService {
 
   public getFocalDistance() {
     return this.viewport.getFocalDistance();
+  }
+
+  public getCameraPosition() {
+    return this.cameraPosition;
   }
 
   public projectFlat(

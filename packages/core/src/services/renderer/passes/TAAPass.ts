@@ -1,11 +1,11 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { lazyInject } from '../../../index';
 import blendFS from '../../../shaders/post-processing/blend.glsl';
 import copyFS from '../../../shaders/post-processing/copy.glsl';
 import quadVS from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ICameraService } from '../../camera/ICameraService';
-import { ILayer, ILayerService } from '../../layer/ILayerService';
+import { ILayer } from '../../layer/ILayerService';
 import { ILogService } from '../../log/ILogService';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
 import { gl } from '../gl';
@@ -191,8 +191,7 @@ export default class TAAPass<InitializationOptions = {}>
     };
 
     this.accumulatingId = accumulatingId++;
-    // @ts-ignore
-    this.timer = setTimeout(() => {
+    this.timer = window.setTimeout(() => {
       accumulate(this.accumulatingId);
     }, 50);
   }

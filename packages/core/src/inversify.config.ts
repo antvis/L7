@@ -154,35 +154,35 @@ export const lazyMultiInject = (
 
 // 绑定 post processing passes
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(CopyPass)
   .whenTargetNamed('copy');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(BlurHPass)
   .whenTargetNamed('blurH');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(BlurVPass)
   .whenTargetNamed('blurV');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(NoisePass)
   .whenTargetNamed('noise');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(SepiaPass)
   .whenTargetNamed('sepia');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(ColorHalfTonePass)
   .whenTargetNamed('colorHalftone');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(HexagonalPixelatePass)
   .whenTargetNamed('hexagonalPixelate');
 container
-  .bind<IPostProcessingPass<unknown>>(TYPES.INewablePostProcessingPass)
+  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
   .to(InkPass)
   .whenTargetNamed('ink');
 
@@ -190,13 +190,11 @@ container
   .bind<interfaces.Factory<IPostProcessingPass<unknown>>>(
     TYPES.IFactoryPostProcessingPass,
   )
-  .toFactory<IPostProcessingPass<unknown>>((context) => {
-    return (named: string) => {
-      return context.container.getNamed<IPostProcessingPass<unknown>>(
-        TYPES.INewablePostProcessingPass,
-        named,
-      );
-    };
-  });
+  .toFactory<IPostProcessingPass<unknown>>((context) => (named: string) =>
+    context.container.getNamed<IPostProcessingPass<unknown>>(
+      TYPES.IPostProcessingPass,
+      named,
+    ),
+  );
 
 export default container;
