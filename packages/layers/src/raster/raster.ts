@@ -24,8 +24,8 @@ interface IRasterLayerStyleOptions {
   rampColors: IColorRamp;
 }
 
-export default class ImageLayer extends BaseLayer<IRasterLayerStyleOptions> {
-  public name: string = 'RasterLayer';
+export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
+  public name: string = 'e';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 
@@ -81,24 +81,48 @@ export default class ImageLayer extends BaseLayer<IRasterLayerStyleOptions> {
       height: imageData.height,
       flipY: true,
     });
-    this.models = [
-      this.buildLayerModel({
-        moduleName: 'Raster',
-        vertexShader: rasterVert,
-        fragmentShader: rasterFrag,
-        triangulation: RasterTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
+    this.models = [this.buildRasterModel()];
+  }
+  private buildRasterModel() {
+    const source = this.getSource();
+    const sourceFeature = source.data.dataArray[0];
+    const triangulation = RasterTriangulation(sourceFeature);
+    this.shaderModuleService.registerModule('raster', {
+      vs: rasterVert,
+      fs: rasterFrag,
+    });
+
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule('raster');
+    const {
+      createAttribute,
+      createElements,
+      createBuffer,
+      createModel,
+    } = this.rendererService;
+    return createModel({
+      vs,
+      fs,
+      attributes: {
+        a_Position: createAttribute({
+          buffer: createBuffer({
+            data: triangulation.vertices,
+            type: gl.FLOAT,
+          }),
+          size: 2,
+        }),
+      },
+      primitive: gl.TRIANGLES,
+      uniforms: {
+        ...uniforms,
+      },
+      depth: {
+        enable: true,
+      },
+      elements: createElements({
+        data: triangulation.indices,
+        type: gl.UNSIGNED_INT,
+        count: triangulation.indices.length,
       }),
-    ];
+    });
   }
 }
