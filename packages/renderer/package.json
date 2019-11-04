@@ -22,6 +22,8 @@
     "@l7/core": "^0.0.1",
     "inversify": "^5.0.1",
     "inversify-logging": "^0.2.1",
-    "regl": "^1.3.11"
+    "reflect-metadata": "^0.1.13",
+    "regl": "^1.3.11",
+    "gl": "^4.4.0"
   }
 }
