@@ -131,7 +131,6 @@ export interface IStyleAttribute extends IStyleAttributeInitializationOptions {
 
 export type Triangulation = (
   feature: IEncodeFeature,
-  parserData: IParseDataItem,
 ) => {
   vertices: number[];
   indices: number[];
@@ -161,7 +160,6 @@ export interface IStyleAttributeService {
   createAttributesAndIndices(
     encodedFeatures: IEncodeFeature[],
     triangulation: Triangulation,
-    parserData: IParseDataItem[],
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
