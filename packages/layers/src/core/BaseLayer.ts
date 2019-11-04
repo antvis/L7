@@ -1,4 +1,5 @@
 import {
+  ICameraService,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -106,6 +107,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
+  @lazyInject(TYPES.IShaderModuleService)
+  protected readonly shaderModuleService: IShaderModuleService;
+
+  @lazyInject(TYPES.IMapService)
+  protected readonly map: IMapService;
+
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
@@ -116,12 +123,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   private styleOptions: Partial<
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
-
-  @lazyInject(TYPES.IShaderModuleService)
-  private readonly shaderModuleService: IShaderModuleService;
-
-  @lazyInject(TYPES.IMapService)
-  private readonly map: IMapService;
 
   @lazyInject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
@@ -343,7 +344,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-
+    const parserData = this.getSource().data.dataArray;
     const {
       attributes,
       elements,

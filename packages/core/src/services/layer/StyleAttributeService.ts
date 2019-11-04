@@ -4,6 +4,7 @@ import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
+import { IParseDataItem } from '../source/ISourceService'
 import { ILayer } from './ILayerService';
 import {
   IEncodeFeature,

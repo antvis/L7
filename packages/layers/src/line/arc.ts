@@ -1,12 +1,13 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
-import { LineTriangulation } from '../core/triangulation';
-import line_frag from './shaders/line_frag.glsl';
-import line_vert from './shaders/line_vert.glsl';
-interface IPointLayerStyleOptions {
+import { LineArcTriangulation } from '../core/triangulation';
+import line_arc_frag from './shaders/line_arc_frag.glsl';
+import line_arc_vert from './shaders/line_arc_vert.glsl';
+interface IArcLayerStyleOptions {
   opacity: number;
+  segmentNumber: number;
 }
-export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
+export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
   public name: string = 'LineLayer';
 
   protected getConfigSchema() {
@@ -26,7 +27,8 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_Opacity: opacity || 1,
+          segmentNumber: 30,
         },
       }),
     );
@@ -37,16 +39,16 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.registerBuiltinAttributes(this);
     this.models = [
       this.buildLayerModel({
-        moduleName: 'line',
-        vertexShader: line_vert,
-        fragmentShader: line_frag,
-        triangulation: LineTriangulation,
+        moduleName: 'arcline',
+        vertexShader: line_arc_vert,
+        fragmentShader: line_arc_frag,
+        triangulation: LineArcTriangulation,
         blend: {
           enable: true,
           func: {
-            srcRGB: gl.SRC_ALPHA,
+            srcRGB: gl.ONE,
             srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+            dstRGB: gl.ONE,
             dstAlpha: 1,
           },
         },
@@ -80,73 +82,24 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     });
 
-    // point layer size;
     layer.styleAttributeService.registerStyleAttribute({
-      name: 'normal',
+      name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Normal',
+        name: 'a_Instance',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-          normal: number[],
-        ) => {
-          return normal;
-        },
-      },
-    });
-
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Miter',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
+        size: 4,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
         ) => {
-          return [vertex[4]];
-        },
-      },
-    });
-
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Distance',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [vertex[3]];
+          return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
       },
     });

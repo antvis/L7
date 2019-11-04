@@ -1,5 +1,5 @@
+import { IParserData } from '@l7/core';
 import { getImage } from '@l7/utils';
-import { IParserData } from '../interface';
 interface IImageCfg {
   extent: [number, number, number, number];
 }
