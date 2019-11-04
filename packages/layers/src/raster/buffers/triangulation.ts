@@ -13,7 +13,7 @@ export function RasterTriangulation(parserData: IParseDataItem) {
   }
   const martini = new Martini(gridSize);
   const tile = martini.createTile(terrain);
-  const mesh = tile.getMesh(1024);
+  const mesh = tile.getMesh(gridSize / 2);
   return {
     vertices: Array.from(mesh.vertices) as number[],
     indices: Array.from(mesh.triangles) as number[],

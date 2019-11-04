@@ -35,6 +35,6 @@ void main() {
 
   //  vec2 range = u_extent.zw - u_extent.xy;
   //  vec4 project_pos = project_position(vec4(pos, 0, 1.0));
-   gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * 50., 1.0));
+   gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * 10., 1.0));
 
 }
