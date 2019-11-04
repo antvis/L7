@@ -17,7 +17,7 @@ const TYPES = {
   IControlService: Symbol.for('IControlService'),
   IStyleAttributeService: Symbol.for('IStyleAttributeService'),
   ILayerPlugin: Symbol.for('ILayerPlugin'),
-  INewablePostProcessingPass: Symbol.for('Newable<IPostProcessingPass>'),
+  IPostProcessingPass: Symbol.for('IPostProcessingPass'),
   IFactoryPostProcessingPass: Symbol.for('Factory<IPostProcessingPass>'),
 };
 
