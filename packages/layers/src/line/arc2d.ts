@@ -1,32 +1,14 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
-import { PointImageTriangulation } from '../core/triangulation';
-import pointImageFrag from './shaders/image_frag.glsl';
-import pointImageVert from './shaders/image_vert.glsl';
-interface IPointLayerStyleOptions {
+import { LineArcTriangulation } from '../core/triangulation';
+import line_arc2d_vert from './shaders/line_arc2d_vert.glsl';
+import line_arc_frag from './shaders/line_arc_frag.glsl';
+interface IArcLayerStyleOptions {
   opacity: number;
+  segmentNumber: number;
 }
-export function PointTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
-  return {
-    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-    extrude: [-1, -1, 1, -1, 1, 1, -1, 1],
-    indices: [0, 1, 2, 2, 3, 0],
-    size: coordinates.length,
-  };
-}
-export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
+export default class Arc2DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
+  public name: string = 'LineLayer';
 
   protected getConfigSchema() {
     return {
@@ -42,42 +24,32 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
 
   protected renderModels() {
     const { opacity } = this.getStyleOptions();
-    const { createTexture2D } = this.rendererService;
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
-          u_texture: createTexture2D({
-            data: this.iconService.getCanvas(),
-            width: 1024,
-            height: this.iconService.canvasHeight || 64,
-          }),
+          u_Opacity: opacity || 1,
+          segmentNumber: 30,
         },
       }),
     );
-
     return this;
   }
 
   protected buildModels() {
     this.registerBuiltinAttributes(this);
-    this.iconService.on('imageUpdate', () => {
-      this.renderModels();
-    });
     this.models = [
       this.buildLayerModel({
-        moduleName: 'pointImage',
-        vertexShader: pointImageVert,
-        fragmentShader: pointImageFrag,
-        triangulation: PointTriangulation,
-        primitive: gl.POINTS,
+        moduleName: 'arc2dline',
+        vertexShader: line_arc2d_vert,
+        fragmentShader: line_arc_frag,
+        triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: {
           enable: true,
           func: {
-            srcRGB: gl.SRC_ALPHA,
+            srcRGB: gl.ONE,
             srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+            dstRGB: gl.ONE,
             dstAlpha: 1,
           },
         },
@@ -111,29 +83,24 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     });
 
-    // point layer size;
     layer.styleAttributeService.registerStyleAttribute({
-      name: 'uv',
+      name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Uv',
+        name: 'a_Instance',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
+        size: 4,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const iconMap = this.iconService.getIconMap();
-          const { shape } = feature;
-          const { x, y } = iconMap[shape as string] || { x: 0, y: 0 };
-          return [x, y];
+          return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
       },
     });

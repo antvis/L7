@@ -39,6 +39,7 @@ export default class Point3D extends React.Component {
       .size([15, 10]);
     scene.addLayer(pointLayer);
     scene.render();
+    this.scene = scene;
   }
 
   public render() {
