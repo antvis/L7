@@ -1,10 +1,7 @@
 import { IEncodeFeature, IParseDataItem } from '@l7/core';
 // @ts-ignore
 import Martini from '@mapbox/martini';
-export function RasterTriangulation(
-  feature: IEncodeFeature,
-  parserData: IParseDataItem,
-) {
+export function RasterTriangulation(parserData: IParseDataItem) {
   const { coordinates, data, min, max, width, height } = parserData;
   const maxlength = Math.max(width, height);
   const gridSize = Math.pow(2, Math.ceil(Math.log2(maxlength))) + 1;
