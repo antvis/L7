@@ -13,7 +13,9 @@ uniform vec4 u_activeColor : [1.0, 0.0, 0.0, 1.0];
 varying vec2 v_uv;
 varying float v_gamma_scale;
 varying vec4 v_color;
+
 #pragma include "projection"
+
 void main() {
   v_color = a_color;
   v_uv = a_tex / u_sdf_map_size;
@@ -24,10 +26,10 @@ void main() {
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
 
   vec4 projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
-  
+
   gl_Position = vec4(projected_position.xy / projected_position.w
     + a_offset * fontScale / u_viewport_size * 2., 0.0, 1.0);
   v_gamma_scale = gl_Position.w;
 
-  
+
 }
