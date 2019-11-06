@@ -1,0 +1,13 @@
+{
+  "title": {
+    "zh": "热力图",
+    "en": "heatmap"
+  },
+  "demos": [
+    {
+      "filename": "line.js",
+      "title": "线图层",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*KCyXTJrePiYAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

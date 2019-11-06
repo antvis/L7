@@ -24,7 +24,6 @@ export default class Viewport implements IViewport {
       far = 1000,
       fov = 0,
     } = mapCamera;
-
     this.zoom = zoom;
     this.center = center;
 

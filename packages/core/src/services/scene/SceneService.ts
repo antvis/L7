@@ -85,6 +85,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public init(globalConfig: IGlobalConfig) {
+    this.initClear();
     this.configService.setAndCheckConfig(globalConfig);
 
     // 初始化资源管理 图片
@@ -160,7 +161,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.map.addMarkerContainer();
       this.inited = true;
 
-      this.layerService.initLayers();
+      // this.layerService.initLayers();
       this.emit('loaded');
     }
 
@@ -206,4 +207,14 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.cameraService.update(viewport);
     this.render();
   };
+  private initClear() {
+    this.inited = false;
+    this.layerService.destroy();
+    this.configService.reset();
+    this.interactionService.destroy();
+    this.controlService.destroy();
+    this.removeAllListeners();
+    this.map.destroy();
+    window.removeEventListener('resize', this.handleWindowResized, false);
+  }
 }

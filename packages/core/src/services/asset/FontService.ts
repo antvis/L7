@@ -64,6 +64,7 @@ export default class FontService implements IFontService {
   private key: string;
   private cache: LRUCache = new LRUCache(CACHE_LIMIT);
   public init() {
+    this.cache.clear();
     this.fontOptions = {
       fontFamily: DEFAULT_FONT_FAMILY,
       fontWeight: DEFAULT_FONT_WEIGHT,

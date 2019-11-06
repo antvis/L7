@@ -57,7 +57,7 @@ export default class LineDemo extends React.Component {
           '#002466',
         ].reverse(),
       )
-      .render();
+
     scene.addLayer(lineLayer);
     scene.render();
     this.scene = scene;

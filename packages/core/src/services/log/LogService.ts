@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import { Log } from 'probe.gl';
 import { ILogService } from './ILogService';
 
-const Logger = new Log({ id: 'L7' }).enable();
+const Logger = new Log({ id: 'L7' }).enable(false);
 
 @injectable()
 export default class LogService implements ILogService {

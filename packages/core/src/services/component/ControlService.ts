@@ -15,6 +15,7 @@ export default class ControlService implements IControlService {
   public controlContainer: HTMLElement;
   private controls: IControl[] = [];
   public init(cfg: IControlServiceCfg) {
+    this.destroy();
     this.container = cfg.container;
     this.initControlPos();
   }
@@ -68,7 +69,9 @@ export default class ControlService implements IControlService {
         DOM.remove(this.controlCorners[i]);
       }
     }
-    DOM.remove(this.controlContainer);
+    if (this.controlContainer) {
+      DOM.remove(this.controlContainer);
+    }
     delete this.controlCorners;
     delete this.controlContainer;
   }

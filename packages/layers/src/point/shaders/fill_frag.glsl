@@ -1,7 +1,7 @@
 uniform float u_blur : 0;
 uniform float u_opacity : 1;
 uniform float u_stroke_width : 1;
-uniform vec4 u_stroke_color : [1, 1, 1, 1];
+uniform vec4 u_stroke_color : [0, 0, 0, 0];
 uniform float u_stroke_opacity : 1;
 
 varying vec4 v_data;
@@ -9,6 +9,7 @@ varying vec4 v_color;
 varying float v_radius;
 
 #pragma include "sdf_2d"
+#pragma include "picking"
 
 void main() {
   int shape = int(floor(v_data.w + 0.5));
@@ -56,6 +57,7 @@ void main() {
     0.0,
     inner_df
   );
+  vec4 strokeColor = u_stroke_color == vec4(0) ? v_color : u_stroke_color;
 
-  gl_FragColor = opacity_t * mix(v_color * u_opacity, u_stroke_color * u_stroke_opacity, color_t);
+  gl_FragColor = opacity_t * mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
 }
