@@ -29,7 +29,7 @@ export default class Mapbox extends React.Component {
       enableHighlight: false,
       onHover: (pickedFeature) => {
         // tslint:disable-next-line:no-console
-        console.log(pickedFeature);
+        // console.log(pickedFeature);
       },
     });
 

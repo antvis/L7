@@ -33,15 +33,26 @@ export default class IconService extends EventEmitter implements IIconService {
     if (this.hasImage(id)) {
       throw new Error('Image Id already exists');
     }
-
+    this.iconData.push({
+      id,
+      width: imageSize,
+      height: imageSize,
+    });
+    this.updateIconMap();
     this.loadImage(image).then((img) => {
       imagedata = img as HTMLImageElement;
-      this.iconData.push({
-        id,
-        image: imagedata,
-        width: imageSize,
-        height: imageSize,
+      const iconImage = this.iconData.find((icon: IIcon) => {
+        return icon.id === id;
       });
+      if (iconImage) {
+        iconImage.image = imagedata;
+      }
+      // this.iconData.push({
+      //   id,
+      //   image: imagedata,
+      //   width: imageSize,
+      //   height: imageSize,
+      // });
       this.update();
     });
   }
@@ -86,7 +97,9 @@ export default class IconService extends EventEmitter implements IIconService {
     this.canvas.height = this.canvasHeight;
     Object.keys(this.iconMap).forEach((item: string) => {
       const { x, y, image } = this.iconMap[item];
-      this.ctx.drawImage(image, x, y, imageSize, imageSize);
+      if (image) {
+        this.ctx.drawImage(image, x, y, imageSize, imageSize);
+      }
     });
   }
 
