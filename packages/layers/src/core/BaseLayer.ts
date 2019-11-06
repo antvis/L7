@@ -1,4 +1,5 @@
 import {
+  gl,
   ICameraService,
   IEncodeFeature,
   IFontService,
@@ -358,6 +359,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
       fs,
       vs,
       elements,
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: gl.SRC_ALPHA,
+          srcAlpha: 1,
+          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+          dstAlpha: 1,
+        },
+      },
       ...rest,
     });
   }

@@ -67,3 +67,4 @@ jspm_packages/
 lib/
 
 .DS_Store
+public

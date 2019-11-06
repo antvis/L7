@@ -1,4 +1,4 @@
-import { PointImageLayer } from '@l7/layers';
+import { PointImageLayer, PointLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 import data from '../data/data.json';
@@ -19,19 +19,6 @@ export default class PointImage extends React.Component {
       zoom: 1,
     });
     const pointLayer = new PointImageLayer({});
-    const p1 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [83.671875, 44.84029065139799],
-          },
-        },
-      ],
-    };
     scene.addImage(
       '00',
       'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*kzTMQqS2QdUAAAAAAAAAAABkARQnAQ',
@@ -40,6 +27,17 @@ export default class PointImage extends React.Component {
       .source(data)
       .shape('00')
       .size(30);
+    const pointLayer2 = new PointLayer({})
+      .source(data)
+      .shape('circle')
+      .size(8)
+      .color('red')
+      .style({
+        opacity: 1.0,
+        strokeWidth: 2,
+        strokeColor: '#fff',
+      });
+    scene.addLayer(pointLayer2);
     scene.addLayer(pointLayer);
     scene.render();
     this.scene = scene;

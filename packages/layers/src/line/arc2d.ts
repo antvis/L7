@@ -27,7 +27,7 @@ export default class Arc2DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1,
+          u_opacity: opacity || 1,
           segmentNumber: 30,
         },
       }),

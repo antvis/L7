@@ -53,7 +53,7 @@ const container = new Container();
 container
   .bind<ISceneService>(TYPES.ISceneService)
   .to(SceneService)
-  .inSingletonScope();
+  .inTransientScope();
 container
   .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
   .to(GlobalConfigService)
@@ -61,7 +61,7 @@ container
 container
   .bind<ILayerService>(TYPES.ILayerService)
   .to(LayerService)
-  .inSingletonScope();
+  .inTransientScope();
 container
   .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
   .to(StyleAttributeService);
