@@ -56,7 +56,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
         },
       }),
     );

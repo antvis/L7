@@ -106,8 +106,8 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       height: imageData.height,
       wrapS: gl.CLAMP_TO_EDGE,
       wrapT: gl.CLAMP_TO_EDGE,
-      min: gl.NEAREST,
-      mag: gl.NEAREST,
+      min: gl.LINEAR,
+      mag: gl.LINEAR,
       flipY: true,
     });
   }
@@ -235,7 +235,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     const { opacity, intensity = 10, radius = 5 } = this.getStyleOptions();
     this.intensityModel.draw({
       uniforms: {
-        u_Opacity: opacity || 1.0,
+        u_opacity: opacity || 1.0,
         u_radius: radius,
         u_intensity: intensity,
       },
@@ -246,7 +246,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     const { opacity } = this.getStyleOptions();
     this.colorModel.draw({
       uniforms: {
-        u_Opacity: opacity || 1.0,
+        u_opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
         u_texture: this.heatmapFramerBuffer,
       },
@@ -262,7 +262,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     ) as mat4;
     this.colorModel.draw({
       uniforms: {
-        u_Opacity: opacity || 1.0,
+        u_opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
         u_texture: this.heatmapFramerBuffer,
         u_extent: [-179.9476, -60.0959, 179.9778, 79.5651],
@@ -273,7 +273,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   private build3dHeatMap() {
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
-    const triangulation = heatMap3DTriangulation(256, 128);
+    const triangulation = heatMap3DTriangulation(width / 2.0, height / 2.0);
     this.shaderModuleService.registerModule('heatmap3dColor', {
       vs: heatmap3DVert,
       fs: heatmap3DFrag,
@@ -313,6 +313,15 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       },
       depth: {
         enable: false,
+      },
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: gl.SRC_ALPHA,
+          srcAlpha: 1,
+          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+          dstAlpha: 1,
+        },
       },
       elements: createElements({
         data: triangulation.indices,

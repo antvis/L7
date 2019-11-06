@@ -121,3 +121,13 @@ vec4 project_common_position_to_clipspace(vec4 position) {
     u_ViewportCenterProjection
   );
 }
+
+vec4 unproject_clipspace_to_position(vec4 clipspacePos, mat4 u_InverseViewProjectionMatrix) {
+  vec4 pos = u_InverseViewProjectionMatrix * (clipspacePos - u_ViewportCenterProjection);
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_METER_OFFSET ||
+    u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    // Needs to be divided with project_uCommonUnitsPerMeter
+    pos.w /= u_PixelsPerMeter.z;
+  }
+  return pos;
+}

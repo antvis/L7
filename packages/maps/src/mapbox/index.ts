@@ -24,7 +24,7 @@ const EventMap: {
   mapmove: 'move',
   camerachange: 'move',
 };
-
+import { MapTheme } from './theme';
 mapboxgl.accessToken =
   'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
@@ -142,7 +142,7 @@ export default class MapboxService implements IMapService {
   }
 
   public setMapStyle(style: string): void {
-    this.map.setStyle(style);
+    this.map.setStyle(this.getMapStyle(style));
   }
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
@@ -162,7 +162,12 @@ export default class MapboxService implements IMapService {
   }
 
   public async init(mapConfig: IMapConfig): Promise<void> {
-    const { id, attributionControl = false, ...rest } = mapConfig;
+    const {
+      id,
+      attributionControl = false,
+      style = 'light',
+      ...rest
+    } = mapConfig;
     this.$mapContainer = document.getElementById(id);
 
     this.viewport = new Viewport();
@@ -174,6 +179,7 @@ export default class MapboxService implements IMapService {
     // @ts-ignore
     this.map = new mapboxgl.Map({
       container: id,
+      style: this.getMapStyle(style),
       attributionControl,
       ...rest,
     });
@@ -245,5 +251,9 @@ export default class MapboxService implements IMapService {
     if (logoCtr) {
       this.map.removeControl(logoCtr);
     }
+  }
+
+  private getMapStyle(name: string) {
+    return MapTheme[name] ? MapTheme[name] : name;
   }
 }

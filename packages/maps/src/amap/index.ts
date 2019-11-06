@@ -16,6 +16,7 @@ import {
 import { DOM } from '@l7/utils';
 import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import { MapTheme } from './theme';
 import Viewport from './Viewport';
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
@@ -137,7 +138,7 @@ export default class AMapService implements IMapService {
     this.map.setZoomAndCenter(zoom, center);
   }
   public setMapStyle(style: string): void {
-    this.setMapStyle(style);
+    this.map.setMapStyle(this.getMapStyle(style));
   }
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
@@ -168,7 +169,13 @@ export default class AMapService implements IMapService {
   }
 
   public async init(mapConfig: IMapConfig): Promise<void> {
-    const { id, style, ...rest } = mapConfig;
+    const {
+      id,
+      style = 'light',
+      minZoom = 0,
+      maxZoom = 18,
+      ...rest
+    } = mapConfig;
 
     this.$mapContainer = document.getElementById(id);
 
@@ -179,7 +186,8 @@ export default class AMapService implements IMapService {
       window.onload = (): void => {
         // @ts-ignore
         this.map = new AMap.Map(id, {
-          mapStyle: style,
+          mapStyle: this.getMapStyle(style),
+          zooms: [minZoom, maxZoom],
           viewMode: '3D',
           ...rest,
         });
@@ -255,4 +263,8 @@ export default class AMapService implements IMapService {
       this.cameraChangedCallback(this.viewport);
     }
   };
+
+  private getMapStyle(name: string) {
+    return MapTheme[name] ? MapTheme[name] : name;
+  }
 }
