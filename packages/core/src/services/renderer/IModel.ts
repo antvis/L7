@@ -54,6 +54,8 @@ export interface IModelInitializationOptions {
    */
   instances?: number;
 
+  colorMask?: [boolean, boolean, boolean, boolean];
+
   /**
    * depth buffer
    */

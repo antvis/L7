@@ -20,7 +20,7 @@ import { MapTheme } from './theme';
 import Viewport from './Viewport';
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
-const AMAP_VERSION: string = '1.4.8';
+const AMAP_VERSION: string = '1.4.15';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
 /**
@@ -208,8 +208,10 @@ export default class AMapService implements IMapService {
   }
 
   public destroy() {
-    this.map.destroy();
-    document.head.removeChild(this.$jsapi);
+    if (this.map) {
+      this.map.destroy();
+      document.head.removeChild(this.$jsapi);
+    }
   }
 
   public getMapContainer() {
@@ -232,7 +234,6 @@ export default class AMapService implements IMapService {
       position,
     } = e.camera;
     const { lng, lat } = this.getCenter();
-
     if (this.cameraChangedCallback) {
       // resync viewport
       this.viewport.syncWithMapCamera({
@@ -253,6 +254,7 @@ export default class AMapService implements IMapService {
 
       // set coordinate system
       if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+        // TODO:偏移坐标系高德地图不支持 pith bear 同步
         this.coordinateSystemService.setCoordinateSystem(
           CoordinateSystem.P20_OFFSET,
         );

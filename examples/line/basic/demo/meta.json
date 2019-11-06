@@ -1,0 +1,13 @@
+{
+  "title": {
+    "zh": "线图层",
+    "en": "line"
+  },
+  "demos": [
+    {
+      "filename": "line.js",
+      "title": "线图层",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*KCyXTJrePiYAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

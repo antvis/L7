@@ -16,8 +16,8 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
-    // this.initPlugin(layer);
-    // layer.init();
+    this.initPlugin(layer);
+    layer.init();
     this.layers.push(layer);
   }
 

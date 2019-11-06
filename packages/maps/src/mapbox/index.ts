@@ -197,9 +197,11 @@ export default class MapboxService implements IMapService {
   }
 
   public destroy() {
-    document.head.removeChild(this.$link);
-    this.$mapContainer = null;
-    this.map.remove();
+    if (this.map) {
+      this.map.remove();
+      document.head.removeChild(this.$link);
+      this.$mapContainer = null;
+    }
   }
 
   public getMapContainer() {
