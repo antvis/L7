@@ -48,7 +48,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1,
+          u_opacity: opacity || 1,
           u_texture: this.texture,
           u_min: min,
           u_width: width,

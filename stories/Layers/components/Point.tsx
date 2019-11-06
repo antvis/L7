@@ -53,7 +53,11 @@ export default class Point3D extends React.Component {
         'rhombus',
         'vesica',
       ])
-      .size('scalerank', [2, 4, 6, 8, 10]);
+      .size('scalerank', [5,10])
+      .style({
+        opacity: 1.0
+      })
+      ;
     scene.addLayer(pointLayer);
     console.log(pointLayer);
     scene.render();

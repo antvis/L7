@@ -64,7 +64,7 @@ let mapType: MapType;
  * scene.render();
  */
 class Scene {
-  public map: AMap.Map | Map;
+  // public map: AMap.Map | Map;
   private sceneService: ISceneService;
   private mapService: IMapService;
   private controlService: IControlService;
@@ -73,7 +73,6 @@ class Scene {
 
   public constructor(config: IMapConfig & IRenderConfig) {
     const { type = MapType.amap } = config;
-
     // 根据用户传入参数绑定地图服务
     let mapServiceImpl: new (...args: any[]) => IMapService;
     if (type === MapType.mapbox) {
@@ -104,13 +103,17 @@ class Scene {
     this.mapService = container.get<IMapService>(TYPES.IMapService);
     this.iconService = container.get<IIconService>(TYPES.IIconService);
     this.controlService = container.get<IControlService>(TYPES.IControlService);
-    this.map = this.mapService.map; // 暴露原生map方法
+    // this.map = this.mapService.map; // 暴露原生map方法
     mapType = this.mapService.getType();
   }
 
   public getMapService(): IMapService {
     return this.mapService;
     //
+  }
+
+  public get map() {
+    return this.mapService.map;
   }
 
   public addLayer(layer: ILayer): void {

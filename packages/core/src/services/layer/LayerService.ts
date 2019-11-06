@@ -16,6 +16,8 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
+    // this.initPlugin(layer);
+    // layer.init();
     this.layers.push(layer);
   }
 
@@ -44,5 +46,10 @@ export default class LayerService implements ILayerService {
   public destroy() {
     this.layers.forEach((layer) => layer.destroy());
     this.layers = [];
+  }
+  private initPlugin(layer: ILayer) {
+    for (const plugin of layer.plugins) {
+      plugin.apply(layer);
+    }
   }
 }

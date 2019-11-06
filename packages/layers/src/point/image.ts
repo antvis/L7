@@ -46,7 +46,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
           u_texture: createTexture2D({
             data: this.iconService.getCanvas(),
             width: 1024,

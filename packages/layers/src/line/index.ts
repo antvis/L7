@@ -26,7 +26,7 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
         },
       }),
     );

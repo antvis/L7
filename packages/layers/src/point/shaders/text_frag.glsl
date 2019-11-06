@@ -18,7 +18,7 @@ void main() {
 
   lowp float buff = (6.0 - u_strokeWidth / fontScale) / SDF_PX;
   highp float gamma = (u_halo_blur * 1.19 / SDF_PX + EDGE_GAMMA) / (fontScale * u_gamma_scale);
-  
+
   highp float gamma_scaled = gamma * v_gamma_scale;
 
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
