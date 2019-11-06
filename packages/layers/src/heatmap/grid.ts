@@ -27,7 +27,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
           u_coverage: coverage || 1.0,
           u_radius: [
             this.getSource().data.xOffset,

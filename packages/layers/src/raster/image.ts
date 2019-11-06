@@ -40,7 +40,7 @@ export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
       this.models.forEach((model) =>
         model.draw({
           uniforms: {
-            u_Opacity: opacity || 1,
+            u_opacity: opacity || 1,
             u_texture: this.texture,
           },
         }),

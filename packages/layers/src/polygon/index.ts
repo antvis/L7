@@ -40,7 +40,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
         },
       }),
     );
