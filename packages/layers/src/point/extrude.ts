@@ -78,7 +78,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           if (size) {
             let buffersize: number[] = [];
             if (Array.isArray(size)) {
-              // TODO 多维size支持
               buffersize =
                 size.length === 2 ? [size[0], size[0], size[1]] : size;
             }

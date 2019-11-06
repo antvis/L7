@@ -6,16 +6,22 @@
     "toPath": "/zh/docs/specification/introduction"
   },
   {
+    "fromPath": "/zh/docs/tutorial",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/manual/tutorial/quickStart"
+  },
+  {
     "fromPath": "/zh/docs/API",
     "isPermanent": true,
     "redirectInBrowser": true,
     "toPath": "/zh/docs/API/L7"
   },
   {
-    "fromPath": "/zh/docs/tutorial",
+    "fromPath": "/zh/examples",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/docs/manual/tutorial/quickStart"
+    "toPath": "/zh/examples/polygon/basic"
   },
   {
     "fromPath": "/zh/examples",

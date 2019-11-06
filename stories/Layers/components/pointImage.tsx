@@ -9,37 +9,51 @@ export default class PointImage extends React.Component {
     this.scene.destroy();
   }
 
-  public componentDidMount() {
+  public async componentDidMount() {
+    const response = await fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
+    );
     const scene = new Scene({
-      center: [120.19382669582967, 30.258134],
+      center: [121.40, 31.258134],
+      zoom: 15,
       id: 'map',
       pitch: 0,
       type: 'mapbox',
       style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 1,
     });
-    const pointLayer = new PointImageLayer({});
     scene.addImage(
       '00',
-      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*kzTMQqS2QdUAAAAAAAAAAABkARQnAQ',
+      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Rq6tQ5b4_JMAAAAAAAAAAABkARQnAQ',
     );
-    pointLayer
-      .source(data)
-      .shape('00')
-      .size(30);
-    const pointLayer2 = new PointLayer({})
-      .source(data)
-      .shape('circle')
-      .size(8)
-      .color('red')
-      .style({
-        opacity: 1.0,
-        strokeWidth: 2,
-        strokeColor: '#fff',
-      });
-    scene.addLayer(pointLayer2);
-    scene.addLayer(pointLayer);
-    scene.render();
+    scene.addImage(
+      '01',
+      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*0D0SQ6AgkRMAAAAAAAAAAABkARQnAQ',
+    );
+    scene.addImage(
+      '02',
+      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
+    );
+    this.scene = scene;
+    scene.on('loaded', () => {
+      run();
+    });
+    const imageLayer = new PointImageLayer({})
+      .source(await response.json(), {
+        parser: {
+          type: 'json',
+          x: 'longitude',
+          y: 'latitude',
+        }
+      })
+      .shape('name', ['00', '01', '02'])
+      .size(60);
+    scene.addLayer(imageLayer);
+
+    function run() {
+      scene.render();
+      console.log('render');
+      requestAnimationFrame(run);
+    }
     this.scene = scene;
   }
 

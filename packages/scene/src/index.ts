@@ -103,8 +103,8 @@ class Scene {
     this.mapService = container.get<IMapService>(TYPES.IMapService);
     this.iconService = container.get<IIconService>(TYPES.IIconService);
     this.controlService = container.get<IControlService>(TYPES.IControlService);
-    // this.map = this.mapService.map; // 暴露原生map方法
     mapType = this.mapService.getType();
+    this.render();
   }
 
   public getMapService(): IMapService {
