@@ -377,7 +377,7 @@ export default class Layer extends Base {
 
   }
   resize() {
-
+    this.scene._engine.update();
   }
   camerachange(e) {
     this.emit('camerachange', e);

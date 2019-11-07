@@ -190,14 +190,14 @@ export default class Scene extends Base {
     // this.map.on('mousemove', this._updateRender);
     this.map.on('mapmove', this._updateRender);
     this.map.on('camerachange', this._updateRender);
-    window.addEventListener('onresize', this._updateRender);
+    this.map.on('resize', this._updateRender);
   }
 
   unRegsterMapEvent() {
     // this.map.off('mousemove', this._updateRender);
     this.map.off('mapmove', this._updateRender);
     this.map.off('camerachange', this._updateRender);
-    window.removeEventListener('onresize', this._updateRender);
+    this.map.off('resize', this._updateRender);
   }
   // control
 

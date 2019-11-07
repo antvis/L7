@@ -9,7 +9,8 @@ export default class Engine extends EventEmitter {
     super();
     this._scene = new THREE.Scene();
     this._camera = new Camera(container).camera;
-    this._renderer = new Renderer(container).renderer;
+    this._render = new Renderer(container);
+    this._renderer = this._render.renderer;
     this._world = world;// 地图场景实例
     // for MapBox
     this.world = new THREE.Group();
@@ -24,6 +25,12 @@ export default class Engine extends EventEmitter {
     });
   }
   update() {
+    this.redraw();
+    setTimeout(() => {
+      this.redraw();
+    }, 50);
+  }
+  redraw() {
     this._renderer.clear();
     this._renderer.render(this._scene, this._camera);
     this._initPostProcessing();
@@ -52,5 +59,9 @@ export default class Engine extends EventEmitter {
   }
   stop() {
     cancelAnimationFrame(this.engineID);
+  }
+  resize() {
+    this._render.updateSize();
+    this.update();
   }
 }
