@@ -56,7 +56,7 @@ export default class Mapbox extends React.Component {
       ])
       .shape('fill')
       .style({
-        opacity: 0.8,
+        opacity: 0.3,
       });
     scene.addLayer(layer);
     scene.render();

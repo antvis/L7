@@ -38,7 +38,7 @@ export default class Highlight extends React.Component {
       highlightColor: [0, 0, 1, 1],
       onHover: (pickedFeature) => {
         // tslint:disable-next-line:no-console
-        console.log(pickedFeature);
+        // console.log(pickedFeature);
       },
     });
 
@@ -59,7 +59,7 @@ export default class Highlight extends React.Component {
       });
     scene.addLayer(layer);
     scene.render();
-
+    console.log(layer);
     this.scene = scene;
 
     /*** 运行时修改样式属性 ***/

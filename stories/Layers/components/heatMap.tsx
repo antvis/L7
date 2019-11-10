@@ -23,7 +23,7 @@ export default class HeatMapLayerDemo extends React.Component {
       zoom: 2,
     });
     const layer = new HeatMapLayer({
-      enableTAA: true,
+      enableTAA: false,
     });
     layer
       .source(await response.json())
@@ -31,10 +31,9 @@ export default class HeatMapLayerDemo extends React.Component {
       .style({
         intensity: 2,
         radius: 20,
-        opacity: 0.5,
+        opacity: 0.6,
         rampColors: {
           colors: [
-            'rgba(0,0,0,0)',
             '#2E8AE6',
             '#69D1AB',
             '#DAF291',
@@ -42,7 +41,7 @@ export default class HeatMapLayerDemo extends React.Component {
             '#FF7A45',
             '#CF1D49',
           ],
-          positions: [0, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0],
+          positions: [0,0.2, 0.4, 0.6, 0.8, 1.0],
         },
       });
     scene.addLayer(layer);

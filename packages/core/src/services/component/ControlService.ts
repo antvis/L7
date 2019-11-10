@@ -15,6 +15,7 @@ export default class ControlService implements IControlService {
   public controlContainer: HTMLElement;
   private controls: IControl[] = [];
   public init(cfg: IControlServiceCfg) {
+    this.destroy();
     this.container = cfg.container;
     this.initControlPos();
   }
@@ -23,7 +24,6 @@ export default class ControlService implements IControlService {
     ctr.addTo(mapService); // scene对象
     this.controls.push(ctr);
   }
-
   public removeControl(ctr: IControl): this {
     const index = this.controls.indexOf(ctr);
     if (index > -1) {
@@ -68,7 +68,9 @@ export default class ControlService implements IControlService {
         DOM.remove(this.controlCorners[i]);
       }
     }
-    DOM.remove(this.controlContainer);
+    if (this.controlContainer) {
+      DOM.remove(this.controlContainer);
+    }
     delete this.controlCorners;
     delete this.controlContainer;
   }
