@@ -53,7 +53,7 @@ const container = new Container();
 container
   .bind<ISceneService>(TYPES.ISceneService)
   .to(SceneService)
-  .inSingletonScope();
+  .inTransientScope();
 container
   .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
   .to(GlobalConfigService)
@@ -100,7 +100,7 @@ container
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
 decorate(injectable(), EventEmitter);
-
+container.bind(TYPES.IEventEmitter).to(EventEmitter);
 // 支持 L7 使用 new 而非容器实例化的场景，同时禁止 lazyInject cache
 // @see https://github.com/inversify/inversify-inject-decorators#caching-vs-non-caching-behaviour
 const DECORATORS = getDecorators(container, false);

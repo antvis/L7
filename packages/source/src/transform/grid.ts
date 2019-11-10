@@ -19,8 +19,8 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
   const { gridHash, gridOffset } = _pointsGridHash(dataArray, size);
   const layerData = _getGridLayerDataFromGridHash(gridHash, gridOffset, option);
   return {
-    yOffset: gridOffset.yOffset / 1.8,
-    xOffset: gridOffset.xOffset / 1.8,
+    yOffset: gridOffset.yOffset / 1.6,
+    xOffset: gridOffset.xOffset / 1.6,
     radius: gridOffset.xOffset,
     dataArray: layerData,
   };

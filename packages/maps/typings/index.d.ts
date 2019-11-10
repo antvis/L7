@@ -1,4 +1,5 @@
 /// <reference path="../../../node_modules/@types/amap-js-api/index.d.ts" />
+/// <reference path="../../../node_modules/eventemitter3/index.d.ts" />
 
 import { IControl } from 'mapbox-gl';
 
@@ -28,4 +29,23 @@ interface IMapboxInstance {
     width: number;
     height: number;
   };
+}
+interface IEventEmitter<EventTypes extends string | symbol = string | symbol> {
+  emit(event: EventTypes, ...args: any[]): boolean;
+  /**
+   * Add a listener for a given event.
+   */
+  on(event: EventTypes, handle: (...args: any[]) => void, context?: any): this;
+
+  off(
+    event: EventTypes,
+    handle: (...args: any[]) => void,
+    context?: any,
+    once?: boolean,
+  ): this;
+
+  /**
+   * Remove all listeners, or those of the specified event.
+   */
+  removeAllListeners(event?: EventTypes): this;
 }

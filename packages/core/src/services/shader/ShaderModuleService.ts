@@ -22,6 +22,7 @@ export default class ShaderModuleService implements IShaderModuleService {
   private rawContentCache: { [key: string]: IModuleParams } = {};
 
   public registerBuiltinModules() {
+    this.destroy();
     this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
     this.registerModule('projection', { vs: projection, fs: '' });
@@ -50,7 +51,10 @@ export default class ShaderModuleService implements IShaderModuleService {
       vs: extractedVS,
     };
   }
-
+  public destroy() {
+    this.moduleCache = {};
+    this.rawContentCache = {};
+  }
   public getModule(moduleName: string): IModuleParams {
     if (this.moduleCache[moduleName]) {
       return this.moduleCache[moduleName];

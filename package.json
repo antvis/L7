@@ -1,6 +1,11 @@
 {
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antvis/L7"
+  },
   "devDependencies": {
+    "@antv/gatsby-theme-antv": "^0.9.7",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -33,6 +38,7 @@
     "babel-plugin-css-modules-transform": "^1.6.2",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-postcss": "^0.3.0",
+    "babel-preset-gatsby": "^0.2.20",
     "clean-webpack-plugin": "^0.1.19",
     "commitizen": "^4.0.3",
     "copy-webpack-plugin": "^4.5.2",
@@ -43,6 +49,8 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
+    "gatsby": "^2.17.7",
+    "gh-pages": "^2.1.1",
     "gl": "^4.4.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.9",
@@ -59,6 +67,7 @@
     "react": "^16.8.6",
     "react-docgen-typescript-loader": "^3.1.0",
     "react-dom": "^16.8.6",
+    "react-i18next": "^11.0.1",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.1.0",
     "style-loader": "^1.0.0",
@@ -81,6 +90,11 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
+    "start": "export NODE_ENV=site && npm run site:develop",
+    "site:develop": "gatsby develop --open -H 0.0.0.0",
+    "site:build": "npm run site:clean && export NODE_ENV=site &&  gatsby build --prefix-paths",
+    "site:clean": "gatsby clean",
+    "site:deploy": "npm run site:build && gh-pages -d public",
     "prebuild": "run-p tsc lint",
     "build": "lerna exec --parallel 'BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
     "postbuild": "yarn build:declarations",

@@ -4,6 +4,7 @@ import {
   ILayerPlugin,
   ILogService,
   IScale,
+  IScaleOptions,
   IStyleAttribute,
   IStyleScale,
   lazyInject,
@@ -47,14 +48,18 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     [field: string]: IStyleScale;
   } = {};
 
+  private scaleOptions: IScaleOptions = {}
+
   public apply(layer: ILayer) {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
+      this.scaleOptions = layer.getScaleOptions();
       const attributes = layer.styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
       this.caculateScalesForAttributes(attributes || [], dataArray);
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
+      this.scaleOptions = layer.getScaleOptions();
       const attributes = layer.styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
         const { dataArray } = layer.getSource().data;
@@ -154,15 +159,13 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private createScale(field: string, data?: IParseDataItem[]): IStyleScale {
     // 首先查找全局默认配置例如 color
-    const scaleOption: IScale | undefined = this.configService.getConfig()?.scales?.[field];
-
+    const scaleOption: IScale | undefined = this.scaleOptions[field];
     const styleScale: IStyleScale = {
         field,
         scale: undefined,
         type: StyleScaleType.VARIABLE,
         option: scaleOption,
       };
-
     if (!data || !data.length) {
 
       if (scaleOption && scaleOption.type) {
@@ -214,6 +217,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       cfg.domain = extent(values);
     } else if (type === ScaleTypes.CAT) {
       cfg.domain = uniq(values);
+    } else if(type === ScaleTypes.QUANTILE) {
+       cfg.domain = values
     }
     return cfg;
   }

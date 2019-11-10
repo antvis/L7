@@ -26,7 +26,7 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
         },
       }),
     );
@@ -124,29 +124,6 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           return [vertex[4]];
-        },
-      },
-    });
-
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Distance',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [vertex[3]];
         },
       },
     });

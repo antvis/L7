@@ -23,6 +23,7 @@ export default class InteractionService extends EventEmitter
 
   public init() {
     // 注册事件在地图底图上
+    this.clear();
     this.addEventListenerOnMap();
   }
 
@@ -68,4 +69,11 @@ export default class InteractionService extends EventEmitter
   private onHover = ({ x, y }: MouseEvent) => {
     this.emit(InteractionEvent.Hover, { x, y });
   };
+  private clear() {
+    if (this.hammertime) {
+      this.hammertime.destroy();
+    }
+    this.removeEventListenerOnMap();
+    this.off(InteractionEvent.Hover);
+  }
 }

@@ -1,0 +1,20 @@
+{
+  "title": {
+    "zh": "线图层",
+    "en": "line"
+  },
+  "demos": [
+    {
+      "filename": "path.js",
+      "title": "路径"
+    },
+    {
+      "filename": "line.js",
+      "title": "等高线"
+    },
+    {
+      "filename": "line2.js",
+      "title": "等值线"
+    }
+  ]
+}

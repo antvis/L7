@@ -97,7 +97,7 @@ export default class PixelPickingPass<InitializationOptions = {}> implements IPa
         depth: 1,
       });
 
-      this.logger.info(`picking fbo cleared ${width} ${height}`);
+      // this.logger.info(`picking fbo cleared ${width} ${height}`);
 
       /**
        * picking pass 不需要 multipass，原因如下：
