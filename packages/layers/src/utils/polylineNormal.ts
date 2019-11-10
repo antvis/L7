@@ -48,9 +48,10 @@ function addNext(
 }
 
 function lineSegmentDistance(end: vec2, start: vec2) {
-  const dx = start[0] - end[0];
-  const dy = start[1] - end[1];
-  // const dz = start[2] - end[2];
+  const a1 = aProjectFlat([start[0], start[1]]);
+  const b1 = aProjectFlat([end[0], end[1]]);
+  const dx = a1[0] - b1[0];
+  const dy = a1[1] - b1[1];
   return Math.sqrt(dx * dx + dy * dy);
 }
 
@@ -212,12 +213,14 @@ export default function(
   }
   const pickData = [];
   for (let i = 0; i < miters.length; i++) {
+    const totalDistance = attrDistance[attrDistance.length - 1];
     pickData.push(
       attrPos[i * 3],
       attrPos[i * 3 + 1],
       attrPos[i * 3 + 1],
       attrDistance[i],
       miters[i],
+      totalDistance,
     );
   }
   return {

@@ -16,9 +16,11 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
+    this.layers.push(layer);
     this.initPlugin(layer);
     layer.init();
-    this.layers.push(layer);
+    // 添加完成需要触发重绘
+    // this.renderLayers();
   }
 
   public initLayers() {
@@ -31,16 +33,42 @@ export default class LayerService implements ILayerService {
     });
   }
 
+  public getLayers(): ILayer[] {
+    return this.layers;
+  }
+
+  public getLayer(id: string): ILayer | undefined {
+    return this.layers.find((layer) => layer.id === id);
+  }
+
+  public remove(layer: ILayer): void {
+    const layerIndex = this.layers.indexOf(layer);
+    if (layerIndex > -1) {
+      this.layers.splice(layerIndex, 1);
+    }
+    layer.destroy();
+    this.renderLayers();
+  }
+
   public renderLayers() {
     // TODO：脏检查，只渲染发生改变的 Layer
+    //
+    this.clear();
     this.layers
-      // .filter((layer) => layer.isDirty())
+      .filter((layer) => layer.isVisible())
       .forEach((layer) => {
         // trigger hooks
         layer.hooks.beforeRender.call();
         layer.render();
         layer.hooks.afterRender.call();
       });
+  }
+
+  public updateRenderOrder() {
+    this.layers.sort((pre: ILayer, next: ILayer) => {
+      return pre.zIndex - next.zIndex;
+    });
+    this.renderLayers();
   }
 
   public destroy() {
@@ -51,5 +79,12 @@ export default class LayerService implements ILayerService {
     for (const plugin of layer.plugins) {
       plugin.apply(layer);
     }
+  }
+  private clear() {
+    this.renderService.clear({
+      color: [0, 0, 0, 0],
+      depth: 1,
+      framebuffer: null,
+    });
   }
 }

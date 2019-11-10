@@ -4,6 +4,8 @@ import HeatMapGridLayer from './heatmap/grid';
 import HeatMapLayer from './heatmap/heatmap';
 import ArcLineLayer from './line/arc';
 import Arc2DLineLayer from './line/arc2d';
+import Arc3DLineLayer from './line/arc3d';
+import DashLineLayer from './line/dash';
 import LineLayer from './line/index';
 import Point3dLayer from './point/extrude';
 import PointLayer from './point/fill';
@@ -79,11 +81,13 @@ export {
   Point3dLayer,
   PointImageLayer,
   LineLayer,
+  DashLineLayer,
   Polygon3DLayer,
   ImageLayer,
   HeatMapGridLayer,
   ArcLineLayer,
   Arc2DLineLayer,
+  Arc3DLineLayer,
   RasterLayer,
   HeatMapLayer,
   TextLayer,
