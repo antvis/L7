@@ -20,4 +20,5 @@ export interface IShaderModuleService {
    * 注册 L7 内置 shader module
    */
   registerBuiltinModules(): void;
+  destroy(): void;
 }

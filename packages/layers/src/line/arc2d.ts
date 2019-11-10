@@ -6,8 +6,11 @@ import line_arc_frag from './shaders/line_arc_frag.glsl';
 interface IArcLayerStyleOptions {
   opacity: number;
   segmentNumber: number;
+  blur: number;
 }
-export default class Arc2DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
+export default class ArcCircleLineLayer extends BaseLayer<
+  IArcLayerStyleOptions
+> {
   public name: string = 'LineLayer';
 
   protected getConfigSchema() {
@@ -23,12 +26,13 @@ export default class Arc2DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity, blur = 0.99 } = this.getStyleOptions();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1,
+          u_opacity: opacity || 1,
           segmentNumber: 30,
+          u_blur: blur,
         },
       }),
     );

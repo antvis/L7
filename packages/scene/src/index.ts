@@ -1,3 +1,4 @@
+import { Logo } from '@l7/component';
 import {
   Bounds,
   container,
@@ -6,6 +7,7 @@ import {
   IIconService,
   IImage,
   ILayer,
+  ILayerService,
   ILngLat,
   IMapConfig,
   IMapService,
@@ -64,16 +66,16 @@ let mapType: MapType;
  * scene.render();
  */
 class Scene {
-  public map: AMap.Map | Map;
+  // public map: AMap.Map | Map;
   private sceneService: ISceneService;
   private mapService: IMapService;
   private controlService: IControlService;
+  private layerService: ILayerService;
 
   private iconService: IIconService;
 
   public constructor(config: IMapConfig & IRenderConfig) {
     const { type = MapType.amap } = config;
-
     // 根据用户传入参数绑定地图服务
     let mapServiceImpl: new (...args: any[]) => IMapService;
     if (type === MapType.mapbox) {
@@ -104,8 +106,11 @@ class Scene {
     this.mapService = container.get<IMapService>(TYPES.IMapService);
     this.iconService = container.get<IIconService>(TYPES.IIconService);
     this.controlService = container.get<IControlService>(TYPES.IControlService);
-    this.map = this.mapService.map; // 暴露原生map方法
+    this.layerService = container.get<ILayerService>(TYPES.ILayerService);
     mapType = this.mapService.getType();
+    // 初始化 scene
+
+    this.init();
   }
 
   public getMapService(): IMapService {
@@ -113,8 +118,24 @@ class Scene {
     //
   }
 
+  public get map() {
+    return this.mapService.map;
+  }
+
   public addLayer(layer: ILayer): void {
     this.sceneService.addLayer(layer);
+  }
+
+  public getLayers(): ILayer[] {
+    return this.layerService.getLayers();
+  }
+
+  public getLayer(id: string): ILayer | undefined {
+    return this.layerService.getLayer(id);
+  }
+
+  public removeLayer(layer: ILayer): void {
+    this.layerService.remove(layer);
   }
 
   public render(): void {
@@ -136,7 +157,13 @@ class Scene {
 
   // map control method
   public addControl(ctr: IControl) {
-    this.controlService.addControl(ctr, this.mapService);
+    if (this.mapService.map) {
+      this.controlService.addControl(ctr, this.mapService);
+    } else {
+      this.mapService.once('mapload', () => {
+        this.controlService.addControl(ctr, this.mapService);
+      });
+    }
   }
 
   public removeControl(ctr: IControl) {
@@ -236,6 +263,15 @@ class Scene {
   public destroy() {
     this.sceneService.destroy();
     // TODO: 清理其他 Service 例如 IconService
+  }
+
+  private init(): void {
+    this.initControl();
+    this.render();
+  }
+
+  private initControl(): void {
+    this.addControl(new Logo());
   }
 
   // 资源管理

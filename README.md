@@ -23,6 +23,13 @@ yarn storybook
 yarn commit
 ```
 
+## view doc example
+
+```bash
+  npm  start
+```
+visit http://localhost:8000/
+
 ## Add Package
 
 创建一个新的 package：

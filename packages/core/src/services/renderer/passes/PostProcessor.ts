@@ -52,7 +52,6 @@ export default class PostProcessor implements IPostProcessor {
   public async render(layer: ILayer) {
     for (let i = 0; i < this.passes.length; i++) {
       const pass = this.passes[i];
-
       // last pass should render to screen
       pass.setRenderToScreen(this.isLastEnabledPass(i));
       await pass.render(layer);
