@@ -1,6 +1,7 @@
 export const MapTheme: {
   [key: string]: any;
 } = {
-  light: 'mapbox://styles/mapbox/light-v10',
-  dark: 'mapbox://styles/mapbox/dark-v10',
+  light: 'mapbox://styles/zcxduo/ck233y3ru1di71cnulo9jdg2v',
+  dark: 'mapbox://styles/zcxduo/ck241p6413s0b1cpayzldv7x7',
+  normal: 'mapbox://styles/zcxduo/ck2mzfaem0vdw1covi2yy793s',
 };

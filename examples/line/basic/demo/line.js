@@ -3,10 +3,10 @@ import { LineLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,
-  type: 'mapbox',
+  type: 'amap',
   style: 'light',
   center: [102.602992, 23.107329],
-  zoom: 13,
+  zoom: 14,
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
@@ -16,22 +16,25 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
       new LineLayer({
       })
         .source(data)
-        .size(1)
+        .size('ELEV', (h) => {
+          return h % 50 === 0 ? 1.0 : 0.5;
+        })
         .shape('line')
+        .scale('ELEV', {
+          type: 'quantize'
+        })
         .color(
           'ELEV',
-          [
-            '#E8FCFF',
-            '#CFF6FF',
-            '#A1E9ff',
-            '#65CEF7',
-            '#3CB1F0',
-            '#2894E0',
-            '#1772c2',
-            '#105CB3',
-            '#0D408C',
-            '#002466',
-          ].reverse(),
+          [ '#E4682F',
+            '#FF8752',
+            '#FFA783',
+            '#FFBEA8',
+            '#FFDCD6',
+            '#EEF3FF',
+            '#C8D7F5',
+            '#A5C1FC',
+            '#7FA7F9',
+            '#5F8AE5' ].reverse()
         )
     scene.addLayer(layer);
     console.log(layer);

@@ -76,13 +76,6 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
         // 渲染前根据 viewport 调整 FBO size
         const { width, height } = this.rendererService.getViewportSize();
         layer.multiPassRenderer.resize(width, height);
-      } else {
-        // 未开启 MultiPassRenderer，由于没有 ClearPass，渲染前需要手动 clear
-        this.rendererService.clear({
-          color: [0, 0, 0, 0],
-          depth: 1,
-          framebuffer: null,
-        });
       }
     });
   }
@@ -99,7 +92,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     const { enablePicking, enableTAA } = layer.getStyleOptions();
 
     // clear first
-    multiPassRenderer.add(new ClearPass());
+    // multiPassRenderer.add(new ClearPass());
 
     // picking pass if enabled
     if (enablePicking) {

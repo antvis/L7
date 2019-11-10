@@ -24,7 +24,6 @@ export default class ControlService implements IControlService {
     ctr.addTo(mapService); // scene对象
     this.controls.push(ctr);
   }
-
   public removeControl(ctr: IControl): this {
     const index = this.controls.indexOf(ctr);
     if (index > -1) {

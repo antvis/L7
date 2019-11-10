@@ -6,8 +6,13 @@
   "demos": [
     {
       "filename": "point.js",
-      "title": "气泡图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*KCyXTJrePiYAAAAAAAAAAABkARQnAQ"
+      "title": "气泡图"
+   
+    },
+    {
+      "filename": "world.js",
+      "title": "气泡图 - 电厂装机量"
+    
     }
   ]
 }

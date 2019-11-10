@@ -2,10 +2,11 @@ import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { LineArcTriangulation } from '../core/triangulation';
 import line_arc_frag from './shaders/line_arc_frag.glsl';
-import line_arc_vert from './shaders/line_arc_vert.glsl';
+import line_arc2d_vert from './shaders/line_bezier_vert.glsl';
 interface IArcLayerStyleOptions {
   opacity: number;
   segmentNumber: number;
+  blur: number;
 }
 export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
   public name: string = 'LineLayer';
@@ -23,12 +24,13 @@ export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity, blur = 0.99 } = this.getStyleOptions();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
           u_opacity: opacity || 1,
           segmentNumber: 30,
+          u_blur: blur,
         },
       }),
     );
@@ -39,10 +41,11 @@ export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
     this.registerBuiltinAttributes(this);
     this.models = [
       this.buildLayerModel({
-        moduleName: 'arcline',
-        vertexShader: line_arc_vert,
+        moduleName: 'arc2dline',
+        vertexShader: line_arc2d_vert,
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
+        depth: { enable: false },
         blend: {
           enable: true,
           func: {

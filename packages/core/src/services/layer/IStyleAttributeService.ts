@@ -46,6 +46,9 @@ export interface IScaleOption {
   format?: () => any;
   domain?: any[];
 }
+export interface IScaleOptions {
+  [key: string]: IScale;
+}
 export interface IStyleScale {
   scale: any;
   field: string;
