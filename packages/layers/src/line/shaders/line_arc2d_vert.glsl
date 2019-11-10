@@ -6,6 +6,7 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform float segmentNumber;
 varying vec4 v_color;
+varying vec2 v_normal;
 
 #pragma include "projection"
 
@@ -39,7 +40,14 @@ vec2 getExtrusionOffset(vec2 line_clipspace, float offset_direction) {
   // rotate by 90 degrees
    dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
   vec2 offset = dir_screenspace * offset_direction * a_Size / 2.0;
-  return offset;
+  return offset * vec2(1.0, -1.0);
+}
+vec2 getNormal(vec2 line_clipspace, float offset_direction) {
+  // normalized direction of the line
+  vec2 dir_screenspace = normalize(line_clipspace);
+  // rotate by 90 degrees
+   dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
+   return reverse_offset_normal(vec3(dir_screenspace,1.0)).xy * sign(offset_direction);
 }
 float getAngularDist (vec2 source, vec2 target) {
   vec2 delta = source - target;
@@ -77,12 +85,10 @@ void main() {
     float segmentRatio = getSegmentRatio(segmentIndex);
     float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
     float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
-
     vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0));
     vec4 next = project_position(vec4(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0, 1.0));
-
-    vec2 offset = getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y);
-
+    v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+    vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
     //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
      gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
 }

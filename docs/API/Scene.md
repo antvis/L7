@@ -11,7 +11,7 @@ order: 1
 ```javascript
 import {Scene} from '@l7/scene';
 const scene =new L7.Scene({
-    id:'map'
+    id:'map',
     mapStyle:'dark',
     center:[ 110.770672, 34.159869 ],
     pitch:45

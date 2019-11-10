@@ -161,7 +161,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.map.addMarkerContainer();
       this.inited = true;
 
-      // this.layerService.initLayers();
+      this.layerService.renderLayers();
       this.emit('loaded');
     }
 

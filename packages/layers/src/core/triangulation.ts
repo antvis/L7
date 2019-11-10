@@ -61,10 +61,10 @@ export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const line = getNormals(coordinates as number[][], false, 0);
   return {
-    vertices: line.attrPos, // [ x,y,z, distance, miter ]
+    vertices: line.attrPos, // [ x,y,z, distance, miter,total ]
     indices: line.attrIndex,
     normals: line.normals,
-    size: 5,
+    size: 6,
   };
 }
 
@@ -87,7 +87,7 @@ export function HeatmapGridTriangulation(feature: IEncodeFeature) {
     | ShapeType2D
     | ShapeType3D);
   return {
-    vertices: positions, // [ x, y, z ]
+    vertices: positions, // [ x, y, z ] 多边形顶点
     indices: index,
     normals: Array.from(computeVertexNormals(positions, index)),
     size: 3,

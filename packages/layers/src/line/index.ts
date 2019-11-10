@@ -127,28 +127,5 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       },
     });
-
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Distance',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [vertex[3]];
-        },
-      },
-    });
   }
 }

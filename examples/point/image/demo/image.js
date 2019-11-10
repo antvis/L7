@@ -34,7 +34,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
         }
       })
       .shape('name', ['00', '01','02'])
-      .size(60);
+      .size(20);
         scene.addLayer(imageLayer);
   });
 

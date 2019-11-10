@@ -223,6 +223,15 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       depth: {
         enable: false,
       },
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: gl.SRC_ALPHA,
+          srcAlpha: 1,
+          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+          dstAlpha: 1,
+        },
+      },
       count: 6,
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
@@ -254,7 +263,6 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   }
   private draw3DHeatMap() {
     const { opacity } = this.getStyleOptions();
-    const mapbounds = this.map.getBounds();
     const invert = mat4.invert(
       mat4.create(),
       // @ts-ignore
@@ -265,7 +273,6 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
         u_opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
         u_texture: this.heatmapFramerBuffer,
-        u_extent: [-179.9476, -60.0959, 179.9778, 79.5651],
         u_InverseViewProjectionMatrix: [...invert],
       },
     });
@@ -273,7 +280,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   private build3dHeatMap() {
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
-    const triangulation = heatMap3DTriangulation(width / 2.0, height / 2.0);
+    const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
     this.shaderModuleService.registerModule('heatmap3dColor', {
       vs: heatmap3DVert,
       fs: heatmap3DFrag,
@@ -312,7 +319,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
         ...uniforms,
       },
       depth: {
-        enable: false,
+        enable: true,
       },
       blend: {
         enable: true,
