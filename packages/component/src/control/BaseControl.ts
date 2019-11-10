@@ -1,6 +1,14 @@
-import { IControlService, IMapService, lazyInject, TYPES } from '@l7/core';
+import {
+  IControlService,
+  ILayerService,
+  IMapService,
+  IRendererService,
+  lazyInject,
+  TYPES,
+} from '@l7/core';
 import { DOM } from '@l7/utils';
 import { EventEmitter } from 'eventemitter3';
+import { inject } from 'inversify';
 
 export enum PositionType {
   'TOPRIGHT' = 'topright',
@@ -20,9 +28,15 @@ export interface IControlOption {
 export default class Control extends EventEmitter {
   public controlOption: IControlOption;
   protected mapsService: IMapService;
+  protected container: HTMLElement;
+
+  @lazyInject(TYPES.IRendererService)
+  protected readonly renderService: IRendererService;
+  @lazyInject(TYPES.ILayerService)
+  protected readonly layerService: ILayerService;
   @lazyInject(TYPES.IControlService)
   private readonly controlService: IControlService;
-  private container: HTMLElement;
+
   private isShow: boolean;
 
   constructor(cfg?: Partial<IControlOption>) {

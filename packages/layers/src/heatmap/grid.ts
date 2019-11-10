@@ -27,7 +27,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 1.0,
+          u_opacity: opacity || 1.0,
           u_coverage: coverage || 1.0,
           u_radius: [
             this.getSource().data.xOffset,
@@ -43,19 +43,11 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     this.registerBuiltinAttributes(this);
     this.models = [
       this.buildLayerModel({
-        moduleName: 'pointExtrude',
+        moduleName: 'gridheatmap',
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
+        depth: { enable: false },
       }),
     ];
   }

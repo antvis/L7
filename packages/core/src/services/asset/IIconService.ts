@@ -5,11 +5,11 @@ export type Listener = (...args: any[]) => void;
 export interface IIconValue {
   x: number;
   y: number;
-  image: HTMLImageElement;
+  image?: HTMLImageElement;
 }
 export interface IIcon {
   id: string;
-  image: HTMLImageElement;
+  image?: HTMLImageElement;
   height: number;
   width: number;
 }

@@ -72,7 +72,6 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public constructor() {
     super();
-
     // @see https://github.com/webpack/tapable#usage
     this.hooks = {
       /**
@@ -86,6 +85,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public init(globalConfig: IGlobalConfig) {
+    this.initClear();
     this.configService.setAndCheckConfig(globalConfig);
 
     // 初始化资源管理 图片
@@ -148,23 +148,25 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public addLayer(layer: ILayer) {
     this.logger.info(`add layer ${layer.name}`);
+
     this.layerService.add(layer);
   }
 
   public async render() {
+    // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 首次渲染需要等待底图、相机初始化
       await this.hooks.init.promise(this.configService.getConfig());
       // 初始化marker 容器
       this.map.addMarkerContainer();
-      this.emit('loaded');
       this.inited = true;
 
-      this.layerService.initLayers();
+      this.layerService.renderLayers();
+      this.emit('loaded');
     }
 
     this.layerService.renderLayers();
-    this.logger.info('render');
+    // this.logger.info('render');
   }
 
   public destroy() {
@@ -205,4 +207,14 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.cameraService.update(viewport);
     this.render();
   };
+  private initClear() {
+    this.inited = false;
+    this.layerService.destroy();
+    this.configService.reset();
+    this.interactionService.destroy();
+    this.controlService.destroy();
+    this.removeAllListeners();
+    this.map.destroy();
+    window.removeEventListener('resize', this.handleWindowResized, false);
+  }
 }
