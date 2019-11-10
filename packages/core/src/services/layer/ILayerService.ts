@@ -6,6 +6,7 @@ import { ISource, ISourceCFG } from '../source/ISourceService';
 import {
   IEncodeFeature,
   IScale,
+  IScaleOptions,
   IStyleAttributeService,
   StyleAttrField,
   StyleAttributeOption,
@@ -32,8 +33,10 @@ export interface IPickedFeature {
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   name: string; // 代表 Layer 的类型
-  // visible: boolean;
-  // zIndex: number;
+  visible: boolean;
+  zIndex: number;
+  minZoom: number;
+  maxZoom: number;
   configService: IGlobalConfigService;
   plugins: ILayerPlugin[];
   hooks: {
@@ -62,8 +65,12 @@ export interface ILayer {
   // filter(field: string, value: StyleAttributeOption): ILayer;
   // active(option: ActiveOption): ILayer;
   style(options: unknown): ILayer;
-  // hide(): ILayer;
-  // show(): ILayer;
+  hide(): ILayer;
+  show(): ILayer;
+  setIndex(index: number): ILayer;
+  isVisible(): boolean;
+  setMaxZoom(min: number): ILayer;
+  setMinZoom(max: number): ILayer;
   // animate(field: string, option: any): ILayer;
   render(): ILayer;
   destroy(): void;
@@ -74,6 +81,13 @@ export interface ILayer {
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
   getStyleOptions(): Partial<ILayerInitializationOptions>;
+  getScaleOptions(): IScaleOptions;
+  /**
+   * 事件
+   */
+  on(type: string, hander: (...args: any[]) => void): void;
+  off(type: string, hander: (...args: any[]) => void): void;
+  once(type: string, hander: (...args: any[]) => void): void;
   /**
    * JSON Schema 用于校验配置项
    */
@@ -96,6 +110,10 @@ export interface ILayerPlugin {
  * Layer 初始化参数
  */
 export interface ILayerInitializationOptions {
+  minZoom: number;
+  maxZoom: number;
+  visible: boolean;
+  zIndex: number;
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
@@ -129,6 +147,10 @@ export interface ILayerInitializationOptions {
 export interface ILayerService {
   add(layer: ILayer): void;
   initLayers(): void;
+  getLayers(): ILayer[];
+  getLayer(name: string): ILayer | undefined;
+  remove(layer: ILayer): void;
+  updateRenderOrder(): void;
   renderLayers(): void;
   destroy(): void;
 }

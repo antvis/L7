@@ -9,11 +9,14 @@ import {
   ILayer,
   ILayerInitializationOptions,
   ILayerPlugin,
+  ILayerService,
   IMapService,
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
   IRendererService,
+  IScale,
+  IScaleOptions,
   IShaderModuleService,
   ISourceCFG,
   IStyleAttributeService,
@@ -26,7 +29,8 @@ import {
   TYPES,
 } from '@l7/core';
 import Source from '@l7/source';
-import { isFunction } from 'lodash';
+import { EventEmitter } from 'eventemitter3';
+import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
@@ -51,7 +55,11 @@ let layerIdCounter = 0;
 const defaultLayerInitializationOptions: Partial<
   ILayerInitializationOptions
 > = {
-  enableMultiPassRenderer: true,
+  minZoom: 0,
+  maxZoom: 20,
+  visible: true,
+  zIndex: 0,
+  enableMultiPassRenderer: false,
   enablePicking: false,
   enableHighlight: false,
   highlightColor: 'red',
@@ -59,9 +67,14 @@ const defaultLayerInitializationOptions: Partial<
   jitterScale: 1,
 };
 
-export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
+export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
+  implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string;
+  public visible: boolean = true;
+  public zIndex: number = 0;
+  public minZoom: number;
+  public maxZoom: number;
 
   // 生命周期钩子
   public hooks = {
@@ -114,6 +127,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @lazyInject(TYPES.IMapService)
   protected readonly map: IMapService;
 
+  @lazyInject(TYPES.ILayerService)
+  protected readonly layerService: ILayerService;
+
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
@@ -124,6 +140,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   private styleOptions: Partial<
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
+  private scaleOptions: IScaleOptions = {};
+
+  private enodeOptions: {
+    [type: string]: {
+      field: string;
+    };
+  };
 
   @lazyInject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
@@ -131,10 +154,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   constructor(
     styleOptions: Partial<ILayerInitializationOptions & ChildLayerStyleOptions>,
   ) {
+    super();
     this.styleOptions = {
       ...defaultLayerInitializationOptions,
       ...styleOptions,
     };
+    const { minZoom, maxZoom, zIndex, visible } = this
+      .styleOptions as ILayerInitializationOptions;
+    this.visible = visible;
+    this.zIndex = zIndex;
+    this.minZoom = minZoom;
+    this.maxZoom = maxZoom;
   }
 
   public addPlugin(plugin: ILayerPlugin) {
@@ -255,12 +285,56 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     };
     return this;
   }
+  public scale(field: string | IScaleOptions, cfg: IScale) {
+    if (isObject(field)) {
+      this.scaleOptions = {
+        ...this.scaleOptions,
+        ...field,
+      };
+    } else {
+      this.scaleOptions[field] = cfg;
+    }
+    return this;
+  }
   public render(): ILayer {
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       this.multiPassRenderer.render();
     } else {
       this.renderModels();
     }
+    return this;
+  }
+
+  public show(): ILayer {
+    this.visible = true;
+    this.layerService.renderLayers();
+    return this;
+  }
+
+  public hide(): ILayer {
+    this.visible = false;
+    this.layerService.renderLayers();
+    return this;
+  }
+
+  public setIndex(index: number): ILayer {
+    this.zIndex = index;
+    this.layerService.updateRenderOrder();
+    return this;
+  }
+
+  public isVisible(): boolean {
+    const zoom = this.map.getZoom();
+    return this.visible && zoom >= this.minZoom && zoom <= this.maxZoom;
+  }
+
+  public setMinZoom(min: number): ILayer {
+    this.minZoom = min;
+    return this;
+  }
+
+  public setMaxZoom(max: number): ILayer {
+    this.maxZoom = max;
     return this;
   }
   /**
@@ -303,6 +377,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   public getStyleOptions() {
     return this.styleOptions;
+  }
+  public getScaleOptions() {
+    return this.scaleOptions;
   }
 
   public setEncodedData(encodedData: IEncodeFeature[]) {

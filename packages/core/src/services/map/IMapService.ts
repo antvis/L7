@@ -22,6 +22,7 @@ export interface IMapService {
 
   on(type: string, hander: (...args: any[]) => void): void;
   off(type: string, hander: (...args: any[]) => void): void;
+  once(type: string, hander: (...args: any[]) => void): void;
   // get dom
   getContainer(): HTMLElement | null;
   getSize(): [number, number];
@@ -58,6 +59,8 @@ export enum MapType {
   amap = 'amap',
   mapbox = 'mapbox',
 }
+
+export const MapServiceEvent = ['mapload'];
 
 /**
  * 地图初始化配置项

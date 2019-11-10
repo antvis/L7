@@ -10,6 +10,7 @@ import {
   IMapService,
   IPoint,
   IViewport,
+  MapServiceEvent,
   MapType,
   TYPES,
 } from '@l7/core';
@@ -37,6 +38,9 @@ export default class MapboxService implements IMapService {
   public map: Map & IMapboxInstance;
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
+
+  @inject(TYPES.IEventEmitter)
+  private eventEmitter: IEventEmitter;
   private viewport: Viewport;
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
@@ -55,7 +59,12 @@ export default class MapboxService implements IMapService {
 
   //  map event
   public on(type: string, handle: (...args: any[]) => void): void {
-    this.map.on(EventMap[type] || type, handle);
+    if (MapServiceEvent.indexOf('mapload') !== -1) {
+      this.eventEmitter.on(type, handle);
+    } else {
+      // 统一事件名称
+      this.map.on(EventMap[type] || type, handle);
+    }
   }
   public off(type: string, handle: (...args: any[]) => void): void {
     this.map.off(EventMap[type] || type, handle);
@@ -183,6 +192,7 @@ export default class MapboxService implements IMapService {
       attributionControl,
       ...rest,
     });
+    this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
 
     // 不同于高德地图，需要手动触发首次渲染
@@ -197,11 +207,18 @@ export default class MapboxService implements IMapService {
   }
 
   public destroy() {
+    this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();
       document.head.removeChild(this.$link);
       this.$mapContainer = null;
     }
+  }
+  public emit(name: string, ...args: any[]) {
+    this.eventEmitter.emit(name, ...args);
+  }
+  public once(name: string, ...args: any[]) {
+    this.eventEmitter.once(name, ...args);
   }
 
   public getMapContainer() {
@@ -242,6 +259,7 @@ export default class MapboxService implements IMapService {
 
     this.cameraChangedCallback(this.viewport);
   };
+
   private removeLogoControl(): void {
     // @ts-ignore
     const controls = this.map._controls as IControl[];
