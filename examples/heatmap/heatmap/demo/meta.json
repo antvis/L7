@@ -5,7 +5,7 @@
   },
   "demos": [
     {
-      "filename": "grid.js",
+      "filename": "world3d.js",
       "title": "网格热力图"
     },
     {
