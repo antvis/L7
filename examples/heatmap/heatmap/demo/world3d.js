@@ -17,7 +17,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64
       })
       .source(data)
       .size('capacity', [0, 1])
-      .shape('heatmap')
+      .shape('heatmap3D')
        // weight映射通道
       .style({
         intensity: 10,
