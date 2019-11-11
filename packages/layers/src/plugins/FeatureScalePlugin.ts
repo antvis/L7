@@ -94,14 +94,21 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
           attributeScale.type = StyleScaleType.VARIABLE;
           scales.forEach((scale) => {
-            // 如果设置了回调干啥这不需要设置让range
-            if (!attributeScale.callback && attributeScale.values.length > 0) {
-              scale.scale.range(attributeScale.values);
+            // 如果设置了回调, 这不需要设置让range
+            if (!attributeScale.callback) {
+              if(attributeScale.values) {
+                scale.scale.range(attributeScale.values);
+              } else if(scale.option?.type==='cat') {
+
+                // 如果没有设置初值且 类型为cat，range ==domain;
+                scale.scale.range(scale.option.domain);
+              }
+
             }
           });
         } else {
           // 设置attribute 常量值 常量直接在value取值
-
+          attributeScale.type = StyleScaleType.CONSTANT;
           attributeScale.values = scales.map((scale, index) => {
             return scale.scale(attributeScale.names[index]);
           });
@@ -167,6 +174,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       option: scaleOption,
     };
     if (!data || !data.length) {
+
       if (scaleOption && scaleOption.type) {
         styleScale.scale = this.createDefaultScale(scaleOption);
       } else {

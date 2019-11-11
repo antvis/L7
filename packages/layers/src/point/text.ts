@@ -164,14 +164,14 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
     });
   }
 
-  private iniTextFont() {
+  private initTextFont() {
     const { fontWeight = 'normal', fontFamily } = this.getStyleOptions();
     const data = this.getEncodedData();
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
-      let { text = '' } = item;
-      text = text.toString();
-      for (const char of text) {
+      let { shape = '' } = item;
+      shape = shape.toString();
+      for (const char of shape) {
         // 去重
         if (characterSet.indexOf(char) === -1) {
           characterSet.push(char);

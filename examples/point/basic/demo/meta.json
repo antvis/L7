@@ -13,6 +13,11 @@
       "filename": "world.js",
       "title": "气泡图 - 电厂装机量"
     
+    },
+    {
+      "filename": "text.js",
+      "title": "文本"
+    
     }
   ]
 }
