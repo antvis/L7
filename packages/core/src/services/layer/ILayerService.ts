@@ -61,6 +61,7 @@ export interface ILayer {
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   // filter(field: string, value: StyleAttributeOption): ILayer;
   // active(option: ActiveOption): ILayer;
