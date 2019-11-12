@@ -64,7 +64,6 @@ export default class Mapbox extends React.Component {
         .addTo(scene);
       scene.addControl(zoomControl);
       scene.addControl(scaleControl);
-      console.log(layer);
       // layer.fitBounds();
     });
   }

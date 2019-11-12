@@ -50,6 +50,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
     "gatsby": "^2.17.7",
+    "geotiff": "^1.0.0-beta.6",
     "gh-pages": "^2.1.1",
     "gl": "^4.4.0",
     "html-webpack-plugin": "^3.2.0",
@@ -62,7 +63,7 @@
     "npm-run-all": "^4.1.5",
     "postcss": "^7.0.18",
     "postcss-plugin": "^1.0.0",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "raw-loader": "^1.0.0",
     "react": "^16.8.6",
     "react-docgen-typescript-loader": "^3.1.0",
@@ -129,8 +130,5 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "dependencies": {
-    "geotiff": "^1.0.0-beta.6"
   }
 }

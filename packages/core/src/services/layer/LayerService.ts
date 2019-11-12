@@ -17,10 +17,6 @@ export default class LayerService implements ILayerService {
 
   public add(layer: ILayer) {
     this.layers.push(layer);
-    this.initPlugin(layer);
-    layer.init();
-    // 添加完成需要触发重绘
-    // this.renderLayers();
   }
 
   public initLayers() {
@@ -75,11 +71,7 @@ export default class LayerService implements ILayerService {
     this.layers.forEach((layer) => layer.destroy());
     this.layers = [];
   }
-  private initPlugin(layer: ILayer) {
-    for (const plugin of layer.plugins) {
-      plugin.apply(layer);
-    }
-  }
+
   private clear() {
     this.renderService.clear({
       color: [0, 0, 0, 0],
