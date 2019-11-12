@@ -108,7 +108,7 @@
     "commit": "git-cz",
     "version": "lerna version --conventional-commits",
     "prerelease": "yarn build",
-    "release": "lerna publish from-git",
+    "release": "lerna publish from-package",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
