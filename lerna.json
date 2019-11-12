@@ -10,7 +10,8 @@
       "verifyRegistry": false,
       "allowBranch": [
         "master",
-        "develop"
+        "develop",
+        "next"
       ],
       "message": "chore: publish"
     }
