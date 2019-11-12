@@ -4,7 +4,14 @@ import { polygonTriangulation } from '..';
 describe('PolygonTriangulation', () => {
   it('should do triangulation with a polygon correctly', () => {
     const mockFeature: IEncodeFeature = {
-      coordinates: [[[0, 0], [1, 0], [1, 1], [0, 1]]],
+      coordinates: [
+        [
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1],
+        ],
+      ],
       color: [1, 0, 0, 0],
     };
     const { indices, vertices, size } = polygonTriangulation(mockFeature);

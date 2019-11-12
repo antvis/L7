@@ -52,9 +52,7 @@ let layerIdCounter = 0;
 /**
  * Layer 基类默认样式属性
  */
-const defaultLayerInitializationOptions: Partial<
-  ILayerInitializationOptions
-> = {
+const defaultLayerInitializationOptions: Partial<ILayerInitializationOptions> = {
   minZoom: 0,
   maxZoom: 20,
   visible: true,
@@ -141,12 +139,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
   private scaleOptions: IScaleOptions = {};
-
-  private enodeOptions: {
-    [type: string]: {
-      field: string;
-    };
-  };
 
   @lazyInject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
@@ -343,7 +335,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public fitBounds(): void {
     const source = this.getSource();
     const extent = source.extent;
-    this.map.fitBounds([[extent[0], extent[1]], [extent[2], extent[3]]]);
+    this.map.fitBounds([
+      [extent[0], extent[1]],
+      [extent[2], extent[3]],
+    ]);
   }
 
   public destroy() {
