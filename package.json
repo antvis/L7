@@ -98,7 +98,7 @@
     "site:deploy": "npm run site:build && gh-pages -d public",
     "prebuild": "run-p tsc lint",
     "build": "lerna exec --parallel 'BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
-    "postbuild": "yarn build:declarations",
+    "todo:postbuild": "yarn build:declarations",
     "fix": "run-p -c 'lint:ts-* --fix'",
     "lint:css": "stylelint 'packages/**/*.ts{,x}'",
     "lint:ts-prod": "tslint --config tslint.prod.json 'packages/**/*.ts{,x}'",
