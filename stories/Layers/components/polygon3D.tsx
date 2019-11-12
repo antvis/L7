@@ -38,7 +38,9 @@ export default class Polygon3D extends React.Component {
       zoom: 3,
     });
     this.scene = scene;
-    const layer = new Polygon3DLayer({});
+    const layer = new Polygon3DLayer({
+      enableLighting: true,
+    });
     layer
       .source(await response.json())
       .size('name', [0, 10000, 50000, 30000, 100000])

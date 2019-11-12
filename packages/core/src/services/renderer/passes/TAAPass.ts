@@ -1,5 +1,4 @@
-import { injectable } from 'inversify';
-import { lazyInject } from '../../../index';
+import { inject, injectable } from 'inversify';
 import blendFS from '../../../shaders/post-processing/blend.glsl';
 import copyFS from '../../../shaders/post-processing/copy.glsl';
 import quadVS from '../../../shaders/post-processing/quad.glsl';
@@ -40,16 +39,16 @@ let accumulatingId = 1;
 @injectable()
 export default class TAAPass<InitializationOptions = {}>
   implements IPass<InitializationOptions> {
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
-  @lazyInject(TYPES.IShaderModuleService)
+  @inject(TYPES.IShaderModuleService)
   protected readonly shaderModule: IShaderModuleService;
 
-  @lazyInject(TYPES.ICameraService)
+  @inject(TYPES.ICameraService)
   protected readonly cameraService: ICameraService;
 
-  @lazyInject(TYPES.ILogService)
+  @inject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
   /**

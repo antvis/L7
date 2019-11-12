@@ -1,6 +1,7 @@
 import {
   Bounds,
   container,
+  createSceneContainer,
   IControl,
   IControlService,
   IIconService,
@@ -21,47 +22,20 @@ import {
 } from '@l7/core';
 import { AMapService, MapboxService } from '@l7/maps';
 import { ReglRendererService } from '@l7/renderer';
-import { interfaces } from 'inversify';
 import { Map } from 'mapbox-gl';
-
-// 绑定渲染引擎服务
-container
-  .bind<IRendererService>(TYPES.IRendererService)
-  .to(ReglRendererService)
-  .inSingletonScope();
-// // 绑定地图服务 AMap & Mapbox
-// container
-//   .bind<IMapService>(TYPES.IMapService)
-//   .to(AMapService)
-//   .whenTargetNamed(MapType.amap)
-//   .inSingletonScope();
-// container
-//   .bind<IMapService>(TYPES.IMapService)
-//   .to(MapboxService)
-//   .inSingletonScope();
-// // 地图服务工厂，根据 name 返回指定服务
-// container
-//   .bind<interfaces.Factory<IMapService>>(TYPES.IFactoryMapService)
-//   .toFactory<IMapService>((context) => {
-//     return (named: string) => {
-//       return context.container.getNamed<IMapService>(TYPES.IMapService, named);
-//     };
-//   });
-
-// 缓存当前地图类型，便于 DEMO 中切换底图时动态绑定
-let mapType: MapType;
 
 /**
  * 暴露 Scene API
  *
  * @example
- * import { Scene } from '@l7/scene';
- * import { PointLayer } from '@l7/layers';
+ * import { Scene } from 'l7/scene';
+ * import { PointLayer } from 'l7/layers';
  *
  * const scene = new Scene();
  * const pointLayer = new PointLayer();
  * scene.addLayer(pointLayer);
  * scene.render();
+ *
  */
 class Scene {
   public map: AMap.Map | Map;
@@ -74,6 +48,15 @@ class Scene {
   public constructor(config: IMapConfig & IRenderConfig) {
     const { type = MapType.amap } = config;
 
+    // 创建场景容器
+    const sceneContainer = createSceneContainer();
+
+    // 绑定渲染引擎服务
+    sceneContainer
+      .bind<IRendererService>(TYPES.IRendererService)
+      .to(ReglRendererService)
+      .inRequestScope();
+
     // 根据用户传入参数绑定地图服务
     let mapServiceImpl: new (...args: any[]) => IMapService;
     if (type === MapType.mapbox) {
@@ -83,29 +66,20 @@ class Scene {
     } else {
       throw new Error('不支持的地图服务');
     }
-
-    // DEMO 中切换底图实现时，需要重新绑定底图服务
-    // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#containerrebindserviceidentifier-serviceidentifier
-    if (!container.isBound(TYPES.IMapService)) {
-      container
-        .bind<IMapService>(TYPES.IMapService)
-        .to(mapServiceImpl)
-        .inSingletonScope();
-    } else if (type !== mapType) {
-      container
-        .rebind<IMapService>(TYPES.IMapService)
-        .to(mapServiceImpl)
-        .inSingletonScope();
-    }
+    sceneContainer
+      .bind<IMapService>(TYPES.IMapService)
+      .to(mapServiceImpl)
+      .inRequestScope();
 
     // 依赖注入
-    this.sceneService = container.get<ISceneService>(TYPES.ISceneService);
+    this.sceneService = sceneContainer.get<ISceneService>(TYPES.ISceneService);
     this.sceneService.init(config);
-    this.mapService = container.get<IMapService>(TYPES.IMapService);
-    this.iconService = container.get<IIconService>(TYPES.IIconService);
-    this.controlService = container.get<IControlService>(TYPES.IControlService);
+    this.mapService = sceneContainer.get<IMapService>(TYPES.IMapService);
+    this.iconService = sceneContainer.get<IIconService>(TYPES.IIconService);
+    this.controlService = sceneContainer.get<IControlService>(
+      TYPES.IControlService,
+    );
     this.map = this.mapService.map; // 暴露原生map方法
-    mapType = this.mapService.getType();
   }
 
   public getMapService(): IMapService {
@@ -147,7 +121,6 @@ class Scene {
   public addMarker(marker: IMarker) {
     marker.addTo(this);
   }
-  // map envent;
 
   public on(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1

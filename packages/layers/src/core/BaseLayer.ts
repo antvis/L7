@@ -16,14 +16,15 @@ import {
   ISourceCFG,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
-  lazyInject,
-  lazyMultiInject,
+  // inject,
+  // lazyMultiInject,
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
   TYPES,
 } from '@l7/core';
 import Source from '@l7/source';
+import { inject, multiInject } from 'inversify';
 import { isFunction } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
@@ -55,6 +56,7 @@ const defaultLayerInitializationOptions: Partial<
   highlightColor: 'red',
   enableTAA: false,
   jitterScale: 1,
+  enableLighting: false,
 };
 
 export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
@@ -81,7 +83,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   public multiPassRenderer: IMultiPassRenderer;
 
   // 注入插件集
-  @lazyMultiInject(TYPES.ILayerPlugin)
+  @multiInject(TYPES.ILayerPlugin)
   public plugins: ILayerPlugin[];
 
   public sourceOption: {
@@ -89,21 +91,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     options?: ISourceCFG;
   };
 
-  @lazyInject(TYPES.IStyleAttributeService)
+  @inject(TYPES.IStyleAttributeService)
   public styleAttributeService: IStyleAttributeService;
 
-  @lazyInject(TYPES.IGlobalConfigService)
+  @inject(TYPES.IGlobalConfigService)
   public readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.IIconService)
+  @inject(TYPES.IIconService)
   protected readonly iconService: IIconService;
 
-  @lazyInject(TYPES.IFontService)
+  @inject(TYPES.IFontService)
   protected readonly fontService: IFontService;
 
   protected layerSource: Source;
 
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   private encodedData: IEncodeFeature[];
@@ -117,13 +119,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
 
-  @lazyInject(TYPES.IShaderModuleService)
+  @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
 
-  @lazyInject(TYPES.IMapService)
+  @inject(TYPES.IMapService)
   private readonly map: IMapService;
 
-  @lazyInject(TYPES.IInteractionService)
+  @inject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
 
   constructor(

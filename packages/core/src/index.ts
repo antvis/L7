@@ -1,4 +1,9 @@
-import container, { lazyInject, lazyMultiInject } from './inversify.config';
+import container, {
+  createLayerContainer,
+  createSceneContainer,
+  lazyInject,
+  lazyMultiInject,
+} from './inversify.config';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
@@ -12,6 +17,8 @@ export {
    * IoC 容器
    */
   container,
+  createSceneContainer,
+  createLayerContainer,
   /**
    * lazy inject，供各个 Layer 使用
    */

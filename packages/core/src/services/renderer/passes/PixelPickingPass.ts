@@ -1,5 +1,4 @@
-import { injectable } from 'inversify';
-import { lazyInject } from '../../../index';
+import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../types';
 import {
   IInteractionService,
@@ -25,13 +24,13 @@ function decodePickingColor(color: Uint8Array): number {
  */
 @injectable()
 export default class PixelPickingPass<InitializationOptions = {}> implements IPass<InitializationOptions> {
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
-  @lazyInject(TYPES.IInteractionService)
+  @inject(TYPES.IInteractionService)
   protected readonly interactionService: IInteractionService;
 
-  @lazyInject(TYPES.ILogService)
+  @inject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
   /**

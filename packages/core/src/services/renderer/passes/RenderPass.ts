@@ -1,5 +1,4 @@
-import { injectable } from 'inversify';
-import { lazyInject } from '../../../index';
+import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { IPass, PassType } from '../IMultiPassRenderer';
@@ -11,7 +10,7 @@ import { IRendererService } from '../IRendererService';
 @injectable()
 export default class RenderPass<InitializationOptions = {}>
   implements IPass<InitializationOptions> {
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getType() {

@@ -55,7 +55,7 @@ export default class ReglTexture2D implements ITexture2D {
       textureOptions.data = data;
     }
 
-    if (typeof mipmap === 'string') {
+    if (typeof mipmap === 'number') {
       textureOptions.mipmap = mipmapMap[mipmap];
     } else if (typeof mipmap === 'boolean') {
       textureOptions.mipmap = mipmap;

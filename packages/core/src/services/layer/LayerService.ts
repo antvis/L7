@@ -1,25 +1,19 @@
 import { inject, injectable } from 'inversify';
-import { container, ILayer } from '../..';
+import { ILayer, lazyMultiInject } from '../..';
 import { TYPES } from '../../types';
-import { IGlobalConfigService } from '../config/IConfigService';
-import { IRendererService } from '../renderer/IRendererService';
 import { ILayerService } from './ILayerService';
 
 @injectable()
 export default class LayerService implements ILayerService {
+  @lazyMultiInject(TYPES.ILayer)
   private layers: ILayer[] = [];
 
-  @inject(TYPES.IRendererService)
-  private readonly renderService: IRendererService;
-
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-
   public add(layer: ILayer) {
-    this.layers.push(layer);
+    // this.layers.push(layer);
   }
 
   public initLayers() {
+    console.log(this.layers);
     this.layers.forEach((layer) => {
       // register plugins in every layer
       for (const plugin of layer.plugins) {

@@ -11,7 +11,7 @@ import {
   TAAPass,
   TYPES,
 } from '@l7/core';
-import { inject, injectable, interfaces, multiInject } from 'inversify';
+import { inject, injectable } from 'inversify';
 
 /**
  * 'blurH' -> ['blurH', {}]

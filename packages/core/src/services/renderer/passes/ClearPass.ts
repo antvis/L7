@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import { lazyInject } from '../../../index';
 import { TYPES } from '../../../types';
 import { IPass, PassType } from '../IMultiPassRenderer';
 import { IRendererService } from '../IRendererService';
@@ -10,7 +9,7 @@ import { IRendererService } from '../IRendererService';
 @injectable()
 export default class ClearPass<InitializationOptions = {}>
   implements IPass<InitializationOptions> {
-  @lazyInject(TYPES.IRendererService)
+  @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
   public getType() {

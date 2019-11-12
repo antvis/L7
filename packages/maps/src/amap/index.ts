@@ -20,6 +20,18 @@ import Viewport from './Viewport';
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.8';
+/**
+ * 确保多个场景只引入一个高德地图脚本
+ */
+const AMAP_SCRIPT_ID: string = 'amap-script';
+/**
+ * 高德地图脚本是否加载完毕
+ */
+let amapLoaded = false;
+/**
+ * 高德地图脚本加载成功等待队列，成功之后依次触发
+ */
+let pendingResolveQueue: Array<() => void> = [];
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
 /**
@@ -27,20 +39,22 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  */
 @injectable()
 export default class AMapService implements IMapService {
+  /**
+   * 原始地图实例
+   */
   public map: AMap.Map & IAMapInstance;
 
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
+
   private markerContainer: HTMLElement;
 
   private $mapContainer: HTMLElement | null;
-  private $jsapi: HTMLScriptElement;
 
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
 
-  // init
   public addMarkerContainer(): void {
     const mapContainer = this.map.getContainer();
     if (mapContainer !== null) {
@@ -174,9 +188,7 @@ export default class AMapService implements IMapService {
 
     // tslint:disable-next-line:typedef
     await new Promise((resolve) => {
-      // 异步加载高德地图
-      // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
-      window.onload = (): void => {
+      const resolveMap = () => {
         // @ts-ignore
         this.map = new AMap.Map(id, {
           mapStyle: style,
@@ -184,16 +196,37 @@ export default class AMapService implements IMapService {
           ...rest,
         });
 
-        // 监听地图相机时间
+        // 监听地图相机事件
         this.map.on('camerachange', this.handleCameraChanged);
         resolve();
       };
 
-      const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=onload`;
-      this.$jsapi = document.createElement('script');
-      this.$jsapi.charset = 'utf-8';
-      this.$jsapi.src = url;
-      document.head.appendChild(this.$jsapi);
+      if (!document.getElementById(AMAP_SCRIPT_ID)) {
+        // 异步加载高德地图
+        // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
+        // @ts-ignore
+        window.initAMap = (): void => {
+          amapLoaded = true;
+          resolveMap();
+
+          if (pendingResolveQueue.length) {
+            pendingResolveQueue.forEach((r) => r());
+            pendingResolveQueue = [];
+          }
+        };
+        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=initAMap`;
+        const $jsapi = document.createElement('script');
+        $jsapi.id = AMAP_SCRIPT_ID;
+        $jsapi.charset = 'utf-8';
+        $jsapi.src = url;
+        document.head.appendChild($jsapi);
+      } else {
+        if (amapLoaded) {
+          resolveMap();
+        } else {
+          pendingResolveQueue.push(resolveMap);
+        }
+      }
     });
 
     this.viewport = new Viewport();
@@ -201,7 +234,12 @@ export default class AMapService implements IMapService {
 
   public destroy() {
     this.map.destroy();
-    document.head.removeChild(this.$jsapi);
+    // @ts-ignore
+    delete window.initAMap;
+    const $jsapi = document.getElementById(AMAP_SCRIPT_ID);
+    if ($jsapi) {
+      document.head.removeChild($jsapi);
+    }
   }
 
   public getMapContainer() {

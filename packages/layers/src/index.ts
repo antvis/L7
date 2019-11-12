@@ -27,45 +27,71 @@ import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
  */
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
-  .to(ConfigSchemaValidationPlugin);
+  .to(ConfigSchemaValidationPlugin)
+  .inRequestScope();
 /**
  * 获取 Source
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(DataSourcePlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(DataSourcePlugin)
+  .inRequestScope();
 /**
  * 根据 StyleAttribute 创建 VertexAttribute
  */
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
-  .to(RegisterStyleAttributePlugin);
+  .to(RegisterStyleAttributePlugin)
+  .inRequestScope();
 /**
  * 根据 Source 创建 Scale
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(FeatureScalePlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(FeatureScalePlugin)
+  .inRequestScope();
 /**
  * 使用 Scale 进行数据映射
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(DataMappingPlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(DataMappingPlugin)
+  .inRequestScope();
 /**
  * 负责属性更新
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(UpdateStyleAttributePlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(UpdateStyleAttributePlugin)
+  .inRequestScope();
 /**
  * Multi Pass 自定义渲染管线
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(MultiPassRendererPlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(MultiPassRendererPlugin)
+  .inRequestScope();
 /**
  * 传入相机坐标系参数
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(ShaderUniformPlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(ShaderUniformPlugin)
+  .inRequestScope();
 /**
  * 传入光照相关参数
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(LightingPlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LightingPlugin)
+  .inRequestScope();
 /**
  * 负责拾取过程中 Encode 以及 Highlight 阶段及结束后恢复
  */
-container.bind<ILayerPlugin>(TYPES.ILayerPlugin).to(PixelPickingPlugin);
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(PixelPickingPlugin)
+  .inRequestScope();
 
 export {
   BaseLayer,

@@ -3,7 +3,7 @@
 import { IControl } from 'mapbox-gl';
 
 interface Window {
-  onLoad: () => void;
+  initAMap: () => void;
 }
 interface IAMapEvent {
   camera: {

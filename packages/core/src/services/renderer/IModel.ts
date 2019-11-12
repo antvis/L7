@@ -132,7 +132,7 @@ export interface IModelInitializationOptions {
   /**
    * stencil
    */
-  stencil?: {
+  stencil?: Partial<{
     // gl.enable(gl.STENCIL_TEST)
     enable: boolean;
     // gl.stencilMask
@@ -160,7 +160,7 @@ export interface IModelInitializationOptions {
       zfail: stencilOp;
       zpass: stencilOp;
     };
-  };
+  }>;
 
   /**
    * cull
