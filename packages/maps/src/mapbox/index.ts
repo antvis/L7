@@ -40,7 +40,7 @@ export default class MapboxService implements IMapService {
   private readonly coordinateSystemService: ICoordinateSystemService;
 
   @inject(TYPES.IEventEmitter)
-  private eventEmitter: IEventEmitter;
+  private eventEmitter: any;
   private viewport: Viewport;
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;

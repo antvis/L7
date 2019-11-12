@@ -4,7 +4,7 @@ import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
-import { IParseDataItem } from '../source/ISourceService'
+import { IParseDataItem } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 import {
   IEncodeFeature,
@@ -216,10 +216,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
       ) {
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
-            const normal = normalsForCurrentFeature?.slice(
-              vertexIdx * 3,
-              vertexIdx * 3 + 3,
-            )|| [];
+            const normal =
+              normalsForCurrentFeature?.slice(
+                vertexIdx * 3,
+                vertexIdx * 3 + 3,
+              ) || [];
             (descriptor.buffer.data as number[]).push(
               ...descriptor.update(
                 feature,
