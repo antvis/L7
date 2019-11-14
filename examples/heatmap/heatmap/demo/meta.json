@@ -6,11 +6,13 @@
   "demos": [
     {
       "filename": "world3d.js",
-      "title": "经典热力图3D"
+      "title": "经典热力图3D",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*NxFPSrd9oscAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "world.js",
-      "title": "经典热力图2D"
+      "title": "经典热力图2D",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*9zUcSK07PHgAAAAAAAAAAABkARQnAQ"
     }
   ]
 }

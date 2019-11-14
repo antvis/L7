@@ -6,11 +6,13 @@
   "demos": [
     {
       "filename": "grid.js",
-      "title": "网格热力图"
+      "title": "网格热力图",
+      "screenshot":""
     },
     {
       "filename": "world.js",
-      "title": "世界电厂热力图"
+      "title": "世界电厂热力图",
+      "screenshot":""
     }
   ]
 }

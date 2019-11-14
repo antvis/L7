@@ -79,7 +79,10 @@ export function LineTriangulation(feature: IEncodeFeature) {
 
 export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as IPosition[][];
-  const { positions, index, normals } = extrude_PolygonNormal(coordinates, true);
+  const { positions, index, normals } = extrude_PolygonNormal(
+    coordinates,
+    true,
+  );
 
   return {
     vertices: positions, // [ x, y, z ]
@@ -92,9 +95,9 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
 export function HeatmapGridTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
 
-  const { positions, index } = getHeatmapGeometry(shape as
-    | ShapeType2D
-    | ShapeType3D);
+  const { positions, index } = getHeatmapGeometry(
+    shape as ShapeType2D | ShapeType3D,
+  );
   return {
     vertices: positions, // [ x, y, z ] 多边形顶点
     indices: index,

@@ -56,7 +56,9 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
 
   protected renderModels() {
     const { clear, useFramebuffer } = this.rendererService;
-    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute('shape');
+    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
     const shapeType = shapeAttr?.scale?.field || 'heatmap';
     useFramebuffer(this.heatmapFramerBuffer, () => {
       clear({
@@ -68,18 +70,23 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       this.drawIntensityMode();
     });
     // this.draw3DHeatMap();
-    shapeType === 'heatmap' ? this.drawColorMode(): this.draw3DHeatMap();
+    shapeType === 'heatmap' ? this.drawColorMode() : this.draw3DHeatMap();
     // this.drawIntensityMode();
     return this;
   }
 
   protected buildModels() {
-    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute('shape');
+    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
     const shapeType = shapeAttr?.scale?.field || 'heatmap';
     this.registerBuiltinAttributes(this);
     this.intensityModel = this.buildHeatMapIntensity();
     this.models = [this.intensityModel];
-    this.colorModel = shapeType === 'heatmap' ? this.buildHeatmapColor(): this.build3dHeatMap();
+    this.colorModel =
+      shapeType === 'heatmap'
+        ? this.buildHeatmapColor()
+        : this.build3dHeatMap();
     this.models.push(this.colorModel);
     const { rampColors } = this.getStyleOptions();
     const imageData = generateColorRamp(rampColors as IColorRamp);
