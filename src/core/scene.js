@@ -55,10 +55,10 @@ export default class Scene extends Base {
     this._engine._picking.add(object);
   }
   _initMap() {
-    this.mapContainer = this.get('id');
+    this.mapContainer = this._getSceneContainer();
     this.mapType = this.get('mapType') || 'amap';
     const MapProvider = getMap(this.mapType);
-    const Map = new MapProvider(this._attrs);
+    const Map = new MapProvider(this.mapContainer, this._attrs);
     Map.mixMap(this);
     this._container = Map.container;
     Map.on('mapLoad', () => {
@@ -78,6 +78,14 @@ export default class Scene extends Base {
       this._initContoller();
       this.emit('loaded');
     });
+  }
+  _getSceneContainer() {
+    const id = this.get('id');
+    if (typeof id === 'string') {
+      return document.getElementById(id);
+    } else if (id instanceof HTMLElement) {
+      return id;
+    }
   }
   initLayer() {
     for (const key in LAYER_MAP) {

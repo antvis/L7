@@ -26,13 +26,14 @@ export default class GaodeMap extends Base {
     y = -(scale * (c * y + d) - 106744817);
     return { x, y };
   }
-  constructor(cfg) {
+  constructor(container, cfg) {
     super(cfg);
-    this.container = document.getElementById(this.get('id'));
+    this.container = container;
     this.initMap();
   }
 
   initMap() {
+    window.forceWebGL = true;
     const mapStyle = this.get('mapStyle');
     if (mapStyle) {
       switch (mapStyle) {
@@ -56,7 +57,7 @@ export default class GaodeMap extends Base {
       this.container = map.getContainer();
       this.setMapStyle(mapStyle);
       this.addOverLayer();
-      setTimeout(() => { this.emit('mapLoad'); }, 50);
+      setTimeout(() => { this.emit('mapLoad'); }, 100);
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
       this.map.on('complete', () => {
@@ -69,12 +70,14 @@ export default class GaodeMap extends Base {
   }
   asyncCamera(engine) {
     this._engine = engine;
-    this.updateCamera();
     this.map.on('camerachange', this.updateCamera.bind(this));
+    this.updateCamera();
+
   }
   updateCamera() {
     const camera = this._engine._camera;
     const mapCamera = this.map.getCameraState();
+    if (!mapCamera || !mapCamera.fov) return;
     let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
     pitch *= DEG2RAD;
     rotation *= DEG2RAD;
