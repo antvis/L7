@@ -1,6 +1,6 @@
-import './packages/component/src/css/l7.css';
+require('./packages/component/src/css/l7.css');
 // window.GeoTIFF = require('geotiff/dist/geotiff.bundle.js')
-window.scene = require('@l7/scene');
-window.layers= require('@l7/layers');
-window.component= require('@l7/component');
-window.G2Plot = require('@antv/g2plot');
+window.scene = require('./packages/scene/src');
+window.layers= require('./packages/layers/src');
+window.component= require('./packages/component/src');
+window.g2plot = require('@antv/g2plot');

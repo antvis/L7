@@ -5,7 +5,7 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
-    "@antv/gatsby-theme-antv": "^0.9.7",
+    "@antv/gatsby-theme-antv": "^0.9.52",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -90,7 +90,7 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "export NODE_ENV=site && npm run site:develop",
+    "start": "NODE_ENV=site npm run site:develop",
     "site:develop": "gatsby develop --open -H 0.0.0.0",
     "site:build": "npm run site:clean && export NODE_ENV=site &&  gatsby build --prefix-paths",
     "site:clean": "gatsby clean",
