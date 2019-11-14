@@ -50,6 +50,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
     "gatsby": "^2.17.7",
+    "gatsby-remark-prettier": "^1.0.0",
     "geotiff": "^1.0.0-beta.6",
     "gh-pages": "^2.1.1",
     "gl": "^4.4.0",
