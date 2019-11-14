@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { HeatMapGridLayer } from '@l7/layers';
+import { HeatMapGridLayer, HeatMapGrid3dLayer } from '@l7/layers';
 const scene = new Scene({
   id: 'map',
   style: 'light',
@@ -13,39 +13,34 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64
   .then((res) => res.json())
   .then((data) => {
     const layer =
-      new HeatMapGridLayer({
+      new HeatMapGrid3dLayer({
       })
       .source(data, {
         transforms: [
           {
-            type: 'grid',
-            size: 100000,
+            type: 'hexagon',
+            size: 200000,
             field: 'capacity',
             method: 'sum',
           },
         ],
       })
       .size('sum', (value) => {
-        return value;
+        return value * 50;
       })
-      .scale('sum',{
-        type:'quantile',
-      })
-      .shape('square')
+      .shape('hexagon')
       .style({
-        coverage: 1,
+        coverage: 0.9,
         angle: 0,
         opacity: 1.0,
       })
       .color('sum', [
-        '#002466',
-        '#105CB3',
-        '#2894E0',
-        '#CFF6FF',
-        '#FFF5B8',
-        '#FFAB5C',
-        '#F27049',
-        '#730D1C',
+            '#2E8AE6',
+            '#69D1AB',
+            '#DAF291',
+            '#FFD591',
+            '#FF7A45',
+            '#CF1D49',
       ]);
     scene.addLayer(layer);
 

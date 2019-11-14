@@ -17,7 +17,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
       })
         .source(data)
         .size('ELEV', (h) => {
-          return h % 50 === 0 ? 1.0 : 0.5;
+          return [h % 50 === 0 ? 1.0 : 0.5, (h -1300) *20 ];
         })
         .shape('line')
         .scale('ELEV', {
