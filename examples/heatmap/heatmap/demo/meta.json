@@ -1,16 +1,16 @@
 {
   "title": {
-    "zh": "网格热力图",
+    "zh": "经典热力图",
     "en": "heatmap"
   },
   "demos": [
     {
       "filename": "world3d.js",
-      "title": "网格热力图"
+      "title": "经典热力图3D"
     },
     {
       "filename": "world.js",
-      "title": "世界电厂热力图"
+      "title": "经典热力图2D"
     }
   ]
 }

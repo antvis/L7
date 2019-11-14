@@ -1,13 +1,20 @@
 import { inject, injectable } from 'inversify';
 import { container, ILayer } from '../..';
 import { TYPES } from '../../types';
+import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerService } from './ILayerService';
 
 @injectable()
 export default class LayerService implements ILayerService {
+  public clock = new Clock();
+
   private layers: ILayer[] = [];
+
+  private layerRenderID: number;
+
+  private animateInstanceCount: number = 0;
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
@@ -73,11 +80,38 @@ export default class LayerService implements ILayerService {
     this.layers = [];
   }
 
+  public startAnimate() {
+    if (this.animateInstanceCount++ === 0) {
+      this.runRender();
+    }
+  }
+
+  public stopAnimate() {
+    if (--this.animateInstanceCount === 0) {
+      this.stopRender();
+    }
+  }
+
+  private initPlugin(layer: ILayer) {
+    for (const plugin of layer.plugins) {
+      plugin.apply(layer);
+    }
+  }
+
   private clear() {
     this.renderService.clear({
       color: [0, 0, 0, 0],
       depth: 1,
       framebuffer: null,
     });
+  }
+
+  private runRender() {
+    this.renderLayers();
+    this.layerRenderID = requestAnimationFrame(this.renderLayers.bind(this));
+  }
+
+  private stopRender() {
+    cancelAnimationFrame(this.layerRenderID);
   }
 }

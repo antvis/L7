@@ -1,5 +1,6 @@
 import {
   gl,
+  IAnimateOption,
   ICameraService,
   IEncodeFeature,
   IFontService,
@@ -134,6 +135,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       values?: StyleAttributeOption;
     };
   } = {};
+
+  protected animateOptions: IAnimateOption = { enable: false };
 
   private encodedData: IEncodeFeature[];
 
@@ -278,6 +281,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       // @ts-ignore
       updateOptions,
     );
+    return this;
+  }
+  public animate(options: IAnimateOption) {
+    this.animateOptions = options;
     return this;
   }
 
