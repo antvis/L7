@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "1.3.21",
+  "version": "1.4.0",
   "description": "Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "build/L7.js",
   "homepage": "https://github.com/antvis/l7",
@@ -106,7 +106,7 @@
   },
   "dependencies": {
     "@antv/geo-coord": "^1.0.8",
-    "@antv/util": "~2.0.1",
+    "@antv/util": "2.0.1",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@mapbox/tiny-sdf": "^1.1.0",
     "@mapbox/vector-tile": "^1.3.1",

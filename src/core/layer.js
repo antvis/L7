@@ -635,7 +635,9 @@ export default class Layer extends Base {
     return this.scene.style.getSource(id);
   }
   setHeight(height) {
-    this._object3D.position.z = height;
+    this._object3D.children.forEach(mesh => {
+      mesh.position.z = height;
+    });
     this.scene._engine.update();
   }
 }
