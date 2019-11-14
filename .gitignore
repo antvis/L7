@@ -69,3 +69,6 @@ lib/
 .DS_Store
 public
 .cache
+
+yarn.lock
+package-lock.json
