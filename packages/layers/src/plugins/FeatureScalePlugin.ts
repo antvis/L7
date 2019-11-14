@@ -43,12 +43,12 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
- // key = field_attribute name
+  // key = field_attribute name
   private scaleCache: {
     [field: string]: IStyleScale;
   } = {};
 
-  private scaleOptions: IScaleOptions = {}
+  private scaleOptions: IScaleOptions = {};
 
   public apply(layer: ILayer) {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
@@ -73,9 +73,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
     });
   }
-  private isNumber(n:any) {
+  private isNumber(n: any) {
     return !isNaN(parseFloat(n)) && isFinite(n);
-
   }
 
   private caculateScalesForAttributes(
@@ -88,11 +87,12 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         // 创建Scale
         const attributeScale = attribute.scale;
         const type = attribute.name;
-        attributeScale.names=  this.parseFields(attribute!.scale!.field || []);
-        const scales: IStyleScale[] = attributeScale.names
-        .map((field:string) => {
-           return this.getOrCreateScale(field, attribute, dataArray);
-        })
+        attributeScale.names = this.parseFields(attribute!.scale!.field || []);
+        const scales: IStyleScale[] = attributeScale.names.map(
+          (field: string) => {
+            return this.getOrCreateScale(field, attribute, dataArray);
+          },
+        );
 
         // 为scales 设置值区间
         if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
@@ -100,22 +100,21 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           scales.forEach((scale) => {
             // 如果设置了回调, 这不需要设置让range
             if (!attributeScale.callback) {
-              if(attributeScale.values) {
-                if(scale.option?.type==='linear' && attributeScale.values.length > 2) {
-                  const tick =scale.scale.ticks(attributeScale.values.length);
-                  if(type === 'color'){
-                      scale.scale.domain(tick)
+              if (attributeScale.values) {
+                if (
+                  scale.option?.type === 'linear' &&
+                  attributeScale.values.length > 2
+                ) {
+                  const tick = scale.scale.ticks(attributeScale.values.length);
+                  if (type === 'color') {
+                    scale.scale.domain(tick);
                   }
-                  
                 }
                 scale.scale.range(attributeScale.values);
-
-              } else if(scale.option?.type==='cat') { 
-               
+              } else if (scale.option?.type === 'cat') {
                 // 如果没有设置初值且 类型为cat，range ==domain;
                 scale.scale.range(scale.option.domain);
               }
-             
             }
           });
         } else {
@@ -125,16 +124,15 @@ export default class FeatureScalePlugin implements ILayerPlugin {
             return scale.scale(attributeScale.names[index]);
           });
         }
-        attributeScale.scalers = scales.map((scale: IStyleScale)=> {
+        attributeScale.scalers = scales.map((scale: IStyleScale) => {
           return {
             field: scale.field,
             func: scale.scale,
-          }
+          };
         });
 
         attribute.needRescale = false;
       }
-
     });
   }
   private getOrCreateScale(
@@ -142,7 +140,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     attribute: IStyleAttribute,
     dataArray: IParseDataItem[],
   ) {
-    const scalekey = [field,attribute.name].join('_')
+    const scalekey = [field, attribute.name].join('_');
     if (this.scaleCache[scalekey]) {
       return this.scaleCache[scalekey];
     }
@@ -156,7 +154,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     // ) { // 只有变量初始化range
     //   styleScale.scale.range(attribute.scale?.values);
     // }
-
 
     return this.scaleCache[scalekey];
   }
@@ -180,13 +177,12 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     // 首先查找全局默认配置例如 color
     const scaleOption: IScale | undefined = this.scaleOptions[field];
     const styleScale: IStyleScale = {
-        field,
-        scale: undefined,
-        type: StyleScaleType.VARIABLE,
-        option: scaleOption,
-      };
-    if (!data || !data.length) { 
-
+      field,
+      scale: undefined,
+      type: StyleScaleType.VARIABLE,
+      option: scaleOption,
+    };
+    if (!data || !data.length) {
       if (scaleOption && scaleOption.type) {
         styleScale.scale = this.createDefaultScale(scaleOption);
       } else {
@@ -195,8 +191,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       return styleScale;
     }
-    const firstValue = (data!.find((d) => !isNil(d[field])))?.[field]
-   
+    const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
+
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {
       styleScale.scale = d3.scaleOrdinal([field]);
@@ -210,7 +206,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       Object.assign(cfg, scaleOption);
       styleScale.scale = this.createDefaultScale(cfg);
       styleScale.option = cfg;
-
     }
     return styleScale;
   }
@@ -237,8 +232,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       cfg.domain = extent(values);
     } else if (type === ScaleTypes.CAT) {
       cfg.domain = uniq(values);
-    } else if(type === ScaleTypes.QUANTILE) {
-       cfg.domain = values
+    } else if (type === ScaleTypes.QUANTILE) {
+      cfg.domain = values;
     }
     return cfg;
   }

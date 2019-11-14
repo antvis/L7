@@ -19,7 +19,10 @@ export default function image(
     dataArray: [
       {
         _id: 0,
-        coordinates: [[extent[0], extent[1]], [extent[2], extent[3]]],
+        coordinates: [
+          [extent[0], extent[1]],
+          [extent[2], extent[3]],
+        ],
       },
     ],
   };

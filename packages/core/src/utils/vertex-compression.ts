@@ -85,7 +85,12 @@ export function packCircleVertex(
     packUint8ToFloat(strokeColor[2], strokeColor[3]),
   ];
 
-  [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([extrudeX, extrudeY]) => {
+  [
+    [-1, -1],
+    [1, -1],
+    [1, 1],
+    [-1, 1],
+  ].forEach(([extrudeX, extrudeY]) => {
     // vec4(
     //   color,
     //   color,

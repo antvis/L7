@@ -65,9 +65,15 @@ const colorObj = {
     '#5B8EF8', '#FCF6FA',
     '#F5E4EF', '#F7CDDF',
     '#ED9CBE', '#D1749B'
-  ]
+  ],
+  color4: [ '#421EB2', '#8C1EB2', '#F27DEB', '#FFF598', '#F7B74A', '#FF4818' ],
+  colors6: [ '#FBE0B2', '#F6BB91', '#F88E8B', '#5C6CE5', '#110A6C', '#0D0943' ],
+  colors5: [ '#F86A7E', '#F79794', '#D0A8AD', '#8596A4', '#0D7D9E', '#07485B' ],
+  colors11: [ '#005F6D', '#0F9EA3', '#B9CDC5', '#DF881C', '#AE571E', '#6C2C03' ],
+  colors7: [ '#D66A74', '#EF808B', '#F09FAF', '#B1C987', '#789676', '#636C58' ],
+  colors8: [ '#5E023A', '#C52C6A', '#F0C4E8', '#F7CAB8', '#7EBCA9', '#117D8D' ],
+  colors9: [ '#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C' ]
 }
-
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv',
 )
