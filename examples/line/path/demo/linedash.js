@@ -5,8 +5,8 @@ const scene = new Scene({
   pitch: 0,
   type: 'amap',
   style: 'light',
-  center: [102.602992, 23.107329],
-  zoom: 4,
+  center: [102.602992, 33.107329],
+  zoom: 3.5,
 });
 
 fetch('https://gw.alipayobjects.com/os/basement_prod/9f6afbcd-3aec-4a26-bd4a-2276d3439e0d.json')

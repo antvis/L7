@@ -5,23 +5,24 @@ const scene = new Scene({
   pitch: 0,
   type: 'amap',
   style: 'light',
-  center: [120.2336, 30.2002],
-  zoom: 15,
+  center: [102.602992, 33.107329],
+  zoom: 3.5,
 });
 
-fetch('https://gw.alipayobjects.com/os/basement_prod/65e9cebb-8063-45e7-b18f-727da84e9908.json')
+fetch('https://gw.alipayobjects.com/os/basement_prod/9f6afbcd-3aec-4a26-bd4a-2276d3439e0d.json')
   .then((res) => res.json())
   .then((data) => {
     const layer =
       new LineLayer({
       })
         .source(data)
-        .size(1.5)
+        .scale('value',{
+          type: 'quantile'
+        })
+        .size('value', [0.5, 1, 1.5, 2])
         .shape('line')
-        .color(
-          'name',
-          ['#5B8FF9','#5CCEA1','#7B320A' ]
-        )
+        .color('value', ['#FFF2E8', '#FFCEA7', '#F0A66C', '#CC464B', '#8A191A'])
+        .animate({enable:true})
     scene.addLayer(layer);
     console.log(layer);
 
