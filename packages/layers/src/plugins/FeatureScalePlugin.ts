@@ -192,7 +192,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       return styleScale;
     }
     const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
-
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {
       styleScale.scale = d3.scaleOrdinal([field]);

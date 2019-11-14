@@ -102,15 +102,16 @@ class Scene {
 
     // 依赖注入
     this.sceneService = container.get<ISceneService>(TYPES.ISceneService);
-    this.sceneService.init(config);
     this.mapService = container.get<IMapService>(TYPES.IMapService);
     this.iconService = container.get<IIconService>(TYPES.IIconService);
     this.controlService = container.get<IControlService>(TYPES.IControlService);
     this.layerService = container.get<ILayerService>(TYPES.ILayerService);
     mapType = this.mapService.getType();
-    // 初始化 scene
 
-    this.init();
+    // 初始化 scene
+    this.sceneService.init(config);
+    // 初始化组件
+    this.initControl();
   }
 
   public getMapService(): IMapService {
@@ -263,11 +264,6 @@ class Scene {
   public destroy() {
     this.sceneService.destroy();
     // TODO: 清理其他 Service 例如 IconService
-  }
-
-  private init(): void {
-    this.initControl();
-    this.render();
   }
 
   private initControl(): void {
