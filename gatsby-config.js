@@ -90,22 +90,6 @@ module.exports = {
         },
       },
       {
-        slug: 'data',
-        icon: 'data',
-        title: {
-          zh: '数据源',
-          en: 'data',
-        },
-      },
-      {
-        slug: 'scene',
-        icon: 'map',
-        title: {
-          zh: '场景',
-          en: 'Scene',
-        },
-      },
-      {
         slug: 'point',
         icon: 'point',
         title: {
@@ -147,19 +131,17 @@ module.exports = {
         },
       },
       {
-        slug: 'marker',
-        icon: 'mapmarker',
+        slug: 'tutorial',
+        icon: 'map',
         title: {
-          zh: '标注',
-          en: 'Marker',
+          zh: '教程示例',
+          en: 'tutorial',
         },
-      }
+      },
     ],
     exampleContainer: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
     playground: {
       container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
-      playgroundDidMount: 'console.log("playgroundDidMount");',
-      playgroundWillUnmount: 'console.log("scene");',
     },
   },
 
