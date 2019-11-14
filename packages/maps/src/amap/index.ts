@@ -105,7 +105,10 @@ export default class AMapService implements IMapService {
     const amapBound = this.map.getBounds().toBounds();
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
-    return [[NE.getLng(), NE.getLat()], [SW.getLng(), SW.getLat()]];
+    return [
+      [NE.getLng(), NE.getLat()],
+      [SW.getLng(), SW.getLat()],
+    ];
   }
 
   public getMinZoom(): number {

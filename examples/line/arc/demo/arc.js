@@ -5,7 +5,7 @@ const scene = new Scene({
   pitch: 0,
   type: 'mapbox',
   style: 'dark',
-  center: [102.602992, 23.107329],
+  center: [0., 23.107329],
   zoom: 0,
 });
 
