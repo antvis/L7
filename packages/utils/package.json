@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@turf/helpers": "^6.1.4",
-    "eventemitter3": "^3.1.0",
+    "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
