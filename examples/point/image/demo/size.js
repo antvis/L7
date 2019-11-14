@@ -9,32 +9,28 @@ const scene = new Scene({
   center: [121.40, 31.258134],
   zoom: 15,
 });
-
-fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
+scene.addImage('00', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*kzTMQqS2QdUAAAAAAAAAAABkARQnAQ');
+scene.addImage('01', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jH1XRb7F7hMAAAAAAAAAAABkARQnAQ');
+scene.addImage('02', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*YaKSTr3L5i8AAAAAAAAAAABkARQnAQ');
+scene.addImage('04', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*dmniQrDpCYwAAAAAAAAAAABkARQnAQ');
+scene.addImage('11', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*YaKSTr3L5i8AAAAAAAAAAABkARQnAQ');
+scene.addImage('15', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*YNlXQYCIzroAAAAAAAAAAABkARQnAQ');
+scene.addImage('07', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*DccRTI6ZRLoAAAAAAAAAAABkARQnAQ');
+scene.addImage('16', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iQKoS6I-rO8AAAAAAAAAAABkARQnAQ');
+scene.addImage('06', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*f-wyS7ad5p0AAAAAAAAAAABkARQnAQ');
+scene.addImage('08', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*lHhzQrOW4AQAAAAAAAAAAABkARQnAQ');
+scene.addImage('17', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*9Q0QS4GdaYcAAAAAAAAAAABkARQnAQ');
+scene.addImage('05', 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*LyuVRowl6nAAAAAAAAAAAABkARQnAQ');
+fetch('https://gw.alipayobjects.com/os/basement_prod/c6042c6b-45fd-4e2e-adf8-fdbf060441e8.json')
   .then((res) => res.json())
   .then((data) => {
-  scene.addImage(
-    '00',
-    'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Rq6tQ5b4_JMAAAAAAAAAAABkARQnAQ',
-  );
-  scene.addImage(
-    '01',
-    'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*0D0SQ6AgkRMAAAAAAAAAAABkARQnAQ',
-  );
-  scene.addImage(
-    '02',
-    'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
-  );
+
    const imageLayer = new PointImageLayer()
-      .source(data, {
-        parser: {
-          type: 'json',
-          x: 'longitude',
-          y: 'latitude'
-        }
+      .source(data)
+      .shape('w', function(w) {
+        return w;
       })
-      .shape('name', ['00', '01','02'])
-      .size('unit_price', [30, 100])
+      .size(20)
        scene.addLayer(imageLayer);
   });
 

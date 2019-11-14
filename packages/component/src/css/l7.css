@@ -791,8 +791,8 @@
   padding: 8px;
   }
 .l7-control-layers label input[type="radio"], input[type="checkbox"]{
-  width: 19px;
-  height: 19px;
+  width: 14px;
+  height: 14px;
   margin: 0;
   vertical-align: middle;
   -ms-transform: scale(1.5); /* IE 9 */

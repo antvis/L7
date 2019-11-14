@@ -56,7 +56,10 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
 
   protected renderModels() {
     const { clear, useFramebuffer } = this.rendererService;
-
+    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
+    const shapeType = shapeAttr?.scale?.field || 'heatmap';
     useFramebuffer(this.heatmapFramerBuffer, () => {
       clear({
         color: [0, 0, 0, 0],
@@ -66,17 +69,24 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       });
       this.drawIntensityMode();
     });
-    this.draw3DHeatMap();
+    // this.draw3DHeatMap();
+    shapeType === 'heatmap' ? this.drawColorMode() : this.draw3DHeatMap();
     // this.drawIntensityMode();
     return this;
   }
 
   protected buildModels() {
+    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
+    const shapeType = shapeAttr?.scale?.field || 'heatmap';
     this.registerBuiltinAttributes(this);
     this.intensityModel = this.buildHeatMapIntensity();
     this.models = [this.intensityModel];
-    // this.colorModel = this.buildHeatmapColor();
-    this.colorModel = this.build3dHeatMap();
+    this.colorModel =
+      shapeType === 'heatmap'
+        ? this.buildHeatmapColor()
+        : this.build3dHeatMap();
     this.models.push(this.colorModel);
     const { rampColors } = this.getStyleOptions();
     const imageData = generateColorRamp(rampColors as IColorRamp);
@@ -95,8 +105,8 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
         height,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
-        min: gl.NEAREST,
-        mag: gl.NEAREST,
+        min: gl.LINEAR,
+        mag: gl.LINEAR,
       }),
     });
 
@@ -175,9 +185,9 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
         enable: true,
         func: {
           srcRGB: gl.ONE,
-          srcAlpha: 1,
+          srcAlpha: gl.ONE_MINUS_SRC_ALPHA,
           dstRGB: gl.ONE,
-          dstAlpha: 1,
+          dstAlpha: gl.ONE_MINUS_SRC_ALPHA,
         },
       },
     });
@@ -280,7 +290,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   private build3dHeatMap() {
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
-    const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
+    const triangulation = heatMap3DTriangulation(width / 2.0, height / 2.0);
     this.shaderModuleService.registerModule('heatmap3dColor', {
       vs: heatmap3DVert,
       fs: heatmap3DFrag,
