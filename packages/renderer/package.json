@@ -20,10 +20,14 @@
   "license": "ISC",
   "dependencies": {
     "@l7/core": "^0.0.1",
+    "gl": "^4.4.0",
     "inversify": "^5.0.1",
     "inversify-logging": "^0.2.1",
     "reflect-metadata": "^0.1.13",
-    "regl": "^1.3.11",
-    "gl": "^4.4.0"
+    "regl": "^1.3.11"
+  },
+  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "publishConfig": {
+    "access": "public"
   }
 }

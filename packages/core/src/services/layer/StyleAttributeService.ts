@@ -23,6 +23,8 @@ const bytesPerElementMap = {
   [gl.UNSIGNED_SHORT]: 2,
 };
 
+let counter = 0;
+
 /**
  * 每个 Layer 都拥有一个，用于管理样式属性的注册和更新
  */
@@ -32,6 +34,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
   private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
+
+  private c = counter++;
 
   private featureLayout: {
     sizePerElement: number;
