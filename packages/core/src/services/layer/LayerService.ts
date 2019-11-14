@@ -26,8 +26,6 @@ export default class LayerService implements ILayerService {
     this.layers.push(layer);
     this.initPlugin(layer);
     layer.init();
-    // 添加完成需要触发重绘
-    // this.renderLayers();
   }
 
   public initLayers() {
