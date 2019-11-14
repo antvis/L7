@@ -22,11 +22,11 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
             x: 'longitude',
             y: 'latitude'
           }
-        }).shape('name',['cylinder', 'triangleColumn', 'hexagonColumn'])
+        }).shape('name',['cylinder', 'triangleColumn', 'hexagonColumn','squareColumn'])
         .size('unit_price', (h)=>{
-          return [ 5,5, h / 1000 ]
+          return [ 15,15, h / 1000 ]
         })
-        .color('name',['#49B5AD', "#5B8FF9"])
+        .color('name',['#49B5AD', "#5B8FF9",'#E4504A','#E99431'])
         .style({
           opacity: 1.0,
         })
