@@ -64,7 +64,8 @@ container
   .inSingletonScope();
 container
   .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
-  .to(StyleAttributeService);
+  .to(StyleAttributeService)
+  .inRequestScope();
 container
   .bind<ICameraService>(TYPES.ICameraService)
   .to(CameraService)
@@ -126,9 +127,11 @@ export const lazyInject = (
     // make it work as usual
     original.call(this, proto, key);
     // return link to proto, so own value wont be 'undefined' after component's creation
-    descriptor!.initializer = () => {
-      return proto[key];
-    };
+    if (descriptor) {
+      descriptor.initializer = () => {
+        return proto[key];
+      };
+    }
   };
 };
 export const lazyMultiInject = (
@@ -145,10 +148,12 @@ export const lazyMultiInject = (
   ): void {
     // make it work as usual
     original.call(this, proto, key);
-    // return link to proto, so own value wont be 'undefined' after component's creation
-    descriptor!.initializer = () => {
-      return proto[key];
-    };
+    if (descriptor) {
+      // return link to proto, so own value wont be 'undefined' after component's creation
+      descriptor!.initializer = () => {
+        return proto[key];
+      };
+    }
   };
 };
 

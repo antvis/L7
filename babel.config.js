@@ -38,6 +38,9 @@ module.exports = (api) => {
             browsers: 'Last 2 Chrome versions, Firefox ESR',
             node: 'current',
           },
+          // set `modules: false` when building CDN bundle, let rollup do commonjs works
+          // @see https://github.com/rollup/rollup-plugin-babel#modules
+          modules: api.env('bundle') ? false : 'auto',
         },
       ],
       [
@@ -65,8 +68,11 @@ module.exports = (api) => {
         }
       ],
       '@babel/plugin-syntax-dynamic-import',
-      '@babel/plugin-transform-modules-commonjs',
-      [
+      // let rollup do commonjs works
+      // @see https://github.com/rollup/rollup-plugin-babel#modules
+      api.env('bundle') ? {} : '@babel/plugin-transform-modules-commonjs',
+      // 开发模式下以原始文本引入，便于调试
+      api.env('bundle') ? {} : [
         // import glsl as raw text
         'babel-plugin-inline-import',
         {
@@ -84,11 +90,10 @@ module.exports = (api) => {
           transform: 'constObject',
         }
       ],
-      // TODO：减少最终打包产物大小
-      // 1. 去除 Shader 中的注释
-      // @see https://www.npmjs.com/package/babel-plugin-remove-glsl-comments
-      // 2. 内联 WebGL 常量
-      // @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
+      // 按需引用 @see https://github.com/lodash/babel-plugin-lodash
+      'lodash',
+      // 内联 WebGL 常量 @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
+      api.env('bundle') ? 'inline-webgl-constants' : {},
     ],
     env: {
       build: {
