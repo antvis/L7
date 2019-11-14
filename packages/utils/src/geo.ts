@@ -8,7 +8,7 @@ import {
 } from '@turf/helpers';
 
 const originShift = (2 * Math.PI * 6378137) / 2.0;
-export type Point = [number, number] | [number, number, number];
+export type Point = number[];
 /**
  * 计算地理数据范围
  * @param {dataArray} data 地理坐标数据
@@ -194,4 +194,16 @@ export function lnglatDistance(
     2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
     (units = 'meters'),
   );
+}
+
+export function project(lnglat: [number, number]) {
+  const d = Math.PI / 180;
+  const max = 85.0511287798;
+  const earthRadius = 6378137;
+  const lat = Math.max(Math.min(max, lnglat[1]), -max);
+  const sin = Math.sin(lat * d);
+  const x = earthRadius * lnglat[0] * d;
+  const y = (earthRadius * Math.log((1 + sin) / (1 - sin))) / 2;
+
+  return [x, y];
 }
