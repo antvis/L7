@@ -61,6 +61,13 @@ export enum AttributeType {
   Uniform,
 }
 
+export interface IAnimateOption {
+  enable: boolean;
+  interval?: number;
+  duration?: number;
+  trailLength?: number;
+}
+
 export interface IEncodeFeature {
   color?: Color;
   size?: number | number[];

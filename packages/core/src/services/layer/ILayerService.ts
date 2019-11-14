@@ -1,9 +1,11 @@
 import { SyncBailHook, SyncHook } from 'tapable';
+import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IModel } from '../renderer/IModel';
 import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';
 import { ISource, ISourceCFG } from '../source/ISourceService';
 import {
+  IAnimateOption,
   IEncodeFeature,
   IScale,
   IScaleOptions,
@@ -62,6 +64,7 @@ export interface ILayer {
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  animate(option: IAnimateOption): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   // filter(field: string, value: StyleAttributeOption): ILayer;
   // active(option: ActiveOption): ILayer;
@@ -146,8 +149,11 @@ export interface ILayerInitializationOptions {
  * 提供 Layer 管理服务
  */
 export interface ILayerService {
+  clock: Clock;
   add(layer: ILayer): void;
   initLayers(): void;
+  startAnimate(): void;
+  stopAnimate(): void;
   getLayers(): ILayer[];
   getLayer(name: string): ILayer | undefined;
   remove(layer: ILayer): void;
