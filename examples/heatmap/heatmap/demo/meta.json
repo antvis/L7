@@ -6,6 +6,7 @@
   "demos": [
     {
       "filename": "world3d.js",
+
       "title": "经典热力图3D",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*NxFPSrd9oscAAAAAAAAAAABkARQnAQ"
     },

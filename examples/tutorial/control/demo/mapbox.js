@@ -10,7 +10,9 @@ const scene = new Scene({
 });
 
 const zoomControl = new Zoom();
-const scaleControl = new Scale();
+const scaleControl = new Scale({
+  position:'rightbottom',
+});
 scene.addControl(zoomControl);
 scene.addControl(scaleControl);
 
