@@ -22,7 +22,7 @@
     "@l7/utils": "0.0.1",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
-    "eventemitter3": "^3.1.0",
+    "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
     "hammerjs": "^2.0.8",
     "inversify": "^5.0.1",
@@ -40,5 +40,9 @@
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.138",
     "@types/viewport-mercator-project": "^6.1.0"
+  },
+  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "publishConfig": {
+    "access": "public"
   }
 }
