@@ -1,6 +1,6 @@
 import { Scene } from '@l7/scene';
 import { Marker } from '@l7/component'
-import  G2Plot from '@antv/g2plot';
+import G2Plot from '@antv/g2plot'
 const scene = new Scene({
   id: 'map',
   type: 'amap',
@@ -137,5 +137,3 @@ const scene = new Scene({
 //     });
 
 //   });
-
-
