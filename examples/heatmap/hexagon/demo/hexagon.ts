@@ -26,9 +26,6 @@ fetch(
         ],
       })
       .size('sum', [0, 600])
-      .scale('sum', {
-        type: 'quantize',
-      })
       .shape('hexagon')
       .style({
         coverage: 0.8,
@@ -50,5 +47,4 @@ fetch(
         ].reverse(),
       );
     scene.addLayer(layer);
-    console.log(layer);
   });
