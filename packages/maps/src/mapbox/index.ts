@@ -26,8 +26,7 @@ const EventMap: {
   camerachange: 'move',
 };
 import { MapTheme } from './theme';
-mapboxgl.accessToken =
-  'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ';
+
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
 /**
@@ -45,7 +44,6 @@ export default class MapboxService implements IMapService {
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
-  private $link: HTMLLinkElement;
 
   // init
   public addMarkerContainer(): void {
@@ -175,6 +173,7 @@ export default class MapboxService implements IMapService {
       id,
       attributionControl = false,
       style = 'light',
+      token = 'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ',
       ...rest
     } = mapConfig;
     this.$mapContainer = document.getElementById(id);
@@ -185,6 +184,7 @@ export default class MapboxService implements IMapService {
      * TODO: 使用 mapbox v0.53.x 版本 custom layer，需要共享 gl context
      * @see https://github.com/mapbox/mapbox-gl-js/blob/master/debug/threejs.html#L61-L64
      */
+    mapboxgl.accessToken = token;
     // @ts-ignore
     this.map = new mapboxgl.Map({
       container: id,
@@ -197,20 +197,13 @@ export default class MapboxService implements IMapService {
 
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
-
-    this.$link = document.createElement('link');
-    this.$link.href =
-      'https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css';
     this.removeLogoControl();
-    this.$link.rel = 'stylesheet';
-    document.head.appendChild(this.$link);
   }
 
   public destroy() {
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();
-      document.head.removeChild(this.$link);
       this.$mapContainer = null;
     }
   }
