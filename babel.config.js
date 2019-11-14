@@ -1,18 +1,29 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = (api) => {
   api.cache(() => process.env.NODE_ENV);
-  if(api.env("site")) { //
+  if(api.env('site')) {
     return {
       "presets": [
+        "babel-preset-gatsby"
+      ],
+      "plugins": [
         [
-          "@babel/preset-env",
+          '@babel/plugin-proposal-decorators',
           {
-            "loose": true,
-            "modules": false
+            legacy: true,
           }
         ],
-        '@babel/preset-react',
-        "babel-preset-gatsby"
+        [
+          // import glsl as raw text
+          'babel-plugin-inline-import',
+          {
+            extensions: [
+              // 由于使用了 TS 的 resolveJsonModule 选项，JSON 可以直接引入，不需要当作纯文本
+              // '.json',
+              '.glsl',
+            ]
+          }
+        ],
       ]
     };
   }
