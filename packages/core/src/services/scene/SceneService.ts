@@ -119,6 +119,9 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.logger.info('map loaded');
+
+      // scene 创建完成自动调用render 方法
+      this.render();
     });
 
     /**
@@ -161,14 +164,13 @@ export default class Scene extends EventEmitter implements ISceneService {
       await this.initPromise;
       // 初始化 marker 容器 TODO: 可以放到 map 初始化方法中？
       this.map.addMarkerContainer();
-      this.layerService.initLayers();
-
+      this.logger.info(' render inited');
       this.inited = true;
       this.emit('loaded');
     }
 
     this.layerService.renderLayers();
-    // this.logger.info('render');
+    this.logger.info('render');
   }
 
   public destroy() {
