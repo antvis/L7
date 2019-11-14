@@ -5,7 +5,7 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
-    "@antv/gatsby-theme-antv": "^0.9.7",
+    "@antv/gatsby-theme-antv": "^0.9.52",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -54,6 +54,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
     "gatsby": "^2.17.7",
+    "gatsby-remark-prettier": "^1.0.0",
     "geotiff": "^1.0.0-beta.6",
     "gh-pages": "^2.1.1",
     "gl": "^4.4.0",
@@ -103,7 +104,7 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "export NODE_ENV=site && npm run site:develop",
+    "start": "NODE_ENV=site npm run site:develop",
     "site:develop": "gatsby develop --open -H 0.0.0.0",
     "site:build": "npm run site:clean && export NODE_ENV=site &&  gatsby build --prefix-paths",
     "site:clean": "gatsby clean",
@@ -144,5 +145,9 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@antv/g2plot": "^0.1.0-beta.5",
+    "geotiff": "^1.0.0-beta.6"
   }
 }

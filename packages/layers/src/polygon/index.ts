@@ -54,6 +54,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
         vertexShader: polygon_vert,
         fragmentShader: polygon_frag,
         triangulation: polygonTriangulation,
+        depth: { enable: false },
       }),
     ];
   }

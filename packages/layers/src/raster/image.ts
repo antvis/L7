@@ -19,7 +19,7 @@ interface IPointLayerStyleOptions {
 }
 
 export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
+  public name: string = 'ImageLayer';
   protected texture: ITexture2D;
 
   protected getConfigSchema() {

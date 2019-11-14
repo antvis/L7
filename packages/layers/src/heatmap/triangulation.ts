@@ -1,6 +1,6 @@
 import { IEncodeFeature, IParseDataItem } from '@l7/core';
 // @ts-ignore
-import Martini from '@mapbox/martini';
+
 export function heatMap3DTriangulation(width: number, height: number) {
   const indices = [];
   const vertices = [];

@@ -5,9 +5,14 @@
   },
   "demos": [
     {
-      "filename": "point.js",
-      "title": "面图层",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*KCyXTJrePiYAAAAAAAAAAABkARQnAQ"
+      "filename": "polygon.js",
+      "title": "全国地图行政区划",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*AoD6SZ4kz0wAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "fill.js",
+      "title": "分类填充图",
+      "screenshot": ""
     }
   ]
 }

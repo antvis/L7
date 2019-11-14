@@ -46,7 +46,7 @@ export default class ReglRendererService implements IRendererService {
           alpha: true,
           // use TAA instead of MSAA
           // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-          antialias: false,
+          antialias: true,
           premultipliedAlpha: true,
         },
         // TODO: use extensions
