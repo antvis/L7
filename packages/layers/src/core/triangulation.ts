@@ -1,13 +1,19 @@
 import { IEncodeFeature } from '@l7/core';
+import { aProjectFlat, lngLatToMeters } from '@l7/utils';
 import { vec3 } from 'gl-matrix';
 import getNormals from '../utils/polylineNormal';
-import extrudePolygon, { fillPolygon, IExtrudeGeomety } from './shape/extrude';
+import extrudePolygon, {
+  extrude_PolygonNormal,
+  fillPolygon,
+  IExtrudeGeomety,
+} from './shape/extrude';
 import {
   geometryShape,
   IPosition,
   ShapeType2D,
   ShapeType3D,
 } from './shape/Path';
+type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
@@ -31,11 +37,15 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
  */
 export function PointExtrudeTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
-  const { positions, index } = getGeometry(shape as ShapeType3D);
+  const { positions, index, normals } = getGeometry(
+    shape as ShapeType3D,
+    false,
+  );
   return {
     vertices: positions,
     indices: index,
-    normals: Array.from(computeVertexNormals(positions, index)),
+    normals,
+    // normals: Array.from(computeVertexNormals(positions, index, 3, false)),
     size: 3,
   };
 }
@@ -70,26 +80,25 @@ export function LineTriangulation(feature: IEncodeFeature) {
 
 export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as IPosition[][];
-  const { positions, index } = extrudePolygon(coordinates);
+  const { positions, index, normals } = extrude_PolygonNormal(
+    coordinates,
+    true,
+  );
 
   return {
     vertices: positions, // [ x, y, z ]
     indices: index,
-    normals: Array.from(computeVertexNormals(positions, index)),
+    normals,
     size: 3,
   };
 }
 
 export function HeatmapGridTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
-
-  const { positions, index } = getHeatmapGeometry(
-    shape as ShapeType2D | ShapeType3D,
-  );
+  const { positions, index } = getHeatmapGeometry(shape as IShape);
   return {
     vertices: positions, // [ x, y, z ] 多边形顶点
     indices: index,
-    normals: Array.from(computeVertexNormals(positions, index)),
     size: 3,
   };
 }
@@ -213,14 +222,14 @@ export function HeatmapTriangulation(feature: IEncodeFeature) {
  * 点图层3d geomerty
  * @param shape 3D形状
  */
-function getGeometry(shape: ShapeType3D): IExtrudeGeomety {
+function getGeometry(shape: ShapeType3D, needFlat = false): IExtrudeGeomety {
   if (GeometryCache && GeometryCache[shape]) {
     return GeometryCache[shape];
   }
   const path = geometryShape[shape]
     ? geometryShape[shape]()
     : geometryShape.cylinder();
-  const geometry = extrudePolygon([path]);
+  const geometry = extrude_PolygonNormal([path], needFlat);
   GeometryCache[shape] = geometry;
   return geometry;
 }
@@ -229,6 +238,7 @@ function computeVertexNormals(
   positions: number[],
   indexArray: number[],
   dim: number = 3,
+  needFlat: boolean = false,
 ) {
   const normals = new Float32Array((positions.length / dim) * 3);
   let vA: number;
@@ -241,11 +251,19 @@ function computeVertexNormals(
     vA = indexArray[i + 0] * 3;
     vB = indexArray[i + 1] * 3;
     vC = indexArray[i + 2] * 3;
-    const [ax, ay] = [positions[vA], positions[vA + 1]];
+    let p1 = [positions[vA], positions[vA + 1]];
+    let p2 = [positions[vB], positions[vB + 1]];
+    let p3 = [positions[vC], positions[vC + 1]];
+    if (needFlat) {
+      p1 = lngLatToMeters(p1);
+      p2 = lngLatToMeters(p2);
+      p3 = lngLatToMeters(p3);
+    }
+    const [ax, ay] = p1;
     const pA = vec3.fromValues(ax, ay, positions[vA + 2]);
-    const [bx, by] = [positions[vB], positions[vB + 1]];
+    const [bx, by] = p2;
     const pB = vec3.fromValues(bx, by, positions[vB + 2]);
-    const [cx, cy] = [positions[vC], positions[vC + 1]];
+    const [cx, cy] = p3;
     const pC = vec3.fromValues(cx, cy, positions[vC + 2]);
     vec3.sub(cb, pC, pB);
     vec3.sub(ab, pA, pB);

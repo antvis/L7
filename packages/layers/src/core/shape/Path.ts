@@ -45,7 +45,7 @@ export function triangle(): IPath {
   return polygonPath(3);
 }
 export function hexagon(): IPath {
-  return polygonPath(6);
+  return polygonPath(6, 1);
 }
 export function pentagon(): IPath {
   return polygonPath(5);

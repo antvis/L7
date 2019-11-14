@@ -1,5 +1,6 @@
 import {
   gl,
+  IAnimateOption,
   ICameraService,
   IEncodeFeature,
   IFontService,
@@ -128,6 +129,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   @lazyInject(TYPES.ILayerService)
   protected readonly layerService: ILayerService;
 
+  protected enodeOptions: {
+    [type: string]: {
+      field: StyleAttributeField;
+      values?: StyleAttributeOption;
+    };
+  } = {};
+
+  protected animateOptions: IAnimateOption = { enable: false };
+
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
@@ -228,6 +238,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+    this.enodeOptions.shape = {
+      field,
+      values,
+    };
     this.styleAttributeService.updateStyleAttribute(
       'shape',
       {
@@ -244,6 +258,33 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       // @ts-ignore
       updateOptions,
     );
+    return this;
+  }
+  public label(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.styleAttributeService.updateStyleAttribute(
+      'label',
+      {
+        // @ts-ignore
+        scale: {
+          field,
+          ...this.splitValuesAndCallbackInAttribute(
+            // @ts-ignore
+            values,
+            null,
+          ),
+        },
+      },
+      // @ts-ignore
+      updateOptions,
+    );
+    return this;
+  }
+  public animate(options: IAnimateOption) {
+    this.animateOptions = options;
     return this;
   }
 

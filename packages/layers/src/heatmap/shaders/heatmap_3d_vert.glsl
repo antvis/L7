@@ -40,6 +40,6 @@ void main() {
 
   v_intensity = texture2D(u_texture, v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
-  gl_Position = project_common_position_to_clipspace(vec4(position.xy, v_intensity * 50., 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(position.xy, fh * 50., 1.0));
 
 }

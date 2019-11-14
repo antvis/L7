@@ -3,7 +3,6 @@ uniform mat4 u_ModelMatrix;
 attribute vec3 a_Position;
 attribute vec2 a_Uv;
 varying vec2 v_texCoord;
-
 #pragma include "projection"
 void main() {
    v_texCoord = a_Uv;
