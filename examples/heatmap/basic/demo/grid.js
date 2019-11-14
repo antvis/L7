@@ -5,7 +5,7 @@ const scene = new Scene({
   style: 'light',
   pitch: 0,
   center: [116.49434030056, 39.868073421167621],
-  type: 'amap',
+  type: 'mapbox',
   zoom: 16,
 });
 
@@ -35,9 +35,9 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/c3f8bda2-081b-449d-aa9f-941
       })
       .shape('square')
       .style({
-        coverage: 0.8,
+        coverage: 1.0,
         angle: 0,
-        opacity: 0.6,
+        opacity: 1.0,
       })
       .color('count', [
         '#002466',
@@ -50,6 +50,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/c3f8bda2-081b-449d-aa9f-941
         '#730D1C',
       ]);
     scene.addLayer(layer);
+    console.log(layer);
 
 
   });

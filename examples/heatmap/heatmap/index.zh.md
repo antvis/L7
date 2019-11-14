@@ -1,4 +1,4 @@
 ---
-title: 热力图
+title: 经典热力图
 order: 0
 ---

@@ -9,10 +9,16 @@ var plugins = [{
       options: {"plugins":[]},
     },{
       plugin: require('/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/gatsby-plugin-manifest/gatsby-ssr'),
-      options: {"plugins":[],"name":"gatsby-starter-default","short_name":"starter","start_url":"/","background_color":"#722ED1","theme_color":"#722ED1","display":"minimal-ui","icon":"/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/@antv/gatsby-theme-antv/site/images/favicon.png"},
+      options: {"plugins":[],"name":"gatsby-starter-default","short_name":"starter","start_url":"/","background_color":"#1890FF","theme_color":"#1890FF","display":"minimal-ui","icon":"/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/@antv/gatsby-theme-antv/site/images/favicon.png"},
     },{
       plugin: require('/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/gatsby-plugin-layout/gatsby-ssr'),
       options: {"plugins":[],"component":"/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/@antv/gatsby-theme-antv/site/layouts/layout.tsx"},
+    },{
+      plugin: require('/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/gatsby-plugin-google-analytics/gatsby-ssr'),
+      options: {"plugins":[],"trackingId":"UA-148148901-7"},
+    },{
+      plugin: require('/Users/lizhengxue/Documents/AntV/github/L7_2.0/L7/node_modules/@antv/gatsby-theme-antv/gatsby-ssr'),
+      options: {"plugins":[],"pathPrefix":"/l7","GATrackingId":"UA-148148901-7","theme":{"primary-color":"#722ED1"}},
     }]
 // During bootstrap, we write requires at top of this file which looks like:
 // var plugins = [

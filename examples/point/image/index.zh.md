@@ -1,4 +1,4 @@
 ---
-title: 符号图
-order: 1
+title: 符号地图
+order: 2
 ---
