@@ -11,7 +11,7 @@ export default class ImageLayerDemo extends React.Component {
 
   public componentDidMount() {
     const scene = new Scene({
-      center: [121.2680, 30.3628],
+      center: [121.2680,30.3628],
       id: 'map',
       pitch: 0,
       type: 'mapbox',
