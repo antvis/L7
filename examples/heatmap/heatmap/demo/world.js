@@ -65,7 +65,7 @@ const colorObj = {
     '#F5E4EF', '#F7CDDF',
     '#ED9CBE', '#D1749B'
   ],
-  color4: [ '#F7B74A', '#FF4818', '#FFF598', '#F27DEB', '#8C1EB2', '#421EB2' ]
+  color4: [ '#421EB2', '#8C1EB2', '#F27DEB', '#FFF598', '#F7B74A', '#FF4818' ]
 }
 
 fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
