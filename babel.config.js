@@ -1,7 +1,7 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = (api) => {
-  const env = api.cache(() => process.env.NODE_ENV);
-  if(env === 'site') {
+  api.cache(() => process.env.NODE_ENV);
+  if(api.env('site')) {
     return {
       "presets": [
         "babel-preset-gatsby"
@@ -38,7 +38,12 @@ module.exports = (api) => {
           },
         },
       ],
-      '@babel/preset-react',
+      [
+        '@babel/preset-react',
+        {
+          development: process.env.BABEL_ENV !== 'build',
+        },
+      ],
       '@babel/preset-typescript',
     ],
     plugins: [
