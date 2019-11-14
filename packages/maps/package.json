@@ -21,10 +21,10 @@
   "license": "ISC",
   "dependencies": {
     "@l7/core": "^0.0.1",
+    "@l7/utils": "0.0.1",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
-    "@l7/utils": "0.0.1",
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
@@ -32,5 +32,9 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/mapbox-gl": "^0.54.3",
     "@types/viewport-mercator-project": "^6.1.0"
+  },
+  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "publishConfig": {
+    "access": "public"
   }
 }
