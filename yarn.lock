@@ -30,6 +30,112 @@
   resolved "https://registry.npm.taobao.org/@ant-design/icons/download/@ant-design/icons-2.1.1.tgz#7b9c08dffd4f5d41db667d9dbe5e0107d0bd9a4a"
   integrity sha1-e5wI3/1PXUHbZn2dvl4BB9C9mko=
 
+"@antv/adjust@~0.2.0":
+  version "0.2.1"
+  resolved "https://registry.npm.taobao.org/@antv/adjust/download/@antv/adjust-0.2.1.tgz#cd350514e2f487702f05250724b554c1054687f4"
+  integrity sha1-zTUFFOL0h3AvBSUHJLVUwQVGh/Q=
+  dependencies:
+    "@antv/util" "~2.0.0"
+    tslib "^1.10.0"
+
+"@antv/attr@~0.2.0":
+  version "0.2.0"
+  resolved "https://registry.npm.taobao.org/@antv/attr/download/@antv/attr-0.2.0.tgz#e9d786949e364936f91c3c19471d3162c73c10e0"
+  integrity sha1-6deGlJ42STb5HDwZRx0xYsc8EOA=
+  dependencies:
+    "@antv/util" "~2.0.0"
+    tslib "^1.10.0"
+
+"@antv/component@~0.4.0-beta.2", "@antv/component@~0.4.0-beta.3":
+  version "0.4.0-beta.3"
+  resolved "https://registry.npm.taobao.org/@antv/component/download/@antv/component-0.4.0-beta.3.tgz?cache=0&sync_timestamp=1573701055549&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40antv%2Fcomponent%2Fdownload%2F%40antv%2Fcomponent-0.4.0-beta.3.tgz#2a1fb9fed8cc3b40f1828c98d43cc5e590a8ea1e"
+  integrity sha1-Kh+5/tjMO0DxgoyY1DzF5ZCo6h4=
+  dependencies:
+    "@antv/attr" "~0.2.0"
+    "@antv/dom-util" "^2.0.1"
+    "@antv/event-emitter" "~0.1.0"
+    "@antv/g" "~3.5.0-beta.1"
+    "@antv/matrix-util" "^2.0.2"
+    "@antv/path-util" "^2.0.3"
+    "@antv/scale" "~0.2.0"
+    "@antv/util" "~2.0.4"
+
+"@antv/coord@~0.2.1", "@antv/coord@~0.2.2":
+  version "0.2.2"
+  resolved "https://registry.npm.taobao.org/@antv/coord/download/@antv/coord-0.2.2.tgz#8c4a1fd0959673ecccaf5bbf53c574a1c8cdbb3e"
+  integrity sha1-jEof0JWWc+zMr1u/U8V0ocjNuz4=
+  dependencies:
+    "@antv/matrix-util" "~2.0.1-beta.1"
+    "@antv/util" "~2.0.3"
+    tslib "^1.10.0"
+
+"@antv/dom-util@^2.0.1", "@antv/dom-util@~2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npm.taobao.org/@antv/dom-util/download/@antv/dom-util-2.0.1.tgz#45cf6deaa3726c60fe4340e6df3fe9f0c5fd72ea"
+  integrity sha1-Rc9t6qNybGD+Q0Dm3z/p8MX9cuo=
+
+"@antv/event-emitter@^0.1.0", "@antv/event-emitter@^0.1.1", "@antv/event-emitter@~0.1.0":
+  version "0.1.1"
+  resolved "https://registry.npm.taobao.org/@antv/event-emitter/download/@antv/event-emitter-0.1.1.tgz#5e6cae4206af0e37eb2431fc3cd9416f8d8cd06c"
+  integrity sha1-XmyuQgavDjfrJDH8PNlBb42M0Gw=
+
+"@antv/g-gesture@~0.1.0-beta.2":
+  version "0.1.0-beta.2"
+  resolved "https://registry.npm.taobao.org/@antv/g-gesture/download/@antv/g-gesture-0.1.0-beta.2.tgz#fdf7fa7455052b4211db22adc5595dfbe908804c"
+  integrity sha1-/ff6dFUFK0IR2yKtxVld++kIgEw=
+  dependencies:
+    "@antv/event-emitter" "~0.1.0"
+    d3-ease "^1.0.5"
+
+"@antv/g2@~3.6.0-beta.4":
+  version "3.6.0-beta.4"
+  resolved "https://registry.npm.taobao.org/@antv/g2/download/@antv/g2-3.6.0-beta.4.tgz?cache=0&sync_timestamp=1571712117197&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40antv%2Fg2%2Fdownload%2F%40antv%2Fg2-3.6.0-beta.4.tgz#0ea4d6466a802ceffc95e087f52bfdcc5ff4a5c8"
+  integrity sha1-DqTWRmqALO/8leCH9Sv9zF/0pcg=
+  dependencies:
+    "@antv/adjust" "~0.2.0"
+    "@antv/attr" "~0.2.0"
+    "@antv/component" "~0.4.0-beta.2"
+    "@antv/coord" "~0.2.1"
+    "@antv/dom-util" "^2.0.1"
+    "@antv/event-emitter" "~0.1.0"
+    "@antv/g" "~3.5.0-beta.1"
+    "@antv/matrix-util" "^2.0.2"
+    "@antv/path-util" "^2.0.2"
+    "@antv/scale" "~0.2.0"
+    "@antv/util" "~2.0.4"
+
+"@antv/g2plot@^0.1.0-beta.5":
+  version "0.1.0-beta.5"
+  resolved "https://registry.npm.taobao.org/@antv/g2plot/download/@antv/g2plot-0.1.0-beta.5.tgz#97b73e593251a3ed6c2b658c131753ab98fdf7f0"
+  integrity sha1-l7c+WTJRo+1sK2WMExdTq5j99/A=
+  dependencies:
+    "@antv/component" "~0.4.0-beta.3"
+    "@antv/coord" "~0.2.2"
+    "@antv/dom-util" "~2.0.1"
+    "@antv/event-emitter" "^0.1.1"
+    "@antv/g" "~3.5.0-beta.1"
+    "@antv/g-gesture" "~0.1.0-beta.2"
+    "@antv/g2" "~3.6.0-beta.4"
+    "@antv/gui" "~0.1.0-beta.4"
+    "@antv/matrix-util" "~2.0.2"
+    "@antv/scale" "^0.2.1"
+    "@antv/util" "~2.0.4"
+    fecha "~3.0.3"
+    resize-observer-polyfill "^1.5.1"
+    tslib "^1.10.0"
+
+"@antv/g@~3.5.0-beta.1":
+  version "3.5.0-beta.1"
+  resolved "https://registry.npm.taobao.org/@antv/g/download/@antv/g-3.5.0-beta.1.tgz#0b1b3e80eeb99ccf450fee1e7796dc37bc6c0978"
+  integrity sha1-Cxs+gO65nM9FD+4ed5bcN7xsCXg=
+  dependencies:
+    "@antv/event-emitter" "^0.1.0"
+    "@antv/gl-matrix" "~2.7.1"
+    "@antv/util" "~1.3.1"
+    d3-ease "~1.0.3"
+    d3-interpolate "~1.1.5"
+    d3-timer "~1.0.6"
+
 "@antv/gatsby-theme-antv@^0.9.7":
   version "0.9.44"
   resolved "https://registry.npm.taobao.org/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-0.9.44.tgz#8c85317444a4ae25d9bf0b1ee188e39a6493338a"
@@ -109,6 +215,63 @@
     slick-carousel "^1.8.1"
     ts-jest "^24.1.0"
     typescript "^3.6.3"
+
+"@antv/gl-matrix@^2.7.1", "@antv/gl-matrix@~2.7.1":
+  version "2.7.1"
+  resolved "https://registry.npm.taobao.org/@antv/gl-matrix/download/@antv/gl-matrix-2.7.1.tgz#acb8e37f7ab3df01345aba4372d7942be42eba14"
+  integrity sha1-rLjjf3qz3wE0WrpDcteUK+QuuhQ=
+
+"@antv/gui@~0.1.0-beta.4":
+  version "0.1.0-beta.4"
+  resolved "https://registry.npm.taobao.org/@antv/gui/download/@antv/gui-0.1.0-beta.4.tgz#89a58d45b15cccc80fa5c783378327b4e8c39b3c"
+  integrity sha1-iaWNRbFczMgPpceDN4MntOjDmzw=
+  dependencies:
+    "@antv/dom-util" "^2.0.1"
+    "@antv/g" "~3.5.0-beta.1"
+    "@antv/path-util" "^2.0.0"
+    "@antv/scale" "~0.2.0"
+    "@antv/util" "~2.0.0"
+    tslib "^1.10.0"
+
+"@antv/matrix-util@^2.0.2", "@antv/matrix-util@~2.0.1-beta.1", "@antv/matrix-util@~2.0.2":
+  version "2.0.4"
+  resolved "https://registry.npm.taobao.org/@antv/matrix-util/download/@antv/matrix-util-2.0.4.tgz#13a6e08c936a37ee70eee2bc714d6206b209bc70"
+  integrity sha1-E6bgjJNqN+5w7uK8cU1iBrIJvHA=
+  dependencies:
+    "@antv/gl-matrix" "^2.7.1"
+    "@antv/util" "~2.0.0"
+    tslib "^1.10.0"
+
+"@antv/path-util@^2.0.0", "@antv/path-util@^2.0.2", "@antv/path-util@^2.0.3":
+  version "2.0.4"
+  resolved "https://registry.npm.taobao.org/@antv/path-util/download/@antv/path-util-2.0.4.tgz#d3f48f9a38dde712391cdcbbac42ab7742ce6cd2"
+  integrity sha1-0/SPmjjd5xI5HNy7rEKrd0LObNI=
+  dependencies:
+    "@antv/util" "~2.0.0"
+    tslib "^1.10.0"
+
+"@antv/scale@^0.2.1", "@antv/scale@~0.2.0":
+  version "0.2.1"
+  resolved "https://registry.npm.taobao.org/@antv/scale/download/@antv/scale-0.2.1.tgz?cache=0&sync_timestamp=1569479536220&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40antv%2Fscale%2Fdownload%2F%40antv%2Fscale-0.2.1.tgz#f5a54919c9161eb791be289e0a827afdd4439cdb"
+  integrity sha1-9aVJGckWHreRviieCoJ6/dRDnNs=
+  dependencies:
+    "@antv/util" "~2.0.3"
+    moment "^2.24.0"
+    tslib "^1.10.0"
+
+"@antv/util@~1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npm.taobao.org/@antv/util/download/@antv/util-1.3.1.tgz?cache=0&sync_timestamp=1572438102677&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40antv%2Futil%2Fdownload%2F%40antv%2Futil-1.3.1.tgz#30a34b201ff9126ec0d58c72c8166a9c3e644ccd"
+  integrity sha1-MKNLIB/5Em7A1YxyyBZqnD5kTM0=
+  dependencies:
+    "@antv/gl-matrix" "^2.7.1"
+
+"@antv/util@~2.0.0", "@antv/util@~2.0.3", "@antv/util@~2.0.4":
+  version "2.0.6"
+  resolved "https://registry.npm.taobao.org/@antv/util/download/@antv/util-2.0.6.tgz?cache=0&sync_timestamp=1572438102677&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40antv%2Futil%2Fdownload%2F%40antv%2Futil-2.0.6.tgz#cf0a97de31d4594ab53f49ebcdb7dee85d3e600e"
+  integrity sha1-zwqX3jHUWUq1P0nrzbfe6F0+YA4=
+  dependencies:
+    tslib "^1.10.0"
 
 "@babel/cli@^7.6.4":
   version "7.6.4"
@@ -7993,6 +8156,11 @@ d3-dsv@^1.1.1:
     iconv-lite "0.4"
     rw "1"
 
+d3-ease@^1.0.5, d3-ease@~1.0.3:
+  version "1.0.5"
+  resolved "https://registry.npm.taobao.org/d3-ease/download/d3-ease-1.0.5.tgz#8ce59276d81241b1b72042d6af2d40e76d936ffb"
+  integrity sha1-jOWSdtgSQbG3IELWry1A522Tb/s=
+
 d3-format@1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.4.1.tgz#c45f74b17c5a290c072a4ba7039dd19662cd5ce6"
@@ -8007,6 +8175,13 @@ d3-interpolate@1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.3.2.tgz#417d3ebdeb4bc4efcc8fd4361c55e4040211fd68"
   integrity sha512-NlNKGopqaz9qM1PXh9gBF1KSCVh+jSFErrSlD/4hybwoNX/gt1d8CDbDW+3i+5UOHhjC6s6nMvRxcuoMVNgL2w==
+  dependencies:
+    d3-color "1"
+
+d3-interpolate@~1.1.5:
+  version "1.1.6"
+  resolved "https://registry.npm.taobao.org/d3-interpolate/download/d3-interpolate-1.1.6.tgz#2cf395ae2381804df08aa1bf766b7f97b5f68fb6"
+  integrity sha1-LPOVriOBgE3wiqG/dmt/l7X2j7Y=
   dependencies:
     d3-color "1"
 
@@ -8032,6 +8207,11 @@ d3-time@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.1.0.tgz#b1e19d307dae9c900b7e5b25ffc5dcc249a8a0f1"
   integrity sha512-Xh0isrZ5rPYYdqhAVk8VLnMEidhz5aP7htAADH6MfzgmmicPkTo8LhkLxci61/lCB7n7UmE3bN0leRt+qvkLxA==
+
+d3-timer@~1.0.6:
+  version "1.0.9"
+  resolved "https://registry.npm.taobao.org/d3-timer/download/d3-timer-1.0.9.tgz#f7bb8c0d597d792ff7131e1c24a36dd471a471ba"
+  integrity sha1-97uMDVl9eS/3Ex4cJKNt1HGkcbo=
 
 d@1, d@^1.0.1:
   version "1.0.1"
@@ -9859,6 +10039,11 @@ fd-slicer@~1.1.0:
   integrity sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=
   dependencies:
     pend "~1.2.0"
+
+fecha@~3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npm.taobao.org/fecha/download/fecha-3.0.3.tgz#fabbd416497649a42c24d34bfa726b579203a1e2"
+  integrity sha1-+rvUFkl2SaQsJNNL+nJrV5IDoeI=
 
 figgy-pudding@^3.4.1, figgy-pudding@^3.5.1:
   version "3.5.1"
@@ -21969,10 +22154,10 @@ ts-pnp@^1.1.2:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.1.4.tgz#ae27126960ebaefb874c6d7fa4729729ab200d90"
   integrity sha512-1J/vefLC+BWSo+qe8OnJQfWTYRS6ingxjwqmHMqaMxXMj7kFtKLgAaYW3JeX3mktjgUL+etlU8/B4VUAUI9QGw==
 
-tslib@^1.6.0, tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
+tslib@^1.10.0, tslib@^1.6.0, tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.10.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
-  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+  resolved "https://registry.npm.taobao.org/tslib/download/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
+  integrity sha1-w8GflZc/sKYpc/sJ2Q2WHuQ+XIo=
 
 tslint-config-prettier@^1.15.0:
   version "1.18.0"
