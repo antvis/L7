@@ -1,17 +1,9 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = (api) => {
-  api.cache(() => process.env.NODE_ENV);
-  if(process.env.NODE_ENV === 'site') {
+  const env = api.cache(() => process.env.NODE_ENV);
+  if(env === 'site') {
     return {
       "presets": [
-        [
-          "@babel/preset-env",
-          {
-            "loose": true,
-            "modules": false
-          }
-        ],
-        '@babel/preset-react',
         "babel-preset-gatsby"
       ],
       "plugins": [
