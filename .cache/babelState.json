@@ -6,6 +6,7 @@
           "name": "babel-plugin-import",
           "options": {
             "libraryName": "antd",
+            "libraryDirectory": "es",
             "style": true
           }
         }
@@ -29,6 +30,7 @@
           "name": "babel-plugin-import",
           "options": {
             "libraryName": "antd",
+            "libraryDirectory": "es",
             "style": true
           }
         }
@@ -52,6 +54,7 @@
           "name": "babel-plugin-import",
           "options": {
             "libraryName": "antd",
+            "libraryDirectory": "es",
             "style": true
           }
         }
@@ -75,6 +78,7 @@
           "name": "babel-plugin-import",
           "options": {
             "libraryName": "antd",
+            "libraryDirectory": "es",
             "style": true
           }
         }

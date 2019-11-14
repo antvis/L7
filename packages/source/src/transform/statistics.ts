@@ -45,7 +45,7 @@ function sum(x: number[]) {
   let transition;
 
   for (let i = 1; i < x.length; i++) {
-    transition = sumNum + x[i];
+    transition = sumNum + x[i] * 1;
 
     // Here we need to update the correction in a different fashion
     // if the new absolute value is greater than the absolute sum
@@ -59,7 +59,7 @@ function sum(x: number[]) {
   }
 
   // Returning the corrected sum
-  return sumNum + correction;
+  return sumNum + correction * 1;
 }
 function mean(x: number[]) {
   if (x.length === 0) {

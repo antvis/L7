@@ -131,6 +131,7 @@
     }
   },
   "dependencies": {
+    "@antv/g2plot": "^0.1.0-beta.5",
     "geotiff": "^1.0.0-beta.6"
   }
 }
