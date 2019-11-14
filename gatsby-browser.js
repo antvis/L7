@@ -1,4 +1,4 @@
-import './packages/component/src/css/l7.css';
+require('./packages/component/src/css/l7.css');
 // window.GeoTIFF = require('geotiff/dist/geotiff.bundle.js')
 window.scene = require('./packages/scene/src');
 window.layers= require('./packages/layers/src');
