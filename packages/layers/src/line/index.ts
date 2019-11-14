@@ -9,6 +9,8 @@ interface IPointLayerStyleOptions {
 export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
   public name: string = 'LineLayer';
 
+  private animateStartTime: number = 0;
+
   protected getConfigSchema() {
     return {
       properties: {
@@ -22,11 +24,21 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected renderModels() {
+    const {
+      enable,
+      interval = 0.2,
+      trailLength = 0.2,
+      duration = 2,
+    } = this.animateOptions;
+    const animate = enable ? 1 : 0;
     const { opacity } = this.getStyleOptions();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
           u_opacity: opacity || 1.0,
+          u_time:
+            this.layerService.clock.getElapsedTime() - this.animateStartTime,
+          u_animate: [animate, duration, interval, trailLength],
         },
       }),
     );
@@ -52,6 +64,7 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       }),
     ];
+    // this.initAnimate();
   }
 
   private registerBuiltinAttributes(layer: ILayer) {
@@ -127,5 +140,13 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       },
     });
+  }
+  // 拆分的动画插件
+  private initAnimate() {
+    const { enable } = this.animateOptions;
+    if (enable) {
+      this.layerService.startAnimate();
+      this.animateStartTime = this.layerService.clock.getElapsedTime();
+    }
   }
 }
