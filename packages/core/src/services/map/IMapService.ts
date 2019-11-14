@@ -20,9 +20,9 @@ export interface IMapService {
   getMarkerContainer(): HTMLElement;
   // MapEvent // 定义事件类型
 
-  on(type: string, hander: (...args: any[]) => void): void;
-  off(type: string, hander: (...args: any[]) => void): void;
-  once(type: string, hander: (...args: any[]) => void): void;
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   // get dom
   getContainer(): HTMLElement | null;
   getSize(): [number, number];

@@ -8,6 +8,7 @@ const scene = new Scene({
   type: 'mapbox',
   zoom: 3,
 });
+window.mapScene = scene;
 
 fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json')
   .then((res) => res.json())

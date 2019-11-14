@@ -13,6 +13,7 @@ import {
   ShapeType2D,
   ShapeType3D,
 } from './shape/Path';
+type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
@@ -94,10 +95,7 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
 
 export function HeatmapGridTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
-
-  const { positions, index } = getHeatmapGeometry(
-    shape as ShapeType2D | ShapeType3D,
-  );
+  const { positions, index } = getHeatmapGeometry(shape as IShape);
   return {
     vertices: positions, // [ x, y, z ] 多边形顶点
     indices: index,

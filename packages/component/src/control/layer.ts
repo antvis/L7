@@ -220,7 +220,8 @@ export default class Layers extends Control {
 
     const obj = this.layerService.getLayer(e.target.layerId);
 
-    const type = obj.overlay
+    // @ts-ignore
+    const type = obj?.overlay
       ? e.type === 'add'
         ? 'overlayadd'
         : 'overlayremove'
