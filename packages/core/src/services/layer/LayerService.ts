@@ -24,7 +24,9 @@ export default class LayerService implements ILayerService {
 
   public add(layer: ILayer) {
     this.layers.push(layer);
-    // layer.init();
+    debugger
+    this.initPlugin(layer);
+    layer.init();
   }
 
   public initLayers() {
