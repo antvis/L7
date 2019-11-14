@@ -1,14 +1,14 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { HeatmapGridTriangulation } from '../core/triangulation';
+import heatmapGridVert from './shaders/grid_vert.glsl';
 import heatmapGridFrag from './shaders/hexagon_frag.glsl';
-import heatmapGridVert from './shaders/hexagon_vert.glsl';
 interface IHeatMapLayerStyleOptions {
   opacity: number;
   coverage: number;
 }
 export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
-  public name: string = 'PointLayer';
+  public name: string = 'heatMapGridLayer';
 
   protected getConfigSchema() {
     return {
@@ -28,7 +28,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
       model.draw({
         uniforms: {
           u_opacity: opacity || 1.0,
-          u_coverage: coverage || 1.0,
+          u_coverage: coverage || 0.9,
           u_radius: [
             this.getSource().data.xOffset,
             this.getSource().data.yOffset,
@@ -48,6 +48,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
         depth: { enable: false },
+        primitive: gl.TRIANGLES,
       }),
     ];
   }
@@ -65,7 +66,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
+        size: 1,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -79,29 +80,6 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'normal',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Normal',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 3,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-          normal: number[],
-        ) => {
-          return normal;
-        },
-      },
-    });
     layer.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,

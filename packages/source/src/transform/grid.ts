@@ -2,6 +2,7 @@
  * 生成四边形热力图
  */
 import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@l7/core';
+import { aProjectFlat, metersToLngLat } from '@l7/utils';
 import { statMap } from './statistics';
 
 interface IGridHash {
@@ -19,8 +20,8 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
   const { gridHash, gridOffset } = _pointsGridHash(dataArray, size);
   const layerData = _getGridLayerDataFromGridHash(gridHash, gridOffset, option);
   return {
-    yOffset: gridOffset.yOffset / 1.6,
-    xOffset: gridOffset.xOffset / 1.6,
+    yOffset: gridOffset.yOffset / 1.8,
+    xOffset: gridOffset.xOffset / 1.8,
     radius: gridOffset.xOffset,
     dataArray: layerData,
   };
@@ -37,8 +38,8 @@ function _pointsGridHash(dataArray: any[], size: number) {
       latMax = pLat > latMax ? pLat : latMax;
     }
   }
-  const centerLat = (latMin + latMax) / 2;
-  // const centerLat = 34.54083;
+  // const centerLat = (latMin + latMax) / 2;
+  const centerLat = 34.54083;
   const gridOffset = _calculateGridLatLonOffset(size, centerLat);
   if (gridOffset.xOffset <= 0 || gridOffset.yOffset <= 0) {
     return { gridHash: {}, gridOffset };

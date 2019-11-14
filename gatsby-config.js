@@ -4,6 +4,11 @@ module.exports = {
       resolve: '@antv/gatsby-theme-antv',
       options: {
         pathPrefix: '/gatsby-theme-antv',
+        GATrackingId: 'UA-148148901-7',
+        pathPrefix: '/l7',
+        theme: {
+          'primary-color': '#722ED1',
+        },
       },
     },
   ],

@@ -67,7 +67,7 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 2,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -75,7 +75,7 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const { size } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
+          return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
         },
       },
     });
