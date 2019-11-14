@@ -11,7 +11,10 @@ export default function raster(data: number[], cfg: IRasterCfg): IParserData {
         height,
         min,
         max,
-        coordinates: [[extent[0], extent[1]], [extent[2], extent[3]]],
+        coordinates: [
+          [extent[0], extent[1]],
+          [extent[2], extent[3]],
+        ],
       },
     ],
   };

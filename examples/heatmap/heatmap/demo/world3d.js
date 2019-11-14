@@ -24,7 +24,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64
         radius: 5,
         opacity: 1.0,
         rampColors: {
-          colors: [
+          colors:[
             '#2E8AE6',
             '#69D1AB',
             '#DAF291',
