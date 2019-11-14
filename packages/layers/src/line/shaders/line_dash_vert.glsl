@@ -16,6 +16,8 @@ varying vec2 v_normal;
 
 varying float v_distance_ratio;
 
+
+
 #pragma include "projection"
 void main() {
 
