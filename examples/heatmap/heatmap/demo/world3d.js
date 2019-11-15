@@ -3,7 +3,7 @@ import { HeatMapLayer } from '@l7/layers';
 const scene = new Scene({
   id: 'map',
   style: 'dark',
-  pitch: 0,
+  pitch: 57.4999999,
   center: [116.49434030056, 39.868073421167621],
   type: 'mapbox',
   zoom: 3,

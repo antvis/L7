@@ -25,7 +25,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
     })
     .size(1)
     .shape('arc')
-    .color('#113681')
+    .color('#8C1EB2')
     .style({
       opacity: 0.8,
       blur: 0.99
