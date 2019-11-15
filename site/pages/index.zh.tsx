@@ -79,9 +79,9 @@ const IndexPage = () => {
     {
       logo:
         'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*2Ij9T76DyCcAAAAAAAAAAABkARQnAQ',
-      title: '灯塔专业版',
+      title: '浅色朴素色板',
       description:
-        '深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金深入金融的基金',
+        '可视化分析应用',
       link: '#',
       image:
         'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*oCd7Sq3N-QEAAAAAAAAAAABkARQnAQ',
@@ -89,9 +89,9 @@ const IndexPage = () => {
     {
       logo:
         'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*ekkhR7ISzUsAAAAAAAAAAABkARQnAQ',
-      title: '灯塔专业版2',
+      title: '深色酷炫色板',
       description:
-        '深2222222入金融的基金深入金融的基金深2222222入金融的基金深入金融的基金深2222222入金融的基金深入金融的基金',
+        '酷炫地图应用',
       image:
         'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*oCd7Sq3N-QEAAAAAAAAAAABkARQnAQ',
     },
@@ -104,10 +104,10 @@ const IndexPage = () => {
 
   return (
     <>
-      <SEO title={t('蚂蚁数据可视化')} lang={i18n.language} />
+      <SEO title={t('蚂蚁地理空间数据可视化')} lang={i18n.language} />
       <Banner
         coverImage={<BannerSVG />}
-        title={t('让数据栩栩如生')}
+        title={t('L7 地理空间可视化引擎')}
         description={t(
           'L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。',
         )}

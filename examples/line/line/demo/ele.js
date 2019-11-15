@@ -2,11 +2,11 @@ import { Scene } from '@l7/scene';
 import { LineLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
+  pitch: 40.89473684210526,
   type: 'amap',
   style: 'light',
-  center: [102.602992, 23.107329],
-  zoom: 14,
+  center: [102.60244, 23.10556],
+  zoom: 14.28,
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')

@@ -1,37 +1,36 @@
 import { Scene } from '@l7/scene';
-import { PointLayer } from '@l7/layers'
+import { PointLayer, PointImageLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,
   type: 'amap',
   style: 'light',
-  center: [121.40, 31.258134],
-  zoom: 15,
-
+  center: [140.067171, 36.26186],
+  zoom: 5.32,
+  maxZoom: 10
 });
-
-fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
+window.mapScene = scene;
+fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
   .then((res) => res.json())
   .then((data) => {
+  
     const pointLayer =
-      new PointLayer({
-      })
-        .source(data, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude'
-          }
-        }).shape('circle')
-        .size('unit_price', [5, 25])
-        .color('name',['#49B5AD', "#5B8FF9"])
+        new PointLayer({
+        })
+        .source(data)
+        .shape('circle')
+        .size('mag', [5, 16])
+        .scale('mag',{
+          type:'quantile'
+        })
+        .color('mag',(mag)=>{
+           return mag > 4.5? "#5B8FF9" : '#5CCEA1';
+        })
         .style({
           opacity: 0.3,
-          strokeWidth: 1,
+          strokeWidth: 1
         })
 
-      scene.addLayer(pointLayer);
+        scene.addLayer(pointLayer);
 
   });
-
-
