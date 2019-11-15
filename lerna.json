@@ -4,18 +4,19 @@
   ],
   "command": {
     "publish": {
-      "npmClient": "yarn",
       "ignoreChanges": ["*.md"],
-      "verifyAccess": false,
-      "verifyRegistry": false,
       "allowBranch": [
         "master",
-        "develop"
+        "develop",
+        "next"
       ],
       "message": "chore: publish"
     }
   },
   "version": "0.0.1",
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "publishConfig": {
+    "access": "public"
+  }
 }

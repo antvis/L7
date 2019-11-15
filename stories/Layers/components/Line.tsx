@@ -2,7 +2,7 @@ import { LineLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 
-export default class Point3D extends React.Component {
+export default class LineDemo extends React.Component {
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -57,7 +57,7 @@ export default class Point3D extends React.Component {
           '#002466',
         ].reverse(),
       )
-      .render();
+
     scene.addLayer(lineLayer);
     scene.render();
     this.scene = scene;

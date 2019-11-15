@@ -71,7 +71,7 @@ this.cameraService.jitterProjectionMatrix(
 useFramebuffer(this.outputRenderTarget, () => {
   this.blendModel.draw({
     uniforms: {
-      u_Opacity: layerStyleOptions.opacity || 1,
+      u_opacity: layerStyleOptions.opacity || 1,
       u_MixRatio: this.frame === 0 ? 1 : 0.9,
       u_Diffuse1: this.sampleRenderTarget,
       u_Diffuse2:

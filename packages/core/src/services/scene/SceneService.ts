@@ -59,7 +59,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   /**
    * 是否首次渲染
    */
-  private inited: boolean;
+  private inited: boolean = false;
+  private initPromise: Promise<void>;
 
   /**
    * canvas 容器
@@ -72,7 +73,6 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public constructor() {
     super();
-
     // @see https://github.com/webpack/tapable#usage
     this.hooks = {
       /**
@@ -87,6 +87,8 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public init(globalConfig: IGlobalConfig) {
     this.configService.setAndCheckConfig(globalConfig);
+    // 初始化 ShaderModule
+    this.shaderModule.registerBuiltinModules();
 
     // 初始化资源管理 图片
     this.iconService.init();
@@ -116,6 +118,9 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.logger.info('map loaded');
+
+      // scene 创建完成自动调用render 方法
+      this.render();
     });
 
     /**
@@ -134,9 +139,6 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.logger.error('容器 id 不存在');
       }
 
-      // 初始化 ShaderModule
-      this.shaderModule.registerBuiltinModules();
-
       // 初始化 container 上的交互
       this.interactionService.init();
 
@@ -144,6 +146,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     });
 
     // TODO：init worker, fontAtlas...
+
+    // 执行异步并行初始化任务
+    this.initPromise = this.hooks.init.promise(this.configService.getConfig());
   }
 
   public addLayer(layer: ILayer) {
@@ -152,15 +157,15 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
+    // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
-      // 首次渲染需要等待底图、相机初始化
-      await this.hooks.init.promise(this.configService.getConfig());
-      // 初始化marker 容器
+      // 还未初始化完成需要等待
+      await this.initPromise;
+      // 初始化 marker 容器 TODO: 可以放到 map 初始化方法中？
       this.map.addMarkerContainer();
-      this.emit('loaded');
+      this.logger.info(' render inited');
       this.inited = true;
-
-      this.layerService.initLayers();
+      this.emit('loaded');
     }
 
     this.layerService.renderLayers();
@@ -179,6 +184,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.map.destroy();
     window.removeEventListener('resize', this.handleWindowResized, false);
   }
+
   private handleWindowResized = () => {
     this.emit('resize');
     if (this.$container) {
@@ -201,6 +207,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.render();
     }
   };
+
   private handleMapCameraChanged = (viewport: IViewport) => {
     this.cameraService.update(viewport);
     this.render();

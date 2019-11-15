@@ -5,9 +5,11 @@ import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 
 import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
+import light from '../../shaders/light.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
 import pickingVert from '../../shaders/picking.vert.glsl';
+import project from '../../shaders/project.glsl';
 import projection from '../../shaders/projection.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 
@@ -22,11 +24,14 @@ export default class ShaderModuleService implements IShaderModuleService {
   private rawContentCache: { [key: string]: IModuleParams } = {};
 
   public registerBuiltinModules() {
+    this.destroy();
     this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
     this.registerModule('projection', { vs: projection, fs: '' });
+    this.registerModule('project', { vs: project, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });
     this.registerModule('lighting', { vs: lighting, fs: '' });
+    this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
   }
 
@@ -50,7 +55,10 @@ export default class ShaderModuleService implements IShaderModuleService {
       vs: extractedVS,
     };
   }
-
+  public destroy() {
+    this.moduleCache = {};
+    this.rawContentCache = {};
+  }
   public getModule(moduleName: string): IModuleParams {
     if (this.moduleCache[moduleName]) {
       return this.moduleCache[moduleName];

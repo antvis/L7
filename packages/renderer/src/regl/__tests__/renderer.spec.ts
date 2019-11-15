@@ -52,7 +52,11 @@ describe('ReglRendererService', () => {
       attributes: {
         a_Position: createAttribute({
           buffer: createBuffer({
-            data: [[-4, -4], [4, -4], [0, 4]],
+            data: [
+              [-4, -4],
+              [4, -4],
+              [0, 4],
+            ],
             type: gl.FLOAT,
           }),
         }),
@@ -86,7 +90,11 @@ describe('ReglRendererService', () => {
       attributes: {
         a_Position: createAttribute({
           buffer: createBuffer({
-            data: [[-4, -4], [4, -4], [0, 4]],
+            data: [
+              [-4, -4],
+              [4, -4],
+              [0, 4],
+            ],
             type: gl.FLOAT,
           }),
         }),
@@ -124,7 +132,11 @@ describe('ReglRendererService', () => {
       attributes: {
         a_Position: createAttribute({
           buffer: createBuffer({
-            data: [[-4, -4], [4, -4], [0, 4]],
+            data: [
+              [-4, -4],
+              [4, -4],
+              [0, 4],
+            ],
             type: gl.FLOAT,
           }),
         }),
@@ -175,7 +187,11 @@ describe('ReglRendererService', () => {
       attributes: {
         a_Position: createAttribute({
           buffer: createBuffer({
-            data: [[-4, -4], [4, -4], [0, 4]],
+            data: [
+              [-4, -4],
+              [4, -4],
+              [0, 4],
+            ],
             type: gl.FLOAT,
           }),
         }),
@@ -234,7 +250,11 @@ describe('ReglRendererService', () => {
       attributes: {
         a_Position: new ReglAttribute(reGL, {
           buffer: new ReglBuffer(reGL, {
-            data: [[-4, -4], [4, -4], [0, 4]],
+            data: [
+              [-4, -4],
+              [4, -4],
+              [0, 4],
+            ],
             type: gl.FLOAT,
           }),
         }),

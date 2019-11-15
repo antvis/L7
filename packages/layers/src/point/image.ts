@@ -6,6 +6,7 @@ import {
   ILayerPlugin,
   ILogService,
   IStyleAttributeService,
+  ITexture2D,
   lazyInject,
   TYPES,
 } from '@l7/core';
@@ -27,7 +28,7 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public name: string = 'PointLayer';
-
+  private texture: ITexture2D;
   protected getConfigSchema() {
     return {
       properties: {
@@ -46,12 +47,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 0,
-          u_texture: createTexture2D({
-            data: this.iconService.getCanvas(),
-            width: 1024,
-            height: this.iconService.canvasHeight || 64,
-          }),
+          u_opacity: opacity || 1.0,
+          u_texture: this.texture,
+          u_textSize: [1024, this.iconService.canvasHeight || 128],
         },
       }),
     );
@@ -61,7 +59,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
 
   protected buildModels() {
     this.registerBuiltinAttributes(this);
+    this.updateTexture();
     this.iconService.on('imageUpdate', () => {
+      this.updateTexture();
       this.renderModels();
     });
     this.models = [
@@ -131,11 +131,20 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const iconMap = this.iconService.getIconMap();
+
           const { shape } = feature;
           const { x, y } = iconMap[shape as string] || { x: 0, y: 0 };
           return [x, y];
         },
       },
+    });
+  }
+  private updateTexture() {
+    const { createTexture2D } = this.rendererService;
+    this.texture = createTexture2D({
+      data: this.iconService.getCanvas(),
+      width: 1024,
+      height: this.iconService.canvasHeight || 128,
     });
   }
 }

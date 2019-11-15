@@ -1,4 +1,5 @@
 const TYPES = {
+  IEventEmitter: Symbol.for('IEventEmitter'),
   ISceneService: Symbol.for('ISceneService'),
   IGlobalConfigService: Symbol.for('IGlobalConfigService'),
   ICameraService: Symbol.for('ICameraService'),

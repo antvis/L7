@@ -87,7 +87,6 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
     const { useFramebuffer, getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
-
     useFramebuffer(
       this.renderToScreen ? null : postProcessor.getWriteFBO(),
       () => {

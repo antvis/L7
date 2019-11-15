@@ -86,7 +86,6 @@ export default class ReglModel implements IModel {
     this.initBlendDrawParams({ blend }, drawParams);
     this.initStencilDrawParams({ stencil }, drawParams);
     this.initCullDrawParams({ cull }, drawParams);
-
     this.drawCommand = reGl(drawParams);
   }
 
@@ -133,7 +132,6 @@ export default class ReglModel implements IModel {
           | ReglTexture2D).get();
       }
     });
-
     this.drawCommand(reglDrawProps);
   }
 

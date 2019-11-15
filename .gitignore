@@ -65,5 +65,11 @@ jspm_packages/
 # End of https://www.gitignore.io/api/node
 
 lib/
+dist/
 
 .DS_Store
+public
+.cache
+
+yarn.lock
+package-lock.json

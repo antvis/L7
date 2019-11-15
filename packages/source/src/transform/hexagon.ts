@@ -1,4 +1,4 @@
-import { aProjectFlat, unProjectFlat } from '@l7/utils';
+import { aProjectFlat, metersToLngLat } from '@l7/utils';
 import { hexbin } from 'd3-hexbin';
 const R_EARTH = 6378000;
 import {
@@ -45,16 +45,18 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
       return {
         [option.method]: hex[option.method],
         count: hex.length,
-        coordinates: unProjectFlat([hex.x, hex.y]),
+        coordinates: [hex.x, hex.y],
         _id: index + 1,
       };
     }),
     radius: pixlSize,
+    xOffset: pixlSize,
+    yOffset: pixlSize,
   };
   return result;
 }
 function getColumn(data: IHexBinItem<IRawData>, columnName: string) {
   return data.map((item: IRawData) => {
-    return item[columnName];
+    return item[columnName] * 1;
   });
 }

@@ -1,4 +1,7 @@
 import {
+  gl,
+  IAnimateOption,
+  ICameraService,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -7,11 +10,14 @@ import {
   ILayer,
   ILayerInitializationOptions,
   ILayerPlugin,
+  ILayerService,
   IMapService,
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
   IRendererService,
+  IScale,
+  IScaleOptions,
   IShaderModuleService,
   ISourceCFG,
   IStyleAttributeService,
@@ -24,8 +30,9 @@ import {
   TYPES,
 } from '@l7/core';
 import Source from '@l7/source';
+import { EventEmitter } from 'eventemitter3';
 import { inject, multiInject } from 'inversify';
-import { isFunction } from 'lodash';
+import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
@@ -47,10 +54,12 @@ let layerIdCounter = 0;
 /**
  * Layer 基类默认样式属性
  */
-const defaultLayerInitializationOptions: Partial<
-  ILayerInitializationOptions
-> = {
-  enableMultiPassRenderer: true,
+const defaultLayerInitializationOptions: Partial<ILayerInitializationOptions> = {
+  minZoom: 0,
+  maxZoom: 20,
+  visible: true,
+  zIndex: 0,
+  enableMultiPassRenderer: false,
   enablePicking: false,
   enableHighlight: false,
   highlightColor: 'red',
@@ -59,9 +68,14 @@ const defaultLayerInitializationOptions: Partial<
   enableLighting: false,
 };
 
-export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
+export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
+  implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string;
+  public visible: boolean = true;
+  public zIndex: number = 0;
+  public minZoom: number;
+  public maxZoom: number;
 
   // 生命周期钩子
   public hooks = {
@@ -108,6 +122,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
+  @inject(TYPES.ILayerService)
+  protected readonly layerService: ILayerService;
+
+  protected enodeOptions: {
+    [type: string]: {
+      field: StyleAttributeField;
+      values?: StyleAttributeOption;
+    };
+  } = {};
+
+  protected animateOptions: IAnimateOption = { enable: false };
+
+  @inject(TYPES.IShaderModuleService)
+  protected readonly shaderModuleService: IShaderModuleService;
+
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
@@ -119,11 +148,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
 
-  @inject(TYPES.IShaderModuleService)
-  private readonly shaderModuleService: IShaderModuleService;
-
   @inject(TYPES.IMapService)
   private readonly map: IMapService;
+  private scaleOptions: IScaleOptions = {};
 
   @inject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
@@ -131,10 +158,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
   constructor(
     styleOptions: Partial<ILayerInitializationOptions & ChildLayerStyleOptions>,
   ) {
+    super();
     this.styleOptions = {
       ...defaultLayerInitializationOptions,
       ...styleOptions,
     };
+    const { minZoom, maxZoom, zIndex, visible } = this
+      .styleOptions as ILayerInitializationOptions;
+    this.visible = visible;
+    this.zIndex = zIndex;
+    this.minZoom = minZoom;
+    this.maxZoom = maxZoom;
   }
 
   public addPlugin(plugin: ILayerPlugin) {
@@ -206,6 +240,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+    this.enodeOptions.shape = {
+      field,
+      values,
+    };
     this.styleAttributeService.updateStyleAttribute(
       'shape',
       {
@@ -222,6 +260,33 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
       // @ts-ignore
       updateOptions,
     );
+    return this;
+  }
+  public label(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.styleAttributeService.updateStyleAttribute(
+      'label',
+      {
+        // @ts-ignore
+        scale: {
+          field,
+          ...this.splitValuesAndCallbackInAttribute(
+            // @ts-ignore
+            values,
+            null,
+          ),
+        },
+      },
+      // @ts-ignore
+      updateOptions,
+    );
+    return this;
+  }
+  public animate(options: IAnimateOption) {
+    this.animateOptions = options;
     return this;
   }
 
@@ -255,6 +320,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     };
     return this;
   }
+  public scale(field: string | IScaleOptions, cfg: IScale) {
+    if (isObject(field)) {
+      this.scaleOptions = {
+        ...this.scaleOptions,
+        ...field,
+      };
+    } else {
+      this.scaleOptions[field] = cfg;
+    }
+    return this;
+  }
   public render(): ILayer {
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       this.multiPassRenderer.render();
@@ -263,13 +339,49 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     }
     return this;
   }
+
+  public show(): ILayer {
+    this.visible = true;
+    this.layerService.renderLayers();
+    return this;
+  }
+
+  public hide(): ILayer {
+    this.visible = false;
+    this.layerService.renderLayers();
+    return this;
+  }
+
+  public setIndex(index: number): ILayer {
+    this.zIndex = index;
+    this.layerService.updateRenderOrder();
+    return this;
+  }
+
+  public isVisible(): boolean {
+    const zoom = this.map.getZoom();
+    return this.visible && zoom >= this.minZoom && zoom <= this.maxZoom;
+  }
+
+  public setMinZoom(min: number): ILayer {
+    this.minZoom = min;
+    return this;
+  }
+
+  public setMaxZoom(max: number): ILayer {
+    this.maxZoom = max;
+    return this;
+  }
   /**
    * zoom to layer Bounds
    */
   public fitBounds(): void {
     const source = this.getSource();
     const extent = source.extent;
-    this.map.fitBounds([[extent[0], extent[1]], [extent[2], extent[3]]]);
+    this.map.fitBounds([
+      [extent[0], extent[1]],
+      [extent[2], extent[3]],
+    ]);
   }
 
   public destroy() {
@@ -303,6 +415,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
 
   public getStyleOptions() {
     return this.styleOptions;
+  }
+  public getScaleOptions() {
+    return this.scaleOptions;
   }
 
   public setEncodedData(encodedData: IEncodeFeature[]) {
@@ -345,7 +460,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-
+    const parserData = this.getSource().data.dataArray;
     const {
       attributes,
       elements,
@@ -359,6 +474,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> implements ILayer {
       fs,
       vs,
       elements,
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: gl.SRC_ALPHA,
+          srcAlpha: 1,
+          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+          dstAlpha: 1,
+        },
+      },
       ...rest,
     });
   }

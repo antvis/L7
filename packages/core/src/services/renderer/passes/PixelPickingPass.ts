@@ -23,7 +23,8 @@ function decodePickingColor(color: Uint8Array): number {
  * @see https://github.com/antvis/L7/blob/next/dev-docs/PixelPickingEngine.md
  */
 @injectable()
-export default class PixelPickingPass<InitializationOptions = {}> implements IPass<InitializationOptions> {
+export default class PixelPickingPass<InitializationOptions = {}>
+  implements IPass<InitializationOptions> {
   @inject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
@@ -96,7 +97,7 @@ export default class PixelPickingPass<InitializationOptions = {}> implements IPa
         depth: 1,
       });
 
-      this.logger.info(`picking fbo cleared ${width} ${height}`);
+      // this.logger.info(`picking fbo cleared ${width} ${height}`);
 
       /**
        * picking pass 不需要 multipass，原因如下：
@@ -131,7 +132,12 @@ export default class PixelPickingPass<InitializationOptions = {}> implements IPa
 
     const xInDevicePixel = x * window.devicePixelRatio;
     const yInDevicePixel = y * window.devicePixelRatio;
-    if (xInDevicePixel > width || xInDevicePixel < 0 || yInDevicePixel > height || yInDevicePixel < 0) {
+    if (
+      xInDevicePixel > width ||
+      xInDevicePixel < 0 ||
+      yInDevicePixel > height ||
+      yInDevicePixel < 0
+    ) {
       return;
     }
 
@@ -213,7 +219,9 @@ export default class PixelPickingPass<InitializationOptions = {}> implements IPa
     const { clear, useFramebuffer } = this.rendererService;
 
     // 先输出到 PostProcessor
-    const readFBO = this.layer.multiPassRenderer.getPostProcessor().getReadFBO();
+    const readFBO = this.layer.multiPassRenderer
+      .getPostProcessor()
+      .getReadFBO();
     this.layer.hooks.beforeRender.call();
     useFramebuffer(readFBO, () => {
       clear({

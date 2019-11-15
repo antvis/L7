@@ -20,7 +20,11 @@ describe('ReglAttribute', () => {
   it('should initialize without `size`', () => {
     const attribute = new ReglAttribute(reGL, {
       buffer: new ReglBuffer(reGL, {
-        data: [[-4, -4], [4, -4], [0, 4]],
+        data: [
+          [-4, -4],
+          [4, -4],
+          [0, 4],
+        ],
         type: gl.FLOAT,
       }),
     });

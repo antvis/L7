@@ -231,7 +231,7 @@ export default class TAAPass<InitializationOptions = {}>
       this.blendModel.draw({
         uniforms: {
           // @ts-ignore
-          u_Opacity: layerStyleOptions.opacity || 1,
+          u_opacity: layerStyleOptions.opacity || 1,
           u_MixRatio: this.frame === 0 ? 1 : 0.9,
           u_Diffuse1: this.sampleRenderTarget,
           u_Diffuse2:

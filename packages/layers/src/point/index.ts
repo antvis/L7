@@ -10,10 +10,13 @@ import {
   TYPES,
 } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
+import { rgb2arr } from '../utils/color';
 import pointFillFrag from './shaders/fill_frag.glsl';
 import pointFillVert from './shaders/fill_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
+  strokeWidth: number;
+  strokeColor: string;
 }
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -40,11 +43,17 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const {
+      opacity = 1,
+      strokeColor = '#fff',
+      strokeWidth = 1,
+    } = this.getStyleOptions();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 0,
+          u_opacity: opacity,
+          u_stroke_width: strokeWidth,
+          u_stroke_color: rgb2arr(strokeColor),
         },
       }),
     );
@@ -60,15 +69,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         fragmentShader: pointFillFrag,
         triangulation: PointTriangulation,
         depth: { enable: false },
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
       }),
     ];
   }
@@ -118,8 +118,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size = 2 } = feature;
-          return [size as number];
+          const { size } = feature;
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });

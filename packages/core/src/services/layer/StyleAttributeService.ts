@@ -4,6 +4,7 @@ import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
+import { IParseDataItem } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 import {
   IEncodeFeature,
@@ -22,6 +23,8 @@ const bytesPerElementMap = {
   [gl.UNSIGNED_SHORT]: 2,
 };
 
+let counter = 0;
+
 /**
  * 每个 Layer 都拥有一个，用于管理样式属性的注册和更新
  */
@@ -31,6 +34,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
   private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
+
+  private c = counter++;
 
   private featureLayout: {
     sizePerElement: number;
@@ -215,10 +220,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
       ) {
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
-            const normal = normalsForCurrentFeature?.slice(
-              vertexIdx * 3,
-              vertexIdx * 3 + 3,
-            )|| [];
+            const normal =
+              normalsForCurrentFeature?.slice(
+                vertexIdx * 3,
+                vertexIdx * 3 + 3,
+              ) || [];
             (descriptor.buffer.data as number[]).push(
               ...descriptor.update(
                 feature,

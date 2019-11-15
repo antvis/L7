@@ -4,6 +4,7 @@ import {
 } from '../renderer/IAttribute';
 import { IBufferInitializationOptions } from '../renderer/IBuffer';
 import { IElements } from '../renderer/IElements';
+import { IParseDataItem, IParserData } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 
 /**
@@ -45,6 +46,9 @@ export interface IScaleOption {
   format?: () => any;
   domain?: any[];
 }
+export interface IScaleOptions {
+  [key: string]: IScale;
+}
 export interface IStyleScale {
   scale: any;
   field: string;
@@ -57,6 +61,13 @@ export enum AttributeType {
   Uniform,
 }
 
+export interface IAnimateOption {
+  enable: boolean;
+  interval?: number;
+  duration?: number;
+  trailLength?: number;
+}
+
 export interface IEncodeFeature {
   color?: Color;
   size?: number | number[];
@@ -64,6 +75,7 @@ export interface IEncodeFeature {
   pattern?: string;
   id?: number;
   coordinates: Position | Position[] | Position[][];
+  [key: string]: any;
 }
 
 export interface IVertexAttributeDescriptor

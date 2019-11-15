@@ -85,16 +85,17 @@ export default class DataMappingPlugin implements ILayerPlugin {
     if (!attribute.scale) {
       return [];
     }
-
     const scalers = attribute?.scale?.scalers || [];
     const params: unknown[] = [];
 
     scalers.forEach(({ field }) => {
-      if (record[field]) {
+      if (
+        record.hasOwnProperty(field) ||
+        attribute.scale?.type === 'variable'
+      ) {
         params.push(record[field]);
       }
     });
-
     return attribute.mapping ? attribute.mapping(params) : [];
   }
 }

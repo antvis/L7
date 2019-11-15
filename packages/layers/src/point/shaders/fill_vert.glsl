@@ -10,7 +10,9 @@ uniform float u_stroke_width : 2;
 varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
+
 #pragma include "projection"
+#pragma include "picking"
 
 void main() {
   // unpack color(vec2)
@@ -33,4 +35,6 @@ void main() {
 
   // construct point coords
   v_data = vec4(extrude, antialiasblur, shape_type);
+
+  setPickingColor(a_PickingColor);
 }

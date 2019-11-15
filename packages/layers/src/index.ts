@@ -1,14 +1,24 @@
 import { container, ILayerPlugin, TYPES } from '@l7/core';
 import BaseLayer from './core/BaseLayer';
+import HeatMapGrid3dLayer from './heatmap/gird3d';
 import HeatMapGridLayer from './heatmap/grid';
+import HeatMapLayer from './heatmap/heatmap';
+import HeatMapHexagonLayer from './heatmap/hexagon';
+import ArcLineLayer from './line/arc';
+import Arc2DLineLayer from './line/arc2d';
+import Arc3DLineLayer from './line/arc3d';
+import DashLineLayer from './line/dash';
 import LineLayer from './line/index';
 import Point3dLayer from './point/extrude';
+import PointLayer from './point/fill';
 import PointImageLayer from './point/image';
-import PointLayer from './point/index';
+import PointNormalLayer from './point/normal';
+import TextLayer from './point/text';
 // import Point from './point/point';
 import PolygonLayer from './polygon';
 import Polygon3DLayer from './polygon/polygon3D';
 import ImageLayer from './raster/image';
+import RasterLayer from './raster/raster';
 
 import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -100,10 +110,19 @@ export {
   Point3dLayer,
   PointImageLayer,
   LineLayer,
+  DashLineLayer,
   Polygon3DLayer,
   ImageLayer,
+  ArcLineLayer,
+  Arc2DLineLayer,
+  Arc3DLineLayer,
+  RasterLayer,
+  HeatMapLayer,
+  TextLayer,
+  PointNormalLayer,
+  HeatMapGrid3dLayer,
+  HeatMapHexagonLayer,
   HeatMapGridLayer,
-  // Line,
   // ImageLayer,
   // HeatMapLayer,
 };

@@ -6,7 +6,7 @@ import pointExtrudeVert from './shaders/polygon_extrude_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
-export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
+export default class PolygonLayer extends BaseLayer<IPointLayerStyleOptions> {
   public name: string = 'PolygonLayer';
 
   protected getConfigSchema() {
@@ -26,7 +26,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
-          u_Opacity: opacity || 0,
+          u_opacity: opacity || 1.0,
         },
       }),
     );
@@ -41,15 +41,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
         triangulation: PolygonExtrudeTriangulation,
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
       }),
     ];
   }

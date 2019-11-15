@@ -1,5 +1,5 @@
+import { IParserData } from '@l7/core';
 import { getImage } from '@l7/utils';
-import { IParserData } from '../interface';
 interface IImageCfg {
   extent: [number, number, number, number];
 }
@@ -19,7 +19,10 @@ export default function image(
     dataArray: [
       {
         _id: 0,
-        coordinates: [[extent[0], extent[1]], [extent[2], extent[3]]],
+        coordinates: [
+          [extent[0], extent[1]],
+          [extent[2], extent[3]],
+        ],
       },
     ],
   };

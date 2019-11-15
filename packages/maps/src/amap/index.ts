@@ -10,16 +10,18 @@ import {
   IMapService,
   IPoint,
   IViewport,
+  MapServiceEvent,
   MapType,
   TYPES,
 } from '@l7/core';
 import { DOM } from '@l7/utils';
 import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import { MapTheme } from './theme';
 import Viewport from './Viewport';
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
-const AMAP_VERSION: string = '1.4.8';
+const AMAP_VERSION: string = '1.4.15';
 /**
  * 确保多个场景只引入一个高德地图脚本
  */
@@ -46,9 +48,9 @@ export default class AMapService implements IMapService {
 
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
-
+  @inject(TYPES.IEventEmitter)
+  private eventEmitter: any;
   private markerContainer: HTMLElement;
-
   private $mapContainer: HTMLElement | null;
 
   private viewport: Viewport;
@@ -69,12 +71,19 @@ export default class AMapService implements IMapService {
   }
 
   //  map event
-  public on(type: string, handle: (...args: any[]) => void): void {
-    this.map.on(type, handle);
+  public on(type: string, handler: (...args: any[]) => void): void {
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.on(type, handler);
+    } else {
+      this.map.on(type, handler);
+    }
   }
-
-  public off(type: string, handle: (...args: any[]) => void): void {
-    this.map.off(type, handle);
+  public off(type: string, handler: (...args: any[]) => void): void {
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handler);
+    } else {
+      this.map.off(type, handler);
+    }
   }
 
   public getContainer(): HTMLElement | null {
@@ -113,7 +122,10 @@ export default class AMapService implements IMapService {
     const amapBound = this.map.getBounds().toBounds();
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
-    return [[NE.getLng(), NE.getLat()], [SW.getLng(), SW.getLat()]];
+    return [
+      [NE.getLng(), NE.getLat()],
+      [SW.getLng(), SW.getLat()],
+    ];
   }
 
   public getMinZoom(): number {
@@ -151,7 +163,7 @@ export default class AMapService implements IMapService {
     this.map.setZoomAndCenter(zoom, center);
   }
   public setMapStyle(style: string): void {
-    this.setMapStyle(style);
+    this.map.setMapStyle(this.getMapStyle(style));
   }
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
@@ -182,7 +194,14 @@ export default class AMapService implements IMapService {
   }
 
   public async init(mapConfig: IMapConfig): Promise<void> {
-    const { id, style, ...rest } = mapConfig;
+    const {
+      id,
+      style = 'light',
+      minZoom = 0,
+      maxZoom = 18,
+      token = AMAP_API_KEY,
+      ...rest
+    } = mapConfig;
 
     this.$mapContainer = document.getElementById(id);
 
@@ -191,7 +210,8 @@ export default class AMapService implements IMapService {
       const resolveMap = () => {
         // @ts-ignore
         this.map = new AMap.Map(id, {
-          mapStyle: style,
+          mapStyle: this.getMapStyle(style),
+          zooms: [minZoom, maxZoom],
           viewMode: '3D',
           ...rest,
         });
@@ -231,6 +251,13 @@ export default class AMapService implements IMapService {
 
     this.viewport = new Viewport();
   }
+  public emit(name: string, ...args: any[]) {
+    this.eventEmitter.emit(name, ...args);
+  }
+
+  public once(name: string, ...args: any[]) {
+    this.eventEmitter.once(name, ...args);
+  }
 
   public destroy() {
     this.map.destroy();
@@ -262,7 +289,6 @@ export default class AMapService implements IMapService {
       position,
     } = e.camera;
     const { lng, lat } = this.getCenter();
-
     if (this.cameraChangedCallback) {
       // resync viewport
       this.viewport.syncWithMapCamera({
@@ -282,15 +308,20 @@ export default class AMapService implements IMapService {
       });
 
       // set coordinate system
-      if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
-        this.coordinateSystemService.setCoordinateSystem(
-          CoordinateSystem.P20_OFFSET,
-        );
-      } else {
-        this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
-      }
-
+      // if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+      //   // TODO:偏移坐标系高德地图不支持 pitch bear 同步
+      //   this.coordinateSystemService.setCoordinateSystem(
+      //     CoordinateSystem.P20_OFFSET,
+      //   );
+      // } else {
+      //   this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
+      // }
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
       this.cameraChangedCallback(this.viewport);
     }
   };
+
+  private getMapStyle(name: string) {
+    return MapTheme[name] ? MapTheme[name] : name;
+  }
 }
