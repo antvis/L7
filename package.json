@@ -105,10 +105,11 @@
   },
   "scripts": {
     "start": "NODE_ENV=site npm run site:develop",
+    "build_site": "NODE_ENV=site npm run  site:build",
     "site:develop": "gatsby develop --open -H 0.0.0.0",
-    "site:build": "npm run site:clean && export NODE_ENV=site &&  gatsby build --prefix-paths",
+    "site:build": "npm run site:clean && gatsby build --prefix-paths",
     "site:clean": "gatsby clean",
-    "site:deploy": "npm run site:build && gh-pages -d public",
+    "site:deploy": "NODE_ENV=site npm run site:build && gh-pages -d public",
     "prebuild": "run-p tsc lint",
     "build": "yarn clean && lerna run build",
     "todo:postbuild": "yarn build:declarations",
