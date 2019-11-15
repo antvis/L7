@@ -1,6 +1,6 @@
 import { Scene } from '@l7/scene';
 import { RasterLayer } from '@l7/layers'
-// import * as GeoTIFF from 'geotiff/dist/geotiff.bundle.js';
+import * as GeoTIFF from 'geotiff/dist/geotiff.bundle.js';
 const scene = new Scene({
   id: 'map',
   pitch: 0,
@@ -9,9 +9,29 @@ const scene = new Scene({
   center: [121.2680, 30.3628],
   zoom: 13,
 });
+ async function getTiffData() {
+     debugger
+  const response = await fetch(
+    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+  );
+  const arrayBuffer = await response.arrayBuffer();
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image = await tiff.getImage();
+  const width = image.getWidth();
+  const height = image.getHeight();
+  const values = await image.readRasters();
+  return {
+    data: values[0],
+    width,
+    height,
+    min: 0,
+    max: 8000,
+  };
+}
 
 async function addLayer() {
-  const tiffdata = await this.getTiffData();
+  const tiffdata = await getTiffData();
+
   const layer = new RasterLayer({});
   layer
     .source(tiffdata.data, {
@@ -44,27 +64,7 @@ async function addLayer() {
     });
     return layer;
 }
-addLayer()
 scene.on('loaded',()=>{
-  const layer = addLayer();
-  scene.addLayer(layer);
+  addLayer();
 })
 
- async function getTiffData() {
-  const response = await fetch(
-    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
-  );
-  const arrayBuffer = await response.arrayBuffer();
-  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
-  const image = await tiff.getImage();
-  const width = image.getWidth();
-  const height = image.getHeight();
-  const values = await image.readRasters();
-  return {
-    data: values[0],
-    width,
-    height,
-    min: 0,
-    max: 8000,
-  };
-}
