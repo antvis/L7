@@ -3,12 +3,8 @@ module.exports = {
     {
       resolve: '@antv/gatsby-theme-antv',
       options: {
-        pathPrefix: '/gatsby-theme-antv',
         GATrackingId: 'UA-148148901-7',
-        pathPrefix: 'L7',
-        theme: {
-          'primary-color': '#722ED1',
-        },
+        pathPrefix: '/l7',
       },
     },
   ],
@@ -139,10 +135,8 @@ module.exports = {
         },
       },
     ],
-    exampleContainer: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
     playground: {
       container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
     },
   },
-
 };
