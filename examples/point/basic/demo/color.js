@@ -34,10 +34,10 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
           'vesica',
         ])
         .size('unit_price', [10, 25])
-        .color('name',['#E4504A',"#E99431", "#EBCC53","#43A5DA","#6CC175"])
+        .color('name',['#5B8FF9',"#5CCEA1", "#5D7092","#F6BD16","#E86452"])
         .style({
-          opacity:1.0,
-          strokeWidth: 1,
+          opacity:0.3,
+          strokeWidth: 2,
 
         })
 

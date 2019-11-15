@@ -57,7 +57,7 @@ export default class MapboxService implements IMapService {
 
   //  map event
   public on(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf('mapload') !== -1) {
+    if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
       // 统一事件名称
