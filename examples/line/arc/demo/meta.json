@@ -4,22 +4,21 @@
     "en": "line"
   },
   "demos": [
-
     {
       "filename": "arc3d.js",
       "title": "3D弧线"
+
+    },
+     {
+      "filename": "arcCircle.js",
+      "title": "大圆弧线",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*FTp1Roy34qgAAAAAAAAAAABkARQnAQ"
 
     },
     {
       "filename": "arc.js",
       "title": "弧线",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gdcqTa6UCsYAAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "arcCircle.js",
-      "title": "大圆弧线",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gdcqTa6UCsYAAAAAAAAAAABkARQnAQ"
-
     }
   ]
 }
