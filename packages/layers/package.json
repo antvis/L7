@@ -2,19 +2,22 @@
   "name": "@l7/layers",
   "version": "0.0.1",
   "description": "",
-  "main": "/dist/index.js",
-  "module": "esm/index.js",
-  "types": "esm/index.d.ts",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
   "sideEffects": false,
   "files": [
     "lib",
-    "esm",
+    "es",
     "README.md"
   ],
   "scripts": {
     "tsc": "tsc --project tsconfig.build.json",
-    "build": "BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=build babel src --watch --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "run-p build:*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
   "author": "xiaoiver",
   "license": "ISC",
