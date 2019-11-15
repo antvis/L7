@@ -2,11 +2,11 @@ import { Scene } from '@l7/scene';
 import { LineLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
+  pitch: 26.842105263157915,
   type: 'amap',
   style: 'dark',
-  center: [102.602992, 23.107329],
-  zoom: 14,
+  center: [102.601919, 23.108997],
+  zoom: 14.22,
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
@@ -24,17 +24,13 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
           type: 'quantize'
         })
         .color(
-          'ELEV',
-          [ '#E4682F',
-            '#FF8752',
-            '#FFA783',
-            '#FFBEA8',
-            '#FFDCD6',
-            '#EEF3FF',
-            '#C8D7F5',
-            '#A5C1FC',
-            '#7FA7F9',
-            '#5F8AE5' ].reverse()
+          'ELEV',[
+    '#094D4A', '#146968',
+    '#1D7F7E', '#289899',
+    '#34B6B7', '#4AC5AF',
+    '#5FD3A6', '#7BE39E',
+    '#A1EDB8', '#CEF8D6'
+    ],
         )
     scene.addLayer(layer);
     console.log(layer);

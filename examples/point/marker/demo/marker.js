@@ -2,7 +2,7 @@ import { Scene } from '@l7/scene';
 import { Marker } from '@l7/component'
 const scene = new Scene({
   id: 'map',
-  type: 'amap',
+  type: 'mapbox',
   style: 'light',
   center: [122.80009283836715, 37.05881309947238],
   pitch: 0,
@@ -25,7 +25,8 @@ function addMarkers() {
       el.style.background = getColor(nodes[i].v);
       const marker = new Marker({
         element: el
-      }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y }).addTo(scene);;
+      }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y })
+      .addTo(scene);;
 
     }
   })

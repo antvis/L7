@@ -5,14 +5,19 @@
   },
   "demos": [
     {
-      "filename": "buble.js",
+      "filename": "point.js",
       "title": "气泡图",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*_9ETS5_1yCEAAAAAAAAAAABkARQnAQ"
    
+    }, 
+    {
+      "filename": "color.js",
+      "title": "形状映射",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*K8ACRr5TY7UAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "world.js",
-      "title": "气泡图 - 电厂装机量",
+      "title": "气泡图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*DMREQYwsCF4AAAAAAAAAAABkARQnAQ"
     
     },
