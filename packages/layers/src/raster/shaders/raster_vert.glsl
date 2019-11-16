@@ -1,8 +1,6 @@
 precision highp float;
-
-uniform mat4 u_ModelMatrix;
 attribute vec3 a_Position;
-
+uniform mat4 u_ModelMatrix;
 uniform vec4 u_extent;
 uniform sampler2D u_texture;
 uniform sampler2D u_colorTexture;
@@ -10,9 +8,11 @@ uniform float u_min;
 uniform float u_max;
 uniform float u_width;
 uniform float u_height;
+uniform float u_heightRatio;
 
 varying vec2 v_texCoord;
 varying vec4 v_color;
+
 #pragma include "projection"
 void main() {
   vec2 uv = a_Position.xy / vec2(u_width, u_height);
@@ -35,6 +35,6 @@ void main() {
 
   //  vec2 range = u_extent.zw - u_extent.xy;
   //  vec4 project_pos = project_position(vec4(pos, 0, 1.0));
-   gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * 10., 1.0));
+   gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * u_heightRatio, 1.0));
 
 }

@@ -12,6 +12,10 @@
     {
       "filename": "raster.js",
       "title": "地形"
+    },
+    {
+      "filename": "light.js",
+      "title": "夜光图"
     }
   ]
 }

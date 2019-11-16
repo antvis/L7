@@ -2,7 +2,10 @@
 	position: absolute !important;
 	top: 0;
 	left: 0;
-	z-index: 5;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 .l7-popup-anchor-top,
 .l7-popup-anchor-top-left,
@@ -354,34 +357,6 @@
 	background-image: url(../images/layers.png);
 	width: 36px;
 	height: 36px;
-	}
-.l7-retina .l7-control-layers-toggle {
-	background-image: url(../images/layers.png);
-	background-size: 26px 26px;
-	}
-.l7-touch .l7-control-layers-toggle {
-	width: 44px;
-	height: 44px;
-	}
-.l7-control-layers .l7-control-layers-list,
-.l7-control-layers-expanded .l7-control-layers-toggle {
-	display: none;
-	}
-.l7-control-layers-expanded .l7-control-layers-list {
-	display: block;
-  position: relative;
-  font-size: 19px;
-  padding: 8px;
-	}
-.l7-control-layers-expanded {
-	padding: 6px 10px 6px 6px;
-	color: #333;
-	background: #fff;
-	}
-.l7-control-layers-scrollbar {
-	overflow-y: scroll;
-	overflow-x: hidden;
-	padding-right: 5px;
 	}
 .l7-cont.l7-marker {
 	position: absolute !important;
@@ -795,9 +770,6 @@
   height: 14px;
   margin: 0;
   vertical-align: middle;
-  -ms-transform: scale(1.5); /* IE 9 */
-  -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
-  transform: scale(1.5);
 }
 .l7-control-layers-separator {
 	height: 0;
