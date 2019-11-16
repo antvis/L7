@@ -1,16 +1,15 @@
 import { Scene } from '@l7/scene';
 import { RasterLayer } from '@l7/layers'
-import * as GeoTIFF from 'geotiff/dist/geotiff.bundle.js';
+import * as GeoTIFF from 'geotiff';
 const scene = new Scene({
   id: 'map',
   pitch: 0,
-  type: 'amap',
+  type: 'mapbox',
   style: 'light',
   center: [121.2680, 30.3628],
-  zoom: 13,
+  zoom: 3,
 });
  async function getTiffData() {
-     debugger
   const response = await fetch(
     'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
   );
@@ -45,6 +44,7 @@ async function addLayer() {
       },
     })
     .style({
+      heightRatio:10,
       opacity: 0.8,
       rampColors: {
         colors: [
@@ -64,7 +64,9 @@ async function addLayer() {
     });
     return layer;
 }
-scene.on('loaded',()=>{
-  addLayer();
+scene.on('loaded', async () =>{
+  const layer = await addLayer();
+  scene.addLayer(layer);
+  scene.render();
 })
 

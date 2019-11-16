@@ -1,4 +1,4 @@
 ---
-title: 3D柱状地图
+title: 3D 柱状地图
 order: 4
 ---
