@@ -5,10 +5,14 @@
   },
   "demos": [
     {
-      "filename": "normal.js",
-      "title": "海量点",
+      "filename": "chart.js",
+      "title": "环图",
       "screenshot":""
-
+    },
+    {
+      "filename": "popuplation.js",
+      "title": "环图",
+      "screenshot":""
     }
   ]
 }

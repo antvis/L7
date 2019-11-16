@@ -169,7 +169,7 @@ export default class Marker {
       svg.appendChild(path);
       element.appendChild(svg);
     }
-    DOM.addClass(element, 'l7-marker');
+    DOM.addClass(element, 'l7_marker');
     element.addEventListener('click', (e: MouseEvent) => {
       this.onMapClick(e);
     });
