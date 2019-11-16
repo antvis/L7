@@ -11,7 +11,12 @@
     },
     {
       "filename": "fill.js",
-      "title": "分类填充图",
+      "title": "连续填充图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*g93EQYYz9HEAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "population.js",
+      "title": "世界地图 女性人口比例",
       "screenshot": ""
     }
   ]

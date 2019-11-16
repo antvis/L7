@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { PolygonLayer } from '@l7/layers'
+import { PolygonLayer, LineLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,
@@ -20,7 +20,20 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json')
       .color('name', colors).shape('fill')
       .style({
         opacity: 0.9
-      }).render();
+      });
+
+       const layer2 =
+      new LineLayer({
+        zIndex: 2
+      })
+      .source(data)
+       .color('#fff')
+       .size(0.3)
+       .style({
+        opacity: 1
+      })
+   
     scene.addLayer(layer);
+    scene.addLayer(layer2);
     console.log(layer);
   });
