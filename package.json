@@ -5,6 +5,7 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
+    "@antv/g2": "^3.5.9",
     "@antv/gatsby-theme-antv": "^0.9.52",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
@@ -54,6 +55,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
     "gatsby": "^2.17.7",
+    "gatsby-plugin-google-analytics": "^2.1.27",
     "gatsby-remark-prettier": "^1.0.0",
     "geotiff": "^1.0.0-beta.6",
     "gh-pages": "^2.1.1",
@@ -73,7 +75,7 @@
     "raw-loader": "^1.0.0",
     "react": "^16.8.6",
     "react-docgen-typescript-loader": "^3.1.0",
-    "react-dom": "^16.8.6",
+    "react-dom": "^16.12.0",
     "react-i18next": "^11.0.1",
     "rimraf": "^2.6.2",
     "rollup": "^1.27.0",
@@ -149,7 +151,6 @@
     }
   },
   "dependencies": {
-    "@antv/g2plot": "^0.1.0-beta.5",
     "geotiff": "^1.0.0-beta.6"
   }
 }

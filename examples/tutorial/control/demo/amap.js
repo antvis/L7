@@ -7,7 +7,7 @@ const scene = new Scene({
   type: 'amap',
   style: 'dark',
   center: [121.40, 31.258134],
-  zoom: 5,
+  zoom: 14,
 });
 
 fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
@@ -39,7 +39,6 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
       };
       const layersControl = new Layers({
         overlayers: overlayers,
-        baseLayers,
       });
       
       scene.addControl(layersControl);
@@ -50,7 +49,9 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
 
 
   const zoomControl = new Zoom();
-  const scaleControl = new Scale();
+  const scaleControl = new Scale({
+    position:"bottomright"
+  });
 
   scene.addControl(zoomControl);
   scene.addControl(scaleControl);

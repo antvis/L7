@@ -1,5 +1,4 @@
 const path = require('path');
-
 exports.onCreateWebpackConfig = ({ getConfig, stage, plugins }) => {
   const config = getConfig();
   config.resolve.extensions.push('.glsl');

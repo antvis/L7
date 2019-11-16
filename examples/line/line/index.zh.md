@@ -1,6 +1,6 @@
 ---
-title: 等值线
-order: 0
+title: 等值线地图
+order: 2
 redirect_from:
   - /zh/examples/line/
 ---
