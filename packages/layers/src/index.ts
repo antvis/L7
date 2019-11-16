@@ -13,12 +13,14 @@ import Point3dLayer from './point/extrude';
 import PointLayer from './point/fill';
 import PointImageLayer from './point/image';
 import PointNormalLayer from './point/normal';
+
 import TextLayer from './point/text';
 // import Point from './point/point';
 import PolygonLayer from './polygon';
 import Polygon3DLayer from './polygon/polygon3D';
 import ImageLayer from './raster/image';
 import RasterLayer from './raster/raster';
+import Raster2DLayer from './raster/raster2d';
 
 import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -97,6 +99,7 @@ export {
   HeatMapGrid3dLayer,
   HeatMapHexagonLayer,
   HeatMapGridLayer,
+  Raster2DLayer,
   // ImageLayer,
   // HeatMapLayer,
 };
