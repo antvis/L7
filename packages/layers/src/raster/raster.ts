@@ -22,6 +22,7 @@ interface IRasterLayerStyleOptions {
   max: number;
   extent: [number, number, number, number];
   rampColors: IColorRamp;
+  heightRatio: number;
 }
 
 export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
@@ -42,7 +43,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity, heightRatio = 10 } = this.getStyleOptions();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { coordinates, width, height, min, max } = parserDataItem;
     this.models.forEach((model) =>
@@ -54,6 +55,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
           u_width: width,
           u_height: height,
           u_max: max,
+          u_heightRatio: heightRatio,
           u_colorTexture: this.colorTexture,
           u_extent: [...coordinates[0], ...coordinates[1]],
         },
@@ -72,6 +74,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       height: parserDataItem.height,
       format: gl.LUMINANCE,
       type: gl.FLOAT,
+      aniso: 4,
     });
     const { rampColors } = this.getStyleOptions();
     const imageData = generateColorRamp(rampColors as IColorRamp);

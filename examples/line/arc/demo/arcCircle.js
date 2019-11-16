@@ -3,12 +3,12 @@ import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
   pitch: 0,
-  type: 'amap',
+  type: 'mapbox',
   style: 'dark',
-  center: [102.602992, 23.107329],
-  zoom: 2,
+  center: [107.77791556935472, 35.443286920228644],
+  zoom: 2.9142882493605033,
 });
-
+window.mapScene = scene;
 fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
   .then((res) => res.text())
   .then((data) => {
