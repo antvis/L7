@@ -112,6 +112,7 @@
     "site:build": "npm run site:clean && gatsby build --prefix-paths",
     "site:clean": "gatsby clean",
     "site:deploy": "NODE_ENV=site npm run site:build && gh-pages -d public",
+    "site:publish":"gh-pages -d public",
     "prebuild": "run-p tsc lint",
     "build": "lerna exec --parallel 'BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
     "todo:postbuild": "yarn build:declarations",

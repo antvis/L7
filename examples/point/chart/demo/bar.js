@@ -1,14 +1,13 @@
 import { Scene } from '@l7/scene';
 import { Marker, Popup } from '@l7/component'
-import  * as G2Plot from '@antv/g2plot'
+import * as G2 from '@antv/g2'
 const scene = new Scene({
   id: 'map',
-
-  type: 'amap',
+  type: 'mapbox',
   style: 'light',
   center: [122.80009283836715, 37.05881309947238],
   pitch: 0,
-  zoom: 3
+  zoom: 2
 });
 
 scene.on('loaded',()=>{
@@ -22,7 +21,11 @@ function addChart() {
       const el = document.createElement('div');
       const total = item.gdp.Agriculture + item.gdp.Industry + item.gdp.Service;
 
-      const size = Math.max(Math.min(parseInt(total / 20000), 100), 30);
+      const size = Math.min(parseInt(total / 30000), 70);
+      if(size< 30) {
+        return
+      }
+      console.log(total);
       const itemData = [{
         item: 'Agriculture',
         count: item.gdp.Agriculture,
@@ -37,41 +40,22 @@ function addChart() {
         percent: item.gdp.Service / total
       }];
 
-      const config = {
-        "tooltip": {
-          "visible": true,
-          "shared": false,
-          "crosshairs": null
-        },
-        legend:{
-          "visible": false,
-        },
-        "label": {
-          "visible": false,
-          "type": "outer",
-          "style": {
-            "fill": "rgba(0, 0, 0, 0.65)"
-          }
-        },
-        "width": size,
-        "height": size,
-        "forceFit": false,
-        "radius": 1,
-        "pieStyle": {
-          "stroke": "white",
-          "lineWidth": 1
-        },
-        "innerRadius": 0.64,
-        "animation": false,
-        "colorField": "item",
-        "angleField": "percent", 
-        "color": ["#5CCEA1", "#5D7092", "#5B8FF9"]
-      }
-      const plot = new G2Plot.Ring(el, {
-        data: itemData,
-        ...config,
+
+      const chart = new G2.Chart({
+        container: el,
+        width: size,
+        height: size,
+        render: 'svg',
+        padding: 0,
       });
-      plot.render();
+      chart.legend(false);
+      chart.source(itemData);
+      chart.tooltip(false);
+      chart.axis('count', {
+        grid:false
+      });
+      chart.interval().position('item*count').color('item',['#5CCEA1','#5D7092','#5B8FF9']).opacity(1);
+      chart.render();
       new Marker({
         element: el
       }).setLnglat({

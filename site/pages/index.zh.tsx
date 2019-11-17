@@ -13,20 +13,21 @@ const IndexPage = () => {
   const features = [
     {
       icon:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*EpwBRpW2X-4AAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
       title: t('架构上灵活可扩展'),
       description: t('支持地图底图，渲染引擎，图层自由定制、扩展，组合'),
     },
     {
       icon:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bjWeSqCAyWoAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
       title: t('业务上简洁且通用'),
-      description: t('以图形符号学地理设计体系理论基础，易用，易理解，专业 专注',
+      description: t(
+        '以图形符号学地理设计体系理论基础，易用，易理解，专业 专注',
       ),
     },
     {
       icon:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*8UXGTKDotJwAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/zos/basement_prod/fd232581-14b3-45ec-a85c-fb349c51b376.svg',
       title: t('可视化上酷炫动感'),
       description: t('支持海量数据，2D、3D，动态，可交互，高性能渲染'),
     },
@@ -79,8 +80,12 @@ const IndexPage = () => {
         coverImage={
           <img
             class="Notification-module--number--31-3Z"
-            style={{ marginLeft: '125px', marginTop: '100px', height: '500px' }}
-            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*JTQgTKOaC1UAAAAAAAAAAABkARQnAQ"
+            style={{
+              marginTop: '40px',
+              marginLeft: '30px',
+              maxHeight: '600px',
+            }}
+            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VcojS5aWhMYAAAAAAAAAAABkARQnAQ"
           />
         }
         title={t('L7 地理空间可视化引擎')}

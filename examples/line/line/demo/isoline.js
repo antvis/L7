@@ -1,12 +1,12 @@
-import { Scene } from '@l7/scene';
-import { LineLayer } from '@l7/layers'
+import { Scene } from './node_modules/@l7/scene';
+import { LineLayer } from './node_modules/@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,
   type: 'amap',
   style: 'light',
-  center: [102.602992, 33.107329],
-  zoom: 3.5,
+  center: [104.117492,36.492696],
+  zoom: 3.89,
 });
 
 fetch('https://gw.alipayobjects.com/os/basement_prod/9f6afbcd-3aec-4a26-bd4a-2276d3439e0d.json')
@@ -21,8 +21,13 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/9f6afbcd-3aec-4a26-bd4a-227
         })
         .size('value', [0.5, 1, 1.5, 2])
         .shape('line')
-        .color('value', ['#FFF2E8', '#FFCEA7', '#F0A66C', '#CC464B', '#8A191A'])
+        .color('value',  [
+          '#0A3663', '#1558AC',
+          '#3771D9', '#4D89E5',
+          '#64A5D3', '#72BED6',
+          '#83CED6', '#A6E1E0',
+          '#B8EFE2', '#D7F9F0'
+        ].reverse())
     scene.addLayer(layer);
-    console.log(layer);
 
   });
