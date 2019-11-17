@@ -9,20 +9,18 @@ const scene = new Scene({
   zoom: 5.32,
   maxZoom: 10
 });
-window.mapScene = scene;
+
+
 fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
   .then((res) => res.json())
   .then((data) => {
-  
+
     const pointLayer =
         new PointLayer({
         })
         .source(data)
         .shape('circle')
-        .size('mag', [5, 16])
-        .scale('mag',{
-          type:'quantile'
-        })
+        .size('mag', [1, 25])
         .color('mag',(mag)=>{
            return mag > 4.5? "#5B8FF9" : '#5CCEA1';
         })
@@ -34,3 +32,4 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842
         scene.addLayer(pointLayer);
 
   });
+
