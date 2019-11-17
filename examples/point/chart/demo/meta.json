@@ -10,7 +10,12 @@
       "screenshot":""
     },
     {
-      "filename": "popuplation.js",
+      "filename": "ring.js",
+      "title": "环图",
+      "screenshot":""
+    },
+    {
+      "filename": "chart.js",
       "title": "环图",
       "screenshot":""
     }

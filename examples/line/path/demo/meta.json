@@ -10,14 +10,14 @@
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*1gddQ6x8Jq4AAAAAAAAAAABkARQnAQ"
     },
     {
-      "filename": "line.js",
-      "title": "等高线",
-      "screenshot":""
+      "filename": "bus_light.js",
+      "title": "公交线路",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*fuSLRL8Ym4kAAAAAAAAAAABkARQnAQ"
     },
     {
-      "filename": "line2.js",
-      "title": "等值线",
-      "screenshot":""
+      "filename": "bus_dark.js",
+      "title": "公交线路",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*c80NRaMfGLAAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "road_dark.js",

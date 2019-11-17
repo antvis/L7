@@ -14,22 +14,3 @@
   text-align: center;
   user-select: none;
 }
-.g2-guide-html {
-  width: 50px;
-  height: 50px;
-  vertical-align: middle;
-  text-align: center;
-  line-height: 0.1
-}
-
-.g2-guide-html .title {
-  font-size: 12px;
-  color: #8c8c8c;
-  font-weight: 300;
-}
-
-.g2-guide-html .value {
-  font-size: 18px;
-  color: #000;
-  font-weight: bold;
-}

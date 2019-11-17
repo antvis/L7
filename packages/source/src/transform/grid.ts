@@ -107,6 +107,6 @@ function _getGridLayerDataFromGridHash(
 }
 function getColumn(data: any[], columnName: string) {
   return data.map((item) => {
-    return item[columnName];
+    return item[columnName] * 1;
   });
 }
