@@ -5,8 +5,8 @@ const scene = new Scene({
   pitch: 0,
   type: 'mapbox',
   style: 'light',
-  center: [0, 29.877025],
-  zoom: 0,
+  center: [0.29399925603274824,0.15507808202093543],
+  zoom: 0.057043970584144114,
 });
 Promise.all([
   fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/world.geo.json').then(d => d.json()),
@@ -21,8 +21,13 @@ Promise.all([
       fe.properties.female= popobj[fe.id] * 1|| 0;
       return fe;
     })
-    console.log(world);
-  var colors = ['#b2182b','#ef8a62','#fddbc7','#f7f7f7','#d1e5f0','#67a9cf','#2166ac'];
+  var colors =  [
+    '#0A3663', '#1558AC',
+    '#3771D9', '#4D89E5',
+    '#64A5D3', '#72BED6',
+    '#83CED6', '#A6E1E0',
+    '#B8EFE2', '#D7F9F0'
+  ];
   const layer =
       new PolygonLayer({
       })
@@ -48,5 +53,4 @@ Promise.all([
 
   scene.addLayer(layer);
   scene.addLayer(layer2);
-  console.log(layer);
 });
