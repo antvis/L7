@@ -50,7 +50,7 @@ export default class AMapService implements IMapService {
       const amap = mapContainer.getElementsByClassName(
         'amap-maps',
       )[0] as HTMLElement;
-      this.markerContainer = DOM.create('div', 'l7-marker', amap);
+      this.markerContainer = DOM.create('div', 'l7-marker-container', amap);
     }
   }
   public getMarkerContainer(): HTMLElement {
