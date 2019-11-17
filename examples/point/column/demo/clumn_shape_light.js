@@ -3,7 +3,7 @@ import { Point3dLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 65.68421052631578,
-  type: 'amap',
+  type: 'mapbox',
   style: 'light',
   center: [121.3917,31.259242],
   zoom: 14.55,
