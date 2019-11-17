@@ -2,7 +2,7 @@ import { HeatMapGridLayer, HeatMapGrid3dLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
-  style: 'light',
+  style: 'dark',
   pitch: 46.49999999999997,
   center: [112.10377141242463, 29.968602656853605],
   zoom: 3.856,
@@ -24,7 +24,7 @@ fetch(
       transforms:[
         {
         type: 'grid',
-        size: 20000,
+        size: 10000,
         field:'v',
         method:'sum'
        }
@@ -39,14 +39,9 @@ fetch(
       angle: 0,
     })
     .color('count', [
-      '#0B0030', '#100243',
-      '#100243', '#1B048B',
-      '#051FB7', '#0350C1',
-      '#0350C1', '#0072C4',
-      '#0796D3', '#2BA9DF',
-      '#30C7C4', '#6BD5A0',
-      '#A7ECB2', '#D0F4CA'
+      '#FF4818', '#F7B74A',
+      '#FFF598', '#FF40F3',
+      '#9415FF', '#421EB2'
     ].reverse())
-
     scene.addLayer(layer);
   });

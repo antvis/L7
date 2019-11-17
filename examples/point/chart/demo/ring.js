@@ -1,20 +1,50 @@
 import { Scene } from '@l7/scene';
 import { Marker, Popup } from '@l7/component'
 import * as G2 from '@antv/g2'
+
+const CSS = `.l7-marker .g2-guide-html {
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 0.1
+}
+
+l7-marker .g2-guide-html .title {
+  font-size: 12px;
+  color: #8c8c8c;
+  font-weight: 300;
+}
+
+l7-marker .g2-guide-html .value {
+  font-size: 18px;
+  color: #000;
+  font-weight: bold;
+}
+`
+function loadCssCode(code) {
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  style.rel = 'stylesheet';
+  // for Chrome Firefox Opera Safari
+  style.appendChild(document.createTextNode(code));
+  // for IE
+  // style.styleSheet.cssText = code;
+  var head = document.getElementsByTagName('head')[0];
+  head.appendChild(style);
+}
+loadCssCode(CSS);
+
 const scene = new Scene({
   id: 'map',
   pitch: 0,
   type: 'mapbox',
   style: 'dark',
-  center: [0, 29.877025],
-  zoom: 0,
+  center: [52.21496184144132, 24.121126851768906],
+  zoom: 3.802,
 });
-
+window.mapScene = scene;
 scene.on('loaded', () => {
-  new Marker().setLnglat({
-    lng: 112,
-    lat: 30
-  }).addTo(scene);
   Promise.all([
     fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/world.geo.json').then(d => d.json()),
     fetch('https://gw.alipayobjects.com/os/basement_prod/5b772136-a1f4-4fc5-9a80-9f9974b4b182.json').then(d => d.json()),
@@ -36,7 +66,7 @@ scene.on('loaded', () => {
       const coord = point.geometry.coordinates;
       const v = point.properties.female * 1;
       if (v < 1 || v> 46 && v < 54) return;
-      const size = 70;
+      const size = 60;
       const data = [{
         type: '男性',
         value: 100.00 - v.toFixed(2)
@@ -48,7 +78,7 @@ scene.on('loaded', () => {
         container: el,
         width: size,
         height: size,
-        render: 'canvas',
+        render: 'svg',
         padding: 0
       });
       chart.source(data);
@@ -56,16 +86,13 @@ scene.on('loaded', () => {
       chart.tooltip(false);
       chart.coord('theta', {
         radius: 0.9,
-        innerRadius: 0.75
+        innerRadius: 0.6
       });
-      chart.guide().html({
-        position: ['50%', '50%'],
-        html: '<div class="g2-guide-html"><p class="title">' + data[1].type + '</p><p class="value">' + (data[1].value + '%') + '</p></div>'
-      });
-      console.log(data);
-      chart.intervalStack().position('value').color('type', ['#eceef1', '#f0657d',]).opacity(1);
+      chart.intervalStack().position('value').color('type', ['#5CCEA1','#5B8FF9']).opacity(1);
       chart.render();
-      new Marker().setLnglat({
+      new Marker(
+        { element: el}
+      ).setLnglat({
         lng: coord[0],
         lat: coord[1]
       }).addTo(scene);

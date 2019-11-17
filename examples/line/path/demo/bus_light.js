@@ -2,10 +2,10 @@ import { Scene } from '@l7/scene';
 import { LineLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
-  center: [103.7850524, 1.4411409],
-  pitch: 45,
-  zoom: 10,
-  rotation: 10,
+  center: [103.83735604457024,1.360253881403068],
+  pitch:  4.00000000000001,
+  zoom: 10.210275860702593,
+  rotation: 19.313180925794313,
   type: 'mapbox',
   style: 'light',
 });
@@ -23,12 +23,18 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/ee07641d-5490-4768-9826-258
           }
         })
         .size('level',(level)=>{
-          return [1.0 , level * 2]
+          return [1.0 , level * 1]
         })
         .shape('line')
         .color(
           'level',
-          ['#5B8FF9','#5CCEA1','#5D7092' ]
+          [
+            '#0A3663', '#1558AC',
+            '#3771D9', '#4D89E5',
+            '#64A5D3', '#72BED6',
+            '#83CED6', '#A6E1E0',
+            '#B8EFE2', '#D7F9F0'
+          ].slice(0,8)
         )
     scene.addLayer(layer);
     console.log(layer);
