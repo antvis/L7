@@ -48,7 +48,7 @@ export default class MapboxService implements IMapService {
   // init
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
-    this.markerContainer = DOM.create('div', 'l7_marker', container);
+    this.markerContainer = DOM.create('div', 'l7-marker-container', container);
   }
 
   public getMarkerContainer(): HTMLElement {
