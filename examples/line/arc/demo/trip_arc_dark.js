@@ -31,4 +31,5 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
     .style({
       opacity: 0.8,
     })
+    scene.addLayer(layer);
   });

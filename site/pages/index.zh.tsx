@@ -55,22 +55,21 @@ const IndexPage = () => {
 
   const cases = [
     {
-      logo:
-        'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*2Ij9T76DyCcAAAAAAAAAAABkARQnAQ',
-      title: t('浅色朴素色板'),
-      description: t('可视化分析应用'),
-      link: '#',
+      logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
+      title: t('浅色色板'),
+      description: t('一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果。'),
+      link: 'https://antvis.github.io/L7/zh/examples/gallery/basic',
       image:
-        'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*oCd7Sq3N-QEAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*8Pa8Toh3-OsAAAAAAAAAAABkARQnAQ',
     },
     {
-      logo:
-        'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*ekkhR7ISzUsAAAAAAAAAAABkARQnAQ',
-      title: t('深色酷炫色板'),
-      description: t('酷炫地图应用'),
+      logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
+      title: t('深色色板'),
+      description: t('一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果.'),
+      link: 'https://antvis.github.io/L7/zh/examples/gallery/basic',
       image:
-        'https://gw.alipayobjects.com/mdn/rms_23b644/afts/img/A*oCd7Sq3N-QEAAAAAAAAAAABkARQnAQ',
-    },
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ryTVQ49K8SkAAAAAAAAAAABkARQnAQ',
+    }
   ];
 
   return (

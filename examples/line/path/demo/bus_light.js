@@ -23,7 +23,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/ee07641d-5490-4768-9826-258
           }
         })
         .size('level',(level)=>{
-          return [1.0 , level * 1]
+          return [0.8 , level * 1]
         })
         .shape('line')
         .color(

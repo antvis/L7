@@ -5,9 +5,9 @@
   },
   "demos": [
     {
-      "filename": "normal.js",
-      "title": "海量点",
-      "screenshot":""
+      "filename": "marker.js",
+      "title": "温度",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oPofT5YBOksAAAAAAAAAAABkARQnAQ"
 
     }
   ]
