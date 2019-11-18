@@ -5,19 +5,19 @@
   },
   "demos": [
     {
+      "filename": "bar.js",
+      "title": "柱图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-Tw3TLzyJ5wAAAAAAAAAAABkARQnAQ"
+    },
+    {
       "filename": "chart.js",
       "title": "环图",
-      "screenshot":""
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Uq_RQqyMrbQAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "ring.js",
       "title": "环图",
-      "screenshot":""
-    },
-    {
-      "filename": "chart.js",
-      "title": "环图",
-      "screenshot":""
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*zUu0RYKaF28AAAAAAAAAAABkARQnAQ"
     }
   ]
 }
