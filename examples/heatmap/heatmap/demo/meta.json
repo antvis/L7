@@ -5,15 +5,20 @@
   },
   "demos": [
     {
-      "filename": "world3d.js",
-
-      "title": "经典热力图3D",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*NxFPSrd9oscAAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "world.js",
+      "filename": "heatmap.js",
       "title": "经典热力图2D",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*9zUcSK07PHgAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "heatmap_purple.js",
+      "title": "经典热力图2D",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*DFwET7xJTA8AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "heatmap3d.js",
+      "title": "经典热力图3D",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*K_nOTa1C7PoAAAAAAAAAAABkARQnAQ"
     }
+
   ]
 }

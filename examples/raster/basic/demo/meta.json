@@ -10,8 +10,13 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ZrCaR53185IAAAAAAAAAAABkARQnAQ"
     },
     {
-      "filename": "raster.js",
-      "title": "地形"
+      "filename": "radar.js",
+      "title": "地形",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ZiMnSZlmblIAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "light.js",
+      "title": "夜光图"
     }
   ]
 }
