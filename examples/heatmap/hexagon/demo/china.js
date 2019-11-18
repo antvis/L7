@@ -2,10 +2,10 @@ import { HeatMapGridLayer, HeatMapGrid3dLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
-  style: 'light',
+  style: 'dark',
   pitch: 47.49999999999995,
-  center: [114.05737552216226, 22.542656745583486],
-  zoom: 3,
+  center: [112.50447776627743,30.830476390931125],
+  zoom: 3.9879693680088626,
   type: 'mapbox',
 });
 window.mapScene = scene;
@@ -24,21 +24,25 @@ fetch(
       transforms:[
         {
         type: 'hexagon',
-        size: 10000,
+        size: 17000,
         field:'v',
         method:'sum'
       }
       ]
     })
     .size('sum',(value)=>{
-       return value * 10;
+       return value * 20;
     })
-    .shape('square')
-     .color('count', ["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
+    .shape('hexagon')
+     .color('count',[
+      '#FF4818', '#F7B74A',
+      '#FFF598', '#FF40F3',
+      '#9415FF', '#421EB2'
+    ].reverse())
     .style({
-      coverage: 0.8,
+      coverage: 0.9,
       angle: 0,
     })
-   
+
     scene.addLayer(layer);
   });

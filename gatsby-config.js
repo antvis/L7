@@ -35,7 +35,7 @@ module.exports = {
           zh: '图表演示',
           en: 'Examples',
         },
-        redirect: 'point/bubble',
+        redirect: 'gallery/basic',
       },
         // target: '_blank',
     ],
