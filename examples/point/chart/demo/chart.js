@@ -3,16 +3,17 @@ import { Marker, Popup } from '@l7/component'
 import * as G2 from '@antv/g2'
 const scene = new Scene({
   id: 'map',
-  type: 'mapbox',
+  type: 'amap',
   style: 'light',
-  center: [122.80009283836715, 37.05881309947238],
+  center: [2.6125016864608597,49.359131],
   pitch: 0,
-  zoom: 2
+  zoom: 4.19
 });
 
 scene.on('loaded',()=>{
   addChart();
 })
+window.mapScene = scene;
 function addChart() {
   fetch('https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json')
   .then((res) => res.json())
@@ -25,7 +26,6 @@ function addChart() {
       if(size< 30) {
         return
       }
-      console.log(total);
       const itemData = [{
         item: 'Agriculture',
         count: item.gdp.Agriculture,
@@ -72,7 +72,7 @@ function addChart() {
       chart.legend(false);
       chart.source(itemData);
       chart.coord('theta', {
-        innerRadius: 0.75
+        innerRadius: 0.6
       });
       chart.tooltip(false);
       chart.intervalStack().position('percent').color('item',['#5CCEA1','#5D7092','#5B8FF9']).shape('sliceShape');
