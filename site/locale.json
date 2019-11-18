@@ -1,1 +1,18 @@
-{}
+{
+  "L7 地理空间可视化引擎": "Geospatial Visualization <br> Analysis Framework",
+  "地理空间数据可视化": "Geospatial Data Visualization Analysis Framework",
+  "L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。": "Large-scale WebGL-powered  Geospatial data visualization analysis framework",
+  "架构上灵活可扩展":"Flexible and scalable",
+  "业务上简洁且通用":"Simple and Universal",
+  "可视化上酷炫动感":"Cool and Dynamic",
+  "支持地图底图，渲染引擎，图层自由定制、扩展，组合":"Support many basemap, many rendering engine, and layer free customization, extension, combination",
+  "以图形符号学地理设计体系理论基础，易用，易理解，专业，专注":"Base  on Semiology of Graphics , easy to use, easy to understand, professional, focused",
+  "支持海量数据，2D、3D，动态，可交互，高性能渲染":"Support massive data, 2D, 3D, dynamic, interactive, high performance rendering",
+  "蚂蚁数据可视化": "AntV",
+  "继续了解": "More",
+  "更新": "Update",
+  "下载使用":"Download",
+  "浅色色板": "Light Theme",
+  "深色色板": "Dark Theme",
+  "一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果." : "many real data visualization case"
+}

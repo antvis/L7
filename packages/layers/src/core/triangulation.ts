@@ -69,7 +69,11 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
  */
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
-  const line = getNormals(coordinates as number[][], false, 0);
+  let path = coordinates;
+  if (Array.isArray(path[0][0])) {
+    path = coordinates[0];
+  }
+  const line = getNormals(path as number[][], false, 0);
   return {
     vertices: line.attrPos, // [ x,y,z, distance, miter,total ]
     indices: line.attrIndex,
