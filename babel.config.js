@@ -1,7 +1,14 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = (api) => {
   api.cache(() => process.env.NODE_ENV);
-  if(api.env('site')) {
+
+  const isSite = api.env('site');
+  const isCDNBundle = api.env('bundle');
+  const isCommonJS = api.env('cjs');
+  const isESModule = api.env('esm');
+  const isTest = api.env('test');
+
+  if (isSite) { //
     return {
       "presets": [
         "babel-preset-gatsby"
@@ -40,13 +47,13 @@ module.exports = (api) => {
           },
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
-          modules: api.env('bundle') ? false : 'auto',
+          modules: (isCDNBundle || isESModule) ? false : 'auto',
         },
       ],
       [
         '@babel/preset-react',
         {
-          development: process.env.BABEL_ENV !== 'build',
+          development: isCommonJS,
         },
       ],
       '@babel/preset-typescript',
@@ -70,9 +77,10 @@ module.exports = (api) => {
       '@babel/plugin-syntax-dynamic-import',
       // let rollup do commonjs works
       // @see https://github.com/rollup/rollup-plugin-babel#modules
-      api.env('bundle') ? {} : '@babel/plugin-transform-modules-commonjs',
+      (isCDNBundle || isESModule) ? {} : '@babel/plugin-transform-modules-commonjs',
+      // '@babel/plugin-transform-modules-commonjs',
       // 开发模式下以原始文本引入，便于调试
-      api.env('bundle') ? {} : [
+      isCDNBundle ? {} : [
         // import glsl as raw text
         'babel-plugin-inline-import',
         {
@@ -93,22 +101,20 @@ module.exports = (api) => {
       // 按需引用 @see https://github.com/lodash/babel-plugin-lodash
       'lodash',
       // 内联 WebGL 常量 @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
-      api.env('bundle') ? 'inline-webgl-constants' : {},
+      isCDNBundle ? 'inline-webgl-constants' : {},
     ],
-    env: {
-      build: {
-        ignore: [
-          '**/*.test.tsx',
-          '**/*.test.ts',
-          '**/*.story.tsx',
-          '__snapshots__',
-          '__tests__',
-          '__stories__',
-          '**/*/__snapshots__',
-          '**/*/__tests__',
-        ],
-      },
-    },
-    ignore: ['node_modules'],
+    ignore: [
+      'node_modules',
+      ...!isTest ? [
+        '**/*.test.tsx',
+        '**/*.test.ts',
+        '**/*.story.tsx',
+        '__snapshots__',
+        '__tests__',
+        '__stories__',
+        '**/*/__snapshots__',
+        '**/*/__tests__',
+      ]: [],
+    ],
   };
 }
