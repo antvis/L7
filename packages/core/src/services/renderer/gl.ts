@@ -4,7 +4,6 @@
  * 使用 babel 插件对常量进行内联，以减少最终打包产物大小
  * @see https://github.com/uber/deck.gl/blob/7.1-release/dev-docs/roadmaps/dist-size-roadmap.md#inline-gl-constants
  */
-
 export enum gl {
   /* ClearBufferMask */
   DEPTH_BUFFER_BIT = 0x00000100,
