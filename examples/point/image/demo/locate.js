@@ -15,14 +15,14 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/e2fc6e0a-af2a-4320-96e5-d9f
   .then((data) => {
   scene.addImage(
     'marker',
-    'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gxtYSIbHgaYAAAAAAAAAAABkARQnAQ',
+    'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ',
   );
    const imageLayer = new PointImageLayer()
       .source(data,)
       .shape('marker')
-      .size(15);
+      .size(12);
         scene.addLayer(imageLayer);
-         
+
   });
 
 window.mapscene =scene;
