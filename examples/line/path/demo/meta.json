@@ -5,19 +5,19 @@
   },
   "demos": [
     {
+      "filename": "bus_light.js",
+      "title": "公交线路",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*fuSLRL8Ym4kAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "bus_dark.js",
+      "title": "公交线路",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*c80NRaMfGLAAAAAAAAAAAABkARQnAQ"
+    },
+    {
       "filename": "road_light.js",
       "title": "路径",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*1gddQ6x8Jq4AAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "line.js",
-      "title": "等高线",
-      "screenshot":""
-    },
-    {
-      "filename": "line2.js",
-      "title": "等值线",
-      "screenshot":""
     },
     {
       "filename": "road_dark.js",

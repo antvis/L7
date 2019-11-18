@@ -3,40 +3,31 @@ module.exports = {
     {
       resolve: '@antv/gatsby-theme-antv',
       options: {
-        pathPrefix: '/gatsby-theme-antv',
         GATrackingId: 'UA-148148901-7',
-        pathPrefix: '/l7',
-        theme: {
-          'primary-color': '#722ED1',
-        },
+        pathPrefix: '/L7',
       },
     },
   ],
   siteMetadata: {
     title: 'L7',
     description: 'Large-scale WebGL-powered  Geospatial data visualization analysis framework',
-    githubUrl: 'https://github.com/antvis/antvis.github.io',
+    githubUrl: 'https://github.com/antvis/L7',
     navs: [
-      {
-        slug: 'docs/specification',
-        title: {
-          zh: '设计语言',
-          en: 'Specification',
-        },
-      },
       {
         slug: 'docs/API',
         title: {
           zh: '文档',
-          en: 'document',
+          en: 'Document',
         },
+        redirect: 'API/L7',
       },
       {
         slug: 'docs/tutorial',
         title: {
           zh: '教程',
-          en: 'tutorial',
+          en: 'Tutorial',
         },
+        redirect: 'tutorial/quickstart',
       },
       {
         slug: 'examples',
@@ -44,7 +35,7 @@ module.exports = {
           zh: '图表演示',
           en: 'Examples',
         },
-        redirect: 'point/basic',
+        redirect: 'gallery/basic',
       },
         // target: '_blank',
     ],
@@ -53,23 +44,23 @@ module.exports = {
         slug: 'specification',
         title: {
           zh: '简介',
-          en: 'introduction',
+          en: 'Introduction',
         },
       },
       {
         slug: 'manual/tutorial',
         title: {
           zh: '教程',
-          en: 'tutorial',
+          en: 'Tutorial',
         },
       },
       {
-        slug: 'API/L7.md',
+        slug: 'API/L7',
         title: {
           zh: '简介',
-          en: 'intro',
+          en: 'Introduction',
         },
-        order:1,
+        order:0,
       },
       {
         slug: 'API/component',
@@ -94,7 +85,7 @@ module.exports = {
         icon: 'point',
         title: {
           zh: '点图层',
-          en: 'PointLayer',
+          en: 'Point Layer',
         },
       },
       {
@@ -102,7 +93,7 @@ module.exports = {
         icon: 'line',
         title: {
           zh: '线图层',
-          en: 'LineLayer',
+          en: 'Line Layer',
         },
       },
       {
@@ -110,7 +101,7 @@ module.exports = {
         icon: 'polygon',
         title: {
           zh: '面图层',
-          en: 'PolygonLayer',
+          en: 'Polygon Layer',
         },
       },
       {
@@ -118,7 +109,7 @@ module.exports = {
         icon: 'heatmap',
         title: {
           zh: '热力图',
-          en: 'HeatMapLayer',
+          en: 'HeatMap Layer',
         },
         order:5,
       },
@@ -127,7 +118,7 @@ module.exports = {
         icon: 'raster',
         title: {
           zh: '栅格图层',
-          en: 'RasterLayer',
+          en: 'Raster Layer',
         },
       },
       {
@@ -135,14 +126,12 @@ module.exports = {
         icon: 'map',
         title: {
           zh: '教程示例',
-          en: 'tutorial',
+          en: 'Tutorial demo',
         },
       },
     ],
-    exampleContainer: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
     playground: {
       container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
     },
   },
-
 };
