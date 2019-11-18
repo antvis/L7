@@ -115,7 +115,7 @@
     "site:deploy": "NODE_ENV=site npm run site:build && gh-pages -d public",
     "site:publish":"gh-pages -d public",
     "prebuild": "run-p tsc lint",
-    "build": "lerna exec --parallel 'BABEL_ENV=build babel src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
+    "build": "yarn clean && lerna run build",
     "todo:postbuild": "yarn build:declarations",
     "fix": "run-p -c 'lint:ts-* --fix'",
     "lint:css": "stylelint 'packages/**/*.ts{,x}'",
@@ -128,13 +128,14 @@
     "prerelease": "yarn build",
     "release": "lerna publish from-package --registry https://registry.npmjs.com/",
     "storybook": "start-storybook -p 6006",
-    "test": "jest",
+    "test": "BABEL_ENV=test jest",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "tsc": "tsc",
     "build:declarations": "lerna exec --stream --no-bail 'tsc --project ./tsconfig.build.json'",
-    "watch": "lerna exec --parallel 'BABEL_ENV=build babel --watch src --root-mode upward --out-dir dist --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
-    "bundle": "NODE_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js",
-    "glsl-minify": "node_modules/.bin/glsl-minifier -i ./build/example.frag -o ./build/example.min.frag"
+    "watch": "yarn clean && lerna exec --parallel 'BABEL_ENV=cjs babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
+    "bundle": "BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js",
+    "glsl-minify": "node_modules/.bin/glsl-minifier -i ./build/example.frag -o ./build/example.min.frag",
+    "clean": "lerna run clean"
   },
   "workspaces": [
     "packages/*",
