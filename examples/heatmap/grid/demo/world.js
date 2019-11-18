@@ -3,11 +3,12 @@ import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
   style: 'dark',
-  pitch: 46.49999999999997,
-  center: [112.10377141242463, 29.968602656853605],
-  zoom: 3.856,
+  pitch: 0,
+  center: [110.097892,  33.853662],
+  zoom: 4.056,
   type: 'amap',
 });
+
 window.mapScene = scene;
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
@@ -24,7 +25,7 @@ fetch(
       transforms:[
         {
         type: 'grid',
-        size: 20000,
+        size: 10000,
         field:'v',
         method:'sum'
        }
@@ -44,6 +45,5 @@ fetch(
       '#46F3FF', '#02BEFF',
       '#1A7AFF', '#0A1FB2'
     ].reverse())
-
     scene.addLayer(layer);
   });
