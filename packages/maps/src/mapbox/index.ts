@@ -48,7 +48,7 @@ export default class MapboxService implements IMapService {
   // init
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
-    this.markerContainer = DOM.create('div', 'l7_marker', container);
+    this.markerContainer = DOM.create('div', 'l7-marker-container', container);
   }
 
   public getMarkerContainer(): HTMLElement {
@@ -57,7 +57,7 @@ export default class MapboxService implements IMapService {
 
   //  map event
   public on(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf('mapload') !== -1) {
+    if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
       // 统一事件名称

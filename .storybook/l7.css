@@ -1,3 +1,6 @@
+.l7-marker-container {
+ width:100%
+}
 .l7-marker {
 	position: absolute !important;
 	top: 0;
@@ -279,7 +282,7 @@
 .l7-right .l7-control {
 	margin-right: 10px;
   }
-  
+
   /* attribution and scale controls */
 
 .l7-control-container .l7-control-attribution {
