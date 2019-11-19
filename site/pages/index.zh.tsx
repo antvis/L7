@@ -4,6 +4,7 @@ import Cases from '@antv/gatsby-theme-antv/site/components/Cases';
 import Companies from '@antv/gatsby-theme-antv/site/components/Companies';
 import Features from '@antv/gatsby-theme-antv/site/components/Features';
 import SEO from '@antv/gatsby-theme-antv/site/components/Seo';
+import '../css/home.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -78,12 +79,7 @@ const IndexPage = () => {
       <Banner
         coverImage={
           <img
-            class="Notification-module--number--31-3Z"
-            style={{
-              marginTop: '40px',
-              marginLeft: '30px',
-              maxHeight: '600px',
-            }}
+            className="cover-image"
             src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VcojS5aWhMYAAAAAAAAAAABkARQnAQ"
           />
         }

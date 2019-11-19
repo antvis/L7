@@ -8,8 +8,8 @@
       "filename": "point.js",
       "title": "气泡图",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*_9ETS5_1yCEAAAAAAAAAAABkARQnAQ"
-   
-    }, 
+
+    },
     {
       "filename": "color.js",
       "title": "形状映射",
@@ -19,13 +19,13 @@
       "filename": "world.js",
       "title": "气泡图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*DMREQYwsCF4AAAAAAAAAAABkARQnAQ"
-    
-    },
-    {
-      "filename": "normal.js",
-      "title": "城市亮度图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Xp7iRaORYuIAAAAAAAAAAABkARQnAQ"
-    
+
+    }, {
+      "filename": "scatter.js",
+      "title": "定点图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Jt3ZSb8VH98AAAAAAAAAAABkARQnAQ"
+
     }
+  
   ]
 }
