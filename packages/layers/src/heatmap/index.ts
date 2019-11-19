@@ -1,112 +1,60 @@
-// import {
-//   gl,
-//   IRendererService,
-//   IShaderModuleService,
-//   lazyInject,
-//   TYPES,
-// } from '@l7/core';
-// import BaseLayer from '../core/BaseLayer';
-// import GridHeatMapBuffer from './buffers/GridBuffer';
-// import hexagon_frag from './shaders/hexagon_frag.glsl';
-// import hexagon_vert from './shaders/hexagon_vert.glsl';
+import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
+import BaseLayer from '../core/BaseLayer';
+import HeatMapModels, { HeatMapModelType } from './models';
+interface IPointLayerStyleOptions {
+  opacity: number;
+}
+export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
+  public name: string = 'HeatMapLayer';
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
+  }
 
-// export default class HeatMapLayer extends BaseLayer {
-//   public name: string = 'HeatMapLayer';
+  protected renderModels() {
+    const shape = this.getModelType();
+    if (shape === 'heatmap') {
+      this.layerModel.render();
+      return;
+    }
+    this.models.forEach((model) =>
+      model.draw({
+        uniforms: this.layerModel.getUninforms(),
+      }),
+    );
+    return this;
+  }
 
-//   @lazyInject(TYPES.IShaderModuleService)
-//   private readonly shaderModule: IShaderModuleService;
-
-//   @lazyInject(TYPES.IRendererService)
-//   private readonly renderer: IRendererService;
-
-//   protected renderModels() {
-//     this.models.forEach((model) =>
-//       model.draw({
-//         uniforms: {
-//           u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-//         },
-//       }),
-//     );
-//     return this;
-//   }
-
-//   protected buildModels(): void {
-//     this.shaderModule.registerModule('grid', {
-//       vs: hexagon_vert,
-//       fs: hexagon_frag,
-//     });
-//     this.models = [];
-//     const { vs, fs, uniforms } = this.shaderModule.getModule('grid');
-//     const buffer = new GridHeatMapBuffer({
-//       data: this.getEncodedData(),
-//     });
-//     const {
-//       createAttribute,
-//       createBuffer,
-//       createElements,
-//       createModel,
-//     } = this.renderer;
-
-//     this.models.push(
-//       createModel({
-//         attributes: {
-//           a_miter: createAttribute({
-//             buffer: createBuffer({
-//               data: buffer.instanceGeometry.positions,
-//               type: gl.FLOAT,
-//             }),
-//             size: 3,
-//             divisor: 0,
-//           }),
-//           // a_normal: createAttribute({
-//           //   buffer: createBuffer({
-//           //     data: buffer.attributes.normals,
-//           //     type: gl.FLOAT,
-//           //   }),
-//           //   size: 3,
-//           // }),
-//           a_color: createAttribute({
-//             buffer: createBuffer({
-//               data: buffer.attributes.colors,
-//               type: gl.FLOAT,
-//             }),
-//             size: 4,
-//             divisor: 1,
-//           }),
-//           // a_size: createAttribute({
-//           //   buffer: createBuffer({
-//           //     data: buffer.attributes.sizes,
-//           //     type: gl.FLOAT,
-//           //   }),
-//           //   size: 1,
-//           //   divisor: 1,
-//           // }),
-//           a_Position: createAttribute({
-//             buffer: createBuffer({
-//               data: buffer.attributes.positions,
-//               type: gl.FLOAT,
-//             }),
-//             size: 3,
-//             divisor: 1,
-//           }),
-//         },
-//         uniforms: {
-//           ...uniforms,
-//           u_opacity: (this.styleOption.opacity as number) || 1.0,
-//           u_radius: [
-//             this.getSource().data.xOffset,
-//             this.getSource().data.yOffset,
-//           ],
-//         },
-//         fs,
-//         vs,
-//         count: buffer.instanceGeometry.index.length,
-//         instances: buffer.verticesCount,
-//         elements: createElements({
-//           data: buffer.instanceGeometry.index,
-//           type: gl.UNSIGNED_INT,
-//         }),
-//       }),
-//     );
-//   }
-// }
+  protected buildModels() {
+    const shape = this.getModelType();
+    this.layerModel = new HeatMapModels[shape](this);
+    this.models = this.layerModel.buildModels();
+  }
+  private getModelType(): HeatMapModelType {
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
+    const { shape3d } = this.configService.getConfig();
+    const source = this.getSource();
+    const sourceType = source.data.type;
+    const shape =
+      (shapeAttribute?.scale?.field as HeatMapModelType) || 'heatmap';
+    if (shape === 'heatmap' || shape === 'heatmap3d') {
+      return 'heatmap';
+    }
+    if (sourceType === 'hexagon') {
+      return shape3d?.indexOf(shape) === -1 ? 'hexagon' : 'grid3d';
+    }
+    if (sourceType === 'grid') {
+      return shape3d?.indexOf(shape) === -1 ? 'grid' : 'grid3d';
+    }
+    return 'heatmap';
+  }
+}

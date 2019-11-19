@@ -1,48 +1,39 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { HeatmapGridTriangulation } from '../core/triangulation';
-import heatmapGridVert from './shaders/grid_vert.glsl';
-import heatmapGridFrag from './shaders/hexagon_frag.glsl';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayer,
+  ILayerModel,
+  IModel,
+  IModelUniform,
+} from '@l7/core';
+import BaseModel from '../../core/baseModel';
+import { HeatmapGridTriangulation } from '../../core/triangulation';
+import heatmapGridVert from '../shaders/grid_vert.glsl';
+import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
 interface IHeatMapLayerStyleOptions {
   opacity: number;
   coverage: number;
 }
-export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
-  public name: string = 'heatMapGridLayer';
-
-  protected getConfigSchema() {
+export default class GridModel extends BaseModel {
+  public getUninforms(): IModelUniform {
+    const {
+      opacity,
+      coverage,
+    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
     return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
+      u_opacity: opacity || 1.0,
+      u_coverage: coverage || 0.9,
+      u_radius: [
+        this.layer.getSource().data.xOffset,
+        this.layer.getSource().data.yOffset,
+      ],
     };
   }
 
-  protected renderModels() {
-    const { opacity, coverage } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity || 1.0,
-          u_coverage: coverage || 0.9,
-          u_radius: [
-            this.getSource().data.xOffset,
-            this.getSource().data.yOffset,
-          ],
-        },
-      }),
-    );
-    return this;
-  }
-
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
         moduleName: 'gridheatmap',
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
@@ -52,10 +43,9 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
       }),
     ];
   }
-
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -80,7 +70,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,
       descriptor: {

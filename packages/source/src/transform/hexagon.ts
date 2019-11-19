@@ -52,6 +52,7 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
     radius: pixlSize,
     xOffset: pixlSize,
     yOffset: pixlSize,
+    type: 'hexagon',
   };
   return result;
 }

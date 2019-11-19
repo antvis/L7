@@ -9,6 +9,8 @@ import {
   IInteractionService,
   ILayer,
   ILayerInitializationOptions,
+  ILayerModel,
+  ILayerModelInitializationOptions,
   ILayerPlugin,
   ILayerService,
   IMapService,
@@ -37,13 +39,6 @@ import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import baseLayerSchema from './schema';
-
-export interface ILayerModelInitializationOptions {
-  moduleName: string;
-  vertexShader: string;
-  fragmentShader: string;
-  triangulation: Triangulation;
-}
 
 /**
  * 分配 layer id
@@ -110,15 +105,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public readonly configService: IGlobalConfigService;
 
   @lazyInject(TYPES.IIconService)
-  protected readonly iconService: IIconService;
+  public readonly iconService: IIconService;
 
   @lazyInject(TYPES.IFontService)
-  protected readonly fontService: IFontService;
-
-  protected layerSource: Source;
+  public readonly fontService: IFontService;
 
   @lazyInject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
+  public readonly rendererService: IRendererService;
+
+  protected layerSource: Source;
 
   @lazyInject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
@@ -128,6 +123,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   @lazyInject(TYPES.ILayerService)
   protected readonly layerService: ILayerService;
+
+  protected layerModel: ILayerModel;
 
   protected enodeOptions: {
     [type: string]: {
@@ -441,7 +438,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.interactionService.triggerHover({ x, y });
   }
 
-  protected buildLayerModel(
+  public buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel {

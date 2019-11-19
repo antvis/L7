@@ -1,8 +1,8 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { PolygonExtrudeTriangulation } from '../core/triangulation';
-import pointExtrudeFrag from './shaders/polygon_extrude_frag.glsl';
-import pointExtrudeVert from './shaders/polygon_extrude_vert.glsl';
+import polygonExtrudeFrag from './shaders/polygon_extrude_frag.glsl';
+import polygonExtrudeVert from './shaders/polygon_extrude_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
@@ -38,8 +38,8 @@ export default class PolygonLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models = [
       this.buildLayerModel({
         moduleName: 'polygonExtrude',
-        vertexShader: pointExtrudeVert,
-        fragmentShader: pointExtrudeFrag,
+        vertexShader: polygonExtrudeVert,
+        fragmentShader: polygonExtrudeFrag,
         triangulation: PolygonExtrudeTriangulation,
       }),
     ];

@@ -3,16 +3,16 @@ import {
   gl,
   IEncodeFeature,
   ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
+  ILayerModel,
+  IModel,
+  IModelUniform,
 } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { rgb2arr } from '../utils/color';
-import normalFrag from './shaders/normal_frag.glsl';
-import normalVert from './shaders/normal_vert.glsl';
+
+import BaseModel from '../../core/baseModel';
+import { rgb2arr } from '../../utils/color';
+import normalFrag from '../shaders/normal_frag.glsl';
+import normalVert from '../shaders/normal_vert.glsl';
+
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
@@ -26,45 +26,24 @@ export function PointTriangulation(feature: IEncodeFeature) {
     size: coordinates.length,
   };
 }
-export default class PointNormalLayer extends BaseLayer<
-  IPointLayerStyleOptions
-> {
-  public name: string = 'PointLayer';
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
-  protected renderModels() {
+export default class NormalModel extends BaseModel {
+  public getUninforms(): IModelUniform {
     const {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',
       strokeWidth = 1,
-    } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity,
-          u_stroke_width: strokeWidth,
-          u_stroke_color: rgb2arr(strokeColor),
-        },
-      }),
-    );
-    return this;
+    } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    return {
+      u_opacity: opacity,
+      u_stroke_width: strokeWidth,
+      u_stroke_color: rgb2arr(strokeColor),
+    };
   }
 
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
         moduleName: 'normalpoint',
         vertexShader: normalVert,
         fragmentShader: normalFrag,
@@ -84,9 +63,9 @@ export default class PointNormalLayer extends BaseLayer<
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
