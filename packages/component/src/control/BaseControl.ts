@@ -3,11 +3,11 @@ import {
   ILayerService,
   IMapService,
   IRendererService,
-  lazyInject,
   TYPES,
 } from '@l7/core';
 import { DOM } from '@l7/utils';
 import { EventEmitter } from 'eventemitter3';
+import { Container } from 'inversify';
 
 export enum PositionType {
   'TOPRIGHT' = 'topright',
@@ -26,15 +26,11 @@ export interface IControlOption {
 }
 export default class Control extends EventEmitter {
   public controlOption: IControlOption;
-  protected mapsService: IMapService;
   protected container: HTMLElement;
-
-  @lazyInject(TYPES.IRendererService)
-  protected readonly renderService: IRendererService;
-  @lazyInject(TYPES.ILayerService)
-  protected readonly layerService: ILayerService;
-  @lazyInject(TYPES.IControlService)
-  private readonly controlService: IControlService;
+  protected mapsService: IMapService;
+  protected renderService: IRendererService;
+  protected layerService: ILayerService;
+  protected controlService: IControlService;
 
   private isShow: boolean;
 
@@ -45,27 +41,36 @@ export default class Control extends EventEmitter {
       ...(cfg || {}),
     };
   }
+
   public getDefault() {
     return {
       position: PositionType.TOPRIGHT,
     };
   }
   public setPosition(position: PositionName) {
-    const controlService = this.controlService;
-    if (controlService) {
-      controlService.removeControl(this);
-    }
-    this.controlOption.position = position;
-    if (controlService) {
-      controlService.addControl(this, this.mapsService);
-    }
+    // FIXME: 只是改变位置不需要销毁再重建吧
+    // const controlService = this.controlService;
+    // if (controlService) {
+    //   controlService.removeControl(this);
+    // }
+    // this.controlOption.position = position;
+    // if (controlService) {
+    //   controlService.addControl(this, this.mapsService);
+    // }
     return this;
   }
-  public addTo(mapService: IMapService) {
-    this.remove();
+  public addTo(sceneContainer: Container) {
+    this.mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
+    this.renderService = sceneContainer.get<IRendererService>(
+      TYPES.IRendererService,
+    );
+    this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
+    this.controlService = sceneContainer.get<IControlService>(
+      TYPES.IControlService,
+    );
+
     this.isShow = true;
-    this.mapsService = mapService;
-    this.container = this.onAdd(mapService);
+    this.container = this.onAdd();
     const container = this.container;
     const pos = this.controlOption.position;
     const corner = this.controlService.controlCorners[pos];
@@ -78,7 +83,7 @@ export default class Control extends EventEmitter {
     }
     return this;
   }
-  public onAdd(Map: IMapService): HTMLElement {
+  public onAdd(): HTMLElement {
     throw new Error('Method not implemented.');
   }
   public hide() {

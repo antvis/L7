@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable, postConstruct } from 'inversify';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { gl } from '../gl';
@@ -19,27 +19,6 @@ export default class PostProcessor implements IPostProcessor {
   private readFBO: IFramebuffer;
   private writeFBO: IFramebuffer;
 
-  constructor() {
-    const { createFramebuffer, createTexture2D } = this.rendererService;
-    this.readFBO = createFramebuffer({
-      color: createTexture2D({
-        width: 1,
-        height: 1,
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-      }),
-    });
-
-    this.writeFBO = createFramebuffer({
-      color: createTexture2D({
-        width: 1,
-        height: 1,
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-      }),
-    });
-  }
-
   public getReadFBO() {
     return this.readFBO;
   }
@@ -49,6 +28,7 @@ export default class PostProcessor implements IPostProcessor {
   }
 
   public async render(layer: ILayer) {
+    const { clear } = this.rendererService;
     for (let i = 0; i < this.passes.length; i++) {
       const pass = this.passes[i];
       // last pass should render to screen
@@ -96,6 +76,28 @@ export default class PostProcessor implements IPostProcessor {
     name: string,
   ): IPostProcessingPass<unknown> | undefined {
     return this.passes.find((p) => p.getName() === name);
+  }
+
+  @postConstruct()
+  private init() {
+    const { createFramebuffer, createTexture2D } = this.rendererService;
+    this.readFBO = createFramebuffer({
+      color: createTexture2D({
+        width: 1,
+        height: 1,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+      }),
+    });
+
+    this.writeFBO = createFramebuffer({
+      color: createTexture2D({
+        width: 1,
+        height: 1,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+      }),
+    });
   }
 
   private isLastEnabledPass(index: number): boolean {

@@ -1,14 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { rgb2arr } from '../utils/color';
 import normalFrag from './shaders/normal_frag.glsl';
@@ -62,7 +52,7 @@ export default class PointNormalLayer extends BaseLayer<
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'normalpoint',
@@ -84,9 +74,9 @@ export default class PointNormalLayer extends BaseLayer<
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {

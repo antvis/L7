@@ -5,7 +5,7 @@ import {
   IModelInitializationOptions,
   IUniform,
 } from '@l7/core';
-import { isPlainObject } from 'lodash';
+import { isPlainObject, isTypedArray } from 'lodash';
 import regl from 'regl';
 import {
   blendEquationMap,
@@ -284,6 +284,7 @@ export default class ReglModel implements IModel {
       typeof uniformValue === 'number' || // u_A: 1
       typeof uniformValue === 'boolean' || // u_A: false
       (Array.isArray(uniformValue) && typeof uniformValue[0] === 'number') || // u_A: [1, 2, 3]
+      isTypedArray(uniformValue) || // u_A: Float32Array
       // @ts-ignore
       uniformValue === '' ||
       'resize' in uniformValue

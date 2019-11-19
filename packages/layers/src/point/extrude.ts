@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { PointExtrudeTriangulation } from '../core/triangulation';
 import pointExtrudeFrag from './shaders/extrude_frag.glsl';
@@ -34,7 +34,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'pointExtrude',
@@ -54,9 +54,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -93,7 +93,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -116,7 +116,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       },
     });
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'pos',
       type: AttributeType.Attribute,
       descriptor: {

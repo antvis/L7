@@ -1,13 +1,12 @@
-import { IMapService } from '@l7/core';
-import { bindAll, DOM } from '@l7/utils';
-import Control, { IControlOption, PositionType } from './BaseControl';
+import { DOM } from '@l7/utils';
+import Control, { PositionType } from './BaseControl';
 export default class Logo extends Control {
   public getDefault() {
     return {
       position: PositionType.BOTTOMLEFT,
     };
   }
-  public onAdd(MapService: IMapService) {
+  public onAdd() {
     const className = 'l7-control-logo';
     const container = DOM.create('div', className);
     const anchor: HTMLLinkElement = DOM.create(

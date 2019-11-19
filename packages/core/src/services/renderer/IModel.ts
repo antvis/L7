@@ -13,6 +13,78 @@ type stencilOp =
   | gl.INCR_WRAP
   | gl.DECR_WRAP;
 
+type BlendingFunctionCombined = Partial<{
+  src:
+    | gl.ZERO
+    | gl.ONE
+    | gl.SRC_COLOR
+    | gl.ONE_MINUS_SRC_COLOR
+    | gl.SRC_ALPHA
+    | gl.ONE_MINUS_SRC_ALPHA
+    | gl.DST_COLOR
+    | gl.ONE_MINUS_DST_COLOR
+    | gl.DST_ALPHA
+    | gl.ONE_MINUS_DST_ALPHA
+    | gl.CONSTANT_COLOR
+    | gl.ONE_MINUS_CONSTANT_COLOR
+    | gl.CONSTANT_ALPHA
+    | gl.ONE_MINUS_CONSTANT_ALPHA
+    | gl.SRC_ALPHA_SATURATE;
+  dst:
+    | gl.ZERO
+    | gl.ONE
+    | gl.SRC_COLOR
+    | gl.ONE_MINUS_SRC_COLOR
+    | gl.SRC_ALPHA
+    | gl.ONE_MINUS_SRC_ALPHA
+    | gl.DST_COLOR
+    | gl.ONE_MINUS_DST_COLOR
+    | gl.DST_ALPHA
+    | gl.ONE_MINUS_DST_ALPHA
+    | gl.CONSTANT_COLOR
+    | gl.ONE_MINUS_CONSTANT_COLOR
+    | gl.CONSTANT_ALPHA
+    | gl.ONE_MINUS_CONSTANT_ALPHA
+    | gl.SRC_ALPHA_SATURATE;
+}>;
+
+type BlendingFunctionSeparate = Partial<{
+  srcRGB:
+    | gl.ZERO
+    | gl.ONE
+    | gl.SRC_COLOR
+    | gl.ONE_MINUS_SRC_COLOR
+    | gl.SRC_ALPHA
+    | gl.ONE_MINUS_SRC_ALPHA
+    | gl.DST_COLOR
+    | gl.ONE_MINUS_DST_COLOR
+    | gl.DST_ALPHA
+    | gl.ONE_MINUS_DST_ALPHA
+    | gl.CONSTANT_COLOR
+    | gl.ONE_MINUS_CONSTANT_COLOR
+    | gl.CONSTANT_ALPHA
+    | gl.ONE_MINUS_CONSTANT_ALPHA
+    | gl.SRC_ALPHA_SATURATE;
+  srcAlpha: number;
+  dstRGB:
+    | gl.ZERO
+    | gl.ONE
+    | gl.SRC_COLOR
+    | gl.ONE_MINUS_SRC_COLOR
+    | gl.SRC_ALPHA
+    | gl.ONE_MINUS_SRC_ALPHA
+    | gl.DST_COLOR
+    | gl.ONE_MINUS_DST_COLOR
+    | gl.DST_ALPHA
+    | gl.ONE_MINUS_DST_ALPHA
+    | gl.CONSTANT_COLOR
+    | gl.ONE_MINUS_CONSTANT_COLOR
+    | gl.CONSTANT_ALPHA
+    | gl.ONE_MINUS_CONSTANT_ALPHA
+    | gl.SRC_ALPHA_SATURATE;
+  dstAlpha: number;
+}>;
+
 export interface IModelInitializationOptions {
   /**
    * Shader 字符串，假设此时已经经过 ShaderLib 处理
@@ -85,42 +157,7 @@ export interface IModelInitializationOptions {
     // gl.enable(gl.BLEND)
     enable: boolean;
     // gl.blendFunc
-    func: Partial<{
-      srcRGB:
-        | gl.ZERO
-        | gl.ONE
-        | gl.SRC_COLOR
-        | gl.ONE_MINUS_SRC_COLOR
-        | gl.SRC_ALPHA
-        | gl.ONE_MINUS_SRC_ALPHA
-        | gl.DST_COLOR
-        | gl.ONE_MINUS_DST_COLOR
-        | gl.DST_ALPHA
-        | gl.ONE_MINUS_DST_ALPHA
-        | gl.CONSTANT_COLOR
-        | gl.ONE_MINUS_CONSTANT_COLOR
-        | gl.CONSTANT_ALPHA
-        | gl.ONE_MINUS_CONSTANT_ALPHA
-        | gl.SRC_ALPHA_SATURATE;
-      srcAlpha: number;
-      dstRGB:
-        | gl.ZERO
-        | gl.ONE
-        | gl.SRC_COLOR
-        | gl.ONE_MINUS_SRC_COLOR
-        | gl.SRC_ALPHA
-        | gl.ONE_MINUS_SRC_ALPHA
-        | gl.DST_COLOR
-        | gl.ONE_MINUS_DST_COLOR
-        | gl.DST_ALPHA
-        | gl.ONE_MINUS_DST_ALPHA
-        | gl.CONSTANT_COLOR
-        | gl.ONE_MINUS_CONSTANT_COLOR
-        | gl.CONSTANT_ALPHA
-        | gl.ONE_MINUS_CONSTANT_ALPHA
-        | gl.SRC_ALPHA_SATURATE;
-      dstAlpha: number;
-    }>;
+    func: BlendingFunctionSeparate;
     // gl.blendEquation
     equation: {
       // TODO: EXT_blend_minmax

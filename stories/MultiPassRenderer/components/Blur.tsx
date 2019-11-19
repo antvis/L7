@@ -5,7 +5,7 @@ import { Scene } from '@l7/scene';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
-export default class Mapbox extends React.Component {
+export default class Blur extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -34,6 +34,7 @@ export default class Mapbox extends React.Component {
       zoom: 3,
     });
     const layer = new PolygonLayer({
+      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       passes: [

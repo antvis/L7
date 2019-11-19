@@ -5,7 +5,7 @@ import {
   ILayer,
   ILayerPlugin,
   ILogService,
-  lazyInject,
+  IStyleAttributeService,
   TYPES,
 } from '@l7/core';
 import { inject, injectable } from 'inversify';
@@ -18,14 +18,21 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
     layer.hooks.init.tap('RegisterStyleAttributePlugin', () => {
-      this.registerBuiltinAttributes(layer);
+      this.registerBuiltinAttributes(styleAttributeService);
     });
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
-    layer.styleAttributeService.registerStyleAttribute({
+  private registerBuiltinAttributes(
+    styleAttributeService: IStyleAttributeService,
+  ) {
+    styleAttributeService.registerStyleAttribute({
       name: 'position',
       type: AttributeType.Attribute,
       descriptor: {
@@ -47,7 +54,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    styleAttributeService.registerStyleAttribute({
       name: 'color',
       type: AttributeType.Attribute,
       descriptor: {

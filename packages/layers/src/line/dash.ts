@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { LineTriangulation } from '../core/triangulation';
 import line_dash_frag from './shaders/line_dash_frag.glsl';
@@ -38,7 +38,7 @@ export default class DashLineLayer extends BaseLayer<
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'line_dash',
@@ -58,9 +58,9 @@ export default class DashLineLayer extends BaseLayer<
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -85,7 +85,7 @@ export default class DashLineLayer extends BaseLayer<
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -109,7 +109,7 @@ export default class DashLineLayer extends BaseLayer<
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'miter',
       type: AttributeType.Attribute,
       descriptor: {
@@ -132,7 +132,7 @@ export default class DashLineLayer extends BaseLayer<
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'startPos',
       type: AttributeType.Attribute,
       descriptor: {
@@ -157,7 +157,7 @@ export default class DashLineLayer extends BaseLayer<
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
       type: AttributeType.Attribute,
       descriptor: {
@@ -180,7 +180,7 @@ export default class DashLineLayer extends BaseLayer<
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'total_distance',
       type: AttributeType.Attribute,
       descriptor: {

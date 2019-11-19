@@ -1,10 +1,12 @@
 import { inject, injectable } from 'inversify';
+import { camelCase, isNil, upperFirst } from 'lodash';
 import {
   gl,
   IModel,
   IRendererService,
   IShaderModuleService,
 } from '../../../index';
+import quad from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { IPostProcessingPass, PassType } from '../IMultiPassRenderer';
@@ -19,12 +21,13 @@ import { IUniform } from '../IUniform';
 export default class BasePostProcessingPass<InitializationOptions = {}>
   implements IPostProcessingPass<InitializationOptions> {
   @inject(TYPES.IShaderModuleService)
-  protected readonly shaderModule: IShaderModuleService;
+  protected readonly shaderModuleService: IShaderModuleService;
 
-  @inject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
+  protected rendererService: IRendererService;
 
   protected config: Partial<InitializationOptions> | undefined;
+
+  protected quad: string = quad;
 
   /**
    * 启用开关
@@ -41,10 +44,19 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
    */
   private model: IModel;
 
+  /**
+   * 效果名，便于在图层中引用
+   */
+  private name: string;
+
   private optionsToUpdate: Partial<InitializationOptions> = {};
 
   public getName() {
-    return '';
+    return this.name;
+  }
+
+  public setName(name: string) {
+    this.name = name;
   }
 
   public getType() {
@@ -53,6 +65,9 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
 
   public init(layer: ILayer, config?: Partial<InitializationOptions>) {
     this.config = config;
+    this.rendererService = layer
+      .getContainer()
+      .get<IRendererService>(TYPES.IRendererService);
 
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     const { vs, fs, uniforms } = this.setupShaders();
@@ -80,16 +95,26 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
         enable: false,
       },
       count: 3,
+      blend: {
+        // copy pass 需要混合
+        enable: this.getName() === 'copy',
+      },
     });
   }
 
   public render(layer: ILayer) {
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
-    const { useFramebuffer, getViewportSize } = this.rendererService;
+    const { useFramebuffer, getViewportSize, clear } = this.rendererService;
     const { width, height } = getViewportSize();
     useFramebuffer(
       this.renderToScreen ? null : postProcessor.getWriteFBO(),
       () => {
+        clear({
+          framebuffer: postProcessor.getWriteFBO(),
+          color: [0, 0, 0, 0],
+          depth: 1,
+          stencil: 0,
+        });
         this.model.draw({
           uniforms: {
             u_Texture: postProcessor.getReadFBO(),
@@ -133,6 +158,19 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
   ): {
     [uniformName: string]: IUniform;
   } | void {
-    throw new Error('Method not implemented.');
+    const uniforms: {
+      [key: string]: IUniform;
+    } = {};
+
+    Object.keys(options).forEach((optionName) => {
+      // @ts-ignore
+      if (!isNil(options[optionName])) {
+        uniforms[`u_${upperFirst(camelCase(optionName))}`] =
+          // @ts-ignore
+          options[optionName];
+      }
+    });
+
+    return uniforms;
   }
 }

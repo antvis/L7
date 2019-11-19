@@ -1,4 +1,3 @@
-import { IMapService } from '@l7/core';
 import { bindAll, DOM } from '@l7/utils';
 import Control, { IControlOption, PositionType } from './BaseControl';
 export interface IZoomControlOption extends IControlOption {
@@ -26,7 +25,7 @@ export default class Zoom extends Control {
     };
   }
 
-  public onAdd(MapService: IMapService) {
+  public onAdd() {
     const zoomName = 'l7-control-zoom';
     const container = DOM.create('div', zoomName + ' l7-bar');
 

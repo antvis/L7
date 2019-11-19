@@ -5,10 +5,9 @@ import {
   ILayer,
   ILayerPlugin,
   IRendererService,
-  lazyInject,
-  TYPES,
+  IStyleAttributeService,
 } from '@l7/core';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 
 function encodePickingColor(featureIdx: number): [number, number, number] {
@@ -27,14 +26,20 @@ const PickingStage = {
 
 @injectable()
 export default class PixelPickingPlugin implements ILayerPlugin {
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
-
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      rendererService,
+      styleAttributeService,
+    }: {
+      rendererService: IRendererService;
+      styleAttributeService: IStyleAttributeService;
+    },
+  ) {
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tap('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getStyleOptions();
-      layer.styleAttributeService.registerStyleAttribute({
+      styleAttributeService.registerStyleAttribute({
         name: 'pickingColor',
         type: AttributeType.Attribute,
         descriptor: {

@@ -11,19 +11,23 @@ import {
   ILayerInitializationOptions,
   ILayerPlugin,
   ILayerService,
+  ILogService,
   IMapService,
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
+  IPass,
+  IPostProcessingPass,
   IRendererService,
   IScale,
   IScaleOptions,
   IShaderModuleService,
   ISourceCFG,
+  // lazyMultiInject,
+  IStyleAttributeInitializationOptions,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
-  // inject,
-  // lazyMultiInject,
+  lazyInject,
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
@@ -31,7 +35,7 @@ import {
 } from '@l7/core';
 import Source from '@l7/source';
 import { EventEmitter } from 'eventemitter3';
-import { inject, multiInject } from 'inversify';
+import { Container, interfaces } from 'inversify';
 import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
@@ -97,7 +101,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public multiPassRenderer: IMultiPassRenderer;
 
   // 注入插件集
-  @multiInject(TYPES.ILayerPlugin)
   public plugins: ILayerPlugin[];
 
   public sourceOption: {
@@ -105,25 +108,35 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     options?: ISourceCFG;
   };
 
-  @inject(TYPES.IStyleAttributeService)
-  public styleAttributeService: IStyleAttributeService;
+  protected styleAttributeService: IStyleAttributeService;
 
-  @inject(TYPES.IGlobalConfigService)
-  public readonly configService: IGlobalConfigService;
+  @lazyInject(TYPES.ILogService)
+  protected readonly logger: ILogService;
 
-  @inject(TYPES.IIconService)
-  protected readonly iconService: IIconService;
+  @lazyInject(TYPES.IGlobalConfigService)
+  protected readonly configService: IGlobalConfigService;
 
-  @inject(TYPES.IFontService)
-  protected readonly fontService: IFontService;
+  @lazyInject(TYPES.IShaderModuleService)
+  protected readonly shaderModuleService: IShaderModuleService;
+
+  protected iconService: IIconService;
+
+  protected fontService: IFontService;
+
+  protected rendererService: IRendererService;
+
+  protected layerService: ILayerService;
+
+  protected interactionService: IInteractionService;
+
+  protected mapService: IMapService;
 
   protected layerSource: Source;
 
-  @inject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
-  @inject(TYPES.ILayerService)
-  protected readonly layerService: ILayerService;
+  protected postProcessingPassFactory: (
+    name: string,
+  ) => IPostProcessingPass<unknown>;
+  protected normalPassFactory: (name: string) => IPass<unknown>;
 
   protected enodeOptions: {
     [type: string]: {
@@ -134,8 +147,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   protected animateOptions: IAnimateOption = { enable: false };
 
-  @inject(TYPES.IShaderModuleService)
-  protected readonly shaderModuleService: IShaderModuleService;
+  /**
+   * 图层容器
+   */
+  private container: Container;
 
   private encodedData: IEncodeFeature[];
 
@@ -148,12 +163,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     ILayerInitializationOptions & ChildLayerStyleOptions
   >;
 
-  @inject(TYPES.IMapService)
-  private readonly map: IMapService;
-  private scaleOptions: IScaleOptions = {};
+  /**
+   * 待更新样式属性，在初始化阶段完成注册
+   */
+  private pendingStyleAttributes: Array<{
+    attributeName: string;
+    attributeOptions: Partial<IStyleAttributeInitializationOptions>;
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>;
+  }> = [];
 
-  @inject(TYPES.IInteractionService)
-  private readonly interactionService: IInteractionService;
+  private scaleOptions: IScaleOptions = {};
 
   constructor(
     styleOptions: Partial<ILayerInitializationOptions & ChildLayerStyleOptions>,
@@ -171,6 +190,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.maxZoom = maxZoom;
   }
 
+  /**
+   * 注入图层容器，父容器为场景容器
+   * RootContainer 1
+   *  -> SceneContainer 1.*
+   *   -> LayerContainer 1.*
+   */
+  public setContainer(container: Container) {
+    this.container = container;
+  }
+
+  public getContainer() {
+    return this.container;
+  }
+
   public addPlugin(plugin: ILayerPlugin) {
     // TODO: 控制插件注册顺序
     // @example:
@@ -182,6 +215,60 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public init() {
+    // 全局容器服务
+    this.iconService = this.container.get<IIconService>(TYPES.IIconService);
+    this.fontService = this.container.get<IFontService>(TYPES.IFontService);
+
+    // 场景容器服务
+    this.rendererService = this.container.get<IRendererService>(
+      TYPES.IRendererService,
+    );
+    this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
+    this.interactionService = this.container.get<IInteractionService>(
+      TYPES.IInteractionService,
+    );
+    this.mapService = this.container.get<IMapService>(TYPES.IMapService);
+    this.postProcessingPassFactory = this.container.get(
+      TYPES.IFactoryPostProcessingPass,
+    );
+    this.normalPassFactory = this.container.get(TYPES.IFactoryNormalPass);
+
+    // 图层容器服务
+    this.styleAttributeService = this.container.get<IStyleAttributeService>(
+      TYPES.IStyleAttributeService,
+    );
+    this.multiPassRenderer = this.container.get<IMultiPassRenderer>(
+      TYPES.IMultiPassRenderer,
+    );
+    this.multiPassRenderer.setLayer(this);
+
+    // 完成样式服务注册完成前添加的属性
+    this.pendingStyleAttributes.forEach(
+      ({ attributeName, attributeOptions, updateOptions }) => {
+        this.styleAttributeService.updateStyleAttribute(
+          attributeName,
+          attributeOptions,
+          // @ts-ignore
+          updateOptions,
+        );
+      },
+    );
+    this.pendingStyleAttributes = [];
+
+    // 获取插件集
+    this.plugins = this.container.getAll<ILayerPlugin>(TYPES.ILayerPlugin);
+    // 完成插件注册，传入场景和图层容器内的服务
+    for (const plugin of this.plugins) {
+      plugin.apply(this, {
+        rendererService: this.rendererService,
+        mapService: this.mapService,
+        styleAttributeService: this.styleAttributeService,
+        normalPassFactory: this.normalPassFactory,
+        postProcessingPassFactory: this.postProcessingPassFactory,
+      });
+    }
+
+    // 触发 init 生命周期插件
     this.hooks.init.call();
     this.buildModels();
     return this;
@@ -192,9 +279,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.styleAttributeService.updateStyleAttribute(
-      'color',
-      {
+    // 设置 color、size、shape、style 时由于场景服务尚未完成（并没有调用 scene.addLayer），因此暂时加入待更新属性列表
+    this.pendingStyleAttributes.push({
+      attributeName: 'color',
+      attributeOptions: {
         // @ts-ignore
         scale: {
           field,
@@ -205,9 +293,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ),
         },
       },
-      // @ts-ignore
       updateOptions,
-    );
+    });
     return this;
   }
 
@@ -216,9 +303,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.styleAttributeService.updateStyleAttribute(
-      'size',
-      {
+    this.pendingStyleAttributes.push({
+      attributeName: 'size',
+      attributeOptions: {
         // @ts-ignore
         scale: {
           field,
@@ -229,9 +316,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ),
         },
       },
-      // @ts-ignore
       updateOptions,
-    );
+    });
     return this;
   }
 
@@ -244,9 +330,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       field,
       values,
     };
-    this.styleAttributeService.updateStyleAttribute(
-      'shape',
-      {
+    this.pendingStyleAttributes.push({
+      attributeName: 'shape',
+      attributeOptions: {
         // @ts-ignore
         scale: {
           field,
@@ -257,9 +343,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ),
         },
       },
-      // @ts-ignore
       updateOptions,
-    );
+    });
     return this;
   }
   public label(
@@ -267,9 +352,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.styleAttributeService.updateStyleAttribute(
-      'label',
-      {
+    this.pendingStyleAttributes.push({
+      attributeName: 'label',
+      attributeOptions: {
         // @ts-ignore
         scale: {
           field,
@@ -280,9 +365,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ),
         },
       },
-      // @ts-ignore
       updateOptions,
-    );
+    });
     return this;
   }
   public animate(options: IAnimateOption) {
@@ -359,7 +443,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public isVisible(): boolean {
-    const zoom = this.map.getZoom();
+    const zoom = this.mapService.getZoom();
     return this.visible && zoom >= this.minZoom && zoom <= this.maxZoom;
   }
 
@@ -378,7 +462,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public fitBounds(): void {
     const source = this.getSource();
     const extent = source.extent;
-    this.map.fitBounds([
+    this.mapService.fitBounds([
       [extent[0], extent[1]],
       [extent[2], extent[3]],
     ]);
@@ -393,6 +477,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.models.forEach((model) => model.destroy());
 
     this.hooks.afterDestroy.call();
+
+    // 解绑图层容器中的服务
+    // this.container.unbind(TYPES.IStyleAttributeService);
   }
 
   public isDirty() {

@@ -5,6 +5,7 @@ import { Scene } from '@l7/scene';
 import * as React from 'react';
 
 export default class AMap extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -15,6 +16,7 @@ export default class AMap extends React.Component {
     const response = await fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     );
+    const data = await response.json();
     const scene = new Scene({
       center: [110.19382669582967, 50.258134],
       id: 'map',
@@ -23,10 +25,12 @@ export default class AMap extends React.Component {
       type: 'amap',
       zoom: 3,
     });
-    const layer = new PolygonLayer({});
+    const layer = new PolygonLayer({
+      enablePicking: false,
+    });
 
     layer
-      .source(await response.json())
+      .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
       .color('name', [
         '#2E8AE6',
@@ -38,7 +42,7 @@ export default class AMap extends React.Component {
       ])
       .shape('fill')
       .style({
-        opacity: 0.8,
+        opacity: 0.3,
       });
     scene.addLayer(layer);
     scene.render();

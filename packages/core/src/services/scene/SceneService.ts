@@ -1,10 +1,10 @@
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
-import { AsyncParallelHook, AsyncSeriesHook } from 'tapable';
+import { AsyncParallelHook } from 'tapable';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
 import { IFontService } from '../asset/IFontService';
-import { IIconService, IImage } from '../asset/IIconService';
+import { IIconService } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
 import { IGlobalConfig, IGlobalConfigService } from '../config/IConfigService';
@@ -15,6 +15,9 @@ import { IMapCamera, IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
+
+let sceneIdCounter = 0;
+
 /**
  * will emit `loaded` `resize` `destroy` event
  */
@@ -54,7 +57,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   private readonly interactionService: IInteractionService;
 
   @inject(TYPES.IShaderModuleService)
-  private readonly shaderModule: IShaderModuleService;
+  private readonly shaderModuleService: IShaderModuleService;
 
   /**
    * 是否首次渲染
@@ -66,6 +69,7 @@ export default class Scene extends EventEmitter implements ISceneService {
    * canvas 容器
    */
   private $container: HTMLDivElement | null;
+  private id: number;
 
   private hooks: {
     init: AsyncParallelHook<unknown>;
@@ -86,9 +90,10 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public init(globalConfig: IGlobalConfig) {
+    this.id = sceneIdCounter++;
     this.configService.setAndCheckConfig(globalConfig);
     // 初始化 ShaderModule
-    this.shaderModule.registerBuiltinModules();
+    this.shaderModuleService.registerBuiltinModules();
 
     // 初始化资源管理 图片
     this.iconService.init();
@@ -117,10 +122,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
-      this.logger.info('map loaded');
-
-      // scene 创建完成自动调用render 方法
-      this.render();
+      this.logger.debug('map loaded');
     });
 
     /**
@@ -142,7 +144,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 初始化 container 上的交互
       this.interactionService.init();
 
-      this.logger.info('renderer loaded');
+      this.logger.debug(`scene ${this.id} renderer loaded`);
     });
 
     // TODO：init worker, fontAtlas...
@@ -152,7 +154,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public addLayer(layer: ILayer) {
-    this.logger.info(`add layer ${layer.name}`);
+    this.logger.debug(`add layer ${layer.name} to scene ${this.id}`);
     this.layerService.add(layer);
   }
 
@@ -161,15 +163,15 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
       await this.initPromise;
-      // 初始化 marker 容器 TODO: 可以放到 map 初始化方法中？
+      this.layerService.initLayers();
+      // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.map.addMarkerContainer();
-      this.logger.info(' render inited');
       this.inited = true;
       this.emit('loaded');
     }
 
     this.layerService.renderLayers();
-    this.logger.info('render');
+    this.logger.debug(`scene ${this.id} render`);
   }
 
   public destroy() {

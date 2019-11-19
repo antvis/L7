@@ -1,8 +1,14 @@
+import { Container } from 'inversify';
 import { SyncBailHook, SyncHook } from 'tapable';
 import Clock from '../../utils/clock';
-import { IGlobalConfigService } from '../config/IConfigService';
+import { IMapService } from '../map/IMapService';
 import { IModel } from '../renderer/IModel';
-import { IMultiPassRenderer } from '../renderer/IMultiPassRenderer';
+import {
+  IMultiPassRenderer,
+  IPass,
+  IPostProcessingPass,
+} from '../renderer/IMultiPassRenderer';
+import { IRendererService } from '../renderer/IRendererService';
 import { ISource, ISourceCFG } from '../source/ISourceService';
 import {
   IAnimateOption,
@@ -39,7 +45,6 @@ export interface ILayer {
   zIndex: number;
   minZoom: number;
   maxZoom: number;
-  configService: IGlobalConfigService;
   plugins: ILayerPlugin[];
   hooks: {
     init: SyncBailHook<void, boolean | void>;
@@ -58,7 +63,8 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
-  styleAttributeService: IStyleAttributeService;
+  getContainer(): Container;
+  setContainer(container: Container): void;
   init(): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -107,7 +113,16 @@ export interface ILayer {
  * Layer 插件
  */
 export interface ILayerPlugin {
-  apply(layer: ILayer): void;
+  apply(
+    layer: ILayer,
+    services: {
+      rendererService: IRendererService;
+      mapService: IMapService;
+      styleAttributeService: IStyleAttributeService;
+      postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
+      normalPassFactory: (name: string) => IPass<unknown>;
+    },
+  ): void;
 }
 
 /**

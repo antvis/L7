@@ -40,7 +40,7 @@ export default class ArcCircleLineLayer extends BaseLayer<
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'arc2dline',
@@ -61,9 +61,9 @@ export default class ArcCircleLineLayer extends BaseLayer<
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -87,7 +87,7 @@ export default class ArcCircleLineLayer extends BaseLayer<
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {

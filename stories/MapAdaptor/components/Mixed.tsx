@@ -1,8 +1,11 @@
-// @ts-ignore
-import { PolygonLayer } from '@l7/layers';
+// tslint:disable-next-line:no-submodule-imports
+import '!style-loader!css-loader!../../assets/css/l7.css';
+import { PointLayer, PolygonLayer } from '@l7/layers';
 // @ts-ignore
 import { Scene } from '@l7/scene';
 import * as React from 'react';
+// @ts-ignore
+import pointsData from '../../assets/data/points.json';
 
 export default class Mixed extends React.Component {
   private scene1: Scene;
@@ -21,6 +24,7 @@ export default class Mixed extends React.Component {
     const response = await fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     );
+    const data = await response.json();
 
     const scene1 = new Scene({
       center: [110.19382669582967, 50.258134],
@@ -38,7 +42,6 @@ export default class Mixed extends React.Component {
       type: 'amap',
       zoom: 3,
     });
-
     const scene3 = new Scene({
       id: 'map3',
       type: 'mapbox',
@@ -47,7 +50,6 @@ export default class Mixed extends React.Component {
       pitch: 0,
       zoom: 2,
     });
-
     const scene4 = new Scene({
       id: 'map4',
       type: 'mapbox',
@@ -61,49 +63,175 @@ export default class Mixed extends React.Component {
     this.scene2 = scene2;
     this.scene3 = scene3;
     this.scene4 = scene4;
-    const layer = new PolygonLayer({});
 
-    layer
-      .source(await response.json())
+    const layer1 = new PolygonLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      passes: [
+        [
+          'colorHalftone',
+          {
+            size: 8,
+          },
+        ],
+      ],
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene1', pickedFeature.feature.name);
+      },
+    });
+    layer1
+      .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
-      .color('name', () => {
-        return 'yellow';
-      })
+      .color('name', [
+        '#2E8AE6',
+        '#69D1AB',
+        '#DAF291',
+        '#FFD591',
+        '#FF7A45',
+        '#CF1D49',
+      ])
       .shape('fill')
       .style({
         opacity: 0.8,
       });
-    scene1.addLayer(layer);
+
+    const layer2 = new PolygonLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      passes: [
+        [
+          'hexagonalPixelate',
+          {
+            scale: 20,
+          },
+        ],
+      ],
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene2', pickedFeature.feature.name);
+      },
+    });
+    layer2
+      .source(data)
+      .size('name', [0, 10000, 50000, 30000, 100000])
+      .color('name', [
+        '#2E8AE6',
+        '#69D1AB',
+        '#DAF291',
+        '#FFD591',
+        '#FF7A45',
+        '#CF1D49',
+      ])
+      .shape('fill')
+      .style({
+        opacity: 0.8,
+      });
+
+    const layer3 = new PolygonLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      passes: ['noise'],
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene3', pickedFeature.feature.name);
+      },
+    });
+    layer3
+      .source(data)
+      .size('name', [0, 10000, 50000, 30000, 100000])
+      .color('name', [
+        '#2E8AE6',
+        '#69D1AB',
+        '#DAF291',
+        '#FFD591',
+        '#FF7A45',
+        '#CF1D49',
+      ])
+      .shape('fill')
+      .style({
+        opacity: 0.8,
+      });
+    const layer4 = new PolygonLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      passes: ['sepia'],
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene4', pickedFeature.feature.name);
+      },
+    });
+    layer4
+      .source(data)
+      .size('name', [0, 10000, 50000, 30000, 100000])
+      .color('name', [
+        '#2E8AE6',
+        '#69D1AB',
+        '#DAF291',
+        '#FFD591',
+        '#FF7A45',
+        '#CF1D49',
+      ])
+      .shape('fill')
+      .style({
+        opacity: 0.8,
+      });
+    const pointLayer = new PointLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      passes: [
+        [
+          'colorHalftone',
+          {
+            size: 8,
+          },
+        ],
+      ],
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene4', pickedFeature.feature.name);
+      },
+    });
+    pointLayer
+      .source(pointsData)
+      .color('name', [
+        '#FFF5B8',
+        '#FFDC7D',
+        '#FFAB5C',
+        '#F27049',
+        '#D42F31',
+        '#730D1C',
+      ])
+      .shape('subregion', [
+        'circle',
+        'triangle',
+        'square',
+        'pentagon',
+        'hexagon',
+        'octogon',
+        'hexagram',
+        'rhombus',
+        'vesica',
+      ])
+      .size('scalerank', [5, 10])
+      .style({
+        opacity: 1.0,
+      });
+
+    scene1.addLayer(layer1);
+    scene2.addLayer(layer2);
+    scene3.addLayer(layer3);
+    scene4.addLayer(layer4);
+    scene4.addLayer(pointLayer);
     scene1.render();
     scene2.render();
     scene3.render();
     scene4.render();
-    // scene.on('loaded', () => {
-    //   const zoomControl = new Zoom({
-    //     position: 'bottomright',
-    //   });
-    //   const scaleControl = new Scale();
-    //   const popup = new Popup({
-    //     offsets: [0, 20],
-    //   })
-    //     .setLnglat({
-    //       lng: 120.19382669582967,
-    //       lat: 30.258134,
-    //     })
-    //     .setText('hello')
-    //     .addTo(scene);
-
-    //   const maker = new Marker();
-    //   maker
-    //     .setLnglat({
-    //       lng: 120.19382669582967,
-    //       lat: 30.258134,
-    //     })
-    //     .addTo(scene);
-    //   scene.addControl(zoomControl);
-    //   scene.addControl(scaleControl);
-    //   // layer.fitBounds();
-    // });
   }
 
   public render() {

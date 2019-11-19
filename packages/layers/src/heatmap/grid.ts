@@ -40,7 +40,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'gridheatmap',
@@ -53,9 +53,9 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -80,7 +80,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,
       descriptor: {

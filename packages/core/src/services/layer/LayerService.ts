@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { ILayer, lazyMultiInject } from '../..';
+import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
@@ -10,7 +10,6 @@ import { ILayerService } from './ILayerService';
 export default class LayerService implements ILayerService {
   public clock = new Clock();
 
-  @lazyMultiInject(TYPES.ILayer)
   private layers: ILayer[] = [];
 
   private layerRenderID: number;
@@ -24,15 +23,11 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
-    // this.layers.push(layer);
+    this.layers.push(layer);
   }
 
   public initLayers() {
     this.layers.forEach((layer) => {
-      // register plugins in every layer
-      for (const plugin of layer.plugins) {
-        plugin.apply(layer);
-      }
       layer.init();
     });
   }
@@ -96,6 +91,7 @@ export default class LayerService implements ILayerService {
     this.renderService.clear({
       color: [0, 0, 0, 0],
       depth: 1,
+      stencil: 0,
       framebuffer: null,
     });
   }

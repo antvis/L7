@@ -80,7 +80,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       'shape',
     );
     const shapeType = shapeAttr?.scale?.field || 'heatmap';
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.intensityModel = this.buildHeatMapIntensity();
     this.models = [this.intensityModel];
     this.colorModel =
@@ -122,8 +122,8 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     });
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
-    layer.styleAttributeService.registerStyleAttribute({
+  private registerBuiltinAttributes() {
+    this.styleAttributeService.registerStyleAttribute({
       name: 'dir',
       type: AttributeType.Attribute,
       descriptor: {
@@ -147,7 +147,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {

@@ -4,11 +4,7 @@ import container, {
   lazyInject,
   lazyMultiInject,
 } from './inversify.config';
-import ClearPass from './services/renderer/passes/ClearPass';
-import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
-import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
-import RenderPass from './services/renderer/passes/RenderPass';
-import TAAPass from './services/renderer/passes/TAAPass';
+import BasePostProcessingPass from './services/renderer/passes/BasePostProcessingPass';
 import { TYPES } from './types';
 import { packCircleVertex } from './utils/vertex-compression';
 
@@ -29,12 +25,7 @@ export {
    */
   TYPES,
   packCircleVertex,
-  /** pass */
-  MultiPassRenderer,
-  ClearPass,
-  RenderPass,
-  PixelPickingPass,
-  TAAPass,
+  BasePostProcessingPass,
 };
 
 /** 暴露服务接口供其他 packages 实现 */

@@ -23,6 +23,8 @@ const TYPES = {
   IPostProcessor: Symbol.for('IPostProcessor'),
   IPostProcessingPass: Symbol.for('IPostProcessingPass'),
   IFactoryPostProcessingPass: Symbol.for('Factory<IPostProcessingPass>'),
+  IFactoryNormalPass: Symbol.for('Factory<IFactoryNormalPass>'),
+  IMultiPassRenderer: Symbol.for('IMultiPassRenderer'),
 };
 
 export { TYPES };

@@ -39,11 +39,13 @@ import ShaderModuleService from './services/shader/ShaderModuleService';
 
 /** PostProcessing passes */
 import {
+  IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
   IPostProcessor,
 } from './services/renderer/IMultiPassRenderer';
 import ClearPass from './services/renderer/passes/ClearPass';
+import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
 import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
 import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
@@ -64,6 +66,10 @@ const container = new Container();
  * bind global services in root container
  */
 container
+  .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
+  .to(GlobalConfigService)
+  .inSingletonScope();
+container
   .bind<IIconService>(TYPES.IIconService)
   .to(IconService)
   .inSingletonScope();
@@ -78,10 +84,6 @@ container
 container
   .bind<IFontService>(TYPES.IFontService)
   .to(FontService)
-  .inSingletonScope();
-container
-  .bind<IControlService>(TYPES.IControlService)
-  .to(ControlService)
   .inSingletonScope();
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
@@ -150,29 +152,29 @@ export function createSceneContainer() {
   sceneContainer.parent = container;
 
   sceneContainer
-    .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
-    .to(GlobalConfigService)
-    .inRequestScope();
-  sceneContainer
     .bind<ILayerService>(TYPES.ILayerService)
     .to(LayerService)
-    .inRequestScope();
+    .inSingletonScope();
   sceneContainer
     .bind<ISceneService>(TYPES.ISceneService)
     .to(SceneService)
-    .inRequestScope();
+    .inSingletonScope();
   sceneContainer
     .bind<ICameraService>(TYPES.ICameraService)
     .to(CameraService)
-    .inRequestScope();
+    .inSingletonScope();
   sceneContainer
     .bind<ICoordinateSystemService>(TYPES.ICoordinateSystemService)
     .to(CoordinateSystemService)
-    .inRequestScope();
+    .inSingletonScope();
   sceneContainer
     .bind<IInteractionService>(TYPES.IInteractionService)
     .to(InteractionService)
-    .inRequestScope();
+    .inSingletonScope();
+  sceneContainer
+    .bind<IControlService>(TYPES.IControlService)
+    .to(ControlService)
+    .inSingletonScope();
 
   // 绑定常规 passes
   sceneContainer
@@ -192,15 +194,10 @@ export function createSceneContainer() {
     .to(TAAPass)
     .whenTargetNamed('taa');
   sceneContainer
-    .bind<interfaces.Factory<IPass<unknown>>>(TYPES.INormalPass)
+    .bind<interfaces.Factory<IPass<unknown>>>(TYPES.IFactoryNormalPass)
     .toFactory<IPass<unknown>>((context) => (named: string) =>
       context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
     );
-
-  sceneContainer
-    .bind<IPostProcessor>(TYPES.IPostProcessor)
-    .to(PostProcessor)
-    .inRequestScope();
 
   // 绑定 post processing passes
   sceneContainer
@@ -241,14 +238,14 @@ export function createSceneContainer() {
     .bind<interfaces.Factory<IPostProcessingPass<unknown>>>(
       TYPES.IFactoryPostProcessingPass,
     )
-    .toFactory<IPostProcessingPass<unknown>>((context) => (named: string) =>
-      context.container.getNamed<IPostProcessingPass<unknown>>(
+    .toFactory<IPostProcessingPass<unknown>>((context) => (named: string) => {
+      const pass = context.container.getNamed<IPostProcessingPass<unknown>>(
         TYPES.IPostProcessingPass,
         named,
-      ),
-    );
-
-  // const DECORATORS = getDecorators(sceneContainer, false);
+      );
+      pass.setName(named);
+      return pass;
+    });
 
   return sceneContainer;
 }
@@ -260,6 +257,10 @@ export function createLayerContainer(sceneContainer: Container) {
   layerContainer
     .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
     .to(StyleAttributeService);
+  layerContainer
+    .bind<IMultiPassRenderer>(TYPES.IMultiPassRenderer)
+    .to(MultiPassRenderer);
+  layerContainer.bind<IPostProcessor>(TYPES.IPostProcessor).to(PostProcessor);
 
   return layerContainer;
 }

@@ -1,27 +1,20 @@
-import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../types';
-import { IPass, PassType } from '../IMultiPassRenderer';
-import { IRendererService } from '../IRendererService';
+import { injectable } from 'inversify';
+import { ILayer } from '../../layer/ILayerService';
+import BaseNormalPass from './BaseNormalPass';
 
 /**
  * ClearPass
  */
 @injectable()
-export default class ClearPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions> {
-  @inject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
-  public getType() {
-    return PassType.Normal;
-  }
-
+export default class ClearPass<
+  InitializationOptions = {}
+> extends BaseNormalPass<InitializationOptions> {
   public getName() {
     return 'clear';
   }
 
-  public init() {
-    //
+  public init(layer: ILayer, config?: Partial<InitializationOptions>) {
+    super.init(layer, config);
   }
 
   public render() {

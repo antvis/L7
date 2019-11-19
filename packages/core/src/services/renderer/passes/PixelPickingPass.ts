@@ -1,15 +1,12 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../types';
-import {
-  IInteractionService,
-  InteractionEvent,
-} from '../../interaction/IInteractionService';
+import { InteractionEvent } from '../../interaction/IInteractionService';
 import { ILayer } from '../../layer/ILayerService';
 import { ILogService } from '../../log/ILogService';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
-import { IPass, PassType } from '../IMultiPassRenderer';
-import { IRendererService } from '../IRendererService';
+import { PassType } from '../IMultiPassRenderer';
+import BaseNormalPass from './BaseNormalPass';
 
 function decodePickingColor(color: Uint8Array): number {
   const [i1, i2, i3] = color;
@@ -23,14 +20,9 @@ function decodePickingColor(color: Uint8Array): number {
  * @see https://github.com/antvis/L7/blob/next/dev-docs/PixelPickingEngine.md
  */
 @injectable()
-export default class PixelPickingPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions> {
-  @inject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
-  @inject(TYPES.IInteractionService)
-  protected readonly interactionService: IInteractionService;
-
+export default class PixelPickingPass<
+  InitializationOptions = {}
+> extends BaseNormalPass<InitializationOptions> {
   @inject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
@@ -57,7 +49,8 @@ export default class PixelPickingPass<InitializationOptions = {}>
     return 'pixelPicking';
   }
 
-  public init(layer: ILayer) {
+  public init(layer: ILayer, config?: Partial<InitializationOptions>) {
+    super.init(layer, config);
     this.layer = layer;
     const { createTexture2D, createFramebuffer } = this.rendererService;
 
@@ -96,8 +89,6 @@ export default class PixelPickingPass<InitializationOptions = {}>
         stencil: 0,
         depth: 1,
       });
-
-      // this.logger.info(`picking fbo cleared ${width} ${height}`);
 
       /**
        * picking pass 不需要 multipass，原因如下：
@@ -159,14 +150,20 @@ export default class PixelPickingPass<InitializationOptions = {}>
         pickedColors[1] !== 0 ||
         pickedColors[2] !== 0
       ) {
-        this.logger.info('picked');
+        this.logger.debug('picked');
         const pickedFeatureIdx = decodePickingColor(pickedColors);
         const rawFeature = this.layer.getSource()?.data?.dataArray[
           pickedFeatureIdx
         ];
 
-        // trigger onHover/Click callback on layer
-        this.triggerHoverOnLayer({ x, y, feature: rawFeature });
+        if (!rawFeature) {
+          this.logger.warn(
+            '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
+          );
+        } else {
+          // trigger onHover/Click callback on layer
+          this.triggerHoverOnLayer({ x, y, feature: rawFeature });
+        }
       }
     });
 

@@ -1,14 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { rgb2arr } from '../utils/color';
 import pointFillFrag from './shaders/fill_frag.glsl';
@@ -61,7 +51,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'pointfill',
@@ -73,8 +63,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
-    layer.styleAttributeService.registerStyleAttribute({
+  private registerBuiltinAttributes() {
+    this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
       descriptor: {
@@ -100,7 +90,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -125,7 +115,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'shape',
       type: AttributeType.Attribute,
       descriptor: {
@@ -144,7 +134,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = layer.configService.getConfig().shape2d as string[];
+          const shape2d = this.configService.getConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

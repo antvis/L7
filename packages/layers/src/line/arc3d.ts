@@ -36,7 +36,7 @@ export default class Arc3DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'arcline',
@@ -56,9 +56,9 @@ export default class Arc3DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -82,7 +82,7 @@ export default class Arc3DLineLayer extends BaseLayer<IArcLayerStyleOptions> {
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {

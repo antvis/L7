@@ -60,4 +60,6 @@ void main() {
   vec4 strokeColor = u_stroke_color == vec4(0) ? v_color : u_stroke_color;
 
   gl_FragColor = opacity_t * mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
+
+  gl_FragColor = filterColor(gl_FragColor);
 }

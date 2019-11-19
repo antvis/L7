@@ -33,12 +33,12 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
   private passes: Array<IPass<unknown>> = [];
 
   @inject(TYPES.IPostProcessor)
-  private readonly postProcessor: IPostProcessor;
+  private postProcessor: IPostProcessor;
 
   private layer: ILayer;
   private renderFlag: boolean;
 
-  constructor(layer: ILayer) {
+  public setLayer(layer: ILayer) {
     this.layer = layer;
   }
 

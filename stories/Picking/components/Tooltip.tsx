@@ -25,11 +25,12 @@ export default class Mapbox extends React.Component {
       zoom: 3,
     });
     const layer = new PolygonLayer({
+      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: false,
       onHover: (pickedFeature) => {
         // tslint:disable-next-line:no-console
-        // console.log(pickedFeature);
+        console.log(pickedFeature);
       },
     });
 

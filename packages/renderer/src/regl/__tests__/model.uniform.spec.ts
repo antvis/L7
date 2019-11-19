@@ -34,6 +34,7 @@ describe('uniforms in ReglModel', () => {
         u_1: 1,
         u_2: [1, 2],
         u_3: false,
+        u_4: new Float32Array([1, 2, 3]),
       },
     });
 
@@ -43,6 +44,8 @@ describe('uniforms in ReglModel', () => {
     expect(model.uniforms.u_2).toEqual([1, 2]);
     // @ts-ignore
     expect(model.uniforms.u_3).toEqual(false);
+    // @ts-ignore
+    expect(model.uniforms.u_4).toEqual(new Float32Array([1, 2, 3]));
   });
 
   it('should generate model with struct uniforms correctly', () => {

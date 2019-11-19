@@ -1,15 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  IFontOptions,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import { getGlyphQuads, shapeText } from '../utils/symbol-layout';
 import textFrag from './shaders/text_frag.glsl';
@@ -64,7 +53,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.models = [
       this.buildLayerModel({
         moduleName: 'pointText',
@@ -85,8 +74,8 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
-    layer.styleAttributeService.registerStyleAttribute({
+  private registerBuiltinAttributes() {
+    this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {
@@ -112,7 +101,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -137,7 +126,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'shape',
       type: AttributeType.Attribute,
       descriptor: {
@@ -156,7 +145,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = layer.configService.getConfig().shape2d as string[];
+          const shape2d = this.configService.getConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

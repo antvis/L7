@@ -34,19 +34,11 @@ export default class TAA extends React.Component {
       zoom: 3,
     });
     const layer = new PolygonLayer({
+      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       enableTAA: true,
       jitterScale: 1,
-      // passes: [
-      //   'blurH',
-      //   [
-      //     'blurV',
-      //     {
-      //       blurRadius: 8,
-      //     },
-      //   ],
-      // ],
     });
 
     layer

@@ -3,15 +3,14 @@ import blendFS from '../../../shaders/post-processing/blend.glsl';
 import copyFS from '../../../shaders/post-processing/copy.glsl';
 import quadVS from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
-import { ICameraService } from '../../camera/ICameraService';
 import { ILayer } from '../../layer/ILayerService';
 import { ILogService } from '../../log/ILogService';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
 import { IModel, IModelInitializationOptions } from '../IModel';
-import { IPass, PassType } from '../IMultiPassRenderer';
-import { IRendererService } from '../IRendererService';
+import { PassType } from '../IMultiPassRenderer';
+import BaseNormalPass from './BaseNormalPass';
 
 // Generate halton sequence
 // https://en.wikipedia.org/wiki/Halton_sequence
@@ -37,16 +36,11 @@ let accumulatingId = 1;
  * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/ri52hv
  */
 @injectable()
-export default class TAAPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions> {
-  @inject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
+export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
+  InitializationOptions
+> {
   @inject(TYPES.IShaderModuleService)
-  protected readonly shaderModule: IShaderModuleService;
-
-  @inject(TYPES.ICameraService)
-  protected readonly cameraService: ICameraService;
+  protected readonly shaderModuleService: IShaderModuleService;
 
   @inject(TYPES.ILogService)
   protected readonly logger: ILogService;
@@ -88,7 +82,9 @@ export default class TAAPass<InitializationOptions = {}>
     return 'taa';
   }
 
-  public init(layer: ILayer) {
+  public init(layer: ILayer, config?: Partial<InitializationOptions>) {
+    super.init(layer, config);
+
     const { createFramebuffer, createTexture2D } = this.rendererService;
     this.sampleRenderTarget = createFramebuffer({
       color: createTexture2D({
@@ -196,7 +192,7 @@ export default class TAAPass<InitializationOptions = {}>
   }
 
   private doRender(layer: ILayer) {
-    this.logger.info(`accumulatingId: ${this.accumulatingId}`);
+    this.logger.debug(`accumulatingId: ${this.accumulatingId}`);
 
     const { clear, getViewportSize, useFramebuffer } = this.rendererService;
     const { width, height } = getViewportSize();
@@ -307,12 +303,14 @@ export default class TAAPass<InitializationOptions = {}>
     fragmentShader: string,
     options?: Partial<IModelInitializationOptions>,
   ) {
-    this.shaderModule.registerModule(shaderModuleName, {
+    this.shaderModuleService.registerModule(shaderModuleName, {
       vs: quadVS,
       fs: fragmentShader,
     });
 
-    const { vs, fs, uniforms } = this.shaderModule.getModule(shaderModuleName);
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
+      shaderModuleName,
+    );
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     return createModel({
       vs,

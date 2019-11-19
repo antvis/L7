@@ -1,17 +1,5 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  ITexture2D,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ITexture2D } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
-import { PointImageTriangulation } from '../core/triangulation';
 import pointImageFrag from './shaders/image_frag.glsl';
 import pointImageVert from './shaders/image_vert.glsl';
 interface IPointLayerStyleOptions {
@@ -58,7 +46,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     this.updateTexture();
     this.iconService.on('imageUpdate', () => {
       this.updateTexture();
@@ -85,9 +73,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -112,7 +100,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {

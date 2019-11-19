@@ -99,7 +99,8 @@ export default class AMapService implements IMapService {
     return MapType.amap;
   }
   public getZoom(): number {
-    return this.map.getZoom();
+    // 统一返回 Mapbox 缩放等级
+    return this.map.getZoom() - 1;
   }
   public getCenter(): ILngLat {
     const center = this.map.getCenter();
@@ -114,7 +115,8 @@ export default class AMapService implements IMapService {
   }
 
   public getRotation(): number {
-    return this.map.getRotation();
+    // 统一返回逆时针旋转角度
+    return 360 - this.map.getRotation();
   }
 
   public getBounds(): Bounds {
@@ -122,9 +124,10 @@ export default class AMapService implements IMapService {
     const amapBound = this.map.getBounds().toBounds();
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
+    // 兼容 Mapbox，统一返回西南、东北
     return [
-      [NE.getLng(), NE.getLat()],
       [SW.getLng(), SW.getLat()],
+      [NE.getLng(), NE.getLat()],
     ];
   }
 

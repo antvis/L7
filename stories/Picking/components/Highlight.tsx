@@ -33,6 +33,7 @@ export default class Highlight extends React.Component {
       zoom: 3,
     });
     const layer = new PolygonLayer({
+      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       highlightColor: [0, 0, 1, 1],
@@ -59,7 +60,6 @@ export default class Highlight extends React.Component {
       });
     scene.addLayer(layer);
     scene.render();
-    console.log(layer);
     this.scene = scene;
 
     /*** 运行时修改样式属性 ***/

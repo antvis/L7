@@ -63,7 +63,7 @@ export default class Layers extends Control {
       sortLayers: false,
     };
   }
-  public onAdd(MapService: IMapService) {
+  public onAdd() {
     this.initLayout();
     this.update();
     this.mapsService.on('zoomend', this.checkDisabledLayers);

@@ -1,6 +1,7 @@
 import { PointLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
+// @ts-ignore
 import data from '../data/data.json';
 export default class Point3D extends React.Component {
   private scene: Scene;
@@ -18,20 +19,15 @@ export default class Point3D extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 1,
     });
-    const pointLayer = new PointLayer({});
-    const p1 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [83.671875, 44.84029065139799],
-          },
-        },
-      ],
-    };
+    const pointLayer = new PointLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene4', pickedFeature.feature.name);
+      },
+    });
     pointLayer
       .source(data)
       .color('name', [
@@ -42,7 +38,7 @@ export default class Point3D extends React.Component {
         '#D42F31',
         '#730D1C',
       ])
-      .shape('subregion',[
+      .shape('subregion', [
         'circle',
         'triangle',
         'square',
@@ -53,13 +49,11 @@ export default class Point3D extends React.Component {
         'rhombus',
         'vesica',
       ])
-      .size('scalerank', [5,10])
+      .size('scalerank', [5, 10])
       .style({
-        opacity: 1.0
-      })
-      ;
+        opacity: 1.0,
+      });
     scene.addLayer(pointLayer);
-    console.log(pointLayer);
     scene.render();
     this.scene = scene;
   }

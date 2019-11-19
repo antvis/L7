@@ -18,10 +18,13 @@ L7 选择了 [InversifyJS](https://github.com/inversify/InversifyJS/blob/master/
 下图清晰的展示了切换引擎和底图时均不会影响核心代码：
 ![](./screenshots/packages.png)
 
-## 多层次容器
+# 多层次容器
 
 L7 需要支持多场景(Scene)，每个场景中又包含了多个图层(Layer)。不同的服务可能隶属全局、Scene 和 Layer，因此对于容器也有层次化的要求。
 试想如果我们只有一个全局容器，其中绑定的所有服务自然也都成了全局服务，在多场景下（页面中一个高德地图、一个 Mapbox）销毁高德地图的渲染服务，将影响到 Mapbox 的展示。
+
+下图为 L7 的四个独立场景（两个高德、两个 Mapbox）DEMO 展示效果，它们应该是能互不干扰运行的：
+![](./screenshots/multi-scene.png)
 
 在 Angular 中也有[分层容器](https://angular.io/guide/hierarchical-dependency-injection)的应用。L7 使用的是 InversifyJS 提供的[层次化依赖注入功能](https://github.com/inversify/InversifyJS/blob/master/wiki/hierarchical_di.md)。
 
@@ -33,9 +36,9 @@ RootContainer 1
 ``` 
 其中每种容器包含不同类型的服务，这些服务有的是单例，有的是工厂方法。子容器应该能访问父容器中绑定的服务，即如果 RootContainer 已经绑定了全局日志服务，SceneContainer 不需要重复绑定也能注入。
 
-下面详细介绍下每种容器中的服务。
+下面详细介绍下每种容器中的服务及其 API，在自定义图层、自定义插件以及自定义后处理效果中都可以方便地使用这些服务。
 
-### 全局容器
+## 全局容器
 
 一些全局性服务不需要用户手动创建，也无需显式销毁。我们在全局容器中完成一次性的绑定，后续在所有场景、图层中都可以让容器注入这些服务的单例。类似 Angular 中的 [root ModuleInjector](https://angular.io/guide/hierarchical-dependency-injection#moduleinjector)。
 
@@ -50,22 +53,156 @@ rootContainer
 
 目前 L7 中全局性服务说明如下：
 
-* 日志服务。基于 `probe.gl` 实现，生产模式下应关闭。
+| 服务名称 | 类型 | 说明 |
+| -------- | --- | --------- |
+| logger  | 全局服务 | 在控制台输出信息 |
+
+* 日志服务。
 * Shader 模块化服务。提供基本的 GLSL 模块化服务，基于字符串替换实现。
 * 配置项校验服务。[详见](./ConfigSchemaValidation.md)
 
-### Scene 容器
+### 日志服务
 
-场景是
+基于 `probe.gl` 实现，默认只输出 debug 级别以上的日志信息。开发模式下通过设置日志等级输出 debug 信息，另外 debug 信息会带上时间戳打点，类似这样：
+```bash
+L7:    403ms  map loaded
+L7:    405ms  add event listeners on canvas
+L7:    676ms  regenerate vertex attributes: color finished
+```
+
+通过 `logger` 引用，可使用 API 如下：
+
+| 方法名 | 参数 | 返回值 | 说明 |
+| -------- | ------------- | --------- | --------- |
+| debug  | `(message: string)` | 无 | 输出 debug 级别信息，会带上时间戳 |
+| info  | `(message: string)` | 无 | 输出 info 级别信息 |
+| warn  | `(message: string)` | 无 | 输出 warn 级别信息 |
+| error  | `(message: string)` | 无 | 输出 error 级别信息 |
+
+在自定义图层中使用示例如下：
+```typescript
+class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
+  protected renderModels() {
+    // 输出 debug 级别信息
+    this.logger.debug('start to render...');
+  }
+}
+```
+
+### Shader 模块化服务
+
+通过 `shaderModuleService` 引用，可使用 API 如下：
+
+| 方法名 | 参数 | 返回值 | 说明 |
+| -------- | ------------- | --------- | --------- |
+| registerModule  | `(moduleName: string, moduleParams: IModuleParams)` | 无 | 使用模块名和参数注册 GLSL 模块，其中 `IModuleParams` 格式见下面  |
+| getModule  | `(moduleName: string)` | `IModuleParams` | 根据模块名获取编译后的 GLSL 模块 |
+
+GLSL 模块参数如下：
+```typescript
+interface IModuleParams {
+  vs: string; // vertex shader 字符串
+  fs: string; // fragment shader 字符串
+  uniforms?: { // 可选，uniforms
+    [key: string]: IUniform;
+  };
+}
+```
+
+我们以自定义后处理效果场景为例，完整教程见[自定义后处理效果](自定义后处理效果.md)：
+```typescript
+protected setupShaders() {
+  // 使用 Shader 服务注册 GLSL 模块
+  this.shaderModuleService.registerModule('dotScreenEffect', {
+    vs: this.quad, // Vertex Shader 固定
+    fs: ``, // 暂时省略，在下一小节中详细介绍
+  });
+
+  // 使用 Shader 服务获取编译后的 GLSL 模块
+  const { vs, fs, uniforms } = this.shaderModuleService.getModule('dotScreenEffect');
+  // 使用渲染器服务获取视口尺寸
+  const { width, height } = this.rendererService.getViewportSize();
+
+  return {
+    vs,
+    fs,
+    uniforms: {
+      ...uniforms,
+      u_ViewportSize: [width, height],
+    },
+  };
+}
+```
+
+### 配置项校验服务
+
+开发者不需要显式调用该服务。
+
+Layer 子类可以通过重载 `getConfigSchema()` 方法定义自身的特有属性。例如 `PolygonLayer` 需要定义透明度，详见[ConfigSchemaValidation 使用方法](ConfigSchemaValidation.md)：
+```typescript
+protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
+  }
+```
+
+以上就是供开发者使用的常见全局服务，下面我们将介绍场景容器及其内部服务。
+
+## Scene 容器
+
+场景可以承载多个图层，与地图底图一一对应。每个场景都有自己独立的容器确保多个场景间服务不会互相干扰，同时继承全局容器以便访问全局服务。容器内服务包括：
 
 * 地图底图服务。每个场景有一个对应的地图底图。
 * 渲染引擎服务。由于依赖 WebGL 上下文，基于 `regl` 实现。
 * 图层管理服务。管理场景中所有的图层，负责图层的创建、销毁。
 * PostProcessingPass。内置常用的后处理效果。
 
-### Layer 容器
+### 地图底图服务
 
-一个场景中可以有
+兼容 Mapbox 和高德，开发者可以获取当前地图的状态、调用地图相机动作（缩放、平移、旋转）。
+
+通过 `mapService` 引用。
+
+常用地图状态获取方法如下：
+| 方法名 | 参数 | 返回值 | 说明 |
+| -------- | ------------- | --------- | --------- |
+| getSize  | 无 | `[number, number]` | 获取地图尺寸（像素单位） |
+| getZoom  | 无 | `number` | 获取当前地图缩放等级，以 Mapbox 为准 |
+| getCenter | 无 | `{lng: number; lat: number}` | 获取当前地图中心点经纬度 |
+| getPitch | 无 | `number` | 获取当前地图仰角 |
+| getRotation | 无 | `number` | 获取当前地图逆时针旋转角度 |
+| getBounds | 无 | `[[number, number], [number, number]]` | 获取当前地图可视区域 `[西南角、东北角]` |
+
+⚠️对于一些地图属性将采用兼容性处理。
+
+* 缩放等级，差异表现在：
+  1. 取值范围。高德缩放等级范围 `[3, 18]`，而 Mapbox 为 `[0, 20]`。
+  2. 高德 `3` 缩放等级对应 Mapbox `2` 缩放等级。考虑兼容性，`getZoom()` 将返回 Mapbox 定义等级。
+* 旋转角度。高德返回地图顺时针旋转角度，Mapbox 返回逆时针旋转角度。考虑兼容性，`getRotation()` 将返回地图逆时针旋转角度。
+
+除了获取地图状态，还可以控制地图进行一些相机动作。
+
+### [WIP]渲染引擎服务
+
+通过 `rendererService` 引用。
+
+### 图层管理服务
+
+开发者不需要显式调用。用于管理场景中所有的图层，负责图层的创建、销毁。
+
+## Layer 容器
+
+每个图层有独立的容器，同时继承自所属场景容器，自然也可以访问全局服务。
+
+* 样式管理服务。
+* MultiPassRenderer 服务。详见[MultiPassRenderer 说明](./MultiPassRenderer.md)
 
 ## 参考资料
 
