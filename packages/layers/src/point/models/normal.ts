@@ -5,6 +5,7 @@ import {
   ILayer,
   ILayerModel,
   IModel,
+  IModelUniform,
 } from '@l7/core';
 
 import BaseModel from '../../core/baseModel';
@@ -27,7 +28,7 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class NormalModel extends BaseModel {
-  public getUninforms() {
+  public getUninforms(): IModelUniform {
     const {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',

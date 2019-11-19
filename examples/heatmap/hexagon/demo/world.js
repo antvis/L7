@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { HeatMapGridLayer, HeatMapGrid3dLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 const scene = new Scene({
   id: 'map',
   style: 'light',
@@ -13,7 +13,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64
   .then((res) => res.json())
   .then((data) => {
     const layer =
-      new HeatMapGrid3dLayer({
+      new HeatmapLayer({
       })
       .source(data, {
         transforms: [
