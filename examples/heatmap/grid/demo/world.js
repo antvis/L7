@@ -1,4 +1,4 @@
-import { HeatMapGridLayer, HeatMapGrid3dLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
@@ -15,7 +15,7 @@ fetch(
 )
   .then((res) => res.text())
   .then((data) => {
-    const layer = new HeatMapGridLayer({})
+    const layer = new HeatmapLayer({})
       .source(data, {
       parser: {
         type: 'csv',

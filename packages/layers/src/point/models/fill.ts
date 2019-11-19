@@ -7,6 +7,7 @@ import {
   ILayerPlugin,
   ILogService,
   IModel,
+  IModelUniform,
   IStyleAttributeService,
   lazyInject,
   TYPES,
@@ -22,7 +23,7 @@ interface IPointLayerStyleOptions {
   strokeColor: string;
 }
 export default class FillModel extends BaseModel {
-  public getUninforms() {
+  public getUninforms(): IModelUniform {
     const {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',

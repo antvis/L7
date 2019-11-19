@@ -315,13 +315,20 @@ function checkIsClosed(points: number[][][]) {
 }
 
 function getHeatmapGeometry(shape: ShapeType2D | ShapeType3D): IExtrudeGeomety {
+  const shape3d = [
+    'cylinder',
+    'triangleColumn',
+    'hexagonColumn',
+    'squareColumn',
+  ];
   const path = geometryShape[shape]
     ? geometryShape[shape]()
     : geometryShape.circle();
-  // const geometry = ShapeType2D[str as ShapeType2D]
-  //   ? fillPolygon([path])
-  //   : extrudePolygon([path]);
-  const geometry = fillPolygon([path]);
+  const geometry =
+    shape3d.indexOf(shape) === -1
+      ? fillPolygon([path])
+      : extrudePolygon([path]);
+  // const geometry = fillPolygon([path]);
   return geometry;
 }
 // 热力图计算范围

@@ -1,21 +1,12 @@
 import { container, ILayerPlugin, TYPES } from '@l7/core';
 import BaseLayer from './core/BaseLayer';
-import HeatMapGrid3dLayer from './heatmap/gird3d';
-import HeatMapGridLayer from './heatmap/grid';
-import HeatMapLayer from './heatmap/heatmap';
-import HeatMapHexagonLayer from './heatmap/hexagon';
-
+import HeatmapLayer from './heatmap';
 import DashLineLayer from './line/dash';
 import LineLayer from './line/index';
 import PointLayer from './point';
-
-import TextLayer from './point/text';
-// import Point from './point/point';
 import PolygonLayer from './polygon';
-// import Polygon3DLayer from './polygon/polygon3D';
 import ImageLayer from './raster/image';
 import RasterLayer from './raster/raster';
-import Raster2DLayer from './raster/raster2d';
 
 import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -80,15 +71,7 @@ export {
   PolygonLayer,
   LineLayer,
   DashLineLayer,
-  // Polygon3DLayer,
   ImageLayer,
   RasterLayer,
-  HeatMapLayer,
-  TextLayer,
-  HeatMapGrid3dLayer,
-  HeatMapHexagonLayer,
-  HeatMapGridLayer,
-  Raster2DLayer,
-  // ImageLayer,
-  // HeatMapLayer,
+  HeatmapLayer,
 };

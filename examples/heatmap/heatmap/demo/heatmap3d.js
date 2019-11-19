@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { HeatMapLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 const scene = new Scene({
   id: 'map',
   style: 'dark',
@@ -14,7 +14,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64
   .then((res) => res.json())
   .then((data) => {
     const layer =
-      new HeatMapLayer({
+      new HeatmapLayer({
       })
       .source(data)
       .size('capacity', [0, 1])
