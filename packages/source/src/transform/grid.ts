@@ -23,6 +23,7 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
     yOffset: gridOffset.yOffset / 1.8,
     xOffset: gridOffset.xOffset / 1.8,
     radius: gridOffset.xOffset,
+    type: 'grid',
     dataArray: layerData,
   };
 }

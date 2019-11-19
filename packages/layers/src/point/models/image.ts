@@ -5,6 +5,7 @@ import {
   ILayer,
   ILayerModel,
   IModel,
+  IModelUniform,
   ITexture2D,
 } from '@l7/core';
 
@@ -19,7 +20,7 @@ interface IPointLayerStyleOptions {
 export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
-  public getUninforms() {
+  public getUninforms(): IModelUniform {
     const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
