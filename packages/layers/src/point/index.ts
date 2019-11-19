@@ -1,18 +1,6 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+import { IEncodeFeature } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
-import { rgb2arr } from '../utils/color';
-import pointFillFrag from './shaders/fill_frag.glsl';
-import pointFillVert from './shaders/fill_vert.glsl';
+import PointModels, { PointType } from './models/index';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
@@ -20,7 +8,6 @@ interface IPointLayerStyleOptions {
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public name: string = 'PointLayer';
-
   protected getConfigSchema() {
     return {
       properties: {
@@ -31,5 +18,45 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       },
     };
+  }
+  protected renderModels() {
+    this.models.forEach((model) =>
+      model.draw({
+        uniforms: this.layerModel.getUninforms(),
+      }),
+    );
+    return this;
+  }
+
+  protected buildModels() {
+    const modelType = this.getModelType();
+    this.layerModel = new PointModels[modelType](this);
+    this.models = this.layerModel.buildModels();
+  }
+
+  private getModelType(): PointType {
+    // pointlayer
+    //  2D、 3d、 shape、image、text、normal、
+    const layerData = this.getEncodedData();
+    const { shape2d, shape3d } = this.configService.getConfig();
+    const iconMap = this.iconService.getIconMap();
+    const item = layerData.find((fe: IEncodeFeature) => {
+      return fe.hasOwnProperty('shape');
+    });
+    if (!item) {
+      return 'normal';
+    } else {
+      const shape = item.shape;
+      if (shape2d?.indexOf(shape as string) !== -1) {
+        return 'fill';
+      }
+      if (shape3d?.indexOf(shape as string) !== -1) {
+        return 'extrude';
+      }
+      if (iconMap.hasOwnProperty(shape as string)) {
+        return 'image';
+      }
+      return 'text';
+    }
   }
 }

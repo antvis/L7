@@ -14,12 +14,12 @@ module.exports = {
     githubUrl: 'https://github.com/antvis/L7',
     navs: [
       {
-        slug: 'docs/API',
+        slug: 'docs/api',
         title: {
           zh: '文档',
           en: 'Document',
         },
-        redirect: 'API/L7',
+        redirect: 'api/l7',
       },
       {
         slug: 'docs/tutorial',

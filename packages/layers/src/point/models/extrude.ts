@@ -1,60 +1,48 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { PointExtrudeTriangulation } from '../core/triangulation';
-import heatmapGrid3dVert from './shaders/hexagon_3d_vert.glsl';
-import heatmapGridFrag from './shaders/hexagon_frag.glsl';
-interface IHeatMapLayerStyleOptions {
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayer,
+  ILayerModel,
+  IModel,
+} from '@l7/core';
+import BaseModel from '../../core/baseModel';
+import { PointExtrudeTriangulation } from '../../core/triangulation';
+import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
+import pointExtrudeVert from '../shaders/extrude_vert.glsl';
+interface IPointLayerStyleOptions {
   opacity: number;
-  coverage: number;
 }
-export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
-  public name: string = 'hexgaon';
-
-  protected getConfigSchema() {
+export default class ExtrudeModel extends BaseModel {
+  public getUninforms() {
+    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
     return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
+      u_opacity: opacity || 1.0,
     };
   }
 
-  protected renderModels() {
-    const { opacity, coverage } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity || 1.0,
-          u_coverage: coverage || 1.0,
-          u_radius: [
-            this.getSource().data.xOffset,
-            this.getSource().data.yOffset,
-          ],
-        },
-      }),
-    );
-    return this;
-  }
-
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
-        moduleName: 'grid3dheatmap',
-        vertexShader: heatmapGrid3dVert,
-        fragmentShader: heatmapGridFrag,
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
+        moduleName: 'pointExtrude',
+        vertexShader: pointExtrudeVert,
+        fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
-        depth: { enable: true },
+        blend: {
+          enable: true,
+          func: {
+            srcRGB: gl.SRC_ALPHA,
+            srcAlpha: 1,
+            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+            dstAlpha: 1,
+          },
+        },
       }),
     ];
   }
-
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -65,7 +53,7 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 3,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -73,13 +61,25 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const { size } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
+          if (size) {
+            let buffersize: number[] = [];
+            if (Array.isArray(size)) {
+              buffersize =
+                size.length === 2 ? [size[0], size[0], size[1]] : size;
+            }
+            if (!Array.isArray(size)) {
+              buffersize = [size];
+            }
+            return buffersize;
+          } else {
+            return [2, 2, 2];
+          }
         },
       },
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -102,8 +102,8 @@ export default class HeatMapGrid extends BaseLayer<IHeatMapLayerStyleOptions> {
         },
       },
     });
-    layer.styleAttributeService.registerStyleAttribute({
-      name: 'pos', // 顶点经纬度位置
+    this.layer.styleAttributeService.registerStyleAttribute({
+      name: 'pos',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',

@@ -3,73 +3,45 @@ import {
   gl,
   IEncodeFeature,
   ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
+  ILayerModel,
+  IModel,
+  IModelUniform,
   ITexture2D,
-  lazyInject,
-  TYPES,
 } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { PointImageTriangulation } from '../core/triangulation';
-import pointImageFrag from './shaders/image_frag.glsl';
-import pointImageVert from './shaders/image_vert.glsl';
+
+import BaseModel from '../../core/baseModel';
+import { PointImageTriangulation } from '../../core/triangulation';
+import pointImageFrag from '../shaders/image_frag.glsl';
+import pointImageVert from '../shaders/image_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
-export function PointTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
-  return {
-    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-    extrude: [-1, -1, 1, -1, 1, 1, -1, 1],
-    indices: [0, 1, 2, 2, 3, 0],
-    size: coordinates.length,
-  };
-}
-export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
+
+export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
-  protected getConfigSchema() {
+
+  public getUninforms(): IModelUniform {
+    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
     return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
+      u_opacity: opacity || 1.0,
+      u_texture: this.texture,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
     };
   }
 
-  protected renderModels() {
-    const { opacity } = this.getStyleOptions();
-    const { createTexture2D } = this.rendererService;
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity || 1.0,
-          u_texture: this.texture,
-          u_textSize: [1024, this.iconService.canvasHeight || 128],
-        },
-      }),
-    );
-
-    return this;
-  }
-
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
+  public buildModels(): IModel[] {
+    this.registerBuiltinAttributes();
     this.updateTexture();
     this.iconService.on('imageUpdate', () => {
       this.updateTexture();
-      this.renderModels();
+      this.layer.render(); // TODO 调用全局render
     });
-    this.models = [
-      this.buildLayerModel({
+    return [
+      this.layer.buildLayerModel({
         moduleName: 'pointImage',
         vertexShader: pointImageVert,
         fragmentShader: pointImageFrag,
-        triangulation: PointTriangulation,
+        triangulation: PointImageTriangulation,
         primitive: gl.POINTS,
         depth: { enable: false },
         blend: {
@@ -85,9 +57,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -112,7 +84,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
@@ -139,6 +111,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     });
   }
+
   private updateTexture() {
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({

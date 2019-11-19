@@ -1,5 +1,6 @@
 {
-  "L7 地理空间可视化引擎": "Geospatial Visualization <br> Analysis Framework",
+  "L7 地理空间可视化引擎": "Geospatial Visualization
+  Analysis Framework",
   "地理空间数据可视化": "Geospatial Data Visualization Analysis Framework",
   "L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。": "Large-scale WebGL-powered  Geospatial data visualization analysis framework",
   "架构上灵活可扩展":"Flexible and scalable",
