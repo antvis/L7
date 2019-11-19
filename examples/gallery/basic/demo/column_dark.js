@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { Point3dLayer} from '@l7/layers'
+import { PointLayer} from '@l7/layers'
 
 const scene = new Scene({
   id: 'map',
@@ -15,7 +15,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then((res) => res.json())
   .then((data) => {
     const pointLayer =
-      new Point3dLayer({
+      new PointLayer({
       })
         .source(data.list, {
           parser: {

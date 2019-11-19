@@ -1,42 +1,36 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { PolygonExtrudeTriangulation } from '../core/triangulation';
-import polygonExtrudeFrag from './shaders/polygon_extrude_frag.glsl';
-import polygonExtrudeVert from './shaders/polygon_extrude_vert.glsl';
-interface IPointLayerStyleOptions {
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayer,
+  ILayerModel,
+  ILayerPlugin,
+  ILogService,
+  IModel,
+  IStyleAttributeService,
+  lazyInject,
+  TYPES,
+} from '@l7/core';
+import BaseModel from '../../core/baseModel';
+import { PolygonExtrudeTriangulation } from '../../core/triangulation';
+import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';
+import polygonExtrudeVert from '../shaders/polygon_extrude_vert.glsl';
+interface IPolygonLayerStyleOptions {
   opacity: number;
 }
-export default class PolygonLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PolygonLayer';
-
-  protected getConfigSchema() {
+export default class ExtrudeModel extends BaseModel {
+  public getUninforms() {
+    const {
+      opacity = 1,
+    } = this.layer.getStyleOptions() as IPolygonLayerStyleOptions;
     return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
+      u_opacity: opacity,
     };
   }
 
-  protected renderModels() {
-    const { opacity } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity || 1.0,
-        },
-      }),
-    );
-    return this;
-  }
-
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
         moduleName: 'polygonExtrude',
         vertexShader: polygonExtrudeVert,
         fragmentShader: polygonExtrudeFrag,
@@ -45,9 +39,9 @@ export default class PolygonLayer extends BaseLayer<IPointLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -71,7 +65,7 @@ export default class PolygonLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {

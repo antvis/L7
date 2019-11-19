@@ -1,51 +1,37 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { LineArcTriangulation } from '../core/triangulation';
-import line_arc_frag from './shaders/line_arc_frag.glsl';
-import line_arc2d_vert from './shaders/line_bezier_vert.glsl';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayer,
+  ILayerModel,
+  IModel,
+  IModelUniform,
+} from '@l7/core';
+import BaseModel from '../../core/baseModel';
+import { LineArcTriangulation } from '../../core/triangulation';
+import line_arc_frag from '../shaders/line_arc_frag.glsl';
+import line_arc_vert from '../shaders/line_arc_vert.glsl';
+
 interface IArcLayerStyleOptions {
   opacity: number;
   segmentNumber: number;
-  blur: number;
 }
-export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
-  public name: string = 'LineLayer';
-
-  protected getConfigSchema() {
+export default class Arc3DModel extends BaseModel {
+  public getUninforms(): IModelUniform {
+    const { opacity } = this.layer.getStyleOptions() as IArcLayerStyleOptions;
     return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
+      u_opacity: opacity || 1,
+      segmentNumber: 30,
     };
   }
 
-  protected renderModels() {
-    const { opacity, blur = 0.99 } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity || 1,
-          segmentNumber: 30,
-          u_blur: blur,
-        },
-      }),
-    );
-    return this;
-  }
-
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
-        moduleName: 'arc2dline',
-        vertexShader: line_arc2d_vert,
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
+        moduleName: 'arcline',
+        vertexShader: line_arc_vert,
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
-        depth: { enable: false },
         blend: {
           enable: true,
           func: {
@@ -58,10 +44,9 @@ export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
       }),
     ];
   }
-
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -85,7 +70,7 @@ export default class ArcLineLayer extends BaseLayer<IArcLayerStyleOptions> {
       },
     });
 
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {

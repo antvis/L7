@@ -3,78 +3,52 @@ import {
   gl,
   IEncodeFeature,
   ILayer,
+  ILayerModel,
   ILayerPlugin,
   ILogService,
+  IModel,
   IStyleAttributeService,
   lazyInject,
   TYPES,
 } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { rgb2arr } from '../utils/color';
-import pointFillFrag from './shaders/fill_frag.glsl';
-import pointFillVert from './shaders/fill_vert.glsl';
+import BaseModel from '../../core/baseModel';
+import { PointFillTriangulation } from '../../core/triangulation';
+import { rgb2arr } from '../../utils/color';
+import pointFillFrag from '../shaders/fill_frag.glsl';
+import pointFillVert from '../shaders/fill_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
   strokeColor: string;
 }
-export function PointTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
-  return {
-    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-    extrude: [-1, -1, 1, -1, 1, 1, -1, 1],
-    indices: [0, 1, 2, 2, 3, 0],
-    size: coordinates.length,
-  };
-}
-export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
-
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
-  protected renderModels() {
+export default class FillModel extends BaseModel {
+  public getUninforms() {
     const {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',
       strokeWidth = 1,
-    } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity,
-          u_stroke_width: strokeWidth,
-          u_stroke_color: rgb2arr(strokeColor),
-        },
-      }),
-    );
-    return this;
+    } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    return {
+      u_opacity: opacity,
+      u_stroke_width: strokeWidth,
+      u_stroke_color: rgb2arr(strokeColor),
+    };
   }
 
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
         moduleName: 'pointfill',
         vertexShader: pointFillVert,
         fragmentShader: pointFillFrag,
-        triangulation: PointTriangulation,
+        triangulation: PointFillTriangulation,
         depth: { enable: false },
       }),
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
-    layer.styleAttributeService.registerStyleAttribute({
+  protected registerBuiltinAttributes() {
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
       descriptor: {
@@ -100,7 +74,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -125,7 +99,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'shape',
       type: AttributeType.Attribute,
       descriptor: {
@@ -144,7 +118,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = layer.configService.getConfig().shape2d as string[];
+          const shape2d = this.layer.configService.getConfig()
+            .shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },
