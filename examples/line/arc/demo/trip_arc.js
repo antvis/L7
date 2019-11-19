@@ -1,4 +1,4 @@
-import { Arc3DLineLayer } from '@l7/layers';
+import { LineLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
@@ -8,12 +8,11 @@ const scene = new Scene({
   center: [-74.06355155037261,40.73507179789368],
   zoom: 11.8623,
 });
-window.mapScene = scene;
 fetch('https://gw.alipayobjects.com/os/basement_prod/bd33a685-a17e-4686-bc79-b0e6a89fd950.csv')
   .then((res) => res.text())
   .then((data) => {
     const layer =
-    new Arc3DLineLayer({})
+    new LineLayer({})
     .source(data, {
       parser: {
         type: 'csv',
@@ -24,7 +23,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/bd33a685-a17e-4686-bc79-b0e
       },
     })
     .size(1)
-    .shape('arc')
+    .shape('arc3d')
     .color('#0C47BF')
     .style({
       opacity: 1,

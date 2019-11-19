@@ -1,4 +1,4 @@
-import { ArcLineLayer } from '@l7/layers';
+import { LineLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
@@ -8,11 +8,11 @@ const scene = new Scene({
   center: [0., 23.107329],
   zoom: 0,
 });
-
+console.time('loadData');
 fetch('https://gw.alipayobjects.com/os/basement_prod/b83699f9-a96d-49b8-b2ea-f99299faebaf.json')
   .then((res) => res.json())
   .then((data) => {
-
+    console.timeEnd('loadData');
     function getAirportCoord(idx) {
       return [data.airports[idx][3], data.airports[idx][4]];
     }
@@ -24,9 +24,9 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/b83699f9-a96d-49b8-b2ea-f99
         ]
       }
     });
-
+    console.timeEnd('loadData');
     const layer =
-      new ArcLineLayer({})
+      new LineLayer({})
         .source(routes, {
           parser: {
             type: 'json',
