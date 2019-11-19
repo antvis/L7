@@ -1,4 +1,4 @@
-import { Arc2DLineLayer } from '@l7/layers';
+import { LineLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
@@ -13,7 +13,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
   .then((res) => res.text())
   .then((data) => {
     const layer =
-    new Arc2DLineLayer({})
+    new LineLayer({})
     .source(data, {
       parser: {
         type: 'csv',

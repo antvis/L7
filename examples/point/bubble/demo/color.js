@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { PointLayer, PointImageLayer } from '@l7/layers'
+import { PointLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,

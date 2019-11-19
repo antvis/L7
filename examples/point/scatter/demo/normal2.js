@@ -1,6 +1,6 @@
 
 import { Scene } from '@l7/scene';
-import { PointNormalLayer } from '@l7/layers'
+import { PointLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 64.88,
@@ -15,7 +15,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7
   .then((res) => res.json())
   .then((data) => {
     const pointLayer =
-      new PointNormalLayer({
+      new PointLayer({
        
       })
         .source(data)
