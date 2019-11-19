@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { HeatMapLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 const scene = new Scene({
   id: 'map',
   style: 'dark',
@@ -13,9 +13,11 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842
   .then((res) => res.json())
   .then((data) => {
     const layer =
-      new HeatMapLayer({
+      new HeatmapLayer({
       })
-      .source(data).size('mag', [0, 1.0]) // weight映射通道
+      .source(data)
+      .shape('heatmap')
+      .size('mag', [0, 1.0]) // weight映射通道
         .style({
           intensity: 2,
           radius: 20,

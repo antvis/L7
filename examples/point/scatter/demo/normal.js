@@ -1,6 +1,6 @@
 
 import { Scene } from '@l7/scene';
-import { PointNormalLayer } from '@l7/layers'
+import { PointLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   type: 'amap',
@@ -15,7 +15,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
   .then((res) => res.text())
   .then((data) => {
     const pointLayer =
-      new PointNormalLayer({
+      new PointLayer({
       })
       .source(data, {
         parser: {

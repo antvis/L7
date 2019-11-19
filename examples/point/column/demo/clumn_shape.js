@@ -1,11 +1,11 @@
 import { Scene } from '@l7/scene';
-import { Point3dLayer } from '@l7/layers'
+import { PointLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 65.68421052631578,
   type: 'amap',
   style: 'dark',
-  center: [121.3917,31.259242],
+  center: [121.3917, 31.259242],
   zoom: 14.55,
   rotation: 120
 
@@ -16,7 +16,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
   .then((res) => res.json())
   .then((data) => {
     const pointLayer =
-      new Point3dLayer({
+      new PointLayer({
       })
         .source(data, {
           parser: {
@@ -24,16 +24,16 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
             x: 'longitude',
             y: 'latitude'
           }
-        }).shape('name',['cylinder', 'triangleColumn', 'hexagonColumn','squareColumn'])
-        .size('unit_price', (h)=>{
-          return [ 6,6, h / 500 ]
+        }).shape('name', ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'])
+        .size('unit_price', (h) => {
+          return [6, 6, h / 500]
         })
-        .color('name',['#739DFF', "#61FCBF",'#FFDE74','#FF896F'])
+        .color('name', ['#739DFF', "#61FCBF", '#FFDE74', '#FF896F'])
         .style({
           opacity: 1.0,
         })
 
-      scene.addLayer(pointLayer);
+    scene.addLayer(pointLayer);
 
   });
 
