@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { PointLayer, PointImageLayer } from '@l7/layers'
+import { PointLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,
@@ -9,7 +9,6 @@ const scene = new Scene({
   zoom: 2.194613775109773,
   maxZoom: 10
 });
-window.mapScene = scene;
 fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json')
   .then((res) => res.json())
   .then((data) => {

@@ -1,42 +1,29 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
-import BaseLayer from '../core/BaseLayer';
-import { PointExtrudeTriangulation } from '../core/triangulation';
-import pointExtrudeFrag from './shaders/extrude_frag.glsl';
-import pointExtrudeVert from './shaders/extrude_vert.glsl';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayer,
+  ILayerModel,
+  IModel,
+} from '@l7/core';
+import BaseModel from '../../core/baseModel';
+import { PointExtrudeTriangulation } from '../../core/triangulation';
+import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
+import pointExtrudeVert from '../shaders/extrude_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
-export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
-
-  protected getConfigSchema() {
+export default class ExtrudeModel extends BaseModel {
+  public getUninforms() {
+    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
     return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
+      u_opacity: opacity || 1.0,
     };
   }
 
-  protected renderModels() {
-    const { opacity } = this.getStyleOptions();
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: {
-          u_opacity: opacity || 1.0,
-        },
-      }),
-    );
-    return this;
-  }
-
-  protected buildModels() {
-    this.registerBuiltinAttributes(this);
-    this.models = [
-      this.buildLayerModel({
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
         moduleName: 'pointExtrude',
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
@@ -53,10 +40,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }),
     ];
   }
-
-  private registerBuiltinAttributes(layer: ILayer) {
+  protected registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -93,7 +79,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     });
 
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -116,7 +102,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       },
     });
-    layer.styleAttributeService.registerStyleAttribute({
+    this.layer.styleAttributeService.registerStyleAttribute({
       name: 'pos',
       type: AttributeType.Attribute,
       descriptor: {

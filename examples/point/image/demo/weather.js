@@ -1,5 +1,5 @@
 import { Scene } from '@l7/scene';
-import { PointImageLayer } from '@l7/layers'
+import { PointLayer } from '@l7/layers'
 const scene = new Scene({
   id: 'map',
   type: 'amap',
@@ -25,13 +25,13 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/c6042c6b-45fd-4e2e-adf8-fdb
   .then((res) => res.json())
   .then((data) => {
 
-   const imageLayer = new PointImageLayer()
+    const imageLayer = new PointLayer()
       .source(data)
-      .shape('w', function(w) {
+      .shape('w', function (w) {
         return w;
       })
       .size(15)
-       scene.addLayer(imageLayer);
+    scene.addLayer(imageLayer);
   });
 
 

@@ -1,5 +1,6 @@
 import { IEncodeFeature } from '@l7/core';
 import { aProjectFlat, lngLatToMeters } from '@l7/utils';
+import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
 import getNormals from '../utils/polylineNormal';
 import extrudePolygon, {
@@ -82,6 +83,18 @@ export function LineTriangulation(feature: IEncodeFeature) {
   };
 }
 
+export function polygonTriangulation(feature: IEncodeFeature) {
+  const { coordinates } = feature;
+  const flattengeo = earcut.flatten(coordinates as number[][][]);
+  const { vertices, dimensions, holes } = flattengeo;
+
+  return {
+    indices: earcut(vertices, holes, dimensions),
+    vertices,
+    size: dimensions,
+  };
+}
+
 export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as IPosition[][];
   const { positions, index, normals } = extrude_PolygonNormal(
@@ -155,7 +168,7 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
  * @param segNum 弧线线段数
  */
 export function LineArcTriangulation(feature: IEncodeFeature) {
-  const segNum = 30;
+  const segNum = 20;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
   const indexArray = [];
