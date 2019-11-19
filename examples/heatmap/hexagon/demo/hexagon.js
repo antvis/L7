@@ -1,4 +1,4 @@
-import { HeatMapGridLayer, HeatMapGrid3dLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 const scene = new Scene({
   id: 'map',
@@ -14,7 +14,7 @@ fetch(
 )
   .then((res) => res.json())
   .then((data) => {
-    const layer = new HeatMapGrid3dLayer({})
+    const layer = new HeatmapLayer({})
       .source(data, {
         transforms: [
           {
@@ -26,7 +26,7 @@ fetch(
         ],
       })
       .size('sum', [0, 600])
-      .shape('hexagon')
+      .shape('hexagonColumn')
       .style({
         coverage: 0.8,
         angle: 0,

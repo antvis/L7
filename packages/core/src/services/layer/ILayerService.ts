@@ -33,6 +33,7 @@ export interface ILayerModelInitializationOptions {
   triangulation: Triangulation;
 }
 export interface ILayerModel {
+  render(): void;
   getUninforms(): IModelUniform;
   buildModels(): IModel[];
 }

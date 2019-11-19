@@ -1,0 +1,18 @@
+.home_l7_feature_img {
+  width:100px;
+}
+.feature-logo {
+  height: 100px !important;
+}
+.cover-image {
+  margin-top: 40px;
+  margin-left: 30px;
+  max-height: 600px;
+}
+@media only screen and (max-height: 800px) {
+  .cover-image {
+    margin-top: 40px;
+    margin-left: 270px;
+    max-height: 400px;
+  }
+}

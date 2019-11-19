@@ -37,7 +37,7 @@ fetch(
       .size('sum', (sum)=>{
         return sum * 200;
       })
-      .shape('hexagon')
+      .shape('hexagonColumn')
       .style({
         coverage: 0.8,
         angle: 0,

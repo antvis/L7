@@ -1,6 +1,7 @@
 import {
   AttributeType,
   gl,
+  ICameraService,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -13,12 +14,15 @@ import {
   IModel,
   IModelUniform,
   IRendererService,
+  IShaderModuleService,
   IStyleAttributeService,
   lazyInject,
   TYPES,
 } from '@l7/core';
 
 export default class BaseModel implements ILayerModel {
+  @lazyInject(TYPES.IStyleAttributeService)
+  public styleAttributeService: IStyleAttributeService;
   protected layer: ILayer;
 
   @lazyInject(TYPES.IGlobalConfigService)
@@ -33,8 +37,14 @@ export default class BaseModel implements ILayerModel {
   @lazyInject(TYPES.IRendererService)
   protected readonly rendererService: IRendererService;
 
+  @lazyInject(TYPES.IShaderModuleService)
+  protected readonly shaderModuleService: IShaderModuleService;
+
   @lazyInject(TYPES.IMapService)
   protected readonly map: IMapService;
+
+  @lazyInject(TYPES.ICameraService)
+  protected readonly camera: ICameraService;
 
   constructor(layer: ILayer) {
     this.layer = layer;
@@ -49,6 +59,9 @@ export default class BaseModel implements ILayerModel {
     throw new Error('Method not implemented.');
   }
 
+  public render() {
+    throw new Error('Method not implemented.');
+  }
   protected registerBuiltinAttributes() {
     throw new Error('Method not implemented.');
   }
