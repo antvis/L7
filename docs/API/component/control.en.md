@@ -1,5 +1,5 @@
 ---
-title: sControl
+title: Control
 order: 1
 ---
 # control

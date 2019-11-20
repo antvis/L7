@@ -1,5 +1,5 @@
 import { IEncodeFeature } from '@l7/core';
-import { polygonTriangulation } from '..';
+import { polygonTriangulation } from '../../core/triangulation';
 
 describe('PolygonTriangulation', () => {
   it('should do triangulation with a polygon correctly', () => {

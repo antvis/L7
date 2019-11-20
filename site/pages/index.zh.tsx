@@ -58,7 +58,7 @@ const IndexPage = () => {
     {
       logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
       title: t('浅色色板'),
-      description: t('将复杂的地理数据，通过简单易用的API，转化成一个个真实的可视化案例，达到开箱即用的效果。'),
+      description: t('一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。'),
       link: `/${i18n.language}/examples/gallery/basic`,
       image:
         'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RPxeQZ8Uk7EAAAAAAAAAAABkARQnAQ',
