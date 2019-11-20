@@ -40,14 +40,14 @@ const scene = new L7.Scene({
   pitch: 0,
   zoom: 12,
   maxZoom:20,
-  minZoom:0,
+  minZoom:0
 });
 ```
 
 
 #### 根据map 实例创建Sence
 
-_L7 基于高德地图3D模式开发的，因此传入Map实例 __viewModes需要设置成3d_<br />_
+L7 基于高德地图3D模式开发的，因此传入Map实例 __viewModes需要设置成3d_<br />_
 ```javascript
 var mapinstance = new AMap.Map('map',{
     center: [ 120.19382669582967, 30.258134 ],
