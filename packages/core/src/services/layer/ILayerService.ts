@@ -2,13 +2,14 @@ import { Container } from 'inversify';
 import { SyncBailHook, SyncHook } from 'tapable';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
-import { IModel } from '../renderer/IModel';
+import { IModel, IModelInitializationOptions } from '../renderer/IModel';
 import {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
+import { IUniform } from '../renderer/IUniform';
 import { ISource, ISourceCFG } from '../source/ISourceService';
 import {
   IAnimateOption,
@@ -18,6 +19,7 @@ import {
   IStyleAttributeService,
   StyleAttrField,
   StyleAttributeOption,
+  Triangulation,
 } from './IStyleAttributeService';
 
 export interface ILayerGlobalConfig {
@@ -29,6 +31,20 @@ export interface ILayerGlobalConfig {
   scales: {
     [key: string]: IScale;
   };
+}
+export interface ILayerModelInitializationOptions {
+  moduleName: string;
+  vertexShader: string;
+  fragmentShader: string;
+  triangulation: Triangulation;
+}
+export interface ILayerModel {
+  render(): void;
+  getUninforms(): IModelUniform;
+  buildModels(): IModel[];
+}
+export interface IModelUniform {
+  [key: string]: IUniform;
 }
 
 export interface IPickedFeature {
@@ -65,6 +81,10 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   getContainer(): Container;
   setContainer(container: Container): void;
+  buildLayerModel(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ): IModel;
   init(): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;

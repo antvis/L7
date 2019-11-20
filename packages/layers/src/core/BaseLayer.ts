@@ -1,7 +1,6 @@
 import {
   gl,
   IAnimateOption,
-  ICameraService,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -9,6 +8,8 @@ import {
   IInteractionService,
   ILayer,
   ILayerInitializationOptions,
+  ILayerModel,
+  ILayerModelInitializationOptions,
   ILayerPlugin,
   ILayerService,
   ILogService,
@@ -23,32 +24,23 @@ import {
   IScaleOptions,
   IShaderModuleService,
   ISourceCFG,
-  // lazyMultiInject,
   IStyleAttributeInitializationOptions,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
   StyleAttributeField,
   StyleAttributeOption,
-  Triangulation,
   TYPES,
 } from '@l7/core';
 import Source from '@l7/source';
 import { EventEmitter } from 'eventemitter3';
-import { Container, interfaces } from 'inversify';
+import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import baseLayerSchema from './schema';
-
-export interface ILayerModelInitializationOptions {
-  moduleName: string;
-  vertexShader: string;
-  fragmentShader: string;
-  triangulation: Triangulation;
-}
 
 /**
  * 分配 layer id
@@ -137,6 +129,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     name: string,
   ) => IPostProcessingPass<unknown>;
   protected normalPassFactory: (name: string) => IPass<unknown>;
+
+  protected layerModel: ILayerModel;
 
   protected enodeOptions: {
     [type: string]: {
@@ -530,7 +524,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.interactionService.triggerHover({ x, y });
   }
 
-  protected buildLayerModel(
+  public buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel {
@@ -547,7 +541,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    const parserData = this.getSource().data.dataArray;
+
     const {
       attributes,
       elements,

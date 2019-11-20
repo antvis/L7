@@ -111,11 +111,11 @@ export default class Layers extends Control {
       className + '-list',
     ) as HTMLElement);
 
-    if (collapsed) {
-      this.mapsService.on('click', this.collapse);
-      container.addEventListener('mouseenter', this.expand);
-      container.addEventListener('mouseleave', this.collapse);
-    }
+    // if (collapsed) {
+    //   this.mapsService.on('click', this.collapse);
+    //   container.addEventListener('mouseenter', this.expand);
+    //   container.addEventListener('mouseleave', this.collapse);
+    // }
 
     this.layersLink = DOM.create('a', className + '-toggle', container);
     const link = this.layersLink;
@@ -124,6 +124,7 @@ export default class Layers extends Control {
     if (!collapsed) {
       this.expand();
     }
+    this.expand();
 
     this.baseLayersList = DOM.create('div', className + '-base', form);
     this.separator = DOM.create('div', className + '-separator', form);

@@ -23,6 +23,7 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
     yOffset: gridOffset.yOffset / 1.8,
     xOffset: gridOffset.xOffset / 1.8,
     radius: gridOffset.xOffset,
+    type: 'grid',
     dataArray: layerData,
   };
 }
@@ -107,6 +108,6 @@ function _getGridLayerDataFromGridHash(
 }
 function getColumn(data: any[], columnName: string) {
   return data.map((item) => {
-    return item[columnName];
+    return item[columnName] * 1;
   });
 }

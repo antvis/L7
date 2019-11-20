@@ -1,4 +1,4 @@
-import { HeatMapGridLayer } from '@l7/layers';
+// import { HeatMapGridLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 
@@ -21,42 +21,42 @@ export default class GridHeatMap extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 16,
     });
-    const layer = new HeatMapGridLayer({});
-    layer
-      .source(await response.json(), {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
-        transforms: [
-          {
-            type: 'grid',
-            size: 50,
-            field: 'count',
-            method: 'sum',
-          },
-        ],
-      })
-      .size('sum', (value: number) => {
-        return value;
-      })
-      .shape('circle')
-      .style({
-        coverage: 0.8,
-        angle: 0,
-      })
-      .color('count', [
-        '#002466',
-        '#105CB3',
-        '#2894E0',
-        '#CFF6FF',
-        '#FFF5B8',
-        '#FFAB5C',
-        '#F27049',
-        '#730D1C',
-      ]);
-    scene.addLayer(layer);
+    // const layer = new HeatMapGridLayer({});
+    // layer
+    //   .source(await response.json(), {
+    //     parser: {
+    //       type: 'json',
+    //       x: 'lng',
+    //       y: 'lat',
+    //     },
+    //     transforms: [
+    //       {
+    //         type: 'grid',
+    //         size: 50,
+    //         field: 'count',
+    //         method: 'sum',
+    //       },
+    //     ],
+    //   })
+    //   .size('sum', (value: number) => {
+    //     return value;
+    //   })
+    //   .shape('circle')
+    //   .style({
+    //     coverage: 0.8,
+    //     angle: 0,
+    //   })
+    //   .color('count', [
+    //     '#002466',
+    //     '#105CB3',
+    //     '#2894E0',
+    //     '#CFF6FF',
+    //     '#FFF5B8',
+    //     '#FFAB5C',
+    //     '#F27049',
+    //     '#730D1C',
+    //   ]);
+    // scene.addLayer(layer);
     scene.render();
     this.scene = scene;
   }

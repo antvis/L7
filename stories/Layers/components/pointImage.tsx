@@ -1,7 +1,6 @@
-import { PointImageLayer, PointLayer } from '@l7/layers';
+// import { PointImageLayer, PointLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
-import data from '../data/data.json';
 export default class PointImage extends React.Component {
   private scene: Scene;
 
@@ -14,7 +13,7 @@ export default class PointImage extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
     );
     const scene = new Scene({
-      center: [121.40, 31.258134],
+      center: [121.4, 31.258134],
       zoom: 15,
       id: 'map',
       pitch: 0,
@@ -37,21 +36,20 @@ export default class PointImage extends React.Component {
     scene.on('loaded', () => {
       run();
     });
-    const imageLayer = new PointImageLayer({})
-      .source(await response.json(), {
-        parser: {
-          type: 'json',
-          x: 'longitude',
-          y: 'latitude',
-        }
-      })
-      .shape('name', ['00', '01', '02'])
-      .size(60);
-    scene.addLayer(imageLayer);
+    // const imageLayer = new PointImageLayer({})
+    //   .source(await response.json(), {
+    //     parser: {
+    //       type: 'json',
+    //       x: 'longitude',
+    //       y: 'latitude',
+    //     },
+    //   })
+    //   .shape('name', ['00', '01', '02'])
+    //   .size(60);
+    // scene.addLayer(imageLayer);
 
     function run() {
       scene.render();
-      console.log('render');
       requestAnimationFrame(run);
     }
     this.scene = scene;

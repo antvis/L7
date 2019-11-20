@@ -206,6 +206,7 @@ export default class Scene extends EventEmitter implements ISceneService {
         width: pixelRatio * w,
         height: pixelRatio * h,
       });
+      //  repaint layers
       this.render();
     }
   };

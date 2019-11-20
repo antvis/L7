@@ -1,6 +1,7 @@
-import { Point3dLayer } from '@l7/layers';
+// import { Point3dLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
+// @ts-ignore
 import data from '../data/data.json';
 export default class Point3D extends React.Component {
   private scene: Scene;
@@ -18,26 +19,13 @@ export default class Point3D extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 1,
     });
-    const pointLayer = new Point3dLayer({});
-    const p1 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [83.671875, 44.84029065139799],
-          },
-        },
-      ],
-    };
-    pointLayer
-      .source(data)
-      .color('red')
-      .shape('cylinder')
-      .size([15, 10]);
-    scene.addLayer(pointLayer);
+    // const pointLayer = new Point3dLayer({});
+    // pointLayer
+    //   .source(data)
+    //   .color('red')
+    //   .shape('cylinder')
+    //   .size([15, 10]);
+    // scene.addLayer(pointLayer);
     scene.render();
     this.scene = scene;
   }
