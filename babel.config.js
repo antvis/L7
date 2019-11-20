@@ -91,6 +91,12 @@ module.exports = (api) => {
           ]
         }
       ],
+      isCDNBundle ? {} : [
+        'transform-import-styles',
+      ],
+      isCDNBundle ? {} : [
+        'inline-import-data-uri',
+      ],
       [
         // @see https://github.com/babel/babel/issues/8741#issuecomment-509041135
         'const-enum',
@@ -101,7 +107,7 @@ module.exports = (api) => {
       // 按需引用 @see https://github.com/lodash/babel-plugin-lodash
       'lodash',
       // 内联 WebGL 常量 @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
-      isCDNBundle ? 'inline-webgl-constants' : {},
+      // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
       'node_modules',

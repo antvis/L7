@@ -1,7 +1,8 @@
-// import { PointImageLayer, PointLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { PointLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 import * as React from 'react';
 export default class PointImage extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -33,26 +34,22 @@ export default class PointImage extends React.Component {
       'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
     );
     this.scene = scene;
-    scene.on('loaded', () => {
-      run();
-    });
-    // const imageLayer = new PointImageLayer({})
-    //   .source(await response.json(), {
-    //     parser: {
-    //       type: 'json',
-    //       x: 'longitude',
-    //       y: 'latitude',
-    //     },
-    //   })
-    //   .shape('name', ['00', '01', '02'])
-    //   .size(60);
-    // scene.addLayer(imageLayer);
-
-    function run() {
-      scene.render();
-      requestAnimationFrame(run);
-    }
-    this.scene = scene;
+    const imageLayer = new PointLayer({
+      // enableMultiPassRenderer: true,
+      // enablePicking: true,
+      // enableHighlight: true,
+      // enableTAA: true,
+    })
+      .source(await response.json(), {
+        parser: {
+          type: 'json',
+          x: 'longitude',
+          y: 'latitude',
+        },
+      })
+      .shape('name', ['00', '01', '02'])
+      .size(60);
+    scene.addLayer(imageLayer);
   }
 
   public render() {

@@ -6,7 +6,7 @@ import {
   ILayerPlugin,
   IRendererService,
   IStyleAttributeService,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 

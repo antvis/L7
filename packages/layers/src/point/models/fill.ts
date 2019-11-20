@@ -4,7 +4,7 @@ import {
   IEncodeFeature,
   IModel,
   IModelUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
 import { rgb2arr } from '../../utils/color';

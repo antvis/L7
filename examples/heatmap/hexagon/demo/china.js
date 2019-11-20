@@ -1,5 +1,5 @@
-import { HeatmapLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatmapLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 const scene = new Scene({
   id: 'map',
   style: 'dark',
@@ -23,12 +23,12 @@ fetch(
       },
       transforms:[
         {
-        type: 'hexagon',
-        size: 17000,
-        field:'v',
-        method:'sum'
-      }
-      ]
+          type: 'hexagon',
+          size: 17000,
+          field:'v',
+          method:'sum',
+        },
+      ],
     })
     .size('sum',(value)=>{
        return value * 20;

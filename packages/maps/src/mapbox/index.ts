@@ -13,8 +13,8 @@ import {
   MapServiceEvent,
   MapType,
   TYPES,
-} from '@l7/core';
-import { DOM } from '@l7/utils';
+} from '@antv/l7-core';
+import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import mapboxgl, { IControl, Map } from 'mapbox-gl';
 import { IMapboxInstance } from '../../typings/index';

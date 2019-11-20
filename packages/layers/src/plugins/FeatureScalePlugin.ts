@@ -11,8 +11,8 @@ import {
   ScaleTypes,
   StyleScaleType,
   TYPES,
-} from '@l7/core';
-import { IParseDataItem } from '@l7/source';
+} from '@antv/l7-core';
+import { IParseDataItem } from '@antv/l7-source';
 import { extent, ticks } from 'd3-array';
 import * as d3 from 'd3-scale';
 import { inject, injectable } from 'inversify';

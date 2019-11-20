@@ -1,5 +1,5 @@
-import { ILngLat, IMapService, IMarkerScene, IPopup } from '@l7/core';
-import { bindAll, DOM } from '@l7/utils';
+import { ILngLat, IMapService, IMarkerScene, IPopup } from '@antv/l7-core';
+import { bindAll, DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 

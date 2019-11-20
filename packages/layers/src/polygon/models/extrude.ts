@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, IModel } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';

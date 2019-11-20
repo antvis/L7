@@ -4,7 +4,7 @@ import {
   ILogService,
   IStyleAttributeService,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 
 /**

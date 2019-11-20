@@ -6,7 +6,7 @@ import {
   IModel,
   IModelUniform,
   ITexture2D,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { mat4 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import { HeatmapTriangulation } from '../../core/triangulation';
@@ -268,7 +268,7 @@ export default class HeatMapModel extends BaseModel {
     const invert = mat4.invert(
       mat4.create(),
       // @ts-ignore
-      mat4.fromValues(...this.camera.getViewProjectionMatrix()),
+      mat4.fromValues(...this.cameraService.getViewProjectionMatrix()),
     ) as mat4;
     this.colorModel.draw({
       uniforms: {

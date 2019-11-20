@@ -11,8 +11,9 @@ L7 Large-scale WebGL-powered Geospatial data visualization analysis framework
 ### Installation
 
 ```
- npm install @l7/l7
-
+npm install @antv/l7
+// or 
+yarn add @antv/l7
 ```
 
 ### Features
@@ -32,41 +33,14 @@ yarn install
 yarn watch
 ```
 
-运行 Demo
+运行 Demo，基于 Storybook：
 ```bash
 yarn storybook
-```
-
-代替 `git commit` 提交：
-```bash
-yarn commit
 ```
 
 ## view doc example
 
 ```bash
-  npm  start
+yarn start
 ```
 visit http://localhost:8000/
-
-## Add Package
-
-add new package：
-```bash
-lerna create my-pack -y
-```
-
-将 ui-lib 作为 my-pack 的依赖：
-```bash
-yarn workspace my-pack add ui-lib/1.0.0
-```
-
-将 lodash 添加为所有 package 的依赖(不包含root）
-```bash
-yarn workspaces run add lodash
-```
-
-将 typescript 设置为 root 的开发依赖
-```bash
-yarn add -W -D typescript jest
-```

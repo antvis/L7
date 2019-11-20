@@ -1,4 +1,4 @@
-import { djb2hash } from '@l7/utils';
+import { djb2hash } from '@antv/l7-utils';
 // @ts-ignore
 import rewind from '@mapbox/geojson-rewind';
 import {

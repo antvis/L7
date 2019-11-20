@@ -1,8 +1,9 @@
-// import { HeatMapGridLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatmapLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 import * as React from 'react';
 
 export default class GridHeatMap extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -11,53 +12,58 @@ export default class GridHeatMap extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/c3f8bda2-081b-449d-aa9f-9413b779205b.json',
+      'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
     );
+    const data = await response.text();
     const scene = new Scene({
-      center: [116.49434030056, 39.868073421167621],
       id: 'map',
+      style: 'dark',
       pitch: 0,
+      center: [110.097892, 33.853662],
+      zoom: 4.056,
       type: 'amap',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 16,
     });
-    // const layer = new HeatMapGridLayer({});
-    // layer
-    //   .source(await response.json(), {
-    //     parser: {
-    //       type: 'json',
-    //       x: 'lng',
-    //       y: 'lat',
-    //     },
-    //     transforms: [
-    //       {
-    //         type: 'grid',
-    //         size: 50,
-    //         field: 'count',
-    //         method: 'sum',
-    //       },
-    //     ],
-    //   })
-    //   .size('sum', (value: number) => {
-    //     return value;
-    //   })
-    //   .shape('circle')
-    //   .style({
-    //     coverage: 0.8,
-    //     angle: 0,
-    //   })
-    //   .color('count', [
-    //     '#002466',
-    //     '#105CB3',
-    //     '#2894E0',
-    //     '#CFF6FF',
-    //     '#FFF5B8',
-    //     '#FFAB5C',
-    //     '#F27049',
-    //     '#730D1C',
-    //   ]);
-    // scene.addLayer(layer);
-    scene.render();
+    const layer = new HeatmapLayer({
+      enablePicking: true,
+      enableHighlight: true,
+    })
+      .source(data, {
+        parser: {
+          type: 'csv',
+          x: 'lng',
+          y: 'lat',
+        },
+        transforms: [
+          {
+            type: 'grid',
+            size: 10000,
+            field: 'v',
+            method: 'sum',
+          },
+        ],
+      })
+      .size('count', (value) => {
+        return value * 0;
+      })
+      .shape('square')
+      .style({
+        coverage: 1,
+        angle: 0,
+      })
+      .color(
+        'count',
+        [
+          '#FF3417',
+          '#FF7412',
+          '#FFB02A',
+          '#FFE754',
+          '#46F3FF',
+          '#02BEFF',
+          '#1A7AFF',
+          '#0A1FB2',
+        ].reverse(),
+      );
+    scene.addLayer(layer);
     this.scene = scene;
   }
 

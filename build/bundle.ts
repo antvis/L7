@@ -1,4 +1,2 @@
 // @ts-ignore
-export * from '@l7/scene';
-// @ts-ignore
-export * from '@l7/layers';
+export * from '@antv/l7';

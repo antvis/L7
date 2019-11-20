@@ -1,8 +1,9 @@
-import { LineLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { LineLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 import * as React from 'react';
 
 export default class LineDemo extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -13,23 +14,6 @@ export default class LineDemo extends React.Component {
     const response = await fetch(
       'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
     );
-    const testdata = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'LineString',
-            coordinates: [
-              [91.58203125, 34.95799531086792],
-              [96.767578125, 34.379712580462204],
-              [99.228515625, 33.7243396617476],
-            ],
-          },
-        },
-      ],
-    };
     const scene = new Scene({
       center: [102.602992, 23.107329],
       id: 'map',
@@ -38,7 +22,15 @@ export default class LineDemo extends React.Component {
       style: 'mapbox://styles/mapbox/dark-v9',
       zoom: 13,
     });
-    const lineLayer = new LineLayer({})
+    const lineLayer = new LineLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+      // onHover: (pickedFeature: any) => {
+      //   // tslint:disable-next-line:no-console
+      //   console.log('Scene4', pickedFeature);
+      // },
+    })
       .source(await response.json())
       .size(1)
       .shape('line')
@@ -56,7 +48,7 @@ export default class LineDemo extends React.Component {
           '#0D408C',
           '#002466',
         ].reverse(),
-      )
+      );
 
     scene.addLayer(lineLayer);
     scene.render();

@@ -256,11 +256,16 @@ export function createLayerContainer(sceneContainer: Container) {
 
   layerContainer
     .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
-    .to(StyleAttributeService);
+    .to(StyleAttributeService)
+    .inSingletonScope();
   layerContainer
     .bind<IMultiPassRenderer>(TYPES.IMultiPassRenderer)
-    .to(MultiPassRenderer);
-  layerContainer.bind<IPostProcessor>(TYPES.IPostProcessor).to(PostProcessor);
+    .to(MultiPassRenderer)
+    .inSingletonScope();
+  layerContainer
+    .bind<IPostProcessor>(TYPES.IPostProcessor)
+    .to(PostProcessor)
+    .inSingletonScope();
 
   return layerContainer;
 }

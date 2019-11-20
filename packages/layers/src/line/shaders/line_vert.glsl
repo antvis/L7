@@ -7,6 +7,8 @@ attribute vec3 a_Position;
 uniform mat4 u_ModelMatrix;
 
 #pragma include "projection"
+#pragma include "picking"
+
 varying vec4 v_color;
 varying float v_dash_array;
 varying vec2 v_normal;
@@ -18,4 +20,6 @@ void main() {
   vec2 offset = project_pixel(size.xy);
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
+
+  setPickingColor(a_PickingColor);
 }

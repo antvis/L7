@@ -1,4 +1,4 @@
-import { container, ILayerPlugin, TYPES } from '@l7/core';
+import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
 import BaseLayer from './core/BaseLayer';
 import HeatmapLayer from './heatmap';
 import DashLineLayer from './line/dash';

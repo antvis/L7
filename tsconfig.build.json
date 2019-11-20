@@ -7,7 +7,8 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@l7/*": ["packages/*/src"],
+      "@antv/l7-*": ["packages/*/src"],
+      "@antv/l7": ["packages/l7/src"],
       "*": ["node_modules", "packages"]
     }
   },

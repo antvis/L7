@@ -7,8 +7,8 @@ import GridHeatMap from './components/heatMapgrid';
 import LineLayer from './components/Line';
 import PointDemo from './components/Point';
 import Point3D from './components/Point3D';
-import PointImage from './components/pointImage';
-import Polygon3D from './components/polygon3D';
+import PointImage from './components/PointImage';
+import Polygon3D from './components/Polygon3D';
 import ImageLayerDemo from './components/rasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 

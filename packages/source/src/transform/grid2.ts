@@ -7,8 +7,8 @@ import {
   IParserData,
   ISourceCFG,
   ITransform,
-} from '@l7/core';
-import { aProjectFlat, metersToLngLat } from '@l7/utils';
+} from '@antv/l7-core';
+import { aProjectFlat, metersToLngLat } from '@antv/l7-utils';
 import { statMap } from './statistics';
 
 interface IGridHash {

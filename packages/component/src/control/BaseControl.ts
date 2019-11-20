@@ -4,8 +4,8 @@ import {
   IMapService,
   IRendererService,
   TYPES,
-} from '@l7/core';
-import { DOM } from '@l7/utils';
+} from '@antv/l7-core';
+import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 

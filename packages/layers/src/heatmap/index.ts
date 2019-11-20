@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ILayer } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import HeatMapModels, { HeatMapModelType } from './models';
 interface IPointLayerStyleOptions {

@@ -1,6 +1,5 @@
-// import { PolygonLayer } from '@l7/layers';
 // @ts-ignore
-import { Scene } from '@l7/scene';
+import { Scene } from '@antv/l7';
 import * as React from 'react';
 
 export default class Mapbox extends React.Component {
@@ -48,8 +47,6 @@ export default class Mapbox extends React.Component {
     //     opacity: 0.8,
     //   });
     // scene.addLayer(layer);
-    scene1.render();
-    scene2.render();
     // scene.on('loaded', () => {
     //   const zoomControl = new Zoom({
     //     position: 'bottomright',

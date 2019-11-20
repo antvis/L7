@@ -1,5 +1,5 @@
-import { HeatmapLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatmapLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 const scene = new Scene({
   id: 'map',
   style: 'dark',

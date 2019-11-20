@@ -1,4 +1,4 @@
-import { aProjectFlat, metersToLngLat } from '@l7/utils';
+import { aProjectFlat, metersToLngLat } from '@antv/l7-utils';
 import { hexbin } from 'd3-hexbin';
 const R_EARTH = 6378000;
 import {
@@ -7,7 +7,7 @@ import {
   IParserData,
   ISourceCFG,
   ITransform,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { statMap } from './statistics';
 interface IHexBinItem<T> extends Array<T> {
   x: number;

@@ -1,9 +1,5 @@
-// tslint:disable-next-line:no-submodule-imports
-import '!style-loader!css-loader!../../assets/css/l7.css';
-import { Scale } from '@l7/component';
-import { PolygonLayer } from '@l7/layers';
 // @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scale, Scene } from '@antv/l7';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
@@ -45,7 +41,6 @@ export default class ScaleComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.render();
     scene.on('loaded', () => {
       const scaleControl = new Scale();
       scene.addControl(scaleControl);

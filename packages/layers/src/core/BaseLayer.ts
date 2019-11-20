@@ -31,8 +31,8 @@ import {
   StyleAttributeField,
   StyleAttributeOption,
   TYPES,
-} from '@l7/core';
-import Source from '@l7/source';
+} from '@antv/l7-core';
+import Source from '@antv/l7-source';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
@@ -55,7 +55,7 @@ const defaultLayerInitializationOptions: Partial<ILayerInitializationOptions> = 
   maxZoom: 20,
   visible: true,
   zIndex: 0,
-  enableMultiPassRenderer: false,
+  enableMultiPassRenderer: true,
   enablePicking: false,
   enableHighlight: false,
   highlightColor: 'red',
@@ -100,8 +100,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     options?: ISourceCFG;
   };
 
-  protected styleAttributeService: IStyleAttributeService;
-
   @lazyInject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
@@ -122,6 +120,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   protected interactionService: IInteractionService;
 
   protected mapService: IMapService;
+
+  protected styleAttributeService: IStyleAttributeService;
 
   protected layerSource: Source;
 

@@ -40,10 +40,13 @@
     "babel-plugin-const-enum": "^0.0.2",
     "babel-plugin-css-modules-transform": "^1.6.2",
     "babel-plugin-inline-import": "^3.0.0",
+    "babel-plugin-inline-import-data-uri": "^1.0.1",
     "babel-plugin-inline-webgl-constants": "^1.0.1",
     "babel-plugin-lodash": "^3.3.4",
+    "babel-plugin-transform-import-styles": "^0.0.11",
     "babel-plugin-transform-postcss": "^0.3.0",
     "babel-preset-gatsby": "^0.2.20",
+    "babel-template": "^6.26.0",
     "clean-webpack-plugin": "^0.1.19",
     "commitizen": "^4.0.3",
     "copy-webpack-plugin": "^4.5.2",
@@ -67,10 +70,12 @@
     "jest-styled-components": "^6.2.1",
     "lerna": "^3.16.4",
     "lint-staged": "^9.2.4",
+    "load-styles": "^2.0.0",
     "node-sass": "^4.12.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^7.0.18",
     "postcss-plugin": "^1.0.0",
+    "postcss-url": "^8.0.0",
     "prettier": "^1.19.1",
     "raw-loader": "^1.0.0",
     "react": "^16.8.6",
@@ -83,6 +88,7 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-terser": "^5.1.2",
     "rollup-pluginutils": "^2.8.2",
     "sass-loader": "^7.1.0",
@@ -124,7 +130,7 @@
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
     "version": "lerna version --conventional-commits",
-    "prerelease": "yarn build",
+    "prerelease": "yarn build && yarn bundle",
     "release": "lerna publish from-package --registry https://registry.npmjs.com/",
     "storybook": "start-storybook -p 6006",
     "test": "BABEL_ENV=test jest",
@@ -150,5 +156,6 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  }
+  },
+  "version": "2.0.0-beta.1"
 }

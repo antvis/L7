@@ -1,9 +1,6 @@
-// tslint:disable-next-line:no-submodule-imports
-import '!style-loader!css-loader!../../assets/css/l7.css';
-import { Zoom } from '@l7/component';
-import { PolygonLayer } from '@l7/layers';
 // @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scene, Zoom } from '@antv/l7';
+
 import * as React from 'react';
 
 export default class ZoomComponent extends React.Component {
@@ -45,7 +42,6 @@ export default class ZoomComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.render();
     scene.on('loaded', () => {
       const zoomControl = new Zoom({
         position: 'bottomright',

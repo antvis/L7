@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { getGlyphQuads, shapeText } from '../utils/symbol-layout';
 import textFrag from './shaders/text_frag.glsl';

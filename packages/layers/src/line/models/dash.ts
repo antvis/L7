@@ -5,7 +5,7 @@ import {
   ILayer,
   ILayerModel,
   IModel,
-} from '@l7/core';
+} from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
 export default class ArcModel extends BaseModel {

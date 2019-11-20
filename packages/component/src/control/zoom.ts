@@ -1,4 +1,4 @@
-import { bindAll, DOM } from '@l7/utils';
+import { bindAll, DOM } from '@antv/l7-utils';
 import Control, { IControlOption, PositionType } from './BaseControl';
 export interface IZoomControlOption extends IControlOption {
   zoomInText: string;

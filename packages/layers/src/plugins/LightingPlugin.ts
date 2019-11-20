@@ -7,7 +7,7 @@ import {
   ILayerPlugin,
   IRendererService,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 
 const lightTypeUniformMap = {
