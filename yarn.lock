@@ -212,6 +212,13 @@
   optionalDependencies:
     chokidar "^2.1.8"
 
+"@babel/code-frame@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/code-frame/download/@babel/code-frame-7.0.0-beta.44.tgz#2a02643368de80916162be70865c97774f3adbd9"
+  integrity sha1-KgJkM2jegJFhYr5whlyXd08629k=
+  dependencies:
+    "@babel/highlight" "7.0.0-beta.44"
+
 "@babel/code-frame@7.5.5", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
   resolved "https://registry.npm.alibaba-inc.com/@babel/code-frame/download/@babel/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
@@ -258,6 +265,17 @@
     resolve "^1.3.2"
     semver "^5.4.1"
     source-map "^0.5.0"
+
+"@babel/generator@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/generator/download/@babel/generator-7.0.0-beta.44.tgz#c7e67b9b5284afcf69b309b50d7d37f3e5033d42"
+  integrity sha1-x+Z7m1KEr89pswm1DX038+UDPUI=
+  dependencies:
+    "@babel/types" "7.0.0-beta.44"
+    jsesc "^2.5.1"
+    lodash "^4.2.0"
+    source-map "^0.5.0"
+    trim-right "^1.0.1"
 
 "@babel/generator@^7.0.0", "@babel/generator@^7.4.0", "@babel/generator@^7.6.0", "@babel/generator@^7.7.2":
   version "7.7.2"
@@ -338,6 +356,15 @@
     "@babel/traverse" "^7.7.0"
     "@babel/types" "^7.7.0"
 
+"@babel/helper-function-name@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/helper-function-name/download/@babel/helper-function-name-7.0.0-beta.44.tgz#e18552aaae2231100a6e485e03854bc3532d44dd"
+  integrity sha1-4YVSqq4iMRAKbkheA4VLw1MtRN0=
+  dependencies:
+    "@babel/helper-get-function-arity" "7.0.0-beta.44"
+    "@babel/template" "7.0.0-beta.44"
+    "@babel/types" "7.0.0-beta.44"
+
 "@babel/helper-function-name@^7.7.0":
   version "7.7.0"
   resolved "https://registry.npm.alibaba-inc.com/@babel/helper-function-name/download/@babel/helper-function-name-7.7.0.tgz#44a5ad151cfff8ed2599c91682dda2ec2c8430a3"
@@ -346,6 +373,13 @@
     "@babel/helper-get-function-arity" "^7.7.0"
     "@babel/template" "^7.7.0"
     "@babel/types" "^7.7.0"
+
+"@babel/helper-get-function-arity@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/helper-get-function-arity/download/@babel/helper-get-function-arity-7.0.0-beta.44.tgz#d03ca6dd2b9f7b0b1e6b32c56c72836140db3a15"
+  integrity sha1-0Dym3SufewseazLFbHKDYUDbOhU=
+  dependencies:
+    "@babel/types" "7.0.0-beta.44"
 
 "@babel/helper-get-function-arity@^7.0.0", "@babel/helper-get-function-arity@^7.7.0":
   version "7.7.0"
@@ -435,6 +469,13 @@
     "@babel/template" "^7.7.0"
     "@babel/types" "^7.7.0"
 
+"@babel/helper-split-export-declaration@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/helper-split-export-declaration/download/@babel/helper-split-export-declaration-7.0.0-beta.44.tgz#c0b351735e0fbcb3822c8ad8db4e583b05ebd9dc"
+  integrity sha1-wLNRc14PvLOCLIrY205YOwXr2dw=
+  dependencies:
+    "@babel/types" "7.0.0-beta.44"
+
 "@babel/helper-split-export-declaration@^7.7.0":
   version "7.7.0"
   resolved "https://registry.npm.alibaba-inc.com/@babel/helper-split-export-declaration/download/@babel/helper-split-export-declaration-7.7.0.tgz#1365e74ea6c614deeb56ebffabd71006a0eb2300"
@@ -460,6 +501,15 @@
     "@babel/template" "^7.7.0"
     "@babel/traverse" "^7.7.0"
     "@babel/types" "^7.7.0"
+
+"@babel/highlight@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/highlight/download/@babel/highlight-7.0.0-beta.44.tgz#18c94ce543916a80553edcdcf681890b200747d5"
+  integrity sha1-GMlM5UORaoBVPtzc9oGJCyAHR9U=
+  dependencies:
+    chalk "^2.0.0"
+    esutils "^2.0.2"
+    js-tokens "^3.0.0"
 
 "@babel/highlight@^7.0.0":
   version "7.5.0"
@@ -1196,6 +1246,16 @@
   resolved "https://registry.npm.alibaba-inc.com/@babel/standalone/download/@babel/standalone-7.7.3.tgz#9a4f7fc64876b11398e7371665969ccfdb0c9806"
   integrity sha1-mk9/xkh2sROY5zcWZZacz9sMmAY=
 
+"@babel/template@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/template/download/@babel/template-7.0.0-beta.44.tgz#f8832f4fdcee5d59bf515e595fc5106c529b394f"
+  integrity sha1-+IMvT9zuXVm/UV5ZX8UQbFKbOU8=
+  dependencies:
+    "@babel/code-frame" "7.0.0-beta.44"
+    "@babel/types" "7.0.0-beta.44"
+    babylon "7.0.0-beta.44"
+    lodash "^4.2.0"
+
 "@babel/template@^7.4.0", "@babel/template@^7.6.0", "@babel/template@^7.7.0":
   version "7.7.0"
   resolved "https://registry.npm.alibaba-inc.com/@babel/template/download/@babel/template-7.7.0.tgz#4fadc1b8e734d97f56de39c77de76f2562e597d0"
@@ -1204,6 +1264,22 @@
     "@babel/code-frame" "^7.0.0"
     "@babel/parser" "^7.7.0"
     "@babel/types" "^7.7.0"
+
+"@babel/traverse@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/traverse/download/@babel/traverse-7.0.0-beta.44.tgz#a970a2c45477ad18017e2e465a0606feee0d2966"
+  integrity sha1-qXCixFR3rRgBfi5GWgYG/u4NKWY=
+  dependencies:
+    "@babel/code-frame" "7.0.0-beta.44"
+    "@babel/generator" "7.0.0-beta.44"
+    "@babel/helper-function-name" "7.0.0-beta.44"
+    "@babel/helper-split-export-declaration" "7.0.0-beta.44"
+    "@babel/types" "7.0.0-beta.44"
+    babylon "7.0.0-beta.44"
+    debug "^3.1.0"
+    globals "^11.1.0"
+    invariant "^2.2.0"
+    lodash "^4.2.0"
 
 "@babel/traverse@^7.0.0", "@babel/traverse@^7.1.0", "@babel/traverse@^7.4.3", "@babel/traverse@^7.6.0", "@babel/traverse@^7.7.0", "@babel/traverse@^7.7.2":
   version "7.7.2"
@@ -1219,6 +1295,15 @@
     debug "^4.1.0"
     globals "^11.1.0"
     lodash "^4.17.13"
+
+"@babel/types@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/@babel/types/download/@babel/types-7.0.0-beta.44.tgz#6b1b164591f77dec0a0342aca995f2d046b3a757"
+  integrity sha1-axsWRZH3fewKA0KsqZXy0Eazp1c=
+  dependencies:
+    esutils "^2.0.2"
+    lodash "^4.2.0"
+    to-fast-properties "^2.0.0"
 
 "@babel/types@^7.0.0", "@babel/types@^7.0.0-beta.49", "@babel/types@^7.3.0", "@babel/types@^7.4.0", "@babel/types@^7.4.4", "@babel/types@^7.6.0", "@babel/types@^7.7.0", "@babel/types@^7.7.1", "@babel/types@^7.7.2":
   version "7.7.2"
@@ -3944,7 +4029,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^2.7.0":
+"@typescript-eslint/eslint-plugin@^2.0.0", "@typescript-eslint/eslint-plugin@^2.7.0":
   version "2.8.0"
   resolved "https://registry.npm.alibaba-inc.com/@typescript-eslint/eslint-plugin/download/@typescript-eslint/eslint-plugin-2.8.0.tgz#eca584d46094ebebc3cb3e9fb625bfbc904a534d"
   integrity sha1-7KWE1GCU6+vDyz6ftiW/vJBKU00=
@@ -3964,7 +4049,7 @@
     "@typescript-eslint/typescript-estree" "2.8.0"
     eslint-scope "^5.0.0"
 
-"@typescript-eslint/parser@^2.7.0":
+"@typescript-eslint/parser@^2.0.0", "@typescript-eslint/parser@^2.7.0":
   version "2.8.0"
   resolved "https://registry.npm.alibaba-inc.com/@typescript-eslint/parser/download/@typescript-eslint/parser-2.8.0.tgz#e10f7c40c8cf2fb19920c879311e6c46ad17bacb"
   integrity sha1-4Q98QMjPL7GZIMh5MR5sRq0Xuss=
@@ -4972,6 +5057,18 @@ babel-eslint@^10.0.3:
     eslint-visitor-keys "^1.0.0"
     resolve "^1.12.0"
 
+babel-eslint@^8.2.6:
+  version "8.2.6"
+  resolved "https://registry.npm.alibaba-inc.com/babel-eslint/download/babel-eslint-8.2.6.tgz#6270d0c73205628067c0f7ae1693a9e797acefd9"
+  integrity sha1-YnDQxzIFYoBnwPeuFpOp55es79k=
+  dependencies:
+    "@babel/code-frame" "7.0.0-beta.44"
+    "@babel/traverse" "7.0.0-beta.44"
+    "@babel/types" "7.0.0-beta.44"
+    babylon "7.0.0-beta.44"
+    eslint-scope "3.7.1"
+    eslint-visitor-keys "^1.0.0"
+
 babel-extract-comments@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.alibaba-inc.com/babel-extract-comments/download/babel-extract-comments-1.0.0.tgz#0a2aedf81417ed391b85e18b4614e693a0351a21"
@@ -5475,6 +5572,11 @@ babel-standalone@^6.26.0:
   version "6.26.0"
   resolved "https://registry.npm.alibaba-inc.com/babel-standalone/download/babel-standalone-6.26.0.tgz#15fb3d35f2c456695815ebf1ed96fe7f015b6886"
   integrity sha1-Ffs9NfLEVmlYFevx7Zb+fwFbaIY=
+
+babylon@7.0.0-beta.44:
+  version "7.0.0-beta.44"
+  resolved "https://registry.npm.alibaba-inc.com/babylon/download/babylon-7.0.0-beta.44.tgz#89159e15e6e30c5096e22d738d8c0af8a0e8ca1d"
+  integrity sha1-iRWeFebjDFCW4i1zjYwK+KDoyh0=
 
 babylon@^6.18.0:
   version "6.18.0"
@@ -6811,6 +6913,11 @@ commander@~2.8.1:
   integrity sha1-Br42f+v9oMMwqh4qBy09yXYkJdQ=
   dependencies:
     graceful-readlink ">= 1.0.0"
+
+comment-parser@^0.5.4:
+  version "0.5.5"
+  resolved "https://registry.npm.alibaba-inc.com/comment-parser/download/comment-parser-0.5.5.tgz#c2584cae7c2f0afc773e96b2ee98f8c10cbd693d"
+  integrity sha1-wlhMrnwvCvx3Ppay7pj4wQy9aT0=
 
 commitizen@^4.0.3:
   version "4.0.3"
@@ -9111,6 +9218,20 @@ escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
+eslint-config-egg@^7.5.1:
+  version "7.5.1"
+  resolved "https://registry.npm.alibaba-inc.com/eslint-config-egg/download/eslint-config-egg-7.5.1.tgz#d62a345e1a541cce7601750941b5840c476e27cc"
+  integrity sha1-1io0XhpUHM52AXUJQbWEDEduJ8w=
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "^2.0.0"
+    "@typescript-eslint/parser" "^2.0.0"
+    babel-eslint "^8.2.6"
+    eslint-plugin-eggache "^1.0.0"
+    eslint-plugin-import "^2.14.0"
+    eslint-plugin-jsdoc "^4.1.1"
+    eslint-plugin-jsx-a11y "^6.1.1"
+    eslint-plugin-react "^7.11.1"
+
 eslint-config-react-app@^5.0.2:
   version "5.0.2"
   resolved "https://registry.npm.alibaba-inc.com/eslint-config-react-app/download/eslint-config-react-app-5.0.2.tgz#df40d73a1402986030680c040bbee520db5a32a4"
@@ -9145,6 +9266,11 @@ eslint-module-utils@^2.4.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
+eslint-plugin-eggache@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-eggache/download/eslint-plugin-eggache-1.0.0.tgz#1f8f98c698d2b511519fbdefbae78fe230487aa4"
+  integrity sha1-H4+YxpjStRFRn73vuueP4jBIeqQ=
+
 eslint-plugin-flowtype@^3.13.0:
   version "3.13.0"
   resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-flowtype/download/eslint-plugin-flowtype-3.13.0.tgz#e241ebd39c0ce519345a3f074ec1ebde4cf80f2c"
@@ -9160,7 +9286,14 @@ eslint-plugin-graphql@^3.1.0:
     graphql-config "^2.0.1"
     lodash "^4.11.1"
 
-eslint-plugin-import@^2.18.2:
+eslint-plugin-html@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-html/download/eslint-plugin-html-6.0.0.tgz#28e5c3e71e6f612e07e73d7c215e469766628c13"
+  integrity sha1-KOXD5x5vYS4H5z18IV5Gl2ZijBM=
+  dependencies:
+    htmlparser2 "^3.10.1"
+
+eslint-plugin-import@^2.14.0, eslint-plugin-import@^2.18.2:
   version "2.18.2"
   resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-import/download/eslint-plugin-import-2.18.2.tgz#02f1180b90b077b33d447a17a2326ceb400aceb6"
   integrity sha1-AvEYC5Cwd7M9RHoXojJs60AKzrY=
@@ -9177,7 +9310,16 @@ eslint-plugin-import@^2.18.2:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jsx-a11y@^6.2.3:
+eslint-plugin-jsdoc@^4.1.1:
+  version "4.8.4"
+  resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-jsdoc/download/eslint-plugin-jsdoc-4.8.4.tgz#31f413c8a31fe656881398d8920b381bfdfac618"
+  integrity sha1-MfQTyKMf5laIE5jYkgs4G/36xhg=
+  dependencies:
+    comment-parser "^0.5.4"
+    jsdoctypeparser "3.1.0"
+    lodash "^4.17.11"
+
+eslint-plugin-jsx-a11y@^6.1.1, eslint-plugin-jsx-a11y@^6.2.3:
   version "6.2.3"
   resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-jsx-a11y/download/eslint-plugin-jsx-a11y-6.2.3.tgz#b872a09d5de51af70a97db1eea7dc933043708aa"
   integrity sha1-uHKgnV3lGvcKl9se6n3JMwQ3CKo=
@@ -9205,7 +9347,7 @@ eslint-plugin-react-hooks@^1.7.0:
   resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-react-hooks/download/eslint-plugin-react-hooks-1.7.0.tgz#6210b6d5a37205f0b92858f895a4e827020a7d04"
   integrity sha1-YhC21aNyBfC5KFj4laToJwIKfQQ=
 
-eslint-plugin-react@^7.16.0:
+eslint-plugin-react@^7.11.1, eslint-plugin-react@^7.16.0:
   version "7.16.0"
   resolved "https://registry.npm.alibaba-inc.com/eslint-plugin-react/download/eslint-plugin-react-7.16.0.tgz#9928e4f3e2122ed3ba6a5b56d0303ba3e41d8c09"
   integrity sha1-mSjk8+ISLtO6altW0DA7o+QdjAk=
@@ -9219,6 +9361,14 @@ eslint-plugin-react@^7.16.0:
     object.values "^1.1.0"
     prop-types "^15.7.2"
     resolve "^1.12.0"
+
+eslint-scope@3.7.1:
+  version "3.7.1"
+  resolved "https://registry.npm.alibaba-inc.com/eslint-scope/download/eslint-scope-3.7.1.tgz#3d63c3edfda02e06e01a452ad88caacc7cdcb6e8"
+  integrity sha1-PWPD7f2gLgbgGkUq2IyqzHzctug=
+  dependencies:
+    esrecurse "^4.1.0"
+    estraverse "^4.1.1"
 
 eslint-scope@^4.0.3:
   version "4.0.3"
@@ -12329,7 +12479,7 @@ html-webpack-plugin@^4.0.0-beta.2:
     tapable "^1.1.3"
     util.promisify "1.0.0"
 
-htmlparser2@^3.10.0, htmlparser2@^3.3.0, htmlparser2@^3.9.1:
+htmlparser2@^3.10.0, htmlparser2@^3.10.1, htmlparser2@^3.3.0, htmlparser2@^3.9.1:
   version "3.10.1"
   resolved "https://registry.npm.alibaba-inc.com/htmlparser2/download/htmlparser2-3.10.1.tgz#bd679dc3f59897b6a34bb10749c855bb53a9392f"
   integrity sha1-vWedw/WYl7ajS7EHSchVu1OpOS8=
@@ -14114,15 +14264,15 @@ js-levenshtein@^1.1.3:
   resolved "https://registry.npm.alibaba-inc.com/js-levenshtein/download/js-levenshtein-1.1.6.tgz#c6cee58eb3550372df8deb85fad5ce66ce01d59d"
   integrity sha1-xs7ljrNVA3LfjeuF+tXOZs4B1Z0=
 
+js-tokens@^3.0.0, js-tokens@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.npm.alibaba-inc.com/js-tokens/download/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
+  integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.alibaba-inc.com/js-tokens/download/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha1-GSA/tZmR35jjoocFDUZHzerzJJk=
-
-js-tokens@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.npm.alibaba-inc.com/js-tokens/download/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
-  integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
 
 js-yaml@^3.10.0, js-yaml@^3.11.0, js-yaml@^3.13.1, js-yaml@^3.4.3, js-yaml@^3.5.2:
   version "3.13.1"
@@ -14136,6 +14286,11 @@ jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.npm.alibaba-inc.com/jsbn/download/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
+
+jsdoctypeparser@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/jsdoctypeparser/download/jsdoctypeparser-3.1.0.tgz#2f65f75165c4d9c632bb4fda13ed36b78321a43b"
+  integrity sha1-L2X3UWXE2cYyu0/aE+02t4MhpDs=
 
 jsdom@^11.5.1:
   version "11.12.0"
@@ -14883,7 +15038,7 @@ lodash@4.17.14:
   resolved "https://registry.npm.alibaba-inc.com/lodash/download/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha1-nOSHrmbJYlT+ILWZ8htoFgKAeLo=
 
-lodash@4.17.15, lodash@^4.0.0, lodash@^4.0.1, lodash@^4.11.1, lodash@^4.15.0, lodash@^4.16.5, lodash@^4.17.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@~4.17.10, lodash@~4.17.5:
+lodash@4.17.15, lodash@^4.0.0, lodash@^4.0.1, lodash@^4.11.1, lodash@^4.15.0, lodash@^4.16.5, lodash@^4.17.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@~4.17.10, lodash@~4.17.5:
   version "4.17.15"
   resolved "https://registry.npm.alibaba-inc.com/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
@@ -22685,6 +22840,11 @@ trim-repeated@^1.0.0:
   integrity sha1-42RqLqTokTEr9+rObPsFOAvAHCE=
   dependencies:
     escape-string-regexp "^1.0.2"
+
+trim-right@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/trim-right/download/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
+  integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
 
 trim-trailing-lines@^1.0.0:
   version "1.1.2"

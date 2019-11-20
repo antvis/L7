@@ -50,7 +50,7 @@ module.exports = {
       {
         slug: 'api/l7',
         title: {
-          zh: '简介',
+          zh: '简介 L7',
           en: 'Introduction',
         },
         order:0,
@@ -58,7 +58,7 @@ module.exports = {
       {
         slug: 'api/scene',
         title: {
-          zh: 'Scene',
+          zh: '场景 Scene',
           en: 'Scene',
         },
         order:1,
@@ -66,23 +66,23 @@ module.exports = {
       {
         slug: 'api/layer',
         title: {
-          zh: 'Layer',
-          en: 'layer',
+          zh: '图层 Layer',
+          en: 'Layer'
         },
         order:2,
       },
       {
         slug: 'api/source',
         title: {
-          zh: 'source',
-          en: 'source',
+          zh: '数据 Source',
+          en: 'Source',
         },
         order:3,
       },
       {
         slug: 'api/component',
         title: {
-          zh: 'Component',
+          zh: '组件 Component',
           en: 'Component',
         },
         order:4,
