@@ -107,7 +107,7 @@ layer.source(data, {
 ### scale
 
 
-#### scale('field', scaleConfig)
+cscle('field', scaleConfig)
 
 (field: string, scaleConfig: object)
 
@@ -127,9 +127,12 @@ layer.source(data, {
 ```
 
 ### size
+
 将数据值映射到图形的大小上的方法。
 
-**注意：** 不同图层的 size 的含义有所差别：
+**注意：** 
+
+不同图层的 size 的含义有所差别：
 
 - point 图形的 size 影响点的半径大小和高度；
 
@@ -153,6 +156,7 @@ pointLayer.size('type', (type) => { // 回调函数
 
 
 #### size(value）
+
 传入数字常量，如 `pointLayer.size(20)`
 
 #### size(field)
@@ -196,6 +200,8 @@ layer.color('type*value', (type, value) => { //多个参数，通过回调函数
 
 
 #### color(value)
+
+
 参数：`value` ：string
 只支持接收一个参数，value 可以是：
 
@@ -212,6 +218,7 @@ layer.color('white') // 指定颜色
 
 
 #### color(field, colors)
+
 参数：
 
 - `field`: stringfield 为映射至颜色属性的数据源字段名，也支持指定多个参数。
@@ -248,7 +255,8 @@ layer.color('gender*age', (gender, age) => {
 ### shape
 将数据值映射到图形的形状上的方法。
 
-#### shape(shape)
+**shape(shape)**
+
 参数`shape` string
 
 只支持接收一个参数，指定几何图像对象绘制的形状。下表列出了不同的 图层 几何图形对象支持的 shape 形状
@@ -260,9 +268,9 @@ layer.color('gender*age', (gender, age) => {
 | polygon | fill,line, extrude |  |
 
 
-#### shape(field, shapes)
+**shape(field, shapes)**
 
-#### shape(field, callback)
+**shape(field, callback)**
 
 
 ### style
@@ -285,50 +293,6 @@ layer.style({
     stroke:'white'
 })
 ```
-
-
-
-
-### filter
-
-2.0 beta 版本还为支持，正式版本支持
-
-数据过滤
-
-#### filter(field,callback)
-参数：
-- field 数据源字段名，根据源数据字段过滤数据，也支持指定多个参数。
-
-- callback 回调函数，回调函数的参数为对应字段的数值，具体使用如下，当 filter 映射为多个字段时，参数按照字段声明的顺序传入.显示数据返回true ，需要过滤掉的返回false
-
-
-```javascript
-
-layer.filter('gender',(gender)=>{
-    if(gender==="男")
-        return true; // 显示男性的数据
-    else 
-        return false; // 非男性将过滤掉
-})
-layer.filter('gender*age',(gender,age)=>{
-    if(gender === '男' && age < 20)  // 根据年龄和性别过滤数据
-        return true;
-    else 
-        return false;
-})
-```
-
-### active
-
-
-开启或者关闭 shape 对于鼠标 hover 时的响应效果，L7  默认为各个 shape 内置了 active 效果 。
-
-```javascript
-layer.active(false); // 关闭默认响应
-layer.active(true); // 开启默认响应
-layer.active({fill:'red'});
-```
-
 
 
 ### show
@@ -354,15 +318,5 @@ layer.hide();
 
 ```javascript
 layer.fitBounds()
-```
 
-### setActive
-
-- id  要素ID，一般来自 click，和 mousemove事件返回值
-- color 指定高亮颜色
-
-设置指定要素的
-
-```javascript
-layer.setActive(id,color)
 ```
