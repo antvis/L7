@@ -23,7 +23,7 @@ const IndexPage = () => {
         'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
       title: t('业务上简洁且通用'),
       description: t(
-        '以图形符号学地理设计体系理论基础，易用，易理解，专业 专注',
+        '以图形符号学地理设计体系理论基础，易用、易理解、专业、专注',
       ),
     },
     {
@@ -36,12 +36,12 @@ const IndexPage = () => {
   const bannerButtons = [
     {
       text: t('图表示例'),
-      link: '/examples/point/basic',
+      link: `/${i18n.language}/examples/gallery/basic`,
       type: 'primary',
     },
     {
       text: t('下载使用'),
-      link: '/docs/API/L7',
+      link: `/${i18n.language}/docs/api/l7`,
     },
   ];
 
@@ -59,7 +59,7 @@ const IndexPage = () => {
       logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
       title: t('浅色色板'),
       description: t('一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果。'),
-      link: 'https://antvis.github.io/L7/zh/examples/gallery/basic',
+      link: `/${i18n.language}/examples/gallery/basic`,
       image:
         'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*8Pa8Toh3-OsAAAAAAAAAAABkARQnAQ',
     },
@@ -67,7 +67,7 @@ const IndexPage = () => {
       logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
       title: t('深色色板'),
       description: t('一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果.'),
-      link: 'https://antvis.github.io/L7/zh/examples/gallery/basic',
+      link: `/${i18n.language}/examples/gallery/basic`,
       image:
         'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ryTVQ49K8SkAAAAAAAAAAABkARQnAQ',
     }
@@ -83,7 +83,7 @@ const IndexPage = () => {
             src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VcojS5aWhMYAAAAAAAAAAABkARQnAQ"
           />
         }
-        title={t('L7 地理空间可视化引擎')}
+        title={t('L7 地理空间数据可视分析引擎')}
         description={t(
           'L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。',
         )}

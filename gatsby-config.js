@@ -41,13 +41,6 @@ module.exports = {
     ],
     docs: [
       {
-        slug: 'specification',
-        title: {
-          zh: '简介',
-          en: 'Introduction',
-        },
-      },
-      {
         slug: 'manual/tutorial',
         title: {
           zh: '教程',
@@ -55,7 +48,7 @@ module.exports = {
         },
       },
       {
-        slug: 'API/L7',
+        slug: 'api/l7',
         title: {
           zh: '简介',
           en: 'Introduction',
@@ -63,12 +56,36 @@ module.exports = {
         order:0,
       },
       {
-        slug: 'API/component',
+        slug: 'api/scene',
         title: {
-          zh: '组件',
-          en: 'Component',
+          zh: 'Scene',
+          en: 'Scene',
         },
         order:1,
+      },
+      {
+        slug: 'api/layer',
+        title: {
+          zh: 'Layer',
+          en: 'layer',
+        },
+        order:2,
+      },
+      {
+        slug: 'api/source',
+        title: {
+          zh: 'source',
+          en: 'source',
+        },
+        order:3,
+      },
+      {
+        slug: 'api/component',
+        title: {
+          zh: 'Component',
+          en: 'Component',
+        },
+        order:4,
       },
     ],
     examples: [

@@ -89,9 +89,9 @@
     wolfy87-eventemitter "~5.1.0"
 
 "@antv/gatsby-theme-antv@^0.9.52":
-  version "0.9.69"
-  resolved "https://registry.npm.alibaba-inc.com/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-0.9.69.tgz#039e5b13ebf0c77ab28265b07566a98a2dd60489"
-  integrity sha1-A55bE+vwx3qygmWwdWapii3WBIk=
+  version "0.9.77"
+  resolved "https://registry.npm.alibaba-inc.com/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-0.9.77.tgz#5cec145937992759c1df3dce547a9a6054758620"
+  integrity sha1-XOwUWTeZJ1nB3z3OVHqaYFR1hiA=
   dependencies:
     "@babel/plugin-transform-modules-umd" "^7.2.0"
     "@babel/preset-env" "^7.6.3"
@@ -126,9 +126,10 @@
     gatsby-plugin-manifest "^2.2.16"
     gatsby-plugin-meta-redirect "^1.1.1"
     gatsby-plugin-nprogress "^2.1.12"
-    gatsby-plugin-offline "^3.0.7"
+    gatsby-plugin-offline "^3.0.22"
     gatsby-plugin-page-creator "^2.1.25"
     gatsby-plugin-react-helmet "^3.1.7"
+    gatsby-plugin-remove-serviceworker "^1.0.0"
     gatsby-plugin-remove-trailing-slashes "^2.1.9"
     gatsby-plugin-sharp "^2.2.22"
     gatsby-plugin-typescript "^2.1.8"
@@ -173,6 +174,7 @@
     slick-carousel "^1.8.1"
     ts-jest "^24.1.0"
     typescript "^3.6.3"
+    video-react "^0.14.1"
 
 "@antv/gl-matrix@^2.7.1", "@antv/gl-matrix@~2.7.1":
   version "2.7.1"
@@ -3724,15 +3726,10 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lodash@*":
+"@types/lodash@*", "@types/lodash@^4.14.138":
   version "4.14.149"
   resolved "https://registry.npm.alibaba-inc.com/@types/lodash/download/@types/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
   integrity sha1-E0LWPZSMYGKDj7+WEBL3TU5jhEA=
-
-"@types/lodash@^4.14.138":
-  version "4.14.148"
-  resolved "https://registry.npm.alibaba-inc.com/@types/lodash/download/@types/lodash-4.14.148.tgz#ffa2786721707b335c6aa1465e6d3d74016fbd3e"
-  integrity sha1-/6J4ZyFwezNcaqFGXm09dAFvvT4=
 
 "@types/mapbox-gl@^0.54.3":
   version "0.54.5"
@@ -3751,15 +3748,10 @@
   resolved "https://registry.npm.alibaba-inc.com/@types/mkdirp/download/@types/mkdirp-0.3.29.tgz#7f2ad7ec55f914482fc9b1ec4bb1ae6028d46066"
   integrity sha1-fyrX7FX5FEgvybHsS7GuYCjUYGY=
 
-"@types/node@*", "@types/node@>= 8":
+"@types/node@*", "@types/node@>= 8", "@types/node@^12.0.2", "@types/node@^12.7.3":
   version "12.12.9"
   resolved "https://registry.npm.alibaba-inc.com/@types/node/download/@types/node-12.12.9.tgz#0b5ae05516b757cbff2e82c04500190aef986c7b"
   integrity sha1-C1rgVRa3V8v/LoLARQAZCu+YbHs=
-
-"@types/node@^12.0.2", "@types/node@^12.7.3":
-  version "12.12.8"
-  resolved "https://registry.npm.alibaba-inc.com/@types/node/download/@types/node-12.12.8.tgz#dab418655af39ce2fa99286a0bed21ef8072ac9d"
-  integrity sha1-2rQYZVrznOL6mShqC+0h74ByrJ0=
 
 "@types/node@^7.0.11":
   version "7.10.9"
@@ -4894,20 +4886,7 @@ autocomplete.js@0.36.0:
   dependencies:
     immediate "^3.2.3"
 
-autoprefixer@^9.0.0, autoprefixer@^9.4.9:
-  version "9.7.1"
-  resolved "https://registry.npm.alibaba-inc.com/autoprefixer/download/autoprefixer-9.7.1.tgz#9ffc44c55f5ca89253d9bb7186cefb01ef57747f"
-  integrity sha1-n/xExV9cqJJT2btxhs77Ae9XdH8=
-  dependencies:
-    browserslist "^4.7.2"
-    caniuse-lite "^1.0.30001006"
-    chalk "^2.4.2"
-    normalize-range "^0.1.2"
-    num2fraction "^1.2.2"
-    postcss "^7.0.21"
-    postcss-value-parser "^4.0.2"
-
-autoprefixer@^9.7.1:
+autoprefixer@^9.0.0, autoprefixer@^9.4.9, autoprefixer@^9.7.1:
   version "9.7.2"
   resolved "https://registry.npm.alibaba-inc.com/autoprefixer/download/autoprefixer-9.7.2.tgz#26cf729fbb709323b40171a874304884dcceffed"
   integrity sha1-Js9yn7twkyO0AXGodDBIhNzO/+0=
@@ -6269,15 +6248,10 @@ caniuse-api@^3.0.0:
     lodash.memoize "^4.1.2"
     lodash.uniq "^4.5.0"
 
-caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30001006, caniuse-lite@^1.0.30001010:
+caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30001010:
   version "1.0.30001010"
   resolved "https://registry.npm.alibaba-inc.com/caniuse-lite/download/caniuse-lite-1.0.30001010.tgz#397a14034d384260453cc81994f494626d34b938"
   integrity sha1-OXoUA004QmBFPMgZlPSUYm00uTg=
-
-caniuse-lite@^1.0.30000989:
-  version "1.0.30001009"
-  resolved "https://registry.npm.alibaba-inc.com/caniuse-lite/download/caniuse-lite-1.0.30001009.tgz#69b77997b882a7aee6af24c8d7d2fa27ee41f348"
-  integrity sha1-abd5l7iCp67mryTI19L6J+5B80g=
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -7106,9 +7080,9 @@ conventional-changelog-preset-loader@^2.1.1:
   integrity sha1-WA+oqwLO8iwkKU0l5S18zSR6mmo=
 
 conventional-changelog-writer@^4.0.6:
-  version "4.0.10"
-  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-writer/download/conventional-changelog-writer-4.0.10.tgz#39f6458cca62a8151b3ce582a57ff71fd2b0ff7a"
-  integrity sha1-OfZFjMpiqBUbPOWCpX/3H9Kw/3o=
+  version "4.0.11"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-writer/download/conventional-changelog-writer-4.0.11.tgz#9f56d2122d20c96eb48baae0bf1deffaed1edba4"
+  integrity sha1-n1bSEi0gyW60i6rgvx3v+u0e26Q=
   dependencies:
     compare-func "^1.3.1"
     conventional-commits-filter "^2.0.2"
@@ -7116,7 +7090,7 @@ conventional-changelog-writer@^4.0.6:
     handlebars "^4.4.0"
     json-stringify-safe "^5.0.1"
     lodash "^4.17.15"
-    meow "^4.0.0"
+    meow "^5.0.0"
     semver "^6.0.0"
     split "^1.0.0"
     through2 "^3.0.0"
@@ -7148,14 +7122,14 @@ conventional-commits-parser@^2.1.0:
     trim-off-newlines "^1.0.0"
 
 conventional-commits-parser@^3.0.3:
-  version "3.0.7"
-  resolved "https://registry.npm.alibaba-inc.com/conventional-commits-parser/download/conventional-commits-parser-3.0.7.tgz#55b6cde6a2d0b4a7ab399392777d527134a8d05c"
-  integrity sha1-VbbN5qLQtKerOZOSd31ScTSo0Fw=
+  version "3.0.8"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-commits-parser/download/conventional-commits-parser-3.0.8.tgz#23310a9bda6c93c874224375e72b09fb275fe710"
+  integrity sha1-IzEKm9psk8h0IkN15ysJ+ydf5xA=
   dependencies:
     JSONStream "^1.0.4"
     is-text-path "^1.0.1"
     lodash "^4.17.15"
-    meow "^4.0.0"
+    meow "^5.0.0"
     split2 "^2.0.0"
     through2 "^3.0.0"
     trim-off-newlines "^1.0.0"
@@ -7857,28 +7831,28 @@ d3-color@1, d3-color@^1.4.0:
   integrity sha1-icRamV7Xc7EzFPBkYN8m1gug7K8=
 
 d3-dispatch@1:
-  version "1.0.5"
-  resolved "https://registry.npm.alibaba-inc.com/d3-dispatch/download/d3-dispatch-1.0.5.tgz#e25c10a186517cd6c82dd19ea018f07e01e39015"
-  integrity sha1-4lwQoYZRfNbILdGeoBjwfgHjkBU=
+  version "1.0.6"
+  resolved "https://registry.npm.alibaba-inc.com/d3-dispatch/download/d3-dispatch-1.0.6.tgz#00d37bcee4dd8cd97729dd893a0ac29caaba5d58"
+  integrity sha1-ANN7zuTdjNl3Kd2JOgrCnKq6XVg=
 
 d3-dsv@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npm.alibaba-inc.com/d3-dsv/download/d3-dsv-1.1.1.tgz#aaa830ecb76c4b5015572c647cc6441e3c7bb701"
-  integrity sha1-qqgw7LdsS1AVVyxkfMZEHjx7twE=
+  version "1.2.0"
+  resolved "https://registry.npm.alibaba-inc.com/d3-dsv/download/d3-dsv-1.2.0.tgz#9d5f75c3a5f8abd611f74d3f5847b0d4338b885c"
+  integrity sha1-nV91w6X4q9YR900/WEew1DOLiFw=
   dependencies:
     commander "2"
     iconv-lite "0.4"
     rw "1"
 
 d3-ease@1, d3-ease@~1.0.3:
-  version "1.0.5"
-  resolved "https://registry.npm.alibaba-inc.com/d3-ease/download/d3-ease-1.0.5.tgz#8ce59276d81241b1b72042d6af2d40e76d936ffb"
-  integrity sha1-jOWSdtgSQbG3IELWry1A522Tb/s=
+  version "1.0.6"
+  resolved "https://registry.npm.alibaba-inc.com/d3-ease/download/d3-ease-1.0.6.tgz#ebdb6da22dfac0a22222f2d4da06f66c416a0ec0"
+  integrity sha1-69ttoi36wKIiIvLU2gb2bEFqDsA=
 
 d3-format@1:
-  version "1.4.1"
-  resolved "https://registry.npm.alibaba-inc.com/d3-format/download/d3-format-1.4.1.tgz#c45f74b17c5a290c072a4ba7039dd19662cd5ce6"
-  integrity sha1-xF90sXxaKQwHKkunA53RlmLNXOY=
+  version "1.4.2"
+  resolved "https://registry.npm.alibaba-inc.com/d3-format/download/d3-format-1.4.2.tgz#2a8c0ebf500f315981c2110eaaf70b82f472cb2b"
+  integrity sha1-KowOv1APMVmBwhEOqvcLgvRyyys=
 
 d3-hexbin@^0.2.2:
   version "0.2.2"
@@ -7886,9 +7860,9 @@ d3-hexbin@^0.2.2:
   integrity sha1-nFg32s/UcasFM3qeke8Qv8T5iDE=
 
 d3-interpolate@1:
-  version "1.3.2"
-  resolved "https://registry.npm.alibaba-inc.com/d3-interpolate/download/d3-interpolate-1.3.2.tgz#417d3ebdeb4bc4efcc8fd4361c55e4040211fd68"
-  integrity sha1-QX0+vetLxO/Mj9Q2HFXkBAIR/Wg=
+  version "1.3.3"
+  resolved "https://registry.npm.alibaba-inc.com/d3-interpolate/download/d3-interpolate-1.3.3.tgz#cef4ba06dfccebcc45e4ae9d4d836a931a945076"
+  integrity sha1-zvS6Bt/M68xF5K6dTYNqkxqUUHY=
   dependencies:
     d3-color "1"
 
@@ -7911,14 +7885,14 @@ d3-scale@^3.1.0:
     d3-time-format "2"
 
 d3-selection@^1.0.2, d3-selection@^1.1.0:
-  version "1.4.0"
-  resolved "https://registry.npm.alibaba-inc.com/d3-selection/download/d3-selection-1.4.0.tgz#ab9ac1e664cf967ebf1b479cc07e28ce9908c474"
-  integrity sha1-q5rB5mTPln6/G0ecwH4ozpkIxHQ=
+  version "1.4.1"
+  resolved "https://registry.npm.alibaba-inc.com/d3-selection/download/d3-selection-1.4.1.tgz#98eedbbe085fbda5bafa2f9e3f3a2f4d7d622a98"
+  integrity sha1-mO7bvghfvaW6+i+ePzovTX1iKpg=
 
 d3-time-format@2:
-  version "2.2.1"
-  resolved "https://registry.npm.alibaba-inc.com/d3-time-format/download/d3-time-format-2.2.1.tgz#971f66aae3b8fb268040494986f41512d4d4dca6"
-  integrity sha1-lx9mquO4+yaAQElJhvQVEtTU3KY=
+  version "2.2.2"
+  resolved "https://registry.npm.alibaba-inc.com/d3-time-format/download/d3-time-format-2.2.2.tgz#187597ffc6a0f37cb36bb7a1d7167cdc887ecda0"
+  integrity sha1-GHWX/8ag83yza7eh1xZ83Ih+zaA=
   dependencies:
     d3-time "1"
 
@@ -7928,14 +7902,14 @@ d3-time@1:
   integrity sha1-seGdMH2unJALflsl/8XcwkmooPE=
 
 d3-timer@1, d3-timer@~1.0.6:
-  version "1.0.9"
-  resolved "https://registry.npm.alibaba-inc.com/d3-timer/download/d3-timer-1.0.9.tgz#f7bb8c0d597d792ff7131e1c24a36dd471a471ba"
-  integrity sha1-97uMDVl9eS/3Ex4cJKNt1HGkcbo=
+  version "1.0.10"
+  resolved "https://registry.npm.alibaba-inc.com/d3-timer/download/d3-timer-1.0.10.tgz#dfe76b8a91748831b13b6d9c793ffbd508dd9de5"
+  integrity sha1-3+dripF0iDGxO22ceT/71QjdneU=
 
 d3-transition@^1.0.1:
-  version "1.2.0"
-  resolved "https://registry.npm.alibaba-inc.com/d3-transition/download/d3-transition-1.2.0.tgz#f538c0e21b2aa1f05f3e965f8567e81284b3b2b8"
-  integrity sha1-9TjA4hsqofBfPpZfhWfoEoSzsrg=
+  version "1.3.2"
+  resolved "https://registry.npm.alibaba-inc.com/d3-transition/download/d3-transition-1.3.2.tgz#a98ef2151be8d8600543434c1ca80140ae23b398"
+  integrity sha1-qY7yFRvo2GAFQ0NMHKgBQK4js5g=
   dependencies:
     d3-color "1"
     d3-dispatch "1"
@@ -8538,9 +8512,9 @@ dom-scroll-into-view@1.x, dom-scroll-into-view@^1.2.0, dom-scroll-into-view@^1.2
   integrity sha1-6PNnMt0ImwIBqI14Fdw/iObWbH4=
 
 dom-serializer@0:
-  version "0.2.1"
-  resolved "https://registry.npm.alibaba-inc.com/dom-serializer/download/dom-serializer-0.2.1.tgz#13650c850daffea35d8b626a4cfc4d3a17643fdb"
-  integrity sha1-E2UMhQ2v/qNdi2JqTPxNOhdkP9s=
+  version "0.2.2"
+  resolved "https://registry.npm.alibaba-inc.com/dom-serializer/download/dom-serializer-0.2.2.tgz#1afb81f533717175d478655debc5e332d9f9bb51"
+  integrity sha1-GvuB9TNxcXXUeGVd68XjMtn5u1E=
   dependencies:
     domelementtype "^2.0.1"
     entities "^2.0.0"
@@ -8744,9 +8718,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 ejs@^2.6.1:
-  version "2.7.2"
-  resolved "https://registry.npm.alibaba-inc.com/ejs/download/ejs-2.7.2.tgz#749037c4c09bd57626a6140afbe6b7e650661614"
-  integrity sha1-dJA3xMCb1XYmphQK++a35lBmFhQ=
+  version "2.7.3"
+  resolved "https://registry.npm.alibaba-inc.com/ejs/download/ejs-2.7.3.tgz#4f437b3992ea0e0757f0ab8d7f29e42593498927"
+  integrity sha1-T0N7OZLqDgdX8KuNfynkJZNJiSc=
 
 electron-to-chromium@^1.3.247, electron-to-chromium@^1.3.306, electron-to-chromium@^1.3.47:
   version "1.3.306"
@@ -10477,7 +10451,7 @@ fuse.js@^3.4.4:
   resolved "https://registry.npm.alibaba-inc.com/fuse.js/download/fuse.js-3.4.5.tgz#8954fb43f9729bd5dbcb8c08f251db552595a7a6"
   integrity sha1-iVT7Q/lym9Xby4wI8lHbVSWVp6Y=
 
-gatsby-cli@^2.8.11, gatsby-cli@^2.8.12:
+gatsby-cli@^2.8.12:
   version "2.8.12"
   resolved "https://registry.npm.alibaba-inc.com/gatsby-cli/download/gatsby-cli-2.8.12.tgz#e1d870a15258003b3ee6db68a24d5b6bc9d4368d"
   integrity sha1-4dhwoVJYADs+5ttook1ba8nUNo0=
@@ -10525,7 +10499,7 @@ gatsby-cli@^2.8.11, gatsby-cli@^2.8.12:
     ink "^2.5.0"
     ink-spinner "^3.0.1"
 
-gatsby-core-utils@^1.0.19, gatsby-core-utils@^1.0.20:
+gatsby-core-utils@^1.0.20:
   version "1.0.20"
   resolved "https://registry.npm.alibaba-inc.com/gatsby-core-utils/download/gatsby-core-utils-1.0.20.tgz#f4788c2591fa7165c87f0ee5e8edf664c91978ea"
   integrity sha1-9HiMJZH6cWXIfw7l6O32ZMkZeOo=
@@ -10594,17 +10568,10 @@ gatsby-plugin-copy-files@^1.0.3:
   dependencies:
     fs-extra "^4.0.0"
 
-gatsby-plugin-google-analytics@^2.1.16:
+gatsby-plugin-google-analytics@^2.1.16, gatsby-plugin-google-analytics@^2.1.27:
   version "2.1.28"
   resolved "https://registry.npm.alibaba-inc.com/gatsby-plugin-google-analytics/download/gatsby-plugin-google-analytics-2.1.28.tgz#3f3b5105a1d47e3f07b1d4a4383e5173f483534c"
   integrity sha1-PztRBaHUfj8HsdSkOD5Rc/SDU0w=
-  dependencies:
-    "@babel/runtime" "^7.7.2"
-
-gatsby-plugin-google-analytics@^2.1.27:
-  version "2.1.27"
-  resolved "https://registry.npm.alibaba-inc.com/gatsby-plugin-google-analytics/download/gatsby-plugin-google-analytics-2.1.27.tgz#adbf24bb971ce3fb67ecdc3dcec36b833ff70abc"
-  integrity sha1-rb8ku5cc4/tn7Nw9zsNrgz/3Crw=
   dependencies:
     "@babel/runtime" "^7.7.2"
 
@@ -10657,7 +10624,7 @@ gatsby-plugin-nprogress@^2.1.12:
     "@babel/runtime" "^7.7.2"
     nprogress "^0.2.0"
 
-gatsby-plugin-offline@^3.0.7:
+gatsby-plugin-offline@^3.0.22:
   version "3.0.22"
   resolved "https://registry.npm.alibaba-inc.com/gatsby-plugin-offline/download/gatsby-plugin-offline-3.0.22.tgz#a8fb03e4d6abbd8cc14a03a9427424734675d484"
   integrity sha1-qPsD5NarvYzBSgOpQnQkc0Z11IQ=
@@ -10670,7 +10637,7 @@ gatsby-plugin-offline@^3.0.7:
     lodash "^4.17.15"
     workbox-build "^4.3.1"
 
-gatsby-plugin-page-creator@^2.1.25, gatsby-plugin-page-creator@^2.1.30, gatsby-plugin-page-creator@^2.1.31:
+gatsby-plugin-page-creator@^2.1.25, gatsby-plugin-page-creator@^2.1.31:
   version "2.1.31"
   resolved "https://registry.npm.alibaba-inc.com/gatsby-plugin-page-creator/download/gatsby-plugin-page-creator-2.1.31.tgz#21554d125d5bd333b5307ea12ece7da297a8eb89"
   integrity sha1-IVVNEl1b0zO1MH6hLs59opeo64k=
@@ -10689,6 +10656,11 @@ gatsby-plugin-react-helmet@^3.1.7:
   integrity sha1-D4HsAQboasLUTLcUp5o6ko5cQKY=
   dependencies:
     "@babel/runtime" "^7.7.2"
+
+gatsby-plugin-remove-serviceworker@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/gatsby-plugin-remove-serviceworker/download/gatsby-plugin-remove-serviceworker-1.0.0.tgz#9fb433bc8bd766e14e1d3711c4ac6f051e1dff7c"
+  integrity sha1-n7QzvIvXZuFOHTcRxKxvBR4d/3w=
 
 gatsby-plugin-remove-trailing-slashes@^2.1.9:
   version "2.1.14"
@@ -10823,7 +10795,7 @@ gatsby-source-github@^0.0.2:
     lodash "~4.17.5"
     yup "~0.24.1"
 
-gatsby-telemetry@^1.1.37, gatsby-telemetry@^1.1.38:
+gatsby-telemetry@^1.1.38:
   version "1.1.38"
   resolved "https://registry.npm.alibaba-inc.com/gatsby-telemetry/download/gatsby-telemetry-1.1.38.tgz#e8ac949565b87e37699ccbd067f55cc2fe62793e"
   integrity sha1-6KyUlWW4fjdpnMvQZ/Vcwv5ieT4=
@@ -10887,9 +10859,9 @@ gatsby-transformer-sharp@^2.2.14:
     sharp "^0.23.2"
 
 gatsby@^2.15.16:
-  version "2.17.17"
-  resolved "https://registry.npm.alibaba-inc.com/gatsby/download/gatsby-2.17.17.tgz#f0999ce134d9abc8f29fc783abe90f69d3b08269"
-  integrity sha1-8Jmc4TTZq8jyn8eDq+kPadOwgmk=
+  version "2.18.0"
+  resolved "https://registry.npm.alibaba-inc.com/gatsby/download/gatsby-2.18.0.tgz#d21e4f0f56006bff913c940e79732db4e42ea319"
+  integrity sha1-0h5PD1YAa/+RPJQOeXMttOQuoxk=
   dependencies:
     "@babel/code-frame" "^7.5.5"
     "@babel/core" "^7.7.2"
@@ -11024,9 +10996,9 @@ gatsby@^2.15.16:
     yaml-loader "^0.5.0"
 
 gatsby@^2.17.7:
-  version "2.17.15"
-  resolved "https://registry.npm.alibaba-inc.com/gatsby/download/gatsby-2.17.15.tgz#731e44f4292256889f374d434d56ace29ac2cfec"
-  integrity sha1-cx5E9CkiVoifN01DTVas4prCz+w=
+  version "2.17.17"
+  resolved "https://registry.npm.alibaba-inc.com/gatsby/download/gatsby-2.17.17.tgz#f0999ce134d9abc8f29fc783abe90f69d3b08269"
+  integrity sha1-8Jmc4TTZq8jyn8eDq+kPadOwgmk=
   dependencies:
     "@babel/code-frame" "^7.5.5"
     "@babel/core" "^7.7.2"
@@ -11088,13 +11060,13 @@ gatsby@^2.17.7:
     flat "^4.1.0"
     fs-exists-cached "1.0.0"
     fs-extra "^8.1.0"
-    gatsby-cli "^2.8.11"
-    gatsby-core-utils "^1.0.19"
+    gatsby-cli "^2.8.12"
+    gatsby-core-utils "^1.0.20"
     gatsby-graphiql-explorer "^0.2.28"
     gatsby-link "^2.2.24"
-    gatsby-plugin-page-creator "^2.1.30"
+    gatsby-plugin-page-creator "^2.1.31"
     gatsby-react-router-scroll "^2.1.16"
-    gatsby-telemetry "^1.1.37"
+    gatsby-telemetry "^1.1.38"
     glob "^7.1.6"
     got "8.3.2"
     graphql "^14.5.8"
@@ -11139,7 +11111,7 @@ gatsby@^2.17.7:
     shallow-compare "^1.2.2"
     sift "^5.1.0"
     signal-exit "^3.0.2"
-    slash "^3.0.0"
+    slugify "^1.3.6"
     socket.io "^2.3.0"
     stack-trace "^0.0.10"
     string-similarity "^1.2.2"
@@ -11945,9 +11917,9 @@ handle-thing@^2.0.0:
   integrity sha1-DgOWlf9QyT/CiFV9aW88HcZ3Z1Q=
 
 handlebars@^4.1.2, handlebars@^4.4.0:
-  version "4.5.2"
-  resolved "https://registry.npm.alibaba-inc.com/handlebars/download/handlebars-4.5.2.tgz#5a4eb92ab5962ca3415ac188c86dc7f784f76a0f"
-  integrity sha1-Wk65KrWWLKNBWsGIyG3H94T3ag8=
+  version "4.5.3"
+  resolved "https://registry.npm.alibaba-inc.com/handlebars/download/handlebars-4.5.3.tgz#5cf75bd8714f7605713511a56be7c349becb0482"
+  integrity sha1-XPdb2HFPdgVxNRGla+fDSb7LBII=
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -12496,9 +12468,9 @@ humps@^2.0.1:
   integrity sha1-3QLqYIG9BWjcXQcxhEY5V7qe+ao=
 
 husky@^3.0.9:
-  version "3.0.9"
-  resolved "https://registry.npm.alibaba-inc.com/husky/download/husky-3.0.9.tgz#a2c3e9829bfd6b4957509a9500d2eef5dbfc8044"
-  integrity sha1-osPpgpv9a0lXUJqVANLu9dv8gEQ=
+  version "3.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/husky/download/husky-3.1.0.tgz#5faad520ab860582ed94f0c1a77f0f04c90b57c0"
+  integrity sha1-X6rVIKuGBYLtlPDBp38PBMkLV8A=
   dependencies:
     chalk "^2.4.2"
     ci-info "^2.0.0"
@@ -18122,19 +18094,10 @@ postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.2, postcss@^6.0.23, postcss@^6.0.8:
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.21, postcss@^7.0.23, postcss@^7.0.5:
+postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.13, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.17, postcss@^7.0.18, postcss@^7.0.2, postcss@^7.0.23, postcss@^7.0.5, postcss@^7.0.6, postcss@^7.0.7:
   version "7.0.23"
   resolved "https://registry.npm.alibaba-inc.com/postcss/download/postcss-7.0.23.tgz#9f9759fad661b15964f3cfc3140f66f1e05eadc1"
   integrity sha1-n5dZ+tZhsVlk88/DFA9m8eBercE=
-  dependencies:
-    chalk "^2.4.2"
-    source-map "^0.6.1"
-    supports-color "^6.1.0"
-
-postcss@^7.0.13, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.17, postcss@^7.0.18, postcss@^7.0.2, postcss@^7.0.6, postcss@^7.0.7:
-  version "7.0.21"
-  resolved "https://registry.npm.alibaba-inc.com/postcss/download/postcss-7.0.21.tgz#06bb07824c19c2021c5d056d5b10c35b989f7e17"
-  integrity sha1-BrsHgkwZwgIcXQVtWxDDW5iffhc=
   dependencies:
     chalk "^2.4.2"
     source-map "^0.6.1"
@@ -18803,9 +18766,9 @@ rc-footer@^0.6.1:
     classnames "^2.2.1"
 
 rc-form@^2.4.10:
-  version "2.4.10"
-  resolved "https://registry.npm.alibaba-inc.com/rc-form/download/rc-form-2.4.10.tgz#8bf7260a4c9a1d5b82621cee5f82d8daa4ecb84e"
-  integrity sha1-i/cmCkyaHVuCYhzuX4LY2qTsuE4=
+  version "2.4.11"
+  resolved "https://registry.npm.alibaba-inc.com/rc-form/download/rc-form-2.4.11.tgz#61ee3ae579259684ae30f2c48f55f0f23a5d3d08"
+  integrity sha1-Ye465XklloSuMPLEj1Xw8jpdPQg=
   dependencies:
     async-validator "~1.11.3"
     babel-runtime "6.x"
@@ -19330,9 +19293,9 @@ react-hotkeys@2.0.0-pre4:
     prop-types "^15.6.1"
 
 react-i18next@^11.0.0, react-i18next@^11.0.1:
-  version "11.2.1"
-  resolved "https://registry.npm.alibaba-inc.com/react-i18next/download/react-i18next-11.2.1.tgz#a56d9f1f52d003eb4fa8f1c7d6752123827160f0"
-  integrity sha1-pW2fH1LQA+tPqPHH1nUhI4JxYPA=
+  version "11.2.2"
+  resolved "https://registry.npm.alibaba-inc.com/react-i18next/download/react-i18next-11.2.2.tgz#e5e55ae4187521b01b4eafe483dd96b280106670"
+  integrity sha1-5eVa5Bh1IbAbTq/kg92WsoAQZnA=
   dependencies:
     "@babel/runtime" "^7.3.1"
     html-parse-stringify2 "2.0.1"
@@ -19807,7 +19770,7 @@ redux-thunk@^2.3.0:
   resolved "https://registry.npm.alibaba-inc.com/redux-thunk/download/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha1-UcLBmhhe1Rh6qpotCLZm0NZGdiI=
 
-redux@^4.0.4:
+redux@^4.0.1, redux@^4.0.4:
   version "4.0.4"
   resolved "https://registry.npm.alibaba-inc.com/redux/download/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
   integrity sha1-TuGusWS2PWobzFeuSqC25vp6N5Y=
@@ -20537,9 +20500,9 @@ rollup@^0.25.8:
     source-map-support "^0.3.2"
 
 rollup@^1.27.0:
-  version "1.27.0"
-  resolved "https://registry.npm.alibaba-inc.com/rollup/download/rollup-1.27.0.tgz#7afe0da89c967cec5ccea7e919da6c89a1a68666"
-  integrity sha1-ev4NqJyWfOxczqfpGdpsiaGmhmY=
+  version "1.27.2"
+  resolved "https://registry.npm.alibaba-inc.com/rollup/download/rollup-1.27.2.tgz#caf54a93df228bf7864f13dddcdb363d3e958509"
+  integrity sha1-yvVKk98ii/eGTxPd3Ns2PT6VhQk=
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"
@@ -23527,6 +23490,17 @@ vfile@^3.0.0:
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
 
+video-react@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.npm.alibaba-inc.com/video-react/download/video-react-0.14.1.tgz#49ac7b19f1d039c0b3ebec82f81224bc2fa8bdf1"
+  integrity sha1-Sax7GfHQOcCz6+yC+BIkvC+ovfE=
+  dependencies:
+    "@babel/runtime" "^7.4.5"
+    classnames "^2.2.6"
+    lodash.throttle "^4.1.1"
+    prop-types "^15.7.2"
+    redux "^4.0.1"
+
 viewport-mercator-project@^6.2.1:
   version "6.2.2"
   resolved "https://registry.npm.alibaba-inc.com/viewport-mercator-project/download/viewport-mercator-project-6.2.2.tgz#f524819ad53fcc009b46136a59f73461bfcf1604"
@@ -24405,9 +24379,9 @@ yargs@^13.2.4, yargs@^13.3.0:
     yargs-parser "^13.1.1"
 
 yargs@^14.2.0:
-  version "14.2.0"
-  resolved "https://registry.npm.alibaba-inc.com/yargs/download/yargs-14.2.0.tgz#f116a9242c4ed8668790b40759b4906c276e76c3"
-  integrity sha1-8RapJCxO2GaHkLQHWbSQbCdudsM=
+  version "14.2.2"
+  resolved "https://registry.npm.alibaba-inc.com/yargs/download/yargs-14.2.2.tgz#2769564379009ff8597cdd38fba09da9b493c4b5"
+  integrity sha1-J2lWQ3kAn/hZfN04+6CdqbSTxLU=
   dependencies:
     cliui "^5.0.0"
     decamelize "^1.2.0"
