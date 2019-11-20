@@ -14,6 +14,7 @@ uniform mat4 u_ModelMatrix;
 varying vec4 v_color;
 
 #pragma include "projection"
+
 #pragma include "light"
 
 void main() {
@@ -24,9 +25,8 @@ void main() {
  vec4 project_pos = project_position(vec4(a_Pos.xy, 0, 1.0));
  vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z), 1.0);
 
-//  float lightWeight = calc_lighting(pos);
-   
- v_color =vec4(a_Color.rgb*lightWeight, a_Color.w); 
+  float lightWeight = calc_lighting(pos);
+ v_color =vec4(a_Color.rgb * lightWeight, a_Color.w); 
 
  gl_Position = project_common_position_to_clipspace(pos);
 
