@@ -1,5 +1,5 @@
 const path = require('path');
-exports.onCreateWebpackConfig = ({ getConfig, stage, plugins }) => {
+exports.onCreateWebpackConfig = ({ getConfig }) => {
   const config = getConfig();
   config.resolve.extensions.push('.glsl');
   config.resolve.alias = {
@@ -11,6 +11,6 @@ exports.onCreateWebpackConfig = ({ getConfig, stage, plugins }) => {
     '@l7/renderer': path.resolve(__dirname, 'packages/renderer/src'),
     '@l7/scene': path.resolve(__dirname, 'packages/scene/src'),
     '@l7/source': path.resolve(__dirname, 'packages/source/src'),
-    '@l7/utils': path.resolve(__dirname, 'packages/utils/src'),
+    '@l7/utils': path.resolve(__dirname, 'packages/utils/src')
   };
 };
