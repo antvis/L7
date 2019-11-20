@@ -130,6 +130,7 @@
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
     "version": "lerna version --conventional-commits",
+    "version:prerelease": "lerna version --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
     "release": "lerna publish from-package --registry https://registry.npmjs.com/",
     "storybook": "start-storybook -p 6006",
@@ -156,6 +157,5 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "version": "2.0.0-beta.1"
+  }
 }
