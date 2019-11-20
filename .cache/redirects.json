@@ -1,0 +1,56 @@
+[
+  {
+    "fromPath": "/en/docs/api",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/docs/api/L7"
+  },
+  {
+    "fromPath": "/zh/docs/api",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/api/L7"
+  },
+  {
+    "fromPath": "/zh/docs/tutorial",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/api/quickstart"
+  },
+  {
+    "fromPath": "/en/docs/tutorial",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/docs/api/quickstart"
+  },
+  {
+    "fromPath": "/zh/examples/raster/",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/raster/basic"
+  },
+  {
+    "fromPath": "/zh/examples/polygon/",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/polygon/3d"
+  },
+  {
+    "fromPath": "/zh/examples/heatmap/",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/heatmap/heatmap"
+  },
+  {
+    "fromPath": "/en/examples",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/examples/gallery/basic"
+  },
+  {
+    "fromPath": "/zh/examples",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/gallery/basic"
+  }
+]
