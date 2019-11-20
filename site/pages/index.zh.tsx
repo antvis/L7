@@ -58,18 +58,18 @@ const IndexPage = () => {
     {
       logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
       title: t('浅色色板'),
-      description: t('一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果。'),
+      description: t('一个个真实的数据可视化案例，复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。'),
       link: `/${i18n.language}/examples/gallery/basic`,
       image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*8Pa8Toh3-OsAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RPxeQZ8Uk7EAAAAAAAAAAABkARQnAQ',
     },
     {
       logo:'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
       title: t('深色色板'),
-      description: t('一个个真实的数据可视化案例，复杂的地理数据,简单，易用的API接口,让用户达到开箱即用的效果.'),
+      description: t('一个个真实的数据可视化案例，复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果'),
       link: `/${i18n.language}/examples/gallery/basic`,
       image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ryTVQ49K8SkAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*B8rtTpvkqTgAAAAAAAAAAABkARQnAQ',
     }
   ];
 
