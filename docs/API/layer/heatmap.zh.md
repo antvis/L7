@@ -48,7 +48,7 @@ layer.source(data, {
         field:'v', 
         method:'sum'
       }
-    ]
+    ],
     }
 ```
 
@@ -188,8 +188,8 @@ var layer = scene.HeatmapLayer({
    transforms:[
      type:'hexgon',
      size:1500,
-     field:'count'
-     operation: 'sum'
+     field:'count',
+     operation: 'sum',
      }
    ] 
   })
