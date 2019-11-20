@@ -63,3 +63,12 @@ GeoJSON 支持点、线、面，等所有的空间数据格式。<br />CSV 支�
 [http://geojson.io/](http://geojson.io/)    可以在线查看，绘制，修改GeoJSON数据
 
 [https://mapshaper.org/](https://mapshaper.org/)  可以查看较大的geojson，还能够简化GeoJSON数据
+
+## 数据资源
+
+#### 全国行政区划边界 
+[支持 geojson, svg下载](http://datav.aliyun.com/tools/atlas/#&lat=33.50475906922609&lng=104.32617187499999&zoom=4)
+
+#### HighCharts 全球行政区划数据集
+
+[https://img.hcharts.cn/mapdata/](https://img.hcharts.cn/mapdata/)

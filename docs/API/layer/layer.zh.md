@@ -93,11 +93,11 @@ layer.source(data, {
 
         },
         {
-        type: 'hexagon',
-        size: 6000,
-        field:'v',
-        method:'sum'
-      }
+          type: 'hexagon',
+          size: 6000,
+          field:'v',
+          method:'sum'
+       }
       ]
     })
 ```
@@ -121,7 +121,7 @@ layer.source(data, {
 
 ```javascript
 {
-  type: {string} // 指定数据类型，可声明的类型为：identity、linear、cat、time、timeCat、log、pow
+  type: "linear" // 指定数据类型，可声明的类型为：identity、linear、cat、time、timeCat、log、pow,  quantile,quantize
 }
 
 ```
