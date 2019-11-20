@@ -3,14 +3,8 @@
     "eslint-config-egg"
   ],
   "globals": {
-    "$": true,
     "AMap": true,
     "L7": true,
-    "AMapUI": true,
-    "DataSet": true,
-    "G2": true,
-    "_": true,
-    "mapboxgl":true,
   },
   "env": {
     "browser": true,
