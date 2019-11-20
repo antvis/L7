@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "All kinds of layers of l7",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,9 +22,9 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.1",
-    "@antv/l7-source": "^2.0.0-beta.1",
-    "@antv/l7-utils": "^2.0.0-beta.1",
+    "@antv/l7-core": "^2.0.0-beta.2",
+    "@antv/l7-source": "^2.0.0-beta.2",
+    "@antv/l7-utils": "^2.0.0-beta.2",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
     "@types/d3-color": "^1.2.2",

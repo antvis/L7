@@ -4,7 +4,9 @@
   ],
   "command": {
     "publish": {
-      "ignoreChanges": ["*.md"],
+      "ignoreChanges": [
+        "*.md"
+      ],
       "allowBranch": [
         "master",
         "develop",
@@ -14,7 +16,7 @@
       "message": "chore: publish"
     }
   },
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {
