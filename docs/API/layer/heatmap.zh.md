@@ -47,9 +47,9 @@ layer.source(data, {
         size: 15000,
         field:'v', 
         method:'sum'
-      }
-    ]
-    }
+        }
+      ],
+  }
 ```
 
 ### shape
@@ -186,12 +186,13 @@ var layer = scene.HeatmapLayer({
       y:lat,
     },
    transforms:[
-     type:'hexgon',
-     size:1500,
-     field:'count'
-     operation: 'sum'
-     }
-   ] 
+     {
+      type:'hexgon',
+      size:1500,
+      field:'count',
+      operation: 'sum',
+     },
+   ],
   })
   .shape('hexgon')
   .size(1000) 
