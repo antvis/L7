@@ -157,9 +157,9 @@ export default class PixelPickingPass<
         ];
 
         if (!rawFeature) {
-          this.logger.warn(
-            '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
-          );
+          // this.logger.error(
+          //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
+          // );
         } else {
           // trigger onHover/Click callback on layer
           this.triggerHoverOnLayer({ x, y, feature: rawFeature });

@@ -1,7 +1,7 @@
 // @ts-ignore
-import { PolygonLayer } from '@l7/layers';
+import { PolygonLayer } from '@antv/l7-layers';
 // @ts-ignore
-import { Scene } from '@l7/scene';
+import { Scene } from '@antv/l7-scene';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 

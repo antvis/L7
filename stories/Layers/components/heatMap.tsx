@@ -1,9 +1,10 @@
-import { HeatmapLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatmapLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 // @ts-ignore
 import * as React from 'react';
 
 export default class HeatMapLayerDemo extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {

@@ -1,6 +1,5 @@
-import { BasePostProcessingPass, IUniform } from '@l7/core';
-import { PolygonLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+// @ts-ignore
+import { BasePostProcessingPass, PolygonLayer, Scene } from '@antv/l7';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -98,7 +97,6 @@ export default class CustomPostProcessing extends React.Component {
     // 注册自定义后处理效果
     scene.registerPostProcessingPass(DotScreenEffect, 'dotScreenEffect');
     const layer = new PolygonLayer({
-      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       passes: [
@@ -129,7 +127,6 @@ export default class CustomPostProcessing extends React.Component {
       });
 
     scene.addLayer(layer);
-    scene.render();
 
     this.scene = scene;
 

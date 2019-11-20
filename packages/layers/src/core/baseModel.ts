@@ -13,7 +13,7 @@ import {
   IStyleAttributeService,
   lazyInject,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 
 export default class BaseModel implements ILayerModel {
   protected layer: ILayer;

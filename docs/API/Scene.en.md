@@ -9,7 +9,7 @@ order: 1
 示例代码
 
 ```javascript
-import {Scene} from '@l7/scene';
+import {Scene} from '@antv/l7-scene';
 const scene =new L7.Scene({
     id:'map',
     mapStyle:'dark',

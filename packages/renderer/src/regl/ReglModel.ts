@@ -4,7 +4,7 @@ import {
   IModelDrawOptions,
   IModelInitializationOptions,
   IUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { isPlainObject, isTypedArray } from 'lodash';
 import regl from 'regl';
 import {

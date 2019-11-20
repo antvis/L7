@@ -191,7 +191,11 @@ protected getConfigSchema() {
 
 ### [WIP]渲染引擎服务
 
+目前 L7 使用 [regl](https://github.com/regl-project/regl)，但开发者不需要关心底层 WebGL 渲染引擎实现，即使后续更换了其他引擎，我们也将保持服务接口的稳定。
+
 通过 `rendererService` 引用。
+
+
 
 ### 图层管理服务
 

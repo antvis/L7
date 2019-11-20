@@ -1,5 +1,5 @@
-import { Scene } from '@l7/scene';
-import { Marker, Popup } from '@l7/component'
+import { Scene } from '@antv/l7-scene';
+import { Marker, Popup } from '@antv/l7-component'
 import * as G2 from '@antv/g2'
 const scene = new Scene({
   id: 'map',

@@ -1,6 +1,6 @@
 {
-  "name": "@l7/core",
-  "version": "0.0.1",
+  "name": "@antv/l7-core",
+  "version": "2.0.0-beta.1",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@l7/utils": "0.0.1",
+    "@antv/l7-utils": "^2.0.0-beta.1",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
     "eventemitter3": "^4.0.0",

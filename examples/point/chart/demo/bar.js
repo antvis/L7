@@ -1,5 +1,4 @@
-import { Scene } from '@l7/scene';
-import { Marker, Popup } from '@l7/component'
+import { Marker, Scene } from '@antv/l7';
 import * as G2 from '@antv/g2'
 const scene = new Scene({
   id: 'map',
@@ -25,7 +24,7 @@ function addChart() {
       if(size< 30) {
         return
       }
-      console.log(total);
+
       const itemData = [{
         item: 'Agriculture',
         count: item.gdp.Agriculture,

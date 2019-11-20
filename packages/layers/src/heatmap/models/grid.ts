@@ -4,7 +4,7 @@ import {
   IEncodeFeature,
   IModel,
   IModelUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
 import heatmapGridVert from '../shaders/grid_vert.glsl';

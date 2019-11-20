@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, ITexture2D } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ITexture2D } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { RasterImageTriangulation } from '../core/triangulation';
 import { generateColorRamp, IColorRamp } from '../utils/color';

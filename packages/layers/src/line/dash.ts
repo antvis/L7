@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { LineTriangulation } from '../core/triangulation';
 import line_dash_frag from './shaders/line_dash_frag.glsl';

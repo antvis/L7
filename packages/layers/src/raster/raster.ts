@@ -10,7 +10,7 @@ import {
   ITexture2D,
   lazyInject,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { generateColorRamp, IColorRamp } from '../utils/color';
 import { RasterTriangulation } from './buffers/triangulation';

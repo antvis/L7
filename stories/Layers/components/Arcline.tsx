@@ -1,8 +1,9 @@
-// import { ArcLineLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { LineLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 import * as React from 'react';
 
 export default class ArcLineDemo extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -21,20 +22,24 @@ export default class ArcLineDemo extends React.Component {
       style: 'mapbox://styles/mapbox/dark-v9',
       zoom: 2,
     });
-    // const lineLayer = new ArcLineLayer({})
-    //   .source(await response.text(), {
-    //     parser: {
-    //       type: 'csv',
-    //       x: 'lng1',
-    //       y: 'lat1',
-    //       x1: 'lng2',
-    //       y1: 'lat2',
-    //     },
-    //   })
-    //   .size(0.5)
-    //   .shape('arc')
-    //   .color('rgb(13,64,140)');
-    // scene.addLayer(lineLayer);
+    const lineLayer = new LineLayer({
+      enableMultiPassRenderer: true,
+      enablePicking: true,
+      enableHighlight: true,
+    })
+      .source(await response.text(), {
+        parser: {
+          type: 'csv',
+          x: 'lng1',
+          y: 'lat1',
+          x1: 'lng2',
+          y1: 'lat2',
+        },
+      })
+      .size(0.5)
+      .shape('arc')
+      .color('rgb(13,64,140)');
+    scene.addLayer(lineLayer);
     scene.render();
     this.scene = scene;
   }

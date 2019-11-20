@@ -1,9 +1,10 @@
-import { PointLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { PointLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
 export default class Point3D extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {

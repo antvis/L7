@@ -1,8 +1,5 @@
-// tslint:disable-next-line:no-submodule-imports
-import '!style-loader!css-loader!../../assets/css/l7.css';
-import { PointLayer, PolygonLayer } from '@l7/layers';
 // @ts-ignore
-import { Scene } from '@l7/scene';
+import { PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 // @ts-ignore
 import pointsData from '../../assets/data/points.json';
@@ -65,7 +62,6 @@ export default class Mixed extends React.Component {
     this.scene4 = scene4;
 
     const layer1 = new PolygonLayer({
-      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       passes: [
@@ -98,7 +94,6 @@ export default class Mixed extends React.Component {
       });
 
     const layer2 = new PolygonLayer({
-      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       passes: [
@@ -131,7 +126,6 @@ export default class Mixed extends React.Component {
       });
 
     const layer3 = new PolygonLayer({
-      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       passes: ['noise'],
@@ -227,11 +221,7 @@ export default class Mixed extends React.Component {
     scene2.addLayer(layer2);
     scene3.addLayer(layer3);
     scene4.addLayer(layer4);
-    scene4.addLayer(pointLayer);
-    scene1.render();
-    scene2.render();
-    scene3.render();
-    scene4.render();
+    // scene4.addLayer(pointLayer);
   }
 
   public render() {

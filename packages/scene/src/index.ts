@@ -1,4 +1,4 @@
-import { Logo } from '@l7/component';
+import { Logo } from '@antv/l7-component';
 import {
   Bounds,
   createLayerContainer,
@@ -22,9 +22,9 @@ import {
   Point,
   SceneEventList,
   TYPES,
-} from '@l7/core';
-import { AMapService, MapboxService } from '@l7/maps';
-import { ReglRendererService } from '@l7/renderer';
+} from '@antv/l7-core';
+import { AMapService, MapboxService } from '@antv/l7-maps';
+import { ReglRendererService } from '@antv/l7-renderer';
 import { Container } from 'inversify';
 import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
 
@@ -87,10 +87,10 @@ class Scene implements IPostProcessingPassPluggable {
     );
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
 
-    // TODO: 初始化组件
-    this.addControl(new Logo());
     // 初始化 scene
     this.sceneService.init(config);
+    // TODO: 初始化组件
+    this.addControl(new Logo());
   }
 
   public getMapService(): IMapService {
@@ -139,13 +139,7 @@ class Scene implements IPostProcessingPassPluggable {
 
   // map control method
   public addControl(ctr: IControl) {
-    if (this.mapService.map) {
-      this.controlService.addControl(ctr, this.container);
-    } else {
-      this.mapService.once('mapload', () => {
-        this.controlService.addControl(ctr, this.container);
-      });
-    }
+    this.controlService.addControl(ctr, this.container);
   }
 
   public removeControl(ctr: IControl) {

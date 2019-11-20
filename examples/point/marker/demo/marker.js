@@ -1,5 +1,5 @@
-import { Scene } from '@l7/scene';
-import { Marker } from '@l7/component'
+import { Scene } from '@antv/l7-scene';
+import { Marker } from '@antv/l7-component'
 const scene = new Scene({
   id: 'map',
   type: 'amap',

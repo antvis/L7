@@ -1,5 +1,5 @@
-import { HeatMapHexagonLayer, HeatMapGrid3dLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatMapHexagonLayer, HeatMapGrid3dLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 const scene = new Scene({
   id: 'map',
   style: 'dark',
@@ -19,11 +19,10 @@ fetch(
   .then((data) => {
     const layer = new HeatMapGrid3dLayer({})
       .source(data, {
-
         parser:{
-           type:'csv',
-            x:'lng',
-            y:'lat',
+          type:'csv',
+          x:'lng',
+          y:'lat',
         },
         transforms: [
           {

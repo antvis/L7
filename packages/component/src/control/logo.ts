@@ -1,4 +1,4 @@
-import { DOM } from '@l7/utils';
+import { DOM } from '@antv/l7-utils';
 import Control, { PositionType } from './BaseControl';
 export default class Logo extends Control {
   public getDefault() {

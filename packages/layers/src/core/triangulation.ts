@@ -1,5 +1,5 @@
-import { IEncodeFeature } from '@l7/core';
-import { aProjectFlat, lngLatToMeters } from '@l7/utils';
+import { IEncodeFeature } from '@antv/l7-core';
+import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
 import getNormals from '../utils/polylineNormal';

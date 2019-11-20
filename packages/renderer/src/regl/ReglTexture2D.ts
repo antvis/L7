@@ -1,4 +1,4 @@
-import { gl, ITexture2D, ITexture2DInitializationOptions } from '@l7/core';
+import { gl, ITexture2D, ITexture2DInitializationOptions } from '@antv/l7-core';
 import regl from 'regl';
 import {
   colorSpaceMap,

@@ -6,7 +6,7 @@ import {
   ILayerModel,
   IModel,
   IModelUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 
 export default class ExtrudeModel extends BaseModel {

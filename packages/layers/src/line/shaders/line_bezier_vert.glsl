@@ -1,4 +1,3 @@
-precision mediump float;
 attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec4 a_Instance;
@@ -7,7 +6,9 @@ uniform mat4 u_ModelMatrix;
 uniform float segmentNumber;
 varying vec4 v_color;
 varying vec2 v_normal;
+
 #pragma include "projection"
+#pragma include "picking"
 
 float bezier3(vec3 arr, float t) {
   float ut = 1. - t;
@@ -50,18 +51,19 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 }
 
 void main() {
-    v_color = a_Color;
-    vec2 source = a_Instance.rg;
-    vec2 target =  a_Instance.ba;
-    float segmentIndex = a_Position.x;
-    float segmentRatio = getSegmentRatio(segmentIndex);
-    float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
-    float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
+  v_color = a_Color;
+  vec2 source = a_Instance.rg;
+  vec2 target =  a_Instance.ba;
+  float segmentIndex = a_Position.x;
+  float segmentRatio = getSegmentRatio(segmentIndex);
+  float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
+  float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
 
-    vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
-    vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));
-    v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
-    vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));
+  v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+  vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
-     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
+  setPickingColor(a_PickingColor);
 }

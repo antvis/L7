@@ -65,6 +65,9 @@ export default class Scene extends EventEmitter implements ISceneService {
   private inited: boolean = false;
   private initPromise: Promise<void>;
 
+  // TODO: 改成状态机
+  private rendering: boolean = false;
+
   /**
    * canvas 容器
    */
@@ -156,9 +159,16 @@ export default class Scene extends EventEmitter implements ISceneService {
   public addLayer(layer: ILayer) {
     this.logger.debug(`add layer ${layer.name} to scene ${this.id}`);
     this.layerService.add(layer);
+    this.render();
   }
 
   public async render() {
+    if (this.rendering) {
+      return;
+    }
+
+    this.rendering = true;
+
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
@@ -172,6 +182,8 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     this.layerService.renderLayers();
     this.logger.debug(`scene ${this.id} render`);
+
+    this.rendering = false;
   }
 
   public destroy() {

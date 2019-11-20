@@ -8,7 +8,7 @@ import {
   IStyleAttribute,
   IStyleAttributeService,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 

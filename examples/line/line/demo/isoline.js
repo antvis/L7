@@ -1,5 +1,5 @@
-import { Scene } from './node_modules/@l7/scene';
-import { LineLayer } from './node_modules/@l7/layers'
+import { Scene } from './node_modules/@antv/l7-scene';
+import { LineLayer } from './node_modules/@antv/l7-layers'
 const scene = new Scene({
   id: 'map',
   pitch: 0,

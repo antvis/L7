@@ -1,5 +1,5 @@
-import { ImageLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { ImageLayer } from '@antv/l7-layers';
+import { Scene } from '@antv/l7-scene';
 import * as React from 'react';
 
 export default class ImageLayerDemo extends React.Component {
