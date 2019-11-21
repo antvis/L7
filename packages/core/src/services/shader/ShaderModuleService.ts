@@ -5,7 +5,7 @@ import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 
 import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
-import light from '../../shaders/light.glsl';
+import light from '../../shaders/light2.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
 import pickingVert from '../../shaders/picking.vert.glsl';
