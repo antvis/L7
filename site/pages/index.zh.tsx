@@ -80,7 +80,11 @@ const IndexPage = () => {
         coverImage={
           <img
             className="cover-image"
+<<<<<<< HEAD
             src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*cCI7RaJs46AAAAAAAAAAAABkARQnAQ"
+=======
+            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VcojS5aWhMYAAAAAAAAAAABkARQnAQ"
+>>>>>>> f40e44f... fix(fix): fix
           />
         }
         title={t('L7 地理空间数据可视分析引擎')}
