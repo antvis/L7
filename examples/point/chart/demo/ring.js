@@ -1,5 +1,4 @@
-import { Scene } from '@l7/scene';
-import { Marker } from '@l7/component';
+import { Scene, Marker } from '@antv/l7';
 import * as G2 from '@antv/g2';
 
 const CSS = `.l7-marker .g2-guide-html {
