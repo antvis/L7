@@ -42,7 +42,7 @@ const scene = new Scene({
   center: [ 52.21496184144132, 24.121126851768906 ],
   zoom: 3.802
 });
-window.mapScene = scene;
+scene.render();
 scene.on('loaded', () => {
   Promise.all([
     fetch(

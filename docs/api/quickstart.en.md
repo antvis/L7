@@ -13,8 +13,7 @@ L7 提供三种使用方式：CDN、Submodule 以及 React 组件。
 首先在 `<head>` 中引入 L7 CDN 版本的 JS 和 CSS 文件：
 ```html
 <head>
-  <script src='https://api.l7/v2.0.0-beta/l7.js'></script>
-  <link href='https://api.l7/v2.0.0-beta/l7.css' rel='stylesheet' />
+  <script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.5/dist/l7.js'></script>
 </head>
 ```
 
@@ -35,7 +34,7 @@ L7 提供三种使用方式：CDN、Submodule 以及 React 组件。
 
 ## 通过 Submodule 使用
 
-首先通过 `npm/yarn` 安装 `@l7/scene` 和 `@l7/layers`：
+首先通过 `npm/yarn` 安装 `@antv/l7` 和 `@l7/layers`：
 ```bash
 npm install --save @l7/scene @l7/layers
 // or
