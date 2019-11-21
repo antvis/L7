@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/mn_MN.jsx"],"names":["mn_MN"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import mn_MN from '../../date-picker/locale/mn_MN';\nexport default mn_MN;\n"],"file":"mn_MN.js"}

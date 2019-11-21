@@ -1,0 +1,80 @@
+{
+	"name": "globalthis",
+	"version": "1.0.0",
+	"author": "Jordan Harband",
+	"description": "ECMAScript spec-compliant polyfill/shim for `globalThis`",
+	"license": "MIT",
+	"main": "index.js",
+	"scripts": {
+		"pretest": "npm run --silent lint && es-shim-api --bound --property",
+		"test": "npm run --silent tests-only",
+		"posttest": "npm run --silent security",
+		"tests-only": "npm run --silent test:implementation && npm run --silent test:shim",
+		"test:native": "node test/native.js",
+		"test:shim": "node test/shimmed.js",
+		"test:implementation": "node test/index.js",
+		"coverage": "covert test/*.js",
+		"coverage:quiet": "covert test/*.js --quiet",
+		"lint": "npm run --silent jscs && npm run --silent eslint",
+		"eslint": "eslint *.js test/*.js",
+		"jscs": "jscs *.js test/*.js",
+		"build": "mkdir -p dist && browserify browserShim.js > dist/browser.js",
+		"prepublish": "npm run --silent build",
+		"security": "nsp check"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ljharb/System.global.git"
+	},
+	"keywords": [
+		"window",
+		"self",
+		"global",
+		"globalThis",
+		"System.global",
+		"global object",
+		"global this value",
+		"ECMAScript",
+		"es-shim API",
+		"polyfill",
+		"shim"
+	],
+	"dependencies": {
+		"define-properties": "^1.1.2",
+		"function-bind": "^1.1.1",
+		"object-keys": "^1.0.12"
+	},
+	"devDependencies": {
+		"@es-shims/api": "^2.1.2",
+		"@ljharb/eslint-config": "^13.0.0",
+		"browserify": "^16.2.2",
+		"covert": "^1.1.0",
+		"eslint": "^5.3.0",
+		"for-each": "^0.3.3",
+		"is": "^3.2.1",
+		"jscs": "^3.0.7",
+		"nsp": "^3.2.1",
+		"tape": "^4.9.1"
+	},
+	"testling": {
+		"files": "test/index.js",
+		"browsers": [
+			"iexplore/6.0..latest",
+			"firefox/3.0..6.0",
+			"firefox/15.0..latest",
+			"firefox/nightly",
+			"chrome/4.0..10.0",
+			"chrome/20.0..latest",
+			"chrome/canary",
+			"opera/10.0..latest",
+			"opera/next",
+			"safari/4.0..latest",
+			"ipad/6.0..latest",
+			"iphone/6.0..latest",
+			"android-browser/4.2"
+		]
+	},
+	"engines": {
+		"node": ">= 0.4"
+	}
+}

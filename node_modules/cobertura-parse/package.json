@@ -1,0 +1,24 @@
+{
+  "name": "cobertura-parse",
+  "version": "1.0.5",
+  "description": "Parse cobertura coverage to JSON, based on output from lcov-parse",
+  "main": "source/index.js",
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "testcover": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vokal/cobertura-parse.git"
+  },
+  "author": "Vokal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vokal/cobertura-parse/issues"
+  },
+  "homepage": "https://github.com/vokal/cobertura-parse",
+  "dependencies": {
+    "mocha": "5.0.5",
+    "xml2js": "0.4.19"
+  }
+}

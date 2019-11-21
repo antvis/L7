@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/nb_NO.jsx"],"names":["nb_NO"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import nb_NO from '../../date-picker/locale/nb_NO';\nexport default nb_NO;\n"],"file":"nb_NO.js"}

@@ -1,0 +1,386 @@
+{
+    "v1.5.0-beta.1": {
+        "released": "2019-10-18T18:59:36Z",
+        "prerelease": true
+    },
+    "v1.4.1": {
+        "released": "2019-10-10T22:03:41Z",
+        "prerelease": false
+    },
+    "v1.4.0": {
+        "released": "2019-09-27T14:08:45Z",
+        "prerelease": false
+    },
+    "v1.3.2": {
+        "released": "2019-09-26T09:14:48Z",
+        "prerelease": false
+    },
+    "v1.4.0-beta.2": {
+        "released": "2019-09-25T13:48:31Z",
+        "prerelease": true
+    },
+    "v1.4.0-beta.1": {
+        "released": "2019-09-21T10:38:35Z",
+        "prerelease": true
+    },
+    "v1.3.1": {
+        "released": "2019-09-05T07:54:19Z",
+        "prerelease": false
+    },
+    "v1.3.0": {
+        "released": "2019-08-28T16:09:49Z",
+        "prerelease": false
+    },
+    "v1.3.0-beta.1": {
+        "released": "2019-08-22T18:19:04Z",
+        "prerelease": true
+    },
+    "v1.2.1": {
+        "released": "2019-08-09T23:14:55Z",
+        "prerelease": false
+    },
+    "v1.2.0": {
+        "released": "2019-07-29T22:49:42Z",
+        "prerelease": false
+    },
+    "v1.2.0-beta.1": {
+        "released": "2019-07-23T22:17:43Z",
+        "prerelease": true
+    },
+    "v1.1.1": {
+        "released": "2019-07-17T00:06:32Z",
+        "prerelease": false
+    },
+    "v1.1.0": {
+        "released": "2019-07-02T01:38:57Z",
+        "prerelease": false
+    },
+    "v1.1.0-beta.2": {
+        "released": "2019-06-25T21:56:41Z",
+        "prerelease": true
+    },
+    "v1.1.0-beta.1": {
+        "released": "2019-06-14T23:03:12Z",
+        "prerelease": true
+    },
+    "v1.0.0": {
+        "released": "2019-05-22T17:36:49Z",
+        "prerelease": false
+    },
+    "v0.54.0": {
+        "released": "2019-04-25T15:44:45Z",
+        "prerelease": false
+    },
+    "v0.54.0-beta.2": {
+        "released": "2019-04-18T16:05:53Z",
+        "prerelease": true
+    },
+    "v0.53.1": {
+        "released": "2019-02-27T22:45:15Z",
+        "prerelease": false
+    },
+    "v0.53.0": {
+        "released": "2019-02-07T20:15:37Z",
+        "prerelease": false
+    },
+    "v0.53.0-beta.1": {
+        "released": "2019-01-31T01:01:28Z",
+        "prerelease": true
+    },
+    "v0.52.0": {
+        "released": "2018-12-19T19:46:16Z",
+        "prerelease": false
+    },
+    "v0.52.0-beta.2": {
+        "released": "2018-12-13T00:49:28Z",
+        "prerelease": true
+    },
+    "v0.52.0-beta.1": {
+        "released": "2018-12-01T14:01:04Z",
+        "prerelease": true
+    },
+    "v0.51.0": {
+        "released": "2018-11-07T23:45:09Z",
+        "prerelease": false
+    },
+    "v0.51.0-beta.1": {
+        "released": "2018-10-31T23:44:37Z",
+        "prerelease": true
+    },
+    "v0.50.0": {
+        "released": "2018-10-12T11:46:41Z",
+        "prerelease": false
+    },
+    "v0.50.0-beta.1": {
+        "released": "2018-10-05T08:33:25Z",
+        "prerelease": true
+    },
+    "v0.49.0": {
+        "released": "2018-09-12T22:55:24Z",
+        "prerelease": false
+    },
+    "v0.49.0-beta.1": {
+        "released": "2018-09-06T23:30:39Z",
+        "prerelease": true
+    },
+    "v0.48.0": {
+        "released": "2018-08-17T00:26:07Z",
+        "prerelease": false
+    },
+    "v0.47.0": {
+        "released": "2018-07-18T21:12:24Z",
+        "prerelease": false
+    },
+    "v0.46.0": {
+        "released": "2018-06-20T22:18:01Z",
+        "prerelease": false
+    },
+    "v0.46.0-beta.1": {
+        "released": "2018-06-14T19:18:50Z",
+        "prerelease": true
+    },
+    "v0.45.0": {
+        "released": "2018-05-07T21:49:00Z",
+        "prerelease": false
+    },
+    "v0.44.2": {
+        "released": "2018-04-03T19:31:10Z",
+        "prerelease": false
+    },
+    "v0.44.1": {
+        "released": "2018-02-14T01:04:22Z",
+        "prerelease": false
+    },
+    "v0.44.0": {
+        "released": "2018-01-25T19:21:50Z",
+        "prerelease": false
+    },
+    "v0.43.0": {
+        "released": "2017-12-21T19:43:57Z",
+        "prerelease": false
+    },
+    "v0.42.2": {
+        "released": "2017-11-21T21:39:44Z",
+        "prerelease": false
+    },
+    "v0.42.1": {
+        "released": "2017-11-18T03:07:56Z",
+        "prerelease": false
+    },
+    "v0.42.0": {
+        "released": "2017-11-14T00:04:27Z",
+        "prerelease": false
+    },
+    "v0.41.0": {
+        "released": "2017-10-11T21:56:58Z",
+        "prerelease": false
+    },
+    "v0.40.1": {
+        "released": "2017-09-19T00:22:43Z",
+        "prerelease": false
+    },
+    "v0.40.0": {
+        "released": "2017-09-13T19:17:27Z",
+        "prerelease": false
+    },
+    "v0.39.1": {
+        "released": "2017-07-24T20:23:23Z",
+        "prerelease": false
+    },
+    "v0.39.0": {
+        "released": "2017-07-21T22:55:57Z",
+        "prerelease": false
+    },
+    "v0.38.0": {
+        "released": "2017-06-09T20:23:13Z",
+        "prerelease": false
+    },
+    "v0.37.0": {
+        "released": "2017-05-02T21:49:38Z",
+        "prerelease": false
+    },
+    "v0.36.0": {
+        "released": "2017-04-19T22:37:56Z",
+        "prerelease": false
+    },
+    "v0.35.1": {
+        "released": "2017-04-12T20:39:04Z",
+        "prerelease": false
+    },
+    "v0.35.0": {
+        "released": "2017-04-07T22:10:27Z",
+        "prerelease": false
+    },
+    "v0.34.0": {
+        "released": "2017-03-17T21:13:34Z",
+        "prerelease": false
+    },
+    "v0.33.1": {
+        "released": "2017-03-11T01:32:19Z",
+        "prerelease": false
+    },
+    "v0.33.0": {
+        "released": "2017-03-08T20:52:41Z",
+        "prerelease": false
+    },
+    "v0.32.1": {
+        "released": "2017-01-26T21:01:26Z",
+        "prerelease": false
+    },
+    "v0.32.0": {
+        "released": "2017-01-26T19:35:31Z",
+        "prerelease": false
+    },
+    "v0.31.0": {
+        "released": "2017-01-10T21:10:11Z",
+        "prerelease": false
+    },
+    "v0.30.0": {
+        "released": "2017-01-05T23:56:55Z",
+        "prerelease": false
+    },
+    "v0.29.0": {
+        "released": "2016-12-20T13:23:40Z",
+        "prerelease": false
+    },
+    "v0.28.0": {
+        "released": "2016-11-17T19:53:59Z",
+        "prerelease": false
+    },
+    "v0.27.0": {
+        "released": "2016-11-11T23:45:21Z",
+        "prerelease": false
+    },
+    "v0.26.0": {
+        "released": "2016-10-13T22:53:42Z",
+        "prerelease": false
+    },
+    "v0.25.1": {
+        "released": "2016-09-30T22:55:49Z",
+        "prerelease": false
+    },
+    "v0.25.0": {
+        "released": "2016-09-29T23:45:57Z",
+        "prerelease": false
+    },
+    "v0.24.0": {
+        "released": "2016-09-20T00:09:46Z",
+        "prerelease": false
+    },
+    "v0.23.0": {
+        "released": "2016-09-19T23:57:13Z",
+        "prerelease": false
+    },
+    "v0.22.1": {
+        "released": "2016-08-18T20:06:18Z",
+        "prerelease": false
+    },
+    "v0.22.0": {
+        "released": "2016-08-12T17:02:48Z",
+        "prerelease": false
+    },
+    "v0.21.0": {
+        "released": "2016-07-13T21:32:28Z",
+        "prerelease": false
+    },
+    "v0.20.1": {
+        "released": "2016-06-21T20:35:07Z",
+        "prerelease": false
+    },
+    "v0.20.0": {
+        "released": "2016-06-10T16:19:07Z",
+        "prerelease": false
+    },
+    "v0.19.1": {
+        "released": "2016-06-03T00:12:56Z",
+        "prerelease": false
+    },
+    "v0.19.0": {
+        "released": "2016-05-31T23:02:04Z",
+        "prerelease": false
+    },
+    "v0.18.0": {
+        "released": "2016-04-29T04:25:22Z",
+        "prerelease": false
+    },
+    "v0.17.0": {
+        "released": "2016-04-13T21:52:00Z",
+        "prerelease": false
+    },
+    "v0.16.0": {
+        "released": "2016-03-24T22:30:20Z",
+        "prerelease": false
+    },
+    "v0.15.0": {
+        "released": "2016-03-02T00:38:44Z",
+        "prerelease": false
+    },
+    "v0.14.3": {
+        "released": "2016-02-26T00:12:50Z",
+        "prerelease": false
+    },
+    "v0.14.2": {
+        "released": "2016-02-20T03:23:57Z",
+        "prerelease": false
+    },
+    "v0.14.1": {
+        "released": "2016-02-10T21:58:47Z",
+        "prerelease": false
+    },
+    "v0.14.0": {
+        "released": "2016-02-09T01:50:46Z",
+        "prerelease": false
+    },
+    "v0.13.1": {
+        "released": "2016-01-28T00:06:29Z",
+        "prerelease": false
+    },
+    "v0.13.0": {
+        "released": "2016-01-27T23:17:33Z",
+        "prerelease": false
+    },
+    "v0.12.4": {
+        "released": "2016-01-19T22:22:29Z",
+        "prerelease": false
+    },
+    "v0.12.3": {
+        "released": "2016-01-14T22:53:57Z",
+        "prerelease": false
+    },
+    "v0.12.2": {
+        "released": "2015-12-22T18:45:06Z",
+        "prerelease": false
+    },
+    "v0.12.1": {
+        "released": "2015-12-08T20:20:42Z",
+        "prerelease": false
+    },
+    "v0.12.0": {
+        "released": "2015-12-03T01:05:46Z",
+        "prerelease": false
+    },
+    "v0.11.5": {
+        "released": "2015-12-01T20:59:33Z",
+        "prerelease": false
+    },
+    "v0.11.4": {
+        "released": "2015-11-16T21:48:48Z",
+        "prerelease": false
+    },
+    "v0.11.3": {
+        "released": "2015-11-10T20:40:54Z",
+        "prerelease": false
+    },
+    "v0.11.2": {
+        "released": "2015-11-10T19:41:57Z",
+        "prerelease": false
+    },
+    "v0.11.0": {
+        "released": "2015-10-14T19:14:23Z",
+        "prerelease": false
+    },
+    "v0.11.1": {
+        "released": "2015-10-14T19:10:51Z",
+        "prerelease": false
+    }
+}

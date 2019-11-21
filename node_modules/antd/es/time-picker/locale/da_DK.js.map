@@ -1,0 +1,1 @@
+{"version":3,"sources":["time-picker/locale/da_DK.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Vælg tid',\n};\nexport default locale;\n"],"file":"da_DK.js"}

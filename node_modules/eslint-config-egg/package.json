@@ -1,0 +1,52 @@
+{
+  "name": "eslint-config-egg",
+  "version": "7.5.1",
+  "description": "Node Style Guide for Egg.",
+  "main": "index",
+  "files": [
+    ".eslintrc",
+    "index.js",
+    "legacy.js",
+    "react.js",
+    "typescript.js",
+    "lib"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "babel-eslint": "^8.2.6",
+    "eslint-plugin-eggache": "^1.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsdoc": "^4.1.1",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1"
+  },
+  "devDependencies": {
+    "autod": "^3.0.1",
+    "coffee": "^5.1.0",
+    "egg-bin": "^1.0.0",
+    "egg-ci": "^1.8.0",
+    "eslint": "^5.4.0",
+    "git-contributor": "^1.0.10",
+    "typescript": "^3.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eggjs/eslint-config-egg"
+  },
+  "homepage": "https://github.com/eggjs/eslint-config-egg",
+  "author": "popomore <sakura9515@gmail.com>",
+  "scripts": {
+    "autod": "autod",
+    "lint": "eslint test/*.test.js lib *.js",
+    "test": "egg-bin test",
+    "ci": "npm run lint && npm run test",
+    "contributor": "git-contributor"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "ci": {
+    "version": "8, 10, 12"
+  }
+}

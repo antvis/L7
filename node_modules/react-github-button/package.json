@@ -1,0 +1,44 @@
+{
+  "name": "react-github-button",
+  "version": "0.1.11",
+  "description": "Unofficial GitHub buttons in React.",
+  "main": "./lib/index.js",
+  "files": [
+    "lib",
+    "assets"
+  ],
+  "scripts": {
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub",
+    "lint": "rc-tools run lint",
+    "test": "rc-tools run compile && mocha"
+  },
+  "config": {
+    "port": 8000
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benjycui/react-github-button.git"
+  },
+  "keywords": [
+    "react",
+    "github",
+    "button"
+  ],
+  "author": "Benjy Cui",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benjycui/react-github-button/issues"
+  },
+  "homepage": "https://github.com/benjycui/react-github-button#readme",
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "rc-tools": "^5.5.11",
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0",
+    "react-probe": "~0.0.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  }
+}

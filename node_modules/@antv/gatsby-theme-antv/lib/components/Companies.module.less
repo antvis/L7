@@ -1,0 +1,71 @@
+@import './mixins';
+
+.wrapper {
+  display: flex;
+  margin: auto;
+  position: relative;
+  flex-direction: column;
+  padding: 0;
+  height: auto;
+  overflow-x: hidden;
+  .content {
+    height: 100%;
+    margin-bottom: 5%;
+    position: relative;
+    .container1440;
+    padding-left: 4.5%;
+  }
+  .title {
+    font-size: 2.714em;
+    font-weight: 500;
+    margin: 118px 0 0 0;
+    position: relative;
+    height: min-content;
+    color: rgba(0, 0, 0, 1);
+  }
+  .slicer {
+    width: 32px;
+    height: 6px;
+    background: linear-gradient(145deg, #c65aff, #248dff);
+    margin-top: 64px;
+  }
+
+  .companiesContainer {
+    position: relative;
+    margin: auto;
+    margin-top: 52px;
+    .company {
+      margin-bottom: 20px;
+      .companyimg {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    .title {
+      font-size: 1.9rem;
+      margin: 98px 0 0 0;
+    }
+    .slicer {
+      width: 25px;
+      height: 6px;
+      margin: 44px 0 44px 0;
+    }
+    .content {
+      margin-left: 4.27%;
+      width: 91.64%;
+      max-width: 91.64%;
+    }
+    .companiesContainer {
+      margin-top: 50px;
+      .company {
+        .companyimg {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

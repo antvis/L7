@@ -1,0 +1,43 @@
+{
+  "name": "corejs-upgrade-webpack-plugin",
+  "version": "2.2.0",
+  "description": "a webpack plugin that transforms core-js v2 paths to core-js v3 paths",
+  "keywords": [
+    "core-js",
+    "path",
+    "resolve",
+    "transform",
+    "webpack"
+  ],
+  "homepage": "https://github.com/ndelangen/corejs-upgrade-webpack-plugin",
+  "bugs": {
+    "url": "https://github.com/ndelangen/corejs-upgrade-webpack-plugin/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ndelangen/corejs-upgrade-webpack-plugin.git"
+  },
+  "license": "MIT",
+  "author": "Norbert de Langen <ndelangen@me.com>",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src -d dist --extensions '.ts'",
+    "generate-types": "tsc --emitDeclarationOnly --declaration src/index.ts --esModuleInterop --outDir dist",
+    "prepublish": "npm run build && npm run generate-types",
+    "test": "jest"
+  },
+  "dependencies": {
+    "resolve-from": "^5.0.0",
+    "webpack": "^4.38.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "@babel/preset-typescript": "^7.3.0",
+    "@types/webpack": "^4.32.0",
+    "eslint": "^6.1.0",
+    "jest": "^24.8.0",
+    "typescript": "^3.5.3"
+  }
+}

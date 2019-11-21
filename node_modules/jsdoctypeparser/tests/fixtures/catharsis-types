@@ -1,0 +1,130 @@
+{!(number|boolean)}
+{!Object}
+{!number|!string}
+{!{myNum: number}}
+{"foo.bar.baz"}
+{'foo.bar.baz'}
+{(Array.<string>|Object.<string, ?>)}
+{(Array|Object.<string, ?>)}
+{(Element|Object|Document|Object.<string, (string|function(!jQuery.event=))>)=}
+{(Error|function(): Error)}
+{(Object|undefined)}
+{(jQuerySelector|Element|Object|Array.<Element>|jQuery|string|function())=}
+{(number|Window|goog.ui.Menu)}
+{(number|boolean)=}
+{(number|boolean)}
+{*}
+{...!Object}
+{...(number|boolean)}
+{...*}
+{...?number}
+{...?}
+{...Array.<string>}
+{...Object!=}
+{...Object!}
+{...function(string, boolean): boolean}
+{...function(string, boolean)}
+{...null}
+{...number?=}
+{...number?}
+{...number}
+{...string|string[]}
+{...undefined}
+{...{myNum: number}}
+{?(number|boolean)}
+{?number}
+{?{myNum: number}}
+{?}
+{Array.<?>}
+{Array.<Foo>}
+{Array.<string>}
+{Array.<{length}>}
+{Array<string>}
+{My-1st-Class}
+{MyClass#myMember#yourMember~theirMember}
+{MyClass#myMember}
+// {MyClass()}
+// {MyClass(...foo)}
+// {MyClass(2)}
+// {MyClass(23456)}
+// {MyClass(a)}
+// {MyClass(abcde)}
+// {MyClass~myMember}
+{Object!=}
+{Object!}
+{Object.<Array.<(boolean|{myKey: Error})>>}
+{Object.<boolean, string>}
+{Object.<string, number>}
+// {Object=!}
+{Object=}
+{Promise.<string>}
+{Window}
+{boolean}
+{foo."bar.baz".qux}
+{foo.'bar.baz'.qux}
+{foo.Promise.<string>}
+{forsooth}
+{function(): (number|string)}
+{function(): number}
+{function()}
+// {function(...[*])}
+// {function(...[null])}
+// {function(...[number]): boolean}
+// {function(...[undefined])}
+{function(...foo)}
+// {function(new:Array, ...[*]): Array}
+{function(new:Boolean, *=): boolean}
+// {function(new:Master, this:Everyone, string, goog.ui.Menu, Array.<Object>)}
+// {function(new:foo.bar, this: foo.baz, string): boolean}
+{function(new:goog.ui.Menu)}
+{function(new:goog.ui.Menu, string)}
+// {function(new:goog.ui.Menu, this:goog.ui)}
+{function(string)=}
+// REASON: The syntax ...[foo] is not supported
+// {function(string, ...[number]): number}
+{function(string, boolean): boolean}
+{function(string, boolean)}
+{function(this:(Array|Date)): (number|string)}
+{function(this:Date, number): (boolean|number|string)}
+{function(this:Object): (number|string)}
+{function(this:goog.ui.Menu)}
+{function(this:goog.ui.Menu, string)}
+{function(this:my.namespace.Class, my.Class)=}
+{function[]}
+{functional}
+{function}
+{goog.ui.Menu}
+{module:foo-bar/baz~Qux}
+{module:foo/bar/baz~Qux}
+{myObj."#weirdProp".foo}
+{myObj."myProp".foo}
+{myObj.'myProp'.foo}
+// REASON: This is not valid JavaScript identifier
+// {myObj.12345}
+{null}
+// REASON: "?" must be placed before "="
+// {number=?}
+{number=}
+{number?=}
+{number?}
+{number[][][]}
+{number[][]}
+{number|string}
+{string[]}
+{this}
+{undefined}
+// REASON: Variable record key syntax is not supported
+// {{(number|boolean|string): number}}
+{{0: string}}
+// {{Array.<string>: number}}
+{{class: string}}
+{{continue: string}}
+{{foo:function()}}
+{{myArray: Array.<string>}}
+{{myKey: (number|boolean|string)}}
+{{myNum: number, myObject}}
+{{myNum: number}=}
+{{myNum: number}}
+{{true: string}}
+{{undefinedHTML: (string|undefined)}}
+{{}}

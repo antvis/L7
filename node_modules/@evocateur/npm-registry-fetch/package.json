@@ -1,0 +1,65 @@
+{
+  "name": "@evocateur/npm-registry-fetch",
+  "version": "4.0.0",
+  "description": "Fetch-based http client for use with npm registry APIs",
+  "main": "index.js",
+  "files": [
+    "*.js",
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prerelease": "npm t",
+    "postrelease": "npm publish && git push --follow-tags",
+    "pretest": "standard",
+    "release": "standard-version -s",
+    "test": "tap -J --coverage test/*.js",
+    "update-coc": "weallbehave -o . && git add CODE_OF_CONDUCT.md && git commit -m 'docs(coc): updated CODE_OF_CONDUCT.md'",
+    "update-contrib": "weallcontribute -o . && git add CONTRIBUTING.md && git commit -m 'docs(contributing): updated CONTRIBUTING.md'"
+  },
+  "repository": "https://github.com/evocateur/npm-registry-fetch",
+  "keywords": [
+    "npm",
+    "registry",
+    "fetch"
+  ],
+  "author": {
+    "name": "Kat Marchán",
+    "email": "kzm@sykosomatic.org",
+    "twitter": "maybekatz"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "JSONStream": "^1.3.4",
+    "bluebird": "^3.5.1",
+    "figgy-pudding": "^3.4.1",
+    "lru-cache": "^5.1.1",
+    "make-fetch-happen": "^5.0.0",
+    "npm-package-arg": "^6.1.0",
+    "safe-buffer": "^5.1.2"
+  },
+  "devDependencies": {
+    "cacache": "^12.0.0",
+    "get-stream": "^4.0.0",
+    "mkdirp": "^0.5.1",
+    "nock": "^9.4.3",
+    "npmlog": "^4.1.2",
+    "rimraf": "^2.6.2",
+    "ssri": "^6.0.0",
+    "standard": "^11.0.1",
+    "standard-version": "^4.4.0",
+    "tap": "^12.0.1",
+    "weallbehave": "^1.2.0",
+    "weallcontribute": "^1.0.8"
+  },
+  "config": {
+    "nyc": {
+      "exclude": [
+        "node_modules/**",
+        "test/**"
+      ]
+    }
+  }
+}

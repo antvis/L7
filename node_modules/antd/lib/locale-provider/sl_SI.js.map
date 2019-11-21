@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/sl_SI.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/sl_SI';\nexport default locale;\n"],"file":"sl_SI.js"}

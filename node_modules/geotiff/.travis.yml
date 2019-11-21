@@ -1,0 +1,19 @@
+language: node_js
+dist: trusty
+node_js:
+- '9.11'
+before_install:
+- sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+- sudo apt-get update
+- sudo apt-get install -y gdal-bin python-gdal imagemagick libtiff-tools
+before_script:
+- mkdir -p test/data
+- pushd test/data
+- sh setup_data.sh
+- popd
+script:
+- npm test
+notifications:
+  email: false
+  slack:
+    secure: QrSzS55Gj5HRNLCijnhf10cKXn0Pib2IttSI0ZeNblJPTL87ddKTFMkqAOj/HJBiYdoVVl+L+ZMzx+5MjvZRcC7/YZ0btGsLcAovdB8c8N02Jnyc0Bm8rIVjX0I+oRBhqCl80Dcxari9fPhPh7XS3xxgJWOs3Aedi5rB/4Fd9CEB0tKoUb/hWTLtN8OsgHfaoWjSR/BFmvEV0EcXSKsTnrj7mJSE1dlLMIzxNScTpBF3RoEaTYrhZdHauHNBCuFc3tmuwp6K/x4NkwaydWo4CsV5vkl/0Q6WTKbh2CHJ5NGRP/3k9Kr9g+pD3XjxrqfMOUguf+a34Zhqy+prLuRbyX0q+T3uLYzmAf2BrfH69HKPgxTKF3iYs3ZVpoOBylv3xF7BMpTk5VwbEIfyprj51AzpLZbc3xG5GkK4gfXxd2TKypQTnjUVijyMBk47ffbSHPWsAKryxJxRonvHCdUYrbldUWri8KiyxN/nOB/zohkHzuCq60y6VowBY0CtDdHjZMLOMehtAuJsyw2+PEiIbLy7BoTgtOr7NYJwddnJhPRBxrre9DfDDL31UxkbR5/+BxfuEHYd8uAXe4qfyhoVtRFFLBSt/6UWdQP6Chyka9/BUyYHxaYRkSBNkId3AuppA7XoGeYzBWu3C9pXhfuuuVxSuCX2aj1iCS5cwFyq3rg=

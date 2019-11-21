@@ -1,0 +1,50 @@
+{
+  "name": "p-waterfall",
+  "version": "1.0.0",
+  "description": "Run promise-returning & async functions in series, each passing its result to the next",
+  "license": "MIT",
+  "repository": "sindresorhus/p-waterfall",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "promise",
+    "waterfall",
+    "series",
+    "serial",
+    "sequence",
+    "sequential",
+    "ordered",
+    "task",
+    "tasks",
+    "array",
+    "collection",
+    "iterable",
+    "iterator",
+    "async",
+    "await",
+    "promises",
+    "bluebird"
+  ],
+  "dependencies": {
+    "p-reduce": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "xo": "*"
+  },
+  "xo": {
+    "esnext": true
+  }
+}

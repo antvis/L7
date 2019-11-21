@@ -1,0 +1,1 @@
+{"version":3,"sources":["button/index.jsx"],"names":["Button","ButtonGroup","Group"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,UAAnB;AACA,OAAOC,WAAP,MAAwB,gBAAxB;AACAD,MAAM,CAACE,KAAP,GAAeD,WAAf;AACA,eAAeD,MAAf","sourcesContent":["import Button from './button';\nimport ButtonGroup from './button-group';\nButton.Group = ButtonGroup;\nexport default Button;\n"],"file":"index.js"}

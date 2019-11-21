@@ -1,0 +1,42 @@
+// control might be better named button now.
+// It's used on both real buttons (play button)
+// and div buttons (menu buttons)
+.video-react .video-react-control {
+  outline: none;
+  position: relative;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 4em;
+  @include flex(none);
+
+  &:before {
+    font-size: 1.8em;
+    line-height: 1.67;
+
+    @extend %video-react-icon-default;
+  }
+
+  // Replacement for focus outline
+  &:focus:before,
+  &:hover:before,
+  &:focus {
+    text-shadow: 0em 0em 1em $video-react-primary-foreground-color,
+      0em 0em 0.5em $video-react-primary-foreground-color;
+  }
+
+}
+
+
+
+// Hide control text visually, but have it available for screenreaders
+.video-react .video-react-control-text {
+  @include hide-visually;
+}
+
+// IE 8 + 9 Support
+.video-react-no-flex .video-react-control {
+  display: table-cell;
+  vertical-align: middle;
+}

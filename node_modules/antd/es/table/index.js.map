@@ -1,0 +1,1 @@
+{"version":3,"sources":["table/index.jsx"],"names":["Table"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,SAAlB;AACA,eAAeA,KAAf","sourcesContent":["import Table from './Table';\nexport default Table;\n"],"file":"index.js"}

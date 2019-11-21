@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/id_ID.jsx"],"names":["id_ID"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import id_ID from '../../date-picker/locale/id_ID';\nexport default id_ID;\n"],"file":"id_ID.js"}

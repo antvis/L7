@@ -1,0 +1,40 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "rules": {
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double", { "avoidEscape": true }],
+    "semi": ["error", "never"],
+    "strict": "off",
+    "keyword-spacing": "error",
+    "indent": [
+      "error",
+      2,
+      { "SwitchCase": 1, "ignoredNodes": ["ConditionalExpression"] }
+    ],
+    "no-extra-semi": "off",
+    "no-unexpected-multiline": "error",
+    "no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "no-implicit-coercion": "error",
+    "no-multi-spaces": "error",
+    "func-call-spacing": "error",
+    "no-warning-comments": "warn",
+    "no-console": 1,
+    "no-case-declarations": "off",
+    "no-constant-condition": "off",
+    "object-curly-spacing": ["error", "always"],
+    "space-in-parens": ["error", "never"],
+    "array-bracket-spacing": ["error", "never"],
+    "prefer-spread": 1,
+    "prefer-template": 1
+  }
+}

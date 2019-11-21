@@ -1,0 +1,156 @@
+
+.video-react .video-react-progress-control {
+  @include flex(auto);
+  @include display-flex(center);
+  min-width: 4em;
+}
+
+.video-react-live .video-react-progress-control {
+  display: none;
+}
+
+// Box containing play and load progresses. Also acts as seek scrubber.
+.video-react .video-react-progress-holder {
+  @include flex(auto);
+  @include transition(all 0.2s);
+  height: 0.3em;
+}
+
+// We need an increased hit area on hover
+.video-react .video-react-progress-control:hover .video-react-progress-holder {
+  font-size: 1.666666666666666666em;
+}
+
+/* If we let the font size grow as much as everything else, the current time tooltip ends up
+ ginormous. If you'd like to enable the current time tooltip all the time, this should be disabled
+ to avoid a weird hitch when you roll off the hover. */
+
+// Also show the current time tooltip
+.video-react .video-react-progress-control:hover .video-react-time-tooltip,
+.video-react .video-react-progress-control:hover .video-react-mouse-display:after,
+.video-react .video-react-progress-control:hover .video-react-play-progress:after {
+  visibility: visible;
+  font-size: 0.6em;
+}
+
+// Progress Bars
+.video-react .video-react-progress-holder .video-react-play-progress,
+.video-react .video-react-progress-holder .video-react-load-progress,
+.video-react .video-react-progress-holder .video-react-tooltip-progress-bar,
+.video-react .video-react-progress-holder .video-react-load-progress div {
+  position: absolute;
+  display: block;
+  height: 0.3em;
+  margin: 0;
+  padding: 0;
+  // updated by javascript during playback
+  width: 0;
+  // Needed for IE6
+  left: 0;
+  top: 0;
+}
+
+.video-react .video-react-play-progress {
+  background-color: $video-react-primary-foreground-color;
+  @extend .video-react-icon;
+  @extend .video-react-icon-circle;
+
+  // Progress handle
+  &:before {
+    position: absolute;
+    top: -0.333333333333333em;
+    right: -0.5em;
+    font-size: 0.9em;
+  }
+}
+
+// Current Time "tooltip"
+// By default this is hidden and only shown when hovering over the progress control
+.video-react .video-react-time-tooltip,
+.video-react .video-react-mouse-display:after,
+.video-react .video-react-play-progress:after {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: -3.4em;
+  right: -1.9em;
+  font-size: 0.9em;
+  color: #000;
+  content: attr(data-current-time);
+  padding: 6px 8px 8px 8px;
+  @include background-color-with-alpha(#fff, 0.8);
+  @include border-radius(0.3em);
+}
+
+.video-react .video-react-time-tooltip,
+.video-react .video-react-play-progress:before,
+.video-react .video-react-play-progress:after {
+  z-index: 1;
+}
+
+.video-react .video-react-progress-control .video-react-keep-tooltips-inside:after {
+  display: none;
+}
+
+.video-react .video-react-load-progress {
+  // For IE8 we'll lighten the color
+  background: lighten($video-react-secondary-background-color, 25%);
+  // Otherwise we'll rely on stacked opacities
+  background: rgba($video-react-secondary-background-color, $video-react-secondary-background-transparency);
+}
+
+// there are child elements of the load progress bar that represent the
+// specific time ranges that have been buffered
+.video-react .video-react-load-progress div {
+  // For IE8 we'll lighten the color
+  background: lighten($video-react-secondary-background-color, 50%);
+  // Otherwise we'll rely on stacked opacities
+  background: rgba($video-react-secondary-background-color, 0.75);
+}
+
+.video-react.video-react-no-flex .video-react-progress-control {
+  width: auto;
+}
+
+.video-react .video-react-time-tooltip {
+  display: inline-block;
+  height: 2.4em;
+  position: relative;
+  float: right;
+  right: -1.9em;
+}
+
+.video-react .video-react-tooltip-progress-bar {
+  visibility: hidden;
+}
+
+.video-react .video-react-progress-control .video-react-mouse-display {
+  display: none;
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  background-color: #000;
+  z-index: 1;
+}
+.video-react-no-flex .video-react-progress-control .video-react-mouse-display {
+  z-index: 0;
+}
+.video-react .video-react-progress-control:hover .video-react-mouse-display {
+  display: block;
+}
+.video-react.video-react-user-inactive .video-react-progress-control .video-react-mouse-display,
+.video-react.video-react-user-inactive .video-react-progress-control .video-react-mouse-display:after {
+  visibility: hidden;
+  opacity: 0;
+  $trans: visibility 1.0s, opacity 1.0s;
+  @include transition($trans);
+}
+.video-react.video-react-user-inactive.video-react-no-flex .video-react-progress-control .video-react-mouse-display,
+.video-react.video-react-user-inactive.video-react-no-flex .video-react-progress-control .video-react-mouse-display:after {
+  display: none;
+}
+.video-react .video-react-mouse-display .video-react-time-tooltip,
+.video-react .video-react-progress-control .video-react-mouse-display:after {
+  color: #fff;
+  @include background-color-with-alpha(#000, 0.8);
+}

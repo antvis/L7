@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage>
+  <sources>
+    <source>ios</source>
+  </sources>
+  <packages>
+    <package name="Headers">
+      <classes>
+        <class filename="NSException.h" name="NSException.h">
+          <methods />
+          <lines>
+            <line branch="false" hits="0" number="102" />
+            <line branch="false" hits="0" number="103" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="Headers2">
+      <classes>
+        <class filename="NSException.h" name="NSException.h" />
+      </classes>
+    </package>
+  </packages>
+</coverage>

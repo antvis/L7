@@ -1,0 +1,69 @@
+@import '~antd/es/style/themes/default.less';
+
+ul.tabs,
+h3.title {
+  font-size: 24px !important;
+  margin: 40px 0 24px !important;
+  line-height: 32px;
+}
+
+ul.tabs {
+  padding: 0;
+  list-style: none;
+
+  > li {
+    padding: 0 !important;
+    margin-right: 36px;
+    margin-left: 0 !important;
+    list-style: none !important;
+    display: inline-block;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+
+    a {
+      color: #697b8c;
+      position: relative;
+      z-index: 1;
+    }
+
+    &:hover a {
+      color: #274057;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      height: 0;
+      bottom: -3px;
+      background-image: transparent;
+      transition: all 3s;
+      background-image: linear-gradient(45deg, #b67aff 0%, #c4a1ff 100%);
+    }
+
+    &.active a {
+      color: @text-color;
+      font-weight: 500;
+    }
+
+    &.active:after {
+      height: 8px;
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  ul.tabs {
+  }
+}

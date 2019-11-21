@@ -1,0 +1,28 @@
+{
+  "name": "workbox-core",
+  "version": "4.3.1",
+  "license": "MIT",
+  "author": "Google's Web DevRel Team",
+  "description": "This module is used by a number of the other Workbox modules to share common code.",
+  "repository": "googlechrome/workbox",
+  "bugs": "https://github.com/googlechrome/workbox/issues",
+  "homepage": "https://github.com/GoogleChrome/workbox",
+  "keywords": [
+    "workbox",
+    "workboxjs",
+    "service worker",
+    "sw"
+  ],
+  "scripts": {
+    "build": "gulp build-packages --package workbox-core",
+    "version": "npm run build",
+    "prepare": "npm run build"
+  },
+  "workbox": {
+    "browserNamespace": "workbox.core",
+    "packageType": "browser"
+  },
+  "main": "build/workbox-core.prod.js",
+  "module": "index.mjs",
+  "gitHead": "194cdeb63d5abb21490f88f01f02f4bcf7e6d54b"
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/ja_JP.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/ja_JP';\nexport default locale;\n"],"file":"ja_JP.js"}

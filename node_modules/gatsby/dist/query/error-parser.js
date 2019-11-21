@@ -1,0 +1,78 @@
+"use strict";
+
+exports.__esModule = true;
+exports.locInGraphQlToLocInFile = exports.default = void 0;
+
+const errorParser = ({
+  message,
+  filePath,
+  location
+}) => {
+  // Handle specific errors from Relay. A list of regexes to match certain
+  // errors to specific callbacks
+  const handlers = [{
+    regex: /Field "(.+)" must not have a selection since type "(.+)" has no subfields/m,
+    cb: match => {
+      return {
+        id: `85909`,
+        context: {
+          sourceMessage: match[0],
+          fieldName: match[1],
+          typeName: match[2]
+        }
+      };
+    }
+  }, {
+    regex: /Encountered\s\d\serror.*:\n\s*(.*)/m,
+    cb: match => {
+      return {
+        id: `85907`,
+        context: {
+          message: match[1]
+        }
+      };
+    }
+  }, // Match anything with a generic catch-all error handler
+  {
+    regex: /[\s\S]*/gm,
+    cb: match => {
+      return {
+        id: `85901`,
+        context: {
+          sourceMessage: match[0]
+        }
+      };
+    }
+  }];
+  let structured;
+
+  for (const {
+    regex,
+    cb
+  } of handlers) {
+    let matched = message.match(regex);
+
+    if (matched) {
+      structured = Object.assign({
+        filePath,
+        location
+      }, cb(matched));
+      break;
+    }
+  }
+
+  return structured;
+};
+
+var _default = errorParser;
+exports.default = _default;
+
+const locInGraphQlToLocInFile = (locationOfGraphQLDocInSourceFile, graphqlLocation) => {
+  return {
+    line: graphqlLocation.line + locationOfGraphQLDocInSourceFile.start.line - 1,
+    column: (graphqlLocation.line === 1 ? locationOfGraphQLDocInSourceFile.start.column : 0) + graphqlLocation.column
+  };
+};
+
+exports.locInGraphQlToLocInFile = locInGraphQlToLocInFile;
+//# sourceMappingURL=error-parser.js.map

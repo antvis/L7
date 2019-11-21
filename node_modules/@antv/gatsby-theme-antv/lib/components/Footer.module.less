@@ -1,0 +1,37 @@
+@import '~antd/es/style/themes/default.less';
+@import './mixins';
+
+.footer {
+  font-family: Avenir, @font-family;
+
+  :global(.rc-footer-container),
+  :global(.rc-footer-bottom-container) {
+    .container1440;
+  }
+
+  .description {
+    opacity: 0.6;
+    font-weight: normal;
+    margin-left: 0.5em;
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+
+    :global(.anticon),
+    a {
+      margin-right: 8px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}
+
+@media only screen and (max-width: 767.99px) {
+  .footer {
+    .bottom {
+      display: block;
+    }
+  }
+}

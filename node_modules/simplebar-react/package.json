@@ -1,0 +1,51 @@
+{
+  "name": "simplebar-react",
+  "version": "1.2.3",
+  "description": "React component for SimpleBar",
+  "files": [
+    "dist",
+    "../../README.md"
+  ],
+  "author": "Adrien Denat",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grsmto/simplebar.git",
+    "directory": "packages/simplebar-react"
+  },
+  "main": "dist/simplebar-react.js",
+  "module": "dist/simplebar-react.esm.js",
+  "types": "dist/simplebar-react.d.ts",
+  "bugs": "https://github.com/grsmto/simplebar/issues",
+  "homepage": "https://grsmto.github.io/simplebar/",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest",
+    "version": "yarn build"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "simplebar": "^4.2.3"
+  },
+  "peerDependencies": {
+    "react": "^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0",
+    "react-dom": "^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0"
+  },
+  "devDependencies": {
+    "react-test-renderer": "^16.3.2",
+    "rollup-plugin-copy": "^3.0.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ]
+  },
+  "gitHead": "0449db62f6b70164a2ecc402c0d3422560f752c3"
+}

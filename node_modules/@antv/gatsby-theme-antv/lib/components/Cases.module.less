@@ -1,0 +1,202 @@
+@import './mixins';
+.wrapper {
+  height: 667px;
+  margin: auto;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  background: rgba(250, 251, 252, 1);
+  .slider {
+    .container1440;
+  }
+  .appWrapper {
+    margin-left: 5%;
+    margin-bottom: 5%;
+    width: 83.88%;
+    height: 100%;
+    overflow-y: hidden;
+    display: flex;
+    .appLeft {
+      margin-left: 3.06%;
+      width: 27%;
+      margin-top: 8%;
+      height: 613px;
+      .appContent {
+        height: fit-content;
+        position: relative;
+        .appLogo {
+          width: 80px;
+        }
+        .appTitle {
+          font-size: 1.2857em;
+          font-weight: 500;
+          margin: 48px 0 0 0;
+          position: relative;
+          height: min-content;
+          color: rgba(0, 0, 0, 1);
+          user-select: text;
+        }
+        .appDescription {
+          color: rgba(105, 123, 140, 0.6);
+          font-size: 1em;
+          margin: 16px 0 0 0;
+          user-select: text;
+        }
+        .detailWrapper {
+          margin: 20px 0 0 0;
+          .detail {
+            color: rgba(47, 87, 235, 1);
+            font-size: 1em;
+          }
+        }
+      }
+      .buttons {
+        cursor: pointer;
+        position: absolute;
+        display: flex;
+        bottom: 30%;
+        height: 100px;
+        .controlButton {
+          width: 47px;
+          height: 47px;
+          line-height: 47px;
+          border: 1px solid #a3b1bf;
+          transition: all 0.3s;
+          &:hover {
+            border: 1px solid #ced4d9;
+            fill: #000000;
+          }
+          &:hover :only-child {
+            color: #ced4d9;
+          }
+          .controlButtonIcon {
+            width: 100%;
+            color: #a3b1bf;
+            transition: all 0.3s;
+          }
+        }
+        .nextButton {
+          width: 47px;
+          margin-left: -1px;
+          background-image: url('https://gw.alipayobjects.com/zos/basement_prod/27ce6e21-bbb6-4490-8326-43483ac39e0b.svg');
+          background-size: 100% 100%;
+          &:hover {
+            background-image: url('https://gw.alipayobjects.com/zos/basement_prod/4d1f0d0a-4e56-4f21-a9aa-06b2f8c3e18e.svg');
+          }
+        }
+      }
+    }
+  }
+}
+.appTeaser {
+  position: absolute;
+  height: 667px;
+  right: 0;
+}
+
+.slider {
+  height: 100%;
+  :global {
+    .slick-dots {
+      display: none;
+    }
+  }
+}
+
+:global {
+  .slick-current {
+    z-index: 2 !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .wrapper {
+    .appWrapper {
+      .appLeft {
+        width: 270px;
+      }
+    }
+  }
+  .appTeaser {
+    position: absolute;
+    width: 857px;
+    left: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    width: 100%;
+    height: fit-content;
+    .slider {
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .appWrapper {
+      width: 100%;
+      padding-bottom: 150px;
+      margin-left: 0;
+      flex-direction: column;
+      text-align: center;
+      .appLeft {
+        height: 286px;
+        margin-left: 4.27%;
+        width: 91.47%;
+        margin-top: 64px;
+        .appContent {
+          width: 90%;
+          margin-left: 5%;
+          .appLogo {
+            position: absolute;
+            top: -36px;
+            left: 50%;
+            transform: translateX(-40px);
+          }
+          .appTitle {
+            padding-top: 76px;
+          }
+          .detailWrapper {
+            margin-top: 40px;
+            .detail {
+              font-size: 1em;
+            }
+          }
+        }
+        .buttons {
+          display: none;
+          position: absolute;
+          bottom: 60px;
+          left: 50%;
+          height: 100px;
+          transform: translateX(-47px);
+          width: 92%;
+        }
+      }
+      .appTeaser {
+        left: 0;
+        margin-top: 60px;
+        margin-bottom: 40px;
+        margin-left: 4.06%;
+        width: 91.47%;
+        height: auto;
+        position: relative;
+      }
+    }
+  }
+
+  .slider {
+    height: 100%;
+    :global {
+      .slick-dots {
+        display: block;
+        bottom: 100px;
+      }
+      .slick-dots li.slick-active button:before {
+        opacity: 1;
+        color: #1890ff;
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["time-picker/locale/he_IL.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'בחר שעה',\n};\nexport default locale;\n"],"file":"he_IL.js"}

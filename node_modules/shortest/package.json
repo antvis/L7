@@ -1,0 +1,21 @@
+{
+  "name": "shortest",
+  "version": "0.0.0",
+  "description": "given an input character set, create an iterator function that returns the next shortest string available",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisdickinson/shortest.git"
+  },
+  "keywords": [
+    "radix",
+    "conversion",
+    "shortest",
+    "identifier"
+  ],
+  "author": "Chris Dickinson <chris@neversaw.us>",
+  "license": "MIT"
+}

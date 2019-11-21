@@ -1,0 +1,32 @@
+import { GetComponentProps, LegacyFunction, Key, ColumnType, TableStore, FixedType, RenderNode, Cell, TableComponents } from './interface';
+export interface TableRowProps<ValueType> {
+    onRow?: GetComponentProps<ValueType>;
+    onRowClick?: LegacyFunction<ValueType>;
+    onRowDoubleClick?: LegacyFunction<ValueType>;
+    onRowContextMenu?: LegacyFunction<ValueType>;
+    onRowMouseEnter?: LegacyFunction<ValueType>;
+    onRowMouseLeave?: LegacyFunction<ValueType>;
+    record?: ValueType;
+    prefixCls?: string;
+    onHover?: (hovered: boolean, rowKey: Key) => void;
+    columns?: ColumnType[];
+    height?: string | number;
+    index?: number;
+    rowKey: Key;
+    className?: string;
+    indent?: number;
+    indentSize?: number;
+    hasExpandIcon?: (index: number) => boolean;
+    hovered: boolean;
+    visible: boolean;
+    store: TableStore;
+    fixed?: FixedType;
+    renderExpandIcon?: RenderNode;
+    renderExpandIconCell?: (cells: Cell[]) => void;
+    components?: TableComponents;
+    expandedRow?: boolean;
+    isAnyColumnsFixed?: boolean;
+    ancestorKeys: Key[];
+}
+declare const _default: any;
+export default _default;

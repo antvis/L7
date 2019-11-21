@@ -1,0 +1,1 @@
+{"version":3,"sources":["statistic/index.jsx"],"names":["Statistic","Countdown"],"mappings":"AAAA,OAAOA,SAAP,MAAsB,aAAtB;AACA,OAAOC,SAAP,MAAsB,aAAtB;AACAD,SAAS,CAACC,SAAV,GAAsBA,SAAtB;AACA,eAAeD,SAAf","sourcesContent":["import Statistic from './Statistic';\nimport Countdown from './Countdown';\nStatistic.Countdown = Countdown;\nexport default Statistic;\n"],"file":"index.js"}

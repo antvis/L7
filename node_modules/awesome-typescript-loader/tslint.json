@@ -1,0 +1,69 @@
+{
+	"exclude": [
+		"node_modules"
+	],
+	"rules": {
+		"jsx-boolean-value": false,
+		"jsx-curly-spacing": false,
+		"jsx-no-multiline-js": false,
+		"jsx-wrap-multiline": false,
+		"jsx-alignment": false,
+		"jsx-no-lambda": true,
+		"jsx-no-string-ref": false,
+		"class-name": true,
+		"curly": true,
+		"quotemark": [
+			true,
+			"single",
+			"jsx-double",
+			"avoid-escape"
+		],
+		"max-line-length": [
+			true,
+			120
+		],
+		"member-ordering": [
+			true,
+			"statics-first"
+		],
+		"new-parens": true,
+		"no-arg": true,
+		"no-consecutive-blank-lines": true,
+		"no-console": [
+			true,
+			"time",
+			"timeEnd"
+		],
+		"no-debugger": true,
+		"no-eval": true,
+		"no-internal-module": true,
+		"no-mergeable-namespace": true,
+		"no-switch-case-fall-through": true,
+		"no-trailing-whitespace": true,
+		"no-unused-variable": [
+			true,
+			"react"
+		],
+		"no-var-keyword": true,
+		"one-variable-per-declaration": [
+			true,
+			"ignore-for-loop"
+		],
+		"semicolon": false,
+		"triple-equals": [
+			true,
+			"allow-null-check"
+		],
+		"typedef-whitespace": [
+			true
+		],
+		"use-isnan": true,
+		"whitespace": [
+			true,
+			"check-branch",
+			"check-decl",
+			"check-operator",
+			"check-type"
+		]
+	}
+}

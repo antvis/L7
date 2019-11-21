@@ -1,0 +1,11 @@
+node_modules
+scripts
+test
+typings
+smildfile.js
+tsconfig.json
+tslint.json
+typings.json
+coverage
+.git
+.idea

@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/ta_IN.jsx"],"names":["ta_IN"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import ta_IN from '../../date-picker/locale/ta_IN';\nexport default ta_IN;\n"],"file":"ta_IN.js"}

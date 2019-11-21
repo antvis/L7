@@ -1,0 +1,44 @@
+{
+	"name": "multimatch",
+	"version": "3.0.0",
+	"description": "Extends `minimatch.match()` with support for multiple patterns",
+	"license": "MIT",
+	"repository": "sindresorhus/multimatch",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"test": "xo && ava"
+	},
+	"files": [
+		"index.js"
+	],
+	"keywords": [
+		"expand",
+		"find",
+		"glob",
+		"globbing",
+		"globs",
+		"match",
+		"matcher",
+		"minimatch",
+		"pattern",
+		"patterns",
+		"wildcard"
+	],
+	"dependencies": {
+		"array-differ": "^2.0.3",
+		"array-union": "^1.0.2",
+		"arrify": "^1.0.1",
+		"minimatch": "^3.0.4"
+	},
+	"devDependencies": {
+		"ava": "^1.0.1",
+		"xo": "^0.23.0"
+	}
+}

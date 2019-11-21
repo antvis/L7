@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/helpers/isPlainObject.js"],"names":["isPlainObject"],"mappings":";;;;;;;AAAA;;;;eAEeA,yB","sourcesContent":["import isPlainObject from 'prop-types-exact/build/helpers/isPlainObject';\n\nexport default isPlainObject;\n"],"file":"isPlainObject.js"}

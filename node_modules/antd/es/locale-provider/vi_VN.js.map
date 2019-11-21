@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/vi_VN.jsx"],"names":["locale"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,iBAAnB;AACA,eAAeA,MAAf","sourcesContent":["import locale from '../locale/vi_VN';\nexport default locale;\n"],"file":"vi_VN.js"}

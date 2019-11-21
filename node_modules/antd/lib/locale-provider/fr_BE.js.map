@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/fr_BE.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/fr_BE';\nexport default locale;\n"],"file":"fr_BE.js"}

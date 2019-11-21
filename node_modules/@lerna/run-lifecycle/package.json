@@ -1,0 +1,40 @@
+{
+  "name": "@lerna/run-lifecycle",
+  "version": "3.16.2",
+  "description": "An internal Lerna tool",
+  "keywords": [
+    "lerna",
+    "utils"
+  ],
+  "homepage": "https://github.com/lerna/lerna/tree/master/utils/run-lifecycle#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Daniel Stockman",
+    "url": "https://github.com/evocateur"
+  },
+  "files": [
+    "run-lifecycle.js"
+  ],
+  "main": "run-lifecycle.js",
+  "engines": {
+    "node": ">= 6.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna/lerna.git",
+    "directory": "utils/run-lifecycle"
+  },
+  "scripts": {
+    "test": "echo \"Run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@lerna/npm-conf": "3.16.0",
+    "figgy-pudding": "^3.5.1",
+    "npm-lifecycle": "^3.1.2",
+    "npmlog": "^4.1.2"
+  },
+  "gitHead": "d4b1a0e48d1ff241fafa268dbe57256e10f2cdc8"
+}

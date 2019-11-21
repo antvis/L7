@@ -1,0 +1,14 @@
+{
+  "name": "babel-plugin-transform-inline-consecutive-adds",
+  "version": "0.4.3",
+  "description": "This plugin inlines consecutive property assignments, array pushes, etc.",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "homepage": "https://github.com/babel/minify#readme",
+  "bugs": "https://github.com/babel/minify/issues",
+  "license": "MIT",
+  "author": "shinew",
+  "main": "lib/index.js",
+  "repository": "https://github.com/babel/minify/tree/master/packages/babel-plugin-transform-inline-consecutive-adds"
+}

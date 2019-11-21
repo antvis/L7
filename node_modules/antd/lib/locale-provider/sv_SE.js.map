@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/sv_SE.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/sv_SE';\nexport default locale;\n"],"file":"sv_SE.js"}

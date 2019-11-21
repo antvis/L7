@@ -1,0 +1,47 @@
+{
+  "name": "dom-scroll-into-view",
+  "version": "1.2.1",
+  "description": "scroll dom node into view automatically",
+  "keywords": [
+    "dom",
+    "scrollIntoView"
+  ],
+  "homepage": "http://github.com/yiminghe/dom-scroll-into-view",
+  "author": "yiminghe@gmail.com",
+  "files": [
+    "lib"
+  ],
+  "main": "./lib/index",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:yiminghe/dom-scroll-into-view.git"
+  },
+  "bugs": {
+    "url": "http://github.com/yiminghe/dom-scroll-into-view/issues"
+  },
+  "license": "MIT",
+  "config": {
+    "port": 8000
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub",
+    "lint": "rc-tools run lint",
+    "karma": "rc-tools run karma",
+    "saucelabs": "rc-tools run saucelabs",
+    "test": "rc-tools run test",
+    "chrome-test": "rc-tools run chrome-test",
+    "coverage": "rc-tools run coverage"
+  },
+  "devDependencies": {
+    "expect.js": "0.3.x",
+    "jquery": "^1.12.0",
+    "pre-commit": "1.x",
+    "rc-tools": "5.x"
+  },
+  "pre-commit": [
+    "lint"
+  ]
+}

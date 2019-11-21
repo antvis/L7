@@ -1,0 +1,74 @@
+{
+  "name": "dat.gui",
+  "version": "0.7.6",
+  "description": "A lightweight graphical user interface for changing variables in JavaScript.",
+  "main": "build/dat.gui.js",
+  "module": "build/dat.gui.module.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c -w -m inline\" \"serve --port 8080\"",
+    "build": "rollup -c && rollup -c rollup.config.min.js",
+    "build-docs": "jsdoc2md -f src/dat/gui/GUI.js src/dat/controllers/Controller.js src/dat/controllers/NumberController.js | replace-between --target API.md --token API",
+    "lint": "eslint src",
+    "preversion": "npm run lint",
+    "version": "npm run build && git add -A build",
+    "postversion": "git push && git push --tags && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dataarts/dat.gui.git"
+  },
+  "author": "Data Arts Team, Google",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/dataarts/dat.gui/issues"
+  },
+  "homepage": "https://github.com/dataarts/dat.gui#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "concurrently": "^3.5.1",
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb-base": "^7.1.0",
+    "eslint-loader": "^1.5.0",
+    "eslint-plugin-import": "^1.15.0",
+    "extend": "^3.0.0",
+    "jsdoc-to-markdown": "^4.0.1",
+    "replace-between": "0.0.8",
+    "rollup": "^0.54.1",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-cleanup": "^2.0.1",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-sass": "^0.6.1",
+    "rollup-plugin-uglify": "^2.0.1",
+    "serve": "^6.5.8"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "rules": {
+      "comma-dangle": 0,
+      "func-names": 0,
+      "no-alert": 0,
+      "no-console": 1,
+      "no-use-before-define": 0,
+      "prefer-rest-params": 0,
+      "prefer-template": 0,
+      "no-mixed-operators": 0,
+      "no-undef": 0,
+      "no-underscore-dangle": 0,
+      "prefer-arrow-callback": 0,
+      "space-before-function-paren": 0,
+      "global-require": 0,
+      "object-shorthand": 0,
+      "max-len": 0,
+      "no-param-reassign": 0,
+      "consistent-return": 0,
+      "no-restricted-syntax": 0,
+      "no-bitwise": 0,
+      "no-plusplus": 0
+    }
+  }
+}

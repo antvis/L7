@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'editoricon';
+  src: url('//at.alicdn.com/t/font_1466643381_3569083.eot');
+  /* IE9*/
+  src: url('//at.alicdn.com/t/font_1466643381_3569083.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('//at.alicdn.com/t/font_1466643381_3569083.woff') format('woff'), /* chrome、firefox */ url('//at.alicdn.com/t/font_1466643381_3569083.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('//at.alicdn.com/t/font_1466643381_3569083.svg#iconfont') format('svg');
+  /* iOS 4.1- */
+}
+.editor-icon {
+  color: #999;
+  display: inline-block;
+  font-style: normal;
+  vertical-align: baseline;
+  text-align: center;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  padding: 6px;
+  border: transparent 1px solid;
+  cursor: pointer;
+}
+.editor-icon:before {
+  display: block;
+  font-size: 14px;
+  font-family: "editoricon" !important;
+}
+.editor-icon:hover,
+.editor-icon.active {
+  color: black;
+  border-color: #999;
+}
+.editor-icon-split {
+  padding: 0 4px;
+}
+.editor-icon-split:before {
+  content: ' ';
+  border-right: 1px solid #ccc;
+}
+.editor-icon-bold:before {
+  content: '\e60b';
+}
+.editor-icon-underline:before {
+  content: '\e60c';
+}
+.editor-icon-strikethrough:before {
+  content: '\e60d';
+}
+.editor-icon-italic:before {
+  content: '\e600';
+}
+.editor-icon-superscript:before {
+  content: '\e60f';
+}
+.editor-icon-emoji:before {
+  content: '\e610';
+}
+.editor-icon-subscript:before {
+  content: '\e60e';
+}
+.editor-icon-align-justify:before {
+  content: '\e605';
+}
+.editor-icon-align-left:before {
+  content: '\e602';
+}
+.editor-icon-align-middle:before {
+  content: '\e603';
+}
+.editor-icon-align-right:before {
+  content: '\e601';
+}
+.editor-icon-font-color:before {
+  content: '\e606';
+}
+.editor-icon-view:before {
+  content: '\e607';
+}
+.editor-icon-picture:before {
+  content: '\e608';
+}
+.editor-icon-attach:before {
+  content: '\e609';
+}
+.editor-icon-video:before {
+  content: '\e60a';
+}
+.rc-editor-core-toolbar {
+  background: #f4f4f4;
+  padding: 6px;
+}
+.alignLeft {
+  text-align: left;
+}
+.alignRight {
+  text-align: right;
+}
+.alignMiddle {
+  text-align: center;
+}
+.alignJustify {
+  text-align: justify;
+}
+.rc-editor-core-editor.oneline .DraftEditor-editorContainer {
+  overflow-x: auto;
+}
+.rc-editor-core-editor.oneline .public-DraftEditor-content {
+  white-space: nowrap !important;
+  word-wrap: break-word;
+}

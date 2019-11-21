@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/nl_BE.jsx"],"names":["nl_BE"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import nl_BE from '../../date-picker/locale/nl_BE';\nexport default nl_BE;\n"],"file":"nl_BE.js"}

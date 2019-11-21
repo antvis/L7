@@ -1,0 +1,47 @@
+{
+  "name": "byte-size",
+  "author": "Lloyd Brookes <75pound@gmail.com>",
+  "contributors": [
+    {
+      "name": "Raul Perez",
+      "email": "repejota@gmail.com",
+      "url": "http://repejota.com"
+    }
+  ],
+  "version": "5.0.1",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "description": "Convert a bytes (and octets) value to a more human-readable format. Choose between metric or IEC units.",
+  "repository": "https://github.com/75lb/byte-size.git",
+  "files": [
+    "index.mjs",
+    "dist/index.js"
+  ],
+  "keywords": [
+    "convert",
+    "bytes",
+    "octet",
+    "size",
+    "human",
+    "readable",
+    "metric",
+    "IEC"
+  ],
+  "scripts": {
+    "test": "npm run test:js && npm run test:mjs",
+    "test:js": "rollup -c dist/test.config.js && node dist/test.js",
+    "test:mjs": "node --experimental-modules test/test.mjs",
+    "docs": "jsdoc2md -t README.hbs dist/index.js > README.md; echo",
+    "cover": "istanbul cover ./node_modules/.bin/test-runner test.js && cat coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "dist": "rollup -c dist/index.config.js"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "jsdoc-to-markdown": "^4.0.1",
+    "rollup": "^0.68.1",
+    "test-runner": "^0.5.1"
+  }
+}

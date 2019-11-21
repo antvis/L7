@@ -1,0 +1,2620 @@
+{!(Array<!Element>|NodeList<!Element>)}
+{!(Element|Document)}
+{!(IDBObjectStore|IDBIndex)}
+{!(goog.a11y.aria.State|string)}
+{!(goog.labs.structs.Map|goog.labs.structs.Multimap)}
+{!(string|Function)}
+{!Arguments}
+{!Array<!Array<!goog.date.Date>>}
+{!Array<!Array<?>>}
+{!Array<!Array<goog.dom.animationFrame.TaskSet_>>}
+{!Array<!Array<number>>}
+{!Array<!Array<string>>}
+{!Array<!CallSite>}
+{!Array<!Element>}
+{!Array<!Function>}
+{!Array<!HTMLDivElement>}
+{!Array<!Node>}
+{!Array<!Object<string,!Array<string>>>}
+{!Array<!Object>}
+{!Array<!Parser.State_>}
+{!Array<!goog.Disposable>}
+{!Array<!goog.debug.EntryPointMonitor>}
+{!Array<!goog.debug.LogRecord|undefined>}
+{!Array<!goog.debug.Logger.Level>}
+{!Array<!goog.debug.Logger>}
+{!Array<!goog.events.Event>}
+{!Array<!goog.events.ListenableKey>}
+{!Array<!goog.events.Listener>}
+{!Array<!goog.format.EmailAddress>}
+{!Array<!goog.fx.TransitionBase>}
+{!Array<!goog.html.SafeHtml>}
+{!Array<!goog.i18n.MessageFormat.TypeVal_>}
+{!Array<!goog.labs.i18n.GenderInfo.Gender>}
+{!Array<!goog.labs.mock.MethodBinding_>}
+{!Array<!goog.labs.pubsub.BroadcastPubSub.Ie8Event_>}
+{!Array<!goog.labs.pubsub.BroadcastPubSub>}
+{!Array<!goog.labs.testing.Environment>}
+{!Array<!goog.labs.testing.Matcher>}
+{!Array<!goog.math.Long>}
+{!Array<!goog.math.Range>}
+{!Array<!goog.math.Rect>}
+{!Array<!goog.net.XhrIo>}
+{!Array<!goog.proto2.FieldDescriptor>}
+{!Array<!goog.result.Result>}
+{!Array<!goog.result.SimpleResult.HandlerEntry_>}
+{!Array<!goog.string.Const>}
+{!Array<!goog.string.newlines.Line>}
+{!Array<!goog.structs.TreeNode<KEY, VALUE>>}
+{!Array<!goog.testing.FunctionCall>}
+{!Array<!goog.testing.JsUnitException>}
+{!Array<!goog.testing.TestCase.Test>}
+{!Array<!goog.testing.net.XhrIo>}
+{!Array<!goog.testing.stacktrace.Frame>}
+{!Array<!goog.tweak.BaseEntry>}
+{!Array<!goog.tweak.BaseSetting>}
+{!Array<!goog.ui.MenuItem>}
+{!Array<!goog.ui.media.MediaModel.Credit>}
+{!Array<!goog.ui.tree.BaseNode>}
+{!Array<!goog.vec.Mat4.Type>}
+{!Array<!goog.vec.Vec3.Type>}
+{!Array<!goog.vec.Vec4.Type>}
+{!Array<!proto2.TestAllTypes.NestedEnum>}
+{!Array<!proto2.TestAllTypes.NestedMessage>}
+{!Array<!proto2.TestAllTypes.RepeatedGroup>}
+{!Array<!string>}
+{!Array<!{keyCode: ?number, modifiers: number}>}
+{!Array<*>}
+{!Array<?(goog.Promise<TYPE>|goog.Thenable<TYPE>|Thenable|*)>}
+{!Array<?>=}
+{!Array<?>}
+{!Array<?Object>}
+{!Array<?string>}
+{!Array<Array<?>>}
+{!Array<Array<number>>}
+{!Array<CSSStyleRule>}
+{!Array<CSSStyleSheet>}
+{!Array<Element>}
+{!Array<Function>}
+{!Array<HTMLAnchorElement>}
+{!Array<K>}
+{!Array<KEY>}
+{!Array<Node>}
+{!Array<Object>}
+{!Array<RESULT>}
+{!Array<S|T>}
+{!Array<T>}
+{!Array<TextRange>}
+{!Array<V>}
+{!Array<VALUE>}
+{!Array<Wire.QueuedMap>}
+{!Array<boolean>}
+{!Array<function(!Function)>}
+{!Array<function(!Object=)>}
+{!Array<function()>}
+{!Array<goog.cssom.iframe.style.CssRuleSet_>}
+{!Array<goog.dom.TextRange>}
+{!Array<goog.editor.plugins.BasicTextFormatter.COMMAND>}
+{!Array<goog.i18n.MessageFormat.TypeVal_>}
+{!Array<goog.iter.Iterator<VALUE>>}
+{!Array<goog.math.Coordinate?>}
+{!Array<goog.math.Path.Segment>}
+{!Array<goog.testing.TestCase.Error>}
+{!Array<goog.testing.TestCase.Test>}
+{!Array<goog.testing.stacktrace.Frame>}
+{!Array<goog.tweak.BaseEntry>}
+{!Array<goog.ui.Component>}
+{!Array<goog.ui.Control>}
+{!Array<goog.ui.MenuItem>}
+{!Array<goog.ui.Tooltip>}
+{!Array<goog.ui.media.MediaModel.Credit>}
+{!Array<number>|!Int32Array}
+{!Array<number>|!Uint8Array|string}
+{!Array<number>|!Uint8Array}
+{!Array<number>|Arguments}
+{!Array<number>|number}
+{!Array<number>}
+{!Array<string>|!goog.labs.format.csv.Sentinels_}
+{!Array<string>|string}
+{!Array<string>|undefined}
+{!Array<string>}
+{!Array<string|!goog.html.SafeHtml>}
+{!Array<string|goog.ui.Control>}
+{!Array<string|goog.uri.utils.QueryValue>}
+{!Array<string|number>}
+{!Array<string|undefined>}
+{!Array<{caption: string, command: !goog.dom.TagName}>}
+{!Array<{caption: string, command: goog.dom.TagName}>}
+{!Array<{caption: string, value: string}>}
+{!Array<{caption: string, value:number}>}
+{!Array<{caption:string, value:number}>}
+{!Array<{caption:string, value:string}>}
+{!ArrayBuffer}
+{!Array|undefined}
+{!Array}
+{!Attr}
+{!Blob}
+{!CSSStyleDeclaration}
+{!CSSStyleSheet}
+{!ChannelRequest=}
+{!ChannelRequest}
+{!ConnectionState=}
+{!ConnectionState}
+{!DOMError}
+{!Date}
+{!Deferred}
+{!DirectTransport.Message_}
+{!DirectoryEntry}
+{!DocumentFragment}
+{!Document}
+{!Element|!Document=}
+{!Element|!DocumentFragment}
+{!Element|!Document}
+{!Element|!StyleSheet}
+{!Element|undefined}
+{!Element}
+{!Entry}
+{!Error=}
+{!Error}
+{!Event=}
+{!EventHandler<!goog.net.xpc.DirectTransport>}
+{!EventTarget|!goog.events.Listenable}
+{!EventTarget}
+{!Event}
+{!FileEntry}
+{!FileError}
+{!FileReader}
+{!FileSaver}
+{!FileSystem}
+{!FileWriter}
+{!Float32Array|!Array<number>}
+{!Float32Array}
+{!Float64Array}
+{!ForwardChannelRequestPool}
+{!Function=}
+{!Function}
+{!HTMLAnchorElement}
+{!HTMLButtonElement}
+{!HTMLDivElement}
+{!HTMLDocument}
+{!HTMLElement}
+{!HTMLEmbedElement}
+{!HTMLFormElement}
+{!HTMLFrameElement}
+{!HTMLIFrameElement}
+{!HTMLImageElement}
+{!HTMLInputElement|!HTMLTextAreaElement}
+{!HTMLInputElement}
+{!HTMLLinkElement}
+{!HTMLObjectElement}
+{!HTMLScriptElement}
+{!HTMLSelectElement}
+{!HTMLSpanElement}
+{!HTMLTableCellElement}
+{!HTMLTableElement}
+{!HTMLTextAreaElement}
+{!Headers}
+{!IArrayLike<!Element>}
+{!IArrayLike<?>}
+{!IArrayLike<T>|string}
+{!IArrayLike<T>}
+{!IArrayLike<VALUE>|string}
+{!IArrayLike<VALUE>}
+{!IArrayLike<string>}
+{!IArrayLike}
+{!IDBDatabaseException}
+{!IDBDatabase}
+{!IDBIndex}
+{!IDBKeyRange}
+{!IDBObjectStore}
+{!IDBRequest}
+{!IDBTransaction}
+{!IThenable<!goog.testing.TestCase.Result>}
+{!IThenable<T>}
+{!Image}
+{!Int32Array|!Array<number>}
+{!Iterable<RESULT>}
+{!Iterable<VALUE>}
+{!Iterator<VALUE>}
+{!Location}
+{!MessageEvent}
+{!MessagePort|!WebWorker}
+{!MessagePort}
+{!MouseEvent}
+{!Node=}
+{!NodeList<?>}
+{!Node|!Object}
+{!Node}
+{!Object.<string, number>}
+{!Object<!(goog.a11y.aria.State|string), (string|boolean|number)>}
+{!Object<!Array<number>>}
+{!Object<!Array<{caption:string, value:string}>>}
+{!Object<!goog.events.Key>}
+{!Object<!goog.messaging.MessageChannel>}
+{!Object<!goog.messaging.PortChannel>}
+{!Object<!goog.net.FileDownloader.Download_>}
+{!Object<!goog.net.ImageLoader.ImageRequest_>}
+{!Object<!goog.structs.Trie<VALUE>>}
+{!Object<!goog.testing.fs.Entry>}
+{!Object<!goog.testing.messaging.MockMessageChannel>}
+{!Object<!goog.tweak.BaseEntry>}
+{!Object<!goog.tweak.BooleanSetting>}
+{!Object<!goog.tweak.EntriesPanel>}
+{!Object<!goog.ui.editor.ButtonDescriptor>}
+{!Object<Array<function(!Object=)>>}
+{!Object<Array<string>, goog.module.ModuleLoader.LoadStatus>}
+{!Object<K, V>}
+{!Object<K,R>}
+{!Object<K,V>}
+{!Object<T>}
+{!Object<V>|!Array<V>}
+{!Object<boolean>}
+{!Object<goog.a11y.aria.Role, goog.a11y.aria.State>}
+{!Object<goog.math.Long.ValueCacheId_, !goog.math.Long>}
+{!Object<goog.math.Path.Segment, function(this: goog.math.Path)>}
+{!Object<goog.ui.editor.Bubble>}
+{!Object<goog.uri.utils.QueryValue>}
+{!Object<number, !goog.Disposable>}
+{!Object<number, !goog.math.Long>}
+{!Object<number, !goog.proto2.FieldDescriptor>}
+{!Object<number, goog.fx.anim.Animated>}
+{!Object<number, number>}
+{!Object<number>}
+{!Object<number|string|boolean>}
+{!Object<string, !Array<!goog.events.Listener>>}
+{!Object<string, !Array<string>>}
+{!Object<string, !Element>}
+{!Object<string, !Object<string, goog.labs.html.AttributeRewriter>>}
+{!Object<string, !goog.async.Deferred>}
+{!Object<string, !goog.debug.Logger>}
+{!Object<string, !goog.html.SafeHtmlFormatter.Replacement>}
+{!Object<string, !goog.html.sanitizer.HtmlSanitizerPolicy>}
+{!Object<string, !goog.net.xpc.IframeRelayTransport.FragmentInfo>}
+{!Object<string, (boolean|undefined)>}
+{!Object<string, ?>}
+{!Object<string, ?goog.html.SafeHtml.AttributeValue>=}
+{!Object<string, ?goog.html.SafeHtml.AttributeValue>}
+{!Object<string, Object<string, goog.labs.html.AttributeRewriter>>}
+{!Object<string, VALUE>|!goog.structs.Trie<VALUE>}
+{!Object<string, VALUE>}
+{!Object<string, boolean>}
+{!Object<string, function()>}
+{!Object<string, function(string, ...)>}
+{!Object<string, goog.fs.Error.ErrorCode>}
+{!Object<string, goog.html.sanitizer.HtmlSanitizerPolicy>}
+{!Object<string, goog.string.Const|string>}
+{!Object<string, goog.uri.utils.QueryValue>}
+{!Object<string, number>}
+{!Object<string, string>=}
+{!Object<string, string>|undefined}
+{!Object<string, string>}
+{!Object<string, string|!goog.string.TypedString>}
+{!Object<string,!Array<string>>}
+{!Object<string,Function>}
+{!Object<string,boolean>}
+{!Object<string,string>}
+{!Object<string>}
+{!Object<string|number, !Window>}
+{!Object<string|number|boolean>=}
+{!Object<string|number|boolean>}
+{!Object=}
+{!Object|!Array<?>}
+{!Object|!Function}
+{!Object|!goog.structs.Map}
+{!Object|string}
+{!Object|undefined}
+{!Object}
+{!ParallelTestResults}
+{!ProgressEvent}
+{!Promise}
+{!Range}
+{!RegExp}
+{!RequestCache|undefined}
+{!RequestCache}
+{!RequestCredentials|undefined}
+{!RequestCredentials}
+{!RequestInit}
+{!Response}
+{!SanitizedContentSubclass}
+{!Selection}
+{!StyleSheet}
+{!TestResults}
+{!TextRange}
+{!Text}
+{!Thenable|undefined}
+{!Thenable}
+{!Timer}
+{!TreeWalker}
+{!Uint8Array|!Array<number>}
+{!Uint8Array|!Int8Array|!Array<number>}
+{!Uint8Array}
+{!WebChannelBase.State}
+{!WebChannelBaseTransport.Channel.Handler_}
+{!WebChannelBaseTransport.Channel}
+{!WebChannelBase}
+{!WebChannelDebug}
+{!Window}
+{!WireV8}
+{!WorkerGlobalScope}
+{!XDomainRequest}
+{!boolean}
+{!dom.PageVisibilityMonitor}
+{!function(!Array<!Object>)}
+{!function(!ChannelRequest)}
+{!function(): !goog.Promise}
+{!function():T}
+{!function()}
+{!function(?):V}
+{!function(VALUE): RESULT}
+{!function(VALUE): void}
+{!function(number, number=):string}
+{!function(string) : *}
+{!function(this: THIS, VALUE): RESULT}
+{!function(this:T, !goog.result.Result)}
+{!function(this:T, !goog.result.SimpleResult)}
+{!function(this:THIS, *): *}
+{!goog.Promise.CallbackEntry_}
+{!goog.Promise<!Array<TYPE>>}
+{!goog.Promise<!Blob>}
+{!goog.Promise<!Image>}
+{!goog.Promise<!Uint8Array|!Array<number>>}
+{!goog.Promise<!Window>}
+{!goog.Promise<!goog.net.XhrLike.OrNative>}
+{!goog.Promise<(string|!Object)>}
+{!goog.Promise<?>}
+{!goog.Promise<HTMLIframeElement>}
+{!goog.Promise<Object>}
+{!goog.Promise<RESULT>}
+{!goog.Promise<T>}
+{!goog.Promise<TYPE>}
+{!goog.Promise<string>}
+{!goog.Promise}
+{!goog.Thenable<T>}
+{!goog.Thenable}
+{!goog.Timer}
+{!goog.Uri.QueryData}
+{!goog.Uri}
+{!goog.a11y.aria.LivePriority}
+{!goog.a11y.aria.Role|string}
+{!goog.a11y.aria.State|string}
+{!goog.a11y.aria.State}
+{!goog.asserts.AssertionError}
+{!goog.async.Deferred<!File>}
+{!goog.async.Deferred<!goog.fs.FileWriter>}
+{!goog.async.Deferred<null>}
+{!goog.async.Deferred}
+{!goog.async.WorkQueue}
+{!goog.color.Hsl}
+{!goog.color.Hsv}
+{!goog.color.Rgb}
+{!goog.crypt.BlobHasher}
+{!goog.crypt.BlockCipher}
+{!goog.crypt.Hash}
+{!goog.crypt.Sha2_64bit}
+{!goog.cssom.iframe.style.CssRuleSet_}
+{!goog.date.DateLike}
+{!goog.date.DateRange.Iterator}
+{!goog.date.DateRange}
+{!goog.date.DateTime}
+{!goog.date.Date}
+{!goog.date.Interval}
+{!goog.date.UtcDateTime}
+{!goog.db.Cursor.Direction=}
+{!goog.db.Cursor}
+{!goog.db.Error.ErrorCode|number}
+{!goog.db.Error.ErrorName}
+{!goog.db.Error}
+{!goog.db.IndexedDb}
+{!goog.db.Index}
+{!goog.db.KeyRange=}
+{!goog.db.KeyRange}
+{!goog.db.ObjectStore}
+{!goog.db.Transaction}
+{!goog.debug.Console}
+{!goog.debug.EntryPointMonitor}
+{!goog.debug.ErrorHandler}
+{!goog.debug.ErrorReporter}
+{!goog.debug.Formatter}
+{!goog.debug.LogBuffer}
+{!goog.debug.LogRecord}
+{!goog.debug.Logger.Level}
+{!goog.debug.Logger}
+{!goog.debug.TextFormatter}
+{!goog.dom.AbstractRange}
+{!goog.dom.ControlRangeIterator}
+{!goog.dom.ControlRange}
+{!goog.dom.DomHelper=}
+{!goog.dom.DomHelper|undefined}
+{!goog.dom.DomHelper}
+{!goog.dom.MultiRangeIterator}
+{!goog.dom.MultiRange}
+{!goog.dom.RangeIterator}
+{!goog.dom.SavedCaretRange}
+{!goog.dom.SavedRange}
+{!goog.dom.TagIterator}
+{!goog.dom.TextRangeIterator}
+{!goog.dom.TextRange}
+{!goog.dom.ViewportSizeMonitor}
+{!goog.dom.browserrange.AbstractRange}
+{!goog.dom.browserrange.GeckoRange}
+{!goog.dom.browserrange.IeRange}
+{!goog.dom.browserrange.OperaRange}
+{!goog.dom.browserrange.W3cRange}
+{!goog.dom.browserrange.WebKitRange}
+{!goog.dom.safe.InsertAdjacentHtmlPosition}
+{!goog.ds.AbstractFastDataNode}
+{!goog.ds.DataManager}
+{!goog.ds.DataNodeList}
+{!goog.ds.DataNode}
+{!goog.ds.EmptyNodeList}
+{!goog.ds.FastDataNode}
+{!goog.editor.Field}
+{!goog.editor.Link}
+{!goog.editor.Table}
+{!goog.editor.icontent.FieldFormatInfo}
+{!goog.editor.range.Point}
+{!goog.events.BrowserEvent=}
+{!goog.events.BrowserEvent}
+{!goog.events.Event=}
+{!goog.events.EventHandler<!goog.db.IndexedDb>}
+{!goog.events.EventHandler<!goog.db.Transaction>}
+{!goog.events.EventHandler<!goog.editor.ClickToEditWrapper>}
+{!goog.events.EventHandler<!goog.events.FileDropHandler>}
+{!goog.events.EventHandler<!goog.fx.DragDropItem>}
+{!goog.events.EventHandler<!goog.net.ChannelRequest>}
+{!goog.events.EventHandler<!goog.net.FileDownloader>}
+{!goog.events.EventHandler<!goog.net.ImageLoader>}
+{!goog.events.EventHandler<!goog.net.streams.XhrStreamReader>}
+{!goog.events.EventHandler<!goog.net.xpc.CrossPageChannel>}
+{!goog.events.EventHandler<!goog.net.xpc.NativeMessagingTransport>}
+{!goog.events.EventHandler<!goog.ui.ContainerScroller>}
+{!goog.events.EventHandler<!goog.ui.editor.ToolbarController>}
+{!goog.events.EventHandler<SCOPE>}
+{!goog.events.EventHandler<T>}
+{!goog.events.EventHandler}
+{!goog.events.EventTarget}
+{!goog.events.Event}
+{!goog.events.KeyHandler}
+{!goog.events.ListenableKey}
+{!goog.events.Listenable}
+{!goog.events.ListenerMap}
+{!goog.format.EmailAddress}
+{!goog.format.HtmlPrettyPrinter}
+{!goog.fs.DirectoryEntry}
+{!goog.fs.Entry}
+{!goog.fs.FileEntry}
+{!goog.fs.FileSaver.EventType|!goog.fs.FileReader.EventType}
+{!goog.fs.FileSystem}
+{!goog.fs.FileWriter}
+{!goog.fx.Animation|!Array<!goog.fx.Animation>}
+{!goog.fx.Animation}
+{!goog.fx.DragEvent}
+{!goog.fx.DragListGroup}
+{!goog.fx.Dragger}
+{!goog.fx.Transition}
+{!goog.fx.css3.Transition}
+{!goog.graphics.AbstractGraphics}
+{!goog.graphics.AffineTransform}
+{!goog.graphics.CanvasGraphics}
+{!goog.graphics.CanvasGroupElement}
+{!goog.graphics.Element}
+{!goog.graphics.EllipseElement}
+{!goog.graphics.Fill}
+{!goog.graphics.Font}
+{!goog.graphics.GroupElement}
+{!goog.graphics.ImageElement}
+{!goog.graphics.PathElement}
+{!goog.graphics.Path}
+{!goog.graphics.RectElement}
+{!goog.graphics.Stroke}
+{!goog.graphics.TextElement}
+{!goog.graphics.ext.Element}
+{!goog.graphics.ext.Path}
+{!goog.html.SafeHtml.AttributeValue}
+{!goog.html.SafeHtml.TextOrHtml_}
+{!goog.html.SafeHtml=}
+{!goog.html.SafeHtmlFormatter.Replacement}
+{!goog.html.SafeHtml|Element}
+{!goog.html.SafeHtml}
+{!goog.html.SafeScript}
+{!goog.html.SafeStyle=}
+{!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>}
+{!goog.html.SafeStyleSheet}
+{!goog.html.SafeStyle|!Array<!goog.html.SafeStyle>}
+{!goog.html.SafeStyle}
+{!goog.html.SafeUrl|string}
+{!goog.html.SafeUrl}
+{!goog.html.TrustedResourceUrl=}
+{!goog.html.TrustedResourceUrl|undefined}
+{!goog.html.TrustedResourceUrl}
+{!goog.html.sanitizer.HtmlSanitizer.Builder=}
+{!goog.html.sanitizer.HtmlSanitizer.Builder}
+{!goog.html.sanitizer.HtmlSanitizerPolicyContext}
+{!goog.html.sanitizer.HtmlSanitizerPolicy}
+{!goog.html.sanitizer.HtmlSanitizer}
+{!goog.i18n.BidiFormatter}
+{!goog.i18n.DateTimeSymbolsType}
+{!goog.i18n.NumberFormat.CompactNumberUnit}
+{!goog.i18n.NumberFormat}
+{!goog.i18n.TimeZone}
+{!goog.i18n.bidi.Dir}
+{!goog.i18n.uChar.NameFetcher}
+{!goog.i18n.uChar.RemoteNameFetcher.RequestType_}
+{!goog.iter.Iterable<!goog.iter.Iterable>}
+{!goog.iter.Iterable<number>}
+{!goog.iter.Iterator<!Array<?>>}
+{!goog.iter.Iterator<!Array<VALUE>>}
+{!goog.iter.Iterator<Node>}
+{!goog.iter.Iterator<RESULT>}
+{!goog.iter.Iterator<VALUE>|!goog.iter.Iterable}
+{!goog.iter.Iterator<VALUE>}
+{!goog.iter.Iterator<number>}
+{!goog.iter.Iterator}
+{!goog.json.Serializer}
+{!goog.labs.events.touch.TouchData}
+{!goog.labs.html.Sanitizer}
+{!goog.labs.mock.MockManager_}
+{!goog.labs.mock.StubBinder}
+{!goog.labs.mock.verification.VerificationMode=}
+{!goog.labs.mock.verification.VerificationMode}
+{!goog.labs.net.webChannel.ChannelRequest}
+{!goog.labs.net.webChannel.Channel}
+{!goog.labs.net.webChannel.ConnectionState}
+{!goog.labs.net.webChannel.WebChannelBase}
+{!goog.labs.net.webChannel.WebChannelDebug}
+{!goog.labs.structs.Map}
+{!goog.labs.structs.Multimap}
+{!goog.labs.testing.AllOfMatcher}
+{!goog.labs.testing.AnyOfMatcher}
+{!goog.labs.testing.AnythingMatcher}
+{!goog.labs.testing.CloseToMatcher}
+{!goog.labs.testing.ContainsStringMatcher}
+{!goog.labs.testing.EndsWithMatcher}
+{!goog.labs.testing.Environment}
+{!goog.labs.testing.EqualToIgnoringWhitespaceMatcher}
+{!goog.labs.testing.EqualToMatcher}
+{!goog.labs.testing.EqualsMatcher}
+{!goog.labs.testing.GreaterThanEqualToMatcher}
+{!goog.labs.testing.GreaterThanMatcher}
+{!goog.labs.testing.HasEntriesMatcher}
+{!goog.labs.testing.HasEntryMatcher}
+{!goog.labs.testing.HasKeyMatcher}
+{!goog.labs.testing.HasPropertyMatcher}
+{!goog.labs.testing.HasValueMatcher}
+{!goog.labs.testing.InstanceOfMatcher}
+{!goog.labs.testing.IsNotMatcher}
+{!goog.labs.testing.IsNullMatcher}
+{!goog.labs.testing.IsNullOrUndefinedMatcher}
+{!goog.labs.testing.IsUndefinedMatcher}
+{!goog.labs.testing.JsonFuzzing.FieldType_}
+{!goog.labs.testing.JsonFuzzing.Options=}
+{!goog.labs.testing.JsonFuzzing.Options}
+{!goog.labs.testing.LessThanEqualToMatcher}
+{!goog.labs.testing.LessThanMatcher}
+{!goog.labs.testing.Matcher}
+{!goog.labs.testing.ObjectEqualsMatcher}
+{!goog.labs.testing.RegexMatcher}
+{!goog.labs.testing.StartsWithMatcher}
+{!goog.labs.testing.StringContainsInOrderMatcher}
+{!goog.math.AffineTransform}
+{!goog.math.Bezier}
+{!goog.math.Box}
+{!goog.math.Coordinate3}
+{!goog.math.Coordinate=}
+{!goog.math.Coordinate}
+{!goog.math.Integer}
+{!goog.math.Line}
+{!goog.math.Long}
+{!goog.math.Matrix|!Array<!Array<number>>|!goog.math.Size|number}
+{!goog.math.Matrix}
+{!goog.math.Path}
+{!goog.math.RangeSet}
+{!goog.math.Range|!Array<number>|string}
+{!goog.math.Range|!Array<number>}
+{!goog.math.Range}
+{!goog.math.Rect}
+{!goog.math.Size}
+{!goog.math.Vec2}
+{!goog.math.Vec3}
+{!goog.math.interpolator.Interpolator1}
+{!goog.messaging.DeferredChannel}
+{!goog.messaging.MessageChannel}
+{!goog.messaging.MultiChannel.VirtualChannel}
+{!goog.messaging.MultiChannel}
+{!goog.module.ModuleInfo}
+{!goog.module.ModuleLoadCallback}
+{!goog.net.BrowserChannel.State}
+{!goog.net.ChannelDebug}
+{!goog.net.ChannelRequest}
+{!goog.net.ErrorCode}
+{!goog.net.EventType}
+{!goog.net.FetchXmlHttpFactory}
+{!goog.net.FileDownloader.Download_}
+{!goog.net.FileDownloader}
+{!goog.net.ImageLoader.CorsRequestType=}
+{!goog.net.ImageLoader.ImageRequest_}
+{!goog.net.IpAddress}
+{!goog.net.WebChannel.ErrorStatus}
+{!goog.net.WebChannel.MessageData}
+{!goog.net.WebChannel.Options=}
+{!goog.net.WebChannel.RuntimeProperties}
+{!goog.net.WebChannelTransport}
+{!goog.net.WebChannel}
+{!goog.net.XhrIo.ResponseType}
+{!goog.net.XhrIoPool}
+{!goog.net.XhrIo}
+{!goog.net.XhrLike.OrNative}
+{!goog.net.XhrLike|!XMLHttpRequest}
+{!goog.net.XhrManager.Request}
+{!goog.net.XmlHttpFactory}
+{!goog.net.streams.JsonStreamParser.State_}
+{!goog.net.streams.XhrStreamReader.Status}
+{!goog.net.streams.XhrStreamReader}
+{!goog.net.xpc.CrossPageChannelRole}
+{!goog.net.xpc.CrossPageChannel}
+{!goog.positioning.AbstractPosition}
+{!goog.positioning.AnchoredPosition}
+{!goog.promise.Resolver<TYPE>}
+{!goog.promise.Resolver}
+{!goog.proto2.Descriptor}
+{!goog.proto2.FieldDescriptor}
+{!goog.proto2.Message}
+{!goog.proto2.Metadata}
+{!goog.proto2.TextFormatSerializer.Printer_}
+{!goog.pubsub.TopicId<!zorg.State>}
+{!goog.pubsub.TopicId<PAYLOAD>=}
+{!goog.pubsub.TopicId<PAYLOAD>}
+{!goog.result.DependentResult}
+{!goog.result.Result.State}
+{!goog.result.Result}
+{!goog.soy.Renderer.SavedTemplateRender}
+{!goog.soy.data.SanitizedContent}
+{!goog.spell.SpellCheck}
+{!goog.storage.mechanism.IterableMechanism}
+{!goog.storage.mechanism.Mechanism}
+{!goog.string.Const=}
+{!goog.string.Const}
+{!goog.string.Parser}
+{!goog.string.StringBuffer}
+{!goog.string.TypedString | string}
+{!goog.structs.CircularBuffer}
+{!goog.structs.Heap}
+{!goog.structs.LinkedMap.Node_<KEY, VALUE>}
+{!goog.structs.LinkedMap.Node_<string, VALUE>}
+{!goog.structs.Map<string, !Array<string>>}
+{!goog.structs.Map<string, ?>|!Object}
+{!goog.structs.Map|!Object}
+{!goog.structs.Map}
+{!goog.structs.Node<K, V>}
+{!goog.structs.QuadTree}
+{!goog.structs.Set<T>}
+{!goog.structs.Set<T|S>}
+{!goog.structs.Set}
+{!goog.structs.SimplePool}
+{!goog.structs.StringSet}
+{!goog.structs.TreeNode<KEY, VALUE>}
+{!goog.structs.TreeNode}
+{!goog.structs.Trie<VALUE>|undefined}
+{!goog.structs.Trie<VALUE>}
+{!goog.testing.AsyncTestCase.TopStackFuncResult_}
+{!goog.testing.AsyncTestCase}
+{!goog.testing.ContinuationTestCase.Step}
+{!goog.testing.DeferredTestCase}
+{!goog.testing.FunctionMock}
+{!goog.testing.JsUnitException}
+{!goog.testing.LooseMock}
+{!goog.testing.MockClock}
+{!goog.testing.MockControl}
+{!goog.testing.MockInterface}
+{!goog.testing.Mock}
+{!goog.testing.MultiTestRunner}
+{!goog.testing.PerformanceTimer.Task}
+{!goog.testing.PropertyReplacer}
+{!goog.testing.PseudoRandom}
+{!goog.testing.StrictMock|!goog.testing.LooseMock}
+{!goog.testing.StrictMock}
+{!goog.testing.TestCase.Error}
+{!goog.testing.TestCase.Result}
+{!goog.testing.TestCase.Test}
+{!goog.testing.TestCase}
+{!goog.testing.events.EventObserver}
+{!goog.testing.fs.Blob}
+{!goog.testing.fs.DirectoryEntry}
+{!goog.testing.fs.Entry}
+{!goog.testing.fs.FileEntry}
+{!goog.testing.fs.FileReader}
+{!goog.testing.fs.FileSystem}
+{!goog.testing.fs.FileWriter}
+{!goog.testing.fs.File}
+{!goog.testing.messaging.MockMessageChannel}
+{!goog.testing.net.XhrIo}
+{!goog.tweak.BaseEntry}
+{!goog.tweak.BooleanGroup|!goog.tweak.NamespaceEntry_}
+{!goog.tweak.BooleanGroup}
+{!goog.tweak.BooleanInGroupSetting}
+{!goog.tweak.BooleanSetting}
+{!goog.tweak.ButtonAction}
+{!goog.tweak.ConfigParams}
+{!goog.tweak.NumericSetting}
+{!goog.tweak.Registry}
+{!goog.tweak.StringSetting|!goog.tweak.NumericSetting}
+{!goog.tweak.StringSetting}
+{!goog.ui.ActivityMonitor}
+{!goog.ui.BaseRoundedPanel}
+{!goog.ui.ButtonRenderer}
+{!goog.ui.Button}
+{!goog.ui.CharCounter.Display}
+{!goog.ui.ColorMenuButton}
+{!goog.ui.ColorPicker}
+{!goog.ui.Component}
+{!goog.ui.Container}
+{!goog.ui.Control}
+{!goog.ui.DatePickerRenderer}
+{!goog.ui.Dialog.ButtonSet}
+{!goog.ui.Dialog}
+{!goog.ui.DrilldownRow.DrilldownRowProperties=}
+{!goog.ui.HoverCard.TriggerEvent}
+{!goog.ui.KeyboardShortcutHandler.SequenceNode_}
+{!goog.ui.KeyboardShortcutHandler.SequenceTree_}
+{!goog.ui.MenuButton}
+{!goog.ui.MenuItem}
+{!goog.ui.MenuRenderer=}
+{!goog.ui.MenuRenderer}
+{!goog.ui.Menu}
+{!goog.ui.ModalAriaVisibilityHelper}
+{!goog.ui.Palette.CurrentCell_}
+{!goog.ui.PopupBase}
+{!goog.ui.RangeModel}
+{!goog.ui.Select}
+{!goog.ui.SplitBehavior}
+{!goog.ui.Toolbar}
+{!goog.ui.ac.AutoComplete}
+{!goog.ui.editor.AbstractDialog.Builder}
+{!goog.ui.editor.Bubble}
+{!goog.ui.editor.LinkDialog.OkEvent}
+{!goog.ui.editor.LinkDialog}
+{!goog.ui.emoji.EmojiPalette}
+{!goog.ui.media.FlashObject}
+{!goog.ui.media.FlickrSetModel}
+{!goog.ui.media.GoogleVideoModel}
+{!goog.ui.media.MediaModel.Category}
+{!goog.ui.media.MediaModel.Credit}
+{!goog.ui.media.MediaModel.Player}
+{!goog.ui.media.MediaModel.SubTitle}
+{!goog.ui.media.MediaModel.Thumbnail}
+{!goog.ui.media.MediaModel}
+{!goog.ui.media.Media}
+{!goog.ui.media.PicasaAlbumModel}
+{!goog.ui.media.VimeoModel}
+{!goog.ui.media.YoutubeModel}
+{!goog.ui.tree.BaseNode}
+{!goog.ui.tree.TreeNode}
+{!goog.ui.tree.TypeAhead}
+{!goog.uri.utils.QueryArray|!Arguments}
+{!goog.vec.AnyType}
+{!goog.vec.Float32|!goog.vec.Float64|!goog.vec.Number}
+{!goog.vec.Mat3.Float32}
+{!goog.vec.Mat3.Float64}
+{!goog.vec.Mat3.Number}
+{!goog.vec.Mat3.Type}
+{!goog.vec.Mat4.AnyType}
+{!goog.vec.Mat4.Float32}
+{!goog.vec.Mat4.Float64}
+{!goog.vec.Mat4.Number}
+{!goog.vec.Mat4.Type}
+{!goog.vec.Quaternion.AnyType}
+{!goog.vec.Quaternion.Float32}
+{!goog.vec.Quaternion.Float64}
+{!goog.vec.Vec2.AnyType}
+{!goog.vec.Vec2.Float32}
+{!goog.vec.Vec2.Float64}
+{!goog.vec.Vec2.Number}
+{!goog.vec.Vec3.AnyType}
+{!goog.vec.Vec3.Float32}
+{!goog.vec.Vec3.Float64}
+{!goog.vec.Vec3.Number}
+{!goog.vec.Vec3.Type}
+{!goog.vec.Vec4.AnyType}
+{!goog.vec.Vec4.Float32}
+{!goog.vec.Vec4.Float64}
+{!goog.vec.Vec4.Number}
+{!goog.vec.Vec4.Type}
+{!goog.vec.mat3d.Type}
+{!goog.vec.mat3f.Type}
+{!goog.vec.mat4d.Type}
+{!goog.vec.mat4f.Type}
+{!goog.vec.vec2d.Type|number}
+{!goog.vec.vec2d.Type}
+{!goog.vec.vec2f.Type|number}
+{!goog.vec.vec2f.Type}
+{!goog.vec.vec3d.Type|number}
+{!goog.vec.vec3d.Type}
+{!goog.vec.vec3f.Type|number}
+{!goog.vec.vec3f.Type}
+{!goog.vec.vec4d.Type|number}
+{!goog.vec.vec4d.Type}
+{!goog.vec.vec4f.Type|number}
+{!goog.vec.vec4f.Type}
+{!number}
+{!proto2.TestAllTypes.NestedEnum}
+{!proto2.TestAllTypes.NestedMessage}
+{!proto2.TestAllTypes.OptionalGroup}
+{!proto2.TestAllTypes.RepeatedGroup}
+{!proto2.TestAllTypes}
+{!proto2.TestDefaultChild}
+{!proto2.TestDefaultParent}
+{!someprotopackage.TestPackageTypes}
+{!string|goog.async.Deferred}
+{!string}
+{!{argumentIndex, argumentOffset}}
+{!{argumentIndex:?}}
+{!{keys:!Array<string>, values:!Array<string>}}
+{!{log:!Function}}
+{!{v:number, f:number}}
+{!{w:number, t:number}}
+{(!Element|!Document)=}
+{(!Image|function(): !Image)=}
+{(!NodeList<!Node>|!Array<!Node>)}
+{(!Object|!string)=}
+{(!Object|string)}
+{(!Object|undefined)}
+{(!goog.storage.RichStorage.Wrapper|undefined)}
+{(Array<number>|Float32Array)}
+{(ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string)=}
+{(ArrayBuffer|Blob|Document|FormData|null|string|undefined)}
+{(ArrayBuffer|Blob|Object<string, string>|Array)}
+{(CSSStyleSheet|StyleSheetList)=}
+{(Date|goog.date.Date)}
+{(Document|Element)=}
+{(Element|Document)=}
+{(Element|string)=}
+{(Node|Window)=}
+{(Object|Array<string>|string)=}
+{(Object|string)=}
+{(RESULT|goog.Thenable<RESULT>|Thenable)=}
+{(boolean|goog.ui.ac.RenderOptions)=}
+{(boolean|number|string)}
+{(function(number):?string)=}
+{(function(string))?}
+{(function(string): boolean)|undefined}
+{(function(string, *, *): ?string)=}
+{(number|!goog.math.Size)}
+{(string|!goog.math.Integer)}
+{(string|Array<(string|number|!Uint8Array)>)=}
+{(string|Object)=}
+{(string|goog.Uri)}
+{(string|number|null)=}
+{*=}
+{*}
+{...!Array<T>}
+{...!Array}
+{...!IArrayLike<?>}
+{...!IArrayLike<VALUE>}
+{...!goog.editor.plugins.LinkBubble.Action}
+{...!goog.iter.Iterator<VALUE>|!goog.iter.Iterable}
+{...!goog.result.Result}
+{...!goog.structs.TreeNode<KEY, VALUE>}
+{...!string}
+{...(!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>)}
+{...(!goog.html.SafeStyle|!Array<!goog.html.SafeStyle>)}
+{...(Array<VALUE>|VALUE)}
+{...(Object|string|Array|NodeList)}
+{...(goog.Uri.QueryData|goog.structs.Map<?, ?>|Object)}
+{...(goog.uri.utils.QueryArray|string|goog.uri.utils.QueryValue)}
+{...(number|string|Array<number>)}
+{...(string|!Blob|!ArrayBuffer)}
+{...(string|!goog.testing.fs.Blob)}
+{...(string|number|!IArrayLike<number|string>)}
+{...*}
+{...?}
+{...Element}
+{...Function}
+{...Node}
+{...Object}
+{...T}
+{...goog.dom.Appendable}
+{...goog.labs.testing.Matcher}
+{...goog.math.Coordinate}
+{...goog.math.Long}
+{...number}
+{...string|number}
+{...string}
+{?(function(this:THIS, *): *)=}
+{?(function(this:THIS, TYPE): VALUE)=}
+{?(function(this:THIS, TYPE):?)=}
+{?(goog.Thenable<TYPE>|Thenable|TYPE)}
+{?(goog.dom.TagName|string)=}
+{?(string|Array<string>)}
+{?({renderRow}|{render})=}
+{?({renderRow}|{render})}
+{?=}
+{?Array<!Object>}
+{?Array<!goog.fx.ActiveDropTarget_>}
+{?Array<goog.ui.tree.BaseNode>}
+{?Array<number>}
+{?Array<string>}
+{?Array|undefined}
+{?BaseTestChannel.State_}
+{?CSSStyleDeclaration}
+{?ChannelRequest.Error}
+{?Document}
+{?Element=}
+{?Element}
+{?Error}
+{?EventTarget}
+{?Function}
+{?HTMLDivElement}
+{?HTMLIFrameElement}
+{?Headers}
+{?IArrayLike<VALUE>}
+{?IArrayLike<string>}
+{?Image}
+{?MediaQueryList}
+{?NamedNodeMap}
+{?Node=}
+{?Node}
+{?Object<string, *>=}
+{?Object<string, ?goog.html.SafeHtml.AttributeValue>=}
+{?Object<string, string>=}
+{?Object=}
+{?Object}
+{?boolean=}
+{?boolean}
+{?dom.PageVisibilityState}
+{?function(!Array<!Object>)}
+{?function(!Element, number): !goog.ui.editor.Bubble}
+{?function(!Error, !Object<string, string>)}
+{?function(!Object)}
+{?function(!WebChannelBase, !Array<!Array<?>>)}
+{?function(!goog.net.BrowserChannel, !Array<!Array<?>>)}
+{?function():Element}
+{?function()}
+{?function(?number)}
+{?function(ARG_TYPES, null=, Object<string, *>=):*}
+{?function(ARG_TYPES, null=, Object<string, *>=):RETURN_TYPE}
+{?function(K, K): number=}
+{?function(T, T): number=}
+{?function(T,T):number=}
+{?function(function(number)): number}
+{?function(number): number}
+{?function(string): string}
+{?function(string, (string|!Object))}
+{?function(string, string):?string}
+{?function(this: S, T, number, ?): ?}
+{?function(this:S, R, T, number, ?) : R}
+{?function(this:S, T, number, ?) : boolean}
+{?function(this:S, T, number, ?) : string}
+{?function(this:S, T, number, ?):boolean}
+{?function(this:T, ...)}
+{?function(this:T,V,?,Object<K,V>):boolean}
+{?function(this:THIS, *): *}
+{?function(this:goog.net.XhrIo, ?)=}
+{?goog.Promise.CallbackEntry_}
+{?goog.Promise}
+{?goog.a11y.aria.Role=}
+{?goog.a11y.aria.Role}
+{?goog.async.WorkItem}
+{?goog.date.Date}
+{?goog.debug.Logger}
+{?goog.dom.DomHelper=}
+{?goog.dom.SavedRange}
+{?goog.ds.DataNode}
+{?goog.events.BrowserEvent}
+{?goog.events.Event=}
+{?goog.events.FocusHandler}
+{?goog.events.KeyHandler}
+{?goog.fs.url.UrlObject_}
+{?goog.fx.ActiveDropTarget_}
+{?goog.fx.DragDropItem}
+{?goog.fx.Dragger}
+{?goog.fx.ScrollableContainer_}
+{?goog.html.SafeHtml=}
+{?goog.html.TrustedResourceUrl=}
+{?goog.html.sanitizer.HtmlSanitizer=}
+{?goog.i18n.bidi.Dir=}
+{?goog.i18n.bidi.Dir}
+{?goog.json.Replacer=}
+{?goog.json.Reviver=}
+{?goog.labs.html.AttributeRewriter}
+{?goog.labs.net.webChannel.ChannelRequest.Error}
+{?goog.labs.pubsub.BroadcastPubSub.Ie8Event_}
+{?goog.log.Logger}
+{?goog.math.Box=}
+{?goog.math.Box}
+{?goog.math.Coordinate}
+{?goog.net.ChannelRequest.Error}
+{?goog.net.XhrIo}
+{?goog.net.XhrLike.OrNative}
+{?goog.net.streams.StreamParser}
+{?goog.net.xpc.CrossPageChannel}
+{?goog.positioning.AbstractPosition}
+{?goog.positioning.Corner=}
+{?goog.proto2.Descriptor}
+{?goog.structs.AvlTree.Node<T>}
+{?goog.testing.MockClock}
+{?goog.testing.TestCase.Order}
+{?goog.testing.TestCase}
+{?goog.ui.Container.Orientation=}
+{?goog.ui.Container.Orientation}
+{?goog.ui.Dialog}
+{?goog.ui.MenuRenderer=}
+{?goog.ui.ac.AutoComplete.Matcher}
+{?goog.ui.editor.AbstractDialog}
+{?goog.ui.tree.BaseNode}
+{?goog.ui.tree.TreeControl}
+{?number=}
+{?number}
+{?proto2.TestAllTypes.NestedEnum}
+{?proto2.TestAllTypes.NestedMessage}
+{?proto2.TestAllTypes.OptionalGroup}
+{?proto2.TestAllTypes.RepeatedGroup}
+{?proto2.TestAllTypes}
+{?proto2.TestDefaultChild}
+{?string=}
+{?string|!goog.events.EventId<EVENTOBJ>}
+{?string}
+{?{callback: function((string|!Object)), objectPayload: boolean}}
+{?{length:number}}
+{?{line: !goog.string.newlines.Line, lineIndex: number}}
+{?{line: number, column: number}}
+{?{moduleName: (string|undefined), declareLegacyNamespace:boolean}}
+{?}
+{ARG_TYPES=}
+{Array<!Array<Element>>}
+{Array<!Array<number>>}
+{Array<!Array<string|boolean>>}
+{Array<!Element>}
+{Array<!Error>}
+{Array<!Function>}
+{Array<!MessagePort>}
+{Array<!Object>}
+{Array<!goog.editor.plugins.LinkBubble.Action>}
+{Array<!goog.events.Listener>}
+{Array<!goog.labs.mock.MethodBinding_>}
+{Array<!goog.proto2.FieldDescriptor>}
+{Array<!goog.result.Result>}
+{Array<!goog.structs.TreeNode<KEY, VALUE>>}
+{Array<!goog.ui.editor.ButtonDescriptor>}
+{Array<*>?}
+{Array<*>}
+{Array<?>=}
+{Array<?>}
+{Array<?number>}
+{Array<Array<(HTMLDivElement|goog.ui.emoji.Emoji)>>}
+{Array<Array<*>>}
+{Array<Array<?>>}
+{Array<Array<number>>}
+{Array<Array<string>>}
+{Array<CSSStyleRule>}
+{Array<Document>}
+{Array<Element>?}
+{Array<Element>}
+{Array<Function>}
+{Array<HTMLAnchorElement>=}
+{Array<HTMLDivElement>}
+{Array<HTMLIFrameElement>}
+{Array<MessagePort>=}
+{Array<MessagePort>}
+{Array<Node>}
+{Array<Node|number|string>}
+{Array<Object> | Object}
+{Array<Object>=}
+{Array<Object>?}
+{Array<Object>|undefined}
+{Array<Object>}
+{Array<Range>}
+{Array<RegExp>}
+{Array<S>|Object<?,S>}
+{Array<T>|Object<?,T>=}
+{Array<T>|goog.structs.Collection<T>|Object<?,T>}
+{Array<T>}
+{Array<VALUE>}
+{Array<Wire.QueuedMap>=}
+{Array<Wire.QueuedMap>}
+{Array<boolean>}
+{Array<function(*, *) : number>}
+{Array<function(Element):boolean>}
+{Array<goog.color.Rgb>}
+{Array<goog.cssom.iframe.style.CssSelector_>}
+{Array<goog.debug.Trace_.Event_>}
+{Array<goog.dom.RangeIterator>}
+{Array<goog.dom.SavedRange>}
+{Array<goog.dom.TextRange>?}
+{Array<goog.dom.TextRange>}
+{Array<goog.dom.pattern.AbstractPattern>}
+{Array<goog.ds.DataNode>=}
+{Array<goog.editor.plugins.UndoRedoState>}
+{Array<goog.events.EventType>}
+{Array<goog.events.KeyCodes>}
+{Array<goog.events.Listenable>=}
+{Array<goog.fx.AbstractDragDrop>}
+{Array<goog.fx.ActiveDropTarget_>}
+{Array<goog.fx.DragDropItem>}
+{Array<goog.fx.ScrollableContainer_>}
+{Array<goog.fx.TransitionBase>}
+{Array<goog.graphics.Element>}
+{Array<goog.graphics.ext.Element>}
+{Array<goog.math.Coordinate>}
+{Array<goog.math.Range>=}
+{Array<goog.math.Range|Array<number>>|string}
+{Array<goog.math.Range|Array<number>>}
+{Array<goog.module.ModuleLoadCallback>}
+{Array<goog.net.BrowserChannel.QueuedMap>=}
+{Array<goog.net.BrowserChannel.QueuedMap>}
+{Array<goog.net.EventType>}
+{Array<goog.net.IframeLoadMonitor>}
+{Array<goog.net.xpc.IframePollingTransport.Receiver>}
+{Array<goog.positioning.Corner>}
+{Array<goog.structs.Node>}
+{Array<goog.style.transition.Css3Property>}
+{Array<goog.testing.MockExpectation>}
+{Array<goog.testing.MockInterface>}
+{Array<goog.testing.TestCase.Test>}
+{Array<goog.ui.Component>?}
+{Array<goog.ui.Control>=}
+{Array<goog.ui.GaugeColoredRange>}
+{Array<goog.ui.ServerChart.MultiAxisType>}
+{Array<goog.ui.TabPane.TabPage>}
+{Array<goog.ui.emoji.EmojiPalette>?}
+{Array<goog.ui.emoji.EmojiPalette>}
+{Array<goog.ui.media.MediaModel.Category>}
+{Array<goog.ui.media.MediaModel.SubTitle>}
+{Array<goog.ui.media.MediaModel.Thumbnail>}
+{Array<goog.ui.tree.BaseNode>|undefined}
+{Array<goog.vec.Matrix4.Type>}
+{Array<goog.vec.mat4d.Type>}
+{Array<goog.vec.mat4f.Type>}
+{Array<goog.vec.vec3d.Type>}
+{Array<goog.vec.vec3f.Type>}
+{Array<goog.vec.vec4d.Type>}
+{Array<goog.vec.vec4f.Type>}
+{Array<number>=}
+{Array<number>?}
+{Array<number>|Float32Array}
+{Array<number>|Float64Array}
+{Array<number>|Uint8Array|string}
+{Array<number>|Uint8Array}
+{Array<number>|number}
+{Array<number>|undefined}
+{Array<number>}
+{Array<number?>}
+{Array<string>=}
+{Array<string>?}
+{Array<string>|string=}
+{Array<string>|string|RegExp|null}
+{Array<string>|string|RegExp|undefined}
+{Array<string>|string|null}
+{Array<string>|undefined}
+{Array<string>}
+{Array<string|!Blob>}
+{Array<string|!goog.testing.fs.Blob>}
+{Array<string|goog.Uri>}
+{Array<string|number>}
+{Array<string|undefined>}
+{Array<{ object: ?, key: string, value: ? }>}
+{Array<{classNames,combinedClassName,els}>}
+{Array<{regex: RegExp, message: string}>}
+{Array<{serviceName: string, payload: string}>}
+{Array<{template: string, data: Object, ijData: Object}>}
+{Array=}
+{ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
+{ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string|undefined}
+{ArrayBuffer}
+{Array|goog.ds.DataNode}
+{Array|undefined}
+{Attr}
+{BaseTestChannel}
+{Blob}
+{CONTEXT=}
+{CSSRuleList}
+{CSSRule}
+{CSSStyleSheet=}
+{CSSStyleSheet|StyleSheetList}
+{CSSStyleSheet}
+{CanvasRenderingContext2D}
+{ChannelRequest.Error}
+{ChannelRequest=}
+{ChannelRequest}
+{Channel}
+{ControlRange}
+{DEFAULT=}
+{DOMStringList}
+{Date=}
+{Date|goog.date.DateTime}
+{Date}
+{Document=}
+{Document|Element}
+{Document|TextRange|Range}
+{Document}
+{EVENTOBJ}
+{Element=}
+{Element?}
+{Element|Document=}
+{Element|DocumentFragment=}
+{Element|Document|null}
+{Element|Document}
+{Element|Event|goog.events.Event}
+{Element|StyleSheet}
+{Element|Window}
+{Element|goog.events.EventTarget}
+{Element|null|string}
+{Element|string=}
+{Element|string|function():Element=}
+{Element|string|null}
+{Element|string}
+{Element|undefined}
+{Element}
+{Error=}
+{Error|Object=}
+{Error|string}
+{Error}
+{Event=}
+{EventTarget=}
+{EventTarget|goog.events.EventTarget}
+{EventTarget|goog.events.Listenable}
+{EventTarget}
+{Event}
+{FileReader}
+{Float32Array}
+{Float64Array}
+{Function=}
+{Function|Object}
+{Function|undefined}
+{Function}
+{HTMLAnchorElement}
+{HTMLBodyElement}
+{HTMLButtonElement}
+{HTMLDivElement}
+{HTMLDocument}
+{HTMLElement}
+{HTMLFormElement}
+{HTMLIFrameElement=}
+{HTMLIFrameElement}
+{HTMLInputElement=}
+{HTMLInputElement|HTMLSelectElement|null}
+{HTMLInputElement|HTMLTextAreaElement}
+{HTMLInputElement}
+{HTMLLinkElement}
+{HTMLObjectElement}
+{HTMLScriptElement}
+{HTMLSelectElement|HTMLInputElement|null}
+{HTMLSelectElement|HTMLInputElement}
+{HTMLSelectElement}
+{HTMLSpanElement}
+{HTMLTableCellElement}
+{HTMLTextAreaElement}
+{IArrayLike<?>|string}
+{IArrayLike<?>}
+{IArrayLike<S>}
+{IArrayLike<T>|string}
+{IArrayLike<T>}
+{IArrayLike<VALUE>|string}
+{IArrayLike<VALUE>}
+{IArrayLike<number>}
+{IArrayLike<string>}
+{IArrayLike=}
+{IArrayLike}
+{IDBCursor}
+{IDBFactory}
+{IDBKeyType=}
+{IDBKeyType}
+{IDBRequest}
+{ITEM}
+{IThenable<TYPE>}
+{Image}
+{Iterable<VALUE>}
+{Iterator<RESULT>}
+{KEY}
+{K}
+{Location}
+{MapPerf.MapType}
+{MediaQueryList}
+{MessageEvent<string>}
+{MessagePort}
+{MessageType}
+{MockWebSocket}
+{Navigator}
+{Node=}
+{Node?}
+{Node|Object}
+{Node|Window}
+{Node|goog.events.EventTarget}
+{Node|string=}
+{Node|string}
+{Node|undefined}
+{Node}
+{Object!}
+{Object<!(goog.a11y.aria.State|string), (string|boolean|number)>}
+{Object<?goog.messaging.MultiChannel.VirtualChannel>}
+{Object<Array<goog.editor.Plugin>>}
+{Object<Array<string>>}
+{Object<Element>}
+{Object<K,V>}
+{Object<boolean>}
+{Object<goog.a11y.aria.LivePriority, !Element>}
+{Object<goog.module.ModuleManager.CallbackType, Array<Function>>}
+{Object<goog.ui.Component.State, goog.a11y.aria.State>}
+{Object<goog.ui.editor.Bubble.Panel_>}
+{Object<number, !goog.proto2.FieldDescriptor>}
+{Object<number, boolean>}
+{Object<number, function(Object)>}
+{Object<number, goog.ui.KeyboardShortcutHandler.SequenceNode_>}
+{Object<number,goog.dom.ViewportSizeMonitor>}
+{Object<number>}
+{Object<string, !Array<string>>}
+{Object<string, !goog.module.ModuleInfo>}
+{Object<string, (string|number|boolean)>|undefined}
+{Object<string, *>=}
+{Object<string, boolean>}
+{Object<string, function(*, *, number): boolean>}
+{Object<string, goog.labs.html.AttributeRewriter>}
+{Object<string, number>}
+{Object<string, string>=}
+{Object<string, string>}
+{Object<string,?number>}
+{Object=}
+{Object|Array<number>}
+{Object|Array<string>}
+{Object|Function}
+{Object|goog.events.Listenable|goog.events.EventTarget}
+{Object|goog.structs.Map=}
+{Object|goog.structs.Map|goog.Uri.QueryData}
+{Object|goog.structs.Map|null}
+{Object|goog.structs.Map|undefined}
+{Object|goog.structs.Map}
+{Object|null|undefined}
+{Object|number|boolean|string}
+{Object|number}
+{Object|string=}
+{Object|string|Array|NodeList}
+{Object|string}
+{Object|undefined}
+{Object}
+{PAYLOAD}
+{R=}
+{RESOLVER_CONTEXT=}
+{RESULT}
+{RETURN_TYPE}
+{RangeOverlap}
+{Range|TextRange|null}
+{Range|TextRange}
+{Range}
+{RegExp}
+{RequestCache|undefined}
+{RequestCache}
+{RequestCredentials|undefined}
+{RequestCredentials}
+{R}
+{S=}
+{SCOPE=}
+{Selection}
+{Storage}
+{String}
+{S}
+{T=}
+{TARGET}
+{THIS=}
+{TYPE}
+{TextRange}
+{Text}
+{Thenable}
+{Touch}
+{Transport}
+{T|S}
+{T|null}
+{T|undefined}
+{T}
+{Uint8Array|Array<number>}
+{VALUE=}
+{VALUE|undefined}
+{VALUE}
+{V|DEFAULT}
+{V|R|undefined}
+{V|undefined}
+{V}
+{WebChannelBase.Error}
+{WebChannelBase.Handler}
+{WebChannelBase.State}
+{WebChannelBase}
+{WebChannelDebug}
+{WebSocket}
+{Window=}
+{Window}
+{XMLHttpRequest}
+{boolean=}
+{boolean|!Object<string>=}
+{boolean|string|number=}
+{boolean|undefined}
+{boolean}
+{dom.PageVisibilityState}
+{function (*): !Object}
+{function (*): string}
+{function (MediaQueryList)}
+{function (string, string):?string=}
+// REASON: Typo? https://github.com/google/closure-library/blob/
+//             47f9c92bb4c7de9a3d46f9921a427402910073fb/
+//             closure/goog/ui/richtextspellchecker_test.js#L89
+// {function(!Array.)}
+{function(!Date):string=}
+{function(!Element): T}
+{function(!Element, number): !goog.ui.editor.Bubble}
+{function(!Error, !Object<string, string>)=}
+{function(!Function): !Function}
+{function(!Function)}
+{function(!Object)}
+{function(!Object, function(*))}
+{function(!Object=)}
+{function(!goog.asserts.AssertionError)}
+{function(!goog.db.IndexedDb.VersionChangeEvent)}
+{function(!goog.debug.LogRecord)}
+{function(!goog.math.Path.Segment, !Array<number>)}
+{function(!goog.testing.TestCase.Result)}
+{function(!goog.ui.Control, !Event)=}
+{function(!goog.ui.Control, !Event)}
+{function(!goog.ui.Control,!Event)}
+{function((!Object|string)): ?}
+{function((Function|string), number=, *=): number}
+{function((TYPE|goog.Promise<TYPE>|Thenable)=)}
+{function((null|number|undefined)): void}
+{function((string|!Object))}
+{function() : !Object}
+{function() : !goog.net.XhrLike.OrNative}
+{function() : Object}
+{function() : void}
+{function(): !goog.net.WebChannelTransport}
+{function(): goog.dom.AbstractRange}
+{function(): number}
+{function(): undefined}
+{function():!Iterator<VALUE>}
+{function():!Object}
+{function():!goog.crypt.Hash}
+{function():!goog.events.Listenable}
+{function():!goog.net.XhrLike.OrNative}
+{function():(goog.async.Deferred|undefined)}
+{function():*}
+{function():ITEM}
+{function():T}
+{function():V}
+{function():boolean}
+{function():number=}
+{function():undefined}
+{function():void}
+{function()=}
+{function()?=}
+{function()|null|undefined}
+{function()}
+{function(*): !goog.Promise}
+{function(*): *}
+{function(*):Object}
+{function(*):boolean}
+{function(*)}
+{function(*, *) : number}
+{function(*, ?goog.json.Replacer=):string}
+{function(*=): void}
+{function(...): boolean}
+{function(...): null}
+{function(...*) : *}
+{function(...*) : void}
+{function(...?): undefined}
+{function(...?):T}
+{function(...?):boolean}
+{function(...?)}
+{function(?):?|string}
+{function(?):?|{handleEvent:function(?):?}|null}
+{function(?):?}
+{function(?):K=}
+{function(?, ?): number}
+{function(?, ?):boolean}
+{function(?, ?, ?): number | function(?, ?): number}
+{function(?, goog.math.Coordinate, goog.structs.QuadTree)}
+{function(?Object)}
+{function(?number)?=}
+{function(?string)}
+{function(EVENTOBJ):?|{handleEvent:function(?):?}|null=}
+{function(EVENTOBJ):?|{handleEvent:function(?):?}|null}
+{function(Element): Element}
+{function(Element): goog.ui.Control}
+{function(Element): void}
+{function(Element):Element?}
+{function(Element):boolean}
+{function(Element)?}
+{function(Element)}
+{function(Function): string}
+{function(Function):string}
+{function(ITEM):void}
+{function(Node) : boolean}
+{function(Node): boolean}
+{function(Node):boolean}
+{function(Object)}
+{function(T): K}
+{function(T):?}
+{function(T):string=}
+{function(TARGET, VALUE): number=}
+{function(TYPE): ?}
+{function(V, V): boolean=}
+{function(VALUE): KEY=}
+{function(VALUE): KEY}
+{function(VALUE, VALUE): number=}
+{function(VALUE,VALUE):boolean=}
+{function(boolean)}
+{function(function())=}
+{function(function())}
+{function(goog.structs.QuadTree.Node)}
+{function(goog.ui.Control,Event)}
+{function(goog.ui.Dialog.EventType):*}
+{function(new: Date)}
+{function(new: T, ...)}
+{function(new: goog.format.EmailAddress, string=,string=)}
+{function(new:CSSMatrix, string)?}
+{function(new:MessageType)}
+{function(new:T, ...)}
+{function(new:goog.Thenable,...?)}
+{function(new:goog.proto2.Message)}
+{function(new:goog.ui.ControlRenderer)}
+{function(number) : number=}
+{function(number) : string}
+{function(number):?string}
+{function(number):number=}
+{function(number):number}
+{function(number):void}
+{function(number)}
+{function(number, !goog.html.SafeHtml): !goog.html.SafeHtml}
+{function(number, ...*): *}
+{function(number, Array)}
+{function(number, Object): string=}
+{function(number, boolean, goog.date.relative.Unit): string}
+{function(number, goog.stats.BasicStat.Slot_): number}
+{function(number, number, boolean): boolean}
+{function(number, number=):!goog.math.Vec2}
+{function(number, string, string)}
+{function(string) : string}
+{function(string): *}
+{function(string): boolean}
+{function(string): string}
+{function(string):?}
+{function(string):Object}
+{function(string):boolean}
+{function(string):void}
+{function(string)}
+{function(string, (string|!Object))}
+{function(string, VALUE)=}
+{function(string, VALUE)|undefined}
+{function(string, VALUE)}
+{function(string, number, !Array<!Object>): !Array<!Object>}
+{function(string, string): number}
+{function(string, string): string}
+{function(string, string)=}
+{function(string, string)}
+{function(string, string, string, (Object|goog.structs.Map)=)}
+{function(string, undefined, !goog.structs.StringSet)}
+{function(this: CONTEXT):TYPE}
+{function(this: Object, string): boolean}
+{function(this: S, T, number, ?): boolean}
+{function(this: T, !Element)}
+{function(this: T, ...?)}
+{function(this: goog.ui.Container, number, number) : number}
+{function(this:CONTEXT, PAYLOAD)}
+{function(this:Object, string, *): *}
+{function(this:S, R, T, number, ?) : R}
+{function(this:S, T,number,Array<T>):?}
+{function(this:SCOPE)|{handleEvent:function()}|null}
+{function(this:SCOPE)}
+{function(this:SCOPE, ...?)}
+{function(this:SCOPE, ?):?|{handleEvent:function(?):?}|null}
+{function(this:SCOPE, EVENTOBJ):(boolean|undefined)}
+{function(this:SCOPE, EVENTOBJ):?|{handleEvent:function(?):?}|null=}
+{function(this:T):?}
+{function(this:T, !goog.result.Result):!goog.result.Result}
+{function(this:T, !goog.result.Result)}
+{function(this:T, ?):?|{handleEvent:function(?):?}|null}
+{function(this:T, ?):?|{handleEvent:function(this:T, ?):?}|null}
+{function(this:T, ?, !goog.result.Result)}
+{function(this:T, EVENTOBJ):?|{handleEvent:function(?):?}|null}
+{function(this:T, EVENTOBJ):?|{handleEvent:function(this:T, ?):?}}
+{function(this:T, V, K, goog.structs.Map<K,V>)}
+{function(this:T, VALUE, KEY, goog.structs.LinkedMap<KEY, VALUE>)}
+{function(this:T, number, *)}
+{function(this:T, number, number, number, !goog.math.Matrix): number}
+{function(this:T, number, number, number, !goog.math.Matrix)}
+{function(this:T,?,?,S):?}
+{function(this:T,?,?,S):V}
+{function(this:T,?,?,S):boolean}
+{function(this:T,?,number):?}
+{function(this:T,V,?,Object<K,V>):?}
+{function(this:T,V,?,Object<K,V>):R}
+{function(this:T,V,?,Object<K,V>):boolean}
+{function(this:T,V,string,Object<K,V>):boolean}
+{function(this:THIS): void}
+{function(this:THIS)}
+{function(this:THIS, !goog.structs.TreeNode<KEY, VALUE>)}
+{function(this:THIS, VALUE, number, ?): !Array<RESULT>}
+{function(this:THIS, VALUE, number, ?): RESULT}
+{function(this:THIS, VALUE, number, ?): number}
+{function(this:THIS,...*):RESULT}
+{function(this:THIS,VALUE,?,!goog.iter.Iterator<VALUE>)}
+{function(this:THIS,VALUE,VALUE):VALUE}
+{goog.Disposable}
+{goog.Promise.CallbackEntry_}
+{goog.Promise.State_}
+{goog.Promise}
+{goog.Thenable<TYPE>}
+{goog.Thenable}
+{goog.Timer=}
+{goog.Timer|undefined}
+{goog.Timer}
+{goog.Uri.QueryData|string|undefined}
+{goog.Uri=}
+{goog.Uri?=}
+{goog.Uri?}
+{goog.Uri|string}
+{goog.Uri}
+{goog.a11y.aria.Announcer}
+{goog.a11y.aria.LivePriority=}
+{goog.a11y.aria.Role|undefined}
+{goog.a11y.aria.Role}
+{goog.a11y.aria.State}
+{goog.asserts.AssertionError}
+{goog.async.ConditionalDelay}
+{goog.async.Deferred=}
+{goog.async.Deferred|*}
+{goog.async.Deferred}
+{goog.async.Delay|goog.async.AnimationDelay}
+{goog.async.Delay}
+{goog.async.FreeList<!goog.Promise.CallbackEntry_>}
+{goog.async.FreeList<goog.async.WorkItem>}
+{goog.async.Throttle}
+{goog.async.WorkItem}
+{goog.color.Hsl}
+{goog.color.Hsv}
+{goog.color.Rgb}
+{goog.crypt.BlockCipher}
+{goog.crypt.Hash}
+{goog.crypt.Sha2_64bit}
+{goog.crypt.Sha2}
+{goog.cssom.iframe.style.NodeAncestry_}
+{goog.date.Date=}
+{goog.date.Date?}
+{goog.date.DateLike=}
+{goog.date.DateLike}
+{goog.date.DateRange}
+{goog.date.DateTime}
+{goog.date.Date|Date=}
+{goog.date.Date|Date}
+{goog.date.Date}
+{goog.date.Interval}
+{goog.date.UtcDateTime}
+{goog.date.month}
+{goog.date.relative.TimeDeltaFormatter}
+{goog.date.relative.Unit}
+{goog.date.weekDay}
+{goog.db.BlockedCallback=}
+{goog.db.Error}
+{goog.db.Transaction.TransactionMode=}
+{goog.db.Transaction.TransactionMode}
+{goog.db.UpgradeNeededCallback=}
+{goog.debug.Console}
+{goog.debug.DebugWindow}
+{goog.debug.DevCss.UserAgent=}
+{goog.debug.DivConsole?}
+{goog.debug.EntryPointMonitor}
+{goog.debug.ErrorHandler}
+{goog.debug.ErrorReporter}
+{goog.debug.Error}
+{goog.debug.Formatter}
+{goog.debug.FpsDisplay.FpsAnimation_}
+{goog.debug.HtmlFormatter}
+{goog.debug.LogRecord}
+{goog.debug.Loggable}
+{goog.debug.Logger.Level}
+{goog.debug.Logger=}
+{goog.debug.Logger}
+{goog.debug.RelativeTimeProvider}
+{goog.debug.Trace_.Event_}
+{goog.debug.Trace_.Stat_}
+{goog.debug.Trace_}
+{goog.defineClass.ClassDescriptor}
+{goog.demos.editor.HelloWorldDialog.OkEvent}
+{goog.demos.editor.HelloWorldDialog}
+{goog.disposable.IDisposable}
+{goog.dom.AbstractMultiRange}
+{goog.dom.AbstractRange=}
+{goog.dom.AbstractRange?}
+{goog.dom.AbstractRange|undefined}
+{goog.dom.AbstractRange}
+{goog.dom.ControlRange?}
+{goog.dom.ControlRange}
+{goog.dom.DomHelper=}
+{goog.dom.DomHelper?}
+{goog.dom.DomHelper|Array<goog.dom.DomHelper>=}
+{goog.dom.DomHelper|undefined}
+{goog.dom.DomHelper}
+{goog.dom.Element}
+{goog.dom.MultiRange}
+{goog.dom.NodeType}
+{goog.dom.RangeEndpoint}
+{goog.dom.RangeIterator}
+{goog.dom.RangeType}
+{goog.dom.SavedCaretRange?}
+{goog.dom.SavedCaretRange}
+{goog.dom.SavedRange=}
+{goog.dom.SavedRange}
+{goog.dom.TagIterator}
+{goog.dom.TagName}
+{goog.dom.TagWalkType?=}
+{goog.dom.TagWalkType}
+{goog.dom.TextRange}
+{goog.dom.ViewportSizeMonitor}
+{goog.dom.animationFrame.TaskSet_}
+{goog.dom.annotate.AnnotateFn}
+{goog.dom.browserrange.AbstractRange?}
+{goog.dom.browserrange.AbstractRange}
+{goog.dom.browserrange.W3cRange}
+{goog.dom.iter.SiblingIterator}
+{goog.dom.pattern.AbstractPattern}
+{goog.dom.pattern.AllChildren}
+{goog.dom.pattern.MatchType}
+{goog.dom.pattern.StartTag}
+{goog.dom.pattern.Tag}
+{goog.ds.AbstractFastDataNode}
+{goog.ds.BaseDataNode}
+{goog.ds.BasicNodeList}
+{goog.ds.DataNode=}
+{goog.ds.DataNodeList}
+{goog.ds.DataNode|goog.ds.DataNodeList}
+{goog.ds.DataNode}
+{goog.ds.Expr=}
+{goog.ds.Expr?}
+{goog.ds.Expr}
+{goog.ds.FastDataNode}
+{goog.ds.JsDataSource}
+{goog.ds.LoadState}
+{goog.ds.XmlDataSource}
+{goog.editor.Field.EventType}
+{goog.editor.Field}
+{goog.editor.Link?}
+{goog.editor.Link}
+{goog.editor.Plugin.Op}
+{goog.editor.Plugin}
+{goog.editor.SeamlessField}
+{goog.editor.icontent.FieldFormatInfo}
+{goog.editor.icontent.FieldStyleInfo?}
+{goog.editor.plugins.AbstractBubblePlugin}
+{goog.editor.plugins.AbstractDialogPlugin}
+{goog.editor.plugins.AbstractTabHandler}
+{goog.editor.plugins.BasicTextFormatter.COMMAND|string}
+{goog.editor.plugins.BasicTextFormatter.COMMAND}
+{goog.editor.plugins.EnterHandler}
+{goog.editor.plugins.UndoRedo.CursorPosition_?}
+{goog.editor.plugins.UndoRedo.CursorPosition_|null|undefined}
+{goog.editor.plugins.UndoRedo.CursorPosition_}
+{goog.editor.plugins.UndoRedo.UndoState_?}
+{goog.editor.plugins.UndoRedo.UndoState_}
+{goog.editor.plugins.UndoRedoManager=}
+{goog.editor.plugins.UndoRedoManager}
+{goog.editor.plugins.UndoRedoState|undefined}
+{goog.editor.plugins.UndoRedoState}
+{goog.editor.range.Point}
+{goog.events.ActionEventWrapper_}
+{goog.events.BrowserEvent.MouseButton=}
+{goog.events.BrowserEvent.MouseButton}
+{goog.events.BrowserEvent=}
+{goog.events.BrowserEvent|Event}
+{goog.events.BrowserEvent|goog.fx.DragEvent}
+{goog.events.BrowserEvent|goog.math.Coordinate=}
+{goog.events.BrowserEvent}
+{goog.events.Event.prototype}
+{goog.events.Event=}
+{goog.events.EventHandler<!goog.History>}
+{goog.events.EventHandler<!goog.editor.Field>}
+{goog.events.EventHandler<!goog.editor.plugins.LinkDialogPlugin>}
+{goog.events.EventHandler<!goog.events.ImeHandler>}
+{goog.events.EventHandler<!goog.events.InputHandler>}
+{goog.events.EventHandler<!goog.events.OnlineHandler>}
+{goog.events.EventHandler<!goog.events.PasteHandler>}
+{goog.events.EventHandler<!goog.fx.DragListGroup>}
+{goog.events.EventHandler<!goog.fx.DragScrollSupport>}
+{goog.events.EventHandler<!goog.graphics.SvgGraphics>}
+{goog.events.EventHandler<!goog.module.ModuleLoader>}
+{goog.events.EventHandler<!goog.net.BulkLoader>}
+{goog.events.EventHandler<!goog.net.XhrManager>}
+{goog.events.EventHandler<!goog.testing.ContinuationTestCase>}
+{goog.events.EventHandler<!goog.testing.MultiTestRunner.TestFrame>}
+{goog.events.EventHandler<!goog.testing.MultiTestRunner>}
+{goog.events.EventHandler<!goog.ui.ActivityMonitor>}
+{goog.events.EventHandler<!goog.ui.CharPicker>}
+{goog.events.EventHandler<!goog.ui.IframeMask>}
+{goog.events.EventHandler<!goog.ui.MenuBase>}
+{goog.events.EventHandler<!goog.ui.PopupBase>}
+{goog.events.EventHandler<!goog.ui.Zippy>}
+{goog.events.EventHandler<!goog.ui.ac.InputHandler>}
+{goog.events.EventHandler<!goog.ui.editor.Bubble>}
+{goog.events.EventHandler<!goog.ui.editor.LinkDialog>}
+{goog.events.EventHandler<!goog.ui.editor.TabPane>}
+{goog.events.EventHandler<!goog.ui.media.FlashObject>}
+{goog.events.EventHandler<T>}
+{goog.events.EventHandler=}
+{goog.events.EventHandler|undefined}
+{goog.events.EventHandler}
+{goog.events.EventId<MyEventObj>}
+{goog.events.EventLike}
+{goog.events.EventTarget|EventTarget}
+{goog.events.EventTarget}
+{goog.events.EventType=}
+{goog.events.EventType}
+{goog.events.EventWrapper}
+{goog.events.Event|Object|string}
+{goog.events.Event}
+{goog.events.FocusHandler}
+{goog.events.ImeHandler.EventType}
+{goog.events.InputHandler?}
+{goog.events.InputHandler|undefined}
+{goog.events.InputHandler}
+{goog.events.KeyCodes}
+{goog.events.KeyEvent}
+{goog.events.KeyHandler?}
+{goog.events.KeyHandler|undefined}
+{goog.events.KeyHandler}
+{goog.events.Key|number}
+{goog.events.Key}
+{goog.events.ListenableKey}
+{goog.events.ListenableType}
+{goog.events.Listenable}
+{goog.events.ListenerMap}
+{goog.events.Listener}
+{goog.events.MouseWheelEvent}
+{goog.events.MouseWheelHandler}
+{goog.events.PasteHandler.State}
+{goog.events.WheelEvent.DeltaMode}
+{goog.events.WheelEvent.EventType}
+{goog.events.eventTargetTester.KeyType}
+{goog.events.eventTargetTester.UnlistenReturnType}
+{goog.format.EmailAddress}
+{goog.format.HtmlPrettyPrinter?}
+{goog.format.JsonPrettyPrinter.TextDelimiters}
+{goog.fs.DirectoryEntry.Behavior=}
+{goog.fs.DirectoryEntry.Behavior}
+{goog.fs.DirectoryEntryImpl}
+{goog.fs.DirectoryEntry}
+{goog.fs.EntryImpl}
+{goog.fs.Entry}
+{goog.fs.Error.ErrorCode}
+{goog.fs.Error=}
+{goog.fs.Error|undefined}
+{goog.fs.Error}
+{goog.fs.FileEntry}
+{goog.fs.FileReader.EventType}
+{goog.fs.FileReader.ReadyState}
+{goog.fs.FileReader}
+{goog.fs.FileSaver.EventType}
+{goog.fs.FileSaver.ReadyState}
+{goog.fs.FileSaver}
+{goog.fs.FileSystemType_}
+{goog.fs.FileSystem}
+{goog.fs.FileWriter}
+{goog.fs.url.UrlObject_}
+{goog.fx.AbstractDragDrop=}
+{goog.fx.AbstractDragDrop?}
+{goog.fx.AbstractDragDrop|undefined}
+{goog.fx.AbstractDragDrop}
+{goog.fx.ActiveDropTarget_}
+{goog.fx.Animation?}
+{goog.fx.AnimationEvent}
+{goog.fx.AnimationParallelQueue}
+{goog.fx.AnimationQueue}
+{goog.fx.Animation|undefined}
+{goog.fx.Animation}
+{goog.fx.DragDropItem=}
+{goog.fx.DragDropItem|undefined}
+{goog.fx.DragDropItem}
+{goog.fx.DragEvent}
+{goog.fx.DragListDirection}
+{goog.fx.DragListGroup}
+{goog.fx.Dragger?}
+{goog.fx.Dragger}
+{goog.fx.Transition=}
+{goog.fx.TransitionBase.State}
+{goog.fx.TransitionBase}
+{goog.fx.Transition|undefined}
+{goog.fx.Transition}
+{goog.fx.anim.Animated}
+{goog.fx.dom.Fade}
+{goog.fx.dom.PredefinedEffect}
+{goog.fx.dom.Slide}
+{goog.graphics.AbstractGraphics?}
+{goog.graphics.AbstractGraphics}
+{goog.graphics.AffineTransform?}
+{goog.graphics.AffineTransform}
+{goog.graphics.CanvasGraphics}
+{goog.graphics.CanvasGroupElement}
+{goog.graphics.CanvasPathElement}
+{goog.graphics.Element}
+{goog.graphics.EllipseElement}
+{goog.graphics.Fill?}
+{goog.graphics.Fill}
+{goog.graphics.Font?}
+{goog.graphics.Font}
+{goog.graphics.GroupElement=}
+{goog.graphics.GroupElement?}
+{goog.graphics.GroupElement|undefined}
+{goog.graphics.GroupElement}
+{goog.graphics.ImageElement}
+{goog.graphics.Path?}
+{goog.graphics.PathElement}
+{goog.graphics.Path}
+{goog.graphics.RectElement}
+{goog.graphics.Stroke?}
+{goog.graphics.StrokeAndFillElement}
+{goog.graphics.Stroke}
+{goog.graphics.SvgGraphics}
+{goog.graphics.TextElement}
+{goog.graphics.VmlGraphics}
+{goog.graphics.ext.Element.PositionType_}
+{goog.graphics.ext.Element.Position_}
+{goog.graphics.ext.Element|goog.graphics.ext.Graphics}
+{goog.graphics.ext.Element}
+{goog.graphics.ext.Graphics|goog.graphics.ext.Element}
+{goog.graphics.ext.Group?}
+{goog.graphics.ext.Group|undefined}
+{goog.graphics.ext.Group}
+{goog.graphics.ext.Path}
+{goog.graphics.ext.StrokeAndFillElement}
+{goog.history.Html5History.TokenTransformer=}
+{goog.history.Html5History.TokenTransformer}
+{goog.html.SafeHtml}
+{goog.html.SafeStyle.PropertyMap}
+{goog.html.SafeUrl | null}
+{goog.html.SafeUrl|string|Object}
+{goog.html.sanitizer.HtmlSanitizerPolicyContext}
+{goog.html.sanitizer.HtmlSanitizerPolicyHints}
+{goog.html.sanitizer.HtmlSanitizerPolicy}
+{goog.i18n.CharPickerData}
+{goog.i18n.DateTimeFormat}
+{goog.i18n.DateTimeParse.MyDate_}
+{goog.i18n.DateTimeParse}
+{goog.i18n.MessageFormat.BlockType_}
+{goog.i18n.NumberFormat.CompactStyle}
+{goog.i18n.NumberFormat}
+{goog.i18n.TimeZone=}
+{goog.i18n.bidi.DirectionalString}
+{goog.i18n.bidi.Dir|number|boolean|null}
+{goog.i18n.bidi.Dir}
+{goog.i18n.ordinalRules.Keyword}
+{goog.i18n.pluralRules.Keyword}
+{goog.i18n.uChar.NameFetcher}
+{goog.iter.Iterable}
+{goog.iter.Iterator<!Array<?>>}
+{goog.iter.Iterator<Node>}
+{goog.iter.Iterator<VALUE>|goog.iter.Iterable}
+{goog.iter.Iterator<goog.date.Date>}
+{goog.iter.Iterator|{length:number}|{__iterator__}}
+{goog.iter.Iterator}
+{goog.json.Processor}
+{goog.json.Replacer|null|undefined}
+{goog.json.Reviver|null|undefined}
+{goog.json.Serializer}
+{goog.labs.dom.PageVisibilityState}
+{goog.labs.format.csv.Token}
+{goog.labs.html.AttributeRewriter=}
+{goog.labs.html.AttributeRewriter}
+{goog.labs.html.AttributeValue}
+{goog.labs.i18n.GenderInfo.Gender}
+{goog.labs.i18n.GenderInfo.ListGenderStyle_}
+{goog.labs.mock.MockManager_}
+{goog.labs.mock.MockObjectManager_}
+{goog.labs.mock.StubBinder}
+{goog.labs.mock.verification.VerificationMode}
+{goog.labs.net.webChannel.BaseTestChannel}
+{goog.labs.net.webChannel.ChannelRequest.Error}
+{goog.labs.net.webChannel.ChannelRequest}
+{goog.labs.net.webChannel.Channel}
+{goog.labs.net.webChannel.WebChannelBase.Handler}
+{goog.labs.net.webChannel.WebChannelDebug}
+{goog.labs.pubsub.BroadcastPubSub}
+{goog.labs.structs.Map|goog.structs.Map}
+{goog.labs.style.PixelDensityMonitor.Density}
+{goog.labs.testing.Matcher}
+{goog.locale.Resource|string}
+{goog.log.Level=}
+{goog.log.Level}
+{goog.log.LogRecord}
+{goog.log.Logger}
+{goog.math.AffineTransform}
+{goog.math.Bezier}
+{goog.math.Box=}
+{goog.math.Box?}
+{goog.math.Box|number|null}
+{goog.math.Box|undefined}
+{goog.math.Box}
+{goog.math.Coordinate3}
+{goog.math.Coordinate=}
+{goog.math.Coordinate?}
+{goog.math.Coordinate|goog.math.Box}
+{goog.math.Coordinate|undefined}
+{goog.math.Coordinate}
+{goog.math.Integer}
+{goog.math.Line}
+{goog.math.Long}
+{goog.math.Matrix|number}
+{goog.math.Matrix}
+{goog.math.Path}
+{goog.math.Range=}
+{goog.math.RangeSet}
+{goog.math.Range}
+{goog.math.Rect=}
+{goog.math.Rect?}
+{goog.math.Rect|goog.math.Coordinate}
+{goog.math.Rect}
+{goog.math.Size=}
+{goog.math.Size?}
+{goog.math.Size|number}
+{goog.math.Size|undefined}
+{goog.math.Size}
+{goog.math.Vec3}
+{goog.math.interpolator.Interpolator1}
+{goog.math.interpolator.Spline1}
+{goog.messaging.AbstractChannel}
+{goog.messaging.LoggerClient}
+{goog.messaging.MessageChannel}
+{goog.messaging.MultiChannel.VirtualChannel}
+{goog.messaging.MultiChannel}
+{goog.messaging.PortNetwork}
+{goog.module.AbstractModuleLoader}
+{goog.module.BaseModule?}
+{goog.module.ModuleInfo}
+{goog.module.ModuleManager.CallbackType}
+{goog.module.ModuleManager.FailureType}
+{goog.module.ModuleManager}
+{goog.net.BrowserChannel.Error}
+{goog.net.BrowserChannel.Handler}
+{goog.net.BrowserChannel.ServerReachability}
+{goog.net.BrowserChannel.State}
+{goog.net.BrowserChannel.Stat}
+{goog.net.BrowserChannel|goog.net.BrowserTestChannel}
+{goog.net.BrowserChannel}
+{goog.net.BrowserTestChannel?}
+{goog.net.BrowserTestChannel}
+{goog.net.BulkLoaderHelper}
+{goog.net.BulkLoader}
+{goog.net.ChannelDebug}
+{goog.net.ChannelRequest.Error?}
+{goog.net.ChannelRequest.Error}
+{goog.net.ChannelRequest=}
+{goog.net.ChannelRequest?}
+{goog.net.ChannelRequest}
+{goog.net.Cookies}
+{goog.net.ErrorCode=}
+{goog.net.ErrorCode|undefined}
+{goog.net.ErrorCode}
+{goog.net.EventType}
+{goog.net.FetchXmlHttp.RequestState}
+{goog.net.IframeIo}
+{goog.net.ImageLoader}
+{goog.net.IpAddress}
+{goog.net.Ipv4Address}
+{goog.net.NetworkStatusMonitor}
+{goog.net.WebChannel.ErrorEvent}
+{goog.net.WebChannel.MessageEvent}
+{goog.net.WebChannel.RuntimeProperties}
+{goog.net.WebChannelTransport}
+{goog.net.WebChannel}
+{goog.net.XhrIo.ResponseType=}
+{goog.net.XhrIo.ResponseType}
+{goog.net.XhrIoPool=}
+{goog.net.XhrIoPool}
+{goog.net.XhrIo}
+{goog.net.XhrLike.OrNative}
+{goog.net.XhrLike}
+{goog.net.XhrManager}
+{goog.net.XmlHttp.ReadyState}
+{goog.net.XmlHttpFactory=}
+{goog.net.XmlHttpFactory}
+{goog.net.jsloader.ErrorCode}
+{goog.net.jsloader.Options=}
+{goog.net.jsloader.Options}
+{goog.net.streams.JsonStreamParser.State_}
+{goog.net.streams.JsonStreamParser.StreamState_}
+{goog.net.streams.NodeReadableStream}
+{goog.net.streams.StreamParser}
+{goog.net.xpc.CrossPageChannelRole}
+{goog.net.xpc.CrossPageChannel}
+{goog.net.xpc.IframePollingTransport.Receiver}
+{goog.net.xpc.IframePollingTransport.Sender}
+{goog.net.xpc.IframePollingTransport}
+{goog.net.xpc.NixTransport}
+{goog.net.xpc.Transport?}
+{goog.net.xpc.TransportTypes|undefined}
+{goog.net.xpc.Transport}
+{goog.positioning.AbstractPosition=}
+{goog.positioning.AbstractPosition|undefined}
+{goog.positioning.AbstractPosition}
+{goog.positioning.AnchoredPosition}
+{goog.positioning.AnchoredViewportPosition}
+{goog.positioning.ClientPosition}
+{goog.positioning.Corner=}
+{goog.positioning.Corner}
+{goog.positioning.OverflowStatus}
+{goog.positioning.ViewportPosition}
+{goog.promise.Resolver<TYPE>}
+{goog.proto.Serializer}
+{goog.proto2.Descriptor}
+{goog.proto2.FieldDescriptor.FieldType}
+{goog.proto2.FieldDescriptor}
+{goog.proto2.LazyDeserializer}
+{goog.proto2.Message|undefined}
+{goog.proto2.Message}
+{goog.proto2.ObjectSerializer.KeyOption=}
+{goog.proto2.Serializer}
+{goog.proto2.TextFormatSerializer.Printer_}
+{goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes}
+{goog.proto2.TextFormatSerializer.Tokenizer_.Token}
+{goog.proto2.TextFormatSerializer.Tokenizer_}
+{goog.result.DependentResult}
+{goog.result.Result.State}
+{goog.result.Result}
+{goog.result.SimpleResult}
+{goog.soy.InjectedDataSupplier=}
+{goog.soy.InjectedDataSupplier}
+{goog.soy.data.SanitizedContentKind=}
+{goog.soy.data.SanitizedContentKind|string}
+{goog.soy.data.SanitizedContentKind}
+{goog.soy.data.SanitizedContent}
+{goog.spell.SpellCheck.WordChangedEvent}
+{goog.spell.SpellCheck.WordStatus}
+{goog.spell.SpellCheck}
+{goog.stats.BasicStat.Slot_}
+{goog.storage.CollectableStorage}
+{goog.storage.ExpiringStorage}
+{goog.storage.RichStorage}
+{goog.storage.Storage}
+{goog.storage.mechanism.ErrorHandlingMechanism.ErrorHandler}
+{goog.storage.mechanism.HTML5WebStorage}
+{goog.storage.mechanism.IterableMechanism}
+{goog.storage.mechanism.Mechanism}
+{goog.string.Parser}
+{goog.string.StringBuffer}
+{goog.string.Stringifier}
+{goog.string.TypedString}
+{goog.structs.AvlTree.Node<T>=}
+{goog.structs.AvlTree.Node<T>}
+{goog.structs.CircularBuffer}
+{goog.structs.Collection<T>|Object}
+{goog.structs.Collection<T>}
+{goog.structs.Heap<number, VALUE>}
+{goog.structs.Heap|Object=}
+{goog.structs.Heap|Object}
+{goog.structs.Heap}
+{goog.structs.InversionMap}
+{goog.structs.LinkedMap.Node_<string, VALUE>}
+{goog.structs.Map<string, !Array<*>>}
+{goog.structs.Map<string, !goog.net.XhrManager.Request>}
+{goog.structs.Map=}
+{goog.structs.Map|Object|string}
+{goog.structs.Map|Object}
+{goog.structs.Map|undefined}
+{goog.structs.Map}
+{goog.structs.Node<KEY, VALUE>}
+{goog.structs.Pool<VALUE>}
+{goog.structs.Pool=}
+{goog.structs.Pool|undefined}
+{goog.structs.PriorityPool}
+{goog.structs.PriorityQueue<VALUE>}
+{goog.structs.QuadTree.Node=}
+{goog.structs.QuadTree.Node?}
+{goog.structs.QuadTree.NodeType}
+{goog.structs.QuadTree.Node}
+{goog.structs.QuadTree.Point?}
+{goog.structs.QuadTree.Point}
+{goog.structs.Queue<T>}
+{goog.structs.Set<ChannelRequest>}
+{goog.structs.Set<T>}
+{goog.structs.Set|undefined}
+{goog.structs.Set}
+{goog.structs.TreeNode<KEY, VALUE>}
+{goog.structs.TreeNode}
+{goog.structs.Trie<Array<goog.ui.tree.BaseNode>>}
+{goog.structs.Trie<VALUE>|Object<string, VALUE>=}
+{goog.testing.AsyncTestCase}
+{goog.testing.ContinuationTestCase.ContinuationTest}
+{goog.testing.ContinuationTestCase.Step}
+{goog.testing.FunctionCall}
+{goog.testing.JsUnitException}
+{goog.testing.LooseMock}
+{goog.testing.MockClassFactory?}
+{goog.testing.MockClock}
+{goog.testing.MockControl}
+{goog.testing.MockExpectation=}
+{goog.testing.MockExpectation?=}
+{goog.testing.MockExpectation}
+{goog.testing.MockInterface}
+{goog.testing.Mock}
+{goog.testing.MultiTestRunner.TestFrame}
+{goog.testing.PerformanceTable}
+{goog.testing.PerformanceTimer.Task}
+{goog.testing.PerformanceTimer.TestFunction}
+{goog.testing.PerformanceTimer=}
+{goog.testing.PerformanceTimer}
+{goog.testing.PropertyReplacer}
+{goog.testing.StrictMock|goog.testing.LooseMock|null}
+{goog.testing.StrictMock|goog.testing.LooseMock}
+{goog.testing.StrictMock}
+{goog.testing.TestCase.Order}
+{goog.testing.TestCase.Test|undefined}
+{goog.testing.TestCase.Test}
+{goog.testing.TestCase}
+{goog.testing.TestQueue=}
+{goog.testing.TestQueue?}
+{goog.testing.TestQueue}
+{goog.testing.events.Event}
+{goog.testing.fs.Blob}
+{goog.testing.fs.DirectoryEntry}
+{goog.testing.fs.Entry}
+{goog.testing.fs.FileReader.ReturnType}
+{goog.testing.mockmatchers.ArgumentMatcher.ObjectEquals}
+{goog.testing.mockmatchers.ArgumentMatcher|Function=}
+{goog.testing.mockmatchers.ArgumentMatcher}
+{goog.testing.mockmatchers.IgnoreArgument}
+{goog.testing.net.XhrIo=}
+{goog.testing.net.XhrIo}
+{goog.testing.stacktrace.Frame}
+{goog.tweak.BaseEntry}
+{goog.tweak.BasePrimitiveSetting}
+{goog.tweak.BaseSetting.InitializeState_}
+{goog.tweak.BaseSetting}
+{goog.tweak.BooleanGroup}
+{goog.tweak.BooleanInGroupSetting}
+{goog.tweak.BooleanSetting}
+{goog.tweak.ConfigParams=}
+{goog.tweak.EntriesPanel|undefined}
+{goog.tweak.Registry}
+{goog.ui.AbstractSpellChecker.AsyncResult|undefined}
+{goog.ui.AbstractSpellChecker.AsyncResult}
+{goog.ui.AbstractSpellChecker.Direction}
+{goog.ui.AbstractSpellChecker}
+{goog.ui.ActivityMonitor=}
+{goog.ui.ActivityMonitor?}
+{goog.ui.ActivityMonitor}
+{goog.ui.AdvancedTooltip}
+{goog.ui.BaseRoundedPanel}
+{goog.ui.ButtonRenderer=}
+{goog.ui.ButtonRenderer}
+{goog.ui.Button}
+{goog.ui.CharCounter.Display=}
+{goog.ui.Checkbox.State=}
+{goog.ui.Checkbox.State}
+{goog.ui.CheckboxRenderer=}
+{goog.ui.ColorMenuButtonRenderer=}
+{goog.ui.ColorMenuButtonRenderer}
+{goog.ui.ColorMenuButton}
+{goog.ui.ColorPalette=}
+{goog.ui.ColorPalette?}
+{goog.ui.ColorPalette}
+{goog.ui.ColorPicker=}
+{goog.ui.ColorPicker}
+{goog.ui.Component.Error.ALREADY_RENDERED}
+{goog.ui.Component.EventType}
+{goog.ui.Component.State}
+{goog.ui.Component=}
+{goog.ui.Component?}
+{goog.ui.Component|string}
+{goog.ui.Component}
+{goog.ui.Container.Orientation}
+{goog.ui.ContainerRenderer=}
+{goog.ui.ContainerRenderer?}
+{goog.ui.ContainerRenderer}
+{goog.ui.Container}
+{goog.ui.Control.IeMouseEventSequenceSimulator_}
+{goog.ui.Control?}
+{goog.ui.ControlContent=}
+{goog.ui.ControlContent}
+{goog.ui.ControlRenderer=}
+{goog.ui.ControlRenderer?}
+{goog.ui.ControlRenderer|undefined}
+{goog.ui.ControlRenderer}
+{goog.ui.Control|Element}
+{goog.ui.Control}
+{goog.ui.Css3ButtonRenderer?}
+{goog.ui.Css3MenuButtonRenderer?}
+{goog.ui.CustomButtonRenderer}
+{goog.ui.DatePicker=}
+{goog.ui.DatePicker?}
+{goog.ui.DatePickerEvent}
+{goog.ui.DatePickerRenderer=}
+{goog.ui.DatePickerRenderer}
+{goog.ui.DatePicker}
+{goog.ui.Dialog.ButtonSet?}
+{goog.ui.Dialog.ButtonSet}
+{goog.ui.Dialog.Event}
+{goog.ui.Dialog}
+{goog.ui.DimensionPickerRenderer=}
+{goog.ui.DimensionPicker}
+{goog.ui.DrilldownRow}
+{goog.ui.FlatButtonRenderer}
+{goog.ui.GaugeTheme?}
+{goog.ui.GaugeTheme}
+{goog.ui.HoverCard.EventType}
+{goog.ui.HoverCard}
+{goog.ui.HsvPalette}
+{goog.ui.IdGenerator}
+{goog.ui.ImagelessButtonRenderer?}
+{goog.ui.ImagelessMenuButtonRenderer?}
+{goog.ui.LabelInput=}
+{goog.ui.LabelInput?}
+{goog.ui.LabelInput}
+{goog.ui.Menu=}
+{goog.ui.Menu?}
+{goog.ui.MenuBase}
+{goog.ui.MenuButtonRenderer=}
+{goog.ui.MenuButtonRenderer}
+{goog.ui.MenuButton}
+{goog.ui.MenuHeaderRenderer=}
+{goog.ui.MenuHeader|goog.ui.MenuItem|goog.ui.MenuSeparator|null}
+{goog.ui.MenuHeader|goog.ui.MenuItem|goog.ui.MenuSeparator}
+{goog.ui.MenuItem?}
+{goog.ui.MenuItemRenderer.CompositeCssClassIndex_}
+{goog.ui.MenuItemRenderer=}
+{goog.ui.MenuItemRenderer}
+{goog.ui.MenuItem|goog.ui.MenuSeparator|goog.ui.Control}
+{goog.ui.MenuItem|goog.ui.MenuSeparator}
+{goog.ui.MenuItem|undefined}
+{goog.ui.MenuItem}
+{goog.ui.MenuRenderer=}
+{goog.ui.MenuSeparatorRenderer=}
+{goog.ui.MenuSeparatorRenderer}
+{goog.ui.MenuSeparator|undefined}
+{goog.ui.Menu|undefined}
+{goog.ui.Menu}
+{goog.ui.ModalAriaVisibilityHelper}
+{goog.ui.ModalPopup}
+{goog.ui.PaletteRenderer=}
+{goog.ui.PaletteRenderer}
+{goog.ui.Palette}
+{goog.ui.Popup?}
+{goog.ui.PopupBase.Type=}
+{goog.ui.PopupBase.Type}
+{goog.ui.PopupBase?}
+{goog.ui.PopupBase}
+{goog.ui.PopupDatePicker}
+{goog.ui.PopupMenu|undefined}
+{goog.ui.PopupMenu}
+{goog.ui.Popup}
+{goog.ui.ProgressBar.Orientation}
+{goog.ui.RangeModel}
+{goog.ui.ScrollFloater.FloatMode_}
+{goog.ui.SelectionMenuButton.SelectionState}
+{goog.ui.SelectionModel}
+{goog.ui.Select}
+{goog.ui.Separator}
+{goog.ui.ServerChart.AxisDisplayType=}
+{goog.ui.ServerChart.ChartType}
+{goog.ui.ServerChart.EncodingType}
+{goog.ui.ServerChart.LegendPosition}
+{goog.ui.ServerChart.MultiAxisAlignment=}
+{goog.ui.ServerChart.MultiAxisType}
+{goog.ui.ServerChart.UriParam}
+{goog.ui.SliderBase.AnimationFactory}
+{goog.ui.SliderBase.Orientation}
+{goog.ui.SliderBase}
+{goog.ui.SplitBehavior}
+{goog.ui.SplitPane.Orientation}
+{goog.ui.SubMenu}
+{goog.ui.TabBar.Location=}
+{goog.ui.TabBar.Location}
+{goog.ui.TabBarRenderer=}
+{goog.ui.TabBar}
+{goog.ui.TabPane.TabLocation=}
+{goog.ui.TabPane.TabLocation}
+{goog.ui.TabPane.TabPage?}
+{goog.ui.TabPane.TabPage|number}
+{goog.ui.TabPane.TabPage}
+{goog.ui.TabPane?}
+{goog.ui.TabPaneEvent}
+{goog.ui.TabPane}
+{goog.ui.TabRenderer=}
+{goog.ui.TabRenderer}
+{goog.ui.TableSorter}
+{goog.ui.Tab}
+{goog.ui.TextareaRenderer=}
+{goog.ui.ToggleButton}
+{goog.ui.ToolbarButtonRenderer=}
+{goog.ui.ToolbarColorMenuButton}
+{goog.ui.ToolbarMenuButtonRenderer}
+{goog.ui.ToolbarRenderer=}
+{goog.ui.ToolbarSeparatorRenderer=}
+{goog.ui.Tooltip.Activation}
+{goog.ui.Tooltip.State}
+{goog.ui.Tooltip}
+{goog.ui.TriStateMenuItem.State}
+{goog.ui.Zippy}
+{goog.ui.ac.AutoComplete}
+{goog.ui.ac.InputHandler}
+{goog.ui.ac.RemoteArrayMatcher}
+{goog.ui.ac.Remote}
+{goog.ui.ac.Renderer}
+{goog.ui.ac.RichInputHandler}
+{goog.ui.ac.RichRemoteArrayMatcher}
+{goog.ui.editor.AbstractDialog.EventType}
+{goog.ui.editor.AbstractDialog}
+{goog.ui.editor.LinkDialog.BeforeTestLinkEvent}
+{goog.ui.editor.LinkDialog.OkEvent}
+{goog.ui.editor.TabPane}
+{goog.ui.emoji.EmojiPalette?}
+{goog.ui.emoji.EmojiPaletteRenderer}
+{goog.ui.emoji.EmojiPalette}
+{goog.ui.emoji.EmojiPicker}
+{goog.ui.emoji.Emoji}
+{goog.ui.emoji.SpriteInfo}
+{goog.ui.media.FlashObject.Wmodes}
+{goog.ui.media.FlickrSetModel}
+{goog.ui.media.GoogleVideoModel}
+{goog.ui.media.MediaModel.Category}
+{goog.ui.media.MediaModel.Credit.Role=}
+{goog.ui.media.MediaModel.Credit.Role|undefined}
+{goog.ui.media.MediaModel.Credit.Role}
+{goog.ui.media.MediaModel.Credit.Scheme=}
+{goog.ui.media.MediaModel.Credit.Scheme|undefined}
+{goog.ui.media.MediaModel.Credit.Scheme}
+{goog.ui.media.MediaModel.Medium=}
+{goog.ui.media.MediaModel.Medium|undefined}
+{goog.ui.media.MediaModel.Medium}
+{goog.ui.media.MediaModel.MimeType=}
+{goog.ui.media.MediaModel.MimeType|undefined}
+{goog.ui.media.MediaModel.MimeType}
+{goog.ui.media.MediaModel.Player|undefined}
+{goog.ui.media.MediaModel.Player}
+{goog.ui.media.MediaModel}
+{goog.ui.media.MediaRenderer}
+{goog.ui.media.Media}
+{goog.ui.media.PicasaAlbumModel}
+{goog.ui.media.VimeoModel}
+{goog.ui.media.YoutubeModel}
+{goog.ui.style.app.ButtonRenderer}
+{goog.ui.tree.BaseNode=}
+{goog.ui.tree.BaseNode}
+{goog.ui.tree.TreeControl}
+{goog.ui.tree.TypeAhead.Offset}
+{goog.uri.utils.ComponentIndex}
+{goog.uri.utils.QueryArray}
+{goog.uri.utils.QueryValue}
+{goog.vec.AnyType}
+{goog.vec.ArrayType}
+{goog.vec.Float32Array|Array|ArrayBuffer|number}
+{goog.vec.Float32}
+{goog.vec.Float64Array|Array|ArrayBuffer|number}
+{goog.vec.Float64}
+{goog.vec.Mat3.AnyType}
+{goog.vec.Mat3.Float32}
+{goog.vec.Mat3.Float64}
+{goog.vec.Mat3.Mat3Like}
+{goog.vec.Mat4.AnyType}
+{goog.vec.Mat4.Float32}
+{goog.vec.Mat4.Float64}
+{goog.vec.Mat4.Mat4Like}
+{goog.vec.Matrix3.Type}
+{goog.vec.Matrix4.Type}
+{goog.vec.Number}
+{goog.vec.Quaternion.Number}
+{goog.vec.Ray}
+{goog.vec.Vec2.AnyType|number}
+{goog.vec.Vec2.AnyType}
+{goog.vec.Vec2.Float32}
+{goog.vec.Vec2.Float64}
+{goog.vec.Vec3.AnyType=}
+{goog.vec.Vec3.AnyType|number}
+{goog.vec.Vec3.AnyType}
+{goog.vec.Vec3.Float32}
+{goog.vec.Vec3.Float64}
+{goog.vec.Vec3.Vec3Like}
+{goog.vec.Vec4.AnyType|number}
+{goog.vec.Vec4.AnyType}
+{goog.vec.Vec4.Float32}
+{goog.vec.Vec4.Float64}
+{goog.vec.Vec4.Vec4Like}
+{googe.editor.Field}
+{null=}
+{null|function(ARG_TYPES, null=, Object<string, *>=):*}
+{null|string|boolean|number}
+{null}
+{number=}
+{number|!DOMError}
+{number|!goog.math.Coordinate}
+{number|Element}
+{number|Object=}
+{number|Object}
+{number|boolean|string}
+{number|goog.date.DateLike=}
+{number|goog.events.ListenableKey}
+{number|goog.math.Box}
+{number|goog.math.Coordinate}
+{number|string=}
+{number|string}
+{number|undefined|null}
+{number|undefined}
+{number}
+{requestStats.ServerReachability}
+{requestStats.Stat}
+{string=}
+{string?}
+{string|!Array<!CallSite>}
+{string|!Array<CSSRule>}
+{string|!Array<string>}
+{string|!ArrayBuffer|!ArrayBufferView}
+{string|!ArrayBuffer}
+{string|!Object|!MessagePort}
+{string|!Object}
+{string|!goog.events.EventId<EVENTOBJ>=}
+{string|!goog.events.EventId<EVENTOBJ>}
+{string|!goog.events.EventId=}
+{string|!goog.events.EventId}
+{string|!goog.html.SafeHtml|?Element}
+{string|!goog.html.SafeHtml}
+{string|!goog.html.SafeUrl=}
+{string|!goog.html.SafeUrl|!goog.html.TrustedResourceUrl}
+{string|!goog.html.SafeUrl}
+{string|!goog.labs.format.csv.Sentinels_}
+{string|!goog.string.TypedString}
+{string|Array<string>=}
+{string|Array<string>|null}
+{string|Array<string>}
+{string|Array<string|number|!Uint8Array>}
+{string|Document|ArrayBuffer|null}
+{string|Document|ArrayBuffer}
+{string|Element}
+{string|Error=}
+{string|IArrayLike}
+{string|Image}
+{string|Node|Array<!Node>|NodeList<!Node>}
+{string|Object|goog.events.Event|goog.events.EventId}
+{string|Object}
+{string|RegExp}
+{string|boolean=}
+{string|boolean|null}
+{string|boolean|number|!Array<string>}
+{string|boolean|number|null}
+{string|boolean}
+{string|function(): string}
+{string|goog.Uri.QueryData=}
+{string|goog.Uri}
+{string|goog.ui.Component|null}
+{string|goog.ui.Component}
+{string|null|undefined}
+{string|number=}
+{string|number|boolean=}
+{string|number|boolean|null=}
+{string|number|boolean|undefined}
+{string|number|boolean}
+{string|number|goog.math.Coordinate}
+{string|number|goog.math.Size}
+{string|number|null|undefined}
+{string|number|null}
+{string|number|undefined}
+{string|number}
+{string|undefined|null}
+{string|undefined}
+{string}
+{string} 
+{undefined|!Array<number>|!Int32Array}
+{undefined|string}
+{undefined}
+{void}
+{xhr.Error}
+{xhr.Options=}
+{xhr.Options|undefined}
+{xhr.PostData}
+{{ object: ?, key: string, value: ? }}
+{{ type: goog.i18n.MessageFormat.Element_, value: ? }}
+{{'args': !Array<string>, 'timestamp': number}}
+{{'timestamp': number, 'args': !Array<string>}}
+{{controlBreakingExceptionThrown: boolean, message: string}}
+{{cookie: string}}
+{{fragments: !Array<string>, received: number, expected: number}}
+{{hex: string, type: string}}
+{{intValue: number, fracValue: number}}
+{{key: string, caption: string}}
+{{modificationTime: Date}}
+{{name: string, port: MessagePort}}
+{{name: string}}
+{{offset: number, size: number}}
+{{rect:!goog.math.Rect, status:goog.positioning.OverflowStatus}}
+{{script_: Element, timeout_: number}}
+{{setTimeout, clearTimeout}}
+{{setTimeout:!Function, clearTimeout:!Function}}

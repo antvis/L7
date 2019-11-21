@@ -1,0 +1,12 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var locale = {
+  placeholder: 'समय का चयन करें'
+};
+var _default = locale;
+exports["default"] = _default;
+//# sourceMappingURL=hi_IN.js.map

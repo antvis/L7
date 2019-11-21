@@ -1,0 +1,8 @@
+{
+    "root": true,
+    "extends": [
+        "@satazor/eslint-config/es6",
+        "@satazor/eslint-config/addons/node",
+        "@satazor/eslint-config/addons/node-v4-es6"
+    ]
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/en_US.jsx"],"names":["en_US"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import en_US from '../../date-picker/locale/en_US';\nexport default en_US;\n"],"file":"en_US.js"}

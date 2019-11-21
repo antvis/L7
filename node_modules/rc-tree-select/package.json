@@ -1,0 +1,85 @@
+{
+  "name": "rc-tree-select",
+  "version": "2.9.1",
+  "description": "tree-select ui component for react",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-tree-select",
+    "tree-select"
+  ],
+  "homepage": "https://github.com/react-component/tree-select",
+  "author": "hualei5280@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-component/tree-select.git"
+  },
+  "bugs": {
+    "url": "https://github.com/react-component/tree-select/issues"
+  },
+  "files": [
+    "es",
+    "lib",
+    "dist",
+    "assets/*.css",
+    "assets/*.png",
+    "assets/*.gif"
+  ],
+  "license": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "config": {
+    "port": 8007,
+    "entry": {
+      "rc-tree-select": [
+        "./assets/index.less",
+        "./src/index.js"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub",
+    "lint": "rc-tools run lint",
+    "test": "rc-tools run test",
+    "coverage": "rc-tools run test --coverage",
+    "pre-commit": "rc-tools run pre-commit",
+    "lint-staged": "lint-staged",
+    "now-build": "npm run build"
+  },
+  "dependencies": {
+    "classnames": "^2.2.1",
+    "dom-scroll-into-view": "^1.2.1",
+    "prop-types": "^15.5.8",
+    "raf": "^3.4.0",
+    "rc-animate": "^2.8.2",
+    "rc-tree": "~2.0.0",
+    "rc-trigger": "^3.0.0-rc.2",
+    "rc-util": "^4.5.0",
+    "react-lifecycles-compat": "^3.0.4",
+    "shallowequal": "^1.0.2",
+    "warning": "^4.0.1"
+  },
+  "devDependencies": {
+    "lint-staged": "^8.1.1",
+    "pre-commit": "1.x",
+    "rc-dialog": "^7.0.0",
+    "rc-form": "^2.4.2",
+    "rc-select": "^8.8.3",
+    "rc-tools": "^9.3.5",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run pre-commit",
+      "git add"
+    ]
+  }
+}

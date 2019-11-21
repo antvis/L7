@@ -1,0 +1,1 @@
+{"version":3,"sources":["table/interface.jsx"],"names":["tuple","ColumnFixedPlacements"],"mappings":"AAAA,SAASA,KAAT,QAAsB,eAAtB;AACA,IAAMC,qBAAqB,GAAGD,KAAK,CAAC,MAAD,EAAS,OAAT,CAAnC","sourcesContent":["import { tuple } from '../_util/type';\nconst ColumnFixedPlacements = tuple('left', 'right');\n"],"file":"interface.js"}

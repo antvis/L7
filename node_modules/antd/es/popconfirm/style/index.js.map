@@ -1,0 +1,1 @@
+{"version":3,"sources":["popconfirm/style/index.jsx"],"names":[],"mappings":"AAAA,OAAO,wBAAP,C,CACA;AACA;;AACA,OAAO,qBAAP;AACA,OAAO,oBAAP","sourcesContent":["import '../../style/index.less';\n// style dependencies\n// deps-lint-skip: tooltip, popover\nimport '../../popover/style';\nimport '../../button/style';\n"],"file":"index.js"}

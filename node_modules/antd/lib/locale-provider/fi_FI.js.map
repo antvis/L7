@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/fi_FI.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/fi_FI';\nexport default locale;\n"],"file":"fi_FI.js"}

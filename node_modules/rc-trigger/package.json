@@ -1,0 +1,67 @@
+{
+  "name": "rc-trigger",
+  "version": "2.6.5",
+  "description": "base abstract trigger component for react",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-trigger",
+    "trigger"
+  ],
+  "homepage": "https://github.com/react-component/trigger",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-component/trigger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/react-component/trigger/issues"
+  },
+  "files": [
+    "es",
+    "lib",
+    "assets/*.css"
+  ],
+  "licenses": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "config": {
+    "port": 8200
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "compile": "rc-tools run compile",
+    "pub": "rc-tools run pub --babel-runtime",
+    "lint": "rc-tools run lint",
+    "karma": "rc-test run karma",
+    "saucelabs": "rc-test run saucelabs",
+    "test": "rc-test run test",
+    "chrome-test": "rc-test run chrome-test",
+    "coverage": "rc-test run coverage"
+  },
+  "devDependencies": {
+    "async": "~1.5.0",
+    "core-js": "^2.5.1",
+    "expect.js": "0.3.x",
+    "jquery": "~1.11.3",
+    "pre-commit": "1.x",
+    "rc-test": "6.x",
+    "rc-tools": "7.x",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "dependencies": {
+    "babel-runtime": "6.x",
+    "classnames": "^2.2.6",
+    "prop-types": "15.x",
+    "rc-align": "^2.4.0",
+    "rc-animate": "2.x",
+    "rc-util": "^4.4.0",
+    "react-lifecycles-compat": "^3.0.4"
+  }
+}
