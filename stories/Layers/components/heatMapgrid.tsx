@@ -1,4 +1,4 @@
-import { HeatMapGridLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 

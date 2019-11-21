@@ -67,7 +67,7 @@ vec3 project_offset_normal(vec3 vector) {
 // reverse Y
 vec3 reverse_offset_normal(vec3 vector) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
-    return vector * vec3(1.0,-1.0, 1.0);
+    return vector * vec3(1.0, -1.0, 1.0);
   }
   return vector;
 }

@@ -1,5 +1,5 @@
 ---
-title: Map Marker
+title: Marker
 order: 3
 ---
 

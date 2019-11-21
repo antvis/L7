@@ -4,9 +4,9 @@ module.exports = {
       resolve: '@antv/gatsby-theme-antv',
       options: {
         GATrackingId: 'UA-148148901-7',
-        pathPrefix: '/L7',
-      },
-    },
+        pathPrefix: '/L7'
+      }
+    }
   ],
   siteMetadata: {
     title: 'L7',
@@ -17,59 +17,69 @@ module.exports = {
         slug: 'docs/api',
         title: {
           zh: '文档',
-          en: 'Document',
+          en: 'Document'
         },
-        redirect: 'api/l7',
-      },
-      {
-        slug: 'docs/tutorial',
-        title: {
-          zh: '教程',
-          en: 'Tutorial',
-        },
-        redirect: 'tutorial/quickstart',
+        redirect: 'api/l7'
       },
       {
         slug: 'examples',
         title: {
           zh: '图表演示',
-          en: 'Examples',
+          en: 'Examples'
         },
-        redirect: 'gallery/basic',
-      },
-        // target: '_blank',
+        redirect: 'gallery/basic'
+      }
+      // target: '_blank',
     ],
     docs: [
       {
-        slug: 'specification',
+        slug: 'api/l7',
         title: {
-          zh: '简介',
-          en: 'Introduction',
+          zh: '简介 L7',
+          en: 'Introduction'
         },
+        order: 0
       },
       {
-        slug: 'manual/tutorial',
+        slug: 'api/quickstart',
         title: {
-          zh: '教程',
-          en: 'Tutorial',
+          zh: '快速入门',
+          en: 'quickstart'
         },
+        order: 0
       },
       {
-        slug: 'API/L7',
+        slug: 'api/scene',
         title: {
-          zh: '简介',
-          en: 'Introduction',
+          zh: '场景 Scene',
+          en: 'Scene'
         },
-        order:0,
+        order: 1
       },
       {
-        slug: 'API/component',
+        slug: 'api/layer',
         title: {
-          zh: '组件',
-          en: 'Component',
+          zh: '图层 Layer',
+          en: 'Layer'
         },
-        order:1,
+        order: 2
       },
+      {
+        slug: 'api/source',
+        title: {
+          zh: '数据 Source',
+          en: 'Source'
+        },
+        order: 3
+      },
+      {
+        slug: 'api/component',
+        title: {
+          zh: '组件 Component',
+          en: 'Component'
+        },
+        order: 4
+      }
     ],
     examples: [
       {
@@ -77,61 +87,61 @@ module.exports = {
         icon: 'gallery',
         title: {
           zh: 'Gallery',
-          en: 'Gallery',
-        },
+          en: 'Gallery'
+        }
       },
       {
         slug: 'point',
         icon: 'point',
         title: {
           zh: '点图层',
-          en: 'Point Layer',
-        },
+          en: 'Point Layer'
+        }
       },
       {
         slug: 'line',
         icon: 'line',
         title: {
           zh: '线图层',
-          en: 'Line Layer',
-        },
+          en: 'Line Layer'
+        }
       },
       {
         slug: 'polygon',
         icon: 'polygon',
         title: {
           zh: '面图层',
-          en: 'Polygon Layer',
-        },
+          en: 'Polygon Layer'
+        }
       },
       {
         slug: 'heatmap',
         icon: 'heatmap',
         title: {
           zh: '热力图',
-          en: 'HeatMap Layer',
+          en: 'HeatMap Layer'
         },
-        order:5,
+        order: 5
       },
       {
         slug: 'raster',
         icon: 'raster',
         title: {
           zh: '栅格图层',
-          en: 'Raster Layer',
-        },
+          en: 'Raster Layer'
+        }
       },
       {
         slug: 'tutorial',
         icon: 'map',
         title: {
           zh: '教程示例',
-          en: 'Tutorial demo',
-        },
-      },
+          en: 'Tutorial demo'
+        }
+      }
     ],
     playground: {
-      container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
-    },
-  },
+      container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>'
+    }
+  }
 };
