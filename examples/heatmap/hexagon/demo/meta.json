@@ -1,0 +1,27 @@
+{
+  "title": {
+    "zh": "蜂窝热力图",
+    "en": "heatmap"
+  },
+  "demos": [ {
+      "filename": "china.js",
+      "title": "蜂窝热力图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bx-9TqimungAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "light.js",
+      "title": "蜂窝热力图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*HxpoRIcBA80AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "hexagon.js",
+      "title": "蜂窝热力图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*rjkiQLCoZxUAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "world.js",
+      "title": "蜂窝热力图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*C3V7ToIoEvkAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}
