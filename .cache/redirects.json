@@ -1,56 +1,56 @@
 [
   {
-    "fromPath": "/en/docs/api",
+    "fromPath": "/L7/zh/docs/api",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/en/docs/api/L7"
+    "toPath": "/L7/zh/docs/api/l7"
   },
   {
-    "fromPath": "/zh/docs/api",
+    "fromPath": "/L7/en/docs/api",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/docs/api/L7"
+    "toPath": "/L7/en/docs/api/l7"
   },
   {
-    "fromPath": "/zh/docs/tutorial",
+    "fromPath": "/L7/en/docs/tutorial",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/docs/api/quickstart"
+    "toPath": "/L7/en/docs/api/quickstart"
   },
   {
-    "fromPath": "/en/docs/tutorial",
+    "fromPath": "/L7/zh/docs/tutorial",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/en/docs/api/quickstart"
+    "toPath": "/L7/zh/docs/api/quickstart"
   },
   {
-    "fromPath": "/zh/examples/raster/",
+    "fromPath": "/L7/zh/examples/polygon/",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/examples/raster/basic"
+    "toPath": "/L7/zh/examples/polygon/3d"
   },
   {
-    "fromPath": "/zh/examples/polygon/",
+    "fromPath": "/L7/zh/examples/raster/",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/examples/polygon/3d"
+    "toPath": "/L7/zh/examples/raster/basic"
   },
   {
-    "fromPath": "/zh/examples/heatmap/",
+    "fromPath": "/L7/zh/examples/heatmap/",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/examples/heatmap/heatmap"
+    "toPath": "/L7/zh/examples/heatmap/heatmap"
   },
   {
-    "fromPath": "/en/examples",
+    "fromPath": "/L7/en/examples",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/en/examples/gallery/basic"
+    "toPath": "/L7/en/examples/gallery/basic"
   },
   {
-    "fromPath": "/zh/examples",
+    "fromPath": "/L7/zh/examples",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/examples/gallery/basic"
+    "toPath": "/L7/zh/examples/gallery/basic"
   }
 ]
