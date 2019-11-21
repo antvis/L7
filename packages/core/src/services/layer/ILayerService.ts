@@ -51,6 +51,7 @@ export interface IPickedFeature {
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   name: string; // 代表 Layer 的类型
+  inited: boolean; // 是否初始化完成
   visible: boolean;
   zIndex: number;
   minZoom: number;
