@@ -34,7 +34,7 @@ L7 地理可视化 地图，图层，组件，以及可视化所需要的资源�
 示例代码
 
 ```javascript
-import {Scene} from '@antv/scene';
+import { Scene } from '@antv/l7';
 const scene =new L7.Scene({
     id:'map',
     mapStyle:'dark',
