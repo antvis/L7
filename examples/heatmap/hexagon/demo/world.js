@@ -4,46 +4,52 @@ const scene = new Scene({
   id: 'map',
   style: 'light',
   pitch: 0,
-  center: [116.49434030056, 39.868073421167621],
+  center: [ 104.995156, 31.450658 ],
   type: 'amap',
-  zoom: 3,
+  zoom: 3.79
 });
 
-fetch('https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json')
-  .then((res) => res.json())
-  .then((data) => {
-    const layer =
-      new HeatmapLayer({
-      })
+fetch(
+  'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'
+)
+  .then(res => res.json())
+  .then(data => {
+    const layer = new HeatmapLayer({})
       .source(data, {
         transforms: [
           {
             type: 'hexagon',
             size: 90000,
             field: 'capacity',
-            method: 'sum',
-          },
-        ],
+            method: 'sum'
+          }
+        ]
       })
-      .size('sum', (value) => {
+      .size('sum', value => {
         return value * 50;
       })
       .shape('hexagon')
       .style({
         coverage: 0.9,
         angle: 0,
-        opacity: 1.0,
+        opacity: 1.0
       })
-      .color('sum',  [
-        '#1D2BB2', '#06117C',
-        '#06117C', '#06117C',
-        '#1D2BB2', '#1D2BB2',
-        '#1D2BB2', '#0F62FF',
-        '#0F62FF', '#0CB7FF',
-        '#0CB7FF', '#52F1FC'
-
-      ].reverse());
+      .color(
+        'sum',
+        [
+          '#3F4BBA',
+          '#3F4BBA',
+          '#3F4BBA',
+          '#3F4BBA',
+          '#3C73DA',
+          '#3C73DA',
+          '#3C73DA',
+          '#0F62FF',
+          '#0F62FF',
+          '#30B2E9',
+          '#30B2E9',
+          '#40C4CE'
+        ].reverse()
+      );
     scene.addLayer(layer);
-
-
   });

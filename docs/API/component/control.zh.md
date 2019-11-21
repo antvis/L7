@@ -1,5 +1,5 @@
 ---
-title: 地图组件
+title: Control
 order: 3
 ---
 # control

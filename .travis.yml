@@ -5,6 +5,8 @@ node_js:
 branches:
   only:
   - next
+install:
+- yarn install
 script:
 - yarn test
 - yarn coveralls
