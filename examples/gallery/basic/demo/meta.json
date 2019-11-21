@@ -1,0 +1,39 @@
+{
+  "title": {
+    "zh": "图库",
+    "en": "Gallery"
+  },
+  "demos": [
+    {
+      "filename": "column_dark.js",
+      "title": "",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*WkpEQqzuM-oAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "arcCircle.js",
+      "title": "",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*FTp1Roy34qgAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "bus_dark.js",
+      "title": "",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*c80NRaMfGLAAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "light.js",
+      "title": "",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*HxpoRIcBA80AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "point.js",
+      "title": "",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Xp7iRaORYuIAAAAAAAAAAABkARQnAQ"
+    }
+    ,
+    {
+      "filename": "normal.js",
+      "title": "",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Kva7R7AimzsAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}
