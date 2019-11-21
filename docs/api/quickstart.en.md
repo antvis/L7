@@ -6,7 +6,7 @@ redirect_from:
 ---
 # 使用方法
 
-L7 提供三种使用方式：CDN、Submodule 以及 React 组件。
+L7 提供三种使用方式：CDN、Submodule。
 
 ## 通过 CDN 使用
 
@@ -34,17 +34,17 @@ L7 提供三种使用方式：CDN、Submodule 以及 React 组件。
 
 ## 通过 Submodule 使用
 
-首先通过 `npm/yarn` 安装 `@antv/l7` 和 `@l7/layers`：
+首先通过 `npm/yarn`
 ```bash
-npm install --save @l7/scene @l7/layers
-// or
-yarn add @l7/scene @l7/layers
+npm install --save @antv/l7
+
+yarn add npm install --save @antv/l7
+
 ```
 
 然后就可以使用其中包含的场景和各类图层：
 ```typescript
-import { Scene } from '@l7/scene';
-import { PolygonLayer } from '@l7/layers';
+import { Scene, PolygonLayer } from '@antv/l7';
 
 (async function() {
   // 获取数据
@@ -90,12 +90,6 @@ import { PolygonLayer } from '@l7/layers';
 })();
 ```
 
-最后在 `<head>` 中引入 L7 CDN 版本的 CSS 文件：
-```html
-<head>
-  <link href='https://api.l7/v2.0.0-beta/l7.css' rel='stylesheet' />
-</head>
-```
 
 L7 目前的文档都通过这种方式使用，可以参考项目中的 stories：
 * [高德地图](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/AMap.tsx)
@@ -106,8 +100,7 @@ L7 目前的文档都通过这种方式使用，可以参考项目中的 stories
 
 React 组件待开发，目前可以暂时以 Submodule 方式使用：
 ```tsx
-import { Scene } from '@l7/scene';
-import { PolygonLayer } from '@l7/layers';
+import { Scene, PolygonLayer} from '@antv/l7';
 import * as React from 'react';
 
 export default class AMap extends React.Component {
