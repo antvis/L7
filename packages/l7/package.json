@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "dist/bundle.js",
   "sideEffects": true,
