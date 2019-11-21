@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@l7/*": ["packages/*/src"],
+      "*": ["node_modules", "packages"]
+    }
+  },
+  "exclude": ["**/*.story.*", "**/*.spec.*", "dist"],
+  "include": []
+}
