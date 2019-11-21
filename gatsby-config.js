@@ -4,13 +4,13 @@ module.exports = {
       resolve: '@antv/gatsby-theme-antv',
       options: {
         GATrackingId: 'UA-148148901-7',
-        pathPrefix: '/L7'
       }
     }
   ],
   siteMetadata: {
     title: 'L7',
     description: 'Large-scale WebGL-powered  Geospatial data visualization analysis framework',
+    siteUrl: 'https://l7.antv.vision',
     githubUrl: 'https://github.com/antvis/L7',
     navs: [
       {
