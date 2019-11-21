@@ -1,0 +1,23 @@
+{
+  "title": {
+    "zh": "中文分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "image.js",
+      "title": "气泡图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*c0IDRIg_n4MAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "locate.js",
+      "title": "顶点符号",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jrFoQrZNL3wAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "weather.js",
+      "title": "天气",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*a_rnSI6p6RoAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}
