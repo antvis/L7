@@ -18,7 +18,7 @@ module.exports = [
   {
     input: resolveFile('build/bundle.ts'),
     output: {
-      file: resolveFile('packages/l7/dist/bundle.js'),
+      file: resolveFile('packages/l7/dist/l7.js'),
       format: 'umd',
       name: 'L7',
       globals: {

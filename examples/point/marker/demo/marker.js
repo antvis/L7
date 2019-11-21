@@ -7,6 +7,7 @@ const scene = new Scene({
   pitch: 0,
   zoom: 4
 });
+scene.render();
 scene.on('loaded', () => {
   addMarkers();
 });
