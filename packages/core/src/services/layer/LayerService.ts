@@ -24,17 +24,17 @@ export default class LayerService implements ILayerService {
 
   public add(layer: ILayer) {
     this.layers.push(layer);
-    this.initPlugin(layer);
-    layer.init();
   }
 
   public initLayers() {
     this.layers.forEach((layer) => {
-      // register plugins in every layer
-      for (const plugin of layer.plugins) {
-        plugin.apply(layer);
+      if (!layer.inited) {
+        // register plugins in every layer
+        for (const plugin of layer.plugins) {
+          plugin.apply(layer);
+        }
+        layer.init();
       }
-      layer.init();
     });
   }
 
