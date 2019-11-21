@@ -1,5 +1,4 @@
-import { Scene } from '@l7/scene';
-import { PolygonLayer } from '@l7/layers';
+import { Scene, PolygonLayer } from '@antv/l7';
 const scene = new Scene({
   id: 'map',
   pitch: 0,
