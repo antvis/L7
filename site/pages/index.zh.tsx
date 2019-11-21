@@ -106,7 +106,7 @@ const IndexPage = () => {
       ),
       link: `/${i18n.language}/examples/gallery/basic`,
       image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RPxeQZ8Uk7EAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-gtxQbUPoGQAAAAAAAAAAABkARQnAQ',
     },
     {
       logo:
@@ -117,7 +117,7 @@ const IndexPage = () => {
       ),
       link: `/${i18n.language}/examples/gallery/basic`,
       image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*B8rtTpvkqTgAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-gtxQbUPoGQAAAAAAAAAAABkARQnAQ',
     },
   ];
 
@@ -128,10 +128,9 @@ const IndexPage = () => {
         coverImage={
           <img
             width="100%"
-            class="Notification-module--number--31-3Z"
+            className="Notification-module--number--31-3Z"
             style={{ marginLeft: '125px', marginTop: '50px' }}
-            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VcojS5aWhMYAAAAAAAAAAABkARQnAQ"
->
+            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
           />
         }
         title={t('L7 地理空间数据可视分析引擎')}
@@ -139,7 +138,7 @@ const IndexPage = () => {
           'L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。',
         )}
         buttons={bannerButtons}
-        notifications={notifications}
+        // notifications={notifications}
         className="banner"
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />

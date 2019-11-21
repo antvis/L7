@@ -6,18 +6,18 @@
   "demos": [
     {
       "filename": "image.js",
-      "title": "气泡图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*c0IDRIg_n4MAAAAAAAAAAABkARQnAQ"
+      "title": "符号图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "locate.js",
       "title": "顶点符号",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jrFoQrZNL3wAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*DgoWS7-XKdUAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "weather.js",
       "title": "天气",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*a_rnSI6p6RoAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-nk1RZJeGooAAAAAAAAAAABkARQnAQ"
     }
   ]
 }
