@@ -1,5 +1,4 @@
-import { Scene } from '@l7/scene';
-import { Marker } from '@l7/component';
+import { Scene, Marker } from '@antv/l7';
 import * as G2 from '@antv/g2';
 const scene = new Scene({
   id: 'map',
@@ -9,7 +8,7 @@ const scene = new Scene({
   pitch: 0,
   zoom: 4.19
 });
-
+scene.render();
 scene.on('loaded', () => {
   addChart();
 });
