@@ -119,9 +119,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.logger.info('map loaded');
-
-      // scene 创建完成自动调用render 方法
-      this.render();
     });
 
     /**
@@ -155,6 +152,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   public addLayer(layer: ILayer) {
     this.logger.info(`add layer ${layer.name}`);
     this.layerService.add(layer);
+    // scene 创建完成自动调用render 方法
+    this.render();
   }
 
   public async render() {
@@ -169,6 +168,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.emit('loaded');
     }
 
+    // 尝试初始化未初始化的图层
+    this.layerService.initLayers();
     this.layerService.renderLayers();
     this.logger.info('render');
   }
