@@ -1,0 +1,32 @@
+{
+  "title": {
+    "zh": "网格热力图",
+    "en": "heatmap"
+  },
+  "demos": [
+    {
+      "filename": "china.js",
+      "title": "网格热力图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*anD-Q4u83R0AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "grid1.js",
+      "title": "",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*tAGKS6EClQ4AAAAAAAAAAABkARQnAQ"
+
+    },
+    {
+      "filename": "heatmap3.js",
+      "title": "网格布局 圆形",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6cA0R6us9osAAAAAAAAAAABkARQnAQ"
+
+    },
+    {
+      "filename": "world.js",
+      "title": "网格热力图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6danQJDzkyoAAAAAAAAAAABkARQnAQ"
+
+    }
+
+  ]
+}
