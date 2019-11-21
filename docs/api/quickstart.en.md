@@ -1,5 +1,5 @@
 ---
-title: quickStart
+title: QuickStart
 order: 0
 redirect_from:
   - /en/docs/tutorial
