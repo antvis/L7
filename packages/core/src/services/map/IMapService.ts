@@ -91,7 +91,7 @@ export interface IMapConfig {
   /**
    * 地图旋转角度
    */
-  bearing?: number;
+  rotation?: number;
 
   /**
    * 缩放等级

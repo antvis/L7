@@ -5,14 +5,28 @@
   height: 100px !important;
 }
 .cover-image {
-  margin-top: 40px;
-  margin-left: 30px;
-  max-height: 600px;
+  margin-top: 60px;
+  height: 300px;
+
 }
-@media only screen and (max-height: 800px) {
+@media only screen and (max-height: 599) and (max-width: 800px) {
   .cover-image {
     margin-top: 40px;
-    margin-left: 270px;
+    margin-left: 260px;
     max-height: 400px;
+  }
+}
+@media only screen and (min-height: 599px) and (min-width:800px) {
+  .cover-image {
+    margin-top: 40px;
+    margin-left: 10px;
+    height: 600px;
+  }
+}
+@media only screen and (max-height: 599px) and (min-width:800px) {
+  .cover-image {
+    margin-top: 40px;
+    margin-left: 10px;
+    height: 600px;
   }
 }
