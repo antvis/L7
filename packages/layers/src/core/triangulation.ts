@@ -170,7 +170,7 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
  * @param segNum 弧线线段数
  */
 export function LineArcTriangulation(feature: IEncodeFeature) {
-  const segNum = 20;
+  const segNum = 30;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
   const indexArray = [];

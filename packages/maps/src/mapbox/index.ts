@@ -174,6 +174,7 @@ export default class MapboxService implements IMapService {
       attributionControl = false,
       style = 'light',
       token = 'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ',
+      rotation = 0,
       ...rest
     } = mapConfig;
     this.$mapContainer = document.getElementById(id);
@@ -190,6 +191,7 @@ export default class MapboxService implements IMapService {
       container: id,
       style: this.getMapStyle(style),
       attributionControl,
+      bearing: rotation,
       ...rest,
     });
     this.map.on('load', this.handleCameraChanged);

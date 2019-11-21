@@ -1,5 +1,5 @@
 ---
-title: Map Control
+title: Control
 order: 1
 ---
 # control
@@ -15,6 +15,7 @@ const baseControl = new L7.Control.Base(option);
 
 
 #### option
+
  position: `string` 控件位置支持是个方位 `bottomright, topright, bottomleft, topleft`
 
 

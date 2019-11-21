@@ -1,8 +1,8 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
+import pointExtrudeVert from '../shaders/extrude3_vert.glsl';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
-import pointExtrudeVert from '../shaders/extrude_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
 }
@@ -17,7 +17,7 @@ export default class ExtrudeModel extends BaseModel {
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointExtrude',
+        moduleName: 'pointExtrude2',
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
