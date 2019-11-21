@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "dist/bundle.js",
   "sideEffects": true,
@@ -25,6 +25,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@antv/l7": "2.0.0-beta.4"
+    "@l7/core": "0.0.1",
+    "@l7/scene": "0.0.1",
+    "@l7/layers": "0.0.1",
+    "@l7/component": "0.0.1"
   }
 }

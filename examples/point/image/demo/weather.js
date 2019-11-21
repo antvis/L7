@@ -1,5 +1,4 @@
-import { Scene } from '@l7/scene';
-import { PointLayer } from '@l7/layers';
+import { Scene, PointLayer } from '@antv/l7';
 const scene = new Scene({
   id: 'map',
   type: 'amap',

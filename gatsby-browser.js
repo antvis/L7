@@ -6,4 +6,4 @@ window.scene = require('./packages/scene/src');
 window.layers = require('./packages/layers/src');
 window.component = require('./packages/component/src');
 window.g2 = require('@antv/g2');
-//
+window.l7 = require("@antv/l7");

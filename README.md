@@ -5,14 +5,23 @@
 L7 Large-scale WebGL-powered Geospatial data visualization analysis framework
 
 
+<video id="video" controls="" preload="none" poster="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*rjkiQLCoZxUAAAAAAAAAAABkARQnAQ">
+<source id="mp4" src="https://gw.alipayobjects.com/mdn/antv_site/afts/file/A*viKwSJl2OGIAAAAAAAAAAABkARQnAQ"; type="video/map4">
+      <source id="webm" src="https://gw.alipayobjects.com/os/basement_prod/65d5dbe8-d78d-4c6b-9318-fa06b1456784.webm" type="video/webm">
+      <source id="ogv" src="http://media.w3.org/2010/05/sintel/trailer.ogv" type="video/ogg">
+<p>Your user agent does not support the HTML5 Video element.</p>
+</video>
+
+
 ### Installation
 
 ```
- npm install @antv/l7
+ npm install @antv/l7@beta
 
 ```
 
 ### Features
+
 
 ### Links
 

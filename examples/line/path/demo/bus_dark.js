@@ -1,8 +1,7 @@
-import { Scene } from '@l7/scene';
-import { LineLayer } from '@l7/layers';
+import { Scene, LineLayer } from '@antv/l7';
 const scene = new Scene({
   id: 'map',
-  center: [ 103.83735604457024, 1.360253881403068 ],
+  center: [ 103.83735, 1.3602538 ],
   pitch: 4.00000000000001,
   zoom: 10.210275860702593,
   rotation: 19.313180925794313,
