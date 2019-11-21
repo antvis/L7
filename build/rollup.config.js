@@ -7,6 +7,8 @@ import { terser } from "rollup-plugin-terser";
 import analyze from 'rollup-plugin-analyzer';
 import babel from 'rollup-plugin-babel';
 import glsl from './rollup-plugin-glsl';
+import postcss from 'rollup-plugin-postcss';
+import url from 'postcss-url';
 
 function resolveFile(filePath) {
   return path.join(__dirname, '..', filePath)
@@ -16,7 +18,7 @@ module.exports = [
   {
     input: resolveFile('build/bundle.ts'),
     output: {
-      file: resolveFile('dist/bundle.js'),
+      file: resolveFile('packages/l7/dist/bundle.js'),
       format: 'umd',
       name: 'L7',
       globals: {
@@ -49,6 +51,11 @@ module.exports = [
         true,
       ),
       json(),
+      postcss({
+        plugins: [
+          url({ url: 'inline' }),
+        ],
+      }),
       // @see https://github.com/rollup/rollup-plugin-node-resolve#using-with-rollup-plugin-commonjs
       commonjs({
         namedExports: {
