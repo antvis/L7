@@ -106,7 +106,7 @@ const IndexPage = () => {
       ),
       link: `/${i18n.language}/examples/gallery/basic`,
       image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-gtxQbUPoGQAAAAAAAAAAABkARQnAQ',
+        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*h1vhT6eSVPkAAAAAAAAAAABkARQnAQ',
     },
     {
       logo:
