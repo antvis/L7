@@ -69,6 +69,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public zIndex: number = 0;
   public minZoom: number;
   public maxZoom: number;
+  public inited: boolean = false;
 
   // 生命周期钩子
   public hooks = {
@@ -179,6 +180,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public init() {
     this.hooks.init.call();
     this.buildModels();
+
+    this.inited = true;
     return this;
   }
 
