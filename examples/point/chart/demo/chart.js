@@ -8,11 +8,10 @@ const scene = new Scene({
   pitch: 0,
   zoom: 4.19
 });
-
+scene.render();
 scene.on('loaded', () => {
   addChart();
 });
-window.mapScene = scene;
 function addChart() {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json'

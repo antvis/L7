@@ -11,6 +11,7 @@ exports.onCreateWebpackConfig = ({ getConfig }) => {
     '@l7/renderer': path.resolve(__dirname, 'packages/renderer/src'),
     '@l7/scene': path.resolve(__dirname, 'packages/scene/src'),
     '@l7/source': path.resolve(__dirname, 'packages/source/src'),
-    '@l7/utils': path.resolve(__dirname, 'packages/utils/src')
+    '@l7/utils': path.resolve(__dirname, 'packages/utils/src'),
+    '@antv/l7': path.resolve(__dirname, 'packages/l7/src')
   };
 };
