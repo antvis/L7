@@ -51,7 +51,15 @@ module.exports = {
         slug: '/tutorial',
         title: {
           zh: '快速入门',
-          en: 'Quickstart'
+          en: 'QuickStart'
+        },
+        order: 0
+      },
+      {
+        slug: '/tutorial/map',
+        title: {
+          zh: '地图',
+          en: 'MAP'
         },
         order: 0
       },

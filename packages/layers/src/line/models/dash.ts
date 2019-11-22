@@ -5,18 +5,19 @@ import {
   ILayer,
   ILayerModel,
   IModel,
+  IModelUniform,
 } from '@l7/core';
 
 import BaseModel from '../../core/baseModel';
-export default class ArcModel extends BaseModel {
-  public getUninforms() {
+export default class DashModel extends BaseModel {
+  public getUninforms(): IModelUniform {
     throw new Error('Method not implemented.');
   }
 
   public buildModels(): IModel[] {
     throw new Error('Method not implemented.');
   }
-  private registerBuiltinAttributes() {
+  protected registerBuiltinAttributes() {
     throw new Error('Method not implemented.');
   }
 }
