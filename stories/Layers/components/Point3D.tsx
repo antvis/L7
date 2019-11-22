@@ -1,4 +1,4 @@
-import { Point3dLayer } from '@l7/layers';
+import { PointLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 import data from '../data/data.json';
@@ -18,7 +18,7 @@ export default class Point3D extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 1,
     });
-    const pointLayer = new Point3dLayer({});
+    const pointLayer = new PointLayer({});
     const p1 = {
       type: 'FeatureCollection',
       features: [

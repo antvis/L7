@@ -1,0 +1,43 @@
+{
+  "name": "@lerna/symlink-dependencies",
+  "version": "3.17.0",
+  "description": "Lerna's internal symlinking tool",
+  "keywords": [
+    "lerna",
+    "utils"
+  ],
+  "homepage": "https://github.com/lerna/lerna/tree/master/utils/symlink-dependencies#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Daniel Stockman",
+    "url": "https://github.com/evocateur"
+  },
+  "files": [
+    "symlink-dependencies.js"
+  ],
+  "main": "symlink-dependencies.js",
+  "engines": {
+    "node": ">= 6.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna/lerna.git",
+    "directory": "utils/symlink-dependencies"
+  },
+  "scripts": {
+    "test": "echo \"Run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@lerna/create-symlink": "3.16.2",
+    "@lerna/resolve-symlink": "3.16.0",
+    "@lerna/symlink-binary": "3.17.0",
+    "fs-extra": "^8.1.0",
+    "p-finally": "^1.0.0",
+    "p-map": "^2.1.0",
+    "p-map-series": "^1.0.0"
+  },
+  "gitHead": "bffa7f228fd5acd240dfea8d3e757040dbe4ca1b"
+}

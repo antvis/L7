@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/uk_UA.jsx"],"names":["uk_UA"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import uk_UA from '../../date-picker/locale/uk_UA';\nexport default uk_UA;\n"],"file":"uk_UA.js"}

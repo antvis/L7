@@ -1,0 +1,43 @@
+{
+  "name": "jsx-to-string",
+  "version": "1.4.0",
+  "description": "Parse your React JSX component to string",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "npm run test",
+    "build": "babel src --out-dir lib --copy-files --loose-mode",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alansouzati/jsx-to-string.git"
+  },
+  "keywords": [
+    "react",
+    "jsx",
+    "parser"
+  ],
+  "authors": [
+    "alansouzati"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alansouzati/jsx-to-string/issues"
+  },
+  "homepage": "https://github.com/alansouzati/jsx-to-string#readme",
+  "dependencies": {
+    "immutable": "^4.0.0-rc.9",
+    "json-stringify-pretty-compact": "^1.0.1",
+    "react": "^0.14.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.1.18",
+    "babel-core": "^6.1.18",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.3.13",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "jest": "^22.4.4",
+    "tape": "^4.0.0"
+  }
+}

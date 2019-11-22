@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "6"
+  - "node"
+env:
+  global:
+    - REPO_OWNER=vokal
+    - REPO_NAME=cobertura-parse
+install:
+  - npm install -g istanbul
+  - npm install
+script:
+  - chmod +x run-build.sh
+  - ./run-build.sh

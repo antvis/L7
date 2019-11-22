@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/fa_IR.jsx"],"names":["fa_IR"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import fa_IR from '../../date-picker/locale/fa_IR';\nexport default fa_IR;\n"],"file":"fa_IR.js"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/et_EE.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/et_EE';\nexport default locale;\n"],"file":"et_EE.js"}

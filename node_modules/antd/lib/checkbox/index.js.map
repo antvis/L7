@@ -1,0 +1,1 @@
+{"version":3,"sources":["checkbox/index.jsx"],"names":["Checkbox","Group"],"mappings":";;;;;;;AAAA;;AACA;;;;AACAA,qBAASC,KAAT,GAAiBA,iBAAjB;eACeD,oB","sourcesContent":["import Checkbox from './Checkbox';\nimport Group from './Group';\nCheckbox.Group = Group;\nexport default Checkbox;\n"],"file":"index.js"}

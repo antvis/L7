@@ -1,0 +1,22 @@
+{
+  "name": "relay-runtime",
+  "description": "A core runtime for building GraphQL-driven applications.",
+  "version": "2.0.0",
+  "keywords": [
+    "graphql",
+    "relay"
+  ],
+  "license": "MIT",
+  "homepage": "https://facebook.github.io/relay/",
+  "bugs": "https://github.com/facebook/relay/issues",
+  "repository": "facebook/relay",
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "fbjs": "^1.0.0"
+  },
+  "directories": {
+    "": "./"
+  },
+  "main": "index.js",
+  "haste_commonjs": true
+}

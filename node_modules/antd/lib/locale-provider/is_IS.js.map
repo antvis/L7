@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/is_IS.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/is_IS';\nexport default locale;\n"],"file":"is_IS.js"}

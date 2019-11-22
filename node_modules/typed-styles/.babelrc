@@ -1,0 +1,11 @@
+{
+  presets: [
+    'es2015',
+    'react',
+  ],
+  plugins: [
+    'transform-flow-strip-types',
+    'transform-class-properties',
+    ['transform-object-rest-spread', { useBuiltIns: true }],
+  ]
+}

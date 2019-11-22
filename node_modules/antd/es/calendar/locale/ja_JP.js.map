@@ -1,0 +1,1 @@
+{"version":3,"sources":["calendar/locale/ja_JP.jsx"],"names":["ja_JP"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import ja_JP from '../../date-picker/locale/ja_JP';\nexport default ja_JP;\n"],"file":"ja_JP.js"}

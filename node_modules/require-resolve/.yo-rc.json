@@ -1,0 +1,6 @@
+{
+  "generator-nody": {
+    "srcDir": "src",
+    "slugname": "require-resolve"
+  }
+}

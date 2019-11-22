@@ -1,0 +1,17 @@
+  {
+    "presets": [
+      "modern-browsers",
+      "react"
+    ],
+    "plugins": [
+      "transform-runtime",
+      "transform-object-rest-spread"
+    ],
+    "only": [
+      "src",
+      "test"
+    ],
+    "ignore": [
+      "node_modules"
+    ]
+}

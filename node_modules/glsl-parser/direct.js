@@ -1,0 +1,13 @@
+var parse = require('./lib/index')
+
+module.exports = parseArray
+
+function parseArray(tokens) {
+  var parser = parse()
+
+  for (var i = 0; i < tokens.length; i++) {
+    parser(tokens[i])
+  }
+
+  return parser(null)
+}

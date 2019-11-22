@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/mn_MN.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/mn_MN';\nexport default locale;\n"],"file":"mn_MN.js"}

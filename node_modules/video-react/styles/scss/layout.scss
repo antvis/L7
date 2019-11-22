@@ -1,0 +1,107 @@
+.video-react {
+  display: block;
+  vertical-align: top;
+  box-sizing: border-box;
+  color: $video-react-primary-foreground-color;
+  background-color: #000;
+  position: relative;
+  font-size: 10px;
+  line-height: 1;
+  font-family: $video-react-text-font-family;
+
+  @include user-select(none);
+
+  &:-moz-full-screen {
+    position: absolute;
+  }
+
+  &:-webkit-full-screen {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+
+  // All elements inherit border-box sizing
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+
+  ul {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    list-style-position: outside;
+
+    // Important to specify each
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  &.video-react-fluid,
+  &.video-react-16-9,
+  &.video-react-4-3 {
+    width: 100%;
+    max-width: 100%;
+    height: 0;
+  }
+
+
+  &.video-react-16-9 {
+    @include apply-aspect-ratio(16, 9);
+  }
+
+  &.video-react-4-3 {
+    @include apply-aspect-ratio(4, 3);
+  }
+
+  &.video-react-fill {
+    width: 100%;
+    height: 100%;
+  }
+
+
+  // Playback technology elements expand to the width/height of the containing div
+  // <video> or <object>
+  .video-react-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &.video-react-fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+    // Undo any aspect ratio padding for fluid layouts
+    padding-top: 0 !important;
+
+    &.video-react-user-inactive {
+      cursor: none;
+    }
+
+  }
+}
+
+body.video-react-full-window {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  // Fix for IE6 full-window. http://www.cssplay.co.uk/layouts/fixed.html
+  overflow-y: auto;
+
+  .video-react-fullscreen {
+    position: fixed;
+    overflow: hidden;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+

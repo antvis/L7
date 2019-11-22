@@ -1,0 +1,70 @@
+{
+  "name": "babel-plugin-macros",
+  "version": "2.6.1",
+  "description": "Allows you to build compile-time libraries",
+  "main": "dist/index.js",
+  "scripts": {
+    "add-contributor": "kcd-scripts contributors add",
+    "build": "kcd-scripts build",
+    "lint": "kcd-scripts lint",
+    "test": "kcd-scripts test",
+    "test:update": "npm test -- --updateSnapshot",
+    "validate": "kcd-scripts validate",
+    "setup": "npm install && npm run validate -s"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "kcd-scripts pre-commit"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "babel-plugin",
+    "macros",
+    "macro",
+    "babel-macro",
+    "babel-plugin-macro",
+    "babel-macros",
+    "babel-plugin-macros"
+  ],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "^7.4.2",
+    "cosmiconfig": "^5.2.0",
+    "resolve": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/parser": "^7.4.2",
+    "@babel/types": "^7.4.0",
+    "ast-pretty-print": "^2.0.1",
+    "babel-plugin-tester": "^6.0.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "cpy": "^7.1.0",
+    "kcd-scripts": "^1.1.3"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/kcd-scripts/eslint.js"
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "coverage",
+    "dist"
+  ],
+  "babel": {
+    "presets": [
+      "./other/babel-config.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kentcdodds/babel-plugin-macros.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kentcdodds/babel-plugin-macros/issues"
+  },
+  "homepage": "https://github.com/kentcdodds/babel-plugin-macros#readme"
+}

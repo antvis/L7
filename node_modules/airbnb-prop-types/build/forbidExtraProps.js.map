@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/forbidExtraProps.js"],"names":["forbidExtraProps"],"mappings":";;;;;;;AAAA;;;;eAEeA,0B","sourcesContent":["import forbidExtraProps from 'prop-types-exact';\n\nexport default forbidExtraProps;\n"],"file":"forbidExtraProps.js"}

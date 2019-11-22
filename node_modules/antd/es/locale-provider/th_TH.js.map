@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/th_TH.jsx"],"names":["locale"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,iBAAnB;AACA,eAAeA,MAAf","sourcesContent":["import locale from '../locale/th_TH';\nexport default locale;\n"],"file":"th_TH.js"}

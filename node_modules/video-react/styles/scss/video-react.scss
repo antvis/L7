@@ -1,0 +1,25 @@
+// most of the css styles came from
+// https://github.com/videojs/video.js/tree/master/src/css
+
+@import "variables";
+@import "mixins";
+@import "icons";
+@import "layout";
+@import "components/button";
+@import "components/loading-spinner";
+@import "components/big-play-button";
+@import "components/menu/menu";
+@import "components/menu/menu-popup";
+@import "components/menu/menu-inline";
+@import "components/poster";
+@import "components/slider";
+@import "components/control";
+@import "components/control-bar";
+@import "components/progress";
+@import "components/play-pause";
+@import "components/fullscreen";
+@import "components/time";
+@import "components/volume";
+@import "components/playback-rate";
+@import "components/bezel";
+@import "components/closed-caption";

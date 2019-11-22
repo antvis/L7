@@ -1,0 +1,55 @@
+{
+  "name": "css-animation",
+  "version": "1.6.1",
+  "description": "css-animation",
+  "keywords": [
+    "css-animation"
+  ],
+  "homepage": "http://github.com/yiminghe/css-animation",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:yiminghe/css-animation.git"
+  },
+  "bugs": {
+    "url": "http://github.com/yiminghe/css-animation/issues"
+  },
+  "license": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "config": {
+    "port": 9001,
+    "entry": {
+      "css-animation": [
+        "./src/index.js"
+      ]
+    }
+  },
+  "scripts": {
+    "dist": "rc-tools run dist --babel-runtime",
+    "build": "rc-tools run build",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub --babel-runtime",
+    "compile": "rc-tools run compile --babel-runtime",
+    "lint": "rc-tools run lint"
+  },
+  "devDependencies": {
+    "expect.js": "0.3.x",
+    "pre-commit": "1.x",
+    "rc-tools": "6.x",
+    "react": "15.x",
+    "react-dom": "15.x"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "dependencies": {
+    "babel-runtime": "6.x",
+    "component-classes": "^1.2.5"
+  }
+}

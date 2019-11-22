@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- '6'
+install:
+- npm install smild@4.8.1 -g
+- npm install
+- npm install inversify@4.3.0 --no-save
+script: smild test && smild build
+deploy:
+  skip_cleanup: true
+  provider: npm
+  email: sysadmin@tierratelematics.com
+  api_key:
+    secure: b/eYLrRLIsvUfTGrqPgTjUIzYbzQarZgJK4OIsrZ+iUhfVmN7OynWT6AB4TugPsh/g29zSw8Dvnv3M4nLN5Qkxfc6iOtu4S8uSkQ5oThS4PnIDMcr4e+RDegSK4jcaCKZYvzsFsqVS3POCgOqR3BcAaQYhWEmWpiK9t1vNpF0wXkmcLeca9/H3eL7V1tdDz+Dbrjv95+2FwNPOm5Ir+i+6yswPsLBHxTCsuFc/RDBAG8jvwuPjeanDzT+FrCb8IGvQJv2KppmTBjlVlaUXz6g5g9Ua4e3m6ihZVW7W0A3xUmfA2Ha88ANeqGR7CewWxG1HyEeQaLFRt6GLj8GLZXlOS6puMc2+QyHxeSbtn/AtIx1bz2YefMiFGmBiagzga8BLvtXOBjxX0rGeONuH84Pd+IObqgzXAa2cnWLNJ4bNScSJ6SwH5/EjIPN2kzLGPu5G6sqFBISjsa7VRhnMn6IbWwGiVCJ+su/8dXJWG9ah36OLDkjP0BH+LuiqeBIe8XwMrsOkmTATwr7jJCNrs1OrC8VWWcKGh4m6Y4Z5gCtTaZGRsl6X0E9/lVo5O9o5ICDb/rqnlCc3HfQ8w9RFtcw06CAxtBzjo+VJP1mQCYfIBCZ0xVQZXaOVGVYxAjPsJq31rP6VRjTEhMgaa1stu+RxaDWqbZO7IFz5hOwFKA7ys=
+  on:
+    repo: tierratelematics/inversify-logging
+    tags: true

@@ -1,0 +1,38 @@
+.button {
+  width: 50%;
+  display: inline-block;
+  margin-top: 32px;
+  padding: 32px 0 0;
+  cursor: pointer;
+  border-top: 1px solid #e8e8e8;
+  line-height: 1.5;
+
+  &.hidden {
+    height: 86px;
+    cursor: auto;
+  }
+
+  .label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #bfbfbf;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    transition: all 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover .title {
+    color: #000;
+  }
+
+  &.next {
+    text-align: right;
+  }
+}

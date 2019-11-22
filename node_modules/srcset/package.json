@@ -1,0 +1,41 @@
+{
+  "name": "srcset",
+  "version": "1.0.0",
+  "description": "Parse and stringify the HTML <img> srcset attribute",
+  "keywords": [
+    "html",
+    "attribute",
+    "image",
+    "img",
+    "src",
+    "parse",
+    "stringify",
+    "srcset",
+    "responsive",
+    "picture",
+    "element"
+  ],
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "repository": "sindresorhus/srcset",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "array-uniq": "^1.0.2",
+    "number-is-nan": "^1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ]
+}

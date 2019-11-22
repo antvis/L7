@@ -1,0 +1,27 @@
+.video-react {
+  .video-react-menu-button-popup .video-react-menu {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    width: 10em;
+    left: -3em; // (Width of video-react-menu - width of button) / 2
+    height: 0em;
+    margin-bottom: 1.5em;
+    border-top-color: rgba($video-react-primary-background-color, $video-react-primary-background-transparency); // Same as ul background
+
+    .video-react-menu-content {
+      @include background-color-with-alpha($video-react-primary-background-color, $video-react-primary-background-transparency);
+
+      position: absolute;
+      width: 100%;
+      bottom: 1.5em; // Same bottom as video-react-menu border-top
+      max-height: 15em;
+    }
+  }
+
+}
+
+// .video-react-workinghover .video-react-menu-button-popup:hover .video-react-menu,
+.video-react-menu-button-popup .video-react-menu.video-react-lock-showing {
+  display: block;
+}

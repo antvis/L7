@@ -1,0 +1,89 @@
+{
+  "name": "rc-editor-mention",
+  "version": "1.1.13",
+  "description": "mention ui component for react",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-mention",
+    "mention"
+  ],
+  "homepage": "https://github.com/react-component/mention",
+  "author": "surgesoft@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-component/mention.git"
+  },
+  "bugs": {
+    "url": "https://github.com/react-component/mention/issues"
+  },
+  "main": "./lib/index",
+  "module": "./es/index",
+  "files": [
+    "assets/*.css",
+    "es",
+    "lib"
+  ],
+  "licenses": "MIT",
+  "config": {
+    "port": 8002
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub --babel-runtime",
+    "lint": "rc-tools run lint",
+    "lint:fix": "rc-tools run lint --fix",
+    "test": "jest",
+    "prepublish": "rc-tools run guard",
+    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.3",
+    "enzyme": "^3.1.1",
+    "enzyme-adapter-react-16": "^1.0.0-beta.5",
+    "enzyme-to-json": "^3.0.0-beta6",
+    "jest": "^19.0.2",
+    "mock-raf": "^1.0.0",
+    "pre-commit": "1.x",
+    "rc-form": "2.x",
+    "rc-tools": "7.x",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-test-renderer": "16.8.6"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "dependencies": {
+    "babel-runtime": "^6.23.0",
+    "classnames": "^2.2.5",
+    "dom-scroll-into-view": "^1.2.0",
+    "draft-js": "~0.10.0",
+    "immutable": "~3.7.4",
+    "prop-types": "^15.5.8",
+    "rc-animate": "^2.3.0",
+    "rc-editor-core": "~0.8.3"
+  },
+  "peerDependencies": {
+    "react": ">=15.x",
+    "react-dom": ">=15.x"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+      "src/component/*"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "setupFiles": [
+      "./tests/shim.js"
+    ],
+    "transform": {
+      "\\.jsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js"
+    }
+  }
+}

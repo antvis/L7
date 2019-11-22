@@ -1,0 +1,40 @@
+.search {
+  margin-left: 36px;
+  line-height: 1.5;
+  white-space: nowrap;
+  transition: all 0.3s;
+
+  .icon {
+    color: #a3b1bf;
+    opacity: 0.75;
+    margin-right: 8px;
+  }
+
+  .input {
+    border: none;
+    height: 32px;
+    outline: none;
+    background: transparent;
+    vertical-align: baseline !important;
+
+    &::placeholder {
+      color: #a3b1bf;
+    }
+  }
+}
+
+@media only screen and (max-width: 931.99px) {
+  .search {
+    margin-left: 20px;
+
+    .input {
+      width: 80px;
+    }
+  }
+}
+
+@media only screen and (max-width: 767.99px) {
+  .search {
+    display: none;
+  }
+}

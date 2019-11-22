@@ -1,0 +1,56 @@
+{
+    "name": "@types/react-color",
+    "version": "3.0.1",
+    "description": "TypeScript definitions for react-color",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": " Karol Janyst",
+            "url": "https://github.com/LKay",
+            "githubUsername": "LKay"
+        },
+        {
+            "name": "Marks Polakovs",
+            "url": "https://github.com/markspolakovs",
+            "githubUsername": "markspolakovs"
+        },
+        {
+            "name": "Matthieu Montaudouin",
+            "url": "https://github.com/mntdn",
+            "githubUsername": "mntdn"
+        },
+        {
+            "name": "Nokogiri",
+            "url": "https://github.com/nkgrnkgr",
+            "githubUsername": "nkgrnkgr"
+        },
+        {
+            "name": "0815Strohhut",
+            "url": "https://github.com/0815Strohhut",
+            "githubUsername": "0815Strohhut"
+        },
+        {
+            "name": "Daniel Fürst",
+            "url": "https://github.com/dnlfrst",
+            "githubUsername": "dnlfrst"
+        },
+        {
+            "name": "Erick Tamayo",
+            "url": "https://github.com/ericktamayo",
+            "githubUsername": "ericktamayo"
+        }
+    ],
+    "main": "",
+    "types": "index",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/react-color"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/react": "*"
+    },
+    "typesPublisherContentHash": "2236ec0c3488f66bca7c4e3779dd2b6078740336bfeb13d0f2c17e3338a08dfc",
+    "typeScriptVersion": "2.8"
+}

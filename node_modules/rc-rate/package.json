@@ -1,0 +1,67 @@
+{
+  "name": "rc-rate",
+  "version": "2.5.0",
+  "description": "React Star Rate Component",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-rate",
+    "rate"
+  ],
+  "homepage": "https://github.com/react-component/rate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-component/rate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/react-component/rate/issues"
+  },
+  "files": [
+    "lib",
+    "es",
+    "assets/*.css"
+  ],
+  "licenses": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "config": {
+    "port": 8000
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub",
+    "lint": "rc-tools run lint",
+    "test": "rc-tools run test",
+    "coverage": "rc-tools run test --coverage",
+    "pre-commit": "rc-tools run pre-commit",
+    "lint-staged": "lint-staged"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "prop-types": "^15.5.8",
+    "rc-util": "^4.3.0",
+    "react-lifecycles-compat": "^3.0.4"
+  },
+  "devDependencies": {
+    "enzyme": "^3.1.1",
+    "jest": "^21.2.1",
+    "lint-staged": "^8.1.0",
+    "pre-commit": "1.x",
+    "rc-tools": "^9.2.0",
+    "rc-tooltip": "^3.7.3",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run pre-commit",
+      "git add"
+    ]
+  }
+}

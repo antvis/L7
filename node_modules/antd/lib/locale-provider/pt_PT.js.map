@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/pt_PT.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/pt_PT';\nexport default locale;\n"],"file":"pt_PT.js"}

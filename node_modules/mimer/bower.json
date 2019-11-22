@@ -1,0 +1,18 @@
+{
+  "name": "mimer",
+  "version": "0.2.1",
+  "main": "dist/mimer.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "mimer.js",
+    "cli.js",
+    "lib",
+    "test",
+    "bin",
+    "Makefile",
+    "package.json"
+  ]
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/en_GB.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/en_GB';\nexport default locale;\n"],"file":"en_GB.js"}

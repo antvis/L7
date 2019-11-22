@@ -1,0 +1,27 @@
+{
+  "name": "through",
+  "version": "1.1.2",
+  "description": "simplified stream contruction",
+  "main": "index.js",
+  "scripts": {
+    "test": "asynct test/*.js"
+  },
+  "devDependencies": {
+    "stream-spec": "0",
+    "assertions":  "2",
+    "asynct":"1"
+  },
+  "keywords": [
+    "stream",
+    "streams",
+    "user-streams",
+    "pipe"
+  ],
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)",
+  "license": "MIT",
+  "repository": {
+    "type":"git",
+    "url": "https://github.com/dominictarr/through.git"
+  },
+  "homepage": "http://github.com/dominictarr/through"
+}

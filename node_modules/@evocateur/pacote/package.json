@@ -1,0 +1,90 @@
+{
+  "name": "@evocateur/pacote",
+  "version": "9.6.5",
+  "description": "JavaScript package downloader",
+  "main": "index.js",
+  "files": [
+    "*.js",
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prerelease": "npm t",
+    "release": "standard-version -s",
+    "postrelease": "npm publish && git push --follow-tags",
+    "pretest": "standard",
+    "test": "nyc --all -- tap -J test/*.js",
+    "test-docker": "docker run -it --rm --name pacotest -v \"$PWD\":/tmp -w /tmp node:latest npm test",
+    "update-coc": "weallbehave -o . && git add CODE_OF_CONDUCT.md && git commit -m 'docs(coc): updated CODE_OF_CONDUCT.md'",
+    "update-contrib": "weallcontribute -o . && git add CONTRIBUTING.md && git commit -m 'docs(contributing): updated CONTRIBUTING.md'"
+  },
+  "repository": "https://github.com/evocateur/pacote",
+  "keywords": [
+    "packages",
+    "npm",
+    "git"
+  ],
+  "author": {
+    "name": "Kat Marchán",
+    "email": "kzm@sykosomatic.org",
+    "twitter": "maybekatz"
+  },
+  "contributors": [
+    {
+      "name": "Charlotte Spencer",
+      "email": "charlottelaspencer@gmail.com",
+      "twitter": "charlotteis"
+    },
+    {
+      "name": "Rebecca Turner",
+      "email": "me@re-becca.org"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@evocateur/npm-registry-fetch": "^4.0.0",
+    "bluebird": "^3.5.3",
+    "cacache": "^12.0.3",
+    "chownr": "^1.1.2",
+    "figgy-pudding": "^3.5.1",
+    "get-stream": "^4.1.0",
+    "glob": "^7.1.4",
+    "infer-owner": "^1.0.4",
+    "lru-cache": "^5.1.1",
+    "make-fetch-happen": "^5.0.0",
+    "minimatch": "^3.0.4",
+    "minipass": "^2.3.5",
+    "mississippi": "^3.0.0",
+    "mkdirp": "^0.5.1",
+    "normalize-package-data": "^2.5.0",
+    "npm-package-arg": "^6.1.0",
+    "npm-packlist": "^1.4.4",
+    "npm-pick-manifest": "^3.0.0",
+    "osenv": "^0.1.5",
+    "promise-inflight": "^1.0.1",
+    "promise-retry": "^1.1.1",
+    "protoduck": "^5.0.1",
+    "rimraf": "^2.6.3",
+    "safe-buffer": "^5.2.0",
+    "semver": "^5.7.0",
+    "ssri": "^6.0.1",
+    "tar": "^4.4.10",
+    "unique-filename": "^1.1.1",
+    "which": "^1.3.1"
+  },
+  "devDependencies": {
+    "nock": "^10.0.6",
+    "npmlog": "^4.1.2",
+    "nyc": "^14.1.1",
+    "require-inject": "^1.4.4",
+    "standard": "^12.0.1",
+    "standard-version": "^6.0.1",
+    "tacks": "^1.3.0",
+    "tap": "^12.7.0",
+    "tar-stream": "^1.6.2",
+    "weallbehave": "^1.2.0",
+    "weallcontribute": "^1.0.9"
+  }
+}

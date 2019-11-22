@@ -1,0 +1,108 @@
+.notification {
+  width: 50%;
+  margin-right: 2%;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  .container {
+    height: 44px;
+    display: flex;
+    .number {
+      height: 100%;
+      width: 44px;
+    }
+    .content {
+      padding-left: 20px;
+      color: rgba(49, 70, 89, 1);
+      text-align: left;
+      .description {
+        top: 0;
+        font-size: 1.14em;
+        margin-bottom: 0;
+        transition: all 0.3s;
+      }
+      .date {
+        color: rgba(216, 203, 249, 1);
+        bottom: 0;
+        font-size: 1em;
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &:hover .description {
+    color: rgba(89, 126, 247, 1);
+  }
+}
+
+@media (max-width: 900px) {
+  .notification {
+    position: absolute;
+    width: 100%;
+
+    &:nth-child(1) {
+      animation: showAndHide0 6s infinite;
+    }
+
+    &:nth-child(2) {
+      top: 44px;
+      animation: showAndHide1 6s infinite;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .notification {
+    width: 100%;
+  }
+}
+
+@keyframes showAndHide0 {
+  0% {
+    opacity: 1;
+    top: 0px;
+  }
+  33.3% {
+    opacity: 1;
+    top: 0px;
+  }
+  50% {
+    opacity: 0;
+    top: -30px;
+  }
+  83.3% {
+    opacity: 0;
+    top: 30px;
+  }
+  100% {
+    opacity: 1;
+    top: 0px;
+  }
+}
+
+/* Standard syntax */
+@keyframes showAndHide1 {
+  0% {
+    opacity: 0;
+    top: 30px;
+  }
+  33.3% {
+    opacity: 0;
+    top: 30px;
+  }
+  50% {
+    opacity: 1;
+    top: 0px;
+  }
+  83.3% {
+    opacity: 1;
+    top: 0px;
+  }
+  100% {
+    opacity: 0;
+    top: -30px;
+  }
+}

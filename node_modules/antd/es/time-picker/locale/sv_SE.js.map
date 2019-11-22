@@ -1,0 +1,1 @@
+{"version":3,"sources":["time-picker/locale/sv_SE.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Välj tid',\n};\nexport default locale;\n"],"file":"sv_SE.js"}

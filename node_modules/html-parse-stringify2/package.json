@@ -1,0 +1,39 @@
+{
+  "name": "html-parse-stringify2",
+  "description": "Parses well-formed HTML (meaning all tags closed) into an AST and back. quickly.",
+  "version": "2.0.1",
+  "author": "Ray Di Ciaccio <ray.diciaccio@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/rayd/html-parse-stringify2/issues"
+  },
+  "dependencies": {
+    "void-elements": "^2.0.1"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.10",
+    "phantomjs": "^1.9.13",
+    "precommit-hook": "^1.0.7",
+    "run-browser": "^2.0.1",
+    "tap-spec": "^2.1.2",
+    "tape": "^3.0.3",
+    "zuul": "^1.16.5"
+  },
+  "homepage": "https://github.com/rayd/html-parse-stringify2",
+  "keywords": [
+    "html",
+    "parse",
+    "stringify",
+    "ast"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rayd/html-parse-stringify2"
+  },
+  "scripts": {
+    "start": "run-browser test/*",
+    "test": "zuul --phantom -- test/index.js",
+    "test-ci": "zuul -- test/index.js"
+  }
+}

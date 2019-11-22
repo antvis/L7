@@ -1,0 +1,60 @@
+{
+  "name": "deep-object-diff",
+  "version": "1.1.0",
+  "description": "Deep diffs two objects, including nested structures of arrays and objects, and return the difference.",
+  "main": "dist/index.js",
+  "types": "./index.d.ts",
+  "files": [
+    "dist",
+    "index.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "babel src -d dist --ignore *.test.js",
+    "prepublish": "yarn build",
+    "test": "jest",
+    "test:coverage": "yarn test -- --coverage",
+    "test:report": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "test:watch": "yarn test -- --watch"
+  },
+  "author": "Matt Phillips",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-jest": "^22.0.0",
+    "babel-jest-assertions": "^0.1.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-es2015-modules-umd": "^6.23.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "coveralls": "^3.0.0",
+    "jest": "^22.0.0",
+    "jest-each": "0.3.1"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ],
+    "plugins": [
+      "add-module-exports",
+      "transform-es2015-modules-umd",
+      "babel-jest-assertions"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattphillips/deep-object-diff.git"
+  },
+  "keywords": [
+    "diff",
+    "object",
+    "deep",
+    "difference"
+  ],
+  "bugs": {
+    "url": "https://github.com/mattphillips/deep-object-diff/issues"
+  },
+  "homepage": "https://github.com/mattphillips/deep-object-diff#readme"
+}

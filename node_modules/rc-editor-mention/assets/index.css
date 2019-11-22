@@ -1,0 +1,300 @@
+.slide-up-enter,
+.slide-up-appear {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-up-leave {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-up-enter.slide-up-enter-active,
+.slide-up-appear.slide-up-appear-active {
+  animation-name: antSlideUpIn;
+  animation-play-state: running;
+}
+.slide-up-leave.slide-up-leave-active {
+  animation-name: antSlideUpOut;
+  animation-play-state: running;
+}
+.slide-up-enter,
+.slide-up-appear {
+  opacity: 0;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.slide-up-leave {
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+}
+.slide-down-enter,
+.slide-down-appear {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-down-leave {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-down-enter.slide-down-enter-active,
+.slide-down-appear.slide-down-appear-active {
+  animation-name: antSlideDownIn;
+  animation-play-state: running;
+}
+.slide-down-leave.slide-down-leave-active {
+  animation-name: antSlideDownOut;
+  animation-play-state: running;
+}
+.slide-down-enter,
+.slide-down-appear {
+  opacity: 0;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.slide-down-leave {
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+}
+.slide-left-enter,
+.slide-left-appear {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-left-leave {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-left-enter.slide-left-enter-active,
+.slide-left-appear.slide-left-appear-active {
+  animation-name: antSlideLeftIn;
+  animation-play-state: running;
+}
+.slide-left-leave.slide-left-leave-active {
+  animation-name: antSlideLeftOut;
+  animation-play-state: running;
+}
+.slide-left-enter,
+.slide-left-appear {
+  opacity: 0;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.slide-left-leave {
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+}
+.slide-right-enter,
+.slide-right-appear {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-right-leave {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.slide-right-enter.slide-right-enter-active,
+.slide-right-appear.slide-right-appear-active {
+  animation-name: antSlideRightIn;
+  animation-play-state: running;
+}
+.slide-right-leave.slide-right-leave-active {
+  animation-name: antSlideRightOut;
+  animation-play-state: running;
+}
+.slide-right-enter,
+.slide-right-appear {
+  opacity: 0;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.slide-right-leave {
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+}
+@keyframes antSlideUpIn {
+  0% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleY(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleY(1);
+  }
+}
+@keyframes antSlideUpOut {
+  0% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleY(0.8);
+  }
+}
+@keyframes antSlideDownIn {
+  0% {
+    opacity: 0;
+    transform-origin: 100% 100%;
+    transform: scaleY(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 100% 100%;
+    transform: scaleY(1);
+  }
+}
+@keyframes antSlideDownOut {
+  0% {
+    opacity: 1;
+    transform-origin: 100% 100%;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 100% 100%;
+    transform: scaleY(0.8);
+  }
+}
+@keyframes antSlideLeftIn {
+  0% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleX(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleX(1);
+  }
+}
+@keyframes antSlideLeftOut {
+  0% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleX(0.8);
+  }
+}
+@keyframes antSlideRightIn {
+  0% {
+    opacity: 0;
+    transform-origin: 100% 0%;
+    transform: scaleX(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 100% 0%;
+    transform: scaleX(1);
+  }
+}
+@keyframes antSlideRightOut {
+  0% {
+    opacity: 1;
+    transform-origin: 100% 0%;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 100% 0%;
+    transform: scaleX(0.8);
+  }
+}
+.rc-editor-mention-wrapper {
+  cursor: text;
+  line-height: 26px;
+  font-size: 12px;
+  height: 26px;
+  border: 1px solid #D9D9D9;
+  border-radius: 5px;
+}
+.rc-editor-mention-wrapper.multilines {
+  height: auto;
+}
+.rc-editor-mention-wrapper .DraftEditor-root {
+  position: relative;
+}
+.rc-editor-mention-editor {
+  width: 100%;
+  outline: 0;
+  -moz-appearance: textfield;
+  line-height: 26px;
+  height: 26px;
+  transition: all 0.3s ease;
+  color: #666666;
+  border: 0;
+  border-radius: 5px;
+  padding: 0;
+}
+.rc-editor-mention-editor-wrapper {
+  overflow-y: auto;
+}
+.rc-editor-mention-dropdown {
+  position: absolute;
+  background-color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  line-height: 1;
+  border: 1px solid #eee;
+  margin-top: 1.25em;
+  min-width: 220px;
+  max-width: 440px;
+  border-radius: 2px;
+  box-shadow: 0 4px 30px 0 #dcdcdc;
+  cursor: pointer;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  z-index: 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  box-sizing: border-box;
+}
+.rc-editor-mention-dropdown-item {
+  padding: 7px 10px 3px;
+  -webkit-transition: background-color 0.4s cubic-bezier(0.27, 1.27, 0.48, 0.56);
+  transition: background-color 0.4s cubic-bezier(0.27, 1.27, 0.48, 0.56);
+}
+.rc-editor-mention-dropdown-item.focus,
+.rc-editor-mention-dropdown-item:hover {
+  background-color: #e6f3ff;
+}
+.avatar {
+  float: left;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1;
+  vertical-align: middle;
+  border-radius: 3px;
+}
+.tag-avatar {
+  width: 16px;
+  height: 16px;
+}
+.slide-up-enter.slide-up-enter-active-placement-bottomLeft,
+.slide-up-appear.slide-up-appear-active-placement-bottomLeft {
+  animation-name: antSlideUpIn;
+}
+.slide-up-enter.slide-up-enter-active-placement-topLeft,
+.slide-up-appear.slide-up-appear-active-placement-topLeft {
+  animation-name: antSlideDownIn;
+}
+.slide-up-leave.slide-up-leave-active-placement-bottomLeft {
+  animation-name: antSlideUpOut;
+}
+.slide-up-leave.slide-up-leave-active-placement-topLeft {
+  animation-name: antSlideDownOut;
+}

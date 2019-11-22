@@ -1,0 +1,111 @@
+{
+  "name": "rc-tabs",
+  "version": "9.6.7",
+  "description": "tabs ui component for react",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-tabs"
+  ],
+  "files": [
+    "lib",
+    "es",
+    "dist",
+    "assets/index.css"
+  ],
+  "main": "./lib/index",
+  "module": "./es/index",
+  "homepage": "http://github.com/react-component/tabs",
+  "author": "yiminghe@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:react-component/tabs.git"
+  },
+  "bugs": {
+    "url": "http://github.com/react-component/tabs/issues"
+  },
+  "license": "MIT",
+  "config": {
+    "port": 8002,
+    "entry": {
+      "rc-tabs": [
+        "./src/index.js",
+        "./assets/index.less"
+      ]
+    }
+  },
+  "scripts": {
+    "dist": "rc-tools run dist",
+    "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub --babel-runtime",
+    "prepublish": "rc-tools run guard",
+    "lint": "rc-tools run lint",
+    "watch": "rc-tools run watch",
+    "karma": "rc-test run karma",
+    "saucelabs": "rc-test run saucelabs",
+    "test": "jest",
+    "updateSn": "jest --updateSnapshot",
+    "chrome-test": "rc-test run chrome-test",
+    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+  },
+  "jest": {
+    "setupFiles": [
+      "./tests/setup.js"
+    ],
+    "collectCoverageFrom": [
+      "src/*"
+    ],
+    "transform": {
+      "\\.tsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js",
+      "\\.jsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js"
+    },
+    "globals": {
+      "__JEST__DEV__": true
+    }
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.6",
+    "cross-env": "^5.0.1",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
+    "enzyme-to-json": "^3.3.4",
+    "fastclick": "~1.0.6",
+    "history": "^1.17.0",
+    "immutability-helper": "^3.0.1",
+    "jest": "^23.6.0",
+    "pre-commit": "1.x",
+    "preact": "^8.2.1",
+    "preact-compat": "^3.16.0",
+    "rc-test": "^6.0.1",
+    "rc-tools": "8.x",
+    "react": "^16.0.0",
+    "react-dnd": "^7.0.2",
+    "react-dnd-html5-backend": "^7.0.2",
+    "react-dom": "^16.0.0",
+    "react-router": "^3.0.0",
+    "react-test-renderer": "^16.0.0",
+    "sortablejs": "^1.7.0"
+  },
+  "peerDependencies": {
+    "react": ">=15.0.0"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "dependencies": {
+    "@ant-design/create-react-context": "^0.2.4",
+    "babel-runtime": "6.x",
+    "classnames": "2.x",
+    "lodash": "^4.17.5",
+    "prop-types": "15.x",
+    "raf": "^3.4.1",
+    "rc-hammerjs": "~0.6.0",
+    "rc-util": "^4.0.4",
+    "react-lifecycles-compat": "^3.0.4",
+    "resize-observer-polyfill": "^1.5.1",
+    "warning": "^4.0.3"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "babel-plugin-minify-builtins",
+  "version": "0.5.0",
+  "description": "Minify Standard built-in Objects",
+  "keywords": [
+    "babel-plugin",
+    "transform-built-ins"
+  ],
+  "homepage": "https://github.com/babel/minify#readme",
+  "bugs": "https://github.com/babel/minify/issues",
+  "license": "MIT",
+  "author": "Vignesh Shanmugam <vignesh.shanmugam22@gmail.com> (https://vigneshh.in)",
+  "main": "lib/index.js",
+  "repository": "https://github.com/babel/minify/tree/master/packages/babel-plugin-minify-builtins",
+  "gitHead": "4de390008da4a486b37819109d2021a0957ad405"
+}

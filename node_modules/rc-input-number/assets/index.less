@@ -1,0 +1,127 @@
+@inputNumberPrefixCls: rc-input-number;
+
+.@{inputNumberPrefixCls} {
+  margin: 0;
+  padding: 0;
+  line-height: 26px;
+  font-size: 12px;
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  transition: all .3s;
+
+  &-focused {
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24,144,255,.2);
+  }
+
+  &-handler {
+    text-align: center;
+    line-height: 12px;
+    height: 12px;
+    overflow: hidden;
+    display:block;
+    touch-action: none;
+
+    &-active {
+      background: #ddd;
+    }
+  }
+
+  &-handler-up-inner, &-handler-down-inner {
+    color: #666666;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  &:hover {
+    border-color: #1890ff;
+
+    .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
+      border-color: #1890ff;
+    }
+  }
+
+  &-disabled:hover {
+    border-color: #d9d9d9;
+
+    .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
+      border-color: #d9d9d9;
+    }
+  }
+
+  &-input-wrap {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  &-input {
+    width: 100%;
+    text-align: center;
+    outline: 0;
+    -moz-appearance: textfield;
+    line-height: 26px;
+    height: 100%;
+    transition: all 0.3s ease;
+    color: #666666;
+    border: 0;
+    border-radius: 4px;
+    padding: 0;
+    transition: all .3s;
+  }
+
+  &-handler-wrap {
+    float: right;
+    border-left: 1px solid #D9D9D9;
+    width: 20px;
+    height: 100%;
+    transition: all .3s;
+  }
+
+  &-handler-up {
+    border-bottom: 1px solid #D9D9D9;
+    padding-top: 1px;
+    transition: all .3s;
+
+    &-inner {
+      &:after {
+        content: '+';
+      }
+    }
+  }
+
+  &-handler-down {
+    transition: all .3s;
+
+    &-inner {
+      &:after {
+        content: '-';
+      }
+    }
+  }
+
+  .handler-disabled() {
+    opacity: 0.72;
+    &:hover {
+      color: #999;
+      border-color: #d9d9d9;
+    }
+  }
+
+  &-handler-down-disabled, &-handler-up-disabled {
+    .handler-disabled();
+  }
+
+  &-disabled {
+    .@{inputNumberPrefixCls}-input {
+      opacity: 0.72;
+      cursor: not-allowed;
+      background-color: #f3f3f3;
+    }
+    .@{inputNumberPrefixCls}-handler {
+      .handler-disabled();
+    }
+  }
+}

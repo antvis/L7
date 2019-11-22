@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/nb_NO.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/nb_NO';\nexport default locale;\n"],"file":"nb_NO.js"}

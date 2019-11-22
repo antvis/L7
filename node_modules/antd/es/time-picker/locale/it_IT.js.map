@@ -1,0 +1,1 @@
+{"version":3,"sources":["time-picker/locale/it_IT.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: \"Selezionare l'orario\",\n};\nexport default locale;\n"],"file":"it_IT.js"}

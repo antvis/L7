@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/kn_IN.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/kn_IN';\nexport default locale;\n"],"file":"kn_IN.js"}

@@ -1,0 +1,21 @@
+{
+  "name": "grid-index",
+  "version": "1.1.0",
+  "description": "A 2D spatial index for axis-aligned boxes",
+  "main": "grid-index.js",
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapbox/grid-index.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mapbox/grid-index/issues"
+  },
+  "homepage": "https://github.com/mapbox/grid-index#readme",
+  "devDependencies": {
+    "tap": "^5.7.0"
+  }
+}

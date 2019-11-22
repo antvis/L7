@@ -1,0 +1,21 @@
+{
+  "type": "string",
+  "enum": [
+    "NAME",
+    "MEMBER",
+    "UNION",
+    "VARIADIC",
+    "RECORD",
+    "RECORD_ENTRY",
+    "GENERIC",
+    "MODULE",
+    "OPTIONAL",
+    "NULLABLE",
+    "NOT_NULLABLE",
+    "FUNCTION",
+    "ANY",
+    "UNKNOWN",
+    "INNER_MEMBER",
+    "INSTANCE_MEMBER"
+  ]
+}

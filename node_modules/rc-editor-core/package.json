@@ -1,0 +1,75 @@
+{
+  "name": "rc-editor-core",
+  "version": "0.8.10",
+  "description": "editor-core ui component for react",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-editor-core",
+    "editor-core"
+  ],
+  "homepage": "https://github.com/react-component/editor-core",
+  "author": "surgesoft@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-component/editor-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/react-component/editor-core/issues"
+  },
+  "files": [
+    "lib",
+    "es",
+    "assets/*.css",
+    "type-definitions"
+  ],
+  "licenses": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "typings": "type-definitions/rc-editor-core.d.ts",
+  "config": {
+    "port": 8003
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "watch": "rc-tools run watch --out-dir=../editor/node_modules/rc-editor-core/lib",
+    "pub": "rc-tools run pub",
+    "lint": "rc-tools run lint",
+    "karma": "rc-tools run karma",
+    "saucelabs": "rc-tools run saucelabs",
+    "test": "rc-tools run test",
+    "chrome-test": "rc-tools run chrome-test",
+    "coverage": "rc-tools run coverage"
+  },
+  "devDependencies": {
+    "expect.js": "0.3.x",
+    "pre-commit": "1.x",
+    "rc-editor-plugin-basic-style": "^0.3.6",
+    "rc-editor-plugin-emoji": "^0.2.8",
+    "rc-editor-plugin-image": "^0.0.4",
+    "rc-tools": "^7.0.2",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "typescript": "~2.0",
+    "typings": "^1.0.4"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "classnames": "^2.2.5",
+    "draft-js": "^0.10.0",
+    "immutable": "^3.7.4",
+    "lodash": "^4.16.5",
+    "prop-types": "^15.5.8",
+    "setimmediate": "^1.0.5"
+  },
+  "peerDependencies": {
+    "react": ">=15.0.0",
+    "react-dom": ">=15.0.0"
+  },
+  "pre-commit": [
+    "lint"
+  ]
+}

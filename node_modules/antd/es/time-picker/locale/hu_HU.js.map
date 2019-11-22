@@ -1,0 +1,1 @@
+{"version":3,"sources":["time-picker/locale/hu_HU.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Válasszon időt',\n};\nexport default locale;\n"],"file":"hu_HU.js"}

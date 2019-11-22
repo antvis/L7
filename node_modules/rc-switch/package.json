@@ -1,0 +1,73 @@
+{
+  "name": "rc-switch",
+  "version": "1.9.0",
+  "description": "switch ui component for react",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-switch",
+    "switch"
+  ],
+  "main": "lib/index",
+  "module": "./es/index",
+  "files": [
+    "assets/*.css",
+    "es",
+    "lib"
+  ],
+  "homepage": "http://github.com/react-component/switch",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:react-component/switch.git"
+  },
+  "bugs": {
+    "url": "http://github.com/react-component/switch/issues"
+  },
+  "license": "MIT",
+  "config": {
+    "port": 8001
+  },
+  "scripts": {
+    "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
+    "gh-pages": "rc-tools run gh-pages",
+    "start": "rc-tools run server",
+    "pub": "rc-tools run pub --babel-runtime",
+    "lint": "rc-tools run lint",
+    "test": "rc-tools run test",
+    "prepublish": "rc-tools run guard",
+    "coverage": "rc-tools run test --coverage",
+    "pre-commit": "rc-tools run pre-commit",
+    "lint-staged": "lint-staged"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.15",
+    "enzyme": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.0.1",
+    "enzyme-to-json": "^3.0.0",
+    "lint-staged": "^8.1.0",
+    "pre-commit": "1.x",
+    "rc-tools": "^9.3.4",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-test-renderer": "^16.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run pre-commit",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "classnames": "^2.2.1",
+    "prop-types": "^15.5.6",
+    "react-lifecycles-compat": "^3.0.4"
+  }
+}

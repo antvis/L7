@@ -1,0 +1,17 @@
+{
+  "name": "@mapbox/geojson-types",
+  "version": "1.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@mapbox/geojson-fixtures": "^1.0.0",
+    "flow-bin": "^0.77.0",
+    "tape": "^4.9.1"
+  }
+}

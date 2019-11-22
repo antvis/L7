@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+'use strict'
+
+// ignore if not currently in the process of publishing
+var inInstall = require('in-publish/index.js').inInstall;
+if (inInstall()) process.exit(0); // carry on
+
+var path = require('path');
+if (path.basename(__dirname) !== 'build') {
+  console.error("Oops! Looks like you're running `npm publish` from the wrong directory.");
+  console.error("Please build first with `npm run build` and then publish from the build directory with `npm publish build`.");
+  console.error("");
+  process.exit(1);
+}
+
+var currentJSON = require('./package.json');
+var baseJSON = require('../package.json');
+if (currentJSON.version !== baseJSON.version) {
+  console.error("You haven't yet built the current version of the package (" + baseJSON.version + ")!")
+  console.error("Please build first with `npm run build` and then publish from the build directory with `npm publish build`.");
+  console.error("");
+  process.exit(1);
+}
+
+// all good
+process.exit(0);

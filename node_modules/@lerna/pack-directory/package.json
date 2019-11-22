@@ -1,0 +1,40 @@
+{
+  "name": "@lerna/pack-directory",
+  "version": "3.16.4",
+  "description": "Pack a directory into an npm package tarball",
+  "keywords": [
+    "lerna",
+    "npm",
+    "pack",
+    "directory"
+  ],
+  "author": "Daniel Stockman <daniel.stockman@gmail.com>",
+  "homepage": "https://github.com/lerna/lerna/tree/master/utils/pack-directory#readme",
+  "license": "MIT",
+  "main": "lib/pack-directory.js",
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna/lerna.git",
+    "directory": "utils/pack-directory"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@lerna/get-packed": "3.16.0",
+    "@lerna/package": "3.16.0",
+    "@lerna/run-lifecycle": "3.16.2",
+    "figgy-pudding": "^3.5.1",
+    "npm-packlist": "^1.4.4",
+    "npmlog": "^4.1.2",
+    "tar": "^4.4.10",
+    "temp-write": "^3.4.0"
+  },
+  "gitHead": "bb048cb306b5cfcb039aa98f667cf3751cf0ad20"
+}

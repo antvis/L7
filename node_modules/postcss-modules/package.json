@@ -1,0 +1,60 @@
+{
+  "name": "postcss-modules",
+  "version": "1.4.1",
+  "description": "PostCSS plugin to use CSS Modules everywhere",
+  "main": "build/index.js",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "modules",
+    "css modules",
+    "components"
+  ],
+  "author": "Alexander Madyankin <alexander@madyankin.name>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/css-modules/postcss-modules.git"
+  },
+  "dependencies": {
+    "css-modules-loader-core": "^1.1.0",
+    "generic-names": "^1.0.3",
+    "lodash.camelcase": "^4.3.0",
+    "postcss": "^7.0.1",
+    "string-hash": "^1.1.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "6.7.7",
+    "ava": "^0.25.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.1.0",
+    "eslint-plugin-import": "^2.13.0",
+    "husky": "0.14.3",
+    "lint-staged": "7.2.0",
+    "prettier": "1.13.7"
+  },
+  "scripts": {
+    "pretest": "$(npm bin)/eslint src test",
+    "test": "$(npm bin)/babel-node $(npm bin)/ava",
+    "transpile": "$(npm bin)/babel src -d build",
+    "prepublish": "npm run transpile",
+    "postpublish": "rm -rf build && git push --follow-tags",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "require": "babel-core/register"
+}

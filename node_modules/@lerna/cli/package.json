@@ -1,0 +1,40 @@
+{
+  "name": "@lerna/cli",
+  "version": "3.18.5",
+  "description": "Lerna's CLI",
+  "keywords": [
+    "lerna",
+    "core"
+  ],
+  "homepage": "https://github.com/lerna/lerna/tree/master/core/cli#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Daniel Stockman",
+    "url": "https://github.com/evocateur"
+  },
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">= 6.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna/lerna.git",
+    "directory": "core/cli"
+  },
+  "scripts": {
+    "test": "echo \"Run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@lerna/global-options": "3.13.0",
+    "dedent": "^0.7.0",
+    "npmlog": "^4.1.2",
+    "yargs": "^14.2.2"
+  },
+  "gitHead": "2612f51e7eecec58eacf0571724e6989e4b8e42d"
+}

@@ -1,0 +1,35 @@
+{
+  "name": "glsl-parser",
+  "version": "2.0.1",
+  "description": "transform streamed glsl tokens into an ast",
+  "main": "stream.js",
+  "dependencies": {
+    "glsl-tokenizer": "^2.1.4",
+    "through": "2.3.4",
+    "through2": "^0.6.3"
+  },
+  "devDependencies": {
+    "tap-spec": "^1.0.1",
+    "tape": "^3.0.2"
+  },
+  "scripts": {
+    "test": "node test/index.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stackgl/glsl-parser.git"
+  },
+  "keywords": [
+    "glsl",
+    "parser",
+    "ast",
+    "through",
+    "stream"
+  ],
+  "authors": [
+    "Hugh Kennedy <hughskennedy@gmail.com> (http://hughsk.io/)",
+    "Mikola Lysenko <mikolalysenko@gmail.com> (http://0fps.net)",
+    "Chris Dickinson <chris@neversaw.us> (http://neversaw.us)"
+  ],
+  "license": "MIT"
+}

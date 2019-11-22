@@ -1,0 +1,1 @@
+{"version":3,"sources":["locale-provider/el_GR.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/el_GR';\nexport default locale;\n"],"file":"el_GR.js"}
