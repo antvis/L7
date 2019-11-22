@@ -1,7 +1,8 @@
 ## L7 地理空间数据可视分析引擎
 
-L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。L7 中的 L 代表 Location，7 代表世界七大洲，寓意能为全球位置数据提供可视分析的能力。L7 以图形符号学为理论基础，将抽象复杂的空间数据转化成 2D、3D 符号，通过颜色、大小、体积、纹理等视觉变量实现丰富的可视化表达。
+[]![travis ci](https://travis-ci.com/antvis/L7.svg?branch=master)](https://travis-ci.com/antvis/L7) [![](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
 
+L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。L7 中的 L 代表 Location，7 代表世界七大洲，寓意能为全球位置数据提供可视分析的能力。L7 以图形符号学为理论基础，将抽象复杂的空间数据转化成 2D、3D 符号，通过颜色、大小、体积、纹理等视觉变量实现丰富的可视化表达。
 
 ## l7 visualization demos
 
@@ -37,7 +38,7 @@ L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源�
 ## 支持丰富的图表类型
 
 ### 点图层
- 
+
  - 气泡图
  - 散点图
  - 符号地图
