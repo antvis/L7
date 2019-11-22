@@ -12,5 +12,4 @@ branches:
 install:
 - yarn install
 script:
-- yarn test
-- yarn coveralls
+- yarn run lint
