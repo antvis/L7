@@ -2,9 +2,8 @@
 title: 快速上手
 order: 0
 redirect_from:
-  - /zh/docs/tutorial
+  - /zh/docs/manual
 ---
-# 使用方法
 
 # 使用方法
 
