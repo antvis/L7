@@ -22,6 +22,13 @@ module.exports = {
         redirect: 'api/l7'
       },
       {
+        slug: 'docs/tutorial',
+        title: {
+          zh: '教程',
+          en: 'tutorial'
+        }
+      },
+      {
         slug: 'examples',
         title: {
           zh: '图表演示',
@@ -41,10 +48,10 @@ module.exports = {
         order: 0
       },
       {
-        slug: 'api/quickstart',
+        slug: '/tutorial',
         title: {
           zh: '快速入门',
-          en: 'quickstart'
+          en: 'Quickstart'
         },
         order: 0
       },
