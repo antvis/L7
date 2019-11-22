@@ -158,5 +158,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "tnpm": {
+    "mode": "yarn"
   }
 }
