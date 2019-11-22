@@ -2,11 +2,14 @@ sudo: false
 language: node_js
 node_js:
 - '12'
+env:
+  matrix:
+    - TEST_TYPE=ci
+    - NODE_ENV=test
 branches:
   only:
-  - next
+  - master
 install:
 - yarn install
 script:
-- yarn test
-- yarn coveralls
+- yarn run lint
