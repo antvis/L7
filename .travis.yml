@@ -1,15 +1,18 @@
-sudo: false
 language: node_js
+
 node_js:
-- '12'
+  - '12'
+
 env:
-  matrix:
-    - TEST_TYPE=ci
-    - NODE_ENV=test
-branches:
-  only:
-  - master
+  - NODE_ENV=test
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH="$HOME/.yarn/bin:$PATH"
+
 install:
-- yarn install
+  - yarn install
+
 script:
-- yarn run lint
+  - yarn lint
+  - yarn test
