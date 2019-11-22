@@ -1,4 +1,4 @@
-import { ArcLineLayer } from '@l7/layers';
+import { LineLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 import * as React from 'react';
 
@@ -21,7 +21,7 @@ export default class ArcLineDemo extends React.Component {
       style: 'mapbox://styles/mapbox/dark-v9',
       zoom: 2,
     });
-    const lineLayer = new ArcLineLayer({})
+    const lineLayer = new LineLayer({})
       .source(await response.text(), {
         parser: {
           type: 'csv',
