@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/is_IS.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Velja tíma',\n};\nexport default locale;\n"],"file":"is_IS.js"}

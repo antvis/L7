@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/default.jsx"],"names":["locale"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,mBAAnB;AACA,eAAeA,MAAf","sourcesContent":["import locale from '../locale/default';\nexport default locale;\n"],"file":"default.js"}

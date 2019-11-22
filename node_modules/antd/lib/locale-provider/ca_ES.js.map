@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/ca_ES.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/ca_ES';\nexport default locale;\n"],"file":"ca_ES.js"}

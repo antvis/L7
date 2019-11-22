@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.js"],"names":[],"mappings":"AAAA,MAAM,CAAN,OAAA,GAAiB,OAAO,CAAP,GAAA,CAAA,QAAA,KAAA,YAAA,GAAwC,OAAO,CAA/C,eAA+C,CAA/C,GAAmE,OAAO,CAA3F,SAA2F,CAA3F","file":"index.js","sourcesContent":["module.exports = process.env.NODE_ENV === 'production' ? require('./build/mocks') : require('./build');\n\n"]}

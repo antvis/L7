@@ -1,5 +1,0 @@
-{
-  "name": "gl-matrix/mat2d",
-  "main": "../cjs/mat2d.js",
-  "module": "../esm/mat2d.js"
-}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["anchor/index.jsx"],"names":["Anchor","Link","AnchorLink"],"mappings":";;;;;;;AAAA;;AACA;;;;AACAA,mBAAOC,IAAP,GAAcC,sBAAd;eACeF,kB","sourcesContent":["import Anchor from './Anchor';\nimport AnchorLink from './AnchorLink';\nAnchor.Link = AnchorLink;\nexport default Anchor;\n"],"file":"index.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/sr_RS.jsx"],"names":["locale"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,iBAAnB;AACA,eAAeA,MAAf","sourcesContent":["import locale from '../locale/sr_RS';\nexport default locale;\n"],"file":"sr_RS.js"}

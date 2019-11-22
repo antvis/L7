@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/id_ID.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Pilih waktu',\n};\nexport default locale;\n"],"file":"id_ID.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/lv_LV.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/lv_LV';\nexport default locale;\n"],"file":"lv_LV.js"}

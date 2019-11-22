@@ -1,1 +1,0 @@
-{"version":3,"sources":["anchor/style/index.jsx"],"names":[],"mappings":"AAAA,OAAO,wBAAP;AACA,OAAO,cAAP,C,CACA;;AACA,OAAO,mBAAP","sourcesContent":["import '../../style/index.less';\nimport './index.less';\n// style dependencies\nimport '../../affix/style';\n"],"file":"index.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["upload/index.jsx"],"names":["Upload","Dragger"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,UAAnB;AACA,OAAOC,OAAP,MAAoB,WAApB;AACAD,MAAM,CAACC,OAAP,GAAiBA,OAAjB;AACA,eAAeD,MAAf","sourcesContent":["import Upload from './Upload';\nimport Dragger from './Dragger';\nUpload.Dragger = Dragger;\nexport default Upload;\n"],"file":"index.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["form/index.jsx"],"names":["Form"],"mappings":"AAAA,OAAOA,IAAP,MAAiB,QAAjB;AACA,eAAeA,IAAf","sourcesContent":["import Form from './Form';\nexport default Form;\n"],"file":"index.js"}

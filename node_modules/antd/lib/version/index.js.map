@@ -1,1 +1,0 @@
-{"version":3,"sources":["version/index.jsx"],"names":["version"],"mappings":";;;;;;;AAAA;;eACeA,gB","sourcesContent":["import { version } from '../../package.json';\nexport default version;\n"],"file":"index.js"}

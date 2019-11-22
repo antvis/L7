@@ -1,7 +1,0 @@
-import * as React from 'react';
-import { AntTreeNode } from './Tree';
-export declare function getFullKeyList(children: React.ReactNode | React.ReactNode[]): string[];
-/** 计算选中范围，只考虑expanded情况以优化性能 */
-export declare function calcRangeKeys(rootChildren: React.ReactNode | React.ReactNode[], expandedKeys: string[], startKey?: string, endKey?: string): string[];
-export declare function convertDirectoryKeysToNodes(rootChildren: React.ReactNode | React.ReactNode[], keys: string[]): AntTreeNode[];
-export declare function getFullKeyListByTreeData(treeData: any[]): any[];

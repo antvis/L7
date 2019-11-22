@@ -1,1 +1,0 @@
-{"version":3,"sources":["collapse/index.jsx"],"names":["Collapse"],"mappings":"AAAA,OAAOA,QAAP,MAAqB,YAArB;AACA,eAAeA,QAAf","sourcesContent":["import Collapse from './Collapse';\nexport default Collapse;\n"],"file":"index.js"}

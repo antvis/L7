@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/bg_BG.jsx"],"names":["bg_BG"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import bg_BG from '../../date-picker/locale/bg_BG';\nexport default bg_BG;\n"],"file":"bg_BG.js"}

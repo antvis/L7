@@ -1,7 +1,0 @@
-language: node_js
-node_js:
-  - "lts/*"
-  - "node"
-  - "8"
-  - "6"
-script: npm run build

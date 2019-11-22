@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/hi_IN.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/hi_IN';\nexport default locale;\n"],"file":"hi_IN.js"}

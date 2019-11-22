@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/de_DE.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Zeit auswählen',\n};\nexport default locale;\n"],"file":"de_DE.js"}

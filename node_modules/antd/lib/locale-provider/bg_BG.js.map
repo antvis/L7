@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/bg_BG.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/bg_BG';\nexport default locale;\n"],"file":"bg_BG.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/da_DK.jsx"],"names":["da_DK"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import da_DK from '../../date-picker/locale/da_DK';\nexport default da_DK;\n"],"file":"da_DK.js"}

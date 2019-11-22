@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/ru_RU.jsx"],"names":["locale"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,iBAAnB;AACA,eAAeA,MAAf","sourcesContent":["import locale from '../locale/ru_RU';\nexport default locale;\n"],"file":"ru_RU.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/vi_VN.jsx"],"names":["locale","placeholder"],"mappings":";;;;;;AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;eAGeD,M","sourcesContent":["const locale = {\n    placeholder: 'Chọn thời gian',\n};\nexport default locale;\n"],"file":"vi_VN.js"}

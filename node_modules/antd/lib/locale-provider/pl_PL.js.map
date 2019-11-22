@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/pl_PL.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/pl_PL';\nexport default locale;\n"],"file":"pl_PL.js"}

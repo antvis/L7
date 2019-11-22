@@ -1,1 +1,0 @@
-{"version":3,"sources":["layout/index.jsx"],"names":["Layout","Sider"],"mappings":"AAAA,OAAOA,MAAP,MAAmB,UAAnB;AACA,OAAOC,KAAP,MAAkB,SAAlB;AACAD,MAAM,CAACC,KAAP,GAAeA,KAAf;AACA,eAAeD,MAAf","sourcesContent":["import Layout from './layout';\nimport Sider from './Sider';\nLayout.Sider = Sider;\nexport default Layout;\n"],"file":"index.js"}

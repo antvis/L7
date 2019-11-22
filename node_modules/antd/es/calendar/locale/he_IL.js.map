@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/he_IL.jsx"],"names":["he_IL"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import he_IL from '../../date-picker/locale/he_IL';\nexport default he_IL;\n"],"file":"he_IL.js"}

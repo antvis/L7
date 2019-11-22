@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/uk_UA.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/uk_UA';\nexport default locale;\n"],"file":"uk_UA.js"}

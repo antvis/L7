@@ -1,5 +1,0 @@
-{
-  "name": "gl-matrix/vec4",
-  "main": "../cjs/vec4.js",
-  "module": "../esm/vec4.js"
-}
