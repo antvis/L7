@@ -129,7 +129,6 @@ const IndexPage = () => {
           <img
             width="100%"
             className="Notification-module--number--31-3Z"
-            style={{ marginLeft: '125px', marginTop: '50px' }}
             src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
           />
         }
@@ -147,6 +146,6 @@ const IndexPage = () => {
       <Companies title={t('感谢信赖')} companies={companies} />
     </>
   );
-}
+};
 
-export default IndexPage
+export default IndexPage;

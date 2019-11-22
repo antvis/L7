@@ -1,4 +1,4 @@
-import { HeatMapLayer } from '@l7/layers';
+import { HeatmapLayer } from '@l7/layers';
 import { Scene } from '@l7/scene';
 // @ts-ignore
 import * as React from 'react';
@@ -22,7 +22,7 @@ export default class HeatMapLayerDemo extends React.Component {
       style: 'mapbox://styles/mapbox/dark-v10',
       zoom: 2,
     });
-    const layer = new HeatMapLayer({
+    const layer = new HeatmapLayer({
       enableTAA: false,
     });
     layer

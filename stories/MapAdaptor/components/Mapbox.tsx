@@ -1,5 +1,4 @@
 // @ts-ignore
-import '!style-loader!css-loader!./css/l7.css';
 import { Marker, Popup, Scale, Zoom } from '@l7/component';
 import { PolygonLayer } from '@l7/layers';
 // @ts-ignore
