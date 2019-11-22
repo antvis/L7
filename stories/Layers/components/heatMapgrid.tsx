@@ -21,7 +21,7 @@ export default class GridHeatMap extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 16,
     });
-    const layer = new HeatMapGridLayer({});
+    const layer = new HeatmapLayer({});
     layer
       .source(await response.json(), {
         parser: {
