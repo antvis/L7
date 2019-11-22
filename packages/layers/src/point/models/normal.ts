@@ -31,7 +31,7 @@ export default class NormalModel extends BaseModel {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',
       strokeWidth = 1,
-    } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,

@@ -29,7 +29,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity } = this.getLayerConfig();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { min, max } = parserDataItem;
     if (this.texture) {
@@ -62,7 +62,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
       type: gl.FLOAT,
       aniso: 4,
     });
-    const { rampColors } = this.getStyleOptions();
+    const { rampColors } = this.getLayerConfig();
     const imageData = generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: imageData.data,

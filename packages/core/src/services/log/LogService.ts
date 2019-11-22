@@ -9,11 +9,11 @@ Logger.priority = 4;
 @injectable()
 export default class LogService implements ILogService {
   public error(message: string): void {
-    Logger.error(1, message)();
+    Logger.error(message)();
   }
 
   public warn(message: string): void {
-    Logger.warn(2, message)();
+    Logger.warn(message)();
   }
 
   public info(message: string): void {

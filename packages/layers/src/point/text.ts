@@ -41,7 +41,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity } = this.getLayerConfig();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
@@ -145,7 +145,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = this.configService.getConfig().shape2d as string[];
+          const shape2d = this.getLayerConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },
@@ -154,7 +154,7 @@ export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
   }
 
   private initTextFont() {
-    const { fontWeight = 'normal', fontFamily } = this.getStyleOptions();
+    const { fontWeight = 'normal', fontFamily } = this.getLayerConfig();
     const data = this.getEncodedData();
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {

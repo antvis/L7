@@ -146,10 +146,16 @@ export const lazyMultiInject = (
 
 export default container;
 
+let sceneIdCounter = 0;
 export function createSceneContainer() {
   // @see https://github.com/inversify/InversifyJS/blob/master/wiki/hierarchical_di.md#support-for-hierarchical-di-systems
   const sceneContainer = new Container();
   sceneContainer.parent = container;
+
+  // 生成场景 ID 并保存在容器内
+  sceneContainer
+    .bind<string>(TYPES.SceneID)
+    .toConstantValue(`${sceneIdCounter++}`);
 
   sceneContainer
     .bind<ILayerService>(TYPES.ILayerService)

@@ -27,7 +27,7 @@ export default class ConfigSchemaValidationPlugin implements ILayerPlugin {
 
       const { valid, errorText } = this.configService.validateLayerConfig(
         layer.name,
-        layer.getStyleOptions(),
+        layer.getLayerConfig(),
       );
 
       if (!valid) {

@@ -123,7 +123,7 @@ export function generateLightingUniforms(
 export default class LightingPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.beforeRender.tap('LightingPlugin', () => {
-      const { enableLighting } = layer.getStyleOptions();
+      const { enableLighting } = layer.getLayerConfig();
       if (enableLighting) {
         layer.models.forEach((model) =>
           // @ts-ignore

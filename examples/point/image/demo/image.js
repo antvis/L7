@@ -1,6 +1,5 @@
 import { Scene } from '@antv/l7-scene';
-import { PointLayer } from '@antv/l7-layers'
-console.log(this);
+import { PointLayer } from '@antv/l7-layers';
 const scene = new Scene({
   id: 'map',
   pitch: 0,

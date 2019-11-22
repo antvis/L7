@@ -10,7 +10,7 @@ export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
-    } = this.layer.getStyleOptions() as IPolygonLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return {
       u_opacity: opacity,
     };

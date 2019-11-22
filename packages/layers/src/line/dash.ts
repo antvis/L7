@@ -25,7 +25,7 @@ export default class DashLineLayer extends BaseLayer<
   }
 
   protected renderModels() {
-    const { opacity, dashArray = [10, 5] } = this.getStyleOptions();
+    const { opacity, dashArray = [10, 5] } = this.getLayerConfig();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {

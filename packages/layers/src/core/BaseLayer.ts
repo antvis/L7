@@ -7,7 +7,7 @@ import {
   IIconService,
   IInteractionService,
   ILayer,
-  ILayerInitializationOptions,
+  ILayerConfig,
   ILayerModel,
   ILayerModelInitializationOptions,
   ILayerPlugin,
@@ -47,23 +47,6 @@ import baseLayerSchema from './schema';
  */
 let layerIdCounter = 0;
 
-/**
- * Layer 基类默认样式属性
- */
-const defaultLayerInitializationOptions: Partial<ILayerInitializationOptions> = {
-  minZoom: 0,
-  maxZoom: 20,
-  visible: true,
-  zIndex: 0,
-  enableMultiPassRenderer: true,
-  enablePicking: false,
-  enableHighlight: false,
-  highlightColor: 'red',
-  enableTAA: false,
-  jitterScale: 1,
-  enableLighting: false,
-};
-
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
@@ -72,6 +55,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public zIndex: number = 0;
   public minZoom: number;
   public maxZoom: number;
+  public inited: boolean = false;
 
   // 生命周期钩子
   public hooks = {
@@ -132,13 +116,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   protected layerModel: ILayerModel;
 
-  protected enodeOptions: {
-    [type: string]: {
-      field: StyleAttributeField;
-      values?: StyleAttributeOption;
-    };
-  } = {};
-
   protected animateOptions: IAnimateOption = { enable: false };
 
   /**
@@ -150,38 +127,38 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private configSchema: object;
 
-  /**
-   * 保存样式属性
-   */
-  private styleOptions: Partial<
-    ILayerInitializationOptions & ChildLayerStyleOptions
-  >;
+  private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
    */
   private pendingStyleAttributes: Array<{
     attributeName: string;
-    attributeOptions: Partial<IStyleAttributeInitializationOptions>;
+    attributeField: StyleAttributeField;
+    attributeValues?: StyleAttributeOption;
+    defaultName?: string;
     updateOptions?: Partial<IStyleAttributeUpdateOptions>;
   }> = [];
 
   private scaleOptions: IScaleOptions = {};
 
-  constructor(
-    styleOptions: Partial<ILayerInitializationOptions & ChildLayerStyleOptions>,
-  ) {
+  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions>) {
     super();
-    this.styleOptions = {
-      ...defaultLayerInitializationOptions,
-      ...styleOptions,
-    };
-    const { minZoom, maxZoom, zIndex, visible } = this
-      .styleOptions as ILayerInitializationOptions;
-    this.visible = visible;
-    this.zIndex = zIndex;
-    this.minZoom = minZoom;
-    this.maxZoom = maxZoom;
+    this.rawConfig = config;
+  }
+
+  public getLayerConfig() {
+    return this.configService.getLayerConfig<ChildLayerStyleOptions>(this.id);
+  }
+
+  public updateLayerConfig(
+    configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
+  ) {
+    const sceneId = this.container.get<string>(TYPES.SceneID);
+    this.configService.setLayerConfig(sceneId, this.id, {
+      ...this.configService.getLayerConfig(this.id),
+      ...configToUpdate,
+    });
   }
 
   /**
@@ -209,6 +186,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public init() {
+    // 设置配置项
+    const sceneId = this.container.get<string>(TYPES.SceneID);
+    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
+
     // 全局容器服务
     this.iconService = this.container.get<IIconService>(TYPES.IIconService);
     this.fontService = this.container.get<IFontService>(TYPES.IFontService);
@@ -238,10 +219,27 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 完成样式服务注册完成前添加的属性
     this.pendingStyleAttributes.forEach(
-      ({ attributeName, attributeOptions, updateOptions }) => {
+      ({
+        attributeName,
+        attributeField,
+        attributeValues,
+        defaultName,
+        updateOptions,
+      }) => {
         this.styleAttributeService.updateStyleAttribute(
           attributeName,
-          attributeOptions,
+          {
+            // @ts-ignore
+            scale: {
+              field: attributeField,
+              ...this.splitValuesAndCallbackInAttribute(
+                // @ts-ignore
+                attributeValues,
+                // @ts-ignore
+                this.getLayerConfig()[defaultName || attributeName],
+              ),
+            },
+          },
           // @ts-ignore
           updateOptions,
         );
@@ -265,6 +263,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 触发 init 生命周期插件
     this.hooks.init.call();
     this.buildModels();
+
+    this.inited = true;
     return this;
   }
 
@@ -276,17 +276,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 设置 color、size、shape、style 时由于场景服务尚未完成（并没有调用 scene.addLayer），因此暂时加入待更新属性列表
     this.pendingStyleAttributes.push({
       attributeName: 'color',
-      attributeOptions: {
-        // @ts-ignore
-        scale: {
-          field,
-          ...this.splitValuesAndCallbackInAttribute(
-            // @ts-ignore
-            values,
-            this.configService.getConfig().colors,
-          ),
-        },
-      },
+      attributeField: field,
+      attributeValues: values,
+      defaultName: 'colors',
       updateOptions,
     });
     return this;
@@ -299,17 +291,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   ) {
     this.pendingStyleAttributes.push({
       attributeName: 'size',
-      attributeOptions: {
-        // @ts-ignore
-        scale: {
-          field,
-          ...this.splitValuesAndCallbackInAttribute(
-            // @ts-ignore
-            values,
-            this.configService.getConfig().size,
-          ),
-        },
-      },
+      attributeField: field,
+      attributeValues: values,
       updateOptions,
     });
     return this;
@@ -320,23 +303,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.enodeOptions.shape = {
-      field,
-      values,
-    };
     this.pendingStyleAttributes.push({
       attributeName: 'shape',
-      attributeOptions: {
-        // @ts-ignore
-        scale: {
-          field,
-          ...this.splitValuesAndCallbackInAttribute(
-            // @ts-ignore
-            values,
-            this.configService.getConfig().shape,
-          ),
-        },
-      },
+      attributeField: field,
+      attributeValues: values,
       updateOptions,
     });
     return this;
@@ -348,17 +318,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   ) {
     this.pendingStyleAttributes.push({
       attributeName: 'label',
-      attributeOptions: {
-        // @ts-ignore
-        scale: {
-          field,
-          ...this.splitValuesAndCallbackInAttribute(
-            // @ts-ignore
-            values,
-            null,
-          ),
-        },
-      },
+      attributeField: field,
+      attributeValues: values,
       updateOptions,
     });
     return this;
@@ -375,7 +336,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     };
     return this;
   }
-  public style(options: object & Partial<ILayerInitializationOptions>): ILayer {
+  public style(options: object & Partial<ILayerConfig>): ILayer {
     const { passes, ...rest } = options;
 
     // passes 特殊处理
@@ -392,8 +353,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       );
     }
 
-    this.styleOptions = {
-      ...this.styleOptions,
+    this.rawConfig = {
+      ...this.rawConfig,
       ...rest,
     };
     return this;
@@ -419,13 +380,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public show(): ILayer {
-    this.visible = true;
+    this.updateLayerConfig({
+      visible: true,
+    });
     this.layerService.renderLayers();
     return this;
   }
 
   public hide(): ILayer {
-    this.visible = false;
+    this.updateLayerConfig({
+      visible: false,
+    });
     this.layerService.renderLayers();
     return this;
   }
@@ -438,16 +403,26 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
-    return this.visible && zoom >= this.minZoom && zoom <= this.maxZoom;
+
+    const {
+      visible,
+      minZoom = -Infinity,
+      maxZoom = Infinity,
+    } = this.getLayerConfig();
+    return !!visible && zoom >= minZoom && zoom <= maxZoom;
   }
 
-  public setMinZoom(min: number): ILayer {
-    this.minZoom = min;
+  public setMinZoom(minZoom: number): ILayer {
+    this.updateLayerConfig({
+      minZoom,
+    });
     return this;
   }
 
-  public setMaxZoom(max: number): ILayer {
-    this.maxZoom = max;
+  public setMaxZoom(maxZoom: number): ILayer {
+    this.updateLayerConfig({
+      maxZoom,
+    });
     return this;
   }
   /**
@@ -494,9 +469,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerSource;
   }
 
-  public getStyleOptions() {
-    return this.styleOptions;
-  }
   public getScaleOptions() {
     return this.scaleOptions;
   }

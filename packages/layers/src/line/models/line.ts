@@ -16,7 +16,7 @@ interface ILineLayerStyleOptions {
 }
 export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getStyleOptions() as ILineLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
     };

@@ -1,6 +1,7 @@
 import { Container } from 'inversify';
 import { SyncBailHook, SyncHook } from 'tapable';
 import Clock from '../../utils/clock';
+import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IModel, IModelInitializationOptions } from '../renderer/IModel';
 import {
@@ -22,16 +23,6 @@ import {
   Triangulation,
 } from './IStyleAttributeService';
 
-export interface ILayerGlobalConfig {
-  colors: string[];
-  size: number;
-  shape: string;
-  shape2d: string[];
-  shape3d: string[];
-  scales: {
-    [key: string]: IScale;
-  };
-}
 export interface ILayerModelInitializationOptions {
   moduleName: string;
   vertexShader: string;
@@ -57,10 +48,8 @@ export interface IPickedFeature {
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   name: string; // 代表 Layer 的类型
-  visible: boolean;
+  inited: boolean; // 是否初始化完成
   zIndex: number;
-  minZoom: number;
-  maxZoom: number;
   plugins: ILayerPlugin[];
   hooks: {
     init: SyncBailHook<void, boolean | void>;
@@ -79,6 +68,7 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+  getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
   buildLayerModel(
@@ -105,12 +95,15 @@ export interface ILayer {
   render(): ILayer;
   destroy(): void;
   source(data: any, option?: ISourceCFG): ILayer;
+  /**
+   * 向当前图层注册插件
+   * @param plugin 插件实例
+   */
   addPlugin(plugin: ILayerPlugin): ILayer;
   getSource(): ISource;
   setSource(source: ISource): void;
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
-  getStyleOptions(): Partial<ILayerInitializationOptions>;
   getScaleOptions(): IScaleOptions;
   /**
    * 事件
@@ -148,7 +141,15 @@ export interface ILayerPlugin {
 /**
  * Layer 初始化参数
  */
-export interface ILayerInitializationOptions {
+export interface ILayerConfig {
+  colors: string[];
+  size: number;
+  shape: string;
+  shape2d: string[];
+  shape3d: string[];
+  scales: {
+    [key: string]: IScale;
+  };
   minZoom: number;
   maxZoom: number;
   visible: boolean;

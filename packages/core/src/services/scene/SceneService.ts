@@ -7,7 +7,7 @@ import { IFontService } from '../asset/IFontService';
 import { IIconService } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
-import { IGlobalConfig, IGlobalConfigService } from '../config/IConfigService';
+import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { IInteractionService } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
@@ -16,13 +16,13 @@ import { IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
 
-let sceneIdCounter = 0;
-
 /**
  * will emit `loaded` `resize` `destroy` event
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
+  @inject(TYPES.SceneID)
+  private readonly id: string;
   /**
    * 使用各种 Service
    */
@@ -72,7 +72,6 @@ export default class Scene extends EventEmitter implements ISceneService {
    * canvas 容器
    */
   private $container: HTMLDivElement | null;
-  private id: number;
 
   private hooks: {
     init: AsyncParallelHook<unknown>;
@@ -92,9 +91,19 @@ export default class Scene extends EventEmitter implements ISceneService {
     };
   }
 
-  public init(globalConfig: IGlobalConfig) {
-    this.id = sceneIdCounter++;
-    this.configService.setAndCheckConfig(globalConfig);
+  public init(sceneConfig: ISceneConfig) {
+    // 设置场景配置项
+    this.configService.setSceneConfig(this.id, sceneConfig);
+
+    // 校验场景配置项，失败则终止初始化过程
+    const { valid, errorText } = this.configService.validateSceneConfig(
+      this.configService.getSceneConfig(this.id),
+    );
+    if (!valid) {
+      this.logger.error(errorText || '');
+      return;
+    }
+
     // 初始化 ShaderModule
     this.shaderModuleService.registerBuiltinModules();
 
@@ -105,7 +114,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     this.controlService.init({
       container: document.getElementById(
-        this.configService.getConfig().id || 'map',
+        this.configService.getSceneConfig(this.id).id || 'map',
       ) as HTMLElement,
     });
 
@@ -134,7 +143,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.hooks.init.tapPromise('initRenderer', async () => {
       // 创建底图之上的 container
       const $container = createRendererContainer(
-        this.configService.getConfig().id || '',
+        this.configService.getSceneConfig(this.id).id || '',
       );
       this.$container = $container;
       if ($container) {
@@ -153,7 +162,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     // TODO：init worker, fontAtlas...
 
     // 执行异步并行初始化任务
-    this.initPromise = this.hooks.init.promise(this.configService.getConfig());
+    this.initPromise = this.hooks.init.promise(
+      this.configService.getSceneConfig(this.id),
+    );
   }
 
   public addLayer(layer: ILayer) {
@@ -173,13 +184,14 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
       await this.initPromise;
-      this.layerService.initLayers();
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.map.addMarkerContainer();
       this.inited = true;
       this.emit('loaded');
     }
 
+    // 尝试初始化未初始化的图层
+    this.layerService.initLayers();
     this.layerService.renderLayers();
     this.logger.debug(`scene ${this.id} render`);
 
@@ -190,7 +202,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.emit('destroy');
     this.inited = false;
     this.layerService.destroy();
-    this.configService.reset();
     this.interactionService.destroy();
     this.controlService.destroy();
     this.removeAllListeners();

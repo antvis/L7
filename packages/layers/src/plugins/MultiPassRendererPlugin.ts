@@ -56,12 +56,12 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     },
   ) {
     layer.hooks.init.tap('MultiPassRendererPlugin', () => {
-      const { enableMultiPassRenderer, passes = [] } = layer.getStyleOptions();
+      const { enableMultiPassRenderer, passes = [] } = layer.getLayerConfig();
 
       // SceneConfig 的 enableMultiPassRenderer 配置项可以统一关闭
       this.enabled =
         !!enableMultiPassRenderer &&
-        this.configService.getConfig().enableMultiPassRenderer !== false;
+        layer.getLayerConfig().enableMultiPassRenderer !== false;
 
       // 根据 LayerConfig passes 配置项初始化
       if (this.enabled) {
@@ -95,7 +95,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     normalPassFactory: (name: string) => IPass<unknown>,
   ) {
     const multiPassRenderer = layer.multiPassRenderer;
-    const { enablePicking, enableTAA } = layer.getStyleOptions();
+    const { enablePicking, enableTAA } = layer.getLayerConfig();
 
     // picking pass if enabled
     if (enablePicking) {

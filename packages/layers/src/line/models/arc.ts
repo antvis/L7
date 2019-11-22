@@ -21,7 +21,7 @@ export default class ArcModel extends BaseModel {
     const {
       opacity,
       blur = 0.99,
-    } = this.layer.getStyleOptions() as IArcLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IArcLayerStyleOptions;
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,

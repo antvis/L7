@@ -25,6 +25,7 @@ const TYPES = {
   IFactoryPostProcessingPass: Symbol.for('Factory<IPostProcessingPass>'),
   IFactoryNormalPass: Symbol.for('Factory<IFactoryNormalPass>'),
   IMultiPassRenderer: Symbol.for('IMultiPassRenderer'),
+  SceneID: Symbol.for('SceneID'),
 };
 
 export { TYPES };

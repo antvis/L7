@@ -74,7 +74,7 @@ export default class HeatMapModel extends BaseModel {
 
     const {
       rampColors,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const imageData = generateColorRamp(rampColors as IColorRamp);
     const { width, height } = getViewportSize();
 
@@ -238,7 +238,7 @@ export default class HeatMapModel extends BaseModel {
       opacity,
       intensity = 10,
       radius = 5,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.intensityModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
@@ -251,7 +251,7 @@ export default class HeatMapModel extends BaseModel {
   private drawColorMode() {
     const {
       opacity,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.colorModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
@@ -264,7 +264,7 @@ export default class HeatMapModel extends BaseModel {
   private draw3DHeatMap() {
     const {
       opacity,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const invert = mat4.invert(
       mat4.create(),
       // @ts-ignore

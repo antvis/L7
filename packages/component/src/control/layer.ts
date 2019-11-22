@@ -177,7 +177,7 @@ export default class Layers extends Control {
       input = inputs[i];
       layer = this.layerService.getLayer(input.layerId);
       if (layer) {
-        input.disabled = layer.visible && !layer.isVisible();
+        input.disabled = !layer.isVisible();
       }
     }
   }

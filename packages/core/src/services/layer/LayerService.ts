@@ -28,7 +28,9 @@ export default class LayerService implements ILayerService {
 
   public initLayers() {
     this.layers.forEach((layer) => {
-      layer.init();
+      if (!layer.inited) {
+        layer.init();
+      }
     });
   }
 

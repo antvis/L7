@@ -1,4 +1,3 @@
-// @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
 import * as dat from 'dat.gui';
 import * as React from 'react';
@@ -6,7 +5,6 @@ import * as React from 'react';
 export default class Blur extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
-  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {

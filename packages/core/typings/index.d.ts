@@ -8,8 +8,8 @@ declare module 'probe.gl' {
 
     debug(priority: number, message: string): () => any;
     info(priority: number, message: string): () => any;
-    warn(priority: number, message: string): () => any;
-    error(priority: number, message: string): () => any;
+    warn(message: string): () => any;
+    error(message: string): () => any;
     probe(priority: number, message: string): () => any;
   }
 }

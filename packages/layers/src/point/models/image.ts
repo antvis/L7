@@ -19,7 +19,7 @@ export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_texture: this.texture,

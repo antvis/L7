@@ -94,9 +94,6 @@ module.exports = api => {
       isCDNBundle ? {} : [
         'transform-import-styles',
       ],
-      isCDNBundle ? {} : [
-        'inline-import-data-uri',
-      ],
       [
         // @see https://github.com/babel/babel/issues/8741#issuecomment-509041135
         'const-enum',

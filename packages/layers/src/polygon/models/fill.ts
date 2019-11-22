@@ -23,7 +23,7 @@ export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
-    } = this.layer.getStyleOptions() as IPolygonLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return {
       u_opacity: opacity,
     };

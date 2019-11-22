@@ -196,7 +196,7 @@ export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
 
     const { clear, getViewportSize, useFramebuffer } = this.rendererService;
     const { width, height } = getViewportSize();
-    const { jitterScale = 1 } = layer.getStyleOptions();
+    const { jitterScale = 1 } = layer.getLayerConfig();
 
     // 使用 Halton 序列抖动投影矩阵
     const offset = this.haltonSequence[this.frame % this.haltonSequence.length];
@@ -222,7 +222,7 @@ export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
     layer.multiPassRenderer.setRenderFlag(true);
 
     // 混合
-    const layerStyleOptions = layer.getStyleOptions();
+    const layerStyleOptions = layer.getLayerConfig();
     useFramebuffer(this.outputRenderTarget, () => {
       this.blendModel.draw({
         uniforms: {

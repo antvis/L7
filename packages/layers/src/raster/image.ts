@@ -30,7 +30,7 @@ export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity } = this.getLayerConfig();
     if (this.texture) {
       this.models.forEach((model) =>
         model.draw({

@@ -19,7 +19,7 @@ export default class Grid3DModel extends BaseModel {
     const {
       opacity,
       coverage,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 1.0,

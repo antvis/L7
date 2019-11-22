@@ -119,7 +119,7 @@ export default class PixelPickingPass<
       useFramebuffer,
     } = this.rendererService;
     const { width, height } = getViewportSize();
-    const { enableHighlight } = this.layer.getStyleOptions();
+    const { enableHighlight } = this.layer.getLayerConfig();
 
     const xInDevicePixel = x * window.devicePixelRatio;
     const yInDevicePixel = y * window.devicePixelRatio;
@@ -181,7 +181,7 @@ export default class PixelPickingPass<
     y: number;
     feature: unknown;
   }) {
-    const { onHover, onClick } = this.layer.getStyleOptions();
+    const { onHover, onClick } = this.layer.getLayerConfig();
     if (onHover) {
       onHover({
         x,

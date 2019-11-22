@@ -40,7 +40,6 @@
     "babel-plugin-const-enum": "^0.0.2",
     "babel-plugin-css-modules-transform": "^1.6.2",
     "babel-plugin-inline-import": "^3.0.0",
-    "babel-plugin-inline-import-data-uri": "^1.0.1",
     "babel-plugin-inline-webgl-constants": "^1.0.1",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-import-styles": "^0.0.11",

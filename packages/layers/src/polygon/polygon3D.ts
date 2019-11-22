@@ -22,7 +22,7 @@ export default class PolygonLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity } = this.getLayerConfig();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {

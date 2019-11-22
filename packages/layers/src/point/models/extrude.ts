@@ -8,7 +8,7 @@ interface IPointLayerStyleOptions {
 }
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
-    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
     };

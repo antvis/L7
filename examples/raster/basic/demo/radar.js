@@ -1,5 +1,5 @@
 import { Scene } from '@antv/l7-scene';
-import { ImageLayer } from '@antv/l7-layers'
+import { ImageLayer } from '@antv/l7-layers';
 const scene = new Scene({
   id: 'map',
   pitch: 0,

@@ -16,7 +16,7 @@ interface IArcLayerStyleOptions {
 }
 export default class Arc3DModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getStyleOptions() as IArcLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IArcLayerStyleOptions;
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,

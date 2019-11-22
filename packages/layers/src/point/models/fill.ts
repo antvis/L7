@@ -21,7 +21,7 @@ export default class FillModel extends BaseModel {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',
       strokeWidth = 1,
-    } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
@@ -112,7 +112,7 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = this.configService.getConfig().shape2d as string[];
+          const shape2d = this.layer.getLayerConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

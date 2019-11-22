@@ -18,10 +18,10 @@ fetch(
   .then(data => {
     const layer = new HeatmapLayer({})
       .source(data, {
-        parser:{
-          type:'csv',
-          x:'lng',
-          y:'lat',
+        parser: {
+          type: 'csv',
+          x: 'lng',
+          y: 'lat'
         },
         transforms: [
           {
