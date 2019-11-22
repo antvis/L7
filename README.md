@@ -7,7 +7,7 @@ L7 Large-scale WebGL-powered Geospatial data visualization analysis framework
 
 ## l7 visualization demos
 
-![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*zOFwTJ9wHXQAAAAAAAAAAABkARQnAQ)
+![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SGU-QIZsnyoAAAAAAAAAAABkARQnAQ)
 
 ### Installation
 
