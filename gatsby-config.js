@@ -3,7 +3,7 @@ module.exports = {
     {
       resolve: '@antv/gatsby-theme-antv',
       options: {
-        GATrackingId: 'UA-148148901-7',
+        GATrackingId: 'UA-148148901-7'
       }
     }
   ],
@@ -20,6 +20,13 @@ module.exports = {
           en: 'Document'
         },
         redirect: 'api/l7'
+      },
+      {
+        slug: 'docs/tutorial',
+        title: {
+          zh: '教程',
+          en: 'tutorial'
+        }
       },
       {
         slug: 'examples',
@@ -41,10 +48,10 @@ module.exports = {
         order: 0
       },
       {
-        slug: 'api/quickstart',
+        slug: '/tutorial',
         title: {
           zh: '快速入门',
-          en: 'quickstart'
+          en: 'Quickstart'
         },
         order: 0
       },
