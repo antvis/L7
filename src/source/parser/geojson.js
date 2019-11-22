@@ -8,37 +8,40 @@ export default function geoJSON(data, cfg) {
   const featureKeys = {};
   data.features = data.features.filter(item => {
     return item != null
-          && item.geometry
-          && item.geometry.type
-          && item.geometry.coordinates
-          && Array.isArray(item.geometry.coordinates)
-          && item.geometry.coordinates.length > 0;
+      && item.geometry
+      && item.geometry.type
+      && item.geometry.coordinates
+      && Array.isArray(item.geometry.coordinates)
+      && item.geometry.coordinates.length > 0;
   });
   rewind(data, true);
   // 数据为空时处理
   let i = 0;
-  turfMeta.flattenEach(data, (currentFeature, featureIndex) => { // 多个polygon 拆成一个
 
+  turfMeta.flattenEach(data, (currentFeature, featureIndex) => { // 多个polygon 拆成一个
     const coord = getCoords(currentFeature);
+
     if (coord.length === 0) {
       i++;
       return;
     }
-    let id = featureIndex + 1;
-    if (cfg.idField && currentFeature.properties[cfg.idField]) {
-      const value = currentFeature.properties[cfg.idField];
-      id = djb2hash(value) % 1000019;
-      featureKeys[id] = {
-        index: i++,
-        idField: value
+    coord.forEach(coor => { // mutipolygon
+      let id = featureIndex + 1;
+      if (cfg.idField && currentFeature.properties[cfg.idField]) {
+        const value = currentFeature.properties[cfg.idField];
+        id = djb2hash(value) % 1000019;
+        featureKeys[id] = {
+          index: i++,
+          idField: value
+        };
+      }
+      const dataItem = {
+        ...currentFeature.properties,
+        coordinates: [ coor ],
+        _id: id
       };
-    }
-    const dataItem = {
-      ...currentFeature.properties,
-      coordinates: coord,
-      _id: id
-    };
-    resultData.push(dataItem);
+      resultData.push(dataItem);
+    });
   });
   return {
     dataArray: resultData,

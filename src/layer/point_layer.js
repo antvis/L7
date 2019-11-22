@@ -33,7 +33,7 @@ export default class PointLayer extends Layer {
       }
     }
 
-    // 2D circle 特殊处理
+    // 2D circle 特殊处理t
     if (pointShape['2d'].indexOf(shape) !== -1) {
       return 'fill';
     } else if (pointShape['3d'].indexOf(shape) !== -1) {
