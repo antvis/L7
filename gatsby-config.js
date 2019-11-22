@@ -3,7 +3,7 @@ module.exports = {
     {
       resolve: '@antv/gatsby-theme-antv',
       options: {
-        GATrackingId: 'UA-148148901-7',
+        GATrackingId: 'UA-148148901-7'
       }
     }
   ],
