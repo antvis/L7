@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/ca_ES.jsx"],"names":["locale","placeholder"],"mappings":";;;;;;AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;eAGeD,M","sourcesContent":["const locale = {\n    placeholder: 'Seleccionar hora',\n};\nexport default locale;\n"],"file":"ca_ES.js"}

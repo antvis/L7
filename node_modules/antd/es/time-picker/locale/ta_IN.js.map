@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/ta_IN.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'நேரத்தைத் தேர்ந்தெடுக்கவும்',\n};\nexport default locale;\n"],"file":"ta_IN.js"}

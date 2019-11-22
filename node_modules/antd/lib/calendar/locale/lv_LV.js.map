@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/lv_LV.jsx"],"names":["lv_LV"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import lv_LV from '../../date-picker/locale/lv_LV';\nexport default lv_LV;\n"],"file":"lv_LV.js"}

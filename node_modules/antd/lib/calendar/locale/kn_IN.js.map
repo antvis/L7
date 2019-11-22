@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/kn_IN.jsx"],"names":["kn_IN"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import kn_IN from '../../date-picker/locale/kn_IN';\nexport default kn_IN;\n"],"file":"kn_IN.js"}

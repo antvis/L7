@@ -1,1 +1,0 @@
-{"version":3,"sources":["date-picker/interface.jsx"],"names":["tuple","DatePickerModes"],"mappings":"AAAA,SAASA,KAAT,QAAsB,eAAtB;AACA,IAAMC,eAAe,GAAGD,KAAK,CAAC,MAAD,EAAS,MAAT,EAAiB,OAAjB,EAA0B,MAA1B,EAAkC,QAAlC,CAA7B","sourcesContent":["import { tuple } from '../_util/type';\nconst DatePickerModes = tuple('time', 'date', 'month', 'year', 'decade');\n"],"file":"interface.js"}

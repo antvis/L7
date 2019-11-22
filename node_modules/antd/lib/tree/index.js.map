@@ -1,1 +1,0 @@
-{"version":3,"sources":["tree/index.jsx"],"names":["Tree"],"mappings":";;;;;;;AAAA;;;;eACeA,gB","sourcesContent":["import Tree from './Tree';\nexport default Tree;\n"],"file":"index.js"}

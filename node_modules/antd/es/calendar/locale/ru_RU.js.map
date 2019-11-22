@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/ru_RU.jsx"],"names":["ru_RU"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import ru_RU from '../../date-picker/locale/ru_RU';\nexport default ru_RU;\n"],"file":"ru_RU.js"}

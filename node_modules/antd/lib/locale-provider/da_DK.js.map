@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/da_DK.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/da_DK';\nexport default locale;\n"],"file":"da_DK.js"}

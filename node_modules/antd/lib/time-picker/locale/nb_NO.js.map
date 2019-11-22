@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/nb_NO.jsx"],"names":["locale","placeholder"],"mappings":";;;;;;AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;eAGeD,M","sourcesContent":["const locale = {\n    placeholder: 'Velg tid',\n};\nexport default locale;\n"],"file":"nb_NO.js"}

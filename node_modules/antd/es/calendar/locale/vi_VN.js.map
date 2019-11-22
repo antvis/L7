@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/vi_VN.jsx"],"names":["vi_VN"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import vi_VN from '../../date-picker/locale/vi_VN';\nexport default vi_VN;\n"],"file":"vi_VN.js"}

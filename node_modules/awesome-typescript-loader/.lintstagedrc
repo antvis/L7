@@ -1,7 +1,0 @@
-{
-  "verbose": false,
-  "linters": {
-    "*.{ts,tsx}": ["tslint", "prettier --ignore-path .prettierignore --write"],
-    "*.{js,jsx}": ["tslint", "prettier --ignore-path .prettierignore --write"],
-  }
-}

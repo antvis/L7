@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/ms_MY.jsx"],"names":["ms_MY"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import ms_MY from '../../date-picker/locale/ms_MY';\nexport default ms_MY;\n"],"file":"ms_MY.js"}

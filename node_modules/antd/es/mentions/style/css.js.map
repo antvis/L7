@@ -1,1 +1,0 @@
-{"version":3,"sources":["mentions/style/index.jsx"],"names":[],"mappings":"AAAA,OAAO,cAAP,C,CACA;;AACA,OAAO,mBAAP;AACA,OAAO,kBAAP","sourcesContent":["import './index.less';\n// style dependencies\nimport '../../empty/style';\nimport '../../spin/style';\n"],"file":"css.js"}

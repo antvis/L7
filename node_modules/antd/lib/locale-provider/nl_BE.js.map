@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/nl_BE.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/nl_BE';\nexport default locale;\n"],"file":"nl_BE.js"}

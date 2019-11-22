@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/mn_MN.jsx"],"names":["mn_MN"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import mn_MN from '../../date-picker/locale/mn_MN';\nexport default mn_MN;\n"],"file":"mn_MN.js"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["time-picker/locale/pt_BR.jsx"],"names":["locale","placeholder"],"mappings":"AAAA,IAAMA,MAAM,GAAG;AACXC,EAAAA,WAAW,EAAE;AADF,CAAf;AAGA,eAAeD,MAAf","sourcesContent":["const locale = {\n    placeholder: 'Hora',\n};\nexport default locale;\n"],"file":"pt_BR.js"}

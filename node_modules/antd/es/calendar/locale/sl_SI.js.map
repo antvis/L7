@@ -1,1 +1,0 @@
-{"version":3,"sources":["calendar/locale/sl_SI.jsx"],"names":["sl_SI"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,gCAAlB;AACA,eAAeA,KAAf","sourcesContent":["import sl_SI from '../../date-picker/locale/sl_SI';\nexport default sl_SI;\n"],"file":"sl_SI.js"}

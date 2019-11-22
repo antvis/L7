@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/ne-NP.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/ne_NP';\nexport default locale;\n"],"file":"ne-NP.js"}

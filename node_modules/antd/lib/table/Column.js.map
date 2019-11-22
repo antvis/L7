@@ -1,1 +1,0 @@
-{"version":3,"sources":["table/Column.jsx"],"names":["Column","React","Component"],"mappings":";;;;;;;AAAA;;;;;;;;;;;;;;;;;;;;AACA;IACqBA,M;;;;;;;;;;;;EAAeC,KAAK,CAACC,S","sourcesContent":["import * as React from 'react';\n/* eslint-disable react/prefer-stateless-function */\nexport default class Column extends React.Component {\n}\n"],"file":"Column.js"}

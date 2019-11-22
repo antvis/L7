@@ -1,1 +1,0 @@
-{"version":3,"sources":["transfer/style/index.jsx"],"names":[],"mappings":";;AAAA;;AACA;;AAEA;;AACA;;AACA;;AACA","sourcesContent":["import '../../style/index.less';\nimport './index.less';\n// style dependencies\nimport '../../empty/style';\nimport '../../checkbox/style';\nimport '../../button/style';\nimport '../../input/style';\n"],"file":"css.js"}

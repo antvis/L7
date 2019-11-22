@@ -1,1 +1,0 @@
-{"version":3,"sources":["tree/index.jsx"],"names":["Tree"],"mappings":"AAAA,OAAOA,IAAP,MAAiB,QAAjB;AACA,eAAeA,IAAf","sourcesContent":["import Tree from './Tree';\nexport default Tree;\n"],"file":"index.js"}

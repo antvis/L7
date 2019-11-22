@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale-provider/de_DE.jsx"],"names":["locale"],"mappings":";;;;;;;AAAA;;;;eACeA,iB","sourcesContent":["import locale from '../locale/de_DE';\nexport default locale;\n"],"file":"de_DE.js"}

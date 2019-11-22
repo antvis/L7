@@ -1,1 +1,0 @@
-{"version":3,"sources":["locale/en_US.jsx"],"names":["defaultLocale"],"mappings":";;;;;;;AAAA;;;;eACeA,oB","sourcesContent":["import defaultLocale from './default';\nexport default defaultLocale;\n"],"file":"en_US.js"}
