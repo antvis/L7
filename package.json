@@ -56,6 +56,7 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
+    "eslint": "^6.6.0",
     "eslint-config-egg": "^7.5.1",
     "eslint-plugin-html": "^6.0.0",
     "gatsby": "^2.17.7",
@@ -157,5 +158,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "tnpm": {
+    "mode": "yarn"
   }
 }
