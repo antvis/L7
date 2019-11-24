@@ -110,7 +110,7 @@ class Scene {
 
     // 初始化 scene
     this.sceneService.init(config);
-    // 初始化组件
+    // 初始化组件 TODO:  render 初始化完成之后
     this.initControl();
   }
 
