@@ -141,6 +141,7 @@
     "build:declarations": "lerna exec --stream --no-bail 'tsc --project ./tsconfig.build.json'",
     "watch": "yarn clean && lerna exec --parallel 'BABEL_ENV=cjs babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
     "bundle": "BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js",
+    "bundle:watch": "BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js --watch", 
     "glsl-minify": "node_modules/.bin/glsl-minifier -i ./build/example.frag -o ./build/example.min.frag",
     "clean": "lerna run clean"
   },

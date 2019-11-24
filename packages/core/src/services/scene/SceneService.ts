@@ -142,7 +142,6 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       this.logger.info('renderer loaded');
     });
-
     // TODO：init worker, fontAtlas...
 
     // 执行异步并行初始化任务
@@ -160,12 +159,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
+
       await this.initPromise;
       // 初始化 marker 容器 TODO: 可以放到 map 初始化方法中？
       this.map.addMarkerContainer();
       this.logger.info(' render inited');
-      this.inited = true;
       this.emit('loaded');
+      this.inited = true;
     }
 
     // 尝试初始化未初始化的图层
