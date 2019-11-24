@@ -5,7 +5,6 @@ module.exports = api => {
   const isCommonJS = api.env('cjs');
   const isESModule = api.env('esm');
   const isTest = api.env('test');
-
   if (process.env.GATSBY === 'true') { //
     return {
       presets: [
@@ -55,8 +54,7 @@ module.exports = api => {
           development: isCommonJS
         }
       ],
-      '@babel/preset-typescript',
-      'babel-preset-gatsby'
+      '@babel/preset-typescript'
     ],
     plugins: [
       '@babel/plugin-proposal-optional-chaining',

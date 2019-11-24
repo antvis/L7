@@ -189,18 +189,17 @@ export default class AMapService implements IMapService {
       token = AMAP_API_KEY,
       ...rest
     } = mapConfig;
+    // 高德地图创建独立的container；
 
-    this.$mapContainer = document.getElementById(id);
-
-    // this.eventEmitter = container.get(TYPES.IEventEmitter);
-
+    // @ts-ignore
+    this.$mapContainer = this.creatAmapContainer(id);
     // tslint:disable-next-line:typedef
     await new Promise((resolve) => {
       // 异步加载高德地图
       // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
       window.onload = (): void => {
         // @ts-ignore
-        this.map = new AMap.Map(id, {
+        this.map = new AMap.Map(this.$mapContainer, {
           mapStyle: this.getMapStyle(style),
           zooms: [minZoom, maxZoom],
           viewMode: '3D',
@@ -292,5 +291,22 @@ export default class AMapService implements IMapService {
 
   private getMapStyle(name: string) {
     return MapTheme[name] ? MapTheme[name] : name;
+  }
+  private creatAmapContainer(id: string | HTMLDivElement) {
+    let $wrapper = id as HTMLDivElement;
+    if (typeof id === 'string') {
+      $wrapper = document.getElementById(id) as HTMLDivElement;
+    }
+    const $amapdiv = document.createElement('div');
+    $amapdiv.style.cssText += `
+      position: absolute;
+      top: 0;
+      z-index:2;
+      height: 100%;
+      width: 100%;
+    `;
+    $amapdiv.id = 'l7_amap_div';
+    $wrapper.appendChild($amapdiv);
+    return $amapdiv;
   }
 }
