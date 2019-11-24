@@ -1,5 +1,5 @@
 ---
-title: data
+title: Data
 order: 1
 ---
 
