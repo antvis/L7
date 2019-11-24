@@ -82,7 +82,7 @@ const IndexPage = () => {
       type: 'primary',
     },
     {
-      text: t('下载使用'),
+      text: t('开始使用'),
       link: `/${i18n.language}/docs/api/l7`,
     },
   ];
@@ -129,10 +129,10 @@ const IndexPage = () => {
           <img
             width="100%"
             className="Notification-module--number--31-3Z"
-            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
+            src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*cCI7RaJs46AAAAAAAAAAAABkARQnAQ"
           />
         }
-        title={t('L7 地理空间数据可视分析引擎')}
+        title={t('L7 空间数据可视分析')}
         description={t(
           'L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。',
         )}
