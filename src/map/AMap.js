@@ -3,6 +3,7 @@ import Global from '../global';
 import * as Theme from '../theme/index';
 import Util from '../util';
 const DEG2RAD = Math.PI / 180;
+let canvasCount = 0;
 export default class GaodeMap extends Base {
   getDefaultCfg() {
     return Util.assign(Global.scene, {
@@ -111,7 +112,7 @@ export default class GaodeMap extends Base {
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
       'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;';
-    this.renderDom.id = 'l7_canvaslayer';
+    this.renderDom.id = 'l7_canvaslayer' + canvasCount++;
 
     this.amapContainer.appendChild(this.renderDom);
     this.l7_marker_Container = document.createElement('div');
