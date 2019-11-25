@@ -24,9 +24,9 @@ module.exports = {
   //   },
   // },
   moduleFileExtensions: [ 'ts', 'tsx', 'js' ],
-  modulePathIgnorePatterns: [ 'dist' ],
+  modulePathIgnorePatterns: [ 'dist', 'packages/renderer' ], // TODO: 暂时关闭render test
   moduleNameMapper: {
-    '@antv/l7-(.+)$': '<rootDir>packages/$1/src',
+    '@antv/l7-(.+)$': '<rootDir>packages/$1/src'
   },
   notify: true,
   notifyMode: 'always',
