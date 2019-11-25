@@ -1,8 +1,13 @@
+const docStyle = window.document.documentElement.style;
+type ELType = HTMLElement | SVGElement;
 let containerCounter = 0;
-
-export function createRendererContainer(domId: string): HTMLDivElement | null {
-  const $wrapper = document.getElementById(domId);
-
+export function createRendererContainer(
+  domId: string | HTMLDivElement,
+): HTMLDivElement | null {
+  let $wrapper = domId as HTMLDivElement;
+  if (typeof domId === 'string') {
+    $wrapper = document.getElementById(domId) as HTMLDivElement;
+  }
   if ($wrapper) {
     const $container = document.createElement('div');
     $container.style.cssText += `
