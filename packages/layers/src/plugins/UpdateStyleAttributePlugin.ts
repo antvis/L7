@@ -1,4 +1,10 @@
-import { ILayer, ILayerPlugin, ILogService, lazyInject, TYPES } from '@l7/core';
+import {
+  ILayer,
+  ILayerPlugin,
+  ILogService,
+  IStyleAttributeService,
+  TYPES,
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 
 /**
@@ -9,22 +15,26 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
-      const attributes =
-        layer.styleAttributeService.getLayerStyleAttributes() || [];
+      const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       attributes
         .filter((attribute) => attribute.needRegenerateVertices)
         .forEach((attribute) => {
           // 精确更新某个/某些 feature(s)，需要传入 featureIdx
-          layer.styleAttributeService.updateAttributeByFeatureRange(
+          styleAttributeService.updateAttributeByFeatureRange(
             attribute.name,
             layer.getEncodedData(), // 获取经过 mapping 最新的数据
             attribute.featureRange.startIndex,
             attribute.featureRange.endIndex,
           );
           attribute.needRegenerateVertices = false;
-          this.logger.info(
+          this.logger.debug(
             `regenerate vertex attributes: ${attribute.name} finished`,
           );
         });

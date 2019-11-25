@@ -1,8 +1,8 @@
-import { LineLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { LineLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 
 export default class Arc2DLineDemo extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -21,7 +21,10 @@ export default class Arc2DLineDemo extends React.Component {
       style: 'mapbox://styles/mapbox/dark-v9',
       zoom: 2,
     });
-    const lineLayer = new LineLayer({})
+    const lineLayer = new LineLayer({
+      enablePicking: true,
+      enableHighlight: true,
+    })
       .source(await response.text(), {
         parser: {
           type: 'csv',

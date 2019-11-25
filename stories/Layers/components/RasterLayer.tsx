@@ -1,5 +1,4 @@
-import { RasterLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import * as GeoTIFF from 'geotiff/dist/geotiff.bundle.js';
 import * as React from 'react';

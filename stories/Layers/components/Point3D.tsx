@@ -1,8 +1,9 @@
-import { PointLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { PointLayer, Scene } from '@antv/l7';
 import * as React from 'react';
+// @ts-ignore
 import data from '../data/data.json';
 export default class Point3D extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -18,20 +19,15 @@ export default class Point3D extends React.Component {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 1,
     });
-    const pointLayer = new PointLayer({});
-    const p1 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [83.671875, 44.84029065139799],
-          },
-        },
-      ],
-    };
+    const pointLayer = new PointLayer({
+      enablePicking: true,
+      enableHighlight: true,
+      enableTAA: true,
+      onHover: (pickedFeature: any) => {
+        // tslint:disable-next-line:no-console
+        console.log('Scene4', pickedFeature.feature.name);
+      },
+    });
     pointLayer
       .source(data)
       .color('red')

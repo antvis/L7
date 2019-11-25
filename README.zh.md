@@ -9,7 +9,7 @@ L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源�
 ### Installation
 
 ```
-npm install @antv/l7
+npm install @antv/l7@beta
 ```
 
 ## 核心特性

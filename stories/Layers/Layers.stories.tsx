@@ -2,14 +2,14 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
-import HeatMapDemo from './components/heatMap';
-import GridHeatMap from './components/heatMapgrid';
+import HeatMapDemo from './components/HeatMap';
+import GridHeatMap from './components/HeatmapGrid';
 import LineLayer from './components/Line';
 import PointDemo from './components/Point';
 import Point3D from './components/Point3D';
-import PointImage from './components/pointImage';
-import Polygon3D from './components/polygon3D';
-import ImageLayerDemo from './components/rasterImage';
+import PointImage from './components/PointImage';
+import Polygon3D from './components/Polygon3D';
+import ImageLayerDemo from './components/RasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 
 // @ts-ignore

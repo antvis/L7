@@ -1,14 +1,23 @@
 import Ajv from 'ajv';
-import { injectable } from 'inversify';
-import { IGlobalConfig, IGlobalConfigService } from './IConfigService';
+import { injectable, postConstruct } from 'inversify';
+import { ILayerConfig } from '../layer/ILayerService';
+import { IGlobalConfigService, ISceneConfig } from './IConfigService';
+import sceneConfigSchema from './sceneConfigSchema';
 
-const defaultGlobalConfig: Partial<IGlobalConfig> = {
+/**
+ * 场景默认配置项
+ */
+const defaultSceneConfig: Partial<ISceneConfig> = {
   type: 'amap',
   zoom: 5,
   center: [107.622, 39.266],
   pitch: 0,
-  // minZoom: 3,
-  // maxZoom: 18,
+};
+
+/**
+ * 图层基类默认样式属性
+ */
+const defaultLayerConfig: Partial<ILayerConfig> = {
   colors: [
     'rgb(103,0,31)',
     'rgb(178,24,43)',
@@ -37,6 +46,17 @@ const defaultGlobalConfig: Partial<IGlobalConfig> = {
     'vesica',
   ],
   shape3d: ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'],
+  minZoom: 0,
+  maxZoom: 20,
+  visible: true,
+  zIndex: 0,
+  enableMultiPassRenderer: true,
+  enablePicking: false,
+  enableHighlight: false,
+  highlightColor: 'red',
+  enableTAA: false,
+  jitterScale: 1,
+  enableLighting: false,
 };
 
 // @see https://github.com/epoberezkin/ajv#options
@@ -47,31 +67,65 @@ const ajv = new Ajv({
 
 @injectable()
 export default class GlobalConfigService implements IGlobalConfigService {
-  private config: Partial<IGlobalConfig> = defaultGlobalConfig;
+  /**
+   * 全部场景配置项缓存
+   */
+  private sceneConfigCache: {
+    [sceneId: string]: Partial<ISceneConfig>;
+  } = {};
 
   /**
-   * 保存每个 Layer 配置项的校验器
+   * 场景配置项校验器
+   */
+  private sceneConfigValidator: Ajv.ValidateFunction;
+
+  /**
+   * 全部图层配置项缓存
+   */
+  private layerConfigCache: {
+    [layerId: string]: Partial<ILayerConfig & ISceneConfig>;
+  } = {};
+
+  /**
+   * 保存每一种 Layer 配置项的校验器
    */
   private layerConfigValidatorCache: {
     [layerName: string]: Ajv.ValidateFunction;
   } = {};
 
-  public getConfig() {
-    return this.config;
+  public getSceneConfig(sceneId: string) {
+    return this.sceneConfigCache[sceneId];
   }
 
-  public setAndCheckConfig(config: Partial<IGlobalConfig>) {
-    this.config = {
-      ...this.config,
+  public setSceneConfig(sceneId: string, config: Partial<ISceneConfig>) {
+    this.sceneConfigCache[sceneId] = {
+      ...defaultSceneConfig,
       ...config,
     };
-    // TODO: validate config with JSON schema
-    // @see https://github.com/webpack/schema-utils
-    return true;
   }
 
-  public reset() {
-    this.config = defaultGlobalConfig;
+  public validateSceneConfig(data: object) {
+    return this.validate(this.sceneConfigValidator, data);
+  }
+
+  public getLayerConfig<IChildLayerConfig>(
+    layerId: string,
+  ): Partial<ILayerConfig & ISceneConfig & IChildLayerConfig> {
+    // @ts-ignore
+    return this.layerConfigCache[layerId];
+  }
+
+  public setLayerConfig(
+    sceneId: string,
+    layerId: string,
+    config: Partial<ILayerConfig>,
+  ) {
+    // @ts-ignore
+    this.layerConfigCache[layerId] = {
+      ...this.sceneConfigCache[sceneId],
+      ...defaultLayerConfig,
+      ...config,
+    };
   }
 
   public registerLayerConfigSchemaValidator(layerName: string, schema: object) {
@@ -81,14 +135,30 @@ export default class GlobalConfigService implements IGlobalConfigService {
   }
 
   public validateLayerConfig(layerName: string, data: object) {
-    const validate = this.layerConfigValidatorCache[layerName];
-    if (validate) {
-      const valid = validate(data);
+    return this.validate(this.layerConfigValidatorCache[layerName], data);
+  }
+
+  public clean() {
+    this.sceneConfigCache = {};
+    this.layerConfigCache = {};
+  }
+
+  @postConstruct()
+  private registerSceneConfigSchemaValidator() {
+    this.sceneConfigValidator = ajv.compile(sceneConfigSchema);
+  }
+
+  private validate(
+    validateFunc: Ajv.ValidateFunction | undefined,
+    data: object,
+  ) {
+    if (validateFunc) {
+      const valid = validateFunc(data);
       if (!valid) {
         return {
           valid,
-          errors: validate.errors,
-          errorText: ajv.errorsText(validate.errors),
+          errors: validateFunc.errors,
+          errorText: ajv.errorsText(validateFunc.errors),
         };
       }
     }

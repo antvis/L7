@@ -1,17 +1,5 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  ILayerPlugin,
-  ILogService,
-  IModel,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';
 import polygonExtrudeVert from '../shaders/polygon_extrude_vert.glsl';
@@ -22,7 +10,7 @@ export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
-    } = this.layer.getStyleOptions() as IPolygonLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return {
       u_opacity: opacity,
     };
@@ -41,7 +29,7 @@ export default class ExtrudeModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -65,7 +53,7 @@ export default class ExtrudeModel extends BaseModel {
       },
     });
 
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
