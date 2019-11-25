@@ -1,5 +1,4 @@
-import { Scene } from '@antv/l7-scene';
-import { Marker } from '@antv/l7-component';
+import { Scene, Marker } from '@antv/l7';
 import * as G2 from '@antv/g2';
 
 const CSS = `.l7-marker .g2-guide-html {
@@ -43,7 +42,7 @@ const scene = new Scene({
   center: [ 52.21496184144132, 24.121126851768906 ],
   zoom: 3.802
 });
-window.mapScene = scene;
+scene.render();
 scene.on('loaded', () => {
   Promise.all([
     fetch(

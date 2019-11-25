@@ -1,4 +1,4 @@
-/// <reference path="../../../node_modules/@types/amap-js-api/index.d.ts" />
+/// <reference types="amap-js-api" />
 /// <reference path="../../../node_modules/eventemitter3/index.d.ts" />
 
 import { IControl } from 'mapbox-gl';

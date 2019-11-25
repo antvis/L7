@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.9",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,8 +24,8 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.3",
-    "@antv/l7-utils": "^2.0.0-beta.3",
+    "@antv/l7-core": "^2.0.0-beta.9",
+    "@antv/l7-utils": "^2.0.0-beta.9",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",

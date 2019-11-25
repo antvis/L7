@@ -1,7 +1,4 @@
-// @ts-ignore
-import { PolygonLayer } from '@antv/l7-layers';
-// @ts-ignore
-import { Scene } from '@antv/l7-scene';
+import { PolygonLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 
 function convertRGB2Hex(rgb: number[]) {

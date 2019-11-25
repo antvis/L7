@@ -19,7 +19,7 @@
     "paths": {
       "@antv/l7-*": ["packages/*/src"],
       "@antv/l7": ["packages/l7/src"],
-      "*": ["node_modules", "packages"]
+      "*": ["node_modules", "packages", "typings/*"]
     }
   },
   "awesomeTypescriptLoaderOptions": {

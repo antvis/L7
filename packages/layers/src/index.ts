@@ -1,5 +1,6 @@
 import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
 import BaseLayer from './core/BaseLayer';
+import './glsl.d';
 import HeatmapLayer from './heatmap';
 import DashLineLayer from './line/dash';
 import LineLayer from './line/index';

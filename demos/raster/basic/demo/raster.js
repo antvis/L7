@@ -1,5 +1,4 @@
-import { Scene } from '@antv/l7-scene';
-import { RasterLayer } from '@antv/l7-layers'
+import { RasterLayer, Scene } from '@antv/l7';
 import * as GeoTIFF from 'geotiff';
 const scene = new Scene({
   id: 'map',

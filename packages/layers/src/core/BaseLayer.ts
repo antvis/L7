@@ -357,6 +357,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       ...this.rawConfig,
       ...rest,
     };
+
+    if (this.container) {
+      this.updateLayerConfig(this.rawConfig);
+    }
     return this;
   }
   public scale(field: string | IScaleOptions, cfg: IScale) {

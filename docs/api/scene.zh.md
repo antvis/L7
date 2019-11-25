@@ -21,19 +21,36 @@ L7 地理可视化 地图，图层，组件，以及可视化所需要的资源�
 - MapBox 国际业务，或者内网离线部署场景
 
 
+###  map
+
+可以通过scene map 属性获取 map实例
+
+```javascript
+ const map = scene.map
+
+```
+为了统一不同底图之前的接口差异 L7 在scene层对map的方法做了统一，因此一些地图的操作方法可以通过scene调用这样，切换不同底图时保证表现一致。
 
 示例代码
 
 ```javascript
-import {Scene} from '@antv/l7-scene';
-const scene =new L7.Scene({
-    id:'map',
-    mapStyle:'dark',
-    center:[ 110.770672, 34.159869 ],
-    pitch:45
-})
-```
+// Module 引用
+import { Scene } from '@antv/l7';
+const scene = new Scene({
+  id: 'map',
+  mapStyle: 'dark',
+  center: [ 110.770672, 34.159869 ],
+  pitch: 45,
+});
 
+// CDN 使用方法
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark',
+  center: [ 110.770672, 34.159869 ],
+  pitch: 45,
+});
+```
 
 ### 构造函数
 
@@ -41,15 +58,6 @@ const scene =new L7.Scene({
 
 
 
-
-
-
-## map
-L7 在scene 下保留了高德地图实例，可以通过scene.map 调用高德地图的map方法。<br />map 实例方法见[高德地图文档](https://lbs.amap.com/api/javascript-api/reference/map)
-
-```javascript
-scene.map
-```
 
 ## 配置项
 
@@ -68,16 +76,23 @@ scene.map
 ### pitch
 地图初始俯仰角度 {number}  default 0
 
-### mapSyle
+### style
 
-简化地图样式设置，L7 内置了三种主题默认样式
+简化地图样式设置，L7 内置了三种主题默认样式 高德，mapbox 都可以使用
 - dark
 - light
 - normal
 
-地图样式 {style} 目前仅支持高德地图。 default 'dark'<br />L7 内置三种种默认地图样式 dark | light|blank 空地图
+除了内置的样式，你也可以传入自定义的其他属性。
 
-设置地图的显示样式，目前支持两种地图样式：<br />第一种：自定义地图样式，如`"amap://styles/d6bf8c1d69cea9f5c696185ad4ac4c86"`<br />可前往[地图自定义平台](https://lbs.amap.com/dev/mapstyle/index)定制自己的个性地图样式；<br />第二种：官方样式模版,如`"amap://styles/grey"`。<br />其他模版样式及自定义地图的使用说明见[开发指南](https://lbs.amap.com/api/javascript-api/guide/create-map/mapstye/)
+比如高德地图
+
+```javascript
+ {
+   style:'amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true' // 设置方法和高德地图一致
+ }
+
+```
 
 
 ### minZoom
@@ -198,21 +213,6 @@ scene.setPitch(pitch)
 
 参数 :<br />   `pitch`  {number}
 
-### 
-
-### setStatus
-设置当前地图显示状态，包括是否可鼠标拖拽移动地图、地图是否可缩放、地图是否可旋转（rotateEnable）、是否可双击放大地图、是否可以通过键盘控制地图旋转（keyboardEnable）等   
-
-```javascript
-    scene.setStatus({
-      dragEnable: true,
-      keyboardEnable: true,
-      doubleClickZoom: true,
-      zoomEnable: true,
-      rotateEnable: true
-    });
-```
-
 
 ### fitBounds
 地图缩放到某个范围内<br />参数 :<br />  `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
@@ -230,7 +230,7 @@ scene.fitBounds([112,32,114,35]);
 scene.removeLayer(layer)
 ```
 
-参数<br />`layer`  {Layer}
+参数 `layer`  {Layer}
 
 ### getLayers
  获取所有的layer

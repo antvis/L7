@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.9",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-utils": "^2.0.0-beta.3",
+    "@antv/l7-utils": "^2.0.0-beta.9",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
     "eventemitter3": "^4.0.0",
@@ -39,6 +39,7 @@
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
+    "@types/amap-js-api": "^1.4.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.138",

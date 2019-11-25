@@ -1,5 +1,4 @@
-import { LineLayer } from '@antv/l7-layers';
-import { Scene } from '@antv/l7-scene';
+import { LineLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 
 export default class LineDemo extends React.Component {

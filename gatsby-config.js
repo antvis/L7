@@ -3,14 +3,14 @@ module.exports = {
     {
       resolve: '@antv/gatsby-theme-antv',
       options: {
-        GATrackingId: 'UA-148148901-7',
-        pathPrefix: '/L7'
+        GATrackingId: 'UA-148148901-7'
       }
     }
   ],
   siteMetadata: {
     title: 'L7',
     description: 'Large-scale WebGL-powered  Geospatial data visualization analysis framework',
+    siteUrl: 'https://l7.antv.vision',
     githubUrl: 'https://github.com/antvis/L7',
     navs: [
       {
@@ -20,6 +20,13 @@ module.exports = {
           en: 'Document'
         },
         redirect: 'api/l7'
+      },
+      {
+        slug: 'docs/tutorial',
+        title: {
+          zh: '教程',
+          en: 'tutorial'
+        }
       },
       {
         slug: 'examples',
@@ -41,10 +48,10 @@ module.exports = {
         order: 0
       },
       {
-        slug: 'api/quickstart',
+        slug: '/tutorial',
         title: {
           zh: '快速入门',
-          en: 'quickstart'
+          en: 'Quickstart'
         },
         order: 0
       },

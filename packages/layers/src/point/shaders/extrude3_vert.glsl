@@ -14,20 +14,20 @@ uniform mat4 u_ModelMatrix;
 varying vec4 v_color;
 
 #pragma include "projection"
-
 #pragma include "light"
+#pragma include "picking"
 
 void main() {
- vec3 size = a_Size * a_Position;
+  vec3 size = a_Size * a_Position;
 
- vec2 offset = project_pixel(size.xy);
- 
- vec4 project_pos = project_position(vec4(a_Pos.xy, 0, 1.0));
- vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z), 1.0);
+  vec2 offset = project_pixel(size.xy);
+
+  vec4 project_pos = project_position(vec4(a_Pos.xy, 0, 1.0));
+  vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z), 1.0);
 
   float lightWeight = calc_lighting(pos);
- v_color =vec4(a_Color.rgb * lightWeight, a_Color.w); 
+  v_color =vec4(a_Color.rgb * lightWeight, a_Color.w); 
 
- gl_Position = project_common_position_to_clipspace(pos);
-
+  gl_Position = project_common_position_to_clipspace(pos);
+  setPickingColor(a_PickingColor);
 }

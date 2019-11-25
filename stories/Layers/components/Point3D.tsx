@@ -1,5 +1,4 @@
-import { PointLayer } from '@antv/l7-layers';
-import { Scene } from '@antv/l7-scene';
+import { PointLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';

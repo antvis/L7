@@ -1,5 +1,4 @@
-import { Scene } from '@antv/l7-scene';
-import { Marker } from '@antv/l7-component';
+import { Scene, Marker } from '@antv/l7';
 const scene = new Scene({
   id: 'map',
   type: 'amap',
@@ -8,7 +7,7 @@ const scene = new Scene({
   pitch: 0,
   zoom: 4
 });
-
+scene.render();
 scene.on('loaded', () => {
   addMarkers();
 });

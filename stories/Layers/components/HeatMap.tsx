@@ -1,5 +1,4 @@
-import { HeatmapLayer } from '@antv/l7-layers';
-import { Scene } from '@antv/l7-scene';
+import { HeatmapLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import * as React from 'react';
 

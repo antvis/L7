@@ -1,9 +1,15 @@
 [
   {
-    "fromPath": "/zh/docs/api",
+    "fromPath": "/en/docs/tutorial",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/docs/api/l7"
+    "toPath": "/en/docs/tutorial/quickstart"
+  },
+  {
+    "fromPath": "/zh/docs/tutorial",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/tutorial/quickstart"
   },
   {
     "fromPath": "/en/docs/api",
@@ -12,16 +18,22 @@
     "toPath": "/en/docs/api/l7"
   },
   {
-    "fromPath": "/en/docs/tutorial",
+    "fromPath": "/zh/docs/api",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/en/docs/api/quickstart"
+    "toPath": "/zh/docs/api/l7"
   },
   {
-    "fromPath": "/zh/docs/tutorial",
+    "fromPath": "/en/docs/manual",
     "isPermanent": true,
     "redirectInBrowser": true,
-    "toPath": "/zh/docs/api/quickstart"
+    "toPath": "/en/docs/manual/tutorial/quickstart"
+  },
+  {
+    "fromPath": "/zh/docs/manual",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/manual/tutorial/quickstart"
   },
   {
     "fromPath": "/zh/examples/raster/",

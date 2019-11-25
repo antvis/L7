@@ -3,13 +3,55 @@ title: Scene
 order: 1
 ---
 
-## 简介
-`Scene `基础的地图类,提供地图创建，图层创建，管理等功能
+# 简介
+
+## Scene
+
+```javascript
+// Module 引用
+import { Scene } from '@antv/l7';
+const scene = new Scene({
+  id: 'map',
+  mapStyle: 'dark',
+  center: [ 110.770672, 34.159869 ],
+  pitch: 45,
+});
+
+// CDN 使用方法
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark',
+  center: [ 110.770672, 34.159869 ],
+  pitch: 45,
+});
+```
+
+
+## Map
+
+ L7 地理可视化侧重于地理数据的可视化表达，地图层需要依赖第三方地图，第三方地图通过Scene 统一创建，创建管理
+ 只需要通过Scene传入地图配置项即可。
+
+目前L7 支持两种地图底图
+
+- 高德地图 国内业务场景 合规中国地图
+- MapBox 国际业务，或者内网离线部署场景
+
+
+###  map
+
+可以通过scene map 属性获取 map实例
+
+```javascript
+ const map = scene.map
+
+```
+为了统一不通底图之前的接口差异 L7 在scene层对map的方法做了统一，因此一些地图的操作方法可以通过scene调用这样，切换不同底图时保证表现一致。
 
 示例代码
 
 ```javascript
-import {Scene} from '@antv/l7-scene';
+import { Scene } from '@antv/l7';
 const scene =new L7.Scene({
     id:'map',
     mapStyle:'dark',
@@ -21,74 +63,14 @@ const scene =new L7.Scene({
 
 ### 构造函数
 
-**Scene**<br />支持两种实例化方式
-
-- 独立实例化 内部根据id自动穿件地图实例
-- 传入地图实例
+**Scene** 
 
 
-
-
-
-#### 独立实例化 Scene
-
-```javascript
-const scene = new L7.Scene({
-  id: 'map',
-  mapStyle: 'dark', 
-  center: [ 120.19382669582967, 30.258134 ],
-  pitch: 0,
-  zoom: 12,
-  maxZoom:20,
-  minZoom:0,
-});
-```
-
-
-#### 根据map 实例创建Sence
-
-_L7 基于高德地图3D模式开发的，因此传入Map实例 __viewModes需要设置成3d_<br />_
-```javascript
-var mapinstance = new AMap.Map('map',{
-    center: [ 120.19382669582967, 30.258134 ],
-    viewMode: '3D',
-    pitch: 0,
-    zoom: 12,
-    maxZoom:20,
-    minZoom:0,
- });
-
-const scene = new L7.Scene({
-  mapStyle: 'dark',
-  map:mapinstance
-});
-```
-
-
-## map
-L7 在scene 下保留了高德地图实例，可以通过scene.map 调用高德地图的map方法。<br />map 实例方法见[高德地图文档](https://lbs.amap.com/api/javascript-api/reference/map)
-
-```javascript
-scene.map
-```
-
-
-## 构造类
-
-### PointLayer
-新建点图层
-
-### PolylineLayer
-新建线图层
-
-### PolygonLayer
-新建面图层
-
-### ImageLayer
-新建图片图层
 
 
 ## 配置项
+
+### 地图配置项
 
 ### id
 需传入 dom 容器或者容器 id  {domObject || string} [必选]
@@ -103,10 +85,23 @@ scene.map
 ### pitch
 地图初始俯仰角度 {number}  default 0
 
-### mapSyle
-地图样式 {style} 目前仅支持高德地图。 default 'dark'<br />L7 内置三种种默认地图样式 dark | light|blank 空地图
+### style
 
-设置地图的显示样式，目前支持两种地图样式：<br />第一种：自定义地图样式，如`"amap://styles/d6bf8c1d69cea9f5c696185ad4ac4c86"`<br />可前往[地图自定义平台](https://lbs.amap.com/dev/mapstyle/index)定制自己的个性地图样式；<br />第二种：官方样式模版,如`"amap://styles/grey"`。<br />其他模版样式及自定义地图的使用说明见[开发指南](https://lbs.amap.com/api/javascript-api/guide/create-map/mapstye/)
+简化地图样式设置，L7 内置了三种主题默认样式 高德，mapbox 都可以使用
+- dark
+- light
+- normal
+
+除了内置的样式，你也可以传入自定义的其他属性。
+
+比如高德地图
+
+```javascript
+ {
+   style:'amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true' // 设置方法和高德地图一致
+ }
+
+```
 
 
 ### minZoom
@@ -227,21 +222,6 @@ scene.setPitch(pitch)
 
 参数 :<br />   `pitch`  {number}
 
-### 
-
-### setStatus
-设置当前地图显示状态，包括是否可鼠标拖拽移动地图、地图是否可缩放、地图是否可旋转（rotateEnable）、是否可双击放大地图、是否可以通过键盘控制地图旋转（keyboardEnable）等   
-
-```javascript
-    scene.setStatus({
-      dragEnable: true,
-      keyboardEnable: true,
-      doubleClickZoom: true,
-      zoomEnable: true,
-      rotateEnable: true
-    });
-```
-
 
 ### fitBounds
 地图缩放到某个范围内<br />参数 :<br />  `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
@@ -259,7 +239,7 @@ scene.fitBounds([112,32,114,35]);
 scene.removeLayer(layer)
 ```
 
-参数<br />`layer`  {Layer}
+参数 `layer`  {Layer}
 
 ### getLayers
  获取所有的layer

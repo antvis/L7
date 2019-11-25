@@ -12,6 +12,6 @@
       "*": ["node_modules", "packages"]
     }
   },
-  "exclude": ["**/*.story.*", "**/*.spec.*", "dist"],
+  "exclude": ["**/*.story.*", "**/__tests__/**/*", "**/*.spec.*", "dist"],
   "include": []
 }
