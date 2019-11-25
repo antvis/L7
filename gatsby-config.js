@@ -48,7 +48,7 @@ module.exports = {
         order: 0
       },
       {
-        slug: '/tutorial',
+        slug: 'tutorial',
         title: {
           zh: '快速入门',
           en: 'QuickStart'
@@ -56,12 +56,12 @@ module.exports = {
         order: 0
       },
       {
-        slug: '/tutorial/map',
+        slug: 'tutorial/map',
         title: {
           zh: '地图',
-          en: 'MAP'
+          en: 'Map'
         },
-        order: 0
+        order: 3
       },
       {
         slug: 'api/scene',
@@ -156,7 +156,10 @@ module.exports = {
       }
     ],
     playground: {
-      container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>'
+      container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
+      dependencies: {
+        '@antv/l7': 'beta'
+      }
     }
   }
 };
