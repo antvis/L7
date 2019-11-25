@@ -1,4 +1,3 @@
-precision mediump float;
 attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec4 a_Instance;
@@ -9,6 +8,7 @@ varying vec4 v_color;
 varying vec2 v_normal;
 
 #pragma include "projection"
+#pragma include "picking"
 
 float maps (float value, float start1, float stop1, float start2, float stop2) {
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
@@ -75,21 +75,21 @@ vec2 interpolate (vec2 source, vec2 target, float angularDist, float t) {
   return vec2(atan(y, x), atan(z, sqrt(x * x + y * y)));
 }
 
-
 void main() {
-    v_color = a_Color;
-    vec2 source = radians(a_Instance.rg);
-    vec2 target = radians(a_Instance.ba);
-    float angularDist = getAngularDist(source, target);
-    float segmentIndex = a_Position.x;
-    float segmentRatio = getSegmentRatio(segmentIndex);
-    float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
-    float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
-    vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0));
-    vec4 next = project_position(vec4(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0, 1.0));
-    v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
-    vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
-    //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
-     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
+  v_color = a_Color;
+  vec2 source = radians(a_Instance.rg);
+  vec2 target = radians(a_Instance.ba);
+  float angularDist = getAngularDist(source, target);
+  float segmentIndex = a_Position.x;
+  float segmentRatio = getSegmentRatio(segmentIndex);
+  float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
+  float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
+  vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0));
+  vec4 next = project_position(vec4(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0, 1.0));
+  v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+  vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
+  //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
+  setPickingColor(a_PickingColor);
 }
 

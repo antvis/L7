@@ -6,13 +6,13 @@ import {
   IScale,
   IScaleOptions,
   IStyleAttribute,
+  IStyleAttributeService,
   IStyleScale,
-  lazyInject,
   ScaleTypes,
   StyleScaleType,
   TYPES,
-} from '@l7/core';
-import { IParseDataItem } from '@l7/source';
+} from '@antv/l7-core';
+import { IParseDataItem } from '@antv/l7-source';
 import { extent, ticks } from 'd3-array';
 import * as d3 from 'd3-scale';
 import { inject, injectable } from 'inversify';
@@ -50,17 +50,22 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private scaleOptions: IScaleOptions = {};
 
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
-      const attributes = layer.styleAttributeService.getLayerStyleAttributes();
+      const attributes = styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
       this.caculateScalesForAttributes(attributes || [], dataArray);
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
-      const attributes = layer.styleAttributeService.getLayerStyleAttributes();
+      const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
         const { dataArray } = layer.getSource().data;
         const attributesToRescale = attributes.filter(
@@ -68,7 +73,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         );
         if (attributesToRescale.length) {
           this.caculateScalesForAttributes(attributesToRescale, dataArray);
-          this.logger.info('rescale finished');
+          this.logger.debug('rescale finished');
         }
       }
     });

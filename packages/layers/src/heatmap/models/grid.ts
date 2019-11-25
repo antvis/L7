@@ -2,12 +2,10 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
   IModel,
   IModelUniform,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+} from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
 import heatmapGridVert from '../shaders/grid_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
@@ -20,7 +18,7 @@ export default class GridModel extends BaseModel {
     const {
       opacity,
       coverage,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
@@ -45,7 +43,7 @@ export default class GridModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -70,7 +68,7 @@ export default class GridModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,
       descriptor: {

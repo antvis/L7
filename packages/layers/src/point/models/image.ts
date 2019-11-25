@@ -2,14 +2,12 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
   IModel,
   IModelUniform,
   ITexture2D,
-} from '@l7/core';
+} from '@antv/l7-core';
 
-import BaseModel from '../../core/baseModel';
+import BaseModel from '../../core/BaseModel';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
@@ -21,7 +19,7 @@ export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_texture: this.texture,
@@ -59,7 +57,7 @@ export default class ImageModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -84,7 +82,7 @@ export default class ImageModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {

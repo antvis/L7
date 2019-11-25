@@ -1,3 +1,4 @@
+/// <reference types="amap-js-api" />
 import { Map } from 'mapbox-gl';
 import { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];

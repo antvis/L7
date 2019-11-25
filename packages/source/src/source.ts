@@ -1,5 +1,5 @@
-import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@l7/core';
-import { extent } from '@l7/utils';
+import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@antv/l7-core';
+import { extent } from '@antv/l7-utils';
 import { BBox, FeatureCollection, Geometries, Properties } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep } from 'lodash';

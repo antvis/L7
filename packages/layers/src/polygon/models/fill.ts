@@ -10,8 +10,8 @@ import {
   IStyleAttributeService,
   lazyInject,
   TYPES,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+} from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { polygonTriangulation } from '../../core/triangulation';
 import polygon_frag from '../shaders/polygon_frag.glsl';
 import polygon_vert from '../shaders/polygon_vert.glsl';
@@ -23,7 +23,7 @@ export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
-    } = this.layer.getStyleOptions() as IPolygonLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return {
       u_opacity: opacity,
     };

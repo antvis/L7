@@ -1,4 +1,4 @@
-import { IEncodeFeature } from '@l7/core';
+import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import PolygonModels, { PolygonModelType } from './models/';
 

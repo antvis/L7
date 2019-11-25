@@ -18,7 +18,7 @@ import {
   IRendererService,
   ITexture2D,
   ITexture2DInitializationOptions,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { injectable } from 'inversify';
 import regl from 'regl';
 import ReglAttribute from './ReglAttribute';
