@@ -1,13 +1,12 @@
 // @ts-ignore
-import { PolygonLayer } from '@l7/layers';
-// @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scene } from '@antv/l7';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
 export default class ColorHalftone extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -34,6 +33,7 @@ export default class ColorHalftone extends React.Component {
       zoom: 3,
     });
     const layer = new PolygonLayer({
+      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       passes: [
@@ -63,7 +63,6 @@ export default class ColorHalftone extends React.Component {
       });
 
     scene.addLayer(layer);
-    scene.render();
 
     this.scene = scene;
 

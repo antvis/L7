@@ -1,7 +1,4 @@
-// @ts-ignore
-import { Polygon3DLayer } from '@l7/layers';
-// @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 
 function convertRGB2Hex(rgb: number[]) {
@@ -38,7 +35,13 @@ export default class Polygon3D extends React.Component {
       zoom: 3,
     });
     this.scene = scene;
-    const layer = new Polygon3DLayer({});
+    const layer = new PolygonLayer({
+      enableMultiPassRenderer: true,
+      enableLighting: true,
+      enablePicking: true,
+      enableHighlight: true,
+      // enableTAA: true,
+    });
     layer
       .source(await response.json())
       .size('name', [0, 10000, 50000, 30000, 100000])
@@ -50,7 +53,7 @@ export default class Polygon3D extends React.Component {
         '#FF7A45',
         '#CF1D49',
       ])
-      .shape('fill')
+      .shape('extrude')
       .style({
         opacity: 1.0,
       });

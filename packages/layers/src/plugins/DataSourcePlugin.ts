@@ -1,5 +1,5 @@
-import { ILayer, ILayerPlugin } from '@l7/core';
-import Source from '@l7/source';
+import { ILayer, ILayerPlugin } from '@antv/l7-core';
+import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
 
 @injectable()

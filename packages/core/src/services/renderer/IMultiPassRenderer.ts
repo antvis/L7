@@ -26,6 +26,7 @@ export interface IPass<InitializationOptions> {
 export interface IPostProcessingPass<InitializationOptions>
   extends IPass<InitializationOptions> {
   setRenderToScreen(renderToScreen: boolean): void;
+  setName(name: string): void;
   isEnabled(): boolean;
   setEnabled(enabled: boolean): void;
   updateOptions(config: Partial<InitializationOptions>): void;
@@ -49,8 +50,12 @@ export interface IPostProcessor {
 export interface IMultiPassRenderer {
   getPostProcessor(): IPostProcessor;
   resize(viewportWidth: number, viewportHeight: number): void;
-  add<InitializationOptions>(pass: IPass<InitializationOptions>): void;
+  add<InitializationOptions>(
+    pass: IPass<InitializationOptions>,
+    config?: Partial<InitializationOptions>,
+  ): void;
   render(): void;
   getRenderFlag(): boolean;
   setRenderFlag(enabled: boolean): void;
+  setLayer(layer: ILayer): void;
 }

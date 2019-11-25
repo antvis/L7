@@ -17,8 +17,9 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@l7/*": ["packages/*/src"],
-      "*": ["node_modules", "packages"]
+      "@antv/l7-*": ["packages/*/src"],
+      "@antv/l7": ["packages/l7/src"],
+      "*": ["node_modules", "packages", "typings/*"]
     }
   },
   "awesomeTypescriptLoaderOptions": {

@@ -1,8 +1,7 @@
-import { PointLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { PointLayer, Scene } from '@antv/l7';
 import * as React from 'react';
-import data from '../data/data.json';
 export default class PointImage extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -14,7 +13,7 @@ export default class PointImage extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
     );
     const scene = new Scene({
-      center: [121.40, 31.258134],
+      center: [121.4, 31.258134],
       zoom: 15,
       id: 'map',
       pitch: 0,
@@ -40,12 +39,11 @@ export default class PointImage extends React.Component {
           type: 'json',
           x: 'longitude',
           y: 'latitude',
-        }
+        },
       })
       .shape('name', ['00', '01', '02'])
       .size(30);
     scene.addLayer(imageLayer);
-
   }
 
   public render() {
