@@ -7,7 +7,24 @@ order: 1
 
 ## Scene
 
-L7 地理可视化 地图，图层，组件，以及可视化所需要的资源，如图片，字体通过Scene统一管理
+```javascript
+// Module 引用
+import { Scene } from '@antv/l7';
+const scene = new Scene({
+  id: 'map',
+  mapStyle: 'dark',
+  center: [ 110.770672, 34.159869 ],
+  pitch: 45,
+});
+
+// CDN 使用方法
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark',
+  center: [ 110.770672, 34.159869 ],
+  pitch: 45,
+});
+```
 
 
 ## Map

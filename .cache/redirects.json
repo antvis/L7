@@ -1,0 +1,68 @@
+[
+  {
+    "fromPath": "/en/docs/api",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/docs/api/l7"
+  },
+  {
+    "fromPath": "/zh/docs/api",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/api/l7"
+  },
+  {
+    "fromPath": "/en/docs/tutorial",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/docs/tutorial/quickstart"
+  },
+  {
+    "fromPath": "/zh/docs/tutorial",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/tutorial/quickstart"
+  },
+  {
+    "fromPath": "/zh/docs/manual",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/docs/manual/tutorial/quickstart"
+  },
+  {
+    "fromPath": "/en/docs/manual",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/docs/manual/tutorial/quickstart"
+  },
+  {
+    "fromPath": "/zh/examples/raster/",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/raster/basic"
+  },
+  {
+    "fromPath": "/zh/examples/polygon/",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/polygon/3d"
+  },
+  {
+    "fromPath": "/zh/examples/heatmap/",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/heatmap/heatmap"
+  },
+  {
+    "fromPath": "/en/examples",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/en/examples/gallery/basic"
+  },
+  {
+    "fromPath": "/zh/examples",
+    "isPermanent": true,
+    "redirectInBrowser": true,
+    "toPath": "/zh/examples/gallery/basic"
+  }
+]

@@ -1,4 +1,4 @@
-import { IEncodeFeature } from '@l7/core';
+import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import PointModels, { PointType } from './models/index';
 interface IPointLayerStyleOptions {
@@ -38,7 +38,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
-    const { shape2d, shape3d } = this.configService.getConfig();
+    const { shape2d, shape3d } = this.getLayerConfig();
     const iconMap = this.iconService.getIconMap();
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');

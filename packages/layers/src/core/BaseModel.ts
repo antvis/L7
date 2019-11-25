@@ -1,15 +1,10 @@
 import {
-  AttributeType,
-  gl,
   ICameraService,
-  IEncodeFeature,
   IFontService,
   IGlobalConfigService,
   IIconService,
   ILayer,
   ILayerModel,
-  ILayerPlugin,
-  ILogService,
   IMapService,
   IModel,
   IModelUniform,
@@ -18,11 +13,9 @@ import {
   IStyleAttributeService,
   lazyInject,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 
 export default class BaseModel implements ILayerModel {
-  @lazyInject(TYPES.IStyleAttributeService)
-  public styleAttributeService: IStyleAttributeService;
   protected layer: ILayer;
 
   @lazyInject(TYPES.IGlobalConfigService)
@@ -34,20 +27,26 @@ export default class BaseModel implements ILayerModel {
   @lazyInject(TYPES.IFontService)
   protected readonly fontService: IFontService;
 
-  @lazyInject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
   @lazyInject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
 
-  @lazyInject(TYPES.IMapService)
-  protected readonly map: IMapService;
-
-  @lazyInject(TYPES.ICameraService)
-  protected readonly camera: ICameraService;
+  protected rendererService: IRendererService;
+  protected styleAttributeService: IStyleAttributeService;
+  protected mapService: IMapService;
+  protected cameraService: ICameraService;
 
   constructor(layer: ILayer) {
     this.layer = layer;
+    this.rendererService = layer
+      .getContainer()
+      .get<IRendererService>(TYPES.IRendererService);
+    this.styleAttributeService = layer
+      .getContainer()
+      .get<IStyleAttributeService>(TYPES.IStyleAttributeService);
+    this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
+    this.cameraService = layer
+      .getContainer()
+      .get<ICameraService>(TYPES.ICameraService);
     this.registerBuiltinAttributes();
   }
 

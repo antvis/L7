@@ -1,4 +1,4 @@
-import { ILayerModel } from '@l7/core';
+import { ILayerModel } from '@antv/l7-core';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import IMageModel from './image';

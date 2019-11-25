@@ -1,9 +1,9 @@
-import { HeatmapLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatmapLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import * as React from 'react';
 
 export default class HeatMapLayerDemo extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -41,11 +41,10 @@ export default class HeatMapLayerDemo extends React.Component {
             '#FF7A45',
             '#CF1D49',
           ],
-          positions: [0,0.2, 0.4, 0.6, 0.8, 1.0],
+          positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
         },
       });
     scene.addLayer(layer);
-    console.log(layer);
     // requestAnimationFrame(run);
     scene.render();
     this.scene = scene;

@@ -1,4 +1,4 @@
-import { IMapCamera, IViewport } from '@l7/core';
+import { IMapCamera, IViewport } from '@antv/l7-core';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 export default class Viewport implements IViewport {

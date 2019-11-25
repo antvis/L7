@@ -1,19 +1,15 @@
 import { injectable } from 'inversify';
-import { lazyInject } from '../../../index';
-import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
-import { IPass, PassType } from '../IMultiPassRenderer';
-import { IRendererService } from '../IRendererService';
+import { PassType } from '../IMultiPassRenderer';
+import BaseNormalPass from './BaseNormalPass';
 
 /**
  * RenderPass，负责输出到后续 PostProcessor 的 readFBO 中
  */
 @injectable()
-export default class RenderPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions> {
-  @lazyInject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
+export default class RenderPass<
+  InitializationOptions = {}
+> extends BaseNormalPass<InitializationOptions> {
   public getType() {
     return PassType.Normal;
   }
@@ -22,8 +18,8 @@ export default class RenderPass<InitializationOptions = {}>
     return 'render';
   }
 
-  public init(layer: ILayer) {
-    //
+  public init(layer: ILayer, config?: Partial<InitializationOptions>) {
+    super.init(layer, config);
   }
 
   public render(layer: ILayer) {

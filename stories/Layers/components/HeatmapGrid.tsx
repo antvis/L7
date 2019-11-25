@@ -1,8 +1,8 @@
-import { HeatMapLayer } from '@l7/layers';
-import { Scene } from '@l7/scene';
+import { HeatmapLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 
 export default class GridHeatMap extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -11,54 +11,59 @@ export default class GridHeatMap extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/c3f8bda2-081b-449d-aa9f-9413b779205b.json',
+      'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
     );
+    const data = await response.text();
     const scene = new Scene({
-      center: [116.49434030056, 39.868073421167621],
       id: 'map',
+      style: 'dark',
       pitch: 0,
+      center: [110.097892, 33.853662],
+      zoom: 4.056,
       type: 'amap',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 16,
     });
-    const layer = new HeatMapLayer({});
-    layer
-      .source(await response.json(), {
+    const layer = new HeatmapLayer({
+      enablePicking: true,
+      enableHighlight: true,
+    })
+      .source(data, {
         parser: {
-          type: 'json',
+          type: 'csv',
           x: 'lng',
           y: 'lat',
         },
         transforms: [
           {
             type: 'grid',
-            size: 50,
-            field: 'count',
+            size: 10000,
+            field: 'v',
             method: 'sum',
           },
         ],
       })
-      .size('sum', (value: number) => {
-        return value;
+      .size('count', (value) => {
+        return value * 0;
       })
-      .shape('circle')
+      .shape('square')
       .style({
-        coverage: 0.5,
+        coverage: 1,
         angle: 0,
-        opacity: 1,
       })
-      .color('count', [
-        '#002466',
-        '#105CB3',
-        '#2894E0',
-        '#CFF6FF',
-        '#FFF5B8',
-        '#FFAB5C',
-        '#F27049',
-        '#730D1C',
-      ]);
+      .color(
+        'count',
+        [
+          '#FF3417',
+          '#FF7412',
+          '#FFB02A',
+          '#FFE754',
+          '#46F3FF',
+          '#02BEFF',
+          '#1A7AFF',
+          '#0A1FB2',
+        ].reverse(),
+      );
     scene.addLayer(layer);
-    scene.render();
+    this.scene = scene;
   }
 
   public render() {
