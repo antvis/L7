@@ -134,7 +134,7 @@ const IndexPage = () => {
         }
         title={t('L7 空间数据可视分析')}
         description={t(
-          'L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于WebGL的开源大规模地理空间数据可视分析开发框架。',
+          '蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。',
         )}
         buttons={bannerButtons}
         // notifications={notifications}
