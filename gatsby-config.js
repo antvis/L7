@@ -25,7 +25,7 @@ module.exports = {
         slug: 'docs/tutorial',
         title: {
           zh: '教程',
-          en: 'tutorial'
+          en: 'Tutorial'
         }
       },
       {
