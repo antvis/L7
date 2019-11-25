@@ -75,3 +75,4 @@ public
 yarn.lock
 package-lock.json
 git_log.sh
+packages/l7/package copy.json

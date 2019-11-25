@@ -1,9 +1,10 @@
 ---
-title: QuickStart
+title: 快速上手
 order: 0
 redirect_from:
-  - /en/docs/tutorial
+  - /zh/docs/tutorial
 ---
+
 # 使用方法
 
 L7 提供三种使用方式：CDN、Submodule。
@@ -36,9 +37,10 @@ L7 提供三种使用方式：CDN、Submodule。
 
 首先通过 `npm/yarn`
 ```bash
-npm install --save @antv/l7
 
-yarn add npm install --save @antv/l7
+npm install --save @antv/l7@beta
+
+yarn add  --save @antv/l7@beta
 
 ```
 

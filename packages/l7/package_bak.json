@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.8",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "dist/l7.js",
   "sideEffects": true,
@@ -23,8 +23,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-   "mapbox-gl": "^1.5.0"
-
+  "dependencies": {
+   "@l7/core": "0.0.1",
+   "@l7/scene": "0.0.1",
+   "@l7/layers": "0.0.1",
+   "@l7/component": "0.0.1"
   }
 }
