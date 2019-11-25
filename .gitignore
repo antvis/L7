@@ -38,6 +38,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+
 jspm_packages/
 
 # Typescript v1 declaration files
@@ -75,4 +76,5 @@ public
 yarn.lock
 package-lock.json
 git_log.sh
-packages/l7/package copy.json
+node_modules/
+packages/l7/package_bak.json
