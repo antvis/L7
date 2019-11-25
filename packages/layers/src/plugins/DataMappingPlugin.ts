@@ -6,9 +6,9 @@ import {
   ILogService,
   IParseDataItem,
   IStyleAttribute,
-  lazyInject,
+  IStyleAttributeService,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 
@@ -20,10 +20,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
     layer.hooks.init.tap('DataMappingPlugin', () => {
-      const attributes =
-        layer.styleAttributeService.getLayerStyleAttributes() || [];
+      const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const { dataArray } = layer.getSource().data;
 
       // TODO: FIXME
@@ -37,15 +41,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
-      const attributes =
-        layer.styleAttributeService.getLayerStyleAttributes() || [];
+      const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const { dataArray } = layer.getSource().data;
       const attributesToRemapping = attributes.filter(
         (attribute) => attribute.needRemapping,
       );
       if (attributesToRemapping.length) {
         layer.setEncodedData(this.mapping(attributesToRemapping, dataArray));
-        this.logger.info('remapping finished');
+        this.logger.debug('remapping finished');
       }
     });
   }

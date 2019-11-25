@@ -4,8 +4,8 @@ import {
   IEncodeFeature,
   IModel,
   IModelUniform,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+} from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
 import heatmapGridVert from '../shaders/hexagon_vert.glsl';
@@ -20,7 +20,7 @@ export default class HexagonModel extends BaseModel {
     const {
       opacity,
       coverage,
-    } = this.layer.getStyleOptions() as IHeatMapLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
@@ -45,7 +45,7 @@ export default class HexagonModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -70,7 +70,7 @@ export default class HexagonModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,
       descriptor: {

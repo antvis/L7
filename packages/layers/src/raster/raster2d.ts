@@ -1,10 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ITexture2D,
-} from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ITexture2D } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { RasterImageTriangulation } from '../core/triangulation';
 import { generateColorRamp, IColorRamp } from '../utils/color';
@@ -35,7 +29,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity } = this.getLayerConfig();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { min, max } = parserDataItem;
     if (this.texture) {
@@ -56,7 +50,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     const source = this.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = this.getSource().data.dataArray[0];
@@ -68,7 +62,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
       type: gl.FLOAT,
       aniso: 4,
     });
-    const { rampColors } = this.getStyleOptions();
+    const { rampColors } = this.getLayerConfig();
     const imageData = generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: imageData.data,
@@ -97,9 +91,9 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {

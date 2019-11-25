@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
+import { AttributeType, gl, IEncodeFeature, ILayer } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import HeatMapModels, { HeatMapModelType } from './models';
 interface IPointLayerStyleOptions {
@@ -41,7 +41,7 @@ export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
-    const { shape3d } = this.configService.getConfig();
+    const { shape3d } = this.getLayerConfig();
     const source = this.getSource();
     const sourceType = source.data.type;
     const shape =

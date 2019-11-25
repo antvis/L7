@@ -1,4 +1,4 @@
-import { IEncodeFeature, IParseDataItem } from '@l7/core';
+import { IEncodeFeature, IParseDataItem } from '@antv/l7-core';
 // @ts-ignore
 
 export function heatMap3DTriangulation(width: number, height: number) {

@@ -4,16 +4,19 @@
   ],
   "command": {
     "publish": {
-      "ignoreChanges": ["*.md"],
+      "ignoreChanges": [
+        "*.md"
+      ],
       "allowBranch": [
         "master",
         "develop",
-        "next"
+        "next",
+        "dev-container"
       ],
       "message": "chore: publish"
     }
   },
-  "version": "0.0.1",
+  "version": "2.0.0-beta.10",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {

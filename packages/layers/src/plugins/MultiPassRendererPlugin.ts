@@ -1,17 +1,13 @@
 import {
-  ClearPass,
   IGlobalConfigService,
   ILayer,
   ILayerPlugin,
+  IPass,
   IPostProcessingPass,
   IRendererService,
-  MultiPassRenderer,
-  PixelPickingPass,
-  RenderPass,
-  TAAPass,
   TYPES,
-} from '@l7/core';
-import { inject, injectable, interfaces, multiInject } from 'inversify';
+} from '@antv/l7-core';
+import { inject, injectable } from 'inversify';
 
 /**
  * 'blurH' -> ['blurH', {}]
@@ -45,28 +41,36 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
-
-  @inject(TYPES.IFactoryPostProcessingPass)
-  private readonly postProcessingPassFactory: (
-    name: string,
-  ) => IPostProcessingPass<unknown>;
-
   private enabled: boolean;
 
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      rendererService,
+      postProcessingPassFactory,
+      normalPassFactory,
+    }: {
+      rendererService: IRendererService;
+      postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
+      normalPassFactory: (name: string) => IPass<unknown>;
+    },
+  ) {
     layer.hooks.init.tap('MultiPassRendererPlugin', () => {
-      const { enableMultiPassRenderer, passes = [] } = layer.getStyleOptions();
+      const { enableMultiPassRenderer, passes = [] } = layer.getLayerConfig();
 
       // SceneConfig 的 enableMultiPassRenderer 配置项可以统一关闭
       this.enabled =
         !!enableMultiPassRenderer &&
-        this.configService.getConfig().enableMultiPassRenderer !== false;
+        layer.getLayerConfig().enableMultiPassRenderer !== false;
 
       // 根据 LayerConfig passes 配置项初始化
       if (this.enabled) {
-        layer.multiPassRenderer = this.createMultiPassRenderer(layer, passes);
+        layer.multiPassRenderer = this.createMultiPassRenderer(
+          layer,
+          passes,
+          postProcessingPassFactory,
+          normalPassFactory,
+        );
         layer.multiPassRenderer.setRenderFlag(true);
       }
     });
@@ -74,7 +78,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     layer.hooks.beforeRender.tap('MultiPassRendererPlugin', () => {
       if (this.enabled) {
         // 渲染前根据 viewport 调整 FBO size
-        const { width, height } = this.rendererService.getViewportSize();
+        const { width, height } = rendererService.getViewportSize();
         layer.multiPassRenderer.resize(width, height);
       }
     });
@@ -87,24 +91,23 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
   private createMultiPassRenderer(
     layer: ILayer,
     passes: Array<string | [string, { [key: string]: unknown }]>,
+    postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>,
+    normalPassFactory: (name: string) => IPass<unknown>,
   ) {
-    const multiPassRenderer = new MultiPassRenderer(layer);
-    const { enablePicking, enableTAA } = layer.getStyleOptions();
-
-    // clear first
-    // multiPassRenderer.add(new ClearPass());
+    const multiPassRenderer = layer.multiPassRenderer;
+    const { enablePicking, enableTAA } = layer.getLayerConfig();
 
     // picking pass if enabled
     if (enablePicking) {
-      multiPassRenderer.add(new PixelPickingPass());
+      multiPassRenderer.add(normalPassFactory('pixelPicking'));
     }
 
     // use TAA pass if enabled instead of render pass
     if (enableTAA) {
-      multiPassRenderer.add(new TAAPass());
+      multiPassRenderer.add(normalPassFactory('taa'));
     } else {
       // render all layers in this pass
-      multiPassRenderer.add(new RenderPass());
+      multiPassRenderer.add(normalPassFactory('render'));
     }
 
     // post processing
@@ -112,14 +115,14 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
       (pass: [string, { [key: string]: unknown }]) => {
         const [passName, initializationOptions] = pass;
         multiPassRenderer.add(
-          this.postProcessingPassFactory(passName),
+          postProcessingPassFactory(passName),
           initializationOptions,
         );
       },
     );
 
     // 末尾为固定的 CopyPass
-    multiPassRenderer.add(this.postProcessingPassFactory('copy'));
+    multiPassRenderer.add(postProcessingPassFactory('copy'));
 
     return multiPassRenderer;
   }

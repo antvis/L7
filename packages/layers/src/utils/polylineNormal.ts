@@ -1,4 +1,4 @@
-import { aProjectFlat, lngLatToMeters, Point } from '@l7/utils';
+import { aProjectFlat, lngLatToMeters, Point } from '@antv/l7-utils';
 import { vec2 } from 'gl-matrix';
 export function computeMiter(
   tangent: vec2,

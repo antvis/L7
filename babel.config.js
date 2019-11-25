@@ -1,11 +1,14 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = api => {
   api.cache(() => process.env.NODE_ENV);
+
+  const isSite = api.env('site');
   const isCDNBundle = api.env('bundle');
   const isCommonJS = api.env('cjs');
   const isESModule = api.env('esm');
   const isTest = api.env('test');
-  if (process.env.GATSBY === 'true') { //
+
+  if (isSite) {
     return {
       presets: [
         'babel-preset-gatsby'
@@ -54,7 +57,7 @@ module.exports = api => {
           development: isCommonJS
         }
       ],
-      '@babel/preset-typescript'
+      '@babel/preset-typescript',
     ],
     plugins: [
       '@babel/plugin-proposal-optional-chaining',
@@ -102,7 +105,7 @@ module.exports = api => {
       // 按需引用 @see https://github.com/lodash/babel-plugin-lodash
       'lodash'
       // 内联 WebGL 常量 @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
-      // isCDNBundle ? 'inline-webgl-constants' : {}
+      // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
       'node_modules',

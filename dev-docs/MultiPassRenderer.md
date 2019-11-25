@@ -35,7 +35,7 @@ export interface IPostProcessingPass extends IPass {
 }
 ```
 
-具体实现依赖 `@l7/renderer` 实现，目前使用 regl 实现 IFramebuffer 等接口。
+具体实现依赖 `@antv/l7-renderer` 实现，目前使用 regl 实现 IFramebuffer 等接口。
 
 ## 内置 Pass
 
