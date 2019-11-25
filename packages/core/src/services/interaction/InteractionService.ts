@@ -23,7 +23,6 @@ export default class InteractionService extends EventEmitter
 
   public init() {
     // 注册事件在地图底图上
-    this.clear();
     this.addEventListenerOnMap();
   }
 
@@ -55,7 +54,7 @@ export default class InteractionService extends EventEmitter
       this.hammertime = hammertime;
 
       // TODO: 根据场景注册事件到 L7 canvas 上
-      this.logger.info('add event listeners on canvas');
+      this.logger.debug('add event listeners on canvas');
     }
   }
 
@@ -67,13 +66,12 @@ export default class InteractionService extends EventEmitter
   }
 
   private onHover = ({ x, y }: MouseEvent) => {
+    const $containter = this.mapService.getMapContainer();
+    if ($containter) {
+      const { top, left } = $containter.getBoundingClientRect();
+      x -= left;
+      y -= top;
+    }
     this.emit(InteractionEvent.Hover, { x, y });
   };
-  private clear() {
-    if (this.hammertime) {
-      this.hammertime.destroy();
-    }
-    this.removeEventListenerOnMap();
-    this.off(InteractionEvent.Hover);
-  }
 }

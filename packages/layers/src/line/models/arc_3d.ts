@@ -2,12 +2,10 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
   IModel,
   IModelUniform,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+} from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc_vert from '../shaders/line_arc_vert.glsl';
@@ -18,7 +16,7 @@ interface IArcLayerStyleOptions {
 }
 export default class Arc3DModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getStyleOptions() as IArcLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IArcLayerStyleOptions;
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,
@@ -46,7 +44,7 @@ export default class Arc3DModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -70,7 +68,7 @@ export default class Arc3DModel extends BaseModel {
       },
     });
 
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {

@@ -7,7 +7,7 @@ import {
   ILayerPlugin,
   IRendererService,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 
 const lightTypeUniformMap = {
@@ -79,9 +79,9 @@ export function generateLightingUniforms(
   lights?: Array<Partial<IDirectionalLight | ISpotLight>>,
 ) {
   const lightsMap: {
-    u_DirectionalLights: IDirectionalLight[];
+    u_DirectionalLights: Array<Omit<IDirectionalLight, 'type'>>;
     u_NumOfDirectionalLights: number;
-    u_SpotLights: ISpotLight[];
+    u_SpotLights: Array<Omit<ISpotLight, 'type'>>;
     u_NumOfSpotLights: number;
   } = {
     u_DirectionalLights: new Array(3).fill({ ...DEFAULT_DIRECTIONAL_LIGHT }),
@@ -123,11 +123,15 @@ export function generateLightingUniforms(
 export default class LightingPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.beforeRender.tap('LightingPlugin', () => {
-      layer.models.forEach((model) =>
-        model.addUniforms({
-          //
-        }),
-      );
+      const { enableLighting } = layer.getLayerConfig();
+      if (enableLighting) {
+        layer.models.forEach((model) =>
+          // @ts-ignore
+          model.addUniforms({
+            ...generateLightingUniforms(),
+          }),
+        );
+      }
     });
   }
 }

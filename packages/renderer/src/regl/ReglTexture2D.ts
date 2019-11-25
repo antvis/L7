@@ -1,4 +1,4 @@
-import { gl, ITexture2D, ITexture2DInitializationOptions } from '@l7/core';
+import { gl, ITexture2D, ITexture2DInitializationOptions } from '@antv/l7-core';
 import regl from 'regl';
 import {
   colorSpaceMap,
@@ -57,7 +57,7 @@ export default class ReglTexture2D implements ITexture2D {
       textureOptions.data = data;
     }
 
-    if (typeof mipmap === 'string') {
+    if (typeof mipmap === 'number') {
       textureOptions.mipmap = mipmapMap[mipmap];
     } else if (typeof mipmap === 'boolean') {
       textureOptions.mipmap = mipmap;

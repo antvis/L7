@@ -1,6 +1,4 @@
-import { Scene } from '@l7/scene';
-import { PointLayer } from '@l7/layers'
-import { Scale, Zoom, Layers } from '@l7/component';
+import { Scale, Zoom, Scene, Layers, PointLayer } from '@antv/l7';
 const scene = new Scene({
   id: 'map',
   pitch: 0,

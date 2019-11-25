@@ -1,12 +1,5 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  IModel,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import pointExtrudeVert from '../shaders/extrude3_vert.glsl';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
@@ -15,7 +8,7 @@ interface IPointLayerStyleOptions {
 }
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
-    const { opacity } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
     };
@@ -42,7 +35,7 @@ export default class ExtrudeModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -79,7 +72,7 @@ export default class ExtrudeModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -102,7 +95,7 @@ export default class ExtrudeModel extends BaseModel {
         },
       },
     });
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'pos',
       type: AttributeType.Attribute,
       descriptor: {

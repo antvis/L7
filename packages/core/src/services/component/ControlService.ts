@@ -1,6 +1,5 @@
-import { DOM } from '@l7/utils';
-import { inject, injectable } from 'inversify';
-import { IMapService } from '../map/IMapService';
+import { DOM } from '@antv/l7-utils';
+import { Container, injectable } from 'inversify';
 import {
   IControl,
   IControlCorners,
@@ -15,13 +14,12 @@ export default class ControlService implements IControlService {
   public controlContainer: HTMLElement;
   private controls: IControl[] = [];
   public init(cfg: IControlServiceCfg) {
-    this.destroy();
     this.container = cfg.container;
     this.initControlPos();
   }
 
-  public addControl(ctr: IControl, mapService: IMapService): void {
-    ctr.addTo(mapService); // scene对象
+  public addControl(ctr: IControl, sceneContainer: Container): void {
+    ctr.addTo(sceneContainer); // scene对象
     this.controls.push(ctr);
   }
   public removeControl(ctr: IControl): this {

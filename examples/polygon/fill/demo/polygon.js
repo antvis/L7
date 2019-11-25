@@ -1,4 +1,3 @@
-
 import { Scene, PolygonLayer, LineLayer } from '@antv/l7';
 const scene = new Scene({
   id: 'map',

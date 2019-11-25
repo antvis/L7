@@ -1,16 +1,12 @@
-import { injectable } from 'inversify';
-import { lazyInject } from '../../../index';
+import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../types';
-import {
-  IInteractionService,
-  InteractionEvent,
-} from '../../interaction/IInteractionService';
+import { InteractionEvent } from '../../interaction/IInteractionService';
 import { ILayer } from '../../layer/ILayerService';
 import { ILogService } from '../../log/ILogService';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
-import { IPass, PassType } from '../IMultiPassRenderer';
-import { IRendererService } from '../IRendererService';
+import { PassType } from '../IMultiPassRenderer';
+import BaseNormalPass from './BaseNormalPass';
 
 function decodePickingColor(color: Uint8Array): number {
   const [i1, i2, i3] = color;
@@ -24,15 +20,10 @@ function decodePickingColor(color: Uint8Array): number {
  * @see https://github.com/antvis/L7/blob/next/dev-docs/PixelPickingEngine.md
  */
 @injectable()
-export default class PixelPickingPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions> {
-  @lazyInject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
-
-  @lazyInject(TYPES.IInteractionService)
-  protected readonly interactionService: IInteractionService;
-
-  @lazyInject(TYPES.ILogService)
+export default class PixelPickingPass<
+  InitializationOptions = {}
+> extends BaseNormalPass<InitializationOptions> {
+  @inject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
   /**
@@ -58,7 +49,8 @@ export default class PixelPickingPass<InitializationOptions = {}>
     return 'pixelPicking';
   }
 
-  public init(layer: ILayer) {
+  public init(layer: ILayer, config?: Partial<InitializationOptions>) {
+    super.init(layer, config);
     this.layer = layer;
     const { createTexture2D, createFramebuffer } = this.rendererService;
 
@@ -98,8 +90,6 @@ export default class PixelPickingPass<InitializationOptions = {}>
         depth: 1,
       });
 
-      // this.logger.info(`picking fbo cleared ${width} ${height}`);
-
       /**
        * picking pass 不需要 multipass，原因如下：
        * 1. 已经 clear，无需 ClearPass
@@ -129,7 +119,7 @@ export default class PixelPickingPass<InitializationOptions = {}>
       useFramebuffer,
     } = this.rendererService;
     const { width, height } = getViewportSize();
-    const { enableHighlight } = this.layer.getStyleOptions();
+    const { enableHighlight } = this.layer.getLayerConfig();
 
     const xInDevicePixel = x * window.devicePixelRatio;
     const yInDevicePixel = y * window.devicePixelRatio;
@@ -160,14 +150,20 @@ export default class PixelPickingPass<InitializationOptions = {}>
         pickedColors[1] !== 0 ||
         pickedColors[2] !== 0
       ) {
-        this.logger.info('picked');
+        this.logger.debug('picked');
         const pickedFeatureIdx = decodePickingColor(pickedColors);
         const rawFeature = this.layer.getSource()?.data?.dataArray[
           pickedFeatureIdx
         ];
 
-        // trigger onHover/Click callback on layer
-        this.triggerHoverOnLayer({ x, y, feature: rawFeature });
+        if (!rawFeature) {
+          // this.logger.error(
+          //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
+          // );
+        } else {
+          // trigger onHover/Click callback on layer
+          this.triggerHoverOnLayer({ x, y, feature: rawFeature });
+        }
       }
     });
 
@@ -185,7 +181,7 @@ export default class PixelPickingPass<InitializationOptions = {}>
     y: number;
     feature: unknown;
   }) {
-    const { onHover, onClick } = this.layer.getStyleOptions();
+    const { onHover, onClick } = this.layer.getLayerConfig();
     if (onHover) {
       onHover({
         x,
