@@ -10,7 +10,7 @@ import {
   ITexture2D,
   lazyInject,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { generateColorRamp, IColorRamp } from '../utils/color';
 import { RasterTriangulation } from './buffers/triangulation';
@@ -43,7 +43,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity, heightRatio = 10 } = this.getStyleOptions();
+    const { opacity, heightRatio = 10 } = this.getLayerConfig();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { coordinates, width, height, min, max } = parserDataItem;
     this.models.forEach((model) =>
@@ -76,7 +76,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       type: gl.FLOAT,
       aniso: 4,
     });
-    const { rampColors } = this.getStyleOptions();
+    const { rampColors } = this.getLayerConfig();
     const imageData = generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: imageData.data,

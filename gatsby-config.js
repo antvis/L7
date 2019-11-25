@@ -156,7 +156,10 @@ module.exports = {
       }
     ],
     playground: {
-      container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>'
+      container: '<div style="min-height: 500px; justify-content: center;position: relative" id="map"/>',
+      dependencies: {
+        '@antv/l7': 'beta'
+      }
     }
   }
 };

@@ -1,4 +1,3 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@l7/core';
 import BaseLayer from '../core/BaseLayer';
 import LineModels, { LineModelType } from './models';
 interface IPointLayerStyleOptions {

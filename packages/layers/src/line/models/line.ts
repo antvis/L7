@@ -2,13 +2,11 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
   IModel,
   IModelUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
 
-import BaseModel from '../../core/baseModel';
+import BaseModel from '../../core/BaseModel';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
@@ -18,7 +16,7 @@ interface ILineLayerStyleOptions {
 }
 export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getStyleOptions() as ILineLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
     };
@@ -45,7 +43,7 @@ export default class LineModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -70,7 +68,7 @@ export default class LineModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
@@ -94,7 +92,7 @@ export default class LineModel extends BaseModel {
       },
     });
 
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'miter',
       type: AttributeType.Attribute,
       descriptor: {

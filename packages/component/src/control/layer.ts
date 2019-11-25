@@ -1,5 +1,5 @@
-import { IMapService } from '@l7/core';
-import { bindAll, DOM, lnglatDistance } from '@l7/utils';
+import { IMapService } from '@antv/l7-core';
+import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
 import Control, {
   IControlOption,
   PositionName,
@@ -63,7 +63,7 @@ export default class Layers extends Control {
       sortLayers: false,
     };
   }
-  public onAdd(MapService: IMapService) {
+  public onAdd() {
     this.initLayout();
     this.update();
     this.mapsService.on('zoomend', this.checkDisabledLayers);
@@ -177,7 +177,7 @@ export default class Layers extends Control {
       input = inputs[i];
       layer = this.layerService.getLayer(input.layerId);
       if (layer) {
-        input.disabled = layer.visible && !layer.isVisible();
+        input.disabled = !layer.isVisible();
       }
     }
   }

@@ -5,10 +5,9 @@ import {
   ILayer,
   ILayerPlugin,
   IRendererService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
-import { inject, injectable } from 'inversify';
+  IStyleAttributeService,
+} from '@antv/l7-core';
+import { injectable } from 'inversify';
 import { rgb2arr } from '../utils/color';
 
 function encodePickingColor(featureIdx: number): [number, number, number] {
@@ -27,14 +26,20 @@ const PickingStage = {
 
 @injectable()
 export default class PixelPickingPlugin implements ILayerPlugin {
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
-
-  public apply(layer: ILayer) {
+  public apply(
+    layer: ILayer,
+    {
+      rendererService,
+      styleAttributeService,
+    }: {
+      rendererService: IRendererService;
+      styleAttributeService: IStyleAttributeService;
+    },
+  ) {
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tap('PixelPickingPlugin', () => {
-      const { enablePicking } = layer.getStyleOptions();
-      layer.styleAttributeService.registerStyleAttribute({
+      const { enablePicking } = layer.getLayerConfig();
+      styleAttributeService.registerStyleAttribute({
         name: 'pickingColor',
         type: AttributeType.Attribute,
         descriptor: {
@@ -54,7 +59,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     // 必须要与 PixelPickingPass 结合使用，因此必须开启 multiPassRenderer
     // if (layer.multiPassRenderer) {
     layer.hooks.beforePickingEncode.tap('PixelPickingPlugin', () => {
-      const { enablePicking } = layer.getStyleOptions();
+      const { enablePicking } = layer.getLayerConfig();
       if (enablePicking) {
         layer.models.forEach((model) =>
           model.addUniforms({
@@ -65,7 +70,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     });
 
     layer.hooks.afterPickingEncode.tap('PixelPickingPlugin', () => {
-      const { enablePicking } = layer.getStyleOptions();
+      const { enablePicking } = layer.getLayerConfig();
       if (enablePicking) {
         layer.models.forEach((model) =>
           model.addUniforms({
@@ -80,7 +85,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     layer.hooks.beforeHighlight.tap(
       'PixelPickingPlugin',
       (pickedColor: number[]) => {
-        const { highlightColor } = layer.getStyleOptions();
+        const { highlightColor } = layer.getLayerConfig();
         const highlightColorInArray =
           typeof highlightColor === 'string'
             ? rgb2arr(highlightColor)

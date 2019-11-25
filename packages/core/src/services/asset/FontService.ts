@@ -1,4 +1,4 @@
-import { LRUCache } from '@l7/utils';
+import { LRUCache } from '@antv/l7-utils';
 // @ts-ignore
 import TinySDF from '@mapbox/tiny-sdf';
 import { inject, injectable } from 'inversify';

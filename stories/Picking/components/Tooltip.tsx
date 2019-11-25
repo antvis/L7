@@ -1,7 +1,5 @@
 // @ts-ignore
-import { PolygonLayer } from '@l7/layers';
-// @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scene } from '@antv/l7';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -29,7 +27,7 @@ export default class Mapbox extends React.Component {
       enableHighlight: false,
       onHover: (pickedFeature) => {
         // tslint:disable-next-line:no-console
-        // console.log(pickedFeature);
+        console.log(pickedFeature);
       },
     });
 
@@ -49,7 +47,6 @@ export default class Mapbox extends React.Component {
         opacity: 0.8,
       });
     scene.addLayer(layer);
-    scene.render();
 
     this.scene = scene;
   }

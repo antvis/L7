@@ -1,4 +1,5 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import {
   IMultiPassRenderer,
@@ -7,7 +8,6 @@ import {
   IPostProcessor,
   PassType,
 } from '../IMultiPassRenderer';
-import PostProcessor from './PostProcessor';
 
 /**
  * ported from Three.js EffectComposer
@@ -31,14 +31,15 @@ import PostProcessor from './PostProcessor';
 @injectable()
 export default class MultiPassRenderer implements IMultiPassRenderer {
   private passes: Array<IPass<unknown>> = [];
+
+  @inject(TYPES.IPostProcessor)
   private postProcessor: IPostProcessor;
 
   private layer: ILayer;
   private renderFlag: boolean;
 
-  constructor(layer: ILayer) {
+  public setLayer(layer: ILayer) {
     this.layer = layer;
-    this.postProcessor = new PostProcessor();
   }
 
   public setRenderFlag(renderFlag: boolean) {

@@ -1,7 +1,5 @@
 // @ts-ignore
-import { PolygonLayer } from '@l7/layers';
-// @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scene } from '@antv/l7';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -58,8 +56,6 @@ export default class Highlight extends React.Component {
         opacity: 1.0,
       });
     scene.addLayer(layer);
-    scene.render();
-    console.log(layer);
     this.scene = scene;
 
     /*** 运行时修改样式属性 ***/
