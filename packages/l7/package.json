@@ -23,6 +23,12 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@l7/core": "0.0.1",
+    "@l7/scene": "0.0.1",
+    "@l7/layers": "0.0.1",
+    "@l7/component": "0.0.1"
+   },
   "peerDependencies": {
    "mapbox-gl": "^1.5.0"
 
