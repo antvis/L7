@@ -22,7 +22,6 @@ export default class ArcLineDemo extends React.Component {
       zoom: 2,
     });
     const lineLayer = new LineLayer({
-      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
     })

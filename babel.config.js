@@ -8,7 +8,7 @@ module.exports = api => {
   const isESModule = api.env('esm');
   const isTest = api.env('test');
 
-  if (isSite) { //
+  if (isSite) {
     return {
       presets: [
         'babel-preset-gatsby'
@@ -36,6 +36,7 @@ module.exports = api => {
       ]
     };
   }
+
   return {
     presets: [
       [
@@ -56,7 +57,7 @@ module.exports = api => {
           development: isCommonJS
         }
       ],
-      '@babel/preset-typescript'
+      '@babel/preset-typescript',
     ],
     plugins: [
       '@babel/plugin-proposal-optional-chaining',
@@ -92,7 +93,7 @@ module.exports = api => {
         }
       ],
       isCDNBundle ? {} : [
-        'transform-import-styles',
+        'transform-import-styles'
       ],
       [
         // @see https://github.com/babel/babel/issues/8741#issuecomment-509041135
@@ -102,7 +103,7 @@ module.exports = api => {
         }
       ],
       // 按需引用 @see https://github.com/lodash/babel-plugin-lodash
-      'lodash',
+      'lodash'
       // 内联 WebGL 常量 @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],

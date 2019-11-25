@@ -1,12 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  IModel,
-  IModelUniform,
-} from '@antv/l7-core';
+import { IModel, IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 
 export default class ExtrudeModel extends BaseModel {

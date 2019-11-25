@@ -38,6 +38,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+
 jspm_packages/
 
 # Typescript v1 declaration files
@@ -66,6 +67,7 @@ jspm_packages/
 
 lib/
 dist/
+es/
 
 .DS_Store
 public
@@ -73,3 +75,5 @@ public
 
 yarn.lock
 package-lock.json
+git_log.sh
+node_modules/

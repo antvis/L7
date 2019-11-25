@@ -17,8 +17,8 @@ export default class PointImage extends React.Component {
       zoom: 15,
       id: 'map',
       pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
+      type: 'amap',
+      style: 'dark',
     });
     scene.addImage(
       '00',
@@ -32,13 +32,8 @@ export default class PointImage extends React.Component {
       '02',
       'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
     );
-    this.scene = scene;
-    const imageLayer = new PointLayer({
-      // enableMultiPassRenderer: true,
-      // enablePicking: true,
-      // enableHighlight: true,
-      // enableTAA: true,
-    })
+
+    const imageLayer = new PointLayer({})
       .source(await response.json(), {
         parser: {
           type: 'json',
@@ -47,7 +42,7 @@ export default class PointImage extends React.Component {
         },
       })
       .shape('name', ['00', '01', '02'])
-      .size(60);
+      .size(30);
     scene.addLayer(imageLayer);
   }
 

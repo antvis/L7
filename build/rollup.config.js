@@ -3,7 +3,7 @@ import alias from '@rollup/plugin-alias';
 import json from '@rollup/plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import { terser } from "rollup-plugin-terser";
+import { terser } from 'rollup-plugin-terser';
 import analyze from 'rollup-plugin-analyzer';
 import babel from 'rollup-plugin-babel';
 import glsl from './rollup-plugin-glsl';
@@ -11,7 +11,7 @@ import postcss from 'rollup-plugin-postcss';
 import url from 'postcss-url';
 
 function resolveFile(filePath) {
-  return path.join(__dirname, '..', filePath)
+  return path.join(__dirname, '..', filePath);
 }
 
 module.exports = [
@@ -22,17 +22,17 @@ module.exports = [
       format: 'umd',
       name: 'L7',
       globals: {
-        'mapbox-gl': 'mapboxgl',
-      },
+        'mapbox-gl': 'mapboxgl'
+      }
     },
     external: [
-      'mapbox-gl',
+      'mapbox-gl'
     ],
     treeshake: true,
     plugins: [
       alias(
         {
-          resolve: ['.tsx', '.ts'],
+          resolve: [ '.tsx', '.ts' ],
           entries: [
             {
               find: /^@antv\/l7-(.*)/,
@@ -43,22 +43,22 @@ module.exports = [
               replacement: resolveFile('packages/l7/src'),
             },
           ]
-        },
+        }
       ),
       resolve({
         browser: true,
         preferBuiltins: false,
-        extensions: ['.js', '.ts'],
+        extensions: [ '.js', '.ts' ]
       }),
       glsl(
-        ['**/*.glsl'],
-        true,
+        [ '**/*.glsl' ],
+        true
       ),
       json(),
       postcss({
         plugins: [
-          url({ url: 'inline' }),
-        ],
+          url({ url: 'inline' })
+        ]
       }),
       // @see https://github.com/rollup/rollup-plugin-node-resolve#using-with-rollup-plugin-commonjs
       commonjs({
@@ -68,23 +68,23 @@ module.exports = [
           lodash: [
             'isNil',
             'uniq',
-            'clamp', 
+            'clamp',
             'isObject',
             'isFunction',
             'cloneDeep',
             'isString',
-            'isNumber',
-          ],
+            'isNumber'
+          ]
         }
       }),
       babel({
-        extensions: ['.js', '.ts'],
+        extensions: [ '.js', '.ts' ]
       }),
       terser(),
       analyze({
         summaryOnly: true,
-        limit: 20,
-      }),
-    ],
-  },
+        limit: 20
+      })
+    ]
+  }
 ];

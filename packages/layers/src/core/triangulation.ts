@@ -70,11 +70,9 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
  */
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
-  let path = coordinates;
-  // @ts-ignore
+  let path = coordinates as number[][][] | number[][];
   if (Array.isArray(path[0][0])) {
-    // @ts-ignore
-    path = coordinates[0];
+    path = coordinates[0] as number[][];
   }
   const line = getNormals(path as number[][], false, 0);
   return {

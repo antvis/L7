@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.10",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,8 +23,8 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.9",
-    "@antv/l7-utils": "^2.0.0-beta.9",
+    "@antv/l7-core": "^2.0.0-beta.10",
+    "@antv/l7-utils": "^2.0.0-beta.10",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
