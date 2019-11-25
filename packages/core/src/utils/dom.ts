@@ -1,5 +1,6 @@
 const docStyle = window.document.documentElement.style;
 type ELType = HTMLElement | SVGElement;
+let containerCounter = 0;
 export function createRendererContainer(
   domId: string | HTMLDivElement,
 ): HTMLDivElement | null {
@@ -17,7 +18,8 @@ export function createRendererContainer(
       width: 100%;
       pointer-events: none;
     `;
-    $container.id = 'l7_canvaslayer';
+    $container.id = `l7-scene-${containerCounter++}`;
+    $container.classList.add('l7-scene');
     $wrapper.appendChild($container);
     return $container;
   }

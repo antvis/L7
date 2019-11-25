@@ -2,17 +2,10 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  ILayerPlugin,
-  ILogService,
   IModel,
   IModelUniform,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
-import BaseModel from '../../core/baseModel';
+} from '@antv/l7-core';
+import BaseModel from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
 import { rgb2arr } from '../../utils/color';
 import pointFillFrag from '../shaders/fill_frag.glsl';
@@ -28,7 +21,7 @@ export default class FillModel extends BaseModel {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',
       strokeWidth = 1,
-    } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
@@ -49,7 +42,7 @@ export default class FillModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
       descriptor: {
@@ -75,7 +68,7 @@ export default class FillModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -100,7 +93,7 @@ export default class FillModel extends BaseModel {
     });
 
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'shape',
       type: AttributeType.Attribute,
       descriptor: {
@@ -119,8 +112,7 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = this.layer.configService.getConfig()
-            .shape2d as string[];
+          const shape2d = this.layer.getLayerConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

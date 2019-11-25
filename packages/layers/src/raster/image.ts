@@ -3,13 +3,8 @@ import {
   gl,
   IEncodeFeature,
   ILayer,
-  ILayerPlugin,
-  ILogService,
-  IStyleAttributeService,
   ITexture2D,
-  lazyInject,
-  TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { RasterImageTriangulation } from '../core/triangulation';
 import rasterImageFrag from './shaders/image_frag.glsl';
@@ -35,7 +30,7 @@ export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected renderModels() {
-    const { opacity } = this.getStyleOptions();
+    const { opacity } = this.getLayerConfig();
     if (this.texture) {
       this.models.forEach((model) =>
         model.draw({
@@ -51,7 +46,7 @@ export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected buildModels() {
-    this.registerBuiltinAttributes(this);
+    this.registerBuiltinAttributes();
     const source = this.getSource();
     const { createTexture2D } = this.rendererService;
     source.data.images.then((imageData: HTMLImageElement[]) => {
@@ -83,9 +78,9 @@ export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
     ];
   }
 
-  private registerBuiltinAttributes(layer: ILayer) {
+  private registerBuiltinAttributes() {
     // point layer size;
-    layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {

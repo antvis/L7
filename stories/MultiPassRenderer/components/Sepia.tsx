@@ -1,7 +1,5 @@
 // @ts-ignore
-import { PolygonLayer } from '@l7/layers';
-// @ts-ignore
-import { Scene } from '@l7/scene';
+import { PolygonLayer, Scene } from '@antv/l7';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -56,7 +54,6 @@ export default class Sepia extends React.Component {
       });
 
     scene.addLayer(layer);
-    scene.render();
 
     this.scene = scene;
 

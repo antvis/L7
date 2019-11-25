@@ -4,7 +4,8 @@ import {
   IModelDrawOptions,
   IModelInitializationOptions,
   IUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
+import { isPlainObject, isTypedArray } from 'lodash';
 import regl from 'regl';
 import {
   blendEquationMap,
@@ -48,7 +49,7 @@ export default class ReglModel implements IModel {
     } = options;
     const reglUniforms: { [key: string]: IUniform } = {};
     if (uniforms) {
-      this.uniforms = uniforms;
+      this.uniforms = this.extractUniforms(uniforms);
       Object.keys(uniforms).forEach((uniformName) => {
         // use regl prop API
         // @ts-ignore
@@ -91,7 +92,7 @@ export default class ReglModel implements IModel {
   public addUniforms(uniforms: { [key: string]: IUniform }) {
     this.uniforms = {
       ...this.uniforms,
-      ...uniforms,
+      ...this.extractUniforms(uniforms),
     };
   }
 
@@ -100,7 +101,7 @@ export default class ReglModel implements IModel {
       [key: string]: IUniform;
     } = {
       ...this.uniforms,
-      ...options.uniforms,
+      ...this.extractUniforms(options.uniforms || {}),
     };
 
     const reglDrawProps: {
@@ -166,7 +167,7 @@ export default class ReglModel implements IModel {
       const { enable, func, equation, color = [0, 0, 0, 0] } = blend;
       // @ts-ignore
       drawParams.blend = {
-        enable: enable === undefined ? false : !!enable,
+        enable: !!enable,
         func: {
           srcRGB: blendFuncMap[(func && func.srcRGB) || gl.SRC_ALPHA],
           srcAlpha: blendFuncMap[(func && func.srcAlpha) || gl.SRC_ALPHA],
@@ -211,7 +212,7 @@ export default class ReglModel implements IModel {
         },
       } = stencil;
       drawParams.stencil = {
-        enable: enable === undefined ? false : !!enable,
+        enable: !!enable,
         mask,
         func: {
           ...func,
@@ -241,9 +242,83 @@ export default class ReglModel implements IModel {
     if (cull) {
       const { enable, face = gl.BACK } = cull;
       drawParams.cull = {
-        enable: enable === undefined ? false : !!enable,
+        enable: !!enable,
         face: cullFaceMap[face],
       };
+    }
+  }
+
+  /**
+   * 考虑结构体命名, eg:
+   * a: { b: 1 }  ->  'a.b'
+   * a: [ { b: 1 } ] -> 'a[0].b'
+   */
+  private extractUniforms(uniforms: {
+    [key: string]: IUniform;
+  }): {
+    [key: string]: IUniform;
+  } {
+    const extractedUniforms = {};
+    Object.keys(uniforms).forEach((uniformName) => {
+      this.extractUniformsRecursively(
+        uniformName,
+        uniforms[uniformName],
+        extractedUniforms,
+        '',
+      );
+    });
+
+    return extractedUniforms;
+  }
+
+  private extractUniformsRecursively(
+    uniformName: string,
+    uniformValue: IUniform,
+    uniforms: {
+      [key: string]: IUniform;
+    },
+    prefix: string,
+  ) {
+    if (
+      uniformValue === null ||
+      typeof uniformValue === 'number' || // u_A: 1
+      typeof uniformValue === 'boolean' || // u_A: false
+      (Array.isArray(uniformValue) && typeof uniformValue[0] === 'number') || // u_A: [1, 2, 3]
+      isTypedArray(uniformValue) || // u_A: Float32Array
+      // @ts-ignore
+      uniformValue === '' ||
+      'resize' in uniformValue
+    ) {
+      uniforms[`${prefix && prefix + '.'}${uniformName}`] = uniformValue;
+      return;
+    }
+
+    // u_Struct.a.b.c
+    if (isPlainObject(uniformValue)) {
+      Object.keys(uniformValue).forEach((childName) => {
+        this.extractUniformsRecursively(
+          childName,
+          // @ts-ignore
+          uniformValue[childName],
+          uniforms,
+          `${prefix && prefix + '.'}${uniformName}`,
+        );
+      });
+    }
+
+    // u_Struct[0].a
+    if (Array.isArray(uniformValue)) {
+      uniformValue.forEach((child, idx) => {
+        Object.keys(child).forEach((childName) => {
+          this.extractUniformsRecursively(
+            childName,
+            // @ts-ignore
+            child[childName],
+            uniforms,
+            `${prefix && prefix + '.'}${uniformName}[${idx}]`,
+          );
+        });
+      });
     }
   }
 }

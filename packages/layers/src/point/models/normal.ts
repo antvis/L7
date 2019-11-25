@@ -2,13 +2,11 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
   IModel,
   IModelUniform,
-} from '@l7/core';
+} from '@antv/l7-core';
 
-import BaseModel from '../../core/baseModel';
+import BaseModel from '../../core/BaseModel';
 import { rgb2arr } from '../../utils/color';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
@@ -33,7 +31,7 @@ export default class NormalModel extends BaseModel {
       opacity = 1,
       strokeColor = 'rgb(0,0,0,0)',
       strokeWidth = 1,
-    } = this.layer.getStyleOptions() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
@@ -65,7 +63,7 @@ export default class NormalModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     // point layer size;
-    this.layer.styleAttributeService.registerStyleAttribute({
+    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {

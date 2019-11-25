@@ -4,7 +4,7 @@ import {
   ILayerPlugin,
   ILogService,
   TYPES,
-} from '@l7/core';
+} from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 
 /**
@@ -27,7 +27,7 @@ export default class ConfigSchemaValidationPlugin implements ILayerPlugin {
 
       const { valid, errorText } = this.configService.validateLayerConfig(
         layer.name,
-        layer.getStyleOptions(),
+        layer.getLayerConfig(),
       );
 
       if (!valid) {

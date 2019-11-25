@@ -1,4 +1,4 @@
-import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@l7/core';
+import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@antv/l7-core';
 import Supercluster from 'supercluster';
 export function cluster(data: IParserData, option: ITransform): IParserData {
   const { radius = 80, maxZoom = 18, minZoom = 0, field, zoom = 2 } = option;

@@ -1,18 +1,15 @@
 import 'reflect-metadata';
 import regl from 'regl';
 import ReglModel from '../ReglModel';
+import createContext from './utils/create-context';
 
-// TODO: 暂时在 travis 跳过这个测试用例，本地能跑过
-const describeFn = process.env.NODE_ENV === 'test' ? describe.skip : describe;
-
-describeFn('ReglModel', () => {
-  let gl;
+describe('ReglModel', () => {
+  let context;
   let reGL: regl.Regl;
 
   beforeEach(() => {
-    const createContext = require('./utils/create-context').default;
-    gl = createContext(1, 1);
-    reGL = regl(gl);
+    context = createContext(1, 1);
+    reGL = regl(context);
   });
 
   it('should generate model with empty uniforms correctly', () => {
@@ -65,15 +62,13 @@ describeFn('ReglModel', () => {
       },
     });
 
-    expect(model.uniforms['u_Struct[0].a']).toEqual(undefined);
-
-    // // @ts-ignore
-    // expect(model.uniforms['u_Struct[0].a']).toEqual(1);
-    // // @ts-ignore
-    // expect(model.uniforms['u_Struct[0].b']).toEqual([1, 2]);
-    // // @ts-ignore
-    // expect(model.uniforms['u_Struct[1].a']).toEqual(2);
-    // // @ts-ignore
-    // expect(model.uniforms['u_Struct[1].b']).toEqual([3, 4]);
+    // @ts-ignore
+    expect(model.uniforms['u_Struct[0].a']).toEqual(1);
+    // @ts-ignore
+    expect(model.uniforms['u_Struct[0].b']).toEqual([1, 2]);
+    // @ts-ignore
+    expect(model.uniforms['u_Struct[1].a']).toEqual(2);
+    // @ts-ignore
+    expect(model.uniforms['u_Struct[1].b']).toEqual([3, 4]);
   });
 });

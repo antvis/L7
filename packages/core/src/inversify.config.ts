@@ -1,3 +1,7 @@
+/**
+ * Root Container
+ * @see /dev-docs/IoC 容器、依赖注入与服务说明.md
+ */
 import 'reflect-metadata';
 
 import { EventEmitter } from 'eventemitter3';
@@ -34,7 +38,15 @@ import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 
 /** PostProcessing passes */
-import { IPostProcessingPass } from './services/renderer/IMultiPassRenderer';
+import {
+  IMultiPassRenderer,
+  IPass,
+  IPostProcessingPass,
+  IPostProcessor,
+} from './services/renderer/IMultiPassRenderer';
+import ClearPass from './services/renderer/passes/ClearPass';
+import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
+import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
 import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
 import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
 import ColorHalfTonePass from './services/renderer/passes/post-processing/ColorHalfTonePass';
@@ -43,36 +55,19 @@ import HexagonalPixelatePass from './services/renderer/passes/post-processing/He
 import InkPass from './services/renderer/passes/post-processing/InkPass';
 import NoisePass from './services/renderer/passes/post-processing/NoisePass';
 import SepiaPass from './services/renderer/passes/post-processing/SepiaPass';
+import PostProcessor from './services/renderer/passes/PostProcessor';
+import RenderPass from './services/renderer/passes/RenderPass';
+import TAAPass from './services/renderer/passes/TAAPass';
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#defaultscope
 const container = new Container();
 
 /**
- * bind services
+ * bind global services in root container
  */
-container
-  .bind<ISceneService>(TYPES.ISceneService)
-  .to(SceneService)
-  .inTransientScope();
 container
   .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
   .to(GlobalConfigService)
-  .inSingletonScope();
-container
-  .bind<ILayerService>(TYPES.ILayerService)
-  .to(LayerService)
-  .inSingletonScope();
-container
-  .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
-  .to(StyleAttributeService)
-  .inRequestScope();
-container
-  .bind<ICameraService>(TYPES.ICameraService)
-  .to(CameraService)
-  .inSingletonScope();
-container
-  .bind<ICoordinateSystemService>(TYPES.ICoordinateSystemService)
-  .to(CoordinateSystemService)
   .inSingletonScope();
 container
   .bind<IIconService>(TYPES.IIconService)
@@ -87,16 +82,8 @@ container
   .to(LogService)
   .inSingletonScope();
 container
-  .bind<IInteractionService>(TYPES.IInteractionService)
-  .to(InteractionService)
-  .inSingletonScope();
-container
   .bind<IFontService>(TYPES.IFontService)
   .to(FontService)
-  .inSingletonScope();
-container
-  .bind<IControlService>(TYPES.IControlService)
-  .to(ControlService)
   .inSingletonScope();
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
@@ -157,49 +144,134 @@ export const lazyMultiInject = (
   };
 };
 
-// 绑定 post processing passes
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(CopyPass)
-  .whenTargetNamed('copy');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(BlurHPass)
-  .whenTargetNamed('blurH');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(BlurVPass)
-  .whenTargetNamed('blurV');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(NoisePass)
-  .whenTargetNamed('noise');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(SepiaPass)
-  .whenTargetNamed('sepia');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(ColorHalfTonePass)
-  .whenTargetNamed('colorHalftone');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(HexagonalPixelatePass)
-  .whenTargetNamed('hexagonalPixelate');
-container
-  .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-  .to(InkPass)
-  .whenTargetNamed('ink');
-
-container
-  .bind<interfaces.Factory<IPostProcessingPass<unknown>>>(
-    TYPES.IFactoryPostProcessingPass,
-  )
-  .toFactory<IPostProcessingPass<unknown>>((context) => (named: string) =>
-    context.container.getNamed<IPostProcessingPass<unknown>>(
-      TYPES.IPostProcessingPass,
-      named,
-    ),
-  );
-
 export default container;
+
+let sceneIdCounter = 0;
+export function createSceneContainer() {
+  // @see https://github.com/inversify/InversifyJS/blob/master/wiki/hierarchical_di.md#support-for-hierarchical-di-systems
+  const sceneContainer = new Container();
+  sceneContainer.parent = container;
+
+  // 生成场景 ID 并保存在容器内
+  sceneContainer
+    .bind<string>(TYPES.SceneID)
+    .toConstantValue(`${sceneIdCounter++}`);
+
+  sceneContainer
+    .bind<ILayerService>(TYPES.ILayerService)
+    .to(LayerService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<ISceneService>(TYPES.ISceneService)
+    .to(SceneService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<ICameraService>(TYPES.ICameraService)
+    .to(CameraService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<ICoordinateSystemService>(TYPES.ICoordinateSystemService)
+    .to(CoordinateSystemService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IInteractionService>(TYPES.IInteractionService)
+    .to(InteractionService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IControlService>(TYPES.IControlService)
+    .to(ControlService)
+    .inSingletonScope();
+
+  // 绑定常规 passes
+  sceneContainer
+    .bind<IPass<unknown>>(TYPES.INormalPass)
+    .to(ClearPass)
+    .whenTargetNamed('clear');
+  sceneContainer
+    .bind<IPass<unknown>>(TYPES.INormalPass)
+    .to(PixelPickingPass)
+    .whenTargetNamed('pixelPicking');
+  sceneContainer
+    .bind<IPass<unknown>>(TYPES.INormalPass)
+    .to(RenderPass)
+    .whenTargetNamed('render');
+  sceneContainer
+    .bind<IPass<unknown>>(TYPES.INormalPass)
+    .to(TAAPass)
+    .whenTargetNamed('taa');
+  sceneContainer
+    .bind<interfaces.Factory<IPass<unknown>>>(TYPES.IFactoryNormalPass)
+    .toFactory<IPass<unknown>>((context) => (named: string) =>
+      context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
+    );
+
+  // 绑定 post processing passes
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(CopyPass)
+    .whenTargetNamed('copy');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(BlurHPass)
+    .whenTargetNamed('blurH');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(BlurVPass)
+    .whenTargetNamed('blurV');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(NoisePass)
+    .whenTargetNamed('noise');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(SepiaPass)
+    .whenTargetNamed('sepia');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(ColorHalfTonePass)
+    .whenTargetNamed('colorHalftone');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(HexagonalPixelatePass)
+    .whenTargetNamed('hexagonalPixelate');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(InkPass)
+    .whenTargetNamed('ink');
+
+  // 绑定工厂方法
+  sceneContainer
+    .bind<interfaces.Factory<IPostProcessingPass<unknown>>>(
+      TYPES.IFactoryPostProcessingPass,
+    )
+    .toFactory<IPostProcessingPass<unknown>>((context) => (named: string) => {
+      const pass = context.container.getNamed<IPostProcessingPass<unknown>>(
+        TYPES.IPostProcessingPass,
+        named,
+      );
+      pass.setName(named);
+      return pass;
+    });
+
+  return sceneContainer;
+}
+
+export function createLayerContainer(sceneContainer: Container) {
+  const layerContainer = new Container();
+  layerContainer.parent = sceneContainer;
+
+  layerContainer
+    .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
+    .to(StyleAttributeService)
+    .inSingletonScope();
+  layerContainer
+    .bind<IMultiPassRenderer>(TYPES.IMultiPassRenderer)
+    .to(MultiPassRenderer)
+    .inSingletonScope();
+  layerContainer
+    .bind<IPostProcessor>(TYPES.IPostProcessor)
+    .to(PostProcessor)
+    .inSingletonScope();
+
+  return layerContainer;
+}

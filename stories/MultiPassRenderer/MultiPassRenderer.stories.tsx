@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import Blur from './components/Blur';
 import ColorHalftone from './components/ColorHalftone';
+import CustomPostProcessing from './components/CustomPostProcessing';
 import HexagonalPixelate from './components/HexagonalPixelate';
 import Ink from './components/Ink';
 import Noise from './components/Noise';
@@ -15,4 +16,5 @@ storiesOf('MultiPassRenderer', module)
   .add('Blur', () => <Blur />)
   .add('Noise', () => <Noise />)
   .add('Sepia', () => <Sepia />)
-  .add('TAA(Temporal Anti-Aliasing)', () => <TAA />);
+  .add('TAA(Temporal Anti-Aliasing)', () => <TAA />)
+  .add('自定义后处理效果', () => <CustomPostProcessing />);

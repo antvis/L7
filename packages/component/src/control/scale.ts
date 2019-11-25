@@ -1,5 +1,5 @@
-import { IMapService } from '@l7/core';
-import { bindAll, DOM, lnglatDistance } from '@l7/utils';
+import { IMapService } from '@antv/l7-core';
+import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
 import Control, { IControlOption, PositionType } from './BaseControl';
 export interface IScaleControlOption extends IControlOption {
   maxWidth: number;
@@ -25,7 +25,7 @@ export default class Scale extends Control {
     };
   }
 
-  public onAdd(MapService: IMapService) {
+  public onAdd() {
     const className = 'l7-control-scale';
     const container = DOM.create('div', className);
     this.addScales(className + '-line', container);
@@ -36,7 +36,7 @@ export default class Scale extends Control {
 
     return container;
   }
-  public onRemove(MapService: IMapService) {
+  public onRemove() {
     const { updateWhenIdle } = this.controlOption;
     this.mapsService.off(updateWhenIdle ? 'moveend' : 'mapmove', this.update);
   }

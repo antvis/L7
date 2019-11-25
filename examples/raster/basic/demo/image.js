@@ -19,6 +19,3 @@ layer.source(
   }
 );
 scene.addLayer(layer);
-// scene.on('loaded', () => {
-//   scene.addLayer(layer);
-// });

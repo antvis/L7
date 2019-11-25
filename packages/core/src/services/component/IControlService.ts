@@ -1,4 +1,4 @@
-import { IMapService } from '../map/IMapService';
+import { Container } from 'inversify';
 export enum PositionType {
   'TOPRIGHT' = 'topright',
   'TOPLEFT' = 'topleft',
@@ -16,8 +16,8 @@ export interface IControlCorners {
 }
 export interface IControl {
   setPosition(pos: PositionType): void;
-  addTo(map: IMapService): void;
-  onAdd(map: IMapService): HTMLElement;
+  addTo(sceneContainer: Container): void;
+  onAdd(): HTMLElement;
   hide(): void;
   show(): void;
   remove(): void;
@@ -27,7 +27,7 @@ export interface IControlService {
   controlCorners: IControlCorners;
   controlContainer: HTMLElement;
   init(cfg: IControlServiceCfg): void;
-  addControl(ctr: IControl, map: IMapService): void;
+  addControl(ctr: IControl, sceneContainer: Container): void;
   removeControl(ctr: IControl): void;
   destroy(): void;
 }
