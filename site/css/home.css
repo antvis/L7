@@ -4,29 +4,7 @@
 .feature-logo {
   height: 100px !important;
 }
-.cover-image {
-  margin-top: 60px;
-  height: 300px;
-
-}
-@media only screen and (max-height: 599) and (max-width: 800px) {
-  .cover-image {
-    margin-top: 40px;
-    margin-left: 260px;
-    max-height: 400px;
-  }
-}
-@media only screen and (min-height: 599px) and (min-width:800px) {
-  .cover-image {
-    margin-top: 40px;
-    margin-left: 10px;
-    height: 600px;
-  }
-}
-@media only screen and (max-height: 599px) and (min-width:800px) {
-  .cover-image {
-    margin-top: 40px;
-    margin-left: 10px;
-    height: 600px;
-  }
+.teaser {
+  right: 0% !important;
+  margin-top: 90px !important;
 }
