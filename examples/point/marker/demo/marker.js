@@ -7,8 +7,8 @@ const scene = new Scene({
     style: 'light',
     center: [ 105.790327, 36.495636 ],
     pitch: 0,
-    zoom: 4,
-  }),
+    zoom: 4
+  })
 });
 scene.render();
 scene.on('loaded', () => {

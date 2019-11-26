@@ -9,7 +9,7 @@ const scene = new Scene({
     center: [ 121.400257, 31.25287 ],
     zoom: 14.55,
     rotation: 134.9507
-  }),
+  })
 });
 
 fetch(

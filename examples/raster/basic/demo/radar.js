@@ -7,8 +7,8 @@ const scene = new Scene({
     pitch: 0,
     style: 'dark',
     center: [ 115.5268, 34.3628 ],
-    zoom: 7,
-  }),
+    zoom: 7
+  })
 });
 
 const layer = new ImageLayer({});

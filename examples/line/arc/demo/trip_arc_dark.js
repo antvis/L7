@@ -8,8 +8,8 @@ const scene = new Scene({
     style: 'dark',
     center: [ 104.34278, 41.12554 ],
     zoom: 2.94888,
-    rotation: 42.3999,
-  }),
+    rotation: 42.3999
+  })
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')

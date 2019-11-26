@@ -42,7 +42,7 @@ const scene = new Scene({
     style: 'dark',
     center: [ 52.21496184144132, 24.121126851768906 ],
     zoom: 3.802
-  }),
+  })
 });
 scene.render();
 scene.on('loaded', () => {

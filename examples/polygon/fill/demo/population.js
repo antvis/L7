@@ -7,8 +7,8 @@ const scene = new Scene({
     pitch: 0,
     style: 'light',
     center: [ 3.438, 40.16797 ],
-    zoom: 0.51329,
-  }),
+    zoom: 0.51329
+  })
 });
 Promise.all([
   fetch(
