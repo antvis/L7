@@ -26,6 +26,7 @@ const TYPES = {
   IFactoryNormalPass: Symbol.for('Factory<IFactoryNormalPass>'),
   IMultiPassRenderer: Symbol.for('IMultiPassRenderer'),
   SceneID: Symbol.for('SceneID'),
+  MapConfig: Symbol.for('MapConfig'),
 };
 
 export { TYPES };
