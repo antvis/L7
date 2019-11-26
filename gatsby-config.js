@@ -48,6 +48,14 @@ module.exports = {
         order: 0
       },
       {
+        slug: 'api/l7stable',
+        title: {
+          zh: '1.x 稳定版',
+          en: '1.x Stable'
+        },
+        order: 1
+      },
+      {
         slug: 'tutorial',
         title: {
           zh: '快速入门',
@@ -69,7 +77,7 @@ module.exports = {
           zh: '场景 Scene',
           en: 'Scene'
         },
-        order: 1
+        order: 2
       },
       {
         slug: 'api/layer',
