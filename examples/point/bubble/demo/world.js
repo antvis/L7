@@ -8,8 +8,8 @@ const scene = new Scene({
     style: 'dark',
     center: [ 96.99215001469588, 29.281597225674773 ],
     zoom: 2.194613775109773,
-    maxZoom: 10,
-  }),
+    maxZoom: 10
+  })
 });
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'

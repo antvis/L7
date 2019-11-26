@@ -7,8 +7,8 @@ const scene = new Scene({
     style: 'light',
     center: [ -121.24357, 37.58264 ],
     pitch: 0,
-    zoom: 6.45,
-  }),
+    zoom: 6.45
+  })
 });
 
 fetch(

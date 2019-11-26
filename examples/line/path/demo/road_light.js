@@ -8,8 +8,8 @@ const scene = new Scene({
     pitch: 0,
     zoom: 10,
     rotation: 0,
-    style: 'light',
-  }),
+    style: 'light'
+  })
 });
 
 fetch(

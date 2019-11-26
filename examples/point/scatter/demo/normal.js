@@ -7,8 +7,8 @@ const scene = new Scene({
     style: 'dark',
     center: [ 121.417463, 31.215175 ],
     pitch: 0,
-    zoom: 11,
-  }),
+    zoom: 11
+  })
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
