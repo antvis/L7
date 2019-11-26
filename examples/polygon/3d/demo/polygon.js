@@ -1,14 +1,16 @@
 import { Scene, PolygonLayer } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'amap',
-  style: 'dark',
-  center: [ 114.050008, 22.529272 ],
-  zoom: 14.1
+  map: new AMap({
+    pitch: 0,
+    style: 'dark',
+    center: [ 114.050008, 22.529272 ],
+    zoom: 14.1
+  }),
 });
 
-window.mapScene = scene;
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/972566c5-a2b9-4a7e-8da1-bae9d0eb0117.json'
 )
