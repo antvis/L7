@@ -8,8 +8,8 @@ const scene = new Scene({
     center: [ 120.5969, 29.7918 ],
     pitch: 35,
     zoom: 7,
-    rotation: 4.183582,
-  }),
+    rotation: 4.183582
+  })
 });
 scene.addImage(
   '00',

@@ -9,7 +9,7 @@ const scene = new Scene({
     center: [ 104.026043, 31.847 ],
     rotation: -0.76,
     zoom: 4.48
-  }),
+  })
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
