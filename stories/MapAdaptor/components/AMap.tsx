@@ -1,8 +1,9 @@
 // @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class AMap extends React.Component {
+export default class AMapComponent extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -16,12 +17,13 @@ export default class AMap extends React.Component {
     );
     const data = await response.json();
     const scene = new Scene({
-      center: [110.19382669582967, 50.258134],
       id: 'map',
-      pitch: 0,
-      style: 'dark',
-      type: 'amap',
-      zoom: 3,
+      map: new AMap({
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        style: 'dark',
+        zoom: 3,
+      }),
     });
     const layer = new PolygonLayer({
       enablePicking: false,

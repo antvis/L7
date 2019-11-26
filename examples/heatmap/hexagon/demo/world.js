@@ -1,11 +1,14 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  style: 'light',
-  pitch: 0,
-  center: [ 104.995156, 31.450658 ],
-  type: 'amap',
-  zoom: 3.79
+  map: new AMap({
+    style: 'light',
+    pitch: 0,
+    center: [ 104.995156, 31.450658 ],
+    zoom: 3.79,
+  }),
 });
 
 fetch(

@@ -1,4 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class LineDemo extends React.Component {
@@ -14,12 +15,13 @@ export default class LineDemo extends React.Component {
       'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
     );
     const scene = new Scene({
-      center: [102.602992, 23.107329],
       id: 'map',
-      pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/dark-v9',
-      zoom: 13,
+      map: new Mapbox({
+        center: [102.602992, 23.107329],
+        pitch: 0,
+        style: 'mapbox://styles/mapbox/dark-v9',
+        zoom: 13,
+      }),
     });
     const lineLayer = new LineLayer({
       enableMultiPassRenderer: true,

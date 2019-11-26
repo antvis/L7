@@ -1,14 +1,15 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  style: 'dark',
-  pitch: 43,
-  center: [ 120.13383079335335, 29.651873105004427 ],
-  zoom: 7.068989519212174,
-  type: 'mapbox'
+  map: new Mapbox({
+    style: 'dark',
+    pitch: 43,
+    center: [ 120.13383079335335, 29.651873105004427 ],
+    zoom: 7.068989519212174,
+  }),
 });
-
-window.mapScene = scene;
 
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv'

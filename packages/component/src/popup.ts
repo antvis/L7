@@ -15,7 +15,7 @@ export interface IPopupOption {
 }
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
-  private mapservice: IMapService;
+  private mapservice: IMapService<unknown>;
   private lngLat: ILngLat;
   private content: HTMLElement;
   private closeButton: HTMLElement;

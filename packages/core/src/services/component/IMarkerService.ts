@@ -1,6 +1,6 @@
 import { ILngLat, IMapService } from '../map/IMapService';
 export interface IMarkerScene {
-  getMapService(): IMapService;
+  getMapService(): IMapService<unknown>;
   [key: string]: any;
 }
 export interface IMarker {

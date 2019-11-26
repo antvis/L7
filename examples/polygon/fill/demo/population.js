@@ -1,11 +1,14 @@
 import { Scene, PolygonLayer, LineLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'mapbox',
-  style: 'light',
-  center: [ 3.438, 40.16797 ],
-  zoom: 0.51329
+  map: new Mapbox({
+    pitch: 0,
+    style: 'light',
+    center: [ 3.438, 40.16797 ],
+    zoom: 0.51329,
+  }),
 });
 Promise.all([
   fetch(

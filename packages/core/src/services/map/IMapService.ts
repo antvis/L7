@@ -1,5 +1,4 @@
-/// <reference types="amap-js-api" />
-import { Map } from 'mapbox-gl';
+import { Container } from 'inversify';
 import { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
 export type Bounds = [[number, number], [number, number]];
@@ -11,9 +10,14 @@ export interface IPoint {
   x: number;
   y: number;
 }
-export interface IMapService {
-  map: AMap.Map | Map;
-  init(config: Partial<IMapConfig>): void;
+
+export interface IMapWrapper {
+  setContainer(container: Container, id: string): void;
+}
+
+export interface IMapService<RawMap = {}> {
+  map: RawMap;
+  init(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
@@ -31,7 +35,7 @@ export interface IMapService {
   getMinZoom(): number;
   getMaxZoom(): number;
   // get map params
-  getType(): MapType;
+  getType(): string;
   getZoom(): number;
   getCenter(): ILngLat;
   getPitch(): number;
@@ -56,19 +60,12 @@ export interface IMapService {
   lngLatToContainer(lnglat: Point): IPoint;
 }
 
-export enum MapType {
-  amap = 'amap',
-  mapbox = 'mapbox',
-}
-
 export const MapServiceEvent = ['mapload'];
 
 /**
  * 地图初始化配置项
  */
 export interface IMapConfig {
-  type: MapType | keyof typeof MapType;
-
   /**
    * 容器 DOM id
    */

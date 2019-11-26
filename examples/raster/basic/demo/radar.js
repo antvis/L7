@@ -1,11 +1,14 @@
 import { Scene, ImageLayer } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'amap',
-  style: 'dark',
-  center: [ 115.5268, 34.3628 ],
-  zoom: 7
+  map: new AMap({
+    pitch: 0,
+    style: 'dark',
+    center: [ 115.5268, 34.3628 ],
+    zoom: 7,
+  }),
 });
 
 const layer = new ImageLayer({});

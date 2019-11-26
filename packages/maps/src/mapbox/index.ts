@@ -11,7 +11,6 @@ import {
   IPoint,
   IViewport,
   MapServiceEvent,
-  MapType,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
@@ -33,8 +32,13 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * AMapService
  */
 @injectable()
-export default class MapboxService implements IMapService {
+export default class MapboxService
+  implements IMapService<Map & IMapboxInstance> {
   public map: Map & IMapboxInstance;
+
+  @inject(TYPES.MapConfig)
+  private readonly config: Partial<IMapConfig>;
+
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 
@@ -79,7 +83,7 @@ export default class MapboxService implements IMapService {
   // get mapStatus method
 
   public getType() {
-    return MapType.mapbox;
+    return 'mapbox';
   }
   public getZoom(): number {
     return this.map.getZoom();
@@ -168,15 +172,15 @@ export default class MapboxService implements IMapService {
     return this.map.project(lnglat);
   }
 
-  public async init(mapConfig: IMapConfig): Promise<void> {
+  public async init(): Promise<void> {
     const {
-      id,
+      id = 'map',
       attributionControl = false,
       style = 'light',
       token = 'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ',
       rotation = 0,
       ...rest
-    } = mapConfig;
+    } = this.config;
     this.$mapContainer = document.getElementById(id);
 
     this.viewport = new Viewport();
@@ -199,7 +203,6 @@ export default class MapboxService implements IMapService {
 
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
-    this.removeLogoControl();
   }
 
   public destroy() {
@@ -207,6 +210,7 @@ export default class MapboxService implements IMapService {
     if (this.map) {
       this.map.remove();
       this.$mapContainer = null;
+      this.removeLogoControl();
     }
   }
   public emit(name: string, ...args: any[]) {
@@ -223,10 +227,7 @@ export default class MapboxService implements IMapService {
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }
-  // 同步不同底图的配置项
-  private initMapConig(): void {
-    throw new Error('Method not implemented.');
-  }
+
   private handleCameraChanged = () => {
     // @see https://github.com/mapbox/mapbox-gl-js/issues/2572
     const { lat, lng } = this.map.getCenter().wrap();

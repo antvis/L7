@@ -1,11 +1,14 @@
 import { Scene, LineLayer } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'amap',
-  style: 'light',
-  center: [ 104.117492, 36.492696 ],
-  zoom: 3.89
+  map: new AMap({
+    pitch: 0,
+    style: 'light',
+    center: [ 104.117492, 36.492696 ],
+    zoom: 3.89
+  }),
 });
 
 fetch(

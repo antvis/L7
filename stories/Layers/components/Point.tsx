@@ -1,4 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
@@ -12,15 +13,15 @@ export default class Point3D extends React.Component {
 
   public componentDidMount() {
     const scene = new Scene({
-      center: [120.19382669582967, 30.258134],
       id: 'map',
-      pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 1,
+      map: new Mapbox({
+        center: [120.19382669582967, 30.258134],
+        pitch: 0,
+        style: 'mapbox://styles/mapbox/streets-v9',
+        zoom: 1,
+      }),
     });
     const pointLayer = new PointLayer({
-      enableMultiPassRenderer: true,
       enablePicking: true,
       enableHighlight: true,
       onHover: (pickedFeature: any) => {
