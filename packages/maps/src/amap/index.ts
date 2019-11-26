@@ -317,15 +317,13 @@ export default class AMapService
       });
 
       // set coordinate system
-      // if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
-      //   // TODO:偏移坐标系高德地图不支持 pitch bear 同步
-      //   this.coordinateSystemService.setCoordinateSystem(
-      //     CoordinateSystem.P20_OFFSET,
-      //   );
-      // } else {
-      //   this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
-      // }
-      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
+      if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+        this.coordinateSystemService.setCoordinateSystem(
+          CoordinateSystem.P20_OFFSET,
+        );
+      } else {
+        this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
+      }
       this.cameraChangedCallback(this.viewport);
     }
   };
