@@ -1,4 +1,5 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as React from 'react';
 
@@ -15,12 +16,13 @@ export default class HeatMapLayerDemo extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
     );
     const scene = new Scene({
-      center: [121.268, 30.3628],
       id: 'map',
-      pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/dark-v10',
-      zoom: 2,
+      map: new Mapbox({
+        center: [121.268, 30.3628],
+        pitch: 0,
+        style: 'mapbox://styles/mapbox/dark-v10',
+        zoom: 2,
+      }),
     });
     const layer = new HeatmapLayer({
       enableTAA: false,

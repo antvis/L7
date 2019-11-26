@@ -1,13 +1,16 @@
 import { Scene, PointLayer } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 35.210526315789465,
-  type: 'amap',
-  style: 'dark',
-  center: [ 104.288144, 31.239692 ],
-  zoom: 4.4
+  map: new AMap({
+    pitch: 35.210526315789465,
+    style: 'dark',
+    center: [ 104.288144, 31.239692 ],
+    zoom: 4.4,
+  }),
 });
-window.mapScene = scene;
+
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then(res => res.json())
   .then(data => {

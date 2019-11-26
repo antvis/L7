@@ -1,12 +1,15 @@
 import { Scene, LineLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 60,
-  type: 'mapbox',
-  style: 'dark',
-  center: [ 104.34278, 41.12554 ],
-  zoom: 2.94888,
-  rotation: 42.3999
+  map: new Mapbox({
+    pitch: 60,
+    style: 'dark',
+    center: [ 104.34278, 41.12554 ],
+    zoom: 2.94888,
+    rotation: 42.3999,
+  }),
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')

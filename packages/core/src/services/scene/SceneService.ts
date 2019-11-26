@@ -121,7 +121,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     /**
      * 初始化底图
      */
-    this.hooks.init.tapPromise('initMap', async (config: unknown) => {
+    this.hooks.init.tapPromise('initMap', async () => {
       // 等待首次相机同步
       await new Promise((resolve) => {
         this.map.onCameraChanged((viewport: IViewport) => {
@@ -129,7 +129,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.cameraService.update(viewport);
           resolve();
         });
-        this.map.init(config as Partial<IMapCamera>);
+        this.map.init();
       });
 
       // 重新绑定非首次相机更新事件

@@ -14,7 +14,7 @@ export default class Marker {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;
   private popup: IPopup; // TODO: POPup
-  private mapservice: IMapService;
+  private mapservice: IMapService<unknown>;
   private lngLat: ILngLat;
   private scene: IMarkerScene;
   constructor(option?: Partial<IMarkerOption>) {

@@ -1,11 +1,14 @@
 import { Scene, LineLayer } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 26.842105263157915,
-  type: 'amap',
-  style: 'dark',
-  center: [ 102.599436, 23.116371 ],
-  zoom: 14.78
+  map: new AMap({
+    pitch: 26.842105263157915,
+    style: 'dark',
+    center: [ 102.599436, 23.116371 ],
+    zoom: 14.78,
+  }),
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')

@@ -1,11 +1,14 @@
 import { Scene, Marker } from '@antv/l7';
+import { AMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  type: 'amap',
-  style: 'light',
-  center: [ 105.790327, 36.495636 ],
-  pitch: 0,
-  zoom: 4
+  map: new AMap({
+    style: 'light',
+    center: [ 105.790327, 36.495636 ],
+    pitch: 0,
+    zoom: 4,
+  }),
 });
 scene.render();
 scene.on('loaded', () => {

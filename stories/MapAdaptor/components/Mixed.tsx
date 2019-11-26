@@ -1,5 +1,6 @@
 // @ts-ignore
 import { PointLayer, PolygonLayer, Scene } from '@antv/l7';
+import { AMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
 import pointsData from '../../assets/data/points.json';
@@ -24,36 +25,40 @@ export default class Mixed extends React.Component {
     const data = await response.json();
 
     const scene1 = new Scene({
-      center: [110.19382669582967, 50.258134],
       id: 'map1',
-      pitch: 0,
-      style: 'light',
-      type: 'amap',
-      zoom: 3,
+      map: new AMap({
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        style: 'light',
+        zoom: 3,
+      }),
     });
     const scene2 = new Scene({
-      center: [110.19382669582967, 50.258134],
       id: 'map2',
-      pitch: 0,
-      style: 'dark',
-      type: 'amap',
-      zoom: 3,
+      map: new AMap({
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        style: 'dark',
+        zoom: 3,
+      }),
     });
     const scene3 = new Scene({
       id: 'map3',
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [110.19382669582967, 50.258134],
-      pitch: 0,
-      zoom: 2,
+      map: new Mapbox({
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        zoom: 2,
+      }),
     });
     const scene4 = new Scene({
       id: 'map4',
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/light-v10',
-      center: [110.19382669582967, 50.258134],
-      pitch: 0,
-      zoom: 2,
+      map: new Mapbox({
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        zoom: 2,
+      }),
     });
 
     this.scene1 = scene1;
