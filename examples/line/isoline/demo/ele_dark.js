@@ -7,8 +7,8 @@ const scene = new Scene({
     pitch: 26.842105263157915,
     style: 'dark',
     center: [ 102.599436, 23.116371 ],
-    zoom: 14.78,
-  }),
+    zoom: 14.78
+  })
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')

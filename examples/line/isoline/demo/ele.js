@@ -8,7 +8,7 @@ const scene = new Scene({
     style: 'light',
     center: [ 102.600579, 23.114887 ],
     zoom: 14.66
-  }),
+  })
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
