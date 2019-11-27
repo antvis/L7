@@ -35,7 +35,7 @@ order: 0
 ``` javascript
   const scene = new L7.Scene({
     id: 'map',
-    map: new L7.AMap({
+    map: new L7.GaodeMap({
       style: 'dark', // 样式URL
       center: [120.19382669582967, 30.258134],
       pitch: 0,
@@ -111,7 +111,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 
   const scene = new L7.Scene({
     id: 'map',
-    map: new L7.AMap({
+    map: new L7.GaodeMap({
       style: 'dark', // 样式URL
       center: [120.19382669582967, 30.258134],
       pitch: 0,
