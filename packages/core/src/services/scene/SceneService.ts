@@ -7,6 +7,7 @@ import { IFontService } from '../asset/IFontService';
 import { IIconService } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
+import { IMarkerService } from '../component/IMarkerService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { IInteractionService } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
@@ -58,6 +59,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
+
+  @inject(TYPES.IMarkerService)
+  private readonly markerService: IMarkerService;
 
   /**
    * 是否首次渲染
@@ -112,12 +116,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 字体资源
     this.fontService.init();
 
-    this.controlService.init({
-      container: document.getElementById(
-        this.configService.getSceneConfig(this.id).id || 'map',
-      ) as HTMLElement,
-    });
-
     /**
      * 初始化底图
      */
@@ -131,9 +129,12 @@ export default class Scene extends EventEmitter implements ISceneService {
         });
         this.map.init();
       });
-
+      // this.controlService.addControls();
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
+      this.map.addMarkerContainer();
+      // 初始化未加载的marker;
+      this.markerService.addMarkers();
       this.logger.debug('map loaded');
     });
 
@@ -155,7 +156,6 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       // 初始化 container 上的交互
       this.interactionService.init();
-
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });
     // TODO：init worker, fontAtlas...
@@ -185,7 +185,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       await this.initPromise;
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
-      this.map.addMarkerContainer();
+
       this.logger.info(' render inited');
       this.emit('loaded');
       this.inited = true;
@@ -194,6 +194,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 尝试初始化未初始化的图层
     this.layerService.initLayers();
     this.layerService.renderLayers();
+    // 组件需要等待layer 初始化完成之后添加
+    this.controlService.addControls();
     this.logger.debug(`scene ${this.id} render`);
 
     this.rendering = false;
@@ -205,6 +207,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.layerService.destroy();
     this.interactionService.destroy();
     this.controlService.destroy();
+    this.markerService.destroy();
     this.removeAllListeners();
     this.rendererService.destroy();
     this.map.destroy();

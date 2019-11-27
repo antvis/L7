@@ -1,9 +1,9 @@
 // @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class AMapComponent extends React.Component {
+export default class GaodeMapComponent extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -18,7 +18,7 @@ export default class AMapComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      map: new AMap({
+      map: new GaodeMap({
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         style: 'dark',

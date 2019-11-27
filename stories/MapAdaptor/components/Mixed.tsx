@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { AMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
 import pointsData from '../../assets/data/points.json';
@@ -26,7 +26,7 @@ export default class Mixed extends React.Component {
 
     const scene1 = new Scene({
       id: 'map1',
-      map: new AMap({
+      map: new GaodeMap({
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         style: 'light',
@@ -35,7 +35,7 @@ export default class Mixed extends React.Component {
     });
     const scene2 = new Scene({
       id: 'map2',
-      map: new AMap({
+      map: new GaodeMap({
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         style: 'dark',

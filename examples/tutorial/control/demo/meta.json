@@ -7,10 +7,12 @@
     {
       "filename": "amap.js",
       "title": "高德底图组件",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*yXzQRYcGTyoAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "mapbox.js",
-      "title": "MapBox底图组件"
+      "title": "MapBox底图组件",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*_SIYR50bbcoAAAAAAAAAAABkARQnAQ"
     }
   ]
 }

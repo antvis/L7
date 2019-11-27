@@ -1,6 +1,7 @@
-import { ILngLat, IMapService, IMarkerScene, IPopup } from '@antv/l7-core';
+import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
+import { Container } from 'inversify';
 import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 
 /** colse event */
@@ -15,7 +16,7 @@ export interface IPopupOption {
 }
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
-  private mapservice: IMapService<unknown>;
+  private mapsService: IMapService<unknown>;
   private lngLat: ILngLat;
   private content: HTMLElement;
   private closeButton: HTMLElement;
@@ -32,14 +33,13 @@ export default class Popup extends EventEmitter implements IPopup {
     bindAll(['update', 'onClickClose', 'remove'], this);
   }
 
-  public addTo(scene: IMarkerScene) {
-    const mapService = scene.getMapService();
-    this.mapservice = mapService;
-    this.mapservice.on('camerachange', this.update);
+  public addTo(scene: Container) {
+    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    this.mapsService.on('camerachange', this.update);
     this.update();
     if (this.popupOption.closeOnClick) {
       this.timeoutInstance = setTimeout(() => {
-        this.mapservice.on('click', this.onClickClose);
+        this.mapsService.on('click', this.onClickClose);
       }, 30);
     }
     return this;
@@ -62,9 +62,15 @@ export default class Popup extends EventEmitter implements IPopup {
   }
 
   public setLnglat(lngLat: ILngLat): this {
-    this.lngLat = lngLat;
-    if (this.mapservice) {
-      this.mapservice.on('camerachange', this.update);
+    this.lngLat = lngLat as ILngLat;
+    if (Array.isArray(lngLat)) {
+      this.lngLat = {
+        lng: lngLat[0],
+        lat: lngLat[1],
+      };
+    }
+    if (this.mapsService) {
+      this.mapsService.on('camerachange', this.update);
     }
     this.update();
     return this;
@@ -99,18 +105,18 @@ export default class Popup extends EventEmitter implements IPopup {
       this.removeDom(this.container);
       delete this.container;
     }
-    if (this.mapservice) {
+    if (this.mapsService) {
       // TODO: mapbox AMap 事件同步
-      this.mapservice.off('camerachange', this.update);
-      this.mapservice.off('click', this.onClickClose);
-      delete this.mapservice;
+      this.mapsService.off('camerachange', this.update);
+      this.mapsService.off('click', this.onClickClose);
+      delete this.mapsService;
     }
     clearTimeout(this.timeoutInstance);
     this.emit('close');
     return this;
   }
   public isOpen() {
-    return !!this.mapservice;
+    return !!this.mapsService;
   }
 
   private createContent() {
@@ -166,10 +172,10 @@ export default class Popup extends EventEmitter implements IPopup {
   private update() {
     const hasPosition = this.lngLat;
     const { className, maxWidth, anchor } = this.popupOption;
-    if (!this.mapservice || !hasPosition || !this.content) {
+    if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
-    const markerContainer = this.mapservice.getMarkerContainer();
+    const markerContainer = this.mapsService.getMarkerContainer();
     if (!this.container && markerContainer) {
       this.container = this.creatDom(
         'div',
@@ -198,12 +204,12 @@ export default class Popup extends EventEmitter implements IPopup {
   }
 
   private updatePosition() {
-    if (!this.mapservice) {
+    if (!this.mapsService) {
       return;
     }
     const { lng, lat } = this.lngLat;
     const { offsets } = this.popupOption;
-    const pos = this.mapservice.lngLatToContainer([lng, lat]);
+    const pos = this.mapsService.lngLatToContainer([lng, lat]);
     this.container.style.left = pos.x + offsets[0] + 'px';
     this.container.style.top = pos.y - offsets[1] + 'px';
   }

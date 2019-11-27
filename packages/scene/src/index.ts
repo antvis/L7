@@ -12,7 +12,10 @@ import {
   ILngLat,
   IMapService,
   IMarker,
+  IMarkerService,
   IPoint,
+  IPopup,
+  IPopupService,
   IPostProcessingPass,
   IRendererService,
   ISceneConfig,
@@ -22,6 +25,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { ReglRendererService } from '@antv/l7-renderer';
+import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import ILayerManager from './ILayerManager';
 import IMapController from './IMapController';
@@ -46,6 +50,8 @@ class Scene
   private controlService: IControlService;
   private layerService: ILayerService;
   private iconService: IIconService;
+  private markerService: IMarkerService;
+  private popupService: IPopupService;
 
   private container: Container;
 
@@ -75,6 +81,14 @@ class Scene
       TYPES.IControlService,
     );
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
+
+    this.markerService = sceneContainer.get<IMarkerService>(
+      TYPES.IMarkerService,
+    );
+
+    this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
+
+    this.initComponent(id);
 
     // 初始化 scene
     this.sceneService.init(config);
@@ -137,9 +151,12 @@ class Scene
 
   // marker
   public addMarker(marker: IMarker) {
-    marker.addTo(this);
+    this.markerService.addMarker(marker);
   }
 
+  public addPopup(popup: IPopup) {
+    this.popupService.addPopup(popup);
+  }
   public on(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1
       ? this.mapService.on(type, handle)
@@ -237,6 +254,16 @@ class Scene
       .whenTargetNamed(name);
   }
 
+  private initComponent(id: string | HTMLDivElement) {
+    this.controlService.init(
+      {
+        container: DOM.getContainer(id),
+      },
+      this.container,
+    );
+    this.markerService.init(this.container);
+    this.popupService.init(this.container);
+  }
   // 资源管理
 }
 
