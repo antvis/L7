@@ -1,10 +1,10 @@
 import { Scene, Marker } from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as G2 from '@antv/g2';
 
 const scene = new Scene({
   id: 'map',
-  map: new AMap({
+  map: new GaodeMap({
     style: 'light',
     center: [ 2.6125016864608597, 49.359131 ],
     pitch: 0,

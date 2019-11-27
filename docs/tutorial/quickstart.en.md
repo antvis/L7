@@ -47,7 +47,7 @@ yarn add  --save @antv/l7@beta
 然后就可以使用其中包含的场景和各类图层：
 ```typescript
 import { Scene, PolygonLayer } from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 (async function() {
   // 获取数据
@@ -59,7 +59,7 @@ import { AMap } from '@antv/l7-maps';
   // 创建场景
   const scene = new Scene({
     id: 'map',
-    map: new AMap({
+    map: new GaodeMap({
       center: [110.19382669582967, 50.258134],
       pitch: 0,
       style: 'dark',
@@ -93,7 +93,7 @@ import { AMap } from '@antv/l7-maps';
 
 
 L7 目前的文档都通过这种方式使用，可以参考项目中的 stories：
-* [高德地图](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/AMap.tsx)
+* [高德地图](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/GaodeMap.tsx)
 * [Mapbox](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/Mapbox.tsx)
 
 
@@ -102,10 +102,10 @@ L7 目前的文档都通过这种方式使用，可以参考项目中的 stories
 React 组件待开发，目前可以暂时以 Submodule 方式使用：
 ```tsx
 import { Scene, PolygonLayer} from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class AMap extends React.Component {
+export default class GaodeMap extends React.Component {
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -118,7 +118,7 @@ export default class AMap extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new AMap({
+      map: new GaodeMap({
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         style: 'dark',
