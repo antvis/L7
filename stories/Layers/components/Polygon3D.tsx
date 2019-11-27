@@ -1,5 +1,5 @@
 import { PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 function convertRGB2Hex(rgb: number[]) {
@@ -25,42 +25,36 @@ export default class Polygon3D extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+      'https://gw.alipayobjects.com/os/basement_prod/972566c5-a2b9-4a7e-8da1-bae9d0eb0117.json'
     );
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
-        center: [110.19382669582967, 50.258134],
+      map: new GaodeMap({
         pitch: 0,
-        zoom: 3,
-      }),
+        style: 'dark',
+        center: [ 114.050008, 22.529272 ],
+        zoom: 14.1
+      })
     });
-    this.scene = scene;
-    const layer = new PolygonLayer({
-      enableLighting: true,
-      enablePicking: true,
-      enableHighlight: true,
-      // enableTAA: true,
-    });
-    layer
+
+    const layer = new PolygonLayer({})
       .source(await response.json())
-      .size('name', [0, 10000, 50000, 30000, 100000])
-      .color('name', [
-        '#2E8AE6',
-        '#69D1AB',
-        '#DAF291',
-        '#FFD591',
-        '#FF7A45',
-        '#CF1D49',
-      ])
       .shape('extrude')
+      .size('h20', [100, 120, 160, 200, 260, 500])
+      .color('h20', [
+        '#816CAD',
+        '#A67FB5',
+        '#C997C7',
+        '#DEB8D4',
+        '#F5D4E6',
+        '#FAE4F1',
+        '#FFF3FC'
+      ])
       .style({
-        opacity: 1.0,
+        opacity: 1.0
       });
     scene.addLayer(layer);
-    scene.render();
-    this.scene = scene;
+
   }
 
   public render() {

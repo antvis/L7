@@ -33,14 +33,8 @@ export default class Layers extends Control {
     this.layers = [];
     this.lastZIndex = 0;
     this.handlingClick = false;
-    const { baseLayers = {}, overlayers = {} } = this.controlOption;
+    this.initLayers();
 
-    Object.keys(baseLayers).forEach((name: string, index: number) => {
-      this.addLayer(baseLayers[name], name, false);
-    });
-    Object.keys(overlayers).forEach((name: any, index: number) => {
-      this.addLayer(overlayers[name], name, true);
-    });
     bindAll(
       [
         'checkDisabledLayers',
@@ -131,6 +125,17 @@ export default class Layers extends Control {
     this.overlaysList = DOM.create('div', className + '-overlays', form);
     container.appendChild(form);
   }
+  private initLayers() {
+    const { baseLayers = {}, overlayers = {} } = this.controlOption;
+    Object.keys(baseLayers).forEach((name: string, index: number) => {
+      // baseLayers[name].once('inited', this.update);
+      this.addLayer(baseLayers[name], name, false);
+    });
+    Object.keys(overlayers).forEach((name: any, index: number) => {
+      // overlayers[name].once('inited', this.update);
+      this.addLayer(overlayers[name], name, true);
+    });
+  }
 
   private update() {
     if (!this.container) {
@@ -177,7 +182,7 @@ export default class Layers extends Control {
       input = inputs[i];
       layer = this.layerService.getLayer(input.layerId);
       if (layer) {
-        input.disabled = !layer.isVisible();
+        input.disabled = !layer.inited || !layer.isVisible();
       }
     }
   }
@@ -251,10 +256,9 @@ export default class Layers extends Control {
 
   private addItem(obj: any) {
     const label = document.createElement('label');
-    const checked =
-      this.layerService.getLayer(obj.layer.id) && obj.layer.isVisible();
+    const layer = this.layerService.getLayer(obj.layer.id);
+    const checked = layer && layer.inited && obj.layer.isVisible();
     let input: IInputItem;
-
     if (obj.overlay) {
       input = document.createElement('input') as IInputItem;
       input.type = 'checkbox';

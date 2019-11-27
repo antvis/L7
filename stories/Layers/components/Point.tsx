@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { AMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
@@ -18,7 +18,7 @@ export default class Point3D extends React.Component {
     const pointsData = await response.json();
     const scene = new Scene({
       id: 'map',
-      map: new AMap({
+      map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'light',
