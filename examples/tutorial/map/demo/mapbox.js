@@ -1,10 +1,11 @@
 import { Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'mapbox',
-  style: 'light',
-  center: [ -97.119140625, 38.75408327579141 ],
-  zoom: 2
+  map: new Mapbox({
+    style: 'light',
+    pitch: 0,
+    center: [ 107.054293, 35.246265 ],
+    zoom: 4.056
+  })
 });
-

@@ -1,9 +1,9 @@
 // @ts-ignore
 import { Scene } from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class MultiAMap extends React.Component {
+export default class MultiGaodeMap extends React.Component {
   private scene1: Scene;
   private scene2: Scene;
 
@@ -18,7 +18,7 @@ export default class MultiAMap extends React.Component {
     );
     const scene1 = new Scene({
       id: 'map1',
-      map: new AMap({
+      map: new GaodeMap({
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         style: 'light',
@@ -27,7 +27,7 @@ export default class MultiAMap extends React.Component {
     });
     const scene2 = new Scene({
       id: 'map2',
-      map: new AMap({
+      map: new GaodeMap({
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         style: 'dark',

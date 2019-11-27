@@ -1,5 +1,6 @@
-import { ILngLat, IMapService, IMarkerScene, IPopup } from '@antv/l7-core';
+import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
+import { Container } from 'inversify';
 import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 //  marker 支持 dragger 未完成
 
@@ -14,9 +15,9 @@ export default class Marker {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;
   private popup: IPopup; // TODO: POPup
-  private mapservice: IMapService<unknown>;
+  private mapsService: IMapService<unknown>;
   private lngLat: ILngLat;
-  private scene: IMarkerScene;
+  private scene: Container;
   constructor(option?: Partial<IMarkerOption>) {
     this.markerOption = {
       ...this.getDefault(),
@@ -36,29 +37,27 @@ export default class Marker {
     };
   }
 
-  public addTo(scene: IMarkerScene) {
-    this.scene = scene;
-    const mapService = scene.getMapService();
-    const { element, draggable } = this.markerOption;
+  public addTo(scene: Container) {
     this.remove();
-    this.mapservice = mapService;
-    mapService.getMarkerContainer().appendChild(element as HTMLElement);
-    mapService.on('camerachange', this.update);
+    this.scene = scene;
+    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    const { element, draggable } = this.markerOption;
+    this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
+    this.mapsService.on('camerachange', this.update);
     // this.setDraggable(draggable);
     this.update();
     return this;
   }
 
   public remove() {
-    if (this.mapservice) {
-      this.mapservice.off('click', this.onMapClick);
-      this.mapservice.off('move', this.update);
-      this.mapservice.off('moveend', this.update);
-      this.mapservice.off('mousedown', this.addDragHandler);
-      this.mapservice.off('touchstart', this.addDragHandler);
-      this.mapservice.off('mouseup', this.onUp);
-      this.mapservice.off('touchend', this.onUp);
-      delete this.mapservice;
+    if (this.mapsService) {
+      this.mapsService.off('click', this.onMapClick);
+      this.mapsService.off('move', this.update);
+      this.mapsService.off('moveend', this.update);
+      this.mapsService.off('mousedown', this.addDragHandler);
+      this.mapsService.off('touchstart', this.addDragHandler);
+      this.mapsService.off('mouseup', this.onUp);
+      this.mapsService.off('touchend', this.onUp);
     }
     const { element } = this.markerOption;
     if (element) {
@@ -70,8 +69,15 @@ export default class Marker {
     return this;
   }
 
-  public setLnglat(lngLat: ILngLat) {
-    this.lngLat = lngLat;
+  public setLnglat(lngLat: ILngLat | IPoint) {
+    this.lngLat = lngLat as ILngLat;
+    if (Array.isArray(lngLat)) {
+      this.lngLat = {
+        lng: lngLat[0],
+        lat: lngLat[1],
+      };
+    }
+
     if (this.popup) {
       this.popup.setLnglat(this.lngLat);
     }
@@ -84,6 +90,14 @@ export default class Marker {
 
   public getElement(): HTMLElement {
     return this.markerOption.element as HTMLElement;
+  }
+
+  public setPopup(popup: IPopup) {
+    this.popup = popup;
+    if (this.lngLat) {
+      this.popup.setLnglat(this.lngLat);
+    }
+    return this;
   }
 
   public togglePopup() {
@@ -115,7 +129,7 @@ export default class Marker {
   }
 
   private update() {
-    if (!this.mapservice) {
+    if (!this.mapsService) {
       return;
     }
     const { element, anchor } = this.markerOption;
@@ -131,12 +145,12 @@ export default class Marker {
   }
 
   private updatePosition() {
-    if (!this.mapservice) {
+    if (!this.mapsService) {
       return;
     }
     const { element } = this.markerOption;
     const { lng, lat } = this.lngLat;
-    const pos = this.mapservice.lngLatToContainer([lng, lat]);
+    const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
       element.style.left = pos.x + 'px';
       element.style.top = pos.y + 'px';

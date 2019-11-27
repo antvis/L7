@@ -1,5 +1,5 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class GridHeatMap extends React.Component {
@@ -17,7 +17,7 @@ export default class GridHeatMap extends React.Component {
     const data = await response.text();
     const scene = new Scene({
       id: 'map',
-      map: new AMap({
+      map: new GaodeMap({
         style: 'dark',
         pitch: 0,
         center: [110.097892, 33.853662],
