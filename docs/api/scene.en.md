@@ -10,10 +10,10 @@ order: 2
 ```javascript
 // Module 引用
 import { Scene } from '@antv/l7';
-import { AMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
-  map: new AMap({
+  map: new GaodeMap({
     style: 'dark',
     center: [ 110.770672, 34.159869 ],
     pitch: 45,
@@ -23,7 +23,7 @@ const scene = new Scene({
 // CDN 使用方法
 const scene = new L7.Scene({
   id: 'map',
-  map: new L7.AMap({
+  map: new L7.GaodeMap({
     style: 'dark',
     center: [ 110.770672, 34.159869 ],
     pitch: 45,
@@ -58,7 +58,7 @@ const map = scene.map
 ```javascript
 const scene =new L7.Scene({
   id: 'map',
-  map: new L7.AMap({
+  map: new L7.GaodeMap({
     style: 'dark',
     center: [ 110.770672, 34.159869 ],
     pitch: 45,
