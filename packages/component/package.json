@@ -33,7 +33,7 @@
     "inversify-logging": "^0.2.1",
     "load-styles": "^2.0.0"
   },
-  "gitHead": "5360c93be63ef4d8d580ca9fafd8fb05cb5fbe30",
+  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {
     "access": "public"
   }
