@@ -1,8 +1,8 @@
 import { Scene, Marker, Popup } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
-  map: new GaodeMap({
+  map: new Mapbox({
     style: 'light',
     pitch: 0,
     center: [ 121.4316962, 31.26082325 ],
