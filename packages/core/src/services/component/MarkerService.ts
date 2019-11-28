@@ -11,11 +11,11 @@ export default class MarkerService implements IMarkerService {
   private markers: IMarker[] = [];
   private unAddMarkers: IMarker[] = [];
   public addMarker(marker: IMarker): void {
-    if (!this.mapsService.map) {
-      this.unAddMarkers.push(marker);
-    } else {
+    if (!this.mapsService.map && this.mapsService.getMarkerContainer()) {
       this.markers.push(marker);
       marker.addTo(this.scene);
+    } else {
+      this.unAddMarkers.push(marker);
     }
   }
   public addMarkers(): void {

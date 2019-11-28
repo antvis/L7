@@ -36,7 +36,7 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/lodash": "^4.14.138"
   },
-  "gitHead": "b1c276cf31af546141b35a2b7e13e8d290f2f300",
+  "gitHead": "5360c93be63ef4d8d580ca9fafd8fb05cb5fbe30",
   "publishConfig": {
     "access": "public"
   }

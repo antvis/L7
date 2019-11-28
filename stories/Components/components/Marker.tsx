@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Marker, PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox, GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class MarkerComponent extends React.Component {
@@ -18,7 +18,7 @@ export default class MarkerComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 3,
@@ -43,14 +43,12 @@ export default class MarkerComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.on('loaded', () => {
-      new Marker()
-        .setLnglat({
-          lng: 120.19382669582967,
-          lat: 30.258134,
-        })
-        .addTo(scene);
+    const marker = new Marker().setLnglat({
+      lng: 120.19382669582967,
+      lat: 30.258134,
     });
+
+    scene.addMarker(marker);
   }
 
   public render() {
