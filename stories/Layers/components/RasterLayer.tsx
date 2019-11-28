@@ -1,4 +1,5 @@
 import { RasterLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as GeoTIFF from 'geotiff/dist/geotiff.bundle.js';
 import * as React from 'react';
@@ -12,12 +13,13 @@ export default class ImageLayerDemo extends React.Component {
 
   public async componentDidMount() {
     const scene = new Scene({
-      center: [121.268, 30.3628],
       id: 'map',
-      pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 2,
+      map: new Mapbox({
+        center: [121.268, 30.3628],
+        pitch: 0,
+        style: 'mapbox://styles/mapbox/streets-v9',
+        zoom: 2,
+      }),
     });
     const tiffdata = await this.getTiffData();
     const layer = new RasterLayer({});
@@ -51,7 +53,6 @@ export default class ImageLayerDemo extends React.Component {
         },
       });
     scene.addLayer(layer);
-    console.log(layer);
     scene.render();
     this.scene = scene;
   }

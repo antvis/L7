@@ -9,9 +9,7 @@
       ],
       "allowBranch": [
         "master",
-        "develop",
-        "next",
-        "dev-container"
+        "next"
       ],
       "message": "chore: publish"
     }

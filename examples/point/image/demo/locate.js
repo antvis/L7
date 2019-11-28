@@ -1,11 +1,14 @@
 import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'amap',
-  style: 'light',
-  center: [ 116.276227, 35.256776 ],
-  zoom: 6
+  map: new GaodeMap({
+    pitch: 0,
+    style: 'light',
+    center: [ 116.276227, 35.256776 ],
+    zoom: 6
+  })
 });
 
 fetch(

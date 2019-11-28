@@ -1,11 +1,14 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  style: 'dark',
-  pitch: 0,
-  center: [ 127.5671666579043, 7.445038892195569 ],
-  type: 'mapbox',
-  zoom: 2.632456779444394
+  map: new Mapbox({
+    style: 'dark',
+    pitch: 0,
+    center: [ 127.5671666579043, 7.445038892195569 ],
+    zoom: 2.632456779444394
+  })
 });
 
 fetch(

@@ -26,6 +26,7 @@
     "@antv/l7-component": "^2.0.0-beta.10",
     "@antv/l7-core": "^2.0.0-beta.10",
     "@antv/l7-layers": "^2.0.0-beta.10",
+    "@antv/l7-maps": "^2.0.0-beta.10",
     "@antv/l7-scene": "^2.0.0-beta.10"
   },
   "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
