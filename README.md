@@ -11,12 +11,12 @@ Powered by WebGL, the rendering technology of L7 supports fast and efficient ren
 L7 focuses on  geographic data expressiveness，interaction and design of geographic visualization layers. The basemaps on the platform are powered by third-party services 
 
 
-## l7 visualization demos
+## 🌄 l7 visualization demos
 
 ![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SGU-QIZsnyoAAAAAAAAAAABkARQnAQ)
 
 
-## ✨ Highlight features of L7 2.0
+## 🌟 Highlight features of L7 2.0
 
 
 🌏	Data-driven Visualization

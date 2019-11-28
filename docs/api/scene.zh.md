@@ -165,6 +165,31 @@ scene.getPitch();
 
 return {number} pitch
 
+### setMapStyle
+
+参数：`style`  {string}  地图样式 具体样式格式和各底图设置方法一致
+
+L7 内置了三种地图样式，AMAP 和MapBox都适用
+
+- light
+- dark
+- normal
+
+设置地图底图样式的方法
+
+```javascript
+// 快捷名称设置
+
+scene.setMapStyle('light');
+
+// mapbox 主题设置
+scene.setMapStyle('mapbox://styles/mapbox/streets-v11')
+
+// AMap 
+scene.setMapStyle('amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true')
+
+```
+
 ### setCenter()
 设置地图中心点坐标
 
@@ -181,7 +206,9 @@ scene.setCenter([lng,lat])
 scene.setZoomAndCenter(zoom,center)
 ```
 
-参数：zoom {number}<br />center {LngLat}
+参数：
+- zoom {number}
+- center {LngLat}
 
 
 ### setRotation
@@ -210,14 +237,20 @@ scene.ZoomOUt()
 scene.panTo(LngLat)
 ```
 
-参数：`center`  LngLat 中心位置坐标
+参数：
+
+- `center`  LngLat 中心位置坐标
 
 ### panBy
 以像素为单位沿X方向和Y方向移动地图
 ```javascript
 scene.panBy(x,y)
 ```
-参数：<br />`x` {number} 水平方向移动像素 向右为正方向<br />      `y`  {number} 垂直方向移动像素 向下为正方向
+参数：
+
+- `x` {number} 水平方向移动像素 向右为正方向
+
+- `y`  {number} 垂直方向移动像素 向下为正方向
 
 
 ### setPitch
@@ -226,11 +259,16 @@ scene.panBy(x,y)
 scene.setPitch(pitch)
 ```
 
-参数 :<br />   `pitch`  {number}
+参数 :
+-  `pitch`  {number}
 
 
 ### fitBounds
-地图缩放到某个范围内<br />参数 :<br />  `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
+地图缩放到某个范围内
+
+参数 :
+
+- `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
 
 ```javascript
 scene.fitBounds([112,32,114,35]);
@@ -245,7 +283,9 @@ scene.fitBounds([112,32,114,35]);
 scene.removeLayer(layer)
 ```
 
-参数 `layer`  {Layer}
+参数 
+
+- `layer`  {Layer}
 
 ### getLayers
  获取所有的layer
