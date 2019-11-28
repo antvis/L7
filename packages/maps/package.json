@@ -36,7 +36,7 @@
     "@types/mapbox-gl": "^0.54.3",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "gitHead": "5360c93be63ef4d8d580ca9fafd8fb05cb5fbe30",
   "publishConfig": {
     "access": "public"
   }
