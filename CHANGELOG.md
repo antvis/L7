@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.12](https://github.com/antvis/L7/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2019-11-28)
+
+
+### Bug Fixes
+
+* **component:** fix marker ([14d4818](https://github.com/antvis/L7/commit/14d48184a1579241b077110ed51a8358de25e010))
+
+
+
+
+
 # 2.0.0-beta.11 (2019-11-28)
 
 

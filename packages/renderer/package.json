@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.0.0-beta.11",
+  "version": "2.0.0-beta.12",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.11",
+    "@antv/l7-core": "^2.0.0-beta.12",
     "gl": "^4.4.0",
     "inversify": "^5.0.1",
     "inversify-logging": "^0.2.1",
