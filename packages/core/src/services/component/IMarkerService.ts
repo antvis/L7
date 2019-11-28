@@ -1,6 +1,6 @@
 import { Container, injectable } from 'inversify';
 import { ILngLat, IMapService, IPoint } from '../map/IMapService';
-import { IPopup } from './IPopUpService';
+import { IPopup } from './IPopupService';
 export interface IMarkerScene {
   getMapService(): IMapService<unknown>;
   [key: string]: any;
