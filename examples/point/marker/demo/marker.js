@@ -10,10 +10,9 @@ const scene = new Scene({
     zoom: 4
   })
 });
+addMarkers();
 scene.render();
-scene.on('loaded', () => {
-  addMarkers();
-});
+
 
 function addMarkers() {
   fetch(
@@ -28,11 +27,11 @@ function addMarkers() {
         el.textContent = nodes[i].v + '℃';
         el.style.background = getColor(nodes[i].v);
         el.style.borderColor = getColor(nodes[i].v);
-        new Marker({
+        const marker = new Marker({
           element: el
         })
-          .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y })
-          .addTo(scene);
+          .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
+        scene.addMarker(marker);
       }
     });
 }
