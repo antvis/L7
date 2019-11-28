@@ -42,7 +42,9 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9
   });
 
 
-const zoomControl = new Zoom();
+const zoomControl = new Zoom({
+  position: 'topright'
+});
 const scaleControl = new Scale({
   position: 'bottomright'
 });
