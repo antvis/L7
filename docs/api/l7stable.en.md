@@ -14,7 +14,7 @@ order: 1
 #### CDN 在线使用连接为
 
 ```html
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.4.2/build/L7-min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.4.4/build/L7-min.js"></script>
 ```
 
 ### npm 安装使用
