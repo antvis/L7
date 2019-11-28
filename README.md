@@ -102,27 +102,7 @@ scene.addLayer(pointLayer);
 
 ##  🔨 Development
 
-使用 Yarn Workspace 完成依赖安装以及各包之间的 link 工作：
-```bash
-yarn install
-```
-
-开发模式：
-```bash
-yarn watch
-```
-
-运行 Demo，基于 Storybook：
-```bash
-yarn storybook
-```
-
-## view doc example
-
-```bash
-yarn start
-```
-visit http://localhost:8000/
+We wrote a [contribution guide](./.github/CONTRIBUTING.md) to help you get started.
 
 
 ## ✅ License

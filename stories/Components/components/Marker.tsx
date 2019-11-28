@@ -44,12 +44,12 @@ export default class MarkerComponent extends React.Component {
       });
     scene.addLayer(layer);
     scene.on('loaded', () => {
-      new Marker()
-        .setLnglat({
-          lng: 120.19382669582967,
-          lat: 30.258134,
-        })
-        .addTo(scene);
+      // new Marker()
+      //   .setLnglat({
+      //     lng: 120.19382669582967,
+      //     lat: 30.258134,
+      //   })
+      //   .addTo(scene);
     });
   }
 

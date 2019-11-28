@@ -44,15 +44,15 @@ export default class PopupComponent extends React.Component {
       });
     scene.addLayer(layer);
     scene.on('loaded', () => {
-      new Popup({
-        offsets: [0, 20],
-      })
-        .setLnglat({
-          lng: 120.19382669582967,
-          lat: 30.258134,
-        })
-        .setText('hello')
-        .addTo(scene);
+      // new Popup({
+      //   offsets: [0, 20],
+      // })
+      //   .setLnglat({
+      //     lng: 120.19382669582967,
+      //     lat: 30.258134,
+      //   })
+      //   .setText('hello')
+      //   .addTo(scene);
     });
   }
 
