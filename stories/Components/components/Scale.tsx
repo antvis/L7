@@ -43,10 +43,9 @@ export default class ScaleComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.on('loaded', () => {
-      const scaleControl = new Scale();
-      scene.addControl(scaleControl);
-    });
+
+    const scaleControl = new Scale();
+    scene.addControl(scaleControl);
   }
 
   public render() {

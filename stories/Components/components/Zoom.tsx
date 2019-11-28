@@ -44,12 +44,10 @@ export default class ZoomComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.on('loaded', () => {
-      const zoomControl = new Zoom({
-        position: 'bottomright',
-      });
-      scene.addControl(zoomControl);
+    const zoomControl = new Zoom({
+      position: 'bottomright',
     });
+    scene.addControl(zoomControl);
   }
 
   public render() {
