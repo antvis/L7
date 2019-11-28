@@ -18,7 +18,7 @@ Include the L7 JS JavaScript  <head> of your HTML file.
 
 ```html
 <head>
-<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.5/dist/l7.js'>
+<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.13/dist/l7.js'>
 </script>
 </head>
 ```
@@ -44,7 +44,7 @@ npm install --save @antv/l7-maps;
 
 ### 初始化地图
 
-#### 使用 Mapbox 底图
+#### 使用 高德 底图
 
 ```javascript
 
