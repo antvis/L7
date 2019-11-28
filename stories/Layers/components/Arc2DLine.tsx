@@ -1,4 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Arc2DLineDemo extends React.Component {
@@ -14,12 +15,13 @@ export default class Arc2DLineDemo extends React.Component {
       'https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt',
     );
     const scene = new Scene({
-      center: [116.2825, 39.9],
       id: 'map',
-      pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/dark-v9',
-      zoom: 2,
+      map: new Mapbox({
+        center: [116.2825, 39.9],
+        pitch: 0,
+        style: 'mapbox://styles/mapbox/dark-v9',
+        zoom: 2,
+      }),
     });
     const lineLayer = new LineLayer({
       enablePicking: true,

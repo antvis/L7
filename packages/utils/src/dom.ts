@@ -1,24 +1,11 @@
 const docStyle = window.document.documentElement.style;
 type ELType = HTMLElement | SVGElement;
-export function createRendererContainer(domId: string): HTMLDivElement | null {
-  const $wrapper = document.getElementById(domId);
-
-  if ($wrapper) {
-    const $container = document.createElement('div');
-    $container.style.cssText += `
-      position: absolute;
-      top: 0;
-      z-index:2;
-      height: 100%;
-      width: 100%;
-      pointer-events: none;
-    `;
-    $container.id = 'l7_canvaslayer';
-    $wrapper.appendChild($container);
-    return $container;
+export function getContainer(domId: string | HTMLDivElement) {
+  let $dom = domId as HTMLDivElement;
+  if (typeof domId === 'string') {
+    $dom = document.getElementById(domId) as HTMLDivElement;
   }
-
-  return null;
+  return $dom;
 }
 
 export function trim(str: string) {
@@ -130,7 +117,7 @@ export function getClass(el: ELType) {
 }
 
 export function empty(el: ELType) {
-  while (el.firstChild) {
+  while (el && el.firstChild) {
     el.removeChild(el.firstChild);
   }
 }
