@@ -7,7 +7,29 @@ order: 2
 
 ## Scene
 
-L7 地理可视化 地图，图层，组件，以及可视化所需要的资源，如图片，字体通过Scene统一管理
+```javascript
+// Module 引用
+import { Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    style: 'dark',
+    center: [ 110.770672, 34.159869 ],
+    pitch: 45,
+  }),
+});
+
+// CDN 使用方法
+const scene = new L7.Scene({
+  id: 'map',
+  map: new L7.GaodeMap({
+    style: 'dark',
+    center: [ 110.770672, 34.159869 ],
+    pitch: 45,
+  }),
+});
+```
 
 
 ## Map
@@ -26,7 +48,7 @@ L7 地理可视化 地图，图层，组件，以及可视化所需要的资源�
 可以通过scene map 属性获取 map实例
 
 ```javascript
- const map = scene.map
+const map = scene.map
 
 ```
 为了统一不同底图之前的接口差异 L7 在scene层对map的方法做了统一，因此一些地图的操作方法可以通过scene调用这样，切换不同底图时保证表现一致。
@@ -34,23 +56,16 @@ L7 地理可视化 地图，图层，组件，以及可视化所需要的资源�
 示例代码
 
 ```javascript
-// Module 引用
-import { Scene } from '@antv/l7';
-const scene = new Scene({
+const scene =new L7.Scene({
   id: 'map',
-  mapStyle: 'dark',
-  center: [ 110.770672, 34.159869 ],
-  pitch: 45,
-});
-
-// CDN 使用方法
-const scene = new L7.Scene({
-  id: 'map',
-  mapStyle: 'dark',
-  center: [ 110.770672, 34.159869 ],
-  pitch: 45,
-});
+  map: new L7.GaodeMap({
+    style: 'dark',
+    center: [ 110.770672, 34.159869 ],
+    pitch: 45,
+  }),
+})
 ```
+
 
 ### 构造函数
 

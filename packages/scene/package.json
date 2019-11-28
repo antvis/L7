@@ -26,6 +26,7 @@
     "@antv/l7-core": "^2.0.0-beta.10",
     "@antv/l7-maps": "^2.0.0-beta.10",
     "@antv/l7-renderer": "^2.0.0-beta.10",
+    "@antv/l7-utils": "^2.0.0-beta.10",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "mapbox-gl": "^1.2.1",
