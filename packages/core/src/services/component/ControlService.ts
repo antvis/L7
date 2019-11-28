@@ -1,26 +1,36 @@
 import { DOM } from '@antv/l7-utils';
 import { Container, injectable } from 'inversify';
+import { TYPES } from '../../types';
+import { IMapService } from '../map/IMapService';
 import {
   IControl,
   IControlCorners,
   IControlService,
   IControlServiceCfg,
 } from './IControlService';
-
 @injectable()
 export default class ControlService implements IControlService {
   public container: HTMLElement;
   public controlCorners: IControlCorners;
   public controlContainer: HTMLElement;
+  public scene: Container;
+  public mapsService: IMapService;
   private controls: IControl[] = [];
-  public init(cfg: IControlServiceCfg) {
+  private unAddControls: IControl[] = [];
+  public init(cfg: IControlServiceCfg, sceneContainer: Container) {
     this.container = cfg.container;
+    this.scene = sceneContainer;
+    this.mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
     this.initControlPos();
   }
-
   public addControl(ctr: IControl, sceneContainer: Container): void {
-    ctr.addTo(sceneContainer); // scene对象
-    this.controls.push(ctr);
+    const mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
+    if (mapsService.map) {
+      ctr.addTo(this.scene); // scene对象
+      this.controls.push(ctr);
+    } else {
+      this.unAddControls.push(ctr);
+    }
   }
   public removeControl(ctr: IControl): this {
     const index = this.controls.indexOf(ctr);
@@ -29,6 +39,14 @@ export default class ControlService implements IControlService {
     }
     ctr.remove();
     return this;
+  }
+
+  public addControls() {
+    this.unAddControls.forEach((ctr: IControl) => {
+      ctr.addTo(this.scene); // scene对象
+      this.controls.push(ctr);
+    });
+    this.unAddControls = [];
   }
 
   public destroy(): void {

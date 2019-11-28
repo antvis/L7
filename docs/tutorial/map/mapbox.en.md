@@ -42,13 +42,13 @@ order: 0
 ``` javascript
   const scene = new L7.Scene({
     id: 'map',
-    style: 'dark', // 样式URL
-    center: [120.19382669582967, 30.258134],
-    pitch: 0,
-    zoom: 12,
-    type:'mapbox',
-    token: 'mapbox token'
-
+    map: new L7.Mapbox({
+      style: 'dark', // 样式URL
+      center: [120.19382669582967, 30.258134],
+      pitch: 0,
+      zoom: 12,
+      token: 'mapbox token',
+    }),
   });
 
 ```
@@ -118,12 +118,13 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 <script>
   const scene = new L7.Scene({
     id: 'map',
-    style: 'dark', // 样式URL
-    center: [120.19382669582967, 30.258134],
-    pitch: 0,
-    zoom: 12,
-    type:'amap',
-
+    map: new L7.Mapbox({
+      style: 'dark', // 样式URL
+      center: [120.19382669582967, 30.258134],
+      pitch: 0,
+      zoom: 12,
+      token: 'mapbox token',
+    }),
   });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')

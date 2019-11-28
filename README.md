@@ -16,7 +16,7 @@ L7 focuses on  geographic data expressiveness，interaction and design of geogra
 ![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SGU-QIZsnyoAAAAAAAAAAABkARQnAQ)
 
 
-## Highlight features of L7 2.0
+## ✨ Highlight features of L7 2.0
 
 
 🌏	Data-driven Visualization
@@ -46,7 +46,9 @@ For global users, Mapbox is easy to be embedded by a simple line of code.
 
 
 
-### Installation
+.
+
+ ###  📦 Installation
 
 ```
 npm install @antv/l7@beta
@@ -98,7 +100,7 @@ scene.addLayer(pointLayer);
 [Examples](https://l7.antv.vision/en/examples/gallery/basic)
 
 
-## Development
+##  🔨 Development
 
 使用 Yarn Workspace 完成依赖安装以及各包之间的 link 工作：
 ```bash
@@ -123,6 +125,6 @@ yarn start
 visit http://localhost:8000/
 
 
-## License
+## ✅ License
 
 [MIT license](./LICENSE).

@@ -46,6 +46,8 @@ export default class Viewport implements IViewport {
     );
     mat4.lookAt(this.viewMatrix, eye, vec3.fromValues(0, 0, 0), up);
 
+    this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);
+
     // 移动相机位置
     mat4.translate(
       this.viewMatrix,

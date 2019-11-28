@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import AMap from './components/AMap';
+import GaodeMap from './components/AMap';
 import Mapbox from './components/Mapbox';
 import Mixed from './components/Mixed';
 import MultiAMap from './components/MultiAMap';
@@ -9,7 +9,7 @@ import MultiMapbox from './components/MultiMapbox';
 import notes from './Map.md';
 // @ts-ignore
 storiesOf('地图底图', module)
-  .add('高德地图', () => <AMap />, {
+  .add('高德地图', () => <GaodeMap />, {
     notes: { markdown: notes },
   })
   .add('Mapbox', () => <Mapbox />, {

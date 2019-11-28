@@ -1,5 +1,6 @@
 // @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -25,11 +26,12 @@ export default class Sepia extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [110.19382669582967, 50.258134],
-      pitch: 0,
-      zoom: 3,
+      map: new Mapbox({
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        zoom: 3,
+      }),
     });
     const layer = new PolygonLayer({
       enablePicking: true,

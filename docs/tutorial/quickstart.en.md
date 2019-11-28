@@ -47,6 +47,7 @@ yarn add  --save @antv/l7@beta
 然后就可以使用其中包含的场景和各类图层：
 ```typescript
 import { Scene, PolygonLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 
 (async function() {
   // 获取数据
@@ -57,13 +58,14 @@ import { Scene, PolygonLayer } from '@antv/l7';
 
   // 创建场景
   const scene = new Scene({
-    center: [110.19382669582967, 50.258134],
     id: 'map',
-    pitch: 0,
-    style: 'dark',
-    type: 'amap',
-    zoom: 3,
-    token: 'pg.xxx', // 高德或者 Mapbox 的 token
+    map: new GaodeMap({
+      center: [110.19382669582967, 50.258134],
+      pitch: 0,
+      style: 'dark',
+      zoom: 3,
+      token: 'pg.xxx', // 高德或者 Mapbox 的 token
+    }),
   });
 
   // 创建图层
@@ -86,15 +88,12 @@ import { Scene, PolygonLayer } from '@antv/l7';
 
   // 添加图层到场景中
   scene.addLayer(layer);
-
-  // 渲染场景
-  scene.render();
 })();
 ```
 
 
 L7 目前的文档都通过这种方式使用，可以参考项目中的 stories：
-* [高德地图](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/AMap.tsx)
+* [高德地图](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/GaodeMap.tsx)
 * [Mapbox](https://github.com/antvis/L7/blob/next/stories/MapAdaptor/components/Mapbox.tsx)
 
 
@@ -103,9 +102,10 @@ L7 目前的文档都通过这种方式使用，可以参考项目中的 stories
 React 组件待开发，目前可以暂时以 Submodule 方式使用：
 ```tsx
 import { Scene, PolygonLayer} from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class AMap extends React.Component {
+export default class GaodeMap extends React.Component {
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -117,13 +117,14 @@ export default class AMap extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     );
     const scene = new Scene({
-      center: [110.19382669582967, 50.258134],
       id: 'map',
-      pitch: 0,
-      style: 'dark',
-      type: 'amap',
-      zoom: 3,
-      token: 'pg.xxx', // 高德或者 Mapbox 的 token
+      map: new GaodeMap({
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        style: 'dark',
+        zoom: 3,
+        token: 'pg.xxx', // 高德或者 Mapbox 的 token
+      }),
     });
     const layer = new PolygonLayer({});
 
@@ -143,7 +144,6 @@ export default class AMap extends React.Component {
         opacity: 0.8,
       });
     scene.addLayer(layer);
-    scene.render();
     this.scene = scene;
   }
 

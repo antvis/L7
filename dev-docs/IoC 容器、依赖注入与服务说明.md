@@ -171,6 +171,7 @@ protected getConfigSchema() {
 通过 `mapService` 引用。
 
 常用地图状态获取方法如下：
+
 | 方法名 | 参数 | 返回值 | 说明 |
 | -------- | ------------- | --------- | --------- |
 | getSize  | 无 | `[number, number]` | 获取地图尺寸（像素单位） |
@@ -194,7 +195,6 @@ protected getConfigSchema() {
 目前 L7 使用 [regl](https://github.com/regl-project/regl)，但开发者不需要关心底层 WebGL 渲染引擎实现，即使后续更换了其他引擎，我们也将保持服务接口的稳定。
 
 通过 `rendererService` 引用。
-
 
 
 ### 图层管理服务

@@ -35,13 +35,13 @@ order: 0
 ``` javascript
   const scene = new L7.Scene({
     id: 'map',
-    style: 'dark', // 样式URL
-    center: [120.19382669582967, 30.258134],
-    pitch: 0,
-    zoom: 12,
-    type:'amap',
-    token: '高德地图token'
-
+    map: new L7.GaodeMap({
+      style: 'dark', // 样式URL
+      center: [120.19382669582967, 30.258134],
+      pitch: 0,
+      zoom: 12,
+      token: '高德地图token',
+    }),
   });
 
 ```
@@ -111,12 +111,13 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 
   const scene = new L7.Scene({
     id: 'map',
-    style: 'dark', // 样式URL
-    center: [120.19382669582967, 30.258134],
-    pitch: 0,
-    zoom: 12,
-    type:'amap',
-
+    map: new L7.GaodeMap({
+      style: 'dark', // 样式URL
+      center: [120.19382669582967, 30.258134],
+      pitch: 0,
+      zoom: 12,
+      token: '高德地图token',
+    }),
   });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
