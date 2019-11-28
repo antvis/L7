@@ -29,7 +29,7 @@
     "@antv/l7-maps": "^2.0.0-beta.11",
     "@antv/l7-scene": "^2.0.0-beta.11"
   },
-  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "gitHead": "5360c93be63ef4d8d580ca9fafd8fb05cb5fbe30",
   "publishConfig": {
     "access": "public"
   }
