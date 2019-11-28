@@ -2,7 +2,6 @@
 title: Control
 order: 3
 ---
-# control
 
 地图组件 用于控制地图的状态如果平移，缩放，或者展示地图一些的辅助信息如图例，比例尺
 
@@ -19,7 +18,7 @@ L7 目前支持Control
 
 #### option
  
-position: `string` 控件位置支持是个方位 
+ position: `string` 控件位置支持是个方位 
 
 - bottomright
 - topright
@@ -28,7 +27,7 @@ position: `string` 控件位置支持是个方位
 
 
 
-组件介绍
+### 组件介绍
 
 ```
 import { Scale Layers, Zoom } from '@antv/l7';
@@ -39,6 +38,7 @@ import { Scale Layers, Zoom } from '@antv/l7';
 
 
 #### Zoom
+
 放大缩小组件 默认 左上角
 
 ```javascript
@@ -64,7 +64,7 @@ import { Scale Layers, Zoom } from '@antv/l7';
 ```
 
 
-#### layer
+#### Layers
 图层列表目前支持可视化的图层控制
 
 ```javascript
