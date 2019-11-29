@@ -7,7 +7,7 @@ redirect_from:
 
 ## L7 
 
-Current version: 2.0.0-beta.10
+Current version:  ![L7 2.0版本号](https://badgen.net/npm/v/@antv/l7/beta)
 
 # 使用方法
 
@@ -18,7 +18,7 @@ Include the L7 JS JavaScript  <head> of your HTML file.
 
 ```html
 <head>
-<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.14/dist/l7.js'>
+<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.15/dist/l7.js'>
 </script>
 </head>
 ```
