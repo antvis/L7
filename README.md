@@ -18,43 +18,33 @@ L7 focuses on  geographic data expressiveness，interaction and design of geogra
 
 ## 🌟 Highlight features of L7 2.0
 
-
-🌏	Data-driven Visualization
+- 🌏 Data-driven Visualization
  
-Layer visualization API design base Semiology of Graphics.
+  Layer visualization API design base Semiology of Graphics.
 
-it supports rich map visualization types for a better insight on data.
+  It supports rich map visualization types for a better insight on data.
 
-
-🌏High performance rendering with 2D/3D effect
+- 🌏 High performance rendering with 2D/3D effect
 	
   Real-time and dynamic rendering with millions of spatial data.
 
+- 🌏 Simple and flexible data format
 
-🌏	Simple and flexible data format:
+  L7 supports a wide variety of data formats including CSV, JSON, geojson, among others, eliminating the need to run conversions ahead of time.
 
- L7 supports a wide variety of data formats including CSV, JSON, geojson, among others, eliminating the need to run conversions ahead of time.
+- 🌏 Multi-basemap
 
-
-🌏Multi-basemap: 
-
-For global users, Mapbox is easy to be embedded by a simple line of code.
-
-
+  For global users, Mapbox is easy to be embedded by a simple line of code.
 
 ## Getting Started
 
-
-
-.
-
- ###  📦 Installation
+### 📦 Installation
 
 ```
 npm install @antv/l7@beta
 ```
 
-### init Map by L7  scene
+### Init Map by L7 scene
 
 ```javascript
 import { Scene } from '@antv/l7';
@@ -70,7 +60,7 @@ new Scene({
 })
 
 ```
-### add Layer 
+### Add Layer
 
 ``` javascript
 
@@ -89,21 +79,16 @@ scene.addLayer(pointLayer);
 
 ```
 
-## Documentation
+## :memo: Documentation
 
-[Getting started with L7](https://l7.antv.vision/en/docs/api/l7)
+- [Getting started with L7](https://l7.antv.vision/en/docs/api/l7)
+- [Tutorials](https://l7.antv.vision/en/docs/tutorial/quickstart)
+- [API documentation](https://l7.antv.vision/en/docs/api/l7)
+- [Examples](https://l7.antv.vision/en/examples/gallery/basic)
 
-[Tutorials](https://l7.antv.vision/en/docs/tutorial/quickstart)
-
-[API documentation](https://l7.antv.vision/en/docs/api/l7)
-
-[Examples](https://l7.antv.vision/en/examples/gallery/basic)
-
-
-##  🔨 Development
+## 🔨 Development
 
 We wrote a [contribution guide](./.github/CONTRIBUTING.md) to help you get started.
-
 
 ## ✅ License
 

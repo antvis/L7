@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.16](https://github.com/antvis/L7/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2019-11-29)
+
+**Note:** Version bump only for package L7
+
+
+
+
+
+# [2.0.0-beta.15](https://github.com/antvis/L7/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2019-11-29)
+
+
+### Bug Fixes
+
+* **control:** lint error ([c863d7c](https://github.com/antvis/L7/commit/c863d7c8d15e560e3dfaf39d0ea3fac3242d776a))
+* **map:** temporarily closed  amap offset coordinate ([9a20f64](https://github.com/antvis/L7/commit/9a20f6480321c9297ff27fe4cfe6af9032fcb969))
+
+
+
+
+
+# [2.0.0-beta.14](https://github.com/antvis/L7/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2019-11-28)
+
+**Note:** Version bump only for package L7
+
+
+
+
+
+# [2.0.0-beta.13](https://github.com/antvis/L7/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2019-11-28)
+
+**Note:** Version bump only for package L7
+
+
+
+
+
+# [2.0.0-beta.12](https://github.com/antvis/L7/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2019-11-28)
+
+
+### Bug Fixes
+
+* **component:** fix marker ([14d4818](https://github.com/antvis/L7/commit/14d48184a1579241b077110ed51a8358de25e010))
+
+
+
+
+
 # 2.0.0-beta.11 (2019-11-28)
 
 

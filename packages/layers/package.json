@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.0.0-beta.11",
+  "version": "2.0.0-beta.16",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,9 +22,9 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.11",
-    "@antv/l7-source": "^2.0.0-beta.11",
-    "@antv/l7-utils": "^2.0.0-beta.11",
+    "@antv/l7-core": "^2.0.0-beta.16",
+    "@antv/l7-source": "^2.0.0-beta.16",
+    "@antv/l7-utils": "^2.0.0-beta.16",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
     "@types/d3-color": "^1.2.2",
@@ -49,7 +49,7 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/lodash": "^4.14.138"
   },
-  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {
     "access": "public"
   }
