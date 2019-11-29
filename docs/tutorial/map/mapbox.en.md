@@ -24,7 +24,7 @@ order: 0
 
 
 ```html
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.9/dist/l7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.16/dist/l7.js"></script>
 ```
 
 
@@ -42,13 +42,13 @@ order: 0
 ``` javascript
   const scene = new L7.Scene({
     id: 'map',
-    style: 'dark', // 样式URL
-    center: [120.19382669582967, 30.258134],
-    pitch: 0,
-    zoom: 12,
-    type:'mapbox',
-    token: 'mapbox token'
-
+    map: new L7.Mapbox({
+      style: 'dark', // 样式URL
+      center: [120.19382669582967, 30.258134],
+      pitch: 0,
+      zoom: 12,
+      token: 'mapbox token',
+    }),
   });
 
 ```
@@ -114,16 +114,17 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 </head>
 <body>
 <div id="map"></div>
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.9/dist/l7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.16/dist/l7.js"></script>
 <script>
   const scene = new L7.Scene({
     id: 'map',
-    style: 'dark', // 样式URL
-    center: [120.19382669582967, 30.258134],
-    pitch: 0,
-    zoom: 12,
-    type:'amap',
-
+    map: new L7.Mapbox({
+      style: 'dark', // 样式URL
+      center: [120.19382669582967, 30.258134],
+      pitch: 0,
+      zoom: 12,
+      token: 'mapbox token',
+    }),
   });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')

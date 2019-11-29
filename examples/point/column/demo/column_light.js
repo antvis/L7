@@ -1,14 +1,17 @@
 import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 48.62562,
-  type: 'amap',
-  style: 'light',
-  center: [ 104.026043, 31.847 ],
-  rotation: -0.76,
-  zoom: 4.48
+  map: new GaodeMap({
+    pitch: 48.62562,
+    style: 'light',
+    center: [ 104.026043, 31.847 ],
+    rotation: -0.76,
+    zoom: 4.48
+  })
 });
-window.mapScene = scene;
+
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then(res => res.json())
   .then(data => {

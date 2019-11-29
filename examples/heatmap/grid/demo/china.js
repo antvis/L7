@@ -1,13 +1,16 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  style: 'light',
-  pitch: 0,
-  center: [ 107.054293, 35.246265 ],
-  zoom: 4.056,
-  type: 'amap'
+  map: new GaodeMap({
+    style: 'light',
+    pitch: 0,
+    center: [ 107.054293, 35.246265 ],
+    zoom: 4.056
+  })
 });
-window.mapScene = scene;
+
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv'
 )

@@ -1,12 +1,15 @@
 import { Scene, PointLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  pitch: 0,
-  type: 'mapbox',
-  style: 'dark',
-  center: [ 96.99215001469588, 29.281597225674773 ],
-  zoom: 2.194613775109773,
-  maxZoom: 10
+  map: new Mapbox({
+    pitch: 0,
+    style: 'dark',
+    center: [ 96.99215001469588, 29.281597225674773 ],
+    zoom: 2.194613775109773,
+    maxZoom: 10
+  })
 });
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'
