@@ -1,4 +1,15 @@
 language: node_js
+os: linux
+sudo: required
+dist: trusty
+addons:
+  apt:
+    packages:
+    - mesa-utils
+    - xvfb
+    - libgl1-mesa-dri
+    - libglapi-mesa
+    - libosmesa6
 
 node_js:
   - '12'
@@ -12,6 +23,9 @@ before_install:
 
 install:
   - yarn install
+
+before_script:
+  - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
 
 script:
   - yarn lint

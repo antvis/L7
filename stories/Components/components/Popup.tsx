@@ -52,7 +52,6 @@ export default class PopupComponent extends React.Component {
       })
       .setText('hello');
     scene.addPopup(popup);
-
   }
 
   public render() {
