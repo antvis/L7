@@ -6,11 +6,12 @@
   },
   "devDependencies": {
     "@antv/g2": "^3.5.9",
-    "@antv/gatsby-theme-antv": "0.10.1",
+    "@antv/gatsby-theme-antv": "^0.10.4",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
@@ -50,6 +51,7 @@
     "commitizen": "^4.0.3",
     "copy-webpack-plugin": "^4.5.2",
     "coveralls": "^3.0.7",
+    "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
     "cz-conventional-changelog": "^3.0.2",
     "dat.gui": "^0.7.2",
@@ -114,11 +116,11 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "npm run site:develop",
-    "site:develop": "BABEL_ENV=site gatsby develop --open -H 0.0.0.0",
-    "site:build": "npm run site:clean && BABEL_ENV=site gatsby build --prefix-paths",
+    "start": "yarn run site:clean && yarn run site:develop",
+    "site:develop": "cross-env BABEL_ENV=site gatsby develop --open -H 0.0.0.0",
+    "site:build": "yarn run site:clean && cross-env BABEL_ENV=site gatsby build --prefix-paths",
     "site:clean": "gatsby clean",
-    "site:deploy": "npm run site:build && gh-pages -d public",
+    "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
     "lint-fix:examples": "prettier --write examples/**/**/*.js",
     "lint:site": "eslint examples/**/**/*.js --fix",
@@ -133,17 +135,17 @@
     "lint:ts": "run-p -c lint:ts-*",
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
-    "version": "lerna version --conventional-commits",
+    "version": "lerna version --force-publish --conventional-commits",
     "version:prerelease": "lerna version --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
-    "release": "lerna publish from-package --registry https://registry.npmjs.com/",
+    "release": "lerna publish from-package --registry https://registry.npmjs.com/ --force-publish",
     "storybook": "start-storybook -p 6006",
-    "test": "BABEL_ENV=test jest",
+    "test": "cross-env BABEL_ENV=test jest",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "tsc": "tsc",
-    "watch": "yarn clean && lerna exec --parallel 'BABEL_ENV=cjs babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments'",
-    "bundle": "BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js",
-    "bundle:watch": "BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js --watch",
+    "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "bundle": "cross-env BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js",
+    "bundle:watch": "cross-env BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js --watch",
     "glsl-minify": "node_modules/.bin/glsl-minifier -i ./build/example.frag -o ./build/example.min.frag",
     "clean": "lerna run clean"
   },
@@ -153,7 +155,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
+      "pre-commit": "yarn run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
@@ -164,5 +166,6 @@
   },
   "tnpm": {
     "mode": "yarn"
-  }
+  },
+  "version": "0.0.0"
 }

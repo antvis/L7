@@ -11,7 +11,6 @@ import {
   IPoint,
   IViewport,
   MapServiceEvent,
-  MapType,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
@@ -35,22 +34,28 @@ let amapLoaded = false;
  * 高德地图脚本加载成功等待队列，成功之后依次触发
  */
 let pendingResolveQueue: Array<() => void> = [];
-const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
+const LNGLAT_OFFSET_ZOOM_THRESHOLD = 20; // 暂时关闭 fix 统一不同坐标系，不同底图的高度位置
 
 /**
  * AMapService
  */
 @injectable()
-export default class AMapService implements IMapService {
+export default class AMapService
+  implements IMapService<AMap.Map & IAMapInstance> {
   /**
    * 原始地图实例
    */
   public map: AMap.Map & IAMapInstance;
 
+  @inject(TYPES.MapConfig)
+  private readonly config: Partial<IMapConfig>;
+
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
+
   @inject(TYPES.IEventEmitter)
   private eventEmitter: any;
+
   private markerContainer: HTMLElement;
   private $mapContainer: HTMLElement | null;
 
@@ -97,7 +102,7 @@ export default class AMapService implements IMapService {
   }
 
   public getType() {
-    return MapType.amap;
+    return 'amap';
   }
   public getZoom(): number {
     // 统一返回 Mapbox 缩放等级
@@ -197,7 +202,7 @@ export default class AMapService implements IMapService {
     };
   }
 
-  public async init(mapConfig: IMapConfig): Promise<void> {
+  public async init(): Promise<void> {
     const {
       id,
       style = 'light',
@@ -205,7 +210,7 @@ export default class AMapService implements IMapService {
       maxZoom = 18,
       token = AMAP_API_KEY,
       ...rest
-    } = mapConfig;
+    } = this.config;
     // 高德地图创建独立的container；
 
     // @ts-ignore
@@ -313,15 +318,13 @@ export default class AMapService implements IMapService {
       });
 
       // set coordinate system
-      // if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
-      //   // TODO:偏移坐标系高德地图不支持 pitch bear 同步
-      //   this.coordinateSystemService.setCoordinateSystem(
-      //     CoordinateSystem.P20_OFFSET,
-      //   );
-      // } else {
-      //   this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
-      // }
-      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
+      if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+        this.coordinateSystemService.setCoordinateSystem(
+          CoordinateSystem.P20_OFFSET,
+        );
+      } else {
+        this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
+      }
       this.cameraChangedCallback(this.viewport);
     }
   };

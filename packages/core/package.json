@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.0.0-beta.10",
+  "version": "2.0.0-beta.16",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-utils": "^2.0.0-beta.10",
+    "@antv/l7-utils": "^2.0.0-beta.16",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
     "eventemitter3": "^4.0.0",
@@ -31,7 +31,6 @@
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "lodash": "^4.17.15",
-    "mapbox-gl": "^1.2.1",
     "merge-json-schemas": "^1.0.0",
     "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
@@ -39,13 +38,12 @@
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
-    "@types/amap-js-api": "^1.4.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.138",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "0563f357f3a07c099bf1ffa9350e6fa3c88353ae",
+  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {
     "access": "public"
   }

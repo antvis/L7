@@ -1,4 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 export default class PointImage extends React.Component {
   // @ts-ignore
@@ -13,12 +14,13 @@ export default class PointImage extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
     );
     const scene = new Scene({
-      center: [121.4, 31.258134],
-      zoom: 15,
       id: 'map',
-      pitch: 0,
-      type: 'amap',
-      style: 'dark',
+      map: new GaodeMap({
+        center: [121.4, 31.258134],
+        zoom: 15,
+        pitch: 0,
+        style: 'dark',
+      }),
     });
     scene.addImage(
       '00',

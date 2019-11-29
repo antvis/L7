@@ -1,17 +1,19 @@
 import { Scene, Marker } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as G2 from '@antv/g2';
+
 const scene = new Scene({
   id: 'map',
-  type: 'amap',
-  style: 'light',
-  center: [ 2.6125016864608597, 49.359131 ],
-  pitch: 0,
-  zoom: 4.19
+  map: new GaodeMap({
+    style: 'light',
+    center: [ 2.6125016864608597, 49.359131 ],
+    pitch: 0,
+    zoom: 4.19
+  })
 });
+addChart();
 scene.render();
-scene.on('loaded', () => {
-  addChart();
-});
+
 function addChart() {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json'
@@ -86,14 +88,14 @@ function addChart() {
           .color('item', [ '#5CCEA1', '#5D7092', '#5B8FF9' ])
           .shape('sliceShape');
         chart.render();
-        new Marker({
+        const marker = new Marker({
           element: el
         })
           .setLnglat({
             lng: item.coordinates[0],
             lat: item.coordinates[1]
-          })
-          .addTo(scene);
+          });
+        scene.addMarker(marker);
       });
     });
 }

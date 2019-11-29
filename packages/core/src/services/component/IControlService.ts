@@ -26,7 +26,8 @@ export interface IControlService {
   container: HTMLElement;
   controlCorners: IControlCorners;
   controlContainer: HTMLElement;
-  init(cfg: IControlServiceCfg): void;
+  addControls(): void;
+  init(cfg: IControlServiceCfg, sceneContainer: Container): void;
   addControl(ctr: IControl, sceneContainer: Container): void;
   removeControl(ctr: IControl): void;
   destroy(): void;

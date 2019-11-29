@@ -1,9 +1,12 @@
 import Ajv from 'ajv';
 import { ILayerConfig } from '../layer/ILayerService';
-import { IMapConfig } from '../map/IMapService';
+import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 
-export type ISceneConfig = IMapConfig & IRenderConfig;
+export interface ISceneConfig extends IRenderConfig {
+  id: string;
+  map: IMapWrapper;
+}
 
 interface IValidateResult {
   valid: boolean;
@@ -24,6 +27,12 @@ export interface IGlobalConfigService {
    * @param data 场景配置项
    */
   validateSceneConfig(data: object): IValidateResult;
+
+  /**
+   * 校验用户传入的地图配置项
+   * @param data 地图配置项
+   */
+  validateMapConfig(data: object): IValidateResult;
 
   /**
    * 获取图层配置项
