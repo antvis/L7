@@ -1,12 +1,15 @@
 import { Scene, LineLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  center: [ 103.83735, 1.3602538 ],
-  pitch: 4.00000000000001,
-  zoom: 10.210275860702593,
-  rotation: 19.313180925794313,
-  type: 'mapbox',
-  style: 'dark'
+  map: new Mapbox({
+    center: [ 103.83735, 1.3602538 ],
+    pitch: 4.00000000000001,
+    zoom: 10.210275860702593,
+    rotation: 19.313180925794313,
+    style: 'dark'
+  })
 });
 
 fetch(

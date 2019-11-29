@@ -2,16 +2,14 @@ import Ajv from 'ajv';
 import { injectable, postConstruct } from 'inversify';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
+import mapConfigSchema from './mapConfigSchema';
 import sceneConfigSchema from './sceneConfigSchema';
 
 /**
  * 场景默认配置项
  */
 const defaultSceneConfig: Partial<ISceneConfig> = {
-  type: 'amap',
-  zoom: 5,
-  center: [107.622, 39.266],
-  pitch: 0,
+  id: 'map',
 };
 
 /**
@@ -80,6 +78,11 @@ export default class GlobalConfigService implements IGlobalConfigService {
   private sceneConfigValidator: Ajv.ValidateFunction;
 
   /**
+   * 地图配置项校验器
+   */
+  private mapConfigValidator: Ajv.ValidateFunction;
+
+  /**
    * 全部图层配置项缓存
    */
   private layerConfigCache: {
@@ -106,6 +109,10 @@ export default class GlobalConfigService implements IGlobalConfigService {
 
   public validateSceneConfig(data: object) {
     return this.validate(this.sceneConfigValidator, data);
+  }
+
+  public validateMapConfig(data: object) {
+    return this.validate(this.mapConfigValidator, data);
   }
 
   public getLayerConfig<IChildLayerConfig>(
@@ -146,6 +153,7 @@ export default class GlobalConfigService implements IGlobalConfigService {
   @postConstruct()
   private registerSceneConfigSchemaValidator() {
     this.sceneConfigValidator = ajv.compile(sceneConfigSchema);
+    this.mapConfigValidator = ajv.compile(mapConfigSchema);
   }
 
   private validate(

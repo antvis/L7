@@ -1,4 +1,5 @@
 import { PolygonLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -8,7 +9,7 @@ function convertRGB2Hex(rgb: number[]) {
   );
 }
 
-export default class Mapbox extends React.Component {
+export default class Polygon extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -29,11 +30,12 @@ export default class Mapbox extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [110.19382669582967, 50.258134],
-      pitch: 0,
-      zoom: 3,
+      map: new Mapbox({
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [110.19382669582967, 50.258134],
+        pitch: 0,
+        zoom: 3,
+      }),
     });
     this.scene = scene;
     const layer = new PolygonLayer({

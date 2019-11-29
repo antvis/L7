@@ -1,12 +1,15 @@
 import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  type: 'amap',
-  style: 'dark',
-  center: [ 120.5969, 29.7918 ],
-  pitch: 35,
-  zoom: 7,
-  rotation: 4.183582
+  map: new GaodeMap({
+    style: 'dark',
+    center: [ 120.5969, 29.7918 ],
+    pitch: 35,
+    zoom: 7,
+    rotation: 4.183582
+  })
 });
 scene.addImage(
   '00',

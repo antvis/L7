@@ -1,4 +1,4 @@
-import AMapService from './amap';
-import MapboxService from './mapbox';
+import GaodeMap from './amap/Wrapper';
+import Mapbox from './mapbox/Wrapper';
 
-export { AMapService, MapboxService };
+export { GaodeMap, Mapbox };

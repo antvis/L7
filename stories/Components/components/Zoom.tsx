@@ -1,5 +1,6 @@
 // @ts-ignore
 import { PolygonLayer, Scene, Zoom } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 
 import * as React from 'react';
 
@@ -17,11 +18,12 @@ export default class ZoomComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [110.19382669582967, 30.258134],
-      pitch: 0,
-      zoom: 3,
+      map: new Mapbox({
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [110.19382669582967, 30.258134],
+        pitch: 0,
+        zoom: 3,
+      }),
     });
     this.scene = scene;
     const layer = new PolygonLayer({});
@@ -42,12 +44,10 @@ export default class ZoomComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.on('loaded', () => {
-      const zoomControl = new Zoom({
-        position: 'bottomright',
-      });
-      scene.addControl(zoomControl);
+    const zoomControl = new Zoom({
+      position: 'bottomright',
     });
+    scene.addControl(zoomControl);
   }
 
   public render() {
