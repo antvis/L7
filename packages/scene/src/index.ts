@@ -10,22 +10,25 @@ import {
   ILayer,
   ILayerService,
   ILngLat,
-  IMapConfig,
   IMapService,
   IMarker,
+  IMarkerService,
   IPoint,
+  IPopup,
+  IPopupService,
   IPostProcessingPass,
-  IRenderConfig,
   IRendererService,
+  ISceneConfig,
   ISceneService,
-  MapType,
   Point,
   SceneEventList,
   TYPES,
 } from '@antv/l7-core';
-import { AMapService, MapboxService } from '@antv/l7-maps';
 import { ReglRendererService } from '@antv/l7-renderer';
+import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import ILayerManager from './ILayerManager';
+import IMapController from './IMapController';
 import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
 
 /**
@@ -38,25 +41,29 @@ import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
  * const scene = new Scene();
  * const pointLayer = new PointLayer();
  * scene.addLayer(pointLayer);
- * scene.render();
  *
  */
-class Scene implements IPostProcessingPassPluggable {
-  // public map: AMap.Map | Map;
+class Scene
+  implements IPostProcessingPassPluggable, IMapController, ILayerManager {
   private sceneService: ISceneService;
-  private mapService: IMapService;
+  private mapService: IMapService<unknown>;
   private controlService: IControlService;
   private layerService: ILayerService;
   private iconService: IIconService;
+  private markerService: IMarkerService;
+  private popupService: IPopupService;
 
   private container: Container;
 
-  public constructor(config: IMapConfig & IRenderConfig) {
-    const { type = MapType.amap } = config;
+  public constructor(config: ISceneConfig) {
+    const { id, map } = config;
 
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
+
+    // 绑定地图服务
+    map.setContainer(sceneContainer, id);
 
     // 绑定渲染引擎服务
     sceneContainer
@@ -64,28 +71,24 @@ class Scene implements IPostProcessingPassPluggable {
       .to(ReglRendererService)
       .inSingletonScope();
 
-    // 根据用户传入参数绑定地图服务
-    let mapServiceImpl: new (...args: any[]) => IMapService;
-    if (type === MapType.mapbox) {
-      mapServiceImpl = MapboxService;
-    } else if (type === MapType.amap) {
-      mapServiceImpl = AMapService;
-    } else {
-      throw new Error('不支持的地图服务');
-    }
-    sceneContainer
-      .bind<IMapService>(TYPES.IMapService)
-      .to(mapServiceImpl)
-      .inSingletonScope();
-
     // 依赖注入
     this.sceneService = sceneContainer.get<ISceneService>(TYPES.ISceneService);
-    this.mapService = sceneContainer.get<IMapService>(TYPES.IMapService);
+    this.mapService = sceneContainer.get<IMapService<unknown>>(
+      TYPES.IMapService,
+    );
     this.iconService = sceneContainer.get<IIconService>(TYPES.IIconService);
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
     );
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
+
+    this.markerService = sceneContainer.get<IMarkerService>(
+      TYPES.IMarkerService,
+    );
+
+    this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
+
+    this.initComponent(id);
 
     // 初始化 scene
     this.sceneService.init(config);
@@ -93,7 +96,7 @@ class Scene implements IPostProcessingPassPluggable {
     this.addControl(new Logo());
   }
 
-  public getMapService(): IMapService {
+  public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
 
@@ -148,9 +151,12 @@ class Scene implements IPostProcessingPassPluggable {
 
   // marker
   public addMarker(marker: IMarker) {
-    marker.addTo(this);
+    this.markerService.addMarker(marker);
   }
 
+  public addPopup(popup: IPopup) {
+    this.popupService.addPopup(popup);
+  }
   public on(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1
       ? this.mapService.on(type, handle)
@@ -163,7 +169,7 @@ class Scene implements IPostProcessingPassPluggable {
       : this.sceneService.off(type, handle);
   }
 
-  // map method
+  // implements IMapController
 
   public getZoom(): number {
     return this.mapService.getZoom();
@@ -184,8 +190,6 @@ class Scene implements IPostProcessingPassPluggable {
   public getBounds(): Bounds {
     return this.mapService.getBounds();
   }
-
-  // set Map status
 
   public setRotation(rotation: number): void {
     this.mapService.setRotation(rotation);
@@ -250,6 +254,16 @@ class Scene implements IPostProcessingPassPluggable {
       .whenTargetNamed(name);
   }
 
+  private initComponent(id: string | HTMLDivElement) {
+    this.controlService.init(
+      {
+        container: DOM.getContainer(id),
+      },
+      this.container,
+    );
+    this.markerService.init(this.container);
+    this.popupService.init(this.container);
+  }
   // 资源管理
 }
 

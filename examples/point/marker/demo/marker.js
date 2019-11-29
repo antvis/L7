@@ -1,16 +1,18 @@
 import { Scene, Marker } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
 const scene = new Scene({
   id: 'map',
-  type: 'amap',
-  style: 'light',
-  center: [ 105.790327, 36.495636 ],
-  pitch: 0,
-  zoom: 4
+  map: new GaodeMap({
+    style: 'light',
+    center: [ 105.790327, 36.495636 ],
+    pitch: 0,
+    zoom: 4
+  })
 });
+addMarkers();
 scene.render();
-scene.on('loaded', () => {
-  addMarkers();
-});
+
 
 function addMarkers() {
   fetch(
@@ -25,11 +27,11 @@ function addMarkers() {
         el.textContent = nodes[i].v + '℃';
         el.style.background = getColor(nodes[i].v);
         el.style.borderColor = getColor(nodes[i].v);
-        new Marker({
+        const marker = new Marker({
           element: el
         })
-          .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y })
-          .addTo(scene);
+          .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
+        scene.addMarker(marker);
       }
     });
 }

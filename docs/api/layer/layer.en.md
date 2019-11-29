@@ -40,7 +40,7 @@ new Layer(option)
 
 ## 鼠标事件 
 
-beta版当前不支持，正式版会支持
+⚠️ beta版当前不支持，正式版会支持
 
 ```javascript
 layer.on('click', (ev)=>{});             // 鼠标左键点击图层事件

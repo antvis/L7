@@ -12,6 +12,36 @@ Invalid configuration object. MyPlugin has been initialised using a configuratio
 和 Webpack 一样，我们也选择 [ajv](https://github.com/epoberezkin/ajv) 作为 JSON Schema 校验器。
 目前我们只在 Layer 初始阶段进行校验，一旦校验失败会中断后续初始化插件的处理，并在控制台给出校验失败信息。后续需要在属性更新时同样进行校验。
 
+## 地图参数校验
+
+当用户传入地图参数时，需要进行校验：
+```javascript
+// l7-core/services/config/mapConfigSchema.ts
+
+export default {
+  properties: {
+    // 地图缩放等级
+    zoom: {
+      type: 'number',
+      minimum: 0,
+      maximum: 20,
+    },
+    // 地图中心点
+    center: {
+      item: {
+        type: 'number',
+      },
+      maxItems: 2,
+      minItems: 2,
+    },
+    // 仰角
+    pitch: {
+      type: 'number',
+    },
+  },
+};
+```
+
 ## Layer 基类配置项 Schema
 
 目前在基类中我们声明了如下属性及其对应的校验规则：

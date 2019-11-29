@@ -28,6 +28,8 @@ import FontService from './services/asset/FontService';
 import IconService from './services/asset/IconService';
 import CameraService from './services/camera/CameraService';
 import ControlService from './services/component/ControlService';
+import MarkerService from './services/component/MarkerService';
+import PopupService from './services/component/PopupService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
 import InteractionService from './services/interaction/InteractionService';
@@ -38,6 +40,8 @@ import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 
 /** PostProcessing passes */
+import { IMarkerService } from './services/component/IMarkerService';
+import { IPopupService } from './services/component/IPopupService';
 import {
   IMultiPassRenderer,
   IPass,
@@ -180,6 +184,15 @@ export function createSceneContainer() {
   sceneContainer
     .bind<IControlService>(TYPES.IControlService)
     .to(ControlService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IMarkerService>(TYPES.IMarkerService)
+    .to(MarkerService)
+    .inSingletonScope();
+
+  sceneContainer
+    .bind<IPopupService>(TYPES.IPopupService)
+    .to(PopupService)
     .inSingletonScope();
 
   // 绑定常规 passes

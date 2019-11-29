@@ -1,5 +1,6 @@
 // @ts-ignore
 import { PolygonLayer, Popup, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class PopupComponent extends React.Component {
@@ -16,11 +17,12 @@ export default class PopupComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [110.19382669582967, 30.258134],
-      pitch: 0,
-      zoom: 3,
+      map: new Mapbox({
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [110.19382669582967, 30.258134],
+        pitch: 0,
+        zoom: 3,
+      }),
     });
     this.scene = scene;
     const layer = new PolygonLayer({});
@@ -41,17 +43,15 @@ export default class PopupComponent extends React.Component {
         opacity: 0.3,
       });
     scene.addLayer(layer);
-    scene.on('loaded', () => {
-      new Popup({
-        offsets: [0, 20],
+    const popup = new Popup({
+      offsets: [0, 20],
+    })
+      .setLnglat({
+        lng: 120.19382669582967,
+        lat: 30.258134,
       })
-        .setLnglat({
-          lng: 120.19382669582967,
-          lat: 30.258134,
-        })
-        .setText('hello')
-        .addTo(scene);
-    });
+      .setText('hello');
+    scene.addPopup(popup);
   }
 
   public render() {

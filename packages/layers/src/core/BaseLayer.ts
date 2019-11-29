@@ -265,6 +265,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.buildModels();
 
     this.inited = true;
+    // 触发初始化完成事件;
+    this.emit('inited');
     return this;
   }
 

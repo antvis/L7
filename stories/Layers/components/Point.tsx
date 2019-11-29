@@ -1,4 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
@@ -10,51 +11,38 @@ export default class Point3D extends React.Component {
     this.scene.destroy();
   }
 
-  public componentDidMount() {
+  public async componentDidMount() {
+    const response = await fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+    );
+    const pointsData = await response.json();
     const scene = new Scene({
-      center: [120.19382669582967, 30.258134],
       id: 'map',
-      pitch: 0,
-      type: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 1,
+      map: new GaodeMap({
+        center: [120.19382669582967, 30.258134],
+        pitch: 0,
+        style: 'light',
+        zoom: 3,
+      }),
+      // map: new Mapbox({
+      //   center: [120.19382669582967, 30.258134],
+      //   pitch: 0,
+      //   style: 'mapbox://styles/mapbox/streets-v9',
+      //   zoom: 1,
+      // }),
     });
-    const pointLayer = new PointLayer({
-      enableMultiPassRenderer: true,
-      enablePicking: true,
-      enableHighlight: true,
-      onHover: (pickedFeature: any) => {
-        // tslint:disable-next-line:no-console
-        console.log('Scene4', pickedFeature.feature.name);
-      },
-    });
-    pointLayer
-      .source(data)
-      .color('name', [
-        '#FFF5B8',
-        '#FFDC7D',
-        '#FFAB5C',
-        '#F27049',
-        '#D42F31',
-        '#730D1C',
-      ])
-      .shape('subregion', [
-        'circle',
-        'triangle',
-        'square',
-        'pentagon',
-        'hexagon',
-        'octogon',
-        'hexagram',
-        'rhombus',
-        'vesica',
-      ])
-      .size('scalerank', [5, 10])
+    const pointLayer = new PointLayer({})
+      .source(pointsData)
+      .shape('circle')
+      .size('mag', [1, 25])
+      .color('mag', (mag) => {
+        return mag > 4.5 ? '#5B8FF9' : '#5CCEA1';
+      })
       .style({
-        opacity: 1.0,
+        opacity: 0.3,
+        strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
-    scene.render();
     this.scene = scene;
   }
 

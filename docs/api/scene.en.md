@@ -10,19 +10,24 @@ order: 2
 ```javascript
 // Module 引用
 import { Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
-  mapStyle: 'dark',
-  center: [ 110.770672, 34.159869 ],
-  pitch: 45,
+  map: new GaodeMap({
+    style: 'dark',
+    center: [ 110.770672, 34.159869 ],
+    pitch: 45,
+  }),
 });
 
 // CDN 使用方法
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'dark',
-  center: [ 110.770672, 34.159869 ],
-  pitch: 45,
+  map: new L7.GaodeMap({
+    style: 'dark',
+    center: [ 110.770672, 34.159869 ],
+    pitch: 45,
+  }),
 });
 ```
 
@@ -43,20 +48,21 @@ const scene = new L7.Scene({
 可以通过scene map 属性获取 map实例
 
 ```javascript
- const map = scene.map
+const map = scene.map
 
 ```
-为了统一不通底图之前的接口差异 L7 在scene层对map的方法做了统一，因此一些地图的操作方法可以通过scene调用这样，切换不同底图时保证表现一致。
+为了统一不同底图之前的接口差异 L7 在scene层对map的方法做了统一，因此一些地图的操作方法可以通过scene调用这样，切换不同底图时保证表现一致。
 
 示例代码
 
 ```javascript
-import { Scene } from '@antv/l7';
 const scene =new L7.Scene({
-    id:'map',
-    mapStyle:'dark',
-    center:[ 110.770672, 34.159869 ],
-    pitch:45
+  id: 'map',
+  map: new L7.GaodeMap({
+    style: 'dark',
+    center: [ 110.770672, 34.159869 ],
+    pitch: 45,
+  }),
 })
 ```
 
@@ -158,6 +164,31 @@ scene.getPitch();
 ```
 
 return {number} pitch
+
+### setMapStyle
+
+参数：`style`  {string}  地图样式 具体样式格式和各底图设置方法一致
+
+L7 内置了三种地图样式，AMAP 和MapBox都适用
+
+- light
+- dark
+- normal
+
+设置地图底图样式的方法
+
+```javascript
+// 快捷名称设置
+
+scene.setMapStyle('light');
+
+// mapbox 主题设置
+scene.setMapStyle('mapbox://styles/mapbox/streets-v11')
+
+// AMap 
+scene.setMapStyle('amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true')
+
+```
 
 ### setCenter()
 设置地图中心点坐标
