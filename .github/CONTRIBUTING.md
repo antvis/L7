@@ -42,13 +42,6 @@ yarn watch
 yarn storybook
 ```
 
-## 运行 L7 站点
-
-您也可以在本地启动 L7 站点，打开 `http://localhost:8000/` 查看例子：
-```bash
-yarn start
-```
-
 ## 运行测试
 
 运行单元测试：
