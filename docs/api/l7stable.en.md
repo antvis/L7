@@ -9,7 +9,7 @@ order: 1
 
  ## [旧版地址](https://antv-2018.alipay.com/zh-cn/l7/1.x/index.html)
 
-目前 1.x 版本最新版本为 1.4.2 版本
+目前 1.x 版本最新版本为 ![L7 1.x 版本](https://badgen.net/npm/v/@antv/l7)
 
 #### CDN 在线使用连接为
 
