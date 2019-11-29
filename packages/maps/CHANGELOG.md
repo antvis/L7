@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.15](https://github.com/antvis/L7/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2019-11-29)
+
+
+### Bug Fixes
+
+* **map:** temporarily closed  amap offset coordinate ([9a20f64](https://github.com/antvis/L7/commit/9a20f6480321c9297ff27fe4cfe6af9032fcb969))
+
+
+
+
+
 # [2.0.0-beta.13](https://github.com/antvis/L7/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2019-11-28)
 
 **Note:** Version bump only for package @antv/l7-maps
