@@ -1,9 +1,9 @@
 module.exports = ({ config }) => {
 
-  // config.module.rules.push({
-  //   test: /\.glsl$/,
-  //   loader: 'raw-loader'
-  // });
+  config.module.rules.push({
+    test: /\.glsl$/,
+    loader: 'raw-loader'
+  });
 
   // config.module.rules.push({
   //   test: /\.worker\.(js|ts)$/,
