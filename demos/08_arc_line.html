@@ -44,10 +44,13 @@ scene.on('loaded', () => {
        y1: 'lat2'
      }})
     .shape('arc')
-    .size(0.8)
+    .size(4)
+    .active({
+      fill:'red'
+    })
     .color('rgb(13,64,140)')
     .animate({
-        enable: true,
+        enable: false,
         interval: 0.1,
         duration: 3,
         trailLength: 0.1

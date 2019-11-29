@@ -62,7 +62,9 @@ export default class GaodeMap extends Base {
     } else {
       this.map = new AMap.Map(this.container, this._attrs);
       this.map.on('complete', () => {
-        this.setMapStyle(mapStyle);
+        if (mapStyle === 'blank') {
+          this.map.setLayers([]);
+        }
         this.addOverLayer();
         this.emit('mapLoad');
       });

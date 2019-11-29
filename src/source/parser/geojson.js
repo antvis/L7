@@ -17,7 +17,6 @@ export default function geoJSON(data, cfg) {
   rewind(data, true);
   // 数据为空时处理
   let i = 0;
-
   turfMeta.flattenEach(data, (currentFeature, featureIndex) => { // 多个polygon 拆成一个
     const coord = getCoords(currentFeature);
 
@@ -25,23 +24,35 @@ export default function geoJSON(data, cfg) {
       i++;
       return;
     }
-    coord.forEach(coor => { // mutipolygon
-      let id = featureIndex + 1;
-      if (cfg.idField && currentFeature.properties[cfg.idField]) {
-        const value = currentFeature.properties[cfg.idField];
-        id = djb2hash(value) % 1000019;
-        featureKeys[id] = {
-          index: i++,
-          idField: value
+    let id = featureIndex + 1;
+    if (cfg.idField && currentFeature.properties[cfg.idField]) {
+      const value = currentFeature.properties[cfg.idField];
+      id = djb2hash(value) % 1000019;
+      featureKeys[id] = {
+        index: i++,
+        idField: value
+      };
+    }
+    if (currentFeature.geometry.type === 'MultiPolygon') {
+      coord.forEach(coor => { // mutipolygon
+
+        const dataItem = {
+          ...currentFeature.properties,
+          coordinates: [ coor ],
+          _id: id
         };
-      }
+        resultData.push(dataItem);
+      });
+
+    } else {
       const dataItem = {
         ...currentFeature.properties,
-        coordinates: [ coor ],
+        coordinates: coord,
         _id: id
       };
       resultData.push(dataItem);
-    });
+    }
+
   });
   return {
     dataArray: resultData,
