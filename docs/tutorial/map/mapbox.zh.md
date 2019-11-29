@@ -24,7 +24,7 @@ order: 0
 
 
 ```html
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.14/dist/l7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.15/dist/l7.js"></script>
 ```
 
 
@@ -115,7 +115,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 </head>
 <body>
 <div id="map"></div>
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.14/dist/l7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.15/dist/l7.js"></script>
 <script>
   const scene = new L7.Scene({
     id: 'map',
