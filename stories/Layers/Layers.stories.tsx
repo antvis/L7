@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
+import Column from './components/column';
 import HeatMapDemo from './components/HeatMap';
 import GridHeatMap from './components/HeatmapGrid';
 import LineLayer from './components/Line';
@@ -16,6 +17,7 @@ import RasterLayerDemo from './components/RasterLayer';
 storiesOf('图层', module)
   .add('点图层', () => <PointDemo />)
   .add('3D点', () => <Point3D />)
+  .add('Column', () => <Column />)
   .add('图片标注', () => <PointImage />)
   .add('面3d图层', () => <Polygon3D />)
   .add('线图层', () => <LineLayer />)
