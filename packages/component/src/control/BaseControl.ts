@@ -48,7 +48,7 @@ export default class Control extends EventEmitter {
     };
   }
   public setPosition(position: PositionName) {
-     // 考虑组件的自动布局，需要销毁重建
+    // 考虑组件的自动布局，需要销毁重建
     // const controlService = this.controlService;
     // if (controlService) {
     //   controlService.removeControl(this);
