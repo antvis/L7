@@ -33,7 +33,7 @@ export default function geoJSON(data, cfg) {
         idField: value
       };
     }
-    if (currentFeature.geometry.type === 'MultiPolygon') {
+    if (currentFeature.geometry.type === 'Polygon') {
       coord.forEach(coor => { // mutipolygon
 
         const dataItem = {

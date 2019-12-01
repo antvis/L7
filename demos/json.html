@@ -24,11 +24,11 @@ const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
   center: [
-          120.15935897827148,
-          30.261736090037477
+         121.60857,
+                31.474449
         ],
   pitch:0,
-  zoom: 5,
+  zoom: 10,
   showBuildingBlock:false,
   minZoom: 0,
   maxZoom: 18
@@ -36,7 +36,7 @@ const scene = new L7.Scene({
 
 
 scene.on('loaded', () => {
-  $.get('https://gw.alipayobjects.com/os/basement_prod/58426ee1-0ab7-4ebf-9212-bce6245fa35c.json', data => {
+  $.get('https://gw.alipayobjects.com/os/basement_prod/f79485d8-d86f-4bb3-856d-537b586be06e.json', data => {
 
    const layer= scene.PolygonLayer({
       zIndex: 2
