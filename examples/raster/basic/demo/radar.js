@@ -22,4 +22,3 @@ layer.source(
   }
 );
 scene.addLayer(layer);
-

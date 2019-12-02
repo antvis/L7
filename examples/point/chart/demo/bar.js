@@ -14,7 +14,6 @@ const scene = new Scene({
 addChart();
 scene.render();
 
-
 function addChart() {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json'
@@ -69,11 +68,10 @@ function addChart() {
         chart.render();
         const marker = new Marker({
           element: el
-        })
-          .setLnglat({
-            lng: item.coordinates[0],
-            lat: item.coordinates[1]
-          });
+        }).setLnglat({
+          lng: item.coordinates[0],
+          lat: item.coordinates[1]
+        });
         scene.addMarker(marker);
       });
     });

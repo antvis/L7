@@ -90,11 +90,10 @@ function addChart() {
         chart.render();
         const marker = new Marker({
           element: el
-        })
-          .setLnglat({
-            lng: item.coordinates[0],
-            lat: item.coordinates[1]
-          });
+        }).setLnglat({
+          lng: item.coordinates[0],
+          lat: item.coordinates[1]
+        });
         scene.addMarker(marker);
       });
     });
