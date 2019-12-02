@@ -6,33 +6,33 @@ const scene = new Scene({
   map: new Mapbox({
     style: 'dark',
     pitch: 47.49999999999995,
-    center: [112.50447776627743, 30.830476390931125],
-    zoom: 3.9879693680088626,
-  }),
+    center: [ 112.50447776627743, 30.830476390931125 ],
+    zoom: 3.9879693680088626
+  })
 });
 
 fetch(
-  'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
+  'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv'
 )
-  .then((res) => res.text())
-  .then((data) => {
+  .then(res => res.text())
+  .then(data => {
     const layer = new HeatmapLayer({})
       .source(data, {
         parser: {
           type: 'csv',
           x: 'lng',
-          y: 'lat',
+          y: 'lat'
         },
         transforms: [
           {
             type: 'hexagon',
             size: 17000,
             field: 'v',
-            method: 'sum',
-          },
-        ],
+            method: 'sum'
+          }
+        ]
       })
-      .size('sum', (value) => {
+      .size('sum', value => {
         return value * 20;
       })
       .shape('hexagonColumn')
@@ -44,12 +44,12 @@ fetch(
           '#FFF598',
           '#FF40F3',
           '#9415FF',
-          '#421EB2',
-        ].reverse(),
+          '#421EB2'
+        ].reverse()
       )
       .style({
         coverage: 0.9,
-        angle: 0,
+        angle: 0
       });
 
     scene.addLayer(layer);
