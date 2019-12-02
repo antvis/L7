@@ -18,6 +18,7 @@ import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
+let mapdivCount = 0;
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.15';
@@ -344,7 +345,7 @@ export default class AMapService
       height: 100%;
       width: 100%;
     `;
-    $amapdiv.id = 'l7_amap_div';
+    $amapdiv.id = 'l7_amap_div' + mapdivCount++;
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
   }
