@@ -77,7 +77,7 @@ module.exports = {
           zh: '场景 Scene',
           en: 'Scene'
         },
-        order: 2
+        order: 1
       },
       {
         slug: 'api/layer',
@@ -85,7 +85,7 @@ module.exports = {
           zh: '图层 Layer',
           en: 'Layer'
         },
-        order: 2
+        order: 3
       },
       {
         slug: 'api/source',
@@ -93,7 +93,7 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source'
         },
-        order: 3
+        order: 2
       },
       {
         slug: 'api/component',

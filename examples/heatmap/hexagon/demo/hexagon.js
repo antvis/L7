@@ -6,17 +6,17 @@ const scene = new Scene({
   map: new Mapbox({
     style: 'light',
     pitch: 56.499,
-    center: [ 114.07737552216226, 22.542656745583486 ],
+    center: [114.07737552216226, 22.542656745583486],
     rotation: 39.19,
-    zoom: 12.47985
-  })
+    zoom: 12.47985,
+  }),
 });
 
 fetch(
-  'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json'
+  'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
 )
-  .then(res => res.json())
-  .then(data => {
+  .then((res) => res.json())
+  .then((data) => {
     const layer = new HeatmapLayer({})
       .source(data, {
         transforms: [
@@ -24,16 +24,16 @@ fetch(
             type: 'hexagon',
             size: 100,
             field: 'h12',
-            method: 'sum'
-          }
-        ]
+            method: 'sum',
+          },
+        ],
       })
-      .size('sum', [ 0, 600 ])
+      .size('sum', [0, 600])
       .shape('hexagonColumn')
       .style({
         coverage: 0.8,
         angle: 0,
-        opacity: 1.0
+        opacity: 1.0,
       })
       .color(
         'sum',
@@ -47,8 +47,8 @@ fetch(
           '#5FD3A6',
           '#7BE39E',
           '#A1EDB8',
-          '#CEF8D6'
-        ].reverse()
+          '#CEF8D6',
+        ].reverse(),
       );
     scene.addLayer(layer);
   });
