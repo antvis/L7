@@ -42,10 +42,7 @@ module.exports = api => {
       [
         '@babel/env',
         {
-          targets: {
-            browsers: 'Last 2 Chrome versions, Firefox ESR',
-            node: 'current'
-          },
+          useBuiltIns: isCDNBundle ? 'usage' : false,
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
           modules: (isCDNBundle || isESModule) ? false : 'auto'
@@ -80,7 +77,6 @@ module.exports = api => {
       // let rollup do commonjs works
       // @see https://github.com/rollup/rollup-plugin-babel#modules
       (isCDNBundle || isESModule) ? {} : '@babel/plugin-transform-modules-commonjs',
-      // '@babel/plugin-transform-modules-commonjs',
       // 开发模式下以原始文本引入，便于调试
       isCDNBundle ? {} : [
         // import glsl as raw text

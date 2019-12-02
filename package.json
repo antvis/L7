@@ -50,6 +50,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "commitizen": "^4.0.3",
     "copy-webpack-plugin": "^4.5.2",
+    "core-js": "3",
     "coveralls": "^3.0.7",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
@@ -159,6 +160,10 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
+  "browserslist": [
+    "last 2 version",
+    "Firefox ESR"
+  ],
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
