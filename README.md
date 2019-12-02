@@ -85,10 +85,7 @@ scene.addLayer(pointLayer);
 - [Tutorials](https://l7.antv.vision/en/docs/tutorial/quickstart)
 - [API documentation](https://l7.antv.vision/en/docs/api/l7)
 - [Examples](https://l7.antv.vision/en/examples/gallery/basic)
-
-## 🔨 Development
-
-We wrote a [contribution guide](./.github/CONTRIBUTING.md) to help you get started.
+- [Contributor documentation](./.github/CONTRIBUTING.md)
 
 ## ✅ License
 
