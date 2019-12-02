@@ -6,16 +6,16 @@ const scene = new Scene({
   map: new GaodeMap({
     pitch: 0,
     style: 'light',
-    center: [ 116.368652, 39.93866 ],
-    zoom: 10.07
-  })
+    center: [116.368652, 39.93866],
+    zoom: 10.07,
+  }),
 });
 
 fetch(
-  'https://gw.alipayobjects.com/os/basement_prod/1d27c363-af3a-469e-ab5b-7a7e1ce4f311.json'
+  'https://gw.alipayobjects.com/os/basement_prod/1d27c363-af3a-469e-ab5b-7a7e1ce4f311.json',
 )
-  .then(res => res.json())
-  .then(data => {
+  .then((res) => res.json())
+  .then((data) => {
     const layer = new PolygonLayer({})
       .source(data)
       .color(
@@ -30,21 +30,21 @@ fetch(
           '#98B7F7',
           '#BDD0F8',
           '#DDE6F7',
-          '#F2F5FC'
-        ].reverse()
+          '#F2F5FC',
+        ].reverse(),
       )
       .shape('fill')
       .style({
-        opacity: 1
+        opacity: 1,
       });
     const layer2 = new LineLayer({
-      zIndex: 2
+      zIndex: 2,
     })
       .source(data)
       .color('#fff')
       .size(0.3)
       .style({
-        opacity: 1
+        opacity: 1,
       });
 
     scene.addLayer(layer);

@@ -39,9 +39,7 @@ order: 0
 ### 初始化 L7 Scene
 
 
-``` javascript
-
-``` javascript
+```javascript
   const scene = new L7.Scene({
     id: 'map',
     map: new L7.Mapbox({
@@ -63,7 +61,7 @@ order: 0
 
 
 
-``` javascript
+```javascript
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then(res => res.json())
