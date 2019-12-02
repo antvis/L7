@@ -1,5 +1,5 @@
 ---
-title: 快速上手
+title: QuickStart
 order: 0
 redirect_from:
   - /en/docs/tutorial
