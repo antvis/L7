@@ -6,9 +6,9 @@ const scene = new Scene({
   map: new GaodeMap({
     pitch: 0,
     style: 'dark',
-    center: [ 115.5268, 34.3628 ],
-    zoom: 7
-  })
+    center: [115.5268, 34.3628],
+    zoom: 7,
+  }),
 });
 
 const layer = new ImageLayer({});
@@ -17,9 +17,8 @@ layer.source(
   {
     parser: {
       type: 'image',
-      extent: [ 113.1277263548, 32.3464238863, 118.1365790452, 36.4786759137 ]
-    }
-  }
+      extent: [113.1277263548, 32.3464238863, 118.1365790452, 36.4786759137],
+    },
+  },
 );
 scene.addLayer(layer);
-

@@ -5,13 +5,12 @@ const scene = new Scene({
   map: new Mapbox({
     style: 'light',
     pitch: 0,
-    center: [ 107.054293, 35.246265 ],
-    zoom: 4.056
-  })
+    center: [107.054293, 35.246265],
+    zoom: 4.056,
+  }),
 });
 
 const zoomControl = new Zoom();
 const scaleControl = new Scale();
 scene.addControl(zoomControl);
 scene.addControl(scaleControl);
-
