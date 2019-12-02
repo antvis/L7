@@ -1,6 +1,12 @@
 const path = require('path');
 exports.onCreateWebpackConfig = ({ getConfig }) => {
   const config = getConfig();
+  config.module.rules.push({
+    test: /\.glsl$/,
+    use: {
+      loader: 'glsl-shaders-loader'
+    }
+  });
   config.resolve.extensions.push('.glsl');
   config.resolve.alias = {
     ...config.resolve.alias,

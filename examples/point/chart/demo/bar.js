@@ -6,20 +6,20 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'light',
-    center: [2.6125016864608597, 49.359131],
+    center: [ 2.6125016864608597, 49.359131 ],
     pitch: 0,
-    zoom: 4.19,
-  }),
+    zoom: 4.19
+  })
 });
 addChart();
 scene.render();
 
 function addChart() {
   fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json',
+    'https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json'
   )
-    .then((res) => res.json())
-    .then((data) => {
+    .then(res => res.json())
+    .then(data => {
       data.nodes.forEach(function(item) {
         const el = document.createElement('div');
         const total =
@@ -33,18 +33,18 @@ function addChart() {
           {
             item: 'Agriculture',
             count: item.gdp.Agriculture,
-            percent: item.gdp.Agriculture / total,
+            percent: item.gdp.Agriculture / total
           },
           {
             item: 'Industry',
             count: item.gdp.Industry,
-            percent: item.gdp.Industry / total,
+            percent: item.gdp.Industry / total
           },
           {
             item: 'Service',
             count: item.gdp.Service,
-            percent: item.gdp.Service / total,
-          },
+            percent: item.gdp.Service / total
+          }
         ];
 
         const chart = new G2.Chart({
@@ -52,25 +52,25 @@ function addChart() {
           width: size,
           height: size,
           render: 'svg',
-          padding: 0,
+          padding: 0
         });
         chart.legend(false);
         chart.source(itemData);
         chart.tooltip(false);
         chart.axis('count', {
-          grid: false,
+          grid: false
         });
         chart
           .interval()
           .position('item*count')
-          .color('item', ['#5CCEA1', '#5D7092', '#5B8FF9'])
+          .color('item', [ '#5CCEA1', '#5D7092', '#5B8FF9' ])
           .opacity(1);
         chart.render();
         const marker = new Marker({
-          element: el,
+          element: el
         }).setLnglat({
           lng: item.coordinates[0],
-          lat: item.coordinates[1],
+          lat: item.coordinates[1]
         });
         scene.addMarker(marker);
       });
