@@ -32,7 +32,7 @@ order: 0
 ### 初始化 L7 Scene
 
 
-``` javascript
+```javascript
   const scene = new L7.Scene({
     id: 'map',
     map: new L7.GaodeMap({
@@ -54,7 +54,7 @@ order: 0
 - 首先我们需要获取数据，获取数据方法，这里我们获取在线的json数据
 - 然后我们就可以初始一个Layer，并添加到Scene就完成了图层的添加。
 
-``` javascript
+```javascript
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then(res => res.json())
