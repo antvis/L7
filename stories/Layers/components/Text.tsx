@@ -41,7 +41,7 @@ export default class Point3D extends React.Component {
         '#D42F31',
         '#730D1C',
       ])
-      .shape('subregion',[
+      .shape('subregion', [
         'circle',
         'triangle',
         'square',
