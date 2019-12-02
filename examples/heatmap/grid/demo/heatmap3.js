@@ -6,39 +6,39 @@ const scene = new Scene({
   map: new GaodeMap({
     style: 'light',
     pitch: 0,
-    center: [ 110.097892, 33.853662 ],
-    zoom: 4.056
-  })
+    center: [110.097892, 33.853662],
+    zoom: 4.056,
+  }),
 });
 
 fetch(
-  'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv'
+  'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
 )
-  .then(res => res.text())
-  .then(data => {
+  .then((res) => res.text())
+  .then((data) => {
     const layer = new HeatmapLayer({})
       .source(data, {
         parser: {
           type: 'csv',
           x: 'lng',
-          y: 'lat'
+          y: 'lat',
         },
         transforms: [
           {
             type: 'grid',
             size: 20000,
             field: 'v',
-            method: 'sum'
-          }
-        ]
+            method: 'sum',
+          },
+        ],
       })
-      .size('count', value => {
+      .size('count', (value) => {
         return value * 0;
       })
       .shape('circle')
       .style({
         coverage: 0.9,
-        angle: 0
+        angle: 0,
       })
       .color(
         'count',
@@ -54,8 +54,8 @@ fetch(
           '#F77B00',
           '#ED9909',
           '#ECC357',
-          '#EDE59C'
-        ].reverse()
+          '#EDE59C',
+        ].reverse(),
       );
     scene.addLayer(layer);
   });
