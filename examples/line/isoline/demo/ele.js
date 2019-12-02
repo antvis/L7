@@ -6,22 +6,22 @@ const scene = new Scene({
   map: new GaodeMap({
     pitch: 53.6305,
     style: 'light',
-    center: [ 102.600579, 23.114887 ],
-    zoom: 14.66
-  })
+    center: [102.600579, 23.114887],
+    zoom: 14.66,
+  }),
 });
 
 fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
-  .then(res => res.json())
-  .then(data => {
+  .then((res) => res.json())
+  .then((data) => {
     const layer = new LineLayer({})
       .source(data)
-      .size('ELEV', h => {
-        return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 20 ];
+      .size('ELEV', (h) => {
+        return [h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 20];
       })
       .shape('line')
       .scale('ELEV', {
-        type: 'quantize'
+        type: 'quantize',
       })
       .color(
         'ELEV',
@@ -35,8 +35,8 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
           '#C8D7F5',
           '#A5C1FC',
           '#7FA7F9',
-          '#5F8AE5'
-        ].reverse()
+          '#5F8AE5',
+        ].reverse(),
       );
     scene.addLayer(layer);
   });

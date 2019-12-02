@@ -1,4 +1,4 @@
-import { PolygonLayer, Scene } from '@antv/l7';
+import { LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -8,48 +8,49 @@ function convertRGB2Hex(rgb: number[]) {
   );
 }
 
-export default class Polygon3D extends React.Component {
-  private gui: dat.GUI;
-  private $stats: Node;
+export default class MultiLine extends React.Component {
   private scene: Scene;
 
   public componentWillUnmount() {
-    if (this.gui) {
-      this.gui.destroy();
-    }
-    if (this.$stats) {
-      document.body.removeChild(this.$stats);
-    }
     this.scene.destroy();
   }
 
   public async componentDidMount() {
-    const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/972566c5-a2b9-4a7e-8da1-bae9d0eb0117.json',
-    );
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
         pitch: 0,
         style: 'dark',
-        center: [114.050008, 22.529272],
+        center: [101.775374, 3],
         zoom: 14.1,
       }),
     });
 
-    const layer = new PolygonLayer({})
-      .source(await response.json())
-      .shape('extrude')
-      .size('h20', [100, 120, 160, 200, 260, 500])
-      .color('h20', [
-        '#816CAD',
-        '#A67FB5',
-        '#C997C7',
-        '#DEB8D4',
-        '#F5D4E6',
-        '#FAE4F1',
-        '#FFF3FC',
-      ])
+    const layer = new LineLayer({})
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'MultiLineString',
+              coordinates: [
+                [
+                  [100, 0],
+                  [101, 1],
+                ],
+                [
+                  [102, 2],
+                  [103, 3],
+                ],
+              ],
+            },
+          },
+        ],
+      })
+      .shape('line')
+      .color('red')
       .style({
         opacity: 1.0,
       });

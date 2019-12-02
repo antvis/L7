@@ -8,48 +8,33 @@ function convertRGB2Hex(rgb: number[]) {
   );
 }
 
-export default class Polygon3D extends React.Component {
+export default class MultiPolygon extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
 
   public componentWillUnmount() {
-    if (this.gui) {
-      this.gui.destroy();
-    }
-    if (this.$stats) {
-      document.body.removeChild(this.$stats);
-    }
     this.scene.destroy();
   }
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/972566c5-a2b9-4a7e-8da1-bae9d0eb0117.json',
+      'https://gw.alipayobjects.com/os/basement_prod/f79485d8-d86f-4bb3-856d-537b586be06e.json',
     );
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
         pitch: 0,
         style: 'dark',
-        center: [114.050008, 22.529272],
+        center: [121.775374, 31.31067],
         zoom: 14.1,
       }),
     });
 
     const layer = new PolygonLayer({})
       .source(await response.json())
-      .shape('extrude')
-      .size('h20', [100, 120, 160, 200, 260, 500])
-      .color('h20', [
-        '#816CAD',
-        '#A67FB5',
-        '#C997C7',
-        '#DEB8D4',
-        '#F5D4E6',
-        '#FAE4F1',
-        '#FFF3FC',
-      ])
+      .shape('fill')
+      .color('red')
       .style({
         opacity: 1.0,
       });
