@@ -1,4 +1,3 @@
-import { djb2hash } from '@antv/l7-utils';
 // @ts-ignore
 import rewind from '@mapbox/geojson-rewind';
 import {
@@ -36,33 +35,30 @@ export default function geoJSON(
     );
   });
   // 数据为空时处理
-  let i = 0;
+  const i = 0;
   // multi polygon 拆分
   turfMeta.flattenEach(
     data,
     (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
       const coord = getCoords(currentFeature);
-      let id = featureIndex;
-      // 瓦片数据通过字段hash建立索引
-      if (
-        cfg &&
-        cfg.idField &&
-        currentFeature.properties &&
-        currentFeature.properties[cfg.idField]
-      ) {
-        const value = currentFeature.properties[cfg.idField];
-        id = djb2hash(value) % 1000019;
-        featureKeys[id] = {
-          index: i++,
-          idField: value,
+      const id = featureIndex;
+      if (currentFeature.geometry.type === 'Polygon') {
+        coord.forEach((coor) => {
+          const dataItem = {
+            ...currentFeature.properties,
+            coordinates: [coor],
+            _id: id,
+          };
+          resultData.push(dataItem);
+        });
+      } else {
+        const dataItem: IParseDataItem = {
+          ...currentFeature.properties,
+          coordinates: coord,
+          _id: id,
         };
+        resultData.push(dataItem);
       }
-      const dataItem: IParseDataItem = {
-        ...currentFeature.properties,
-        coordinates: coord,
-        _id: id,
-      };
-      resultData.push(dataItem);
     },
   );
   return {

@@ -62,7 +62,7 @@ new Scene({
 ```
 ### Add Layer
 
-``` javascript
+```javascript
 
 import { PointLayer } from '@antv/l7';
   const pointLayer = new PointLayer()
