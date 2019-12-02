@@ -50,6 +50,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "commitizen": "^4.0.3",
     "copy-webpack-plugin": "^4.5.2",
+    "core-js": "3",
     "coveralls": "^3.0.7",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
@@ -122,8 +123,8 @@
     "site:clean": "gatsby clean",
     "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
-    "lint-fix:examples": "prettier --write examples/**/**/*.js",
-    "lint:site": "eslint examples/**/**/*.js --fix",
+    "lint:fix": "prettier --write docs/api/**/*.md packages/**/*.{spec,story}.ts{,x} stories/**/**/*.tsx",
+    "lint:examples": "eslint examples/**/**/*.js --fix",
     "prebuild": "run-p tsc lint",
     "build": "yarn clean && lerna run build",
     "postbuild": "yarn build:declarations",
@@ -159,6 +160,10 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
+  "browserslist": [
+    "last 2 version",
+    "Firefox ESR"
+  ],
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"

@@ -67,7 +67,9 @@ Promise.all([
     const el = document.createElement('div');
     const coord = point.geometry.coordinates;
     const v = point.properties.female * 1;
-    if (v < 1 || (v > 46 && v < 54)) { return; }
+    if (v < 1 || (v > 46 && v < 54)) {
+      return;
+    }
     const size = 60;
     const data = [
       {
@@ -99,11 +101,10 @@ Promise.all([
       .color('type', [ '#5CCEA1', '#5B8FF9' ])
       .opacity(1);
     chart.render();
-    const marker = new Marker({ element: el })
-      .setLnglat({
-        lng: coord[0],
-        lat: coord[1]
-      });
+    const marker = new Marker({ element: el }).setLnglat({
+      lng: coord[0],
+      lat: coord[1]
+    });
     scene.addMarker(marker);
   });
 });

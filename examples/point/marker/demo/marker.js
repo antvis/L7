@@ -13,7 +13,6 @@ const scene = new Scene({
 addMarkers();
 scene.render();
 
-
 function addMarkers() {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json'
@@ -21,7 +20,9 @@ function addMarkers() {
     .then(res => res.json())
     .then(nodes => {
       for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].g !== '1' || nodes[i].v === '') { continue; }
+        if (nodes[i].g !== '1' || nodes[i].v === '') {
+          continue;
+        }
         const el = document.createElement('label');
         el.className = 'lableclass';
         el.textContent = nodes[i].v + '℃';
@@ -29,8 +30,7 @@ function addMarkers() {
         el.style.borderColor = getColor(nodes[i].v);
         const marker = new Marker({
           element: el
-        })
-          .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
+        }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
         scene.addMarker(marker);
       }
     });
