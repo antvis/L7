@@ -6,23 +6,23 @@ const scene = new Scene({
   map: new GaodeMap({
     pitch: 0,
     style: 'light',
-    center: [121.435159, 31.256971],
+    center: [ 121.435159, 31.256971 ],
     zoom: 14.89,
-    minZoom: 10,
-  }),
+    minZoom: 10
+  })
 });
 fetch(
-  'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
+  'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json'
 )
-  .then((res) => res.json())
-  .then((data) => {
+  .then(res => res.json())
+  .then(data => {
     const pointLayer = new PointLayer({})
       .source(data, {
         parser: {
           type: 'json',
           x: 'longitude',
-          y: 'latitude',
-        },
+          y: 'latitude'
+        }
       })
       .shape('name', [
         'circle',
@@ -33,13 +33,13 @@ fetch(
         'octogon',
         'hexagram',
         'rhombus',
-        'vesica',
+        'vesica'
       ])
-      .size('unit_price', [10, 25])
-      .color('name', ['#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452'])
+      .size('unit_price', [ 10, 25 ])
+      .color('name', [ '#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452' ])
       .style({
         opacity: 0.3,
-        strokeWidth: 2,
+        strokeWidth: 2
       });
 
     scene.addLayer(pointLayer);
