@@ -30,7 +30,7 @@ const scene = new L7.Scene({
 });
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json', data => {
-   window.layer = scene.PointLayer({
+   const layer = scene.PointLayer({
       zIndex: 2
     })
     .source(data.list, {
@@ -43,10 +43,22 @@ scene.on('loaded', () => {
     .shape('cylinder')
     .size('t',(level)=> {
       return [2,2,(level*3+20)];
-    }) 
+    })
     .active(true)
     .color('t', ["#002466","#105CB3","#2894E0","#CFF6FF","#FFF5B8","#FFAB5C","#F27049","#730D1C"])
      .render();
+    layer.on('click',(e)=>{
+       var lnglat = e.lnglat,
+          feature = e.feature;
+
+        var html = '<p>\u7701\u4EFD\uFF1A' + feature.s + '</p>\n        <p>\u5730\u533A\uFF1A' + feature.m + '</p>\n        <p>\u6E29\u5EA6\uFF1A' + feature.t + '</p>\n        ';
+
+        new L7.Popup().setLnglat([lnglat.lng, lnglat.lat]).setHTML(html).addTo(scene);
+    })
+
+    layer.on('unpick',(e) => {
+      console.log(e);
+    })
   });
 });
 </script>

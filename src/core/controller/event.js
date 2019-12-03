@@ -47,9 +47,14 @@ export default class EventContoller {
         this._selectedId = featureId;
       }
       if (featureId < 0 && this._selectedId != null) {
-        type = 'mouseleave';
-        this.layer.emit(type, target);
+        this.layer.emit('mouseleave', target);
         this._selectedId = null;
+      }
+      if (featureId < 0) {
+        // 没有选中元素
+        this.layer.emit('unpick', target);
+        this.layer.emit('un' + type, target);
+
       }
       this.layer._activeIds = featureId;
 
