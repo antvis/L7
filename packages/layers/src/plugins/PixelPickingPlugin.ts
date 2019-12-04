@@ -38,6 +38,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
   ) {
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tap('PixelPickingPlugin', () => {
+      console.time('PixelPickingPlugin')
       const { enablePicking } = layer.getLayerConfig();
       styleAttributeService.registerStyleAttribute({
         name: 'pickingColor',
@@ -55,6 +56,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             enablePicking ? encodePickingColor(featureIdx) : [0, 0, 0],
         },
       });
+      console.timeEnd('PixelPickingPlugin')
     });
     // 必须要与 PixelPickingPass 结合使用，因此必须开启 multiPassRenderer
     // if (layer.multiPassRenderer) {

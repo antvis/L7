@@ -25,7 +25,9 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('RegisterStyleAttributePlugin', () => {
+      console.time('RegisterStyleAttributePlugin')
       this.registerBuiltinAttributes(styleAttributeService);
+      console.timeEnd('RegisterStyleAttributePlugin')
     });
   }
 
