@@ -3,6 +3,7 @@ import * as React from 'react';
 import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
 import Column from './components/column';
+import DataUpdate from './components/data_update';
 import HeatMapDemo from './components/HeatMap';
 import GridHeatMap from './components/HeatmapGrid';
 import LineLayer from './components/Line';
@@ -16,6 +17,7 @@ import RasterLayerDemo from './components/RasterLayer';
 // @ts-ignore
 storiesOf('图层', module)
   .add('点图层', () => <PointDemo />)
+  .add('数据更新', () => <DataUpdate />)
   .add('3D点', () => <Point3D />)
   .add('Column', () => <Column />)
   .add('图片标注', () => <PointImage />)

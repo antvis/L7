@@ -27,6 +27,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('DataMappingPlugin', () => {
+      console.time('DataMappingPlugin')
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const { dataArray } = layer.getSource().data;
 
@@ -37,6 +38,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
       // mapping with source data
       layer.setEncodedData(this.mapping(attributes, dataArray));
+      console.timeEnd('DataMappingPlugin')
     });
 
     // remapping before render

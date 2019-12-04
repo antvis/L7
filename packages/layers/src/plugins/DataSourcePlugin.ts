@@ -6,8 +6,10 @@ import { injectable } from 'inversify';
 export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.init.tap('DataSourcePlugin', () => {
+      console.time('DataSourcePlugin')
       const { data, options } = layer.sourceOption;
       layer.setSource(new Source(data, options));
+      console.timeEnd('DataSourcePlugin')
     });
   }
 }

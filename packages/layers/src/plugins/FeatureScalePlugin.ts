@@ -57,10 +57,12 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
+      console.time('FeatureScalePlugin')
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
       this.caculateScalesForAttributes(attributes || [], dataArray);
+      console.timeEnd('FeatureScalePlugin')
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
