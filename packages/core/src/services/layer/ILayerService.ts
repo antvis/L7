@@ -95,6 +95,7 @@ export interface ILayer {
   render(): ILayer;
   destroy(): void;
   source(data: any, option?: ISourceCFG): ILayer;
+  setData(data: any, option?: ISourceCFG): ILayer;
   /**
    * 向当前图层注册插件
    * @param plugin 插件实例

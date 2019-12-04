@@ -16,8 +16,18 @@ export interface ITransform {
 }
 
 export interface ISourceCFG {
+  cluster?: boolean;
+  clusterOptions?: Partial<IClusterOptions>;
   parser?: IParserCfg;
   transforms?: ITransform[];
+}
+export interface IClusterOptions {
+  enable: false;
+  radius: number;
+  maxZoom: number;
+  minZoom: number;
+  field: string;
+  method: 'max' | 'sum' | 'min' | 'mean' | 'count' | CallBack;
 }
 export interface IDictionary<TValue> {
   [key: string]: TValue;
