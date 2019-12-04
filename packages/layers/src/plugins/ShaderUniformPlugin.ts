@@ -31,6 +31,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
       // 重新计算坐标系参数
+      console.time('ShaderUniformPlugin')
       this.coordinateSystemService.refresh();
 
       const { width, height } = this.rendererService.getViewportSize();
@@ -58,7 +59,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         }),
       );
-
+      console.timeEnd('ShaderUniformPlugin')
       // TODO：脏检查，决定是否需要渲染
     });
   }

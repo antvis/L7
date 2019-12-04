@@ -249,6 +249,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 获取插件集
     this.plugins = this.container.getAll<ILayerPlugin>(TYPES.ILayerPlugin);
+    console.log(this.plugins)
     // 完成插件注册，传入场景和图层容器内的服务
     for (const plugin of this.plugins) {
       plugin.apply(this, {
@@ -336,6 +337,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       data,
       options,
     };
+    return this;
+  }
+
+  public setData(data: any, options?: ISourceCFG) {
+    this.sourceOption.data = data;
+    this.sourceOption.options = options;
+    console.time('init')
+    this.hooks.init.call();
+    console.timeEnd('init')
+    this.buildModels();
     return this;
   }
   public style(options: object & Partial<ILayerConfig>): ILayer {
@@ -455,6 +466,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
+  }
+  public clear() {
+
+    this.styleAttributeService.clearAllAttributes();
+    // 销毁所有 model
+    this.models.forEach((model) => model.destroy());
   }
 
   public isDirty() {

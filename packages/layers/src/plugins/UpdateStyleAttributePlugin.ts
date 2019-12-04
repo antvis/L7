@@ -21,7 +21,8 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
+    layer.hooks.init.tap('UpdateStyleAttributePlugin', () => {
+      console.time('UpdateStyleAttributePlugin')
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       attributes
         .filter((attribute) => attribute.needRegenerateVertices)
@@ -38,6 +39,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
             `regenerate vertex attributes: ${attribute.name} finished`,
           );
         });
+        console.timeEnd('UpdateStyleAttributePlugin')
     });
   }
 }
