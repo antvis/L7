@@ -16,34 +16,37 @@ export default class Point3D extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
     );
     const pointsData = await response.json();
+
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
-        style: 'light',
+        style: 'dark',
         zoom: 3,
       }),
-      // map: new Mapbox({
-      //   center: [120.19382669582967, 30.258134],
-      //   pitch: 0,
-      //   style: 'mapbox://styles/mapbox/streets-v9',
-      //   zoom: 1,
-      // }),
     });
+    this.scene = scene;
+
     const pointLayer = new PointLayer({})
-      .source(pointsData)
-      .shape('circle')
-      .size('mag', [1, 25])
-      .color('mag', (mag) => {
-        return mag > 4.5 ? '#5B8FF9' : '#5CCEA1';
+      .source(pointsData, {
+        cluster: true,
       })
+      .shape('circle')
+      .scale('point_count', {
+        type: 'quantile',
+      })
+      .filter('point_count', (point_count: number) => {
+        return point_count > 1;
+      })
+      .size('point_count', [5, 10, 15, 20, 25])
+      .color('red')
       .style({
         opacity: 0.3,
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
-    this.scene = scene;
+    console.log(pointLayer);
   }
 
   public render() {

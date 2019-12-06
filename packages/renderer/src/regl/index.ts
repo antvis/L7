@@ -52,14 +52,14 @@ export default class ReglRendererService implements IRendererService {
         // TODO: use extensions
         extensions: [
           'OES_element_index_uint',
-          'EXT_shader_texture_lod', // IBL
-          'OES_standard_derivatives', // wireframe
+          // 'EXT_shader_texture_lod', // IBL 兼容性问题
+          // 'OES_standard_derivatives', // wireframe
           'OES_texture_float', // shadow map
-          'WEBGL_depth_texture',
+          // 'WEBGL_depth_texture',
           'angle_instanced_arrays',
-          'EXT_texture_filter_anisotropic', // VSM shadow map
+          // 'EXT_texture_filter_anisotropic', // VSM shadow map
         ],
-        optionalExtensions: ['oes_texture_float_linear'],
+        // optionalExtensions: ['oes_texture_float_linear'],
         // profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
           if (err || !r) {
@@ -131,6 +131,13 @@ export default class ReglRendererService implements IRendererService {
   }) => {
     // use WebGL context directly
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
+    const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
+    if (renderCanvas) {
+      renderCanvas.width = width;
+      renderCanvas.height = height;
+      renderCanvas.style.width = width / 2 + 'px';
+      renderCanvas.style.height = height / 2 + 'px';
+    }
     this.gl._gl.viewport(x, y, width, height);
     this.gl._refresh();
   };
