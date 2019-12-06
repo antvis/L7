@@ -25,9 +25,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('RegisterStyleAttributePlugin', () => {
-      console.time('RegisterStyleAttributePlugin')
       this.registerBuiltinAttributes(styleAttributeService);
-      console.timeEnd('RegisterStyleAttributePlugin')
     });
   }
 
@@ -56,6 +54,24 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       },
     });
 
+    styleAttributeService.registerStyleAttribute({
+      name: 'filter',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'filter',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (feature: IEncodeFeature, featureIdx: number) => {
+          const { filter } = feature;
+          return filter ? [1] : [0];
+        },
+      },
+    });
     styleAttributeService.registerStyleAttribute({
       name: 'color',
       type: AttributeType.Attribute,

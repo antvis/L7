@@ -26,6 +26,8 @@ export interface IClusterOptions {
   radius: number;
   maxZoom: number;
   minZoom: number;
+  zoom: number;
+  bbox: [number, number, number, number];
   field: string;
   method: 'max' | 'sum' | 'min' | 'mean' | 'count' | CallBack;
 }
@@ -57,6 +59,8 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   data: IParserData;
+  cluster: boolean;
+  clusterOptions: Partial<IClusterOptions>;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

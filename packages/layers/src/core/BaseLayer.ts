@@ -28,17 +28,20 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  ScaleTypeName,
+  ScaleTypes,
   StyleAttributeField,
   StyleAttributeOption,
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
+import { bindAll } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
-import { SyncBailHook, SyncHook } from 'tapable';
+import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import baseLayerSchema from './schema';
 
@@ -46,6 +49,7 @@ import baseLayerSchema from './schema';
  * 分配 layer id
  */
 let layerIdCounter = 0;
+const MapEventTypes = ['zoomchange', 'dragend', 'camerachange', 'resize'];
 
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
@@ -56,11 +60,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public minZoom: number;
   public maxZoom: number;
   public inited: boolean = false;
-
+  public layerModelNeedUpdate: boolean = false;
+  public dataPluginsState: { [key: string]: boolean } = {
+    DataSource: false,
+    DataMapping: false,
+    FeatureScale: false,
+    StyleAttr: false,
+  };
   // 生命周期钩子
   public hooks = {
     init: new SyncBailHook<void, boolean | void>(),
     beforeRender: new SyncBailHook<void, boolean | void>(),
+    beforeRenderData: new SyncWaterfallHook<void | boolean>(['data']),
     afterRender: new SyncHook<void>(),
     beforePickingEncode: new SyncHook<void>(),
     afterPickingEncode: new SyncHook<void>(),
@@ -249,7 +260,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 获取插件集
     this.plugins = this.container.getAll<ILayerPlugin>(TYPES.ILayerPlugin);
-    console.log(this.plugins)
     // 完成插件注册，传入场景和图层容器内的服务
     for (const plugin of this.plugins) {
       plugin.apply(this, {
@@ -263,6 +273,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
+
     this.buildModels();
 
     this.inited = true;
@@ -294,6 +305,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   ) {
     this.pendingStyleAttributes.push({
       attributeName: 'size',
+      attributeField: field,
+      attributeValues: values,
+      updateOptions,
+    });
+    return this;
+  }
+  public filter(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.pendingStyleAttributes.push({
+      attributeName: 'filter',
       attributeField: field,
       attributeValues: values,
       updateOptions,
@@ -343,12 +367,34 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public setData(data: any, options?: ISourceCFG) {
     this.sourceOption.data = data;
     this.sourceOption.options = options;
-    console.time('init')
     this.hooks.init.call();
-    console.timeEnd('init')
     this.buildModels();
     return this;
   }
+
+  public isSourceNeedUpdate() {
+    const cluster = this.layerSource.cluster;
+    if (cluster) {
+      const { zoom = 0, bbox = [0, 0, 0, 0] } = this.layerSource.clusterOptions;
+      const newZoom = this.mapService.getZoom();
+      const bounds = this.mapService.getBounds();
+      const newBbox: [number, number, number, number] = [
+        bounds[0][0],
+        bounds[0][1],
+        bounds[1][0],
+        bounds[1][1],
+      ];
+      // ||
+      //   bbox[0] !== newBbox[0] ||
+      //   bbox[2] !== newBbox[2]
+      if (Math.abs(zoom - newZoom) > 1) {
+        this.layerSource.updateClusterData(Math.floor(newZoom), newBbox);
+        return true;
+      }
+    }
+    return false;
+  }
+
   public style(options: object & Partial<ILayerConfig>): ILayer {
     const { passes, ...rest } = options;
 
@@ -376,7 +422,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this;
   }
-  public scale(field: string | IScaleOptions, cfg: IScale) {
+  public scale(field: ScaleTypeName | IScaleOptions, cfg: IScale) {
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -464,11 +510,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     this.hooks.afterDestroy.call();
 
+    this.removeAllListeners();
+
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
   }
   public clear() {
-
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
     this.models.forEach((model) => model.destroy());
@@ -487,6 +534,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public setSource(source: Source) {
     this.layerSource = source;
+    const bounds = this.mapService.getBounds();
+    const zoom = this.mapService.getZoom();
+    if (this.layerSource.cluster) {
+      this.layerSource.updateClusterData(zoom, [
+        bounds[0][0],
+        bounds[0][1],
+        bounds[1][0],
+        bounds[1][1],
+      ]);
+    }
   }
   public getSource() {
     return this.layerSource;
@@ -536,7 +593,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-
     const {
       attributes,
       elements,
@@ -585,5 +641,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         : valuesOrCallback || defaultValues,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
+  }
+
+  private registerMapEvent() {
+    MapEventTypes.forEach((type) => {
+      this.mapService.on(type, this.layerMapHander.bind(this, type));
+    });
+  }
+  private layerMapHander(type: string, data: any) {
+    this.emit(type, data);
   }
 }
