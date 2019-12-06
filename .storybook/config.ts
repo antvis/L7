@@ -1,6 +1,6 @@
 // tslint:disable-next-line:no-submodule-imports
 import '!style-loader!css-loader!sass-loader!./iframe.scss';
-import '@storybook/addon-console';
+// import '@storybook/addon-console';
 import { addParameters, configure } from '@storybook/react';
 import { create } from '@storybook/theming';
 
@@ -15,7 +15,7 @@ addParameters({
     enableShortcuts: true,
     theme: create({
       base: 'light',
-      brandTitle: 'L7 POC for new architecture',
+      brandTitle: 'L7 for new architecture',
       brandUrl: 'https://github.com/xiaoiver/L7-POC',
       gridCellSize: 12,
     }),

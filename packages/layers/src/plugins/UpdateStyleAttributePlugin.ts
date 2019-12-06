@@ -22,24 +22,46 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('UpdateStyleAttributePlugin', () => {
-      console.time('UpdateStyleAttributePlugin')
-      const attributes = styleAttributeService.getLayerStyleAttributes() || [];
-      attributes
-        .filter((attribute) => attribute.needRegenerateVertices)
-        .forEach((attribute) => {
-          // 精确更新某个/某些 feature(s)，需要传入 featureIdx
-          styleAttributeService.updateAttributeByFeatureRange(
-            attribute.name,
-            layer.getEncodedData(), // 获取经过 mapping 最新的数据
-            attribute.featureRange.startIndex,
-            attribute.featureRange.endIndex,
-          );
-          attribute.needRegenerateVertices = false;
-          this.logger.debug(
-            `regenerate vertex attributes: ${attribute.name} finished`,
-          );
-        });
-        console.timeEnd('UpdateStyleAttributePlugin')
+      this.updateStyleAtrribute(layer, { styleAttributeService });
     });
+
+    layer.hooks.beforeRenderData.tap('styleAttributeService', (flag) => {
+      if (flag) {
+        // styleAttributeService.createAttributesAndIndices(
+        //   layer.getEncodedData(),
+        // );
+        layer.layerModelNeedUpdate = true;
+        return true;
+      }
+      return false;
+    });
+
+    layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
+      this.updateStyleAtrribute(layer, { styleAttributeService });
+    });
+  }
+
+  private updateStyleAtrribute(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
+    const attributes = styleAttributeService.getLayerStyleAttributes() || [];
+    attributes
+      .filter((attribute) => attribute.needRegenerateVertices)
+      .forEach((attribute) => {
+        // 精确更新某个/某些 feature(s)，需要传入 featureIdx
+        styleAttributeService.updateAttributeByFeatureRange(
+          attribute.name,
+          layer.getEncodedData(), // 获取经过 mapping 最新的数据
+          attribute.featureRange.startIndex,
+          attribute.featureRange.endIndex,
+        );
+        attribute.needRegenerateVertices = false;
+        this.logger.debug(
+          `regenerate vertex attributes: ${attribute.name} finished`,
+        );
+      });
   }
 }

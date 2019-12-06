@@ -27,18 +27,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('DataMappingPlugin', () => {
-      console.time('DataMappingPlugin')
-      const attributes = styleAttributeService.getLayerStyleAttributes() || [];
-      const { dataArray } = layer.getSource().data;
+      this.doMaping(layer, { styleAttributeService });
+    });
 
-      // TODO: FIXME
-      if (!dataArray) {
-        return;
+    layer.hooks.beforeRenderData.tap('DataMappingPlugin', (flag) => {
+      if (flag) {
+        layer.dataPluginsState.DataMapping = false;
+        this.doMaping(layer, { styleAttributeService });
+        return true;
       }
-
-      // mapping with source data
-      layer.setEncodedData(this.mapping(attributes, dataArray));
-      console.timeEnd('DataMappingPlugin')
+      return false;
     });
 
     // remapping before render
@@ -54,6 +52,29 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
     });
   }
+  private doMaping(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
+    const attributes = styleAttributeService.getLayerStyleAttributes() || [];
+    const filter = styleAttributeService.getLayerStyleAttribute('filter');
+    const { dataArray } = layer.getSource().data;
+    let filterData = dataArray;
+    if (filter?.scale) {
+      filterData = dataArray.filter((record: IParseDataItem) => {
+        return this.applyAttributeMapping(filter, record)[0];
+      });
+    }
+
+    // TODO: FIXME
+    if (!filterData) {
+      return;
+    }
+    // mapping with source data
+    layer.setEncodedData(this.mapping(attributes, filterData));
+  }
 
   private mapping(
     attributes: IStyleAttribute[],
@@ -64,21 +85,22 @@ export default class DataMappingPlugin implements ILayerPlugin {
         id: record._id,
         coordinates: record.coordinates,
       };
-      // TODO 数据过滤
-      attributes.forEach((attribute: IStyleAttribute) => {
-        let values = this.applyAttributeMapping(attribute, record);
-        attribute.needRemapping = false;
+      attributes
+        // .filter((attribute) => attribute.name !== 'filter')
+        .forEach((attribute: IStyleAttribute) => {
+          let values = this.applyAttributeMapping(attribute, record);
+          attribute.needRemapping = false;
 
-        // TODO: 支持每个属性配置 postprocess
-        if (attribute.name === 'color') {
-          values = values.map((c: unknown) => {
-            return rgb2arr(c as string);
-          });
-        }
-        // @ts-ignore
-        encodeRecord[attribute.name] =
-          Array.isArray(values) && values.length === 1 ? values[0] : values;
-      });
+          // TODO: 支持每个属性配置 postprocess
+          if (attribute.name === 'color') {
+            values = values.map((c: unknown) => {
+              return rgb2arr(c as string);
+            });
+          }
+          // @ts-ignore
+          encodeRecord[attribute.name] =
+            Array.isArray(values) && values.length === 1 ? values[0] : values;
+        });
       return encodeRecord;
     }) as IEncodeFeature[];
   }

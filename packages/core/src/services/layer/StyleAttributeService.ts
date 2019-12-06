@@ -30,10 +30,18 @@ let counter = 0;
  */
 @injectable()
 export default class StyleAttributeService implements IStyleAttributeService {
+  public attributesAndIndices: {
+    attributes: {
+      [attributeName: string]: IAttribute;
+    };
+    elements: IElements;
+  };
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
+
+  private triangulation: Triangulation;
 
   private c = counter++;
 
@@ -49,7 +57,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     sizePerElement: 0,
     elements: [],
   };
-
   public registerStyleAttribute(
     options: Partial<IStyleAttributeInitializationOptions>,
   ) {
@@ -170,14 +177,20 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
   public createAttributesAndIndices(
     features: IEncodeFeature[],
-    triangulation: Triangulation,
+    triangulation?: Triangulation,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
   } {
-    const descriptors = this.attributes.map((attr) => attr.descriptor);
+    if (triangulation) {
+      this.triangulation = triangulation;
+    }
+    const descriptors = this.attributes.map((attr) => {
+      attr.resetDescriptor();
+      return attr.descriptor;
+    });
     let verticesNum = 0;
     const vertices: number[] = [];
     const indices: number[] = [];
@@ -191,7 +204,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
-      } = triangulation(feature);
+      } = this.triangulation(feature);
       indices.push(...indicesForCurrentFeature.map((i) => i + verticesNum));
       vertices.push(...verticesForCurrentFeature);
       if (normalsForCurrentFeature) {
@@ -211,7 +224,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
       });
 
       verticesNum += verticesNumForCurrentFeature;
-
       // 根据 position 顶点生成其他顶点数据
       for (
         let vertexIdx = 0;
@@ -273,13 +285,12 @@ export default class StyleAttributeService implements IStyleAttributeService {
       type: gl.UNSIGNED_INT,
       count: indices.length,
     });
-
-    return {
+    this.attributesAndIndices = {
       attributes,
       elements,
     };
+    return this.attributesAndIndices;
   }
-
   public clearAllAttributes() {
     // 销毁关联的 vertex attribute buffer objects
     this.attributes.forEach((attribute) => {

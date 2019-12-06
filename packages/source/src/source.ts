@@ -14,7 +14,7 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { cloneDeep, isString, isFunction } from 'lodash';
+import { cloneDeep, isFunction, isString } from 'lodash';
 import Supercluster from 'supercluster';
 import { SyncHook } from 'tapable';
 import { getParser, getTransform } from './';
@@ -34,17 +34,19 @@ export default class Source extends EventEmitter {
   };
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];
+  public cluster: boolean = false;
+  public clusterOptions: Partial<IClusterOptions> = {
+    enable: false,
+    radius: 40,
+    maxZoom: 20,
+    zoom: -99,
+    method: 'count',
+  };
 
   // 原始数据
   private originData: any;
   private rawData: any;
-  private clusterOptions: Partial<IClusterOptions> = {
-    enable: false,
-    radius: 40,
-    maxZoom: 20,
-    method: 'count',
-  };
-  private cluster: boolean = false;
+
   private clusterIndex: Supercluster;
 
   constructor(data: any, cfg?: ISourceCFG) {
@@ -58,6 +60,7 @@ export default class Source extends EventEmitter {
       if (cfg.transforms) {
         this.transforms = cfg.transforms;
       }
+      this.cluster = cfg.cluster || false;
       if (cfg.clusterOptions) {
         this.cluster = true;
         this.clusterOptions = {
@@ -82,35 +85,40 @@ export default class Source extends EventEmitter {
   public updateClusterData(
     zoom: number,
     bbox: [number, number, number, number],
-  ): any {
+  ): void {
     const { method = 'sum', field } = this.clusterOptions;
-    const data = this.clusterIndex.getClusters(bbox, zoom);
-    if (!field && !isFunction(method)) {
-      return;
-    }
-
-    const clusterdata = data.map((item) => {
-      const id = item.id as number;
-      if (id) {
-        const points = this.clusterIndex.getLeaves(id, Infinity);
-        const properties = points.map((d) => d.properties);
-        let statNum;
-        if (isString(method) && field) {
-          const column = getColumn(properties, field);
-          statNum = statMap[method](column);
-        }
-        if (isFunction(method)) {
-          statNum = method(properties);
-        }
-        item.properties.stat = statNum;
+    let data = this.clusterIndex.getClusters(bbox, zoom);
+    this.clusterOptions.bbox = bbox;
+    this.clusterOptions.zoom = zoom;
+    data.forEach((p) => {
+      if (!p.id) {
+        p.properties.point_count = 1;
       }
-
-      return item;
     });
-
+    if (field || isFunction(method)) {
+      data = data.map((item) => {
+        const id = item.id as number;
+        if (id) {
+          const points = this.clusterIndex.getLeaves(id, Infinity);
+          const properties = points.map((d) => d.properties);
+          let statNum;
+          if (isString(method) && field) {
+            const column = getColumn(properties, field);
+            statNum = statMap[method](column);
+          }
+          if (isFunction(method)) {
+            statNum = method(properties);
+          }
+          item.properties.stat = statNum;
+        } else {
+          item.properties.point_count = 1;
+        }
+        return item;
+      });
+    }
     this.data = getParser('geojson')({
       type: 'FeatureCollection',
-      features: clusterdata,
+      features: data,
     });
     this.executeTrans();
   }

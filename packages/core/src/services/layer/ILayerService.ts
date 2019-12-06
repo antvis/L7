@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { SyncBailHook, SyncHook } from 'tapable';
+import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
@@ -51,8 +51,11 @@ export interface ILayer {
   inited: boolean; // 是否初始化完成
   zIndex: number;
   plugins: ILayerPlugin[];
+  layerModelNeedUpdate: boolean;
+  dataPluginsState: { [key: string]: boolean };
   hooks: {
     init: SyncBailHook<void, boolean | void>;
+    beforeRenderData: SyncWaterfallHook<boolean | void>;
     beforeRender: SyncBailHook<void, boolean | void>;
     afterRender: SyncHook<void>;
     beforePickingEncode: SyncHook<void>;
@@ -76,13 +79,14 @@ export interface ILayer {
       Partial<IModelInitializationOptions>,
   ): IModel;
   init(): ILayer;
+  scale(field: string | IScaleOptions, cfg: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   animate(option: IAnimateOption): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
-  // filter(field: string, value: StyleAttributeOption): ILayer;
+  filter(field: string, value: StyleAttributeOption): ILayer;
   // active(option: ActiveOption): ILayer;
   style(options: unknown): ILayer;
   hide(): ILayer;
@@ -102,6 +106,7 @@ export interface ILayer {
    */
   addPlugin(plugin: ILayerPlugin): ILayer;
   getSource(): ISource;
+  isSourceNeedUpdate(): boolean;
   setSource(source: ISource): void;
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];

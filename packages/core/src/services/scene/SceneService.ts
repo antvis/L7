@@ -1,3 +1,6 @@
+// @ts-ignore
+import { DOM } from '@antv/l7-utils';
+import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import { AsyncParallelHook } from 'tapable';
@@ -149,7 +152,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.$container = $container;
       if ($container) {
         await this.rendererService.init($container);
-        window.addEventListener('resize', this.handleWindowResized, false);
+        elementResizeEvent(this.$container, this.handleWindowResized);
+        // window.addEventListener('resize', this.handleWindowResized, false);
       } else {
         this.logger.error('容器 id 不存在');
       }
@@ -211,11 +215,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.removeAllListeners();
     this.rendererService.destroy();
     this.map.destroy();
-    window.removeEventListener('resize', this.handleWindowResized, false);
+    unbind(this.$container);
+    // window.removeEventListener('resize', this.handleWindowResized, false);
   }
 
   private handleWindowResized = () => {
     this.emit('resize');
+    // @ts-check
     if (this.$container) {
       // recalculate the viewport's size and call gl.viewport
       // @see https://github.com/regl-project/regl/blob/master/lib/webgl.js#L24-L38
@@ -227,12 +233,15 @@ export default class Scene extends EventEmitter implements ISceneService {
         w = bounds.right - bounds.left;
         h = bounds.bottom - bounds.top;
       }
+
       this.rendererService.viewport({
         x: 0,
         y: 0,
         width: pixelRatio * w,
         height: pixelRatio * h,
       });
+      // 触发 Map， canvas
+      DOM.triggerResize();
       //  repaint layers
       this.render();
     }

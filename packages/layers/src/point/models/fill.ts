@@ -1,6 +1,8 @@
 import {
   AttributeType,
   gl,
+  IAttribute,
+  IElements,
   IEncodeFeature,
   IModel,
   IModelUniform,
@@ -29,6 +31,17 @@ export default class FillModel extends BaseModel {
     };
   }
 
+  public getAttribute(): {
+    attributes: {
+      [attributeName: string]: IAttribute;
+    };
+    elements: IElements;
+  } {
+    return this.styleAttributeService.createAttributesAndIndices(
+      this.layer.getEncodedData(),
+      PointFillTriangulation,
+    );
+  }
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({

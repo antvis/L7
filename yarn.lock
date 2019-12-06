@@ -8990,6 +8990,11 @@ element-resize-detector@^1.1.15:
   dependencies:
     batch-processor "^1.0.0"
 
+element-resize-event@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/element-resize-event/-/element-resize-event-3.0.3.tgz#3f59facef6b8f23fbd678a5f364ee5723af98a2a"
+  integrity sha512-vhGNxT87PdZA6Ak4E0QhArwGzNcSPUwSN7n9wCFLeBlY2NNuuiwguQuQIp7P5oB65PLJ892yKcHiqz1xLWeiug==
+
 elliptic@^6.0.0:
   version "6.5.2"
   resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.5.2.tgz#05c5678d7173c049d8ca433552224a495d0e3762"
