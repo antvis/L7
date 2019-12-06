@@ -48,7 +48,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   maxZoom: 20,
   visible: true,
   zIndex: 0,
-  enableMultiPassRenderer: true,
+  enableMultiPassRenderer: false,
   enablePicking: false,
   enableHighlight: false,
   highlightColor: 'red',

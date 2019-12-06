@@ -8,6 +8,7 @@ import {
   IStyleAttribute,
   IStyleAttributeService,
   IStyleScale,
+  ScaleTypeName,
   ScaleTypes,
   StyleScaleType,
   TYPES,
@@ -57,12 +58,22 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
-      console.time('FeatureScalePlugin')
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
       this.caculateScalesForAttributes(attributes || [], dataArray);
-      console.timeEnd('FeatureScalePlugin')
+    });
+
+    // 检测数据是不否需要更新
+    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', (flag) => {
+      if (flag) {
+        this.scaleOptions = layer.getScaleOptions();
+        const attributes = styleAttributeService.getLayerStyleAttributes();
+        const { dataArray } = layer.getSource().data;
+        this.caculateScalesForAttributes(attributes || [], dataArray);
+        return true;
+      }
+      return false;
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
@@ -225,7 +236,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   }
 
   private createDefaultScaleConfig(
-    type: ScaleTypes,
+    type: ScaleTypeName,
     field: string,
     data?: IParseDataItem[],
   ) {

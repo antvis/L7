@@ -20,11 +20,15 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     };
   }
   protected renderModels() {
-    this.models.forEach((model) =>
+    if (this.layerModelNeedUpdate) {
+      this.models = this.layerModel.buildModels();
+      this.layerModelNeedUpdate = false;
+    }
+    this.models.forEach((model) => {
       model.draw({
         uniforms: this.layerModel.getUninforms(),
-      }),
-    );
+      });
+    });
     return this;
   }
 
@@ -58,5 +62,10 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
       return 'text';
     }
+  }
+
+  private updateData() {
+    // const bounds = this.mapService.getBounds();
+    // console.log(bounds);
   }
 }

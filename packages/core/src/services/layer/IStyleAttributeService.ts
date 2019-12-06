@@ -25,9 +25,18 @@ export enum ScaleTypes {
   THRESHOLD = 'threshold',
   CAT = 'cat',
 }
-
+export type ScaleTypeName =
+  | 'linear'
+  | 'power'
+  | 'log'
+  | 'identity'
+  | 'time'
+  | 'quantile'
+  | 'quantize'
+  | 'threshold'
+  | 'cat';
 export interface IScale {
-  type: ScaleTypes;
+  type: ScaleTypeName;
   ticks?: any[];
   nice?: boolean;
   format?: () => any;
@@ -40,7 +49,7 @@ export enum StyleScaleType {
 }
 export interface IScaleOption {
   field?: string;
-  type: ScaleTypes;
+  type: ScaleTypeName;
   ticks?: any[];
   nice?: boolean;
   format?: () => any;
@@ -137,6 +146,7 @@ export interface IStyleAttribute extends IStyleAttributeInitializationOptions {
   vertexAttribute: IAttribute;
   mapping?(...params: unknown[]): unknown[];
   setProps(props: Partial<IStyleAttributeInitializationOptions>): void;
+  resetDescriptor(): void;
 }
 
 export type Triangulation = (
@@ -157,6 +167,12 @@ export interface IStyleAttributeService {
   //   layerName: string,
   //   options: ILayerStyleOptions,
   // ): void;
+  attributesAndIndices: {
+    attributes: {
+      [attributeName: string]: IAttribute;
+    };
+    elements: IElements;
+  };
   registerStyleAttribute(
     options: Partial<IStyleAttributeInitializationOptions>,
   ): IStyleAttribute;
@@ -169,7 +185,7 @@ export interface IStyleAttributeService {
   getLayerStyleAttribute(attributeName: string): IStyleAttribute | undefined;
   createAttributesAndIndices(
     encodedFeatures: IEncodeFeature[],
-    triangulation: Triangulation,
+    triangulation?: Triangulation,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;

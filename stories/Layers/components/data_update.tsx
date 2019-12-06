@@ -53,9 +53,9 @@ export default class DataUpdate extends React.Component {
       });
     scene.addLayer(layer);
     function animateMarker(timestamp: number) {
-      console.time('updatedata');
+
       layer.setData(pointOnCircle(timestamp / 1000));
-      console.timeEnd('updatedata');
+
       scene.render();
 
       // setTimeout(animateMarker, 100);
@@ -63,7 +63,6 @@ export default class DataUpdate extends React.Component {
     }
     layer.on('inited', () => {
       animateMarker(0);
-      console.log('inited');
     });
   }
 

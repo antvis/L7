@@ -128,3 +128,17 @@ export function setTransform(el: ELType, value: string) {
   // @ts-ignore
   el.style[transformProp] = value;
 }
+
+export function triggerResize() {
+  if (typeof Event === 'function') {
+    // modern browsers
+    window.dispatchEvent(new Event('resize'));
+  } else {
+    // for IE and other old browsers
+    // causes deprecation warning on modern browsers
+    const evt = window.document.createEvent('UIEvents');
+    // @ts-ignore
+    evt.initUIEvent('resize', true, false, window, 0);
+    window.dispatchEvent(evt);
+  }
+}
