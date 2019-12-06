@@ -49,34 +49,35 @@ npm install @antv/l7@beta
 ```javascript
 import { Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
-new Scene({
+
+const scene = new Scene({
   id: 'map',
   map: new Mapbox({
     style: 'light',
     pitch: 0,
     center: [ 107.054293, 35.246265 ],
     zoom: 4.056
-  })
-})
-
+  }),
+});
 ```
+
 ### Add Layer
 
-```javascript
 
+```javascript
 import { PointLayer } from '@antv/l7';
-  const pointLayer = new PointLayer()
-      .source(data)
-      .shape('circle')
-      .size('mag', [ 1, 25 ])
-      .color('mag',['#5B8FF9', '#5CCEA1'])
-      .style({
-        opacity: 0.3,
-        strokeWidth: 1
-      });
+
+const pointLayer = new PointLayer()
+  .source(data)
+  .shape('circle')
+  .size('mag', [ 1, 25 ])
+  .color('mag',['#5B8FF9', '#5CCEA1'])
+  .style({
+    opacity: 0.3,
+    strokeWidth: 1,
+  });
 
 scene.addLayer(pointLayer);
-
 ```
 
 ## :memo: Documentation
