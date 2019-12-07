@@ -16,7 +16,7 @@ addParameters({
     theme: create({
       base: 'light',
       brandTitle: 'L7 for new architecture',
-      brandUrl: 'https://github.com/xiaoiver/L7-POC',
+      brandUrl: 'https://github.com/antvis/L7',
       gridCellSize: 12,
     }),
   },
