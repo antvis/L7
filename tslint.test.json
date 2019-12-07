@@ -4,6 +4,6 @@
     "no-implicit-dependencies": [false, "dev"]
   },
   "linterOptions": {
-    "exclude": ["**/*.d.ts"]
+    "exclude": ["**/*.d.ts", "**/data/*.ts"]
   }
 }
