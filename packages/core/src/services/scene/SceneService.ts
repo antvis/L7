@@ -151,7 +151,10 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.$container = $container;
       if ($container) {
         await this.rendererService.init($container);
-        elementResizeEvent(this.$container, this.handleWindowResized);
+        elementResizeEvent(
+          this.$container as HTMLDivElement,
+          this.handleWindowResized,
+        );
         // window.addEventListener('resize', this.handleWindowResized, false);
       } else {
         this.logger.error('容器 id 不存在');
@@ -214,7 +217,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.removeAllListeners();
     this.rendererService.destroy();
     this.map.destroy();
-    unbind(this.$container);
+    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
     // window.removeEventListener('resize', this.handleWindowResized, false);
   }
 
