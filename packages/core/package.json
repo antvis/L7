@@ -42,6 +42,7 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.138",
+    "@types/element-resize-event": "^2.0.0",
     "@types/viewport-mercator-project": "^6.1.0"
   },
   "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",

@@ -1,4 +1,3 @@
-// @ts-ignore
 import { DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
