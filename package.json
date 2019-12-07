@@ -131,7 +131,7 @@
     "build:declarations": "lerna exec --stream --no-bail 'tsc --project ./tsconfig.build.json'",
     "fix": "run-p -c 'lint:ts-* --fix'",
     "lint:css": "stylelint 'packages/**/*.js{,x}'",
-    "lint:ts-prod": "tslint --config tslint.prod.json 'packages/**/*.ts{,x}'",
+    "lint:ts-prod": "tslint --config tslint.prod.json packages/**/*.ts",
     "lint:ts-test": "tslint --config tslint.test.json 'packages/**/*.{spec,story}.ts{,x}'",
     "lint:ts": "run-p -c lint:ts-*",
     "lint": "run-p -c lint:*",
