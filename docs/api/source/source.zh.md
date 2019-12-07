@@ -25,12 +25,10 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 
 ### parser
 
-
 **配置项**
 
- - type:  ```csv|json|geojson|image|raster```
- - 其他可选配置项，具体和数据格式相关
-
+- type: `csv|json|geojson|image|raster`
+- 其他可选配置项，具体和数据格式相关
 
 #### geojson
 
@@ -41,6 +39,7 @@ layer.source(data);
 ```
 
 #### JSON
+
 [JSON 数据格式解析](../json)
 
 #### csv
@@ -165,4 +164,3 @@ layer.source(data, {
 - size: 网格半径
 - field: 数据统计字段
 - method:聚合方法   count,max,min,sum,mean 5 个统计维度
-
