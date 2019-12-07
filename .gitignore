@@ -73,7 +73,6 @@ es/
 public
 .cache
 
-yarn.lock
 package-lock.json
 git_log.sh
 node_modules/
