@@ -3721,6 +3721,11 @@
   resolved "https://registry.npmjs.org/@types/earcut/-/earcut-2.1.0.tgz#20cbed6e57dc65de3c1255c1a0c586864ed5c7e9"
   integrity sha512-PKu2suACS92cLQb2DZ6ytgnQm9PKPQRCD9jPqgMUTMVEuUqLTfCRHuaOXKmZTyVpL7zqJX+ZSZoyUr4e5muSNg==
 
+"@types/element-resize-event@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/@types/element-resize-event/-/element-resize-event-2.0.0.tgz#1baed45ef816bea8fe9e1d2ede350c2f5ea9630f"
+  integrity sha1-G67UXvgWvqj+nh0u3jUML16pYw8=
+
 "@types/enzyme-adapter-react-16@^1.0.3":
   version "1.0.5"
   resolved "https://registry.npmjs.org/@types/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.0.5.tgz#1bf30a166f49be69eeda4b81e3f24113c8b4e9d5"
@@ -8989,6 +8994,11 @@ element-resize-detector@^1.1.15:
   integrity sha512-16/5avDegXlUxytGgaumhjyQoM6hpp5j3+L79sYq5hlXfTNRy5WMMuTVWkZU3egp/CokCmTmvf18P3KeB57Iog==
   dependencies:
     batch-processor "^1.0.0"
+
+element-resize-event@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/element-resize-event/-/element-resize-event-3.0.3.tgz#3f59facef6b8f23fbd678a5f364ee5723af98a2a"
+  integrity sha512-vhGNxT87PdZA6Ak4E0QhArwGzNcSPUwSN7n9wCFLeBlY2NNuuiwguQuQIp7P5oB65PLJ892yKcHiqz1xLWeiug==
 
 elliptic@^6.0.0:
   version "6.5.2"
