@@ -1,5 +1,7 @@
 import {
+  IAttribute,
   ICameraService,
+  IElements,
   IFontService,
   IGlobalConfigService,
   IIconService,
@@ -12,10 +14,13 @@ import {
   IShaderModuleService,
   IStyleAttributeService,
   lazyInject,
+  Triangulation,
   TYPES,
 } from '@antv/l7-core';
 
 export default class BaseModel implements ILayerModel {
+  public triangulation: Triangulation;
+
   protected layer: ILayer;
 
   @lazyInject(TYPES.IGlobalConfigService)
@@ -57,7 +62,14 @@ export default class BaseModel implements ILayerModel {
   public buildModels(): IModel[] {
     throw new Error('Method not implemented.');
   }
-
+  public getAttribute(): {
+    attributes: {
+      [attributeName: string]: IAttribute;
+    };
+    elements: IElements;
+  } {
+    throw new Error('Method not implemented.');
+  }
   public render() {
     throw new Error('Method not implemented.');
   }

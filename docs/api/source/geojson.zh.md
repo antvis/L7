@@ -1,5 +1,5 @@
 ---
-title: geojson
+title: GeoJSON
 order: 1
 ---
 
