@@ -123,7 +123,7 @@
     "site:clean": "gatsby clean",
     "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
-    "lint:fix": "prettier --write docs/api/**/*.md packages/**/*.{spec,story}.ts{,x} stories/**/**/*.tsx",
+    "lint:fix": "prettier --write docs/api/**/*.md packages/**/*.{spec,story}.ts{,x} stories/**/**/*.tsx  *.md",
     "lint:examples": "eslint examples/**/**/*.js --fix",
     "prebuild": "run-p tsc lint",
     "build": "yarn clean && lerna run build",
