@@ -68,6 +68,12 @@ export default class StyleAttribute implements IStyleAttribute {
     return this.defaultCallback(params);
   }
 
+  public resetDescriptor() {
+    if (this.descriptor) {
+      this.descriptor.buffer.data = [];
+    }
+  }
+
   private defaultCallback = (params: unknown[]): unknown[] => {
     // 没有 params 的情况，是指没有指定 fields，直接返回配置的 values 常量
     if (params.length === 0) {

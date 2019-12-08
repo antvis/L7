@@ -34,7 +34,6 @@ export interface IElements {
     // 原 Buffer 替换位置，单位为 byte
     offset: number;
   }): void;
-
   /**
    * gl.deleteBuffer
    */

@@ -130,10 +130,16 @@ export default class AMapService
     const amapBound = this.map.getBounds().toBounds();
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
+    const center = this.getCenter();
+    const maxlng =
+      center.lng > NE.getLng() || center.lng < SW.getLng()
+        ? 180 - NE.getLng()
+        : NE.getLng();
+    const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
     // 兼容 Mapbox，统一返回西南、东北
     return [
-      [SW.getLng(), SW.getLat()],
-      [NE.getLng(), NE.getLat()],
+      [minlng, SW.getLat()],
+      [maxlng, NE.getLat()],
     ];
   }
 
