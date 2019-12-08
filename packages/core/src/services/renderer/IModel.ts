@@ -220,6 +220,7 @@ export interface IModelDrawOptions {
   attributes?: {
     [key: string]: IAttribute;
   };
+  elements?: IElements;
 }
 
 /**

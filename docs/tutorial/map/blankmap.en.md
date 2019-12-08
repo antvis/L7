@@ -24,4 +24,7 @@ const scene = new Scene({
 ```
 如果你只是需要做个中国地图，世界地图这样填充图，建议你采用这样的模式
 
-离线，无token使用 ![mapbox demo](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14&hidenavigation=1&theme=dark)
+
+离线，无token使用 
+
+<iframe width="100%" height="400" src="//jsfiddle.net/lzxue/a76og89k/embedded/html,result/light/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
