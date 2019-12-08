@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.19](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.19) (2019-12-08)
+
+### Bug Fixes
+
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+
+# [2.0.0-beta.18](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.18) (2019-12-08)
+
+### Bug Fixes
+
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+
+# [2.0.0-beta.17](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2019-12-08)
+
+### Bug Fixes
+
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+
 # [2.0.0-beta.16](https://github.com/antvis/L7/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2019-11-29)
 
 **Note:** Version bump only for package L7
