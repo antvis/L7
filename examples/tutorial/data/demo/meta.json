@@ -6,8 +6,11 @@
   "demos": [
     {
       "filename": "line.js",
-      "title": "json数据"",
-      "screenshot": ""
+      "title": "json数据"
+    },
+    {
+      "filename": "data_update.js",
+      "title": "数据更新"
     }
   ]
 }

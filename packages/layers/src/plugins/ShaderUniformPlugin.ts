@@ -31,6 +31,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
       // 重新计算坐标系参数
+
       this.coordinateSystemService.refresh();
 
       const { width, height } = this.rendererService.getViewportSize();

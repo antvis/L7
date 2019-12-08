@@ -6,6 +6,9 @@ export const MapTheme: {
   normal: 'mapbox://styles/mapbox/streets-v11',
   blank: {
     version: 8,
+    sprite: 'https://lzxue.github.io/font-glyphs/sprite/sprite',
+    glyphs:
+      'https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf',
     sources: {},
     layers: [
       {

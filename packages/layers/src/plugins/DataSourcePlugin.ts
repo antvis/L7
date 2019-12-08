@@ -9,5 +9,13 @@ export default class DataSourcePlugin implements ILayerPlugin {
       const { data, options } = layer.sourceOption;
       layer.setSource(new Source(data, options));
     });
+
+    // 检测数据是不否需要更新
+    layer.hooks.beforeRenderData.tap('DataSourcePlugin', (flag) => {
+      if (layer.isSourceNeedUpdate()) {
+        return true;
+      }
+      return false;
+    });
   }
 }
