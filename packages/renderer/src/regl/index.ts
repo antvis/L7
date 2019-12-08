@@ -53,14 +53,14 @@ export default class ReglRendererService implements IRendererService {
         extensions: [
           'OES_element_index_uint',
           // 'EXT_shader_texture_lod', // IBL 兼容性问题
-          // 'OES_standard_derivatives', // wireframe
-          'OES_texture_float', // shadow map
-          // 'WEBGL_depth_texture',
+          'OES_standard_derivatives', // wireframe
+          // 'OES_texture_float', // shadow map 兼容性问题
+          'WEBGL_depth_texture',
           'angle_instanced_arrays',
-          // 'EXT_texture_filter_anisotropic', // VSM shadow map
+          'EXT_texture_filter_anisotropic', // VSM shadow map
         ],
         // optionalExtensions: ['oes_texture_float_linear'],
-        // profile: true,
+        profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
           if (err || !r) {
             reject(err);
