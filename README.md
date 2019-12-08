@@ -8,24 +8,21 @@ Large-scale WebGL-powered Geospatial data visualization analysis framework.
 
 Powered by WebGL, the rendering technology of L7 supports fast and efficient rendering of big data, 2D/3D rendering, possible through calculation and analysis of spatial data by GPU Parallel Compu-ting.
 
-L7 focuses on  geographic data expressiveness，interaction and design of geographic visualization layers. The basemaps on the platform are powered by third-party services 
-
+L7 focuses on geographic data expressiveness，interaction and design of geographic visualization layers. The basemaps on the platform are powered by third-party services
 
 ## 🌄 l7 visualization demos
 
 ![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SGU-QIZsnyoAAAAAAAAAAABkARQnAQ)
 
-
 ## 🌟 Highlight features of L7 2.0
 
 - 🌏 Data-driven Visualization
- 
+
   Layer visualization API design base Semiology of Graphics.
 
   It supports rich map visualization types for a better insight on data.
 
 - 🌏 High performance rendering with 2D/3D effect
-	
   Real-time and dynamic rendering with millions of spatial data.
 
 - 🌏 Simple and flexible data format
@@ -55,14 +52,13 @@ const scene = new Scene({
   map: new Mapbox({
     style: 'light',
     pitch: 0,
-    center: [ 107.054293, 35.246265 ],
-    zoom: 4.056
+    center: [107.054293, 35.246265],
+    zoom: 4.056,
   }),
 });
 ```
 
 ### Add Layer
-
 
 ```javascript
 import { PointLayer } from '@antv/l7';
@@ -70,8 +66,8 @@ import { PointLayer } from '@antv/l7';
 const pointLayer = new PointLayer()
   .source(data)
   .shape('circle')
-  .size('mag', [ 1, 25 ])
-  .color('mag',['#5B8FF9', '#5CCEA1'])
+  .size('mag', [1, 25])
+  .color('mag', ['#5B8FF9', '#5CCEA1'])
   .style({
     opacity: 0.3,
     strokeWidth: 1,
