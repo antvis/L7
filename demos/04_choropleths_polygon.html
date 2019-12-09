@@ -17,7 +17,7 @@
 
 <body>
 <div id="map"></div>
-<div  id ="info" class ="tooltip" style="display:none"></div> 
+<div  id ="info" class ="tooltip" style="display:none"></div>
 <div class='info-panel top-right'>
  <p>
  <label>min</label><input name="minaqi" type="range" step="1" min="0" max="200" value=0> <label>0</label>
@@ -53,16 +53,16 @@ const colorObj ={
 const scene = new L7.Scene({
   id: 'map',
   mapStyle: 'dark', // 样式URL
-  center: [104.838088,34.075889 ],
+  center: [120.389374, 29.301169],
   pitch: 0,
-  zoom: 4.5,
+  zoom: 10,
 
 });
 window.scene = scene;
 scene.on('loaded', () => {
   var colors = ["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"];
   $.getJSON('https://gw.alipayobjects.com/os/basement_prod/77497aa8-8dd0-4a0c-bf3b-3bb55c5d453c.json', city => {
-   
+
     const citylayer = scene.PolygonLayer()
     .source(city)
     .color('#F27049')
@@ -72,7 +72,7 @@ scene.on('loaded', () => {
       opacity: 0.8
     })
     .render();
-    
+
      const citylayer2 = scene.PolygonLayer()
       .source(city)
       .shape('line')
@@ -81,9 +81,18 @@ scene.on('loaded', () => {
         opacity: 1.0
        })
       .render();
-    
-    console.log(citylayer);
-    
+
+    citylayer.on('click', function(e) {
+        var lnglat = e.lnglat,
+          feature = e.feature;
+          console.log(feature);
+
+         var html = '<p>省份' + feature.properties.province + '</p>\n <p>市' + feature.properties.city + '</p>\n<p>区' + feature.properties.town + '</p>\n';
+
+          new L7.Popup().setLnglat([lnglat.lng, lnglat.lat]).setHTML(html).addTo(scene);
+    });
+
+
   });
 });
 

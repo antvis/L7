@@ -29,6 +29,7 @@ export default class Popup extends Base {
     this.lngLat = lngLat;
     if (this._scene) {
       this._scene.on('camerachange', this._update);
+      this._scene.on('resize', this._update);
     }
     this._update(lngLat);
     return this;
@@ -132,6 +133,7 @@ export default class Popup extends Base {
     }
     if (this._scene) {
       this._scene.off('camerachange', this._update);
+      this._scene.off('resize', this._update);
       this._scene.off('click', this._onClickClose);
       delete this._scene;
     }

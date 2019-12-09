@@ -55,6 +55,7 @@ export default class Marker extends Base {
     this._scene = scene;
     this._scene.getMarkerContainer().appendChild(this.get('element'));
     this._scene.on('camerachange', this._update);
+    this._scene.on('resize', this._update);
     this.setDraggable(this.get('draggable'));
     this._update();
     return this;
@@ -63,6 +64,8 @@ export default class Marker extends Base {
   remove() {
     if (this._scene) {
       this._scene.off('click', this._onMapClick);
+      this._scene.off('resize', this._update);
+      this._scene.off('camerachange', this._update);
       this._scene.off('move', this._update);
       this._scene.off('moveend', this._update);
       this._scene.off('mousedown', this._addDragHandler);
