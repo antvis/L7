@@ -113,6 +113,9 @@ export default class GaodeMap extends Base {
   }
   addOverLayer() {
     this.amapContainer = this.map.getContainer().getElementsByClassName('amap-maps')[0];
+    if (!this.amapContainer) {
+      throw new Error('确保高德地图实例化完成再创建初始化L7 scene');
+    }
     this.renderDom = document.createElement('div');
     this.renderDom.style.cssText +=
       'position: absolute;top: 0;height: 100%;width: 100%;pointer-events: none;';

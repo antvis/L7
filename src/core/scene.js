@@ -7,6 +7,7 @@ import { getMap } from '../map/index';
 import Global from '../global';
 import { getInteraction } from '../interaction/index';
 import { compileBuiltinModules } from '../geom/shader';
+import elementResizeEvent, { unbind } from 'element-resize-event';
 import Style from './style';
 import Controller from './controller/control';
 import * as Control from '../component/control';
@@ -19,6 +20,7 @@ export default class Scene extends Base {
   }
   constructor(cfg) {
     super(cfg);
+    this.handleWindowResized = this.handleWindowResized.bind(this);
     this._initMap();
     this.crs = epsg3857;
     this.fontAtlasManager = new FontAtlasManager();
@@ -59,6 +61,10 @@ export default class Scene extends Base {
     this.mapType = this.get('mapType') || 'amap';
     const MapProvider = getMap(this.mapType);
     const Map = new MapProvider(this.mapContainer, this._attrs);
+    elementResizeEvent(
+      this.mapContainer,
+      this.handleWindowResized,
+    );
     Map.mixMap(this);
     this._container = Map.container;
     Map.on('mapLoad', () => {
@@ -226,6 +232,7 @@ export default class Scene extends Base {
     this._layers.forEach(layer => {
       layer.destroy();
     });
+    unbind(this.mapContainer, this.handleWindowResized);
     this._layers.length = 0;
     this.image = null;
     this.fontAtlasManager = null;
@@ -236,7 +243,9 @@ export default class Scene extends Base {
     this.map.destroy();
     this.unRegsterMapEvent();
     this._unRegistEvents();
-
-
+  }
+  handleWindowResized() {
+    this.emit('resize');
+    this._engine.resize();
   }
 }

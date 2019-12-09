@@ -8,7 +8,9 @@ export default class Engine extends EventEmitter {
   constructor(container, world) {
     super();
     this._scene = new THREE.Scene();
-    this._camera = new Camera(container).camera;
+    this.camera = new Camera(container);
+    this._camera = this.camera.camera;
+
     this._render = new Renderer(container);
     this._renderer = this._render.renderer;
     this._world = world;// 地图场景实例
@@ -62,6 +64,7 @@ export default class Engine extends EventEmitter {
   }
   resize() {
     this._render.updateSize();
+    this.camera.updateSize();
     this.update();
   }
 }
