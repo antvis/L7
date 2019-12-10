@@ -7,6 +7,13 @@ order: 0
 
 source 地理数据处理模块，主要包含数据解析（parser)，和数据处理(transform);
 
+- data
+- option
+  - cluster **boolean** 是否聚合
+  - clusterOption 聚合配置项
+  - parser 数据解析配置
+  - transforms 数据处理配置
+
 ### parser
 
 不同数据类型处理成统一数据格式。矢量数据包括 GeoJON, CSV，Json 等不同数据格式，栅格数据，包括 Raster，Image 数据。将来还会支持瓦片格式数据。
@@ -22,6 +29,14 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 数据转换，数据统计，网格布局，数据聚合等数据操作。
 
 ## API
+
+### cluster 可选 可以只设置 cluster
+
+### clusterOption 可选
+
+- radius 聚合半径 **number** default 40
+- minZoom: 最小聚合缩放等级 **number** default 0
+- maxZoom: 最大聚合缩放等级 **number** default 16
 
 ### parser
 
@@ -40,99 +55,24 @@ layer.source(data);
 
 #### JSON
 
-[JSON 数据格式解析](../json)
+[JSON 数据格式解析](./json)
 
 #### csv
 
-点，线数据配置项同 json 数据类型
+[CSV 数据格式解析](./csv)
 
-```javascript
-layer.source(data, {
-  parser: {
-    type: 'csv',
-    x: 'lng1',
-    y: 'lat1',
-    x1: 'lng1',
-    y1: 'lat2',
-  },
-});
-```
-
-**栅格数据类型 **
+栅格数据类型
 
 #### image
 
-根据图片的经纬度范围，将图片添加到地图上。  配置项
-
-- type: image
-- extent: 图像的经纬度范围 []
-
-```javascript
-layer.source(
-  'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
-  {
-    parser: {
-      type: 'image',
-      extent: [121.168, 30.2828, 121.384, 30.4219],
-    },
-  },
-);
-```
-
-#### raster
-
-栅格数据类型，主要表示遥感数据类型 data 栅格数据的二维矩阵数据 parser 配置项
-
-- type  raster
-- width  数据宽度二维矩阵 columns
-- height 数据高度
-- min 数据最大值
-- max 数据最小值
-- extent 经纬度范围
-
-```javascript
-source(values, {
-  parser: {
-    type: 'raster',
-    width: n,
-    height: m,
-    min: 0,
-    max: 8000,
-    extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
-  },
-});
-```
+[Image 数据格式解析](./image)
 
 ### transforms
 
-目前支持三种数据处理方法 map，grid，hexagon transform 配置项
+目前支持两种热力图使用的数据处理方法 grid，hexagon transform 配置项
 
 - type 数据处理类型
 - tansform cfg  数据处理配置项
-
-#### map
-
-数据处理，支持自定义 callback 函数
-
-- callback:function 回调函数
-
-```javascript
-layer.source(data, {
-  transforms: [
-    {
-      type: 'map',
-      callback: function(item) {
-        const [x, y] = item.coordinates;
-        item.lat = item.lat * 1;
-        item.lng = item.lng * 1;
-        item.v = item.v * 1;
-        item.coordinates = [x * 1, y * 1];
-        return item;
-      },
-    },
-  ],
-});
-```
 
 #### grid
 

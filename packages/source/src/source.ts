@@ -1,9 +1,12 @@
 import {
   IClusterOptions,
+  IMapService,
   IParserCfg,
   IParserData,
   ISourceCFG,
   ITransform,
+  lazyInject,
+  TYPES,
 } from '@antv/l7-core';
 import { extent } from '@antv/l7-utils';
 import {
@@ -14,13 +17,13 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
+import { Container } from 'inversify';
 import { cloneDeep, isFunction, isString } from 'lodash';
 import Supercluster from 'supercluster';
 import { SyncHook } from 'tapable';
 import { getParser, getTransform } from './';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
-
 export default class Source extends EventEmitter {
   public data: IParserData;
 
@@ -82,13 +85,9 @@ export default class Source extends EventEmitter {
     this.init();
   }
 
-  public updateClusterData(
-    zoom: number,
-    bbox: [number, number, number, number],
-  ): void {
+  public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
-    let data = this.clusterIndex.getClusters(bbox, zoom);
-    this.clusterOptions.bbox = bbox;
+    let data = this.clusterIndex.getClusters(this.extent, zoom);
     this.clusterOptions.zoom = zoom;
     data.forEach((p) => {
       if (!p.id) {
