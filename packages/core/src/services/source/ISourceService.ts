@@ -61,6 +61,7 @@ export interface ISource {
   data: IParserData;
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
+  updateClusterData(zoom: number): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];
