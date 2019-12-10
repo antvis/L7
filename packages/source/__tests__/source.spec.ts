@@ -20,6 +20,6 @@ describe('source constructor', () => {
         field: 'mag',
       },
     });
-    source.updateClusterData(2, [10, 0, 130, 75]);
+    source.updateClusterData(2);
   });
 });

@@ -371,30 +371,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.buildModels();
     return this;
   }
-
-  public isSourceNeedUpdate() {
-    const cluster = this.layerSource.cluster;
-    if (cluster) {
-      const { zoom = 0, bbox = [0, 0, 0, 0] } = this.layerSource.clusterOptions;
-      const newZoom = this.mapService.getZoom();
-      const bounds = this.mapService.getBounds();
-      const newBbox: [number, number, number, number] = [
-        bounds[0][0],
-        bounds[0][1],
-        bounds[1][0],
-        bounds[1][1],
-      ];
-      // ||
-      //   bbox[0] !== newBbox[0] ||
-      //   bbox[2] !== newBbox[2]
-      if (Math.abs(zoom - newZoom) > 1) {
-        this.layerSource.updateClusterData(Math.floor(newZoom), newBbox);
-        return true;
-      }
-    }
-    return false;
-  }
-
   public style(options: object & Partial<ILayerConfig>): ILayer {
     const { passes, ...rest } = options;
 
@@ -537,12 +513,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     const bounds = this.mapService.getBounds();
     const zoom = this.mapService.getZoom();
     if (this.layerSource.cluster) {
-      this.layerSource.updateClusterData(zoom, [
-        bounds[0][0],
-        bounds[0][1],
-        bounds[1][0],
-        bounds[1][1],
-      ]);
+      this.layerSource.updateClusterData(zoom);
     }
   }
   public getSource() {
