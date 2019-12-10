@@ -36,9 +36,6 @@ export default class Point3D extends React.Component {
       .scale('point_count', {
         type: 'quantile',
       })
-      .filter('point_count', (point_count: number) => {
-        return point_count > 1;
-      })
       .size('point_count', [5, 10, 15, 20, 25])
       .color('red')
       .style({
@@ -46,7 +43,6 @@ export default class Point3D extends React.Component {
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
-    console.log(pointLayer);
   }
 
   public render() {

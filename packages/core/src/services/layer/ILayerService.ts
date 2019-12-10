@@ -106,7 +106,6 @@ export interface ILayer {
    */
   addPlugin(plugin: ILayerPlugin): ILayer;
   getSource(): ISource;
-  isSourceNeedUpdate(): boolean;
   setSource(source: ISource): void;
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
