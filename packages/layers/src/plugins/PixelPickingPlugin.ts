@@ -8,15 +8,7 @@ import {
   IStyleAttributeService,
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
-import { rgb2arr } from '../utils/color';
-
-function encodePickingColor(featureIdx: number): [number, number, number] {
-  return [
-    (featureIdx + 1) & 255,
-    ((featureIdx + 1) >> 8) & 255,
-    (((featureIdx + 1) >> 8) >> 8) & 255,
-  ];
-}
+import { encodePickingColor, rgb2arr } from '../utils/color';
 
 const PickingStage = {
   NONE: 0.0,
@@ -50,9 +42,13 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           },
           size: 3,
           // TODO: 固定 feature range 范围内的 pickingColor 都是固定的，可以生成 cache
-          update: (feature: IEncodeFeature, featureIdx: number) =>
+          update: (feature: IEncodeFeature, featureIdx: number) => {
             // 只有开启拾取才需要 encode
-            enablePicking ? encodePickingColor(featureIdx) : [0, 0, 0],
+            const { id } = feature;
+            return enablePicking && layer.isVisible()
+              ? encodePickingColor(id as number)
+              : [0, 0, 0];
+          },
         },
       });
     });
@@ -60,7 +56,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     // if (layer.multiPassRenderer) {
     layer.hooks.beforePickingEncode.tap('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getLayerConfig();
-      if (enablePicking) {
+      if (enablePicking && layer.isVisible()) {
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.ENCODE,
@@ -71,7 +67,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
 
     layer.hooks.afterPickingEncode.tap('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getLayerConfig();
-      if (enablePicking) {
+      if (enablePicking && layer.isVisible()) {
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.NONE,
