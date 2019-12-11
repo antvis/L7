@@ -5,7 +5,6 @@ import ArcLineDemo from './components/Arcline';
 import Column from './components/column';
 import DataUpdate from './components/data_update';
 import HeatMapDemo from './components/HeatMap';
-import GridHeatMap from './components/HeatmapGrid';
 import LineLayer from './components/Line';
 import PointDemo from './components/Point';
 import Point3D from './components/Point3D';
@@ -25,7 +24,6 @@ storiesOf('图层', module)
   .add('线图层', () => <LineLayer />)
   .add('3D弧线', () => <ArcLineDemo />)
   .add('2D弧线', () => <Arc2DLineDemo />)
-  .add('网格热力图', () => <GridHeatMap />)
   .add('热力图', () => <HeatMapDemo />)
   .add('栅格', () => <RasterLayerDemo />)
   .add('图片', () => <ImageLayerDemo />);
