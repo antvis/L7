@@ -112,7 +112,18 @@ export default class PixelPickingPass<
    * 拾取视口指定坐标属于的要素
    * TODO：支持区域拾取
    */
-  private pickFromPickingFBO = ({ x, y }: { x: number; y: number }) => {
+  private pickFromPickingFBO = ({
+    x,
+    y,
+    type,
+  }: {
+    x: number;
+    y: number;
+    type: string;
+  }) => {
+    if (!this.layer.isVisible()) {
+      return;
+    }
     const {
       getViewportSize,
       readPixels,
@@ -152,9 +163,9 @@ export default class PixelPickingPass<
       ) {
         this.logger.debug('picked');
         const pickedFeatureIdx = decodePickingColor(pickedColors);
-        const rawFeature = this.layer.getSource()?.data?.dataArray[
-          pickedFeatureIdx
-        ];
+        const rawFeature = this.layer
+          .getSource()
+          .getFeatureById(pickedFeatureIdx);
 
         if (!rawFeature) {
           // this.logger.error(
@@ -162,7 +173,7 @@ export default class PixelPickingPass<
           // );
         } else {
           // trigger onHover/Click callback on layer
-          this.triggerHoverOnLayer({ x, y, feature: rawFeature });
+          this.triggerHoverOnLayer({ x, y, type, feature: rawFeature });
         }
       }
     });
@@ -175,10 +186,12 @@ export default class PixelPickingPass<
   private triggerHoverOnLayer({
     x,
     y,
+    type,
     feature,
   }: {
     x: number;
     y: number;
+    type: string;
     feature: unknown;
   }) {
     const { onHover, onClick } = this.layer.getLayerConfig();
@@ -196,6 +209,11 @@ export default class PixelPickingPass<
         feature,
       });
     }
+    this.layer.emit(type, {
+      x,
+      y,
+      feature,
+    });
   }
 
   /**

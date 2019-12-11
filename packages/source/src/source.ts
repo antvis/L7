@@ -121,6 +121,16 @@ export default class Source extends EventEmitter {
     });
     this.executeTrans();
   }
+  public getFeatureById(id: number): unknown {
+    const { type = 'geojson' } = this.parser;
+    if (type === 'geojson') {
+      return id < this.rawData.features.length
+        ? this.rawData.features[id]
+        : 'null';
+    } else {
+      return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
+    }
+  }
 
   private excuteParser(): void {
     const parser = this.parser;

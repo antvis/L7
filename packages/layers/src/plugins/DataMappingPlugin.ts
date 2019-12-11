@@ -27,13 +27,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('DataMappingPlugin', () => {
-      this.doMaping(layer, { styleAttributeService });
+      this.generateMaping(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('DataMappingPlugin', (flag) => {
-      if (flag) {
-        layer.dataPluginsState.DataMapping = false;
-        this.doMaping(layer, { styleAttributeService });
+      if (flag || layer.dataState.dataMappingNeedUpdate) {
+        layer.dataState.dataMappingNeedUpdate = false;
+        this.generateMaping(layer, { styleAttributeService });
         return true;
       }
       return false;
@@ -52,7 +52,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
     });
   }
-  private doMaping(
+  private generateMaping(
     layer: ILayer,
     {
       styleAttributeService,
@@ -62,6 +62,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
     let filterData = dataArray;
+    // 数据过滤完 在执行数据映射
     if (filter?.scale) {
       filterData = dataArray.filter((record: IParseDataItem) => {
         return this.applyAttributeMapping(filter, record)[0];

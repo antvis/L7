@@ -13,6 +13,7 @@ import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
+import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
 import PixelPickingPlugin from './plugins/PixelPickingPlugin';
@@ -56,6 +57,15 @@ container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(DataMappingPlugin)
   .inRequestScope();
+
+/**
+ * 更新地图样式配置项 如active, show, hide
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerStylePlugin)
+  .inRequestScope();
+
 /**
  * 负责属性更新
  */
