@@ -22,7 +22,13 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
-
+export interface IDataState {
+  dataSourceNeedUpdate: boolean;
+  dataMappingNeedUpdate: boolean;
+  filterNeedUpdate: boolean;
+  featureScaleNeedUpdate: boolean;
+  StyleAttrNeedUpdate: boolean;
+}
 export interface ILayerModelInitializationOptions {
   moduleName: string;
   vertexShader: string;
@@ -44,6 +50,10 @@ export interface IPickedFeature {
   lnglat?: { lng: number; lat: number };
   feature?: unknown;
 }
+// 交互样式
+export interface IActiveOption {
+  color: string | number[];
+}
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -52,9 +62,11 @@ export interface ILayer {
   zIndex: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
-  dataPluginsState: { [key: string]: boolean };
+  dataState: IDataState; // 数据流状态
+  pickedFeatureID: number;
   hooks: {
     init: SyncBailHook<void, boolean | void>;
+    afterInit: SyncBailHook<void, boolean | void>;
     beforeRenderData: SyncWaterfallHook<boolean | void>;
     beforeRender: SyncBailHook<void, boolean | void>;
     afterRender: SyncHook<void>;
@@ -87,7 +99,16 @@ export interface ILayer {
   animate(option: IAnimateOption): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   filter(field: string, value: StyleAttributeOption): ILayer;
-  // active(option: ActiveOption): ILayer;
+  active(option: IActiveOption | boolean): ILayer;
+  setActive(
+    id: number | { x: number; y: number },
+    option?: IActiveOption,
+  ): void;
+  select(option: IActiveOption | false): ILayer;
+  setSelect(
+    id: number | { x: number; y: number },
+    option?: IActiveOption,
+  ): void;
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
@@ -100,6 +121,7 @@ export interface ILayer {
   destroy(): void;
   source(data: any, option?: ISourceCFG): ILayer;
   setData(data: any, option?: ISourceCFG): ILayer;
+  fitBounds(): ILayer;
   /**
    * 向当前图层注册插件
    * @param plugin 插件实例
@@ -110,11 +132,13 @@ export interface ILayer {
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
   getScaleOptions(): IScaleOptions;
+
   /**
    * 事件
    */
   on(type: string, hander: (...args: any[]) => void): void;
   off(type: string, hander: (...args: any[]) => void): void;
+  emit(type: string, hander: unknown): void;
   once(type: string, hander: (...args: any[]) => void): void;
   /**
    * JSON Schema 用于校验配置项
@@ -125,6 +149,8 @@ export interface ILayer {
    * 直接调用拾取方法，在非鼠标交互场景中使用
    */
   pick(query: { x: number; y: number }): void;
+
+  updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
 }
 
 /**
@@ -159,6 +185,8 @@ export interface ILayerConfig {
   maxZoom: number;
   visible: boolean;
   zIndex: number;
+  autoFit: boolean;
+  pickedFeatureID: number;
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
@@ -174,6 +202,8 @@ export interface ILayerConfig {
    * 高亮颜色
    */
   highlightColor: string | number[];
+  active: boolean;
+  activeColor: string | number[];
   /**
    * 开启 TAA
    */
