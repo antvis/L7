@@ -38,13 +38,18 @@ export default class AdvancedAPI extends React.Component {
       highlightColor: [0, 0, 1, 1],
       onHover: (pickedFeature) => {
         // tslint:disable-next-line:no-console
-        console.log(pickedFeature);
+      },
+      onClick: (pickedFeature) => {
+        // tslint:disable-next-line:no-console
       },
     });
 
     layer
       .source(await response.json())
       .size('name', [0, 10000, 50000, 30000, 100000])
+      .active({
+        color: 'red',
+      })
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -58,6 +63,9 @@ export default class AdvancedAPI extends React.Component {
         opacity: 0.8,
       });
     scene.addLayer(layer);
+    layer.on('click', (e) => {
+      console.log(e);
+    });
 
     this.scene = scene;
 
@@ -67,9 +75,10 @@ export default class AdvancedAPI extends React.Component {
     const styleOptions = {
       enablePicking: true,
       enableHighlight: true,
-      highlightColor: [0, 0, 255],
+      highlightColor: [1, 0, 0],
       pickingX: window.innerWidth / 2,
       pickingY: window.innerHeight / 2,
+      visible: true,
     };
     const pointFolder = gui.addFolder('非鼠标 hover 交互');
     pointFolder
@@ -80,23 +89,30 @@ export default class AdvancedAPI extends React.Component {
         });
         scene.render();
       });
+    pointFolder.add(styleOptions, 'visible').onChange((visible: boolean) => {
+      layer.style({
+        visible,
+      });
+      scene.render();
+    });
     pointFolder
       .add(styleOptions, 'pickingX', 0, window.innerWidth)
       .onChange((pickingX: number) => {
-        layer.pick({ x: pickingX, y: styleOptions.pickingY });
+        layer.setActive({ x: pickingX, y: styleOptions.pickingY });
       });
     pointFolder
       .add(styleOptions, 'pickingY', 0, window.innerHeight)
       .onChange((pickingY: number) => {
-        layer.pick({ x: styleOptions.pickingX, y: pickingY });
+        layer.setActive({ x: styleOptions.pickingX, y: pickingY });
       });
     pointFolder
       .addColor(styleOptions, 'highlightColor')
       .onChange((highlightColor: number[]) => {
         const [r, g, b] = highlightColor.map((c) => c / 255);
-        layer.style({
-          highlightColor: [r, g, b, 1],
-        });
+        layer.setActive(
+          { x: styleOptions.pickingX, y: styleOptions.pickingY },
+          { color: [r, g, b, 1] },
+        );
         scene.render();
       });
     pointFolder.open();

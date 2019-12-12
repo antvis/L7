@@ -5,7 +5,6 @@ import { TYPES } from '../../types';
 import { ILogService } from '../log/ILogService';
 import { IMapService } from '../map/IMapService';
 import { IInteractionService, InteractionEvent } from './IInteractionService';
-
 /**
  * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
  * 除此之外，后续如果支持非地图场景，事件监听就需要注册在 L7 canvas 上。
@@ -49,8 +48,13 @@ export default class InteractionService extends EventEmitter
       // hammertime.on('panmove', this.onPanmove);
       // hammertime.on('panend', this.onPanend);
       // hammertime.on('pinch', this.onPinch);
-
       $containter.addEventListener('mousemove', this.onHover);
+      $containter.addEventListener('click', this.onHover);
+      $containter.addEventListener('mousedown', this.onHover);
+      $containter.addEventListener('mouseup', this.onHover);
+      $containter.addEventListener('dblclick', this.onHover);
+      $containter.addEventListener('contextmenu', this.onHover);
+
       this.hammertime = hammertime;
 
       // TODO: 根据场景注册事件到 L7 canvas 上
@@ -62,16 +66,21 @@ export default class InteractionService extends EventEmitter
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       $containter.removeEventListener('mousemove', this.onHover);
+      $containter.removeEventListener('click', this.onHover);
+      $containter.removeEventListener('mousedown', this.onHover);
+      $containter.removeEventListener('mouseup', this.onHover);
+      $containter.removeEventListener('dblclick', this.onHover);
+      $containter.removeEventListener('contextmenu', this.onHover);
     }
   }
 
-  private onHover = ({ x, y }: MouseEvent) => {
+  private onHover = ({ x, y, type }: MouseEvent) => {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       const { top, left } = $containter.getBoundingClientRect();
       x -= left;
       y -= top;
     }
-    this.emit(InteractionEvent.Hover, { x, y });
+    this.emit(InteractionEvent.Hover, { x, y, type });
   };
 }

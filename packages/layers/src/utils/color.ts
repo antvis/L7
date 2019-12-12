@@ -15,6 +15,16 @@ export function rgb2arr(str: string) {
   return arr;
 }
 
+export function encodePickingColor(
+  featureIdx: number,
+): [number, number, number] {
+  return [
+    (featureIdx + 1) & 255,
+    ((featureIdx + 1) >> 8) & 255,
+    (((featureIdx + 1) >> 8) >> 8) & 255,
+  ];
+}
+
 export function generateColorRamp(colorRamp: IColorRamp): ImageData {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
