@@ -9,6 +9,7 @@ import { cluster } from './transform/cluster';
 import { filter } from './transform/filter';
 import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
+import { join } from './transform/join';
 import { map } from './transform/map';
 export default Source;
 registerParser('geojson', geojson);
