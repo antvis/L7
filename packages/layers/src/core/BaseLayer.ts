@@ -1,6 +1,8 @@
 import {
   gl,
+  IActiveOption,
   IAnimateOption,
+  IDataState,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -44,12 +46,10 @@ import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import baseLayerSchema from './schema';
-
 /**
  * 分配 layer id
  */
 let layerIdCounter = 0;
-const MapEventTypes = ['zoomchange', 'dragend', 'camerachange', 'resize'];
 
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
@@ -61,15 +61,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public maxZoom: number;
   public inited: boolean = false;
   public layerModelNeedUpdate: boolean = false;
-  public dataPluginsState: { [key: string]: boolean } = {
-    DataSource: false,
-    DataMapping: false,
-    FeatureScale: false,
-    StyleAttr: false,
+  public pickedFeatureID: number = -1;
+
+  public dataState: IDataState = {
+    dataSourceNeedUpdate: false,
+    dataMappingNeedUpdate: false,
+    filterNeedUpdate: false,
+    featureScaleNeedUpdate: false,
+    StyleAttrNeedUpdate: false,
   };
   // 生命周期钩子
   public hooks = {
     init: new SyncBailHook<void, boolean | void>(),
+    afterInit: new SyncBailHook<void, boolean | void>(),
     beforeRender: new SyncBailHook<void, boolean | void>(),
     beforeRenderData: new SyncWaterfallHook<void | boolean>(['data']),
     afterRender: new SyncHook<void>(),
@@ -140,6 +144,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
+  private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
+
   /**
    * 待更新样式属性，在初始化阶段完成注册
    */
@@ -165,11 +171,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
-    const sceneId = this.container.get<string>(TYPES.SceneID);
-    this.configService.setLayerConfig(sceneId, this.id, {
-      ...this.configService.getLayerConfig(this.id),
-      ...configToUpdate,
-    });
+    if (!this.inited) {
+      this.needUpdateConfig = {
+        ...this.needUpdateConfig,
+        ...configToUpdate,
+      };
+    } else {
+      const sceneId = this.container.get<string>(TYPES.SceneID);
+      this.configService.setLayerConfig(sceneId, this.id, {
+        ...this.configService.getLayerConfig(this.id),
+        ...this.needUpdateConfig,
+        ...configToUpdate,
+      });
+      this.needUpdateConfig = {};
+    }
   }
 
   /**
@@ -273,10 +288,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
+    this.inited = true;
+
+    this.hooks.afterInit.call();
 
     this.buildModels();
-
-    this.inited = true;
     // 触发初始化完成事件;
     this.emit('inited');
     return this;
@@ -311,6 +327,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     return this;
   }
+  // 对mapping后的数据过滤，scale保持不变
   public filter(
     field: StyleAttributeField,
     values?: StyleAttributeOption,
@@ -322,6 +339,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       attributeValues: values,
       updateOptions,
     });
+    this.dataState.dataMappingNeedUpdate = true;
     return this;
   }
 
@@ -371,30 +389,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.buildModels();
     return this;
   }
-
-  public isSourceNeedUpdate() {
-    const cluster = this.layerSource.cluster;
-    if (cluster) {
-      const { zoom = 0, bbox = [0, 0, 0, 0] } = this.layerSource.clusterOptions;
-      const newZoom = this.mapService.getZoom();
-      const bounds = this.mapService.getBounds();
-      const newBbox: [number, number, number, number] = [
-        bounds[0][0],
-        bounds[0][1],
-        bounds[1][0],
-        bounds[1][1],
-      ];
-      // ||
-      //   bbox[0] !== newBbox[0] ||
-      //   bbox[2] !== newBbox[2]
-      if (Math.abs(zoom - newZoom) > 1) {
-        this.layerSource.updateClusterData(Math.floor(newZoom), newBbox);
-        return true;
-      }
-    }
-    return false;
-  }
-
   public style(options: object & Partial<ILayerConfig>): ILayer {
     const { passes, ...rest } = options;
 
@@ -442,11 +436,51 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public active(options: IActiveOption) {
+    this.updateLayerConfig({
+      enableHighlight: isObject(options) ? true : options,
+      highlightColor: isObject(options)
+        ? options.color
+        : this.getLayerConfig().highlightColor,
+    });
+    return this;
+  }
+  public setActive(
+    id: number | { x: number; y: number },
+    options?: IActiveOption,
+  ): void {
+    if (isObject(id)) {
+      const { x = 0, y = 0 } = id;
+      this.updateLayerConfig({
+        highlightColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().highlightColor,
+      });
+      this.pick({ x, y });
+    } else {
+      this.updateLayerConfig({
+        pickedFeatureID: id,
+        highlightColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().highlightColor,
+      });
+    }
+  }
+
+  public select(option: IActiveOption | false): ILayer {
+    return this;
+  }
+
+  public setSelect(
+    id: number | { x: number; y: number },
+    options?: IActiveOption,
+  ): void {
+    throw new Error('Method not implemented.');
+  }
   public show(): ILayer {
     this.updateLayerConfig({
       visible: true,
     });
-    this.layerService.renderLayers();
     return this;
   }
 
@@ -454,7 +488,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.updateLayerConfig({
       visible: false,
     });
-    this.layerService.renderLayers();
     return this;
   }
 
@@ -491,13 +524,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   /**
    * zoom to layer Bounds
    */
-  public fitBounds(): void {
+  public fitBounds(): ILayer {
+    if (!this.inited) {
+      this.updateLayerConfig({
+        autoFit: true,
+      });
+      return this;
+    }
     const source = this.getSource();
     const extent = source.extent;
     this.mapService.fitBounds([
       [extent[0], extent[1]],
       [extent[2], extent[3]],
     ]);
+    return this;
   }
 
   public destroy() {
@@ -537,12 +577,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     const bounds = this.mapService.getBounds();
     const zoom = this.mapService.getZoom();
     if (this.layerSource.cluster) {
-      this.layerSource.updateClusterData(zoom, [
-        bounds[0][0],
-        bounds[0][1],
-        bounds[1][0],
-        bounds[1][1],
-      ]);
+      this.layerSource.updateClusterData(zoom);
     }
   }
   public getSource() {
@@ -643,11 +678,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     };
   }
 
-  private registerMapEvent() {
-    MapEventTypes.forEach((type) => {
-      this.mapService.on(type, this.layerMapHander.bind(this, type));
-    });
-  }
   private layerMapHander(type: string, data: any) {
     this.emit(type, data);
   }
