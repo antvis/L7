@@ -195,20 +195,20 @@ export default class PixelPickingPass<
     feature: unknown;
   }) {
     const { onHover, onClick } = this.layer.getLayerConfig();
-    if (onHover) {
-      onHover({
-        x,
-        y,
-        feature,
-      });
-    }
-    if (onClick) {
-      onClick({
-        x,
-        y,
-        feature,
-      });
-    }
+    // if (onHover) {
+    //   onHover({
+    //     x,
+    //     y,
+    //     feature,
+    //   });
+    // }
+    // if (onClick) {
+    //   onClick({
+    //     x,
+    //     y,
+    //     feature,
+    //   });
+    // }
     this.layer.emit(type, {
       x,
       y,
