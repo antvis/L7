@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.20](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.20) (2019-12-12)
+
+
+### Bug Fixes
+
+* 修复webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+* **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+
+
+
+
+
 # [2.0.0-beta.19](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.19) (2019-12-08)
 
 
