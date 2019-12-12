@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="geometry" content="diagram">
+  <link rel="stylesheet" href="./assets/common.css">
+  <link rel="stylesheet" href="./assets/info.css">
+
+  <title>hexagon demo</title>
+  <style>
+  body {margin: 0;}
+	#map { position:absolute; top:0; bottom:0; width:400px; height:400px }
+  </style>
+<link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="map"></div>
+
+ <script src="https://webapi.amap.com/maps?v=1.4.15&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.js"></script>
+ <script src="../build/L7.js"></script>
+
+
+
+<script>
+$('#map')
+	.draggable()
+	.resizable();
+console.log(L7);
+const scene = new L7.Scene({
+  id: 'map',
+  mapStyle: 'dark', // 样式URL
+  center: [104.838088,34.075889 ],
+  pitch: 0,
+  zoom: 3,
+
+});
+scene.on('loaded', () => {
+  var colors = ["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"];
+  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
+    const citylayer = scene.PolygonLayer()
+    .source(city)
+    .color('pm2_5_24h',colors)
+    .shape('fill')
+    .active(true)
+    .style({
+      opacity: 1
+    })
+    .render();
+
+     citylayer.on('click', function(e) {
+        var lnglat = e.lnglat,
+          feature = e.feature.properties;
+
+        var html = '<p>城市:' + feature.name+ '</p>\n <p>质量:' + feature.quality+ '</p>\n <p>等级:' + feature.level + '</p>\n ';
+
+        new L7.Popup().setLnglat([lnglat.lng, lnglat.lat]).setHTML(html).addTo(scene);
+      });
+
+      $.get('https://gw.alipayobjects.com/os/basement_prod/c3f8bda2-081b-449d-aa9f-9413b779205b.json', function(data) {
+      scene.HeatmapLayer({
+          zIndex: 2
+        }).source(data, {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat'
+          }
+        }).size('count', [0, 1]) // weight映射通道
+        .style({
+          intensity: 10,
+          radius: 20,
+          opacity: 1,
+          rampColors: {
+            colors: ['#2E8AE6', '#69D1AB', '#DAF291', '#FFD591', '#FF7A45', '#CF1D49'],
+            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+          }
+        }).render();
+      });
+});
+})
+</script>
+</body>
+</html>
+

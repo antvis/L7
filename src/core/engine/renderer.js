@@ -4,7 +4,6 @@ export default class Renderer {
     this.container = container;
     this.initRender();
     this.updateSize();
-    window.addEventListener('resize', this.updateSize.bind(this), false);
   }
   initRender() {
     this.renderer = new THREE.WebGLRenderer({

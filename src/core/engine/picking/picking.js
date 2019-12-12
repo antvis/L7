@@ -32,7 +32,9 @@ class Picking {
 
   _initEvents() {
     this._resizeHandler = this._resizeTexture.bind(this);
-    window.addEventListener('resize', this._resizeHandler, false);
+  }
+  resize() {
+    this._resizeTexture();
   }
   pickdata(event) {
     let point = { x: event.offsetX, y: event.offsetY, type: event.type, _parent: event };

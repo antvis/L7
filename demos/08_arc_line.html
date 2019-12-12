@@ -31,13 +31,27 @@ const scene = new L7.Scene({
 });
 scene.on('loaded', () => {
   $.get('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt', data => {
+   const data2= [{
+            lng1:  91.111891,
+            lat1:29.662557,
+            lng2:97.342625,
+            lat2:37.373799,
+            value: 10
+        },{
+            lng1:91.111891,
+            lat1:29.662557,
+            lng2:104.067923,
+            lat2:30.679943,
+            value: 19
+        }
+        ]
 
     const layer = scene.LineLayer({
       zIndex: 2
     })
-     .source(data, { // lng1,lat1,lng2,lat2
+     .source(data2, { // lng1,lat1,lng2,lat2
        parser:{
-         type: 'csv',
+         type: 'json',
        x: 'lng1',
        y: 'lat1',
        x1: 'lng2',

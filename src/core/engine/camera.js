@@ -5,7 +5,6 @@ export default class Camera {
     const camera = new THREE.PerspectiveCamera(45, 1, 1, 2000000);
     this.camera = camera;
     this.updateSize();
-    window.addEventListener('resize', this.updateSize.bind(this));
 
   }
   updateSize() {

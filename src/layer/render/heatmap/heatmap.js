@@ -15,7 +15,7 @@ export default function DrawHeatmap(layerdata, layer) {
   const heatmap = new heatmapPass(layerdata, layer);
   const copy = new copyPass(layer);
   copy.renderToScreen = true;
-  const composer = new EffectComposer(layer.scene._engine._renderer, layer.scene._container);
+  const composer = new EffectComposer(layer.scene._engine._renderer);
   composer.id = layer.layerId;
   composer.addPass(heatmap);
   composer.addPass(copy);
