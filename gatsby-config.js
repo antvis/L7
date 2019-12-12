@@ -169,6 +169,10 @@ module.exports = {
         '@antv/l7': 'beta',
         '@antv/l7-maps': 'latest'
       }
+    },
+    docsearchOptions: {
+      apiKey: '97db146dbe490416af81ef3a8923bcaa',
+      indexName: 'antv_l7'
     }
   }
 };
