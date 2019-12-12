@@ -8,7 +8,7 @@ export interface IInteractionService {
   destroy(): void;
   on(
     eventName: InteractionEvent,
-    callback: (params: { x: number; y: number }) => void,
+    callback: (params: { x: number; y: number; type: string }) => void,
   ): void;
-  triggerHover({ x, y }: { x: number; y: number }): void;
+  triggerHover({ x, y, type }: { x: number; y: number; type?: string }): void;
 }
