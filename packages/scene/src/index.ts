@@ -210,6 +210,9 @@ class Scene
     this.mapService.panTo(pixel);
   }
 
+  public setZoom(zoom: number): void {
+    this.mapService.setZoom(zoom);
+  }
   public fitBounds(bound: Bounds): void {
     this.mapService.fitBounds(bound);
   }
