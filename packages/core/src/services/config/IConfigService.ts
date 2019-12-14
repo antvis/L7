@@ -41,6 +41,11 @@ export interface IGlobalConfigService {
   getLayerConfig<IChildLayerConfig>(
     layerId: string,
   ): Partial<ILayerConfig & ISceneConfig & IChildLayerConfig>;
+  /**
+   * 获取警告信息
+   * @param key
+   */
+  getSceneWarninfo(layerId: string): string;
 
   /**
    * 设置图层配置项，继承所属场景配置项
