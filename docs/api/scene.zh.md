@@ -97,6 +97,7 @@ const scene =new L7.Scene({
 - dark
 - light
 - normal
+- blank 无底图
 
 除了内置的样式，你也可以传入自定义的其他属性。
 
@@ -198,7 +199,14 @@ scene.setCenter([lng,lat])
 ```
 
 参数：`center`  {LngLat} 地图中心点
+### setZoom()
 
+设置地图缩放等级
+
+参数：`zoom` 地图缩放等级
+```
+scene.setZoom(zoom)
+```
 
 ### setZoomAndCenter
 设置地图等级和中心

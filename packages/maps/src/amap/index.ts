@@ -5,7 +5,9 @@ import {
   Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  IGlobalConfigService,
   ILngLat,
+  ILogService,
   IMapConfig,
   IMapService,
   IPoint,
@@ -46,6 +48,12 @@ export default class AMapService
    * 原始地图实例
    */
   public map: AMap.Map & IAMapInstance;
+
+  @inject(TYPES.IGlobalConfigService)
+  private readonly configService: IGlobalConfigService;
+
+  @inject(TYPES.ILogService)
+  private readonly logger: ILogService;
 
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
@@ -106,8 +114,13 @@ export default class AMapService
   }
   public getZoom(): number {
     // 统一返回 Mapbox 缩放等级
-    return this.map.getZoom() - 1;
+    return this.map.getZoom();
   }
+
+  public setZoom(zoom: number): void {
+    return this.map.setZoom(zoom);
+  }
+
   public getCenter(): ILngLat {
     const center = this.map.getCenter();
     return {
@@ -250,7 +263,10 @@ export default class AMapService
             pendingResolveQueue = [];
           }
         };
-        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=initAMap`;
+        if (token === AMAP_API_KEY) {
+          this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+        }
+        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D&callback=initAMap`;
         const $jsapi = document.createElement('script');
         $jsapi.id = AMAP_SCRIPT_ID;
         $jsapi.charset = 'utf-8';

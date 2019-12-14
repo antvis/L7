@@ -4,6 +4,7 @@ import { ILayerConfig } from '../layer/ILayerService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import mapConfigSchema from './mapConfigSchema';
 import sceneConfigSchema from './sceneConfigSchema';
+import WarnInfo, { IWarnInfo } from './warnInfo';
 
 /**
  * 场景默认配置项
@@ -102,6 +103,10 @@ export default class GlobalConfigService implements IGlobalConfigService {
 
   public getSceneConfig(sceneId: string) {
     return this.sceneConfigCache[sceneId];
+  }
+
+  public getSceneWarninfo(id: string) {
+    return WarnInfo[id];
   }
 
   public setSceneConfig(sceneId: string, config: Partial<ISceneConfig>) {
