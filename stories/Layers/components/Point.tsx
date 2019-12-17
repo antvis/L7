@@ -19,7 +19,7 @@ export default class Point3D extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
@@ -36,13 +36,18 @@ export default class Point3D extends React.Component {
           type: 'quantile',
         })
         .size('point_count', [5, 10, 15, 20, 25])
-        .active(true)
-        .color('red')
+        .color('yellow')
         .style({
-          opacity: 0.3,
+          opacity: 0.5,
           strokeWidth: 1,
         });
       scene.addLayer(pointLayer);
+      pointLayer.on('mousemove', (e) => {
+        const id = e.featureId;
+        console.log(id);
+        pointLayer.setActive(id);
+      });
+
       this.scene = scene;
     });
   }

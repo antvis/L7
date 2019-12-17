@@ -11,8 +11,8 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
-import { generateColorRamp, IColorRamp } from '../utils/color';
 import { RasterTriangulation } from './buffers/triangulation';
 import rasterFrag from './shaders/raster_frag.glsl';
 import rasterVert from './shaders/raster_vert.glsl';
