@@ -36,7 +36,7 @@ export default class Point3D extends React.Component {
           type: 'quantile',
         })
         .size('point_count', [5, 10, 15, 20, 25])
-        // .size(10)
+        .active(true)
         .color('red')
         .style({
           opacity: 0.3,
