@@ -66,11 +66,15 @@ export const MapServiceEvent = ['mapload'];
 /**
  * 地图初始化配置项
  */
-export interface IMapConfig {
+export interface IMapConfig<RawMap = {}> {
+  /**
+   * 地图实例
+   */
+  mapInstance?: RawMap;
   /**
    * 容器 DOM id
    */
-  id: string;
+  id: string | HTMLDivElement;
 
   /**
    * 地图

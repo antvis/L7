@@ -6,7 +6,15 @@ order: 1
 
 ## 使用
 
-气泡图通过PointLayer对象实例化，shape 设置成 **circle**
+气泡图通过PointLayer对象实例化，
+
+### shape 
+ 
+ 通常气泡图shape 设置为 **circle**
+
+### size
+
+气泡图大小，需要指定数据映射字段
 
 ```javascript
 

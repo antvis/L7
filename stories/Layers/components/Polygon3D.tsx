@@ -54,6 +54,7 @@ export default class Polygon3D extends React.Component {
         opacity: 1.0,
       });
     scene.addLayer(layer);
+    this.scene = scene;
   }
 
   public render() {

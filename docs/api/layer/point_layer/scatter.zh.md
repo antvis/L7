@@ -19,10 +19,14 @@ order: 2
 - rhombus
 - vesica
 
-### 视觉通道设置
+散点图shape 一般设置成常量
 
-shape、size 设置成常量
-color 可以设置根据数据映射
+### color
+
+color 可以根据数据的差异设置成不同颜色，表示数据的不同分类。
+
+### size
+散点图一般等大小的图形,size 一般设置成常量
 
 ```javascript
 
