@@ -6,8 +6,8 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { rgb2arr } from '../../utils/color';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
 

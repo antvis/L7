@@ -15,6 +15,13 @@ export function rgb2arr(str: string) {
   return arr;
 }
 
+export function decodePickingColor(color: Uint8Array): number {
+  const [i1, i2, i3] = color;
+  // 1 was added to seperate from no selection
+  const index = i1 + i2 * 256 + i3 * 65536 - 1;
+  return index;
+}
+
 export function encodePickingColor(
   featureIdx: number,
 ): [number, number, number] {

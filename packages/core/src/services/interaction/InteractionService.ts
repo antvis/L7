@@ -36,6 +36,13 @@ export default class InteractionService extends EventEmitter
   public triggerHover({ x, y }: { x: number; y: number }) {
     this.emit(InteractionEvent.Hover, { x, y });
   }
+  public triggerSelect(id: number): void {
+    this.emit(InteractionEvent.Select, { featureId: id });
+  }
+
+  public triggerActive(id: number): void {
+    this.emit(InteractionEvent.Active, { featureId: id });
+  }
 
   private addEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
@@ -81,6 +88,7 @@ export default class InteractionService extends EventEmitter
       x -= left;
       y -= top;
     }
-    this.emit(InteractionEvent.Hover, { x, y, type });
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+    this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
   };
 }
