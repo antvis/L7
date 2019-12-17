@@ -170,6 +170,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.initPromise = this.hooks.init.promise(
       this.configService.getSceneConfig(this.id),
     );
+
+    this.render();
   }
 
   public addLayer(layer: ILayer) {
