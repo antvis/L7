@@ -228,28 +228,37 @@ export default class AMapService
       minZoom = 0,
       maxZoom = 18,
       token = AMAP_API_KEY,
+      mapInstance,
       ...rest
     } = this.config;
     // 高德地图创建独立的container；
 
-    // @ts-ignore
-    this.$mapContainer = this.creatAmapContainer(id);
     // tslint:disable-next-line:typedef
     await new Promise((resolve) => {
       const resolveMap = () => {
-        // @ts-ignore
-        this.map = new AMap.Map(this.$mapContainer, {
-          mapStyle: this.getMapStyle(style),
-          zooms: [minZoom, maxZoom],
-          viewMode: '3D',
-          ...rest,
-        });
-
-        // 监听地图相机事件
-        this.map.on('camerachange', this.handleCameraChanged);
-        resolve();
+        if (mapInstance) {
+          this.map = mapInstance as AMap.Map & IAMapInstance;
+          this.$mapContainer = this.map.getContainer();
+          setTimeout(() => {
+            this.map.on('camerachange', this.handleCameraChanged);
+            resolve();
+          }, 30);
+        } else {
+          this.$mapContainer = this.creatAmapContainer(
+            id as string | HTMLDivElement,
+          );
+          // @ts-ignore
+          this.map = new AMap.Map(this.$mapContainer, {
+            mapStyle: this.getMapStyle(style),
+            zooms: [minZoom, maxZoom],
+            viewMode: '3D',
+            ...rest,
+          });
+          // 监听地图相机事件
+          this.map.on('camerachange', this.handleCameraChanged);
+          resolve();
+        }
       };
-
       if (!document.getElementById(AMAP_SCRIPT_ID)) {
         // 异步加载高德地图
         // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
@@ -257,7 +266,6 @@ export default class AMapService
         window.initAMap = (): void => {
           amapLoaded = true;
           resolveMap();
-
           if (pendingResolveQueue.length) {
             pendingResolveQueue.forEach((r) => r());
             pendingResolveQueue = [];
@@ -273,7 +281,7 @@ export default class AMapService
         $jsapi.src = url;
         document.head.appendChild($jsapi);
       } else {
-        if (amapLoaded) {
+        if (amapLoaded || mapInstance) {
           resolveMap();
         } else {
           pendingResolveQueue.push(resolveMap);
@@ -363,7 +371,6 @@ export default class AMapService
     $amapdiv.style.cssText += `
       position: absolute;
       top: 0;
-      z-index:2;
       height: 100%;
       width: 100%;
     `;

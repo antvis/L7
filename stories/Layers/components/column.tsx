@@ -22,7 +22,7 @@ export default class Column extends React.Component {
         rotation: 134.9507,
       }),
     });
-
+    this.scene = scene;
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
     )

@@ -192,9 +192,9 @@ export default class MapboxService
       style = 'light',
       token = MAPBOX_API_KEY,
       rotation = 0,
+      mapInstance,
       ...rest
     } = this.config;
-    this.$mapContainer = document.getElementById(id);
 
     this.viewport = new Viewport();
 
@@ -210,14 +210,21 @@ export default class MapboxService
     if (token === MAPBOX_API_KEY && style !== 'blank') {
       this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
     }
-    // @ts-ignore
-    this.map = new mapboxgl.Map({
-      container: id,
-      style: this.getMapStyle(style),
-      attributionControl,
-      bearing: rotation,
-      ...rest,
-    });
+    if (mapInstance) {
+      // @ts-ignore
+      this.map = mapInstance;
+      this.$mapContainer = this.map.getContainer();
+    } else {
+      this.$mapContainer = this.creatAmapContainer(id);
+      // @ts-ignore
+      this.map = new mapboxgl.Map({
+        container: id,
+        style: this.getMapStyle(style),
+        attributionControl,
+        bearing: rotation,
+        ...rest,
+      });
+    }
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
 
@@ -275,6 +282,14 @@ export default class MapboxService
 
     this.cameraChangedCallback(this.viewport);
   };
+
+  private creatAmapContainer(id: string | HTMLDivElement) {
+    let $wrapper = id as HTMLDivElement;
+    if (typeof id === 'string') {
+      $wrapper = document.getElementById(id) as HTMLDivElement;
+    }
+    return $wrapper;
+  }
 
   private removeLogoControl(): void {
     // @ts-ignore
