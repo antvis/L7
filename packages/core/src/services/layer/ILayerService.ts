@@ -73,6 +73,8 @@ export interface ILayer {
     beforePickingEncode: SyncHook<void>;
     afterPickingEncode: SyncHook<void>;
     beforeHighlight: SyncHook<[number[]]>;
+    beforeSelect: SyncHook<[number[]]>;
+    afterSelect: SyncHook<void>;
     afterHighlight: SyncHook<void>;
     beforeDestroy: SyncHook<void>;
     afterDestroy: SyncHook<void>;
@@ -86,6 +88,8 @@ export interface ILayer {
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
+  setCurrentPickId(id: number | null): void;
+  getCurrentPickId(): number | null;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
@@ -198,10 +202,13 @@ export interface ILayerConfig {
    * 开启高亮
    */
   enableHighlight: boolean;
+
+  enableSelect: boolean;
   /**
    * 高亮颜色
    */
   highlightColor: string | number[];
+  selectColor: string | number[];
   active: boolean;
   activeColor: string | number[];
   /**
