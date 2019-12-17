@@ -16,7 +16,7 @@
     ],
     "no-bitwise": false,
     "object-literal-sort-keys": false,
-    "no-implicit-dependencies": false
+    "no-implicit-dependencies": [true, "dev"]
   },
   "globals": {
     "AMap": true
