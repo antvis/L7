@@ -106,6 +106,7 @@ class Scene
 
   public addLayer(layer: ILayer): void {
     // 为当前图层创建一个容器
+    // TODO: 初始化的时候设置 容器
     const layerContainer = createLayerContainer(this.container);
     layer.setContainer(layerContainer);
     this.sceneService.addLayer(layer);

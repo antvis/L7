@@ -51,6 +51,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       return 'normal';
     } else {
       const shape = item.shape;
+      if (shape === 'dot') {
+        return 'normal';
+      }
       if (shape2d?.indexOf(shape as string) !== -1) {
         return 'fill';
       }

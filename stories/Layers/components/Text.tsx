@@ -54,7 +54,6 @@ export default class Point3D extends React.Component {
       ])
       .size('scalerank', [2, 4, 6, 8, 10]);
     scene.addLayer(pointLayer);
-    console.log(pointLayer);
     scene.render();
     this.scene = scene;
   }
