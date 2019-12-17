@@ -26,23 +26,25 @@ export default class Point3D extends React.Component {
         zoom: 3,
       }),
     });
-    this.scene = scene;
-
-    const pointLayer = new PointLayer({})
-      .source(pointsData, {
-        cluster: true,
-      })
-      .shape('circle')
-      .scale('point_count', {
-        type: 'quantile',
-      })
-      .size('point_count', [5, 10, 15, 20, 25])
-      .color('red')
-      .style({
-        opacity: 0.3,
-        strokeWidth: 1,
-      });
-    scene.addLayer(pointLayer);
+    scene.on('loaded', () => {
+      const pointLayer = new PointLayer({})
+        .source(pointsData, {
+          cluster: true,
+        })
+        .shape('circle')
+        .scale('point_count', {
+          type: 'quantile',
+        })
+        .size('point_count', [5, 10, 15, 20, 25])
+        // .size(10)
+        .color('red')
+        .style({
+          opacity: 0.3,
+          strokeWidth: 1,
+        });
+      scene.addLayer(pointLayer);
+      this.scene = scene;
+    });
   }
 
   public render() {

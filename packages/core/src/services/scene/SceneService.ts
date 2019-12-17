@@ -184,7 +184,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
 
     this.rendering = true;
-
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
@@ -205,6 +204,10 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.logger.debug(`scene ${this.id} render`);
 
     this.rendering = false;
+  }
+
+  public getSceneContainer(): HTMLDivElement {
+    return this.$container as HTMLDivElement;
   }
 
   public destroy() {

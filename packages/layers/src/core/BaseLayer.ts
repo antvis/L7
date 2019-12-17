@@ -437,12 +437,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public active(options: IActiveOption) {
-    this.updateLayerConfig({
-      enableHighlight: isObject(options) ? true : options,
-      highlightColor: isObject(options)
-        ? options.color
-        : this.getLayerConfig().highlightColor,
-    });
+    const activeOption: Partial<ILayerConfig> = {};
+    activeOption.enableHighlight = isObject(options) ? true : options;
+    if (isObject(options)) {
+      activeOption.enableHighlight = true;
+      if (options.color) {
+        activeOption.highlightColor = options.color;
+      }
+    } else {
+      activeOption.enableHighlight = !!options;
+    }
+    this.updateLayerConfig(activeOption);
     return this;
   }
   public setActive(

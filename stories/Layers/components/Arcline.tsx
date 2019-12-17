@@ -23,6 +23,7 @@ export default class ArcLineDemo extends React.Component {
         zoom: 2,
       }),
     });
+    this.scene = scene;
     const lineLayer = new LineLayer({
       enablePicking: true,
       enableHighlight: true,
