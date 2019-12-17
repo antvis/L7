@@ -84,10 +84,10 @@ export default class Source extends EventEmitter {
     });
     this.init();
   }
-  public getClusters(zoom: number) {
+  public getClusters(zoom: number): any {
     return this.clusterIndex.getClusters(this.extent, zoom);
   }
-  public getClustersLeaves(id: number) {
+  public getClustersLeaves(id: number): any {
     return this.clusterIndex.getLeaves(id, Infinity);
   }
   public updateClusterData(zoom: number): void {
