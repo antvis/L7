@@ -205,10 +205,16 @@ export default class MapboxService
     if (!mapboxgl) {
       this.logger.error(this.configService.getSceneWarninfo('SDK'));
     }
-    mapboxgl.accessToken = token;
-
-    if (token === MAPBOX_API_KEY && style !== 'blank') {
+    if (
+      token === MAPBOX_API_KEY &&
+      style !== 'blank' &&
+      !mapboxgl.accessToken
+    ) {
       this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+    }
+
+    if (!mapboxgl.accessToken) {
+      mapboxgl.accessToken = token;
     }
     if (mapInstance) {
       // @ts-ignore
