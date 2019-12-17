@@ -81,6 +81,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     afterPickingEncode: new SyncHook<void>(),
     beforeHighlight: new SyncHook<[number[]]>(['pickedColor']),
     afterHighlight: new SyncHook<void>(),
+    beforeSelect: new SyncHook<[number[]]>(['pickedColor']),
+    afterSelect: new SyncHook<void>(),
     beforeDestroy: new SyncHook<void>(),
     afterDestroy: new SyncHook<void>(),
   };
@@ -142,6 +144,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private configSchema: object;
 
+  private currentPickId: number | null = null;
+
   private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
@@ -159,7 +163,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private scaleOptions: IScaleOptions = {};
 
-  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions>) {
+  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
     this.rawConfig = config;
   }
@@ -469,10 +473,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
+      this.interactionService.triggerActive(id);
     }
   }
 
   public select(option: IActiveOption | false): ILayer {
+    const activeOption: Partial<ILayerConfig> = {};
+    activeOption.enableSelect = isObject(option) ? true : option;
+    if (isObject(option)) {
+      activeOption.enableSelect = true;
+      if (option.color) {
+        activeOption.selectColor = option.color;
+      }
+    } else {
+      activeOption.enableHighlight = !!option;
+    }
+    this.updateLayerConfig(activeOption);
     return this;
   }
 
@@ -480,7 +496,23 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     id: number | { x: number; y: number },
     options?: IActiveOption,
   ): void {
-    throw new Error('Method not implemented.');
+    if (isObject(id)) {
+      const { x = 0, y = 0 } = id;
+      this.updateLayerConfig({
+        selectColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().selectColor,
+      });
+      this.pick({ x, y });
+    } else {
+      this.updateLayerConfig({
+        pickedFeatureID: id,
+        selectColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().selectColor,
+      });
+      this.interactionService.triggerSelect(id);
+    }
   }
   public show(): ILayer {
     this.updateLayerConfig({
@@ -502,6 +534,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public setCurrentPickId(id: number) {
+    this.currentPickId = id;
+  }
+
+  public getCurrentPickId(): number | null {
+    return this.currentPickId;
+  }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
 

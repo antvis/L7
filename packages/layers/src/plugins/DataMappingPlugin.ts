@@ -9,8 +9,8 @@ import {
   IStyleAttributeService,
   TYPES,
 } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
-import { rgb2arr } from '../utils/color';
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {

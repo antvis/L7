@@ -21,21 +21,14 @@ export default class Point3D extends React.Component {
         zoom: 1,
       }),
     });
-    const pointLayer = new PointLayer({
-      enablePicking: false,
-      enableHighlight: false,
-      enableTAA: false,
-      onHover: (pickedFeature: any) => {
-        // tslint:disable-next-line:no-console
-        console.log('Scene4', pickedFeature.feature.name);
-      },
-    });
+    const pointLayer = new PointLayer();
     pointLayer
       .source(data, {
         cluster: true,
       })
       .color('red')
       .shape('cylinder')
+      .active({ color: 'blue' })
       .size([15, 10]);
     scene.addLayer(pointLayer);
     scene.render();
