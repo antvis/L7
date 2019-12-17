@@ -21,9 +21,11 @@
   },
   "author": "xiaoiver",
   "license": "ISC",
+  "devDependencies": {
+    "gl": "^4.4.0"
+  },
   "dependencies": {
     "@antv/l7-core": "^2.0.0-beta.20",
-    "gl": "^4.4.0",
     "inversify": "^5.0.1",
     "inversify-logging": "^0.2.1",
     "lodash": "^4.17.15",
