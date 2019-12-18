@@ -19,30 +19,63 @@ export default class Point3D extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
         zoom: 3,
       }),
     });
-    this.scene = scene;
-
-    const pointLayer = new PointLayer({})
-      .source(pointsData, {
-        cluster: true,
-      })
-      .shape('circle')
-      .scale('point_count', {
-        type: 'quantile',
-      })
-      .size('point_count', [5, 10, 15, 20, 25])
-      .color('red')
-      .style({
-        opacity: 0.3,
-        strokeWidth: 1,
+    scene.on('loaded', () => {
+      const pointLayer = new PointLayer({})
+        .source(pointsData, {
+          cluster: true,
+        })
+        .shape('circle')
+        .scale('point_count', {
+          type: 'quantile',
+        })
+        .size('point_count', [5, 10, 15, 20, 25])
+        .color('yellow')
+        .style({
+          opacity: 0.5,
+          strokeWidth: 1,
+        });
+      scene.addLayer(pointLayer);
+      pointLayer.on('mousemove', (e) => {
+        const id = e.featureId;
+        console.log(e.type);
+        pointLayer.setActive(id);
       });
-    scene.addLayer(pointLayer);
+      pointLayer.on('mousedown', (e) => {
+        const id = e.featureId;
+        console.log(e.type);
+        pointLayer.setActive(id);
+      });
+      pointLayer.on('mouseup', (e) => {
+        const id = e.featureId;
+        console.log(e.type);
+        pointLayer.setActive(id);
+      });
+      pointLayer.on('click', (e) => {
+        const id = e.featureId;
+        console.log(e.type);
+        pointLayer.setActive(id);
+      });
+
+      pointLayer.on('contextmenu', (e) => {
+        const id = e.featureId;
+        console.log(e.type);
+        pointLayer.setActive(id);
+      });
+      pointLayer.on('unpick', (e) => {
+        const id = e.featureId;
+        console.log(e.type);
+        pointLayer.setActive(id);
+      });
+
+      this.scene = scene;
+    });
   }
 
   public render() {

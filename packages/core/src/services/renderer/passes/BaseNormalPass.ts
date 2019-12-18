@@ -1,5 +1,9 @@
 import { inject, injectable } from 'inversify';
-import { IRendererService, IShaderModuleService } from '../../../index';
+import {
+  IMapService,
+  IRendererService,
+  IShaderModuleService,
+} from '../../../index';
 import { TYPES } from '../../../types';
 import { ICameraService } from '../../camera/ICameraService';
 import { IInteractionService } from '../../interaction/IInteractionService';
@@ -17,6 +21,7 @@ export default class BaseNormalPass<InitializationOptions = {}>
 
   protected rendererService: IRendererService;
   protected cameraService: ICameraService;
+  protected mapService: IMapService;
   protected interactionService: IInteractionService;
   protected layerService: ILayerService;
 
@@ -38,6 +43,7 @@ export default class BaseNormalPass<InitializationOptions = {}>
     this.cameraService = layer
       .getContainer()
       .get<ICameraService>(TYPES.ICameraService);
+    this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     this.interactionService = layer
       .getContainer()
       .get<IInteractionService>(TYPES.IInteractionService);

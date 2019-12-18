@@ -17,7 +17,9 @@ export default class PopupService implements IPopupService {
   }
 
   public addPopup(popup: IPopup) {
-    this.popup.remove();
+    if (this.popup) {
+      this.popup.remove();
+    }
     popup.addTo(this.scene);
     this.popup = popup;
   }

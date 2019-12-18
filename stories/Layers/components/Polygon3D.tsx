@@ -41,6 +41,7 @@ export default class Polygon3D extends React.Component {
       .source(await response.json())
       .shape('extrude')
       .size('h20', [100, 120, 160, 200, 260, 500])
+      .active({ color: 'blue' })
       .color('h20', [
         '#816CAD',
         '#A67FB5',
@@ -54,6 +55,7 @@ export default class Polygon3D extends React.Component {
         opacity: 1.0,
       });
     scene.addLayer(layer);
+    this.scene = scene;
   }
 
   public render() {
