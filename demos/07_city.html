@@ -22,8 +22,17 @@
 <script src="../build/L7.js"></script>
 <script>
 
+var map = new AMap.Map('map', {
+    zoom: 11,
+    viewMode: '3D',
+    features: ['bg', 'road', 'building','point'],
+    mapStyle: 'amap://styles/ae40ef0d4110bdd11544414647d83cbd',
+    disableSocket: true,
+    resizeEnable: true,
+  });
 const scene = new L7.Scene({
-  id: 'map',
+  map: map,
+  //id: 'map',
   mapStyle: 'light', // 样式URL
   center: [120.173104,  30.244072],
   pitch: 66.50572,
