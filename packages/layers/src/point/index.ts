@@ -7,7 +7,7 @@ interface IPointLayerStyleOptions {
   strokeColor: string;
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
+  public type: string = 'PointLayer';
   protected getConfigSchema() {
     return {
       properties: {
