@@ -185,10 +185,15 @@ export default class PixelPickingPass<
           x,
           y,
           lngLat,
-          type: this.layer.getCurrentPickId() === null ? 'unpick' : 'mouseout',
+          type:
+            this.layer.getCurrentPickId() === null ? 'un' + type : 'mouseout',
           featureId: null,
           feature: null,
         };
+        this.triggerHoverOnLayer({
+          ...target,
+          type: 'unpick',
+        });
         this.triggerHoverOnLayer(target);
         this.layer.setCurrentPickId(null);
       }
