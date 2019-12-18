@@ -1,7 +1,7 @@
 import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
 import Source from '@antv/l7-source';
+import { encodePickingColor, rgb2arr } from '@antv/l7-utils';
 import { injectable } from 'inversify';
-import { encodePickingColor, rgb2arr } from '../utils/color';
 @injectable()
 export default class LayerStylePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {

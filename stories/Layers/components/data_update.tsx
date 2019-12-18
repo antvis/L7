@@ -45,6 +45,7 @@ export default class DataUpdate extends React.Component {
       .source(pointOnCircle(0))
       .shape('circle')
       .size(15) // default 1
+      .active(false)
       .color('#2F54EB')
       .style({
         strokeColor: '#fff',
@@ -54,10 +55,7 @@ export default class DataUpdate extends React.Component {
     scene.addLayer(layer);
     function animateMarker(timestamp: number) {
       layer.setData(pointOnCircle(timestamp / 1000));
-
       scene.render();
-
-      // setTimeout(animateMarker, 100);
       requestAnimationFrame(animateMarker);
     }
     layer.on('inited', () => {

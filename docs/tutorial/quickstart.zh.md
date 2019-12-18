@@ -157,3 +157,6 @@ export default class AMapExample extends React.Component {
 更多React使用 [示例查看](https://github.com/antvis/L7/tree/master/stories) 
 
 ### Vue 欢迎补充
+[1.x Vue 使用](https://codesandbox.io/s/l7-vue1xdemo-wknsz)
+### Html
+[2.0版本 HTML 使用模板](https://codesandbox.io/s/l7htmltemplate-vp2lp)
