@@ -10,7 +10,6 @@ export interface IBlendOptions {
   func: BlendingFunctionSeparate;
   // gl.blendEquation
   equation: {
-    // TODO: EXT_blend_minmax
     rgb:
       | gl.FUNC_ADD
       | gl.FUNC_SUBTRACT
