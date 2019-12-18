@@ -7,10 +7,10 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import { HeatmapTriangulation } from '../../core/triangulation';
-import { generateColorRamp, IColorRamp } from '../../utils/color';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
 import heatmap3DVert from '../shaders/heatmap_3d_vert.glsl';
 import heatmapColorFrag from '../shaders/heatmap_frag.glsl';

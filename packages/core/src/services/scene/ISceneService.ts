@@ -9,6 +9,7 @@ export interface ISceneService {
   init(config: IMapConfig & IRenderConfig): void;
   addLayer(layer: ILayer): void;
   render(): void;
+  getSceneContainer(): HTMLDivElement;
   destroy(): void;
 }
 // scene 事件

@@ -88,6 +88,38 @@ module.exports = {
         order: 3
       },
       {
+        slug: 'api/layer/point_layer',
+        title: {
+          zh: '点图层',
+          en: 'PointLayer'
+        },
+        order: 1
+      },
+      {
+        slug: 'api/layer/line_layer',
+        title: {
+          zh: '线图层',
+          en: 'LineLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/layer/polygon_layer',
+        title: {
+          zh: '面图层',
+          en: 'PolygonLayer'
+        },
+        order: 3
+      },
+      {
+        slug: 'api/layer/heatmap_layer',
+        title: {
+          zh: '热力图',
+          en: 'HeatmapLayer'
+        },
+        order: 4
+      },
+      {
         slug: 'api/source',
         title: {
           zh: '数据 Source',

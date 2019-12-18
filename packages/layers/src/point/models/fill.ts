@@ -7,9 +7,9 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
-import { rgb2arr } from '../../utils/color';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 interface IPointLayerStyleOptions {

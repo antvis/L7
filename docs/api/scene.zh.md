@@ -95,6 +95,7 @@ const scene = new L7.Scene({
 - dark
 - light
 - normal
+- blank 无底图
 
 除了内置的样式，你也可以传入自定义的其他属性。
 

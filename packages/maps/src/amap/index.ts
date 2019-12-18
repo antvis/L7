@@ -5,7 +5,9 @@ import {
   Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  IGlobalConfigService,
   ILngLat,
+  ILogService,
   IMapConfig,
   IMapService,
   IPoint,
@@ -46,6 +48,12 @@ export default class AMapService
    * 原始地图实例
    */
   public map: AMap.Map & IAMapInstance;
+
+  @inject(TYPES.IGlobalConfigService)
+  private readonly configService: IGlobalConfigService;
+
+  @inject(TYPES.ILogService)
+  private readonly logger: ILogService;
 
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
@@ -106,8 +114,13 @@ export default class AMapService
   }
   public getZoom(): number {
     // 统一返回 Mapbox 缩放等级
-    return this.map.getZoom() - 1;
+    return this.map.getZoom();
   }
+
+  public setZoom(zoom: number): void {
+    return this.map.setZoom(zoom);
+  }
+
   public getCenter(): ILngLat {
     const center = this.map.getCenter();
     return {
@@ -215,28 +228,37 @@ export default class AMapService
       minZoom = 0,
       maxZoom = 18,
       token = AMAP_API_KEY,
+      mapInstance,
       ...rest
     } = this.config;
     // 高德地图创建独立的container；
 
-    // @ts-ignore
-    this.$mapContainer = this.creatAmapContainer(id);
     // tslint:disable-next-line:typedef
     await new Promise((resolve) => {
       const resolveMap = () => {
-        // @ts-ignore
-        this.map = new AMap.Map(this.$mapContainer, {
-          mapStyle: this.getMapStyle(style),
-          zooms: [minZoom, maxZoom],
-          viewMode: '3D',
-          ...rest,
-        });
-
-        // 监听地图相机事件
-        this.map.on('camerachange', this.handleCameraChanged);
-        resolve();
+        if (mapInstance) {
+          this.map = mapInstance as AMap.Map & IAMapInstance;
+          this.$mapContainer = this.map.getContainer();
+          setTimeout(() => {
+            this.map.on('camerachange', this.handleCameraChanged);
+            resolve();
+          }, 30);
+        } else {
+          this.$mapContainer = this.creatAmapContainer(
+            id as string | HTMLDivElement,
+          );
+          // @ts-ignore
+          this.map = new AMap.Map(this.$mapContainer, {
+            mapStyle: this.getMapStyle(style),
+            zooms: [minZoom, maxZoom],
+            viewMode: '3D',
+            ...rest,
+          });
+          // 监听地图相机事件
+          this.map.on('camerachange', this.handleCameraChanged);
+          resolve();
+        }
       };
-
       if (!document.getElementById(AMAP_SCRIPT_ID)) {
         // 异步加载高德地图
         // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
@@ -244,20 +266,22 @@ export default class AMapService
         window.initAMap = (): void => {
           amapLoaded = true;
           resolveMap();
-
           if (pendingResolveQueue.length) {
             pendingResolveQueue.forEach((r) => r());
             pendingResolveQueue = [];
           }
         };
-        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${AMAP_API_KEY}&plugin=Map3D&callback=initAMap`;
+        if (token === AMAP_API_KEY) {
+          this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+        }
+        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D&callback=initAMap`;
         const $jsapi = document.createElement('script');
         $jsapi.id = AMAP_SCRIPT_ID;
         $jsapi.charset = 'utf-8';
         $jsapi.src = url;
         document.head.appendChild($jsapi);
       } else {
-        if (amapLoaded) {
+        if (amapLoaded || mapInstance) {
           resolveMap();
         } else {
           pendingResolveQueue.push(resolveMap);
@@ -347,7 +371,6 @@ export default class AMapService
     $amapdiv.style.cssText += `
       position: absolute;
       top: 0;
-      z-index:2;
       height: 100%;
       width: 100%;
     `;
