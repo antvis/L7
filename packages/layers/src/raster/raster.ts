@@ -26,7 +26,7 @@ interface IRasterLayerStyleOptions {
 }
 
 export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
-  public name: string = 'e';
+  public type: string = 'RasterLayer';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 

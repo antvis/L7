@@ -141,6 +141,8 @@ export const blendEquationMap: {
   [key: string]: regl.BlendingEquation;
 } = {
   [gl.FUNC_ADD]: 'add',
+  [gl.MIN_EXT]: 'min',
+  [gl.MAX_EXT]: 'max',
   [gl.FUNC_SUBTRACT]: 'subtract',
   [gl.FUNC_REVERSE_SUBTRACT]: 'reverse subtract',
 };

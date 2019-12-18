@@ -5,7 +5,7 @@ interface IPointLayerStyleOptions {
   opacity: number;
 }
 export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'HeatMapLayer';
+  public type: string = 'HeatMapLayer';
   protected getConfigSchema() {
     return {
       properties: {

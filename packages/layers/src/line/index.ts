@@ -4,7 +4,7 @@ interface IPointLayerStyleOptions {
   opacity: number;
 }
 export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'LineLayer';
+  public type: string = 'LineLayer';
 
   private animateStartTime: number = 0;
 

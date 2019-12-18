@@ -53,6 +53,7 @@ export default class ReglRendererService implements IRendererService {
         extensions: [
           'OES_element_index_uint',
           // 'EXT_shader_texture_lod', // IBL 兼容性问题
+          'EXT_blend_minmax',
           'OES_standard_derivatives', // wireframe
           // 'OES_texture_float', // shadow map 兼容性问题
           'WEBGL_depth_texture',

@@ -24,6 +24,10 @@ new Layer(option)
 
 ## 配置项
 
+### name
+
+设置图层名称,可根据 name 获取 layer;
+
 ### visable
 
 图层是否可见   {bool } default true
@@ -39,6 +43,15 @@ new Layer(option)
 ### maxZoom
 
 图层显示最大缩放等级 （0-18）   {number}  default 18
+
+### blend
+
+图层元素混合效果
+
+- normal 正常效果 默认
+- additive 叠加模式
+- subtractive 相减模式
+- max 最大值
 
 # 方法
 
@@ -284,6 +297,13 @@ scene.render();
 layer.setData(data);
 ```
 
+### setBlend(type)
+
+设置图层叠加方法
+参数：
+
+- type blend 类型
+
 ## 图层控制方法
 
 ### show
@@ -422,3 +442,13 @@ layer.on('unmousedown', (ev) => {}); // 图层外单击按下时触发
 layer.on('uncontextmenu', (ev) => {}); // 图层外点击右键
 layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
 ```
+
+## 图层事件
+
+### inited
+
+图层初始化完成后触发
+
+### remove
+
+图层移除时触发
