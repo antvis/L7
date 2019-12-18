@@ -59,7 +59,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   enableSelect: false,
   highlightColor: 'red',
   selectColor: 'blue',
-  enableTAA: false,
+  enableTAA: true,
   jitterScale: 1,
   enableLighting: false,
 };
