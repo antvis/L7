@@ -207,16 +207,6 @@ scene.setCenter([lng, lat]);
 
 参数：`center` {LngLat} 地图中心点
 
-### setZoom()
-
-设置地图缩放等级
-
-参数：`zoom` 地图缩放等级
-
-```
-scene.setZoom(zoom)
-```
-
 ### setZoomAndCenter
 
 设置地图等级和中心
@@ -317,16 +307,6 @@ scene.removeLayer(layer);
 参数
 
 - `layer` {Layer}
-
-### getLayers
-
-获取所有的 layer
-
-```javascript
-scene.getLayers();
-```
-
-return layers  {array}
 
 ## 事件
 
