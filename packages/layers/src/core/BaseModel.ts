@@ -1,5 +1,7 @@
 import {
+  BlendType,
   IAttribute,
+  IBlendOptions,
   ICameraService,
   IElements,
   IFontService,
@@ -17,7 +19,7 @@ import {
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
-
+import { BlendTypes } from '../utils/blend';
 export default class BaseModel implements ILayerModel {
   public triangulation: Triangulation;
 
@@ -54,7 +56,10 @@ export default class BaseModel implements ILayerModel {
       .get<ICameraService>(TYPES.ICameraService);
     this.registerBuiltinAttributes();
   }
-
+  public getBlend(): IBlendOptions {
+    const { blend = 'normal' } = this.layer.getLayerConfig();
+    return BlendTypes[BlendType[blend]] as IBlendOptions;
+  }
   public getUninforms(): IModelUniform {
     throw new Error('Method not implemented.');
   }

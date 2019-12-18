@@ -10,7 +10,7 @@ interface IDashLineLayerStyleOptions {
 export default class DashLineLayer extends BaseLayer<
   IDashLineLayerStyleOptions
 > {
-  public name: string = 'LineLayer';
+  public type: string = 'LineLayer';
 
   protected getConfigSchema() {
     return {
