@@ -61,12 +61,13 @@ export default class Scene extends Base {
     this.mapType = this.get('mapType') || 'amap';
     const MapProvider = getMap(this.mapType);
     const Map = new MapProvider(this.mapContainer, this._attrs);
+    Map.mixMap(this);
+    this.mapContainer = Map.container;
+    this._container = Map.container;
     elementResizeEvent(
-      this.mapContainer,
+      this._container,
       this.handleWindowResized,
     );
-    Map.mixMap(this);
-    this._container = Map.container;
     Map.on('mapLoad', () => {
       this.map = Map.map;
       this._markerContainier = Map.l7_marker_Container;
@@ -232,7 +233,7 @@ export default class Scene extends Base {
     this._layers.forEach(layer => {
       layer.destroy();
     });
-    unbind(this.mapContainer, this.handleWindowResized);
+    unbind(this._container, this.handleWindowResized);
     this._layers.length = 0;
     this.image = null;
     this.fontAtlasManager = null;
