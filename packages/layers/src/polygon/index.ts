@@ -7,7 +7,7 @@ interface IPolygonLayerStyleOptions {
 }
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
-  public name: string = 'PolygonLayer';
+  public type: string = 'PolygonLayer';
 
   protected getConfigSchema() {
     return {

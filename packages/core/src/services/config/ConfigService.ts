@@ -50,6 +50,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   visible: true,
   autoFit: false,
   zIndex: 0,
+  blend: 'normal',
   pickedFeatureID: -1,
   enableMultiPassRenderer: true,
   enablePicking: true,

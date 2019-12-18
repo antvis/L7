@@ -38,8 +38,8 @@ export default class LayerService implements ILayerService {
     return this.layers;
   }
 
-  public getLayer(id: string): ILayer | undefined {
-    return this.layers.find((layer) => layer.id === id);
+  public getLayer(name: string): ILayer | undefined {
+    return this.layers.find((layer) => layer.name === name);
   }
 
   public remove(layer: ILayer): void {
@@ -47,6 +47,7 @@ export default class LayerService implements ILayerService {
     if (layerIndex > -1) {
       this.layers.splice(layerIndex, 1);
     }
+    layer.emit('remove', null);
     layer.destroy();
     this.renderLayers();
   }
