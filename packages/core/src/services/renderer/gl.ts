@@ -60,6 +60,10 @@ export enum gl {
   FUNC_SUBTRACT = 0x800a,
   FUNC_REVERSE_SUBTRACT = 0x800b,
 
+  /** Blend Min Max */
+  MAX_EXT = 0x8008,
+  MIN_EXT = 0x8007,
+
   /* Separate Blend Functions */
   BLEND_DST_RGB = 0x80c8,
   BLEND_SRC_RGB = 0x80c9,

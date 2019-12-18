@@ -1,4 +1,5 @@
 import {
+  BlendType,
   gl,
   IActiveOption,
   IAnimateOption,
@@ -37,7 +38,6 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { bindAll } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
@@ -45,6 +45,7 @@ import { isFunction, isObject } from 'lodash';
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
+import { BlendTypes } from '../utils/blend';
 import baseLayerSchema from './schema';
 /**
  * 分配 layer id
@@ -55,6 +56,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string;
+  public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
   public minZoom: number;
@@ -165,6 +167,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
+    this.name = config.name || this.id;
     this.rawConfig = config;
   }
 
@@ -299,6 +302,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.buildModels();
     // 触发初始化完成事件;
     this.emit('inited');
+    this.emit('added');
     return this;
   }
 
@@ -514,10 +518,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       this.interactionService.triggerSelect(id);
     }
   }
+  public setBlend(type: keyof typeof BlendType): void {
+    this.updateLayerConfig({
+      blend: type,
+    });
+    this.layerModelNeedUpdate = true;
+    this.render();
+  }
   public show(): ILayer {
     this.updateLayerConfig({
       visible: true,
     });
+
     return this;
   }
 
@@ -685,15 +697,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       fs,
       vs,
       elements,
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: gl.SRC_ALPHA,
-          srcAlpha: 1,
-          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-          dstAlpha: 1,
-        },
-      },
+      blend: BlendTypes[BlendType.normal],
       ...rest,
     });
   }
