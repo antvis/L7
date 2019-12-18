@@ -63,6 +63,8 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
+  getClusters(zoom: number): any;
+  getClustersLeaves(id: number): any;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

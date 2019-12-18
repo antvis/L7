@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PolygonLayer, Scene } from '@antv/l7';
+import { PolygonLayer, Popup, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
@@ -24,15 +24,7 @@ export default class Tooltip extends React.Component {
         zoom: 3,
       }),
     });
-    const layer = new PolygonLayer({
-      enablePicking: true,
-      enableHighlight: false,
-      onHover: (pickedFeature) => {
-        // tslint:disable-next-line:no-console
-        console.log(pickedFeature);
-      },
-    });
-
+    const layer = new PolygonLayer();
     layer
       .source(await response.json())
       .size('name', [0, 10000, 50000, 30000, 100000])
@@ -49,6 +41,14 @@ export default class Tooltip extends React.Component {
         opacity: 0.8,
       });
     scene.addLayer(layer);
+    layer.on('click', (e) => {
+      const popup = new Popup({
+        offsets: [0, 0],
+      })
+        .setLnglat(e.lngLat)
+        .setText(e.feature.properties.name);
+      scene.addPopup(popup);
+    });
 
     this.scene = scene;
   }

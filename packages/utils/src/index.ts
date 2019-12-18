@@ -4,4 +4,5 @@ export * from './fetchData';
 export * from './geo';
 export * from './lru_cache';
 export * from './event';
+export * from './color';
 export { DOM };
