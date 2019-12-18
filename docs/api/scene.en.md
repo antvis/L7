@@ -290,16 +290,6 @@ scene.removeLayer(layer);
 
 参数 `layer` {Layer}
 
-### getLayers
-
-获取所有的 layer
-
-```javascript
-scene.getLayers();
-```
-
-return layers  {array}
-
 ## 事件
 
 ### on
