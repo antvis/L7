@@ -1,9 +1,15 @@
 import BaseLayer from '../core/BaseLayer';
 import LineModels, { LineModelType } from './models';
-interface IPointLayerStyleOptions {
-  opacity: number;
+export enum LineType {
+  'solid' = 'solid',
+  'dash' = 'dash',
 }
-export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
+interface ILineLayerStyleOptions {
+  opacity: number;
+  lineType?: keyof typeof LineType;
+  dashArray?: [number, number];
+}
+export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
 
   private animateStartTime: number = 0;
@@ -34,7 +40,7 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.layerModel = new LineModels[shape](this);
     this.models = this.layerModel.buildModels();
   }
-  private getModelType(): LineModelType {
+  protected getModelType(): LineModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

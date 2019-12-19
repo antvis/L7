@@ -42,6 +42,7 @@ export default class LineModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
+    // const lineType = this
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',

@@ -6,6 +6,7 @@ import line_dash_vert from './shaders/line_dash_vert.glsl';
 interface IDashLineLayerStyleOptions {
   opacity: number;
   dashArray: [number, number];
+  lineType: string;
 }
 export default class DashLineLayer extends BaseLayer<
   IDashLineLayerStyleOptions
@@ -25,7 +26,11 @@ export default class DashLineLayer extends BaseLayer<
   }
 
   protected renderModels() {
-    const { opacity, dashArray = [10, 5] } = this.getLayerConfig();
+    const {
+      opacity,
+      dashArray = [10, 5],
+      lineType = 'dash',
+    } = this.getLayerConfig();
     this.models.forEach((model) =>
       model.draw({
         uniforms: {
@@ -132,30 +137,30 @@ export default class DashLineLayer extends BaseLayer<
       },
     });
 
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'startPos',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_StartPos',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 3,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const coordinates = feature.coordinates as number[][];
-          const coord = coordinates[0];
-          return coord.length === 3 ? coord : [...coord, 0.0];
-        },
-      },
-    });
+    // this.styleAttributeService.registerStyleAttribute({
+    //   name: 'startPos',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_StartPos',
+    //     buffer: {
+    //       // give the WebGL driver a hint that this buffer may change
+    //       usage: gl.DYNAMIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 3,
+    //     update: (
+    //       feature: IEncodeFeature,
+    //       featureIdx: number,
+    //       vertex: number[],
+    //       attributeIdx: number,
+    //     ) => {
+    //       const coordinates = feature.coordinates as number[][];
+    //       const coord = coordinates[0];
+    //       return coord.length === 3 ? coord : [...coord, 0.0];
+    //     },
+    //   },
+    // });
 
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
