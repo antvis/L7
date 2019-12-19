@@ -19,6 +19,19 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     };
   }
+  protected getDefaultConfig() {
+    const type = this.getModelType();
+    const defaultConfig = {
+      normal: {
+        blend: 'additive',
+      },
+      fill: {},
+      extrude: {},
+      image: {},
+      text: {},
+    };
+    return defaultConfig[type];
+  }
   protected renderModels() {
     if (this.layerModelNeedUpdate) {
       this.models = this.layerModel.buildModels();
@@ -38,7 +51,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models = this.layerModel.buildModels();
   }
 
-  private getModelType(): PointType {
+  protected getModelType(): PointType {
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
