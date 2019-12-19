@@ -54,7 +54,7 @@ module.exports = api => {
           development: isCommonJS
         }
       ],
-      '@babel/preset-typescript',
+      '@babel/preset-typescript'
     ],
     plugins: [
       '@babel/plugin-proposal-object-rest-spread',
@@ -64,6 +64,11 @@ module.exports = api => {
         '@babel/plugin-proposal-decorators',
         {
           legacy: true
+        }
+      ],
+      [ '@babel/plugin-transform-runtime',
+        {
+          regenerator: true
         }
       ],
       [

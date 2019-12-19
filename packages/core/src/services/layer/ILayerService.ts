@@ -52,7 +52,7 @@ export interface ILayerModelInitializationOptions {
 export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
-  getBlend(): IBlendOptions;
+  getDefaultStyle(): unknown;
   buildModels(): IModel[];
 }
 export interface IModelUniform {
