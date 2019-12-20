@@ -44,9 +44,14 @@ module.exports = api => {
         {
           // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
           useBuiltIns: 'usage',
+          corejs: '3.0.0',
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
-          modules: (isCDNBundle || isESModule) ? false : 'auto'
+          modules: (isCDNBundle || isESModule) ? false : 'auto',
+          targets: {
+            chrome: 58,
+            ie: 11
+          }
         }
       ],
       [
@@ -57,10 +62,12 @@ module.exports = api => {
       ],
       '@babel/preset-typescript'
     ],
+    ignore: [ /[\/\\]core-js/, /@babel[\/\\]runtime/ ],
     plugins: [
       '@babel/plugin-proposal-object-rest-spread',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
+      '@babel/plugin-syntax-async-generators',
       [
         '@babel/plugin-proposal-decorators',
         {
