@@ -8,7 +8,7 @@ varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
 
-#pragma include "sdf_2d"
+ #pragma include "sdf_2d"
 
 void main() {
   // int shape = int(floor(v_data.w + 0.5));
@@ -57,7 +57,6 @@ void main() {
     0.0,
     inner_df
   );
-
   gl_FragColor = opacity_t * mix(v_color * u_opacity, u_stroke * u_strokeOpacity * v_color.a, color_t);
   #pragma include "pick"
 }

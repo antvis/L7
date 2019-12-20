@@ -9,7 +9,6 @@ import { registerLayer } from './layer';
 import Popup from './component/popup';
 import Marker from './component/marker';
 import * as Control from './component/control';
-
 const version = Global.version;
 const exported = {
   version,

@@ -247,6 +247,8 @@ export default class Scene extends Base {
   }
   handleWindowResized() {
     this.emit('resize');
-    this._engine.resize();
+    if (this._engine) {
+      this._engine.resize();
+    }
   }
 }

@@ -4,9 +4,9 @@ attribute float a_size;
 attribute float a_shape;
 attribute vec2 miter;
 
-uniform float u_zoom : 1;
-uniform float u_stroke_width : 2;
-uniform float u_activeId : 0;
+uniform float u_zoom : 1.;
+uniform float u_stroke_width : 2.;
+uniform float u_activeId : 0.;
 uniform vec4 u_activeColor : [ 1.0, 0, 0, 1.0 ];
 
 varying vec4 v_data;
@@ -22,7 +22,7 @@ void main() {
   // unpack pickingId
   // float pickingId = a_packed_data.w;
     // float pickingId = .w;
-  
+
   // unpack data(extrude(4-bit), radius(16-bit))
   // float compressed = a_packed_data.z;
 

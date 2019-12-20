@@ -11,6 +11,7 @@
 <body>
 <div id="map"></div>
 <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.7.0/polyfill.min.js'></script>
 <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
 <script src="../build/l7.js"></script>
@@ -72,20 +73,6 @@
     .render();
 
 
-
-        const popup = new L7.Popup({anchor:'left'}).setText('hello world')
-        const marker = new L7.Marker({color:'blue'})
-        .setLnglat( [120.19382669582967, 30.258134])
-        .setPopup(popup)
-        .addTo(scene);
-
-
-        layer.on('click',(e) => {
-           const { lnglat, feature } = e;
-         const popup = new L7.Popup()
-          .setLnglat([lnglat.lng, lnglat.lat])
-          .setHTML('hello').addTo(scene);
-        })
 
     });
 

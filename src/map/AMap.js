@@ -82,7 +82,10 @@ export default class GaodeMap extends Base {
   updateCamera() {
     const camera = this._engine._camera;
     const mapCamera = this.map.getCameraState();
-    if (!mapCamera || !mapCamera.fov) return;
+
+    if (!mapCamera || !mapCamera.fov) {
+      throw new Error('浏览器不支持');
+    }
     let { fov, near, far, height, pitch, rotation, aspect } = mapCamera;
     pitch *= DEG2RAD;
     rotation *= DEG2RAD;
