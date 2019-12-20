@@ -42,7 +42,8 @@ module.exports = api => {
       [
         '@babel/env',
         {
-          useBuiltIns: isCDNBundle ? 'usage' : false,
+          // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
+          useBuiltIns: 'usage',
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
           modules: (isCDNBundle || isESModule) ? false : 'auto'
@@ -64,11 +65,6 @@ module.exports = api => {
         '@babel/plugin-proposal-decorators',
         {
           legacy: true
-        }
-      ],
-      [ '@babel/plugin-transform-runtime',
-        {
-          regenerator: true
         }
       ],
       [
