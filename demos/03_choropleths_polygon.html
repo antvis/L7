@@ -38,7 +38,7 @@
 <script>
 window.forceWebGL =true
 </script>
-
+<script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.7.0/polyfill.min.js'></script>
  <script src="https://webapi.amap.com/maps?v=1.4.15&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
 <script src="./assets/jquery-3.2.1.min.js"></script>
 <script src="./assets/dat.gui.min.js"></script>
@@ -55,16 +55,35 @@ const colorObj ={
 
 const scene = new L7.Scene({
   id: 'map',
-  mapStyle: 'blank', // 样式URL
+  mapStyle: 'dark', // 样式URL
   center: [104.838088,34.075889 ],
   pitch: 0,
   zoom: 4.5,
 
 });
 window.scene = scene;
-scene.on('loaded', () => {
+scene.on('loaded', function() {
+   $.get('https://gw.alipayobjects.com/os/rmsportal/epnZEheZeDgsiSjSPcCv.json', function(data) {
+     const layer =  scene.PointLayer({
+          zIndex: 2
+        }).source(data, {
+          scale: {
+            min: 0,
+            max: 1000,
+            type: 'linear'
+          }
+        }).shape('circle').size('value', [5, 80]) // default 1
+        .active(true).filter('value', function(field_8) {
+          return field_8 * 1 > 500;
+        }).color('type', ["#FFF4F2", "#FFDFDB", "#FAADAA", "#F77472", "#F04850", "#D63147", "#BD223E", "#A81642", "#820C37", "#5C0023"].reverse()).style({
+          stroke: 'rgb(255,255,255)',
+          strokeWidth: 1,
+          opacity: 0.9
+        }).render();
+    })
   var colors = ["#FFF5B8","#FFDC7D","#FFAB5C","#F27049","#D42F31","#730D1C"];
-  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', city => {
+  return
+  $.getJSON('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json', function(city){
     const citylayer = scene.PolygonLayer()
     .source(city)
     .color('pm2_5_24h',colorObj['green'])
@@ -74,37 +93,10 @@ scene.on('loaded', () => {
       opacity: 1
     })
     .render();
- var highlight = scene.LineLayer().source(city).color('red').filter('name',(name)=>{
+ var highlight = scene.LineLayer().source(city).color('red').filter('name',function(name){
    return name === '上海'
 
  }).shape('line').size(2).render();
-
-/**
-  const colorsEnum = ['blue','red','orange','green','purple','purple']
-    setInterval(()=>{
-      const index = parseInt(Math.random() * 5)
-      const colors = colorObj[colorsEnum[index]]
-      citylayer.color('pm2_5_24h',(p)=>{
-        if(p>120){
-          return colors[5];
-        } else if(p>65){
-          return colors[4];
-        } else if(p>30) {
-          return colors[3];
-        } else if(p>15){
-          return colors[2];
-        } else if(p>8){
-          return colors[1];
-        }else {
-          return colors[0];
-        }
-    }).render()
-
-    },10000)
-    **/
-
-
-
      const citylayer2 = scene.LineLayer()
       .source(city)
       .shape('line')
@@ -115,26 +107,8 @@ scene.on('loaded', () => {
        })
       .render();
 
-    citylayer.on('mouseleave',(e)=>{
-      console.log(e);
-    })
+
     scene.fitBounds([74.70703125,15.792253570362446,135.17578125, 52.3755991766591]);
-    citylayer.on('click',(e)=>{
-      $("#info").css({'left': e.pixel.x,'top':e.pixel.y, display:'block'});
-      $("#info").html(`<p>${e.feature.properties.area || e.feature.properties.name }<span">${e.feature.properties.pm2_5_24h || 0}</span></p>`);
-    })
-    $('.info-panel input').change(function(){
-        $(this).next().text($(this).val());
-        const min = $('.info-panel input').val();
-        const max = $($('.info-panel input')[1]).val();
-        citylayer.filter('pm2_5_24h',(value)=>{
-           return (value>=min && value<=max)
-        }).render();
-      })
-      $('.info-panel select').change(function(){
-        const color = $(this).val();
-        citylayer.color('pm2_5_24h',colorObj[color]).render();
-      })
   });
 });
 

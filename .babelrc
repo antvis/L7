@@ -3,6 +3,6 @@
     "transform-remove-strict-mode"
   ],
   "presets": [
-    "@babel/preset-env"
+    "@babel/preset-env",
   ]
 }

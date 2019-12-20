@@ -10,7 +10,7 @@ float sdCircle(vec2 p, float r) {
 }
 
 float sdEquilateralTriangle(vec2 p) {
-  const float k = sqrt(3.0);
+  float k = sqrt(3.0);
   p.x = abs(p.x) - 1.0;
   p.y = p.y + 1.0/k;
   if( p.x + k*p.y > 0.0 ) p = vec2(p.x-k*p.y,-k*p.x-p.y)/2.0;
@@ -28,12 +28,12 @@ float sdPentagon(vec2 p, float r) {
   p.x = abs(p.x);
   p -= 2.0*min(dot(vec2(-k.x,k.y),p),0.0)*vec2(-k.x,k.y);
   p -= 2.0*min(dot(vec2( k.x,k.y),p),0.0)*vec2( k.x,k.y);
-  p -= vec2(clamp(p.x,-r*k.z,r*k.z),r);    
+  p -= vec2(clamp(p.x,-r*k.z,r*k.z),r);
   return length(p)*sign(p.y);
 }
 
 float sdHexagon(vec2 p, float r) {
-  const vec3 k = vec3(-0.866025404,0.5,0.577350269);
+  vec3 k = vec3(-0.866025404,0.5,0.577350269);
   p = abs(p);
   p -= 2.0*min(dot(k.xy,p),0.0)*k.xy;
   p -= vec2(clamp(p.x, -k.z*r, k.z*r), r);
@@ -41,7 +41,7 @@ float sdHexagon(vec2 p, float r) {
 }
 
 float sdOctogon(vec2 p, float r) {
-  const vec3 k = vec3(-0.9238795325, 0.3826834323, 0.4142135623 );
+  vec3 k = vec3(-0.9238795325, 0.3826834323, 0.4142135623 );
   p = abs(p);
   p -= 2.0*min(dot(vec2( k.x,k.y),p),0.0)*vec2( k.x,k.y);
   p -= 2.0*min(dot(vec2(-k.x,k.y),p),0.0)*vec2(-k.x,k.y);
@@ -50,7 +50,7 @@ float sdOctogon(vec2 p, float r) {
 }
 
 float sdHexagram(vec2 p, float r) {
-  const vec4 k=vec4(-0.5,0.8660254038,0.5773502692,1.7320508076);
+  vec4 k=vec4(-0.5,0.8660254038,0.5773502692,1.7320508076);
   p = abs(p);
   p -= 2.0*min(dot(k.xy,p),0.0)*k.xy;
   p -= 2.0*min(dot(k.yx,p),0.0)*k.yx;
@@ -68,7 +68,7 @@ float sdRhombus(vec2 p, vec2 b) {
 float sdVesica(vec2 p, float r, float d) {
   p = abs(p);
   float b = sqrt(r*r-d*d); // can delay this sqrt
-  return ((p.y-b)*d>p.x*b) 
+  return ((p.y-b)*d>p.x*b)
           ? length(p-vec2(0.0,b))
           : length(p-vec2(-d,0.0))-r;
 }
