@@ -8,7 +8,7 @@ order: 2
 
 L7 在地图样式层面增加了无底图样式```blank``` 无底图模式
 
-😃不需要使用mapbox token 拿来就用，不要注册mapbox账户
+不需要使用mapbox token 也不需要注册mapbox账户
 
 ```javascript
 const scene = new Scene({
