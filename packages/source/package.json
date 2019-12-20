@@ -26,6 +26,7 @@
   "dependencies": {
     "@antv/l7-core": "^2.0.0-beta.21",
     "@antv/l7-utils": "^2.0.0-beta.21",
+    "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",

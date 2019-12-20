@@ -232,7 +232,6 @@ export default class AMapService
       ...rest
     } = this.config;
     // 高德地图创建独立的container；
-
     // tslint:disable-next-line:typedef
     await new Promise((resolve) => {
       const resolveMap = () => {
