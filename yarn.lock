@@ -89,9 +89,9 @@
     wolfy87-eventemitter "~5.1.0"
 
 "@antv/gatsby-theme-antv@^0.10.17":
-  version "0.10.21"
-  resolved "https://registry.npm.alibaba-inc.com/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-0.10.21.tgz#2f89811634e632da1b1b0632ea6ca07b1b5e86a4"
-  integrity sha1-L4mBFjTmMtobGwYy6mygextehqQ=
+  version "0.10.24"
+  resolved "https://registry.npmjs.org/@antv/gatsby-theme-antv/-/gatsby-theme-antv-0.10.24.tgz#0a57af29a1fc75c390eb70a0c490181e778ecf82"
+  integrity sha512-MMqDmv4hC8f61rFftrjcoGqGGpr+j+uDkPX+AmwpFEaYWzh+QqDO56I0IZUzwYhLihFwjH5z78JtkLO2bDNk4g==
   dependencies:
     "@babel/plugin-transform-modules-umd" "^7.2.0"
     "@babel/preset-env" "^7.6.3"
@@ -649,8 +649,8 @@
 
 "@babel/plugin-syntax-async-generators@^7.2.0", "@babel/plugin-syntax-async-generators@^7.7.4":
   version "7.7.4"
-  resolved "https://registry.npm.alibaba-inc.com/@babel/plugin-syntax-async-generators/download/@babel/plugin-syntax-async-generators-7.7.4.tgz#331aaf310a10c80c44a66b238b6e49132bd3c889"
-  integrity sha1-MxqvMQoQyAxEpmsji25JEyvTyIk=
+  resolved "https://registry.npmjs.org/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.7.4.tgz#331aaf310a10c80c44a66b238b6e49132bd3c889"
+  integrity sha512-Li4+EjSpBgxcsmeEF8IFcfV/+yJGxHXDirDkEoyFjumuwbmfCVHUt0HuowD/iGM7OhIRyXJH9YXxqiH6N815+g==
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
@@ -1036,8 +1036,8 @@
 
 "@babel/plugin-transform-runtime@^7.7.6":
   version "7.7.6"
-  resolved "https://registry.npm.alibaba-inc.com/@babel/plugin-transform-runtime/download/@babel/plugin-transform-runtime-7.7.6.tgz#4f2b548c88922fb98ec1c242afd4733ee3e12f61"
-  integrity sha1-TytUjIiSL7mOwcJCr9RzPuPhL2E=
+  resolved "https://registry.npmjs.org/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.7.6.tgz#4f2b548c88922fb98ec1c242afd4733ee3e12f61"
+  integrity sha512-tajQY+YmXR7JjTwRvwL4HePqoL3DYxpYXIHKVvrOIvJmeHe2y1w4tz5qz9ObUDC9m76rCzIMPyn4eERuwA4a4A==
   dependencies:
     "@babel/helper-module-imports" "^7.7.4"
     "@babel/helper-plugin-utils" "^7.0.0"
@@ -1297,8 +1297,8 @@
 
 "@babel/runtime@^7.7.7":
   version "7.7.7"
-  resolved "https://registry.npm.alibaba-inc.com/@babel/runtime/download/@babel/runtime-7.7.7.tgz#194769ca8d6d7790ec23605af9ee3e42a0aa79cf"
-  integrity sha1-GUdpyo1td5DsI2Ba+e4+QqCqec8=
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.7.7.tgz#194769ca8d6d7790ec23605af9ee3e42a0aa79cf"
+  integrity sha512-uCnC2JEVAu8AKB5do1WRIsvrdJ0flYx/A/9f/6chdacnEZ7LmavjdsDXr5ksYBegxtuTPR5Va9/+13QF/kFkCA==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -3678,8 +3678,8 @@
 
 "@types/codemirror@^0.0.81":
   version "0.0.81"
-  resolved "https://registry.npm.alibaba-inc.com/@types/codemirror/download/@types/codemirror-0.0.81.tgz#3cea2c1006406973d4aad212e617638cbfc2965b"
-  integrity sha1-POosEAZAaXPUqtIS5hdjjL/Clls=
+  resolved "https://registry.npmjs.org/@types/codemirror/-/codemirror-0.0.81.tgz#3cea2c1006406973d4aad212e617638cbfc2965b"
+  integrity sha512-QoeIb9tn/TZp0IzNyMKlcwHR6pHxNoIW9mKqF7asAsj+AWqpFOEUsxia756L6WKBQNk2psHpu+aFuIFqo3Ac0A==
   dependencies:
     "@types/tern" "*"
 
