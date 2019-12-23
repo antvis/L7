@@ -26,6 +26,7 @@
     "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
+    "core-js": "3",
     "element-resize-event": "^3.0.3",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
