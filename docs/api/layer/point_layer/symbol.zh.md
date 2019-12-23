@@ -25,9 +25,8 @@ addImage()
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg'
   );
 
-⚠️ 符号图的ID不能与点图层已有shape名称相同，比如不能设置 circle
-
 ```
+⚠️ 符号图的ID不能与点图层已有shape名称相同，比如不能设置 circle
 
 符号图需要把shape设置成图片的id，同样符号图shape也支持数据映射
 

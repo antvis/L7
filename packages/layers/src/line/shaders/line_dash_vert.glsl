@@ -8,6 +8,7 @@ attribute vec3 a_Position;
 attribute float a_Distance;
 uniform mat4 u_ModelMatrix;
 uniform vec2 u_dash_array: [10.0, 5.];
+uniform  float u_line_type: 0.0;
 uniform float u_dash_offset: 0;
 
 varying vec4 v_color;
@@ -21,6 +22,7 @@ varying float v_distance_ratio;
 #pragma include "projection"
 void main() {
 
+   
   v_distance_ratio = a_Distance / a_Total_Distance;
 
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
