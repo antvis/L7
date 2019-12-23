@@ -26,6 +26,7 @@
     "@antv/l7-core": "^2.0.0-beta.22",
     "@antv/l7-utils": "^2.0.0-beta.22",
     "@babel/runtime": "^7.7.7",
+    "core-js": "3",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",

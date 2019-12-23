@@ -28,6 +28,7 @@
     "@antv/l7-utils": "^2.0.0-beta.22",
     "@babel/runtime": "^7.7.7",
     "@turf/distance": "^6.0.1",
+    "core-js": "3",
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
