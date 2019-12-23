@@ -31,6 +31,7 @@
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
+    "core-js": "3",
     "d3-dsv": "^1.1.1",
     "d3-hexbin": "^0.2.2",
     "eventemitter3": "^4.0.0",
