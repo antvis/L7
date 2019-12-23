@@ -18,7 +18,7 @@ Include the L7 JS JavaScript  <head> of your HTML file.
 
 ```html
 <head>
-<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.20/dist/l7.js'>
+<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.24/dist/l7.js'>
 </script>
 </head>
 ```
