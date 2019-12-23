@@ -33,7 +33,8 @@
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "inversify-logging": "^0.2.1",
-    "load-styles": "^2.0.0"
+    "load-styles": "^2.0.0",
+    "regenerator-runtime": "^0.13.3"
   },
   "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {
