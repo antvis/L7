@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.24](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.24) (2019-12-23)
+
+
+### Bug Fixes
+
+* remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+* remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+* **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+* **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+* 修复webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+* mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+* render 将gl模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+* source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+* **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+* **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+* **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+* **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+* **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+* **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+
+### Features
+
+* **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+* **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+* scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+* **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+* **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+* **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+
+
+
+
 # [2.0.0-beta.23](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.23) (2019-12-23)
 
 ### Bug Fixes
