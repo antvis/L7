@@ -221,7 +221,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public init() {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
-    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
+    this.configService.setLayerConfig(sceneId, this.id, {});
 
     // 全局容器服务
     this.iconService = this.container.get<IIconService>(TYPES.IIconService);
@@ -298,7 +298,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.inited = true;
 
     this.hooks.afterInit.call();
-
+    // 更新 module 样式
+    this.updateLayerConfig({
+      ...this.rawConfig,
+      ...(this.getDefaultConfig() as object),
+    });
     this.buildModels();
     // 触发初始化完成事件;
     this.emit('inited');
@@ -714,6 +718,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     throw new Error('Method not implemented.');
   }
 
+  protected getModelType(): unknown {
+    throw new Error('Method not implemented.');
+  }
+  protected getDefaultConfig() {
+    return {};
+  }
   private splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],

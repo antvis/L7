@@ -3,6 +3,7 @@ import * as React from 'react';
 import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
 import Column from './components/column';
+import DashLineDemo from './components/dash';
 import DataUpdate from './components/data_update';
 import HeatMapDemo from './components/HeatMap';
 import LightDemo from './components/light';
@@ -24,6 +25,7 @@ storiesOf('图层', module)
   .add('图片标注', () => <PointImage />)
   .add('面3d图层', () => <Polygon3D />)
   .add('线图层', () => <LineLayer />)
+  .add('虚线', () => <DashLineDemo />)
   .add('3D弧线', () => <ArcLineDemo />)
   .add('2D弧线', () => <Arc2DLineDemo />)
   .add('热力图', () => <HeatMapDemo />)

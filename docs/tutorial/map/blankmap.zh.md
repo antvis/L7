@@ -8,7 +8,7 @@ order: 2
 
 L7 在地图样式层面增加了无底图样式```blank``` 无底图模式
 
-😃不需要使用mapbox token 拿来就用，不要注册mapbox账户
+不需要使用mapbox token 也不需要注册mapbox账户
 
 ```javascript
 const scene = new Scene({
@@ -26,4 +26,10 @@ const scene = new Scene({
 
 离线，无token使用 
 
-<iframe width="100%" height="400" src="//jsfiddle.net/lzxue/a76og89k/embedded/html,result/light/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+<iframe
+     src="https://codesandbox.io/embed/worldmap-tv6uv?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="worldmap"
+     allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+     sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+   ></iframe>
