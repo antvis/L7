@@ -18,7 +18,7 @@ export default class Light extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         pitch: 0,
         style: 'dark',
         center: [116.405289, 39.904987],
@@ -27,9 +27,7 @@ export default class Light extends React.Component {
     });
     this.scene = scene;
     scene.on('loaded', async () => {
-      const pointLayer = new PointLayer({
-        blend: 'min',
-      })
+      const pointLayer = new PointLayer()
         .source(pointsData, {
           parser: {
             type: 'csv',
@@ -37,8 +35,8 @@ export default class Light extends React.Component {
             y: 'lat',
           },
         })
-        .size(2)
-        .color('#FFFECC')
+        .size(1)
+        .color('#ffa842')
         .style({
           opacity: 1,
         });
