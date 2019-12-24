@@ -75,6 +75,7 @@ export interface IAnimateOption {
   interval?: number;
   duration?: number;
   trailLength?: number;
+  repeat?: number;
 }
 
 export interface IEncodeFeature {

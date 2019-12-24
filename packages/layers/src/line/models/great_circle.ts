@@ -1,35 +1,46 @@
 import {
   AttributeType,
   gl,
+  IAnimateOption,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
+import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc2d_vert from '../shaders/line_arc2d_vert.glsl';
 import line_arc_frag from '../shaders/line_arc_frag.glsl';
+const lineStyleObj: { [key: string]: number } = {
+  solid: 0.0,
+  dash: 1.0,
+};
 
-interface IArcLayerStyleOptions {
-  opacity: number;
-  segmentNumber: number;
-  blur: number;
-}
 export default class GreatCircleModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
-      blur = 0.99,
-    } = this.layer.getLayerConfig() as IArcLayerStyleOptions;
+      lineType = 'solid',
+      dashArray = [10, 5],
+    } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,
-      u_blur: blur,
+      u_line_type: lineStyleObj[lineType as string] || 0.0,
+      u_dash_array: dashArray,
+      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
   public buildModels(): IModel[] {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    if (animateOption.enable) {
+      this.layer.setAnimateStartTime();
+    }
     return [
       this.layer.buildLayerModel({
         moduleName: 'arc2dline',
@@ -37,15 +48,7 @@ export default class GreatCircleModel extends BaseModel {
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
         depth: { enable: false },
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.ONE,
-            srcAlpha: 1,
-            dstRGB: gl.ONE,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }

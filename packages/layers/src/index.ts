@@ -1,8 +1,8 @@
 import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
+import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
-import DashLineLayer from './line/dash';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
@@ -107,7 +107,7 @@ export {
   PointLayer,
   PolygonLayer,
   LineLayer,
-  DashLineLayer,
+  CityBuildingLayer,
   ImageLayer,
   RasterLayer,
   HeatmapLayer,

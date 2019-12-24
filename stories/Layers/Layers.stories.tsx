@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
+import CityBuildingLayerDemo from './components/citybuilding';
 import Column from './components/column';
 import DashLineDemo from './components/dash';
 import DataUpdate from './components/data_update';
@@ -24,6 +25,7 @@ storiesOf('图层', module)
   .add('Column', () => <Column />)
   .add('图片标注', () => <PointImage />)
   .add('面3d图层', () => <Polygon3D />)
+  .add('点亮城市', () => <CityBuildingLayerDemo />)
   .add('线图层', () => <LineLayer />)
   .add('虚线', () => <DashLineDemo />)
   .add('3D弧线', () => <ArcLineDemo />)

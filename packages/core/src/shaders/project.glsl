@@ -8,7 +8,7 @@ vec2 ProjectFlat(vec2 lnglat){
   float x=lnglat.x*d;
   float y=lat*d;
   y=log(tan((PI/4.)+(y/2.)));
-  
+
   float a=.5/PI,
   b=.5,
   c=-.5/PI;
@@ -31,4 +31,10 @@ vec2 unProjectFlat(vec2 px){
   float lat=y/d;
   float lng=x/d;
   return vec2(lng,lat);
+}
+
+float pixelDistance(vec2 from, vec2 to) {
+ vec2 a1 = ProjectFlat(from);
+ vec2 b1 = ProjectFlat(to);
+ return distance(a1, b1);
 }
