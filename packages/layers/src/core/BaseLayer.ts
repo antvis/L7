@@ -165,6 +165,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private scaleOptions: IScaleOptions = {};
 
+  private AnimateStartTime: number;
+
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
     this.name = config.name || this.id;
@@ -298,11 +300,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.inited = true;
 
     this.hooks.afterInit.call();
-    // 更新 module 样式
+    // 更新 model 样式
     this.updateLayerConfig({
-      ...this.rawConfig,
       ...(this.getDefaultConfig() as object),
+      ...this.rawConfig,
     });
+    // 启动动画
+    const { animateOption } = this.getLayerConfig();
+    if (animateOption?.enable) {
+      this.layerService.startAnimate();
+    }
     this.buildModels();
     // 触发初始化完成事件;
     this.emit('inited');
@@ -381,8 +388,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     return this;
   }
-  public animate(options: IAnimateOption) {
-    this.animateOptions = options;
+  public animate(options: IAnimateOption | boolean) {
+    let rawAnimate: Partial<IAnimateOption> = {};
+    if (isObject(options)) {
+      rawAnimate.enable = true;
+      rawAnimate = {
+        ...rawAnimate,
+        ...options,
+      };
+    } else {
+      rawAnimate.enable = options;
+    }
+    this.updateLayerConfig({
+      animateOption: rawAnimate,
+    });
+    // this.animateOptions = options;
     return this;
   }
 
@@ -706,6 +726,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
   }
 
+  public getTime() {
+    return this.layerService.clock.getDelta();
+  }
+  public setAnimateStartTime() {
+    this.AnimateStartTime = this.layerService.clock.getElapsedTime();
+  }
+  public getLayerAnimateTime(): number {
+    return this.layerService.clock.getElapsedTime() - this.AnimateStartTime;
+  }
+
   protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }
@@ -734,9 +764,5 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         : valuesOrCallback || defaultValues,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
-  }
-
-  private layerMapHander(type: string, data: any) {
-    this.emit(type, data);
   }
 }

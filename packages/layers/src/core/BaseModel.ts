@@ -1,5 +1,6 @@
 import {
   BlendType,
+  IAnimateOption,
   IAttribute,
   IBlendOptions,
   ICameraService,
@@ -85,5 +86,19 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
   protected registerBuiltinAttributes() {
     throw new Error('Method not implemented.');
+  }
+  protected animateOption2Array(option: IAnimateOption): number[] {
+    return [
+      option.enable ? 0 : 1.0,
+      option.duration || 4.0,
+      option.interval || 0.2,
+      option.trailLength || 0.1,
+    ];
+  }
+  protected startModelAnimate() {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    if (animateOption.enable) {
+      this.layer.setAnimateStartTime();
+    }
   }
 }

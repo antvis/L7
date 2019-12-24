@@ -27,7 +27,9 @@ export default class Light extends React.Component {
     });
     this.scene = scene;
     scene.on('loaded', async () => {
-      const pointLayer = new PointLayer()
+      const pointLayer = new PointLayer({
+        blend: 'normal',
+      })
         .source(pointsData, {
           parser: {
             type: 'csv',
