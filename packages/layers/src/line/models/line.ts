@@ -1,49 +1,103 @@
 import {
   AttributeType,
   gl,
+  IAnimateOption,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
+import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
-
-interface ILineLayerStyleOptions {
-  opacity: number;
-}
+const lineStyleObj: { [key: string]: number } = {
+  solid: 0.0,
+  dash: 1.0,
+};
 export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const {
+      opacity,
+      lineType = lineStyleType.solid,
+      dashArray = [10, 5],
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_opacity: opacity || 1.0,
+      u_line_type: lineStyleObj[lineType],
+      u_dash_array: dashArray,
+      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
   public buildModels(): IModel[] {
+    this.startModelAnimate();
     return [
       this.layer.buildLayerModel({
         moduleName: 'line',
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: LineTriangulation,
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }
   protected registerBuiltinAttributes() {
     // const lineType = this
     // point layer size;
+    const {
+      lineType = 'solid',
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    // if (lineType === 'dash') {
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'distance',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Distance',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          return [vertex[3]];
+        },
+      },
+    });
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'total_distance',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Total_Distance',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          return [vertex[5]];
+        },
+      },
+    });
+    // }
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,

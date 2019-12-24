@@ -116,7 +116,7 @@ export interface ILayer {
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  animate(option: IAnimateOption): ILayer;
+  animate(option: Partial<IAnimateOption> | boolean): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   filter(field: string, value: StyleAttributeOption): ILayer;
   active(option: IActiveOption | boolean): ILayer;
@@ -172,6 +172,8 @@ export interface ILayer {
   pick(query: { x: number; y: number }): void;
 
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
+  setAnimateStartTime(): void;
+  getLayerAnimateTime(): number;
 }
 
 /**
@@ -242,6 +244,7 @@ export interface ILayerConfig {
    * 开启光照
    */
   enableLighting: boolean;
+  animateOption: Partial<IAnimateOption>;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }

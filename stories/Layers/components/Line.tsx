@@ -23,15 +23,7 @@ export default class LineDemo extends React.Component {
         zoom: 13,
       }),
     });
-    const lineLayer = new LineLayer({
-      enableMultiPassRenderer: true,
-      enablePicking: true,
-      enableHighlight: true,
-      // onHover: (pickedFeature: any) => {
-      //   // tslint:disable-next-line:no-console
-      //   console.log('Scene4', pickedFeature);
-      // },
-    })
+    const lineLayer = new LineLayer()
       .source(await response.json())
       .size(1)
       .shape('line')
@@ -49,7 +41,15 @@ export default class LineDemo extends React.Component {
           '#0D408C',
           '#002466',
         ].reverse(),
-      );
+      )
+      .animate({
+        interval: 0.1,
+        trailLength: 0.05,
+        duration: 2,
+      })
+      .style({
+        lineType: 'solid',
+      });
 
     scene.addLayer(lineLayer);
     scene.render();
