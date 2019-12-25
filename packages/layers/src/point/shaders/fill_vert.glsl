@@ -34,7 +34,7 @@ void main() {
   float antialiasblur = 1.0 / (a_Size + u_stroke_width);
 
   // construct point coords
-  v_data = vec4(extrude, antialiasblur,  );
+  v_data = vec4(extrude, antialiasblur,shape_type);
 
   setPickingColor(a_PickingColor);
 }
