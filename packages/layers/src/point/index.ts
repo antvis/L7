@@ -4,7 +4,7 @@ import PointModels, { PointType } from './models/index';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
-  strokeColor: string;
+  stroke: string;
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
