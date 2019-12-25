@@ -25,10 +25,10 @@ float random (vec2 st) {
     return fract(sin(dot(st.xy, vec2(12.9898,78.233)))* 43758.5453123);
 }
 
-float LinearizeDepth() 
+float LinearizeDepth()
 {
-    float z = gl_FragCoord.z * 2.0 - 1.0;  
-    return (2.0 * u_near * u_far) / (u_far + u_near - z * (u_far - u_near));	
+    float z = gl_FragCoord.z * 2.0 - 1.0;
+    return (2.0 * u_near * u_far) / (u_far + u_near - z * (u_far - u_near));
 }
 
 vec3 fog(vec3 color, vec3 fogColor, float depth){
@@ -37,7 +37,7 @@ vec3 fog(vec3 color, vec3 fogColor, float depth){
     return output_color;
 }
 
-float sdRect(vec2 p, vec2 sz) {  
+float sdRect(vec2 p, vec2 sz) {
   vec2 d = abs(p) - sz;
   float outside = length(max(d, 0.));
   float inside = min(max(d.x, d.y), 0.);
@@ -53,14 +53,14 @@ void main() {
     vec3 brightColor = u_brightColor.xyz;
     vec3 windowColor = u_windowColor.xyz;
     float targetColId = 5.;
-    float depth = 1.0 - LinearizeDepth() / u_far * u_zoom;  
-    vec3 fogColor = vec3(23.0/255.0,31.0/255.0,51.0/255.0); 
-   #ifdef ANIMATE 
+    float depth = 1.0 - LinearizeDepth() / u_far * u_zoom;
+    vec3 fogColor = vec3(23.0/255.0,31.0/255.0,51.0/255.0);
+   #ifdef ANIMATE
      if(v_texCoord.x < 0.) { //顶部颜色
        vec3 foggedColor = fog(baseColor.xyz + vec3(0.12*0.9,0.2*0.9,0.3*0.9),fogColor,depth);
        gl_FragColor = vec4( foggedColor, v_color.w);
      }else { // 侧面颜色
-        vec2 st = v_texCoord; 
+        vec2 st = v_texCoord;
         vec2  UvScale = v_texCoord;
         float tStep = min(0.08,max(0.05* (18.0-u_zoom),0.02));
         float tStart = 0.25 * tStep;
@@ -79,10 +79,10 @@ void main() {
         vec2 windowSize = vec2(abs(tEnd-tStart),abs(tEnd-tStart));
         float dist = sdRect(vec2(u,v), windowSize);
         float s = sU * sV;
-   
+
         float curColId = floor(UvScale.x / tStep);
         float sCol = step(targetColId - 0.2, curColId) - step(targetColId + 0.2, curColId);
-        
+
         float mLightP = mod(lightP, 2.);
         float sRow = step(mLightP - 0.2, st.y) - step(mLightP, st.y);
         if(ux == targetColId){
@@ -103,12 +103,12 @@ void main() {
         color = color * v_color.rgb;
 
         vec3 foggedColor = fog(color,fogColor,depth);
-         
-        gl_FragColor = vec4(foggedColor,1.0); 
+
+        gl_FragColor = vec4(foggedColor,1.0);
      }
    #else
       gl_FragColor = vec4(v_color.xyz , v_color.w);
    #endif
     #pragma include "pick"
- 
+
 }

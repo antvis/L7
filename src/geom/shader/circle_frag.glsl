@@ -11,9 +11,7 @@ varying float v_radius;
  #pragma include "sdf_2d"
 
 void main() {
-  // int shape = int(floor(v_data.w + 0.5));
-   int shape = int(v_data.w);
-
+  int shape = int(floor(v_data.w + 0.5));
   lowp float antialiasblur = v_data.z;
   float antialiased_blur = -max(u_blur, antialiasblur);
   float r = v_radius / (v_radius + u_strokeWidth);
