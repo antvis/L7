@@ -1,4 +1,4 @@
-export const enum lineStyleType {
+export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
 }
@@ -9,8 +9,3 @@ export interface ILineLayerStyleOptions {
   dashArray?: [number, number];
   segmentNumber: number;
 }
-
-export const lineStyleObj: { [key: string]: number } = {
-  solid: 0.0,
-  dash: 1.0,
-};
