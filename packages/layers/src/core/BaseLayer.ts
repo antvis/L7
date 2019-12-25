@@ -55,7 +55,7 @@ let layerIdCounter = 0;
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
-  public name: string;
+  public name: string = `${layerIdCounter++}`;
   public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
