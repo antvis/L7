@@ -137,6 +137,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.map.addMarkerContainer();
       // 初始化未加载的marker;
       this.markerService.addMarkers();
+      // 地图初始化之后 才能初始化 container 上的交互
+      this.interactionService.init();
       this.logger.debug('map loaded');
     });
 
@@ -160,8 +162,6 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.logger.error('容器 id 不存在');
       }
 
-      // 初始化 container 上的交互
-      this.interactionService.init();
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });
     // TODO：init worker, fontAtlas...
