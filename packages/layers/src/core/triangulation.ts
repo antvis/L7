@@ -47,7 +47,7 @@ export function PointExtrudeTriangulation(feature: IEncodeFeature) {
     indices: index,
     normals,
     // normals: Array.from(computeVertexNormals(positions, index, 3, false)),
-    size: 3,
+    size: 5,
   };
 }
 

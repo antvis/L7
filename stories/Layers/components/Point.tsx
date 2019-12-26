@@ -24,59 +24,58 @@ export default class Point3D extends React.Component {
         pitch: 0,
         style: 'dark',
         zoom: 3,
-        token: 'test',
       }),
     });
-    scene.on('loaded', () => {
-      const pointLayer = new PointLayer({})
-        .source(pointsData, {
-          cluster: true,
-        })
-        .shape('circle')
-        .scale('point_count', {
-          type: 'quantile',
-        })
-        .size('point_count', [5, 10, 15, 20, 25])
-        .color('yellow')
-        .style({
-          opacity: 0.5,
-          strokeWidth: 1,
-        });
-      scene.addLayer(pointLayer);
-      pointLayer.on('mousemove', (e) => {
-        const id = e.featureId;
-        console.log(e.type);
-        pointLayer.setActive(id);
+    // scene.on('loaded', () => {
+    const pointLayer = new PointLayer({})
+      .source(pointsData, {
+        cluster: true,
+      })
+      .shape('circle')
+      .scale('point_count', {
+        type: 'quantile',
+      })
+      .size('point_count', [5, 10, 15, 20, 25])
+      .color('yellow')
+      .style({
+        opacity: 0.5,
+        strokeWidth: 1,
       });
-      pointLayer.on('mousedown', (e) => {
-        const id = e.featureId;
-        console.log(e.type);
-        pointLayer.setActive(id);
-      });
-      pointLayer.on('mouseup', (e) => {
-        const id = e.featureId;
-        console.log(e.type);
-        pointLayer.setActive(id);
-      });
-      pointLayer.on('click', (e) => {
-        const id = e.featureId;
-        console.log(e.type);
-        pointLayer.setActive(id);
-      });
-
-      pointLayer.on('contextmenu', (e) => {
-        const id = e.featureId;
-        console.log(e.type);
-        pointLayer.setActive(id);
-      });
-      pointLayer.on('unpick', (e) => {
-        const id = e.featureId;
-        console.log(e.type);
-        pointLayer.setActive(id);
-      });
-
-      this.scene = scene;
+    scene.addLayer(pointLayer);
+    pointLayer.on('mousemove', (e) => {
+      const id = e.featureId;
+      console.log(e.type);
+      pointLayer.setActive(id);
     });
+    pointLayer.on('mousedown', (e) => {
+      const id = e.featureId;
+      console.log(e.type);
+      pointLayer.setActive(id);
+    });
+    pointLayer.on('mouseup', (e) => {
+      const id = e.featureId;
+      console.log(e.type);
+      pointLayer.setActive(id);
+    });
+    pointLayer.on('click', (e) => {
+      const id = e.featureId;
+      console.log(e.type);
+      pointLayer.setActive(id);
+    });
+
+    pointLayer.on('contextmenu', (e) => {
+      const id = e.featureId;
+      console.log(e.type);
+      pointLayer.setActive(id);
+    });
+    pointLayer.on('unpick', (e) => {
+      const id = e.featureId;
+      console.log(e.type);
+      pointLayer.setActive(id);
+    });
+
+    this.scene = scene;
+    // });
   }
 
   public render() {
