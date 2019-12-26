@@ -114,7 +114,7 @@ export default class AMapService
   }
   public getZoom(): number {
     // 统一返回 Mapbox 缩放等级
-    return this.map.getZoom();
+    return this.map.getZoom() - 1;
   }
 
   public setZoom(zoom: number): void {
