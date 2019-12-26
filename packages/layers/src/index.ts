@@ -13,6 +13,7 @@ import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
+import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
 import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
@@ -86,6 +87,14 @@ container
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(ShaderUniformPlugin)
+  .inRequestScope();
+
+/**
+ * 传入动画参数
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerAnimateStylePlugin)
   .inRequestScope();
 /**
  * 传入光照相关参数

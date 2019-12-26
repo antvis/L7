@@ -119,7 +119,7 @@ export interface IStyleAttributeInitializationOptions {
   type: AttributeType;
   scale?: {
     field: StyleAttributeField;
-    values: unknown[];
+    values: unknown[] | string;
     names: string[];
     type: StyleScaleType;
     callback?: (...args: any[]) => [];

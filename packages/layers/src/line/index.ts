@@ -29,7 +29,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     return defaultConfig[type];
   }
   protected renderModels() {
-    // console.log(this.layerModel.getUninforms());
     this.models.forEach((model) =>
       model.draw({
         uniforms: this.layerModel.getUninforms(),

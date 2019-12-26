@@ -24,6 +24,7 @@ varying vec4 v_color;
 varying vec2 v_dash_array;
 varying vec2 v_normal;
 varying float v_distance_ratio;
+varying float v_side;
 
 
 void main() {
@@ -39,6 +40,7 @@ void main() {
   v_color = a_Color;
   vec3 size = a_Miter * a_Size.x * reverse_offset_normal(a_Normal);  //v_normal * vec3(1., -1., 1.0);
   vec2 offset = project_pixel(size.xy);
+  v_side = a_Miter * a_Size.x;
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 
