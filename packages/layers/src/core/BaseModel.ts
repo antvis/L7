@@ -70,6 +70,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     throw new Error('Method not implemented.');
   }
 
+  public getAnimateOption(): IModelUniform {
+    throw new Error('Method not implemented.');
+  }
+
   public buildModels(): IModel[] {
     throw new Error('Method not implemented.');
   }
