@@ -53,6 +53,7 @@ export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
+  getAnimateOption(): unknown;
   buildModels(): IModel[];
 }
 export interface IModelUniform {
