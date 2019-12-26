@@ -57,7 +57,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.cameraService = layer
       .getContainer()
       .get<ICameraService>(TYPES.ICameraService);
+    // 注册 Attribute
     this.registerBuiltinAttributes();
+    // 开启动画
+    this.startModelAnimate();
   }
   public getBlend(): IBlendOptions {
     const { blend = 'normal' } = this.layer.getLayerConfig();
@@ -68,6 +71,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
   public getUninforms(): IModelUniform {
     throw new Error('Method not implemented.');
+  }
+
+  public getAnimateUniforms(): IModelUniform {
+    return {};
   }
 
   public buildModels(): IModel[] {

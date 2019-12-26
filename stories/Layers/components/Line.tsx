@@ -12,40 +12,30 @@ export default class LineDemo extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
+      'https://arcgis.github.io/arcgis-samples-javascript/sample-data/custom-gl-animated-lines/lines.json',
     );
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        center: [102.602992, 23.107329],
-        pitch: 0,
-        style: 'mapbox://styles/mapbox/dark-v9',
-        zoom: 13,
+        center: [-74.006, 40.7128],
+        zoom: 15,
+        style: 'dark',
       }),
     });
     const lineLayer = new LineLayer()
-      .source(await response.json())
-      .size(1)
+      .source(await response.json(), {
+        parser: {
+          type: 'json',
+          coordinates: 'path',
+        },
+      })
+      .size(3)
       .shape('line')
-      .color(
-        'ELEV',
-        [
-          '#E8FCFF',
-          '#CFF6FF',
-          '#A1E9ff',
-          '#65CEF7',
-          '#3CB1F0',
-          '#2894E0',
-          '#1772c2',
-          '#105CB3',
-          '#0D408C',
-          '#002466',
-        ].reverse(),
-      )
+      .color('red')
       .animate({
-        interval: 0.1,
-        trailLength: 0.05,
-        duration: 2,
+        interval: 0.5,
+        trailLength: 0.2,
+        duration: 4,
       })
       .style({
         lineType: 'solid',
