@@ -103,6 +103,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     options?: ISourceCFG;
   };
 
+  public layerModel: ILayerModel;
+
   @lazyInject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
@@ -132,8 +134,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     name: string,
   ) => IPostProcessingPass<unknown>;
   protected normalPassFactory: (name: string) => IPass<unknown>;
-
-  protected layerModel: ILayerModel;
 
   protected animateOptions: IAnimateOption = { enable: false };
 

@@ -53,6 +53,7 @@ export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
+  getAnimateUniforms(): IModelUniform;
   buildModels(): IModel[];
 }
 export interface IModelUniform {
@@ -78,6 +79,7 @@ export interface ILayer {
   zIndex: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
+  layerModel: ILayerModel;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number;
   hooks: {
