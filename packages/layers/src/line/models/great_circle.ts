@@ -25,22 +25,22 @@ export default class GreatCircleModel extends BaseModel {
       lineType = 'solid',
       dashArray = [10, 5],
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,
       u_line_type: lineStyleObj[lineType as string] || 0.0,
       u_dash_array: dashArray,
+    };
+  }
+  public getAnimateUniforms(): IModelUniform {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    return {
       u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
   public buildModels(): IModel[] {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    if (animateOption.enable) {
-      this.layer.setAnimateStartTime();
-    }
     return [
       this.layer.buildLayerModel({
         moduleName: 'arc2dline',
@@ -53,7 +53,6 @@ export default class GreatCircleModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,

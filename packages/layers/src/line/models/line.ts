@@ -24,18 +24,21 @@ export default class LineModel extends BaseModel {
       lineType = lineStyleType.solid,
       dashArray = [10, 5],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_opacity: opacity || 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
+    };
+  }
+  public getAnimateUniforms(): IModelUniform {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    return {
       u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
   public buildModels(): IModel[] {
-    this.startModelAnimate();
     return [
       this.layer.buildLayerModel({
         moduleName: 'line',

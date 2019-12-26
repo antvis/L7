@@ -11,6 +11,7 @@ import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
 import { IMarkerService } from '../component/IMarkerService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
+import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
 import { IInteractionService } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
@@ -46,6 +47,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.IMapService)
   private readonly map: IMapService;
+
+  @inject(TYPES.ICoordinateSystemService)
+  private readonly coordinateSystemService: ICoordinateSystemService;
 
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
@@ -249,6 +253,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       });
       // 触发 Map， canvas
       DOM.triggerResize();
+      this.coordinateSystemService.needRefresh = true;
       //  repaint layers
       this.render();
     }

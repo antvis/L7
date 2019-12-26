@@ -1,9 +1,11 @@
 import {
   AttributeType,
   gl,
+  IAnimateOption,
   IAttribute,
   IElements,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
@@ -28,6 +30,13 @@ export default class FillModel extends BaseModel {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
       u_stroke_color: rgb2arr(stroke),
+    };
+  }
+  public getAnimateUniforms(): IModelUniform {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    return {
+      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
