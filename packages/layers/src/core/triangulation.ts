@@ -47,7 +47,7 @@ export function PointExtrudeTriangulation(feature: IEncodeFeature) {
     indices: index,
     normals,
     // normals: Array.from(computeVertexNormals(positions, index, 3, false)),
-    size: 3,
+    size: 5,
   };
 }
 
@@ -103,10 +103,10 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   );
 
   return {
-    vertices: positions, // [ x, y, z ]
+    vertices: positions, // [ x, y, z, uv.x,uv.y ]
     indices: index,
     normals,
-    size: 3,
+    size: 5,
   };
 }
 
