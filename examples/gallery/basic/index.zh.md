@@ -1,6 +1,4 @@
 ---
-title: Gallery
+title: 官方精品库
 order: 0
-redirect_from:
-  - /zh/examples
 ---

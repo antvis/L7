@@ -33,10 +33,8 @@ module.exports = {
         title: {
           zh: '图表演示',
           en: 'Examples'
-        },
-        redirect: 'gallery/basic'
+        }
       }
-      // target: '_blank',
     ],
     docs: [
       {
@@ -141,8 +139,8 @@ module.exports = {
         slug: 'gallery',
         icon: 'gallery',
         title: {
-          zh: 'Gallery',
-          en: 'Gallery'
+          zh: '官方精品库',
+          en: 'Featured'
         }
       },
       {
