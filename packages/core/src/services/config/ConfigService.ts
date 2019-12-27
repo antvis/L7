@@ -4,6 +4,7 @@ import { ILayerConfig } from '../layer/ILayerService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import mapConfigSchema from './mapConfigSchema';
 import sceneConfigSchema from './sceneConfigSchema';
+import WarnInfo, { IWarnInfo } from './warnInfo';
 
 /**
  * 场景默认配置项
@@ -49,13 +50,16 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   visible: true,
   autoFit: false,
   zIndex: 0,
+  blend: 'normal',
   pickedFeatureID: -1,
   enableMultiPassRenderer: true,
   enablePicking: true,
   active: false,
   activeColor: 'red',
   enableHighlight: false,
+  enableSelect: false,
   highlightColor: 'red',
+  selectColor: 'blue',
   enableTAA: false,
   jitterScale: 1,
   enableLighting: false,
@@ -102,6 +106,10 @@ export default class GlobalConfigService implements IGlobalConfigService {
 
   public getSceneConfig(sceneId: string) {
     return this.sceneConfigCache[sceneId];
+  }
+
+  public getSceneWarninfo(id: string) {
+    return WarnInfo[id];
   }
 
   public setSceneConfig(sceneId: string, config: Partial<ISceneConfig>) {

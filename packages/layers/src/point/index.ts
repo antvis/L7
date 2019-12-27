@@ -7,7 +7,7 @@ interface IPointLayerStyleOptions {
   strokeColor: string;
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
+  public type: string = 'PointLayer';
   protected getConfigSchema() {
     return {
       properties: {
@@ -18,6 +18,19 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         },
       },
     };
+  }
+  protected getDefaultConfig() {
+    const type = this.getModelType();
+    const defaultConfig = {
+      normal: {
+        blend: 'additive',
+      },
+      fill: {},
+      extrude: {},
+      image: {},
+      text: {},
+    };
+    return defaultConfig[type];
   }
   protected renderModels() {
     if (this.layerModelNeedUpdate) {
@@ -38,7 +51,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.models = this.layerModel.buildModels();
   }
 
-  private getModelType(): PointType {
+  protected getModelType(): PointType {
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
@@ -51,6 +64,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       return 'normal';
     } else {
       const shape = item.shape;
+      if (shape === 'dot') {
+        return 'normal';
+      }
       if (shape2d?.indexOf(shape as string) !== -1) {
         return 'fill';
       }

@@ -1,16 +1,18 @@
 import {
   AttributeType,
+  BlendType,
   gl,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
 
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { rgb2arr } from '../../utils/color';
+import { BlendTypes } from '../../utils/blend';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
@@ -26,6 +28,11 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class NormalModel extends BaseModel {
+  public getDefaultStyle(): Partial<IPointLayerStyleOptions & ILayerConfig> {
+    return {
+      blend: 'additive',
+    };
+  }
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -38,7 +45,6 @@ export default class NormalModel extends BaseModel {
       u_stroke_color: rgb2arr(strokeColor),
     };
   }
-
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
@@ -48,15 +54,7 @@ export default class NormalModel extends BaseModel {
         triangulation: PointTriangulation,
         depth: { enable: false },
         primitive: gl.POINTS,
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.ONE,
-            srcAlpha: 1,
-            dstRGB: gl.ONE,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }
@@ -86,5 +84,12 @@ export default class NormalModel extends BaseModel {
         },
       },
     });
+  }
+  private defaultStyleOptions(): Partial<
+    IPointLayerStyleOptions & ILayerConfig
+  > {
+    return {
+      blend: BlendType.additive,
+    };
   }
 }

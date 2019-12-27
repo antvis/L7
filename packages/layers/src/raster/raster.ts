@@ -11,8 +11,8 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
-import { generateColorRamp, IColorRamp } from '../utils/color';
 import { RasterTriangulation } from './buffers/triangulation';
 import rasterFrag from './shaders/raster_frag.glsl';
 import rasterVert from './shaders/raster_vert.glsl';
@@ -26,7 +26,7 @@ interface IRasterLayerStyleOptions {
 }
 
 export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
-  public name: string = 'e';
+  public type: string = 'RasterLayer';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 

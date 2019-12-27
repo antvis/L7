@@ -7,7 +7,7 @@ interface IPolygonLayerStyleOptions {
 }
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
-  public name: string = 'PolygonLayer';
+  public type: string = 'PolygonLayer';
 
   protected getConfigSchema() {
     return {
@@ -36,7 +36,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     this.models = this.layerModel.buildModels();
   }
 
-  private getModelType(): PolygonModelType {
+  protected getModelType(): PolygonModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

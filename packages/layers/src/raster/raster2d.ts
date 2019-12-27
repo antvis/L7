@@ -1,7 +1,7 @@
 import { AttributeType, gl, IEncodeFeature, ITexture2D } from '@antv/l7-core';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
 import { RasterImageTriangulation } from '../core/triangulation';
-import { generateColorRamp, IColorRamp } from '../utils/color';
 import rasterImageFrag from './shaders/raster_2d_frag.glsl';
 import rasterImageVert from './shaders/raster_2d_vert.glsl';
 interface IRasterLayerStyleOptions {
@@ -12,7 +12,7 @@ interface IRasterLayerStyleOptions {
 }
 
 export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
-  public name: string = 'RasterLayer';
+  public type: string = 'RasterLayer';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 

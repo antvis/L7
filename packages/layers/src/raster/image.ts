@@ -9,12 +9,12 @@ import BaseLayer from '../core/BaseLayer';
 import { RasterImageTriangulation } from '../core/triangulation';
 import rasterImageFrag from './shaders/image_frag.glsl';
 import rasterImageVert from './shaders/image_vert.glsl';
-interface IPointLayerStyleOptions {
+interface IRaterLayerStyleOptions {
   opacity: number;
 }
 
-export default class ImageLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'ImageLayer';
+export default class ImageLayer extends BaseLayer<IRaterLayerStyleOptions> {
+  public type: string = 'ImageLayer';
   protected texture: ITexture2D;
 
   protected getConfigSchema() {

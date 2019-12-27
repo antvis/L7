@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.0.0-beta.19",
+  "version": "2.0.0-beta.24",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,12 +24,14 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.19",
-    "@antv/l7-utils": "^2.0.0-beta.19",
+    "@antv/l7-core": "^2.0.0-beta.24",
+    "@antv/l7-utils": "^2.0.0-beta.24",
+    "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
+    "core-js": "3",
     "d3-dsv": "^1.1.1",
     "d3-hexbin": "^0.2.2",
     "eventemitter3": "^4.0.0",
@@ -39,6 +41,7 @@
     "inversify-logging": "^0.2.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
+    "regenerator-runtime": "^0.13.3",
     "supercluster": "^6.0.2",
     "tapable": "^2.0.0-beta.8"
   },
