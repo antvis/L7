@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
 import { injectable, postConstruct } from 'inversify';
+import { merge } from 'lodash';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import mapConfigSchema from './mapConfigSchema';
@@ -63,6 +64,12 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   enableTAA: false,
   jitterScale: 1,
   enableLighting: false,
+  animateOption: {
+    enable: false,
+    interval: 0.2,
+    duration: 4,
+    trailLength: 0.15,
+  },
 };
 
 // @see https://github.com/epoberezkin/ajv#options
@@ -141,9 +148,7 @@ export default class GlobalConfigService implements IGlobalConfigService {
   ) {
     // @ts-ignore
     this.layerConfigCache[layerId] = {
-      ...this.sceneConfigCache[sceneId],
-      ...defaultLayerConfig,
-      ...config,
+      ...merge({}, this.sceneConfigCache[sceneId], defaultLayerConfig, config),
     };
   }
 

@@ -1,14 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
+import { ILineLayerStyleOptions } from '../core/interface';
 import LineModels, { LineModelType } from './models';
-export enum LineType {
-  'solid' = 'solid',
-  'dash' = 'dash',
-}
-interface ILineLayerStyleOptions {
-  opacity: number;
-  lineType?: keyof typeof LineType;
-  dashArray?: [number, number];
-}
+
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
 
@@ -25,7 +18,16 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       },
     };
   }
-
+  protected getDefaultConfig() {
+    const type = this.getModelType();
+    const defaultConfig = {
+      line: {},
+      arc3d: { blend: 'additive' },
+      arc: { blend: 'additive' },
+      greatcircle: { blend: 'additive' },
+    };
+    return defaultConfig[type];
+  }
   protected renderModels() {
     this.models.forEach((model) =>
       model.draw({
