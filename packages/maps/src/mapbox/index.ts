@@ -5,7 +5,9 @@ import {
   Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  IGlobalConfigService,
   ILngLat,
+  ILogService,
   IMapConfig,
   IMapService,
   IPoint,
@@ -27,7 +29,8 @@ const EventMap: {
 import { MapTheme } from './theme';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
-
+const MAPBOX_API_KEY =
+  'pk.eyJ1IjoibHp4dWUiLCJhIjoiYnhfTURyRSJ9.Ugm314vAKPHBzcPmY1p4KQ';
 /**
  * AMapService
  */
@@ -39,6 +42,11 @@ export default class MapboxService
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
+  @inject(TYPES.IGlobalConfigService)
+  private readonly configService: IGlobalConfigService;
+
+  @inject(TYPES.ILogService)
+  private readonly logger: ILogService;
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 
@@ -85,8 +93,13 @@ export default class MapboxService
   public getType() {
     return 'mapbox';
   }
+
   public getZoom(): number {
     return this.map.getZoom();
+  }
+
+  public setZoom(zoom: number) {
+    return this.map.setZoom(zoom);
   }
 
   public getCenter(): ILngLat {
@@ -177,11 +190,11 @@ export default class MapboxService
       id = 'map',
       attributionControl = false,
       style = 'light',
-      token = 'pk.eyJ1IjoieGlhb2l2ZXIiLCJhIjoiY2pxcmc5OGNkMDY3cjQzbG42cXk5NTl3YiJ9.hUC5Chlqzzh0FFd_aEc-uQ',
+      token = MAPBOX_API_KEY,
       rotation = 0,
+      mapInstance,
       ...rest
     } = this.config;
-    this.$mapContainer = document.getElementById(id);
 
     this.viewport = new Viewport();
 
@@ -189,15 +202,43 @@ export default class MapboxService
      * TODO: 使用 mapbox v0.53.x 版本 custom layer，需要共享 gl context
      * @see https://github.com/mapbox/mapbox-gl-js/blob/master/debug/threejs.html#L61-L64
      */
-    mapboxgl.accessToken = token;
-    // @ts-ignore
-    this.map = new mapboxgl.Map({
-      container: id,
-      style: this.getMapStyle(style),
-      attributionControl,
-      bearing: rotation,
-      ...rest,
-    });
+
+    // 判断全局 mapboxgl 对象的加载
+    if (!mapInstance && !mapboxgl) {
+      // 用户有时传递进来的实例是继承于 mapbox 实例化的，不一定是 mapboxgl 对象。
+      this.logger.error(this.configService.getSceneWarninfo('SDK'));
+    }
+
+    if (
+      token === MAPBOX_API_KEY &&
+      style !== 'blank' &&
+      !mapboxgl.accessToken &&
+      !mapInstance // 如果用户传递了 mapInstance，应该不去干预实例的 accessToken。
+    ) {
+      this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+    }
+
+    // 判断是否设置了 accessToken
+    if (!mapInstance && !mapboxgl.accessToken) {
+      // 用户有时传递进来的实例是继承于 mapbox 实例化的，不一定是 mapboxgl 对象。
+      mapboxgl.accessToken = token;
+    }
+
+    if (mapInstance) {
+      // @ts-ignore
+      this.map = mapInstance;
+      this.$mapContainer = this.map.getContainer();
+    } else {
+      this.$mapContainer = this.creatAmapContainer(id);
+      // @ts-ignore
+      this.map = new mapboxgl.Map({
+        container: id,
+        style: this.getMapStyle(style),
+        attributionControl,
+        bearing: rotation,
+        ...rest,
+      });
+    }
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
 
@@ -255,6 +296,14 @@ export default class MapboxService
 
     this.cameraChangedCallback(this.viewport);
   };
+
+  private creatAmapContainer(id: string | HTMLDivElement) {
+    let $wrapper = id as HTMLDivElement;
+    if (typeof id === 'string') {
+      $wrapper = document.getElementById(id) as HTMLDivElement;
+    }
+    return $wrapper;
+  }
 
   private removeLogoControl(): void {
     // @ts-ignore

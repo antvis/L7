@@ -1,11 +1,11 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import HeatMapModels, { HeatMapModelType } from './models';
-interface IPointLayerStyleOptions {
+interface IHeatMapLayerStyleOptions {
   opacity: number;
 }
-export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'HeatMapLayer';
+export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
+  public type: string = 'HeatMapLayer';
   protected getConfigSchema() {
     return {
       properties: {
@@ -37,7 +37,7 @@ export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.layerModel = new HeatMapModels[shape](this);
     this.models = this.layerModel.buildModels();
   }
-  private getModelType(): HeatMapModelType {
+  protected getModelType(): HeatMapModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

@@ -3,7 +3,11 @@ import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
-import { IModel, IModelInitializationOptions } from '../renderer/IModel';
+import {
+  IBlendOptions,
+  IModel,
+  IModelInitializationOptions,
+} from '../renderer/IModel';
 import {
   IMultiPassRenderer,
   IPass,
@@ -22,6 +26,16 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+export enum BlendType {
+  normal = 'normal',
+  additive = 'additive',
+  subtractive = 'subtractive',
+  min = 'min',
+  max = 'max',
+}
+export interface IBlendTypes {
+  [key: string]: Partial<IBlendOptions>;
+}
 export interface IDataState {
   dataSourceNeedUpdate: boolean;
   dataMappingNeedUpdate: boolean;
@@ -38,6 +52,7 @@ export interface ILayerModelInitializationOptions {
 export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
+  getDefaultStyle(): unknown;
   buildModels(): IModel[];
 }
 export interface IModelUniform {
@@ -57,7 +72,8 @@ export interface IActiveOption {
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
-  name: string; // 代表 Layer 的类型
+  type: string; // 代表 Layer 的类型
+  name: string; //
   inited: boolean; // 是否初始化完成
   zIndex: number;
   plugins: ILayerPlugin[];
@@ -73,6 +89,8 @@ export interface ILayer {
     beforePickingEncode: SyncHook<void>;
     afterPickingEncode: SyncHook<void>;
     beforeHighlight: SyncHook<[number[]]>;
+    beforeSelect: SyncHook<[number[]]>;
+    afterSelect: SyncHook<void>;
     afterHighlight: SyncHook<void>;
     beforeDestroy: SyncHook<void>;
     afterDestroy: SyncHook<void>;
@@ -86,6 +104,8 @@ export interface ILayer {
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
+  setCurrentPickId(id: number | null): void;
+  getCurrentPickId(): number | null;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
@@ -116,6 +136,7 @@ export interface ILayer {
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;
+  setBlend(type: keyof typeof BlendType): void;
   // animate(field: string, option: any): ILayer;
   render(): ILayer;
   destroy(): void;
@@ -186,6 +207,8 @@ export interface ILayerConfig {
   visible: boolean;
   zIndex: number;
   autoFit: boolean;
+  name: string; //
+  blend: keyof typeof BlendType;
   pickedFeatureID: number;
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
@@ -198,10 +221,13 @@ export interface ILayerConfig {
    * 开启高亮
    */
   enableHighlight: boolean;
+
+  enableSelect: boolean;
   /**
    * 高亮颜色
    */
   highlightColor: string | number[];
+  selectColor: string | number[];
   active: boolean;
   activeColor: string | number[];
   /**
