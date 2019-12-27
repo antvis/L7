@@ -1,3 +1,22 @@
+interface IPoint {
+  x: number;
+  y: number;
+}
+export interface IGlyphQuad {
+  tr: IPoint;
+  tl: IPoint;
+  bl: IPoint;
+  br: IPoint;
+  tex: {
+    x: number;
+    y: number;
+    height: number;
+    width: number;
+    advance: number;
+  };
+  glyphOffset: [number, number];
+}
+
 /**
  * 返回文本相对锚点位置
  * @param {string} anchor 锚点位置
@@ -181,7 +200,7 @@ export function shapeText(
   textAnchor: string,
   textJustify: string,
   spacing: number,
-  translate: [number, number],
+  translate: [number, number] = [0, 0],
 ) {
   // TODO：处理换行
   const lines = text.split('\n');
@@ -215,11 +234,11 @@ export function shapeText(
 
 export function getGlyphQuads(
   shaping: any,
-  textOffset: [number, number],
+  textOffset: [number, number] = [0, 0],
   alongLine: boolean,
-) {
+): IGlyphQuad[] {
   const { positionedGlyphs } = shaping;
-  const quads = [];
+  const quads: IGlyphQuad[] = [];
 
   for (const positionedGlyph of positionedGlyphs) {
     const rect = positionedGlyph.metrics;
@@ -229,7 +248,7 @@ export function getGlyphQuads(
 
     const halfAdvance = (rect.advance * positionedGlyph.scale) / 2;
 
-    const glyphOffset = alongLine
+    const glyphOffset: [number, number] = alongLine
       ? [positionedGlyph.x + halfAdvance, positionedGlyph.y]
       : [0, 0];
 

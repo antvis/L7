@@ -68,7 +68,6 @@ export default class InteractionService extends EventEmitter
       this.logger.debug('add event listeners on canvas');
     }
   }
-
   private removeEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
