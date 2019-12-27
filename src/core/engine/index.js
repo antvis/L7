@@ -28,9 +28,6 @@ export default class Engine extends EventEmitter {
   }
   update() {
     this.redraw();
-    setTimeout(() => {
-      this.redraw();
-    }, 50);
   }
   redraw() {
     this._renderer.clear();

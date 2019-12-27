@@ -228,7 +228,9 @@ export default class Scene extends Base {
     this._engine.update();
   }
   destroy() {
-    this.get('controlController').clearControlPos();
+    if (this.get('controlController')) {
+      this.get('controlController').clearControlPos();
+    }
     super.destroy();
     this._layers.forEach(layer => {
       layer.destroy();
@@ -239,11 +241,12 @@ export default class Scene extends Base {
     this.fontAtlasManager = null;
     this.style.destroy();
     this.style = null;
-    this._engine.destroy();
-    this._engine = null;
+
     this.map.destroy();
     this.unRegsterMapEvent();
     this._unRegistEvents();
+    this._engine.destroy();
+    this._engine = null;
   }
   handleWindowResized() {
     this.emit('resize');
