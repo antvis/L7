@@ -26,6 +26,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
       .size('t', function(level) {
         return [ 1, 2, level * 2 + 20 ];
       })
+      .active(true)
       .color('t', [
         '#094D4A',
         '#146968',
