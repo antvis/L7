@@ -1,8 +1,8 @@
 import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
+import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
-import DashLineLayer from './line/dash';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
@@ -13,6 +13,7 @@ import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
+import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
 import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
@@ -87,6 +88,14 @@ container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(ShaderUniformPlugin)
   .inRequestScope();
+
+/**
+ * 传入动画参数
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerAnimateStylePlugin)
+  .inRequestScope();
 /**
  * 传入光照相关参数
  */
@@ -107,7 +116,7 @@ export {
   PointLayer,
   PolygonLayer,
   LineLayer,
-  DashLineLayer,
+  CityBuildingLayer,
   ImageLayer,
   RasterLayer,
   HeatmapLayer,

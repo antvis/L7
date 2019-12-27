@@ -21,12 +21,12 @@ export default class ConfigSchemaValidationPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.init.tap('ConfigSchemaValidationPlugin', () => {
       this.configService.registerLayerConfigSchemaValidator(
-        layer.name,
+        layer.name as string,
         layer.getConfigSchemaForValidation(),
       );
 
       const { valid, errorText } = this.configService.validateLayerConfig(
-        layer.name,
+        layer.name as string,
         layer.getLayerConfig(),
       );
 

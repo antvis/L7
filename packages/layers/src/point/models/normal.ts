@@ -16,7 +16,7 @@ import normalVert from '../shaders/normal_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
-  strokeColor: string;
+  stroke: string;
 }
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -36,13 +36,13 @@ export default class NormalModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      strokeColor = 'rgb(0,0,0,0)',
+      stroke = 'rgb(0,0,0,0)',
       strokeWidth = 1,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
-      u_stroke_color: rgb2arr(strokeColor),
+      u_stroke_color: rgb2arr(stroke),
     };
   }
   public buildModels(): IModel[] {
