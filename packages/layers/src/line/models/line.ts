@@ -21,7 +21,7 @@ export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
-      lineType = lineStyleType.solid,
+      lineType = 'solid',
       dashArray = [10, 5],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return {
