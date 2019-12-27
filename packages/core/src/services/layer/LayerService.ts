@@ -81,6 +81,7 @@ export default class LayerService implements ILayerService {
 
   public startAnimate() {
     if (this.animateInstanceCount++ === 0) {
+      this.clock.start();
       this.runRender();
     }
   }
@@ -88,6 +89,7 @@ export default class LayerService implements ILayerService {
   public stopAnimate() {
     if (--this.animateInstanceCount === 0) {
       this.stopRender();
+      this.clock.stop();
     }
   }
 
@@ -102,7 +104,7 @@ export default class LayerService implements ILayerService {
 
   private runRender() {
     this.renderLayers();
-    this.layerRenderID = requestAnimationFrame(this.renderLayers.bind(this));
+    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
   private stopRender() {

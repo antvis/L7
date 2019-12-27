@@ -73,7 +73,8 @@ module.exports = [
             'isFunction',
             'cloneDeep',
             'isString',
-            'isNumber'
+            'isNumber',
+            'merge'
           ]
         }
       }),

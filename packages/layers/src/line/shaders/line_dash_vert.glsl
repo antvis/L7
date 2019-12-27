@@ -22,7 +22,7 @@ varying float v_distance_ratio;
 #pragma include "projection"
 void main() {
 
-   
+
   v_distance_ratio = a_Distance / a_Total_Distance;
 
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
