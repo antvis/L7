@@ -1,3 +1,5 @@
+#define Animate 0.0
+
 uniform float u_blur : 0;
 uniform float u_opacity : 1;
 uniform float u_stroke_width : 1;
@@ -7,6 +9,8 @@ uniform float u_stroke_opacity : 1;
 varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
+uniform float u_time;
+uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
 #pragma include "sdf_2d"
 #pragma include "picking"
@@ -61,8 +65,19 @@ void main() {
     inner_df
   );
   vec4 strokeColor = u_stroke_color == vec4(0) ? v_color : u_stroke_color;
+  float PI = 3.14159;
+  float N_RINGS = 3.0;
+  float FREQ = 1.0;
+
+
 
   gl_FragColor = opacity_t * mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
+
+  if(u_aimate.x == Animate) {
+    float d = length(v_data.xy);
+    float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * N_RINGS - FREQ * u_time)), 0.0, 1.0);
+    gl_FragColor = vec4(gl_FragColor.xyz * intensity, intensity);
+  }
 
   gl_FragColor = filterColor(gl_FragColor);
 }
