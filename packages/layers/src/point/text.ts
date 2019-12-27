@@ -26,7 +26,7 @@ export function PointTriangulation(feature: IEncodeFeature) {
   };
 }
 export default class TextLayer extends BaseLayer<IPointTextLayerStyleOptions> {
-  public name: string = 'PointLayer';
+  public type: string = 'PointLayer';
 
   protected getConfigSchema() {
     return {

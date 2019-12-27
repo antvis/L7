@@ -1,4 +1,5 @@
 import {
+  BlendType,
   gl,
   IActiveOption,
   IAnimateOption,
@@ -37,7 +38,6 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { bindAll } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
@@ -45,6 +45,7 @@ import { isFunction, isObject } from 'lodash';
 import mergeJsonSchemas from 'merge-json-schemas';
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
+import { BlendTypes } from '../utils/blend';
 import baseLayerSchema from './schema';
 /**
  * 分配 layer id
@@ -55,6 +56,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string;
+  public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
   public minZoom: number;
@@ -81,6 +83,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     afterPickingEncode: new SyncHook<void>(),
     beforeHighlight: new SyncHook<[number[]]>(['pickedColor']),
     afterHighlight: new SyncHook<void>(),
+    beforeSelect: new SyncHook<[number[]]>(['pickedColor']),
+    afterSelect: new SyncHook<void>(),
     beforeDestroy: new SyncHook<void>(),
     afterDestroy: new SyncHook<void>(),
   };
@@ -142,6 +146,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private configSchema: object;
 
+  private currentPickId: number | null = null;
+
   private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
@@ -159,8 +165,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private scaleOptions: IScaleOptions = {};
 
-  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions>) {
+  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
+    this.name = config.name || this.id;
     this.rawConfig = config;
   }
 
@@ -214,7 +221,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public init() {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
-    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
+    this.configService.setLayerConfig(sceneId, this.id, {});
 
     // 全局容器服务
     this.iconService = this.container.get<IIconService>(TYPES.IIconService);
@@ -291,10 +298,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.inited = true;
 
     this.hooks.afterInit.call();
-
+    // 更新 module 样式
+    this.updateLayerConfig({
+      ...this.rawConfig,
+      ...(this.getDefaultConfig() as object),
+    });
     this.buildModels();
     // 触发初始化完成事件;
     this.emit('inited');
+    this.emit('added');
     return this;
   }
 
@@ -437,12 +449,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public active(options: IActiveOption) {
-    this.updateLayerConfig({
-      enableHighlight: isObject(options) ? true : options,
-      highlightColor: isObject(options)
-        ? options.color
-        : this.getLayerConfig().highlightColor,
-    });
+    const activeOption: Partial<ILayerConfig> = {};
+    activeOption.enableHighlight = isObject(options) ? true : options;
+    if (isObject(options)) {
+      activeOption.enableHighlight = true;
+      if (options.color) {
+        activeOption.highlightColor = options.color;
+      }
+    } else {
+      activeOption.enableHighlight = !!options;
+    }
+    this.updateLayerConfig(activeOption);
     return this;
   }
   public setActive(
@@ -464,10 +481,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
+      this.interactionService.triggerActive(id);
     }
   }
 
   public select(option: IActiveOption | false): ILayer {
+    const activeOption: Partial<ILayerConfig> = {};
+    activeOption.enableSelect = isObject(option) ? true : option;
+    if (isObject(option)) {
+      activeOption.enableSelect = true;
+      if (option.color) {
+        activeOption.selectColor = option.color;
+      }
+    } else {
+      activeOption.enableHighlight = !!option;
+    }
+    this.updateLayerConfig(activeOption);
     return this;
   }
 
@@ -475,12 +504,36 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     id: number | { x: number; y: number },
     options?: IActiveOption,
   ): void {
-    throw new Error('Method not implemented.');
+    if (isObject(id)) {
+      const { x = 0, y = 0 } = id;
+      this.updateLayerConfig({
+        selectColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().selectColor,
+      });
+      this.pick({ x, y });
+    } else {
+      this.updateLayerConfig({
+        pickedFeatureID: id,
+        selectColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().selectColor,
+      });
+      this.interactionService.triggerSelect(id);
+    }
+  }
+  public setBlend(type: keyof typeof BlendType): void {
+    this.updateLayerConfig({
+      blend: type,
+    });
+    this.layerModelNeedUpdate = true;
+    this.render();
   }
   public show(): ILayer {
     this.updateLayerConfig({
       visible: true,
     });
+
     return this;
   }
 
@@ -497,6 +550,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public setCurrentPickId(id: number) {
+    this.currentPickId = id;
+  }
+
+  public getCurrentPickId(): number | null {
+    return this.currentPickId;
+  }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
 
@@ -641,15 +701,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       fs,
       vs,
       elements,
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: gl.SRC_ALPHA,
-          srcAlpha: 1,
-          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-          dstAlpha: 1,
-        },
-      },
+      blend: BlendTypes[BlendType.normal],
       ...rest,
     });
   }
@@ -666,6 +718,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     throw new Error('Method not implemented.');
   }
 
+  protected getModelType(): unknown {
+    throw new Error('Method not implemented.');
+  }
+  protected getDefaultConfig() {
+    return {};
+  }
   private splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],

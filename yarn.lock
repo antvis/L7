@@ -88,10 +88,10 @@
     d3-timer "~1.0.6"
     wolfy87-eventemitter "~5.1.0"
 
-"@antv/gatsby-theme-antv@^0.10.4":
-  version "0.10.7"
-  resolved "https://registry.npmjs.org/@antv/gatsby-theme-antv/-/gatsby-theme-antv-0.10.7.tgz#e2c2620aee959e635c5c95b5d9fa2e9f87812ca9"
-  integrity sha512-hYkdm6Knt+2KxUoNoXXlDC9KQcAIZdRITqXGx25cUNgpz0+GBDtg15D2JWMwjDpgu86cjjIjMM1860jvTcRm5Q==
+"@antv/gatsby-theme-antv@^0.10.17":
+  version "0.10.24"
+  resolved "https://registry.npmjs.org/@antv/gatsby-theme-antv/-/gatsby-theme-antv-0.10.24.tgz#0a57af29a1fc75c390eb70a0c490181e778ecf82"
+  integrity sha512-MMqDmv4hC8f61rFftrjcoGqGGpr+j+uDkPX+AmwpFEaYWzh+QqDO56I0IZUzwYhLihFwjH5z78JtkLO2bDNk4g==
   dependencies:
     "@babel/plugin-transform-modules-umd" "^7.2.0"
     "@babel/preset-env" "^7.6.3"
@@ -101,7 +101,7 @@
     "@hot-loader/react-dom" "^16.9.0+4.12.11"
     "@stackblitz/sdk" "^1.3.0"
     "@types/classnames" "^2.2.9"
-    "@types/codemirror" "^0.0.80"
+    "@types/codemirror" "^0.0.81"
     "@types/git-url-parse" "^9.0.0"
     "@types/lodash-es" "^4.17.3"
     "@types/parse-github-url" "^1.0.0"
@@ -150,6 +150,7 @@
     gatsby-transformer-sharp "^2.2.14"
     git-url-parse "^11.1.2"
     i18next "^19.0.0"
+    indent-string "^4.0.0"
     insert-css "^2.0.0"
     less "^3.10.3"
     lodash "^4.17.15"
@@ -176,6 +177,7 @@
     react-use "^13.8.0"
     release-it "^12.4.3"
     shallowequal "^1.1.0"
+    slash "^3.0.0"
     slick-carousel "^1.8.1"
     ts-jest "^24.1.0"
     typescript "^3.6.3"
@@ -1032,6 +1034,16 @@
     resolve "^1.8.1"
     semver "^5.5.1"
 
+"@babel/plugin-transform-runtime@^7.7.6":
+  version "7.7.6"
+  resolved "https://registry.npmjs.org/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.7.6.tgz#4f2b548c88922fb98ec1c242afd4733ee3e12f61"
+  integrity sha512-tajQY+YmXR7JjTwRvwL4HePqoL3DYxpYXIHKVvrOIvJmeHe2y1w4tz5qz9ObUDC9m76rCzIMPyn4eERuwA4a4A==
+  dependencies:
+    "@babel/helper-module-imports" "^7.7.4"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    resolve "^1.8.1"
+    semver "^5.5.1"
+
 "@babel/plugin-transform-shorthand-properties@^7.2.0", "@babel/plugin-transform-shorthand-properties@^7.7.4":
   version "7.7.4"
   resolved "https://registry.npmjs.org/@babel/plugin-transform-shorthand-properties/-/plugin-transform-shorthand-properties-7.7.4.tgz#74a0a9b2f6d67a684c6fbfd5f0458eb7ba99891e"
@@ -1280,6 +1292,13 @@
   version "7.7.4"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.7.4.tgz#b23a856751e4bf099262f867767889c0e3fe175b"
   integrity sha512-r24eVUUr0QqNZa+qrImUk8fn5SPhHq+IfYvIoIMg0do3GdK9sMdiLKP3GYVVaxpPKORgm8KRKaNTEhAjgIpLMw==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
+"@babel/runtime@^7.7.7":
+  version "7.7.7"
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.7.7.tgz#194769ca8d6d7790ec23605af9ee3e42a0aa79cf"
+  integrity sha512-uCnC2JEVAu8AKB5do1WRIsvrdJ0flYx/A/9f/6chdacnEZ7LmavjdsDXr5ksYBegxtuTPR5Va9/+13QF/kFkCA==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -3657,10 +3676,10 @@
   resolved "https://registry.npmjs.org/@types/classnames/-/classnames-2.2.9.tgz#d868b6febb02666330410fe7f58f3c4b8258be7b"
   integrity sha512-MNl+rT5UmZeilaPxAVs6YaPC2m6aA8rofviZbhbxpPpl61uKodfdQVsBtgJGTqGizEf02oW3tsVe7FYB8kK14A==
 
-"@types/codemirror@^0.0.80":
-  version "0.0.80"
-  resolved "https://registry.npmjs.org/@types/codemirror/-/codemirror-0.0.80.tgz#c047bb30462582615c3d51e5be6155315f764427"
-  integrity sha512-oTi/s9PkWo3+/L9UrRpqngc4i6fRFMp3YQS0nv3Wy5vjl9n6GsqI9oNF6rjl/7J16Ipe67F9eatwRMTSB/Bo0w==
+"@types/codemirror@^0.0.81":
+  version "0.0.81"
+  resolved "https://registry.npmjs.org/@types/codemirror/-/codemirror-0.0.81.tgz#3cea2c1006406973d4aad212e617638cbfc2965b"
+  integrity sha512-QoeIb9tn/TZp0IzNyMKlcwHR6pHxNoIW9mKqF7asAsj+AWqpFOEUsxia756L6WKBQNk2psHpu+aFuIFqo3Ac0A==
   dependencies:
     "@types/tern" "*"
 
@@ -20776,10 +20795,10 @@ rollup@^0.25.8:
     minimist "^1.2.0"
     source-map-support "^0.3.2"
 
-rollup@^1.27.0:
-  version "1.27.8"
-  resolved "https://registry.npmjs.org/rollup/-/rollup-1.27.8.tgz#94288a957af9f4c2380b73a17494d87705997d0f"
-  integrity sha512-EVoEV5rAWl+5clnGznt1KY8PeVkzVQh/R0d2s3gHEkN7gfoyC4JmvIVuCtPbYE8NM5Ep/g+nAmvKXBjzaqTsHA==
+rollup@^1.27.14:
+  version "1.27.14"
+  resolved "https://registry.npmjs.org/rollup/-/rollup-1.27.14.tgz#940718d5eec1a6887e399aa0089944bae5c4f377"
+  integrity sha512-DuDjEyn8Y79ALYXMt+nH/EI58L5pEw5HU9K38xXdRnxQhvzUTI/nxAawhkAHUQeudANQ//8iyrhVRHJBuR6DSQ==
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"

@@ -1,4 +1,5 @@
 {
+  "name": "l7",
   "private": true,
   "repository": {
     "type": "git",
@@ -13,6 +14,8 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
+    "@babel/plugin-syntax-async-generators": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
@@ -88,7 +91,7 @@
     "react-dom": "^16.12.0",
     "react-i18next": "^11.0.1",
     "rimraf": "^2.6.2",
-    "rollup": "^1.27.0",
+    "rollup": "^1.27.14",
     "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -123,7 +126,7 @@
     "site:clean": "gatsby clean",
     "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
-    "lint:fix": "prettier --write docs/api/**/*.md packages/**/*.{spec,story}.ts{,x} stories/**/**/*.tsx  *.md",
+    "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md  packages/**/*.{spec,story}.ts{,x} stories/**/**/*.tsx  *.md",
     "lint:examples": "eslint examples/**/**/*.js --fix",
     "prebuild": "run-p tsc lint",
     "build": "yarn clean && lerna run build",

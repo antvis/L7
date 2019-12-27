@@ -165,7 +165,10 @@ export default class Popup extends EventEmitter implements IPopup {
     };
   }
 
-  private onClickClose() {
+  private onClickClose(e: Event) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
     this.remove();
   }
 
@@ -191,6 +194,9 @@ export default class Popup extends EventEmitter implements IPopup {
           .forEach((name) => this.container.classList.add(name));
       }
       this.container.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+      });
+      this.container.addEventListener('click', (e) => {
         e.stopPropagation();
       });
     }

@@ -236,7 +236,7 @@ export default class Layers extends Control {
       : null;
 
     if (type) {
-      this.emit(type, obj); // TODO:图
+      this.emit(type, obj);
     }
   }
 

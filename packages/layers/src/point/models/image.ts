@@ -11,7 +11,7 @@ import BaseModel from '../../core/BaseModel';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
-interface IPointLayerStyleOptions {
+interface IImageLayerStyleOptions {
   opacity: number;
 }
 
@@ -19,7 +19,7 @@ export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_texture: this.texture,
