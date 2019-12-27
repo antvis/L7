@@ -1,4 +1,4 @@
-import { DashLineLayer, Scene } from '@antv/l7';
+import { LineLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -23,7 +23,7 @@ export default class DashLineDemo extends React.Component {
         zoom: 14,
       }),
     });
-    const lineLayer = new DashLineLayer()
+    const lineLayer = new LineLayer()
       .source(await response.json())
       .size(1)
       .shape('line')
@@ -41,7 +41,10 @@ export default class DashLineDemo extends React.Component {
           '#0D408C',
           '#002466',
         ].reverse(),
-      );
+      )
+      .style({
+        lineType: 'dash',
+      });
 
     scene.addLayer(lineLayer);
     this.scene = scene;

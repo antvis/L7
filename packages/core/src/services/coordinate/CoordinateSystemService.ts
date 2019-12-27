@@ -13,6 +13,7 @@ const VECTOR_TO_POINT_MATRIX = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
 @injectable()
 export default class CoordinateSystemService
   implements ICoordinateSystemService {
+  public needRefresh: boolean = true;
   @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
 
@@ -59,6 +60,9 @@ export default class CoordinateSystemService
    * TODO: 使用 memoize 缓存参数以及计算结果
    */
   public refresh(): void {
+    // if (!this.needRefresh) {
+    //   return;
+    // }
     const zoom = this.cameraService.getZoom();
     const zoomScale = this.cameraService.getZoomScale();
     const center = this.cameraService.getCenter();
@@ -86,6 +90,7 @@ export default class CoordinateSystemService
     } else if (this.coordinateSystem === CoordinateSystem.P20_OFFSET) {
       this.calculateLnglatOffset(center, zoom, zoomScale, true);
     }
+    this.needRefresh = false;
 
     // TODO: 判断是否应用瓦片 & 常规坐标系
   }

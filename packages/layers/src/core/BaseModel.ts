@@ -1,5 +1,6 @@
 import {
   BlendType,
+  IAnimateOption,
   IAttribute,
   IBlendOptions,
   ICameraService,
@@ -56,7 +57,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.cameraService = layer
       .getContainer()
       .get<ICameraService>(TYPES.ICameraService);
+    // 注册 Attribute
     this.registerBuiltinAttributes();
+    // 开启动画
+    this.startModelAnimate();
   }
   public getBlend(): IBlendOptions {
     const { blend = 'normal' } = this.layer.getLayerConfig();
@@ -67,6 +71,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
   public getUninforms(): IModelUniform {
     throw new Error('Method not implemented.');
+  }
+
+  public getAnimateUniforms(): IModelUniform {
+    return {};
   }
 
   public buildModels(): IModel[] {
@@ -85,5 +93,19 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
   protected registerBuiltinAttributes() {
     throw new Error('Method not implemented.');
+  }
+  protected animateOption2Array(option: IAnimateOption): number[] {
+    return [
+      option.enable ? 0 : 1.0,
+      option.duration || 4.0,
+      option.interval || 0.2,
+      option.trailLength || 0.1,
+    ];
+  }
+  protected startModelAnimate() {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    if (animateOption.enable) {
+      this.layer.setAnimateStartTime();
+    }
   }
 }

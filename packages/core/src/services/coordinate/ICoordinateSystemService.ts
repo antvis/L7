@@ -30,6 +30,7 @@ export const CoordinateUniform = {
 };
 
 export interface ICoordinateSystemService {
+  needRefresh: boolean;
   refresh(): void;
   getCoordinateSystem(): CoordinateSystem;
   setCoordinateSystem(coordinateSystem: CoordinateSystem): void;

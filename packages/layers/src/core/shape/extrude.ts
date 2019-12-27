@@ -87,7 +87,7 @@ export function fillPolygon(points: IPath[]) {
 
 export function extrude_PolygonNormal(
   path: IPath[],
-  needFlat = false,
+  needFlat = false, // 是否需要转成平面坐标
 ): IExtrudeGeomety {
   const p1 = path[0][0];
   const p2 = path[0][path[0].length - 1];
@@ -100,12 +100,12 @@ export function extrude_PolygonNormal(
   const positions = [];
   const indexArray = [];
   const normals = [];
-  // 设置顶部z值
+  // 设置顶部z值 position uv
   for (let j = 0; j < vertices.length / dimensions; j++) {
     if (dimensions === 2) {
-      positions.push(vertices[j * 2], vertices[j * 2 + 1], 1);
+      positions.push(vertices[j * 2], vertices[j * 2 + 1], 1, -1, -1);
     } else {
-      positions.push(vertices[j * 3], vertices[j * 3 + 1], 1);
+      positions.push(vertices[j * 3], vertices[j * 3 + 1], 1, -1, -1);
     }
     normals.push(0, 0, 1);
   }
@@ -127,20 +127,28 @@ export function extrude_PolygonNormal(
     if (nextPoint.length === 0) {
       nextPoint = flattengeo.vertices.slice(0, dimensions);
     }
-    const indexOffset = positions.length / 3;
+    const indexOffset = positions.length / 5;
     positions.push(
       prePoint[0],
       prePoint[1],
       1,
+      0,
+      0,
       nextPoint[0],
       nextPoint[1],
       1,
+      0.1,
+      0,
       prePoint[0],
       prePoint[1],
       0,
+      0,
+      0.8,
       nextPoint[0],
       nextPoint[1],
       0,
+      0.1,
+      0.8,
     );
     const normal = computeVertexNormals(
       [nextPoint[0], nextPoint[1], 1],
