@@ -20,6 +20,9 @@ export default class LayerAnimateStylePlugin implements ILayerPlugin {
   private readonly rendererService: IRendererService;
 
   public apply(layer: ILayer) {
+    // layer.hooks.beforeRender.tap('LayerAnimateStylePlugin', () => {
+
+    // })
     layer.hooks.beforeRender.tap('LayerAnimateStylePlugin', () => {
       // 重新计算坐标系参数
       layer.models.forEach((model: IModel) => {

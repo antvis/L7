@@ -165,7 +165,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private scaleOptions: IScaleOptions = {};
 
-  private AnimateStartTime: number;
+  private animateStartTime: number;
+
+  private aniamateStatus: boolean = false;
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
@@ -309,6 +311,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     const { animateOption } = this.getLayerConfig();
     if (animateOption?.enable) {
       this.layerService.startAnimate();
+      this.aniamateStatus = true;
     }
     this.buildModels();
     // 触发初始化完成事件;
@@ -730,10 +733,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerService.clock.getDelta();
   }
   public setAnimateStartTime() {
-    this.AnimateStartTime = this.layerService.clock.getElapsedTime();
+    this.animateStartTime = this.layerService.clock.getElapsedTime();
+  }
+  public stopAnimate() {
+    if (this.aniamateStatus) {
+      this.layerService.stopAnimate();
+      this.aniamateStatus = false;
+      this.updateLayerConfig({
+        animateOption: {
+          enable: false,
+        },
+      });
+    }
   }
   public getLayerAnimateTime(): number {
-    return this.layerService.clock.getElapsedTime() - this.AnimateStartTime;
+    return this.layerService.clock.getElapsedTime() - this.animateStartTime;
   }
 
   protected getConfigSchema() {
