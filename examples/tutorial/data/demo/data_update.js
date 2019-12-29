@@ -25,6 +25,10 @@ function pointOnCircle(angle) {
     }]
   };
 }
+
+scene.on('loaded', () => {
+  // animateMarker(0);
+});
 const layer = new PointLayer()
   .source(pointOnCircle(0))
   .shape('circle')
@@ -36,11 +40,7 @@ const layer = new PointLayer()
     opacity: 1
   });
 scene.addLayer(layer);
-function animateMarker(timestamp) {
-  layer.setData(pointOnCircle(timestamp / 1000));
-  requestAnimationFrame(animateMarker);
-}
-layer.on('inited', () => {
-  animateMarker(0);
-});
-
+// function animateMarker(timestamp) {
+//   layer.setData(pointOnCircle(timestamp / 1000));
+//   requestAnimationFrame(animateMarker);
+// }
