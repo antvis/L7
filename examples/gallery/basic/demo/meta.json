@@ -6,33 +6,33 @@
   "demos": [
     {
       "filename": "column_dark.js",
-      "title": "",
+      "title": "3D柱图深色",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7COqR4wCc6QAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "arcCircle.js",
-      "title": "",
+      "title": "弧线地图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6Qm_QY69sBMAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "bus_dark.js",
-      "title": "",
+      "title": "公交线路深色",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*j-P8RaJMEvAAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "light.js",
-      "title": "",
+      "title": "蜂窝图3D",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SLcGSbvZoEwAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "point.js",
-      "title": "",
+      "title": "海量点",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ypZCT6pqv84AAAAAAAAAAABkARQnAQ"
     }
     ,
     {
       "filename": "normal.js",
-      "title": "",
+      "title": "亮度图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*xr8BQouXGvoAAAAAAAAAAABkARQnAQ"
     }
   ]
