@@ -166,8 +166,7 @@
     }
   },
   "resolutions": {
-    "../core-js": "3",
-    "**/**/fsevents": "^2.1.2"
+    "../core-js": "3"
   },
   "tnpm": {
     "mode": "yarn"
