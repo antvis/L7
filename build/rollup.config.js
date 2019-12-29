@@ -1,8 +1,8 @@
 import path from 'path';
 import alias from '@rollup/plugin-alias';
 import json from '@rollup/plugin-json';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from 'sharp';
+import commonjs from '@rollup/plugin-commons';
 import { terser } from 'rollup-plugin-terser';
 import analyze from 'rollup-plugin-analyzer';
 import babel from 'rollup-plugin-babel';

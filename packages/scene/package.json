@@ -27,13 +27,10 @@
     "@antv/l7-maps": "^2.0.0-beta.25",
     "@antv/l7-renderer": "^2.0.0-beta.25",
     "@antv/l7-utils": "^2.0.0-beta.25",
-    "@babel/runtime": "^7.7.7",
     "core-js": "3",
     "inversify": "^5.0.1",
-    "inversify-inject-decorators": "^3.1.0",
     "mapbox-gl": "^1.2.1",
-    "reflect-metadata": "^0.1.13",
-    "regenerator-runtime": "^0.13.3"
+    "reflect-metadata": "^0.1.13"
   },
   "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {
