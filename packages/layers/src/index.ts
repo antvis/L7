@@ -20,8 +20,8 @@ import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
 import PixelPickingPlugin from './plugins/PixelPickingPlugin';
 import RegisterStyleAttributePlugin from './plugins/RegisterStyleAttributePlugin';
 import ShaderUniformPlugin from './plugins/ShaderUniformPlugin';
+import UpdateModelPlugin from './plugins/UpdateModelPlugin';
 import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
-
 /**
  * 校验传入参数配置项的正确性
  * @see /dev-docs/ConfigSchemaValidation.md
@@ -74,6 +74,15 @@ container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(UpdateStyleAttributePlugin)
   .inRequestScope();
+
+/**
+ * 负责Model更新
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(UpdateModelPlugin)
+  .inRequestScope();
+
 /**
  * Multi Pass 自定义渲染管线
  */
