@@ -12,6 +12,7 @@ import {
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import CollisionIndex from '../../utils/collision-index';
+import { calculteCentroid } from '../../utils/geo';
 import {
   getGlyphQuads,
   IGlyphQuad,
@@ -33,14 +34,12 @@ interface IPointTextLayerStyleOptions {
   textAllowOverlap: boolean;
 }
 export function TextTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
+  const centroid = feature.centroid as number[]; // 计算中心点
   const { glyphQuads } = feature;
   const vertices: number[] = [];
   const indices: number[] = [];
   const coord =
-    coordinates.length === 2
-      ? [coordinates[0], coordinates[1], 0]
-      : coordinates;
+    centroid.length === 2 ? [centroid[0], centroid[1], 0] : centroid;
   glyphQuads.forEach((quad: IGlyphQuad, index: number) => {
     vertices.push(
       ...coord,
@@ -90,8 +89,8 @@ export default class TextModel extends BaseModel {
     const {
       fontWeight = 800,
       fontFamily,
-      stroke,
-      strokeWidth,
+      stroke = '#fff',
+      strokeWidth = 0,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const { canvas } = this.fontService;
     return {
@@ -235,7 +234,7 @@ export default class TextModel extends BaseModel {
    */
   private initTextFont() {
     const {
-      fontWeight = 'normal',
+      fontWeight = '800',
       fontFamily,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
@@ -268,7 +267,7 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '' } = feature;
+      const { shape = '', coordinates } = feature;
       const shaping = shapeText(
         shape.toString(),
         mapping,
@@ -281,6 +280,7 @@ export default class TextModel extends BaseModel {
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
+      feature.centroid = calculteCentroid(coordinates);
       return feature;
     });
   }
@@ -301,10 +301,10 @@ export default class TextModel extends BaseModel {
     const collisionIndex = new CollisionIndex(width, height);
     const filterData = this.glyphInfo.filter((feature: IEncodeFeature) => {
       const { shaping, id = 0 } = feature;
-      const coordinates = feature.coordinates as [number, number];
+      const centroid = feature.centroid as [number, number];
       const size = feature.size as number;
       const fontScale: number = size / 24;
-      const pixels = this.mapService.lngLatToContainer(coordinates);
+      const pixels = this.mapService.lngLatToContainer(centroid);
       const { box } = collisionIndex.placeCollisionBox({
         x1: shaping.left * fontScale - padding[0],
         x2: shaping.right * fontScale + padding[0],
