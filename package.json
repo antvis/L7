@@ -24,6 +24,7 @@
     "@rollup/plugin-alias": "^2.2.0",
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-json": "^4.0.0",
+    "@rollup/plugin-node-resolve": "^6.0.0",
     "@storybook/react": "^5.1.9",
     "@types/dat.gui": "^0.7.1",
     "@types/enzyme": "^3.1.14",

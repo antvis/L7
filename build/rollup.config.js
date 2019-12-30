@@ -1,7 +1,7 @@
 import path from 'path';
 import alias from '@rollup/plugin-alias';
 import json from '@rollup/plugin-json';
-import resolve from 'sharp';
+import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import analyze from 'rollup-plugin-analyzer';
@@ -41,7 +41,7 @@ module.exports = [
             {
               find: /^@antv\/l7$/,
               replacement: resolveFile('packages/l7/src'),
-            },
+            }
           ]
         }
       ),
