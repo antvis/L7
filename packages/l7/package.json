@@ -28,9 +28,7 @@
     "@antv/l7-core": "^2.0.0-beta.25",
     "@antv/l7-layers": "^2.0.0-beta.25",
     "@antv/l7-maps": "^2.0.0-beta.25",
-    "@antv/l7-scene": "^2.0.0-beta.25",
-    "core-js": "3",
-    "regenerator-runtime": "^0.13.3"
+    "@antv/l7-scene": "^2.0.0-beta.25"
   },
   "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {

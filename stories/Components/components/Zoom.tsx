@@ -19,7 +19,7 @@ export default class ZoomComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 3,
@@ -39,9 +39,10 @@ export default class ZoomComponent extends React.Component {
         '#FF7A45',
         '#CF1D49',
       ])
-      .shape('fill')
+      .shape('name', 'text')
+      .size(10)
       .style({
-        opacity: 0.3,
+        opacity: 1.0,
       });
     scene.addLayer(layer);
     const zoomControl = new Zoom({
