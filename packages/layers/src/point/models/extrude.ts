@@ -1,6 +1,7 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
+import { calculteCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
 interface IPointLayerStyleOptions {
@@ -100,7 +101,7 @@ export default class ExtrudeModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number) => {
-          const coordinates = feature.coordinates as number[];
+          const coordinates = calculteCentroid(feature.coordinates);
           return [coordinates[0], coordinates[1], 0];
         },
       },

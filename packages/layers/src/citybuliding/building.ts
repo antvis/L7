@@ -16,16 +16,6 @@ export default class CityBuildingLayer extends BaseLayer {
       },
     };
   }
-
-  protected renderModels() {
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      }),
-    );
-    return this;
-  }
-
   protected buildModels() {
     this.layerModel = new CityBuildModel(this);
     this.models = this.layerModel.buildModels();
