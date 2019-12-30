@@ -237,7 +237,7 @@ export function getGlyphQuads(
   textOffset: [number, number] = [0, 0],
   alongLine: boolean,
 ): IGlyphQuad[] {
-  const { positionedGlyphs } = shaping;
+  const { positionedGlyphs = [] } = shaping;
   const quads: IGlyphQuad[] = [];
 
   for (const positionedGlyph of positionedGlyphs) {

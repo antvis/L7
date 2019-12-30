@@ -8,7 +8,7 @@ type CallBack = (...args: any[]) => any;
  * @see https://zhuanlan.zhihu.com/p/74373214
  */
 class GridIndex {
-  private boxCells: number[][];
+  private boxCells: number[][] = [];
   private xCellCount: number;
   private yCellCount: number;
   private boxKeys: string[];

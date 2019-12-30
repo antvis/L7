@@ -25,7 +25,6 @@
     "@antv/l7-core": "^2.0.0-beta.25",
     "@antv/l7-source": "^2.0.0-beta.25",
     "@antv/l7-utils": "^2.0.0-beta.25",
-    "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
     "@types/d3-color": "^1.2.2",
@@ -40,7 +39,6 @@
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "merge-json-schemas": "1.0.0",
-    "polyline-miter-util": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.3",
     "tapable": "^2.0.0-beta.8"

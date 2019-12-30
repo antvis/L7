@@ -44,7 +44,7 @@ export default class TextLayerDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
@@ -61,17 +61,17 @@ export default class TextLayerDemo extends React.Component {
         },
       })
       .shape('m', 'text')
-      .size(24)
+      .size(12)
       .color('#fff')
       .style({
-        fontWeight: 800,
-        textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-        textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
-        spacing: 2, // 字符间距
-        padding: [4, 4], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-        strokeColor: 'white', // 描边颜色
-        strokeWidth: 4, // 描边宽度
-        strokeOpacity: 1.0,
+        // fontWeight: 200,
+        // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+        // textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+        // spacing: 2, // 字符间距
+        // padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+        // stroke: 'red', // 描边颜色
+        // strokeWidth: 2, // 描边宽度
+        // strokeOpacity: 1.0,
       });
     scene.addLayer(pointLayer);
 
