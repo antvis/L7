@@ -12,7 +12,7 @@ import {
 } from './IFontService';
 export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'sans-serif';
-export const DEFAULT_FONT_WEIGHT = 'normal';
+export const DEFAULT_FONT_WEIGHT = '800';
 export const DEFAULT_FONT_SIZE = 24;
 export const DEFAULT_BUFFER = 3;
 export const DEFAULT_CUTOFF = 0.25;

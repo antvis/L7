@@ -23,12 +23,6 @@
     "@commitlint/config-conventional": "^8.1.0",
     "@rollup/plugin-alias": "^2.2.0",
     "@rollup/plugin-json": "^4.0.0",
-    "@storybook/addon-actions": "^5.1.9",
-    "@storybook/addon-console": "^1.2.1",
-    "@storybook/addon-info": "^5.1.9",
-    "@storybook/addon-knobs": "^5.1.9",
-    "@storybook/addon-notes": "^5.1.9",
-    "@storybook/addon-storysource": "^5.1.11",
     "@storybook/react": "^5.1.9",
     "@types/dat.gui": "^0.7.1",
     "@types/enzyme": "^3.1.14",
@@ -94,8 +88,6 @@
     "rollup": "^1.27.14",
     "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-terser": "^5.1.2",
     "rollup-pluginutils": "^2.8.2",
@@ -172,6 +164,9 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "resolutions": {
+    "../core-js": "3"
   },
   "tnpm": {
     "mode": "yarn"
