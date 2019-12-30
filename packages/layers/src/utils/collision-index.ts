@@ -9,10 +9,6 @@ export interface ICollisionBox {
 // @mapbox/grid-index 并没有类似 hitTest 的单纯获取碰撞检测结果的方法，query 将导致计算大量多余的包围盒结果，因此使用改良版
 import { mat4, vec4 } from 'gl-matrix';
 import GridIndex from './grid-index';
-
-// 为 viewport 加上 buffer，避免边缘处的文本无法显示
-const viewportPadding = 100;
-
 /**
  * 基于网格实现文本避让，大幅提升包围盒碰撞检测效率
  * @see https://zhuanlan.zhihu.com/p/74373214
@@ -21,6 +17,7 @@ export default class CollisionIndex {
   private width: number;
   private height: number;
   private grid: GridIndex;
+  private viewportPadding: number = 100;
   private screenRightBoundary: number;
   private screenBottomBoundary: number;
   private gridRightBoundary: number;
@@ -28,30 +25,35 @@ export default class CollisionIndex {
   constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
+    this.viewportPadding = Math.max(width, height);
     // 创建网格索引
     this.grid = new GridIndex(
-      width + 2 * viewportPadding,
-      height + 2 * viewportPadding,
+      width + this.viewportPadding,
+      height + this.viewportPadding,
       25,
     );
 
-    this.screenRightBoundary = width + viewportPadding;
-    this.screenBottomBoundary = height + viewportPadding;
-    this.gridRightBoundary = width + 2 * viewportPadding;
-    this.gridBottomBoundary = height + 2 * viewportPadding;
+    this.screenRightBoundary = width + this.viewportPadding;
+    this.screenBottomBoundary = height + this.viewportPadding;
+    this.gridRightBoundary = width + 2 * this.viewportPadding;
+    this.gridBottomBoundary = height + 2 * this.viewportPadding;
   }
 
-  public placeCollisionBox(collisionBox: ICollisionBox, mvpMatrix: mat4) {
-    const projectedPoint = this.project(
-      mvpMatrix,
-      collisionBox.anchorPointX,
-      collisionBox.anchorPointY,
-    );
+  public placeCollisionBox(collisionBox: ICollisionBox) {
+    // const projectedPoint = this.project(
+    //   mvpMatrix,
+    //   collisionBox.anchorPointX,
+    //   collisionBox.anchorPointY,
+    // );
 
-    const tlX = collisionBox.x1 + projectedPoint.x;
-    const tlY = collisionBox.y1 + projectedPoint.y;
-    const brX = collisionBox.x2 + projectedPoint.x;
-    const brY = collisionBox.y2 + projectedPoint.y;
+    const tlX =
+      collisionBox.x1 + collisionBox.anchorPointX + this.viewportPadding;
+    const tlY =
+      collisionBox.y1 + collisionBox.anchorPointY + this.viewportPadding;
+    const brX =
+      collisionBox.x2 + collisionBox.anchorPointX + this.viewportPadding;
+    const brY =
+      collisionBox.y2 + collisionBox.anchorPointY + this.viewportPadding;
 
     if (
       !this.isInsideGrid(tlX, tlY, brX, brY) ||
@@ -79,14 +81,16 @@ export default class CollisionIndex {
    * @param {number} y P20 平面坐标Y
    * @return {Point} projectedPoint
    */
-  public project(mvpMatrix: mat4, x: number, y: number) {
+  public project(mvpMatrix: number[], x: number, y: number) {
     const point = vec4.fromValues(x, y, 0, 1);
     const out = vec4.create();
-    vec4.transformMat4(out, point, mvpMatrix);
+    // @ts-ignore
+    const mat = mat4.fromValues(...mvpMatrix);
+    vec4.transformMat4(out, point, mat);
     // GL 坐标系[-1, 1] -> viewport 坐标系[width, height]
     return {
-      x: ((out[0] / out[3] + 1) / 2) * this.width + viewportPadding,
-      y: ((-out[1] / out[3] + 1) / 2) * this.height + viewportPadding,
+      x: ((out[0] / out[3] + 1) / 2) * this.width + this.viewportPadding,
+      y: ((-out[1] / out[3] + 1) / 2) * this.height + this.viewportPadding,
     };
   }
 
