@@ -47,7 +47,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   ],
   shape3d: ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'],
   minZoom: 0,
-  maxZoom: 20,
+  maxZoom: 24,
   visible: true,
   autoFit: false,
   zIndex: 0,

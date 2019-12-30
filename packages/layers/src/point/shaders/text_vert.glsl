@@ -27,7 +27,7 @@ void main() {
   vec4 projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   gl_Position = vec4(projected_position.xy / projected_position.w
-    + a_textOffsets * fontScale / u_ViewportSize * 2., 0.0, 1.0);
+    + a_textOffsets * fontScale / u_ViewportSize * 2. * u_DevicePixelRatio, 0.0, 1.0);
   v_gamma_scale = gl_Position.w;
 
 

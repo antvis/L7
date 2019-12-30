@@ -77,6 +77,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     return {};
   }
 
+  public needUpdate(): boolean {
+    return false;
+  }
   public buildModels(): IModel[] {
     throw new Error('Method not implemented.');
   }

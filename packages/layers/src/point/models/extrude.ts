@@ -21,15 +21,7 @@ export default class ExtrudeModel extends BaseModel {
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }

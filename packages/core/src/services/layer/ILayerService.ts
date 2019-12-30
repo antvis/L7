@@ -55,6 +55,7 @@ export interface ILayerModel {
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
   buildModels(): IModel[];
+  needUpdate(): boolean;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
