@@ -3,6 +3,7 @@ import {
   BlendType,
   gl,
   IEncodeFeature,
+  ILayer,
   ILayerConfig,
   IModel,
   IModelUniform,
@@ -10,7 +11,7 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { PointFillTriangulation } from '../../core/triangulation';
+import CollisionIndex from '../../utils/collision-index';
 import {
   getGlyphQuads,
   IGlyphQuad,
@@ -81,14 +82,18 @@ export function TextTriangulation(feature: IEncodeFeature) {
 
 export default class TextModel extends BaseModel {
   private texture: ITexture2D;
+  private glyphInfo: IEncodeFeature[];
+  private currentZoom: number = -1;
+  private extent: [[number, number], [number, number]];
+
   public getUninforms(): IModelUniform {
     const {
-      fontWeight = 'normal',
+      fontWeight = 800,
       fontFamily,
       stroke,
       strokeWidth,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
-    const { canvas, fontAtlas, mapping } = this.fontService;
+    const { canvas } = this.fontService;
     return {
       u_opacity: 1.0,
       u_sdf_map: this.texture,
@@ -100,10 +105,9 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-    this.initTextFont();
-    this.generateGlyphLayout();
-    this.registerBuiltinAttributes();
+    this.initGlyph();
     this.updateTexture();
+    this.filterGlyphs();
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointText',
@@ -115,9 +119,36 @@ export default class TextModel extends BaseModel {
       }),
     ];
   }
+  public needUpdate() {
+    const {
+      textAllowOverlap = false,
+    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    const zoom = this.mapService.getZoom();
+    const extent = this.mapService.getBounds();
+    const flag =
+      extent[0][0] < this.extent[0][0] ||
+      extent[0][1] < this.extent[0][1] ||
+      extent[1][0] > this.extent[1][0] ||
+      extent[1][1] < this.extent[1][1];
+
+    if (!textAllowOverlap && (Math.abs(this.currentZoom - zoom) > 1 || flag)) {
+      this.filterGlyphs();
+      this.layer.models = [
+        this.layer.buildLayerModel({
+          moduleName: 'pointText',
+          vertexShader: textVert,
+          fragmentShader: textFrag,
+          triangulation: TextTriangulation,
+          depth: { enable: false },
+          blend: this.getBlend(),
+        }),
+      ];
+      return true;
+    }
+    return false;
+  }
 
   protected registerBuiltinAttributes() {
-    const viewProjection = this.cameraService.getViewProjectionMatrix();
     this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
       type: AttributeType.Attribute,
@@ -190,6 +221,18 @@ export default class TextModel extends BaseModel {
       },
     });
   }
+  private textExtent(): [[number, number], [number, number]] {
+    const bounds = this.mapService.getBounds();
+    const step =
+      Math.min(bounds[1][0] - bounds[0][0], bounds[1][1] - bounds[1][0]) / 2;
+    return [
+      [bounds[0][0] - step, bounds[0][1] - step],
+      [bounds[1][0] + step, bounds[1][1] + step],
+    ];
+  }
+  /**
+   * 生成文字纹理
+   */
   private initTextFont() {
     const {
       fontWeight = 'normal',
@@ -213,20 +256,19 @@ export default class TextModel extends BaseModel {
       fontFamily,
     });
   }
+  /**
+   * 生成文字布局
+   */
   private generateGlyphLayout() {
-    const { canvas, fontAtlas, mapping } = this.fontService;
+    const { mapping } = this.fontService;
     const {
       spacing = 2,
       textAnchor = 'center',
       textOffset,
-      padding = [4, 4],
-      textAllowOverlap,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
-    data.forEach((feature: IEncodeFeature) => {
-      const { coordinates, shape = '' } = feature;
-      const size = feature.size as number;
-      const fontScale = size / 24;
+    this.glyphInfo = data.map((feature: IEncodeFeature) => {
+      const { shape = '' } = feature;
       const shaping = shapeText(
         shape.toString(),
         mapping,
@@ -239,19 +281,60 @@ export default class TextModel extends BaseModel {
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
+      return feature;
     });
   }
-
-  private drawGlyph() {
+  /**
+   * 文字避让
+   */
+  private filterGlyphs() {
     const {
-      spacing = 2,
-      textAnchor = 'center',
-      textOffset = [0, 0],
       padding = [4, 4],
-      textAllowOverlap,
+      textAllowOverlap = false,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
-    const viewProjection = this.cameraService.getViewProjectionMatrix();
+    if (textAllowOverlap) {
+      return;
+    }
+    this.currentZoom = this.mapService.getZoom();
+    this.extent = this.textExtent();
+    const { width, height } = this.rendererService.getViewportSize();
+    const collisionIndex = new CollisionIndex(width, height);
+    const filterData = this.glyphInfo.filter((feature: IEncodeFeature) => {
+      const { shaping, id = 0 } = feature;
+      const coordinates = feature.coordinates as [number, number];
+      const size = feature.size as number;
+      const fontScale: number = size / 24;
+      const pixels = this.mapService.lngLatToContainer(coordinates);
+      const { box } = collisionIndex.placeCollisionBox({
+        x1: shaping.left * fontScale - padding[0],
+        x2: shaping.right * fontScale + padding[0],
+        y1: shaping.top * fontScale - padding[1],
+        y2: shaping.bottom * fontScale + padding[1],
+        anchorPointX: pixels.x,
+        anchorPointY: pixels.y,
+      });
+      if (box && box.length) {
+        // TODO：featureIndex
+        collisionIndex.insertCollisionBox(box, id);
+        return true;
+      } else {
+        return false;
+      }
+    });
+    this.layer.setEncodedData(filterData);
   }
+  /**
+   * 初始化文字布局
+   */
+  private initGlyph() {
+    // 1.生成文字纹理
+    this.initTextFont();
+    // 2.生成文字布局
+    this.generateGlyphLayout();
+  }
+  /**
+   * 更新文字纹理
+   */
   private updateTexture() {
     const { createTexture2D } = this.rendererService;
     const { canvas } = this.fontService;

@@ -26,14 +26,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     };
     return defaultConfig[type];
   }
-  protected renderModels() {
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      }),
-    );
-    return this;
-  }
 
   protected buildModels() {
     const shape = this.getModelType();

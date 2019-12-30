@@ -759,7 +759,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   protected renderModels() {
-    throw new Error('Method not implemented.');
+    if (this.layerModelNeedUpdate) {
+      this.models = this.layerModel.buildModels();
+      this.layerModelNeedUpdate = false;
+    }
+    this.models.forEach((model) => {
+      model.draw({
+        uniforms: this.layerModel.getUninforms(),
+      });
+    });
+    return this;
   }
 
   protected getModelType(): unknown {

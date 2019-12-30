@@ -20,16 +20,6 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       },
     };
   }
-
-  protected renderModels() {
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      }),
-    );
-    return this;
-  }
-
   protected buildModels() {
     const shape = this.getModelType();
     this.layerModel = new PolygonModels[shape](this);
