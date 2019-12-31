@@ -9,12 +9,12 @@
       ],
       "allowBranch": [
         "master",
-        "next"
+        "docs"
       ],
       "message": "chore: publish"
     }
   },
-  "version": "2.0.0-beta.26",
+  "version": "2.0.0-alpha.27",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {
