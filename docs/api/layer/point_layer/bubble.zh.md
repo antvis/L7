@@ -8,6 +8,10 @@ order: 1
 
 气泡图通过PointLayer对象实例化，
 
+```javascript
+import { PointLayer } from '@antv/l7';
+
+```
 ### shape 
  
  通常气泡图shape 设置为 **circle**
@@ -29,6 +33,24 @@ new PointLayer()
       strokeWidth: 1
     })
 ```
+
+### animate
+
+气泡图支持水波动画效果
+
+#### 开启关闭动画
+
+```javascript
+layer.animate(true)
+layer.animate(false)
+```
+#### 水波配置项
+
+- speed 水波速度
+- rings 水波环数
+
+
+
 ## tips
 
 目前style的配置项只支持全局设置，不支持数据映射。

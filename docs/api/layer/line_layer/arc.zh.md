@@ -50,3 +50,26 @@ const layer = new LineLayer({})
         opacity: 0.8,
       });
 ```
+### animate
+
+#### 开启关闭动画
+
+```javascript
+layer.animate(true)
+layer.animate(false)
+```
+
+#### 设置动画参数
+
+- duration 动画时间 单位(s)秒
+- interval 轨迹间隔, 取值区间 0 - 1
+- trailLength 轨迹长度 取值区间 0 - 1
+
+```javascript
+layer.animate({
+  duration: 4,
+  interval: 0.2,
+  trailLength: 0.1
+  
+})
+```

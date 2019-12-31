@@ -21,4 +21,6 @@ shape 设置成line即可绘制路线图
  
  layer.size('',[])
 ```
+### animate
+
 
