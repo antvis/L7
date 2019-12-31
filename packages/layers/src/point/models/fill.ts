@@ -62,7 +62,9 @@ export default class FillModel extends BaseModel {
       }),
     ];
   }
-
+  protected animateOption2Array(option: IAnimateOption): number[] {
+    return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3];
+  }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
