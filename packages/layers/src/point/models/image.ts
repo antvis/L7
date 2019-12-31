@@ -42,15 +42,7 @@ export default class ImageModel extends BaseModel {
         triangulation: PointImageTriangulation,
         primitive: gl.POINTS,
         depth: { enable: false },
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }

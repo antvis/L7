@@ -4,7 +4,7 @@ import PointModels, { PointType } from './models/index';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
-  strokeColor: string;
+  stroke: string;
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
@@ -28,23 +28,12 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       fill: {},
       extrude: {},
       image: {},
-      text: {},
+      text: {
+        blend: 'normal',
+      },
     };
     return defaultConfig[type];
   }
-  protected renderModels() {
-    if (this.layerModelNeedUpdate) {
-      this.models = this.layerModel.buildModels();
-      this.layerModelNeedUpdate = false;
-    }
-    this.models.forEach((model) => {
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      });
-    });
-    return this;
-  }
-
   protected buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
@@ -78,10 +67,5 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
       return 'text';
     }
-  }
-
-  private updateData() {
-    // const bounds = this.mapService.getBounds();
-    // console.log(bounds);
   }
 }

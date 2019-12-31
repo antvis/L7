@@ -11,6 +11,7 @@ import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
 import { IMarkerService } from '../component/IMarkerService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
+import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
 import { IInteractionService } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
@@ -46,6 +47,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.IMapService)
   private readonly map: IMapService;
+
+  @inject(TYPES.ICoordinateSystemService)
+  private readonly coordinateSystemService: ICoordinateSystemService;
 
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
@@ -137,6 +141,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.map.addMarkerContainer();
       // 初始化未加载的marker;
       this.markerService.addMarkers();
+      // 地图初始化之后 才能初始化 container 上的交互
+      this.interactionService.init();
       this.logger.debug('map loaded');
     });
 
@@ -155,13 +161,13 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.$container as HTMLDivElement,
           this.handleWindowResized,
         );
-        // window.addEventListener('resize', this.handleWindowResized, false);
+        window
+          .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
+          .addListener(this.handleWindowResized);
       } else {
         this.logger.error('容器 id 不存在');
       }
 
-      // 初始化 container 上的交互
-      this.interactionService.init();
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });
     // TODO：init worker, fontAtlas...
@@ -223,7 +229,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.rendererService.destroy();
     this.map.destroy();
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    // window.removeEventListener('resize', this.handleWindowResized, false);
+    window
+      .matchMedia('screen and (min-resolution: 2dppx)')
+      .removeListener(this.handleWindowResized);
   }
 
   private handleWindowResized = () => {
@@ -249,6 +257,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       });
       // 触发 Map， canvas
       DOM.triggerResize();
+      this.coordinateSystemService.needRefresh = true;
       //  repaint layers
       this.render();
     }

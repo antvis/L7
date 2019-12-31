@@ -25,13 +25,13 @@ position: `string` 控件位置支持是个方位
 ### 组件介绍
 
 ```
-import { Scale Layers, Zoom } from '@antv/l7';
+import { Scale, Layers, Zoom } from '@antv/l7';
 
 ```
 
 #### Zoom
 
-放大缩小组件 默认 左上角
+放大缩小组件 默认左上角
 
 ```javascript
 const zoomControl = new Zoom({
@@ -43,14 +43,14 @@ scene.addControl(zoomControl);
 
 #### Scale
 
-比例尺组件默认左下角
+比例尺组件 默认左下角
 
 ```javascript
-const zoomControl = new Zoom({
-  position: 'topleft',
+const scaleControl = new Scale({
+  position: 'bottomleft',
 });
 
-scene.addControl(zoomControl);
+scene.addControl(scaleControl);
 ```
 
 #### Layers
