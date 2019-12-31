@@ -22,8 +22,8 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@turf/helpers": "^6.1.4",
-    "core-js": "3"
+    "@babel/runtime": "^7.7.7",
+    "@turf/helpers": "^6.1.4"
   },
   "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {
