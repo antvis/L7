@@ -64,6 +64,7 @@ module.exports = api => {
       '@babel/preset-typescript'
     ],
     plugins: [
+      isCDNBundle ? {} : '@babel/plugin-transform-runtime',
       '@babel/plugin-proposal-object-rest-spread',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -113,8 +114,6 @@ module.exports = api => {
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
-      /[\/\\]core-js/,
-      /@babel[\/\\]runtime/,
       'node_modules',
       ...!isTest ? [
         '**/*.test.tsx',
