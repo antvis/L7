@@ -48,7 +48,7 @@ export default class DataUpdate extends React.Component {
       .active(false)
       .color('#2F54EB')
       .style({
-        strokeColor: '#fff',
+        stroke: '#fff',
         strokeWidth: 2,
         opacity: 1,
       });
