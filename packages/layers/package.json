@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.0.0-beta.24",
+  "version": "2.0.0-beta.26",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,10 +22,9 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.24",
-    "@antv/l7-source": "^2.0.0-beta.24",
-    "@antv/l7-utils": "^2.0.0-beta.24",
-    "@babel/runtime": "^7.7.7",
+    "@antv/l7-core": "^2.0.0-beta.26",
+    "@antv/l7-source": "^2.0.0-beta.26",
+    "@antv/l7-utils": "^2.0.0-beta.26",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
     "@types/d3-color": "^1.2.2",
@@ -40,7 +39,6 @@
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "merge-json-schemas": "1.0.0",
-    "polyline-miter-util": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.3",
     "tapable": "^2.0.0-beta.8"

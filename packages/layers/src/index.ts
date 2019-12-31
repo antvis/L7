@@ -1,8 +1,8 @@
 import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
+import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
-import DashLineLayer from './line/dash';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
@@ -13,14 +13,15 @@ import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
+import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
 import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
 import PixelPickingPlugin from './plugins/PixelPickingPlugin';
 import RegisterStyleAttributePlugin from './plugins/RegisterStyleAttributePlugin';
 import ShaderUniformPlugin from './plugins/ShaderUniformPlugin';
+import UpdateModelPlugin from './plugins/UpdateModelPlugin';
 import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
-
 /**
  * 校验传入参数配置项的正确性
  * @see /dev-docs/ConfigSchemaValidation.md
@@ -73,6 +74,15 @@ container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(UpdateStyleAttributePlugin)
   .inRequestScope();
+
+/**
+ * 负责Model更新
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(UpdateModelPlugin)
+  .inRequestScope();
+
 /**
  * Multi Pass 自定义渲染管线
  */
@@ -86,6 +96,14 @@ container
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(ShaderUniformPlugin)
+  .inRequestScope();
+
+/**
+ * 传入动画参数
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerAnimateStylePlugin)
   .inRequestScope();
 /**
  * 传入光照相关参数
@@ -107,7 +125,7 @@ export {
   PointLayer,
   PolygonLayer,
   LineLayer,
-  DashLineLayer,
+  CityBuildingLayer,
   ImageLayer,
   RasterLayer,
   HeatmapLayer,

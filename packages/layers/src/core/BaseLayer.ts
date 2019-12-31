@@ -55,7 +55,7 @@ let layerIdCounter = 0;
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
-  public name: string;
+  public name: string = `${layerIdCounter++}`;
   public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
@@ -103,6 +103,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     options?: ISourceCFG;
   };
 
+  public layerModel: ILayerModel;
+
   @lazyInject(TYPES.ILogService)
   protected readonly logger: ILogService;
 
@@ -133,8 +135,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   ) => IPostProcessingPass<unknown>;
   protected normalPassFactory: (name: string) => IPass<unknown>;
 
-  protected layerModel: ILayerModel;
-
   protected animateOptions: IAnimateOption = { enable: false };
 
   /**
@@ -164,6 +164,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }> = [];
 
   private scaleOptions: IScaleOptions = {};
+
+  private animateStartTime: number;
+
+  private aniamateStatus: boolean = false;
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
@@ -298,11 +302,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.inited = true;
 
     this.hooks.afterInit.call();
-    // 更新 module 样式
+    // 更新 model 样式
     this.updateLayerConfig({
-      ...this.rawConfig,
       ...(this.getDefaultConfig() as object),
+      ...this.rawConfig,
     });
+    // 启动动画
+    const { animateOption } = this.getLayerConfig();
+    if (animateOption?.enable) {
+      this.layerService.startAnimate();
+      this.aniamateStatus = true;
+    }
     this.buildModels();
     // 触发初始化完成事件;
     this.emit('inited');
@@ -381,8 +391,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     return this;
   }
-  public animate(options: IAnimateOption) {
-    this.animateOptions = options;
+  public animate(options: IAnimateOption | boolean) {
+    let rawAnimate: Partial<IAnimateOption> = {};
+    if (isObject(options)) {
+      rawAnimate.enable = true;
+      rawAnimate = {
+        ...rawAnimate,
+        ...options,
+      };
+    } else {
+      rawAnimate.enable = options;
+    }
+    this.updateLayerConfig({
+      animateOption: rawAnimate,
+    });
+    // this.animateOptions = options;
     return this;
   }
 
@@ -706,6 +729,27 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
   }
 
+  public getTime() {
+    return this.layerService.clock.getDelta();
+  }
+  public setAnimateStartTime() {
+    this.animateStartTime = this.layerService.clock.getElapsedTime();
+  }
+  public stopAnimate() {
+    if (this.aniamateStatus) {
+      this.layerService.stopAnimate();
+      this.aniamateStatus = false;
+      this.updateLayerConfig({
+        animateOption: {
+          enable: false,
+        },
+      });
+    }
+  }
+  public getLayerAnimateTime(): number {
+    return this.layerService.clock.getElapsedTime() - this.animateStartTime;
+  }
+
   protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }
@@ -715,7 +759,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   protected renderModels() {
-    throw new Error('Method not implemented.');
+    if (this.layerModelNeedUpdate) {
+      this.models = this.layerModel.buildModels();
+      this.layerModelNeedUpdate = false;
+    }
+    this.models.forEach((model) => {
+      model.draw({
+        uniforms: this.layerModel.getUninforms(),
+      });
+    });
+    return this;
   }
 
   protected getModelType(): unknown {
@@ -734,9 +787,5 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         : valuesOrCallback || defaultValues,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
-  }
-
-  private layerMapHander(type: string, data: any) {
-    this.emit(type, data);
   }
 }
