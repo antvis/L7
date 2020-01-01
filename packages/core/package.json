@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.0.0-beta.26",
+  "version": "2.0.0-alpha.28",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,10 +22,10 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-utils": "^2.0.0-beta.26",
+    "@antv/l7-utils": "^2.0.0-alpha.28",
+    "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
-    "core-js": "3",
     "element-resize-event": "^3.0.3",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
@@ -36,7 +36,6 @@
     "merge-json-schemas": "^1.0.0",
     "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
-    "regenerator-runtime": "^0.13.3",
     "tapable": "^2.0.0-beta.8",
     "viewport-mercator-project": "^6.2.1"
   },

@@ -76,6 +76,9 @@ const scene = new Scene({
 });
 ```
 
+[示例地址](/zh/examples/tutorial/map#amapInstance)
+[代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
+
 #### 传入 Mapbox 地图实例
 
 ```javascript

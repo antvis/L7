@@ -7,7 +7,7 @@
     "jsx": "react",
     "target": "es5",
     "lib": ["es6", "dom"],
-    "types": ["reflect-metadata", "jest"],
+    "types": ["reflect-metadata", "jest" ],
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
