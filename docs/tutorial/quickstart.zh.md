@@ -20,7 +20,7 @@ Include the L7 JS JavaScript  <head> of your HTML file.
 ```html
 <head>
 <! --引入第三方地图JSAPI--> 
-<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.26/dist/l7.js'>
+<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.27/dist/l7.js'>
 </script>
 </head>
 ```
