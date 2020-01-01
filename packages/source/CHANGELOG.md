@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.28) (2020-01-01)
+
+
+### Bug Fixes
+
+* mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+* source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+* **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+* **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+* **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+* **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+* **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+
+
+
+
+# [2.0.0-alpha.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.27) (2019-12-31)
+
+
+### Bug Fixes
+
+* mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+* source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+* **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+* **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+* **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+* **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+* **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+
+
+
+
 # [2.0.0-beta.26](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.26) (2019-12-30)
 
 

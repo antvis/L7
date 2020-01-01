@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.28) (2020-01-01)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-alpha.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.27) (2019-12-31)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
 # [2.0.0-beta.26](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.26) (2019-12-30)
 
 
