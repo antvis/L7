@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.27) (2020-01-01)
+
+
+### Bug Fixes
+
+* render 将gl模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+* 修复webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+* **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+
+
+### Features
+
+* **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+
+
+
+
+
 # [2.0.0-alpha.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.28) (2020-01-01)
 
 
