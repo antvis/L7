@@ -75,7 +75,7 @@ void main() {
 
   if(u_aimate.x == Animate) {
     float d = length(v_data.xy);
-    float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * N_RINGS - FREQ * u_time)), 0.0, 1.0);
+    float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);
     gl_FragColor = vec4(gl_FragColor.xyz * intensity, intensity);
   }
 
