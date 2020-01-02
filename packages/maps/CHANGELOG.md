@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
+
+
+### Bug Fixes
+
+* mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+* 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+* **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+
+
+### Features
+
+* add raster layer ([2b28380](https://github.com/antvis/L7/commit/2b2838015198b8586b0c30fdc154116252a76f29))
+* **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+* scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+
+
+
+
+
 # [2.0.0-beta.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.27) (2020-01-01)
 
 
