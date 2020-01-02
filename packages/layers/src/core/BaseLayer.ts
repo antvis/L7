@@ -424,7 +424,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.buildModels();
     return this;
   }
-  public style(options: object & Partial<ILayerConfig>): ILayer {
+  public style(
+    options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
+  ): ILayer {
     const { passes, ...rest } = options;
 
     // passes 特殊处理
@@ -582,7 +584,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
-
     const {
       visible,
       minZoom = -Infinity,
