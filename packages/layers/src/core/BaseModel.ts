@@ -11,6 +11,7 @@ import {
   ILayer,
   ILayerConfig,
   ILayerModel,
+  ILayerService,
   IMapService,
   IModel,
   IModelUniform,
@@ -20,7 +21,6 @@ import {
   lazyInject,
   Triangulation,
   TYPES,
-  ILayerService,
 } from '@antv/l7-core';
 import { BlendTypes } from '../utils/blend';
 export default class BaseModel<ChildLayerStyleOptions = {}>
