@@ -24,6 +24,15 @@ L7 在内部解决了不同底图地图直接的差异，同时 L7 层面统一�
 ⚠️ 使用地图申请地图 token，L7 内部设置了默认 token，仅供测试使用
 
 #### 高德地图实例化
+高德地图API配置参数
+
+- token
+   注册高德 [API token](https://lbs.amap.com/api/javascript-api/guide/abc/prepare)
+
+- plugin  {array} ```['AMap.ElasticMarker','AMap.CircleEditor'] ```
+
+   加载[高德地图插件](https://lbs.amap.com/api/javascript-api/guide/abc/plugins)
+    
 
 ```javascript
 const L7AMap = new GaodeMap({
@@ -32,6 +41,7 @@ const L7AMap = new GaodeMap({
   center: [104.288144, 31.239692],
   zoom: 4.4,
   token: 'xxxx - token',
+  plugin:[] // 可以不设置
 });
 ```
 
@@ -58,6 +68,8 @@ const scene = new Scene({
 ⚠️ scene id 参数需要地图的 Map 实例是同个容器。
 
 ⚠️ 传入地图实例需要自行引入相关地图的 API
+
+⚠️ viewMode 设置为 3D 模式
 
 #### 传入高德地图实例
 
