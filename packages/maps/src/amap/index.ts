@@ -229,6 +229,7 @@ export default class AMapService
       maxZoom = 18,
       token = AMAP_API_KEY,
       mapInstance,
+      plugin = [],
       ...rest
     } = this.config;
     // 高德地图创建独立的container；
@@ -273,7 +274,9 @@ export default class AMapService
         if (token === AMAP_API_KEY) {
           this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
         }
-        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D&callback=initAMap`;
+        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D${plugin.join(
+          ',',
+        )}&callback=initAMap`;
         const $jsapi = document.createElement('script');
         $jsapi.id = AMAP_SCRIPT_ID;
         $jsapi.charset = 'utf-8';
