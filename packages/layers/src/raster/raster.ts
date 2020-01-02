@@ -5,12 +5,14 @@ import {
   ILayer,
   ILayerPlugin,
   ILogService,
+  IModelUniform,
   IRasterParserDataItem,
   IStyleAttributeService,
   ITexture2D,
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
+
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
 import { RasterTriangulation } from './buffers/triangulation';
@@ -30,6 +32,9 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 
+  public getAnimateUniforms(): IModelUniform {
+    return {};
+  }
   protected getConfigSchema() {
     return {
       properties: {
