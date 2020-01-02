@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
 # [2.0.0-beta.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.27) (2020-01-01)
 
 
