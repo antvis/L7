@@ -5,7 +5,7 @@ order: 2
 
 # 简介
 
-L7 专注数据可视化层数据表达，目前 L7 还不支持独立的地图引擎，需要引入第三方引擎，目前支持 高德地图和 MapBox 两种。
+L7 专注数据可视化层数据表达，目前 L7 还不支持独立的地图引擎，需要引入第三方引擎，目前支持 高德地图和 MapBox 两种。=
 L7 在内部解决了不同底图地图直接的差异，同时 L7 层面统一管理地图的操作方法。
 
 ## Map
@@ -25,6 +25,15 @@ L7 在内部解决了不同底图地图直接的差异，同时 L7 层面统一�
 
 #### 高德地图实例化
 
+高德地图 API 配置参数
+
+- token
+  注册高德 [API token](https://lbs.amap.com/api/javascript-api/guide/abc/prepare)
+
+- plugin {array} `['AMap.ElasticMarker','AMap.CircleEditor']`
+
+  加载[高德地图插件](https://lbs.amap.com/api/javascript-api/guide/abc/plugins)
+
 ```javascript
 const L7AMap = new GaodeMap({
   pitch: 35.210526315789465,
@@ -32,6 +41,7 @@ const L7AMap = new GaodeMap({
   center: [104.288144, 31.239692],
   zoom: 4.4,
   token: 'xxxx - token',
+  plugin: [], // 可以不设置
 });
 ```
 
@@ -59,6 +69,8 @@ const scene = new Scene({
 
 ⚠️ 传入地图实例需要自行引入相关地图的 API
 
+⚠️ viewMode 设置为 3D 模式
+
 #### 传入高德地图实例
 
 ```javascript
@@ -75,6 +87,9 @@ const scene = new Scene({
   }),
 });
 ```
+
+[示例地址](/zh/examples/tutorial/map#amapInstance)
+[代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
 #### 传入 Mapbox 地图实例
 

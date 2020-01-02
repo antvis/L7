@@ -72,6 +72,10 @@ export interface IMapConfig<RawMap = {}> {
    */
   mapInstance?: RawMap;
   /**
+   * 高德地图API插件
+   */
+  plugin?: string[];
+  /**
    * 容器 DOM id
    */
   id: string | HTMLDivElement;

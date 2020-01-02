@@ -187,7 +187,6 @@ layer.source(
     parser:{
         type:'json',
         coordinates: "coord",
-
     }
   }
 })
