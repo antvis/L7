@@ -52,7 +52,6 @@ export default class ReglRendererService implements IRendererService {
         // TODO: use extensions
         extensions: [
           'OES_element_index_uint',
-          // 'EXT_shader_texture_lod', // IBL 兼容性问题
           'EXT_blend_minmax',
           'OES_standard_derivatives', // wireframe
           // 'OES_texture_float', // shadow map 兼容性问题
@@ -60,7 +59,7 @@ export default class ReglRendererService implements IRendererService {
           'angle_instanced_arrays',
           'EXT_texture_filter_anisotropic', // VSM shadow map
         ],
-        // optionalExtensions: ['oes_texture_float_linear'],
+        optionalExtensions: ['oes_texture_float_linear', 'OES_texture_float'],
         profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
           if (err || !r) {

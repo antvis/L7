@@ -43,7 +43,7 @@ order: 5
 layer.source(pointsData, {
           cluster: true,
         });
-
+        
 // 设置配置项
 layer.source(pointsData, {
           cluster: true,
