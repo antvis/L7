@@ -20,6 +20,7 @@ import {
   lazyInject,
   Triangulation,
   TYPES,
+  ILayerService,
 } from '@antv/l7-core';
 import { BlendTypes } from '../utils/blend';
 export default class BaseModel<ChildLayerStyleOptions = {}>
@@ -44,6 +45,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected styleAttributeService: IStyleAttributeService;
   protected mapService: IMapService;
   protected cameraService: ICameraService;
+  protected layerService: ILayerService;
 
   constructor(layer: ILayer) {
     this.layer = layer;
@@ -57,6 +59,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.cameraService = layer
       .getContainer()
       .get<ICameraService>(TYPES.ICameraService);
+    this.layerService = layer
+      .getContainer()
+      .get<ILayerService>(TYPES.ILayerService);
+
     // 注册 Attribute
     this.registerBuiltinAttributes();
     // 开启动画
