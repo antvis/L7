@@ -15,7 +15,7 @@ export default class ImageLayerDemo extends React.Component {
       map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'dark',
         zoom: 10,
       }),
     });
@@ -30,7 +30,6 @@ export default class ImageLayerDemo extends React.Component {
       },
     );
     scene.addLayer(layer);
-    scene.render();
     this.scene = scene;
   }
 

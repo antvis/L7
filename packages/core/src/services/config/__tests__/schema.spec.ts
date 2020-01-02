@@ -40,12 +40,12 @@ describe('ConfigService', () => {
     const { valid, errorText } = configService.validateMapConfig({
       zoom: 100,
       minZoom: 100,
-      maxZoom: -1,
+      maxZoom: -2,
     });
     expect(valid).toBeFalsy();
-    expect(errorText).toMatch('zoom should be <= 20');
-    expect(errorText).toMatch('minZoom should be <= 20');
-    expect(errorText).toMatch('maxZoom should be >= 0');
+    expect(errorText).toMatch('zoom should be <= 24');
+    expect(errorText).toMatch('minZoom should be <= 24');
+    expect(errorText).toMatch('maxZoom should be >= -1');
 
     expect(
       configService.validateMapConfig({
