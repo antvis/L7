@@ -17,7 +17,7 @@ export default class MarkerComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
@@ -30,6 +30,7 @@ export default class MarkerComponent extends React.Component {
     layer
       .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
+      .active(true)
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -40,15 +41,34 @@ export default class MarkerComponent extends React.Component {
       ])
       .shape('fill')
       .style({
-        opacity: 0.3,
+        opacity: 0.8,
       });
     scene.addLayer(layer);
     const marker = new Marker().setLnglat({
       lng: 120.19382669582967,
       lat: 30.258134,
     });
+    marker.on('click', (e) => {
+      console.log(e);
+    });
 
     scene.addMarker(marker);
+    scene.on('loaded', () => {
+      // @ts-ignore
+      const marker1 = new AMap.Marker({
+        map: scene.map,
+        position: [113.800646, 34.796227],
+        shadow: '#000',
+        label: {
+          content: '站点',
+          direction: 'top',
+        },
+      });
+      marker1.on('click', () => {
+        alert(1111);
+        console.log('选中的点', 1111);
+      });
+    });
   }
 
   public render() {
