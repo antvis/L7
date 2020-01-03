@@ -1,5 +1,6 @@
 import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 //  marker 支持 dragger 未完成
@@ -10,8 +11,9 @@ export interface IMarkerOption {
   color: string;
   offset: number[];
   draggable: boolean;
+  extData?: any;
 }
-export default class Marker {
+export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;
   private popup: IPopup; // TODO: POPup
@@ -19,6 +21,7 @@ export default class Marker {
   private lngLat: ILngLat;
   private scene: Container;
   constructor(option?: Partial<IMarkerOption>) {
+    super();
     this.markerOption = {
       ...this.getDefault(),
       ...option,
@@ -38,13 +41,13 @@ export default class Marker {
   }
 
   public addTo(scene: Container) {
-    this.remove();
+    // this.remove();
     this.scene = scene;
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     const { element, draggable } = this.markerOption;
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
+    this.registerMarkerEvent(element as HTMLElement);
     this.mapsService.on('camerachange', this.update);
-    // this.setDraggable(draggable);
     this.update();
     return this;
   }
@@ -59,6 +62,8 @@ export default class Marker {
       this.mapsService.off('mouseup', this.onUp);
       this.mapsService.off('touchend', this.onUp);
     }
+    this.unRegisterMarkerEvent();
+    this.removeAllListeners();
     const { element } = this.markerOption;
     if (element) {
       DOM.remove(element);
@@ -187,9 +192,38 @@ export default class Marker {
     element.addEventListener('click', (e: MouseEvent) => {
       this.onMapClick(e);
     });
+    element.addEventListener('click', this.eventHander);
     applyAnchorClass(element, anchor, 'marker');
   }
+  private registerMarkerEvent(element: HTMLElement) {
+    element.addEventListener('mousemove', this.eventHander);
+    element.addEventListener('click', this.eventHander);
+    element.addEventListener('mousedown', this.eventHander);
+    element.addEventListener('mouseup', this.eventHander);
+    element.addEventListener('dblclick', this.eventHander);
+    element.addEventListener('contextmenu', this.eventHander);
+    element.addEventListener('mouseover', this.eventHander);
+    element.addEventListener('mouseout', this.eventHander);
+  }
+  private unRegisterMarkerEvent() {
+    const element = this.getElement();
+    element.removeEventListener('mousemove', this.eventHander);
+    element.removeEventListener('click', this.eventHander);
+    element.removeEventListener('mousedown', this.eventHander);
+    element.removeEventListener('mouseup', this.eventHander);
+    element.removeEventListener('dblclick', this.eventHander);
+    element.removeEventListener('contextmenu', this.eventHander);
+    element.removeEventListener('mouseover', this.eventHander);
+    element.removeEventListener('mouseout', this.eventHander);
+  }
 
+  private eventHander = (e: MouseEvent) => {
+    this.emit(e.type, {
+      target: e,
+      data: this.markerOption.extData,
+      lngLat: this.lngLat,
+    });
+  };
   private addDragHandler(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }
