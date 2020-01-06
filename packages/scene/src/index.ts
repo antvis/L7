@@ -99,6 +99,9 @@ class Scene
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
+  public ExportMap2Png(): string {
+    return this.sceneService.ExportMap2Png();
+  }
 
   public get map() {
     return this.mapService.map;
