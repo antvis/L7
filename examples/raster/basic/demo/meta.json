@@ -11,12 +11,23 @@
     },
     {
       "filename": "radar.js",
-      "title": "地形",
+      "title": "雷达图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ZiMnSZlmblIAAAAAAAAAAABkARQnAQ"
     },
     {
+      "filename": "dem.js",
+      "title": "地形图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oinmTJIlmbMAAAAAAAAAAABkARQnAQ"
+    },
+    {
       "filename": "light.js",
-      "title": "夜光图"
+      "title": "夜光图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*nvP2R6ZbSSgAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "ndvi.js",
+      "title": "NDVI",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6BQSTI51T_UAAAAAAAAAAABkARQnAQ"
     }
   ]
 }
