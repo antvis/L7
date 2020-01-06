@@ -133,6 +133,14 @@ export default class Marker extends EventEmitter {
     return this.markerOption.draggable;
   }
 
+  public getExtData() {
+    return this.markerOption.extData;
+  }
+
+  public setExtData(data: any) {
+    this.markerOption.extData = data;
+  }
+
   private update() {
     if (!this.mapsService) {
       return;

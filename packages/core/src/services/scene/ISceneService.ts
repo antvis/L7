@@ -10,6 +10,7 @@ export interface ISceneService {
   addLayer(layer: ILayer): void;
   render(): void;
   getSceneContainer(): HTMLDivElement;
+  ExportMap2Png(): string;
   destroy(): void;
 }
 // scene 事件
