@@ -300,13 +300,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 触发 init 生命周期插件
     this.hooks.init.call();
     this.inited = true;
-
-    this.hooks.afterInit.call();
     // 更新 model 样式
     this.updateLayerConfig({
       ...(this.getDefaultConfig() as object),
       ...this.rawConfig,
     });
+    this.hooks.afterInit.call();
     // 启动动画
     const { animateOption } = this.getLayerConfig();
     if (animateOption?.enable) {
