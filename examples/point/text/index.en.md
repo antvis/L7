@@ -1,4 +1,4 @@
 ---
-title: 亮度图
+title: label
 order: 1
 ---
