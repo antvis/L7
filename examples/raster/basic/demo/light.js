@@ -44,13 +44,13 @@ async function addLayer() {
     })
     .style({
       opacity: 1.0,
-      clampLow: false,
-      clampHigh: false,
+      clampLow: true,
+      clampHigh: true,
       domain: [ 0, 90 ],
       nodataValue: 0,
       rampColors: {
-        colors: [ 'rgb(166,97,26)', 'rgb(223,194,125)', 'rgb(245,245,245)', 'rgb(128,205,193)', 'rgb(1,133,113)' ],
-        positions: [ 0, 0.25, 0.5, 0.75, 1.0 ]
+        colors: [ 'rgba(166,97,26,0)', '#c3aa00', '#fadb14', '#fef346', '#ffff96' ],
+        positions: [ 0, 0.1, 0.25, 0.5, 1.0 ]
       }
     });
 

@@ -82,7 +82,7 @@ void main() {
         if(ux == targetColId){
             n =0.;
         }
-        float timeP = min(0.75, abs ( sin(u_time/6.0) ) );
+        float timeP = min(0.75, abs ( sin(u_time/3.0) ) );
         float hot = smoothstep(1.0,0.0,timeP);
         vec3 color = mix(baseColor, getWindowColor(n,hot,brightColor,windowColor), s);
         //vec3 color = mix(baseColor, getWindowColor(n,hot,brightColor,windowColor), 1.0);
