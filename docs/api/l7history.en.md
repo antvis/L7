@@ -1,6 +1,6 @@
 ---
-title: 1.x stable
-order: 1
+title: 1.x history
+order: 9
 ---
 
 ## L7 1.x 版本
@@ -17,8 +17,6 @@ order: 1
 
 ### npm 安装使用
 
-会默认安装 1.x 的最新版本，2.0 正式版本发布后才会默认 2.0 版本
-
 ```
 npm install @antv/l7
 
@@ -29,7 +27,3 @@ npm install @antv/l7
 - [1.x 官网](https://antv-2018.alipay.com/zh-cn/l7/1.x/index.html)
 
 - [1.x 文档](https://www.yuque.com/antv/l7/vgo25g)
-
-L7 2.0 beta 版本已经发布，一些功能还没有完善，我们将在 1 月 6 号发布 2.0 正式版，会包含 1.x 版的所有功能.
-
-L7 2.0 beta 版本已经发布，一些功能还没有完善，我们将在 1 月 6 号发布 2.0 正式版，会包含 1.x 版的所有功能.

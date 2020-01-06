@@ -56,11 +56,10 @@ Promise.all([
   })
     .source(world)
     .color('#fff')
-    .size(0.3)
+    .size(0.8)
     .style({
       opacity: 1
     });
-
   scene.addLayer(layer);
   scene.addLayer(layer2);
 });
