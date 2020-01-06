@@ -24,7 +24,7 @@ order: 0
 
 
 ```html
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.28/dist/l7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0/dist/l7.js"></script>
 ```
 
 
@@ -116,7 +116,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
   
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.28/dist/l7.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0/dist/l7.js"></script>
 <script>
   const scene = new L7.Scene({
     id: 'map',
