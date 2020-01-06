@@ -68,3 +68,14 @@ order: 0
 lineLayer.size(1); // 线的宽度为 1
 lineLayer.size([1, 2]); // 宽度为1，高度2
 ```
+### style
+
+- lineType  dash | solid  线类型实线和虚线
+- dashArray 虚线配置项 ```[ 5, 5]``` 
+
+```javascript
+  layer .style({
+      lineType: 'dash',
+      dashArray: [ 5, 5 ]
+    })
+```
