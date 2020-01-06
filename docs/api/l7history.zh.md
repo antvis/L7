@@ -1,6 +1,6 @@
 ---
-title: 1.x 稳定版
-order: 1
+title: 1.x 历史版本
+order: 9
 ---
 
 ## L7 1.x 版本
@@ -12,7 +12,7 @@ order: 1
 #### CDN 在线使用连接为
 
 ```html
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.4.4/build/L7-min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.4.14/build/L7-min.js"></script>
 ```
 
 ### npm 安装使用
@@ -29,5 +29,3 @@ npm install @antv/l7
 - [1.x 官网](https://antv-2018.alipay.com/zh-cn/l7/1.x/index.html)
 
 - [1.x 文档](https://www.yuque.com/antv/l7/vgo25g)
-
-L7 2.0 beta 版本已经发布，一些功能还没有完善，我们将在 1 月 6 号发布 2.0 正式版，会包含 1.x 版的所有功能.
