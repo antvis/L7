@@ -36,6 +36,7 @@ fetch(
         'vesica'
       ])
       .size('unit_price', [ 10, 25 ])
+      .active(true)
       .color('name', [ '#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452' ])
       .style({
         opacity: 0.3,

@@ -7,8 +7,11 @@ order: 3
 ## 使用
 
 ### shape
+
  - dot 如果需要使用亮度图可以将shape设置为dot,或者不设置shape
+
 ### color 
+
   - 无权重
    如果数据没有权重可以将颜色设置为常量，渲染时会自动进行颜色叠加，点越多颜色约亮
   - 有权重
@@ -16,6 +19,7 @@ order: 3
 
 
 ```javascript
+
 const pointLayer = new PointLayer()
       .source(data)
       .size(2)

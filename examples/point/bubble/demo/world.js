@@ -31,6 +31,7 @@ fetch(
         '#A1EDB8',
         '#CEF8D6'
       ])
+      .active(true)
       .style({
         opacity: 0.5,
         strokeWidth: 0

@@ -118,12 +118,28 @@ module.exports = {
         order: 4
       },
       {
+        slug: 'api/layer/image_layer',
+        title: {
+          zh: '图片图层',
+          en: 'IMageLayer'
+        },
+        order: 5
+      },
+      {
+        slug: 'api/layer/raster_layer',
+        title: {
+          zh: '栅格图',
+          en: 'RasterLayer'
+        },
+        order: 6
+      },
+      {
         slug: 'api/layer/cityBuilding',
         title: {
           zh: '城市建筑',
           en: 'CityBuilding'
         },
-        order: 6
+        order: 8
       },
       {
         slug: 'api/source',

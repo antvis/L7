@@ -19,7 +19,7 @@ export default class Point3D extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
@@ -37,6 +37,7 @@ export default class Point3D extends React.Component {
       })
       .size('point_count', [5, 10, 15, 20, 25])
       .animate(false)
+      .active(true)
       .color('yellow')
       .style({
         opacity: 0.5,
