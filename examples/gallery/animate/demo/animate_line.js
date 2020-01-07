@@ -4,7 +4,7 @@ const scene = new Scene({
   id: 'map',
   map: new Mapbox({
     center: [ -74.006, 40.7128 ],
-    zoom: 15,
+    zoom: 14,
     style: 'dark'
   })
 });
@@ -27,9 +27,9 @@ fetch(
         return `rgb(${v[0]})`;
       })
       .animate({
-        interval: 0.5,
-        trailLength: 0.4,
-        duration: 4
+        interval: 0.1,
+        trailLength: 1.0,
+        duration: 2
       });
     scene.addLayer(lineLayer);
   });
