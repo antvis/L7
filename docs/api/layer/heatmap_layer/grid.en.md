@@ -1,19 +1,19 @@
+```
 ---
-title: 蜂窝热力图
+title: GridHeatMapLayer
 order: 1
 ---
 
-将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局
+将一组点数据按照等大小的正方形网格进行聚合，一个正方形网格代表网格内所有点的统计值。方格热力图特点以方格网布局。
 
 ## source
-
 网格数据只支持点数据作为数据源，数据格式支持csv、json、geojson.
 
 #### 设置网格聚合参数
 
 布局方法 通过 source 的 tansforms 属性配置
 
-- type  数据聚合类型  hexagon
+- type  数据聚合类型 grid
 - size  网格半径 单位 米
 - field  聚合字段
 - method 聚合方法  count,max,min,sum,mean5 个统计维度
@@ -28,7 +28,7 @@ layer.source(data, {
       },
       transforms:[
         {
-        type: 'hexagon',
+        type: 'grid',
         size: 15000,
         field:'v',
         method:'sum'
@@ -81,17 +81,18 @@ layer.size('value', [10,50]);// 根据value 字段映射大小
 layer.size('value', (value)=>{})  // 回调函数设置高度
 
 ```
-## color
+### color
 
-同layer color方法
+同layer [color方法](../layer/#color)
 
-## style
+### style
 
 - coverage 网格覆盖度  0 - 1
 - angle 网格旋转角度   0 - 360
 - opacity 透明度  0 - 1.0
 
 ```javascript
+  
     layer.style({
       coverage: 0.9,
       angle: 0,
@@ -100,33 +101,53 @@ layer.size('value', (value)=>{})  // 回调函数设置高度
   
 ```
 
-### 完整代码
+## 完整实例代码
 
 ```javascript
-const layer = 
-  new HeatmapLayer({
-    zIndex: 2,
-  })
-  .souce(data, {
-    parser: {
-      type: 'csv',
-      x: lng,
-      y: lat,
-    },
-    transforms: [
-      {
-        type: 'hexagon',
-        size: 1500,
-        field: 'count',
-        operation: 'sum',
-      },
-    ],
-  })
-  .shape('hexagon')
-  .color('sum')
-  .style({
-    coverage: 0.8,
-  });
+const layer = new HeatmapLayer({})
+      .source(data, {
+        parser: {
+          type: 'csv',
+          x: 'lng',
+          y: 'lat'
+        },
+        transforms: [
+          {
+            type: 'grid',
+            size: 20000,
+            field: 'v',
+            method: 'sum'
+          }
+        ]
+      })
+      .shape('square')
+      .style({
+        coverage: 1,
+        angle: 0
+      })
+      .color(
+        'count',
+        [
+          '#0B0030',
+          '#100243',
+          '#100243',
+          '#1B048B',
+          '#051FB7',
+          '#0350C1',
+          '#0350C1',
+          '#0072C4',
+          '#0796D3',
+          '#2BA9DF',
+          '#30C7C4',
+          '#6BD5A0',
+          '#A7ECB2',
+          '#D0F4CA'
+        ].reverse()
+      );
+
+    scene.addLayer(layer);
 ```
+
+
 
 
