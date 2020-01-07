@@ -27,8 +27,8 @@ fetch(
       .shape('circle')
       .active(true)
       .animate(true)
-      .size(40)
-      .color('#ffa842')
+      .size(56)
+      .color('#4cfd47')
       .style({
         opacity: 1
       });
