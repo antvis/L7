@@ -80,12 +80,12 @@ layer.setData(data);
 
 ### transforms
 
- tranforms 处理的是的标准化之后的数据
- 标准化之后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
+tranforms 处理的是的标准化之后的数据
+标准化之后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
 
- 处理完之后返回的也是标准数据
+处理完之后返回的也是标准数据
 
-``` javascript
+```javascript
  [{
    coordinates: [[]] // 地理坐标字段
    _id:'',// 标准化之后新增字段
@@ -112,7 +112,6 @@ layer.setData(data);
 - method:聚合方法   count,max,min,sum,mean5 个统计维度
 
 ```javascript
-
 layer.source(data, {
   transforms: [
     {
@@ -123,8 +122,8 @@ layer.source(data, {
     },
   ],
 });
-
 ```
+
 #### hexagon
 
 生成六边形网格布局，根据数据字段统计

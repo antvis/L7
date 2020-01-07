@@ -2,11 +2,13 @@
 title: ImageLayer
 order: 5
 ---
+
 ## 简介
 
 将图片添加到地图上，需要指定图片的经纬度范围
 
 ## 使用
+
 ```javascript
 import { ImageLayer } from '@antv/l7';
 ```
