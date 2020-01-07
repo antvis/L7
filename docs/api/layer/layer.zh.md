@@ -12,15 +12,14 @@ L7 Layer 接口设计遵循图形语法，在可视表达上
 语法示例
 
 ```javascript
-const layer= new Layer(option)
+const layer = new Layer(option)
   .source()
   .color()
   .size()
   .shape()
   .style();
 
-scene.addLayer(layer)
-
+scene.addLayer(layer);
 ```
 
 ## 构造函数
