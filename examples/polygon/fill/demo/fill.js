@@ -34,6 +34,7 @@ fetch(
         ].reverse()
       )
       .shape('fill')
+      .active(true)
       .style({
         opacity: 1
       });
