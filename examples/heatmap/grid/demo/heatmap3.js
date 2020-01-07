@@ -32,9 +32,6 @@ fetch(
           }
         ]
       })
-      .size('count', value => {
-        return value * 0;
-      })
       .shape('circle')
       .style({
         coverage: 0.9,

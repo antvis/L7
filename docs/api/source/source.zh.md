@@ -30,7 +30,7 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 
 ## API
 
-### cluster 可选 可以只设置 cluster
+### cluster ``boolean` 可选 可以只设置
 
 ### clusterOption 可选
 
@@ -51,6 +51,17 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 
 ```javascript
 layer.source(data);
+```
+
+### Source 更新
+
+如果数据发生改变，可以需要更新数据
+可以通过调用 layer 的 setData 方法实现数据的更新
+
+具体见 [Layer](../layer/layer/#setdata)
+
+```javascript
+layer.setData(data);
 ```
 
 #### JSON
