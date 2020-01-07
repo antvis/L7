@@ -5,6 +5,12 @@ order: 1
 
 将一组点数据按照等大小的正方形网格进行聚合，一个正方形网格代表网格内所有点的统计值。方格热力图特点以方格网布局。
 
+## 使用
+```javascript
+import { HeatMapLayer] } from '@antv/l7';
+
+```
+
 ## source
 网格数据只支持点数据作为数据源，数据格式支持csv、json、geojson.
 
@@ -40,7 +46,7 @@ layer.source(data, {
 
 网格热力图虽然是以标准四边形网格进行数据聚合，但是展示效果上可以设置为其形状，形状只支持常量
 
-#### 2d
+### 2d
 
 - circle,
 - triangle
@@ -52,7 +58,7 @@ layer.shape(circle);
 
 ```
 
-#### 3d
+### 3d
 
 - cylinder
 - triangleColumn
@@ -102,7 +108,7 @@ layer.size('value', (value)=>{})  // 回调函数设置高度
 ## 完整实例代码
 
 ```javascript
-onst layer = new HeatmapLayer({})
+const layer = new HeatmapLayer({})
       .source(data, {
         parser: {
           type: 'csv',
