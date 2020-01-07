@@ -7,7 +7,9 @@ Marker 地图标注 目前只支持 2D dom 标注
 
 ## 构造函数
 
-Marker<br />`const Marker = new L7.Marker(option)`
+Marker
+
+`const Marker = new L7.Marker(option)`
 
 #### option
 

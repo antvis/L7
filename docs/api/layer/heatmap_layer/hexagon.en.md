@@ -1,12 +1,10 @@
 ---
-title: 蜂窝热力图
+title: Hexagon HeatMap
 order: 1
 ---
-
 将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局
 
 ## source
-
 网格数据只支持点数据作为数据源，数据格式支持csv、json、geojson.
 
 #### 设置网格聚合参数
@@ -92,6 +90,7 @@ layer.size('value', (value)=>{})  // 回调函数设置高度
 - opacity 透明度  0 - 1.0
 
 ```javascript
+  
     layer.style({
       coverage: 0.9,
       angle: 0,
