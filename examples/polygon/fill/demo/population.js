@@ -47,6 +47,7 @@ Promise.all([
     })
     .color('female', colors)
     .shape('fill')
+    .active(true)
     .style({
       opacity: 0.9
     });

@@ -37,7 +37,7 @@ Install the npm package.
 ```bash
 
 // L7 依赖
-npm install --save @antv/l7@beta
+npm install --save @antv/l7
 
 // 第三方底图依赖
 npm install --save @antv/l7-maps;
