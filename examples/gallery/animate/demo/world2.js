@@ -47,10 +47,10 @@ Promise.all([
 
   const worldLine = new LineLayer()
     .source(world)
-    .color('#41fc9d')
-    .size(0.5)
+    .color('#495e96')
+    .size(0.6)
     .style({
-      opacity: 0.4
+      opacity: 0.2
     });
   const dotPoint = new PointLayer()
     .source(dotData, {
@@ -61,9 +61,12 @@ Promise.all([
       }
     })
     .shape('circle')
-    .color('#ffed11')
-    .animate(true)
-    .size(40)
+    .color('#abc7e9')
+    .animate({
+      speed: 0.8
+    }
+    )
+    .size(30)
     .style({
       opacity: 1.0
     });
@@ -74,7 +77,7 @@ Promise.all([
         coordinates: 'coord'
       }
     })
-    .color('#ff6b34')
+    .color('#b97feb')
     .shape('arc3d')
     .size(2)
     .animate({
