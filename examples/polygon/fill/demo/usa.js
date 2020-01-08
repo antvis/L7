@@ -16,24 +16,25 @@ fetch(
 )
   .then(res => res.json())
   .then(data => {
+    const color = [ 'rgb(255,255,217)', 'rgb(237,248,177)', 'rgb(199,233,180)', 'rgb(127,205,187)', 'rgb(65,182,196)', 'rgb(29,145,192)', 'rgb(34,94,168)', 'rgb(12,44,132)' ];
     const layer = new PolygonLayer({})
       .source(data)
       .color(
         'density', d => {
-          return d > 1000 ? '#800026' :
-            d > 500 ? '#BD0026' :
-              d > 200 ? '#E31A1C' :
-                d > 100 ? '#FC4E2A' :
-                  d > 50 ? '#FD8D3C' :
-                    d > 20 ? '#FEB24C' :
-                      d > 10 ? '#FED976' :
-                        '#FFEDA0';
+          return d > 1000 ? color[7] :
+            d > 500 ? color[6] :
+              d > 200 ? color[5] :
+                d > 100 ? color[4] :
+                  d > 50 ? color[3] :
+                    d > 20 ? color[2] :
+                      d > 10 ? color[1] :
+                        color[0];
         }
       )
       .shape('fill')
       .active(true)
       .style({
-        opacity: 0.8
+        opacity: 1.0
       });
     const layer2 = new LineLayer({
       zIndex: 2
@@ -52,7 +53,8 @@ fetch(
 
     layer.on('mousemove', e => {
       const popup = new Popup({
-        offsets: [ 0, 0 ]
+        offsets: [ 0, 0 ],
+        closeButton: false
       })
         .setLnglat(e.lngLat)
         .setHTML(`<span>${e.feature.properties.name}: ${e.feature.properties.density}</span>`);

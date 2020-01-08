@@ -14,7 +14,7 @@ const scene = new Scene({
 addLayer();
 async function getTiffData() {
   const response = await fetch(
-    'https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF141999.tiff'
+    'https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF182013.tiff'
   );
   const arrayBuffer = await response.arrayBuffer();
   const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
@@ -44,13 +44,13 @@ async function addLayer() {
     })
     .style({
       opacity: 1.0,
-      clampLow: true,
-      clampHigh: true,
+      clampLow: false,
+      clampHigh: false,
       domain: [ 0, 90 ],
       nodataValue: 0,
       rampColors: {
-        colors: [ 'rgba(166,97,26,0)', '#c3aa00', '#fadb14', '#fef346', '#ffff96' ],
-        positions: [ 0, 0.1, 0.25, 0.5, 1.0 ]
+        colors: [ 'rgba(92,58,16,0)', 'rgba(92,58,16,0)', '#f8501a', '#f6961f', '#f8d069', '#fffdf8' ],
+        positions: [ 0, 0.05, 0.1, 0.25, 0.5, 1.0 ]
       }
     });
 

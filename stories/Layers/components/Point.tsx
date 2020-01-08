@@ -44,38 +44,6 @@ export default class Point3D extends React.Component {
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
-    pointLayer.on('mousemove', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('mousedown', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('mouseup', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('click', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-
-    pointLayer.on('contextmenu', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('unpick', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-
     this.scene = scene;
     // });
   }

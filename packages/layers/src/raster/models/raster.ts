@@ -38,7 +38,7 @@ export default class RasterModel extends BaseModel {
       noDataValue = -9999999,
       domain = [0, 1],
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-
+    this.updateColorTexure();
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
@@ -108,6 +108,20 @@ export default class RasterModel extends BaseModel {
           return [vertex[3], vertex[4]];
         },
       },
+    });
+  }
+
+  private updateColorTexure() {
+    const { createTexture2D } = this.rendererService;
+    const {
+      rampColors,
+    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+    const imageData = generateColorRamp(rampColors as IColorRamp);
+    this.colorTexture = createTexture2D({
+      data: imageData.data,
+      width: imageData.width,
+      height: imageData.height,
+      flipY: true,
     });
   }
 }
