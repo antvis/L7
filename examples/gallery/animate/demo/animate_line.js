@@ -21,15 +21,15 @@ fetch(
           coordinates: 'path'
         }
       })
-      .size(3)
+      .size(1.5)
       .shape('line')
       .color('color', v => {
         return `rgb(${v[0]})`;
       })
       .animate({
-        interval: 0.1,
-        trailLength: 1.0,
-        duration: 2
+        interval: 0.6,
+        trailLength: 1.5,
+        duration: 6
       });
     scene.addLayer(lineLayer);
   });
