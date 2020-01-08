@@ -20,11 +20,11 @@ fetch(
       .source(data)
       .size(1)
       .shape('line')
-      .color('#ff893a')
+      .color('#25d8b7')
       .animate({
-        interval: 0.4,
-        duration: 1,
-        trailLength: 0.8
+        interval: 1, // 间隔
+        duration: 1, // 持续时间，延时
+        trailLength: 2 // 流线长度
       });
     scene.addLayer(layer);
   });

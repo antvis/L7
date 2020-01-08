@@ -5,6 +5,8 @@ order: 10
 
 ## 2020.01.06 2.0 正式版
 
+[Github](https://github.com/antvis/L7) https://github.com/antvis/L7 欢迎 Star
+
 ###✨ Features
 
 • 新增弧线图，路径图动画功能
