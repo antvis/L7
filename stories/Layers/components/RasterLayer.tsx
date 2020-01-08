@@ -28,21 +28,21 @@ export default class ImageLayerDemo extends React.Component {
     });
     const tiffdata = await this.getTiffData();
     const layer = new RasterLayer({});
-    const mindata = -5000;
-    const maxdata = 10000;
+    const mindata = -0;
+    const maxdata = 8000;
     layer
       .source(tiffdata.data, {
         parser: {
           type: 'raster',
           width: tiffdata.width,
           height: tiffdata.height,
-          // extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
-          extent: [
-            73.4766000000000048,
-            18.1054999999999993,
-            135.1066187,
-            57.630046,
-          ],
+          extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+          // extent: [
+          //   73.4766000000000048,
+          //   18.1054999999999993,
+          //   135.1066187,
+          //   57.630046,
+          // ],
         },
       })
       .style({
@@ -108,7 +108,6 @@ export default class ImageLayerDemo extends React.Component {
     rasterFolder
       .add(styleOptions, 'colorScales', Object.keys(colorScales))
       .onChange((color: string) => {
-        colorScales[color].colors = colorScales[color].colors.reverse();
         layer.style({
           rampColors: colorScales[color],
         });
@@ -132,8 +131,8 @@ export default class ImageLayerDemo extends React.Component {
   }
   private async getTiffData() {
     const response = await fetch(
-      // 'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
-      'https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tiff',
+      'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+      // 'https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tiff',
     );
     const arrayBuffer = await response.arrayBuffer();
     const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
