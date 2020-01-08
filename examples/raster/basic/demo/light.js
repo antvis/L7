@@ -49,7 +49,7 @@ async function addLayer() {
       domain: [ 0, 90 ],
       nodataValue: 0,
       rampColors: {
-        colors: [ 'rgba(92,58,16,0)', 'rgba(92,58,16,0)', '#f8501a', '#f6961f', '#f8d069', '#fffdf8' ],
+        colors: [ 'rgba(92,58,16,0)', 'rgba(92,58,16,0)', '#fabd08', '#f1e93f', '#f1ff8f', '#fcfff7' ],
         positions: [ 0, 0.05, 0.1, 0.25, 0.5, 1.0 ]
       }
     });
