@@ -4,12 +4,12 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    style: 'dark',
+    style: 'amap://styles/a49ef8d081db7b85adb2e90ba7941f1e?isPublic=true',
     center: [ 120.173104, 30.244072 ],
-    pitch: 66.50572,
-    zoom: 15.79,
-    minZoom: 10,
-    maxZoom: 18
+    pitch: 70.41138037735848,
+    zoom: 17.18,
+    rotation: 2.24, // 358.7459759480504
+    minZoom: 14
   })
 });
 
@@ -27,15 +27,15 @@ scene.on('loaded', () => {
       layer
         .source(data)
         .size('floor', [ 100, 3000 ])
-        .color('rgba(242,246,250,1.0)')
+        .color('rgba(242,246,250,0.5)')
         .animate({
           enable: true
         })
         .style({
           opacity: 1.0,
-          baseColor: 'rgb(16,16,16)',
-          windowColor: 'rgb(30,60,89)',
-          brightColor: 'rgb(255,176,38)'
+          baseColor: 'rgba(36,16,63,0.3)',
+          windowColor: '#0e0220',
+          brightColor: '#08faee'
         });
       scene.addLayer(layer);
     });
@@ -60,4 +60,3 @@ scene.on('loaded', () => {
     });
 
 });
-

@@ -18,7 +18,7 @@ fetch(
   .then(data => {
     const layer = new LineLayer()
       .source(data)
-      .size(1)
+      .size(1.5)
       .shape('line')
       .color('#25d8b7')
       .animate({
