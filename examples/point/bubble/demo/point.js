@@ -25,6 +25,7 @@ fetch(
       .color('mag', mag => {
         return mag > 4.5 ? '#5B8FF9' : '#5CCEA1';
       })
+      .active(true)
       .style({
         opacity: 0.3,
         strokeWidth: 1

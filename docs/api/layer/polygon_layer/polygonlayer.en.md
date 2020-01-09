@@ -2,12 +2,16 @@
 title: PolygonLayer
 order: 0
 ---
-
-# 填充图
-
 绘制 2D 多边形以及沿 Z 轴拉伸后的 3D 图形。
 
-### shape
+## 使用
+
+```javascript
+import { PolygonLayer } from '@antv/l7';
+
+```
+
+## shape
 
 填充图支持 3 种 shape
 
