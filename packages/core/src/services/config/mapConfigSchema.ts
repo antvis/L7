@@ -6,18 +6,18 @@ export default {
     // 地图缩放等级
     zoom: {
       type: 'number',
-      minimum: 0,
-      maximum: 20,
+      minimum: -1,
+      maximum: 24,
     },
     minZoom: {
       type: 'number',
-      minimum: 0,
-      maximum: 20,
+      minimum: -1,
+      maximum: 24,
     },
     maxZoom: {
       type: 'number',
-      minimum: 0,
-      maximum: 20,
+      minimum: -1,
+      maximum: 24,
     },
     // 地图中心点
     center: {

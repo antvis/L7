@@ -118,6 +118,14 @@ module.exports = {
         order: 4
       },
       {
+        slug: 'api/layer/cityBuilding',
+        title: {
+          zh: '城市建筑',
+          en: 'CityBuilding'
+        },
+        order: 6
+      },
+      {
         slug: 'api/source',
         title: {
           zh: '数据 Source',

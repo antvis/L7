@@ -46,7 +46,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
     'vesica',
   ],
   shape3d: ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'],
-  minZoom: 0,
+  minZoom: -1,
   maxZoom: 24,
   visible: true,
   autoFit: false,

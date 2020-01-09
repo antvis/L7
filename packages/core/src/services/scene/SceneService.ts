@@ -218,6 +218,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     return this.$container as HTMLDivElement;
   }
 
+  public ExportMap2Png(): string {
+    const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
+    this.render();
+    const layersPng = renderCanvas?.toDataURL() as string;
+    return layersPng;
+  }
+
   public destroy() {
     this.emit('destroy');
     this.inited = false;

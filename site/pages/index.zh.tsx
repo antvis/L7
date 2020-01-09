@@ -142,7 +142,7 @@ const IndexPage = () => {
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />
       <Features features={features} style={{ width: '100%' }} />
-      <Cases style={{ width: '102%' }} cases={cases} />
+      <Cases cases={cases} />
       <Companies title={t('感谢信赖')} companies={companies} />
     </>
   );
