@@ -8,6 +8,7 @@ import PointLayer from './point';
 import PolygonLayer from './polygon';
 import ImageLayer from './raster/image';
 import RasterLayer from './raster/raster';
+import ThreeJSLayer from './three';
 
 import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -111,4 +112,5 @@ export {
   ImageLayer,
   RasterLayer,
   HeatmapLayer,
+  ThreeJSLayer,
 };

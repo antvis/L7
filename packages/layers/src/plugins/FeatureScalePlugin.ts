@@ -64,7 +64,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.caculateScalesForAttributes(attributes || [], dataArray);
     });
 
-    // 检测数据是不否需要更新
+    // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tap('FeatureScalePlugin', (flag) => {
       if (flag) {
         this.scaleOptions = layer.getScaleOptions();

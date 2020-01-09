@@ -3,7 +3,9 @@ import * as React from 'react';
 import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
 import Column from './components/column';
+import CustomThreeJSDemo from './components/CustomThreeJSLayer';
 import DataUpdate from './components/data_update';
+import GlTFThreeJSDemo from './components/GlTFThreeJSDemo';
 import HeatMapDemo from './components/HeatMap';
 import LineLayer from './components/Line';
 import PointDemo from './components/Point';
@@ -26,4 +28,6 @@ storiesOf('图层', module)
   .add('2D弧线', () => <Arc2DLineDemo />)
   .add('热力图', () => <HeatMapDemo />)
   .add('栅格', () => <RasterLayerDemo />)
-  .add('图片', () => <ImageLayerDemo />);
+  .add('图片', () => <ImageLayerDemo />)
+  .add('Three.js 图层', () => <CustomThreeJSDemo />)
+  .add('glTF 图层', () => <GlTFThreeJSDemo />);

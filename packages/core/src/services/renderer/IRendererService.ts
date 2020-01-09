@@ -54,6 +54,8 @@ export interface IRendererService {
   ): void;
   getViewportSize(): { width: number; height: number };
   getContainer(): HTMLElement | null;
+  getCanvas(): HTMLCanvasElement | null;
+  getGLContext(): WebGLRenderingContext;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
   readPixels(options: IReadPixelsOptions): Uint8Array;
   destroy(): void;

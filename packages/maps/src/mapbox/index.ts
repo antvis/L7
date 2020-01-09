@@ -8,23 +8,26 @@ import {
   ILngLat,
   IMapConfig,
   IMapService,
+  IMercator,
   IPoint,
   IViewport,
   MapServiceEvent,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
+import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import mapboxgl, { IControl, Map } from 'mapbox-gl';
 import { IMapboxInstance } from '../../typings/index';
+import { MapTheme } from './theme';
 import Viewport from './Viewport';
+
 const EventMap: {
   [key: string]: any;
 } = {
   mapmove: 'move',
   camerachange: 'move',
 };
-import { MapTheme } from './theme';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
@@ -170,6 +173,55 @@ export default class MapboxService
 
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     return this.map.project(lnglat);
+  }
+
+  public lngLatToMercator(
+    lnglat: [number, number],
+    altitude: number,
+  ): IMercator {
+    const { x = 0, y = 0, z = 0 } = mapboxgl.MercatorCoordinate.fromLngLat(
+      lnglat,
+      altitude,
+    );
+    return { x, y, z };
+  }
+
+  public getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number] = [1, 1, 1],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ): number[] {
+    const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+      lnglat,
+      altitude,
+    );
+    // @ts-ignore
+    const meters = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
+    const modelMatrix = mat4.create();
+
+    mat4.translate(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(
+        modelAsMercatorCoordinate.x - origin.x,
+        modelAsMercatorCoordinate.y - origin.y,
+        modelAsMercatorCoordinate.z || 0 - origin.z,
+      ),
+    );
+
+    mat4.scale(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(meters * scale[0], -meters * scale[1], meters * scale[2]),
+    );
+
+    mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
+    mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
+    mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
+
+    return (modelMatrix as unknown) as number[];
   }
 
   public async init(): Promise<void> {

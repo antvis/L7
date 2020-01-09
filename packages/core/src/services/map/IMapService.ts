@@ -11,6 +11,12 @@ export interface IPoint {
   y: number;
 }
 
+export interface IMercator {
+  x: number;
+  y: number;
+  z: number;
+}
+
 export interface IMapWrapper {
   setContainer(container: Container, id: string): void;
 }
@@ -58,6 +64,14 @@ export interface IMapService<RawMap = {}> {
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
+  lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
+  getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number],
+    origin: IMercator,
+  ): number[];
 }
 
 export const MapServiceEvent = ['mapload'];

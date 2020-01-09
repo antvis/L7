@@ -53,7 +53,6 @@ export default class LayerService implements ILayerService {
 
   public renderLayers() {
     // TODO：脏检查，只渲染发生改变的 Layer
-    //
     this.clear();
     this.layers
       .filter((layer) => layer.isVisible())

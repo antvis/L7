@@ -2,6 +2,8 @@ import {
   gl,
   IActiveOption,
   IAnimateOption,
+  ICameraService,
+  ICoordinateSystemService,
   IDataState,
   IEncodeFeature,
   IFontService,
@@ -107,6 +109,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   @lazyInject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
+
+  protected cameraService: ICameraService;
+
+  protected coordinateService: ICoordinateSystemService;
 
   protected iconService: IIconService;
 
@@ -229,6 +235,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       TYPES.IInteractionService,
     );
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
+    this.cameraService = this.container.get<ICameraService>(
+      TYPES.ICameraService,
+    );
+    this.coordinateService = this.container.get<ICoordinateSystemService>(
+      TYPES.ICoordinateSystemService,
+    );
     this.postProcessingPassFactory = this.container.get(
       TYPES.IFactoryPostProcessingPass,
     );

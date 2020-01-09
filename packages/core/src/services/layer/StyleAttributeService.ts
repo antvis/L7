@@ -23,8 +23,6 @@ const bytesPerElementMap = {
   [gl.UNSIGNED_SHORT]: 2,
 };
 
-let counter = 0;
-
 /**
  * 每个 Layer 都拥有一个，用于管理样式属性的注册和更新
  */
@@ -40,10 +38,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
   private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
-
-  private triangulation: Triangulation;
-
-  private c = counter++;
 
   private featureLayout: {
     sizePerElement: number;
@@ -177,16 +171,13 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
   public createAttributesAndIndices(
     features: IEncodeFeature[],
-    triangulation?: Triangulation,
+    triangulation: Triangulation,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
   } {
-    if (triangulation) {
-      this.triangulation = triangulation;
-    }
     const descriptors = this.attributes.map((attr) => {
       attr.resetDescriptor();
       return attr.descriptor;
@@ -204,7 +195,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
-      } = this.triangulation(feature);
+      } = triangulation(feature);
       indices.push(...indicesForCurrentFeature.map((i) => i + verticesNum));
       vertices.push(...verticesForCurrentFeature);
       if (normalsForCurrentFeature) {

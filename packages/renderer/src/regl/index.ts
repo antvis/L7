@@ -167,6 +167,14 @@ export default class ReglRendererService implements IRendererService {
     return this.$container;
   };
 
+  public getCanvas = () => {
+    return this.$container?.getElementsByTagName('canvas')[0] || null;
+  };
+
+  public getGLContext = () => {
+    return this.gl._gl;
+  };
+
   public destroy = () => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
     this.gl.destroy();
