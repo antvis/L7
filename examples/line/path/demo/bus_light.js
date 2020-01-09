@@ -1,6 +1,6 @@
 // Data Source https://busrouter.sg/visualization/
 
-import { Scene, LineLayer } from '@antv/l7';
+import { Scene, LineLayer, Popup } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -30,6 +30,7 @@ fetch(
         return [ 0.8, level * 1 ];
       })
       .shape('line')
+      .active(true)
       .color(
         'level',
         [
@@ -47,5 +48,14 @@ fetch(
           .reverse()
           .slice(0, 8)
       );
+    layer.on('mousemove', e => {
+      const popup = new Popup({
+        offsets: [ 0, 0 ],
+        closeButton: false
+      })
+        .setLnglat(e.lngLat)
+        .setHTML(`<span>车次: ${e.feature.number}</span>`);
+      scene.addPopup(popup);
+    });
     scene.addLayer(layer);
   });

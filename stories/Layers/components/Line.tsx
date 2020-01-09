@@ -33,16 +33,15 @@ export default class LineDemo extends React.Component {
       .shape('line')
       .color('color', (v) => {
         return `rgb(${v[0]})`;
+      })
+      .animate({
+        enable: true,
+        interval: 0.5,
+        trailLength: 0.4,
+        duration: 4,
       });
-    // .animate({
-    //   enable: false,
-    //   interval: 0.5,
-    //   trailLength: 0.4,
-    //   duration: 4,
-    // })
 
     scene.addLayer(lineLayer);
-    scene.render();
     this.scene = scene;
   }
 
