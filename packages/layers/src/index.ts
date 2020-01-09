@@ -3,11 +3,11 @@ import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
+import ImageLayer from './image';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
-import ImageLayer from './raster/image';
-import RasterLayer from './raster/raster';
+import RasterLayer from './raster';
 
 import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
