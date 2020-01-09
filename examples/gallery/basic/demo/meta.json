@@ -5,6 +5,16 @@
   },
   "demos": [
     {
+      "filename": "animate.js",
+      "title": "轨迹动画",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-x3uRY5G_4sAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "build.js",
+      "title": "点亮城市",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*InPpTbVN-yUAAAAAAAAAAABkARQnAQ"
+    },
+    {
       "filename": "column_dark.js",
       "title": "3D柱图深色",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7COqR4wCc6QAAAAAAAAAAABkARQnAQ"
