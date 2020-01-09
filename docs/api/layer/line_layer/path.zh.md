@@ -19,8 +19,31 @@ shape 设置成line即可绘制路线图
 ```javascript
  layer.size([2,10]) // 绘制宽度为2，高度为10的路径
  
- layer.size('',[])
+ layer.size('height',[])
 ```
 ### animate
+
+#### 开启关闭动画
+
+```javascript
+layer.animate(true)
+layer.animate(false)
+```
+
+#### 设置动画参数
+
+- duration 动画时间 单位(s)秒
+- interval 轨迹间隔, 取值区间 0 - 1
+- trailLength 轨迹长度 取值区间 0 - 1
+
+```javascript
+layer.animate({
+  duration: 4,
+  interval: 0.2,
+  trailLength: 0.1
+  
+})
+```
+
 
 

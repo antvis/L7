@@ -34,6 +34,7 @@ fetch(
         ].reverse()
       )
       .shape('fill')
+      .active(true)
       .style({
         opacity: 1
       });
@@ -42,7 +43,7 @@ fetch(
     })
       .source(data)
       .color('#fff')
-      .size(0.3)
+      .size(0.8)
       .style({
         opacity: 1
       });

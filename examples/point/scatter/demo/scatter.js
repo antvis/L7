@@ -26,6 +26,7 @@ fetch(
       })
       .shape('circle')
       .size(4)
+      .active(true)
       .color('Magnitude', [
         '#0A3663',
         '#1558AC',

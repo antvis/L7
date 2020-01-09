@@ -30,10 +30,7 @@ void main() {
   if(u_aimate.x == Animate) {
       float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
-      alpha = smoothstep(0., 1., alpha);
-      // float alpha2 = exp(-abs(v_side));
       gl_FragColor.a *= alpha * blur;
-      // gl_FragColor.a = fract(u_time);
   }
  // dash line
   if(u_line_type == LineTypeDash) {

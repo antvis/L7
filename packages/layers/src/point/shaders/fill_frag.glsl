@@ -69,8 +69,8 @@ void main() {
   float N_RINGS = 3.0;
   float FREQ = 1.0;
 
-
-
+  // gl_FragColor = v_color * color_t;
+  // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
   gl_FragColor = opacity_t * mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
 
   if(u_aimate.x == Animate) {
