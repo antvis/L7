@@ -52,5 +52,3 @@ order: 10
 • 修复地图组件加载报错问题
 
 • 修复样式配置 strokeColor- stroke
-
-## 2019.11.22 2.0beta
