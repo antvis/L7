@@ -42,32 +42,6 @@ export default class GridModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { size } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,

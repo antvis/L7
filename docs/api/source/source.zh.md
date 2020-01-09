@@ -30,7 +30,7 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 
 ## API
 
-### cluster 可选 可以只设置 cluster
+### cluster ``boolean` 可选 可以只设置
 
 ### clusterOption 可选
 
@@ -53,6 +53,17 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 layer.source(data);
 ```
 
+### Source 更新
+
+如果数据发生改变，可以需要更新数据
+可以通过调用 layer 的 setData 方法实现数据的更新
+
+具体见 [Layer](../layer/layer/#setdata)
+
+```javascript
+layer.setData(data);
+```
+
 #### JSON
 
 [JSON 数据格式解析](./json)
@@ -68,6 +79,23 @@ layer.source(data);
 [Image 数据格式解析](./image)
 
 ### transforms
+
+tranforms 处理的是的标准化之后的数据
+标准化之后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
+
+处理完之后返回的也是标准数据
+
+```javascript
+ [{
+   coordinates: [[]] // 地理坐标字段
+   _id:'',// 标准化之后新增字段
+   name:''
+   value:''
+  // ....
+ }]
+
+
+```
 
 目前支持两种热力图使用的数据处理方法 grid，hexagon transform 配置项
 

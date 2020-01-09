@@ -7,7 +7,7 @@ redirect_from:
 
 # L7 
 
-Current version:  ![L7 2.0版本号](https://badgen.net/npm/v/@antv/l7/beta)
+Current version:  ![L7 2.0版本号](https://badgen.net/npm/v/@antv/l7)
 
 ## 使用方法
 
@@ -37,7 +37,7 @@ Install the npm package.
 ```bash
 
 // L7 依赖
-npm install --save @antv/l7@beta
+npm install --save @antv/l7
 
 // 第三方底图依赖
 npm install --save @antv/l7-maps;
@@ -156,7 +156,21 @@ export default class AMapExample extends React.Component {
 
 更多React使用 [示例查看](https://github.com/antvis/L7/tree/master/stories) 
 
-### Vue 欢迎补充
-[1.x Vue 使用](https://codesandbox.io/s/l7-vue1xdemo-wknsz)
-### Html
-[2.0版本 HTML 使用模板](https://codesandbox.io/s/l7htmltemplate-vp2lp)
+## 不同项目使用模板
+
+不同项目模板在CodeSandbox你可以预览，也可以下载到本地
+
+### React
+
+[地址](https://codesandbox.io/s/l720react-jfwyz)
+
+### Vue
+
+[地址](https://codesandbox.io/s/l720vue-uef1x)
+
+### Angular
+
+[地址](https://codesandbox.io/s/angulartest-chpff)
+
+### HTML CDN
+[地址](https://codesandbox.io/s/l7cdndemo-gfg9m)

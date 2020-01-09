@@ -21,7 +21,6 @@ void main() {
   gl_FragColor.a *= (blur * u_opacity);
   if(u_line_type == LineTypeDash) {
     gl_FragColor.a *= blur  * (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
-    // gl_FragColor.a =
   }
 
   if(u_aimate.x == Animate) {
@@ -29,7 +28,6 @@ void main() {
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
-      // gl_FragColor.a = fract(u_time);
   }
   gl_FragColor = filterColor(gl_FragColor);
 }
