@@ -4,7 +4,7 @@ import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerService } from './ILayerService';
+import { ILayerModel, ILayerService } from './ILayerService';
 
 @injectable()
 export default class LayerService implements ILayerService {
@@ -52,6 +52,10 @@ export default class LayerService implements ILayerService {
     this.renderLayers();
   }
 
+  public removeAllLayers() {
+    this.destroy();
+  }
+
   public renderLayers() {
     // TODO：脏检查，只渲染发生改变的 Layer
     //
@@ -77,6 +81,7 @@ export default class LayerService implements ILayerService {
   public destroy() {
     this.layers.forEach((layer) => layer.destroy());
     this.layers = [];
+    this.renderLayers();
   }
 
   public startAnimate() {
