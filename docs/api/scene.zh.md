@@ -322,6 +322,24 @@ scene.removeLayer(layer);
 
 移除事件监听<br />`eventName` {string} 事件名<br />`hander` {function } 事件回调函数
 
+### 场景事件
+
+#### loaded
+
+scene 初始化完成事件，scene 初始化完成添加 Layer
+
+```javascript
+scene.on('loaded', () => {});
+```
+
+#### resize
+
+地图容器变化事件
+
+```javascript
+scene.on('resize', () => {}); // 地图容器大小改变事件
+```
+
 ### 地图事件
 
 ```javascript
@@ -349,10 +367,4 @@ scene.on('rightclick', (ev) => {}); // 鼠标右键单击事件
 scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
-```
-
-### 其它事件
-
-```javascript
-scene.on('resize', () => {}); // 地图容器大小改变事件
 ```
