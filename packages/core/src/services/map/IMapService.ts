@@ -108,7 +108,7 @@ export interface IMapConfig<RawMap = {}> {
   /**
    * 底图样式
    */
-  style?: string;
+  style?: string | { [key: string]: any };
   /**
    * 最小缩放等级
    */
