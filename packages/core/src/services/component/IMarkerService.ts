@@ -23,6 +23,7 @@ export interface IMarkerService {
   addMarker(Marker: IMarker): void;
   addMarkers(): void;
   removeMarker(Marker: IMarker): void;
+  removeAllMarkers(): void;
   init(scene: Container): void;
   destroy(): void;
 }

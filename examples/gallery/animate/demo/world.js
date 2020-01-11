@@ -27,7 +27,7 @@ const scene = new Scene({
   })
 });
 Promise.all([
-  fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/world.geo.json').then(d => d.json()),
+  fetch('https://gw.alipayobjects.com/os/basement_prod/dbd008f1-9189-461c-88aa-569357ffc07d.json').then(d => d.json()),
   fetch('https://gw.alipayobjects.com/os/basement_prod/4472780b-fea1-4fc2-9e4b-3ca716933dc7.json').then(d => d.text()),
   fetch('https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json').then(d => d.text())
 ]).then(function onLoad([ world, dot, flyline ]) {
