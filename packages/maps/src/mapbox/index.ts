@@ -13,6 +13,7 @@ import {
   IPoint,
   IViewport,
   MapServiceEvent,
+  MapStyle,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
@@ -318,7 +319,10 @@ export default class MapboxService
     }
   }
 
-  private getMapStyle(name: string) {
+  private getMapStyle(name: MapStyle) {
+    if (typeof name !== 'string') {
+      return name;
+    }
     return MapTheme[name] ? MapTheme[name] : name;
   }
 }
