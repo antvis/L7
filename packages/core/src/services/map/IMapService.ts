@@ -11,6 +11,7 @@ export interface IPoint {
   y: number;
 }
 
+export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
   setContainer(container: Container, id: string): void;
 }
@@ -108,7 +109,7 @@ export interface IMapConfig<RawMap = {}> {
   /**
    * 底图样式
    */
-  style?: string;
+  style?: MapStyle;
   /**
    * 最小缩放等级
    */
