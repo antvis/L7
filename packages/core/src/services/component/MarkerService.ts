@@ -18,6 +18,7 @@ export default class MarkerService implements IMarkerService {
       this.unAddMarkers.push(marker);
     }
   }
+
   public addMarkers(): void {
     this.unAddMarkers.forEach((marker: IMarker) => {
       marker.addTo(this.scene);
@@ -25,9 +26,15 @@ export default class MarkerService implements IMarkerService {
     });
     this.unAddMarkers = [];
   }
+
   public removeMarker(marker: IMarker): void {
     marker.remove();
   }
+
+  public removeAllMarkers(): void {
+    this.destroy();
+  }
+
   public init(scene: Container): void {
     // this.container = cfg.container;
     this.scene = scene;

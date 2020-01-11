@@ -13,6 +13,7 @@ import {
   IPoint,
   IViewport,
   MapServiceEvent,
+  MapStyle,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
@@ -249,7 +250,7 @@ export default class AMapService
           );
           // @ts-ignore
           this.map = new AMap.Map(this.$mapContainer, {
-            mapStyle: this.getMapStyle(style),
+            mapStyle: this.getMapStyle(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
@@ -361,7 +362,7 @@ export default class AMapService
     }
   };
 
-  private getMapStyle(name: string) {
+  private getMapStyle(name: string): string {
     return MapTheme[name] ? MapTheme[name] : name;
   }
   private creatAmapContainer(id: string | HTMLDivElement) {
