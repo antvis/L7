@@ -6,7 +6,8 @@ L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源�
 
 L7 能够满足常见的地图图表，BI 系统的可视化分析、以及 GIS，交通，电力，国土，农业，城市等领域的空间信息管理，分析等应用系统开发需求。
 
-![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*JS8vTY5aeCcAAAAAAAAAAABkARQnAQ)
+
+![l7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*DACBQYunl7IAAAAAAAAAAABkARQnAQ)
 
 ## 🌟 核心特性
 
