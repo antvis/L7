@@ -12,7 +12,7 @@ L7 focuses on geographic data expressiveness，interaction and design of geograp
 
 ## 🌄 l7 visualization demos
 
-![l7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*_8StTZrLSSQAAAAAAAAAAABkARQnAQ)
+![l7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
 ## 🌟 Highlight features of L7 2.0
 
