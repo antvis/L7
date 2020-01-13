@@ -88,7 +88,7 @@ export default class TextModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       fontWeight = 800,
-      fontFamily,
+      fontFamily = 'sans-serif',
       stroke = '#fff',
       strokeWidth = 0,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;

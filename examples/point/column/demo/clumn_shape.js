@@ -25,6 +25,7 @@ fetch(
           y: 'latitude'
         }
       })
+      .active(true)
       .shape('name', [
         'cylinder',
         'triangleColumn',

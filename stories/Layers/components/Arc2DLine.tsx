@@ -33,7 +33,7 @@ export default class Arc2DLineDemo extends React.Component {
           y1: 'lat2',
         },
       })
-      .size(1.2)
+      .size(4)
       .shape('greatcircle')
       .color('rgb(13,64,140)')
       .animate({
