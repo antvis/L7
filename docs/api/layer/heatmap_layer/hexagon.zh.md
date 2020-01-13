@@ -8,7 +8,7 @@ order: 1
 ## 使用
 
 ```javascript
-import { HeatMapLayer] } from '@antv/l7';
+import { HeatMapLayer } from '@antv/l7';
 
 ```
 
