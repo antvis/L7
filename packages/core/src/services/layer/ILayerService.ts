@@ -264,6 +264,7 @@ export interface ILayerService {
   getLayers(): ILayer[];
   getLayer(name: string): ILayer | undefined;
   remove(layer: ILayer): void;
+  removeAllLayers(): void;
   updateRenderOrder(): void;
   renderLayers(): void;
   destroy(): void;

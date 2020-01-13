@@ -1,42 +1,21 @@
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
+import * as dat from 'dat.gui';
 // @ts-ignore
 import data from '../data/data.json';
 export default class TextLayerDemo extends React.Component {
   // @ts-ignore
   private scene: Scene;
+  private gui: dat.GUI;
 
   public componentWillUnmount() {
     this.scene.destroy();
+    if (this.gui) {
+      this.gui.destroy();
+    }
   }
-
   public async componentDidMount() {
-    const data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {
-            name: '中华人民共和国',
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [103.0078125, 36.03133177633187],
-          },
-        },
-        {
-          type: 'Feature',
-          properties: {
-            name: '中华人民共和国',
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [122.6953125, 10.833305983642491],
-          },
-        },
-      ],
-    };
     const response = await fetch(
       'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',
     );
@@ -76,6 +55,32 @@ export default class TextLayerDemo extends React.Component {
     scene.addLayer(pointLayer);
 
     this.scene = scene;
+
+    const gui = new dat.GUI();
+    this.gui = gui;
+    const styleOptions = {
+      textAnchor: 'center',
+      strokeWidth: 1,
+    };
+    const rasterFolder = gui.addFolder('栅格可视化');
+    rasterFolder
+      .add(styleOptions, 'textAnchor', [
+        'center',
+        'left',
+        'right',
+        'top',
+        'bottom',
+        'top-left',
+        'bottom-right',
+        'bottom-left',
+        'top-right',
+      ])
+      .onChange((anchor: string) => {
+        pointLayer.style({
+          textAnchor: anchor,
+        });
+        scene.render();
+      });
     // });
   }
 

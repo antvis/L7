@@ -27,9 +27,6 @@ fetch(
           }
         ]
       })
-      .size('sum', value => {
-        return value * 50;
-      })
       .shape('hexagon')
       .style({
         coverage: 0.9,
