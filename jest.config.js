@@ -1,4 +1,6 @@
 module.exports = {
+  runner: 'jest-electron/runner',
+  testEnvironment: 'jest-electron/environment',
   preset: 'ts-jest',
   clearMocks: true,
   collectCoverageFrom: [
