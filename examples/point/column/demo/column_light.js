@@ -1,4 +1,4 @@
-import { Scene, PointLayer } from '@antv/l7';
+import { Scene, PointLayer, Popup } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -27,9 +27,19 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
       .size('t', function(level) {
         return [ 1, 2, level * 2 + 20 ];
       })
+      .active(true)
       .color('#006CFF')
       .style({
         opacity: 1.0
       });
+    pointLayer.on('mousemove', e => {
+      const popup = new Popup({
+        offsets: [ 0, 0 ],
+        closeButton: false
+      })
+        .setLnglat(e.lngLat)
+        .setHTML(`<span>${e.feature.s}: ${e.feature.t}℃</span>`);
+      scene.addPopup(popup);
+    });
     scene.addLayer(pointLayer);
   });

@@ -78,7 +78,7 @@ const IndexPage = () => {
   const bannerButtons = [
     {
       text: t('图表示例'),
-      link: `/${i18n.language}/examples/gallery/basic`,
+      link: `/${i18n.language}/examples/gallery`,
       type: 'primary',
     },
     {
@@ -89,10 +89,16 @@ const IndexPage = () => {
 
   const notifications = [
     {
-      type: t('测试'),
-      title: t('L7  2.0 beta'),
-      date: '2019.12.04',
-      link: '#',
+      type: t('新版发布'),
+      title: t('L7 2.0 正式版'),
+      date: '2020.01.06',
+      link: 'https://www.yuque.com/antv/blog/haygzb',
+    },
+    {
+      type: t('推荐'),
+      title: t('欢迎进入 2020 可视化智能研发时代'),
+      date: '2020.01.08',
+      link: 'https://www.yuque.com/antv/blog/ygdubv',
     },
   ];
 
@@ -137,7 +143,7 @@ const IndexPage = () => {
           '蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。',
         )}
         buttons={bannerButtons}
-        // notifications={notifications}
+        notifications={notifications}
         className="banner"
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />

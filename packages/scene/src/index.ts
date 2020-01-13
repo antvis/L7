@@ -107,6 +107,7 @@ class Scene
     return this.mapService.map;
   }
 
+  // layer 管理
   public addLayer(layer: ILayer): void {
     // 为当前图层创建一个容器
     // TODO: 初始化的时候设置 容器
@@ -125,6 +126,10 @@ class Scene
 
   public removeLayer(layer: ILayer): void {
     this.layerService.remove(layer);
+  }
+
+  public removeAllLayer(): void {
+    this.layerService.removeAllLayers();
   }
 
   public render(): void {
@@ -158,9 +163,14 @@ class Scene
     this.markerService.addMarker(marker);
   }
 
+  public removeAllMakers() {
+    this.markerService.removeAllMarkers();
+  }
+
   public addPopup(popup: IPopup) {
     this.popupService.addPopup(popup);
   }
+
   public on(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1
       ? this.mapService.on(type, handle)

@@ -47,6 +47,7 @@ Promise.all([
     })
     .color('female', colors)
     .shape('fill')
+    .active(true)
     .style({
       opacity: 0.9
     });
@@ -56,11 +57,10 @@ Promise.all([
   })
     .source(world)
     .color('#fff')
-    .size(0.3)
+    .size(0.8)
     .style({
       opacity: 1
     });
-
   scene.addLayer(layer);
   scene.addLayer(layer2);
 });

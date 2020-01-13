@@ -28,6 +28,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/JToMOWvicvJOISZFCkEI.json')
       .source(data)
       .color('name', colors)
       .shape('fill')
+      .active(true)
       .style({
         opacity: 0.9
       });

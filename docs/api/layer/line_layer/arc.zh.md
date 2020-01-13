@@ -29,27 +29,6 @@ order: 1
 - greatcircle 大圆航线，地图两个点的最近距离不是两个点连线，而是大圆航线
 - arc3d 3d 弧线地图 3D 视角
 
-
-### 示例代码
-
-```javascript
-const layer = new LineLayer({})
-      .source(data, {
-        parser: {
-          type: 'csv',
-          x: 'lng1',
-          y: 'lat1',
-          x1: 'lng2',
-          y1: 'lat2'
-        }
-      })
-      .size(1)
-      .shape('arc')
-      .color('#8C1EB2')
-      .style({
-        opacity: 0.8,
-      });
-```
 ### animate
 
 #### 开启关闭动画
@@ -72,4 +51,26 @@ layer.animate({
   trailLength: 0.1
   
 })
+```
+
+
+### 示例代码
+
+```javascript
+const layer = new LineLayer({})
+      .source(data, {
+        parser: {
+          type: 'csv',
+          x: 'lng1',
+          y: 'lat1',
+          x1: 'lng2',
+          y1: 'lat2'
+        }
+      })
+      .size(1)
+      .shape('arc')
+      .color('#8C1EB2')
+      .style({
+        opacity: 0.8,
+      });
 ```

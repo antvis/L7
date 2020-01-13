@@ -19,7 +19,7 @@ export default class Point3D extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
@@ -29,52 +29,22 @@ export default class Point3D extends React.Component {
     // scene.on('loaded', () => {
     const pointLayer = new PointLayer({})
       .source(pointsData, {
-        cluster: true,
+        cluster: false,
       })
       .shape('circle')
-      .scale('point_count', {
-        type: 'quantile',
-      })
-      .size('point_count', [5, 10, 15, 20, 25])
+      // .scale('point_count', {
+      //   type: 'quantile',
+      // })
+      // .size('point_count', [5, 10, 15, 20, 25])
+      .size(5)
       .animate(false)
+      .active(true)
       .color('yellow')
       .style({
-        opacity: 0.5,
+        opacity: 1,
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
-    pointLayer.on('mousemove', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('mousedown', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('mouseup', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('click', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-
-    pointLayer.on('contextmenu', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-    pointLayer.on('unpick', (e) => {
-      const id = e.featureId;
-      console.log(e.type);
-      pointLayer.setActive(id);
-    });
-
     this.scene = scene;
     // });
   }
