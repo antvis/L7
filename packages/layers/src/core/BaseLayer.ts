@@ -551,13 +551,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       blend: type,
     });
     this.layerModelNeedUpdate = true;
-    this.render();
+    this.reRender();
   }
   public show(): ILayer {
     this.updateLayerConfig({
       visible: true,
     });
-
+    this.reRender();
     return this;
   }
 
@@ -565,9 +565,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.updateLayerConfig({
       visible: false,
     });
+    this.reRender();
     return this;
   }
-
   public setIndex(index: number): ILayer {
     this.zIndex = index;
     this.layerService.updateRenderOrder();
@@ -776,6 +776,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
   protected getDefaultConfig() {
     return {};
+  }
+  private reRender() {
+    if (this.inited) {
+      this.layerService.renderLayers();
+    }
   }
   private splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
