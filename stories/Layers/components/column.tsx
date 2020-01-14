@@ -43,7 +43,7 @@ export default class Column extends React.Component {
             'squareColumn',
           ])
           .size('unit_price', (h) => {
-            return [6, 6, h / 500];
+            return [6, 6, 100];
           })
           .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
           .style({

@@ -104,16 +104,16 @@ vec2 project_pixel_size_to_clipspace(vec2 pixels) {
 }
 
 float project_pixel(float pixel) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, (20.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - u_Zoom));
   }
   return pixel;
 }
 vec2 project_pixel(vec2 pixel) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, (20.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - u_Zoom));
   }
   return pixel;
 }
