@@ -32,7 +32,7 @@ fetch(
 
     scene.addLayer(pointLayer);
     const overlayers = {
-      围栏填充: pointLayer
+      气泡图: pointLayer
     };
     const layersControl = new Layers({
       overlayers
