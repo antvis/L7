@@ -8,7 +8,6 @@ L7 能够满足常见的地图图表，BI 系统的可视化分析、以及 GIS�
 
 ![l7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
-
 ## 🌟 核心特性
 
 🌏 数据驱动可视化展示
