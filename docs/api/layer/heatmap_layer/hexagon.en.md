@@ -6,7 +6,7 @@ order: 1
 
 ## 使用
 ```javascript
-import { HeatMapLayer] } from '@antv/l7';
+import { HeatMapLayer } from '@antv/l7';
 ```
 ## source
 网格数据只支持点数据作为数据源，数据格式支持csv、json、geojson.
