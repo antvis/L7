@@ -37,7 +37,7 @@ let amapLoaded = false;
  * 高德地图脚本加载成功等待队列，成功之后依次触发
  */
 let pendingResolveQueue: Array<() => void> = [];
-const LNGLAT_OFFSET_ZOOM_THRESHOLD = 20; // 暂时关闭 fix 统一不同坐标系，不同底图的高度位置
+const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标系，不同底图的高度位置
 
 /**
  * AMapService
