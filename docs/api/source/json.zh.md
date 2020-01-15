@@ -164,30 +164,21 @@ coordinates 包含两个坐标，
 第二个坐标 对应 x1, y1
 
 ```javascript
- const data = [
-   {
-  "id": "1",
-  "coord": [
-      [
-        101.953125,
-        50.51342652633956
-      ],
-      [
-        119.17968749999999,
-        33.137551192346145
-      ]
-    ]
-   }
- ];
-layer.source(
-  data,
-   {
-    parser:{
-        type:'json',
-        coordinates: "coord",
-    }
-})
-
+const data = [
+  {
+    id: '1',
+    coord: [
+      [101.953125, 50.51342652633956],
+      [119.17968749999999, 33.137551192346145],
+    ],
+  },
+];
+layer.source(data, {
+  parser: {
+    type: 'json',
+    coordinates: 'coord',
+  },
+});
 ```
 
 如果需要使用绘制轨迹数据，需要通过 coodinates 指定线的点序列。
