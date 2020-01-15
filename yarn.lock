@@ -88,10 +88,10 @@
     d3-timer "~1.0.6"
     wolfy87-eventemitter "~5.1.0"
 
-"@antv/gatsby-theme-antv@^0.10.17":
-  version "0.10.39"
-  resolved "https://registry.npm.taobao.org/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-0.10.39.tgz#a7fc85ec0872f75181a899798e2e248efcea2aa0"
-  integrity sha1-p/yF7Ahy91GBqJl5ji4kjvzqKqA=
+"@antv/gatsby-theme-antv@^0.10.40":
+  version "0.10.40"
+  resolved "https://registry.npm.taobao.org/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-0.10.40.tgz#3bc2f1c15fa659c14cb31004f280fefcfbf49066"
+  integrity sha1-O8LxwV+mWcFMsxAE8oD+/Pv0kGY=
   dependencies:
     "@babel/plugin-transform-modules-umd" "^7.2.0"
     "@babel/preset-env" "^7.6.3"
