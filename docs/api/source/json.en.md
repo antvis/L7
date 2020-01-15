@@ -125,34 +125,32 @@ layer.source(data, {
 简易解析只支持两个点组成的线段，主要再绘制弧线的时候比较常用，只需指定线段的起始点坐标
 
 ```javascript
-const data = [{
-   lng1:112.345,
-   lat1:30.455,
-   lng2:112.345,
-   lat2:30.455,
-   value: 10
+const data = [
+  {
+    lng1: 112.345,
+    lat1: 30.455,
+    lng2: 112.345,
+    lat2: 30.455,
+    value: 10,
   },
   {
-   lng1:114.345,
-   lat1:31.455,
-   lng2:112.345,
-   lat2:30.455,
-   value: 10
-  }
+    lng1: 114.345,
+    lat1: 31.455,
+    lng2: 112.345,
+    lat2: 30.455,
+    value: 10,
+  },
 ];
 
-layer.source(
-  data,
-   {
-    parser:{
-        type:'json',
-        x:'lng1',
-        y:'lat1' ,
-        x1:'lng1',
-        y1:'lat2' ,
-    }
-  }
-})
+layer.source(data, {
+  parser: {
+    type: 'json',
+    x: 'lng1',
+    y: 'lat1',
+    x1: 'lng1',
+    y1: 'lat2',
+  },
+});
 ```
 
 #### 通用解析
@@ -178,7 +176,7 @@ coordinates 包含两个坐标，
       ]
     ]
    }
-
+ ];
 layer.source(
   data,
    {
@@ -187,7 +185,6 @@ layer.source(
         coordinates: "coord",
 
     }
-  }
 })
 
 ```
@@ -214,16 +211,12 @@ const data = {
 使用时通过 coordinates 指定
 
 ```javascript
-layer.source(
-  data,
-   {
-    parser:{
-        type:'json',
-        coordinates:'path'
-    }
-  }
-})
-
+layer.source(data, {
+  parser: {
+    type: 'json',
+    coordinates: 'path',
+  },
+});
 ```
 
 ### 面数据
