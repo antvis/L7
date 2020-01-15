@@ -38,8 +38,8 @@ layer.source(data, {
         field:'v',
         method:'sum'
         }
-      ],
-  }
+      ]
+  })
 
 ```
 ## shape
