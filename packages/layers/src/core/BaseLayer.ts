@@ -38,6 +38,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
+import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
@@ -509,7 +510,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
   }
 
-  public select(option: IActiveOption | false): ILayer {
+  public select(option: IActiveOption | boolean): ILayer {
     const activeOption: Partial<ILayerConfig> = {};
     activeOption.enableSelect = isObject(option) ? true : option;
     if (isObject(option)) {
@@ -518,7 +519,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         activeOption.selectColor = option.color;
       }
     } else {
-      activeOption.enableHighlight = !!option;
+      activeOption.enableSelect = !!option;
     }
     this.updateLayerConfig(activeOption);
     return this;
@@ -543,7 +544,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().selectColor,
       });
-      this.interactionService.triggerSelect(id);
+      this.hooks.beforeHighlight.call(
+        encodePickingColor(id as number) as number[],
+      );
+      // this.interactionService.triggerSelect(id);
+      // this.reRender();
     }
   }
   public setBlend(type: keyof typeof BlendType): void {
