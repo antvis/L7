@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PolygonLayer, Scale, Scene, PointLayer } from '@antv/l7';
+import { PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -43,6 +43,7 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
+      .select(true)
       .style({
         opacity: 1.0,
       });
@@ -57,14 +58,18 @@ export default class ScaleComponent extends React.Component {
         type: 'quantile',
       })
       .size('point_count', [5, 10, 15, 20, 25])
-      .animate(false)
-      .active(true)
+      .animate(true)
+      .select(true)
       .color('yellow')
       .style({
         opacity: 0.5,
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
+    pointLayer.on('click', (e) => {
+      // console.log(e);
+      // pointLayer.setSelect(e.featureId);
+    });
 
     const scaleControl = new Scale();
     scene.addControl(scaleControl);

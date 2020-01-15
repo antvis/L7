@@ -237,59 +237,14 @@ export default class PixelPickingPass<
    */
   private highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     const [r, g, b] = pickedColors;
-    const { clear, useFramebuffer } = this.rendererService;
-    // 先输出到 PostProcessor
-    const readFBO = this.layer.multiPassRenderer
-      .getPostProcessor()
-      .getReadFBO();
-    this.layer.hooks.beforeRender.call();
-    useFramebuffer(readFBO, () => {
-      clear({
-        color: [0, 0, 0, 0],
-        depth: 1,
-        stencil: 0,
-        framebuffer: readFBO,
-      });
-
-      // TODO: highlight pass 需要 multipass
-      const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
-      this.layer.multiPassRenderer.setRenderFlag(false);
-      this.layer.hooks.beforeHighlight.call([r, g, b]);
-      this.layer.render();
-      this.layer.hooks.afterHighlight.call();
-      this.layer.hooks.afterRender.call();
-      this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
-    });
-    this.layer.multiPassRenderer.getPostProcessor().render(this.layer);
+    this.layer.hooks.beforeHighlight.call([r, g, b]);
+    this.layerService.renderLayers();
   }
 
   private selectFeature(pickedColors: Uint8Array | undefined) {
     const [r, g, b] = pickedColors;
-    const { clear, useFramebuffer } = this.rendererService;
-
-    // 先输出到 PostProcessor
-    const readFBO = this.layer.multiPassRenderer
-      .getPostProcessor()
-      .getReadFBO();
-    this.layer.hooks.beforeRender.call();
-    useFramebuffer(readFBO, () => {
-      clear({
-        color: [0, 0, 0, 0],
-        depth: 1,
-        stencil: 0,
-        framebuffer: readFBO,
-      });
-
-      // TODO: highlight pass 需要 multipass
-      const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
-      this.layer.multiPassRenderer.setRenderFlag(false);
-      this.layer.hooks.beforeSelect.call([r, g, b]);
-      this.layer.render();
-      this.layer.hooks.afterSelect.call();
-      this.layer.hooks.afterRender.call();
-      this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
-    });
-    this.layer.multiPassRenderer.getPostProcessor().render(this.layer);
+    this.layer.hooks.beforeSelect.call([r, g, b]);
+    this.layerService.renderLayers();
   }
 
   private selectFeatureHander({ featureId }: Partial<IInteractionTarget>) {

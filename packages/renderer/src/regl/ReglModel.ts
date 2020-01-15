@@ -103,7 +103,6 @@ export default class ReglModel implements IModel {
       ...this.uniforms,
       ...this.extractUniforms(options.uniforms || {}),
     };
-
     const reglDrawProps: {
       [key: string]:
         | regl.Framebuffer
