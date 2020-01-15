@@ -6,6 +6,8 @@ Large-scale WebGL-powered Geospatial data visualization analysis framework.
 
 [中文 README](./README.zh-CN.md)
 
+[GitHub](https://github.com/antvis/L7)
+
 Powered by WebGL, the rendering technology of L7 supports fast and efficient rendering of big data, 2D/3D rendering, possible through calculation and analysis of spatial data by GPU Parallel Compu-ting.
 
 L7 focuses on geographic data expressiveness，interaction and design of geographic visualization layers. The basemaps on the platform are powered by third-party services
