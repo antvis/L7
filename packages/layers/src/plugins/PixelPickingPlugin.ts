@@ -110,6 +110,9 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           typeof selectColor === 'string'
             ? rgb2arr(selectColor)
             : selectColor || [1, 0, 0, 1];
+        layer.updateLayerConfig({
+          pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
+        });
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,
