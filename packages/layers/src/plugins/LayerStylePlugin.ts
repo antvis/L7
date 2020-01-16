@@ -15,19 +15,5 @@ export default class LayerStylePlugin implements ILayerPlugin {
         layer.fitBounds();
       }
     });
-
-    layer.hooks.beforeRender.tap('LayerStylePlugin', () => {
-      const {
-        highlightColor = 'red',
-        pickedFeatureID = -1,
-      } = layer.getLayerConfig();
-      layer.models.forEach((model) =>
-        model.addUniforms({
-          u_PickingStage: 2.0,
-          u_PickingColor: encodePickingColor(pickedFeatureID),
-          u_HighlightColor: rgb2arr(highlightColor as string),
-        }),
-      );
-    });
   }
 }
