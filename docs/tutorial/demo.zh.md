@@ -1,5 +1,5 @@
 ---
-title: 如何在本地运行demo
+title: 本地运行demo
 order: 1
 ---
 
