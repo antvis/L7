@@ -43,7 +43,7 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
-      .select(true)
+      // .select(true)
       .style({
         opacity: 1.0,
       });
@@ -58,7 +58,7 @@ export default class ScaleComponent extends React.Component {
         type: 'quantile',
       })
       .size('point_count', [5, 10, 15, 20, 25])
-      .animate(true)
+      .animate(false)
       .select(true)
       .color('yellow')
       .style({
@@ -66,11 +66,9 @@ export default class ScaleComponent extends React.Component {
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
-    pointLayer.on('click', (e) => {
-      // console.log(e);
-      // pointLayer.setSelect(e.featureId);
+    layer.on('click', (e) => {
+      layer.setSelect(e.featureId);
     });
-
     const scaleControl = new Scale();
     scene.addControl(scaleControl);
   }

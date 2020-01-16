@@ -50,13 +50,18 @@ export default class PixelPickingPass<
   public init(layer: ILayer, config?: Partial<InitializationOptions>) {
     super.init(layer, config);
     this.layer = layer;
-    const { createTexture2D, createFramebuffer } = this.rendererService;
+    const {
+      createTexture2D,
+      createFramebuffer,
+      getViewportSize,
+    } = this.rendererService;
+    const { width, height } = getViewportSize();
 
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
       color: createTexture2D({
-        width: 1,
-        height: 1,
+        width,
+        height,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
       }),
