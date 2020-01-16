@@ -25,6 +25,7 @@ export default class GaodeMapComponent extends React.Component {
         center: [116.397428, 39.90923], // 初始化地图中心点
       });
       const scene = new Scene({
+        // @ts-ignore
         id: 'map',
         map: new GaodeMap({
           mapInstance: map,

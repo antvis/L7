@@ -419,10 +419,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public setData(data: any, options?: ISourceCFG) {
-    this.sourceOption.data = data;
-    this.sourceOption.options = options;
-    this.hooks.init.call();
-    this.buildModels();
+    if (this.inited) {
+      this.layerSource.setData(data);
+    } else {
+      this.on('inited', () => {
+        this.layerSource.setData(data);
+      });
+    }
+
     return this;
   }
   public style(
@@ -641,6 +645,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public destroy() {
     this.hooks.beforeDestroy.call();
+    // 清除sources事件
+    this.layerSource.off('update', this.sourceEvent);
 
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
@@ -673,11 +679,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public setSource(source: Source) {
     this.layerSource = source;
-    const bounds = this.mapService.getBounds();
     const zoom = this.mapService.getZoom();
     if (this.layerSource.cluster) {
       this.layerSource.updateClusterData(zoom);
     }
+    // source 可能会复用，会在其它layer被修改
+    this.layerSource.on('update', this.sourceEvent);
   }
   public getSource() {
     return this.layerSource;
@@ -793,6 +800,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   protected getDefaultConfig() {
     return {};
   }
+
+  private sourceEvent = () => {
+    this.dataState.dataSourceNeedUpdate = true;
+    this.reRender();
+  };
+
   private reRender() {
     if (this.inited) {
       this.layerService.renderLayers();

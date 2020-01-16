@@ -61,7 +61,6 @@ class Scene
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
-
     // 绑定地图服务
     map.setContainer(sceneContainer, id);
 

@@ -13,9 +13,12 @@ export default class DataSourcePlugin implements ILayerPlugin {
       this.updateClusterData(layer);
     });
 
-    // 检测数据是不否需要更新
+    // 检测数据不否需要更新
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', (flag) => {
-      return this.updateClusterData(layer);
+      const neeUpdate1 = this.updateClusterData(layer);
+      const neeUpdate2 = layer.dataState.dataSourceNeedUpdate;
+      layer.dataState.dataSourceNeedUpdate = false;
+      return neeUpdate1 || neeUpdate2;
     });
   }
 
