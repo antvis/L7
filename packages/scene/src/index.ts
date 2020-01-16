@@ -12,6 +12,7 @@ import {
   ILngLat,
   IMapService,
   IMarker,
+  IMarkerLayer,
   IMarkerService,
   IPoint,
   IPopup,
@@ -161,6 +162,14 @@ class Scene
   // marker
   public addMarker(marker: IMarker) {
     this.markerService.addMarker(marker);
+  }
+
+  public addMarkerLayer(layer: IMarkerLayer) {
+    this.markerService.addMarkerLayer(layer);
+  }
+
+  public removeMarkerLayer(layer: IMarkerLayer) {
+    this.markerService.removeMarkerLayer(layer);
   }
 
   public removeAllMakers() {
