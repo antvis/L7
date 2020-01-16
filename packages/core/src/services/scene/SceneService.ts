@@ -141,6 +141,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.map.addMarkerContainer();
       // 初始化未加载的marker;
       this.markerService.addMarkers();
+      this.markerService.addMarkerLayers();
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
       this.logger.debug('map loaded');
