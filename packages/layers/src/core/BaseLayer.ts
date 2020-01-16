@@ -226,6 +226,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public init() {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
+    // 初始化图层配置项
     this.configService.setLayerConfig(sceneId, this.id, {});
 
     // 全局容器服务
@@ -506,7 +507,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
-      this.interactionService.triggerActive(id);
+      this.hooks.beforeSelect.callAsync(
+        encodePickingColor(id as number) as number[],
+        () => {
+          setTimeout(() => {
+            this.reRender();
+          }, 1);
+        },
+      );
     }
   }
 
@@ -544,11 +552,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().selectColor,
       });
-      this.hooks.beforeHighlight.call(
+      this.hooks.beforeSelect.callAsync(
         encodePickingColor(id as number) as number[],
+        () => {
+          setTimeout(() => {
+            this.reRender();
+          }, 1);
+        },
       );
-      // this.interactionService.triggerSelect(id);
-      // this.reRender();
     }
   }
   public setBlend(type: keyof typeof BlendType): void {
