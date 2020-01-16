@@ -80,6 +80,7 @@ Promise.all([
     .color('#b97feb')
     .shape('arc3d')
     .size(2)
+    .active(true)
     .animate({
       interval: 2,
       trailLength: 2,

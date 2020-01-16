@@ -8,7 +8,6 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Container } from 'inversify';
-
 export default class BaseMapWrapper<RawMap> implements IMapWrapper {
   @lazyInject(TYPES.ILogService)
   protected readonly logger: ILogService;
@@ -23,7 +22,7 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
   }
 
   public setContainer(sceneContainer: Container, id: string) {
-    // 首先使用全局配置服务校验地图参数
+    // // 首先使用全局配置服务校验地图参数
     const { valid, errorText } = this.configService.validateMapConfig(
       this.config,
     );
@@ -32,7 +31,6 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
       this.logger.error(errorText || '');
       return;
     }
-
     // 绑定用户传入的原始地图参数
     sceneContainer.bind<Partial<IMapConfig>>(TYPES.MapConfig).toConstantValue({
       ...this.config,
