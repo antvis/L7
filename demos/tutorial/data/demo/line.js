@@ -33,6 +33,5 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
           ].reverse(),
         )
     scene.addLayer(layer);
-    console.log(layer);
 
   });
