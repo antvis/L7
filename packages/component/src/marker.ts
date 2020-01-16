@@ -16,7 +16,7 @@ export interface IMarkerOption {
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;
-  private popup: IPopup; // TODO: POPup
+  private popup: IPopup;
   private mapsService: IMapService<unknown>;
   private lngLat: ILngLat;
   private scene: Container;
