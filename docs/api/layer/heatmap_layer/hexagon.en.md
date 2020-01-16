@@ -35,8 +35,8 @@ layer.source(data, {
         field:'v',
         method:'sum'
         }
-      ],
-  }
+      ]
+  })
 
 ```
 ## shape
@@ -99,7 +99,7 @@ layer.size('value', (value)=>{})  // 回调函数设置高度
       coverage: 0.9,
       angle: 0,
       opacity: 1.0
-  })
+  });
   
 ```
 
