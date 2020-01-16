@@ -38,6 +38,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
+import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
@@ -225,6 +226,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public init() {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
+    // 初始化图层配置项
     this.configService.setLayerConfig(sceneId, this.id, {});
 
     // 全局容器服务
@@ -505,11 +507,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
-      this.interactionService.triggerActive(id);
+      this.hooks.beforeSelect.callAsync(
+        encodePickingColor(id as number) as number[],
+        () => {
+          setTimeout(() => {
+            this.reRender();
+          }, 1);
+        },
+      );
     }
   }
 
-  public select(option: IActiveOption | false): ILayer {
+  public select(option: IActiveOption | boolean): ILayer {
     const activeOption: Partial<ILayerConfig> = {};
     activeOption.enableSelect = isObject(option) ? true : option;
     if (isObject(option)) {
@@ -518,7 +527,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         activeOption.selectColor = option.color;
       }
     } else {
-      activeOption.enableHighlight = !!option;
+      activeOption.enableSelect = !!option;
     }
     this.updateLayerConfig(activeOption);
     return this;
@@ -543,7 +552,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().selectColor,
       });
-      this.interactionService.triggerSelect(id);
+      this.hooks.beforeSelect.callAsync(
+        encodePickingColor(id as number) as number[],
+        () => {
+          setTimeout(() => {
+            this.reRender();
+          }, 1);
+        },
+      );
     }
   }
   public setBlend(type: keyof typeof BlendType): void {
