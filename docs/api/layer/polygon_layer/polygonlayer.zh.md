@@ -19,9 +19,11 @@ import { PolygonLayer } from '@antv/l7';
 - extrude 对填充图 3D 拉伸 不支持数据映射
 
 ```javascript
+
 PolyonLayer.shape('fill');
 PolyonLayer.shape('line').size(1); // size 表示线宽度
 PolyonLayer.shape('extrude'); // size 表示高度
+
 ```
 
 其他方法，事件，同基类 [Layer](/zh/docs/api/layer/layer)
