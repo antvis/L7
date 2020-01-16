@@ -35,19 +35,15 @@ layer.source(data, {
 ### 线段弧线数据通过 CSV 加载
 
 ```javascript
-layer.source(
-  data,
-   {
-    parser:{
-        type:'csv',
-        x:'lng1',
-        y:'lat1' ,
-        x1:'lng1',
-        y1:'lat2' ,
-    }
-  }
-})
-
+layer.source(data, {
+  parser: {
+    type: 'csv',
+    x: 'lng1',
+    y: 'lat1',
+    x1: 'lng1',
+    y1: 'lat2',
+  },
+});
 ```
 
 [CSV 线段数据 demo 示例](../../../examples/gallery/basic#arcCircle)
