@@ -23,6 +23,7 @@ export default class ChartComponent extends React.Component {
     });
     addChart();
     scene.render();
+    this.scene = scene;
     function addChart() {
       Promise.all([
         fetch(

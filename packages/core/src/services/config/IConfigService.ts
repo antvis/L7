@@ -4,7 +4,7 @@ import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 
 export interface ISceneConfig extends IRenderConfig {
-  id: string;
+  id: string | HTMLDivElement;
   map: IMapWrapper;
 }
 
