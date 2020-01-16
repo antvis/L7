@@ -38,9 +38,12 @@ export default class ArcLineDemo extends React.Component {
       })
       .size(1)
       .shape('arc3d')
-      .active(true)
+      .select({
+        color: 'red',
+      })
       .color('rgb(13,64,140)')
       .animate({
+        enable: true,
         interval: 0.1,
         duration: 2,
         trailLength: 1.0,
