@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,7 +24,7 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.2",
+    "@antv/l7-core": "^2.0.3",
     "@antv/l7-utils": "^2.0.1",
     "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
@@ -44,7 +44,7 @@
     "@types/d3-hexbin": "^0.2.3",
     "@types/lodash": "^4.14.138"
   },
-  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
+  "gitHead": "9fabb78790428d2025b89fb6146fc555cb1d987d",
   "publishConfig": {
     "access": "public"
   }
