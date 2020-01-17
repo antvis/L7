@@ -71,7 +71,7 @@ Marker
 
 ```javascript
 var el = document.createElement('label');
-el.className = 'lableclass';
+el.className = 'labelclass';
 el.textContent = data[i].v;
 el.style.background = getColor(data[i].v);
 new L7.Marker({
