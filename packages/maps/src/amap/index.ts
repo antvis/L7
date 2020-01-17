@@ -260,7 +260,7 @@ export default class AMapService
           resolve();
         }
       };
-      if (!document.getElementById(AMAP_SCRIPT_ID)) {
+      if (!document.getElementById(AMAP_SCRIPT_ID) || !mapInstance) {
         // 异步加载高德地图
         // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
         // @ts-ignore

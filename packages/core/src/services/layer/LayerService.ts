@@ -14,6 +14,8 @@ export default class LayerService implements ILayerService {
 
   private layerRenderID: number;
 
+  private sceneInited: boolean = false;
+
   private animateInstanceCount: number = 0;
 
   private alreadyInRendering: boolean = false;
@@ -25,10 +27,14 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
+    // if (this.sceneInited) {
+    //   layer.init();
+    // }
     this.layers.push(layer);
   }
 
   public initLayers() {
+    this.sceneInited = true;
     this.layers.forEach((layer) => {
       if (!layer.inited) {
         layer.init();

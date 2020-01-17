@@ -17,7 +17,7 @@ export default class MapboxComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 3,
