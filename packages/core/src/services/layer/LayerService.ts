@@ -14,7 +14,11 @@ export default class LayerService implements ILayerService {
 
   private layerRenderID: number;
 
+  private sceneInited: boolean = false;
+
   private animateInstanceCount: number = 0;
+
+  private alreadyInRendering: boolean = false;
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
@@ -23,10 +27,14 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
+    // if (this.sceneInited) {
+    //   layer.init();
+    // }
     this.layers.push(layer);
   }
 
   public initLayers() {
+    this.sceneInited = true;
     this.layers.forEach((layer) => {
       if (!layer.inited) {
         layer.init();
@@ -58,7 +66,11 @@ export default class LayerService implements ILayerService {
 
   public renderLayers() {
     // TODO：脏检查，只渲染发生改变的 Layer
+    if (this.alreadyInRendering) {
+      return;
+    }
     //
+    this.alreadyInRendering = true;
     this.clear();
     this.layers
       .filter((layer) => layer.isVisible())
@@ -69,6 +81,7 @@ export default class LayerService implements ILayerService {
         layer.render();
         layer.hooks.afterRender.call();
       });
+    this.alreadyInRendering = false;
   }
 
   public updateRenderOrder() {

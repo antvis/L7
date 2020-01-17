@@ -12,6 +12,7 @@ import {
   ILngLat,
   IMapService,
   IMarker,
+  IMarkerLayer,
   IMarkerService,
   IPoint,
   IPopup,
@@ -61,7 +62,6 @@ class Scene
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
-
     // 绑定地图服务
     map.setContainer(sceneContainer, id);
 
@@ -161,6 +161,14 @@ class Scene
   // marker
   public addMarker(marker: IMarker) {
     this.markerService.addMarker(marker);
+  }
+
+  public addMarkerLayer(layer: IMarkerLayer) {
+    this.markerService.addMarkerLayer(layer);
+  }
+
+  public removeMarkerLayer(layer: IMarkerLayer) {
+    this.markerService.removeMarkerLayer(layer);
   }
 
   public removeAllMakers() {

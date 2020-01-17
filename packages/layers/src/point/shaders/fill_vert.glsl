@@ -27,9 +27,9 @@ void main() {
   vec2 offset = project_pixel(extrude * (a_Size + u_stroke_width));
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
 
-  // TODO: billboard
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
 
+  // TODO: billboard
   // anti-alias
   float antialiasblur = 1.0 / (a_Size + u_stroke_width);
 

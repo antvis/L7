@@ -1,6 +1,7 @@
 import {
   IClusterOptions,
   IMapService,
+  IParseDataItem,
   IParserCfg,
   IParserData,
   ISourceCFG,
@@ -84,6 +85,13 @@ export default class Source extends EventEmitter {
     });
     this.init();
   }
+
+  public setData(data: any) {
+    this.rawData = data;
+    this.originData = cloneDeep(data);
+    this.init();
+    this.emit('update');
+  }
   public getClusters(zoom: number): any {
     return this.clusterIndex.getClusters(this.extent, zoom);
   }
@@ -128,13 +136,20 @@ export default class Source extends EventEmitter {
   }
   public getFeatureById(id: number): unknown {
     const { type = 'geojson' } = this.parser;
-    if (type === 'geojson') {
+    if (type === 'geojson' && !this.cluster) {
       return id < this.rawData.features.length
         ? this.rawData.features[id]
         : 'null';
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
     }
+  }
+
+  public getFeatureId(field: string, value: any): number | undefined {
+    const feature = this.data.dataArray.find((dataItem: IParseDataItem) => {
+      return dataItem[field] === name;
+    });
+    return feature?._id;
   }
 
   private excuteParser(): void {
