@@ -7,7 +7,7 @@ import Supercluster from 'supercluster';
 import Marker from './marker';
 type CallBack = (...args: any[]) => any;
 interface IMarkerStyleOption {
-  el: HTMLDivElement | string;
+  element: CallBack;
   style: { [key: string]: any } | CallBack;
   className: string;
   radius: number;
@@ -57,7 +57,7 @@ export default class MarkerLayer extends EventEmitter {
         zoom: -99,
         style: {},
         className: '',
-        el: '',
+        element: this.generateElement,
       },
     };
   }
@@ -65,10 +65,12 @@ export default class MarkerLayer extends EventEmitter {
     // this.remove();
     this.scene = scene;
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
-    this.initCluster();
-    this.update();
-    this.mapsService.on('zoom', this.update);
-    this.mapsService.on('zoomchange', this.update);
+    if (this.markerLayerOption.cluster) {
+      this.initCluster();
+      this.update();
+      this.mapsService.on('zoom', this.update);
+      this.mapsService.on('zoomchange', this.update);
+    }
     this.addMarkers();
     return this;
   }
@@ -102,6 +104,7 @@ export default class MarkerLayer extends EventEmitter {
     this.markers.forEach((marker: IMarker) => {
       marker.remove();
     });
+    this.mapsService.off('zoom', this.update);
     this.mapsService.off('zoomchange', this.update);
     this.markers = [];
   }
@@ -157,27 +160,13 @@ export default class MarkerLayer extends EventEmitter {
       marker.addTo(this.scene);
     });
   }
+
   private clusterMarker(feature: any) {
     const clusterOption = this.markerLayerOption.clusterOption;
 
-    const { className = '', style } = clusterOption as IMarkerStyleOption;
-    const el = DOM.create('div', 'l7-marker-cluster');
-    const label = DOM.create('div', '', el);
-    const span = DOM.create('span', '', label);
-    if (className !== '') {
-      DOM.addClass(el, className);
-    }
-    span.textContent = feature.properties.point_count;
-    const elStyle = isFunction(style)
-      ? style(feature.properties.point_count)
-      : style;
-
-    Object.keys(elStyle).forEach((key: string) => {
-      // @ts-ignore
-      el.style[key] = elStyle[key];
-    });
+    const { element } = clusterOption as IMarkerStyleOption;
     const marker = new Marker({
-      element: el,
+      element: element(feature),
     }).setLnglat({
       lng: feature.geometry.coordinates[0],
       lat: feature.geometry.coordinates[1],
@@ -197,5 +186,24 @@ export default class MarkerLayer extends EventEmitter {
       this.getClusterMarker(Math.floor(zoom));
       this.zoom = Math.floor(zoom);
     }
+  }
+  private generateElement(feature: any) {
+    const el = DOM.create('div', 'l7-marker-cluster');
+    const label = DOM.create('div', '', el);
+    const span = DOM.create('span', '', label);
+    span.textContent = feature.properties.point_count;
+    // if (className !== '') {
+    //   DOM.addClass(el, className);
+    // }
+    // span.textContent = feature.properties.point_count;
+    // const elStyle = isFunction(style)
+    //   ? style(feature.properties.point_count)
+    //   : style;
+
+    // Object.keys(elStyle).forEach((key: string) => {
+    //   // @ts-ignore
+    //   el.style[key] = elStyle[key];
+    // });
+    return el;
   }
 }
