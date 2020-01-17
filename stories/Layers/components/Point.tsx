@@ -35,16 +35,22 @@ export default class Point3D extends React.Component {
       // .scale('point_count', {
       //   type: 'quantile',
       // })
-      // .size('point_count', [5, 10, 15, 20, 25])
-      .size(5)
+      .size('mag', [5, 10, 15, 20, 25])
       .animate(false)
       .active(true)
       .color('yellow')
       .style({
-        opacity: 1,
+        opacity: 0.5,
         strokeWidth: 1,
       });
     scene.addLayer(pointLayer);
+    scene.on('loaded', () => {
+      const newData = {
+        type: 'FeatureCollection',
+        features: pointsData.features.slice(0, 100),
+      };
+      pointLayer.setData(newData);
+    });
     this.scene = scene;
     // });
   }

@@ -13,7 +13,7 @@ export interface IPoint {
 
 export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
-  setContainer(container: Container, id: string): void;
+  setContainer(container: Container, id: string | HTMLDivElement): void;
 }
 
 export interface IMapService<RawMap = {}> {
