@@ -15,15 +15,29 @@ export interface IMarker {
   setLnglat(lngLat: ILngLat | IPoint): this;
   getLnglat(): ILngLat;
   getElement(): HTMLElement;
+  getExtData(): any;
+  setExtData(data: any): void;
   setPopup(popup: IPopup): void;
   togglePopup(): this;
 }
 export interface IMarkerService {
   container: HTMLElement;
+  addMarkerLayer(Marker: IMarkerLayer): void;
+  removeMarkerLayer(Marker: IMarkerLayer): void;
   addMarker(Marker: IMarker): void;
   addMarkers(): void;
+  addMarkerLayers(): void;
   removeMarker(Marker: IMarker): void;
   removeAllMarkers(): void;
   init(scene: Container): void;
+  destroy(): void;
+}
+
+export interface IMarkerLayer {
+  addMarker(marker: IMarker): void;
+  getMarkers(): IMarker[];
+  addTo(scene: Container): void;
+  removeMarker(marker: IMarker): void;
+  clear(): void;
   destroy(): void;
 }

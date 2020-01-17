@@ -1,4 +1,4 @@
-import { Scene, Marker } from '@antv/l7';
+import { Scene, Marker, MarkerLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -19,6 +19,7 @@ function addMarkers() {
   )
     .then(res => res.json())
     .then(nodes => {
+      const markerLayer = new MarkerLayer();
       for (let i = 0; i < nodes.length; i++) {
         if (nodes[i].g !== '1' || nodes[i].v === '') {
           continue;
@@ -31,25 +32,27 @@ function addMarkers() {
         const marker = new Marker({
           element: el
         }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
-        scene.addMarker(marker);
+        markerLayer.addMarker(marker);
       }
+      scene.addMarkerLayer(markerLayer);
     });
 }
 
 function getColor(v) {
+  const colors = [ '#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#78c679', '#41ab5d', '#238443', '#005a32' ];
   return v > 50
-    ? '#800026'
+    ? colors[7]
     : v > 40
-      ? '#BD0026'
+      ? colors[6]
       : v > 30
-        ? '#E31A1C'
+        ? colors[5]
         : v > 20
-          ? '#FC4E2A'
+          ? colors[4]
           : v > 10
-            ? '#FD8D3C'
+            ? colors[3]
             : v > 5
-              ? '#FEB24C'
+              ? colors[2]
               : v > 0
-                ? '#FED976'
-                : '#FFEDA0';
+                ? colors[1]
+                : colors[0];
 }
