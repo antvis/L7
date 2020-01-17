@@ -127,7 +127,7 @@ export interface ILayer {
     id: number | { x: number; y: number },
     option?: IActiveOption,
   ): void;
-  select(option: IActiveOption | false): ILayer;
+  select(option: IActiveOption | boolean): ILayer;
   setSelect(
     id: number | { x: number; y: number },
     option?: IActiveOption,

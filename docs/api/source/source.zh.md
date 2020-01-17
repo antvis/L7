@@ -85,16 +85,16 @@ tranforms 处理的是的标准化之后的数据
 
 处理完之后返回的也是标准数据
 
-```javascript
- [{
-   coordinates: [[]] // 地理坐标字段
-   _id:'',// 标准化之后新增字段
-   name:''
-   value:''
-  // ....
- }]
-
-
+```json
+[
+  {
+    "coordinates": [[]], // 地理坐标字段
+    "_id": "122", // 标准化之后新增字段
+    "name": "test",
+    "value": 1
+    // ....
+  }
+]
 ```
 
 目前支持两种热力图使用的数据处理方法 grid，hexagon transform 配置项
