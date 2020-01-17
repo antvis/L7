@@ -11,6 +11,27 @@
   z-index: 5;
   cursor: pointer;
 }
+
+.l7-marker-cluster {
+  background-clip: padding-box;
+  border-radius: 20px;
+  background-color: rgba(181, 226, 140, 0.6);
+  width: 40px;
+  height: 40px;
+}
+.l7-marker-cluster div {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border-radius: 15px;
+  font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  background-color: rgba(110, 204, 57, 0.6);
+}
+.l7-marker-cluster span {
+  line-height: 30px;
+}
 .l7-popup-anchor-top,
 .l7-popup-anchor-top-left,
 .l7-popup-anchor-top-right {
