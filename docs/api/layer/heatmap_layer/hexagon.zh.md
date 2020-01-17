@@ -8,7 +8,7 @@ order: 1
 ## 使用
 
 ```javascript
-import { HeatMapLayer] } from '@antv/l7';
+import { HeatMapLayer } from '@antv/l7';
 
 ```
 
@@ -40,8 +40,8 @@ layer.source(data, {
         field:'v',
         method:'sum'
         }
-      ],
-  }
+      ]
+  })
 
 ```
 ## shape
@@ -103,8 +103,7 @@ layer.size('value', (value)=>{})  // 回调函数设置高度
       coverage: 0.9,
       angle: 0,
       opacity: 1.0
-  })
-  
+  });
 ```
 
 ### 完整代码

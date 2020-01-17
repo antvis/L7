@@ -24,7 +24,7 @@ function addMarkers() {
           continue;
         }
         const el = document.createElement('label');
-        el.className = 'lableclass';
+        el.className = 'labelclass';
         el.textContent = nodes[i].v + '℃';
         el.style.background = getColor(nodes[i].v);
         el.style.borderColor = getColor(nodes[i].v);
