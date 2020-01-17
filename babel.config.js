@@ -16,6 +16,7 @@ module.exports = api => {
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
         '@babel/plugin-proposal-nullish-coalescing-operator',
+        'transform-inline-environment-variables',
         [
           '@babel/plugin-proposal-decorators',
           {
