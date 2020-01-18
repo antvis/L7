@@ -209,8 +209,8 @@ export default class AMapService
     const ll = new AMap.Pixel(pixel[0], pixel[1]);
     const lngLat = this.map.containerToLngLat(ll);
     return {
-      lng: lngLat.getLng(),
-      lat: lngLat.getLat(),
+      lng: lngLat?.getLng(),
+      lat: lngLat?.getLat(),
     };
   }
   public lngLatToContainer(lnglat: [number, number]): IPoint {

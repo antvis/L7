@@ -87,7 +87,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
       };
       attributes
-        // .filter((attribute) => attribute.name !== 'filter')
+        .filter((attribute) => attribute.scale !== undefined)
         .forEach((attribute: IStyleAttribute) => {
           let values = this.applyAttributeMapping(attribute, record);
           attribute.needRemapping = false;
