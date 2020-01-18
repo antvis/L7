@@ -109,6 +109,8 @@ export interface ILayer {
   setContainer(container: Container): void;
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
+  prepareBuildModel(): void;
+  buildModels(): void;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,

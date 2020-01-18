@@ -45,7 +45,7 @@
 //     return this;
 //   }
 
-//   protected buildModels() {
+// public buildModels() {
 //     this.registerBuiltinAttributes();
 //     const source = this.getSource();
 //     const { createTexture2D } = this.rendererService;
