@@ -5,6 +5,12 @@ import LineModels, { LineModelType } from './models';
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
 
+  public buildModels() {
+    const shape = this.getModelType();
+    this.layerModel = new LineModels[shape](this);
+    this.models = this.layerModel.buildModels();
+  }
+
   protected getConfigSchema() {
     return {
       properties: {
@@ -25,12 +31,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       greatcircle: { blend: 'additive' },
     };
     return defaultConfig[type];
-  }
-
-  protected buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new LineModels[shape](this);
-    this.models = this.layerModel.buildModels();
   }
   protected getModelType(): LineModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(

@@ -301,26 +301,30 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
+    this.hooks.afterInit.call();
+
+    // 触发初始化完成事件;
+    this.emit('inited');
+    this.emit('added');
+    return this;
+  }
+  /**
+   * Model初始化前需要更新Model样式
+   */
+  public prepareBuildModel() {
     this.inited = true;
-    // 更新 model 样式
     this.updateLayerConfig({
       ...(this.getDefaultConfig() as object),
       ...this.rawConfig,
     });
-    this.hooks.afterInit.call();
+
     // 启动动画
     const { animateOption } = this.getLayerConfig();
     if (animateOption?.enable) {
       this.layerService.startAnimate();
       this.aniamateStatus = true;
     }
-    this.buildModels();
-    // 触发初始化完成事件;
-    this.emit('inited');
-    this.emit('added');
-    return this;
   }
-
   public color(
     field: StyleAttributeField,
     values?: StyleAttributeOption,
@@ -773,11 +777,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerService.clock.getElapsedTime() - this.animateStartTime;
   }
 
-  protected getConfigSchema() {
+  public buildModels() {
     throw new Error('Method not implemented.');
   }
 
-  protected buildModels() {
+  protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }
 
