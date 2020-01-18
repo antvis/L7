@@ -16,40 +16,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
-  protected renderModels() {
-    const { opacity } = this.getLayerConfig();
-    const parserDataItem = this.getSource().data.dataArray[0];
-    const { min, max } = parserDataItem;
-    if (this.texture) {
-      this.models.forEach((model) =>
-        model.draw({
-          uniforms: {
-            u_opacity: opacity || 1,
-            u_texture: this.texture,
-            u_min: min,
-            u_max: max,
-            u_colorTexture: this.colorTexture,
-          },
-        }),
-      );
-    }
-
-    return this;
-  }
-
-  protected buildModels() {
+  public buildModels() {
     this.registerBuiltinAttributes();
     const source = this.getSource();
     const { createTexture2D } = this.rendererService;
@@ -89,6 +56,39 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
         },
       }),
     ];
+  }
+
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
+  }
+
+  protected renderModels() {
+    const { opacity } = this.getLayerConfig();
+    const parserDataItem = this.getSource().data.dataArray[0];
+    const { min, max } = parserDataItem;
+    if (this.texture) {
+      this.models.forEach((model) =>
+        model.draw({
+          uniforms: {
+            u_opacity: opacity || 1,
+            u_texture: this.texture,
+            u_min: min,
+            u_max: max,
+            u_colorTexture: this.colorTexture,
+          },
+        }),
+      );
+    }
+
+    return this;
   }
 
   private registerBuiltinAttributes() {

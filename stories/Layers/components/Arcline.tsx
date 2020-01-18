@@ -41,6 +41,9 @@ export default class ArcLineDemo extends React.Component {
       .select({
         color: 'red',
       })
+      .active({
+        color: 'red',
+      })
       .color('rgb(13,64,140)')
       .animate({
         enable: true,
