@@ -159,11 +159,11 @@ export default class AMapService
 
   public getMinZoom(): number {
     const zooms = this.map.get('zooms') as [number, number];
-    return zooms[0];
+    return zooms[0] - 1;
   }
   public getMaxZoom(): number {
     const zooms = this.map.get('zooms') as [number, number];
-    return zooms[1];
+    return zooms[1] - 1;
   }
   public setRotation(rotation: number): void {
     return this.map.setRotation(rotation);
