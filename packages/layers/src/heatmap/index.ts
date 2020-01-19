@@ -6,6 +6,12 @@ interface IHeatMapLayerStyleOptions {
 }
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
+
+  public buildModels() {
+    const shape = this.getModelType();
+    this.layerModel = new HeatMapModels[shape](this);
+    this.models = this.layerModel.buildModels();
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -21,7 +27,15 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   protected renderModels() {
     const shape = this.getModelType();
     if (shape === 'heatmap') {
-      this.layerModel.render(); // 独立的渲染流程
+      // if (this.layerModelNeedUpdate) {
+      //   this.layerModel.buildModels();
+      //   this.buildModels();
+      //   this.layerModelNeedUpdate = false;
+      // }
+      if (this.layerModel) {
+        this.layerModel.render(); // 独立的渲染流程
+      }
+
       return this;
     }
     if (this.layerModelNeedUpdate) {
@@ -34,12 +48,6 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       }),
     );
     return this;
-  }
-
-  protected buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new HeatMapModels[shape](this);
-    this.models = this.layerModel.buildModels();
   }
   protected getModelType(): HeatMapModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(

@@ -35,6 +35,28 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public getAnimateUniforms(): IModelUniform {
     return {};
   }
+
+  public buildModels() {
+    const parserDataItem = this.getSource().data.dataArray[0];
+    const { createTexture2D } = this.rendererService;
+    this.texture = createTexture2D({
+      data: parserDataItem.data,
+      width: parserDataItem.width,
+      height: parserDataItem.height,
+      format: gl.LUMINANCE,
+      type: gl.FLOAT,
+      aniso: 4,
+    });
+    const { rampColors } = this.getLayerConfig();
+    const imageData = generateColorRamp(rampColors as IColorRamp);
+    this.colorTexture = createTexture2D({
+      data: imageData.data,
+      width: imageData.width,
+      height: imageData.height,
+      flipY: true,
+    });
+    this.models = [this.buildRasterModel()];
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -68,28 +90,6 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     );
 
     return this;
-  }
-
-  protected buildModels() {
-    const parserDataItem = this.getSource().data.dataArray[0];
-    const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
-      data: parserDataItem.data,
-      width: parserDataItem.width,
-      height: parserDataItem.height,
-      format: gl.LUMINANCE,
-      type: gl.FLOAT,
-      aniso: 4,
-    });
-    const { rampColors } = this.getLayerConfig();
-    const imageData = generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: true,
-    });
-    this.models = [this.buildRasterModel()];
   }
   private buildRasterModel() {
     const source = this.getSource();

@@ -5,6 +5,11 @@ interface IImageLayerStyleOptions {
 }
 export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   public type: string = 'ImageLayer';
+  public buildModels() {
+    const modelType = this.getModelType();
+    this.layerModel = new ImageModels[modelType](this);
+    this.models = this.layerModel.buildModels();
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -22,11 +27,6 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
       image: {},
     };
     return defaultConfig[type];
-  }
-  protected buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new ImageModels[modelType](this);
-    this.models = this.layerModel.buildModels();
   }
 
   protected getModelType(): ImageModelType {
