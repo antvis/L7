@@ -9,6 +9,7 @@ import { injectable } from 'inversify';
 export default class LayerStylePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.afterInit.tap('LayerStylePlugin', () => {
+      // 更新图层默认状态
       layer.updateLayerConfig({});
       const { autoFit } = layer.getLayerConfig();
       if (autoFit) {

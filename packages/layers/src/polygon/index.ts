@@ -9,6 +9,11 @@ interface IPolygonLayerStyleOptions {
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
+  public buildModels() {
+    const shape = this.getModelType();
+    this.layerModel = new PolygonModels[shape](this);
+    this.models = this.layerModel.buildModels();
+  }
 
   protected getConfigSchema() {
     return {
@@ -20,11 +25,6 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
         },
       },
     };
-  }
-  protected buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new PolygonModels[shape](this);
-    this.models = this.layerModel.buildModels();
   }
 
   protected getModelType(): PolygonModelType {

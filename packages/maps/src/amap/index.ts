@@ -159,11 +159,11 @@ export default class AMapService
 
   public getMinZoom(): number {
     const zooms = this.map.get('zooms') as [number, number];
-    return zooms[0];
+    return zooms[0] - 1;
   }
   public getMaxZoom(): number {
     const zooms = this.map.get('zooms') as [number, number];
-    return zooms[1];
+    return zooms[1] - 1;
   }
   public setRotation(rotation: number): void {
     return this.map.setRotation(rotation);
@@ -209,8 +209,8 @@ export default class AMapService
     const ll = new AMap.Pixel(pixel[0], pixel[1]);
     const lngLat = this.map.containerToLngLat(ll);
     return {
-      lng: lngLat.getLng(),
-      lat: lngLat.getLat(),
+      lng: lngLat?.getLng(),
+      lat: lngLat?.getLat(),
     };
   }
   public lngLatToContainer(lnglat: [number, number]): IPoint {
@@ -248,43 +248,40 @@ export default class AMapService
           this.$mapContainer = this.creatAmapContainer(
             id as string | HTMLDivElement,
           );
-          // @ts-ignore
-          this.map = new AMap.Map(this.$mapContainer, {
+
+          const map = new AMap.Map(this.$mapContainer, {
             mapStyle: this.getMapStyle(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
           });
           // 监听地图相机事件
-          this.map.on('camerachange', this.handleCameraChanged);
-          resolve();
+          map.on('camerachange', this.handleCameraChanged);
+          // @ts-ignore
+          this.map = map;
+          setTimeout(() => {
+            resolve();
+          }, 10);
         }
       };
-      if (!document.getElementById(AMAP_SCRIPT_ID) || !mapInstance) {
-        // 异步加载高德地图
-        // @see https://lbs.amap.com/api/javascript-api/guide/abc/load
-        // @ts-ignore
-        window.initAMap = (): void => {
-          amapLoaded = true;
+      if (!amapLoaded && !mapInstance) {
+        if (token === AMAP_API_KEY) {
+          this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+        }
+        amapLoaded = true;
+        this.loadAMapScript(
+          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D${plugin.join(
+            ',',
+          )}`,
+        ).then(() => {
           resolveMap();
           if (pendingResolveQueue.length) {
             pendingResolveQueue.forEach((r) => r());
             pendingResolveQueue = [];
           }
-        };
-        if (token === AMAP_API_KEY) {
-          this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
-        }
-        const url: string = `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D${plugin.join(
-          ',',
-        )}&callback=initAMap`;
-        const $jsapi = document.createElement('script');
-        $jsapi.id = AMAP_SCRIPT_ID;
-        $jsapi.charset = 'utf-8';
-        $jsapi.src = url;
-        document.head.appendChild($jsapi);
+        });
       } else {
-        if (amapLoaded || mapInstance) {
+        if ((amapLoaded && window.AMap) || mapInstance) {
           resolveMap();
         } else {
           pendingResolveQueue.push(resolveMap);
@@ -380,5 +377,16 @@ export default class AMapService
     $amapdiv.id = 'l7_amap_div' + mapdivCount++;
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
+  }
+  private loadAMapScript(src: string) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        resolve();
+      };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
   }
 }

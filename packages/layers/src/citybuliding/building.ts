@@ -4,6 +4,10 @@ import CityBuildModel from './models/build';
 
 export default class CityBuildingLayer extends BaseLayer {
   public type: string = 'PolygonLayer';
+  public buildModels() {
+    this.layerModel = new CityBuildModel(this);
+    this.models = this.layerModel.buildModels();
+  }
 
   protected getConfigSchema() {
     return {
@@ -15,10 +19,6 @@ export default class CityBuildingLayer extends BaseLayer {
         },
       },
     };
-  }
-  protected buildModels() {
-    this.layerModel = new CityBuildModel(this);
-    this.models = this.layerModel.buildModels();
   }
 
   protected getModelType(): string {

@@ -8,6 +8,11 @@ interface IPointLayerStyleOptions {
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
+  public buildModels() {
+    const modelType = this.getModelType();
+    this.layerModel = new PointModels[modelType](this);
+    this.models = this.layerModel.buildModels();
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -33,11 +38,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     };
     return defaultConfig[type];
-  }
-  protected buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new PointModels[modelType](this);
-    this.models = this.layerModel.buildModels();
   }
 
   protected getModelType(): PointType {
