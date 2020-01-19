@@ -34,6 +34,12 @@ export default function geoJSON(
       geometry.coordinates.length > 0
     );
   });
+  if (data.features.length === 0) {
+    return {
+      dataArray: [],
+      featureKeys,
+    };
+  }
   // 数据为空时处理
   const i = 0;
   // multi polygon 拆分

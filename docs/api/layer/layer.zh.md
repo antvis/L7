@@ -494,9 +494,25 @@ layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
 ## 图层事件
 
 ### inited
+option
+- target  ILayer 当前layer
+- type  事件类型 
+
 
 图层初始化完成后触发
+
+### add
+图层添加到scene
+
+option
+- target  ILayer 当前layer
+- type  事件类型 
+
 
 ### remove
 
 图层移除时触发
+
+option
+- target  ILayer 当前layer
+- type  事件类型 

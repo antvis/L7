@@ -20,40 +20,42 @@ export default class HeatMapLayerDemo extends React.Component {
       map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,
-        style: 'mapbox://styles/mapbox/dark-v10',
+        style: 'dark',
         zoom: 2,
       }),
     });
-    const layer = new HeatmapLayer({
-      enableTAA: false,
-    });
+    const data = await response.json();
+
+    const layer = new HeatmapLayer();
     layer
-      .source(await response.json())
-      .size('mag', [0, 1]) // weight映射通道
+      .source({
+        type: 'FeatureCollection',
+        features: [],
+      })
+      .shape('heatmap')
+      .size('mag', [0, 1.0]) // weight映射通道
       .style({
         intensity: 2,
         radius: 20,
-        opacity: 0.6,
+        opacity: 1.0,
         rampColors: {
           colors: [
-            '#2E8AE6',
-            '#69D1AB',
-            '#DAF291',
-            '#FFD591',
-            '#FF7A45',
-            '#CF1D49',
-          ],
+            '#FF4818',
+            '#F7B74A',
+            '#FFF598',
+            '#91EABC',
+            '#2EA9A1',
+            '#206C7C',
+          ].reverse(),
           positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
         },
       });
     scene.addLayer(layer);
-    // requestAnimationFrame(run);
-    scene.render();
+    layer.setData({
+      type: 'FeatureCollection',
+      features: data.features.slice(0, 100),
+    });
     this.scene = scene;
-    // function run() {
-    //   scene.render();
-    //   requestAnimationFrame(run);
-    // }
   }
 
   public render() {
