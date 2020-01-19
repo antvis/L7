@@ -304,8 +304,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.hooks.afterInit.call();
 
     // 触发初始化完成事件;
-    this.emit('inited');
-    this.emit('added');
+    this.emit('inited', {
+      target: this,
+      type: 'inited',
+    });
+    this.emit('add', {
+      target: this,
+      type: 'add',
+    });
     return this;
   }
   /**
@@ -658,6 +664,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.models.forEach((model) => model.destroy());
 
     this.hooks.afterDestroy.call();
+
+    this.emit('remove', {
+      target: this,
+      type: 'remove',
+    });
 
     this.removeAllListeners();
 
