@@ -55,13 +55,13 @@ export default class DataUpdate extends React.Component {
     scene.addLayer(layer);
     layer.setData(pointOnCircle(1000));
     scene.render();
-    // function animateMarker(timestamp: number) {
-    //   layer.setData(pointOnCircle(timestamp / 1000));
-    //   scene.render();
-    //   requestAnimationFrame(animateMarker);
-    // }
+    function animateMarker(timestamp: number) {
+      layer.setData(pointOnCircle(timestamp / 1000));
+      scene.render();
+      requestAnimationFrame(animateMarker);
+    }
     // layer.on('inited', () => {
-    //   animateMarker(0);
+    animateMarker(0);
     // });
   }
 
