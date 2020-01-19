@@ -11,6 +11,11 @@ interface IRasterLayerStyleOptions {
 }
 export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
+  public buildModels() {
+    const modelType = this.getModelType();
+    this.layerModel = new RasterModels[modelType](this);
+    this.models = this.layerModel.buildModels();
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -29,11 +34,6 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       raster3d: {},
     };
     return defaultConfig[type];
-  }
-  protected buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new RasterModels[modelType](this);
-    this.models = this.layerModel.buildModels();
   }
 
   protected getModelType(): RasterModelType {
