@@ -53,6 +53,9 @@ export default class TextLayerDemo extends React.Component {
         // strokeOpacity: 1.0,
       });
     scene.addLayer(pointLayer);
+    pointLayer.on('click', (e) => {
+      console.log(e);
+    });
 
     this.scene = scene;
 

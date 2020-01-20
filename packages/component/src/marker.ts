@@ -20,6 +20,7 @@ export default class Marker extends EventEmitter {
   private mapsService: IMapService<unknown>;
   private lngLat: ILngLat;
   private scene: Container;
+  private added: boolean = false;
   constructor(option?: Partial<IMarkerOption>) {
     super();
     this.markerOption = {
@@ -49,6 +50,8 @@ export default class Marker extends EventEmitter {
     this.registerMarkerEvent(element as HTMLElement);
     this.mapsService.on('camerachange', this.update);
     this.update();
+    this.added = true;
+    this.emit('added');
     return this;
   }
 
@@ -95,6 +98,55 @@ export default class Marker extends EventEmitter {
 
   public getElement(): HTMLElement {
     return this.markerOption.element as HTMLElement;
+  }
+
+  public setElement(el: HTMLElement): this {
+    if (!this.added) {
+      this.once('added', () => {
+        this.setElement(el);
+      });
+      return this;
+    }
+    const { element } = this.markerOption;
+    if (element) {
+      DOM.remove(element);
+    }
+    this.markerOption.element = el;
+    this.init();
+    this.mapsService.getMarkerContainer().appendChild(el as HTMLElement);
+    this.registerMarkerEvent(el as HTMLElement);
+    this.update();
+    return this;
+  }
+
+  public openPopup(): this {
+    if (!this.added) {
+      this.once('added', () => {
+        this.openPopup();
+      });
+      return this;
+    }
+    const popup = this.popup;
+    if (!popup) {
+      return this;
+    }
+    if (!popup.isOpen()) {
+      popup.addTo(this.scene);
+    }
+    return this;
+  }
+
+  public closePopup(): this {
+    if (!this.added) {
+      this.once('added', () => {
+        this.closePopup();
+      });
+    }
+    const popup = this.popup;
+    if (popup) {
+      popup.remove();
+    }
+    return this;
   }
 
   public setPopup(popup: IPopup) {
