@@ -7,6 +7,7 @@ import AMapinstance from './components/MapInstance';
 import Mixed from './components/Mixed';
 import MultiAMap from './components/MultiAMap';
 import MultiMapbox from './components/MultiMapbox';
+import MultiAMapLayer from './components/multiMaptest';
 // @ts-ignore
 import notes from './Map.md';
 // @ts-ignore
@@ -24,6 +25,9 @@ storiesOf('地图底图', module)
     notes: { markdown: notes },
   })
   .add('多个高德地图实例', () => <MultiAMap />, {
+    notes: { markdown: notes },
+  })
+  .add('多个高德图层', () => <MultiAMapLayer />, {
     notes: { markdown: notes },
   })
   .add('多个 Mapbox 实例', () => <MultiMapbox />, {
