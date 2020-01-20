@@ -13,6 +13,7 @@ varying vec4 v_color;
 varying vec2 v_uv;
 varying float v_gamma_scale;
 
+#pragma include "picking"
 void main() {
   // get sdf from atlas
   float dist = texture2D(u_sdf_map, v_uv).a;
@@ -27,4 +28,5 @@ void main() {
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
 
   gl_FragColor = mix(v_color * u_opacity, u_stroke, smoothstep(0., 0.5, 1. - dist)) * alpha;
+  gl_FragColor = filterColor(gl_FragColor);
 }
