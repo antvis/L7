@@ -33,11 +33,10 @@ scene.addMarkerLayer(markerLayer);
 
 #### option
 
-- cluster 是部分聚合 `boolean` 默认 `false`
+- cluster 聚合 `boolean` 默认 `false`
 
 - clusterOption 聚合配置
-- cluster 是部分聚合
-  - element `function`
+  - element `function` 通过回调函数设置聚合 Marker 的样式，返回 dom 元素
 
 后续会增加更多配置项目
 
@@ -47,7 +46,7 @@ scene.addMarkerLayer(markerLayer);
 
 参数
 
-- marker `Marker` 需要添加的 Marker
+- marker `IMarker` 需要添加的 Marker
 
 添加 Marker
 

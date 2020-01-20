@@ -73,6 +73,13 @@ const pointLayer = new PointLayer({})
           strokeWidth: 1,
         });
 ```
+[聚合图使用案例](../../../examples/point/cluster)
+
+### FAQ
+PointLayer的聚合图采用WebGL绘制，不支持自定义具体聚合样式，如果有自定义的需求可以使用MarkerLayer的聚合功能，你可以通过Dom完全自定义样式。
+
+[MarkerLayer聚合](../../component/markerLayer)
+
 
 
 
