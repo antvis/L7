@@ -14,6 +14,7 @@ import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
 import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
+import LayerModelPlugin from './plugins/LayerModelPlugin';
 import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
@@ -118,6 +119,13 @@ container
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(PixelPickingPlugin)
+  .inRequestScope();
+/**
+ * 初始化Model
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerModelPlugin)
   .inRequestScope();
 
 export {

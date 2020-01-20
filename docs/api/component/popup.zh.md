@@ -93,4 +93,7 @@ popup.on('close', () => {});
   const new L7.Popup().setLnglat([112, 32]).setHTML(html).addTo(scene);
 ```
 
-### FAQ
+## demo 地址
+
+[demo1](../../../examples/point/column)
+[demo2](../../../examples/line/path)
