@@ -1,5 +1,11 @@
-import { Scene, Marker, MarkerLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import {
+  Scene,
+  Marker,
+  MarkerLayer
+} from '@antv/l7';
+import {
+  GaodeMap
+} from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
@@ -23,7 +29,9 @@ function addMarkers() {
         cluster: true
       });
       for (let i = 0; i < nodes.features.length; i++) {
-        const { coordinates } = nodes.features[i].geometry;
+        const {
+          coordinates
+        } = nodes.features[i].geometry;
         const marker = new Marker().setLnglat({
           lng: coordinates[0],
           lat: coordinates[1]
@@ -31,6 +39,6 @@ function addMarkers() {
         markerLayer.addMarker(marker);
       }
       scene.addMarkerLayer(markerLayer);
-      scene.addMarkerLayer(markerLayer);
+      // scene.addMarkerLayer(markerLayer);
     });
 }
