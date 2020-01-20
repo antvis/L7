@@ -10,6 +10,8 @@ export interface IPopup {
   setText(text: string): this;
   setMaxWidth(maxWidth: string): this;
   isOpen(): boolean;
+  open(): void;
+  close(): void;
 }
 export interface IPopupService {
   addPopup(popup: IPopup): void;
