@@ -14,6 +14,7 @@ varying float v_gamma_scale;
 varying vec4 v_color;
 
 #pragma include "projection"
+#pragma include "picking"
 
 void main() {
   v_color = a_Color;
@@ -29,6 +30,6 @@ void main() {
   gl_Position = vec4(projected_position.xy / projected_position.w
     + a_textOffsets * fontScale / u_ViewportSize * 2. * u_DevicePixelRatio, 0.0, 1.0);
   v_gamma_scale = gl_Position.w;
-
+  setPickingColor(a_PickingColor);
 
 }
