@@ -106,6 +106,8 @@ export default class ImageModel extends BaseModel {
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
+      mag: gl.LINEAR,
+      min: gl.LINEAR,
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });

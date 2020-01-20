@@ -60,6 +60,14 @@ var html =
 popup.setHtml(html);
 ```
 
+#### setDOMContent
+
+- 参数 htmlNode dom 对象
+  区别于 setHtml 对象只能传字符串
+
+**tips**
+如果需要将 react 组件渲染到 popup 可以用此方法。
+
 #### setText
 
 设置 popup 显示文本内容
