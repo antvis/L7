@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene } from '@antv/l7';
+import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -14,26 +14,86 @@ export default class MultiGaodeMap extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+      'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
     );
+    const data = await response.json();
     const scene1 = new Scene({
       id: 'map1',
       map: new GaodeMap({
-        center: [110.19382669582967, 50.258134],
-        pitch: 0,
+        center: [121.435159, 31.256971],
+        zoom: 14.89,
         style: 'light',
-        zoom: 3,
       }),
     });
     const scene2 = new Scene({
       id: 'map2',
       map: new GaodeMap({
-        center: [110.19382669582967, 50.258134],
-        pitch: 0,
+        center: [121.435159, 31.256971],
+        zoom: 14.89,
         style: 'dark',
-        zoom: 3,
       }),
     });
+
+    const pointLayer = new PointLayer({})
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'longitude',
+          y: 'latitude',
+        },
+      })
+      .shape('name', [
+        'circle',
+        'triangle',
+        'square',
+        'pentagon',
+        'hexagon',
+        'octogon',
+        'hexagram',
+        'rhombus',
+        'vesica',
+      ])
+      .size('unit_price', [10, 25])
+      .active(true)
+      .color('name', ['#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452'])
+      .style({
+        opacity: 0.3,
+        strokeWidth: 2,
+      });
+
+    const pointLayer2 = new PointLayer({})
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'longitude',
+          y: 'latitude',
+        },
+      })
+      .shape('name', [
+        'circle',
+        'triangle',
+        'square',
+        'pentagon',
+        'hexagon',
+        'octogon',
+        'hexagram',
+        'rhombus',
+        'vesica',
+      ])
+      .size('unit_price', [10, 25])
+      .active(true)
+      .color('#5B8FF9')
+      .style({
+        opacity: 0.3,
+        strokeWidth: 2,
+      });
+    scene1.on('loaded', () => {
+      scene1.addLayer(pointLayer);
+    });
+    scene2.on('loaded', () => {
+      scene2.addLayer(pointLayer2);
+    });
+
     this.scene1 = scene1;
     this.scene2 = scene2;
   }
