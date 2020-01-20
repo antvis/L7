@@ -31,6 +31,5 @@ function addMarkers() {
         markerLayer.addMarker(marker);
       }
       scene.addMarkerLayer(markerLayer);
-      scene.addMarkerLayer(markerLayer);
     });
 }

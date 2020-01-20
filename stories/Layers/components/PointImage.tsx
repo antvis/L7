@@ -47,6 +47,9 @@ export default class PointImage extends React.Component {
       .shape('name', ['00', '01', '02'])
       .size(30);
     scene.addLayer(imageLayer);
+    imageLayer.on('click', (e) => {
+      console.log(e);
+    });
   }
 
   public render() {

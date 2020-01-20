@@ -23,6 +23,7 @@ export default class Popup extends EventEmitter implements IPopup {
   private timeoutInstance: any;
   private container: HTMLElement;
   private tip: HTMLElement;
+  private scene: Container;
 
   constructor(cfg?: Partial<IPopupOption>) {
     super();
@@ -36,6 +37,7 @@ export default class Popup extends EventEmitter implements IPopup {
   public addTo(scene: Container) {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.mapsService.on('camerachange', this.update);
+    this.scene = scene;
     this.update();
     if (this.popupOption.closeOnClick) {
       this.timeoutInstance = setTimeout(() => {
@@ -43,6 +45,14 @@ export default class Popup extends EventEmitter implements IPopup {
       }, 30);
     }
     return this;
+  }
+
+  public close(): void {
+    this.remove();
+  }
+
+  public open(): void {
+    this.addTo(this.scene);
   }
 
   public setHTML(html: string) {

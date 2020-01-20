@@ -31,6 +31,10 @@ module.exports = ({ config }) => {
     test: /\.stories\.css?$/,
     use: ['style-loader', 'css-loader'],
   },
+  {
+    test: /\.stories\.svg$/,
+    loader: 'svg-inline-loader'
+  }
   );
 
   config.resolve.extensions.push('.ts', '.tsx', '.js', '.glsl');

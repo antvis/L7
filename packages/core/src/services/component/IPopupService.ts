@@ -10,10 +10,13 @@ export interface IPopup {
   setText(text: string): this;
   setMaxWidth(maxWidth: string): this;
   isOpen(): boolean;
+  open(): void;
+  close(): void;
 }
 export interface IPopupService {
   addPopup(popup: IPopup): void;
   removePopup(popup: IPopup): void;
   init(scene: Container): void;
+  initPopup(): void;
   destroy(): void;
 }

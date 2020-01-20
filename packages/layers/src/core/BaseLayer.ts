@@ -230,10 +230,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.configService.setLayerConfig(sceneId, this.id, {});
 
     // 全局容器服务
+
+    // 场景容器服务
     this.iconService = this.container.get<IIconService>(TYPES.IIconService);
     this.fontService = this.container.get<IFontService>(TYPES.IFontService);
 
-    // 场景容器服务
     this.rendererService = this.container.get<IRendererService>(
       TYPES.IRendererService,
     );
