@@ -142,3 +142,13 @@ export function triggerResize() {
     window.dispatchEvent(evt);
   }
 }
+
+export function printCanvas(canvas: HTMLCanvasElement) {
+  const css = [
+    'padding: ' + (canvas.height / 2 - 8) + 'px ' + canvas.width / 2 + 'px;',
+    'line-height: ' + canvas.height + 'px;',
+    'background-image: url(' + canvas.toDataURL() + ');',
+  ];
+  // tslint:disable-next-line:no-console
+  console.log('%c\n', css.join(''));
+}

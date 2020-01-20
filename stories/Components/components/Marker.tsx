@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Marker, PointLayer, PolygonLayer, Scene } from '@antv/l7';
+import { Marker, PointLayer, PolygonLayer, Popup, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -26,10 +26,22 @@ export default class MarkerComponent extends React.Component {
     });
     this.scene = scene;
 
-    const marker = new Marker().setLnglat({
-      lng: 120.184824,
-      lat: 30.248341,
-    });
+    const popup = new Popup({
+      offsets: [0, 20],
+    }).setText('hello');
+
+    const marker = new Marker()
+      .setLnglat({
+        lng: 120.184824,
+        lat: 30.248341,
+      })
+      .setPopup(popup);
+
+    scene.addMarker(marker);
+
+    const el = document.createElement('h1');
+    el.innerHTML = 'Marker';
+    marker.setElement(el);
 
     const arr = [
       {
@@ -54,6 +66,7 @@ export default class MarkerComponent extends React.Component {
       .style({
         opacity: 1,
       });
+
     scene.addLayer(pointLayer);
     scene.addMarker(marker);
 

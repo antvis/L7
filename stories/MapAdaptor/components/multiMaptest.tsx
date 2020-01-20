@@ -2,8 +2,6 @@
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-// import imageIcon from './image/icon.svg';
-
 export default class MultiGaodeMap extends React.Component {
   private scene1: Scene;
   private scene2: Scene;
