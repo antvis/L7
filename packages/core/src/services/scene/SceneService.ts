@@ -10,6 +10,7 @@ import { IIconService } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
 import { IMarkerService } from '../component/IMarkerService';
+import { IPopupService } from '../component/IPopupService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
 import { IInteractionService } from '../interaction/IInteractionService';
@@ -68,6 +69,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.IMarkerService)
   private readonly markerService: IMarkerService;
+
+  @inject(TYPES.IPopupService)
+  private readonly popupService: IPopupService;
 
   /**
    * 是否首次渲染
@@ -139,9 +143,11 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
+
       // 初始化未加载的marker;
       this.markerService.addMarkers();
       this.markerService.addMarkerLayers();
+      this.popupService.initPopup();
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
       this.logger.debug(`map ${this.id} loaded`);
