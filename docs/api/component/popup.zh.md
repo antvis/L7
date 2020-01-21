@@ -75,6 +75,20 @@ popup.setHtml(html);
 ```javascript
 popup.setText('hello world');
 ```
+#### open
+显示popup
+
+```javascript
+
+popup.open();
+
+```
+#### close
+显示popup
+
+```javascript
+popup.close();
+```
 
 #### remove
 
@@ -86,11 +100,18 @@ popup.remove();
 
 ## 事件
 
+### open
+
+```javascript
+popup.on('open', () => {});
+```
+
 #### close
 
 ```javascript
 popup.on('close', () => {});
 ```
+
 
 ## 示例代码
 
