@@ -44,6 +44,7 @@ export default class Popup extends EventEmitter implements IPopup {
         this.mapsService.on('click', this.onClickClose);
       }, 30);
     }
+    this.emit('open');
     return this;
   }
 
