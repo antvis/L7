@@ -88,7 +88,6 @@ scene.addMarkerLayer(layer);
 
 ```javascript
 scene.removeMarkerLayer(layer);
-
 ```
 
 ### demo 地址
