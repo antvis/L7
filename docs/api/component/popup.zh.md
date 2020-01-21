@@ -90,6 +90,22 @@ popup.open();
 popup.close();
 ```
 
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
+```
+
 #### remove
 
 移除 popup
