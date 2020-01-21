@@ -1,6 +1,6 @@
 ---
-title: Popup
-order: 4
+title: popup
+order: 0
 ---
 
 # popup
@@ -60,12 +60,36 @@ var html =
 popup.setHtml(html);
 ```
 
+#### setDOMContent
+
+- 参数 htmlNode dom 对象
+  区别于 setHtml 对象只能传字符串
+
+**tips**
+如果需要将 react 组件渲染到 popup 可以用此方法。
+
 #### setText
 
 设置 popup 显示文本内容
 
 ```javascript
 popup.setText('hello world');
+```
+
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
 ```
 
 #### remove
@@ -77,6 +101,12 @@ popup.remove();
 ```
 
 ## 事件
+
+### open
+
+```javascript
+popup.on('open', () => {});
+```
 
 #### close
 
