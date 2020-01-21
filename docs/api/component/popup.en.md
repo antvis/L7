@@ -75,16 +75,18 @@ popup.setHtml(html);
 ```javascript
 popup.setText('hello world');
 ```
+
 #### open
-显示popup
+
+显示 popup
 
 ```javascript
-
 popup.open();
-
 ```
+
 #### close
-显示popup
+
+显示 popup
 
 ```javascript
 popup.close();
@@ -127,7 +129,6 @@ popup.on('open', () => {});
 ```javascript
 popup.on('close', () => {});
 ```
-
 
 ## 示例代码
 
