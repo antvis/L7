@@ -76,6 +76,22 @@ popup.setHtml(html);
 popup.setText('hello world');
 ```
 
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
+```
+
 #### remove
 
 移除 popup
@@ -85,6 +101,12 @@ popup.remove();
 ```
 
 ## 事件
+
+### open
+
+```javascript
+popup.on('open', () => {});
+```
 
 #### close
 
