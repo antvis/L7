@@ -104,6 +104,7 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    this.extent = this.textExtent();
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
