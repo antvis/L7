@@ -76,7 +76,7 @@ export default class MarkerLayer extends EventEmitter {
   public addMarker(marker: IMarker) {
     const cluster = this.markerLayerOption.cluster;
     if (cluster) {
-      this.addPoint(marker);
+      this.addPoint(marker, this.markers.length);
     }
     this.markers.push(marker);
   }
@@ -113,14 +113,17 @@ export default class MarkerLayer extends EventEmitter {
     this.removeAllListeners();
   }
 
-  private addPoint(marker: IMarker) {
+  private addPoint(marker: IMarker, id: number) {
     const { lng, lat } = marker.getLnglat();
     const feature: IPointFeature = {
       geometry: {
         type: 'Point',
         coordinates: [lng, lat],
       },
-      properties: marker.getExtData(),
+      properties: {
+        ...marker.getExtData(),
+        marker_id: id,
+      },
     };
     this.points.push(feature);
   }
@@ -200,11 +203,13 @@ export default class MarkerLayer extends EventEmitter {
     return marker;
   }
   private normalMarker(feature: any) {
-    const marker = new Marker().setLnglat({
-      lng: feature.geometry.coordinates[0],
-      lat: feature.geometry.coordinates[1],
-    });
-    return marker;
+    const marker_id = feature.properties.marker_id;
+    return marker_id
+      ? new Marker().setLnglat({
+          lng: feature.geometry.coordinates[0],
+          lat: feature.geometry.coordinates[1],
+        })
+      : this.markers[marker_id];
   }
   private update() {
     const zoom = this.mapsService.getZoom();
