@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Marker, MarkerLayer, PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox, GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 export default class ClusterMarkerLayer extends React.Component {
   private scene: Scene;
@@ -34,6 +34,10 @@ export default class ClusterMarkerLayer extends React.Component {
     const nodes = await response.json();
     const markerLayer = new MarkerLayer({
       cluster: true,
+      clusterOption: {
+        field: 'mag',
+        method: 'sum',
+      },
     });
     const scene = new Scene({
       id: 'map',
@@ -47,7 +51,9 @@ export default class ClusterMarkerLayer extends React.Component {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < nodes.features.length; i++) {
       const { coordinates } = nodes.features[i].geometry;
-      const marker = new Marker().setLnglat({
+      const marker = new Marker({
+        extData: nodes.features[i].properties,
+      }).setLnglat({
         lng: coordinates[0],
         lat: coordinates[1],
       });
