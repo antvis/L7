@@ -1,9 +1,8 @@
 /**
  * 生成四边形热力图
  */
-import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@antv/l7-core';
-import { aProjectFlat, metersToLngLat } from '@antv/l7-utils';
-import { statMap } from './statistics';
+import { IParserData, ITransform } from '@antv/l7-core';
+import { Satistics } from '@antv/l7-utils';
 
 interface IGridHash {
   [key: string]: any;
@@ -90,8 +89,8 @@ function _getGridLayerDataFromGridHash(
       [key: string]: any;
     } = {};
     if (option.field && option.method) {
-      const columns = getColumn(gridHash[key].points, option.field);
-      item[option.method] = statMap[option.method](columns);
+      const columns = Satistics.getColumn(gridHash[key].points, option.field);
+      item[option.method] = Satistics.statMap[option.method](columns);
     }
     Object.assign(item, {
       _id: i + 1,
@@ -99,15 +98,11 @@ function _getGridLayerDataFromGridHash(
         -180 + gridOffset.xOffset * lonIdx,
         -90 + gridOffset.yOffset * latIdx,
       ],
+      rawData: gridHash[key].points,
       count: gridHash[key].count,
     });
     // @ts-ignore
     accu.push(item);
     return accu;
   }, []);
-}
-function getColumn(data: any[], columnName: string) {
-  return data.map((item) => {
-    return item[columnName] * 1;
-  });
 }
