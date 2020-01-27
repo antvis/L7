@@ -28,10 +28,7 @@ export default class HeatMapLayerDemo extends React.Component {
 
     const layer = new HeatmapLayer();
     layer
-      .source({
-        type: 'FeatureCollection',
-        features: [],
-      })
+      .source(data)
       .shape('heatmap')
       .size('mag', [0, 1.0]) // weight映射通道
       .style({
@@ -51,9 +48,8 @@ export default class HeatMapLayerDemo extends React.Component {
         },
       });
     scene.addLayer(layer);
-    layer.setData({
-      type: 'FeatureCollection',
-      features: data.features.slice(0, 100),
+    scene.on('loaded', () => {
+      console.log('scene loaded');
     });
     this.scene = scene;
   }
