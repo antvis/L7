@@ -9,7 +9,7 @@ import {
   ITransform,
 } from '@antv/l7-core';
 import { aProjectFlat, metersToLngLat } from '@antv/l7-utils';
-import { statMap } from './statistics';
+import { statMap } from '../../../utils/src/statistics';
 
 interface IGridHash {
   [key: string]: any;

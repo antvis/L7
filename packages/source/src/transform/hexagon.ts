@@ -1,14 +1,12 @@
-import { aProjectFlat, metersToLngLat } from '@antv/l7-utils';
+import { aProjectFlat, Satistics } from '@antv/l7-utils';
 import { hexbin } from 'd3-hexbin';
 const R_EARTH = 6378000;
 import {
   IParseDataItem,
-  IParserCfg,
   IParserData,
   ISourceCFG,
   ITransform,
 } from '@antv/l7-core';
-import { statMap } from './statistics';
 interface IHexBinItem<T> extends Array<T> {
   x: number;
   y: number;
@@ -39,12 +37,13 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
   const result: IParserData = {
     dataArray: hexbinBins.map((hex: IHexBinItem<IRawData>, index: number) => {
       if (option.field && method) {
-        const columns = getColumn(hex, option.field);
-        hex[method] = statMap[method](columns);
+        const columns = Satistics.getColumn(hex, option.field);
+        hex[method] = Satistics.statMap[method](columns);
       }
       return {
         [option.method]: hex[method],
         count: hex.length,
+        rawData: hex,
         coordinates: [hex.x, hex.y],
         _id: index + 1,
       };
@@ -55,9 +54,4 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
     type: 'hexagon',
   };
   return result;
-}
-function getColumn(data: IHexBinItem<IRawData>, columnName: string) {
-  return data.map((item: IRawData) => {
-    return item[columnName] * 1;
-  });
 }

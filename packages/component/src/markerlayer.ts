@@ -1,8 +1,8 @@
 import { IMapService, IMarker, TYPES } from '@antv/l7-core';
-import { bindAll, DOM } from '@antv/l7-utils';
+import { bindAll, DOM, Satistics } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isFunction } from 'lodash';
+import { merge } from 'lodash';
 import Supercluster from 'supercluster';
 import Marker from './marker';
 type CallBack = (...args: any[]) => any;
@@ -10,6 +10,8 @@ interface IMarkerStyleOption {
   element: CallBack;
   style: { [key: string]: any } | CallBack;
   className: string;
+  field?: string;
+  method?: 'sum' | 'max' | 'min' | 'mean';
   radius: number;
   maxZoom: number;
   minZoom: number;
@@ -18,7 +20,7 @@ interface IMarkerStyleOption {
 
 interface IMarkerLayerOption {
   cluster: boolean;
-  clusterOption: IMarkerStyleOption;
+  clusterOption: Partial<IMarkerStyleOption>;
 }
 
 interface IPointFeature {
@@ -40,10 +42,7 @@ export default class MarkerLayer extends EventEmitter {
 
   constructor(option?: Partial<IMarkerLayerOption>) {
     super();
-    this.markerLayerOption = {
-      ...this.getDefault(),
-      ...option,
-    };
+    this.markerLayerOption = merge(this.getDefault(), option);
     bindAll(['update'], this);
     this.zoom = this.markerLayerOption.clusterOption?.zoom || -99;
   }
@@ -151,6 +150,24 @@ export default class MarkerLayer extends EventEmitter {
     });
     this.clusterMarkers = [];
     clusterPoint.forEach((feature) => {
+      const { field, method } = this.markerLayerOption.clusterOption;
+      // 处理聚合数据
+      if (feature.properties && feature.properties?.cluster_id) {
+        const clusterData = this.getLeaves(feature.properties?.cluster_id);
+        feature.properties.clusterData = clusterData;
+        if (field && method) {
+          const columnData = clusterData?.map((item) => {
+            const data = {
+              [field]: item.properties[field],
+            };
+            return data;
+          });
+          const column = Satistics.getColumn(columnData as any, field);
+          const stat = Satistics.getSatByColumn(method, column);
+          const fieldName = 'point_' + method;
+          feature.properties[fieldName] = stat;
+        }
+      }
       const marker =
         feature.properties && feature.properties.hasOwnProperty('point_count')
           ? this.clusterMarker(feature)
@@ -160,7 +177,16 @@ export default class MarkerLayer extends EventEmitter {
       marker.addTo(this.scene);
     });
   }
-
+  private getLeaves(
+    clusterId: number,
+    limit: number = Infinity,
+    offset: number = 0,
+  ) {
+    if (!clusterId) {
+      return null;
+    }
+    return this.clusterIndex.getLeaves(clusterId, limit, offset);
+  }
   private clusterMarker(feature: any) {
     const clusterOption = this.markerLayerOption.clusterOption;
 
