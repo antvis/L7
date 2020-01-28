@@ -32,6 +32,11 @@ export default class ControlService implements IControlService {
       this.unAddControls.push(ctr);
     }
   }
+  public getControlByName(name: string | number): IControl | undefined {
+    return this.controls.find((ctr) => {
+      return ctr.controlOption.name === name;
+    });
+  }
   public removeControl(ctr: IControl): this {
     const index = this.controls.indexOf(ctr);
     if (index > -1) {

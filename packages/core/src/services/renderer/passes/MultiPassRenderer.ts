@@ -82,4 +82,8 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
     pass.init(this.layer, config);
     this.passes.splice(index, 0, pass);
   }
+
+  public destroy() {
+    this.passes.length = 0;
+  }
 }

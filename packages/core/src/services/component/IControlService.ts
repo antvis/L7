@@ -5,8 +5,16 @@ export enum PositionType {
   'BOTTOMRIGHT' = 'bottomright',
   'BOTTOMLEFT' = 'bottomleft',
 }
+
+export type PositionName =
+  | 'topright'
+  | 'topleft'
+  | 'bottomright'
+  | 'bottomleft';
 export interface IControlOption {
-  position: PositionType;
+  name: string;
+  position: PositionName;
+  [key: string]: any;
 }
 export interface IControlServiceCfg {
   container: HTMLElement;
@@ -15,6 +23,7 @@ export interface IControlCorners {
   [key: string]: HTMLElement;
 }
 export interface IControl {
+  controlOption: IControlOption;
   setPosition(pos: PositionType): void;
   addTo(sceneContainer: Container): void;
   onAdd(): HTMLElement;
@@ -29,6 +38,7 @@ export interface IControlService {
   addControls(): void;
   init(cfg: IControlServiceCfg, sceneContainer: Container): void;
   addControl(ctr: IControl, sceneContainer: Container): void;
+  getControlByName(name: string | number): IControl | undefined;
   removeControl(ctr: IControl): void;
   destroy(): void;
 }

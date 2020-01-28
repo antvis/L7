@@ -73,6 +73,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     this.layers
+      .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
         // trigger hooks
