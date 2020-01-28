@@ -659,6 +659,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);
 
+    this.multiPassRenderer.destroy();
+
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
