@@ -1,6 +1,7 @@
-import { IMapService } from '@antv/l7-core';
+import { IControlOption } from '@antv/l7-core';
 import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
-import Control, { IControlOption, PositionType } from './BaseControl';
+
+import Control, { PositionType } from './BaseControl';
 export interface IScaleControlOption extends IControlOption {
   maxWidth: number;
   metric: boolean;
@@ -22,6 +23,7 @@ export default class Scale extends Control {
       metric: true,
       updateWhenIdle: false,
       imperial: false,
+      name: 'scale',
     };
   }
 
