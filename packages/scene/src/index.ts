@@ -158,6 +158,10 @@ class Scene
     this.controlService.removeControl(ctr);
   }
 
+  public getControlByName(name: string) {
+    return this.controlService.getControlByName(name);
+  }
+
   // marker
   public addMarker(marker: IMarker) {
     this.markerService.addMarker(marker);
