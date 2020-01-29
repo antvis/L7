@@ -34,6 +34,10 @@ export default class PixelPickingPass<
    */
   private layer: ILayer;
 
+  private width: number = 0;
+
+  private height: number = 0;
+
   /**
    * 简单的 throttle，防止连续触发 hover 时导致频繁渲染到 picking framebuffer
    */
@@ -91,8 +95,11 @@ export default class PixelPickingPass<
     this.alreadyInRendering = true;
 
     // resize first, fbo can't be resized in use
-    this.pickingFBO.resize({ width, height });
-
+    if (this.width !== width || this.height !== height) {
+      this.pickingFBO.resize({ width, height });
+      this.width = width;
+      this.height = height;
+    }
     useFramebuffer(this.pickingFBO, () => {
       clear({
         framebuffer: this.pickingFBO,
