@@ -56,7 +56,7 @@ let layerIdCounter = 0;
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
-  public name: string = `${layerIdCounter++}`;
+  public name: string = `${layerIdCounter}`;
   public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
@@ -658,6 +658,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);
+
+    this.multiPassRenderer.destroy();
 
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();

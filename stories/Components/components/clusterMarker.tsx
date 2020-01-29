@@ -52,6 +52,7 @@ export default class ClusterMarkerLayer extends React.Component {
     for (let i = 0; i < nodes.features.length; i++) {
       const { coordinates } = nodes.features[i].geometry;
       const marker = new Marker({
+        color: 'red',
         extData: nodes.features[i].properties,
       }).setLnglat({
         lng: coordinates[0],

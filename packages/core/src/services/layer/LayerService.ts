@@ -27,9 +27,9 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
-    // if (this.sceneInited) {
-    //   layer.init();
-    // }
+    if (this.sceneInited) {
+      layer.init();
+    }
     this.layers.push(layer);
   }
 
@@ -73,6 +73,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     this.layers
+      .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
         // trigger hooks
