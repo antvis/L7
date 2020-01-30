@@ -41,4 +41,4 @@ import { RasterLayer } from '@antv/l7';
   positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
   } // 色带
 
-  ⚠️ color, position 的长度要相同
+  ⚠️  color, position 的长度要相同
