@@ -264,7 +264,6 @@ scene.panBy(x, y);
 ```
 
 参数：
-
 - `x` {number} 水平方向移动像素 向右为正方向
 - `y` {number} 垂直方向移动像素 向下为正方向
 
@@ -278,7 +277,7 @@ scene.setPitch(pitch);
 
 参数 :
 
-`pitch` {number}
+ `pitch` {number}
 
 ### fitBounds
 
@@ -315,7 +314,6 @@ scene.removeLayer(layer);
 ### off
 
 移除事件监听
-
 - `eventName` {string} 事件名
 - `handler` {function } 事件回调函数
 

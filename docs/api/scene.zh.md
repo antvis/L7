@@ -323,7 +323,7 @@ scene.removeLayer(layer);
 
 移除事件监听
 `eventName` {string} 事件名
-`handler` {function } 事件回调函数
+`handler`  {function } 事件回调函数
 
 ### 场景事件
 

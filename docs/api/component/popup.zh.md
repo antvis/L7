@@ -28,16 +28,14 @@ const popup = new L7.Popup(option);
 
 设置 popup 的经纬度位置
 
-**参数**：lnglat
+**参数**：lnglat 
 
 支持数组
-
 ```javascript
-[112, 32];
+[112,32]
 ```
 
 经纬度对象
-
 ```javascript
 {
   lng: 112,
@@ -66,11 +64,12 @@ popup.addTo(scene);
 设置 popup html 内容
 
 ```javascript
-var html = `<p>省份
+var html =
+  `<p>省份
   ${feature.s} </p><p>地区
   ${feature.m}</p><p>数值
   ${feature.t}</p>`;
-popup.setHtml(html);
+  popup.setHtml(html);
 ```
 
 #### setDOMContent
