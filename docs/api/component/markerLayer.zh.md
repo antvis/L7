@@ -3,12 +3,12 @@ title: Marker 图层
 order: 3
 ---
 
-MarkerLayer 是Marker的升级版，Marker是独立的地图标注，MarkerLayer则是统一管理大量的Marker数据。
-
+MarkerLayer 是 Marker 的升级版，Marker 是独立的地图标注，MarkerLayer 则是统一管理大量的 Marker 数据。
 
 **技术差异**
+
 - Marker Dom 绘制一个地图元素
-- MarkerLayer 统一管理多个DomMarker
+- MarkerLayer 统一管理多个 DomMarker
 - PointLayer 通过 WebGL 绘制元素。
 
 **功能差异**
