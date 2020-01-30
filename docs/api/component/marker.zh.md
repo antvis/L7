@@ -3,7 +3,7 @@ title: Marker
 order: 3
 ---
 
-Marker 地图标注 目前只支持 2D dom 标注
+Marker 地图标注 目前只支持 2D Dom 标注
 
 ## 构造函数
 
@@ -13,7 +13,8 @@ Marker
 
 #### option
 
-- color        `string`   ![map-marker.png](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)  设置默认 marker 的颜色
+- color        `string` 
+ ![map-marker.png](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)  设置默认 marker 的颜色
 - element    `Dom|string`    自定义 marker Dom 节点，可以是 dom 实例，也可以是 dom id
 - anchor     `string`  锚点位置   支持 center, top, top-left, top-right, bottom, bottom-left,bottom-right,left, right
 - offset    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量

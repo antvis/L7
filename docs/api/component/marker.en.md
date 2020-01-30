@@ -62,7 +62,7 @@ scene.addMarker(marker);
 
 #### 默认 Marker
 
-\*\*<br />`const marker = new L7.Marker({color:'blue'})`
+`const marker = new L7.Marker({color:'blue'})`
 
 #### 自定义 Marker
 

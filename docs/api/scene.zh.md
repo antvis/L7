@@ -316,11 +316,14 @@ scene.removeLayer(layer);
 
 #### 参数
 
-`eventName` {string} 事件名<br />`hander` {function } 事件回调函数
+`eventName` {string} 事件名
+`handler` {function } 事件回调函数
 
 ### off
 
-移除事件监听<br />`eventName` {string} 事件名<br />`hander` {function } 事件回调函数
+移除事件监听
+`eventName` {string} 事件名
+`handler`  {function } 事件回调函数
 
 ### 场景事件
 
@@ -363,7 +366,7 @@ scene.on('mouseover', (ev) => {}); // 鼠标移入地图容器内时触发
 scene.on('mouseout', (ev) => {}); // 鼠标移出地图容器时触发
 scene.on('mouseup', (ev) => {}); // 鼠标在地图上单击抬起时触发
 scene.on('mousedown', (ev) => {}); // 鼠标在地图上单击按下时触发
-scene.on('rightclick', (ev) => {}); // 鼠标右键单击事件
+scene.on('contextmenu', (ev) => {}); // 鼠标右键单击事件
 scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
