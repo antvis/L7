@@ -1,95 +1,73 @@
 ---
 title: Control
-order: 1
+order: 3
 ---
-
-# control
 
 地图组件 用于控制地图的状态如果平移，缩放，或者展示地图一些的辅助信息如图例，比例尺
 
-## 构造函数
+L7 目前支持 Control
 
-```javascript
-const baseControl = new L7.Control.Base(option);
-```
+- Zoom 放大缩小
+- Scale 比例尺
+- Layers 图层列表
+
+## 构造函数
 
 #### option
 
-position: `string` 控件位置支持是个方位 `bottomright, topright, bottomleft, topleft`
+position: `string` 控件位置支持是个方位
 
-#### scene 内置地图组件
+- bottomright
+- topright
+- bottomleft,
+- topleft`
 
-zoom 地图放大缩小   默认添加<br />Scale 地图比例尺     默认添加<br />attribution 地图数据属性    默认添加<br />layer 图层列表
+### 组件介绍
 
-**scene 配置项设置控件添加状态**
-
-```javascript
-scene = new L7.scene({
-  zoomControl: true,
-  scaleControl: true,
-  attributionControl: true,
-});
 ```
+import { Scale, Layers, Zoom } from '@antv/l7';
 
-####
+```
 
 #### Zoom
 
-放大缩小组件 默认 左上角
+放大缩小组件 默认左上角
 
 ```javascript
-new L7.Control.Zoom({
+const zoomControl = new Zoom({
   position: 'topleft',
-}).addTo(scene);
+});
+
+scene.addControl(zoomControl);
 ```
 
 #### Scale
 
-比例尺组件默认左下角
+比例尺组件 默认左下角
 
 ```javascript
-new L7.Control.Scale({
+const scaleControl = new Scale({
   position: 'bottomleft',
-}).addTo(scene);
+});
+
+scene.addControl(scaleControl);
 ```
 
-#### attribution
+#### Layers
 
-默认右下角
-
-```javascript
-new L7.Control.Attribution({
-  position: 'bottomleft',
-}).addTo(scene);
-```
-
-#### layer
-
-图层列表目前只支持可视化 overlayers 图层控制
+图层列表目前支持可视化的图层控制
 
 ```javascript
-var overlayers = {
-  围栏填充: layer,
-  围栏边界: layer2,
+const overlayers = {
+  点图层: layer,
 };
-new L7.Control.Layers({
-  overlayers: overlayers,
-}).addTo(scene);
+const layersControl = new Layers({
+  overlayers,
+});
+scene.addControl(layersControl);
 ```
 
 ## 方法
-
-#### onAdd
-
-组件添加到地图 Scene 时调用，自定义组件时需要实现此方法
-
-#### addTo
-
-添加到地图 scene
-
-```javascript
-control.addTo(scene);
-```
 
 #### setPosition
 
@@ -106,34 +84,3 @@ control.setPosition('bottomright');
 ```javascript
 control.remove();
 ```
-
-## 示例代码
-
-#### 自定义图例控件
-
-[源码](https://antv.alipay.com/zh-cn/l7/1.x/demo/component/extendControl.html)
-
-```javascript
-var legend = new L7.Control.Base({
-  position: 'bottomright',
-});
-legend.onAdd = function() {
-  var el = document.createElement('div');
-  el.className = 'infolegend legend';
-  var grades = [0, 8, 15, 30, 65, 120];
-  for (var i = 0; i < grades.length; i++) {
-    el.innerHTML +=
-      '<i style="background:' +
-      colors[i] +
-      '"></i> ' +
-      grades[i] +
-      (grades[i + 1] ? '–' + grades[i + 1] + '<br>' : '+');
-  }
-  return el;
-};
-legend.addTo(scene);
-```
-
-##
-
-## FAQ

@@ -3,17 +3,18 @@ title: Marker 图层
 order: 3
 ---
 
-MarkerLayer 不同于 PointLayer 图层
+MarkerLayer 是Marker的升级版，Marker是独立的地图标注，MarkerLayer则是统一管理大量的Marker数据。
+
 
 **技术差异**
-
-- MarkerLayer 地图元素采用 Dom 元素绘制
+- Marker Dom 绘制一个地图元素
+- MarkerLayer 统一管理多个DomMarker
 - PointLayer 通过 WebGL 绘制元素。
 
 **功能差异**
 
-- MarkerLayer 元素的自定义性比较强，任何 HTML+ CSS 的组合都可可以绘制在地图上。
-- PointLayer 自定义性比较弱，实现成本比较高，优势可以绘制大量的数据，性能比交互。
+- MarkerLayer 元素的自定义性比较强，任何 HTML+ CSS 的组合都可以绘制在地图上。
+- PointLayer 自定义性比较弱，实现成本比较高，优势可以绘制大量的数据，性能比较好。
 
 ## 使用
 

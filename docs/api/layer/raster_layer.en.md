@@ -37,8 +37,8 @@ import { RasterLayer } from '@antv/l7';
 - domain: [ 0, 8000 ] 数据映射区间
 - noDataValue Number noDataValue 不会显示
 - rampColors: {
-  colors: [ '#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C' ].reverse(),
+  colors: [ '#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C' ],
   positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
   } // 色带
 
-  :warning: color, position 的长度要相同
+  ⚠️  color, position 的长度要相同
