@@ -1,7 +1,8 @@
 ---
-title: How to start the demo locally
+title: 本地运行demo
 order: 1
 ---
+
 
 ### 一、打开L7demo页面
 
@@ -11,7 +12,7 @@ order: 1
 
 <img src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bKT5TrlYlGEAAAAAAAAAAABkARQnAQ" alt="L7 地理可视化" width = "50%" height = "100%">
 
-你可能没有注意，代码区的上方有一排工具按钮，注意了你可能不知道干什么用的。
+你可能没有注意到，代码区的上方有一排工具按钮，。
 
 
 ### 二、打开 codesandbox。
@@ -22,7 +23,7 @@ order: 1
 
 <img src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*coZsTLbX2FQAAAAAAAAAAABkARQnAQ" alt="L7 地理可视化" width = "50%" height = "100%">
 
-你发现你进入了一个线代码编辑器比较流行，这个里面你可以修改代码，并且能够随时看到效果
+你发现你进入了一个在线的代码编辑器，在这里面你可以修改代码，并且能够随时看到效果
 
 你可能想说我就想本地跑起来，不想在线修改。
 
@@ -57,6 +58,9 @@ yarn  start
 
 <img src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oQQ2RbOzx0oAAAAAAAAAAABkARQnAQ" alt="L7 地理可视化" width = "50%" height = "100%">
 
+
 现在你可以尽情的本地修改代码，添加自己的图层了。
 
 L7 所有demo都可以在codesandbox 打开，你可以下载代码。
+
+
