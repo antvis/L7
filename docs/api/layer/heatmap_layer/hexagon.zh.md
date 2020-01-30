@@ -23,7 +23,7 @@ import { HeatMapLayer } from '@antv/l7';
 - type  数据聚合类型  hexagon
 - size  网格半径 单位 米
 - field  聚合字段
-- method 聚合方法  count,max,min,sum,mean5 个统计维度
+- method 聚合方法 count,max,min,sum,mean 5个统计维度
 
 ```javascript
 
@@ -56,7 +56,7 @@ layer.source(data, {
 - heaxgon 
 
 ```javascript
-layer.shape(circle);
+layer.shape('circle');
 
 ```
 
@@ -68,7 +68,7 @@ layer.shape(circle);
 - squareColumn,
 
 ```javascript
-layer.shape(cylinder);
+layer.shape('cylinder');
 
 ```
 
