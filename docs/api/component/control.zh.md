@@ -60,8 +60,8 @@ scene.addControl(scaleControl);
 配置项
 
 option 控件配置项
-overlayers 将一组图层添加到图层列表，
-overlayers Object
+overlayers 将一组图层添加到图层列表
+overlayers  Object
 key: 列表显示的图层名字可以自定义
 layer: 图层对象
 overlayers 示例
