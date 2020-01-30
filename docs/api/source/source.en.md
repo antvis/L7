@@ -131,4 +131,4 @@ layer.source(data, {
 - type: 'hexagon',
 - size: 网格半径
 - field: 数据统计字段
-- method:聚合方法   count,max,min,sum,mean 5 个统计维度
+- method: 聚合方法   count,max,min,sum,mean 5 个统计维度

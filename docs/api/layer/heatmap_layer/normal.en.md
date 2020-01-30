@@ -39,7 +39,7 @@ layer.size('weight', [0,1])
   - colors  颜色数组
   - positions 数据区间
 
-  :warning: color, position 的长度要相同
+  ⚠️  color, position 的长度要相同
 
 ## 完整代码
 
