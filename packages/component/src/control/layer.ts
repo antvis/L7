@@ -114,8 +114,6 @@ export default class Layers extends Control {
     if (!collapsed) {
       this.expand();
     }
-    this.expand();
-
     this.baseLayersList = DOM.create('div', className + '-base', form);
     this.separator = DOM.create('div', className + '-separator', form);
     this.overlaysList = DOM.create('div', className + '-overlays', form);

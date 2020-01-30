@@ -3,7 +3,7 @@ title: Control
 order: 3
 ---
 
-地图组件 用于控制地图的状态如果平移，缩放，或者展示地图一些的辅助信息如图例，比例尺
+地图组件用于控制地图的状态如果平移，缩放，或者展示地图一些的辅助信息如图例、比例尺
 
 L7 目前支持 Control
 
@@ -56,6 +56,22 @@ scene.addControl(scaleControl);
 #### Layers
 
 图层列表目前支持可视化的图层控制
+
+配置项
+
+option 控件配置项
+overlayers 将一组图层添加到图层列表，
+overlayers Object
+key: 列表显示的图层名字可以自定义
+layer: 图层对象
+overlayers 示例
+
+```javascript
+  {
+   "图层一"：layer1,
+   "图层二"：layer2,
+  }
+```
 
 ```javascript
 const overlayers = {
