@@ -503,7 +503,9 @@ layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
 图层初始化完成后触发
 
 ```javascript
-layer.on('inited', (option) => {});
+ layer.on('inited',(option)=>{
+
+ })
 ```
 
 ### add
