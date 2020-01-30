@@ -138,8 +138,8 @@ export default class Source extends EventEmitter {
     const { type = 'geojson' } = this.parser;
     if (type === 'geojson' && !this.cluster) {
       //  TODO： 聚合图层返回聚合和后的数据
-      return id < this.rawData.features.length
-        ? this.rawData.features[id]
+      return id < this.originData.features.length
+        ? this.originData.features[id]
         : 'null';
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';

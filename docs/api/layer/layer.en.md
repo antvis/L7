@@ -120,7 +120,7 @@ cscle('field', scaleConfig)
 
 ## 视觉编码方法
 
-可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通过，你可以指定数据字段，为不同要素设置不同的图形属性。
+可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
 
 ### size
 
@@ -324,7 +324,7 @@ layer.show();
 layer.hide();
 ```
 
-### isVisable
+### isVisible
 
 图层是否可见
 
@@ -420,7 +420,7 @@ layer.setSelect(id);
 - x: number 鼠标  在地图位置 x 坐标
 - y: number 鼠标  在地图位置 y 坐标
 - type: string 鼠标事件类型
-- lngLat: ILngLat {lng:number, lat: number }; 鼠标所在位置经纬度
+- lngLat: 经度度对象 {lng:number, lat: number }; 鼠标所在位置经纬度
 - feature: any; 数据选中的地理要素信息
 - featureId: number | null; 数据选中的地理要素的 ID
 
@@ -495,27 +495,33 @@ layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
 
 ### inited
 
-option
+参数 option
 
-- target ILayer 当前 layer
+- target 当前 layer
 - type 事件类型
 
 图层初始化完成后触发
+
+```javascript
+ layer.on('inited',(option)=>{
+
+ })
+```
 
 ### add
 
 图层添加到 scene
 
-option
+参数 option
 
-- target ILayer 当前 layer
+- target 当前 layer
 - type 事件类型
 
 ### remove
 
 图层移除时触发
 
-option
+参数 option
 
-- target ILayer 当前 layer
+- target 当前 layer
 - type 事件类型
