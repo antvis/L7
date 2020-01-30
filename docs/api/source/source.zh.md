@@ -111,7 +111,7 @@ tranforms 处理的是的标准化之后的数据
 - type: 'grid',
 - size: 网格半径
 - field: 数据统计字段
-- method: 聚合方法 count,max,min,sum,mean 5个统计维度
+- method: 聚合方法  count,max,min,sum,mean 5 个统计维度
 
 ```javascript
 layer.source(data, {
