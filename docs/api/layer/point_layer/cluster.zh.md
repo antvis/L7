@@ -31,11 +31,10 @@ order: 5
   
   **getClustersLeaves(id: string)**
   
-    根据id获取聚合节点的数据
+  根据id获取聚合节点的数据，每个聚合节点会有一个唯一ID
 
   - id 聚合数据id
 
-  
 
 
 ```javascript
