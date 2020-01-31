@@ -30,7 +30,7 @@ scene.addLayer(layer);
 
 设置图层名称,可根据 name 获取 layer;
 
-### visable
+### visible
 
 图层是否可见   {bool } default true
 
@@ -102,7 +102,7 @@ layer.source(data, {
 
 ### scale
 
-cscle('field', scaleConfig)
+scale('field', scaleConfig)
 
 (field: string, scaleConfig: object)
 
