@@ -19,9 +19,12 @@ Include the L7 JS JavaScript  <head> of your HTML file.
 
 ```html
 <head>
-<! --引入第三方地图JSAPI--> 
-<script src='https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.8/dist/l7.js'>
-</script>
+<! --引入最新版的L7--> 
+<script src = 'https://unpkg.com/@antv/l7'></script>
+
+<! --指定版本号引入L7--> 
+<script src = 'https://unpkg.com/@antv/l7@2.0.11'></script>
+
 </head>
 ```
 
