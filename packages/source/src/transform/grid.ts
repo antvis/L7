@@ -93,7 +93,7 @@ function _getGridLayerDataFromGridHash(
       item[option.method] = Satistics.statMap[option.method](columns);
     }
     Object.assign(item, {
-      _id: i + 1,
+      _id: i,
       coordinates: [
         -180 + gridOffset.xOffset * lonIdx,
         -90 + gridOffset.yOffset * latIdx,
