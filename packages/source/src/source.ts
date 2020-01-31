@@ -136,7 +136,7 @@ export default class Source extends EventEmitter {
   }
   public getFeatureById(id: number): unknown {
     const { type = 'geojson' } = this.parser;
-    if (type === 'geojson' && !this.cluster) {
+    if (type === 'geojson' && !this.cluster && this.transforms.length === 0) {
       //  TODO： 聚合图层返回聚合和后的数据
       return id < this.originData.features.length
         ? this.originData.features[id]
