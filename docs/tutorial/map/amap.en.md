@@ -17,8 +17,16 @@ order: 0
 
 2.0版本在L7内部动态引入了高德地图JS API，因此不再需要单独引入高德JS API，只需设置 type 为 ```amap``` 并且传入token
 
+
 ```html
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.8/dist/l7.js"></script>
+<head>
+<! --引入最新版的L7--> 
+<script src = 'https://unpkg.com/@antv/l7'></script>
+
+<! --指定版本号引入L7--> 
+<script src = 'https://unpkg.com/@antv/l7@2.0.11'></script>
+
+</head>
 ```
 
 ### 添加div 标签指定地图容器
@@ -106,7 +114,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 </head>
 <body>
 <div id="map"></div>
-<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.8/dist/l7.js"></script>
+<script src="https://unpkg.com/@antv/l7"></script>
 <script>
 
   const scene = new L7.Scene({

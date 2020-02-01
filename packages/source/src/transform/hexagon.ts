@@ -45,7 +45,7 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
         count: hex.length,
         rawData: hex,
         coordinates: [hex.x, hex.y],
-        _id: index + 1,
+        _id: index,
       };
     }),
     radius: pixlSize,
