@@ -1,3 +1,6 @@
+interface IItemData {
+  [key: string]: any;
+}
 function max(x: number[]) {
   if (x.length === 0) {
     throw new Error('max requires at least one data point');
@@ -75,3 +78,12 @@ export const statMap: { [key: string]: any } = {
   mean,
   sum,
 };
+export function getColumn(data: IItemData[], columnName: string) {
+  return data.map((item: IItemData) => {
+    return item[columnName] * 1;
+  });
+}
+
+export function getSatByColumn(type: string, column: number[]) {
+  return statMap[type](column);
+}

@@ -20,6 +20,12 @@ export default class InteractionService extends EventEmitter
 
   private hammertime: HammerManager;
 
+  private lastClickTime: number = 0;
+
+  private lastClickXY: number[] = [-1, -1];
+
+  private clickTimer: number;
+
   public init() {
     // 注册事件在地图底图上
     this.addEventListenerOnMap();
@@ -59,7 +65,7 @@ export default class InteractionService extends EventEmitter
       $containter.addEventListener('click', this.onHover);
       $containter.addEventListener('mousedown', this.onHover);
       $containter.addEventListener('mouseup', this.onHover);
-      $containter.addEventListener('dblclick', this.onHover);
+      // $containter.addEventListener('dblclick', this.onHover);
       $containter.addEventListener('contextmenu', this.onHover);
 
       this.hammertime = hammertime;
@@ -75,7 +81,7 @@ export default class InteractionService extends EventEmitter
       $containter.removeEventListener('click', this.onHover);
       $containter.removeEventListener('mousedown', this.onHover);
       $containter.removeEventListener('mouseup', this.onHover);
-      $containter.removeEventListener('dblclick', this.onHover);
+      // $containter.removeEventListener('dblclick', this.onHover);
       $containter.removeEventListener('contextmenu', this.onHover);
     }
   }
@@ -88,6 +94,32 @@ export default class InteractionService extends EventEmitter
       y -= top;
     }
     const lngLat = this.mapService.containerToLngLat([x, y]);
+
+    if (type === 'click') {
+      const nowTime = new Date().getTime();
+      if (
+        nowTime - this.lastClickTime < 500 &&
+        Math.abs(this.lastClickXY[0] - x) < 10 &&
+        Math.abs(this.lastClickXY[1] - y) < 10
+      ) {
+        this.lastClickTime = 0;
+        this.lastClickXY = [-1, -1];
+        if (this.clickTimer) {
+          clearTimeout(this.clickTimer);
+        }
+        type = 'dblclick';
+        this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+      } else {
+        this.lastClickTime = nowTime;
+        this.lastClickXY = [x, y];
+        this.clickTimer = setTimeout(() => {
+          type = 'click';
+          this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+        }, 500);
+      }
+      return;
+    }
+
     this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
   };
 }

@@ -87,12 +87,12 @@ export default class MultiGaodeMap extends React.Component {
         opacity: 0.3,
         strokeWidth: 2,
       });
-    scene1.on('loaded', () => {
-      scene1.addLayer(pointLayer);
-    });
-    scene2.on('loaded', () => {
-      scene2.addLayer(pointLayer2);
-    });
+    // scene1.on('loaded', () => {
+    scene1.addLayer(pointLayer);
+    // });
+    // scene2.on('loaded', () => {
+    scene2.addLayer(pointLayer2);
+    // });
 
     this.scene1 = scene1;
     this.scene2 = scene2;

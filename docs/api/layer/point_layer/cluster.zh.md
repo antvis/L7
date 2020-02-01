@@ -31,11 +31,10 @@ order: 5
   
   **getClustersLeaves(id: string)**
   
-    根据id获取聚合节点的数据
+  根据id获取聚合节点的数据，每个聚合节点会有一个唯一ID
 
   - id 聚合数据id
 
-  
 
 
 ```javascript
@@ -73,6 +72,13 @@ const pointLayer = new PointLayer({})
           strokeWidth: 1,
         });
 ```
+[聚合图使用案例](../../../examples/point/cluster)
+
+### FAQ
+PointLayer的聚合图采用WebGL绘制，不支持自定义具体聚合样式，如果有自定义的需求可以使用MarkerLayer的聚合功能，你可以通过Dom完全自定义样式。
+
+[MarkerLayer聚合](../../component/markerLayer)
+
 
 
 

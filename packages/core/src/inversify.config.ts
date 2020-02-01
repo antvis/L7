@@ -73,10 +73,10 @@ container
   .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
   .to(GlobalConfigService)
   .inSingletonScope();
-container
-  .bind<IIconService>(TYPES.IIconService)
-  .to(IconService)
-  .inSingletonScope();
+// container
+//   .bind<IIconService>(TYPES.IIconService)
+//   .to(IconService)
+//   .inSingletonScope();
 container
   .bind<IShaderModuleService>(TYPES.IShaderModuleService)
   .to(ShaderModuleService)
@@ -85,10 +85,10 @@ container
   .bind<ILogService>(TYPES.ILogService)
   .to(LogService)
   .inSingletonScope();
-container
-  .bind<IFontService>(TYPES.IFontService)
-  .to(FontService)
-  .inSingletonScope();
+// container
+//   .bind<IFontService>(TYPES.IFontService)
+//   .to(FontService)
+//   .inSingletonScope();
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
 decorate(injectable(), EventEmitter);
@@ -160,7 +160,6 @@ export function createSceneContainer() {
   sceneContainer
     .bind<string>(TYPES.SceneID)
     .toConstantValue(`${sceneIdCounter++}`);
-
   sceneContainer
     .bind<ILayerService>(TYPES.ILayerService)
     .to(LayerService)
@@ -188,6 +187,14 @@ export function createSceneContainer() {
   sceneContainer
     .bind<IMarkerService>(TYPES.IMarkerService)
     .to(MarkerService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IIconService>(TYPES.IIconService)
+    .to(IconService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IFontService>(TYPES.IFontService)
+    .to(FontService)
     .inSingletonScope();
 
   sceneContainer
