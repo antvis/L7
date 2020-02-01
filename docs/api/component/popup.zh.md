@@ -40,8 +40,8 @@ const popup = new L7.Popup(option);
 
 ```javascript
 {
-  lng: 112,
-  lat: 30
+    lng: 112.323,
+    lat: 30.456,
 }
 ```
 
