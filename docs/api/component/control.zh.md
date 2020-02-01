@@ -68,8 +68,8 @@ overlayers 示例
 
 ```javascript
   {
-   "图层一"：layer1,
-   "图层二"：layer2,
+   图层一: layer1,
+   图层二: layer2,
   }
 ```
 
