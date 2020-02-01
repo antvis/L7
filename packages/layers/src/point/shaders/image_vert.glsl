@@ -11,6 +11,7 @@ uniform float u_stroke_width : 1;
 varying float v_size;
 
 #pragma include "projection"
+#pragma include "picking"
 
 void main() {
    v_color = a_Color;
@@ -20,5 +21,6 @@ void main() {
 
    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
    gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
+   setPickingColor(a_PickingColor);
 
 }

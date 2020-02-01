@@ -26,7 +26,24 @@ const popup = new L7.Popup(option);
 
 #### setLnglat
 
-设置 popup 的经纬度位置<br />**参数**：lnglat 经纬度数组 [112,32]
+设置 popup 的经纬度位置
+
+**参数**：lnglat
+
+支持数组
+
+```javascript
+[112, 32];
+```
+
+经纬度对象
+
+```javascript
+{
+  lng: 112,
+  lat: 30
+}
+```
 
 ```javascript
 popup.setLnglat([112, 32]);
@@ -49,16 +66,21 @@ popup.addTo(scene);
 设置 popup html 内容
 
 ```javascript
-var html =
-  '<p>\u7701\u4EFD\uFF1A' +
-  feature.s +
-  '</p>\n        <p>\u5730\u533A\uFF1A' +
-  feature.m +
-  '</p>\n        <p>\u6E29\u5EA6\uFF1A' +
-  feature.t +
-  '</p>\n        ';
+var html = `<p>省份
+  ${feature.s} </p><p>地区
+  ${feature.m}</p><p>数值
+  ${feature.t}</p>`;
 popup.setHtml(html);
 ```
+
+#### setDOMContent
+
+- 参数 htmlNode dom 对象
+  区别于 setHtml 对象只能传字符串
+
+**tips**
+
+如果需要将 react 组件渲染到 popup 可以用此方法。
 
 #### setText
 
@@ -66,6 +88,38 @@ popup.setHtml(html);
 
 ```javascript
 popup.setText('hello world');
+```
+
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
+```
+
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
 ```
 
 #### remove
@@ -77,6 +131,12 @@ popup.remove();
 ```
 
 ## 事件
+
+### open
+
+```javascript
+popup.on('open', () => {});
+```
 
 #### close
 

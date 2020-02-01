@@ -1,8 +1,10 @@
 import {
+  IControlOption,
   IControlService,
   ILayerService,
   IMapService,
   IRendererService,
+  PositionName,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
@@ -15,18 +17,12 @@ export enum PositionType {
   'BOTTOMRIGHT' = 'bottomright',
   'BOTTOMLEFT' = 'bottomleft',
 }
-export type PositionName =
-  | 'topright'
-  | 'topleft'
-  | 'bottomright'
-  | 'bottomleft';
-export interface IControlOption {
-  position: PositionName;
-  [key: string]: any;
-}
+
+let controlId = 0;
 export default class Control extends EventEmitter {
   public controlOption: IControlOption;
   protected container: HTMLElement;
+  protected sceneContainer: Container;
   protected mapsService: IMapService;
   protected renderService: IRendererService;
   protected layerService: ILayerService;
@@ -45,18 +41,19 @@ export default class Control extends EventEmitter {
   public getDefault() {
     return {
       position: PositionType.TOPRIGHT,
+      name: `${controlId++}`,
     };
   }
   public setPosition(position: PositionName) {
     // 考虑组件的自动布局，需要销毁重建
-    // const controlService = this.controlService;
-    // if (controlService) {
-    //   controlService.removeControl(this);
-    // }
-    // this.controlOption.position = position;
-    // if (controlService) {
-    //   controlService.addControl(this, this.mapsService);
-    // }
+    const controlService = this.controlService;
+    if (controlService) {
+      controlService.removeControl(this);
+    }
+    this.controlOption.position = position;
+    if (controlService) {
+      controlService.addControl(this, this.sceneContainer);
+    }
     return this;
   }
   public addTo(sceneContainer: Container) {
@@ -68,7 +65,7 @@ export default class Control extends EventEmitter {
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
     );
-
+    this.sceneContainer = sceneContainer;
     this.isShow = true;
     this.container = this.onAdd();
     const container = this.container;

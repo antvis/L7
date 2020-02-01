@@ -205,10 +205,17 @@ export default class StyleAttributeService implements IStyleAttributeService {
         normals: normalsForCurrentFeature,
         size: vertexSize,
       } = this.triangulation(feature);
-      indices.push(...indicesForCurrentFeature.map((i) => i + verticesNum));
-      vertices.push(...verticesForCurrentFeature);
+      indicesForCurrentFeature.forEach((i) => {
+        indices.push(i + verticesNum);
+      });
+      verticesForCurrentFeature.forEach((index) => {
+        vertices.push(index);
+      });
+      // fix Maximum call stack size exceeded https://stackoverflow.com/questions/22123769/rangeerror-maximum-call-stack-size-exceeded-why
       if (normalsForCurrentFeature) {
-        normals.push(...normalsForCurrentFeature);
+        normalsForCurrentFeature.forEach((normal) => {
+          normals.push(normal);
+        });
       }
       size = vertexSize;
       const verticesNumForCurrentFeature =
