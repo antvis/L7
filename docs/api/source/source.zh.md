@@ -30,13 +30,15 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 
 ## API
 
-### cluster ``boolean` 可选 可以只设置
+### cluster `boolean` 可选 可以只设置
 
 ### clusterOption 可选
 
 - radius 聚合半径 **number** default 40
 - minZoom: 最小聚合缩放等级 **number** default 0
 - maxZoom: 最大聚合缩放等级 **number** default 16
+
+[聚合图使用案例](../../../examples/point/cluster)
 
 ### parser
 
@@ -109,7 +111,7 @@ tranforms 处理的是的标准化之后的数据
 - type: 'grid',
 - size: 网格半径
 - field: 数据统计字段
-- method:聚合方法   count,max,min,sum,mean5 个统计维度
+- method: 聚合方法  count,max,min,sum,mean 5 个统计维度
 
 ```javascript
 layer.source(data, {

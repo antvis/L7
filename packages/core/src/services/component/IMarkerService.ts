@@ -19,6 +19,9 @@ export interface IMarker {
   setExtData(data: any): void;
   setPopup(popup: IPopup): void;
   togglePopup(): this;
+  openPopup(): this;
+  closePopup(): this;
+  setElement(el: HTMLElement): this;
 }
 export interface IMarkerService {
   container: HTMLElement;

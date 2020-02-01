@@ -1,10 +1,6 @@
-import { IMapService } from '@antv/l7-core';
+import { IControlOption, PositionName, PositionType } from '@antv/l7-core';
 import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
-import Control, {
-  IControlOption,
-  PositionName,
-  PositionType,
-} from './BaseControl';
+import Control from './BaseControl';
 export interface ILayerControlOption extends IControlOption {
   collapsed: boolean;
   autoZIndex: boolean;
@@ -55,6 +51,7 @@ export default class Layers extends Control {
       autoZIndex: true,
       hideSingleBase: false,
       sortLayers: false,
+      name: 'layers',
     };
   }
   public onAdd() {
@@ -117,8 +114,6 @@ export default class Layers extends Control {
     if (!collapsed) {
       this.expand();
     }
-    this.expand();
-
     this.baseLayersList = DOM.create('div', className + '-base', form);
     this.separator = DOM.create('div', className + '-separator', form);
     this.overlaysList = DOM.create('div', className + '-overlays', form);

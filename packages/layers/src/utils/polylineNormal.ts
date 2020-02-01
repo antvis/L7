@@ -217,7 +217,7 @@ export default function(
     pickData.push(
       attrPos[i * 3],
       attrPos[i * 3 + 1],
-      attrPos[i * 3 + 1],
+      attrPos[i * 3 + 2],
       attrDistance[i],
       miters[i],
       totalDistance,

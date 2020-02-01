@@ -89,16 +89,16 @@ const IndexPage = () => {
 
   const notifications = [
     {
+      type: t('推荐'),
+      title: t('如何用L7制作省市下钻疫情地图'),
+      date: '2020.01.31',
+      link: 'https://www.yuque.com/xiaofengcanyue/scpehq/zf094u',
+    },
+    {
       type: t('新版发布'),
       title: t('L7 2.0 正式版'),
       date: '2020.01.06',
       link: 'https://www.yuque.com/antv/blog/haygzb',
-    },
-    {
-      type: t('推荐'),
-      title: t('欢迎进入 2020 可视化智能研发时代'),
-      date: '2020.01.08',
-      link: 'https://www.yuque.com/antv/blog/ygdubv',
     },
   ];
 

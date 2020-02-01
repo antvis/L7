@@ -32,16 +32,18 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.IIconService)
-  protected readonly iconService: IIconService;
+  // @lazyInject(TYPES.IIconService)
+  // protected readonly iconService: IIconService;
 
-  @lazyInject(TYPES.IFontService)
-  protected readonly fontService: IFontService;
+  // @lazyInject(TYPES.IFontService)
+  // protected readonly fontService: IFontService;
 
   @lazyInject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
+  protected iconService: IIconService;
+  protected fontService: IFontService;
   protected styleAttributeService: IStyleAttributeService;
   protected mapService: IMapService;
   protected cameraService: ICameraService;
@@ -56,6 +58,12 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       .getContainer()
       .get<IStyleAttributeService>(TYPES.IStyleAttributeService);
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
+    this.iconService = layer
+      .getContainer()
+      .get<IIconService>(TYPES.IIconService);
+    this.fontService = layer
+      .getContainer()
+      .get<IFontService>(TYPES.IFontService);
     this.cameraService = layer
       .getContainer()
       .get<ICameraService>(TYPES.ICameraService);

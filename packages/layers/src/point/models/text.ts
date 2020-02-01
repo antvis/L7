@@ -92,6 +92,7 @@ export default class TextModel extends BaseModel {
       stroke = '#fff',
       strokeWidth = 0,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    this.updateTexture();
     const { canvas } = this.fontService;
     return {
       u_opacity: 1.0,
@@ -104,6 +105,7 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    this.extent = this.textExtent();
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();

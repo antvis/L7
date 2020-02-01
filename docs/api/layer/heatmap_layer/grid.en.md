@@ -23,7 +23,7 @@ import { HeatMapLayer } from '@antv/l7';
 - type  数据聚合类型 grid
 - size  网格半径 单位 米
 - field  聚合字段
-- method 聚合方法  count,max,min,sum,mean5 个统计维度
+- method 聚合方法  count,max,min,sum,mean 5个统计维度
 
 ```javascript
 
@@ -57,7 +57,7 @@ layer.source(data, {
 
 ```javascript
 
-layer.shape(circle);
+layer.shape('circle');
 
 ```
 
@@ -69,7 +69,7 @@ layer.shape(circle);
 - squareColumn,
 
 ```javascript
-layer.shape(cylinder);
+layer.shape('cylinder');
 
 ```
 
@@ -150,7 +150,7 @@ const layer = new HeatmapLayer({})
           '#6BD5A0',
           '#A7ECB2',
           '#D0F4CA'
-        ].reverse()
+        ]
       );
 
     scene.addLayer(layer);
