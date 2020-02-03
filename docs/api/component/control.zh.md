@@ -67,7 +67,7 @@ layer: 图层对象
 overlayers 示例
 
 ```javascript
-  {
+  const layer = {
    图层一: layer1,
    图层二: layer2,
   }
