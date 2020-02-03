@@ -19,6 +19,7 @@ export default class AnimatePoint extends React.Component {
         style: 'dark',
         center: [112, 23.69],
         zoom: 2.5,
+        plugin: ['AMap.ToolBar'],
       }),
     });
 
