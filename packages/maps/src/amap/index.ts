@@ -269,8 +269,9 @@ export default class AMapService
           this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
         }
         amapLoaded = true;
+        plugin.push('Map3D');
         this.loadAMapScript(
-          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D,${plugin.join(
+          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=${plugin.join(
             ',',
           )}`,
         ).then(() => {
