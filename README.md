@@ -40,7 +40,7 @@ L7 focuses on geographic data expressiveness，interaction and design of geograp
 ### 📦 Installation
 
 ```
-npm install @antv/l7@beta
+npm install @antv/l7
 ```
 
 ### Init Map by L7 scene
