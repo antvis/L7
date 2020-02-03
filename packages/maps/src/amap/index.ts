@@ -270,7 +270,7 @@ export default class AMapService
         }
         amapLoaded = true;
         this.loadAMapScript(
-          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D${plugin.join(
+          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=Map3D,${plugin.join(
             ',',
           )}`,
         ).then(() => {
