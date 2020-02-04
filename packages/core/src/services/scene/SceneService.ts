@@ -226,10 +226,11 @@ export default class Scene extends EventEmitter implements ISceneService {
     return this.$container as HTMLDivElement;
   }
 
-  public ExportMap2Png(): string {
+  public exportPng(): string {
     const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
-    this.render();
-    const layersPng = renderCanvas?.toDataURL() as string;
+    // this.render();
+    DOM.printCanvas(renderCanvas as HTMLCanvasElement);
+    const layersPng = renderCanvas?.toDataURL('image/png') as string;
     return layersPng;
   }
 
@@ -237,11 +238,11 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.emit('destroy');
     this.inited = false;
     this.layerService.destroy();
+    this.rendererService.destroy();
     this.interactionService.destroy();
     this.controlService.destroy();
     this.markerService.destroy();
     this.removeAllListeners();
-    this.rendererService.destroy();
     this.map.destroy();
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
     window
