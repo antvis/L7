@@ -76,6 +76,22 @@ const scene = new L7.Scene({
 
 需传入 dom 容器或者容器 id  {domObject || string} [必选]
 
+### logoPosition
+
+L7 Logo的显示位置 默认左下角
+
+- bottomright
+- topright
+- bottomleft,
+- topleft`
+
+
+### logoVisible 
+
+是否显示L7的Logo {boolean} true
+
+
+
 ### zoom
 
 地图初始显示级别 {number} （0-22）

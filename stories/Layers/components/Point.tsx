@@ -23,7 +23,7 @@ export default class Point3D extends React.Component {
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
-        zoom: 3,
+        zoom: 0,
       }),
     });
     // scene.on('loaded', () => {
