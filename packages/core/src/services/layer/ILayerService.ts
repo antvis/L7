@@ -141,6 +141,9 @@ export interface ILayer {
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;
+  getMinZoom(): number;
+  getMaxZoom(): number;
+  get(name: string): number;
   setBlend(type: keyof typeof BlendType): void;
   // animate(field: string, option: any): ILayer;
   render(): ILayer;
