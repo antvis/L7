@@ -134,3 +134,56 @@ layer.source(data, {
 - size: 网格半径
 - field: 数据统计字段
 - method:聚合方法   count,max,min,sum,mean 5 个统计维度
+
+#### join
+
+数据连接，业务中跟多情况是地理数据和业务数据分开的两套数据，我们可与通过 join 方法将地理数据和业务数据进行关联。
+
+**配置项**
+
+- type: join
+- sourceField 需要连接的业务数据字段名称
+- data 需要连接的数据源 仅支持 json 格式
+- targetField 关联的地理数据字段名称
+
+```javascript
+ const data = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "city":'北京'
+      },
+      "geometry": {
+      }
+    }
+  ]
+
+ }
+
+const data2 = [
+  {
+    name:'北京',
+    value: 13
+  },
+  {
+    name:'天津',
+    value: 20
+  }
+]
+// data 是地理数据
+// data2 属性数据或者业务数据
+
+// 通过join方法我们就可以将两个数据连接到一起
+
+ layer.source(data,{
+   transforms:[
+     type: 'join'
+     sourceField: 'name' //data1 对应字段名
+     targetField: 'city' // data 对应字段名
+     data: data2,
+   ]
+ })
+ .color('value') // 可以采用data1的value字段进行数据到颜色的映射
+```
