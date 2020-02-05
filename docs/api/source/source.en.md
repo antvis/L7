@@ -157,7 +157,6 @@ layer.source(data, {
       }
     }
   ]
-
  }
 
 const data2 = [
