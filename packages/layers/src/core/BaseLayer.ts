@@ -629,6 +629,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public getMinZoom(): number {
+    const { minZoom } = this.getLayerConfig();
+    return minZoom as number;
+  }
+
+  public getMaxZoom(): number {
+    const { maxZoom } = this.getLayerConfig();
+    return maxZoom as number;
+  }
+
+  public get(name: string) {
+    const cfg = this.getLayerConfig();
+    // @ts-ignore
+    return cfg[name];
+  }
+
   public setMaxZoom(maxZoom: number): ILayer {
     this.updateLayerConfig({
       maxZoom,
