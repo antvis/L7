@@ -175,8 +175,12 @@ export default class Layers extends Control {
     for (let i = inputs.length - 1; i >= 0; i--) {
       input = inputs[i];
       layer = this.layerService.getLayer(input.layerId);
-      if (layer) {
-        input.disabled = !layer.inited || !layer.isVisible();
+
+      if (layer && layer.inited) {
+        const minZoom = layer.getMinZoom();
+        const maxZoom = layer.getMaxZoom();
+
+        input.disabled = zoom < minZoom || zoom > maxZoom;
       }
     }
   }

@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
+import { Layers, PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -70,7 +70,16 @@ export default class ScaleComponent extends React.Component {
       layer.setSelect(e.featureId);
     });
     const scaleControl = new Scale();
+    const layers = {
+      点图层: pointLayer,
+      面图层: layer,
+    };
+    const layerControl = new Layers({
+      overlayers: layers,
+    });
+
     scene.addControl(scaleControl);
+    scene.addControl(layerControl);
   }
 
   public render() {
