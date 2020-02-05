@@ -16,11 +16,11 @@ vec4 filterHighlightColor(vec4 color) {
   if (selected) {
     vec4 highLightColor = u_HighlightColor * COLOR_SCALE;
 
-    // float highLightAlpha = highLightColor.a;
-    // float highLightRatio = highLightAlpha / (highLightAlpha + color.a * (1.0 - highLightAlpha));
+    float highLightAlpha = highLightColor.a;
+    float highLightRatio = highLightAlpha / (highLightAlpha + color.a * (1.0 - highLightAlpha));
 
-    // vec3 resultRGB = mix(color.rgb, highLightColor.rgb, highLightRatio);
-    return highLightColor;
+    vec3 resultRGB = mix(color.rgb, highLightColor.rgb, highLightRatio);
+    return vec4(resultRGB, color.a);
   } else {
     return color;
   }
