@@ -23,7 +23,11 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
-    "@turf/helpers": "^6.1.4"
+    "@turf/helpers": "^6.1.4",
+    "d3-color": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/d3-color": "^1.2.2"
   },
   "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
   "publishConfig": {

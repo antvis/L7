@@ -78,19 +78,16 @@ const scene = new L7.Scene({
 
 ### logoPosition
 
-L7 Logo的显示位置 默认左下角
+L7 Logo 的显示位置 默认左下角
 
 - bottomright
 - topright
 - bottomleft,
 - topleft`
 
+### logoVisible
 
-### logoVisible 
-
-是否显示L7的Logo {boolean} true
-
-
+是否显示 L7 的 Logo {boolean} true
 
 ### zoom
 

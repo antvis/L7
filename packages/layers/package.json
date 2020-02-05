@@ -28,7 +28,6 @@
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
-    "@types/d3-color": "^1.2.2",
     "d3-array": "^2.3.1",
     "d3-color": "^1.4.0",
     "d3-scale": "^3.1.0",
@@ -47,7 +46,8 @@
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5",
-    "@types/lodash": "^4.14.138"
+    "@types/lodash": "^4.14.138",
+    "@types/d3-color": "^1.2.2"
   },
   "gitHead": "9fabb78790428d2025b89fb6146fc555cb1d987d",
   "publishConfig": {
