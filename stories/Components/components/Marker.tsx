@@ -30,7 +30,9 @@ export default class MarkerComponent extends React.Component {
       offsets: [0, 20],
     }).setText('hello');
 
-    const marker = new Marker()
+    const marker = new Marker({
+      offsets: [0, -20],
+    })
       .setLnglat({
         lng: 120.184824,
         lat: 30.248341,
