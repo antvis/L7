@@ -179,8 +179,8 @@ const data2 = [
  layer.source(data,{
    transforms:[
      type: 'join'
-     sourceField: 'name' //data1 对应字段名
-     targetField: 'city' // data 对应字段名
+     sourceField: 'name', //data1 对应字段名
+     targetField: 'city', // data 对应字段名
      data: data2,
    ]
  })
