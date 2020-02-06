@@ -16,7 +16,7 @@ Marker
 - color        `string` ![L7 Marker](https://gw.alipayobjects.com/zos/basement_prod/b10e0efd-8379-4b04-bcbb-5cfefaa0327f.svg)设置默认 marker 的颜色
 - element    `Dom|string`    自定义 marker Dom 节点，可以是 dom 实例，也可以是 dom id
 - anchor     `string`  锚点位置   支持 center, top, top-left, top-right, bottom, bottom-left,bottom-                        right,left, right
-- offset    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
+- offsets    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
 
 ### 添加到 Scene
 
