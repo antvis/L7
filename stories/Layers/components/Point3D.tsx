@@ -31,6 +31,11 @@ export default class Point3D extends React.Component {
       .active({ color: 'blue' })
       .size([15, 10]);
     scene.addLayer(pointLayer);
+    setTimeout(() => {
+      pointLayer.size([20, 100]);
+      scene.render();
+      console.log('update size');
+    }, 2000);
     scene.render();
     this.scene = scene;
   }

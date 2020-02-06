@@ -60,7 +60,7 @@ export interface IScaleOptions {
 }
 export interface IStyleScale {
   scale: any;
-  field: string;
+  field: string | number;
   type: StyleScaleType;
   option: IScaleOption | undefined;
 }
@@ -112,7 +112,7 @@ export interface IVertexAttributeDescriptor
 type Position = number[];
 type Color = [number, number, number, number];
 type CallBack = (...args: any[]) => any;
-export type StyleAttributeField = string | string[];
+export type StyleAttributeField = string | string[] | number[];
 export type StyleAttributeOption = string | number | boolean | any[] | CallBack;
 export type StyleAttrField = string | string[] | number | number[];
 
@@ -122,11 +122,11 @@ export interface IStyleAttributeInitializationOptions {
   scale?: {
     field: StyleAttributeField;
     values: unknown[] | string;
-    names: string[];
+    names: string[] | number[];
     type: StyleScaleType;
     callback?: (...args: any[]) => [];
     scalers?: Array<{
-      field: string;
+      field: string | number;
       func: unknown;
     }>;
   };

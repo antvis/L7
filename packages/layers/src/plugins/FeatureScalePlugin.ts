@@ -106,11 +106,10 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         const attributeScale = attribute.scale;
         const type = attribute.name;
         attributeScale.names = this.parseFields(attribute!.scale!.field || []);
-        const scales: IStyleScale[] = attributeScale.names.map(
-          (field: string) => {
-            return this.getOrCreateScale(field, attribute, dataArray);
-          },
-        );
+        const scales: IStyleScale[] = [];
+        attributeScale.names.forEach((field: string | number) => {
+          scales.push(this.getOrCreateScale(field, attribute, dataArray));
+        });
 
         // 为scales 设置值区间
         if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
@@ -155,7 +154,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     });
   }
   private getOrCreateScale(
-    field: string,
+    field: string | number,
     attribute: IStyleAttribute,
     dataArray: IParseDataItem[],
   ) {
@@ -175,7 +174,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
    * 'w*h' => ['w', 'h']
    * 'w' => ['w']
    */
-  private parseFields(field: string[] | string): string[] {
+  private parseFields(
+    field: string[] | string | number[],
+  ): string[] | number[] {
     if (Array.isArray(field)) {
       return field;
     }
@@ -186,7 +187,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   }
 
   private createScale(
-    field: string,
+    field: string | number,
     values: unknown[] | string | undefined,
     data?: IParseDataItem[],
   ): IStyleScale {
@@ -239,7 +240,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private createDefaultScaleConfig(
     type: ScaleTypeName,
-    field: string,
+    field: string | number,
     data?: IParseDataItem[],
   ) {
     const cfg: IScale = {
