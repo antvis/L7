@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-utils": "^2.0.15",
+    "@antv/l7-utils": "^2.0.16",
     "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
@@ -46,7 +46,7 @@
     "@types/lodash": "^4.14.138",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "9fabb78790428d2025b89fb6146fc555cb1d987d",
+  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
   "publishConfig": {
     "access": "public"
   }
