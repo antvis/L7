@@ -18,11 +18,14 @@ export default class LineDemo extends React.Component {
       id: 'map',
       map: new Mapbox({
         center: [-74.006, 40.7128],
-        zoom: 15,
+        zoom: 11.5,
         style: 'dark',
       }),
     });
-    const lineLayer = new LineLayer()
+    const lineLayer = new LineLayer({
+      minZoom: 12,
+      maxZoom: 15,
+    })
       .source(await response.json(), {
         parser: {
           type: 'json',
@@ -31,6 +34,7 @@ export default class LineDemo extends React.Component {
       })
       .size(3)
       .shape('line')
+      .active(true)
       .color('color', (v) => {
         return `rgb(${v[0]})`;
       })
