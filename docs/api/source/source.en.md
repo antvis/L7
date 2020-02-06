@@ -145,42 +145,42 @@ layer.source(data, {
 - targetField 关联的地理数据字段名称
 
 ```javascript
- const data = {
-  "type": "FeatureCollection",
-  "features": [
+const data = {
+  type: 'FeatureCollection',
+  features: [
     {
-      "type": "Feature",
-      "properties": {
-        "city":'北京'
+      type: 'Feature',
+      properties: {
+        city: '北京',
       },
-      "geometry": {
-      }
-    }
-  ]
- }
+      geometry: {},
+    },
+  ],
+};
 
 const data2 = [
   {
-    name:'北京',
-    value: 13
+    name: '北京',
+    value: 13,
   },
   {
-    name:'天津',
-    value: 20
-  }
-]
+    name: '天津',
+    value: 20,
+  },
+];
 // data 是地理数据
 // data2 属性数据或者业务数据
 
 // 通过join方法我们就可以将两个数据连接到一起
 
- layer.source(data,{
-   transforms:[
-     type: 'join',
-     sourceField: 'name' //data1 对应字段名
-     targetField: 'city' // data 对应字段名
-     data: data2,
-   ]
- })
- .color('value') // 可以采用data1的value字段进行数据到颜色的映射
+layer
+  .source(data, {
+    transforms: [
+      (type: 'join'),
+      (sourceField: 'name'), //data1 对应字段名
+      (targetField: 'city'), // data 对应字段名
+      (data: data2),
+    ],
+  })
+  .color('value'); // 可以采用data1的value字段进行数据到颜色的映射
 ```
