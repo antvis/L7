@@ -1,4 +1,3 @@
-
 precision highp float;
 attribute vec3 a_Position;
 attribute vec4 a_Color;
@@ -21,6 +20,7 @@ void main() {
 
    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
    gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
-   setPickingColor(a_PickingColor);
+
+  setPickingColor(a_PickingColor);
 
 }

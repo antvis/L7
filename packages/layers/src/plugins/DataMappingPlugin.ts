@@ -121,6 +121,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         record.hasOwnProperty(field) ||
         attribute.scale?.type === 'variable'
       ) {
+        // TODO:多字段，常量
         params.push(record[field]);
       }
     });
