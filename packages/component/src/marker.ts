@@ -9,7 +9,7 @@ export interface IMarkerOption {
   element: HTMLElement | undefined;
   anchor: anchorType;
   color: string;
-  offset: number[];
+  offsets: number[];
   draggable: boolean;
   extData?: any;
 }
@@ -35,7 +35,7 @@ export default class Marker extends EventEmitter {
     return {
       element: undefined, // DOM element
       anchor: anchorType.BOTTOM,
-      offset: [0, 0],
+      offsets: [0, 0],
       color: '#5B8FF9',
       draggable: false,
     };
@@ -174,7 +174,7 @@ export default class Marker extends EventEmitter {
   }
 
   public getOffset(): number[] {
-    return this.markerOption.offset;
+    return this.markerOption.offsets;
   }
 
   public setDraggable(draggable: boolean) {
@@ -213,12 +213,12 @@ export default class Marker extends EventEmitter {
     if (!this.mapsService) {
       return;
     }
-    const { element } = this.markerOption;
+    const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
-      element.style.left = pos.x + 'px';
-      element.style.top = pos.y + 'px';
+      element.style.left = pos.x + offsets[0] + 'px';
+      element.style.top = pos.y - offsets[1] + 'px';
     }
   }
 
