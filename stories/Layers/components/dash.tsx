@@ -43,7 +43,8 @@ export default class DashLineDemo extends React.Component {
         ].reverse(),
       )
       .style({
-        lineType: 'dash',
+        // lineType: 'dash',
+        opacity: 0.5,
       });
 
     scene.addLayer(lineLayer);

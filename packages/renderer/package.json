@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,14 +25,14 @@
     "gl": "^4.4.0"
   },
   "dependencies": {
-    "@antv/l7-core": "^2.0.15",
+    "@antv/l7-core": "^2.0.16",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "regl": "^1.3.11"
   },
-  "gitHead": "9fabb78790428d2025b89fb6146fc555cb1d987d",
+  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
   "publishConfig": {
     "access": "public"
   }
