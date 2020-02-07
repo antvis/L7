@@ -267,7 +267,8 @@ export interface ILayerService {
   startAnimate(): void;
   stopAnimate(): void;
   getLayers(): ILayer[];
-  getLayer(name: string): ILayer | undefined;
+  getLayer(id: string): ILayer | undefined;
+  getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer): void;
   removeAllLayers(): void;
   updateRenderOrder(): void;
