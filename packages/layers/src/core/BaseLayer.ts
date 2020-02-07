@@ -173,6 +173,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
     this.name = config.name || this.id;
+    this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
   }
 

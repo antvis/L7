@@ -89,13 +89,16 @@ export default class TextModel extends BaseModel {
     const {
       fontWeight = 800,
       fontFamily = 'sans-serif',
+      opacity = 1.0,
       stroke = '#fff',
       strokeWidth = 0,
+      strokeOpacity = 1,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     this.updateTexture();
     const { canvas } = this.fontService;
     return {
-      u_opacity: 1.0,
+      u_opacity: opacity,
+      u_stroke_opacity: strokeOpacity,
       u_sdf_map: this.texture,
       u_stroke: rgb2arr(stroke),
       u_halo_blur: 0.5,

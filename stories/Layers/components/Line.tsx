@@ -36,13 +36,16 @@ export default class LineDemo extends React.Component {
       .shape('line')
       .active(true)
       .color('color', (v) => {
-        return `rgb(${v[0]})`;
+        return `rgb(${v})`;
       })
       .animate({
         enable: true,
         interval: 0.5,
         trailLength: 0.4,
         duration: 4,
+      })
+      .style({
+        opacity: 1.0,
       });
 
     scene.addLayer(lineLayer);
