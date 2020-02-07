@@ -62,7 +62,7 @@
     "eslint": "^6.6.0",
     "eslint-config-egg": "^7.5.1",
     "eslint-plugin-html": "^6.0.0",
-    "gatsby": "^2.17.7",
+    "gatsby": "2.19.5",
     "gatsby-plugin-google-analytics": "^2.1.27",
     "gatsby-remark-prettier": "^1.0.0",
     "geotiff": "^1.0.0-beta.6",
@@ -119,7 +119,7 @@
   "scripts": {
     "start": "yarn run site:clean && yarn run site:develop",
     "site:develop": "cross-env BABEL_ENV=site gatsby develop --open -H 0.0.0.0",
-    "site:build": "yarn run site:clean && cross-env BABEL_ENV=site gatsby build --prefix-paths",
+    "site:build": "yarn run site:clean && cross-env BABEL_ENV=site gatsby build --prefix-paths --no-uglify",
     "site:clean": "gatsby clean",
     "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
