@@ -126,6 +126,10 @@ class Scene
     return this.layerService.getLayer(id);
   }
 
+  public getLayerByName(name: string): ILayer | undefined {
+    return this.layerService.getLayerByName(name);
+  }
+
   public removeLayer(layer: ILayer): void {
     this.layerService.remove(layer);
   }
