@@ -1,5 +1,5 @@
 ---
-title: Scene
+title: 场景 Scene
 order: 2
 ---
 
@@ -108,6 +108,7 @@ L7 Logo 的显示位置 默认左下角
 - dark
 - light
 - normal
+- blank 无底图
 
 除了内置的样式，你也可以传入自定义的其他属性。
 
@@ -151,7 +152,21 @@ return {float}   当前缩放等级
 scene.getLayers();
 ```
 
-return 图层数组 {Array}
+### getLayerByName(name)
+
+根据图层名称获取图层
+
+参数
+
+-name {string}
+
+layer 初始化可配置图层 name
+
+```javascript
+scene.getLayerByName(name);
+```
+
+return Layer 图层对象
 
 ### getCenter()
 
@@ -266,7 +281,9 @@ scene.ZoomOUt();
 scene.panTo(LngLat);
 ```
 
-参数：`center` LngLat 中心位置坐标
+参数：
+
+- `center` LngLat 中心位置坐标
 
 ### panBy
 
@@ -279,6 +296,7 @@ scene.panBy(x, y);
 参数：
 
 - `x` {number} 水平方向移动像素 向右为正方向
+
 - `y` {number} 垂直方向移动像素 向下为正方向
 
 ### setPitch
@@ -291,11 +309,12 @@ scene.setPitch(pitch);
 
 参数 :
 
-`pitch` {number}
+- `pitch` {number}
 
 ### fitBounds
 
 地图缩放到某个范围内
+
 参数 :
 
 - `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
@@ -312,7 +331,9 @@ scene.fitBounds([112, 32, 114, 35]);
 scene.removeLayer(layer);
 ```
 
-参数 `layer` {Layer}
+参数
+
+- `layer` {Layer}
 
 ## 事件
 
@@ -322,15 +343,32 @@ scene.removeLayer(layer);
 
 #### 参数
 
-- `eventName` {string} 事件名
-- `handler` {function } 事件回调函数
+`eventName` {string} 事件名
+`handler` {function } 事件回调函数
 
 ### off
 
 移除事件监听
+`eventName` {string} 事件名
+`handler` {function } 事件回调函数
 
-- `eventName` {string} 事件名
-- `handler` {function } 事件回调函数
+### 场景事件
+
+#### loaded
+
+scene 初始化完成事件，scene 初始化完成添加 Layer
+
+```javascript
+scene.on('loaded', () => {});
+```
+
+#### resize
+
+地图容器变化事件
+
+```javascript
+scene.on('resize', () => {}); // 地图容器大小改变事件
+```
 
 ### 地图事件
 
@@ -355,14 +393,8 @@ scene.on('mouseover', (ev) => {}); // 鼠标移入地图容器内时触发
 scene.on('mouseout', (ev) => {}); // 鼠标移出地图容器时触发
 scene.on('mouseup', (ev) => {}); // 鼠标在地图上单击抬起时触发
 scene.on('mousedown', (ev) => {}); // 鼠标在地图上单击按下时触发
-scene.on('rightclick', (ev) => {}); // 鼠标右键单击事件
+scene.on('contextmenu', (ev) => {}); // 鼠标右键单击事件
 scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
-```
-
-### 其它事件
-
-```javascript
-scene.on('resize', () => {}); // 地图容器大小改变事件
 ```
