@@ -209,18 +209,18 @@ export default class PixelPickingPass<
         this.triggerHoverOnLayer(target);
         this.layer.setCurrentPickId(null);
       }
-    });
 
-    if (enableHighlight) {
-      this.highlightPickedFeature(pickedColors);
-    }
-    if (
-      enableSelect &&
-      type === 'click' &&
-      pickedColors?.toString() !== [0, 0, 0, 0].toString()
-    ) {
-      this.selectFeature(pickedColors);
-    }
+      if (enableHighlight) {
+        this.highlightPickedFeature(pickedColors);
+      }
+      if (
+        enableSelect &&
+        type === 'click' &&
+        pickedColors?.toString() !== [0, 0, 0, 0].toString()
+      ) {
+        this.selectFeature(pickedColors);
+      }
+    });
   };
 
   private triggerHoverOnLayer(target: {

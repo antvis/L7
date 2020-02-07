@@ -53,6 +53,7 @@ export default class ArcLineDemo extends React.Component {
       })
       .style({
         lineType: 'dash',
+        opacity: 0.5,
       });
     scene.addLayer(lineLayer);
     scene.render();

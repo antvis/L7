@@ -42,7 +42,7 @@ export default class Arc2DLineDemo extends React.Component {
         trailLength: 0.4,
       })
       .style({
-        opacity: 0.6,
+        opacity: 0.1,
       });
     scene.addLayer(lineLayer);
     scene.render();

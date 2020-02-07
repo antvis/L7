@@ -49,9 +49,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           update: (feature: IEncodeFeature, featureIdx: number) => {
             // 只有开启拾取才需要 encode
             const { id } = feature;
-            return enablePicking && layer.isVisible()
-              ? encodePickingColor(id as number)
-              : [0, 0, 0];
+            return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
           },
         },
       });
