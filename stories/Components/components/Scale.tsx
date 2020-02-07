@@ -29,7 +29,9 @@ export default class ScaleComponent extends React.Component {
       }),
     });
     this.scene = scene;
-    const layer = new PolygonLayer({});
+    const layer = new PolygonLayer({
+      name: '01',
+    });
 
     layer
       .source(data)
@@ -48,8 +50,9 @@ export default class ScaleComponent extends React.Component {
         opacity: 1.0,
       });
     scene.addLayer(layer);
-
-    const pointLayer = new PointLayer()
+    const pointLayer = new PointLayer({
+      name: '02',
+    })
       .source(pointsData, {
         cluster: true,
       })
