@@ -72,6 +72,7 @@ export default class LayerService implements ILayerService {
     //
     this.alreadyInRendering = true;
     this.clear();
+    this.updateRenderOrder();
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())

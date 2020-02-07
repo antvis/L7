@@ -65,8 +65,9 @@ export default class TextLayerDemo extends React.Component {
     const styleOptions = {
       textAnchor: 'center',
       strokeWidth: 1,
+      opacity: 1,
     };
-    const rasterFolder = gui.addFolder('栅格可视化');
+    const rasterFolder = gui.addFolder('文本可视化');
     rasterFolder
       .add(styleOptions, 'textAnchor', [
         'center',
@@ -82,6 +83,23 @@ export default class TextLayerDemo extends React.Component {
       .onChange((anchor: string) => {
         pointLayer.style({
           textAnchor: anchor,
+        });
+        scene.render();
+      });
+
+    rasterFolder
+      .add(styleOptions, 'strokeWidth', 0, 10)
+      .onChange((strokeWidth: number) => {
+        pointLayer.style({
+          strokeWidth,
+        });
+        scene.render();
+      });
+    rasterFolder
+      .add(styleOptions, 'opacity', 0, 1)
+      .onChange((opacity: number) => {
+        pointLayer.style({
+          opacity,
         });
         scene.render();
       });
