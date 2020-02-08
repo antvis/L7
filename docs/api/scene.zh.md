@@ -152,7 +152,21 @@ return {float}   当前缩放等级
 scene.getLayers();
 ```
 
-return 图层数组 {Array}
+### getLayerByName(name)
+根据图层名称获取图层
+
+参数
+
+-name {string} 
+
+layer初始化可配置图层name
+
+
+```javascript
+scene.getLayerByName(name);
+```
+
+return Layer 图层对象
 
 ### getCenter()
 
