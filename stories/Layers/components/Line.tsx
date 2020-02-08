@@ -48,9 +48,9 @@ export default class LineDemo extends React.Component {
         opacity: 1.0,
       });
 
-    lineLayer.on('click',(e)=> {
+    lineLayer.on('click', (e) => {
       console.log(e);
-    })
+    });
     scene.addLayer(lineLayer);
     this.scene = scene;
   }
