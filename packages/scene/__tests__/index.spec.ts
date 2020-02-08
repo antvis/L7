@@ -20,5 +20,17 @@ describe('template', () => {
   it('scene map method', () => {
     expect(scene.getZoom()).toEqual(3);
     expect(scene.getPitch()).toEqual(0);
+    const center = scene.getCenter();
+    expect(center.lng).toEqual(110.19382669582967);
+    expect(center.lat).toEqual(30.258134);
+    expect(scene.getRotation()).toEqual(-0);
+    expect(scene.getBounds()).toEqual([
+      [88.22117044582802, 9.751305353647084],
+      [132.1664829458271, 47.2486735705956],
+    ]);
+    scene.setZoom(5);
+    expect(scene.getZoom()).toEqual(5);
+    scene.setPitch(5);
+    expect(scene.getPitch()).toEqual(5);
   });
 });

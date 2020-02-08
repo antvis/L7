@@ -111,6 +111,10 @@ export default class MapboxService
     return this.map.getPitch();
   }
 
+  public setPitch(pitch: number) {
+    return this.map.setPitch(pitch);
+  }
+
   public getRotation(): number {
     return this.map.getBearing();
   }

@@ -245,6 +245,10 @@ class Scene
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }
+
+  public setPitch(pitch: number) {
+    this.mapService.setPitch(pitch);
+  }
   public fitBounds(bound: Bounds): void {
     this.mapService.fitBounds(bound);
   }

@@ -50,6 +50,7 @@ export interface IMapService<RawMap = {}> {
   zoomOut(): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
+  setPitch(pitch: number): void;
   fitBounds(bound: Bounds): void;
   setZoomAndCenter(zoom: number, center: Point): void;
   setZoom(zoom: number): void;
