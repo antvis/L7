@@ -366,6 +366,16 @@ layer.setMinZoom(zoom);
 layer.setMinZoom(zoom);
 ```
 
+设置图层最大缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
 ## 图层交互方法
 
 ### active

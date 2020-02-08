@@ -158,7 +158,7 @@ scene.getLayers();
 
 参数
 
--name {string}
+- name {string}
 
 layer 初始化可配置图层 name
 
