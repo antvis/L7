@@ -30,7 +30,6 @@ scene.addLayer(layer);
 
 设置图层名称,可根据 name 获取 layer;
 
-
 ### visible
 
 图层是否可见   {bool } default true
@@ -356,6 +355,17 @@ layer.setMinZoom(zoom);
 ```
 
 ### setMaxZoom
+
+设置图层最大缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
 设置图层最大缩放等级
 
 参数

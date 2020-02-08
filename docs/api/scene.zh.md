@@ -153,14 +153,14 @@ scene.getLayers();
 ```
 
 ### getLayerByName(name)
+
 根据图层名称获取图层
 
 参数
 
--name {string} 
+- name {string}
 
-layer初始化可配置图层name
-
+layer 初始化可配置图层 name
 
 ```javascript
 scene.getLayerByName(name);
