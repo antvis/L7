@@ -66,8 +66,8 @@ export default class MarkerLayer extends EventEmitter {
     if (this.markerLayerOption.cluster) {
       this.initCluster();
       this.update();
-      this.mapsService.on('zoom', this.update);
-      this.mapsService.on('zoomchange', this.update);
+      // 地图视野变化时，重新计算视野内的聚合点。
+      this.mapsService.on('camerachange', this.update);
     }
     this.addMarkers();
     return this;
@@ -102,8 +102,7 @@ export default class MarkerLayer extends EventEmitter {
     this.markers.forEach((marker: IMarker) => {
       marker.remove();
     });
-    this.mapsService.off('zoom', this.update);
-    this.mapsService.off('zoomchange', this.update);
+    this.mapsService.off('camerachange', this.update);
     this.markers = [];
   }
 
@@ -143,10 +142,12 @@ export default class MarkerLayer extends EventEmitter {
   }
 
   private getClusterMarker(zoom: number) {
-    const clusterPoint = this.clusterIndex.getClusters(
-      [-180, -85, 180, 85],
-      zoom,
-    );
+    // 之前的参数为  [-180, -85, 180, 85]，基本等于全地图的范围
+    // 优化后的逻辑为：
+    // 取当前视野范围 * 2，只渲染视野内 * 2 范围的点
+    const viewBounds = this.mapsService.getBounds();
+    const viewBBox = viewBounds[0].concat(viewBounds[1]) as GeoJSON.BBox;
+    const clusterPoint = this.clusterIndex.getClusters(viewBBox, zoom);
     this.clusterMarkers.forEach((marker: IMarker) => {
       marker.remove();
     });
@@ -207,13 +208,20 @@ export default class MarkerLayer extends EventEmitter {
     const marker_id = feature.properties.marker_id;
     return this.markers[marker_id];
   }
+
   private update() {
     const zoom = this.mapsService.getZoom();
-    if (Math.abs(zoom - this.zoom) > 1) {
-      this.getClusterMarker(Math.floor(zoom));
+    // 在 zoom 变化的时候，通过控制触发的阈值 (0.4)，减少小层级的 zoom 变化引起的频繁重绘
+    if (zoom !== this.zoom && Math.abs(zoom - this.zoom) > 0.4) {
+      // 按照当前地图的放大层级向下取整，进行聚合点的绘制
       this.zoom = Math.floor(zoom);
+      this.getClusterMarker(Math.floor(zoom));
+    } else if (zoom === this.zoom) {
+      // 如果 zoom 没有变化，只是平移，进行重新计算渲染加载s
+      this.getClusterMarker(Math.floor(zoom));
     }
   }
+
   private generateElement(feature: any) {
     const el = DOM.create('div', 'l7-marker-cluster');
     const label = DOM.create('div', '', el);
