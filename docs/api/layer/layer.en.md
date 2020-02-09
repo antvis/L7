@@ -30,13 +30,13 @@ scene.addLayer(layer);
 
 设置图层名称,可根据 name 获取 layer;
 
-### visable
+### visible
 
 图层是否可见   {bool } default true
 
 ### zIndex
 
-图层绘制顺序，数值越小优先绘制，可以控制图层绘制的上下层级 {int}   default 0
+图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级 {int}   default 0
 
 ### minZoom
 
@@ -102,7 +102,7 @@ layer.source(data, {
 
 ### scale
 
-cscle('field', scaleConfig)
+scale('field', scaleConfig)
 
 (field: string, scaleConfig: object)
 
@@ -344,7 +344,37 @@ layer.fitBounds();
 
 ### setMinZoom
 
+设置图层最小缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
 ### setMaxZoom
+
+设置图层最大缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
+设置图层最大缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
 
 ## 图层交互方法
 

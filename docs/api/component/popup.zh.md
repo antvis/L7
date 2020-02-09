@@ -39,10 +39,10 @@ const popup = new L7.Popup(option);
 经纬度对象
 
 ```javascript
-{
-  lng: 112,
-  lat: 30
-}
+const lnglat = {
+  lng: 112.323,
+  lat: 30.456,
+};
 ```
 
 ```javascript

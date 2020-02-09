@@ -1,11 +1,13 @@
 import Ajv from 'ajv';
+import { PositionName } from '../component/IControlService';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
-
 export interface ISceneConfig extends IRenderConfig {
   id: string | HTMLDivElement;
   map: IMapWrapper;
+  logoPosition?: PositionName;
+  logoVisible?: boolean;
 }
 
 interface IValidateResult {

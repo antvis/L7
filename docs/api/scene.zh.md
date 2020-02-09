@@ -76,6 +76,19 @@ const scene = new L7.Scene({
 
 需传入 dom 容器或者容器 id  {domObject || string} [必选]
 
+### logoPosition
+
+L7 Logo 的显示位置 默认左下角
+
+- bottomright
+- topright
+- bottomleft,
+- topleft`
+
+### logoVisible
+
+是否显示 L7 的 Logo {boolean} true
+
 ### zoom
 
 地图初始显示级别 {number} （0-22）
@@ -139,7 +152,21 @@ return {float}   当前缩放等级
 scene.getLayers();
 ```
 
-return 图层数组 {Array}
+### getLayerByName(name)
+
+根据图层名称获取图层
+
+参数
+
+- name {string}
+
+layer 初始化可配置图层 name
+
+```javascript
+scene.getLayerByName(name);
+```
+
+return Layer 图层对象
 
 ### getCenter()
 

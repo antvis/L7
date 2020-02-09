@@ -112,6 +112,7 @@ export default class InteractionService extends EventEmitter
       } else {
         this.lastClickTime = nowTime;
         this.lastClickXY = [x, y];
+        // @ts-ignore
         this.clickTimer = setTimeout(() => {
           type = 'click';
           this.emit(InteractionEvent.Hover, { x, y, lngLat, type });

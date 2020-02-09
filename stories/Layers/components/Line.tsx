@@ -18,11 +18,14 @@ export default class LineDemo extends React.Component {
       id: 'map',
       map: new Mapbox({
         center: [-74.006, 40.7128],
-        zoom: 15,
+        zoom: 11.5,
         style: 'dark',
       }),
     });
-    const lineLayer = new LineLayer()
+    const lineLayer = new LineLayer({
+      minZoom: 12,
+      maxZoom: 15,
+    })
       .source(await response.json(), {
         parser: {
           type: 'json',
@@ -31,16 +34,23 @@ export default class LineDemo extends React.Component {
       })
       .size(3)
       .shape('line')
+      .active(true)
       .color('color', (v) => {
-        return `rgb(${v[0]})`;
+        return `rgb(${v})`;
       })
       .animate({
         enable: true,
         interval: 0.5,
         trailLength: 0.4,
         duration: 4,
+      })
+      .style({
+        opacity: 1.0,
       });
 
+    lineLayer.on('click', (e) => {
+      console.log(e);
+    });
     scene.addLayer(lineLayer);
     this.scene = scene;
   }

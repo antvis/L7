@@ -62,7 +62,7 @@
     "eslint": "^6.6.0",
     "eslint-config-egg": "^7.5.1",
     "eslint-plugin-html": "^6.0.0",
-    "gatsby": "^2.17.7",
+    "gatsby": "2.19.5",
     "gatsby-plugin-google-analytics": "^2.1.27",
     "gatsby-remark-prettier": "^1.0.0",
     "geotiff": "^1.0.0-beta.6",

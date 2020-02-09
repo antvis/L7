@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.0.11",
+  "version": "2.0.17",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,9 +23,13 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
-    "@turf/helpers": "^6.1.4"
+    "@turf/helpers": "^6.1.4",
+    "d3-color": "^1.4.0"
   },
-  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
+  "devDependencies": {
+    "@types/d3-color": "^1.2.2"
+  },
+  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
   "publishConfig": {
     "access": "public"
   }

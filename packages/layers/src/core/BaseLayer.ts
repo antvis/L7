@@ -173,6 +173,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
     this.name = config.name || this.id;
+    this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
   }
 
@@ -259,13 +260,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 完成样式服务注册完成前添加的属性
     this.pendingStyleAttributes.forEach(
-      ({
-        attributeName,
-        attributeField,
-        attributeValues,
-        defaultName,
-        updateOptions,
-      }) => {
+      ({ attributeName, attributeField, attributeValues, updateOptions }) => {
         this.styleAttributeService.updateStyleAttribute(
           attributeName,
           {
@@ -276,7 +271,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
                 // @ts-ignore
                 attributeValues,
                 // @ts-ignore
-                this.getLayerConfig()[defaultName || attributeName],
+                this.getLayerConfig()[attributeName],
               ),
             },
           },
@@ -338,13 +333,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     // 设置 color、size、shape、style 时由于场景服务尚未完成（并没有调用 scene.addLayer），因此暂时加入待更新属性列表
-    this.pendingStyleAttributes.push({
-      attributeName: 'color',
-      attributeField: field,
-      attributeValues: values,
-      defaultName: 'colors',
-      updateOptions,
-    });
+    this.updateStyleAttribute('color', field, values, updateOptions);
+
+    // this.pendingStyleAttributes.push({
+    //   attributeName: 'color',
+    //   attributeField: field,
+    //   attributeValues: values,
+    //   defaultName: 'colors',
+    //   updateOptions,
+    // });
     return this;
   }
 
@@ -353,12 +350,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'size',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
+    this.updateStyleAttribute('size', field, values, updateOptions);
     return this;
   }
   // 对mapping后的数据过滤，scale保持不变
@@ -367,12 +359,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'filter',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
+    this.updateStyleAttribute('filter', field, values, updateOptions);
     this.dataState.dataMappingNeedUpdate = true;
     return this;
   }
@@ -382,12 +369,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'shape',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
+    this.updateStyleAttribute('shape', field, values, updateOptions);
     return this;
   }
   public label(
@@ -629,6 +611,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public getMinZoom(): number {
+    const { minZoom } = this.getLayerConfig();
+    return minZoom as number;
+  }
+
+  public getMaxZoom(): number {
+    const { maxZoom } = this.getLayerConfig();
+    return maxZoom as number;
+  }
+
+  public get(name: string) {
+    const cfg = this.getLayerConfig();
+    // @ts-ignore
+    return cfg[name];
+  }
+
   public setMaxZoom(maxZoom: number): ILayer {
     this.updateLayerConfig({
       maxZoom,
@@ -839,5 +837,39 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         : valuesOrCallback || defaultValues,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
+  }
+
+  private updateStyleAttribute(
+    type: string,
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    if (!this.inited) {
+      this.pendingStyleAttributes.push({
+        attributeName: type,
+        attributeField: field,
+        attributeValues: values,
+        updateOptions,
+      });
+    } else {
+      this.styleAttributeService.updateStyleAttribute(
+        type,
+        {
+          // @ts-ignore
+          scale: {
+            field,
+            ...this.splitValuesAndCallbackInAttribute(
+              // @ts-ignore
+              values,
+              // @ts-ignore
+              this.getLayerConfig()[field],
+            ),
+          },
+        },
+        // @ts-ignore
+        updateOptions,
+      );
+    }
   }
 }

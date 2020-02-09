@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
+import { Layers, PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -29,7 +29,9 @@ export default class ScaleComponent extends React.Component {
       }),
     });
     this.scene = scene;
-    const layer = new PolygonLayer({});
+    const layer = new PolygonLayer({
+      name: '01',
+    });
 
     layer
       .source(data)
@@ -48,8 +50,9 @@ export default class ScaleComponent extends React.Component {
         opacity: 1.0,
       });
     scene.addLayer(layer);
-
-    const pointLayer = new PointLayer()
+    const pointLayer = new PointLayer({
+      name: '02',
+    })
       .source(pointsData, {
         cluster: true,
       })
@@ -70,7 +73,16 @@ export default class ScaleComponent extends React.Component {
       layer.setSelect(e.featureId);
     });
     const scaleControl = new Scale();
+    const layers = {
+      点图层: pointLayer,
+      面图层: layer,
+    };
+    const layerControl = new Layers({
+      overlayers: layers,
+    });
+
     scene.addControl(scaleControl);
+    scene.addControl(layerControl);
   }
 
   public render() {

@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-component",
-  "version": "2.0.11",
+  "version": "2.0.17",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,14 +24,14 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.11",
-    "@antv/l7-utils": "^2.0.11",
+    "@antv/l7-core": "^2.0.17",
+    "@antv/l7-utils": "^2.0.17",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
     "load-styles": "^2.0.0"
   },
-  "gitHead": "9fabb78790428d2025b89fb6146fc555cb1d987d",
+  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
   "publishConfig": {
     "access": "public"
   }

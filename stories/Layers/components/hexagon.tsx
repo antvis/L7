@@ -1,10 +1,10 @@
-import { PointLayer, Scene } from '@antv/l7';
+import { HeatmapLayer, PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import * as React from 'react';
 import * as dat from 'dat.gui';
+import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
-export default class TextLayerDemo extends React.Component {
+export default class HexagonLayerDemo extends React.Component {
   // @ts-ignore
   private scene: Scene;
   private gui: dat.GUI;
@@ -17,7 +17,7 @@ export default class TextLayerDemo extends React.Component {
   }
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',
+      'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
     );
     const pointsData = await response.json();
 
@@ -26,33 +26,44 @@ export default class TextLayerDemo extends React.Component {
       map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
-        style: 'dark',
+        style: 'light',
         zoom: 3,
       }),
     });
-    // scene.on('loaded', () => {
-    const pointLayer = new PointLayer({})
-      .source(pointsData.list, {
-        parser: {
-          type: 'json',
-          x: 'j',
-          y: 'w',
-        },
+    const pointLayer = new HeatmapLayer({})
+      .source(pointsData, {
+        transforms: [
+          {
+            type: 'grid',
+            size: 500000,
+            field: 'capacity',
+            method: 'sum',
+          },
+        ],
       })
-      .shape('m', 'text')
-      .size(12)
-      .color('#fff')
+      .shape('hexagon')
       .style({
-        textAllowOverlap: true,
-        // fontWeight: 200,
-        // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-        // textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
-        // spacing: 2, // 字符间距
-        // padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-        // stroke: 'red', // 描边颜色
-        // strokeWidth: 2, // 描边宽度
-        // strokeOpacity: 1.0,
-      });
+        coverage: 0.9,
+        angle: 0,
+        opacity: 0.6,
+      })
+      .color(
+        'sum',
+        [
+          '#3F4BBA',
+          '#3F4BBA',
+          '#3F4BBA',
+          '#3F4BBA',
+          '#3C73DA',
+          '#3C73DA',
+          '#3C73DA',
+          '#0F62FF',
+          '#0F62FF',
+          '#30B2E9',
+          '#30B2E9',
+          '#40C4CE',
+        ].reverse(),
+      );
     scene.addLayer(pointLayer);
     pointLayer.on('click', (e) => {
       console.log(e);
@@ -65,9 +76,8 @@ export default class TextLayerDemo extends React.Component {
     const styleOptions = {
       textAnchor: 'center',
       strokeWidth: 1,
-      opacity: 1,
     };
-    const rasterFolder = gui.addFolder('文本可视化');
+    const rasterFolder = gui.addFolder('栅格可视化');
     rasterFolder
       .add(styleOptions, 'textAnchor', [
         'center',
@@ -83,23 +93,6 @@ export default class TextLayerDemo extends React.Component {
       .onChange((anchor: string) => {
         pointLayer.style({
           textAnchor: anchor,
-        });
-        scene.render();
-      });
-
-    rasterFolder
-      .add(styleOptions, 'strokeWidth', 0, 10)
-      .onChange((strokeWidth: number) => {
-        pointLayer.style({
-          strokeWidth,
-        });
-        scene.render();
-      });
-    rasterFolder
-      .add(styleOptions, 'opacity', 0, 1)
-      .onChange((opacity: number) => {
-        pointLayer.style({
-          opacity,
         });
         scene.render();
       });

@@ -24,17 +24,17 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 void main() {
   gl_FragColor = v_color;
   // anti-alias
-  float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy)) * u_opacity;
-  // gl_FragColor.a *= blur;
+  float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
+  gl_FragColor.a *= blur * u_opacity;
 
   if(u_aimate.x == Animate) {
       float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
-      gl_FragColor.a *= alpha * blur;
+      gl_FragColor.a *= alpha;
   }
  // dash line
   if(u_line_type == LineTypeDash) {
-    gl_FragColor.a *= blur  * (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
+    gl_FragColor.a *=(1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
   }
 
   gl_FragColor = filterColor(gl_FragColor);

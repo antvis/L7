@@ -141,6 +141,9 @@ export interface ILayer {
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;
+  getMinZoom(): number;
+  getMaxZoom(): number;
+  get(name: string): number;
   setBlend(type: keyof typeof BlendType): void;
   // animate(field: string, option: any): ILayer;
   render(): ILayer;
@@ -264,7 +267,8 @@ export interface ILayerService {
   startAnimate(): void;
   stopAnimate(): void;
   getLayers(): ILayer[];
-  getLayer(name: string): ILayer | undefined;
+  getLayer(id: string): ILayer | undefined;
+  getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer): void;
   removeAllLayers(): void;
   updateRenderOrder(): void;

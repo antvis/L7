@@ -12,6 +12,8 @@ import WarnInfo, { IWarnInfo } from './warnInfo';
  */
 const defaultSceneConfig: Partial<ISceneConfig> = {
   id: 'map',
+  logoPosition: 'bottomleft',
+  logoVisible: true,
 };
 
 /**

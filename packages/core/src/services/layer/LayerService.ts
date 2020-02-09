@@ -46,7 +46,11 @@ export default class LayerService implements ILayerService {
     return this.layers;
   }
 
-  public getLayer(name: string): ILayer | undefined {
+  public getLayer(id: string): ILayer | undefined {
+    return this.layers.find((layer) => layer.id === id);
+  }
+
+  public getLayerByName(name: string): ILayer | undefined {
     return this.layers.find((layer) => layer.name === name);
   }
 
@@ -72,6 +76,7 @@ export default class LayerService implements ILayerService {
     //
     this.alreadyInRendering = true;
     this.clear();
+    this.updateRenderOrder();
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
