@@ -143,7 +143,7 @@
     "release-cdn": "antv-bin upload -n @antv/l7",
     "storybook": "start-storybook -p 6006",
     "test": "cross-env BABEL_ENV=test jest",
-    "test-live": "cross-env BABEL_ENV=test DEBUG_MODE=1 jest --watch  packages/scene/__tests__/index.spec.ts ",
+    "test-live": "cross-env BABEL_ENV=test DEBUG_MODE=1 jest --watch",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "tsc": "tsc",
     "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
