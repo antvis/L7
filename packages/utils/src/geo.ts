@@ -7,6 +7,15 @@ import {
   Units,
 } from '@turf/helpers';
 
+export type IBounds = [[number, number], [number, number]];
+export interface ILngLat {
+  lng: number;
+  lat: number;
+}
+export interface IPoint {
+  x: number;
+  y: number;
+}
 const originShift = (2 * Math.PI * 6378137) / 2.0;
 export type Point = number[];
 /**
@@ -206,4 +215,27 @@ export function project(lnglat: [number, number]) {
   const y = (earthRadius * Math.log((1 + sin) / (1 - sin))) / 2;
 
   return [x, y];
+}
+
+export function padBounds(b: IBounds, bufferRatio: number): IBounds {
+  const heightBuffer = Math.abs(b[1][1] - b[0][1]) * bufferRatio;
+  const widthBuffer = Math.abs(b[1][0] - b[0][0]) * bufferRatio;
+
+  return [
+    [b[0][0] - widthBuffer, b[0][1] - heightBuffer],
+    [b[1][0] + widthBuffer, b[1][1] + heightBuffer],
+  ];
+}
+/**
+ * b1 包含 b2 返回 true 否则false
+ * @param b1 bounds1
+ * @param b2 bounds2
+ */
+export function boundsContains(b1: IBounds, b2: IBounds): boolean {
+  return (
+    b1[0][0] <= b2[0][0] &&
+    b1[0][1] <= b2[0][1] &&
+    b1[1][0] >= b2[1][0] &&
+    b1[1][1] >= b2[1][1]
+  );
 }

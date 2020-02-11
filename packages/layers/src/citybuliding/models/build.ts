@@ -9,6 +9,7 @@ interface ICityBuildLayerStyleOptions {
   baseColor: string;
   brightColor: string;
   windowColor: string;
+  time: number;
 }
 export default class CityBuildModel extends BaseModel {
   public getUninforms() {
@@ -17,13 +18,14 @@ export default class CityBuildModel extends BaseModel {
       baseColor = 'rgb(16,16,16)',
       brightColor = 'rgb(255,176,38)',
       windowColor = 'rgb(30,60,89)',
+      time = 0,
     } = this.layer.getLayerConfig() as ICityBuildLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_baseColor: rgb2arr(baseColor),
       u_brightColor: rgb2arr(brightColor),
       u_windowColor: rgb2arr(windowColor),
-      u_time: this.layer.getLayerAnimateTime(),
+      u_time: this.layer.getLayerAnimateTime() || time,
     };
   }
 
