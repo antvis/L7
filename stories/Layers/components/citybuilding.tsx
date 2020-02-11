@@ -1,7 +1,7 @@
 import { CityBuildingLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
+import * as dat from 'dat.gui';
 import * as React from 'react';
-
 export default class CityBuildingLayerDemo extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -31,7 +31,7 @@ export default class CityBuildingLayerDemo extends React.Component {
       .size('floor', [0, 500])
       .color('rgba(242,246,250,1.0)')
       .animate({
-        enable: true,
+        enable: false,
       })
       .style({
         opacity: 1.0,
@@ -40,8 +40,18 @@ export default class CityBuildingLayerDemo extends React.Component {
         brightColor: 'rgb(255,176,38)',
       });
     scene.addLayer(pointLayer);
-    scene.render();
+
     this.scene = scene;
+
+    const gui = new dat.GUI();
+    const styleOptions = {
+      time: 1,
+    };
+    const pointFolder = gui.addFolder('动画控制');
+    pointFolder.add(styleOptions, 'time', 0, 4000, 1).onChange((t: number) => {
+      pointLayer.setLight(t);
+      scene.render();
+    });
   }
   public render() {
     return (

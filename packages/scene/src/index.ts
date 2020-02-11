@@ -58,7 +58,6 @@ class Scene
 
   public constructor(config: ISceneConfig) {
     const { id, map, logoPosition, logoVisible } = config;
-
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
