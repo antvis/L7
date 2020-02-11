@@ -1,5 +1,5 @@
 // tslint:disable-next-line:no-submodule-imports
-import '!style-loader!css-loader!sass-loader!./iframe.scss';
+// import '!style-loader!css-loader!sass-loader!./iframe.scss';
 import { addParameters, configure } from '@storybook/react';
 import { create } from '@storybook/theming';
 
