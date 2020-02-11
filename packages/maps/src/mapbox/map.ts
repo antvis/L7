@@ -233,7 +233,7 @@ export default class MapboxService
       this.$mapContainer = this.creatAmapContainer(id);
       // @ts-ignore
       this.map = new mapboxgl.Map({
-        container: id,
+        container: this.$mapContainer,
         style: this.getMapStyle(style),
         attributionControl,
         bearing: rotation,

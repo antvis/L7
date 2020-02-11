@@ -8,7 +8,11 @@ export default class CityBuildingLayer extends BaseLayer {
     this.layerModel = new CityBuildModel(this);
     this.models = this.layerModel.buildModels();
   }
-
+  public setLight(t: number) {
+    this.updateLayerConfig({
+      time: t,
+    });
+  }
   protected getConfigSchema() {
     return {
       properties: {
