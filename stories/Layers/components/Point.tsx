@@ -18,7 +18,7 @@ export default class Point3D extends React.Component {
     const pointsData = await response.json();
 
     const scene = new Scene({
-      id: 'map',
+      id: document.getElementById('map') as HTMLDivElement,
       map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,

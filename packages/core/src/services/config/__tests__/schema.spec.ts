@@ -23,11 +23,11 @@ describe('ConfigService', () => {
   });
 
   it("should validate scene's options according to JSON schema", () => {
-    const { valid, errorText } = configService.validateSceneConfig({
-      id: 0,
-    });
-    expect(valid).toBeFalsy();
-    expect(errorText).toMatch('id should be string');
+    // const { valid, errorText } = configService.validateSceneConfig({
+    //   id: 0,
+    // });
+    // expect(valid).toBeFalsy();
+    // expect(errorText).toMatch('id should be string');
 
     expect(
       configService.validateSceneConfig({
