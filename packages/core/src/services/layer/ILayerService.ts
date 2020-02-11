@@ -116,7 +116,7 @@ export interface ILayer {
       Partial<IModelInitializationOptions>,
   ): IModel;
   init(): ILayer;
-  scale(field: string | IScaleOptions, cfg: IScale): ILayer;
+  scale(field: string | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
