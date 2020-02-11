@@ -39,6 +39,19 @@ layer.animate(true);
 
 [layer#style](./layer#style)
 
+## 自定义动画频率
+
+自定义动画频率需要 关闭默认动画，通过 setLight 方法不断更新时间
+
+```javascript
+layer.animate(false);
+```
+
+### setLight(time)
+
+参数
+time : 时间 毫秒
+
 #### 完整代码
 
 ```javascript

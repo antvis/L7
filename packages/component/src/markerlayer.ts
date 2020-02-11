@@ -1,5 +1,12 @@
 import { IMapService, IMarker, TYPES } from '@antv/l7-core';
-import { bindAll, DOM, Satistics } from '@antv/l7-utils';
+import {
+  bindAll,
+  boundsContains,
+  DOM,
+  IBounds,
+  padBounds,
+  Satistics,
+} from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { merge } from 'lodash';
@@ -39,6 +46,7 @@ export default class MarkerLayer extends EventEmitter {
   private mapsService: IMapService<unknown>;
   private scene: Container;
   private zoom: number;
+  private bbox: IBounds;
 
   constructor(option?: Partial<IMarkerLayerOption>) {
     super();
@@ -141,11 +149,7 @@ export default class MarkerLayer extends EventEmitter {
     this.clusterIndex.load(this.points);
   }
 
-  private getClusterMarker(zoom: number) {
-    // 之前的参数为  [-180, -85, 180, 85]，基本等于全地图的范围
-    // 优化后的逻辑为：
-    // 取当前视野范围 * 2，只渲染视野内 * 2 范围的点
-    const viewBounds = this.mapsService.getBounds();
+  private getClusterMarker(viewBounds: IBounds, zoom: number) {
     const viewBBox = viewBounds[0].concat(viewBounds[1]) as GeoJSON.BBox;
     const clusterPoint = this.clusterIndex.getClusters(viewBBox, zoom);
     this.clusterMarkers.forEach((marker: IMarker) => {
@@ -168,14 +172,10 @@ export default class MarkerLayer extends EventEmitter {
           const column = Satistics.getColumn(columnData as any, field);
           const stat = Satistics.getSatByColumn(method, column);
           const fieldName = 'point_' + method;
-          feature.properties[fieldName] = stat;
+          feature.properties[fieldName] = stat.toFixed(2);
         }
       }
       const marker = this.clusterMarker(feature);
-      // feature.properties && feature.properties.hasOwnProperty('point_count')
-      //   ? this.clusterMarker(feature)
-      //   : this.normalMarker(feature);
-
       this.clusterMarkers.push(marker);
       marker.addTo(this.scene);
     });
@@ -211,14 +211,15 @@ export default class MarkerLayer extends EventEmitter {
 
   private update() {
     const zoom = this.mapsService.getZoom();
-    // 在 zoom 变化的时候，通过控制触发的阈值 (0.4)，减少小层级的 zoom 变化引起的频繁重绘
-    if (zoom !== this.zoom && Math.abs(zoom - this.zoom) > 0.4) {
-      // 按照当前地图的放大层级向下取整，进行聚合点的绘制
+    const bbox = this.mapsService.getBounds();
+    if (
+      !this.bbox ||
+      Math.abs(zoom - this.zoom) >= 1 ||
+      !boundsContains(this.bbox, bbox)
+    ) {
+      this.bbox = padBounds(bbox, 0.5);
       this.zoom = Math.floor(zoom);
-      this.getClusterMarker(Math.floor(zoom));
-    } else if (zoom === this.zoom) {
-      // 如果 zoom 没有变化，只是平移，进行重新计算渲染加载s
-      this.getClusterMarker(Math.floor(zoom));
+      this.getClusterMarker(this.bbox, this.zoom);
     }
   }
 
@@ -234,14 +235,6 @@ export default class MarkerLayer extends EventEmitter {
         ? feature.properties['point_' + method] || feature.properties[field]
         : feature.properties.point_count;
     span.textContent = text;
-    // const elStyle = isFunction(style)
-    //   ? style(feature.properties.point_count)
-    //   : style;
-
-    // Object.keys(elStyle).forEach((key: string) => {
-    //   // @ts-ignore
-    //   el.style[key] = elStyle[key];
-    // });
     return el;
   }
 }

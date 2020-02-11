@@ -21,7 +21,7 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
     this.config = config;
   }
 
-  public setContainer(sceneContainer: Container, id: string) {
+  public setContainer(sceneContainer: Container, id: string | HTMLDivElement) {
     // // 首先使用全局配置服务校验地图参数
     const { valid, errorText } = this.configService.validateMapConfig(
       this.config,
