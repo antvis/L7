@@ -13,7 +13,7 @@ export default class AnimatePoint extends React.Component {
 
   public async componentDidMount() {
     const scene = new Scene({
-      id: 'map',
+      id: document.getElementById('map') as HTMLDivElement,
       map: new GaodeMap({
         pitch: 0,
         style: 'dark',
