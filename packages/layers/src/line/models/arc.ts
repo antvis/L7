@@ -12,7 +12,7 @@ import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/line_arc_frag.glsl';
-import line_arc2d_vert from '../shaders/line_bezier_vert.glsl';
+import line_arc2d_vert from '../shaders/line_arc_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
