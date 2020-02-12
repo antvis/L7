@@ -75,11 +75,11 @@ export default class PixelPickingPass<
     this.interactionService.on(InteractionEvent.Hover, this.pickFromPickingFBO);
     this.interactionService.on(
       InteractionEvent.Select,
-      this.selectFeatureHander.bind(this),
+      this.selectFeatureHandle.bind(this),
     );
     this.interactionService.on(
       InteractionEvent.Active,
-      this.highlightFeatureHander.bind(this),
+      this.highlightFeatureHandle.bind(this),
     );
   }
 
@@ -131,7 +131,7 @@ export default class PixelPickingPass<
    * TODO：支持区域拾取
    */
   private pickFromPickingFBO = ({ x, y, lngLat, type }: IInteractionTarget) => {
-    if (!this.layer.isVisible()) {
+    if (!this.layer.isVisible() || !this.layer.needPick()) {
       return;
     }
     const {
@@ -259,12 +259,12 @@ export default class PixelPickingPass<
     this.layerService.renderLayers();
   }
 
-  private selectFeatureHander({ featureId }: Partial<IInteractionTarget>) {
+  private selectFeatureHandle({ featureId }: Partial<IInteractionTarget>) {
     const pickedColors = encodePickingColor(featureId as number);
     this.selectFeature(new Uint8Array(pickedColors));
   }
 
-  private highlightFeatureHander({ featureId }: Partial<IInteractionTarget>) {
+  private highlightFeatureHandle({ featureId }: Partial<IInteractionTarget>) {
     const pickedColors = encodePickingColor(featureId as number);
     this.highlightPickedFeature(new Uint8Array(pickedColors));
   }
