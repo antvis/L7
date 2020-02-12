@@ -165,10 +165,10 @@ export interface ILayer {
   /**
    * 事件
    */
-  on(type: string, hander: (...args: any[]) => void): void;
-  off(type: string, hander: (...args: any[]) => void): void;
-  emit(type: string, hander: unknown): void;
-  once(type: string, hander: (...args: any[]) => void): void;
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  emit(type: string, handler: unknown): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   /**
    * JSON Schema 用于校验配置项
    */
