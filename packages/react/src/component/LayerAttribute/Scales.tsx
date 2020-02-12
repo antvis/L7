@@ -9,13 +9,10 @@ interface ILayerProps {
 }
 export default React.memo(function Chart(props: ILayerProps) {
   const { layer, scales } = props;
-  useEffect(
-    () => {
-      scales.field
-        ? layer.scale(scales.field as string, scales.value as IScale)
-        : layer.scale(scales.values as IScaleOptions);
-    },
-    Object.values(scales).map((scale) => JSON.stringify(scales)),
-  );
+  useEffect(() => {
+    scales.field
+      ? layer.scale(scales.field as string, scales.value as IScale)
+      : layer.scale(scales.values as IScaleOptions);
+  }, [scales.value, scales.field, JSON.stringify(scales.values)]);
   return null;
 });

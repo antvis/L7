@@ -3,7 +3,8 @@
   "compilerOptions": {
     "declarationDir": "./es",
     "rootDir": "./src",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "target": "es6",
   },
   "include": ["./src"]
 }
