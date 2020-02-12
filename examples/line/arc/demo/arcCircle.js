@@ -27,8 +27,7 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
       .shape('greatcircle')
       .color('#8C1EB2')
       .style({
-        opacity: 0.8,
-        blur: 0.99
+        opacity: 0.8
       });
     scene.addLayer(layer);
   });
