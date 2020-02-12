@@ -131,7 +131,7 @@ export default class PixelPickingPass<
    * TODO：支持区域拾取
    */
   private pickFromPickingFBO = ({ x, y, lngLat, type }: IInteractionTarget) => {
-    if (!this.layer.isVisible()) {
+    if (!this.layer.isVisible() || !this.layer.needPick()) {
       return;
     }
     const {

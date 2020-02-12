@@ -789,6 +789,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerService.clock.getElapsedTime() - this.animateStartTime;
   }
 
+  public needPick(): boolean {
+    const {
+      enableHighlight = true,
+      enableSelect = true,
+    } = this.getLayerConfig();
+    const eventNames = this.eventNames().filter((name) => {
+      return name !== 'inited' && name !== 'add' && name !== 'remove';
+    });
+    return eventNames.length > 0 || enableHighlight || enableSelect;
+  }
+
   public buildModels() {
     throw new Error('Method not implemented.');
   }
