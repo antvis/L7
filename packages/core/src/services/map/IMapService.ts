@@ -121,6 +121,8 @@ export interface IMapConfig<RawMap = {}> {
   maxZoom?: number;
 
   attributionControl?: boolean;
+
+  [key: string]: any;
 }
 
 /**

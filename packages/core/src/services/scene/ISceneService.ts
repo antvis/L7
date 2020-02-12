@@ -3,8 +3,8 @@ import { IMapConfig } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 
 export interface ISceneService {
-  on(type: string, hander: (...args: any[]) => void): void;
-  off(type: string, hander: (...args: any[]) => void): void;
+  on(type: string, handle: (...args: any[]) => void): void;
+  off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
   init(config: IMapConfig & IRenderConfig): void;
   addLayer(layer: ILayer): void;
