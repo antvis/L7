@@ -104,6 +104,7 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+  needPick(): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
@@ -116,7 +117,7 @@ export interface ILayer {
       Partial<IModelInitializationOptions>,
   ): IModel;
   init(): ILayer;
-  scale(field: string | IScaleOptions, cfg: IScale): ILayer;
+  scale(field: string | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -165,10 +166,10 @@ export interface ILayer {
   /**
    * 事件
    */
-  on(type: string, hander: (...args: any[]) => void): void;
-  off(type: string, hander: (...args: any[]) => void): void;
-  emit(type: string, hander: unknown): void;
-  once(type: string, hander: (...args: any[]) => void): void;
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  emit(type: string, handler: unknown): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   /**
    * JSON Schema 用于校验配置项
    */
