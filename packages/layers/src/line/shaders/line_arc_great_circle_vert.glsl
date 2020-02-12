@@ -50,7 +50,7 @@ vec2 getExtrusionOffset(vec2 line_clipspace, float offset_direction) {
   // rotate by 90 degrees
    dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
   vec2 offset = dir_screenspace * offset_direction * a_Size / 2.0;
-  return offset * vec2(1.0, -1.0);
+  return offset;
 }
 vec2 getNormal(vec2 line_clipspace, float offset_direction) {
   // normalized direction of the line

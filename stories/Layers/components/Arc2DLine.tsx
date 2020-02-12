@@ -23,28 +23,28 @@ export default class Arc2DLineDemo extends React.Component {
         zoom: 2,
       }),
     });
-    const lineLayer = new LineLayer()
+    const lineLayer = new LineLayer({
+      blend: 'normal',
+    })
       .source(await response.text(), {
         parser: {
           type: 'csv',
-          x: 'lng1',
-          y: 'lat1',
-          x1: 'lng2',
-          y1: 'lat2',
+          x1: 'lng1',
+          y1: 'lat1',
+          x: 'lng2',
+          y: 'lat2',
         },
       })
-      .size(4)
-      .shape('greatcircle')
-      .color('rgb(13,64,140)')
-      .animate({
-        interval: 0.5,
-        duration: 2,
-        trailLength: 0.4,
-      })
+      .size(3)
+      .shape('arc')
+      .color('#8C1EB2')
       .style({
-        opacity: 0.1,
+        opacity: 1,
       });
     scene.addLayer(lineLayer);
+    lineLayer.on('click', (e) => {
+      console.log(e);
+    });
     scene.render();
     this.scene = scene;
   }
