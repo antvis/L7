@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@antv/g2": "^3.5.9",
-    "@antv/gatsby-theme-antv": "^0.10.40",
+    "@antv/gatsby-theme-antv": "^0.10.43",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -62,7 +62,7 @@
     "eslint": "^6.6.0",
     "eslint-config-egg": "^7.5.1",
     "eslint-plugin-html": "^6.0.0",
-    "gatsby": "2.19.5",
+    "gatsby": "^2.19.15",
     "gatsby-plugin-google-analytics": "^2.1.27",
     "gatsby-remark-prettier": "^1.0.0",
     "geotiff": "^1.0.0-beta.6",
