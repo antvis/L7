@@ -54,7 +54,6 @@ export default React.memo(function Map() {
           />
         )}
       </Scene>
-      />
     </>
   );
 });
