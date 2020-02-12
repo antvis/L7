@@ -9,8 +9,11 @@ interface ILayerProps {
 }
 export default React.memo(function Chart(props: ILayerProps) {
   const { layer, style } = props;
-  useEffect(() => {
-    layer.style(style);
-  }, Object.values(style));
+  useEffect(
+    () => {
+      layer.style(style);
+    },
+    Object.keys(style).map((key) => style[key]),
+  );
   return null;
 });
