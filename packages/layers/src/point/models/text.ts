@@ -86,6 +86,13 @@ export default class TextModel extends BaseModel {
   private extent: [[number, number], [number, number]];
   private textureHeight: number = 0;
   private preTextStyle: Partial<IPointTextLayerStyleOptions> = {};
+  private glyphInfoMap: {
+    [key: string]: {
+      shaping: any;
+      glyphQuads: IGlyphQuad[];
+      centroid: number[];
+    };
+  } = {};
 
   public getUninforms(): IModelUniform {
     const {
@@ -284,7 +291,7 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '', coordinates } = feature;
+      const { shape = '', coordinates, id } = feature;
       const shaping = shapeText(
         shape.toString(),
         mapping,
@@ -298,6 +305,13 @@ export default class TextModel extends BaseModel {
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
       feature.centroid = calculteCentroid(coordinates);
+      if (id) {
+        this.glyphInfoMap[id] = {
+          shaping,
+          glyphQuads,
+          centroid: calculteCentroid(coordinates),
+        };
+      }
       return feature;
     });
   }

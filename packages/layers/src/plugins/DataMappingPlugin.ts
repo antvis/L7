@@ -64,7 +64,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
         if (filter?.needRemapping) {
           layer.setEncodedData(this.mapping(attributes, filterData));
         } else {
-          layer.setEncodedData(this.mapping(attributesToRemapping, filterData));
+          layer.setEncodedData(
+            this.mapping(
+              attributesToRemapping,
+              filterData,
+              layer.getEncodedData(),
+            ),
+          );
         }
 
         this.logger.debug('remapping finished');
@@ -99,11 +105,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private mapping(
     attributes: IStyleAttribute[],
     data: IParseDataItem[],
+    predata?: IEncodeFeature[],
   ): IEncodeFeature[] {
-    return data.map((record: IParseDataItem) => {
+    return data.map((record: IParseDataItem, i) => {
+      const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
         id: record._id,
         coordinates: record.coordinates,
+        ...preRecord,
       };
       attributes
         .filter((attribute) => attribute.scale !== undefined)
