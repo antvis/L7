@@ -9,7 +9,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { boundsContains, padBounds, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import CollisionIndex from '../../utils/collision-index';
 import { calculteCentroid } from '../../utils/geo';
@@ -84,18 +84,26 @@ export default class TextModel extends BaseModel {
   private glyphInfo: IEncodeFeature[];
   private currentZoom: number = -1;
   private extent: [[number, number], [number, number]];
+  private textureHeight: number = 0;
+  private preTextStyle: Partial<IPointTextLayerStyleOptions> = {};
 
   public getUninforms(): IModelUniform {
     const {
-      fontWeight = 800,
-      fontFamily = 'sans-serif',
       opacity = 1.0,
       stroke = '#fff',
       strokeWidth = 0,
       strokeOpacity = 1,
+      textAnchor = 'center',
+      textAllowOverlap = true,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
-    this.updateTexture();
     const { canvas } = this.fontService;
+    if (canvas.height !== this.textureHeight) {
+      this.updateTexture();
+    }
+    this.preTextStyle = {
+      textAnchor,
+      textAllowOverlap,
+    };
     return {
       u_opacity: opacity,
       u_stroke_opacity: strokeOpacity,
@@ -109,6 +117,14 @@ export default class TextModel extends BaseModel {
 
   public buildModels(): IModel[] {
     this.extent = this.textExtent();
+    const {
+      textAnchor = 'center',
+      textAllowOverlap = true,
+    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    this.preTextStyle = {
+      textAnchor,
+      textAllowOverlap,
+    };
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
@@ -127,15 +143,15 @@ export default class TextModel extends BaseModel {
     const {
       textAllowOverlap = false,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    // textAllowOverlap 发生改变
     const zoom = this.mapService.getZoom();
     const extent = this.mapService.getBounds();
-    const flag =
-      extent[0][0] < this.extent[0][0] ||
-      extent[0][1] < this.extent[0][1] ||
-      extent[1][0] > this.extent[1][0] ||
-      extent[1][1] < this.extent[1][1];
-
-    if (!textAllowOverlap && (Math.abs(this.currentZoom - zoom) > 1 || flag)) {
+    const flag = boundsContains(this.extent, extent);
+    // 文本不能压盖则进行过滤
+    if (
+      (!textAllowOverlap && (Math.abs(this.currentZoom - zoom) > 1 || !flag)) ||
+      textAllowOverlap !== this.preTextStyle.textAllowOverlap
+    ) {
       this.filterGlyphs();
       this.layer.models = [
         this.layer.buildLayerModel({
@@ -227,12 +243,7 @@ export default class TextModel extends BaseModel {
   }
   private textExtent(): [[number, number], [number, number]] {
     const bounds = this.mapService.getBounds();
-    const step =
-      Math.min(bounds[1][0] - bounds[0][0], bounds[1][1] - bounds[1][0]) / 2;
-    return [
-      [bounds[0][0] - step, bounds[0][1] - step],
-      [bounds[1][0] + step, bounds[1][1] + step],
-    ];
+    return padBounds(bounds, 0.5);
   }
   /**
    * 生成文字纹理
@@ -240,7 +251,7 @@ export default class TextModel extends BaseModel {
   private initTextFont() {
     const {
       fontWeight = '800',
-      fontFamily,
+      fontFamily = 'sans-serif',
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
     const characterSet: string[] = [];
@@ -264,6 +275,7 @@ export default class TextModel extends BaseModel {
    * 生成文字布局
    */
   private generateGlyphLayout() {
+    // TODO:更新文字布局
     const { mapping } = this.fontService;
     const {
       spacing = 2,
@@ -298,6 +310,7 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     if (textAllowOverlap) {
+      this.layer.setEncodedData(this.glyphInfo);
       return;
     }
     this.currentZoom = this.mapService.getZoom();
@@ -343,10 +356,26 @@ export default class TextModel extends BaseModel {
   private updateTexture() {
     const { createTexture2D } = this.rendererService;
     const { canvas } = this.fontService;
+    this.textureHeight = canvas.height;
     this.texture = createTexture2D({
       data: canvas,
       width: canvas.width,
       height: canvas.height,
     });
+  }
+
+  private rebuildModel() {
+    // 避让 anchor,等属性变化时需要重新构建model
+    this.filterGlyphs();
+    return [
+      this.layer.buildLayerModel({
+        moduleName: 'pointText',
+        vertexShader: textVert,
+        fragmentShader: textFrag,
+        triangulation: TextTriangulation,
+        depth: { enable: false },
+        blend: this.getBlend(),
+      }),
+    ];
   }
 }

@@ -27,11 +27,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('DataMappingPlugin', () => {
+      // 初始化重新生成 map
       this.generateMaping(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('DataMappingPlugin', (flag) => {
-      if (flag || layer.dataState.dataMappingNeedUpdate) {
+      if (
+        flag ||
+        layer.dataState.dataMappingNeedUpdate ||
+        layer.layerModelNeedUpdate
+      ) {
         layer.dataState.dataMappingNeedUpdate = false;
         this.generateMaping(layer, { styleAttributeService });
         return true;
@@ -42,16 +47,31 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
+      const filter = styleAttributeService.getLayerStyleAttribute('filter');
       const { dataArray } = layer.getSource().data;
       const attributesToRemapping = attributes.filter(
-        (attribute) => attribute.needRemapping,
+        (attribute) => attribute.needRemapping, // 如果filter变化
       );
+      let filterData = dataArray;
+      // 数据过滤完 再执行数据映射
+      if (filter?.needRemapping && filter?.scale) {
+        filterData = dataArray.filter((record: IParseDataItem) => {
+          return this.applyAttributeMapping(filter, record)[0];
+        });
+      }
       if (attributesToRemapping.length) {
-        layer.setEncodedData(this.mapping(attributesToRemapping, dataArray));
+        // 过滤数据
+        if (filter?.needRemapping) {
+          layer.setEncodedData(this.mapping(attributes, filterData));
+        } else {
+          layer.setEncodedData(this.mapping(attributesToRemapping, filterData));
+        }
+
         this.logger.debug('remapping finished');
       }
     });
   }
+
   private generateMaping(
     layer: ILayer,
     {
@@ -62,17 +82,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
     let filterData = dataArray;
-    // 数据过滤完 在执行数据映射
+    // 数据过滤完 再执行数据映射
     if (filter?.scale) {
       filterData = dataArray.filter((record: IParseDataItem) => {
         return this.applyAttributeMapping(filter, record)[0];
       });
     }
-
     // TODO: FIXME
-    if (!filterData) {
-      return;
-    }
+    // if (!filterData) {
+    //   return;
+    // }
     // mapping with source data
     layer.setEncodedData(this.mapping(attributes, filterData));
   }
