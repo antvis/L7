@@ -39,15 +39,15 @@ export default class TextLayerDemo extends React.Component {
           y: 'w',
         },
       })
-      // .shape('m', 'text')
-      .shape('circle')
+      .shape('m', 'text')
+      // .shape('circle')
       .size(12)
       .filter('t', (t) => {
         return t > 14;
       })
       .color('red')
       .style({
-        // textAllowOverlap: true,
+        textAllowOverlap: true,
         // fontWeight: 200,
         // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
         // textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
@@ -90,12 +90,12 @@ export default class TextLayerDemo extends React.Component {
       });
 
     rasterFolder
-      .add(styleOptions, 'strokeWidth', 0, 1000)
+      .add(styleOptions, 'strokeWidth', 0, 10)
       .onChange((strokeWidth: number) => {
-        // pointLayer.filter('t', (t: number) => {
-        //   return t > strokeWidth;
-        // });
-        pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+        pointLayer.filter('t', (t: number) => {
+          return t > strokeWidth;
+        });
+        // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
         scene.render();
       });
     rasterFolder
