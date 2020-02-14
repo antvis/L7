@@ -125,7 +125,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
         const { elements, sizePerElement } = this.featureLayout;
         // 截取待更新的 feature 范围
         const featuresToUpdate = elements.slice(startFeatureIdx, endFeatureIdx);
-
         // [n, n] 中断更新
         if (!featuresToUpdate.length) {
           return;
@@ -184,6 +183,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
     };
     elements: IElements;
   } {
+    // 每次创建的初始化化 LayerOut
+    this.featureLayout = {
+      sizePerElement: 0,
+      elements: [],
+    };
     if (triangulation) {
       this.triangulation = triangulation;
     }
@@ -196,7 +200,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const indices: number[] = [];
     const normals: number[] = [];
     let size = 3;
-
     features.forEach((feature, featureIdx) => {
       // 逐 feature 进行三角化
       const {
