@@ -9,7 +9,14 @@ import babel from 'rollup-plugin-babel';
 import glsl from './rollup-plugin-glsl';
 import postcss from 'rollup-plugin-postcss';
 import url from 'postcss-url';
-
+const { BUILD, MINIFY } = process.env;
+const minified = MINIFY === 'true';
+const production = BUILD === 'production';
+const outputFile = !production
+  ? 'packages/l7/dist/l7-dev.js'
+  : minified
+    ? 'packages/l7/dist/l7.js'
+    : 'packages/l7/dist/l7-dev.js';
 function resolveFile(filePath) {
   return path.join(__dirname, '..', filePath);
 }
@@ -18,7 +25,7 @@ module.exports = [
   {
     input: resolveFile('build/bundle.ts'),
     output: {
-      file: resolveFile('packages/l7/dist/l7.js'),
+      file: resolveFile(outputFile),
       format: 'umd',
       name: 'L7',
       globals: {
@@ -28,7 +35,7 @@ module.exports = [
     external: [
       'mapbox-gl'
     ],
-    treeshake: true,
+    treeshake: minified,
     plugins: [
       alias(
         {
@@ -81,7 +88,8 @@ module.exports = [
       babel({
         extensions: [ '.js', '.ts' ]
       }),
-      terser(),
+      // terser(),
+      minified ? terser() : false,
       analyze({
         summaryOnly: true,
         limit: 20

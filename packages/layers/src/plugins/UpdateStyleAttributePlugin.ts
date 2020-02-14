@@ -37,10 +37,12 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     });
 
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
+      if (layer.layerModelNeedUpdate) {
+        return;
+      }
       this.updateStyleAtrribute(layer, { styleAttributeService });
     });
   }
-
   private updateStyleAtrribute(
     layer: ILayer,
     {
@@ -48,10 +50,16 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
+    const filter = styleAttributeService.getLayerStyleAttribute('filter');
+    if (filter && filter.needRegenerateVertices) {
+      layer.layerModelNeedUpdate = true;
+      attributes.forEach((attr) => (attr.needRegenerateVertices = false));
+      return;
+    }
     attributes
       .filter((attribute) => attribute.needRegenerateVertices)
       .forEach((attribute) => {
-        // 精确更新某个/某些 feature(s)，需要传入 featureIdx
+        // 精确更新某个/某些 feature(s)，需要传入 featureIdx d
         styleAttributeService.updateAttributeByFeatureRange(
           attribute.name,
           layer.getEncodedData(), // 获取经过 mapping 最新的数据

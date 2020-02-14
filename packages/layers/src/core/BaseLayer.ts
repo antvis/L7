@@ -360,7 +360,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     this.updateStyleAttribute('filter', field, values, updateOptions);
-    this.dataState.dataMappingNeedUpdate = true;
+    // if (this.inited) {
+    //   this.layerModelNeedUpdate = true;
+    // }
     return this;
   }
 
@@ -811,6 +813,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   protected renderModels() {
     if (this.layerModelNeedUpdate) {
       this.models = this.layerModel.buildModels();
+      this.hooks.beforeRender.call();
       this.layerModelNeedUpdate = false;
     }
     this.models.forEach((model) => {
