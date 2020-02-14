@@ -1,5 +1,4 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
-const path = require('path');
 module.exports = api => {
   api.cache(() => process.env.NODE_ENV);
 
@@ -53,7 +52,6 @@ module.exports = api => {
           modules: (isCDNBundle || isESModule) ? false : 'auto',
           targets: {
             chrome: 58,
-            ie: 10,
             browsers: [ 'ie >= 11' ]
           }
         }
@@ -117,7 +115,7 @@ module.exports = api => {
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
-      // 'node_modules/d3-array',
+      'node_modules',
       // /node_modules\/(?![d3*])/,
       ...!isTest ? [
         '**/*.test.tsx',
