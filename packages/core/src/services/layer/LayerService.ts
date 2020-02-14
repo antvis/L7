@@ -69,11 +69,9 @@ export default class LayerService implements ILayerService {
   }
 
   public renderLayers() {
-    // TODO：脏检查，只渲染发生改变的 Layer
     if (this.alreadyInRendering) {
       return;
     }
-    //
     this.alreadyInRendering = true;
     this.clear();
     this.updateRenderOrder();
