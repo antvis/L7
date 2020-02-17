@@ -57,20 +57,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
       }),
     ];
   }
-
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
-  protected renderModels() {
+  public renderModels() {
     const { opacity } = this.getLayerConfig();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { min, max } = parserDataItem;
@@ -89,6 +76,18 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
     }
 
     return this;
+  }
+
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
   }
 
   private registerBuiltinAttributes() {
