@@ -12,8 +12,11 @@ export default React.memo(function Chart(props: ISourceProps) {
   const { data, ...sourceOption } = source;
 
   useEffect(() => {
-    // @ts-ignore
-    layer.source(data, sourceOption);
-  }, []);
+    if (!layer.inited) {
+      layer.source(data, sourceOption);
+    } else {
+      layer.setData(data, sourceOption);
+    }
+  }, [data, sourceOption]);
   return null;
 });

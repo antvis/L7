@@ -111,6 +111,7 @@ export interface ILayer {
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
   prepareBuildModel(): void;
+  renderModels(): void;
   buildModels(): void;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
@@ -263,6 +264,7 @@ export interface ILayerConfig {
  */
 export interface ILayerService {
   clock: Clock;
+  alreadyInRendering: boolean;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;

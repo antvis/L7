@@ -170,6 +170,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private aniamateStatus: boolean = false;
 
+  // private pickingPassRender: IPass<'pixelPicking'>;
+
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
     this.name = config.name || this.id;
@@ -228,7 +230,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
-    this.configService.setLayerConfig(sceneId, this.id, {});
+    const { enableMultiPassRenderer = false } = this.rawConfig;
+    this.configService.setLayerConfig(sceneId, this.id, {
+      enableMultiPassRenderer,
+    });
 
     // 全局容器服务
 
@@ -297,6 +302,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
+
+    // this.pickingPassRender = this.normalPassFactory('pixelPicking');
+    // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
 
     // 触发初始化完成事件;
@@ -465,11 +473,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
   public render(): ILayer {
-    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
-      this.multiPassRenderer.render();
-    } else {
-      this.renderModels();
-    }
+    // if (
+    //   this.needPick() &&
+    //   this.multiPassRenderer &&
+    //   this.multiPassRenderer.getRenderFlag()
+    // ) {
+    //   this.multiPassRenderer.render();
+    // } else if (this.needPick() && this.multiPassRenderer) {
+    //   this.renderModels();
+    // } else {
+    //   this.renderModels();
+    // }
+
+    this.renderModels();
+    // this.multiPassRenderer.render();
+    // this.renderModels();
     return this;
   }
 
@@ -806,11 +824,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     throw new Error('Method not implemented.');
   }
 
-  protected getConfigSchema() {
-    throw new Error('Method not implemented.');
-  }
-
-  protected renderModels() {
+  public renderModels() {
     if (this.layerModelNeedUpdate) {
       this.models = this.layerModel.buildModels();
       this.hooks.beforeRender.call();
@@ -822,6 +836,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       });
     });
     return this;
+  }
+
+  protected getConfigSchema() {
+    throw new Error('Method not implemented.');
   }
 
   protected getModelType(): unknown {
