@@ -240,6 +240,7 @@ export default class AMapService
         if (mapInstance) {
           this.map = mapInstance as AMap.Map & IAMapInstance;
           this.$mapContainer = this.map.getContainer();
+          this.removeLogoControl();
           setTimeout(() => {
             this.map.on('camerachange', this.handleCameraChanged);
             resolve();
@@ -255,6 +256,7 @@ export default class AMapService
             viewMode: '3D',
             ...rest,
           });
+          this.removeLogoControl();
           // 监听地图相机事件
           map.on('camerachange', this.handleCameraChanged);
           // @ts-ignore
@@ -389,5 +391,13 @@ export default class AMapService
       script.onerror = reject;
       document.head.appendChild(script);
     });
+  }
+
+  private removeLogoControl(): void {
+    // @ts-ignore
+    const logo = document.getElementsByClassName('amap-logo');
+    if (logo) {
+      logo[0].setAttribute('style', 'display: none !important');
+    }
   }
 }

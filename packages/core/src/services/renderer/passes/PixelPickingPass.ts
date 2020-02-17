@@ -60,7 +60,6 @@ export default class PixelPickingPass<
       getViewportSize,
     } = this.rendererService;
     const { width, height } = getViewportSize();
-
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
       color: createTexture2D({
