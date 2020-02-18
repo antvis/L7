@@ -1,6 +1,6 @@
 import { ILayer, StyleAttrField } from '@antv/l7';
 import * as React from 'react';
-import { IAttributeOptions } from '.';
+import { IAttributeOptions } from './';
 
 const { useEffect } = React;
 interface ILayerProps {

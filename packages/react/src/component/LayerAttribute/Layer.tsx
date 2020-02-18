@@ -3,12 +3,35 @@ import * as React from 'react';
 import { LayerContext } from '../LayerContext';
 import { useSceneValue } from '../SceneContext';
 
-import { Active, Color, Filter, ILayerProps, Scales, Shape, Size, Source, Style } from '.';
+import {
+  Active,
+  Color,
+  Filter,
+  ILayerProps,
+  Scales,
+  Shape,
+  Size,
+  Source,
+  Style,
+} from './';
 
 const { useEffect, useState } = React;
 
-export default function BaseLayer(type: string, props: ILayerProps & { children?: any }) {
-  const { source, color, shape, style, size, scales, active, filter, options } = props;
+export default function BaseLayer(
+  type: string,
+  props: ILayerProps & { children?: any },
+) {
+  const {
+    source,
+    color,
+    shape,
+    style,
+    size,
+    scales,
+    active,
+    filter,
+    options,
+  } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
   const [layer, setLayer] = useState();
   if (!layer) {
