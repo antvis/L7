@@ -1,5 +1,5 @@
 import { IMapConfig, Scene } from '@antv/l7';
-
+// @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Mapbox from '@antv/l7-maps/lib/mapbox';
 import React, { createElement, createRef, useEffect, useState } from 'react';
