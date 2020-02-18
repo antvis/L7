@@ -1,12 +1,14 @@
 import { ILayer, LineLayer, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import * as React from 'react';
+import { LayerContext } from '../LayerContext';
 import { useSceneValue } from '../SceneContext';
-import { Color, ILayerProps, Scales, Shape, Size, Source, Style } from './';
+
+import { Active, Color, Filter, ILayerProps, Scales, Shape, Size, Source, Style } from '.';
 
 const { useEffect, useState } = React;
 
-export default function BaseLayer(type: string, props: ILayerProps) {
-  const { source, color, shape, style, size, scales, options } = props;
+export default function BaseLayer(type: string, props: ILayerProps & { children?: any }) {
+  const { source, color, shape, style, size, scales, active, filter, options } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
   const [layer, setLayer] = useState();
   if (!layer) {
@@ -39,13 +41,17 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     }
   });
   return (
-    <>
+    <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />
       {scales && <Scales layer={layer} scales={scales} />}
       <Color layer={layer} color={color} />
       {size && <Size layer={layer} size={size} />}
       <Shape layer={layer} shape={shape} />
       {style && <Style layer={layer} style={style} />}
-    </>
+      {active && <Active layer={layer} active={active} />}
+      {filter && <Filter layer={layer} filter={filter} />}
+      {/* LayerContext主要传入LayerEvent组件 */}
+      {props.children}
+    </LayerContext.Provider>
   );
 }
