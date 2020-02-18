@@ -1,12 +1,12 @@
 import { ILayer, LineLayer, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 import { useSceneValue } from '../SceneContext';
-import { Color, ILayerProps, Scales, Shape, Size, Source, Style } from './';
+import { Color, ILayerProps, Scale, Shape, Size, Source, Style } from './';
 
 const { useEffect, useState } = React;
 
 export default function BaseLayer(type: string, props: ILayerProps) {
-  const { source, color, shape, style, size, scales, options } = props;
+  const { source, color, shape, style, size, scale, options } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
   const [layer, setLayer] = useState();
   if (!layer) {
@@ -41,7 +41,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
   return (
     <>
       <Source layer={layer} source={source} />
-      {scales && <Scales layer={layer} scales={scales} />}
+      {scale && <Scale layer={layer} scale={scale} />}
       <Color layer={layer} color={color} />
       {size && <Size layer={layer} size={size} />}
       <Shape layer={layer} shape={shape} />

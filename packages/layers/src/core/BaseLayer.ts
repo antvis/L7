@@ -31,6 +31,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  ScaleAttributeType,
   ScaleTypeName,
   ScaleTypes,
   StyleAttributeField,
@@ -461,7 +462,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this;
   }
-  public scale(field: ScaleTypeName | IScaleOptions, cfg: IScale) {
+  public scale(field: string | IScaleOptions, cfg: IScale) {
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -747,6 +748,30 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       ]);
     }
     return this.configSchema;
+  }
+  public getLegendItems(name: string) {
+    const scale = this.styleAttributeService.getLayerAttributeScale(name);
+    if (scale) {
+      if (scale.ticks) {
+        const items = scale.ticks().map((item: any) => {
+          return {
+            value: item,
+            [name]: scale(item),
+          };
+        });
+        return items;
+      } else if (scale.invertExtent) {
+        const items = scale.range().map((item: any) => {
+          return {
+            value: scale.invertExtent(item),
+            [name]: item,
+          };
+        });
+        return items;
+      }
+    } else {
+      return [];
+    }
   }
 
   public pick({ x, y }: { x: number; y: number }) {

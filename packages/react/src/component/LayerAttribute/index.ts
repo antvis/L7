@@ -1,6 +1,11 @@
-import { IScale, IScaleOptions, ISourceCFG } from '@antv/l7';
+import {
+  IScale,
+  IScaleOptions,
+  ISourceCFG,
+  ScaleAttributeType,
+} from '@antv/l7';
 import Color from './Color';
-import Scales from './Scales';
+import Scale from './Scale';
 import Shape from './Shape';
 import Size from './Size';
 import Source from './Source';
@@ -9,12 +14,17 @@ export interface IAttributeOptions {
   field: string;
   value: string | number;
   values: string[] | number[] | string;
+  scale?: string;
 }
 
 export interface IScaleAttributeOptions {
-  field: string;
+  field: string | IScaleOptions;
   value: IScale;
   values: IScaleOptions;
+}
+
+export interface IScaleOption {
+  [key: string]: IScaleAttributeOptions;
 }
 export interface IStyleOptions {
   opacity: number;
@@ -30,9 +40,9 @@ export interface ILayerProps {
   source: ISourceOptions;
   color: Partial<IAttributeOptions>;
   shape: Partial<IAttributeOptions>;
-  scales?: Partial<IScaleAttributeOptions>;
+  scale?: Partial<IScaleAttributeOptions>;
   size?: Partial<IAttributeOptions>;
   style?: Partial<IStyleOptions>;
 }
 
-export { Source, Size, Color, Shape, Style, Scales };
+export { Source, Size, Color, Shape, Style, Scale };
