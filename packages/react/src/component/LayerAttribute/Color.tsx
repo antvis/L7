@@ -13,6 +13,6 @@ export default React.memo(function Chart(props: ILayerProps) {
     color.field
       ? layer.color(color.field as StyleAttrField, color.values)
       : layer.color(color.value as StyleAttrField);
-  }, [color.value, color.field, JSON.stringify(color.values)]);
+  }, [color.value, color.field, JSON.stringify(color.values), color.values]);
   return null;
 });
