@@ -46,9 +46,9 @@ export default class PointImage extends React.Component {
             y: 'latitude',
           },
         })
-        .shape('circle')
+        .shape('triangle')
         .color('red')
-        .active(false)
+        .active(true)
         .size(20);
       scene.addLayer(imageLayer);
       i++;

@@ -87,7 +87,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const extrude = [-1, -1, 1, -1, 1, 1, -1, 1];
+          const extrude = [1, 1, -1, 1, -1, -1, 1, -1];
           const extrudeIndex = (attributeIdx % 4) * 2;
           return [extrude[extrudeIndex], extrude[extrudeIndex + 1]];
         },

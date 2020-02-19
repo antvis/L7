@@ -18,6 +18,7 @@ import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IPickingService } from './IPickingService';
 
+const PICKSCALE = 10.0;
 @injectable()
 export default class PickingService implements IPickingService {
   @inject(TYPES.IRendererService)
@@ -64,23 +65,52 @@ export default class PickingService implements IPickingService {
       return;
     }
     this.alreadyInPicking = true;
-    const layers = this.layerService.getLayers();
-    layers
-      .filter((layer) => layer.needPick())
-      .reverse()
-      .forEach(async (layer) => {
-        await this.pickingLayer(layer, target); // 可以实现是否向下触发
-      });
+    await this.pickingLayers(target);
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
+  private async pickingLayers(target: IInteractionTarget) {
+    const { getViewportSize, useFramebuffer, clear } = this.rendererService;
+    const { width, height } = getViewportSize();
 
+    if (this.width !== width || this.height !== height) {
+      this.pickingFBO.resize({
+        width: Math.round(width / PICKSCALE),
+        height: Math.round(height / PICKSCALE),
+      });
+      this.width = width;
+      this.height = height;
+    }
+
+    useFramebuffer(this.pickingFBO, () => {
+      const layers = this.layerService.getLayers();
+      layers
+        .filter((layer) => layer.needPick())
+        .reverse()
+        .forEach((layer) => {
+          clear({
+            framebuffer: this.pickingFBO,
+            color: [0, 0, 0, 0],
+            stencil: 0,
+            depth: 1,
+          });
+
+          layer.hooks.beforePickingEncode.call();
+          layer.renderModels();
+          layer.hooks.afterPickingEncode.call();
+          this.pickFromPickingFBO(layer, target);
+        });
+    });
+  }
   private async pickingLayer(layer: ILayer, target: IInteractionTarget) {
     const { getViewportSize, useFramebuffer, clear } = this.rendererService;
     const { width, height } = getViewportSize();
 
     if (this.width !== width || this.height !== height) {
-      this.pickingFBO.resize({ width, height });
+      this.pickingFBO.resize({
+        width: Math.round(width / PICKSCALE),
+        height: Math.round(height / PICKSCALE),
+      });
       this.width = width;
       this.height = height;
     }
@@ -124,17 +154,15 @@ export default class PickingService implements IPickingService {
       return;
     }
     let pickedColors: Uint8Array | undefined;
-
     pickedColors = readPixels({
-      x: Math.round(xInDevicePixel),
+      x: Math.round(xInDevicePixel / PICKSCALE),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.round(height - (y + 1) * window.devicePixelRatio),
+      y: Math.round((height - (y + 1) * window.devicePixelRatio) / PICKSCALE),
       width: 1,
       height: 1,
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-
     if (
       pickedColors[0] !== 0 ||
       pickedColors[1] !== 0 ||
@@ -220,13 +248,13 @@ export default class PickingService implements IPickingService {
   ) {
     const [r, g, b] = pickedColors;
     layer.hooks.beforeHighlight.call([r, g, b]);
-    this.layerService.renderLayers();
+    // this.layerService.renderLayers();
   }
 
   private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
-    this.layerService.renderLayers();
+    // this.layerService.renderLayers();
   }
 
   private selectFeatureHandle(
