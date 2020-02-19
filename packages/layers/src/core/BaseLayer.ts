@@ -369,9 +369,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     this.updateStyleAttribute('filter', field, values, updateOptions);
-    // if (this.inited) {
-    //   this.layerModelNeedUpdate = true;
-    // }
     return this;
   }
 

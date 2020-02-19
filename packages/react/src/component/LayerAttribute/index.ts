@@ -13,14 +13,14 @@ type CallBack = (...args: any[]) => any;
 export interface IAttributeOptions {
   field: string;
   value: string | number;
-  values: string[] | number[] | string;
+  values: string[] | number[] | string | number;
   scale?: string;
 }
 
 export interface IScaleAttributeOptions {
   field: string | IScaleOptions;
   value: IScale;
-  values: IScaleOptions;
+  values: IScaleOptions | IScale;
 }
 
 export interface IScaleOption {

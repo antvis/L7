@@ -39,7 +39,7 @@ export default class TextLayerDemo extends React.Component {
           y: 'w',
         },
       })
-      .shape('m', 'text')
+      .shape('w', 'text')
       // .shape('circle')
       .size(12)
       .filter('t', (t) => {
@@ -63,7 +63,7 @@ export default class TextLayerDemo extends React.Component {
     const gui = new dat.GUI();
     this.gui = gui;
     const styleOptions = {
-      textAnchor: 'center',
+      field: 'w',
       strokeWidth: 1,
       textAllowOverlap: false,
       opacity: 1,
@@ -71,21 +71,10 @@ export default class TextLayerDemo extends React.Component {
     };
     const rasterFolder = gui.addFolder('文本可视化');
     rasterFolder
-      .add(styleOptions, 'textAnchor', [
-        'center',
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'top-left',
-        'bottom-right',
-        'bottom-left',
-        'top-right',
-      ])
+      .add(styleOptions, 'field', ['w', 's', 'l', 'm', 'j', 'h'])
       .onChange((anchor: string) => {
-        pointLayer.style({
-          textAnchor: anchor,
-        });
+        console.log(anchor);
+        pointLayer.shape(anchor, 'text');
         scene.render();
       });
 
