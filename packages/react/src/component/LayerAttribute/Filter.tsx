@@ -5,14 +5,14 @@ import { IAttributeOptions } from './';
 const { useEffect } = React;
 interface ILayerProps {
   layer: ILayer;
-  shape: Partial<IAttributeOptions>;
+  filter: Partial<IAttributeOptions>;
 }
 export default React.memo(function Chart(props: ILayerProps) {
-  const { layer, shape } = props;
+  const { layer, filter } = props;
   useEffect(() => {
-    shape.field
-      ? layer.shape(shape.field, shape.values)
-      : layer.shape(shape.value as StyleAttrField);
-  }, [shape.field, shape.value, JSON.stringify(shape.values), shape.values]);
+    if (filter.field) {
+      layer.filter(filter.field as string, filter.values as StyleAttrField);
+    }
+  }, [filter.field, JSON.stringify(filter.values), filter.values]);
   return null;
 });
