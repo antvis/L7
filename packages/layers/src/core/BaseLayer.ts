@@ -749,7 +749,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this.configSchema;
   }
-  public getLegendItems(name: string) {
+  public getLegendItems(name: string): any {
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
     if (scale) {
       if (scale.ticks) {

@@ -3,7 +3,7 @@ import { IMapConfig, Scene } from '@antv/l7';
 // tslint:disable-next-line:no-submodule-imports
 import GaodeMap from '@antv/l7-maps/lib/amap';
 import React, { createElement, createRef, useEffect, useState } from 'react';
-import SceneContext from './SceneContext';
+import { SceneContext } from './SceneContext';
 interface IMapSceneConig {
   style?: React.CSSProperties;
   className?: string;
