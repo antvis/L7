@@ -837,7 +837,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       enableSelect = true,
     } = this.getLayerConfig();
     const eventNames = this.eventNames().filter((name) => {
-      return name !== 'inited' && name !== 'add' && name !== 'remove';
+      return (
+        name !== 'inited' && name !== 'add' && name !== 'remove' && 'dataupdate' // 非拾取事件排除
+      );
     });
     return eventNames.length > 0 || enableHighlight || enableSelect;
   }
@@ -873,6 +875,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
+    this.emit('dataUpdate');
     this.reRender();
   };
 
