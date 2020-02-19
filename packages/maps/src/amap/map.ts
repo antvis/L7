@@ -256,7 +256,10 @@ export default class AMapService
             viewMode: '3D',
             ...rest,
           });
-          this.removeLogoControl();
+          map.on('complete', () => {
+            this.removeLogoControl();
+          });
+
           // 监听地图相机事件
           map.on('camerachange', this.handleCameraChanged);
           // @ts-ignore
