@@ -2,7 +2,7 @@ import { IActiveOption, IScale, IScaleOptions, ISourceCFG } from '@antv/l7';
 import Active from './Active';
 import Color from './Color';
 import Filter from './Filter';
-import Scales from './Scales';
+import Scale from './Scale';
 import Shape from './Shape';
 import Size from './Size';
 import Source from './Source';
@@ -12,14 +12,19 @@ type CallBack = (...args: any[]) => any;
 
 export interface IAttributeOptions {
   field: string;
-  value: string | number | CallBack;
-  values: string[] | number[] | string | CallBack;
+  value: string | number;
+  values: string[] | number[] | string | number;
+  scale?: string;
 }
 
 export interface IScaleAttributeOptions {
-  field: string;
+  field: string | IScaleOptions;
   value: IScale;
-  values: IScaleOptions;
+  values: IScaleOptions | IScale;
+}
+
+export interface IScaleOption {
+  [key: string]: IScaleAttributeOptions;
 }
 export interface IStyleOptions {
   opacity: number;
@@ -40,11 +45,12 @@ export interface ILayerProps {
   source: ISourceOptions;
   color: Partial<IAttributeOptions>;
   shape: Partial<IAttributeOptions>;
-  scales?: Partial<IScaleAttributeOptions>;
+  scale?: Partial<IScaleAttributeOptions>;
   size?: Partial<IAttributeOptions>;
   style?: Partial<IStyleOptions>;
   active?: IActiveOptions;
   filter?: Partial<IAttributeOptions>;
+  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
 }
 
-export { Active, Color, Filter, Source, Size, Shape, Style, Scales };
+export { Active, Color, Filter, Source, Size, Shape, Style, Scale };

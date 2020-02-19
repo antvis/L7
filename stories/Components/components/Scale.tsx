@@ -62,7 +62,7 @@ export default class ScaleComponent extends React.Component {
       })
       .size('point_count', [5, 10, 15, 20, 25])
       .animate(false)
-      .select(true)
+      .active(true)
       .color('yellow')
       .style({
         opacity: 0.5,

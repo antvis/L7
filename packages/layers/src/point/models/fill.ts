@@ -18,6 +18,7 @@ interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
   stroke: string;
+  strokeOpacity: number;
 }
 export default class FillModel extends BaseModel {
   public getUninforms(): IModelUniform {
@@ -25,11 +26,13 @@ export default class FillModel extends BaseModel {
       opacity = 1,
       stroke = 'rgb(0,0,0,0)',
       strokeWidth = 1,
+      strokeOpacity = 1,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
       u_stroke_color: rgb2arr(stroke),
+      u_stroke_opacity: strokeOpacity,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -84,7 +87,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const extrude = [-1, -1, 1, -1, 1, 1, -1, 1];
+          const extrude = [1, 1, -1, 1, -1, -1, 1, -1];
           const extrudeIndex = (attributeIdx % 4) * 2;
           return [extrude[extrudeIndex], extrude[extrudeIndex + 1]];
         },

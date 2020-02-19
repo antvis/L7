@@ -55,7 +55,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   zIndex: 0,
   blend: 'normal',
   pickedFeatureID: -1,
-  enableMultiPassRenderer: true,
+  enableMultiPassRenderer: false,
   enablePicking: true,
   active: false,
   activeColor: '#2f54eb',

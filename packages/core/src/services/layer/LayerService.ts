@@ -10,6 +10,8 @@ import { ILayerModel, ILayerService } from './ILayerService';
 export default class LayerService implements ILayerService {
   public clock = new Clock();
 
+  public alreadyInRendering: boolean = false;
+
   private layers: ILayer[] = [];
 
   private layerRenderID: number;
@@ -17,8 +19,6 @@ export default class LayerService implements ILayerService {
   private sceneInited: boolean = false;
 
   private animateInstanceCount: number = 0;
-
-  private alreadyInRendering: boolean = false;
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;

@@ -31,6 +31,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  ScaleAttributeType,
   ScaleTypeName,
   ScaleTypes,
   StyleAttributeField,
@@ -170,6 +171,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private aniamateStatus: boolean = false;
 
+  // private pickingPassRender: IPass<'pixelPicking'>;
+
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
     this.name = config.name || this.id;
@@ -228,7 +231,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
-    this.configService.setLayerConfig(sceneId, this.id, {});
+    const { enableMultiPassRenderer = false } = this.rawConfig;
+    this.configService.setLayerConfig(sceneId, this.id, {
+      enableMultiPassRenderer,
+    });
 
     // 全局容器服务
 
@@ -297,6 +303,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
+
+    // this.pickingPassRender = this.normalPassFactory('pixelPicking');
+    // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
 
     // 触发初始化完成事件;
@@ -360,9 +369,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     this.updateStyleAttribute('filter', field, values, updateOptions);
-    // if (this.inited) {
-    //   this.layerModelNeedUpdate = true;
-    // }
     return this;
   }
 
@@ -453,7 +459,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this;
   }
-  public scale(field: ScaleTypeName | IScaleOptions, cfg: IScale) {
+  public scale(field: string | IScaleOptions, cfg: IScale) {
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -465,11 +471,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
   public render(): ILayer {
-    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
-      this.multiPassRenderer.render();
-    } else {
-      this.renderModels();
-    }
+    // if (
+    //   this.needPick() &&
+    //   this.multiPassRenderer &&
+    //   this.multiPassRenderer.getRenderFlag()
+    // ) {
+    //   this.multiPassRenderer.render();
+    // } else if (this.needPick() && this.multiPassRenderer) {
+    //   this.renderModels();
+    // } else {
+    //   this.renderModels();
+    // }
+
+    this.renderModels();
+    // this.multiPassRenderer.render();
+    // this.renderModels();
     return this;
   }
 
@@ -730,6 +746,30 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this.configSchema;
   }
+  public getLegendItems(name: string): any {
+    const scale = this.styleAttributeService.getLayerAttributeScale(name);
+    if (scale) {
+      if (scale.ticks) {
+        const items = scale.ticks().map((item: any) => {
+          return {
+            value: item,
+            [name]: scale(item),
+          };
+        });
+        return items;
+      } else if (scale.invertExtent) {
+        const items = scale.range().map((item: any) => {
+          return {
+            value: scale.invertExtent(item),
+            [name]: item,
+          };
+        });
+        return items;
+      }
+    } else {
+      return [];
+    }
+  }
 
   public pick({ x, y }: { x: number; y: number }) {
     this.interactionService.triggerHover({ x, y });
@@ -806,11 +846,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     throw new Error('Method not implemented.');
   }
 
-  protected getConfigSchema() {
-    throw new Error('Method not implemented.');
-  }
-
-  protected renderModels() {
+  public renderModels() {
     if (this.layerModelNeedUpdate) {
       this.models = this.layerModel.buildModels();
       this.hooks.beforeRender.call();
@@ -822,6 +858,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       });
     });
     return this;
+  }
+
+  protected getConfigSchema() {
+    throw new Error('Method not implemented.');
   }
 
   protected getModelType(): unknown {
