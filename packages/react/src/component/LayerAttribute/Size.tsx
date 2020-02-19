@@ -12,7 +12,7 @@ export default React.memo(function Chart(props: ILayerProps) {
   useEffect(() => {
     size.field
       ? layer.size(size.field, size.values)
-      : layer.size(size.value as StyleAttrField);
-  }, [size.field, size.value, size.scale, size.values]);
+      : layer.size(size.values as StyleAttrField);
+  }, [size.field, size.values, size.scale]);
   return null;
 });
