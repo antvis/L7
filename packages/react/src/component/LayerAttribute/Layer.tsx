@@ -2,13 +2,12 @@ import { ILayer, LineLayer, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import * as React from 'react';
 import { LayerContext } from '../LayerContext';
 import { useSceneValue } from '../SceneContext';
-
 import {
   Active,
   Color,
   Filter,
   ILayerProps,
-  Scales,
+  Scale,
   Shape,
   Size,
   Source,
@@ -17,17 +16,14 @@ import {
 
 const { useEffect, useState } = React;
 
-export default function BaseLayer(
-  type: string,
-  props: ILayerProps & { children?: any },
-) {
+export default function BaseLayer(type: string, props: ILayerProps) {
   const {
     source,
     color,
     shape,
     style,
     size,
-    scales,
+    scale,
     active,
     filter,
     options,
@@ -66,7 +62,7 @@ export default function BaseLayer(
   return (
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />
-      {scales && <Scales layer={layer} scales={scales} />}
+      {scale && <Scale layer={layer} scale={scale} />}
       <Color layer={layer} color={color} />
       {size && <Size layer={layer} size={size} />}
       <Shape layer={layer} shape={shape} />

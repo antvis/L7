@@ -14,6 +14,7 @@ import { IPopupService } from '../component/IPopupService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
 import { IInteractionService } from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
 import { IMapCamera, IMapService } from '../map/IMapService';
@@ -63,6 +64,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
+
+  @inject(TYPES.IPickingService)
+  private readonly pickingService: IPickingService;
 
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
@@ -150,6 +154,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.popupService.initPopup();
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
+
       this.logger.debug(`map ${this.id} loaded`);
     });
 
@@ -174,6 +179,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       } else {
         this.logger.error('容器 id 不存在');
       }
+      this.pickingService.init();
 
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });

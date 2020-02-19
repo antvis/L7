@@ -14,4 +14,9 @@ export interface ISceneService {
   destroy(): void;
 }
 // scene 事件
-export const SceneEventList = ['loaded', 'maploaded', 'resize', 'destroy'];
+export const SceneEventList: string[] = [
+  'loaded',
+  'maploaded',
+  'resize',
+  'destroy',
+];

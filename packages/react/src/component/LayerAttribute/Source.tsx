@@ -16,11 +16,7 @@ export default React.memo(function Chart(props: ISourceProps) {
       layer.source(data, sourceOption);
     } else {
       layer.setData(data, sourceOption);
-      if (layer.type === 'PolygonLayer') {
-        // 重新设置data之后，自适应处理
-        layer.fitBounds();
-      }
     }
-  }, [data]);
+  }, [data, sourceOption]);
   return null;
 });

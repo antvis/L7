@@ -12,7 +12,7 @@ export default React.memo(function Chart(props: ILayerProps) {
   useEffect(() => {
     shape.field
       ? layer.shape(shape.field, shape.values)
-      : layer.shape(shape.value as StyleAttrField);
-  }, [shape.field, shape.value, JSON.stringify(shape.values), shape.values]);
+      : layer.shape(shape.values as StyleAttrField);
+  }, [shape.field, JSON.stringify(shape.values)]);
   return null;
 });

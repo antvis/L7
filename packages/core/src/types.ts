@@ -17,6 +17,7 @@ const TYPES = {
   IIconService: Symbol.for('IIconService'),
   IFontService: Symbol.for('IFontService'),
   IInteractionService: Symbol.for('IInteractionService'),
+  IPickingService: Symbol.for('IPickingService'),
   IControlService: Symbol.for('IControlService'),
   IStyleAttributeService: Symbol.for('IStyleAttributeService'),
   ILayer: Symbol.for('ILayer'),

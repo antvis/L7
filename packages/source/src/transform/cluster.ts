@@ -3,7 +3,10 @@ import Supercluster from 'supercluster';
 export function cluster(data: IParserData, option: ITransform): IParserData {
   const { radius = 80, maxZoom = 18, minZoom = 0, field, zoom = 2 } = option;
   if (data.pointIndex) {
-    const clusterData = data.pointIndex.getClusters(data.extent, zoom);
+    const clusterData = data.pointIndex.getClusters(
+      data.extent,
+      Math.floor(zoom),
+    );
     data.dataArray = formatData(clusterData);
     return data;
   }

@@ -12,7 +12,8 @@ export default React.memo(function Chart(props: ILayerProps) {
   useEffect(() => {
     color.field
       ? layer.color(color.field as StyleAttrField, color.values)
-      : layer.color(color.value as StyleAttrField);
-  }, [color.value, color.field, JSON.stringify(color.values), color.values]);
+      : layer.color(color.values as StyleAttrField);
+  }, [color.field, color.scale, JSON.stringify(color.values)]);
+
   return null;
 });
