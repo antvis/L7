@@ -22,6 +22,7 @@ import {
   IScale,
   IScaleOptions,
   IStyleAttributeService,
+  ScaleAttributeType,
   StyleAttrField,
   StyleAttributeOption,
   Triangulation,
@@ -111,13 +112,14 @@ export interface ILayer {
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
   prepareBuildModel(): void;
+  renderModels(): void;
   buildModels(): void;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
   init(): ILayer;
-  scale(field: string | IScaleOptions, cfg?: IScale): ILayer;
+  scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -138,6 +140,7 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
+  getLegendItems(name: string): any;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
@@ -263,6 +266,7 @@ export interface ILayerConfig {
  */
 export interface ILayerService {
   clock: Clock;
+  alreadyInRendering: boolean;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;

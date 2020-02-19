@@ -1,5 +1,5 @@
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { LineLayer, Scene } from '@antv/l7-react';
+import { LineLayer, MapScene } from '@antv/l7-react';
 import * as React from 'react';
 
 export default React.memo(function Map() {
@@ -23,7 +23,7 @@ export default React.memo(function Map() {
   }, []);
   return (
     <>
-      <Scene
+      <MapScene
         map={amap}
         style={{
           position: 'absolute',
@@ -53,7 +53,7 @@ export default React.memo(function Map() {
             }}
           />
         )}
-      </Scene>
+      </MapScene>
     </>
   );
 });

@@ -7,6 +7,7 @@ import { IRendererService } from '../renderer/IRendererService';
 import { IParseDataItem } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 import {
+  IAttributeScale,
   IEncodeFeature,
   IStyleAttribute,
   IStyleAttributeInitializationOptions,
@@ -106,6 +107,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
     return this.attributes.find(
       (attribute) => attribute.name === attributeName,
     );
+  }
+
+  public getLayerAttributeScale(name: string) {
+    const attribute = this.getLayerStyleAttribute(name);
+    const scale = attribute?.scale?.scalers as IAttributeScale[];
+    if (scale && scale[0]) {
+      return scale[0].func;
+    }
+    return null;
   }
 
   public updateAttributeByFeatureRange(
