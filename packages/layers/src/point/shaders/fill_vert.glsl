@@ -24,7 +24,7 @@ void main() {
   // radius(16-bit)
   v_radius = a_Size;
 
-  vec2 offset = project_pixel(extrude * (a_Size + u_stroke_width)) * -1.;
+  vec2 offset = project_pixel(extrude * (a_Size + u_stroke_width));
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
 
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));

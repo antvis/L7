@@ -46,10 +46,14 @@ export default class PointImage extends React.Component {
             y: 'latitude',
           },
         })
-        .shape('triangle')
+        // .shape('name', ['00', '01', '02'])
+        .shape('name', 'text')
         .color('red')
-        .active(true)
+        .active(false)
         .size(20);
+      // imageLayer.on('click', (e) => {
+      //   console.log(e);
+      // });
       scene.addLayer(imageLayer);
       i++;
     }
