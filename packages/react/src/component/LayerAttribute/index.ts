@@ -1,4 +1,10 @@
-import { IActiveOption, IScale, IScaleOptions, ISourceCFG } from '@antv/l7';
+import {
+  BlendType,
+  IActiveOption,
+  IScale,
+  IScaleOptions,
+  ISourceCFG,
+} from '@antv/l7';
 import Active from './Active';
 import Color from './Color';
 import Filter from './Filter';
@@ -13,8 +19,9 @@ type CallBack = (...args: any[]) => any;
 export interface IAttributeOptions {
   field: string;
   value: string | number;
-  values: string[] | number[] | string | number;
+  values: string[] | number[] | string | number | CallBack;
   scale?: string;
+  blend: keyof typeof BlendType;
 }
 
 export interface IScaleAttributeOptions {
@@ -22,7 +29,16 @@ export interface IScaleAttributeOptions {
   value: IScale;
   values: IScaleOptions | IScale;
 }
-
+export interface ILayerOption {
+  name?: string;
+  visible: boolean;
+  zIndex: number;
+  minZoom: number;
+  maxZoom: number;
+  autoFit: boolean;
+  blend: keyof typeof BlendType;
+  [key: string]: any;
+}
 export interface IScaleOption {
   [key: string]: IScaleAttributeOptions;
 }
@@ -39,9 +55,7 @@ export interface IActiveOptions {
   option: IActiveOption | boolean;
 }
 export interface ILayerProps {
-  options?: {
-    [key: string]: any;
-  };
+  options?: Partial<ILayerOption>;
   source: ISourceOptions;
   color: Partial<IAttributeOptions>;
   shape: Partial<IAttributeOptions>;
