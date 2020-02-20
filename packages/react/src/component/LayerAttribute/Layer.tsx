@@ -59,6 +59,25 @@ export default function BaseLayer(type: string, props: ILayerProps) {
       mapScene.render();
     }
   });
+
+  useEffect(() => {
+    if (layer && layer.inited) {
+      layer.updateLayerConfig(options);
+    }
+  }, [options?.maxZoom, options?.maxZoom, options?.visible, options?.autoFit]);
+
+  useEffect(() => {
+    if (layer && layer.inited && options && options.zIndex) {
+      layer.setIndex(options.zIndex);
+    }
+  }, [options?.zIndex]);
+
+  useEffect(() => {
+    if (layer && layer.inited && options && options.blend) {
+      layer.setBlend(options.blend);
+    }
+  }, [options?.blend]);
+
   return (
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />

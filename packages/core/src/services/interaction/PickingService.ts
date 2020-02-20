@@ -18,7 +18,7 @@ import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IPickingService } from './IPickingService';
 
-const PICKSCALE = 10.0;
+const PICKSCALE = 1.0;
 @injectable()
 export default class PickingService implements IPickingService {
   @inject(TYPES.IRendererService)
@@ -155,9 +155,9 @@ export default class PickingService implements IPickingService {
     }
     let pickedColors: Uint8Array | undefined;
     pickedColors = readPixels({
-      x: Math.round(xInDevicePixel / PICKSCALE),
+      x: Math.floor(xInDevicePixel / PICKSCALE),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.round((height - (y + 1) * window.devicePixelRatio) / PICKSCALE),
+      y: Math.floor((height - (y + 1) * window.devicePixelRatio) / PICKSCALE),
       width: 1,
       height: 1,
       data: new Uint8Array(1 * 1 * 4),

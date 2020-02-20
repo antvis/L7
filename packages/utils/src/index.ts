@@ -5,5 +5,6 @@ export * from './geo';
 export * from './lru_cache';
 export * from './event';
 export * from './color';
+export * from './anchor';
 import * as Satistics from './statistics';
 export { DOM, Satistics };

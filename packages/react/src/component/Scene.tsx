@@ -12,7 +12,7 @@ interface IMapSceneConig {
   map: IMapWrapper;
   children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
 }
-const MapScene = React.memo((props: IMapSceneConig) => {
+export default React.memo((props: IMapSceneConig) => {
   const { style, className, map, options } = props;
   const container = createRef();
   const [scene, setScene] = useState();
@@ -36,6 +36,8 @@ const MapScene = React.memo((props: IMapSceneConig) => {
       sceneInstance.destroy();
     };
   }, []);
+
+  // 更新地图
   useEffect(() => {
     if (!scene) {
       return;
@@ -57,5 +59,3 @@ const MapScene = React.memo((props: IMapSceneConig) => {
     </SceneContext.Provider>
   );
 });
-
-export { MapScene };
