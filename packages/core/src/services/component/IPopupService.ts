@@ -1,6 +1,15 @@
+import { anchorType } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import { ILngLat, IMapService } from '../map/IMapService';
 
+export interface IPopupOption {
+  closeButton: boolean;
+  closeOnClick: boolean;
+  maxWidth: string;
+  anchor: anchorType;
+  className: string;
+  offsets: number[];
+}
 export interface IPopup {
   addTo(scene: Container): this;
   remove(): void;
