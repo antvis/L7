@@ -234,8 +234,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public exportPng(): string {
     const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
-    // this.render();
-    DOM.printCanvas(renderCanvas as HTMLCanvasElement);
+    this.render();
     const layersPng = renderCanvas?.toDataURL('image/png') as string;
     return layersPng;
   }
