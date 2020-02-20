@@ -55,6 +55,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     };
   }, []);
   useEffect(() => {
+    // 重绘layer
     if (layer) {
       mapScene.render();
     }

@@ -107,6 +107,10 @@ export default class MapboxService
     return this.map.getCenter();
   }
 
+  public setCenter(lnglat: [number, number]): void {
+    this.map.setCenter(lnglat);
+  }
+
   public getPitch(): number {
     return this.map.getPitch();
   }
@@ -133,6 +137,10 @@ export default class MapboxService
 
   public zoomIn(): void {
     this.map.zoomIn();
+  }
+
+  public setPitch(pitch: number) {
+    return this.map.setPitch(pitch);
   }
 
   public zoomOut(): void {

@@ -22,6 +22,8 @@ import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
 let mapdivCount = 0;
+// @ts-ignore
+window.forceWebGL = true;
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.15';
@@ -129,7 +131,9 @@ export default class AMapService
       lat: center.getLat(),
     };
   }
-
+  public setCenter(lnglat: [number, number]): void {
+    this.map.setCenter(lnglat);
+  }
   public getPitch(): number {
     return this.map.getPitch();
   }
@@ -165,10 +169,14 @@ export default class AMapService
     const zooms = this.map.get('zooms') as [number, number];
     return zooms[1] - 1;
   }
+
   public setRotation(rotation: number): void {
     return this.map.setRotation(rotation);
   }
 
+  public setPitch(pitch: number) {
+    return this.map.setPitch(pitch);
+  }
   public zoomIn(): void {
     this.map.zoomIn();
   }
