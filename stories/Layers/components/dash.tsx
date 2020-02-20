@@ -27,6 +27,7 @@ export default class DashLineDemo extends React.Component {
       .source(await response.json())
       .size(1)
       .shape('line')
+      .active({ color: 'red' })
       .color(
         'ELEV',
         [
@@ -44,7 +45,7 @@ export default class DashLineDemo extends React.Component {
       )
       .style({
         // lineType: 'dash',
-        opacity: 0.5,
+        opacity: 1.0,
       });
 
     scene.addLayer(lineLayer);
