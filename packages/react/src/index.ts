@@ -1,11 +1,10 @@
 export * from './component/SceneContext';
-export { default as Scene } from './component/Scene';
 export { default as AMapScene } from './component/AMapScene';
 export { default as MapboxScene } from './component/MapboxScene';
+export { default as Scene } from './component/Scene';
 export * from './component/Layer';
 export { default as Control } from './component/Control';
 export { default as CustomControl } from './component/CustomControl';
-export { MapScene } from './component/Scene';
 export { PolygonLayer, LineLayer, PointLayer } from './component/Layer';
 export { LayerEvent } from './component/LayerEvent';
 export { useSceneValue, SceneContext } from './component/SceneContext';

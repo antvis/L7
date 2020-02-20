@@ -13,6 +13,9 @@ export const LayerEvent = React.memo((props: ILayerProps) => {
 
   useEffect(() => {
     layer.on(type, handler);
+    return () => {
+      layer.off('type', handler);
+    };
   }, [type]);
   return null;
 });
