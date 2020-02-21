@@ -14,7 +14,7 @@ export const SceneEvent = React.memo((props: ILayerProps) => {
   useEffect(() => {
     mapScene.on(type, handler);
     return () => {
-      mapScene.off('type', handler);
+      mapScene.off(type, handler);
     };
   }, [type]);
   return null;
