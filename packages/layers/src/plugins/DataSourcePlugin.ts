@@ -17,7 +17,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
     });
 
     // 检测数据不否需要更新
-    layer.hooks.beforeRenderData.tap('DataSourcePlugin', (flag) => {
+    layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
       const neeUpdate1 = this.updateClusterData(layer);
       const neeUpdate2 = layer.dataState.dataSourceNeedUpdate;
       layer.dataState.dataSourceNeedUpdate = false;

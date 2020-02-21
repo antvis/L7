@@ -7,6 +7,7 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
+      "@antv/async-hook": ["packages/async-hook/src"],
       "@antv/l7-*": ["packages/*/src"],
       "@antv/l7": ["packages/l7/src"],
       "*": ["node_modules", "packages"]
