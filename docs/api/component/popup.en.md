@@ -59,7 +59,7 @@ popup.setLnglat([112, 32]);
 popup.addTo(scene);
 ```
 
-#### setHtml
+#### setHTML
 
 **参数**：html 字符串
 
@@ -70,7 +70,7 @@ var html = `<p>省份
   ${feature.s} </p><p>地区
   ${feature.m}</p><p>数值
   ${feature.t}</p>`;
-popup.setHtml(html);
+popup.setHTML(html);
 ```
 
 #### setDOMContent
@@ -150,7 +150,8 @@ popup.on('close', () => {});
 
 ```
   var html = '<p>'+feature.m+'</p>';
-  const new L7.Popup().setLnglat([112, 32]).setHTML(html).addTo(scene);
+  const popup= new L7.Popup().setLnglat([112, 32]).setHTML(html);
+  scene.addPopup(popup);
 ```
 
 ## demo 地址
