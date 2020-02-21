@@ -37,7 +37,7 @@ export default class PointImage extends React.Component {
     );
     let i = 0;
     const data = await response.json();
-    while (i < 50) {
+    while (i < 1) {
       const imageLayer = new PointLayer()
         .source(data, {
           parser: {
@@ -46,9 +46,9 @@ export default class PointImage extends React.Component {
             y: 'latitude',
           },
         })
-        // .shape('name', ['00', '01', '02'])
-        .shape('name', 'text')
-        .color('red')
+        .shape('name', ['00', '01', '02'])
+        // .shape('name', 'text')
+        // .color('red')
         .active(false)
         .size(20);
       // imageLayer.on('click', (e) => {

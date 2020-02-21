@@ -162,9 +162,7 @@ export default class TextLayerDemo extends React.Component {
             opacity,
           });
           scene.render();
-          setTimeout(() => {
-            scene.render();
-          }, 10);
+          scene.exportPng();
         });
       rasterFolder.addColor(styleOptions, 'color').onChange((color: string) => {
         layer.color(color);

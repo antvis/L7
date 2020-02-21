@@ -48,18 +48,21 @@ export default class ReglRendererService implements IRendererService {
           // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
           antialias: true,
           premultipliedAlpha: true,
+          preserveDrawingBuffer: false,
         },
         // TODO: use extensions
         extensions: [
           'OES_element_index_uint',
           'EXT_blend_minmax',
           'OES_standard_derivatives', // wireframe
-          // 'OES_texture_float', // shadow map 兼容性问题
           'WEBGL_depth_texture',
-          'angle_instanced_arrays',
-          'EXT_texture_filter_anisotropic', // VSM shadow map
+          'angle_instanced_arrays', // VSM shadow map
         ],
-        optionalExtensions: ['oes_texture_float_linear', 'OES_texture_float'],
+        optionalExtensions: [
+          'oes_texture_float_linear',
+          'OES_texture_float',
+          'EXT_texture_filter_anisotropic',
+        ],
         profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
           if (err || !r) {
