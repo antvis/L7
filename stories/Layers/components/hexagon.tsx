@@ -23,7 +23,7 @@ export default class HexagonLayerDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'light',
