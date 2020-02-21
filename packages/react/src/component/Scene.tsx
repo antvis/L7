@@ -37,14 +37,6 @@ export default React.memo((props: IMapSceneConig) => {
     };
   }, []);
 
-  // 更新地图
-  useEffect(() => {
-    if (!scene) {
-      return;
-    }
-    scene.setMapStyle(style);
-  }, [style]);
-
   return (
     <SceneContext.Provider value={scene}>
       {createElement(
