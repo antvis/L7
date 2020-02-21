@@ -31,17 +31,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
       this.generateMaping(layer, { styleAttributeService });
     });
 
-    layer.hooks.beforeRenderData.tap('DataMappingPlugin', (flag) => {
-      if (
-        flag ||
-        layer.dataState.dataMappingNeedUpdate ||
-        layer.layerModelNeedUpdate
-      ) {
-        layer.dataState.dataMappingNeedUpdate = false;
-        this.generateMaping(layer, { styleAttributeService });
-        return true;
-      }
-      return false;
+    layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
+      layer.dataState.dataMappingNeedUpdate = false;
+      this.generateMaping(layer, { styleAttributeService });
+      return true;
     });
 
     // remapping before render
