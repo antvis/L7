@@ -51,9 +51,7 @@ export default class Point3D extends React.Component {
           strokeWidth: 1,
         });
       scene.addLayer(pointLayer);
-      const items = pointLayer.getLegendItems('color');
-      console.log(items);
-      console.log(pointLayer.getLegendItems('size'));
+
       // scene.on('loaded', () => {
       //   const newData = {
       //     type: 'FeatureCollection',

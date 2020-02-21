@@ -52,6 +52,8 @@ export interface IMapService<RawMap = {}> {
   panBy(pixel: Point): void;
   fitBounds(bound: Bounds): void;
   setZoomAndCenter(zoom: number, center: Point): void;
+  setCenter(center: [number, number]): void;
+  setPitch(pitch: number): void;
   setZoom(zoom: number): void;
   setMapStyle(style: string): void;
 
