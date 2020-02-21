@@ -42,6 +42,10 @@ module.exports = [
           resolve: [ '.tsx', '.ts' ],
           entries: [
             {
+              find: /^@antv\/async-hook$/,
+              replacement: resolveFile('packages/async-hook/src'),
+            },
+            {
               find: /^@antv\/l7-(.*)/,
               replacement: resolveFile('packages/$1/src'),
             },

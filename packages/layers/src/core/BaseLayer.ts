@@ -1,3 +1,5 @@
+// @ts-ignore
+import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import {
   BlendType,
   gl,
@@ -45,7 +47,6 @@ import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import baseLayerSchema from './schema';
@@ -76,19 +77,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   };
   // 生命周期钩子
   public hooks = {
-    init: new SyncBailHook<void, boolean | void>(),
-    afterInit: new SyncBailHook<void, boolean | void>(),
-    beforeRender: new SyncBailHook<void, boolean | void>(),
-    beforeRenderData: new SyncWaterfallHook<void | boolean>(['data']),
-    afterRender: new SyncHook<void>(),
-    beforePickingEncode: new SyncHook<void>(),
-    afterPickingEncode: new SyncHook<void>(),
-    beforeHighlight: new SyncHook<[number[]]>(['pickedColor']),
-    afterHighlight: new SyncHook<void>(),
-    beforeSelect: new SyncHook<[number[]]>(['pickedColor']),
-    afterSelect: new SyncHook<void>(),
-    beforeDestroy: new SyncHook<void>(),
-    afterDestroy: new SyncHook<void>(),
+    init: new SyncBailHook(),
+    afterInit: new SyncBailHook(),
+    beforeRender: new SyncBailHook(),
+    beforeRenderData: new SyncWaterfallHook(),
+    afterRender: new SyncHook(),
+    beforePickingEncode: new SyncHook(),
+    afterPickingEncode: new SyncHook(),
+    beforeHighlight: new SyncHook(['pickedColor']),
+    afterHighlight: new SyncHook(),
+    beforeSelect: new SyncHook(['pickedColor']),
+    afterSelect: new SyncHook(),
+    beforeDestroy: new SyncHook(),
+    afterDestroy: new SyncHook(),
   };
 
   // 待渲染 model 列表
@@ -522,14 +523,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
-      this.hooks.beforeSelect.callAsync(
-        encodePickingColor(id as number) as number[],
-        () => {
+      this.hooks.beforeSelect
+        .call(encodePickingColor(id as number) as number[])
+        .then(() => {
           setTimeout(() => {
             this.reRender();
           }, 1);
-        },
-      );
+        });
     }
   }
 
@@ -567,14 +567,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().selectColor,
       });
-      this.hooks.beforeSelect.callAsync(
-        encodePickingColor(id as number) as number[],
-        () => {
+      this.hooks.beforeSelect
+        .call(encodePickingColor(id as number) as number[])
+        .then(() => {
           setTimeout(() => {
             this.reRender();
           }, 1);
-        },
-      );
+        });
     }
   }
   public setBlend(type: keyof typeof BlendType): void {
@@ -849,7 +848,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public renderModels() {
-    if (this.layerModelNeedUpdate) {
+    if (this.layerModelNeedUpdate && this.layerModel) {
       this.models = this.layerModel.buildModels();
       this.hooks.beforeRender.call();
       this.layerModelNeedUpdate = false;
