@@ -13,7 +13,7 @@ interface IMapSceneConig {
 const MapboxScene = React.memo((props: IMapSceneConig) => {
   const { style, className, map } = props;
   const container = createRef();
-  const [scene, setScene] = useState();
+  const [scene, setScene] = useState<Scene>();
 
   // 地图初始
   useEffect(() => {
@@ -31,39 +31,34 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
 
   // 更新地图样式
   useEffect(() => {
-    if (!scene) {
-      return;
+    if (scene && map.style) {
+      scene.setMapStyle(map.style);
     }
-    scene.setMapStyle(map.style);
   }, [map.style]);
 
   useEffect(() => {
-    if (!scene) {
-      return;
+    if (scene && map.zoom) {
+      scene.setZoom(map.zoom);
     }
-    scene.setZoom(map.zoom);
-  }, [map.zoom, map.center, map.pitch, map.rotation]);
+  }, [map.zoom]);
 
   useEffect(() => {
-    if (!scene) {
-      return;
+    if (scene && map.center) {
+      scene.setCenter(map.center);
     }
-    scene.setCenter(map.center);
   }, [map.center]);
   useEffect(() => {
-    if (!scene) {
-      return;
+    if (scene && map.pitch) {
+      scene.setPitch(map.pitch);
     }
-    scene.setPitch(map.pitch);
   }, [map.pitch]);
   useEffect(() => {
-    if (!scene) {
-      return;
+    if (scene && map.rotation) {
+      scene.setRotation(map.rotation);
     }
-    scene.setRotation(map.rotation);
   }, [map.rotation]);
 
-  return (
+  return scene !== undefined ? (
     <SceneContext.Provider value={scene}>
       {createElement(
         'div',
@@ -75,7 +70,7 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
         scene && props.children,
       )}
     </SceneContext.Provider>
-  );
+  ) : null;
 });
 
 export default MapboxScene;
