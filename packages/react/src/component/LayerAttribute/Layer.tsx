@@ -29,7 +29,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     options,
   } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
-  const [layer, setLayer] = useState();
+  const [layer, setLayer] = useState<ILayer>();
   if (!layer) {
     let l: ILayer;
     switch (type) {
@@ -49,23 +49,29 @@ export default function BaseLayer(type: string, props: ILayerProps) {
   }
 
   useEffect(() => {
-    mapScene.addLayer(layer);
-    return () => {
-      mapScene.removeLayer(layer);
-    };
+    if (layer !== undefined) {
+      mapScene.addLayer(layer as ILayer);
+      return () => {
+        mapScene.removeLayer(layer as ILayer);
+      };
+    }
   }, []);
   useEffect(() => {
     // 重绘layer
     if (layer) {
       mapScene.render();
+      // 如果autoFit为true，执行自适应操作
+      if (options?.autoFit) {
+        layer.fitBounds();
+      }
     }
   });
 
   useEffect(() => {
-    if (layer && layer.inited) {
+    if (layer && layer.inited && options) {
       layer.updateLayerConfig(options);
     }
-  }, [options?.maxZoom, options?.maxZoom, options?.visible, options?.autoFit]);
+  }, [options?.minZoom, options?.maxZoom, options?.visible]);
 
   useEffect(() => {
     if (layer && layer.inited && options && options.zIndex) {
@@ -79,7 +85,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     }
   }, [options?.blend]);
 
-  return (
+  return layer !== null && layer !== undefined ? (
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />
       {scale && <Scale layer={layer} scale={scale} />}
@@ -92,5 +98,5 @@ export default function BaseLayer(type: string, props: ILayerProps) {
       {/* LayerContext主要传入LayerEvent组件 */}
       {props.children}
     </LayerContext.Provider>
-  );
+  ) : null;
 }

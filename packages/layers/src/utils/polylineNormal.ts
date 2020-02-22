@@ -17,8 +17,8 @@ export function computeNormal(out: vec2, dir: vec2) {
   return vec2.set(out, -dir[1], dir[0]);
 }
 export function direction(out: vec2, a: vec2, b: vec2) {
-  const a1 = aProjectFlat([a[0], a[1]]);
-  const b1 = aProjectFlat([b[0], b[1]]);
+  const a1 = aProjectFlat([a[0], a[1]]) as [number, number];
+  const b1 = aProjectFlat([b[0], b[1]]) as [number, number];
   vec2.sub(out, a1, b1);
   vec2.normalize(out, out);
   return out;
