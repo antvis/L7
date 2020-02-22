@@ -174,7 +174,7 @@ export default class MapboxService
     });
   }
 
-  public setMapStyle(style: string): void {
+  public setMapStyle(style: any): void {
     this.map.setStyle(this.getMapStyle(style));
   }
   // TODO: 计算像素坐标

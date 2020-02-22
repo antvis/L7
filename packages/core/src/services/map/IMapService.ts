@@ -55,7 +55,7 @@ export interface IMapService<RawMap = {}> {
   setCenter(center: [number, number]): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
-  setMapStyle(style: string): void;
+  setMapStyle(style: any): void;
 
   // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;

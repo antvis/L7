@@ -22,7 +22,7 @@ interface IPopupProps {
 export default React.memo(function LoadImage(props: IPopupProps) {
   const mapScene = (useSceneValue() as unknown) as Scene;
   const { lnglat, html, text, children } = props;
-  const [popup, setPopup] = React.useState();
+  const [popup, setPopup] = React.useState<Popup>();
   const el = document.createElement('div');
   useEffect(() => {
     const p = new Popup(props.option);
