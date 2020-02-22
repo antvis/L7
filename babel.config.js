@@ -70,6 +70,7 @@ module.exports = api => {
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       '@babel/plugin-syntax-async-generators',
+      '@babel/plugin-transform-parameters',
       [
         '@babel/plugin-proposal-decorators',
         {
@@ -115,7 +116,7 @@ module.exports = api => {
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
-      'node_modules',
+      // 'node_modules',
       // /node_modules\/(?![d3*])/,
       ...!isTest ? [
         '**/*.test.tsx',
