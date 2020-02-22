@@ -58,6 +58,10 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     // 重绘layer
     if (layer) {
       mapScene.render();
+      // 如果autoFit为true，执行自适应操作
+      if (options?.autoFit) {
+        layer.fitBounds();
+      }
     }
   });
 
@@ -65,7 +69,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     if (layer && layer.inited) {
       layer.updateLayerConfig(options);
     }
-  }, [options?.maxZoom, options?.maxZoom, options?.visible, options?.autoFit]);
+  }, [options?.maxZoom, options?.maxZoom, options?.visible]);
 
   useEffect(() => {
     if (layer && layer.inited && options && options.zIndex) {
