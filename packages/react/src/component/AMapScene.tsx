@@ -33,7 +33,7 @@ const AMapScene = React.memo((props: IMapSceneConig) => {
     scene.setMapStyle(map.style);
   }, [map.style]);
 
-  return scene !== undefined ? (
+  return (
     <SceneContext.Provider value={scene}>
       {createElement(
         'div',
@@ -45,7 +45,7 @@ const AMapScene = React.memo((props: IMapSceneConig) => {
         scene && props.children,
       )}
     </SceneContext.Provider>
-  ) : null;
+  );
 });
 
 export default AMapScene;
