@@ -25,7 +25,7 @@ export default React.memo((props: IMapSceneConig) => {
     };
   }, []);
 
-  return scene !== null && scene !== undefined ? (
+  return (
     <SceneContext.Provider value={scene}>
       {createElement(
         'div',
@@ -37,5 +37,5 @@ export default React.memo((props: IMapSceneConig) => {
         scene && props.children,
       )}
     </SceneContext.Provider>
-  ) : null;
+  );
 });
