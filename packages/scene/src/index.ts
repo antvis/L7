@@ -210,8 +210,16 @@ class Scene
     return this.mapService.getCenter();
   }
 
+  public setCenter(center: [number, number]) {
+    return this.mapService.setCenter(center);
+  }
+
   public getPitch(): number {
     return this.mapService.getPitch();
+  }
+
+  public setPitch(pitch: number) {
+    return this.mapService.setPitch(pitch);
   }
 
   public getRotation(): number {
@@ -252,7 +260,7 @@ class Scene
     this.mapService.setZoomAndCenter(zoom, center);
   }
 
-  public setMapStyle(style: string): void {
+  public setMapStyle(style: any): void {
     this.mapService.setMapStyle(style);
   }
 

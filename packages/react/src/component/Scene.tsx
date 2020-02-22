@@ -11,7 +11,7 @@ interface IMapSceneConig {
 export default React.memo((props: IMapSceneConig) => {
   const { style, className, map } = props;
   const container = createRef();
-  const [scene, setScene] = useState();
+  const [scene, setScene] = useState<Scene>();
   useEffect(() => {
     const sceneInstance = new Scene({
       id: container.current as HTMLDivElement,
@@ -25,7 +25,7 @@ export default React.memo((props: IMapSceneConig) => {
     };
   }, []);
 
-  return (
+  return scene !== null && scene !== undefined ? (
     <SceneContext.Provider value={scene}>
       {createElement(
         'div',
@@ -37,5 +37,5 @@ export default React.memo((props: IMapSceneConig) => {
         scene && props.children,
       )}
     </SceneContext.Provider>
-  );
+  ) : null;
 });
