@@ -49,6 +49,7 @@ describe('ReglModel', () => {
       attributes: {},
       // @ts-ignore
       uniforms: {
+        // @ts-ignore
         u_Struct: [
           {
             a: 1,
