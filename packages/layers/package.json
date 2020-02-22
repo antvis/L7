@@ -39,8 +39,7 @@
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "merge-json-schemas": "1.0.0",
-    "reflect-metadata": "^0.1.13",
-    "tapable": "^2.0.0-beta.8"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
