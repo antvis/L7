@@ -87,6 +87,7 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
       },
       // @ts-ignore
       uniforms: {
+        // @ts-ignore
         u_Texture: null,
         ...uniforms,
         ...(this.config && this.convertOptionsToUniforms(this.config)),

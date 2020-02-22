@@ -13,7 +13,7 @@ interface IMapSceneConig {
 const AMapScene = React.memo((props: IMapSceneConig) => {
   const { style, className, map } = props;
   const container = createRef();
-  const [scene, setScene] = useState();
+  const [scene, setScene] = useState<Scene>();
   useEffect(() => {
     const sceneInstance = new Scene({
       id: container.current as HTMLDivElement,
@@ -33,7 +33,7 @@ const AMapScene = React.memo((props: IMapSceneConig) => {
     scene.setMapStyle(map.style);
   }, [map.style]);
 
-  return (
+  return scene !== undefined ? (
     <SceneContext.Provider value={scene}>
       {createElement(
         'div',
@@ -45,7 +45,7 @@ const AMapScene = React.memo((props: IMapSceneConig) => {
         scene && props.children,
       )}
     </SceneContext.Provider>
-  );
+  ) : null;
 });
 
 export default AMapScene;
