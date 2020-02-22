@@ -58,7 +58,7 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
     }
   }, [map.rotation]);
 
-  return scene !== undefined ? (
+  return (
     <SceneContext.Provider value={scene}>
       {createElement(
         'div',
@@ -70,7 +70,7 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
         scene && props.children,
       )}
     </SceneContext.Provider>
-  ) : null;
+  );
 });
 
 export default MapboxScene;
