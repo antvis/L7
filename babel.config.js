@@ -45,7 +45,7 @@ module.exports = api => {
         {
           // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
           // useBuiltIns: 'usage',
-          // corejs: '3.0.0',
+          corejs: '3.0.0',
           useBuiltIns: isCDNBundle ? 'usage' : false,
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
@@ -116,7 +116,6 @@ module.exports = api => {
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
-      // 'node_modules',
       // /node_modules\/(?![d3*])/,
       ...!isTest ? [
         '**/*.test.tsx',
