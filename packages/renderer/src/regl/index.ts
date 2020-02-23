@@ -53,15 +53,15 @@ export default class ReglRendererService implements IRendererService {
         // TODO: use extensions
         extensions: [
           'OES_element_index_uint',
-          'EXT_blend_minmax',
           'OES_standard_derivatives', // wireframe
-          'WEBGL_depth_texture',
           'angle_instanced_arrays', // VSM shadow map
         ],
         optionalExtensions: [
           'oes_texture_float_linear',
           'OES_texture_float',
           'EXT_texture_filter_anisotropic',
+          'EXT_blend_minmax',
+          'WEBGL_depth_texture',
         ],
         profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {

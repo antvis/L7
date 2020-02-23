@@ -32,7 +32,7 @@ export default class ReglTexture2D implements ITexture2D {
       premultiplyAlpha = false,
       mag = gl.NEAREST,
       min = gl.NEAREST,
-      colorSpace = gl.NONE,
+      colorSpace = gl.BROWSER_DEFAULT_WEBGL,
     } = options;
 
     const textureOptions: regl.Texture2DOptions = {
