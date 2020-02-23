@@ -22,13 +22,14 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
+    "@antv/async-hook": "^2.0.25",
     "@antv/l7-core": "^2.0.27-alpha.0",
     "@antv/l7-source": "^2.0.27-alpha.0",
     "@antv/l7-utils": "^2.0.27-alpha.0",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
-    "d3-array": "^2.3.1",
+    "d3-array": "2.3.3",
     "d3-color": "^1.4.0",
     "d3-scale": "^3.1.0",
     "earcut": "^2.2.1",
@@ -38,8 +39,7 @@
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "merge-json-schemas": "1.0.0",
-    "reflect-metadata": "^0.1.13",
-    "tapable": "^2.0.0-beta.8"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/d3-array": "^2.0.0",

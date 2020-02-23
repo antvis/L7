@@ -1,3 +1,5 @@
+// @ts-ignore
+import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
   IMapService,
@@ -21,7 +23,6 @@ import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { cloneDeep, isFunction, isString } from 'lodash';
 import Supercluster from 'supercluster';
-import { SyncHook } from 'tapable';
 import { getParser, getTransform } from './';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
@@ -32,9 +33,7 @@ export default class Source extends EventEmitter {
   public extent: BBox;
   // 生命周期钩子
   public hooks = {
-    init: new SyncHook(['source']),
-    layout: new SyncHook(['source']),
-    update: new SyncHook(['source']),
+    init: new SyncHook(),
   };
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];

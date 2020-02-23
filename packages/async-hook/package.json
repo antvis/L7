@@ -1,6 +1,6 @@
 {
-  "name": "@antv/l7-source",
-  "version": "2.0.27-alpha.0",
+  "name": "@antv/async-hook",
+  "version": "2.0.25",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,29 +23,14 @@
   },
   "author": "lzxue",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+  "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/async-hook": "^2.0.25",
-    "@antv/l7-core": "^2.0.27-alpha.0",
-    "@antv/l7-utils": "^2.0.27-alpha.0",
-    "@babel/runtime": "^7.7.7",
-    "@mapbox/geojson-rewind": "^0.4.0",
-    "@turf/helpers": "^6.1.4",
-    "@turf/invariant": "^6.1.2",
-    "@turf/meta": "^6.0.2",
-    "d3-dsv": "^1.1.1",
-    "d3-hexbin": "^0.2.2",
-    "eventemitter3": "^4.0.0",
-    "inversify": "^5.0.1",
-    "lodash": "^4.17.15",
-    "supercluster": "^6.0.2"
+    "async": "^3.1.1"
   },
   "devDependencies": {
-    "@types/d3-dsv": "^1.0.36",
-    "@types/d3-hexbin": "^0.2.3",
-    "@types/lodash": "^4.14.138"
-  },
-  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
-  "publishConfig": {
-    "access": "public"
+    "@types/async": "^3.0.8"
   }
 }
