@@ -80,7 +80,7 @@ export default class LayerService implements ILayerService {
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
         // trigger hooks
-        layer.hooks.beforeRenderData.call(true);
+        layer.hooks.beforeRenderData.call();
         layer.hooks.beforeRender.call();
         layer.render();
         layer.hooks.afterRender.call();

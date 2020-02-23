@@ -25,15 +25,9 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       this.updateStyleAtrribute(layer, { styleAttributeService });
     });
 
-    layer.hooks.beforeRenderData.tap('styleAttributeService', (flag) => {
-      if (flag) {
-        // styleAttributeService.createAttributesAndIndices(
-        //   layer.getEncodedData(),
-        // );
-        layer.layerModelNeedUpdate = true;
-        return true;
-      }
-      return false;
+    layer.hooks.beforeRenderData.tap('styleAttributeService', () => {
+      layer.layerModelNeedUpdate = true;
+      return true;
     });
 
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
