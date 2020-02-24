@@ -1,7 +1,6 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = api => {
   api.cache(() => process.env.NODE_ENV);
-
   const isSite = api.env('site');
   const isCDNBundle = api.env('bundle');
   const isCommonJS = api.env('cjs');
@@ -45,7 +44,7 @@ module.exports = api => {
         {
           // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
           // useBuiltIns: 'usage',
-          corejs: '3.0.0',
+          ...isCDNBundle ? { corejs: '3.0.0' } : {},
           useBuiltIns: isCDNBundle ? 'usage' : false,
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
@@ -71,6 +70,7 @@ module.exports = api => {
       '@babel/plugin-proposal-nullish-coalescing-operator',
       '@babel/plugin-syntax-async-generators',
       '@babel/plugin-transform-parameters',
+      'transform-node-env-inline',
       [
         '@babel/plugin-proposal-decorators',
         {
