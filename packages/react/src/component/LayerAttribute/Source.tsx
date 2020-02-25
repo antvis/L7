@@ -17,6 +17,6 @@ export default React.memo(function Chart(props: ISourceProps) {
     } else {
       layer.setData(data, sourceOption);
     }
-  }, [data, sourceOption]);
+  }, [data, JSON.stringify(sourceOption)]);
   return null;
 });

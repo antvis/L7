@@ -12,6 +12,6 @@ export default React.memo(function Chart(props: ILayerProps) {
   const { layer, active } = props;
   useEffect(() => {
     layer.active(active.option);
-  }, [active, layer]);
+  }, [JSON.stringify(active)]);
   return null;
 });

@@ -304,7 +304,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
-
     // this.pickingPassRender = this.normalPassFactory('pixelPicking');
     // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
@@ -525,6 +524,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
+        // @ts-ignore
         .then(() => {
           setTimeout(() => {
             this.reRender();
@@ -569,6 +569,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
+        // @ts-ignore
         .then(() => {
           setTimeout(() => {
             this.reRender();
