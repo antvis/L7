@@ -1,6 +1,6 @@
 // @ts-ignore
-// tslint:disable-next-line: no-submodule-imports
-import series from 'async/series';
+// tslint:disable-next-line:no-submodule-imports
+import async from 'async/dist/async.js';
 import { CallBack, IHook } from './IHook';
 export default class SyncHook implements IHook {
   private tasks: any[];
@@ -9,9 +9,9 @@ export default class SyncHook implements IHook {
     this.tasks = [];
   }
 
-  public call(...args: any[]) {
+  public call(...args: any[]): void {
     this.args = args;
-    return series(this.tasks);
+    return async.series(this.tasks);
   }
   public tap(name: string, cb: CallBack) {
     this.tasks.push((callback: any) => {

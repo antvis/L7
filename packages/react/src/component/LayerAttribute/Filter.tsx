@@ -13,6 +13,6 @@ export default React.memo(function Chart(props: ILayerProps) {
     if (filter.field) {
       layer.filter(filter.field as string, filter.values as StyleAttrField);
     }
-  }, [filter.field, JSON.stringify(filter.values)]);
+  }, [filter.field, filter.values, JSON.stringify(filter.values)]);
   return null;
 });

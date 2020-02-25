@@ -1,9 +1,10 @@
 import { injectable } from 'inversify';
 import Probe, { Log } from 'probe.gl';
 import { ILogService } from './ILogService';
+// !process.env.NODE_ENV === 'production',
 const Logger = new Log({ id: 'L7' }).enable(
   // @ts-ignore
-  !process.env.NODE_ENV === 'production',
+  process.env.NODE_ENV !== 'production',
 );
 // // 只输出 debug 级别以上的日志信息
 Logger.priority = 5;
