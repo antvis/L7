@@ -1,6 +1,6 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import waterfall from 'async/waterfall';
+import async from 'async/dist/async.js';
 import { CallBack, IHook } from './IHook';
 export default class SyncWaterfallHook implements IHook {
   private tasks: any[];
@@ -8,8 +8,8 @@ export default class SyncWaterfallHook implements IHook {
     this.tasks = [];
   }
 
-  public call(...args: any[]) {
-    return waterfall(this.tasks);
+  public call(...args: any[]): void {
+    return async.waterfall(this.tasks);
   }
   public tap(name: string, cb: CallBack) {
     if (this.tasks.length === 0) {

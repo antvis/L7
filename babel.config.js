@@ -44,7 +44,7 @@ module.exports = api => {
         {
           // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
           // useBuiltIns: 'usage',
-          ...isCDNBundle ? { corejs: '3.0.0' } : {},
+          ...isCDNBundle ? { corejs: '2.0.0' } : {},
           useBuiltIns: isCDNBundle ? 'usage' : false,
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
@@ -69,7 +69,7 @@ module.exports = api => {
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       '@babel/plugin-syntax-async-generators',
-      '@babel/plugin-transform-parameters',
+      // '@babel/plugin-transform-parameters',
       'transform-node-env-inline',
       [
         '@babel/plugin-proposal-decorators',
@@ -116,7 +116,8 @@ module.exports = api => {
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
-      // /node_modules\/(?![d3*])/,
+      // /node_modules\/(?![kdbush|supercluster|async])/,
+      'node_modules',
       ...!isTest ? [
         '**/*.test.tsx',
         '**/*.test.ts',

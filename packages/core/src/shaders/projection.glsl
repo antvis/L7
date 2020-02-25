@@ -63,10 +63,10 @@ vec3 project_offset_normal(vec3 vector) {
   }
   return project_normal(vector);
 }
-
+// || u_CoordinateSystem < COORDINATE_SYSTEM_P20_OFFSET + 0.01 && u_CoordinateSystem >COORDINATE_SYSTEM_P20_OFFSET - 0.01
 // reverse Y
 vec3 reverse_offset_normal(vec3 vector) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET ) {
     return vector * vec3(1.0, -1.0, 1.0);
   }
   return vector;
