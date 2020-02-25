@@ -3,7 +3,11 @@
   "compilerOptions": {
     "declarationDir": "./es",
     "rootDir": "./src",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "moduleResolution": "Node",
+    "paths": {
+      "*": ["node_modules", "typings/*"]
+    }
   },
   "include": ["./src"]
 }
