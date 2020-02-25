@@ -10,9 +10,6 @@ export default class DataSourcePlugin implements ILayerPlugin {
     layer.hooks.init.tap('DataSourcePlugin', () => {
       const { data, options } = layer.sourceOption;
       layer.setSource(new Source(data, options));
-      // if (layer.getSource().data.dataArray.length === 0) {
-      //   return true;
-      // }
       this.updateClusterData(layer);
     });
 

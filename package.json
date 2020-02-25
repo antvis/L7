@@ -36,6 +36,7 @@
     "@types/node": "^12.12.22",
     "@types/storybook__react": "^4.0.2",
     "@types/supercluster": "^5.0.1",
+    "async-es": "^3.2.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
@@ -46,6 +47,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-import-styles": "^0.0.11",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+    "babel-plugin-transform-node-env-inline": "^0.4.3",
     "babel-plugin-transform-postcss": "^0.3.0",
     "babel-preset-gatsby": "^0.2.22",
     "babel-template": "^6.26.0",
@@ -148,7 +150,7 @@
     "test-live": "cross-env BABEL_ENV=test DEBUG_MODE=1 jest --watch",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "tsc": "tsc",
-    "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs NODE_ENV=production babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "bundle": "cross-env BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js --environment BUILD:production,MINIFY:true",
     "bundle-dev": "cross-env BABEL_ENV=bundle node_modules/.bin/rollup -c  ./build/rollup.config.js  --environment 'BUILD:production,MINIFY:false'",
     "bundle:watch": "cross-env BABEL_ENV=bundle node_modules/.bin/rollup -c ./build/rollup.config.js --watch",
@@ -176,7 +178,7 @@
   },
   "resolutions": {
     "../core-js": "3",
-    "d3-array": "2.3.3"
+    "d3-array": "1"
   },
   "tnpm": {
     "mode": "yarn"

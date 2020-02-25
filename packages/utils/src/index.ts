@@ -1,3 +1,4 @@
+// @ts-ignore
 export { djb2hash, BKDRHash } from './hash';
 import * as DOM from './dom';
 export * from './fetchData';

@@ -1,9 +1,13 @@
 import { injectable } from 'inversify';
 import Probe, { Log } from 'probe.gl';
 import { ILogService } from './ILogService';
-const Logger = new Log({ id: 'L7' }).enable(true);
+// !process.env.NODE_ENV === 'production',
+const Logger = new Log({ id: 'L7' }).enable(
+  // @ts-ignore
+  process.env.NODE_ENV !== 'production',
+);
 // // 只输出 debug 级别以上的日志信息
-Logger.priority = 2;
+Logger.priority = 5;
 
 @injectable()
 export default class LogService implements ILogService {
@@ -12,7 +16,7 @@ export default class LogService implements ILogService {
   }
 
   public warn(message: string): void {
-    Logger.info(1, message)();
+    Logger.probe(1, message)();
   }
 
   public info(message: string): void {

@@ -1,6 +1,6 @@
 {
   "name": "@antv/async-hook",
-  "version": "2.0.25",
+  "version": "2.0.28-alpha.0",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -32,5 +32,9 @@
   },
   "devDependencies": {
     "@types/async": "^3.0.8"
+  },
+  "gitHead": "a5d354b66873f700730248d015c5e539c54b34b7",
+  "publishConfig": {
+    "access": "public"
   }
 }
