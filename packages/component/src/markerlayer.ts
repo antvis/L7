@@ -10,7 +10,9 @@ import {
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { merge } from 'lodash';
-import Supercluster from 'supercluster';
+// @ts-ignore
+// tslint:disable-next-line:no-submodule-imports
+import Supercluster from 'supercluster/dist/supercluster';
 import Marker from './marker';
 type CallBack = (...args: any[]) => any;
 interface IMarkerStyleOption {
@@ -150,20 +152,20 @@ export default class MarkerLayer extends EventEmitter {
   }
 
   private getClusterMarker(viewBounds: IBounds, zoom: number) {
-    const viewBBox = viewBounds[0].concat(viewBounds[1]) as GeoJSON.BBox;
+    const viewBBox = viewBounds[0].concat(viewBounds[1]);
     const clusterPoint = this.clusterIndex.getClusters(viewBBox, zoom);
     this.clusterMarkers.forEach((marker: IMarker) => {
       marker.remove();
     });
     this.clusterMarkers = [];
-    clusterPoint.forEach((feature) => {
+    clusterPoint.forEach((feature: any) => {
       const { field, method } = this.markerLayerOption.clusterOption;
       // 处理聚合数据
       if (feature.properties && feature.properties?.cluster_id) {
         const clusterData = this.getLeaves(feature.properties?.cluster_id);
         feature.properties.clusterData = clusterData;
         if (field && method) {
-          const columnData = clusterData?.map((item) => {
+          const columnData = clusterData?.map((item: any) => {
             const data = {
               [field]: item.properties[field],
             };

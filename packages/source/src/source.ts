@@ -20,9 +20,10 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
 import { cloneDeep, isFunction, isString } from 'lodash';
-import Supercluster from 'supercluster';
+// @ts-ignore
+// tslint:disable-next-line:no-submodule-imports
+import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
@@ -101,17 +102,17 @@ export default class Source extends EventEmitter {
     const { method = 'sum', field } = this.clusterOptions;
     let data = this.clusterIndex.getClusters(this.extent, zoom);
     this.clusterOptions.zoom = zoom;
-    data.forEach((p) => {
+    data.forEach((p: any) => {
       if (!p.id) {
         p.properties.point_count = 1;
       }
     });
     if (field || isFunction(method)) {
-      data = data.map((item) => {
+      data = data.map((item: any) => {
         const id = item.id as number;
         if (id) {
           const points = this.clusterIndex.getLeaves(id, Infinity);
-          const properties = points.map((d) => d.properties);
+          const properties = points.map((d: any) => d.properties);
           let statNum;
           if (isString(method) && field) {
             const column = getColumn(properties, field);

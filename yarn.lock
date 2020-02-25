@@ -4801,6 +4801,11 @@ async-each@^1.0.1:
   resolved "https://registry.npmjs.org/async-each/-/async-each-1.0.3.tgz#b727dbf87d7651602f06f4d4ac387f47d91b0cbf"
   integrity sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
 
+async-es@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/async-es/-/async-es-3.2.0.tgz#8837aa12f675de80fac56b94a4b4cef515343de3"
+  integrity sha512-dMWVIUBi/ejt+QERtMdIin2rlzSNK7GAfEwIyaOGDy536s0OqH+aUNkj9MQ01hq2rB1f7x6w7RJchtthCk0IDA==
+
 async-foreach@^0.1.3:
   version "0.1.3"
   resolved "https://registry.npmjs.org/async-foreach/-/async-foreach-0.1.3.tgz#36121f845c0578172de419a97dbeb1d16ec34542"
@@ -7889,10 +7894,15 @@ cz-conventional-changelog@^3.0.2:
   optionalDependencies:
     "@commitlint/load" ">6.1.1"
 
-"d3-array@1.2.0 - 2", d3-array@2.3.3:
-  version "2.3.3"
-  resolved "https://registry.npmjs.org/d3-array/-/d3-array-2.3.3.tgz#e90c39fbaedccedf59fc30473092f99a0e14efa2"
-  integrity sha512-syv3wp0U5aB6toP2zb2OdBkhTy1MWDsCAaYk6OXJZv+G4u7bSWEmYgxLoFyc88RQUhZYGCebW9a9UD1gFi5+MQ==
+d3-array@1, d3-array@^1.2.0:
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
+  integrity sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==
+
+d3-collection@1:
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/d3-collection/-/d3-collection-1.0.7.tgz#349bd2aa9977db071091c13144d5e4f16b5b310e"
+  integrity sha512-ii0/r5f4sjKNTfh84Di+DpztYwqKhEyUlKoPrzUFfeSkWxjW49xU2QzO9qrPrNkpdI0XJkfzvmTu8V2Zylln6A==
 
 d3-color@1, d3-color@^1.4.0:
   version "1.4.0"
@@ -7928,7 +7938,7 @@ d3-hexbin@^0.2.2:
   resolved "https://registry.npmjs.org/d3-hexbin/-/d3-hexbin-0.2.2.tgz#9c5837dacfd471ab05337a9e91ef10bfc4f98831"
   integrity sha1-nFg32s/UcasFM3qeke8Qv8T5iDE=
 
-d3-interpolate@1, d3-interpolate@^1.2.0:
+d3-interpolate@1:
   version "1.4.0"
   resolved "https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-1.4.0.tgz#526e79e2d80daa383f9e0c1c1c7dcc0f0583e987"
   integrity sha512-V9znK0zc3jOPV4VD2zZn0sDhZU3WAE2bmlxdIwwQPPzPjvyLkd8B3JUVdS1IDUFDkWZ72c9qnv1GK2ZagTZ8EA==
@@ -7942,14 +7952,15 @@ d3-interpolate@~1.1.5:
   dependencies:
     d3-color "1"
 
-d3-scale@^3.1.0:
-  version "3.2.1"
-  resolved "https://registry.npmjs.org/d3-scale/-/d3-scale-3.2.1.tgz#da1684adce7261b4bc7a76fe193d887f0e909e69"
-  integrity sha512-huz5byJO/6MPpz6Q8d4lg7GgSpTjIZW/l+1MQkzKfu2u8P6hjaXaStOpmyrD6ymKoW87d2QVFCKvSjLwjzx/rA==
+d3-scale@2:
+  version "2.2.2"
+  resolved "https://registry.npmjs.org/d3-scale/-/d3-scale-2.2.2.tgz#4e880e0b2745acaaddd3ede26a9e908a9e17b81f"
+  integrity sha512-LbeEvGgIb8UMcAa0EATLNX0lelKWGYDQiPdHj+gLblGVhGLyNbaCn3EvrJf0A3Y/uOOU5aD6MTh5ZFCdEwGiCw==
   dependencies:
-    d3-array "1.2.0 - 2"
+    d3-array "^1.2.0"
+    d3-collection "1"
     d3-format "1"
-    d3-interpolate "^1.2.0"
+    d3-interpolate "1"
     d3-time "1"
     d3-time-format "2"
 
