@@ -1,3 +1,4 @@
+import { ISceneConfig } from '../config/IConfigService';
 import { ILayer } from '../layer/ILayerService';
 import { IMapConfig } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
@@ -8,6 +9,7 @@ export interface ISceneService {
   removeAllListeners(event?: string): this;
   init(config: IMapConfig & IRenderConfig): void;
   addLayer(layer: ILayer): void;
+  getSceneConfig(): Partial<ISceneConfig>;
   render(): void;
   getSceneContainer(): HTMLDivElement;
   exportPng(): string;
