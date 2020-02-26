@@ -19,7 +19,6 @@
     "paths": {
       "@antv/l7-*": ["packages/*/src"],
       "@antv/l7": ["packages/l7/src"],
-      "@antv/async-hook": ["packages/async-hook/src"],
       "*": ["node_modules", "packages", "typings/*"]
     }
   },
