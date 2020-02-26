@@ -9,18 +9,7 @@ export default class AsyncParallelHook {
   }
 
   public promise(...args: any[]) {
-    return new Promise((resolve, reject) => {
-      async.parallel(this.tasks).then((res: any, err: any) => {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
-    });
-
-    // return async.parallel(this.tasks).then((err, res) => {
-    //   return new Promise(r);
-    // });
+    return async.parallel(this.tasks);
   }
   public tapPromise(name: string, cb: CallBack) {
     this.tasks.push(async (callback: any) => {
