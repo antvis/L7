@@ -18,8 +18,8 @@ import { IInteractionService } from '../interaction/IInteractionService';
 import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
-import { IMapCamera, IMapService } from '../map/IMapService';
-import { IRendererService } from '../renderer/IRendererService';
+import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
+import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
 
@@ -236,6 +236,10 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.render();
     const layersPng = renderCanvas?.toDataURL('image/png') as string;
     return layersPng;
+  }
+
+  public getSceneConfig(): Partial<ISceneConfig> {
+    return this.configService.getSceneConfig(this.id as string);
   }
 
   public destroy() {
