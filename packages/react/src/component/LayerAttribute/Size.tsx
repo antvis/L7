@@ -13,7 +13,6 @@ export default React.memo(function Chart(props: ILayerProps) {
     size.field
       ? layer.size(size.field, size.values)
       : layer.size(size.values as StyleAttrField);
-    // TODO：目前这种处理会频繁更新，但是直接JSON.Stringify(size.values)，回调函数不会更新，待优化
-  }, [size.field, size.values, size.scale]);
+  }, [size.field, size.scale, JSON.stringify(size.values), JSON.stringify(size.options)]);
   return null;
 });
