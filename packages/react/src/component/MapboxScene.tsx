@@ -1,4 +1,4 @@
-import { IMapConfig, Scene, Zoom } from '@antv/l7';
+import { IMapConfig, ISceneConfig, Scene, Zoom } from '@antv/l7';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Mapbox from '@antv/l7-maps/lib/mapbox';
@@ -8,10 +8,11 @@ interface IMapSceneConig {
   style?: React.CSSProperties;
   className?: string;
   map: IMapConfig;
+  option?: Partial<ISceneConfig>;
   children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
 }
 const MapboxScene = React.memo((props: IMapSceneConig) => {
-  const { style, className, map } = props;
+  const { style, className, map, option } = props;
   const container = createRef();
   const [scene, setScene] = useState<Scene>();
 
@@ -19,6 +20,7 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
   useEffect(() => {
     const sceneInstance = new Scene({
       id: container.current as HTMLDivElement,
+      ...option,
       map: new Mapbox(map),
     });
     sceneInstance.on('loaded', () => {
