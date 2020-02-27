@@ -63,6 +63,7 @@ export default function(
   points: number[][],
   closed: boolean,
   indexOffset: number,
+  isDash: boolean = true,
 ) {
   const lineA = vec2.fromValues(0, 0);
   const lineB = vec2.fromValues(0, 0);
@@ -108,8 +109,11 @@ export default function(
             : null;
       }
     }
-    const lineDistance = lineSegmentDistance(cur, last);
-    const d = lineDistance + attrDistance[attrDistance.length - 1];
+    let d = 0;
+    if (isDash) {
+      const lineDistance = lineSegmentDistance(cur, last);
+      d = lineDistance + attrDistance[attrDistance.length - 1];
+    }
     direction(lineA, cur, last);
     if (!lineNormal) {
       lineNormal = vec2.create();
@@ -218,15 +222,15 @@ export default function(
       attrPos[i * 3],
       attrPos[i * 3 + 1],
       attrPos[i * 3 + 2],
-      attrDistance[i],
+      attrDistance[i], // dash
       miters[i],
-      totalDistance,
+      totalDistance, // dash
     );
   }
   return {
     normals: out,
     attrIndex,
-    attrPos: pickData, // [x,y,z, distance, miter ]
+    attrPos: pickData, // [x,y,z, distance, miter ,tatal ]
   };
 }
 // [x,y,z, distance, miter ]
