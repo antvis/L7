@@ -22,6 +22,9 @@ export interface IAttributeOptions {
   values: string[] | number[] | string | number | CallBack;
   scale?: string;
   blend: keyof typeof BlendType;
+  options?: {
+    [key: string]: any;
+  };
 }
 
 export interface IScaleAttributeOptions {
