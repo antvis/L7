@@ -17,6 +17,11 @@ export default React.memo(function Chart(props: ISourceProps) {
     } else {
       layer.setData(data, sourceOption);
     }
+    // 临时解决：若开启，每次更新之后自适应缩放；
+    // TODO：是否可以统一到Layer的option里，目前问题是Layer的autoFit一直为true，无法触发更新
+    if (sourceOption.autoFit) {
+      layer.fitBounds();
+    }
   }, [data, JSON.stringify(sourceOption)]);
   return null;
 });

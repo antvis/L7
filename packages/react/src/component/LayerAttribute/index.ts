@@ -49,6 +49,8 @@ export interface IStyleOptions {
 
 export interface ISourceOptions extends ISourceCFG {
   data: any;
+  // 每次更新数据之后是否自适应缩放
+  autoFit: boolean;
 }
 
 export interface IActiveOptions {
