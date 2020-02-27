@@ -13,6 +13,6 @@ export default React.memo(function Chart(props: ILayerProps) {
     shape.field
       ? layer.shape(shape.field, shape.values)
       : layer.shape(shape.values as StyleAttrField);
-  }, [shape.field, JSON.stringify(shape.values)]);
+  }, [shape.field, JSON.stringify(shape.values), JSON.stringify(shape.options)]);
   return null;
 });

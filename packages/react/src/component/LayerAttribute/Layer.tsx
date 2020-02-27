@@ -60,10 +60,6 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     // 重绘layer
     if (layer) {
       mapScene.render();
-      // 如果autoFit为true，执行自适应操作
-      if (options?.autoFit) {
-        layer.fitBounds();
-      }
     }
   });
 
