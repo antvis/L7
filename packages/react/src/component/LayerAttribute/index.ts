@@ -22,6 +22,9 @@ export interface IAttributeOptions {
   values: string[] | number[] | string | number | CallBack;
   scale?: string;
   blend: keyof typeof BlendType;
+  options?: {
+    [key: string]: any;
+  };
 }
 
 export interface IScaleAttributeOptions {
@@ -49,6 +52,8 @@ export interface IStyleOptions {
 
 export interface ISourceOptions extends ISourceCFG {
   data: any;
+  // 每次更新数据之后是否自适应缩放
+  autoFit: boolean;
 }
 
 export interface IActiveOptions {
