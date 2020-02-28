@@ -10,9 +10,10 @@ interface IMapSceneConig {
   map: Partial<IMapConfig>;
   option?: Partial<ISceneConfig>;
   children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
+  onSceneLoaded?: (scene: Scene) => void;
 }
 const AMapScene = React.memo((props: IMapSceneConig) => {
-  const { style, className, map, option } = props;
+  const { style, className, map, option, onSceneLoaded } = props;
   const container = createRef();
   const [scene, setScene] = useState<Scene>();
   useEffect(() => {
@@ -23,6 +24,9 @@ const AMapScene = React.memo((props: IMapSceneConig) => {
     });
     sceneInstance.on('loaded', () => {
       setScene(sceneInstance);
+      if (onSceneLoaded) {
+        onSceneLoaded(sceneInstance);
+      }
     });
     return () => {
       sceneInstance.destroy();

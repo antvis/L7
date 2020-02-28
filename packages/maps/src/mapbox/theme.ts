@@ -10,6 +10,14 @@ export const MapTheme: {
     glyphs:
       'https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf',
     sources: {},
-    layers: [],
+    layers: [
+      {
+        id: 'background',
+        type: 'background',
+        layout: {
+          visibility: 'none',
+        },
+      },
+    ],
   },
 };

@@ -85,6 +85,7 @@ export default class TextModel extends BaseModel {
   private currentZoom: number = -1;
   private extent: [[number, number], [number, number]];
   private textureHeight: number = 0;
+  private textCount: number = 0;
   private preTextStyle: Partial<IPointTextLayerStyleOptions> = {};
   private glyphInfoMap: {
     [key: string]: {
@@ -101,10 +102,10 @@ export default class TextModel extends BaseModel {
       strokeWidth = 0,
       strokeOpacity = 1,
       textAnchor = 'center',
-      textAllowOverlap = true,
+      textAllowOverlap = false,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
-    const { canvas } = this.fontService;
-    if (canvas.height !== this.textureHeight) {
+    const { canvas, mapping } = this.fontService;
+    if (Object.keys(mapping).length !== this.textCount) {
       this.updateTexture();
     }
     this.preTextStyle = {
