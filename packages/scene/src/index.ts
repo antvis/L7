@@ -57,7 +57,7 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, logoPosition, logoVisible } = config;
+    const { id, map, logoPosition, logoVisible = true } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -92,16 +92,15 @@ class Scene
     // 初始化 scene
     this.sceneService.init(config);
     // TODO: 初始化组件
-    if (logoVisible) {
-      this.addControl(new Logo({ position: logoPosition }));
-    }
+
+    this.initControl();
   }
 
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
-  public exportPng(): string {
-    return this.sceneService.exportPng();
+  public exportPng(type?: 'png' | 'jpg'): string {
+    return this.sceneService.exportPng(type);
   }
 
   public get map() {
@@ -305,6 +304,13 @@ class Scene
     );
     this.markerService.init(this.container);
     this.popupService.init(this.container);
+  }
+
+  private initControl() {
+    const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
+    if (logoVisible) {
+      this.addControl(new Logo({ position: logoPosition }));
+    }
   }
   // 资源管理
 }

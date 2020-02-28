@@ -1,4 +1,4 @@
-import { IMapConfig, Scene } from '@antv/l7';
+import { IMapConfig, ISceneConfig, Scene } from '@antv/l7';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import GaodeMap from '@antv/l7-maps/lib/amap';
@@ -7,20 +7,26 @@ import { SceneContext } from './SceneContext';
 interface IMapSceneConig {
   style?: React.CSSProperties;
   className?: string;
-  map: IMapConfig;
+  map: Partial<IMapConfig>;
+  option?: Partial<ISceneConfig>;
   children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
+  onSceneLoaded?: (scene: Scene) => void;
 }
 const AMapScene = React.memo((props: IMapSceneConig) => {
-  const { style, className, map } = props;
+  const { style, className, map, option, onSceneLoaded } = props;
   const container = createRef();
   const [scene, setScene] = useState<Scene>();
   useEffect(() => {
     const sceneInstance = new Scene({
       id: container.current as HTMLDivElement,
+      ...option,
       map: new GaodeMap(map),
     });
     sceneInstance.on('loaded', () => {
       setScene(sceneInstance);
+      if (onSceneLoaded) {
+        onSceneLoaded(sceneInstance);
+      }
     });
     return () => {
       sceneInstance.destroy();

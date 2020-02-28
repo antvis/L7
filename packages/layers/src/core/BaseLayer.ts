@@ -875,6 +875,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
+    const { autoFit } = this.getLayerConfig();
+    if (autoFit) {
+      this.fitBounds();
+    }
+
     this.emit('dataUpdate');
     this.reRender();
   };

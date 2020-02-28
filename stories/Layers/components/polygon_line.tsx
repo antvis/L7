@@ -1,9 +1,17 @@
 // @ts-ignore
-import { Layers, PointLayer, PolygonLayer, Scale, Scene, Zoom } from '@antv/l7';
+import {
+  Layers,
+  LineLayer,
+  PointLayer,
+  PolygonLayer,
+  Scale,
+  Scene,
+  Zoom,
+} from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class ScaleComponent extends React.Component {
+export default class World extends React.Component {
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -12,10 +20,10 @@ export default class ScaleComponent extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+      'https://gw.alipayobjects.com/os/basement_prod/68dc6756-627b-4e9e-a5ba-e834f6ba48f8.json',
     );
     const response2 = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+      'https://gw.alipayobjects.com/os/basement_prod/13b3aa35-f7a1-4d21-acad-805a4553edb4.json',
     );
     const pointsData = await response2.json();
     const data = await response.json();
@@ -26,7 +34,7 @@ export default class ScaleComponent extends React.Component {
         style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
-        zoom: 3,
+        zoom: 0,
       }),
     });
     this.scene = scene;
@@ -36,7 +44,6 @@ export default class ScaleComponent extends React.Component {
 
     layer
       .source(data)
-      .size('name', [0, 10000, 50000, 30000, 100000])
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -46,49 +53,45 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
-      // .select(true)
+      .select(true)
       .style({
         opacity: 1.0,
       });
     scene.addLayer(layer);
+
+    const linelayer = new LineLayer({
+      name: '01',
+    });
+
+    linelayer
+      .source(data)
+      .color('#fff')
+      .size(1)
+      .shape('line')
+      .select(true)
+      .style({
+        opacity: 1.0,
+      });
+    scene.addLayer(linelayer);
     const pointLayer = new PointLayer({
       name: '02',
     })
       .source(pointsData, {
-        cluster: true,
+        parser: {
+          type: 'json',
+          coordinates: 'center',
+        },
       })
-      .shape('circle')
-      .scale('point_count', {
-        type: 'quantile',
-      })
-      .size('point_count', [5, 10, 15, 20, 25])
-      .animate(false)
+      .shape('name', 'text')
+      .size(12)
       .active(true)
-      .color('yellow')
+      .color('#fff')
       .style({
-        opacity: 0.5,
-        strokeWidth: 1,
+        opacity: 1,
+        sttoke: '#FFF',
+        strokeWidth: 0,
       });
     scene.addLayer(pointLayer);
-    layer.on('click', (e) => {
-      layer.setSelect(e.featureId);
-    });
-    const scaleControl = new Scale();
-    const layers = {
-      点图层: pointLayer,
-      面图层: layer,
-    };
-    const layerControl = new Layers({
-      overlayers: layers,
-      position: 'bottomright',
-    });
-
-    scene.addControl(scaleControl);
-    scene.addControl(layerControl);
-    const zoomControl = new Zoom({
-      position: 'bottomright',
-    });
-    scene.addControl(zoomControl);
   }
 
   public render() {
