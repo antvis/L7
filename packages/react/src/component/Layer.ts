@@ -9,7 +9,7 @@ const PolygonLayer = React.memo(function Layer(
 });
 
 const LineLayer = React.memo(function Layer(props: ILayerProps) {
-  return BaseLayer('polygonLayer', props);
+  return BaseLayer('lineLayer', props);
 });
 
 const PointLayer = React.memo(function Layer(

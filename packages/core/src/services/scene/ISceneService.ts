@@ -12,7 +12,7 @@ export interface ISceneService {
   getSceneConfig(): Partial<ISceneConfig>;
   render(): void;
   getSceneContainer(): HTMLDivElement;
-  exportPng(): string;
+  exportPng(type?: 'png' | 'jpg'): string;
   destroy(): void;
 }
 // scene 事件

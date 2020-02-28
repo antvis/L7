@@ -99,8 +99,8 @@ class Scene
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
-  public exportPng(): string {
-    return this.sceneService.exportPng();
+  public exportPng(type?: 'png' | 'jpg'): string {
+    return this.sceneService.exportPng(type);
   }
 
   public get map() {
