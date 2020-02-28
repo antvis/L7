@@ -22,7 +22,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('UpdateStyleAttributePlugin', () => {
-      this.updateStyleAtrribute(layer, { styleAttributeService });
+      this.initStyleAttribute(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('styleAttributeService', () => {
@@ -68,6 +68,28 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
         this.logger.debug(
           `regenerate vertex attributes: ${attribute.name} finished`,
         );
+      });
+  }
+
+  private initStyleAttribute(
+    layer: ILayer,
+    {
+      styleAttributeService,
+    }: { styleAttributeService: IStyleAttributeService },
+  ) {
+    const attributes = styleAttributeService.getLayerStyleAttributes() || [];
+    attributes
+      .filter((attribute) => attribute.needRegenerateVertices)
+      .forEach((attribute) => {
+        // 精确更新某个/某些 feature(s)，需要传入 featureIdx d
+        styleAttributeService.updateAttributeByFeatureRange(
+          attribute.name,
+          layer.getEncodedData(), // 获取经过 mapping 最新的数据
+          attribute.featureRange.startIndex,
+          attribute.featureRange.endIndex,
+        );
+        attribute.needRegenerateVertices = false;
+        this.logger.debug(`init vertex attributes: ${attribute.name} finished`);
       });
   }
 }

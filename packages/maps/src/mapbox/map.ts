@@ -274,6 +274,14 @@ export default class MapboxService
     return this.$mapContainer;
   }
 
+  public exportMap(type: 'jpg' | 'png'): string {
+    const renderCanvas = this.map.getCanvas();
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
+  }
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }
