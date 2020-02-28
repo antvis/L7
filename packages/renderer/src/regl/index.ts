@@ -15,6 +15,7 @@ import {
   IModel,
   IModelInitializationOptions,
   IReadPixelsOptions,
+  IRenderConfig,
   IRendererService,
   ITexture2D,
   ITexture2DInitializationOptions,
@@ -36,7 +37,10 @@ export default class ReglRendererService implements IRendererService {
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
 
-  public async init($container: HTMLDivElement): Promise<void> {
+  public async init(
+    $container: HTMLDivElement,
+    cfg: IRenderConfig,
+  ): Promise<void> {
     this.$container = $container;
     // tslint:disable-next-line:typedef
     this.gl = await new Promise((resolve, reject) => {
@@ -46,9 +50,9 @@ export default class ReglRendererService implements IRendererService {
           alpha: true,
           // use TAA instead of MSAA
           // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-          antialias: true,
+          antialias: cfg.antialias,
           premultipliedAlpha: true,
-          preserveDrawingBuffer: false,
+          preserveDrawingBuffer: cfg.preserveDrawingBuffer,
         },
         // TODO: use extensions
         extensions: [

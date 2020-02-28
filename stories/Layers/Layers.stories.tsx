@@ -16,6 +16,7 @@ import Point3D from './components/Point3D';
 import PointImage from './components/PointImage';
 import PolygonDemo from './components/polygon';
 import Polygon3D from './components/Polygon3D';
+import WorldDemo from './components/polygon_line';
 import ImageLayerDemo from './components/RasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 import TextLayerDemo from './components/Text';
@@ -40,4 +41,5 @@ storiesOf('图层', module)
   .add('热力图', () => <HeatMapDemo />)
   .add('网格热力图', () => <HexagonLayerDemo />)
   .add('栅格', () => <RasterLayerDemo />)
-  .add('图片', () => <ImageLayerDemo />);
+  .add('图片', () => <ImageLayerDemo />)
+  .add('世界地图', () => <WorldDemo />);
