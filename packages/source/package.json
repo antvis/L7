@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.0.29",
+  "version": "2.0.30",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-core": "^2.0.29",
+    "@antv/l7-core": "^2.0.30",
     "@antv/l7-utils": "^2.0.29",
     "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
