@@ -305,6 +305,18 @@ export default class AMapService
 
     this.viewport = new Viewport();
   }
+
+  public exportMap(type: 'jpg' | 'png'): string {
+    const renderCanvas = this.getContainer()?.getElementsByClassName(
+      'amap-layer',
+    )[0] as HTMLCanvasElement;
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
+  }
+
   public emit(name: string, ...args: any[]) {
     this.eventEmitter.emit(name, ...args);
   }

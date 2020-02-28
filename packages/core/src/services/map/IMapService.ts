@@ -62,6 +62,7 @@ export interface IMapService<RawMap = {}> {
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
+  exportMap(type: 'jpg' | 'png'): string;
 }
 
 export const MapServiceEvent = ['mapload'];
