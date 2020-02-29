@@ -88,7 +88,7 @@ export default class World extends React.Component {
       .color('#fff')
       .style({
         opacity: 1,
-        sttoke: '#FFF',
+        stroke: '#FFF',
         strokeWidth: 0,
       });
     scene.addLayer(pointLayer);
