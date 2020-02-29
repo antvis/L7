@@ -4,6 +4,7 @@ import { IMapConfig } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 
 export interface ISceneService {
+  destroyed: boolean;
   on(type: string, handle: (...args: any[]) => void): void;
   off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
