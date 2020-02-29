@@ -16,7 +16,6 @@ export function createRendererContainer(
       z-index:2;
       height: 100%;
       width: 100%;
-      background: inherit;
       pointer-events: none;
     `;
     $container.id = `l7-scene-${containerCounter++}`;
