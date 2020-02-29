@@ -28,6 +28,8 @@ import { ISceneService } from './ISceneService';
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
+  public destroyed: true;
+
   @inject(TYPES.SceneID)
   private readonly id: string;
   /**
@@ -203,7 +205,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-    if (this.rendering) {
+    if (this.rendering && !this.destroyed) {
       return;
     }
 
@@ -212,6 +214,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
       await this.initPromise;
+      if (this.destroy) {
+        this.destroy();
+      }
 
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.logger.info(' render inited');
@@ -249,15 +254,21 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public destroy() {
+    if (!this.inited) {
+      this.destroyed = true;
+      return;
+    }
     this.emit('destroy');
-    this.inited = false;
+
     this.layerService.destroy();
     this.rendererService.destroy();
+    this.map.destroy();
+
     this.interactionService.destroy();
     this.controlService.destroy();
     this.markerService.destroy();
     this.removeAllListeners();
-    this.map.destroy();
+    this.inited = false;
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
     window
       .matchMedia('screen and (min-resolution: 2dppx)')
