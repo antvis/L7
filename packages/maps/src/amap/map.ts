@@ -419,7 +419,7 @@ export default class AMapService
   private removeLogoControl(): void {
     // @ts-ignore
     const logo = document.getElementsByClassName('amap-logo');
-    if (logo) {
+    if (logo && logo[0]) {
       logo[0].setAttribute('style', 'display: none !important');
     }
   }
