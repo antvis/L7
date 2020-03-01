@@ -28,7 +28,7 @@ import { ISceneService } from './ISceneService';
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
-  public destroyed: true;
+  public destroyed: boolean = false;
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -205,7 +205,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-    if (this.rendering && !this.destroyed) {
+    if (this.rendering && this.destroyed) {
       return;
     }
 
@@ -214,7 +214,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
       await this.initPromise;
-      if (this.destroy) {
+      if (this.destroyed) {
         this.destroy();
       }
 
