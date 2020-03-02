@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.0.32",
+  "version": "2.0.33",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,11 +26,11 @@
     "@antv/l7-core": "^2.0.32",
     "@antv/l7-utils": "^2.0.29",
     "@babel/runtime": "^7.7.7",
+    "@types/amap-js-api": "^1.4.6",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
-    "viewport-mercator-project": "^6.2.1",
-    "@types/amap-js-api": "^1.4.6"
+    "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
