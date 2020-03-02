@@ -1,9 +1,8 @@
 import { IMapWrapper, Scene } from '@antv/l7';
 import React, { createElement, createRef, useEffect, useState } from 'react';
 import { SceneContext } from './SceneContext';
-
 interface IMapSceneConig {
-  style?: React.CSSProperties;
+  style?: Partial<React.CSSProperties>;
   className?: string;
   map: IMapWrapper;
   children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
