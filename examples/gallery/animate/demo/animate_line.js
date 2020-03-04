@@ -24,7 +24,7 @@ fetch(
       .size(1.5)
       .shape('line')
       .color('color', v => {
-        return `rgb(${v[0]})`;
+        return `rgb(${v})`;
       })
       .animate({
         interval: 0.6,
