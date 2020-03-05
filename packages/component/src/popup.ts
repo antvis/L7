@@ -76,7 +76,7 @@ export default class Popup extends EventEmitter implements IPopup {
     return this.setDOMContent(frag);
   }
 
-  public setLnglat(lngLat: ILngLat): this {
+  public setLnglat(lngLat: ILngLat | number[]): this {
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {

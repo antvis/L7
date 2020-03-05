@@ -1,4 +1,12 @@
-import { ILayer, LineLayer, PointLayer, PolygonLayer, Scene } from '@antv/l7';
+import {
+  HeatmapLayer,
+  ILayer,
+  LineLayer,
+  PointLayer,
+  PolygonLayer,
+  RasterLayer,
+  Scene,
+} from '@antv/l7';
 import * as React from 'react';
 import { LayerContext } from '../LayerContext';
 import { useSceneValue } from '../SceneContext';
@@ -27,6 +35,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     active,
     filter,
     options,
+    onLayerLoad,
   } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
   const [layer, setLayer] = useState<ILayer>();
@@ -42,9 +51,20 @@ export default function BaseLayer(type: string, props: ILayerProps) {
       case 'pointLayer':
         l = new PointLayer(options);
         break;
+      case 'heatmapLayer':
+        l = new HeatmapLayer(options);
+        break;
+      case 'rasterLayer':
+        l = new RasterLayer(options);
+        break;
       default:
         l = new PolygonLayer(options);
     }
+    l.on('inited', () => {
+      if (onLayerLoad) {
+        onLayerLoad(l, mapScene);
+      }
+    });
     setLayer(l);
   }
 

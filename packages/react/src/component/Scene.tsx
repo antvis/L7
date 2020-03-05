@@ -5,7 +5,7 @@ interface IMapSceneConig {
   style?: Partial<React.CSSProperties>;
   className?: string;
   map: IMapWrapper;
-  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
+  children?: React.ReactNode;
 }
 export default React.memo((props: IMapSceneConig) => {
   const { style, className, map } = props;

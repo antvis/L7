@@ -1,4 +1,11 @@
-import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
+import {
+  ILngLat,
+  IMapService,
+  IMarkerOption,
+  IPoint,
+  IPopup,
+  TYPES,
+} from '@antv/l7-core';
 import {
   anchorTranslate,
   anchorType,
@@ -10,15 +17,6 @@ import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 
 //  marker 支持 dragger 未完成
-
-export interface IMarkerOption {
-  element: HTMLElement | undefined;
-  anchor: anchorType;
-  color: string;
-  offsets: number[];
-  draggable: boolean;
-  extData?: any;
-}
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;

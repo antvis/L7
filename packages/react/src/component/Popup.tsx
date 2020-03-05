@@ -9,36 +9,59 @@ import {
 } from '@antv/l7';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import { useSceneValue } from './SceneContext';
-
-const { useEffect } = React;
+import { SceneContext } from './SceneContext';
 interface IPopupProps {
-  option: IPopupOption;
-  lnglat: ILngLat;
-  text: string;
-  html: string;
-  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
+  option?: IPopupOption;
+  lnglat: number[];
+  children?: React.ReactNode;
 }
-export default React.memo(function LoadImage(props: IPopupProps) {
-  const mapScene = (useSceneValue() as unknown) as Scene;
-  const { lnglat, html, text, children } = props;
-  const [popup, setPopup] = React.useState<Popup>();
-  const el = document.createElement('div');
-  useEffect(() => {
-    const p = new Popup(props.option);
+export default class PopupComponet extends React.PureComponent<IPopupProps> {
+  private el: HTMLDivElement;
+  private scene: Scene;
+  private popup: Popup;
+  constructor(props: IPopupProps) {
+    super(props);
+    this.el = document.createElement('div');
+  }
+  public componentDidMount() {
+    const { lnglat, children, option } = this.props;
+    const p = new Popup(option);
+
     if (lnglat) {
       p.setLnglat(lnglat);
     }
-    if (html) {
-      p.setHTML(html);
-    }
-    if (text) {
-      p.setText(text);
-    }
     if (children) {
-      p.setDOMContent(el);
+      p.setDOMContent(this.el);
     }
-    setPopup(p);
-  }, []);
-  return createPortal(children, el);
-});
+    this.popup = p;
+    this.scene.addPopup(p);
+  }
+
+  public componentDidUpdate(prevProps: IPopupProps) {
+    const positionChanged =
+      prevProps?.lnglat.toString() !== this.props?.lnglat.toString();
+
+    if (positionChanged) {
+      this.popup.setLnglat(this.props.lnglat);
+    }
+  }
+
+  public componentWillUnmount() {
+    this.popup.remove();
+  }
+
+  public render() {
+    return React.createElement(
+      SceneContext.Consumer,
+      // @ts-ignore
+      {},
+      (scene: Scene) => {
+        if (scene) {
+          this.scene = scene;
+        }
+
+        return createPortal(this.props.children, this.el);
+      },
+    );
+  }
+}

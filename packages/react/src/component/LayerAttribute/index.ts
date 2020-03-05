@@ -1,10 +1,13 @@
 import {
   BlendType,
   IActiveOption,
+  ILayer,
   IScale,
   IScaleOptions,
   ISourceCFG,
+  Scene,
 } from '@antv/l7';
+import * as React from 'react';
 import Active from './Active';
 import Color from './Color';
 import Filter from './Filter';
@@ -69,7 +72,8 @@ export interface ILayerProps {
   style?: Partial<IStyleOptions>;
   active?: IActiveOptions;
   filter?: Partial<IAttributeOptions>;
-  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
+  onLayerLoad?: (layer: ILayer, scene: Scene) => void;
+  children?: React.ReactNode;
 }
 
 export { Active, Color, Filter, Source, Size, Shape, Style, Scale };

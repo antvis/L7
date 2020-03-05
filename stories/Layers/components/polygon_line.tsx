@@ -31,7 +31,7 @@ export default class World extends React.Component {
       id: 'map',
       logoVisible: false,
       map: new Mapbox({
-        style: 'dark',
+        style: 'light',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 0,
@@ -55,7 +55,7 @@ export default class World extends React.Component {
       .shape('fill')
       .select(true)
       .style({
-        opacity: 1.0,
+        opacity: 0.8,
       });
     scene.addLayer(layer);
 
