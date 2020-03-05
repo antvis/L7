@@ -66,6 +66,4 @@ export default React.memo(function Map() {
     </>
   );
 });
-
 ```
-
