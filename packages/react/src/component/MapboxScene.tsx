@@ -9,7 +9,7 @@ interface IMapSceneConig {
   className?: string;
   map: Partial<IMapConfig>;
   option?: Partial<ISceneConfig>;
-  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
+  children?: React.ReactNode;
   onSceneLoaded?: (scene: Scene) => void;
 }
 const MapboxScene = React.memo((props: IMapSceneConig) => {

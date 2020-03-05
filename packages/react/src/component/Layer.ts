@@ -18,4 +18,16 @@ const PointLayer = React.memo(function Layer(
   return BaseLayer('pointLayer', props);
 });
 
-export { PolygonLayer, LineLayer, PointLayer };
+const HeatMapLayer = React.memo(function Layer(
+  props: ILayerProps & { children?: any },
+) {
+  return BaseLayer('heatmapLayer', props);
+});
+
+const RasterLayer = React.memo(function Layer(
+  props: ILayerProps & { children?: any },
+) {
+  return BaseLayer('rasterLayer', props);
+});
+
+export { PolygonLayer, LineLayer, PointLayer, HeatMapLayer, RasterLayer };

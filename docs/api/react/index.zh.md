@@ -1,6 +1,18 @@
-import { AMapScene, LineLayer, Marker, Popup } from '@antv/l7-react';
-import * as React from 'react';
+---
+title: 快速开始
+order: 0
+---
 
+### 安装
+
+```bash
+ npm i @antv/l7-react
+```
+
+### 示例
+
+```javascript
+import { LineLayer, AMapScene } from '@antv/l7-react';
 export default React.memo(function Map() {
   const [data, setData] = React.useState();
   React.useEffect(() => {
@@ -30,32 +42,30 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
-        <Popup lnglat={[110.1938, 50.25] as number[]}>
-          <p>122222</p>
-        </Popup>
-        <Marker lnglat={[110.1938, 30.25] as number[]}>
-          <p>122222</p>
-        </Marker>
-        <LineLayer
-          key={'2'}
-          source={{
-            data,
-          }}
-          size={{
-            values: 1,
-          }}
-          color={{
-            values: '#fff',
-          }}
-          shape={{
-            values: 'line',
-          }}
-          style={{
-            opacity: 1,
-          }}
-        />
+        {data && (
+          <LineLayer
+            key={'2'}
+            source={{
+              data,
+            }}
+            size={{
+              values: 1,
+            }}
+            color={{
+              values: '#fff',
+            }}
+            shape={{
+              values: 'line',
+            }}
+            style={{
+              opacity: 1,
+            }}
+          />
         )}
       </AMapScene>
     </>
   );
 });
+
+```
+
