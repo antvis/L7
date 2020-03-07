@@ -1,3 +1,5 @@
+// @ts-ignore
+import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
   IMapService,
@@ -18,10 +20,10 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
 import { cloneDeep, isFunction, isString } from 'lodash';
-import Supercluster from 'supercluster';
-import { SyncHook } from 'tapable';
+// @ts-ignore
+// tslint:disable-next-line:no-submodule-imports
+import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
@@ -32,9 +34,7 @@ export default class Source extends EventEmitter {
   public extent: BBox;
   // 生命周期钩子
   public hooks = {
-    init: new SyncHook(['source']),
-    layout: new SyncHook(['source']),
-    update: new SyncHook(['source']),
+    init: new SyncHook(),
   };
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];
@@ -102,17 +102,17 @@ export default class Source extends EventEmitter {
     const { method = 'sum', field } = this.clusterOptions;
     let data = this.clusterIndex.getClusters(this.extent, zoom);
     this.clusterOptions.zoom = zoom;
-    data.forEach((p) => {
+    data.forEach((p: any) => {
       if (!p.id) {
         p.properties.point_count = 1;
       }
     });
     if (field || isFunction(method)) {
-      data = data.map((item) => {
+      data = data.map((item: any) => {
         const id = item.id as number;
         if (id) {
           const points = this.clusterIndex.getLeaves(id, Infinity);
-          const properties = points.map((d) => d.properties);
+          const properties = points.map((d: any) => d.properties);
           let statNum;
           if (isString(method) && field) {
             const column = getColumn(properties, field);

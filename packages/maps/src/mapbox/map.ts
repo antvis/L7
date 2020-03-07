@@ -107,12 +107,12 @@ export default class MapboxService
     return this.map.getCenter();
   }
 
-  public getPitch(): number {
-    return this.map.getPitch();
+  public setCenter(lnglat: [number, number]): void {
+    this.map.setCenter(lnglat);
   }
 
-  public setPitch(pitch: number) {
-    return this.map.setPitch(pitch);
+  public getPitch(): number {
+    return this.map.getPitch();
   }
 
   public getRotation(): number {
@@ -137,6 +137,10 @@ export default class MapboxService
 
   public zoomIn(): void {
     this.map.zoomIn();
+  }
+
+  public setPitch(pitch: number) {
+    return this.map.setPitch(pitch);
   }
 
   public zoomOut(): void {
@@ -170,7 +174,7 @@ export default class MapboxService
     });
   }
 
-  public setMapStyle(style: string): void {
+  public setMapStyle(style: any): void {
     this.map.setStyle(this.getMapStyle(style));
   }
   // TODO: 计算像素坐标
@@ -237,7 +241,7 @@ export default class MapboxService
       this.$mapContainer = this.creatAmapContainer(id);
       // @ts-ignore
       this.map = new mapboxgl.Map({
-        container: id,
+        container: this.$mapContainer,
         style: this.getMapStyle(style),
         attributionControl,
         bearing: rotation,
@@ -270,6 +274,14 @@ export default class MapboxService
     return this.$mapContainer;
   }
 
+  public exportMap(type: 'jpg' | 'png'): string {
+    const renderCanvas = this.map.getCanvas();
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
+  }
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }

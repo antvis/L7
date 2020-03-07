@@ -1,0 +1,38 @@
+{
+  "name": "@antv/l7-react",
+  "version": "2.0.34",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "sideEffects": true,
+  "files": [
+    "lib",
+    "es",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "run-p build:*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "lint:ts": "run-p -c lint:ts-*",
+    "test": "jest"
+  },
+  "author": "lzxue",
+  "license": "ISC",
+  "dependencies": {
+    "@antv/l7": "^2.0.34",
+    "@antv/l7-maps": "^2.0.34",
+    "@babel/runtime": "^7.7.7",
+    "load-styles": "^2.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.10.2"
+  },
+  "gitHead": "a5d354b66873f700730248d015c5e539c54b34b7",
+  "publishConfig": {
+    "access": "public"
+  }
+}

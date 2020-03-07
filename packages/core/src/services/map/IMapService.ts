@@ -50,17 +50,19 @@ export interface IMapService<RawMap = {}> {
   zoomOut(): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
-  setPitch(pitch: number): void;
   fitBounds(bound: Bounds): void;
   setZoomAndCenter(zoom: number, center: Point): void;
+  setCenter(center: [number, number]): void;
+  setPitch(pitch: number): void;
   setZoom(zoom: number): void;
-  setMapStyle(style: string): void;
+  setMapStyle(style: any): void;
 
   // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
+  exportMap(type: 'jpg' | 'png'): string;
 }
 
 export const MapServiceEvent = ['mapload'];
@@ -122,6 +124,8 @@ export interface IMapConfig<RawMap = {}> {
   maxZoom?: number;
 
   attributionControl?: boolean;
+
+  [key: string]: any;
 }
 
 /**

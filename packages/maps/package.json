@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.0.17",
+  "version": "2.0.34",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,21 +23,21 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.17",
-    "@antv/l7-utils": "^2.0.17",
+    "@antv/l7-core": "^2.0.34",
+    "@antv/l7-utils": "^2.0.34",
     "@babel/runtime": "^7.7.7",
+    "@types/amap-js-api": "^1.4.6",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
-    "@types/amap-js-api": "^1.4.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/mapbox-gl": "^0.54.3",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
+  "gitHead": "a5d354b66873f700730248d015c5e539c54b34b7",
   "publishConfig": {
     "access": "public"
   }

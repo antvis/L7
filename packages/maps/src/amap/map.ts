@@ -22,6 +22,8 @@ import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
 let mapdivCount = 0;
+// @ts-ignore
+window.forceWebGL = true;
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.15';
@@ -129,13 +131,11 @@ export default class AMapService
       lat: center.getLat(),
     };
   }
-
+  public setCenter(lnglat: [number, number]): void {
+    this.map.setCenter(lnglat);
+  }
   public getPitch(): number {
     return this.map.getPitch();
-  }
-
-  public setPitch(pitch: number): void {
-    return this.map.setPitch(pitch);
   }
 
   public getRotation(): number {
@@ -173,6 +173,9 @@ export default class AMapService
     return this.map.setRotation(rotation);
   }
 
+  public setPitch(pitch: number) {
+    return this.map.setPitch(pitch);
+  }
   public zoomIn(): void {
     this.map.zoomIn();
   }
@@ -244,6 +247,7 @@ export default class AMapService
         if (mapInstance) {
           this.map = mapInstance as AMap.Map & IAMapInstance;
           this.$mapContainer = this.map.getContainer();
+          this.removeLogoControl();
           setTimeout(() => {
             this.map.on('camerachange', this.handleCameraChanged);
             resolve();
@@ -259,6 +263,10 @@ export default class AMapService
             viewMode: '3D',
             ...rest,
           });
+          map.on('complete', () => {
+            this.removeLogoControl();
+          });
+
           // 监听地图相机事件
           map.on('camerachange', this.handleCameraChanged);
           // @ts-ignore
@@ -296,6 +304,18 @@ export default class AMapService
 
     this.viewport = new Viewport();
   }
+
+  public exportMap(type: 'jpg' | 'png'): string {
+    const renderCanvas = this.getContainer()?.getElementsByClassName(
+      'amap-layer',
+    )[0] as HTMLCanvasElement;
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
+  }
+
   public emit(name: string, ...args: any[]) {
     this.eventEmitter.emit(name, ...args);
   }
@@ -393,5 +413,13 @@ export default class AMapService
       script.onerror = reject;
       document.head.appendChild(script);
     });
+  }
+
+  private removeLogoControl(): void {
+    // @ts-ignore
+    const logo = document.getElementsByClassName('amap-logo');
+    if (logo && logo[0]) {
+      logo[0].setAttribute('style', 'display: none !important');
+    }
   }
 }

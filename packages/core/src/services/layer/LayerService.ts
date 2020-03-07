@@ -10,6 +10,8 @@ import { ILayerModel, ILayerService } from './ILayerService';
 export default class LayerService implements ILayerService {
   public clock = new Clock();
 
+  public alreadyInRendering: boolean = false;
+
   private layers: ILayer[] = [];
 
   private layerRenderID: number;
@@ -17,8 +19,6 @@ export default class LayerService implements ILayerService {
   private sceneInited: boolean = false;
 
   private animateInstanceCount: number = 0;
-
-  private alreadyInRendering: boolean = false;
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
@@ -69,11 +69,9 @@ export default class LayerService implements ILayerService {
   }
 
   public renderLayers() {
-    // TODO：脏检查，只渲染发生改变的 Layer
     if (this.alreadyInRendering) {
       return;
     }
-    //
     this.alreadyInRendering = true;
     this.clear();
     this.updateRenderOrder();
@@ -82,7 +80,7 @@ export default class LayerService implements ILayerService {
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
         // trigger hooks
-        layer.hooks.beforeRenderData.call(true);
+        layer.hooks.beforeRenderData.call();
         layer.hooks.beforeRender.call();
         layer.render();
         layer.hooks.afterRender.call();

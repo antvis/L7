@@ -1,4 +1,4 @@
-import Ajv from 'ajv';
+// import Ajv from 'ajv';
 import { PositionName } from '../component/IControlService';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IMapWrapper } from '../map/IMapService';
@@ -10,11 +10,11 @@ export interface ISceneConfig extends IRenderConfig {
   logoVisible?: boolean;
 }
 
-interface IValidateResult {
-  valid: boolean;
-  errors: Ajv.ErrorObject[] | null | undefined;
-  errorText: string | null;
-}
+// interface IValidateResult {
+//   valid: boolean;
+//   errors: Ajv.ErrorObject[] | null | undefined;
+//   errorText: string | null;
+// }
 
 export interface IGlobalConfigService {
   /**
@@ -28,13 +28,13 @@ export interface IGlobalConfigService {
    * 校验用户传入的场景配置项
    * @param data 场景配置项
    */
-  validateSceneConfig(data: object): IValidateResult;
+  // validateSceneConfig(data: object): IValidateResult;
 
   /**
    * 校验用户传入的地图配置项
    * @param data 地图配置项
    */
-  validateMapConfig(data: object): IValidateResult;
+  // validateMapConfig(data: object): IValidateResult;
 
   /**
    * 获取图层配置项
@@ -66,13 +66,13 @@ export interface IGlobalConfigService {
    * @param layerName 图层名
    * @param schema 校验规则描述
    */
-  registerLayerConfigSchemaValidator(layerName: string, schema: object): void;
+  // registerLayerConfigSchemaValidator(layerName: string, schema: object): void;
 
   /**
    * 校验用户传入的图层配置项
    * @param data 图层配置项
    */
-  validateLayerConfig(layerName: string, data: object): IValidateResult;
+  // validateLayerConfig(layerName: string, data: object): IValidateResult;
 
   /**
    * 清除场景和图层配置项 Cache，但是需要保留校验器

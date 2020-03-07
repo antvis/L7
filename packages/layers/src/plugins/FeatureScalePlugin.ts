@@ -64,16 +64,13 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.caculateScalesForAttributes(attributes || [], dataArray);
     });
 
-    // 检测数据是不否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', (flag) => {
-      if (flag) {
-        this.scaleOptions = layer.getScaleOptions();
-        const attributes = styleAttributeService.getLayerStyleAttributes();
-        const { dataArray } = layer.getSource().data;
-        this.caculateScalesForAttributes(attributes || [], dataArray);
-        return true;
-      }
-      return false;
+    // 检测数据是否需要更新
+    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
+      this.scaleOptions = layer.getScaleOptions();
+      const attributes = styleAttributeService.getLayerStyleAttributes();
+      const { dataArray } = layer.getSource().data;
+      this.caculateScalesForAttributes(attributes || [], dataArray);
+      return true;
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
@@ -146,6 +143,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           return {
             field: scale.field,
             func: scale.scale,
+            option: scale.option,
           };
         });
 
@@ -160,13 +158,17 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   ) {
     const scalekey = [field, attribute.name].join('_');
     const values = attribute.scale?.values;
-    if (this.scaleCache[scalekey]) {
-      return this.scaleCache[scalekey];
-    }
-    const styleScale = this.createScale(field, values, dataArray);
-    this.scaleCache[scalekey] = styleScale;
-
-    return this.scaleCache[scalekey];
+    // if (this.scaleCache[scalekey]) {
+    //   return this.scaleCache[scalekey];
+    // }
+    const styleScale = this.createScale(
+      field,
+      attribute.name,
+      values,
+      dataArray,
+    );
+    // this.scaleCache[scalekey] = styleScale;
+    return styleScale;
   }
 
   /**
@@ -188,11 +190,15 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private createScale(
     field: string | number,
+    name: string,
     values: unknown[] | string | undefined,
     data?: IParseDataItem[],
   ): IStyleScale {
-    // 首先查找全局默认配置例如 color
-    const scaleOption: IScale | undefined = this.scaleOptions[field];
+    // scale 支持根据视觉通道和字段
+    const scaleOption: IScale | undefined =
+      this.scaleOptions[name] && this.scaleOptions[name].field === field
+        ? this.scaleOptions[name]
+        : this.scaleOptions[field];
     const styleScale: IStyleScale = {
       field,
       scale: undefined,

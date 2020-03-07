@@ -1,7 +1,7 @@
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import * as React from 'react';
 import * as dat from 'dat.gui';
+import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
 export default class TextLayerDemo extends React.Component {
@@ -39,9 +39,13 @@ export default class TextLayerDemo extends React.Component {
           y: 'w',
         },
       })
-      .shape('m', 'text')
+      .shape('w', 'text')
+      // .shape('circle')
       .size(12)
-      .color('#fff')
+      .filter('t', (t) => {
+        return t > 14;
+      })
+      .color('red')
       .style({
         textAllowOverlap: true,
         // fontWeight: 200,
@@ -54,44 +58,40 @@ export default class TextLayerDemo extends React.Component {
         // strokeOpacity: 1.0,
       });
     scene.addLayer(pointLayer);
-    pointLayer.on('click', (e) => {
-      console.log(e);
-    });
-
     this.scene = scene;
 
     const gui = new dat.GUI();
     this.gui = gui;
     const styleOptions = {
-      textAnchor: 'center',
+      field: 'w',
       strokeWidth: 1,
+      textAllowOverlap: false,
       opacity: 1,
+      color: '#ffffff',
     };
     const rasterFolder = gui.addFolder('文本可视化');
     rasterFolder
-      .add(styleOptions, 'textAnchor', [
-        'center',
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'top-left',
-        'bottom-right',
-        'bottom-left',
-        'top-right',
-      ])
+      .add(styleOptions, 'field', ['w', 's', 'l', 'm', 'j', 'h'])
       .onChange((anchor: string) => {
-        pointLayer.style({
-          textAnchor: anchor,
-        });
+        console.log(anchor);
+        pointLayer.shape(anchor, 'text');
         scene.render();
       });
 
     rasterFolder
       .add(styleOptions, 'strokeWidth', 0, 10)
       .onChange((strokeWidth: number) => {
+        pointLayer.filter('t', (t: number) => {
+          return t > strokeWidth;
+        });
+        // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+        scene.render();
+      });
+    rasterFolder
+      .add(styleOptions, 'textAllowOverlap', 0, 10)
+      .onChange((textAllowOverlap: boolean) => {
         pointLayer.style({
-          strokeWidth,
+          textAllowOverlap,
         });
         scene.render();
       });
@@ -102,7 +102,14 @@ export default class TextLayerDemo extends React.Component {
           opacity,
         });
         scene.render();
+        setTimeout(() => {
+          scene.render();
+        }, 10);
       });
+    rasterFolder.addColor(styleOptions, 'color').onChange((color: string) => {
+      pointLayer.color(color);
+      scene.render();
+    });
     // });
   }
 

@@ -1,18 +1,22 @@
-import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
-import { bindAll, DOM } from '@antv/l7-utils';
+import {
+  ILngLat,
+  IMapService,
+  IMarkerOption,
+  IPoint,
+  IPopup,
+  TYPES,
+} from '@antv/l7-core';
+import {
+  anchorTranslate,
+  anchorType,
+  applyAnchorClass,
+  bindAll,
+  DOM,
+} from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
-//  marker 支持 dragger 未完成
 
-export interface IMarkerOption {
-  element: HTMLElement | undefined;
-  anchor: anchorType;
-  color: string;
-  offsets: number[];
-  draggable: boolean;
-  extData?: any;
-}
+//  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;
@@ -252,32 +256,32 @@ export default class Marker extends EventEmitter {
     element.addEventListener('click', (e: MouseEvent) => {
       this.onMapClick(e);
     });
-    element.addEventListener('click', this.eventHander);
+    element.addEventListener('click', this.eventHandle);
     applyAnchorClass(element, anchor, 'marker');
   }
   private registerMarkerEvent(element: HTMLElement) {
-    element.addEventListener('mousemove', this.eventHander);
-    element.addEventListener('click', this.eventHander);
-    element.addEventListener('mousedown', this.eventHander);
-    element.addEventListener('mouseup', this.eventHander);
-    element.addEventListener('dblclick', this.eventHander);
-    element.addEventListener('contextmenu', this.eventHander);
-    element.addEventListener('mouseover', this.eventHander);
-    element.addEventListener('mouseout', this.eventHander);
+    element.addEventListener('mousemove', this.eventHandle);
+    element.addEventListener('click', this.eventHandle);
+    element.addEventListener('mousedown', this.eventHandle);
+    element.addEventListener('mouseup', this.eventHandle);
+    element.addEventListener('dblclick', this.eventHandle);
+    element.addEventListener('contextmenu', this.eventHandle);
+    element.addEventListener('mouseover', this.eventHandle);
+    element.addEventListener('mouseout', this.eventHandle);
   }
   private unRegisterMarkerEvent() {
     const element = this.getElement();
-    element.removeEventListener('mousemove', this.eventHander);
-    element.removeEventListener('click', this.eventHander);
-    element.removeEventListener('mousedown', this.eventHander);
-    element.removeEventListener('mouseup', this.eventHander);
-    element.removeEventListener('dblclick', this.eventHander);
-    element.removeEventListener('contextmenu', this.eventHander);
-    element.removeEventListener('mouseover', this.eventHander);
-    element.removeEventListener('mouseout', this.eventHander);
+    element.removeEventListener('mousemove', this.eventHandle);
+    element.removeEventListener('click', this.eventHandle);
+    element.removeEventListener('mousedown', this.eventHandle);
+    element.removeEventListener('mouseup', this.eventHandle);
+    element.removeEventListener('dblclick', this.eventHandle);
+    element.removeEventListener('contextmenu', this.eventHandle);
+    element.removeEventListener('mouseover', this.eventHandle);
+    element.removeEventListener('mouseout', this.eventHandle);
   }
 
-  private eventHander = (e: MouseEvent) => {
+  private eventHandle = (e: MouseEvent) => {
     this.emit(e.type, {
       target: e,
       data: this.markerOption.extData,

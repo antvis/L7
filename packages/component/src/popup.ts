@@ -1,19 +1,23 @@
-import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
-import { bindAll, DOM } from '@antv/l7-utils';
+import {
+  ILngLat,
+  IMapService,
+  IPoint,
+  IPopup,
+  IPopupOption,
+  TYPES,
+} from '@antv/l7-core';
+import {
+  anchorTranslate,
+  anchorType,
+  applyAnchorClass,
+  bindAll,
+  DOM,
+} from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 
 /** colse event */
 
-export interface IPopupOption {
-  closeButton: boolean;
-  closeOnClick: boolean;
-  maxWidth: string;
-  anchor: anchorType;
-  className: string;
-  offsets: number[];
-}
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
   private mapsService: IMapService<unknown>;
@@ -72,7 +76,7 @@ export default class Popup extends EventEmitter implements IPopup {
     return this.setDOMContent(frag);
   }
 
-  public setLnglat(lngLat: ILngLat): this {
+  public setLnglat(lngLat: ILngLat | number[]): this {
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {

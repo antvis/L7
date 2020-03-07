@@ -9,7 +9,7 @@ import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
 
-import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
+// import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
@@ -27,10 +27,10 @@ import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
  * 校验传入参数配置项的正确性
  * @see /dev-docs/ConfigSchemaValidation.md
  */
-container
-  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
-  .to(ConfigSchemaValidationPlugin)
-  .inRequestScope();
+// container
+//   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+//   .to(ConfigSchemaValidationPlugin)
+//   .inRequestScope();
 /**
  * 获取 Source
  */

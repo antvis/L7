@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Layers, PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
+import { Layers, PointLayer, PolygonLayer, Scale, Scene, Zoom } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -21,6 +21,7 @@ export default class ScaleComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
+      logoVisible: false,
       map: new Mapbox({
         style: 'dark',
         center: [110.19382669582967, 30.258134],
@@ -62,7 +63,7 @@ export default class ScaleComponent extends React.Component {
       })
       .size('point_count', [5, 10, 15, 20, 25])
       .animate(false)
-      .select(true)
+      .active(true)
       .color('yellow')
       .style({
         opacity: 0.5,
@@ -79,10 +80,15 @@ export default class ScaleComponent extends React.Component {
     };
     const layerControl = new Layers({
       overlayers: layers,
+      position: 'bottomright',
     });
 
     scene.addControl(scaleControl);
     scene.addControl(layerControl);
+    const zoomControl = new Zoom({
+      position: 'bottomright',
+    });
+    scene.addControl(zoomControl);
   }
 
   public render() {

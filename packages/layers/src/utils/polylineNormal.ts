@@ -17,8 +17,8 @@ export function computeNormal(out: vec2, dir: vec2) {
   return vec2.set(out, -dir[1], dir[0]);
 }
 export function direction(out: vec2, a: vec2, b: vec2) {
-  const a1 = aProjectFlat([a[0], a[1]]);
-  const b1 = aProjectFlat([b[0], b[1]]);
+  const a1 = aProjectFlat([a[0], a[1]]) as [number, number];
+  const b1 = aProjectFlat([b[0], b[1]]) as [number, number];
   vec2.sub(out, a1, b1);
   vec2.normalize(out, out);
   return out;
@@ -63,6 +63,7 @@ export default function(
   points: number[][],
   closed: boolean,
   indexOffset: number,
+  isDash: boolean = true,
 ) {
   const lineA = vec2.fromValues(0, 0);
   const lineB = vec2.fromValues(0, 0);
@@ -108,8 +109,11 @@ export default function(
             : null;
       }
     }
-    const lineDistance = lineSegmentDistance(cur, last);
-    const d = lineDistance + attrDistance[attrDistance.length - 1];
+    let d = 0;
+    if (isDash) {
+      const lineDistance = lineSegmentDistance(cur, last);
+      d = lineDistance + attrDistance[attrDistance.length - 1];
+    }
     direction(lineA, cur, last);
     if (!lineNormal) {
       lineNormal = vec2.create();
@@ -218,15 +222,15 @@ export default function(
       attrPos[i * 3],
       attrPos[i * 3 + 1],
       attrPos[i * 3 + 2],
-      attrDistance[i],
+      attrDistance[i], // dash
       miters[i],
-      totalDistance,
+      totalDistance, // dash
     );
   }
   return {
     normals: out,
     attrIndex,
-    attrPos: pickData, // [x,y,z, distance, miter ]
+    attrPos: pickData, // [x,y,z, distance, miter ,tatal ]
   };
 }
 // [x,y,z, distance, miter ]

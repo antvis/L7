@@ -1,8 +1,9 @@
+// @ts-ignore
+import { AsyncParallelHook } from '@antv/async-hook';
 import { DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
-import { AsyncParallelHook } from 'tapable';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
 import { IFontService } from '../asset/IFontService';
@@ -14,10 +15,11 @@ import { IPopupService } from '../component/IPopupService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
 import { IInteractionService } from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
-import { IMapCamera, IMapService } from '../map/IMapService';
-import { IRendererService } from '../renderer/IRendererService';
+import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
+import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
 
@@ -26,6 +28,8 @@ import { ISceneService } from './ISceneService';
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
+  public destroyed: boolean = false;
+
   @inject(TYPES.SceneID)
   private readonly id: string;
   /**
@@ -64,6 +68,9 @@ export default class Scene extends EventEmitter implements ISceneService {
   @inject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
 
+  @inject(TYPES.IPickingService)
+  private readonly pickingService: IPickingService;
+
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
 
@@ -88,7 +95,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   private $container: HTMLDivElement | null;
 
   private hooks: {
-    init: AsyncParallelHook<unknown>;
+    init: AsyncParallelHook;
   };
 
   public constructor() {
@@ -101,7 +108,7 @@ export default class Scene extends EventEmitter implements ISceneService {
        * 2. initRenderer：初始化渲染引擎
        * 3. initWorker：初始化 Worker
        */
-      init: new AsyncParallelHook(['config']),
+      init: new AsyncParallelHook(),
     };
   }
 
@@ -110,13 +117,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.configService.setSceneConfig(this.id, sceneConfig);
 
     // 校验场景配置项，失败则终止初始化过程
-    const { valid, errorText } = this.configService.validateSceneConfig(
-      this.configService.getSceneConfig(this.id),
-    );
-    if (!valid) {
-      this.logger.error(errorText || '');
-      return;
-    }
+    // const { valid, errorText } = this.configService.validateSceneConfig(
+    //   this.configService.getSceneConfig(this.id),
+    // );
+    // if (!valid) {
+    //   this.logger.error(errorText || '');
+    //   return;
+    // }
 
     // 初始化 ShaderModule
     this.shaderModuleService.registerBuiltinModules();
@@ -163,7 +170,10 @@ export default class Scene extends EventEmitter implements ISceneService {
       );
       this.$container = $container;
       if ($container) {
-        await this.rendererService.init($container);
+        await this.rendererService.init(
+          $container,
+          this.configService.getSceneConfig(this.id) as IRenderConfig,
+        );
         elementResizeEvent(
           this.$container as HTMLDivElement,
           this.handleWindowResized,
@@ -174,15 +184,15 @@ export default class Scene extends EventEmitter implements ISceneService {
       } else {
         this.logger.error('容器 id 不存在');
       }
+      this.pickingService.init();
 
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });
     // TODO：init worker, fontAtlas...
 
     // 执行异步并行初始化任务
-    this.initPromise = this.hooks.init.promise(
-      this.configService.getSceneConfig(this.id),
-    );
+    // @ts-ignore
+    this.initPromise = this.hooks.init.promise();
 
     this.render();
   }
@@ -194,7 +204,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-    if (this.rendering) {
+    if (this.rendering && this.destroyed) {
       return;
     }
 
@@ -202,10 +212,12 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
-
       await this.initPromise;
-      // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
+      if (this.destroyed) {
+        this.destroy();
+      }
 
+      // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.logger.info(' render inited');
       this.layerService.initLayers();
       this.controlService.addControls();
@@ -226,24 +238,36 @@ export default class Scene extends EventEmitter implements ISceneService {
     return this.$container as HTMLDivElement;
   }
 
-  public exportPng(): string {
+  public exportPng(type?: 'png' | 'jpg'): string {
     const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
-    // this.render();
-    DOM.printCanvas(renderCanvas as HTMLCanvasElement);
-    const layersPng = renderCanvas?.toDataURL('image/png') as string;
+    this.render();
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
   }
 
+  public getSceneConfig(): Partial<ISceneConfig> {
+    return this.configService.getSceneConfig(this.id as string);
+  }
+
   public destroy() {
+    if (!this.inited) {
+      this.destroyed = true;
+      return;
+    }
     this.emit('destroy');
-    this.inited = false;
+
     this.layerService.destroy();
     this.rendererService.destroy();
+    this.map.destroy();
+
     this.interactionService.destroy();
     this.controlService.destroy();
     this.markerService.destroy();
     this.removeAllListeners();
-    this.map.destroy();
+    this.inited = false;
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
     window
       .matchMedia('screen and (min-resolution: 2dppx)')

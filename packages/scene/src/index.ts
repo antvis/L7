@@ -57,8 +57,7 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, logoPosition, logoVisible } = config;
-
+    const { id, map, logoPosition, logoVisible = true } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -93,16 +92,15 @@ class Scene
     // 初始化 scene
     this.sceneService.init(config);
     // TODO: 初始化组件
-    if (logoVisible) {
-      this.addControl(new Logo({ position: logoPosition }));
-    }
+
+    this.initControl();
   }
 
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
-  public exportPng(): string {
-    return this.sceneService.exportPng();
+  public exportPng(type?: 'png' | 'jpg'): string {
+    return this.sceneService.exportPng(type);
   }
 
   public get map() {
@@ -211,8 +209,16 @@ class Scene
     return this.mapService.getCenter();
   }
 
+  public setCenter(center: [number, number]) {
+    return this.mapService.setCenter(center);
+  }
+
   public getPitch(): number {
     return this.mapService.getPitch();
+  }
+
+  public setPitch(pitch: number) {
+    return this.mapService.setPitch(pitch);
   }
 
   public getRotation(): number {
@@ -245,10 +251,6 @@ class Scene
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }
-
-  public setPitch(pitch: number) {
-    this.mapService.setPitch(pitch);
-  }
   public fitBounds(bound: Bounds): void {
     this.mapService.fitBounds(bound);
   }
@@ -257,7 +259,7 @@ class Scene
     this.mapService.setZoomAndCenter(zoom, center);
   }
 
-  public setMapStyle(style: string): void {
+  public setMapStyle(style: any): void {
     this.mapService.setMapStyle(style);
   }
 
@@ -302,6 +304,13 @@ class Scene
     );
     this.markerService.init(this.container);
     this.popupService.init(this.container);
+  }
+
+  private initControl() {
+    const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
+    if (logoVisible) {
+      this.addControl(new Logo({ position: logoPosition }));
+    }
   }
   // 资源管理
 }

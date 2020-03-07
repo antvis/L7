@@ -1,3 +1,4 @@
+import { anchorType } from '@antv/l7-utils';
 import { Container, injectable } from 'inversify';
 import { ILngLat, IMapService, IPoint } from '../map/IMapService';
 import { IPopup } from './IPopupService';
@@ -8,6 +9,14 @@ export interface IMarkerScene {
 
 export interface IMarkerServiceCfg {
   container: HTMLElement;
+}
+export interface IMarkerOption {
+  element: HTMLElement | undefined;
+  anchor: anchorType;
+  color: string;
+  offsets: number[];
+  draggable: boolean;
+  extData?: any;
 }
 export interface IMarker {
   addTo(scene: Container): void;

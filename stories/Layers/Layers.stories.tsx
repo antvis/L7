@@ -14,7 +14,9 @@ import LineLayer from './components/Line';
 import PointDemo from './components/Point';
 import Point3D from './components/Point3D';
 import PointImage from './components/PointImage';
+import PolygonDemo from './components/polygon';
 import Polygon3D from './components/Polygon3D';
+import WorldDemo from './components/polygon_line';
 import ImageLayerDemo from './components/RasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 import TextLayerDemo from './components/Text';
@@ -30,6 +32,7 @@ storiesOf('图层', module)
   .add('Column', () => <Column />)
   .add('图片标注', () => <PointImage />)
   .add('面3d图层', () => <Polygon3D />)
+  .add('面图层', () => <PolygonDemo />)
   .add('点亮城市', () => <CityBuildingLayerDemo />)
   .add('线图层', () => <LineLayer />)
   .add('虚线', () => <DashLineDemo />)
@@ -38,4 +41,5 @@ storiesOf('图层', module)
   .add('热力图', () => <HeatMapDemo />)
   .add('网格热力图', () => <HexagonLayerDemo />)
   .add('栅格', () => <RasterLayerDemo />)
-  .add('图片', () => <ImageLayerDemo />);
+  .add('图片', () => <ImageLayerDemo />)
+  .add('世界地图', () => <WorldDemo />);

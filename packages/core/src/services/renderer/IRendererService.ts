@@ -16,6 +16,8 @@ export interface IRenderConfig {
    */
   enableMultiPassRenderer?: boolean;
   passes?: Array<IPass<unknown>>;
+  antialias?: boolean;
+  preserveDrawingBuffer?: boolean;
 }
 
 export interface IClearOptions {
@@ -40,7 +42,7 @@ export interface IReadPixelsOptions {
 }
 
 export interface IRendererService {
-  init($container: HTMLDivElement): Promise<void>;
+  init($container: HTMLDivElement, cfg: IRenderConfig): Promise<void>;
   clear(options: IClearOptions): void;
   createModel(options: IModelInitializationOptions): IModel;
   createAttribute(options: IAttributeInitializationOptions): IAttribute;

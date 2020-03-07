@@ -18,41 +18,49 @@ export default class Point3D extends React.Component {
     const pointsData = await response.json();
 
     const scene = new Scene({
-      id: 'map',
-      map: new Mapbox({
+      id: document.getElementById('map') as HTMLDivElement,
+      map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
         zoom: 0,
       }),
     });
-    // scene.on('loaded', () => {
-    const pointLayer = new PointLayer({})
-      .source(pointsData, {
-        cluster: false,
-      })
-      .shape('circle')
-      // .scale('point_count', {
-      //   type: 'quantile',
-      // })
-      .size('mag', [5, 10, 15, 20, 25])
-      .animate(false)
-      .active(true)
-      .color('yellow')
-      .style({
-        opacity: 0.5,
-        strokeWidth: 1,
-      });
-    scene.addLayer(pointLayer);
     scene.on('loaded', () => {
-      const newData = {
-        type: 'FeatureCollection',
-        features: pointsData.features.slice(0, 100),
-      };
-      pointLayer.setData(newData);
+      const pointLayer = new PointLayer({})
+        .source(pointsData, {
+          cluster: false,
+        })
+        .scale({
+          size: {
+            type: 'power',
+            field: 'mag',
+          },
+          color: {
+            type: 'linear',
+            field: 'mag',
+          },
+        })
+        .shape('circle')
+        .size('mag', [2, 8, 14, 20, 26, 32, 40])
+        .animate(false)
+        .active(true)
+        .color('mag', ['red', 'blue', 'yellow', 'green'])
+        .style({
+          opacity: 0.5,
+          strokeWidth: 1,
+        });
+      scene.addLayer(pointLayer);
+
+      // scene.on('loaded', () => {
+      //   const newData = {
+      //     type: 'FeatureCollection',
+      //     features: pointsData.features.slice(0, 100),
+      //   };
+      //   pointLayer.setData(newData);
+      // });
+      this.scene = scene;
     });
-    this.scene = scene;
-    // });
   }
 
   public render() {

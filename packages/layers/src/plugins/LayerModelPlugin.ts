@@ -13,13 +13,12 @@ export default class LayerModelPlugin implements ILayerPlugin {
       layer.buildModels();
     });
 
-    layer.hooks.beforeRenderData.tap('DataSourcePlugin', (flag) => {
+    layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
       // 更新Model 配置项
-      if (flag) {
-        layer.prepareBuildModel();
-        // 初始化 Model
-        layer.buildModels();
-      }
+      layer.prepareBuildModel();
+      // 初始化 Model
+      layer.buildModels();
+      layer.layerModelNeedUpdate = false;
       return false;
     });
   }

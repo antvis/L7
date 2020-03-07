@@ -14,8 +14,8 @@ export const MapTheme: {
       {
         id: 'background',
         type: 'background',
-        paint: {
-          'background-color': 'white',
+        layout: {
+          visibility: 'none',
         },
       },
     ],
