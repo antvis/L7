@@ -91,11 +91,11 @@ L7 Logo 的显示位置 默认左下角
 
 ### antialias
 
-是否开始前抗锯齿  `boolean`  `true`
+是否开始前抗锯齿 `boolean` `true`
 
 ### preserveDrawingBuffer
 
-是否保留缓冲区数据  `boolean`  `false`
+是否保留缓冲区数据 `boolean` `false`
 
 ## Map 配置项
 

@@ -53,7 +53,6 @@ export default class Point3D extends React.Component {
       scene.addLayer(pointLayer);
       const hander = () => {
         console.log('click');
-
       };
       scene.on('click', hander);
       this.scene = scene;
