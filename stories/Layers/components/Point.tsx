@@ -51,14 +51,11 @@ export default class Point3D extends React.Component {
           strokeWidth: 1,
         });
       scene.addLayer(pointLayer);
+      const hander = () => {
+        console.log('click');
 
-      // scene.on('loaded', () => {
-      //   const newData = {
-      //     type: 'FeatureCollection',
-      //     features: pointsData.features.slice(0, 100),
-      //   };
-      //   pointLayer.setData(newData);
-      // });
+      };
+      scene.on('click', hander);
       this.scene = scene;
     });
   }
