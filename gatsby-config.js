@@ -80,10 +80,10 @@ module.exports = {
       {
         slug: 'api/react',
         title: {
-          zh: 'react 组件',
+          zh: 'React 组件',
           en: 'react component'
         },
-        order: 10
+        order: 6
       },
       {
         slug: 'api/layer',
@@ -155,7 +155,7 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source'
         },
-        order: 2
+        order: 4
       },
       {
         slug: 'api/component',
@@ -163,7 +163,7 @@ module.exports = {
           zh: '组件 Component',
           en: 'Component'
         },
-        order: 4
+        order: 5
       }
     ],
     examples: [
