@@ -16,7 +16,7 @@ import { SceneContext } from './SceneContext';
 interface IMarkerProps {
   option?: IMarkerOption;
   lnglat: ILngLat | number[];
-  onMarkerLoad?: (marker: IMarker) => void;
+  onMarkerLoaded?: (marker: IMarker) => void;
   children?: React.ReactNode;
 }
 export default class MarkerComponet extends React.PureComponent<IMarkerProps> {
@@ -28,7 +28,7 @@ export default class MarkerComponet extends React.PureComponent<IMarkerProps> {
     this.el = document.createElement('div');
   }
   public componentDidMount() {
-    const { lnglat, children, option, onMarkerLoad } = this.props;
+    const { lnglat, children, option, onMarkerLoaded } = this.props;
     const marker = new Marker(option);
     if (lnglat) {
       marker.setLnglat(lnglat as ILngLat | IPoint);
@@ -37,8 +37,8 @@ export default class MarkerComponet extends React.PureComponent<IMarkerProps> {
       marker.setElement(this.el);
     }
     this.marker = marker;
-    if (onMarkerLoad) {
-      onMarkerLoad(marker);
+    if (onMarkerLoaded) {
+      onMarkerLoaded(marker);
     }
     this.scene.addMarker(marker);
   }

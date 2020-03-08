@@ -69,8 +69,7 @@ el.textContent = data[i].v;
 el.style.background = getColor(data[i].v);
 new L7.Marker({
   element: el,
-})
-  .setLnglat([data[i].x * 1, data[i].y]
+}).setLnglat([data[i].x * 1, data[i].y]);
 ```
 
 #### 设置 popup
