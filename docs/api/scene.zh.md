@@ -89,6 +89,16 @@ L7 Logo 的显示位置 默认左下角
 
 是否显示 L7 的 Logo {boolean} true
 
+### antialias
+
+是否开始前抗锯齿 `boolean` `true`
+
+### preserveDrawingBuffer
+
+是否保留缓冲区数据 `boolean` `false`
+
+## Map 配置项
+
 ### zoom
 
 地图初始显示级别 {number} （0-22）
@@ -113,6 +123,8 @@ L7 Logo 的显示位置 默认左下角
 除了内置的样式，你也可以传入自定义的其他属性。
 
 比如高德地图
+
+⚠️ 高德地图样式 增加 `isPublic=true` 参数
 
 ```javascript
 {

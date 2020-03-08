@@ -69,7 +69,7 @@ scene.addLayer(layer);
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换 可设置多个
 
-parser 和  transforms [见 source 文档](https://www.yuque.com/antv/l7/source)
+parser 和  transforms [见 source 文档](../source/source)
 
 ```javascript
 layer.source(data, {

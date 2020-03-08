@@ -78,6 +78,14 @@ module.exports = {
         order: 1
       },
       {
+        slug: 'api/react',
+        title: {
+          zh: 'react 组件',
+          en: 'react component'
+        },
+        order: 10
+      },
+      {
         slug: 'api/layer',
         title: {
           zh: '图层 Layer',
