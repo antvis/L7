@@ -204,7 +204,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-    if (this.rendering && this.destroyed) {
+    if (this.rendering || this.destroyed) {
       return;
     }
 
@@ -216,7 +216,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       if (this.destroyed) {
         this.destroy();
       }
-
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.logger.info(' render inited');
       this.layerService.initLayers();
