@@ -1,6 +1,6 @@
 ---
 title: Layer 组件
-order: 1
+order: 2
 ---
 
 ## Scene Props
@@ -21,9 +21,7 @@ order: 1
 
 ### attributeOption
 
-color, size, shape 等图形映射通道配置项
-
-#### option
+color, size, shape 等图形映射通道，通过下面参数配置
 
 - field 映射字段，如果是常量设置为 null
 - values 映射值 支持 常量，数组，回调函数，如果 values 为数组或回调需要设置 field 字段
@@ -32,11 +30,11 @@ color, size, shape 等图形映射通道配置项
 
 数据源配置项
 
-#### Option
-
 - data 支持 geojson、csv、json
 - parser 数据解析配置项
 - transforms 数据处理配置项
+
+具体配置项
 
 ```jsx
 import { PolygonLayer } from '@antv/l7-react';

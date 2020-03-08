@@ -1,9 +1,7 @@
 ---
-title: popup
+title: Popup 信息框
 order: 0
 ---
-
-# popup
 
 地图标注信息窗口，用于展示地图要素的属性信息
 
@@ -21,6 +19,12 @@ const popup = new L7.Popup(option);
 - closeOnClick
 - maxWidth
 - anchor
+
+#### 添加到地图
+
+```javascript
+scene.addPopup(popup);
+```
 
 ## 方法
 
@@ -47,16 +51,6 @@ const lnglat = {
 
 ```javascript
 popup.setLnglat([112, 32]);
-```
-
-#### addTo
-
-**参数**：scene 地图 scene 实例
-
-将 popup 添加到地图 scene 显示
-
-```javascript
-popup.addTo(scene);
 ```
 
 #### setHTML
