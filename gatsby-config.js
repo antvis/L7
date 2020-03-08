@@ -176,14 +176,6 @@ module.exports = {
         }
       },
       {
-        slug: 'react',
-        icon: 'raster',
-        title: {
-          zh: 'React 组件',
-          en: 'React Component'
-        }
-      },
-      {
         slug: 'point',
         icon: 'point',
         title: {
