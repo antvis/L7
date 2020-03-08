@@ -94,11 +94,9 @@ el.style.background = getColor(data[i].v);
 
 const marker = new L7.Marker({
   element: el,
-})
-  .setLnglat([data[i].x * 1, data[i].y]);
+}).setLnglat([data[i].x * 1, data[i].y]);
 
- scene.addMarker(marker);
-
+scene.addMarker(marker);
 ```
 
 #### 设置 popup
@@ -112,7 +110,7 @@ new L7.Marker({
   element: el,
 })
   .setLnglat(item.coordinates)
-  .setPopup(popup)
+  .setPopup(popup);
 ```
 
 ## 事件

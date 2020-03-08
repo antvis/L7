@@ -26,7 +26,6 @@ const popup = new L7.Popup(option);
 scene.addPopup(popup);
 ```
 
-
 ## 方法
 
 #### setLnglat
@@ -53,6 +52,7 @@ const lnglat = {
 ```javascript
 popup.setLnglat([112, 32]);
 ```
+
 #### setHTML
 
 **参数**：html 字符串

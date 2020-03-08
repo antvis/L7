@@ -178,10 +178,12 @@ const data2 = [
 layer
   .source(data, {
     transforms: [
-      (type: 'join'),
-      (sourceField: 'name'), //data1 对应字段名
-      (targetField: 'city'), // data 对应字段名
-      (data: data2),
+      {
+      type: 'join',
+      sourceField: 'name', //data1 对应字段名
+      targetField: 'city', // data 对应字段名 绑定到的地理数据
+      data: data2
+      }
     ],
   })
   .color('value'); // 可以采用data1的value字段进行数据到颜色的映射
