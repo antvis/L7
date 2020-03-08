@@ -157,7 +157,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.popupService.initPopup();
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
-
       this.logger.debug(`map ${this.id} loaded`);
     });
 

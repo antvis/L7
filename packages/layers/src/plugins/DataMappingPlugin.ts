@@ -70,7 +70,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
     });
   }
-
   private generateMaping(
     layer: ILayer,
     {
