@@ -169,7 +169,6 @@ export default class AMapService
     const zooms = this.map.get('zooms') as [number, number];
     return zooms[1] - 1;
   }
-
   public setRotation(rotation: number): void {
     return this.map.setRotation(rotation);
   }
