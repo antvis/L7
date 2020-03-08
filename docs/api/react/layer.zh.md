@@ -1,6 +1,6 @@
 ---
 title: Layer 组件
-order: 1
+order: 2
 ---
 
 ## Scene Props
