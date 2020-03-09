@@ -217,6 +217,14 @@ module.exports = {
         }
       },
       {
+        slug: 'react',
+        icon: 'map',
+        title: {
+          zh: 'React 组件',
+          en: 'React Demo'
+        }
+      },
+      {
         slug: 'tutorial',
         icon: 'map',
         title: {

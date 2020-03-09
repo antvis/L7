@@ -13,7 +13,9 @@ export default class LayerStylePlugin implements ILayerPlugin {
       layer.updateLayerConfig({});
       const { autoFit } = layer.getLayerConfig();
       if (autoFit) {
-        layer.fitBounds();
+        setTimeout(() => {
+          layer.fitBounds();
+        }, 100);
       }
     });
   }

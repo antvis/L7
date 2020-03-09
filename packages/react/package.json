@@ -27,7 +27,9 @@
     "@antv/l7": "^2.0.34",
     "@antv/l7-maps": "^2.0.34",
     "@babel/runtime": "^7.7.7",
-    "load-styles": "^2.0.0",
+    "load-styles": "^2.0.0"
+  },
+  "peerDependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.10.2"
   },

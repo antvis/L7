@@ -7,7 +7,7 @@ order: 2
 
 | prop name     | Type                           | Default                                                   | Description                             |
 | ------------- | ------------------------------ | --------------------------------------------------------- | --------------------------------------- |
-| option        | `layer option`                 |                                                           | layer 配置项                            |
+| options       | `layer options`                |                                                           | layer 配置项                            |
 | source        | `sourceOption`                 |                                                           | 数据源配置项                            |
 | color         | `attributeOption`              |                                                           | 颜色通道                                |
 | shape         | `attributeOption`              |                                                           | 图层形状属性                            |
@@ -19,15 +19,17 @@ order: 2
 | active        | `boolean` `interaction option` | `false`                                                   | 图层 hover 高亮                         |
 | onLayerLoaded | `Function`                     |                                                           | 图层添加完成后回调，用于获取 layer 对象 |
 
-### layer option
+### layer options
 
-| prop name | Type      | Default                 | Description                              |
-| --------- | --------- | ----------------------- | ---------------------------------------- |
-| name      | `string`  |                         | 图层名字，可根据名称获取 layer           |
-| visible   | `boolean` | `true`                  | 图层是否可见                             |
-| zIndex    | `number`  | 0                       | 图层绘制顺序，                           |
-| minZoom   | `number`  | 0                       | 设置 layer 最小可见等级，小于则不显示    |
-| maxZoom   | `number`  | 与 map 最大缩放等级一致 | 设置 layerd 的最大可见等级，大于则不显示 |
+| prop name | Type      | Default                 | Description                                      |
+| --------- | --------- | ----------------------- | ------------------------------------------------ |
+| name      | `string`  |                         | 图层名字，可根据名称获取 layer                   |
+| visible   | `boolean` | `true`                  | 图层是否可见                                     |
+| zIndex    | `number`  | 0                       | 图层绘制顺序，                                   |
+| minZoom   | `number`  | 0                       | 设置 layer 最小可见等级，小于则不显示            |
+| maxZoom   | `number`  | 与 map 最大缩放等级一致 | 设置 layerd 的最大可见等级，大于则不显示         |
+| aotoFit   | `boolean` | `false`                 | 是否缩放到图层范围                               |
+| blend     | 'string'  | 'normal'                | 图层元素混合效果 [详情]('../layer/layer/#blend') |
 
 ### attribute Option
 
