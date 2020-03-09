@@ -1,0 +1,19 @@
+{
+  "title": {
+    "zh": "Scene 组件",
+    "en": "Scene Component"
+  },
+  "demos": [
+
+    {
+      "filename": "amap.jsx",
+      "title": "高德地图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ZiMnSZlmblIAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "Mapbox.jsx",
+      "title": "Mapbox 地图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*ZiMnSZlmblIAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

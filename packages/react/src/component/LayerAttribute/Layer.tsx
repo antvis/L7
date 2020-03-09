@@ -103,6 +103,12 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     }
   }, [options?.blend]);
 
+  // useEffect(() => {
+  //   if (layer && layer.inited && options && options.autoFit === true) {
+  //     layer.fitBounds();
+  //   }
+  // }, [options?.autoFit]);
+
   return layer !== null && layer !== undefined ? (
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />

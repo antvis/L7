@@ -126,24 +126,22 @@ layer.source(data, {
 - cat 枚举
 
 ```javascript
-
-layer.scale('name',{
-  type: 'cat'
-})
+layer.scale('name', {
+  type: 'cat',
+});
 
 // 设置多个scale
 
-字段名为 key, value 为scale配置项
+// 字段名为 key, value 为scale配置项
 
 layer.scale({
-  name:{
-    type: 'cat'
+  name: {
+    type: 'cat',
   },
   value: {
-    type: 'linear'
-  }
-})
-
+    type: 'linear',
+  },
+});
 ```
 
 ## 视觉编码方法
