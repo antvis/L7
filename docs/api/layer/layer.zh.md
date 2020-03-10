@@ -102,20 +102,46 @@ layer.source(data, {
 
 ### scale
 
-scale('field', scaleConfig)
-
-(field: string, scaleConfig: object)
-
-为指定的数据字段进行列定义，返回 layer 实例。
+设置数据字段映射方法
 
 - `field` 字段名。
 
 - `scaleConfig` 列定义配置，对象类型，可配置的属性如下：
 
+#### scale 类型
+
+**连续型**
+
+- linear 线性
+- log
+- pow 指数型
+
+**连续分类型**
+
+- quantile 等分位
+- quantize 等间距
+
+**枚举型**
+
+- cat 枚举
+
 ```javascript
-{
-  type: 'linear'; // 指定数据类型，可声明的类型为：identity、linear、cat、time、timeCat、log、pow,  quantile,quantize
-}
+layer.scale('name', {
+  type: 'cat',
+});
+
+// 设置多个scale
+
+// 字段名为 key, value 为scale配置项
+
+layer.scale({
+  name: {
+    type: 'cat',
+  },
+  value: {
+    type: 'linear',
+  },
+});
 ```
 
 ## 视觉编码方法
@@ -126,7 +152,7 @@ scale('field', scaleConfig)
 
 将数据值映射到图形的大小上的方法,具体 size 的表示具体意义可以查看对应图层的文档
 
-```
+```javascript
 pointLayer.size(10); // 常量
 pointLayer.size('type'); // 使用字段映射到大小
 pointLayer.size('type', [0, 10]); // 使用字段映射到大小，并指定最大值和最小值

@@ -1,4 +1,12 @@
-import { AMapScene, LineLayer, Marker, Popup } from '@antv/l7-react';
+import {
+  AMapScene,
+  LayerContext,
+  LineLayer,
+  Marker,
+  Popup,
+  SceneContext,
+  SceneEvent,
+} from '@antv/l7-react';
 import * as React from 'react';
 
 export default React.memo(function Map() {
@@ -30,6 +38,18 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
+        <SceneContext.Consumer>
+          {(scene) => {
+            console.log(scene);
+            return null;
+          }}
+        </SceneContext.Consumer>
+        <SceneEvent
+          type="click"
+          handler={() => {
+            console.log('click');
+          }}
+        />
         <Popup lnglat={[110.1938, 50.25] as number[]}>
           <p>122222</p>
         </Popup>
@@ -53,8 +73,14 @@ export default React.memo(function Map() {
           style={{
             opacity: 1,
           }}
-        />
-        )}
+        >
+          <LayerContext.Consumer>
+            {(layer) => {
+              console.log(layer);
+              return null;
+            }}
+          </LayerContext.Consumer>
+        </LineLayer>
       </AMapScene>
     </>
   );

@@ -7,7 +7,7 @@ interface ILayerProps {
   type: string;
   handler: (...args: any[]) => void;
 }
-export const SceneEvent = React.memo((props: ILayerProps) => {
+const SceneEvent = React.memo((props: ILayerProps) => {
   const { type, handler } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
 
@@ -19,3 +19,5 @@ export const SceneEvent = React.memo((props: ILayerProps) => {
   }, [type]);
   return null;
 });
+
+export default SceneEvent;

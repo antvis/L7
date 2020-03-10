@@ -12,10 +12,11 @@ export const LayerEvent = React.memo((props: ILayerProps) => {
   const layer = (useLayerValue() as unknown) as ILayer;
 
   useEffect(() => {
+    layer.off(type, handler);
     layer.on(type, handler);
     return () => {
       layer.off(type, handler);
     };
-  }, [type]);
+  }, [type, handler]);
   return null;
 });

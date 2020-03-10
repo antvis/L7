@@ -126,7 +126,7 @@ scale('field', scaleConfig)
 
 将数据值映射到图形的大小上的方法,具体 size 的表示具体意义可以查看对应图层的文档
 
-```
+```javascript
 pointLayer.size(10); // 常量
 pointLayer.size('type'); // 使用字段映射到大小
 pointLayer.size('type', [0, 10]); // 使用字段映射到大小，并指定最大值和最小值

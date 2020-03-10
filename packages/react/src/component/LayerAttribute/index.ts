@@ -12,6 +12,7 @@ import Active from './Active';
 import Color from './Color';
 import Filter from './Filter';
 import Scale from './Scale';
+import Select from './Select';
 import Shape from './Shape';
 import Size from './Size';
 import Source from './Source';
@@ -71,9 +72,10 @@ export interface ILayerProps {
   size?: Partial<IAttributeOptions>;
   style?: Partial<IStyleOptions>;
   active?: IActiveOptions;
+  select?: IActiveOptions;
   filter?: Partial<IAttributeOptions>;
-  onLayerLoad?: (layer: ILayer, scene: Scene) => void;
+  onLayerLoaded?: (layer: ILayer, scene: Scene) => void;
   children?: React.ReactNode;
 }
 
-export { Active, Color, Filter, Source, Size, Shape, Style, Scale };
+export { Active, Color, Filter, Source, Size, Shape, Style, Scale, Select };

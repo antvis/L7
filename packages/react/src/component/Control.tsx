@@ -1,9 +1,9 @@
-import { IControl, Logo, PositionType, Scale, Scene, Zoom } from '@antv/l7';
+import { IControl, Logo, PositionName, Scale, Scene, Zoom } from '@antv/l7';
 import React, { useEffect, useState } from 'react';
 import { useSceneValue } from './SceneContext';
 interface IControlProps {
   type: 'scale' | 'zoom' | 'logo';
-  position: PositionType;
+  position: PositionName;
   [key: string]: any;
 }
 export default React.memo(function MapControl(props: IControlProps) {
@@ -15,17 +15,17 @@ export default React.memo(function MapControl(props: IControlProps) {
     switch (type) {
       case 'scale':
         ctr = new Scale({
-          position,
+          position: position || 'bottomright',
         });
         break;
       case 'zoom':
         ctr = new Zoom({
-          position,
+          position: position || 'topright',
         });
         break;
       case 'logo':
         ctr = new Logo({
-          position,
+          position: position || 'bottomleft',
         });
     }
     setControl(ctr);

@@ -23,7 +23,7 @@ float r = 1.0 - smoothstep(radius-(radius*0.01),
   if(v_color == vec4(0.)){
         gl_FragColor= vec4(textureColor.xyz, textureColor.w * r);
   }else {
-        gl_FragColor= step(0.01, textureColor.x) * v_color;
+        gl_FragColor= step(0.01, textureColor.z) * v_color;
   }
   gl_FragColor = filterColor(gl_FragColor);
 }
