@@ -39,13 +39,13 @@ export default class TextLayerDemo extends React.Component {
           y: 'w',
         },
       })
-      .shape('w', 'text')
+      .shape('s', 'text')
       // .shape('circle')
-      .size(12)
+      .size(24)
       .filter('t', (t) => {
-        return t > 14;
+        return t > 18;
       })
-      .color('red')
+      .color('#fff')
       .style({
         textAllowOverlap: true,
         // fontWeight: 200,
@@ -53,8 +53,8 @@ export default class TextLayerDemo extends React.Component {
         // textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
         // spacing: 2, // 字符间距
         // padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-        // stroke: 'red', // 描边颜色
-        // strokeWidth: 2, // 描边宽度
+        stroke: '#fff', // 描边颜色
+        strokeWidth: 0, // 描边宽度
         // strokeOpacity: 1.0,
       });
     scene.addLayer(pointLayer);
