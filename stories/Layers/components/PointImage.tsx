@@ -33,11 +33,11 @@ export default class PointImage extends React.Component {
     );
     scene.addImage(
       '02',
-      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
+      'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
     );
     let i = 0;
     const data = await response.json();
-    while (i < 50) {
+    while (i < 1) {
       const imageLayer = new PointLayer()
         .source(data, {
           parser: {
@@ -48,7 +48,7 @@ export default class PointImage extends React.Component {
         })
         .shape('name', ['00', '01', '02'])
         // .shape('triangle')
-        // .color('red')
+        .color('red')
         .active(true)
         .size(20);
       // imageLayer.on('click', (e) => {

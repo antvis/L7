@@ -93,7 +93,7 @@ export default class Zoom extends Control {
   ) {
     const link = DOM.create('a', className, container) as HTMLLinkElement;
     link.innerHTML = html;
-    link.href = '#';
+    link.href = 'javascript:void(0)';
     link.addEventListener('click', fn);
     return link;
   }

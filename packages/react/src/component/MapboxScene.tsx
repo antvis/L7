@@ -1,7 +1,7 @@
 import { IMapConfig, ISceneConfig, Scene, Zoom } from '@antv/l7';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import Mapbox from '@antv/l7-maps/lib/mapbox';
+import { Mapbox } from '@antv/l7-maps';
 import React, { createElement, createRef, useEffect, useState } from 'react';
 import { SceneContext } from './SceneContext';
 interface IMapSceneConig {

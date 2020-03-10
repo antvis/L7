@@ -16,6 +16,7 @@ import {
   Filter,
   ILayerProps,
   Scale,
+  Select,
   Shape,
   Size,
   Source,
@@ -33,9 +34,10 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     size,
     scale,
     active,
+    select,
     filter,
     options,
-    onLayerLoad,
+    onLayerLoaded,
   } = props;
   const mapScene = (useSceneValue() as unknown) as Scene;
   const [layer, setLayer] = useState<ILayer>();
@@ -61,8 +63,8 @@ export default function BaseLayer(type: string, props: ILayerProps) {
         l = new PolygonLayer(options);
     }
     l.on('inited', () => {
-      if (onLayerLoad) {
-        onLayerLoad(l, mapScene);
+      if (onLayerLoaded) {
+        onLayerLoaded(l, mapScene);
       }
     });
     setLayer(l);
@@ -101,6 +103,12 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     }
   }, [options?.blend]);
 
+  // useEffect(() => {
+  //   if (layer && layer.inited && options && options.autoFit === true) {
+  //     layer.fitBounds();
+  //   }
+  // }, [options?.autoFit]);
+
   return layer !== null && layer !== undefined ? (
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />
@@ -110,6 +118,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
       <Shape layer={layer} shape={shape} />
       {style && <Style layer={layer} style={style} />}
       {active && <Active layer={layer} active={active} />}
+      {select && <Select layer={layer} select={select} />}
       {filter && <Filter layer={layer} filter={filter} />}
       {/* LayerContext主要传入LayerEvent组件 */}
       {props.children}
