@@ -48,7 +48,7 @@ export default class PointImage extends React.Component {
         })
         .shape('name', ['00', '01', '02'])
         // .shape('triangle')
-        .color('red')
+        // .color('red')
         .active(true)
         .size(20);
       // imageLayer.on('click', (e) => {

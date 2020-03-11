@@ -5,6 +5,8 @@ import {
   createSceneContainer,
   IControl,
   IControlService,
+  IFontService,
+  IIconFontGlyph,
   IIconService,
   IImage,
   ILayer,
@@ -53,6 +55,7 @@ class Scene
   private iconService: IIconService;
   private markerService: IMarkerService;
   private popupService: IPopupService;
+  private fontService: IFontService;
 
   private container: Container;
 
@@ -76,6 +79,7 @@ class Scene
       TYPES.IMapService,
     );
     this.iconService = sceneContainer.get<IIconService>(TYPES.IIconService);
+    this.fontService = sceneContainer.get<IFontService>(TYPES.IFontService);
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
     );
@@ -151,6 +155,10 @@ class Scene
 
   public removeImage(id: string) {
     this.iconService.removeImage(id);
+  }
+
+  public addIconFontGlyphs(fontFamily: string, glyphs: IIconFontGlyph[]) {
+    this.fontService.addIconGlyphs(glyphs);
   }
 
   // map control method

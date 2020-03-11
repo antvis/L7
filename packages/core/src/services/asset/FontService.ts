@@ -9,10 +9,11 @@ import {
   IFontMappingItem,
   IFontOptions,
   IFontService,
+  IIconFontGlyph,
 } from './IFontService';
 export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'sans-serif';
-export const DEFAULT_FONT_WEIGHT = '800';
+export const DEFAULT_FONT_WEIGHT = 'normal';
 export const DEFAULT_FONT_SIZE = 24;
 export const DEFAULT_BUFFER = 3;
 export const DEFAULT_CUTOFF = 0.25;
@@ -60,9 +61,13 @@ function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
 @injectable()
 export default class FontService implements IFontService {
   public fontAtlas: IFontAtlas;
+  private iconFontGlyphs: {
+    [key: string]: string;
+  } = {};
   private fontOptions: IFontOptions;
   private key: string;
   private cache: LRUCache = new LRUCache(CACHE_LIMIT);
+
   public init() {
     this.cache.clear();
     this.fontOptions = {
@@ -77,7 +82,17 @@ export default class FontService implements IFontService {
     };
     this.key = '';
   }
-
+  public addIconGlyphs(glyphs: IIconFontGlyph[]): void {
+    glyphs.forEach((glyph) => {
+      this.iconFontGlyphs[glyph.name] = glyph.unicode;
+    });
+  }
+  public getGlyph(name: string): string {
+    if (this.iconFontGlyphs[name]) {
+      return String.fromCharCode(parseInt(this.iconFontGlyphs[name], 16));
+    }
+    return '';
+  }
   public get scale() {
     return HEIGHT_SCALE;
   }

@@ -33,16 +33,9 @@ export default class ZoomComponent extends React.Component {
     layer
       .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
-      .color('name', [
-        '#2E8AE6',
-        '#69D1AB',
-        '#DAF291',
-        '#FFD591',
-        '#FF7A45',
-        '#CF1D49',
-      ])
+      .color('#fff')
       .shape('name', 'text')
-      .size(10)
+      .size(12)
       .style({
         opacity: 1.0,
       });
