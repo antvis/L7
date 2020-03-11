@@ -70,7 +70,7 @@ export default React.memo(function Map() {
     const fetchData = async () => {
       const [geoData, ncovData] = await Promise.all([
         fetch(
-          'https://gw.alipayobjects.com/os/bmw-prod/36741c60-5e69-4c36-9033-d4ce42754a78.json',
+          'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
         fetch('https://lab.isaaclin.cn/nCoV/api/area?latest=1').then((d) =>
           d.json(),

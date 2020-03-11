@@ -111,6 +111,7 @@ export default class TextModel extends BaseModel {
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
       this.updateTexture();
+      this.textCount = Object.keys(mapping).length;
     }
     this.preTextStyle = {
       textAnchor,

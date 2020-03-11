@@ -1,5 +1,4 @@
 import {
-  LayerEvent,
   LineLayer,
   MapboxScene,
   Marker,
@@ -8,15 +7,7 @@ import {
   Popup,
 } from '@antv/l7-react';
 import * as React from 'react';
-const colors = [
-  '#ffffb2',
-  '#fed976',
-  '#feb24c',
-  '#fd8d3c',
-  '#fc4e2a',
-  '#e31a1c',
-  '#b10026',
-];
+import ReactDOM from 'react-dom';
 function joinData(geodata: any, ncovData: any) {
   const ncovDataObj: any = {};
   ncovData.forEach((item: any) => {
@@ -32,7 +23,7 @@ function joinData(geodata: any, ncovData: any) {
     if (countryName === '中国') {
       if (!ncovDataObj[countryName]) {
         ncovDataObj[countryName] = {
-          countryName,
+          countryName: 0,
           countryEnglishName,
           currentConfirmedCount: 0,
           confirmedCount: 0,
@@ -72,13 +63,9 @@ function joinData(geodata: any, ncovData: any) {
   return geodata;
 }
 
-export default React.memo(function Map() {
+const World = React.memo(function Map() {
   const [data, setData] = React.useState();
   const [filldata, setfillData] = React.useState();
-  const [popupInfo, setPopupInfo] = React.useState<{
-    lnglat: number[];
-    feature: any;
-  }>();
   React.useEffect(() => {
     const fetchData = async () => {
       const [geoData, ncovData] = await Promise.all([
@@ -98,19 +85,12 @@ export default React.memo(function Map() {
     };
     fetchData();
   }, []);
-  function showPopup(args: any): void {
-    setPopupInfo({
-      lnglat: args.lngLat,
-      feature: args.feature,
-    });
-  }
-
   return (
     <>
       <MapboxScene
         map={{
           center: [110.19382669582967, 50.258134],
-          pitch: 0,
+          pitch: 50,
           style: 'blank',
           zoom: 1,
         }}
@@ -122,21 +102,6 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
-        {popupInfo && (
-          <Popup lnglat={popupInfo.lnglat}>
-            {popupInfo.feature.name}
-            <ul
-              style={{
-                margin: 0,
-              }}
-            >
-              <li>现有确诊:{popupInfo.feature.currentConfirmedCount}</li>
-              <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
-              <li>治愈:{popupInfo.feature.curedCount}</li>
-              <li>死亡:{popupInfo.feature.deadCount}</li>
-            </ul>
-          </Popup>
-        )}
         {data && [
           <PolygonLayer
             key={'1'}
@@ -200,75 +165,60 @@ export default React.memo(function Map() {
                 },
               },
             }}
-            color={{
-              field: 'confirmedCount',
-              values: (count) => {
-                return count > 10000
-                  ? colors[6]
-                  : count > 1000
-                  ? colors[5]
-                  : count > 500
-                  ? colors[4]
-                  : count > 100
-                  ? colors[3]
-                  : count > 10
-                  ? colors[2]
-                  : count > 1
-                  ? colors[1]
-                  : colors[0];
-              },
-            }}
-            shape={{
-              values: 'circle',
-            }}
             active={{
               option: {
                 color: '#0c2c84',
               },
             }}
-            size={{
-              field: 'confirmedCount',
-              values: [0, 30],
-            }}
-            style={{
-              opacity: 0.6,
-            }}
-          >
-            <LayerEvent type="mousemove" handler={showPopup} />
-          </PointLayer>,
-          <PointLayer
-            key={'5'}
-            source={{
-              data,
-              parser: {
-                type: 'json',
-                coordinates: 'centroid',
-              },
-            }}
             color={{
-              values: '#fff',
+              field: 'confirmedCount',
+              values: (count) => {
+                return count > 10000
+                  ? '#732200'
+                  : count > 1000
+                  ? '#CC3D00'
+                  : count > 500
+                  ? '#FF6619'
+                  : count > 100
+                  ? '#FF9466'
+                  : count > 10
+                  ? '#FFC1A6'
+                  : count > 1
+                  ? '#FCE2D7'
+                  : 'rgb(255,255,255)';
+              },
             }}
             shape={{
-              field: 'countryName',
-              values: 'text',
-            }}
-            filter={{
-              field: 'currentConfirmedCount',
-              values: (v) => {
-                return v > 500;
-              },
+              values: 'cylinder',
             }}
             size={{
-              values: 12,
+              field: 'confirmedCount',
+              values: (count: number) => {
+                const height =
+                  count > 10000
+                    ? 70
+                    : count > 1000
+                    ? 40
+                    : count > 500
+                    ? 30
+                    : count > 100
+                    ? 20
+                    : count > 10
+                    ? 10
+                    : count > 1
+                    ? 5
+                    : 1;
+                return [5, 5, height];
+              },
             }}
             style={{
               opacity: 1,
             }}
-          >
-            <LayerEvent type="mousemove" handler={showPopup} />
-          </PointLayer>,
+          />,
         ]}
       </MapboxScene>
     </>
   );
 });
+
+ReactDOM.render(<World />, document.getElementById('map'));
