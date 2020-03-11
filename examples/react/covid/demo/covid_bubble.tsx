@@ -8,15 +8,16 @@ import {
   Popup,
 } from '@antv/l7-react';
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 const colors = [
-  '#ffffb2',
-  '#fed976',
-  '#feb24c',
-  '#fd8d3c',
-  '#fc4e2a',
-  '#e31a1c',
-  '#b10026',
-];
+  '#732200',
+  '#CC3D00',
+  '#FF6619',
+  '#FF9466',
+  '#FFC1A6',
+  '#FCE2D7',
+  '#ffffff',
+].reverse();
 function joinData(geodata: any, ncovData: any) {
   const ncovDataObj: any = {};
   ncovData.forEach((item: any) => {
@@ -72,7 +73,7 @@ function joinData(geodata: any, ncovData: any) {
   return geodata;
 }
 
-export default React.memo(function Map() {
+const World = React.memo(function Map() {
   const [data, setData] = React.useState();
   const [filldata, setfillData] = React.useState();
   const [popupInfo, setPopupInfo] = React.useState<{
@@ -231,7 +232,7 @@ export default React.memo(function Map() {
               values: [0, 30],
             }}
             style={{
-              opacity: 0.6,
+              opacity: 0.8,
             }}
           >
             <LayerEvent type="mousemove" handler={showPopup} />
@@ -272,3 +273,4 @@ export default React.memo(function Map() {
     </>
   );
 });
+ReactDOM.render(<World />, document.getElementById('map'));

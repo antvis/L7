@@ -3,6 +3,25 @@ title: Layer 组件
 order: 2
 ---
 
+## Layer 类型
+
+React 各个组件名称和 L7 名称保持一致
+
+- PointLayer
+- PolygonLayer
+- LineLayer
+- HeatmapLayer
+- RasterLayer
+- ImageLayer
+- CityBuildingLayer
+
+### 使用方式
+
+```jsx
+import { PointLayer } '@antv/l7-react';
+
+```
+
 ## Layer Props
 
 | prop name     | Type                           | Default                                                   | Description                             |
@@ -17,6 +36,7 @@ order: 2
 | filter        | `Function`                     |                                                           | 图层数据过滤方法                        |
 | select        | `boolean` `interaction option` |                                                           | 图层选中高亮                            |
 | active        | `boolean` `interaction option` | `false`                                                   | 图层 hover 高亮                         |
+| animate       | `animate Option`               | `null`                                                    | 图层动画配置                            |
 | onLayerLoaded | `Function`                     |                                                           | 图层添加完成后回调，用于获取 layer 对象 |
 
 ### layer options
@@ -73,9 +93,15 @@ const scales = {
 
 ### interaction option
 
+active，select 配置项
+
 **option**
 
 - color 设置交互的颜色，指滑过或者选中的
+
+```jsx
+<>
+```
 
 ### 获取 layer 对象
 
@@ -83,9 +109,9 @@ const scales = {
 
 回调函数获取 layer, scene 对象
 
-onLayerLoaded=(layer, scene) =>{
-
-}
+```javascript
+onLayerLoaded = (layer, scene) => {};
+```
 
 #### Context API
 

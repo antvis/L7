@@ -1,13 +1,12 @@
 import {
-  LayerEvent,
   LineLayer,
   MapboxScene,
   Marker,
-  PointLayer,
   PolygonLayer,
   Popup,
 } from '@antv/l7-react';
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 
 function joinData(geodata: any, ncovData: any) {
   const ncovDataObj: any = {};
@@ -64,13 +63,8 @@ function joinData(geodata: any, ncovData: any) {
   return geodata;
 }
 
-export default React.memo(function Map() {
+const World = React.memo(function Map() {
   const [data, setData] = React.useState();
-  const [filldata, setfillData] = React.useState();
-  const [popupInfo, setPopupInfo] = React.useState<{
-    lnglat: number[];
-    feature: any;
-  }>();
   React.useEffect(() => {
     const fetchData = async () => {
       const [geoData, ncovData] = await Promise.all([
@@ -81,22 +75,10 @@ export default React.memo(function Map() {
           d.json(),
         ),
       ]);
-      const worldData = joinData(geoData, ncovData.results);
-      const pointdata = worldData.features.map((feature: any) => {
-        return feature.properties;
-      });
-      setfillData(worldData);
-      setData(pointdata);
+      setData(joinData(geoData, ncovData.results));
     };
     fetchData();
   }, []);
-  function showPopup(args: any): void {
-    setPopupInfo({
-      lnglat: args.lngLat,
-      feature: args.feature,
-    });
-  }
-
   return (
     <>
       <MapboxScene
@@ -114,29 +96,14 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
-        {popupInfo && (
-          <Popup lnglat={popupInfo.lnglat}>
-            {popupInfo.feature.name}
-            <ul
-              style={{
-                margin: 0,
-              }}
-            >
-              <li>现有确诊:{popupInfo.feature.currentConfirmedCount}</li>
-              <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
-              <li>治愈:{popupInfo.feature.curedCount}</li>
-              <li>死亡:{popupInfo.feature.deadCount}</li>
-            </ul>
-          </Popup>
-        )}
         {data && [
           <PolygonLayer
             key={'1'}
             options={{
-              autoFit: false,
+              autoFit: true,
             }}
             source={{
-              data: filldata,
+              data,
             }}
             scale={{
               values: {
@@ -145,8 +112,21 @@ export default React.memo(function Map() {
                 },
               },
             }}
+            active={{
+              option: {
+                color: '#0c2c84',
+              },
+            }}
             color={{
-              values: '#ddd',
+              field: 'confirmedCount',
+              values: [
+                '#732200',
+                '#CC3D00',
+                '#FF6619',
+                '#FF9466',
+                '#FFC1A6',
+                '#FCE2D7',
+              ].reverse()
             }}
             shape={{
               values: 'fill',
@@ -156,15 +136,15 @@ export default React.memo(function Map() {
             }}
           />,
           <LineLayer
-            key={'3'}
+            key={'2'}
             source={{
-              data: filldata,
+              data,
             }}
             size={{
               values: 0.6,
             }}
             color={{
-              values: '#fff',
+              values: '#f00',
             }}
             shape={{
               values: 'line',
@@ -173,51 +153,9 @@ export default React.memo(function Map() {
               opacity: 1,
             }}
           />,
-          <PointLayer
-            key={'2'}
-            options={{
-              autoFit: true,
-            }}
-            source={{
-              data,
-              parser: {
-                type: 'json',
-                coordinates: 'centroid',
-              },
-            }}
-            scale={{
-              values: {
-                confirmedCount: {
-                  type: 'log',
-                },
-              },
-            }}
-            color={{
-              values: '#b10026',
-            }}
-            shape={{
-              values: 'circle',
-            }}
-            active={{
-              option: {
-                color: '#0c2c84',
-              },
-            }}
-            size={{
-              field: 'confirmedCount',
-              values: [5, 60],
-            }}
-            animate={{
-              enable: true,
-            }}
-            style={{
-              opacity: 0.6,
-            }}
-          >
-            <LayerEvent type="mousemove" handler={showPopup} />
-          </PointLayer>,
         ]}
       </MapboxScene>
     </>
   );
 });
+ReactDOM.render(<World />, document.getElementById('map'));

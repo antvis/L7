@@ -5,7 +5,7 @@ export { default as Scene } from './component/Scene';
 export * from './component/Layer';
 export { default as Control } from './component/Control';
 export { default as CustomControl } from './component/CustomControl';
-export { PolygonLayer, LineLayer, PointLayer } from './component/Layer';
+export * from './component/Layer';
 export { LayerEvent } from './component/LayerEvent';
 export { useSceneValue, SceneContext } from './component/SceneContext';
 export { useLayerValue, LayerContext } from './component/LayerContext';

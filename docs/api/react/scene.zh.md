@@ -3,6 +3,14 @@ title: Scene 组件
 order: 1
 ---
 
+## 使用
+
+在 React 版本中 Mapbox 和高德地图作为两个组件封装的。
+
+```javascript
+import { MapboxScene, AmapScene } from '@antv/l7-react';
+```
+
 ## Scene Props
 
 | prop name     | Type       | Default    | Description                            |

@@ -1,14 +1,23 @@
-import { AMapScene, Control, LineLayer } from '@antv/l7-react';
+import { AMapScene, Marker } from '@antv/l7-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+function creatMarkers() {
+  const markers = [];
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 5; j++) {
+      markers.push(<Marker key={i + '-' + j} lnglat={[112 + i, 30 + j]} />);
+    }
+  }
+  return markers;
+}
 const MapScene = React.memo(function Map() {
   return (
     <AMapScene
       map={{
-        center: [110.19382669582967, 30.258134],
+        center: [114, 32],
         pitch: 0,
         style: 'dark',
-        zoom: 1,
+        zoom: 6,
       }}
       style={{
         position: 'absolute',
@@ -18,8 +27,7 @@ const MapScene = React.memo(function Map() {
         bottom: 0,
       }}
     >
-      <Control type="scale" />
-      <Control type="zoom" />
+      {creatMarkers()}
     </AMapScene>
   );
 });

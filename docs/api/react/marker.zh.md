@@ -21,6 +21,10 @@ order: 3
 | offsets   | `Array[x,y]` | `null`  | marker 位置偏移                                                                |
 | extData   | `object`     | `null`  | marker 属性数据                                                                |
 
+## Maker 事件
+
+通过 onMarkerLoaded 方法获取 Marker 实例监听
+
 ## 实例
 
 ```jsx

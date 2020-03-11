@@ -68,7 +68,7 @@ export default React.memo(function Map() {
     const fetchData = async () => {
       const [geoData, ncovData] = await Promise.all([
         fetch(
-          'https://gw.alipayobjects.com/os/bmw-prod/36741c60-5e69-4c36-9033-d4ce42754a78.json',
+          'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
         fetch('https://lab.isaaclin.cn/nCoV/api/area?latest=1').then((d) =>
           d.json(),
@@ -118,21 +118,14 @@ export default React.memo(function Map() {
             }}
             color={{
               field: 'confirmedCount',
-              values: (count) => {
-                return count > 10000
-                  ? '#b10026'
-                  : count > 1000
-                  ? '#e31a1c'
-                  : count > 500
-                  ? '#fc4e2a'
-                  : count > 100
-                  ? '#fd8d3c'
-                  : count > 10
-                  ? '#feb24c'
-                  : count > 1
-                  ? '#fed976'
-                  : 'rgb(255,255,255)';
-              },
+              values: [
+                '#732200',
+                '#CC3D00',
+                '#FF6619',
+                '#FF9466',
+                '#FFC1A6',
+                '#FCE2D7',
+              ].reverse(),
             }}
             shape={{
               values: 'fill',

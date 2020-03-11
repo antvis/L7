@@ -1,4 +1,4 @@
 ---
 title: Scene Component
-order: 0
+order: 1
 ---

@@ -8,15 +8,7 @@ import {
   Popup,
 } from '@antv/l7-react';
 import * as React from 'react';
-const colors = [
-  '#ffffb2',
-  '#fed976',
-  '#feb24c',
-  '#fd8d3c',
-  '#fc4e2a',
-  '#e31a1c',
-  '#b10026',
-];
+import ReactDOM from 'react-dom';
 function joinData(geodata: any, ncovData: any) {
   const ncovDataObj: any = {};
   ncovData.forEach((item: any) => {
@@ -32,7 +24,7 @@ function joinData(geodata: any, ncovData: any) {
     if (countryName === '中国') {
       if (!ncovDataObj[countryName]) {
         ncovDataObj[countryName] = {
-          countryName,
+          countryName: 0,
           countryEnglishName,
           currentConfirmedCount: 0,
           confirmedCount: 0,
@@ -72,7 +64,7 @@ function joinData(geodata: any, ncovData: any) {
   return geodata;
 }
 
-export default React.memo(function Map() {
+const World = React.memo(function Map() {
   const [data, setData] = React.useState();
   const [filldata, setfillData] = React.useState();
   const [popupInfo, setPopupInfo] = React.useState<{
@@ -141,7 +133,7 @@ export default React.memo(function Map() {
           <PolygonLayer
             key={'1'}
             options={{
-              autoFit: true,
+              autoFit: false,
             }}
             source={{
               data: filldata,
@@ -201,22 +193,7 @@ export default React.memo(function Map() {
               },
             }}
             color={{
-              field: 'confirmedCount',
-              values: (count) => {
-                return count > 10000
-                  ? colors[6]
-                  : count > 1000
-                  ? colors[5]
-                  : count > 500
-                  ? colors[4]
-                  : count > 100
-                  ? colors[3]
-                  : count > 10
-                  ? colors[2]
-                  : count > 1
-                  ? colors[1]
-                  : colors[0];
-              },
+              values: '#b10026',
             }}
             shape={{
               values: 'circle',
@@ -228,41 +205,13 @@ export default React.memo(function Map() {
             }}
             size={{
               field: 'confirmedCount',
-              values: [0, 30],
+              values: [5, 60],
+            }}
+            animate={{
+              enable: true,
             }}
             style={{
               opacity: 0.6,
-            }}
-          >
-            <LayerEvent type="mousemove" handler={showPopup} />
-          </PointLayer>,
-          <PointLayer
-            key={'5'}
-            source={{
-              data,
-              parser: {
-                type: 'json',
-                coordinates: 'centroid',
-              },
-            }}
-            color={{
-              values: '#fff',
-            }}
-            shape={{
-              field: 'countryName',
-              values: 'text',
-            }}
-            filter={{
-              field: 'currentConfirmedCount',
-              values: (v) => {
-                return v > 500;
-              },
-            }}
-            size={{
-              values: 12,
-            }}
-            style={{
-              opacity: 1,
             }}
           >
             <LayerEvent type="mousemove" handler={showPopup} />
@@ -272,3 +221,4 @@ export default React.memo(function Map() {
     </>
   );
 });
+ReactDOM.render(<World />, document.getElementById('map'));

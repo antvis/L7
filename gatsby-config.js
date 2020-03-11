@@ -176,6 +176,14 @@ module.exports = {
         }
       },
       {
+        slug: 'react',
+        icon: 'map',
+        title: {
+          zh: 'React 组件',
+          en: 'React Demo'
+        }
+      },
+      {
         slug: 'point',
         icon: 'point',
         title: {
@@ -214,14 +222,6 @@ module.exports = {
         title: {
           zh: '栅格图层',
           en: 'Raster Layer'
-        }
-      },
-      {
-        slug: 'react',
-        icon: 'map',
-        title: {
-          zh: 'React 组件',
-          en: 'React Demo'
         }
       },
       {

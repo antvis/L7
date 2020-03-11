@@ -1,6 +1,8 @@
 import {
+  CityBuildingLayer,
   HeatmapLayer,
   ILayer,
+  ImageLayer,
   LineLayer,
   PointLayer,
   PolygonLayer,
@@ -61,6 +63,12 @@ export default function BaseLayer(type: string, props: ILayerProps) {
       case 'rasterLayer':
         l = new RasterLayer(options);
         break;
+      case 'imageLayer':
+        l = new ImageLayer(options);
+        break;
+      case 'citybuildingLayer':
+        l = new CityBuildingLayer(options);
+        break;
       default:
         l = new PolygonLayer(options);
     }
@@ -115,9 +123,9 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />
       {scale && <Scale layer={layer} scale={scale} />}
-      <Color layer={layer} color={color} />
+      {color && <Color layer={layer} color={color} />}
       {size && <Size layer={layer} size={size} />}
-      <Shape layer={layer} shape={shape} />
+      {shape && <Shape layer={layer} shape={shape} />}
       {style && <Style layer={layer} style={style} />}
       {active && <Active layer={layer} active={active} />}
       {select && <Select layer={layer} select={select} />}
