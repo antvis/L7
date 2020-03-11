@@ -12,6 +12,7 @@ import { LayerContext } from '../LayerContext';
 import { useSceneValue } from '../SceneContext';
 import {
   Active,
+  Animate,
   Color,
   Filter,
   ILayerProps,
@@ -36,6 +37,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     active,
     select,
     filter,
+    animate,
     options,
     onLayerLoaded,
   } = props;
@@ -120,6 +122,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
       {active && <Active layer={layer} active={active} />}
       {select && <Select layer={layer} select={select} />}
       {filter && <Filter layer={layer} filter={filter} />}
+      {animate && <Animate layer={layer} animate={animate} />}
       {/* LayerContext主要传入LayerEvent组件 */}
       {props.children}
     </LayerContext.Provider>

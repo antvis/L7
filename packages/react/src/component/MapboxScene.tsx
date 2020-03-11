@@ -40,7 +40,7 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
     if (scene && map.style) {
       scene.setMapStyle(map.style);
     }
-  }, [map.style]);
+  }, [JSON.stringify(map.style)]);
 
   useEffect(() => {
     if (scene && map.zoom) {
@@ -52,7 +52,7 @@ const MapboxScene = React.memo((props: IMapSceneConig) => {
     if (scene && map.center) {
       scene.setCenter(map.center);
     }
-  }, [map.center]);
+  }, [JSON.stringify(map.center)]);
   useEffect(() => {
     if (scene && map.pitch) {
       scene.setPitch(map.pitch);
