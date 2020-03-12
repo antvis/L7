@@ -145,7 +145,7 @@ const World = React.memo(function Map() {
               values: 0.6,
             }}
             color={{
-              values: '#f00', // 描边颜色
+              values: '#aaa', // 描边颜色
             }}
             shape={{
               values: 'line',
