@@ -93,6 +93,7 @@ export default class Marker extends EventEmitter {
     if (this.popup) {
       this.popup.setLnglat(this.lngLat);
     }
+    this.update();
     return this;
   }
 

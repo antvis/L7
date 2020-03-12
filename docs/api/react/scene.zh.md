@@ -13,13 +13,13 @@ import { MapboxScene, AmapScene } from '@antv/l7-react';
 
 ## Scene Props
 
-| prop name     | Type       | Default    | Description                            |
-| ------------- | ---------- | ---------- | -------------------------------------- |
-| style         | `Object`   | `null`     | scene css 样式                         |
-| className     | `string`   | `null`     | 样式名称                               |
-| map           | `Object`   | `Required` | map option [地图配置项]()              |
-| option        | `Object`   | `void`     | scene option 配置项 [详情](#map-props) |
-| onSceneLoaded | `Function` | `void`     | scene 加载回调函数                     |
+| prop name     | Type           | Default    | Description                            |
+| ------------- | -------------- | ---------- | -------------------------------------- |
+| style         | `Object`       | `null`     | scene css 样式                         |
+| className     | `string`       | `null`     | 样式名称                               |
+| map           | `map option`   | `Required` | map option [地图配置项]()              |
+| option        | `scene option` | `void`     | scene option 配置项 [详情](#map-props) |
+| onSceneLoaded | `Function`     | `void`     | scene 加载回调函数                     |
 
 ### 高德地图场景
 

@@ -90,6 +90,7 @@ const World = React.memo(function Map() {
         }}
         style={{
           position: 'absolute',
+          background:'#fff', // 地图背景色
           top: 0,
           left: 0,
           right: 0,
@@ -118,7 +119,7 @@ const World = React.memo(function Map() {
               },
             }}
             color={{
-              field: 'confirmedCount',
+              field: 'confirmedCount', // 填充颜色
               values: [
                 '#732200',
                 '#CC3D00',
@@ -144,7 +145,7 @@ const World = React.memo(function Map() {
               values: 0.6,
             }}
             color={{
-              values: '#f00',
+              values: '#f00', // 描边颜色
             }}
             shape={{
               values: 'line',
