@@ -264,6 +264,8 @@ const World = React.memo(function Map() {
             }}
             style={{
               opacity: 1,
+              strokeOpacity: 0,
+              strokeWidth: 0,
             }}
           >
             <LayerEvent type="mousemove" handler={showPopup} />
