@@ -1,4 +1,4 @@
 ---
 title: Control Component
-order: 0
+order: 3
 ---

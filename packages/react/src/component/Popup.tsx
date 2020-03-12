@@ -39,10 +39,14 @@ export default class PopupComponet extends React.PureComponent<IPopupProps> {
 
   public componentDidUpdate(prevProps: IPopupProps) {
     const positionChanged =
-      prevProps?.lnglat.toString() !== this.props?.lnglat.toString();
+      prevProps?.lnglat?.toString() !== this.props?.lnglat?.toString();
 
     if (positionChanged) {
+      this.popup.remove();
+      this.popup = new Popup(this.props.option);
       this.popup.setLnglat(this.props.lnglat);
+      this.popup.setDOMContent(this.el);
+      this.scene.addPopup(this.popup);
     }
   }
 

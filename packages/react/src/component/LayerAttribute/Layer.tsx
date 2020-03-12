@@ -1,6 +1,8 @@
 import {
+  CityBuildingLayer,
   HeatmapLayer,
   ILayer,
+  ImageLayer,
   LineLayer,
   PointLayer,
   PolygonLayer,
@@ -12,6 +14,7 @@ import { LayerContext } from '../LayerContext';
 import { useSceneValue } from '../SceneContext';
 import {
   Active,
+  Animate,
   Color,
   Filter,
   ILayerProps,
@@ -36,6 +39,7 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     active,
     select,
     filter,
+    animate,
     options,
     onLayerLoaded,
   } = props;
@@ -58,6 +62,12 @@ export default function BaseLayer(type: string, props: ILayerProps) {
         break;
       case 'rasterLayer':
         l = new RasterLayer(options);
+        break;
+      case 'imageLayer':
+        l = new ImageLayer(options);
+        break;
+      case 'citybuildingLayer':
+        l = new CityBuildingLayer(options);
         break;
       default:
         l = new PolygonLayer(options);
@@ -113,13 +123,14 @@ export default function BaseLayer(type: string, props: ILayerProps) {
     <LayerContext.Provider value={layer}>
       <Source layer={layer} source={source} />
       {scale && <Scale layer={layer} scale={scale} />}
-      <Color layer={layer} color={color} />
+      {color && <Color layer={layer} color={color} />}
       {size && <Size layer={layer} size={size} />}
-      <Shape layer={layer} shape={shape} />
+      {shape && <Shape layer={layer} shape={shape} />}
       {style && <Style layer={layer} style={style} />}
       {active && <Active layer={layer} active={active} />}
       {select && <Select layer={layer} select={select} />}
       {filter && <Filter layer={layer} filter={filter} />}
+      {animate && <Animate layer={layer} animate={animate} />}
       {/* LayerContext主要传入LayerEvent组件 */}
       {props.children}
     </LayerContext.Provider>

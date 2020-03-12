@@ -26,6 +26,8 @@ interface IPointTextLayerStyleOptions {
   spacing: number;
   padding: [number, number];
   stroke: string;
+  halo: number;
+  gamma: number;
   strokeWidth: number;
   strokeOpacity: number;
   fontWeight: string;
@@ -103,10 +105,13 @@ export default class TextModel extends BaseModel {
       strokeOpacity = 1,
       textAnchor = 'center',
       textAllowOverlap = false,
+      halo = 0.5,
+      gamma = 2.0,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
       this.updateTexture();
+      this.textCount = Object.keys(mapping).length;
     }
     this.preTextStyle = {
       textAnchor,
@@ -117,7 +122,8 @@ export default class TextModel extends BaseModel {
       u_stroke_opacity: strokeOpacity,
       u_sdf_map: this.texture,
       u_stroke: rgb2arr(stroke),
-      u_halo_blur: 0.5,
+      u_halo_blur: halo,
+      u_gamma_scale: gamma,
       u_sdf_map_size: [canvas.width, canvas.height],
       u_strokeWidth: strokeWidth,
     };
@@ -292,11 +298,13 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '', coordinates, id } = feature;
+      const { shape = '', coordinates, id, size = 1 } = feature;
+
       const shaping = shapeText(
         shape.toString(),
         mapping,
-        24,
+        // @ts-ignore
+        size,
         textAnchor,
         'center',
         spacing,
@@ -374,6 +382,8 @@ export default class TextModel extends BaseModel {
     this.textureHeight = canvas.height;
     this.texture = createTexture2D({
       data: canvas,
+      mag: gl.LINEAR,
+      min: gl.LINEAR,
       width: canvas.width,
       height: canvas.height,
     });
