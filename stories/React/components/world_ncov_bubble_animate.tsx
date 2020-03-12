@@ -211,7 +211,7 @@ export default React.memo(function Map() {
               enable: true,
             }}
             style={{
-              opacity: 0.6,
+              opacity: 1.0,
             }}
           >
             <LayerEvent type="mousemove" handler={showPopup} />

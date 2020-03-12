@@ -143,7 +143,7 @@ export default React.memo(function Map() {
               values: 0.6,
             }}
             color={{
-              values: '#f00',
+              values: '#aaa',
             }}
             shape={{
               values: 'line',
