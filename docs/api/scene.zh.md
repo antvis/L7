@@ -347,6 +347,14 @@ scene.removeLayer(layer);
 
 - `layer` {Layer}
 
+### exportMap
+
+导出地图，目前仅支持导出可视化层，不支持底图导出
+
+- 参数 type `png|jpg` 默认png
+
+scene.exportMap('png')
+
 ## 事件
 
 ### on

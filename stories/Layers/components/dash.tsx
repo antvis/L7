@@ -1,5 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox, GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class DashLineDemo extends React.Component {
