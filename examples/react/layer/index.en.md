@@ -1,4 +1,4 @@
 ---
 title: Layer Component
-order: 0
+order: 2
 ---

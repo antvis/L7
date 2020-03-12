@@ -41,13 +41,13 @@ export default class TextLayerDemo extends React.Component {
       })
       .shape('s', 'text')
       // .shape('circle')
-      .size(24)
+      .size(8)
       .filter('t', (t) => {
-        return t > 18;
+        return t < 5;
       })
-      .color('#fff')
+      .color('#f00')
       .style({
-        textAllowOverlap: true,
+        textAllowOverlap: false,
         // fontWeight: 200,
         // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
         // textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
@@ -64,16 +64,19 @@ export default class TextLayerDemo extends React.Component {
     this.gui = gui;
     const styleOptions = {
       field: 'w',
-      strokeWidth: 1,
+      strokeWidth: 0,
+      stroke: '#fff',
       textAllowOverlap: false,
       opacity: 1,
-      color: '#ffffff',
+      size: 8,
+      color: '#fff',
+      halo: 0.5,
+      gamma: 2.0,
     };
     const rasterFolder = gui.addFolder('文本可视化');
     rasterFolder
       .add(styleOptions, 'field', ['w', 's', 'l', 'm', 'j', 'h'])
       .onChange((anchor: string) => {
-        console.log(anchor);
         pointLayer.shape(anchor, 'text');
         scene.render();
       });
@@ -81,12 +84,34 @@ export default class TextLayerDemo extends React.Component {
     rasterFolder
       .add(styleOptions, 'strokeWidth', 0, 10)
       .onChange((strokeWidth: number) => {
-        pointLayer.filter('t', (t: number) => {
-          return t > strokeWidth;
+        pointLayer.style({
+          strokeWidth,
         });
         // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
         scene.render();
       });
+
+    rasterFolder.add(styleOptions, 'size', 5, 30).onChange((size: number) => {
+      pointLayer.size(size);
+      // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+      scene.render();
+    });
+
+    rasterFolder.add(styleOptions, 'gamma', 0, 10).onChange((gamma: number) => {
+      pointLayer.style({
+        gamma,
+      });
+      // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+      scene.render();
+    });
+
+    rasterFolder.add(styleOptions, 'halo', 0, 10).onChange((halo: number) => {
+      pointLayer.style({
+        halo,
+      });
+      // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+      scene.render();
+    });
     rasterFolder
       .add(styleOptions, 'textAllowOverlap', 0, 10)
       .onChange((textAllowOverlap: boolean) => {

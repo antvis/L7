@@ -1,6 +1,7 @@
 import {
   BlendType,
   IActiveOption,
+  IAnimateOption,
   ILayer,
   IScale,
   IScaleOptions,
@@ -9,6 +10,7 @@ import {
 } from '@antv/l7';
 import * as React from 'react';
 import Active from './Active';
+import Animate from './Animate';
 import Color from './Color';
 import Filter from './Filter';
 import Scale from './Scale';
@@ -74,8 +76,20 @@ export interface ILayerProps {
   active?: IActiveOptions;
   select?: IActiveOptions;
   filter?: Partial<IAttributeOptions>;
+  animate?: Partial<IAnimateOption>;
   onLayerLoaded?: (layer: ILayer, scene: Scene) => void;
   children?: React.ReactNode;
 }
 
-export { Active, Color, Filter, Source, Size, Shape, Style, Scale, Select };
+export {
+  Active,
+  Color,
+  Filter,
+  Source,
+  Size,
+  Shape,
+  Style,
+  Scale,
+  Select,
+  Animate,
+};

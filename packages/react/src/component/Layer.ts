@@ -30,4 +30,24 @@ const RasterLayer = React.memo(function Layer(
   return BaseLayer('rasterLayer', props);
 });
 
-export { PolygonLayer, LineLayer, PointLayer, HeatMapLayer, RasterLayer };
+const ImageLayer = React.memo(function Layer(
+  props: ILayerProps & { children?: any },
+) {
+  return BaseLayer('imagelayer', props);
+});
+
+const CityBuildingLayer = React.memo(function Layer(
+  props: ILayerProps & { children?: any },
+) {
+  return BaseLayer('citybuildinglayer', props);
+});
+
+export {
+  PolygonLayer,
+  LineLayer,
+  PointLayer,
+  HeatMapLayer,
+  RasterLayer,
+  ImageLayer,
+  CityBuildingLayer,
+};

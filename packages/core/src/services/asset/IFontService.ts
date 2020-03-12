@@ -37,12 +37,19 @@ export interface IFontAtlas {
   width: number;
   height: number;
 }
+export interface IIconFontGlyph {
+  name: string;
+  unicode: string;
+  [key: string]: any;
+}
 export interface IFontService {
   mapping: IFontMapping;
   fontAtlas: IFontAtlas;
   canvas: HTMLCanvasElement;
   scale: number;
   init(): void;
+  addIconGlyphs(glyphs: IIconFontGlyph[]): void;
+  getGlyph(name: string): string;
   setFontOptions(option: Partial<IFontOptions>): void;
   destroy(): void;
 }

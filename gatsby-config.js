@@ -83,7 +83,7 @@ module.exports = {
           zh: 'React 组件',
           en: 'react component'
         },
-        order: 6
+        order: 2
       },
       {
         slug: 'api/layer',
@@ -91,7 +91,7 @@ module.exports = {
           zh: '图层 Layer',
           en: 'Layer'
         },
-        order: 3
+        order: 4
       },
       {
         slug: 'api/layer/point_layer',
@@ -155,7 +155,7 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source'
         },
-        order: 4
+        order: 5
       },
       {
         slug: 'api/component',
@@ -163,7 +163,7 @@ module.exports = {
           zh: '组件 Component',
           en: 'Component'
         },
-        order: 5
+        order: 6
       }
     ],
     examples: [
@@ -173,6 +173,14 @@ module.exports = {
         title: {
           zh: '官方精品库',
           en: 'Featured'
+        }
+      },
+      {
+        slug: 'react',
+        icon: 'map',
+        title: {
+          zh: 'React 组件',
+          en: 'React Demo'
         }
       },
       {
@@ -214,14 +222,6 @@ module.exports = {
         title: {
           zh: '栅格图层',
           en: 'Raster Layer'
-        }
-      },
-      {
-        slug: 'react',
-        icon: 'map',
-        title: {
-          zh: 'React 组件',
-          en: 'React Demo'
         }
       },
       {
