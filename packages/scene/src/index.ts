@@ -107,6 +107,10 @@ class Scene
     return this.sceneService.exportPng(type);
   }
 
+  public exportMap(type?: 'png' | 'jpg'): string {
+    return this.sceneService.exportPng(type);
+  }
+
   public get map() {
     return this.mapService.map;
   }
