@@ -62,7 +62,6 @@ function joinData(geodata: any, ncovData: any) {
   });
   return geodata;
 }
-
 const World = React.memo(function Map() {
   const [data, setData] = React.useState();
   const [filldata, setfillData] = React.useState();

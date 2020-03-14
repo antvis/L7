@@ -1,5 +1,5 @@
 ---
-title: 地图 Map
+title: Map
 order: 2
 ---
 

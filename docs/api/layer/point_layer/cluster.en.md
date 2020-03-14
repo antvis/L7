@@ -1,5 +1,5 @@
 ---
-title: 聚合图
+title: Cluster Map
 order: 5
 ---
 ## 使用

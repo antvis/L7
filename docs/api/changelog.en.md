@@ -7,21 +7,22 @@ order: 10
 
 ###✨ Features
 
-•  新增 l7-react 版本
-• 可自定义样式的聚合图 MakerLayer
-• 新增 quantile、quantize 度量
-• 地图导出功能
+-  新增 l7-react 版本
+-  可自定义样式的聚合图 MakerLayer
+-  新增 quantile、quantize 度量
+-  地图导出功能
 
 ### 🍏 Improvements
 
-• IE 11 支持
-• 更新拾取机制，拾取更高效
-• 优化依赖包减少包体积
+-  IE 11 支持
+-  更新拾取机制，拾取更高效
+-  优化依赖包减少包体积
 
 ### 🐞 Bug Fixes
 
-• setData 更新机制
-• color,size,shape 更新重绘问题
+- setData 更新机制
+- color,size,shape 更新重绘问题
+
 
 ## 2020.01.06 2.0 正式版
 
