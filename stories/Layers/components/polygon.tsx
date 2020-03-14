@@ -111,7 +111,10 @@ export default class TextLayerDemo extends React.Component {
       }),
     });
     scene.on('loaded', () => {
-      const layer = new PolygonLayer({})
+      const layer = new PolygonLayer({
+        minZoom: 3,
+        maxZoom: 7,
+      })
         .source(data)
         .shape('fill')
         .color('childrenNum', [
@@ -128,6 +131,9 @@ export default class TextLayerDemo extends React.Component {
           opacity: 1.0,
         });
       scene.addLayer(layer);
+      layer.on('click', (e) => {
+        console.log(e);
+      });
       this.scene = scene;
 
       const gui = new dat.GUI();

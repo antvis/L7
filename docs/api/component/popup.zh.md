@@ -99,6 +99,7 @@ popup.open();
 ```javascript
 popup.close();
 ```
+
 #### remove
 
 移除 popup
