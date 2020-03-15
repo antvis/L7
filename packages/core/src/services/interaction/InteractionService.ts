@@ -61,6 +61,7 @@ export default class InteractionService extends EventEmitter
       // hammertime.on('panmove', this.onPanmove);
       // hammertime.on('panend', this.onPanend);
       // hammertime.on('pinch', this.onPinch);
+      $containter.addEventListener('touchstart', this.onTouch);
       $containter.addEventListener('mousemove', this.onHover);
       $containter.addEventListener('click', this.onHover);
       $containter.addEventListener('mousedown', this.onHover);
@@ -85,6 +86,15 @@ export default class InteractionService extends EventEmitter
       $containter.removeEventListener('contextmenu', this.onHover);
     }
   }
+  private onTouch = (target: TouchEvent) => {
+    const touch = target.touches[0];
+    // @ts-ignore
+    this.onHover({
+      x: touch.pageX,
+      y: touch.pageY,
+      type: 'touch',
+    });
+  };
 
   private onHover = ({ x, y, type }: MouseEvent) => {
     const $containter = this.mapService.getMapContainer();
@@ -120,7 +130,9 @@ export default class InteractionService extends EventEmitter
       }
       return;
     }
-
+    if (type === 'touch') {
+      type = 'click';
+    }
     this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
   };
 }

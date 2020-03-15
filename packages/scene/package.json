@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-scene",
-  "version": "2.0.36",
+  "version": "2.1.0",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,10 +22,10 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-component": "^2.0.36",
-    "@antv/l7-core": "^2.0.36",
-    "@antv/l7-maps": "^2.0.36",
-    "@antv/l7-renderer": "^2.0.36",
+    "@antv/l7-component": "^2.1.0",
+    "@antv/l7-core": "^2.1.0",
+    "@antv/l7-maps": "^2.1.0",
+    "@antv/l7-renderer": "^2.1.0",
     "@antv/l7-utils": "^2.0.36",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
