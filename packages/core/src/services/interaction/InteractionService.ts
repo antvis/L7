@@ -3,7 +3,7 @@ import Hammer from 'hammerjs';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { ILogService } from '../log/ILogService';
-import { IMapService } from '../map/IMapService';
+import { ILngLat, IMapService } from '../map/IMapService';
 import { IInteractionService, InteractionEvent } from './IInteractionService';
 /**
  * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
@@ -79,6 +79,7 @@ export default class InteractionService extends EventEmitter
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       $containter.removeEventListener('mousemove', this.onHover);
+      $containter.removeEventListener('touchstart', this.onTouch);
       $containter.removeEventListener('click', this.onHover);
       $containter.removeEventListener('mousedown', this.onHover);
       $containter.removeEventListener('mouseup', this.onHover);
@@ -106,33 +107,42 @@ export default class InteractionService extends EventEmitter
     const lngLat = this.mapService.containerToLngLat([x, y]);
 
     if (type === 'click') {
-      const nowTime = new Date().getTime();
-      if (
-        nowTime - this.lastClickTime < 500 &&
-        Math.abs(this.lastClickXY[0] - x) < 10 &&
-        Math.abs(this.lastClickXY[1] - y) < 10
-      ) {
-        this.lastClickTime = 0;
-        this.lastClickXY = [-1, -1];
-        if (this.clickTimer) {
-          clearTimeout(this.clickTimer);
-        }
-        type = 'dblclick';
-        this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
-      } else {
-        this.lastClickTime = nowTime;
-        this.lastClickXY = [x, y];
-        // @ts-ignore
-        this.clickTimer = setTimeout(() => {
-          type = 'click';
-          this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
-        }, 500);
+      if ('ontouchstart' in document.documentElement === true) {
+        return;
       }
+      this.isDoubleTap(x, y, lngLat);
       return;
     }
     if (type === 'touch') {
-      type = 'click';
+      this.isDoubleTap(x, y, lngLat);
+      return;
     }
     this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
   };
+
+  private isDoubleTap(x: number, y: number, lngLat: ILngLat) {
+    const nowTime = new Date().getTime();
+    let type = 'click';
+    if (
+      nowTime - this.lastClickTime < 500 &&
+      Math.abs(this.lastClickXY[0] - x) < 10 &&
+      Math.abs(this.lastClickXY[1] - y) < 10
+    ) {
+      this.lastClickTime = 0;
+      this.lastClickXY = [-1, -1];
+      if (this.clickTimer) {
+        clearTimeout(this.clickTimer);
+      }
+      type = 'dblclick';
+      this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+    } else {
+      this.lastClickTime = nowTime;
+      this.lastClickXY = [x, y];
+      // @ts-ignore
+      this.clickTimer = setTimeout(() => {
+        type = 'click';
+        this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+      }, 500);
+    }
+  }
 }
