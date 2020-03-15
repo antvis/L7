@@ -26,6 +26,8 @@ const EventMap: {
 } = {
   mapmove: 'move',
   camerachange: 'move',
+  zoomChange: 'zoom',
+  dragging: 'drag',
 };
 import { MapTheme } from './theme';
 

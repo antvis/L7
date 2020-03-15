@@ -106,15 +106,12 @@ export default class TextLayerDemo extends React.Component {
       map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
-        style: 'dark',
-        zoom: 3,
+        style: 'blank',
+        zoom: 0,
       }),
     });
     scene.on('loaded', () => {
-      const layer = new PolygonLayer({
-        minZoom: 3,
-        maxZoom: 7,
-      })
+      const layer = new PolygonLayer({})
         .source(data)
         .shape('fill')
         .color('childrenNum', [

@@ -5,8 +5,6 @@ order: 2
 
 # 简介
 
-## Scene
-
 ```javascript
 // Module 引用
 import { Scene } from '@antv/l7';
@@ -101,7 +99,7 @@ L7 Logo 的显示位置 默认左下角
 
 ### zoom
 
-地图初始显示级别 {number} （0-22）
+地图初始显示级别 {number} Mapbox （0-24） 高德 （3-18）
 
 ### center
 
@@ -134,11 +132,11 @@ L7 Logo 的显示位置 默认左下角
 
 ### minZoom
 
-地图最小缩放等级 {number}  default 0 (0-22)
+地图最小缩放等级 {number}  default 0 Mapbox 0-24） 高德 （3-18）
 
 ### maxZoom
 
-地图最大缩放等级 {number}  default 22 (0-22)
+地图最大缩放等级 {number}  default 22 Mapbox（0-24） 高德 （3-18）
 
 ### rotateEnable
 
@@ -401,6 +399,11 @@ scene.on('zoomchange', () => {}); // 地图缩放级别更改后触发
 scene.on('zoomstart', () => {}); // 缩放开始时触发
 scene.on('zoomend', () => {}); // 缩放停止时触发
 ```
+
+其他地图事件可以查看相应底图的事件文档,地图事件也可以通过 Scene.map 进行设置
+
+[Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/#map.event)
+[高德](https://lbs.amap.com/api/javascript-api/reference/map)
 
 ### 鼠标事件
 

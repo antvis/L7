@@ -38,11 +38,15 @@ scene.addLayer(layer);
 
 ### minZoom
 
-图层显示最小缩放等级，（0-18）   {number}  default 0
+图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （3-18）
 
 ### maxZoom
 
-图层显示最大缩放等级 （0-18）   {number}  default 18
+图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （3-18）
+
+### autoFit
+
+layer 初始化完成之后，是否自动缩放到图层范围 {bool } default false
 
 ### blend
 

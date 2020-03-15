@@ -23,7 +23,7 @@
   </head>
   <body>
     <div id="map"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>-->
      <!-- <script src="https://cdn.jsdelivr.net/npm/symbol-es6@0.1.2/symbol-es6.min.js"></script> -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
 
@@ -88,12 +88,21 @@
       const scene = new L7.Scene({
         id: "map",
         map: new L7.Mapbox({
-          style: "dark", // 样式URL
+          style: "blank", // 样式URL
           center: [ -96, 37.8 ],
           zoom: 3,
           pitch: 0,
         })
       });
+   document.body.addEventListener('touchstart', ()=>{
+     //alert('touchstart!');
+   });
+
+    document.body.addEventListener('click', ()=>{
+     // alert('Click!');
+   });
+
+  scene.on('loaded',()=>{
  const color = [ 'rgb(255,255,217)', 'rgb(237,248,177)', 'rgb(199,233,180)', 'rgb(127,205,187)', 'rgb(65,182,196)', 'rgb(29,145,192)', 'rgb(34,94,168)', 'rgb(12,44,132)' ];
      const layer = new L7.PolygonLayer({})
       .source(data)
@@ -114,7 +123,14 @@
       .style({
         opacity: 1.0
       });
-          scene.addLayer(layer);
+      scene.addLayer(layer);
+      layer.on('click',()=>{
+        console.log('click')
+      })
+      layer.on('dblclick',()=>{
+        console.log('dblclickww')
+      })
+ })
     </script>
   </body>
 </html>

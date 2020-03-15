@@ -10,9 +10,10 @@ const scene = new Scene({
     zoom: 4
   })
 });
-addMarkers();
-scene.render();
-
+scene.on('loaded', () => {
+  addMarkers();
+  scene.render();
+});
 function addMarkers() {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json'

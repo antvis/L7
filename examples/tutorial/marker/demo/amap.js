@@ -9,13 +9,15 @@ const scene = new Scene({
     zoom: 12.056
   })
 });
+scene.on('loaded', () => {
 // 创建默认 marker
-const popup = new Popup({
-  offsets: [ 0, 20 ]
-}).setText('hello');
+  const popup = new Popup({
+    offsets: [ 0, 20 ]
+  }).setText('hello');
 
-const marker = new Marker()
-  .setLnglat([ 121.4316962, 31.26082325 ])
-  .setPopup(popup);
+  const marker = new Marker()
+    .setLnglat([ 121.4316962, 31.26082325 ])
+    .setPopup(popup);
 
-scene.addMarker(marker);
+  scene.addMarker(marker);
+});

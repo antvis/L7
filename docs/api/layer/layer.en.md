@@ -38,11 +38,15 @@ scene.addLayer(layer);
 
 ### minZoom
 
-图层显示最小缩放等级，（0-18）   {number}  default 0
+图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （3-18）
 
 ### maxZoom
 
-图层显示最大缩放等级 （0-18）   {number}  default 18
+图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （3-18）
+
+### autoFit
+
+layer 初始化完成之后，是否自动缩放到图层范围 {bool } default false
 
 ### blend
 
@@ -67,7 +71,7 @@ scene.addLayer(layer);
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换 可设置多个
 
-parser 和  transforms [见 source 文档](https://www.yuque.com/antv/l7/source)
+parser 和  transforms [见 source 文档](../source/source)
 
 ```javascript
 layer.source(data, {
@@ -100,20 +104,46 @@ layer.source(data, {
 
 ### scale
 
-scale('field', scaleConfig)
-
-(field: string, scaleConfig: object)
-
-为指定的数据字段进行列定义，返回 layer 实例。
+设置数据字段映射方法
 
 - `field` 字段名。
 
 - `scaleConfig` 列定义配置，对象类型，可配置的属性如下：
 
+#### scale 类型
+
+**连续型**
+
+- linear 线性
+- log
+- pow 指数型
+
+**连续分类型**
+
+- quantile 等分位
+- quantize 等间距
+
+**枚举型**
+
+- cat 枚举
+
 ```javascript
-{
-  type: 'linear'; // 指定数据类型，可声明的类型为：identity、linear、cat、time、timeCat、log、pow,  quantile,quantize
-}
+layer.scale('name', {
+  type: 'cat',
+});
+
+// 设置多个scale
+
+// 字段名为 key, value 为scale配置项
+
+layer.scale({
+  name: {
+    type: 'cat',
+  },
+  value: {
+    type: 'linear',
+  },
+});
 ```
 
 ## 视觉编码方法
