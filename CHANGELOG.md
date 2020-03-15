@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+### Bug Fixes
+
+- ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+- ios touchstart && double touch ([4fc3a11](https://github.com/antvis/L7/commit/4fc3a11de953918a9f5ba13d767c00429d1711cd))
+- mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+- mapbox 光照问题 ([88aa585](https://github.com/antvis/L7/commit/88aa585c2a8339f6eb7518a92e5544733ba356e3))
+- update demo style ([c1960b5](https://github.com/antvis/L7/commit/c1960b50ef3e3d3aed6eb0f1934515678c2dbde8))
+- 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
 ## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
 
 ### Bug Fixes
