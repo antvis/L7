@@ -10,30 +10,31 @@ const scene = new Scene({
     zoom: 14.78
   })
 });
-
-fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
-  .then(res => res.json())
-  .then(data => {
-    const layer = new LineLayer({})
-      .source(data)
-      .size('ELEV', h => {
-        return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 20 ];
-      })
-      .shape('line')
-      .scale('ELEV', {
-        type: 'quantize'
-      })
-      .color('ELEV', [
-        '#094D4A',
-        '#146968',
-        '#1D7F7E',
-        '#289899',
-        '#34B6B7',
-        '#4AC5AF',
-        '#5FD3A6',
-        '#7BE39E',
-        '#A1EDB8',
-        '#CEF8D6'
-      ]);
-    scene.addLayer(layer);
-  });
+scene.on('loaded', () => {
+  fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
+    .then(res => res.json())
+    .then(data => {
+      const layer = new LineLayer({})
+        .source(data)
+        .size('ELEV', h => {
+          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 20 ];
+        })
+        .shape('line')
+        .scale('ELEV', {
+          type: 'quantize'
+        })
+        .color('ELEV', [
+          '#094D4A',
+          '#146968',
+          '#1D7F7E',
+          '#289899',
+          '#34B6B7',
+          '#4AC5AF',
+          '#5FD3A6',
+          '#7BE39E',
+          '#A1EDB8',
+          '#CEF8D6'
+        ]);
+      scene.addLayer(layer);
+    });
+});

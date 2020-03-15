@@ -1,5 +1,5 @@
 ---
-title: 本地运行demo
+title: Local demo
 order: 1
 ---
 

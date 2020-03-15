@@ -94,23 +94,7 @@ popup.open();
 
 #### close
 
-显示 popup
-
-```javascript
-popup.close();
-```
-
-#### open
-
-显示 popup
-
-```javascript
-popup.open();
-```
-
-#### close
-
-显示 popup
+关闭 popup
 
 ```javascript
 popup.close();

@@ -11,7 +11,9 @@ const scene = new Scene({
     zoom: 3
   })
 });
-addLayer();
+scene.on('loaded', () => {
+  addLayer();
+});
 async function getTiffData() {
   const response = await fetch(
     'https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF182013.tiff'
