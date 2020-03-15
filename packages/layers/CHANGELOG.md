@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+
+### Bug Fixes
+
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+* 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
+
+
+
+
 ## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
 
 **Note:** Version bump only for package @antv/l7-layers
