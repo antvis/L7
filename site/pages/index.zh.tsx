@@ -96,9 +96,9 @@ const IndexPage = () => {
     },
     {
       type: t('新版发布'),
-      title: t('L7 2.0 正式版'),
-      date: '2020.01.06',
-      link: 'https://www.yuque.com/antv/blog/haygzb',
+      title: t('L7 2.1 正式版'),
+      date: '2020.03.12',
+      link: ' https://www.yuque.com/antv/blog/ows55v',
     },
   ];
 

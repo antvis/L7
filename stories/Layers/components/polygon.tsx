@@ -106,8 +106,8 @@ export default class TextLayerDemo extends React.Component {
       map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
-        style: 'dark',
-        zoom: 3,
+        style: 'blank',
+        zoom: 0,
       }),
     });
     scene.on('loaded', () => {
@@ -128,6 +128,9 @@ export default class TextLayerDemo extends React.Component {
           opacity: 1.0,
         });
       scene.addLayer(layer);
+      layer.on('click', (e) => {
+        console.log(e);
+      });
       this.scene = scene;
 
       const gui = new dat.GUI();

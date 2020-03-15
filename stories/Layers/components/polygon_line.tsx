@@ -31,7 +31,7 @@ export default class World extends React.Component {
       id: 'map',
       logoVisible: false,
       map: new Mapbox({
-        style: 'light',
+        style: 'blank',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 0,

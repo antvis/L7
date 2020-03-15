@@ -841,7 +841,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         name !== 'inited' && name !== 'add' && name !== 'remove' && 'dataupdate' // 非拾取事件排除
       );
     });
-    return eventNames.length > 0 || enableHighlight || enableSelect;
+    const flag = eventNames.length > 0 || enableHighlight || enableSelect;
+    return this.isVisible() && flag;
   }
 
   public buildModels() {

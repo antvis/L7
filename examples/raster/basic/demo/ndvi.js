@@ -11,8 +11,9 @@ const scene = new Scene({
     zoom: 3
   })
 });
-addLayer();
-
+scene.on('loaded', () => {
+  addLayer();
+});
 // async function getAllYearData() {
 //   const allData = [];
 //   for (let i = 1; i < 13; i++) {

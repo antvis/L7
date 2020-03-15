@@ -3,8 +3,6 @@ title: PointLayer
 order: 0
 ---
 
-# PointLayer
-
 ## 简介
 
 点数据的展示，数据源支持 JSON,GeoJSON,CSV 三种数据格式。
