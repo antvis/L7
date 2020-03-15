@@ -140,7 +140,6 @@ export default class PickingService implements IPickingService {
       useFramebuffer,
     } = this.rendererService;
     const { width, height } = getViewportSize();
-
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
     const xInDevicePixel = x * window.devicePixelRatio;

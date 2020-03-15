@@ -9,8 +9,9 @@ const scene = new Scene({
     zoom: 4.056
   })
 });
-
-const zoomControl = new Zoom();
-const scaleControl = new Scale();
-scene.addControl(zoomControl);
-scene.addControl(scaleControl);
+scene.on('loaded', () => {
+  const zoomControl = new Zoom();
+  const scaleControl = new Scale();
+  scene.addControl(zoomControl);
+  scene.addControl(scaleControl);
+});
