@@ -12,50 +12,52 @@ export default class Point3D extends React.Component {
   }
 
   public async componentDidMount() {
-    const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
-    );
-    const pointsData = await response.json();
-
     const scene = new Scene({
-      id: document.getElementById('map') as HTMLDivElement,
+      id: 'map',
       map: new GaodeMap({
-        center: [120.19382669582967, 30.258134],
+        style: 'light',
+        center: [-121.24357, 37.58264],
         pitch: 0,
-        style: 'dark',
-        zoom: 0,
+        zoom: 6.45,
       }),
     });
     scene.on('loaded', () => {
-      const pointLayer = new PointLayer({})
-        .source(pointsData, {
-          cluster: false,
-        })
-        .scale({
-          size: {
-            type: 'power',
-            field: 'mag',
-          },
-          color: {
-            type: 'linear',
-            field: 'mag',
-          },
-        })
-        .shape('circle')
-        .size('mag', [2, 8, 14, 20, 26, 32, 40])
-        .animate(false)
-        .active(true)
-        .color('mag', ['red', 'blue', 'yellow', 'green'])
-        .style({
-          opacity: 0.5,
-          strokeWidth: 1,
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/6c4bb5f2-850b-419d-afc4-e46032fc9f94.csv',
+      )
+        .then((res) => res.text())
+        .then((data) => {
+          const pointLayer = new PointLayer({})
+            .source(data, {
+              parser: {
+                type: 'csv',
+                x: 'Longitude',
+                y: 'Latitude',
+              },
+            })
+            .shape('circle')
+            .size(8)
+            .active(true)
+            .color('Magnitude', [
+              '#0A3663',
+              '#1558AC',
+              '#3771D9',
+              '#4D89E5',
+              '#64A5D3',
+              '#72BED6',
+              '#83CED6',
+              '#A6E1E0',
+              '#B8EFE2',
+              '#D7F9F0',
+            ])
+            .style({
+              opacity: 1,
+              strokeWidth: 0,
+            });
+
+          scene.addLayer(pointLayer);
+          this.scene = scene;
         });
-      scene.addLayer(pointLayer);
-      const hander = () => {
-        console.log('click');
-      };
-      scene.on('click', hander);
-      this.scene = scene;
     });
   }
 
