@@ -88,7 +88,11 @@ export default class InteractionService extends EventEmitter
     }
   }
   private onTouch = (target: TouchEvent) => {
-    const touch = target.touches[0];
+    target.stopPropagation();
+    if (target.targetTouches.length > 1) {
+      return;
+    }
+    const touch = target.targetTouches[0];
     // @ts-ignore
     this.onHover({
       x: touch.pageX,
@@ -117,7 +121,9 @@ export default class InteractionService extends EventEmitter
       this.isDoubleTap(x, y, lngLat);
       return;
     }
-    this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+    if (type !== 'click' || type !== 'click') {
+      this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+    }
   };
 
   private isDoubleTap(x: number, y: number, lngLat: ILngLat) {

@@ -70,9 +70,10 @@ const World = React.memo(function Map() {
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
-        fetch('https://lab.isaaclin.cn/nCoV/api/area?latest=1').then((d) =>
-          d.json(),
-        ),
+         // https://lab.isaaclin.cn/nCoV/api/area?latest=1
+         fetch(
+          'https://gw.alipayobjects.com/os/bmw-prod/0676f102-22f6-4c75-ab12-1ae200834b1c.json',
+        ).then((d) => d.json()),
       ]);
       setData(joinData(geoData, ncovData.results));
     };

@@ -18,7 +18,7 @@ const PointLayer = React.memo(function Layer(
   return BaseLayer('pointLayer', props);
 });
 
-const HeatMapLayer = React.memo(function Layer(
+const HeatmapLayer = React.memo(function Layer(
   props: ILayerProps & { children?: any },
 ) {
   return BaseLayer('heatmapLayer', props);
@@ -46,7 +46,7 @@ export {
   PolygonLayer,
   LineLayer,
   PointLayer,
-  HeatMapLayer,
+  HeatmapLayer,
   RasterLayer,
   ImageLayer,
   CityBuildingLayer,

@@ -287,7 +287,8 @@ export default class Scene extends EventEmitter implements ISceneService {
         w = bounds.right - bounds.left;
         h = bounds.bottom - bounds.top;
       }
-
+      const canvas = this.$container?.getElementsByTagName('canvas')[0];
+      // this.$container.
       this.rendererService.viewport({
         x: 0,
         y: 0,
@@ -297,6 +298,10 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 触发 Map， canvas
       DOM.triggerResize();
       this.coordinateSystemService.needRefresh = true;
+      if (canvas) {
+        canvas.width = w * pixelRatio;
+        canvas.height = h * pixelRatio;
+      }
       //  repaint layers
       this.render();
     }
