@@ -34,7 +34,7 @@ export default class CityBuildingLayerDemo extends React.Component {
         enable: false,
       })
       .style({
-        opacity: 1.0,
+        opacity: 0.7,
         baseColor: 'rgb(16,16,16)',
         windowColor: 'rgb(30,60,89)',
         brightColor: 'rgb(255,176,38)',
