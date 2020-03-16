@@ -22,6 +22,7 @@ interface IHeatMapLayerStyleOptions {
   opacity: number;
   intensity: number;
   radius: number;
+  angle: number;
   rampColors: IColorRamp;
 }
 

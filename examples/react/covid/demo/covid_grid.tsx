@@ -1,4 +1,5 @@
 import {
+  HeatmapLayer,
   LayerEvent,
   LineLayer,
   MapboxScene,
@@ -9,6 +10,8 @@ import {
 } from '@antv/l7-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+const colors =
+ ['#f7fcf0','#e0f3db','#ccebc5','#a8ddb5','#7bccc4','#4eb3d3','#2b8cbe','#08589e'].reverse();
 function joinData(geodata: any, ncovData: any) {
   const ncovDataObj: any = {};
   ncovData.forEach((item: any) => {
@@ -24,7 +27,7 @@ function joinData(geodata: any, ncovData: any) {
     if (countryName === '中国') {
       if (!ncovDataObj[countryName]) {
         ncovDataObj[countryName] = {
-          countryName: 0,
+          countryName,
           countryEnglishName,
           currentConfirmedCount: 0,
           confirmedCount: 0,
@@ -73,7 +76,7 @@ const World = React.memo(function Map() {
   }>();
   React.useEffect(() => {
     const fetchData = async () => {
-      const [geoData, ncovData] = await Promise.all([
+      const [geoData, ncovData, gridData] = await Promise.all([
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
@@ -81,12 +84,15 @@ const World = React.memo(function Map() {
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/0676f102-22f6-4c75-ab12-1ae200834b1c.json',
         ).then((d) => d.json()),
+        fetch(
+          'https://gw.alipayobjects.com/os/bmw-prod/8990e8b4-c58e-419b-afb9-8ea3daff2dd1.json',
+        ).then((d) => d.json()),
       ]);
       const worldData = joinData(geoData, ncovData.results);
       const pointdata = worldData.features.map((feature: any) => {
         return feature.properties;
       });
-      setfillData(worldData);
+      setfillData(gridData);
       setData(pointdata);
     };
     fetchData();
@@ -131,47 +137,29 @@ const World = React.memo(function Map() {
           </Popup>
         )}
         {data && [
-          <PolygonLayer
+          <HeatmapLayer
             key={'1'}
-            options={{
-              autoFit: false,
-            }}
             source={{
               data: filldata,
-            }}
-            scale={{
-              values: {
-                confirmedCount: {
-                  type: 'quantile',
+              transforms: [
+                {
+                  type: 'hexagon',
+                  size: 500000,
+                  field: 'capacity',
+                  method: 'sum',
                 },
-              },
+              ],
             }}
             color={{
-              values: '#ddd',
+              values: 'rgb(221,230,238)',
             }}
             shape={{
-              values: 'fill',
+              values: 'hexagon',
             }}
             style={{
-              opacity: 1,
-            }}
-          />,
-          <LineLayer
-            key={'3'}
-            source={{
-              data: filldata,
-            }}
-            size={{
-              values: 0.6,
-            }}
-            color={{
-              values: '#fff',
-            }}
-            shape={{
-              values: 'line',
-            }}
-            style={{
-              opacity: 1,
+              coverage: 0.7,
+              angle: 0.3,
+              opacity: 0.8,
             }}
           />,
           <PointLayer
@@ -194,7 +182,22 @@ const World = React.memo(function Map() {
               },
             }}
             color={{
-              values: '#b10026',
+              field: 'confirmedCount',
+              values: (count) => {
+                return count > 10000
+                  ? colors[6]
+                  : count > 1000
+                  ? colors[5]
+                  : count > 500
+                  ? colors[4]
+                  : count > 100
+                  ? colors[3]
+                  : count > 10
+                  ? colors[2]
+                  : count > 1
+                  ? colors[1]
+                  : colors[0];
+              },
             }}
             shape={{
               values: 'circle',
@@ -206,10 +209,7 @@ const World = React.memo(function Map() {
             }}
             size={{
               field: 'confirmedCount',
-              values: [5, 60],
-            }}
-            animate={{
-              enable: true,
+              values: [0, 20],
             }}
             style={{
               opacity: 0.6,

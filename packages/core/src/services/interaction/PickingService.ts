@@ -6,7 +6,6 @@ import {
   IShaderModuleService,
 } from '../../index';
 import { TYPES } from '../../types';
-import { ICameraService } from '../camera/ICameraService';
 import {
   IInteractionService,
   IInteractionTarget,
@@ -102,43 +101,11 @@ export default class PickingService implements IPickingService {
         });
     });
   }
-  private async pickingLayer(layer: ILayer, target: IInteractionTarget) {
-    const { getViewportSize, useFramebuffer, clear } = this.rendererService;
-    const { width, height } = getViewportSize();
-
-    if (this.width !== width || this.height !== height) {
-      this.pickingFBO.resize({
-        width: Math.round(width / PICKSCALE),
-        height: Math.round(height / PICKSCALE),
-      });
-      this.width = width;
-      this.height = height;
-    }
-
-    useFramebuffer(this.pickingFBO, () => {
-      clear({
-        framebuffer: this.pickingFBO,
-        color: [0, 0, 0, 0],
-        stencil: 0,
-        depth: 1,
-      });
-
-      layer.hooks.beforePickingEncode.call();
-      layer.renderModels();
-      layer.hooks.afterPickingEncode.call();
-      this.pickFromPickingFBO(layer, target);
-    });
-  }
-
   private pickFromPickingFBO = (
     layer: ILayer,
     { x, y, lngLat, type }: IInteractionTarget,
   ) => {
-    const {
-      getViewportSize,
-      readPixels,
-      useFramebuffer,
-    } = this.rendererService;
+    const { getViewportSize, readPixels } = this.rendererService;
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
@@ -247,28 +214,10 @@ export default class PickingService implements IPickingService {
   ) {
     const [r, g, b] = pickedColors;
     layer.hooks.beforeHighlight.call([r, g, b]);
-    // this.layerService.renderLayers();
   }
 
   private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
-    // this.layerService.renderLayers();
-  }
-
-  private selectFeatureHandle(
-    layer: ILayer,
-    { featureId }: Partial<IInteractionTarget>,
-  ) {
-    const pickedColors = encodePickingColor(featureId as number);
-    this.selectFeature(layer, new Uint8Array(pickedColors));
-  }
-
-  private highlightFeatureHandle(
-    layer: ILayer,
-    { featureId }: Partial<IInteractionTarget>,
-  ) {
-    const pickedColors = encodePickingColor(featureId as number);
-    this.highlightPickedFeature(layer, new Uint8Array(pickedColors));
   }
 }

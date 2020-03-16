@@ -12,16 +12,19 @@ import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
 interface IHeatMapLayerStyleOptions {
   opacity: number;
   coverage: number;
+  angle: number;
 }
 export default class GridModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
       coverage,
+      angle,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
+      u_angle: angle || 0,
       u_radius: [
         this.layer.getSource().data.xOffset,
         this.layer.getSource().data.yOffset,
@@ -38,6 +41,7 @@ export default class GridModel extends BaseModel {
         triangulation: HeatmapGridTriangulation,
         depth: { enable: false },
         primitive: gl.TRIANGLES,
+        blend: this.getBlend(),
       }),
     ];
   }
