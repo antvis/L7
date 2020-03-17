@@ -53,20 +53,21 @@ export default class InteractionService extends EventEmitter
   private addEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
-      const hammertime = new Hammer($containter);
-      hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-      hammertime.get('pinch').set({ enable: true });
-
-      // hammertime.on('panstart', this.onPanstart);
-      // hammertime.on('panmove', this.onPanmove);
-      // hammertime.on('panend', this.onPanend);
-      // hammertime.on('pinch', this.onPinch);
-      $containter.addEventListener('touchstart', this.onTouch);
+      const hammertime = new Hammer.Manager($containter);
+      hammertime.add(new Hammer.Tap({ event: 'dblclick', taps: 2 }));
+      hammertime.add(new Hammer.Tap({ event: 'click' }));
+      hammertime.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+      hammertime.add(new Hammer.Press({}));
+      // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+      // hammertime.get('pinch').set({ enable: true });
+      hammertime.on('dblclick click', this.onHammer);
+      // hammertime.on('panstart panmove panend', this.onHammer);
+      // hammertime.on('press pressup', this.onHammer);
+      // $containter.addEventListener('touchstart', this.onTouch);
       $containter.addEventListener('mousemove', this.onHover);
-      $containter.addEventListener('click', this.onHover);
+      // $containter.addEventListener('click', this.onHover);
       $containter.addEventListener('mousedown', this.onHover);
       $containter.addEventListener('mouseup', this.onHover);
-      // $containter.addEventListener('dblclick', this.onHover);
       $containter.addEventListener('contextmenu', this.onHover);
 
       this.hammertime = hammertime;
@@ -79,24 +80,45 @@ export default class InteractionService extends EventEmitter
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       $containter.removeEventListener('mousemove', this.onHover);
-      $containter.removeEventListener('touchstart', this.onTouch);
-      $containter.removeEventListener('click', this.onHover);
+      this.hammertime.off('dblclick click', this.onHammer);
+      // $containter.removeEventListener('touchstart', this.onTouch);
+      // $containter.removeEventListener('click', this.onHover);
       $containter.removeEventListener('mousedown', this.onHover);
       $containter.removeEventListener('mouseup', this.onHover);
       // $containter.removeEventListener('dblclick', this.onHover);
       $containter.removeEventListener('contextmenu', this.onHover);
     }
   }
+  private onHammer = (target: HammerInput) => {
+    const { type, pointerType } = target;
+    let clientX;
+    let clientY;
+    if (pointerType === 'touch') {
+      clientY = target.pointers[0].clientY;
+      clientX = target.pointers[0].clientX;
+    } else {
+      clientY = (target.srcEvent as MouseEvent).y;
+      clientX = (target.srcEvent as MouseEvent).x;
+    }
+
+    const $containter = this.mapService.getMapContainer();
+    if ($containter) {
+      const { top, left } = $containter.getBoundingClientRect();
+      clientX -= left;
+      clientY -= top;
+    }
+    const lngLat = this.mapService.containerToLngLat([clientX, clientY]);
+    this.emit(InteractionEvent.Hover, { x: clientX, y: clientY, lngLat, type });
+  };
   private onTouch = (target: TouchEvent) => {
-    target.stopPropagation();
     if (target.targetTouches.length > 1) {
       return;
     }
     const touch = target.targetTouches[0];
     // @ts-ignore
     this.onHover({
-      x: touch.pageX,
-      y: touch.pageY,
+      x: touch.clientX,
+      y: touch.clientY,
       type: 'touch',
     });
   };
@@ -122,7 +144,12 @@ export default class InteractionService extends EventEmitter
       return;
     }
     if (type !== 'click' || type !== 'click') {
-      this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
+      this.emit(InteractionEvent.Hover, {
+        x,
+        y,
+        lngLat,
+        type,
+      });
     }
   };
 
