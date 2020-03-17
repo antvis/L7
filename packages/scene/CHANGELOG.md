@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+
+### Bug Fixes
+
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+
+
+
+
+
 ## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
 
 
