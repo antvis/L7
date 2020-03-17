@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+
+### Bug Fixes
+
+* fix build layer opactiy ([5a58ab8](https://github.com/antvis/L7/commit/5a58ab8f86ec969ca384e984784355c2c91b1a47))
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+* 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
+
+
+
+
 ## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
 
 
