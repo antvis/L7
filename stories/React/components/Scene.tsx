@@ -38,18 +38,6 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
-        <SceneContext.Consumer>
-          {(scene) => {
-            console.log(scene);
-            return null;
-          }}
-        </SceneContext.Consumer>
-        <SceneEvent
-          type="click"
-          handler={() => {
-            console.log('click');
-          }}
-        />
         <Popup lnglat={[110.1938, 50.25] as number[]}>
           <p>122222</p>
         </Popup>
