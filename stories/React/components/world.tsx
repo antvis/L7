@@ -30,6 +30,9 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
+        <Popup lnglat={[110.1938, 50.25] as number[]}>
+          <p>122222</p>
+        </Popup>
         {data && [
           <PolygonLayer
             key={'2'}
@@ -54,6 +57,7 @@ export default React.memo(function Map() {
               opacity: 1,
             }}
           />,
+
           <LineLayer
             key={'21'}
             source={{
