@@ -28,7 +28,7 @@
      <!-- <script src="https://cdn.jsdelivr.net/npm/symbol-es6@0.1.2/symbol-es6.min.js"></script> -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
 
-    <script src="../dist/l7.js"></script>
+    <script src="../dist/l7-dev.js"></script>
     <script>
     const data =
 {"type":"FeatureCollection","features":[
@@ -96,7 +96,7 @@
         })
       })
   scene.on('loaded',()=>{
-    alert('加载完成');
+   console.log(L7);
 
 
  const color = [ 'rgb(255,255,217)', 'rgb(237,248,177)', 'rgb(199,233,180)', 'rgb(127,205,187)', 'rgb(65,182,196)', 'rgb(29,145,192)', 'rgb(34,94,168)', 'rgb(12,44,132)' ];
@@ -119,7 +119,7 @@
       .style({
         opacity: 1.0
       });
-          scene.addLayer(layer);
+     scene.addLayer(layer);
    });
     </script>
   </body>

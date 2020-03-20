@@ -1,5 +1,5 @@
 import { LineLayer, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox, GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 function convertRGB2Hex(rgb: number[]) {
@@ -83,6 +83,12 @@ export default class MultiPolygon extends React.Component {
       .style({
         opacity: 0.1,
       });
+    layer.on('click', (e) => {
+      console.log(e);
+    });
+    layer.on('dblclick', (e) => {
+      console.log(e);
+    });
     const line = new PolygonLayer()
       .source(data)
       .shape('line')
@@ -116,6 +122,7 @@ export default class MultiPolygon extends React.Component {
     scene.addLayer(this.addPoint(data2));
     scene.addLayer(this.addActivePoint());
     scene.addLayer(this.addMidPoint(data2));
+    this.scene = scene;
   }
   public render() {
     return (

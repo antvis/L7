@@ -107,7 +107,7 @@ export default React.memo(function Map() {
           zoom: 1,
         }}
         style={{
-          position: 'absolute',
+          // position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
