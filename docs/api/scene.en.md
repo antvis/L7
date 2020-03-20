@@ -323,6 +323,14 @@ scene.setPitch(pitch);
 scene.fitBounds([112, 32, 114, 35]);
 ```
 
+### getContainer
+
+获取地图容器 return htmlElement
+
+```javascript
+scene.getContainer();
+```
+
 ### removeLayer
 
 移除 layer
