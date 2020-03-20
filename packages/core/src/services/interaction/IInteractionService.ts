@@ -4,6 +4,7 @@ export enum InteractionEvent {
   Click = 'click',
   Select = 'select',
   Active = 'active',
+  Drag = 'drag',
 }
 export interface IInteractionTarget {
   x: number;
