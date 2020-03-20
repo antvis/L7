@@ -175,7 +175,7 @@
     }
   },
   "resolutions": {
-    "../core-js": "3",
+    "core-js": "3",
     "d3-array": "1"
   },
   "tnpm": {
