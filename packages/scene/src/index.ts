@@ -9,6 +9,7 @@ import {
   IIconFontGlyph,
   IIconService,
   IImage,
+  IInteractionService,
   ILayer,
   ILayerService,
   ILngLat,
@@ -56,6 +57,7 @@ class Scene
   private markerService: IMarkerService;
   private popupService: IPopupService;
   private fontService: IFontService;
+  private interactionService: IInteractionService;
 
   private container: Container;
 
@@ -88,7 +90,9 @@ class Scene
     this.markerService = sceneContainer.get<IMarkerService>(
       TYPES.IMarkerService,
     );
-
+    this.interactionService = sceneContainer.get<IInteractionService>(
+      TYPES.IInteractionService,
+    );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
 
     this.initComponent(id);
