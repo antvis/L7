@@ -14,7 +14,11 @@ import { IMarkerService } from '../component/IMarkerService';
 import { IPopupService } from '../component/IPopupService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
-import { IInteractionService } from '../interaction/IInteractionService';
+import {
+  IInteractionService,
+  IInteractionTarget,
+  InteractionEvent,
+} from '../interaction/IInteractionService';
 import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
@@ -24,7 +28,7 @@ import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
 
 /**
- * will emit `loaded` `resize` `destroy` event
+ * will emit `loaded` `resize` `destroy` event panstart panmove panend
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
@@ -157,6 +161,10 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.popupService.initPopup();
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
+      this.interactionService.on(
+        InteractionEvent.Drag,
+        this.addSceneEvent.bind(this),
+      );
       this.logger.debug(`map ${this.id} loaded`);
     });
 
@@ -311,4 +319,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.cameraService.update(viewport);
     this.render();
   };
+
+  private addSceneEvent(target: IInteractionTarget) {
+    this.emit(target.type, target);
+  }
 }

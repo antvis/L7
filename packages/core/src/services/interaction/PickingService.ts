@@ -110,7 +110,7 @@ export default class PickingService implements IPickingService {
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
     const xInDevicePixel = x * window.devicePixelRatio;
-    const yInDevicePixel = y * window.devicePixelRatio;
+    const yInDevicePixel = (height - (y + 1)) * window.devicePixelRatio;
     if (
       xInDevicePixel > width ||
       xInDevicePixel < 0 ||
@@ -123,7 +123,7 @@ export default class PickingService implements IPickingService {
     pickedColors = readPixels({
       x: Math.floor(xInDevicePixel / PICKSCALE),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor((height - (y + 1) * window.devicePixelRatio) / PICKSCALE),
+      y: Math.floor(yInDevicePixel / PICKSCALE),
       width: 1,
       height: 1,
       data: new Uint8Array(1 * 1 * 4),
