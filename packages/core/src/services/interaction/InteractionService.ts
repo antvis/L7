@@ -5,6 +5,12 @@ import { TYPES } from '../../types';
 import { ILogService } from '../log/ILogService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { IInteractionService, InteractionEvent } from './IInteractionService';
+const DragEventMap: { [key: string]: string } = {
+  panstart: 'dragstart',
+  panmove: 'dragging',
+  panend: 'dragend',
+  pancancel: 'dragcancle',
+};
 /**
  * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
  * 除此之外，后续如果支持非地图场景，事件监听就需要注册在 L7 canvas 上。
@@ -61,7 +67,7 @@ export default class InteractionService extends EventEmitter
       // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
       // hammertime.get('pinch').set({ enable: true });
       hammertime.on('dblclick click', this.onHammer);
-      // hammertime.on('panstart panmove panend', this.onHammer);
+      hammertime.on('panstart panmove panend pancancel', this.onDrag);
       // hammertime.on('press pressup', this.onHammer);
       // $containter.addEventListener('touchstart', this.onTouch);
       $containter.addEventListener('mousemove', this.onHover);
@@ -81,6 +87,7 @@ export default class InteractionService extends EventEmitter
     if ($containter) {
       $containter.removeEventListener('mousemove', this.onHover);
       this.hammertime.off('dblclick click', this.onHammer);
+      this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
       // $containter.removeEventListener('touchstart', this.onTouch);
       // $containter.removeEventListener('click', this.onHover);
       $containter.removeEventListener('mousedown', this.onHover);
@@ -89,16 +96,26 @@ export default class InteractionService extends EventEmitter
       $containter.removeEventListener('contextmenu', this.onHover);
     }
   }
+  private onDrag = (target: HammerInput) => {
+    const interactionTarget = this.interactionEvent(target);
+    interactionTarget.type = DragEventMap[interactionTarget.type];
+    this.emit(InteractionEvent.Drag, interactionTarget);
+  };
   private onHammer = (target: HammerInput) => {
+    const interactionTarget = this.interactionEvent(target);
+    this.emit(InteractionEvent.Hover, interactionTarget);
+  };
+
+  private interactionEvent(target: HammerInput) {
     const { type, pointerType } = target;
     let clientX;
     let clientY;
     if (pointerType === 'touch') {
-      clientY = target.pointers[0].clientY;
-      clientX = target.pointers[0].clientX;
+      clientY = Math.floor(target.pointers[0].clientY);
+      clientX = Math.floor(target.pointers[0].clientX);
     } else {
-      clientY = (target.srcEvent as MouseEvent).y;
-      clientX = (target.srcEvent as MouseEvent).x;
+      clientY = Math.floor((target.srcEvent as MouseEvent).y);
+      clientX = Math.floor((target.srcEvent as MouseEvent).x);
     }
 
     const $containter = this.mapService.getMapContainer();
@@ -108,21 +125,8 @@ export default class InteractionService extends EventEmitter
       clientY -= top;
     }
     const lngLat = this.mapService.containerToLngLat([clientX, clientY]);
-    this.emit(InteractionEvent.Hover, { x: clientX, y: clientY, lngLat, type });
-  };
-  private onTouch = (target: TouchEvent) => {
-    if (target.targetTouches.length > 1) {
-      return;
-    }
-    const touch = target.targetTouches[0];
-    // @ts-ignore
-    this.onHover({
-      x: touch.clientX,
-      y: touch.clientY,
-      type: 'touch',
-    });
-  };
-
+    return { x: clientX, y: clientY, lngLat, type };
+  }
   private onHover = ({ x, y, type }: MouseEvent) => {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
