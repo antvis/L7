@@ -1,4 +1,4 @@
-import { LineLayer, MapboxScene, PolygonLayer } from '@antv/l7-react';
+import { LineLayer, MapboxScene, PolygonLayer, Popup } from '@antv/l7-react';
 import * as React from 'react';
 
 export default React.memo(function Map() {

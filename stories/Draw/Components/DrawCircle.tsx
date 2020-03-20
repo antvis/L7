@@ -1,7 +1,7 @@
 import { LineLayer, PointLayer, PolygonLayer, Popup, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import { lnglatDistance } from '@antv/l7-utils';
-import turfCircle from '@turf/circle';
+// import turfCircle from '@turf/circle';
 import * as React from 'react';
 const createGeoJSONCircle = (
   center: [number, number],
@@ -9,13 +9,13 @@ const createGeoJSONCircle = (
   points: number = 64,
 ) => {
   const options = { steps: 64 };
-  const circle = turfCircle(center, radiusInKm, options);
+  // const circle = turfCircle(center, radiusInKm, options);
 
   return {
     type: 'geojson',
     data: {
       type: 'FeatureCollection',
-      features: [circle],
+      features: [],
     },
   };
 };
