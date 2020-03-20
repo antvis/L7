@@ -11,10 +11,10 @@
       }
       #map {
         position: absolute;
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
       }
     </style>
     <link
@@ -24,11 +24,9 @@
   </head>
   <body>
     <div id="map"></div>
-      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>-->
-     <!-- <script src="https://cdn.jsdelivr.net/npm/symbol-es6@0.1.2/symbol-es6.min.js"></script> -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
-
-    <script src="../dist/l7-dev.js"></script>
+    <script src="../dist/l7.js"></script>
     <script>
     const data =
 {"type":"FeatureCollection","features":[
@@ -94,8 +92,8 @@
           zoom: 3,
           pitch: 0,
         })
-      })
-  scene.on('loaded',()=>{
+      });
+   scene.on('loaded',function(){
    console.log(L7);
 
 
