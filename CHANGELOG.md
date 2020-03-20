@@ -5,15 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
 
-
 ### Bug Fixes
 
-* observerable打包问题 ([412e2a8](https://github.com/antvis/L7/commit/412e2a83f78a9a448f0a5b65ccaf2ea97f78b47a))
-* picking ([d6c6694](https://github.com/antvis/L7/commit/d6c66941323fb21e6810e1d72d5b43e40867be71))
-
-
-
-
+- observerable 打包问题 ([412e2a8](https://github.com/antvis/L7/commit/412e2a83f78a9a448f0a5b65ccaf2ea97f78b47a))
+- picking ([d6c6694](https://github.com/antvis/L7/commit/d6c66941323fb21e6810e1d72d5b43e40867be71))
 
 ## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
 
