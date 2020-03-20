@@ -208,6 +208,14 @@ scene.getPitch();
 
 return {number} pitch
 
+### getContainer
+
+获取地图容器 return htmlElement
+
+```javascript
+scene.getContainer();
+```
+
 ### setMapStyle
 
 参数：`style` {string} 地图样式 具体样式格式和各底图设置方法一致
