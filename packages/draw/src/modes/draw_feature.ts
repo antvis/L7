@@ -1,3 +1,4 @@
+import { Scene } from '@antv/l7';
 import { Feature, FeatureCollection } from '@turf/helpers';
 import DrawSource from '../source';
 
@@ -5,26 +6,35 @@ export interface IDrawOption {
   data: FeatureCollection;
 }
 
+export type DrawStatus = 'Drawing' | 'Selected' | 'Edit' | 'Finish';
+
 export default abstract class DrawFeature {
   private source: DrawSource;
-  constructor(options: IDrawOption) {
+  private scene: Scene;
+  constructor(scene: Scene, options: IDrawOption) {
     const { data } = options;
+    this.scene = scene;
     this.source = new DrawSource(data);
   }
-
-  protected onDragStart() {
-    throw new Error('not imp');
+  public enable() {
+    this.scene.on('dragstart', this.onDragStart);
+    this.scene.on('drag', this.onDragging);
+    this.scene.on('dragend', this.onDragEnd);
+    this.scene.on('click', this.onClick);
   }
 
-  protected onDragging() {
-    throw new Error('not imp');
+  public disable() {
+    this.scene.off('dragstart', this.onDragStart);
+    this.scene.off('drag', this.onDragging);
+    this.scene.off('dragend', this.onDragEnd);
+    this.scene.off('click', this.onClick);
   }
 
-  protected onDragEnd() {
-    throw new Error('not imp');
-  }
+  protected abstract onDragStart(): any;
 
-  protected onClick() {
-    throw new Error('not imp');
-  }
+  protected abstract onDragging(): any;
+
+  protected abstract onDragEnd(): any;
+
+  protected abstract onClick(): any;
 }
