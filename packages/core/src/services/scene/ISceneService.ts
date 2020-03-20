@@ -22,4 +22,8 @@ export const SceneEventList: string[] = [
   'maploaded',
   'resize',
   'destroy',
+  'dragstart',
+  'dragging',
+  'dragend',
+  'dragcancel',
 ];
