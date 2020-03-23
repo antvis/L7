@@ -40,7 +40,7 @@ function sum(x: number[]) {
   }
 
   // Initializing the sum as the first number in the array
-  let sumNum = x[0];
+  let sumNum = x[0] * 1;
 
   // Keeping track of the floating-point error correction
   let correction = 0;
@@ -71,16 +71,45 @@ function mean(x: number[]) {
   return sum(x) / x.length;
 }
 
-export { sum, max, min, mean };
+function mode(x: any[]) {
+  if (x.length === 0) {
+    throw new Error('mean requires at least one data point');
+  }
+  if (x.length < 3) {
+    return x[0];
+  }
+  x.sort();
+  let last = x[0];
+  let value = NaN;
+  let maxSeen = 0;
+  let seenThis = 1;
+
+  for (let i = 1; i < x.length + 1; i++) {
+    if (x[i] !== last) {
+      if (seenThis > maxSeen) {
+        maxSeen = seenThis;
+        value = last;
+      }
+      seenThis = 1;
+      last = x[i];
+    } else {
+      seenThis++;
+    }
+  }
+  return value;
+}
+
+export { sum, max, min, mean, mode };
 export const statMap: { [key: string]: any } = {
   min,
   max,
   mean,
   sum,
+  mode,
 };
 export function getColumn(data: IItemData[], columnName: string) {
   return data.map((item: IItemData) => {
-    return item[columnName] * 1;
+    return item[columnName];
   });
 }
 

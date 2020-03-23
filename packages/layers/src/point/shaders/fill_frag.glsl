@@ -57,6 +57,8 @@ void main() {
   float opacity_t = smoothstep(0.0, antialiased_blur, outer_df);
   if(u_stroke_width <0.01 ) {
      gl_FragColor = v_color * opacity_t;
+     gl_FragColor.a =  gl_FragColor.a * u_opacity;
+     gl_FragColor = filterColor(gl_FragColor);
      return;
   }
   float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(

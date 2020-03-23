@@ -20,7 +20,7 @@ export default {
   output: [
     {
       format: 'umd',
-      name: 'L7-Draw',
+      name: 'L7-Maps',
       file: pkg.unpkg,
       sourcemap: true
     }
