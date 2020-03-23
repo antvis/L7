@@ -17,8 +17,8 @@ export type DrawStatus =
   | 'EditFinish';
 
 export default abstract class DrawFeature {
-  protected source: DrawSource;
-  protected scene: Scene;
+  public source: DrawSource;
+  public scene: Scene;
   protected options: {
     [key: string]: any;
   } = {
@@ -36,20 +36,49 @@ export default abstract class DrawFeature {
     if (this.isEnable) {
       return;
     }
+    // @ts-ignore
+    this.scene.map.dragPan.disable();
     this.scene.on('dragstart', this.onDragStart);
     this.scene.on('dragging', this.onDragging);
     this.scene.on('dragend', this.onDragEnd);
-    // this.scene.on('click', this.onClick);
-    this.setCursor('crosshair');
+    this.setCursor(this.getOption('cursor'));
+    this.isEnable = true;
   }
 
   public disable() {
+    if (!this.isEnable) {
+      return;
+    }
     this.scene.off('dragstart', this.onDragStart);
     this.scene.off('dragging', this.onDragging);
     this.scene.off('dragend', this.onDragEnd);
     // this.scene.off('click', this.onClick);
     this.resetCursor();
+    // @ts-ignore
+    this.scene.map.dragPan.enable();
+    this.isEnable = false;
   }
+
+  public getOption(key: string) {
+    return this.options[key];
+  }
+  public getStyle(id: string) {
+    return this.getOption('style')[id];
+  }
+
+  public setCursor(cursor: string) {
+    const container = this.scene.getContainer();
+    if (container) {
+      container.style.cursor = cursor;
+    }
+  }
+  public resetCursor() {
+    const container = this.scene.getContainer();
+    if (container) {
+      container.style.cursor = 'default';
+    }
+  }
+
   protected getDefaultOptions() {
     return {};
   }
@@ -61,23 +90,4 @@ export default abstract class DrawFeature {
   protected abstract onDragEnd(e: IInteractionTarget): void;
 
   protected abstract onClick(): void;
-  protected getOption(key: string) {
-    return this.options[key];
-  }
-  protected getStyle(id: string) {
-    return this.getOption('style')[id];
-  }
-
-  protected setCursor(cursor: string) {
-    const container = this.scene.getContainer();
-    if (container) {
-      container.style.cursor = cursor;
-    }
-  }
-  protected resetCursor() {
-    const container = this.scene.getContainer();
-    if (container) {
-      container.style.cursor = 'default';
-    }
-  }
 }

@@ -15,9 +15,9 @@ export default class Circle extends React.Component {
       id: 'map',
       map: new Mapbox({
         pitch: 0,
-        style: 'normal',
-        center: [121.775374, 31.31067],
-        zoom: 15,
+        style: 'light',
+        center: [113.775374, 28.31067],
+        zoom: 12,
       }),
     });
     this.scene = scene;

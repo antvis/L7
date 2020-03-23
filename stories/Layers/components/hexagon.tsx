@@ -44,7 +44,17 @@ export default class HexagonLayerDemo extends React.Component {
               ],
             })
             .shape('hexagon') // 支持 circle, hexagon,triangle
-            .color('mode', ['#ffffe5','#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506'])
+            .color('mode', [
+              '#ffffe5',
+              '#fff7bc',
+              '#fee391',
+              '#fec44f',
+              '#fe9929',
+              '#ec7014',
+              '#cc4c02',
+              '#993404',
+              '#662506',
+            ])
             .active(false)
             .style({
               coverage: 0.7,
