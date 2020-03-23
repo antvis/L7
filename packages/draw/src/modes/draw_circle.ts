@@ -12,7 +12,9 @@ import {
 import turfCircle from '@turf/circle';
 import turfDistance from '@turf/distance';
 import { Feature, featureCollection, point } from '@turf/helpers';
+import RenderLayer from '../render/render';
 import DrawFeature, { IDrawOption } from './draw_feature';
+import DrawSelected from './draw_selected';
 let CircleFeatureId = 0;
 export type unitsType = 'degrees' | 'radians' | 'miles' | 'kilometers';
 export interface IDrawCircleOption extends IDrawOption {
@@ -28,9 +30,8 @@ export default class DrawCircle extends DrawFeature {
   private endPoint: ILngLat;
   private dragStartPoint: ILngLat;
   // 绘制完成之后显示
-  private normalLayer: ILayer;
-  private normalLineLayer: ILayer;
-
+  private normalLayer: RenderLayer;
+  private selectMode: DrawSelected;
   // 编辑过程中显示
   private centerLayer: ILayer;
   private circleLayer: ILayer;
@@ -39,15 +40,11 @@ export default class DrawCircle extends DrawFeature {
   private popup: IPopup;
   constructor(scene: Scene, options: Partial<IDrawCircleOption> = {}) {
     super(scene, options);
-    this.initNormalLayer();
+    this.normalLayer = new RenderLayer(this);
   }
   protected onDragStart = (e: IInteractionTarget) => {
     // @ts-ignore
-    this.scene.map.dragPan.disable();
     this.dragStartPoint = e.lngLat;
-    if (this.drawStatus === 'DrawSelected') {
-      return;
-    }
     this.center = e.lngLat;
     const centerStyle = this.getStyle('active_point');
     const layer = new PointLayer()
@@ -63,28 +60,19 @@ export default class DrawCircle extends DrawFeature {
       .size(centerStyle.size)
       .style(centerStyle.style);
     this.scene.addLayer(layer);
-    this.initDrawLayer();
     this.centerLayer = layer;
+    this.initDrawLayer();
     this.setCursor('grabbing');
   };
   protected getDefaultOptions() {
     return {
-      steps: 4,
+      steps: 64,
       units: 'kilometres',
+      cursor: 'crosshair',
     };
   }
 
   protected onDragging = (e: IInteractionTarget) => {
-    if (this.drawStatus === 'DrawSelected') {
-      const delta = {
-        lng: e.lngLat.lng - this.dragStartPoint.lng,
-        lat: e.lngLat.lat - this.dragStartPoint.lat,
-      };
-      this.moveCircle(this.currentFeature as Feature, delta);
-      this.dragStartPoint = e.lngLat;
-
-      return;
-    }
     this.endPoint = e.lngLat;
     const currentData = this.createCircleData(this.center, this.endPoint);
     this.updateDrawLayer(currentData);
@@ -93,16 +81,16 @@ export default class DrawCircle extends DrawFeature {
   };
 
   protected onDragEnd = () => {
-    if (this.drawStatus === 'DrawSelected') {
-      return;
-    }
     this.source.addFeature(this.currentFeature);
     // @ts-ignore
     this.scene.map.dragPan.enable();
     this.popup.remove();
-    // this.disable();
-    this.addCircleLayerEvent();
+    // 绘制完成进入选中状态
+    this.selectMode = new DrawSelected(this.scene, {});
+    this.selectMode.setSelectedFeature(this.currentFeature as Feature);
+    this.removeDrawLayer();
     this.drawStatus = 'DrawSelected';
+    this.disable();
     return;
   };
   protected onClick = () => {
@@ -113,7 +101,7 @@ export default class DrawCircle extends DrawFeature {
       return;
     }
     this.currentFeature = null;
-    this.updateNormalLayer();
+    this.normalLayer.updateData();
     this.centerLayer.setData([]);
     this.circleLayer.setData(InitFeature);
     this.circleLineLayer.setData(InitFeature);
@@ -162,82 +150,21 @@ export default class DrawCircle extends DrawFeature {
     this.circleLayer.setData(currentData);
     this.circleLineLayer.setData(currentData);
   }
+
+  private removeDrawLayer() {
+    this.scene.removeLayer(this.circleLayer);
+    this.scene.removeLayer(this.circleLineLayer);
+    this.scene.removeLayer(this.centerLayer);
+  }
+
   private addDrawPopup(lnglat: ILngLat, dis: number) {
     const popup = new Popup({
       anchor: 'left',
       closeButton: false,
     })
       .setLnglat(lnglat)
-      .setText(`${dis}`);
+      .setText(`半径:${dis.toFixed(2)}千米`);
     this.scene.addPopup(popup);
     this.popup = popup;
-  }
-
-  private initNormalLayer() {
-    const style = this.getStyle('normal_fill');
-    const linestyle = this.getStyle('normal_line');
-    this.normalLayer = new PolygonLayer()
-      .source(this.source.data)
-      .shape('fill')
-      .active(true)
-      .color(style.color)
-      .style(style.style);
-
-    this.normalLineLayer = new LineLayer()
-      .source(this.source.data)
-      .shape('line')
-      .size(linestyle.size)
-      .color(linestyle.color)
-      .style(linestyle.style);
-    this.scene.addLayer(this.normalLayer);
-    this.scene.addLayer(this.normalLineLayer);
-    this.normalLayer.on('click', this.onNormalLayerClick);
-  }
-  private updateNormalLayer() {
-    this.normalLayer.setData(this.source.data);
-    this.normalLineLayer.setData(this.source.data);
-  }
-
-  private onNormalLayerClick = (e: any) => {
-    this.currentFeature = e.feature;
-    this.normalLayer.filter('id', (id: string) => {
-      return this.currentFeature === null || id !== e.feature.properties.id;
-    });
-    this.normalLineLayer.filter('id', (id: string) => {
-      return this.currentFeature === null || id !== e.feature.properties.id;
-    });
-    const seletedFeature = e.feature;
-    this.setCursor('move');
-    this.updateDrawLayer(featureCollection([seletedFeature]));
-    this.centerLayer.setData([seletedFeature.properties.center]);
-    this.drawStatus = 'DrawSelected';
-    this.enable();
-  };
-
-  private addCircleLayerEvent() {
-    this.circleLayer.on('mousemove', (e) => {
-      this.setCursor('move');
-    });
-    this.circleLayer.on('unmousemove', (e) => {
-      this.resetCursor();
-    });
-    this.circleLayer.on('unclick', this.onCircleLayerClick);
-  }
-
-  private moveCircle(feature: Feature, delta: ILngLat) {
-    const preCenter = feature?.properties?.center as ILngLat;
-    const preEndPoint = feature?.properties?.endPoint as ILngLat;
-    const newCenter = {
-      lng: preCenter.lng + delta.lng,
-      lat: preCenter.lat + delta.lat,
-    };
-    const newEndPoint = {
-      lng: preEndPoint.lng + delta.lng,
-      lat: preEndPoint.lat + delta.lat,
-    };
-
-    const newCircle = this.createCircleData(newCenter, newEndPoint);
-    this.centerLayer.setData([newCenter]);
-    this.updateDrawLayer(newCircle);
   }
 }
