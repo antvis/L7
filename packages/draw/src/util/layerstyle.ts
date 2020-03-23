@@ -1,4 +1,4 @@
-const FillStyle = {
+const LayerStyles = {
   // 正常显示样式
   normal_fill: {
     type: 'PolygonLayer',
@@ -17,8 +17,6 @@ const FillStyle = {
       opacity: 0.1,
     },
   },
-};
-const PointStyle = {
   normal_point: {
     type: 'PointLayer',
     shape: 'circle',
@@ -46,8 +44,6 @@ const PointStyle = {
       strokeWidth: 2,
     },
   },
-};
-const LineStyle = {
   normal_line: {
     type: 'LineLayer',
     shape: 'line',
@@ -69,3 +65,5 @@ const LineStyle = {
     },
   },
 };
+
+export default LayerStyles;

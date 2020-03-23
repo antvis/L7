@@ -1,6 +1,6 @@
 import { Feature, FeatureCollection } from '@turf/helpers';
 export default class DrawSource {
-  private data: FeatureCollection;
+  public data: FeatureCollection;
   constructor(data?: FeatureCollection) {
     this.data = data || this.getDefaultData();
   }

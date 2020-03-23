@@ -1,11 +1,10 @@
 # `react`
 
-> TODO: description
+> L7 
 
 ## Usage
 
 ```
-const react = require('react');
+import { Scene }  from '@antv/l7-react';
 
-// TODO: DEMONSTRATE API
 ```

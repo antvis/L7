@@ -5,8 +5,10 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
+  "unpkg": "dist/l7-maps.js",
   "sideEffects": false,
   "files": [
+    "dist",
     "lib",
     "es",
     "typings/index.d.ts",
