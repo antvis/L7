@@ -15,7 +15,7 @@ const InitFeature = {
 };
 import Draw from '../modes/draw_mode';
 import { DrawEvent, DrawModes } from '../util/constant';
-export default class RenderLayer {
+export default class DrawLayer {
   private polygonLayer: ILayer;
   private lineLayer: ILayer;
   private draw: Draw;
