@@ -1,2 +1,3 @@
 import DrawCircle from './draw_circle';
-export { DrawCircle };
+import DrawRect from './draw_rect';
+export { DrawCircle, DrawRect };
