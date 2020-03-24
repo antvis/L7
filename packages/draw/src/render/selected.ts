@@ -20,6 +20,7 @@ export default class EditRenderLayer {
   private polygonLayer: ILayer;
   private lineLayer: ILayer;
   private centerLayer: ILayer;
+  private endPointLayer: ILayer;
   private draw: Draw;
   private currentFeature: Feature;
   constructor(draw: Draw) {
@@ -57,10 +58,28 @@ export default class EditRenderLayer {
       .color(centerStyle.color)
       .size(centerStyle.size)
       .style(centerStyle.style);
+
+    this.endPointLayer = new PointLayer({
+      zIndex: 4,
+      blend: 'normal',
+    })
+      .source([], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .color(centerStyle.color)
+      .size(centerStyle.size)
+      .style(centerStyle.style);
+
     this.draw.scene.addLayer(this.polygonLayer);
     this.draw.scene.addLayer(this.lineLayer);
-    // this.draw.scene.addLayer(this.centerLayer);
+    this.draw.scene.addLayer(this.centerLayer);
   }
+
   public updateData(data: any) {
     if (this.currentFeature === undefined) {
       this.addLayerEvent();
@@ -68,7 +87,23 @@ export default class EditRenderLayer {
     this.currentFeature = data.features[0];
     this.lineLayer.setData(data);
     this.polygonLayer.setData(data);
-    // this.centerLayer.setData([data.features[0].properties.center]);
+    const properties = data.features[0].properties;
+    if (properties.startPoint) {
+      this.centerLayer.setData([
+        {
+          lng: properties.startPoint[0],
+          lat: properties.startPoint[1],
+        },
+      ]);
+    }
+    if (properties.endPoint) {
+      this.endPointLayer.setData([
+        {
+          lng: properties.endPoint[0],
+          lat: properties.endPoint[1],
+        },
+      ]);
+    }
   }
 
   public destroy() {
