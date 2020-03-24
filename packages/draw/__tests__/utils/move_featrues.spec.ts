@@ -48,11 +48,15 @@ describe('moveFeature', () => {
     },
   };
   it('move Point', () => {
-    const res = moveFeature([pointFeature], delta);
+    const res = moveFeature([pointFeature], delta) as Array<
+      Feature<Geometry, Properties>
+    >;
     expect(res[0].geometry.coordinates).toEqual([131, 48]);
   });
   it('move BBox', () => {
-    const res = moveFeature([polyon], delta);
+    const res = moveFeature([polyon], delta) as Array<
+      Feature<Geometry, Properties>
+    >;
     expect(res[0].geometry.coordinates).toEqual([
       [
         [50.5703125, 46.583289756006316],
@@ -64,7 +68,9 @@ describe('moveFeature', () => {
     ]);
   });
   it('move line', () => {
-    const res = moveFeature([line], delta);
+    const res = moveFeature([line], delta) as Array<
+      Feature<Geometry, Properties>
+    >;
     expect(res[0].geometry.coordinates).toEqual([
       [55.31640625, 63.91523303947614],
       [72.015625, 63.59334083012024],
