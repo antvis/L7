@@ -12,15 +12,14 @@ import {
 import { Feature, FeatureCollection, point } from '@turf/helpers';
 import selectRender from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { createCircle } from '../util/create_geometry';
+import { creatRect } from '../util/create_geometry';
 import moveFeatures, { movePoint, moveRing } from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
 export interface IDrawRectOption extends IDrawFeatureOption {
   units: unitsType;
   steps: number;
 }
-let CircleFeatureId = 0;
-export default class DrawCircle extends DrawFeature {
+export default class DrawRect extends DrawFeature {
   private startPoint: ILngLat;
   private endPoint: ILngLat;
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
@@ -68,14 +67,9 @@ export default class DrawCircle extends DrawFeature {
   }
 
   protected createFeature(): FeatureCollection {
-    const feature = createCircle(
+    const feature = creatRect(
       [this.startPoint.lng, this.startPoint.lat],
       [this.endPoint.lng, this.endPoint.lat],
-      {
-        units: this.getOption('units'),
-        steps: this.getOption('steps'),
-        id: `${CircleFeatureId++}`,
-      },
     );
     this.setCurrentFeature(feature as Feature);
     return {

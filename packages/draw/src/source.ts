@@ -22,6 +22,18 @@ export default class DrawSource {
       this.data.features.splice(index, 1);
     }
   }
+  public setFeatureActive(feature: Feature) {
+    const fe = this.getFeature(feature?.properties?.id);
+    if (fe && fe.properties) {
+      fe.properties.active = true;
+    }
+  }
+  public setFeatureUnActive(feature: Feature) {
+    const fe = this.getFeature(feature?.properties?.id);
+    if (fe && fe.properties) {
+      fe.properties.active = false;
+    }
+  }
   public updateFeature(feature: Feature) {
     this.removeFeature(feature);
     this.addFeature(feature);

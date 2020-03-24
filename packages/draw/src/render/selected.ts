@@ -14,8 +14,8 @@ const InitFeature = {
   features: [],
 };
 import { Feature } from '@turf/helpers';
-import DrawEdit from '../modes/draw_edit';
 import Draw from '../modes/draw_feature';
+import { DrawEvent, DrawModes } from '../util/constant';
 export default class EditRenderLayer {
   private polygonLayer: ILayer;
   private lineLayer: ILayer;
@@ -59,41 +59,56 @@ export default class EditRenderLayer {
       .style(centerStyle.style);
     this.draw.scene.addLayer(this.polygonLayer);
     this.draw.scene.addLayer(this.lineLayer);
-    this.draw.scene.addLayer(this.centerLayer);
-    this.addLayerEvent();
+    // this.draw.scene.addLayer(this.centerLayer);
   }
   public updateData(data: any) {
+    if (this.currentFeature === undefined) {
+      this.addLayerEvent();
+    }
     this.currentFeature = data.features[0];
     this.lineLayer.setData(data);
     this.polygonLayer.setData(data);
-    this.centerLayer.setData([data.features[0].properties.center]);
+    // this.centerLayer.setData([data.features[0].properties.center]);
   }
 
   public destroy() {
     this.draw.scene.removeLayer(this.lineLayer);
     this.draw.scene.removeLayer(this.polygonLayer);
-    this.draw.scene.removeLayer(this.centerLayer);
+    // this.draw.scene.removeLayer(this.centerLayer);
   }
 
+  public show() {
+    this.lineLayer.show();
+    this.polygonLayer.show();
+    // this.centerLayer.show();
+  }
+
+  public hide() {
+    this.lineLayer.hide();
+    this.polygonLayer.hide();
+    // this.centerLayer.hide();
+  }
   private addLayerEvent() {
     this.polygonLayer.on('mousemove', (e) => {
       this.draw.setCursor('move');
-      this.draw.enable();
+      this.draw.selectMode.enable();
     });
     this.polygonLayer.on('unmousemove', (e) => {
       this.draw.resetCursor();
-      this.draw.disable();
+      this.draw.selectMode.disable();
     });
 
     this.polygonLayer.on('click', (e) => {
       // 进入编辑态
-      const drawEdit = new DrawEdit(this.draw.scene, {});
-      drawEdit.setEditFeature(this.currentFeature);
-      this.draw.disable();
-      this.destroy();
+      this.draw.selectMode.disable();
+      this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
+      this.hide();
     });
     this.polygonLayer.on('unclick', (e) => {
       // 取消选中 回到初始态
+      this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+      this.draw.selectMode.disable();
+      this.hide();
     });
   }
 }
