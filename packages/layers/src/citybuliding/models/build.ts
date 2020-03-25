@@ -85,7 +85,7 @@ export default class CityBuildModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 10 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
