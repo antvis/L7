@@ -17,6 +17,8 @@ export type DrawStatus =
   | 'DrawFinish'
   | 'EditFinish';
 
+let DrawFeatureId = 0;
+
 export default abstract class DrawMode extends EventEmitter {
   public source: DrawSource;
   public scene: Scene;
@@ -45,6 +47,7 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene.on('dragstart', this.onDragStart);
     this.scene.on('dragging', this.onDragging);
     this.scene.on('dragend', this.onDragEnd);
+    this.scene.on('click', this.onClick);
     this.setCursor(this.getOption('cursor'));
     this.isEnable = true;
   }
@@ -56,7 +59,7 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene.off('dragstart', this.onDragStart);
     this.scene.off('dragging', this.onDragging);
     this.scene.off('dragend', this.onDragEnd);
-    // this.scene.off('click', this.onClick);
+    this.scene.off('click', this.onClick);
     this.resetCursor();
     // @ts-ignore
     this.scene.map.dragPan.enable();
@@ -70,8 +73,13 @@ export default abstract class DrawMode extends EventEmitter {
   public getOption(key: string) {
     return this.options[key];
   }
+
   public getStyle(id: string) {
     return this.getOption('style')[id];
+  }
+
+  public getUniqId() {
+    return DrawFeatureId++;
   }
 
   public setCursor(cursor: string) {
@@ -96,4 +104,8 @@ export default abstract class DrawMode extends EventEmitter {
   protected abstract onDragging(e: IInteractionTarget): void;
 
   protected abstract onDragEnd(e: IInteractionTarget): void;
+
+  protected onClick(e: IInteractionTarget): any {
+    return null;
+  }
 }

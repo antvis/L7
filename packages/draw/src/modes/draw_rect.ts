@@ -12,7 +12,7 @@ import {
 import { Feature, FeatureCollection, point } from '@turf/helpers';
 import selectRender from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { creatRect } from '../util/create_geometry';
+import { createRect } from '../util/create_geometry';
 import moveFeatures, { movePoint, moveRing } from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
 export interface IDrawRectOption extends IDrawFeatureOption {
@@ -25,6 +25,9 @@ export default class DrawRect extends DrawFeature {
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
     this.selectLayer = new selectRender(this);
+  }
+  public drawFinish() {
+    return null;
   }
   protected onDragStart = (e: IInteractionTarget) => {
     this.startPoint = e.lngLat;
@@ -67,7 +70,7 @@ export default class DrawRect extends DrawFeature {
   }
 
   protected createFeature(): FeatureCollection {
-    const feature = creatRect(
+    const feature = createRect(
       [this.startPoint.lng, this.startPoint.lat],
       [this.endPoint.lng, this.endPoint.lat],
     );

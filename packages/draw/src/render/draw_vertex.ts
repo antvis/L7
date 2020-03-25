@@ -3,12 +3,13 @@ const InitFeature = {
   type: 'FeatureCollection',
   features: [],
 };
+type CallBack = (...args: any[]) => any;
 import { FeatureCollection } from '@turf/helpers';
 import Draw from '../modes/draw_feature';
 import { DrawEvent, DrawModes } from '../util/constant';
 import { renderFeature } from '../util/renderFeature';
-export default class DrawLayer {
-  private drawLayers: ILayer[] = [];
+export default class DrawVertexLayer {
+  public drawLayers: ILayer[] = [];
   private draw: Draw;
   constructor(draw: Draw) {
     this.draw = draw;
@@ -18,6 +19,14 @@ export default class DrawLayer {
     const style = this.draw.getStyle('active');
     this.drawLayers = renderFeature(feature, style);
     this.addLayers();
+  }
+  public on(type: any, handler: CallBack) {
+    const layer = this.drawLayers[0];
+    layer.on(type, handler);
+  }
+  public off(type: any, handler: CallBack) {
+    const layer = this.drawLayers[0];
+    layer.off(type, handler);
   }
   public updateData(data: any) {
     this.drawLayers.forEach((layer) => layer.setData(data));
@@ -45,39 +54,30 @@ export default class DrawLayer {
   }
 
   public enableDrag() {
-    this.show();
     const layer = this.drawLayers[0];
     layer.on('mousemove', this.onMouseMove);
     layer.on('mouseout', this.onUnMouseMove);
     layer.on('click', this.onClick);
-    layer.on('unclick', this.onUnClick);
   }
   public disableDrag() {
     const layer = this.drawLayers[0];
     layer.off('mousemove', this.onMouseMove);
     layer.off('mouseout', this.onUnMouseMove);
     layer.off('click', this.onClick);
-    layer.off('unclick', this.onUnClick);
   }
 
   private onMouseMove = (e: any) => {
-    this.draw.setCursor('move');
-    this.draw.selectMode.enable();
+    this.draw.setCursor('pointer');
+    // this.draw.editMode.enable();
   };
   private onUnMouseMove = (e: any) => {
     this.draw.resetCursor();
-    this.draw.selectMode.disable();
+    // this.draw.editMode.disable();
   };
   private onClick = (e: any) => {
-    this.draw.selectMode.disable();
     this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
-    this.disableDrag();
-    this.hide();
-  };
-  private onUnClick = (e: any) => {
-    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
     this.draw.selectMode.disable();
     this.disableDrag();
-    this.hide();
+    this.draw.editMode.enable();
   };
 }

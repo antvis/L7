@@ -27,6 +27,10 @@ export default class DrawCircle extends DrawFeature {
     super(scene, options);
     this.selectLayer = new selectRender(this);
   }
+
+  public drawFinish() {
+    return null;
+  }
   protected onDragStart = (e: IInteractionTarget) => {
     this.startPoint = e.lngLat;
     this.setCursor('grabbing');
