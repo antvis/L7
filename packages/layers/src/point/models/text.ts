@@ -231,7 +231,7 @@ export default class TextModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 12 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
