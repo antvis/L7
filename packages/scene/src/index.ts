@@ -264,6 +264,9 @@ class Scene
     this.mapService.panTo(pixel);
   }
 
+  public getContainer() {
+    return this.mapService.getContainer();
+  }
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }

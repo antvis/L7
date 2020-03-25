@@ -4,6 +4,6 @@
 ## Usage
 
 ```
-const draw = require('draw');
+const draw = require('l7-draw');
 
 ```

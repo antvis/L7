@@ -30,7 +30,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       normal: {
         blend: 'additive',
       },
-      fill: {},
+      fill: { blend: 'normal' },
       extrude: {},
       image: {},
       icon: {},

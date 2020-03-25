@@ -55,7 +55,7 @@ export default class MultiPolygon extends React.Component {
       scene.addLayer(circleLayer);
       scene.on('dragstart', (e: any) => {
         // @ts-ignore
-        scene.map.dragdrag.disable();
+        scene.map.drag.disable();
         startPoint = e.lngLat;
         const layer = new PointLayer()
           .source([startPoint], {

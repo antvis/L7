@@ -6,7 +6,7 @@ export interface IPopupOption {
   closeButton: boolean;
   closeOnClick: boolean;
   maxWidth: string;
-  anchor: anchorType;
+  anchor: anchorType[any];
   className: string;
   offsets: number[];
 }
