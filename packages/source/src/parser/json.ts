@@ -18,6 +18,10 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
     } // 点数据
     if (x && y && x1 && y1) {
       // 弧线 或者线段
+      // const prevLng = col[x];
+      // let lng = col[x1];
+      // lng += lng - prevLng > 180 ? -360 : 
+      //  prevLng - lng > 180 ? 360 : 0;
       coords = [
         [parseFloat(col[x]), parseFloat(col[y])],
         [parseFloat(col[x1]), parseFloat(col[y1])],
