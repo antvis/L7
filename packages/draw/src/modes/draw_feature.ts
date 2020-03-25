@@ -17,6 +17,8 @@ import {
   featureCollection,
   point,
 } from '@turf/helpers';
+import DrawRender from '../render/draw';
+import DrawVertexLayer from '../render/draw_vertex';
 import EditLayer from '../render/edit';
 import RenderLayer from '../render/render';
 import SelectLayer from '../render/selected';
@@ -39,6 +41,8 @@ export default abstract class DrawFeature extends DrawMode {
   public selectMode: DrawSelected;
   public editMode: DrawEdit;
   protected renderLayer: RenderLayer;
+  protected drawRender: DrawRender;
+  protected drawVertexLayer: DrawVertexLayer;
   protected selectLayer: SelectLayer;
   protected editLayer: EditLayer;
   protected centerLayer: ILayer;
@@ -48,6 +52,8 @@ export default abstract class DrawFeature extends DrawMode {
   protected drawLineLayer: ILayer;
   constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
+    this.drawRender = new DrawRender(this);
+    this.drawVertexLayer = new DrawVertexLayer(this);
     this.renderLayer = new RenderLayer(this);
     this.selectLayer = new SelectLayer(this);
     this.editLayer = new EditLayer(this);
@@ -62,6 +68,7 @@ export default abstract class DrawFeature extends DrawMode {
     this.on(DrawEvent.CREATE, this.onDrawCreate);
     this.on(DrawEvent.MODE_CHANGE, this.onModeChange);
   }
+  public abstract drawFinish(): void;
   protected getDefaultOptions() {
     return {
       steps: 64,
@@ -75,7 +82,7 @@ export default abstract class DrawFeature extends DrawMode {
 
   protected abstract onDragEnd(e: IInteractionTarget): void;
 
-  protected abstract createFeature(e: ILngLat): FeatureCollection;
+  protected abstract createFeature(e?: any): FeatureCollection;
 
   protected abstract moveFeature(e: ILngLat): Feature;
 
@@ -166,13 +173,17 @@ export default abstract class DrawFeature extends DrawMode {
       case DrawModes.SIMPLE_SELECT:
         this.renderLayer.updateData();
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
-        this.selectLayer.updateData(
-          featureCollection([this.currentFeature as Feature]),
-        );
-        this.selectLayer.show();
+        this.drawRender.enableDrag();
+        this.drawVertexLayer.enableDrag();
+        this.drawVertexLayer.show();
         break;
+      // this.selectLayer.updateData(
+      //   featureCollection([this.currentFeature as Feature]),
+      // );
+      // this.selectLayer.show();
       case DrawModes.STATIC:
         this.source.setFeatureUnActive(this.currentFeature as Feature);
+        this.drawVertexLayer.hide();
         this.renderLayer.updateData();
         break;
     }
@@ -183,7 +194,7 @@ export default abstract class DrawFeature extends DrawMode {
     if (this.popup) {
       this.popup.remove();
     }
-    this.removeDrawLayer();
+    // this.removeDrawLayer();
   };
 
   private onDrawUpdate = (feature: Feature) => {
@@ -191,9 +202,11 @@ export default abstract class DrawFeature extends DrawMode {
   };
 
   private onDrawMove = (delta: ILngLat) => {
-    const feature = this.moveFeature(delta);
-    this.currentFeature = feature;
-    this.selectLayer.updateData(featureCollection([feature]));
+    // const feature =
+    this.moveFeature(delta);
+    // this.currentFeature = feature;
+    // this.selectLayer.updateData(featureCollection([feature]));
+    // this.drawRender.updateData(featureCollection([feature]));
   };
 
   private onDrawEdit = (endpoint: ILngLat) => {

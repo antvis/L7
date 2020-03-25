@@ -1,4 +1,39 @@
 const LayerStyles = {
+  active: {
+    point: {
+      type: 'PointLayer',
+      shape: 'circle',
+      color: '#fbb03b',
+      size: 5,
+      style: {
+        stroke: '#fff',
+        strokeWidth: 2,
+      },
+    },
+    line: {
+      type: 'LineLayer',
+      shape: 'line',
+      color: '#fbb03b',
+      size: 1,
+      style: {
+        opacity: 1,
+        lineType: 'dash',
+        dashArray: [2, 2],
+      },
+    },
+    polygon: {
+      shape: 'fill',
+      color: '#fbb03b',
+      style: {
+        opacity: 0.1,
+        stroke: '#fbb03b',
+        strokeWidth: 1,
+        strokeOpacity: 1,
+        lineType: 'dash',
+        dashArray: [2, 2],
+      },
+    },
+  },
   // 正常显示样式
   normal_fill: {
     type: 'PolygonLayer',

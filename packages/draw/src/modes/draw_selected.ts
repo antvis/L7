@@ -74,42 +74,4 @@ export default class DrawSelect extends DrawFeature {
   protected onClick = () => {
     return null;
   };
-
-  private createCircleData(center: ILngLat, endPoint: ILngLat) {
-    const radius = turfDistance(
-      point([center.lng, center.lat]),
-      point([endPoint.lng, endPoint.lat]),
-      this.getOption('units'),
-    );
-    const feature = turfCircle([center.lng, center.lat], radius, {
-      units: this.getOption('units'),
-      steps: this.getOption('steps'),
-      properties: {
-        id: `${this.currentFeature?.properties?.id}`,
-        active: true,
-        radius,
-        center,
-        endPoint,
-      },
-    });
-    this.currentFeature = feature as Feature;
-    return featureCollection([feature]);
-  }
-
-  private moveCircle(feature: Feature, delta: ILngLat) {
-    const preCenter = feature?.properties?.center as ILngLat;
-    const preEndPoint = feature?.properties?.endPoint as ILngLat;
-    const newCenter = {
-      lng: preCenter.lng + delta.lng,
-      lat: preCenter.lat + delta.lat,
-    };
-    const newEndPoint = {
-      lng: preEndPoint.lng + delta.lng,
-      lat: preEndPoint.lat + delta.lat,
-    };
-
-    const newCircle = this.createCircleData(newCenter, newEndPoint);
-    // this.centerLayer.setData([newCenter]);
-    this.editLayer.updateData(newCircle);
-  }
 }

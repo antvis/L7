@@ -46,8 +46,8 @@ export interface IMapService<RawMap = {}> {
 
   // control with raw map
   setRotation(rotation: number): void;
-  zoomIn(): void;
-  zoomOut(): void;
+  zoomIn(option?: any, eventData?: any): void;
+  zoomOut(option?: any, eventData?: any): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
   fitBounds(bound: Bounds): void;

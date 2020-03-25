@@ -85,6 +85,9 @@ export default class ScaleComponent extends React.Component {
 
     scene.addControl(scaleControl);
     scene.addControl(layerControl);
+    scene.on('zoomchange', () => {
+      console.log(scene.getCenter(), scene.getZoom());
+    });
     const zoomControl = new Zoom({
       position: 'bottomright',
     });

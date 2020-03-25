@@ -26,7 +26,7 @@ const EventMap: {
 } = {
   mapmove: 'move',
   camerachange: 'move',
-  zoomChange: 'zoom',
+  zoomchange: 'zoom',
   dragging: 'drag',
 };
 import { MapTheme } from './theme';
@@ -137,16 +137,14 @@ export default class MapboxService
     this.map.setBearing(rotation);
   }
 
-  public zoomIn(): void {
-    this.map.zoomIn();
+  public zoomIn(option?: any, eventData?: any): void {
+    this.map.zoomIn(option, eventData);
   }
-
+  public zoomOut(option?: any, eventData?: any): void {
+    this.map.zoomOut(option, eventData);
+  }
   public setPitch(pitch: number) {
     return this.map.setPitch(pitch);
-  }
-
-  public zoomOut(): void {
-    this.map.zoomOut();
   }
 
   public panTo(p: [number, number]): void {

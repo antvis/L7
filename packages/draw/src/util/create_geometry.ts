@@ -1,6 +1,12 @@
 import turfCircle from '@turf/circle';
 import turfDistance from '@turf/distance';
-import { Feature, featureCollection, point } from '@turf/helpers';
+import {
+  Feature,
+  featureCollection,
+  lineString,
+  point,
+  polygon,
+} from '@turf/helpers';
 import { unitsType } from './constant';
 
 export function createCircle(
@@ -28,7 +34,7 @@ export function createCircle(
   return feature as Feature;
 }
 
-export function creatRect(
+export function createRect(
   startPoint: [number, number],
   endPoint: [number, number],
 ): Feature {
@@ -57,4 +63,41 @@ export function creatRect(
     },
   };
   return feature as Feature;
+}
+
+export function createPolygon(
+  points: Array<{ lng: number; lat: number }>,
+  options: any,
+): any {
+  const coords = points.map((p) => [p.lng, p.lat]);
+  if (points.length < 2) {
+    return point(coords[0], options);
+  } else if (points.length < 3) {
+    return lineString(coords, options);
+  } else {
+    coords.push(coords[0]);
+    return polygon([coords], options);
+  }
+}
+
+export function createLine(
+  points: Array<{ lng: number; lat: number }>,
+  options: any,
+): any {
+  const coords = points.map((p) => [p.lng, p.lat]);
+  if (points.length < 2) {
+    return point(coords[0], options);
+  } else {
+    return lineString(coords, options);
+  }
+}
+
+export function createPoint(points: Array<{ lng: number; lat: number }>) {
+  const features = points.map((p, index) =>
+    point([p.lng, p.lat], {
+      active: true,
+      id: index.toString(),
+    }),
+  );
+  return featureCollection(features);
 }
