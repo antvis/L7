@@ -67,8 +67,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
             ),
           );
         }
-
         this.logger.debug('remapping finished');
+        // 处理文本更新
+        layer.emit('remapping', null);
       }
     });
   }
@@ -88,11 +89,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return this.applyAttributeMapping(filter, record)[0];
       });
     }
-    // TODO: FIXME
-    // if (!filterData) {
-    //   return;
-    // }
-    // mapping with source data
     layer.setEncodedData(this.mapping(attributes, filterData));
   }
 

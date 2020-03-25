@@ -36,44 +36,56 @@ interface IPointTextLayerStyleOptions {
   textAllowOverlap: boolean;
 }
 export function TextTriangulation(feature: IEncodeFeature) {
-  const centroid = feature.centroid as number[]; // 计算中心点
-  const { glyphQuads } = feature;
+  // @ts-ignore
+  const that = this as TextModel;
+  const id = feature.id as number;
   const vertices: number[] = [];
   const indices: number[] = [];
+
+  if (!that.glyphInfoMap || !that.glyphInfoMap[id]) {
+    return {
+      vertices: [], // [ x, y, z, tex.x,tex.y, offset.x. offset.y]
+      indices: [],
+      size: 7,
+    };
+  }
+  const centroid = that.glyphInfoMap[id].centroid as number[]; // 计算中心点
   const coord =
     centroid.length === 2 ? [centroid[0], centroid[1], 0] : centroid;
-  glyphQuads.forEach((quad: IGlyphQuad, index: number) => {
-    vertices.push(
-      ...coord,
-      quad.tex.x,
-      quad.tex.y + quad.tex.height,
-      quad.tl.x,
-      quad.tl.y,
-      ...coord,
-      quad.tex.x + quad.tex.width,
-      quad.tex.y + quad.tex.height,
-      quad.tr.x,
-      quad.tr.y,
-      ...coord,
-      quad.tex.x + quad.tex.width,
-      quad.tex.y,
-      quad.br.x,
-      quad.br.y,
-      ...coord,
-      quad.tex.x,
-      quad.tex.y,
-      quad.bl.x,
-      quad.bl.y,
-    );
-    indices.push(
-      0 + index * 4,
-      1 + index * 4,
-      2 + index * 4,
-      2 + index * 4,
-      3 + index * 4,
-      0 + index * 4,
-    );
-  });
+  that.glyphInfoMap[id].glyphQuads.forEach(
+    (quad: IGlyphQuad, index: number) => {
+      vertices.push(
+        ...coord,
+        quad.tex.x,
+        quad.tex.y + quad.tex.height,
+        quad.tl.x,
+        quad.tl.y,
+        ...coord,
+        quad.tex.x + quad.tex.width,
+        quad.tex.y + quad.tex.height,
+        quad.tr.x,
+        quad.tr.y,
+        ...coord,
+        quad.tex.x + quad.tex.width,
+        quad.tex.y,
+        quad.br.x,
+        quad.br.y,
+        ...coord,
+        quad.tex.x,
+        quad.tex.y,
+        quad.bl.x,
+        quad.bl.y,
+      );
+      indices.push(
+        0 + index * 4,
+        1 + index * 4,
+        2 + index * 4,
+        2 + index * 4,
+        3 + index * 4,
+        0 + index * 4,
+      );
+    },
+  );
   return {
     vertices, // [ x, y, z, tex.x,tex.y, offset.x. offset.y]
     indices,
@@ -82,21 +94,20 @@ export function TextTriangulation(feature: IEncodeFeature) {
 }
 
 export default class TextModel extends BaseModel {
-  private texture: ITexture2D;
-  private glyphInfo: IEncodeFeature[];
-  private currentZoom: number = -1;
-  private extent: [[number, number], [number, number]];
-  private textureHeight: number = 0;
-  private textCount: number = 0;
-  private preTextStyle: Partial<IPointTextLayerStyleOptions> = {};
-  private glyphInfoMap: {
+  public glyphInfo: IEncodeFeature[];
+  public glyphInfoMap: {
     [key: string]: {
       shaping: any;
       glyphQuads: IGlyphQuad[];
       centroid: number[];
     };
   } = {};
-
+  private texture: ITexture2D;
+  private currentZoom: number = -1;
+  private extent: [[number, number], [number, number]];
+  private textureHeight: number = 0;
+  private textCount: number = 0;
+  private preTextStyle: Partial<IPointTextLayerStyleOptions> = {};
   public getUninforms(): IModelUniform {
     const {
       opacity = 1.0,
@@ -130,6 +141,11 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    this.layer.on('remapping', () => {
+      this.initGlyph();
+      this.updateTexture();
+      this.reBuildModel();
+    });
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -147,7 +163,7 @@ export default class TextModel extends BaseModel {
         moduleName: 'pointText',
         vertexShader: textVert,
         fragmentShader: textFrag,
-        triangulation: TextTriangulation,
+        triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
       }),
@@ -166,17 +182,7 @@ export default class TextModel extends BaseModel {
       (!textAllowOverlap && (Math.abs(this.currentZoom - zoom) > 1 || !flag)) ||
       textAllowOverlap !== this.preTextStyle.textAllowOverlap
     ) {
-      this.filterGlyphs();
-      this.layer.models = [
-        this.layer.buildLayerModel({
-          moduleName: 'pointText',
-          vertexShader: textVert,
-          fragmentShader: textFrag,
-          triangulation: TextTriangulation,
-          depth: { enable: false },
-          blend: this.getBlend(),
-        }),
-      ];
+      this.reBuildModel();
       return true;
     }
     return false;
@@ -314,13 +320,11 @@ export default class TextModel extends BaseModel {
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
       feature.centroid = calculteCentroid(coordinates);
-      if (id) {
-        this.glyphInfoMap[id] = {
-          shaping,
-          glyphQuads,
-          centroid: calculteCentroid(coordinates),
-        };
-      }
+      this.glyphInfoMap[id as number] = {
+        shaping,
+        glyphQuads,
+        centroid: calculteCentroid(coordinates),
+      };
       return feature;
     });
   }
@@ -333,9 +337,11 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     if (textAllowOverlap) {
-      this.layer.setEncodedData(this.glyphInfo);
+      // 如果允许文本覆盖
+      // this.layer.setEncodedData(this.glyphInfo);
       return;
     }
+    this.glyphInfoMap = {};
     this.currentZoom = this.mapService.getZoom();
     this.extent = this.textExtent();
     const { width, height } = this.rendererService.getViewportSize();
@@ -362,7 +368,11 @@ export default class TextModel extends BaseModel {
         return false;
       }
     });
-    this.layer.setEncodedData(filterData);
+    filterData.forEach((item) => {
+      // @ts-ignore
+      this.glyphInfoMap[item.id as number] = item;
+    });
+    // this.layer.setEncodedData(filterData);
   }
   /**
    * 初始化文字布局
@@ -389,15 +399,14 @@ export default class TextModel extends BaseModel {
     });
   }
 
-  private rebuildModel() {
-    // 避让 anchor,等属性变化时需要重新构建model
+  private reBuildModel() {
     this.filterGlyphs();
-    return [
+    this.layer.models = [
       this.layer.buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
         fragmentShader: textFrag,
-        triangulation: TextTriangulation,
+        triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
       }),
