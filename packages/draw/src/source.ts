@@ -1,6 +1,6 @@
 import { Feature, FeatureCollection } from '@turf/helpers';
 export default class DrawSource {
-  private data: FeatureCollection;
+  public data: FeatureCollection;
   constructor(data?: FeatureCollection) {
     this.data = data || this.getDefaultData();
   }
@@ -20,6 +20,18 @@ export default class DrawSource {
     const index = this.getFeatureIndex(feature);
     if (index !== undefined) {
       this.data.features.splice(index, 1);
+    }
+  }
+  public setFeatureActive(feature: Feature) {
+    const fe = this.getFeature(feature?.properties?.id);
+    if (fe && fe.properties) {
+      fe.properties.active = true;
+    }
+  }
+  public setFeatureUnActive(feature: Feature) {
+    const fe = this.getFeature(feature?.properties?.id);
+    if (fe && fe.properties) {
+      fe.properties.active = false;
     }
   }
   public updateFeature(feature: Feature) {

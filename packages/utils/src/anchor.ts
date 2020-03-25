@@ -9,7 +9,7 @@ export enum anchorType {
   'RIGHT' = 'right',
 }
 
-export const anchorTranslate = {
+export const anchorTranslate: { [key: string]: string } = {
   center: 'translate(-50%,-50%)',
   top: 'translate(-50%,0)',
   'top-left': 'translate(0,0)',
