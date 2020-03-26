@@ -9,7 +9,12 @@ import {
   Popup,
   Scene,
 } from '@antv/l7';
-import { Feature, FeatureCollection, Geometries, point } from '@turf/helpers';
+import {
+  Feature,
+  FeatureCollection,
+  featureCollection,
+  point,
+} from '@turf/helpers';
 import selectRender from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import { createPoint, createPolygon } from '../util/create_geometry';
@@ -21,12 +26,10 @@ export interface IDrawRectOption extends IDrawFeatureOption {
   steps: number;
 }
 export default class DrawPoint extends DrawFeature {
-  private drawLayers: ILayer[] = [];
-  private drawPointLayers: ILayer[] = [];
+  protected pointFeatures: Feature[];
 
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
-    this.selectLayer = new selectRender(this);
   }
 
   public drawFinish() {
@@ -49,14 +52,18 @@ export default class DrawPoint extends DrawFeature {
   protected onClick = (e: any) => {
     const lngLat = e.lngLat;
     const feature = this.createFeature(lngLat);
-    this.drawLayers = this.addDrawLayer(this.drawLayers, feature);
-    this.disable();
-    // this.drawFinish();
+    this.drawRender.update(feature);
+    this.drawVertexLayer.update(feature);
+    this.drawFinish();
   };
 
   protected moveFeature(delta: ILngLat): Feature {
-    const newFeature = moveFeatures([this.currentFeature as Feature], delta)[0];
-    return newFeature;
+    const newFeature = moveFeatures([this.currentFeature as Feature], delta);
+    this.drawRender.updateData(featureCollection(newFeature));
+    this.drawVertexLayer.updateData(featureCollection(newFeature));
+    this.currentFeature = newFeature[0];
+    this.pointFeatures = newFeature;
+    return this.currentFeature;
   }
   protected createFeature(p: ILngLat): FeatureCollection {
     const feature = point([p.lng, p.lat], {

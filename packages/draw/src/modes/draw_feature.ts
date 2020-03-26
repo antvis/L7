@@ -18,16 +18,15 @@ import {
   point,
 } from '@turf/helpers';
 import DrawRender from '../render/draw';
+import RenderLayer from '../render/draw_result';
 import DrawVertexLayer from '../render/draw_vertex';
 import EditLayer from '../render/edit';
-import RenderLayer from '../render/render';
 import SelectLayer from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
+import { createPoint } from '../util/create_geometry';
 import DrawEdit from './draw_edit';
 import DrawMode, { IDrawOption } from './draw_mode';
 import DrawSelected from './draw_selected';
-let CircleFeatureId = 0;
-
 export interface IDrawFeatureOption extends IDrawOption {
   units: unitsType;
   steps: number;
@@ -55,8 +54,8 @@ export default abstract class DrawFeature extends DrawMode {
     this.drawRender = new DrawRender(this);
     this.drawVertexLayer = new DrawVertexLayer(this);
     this.renderLayer = new RenderLayer(this);
-    this.selectLayer = new SelectLayer(this);
-    this.editLayer = new EditLayer(this);
+
+    // this.editLayer = new EditLayer(this);
     this.selectMode = new DrawSelected(this.scene, {});
     this.editMode = new DrawEdit(this.scene, {});
     this.selectMode.on(DrawEvent.UPDATE, this.onDrawUpdate);
@@ -93,7 +92,7 @@ export default abstract class DrawFeature extends DrawMode {
       return;
     }
     this.currentFeature = null;
-    this.renderLayer.updateData();
+    this.renderLayer.updateData(this.source.data);
     this.centerLayer.setData([]);
     this.drawLayer.setData(InitFeature);
     this.drawLineLayer.setData(InitFeature);
@@ -122,33 +121,6 @@ export default abstract class DrawFeature extends DrawMode {
     this.drawLineLayer.setData(currentData);
   }
 
-  private removeDrawLayer() {
-    this.scene.removeLayer(this.drawLayer);
-    this.scene.removeLayer(this.drawLineLayer);
-    this.scene.removeLayer(this.centerLayer);
-  }
-
-  private createCircleData(center: ILngLat, endPoint: ILngLat) {
-    const radius = turfDistance(
-      point([center.lng, center.lat]),
-      point([endPoint.lng, endPoint.lat]),
-      this.getOption('units'),
-    );
-    const feature = turfCircle([center.lng, center.lat], radius, {
-      units: this.getOption('units'),
-      steps: this.getOption('steps'),
-      properties: {
-        id: `${CircleFeatureId++}`,
-        active: true,
-        radius,
-        center,
-        endPoint,
-      },
-    });
-    this.currentFeature = feature as Feature;
-    return featureCollection([feature]);
-  }
-
   private addDrawPopup(lnglat: ILngLat, dis: number) {
     const popup = new Popup({
       anchor: 'left',
@@ -163,28 +135,22 @@ export default abstract class DrawFeature extends DrawMode {
   private onModeChange = (mode: DrawModes[any]) => {
     switch (mode) {
       case DrawModes.DIRECT_SELECT:
-        this.selectLayer.hide();
-        this.editMode.setEditFeature(this.currentFeature as Feature);
-        this.editLayer.updateData(
-          featureCollection([this.currentFeature as Feature]),
-        );
-        this.editLayer.show();
+        // this.editMode.setEditFeature(this.currentFeature as Feature);
+        // this.editLayer.updateData(
+        //   featureCollection([this.currentFeature as Feature]),
+        // );
+        // this.editLayer.show();
         break;
       case DrawModes.SIMPLE_SELECT:
-        this.renderLayer.updateData();
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
         this.drawRender.enableDrag();
         this.drawVertexLayer.enableDrag();
         this.drawVertexLayer.show();
         break;
-      // this.selectLayer.updateData(
-      //   featureCollection([this.currentFeature as Feature]),
-      // );
-      // this.selectLayer.show();
       case DrawModes.STATIC:
         this.source.setFeatureUnActive(this.currentFeature as Feature);
         this.drawVertexLayer.hide();
-        this.renderLayer.updateData();
+        this.renderLayer.update(this.source.data);
         break;
     }
   };
@@ -212,6 +178,6 @@ export default abstract class DrawFeature extends DrawMode {
   private onDrawEdit = (endpoint: ILngLat) => {
     const feature = this.editFeature(endpoint);
     this.currentFeature = feature.features[0];
-    this.editLayer.updateData(feature);
+    // this.editLayer.updateData(feature);
   };
 }

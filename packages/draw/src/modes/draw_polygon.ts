@@ -28,13 +28,10 @@ export interface IDrawRectOption extends IDrawFeatureOption {
   steps: number;
 }
 export default class DrawPolygon extends DrawFeature {
-  private startPoint: ILngLat;
-  private endPoint: ILngLat;
-  private points: ILngLat[] = [];
-  private pointFeatures: Feature[];
-  private drawLayers: ILayer[] = [];
-  private drawPointLayers: ILayer[] = [];
-
+  protected startPoint: ILngLat;
+  protected endPoint: ILngLat;
+  protected points: ILngLat[] = [];
+  protected pointFeatures: Feature[];
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
   }
@@ -53,15 +50,10 @@ export default class DrawPolygon extends DrawFeature {
 
   public drawFinish() {
     const feature = this.createFeature(this.points);
-    // this.drawLayers = this.addDrawLayer(this.drawLayers, feature);
     this.drawRender.update(feature);
     const pointfeatures = createPoint(this.points);
     this.pointFeatures = pointfeatures.features;
     this.drawVertexLayer.update(pointfeatures);
-    // this.drawPointLayers = this.addDrawLayer(
-    //   this.drawPointLayers,
-    //   pointfeatures,
-    // );
     this.emit(DrawEvent.CREATE, this.currentFeature);
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
     this.disable();
@@ -84,24 +76,9 @@ export default class DrawPolygon extends DrawFeature {
     const feature = this.createFeature(this.points);
     const pointfeatures = createPoint([this.points[0], this.endPoint]);
     this.pointFeatures = pointfeatures.features;
-    // this.drawLayers = this.addDrawLayer(this.drawLayers, feature);
     this.drawRender.update(feature);
     this.drawVertexLayer.update(pointfeatures);
     this.onDraw();
-    // this.drawPointLayers = this.addDrawLayer(
-    //   this.drawPointLayers,
-    //   pointfeatures,
-    // );
-    // this.drawPointLayers[0].on('mousemove', () => {
-    //   this.setCursor('pointer');
-    // });
-    // this.drawPointLayers[0].on('unmousemove', () => {
-    //   this.setCursor('crosshair');
-    // });
-    // this.drawPointLayers[0].on('click', () => {
-    //   this.resetCursor();
-    //   this.drawFinish();
-    // });
   };
 
   protected onMouseMove = (e: any) => {
@@ -113,7 +90,6 @@ export default class DrawPolygon extends DrawFeature {
     tmpPoints.push(lngLat);
     const feature = this.createFeature(tmpPoints);
     this.drawRender.update(feature);
-    // this.drawLayers = this.addDrawLayer(this.drawLayers, feature);
   };
 
   protected onDblClick = (e: any) => {
@@ -163,15 +139,6 @@ export default class DrawPolygon extends DrawFeature {
       this.drawFinish();
     });
   };
-  private addDrawLayer(drawLayers: ILayer[], fc: FeatureCollection) {
-    if (drawLayers.length !== 0) {
-      drawLayers.map((layer) => this.scene.removeLayer(layer));
-    }
-    const style = this.getStyle('active');
-    drawLayers = renderFeature(fc, style);
-    drawLayers.map((layer) => this.scene.addLayer(layer));
-    return drawLayers;
-  }
 }
 /**
  * draw 端点响应事件

@@ -23,7 +23,7 @@ export function createCircle(
     units: options.units,
     steps: options.steps,
     properties: {
-      id: options.id,
+      ...options,
       active: true,
       radius,
       startPoint: center,
@@ -37,6 +37,9 @@ export function createCircle(
 export function createRect(
   startPoint: [number, number],
   endPoint: [number, number],
+  options: {
+    id: string;
+  },
 ): Feature {
   const minX = Math.min(startPoint[0], endPoint[0]);
   const minY = Math.min(startPoint[1], endPoint[1]);
@@ -48,6 +51,7 @@ export function createRect(
       active: true,
       startPoint,
       endPoint,
+      ...options,
     },
     geometry: {
       type: 'Polygon',

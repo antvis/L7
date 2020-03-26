@@ -7,43 +7,14 @@ import { FeatureCollection } from '@turf/helpers';
 import Draw from '../modes/draw_feature';
 import { DrawEvent, DrawModes } from '../util/constant';
 import { renderFeature } from '../util/renderFeature';
-export default class DrawLayer {
-  private drawLayers: ILayer[] = [];
-  private draw: Draw;
-  constructor(draw: Draw) {
-    this.draw = draw;
-  }
+import BaseRender from './base_render';
+export default class DrawLayer extends BaseRender {
   public update(feature: FeatureCollection) {
     this.removeLayers();
     const style = this.draw.getStyle('active');
     this.drawLayers = renderFeature(feature, style);
     this.addLayers();
   }
-  public updateData(data: any) {
-    this.drawLayers.forEach((layer) => layer.setData(data));
-  }
-
-  public destroy() {
-    this.removeLayers();
-  }
-
-  public removeLayers() {
-    if (this.drawLayers.length !== 0) {
-      this.drawLayers.forEach((layer) => this.draw.scene.removeLayer(layer));
-    }
-  }
-  public addLayers() {
-    this.drawLayers.forEach((layer) => this.draw.scene.addLayer(layer));
-  }
-
-  public show() {
-    this.drawLayers.forEach((layer) => layer.show());
-  }
-
-  public hide() {
-    this.drawLayers.forEach((layer) => layer.hide());
-  }
-
   public enableDrag() {
     this.show();
     const layer = this.drawLayers[0];
