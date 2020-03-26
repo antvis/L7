@@ -15,11 +15,6 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public renderModels() {
     const shape = this.getModelType();
     if (shape === 'heatmap') {
-      // if (this.layerModelNeedUpdate) {
-      //   this.layerModel.buildModels();
-      //   this.buildModels();
-      //   this.layerModelNeedUpdate = false;
-      // }
       if (this.layerModel) {
         this.layerModel.render(); // 独立的渲染流程
       }
