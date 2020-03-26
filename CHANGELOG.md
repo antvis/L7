@@ -5,14 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
 
-
 ### Bug Fixes
 
-* 修复颜色纹理取色问题 & 图片标注默认颜色问题 ([9d6b198](https://github.com/antvis/L7/commit/9d6b198f76b44c55ce0a094c6649c9e4130a398b))
-
-
-
-
+- 修复颜色纹理取色问题 & 图片标注默认颜色问题 ([9d6b198](https://github.com/antvis/L7/commit/9d6b198f76b44c55ce0a094c6649c9e4130a398b))
 
 ## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
 
