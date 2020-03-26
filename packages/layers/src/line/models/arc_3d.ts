@@ -69,7 +69,7 @@ export default class Arc3DModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },

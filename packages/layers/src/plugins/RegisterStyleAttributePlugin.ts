@@ -86,7 +86,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         size: 4,
         update: (feature: IEncodeFeature, featureIdx: number) => {
           const { color } = feature;
-          return !color || !color.length ? [0, 0, 0, 0] : color;
+          return !color || !color.length ? [1, 1, 1, 1] : color;
         },
       },
     });

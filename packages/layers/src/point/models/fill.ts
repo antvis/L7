@@ -114,7 +114,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
