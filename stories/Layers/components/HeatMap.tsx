@@ -29,7 +29,7 @@ export default class HeatMapLayerDemo extends React.Component {
     const layer = new HeatmapLayer();
     layer
       .source(data)
-      .shape('heatmap')
+      .shape('heatmap3D')
       .size('mag', [0, 1.0]) // weight映射通道
       .style({
         intensity: 2,

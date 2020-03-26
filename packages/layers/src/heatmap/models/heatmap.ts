@@ -276,7 +276,7 @@ export default class HeatMapModel extends BaseModel {
   private build3dHeatMap() {
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
-    const triangulation = heatMap3DTriangulation(width / 2.0, height / 2.0);
+    const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
     this.shaderModuleService.registerModule('heatmap3dColor', {
       vs: heatmap3DVert,
       fs: heatmap3DFrag,

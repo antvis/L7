@@ -20,7 +20,7 @@ vec2 toBezier(float t, vec4 p){
 void main() {
   v_texCoord = a_Uv;
 
-  vec2 pos = 1.8 * (a_Uv * vec2(2.0) - vec2(1.0));
+  vec2 pos =(a_Uv * vec2(2.0) - vec2(1.0));
 
 
   vec4 p1 = vec4(pos, 0.0, 1.0);
@@ -40,6 +40,6 @@ void main() {
 
   v_intensity = texture2D(u_texture, v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
-  gl_Position = project_common_position_to_clipspace(vec4(position.xy, fh * 50., 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(position.xy, fh * project_pixel(50.), 1.0));
 
 }
