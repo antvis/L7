@@ -112,9 +112,9 @@ export default class PickingService implements IPickingService {
     const xInDevicePixel = x * window.devicePixelRatio;
     const yInDevicePixel = y * window.devicePixelRatio;
     if (
-      xInDevicePixel > width ||
+      xInDevicePixel > width - 1 * window.devicePixelRatio ||
       xInDevicePixel < 0 ||
-      yInDevicePixel > height ||
+      yInDevicePixel > height - 1 * window.devicePixelRatio ||
       yInDevicePixel < 0
     ) {
       return;
