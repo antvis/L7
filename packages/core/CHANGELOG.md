@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+
+### Bug Fixes
+
+* 拾取 invalid x offset ([8282007](https://github.com/antvis/L7/commit/82820077f40998e156337b266623309eff6b2d60))
+
+
+
+
+
 ## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
 
 **Note:** Version bump only for package @antv/l7-core
