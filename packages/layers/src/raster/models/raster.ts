@@ -70,7 +70,7 @@ export default class RasterModel extends BaseModel {
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
-      flipY: true,
+      flipY: false,
     });
     return [
       this.layer.buildLayerModel({
@@ -121,7 +121,7 @@ export default class RasterModel extends BaseModel {
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
-      flipY: true,
+      flipY: false,
     });
   }
 }
