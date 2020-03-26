@@ -73,7 +73,7 @@ export default class Zoom extends Control {
       !this.disabled &&
       this.mapsService.getZoom() < this.mapsService.getMaxZoom()
     ) {
-      this.mapsService.zoomIn({});
+      this.mapsService.zoomIn();
     }
   }
   private zoomOut() {
@@ -81,7 +81,7 @@ export default class Zoom extends Control {
       !this.disabled &&
       this.mapsService.getZoom() > this.mapsService.getMinZoom()
     ) {
-      this.mapsService.zoomOut({});
+      this.mapsService.zoomOut();
     }
   }
   private createButton(
