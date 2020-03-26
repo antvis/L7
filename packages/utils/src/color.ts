@@ -37,7 +37,7 @@ export function generateColorRamp(colorRamp: IColorRamp): ImageData {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
-  const gradient = ctx.createLinearGradient(0, 0, 256, 0);
+  const gradient = ctx.createLinearGradient(0, 0, 256, 1);
   let data = null;
   const min = colorRamp.positions[0];
   const max = colorRamp.positions[colorRamp.positions.length - 1];
@@ -49,5 +49,5 @@ export function generateColorRamp(colorRamp: IColorRamp): ImageData {
   ctx.fillRect(0, 0, 256, 1);
   data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
 
-  return new ImageData(data, 16, 16);
+  return new ImageData(data, 256, 1);
 }

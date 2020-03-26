@@ -18,39 +18,44 @@ export default class HeatMapLayerDemo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        center: [121.268, 30.3628],
-        pitch: 0,
         style: 'dark',
-        zoom: 2,
+        pitch: 58.5,
+        center: [111.8759, 30.6942],
+        rotation: 0.519,
+        zoom: 3.6116,
       }),
     });
-    const data = await response.json();
-
-    const layer = new HeatmapLayer();
-    layer
-      .source(data)
-      .shape('heatmap3D')
-      .size('mag', [0, 1.0]) // weight映射通道
-      .style({
-        intensity: 2,
-        radius: 20,
-        opacity: 1.0,
-        rampColors: {
-          colors: [
-            '#FF4818',
-            '#F7B74A',
-            '#FFF598',
-            '#91EABC',
-            '#2EA9A1',
-            '#206C7C',
-          ].reverse(),
-          positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-        },
-      });
-    scene.addLayer(layer);
     scene.on('loaded', () => {
-      console.log('scene loaded');
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const layer = new HeatmapLayer({})
+            .source(data)
+            .size('capacity', [0, 1])
+            .shape('heatmap3D')
+            // weight映射通道
+            .style({
+              intensity: 10,
+              radius: 5,
+              opacity: 1.0,
+              rampColors: {
+                colors: [
+                  '#2E8AE6',
+                  '#69D1AB',
+                  '#DAF291',
+                  '#FFD591',
+                  '#FF7A45',
+                  '#CF1D49',
+                ],
+                positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+              }
+            });
+          scene.addLayer(layer);
+        });
     });
+
     this.scene = scene;
   }
 
