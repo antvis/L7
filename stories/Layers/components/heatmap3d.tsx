@@ -1,5 +1,5 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
-import { Mapbox,GaodeMap } from '@antv/l7-maps';
+import { Mapbox, GaodeMap } from '@antv/l7-maps';
 // @ts-ignore
 import * as React from 'react';
 
