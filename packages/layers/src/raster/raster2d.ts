@@ -35,7 +35,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
-      flipY: true,
+      flipY: false,
     });
     this.models = [
       this.buildLayerModel({

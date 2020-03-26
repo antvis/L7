@@ -82,13 +82,14 @@ export default class HeatMapModel extends BaseModel {
     // 初始化密度图纹理
     this.heatmapFramerBuffer = createFramebuffer({
       color: createTexture2D({
-        width,
-        height,
+        width: Math.floor(width / 4),
+        height: Math.floor(height / 4),
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
         min: gl.LINEAR,
         mag: gl.LINEAR,
       }),
+      depth: false,
     });
 
     // 初始化颜色纹理
@@ -99,9 +100,9 @@ export default class HeatMapModel extends BaseModel {
       height: imageData.height,
       wrapS: gl.CLAMP_TO_EDGE,
       wrapT: gl.CLAMP_TO_EDGE,
-      min: gl.LINEAR,
-      mag: gl.LINEAR,
-      flipY: true,
+      min: gl.NEAREST,
+      mag: gl.NEAREST,
+      flipY: false,
     });
 
     return [this.intensityModel, this.colorModel];
@@ -149,7 +150,7 @@ export default class HeatMapModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size = 2 } = feature;
+          const { size = 1 } = feature;
           return [size as number];
         },
       },
@@ -168,9 +169,9 @@ export default class HeatMapModel extends BaseModel {
         enable: true,
         func: {
           srcRGB: gl.ONE,
-          srcAlpha: gl.ONE_MINUS_SRC_ALPHA,
+          srcAlpha: 1,
           dstRGB: gl.ONE,
-          dstAlpha: gl.ONE_MINUS_SRC_ALPHA,
+          dstAlpha: 1,
         },
       },
     });
@@ -216,15 +217,7 @@ export default class HeatMapModel extends BaseModel {
       depth: {
         enable: false,
       },
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: gl.SRC_ALPHA,
-          srcAlpha: 1,
-          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-          dstAlpha: 1,
-        },
-      },
+      blend: this.getBlend(),
       count: 6,
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],

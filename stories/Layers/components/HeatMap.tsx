@@ -37,13 +37,13 @@ export default class HeatMapLayerDemo extends React.Component {
         opacity: 1.0,
         rampColors: {
           colors: [
-            '#FF4818',
-            '#F7B74A',
-            '#FFF598',
-            '#91EABC',
-            '#2EA9A1',
-            '#206C7C',
-          ].reverse(),
+            'rgba(33,102,172,0)',
+            'rgb(103,169,207)',
+            'rgb(209,229,240)',
+            'rgb(253,219,199)',
+            'rgb(239,138,98)',
+            'rgb(178,24,43)',
+          ],
           positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
         },
       });
