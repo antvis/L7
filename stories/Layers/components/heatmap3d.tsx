@@ -1,5 +1,5 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox,GaodeMap } from '@antv/l7-maps';
 // @ts-ignore
 import * as React from 'react';
 
@@ -17,7 +17,7 @@ export default class HeatMapLayerDemo extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         style: 'dark',
         pitch: 58.5,
         center: [111.8759, 30.6942],
