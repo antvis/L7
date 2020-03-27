@@ -58,6 +58,7 @@ class Scene
   private popupService: IPopupService;
   private fontService: IFontService;
   private interactionService: IInteractionService;
+  private animate: boolean;
   private fitBoundsOptions: mapboxgl.FitBoundsOptions;
   private container: Container;
 
@@ -67,7 +68,8 @@ class Scene
       map,
       logoPosition,
       logoVisible = true,
-      fitBoundsOptions = { animate: true },
+      animate = true,
+      fitBoundsOptions = {},
     } = config;
     this.fitBoundsOptions = fitBoundsOptions;
     // 创建场景容器
@@ -281,7 +283,11 @@ class Scene
     bound: Bounds,
     fitBoundsOptions?: mapboxgl.FitBoundsOptions,
   ): void {
-    this.mapService.fitBounds(bound, this.fitBoundsOptions || fitBoundsOptions);
+    this.mapService.fitBounds(
+      bound,
+      // 选项优先级：用户传入，覆盖animate直接配置，覆盖Scene配置项传入
+      fitBoundsOptions || { ...this.fitBoundsOptions, animate: this.animate },
+    );
   }
 
   public setZoomAndCenter(zoom: number, center: Point): void {
