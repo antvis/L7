@@ -49,7 +49,7 @@ export default interface IMapController {
   /**
    * 调整地图适合指定区域
    */
-  fitBounds(bound: Bounds): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: mapboxgl.FitBoundsOptions): void;
 
   setRotation(rotation: number): void;
 

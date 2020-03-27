@@ -157,8 +157,11 @@ export default class MapboxService
     this.panTo(pixel);
   }
 
-  public fitBounds(bound: Bounds): void {
-    this.map.fitBounds(bound);
+  public fitBounds(
+    bound: Bounds,
+    fitBoundsOptions?: mapboxgl.FitBoundsOptions,
+  ): void {
+    this.map.fitBounds(bound, fitBoundsOptions);
   }
 
   public setMaxZoom(max: number): void {

@@ -654,7 +654,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   /**
    * zoom to layer Bounds
    */
-  public fitBounds(): ILayer {
+  public fitBounds(fitBoundsOptions?: mapboxgl.FitBoundsOptions): ILayer {
     if (!this.inited) {
       this.updateLayerConfig({
         autoFit: true,
@@ -663,10 +663,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     const source = this.getSource();
     const extent = source.extent;
-    this.mapService.fitBounds([
-      [extent[0], extent[1]],
-      [extent[2], extent[3]],
-    ]);
+    this.mapService.fitBounds(
+      [
+        [extent[0], extent[1]],
+        [extent[2], extent[3]],
+      ],
+      fitBoundsOptions,
+    );
     return this;
   }
 
@@ -876,9 +879,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
-    const { autoFit } = this.getLayerConfig();
+    const { autoFit, fitBoundsOptions } = this.getLayerConfig();
     if (autoFit) {
-      this.fitBounds();
+      this.fitBounds(fitBoundsOptions);
     }
 
     this.emit('dataUpdate');
