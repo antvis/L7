@@ -654,7 +654,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   /**
    * zoom to layer Bounds
    */
-  public fitBounds(fitBoundsOptions?: mapboxgl.FitBoundsOptions): ILayer {
+  public fitBounds(fitBoundsOptions?: unknown): ILayer {
     if (!this.inited) {
       this.updateLayerConfig({
         autoFit: true,
