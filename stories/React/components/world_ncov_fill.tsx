@@ -100,6 +100,10 @@ export default React.memo(function Map() {
             key={'1'}
             options={{
               autoFit: true,
+              fitBoundsOptions: {
+                duration: 0,
+                animate: false,
+              },
             }}
             source={{
               data,
