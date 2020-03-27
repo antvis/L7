@@ -270,8 +270,11 @@ class Scene
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }
-  public fitBounds(bound: Bounds): void {
-    this.mapService.fitBounds(bound);
+  public fitBounds(
+    bound: Bounds,
+    fitBoundsOptions?: mapboxgl.FitBoundsOptions,
+  ): void {
+    this.mapService.fitBounds(bound, fitBoundsOptions);
   }
 
   public setZoomAndCenter(zoom: number, center: Point): void {
