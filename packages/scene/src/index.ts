@@ -58,11 +58,18 @@ class Scene
   private popupService: IPopupService;
   private fontService: IFontService;
   private interactionService: IInteractionService;
-
+  private fitBoundsOptions: mapboxgl.FitBoundsOptions;
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, logoPosition, logoVisible = true } = config;
+    const {
+      id,
+      map,
+      logoPosition,
+      logoVisible = true,
+      fitBoundsOptions = { animate: true },
+    } = config;
+    this.fitBoundsOptions = fitBoundsOptions;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -274,7 +281,7 @@ class Scene
     bound: Bounds,
     fitBoundsOptions?: mapboxgl.FitBoundsOptions,
   ): void {
-    this.mapService.fitBounds(bound, fitBoundsOptions);
+    this.mapService.fitBounds(bound, this.fitBoundsOptions || fitBoundsOptions);
   }
 
   public setZoomAndCenter(zoom: number, center: Point): void {
