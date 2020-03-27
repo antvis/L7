@@ -59,7 +59,7 @@ class Scene
   private fontService: IFontService;
   private interactionService: IInteractionService;
   private animate: boolean;
-  private fitBoundsOptions: mapboxgl.FitBoundsOptions;
+  private fitBoundsOptions: unknown;
   private container: Container;
 
   public constructor(config: ISceneConfig) {
@@ -279,14 +279,14 @@ class Scene
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }
-  public fitBounds(
-    bound: Bounds,
-    fitBoundsOptions?: mapboxgl.FitBoundsOptions,
-  ): void {
+  public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
     this.mapService.fitBounds(
       bound,
       // 选项优先级：用户传入，覆盖animate直接配置，覆盖Scene配置项传入
-      fitBoundsOptions || { ...this.fitBoundsOptions, animate: this.animate },
+      fitBoundsOptions || {
+        ...(this.fitBoundsOptions as object),
+        animate: this.animate,
+      },
     );
   }
 

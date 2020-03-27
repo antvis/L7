@@ -9,7 +9,7 @@ export interface ISceneConfig extends IRenderConfig {
   logoPosition?: PositionName;
   logoVisible?: boolean;
   animate?: boolean;
-  fitBoundsOptions?: mapboxgl.FitBoundsOptions;
+  fitBoundsOptions?: unknown;
 }
 
 // interface IValidateResult {

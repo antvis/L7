@@ -50,7 +50,7 @@ export interface IMapService<RawMap = {}> {
   zoomOut(): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
-  fitBounds(bound: Bounds, fitBoundsOptions?: mapboxgl.FitBoundsOptions): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
   setZoomAndCenter(zoom: number, center: Point): void;
   setCenter(center: [number, number]): void;
   setPitch(pitch: number): void;

@@ -155,7 +155,7 @@ export interface ILayer {
   destroy(): void;
   source(data: any, option?: ISourceCFG): ILayer;
   setData(data: any, option?: ISourceCFG): ILayer;
-  fitBounds(fitBoundsOptions?: mapboxgl.FitBoundsOptions): ILayer;
+  fitBounds(fitBoundsOptions?: unknown): ILayer;
   /**
    * 向当前图层注册插件
    * @param plugin 插件实例
@@ -222,7 +222,7 @@ export interface ILayerConfig {
   visible: boolean;
   zIndex: number;
   autoFit: boolean;
-  fitBoundsOptions?: mapboxgl.FitBoundsOptions;
+  fitBoundsOptions?: unknown;
   name: string; //
   blend: keyof typeof BlendType;
   pickedFeatureID: number;
