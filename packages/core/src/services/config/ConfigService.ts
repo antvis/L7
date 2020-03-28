@@ -17,6 +17,7 @@ const defaultSceneConfig: Partial<ISceneConfig & IRenderConfig> = {
   logoVisible: true,
   antialias: true,
   preserveDrawingBuffer: false,
+  fitBoundsOptions: {},
 };
 
 /**

@@ -85,7 +85,7 @@ export default React.memo(function Map() {
           center: [110.19382669582967, 50.258134],
           pitch: 0,
           style: 'blank',
-          zoom: 1,
+          zoom: 10,
         }}
         style={{
           position: 'absolute',
