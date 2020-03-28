@@ -46,7 +46,7 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
-      // .select(true)
+      .select(true)
       .style({
         opacity: 1.0,
       });
@@ -73,11 +73,13 @@ export default class ScaleComponent extends React.Component {
     scene.addLayer(pointLayer);
     layer.on('click', (e) => {
       console.log(1, e);
-      layer.setSelect(e.featureId);
+      // layer.setSelect(e.featureId);
     });
     pointLayer.on('click', (e) => {
       console.log(2, e);
-      pointLayer.setSelect(e.featureId);
+    });
+    pointLayer.on('mouseout', (e) => {
+      console.log(2, e);
     });
     const scaleControl = new Scale();
     const layers = {
@@ -91,9 +93,6 @@ export default class ScaleComponent extends React.Component {
 
     scene.addControl(scaleControl);
     scene.addControl(layerControl);
-    scene.on('zoomchange', () => {
-      console.log(scene.getCenter(), scene.getZoom());
-    });
     const zoomControl = new Zoom({
       position: 'bottomright',
     });
