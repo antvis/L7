@@ -21,7 +21,7 @@ void main() {
 
   float shape_type = a_Shape;
 
-  float newSize = setPickingSize(a_Size)
+  float newSize = setPickingSize(a_Size);
 
   // radius(16-bit)
   v_radius = newSize;

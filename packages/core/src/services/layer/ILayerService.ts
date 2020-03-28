@@ -106,7 +106,7 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
-  needPick(): boolean;
+  needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
@@ -222,6 +222,7 @@ export interface ILayerConfig {
   visible: boolean;
   zIndex: number;
   pickingBuffer: number;
+  enablePropagation: boolean;
   autoFit: boolean;
   name: string; //
   blend: keyof typeof BlendType;
