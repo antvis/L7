@@ -168,7 +168,10 @@ export default class PickingService implements IPickingService {
         x,
         y,
         lngLat,
-        type: layer.getCurrentPickId() === null ? 'un' + type : 'mouseout',
+        type:
+          layer.getCurrentPickId() !== null && type === 'mousemove'
+            ? 'mouseout'
+            : 'un' + type,
         featureId: null,
         feature: null,
       };
@@ -188,7 +191,17 @@ export default class PickingService implements IPickingService {
       type === 'click' &&
       pickedColors?.toString() !== [0, 0, 0, 0].toString()
     ) {
-      this.selectFeature(layer, pickedColors); // toggle select
+      const selectedId = decodePickingColor(pickedColors);
+      if (
+        layer.getCurrentSelectedId() === null ||
+        selectedId !== layer.getCurrentSelectedId()
+      ) {
+        this.selectFeature(layer, pickedColors);
+        layer.setCurrentSelectedId(selectedId);
+      } else {
+        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.setCurrentSelectedId(null);
+      }
     }
     return isPicked;
   };

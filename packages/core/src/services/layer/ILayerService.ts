@@ -84,7 +84,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   layerModel: ILayerModel;
   dataState: IDataState; // 数据流状态
-  pickedFeatureID: number;
+  pickedFeatureID: number | null;
   hooks: {
     init: SyncBailHook;
     afterInit: SyncBailHook;
@@ -112,6 +112,8 @@ export interface ILayer {
   setContainer(container: Container): void;
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
+  setCurrentSelectedId(id: number | null): void;
+  getCurrentSelectedId(): number | null;
   prepareBuildModel(): void;
   renderModels(): void;
   buildModels(): void;

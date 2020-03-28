@@ -66,7 +66,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public maxZoom: number;
   public inited: boolean = false;
   public layerModelNeedUpdate: boolean = false;
-  public pickedFeatureID: number = -1;
+  public pickedFeatureID: number | null = null;
+  public selectedFeatureID: number | null = null;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -612,6 +613,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public getCurrentPickId(): number | null {
     return this.currentPickId;
   }
+
+  public setCurrentSelectedId(id: number) {
+    this.selectedFeatureID = id;
+  }
+
+  public getCurrentSelectedId(): number | null {
+    return this.selectedFeatureID;
+  }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
     const {
@@ -844,7 +853,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if ((type === 'click' || type === 'dblclick') && enableSelect) {
       isPick = true;
     }
-    if (type === 'mousemove' && enableHighlight) {
+    if (
+      type === 'mousemove' &&
+      (enableHighlight ||
+        this.eventNames().indexOf('mouseenter') !== -1 ||
+        this.eventNames().indexOf('mouseout') !== -1)
+    ) {
       isPick = true;
     }
 
