@@ -87,6 +87,10 @@ export default abstract class DrawFeature extends DrawMode {
 
   protected abstract editFeature(e: any): FeatureCollection;
 
+  protected abstract hideOtherLayer(): void;
+
+  protected abstract showOtherLayer(): void;
+
   protected ondrawLayerClick = () => {
     if (this.currentFeature === null) {
       return;
@@ -135,7 +139,9 @@ export default abstract class DrawFeature extends DrawMode {
   private onModeChange = (mode: DrawModes[any]) => {
     switch (mode) {
       case DrawModes.DIRECT_SELECT:
-        // this.editMode.setEditFeature(this.currentFeature as Feature);
+        this.editMode.setEditFeature(this.currentFeature as Feature);
+        this.drawVertexLayer.enableEdit();
+        // this.editMode.enable();
         // this.editLayer.updateData(
         //   featureCollection([this.currentFeature as Feature]),
         // );
@@ -144,13 +150,18 @@ export default abstract class DrawFeature extends DrawMode {
       case DrawModes.SIMPLE_SELECT:
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
         this.drawRender.enableDrag();
-        this.drawVertexLayer.enableDrag();
+        this.drawVertexLayer.disableEdit();
         this.drawVertexLayer.show();
+        this.drawRender.show();
+        this.showOtherLayer();
         break;
       case DrawModes.STATIC:
         this.source.setFeatureUnActive(this.currentFeature as Feature);
         this.drawVertexLayer.hide();
+        this.drawVertexLayer.disableEdit();
+        this.hideOtherLayer();
         this.renderLayer.update(this.source.data);
+        this.renderLayer.enableDrag();
         break;
     }
   };
@@ -178,6 +189,5 @@ export default abstract class DrawFeature extends DrawMode {
   private onDrawEdit = (endpoint: ILngLat) => {
     const feature = this.editFeature(endpoint);
     this.currentFeature = feature.features[0];
-    // this.editLayer.updateData(feature);
   };
 }

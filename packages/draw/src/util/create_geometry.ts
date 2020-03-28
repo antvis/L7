@@ -25,6 +25,7 @@ export function createCircle(
     properties: {
       ...options,
       active: true,
+      type: 'circle',
       radius,
       startPoint: center,
       endPoint,
@@ -48,6 +49,7 @@ export function createRect(
   const feature = {
     type: 'Feature',
     properties: {
+      type: 'rect',
       active: true,
       startPoint,
       endPoint,

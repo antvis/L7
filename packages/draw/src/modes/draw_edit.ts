@@ -46,6 +46,7 @@ export default class DrawEdit extends DrawFeature {
 
   protected onDragEnd = () => {
     this.emit(DrawEvent.UPDATE, null);
+    this.resetCursor();
     this.disable();
   };
   protected onClick = () => {

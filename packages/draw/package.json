@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@antv/l7": "^2.1.7",
+    "@turf/midpoint": "^5.1.5",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
     "@turf/distance": "^6.0.1",

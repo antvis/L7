@@ -86,7 +86,20 @@ export default class DrawCircle extends DrawFeature {
 
   protected editFeature(endPoint: ILngLat): FeatureCollection {
     this.endPoint = endPoint;
+    const newFeature = this.createFeature();
+    this.drawRender.updateData(newFeature);
+    const pointfeatures = createPoint([this.endPoint]);
+    this.pointFeatures = pointfeatures.features;
+    this.drawVertexLayer.updateData(pointfeatures);
     return this.createFeature();
+  }
+
+  protected showOtherLayer() {
+    this.centerLayer.show();
+  }
+
+  protected hideOtherLayer() {
+    this.centerLayer.hide();
   }
 
   private initCenterLayer() {

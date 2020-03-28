@@ -7,6 +7,7 @@ export default class DrawResultLayer extends BaseRender {
     this.removeLayers();
     const style = this.draw.getStyle('normal');
     this.drawLayers = renderFeature(feature, style);
+    this.addFilter();
     this.addLayers();
   }
   public enableDrag() {
@@ -26,6 +27,8 @@ export default class DrawResultLayer extends BaseRender {
   }
   private onClick = (e: any) => {
     this.draw.setCurrentFeature(e.feature);
+    this.draw.source.setFeatureActive(e.feature);
+    this.update(this.draw.source.data);
     this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
   };
 }

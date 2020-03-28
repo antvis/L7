@@ -18,16 +18,26 @@ export default class DrawLayer extends BaseRender {
   public enableDrag() {
     this.show();
     const layer = this.drawLayers[0];
-    layer.on('mousemove', this.onMouseMove);
+    layer.on('mouseenter', this.onMouseMove);
     layer.on('mouseout', this.onUnMouseMove);
     layer.on('click', this.onClick);
     layer.on('unclick', this.onUnClick);
   }
   public disableDrag() {
     const layer = this.drawLayers[0];
-    layer.off('mousemove', this.onMouseMove);
+    layer.off('mouseenter', this.onMouseMove);
     layer.off('mouseout', this.onUnMouseMove);
     layer.off('click', this.onClick);
+    layer.off('unclick', this.onUnClick);
+  }
+
+  public enableEdit() {
+    const layer = this.drawLayers[0];
+    layer.on('unclick', this.onUnClick);
+  }
+
+  public disableEdit() {
+    const layer = this.drawLayers[0];
     layer.off('unclick', this.onUnClick);
   }
 
@@ -43,7 +53,8 @@ export default class DrawLayer extends BaseRender {
     this.draw.selectMode.disable();
     this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
     this.disableDrag();
-    this.hide();
+    this.draw.resetCursor();
+    this.enableEdit();
   };
   private onUnClick = (e: any) => {
     this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);

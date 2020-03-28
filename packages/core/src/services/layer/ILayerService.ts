@@ -221,6 +221,7 @@ export interface ILayerConfig {
   maxZoom: number;
   visible: boolean;
   zIndex: number;
+  pickingBuffer: number;
   autoFit: boolean;
   name: string; //
   blend: keyof typeof BlendType;
