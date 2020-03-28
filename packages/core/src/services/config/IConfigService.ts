@@ -8,6 +8,8 @@ export interface ISceneConfig extends IRenderConfig {
   map: IMapWrapper;
   logoPosition?: PositionName;
   logoVisible?: boolean;
+  animate?: boolean;
+  fitBoundsOptions?: unknown;
 }
 
 // interface IValidateResult {

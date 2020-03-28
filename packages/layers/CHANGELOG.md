@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+
+### Bug Fixes
+
+* 3d 热力图抖动问题 fixes [#138](https://github.com/antvis/L7/issues/138) [#263](https://github.com/antvis/L7/issues/263) ([d56e8d6](https://github.com/antvis/L7/commit/d56e8d6205942ca12fa7ac3dfd226aecbb850ed2))
+
+
+
+
+
 ## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
 
 
