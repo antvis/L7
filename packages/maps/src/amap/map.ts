@@ -11,6 +11,7 @@ import {
   IMapConfig,
   IMapService,
   IPoint,
+  IStatusOptions,
   IViewport,
   MapServiceEvent,
   MapStyle,
@@ -200,6 +201,10 @@ export default class AMapService
   }
   public setMapStyle(style: string): void {
     this.map.setMapStyle(this.getMapStyle(style));
+  }
+
+  public setStatus(option: Partial<IStatusOptions>) {
+    this.map.setStatus(option);
   }
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
