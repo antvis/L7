@@ -23,11 +23,7 @@ function drawPoint(fe: FeatureCollection, style: any) {
     .shape('circle')
     .color(style.color)
     .size(style.size)
-    .style({
-      opacity: style.style.opacity,
-      stroke: style.style.stroke,
-      strokeWidth: style.style.strokeWidth,
-    });
+    .style(style.style);
   return [layer];
 }
 

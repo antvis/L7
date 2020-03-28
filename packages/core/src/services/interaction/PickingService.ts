@@ -136,6 +136,10 @@ export default class PickingService implements IPickingService {
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
       const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+      if (pickedFeatureIdx !== layer.getCurrentPickId()) {
+        type = 'mouseenter';
+      }
+
       const target = {
         x,
         y,
@@ -154,6 +158,7 @@ export default class PickingService implements IPickingService {
         this.triggerHoverOnLayer(layer, target);
       }
     } else {
+      // 未选中
       const target = {
         x,
         y,

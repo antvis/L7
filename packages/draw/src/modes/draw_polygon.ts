@@ -17,6 +17,7 @@ import {
   point,
 } from '@turf/helpers';
 import drawRender from '../render/draw';
+import DrawMidVertex from '../render/draw_mid_vertex';
 import selectRender from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import { createPoint, createPolygon } from '../util/create_geometry';
@@ -32,8 +33,13 @@ export default class DrawPolygon extends DrawFeature {
   protected endPoint: ILngLat;
   protected points: ILngLat[] = [];
   protected pointFeatures: Feature[];
+  protected drawMidVertexLayer: DrawMidVertex;
+
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
+    this.drawMidVertexLayer = new DrawMidVertex(this);
+    this.on(DrawEvent.MODE_CHANGE, this.addMidLayerEvent);
+    // this.editMode.on(DrawEvent.MODE_CHANGE, this.addMidLayerEvent);
   }
   public enable() {
     super.enable();
@@ -113,6 +119,7 @@ export default class DrawPolygon extends DrawFeature {
   protected createFeature(points: ILngLat[]): FeatureCollection {
     const feature = createPolygon(points, {
       id: this.getUniqId(),
+      type: 'polygon',
       active: true,
     });
     this.setCurrentFeature(feature as Feature);
@@ -139,6 +146,25 @@ export default class DrawPolygon extends DrawFeature {
       this.drawFinish();
     });
   };
+
+  protected showOtherLayer() {
+    return null;
+  }
+
+  protected hideOtherLayer() {
+    return null;
+  }
+
+  protected addMidLayerEvent(mode: DrawModes[any]) {
+    switch (mode) {
+      case DrawModes.DIRECT_SELECT:
+        this.drawMidVertexLayer.update(featureCollection(this.pointFeatures));
+        break;
+      case DrawModes.STATIC:
+        this.drawMidVertexLayer.hide();
+        break;
+    }
+  }
 }
 /**
  * draw 端点响应事件

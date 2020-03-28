@@ -79,11 +79,13 @@ const LayerStyles = {
     },
   },
   mid_point: {
-    type: 'PointLayer',
-    shape: 'circle',
-    color: '#fbb03b',
-    size: 3,
-    style: {},
+    point: {
+      type: 'PointLayer',
+      shape: 'circle',
+      color: '#fbb03b',
+      size: 3,
+      style: {},
+    },
   },
 };
 

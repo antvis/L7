@@ -5,6 +5,7 @@ uniform vec3 u_PickingColor : [0, 0, 0];
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
 uniform float u_PickingThreshold : 1.0;
+uniform float u_PickingBuffer: 0.0;
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
@@ -24,4 +25,8 @@ void setPickingColor(vec3 pickingColor) {
 
   // Stores the picking color so that the fragment shader can render it during picking
   v_PickingResult.rgb = pickingColor * COLOR_SCALE;
+}
+
+float setPickingSize(float x) {
+   return u_PickingStage == PICKING_ENCODE ? x + u_PickingBuffer : x;
 }

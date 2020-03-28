@@ -34,12 +34,13 @@ export default class World extends React.Component {
         style: 'blank',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
-        zoom: 0,
+        zoom: 5,
       }),
     });
     this.scene = scene;
     const layer = new PolygonLayer({
       name: '01',
+      autoFit: true,
     });
 
     layer

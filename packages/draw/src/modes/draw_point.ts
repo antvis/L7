@@ -80,6 +80,14 @@ export default class DrawPoint extends DrawFeature {
     return this.createFeature(endPoint);
   }
 
+  protected showOtherLayer() {
+    return null;
+  }
+
+  protected hideOtherLayer() {
+    return null;
+  }
+
   private addDrawLayer(drawLayers: ILayer[], fc: FeatureCollection) {
     if (drawLayers.length !== 0) {
       drawLayers.map((layer) => this.scene.removeLayer(layer));

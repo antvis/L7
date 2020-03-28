@@ -38,6 +38,7 @@ export default class DrawLine extends DrawPolygon {
   protected createFeature(points: ILngLat[]): FeatureCollection {
     const feature = createLine(points, {
       id: this.getUniqId(),
+      type: 'line',
     });
     this.setCurrentFeature(feature as Feature);
     return {

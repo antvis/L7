@@ -55,6 +55,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   maxZoom: 24,
   visible: true,
   autoFit: false,
+  pickingBuffer: 0,
   zIndex: 0,
   blend: 'normal',
   pickedFeatureID: -1,

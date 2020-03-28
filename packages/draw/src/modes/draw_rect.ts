@@ -43,9 +43,4 @@ export default class DrawRect extends DrawCircle {
     this.setCurrentFeature(feature as Feature);
     return featureCollection([feature]);
   }
-
-  protected editFeature(endPoint: ILngLat): FeatureCollection {
-    this.endPoint = endPoint;
-    return this.createFeature();
-  }
 }
