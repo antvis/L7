@@ -831,18 +831,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerService.clock.getElapsedTime() - this.animateStartTime;
   }
 
-  public needPick(): boolean {
+  public needPick(type: string): boolean {
     const {
       enableHighlight = true,
       enableSelect = true,
     } = this.getLayerConfig();
-    const eventNames = this.eventNames().filter((name) => {
-      return (
-        name !== 'inited' && name !== 'add' && name !== 'remove' && 'dataupdate' // 非拾取事件排除
-      );
-    });
-    const flag = eventNames.length > 0 || enableHighlight || enableSelect;
-    return this.isVisible() && flag;
+    // 判断layer是否监听事件;
+    let isPick = this.eventNames().indexOf(type) !== -1;
+    if ((type === 'click' || type === 'dblclick') && enableSelect) {
+      isPick = true;
+    }
+    if (type === 'mousemove' && enableHighlight) {
+      isPick = true;
+    }
+
+    return this.isVisible() && isPick;
   }
 
   public buildModels() {

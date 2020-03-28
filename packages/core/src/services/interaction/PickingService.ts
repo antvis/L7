@@ -84,20 +84,20 @@ export default class PickingService implements IPickingService {
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getLayers();
       layers
-        .filter((layer) => layer.needPick())
+        .filter((layer) => layer.needPick(target.type))
         .reverse()
-        .forEach((layer) => {
+        .some((layer) => {
           clear({
             framebuffer: this.pickingFBO,
             color: [0, 0, 0, 0],
             stencil: 0,
             depth: 1,
           });
-
           layer.hooks.beforePickingEncode.call();
           layer.renderModels();
           layer.hooks.afterPickingEncode.call();
-          this.pickFromPickingFBO(layer, target);
+          const isPicked = this.pickFromPickingFBO(layer, target);
+          return isPicked && !layer.getLayerConfig().enablePropagation;
         });
     });
   }
@@ -105,6 +105,7 @@ export default class PickingService implements IPickingService {
     layer: ILayer,
     { x, y, lngLat, type }: IInteractionTarget,
   ) => {
+    let isPicked = false;
     const { getViewportSize, readPixels } = this.rendererService;
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
@@ -117,7 +118,7 @@ export default class PickingService implements IPickingService {
       yInDevicePixel > height - 1 * window.devicePixelRatio ||
       yInDevicePixel < 0
     ) {
-      return;
+      return false;
     }
     let pickedColors: Uint8Array | undefined;
     pickedColors = readPixels({
@@ -136,7 +137,10 @@ export default class PickingService implements IPickingService {
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
       const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
-      if (pickedFeatureIdx !== layer.getCurrentPickId()) {
+      if (
+        pickedFeatureIdx !== layer.getCurrentPickId() &&
+        type === 'mousemove'
+      ) {
         type = 'mouseenter';
       }
 
@@ -154,8 +158,9 @@ export default class PickingService implements IPickingService {
         // );
       } else {
         // trigger onHover/Click callback on layer
+        isPicked = true;
         layer.setCurrentPickId(pickedFeatureIdx);
-        this.triggerHoverOnLayer(layer, target);
+        this.triggerHoverOnLayer(layer, target); // 触发拾取事件
       }
     } else {
       // 未选中
@@ -183,8 +188,9 @@ export default class PickingService implements IPickingService {
       type === 'click' &&
       pickedColors?.toString() !== [0, 0, 0, 0].toString()
     ) {
-      this.selectFeature(layer, pickedColors);
+      this.selectFeature(layer, pickedColors); // toggle select
     }
+    return isPicked;
   };
   private triggerHoverOnLayer(
     layer: ILayer,
