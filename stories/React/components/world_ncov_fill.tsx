@@ -85,7 +85,7 @@ export default React.memo(function Map() {
           center: [110.19382669582967, 50.258134],
           pitch: 0,
           style: 'blank',
-          zoom: 1,
+          zoom: 10,
         }}
         style={{
           position: 'absolute',
@@ -100,6 +100,10 @@ export default React.memo(function Map() {
             key={'1'}
             options={{
               autoFit: true,
+              fitBoundsOptions: {
+                duration: 0,
+                animate: false,
+              },
             }}
             source={{
               data,

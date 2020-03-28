@@ -11,6 +11,15 @@ export interface IPoint {
   y: number;
 }
 
+export interface IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+}
 export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
   setContainer(container: Container, id: string | HTMLDivElement): void;
@@ -50,12 +59,13 @@ export interface IMapService<RawMap = {}> {
   zoomOut(): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
-  fitBounds(bound: Bounds): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
   setZoomAndCenter(zoom: number, center: Point): void;
   setCenter(center: [number, number]): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
   setMapStyle(style: any): void;
+  setStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;

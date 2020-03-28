@@ -11,6 +11,7 @@ import {
   IMapConfig,
   IMapService,
   IPoint,
+  IStatusOptions,
   IViewport,
   MapServiceEvent,
   MapStyle,
@@ -157,8 +158,8 @@ export default class MapboxService
     this.panTo(pixel);
   }
 
-  public fitBounds(bound: Bounds): void {
-    this.map.fitBounds(bound);
+  public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
+    this.map.fitBounds(bound, fitBoundsOptions as mapboxgl.FitBoundsOptions);
   }
 
   public setMaxZoom(max: number): void {
@@ -167,6 +168,38 @@ export default class MapboxService
 
   public setMinZoom(min: number): void {
     this.map.setMinZoom(min);
+  }
+  public setStatus(option: Partial<IStatusOptions>) {
+    if (option.doubleClickZoom === true) {
+      this.map.doubleClickZoom.enable();
+    }
+    if (option.doubleClickZoom === false) {
+      this.map.doubleClickZoom.disable();
+    }
+    if (option.dragEnable === false) {
+      this.map.dragPan.disable();
+    }
+    if (option.dragEnable === true) {
+      this.map.dragPan.enable();
+    }
+    if (option.rotateEnable === false) {
+      this.map.dragRotate.disable();
+    }
+    if (option.dragEnable === true) {
+      this.map.dragRotate.enable();
+    }
+    if (option.keyboardEnable === false) {
+      this.map.keyboard.disable();
+    }
+    if (option.keyboardEnable === true) {
+      this.map.keyboard.enable();
+    }
+    if (option.zoomEnable === false) {
+      this.map.scrollZoom.disable();
+    }
+    if (option.zoomEnable === true) {
+      this.map.scrollZoom.enable();
+    }
   }
 
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
