@@ -4,8 +4,6 @@ import { merge } from 'lodash';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
-import mapConfigSchema from './mapConfigSchema';
-import sceneConfigSchema from './sceneConfigSchema';
 import WarnInfo, { IWarnInfo } from './warnInfo';
 
 /**
@@ -17,6 +15,9 @@ const defaultSceneConfig: Partial<ISceneConfig & IRenderConfig> = {
   logoVisible: true,
   antialias: true,
   preserveDrawingBuffer: false,
+  fitBoundsOptions: {
+    animate: false,
+  },
 };
 
 /**
