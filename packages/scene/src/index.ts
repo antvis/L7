@@ -24,6 +24,7 @@ import {
   IRendererService,
   ISceneConfig,
   ISceneService,
+  IStatusOptions,
   Point,
   SceneEventList,
   TYPES,
@@ -58,11 +59,10 @@ class Scene
   private popupService: IPopupService;
   private fontService: IFontService;
   private interactionService: IInteractionService;
-
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, logoPosition, logoVisible = true } = config;
+    const { id, map } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -102,6 +102,21 @@ class Scene
     // TODO: 初始化组件
 
     this.initControl();
+  }
+  public getSize(): [number, number] {
+    return this.mapService.getSize();
+  }
+  public getMinZoom(): number {
+    return this.mapService.getMinZoom();
+  }
+  public getMaxZoom(): number {
+    return this.mapService.getMaxZoom();
+  }
+  public getType(): string {
+    return this.mapService.getType();
+  }
+  public getMapContainer(): HTMLElement | null {
+    return this.mapService.getMapContainer();
   }
 
   public getMapService(): IMapService<unknown> {
@@ -270,8 +285,16 @@ class Scene
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }
-  public fitBounds(bound: Bounds): void {
-    this.mapService.fitBounds(bound);
+  public fitBounds(bound: Bounds, options?: unknown): void {
+    const { fitBoundsOptions, animate } = this.sceneService.getSceneConfig();
+    this.mapService.fitBounds(
+      bound,
+      // 选项优先级：用户传入，覆盖animate直接配置，覆盖Scene配置项传入
+      options || {
+        ...(fitBoundsOptions as object),
+        animate,
+      },
+    );
   }
 
   public setZoomAndCenter(zoom: number, center: Point): void {
@@ -280,6 +303,10 @@ class Scene
 
   public setMapStyle(style: any): void {
     this.mapService.setMapStyle(style);
+  }
+
+  public setStatus(options: IStatusOptions) {
+    this.mapService.setStatus(options);
   }
 
   // conversion Method

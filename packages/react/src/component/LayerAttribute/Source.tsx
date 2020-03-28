@@ -18,7 +18,7 @@ export default React.memo(function Chart(props: ISourceProps) {
       layer.setData(data, sourceOption);
     }
     if (sourceOption.autoFit) {
-      layer.fitBounds();
+      layer.fitBounds(sourceOption && sourceOption.fitBoundsOptions);
     }
   }, [data, JSON.stringify(sourceOption)]);
   return null;
