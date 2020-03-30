@@ -28,7 +28,9 @@ function drawPoint(fe: FeatureCollection, style: any) {
 }
 
 function drawLine(fe: FeatureCollection, style: any) {
-  const layer = new LineLayer()
+  const layer = new LineLayer({
+    pickingBuffer: 3,
+  })
     .source(fe)
     .shape('line')
     .color(style.color)

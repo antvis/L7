@@ -6,8 +6,8 @@ const InitFeature = {
 import { FeatureCollection } from '@turf/helpers';
 import Draw from '../modes/draw_feature';
 import { DrawEvent, DrawModes } from '../util/constant';
-import { renderFeature } from '../util/renderFeature';
 import BaseRender from './base_render';
+import { renderFeature } from './renderFeature';
 export default class DrawLayer extends BaseRender {
   public update(feature: FeatureCollection) {
     this.removeLayers();
@@ -17,28 +17,44 @@ export default class DrawLayer extends BaseRender {
   }
   public enableDrag() {
     this.show();
+    if (this.isEnableDrag) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.on('mouseenter', this.onMouseMove);
     layer.on('mouseout', this.onUnMouseMove);
     layer.on('click', this.onClick);
     layer.on('unclick', this.onUnClick);
+    this.isEnableDrag = true;
   }
   public disableDrag() {
+    if (!this.isEnableDrag) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.off('mouseenter', this.onMouseMove);
     layer.off('mouseout', this.onUnMouseMove);
     layer.off('click', this.onClick);
     layer.off('unclick', this.onUnClick);
+    this.isEnableDrag = false;
   }
 
   public enableEdit() {
+    if (this.isEnableEdit) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.on('unclick', this.onUnClick);
+    this.isEnableDrag = true;
   }
 
   public disableEdit() {
+    if (!this.isEnableEdit) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.off('unclick', this.onUnClick);
+    this.isEnableDrag = false;
   }
 
   private onMouseMove = (e: any) => {
@@ -51,15 +67,19 @@ export default class DrawLayer extends BaseRender {
   };
   private onClick = (e: any) => {
     this.draw.selectMode.disable();
-    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
+    this.draw.editMode.enable();
     this.disableDrag();
     this.draw.resetCursor();
     this.enableEdit();
+    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
   };
+
   private onUnClick = (e: any) => {
-    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
     this.draw.selectMode.disable();
+    this.draw.editMode.disable();
     this.disableDrag();
+    this.disableEdit();
     this.hide();
+    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
   };
 }
