@@ -1,14 +1,4 @@
-import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
+import { IInteractionTarget, ILayer, ILngLat, Popup, Scene } from '@antv/l7';
 import turfCircle from '@turf/circle';
 import turfDistance from '@turf/distance';
 import {
@@ -20,10 +10,7 @@ import {
 import DrawRender from '../render/draw';
 import RenderLayer from '../render/draw_result';
 import DrawVertexLayer from '../render/draw_vertex';
-import EditLayer from '../render/edit';
-import SelectLayer from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { createPoint } from '../util/create_geometry';
 import DrawEdit from './draw_edit';
 import DrawMode, { IDrawOption } from './draw_mode';
 import DrawSelected from './draw_selected';
@@ -42,8 +29,6 @@ export default abstract class DrawFeature extends DrawMode {
   protected renderLayer: RenderLayer;
   protected drawRender: DrawRender;
   protected drawVertexLayer: DrawVertexLayer;
-  protected selectLayer: SelectLayer;
-  protected editLayer: EditLayer;
   protected centerLayer: ILayer;
 
   // 编辑过程中显示
@@ -68,6 +53,9 @@ export default abstract class DrawFeature extends DrawMode {
     this.on(DrawEvent.MODE_CHANGE, this.onModeChange);
   }
   public abstract drawFinish(): void;
+  public addVertex(feature: Feature): void {
+    throw new Error('子类未实现该方法');
+  }
   protected getDefaultOptions() {
     return {
       steps: 64,
@@ -91,40 +79,6 @@ export default abstract class DrawFeature extends DrawMode {
 
   protected abstract showOtherLayer(): void;
 
-  protected ondrawLayerClick = () => {
-    if (this.currentFeature === null) {
-      return;
-    }
-    this.currentFeature = null;
-    this.renderLayer.updateData(this.source.data);
-    this.centerLayer.setData([]);
-    this.drawLayer.setData(InitFeature);
-    this.drawLineLayer.setData(InitFeature);
-    return;
-  };
-  protected initDrawFillLayer() {
-    const style = this.getStyle('active_fill');
-    const linestyle = this.getStyle('active_line');
-    this.drawLayer = new PolygonLayer()
-      .source(InitFeature)
-      .color(style.color)
-      .shape('fill')
-      .style(style.style);
-    this.drawLineLayer = new PolygonLayer()
-      .source(InitFeature)
-      .color(linestyle.color)
-      .size(linestyle.size)
-      .shape('line')
-      .style(linestyle.style);
-    this.scene.addLayer(this.drawLayer);
-    this.scene.addLayer(this.drawLineLayer);
-  }
-
-  protected updateDrawFillLayer(currentData: any) {
-    this.drawLayer.setData(currentData);
-    this.drawLineLayer.setData(currentData);
-  }
-
   private addDrawPopup(lnglat: ILngLat, dis: number) {
     const popup = new Popup({
       anchor: 'left',
@@ -139,16 +93,14 @@ export default abstract class DrawFeature extends DrawMode {
   private onModeChange = (mode: DrawModes[any]) => {
     switch (mode) {
       case DrawModes.DIRECT_SELECT:
+        this.editMode.enable();
         this.editMode.setEditFeature(this.currentFeature as Feature);
+        this.drawVertexLayer.show();
         this.drawVertexLayer.enableEdit();
-        // this.editMode.enable();
-        // this.editLayer.updateData(
-        //   featureCollection([this.currentFeature as Feature]),
-        // );
-        // this.editLayer.show();
         break;
       case DrawModes.SIMPLE_SELECT:
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
+        this.selectMode.enable();
         this.drawRender.enableDrag();
         this.drawVertexLayer.disableEdit();
         this.drawVertexLayer.show();
@@ -179,15 +131,10 @@ export default abstract class DrawFeature extends DrawMode {
   };
 
   private onDrawMove = (delta: ILngLat) => {
-    // const feature =
     this.moveFeature(delta);
-    // this.currentFeature = feature;
-    // this.selectLayer.updateData(featureCollection([feature]));
-    // this.drawRender.updateData(featureCollection([feature]));
   };
 
   private onDrawEdit = (endpoint: ILngLat) => {
-    const feature = this.editFeature(endpoint);
-    this.currentFeature = feature.features[0];
+    this.editFeature(endpoint);
   };
 }

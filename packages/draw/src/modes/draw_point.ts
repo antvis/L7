@@ -1,25 +1,12 @@
-import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
+import { IInteractionTarget, ILayer, ILngLat, Scene } from '@antv/l7';
 import {
   Feature,
   FeatureCollection,
   featureCollection,
   point,
 } from '@turf/helpers';
-import selectRender from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { createPoint, createPolygon } from '../util/create_geometry';
-import moveFeatures, { movePoint, moveRing } from '../util/move_featrues';
-import { renderFeature } from '../util/renderFeature';
+import moveFeatures from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
 export interface IDrawRectOption extends IDrawFeatureOption {
   units: unitsType;
@@ -30,6 +17,7 @@ export default class DrawPoint extends DrawFeature {
 
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
+    this.type = 'point';
   }
 
   public drawFinish() {
@@ -86,15 +74,5 @@ export default class DrawPoint extends DrawFeature {
 
   protected hideOtherLayer() {
     return null;
-  }
-
-  private addDrawLayer(drawLayers: ILayer[], fc: FeatureCollection) {
-    if (drawLayers.length !== 0) {
-      drawLayers.map((layer) => this.scene.removeLayer(layer));
-    }
-    const style = this.getStyle('active');
-    drawLayers = renderFeature(fc, style);
-    drawLayers.map((layer) => this.scene.addLayer(layer));
-    return drawLayers;
   }
 }

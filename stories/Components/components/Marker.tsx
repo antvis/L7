@@ -25,7 +25,6 @@ export default class MarkerComponent extends React.Component {
       }),
     });
 
-
     const popup = new Popup({
       offsets: [0, 20],
     }).setText('hello');
@@ -71,7 +70,6 @@ export default class MarkerComponent extends React.Component {
 
     scene.addLayer(pointLayer);
     scene.addMarker(marker);
-
 
     scene.on('loaded', () => {
       // @ts-ignore

@@ -1,31 +1,19 @@
-import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
-import {
-  Feature,
-  FeatureCollection,
-  featureCollection,
-  Geometries,
-  point,
-} from '@turf/helpers';
+import { IInteractionTarget, ILayer, ILngLat, Scene } from '@antv/l7';
+import { Feature, FeatureCollection, featureCollection } from '@turf/helpers';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { createLine, createPoint } from '../util/create_geometry';
-import moveFeatures, { movePoint, moveRing } from '../util/move_featrues';
-import DrawFeature, { IDrawFeatureOption } from './draw_feature';
+import { createLine } from '../util/create_geometry';
+import moveFeatures from '../util/move_featrues';
+import { IDrawFeatureOption } from './draw_feature';
 import DrawPolygon from './draw_polygon';
 export interface IDrawRectOption extends IDrawFeatureOption {
   units: unitsType;
   steps: number;
 }
 export default class DrawLine extends DrawPolygon {
+  constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
+    super(scene, options);
+    this.type = 'line';
+  }
   protected moveFeature(delta: ILngLat): Feature {
     const newFeature = moveFeatures([this.currentFeature as Feature], delta);
     const newPointFeture = moveFeatures(this.pointFeatures, delta);
@@ -45,10 +33,5 @@ export default class DrawLine extends DrawPolygon {
       type: 'FeatureCollection',
       features: [feature],
     };
-  }
-
-  protected editFeature(endPoint: ILngLat): FeatureCollection {
-    this.endPoint = endPoint;
-    return this.createFeature(this.points);
   }
 }
