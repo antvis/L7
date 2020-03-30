@@ -169,7 +169,7 @@ export default class MapboxService
   public setMinZoom(min: number): void {
     this.map.setMinZoom(min);
   }
-  public setStatus(option: Partial<IStatusOptions>) {
+  public setMapStatus(option: Partial<IStatusOptions>): void {
     if (option.doubleClickZoom === true) {
       this.map.doubleClickZoom.enable();
     }

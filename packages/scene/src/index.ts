@@ -305,8 +305,8 @@ class Scene
     this.mapService.setMapStyle(style);
   }
 
-  public setStatus(options: IStatusOptions) {
-    this.mapService.setStatus(options);
+  public setMapStatus(options: IStatusOptions) {
+    this.mapService.setMapStatus(options);
   }
 
   // conversion Method
