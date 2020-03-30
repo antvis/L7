@@ -67,7 +67,7 @@ export default interface IMapController {
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
   setMapStyle(style: any): void;
-  setStatus(option: Partial<IStatusOptions>): void;
+  setMapStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;
