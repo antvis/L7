@@ -1,28 +1,17 @@
-import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
+import { IInteractionTarget, ILayer, ILngLat, Scene } from '@antv/l7';
 import {
   Feature,
   FeatureCollection,
   featureCollection,
   Geometries,
   point,
+  Position,
+  Properties,
 } from '@turf/helpers';
-import drawRender from '../render/draw';
 import DrawMidVertex from '../render/draw_mid_vertex';
-import selectRender from '../render/selected';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import { createPoint, createPolygon } from '../util/create_geometry';
-import moveFeatures, { movePoint, moveRing } from '../util/move_featrues';
-import { renderFeature } from '../util/renderFeature';
+import moveFeatures from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
 export interface IDrawRectOption extends IDrawFeatureOption {
   units: unitsType;
@@ -37,9 +26,9 @@ export default class DrawPolygon extends DrawFeature {
 
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
+    this.type = 'polygon';
     this.drawMidVertexLayer = new DrawMidVertex(this);
     this.on(DrawEvent.MODE_CHANGE, this.addMidLayerEvent);
-    // this.editMode.on(DrawEvent.MODE_CHANGE, this.addMidLayerEvent);
   }
   public enable() {
     super.enable();
@@ -63,6 +52,40 @@ export default class DrawPolygon extends DrawFeature {
     this.emit(DrawEvent.CREATE, this.currentFeature);
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
     this.disable();
+  }
+
+  public addVertex(vertex: Feature<Geometries, Properties>) {
+    // @ts-ignore
+    const id = vertex.properties.id;
+    const coord = vertex.geometry.coordinates as Position;
+    const feature = this.currentFeature as Feature<Geometries, Properties>;
+    const type = feature.geometry.type;
+    const points = [];
+    if (type === 'Polygon') {
+      const coords = feature.geometry.coordinates as Position[][];
+      coords[0].splice(id + 1, 0, coord);
+      for (let i = 0; i < coords[0].length - 1; i++) {
+        points.push({
+          lng: coords[0][i][0],
+          lat: coords[0][i][1],
+        });
+      }
+    } else {
+      const coords = feature.geometry.coordinates as Position[];
+      coords.splice(id + 1, 0, coord);
+      for (const coor of coords) {
+        points.push({
+          lng: coor[0],
+          lat: coor[1],
+        });
+      }
+    }
+    const pointfeatures = createPoint(points);
+    this.pointFeatures = pointfeatures.features;
+    this.drawRender.updateData(featureCollection([feature]));
+    this.drawVertexLayer.updateData(pointfeatures);
+    this.drawMidVertexLayer.updateData(featureCollection(this.pointFeatures));
+    this.setCurrentFeature(feature);
   }
   protected onDragStart = (e: IInteractionTarget) => {
     return null;
@@ -129,9 +152,28 @@ export default class DrawPolygon extends DrawFeature {
     };
   }
 
-  protected editFeature(endPoint: ILngLat): FeatureCollection {
-    this.endPoint = endPoint;
-    return this.createFeature(this.points);
+  protected editFeature(vertex: ILngLat): FeatureCollection {
+    const selectVertexed = this.currentVertex as Feature<
+      Geometries,
+      Properties
+    >;
+    if (selectVertexed === null) {
+      return featureCollection([]);
+    } else {
+      // @ts-ignore
+      const id = selectVertexed.properties.id;
+      selectVertexed.geometry.coordinates = [vertex.lng, vertex.lat];
+      // @ts-ignore
+      this.pointFeatures[id].geometry.coordinates = [vertex.lng, vertex.lat];
+      this.drawVertexLayer.updateData(featureCollection(this.pointFeatures));
+      this.drawMidVertexLayer.updateData(featureCollection(this.pointFeatures));
+      this.editPolygonVertex(id, vertex);
+      this.drawRender.updateData(
+        featureCollection([this.currentFeature as Feature]),
+      );
+    }
+
+    return featureCollection([]);
   }
 
   protected onDraw = () => {
@@ -159,11 +201,31 @@ export default class DrawPolygon extends DrawFeature {
     switch (mode) {
       case DrawModes.DIRECT_SELECT:
         this.drawMidVertexLayer.update(featureCollection(this.pointFeatures));
+        this.drawMidVertexLayer.show();
         break;
       case DrawModes.STATIC:
         this.drawMidVertexLayer.hide();
         break;
     }
+  }
+
+  private editPolygonVertex(id: number, vertex: ILngLat) {
+    const feature = this.currentFeature as Feature<Geometries, Properties>;
+    const type = feature.geometry.type;
+    if (type === 'Polygon') {
+      const coords = feature.geometry.coordinates as Position[][];
+      coords[0][id] = [vertex.lng, vertex.lat];
+      if (-id === 0) {
+        coords[0][coords[0].length - 1] = [vertex.lng, vertex.lat];
+      }
+    } else {
+      const coords = feature.geometry.coordinates as Position[];
+      coords[id] = [vertex.lng, vertex.lat];
+    }
+    this.setCurrentFeature(feature);
+    this.drawRender.updateData(
+      featureCollection([this.currentFeature as Feature]),
+    );
   }
 }
 /**

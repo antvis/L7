@@ -7,8 +7,8 @@ import {
   Properties,
 } from '@turf/helpers';
 import midPoint from '@turf/midpoint';
-import { renderFeature } from '../util/renderFeature';
 import BaseRender from './base_render';
+import { renderFeature } from './renderFeature';
 export default class DrawVertexLayer extends BaseRender {
   public update(pointFeatures: FeatureCollection) {
     this.removeLayers();
@@ -45,6 +45,7 @@ export default class DrawVertexLayer extends BaseRender {
     // this.draw.editMode.disable();
   };
   private onClick = (e: any) => {
+    this.draw.addVertex(e.feature);
     // 添加一个顶点 1.更新顶点 2.更新重点
   };
 
@@ -52,12 +53,21 @@ export default class DrawVertexLayer extends BaseRender {
     const midFeatures: Feature[] = [];
     fe.features.forEach((item, index) => {
       const preFeature = (item as unknown) as Feature<Point, Properties>;
+      if (this.draw.type === 'line' && index === fe.features.length - 1) {
+        return;
+      }
       const nextFeature =
         index !== fe.features.length - 1
           ? ((fe.features[index + 1] as unknown) as Feature<Point, Properties>)
           : ((fe.features[0] as unknown) as Feature<Point, Properties>);
       // @ts-ignore
-      midFeatures.push(midPoint(preFeature, nextFeature));
+      const point = midPoint(preFeature, nextFeature) as Feature<
+        Point,
+        Properties
+      >;
+      // @ts-ignore
+      point.properties.id = index;
+      midFeatures.push(point);
     });
     return featureCollection(midFeatures);
   }

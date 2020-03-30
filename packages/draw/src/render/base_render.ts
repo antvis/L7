@@ -7,10 +7,12 @@ type CallBack = (...args: any[]) => any;
 import { FeatureCollection } from '@turf/helpers';
 import Draw from '../modes/draw_feature';
 import { DrawEvent, DrawModes } from '../util/constant';
-import { renderFeature } from '../util/renderFeature';
+import { renderFeature } from './renderFeature';
 export default class BaseRenderLayer {
   public drawLayers: ILayer[] = [];
   protected draw: Draw;
+  protected isEnableDrag: boolean;
+  protected isEnableEdit: boolean;
   constructor(draw: Draw) {
     this.draw = draw;
   }

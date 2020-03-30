@@ -853,15 +853,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if ((type === 'click' || type === 'dblclick') && enableSelect) {
       isPick = true;
     }
+    if (type === 'click' && this.eventNames().indexOf('unclick') !== -1) {
+      isPick = true;
+    }
     if (
       type === 'mousemove' &&
       (enableHighlight ||
         this.eventNames().indexOf('mouseenter') !== -1 ||
+        this.eventNames().indexOf('unmousemove') !== -1 ||
         this.eventNames().indexOf('mouseout') !== -1)
     ) {
       isPick = true;
     }
-
     return this.isVisible() && isPick;
   }
 
