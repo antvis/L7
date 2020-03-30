@@ -203,7 +203,7 @@ export default class AMapService
     this.map.setMapStyle(this.getMapStyle(style));
   }
 
-  public setStatus(option: Partial<IStatusOptions>) {
+  public setMapStatus(option: Partial<IStatusOptions>): void {
     this.map.setStatus(option);
   }
   public pixelToLngLat(pixel: [number, number]): ILngLat {
