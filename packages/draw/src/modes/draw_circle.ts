@@ -1,14 +1,4 @@
-import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
+import { IInteractionTarget, ILngLat, PointLayer, Scene } from '@antv/l7';
 import { Feature, FeatureCollection, featureCollection } from '@turf/helpers';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import { createCircle, createPoint } from '../util/create_geometry';
@@ -24,7 +14,7 @@ export default class DrawCircle extends DrawFeature {
   protected pointFeatures: Feature[];
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
-    // this.selectLayer = new selectRender(this);
+    this.type = 'circle';
   }
 
   public drawFinish() {
@@ -34,7 +24,6 @@ export default class DrawCircle extends DrawFeature {
     this.startPoint = e.lngLat;
     this.setCursor('grabbing');
     this.initCenterLayer();
-    // this.initDrawFillLayer();
     this.centerLayer.setData([this.startPoint]);
   };
   protected onDragging = (e: IInteractionTarget) => {

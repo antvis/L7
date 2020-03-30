@@ -1,7 +1,7 @@
 import { FeatureCollection } from '@turf/helpers';
 import { DrawEvent, DrawModes } from '../util/constant';
-import { renderFeature } from '../util/renderFeature';
 import BaseRender from './base_render';
+import { renderFeature } from './renderFeature';
 export default class DrawResultLayer extends BaseRender {
   public update(feature: FeatureCollection) {
     this.removeLayers();

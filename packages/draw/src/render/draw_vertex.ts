@@ -1,7 +1,6 @@
 import { FeatureCollection } from '@turf/helpers';
-import { DrawEvent, DrawModes } from '../util/constant';
-import { renderFeature } from '../util/renderFeature';
 import BaseRender from './base_render';
+import { renderFeature } from './renderFeature';
 export default class DrawVertexLayer extends BaseRender {
   public update(feature: FeatureCollection) {
     this.removeLayers();
@@ -10,32 +9,37 @@ export default class DrawVertexLayer extends BaseRender {
     this.addLayers();
   }
   public enableDrag() {
-    // const layer = this.drawLayers[0];
-    // layer.on('mousemove', this.onMouseEnter);
-    // layer.on('mouseout', this.onMouseOut);
-    // layer.on('click', this.onClick);
+    return;
   }
   public disableDrag() {
-    // const layer = this.drawLayers[0];
-    // layer.off('mousemove', this.onMouseEnter);
-    // layer.off('mouseout', this.onMouseOut);
-    // layer.off('click', this.onClick);
+    return;
   }
 
   public enableEdit() {
+    if (this.isEnableEdit) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.on('mouseenter', this.onMouseEnter);
     layer.on('mouseout', this.onMouseOut);
+    layer.on('click', this.onClick);
+    this.isEnableEdit = true;
   }
 
   public disableEdit() {
+    if (!this.isEnableEdit) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.off('mouseenter', this.onMouseEnter);
     layer.off('mouseout', this.onMouseOut);
+    layer.off('click', this.onClick);
+    this.isEnableEdit = false;
   }
 
   private onMouseEnter = (e: any) => {
     this.draw.setCursor('move');
+    this.draw.setCurrentVertex(e.feature);
     this.draw.editMode.enable();
   };
   private onMouseOut = (e: any) => {
@@ -43,9 +47,7 @@ export default class DrawVertexLayer extends BaseRender {
     this.draw.editMode.disable();
   };
   private onClick = (e: any) => {
-    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
-    this.draw.selectMode.disable();
-    // this.disableDrag();
-    // this.draw.editMode.enable();
+    this.draw.setCurrentVertex(e.feature);
+    this.draw.editMode.enable();
   };
 }

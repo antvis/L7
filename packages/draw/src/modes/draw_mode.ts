@@ -1,7 +1,7 @@
 import { IInteractionTarget, IPopup, Scene } from '@antv/l7';
 import { Feature, FeatureCollection } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { merge, throttle } from 'lodash';
+import { merge } from 'lodash';
 import DrawSource from '../source';
 import LayerStyles from '../util/layerstyle';
 
@@ -22,6 +22,8 @@ let DrawFeatureId = 0;
 export default abstract class DrawMode extends EventEmitter {
   public source: DrawSource;
   public scene: Scene;
+  public type: string;
+
   protected options: {
     [key: string]: any;
   } = {
@@ -29,6 +31,7 @@ export default abstract class DrawMode extends EventEmitter {
   };
   protected drawStatus: DrawStatus = 'Drawing';
   protected currentFeature: Feature | null;
+  protected currentVertex: Feature | null;
   protected isEnable: boolean = false;
   protected popup: IPopup;
   constructor(scene: Scene, options: Partial<IDrawOption> = {}) {
@@ -68,6 +71,14 @@ export default abstract class DrawMode extends EventEmitter {
   public setCurrentFeature(feature: Feature) {
     this.currentFeature = feature;
     this.source.setFeatureActive(feature);
+  }
+
+  public setCurrentVertex(feature: Feature) {
+    this.currentVertex = feature;
+  }
+
+  public getCurrentVertex(feature: Feature) {
+    return this.currentVertex;
   }
 
   public getOption(key: string) {
