@@ -6,7 +6,7 @@ import {
   point,
 } from '@turf/helpers';
 import { unitsType } from '../util/constant';
-import { createRect } from '../util/create_geometry';
+import { createPoint, createRect } from '../util/create_geometry';
 import DrawCircle from './draw_circle';
 import { IDrawFeatureOption } from './draw_feature';
 export interface IDrawRectOption extends IDrawFeatureOption {
@@ -22,15 +22,17 @@ export default class DrawRect extends DrawCircle {
     return null;
   }
 
-  protected createFeature(): FeatureCollection {
+  protected createFeature(id: string = '0'): Feature {
+    const points = createPoint([this.endPoint]);
     const feature = createRect(
       [this.startPoint.lng, this.startPoint.lat],
       [this.endPoint.lng, this.endPoint.lat],
       {
-        id: `${this.getUniqId()}`,
+        id,
+        pointFeatures: points.features,
       },
     );
     this.setCurrentFeature(feature as Feature);
-    return featureCollection([feature]);
+    return feature;
   }
 }

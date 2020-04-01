@@ -16,6 +16,7 @@ export function createCircle(
     units: unitsType;
     steps: number;
     id: string;
+    pointFeatures: Feature[];
   },
 ): Feature {
   const radius = turfDistance(point(center), point(endPoint), options);
@@ -27,8 +28,14 @@ export function createCircle(
       active: true,
       type: 'circle',
       radius,
-      startPoint: center,
-      endPoint,
+      startPoint: {
+        lng: center[0],
+        lat: center[1],
+      },
+      endPoint: {
+        lng: endPoint[0],
+        lat: endPoint[1],
+      },
       path: [center, endPoint],
     },
   });
@@ -40,6 +47,8 @@ export function createRect(
   endPoint: [number, number],
   options: {
     id: string;
+    pointFeatures: Feature[];
+    [key: string]: any;
   },
 ): Feature {
   const minX = Math.min(startPoint[0], endPoint[0]);
@@ -51,8 +60,14 @@ export function createRect(
     properties: {
       type: 'rect',
       active: true,
-      startPoint,
-      endPoint,
+      startPoint: {
+        lng: startPoint[0],
+        lat: startPoint[1],
+      },
+      endPoint: {
+        lng: endPoint[0],
+        lat: endPoint[1],
+      },
       ...options,
     },
     geometry: {
@@ -73,7 +88,11 @@ export function createRect(
 
 export function createPolygon(
   points: Array<{ lng: number; lat: number }>,
-  options: any,
+  options: {
+    id?: string | number;
+    pointFeatures: Feature[];
+    [key: string]: any;
+  },
 ): any {
   const coords = points.map((p) => [p.lng, p.lat]);
   if (points.length < 2) {

@@ -40,8 +40,8 @@ export default class DrawPoint extends DrawFeature {
   protected onClick = (e: any) => {
     const lngLat = e.lngLat;
     const feature = this.createFeature(lngLat);
-    this.drawRender.update(feature);
-    this.drawVertexLayer.update(feature);
+    this.drawRender.update(featureCollection([feature]));
+    this.drawVertexLayer.update(featureCollection([feature]));
     this.drawFinish();
   };
 
@@ -53,19 +53,16 @@ export default class DrawPoint extends DrawFeature {
     this.pointFeatures = newFeature;
     return this.currentFeature;
   }
-  protected createFeature(p: ILngLat): FeatureCollection {
+  protected createFeature(p: ILngLat): Feature {
     const feature = point([p.lng, p.lat], {
       id: this.getUniqId(),
     });
     this.setCurrentFeature(feature as Feature);
-    return {
-      type: 'FeatureCollection',
-      features: [feature],
-    };
+    return feature;
   }
 
-  protected editFeature(endPoint: ILngLat): FeatureCollection {
-    return this.createFeature(endPoint);
+  protected editFeature(endPoint: ILngLat): void {
+    this.createFeature(endPoint);
   }
 
   protected showOtherLayer() {

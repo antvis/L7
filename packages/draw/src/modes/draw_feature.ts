@@ -53,6 +53,15 @@ export default abstract class DrawFeature extends DrawMode {
     this.on(DrawEvent.MODE_CHANGE, this.onModeChange);
   }
   public abstract drawFinish(): void;
+  public setCurrentFeature(feature: Feature) {
+    this.currentFeature = feature as Feature;
+    // @ts-ignore
+    // @ts-ignore
+    this.pointFeatures = feature.properties.pointFeatures;
+
+    this.source.setFeatureActive(feature);
+  }
+
   public addVertex(feature: Feature): void {
     throw new Error('子类未实现该方法');
   }
@@ -69,11 +78,11 @@ export default abstract class DrawFeature extends DrawMode {
 
   protected abstract onDragEnd(e: IInteractionTarget): void;
 
-  protected abstract createFeature(e?: any): FeatureCollection;
+  protected abstract createFeature(e?: any): Feature;
 
-  protected abstract moveFeature(e: ILngLat): Feature;
+  protected abstract moveFeature(e: ILngLat): void;
 
-  protected abstract editFeature(e: any): FeatureCollection;
+  protected abstract editFeature(e: any): void;
 
   protected abstract hideOtherLayer(): void;
 
@@ -95,20 +104,34 @@ export default abstract class DrawFeature extends DrawMode {
       case DrawModes.DIRECT_SELECT:
         this.editMode.enable();
         this.editMode.setEditFeature(this.currentFeature as Feature);
+        this.drawRender.updateData(
+          featureCollection([this.currentFeature as Feature]),
+        );
+        this.drawVertexLayer.updateData(
+          featureCollection(this.currentFeature?.properties?.pointFeatures),
+        );
         this.drawVertexLayer.show();
         this.drawVertexLayer.enableEdit();
+        this.showOtherLayer();
         break;
       case DrawModes.SIMPLE_SELECT:
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
         this.selectMode.enable();
         this.drawRender.enableDrag();
+        this.drawRender.updateData(
+          featureCollection([this.currentFeature as Feature]),
+        );
+        this.drawVertexLayer.updateData(
+          featureCollection(this.currentFeature?.properties?.pointFeatures),
+        );
         this.drawVertexLayer.disableEdit();
         this.drawVertexLayer.show();
         this.drawRender.show();
         this.showOtherLayer();
         break;
       case DrawModes.STATIC:
-        this.source.setFeatureUnActive(this.currentFeature as Feature);
+        this.source.updateFeature(this.currentFeature as Feature);
+        this.source.clearFeatureActive();
         this.drawVertexLayer.hide();
         this.drawVertexLayer.disableEdit();
         this.hideOtherLayer();
@@ -120,10 +143,6 @@ export default abstract class DrawFeature extends DrawMode {
 
   private onDrawCreate = (feature: Feature) => {
     this.source.addFeature(feature);
-    if (this.popup) {
-      this.popup.remove();
-    }
-    // this.removeDrawLayer();
   };
 
   private onDrawUpdate = (feature: Feature) => {
