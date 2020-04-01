@@ -1,7 +1,7 @@
-import { IInteractionTarget, ILayer, ILngLat, Scene } from '@antv/l7';
-import { Feature, FeatureCollection, featureCollection } from '@turf/helpers';
-import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { createLine } from '../util/create_geometry';
+import { ILngLat, Scene } from '@antv/l7';
+import { Feature, featureCollection } from '@turf/helpers';
+import { unitsType } from '../util/constant';
+import { createLine, createPoint } from '../util/create_geometry';
 import moveFeatures from '../util/move_featrues';
 import { IDrawFeatureOption } from './draw_feature';
 import DrawPolygon from './draw_polygon';
@@ -23,15 +23,16 @@ export default class DrawLine extends DrawPolygon {
     this.pointFeatures = newPointFeture;
     return this.currentFeature;
   }
-  protected createFeature(points: ILngLat[]): FeatureCollection {
+  protected createFeature(points: ILngLat[]): Feature {
+    const pointfeatures = createPoint(this.points);
+    this.pointFeatures = pointfeatures.features;
     const feature = createLine(points, {
       id: this.getUniqId(),
       type: 'line',
+      active: true,
+      pointFeatures: this.pointFeatures,
     });
     this.setCurrentFeature(feature as Feature);
-    return {
-      type: 'FeatureCollection',
-      features: [feature],
-    };
+    return feature;
   }
 }

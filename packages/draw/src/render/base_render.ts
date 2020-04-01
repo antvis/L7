@@ -17,6 +17,9 @@ export default class BaseRenderLayer {
     this.draw = draw;
   }
   public update(feature: FeatureCollection) {
+    if (this.drawLayers.length > 0) {
+      this.updateData(feature);
+    }
     this.removeLayers();
     const style = this.draw.getStyle('normal');
     this.drawLayers = renderFeature(feature, style);

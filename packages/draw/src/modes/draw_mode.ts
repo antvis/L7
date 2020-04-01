@@ -23,6 +23,7 @@ export default abstract class DrawMode extends EventEmitter {
   public source: DrawSource;
   public scene: Scene;
   public type: string;
+  public isEnable: boolean = false;
 
   protected options: {
     [key: string]: any;
@@ -32,7 +33,6 @@ export default abstract class DrawMode extends EventEmitter {
   protected drawStatus: DrawStatus = 'Drawing';
   protected currentFeature: Feature | null;
   protected currentVertex: Feature | null;
-  protected isEnable: boolean = false;
   protected popup: IPopup;
   constructor(scene: Scene, options: Partial<IDrawOption> = {}) {
     super();
@@ -80,6 +80,9 @@ export default abstract class DrawMode extends EventEmitter {
   public getCurrentVertex(feature: Feature) {
     return this.currentVertex;
   }
+  public getCurrentFeature() {
+    return this.currentVertex;
+  }
 
   public getOption(key: string) {
     return this.options[key];
@@ -94,15 +97,15 @@ export default abstract class DrawMode extends EventEmitter {
   }
 
   public setCursor(cursor: string) {
-    const container = this.scene.getContainer();
+    const container = this.scene.getMapCanvasContainer();
     if (container) {
       container.style.cursor = cursor;
     }
   }
   public resetCursor() {
-    const container = this.scene.getContainer();
+    const container = this.scene.getMapCanvasContainer();
     if (container) {
-      container.style.cursor = 'default';
+      container.removeAttribute('style');
     }
   }
 

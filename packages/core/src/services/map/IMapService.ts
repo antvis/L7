@@ -52,6 +52,7 @@ export interface IMapService<RawMap = {}> {
   getRotation(): number;
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
+  getMapCanvasContainer(): HTMLElement;
 
   // control with raw map
   setRotation(rotation: number): void;

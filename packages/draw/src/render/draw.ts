@@ -3,7 +3,7 @@ const InitFeature = {
   type: 'FeatureCollection',
   features: [],
 };
-import { FeatureCollection } from '@turf/helpers';
+import { Feature, FeatureCollection } from '@turf/helpers';
 import Draw from '../modes/draw_feature';
 import { DrawEvent, DrawModes } from '../util/constant';
 import BaseRender from './base_render';
@@ -71,12 +71,16 @@ export default class DrawLayer extends BaseRender {
     this.disableDrag();
     this.draw.resetCursor();
     this.enableEdit();
+    this.draw.setCurrentFeature(e.feature);
     this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
   };
 
   private onUnClick = (e: any) => {
     this.draw.selectMode.disable();
     this.draw.editMode.disable();
+    this.draw.source.setFeatureUnActive(
+      this.draw.getCurrentFeature() as Feature,
+    );
     this.disableDrag();
     this.disableEdit();
     this.hide();
