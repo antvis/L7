@@ -21,6 +21,7 @@ import WorldDemo from './components/polygon_line';
 import ImageLayerDemo from './components/RasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 import TextLayerDemo from './components/Text';
+import GridTest from './components/gridtest';
 
 // @ts-ignore
 storiesOf('图层', module)
@@ -44,4 +45,5 @@ storiesOf('图层', module)
   .add('网格热力图', () => <HexagonLayerDemo />)
   .add('栅格', () => <RasterLayerDemo />)
   .add('图片', () => <ImageLayerDemo />)
+  .add('网格测试', () => <GridTest />)
   .add('世界地图', () => <WorldDemo />);

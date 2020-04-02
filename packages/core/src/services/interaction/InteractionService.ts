@@ -99,8 +99,8 @@ export default class InteractionService extends EventEmitter
       $containter.removeEventListener('mousemove', this.onHover);
       // this.hammertime.off('dblclick click', this.onHammer);
       this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
-      $containter.removeEventListener('touchstart', this.onTouch);
-      $containter.removeEventListener('click', this.onHover);
+      // $containter.removeEventListener('touchstart', this.onTouch);
+      // $containter.removeEventListener('click', this.onHover);
       $containter.removeEventListener('mousedown', this.onHover);
       $containter.removeEventListener('mouseup', this.onHover);
       // $containter.removeEventListener('dblclick', this.onHover);

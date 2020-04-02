@@ -849,11 +849,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       enableSelect = true,
     } = this.getLayerConfig();
     // 判断layer是否监听事件;
-    let isPick = this.eventNames().indexOf(type) !== -1;
+    let isPick =
+      this.eventNames().indexOf(type) !== -1 ||
+      this.eventNames().indexOf('un' + type) !== -1;
     if ((type === 'click' || type === 'dblclick') && enableSelect) {
-      isPick = true;
-    }
-    if (type === 'click' && this.eventNames().indexOf('unclick') !== -1) {
       isPick = true;
     }
     if (
