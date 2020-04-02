@@ -76,6 +76,17 @@ export default abstract class DrawFeature extends DrawMode {
   public enableLayer() {
     this.drawRender.enableDrag();
   }
+  public clear() {
+    this.drawRender.hide();
+    this.drawVertexLayer.hide();
+    this.hideOtherLayer();
+    this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+  }
+  public reset() {
+    this.drawRender.show();
+    this.drawVertexLayer.show();
+    this.showOtherLayer();
+  }
 
   public addVertex(feature: Feature): void {
     throw new Error('子类未实现该方法');
@@ -177,8 +188,12 @@ export default abstract class DrawFeature extends DrawMode {
 
   private onDrawDelete = () => {
     if (this.drawStatus === 'DrawSelected') {
+      this.clear();
       this.source.removeFeature(this.currentFeature as Feature);
-      this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+      this.renderLayer.update(this.source.data);
+      // this.reset();
     }
+
+    // this.source.removeFeature(this.currentFeature as Feature
   };
 }
