@@ -1,6 +1,7 @@
 import EventEmitter from 'eventemitter3';
 import Hammer from 'hammerjs';
 import { inject, injectable } from 'inversify';
+// @ts-ignore
 import { TYPES } from '../../types';
 import { ILogService } from '../log/ILogService';
 import { ILngLat, IMapService } from '../map/IMapService';
@@ -58,10 +59,20 @@ export default class InteractionService extends EventEmitter
 
   private addEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
+    Hammer.defaults.domEvents = true;
     if ($containter) {
       const hammertime = new Hammer.Manager($containter);
-      hammertime.add(new Hammer.Tap({ event: 'dblclick', taps: 2 }));
-      hammertime.add(new Hammer.Tap({ event: 'click' }));
+      hammertime.add(
+        new Hammer.Tap({
+          event: 'dblclick',
+          taps: 2,
+        }),
+      );
+      hammertime.add(
+        new Hammer.Tap({
+          event: 'click',
+        }),
+      );
       hammertime.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
       hammertime.add(new Hammer.Press({}));
       // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
@@ -86,10 +97,10 @@ export default class InteractionService extends EventEmitter
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       $containter.removeEventListener('mousemove', this.onHover);
-      this.hammertime.off('dblclick click', this.onHammer);
+      // this.hammertime.off('dblclick click', this.onHammer);
       this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
-      // $containter.removeEventListener('touchstart', this.onTouch);
-      // $containter.removeEventListener('click', this.onHover);
+      $containter.removeEventListener('touchstart', this.onTouch);
+      $containter.removeEventListener('click', this.onHover);
       $containter.removeEventListener('mousedown', this.onHover);
       $containter.removeEventListener('mouseup', this.onHover);
       // $containter.removeEventListener('dblclick', this.onHover);
@@ -102,8 +113,18 @@ export default class InteractionService extends EventEmitter
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
   private onHammer = (target: HammerInput) => {
+    target.srcEvent.stopPropagation();
     const interactionTarget = this.interactionEvent(target);
     this.emit(InteractionEvent.Hover, interactionTarget);
+  };
+  private onTouch = (target: TouchEvent) => {
+    const touch = target.touches[0];
+    // @ts-ignore
+    this.onHover({
+      x: touch.pageX,
+      y: touch.pageY,
+      type: 'touch',
+    });
   };
 
   private interactionEvent(target: HammerInput) {
@@ -147,7 +168,7 @@ export default class InteractionService extends EventEmitter
       this.isDoubleTap(x, y, lngLat);
       return;
     }
-    if (type !== 'click' || type !== 'click') {
+    if (type !== 'click' && type !== 'dblclick') {
       this.emit(InteractionEvent.Hover, {
         x,
         y,
@@ -161,7 +182,7 @@ export default class InteractionService extends EventEmitter
     const nowTime = new Date().getTime();
     let type = 'click';
     if (
-      nowTime - this.lastClickTime < 500 &&
+      nowTime - this.lastClickTime < 400 &&
       Math.abs(this.lastClickXY[0] - x) < 10 &&
       Math.abs(this.lastClickXY[1] - y) < 10
     ) {
@@ -179,7 +200,7 @@ export default class InteractionService extends EventEmitter
       this.clickTimer = setTimeout(() => {
         type = 'click';
         this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
-      }, 500);
+      }, 400);
     }
   }
 }

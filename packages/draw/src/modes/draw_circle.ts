@@ -118,7 +118,9 @@ export default class DrawCircle extends DrawFeature {
   }
 
   protected hideOtherLayer() {
-    this.centerLayer.hide();
+    if (this.currentFeature) {
+      this.centerLayer.hide();
+    }
   }
 
   private initCenterLayer() {

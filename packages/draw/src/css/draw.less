@@ -3,7 +3,7 @@
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0,0,0,.1);
   display: flex;
-  button {
+  a {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px 20px;
@@ -17,16 +17,11 @@
     box-sizing: border-box;
     cursor: pointer;
   }
-  button+button {
-    border-top: 1px solid #ddd;
+  a:not(:disabled):hover {
+    background-color: rgba(0, 0, 0, 0.05);
   }
-  button:not(:disabled):hover {
-    background-color: rgba(255, 255, 255, 0.9);
-  }
-  button:focus:first-child {
-    border-radius: 4px 4px 0 0;
-  }
-  button:focus {
+
+  a:focus {
     box-shadow: 0 0 2px 2px #0096ff;
   }
   .draw-point {
@@ -44,5 +39,32 @@
   .draw-circle {
     background-image: url('https://gw.alipayobjects.com/zos/bmw-prod/fa234d68-85aa-4628-b1b6-aad47ab093b4.svg');
   }
+  .draw-delete {
+    background-image: url('https://gw.alipayobjects.com/zos/bmw-prod/0c9ba44b-aba3-4007-ba4e-ab815279886b.svg');
+  }
 
+}
+.horizontal {
+  flex-direction: row;
+  a:focus:first-child {
+    border-radius: 4px 0px 0px 4px;
+  }
+  a:focus:last-child {
+    border-radius: 0px 4px 4px 4px;
+  }
+  a+a {
+    border-left: 1px solid #eee;
+  }
+}
+.vertical {
+  flex-direction: column;
+  a:focus:first-child {
+    border-radius: 4px 4px 0 0;
+  }
+  a:focus:last-child {
+    border-radius: 0px 0px 4px 4px;
+  }
+  a+a {
+    border-top: 1px solid #eee;
+  }
 }

@@ -33,7 +33,7 @@ void main() {
 
   // TODO: billboard
   // anti-alias
-  float antialiasblur = 1.0 / (newSize + u_stroke_width);
+  float antialiasblur = 1.0 / u_DevicePixelRatio / (newSize + u_stroke_width);
 
   // construct point coords
   v_data = vec4(extrude, antialiasblur,shape_type);

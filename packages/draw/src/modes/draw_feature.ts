@@ -1,6 +1,4 @@
 import { IInteractionTarget, ILayer, ILngLat, Popup, Scene } from '@antv/l7';
-import turfCircle from '@turf/circle';
-import turfDistance from '@turf/distance';
 import {
   Feature,
   FeatureCollection,
@@ -11,6 +9,7 @@ import DrawRender from '../render/draw';
 import RenderLayer from '../render/draw_result';
 import DrawVertexLayer from '../render/draw_vertex';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
+import DrawDelete from './draw_delete';
 import DrawEdit from './draw_edit';
 import DrawMode, { IDrawOption } from './draw_mode';
 import DrawSelected from './draw_selected';
@@ -26,6 +25,8 @@ export default abstract class DrawFeature extends DrawMode {
   // 绘制完成之后显示
   public selectMode: DrawSelected;
   public editMode: DrawEdit;
+  public deleteMode: DrawDelete;
+
   protected renderLayer: RenderLayer;
   protected drawRender: DrawRender;
   protected drawVertexLayer: DrawVertexLayer;
@@ -43,12 +44,16 @@ export default abstract class DrawFeature extends DrawMode {
     // this.editLayer = new EditLayer(this);
     this.selectMode = new DrawSelected(this.scene, {});
     this.editMode = new DrawEdit(this.scene, {});
+    this.deleteMode = new DrawDelete(this.scene, {});
+
     this.selectMode.on(DrawEvent.UPDATE, this.onDrawUpdate);
     this.selectMode.on(DrawEvent.Move, this.onDrawMove);
     this.editMode.on(DrawEvent.MODE_CHANGE, this.onModeChange);
     this.editMode.on(DrawEvent.UPDATE, this.onDrawUpdate);
     this.editMode.on(DrawEvent.Edit, this.onDrawEdit);
     this.selectMode.on(DrawEvent.MODE_CHANGE, this.onModeChange);
+
+    this.deleteMode.on(DrawEvent.DELETE, this.onDrawDelete);
     this.on(DrawEvent.CREATE, this.onDrawCreate);
     this.on(DrawEvent.MODE_CHANGE, this.onModeChange);
   }
@@ -60,6 +65,16 @@ export default abstract class DrawFeature extends DrawMode {
     this.pointFeatures = feature.properties.pointFeatures;
 
     this.source.setFeatureActive(feature);
+  }
+  public deleteCurrentFeature() {
+    this.deleteMode.enable();
+  }
+  public disableLayer() {
+    // this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+    this.drawRender.disableDrag();
+  }
+  public enableLayer() {
+    this.drawRender.enableDrag();
   }
 
   public addVertex(feature: Feature): void {
@@ -113,6 +128,7 @@ export default abstract class DrawFeature extends DrawMode {
         this.drawVertexLayer.show();
         this.drawVertexLayer.enableEdit();
         this.showOtherLayer();
+        this.drawStatus = 'DrawEdit';
         break;
       case DrawModes.SIMPLE_SELECT:
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
@@ -128,6 +144,7 @@ export default abstract class DrawFeature extends DrawMode {
         this.drawVertexLayer.show();
         this.drawRender.show();
         this.showOtherLayer();
+        this.drawStatus = 'DrawSelected';
         break;
       case DrawModes.STATIC:
         this.source.updateFeature(this.currentFeature as Feature);
@@ -137,6 +154,7 @@ export default abstract class DrawFeature extends DrawMode {
         this.hideOtherLayer();
         this.renderLayer.update(this.source.data);
         this.renderLayer.enableDrag();
+        this.drawStatus = 'DrawFinish';
         break;
     }
   };
@@ -155,5 +173,12 @@ export default abstract class DrawFeature extends DrawMode {
 
   private onDrawEdit = (endpoint: ILngLat) => {
     this.editFeature(endpoint);
+  };
+
+  private onDrawDelete = () => {
+    if (this.drawStatus === 'DrawSelected') {
+      this.source.removeFeature(this.currentFeature as Feature);
+      this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+    }
   };
 }

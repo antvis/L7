@@ -51,11 +51,16 @@ export default class DrawPoint extends DrawFeature {
     this.drawVertexLayer.updateData(featureCollection(newFeature));
     this.currentFeature = newFeature[0];
     this.pointFeatures = newFeature;
+    this.currentFeature.properties = {
+      ...this.currentFeature.properties,
+      pointFeatures: newFeature,
+    };
     return this.currentFeature;
   }
   protected createFeature(p: ILngLat): Feature {
     const feature = point([p.lng, p.lat], {
       id: this.getUniqId(),
+      pointFeatures: [point([p.lng, p.lat])],
     });
     this.setCurrentFeature(feature as Feature);
     return feature;

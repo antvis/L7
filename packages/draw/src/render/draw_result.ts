@@ -30,6 +30,16 @@ export default class DrawResultLayer extends BaseRender {
     layer.off('click', this.onClick);
     this.isEnableDrag = false;
   }
+  public enableDelete() {
+    this.disableDrag();
+    const layer = this.drawLayers[0];
+    layer.on('click', this.onDeleteClick);
+  }
+
+  public disableDelete() {
+    const layer = this.drawLayers[0];
+    layer.off('click', this.onDeleteClick);
+  }
   public addFilter() {
     this.drawLayers.forEach((layer) =>
       layer.filter('active', (active) => {
@@ -41,10 +51,14 @@ export default class DrawResultLayer extends BaseRender {
     this.draw.source.setFeatureUnActive(
       this.draw.getCurrentFeature() as Feature,
     );
-    // console.log(e.feature);
     this.draw.setCurrentFeature(e.feature);
     this.draw.source.setFeatureActive(e.feature as Feature);
     this.updateData(this.draw.source.data);
     this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
+  };
+
+  private onDeleteClick = (e: any) => {
+    this.draw.source.removeFeature(e.feature);
+    this.updateData(this.draw.source.data);
   };
 }

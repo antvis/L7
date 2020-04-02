@@ -50,7 +50,6 @@ export default class DrawPolygon extends DrawFeature {
     this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
     // @ts-ignore
     // feature.properties.pointFeatures = pointfeatures;
-    // console.log(feature);
     this.emit(DrawEvent.CREATE, this.currentFeature);
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
     this.points = [];

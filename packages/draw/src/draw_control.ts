@@ -1,10 +1,12 @@
 import { Control, IControlOption, PositionType, Scene } from '@antv/l7';
 import { DOM } from '@antv/l7-utils';
+import Hammer from 'hammerjs';
 import './css/draw.less';
 import {
   DrawCircle,
+  DrawDelete,
+  DrawFeature,
   DrawLine,
-  DrawMode,
   DrawPoint,
   DrawPolygon,
   DrawRect,
@@ -20,8 +22,10 @@ export interface IDrawControlOption extends IControlOption {
 }
 export class DrawControl extends Control {
   private draw: {
-    [key: string]: DrawMode;
+    [key: string]: DrawFeature;
   } = {};
+  private drawDelete: DrawDelete;
+  private currentDraw: DrawFeature;
   private scene: Scene;
   constructor(scene: Scene, options: Partial<IDrawControlOption>) {
     super(options);
@@ -39,11 +43,10 @@ export class DrawControl extends Control {
   }
 
   public onAdd(): HTMLElement {
-    const controlClass = 'l7-control-draw';
+    const { layout } = this.controlOption;
+    const controlClass = 'l7-control-draw' + ' ' + layout;
     const { controls } = this.controlOption as IDrawControlOption;
     const container = DOM.create('div', controlClass) as HTMLElement;
-    container.style.flexDirection =
-      this.controlOption.layout === 'vertical' ? 'column' : 'row';
     if (controls.point) {
       this.draw.point = new DrawPoint(this.scene);
       this.createButton(
@@ -89,6 +92,16 @@ export class DrawControl extends Control {
         this.onButtonClick.bind(null, 'circle'),
       );
     }
+
+    if (controls.delete) {
+      this.drawDelete = new DrawDelete(this.scene);
+      this.createButton(
+        '删除',
+        'draw-delete',
+        container,
+        this.onDeleteMode.bind(null, 'delete'),
+      );
+    }
     return container;
   }
 
@@ -98,19 +111,29 @@ export class DrawControl extends Control {
     container: HTMLElement,
     fn: (...arg: any[]) => any,
   ) {
-    const link = DOM.create('button', className, container) as HTMLLinkElement;
+    const link = DOM.create('a', className, container) as HTMLLinkElement;
+    link.href = 'javascript:void(0)';
     link.title = tile;
-    link.addEventListener('click', fn);
+    link.addEventListener('click', fn, false);
     return link;
   }
 
-  private onButtonClick = (type: string) => {
+  private onButtonClick = (type: string, e: MouseEvent) => {
     for (const draw in this.draw) {
       if (draw === type) {
         this.draw[draw].enable();
+        this.currentDraw = this.draw[draw];
       } else {
         this.draw[draw].disable();
       }
     }
+  };
+
+  private onDeleteMode = (type: string, e: MouseEvent) => {
+    // e.stopPropagation();
+    if (!this.currentDraw) {
+      return;
+    }
+    return false;
   };
 }

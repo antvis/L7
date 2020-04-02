@@ -25,15 +25,17 @@ export default class Circle extends React.Component {
     scene.on('loaded', () => {
       const drawControl = new DrawControl(scene, {
         position: 'topright',
-        layout: 'vertical', // horizontal vertical
+        layout: 'horizontal', // horizontal vertical
         controls: {
           point: true,
           polygon: true,
           line: true,
           circle: true,
           rect: true,
+          delete: true,
         },
       });
+      scene.on('click', () => {});
       scene.addControl(drawControl);
     });
   }

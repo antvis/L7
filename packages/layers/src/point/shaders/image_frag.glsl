@@ -25,5 +25,6 @@ float r = 1.0 - smoothstep(radius-(radius*0.01),
   }else {
         gl_FragColor= step(0.01, textureColor.z) * v_color;
   }
+  gl_FragColor.a =gl_FragColor.a * u_opacity;
   gl_FragColor = filterColor(gl_FragColor);
 }
