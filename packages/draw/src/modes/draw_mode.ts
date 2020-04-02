@@ -76,6 +76,9 @@ export default abstract class DrawMode extends EventEmitter {
   public setCurrentVertex(feature: Feature) {
     this.currentVertex = feature;
   }
+  public deleteCurrentFeature() {
+    throw new Error('子类未实现该方法');
+  }
 
   public getCurrentVertex(feature: Feature) {
     return this.currentVertex;

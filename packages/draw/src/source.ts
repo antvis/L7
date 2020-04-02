@@ -28,6 +28,7 @@ export default class DrawSource {
       fe.properties.active = true;
     }
   }
+
   public setFeatureUnActive(feature: Feature) {
     const fe = this.getFeature(feature?.properties?.id);
     if (fe && fe.properties) {

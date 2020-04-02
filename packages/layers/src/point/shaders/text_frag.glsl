@@ -29,6 +29,7 @@ void main() {
   highp float gamma_scaled = gamma * v_gamma_scale;
 
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
-  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), vec4(u_stroke.rgb, u_stroke.a * u_opacity), smoothstep(0., 0.5, 1. - dist)) * alpha;
+  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), vec4(u_stroke.rgb, u_stroke.a * u_opacity), smoothstep(0., 0.5, 1. - dist));
+  gl_FragColor.a= gl_FragColor.a * alpha;
   gl_FragColor = filterColor(gl_FragColor);
 }
