@@ -1,6 +1,5 @@
 import { Control, IControlOption, PositionType, Scene } from '@antv/l7';
 import { DOM } from '@antv/l7-utils';
-import Hammer from 'hammerjs';
 import './css/draw.less';
 import {
   DrawCircle,
@@ -11,6 +10,7 @@ import {
   DrawPolygon,
   DrawRect,
 } from './modes';
+import { DrawEvent, DrawModes } from './util/constant';
 export interface IControls {
   [key: string]: boolean;
 }
@@ -102,6 +102,7 @@ export class DrawControl extends Control {
         this.onDeleteMode.bind(null, 'delete'),
       );
     }
+    // 监听组件 选中, 编辑
     return container;
   }
 
@@ -114,11 +115,12 @@ export class DrawControl extends Control {
     const link = DOM.create('a', className, container) as HTMLLinkElement;
     link.href = 'javascript:void(0)';
     link.title = tile;
-    link.addEventListener('click', fn, false);
+    link.addEventListener('mousedown', fn, true);
     return link;
   }
 
   private onButtonClick = (type: string, e: MouseEvent) => {
+    e.stopPropagation();
     for (const draw in this.draw) {
       if (draw === type) {
         this.draw[draw].enable();
@@ -130,10 +132,11 @@ export class DrawControl extends Control {
   };
 
   private onDeleteMode = (type: string, e: MouseEvent) => {
-    // e.stopPropagation();
+    e.stopPropagation();
     if (!this.currentDraw) {
       return;
     }
+    this.currentDraw.deleteMode.enable();
     return false;
   };
 }
