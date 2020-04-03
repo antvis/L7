@@ -21,6 +21,12 @@ export default class DrawDelete extends DrawFeature {
   public disable() {
     return null;
   }
+  protected getDefaultOptions() {
+    return {
+      ...super.getDefaultOptions(),
+      title: '删除图形',
+    };
+  }
 
   protected onDragStart(e: any): void {
     throw new Error('Method not implemented.');

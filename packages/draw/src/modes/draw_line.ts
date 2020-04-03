@@ -14,6 +14,13 @@ export default class DrawLine extends DrawPolygon {
     super(scene, options);
     this.type = 'line';
   }
+
+  protected getDefaultOptions() {
+    return {
+      ...super.getDefaultOptions(),
+      title: '绘制线',
+    };
+  }
   protected moveFeature(delta: ILngLat): Feature {
     const newFeature = moveFeatures([this.currentFeature as Feature], delta);
     const newPointFeture = moveFeatures(this.pointFeatures, delta);

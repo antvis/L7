@@ -34,7 +34,7 @@ vec4 filterPickingColor(vec4 color) {
   if (u_PickingStage == PICKING_ENCODE && length(pickingColor) < 0.001) {
     discard;
   }
-  return u_PickingStage == PICKING_ENCODE ? vec4(pickingColor, 1.0) : color;
+  return u_PickingStage == PICKING_ENCODE ? vec4(pickingColor, step(0.001,color.a)): color;
 }
 
 /*
