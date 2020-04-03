@@ -36,14 +36,14 @@ export default class HexagonLayerDemo extends React.Component {
             .source(data, {
               transforms: [
                 {
-                  type: 'hexagon',
+                  type: 'grid',
                   size: 500000,
                   field: 'name',
                   method: 'mode',
                 },
               ],
             })
-            .shape('hexagon') // 支持 circle, hexagon,triangle
+            .shape('square') // 支持 circle, hexagon,triangle
             .color('mode', [
               '#ffffe5',
               '#fff7bc',

@@ -22,7 +22,7 @@ export default class HeatMapLayerDemo extends React.Component {
         pitch: 58.5,
         center: [111.8759, 30.6942],
         rotation: 0.519,
-        zoom: 3.6116,
+        zoom: 14,
       }),
     });
     scene.on('loaded', () => {

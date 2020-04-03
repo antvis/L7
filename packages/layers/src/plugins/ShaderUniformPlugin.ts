@@ -55,6 +55,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           u_ViewportSize: [width, height],
           u_DevicePixelRatio: window.devicePixelRatio,
           u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+          u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
         }),
       );
 

@@ -108,6 +108,10 @@ export default class AMapService
     return this.map.getContainer();
   }
 
+  public getMapCanvasContainer(): HTMLElement {
+    return this.map.getContainer() as HTMLElement;
+  }
+
   public getSize(): [number, number] {
     const size = this.map.getSize();
     return [size.getWidth(), size.getHeight()];

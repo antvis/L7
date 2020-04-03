@@ -4,8 +4,6 @@ import { merge } from 'lodash';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
-import mapConfigSchema from './mapConfigSchema';
-import sceneConfigSchema from './sceneConfigSchema';
 import WarnInfo, { IWarnInfo } from './warnInfo';
 
 /**
@@ -58,6 +56,8 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   maxZoom: 24,
   visible: true,
   autoFit: false,
+  pickingBuffer: 0,
+  enablePropagation: false,
   zIndex: 0,
   blend: 'normal',
   pickedFeatureID: -1,
