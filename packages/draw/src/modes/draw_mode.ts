@@ -80,7 +80,7 @@ export default abstract class DrawMode extends EventEmitter {
     throw new Error('子类未实现该方法');
   }
 
-  public getCurrentVertex(feature: Feature) {
+  public getCurrentVertex() {
     return this.currentVertex;
   }
   public getCurrentFeature() {

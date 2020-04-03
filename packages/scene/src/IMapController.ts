@@ -59,6 +59,7 @@ export default interface IMapController {
   // get map params
   getType(): string;
   getMapContainer(): HTMLElement | null;
+  getMapCanvasContainer(): HTMLElement;
 
   // control with raw map
   setRotation(rotation: number): void;
