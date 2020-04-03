@@ -55,12 +55,6 @@ void main() {
   }
 
   float opacity_t = smoothstep(0.0, antialiased_blur, outer_df);
-  if(u_stroke_width <0.01 ) {
-     gl_FragColor = v_color * opacity_t;
-     gl_FragColor.a =  gl_FragColor.a * u_opacity;
-     gl_FragColor = filterColor(gl_FragColor);
-     return;
-  }
   float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(
     antialiased_blur,
     0.0,
@@ -73,8 +67,8 @@ void main() {
 
   // gl_FragColor = v_color * color_t;
   // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
-  gl_FragColor = opacity_t * mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
-
+  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
+  gl_FragColor.a = gl_FragColor.a * opacity_t;
   if(u_aimate.x == Animate) {
     float d = length(v_data.xy);
     float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);

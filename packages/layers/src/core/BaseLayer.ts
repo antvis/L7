@@ -66,7 +66,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public maxZoom: number;
   public inited: boolean = false;
   public layerModelNeedUpdate: boolean = false;
-  public pickedFeatureID: number = -1;
+  public pickedFeatureID: number | null = null;
+  public selectedFeatureID: number | null = null;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -612,6 +613,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public getCurrentPickId(): number | null {
     return this.currentPickId;
   }
+
+  public setCurrentSelectedId(id: number) {
+    this.selectedFeatureID = id;
+  }
+
+  public getCurrentSelectedId(): number | null {
+    return this.selectedFeatureID;
+  }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
     const {
@@ -834,18 +843,28 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerService.clock.getElapsedTime() - this.animateStartTime;
   }
 
-  public needPick(): boolean {
+  public needPick(type: string): boolean {
     const {
       enableHighlight = true,
       enableSelect = true,
     } = this.getLayerConfig();
-    const eventNames = this.eventNames().filter((name) => {
-      return (
-        name !== 'inited' && name !== 'add' && name !== 'remove' && 'dataupdate' // 非拾取事件排除
-      );
-    });
-    const flag = eventNames.length > 0 || enableHighlight || enableSelect;
-    return this.isVisible() && flag;
+    // 判断layer是否监听事件;
+    let isPick =
+      this.eventNames().indexOf(type) !== -1 ||
+      this.eventNames().indexOf('un' + type) !== -1;
+    if ((type === 'click' || type === 'dblclick') && enableSelect) {
+      isPick = true;
+    }
+    if (
+      type === 'mousemove' &&
+      (enableHighlight ||
+        this.eventNames().indexOf('mouseenter') !== -1 ||
+        this.eventNames().indexOf('unmousemove') !== -1 ||
+        this.eventNames().indexOf('mouseout') !== -1)
+    ) {
+      isPick = true;
+    }
+    return this.isVisible() && isPick;
   }
 
   public buildModels() {

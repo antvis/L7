@@ -23,7 +23,9 @@ export default class DashLineDemo extends React.Component {
         zoom: 14,
       }),
     });
-    const lineLayer = new LineLayer()
+    const lineLayer = new LineLayer({
+      pickingBuffer: 5,
+    })
       .source(await response.json())
       .size(1)
       .shape('line')

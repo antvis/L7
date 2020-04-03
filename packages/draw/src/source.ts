@@ -28,11 +28,19 @@ export default class DrawSource {
       fe.properties.active = true;
     }
   }
+
   public setFeatureUnActive(feature: Feature) {
     const fe = this.getFeature(feature?.properties?.id);
     if (fe && fe.properties) {
       fe.properties.active = false;
     }
+  }
+  public clearFeatureActive() {
+    this.data.features.forEach((fe: Feature) => {
+      if (fe && fe.properties) {
+        fe.properties.active = false;
+      }
+    });
   }
   public updateFeature(feature: Feature) {
     this.removeFeature(feature);

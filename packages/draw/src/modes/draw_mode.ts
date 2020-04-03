@@ -1,7 +1,7 @@
 import { IInteractionTarget, IPopup, Scene } from '@antv/l7';
 import { Feature, FeatureCollection } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { merge, throttle } from 'lodash';
+import { merge } from 'lodash';
 import DrawSource from '../source';
 import LayerStyles from '../util/layerstyle';
 
@@ -17,9 +17,14 @@ export type DrawStatus =
   | 'DrawFinish'
   | 'EditFinish';
 
+let DrawFeatureId = 0;
+
 export default abstract class DrawMode extends EventEmitter {
   public source: DrawSource;
   public scene: Scene;
+  public type: string;
+  public isEnable: boolean = false;
+
   protected options: {
     [key: string]: any;
   } = {
@@ -27,7 +32,7 @@ export default abstract class DrawMode extends EventEmitter {
   };
   protected drawStatus: DrawStatus = 'Drawing';
   protected currentFeature: Feature | null;
-  protected isEnable: boolean = false;
+  protected currentVertex: Feature | null;
   protected popup: IPopup;
   constructor(scene: Scene, options: Partial<IDrawOption> = {}) {
     super();
@@ -45,6 +50,7 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene.on('dragstart', this.onDragStart);
     this.scene.on('dragging', this.onDragging);
     this.scene.on('dragend', this.onDragEnd);
+    this.scene.on('click', this.onClick);
     this.setCursor(this.getOption('cursor'));
     this.isEnable = true;
   }
@@ -56,7 +62,7 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene.off('dragstart', this.onDragStart);
     this.scene.off('dragging', this.onDragging);
     this.scene.off('dragend', this.onDragEnd);
-    // this.scene.off('click', this.onClick);
+    this.scene.off('click', this.onClick);
     this.resetCursor();
     // @ts-ignore
     this.scene.map.dragPan.enable();
@@ -67,23 +73,42 @@ export default abstract class DrawMode extends EventEmitter {
     this.source.setFeatureActive(feature);
   }
 
+  public setCurrentVertex(feature: Feature) {
+    this.currentVertex = feature;
+  }
+  public deleteCurrentFeature() {
+    throw new Error('子类未实现该方法');
+  }
+
+  public getCurrentVertex(feature: Feature) {
+    return this.currentVertex;
+  }
+  public getCurrentFeature() {
+    return this.currentVertex;
+  }
+
   public getOption(key: string) {
     return this.options[key];
   }
+
   public getStyle(id: string) {
     return this.getOption('style')[id];
   }
 
+  public getUniqId() {
+    return DrawFeatureId++;
+  }
+
   public setCursor(cursor: string) {
-    const container = this.scene.getContainer();
+    const container = this.scene.getMapCanvasContainer();
     if (container) {
       container.style.cursor = cursor;
     }
   }
   public resetCursor() {
-    const container = this.scene.getContainer();
+    const container = this.scene.getMapCanvasContainer();
     if (container) {
-      container.style.cursor = 'default';
+      container.removeAttribute('style');
     }
   }
 
@@ -96,4 +121,8 @@ export default abstract class DrawMode extends EventEmitter {
   protected abstract onDragging(e: IInteractionTarget): void;
 
   protected abstract onDragEnd(e: IInteractionTarget): void;
+
+  protected onClick(e: IInteractionTarget): any {
+    return null;
+  }
 }

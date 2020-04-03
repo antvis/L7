@@ -23,7 +23,7 @@ export default class TextLayerDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
@@ -41,7 +41,7 @@ export default class TextLayerDemo extends React.Component {
       })
       .shape('s', 'text')
       // .shape('circle')
-      .size(8)
+      .size(18)
       .filter('t', (t) => {
         return t < 5;
       })
@@ -54,7 +54,7 @@ export default class TextLayerDemo extends React.Component {
         // spacing: 2, // 字符间距
         // padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
         stroke: '#fff', // 描边颜色
-        strokeWidth: 0, // 描边宽度
+        strokeWidth: 1, // 描边宽度
         // strokeOpacity: 1.0,
       });
     scene.addLayer(pointLayer);

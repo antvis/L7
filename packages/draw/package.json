@@ -33,6 +33,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@turf/midpoint": "^5.1.5",
+    "@antv/l7-component": "^2.1.9",
     "@antv/l7": "^2.1.9",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",

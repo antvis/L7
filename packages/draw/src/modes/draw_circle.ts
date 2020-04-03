@@ -1,96 +1,130 @@
+import { IInteractionTarget, ILngLat, PointLayer, Scene } from '@antv/l7';
 import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
-import { Feature, FeatureCollection, point } from '@turf/helpers';
-import selectRender from '../render/selected';
+  Feature,
+  FeatureCollection,
+  featureCollection,
+  Geometries,
+  Properties,
+} from '@turf/helpers';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
-import { createCircle } from '../util/create_geometry';
-import moveFeatures, { movePoint, moveRing } from '../util/move_featrues';
+import { createCircle, createPoint } from '../util/create_geometry';
+import moveFeatures, { movePoint } from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
 export interface IDrawRectOption extends IDrawFeatureOption {
   units: unitsType;
   steps: number;
 }
-let CircleFeatureId = 0;
 export default class DrawCircle extends DrawFeature {
-  private startPoint: ILngLat;
-  private endPoint: ILngLat;
+  protected startPoint: ILngLat;
+  protected endPoint: ILngLat;
+  protected pointFeatures: Feature[];
   constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
     super(scene, options);
-    this.selectLayer = new selectRender(this);
+    this.type = 'circle';
   }
+
+  public drawFinish() {
+    return null;
+  }
+
+  public setCurrentFeature(feature: Feature) {
+    this.currentFeature = feature as Feature;
+    // @ts-ignore
+    // @ts-ignore
+    this.pointFeatures = feature.properties.pointFeatures;
+    // @ts-ignore
+    this.startPoint = feature.properties.startPoint;
+    // @ts-ignore
+    this.endPoint = feature.properties.endPoint;
+    this.source.setFeatureActive(feature);
+  }
+
   protected onDragStart = (e: IInteractionTarget) => {
     this.startPoint = e.lngLat;
     this.setCursor('grabbing');
     this.initCenterLayer();
-    this.initDrawFillLayer();
     this.centerLayer.setData([this.startPoint]);
   };
+
   protected onDragging = (e: IInteractionTarget) => {
     this.endPoint = e.lngLat;
-    const feature = this.createFeature();
-    this.updateDrawFillLayer(feature);
+    const feature = this.createFeature() as Feature<Geometries, Properties>;
+    const properties = feature.properties as { pointFeatures: Feature[] };
+    this.drawRender.update(featureCollection([feature]));
+    this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
   };
 
   protected onDragEnd = () => {
+    const feature = this.createFeature(`${this.getUniqId()}`);
+    const properties = feature.properties as { pointFeatures: Feature[] };
+    this.drawRender.update(featureCollection([feature]));
+    this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
     this.emit(DrawEvent.CREATE, this.currentFeature);
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
     this.disable();
   };
 
-  protected moveFeature(delta: ILngLat): Feature {
-    const newFeature = moveFeatures([this.currentFeature as Feature], delta)[0];
-    const properties = newFeature.properties as {
-      startPoint: [number, number];
-      endPoint: [number, number];
-    };
-    const { startPoint, endPoint } = properties;
-    properties.startPoint = movePoint(startPoint, delta);
-    properties.endPoint = movePoint(endPoint, delta);
-    newFeature.properties = properties;
+  protected moveFeature(delta: ILngLat): void {
+    const newFeature = moveFeatures([this.currentFeature as Feature], delta);
+    this.drawRender.updateData(featureCollection(newFeature));
+    const newPointFeture = moveFeatures(this.pointFeatures, delta);
+    this.drawVertexLayer.updateData(featureCollection(newPointFeture));
+    const newStartPoint = movePoint(
+      [this.startPoint.lng, this.startPoint.lat],
+      delta,
+    );
     this.startPoint = {
-      lat: startPoint[1],
-      lng: startPoint[0],
+      lat: newStartPoint[1],
+      lng: newStartPoint[0],
     };
-    this.endPoint = {
-      lat: endPoint[1],
-      lng: endPoint[0],
+    newFeature[0].properties = {
+      ...newFeature[0].properties,
+      startPoint: this.startPoint,
+      pointFeatures: newPointFeture,
     };
-    return newFeature;
+    this.centerLayer.setData([this.startPoint]);
+    this.setCurrentFeature(newFeature[0]);
   }
 
-  protected createFeature(): FeatureCollection {
+  protected createFeature(id: string = '0'): Feature {
+    const points = createPoint([this.endPoint]);
     const feature = createCircle(
       [this.startPoint.lng, this.startPoint.lat],
       [this.endPoint.lng, this.endPoint.lat],
       {
+        pointFeatures: points.features,
         units: this.getOption('units'),
         steps: this.getOption('steps'),
-        id: `${CircleFeatureId++}`,
+        id,
       },
     );
     this.setCurrentFeature(feature as Feature);
-    return {
-      type: 'FeatureCollection',
-      features: [feature],
-    };
+    return feature;
   }
 
-  protected editFeature(endPoint: ILngLat): FeatureCollection {
+  protected editFeature(endPoint: ILngLat): void {
     this.endPoint = endPoint;
-    return this.createFeature();
+    const newFeature = this.createFeature();
+    const properties = newFeature.properties as { pointFeatures: Feature[] };
+    this.drawRender.updateData(featureCollection([newFeature]));
+    this.drawVertexLayer.updateData(
+      featureCollection(properties.pointFeatures),
+    );
+  }
+
+  protected showOtherLayer() {
+    this.centerLayer.setData([this.currentFeature?.properties?.startPoint]);
+    this.centerLayer.show();
+  }
+
+  protected hideOtherLayer() {
+    if (this.currentFeature) {
+      this.centerLayer.hide();
+    }
   }
 
   private initCenterLayer() {
-    const centerStyle = this.getStyle('active_point');
+    const centerStyle = this.getStyle('active').point;
     const layer = new PointLayer()
       .source([this.startPoint], {
         parser: {

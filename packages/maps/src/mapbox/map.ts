@@ -20,14 +20,18 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import mapboxgl, { IControl, Map } from 'mapbox-gl';
+
+// tslint:disable-next-line:no-submodule-imports
+import 'mapbox-gl/dist/mapbox-gl.css';
 import { IMapboxInstance } from '../../typings/index';
+import './logo.css';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;
 } = {
   mapmove: 'move',
   camerachange: 'move',
-  zoomChange: 'zoom',
+  zoomchange: 'zoom',
   dragging: 'drag',
 };
 import { MapTheme } from './theme';
@@ -87,6 +91,9 @@ export default class MapboxService
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
   }
+  public getMapCanvasContainer(): HTMLElement {
+    return this.map.getCanvasContainer();
+  }
 
   public getSize(): [number, number] {
     const size = this.map.transform;
@@ -138,16 +145,14 @@ export default class MapboxService
     this.map.setBearing(rotation);
   }
 
-  public zoomIn(): void {
-    this.map.zoomIn();
+  public zoomIn(option?: any, eventData?: any): void {
+    this.map.zoomIn(option, eventData);
   }
-
+  public zoomOut(option?: any, eventData?: any): void {
+    this.map.zoomOut(option, eventData);
+  }
   public setPitch(pitch: number) {
     return this.map.setPitch(pitch);
-  }
-
-  public zoomOut(): void {
-    this.map.zoomOut();
   }
 
   public panTo(p: [number, number]): void {
@@ -295,7 +300,6 @@ export default class MapboxService
     if (this.map) {
       this.map.remove();
       this.$mapContainer = null;
-      this.removeLogoControl();
     }
   }
   public emit(name: string, ...args: any[]) {
@@ -356,20 +360,6 @@ export default class MapboxService
     }
     return $wrapper;
   }
-
-  private removeLogoControl(): void {
-    // @ts-ignore
-    const controls = this.map._controls as IControl[];
-    const logoCtr = controls.find((ctr: IControl) => {
-      if (ctr.hasOwnProperty('_updateLogo')) {
-        return true;
-      }
-    });
-    if (logoCtr) {
-      this.map.removeControl(logoCtr);
-    }
-  }
-
   private getMapStyle(name: MapStyle) {
     if (typeof name !== 'string') {
       return name;

@@ -18,7 +18,7 @@ export default class Point3D extends React.Component {
         style: 'light',
         center: [-121.24357, 37.58264],
         pitch: 0,
-        zoom: 6.45,
+        zoom: 10.45,
       }),
     });
     scene.on('loaded', () => {
@@ -53,6 +53,7 @@ export default class Point3D extends React.Component {
             .style({
               opacity: 1,
               strokeWidth: 0,
+              stroke: '#fff',
             });
 
           scene.addLayer(pointLayer);

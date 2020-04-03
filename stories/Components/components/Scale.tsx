@@ -46,13 +46,14 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
-      // .select(true)
+      .select(true)
       .style({
         opacity: 1.0,
       });
     scene.addLayer(layer);
     const pointLayer = new PointLayer({
       name: '02',
+      enablePropagation: true,
     })
       .source(pointsData, {
         cluster: true,
@@ -63,7 +64,7 @@ export default class ScaleComponent extends React.Component {
       })
       .size('point_count', [5, 10, 15, 20, 25])
       .animate(false)
-      .active(true)
+      .active(false)
       .color('yellow')
       .style({
         opacity: 0.5,
@@ -71,7 +72,14 @@ export default class ScaleComponent extends React.Component {
       });
     scene.addLayer(pointLayer);
     layer.on('click', (e) => {
-      layer.setSelect(e.featureId);
+      console.log(1, e);
+      // layer.setSelect(e.featureId);
+    });
+    pointLayer.on('click', (e) => {
+      console.log(2, e);
+    });
+    pointLayer.on('mouseout', (e) => {
+      console.log(2, e);
     });
     const scaleControl = new Scale();
     const layers = {

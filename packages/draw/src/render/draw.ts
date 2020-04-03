@@ -1,82 +1,89 @@
-import {
-  IInteractionTarget,
-  ILayer,
-  ILngLat,
-  IPopup,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Popup,
-  Scene,
-} from '@antv/l7';
+import { IInteractionTarget, ILayer, Scene } from '@antv/l7';
 const InitFeature = {
   type: 'FeatureCollection',
   features: [],
 };
-import Draw from '../modes/draw_mode';
+import { Feature, FeatureCollection } from '@turf/helpers';
+import Draw from '../modes/draw_feature';
 import { DrawEvent, DrawModes } from '../util/constant';
-export default class DrawLayer {
-  private polygonLayer: ILayer;
-  private lineLayer: ILayer;
-  private draw: Draw;
-  constructor(draw: Draw) {
-    this.draw = draw;
-    this.init();
+import BaseRender from './base_render';
+import { renderFeature } from './renderFeature';
+export default class DrawLayer extends BaseRender {
+  public update(feature: FeatureCollection) {
+    this.removeLayers();
+    const style = this.draw.getStyle('active');
+    this.drawLayers = renderFeature(feature, style);
+    this.addLayers();
   }
-  public init() {
-    const style = this.draw.getStyle('normal_fill');
-    const linestyle = this.draw.getStyle('normal_line');
-    this.polygonLayer = new PolygonLayer({
-      zIndex: 0,
-    })
-      .source(InitFeature)
-      .filter('active', (active) => {
-        return !active;
-      })
-      .shape('fill')
-      .active(true)
-      .color(style.color)
-      .style(style.style);
-
-    this.lineLayer = new LineLayer({
-      zIndex: 1,
-    })
-      .source(InitFeature)
-      .shape('line')
-      .filter('active', (active) => {
-        return !active;
-      })
-      .size(linestyle.size)
-      .color(linestyle.color)
-      .style(linestyle.style);
-    this.draw.scene.addLayer(this.polygonLayer);
-    this.draw.scene.addLayer(this.lineLayer);
-    this.addLayerEvent();
+  public enableDrag() {
+    this.show();
+    if (this.isEnableDrag) {
+      return;
+    }
+    const layer = this.drawLayers[0];
+    layer.on('mouseenter', this.onMouseMove);
+    layer.on('mouseout', this.onUnMouseMove);
+    layer.on('click', this.onClick);
+    layer.on('unmousedown', this.onUnClick);
+    this.isEnableDrag = true;
   }
-  public updateData() {
-    this.lineLayer.setData(this.draw.source.data);
-    this.polygonLayer.setData(this.draw.source.data);
+  public disableDrag() {
+    if (!this.isEnableDrag) {
+      return;
+    }
+    const layer = this.drawLayers[0];
+    layer.off('mouseenter', this.onMouseMove);
+    layer.off('mouseout', this.onUnMouseMove);
+    layer.off('click', this.onClick);
+    layer.off('unmousedown', this.onUnClick);
+    this.isEnableDrag = false;
   }
 
-  public destroy() {
-    this.draw.scene.removeLayer(this.lineLayer);
-    this.draw.scene.removeLayer(this.polygonLayer);
+  public enableEdit() {
+    if (this.isEnableEdit) {
+      return;
+    }
+    const layer = this.drawLayers[0];
+    layer.on('unclick', this.onUnClick);
+    this.isEnableDrag = true;
   }
 
-  public show() {
-    this.lineLayer.show();
-    this.polygonLayer.show();
+  public disableEdit() {
+    if (!this.isEnableEdit) {
+      return;
+    }
+    const layer = this.drawLayers[0];
+    layer.off('unclick', this.onUnClick);
+    this.isEnableDrag = false;
   }
 
-  public hide() {
-    this.lineLayer.hide();
-    this.polygonLayer.hide();
-  }
+  private onMouseMove = (e: any) => {
+    this.draw.setCursor('move');
+    this.draw.selectMode.enable();
+  };
+  private onUnMouseMove = (e: any) => {
+    this.draw.resetCursor();
+    this.draw.selectMode.disable();
+  };
+  private onClick = (e: any) => {
+    this.draw.selectMode.disable();
+    this.draw.editMode.enable();
+    this.disableDrag();
+    this.draw.resetCursor();
+    this.enableEdit();
+    this.draw.setCurrentFeature(e.feature);
+    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.DIRECT_SELECT);
+  };
 
-  private addLayerEvent() {
-    this.polygonLayer.on('click', (e) => {
-      this.draw.setCurrentFeature(e.feature);
-      this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
-    });
-  }
+  private onUnClick = (e: any) => {
+    this.draw.selectMode.disable();
+    this.draw.editMode.disable();
+    this.draw.source.setFeatureUnActive(
+      this.draw.getCurrentFeature() as Feature,
+    );
+    this.disableDrag();
+    this.disableEdit();
+    this.hide();
+    this.draw.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+  };
 }

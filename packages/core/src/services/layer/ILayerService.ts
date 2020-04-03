@@ -84,7 +84,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   layerModel: ILayerModel;
   dataState: IDataState; // 数据流状态
-  pickedFeatureID: number;
+  pickedFeatureID: number | null;
   hooks: {
     init: SyncBailHook;
     afterInit: SyncBailHook;
@@ -106,12 +106,14 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
-  needPick(): boolean;
+  needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
+  setCurrentSelectedId(id: number | null): void;
+  getCurrentSelectedId(): number | null;
   prepareBuildModel(): void;
   renderModels(): void;
   buildModels(): void;
@@ -221,6 +223,8 @@ export interface ILayerConfig {
   maxZoom: number;
   visible: boolean;
   zIndex: number;
+  pickingBuffer: number;
+  enablePropagation: boolean;
   autoFit: boolean;
   fitBoundsOptions?: unknown;
   name: string; //

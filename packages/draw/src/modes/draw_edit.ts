@@ -1,8 +1,5 @@
-import { IInteractionTarget, ILayer, ILngLat, Popup, Scene } from '@antv/l7';
-import turfCircle from '@turf/circle';
-import turfDistance from '@turf/distance';
-import { Feature, featureCollection, point } from '@turf/helpers';
-import EditRender from '../render/edit';
+import { IInteractionTarget, ILngLat, Scene } from '@antv/l7';
+import { Feature } from '@turf/helpers';
 import { DrawEvent } from '../util/constant';
 import DrawFeature, { IDrawOption } from './draw_mode';
 export type unitsType = 'degrees' | 'radians' | 'miles' | 'kilometers';
@@ -18,7 +15,6 @@ export default class DrawEdit extends DrawFeature {
   private center: ILngLat;
   private endPoint: ILngLat;
   // 绘制完成之后显示
-  private editLayer: EditRender;
   constructor(scene: Scene, options: Partial<IDrawCircleOption> = {}) {
     super(scene, options);
   }
@@ -46,6 +42,7 @@ export default class DrawEdit extends DrawFeature {
 
   protected onDragEnd = () => {
     this.emit(DrawEvent.UPDATE, null);
+    this.resetCursor();
     this.disable();
   };
   protected onClick = () => {

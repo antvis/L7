@@ -118,6 +118,9 @@ class Scene
   public getMapContainer(): HTMLElement | null {
     return this.mapService.getMapContainer();
   }
+  public getMapCanvasContainer(): HTMLElement {
+    return this.mapService.getMapCanvasContainer() as HTMLElement;
+  }
 
   public getMapService(): IMapService<unknown> {
     return this.mapService;
