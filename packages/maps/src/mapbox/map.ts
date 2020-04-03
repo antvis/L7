@@ -91,8 +91,9 @@ export default class MapboxService
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
   }
+
   public getMapCanvasContainer(): HTMLElement {
-    return this.map.getCanvasContainer();
+    return this.map.getCanvasContainer() as HTMLElement;
   }
 
   public getSize(): [number, number] {
