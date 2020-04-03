@@ -21,6 +21,12 @@ export default class DrawRect extends DrawCircle {
   public drawFinish() {
     return null;
   }
+  protected getDefaultOptions() {
+    return {
+      ...super.getDefaultOptions(),
+      title: '绘制矩形',
+    };
+  }
 
   protected createFeature(id: string = '0'): Feature {
     const points = createPoint([this.endPoint]);

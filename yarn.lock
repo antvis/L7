@@ -4179,7 +4179,7 @@
   dependencies:
     "@turf/helpers" "^5.1.5"
 
-"@turf/midpoint@5.1.x":
+"@turf/midpoint@5.1.x", "@turf/midpoint@^5.1.5":
   version "5.1.5"
   resolved "https://registry.npmjs.org/@turf/midpoint/-/midpoint-5.1.5.tgz#e261f6b2b0ea8124cceff552a262dd465c9d05f0"
   integrity sha1-4mH2srDqgSTM7/VSomLdRlydBfA=
