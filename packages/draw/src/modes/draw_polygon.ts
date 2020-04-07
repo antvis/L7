@@ -110,6 +110,9 @@ export default class DrawPolygon extends DrawFeature {
   };
 
   protected onClick = (e: any) => {
+    if (this.drawStatus !== 'Drawing') {
+      this.drawRender.emit('unmouseup', null);
+    }
     const lngLat = e.lngLat || e.lnglat;
     this.endPoint = lngLat;
     this.points.push(lngLat);

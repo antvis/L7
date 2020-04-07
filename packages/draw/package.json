@@ -11,6 +11,7 @@
   "types": "es/index.d.ts",
   "sideEffects": true,
   "files": [
+    "dist",
     "lib",
     "es",
     "README.md"
@@ -29,6 +30,7 @@
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:cdn": "node_modules/.bin/rollup -c",
     "lint:ts": "run-p -c lint:ts-*",
     "test": "jest"
   },
@@ -45,5 +47,11 @@
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
   },
-  "homepage": "https://github.com/antvis/L7#readme"
+  "homepage": "https://github.com/antvis/L7#readme",
+  "devDependencies": {
+    "postcss": "^7.0.27",
+    "postcss-url": "^8.0.0",
+    "rollup": "^2.3.3",
+    "rollup-plugin-less": "^1.1.2"
+  }
 }

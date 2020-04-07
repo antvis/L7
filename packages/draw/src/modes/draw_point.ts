@@ -44,6 +44,9 @@ export default class DrawPoint extends DrawFeature {
   };
 
   protected onClick = (e: any) => {
+    if (this.drawStatus !== 'Drawing') {
+      this.drawRender.emit('unmouseup', null);
+    }
     const lngLat = e.lngLat || e.lnglat;
     const feature = this.createFeature(lngLat);
     this.drawRender.update(featureCollection([feature]));

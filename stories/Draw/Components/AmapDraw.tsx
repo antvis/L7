@@ -35,7 +35,9 @@ export default class AMapDraw extends React.Component {
           delete: true,
         },
       });
-      scene.on('click', () => {});
+      scene.on('click', () => {
+        console.log('click');
+      });
       scene.addControl(drawControl);
     });
   }

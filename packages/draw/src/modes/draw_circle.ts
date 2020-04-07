@@ -47,6 +47,9 @@ export default class DrawCircle extends DrawFeature {
   }
 
   protected onDragStart = (e: IInteractionTarget) => {
+    if (this.drawStatus !== 'Drawing') {
+      this.drawRender.emit('unmouseup', null);
+    }
     this.startPoint = e.lngLat;
     this.setCursor('grabbing');
     this.initCenterLayer();

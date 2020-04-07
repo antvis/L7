@@ -3,26 +3,43 @@ import typescript from 'rollup-plugin-typescript';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import buble from 'rollup-plugin-buble';
-
+import postcss from 'rollup-plugin-postcss';
+import { terser } from 'rollup-plugin-terser';
+import url from 'postcss-url';
 export default {
   input: './src/index.ts',
   plugins: [
+    // less(),
     typescript({
       exclude: 'node_modules/**',
       typescript: require('typescript')
     }),
     resolve(),
-    commonjs(),
+    postcss({
+      plugins: [
+        url({ url: 'inline' })
+      ]
+    }),
+    commonjs({
+      namedExports: {
+        eventemitter3: [ 'EventEmitter' ],
+        lodash: [ 'merge' ]
+      }
+    }),
     buble({
       transforms: { generator: false }
-    })
+    }),
+    terser()
   ],
   output: [
     {
       format: 'umd',
       name: 'L7-Draw',
       file: pkg.unpkg,
-      sourcemap: true
+      sourcemap: true,
+      globals: {
+        '@antv/l7': 'L7'
+      }
     }
   ]
 };
