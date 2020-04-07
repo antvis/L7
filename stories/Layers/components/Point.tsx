@@ -37,7 +37,9 @@ export default class Point3D extends React.Component {
             })
             .shape('circle')
             .size(8)
-            .active(true)
+            .active({
+              color: 'red',
+            })
             .color('Magnitude', [
               '#0A3663',
               '#1558AC',

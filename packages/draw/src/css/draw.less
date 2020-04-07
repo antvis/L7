@@ -3,7 +3,7 @@
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0,0,0,.1);
   display: flex;
-  a {
+  button {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px 20px;
@@ -17,11 +17,11 @@
     box-sizing: border-box;
     cursor: pointer;
   }
-  a:not(:disabled):hover {
+ button:not(:disabled):hover {
     background-color: rgba(0, 0, 0, 0.05);
   }
 
-  a:focus {
+ button:focus {
     box-shadow: 0 0 2px 2px #0096ff;
   }
   .draw-point {
@@ -46,25 +46,25 @@
 }
 .horizontal {
   flex-direction: row;
-  a:focus:first-child {
+ button:focus:first-child {
     border-radius: 4px 0px 0px 4px;
   }
-  a:focus:last-child {
+ button:focus:last-child {
     border-radius: 0px 4px 4px 4px;
   }
-  a+a {
+ button+button {
     border-left: 1px solid #eee;
   }
 }
 .vertical {
   flex-direction: column;
-  a:focus:first-child {
+ button:focus:first-child {
     border-radius: 4px 4px 0 0;
   }
-  a:focus:last-child {
+ button:focus:last-child {
     border-radius: 0px 0px 4px 4px;
   }
-  a+a {
+ button+button {
     border-top: 1px solid #eee;
   }
 }

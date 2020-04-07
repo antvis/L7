@@ -36,7 +36,6 @@ export function createCircle(
         lng: endPoint[0],
         lat: endPoint[1],
       },
-      path: [center, endPoint],
     },
   });
   return feature as Feature;

@@ -91,6 +91,13 @@ export default class DrawPolygon extends DrawFeature {
     feature.properties.pointFeatures = pointfeatures.features;
     this.setCurrentFeature(feature);
   }
+
+  protected getDefaultOptions() {
+    return {
+      ...super.getDefaultOptions(),
+      title: '绘制多边形',
+    };
+  }
   protected onDragStart = (e: IInteractionTarget) => {
     return null;
   };
@@ -108,10 +115,10 @@ export default class DrawPolygon extends DrawFeature {
     this.points.push(lngLat);
     const feature = this.createFeature(this.points);
     const properties = feature.properties as { pointFeatures: Feature[] };
-    // const pointfeatures = createPoint([this.points[0], this.endPoint]);
+    const pointfeatures = createPoint([this.points[0], this.endPoint]);
     // this.pointFeatures = pointfeatures.features;
     this.drawRender.update(featureCollection([feature]));
-    this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
+    this.drawVertexLayer.update(featureCollection(pointfeatures.features));
     this.onDraw();
   };
 

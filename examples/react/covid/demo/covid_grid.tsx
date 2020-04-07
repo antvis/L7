@@ -82,7 +82,7 @@ const World = React.memo(function Map() {
         ).then((d) => d.json()),
         // https://lab.isaaclin.cn/nCoV/api/area?latest=1
         fetch(
-          'https://gw.alipayobjects.com/os/bmw-prod/0676f102-22f6-4c75-ab12-1ae200834b1c.json',
+          'https://gw.alipayobjects.com/os/bmw-prod/55a7dd2e-3fb4-4442-8899-900bb03ee67a.json',
         ).then((d) => d.json()),
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/8990e8b4-c58e-419b-afb9-8ea3daff2dd1.json',
