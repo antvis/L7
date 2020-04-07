@@ -1,7 +1,7 @@
 import { ILayer, LineLayer, PointLayer, PolygonLayer } from '@antv/l7';
 import { FeatureCollection } from '@turf/helpers';
 export function renderFeature(fe: FeatureCollection, style: any): ILayer[] {
-  const type = fe.features[0].geometry.type;
+  const type = fe.features[0]?.geometry?.type;
   let layers;
   switch (type) {
     case 'Point':
