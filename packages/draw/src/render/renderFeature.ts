@@ -18,7 +18,9 @@ export function renderFeature(fe: FeatureCollection, style: any): ILayer[] {
 }
 
 function drawPoint(fe: FeatureCollection, style: any) {
-  const layer = new PointLayer()
+  const layer = new PointLayer({
+    zIndex: 2,
+  })
     .source(fe)
     .shape('circle')
     .color(style.color)

@@ -36,8 +36,7 @@ export default class DrawSelect extends DrawFeature {
   }
 
   protected onDragStart = (e: IInteractionTarget) => {
-    // @ts-ignore
-    this.scene.map.dragPan.disable();
+    this.scene.setMapStatus({ dragEnable: false });
     this.dragStartPoint = e.lngLat;
   };
   protected getDefaultOptions() {

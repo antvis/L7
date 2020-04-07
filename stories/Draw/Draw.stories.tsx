@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import AMapDraw from './Components/AmapDraw';
 import Circle from './Components/Circle';
 import DrawCircle from './Components/DrawCircle';
 import DrawControl from './Components/DrawControl';
@@ -17,4 +18,5 @@ storiesOf('绘制', module)
   .add('路径', () => <Line />, {})
   .add('绘制组件', () => <DrawControl />, {})
   .add('绘制圆', () => <DrawCircle />, {})
+  .add('高德地图', () => <AMapDraw />, {})
   .add('绘制面', () => <DrawPolygon />, {});

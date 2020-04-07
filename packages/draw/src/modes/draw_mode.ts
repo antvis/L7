@@ -49,7 +49,9 @@ export default abstract class DrawMode extends EventEmitter {
       return;
     }
     // @ts-ignore
-    this.scene.map.dragPan.disable();
+    this.scene.setMapStatus({
+      dragEnable: false,
+    });
     this.scene.on('dragstart', this.onDragStart);
     this.scene.on('dragging', this.onDragging);
     this.scene.on('dragend', this.onDragEnd);
@@ -68,7 +70,9 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene.off('click', this.onClick);
     this.resetCursor();
     // @ts-ignore
-    this.scene.map.dragPan.enable();
+    this.scene.setMapStatus({
+      dragEnable: true,
+    });
     this.isEnable = false;
   }
   public setCurrentFeature(feature: Feature) {

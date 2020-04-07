@@ -110,7 +110,7 @@ export default class DrawPolygon extends DrawFeature {
   };
 
   protected onClick = (e: any) => {
-    const lngLat = e.lngLat;
+    const lngLat = e.lngLat || e.lnglat;
     this.endPoint = lngLat;
     this.points.push(lngLat);
     const feature = this.createFeature(this.points);
@@ -123,7 +123,7 @@ export default class DrawPolygon extends DrawFeature {
   };
 
   protected onMouseMove = (e: any) => {
-    const lngLat = e.lngLat;
+    const lngLat = e.lngLat || e.lnglat;
     if (this.points.length === 0) {
       return;
     }
@@ -134,7 +134,7 @@ export default class DrawPolygon extends DrawFeature {
   };
 
   protected onDblClick = (e: any) => {
-    const lngLat = e.lngLat;
+    const lngLat = e.lngLat || e.lnglat;
     if (this.points.length < 2) {
       return;
     }

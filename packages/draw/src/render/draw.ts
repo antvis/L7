@@ -24,7 +24,7 @@ export default class DrawLayer extends BaseRender {
     layer.on('mouseenter', this.onMouseMove);
     layer.on('mouseout', this.onUnMouseMove);
     layer.on('click', this.onClick);
-    layer.on('unmousedown', this.onUnClick);
+    layer.on('unmouseup', this.onUnClick);
     this.isEnableDrag = true;
   }
   public disableDrag() {
@@ -35,7 +35,7 @@ export default class DrawLayer extends BaseRender {
     layer.off('mouseenter', this.onMouseMove);
     layer.off('mouseout', this.onUnMouseMove);
     layer.off('click', this.onClick);
-    layer.off('unmousedown', this.onUnClick);
+    layer.off('unmouseup', this.onUnClick);
     this.isEnableDrag = false;
   }
 
