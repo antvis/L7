@@ -59,7 +59,6 @@ export default class InteractionService extends EventEmitter
 
   private addEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
-    Hammer.defaults.domEvents = true;
     if ($containter) {
       const hammertime = new Hammer.Manager($containter);
       hammertime.add(

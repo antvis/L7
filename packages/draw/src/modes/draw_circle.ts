@@ -39,6 +39,13 @@ export default class DrawCircle extends DrawFeature {
     this.source.setFeatureActive(feature);
   }
 
+  protected getDefaultOptions() {
+    return {
+      ...super.getDefaultOptions(),
+      title: '绘制圆',
+    };
+  }
+
   protected onDragStart = (e: IInteractionTarget) => {
     this.startPoint = e.lngLat;
     this.setCursor('grabbing');

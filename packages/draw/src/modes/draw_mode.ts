@@ -7,6 +7,7 @@ import LayerStyles from '../util/layerstyle';
 
 export interface IDrawOption {
   data: FeatureCollection;
+  title: string;
   style: any;
 }
 
@@ -23,6 +24,7 @@ export default abstract class DrawMode extends EventEmitter {
   public source: DrawSource;
   public scene: Scene;
   public type: string;
+  public title: string;
   public isEnable: boolean = false;
 
   protected options: {
@@ -40,6 +42,7 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene = scene;
     this.source = new DrawSource(data);
     this.options = merge(this.options, this.getDefaultOptions(), options);
+    this.title = this.getOption('title');
   }
   public enable() {
     if (this.isEnable) {
