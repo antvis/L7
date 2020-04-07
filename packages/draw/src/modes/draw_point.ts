@@ -44,7 +44,7 @@ export default class DrawPoint extends DrawFeature {
   };
 
   protected onClick = (e: any) => {
-    const lngLat = e.lngLat;
+    const lngLat = e.lngLat || e.lnglat;
     const feature = this.createFeature(lngLat);
     this.drawRender.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection([feature]));

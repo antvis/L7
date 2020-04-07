@@ -2,7 +2,7 @@
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-04-03 19:30:39
+ * @Last Modified time: 2020-04-07 15:17:21
  */
 import { Control, IControlOption, PositionType, Scene } from '@antv/l7';
 import { DOM } from '@antv/l7-utils';
@@ -104,7 +104,7 @@ export class DrawControl extends Control {
   }
 
   private onButtonClick = (type: string, e: MouseEvent) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     for (const draw in this.draw) {
       if (draw === type) {
         this.draw[draw].enable();
@@ -115,7 +115,7 @@ export class DrawControl extends Control {
   };
 
   private onDeleteMode = (type: string, e: MouseEvent) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     if (!this.currentDraw) {
       return;
     }

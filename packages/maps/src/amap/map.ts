@@ -109,7 +109,9 @@ export default class AMapService
   }
 
   public getMapCanvasContainer(): HTMLElement {
-    return this.map.getContainer() as HTMLElement;
+    return this.map
+      .getContainer()
+      ?.getElementsByClassName('amap-maps')[0] as HTMLElement;
   }
 
   public getSize(): [number, number] {
