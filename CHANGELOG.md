@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+
+### Bug Fixes
+
+* marker event ([ce6eefd](https://github.com/antvis/L7/commit/ce6eefdeb87935f48d7ca2779837270f1498f3a5))
+
+
+
+
+
 ## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
 
 ### Bug Fixes
