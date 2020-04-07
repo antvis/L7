@@ -73,9 +73,8 @@ export default class MarkerComponent extends React.Component {
 
     scene.on('loaded', () => {
       // @ts-ignore
-      marker.on('click', (e) => {
-        console.log(this.scene.getZoom());
-      });
+      // marker.on('click', (e) => {
+      // });
       // const marker1 = new AMap.Marker({
       //   map: scene.map,
       //   position: [120.184824, 30.248341],
