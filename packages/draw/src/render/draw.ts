@@ -44,7 +44,7 @@ export default class DrawLayer extends BaseRender {
       return;
     }
     const layer = this.drawLayers[0];
-    layer.on('unclick', this.onUnClick);
+    layer.on('unmouseup', this.onUnClick);
     this.isEnableDrag = true;
   }
 
@@ -53,7 +53,7 @@ export default class DrawLayer extends BaseRender {
       return;
     }
     const layer = this.drawLayers[0];
-    layer.off('unclick', this.onUnClick);
+    layer.off('unmouseup', this.onUnClick);
     this.isEnableDrag = false;
   }
 

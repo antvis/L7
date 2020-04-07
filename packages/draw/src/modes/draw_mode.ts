@@ -1,7 +1,8 @@
 import { IInteractionTarget, IPopup, Scene } from '@antv/l7';
 import { Feature, FeatureCollection } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { merge } from 'lodash';
+// tslint:disable-next-line:no-submodule-imports
+import merge from 'lodash/merge';
 import DrawSource from '../source';
 import LayerStyles from '../util/layerstyle';
 

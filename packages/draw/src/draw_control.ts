@@ -2,10 +2,9 @@
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-04-07 15:17:21
+ * @Last Modified time: 2020-04-07 20:15:45
  */
-import { Control, IControlOption, PositionType, Scene } from '@antv/l7';
-import { DOM } from '@antv/l7-utils';
+import { Control, DOM, IControlOption, PositionType, Scene } from '@antv/l7';
 import './css/draw.less';
 import {
   DrawCircle,
@@ -99,23 +98,23 @@ export class DrawControl extends Control {
   ) {
     const link = DOM.create('button', className, container);
     link.title = tile;
-    link.addEventListener('mousedown', fn, false);
+    link.addEventListener('mouseup', fn, false);
     return link;
   }
 
   private onButtonClick = (type: string, e: MouseEvent) => {
-    // e.stopPropagation();
     for (const draw in this.draw) {
       if (draw === type) {
         this.draw[draw].enable();
       } else {
         this.draw[draw].disable();
+        // this.draw[draw].emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
       }
     }
   };
 
   private onDeleteMode = (type: string, e: MouseEvent) => {
-    // e.stopPropagation();
+    e.stopPropagation();
     if (!this.currentDraw) {
       return;
     }
