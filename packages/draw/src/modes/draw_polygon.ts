@@ -59,12 +59,12 @@ export default class DrawPolygon extends DrawFeature {
   public addVertex(vertex: Feature<Geometries, Properties>) {
     // @ts-ignore
     const id = vertex.properties.id;
-    const coord = vertex.geometry.coordinates as Position;
+    const coord = vertex?.geometry?.coordinates as Position;
     const feature = this.currentFeature as Feature<Geometries, Properties>;
-    const type = feature.geometry.type;
+    const type = feature?.geometry?.type;
     const points = [];
     if (type === 'Polygon') {
-      const coords = feature.geometry.coordinates as Position[][];
+      const coords = feature?.geometry?.coordinates as Position[][];
       coords[0].splice(id + 1, 0, coord);
       for (let i = 0; i < coords[0].length - 1; i++) {
         points.push({
@@ -73,7 +73,7 @@ export default class DrawPolygon extends DrawFeature {
         });
       }
     } else {
-      const coords = feature.geometry.coordinates as Position[];
+      const coords = feature?.geometry?.coordinates as Position[];
       coords.splice(id + 1, 0, coord);
       for (const coor of coords) {
         points.push({
@@ -176,6 +176,7 @@ export default class DrawPolygon extends DrawFeature {
     } else {
       // @ts-ignore
       const id = selectVertexed.properties.id * 1;
+      // @ts-ignore
       selectVertexed.geometry.coordinates = [vertex.lng, vertex.lat];
       // @ts-ignore
       this.pointFeatures[id].geometry.coordinates = [vertex.lng, vertex.lat];
@@ -233,15 +234,15 @@ export default class DrawPolygon extends DrawFeature {
 
   private editPolygonVertex(id: number, vertex: ILngLat) {
     const feature = this.currentFeature as Feature<Geometries, Properties>;
-    const type = feature.geometry.type;
+    const type = feature?.geometry?.type;
     if (type === 'Polygon') {
-      const coords = feature.geometry.coordinates as Position[][];
+      const coords = feature?.geometry?.coordinates as Position[][];
       coords[0][id] = [vertex.lng, vertex.lat];
       if (-id === 0) {
         coords[0][coords[0].length - 1] = [vertex.lng, vertex.lat];
       }
     } else {
-      const coords = feature.geometry.coordinates as Position[];
+      const coords = feature?.geometry?.coordinates as Position[];
       coords[id] = [vertex.lng, vertex.lat];
     }
     this.setCurrentFeature(feature);
