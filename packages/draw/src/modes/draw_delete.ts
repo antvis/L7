@@ -9,7 +9,6 @@ export interface IDrawCircleOption extends IDrawOption {
 }
 
 export default class DrawDelete extends DrawFeature {
-  private endPoint: ILngLat;
   // 绘制完成之后显示
   constructor(scene: Scene, options: Partial<IDrawCircleOption> = {}) {
     super(scene, options);

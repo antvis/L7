@@ -24,7 +24,7 @@ export default class DrawLine extends DrawPolygon {
   protected moveFeature(delta: ILngLat): Feature {
     const newFeature = moveFeatures([this.currentFeature as Feature], delta);
     const newPointFeture = moveFeatures(this.pointFeatures, delta);
-    this.drawRender.updateData(featureCollection(newFeature));
+    this.drawLayer.updateData(featureCollection(newFeature));
     this.drawVertexLayer.updateData(featureCollection(newPointFeture));
     this.currentFeature = newFeature[0];
     this.pointFeatures = newPointFeture;
