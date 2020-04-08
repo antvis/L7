@@ -14,7 +14,7 @@ export default class DrawResultLayer extends BaseRender {
     this.addFilter();
     this.addLayers();
   }
-  public enableDrag() {
+  public enableSelect() {
     if (this.isEnableDrag) {
       return;
     }
@@ -22,7 +22,7 @@ export default class DrawResultLayer extends BaseRender {
     layer.on('click', this.onClick);
     this.isEnableDrag = true;
   }
-  public disableDrag() {
+  public disableSelect() {
     if (!this.isEnableDrag) {
       return;
     }
@@ -31,7 +31,7 @@ export default class DrawResultLayer extends BaseRender {
     this.isEnableDrag = false;
   }
   public enableDelete() {
-    this.disableDrag();
+    this.disableSelect();
     const layer = this.drawLayers[0];
     layer.on('click', this.onDeleteClick);
   }

@@ -46,6 +46,9 @@ export default class DrawSource {
     this.removeFeature(feature);
     this.addFeature(feature);
   }
+  public destroy() {
+    this.data = this.getDefaultData();
+  }
   private getDefaultData(): FeatureCollection {
     return {
       type: 'FeatureCollection',

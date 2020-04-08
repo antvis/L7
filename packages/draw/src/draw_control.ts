@@ -2,7 +2,7 @@
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-04-07 20:15:45
+ * @Last Modified time: 2020-04-08 11:12:08
  */
 import { Control, DOM, IControlOption, PositionType, Scene } from '@antv/l7';
 import './css/draw.less';
@@ -38,7 +38,6 @@ export class DrawControl extends Control {
   private draw: {
     [key: string]: DrawFeature;
   } = {};
-  private drawDelete: DrawDelete;
   private currentDraw: DrawFeature;
   private scene: Scene;
   constructor(scene: Scene, options: Partial<IDrawControlOption>) {
@@ -64,6 +63,14 @@ export class DrawControl extends Control {
     this.addControls(controls, container);
     // 监听组件 选中, 编辑
     return container;
+  }
+
+  public onRemove() {
+    for (const draw in this.draw) {
+      if (this.draw[draw]) {
+        this.draw[draw].destory();
+      }
+    }
   }
   private addControls(controls: IControls, container: HTMLElement) {
     for (const type in controls) {
@@ -108,7 +115,6 @@ export class DrawControl extends Control {
         this.draw[draw].enable();
       } else {
         this.draw[draw].disable();
-        // this.draw[draw].emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
       }
     }
   };

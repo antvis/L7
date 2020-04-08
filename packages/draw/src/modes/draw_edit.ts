@@ -7,12 +7,7 @@ export interface IDrawCircleOption extends IDrawOption {
   units: unitsType;
   steps: number;
 }
-const InitFeature = {
-  type: 'FeatureCollection',
-  features: [],
-};
 export default class DrawEdit extends DrawFeature {
-  private center: ILngLat;
   private endPoint: ILngLat;
   // 绘制完成之后显示
   constructor(scene: Scene, options: Partial<IDrawCircleOption> = {}) {
@@ -41,7 +36,7 @@ export default class DrawEdit extends DrawFeature {
   };
 
   protected onDragEnd = () => {
-    this.emit(DrawEvent.UPDATE, null);
+    this.emit(DrawEvent.UPDATE, this.currentFeature);
     this.resetCursor();
     this.disable();
   };

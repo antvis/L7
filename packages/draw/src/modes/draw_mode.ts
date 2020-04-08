@@ -119,6 +119,11 @@ export default abstract class DrawMode extends EventEmitter {
       container.removeAttribute('style');
     }
   }
+  public destory() {
+    DrawFeatureId = 0;
+    this.removeAllListeners();
+    this.disable();
+  }
 
   protected getDefaultOptions() {
     return {};

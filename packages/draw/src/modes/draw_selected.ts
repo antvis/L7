@@ -28,7 +28,6 @@ export default class DrawSelect extends DrawFeature {
   // 绘制完成之后显示
   constructor(scene: Scene, options: Partial<IDrawCircleOption> = {}) {
     super(scene, options);
-    // this.editLayer = new EditRender(this);
   }
 
   public setSelectedFeature(feature: Feature) {

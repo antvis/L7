@@ -46,7 +46,7 @@ export default class DrawPolygon extends DrawFeature {
   public drawFinish() {
     const feature = this.createFeature(this.points);
     const properties = feature.properties as { pointFeatures: Feature[] };
-    this.drawRender.update(featureCollection([feature]));
+    this.drawLayer.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
     // @ts-ignore
     // feature.properties.pointFeatures = pointfeatures;
@@ -84,7 +84,7 @@ export default class DrawPolygon extends DrawFeature {
     }
     const pointfeatures = createPoint(points);
     this.pointFeatures = pointfeatures.features;
-    this.drawRender.updateData(featureCollection([feature]));
+    this.drawLayer.updateData(featureCollection([feature]));
     this.drawVertexLayer.updateData(pointfeatures);
     this.drawMidVertexLayer.updateData(featureCollection(this.pointFeatures));
     // @ts-ignore
@@ -111,7 +111,7 @@ export default class DrawPolygon extends DrawFeature {
 
   protected onClick = (e: any) => {
     if (this.drawStatus !== 'Drawing') {
-      this.drawRender.emit('unmouseup', null);
+      this.drawLayer.emit('unclick', null);
     }
     const lngLat = e.lngLat || e.lnglat;
     this.endPoint = lngLat;
@@ -120,7 +120,7 @@ export default class DrawPolygon extends DrawFeature {
     const properties = feature.properties as { pointFeatures: Feature[] };
     const pointfeatures = createPoint([this.points[0], this.endPoint]);
     // this.pointFeatures = pointfeatures.features;
-    this.drawRender.update(featureCollection([feature]));
+    this.drawLayer.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection(pointfeatures.features));
     this.onDraw();
   };
@@ -133,7 +133,7 @@ export default class DrawPolygon extends DrawFeature {
     const tmpPoints = this.points.slice();
     tmpPoints.push(lngLat);
     const feature = this.createFeature(tmpPoints);
-    this.drawRender.update(featureCollection([feature]));
+    this.drawLayer.update(featureCollection([feature]));
   };
 
   protected onDblClick = (e: any) => {
@@ -148,7 +148,7 @@ export default class DrawPolygon extends DrawFeature {
   protected moveFeature(delta: ILngLat): void {
     const newFeature = moveFeatures([this.currentFeature as Feature], delta);
     const newPointFeture = moveFeatures(this.pointFeatures, delta);
-    this.drawRender.updateData(featureCollection(newFeature));
+    this.drawLayer.updateData(featureCollection(newFeature));
     this.drawVertexLayer.updateData(featureCollection(newPointFeture));
     newFeature[0].properties = {
       ...newFeature[0].properties,
@@ -186,7 +186,7 @@ export default class DrawPolygon extends DrawFeature {
       this.drawVertexLayer.updateData(featureCollection(this.pointFeatures));
       this.drawMidVertexLayer.updateData(featureCollection(this.pointFeatures));
       this.editPolygonVertex(id, vertex);
-      this.drawRender.updateData(
+      this.drawLayer.updateData(
         featureCollection([this.currentFeature as Feature]),
       );
       const feature = this.currentFeature as Feature;
@@ -249,7 +249,7 @@ export default class DrawPolygon extends DrawFeature {
       coords[id] = [vertex.lng, vertex.lat];
     }
     this.setCurrentFeature(feature);
-    this.drawRender.updateData(
+    this.drawLayer.updateData(
       featureCollection([this.currentFeature as Feature]),
     );
   }
