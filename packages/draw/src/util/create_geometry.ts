@@ -3,6 +3,7 @@ import turfDistance from '@turf/distance';
 import {
   Feature,
   featureCollection,
+  FeatureCollection,
   lineString,
   point,
   polygon,
@@ -116,7 +117,9 @@ export function createLine(
   }
 }
 
-export function createPoint(points: Array<{ lng: number; lat: number }>) {
+export function createPoint(
+  points: Array<{ lng: number; lat: number }>,
+): FeatureCollection {
   const features = points.map((p, index) =>
     point([p.lng, p.lat], {
       active: true,

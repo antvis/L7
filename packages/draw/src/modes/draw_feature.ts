@@ -4,28 +4,31 @@ import {
   FeatureCollection,
   featureCollection,
   point,
+  Units,
+  unitsFactors,
 } from '@turf/helpers';
 import DrawRender from '../render/draw';
 import RenderLayer from '../render/draw_result';
 import DrawVertexLayer from '../render/draw_vertex';
-import { DrawEvent, DrawModes, unitsType } from '../util/constant';
+import { DrawEvent, DrawModes } from '../util/constant';
 import DrawDelete from './draw_delete';
 import DrawEdit from './draw_edit';
 import DrawMode, { IDrawOption } from './draw_mode';
 import DrawSelected from './draw_selected';
 export interface IDrawFeatureOption extends IDrawOption {
-  units: unitsType;
+  units: Units;
   steps: number;
+  editEnable: boolean;
+  selectEnable: boolean;
+  cursor: string;
 }
-const InitFeature = {
-  type: 'FeatureCollection',
-  features: [],
-};
 export default abstract class DrawFeature extends DrawMode {
   // 绘制完成之后显示
   public selectMode: DrawSelected;
   public editMode: DrawEdit;
   public deleteMode: DrawDelete;
+  public editEnable: boolean;
+  public selectEnable: boolean;
 
   protected normalLayer: RenderLayer;
   protected drawLayer: DrawRender;
@@ -36,6 +39,8 @@ export default abstract class DrawFeature extends DrawMode {
     this.drawLayer = new DrawRender(this);
     this.drawVertexLayer = new DrawVertexLayer(this);
     this.normalLayer = new RenderLayer(this);
+    this.selectEnable = this.getOption('selectEnable');
+    this.editEnable = this.getOption('editEnable');
 
     // this.editLayer = new EditLayer(this);
     this.selectMode = new DrawSelected(this.scene, {});
@@ -90,20 +95,22 @@ export default abstract class DrawFeature extends DrawMode {
   }
 
   public onRemove() {
-    this.destory();
-    this.selectMode.destory();
-    this.editMode.destory();
+    this.destroy();
+    this.selectMode.destroy();
+    this.editMode.destroy();
     this.source.destroy();
     this.drawLayer.destroy();
     this.drawVertexLayer.destroy();
     this.normalLayer.destroy();
     document.removeEventListener('keydown', this.addKeyDownEvent);
   }
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       steps: 64,
-      units: 'kilometres',
+      units: 'kilometers',
       cursor: 'crosshair',
+      editEnable: true,
+      selectEnable: true,
     };
   }
   protected abstract onDragStart(e: IInteractionTarget): void;
@@ -136,6 +143,9 @@ export default abstract class DrawFeature extends DrawMode {
   private onModeChange = (mode: DrawModes[any]) => {
     switch (mode) {
       case DrawModes.DIRECT_SELECT:
+        if (!this.editEnable) {
+          return;
+        }
         this.editMode.enable();
         this.editMode.setEditFeature(this.currentFeature as Feature);
         this.drawLayer.updateData(
@@ -150,6 +160,13 @@ export default abstract class DrawFeature extends DrawMode {
         this.drawStatus = 'DrawEdit';
         break;
       case DrawModes.SIMPLE_SELECT:
+        if (!this.selectEnable) {
+          this.drawLayer.hide();
+          this.drawVertexLayer.hide();
+          this.hideOtherLayer();
+          this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+          return;
+        }
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
         this.selectMode.enable();
         this.drawLayer.enableSelect();

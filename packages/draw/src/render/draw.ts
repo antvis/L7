@@ -23,7 +23,9 @@ export default class DrawLayer extends BaseRender {
     const layer = this.drawLayers[0];
     layer.on('mouseenter', this.onMouseMove);
     layer.on('mouseout', this.onUnMouseMove);
-    layer.on('click', this.onClick);
+    if (this.draw.editEnable) {
+      layer.on('click', this.onClick);
+    }
     layer.on('unclick', this.onUnClick);
     this.isEnableDrag = true;
   }

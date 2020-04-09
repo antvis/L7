@@ -3,14 +3,10 @@ import { Feature, featureCollection, point } from '@turf/helpers';
 import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import moveFeatures from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
-export interface IDrawRectOption extends IDrawFeatureOption {
-  units: unitsType;
-  steps: number;
-}
 export default class DrawPoint extends DrawFeature {
   protected pointFeatures: Feature[];
 
-  constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
+  constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
     this.type = 'point';
   }
@@ -20,7 +16,7 @@ export default class DrawPoint extends DrawFeature {
     this.disable();
   }
 
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       ...super.getDefaultOptions(),
       title: '绘制点',

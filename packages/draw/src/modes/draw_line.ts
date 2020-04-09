@@ -15,7 +15,7 @@ export default class DrawLine extends DrawPolygon {
     this.type = 'line';
   }
 
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       ...super.getDefaultOptions(),
       title: '绘制线',

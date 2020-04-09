@@ -49,7 +49,6 @@ export default class DrawPolygon extends DrawFeature {
     this.drawLayer.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
     // @ts-ignore
-    // feature.properties.pointFeatures = pointfeatures;
     this.emit(DrawEvent.CREATE, this.currentFeature);
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
     this.points = [];
@@ -92,7 +91,7 @@ export default class DrawPolygon extends DrawFeature {
     this.setCurrentFeature(feature);
   }
 
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       ...super.getDefaultOptions(),
       title: '绘制多边形',
@@ -169,13 +168,13 @@ export default class DrawPolygon extends DrawFeature {
     return feature;
   }
 
-  protected editFeature(vertex: ILngLat) {
+  protected editFeature(vertex: ILngLat): void {
     const selectVertexed = this.currentVertex as Feature<
       Geometries,
       Properties
     >;
     if (selectVertexed === null) {
-      return featureCollection([]);
+      return;
     } else {
       // @ts-ignore
       const id = selectVertexed.properties.id * 1;

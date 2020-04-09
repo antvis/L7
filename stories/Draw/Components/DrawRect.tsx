@@ -23,7 +23,10 @@ export default class Circle extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      const drawRect = new DrawRect(scene);
+      const drawRect = new DrawRect(scene, {
+        editEnable: false,
+        selectEnable: false,
+      });
       drawRect.enable();
     });
   }

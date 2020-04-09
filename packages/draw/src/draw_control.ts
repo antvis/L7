@@ -2,7 +2,7 @@
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-04-08 11:12:08
+ * @Last Modified time: 2020-04-09 19:34:41
  */
 import { Control, DOM, IControlOption, PositionType, Scene } from '@antv/l7';
 import './css/draw.less';
@@ -15,6 +15,7 @@ import {
   DrawPolygon,
   DrawRect,
 } from './modes';
+import { IDrawFeatureOption } from './modes/draw_feature';
 const DrawType: {
   [key: string]: any;
 } = {
@@ -24,9 +25,10 @@ const DrawType: {
   circle: DrawCircle,
   rect: DrawRect,
 };
+import { isObject, polygon } from '@turf/helpers';
 import { DrawEvent, DrawModes } from './util/constant';
 export interface IControls {
-  [key: string]: boolean;
+  [key: string]: boolean | IDrawFeatureOption;
 }
 
 export interface IDrawControlOption extends IControlOption {
@@ -50,6 +52,11 @@ export class DrawControl extends Control {
       position: PositionType.TOPLEFT,
       controls: {
         point: true,
+        line: true,
+        polygon: true,
+        rect: true,
+        circle: true,
+        delete: true,
       },
       name: 'draw',
     };
@@ -68,14 +75,15 @@ export class DrawControl extends Control {
   public onRemove() {
     for (const draw in this.draw) {
       if (this.draw[draw]) {
-        this.draw[draw].destory();
+        this.draw[draw].destroy();
       }
     }
   }
   private addControls(controls: IControls, container: HTMLElement) {
     for (const type in controls) {
-      if (DrawType[type]) {
-        const draw = new DrawType[type](this.scene);
+      if (DrawType[type] && controls[type] !== false) {
+        const drawOption = isObject(controls[type]) ? controls[type] : false;
+        const draw = new DrawType[type](this.scene, drawOption);
         draw.on(DrawEvent.MODE_CHANGE, this.onModeChange.bind(null, type));
         this.draw[type] = draw;
         this.createButton(
@@ -84,7 +92,7 @@ export class DrawControl extends Control {
           container,
           this.onButtonClick.bind(null, type),
         );
-      } else if (type === 'delete') {
+      } else if (type === 'delete' && controls[type] !== false) {
         const draw = new DrawDelete(this.scene);
         draw.on(DrawEvent.MODE_CHANGE, this.onModeChange.bind(null, type));
         this.createButton(

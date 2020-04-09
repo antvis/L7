@@ -15,16 +15,12 @@ import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import { createCircle, createPoint } from '../util/create_geometry';
 import moveFeatures, { movePoint } from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
-export interface IDrawRectOption extends IDrawFeatureOption {
-  units: unitsType;
-  steps: number;
-}
 export default class DrawCircle extends DrawFeature {
   protected startPoint: ILngLat;
   protected endPoint: ILngLat;
   protected pointFeatures: Feature[];
   protected centerLayer: ILayer;
-  constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
+  constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
     this.type = 'circle';
   }
@@ -44,7 +40,7 @@ export default class DrawCircle extends DrawFeature {
     this.source.setFeatureActive(feature);
   }
 
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       ...super.getDefaultOptions(),
       title: '绘制圆',
