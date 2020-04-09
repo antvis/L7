@@ -93,9 +93,8 @@ export default class HeatMapModel extends BaseModel {
     });
 
     // 初始化颜色纹理
-
     this.colorTexture = createTexture2D({
-      data: imageData.data,
+      data: new Uint8Array(imageData.data),
       width: imageData.width,
       height: imageData.height,
       wrapS: gl.CLAMP_TO_EDGE,

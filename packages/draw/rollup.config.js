@@ -14,7 +14,9 @@ export default {
       exclude: 'node_modules/**',
       typescript: require('typescript')
     }),
-    resolve(),
+    resolve({
+      preferBuiltins: false
+    }),
     postcss({
       plugins: [
         url({ url: 'inline' })
@@ -30,6 +32,9 @@ export default {
       transforms: { generator: false }
     }),
     terser()
+  ],
+  external: [
+    '@antv/l7'
   ],
   output: [
     {

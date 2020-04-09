@@ -18,6 +18,9 @@ export default class DrawResultLayer extends BaseRender {
     if (this.isEnableDrag) {
       return;
     }
+    if (!this.draw.selectEnable) {
+      return;
+    }
     const layer = this.drawLayers[0];
     layer.on('click', this.onClick);
     this.isEnableDrag = true;
