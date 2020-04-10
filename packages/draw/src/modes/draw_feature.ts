@@ -4,42 +4,43 @@ import {
   FeatureCollection,
   featureCollection,
   point,
+  Units,
+  unitsFactors,
 } from '@turf/helpers';
 import DrawRender from '../render/draw';
 import RenderLayer from '../render/draw_result';
 import DrawVertexLayer from '../render/draw_vertex';
-import { DrawEvent, DrawModes, unitsType } from '../util/constant';
+import { DrawEvent, DrawModes } from '../util/constant';
 import DrawDelete from './draw_delete';
 import DrawEdit from './draw_edit';
 import DrawMode, { IDrawOption } from './draw_mode';
 import DrawSelected from './draw_selected';
 export interface IDrawFeatureOption extends IDrawOption {
-  units: unitsType;
+  units: Units;
   steps: number;
+  editEnable: boolean;
+  selectEnable: boolean;
+  cursor: string;
 }
-const InitFeature = {
-  type: 'FeatureCollection',
-  features: [],
-};
 export default abstract class DrawFeature extends DrawMode {
   // 绘制完成之后显示
   public selectMode: DrawSelected;
   public editMode: DrawEdit;
   public deleteMode: DrawDelete;
+  public editEnable: boolean;
+  public selectEnable: boolean;
 
-  protected renderLayer: RenderLayer;
-  protected drawRender: DrawRender;
+  protected normalLayer: RenderLayer;
+  protected drawLayer: DrawRender;
   protected drawVertexLayer: DrawVertexLayer;
-  protected centerLayer: ILayer;
 
-  // 编辑过程中显示
-  protected drawLayer: ILayer;
-  protected drawLineLayer: ILayer;
   constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
-    this.drawRender = new DrawRender(this);
+    this.drawLayer = new DrawRender(this);
     this.drawVertexLayer = new DrawVertexLayer(this);
-    this.renderLayer = new RenderLayer(this);
+    this.normalLayer = new RenderLayer(this);
+    this.selectEnable = this.getOption('selectEnable');
+    this.editEnable = this.getOption('editEnable');
 
     // this.editLayer = new EditLayer(this);
     this.selectMode = new DrawSelected(this.scene, {});
@@ -56,6 +57,7 @@ export default abstract class DrawFeature extends DrawMode {
     this.deleteMode.on(DrawEvent.DELETE, this.onDrawDelete);
     this.on(DrawEvent.CREATE, this.onDrawCreate);
     this.on(DrawEvent.MODE_CHANGE, this.onModeChange);
+    document.addEventListener('keydown', this.addKeyDownEvent);
   }
   public abstract drawFinish(): void;
   public setCurrentFeature(feature: Feature) {
@@ -71,19 +73,19 @@ export default abstract class DrawFeature extends DrawMode {
   }
   public disableLayer() {
     // this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
-    this.drawRender.disableDrag();
+    this.drawLayer.disableSelect();
   }
   public enableLayer() {
-    this.drawRender.enableDrag();
+    this.drawLayer.enableSelect();
   }
   public clear() {
-    this.drawRender.hide();
+    this.drawLayer.hide();
     this.drawVertexLayer.hide();
     this.hideOtherLayer();
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
   }
   public reset() {
-    this.drawRender.show();
+    this.drawLayer.show();
     this.drawVertexLayer.show();
     this.showOtherLayer();
   }
@@ -91,11 +93,24 @@ export default abstract class DrawFeature extends DrawMode {
   public addVertex(feature: Feature): void {
     throw new Error('子类未实现该方法');
   }
-  protected getDefaultOptions() {
+
+  public onRemove() {
+    this.destroy();
+    this.selectMode.destroy();
+    this.editMode.destroy();
+    this.source.destroy();
+    this.drawLayer.destroy();
+    this.drawVertexLayer.destroy();
+    this.normalLayer.destroy();
+    document.removeEventListener('keydown', this.addKeyDownEvent);
+  }
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       steps: 64,
-      units: 'kilometres',
+      units: 'kilometers',
       cursor: 'crosshair',
+      editEnable: true,
+      selectEnable: true,
     };
   }
   protected abstract onDragStart(e: IInteractionTarget): void;
@@ -128,9 +143,12 @@ export default abstract class DrawFeature extends DrawMode {
   private onModeChange = (mode: DrawModes[any]) => {
     switch (mode) {
       case DrawModes.DIRECT_SELECT:
+        if (!this.editEnable) {
+          return;
+        }
         this.editMode.enable();
         this.editMode.setEditFeature(this.currentFeature as Feature);
-        this.drawRender.updateData(
+        this.drawLayer.updateData(
           featureCollection([this.currentFeature as Feature]),
         );
         this.drawVertexLayer.updateData(
@@ -142,10 +160,17 @@ export default abstract class DrawFeature extends DrawMode {
         this.drawStatus = 'DrawEdit';
         break;
       case DrawModes.SIMPLE_SELECT:
+        if (!this.selectEnable) {
+          this.drawLayer.hide();
+          this.drawVertexLayer.hide();
+          this.hideOtherLayer();
+          this.emit(DrawEvent.MODE_CHANGE, DrawModes.STATIC);
+          return;
+        }
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
         this.selectMode.enable();
-        this.drawRender.enableDrag();
-        this.drawRender.updateData(
+        this.drawLayer.enableSelect();
+        this.drawLayer.updateData(
           featureCollection([this.currentFeature as Feature]),
         );
         this.drawVertexLayer.updateData(
@@ -153,7 +178,7 @@ export default abstract class DrawFeature extends DrawMode {
         );
         this.drawVertexLayer.disableEdit();
         this.drawVertexLayer.show();
-        this.drawRender.show();
+        this.drawLayer.show();
         this.showOtherLayer();
         this.drawStatus = 'DrawSelected';
         break;
@@ -163,8 +188,8 @@ export default abstract class DrawFeature extends DrawMode {
         this.drawVertexLayer.hide();
         this.drawVertexLayer.disableEdit();
         this.hideOtherLayer();
-        this.renderLayer.update(this.source.data);
-        this.renderLayer.enableDrag();
+        this.normalLayer.update(this.source.data);
+        this.normalLayer.enableSelect();
         this.drawStatus = 'DrawFinish';
         break;
     }
@@ -176,6 +201,7 @@ export default abstract class DrawFeature extends DrawMode {
 
   private onDrawUpdate = (feature: Feature) => {
     this.source.updateFeature(this.currentFeature as Feature);
+    this.emit(DrawEvent.UPDATE, this.currentFeature);
   };
 
   private onDrawMove = (delta: ILngLat) => {
@@ -190,10 +216,15 @@ export default abstract class DrawFeature extends DrawMode {
     if (this.drawStatus === 'DrawSelected') {
       this.clear();
       this.source.removeFeature(this.currentFeature as Feature);
-      this.renderLayer.update(this.source.data);
-      // this.reset();
+      this.normalLayer.update(this.source.data);
     }
+  };
 
-    // this.source.removeFeature(this.currentFeature as Feature
+  private addKeyDownEvent = (event: KeyboardEvent) => {
+    // tslint:disable-next-line:no-arg
+    const e = event || window.event;
+    if (e && e.keyCode === 8) {
+      this.deleteMode.enable();
+    }
   };
 }

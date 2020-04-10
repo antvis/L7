@@ -93,9 +93,8 @@ export default class HeatMapModel extends BaseModel {
     });
 
     // 初始化颜色纹理
-
     this.colorTexture = createTexture2D({
-      data: imageData.data,
+      data: new Uint8Array(imageData.data),
       width: imageData.width,
       height: imageData.height,
       wrapS: gl.CLAMP_TO_EDGE,
@@ -261,14 +260,17 @@ export default class HeatMapModel extends BaseModel {
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const invert = mat4.invert(
       mat4.create(),
-      // @ts-ignore
-      mat4.fromValues(...this.cameraService.getViewProjectionMatrix()),
+      mat4.fromValues(
+        // @ts-ignore
+        ...this.cameraService.getViewProjectionMatrixUncentered(),
+      ),
     ) as mat4;
     this.colorModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
         u_texture: this.heatmapFramerBuffer,
+        u_ViewProjectionMatrixUncentered: this.cameraService.getViewProjectionMatrixUncentered(),
         u_InverseViewProjectionMatrix: [...invert],
       },
     });

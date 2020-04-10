@@ -9,6 +9,7 @@ import DashLineDemo from './components/dash';
 import DataUpdate from './components/data_update';
 import HeatMapDemo from './components/HeatMap';
 import HeatMapDemo3D from './components/heatmap3d';
+import HeatMap3D_2 from './components/heatmap2';
 import HexagonLayerDemo from './components/hexagon';
 import LightDemo from './components/light';
 import LineLayer from './components/Line';
@@ -42,6 +43,7 @@ storiesOf('图层', module)
   .add('2D弧线', () => <Arc2DLineDemo />)
   .add('热力图', () => <HeatMapDemo />)
   .add('热力图3D', () => <HeatMapDemo3D />)
+  .add('热力图2', () => <HeatMap3D_2 />)
   .add('网格热力图', () => <HexagonLayerDemo />)
   .add('栅格', () => <RasterLayerDemo />)
   .add('图片', () => <ImageLayerDemo />)

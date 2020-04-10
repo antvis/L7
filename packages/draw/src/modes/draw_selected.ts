@@ -12,12 +12,8 @@ import {
 import { Feature, featureCollection, point } from '@turf/helpers';
 import { DrawEvent, DrawModes } from '../util/constant';
 import moveFeatures from '../util/move_featrues';
+import { IDrawFeatureOption } from './draw_feature';
 import DrawFeature, { IDrawOption } from './draw_mode';
-export type unitsType = 'degrees' | 'radians' | 'miles' | 'kilometers';
-export interface IDrawCircleOption extends IDrawOption {
-  units: unitsType;
-  steps: number;
-}
 const InitFeature = {
   type: 'FeatureCollection',
   features: [],
@@ -26,9 +22,8 @@ export default class DrawSelect extends DrawFeature {
   private center: ILngLat;
   private dragStartPoint: ILngLat;
   // 绘制完成之后显示
-  constructor(scene: Scene, options: Partial<IDrawCircleOption> = {}) {
+  constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
-    // this.editLayer = new EditRender(this);
   }
 
   public setSelectedFeature(feature: Feature) {
@@ -36,14 +31,14 @@ export default class DrawSelect extends DrawFeature {
   }
 
   protected onDragStart = (e: IInteractionTarget) => {
-    // @ts-ignore
-    this.scene.map.dragPan.disable();
+    this.scene.setMapStatus({ dragEnable: false });
     this.dragStartPoint = e.lngLat;
   };
-  protected getDefaultOptions() {
+
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       steps: 64,
-      units: 'kilometres',
+      units: 'kilometers',
       cursor: 'move',
     };
   }

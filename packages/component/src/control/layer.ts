@@ -89,13 +89,22 @@ export default class Layers extends Control {
     return this;
   }
 
+  public onRemove() {
+    if (!this.mapsService) {
+      return;
+    }
+    this.mapsService.off('click', this.collapse);
+    this.layers.forEach((layerItem) => {
+      layerItem.layer.off('remove', this.onLayerChange);
+      layerItem.layer.off('add', this.onLayerChange);
+    });
+  }
   private initLayout() {
     const className = 'l7-control-layers';
     const container = (this.container = DOM.create('div', className));
     const { collapsed } = this.controlOption;
     // makes this work on IE touch devices by stopping it from firing a mouseout event when the touch is released
     container.setAttribute('aria-haspopup', 'true');
-
     const form = (this.form = DOM.create(
       'form',
       className + '-list',

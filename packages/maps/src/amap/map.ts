@@ -20,6 +20,7 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
 let mapdivCount = 0;
@@ -109,7 +110,9 @@ export default class AMapService
   }
 
   public getMapCanvasContainer(): HTMLElement {
-    return this.map.getContainer() as HTMLElement;
+    return this.map
+      .getContainer()
+      ?.getElementsByClassName('amap-maps')[0] as HTMLElement;
   }
 
   public getSize(): [number, number] {
@@ -256,7 +259,6 @@ export default class AMapService
         if (mapInstance) {
           this.map = mapInstance as AMap.Map & IAMapInstance;
           this.$mapContainer = this.map.getContainer();
-          this.removeLogoControl();
           setTimeout(() => {
             this.map.on('camerachange', this.handleCameraChanged);
             resolve();
@@ -272,10 +274,6 @@ export default class AMapService
             viewMode: '3D',
             ...rest,
           });
-          map.on('complete', () => {
-            this.removeLogoControl();
-          });
-
           // 监听地图相机事件
           map.on('camerachange', this.handleCameraChanged);
           // @ts-ignore
@@ -422,13 +420,5 @@ export default class AMapService
       script.onerror = reject;
       document.head.appendChild(script);
     });
-  }
-
-  private removeLogoControl(): void {
-    // @ts-ignore
-    const logo = document.getElementsByClassName('amap-logo');
-    if (logo && logo[0]) {
-      logo[0].setAttribute('style', 'display: none !important');
-    }
   }
 }

@@ -308,7 +308,7 @@ class Scene
     this.mapService.setMapStyle(style);
   }
 
-  public setMapStatus(options: IStatusOptions) {
+  public setMapStatus(options: Partial<IStatusOptions>) {
     this.mapService.setMapStatus(options);
   }
 

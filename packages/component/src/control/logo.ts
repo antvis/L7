@@ -23,4 +23,8 @@ export default class Logo extends Control {
     container.appendChild(anchor);
     return container;
   }
+
+  public onRemove() {
+    return null;
+  }
 }

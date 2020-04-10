@@ -25,6 +25,12 @@ export default class Circle extends React.Component {
     scene.on('loaded', () => {
       const drawCircle = new DrawCircle(scene);
       drawCircle.enable();
+      drawCircle.on('draw.create', (e: any) => {
+        console.log(e);
+      });
+      drawCircle.on('draw.update', (e: any) => {
+        console.log(e);
+      });
     });
   }
 

@@ -33,6 +33,12 @@ export default class BaseRenderLayer {
     const layer = this.drawLayers[0];
     layer.off(type, handler);
   }
+
+  public emit(type: string, e: any) {
+    const layer = this.drawLayers[0];
+    layer.emit(type, e);
+  }
+
   public updateData(data: any) {
     this.drawLayers.forEach((layer) => layer.setData(data));
   }

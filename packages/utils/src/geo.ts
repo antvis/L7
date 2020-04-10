@@ -8,16 +8,16 @@ import {
 } from '@turf/helpers';
 
 export type IBounds = [[number, number], [number, number]];
-export interface ILngLat {
+interface ILngLat {
   lng: number;
   lat: number;
 }
-export interface IPoint {
+interface IPoint {
   x: number;
   y: number;
 }
 const originShift = (2 * Math.PI * 6378137) / 2.0;
-export type Point = number[];
+type Point = number[];
 /**
  * 计算地理数据范围
  * @param {dataArray} data 地理坐标数据

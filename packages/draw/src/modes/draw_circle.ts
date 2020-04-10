@@ -1,7 +1,12 @@
-import { IInteractionTarget, ILngLat, PointLayer, Scene } from '@antv/l7';
+import {
+  IInteractionTarget,
+  ILayer,
+  ILngLat,
+  PointLayer,
+  Scene,
+} from '@antv/l7';
 import {
   Feature,
-  FeatureCollection,
   featureCollection,
   Geometries,
   Properties,
@@ -10,15 +15,12 @@ import { DrawEvent, DrawModes, unitsType } from '../util/constant';
 import { createCircle, createPoint } from '../util/create_geometry';
 import moveFeatures, { movePoint } from '../util/move_featrues';
 import DrawFeature, { IDrawFeatureOption } from './draw_feature';
-export interface IDrawRectOption extends IDrawFeatureOption {
-  units: unitsType;
-  steps: number;
-}
 export default class DrawCircle extends DrawFeature {
   protected startPoint: ILngLat;
   protected endPoint: ILngLat;
   protected pointFeatures: Feature[];
-  constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
+  protected centerLayer: ILayer;
+  constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
     this.type = 'circle';
   }
@@ -30,7 +32,6 @@ export default class DrawCircle extends DrawFeature {
   public setCurrentFeature(feature: Feature) {
     this.currentFeature = feature as Feature;
     // @ts-ignore
-    // @ts-ignore
     this.pointFeatures = feature.properties.pointFeatures;
     // @ts-ignore
     this.startPoint = feature.properties.startPoint;
@@ -39,7 +40,7 @@ export default class DrawCircle extends DrawFeature {
     this.source.setFeatureActive(feature);
   }
 
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       ...super.getDefaultOptions(),
       title: '绘制圆',
@@ -47,6 +48,9 @@ export default class DrawCircle extends DrawFeature {
   }
 
   protected onDragStart = (e: IInteractionTarget) => {
+    if (this.drawStatus !== 'Drawing') {
+      this.drawLayer.emit('unclick', null);
+    }
     this.startPoint = e.lngLat;
     this.setCursor('grabbing');
     this.initCenterLayer();
@@ -57,14 +61,14 @@ export default class DrawCircle extends DrawFeature {
     this.endPoint = e.lngLat;
     const feature = this.createFeature() as Feature<Geometries, Properties>;
     const properties = feature.properties as { pointFeatures: Feature[] };
-    this.drawRender.update(featureCollection([feature]));
+    this.drawLayer.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
   };
 
   protected onDragEnd = () => {
     const feature = this.createFeature(`${this.getUniqId()}`);
     const properties = feature.properties as { pointFeatures: Feature[] };
-    this.drawRender.update(featureCollection([feature]));
+    this.drawLayer.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection(properties.pointFeatures));
     this.emit(DrawEvent.CREATE, this.currentFeature);
     this.emit(DrawEvent.MODE_CHANGE, DrawModes.SIMPLE_SELECT);
@@ -73,7 +77,7 @@ export default class DrawCircle extends DrawFeature {
 
   protected moveFeature(delta: ILngLat): void {
     const newFeature = moveFeatures([this.currentFeature as Feature], delta);
-    this.drawRender.updateData(featureCollection(newFeature));
+    this.drawLayer.updateData(featureCollection(newFeature));
     const newPointFeture = moveFeatures(this.pointFeatures, delta);
     this.drawVertexLayer.updateData(featureCollection(newPointFeture));
     const newStartPoint = movePoint(
@@ -113,7 +117,7 @@ export default class DrawCircle extends DrawFeature {
     this.endPoint = endPoint;
     const newFeature = this.createFeature();
     const properties = newFeature.properties as { pointFeatures: Feature[] };
-    this.drawRender.updateData(featureCollection([newFeature]));
+    this.drawLayer.updateData(featureCollection([newFeature]));
     this.drawVertexLayer.updateData(
       featureCollection(properties.pointFeatures),
     );
