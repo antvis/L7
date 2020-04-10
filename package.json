@@ -141,7 +141,7 @@
     "lint:ts": "run-p -c lint:ts-*",
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
-    "version": "lerna version --force-publish --conventional-commits",
+    "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
     "release": "lerna publish from-package --registry https://registry.npmjs.com/ --force-publish",
