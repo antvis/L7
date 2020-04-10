@@ -9,19 +9,15 @@ import { unitsType } from '../util/constant';
 import { createPoint, createRect } from '../util/create_geometry';
 import DrawCircle from './draw_circle';
 import { IDrawFeatureOption } from './draw_feature';
-export interface IDrawRectOption extends IDrawFeatureOption {
-  units: unitsType;
-  steps: number;
-}
 export default class DrawRect extends DrawCircle {
-  constructor(scene: Scene, options: Partial<IDrawRectOption> = {}) {
+  constructor(scene: Scene, options: Partial<IDrawFeatureOption> = {}) {
     super(scene, options);
     this.type = 'rect';
   }
   public drawFinish() {
     return null;
   }
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): Partial<IDrawFeatureOption> {
     return {
       ...super.getDefaultOptions(),
       title: '绘制矩形',

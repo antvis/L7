@@ -8,10 +8,10 @@ export default class DrawVertexLayer extends BaseRender {
     this.drawLayers = renderFeature(feature, style);
     this.addLayers();
   }
-  public enableDrag() {
+  public enableSelect() {
     return;
   }
-  public disableDrag() {
+  public disableSelect() {
     return;
   }
 

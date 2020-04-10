@@ -38,11 +38,9 @@ export default class DrawVertexLayer extends BaseRender {
 
   private onMouseEnter = (e: any) => {
     this.draw.setCursor('pointer');
-    // this.draw.editMode.enable();
   };
   private onMouseOut = (e: any) => {
     this.draw.resetCursor();
-    // this.draw.editMode.disable();
   };
   private onClick = (e: any) => {
     this.draw.addVertex(e.feature);

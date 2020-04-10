@@ -27,6 +27,7 @@ export interface IControl {
   setPosition(pos: PositionType): void;
   addTo(sceneContainer: Container): void;
   onAdd(): HTMLElement;
+  onRemove(): void;
   hide(): void;
   show(): void;
   remove(): void;

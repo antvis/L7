@@ -23,6 +23,7 @@ order: 4
 
 ```jsx
 import { Popup } from '@antv/l7-react';
-
 <Popup option={{}} lnglat={[]} />;
 ```
+
+[popup 使用完整 demo](../../../examples/react/covid#covid_bubble)

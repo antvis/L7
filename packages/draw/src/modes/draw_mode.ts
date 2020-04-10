@@ -1,7 +1,8 @@
 import { IInteractionTarget, IPopup, Scene } from '@antv/l7';
 import { Feature, FeatureCollection } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { merge } from 'lodash';
+// tslint:disable-next-line:no-submodule-imports
+import merge from 'lodash/merge';
 import DrawSource from '../source';
 import LayerStyles from '../util/layerstyle';
 
@@ -49,7 +50,9 @@ export default abstract class DrawMode extends EventEmitter {
       return;
     }
     // @ts-ignore
-    this.scene.map.dragPan.disable();
+    this.scene.setMapStatus({
+      dragEnable: false,
+    });
     this.scene.on('dragstart', this.onDragStart);
     this.scene.on('dragging', this.onDragging);
     this.scene.on('dragend', this.onDragEnd);
@@ -68,7 +71,9 @@ export default abstract class DrawMode extends EventEmitter {
     this.scene.off('click', this.onClick);
     this.resetCursor();
     // @ts-ignore
-    this.scene.map.dragPan.enable();
+    this.scene.setMapStatus({
+      dragEnable: true,
+    });
     this.isEnable = false;
   }
   public setCurrentFeature(feature: Feature) {
@@ -83,11 +88,11 @@ export default abstract class DrawMode extends EventEmitter {
     throw new Error('子类未实现该方法');
   }
 
-  public getCurrentVertex() {
-    return this.currentVertex;
+  public getCurrentVertex(): Feature {
+    return this.currentVertex as Feature;
   }
-  public getCurrentFeature() {
-    return this.currentVertex;
+  public getCurrentFeature(): Feature {
+    return this.currentFeature as Feature;
   }
 
   public getOption(key: string) {
@@ -114,8 +119,13 @@ export default abstract class DrawMode extends EventEmitter {
       container.removeAttribute('style');
     }
   }
+  public destroy() {
+    DrawFeatureId = 0;
+    this.removeAllListeners();
+    this.disable();
+  }
 
-  protected getDefaultOptions() {
+  protected getDefaultOptions(): any {
     return {};
   }
 

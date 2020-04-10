@@ -7,6 +7,7 @@ export default class Viewport implements IViewport {
   private projectionMatrix: mat4 = mat4.create();
   private viewMatrix: mat4 = mat4.create();
   private viewProjectionMatrix: mat4 = mat4.create();
+  private ViewProjectionMatrixUncentered: mat4 = mat4.create();
   private viewUncenteredMatrix: mat4 = mat4.create();
   private zoom: number;
   private center: number[];
@@ -60,6 +61,11 @@ export default class Viewport implements IViewport {
       this.projectionMatrix,
       this.viewMatrix,
     );
+    mat4.multiply(
+      this.ViewProjectionMatrixUncentered,
+      this.projectionMatrix,
+      this.viewMatrix,
+    );
   }
 
   public getZoom(): number {
@@ -93,6 +99,11 @@ export default class Viewport implements IViewport {
   public getViewProjectionMatrix(): number[] {
     // @ts-ignore
     return this.viewProjectionMatrix;
+  }
+
+  public getViewProjectionMatrixUncentered(): number[] {
+    // @ts-ignore
+    return this.ViewProjectionMatrixUncentered;
   }
 
   public getFocalDistance() {
