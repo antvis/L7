@@ -1,5 +1,5 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as React from 'react';
 
@@ -21,7 +21,7 @@ export default class HeatMapLayerDemo extends React.Component {
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'dark',
-        zoom: 2,
+        zoom: 12,
       }),
     });
     const data = await response.json();
@@ -48,8 +48,8 @@ export default class HeatMapLayerDemo extends React.Component {
         },
       });
     scene.addLayer(layer);
-    scene.on('loaded', () => {
-      console.log('scene loaded');
+    scene.on('zoom', () => {
+      console.log(scene.getZoom());
     });
     this.scene = scene;
   }

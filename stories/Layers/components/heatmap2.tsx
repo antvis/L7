@@ -14,9 +14,9 @@ export default class HeatMapLayerDemo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         style: 'dark',
-        pitch: 58.5,
+        pitch: 8.5,
         center: [116.49434030056, 39.868073421167621],
         zoom: 13,
       }),
