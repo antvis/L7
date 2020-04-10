@@ -104,6 +104,9 @@ export default React.memo(function Map() {
       feature: args.feature,
     });
   }
+  function hidePopup(args: any): void {
+    setPopupInfo(undefined);
+  }
 
   return (
     <>
@@ -235,6 +238,7 @@ export default React.memo(function Map() {
             }}
           >
             <LayerEvent type="mousemove" handler={showPopup} />
+            <LayerEvent type="mouseout" handler={hidePopup} />
           </PointLayer>,
           <PointLayer
             key={'5'}

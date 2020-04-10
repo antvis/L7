@@ -58,6 +58,10 @@ export default class Viewport implements IViewport {
     return this.viewport.viewProjectionMatrix;
   }
 
+  public getViewProjectionMatrixUncentered(): number[] {
+    // @ts-ignore
+    return this.viewport.viewProjectionMatrix;
+  }
   public getFocalDistance() {
     return 1;
   }

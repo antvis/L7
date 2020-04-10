@@ -5,6 +5,7 @@ uniform sampler2D u_texture;
 varying vec2 v_texCoord;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_InverseViewProjectionMatrix;
+uniform mat4 u_ViewProjectionMatrixUncentered;
 varying float v_intensity;
 
 vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {
@@ -26,8 +27,8 @@ void main() {
   vec4 p1 = vec4(pos, 0.0, 1.0);
 	vec4 p2 = vec4(pos, 1.0, 1.0);
 
-	vec4 inverseP1 = unproject_clipspace_to_position(p1, u_InverseViewProjectionMatrix);
-	vec4 inverseP2 = unproject_clipspace_to_position(p2, u_InverseViewProjectionMatrix) ;
+	vec4 inverseP1 = u_InverseViewProjectionMatrix * p1;
+	vec4 inverseP2 = u_InverseViewProjectionMatrix * p2;
 
   inverseP1 = inverseP1 / inverseP1.w;
 	inverseP2 = inverseP2 / inverseP2.w;
@@ -40,6 +41,6 @@ void main() {
 
   v_intensity = texture2D(u_texture, v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
-  gl_Position = project_common_position_to_clipspace(vec4(position.xy, fh * project_pixel(50.), 1.0));
+  gl_Position = u_ViewProjectionMatrixUncentered * vec4(position.xy, fh * project_pixel(50.), 1.0);
 
 }
