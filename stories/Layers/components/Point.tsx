@@ -14,6 +14,7 @@ export default class Point3D extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
+      pickBufferScale: 3.0,
       map: new GaodeMap({
         style: 'light',
         center: [-121.24357, 37.58264],
