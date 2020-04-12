@@ -192,7 +192,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       } else {
         this.logger.error('容器 id 不存在');
       }
-      this.pickingService.init();
+      this.pickingService.init(this.id);
 
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });
