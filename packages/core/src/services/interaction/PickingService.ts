@@ -6,6 +6,7 @@ import {
   IShaderModuleService,
 } from '../../index';
 import { TYPES } from '../../types';
+import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import {
   IInteractionService,
   IInteractionTarget,
@@ -17,11 +18,13 @@ import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IPickingService } from './IPickingService';
 
-const PICKSCALE = 1.0;
 @injectable()
 export default class PickingService implements IPickingService {
   @inject(TYPES.IRendererService)
   private rendererService: IRendererService;
+
+  @inject(TYPES.IGlobalConfigService)
+  private readonly configService: IGlobalConfigService;
 
   @inject(TYPES.IInteractionService)
   private interactionService: IInteractionService;
@@ -36,18 +39,22 @@ export default class PickingService implements IPickingService {
 
   private alreadyInPicking: boolean = false;
 
-  public init() {
+  private pickBufferScale: number = 1.0;
+
+  public init(id: string) {
     const {
       createTexture2D,
       createFramebuffer,
       getViewportSize,
     } = this.rendererService;
     const { width, height } = getViewportSize();
+    this.pickBufferScale =
+      this.configService.getSceneConfig(id).pickBufferScale || 1;
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
       color: createTexture2D({
-        width,
-        height,
+        width: Math.round(width / this.pickBufferScale),
+        height: Math.round(height / this.pickBufferScale),
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
       }),
@@ -74,8 +81,8 @@ export default class PickingService implements IPickingService {
 
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
-        width: Math.round(width / PICKSCALE),
-        height: Math.round(height / PICKSCALE),
+        width: Math.round(width / this.pickBufferScale),
+        height: Math.round(height / this.pickBufferScale),
       });
       this.width = width;
       this.height = height;
@@ -122,9 +129,11 @@ export default class PickingService implements IPickingService {
     }
     let pickedColors: Uint8Array | undefined;
     pickedColors = readPixels({
-      x: Math.floor(xInDevicePixel / PICKSCALE),
+      x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor((height - (y + 1) * window.devicePixelRatio) / PICKSCALE),
+      y: Math.floor(
+        (height - (y + 1) * window.devicePixelRatio) / this.pickBufferScale,
+      ),
       width: 1,
       height: 1,
       data: new Uint8Array(1 * 1 * 4),

@@ -1,3 +1,3 @@
 export interface IPickingService {
-  init(): void;
+  init(id: string): void;
 }

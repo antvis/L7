@@ -10,6 +10,7 @@ export interface ISceneConfig extends IRenderConfig {
   logoVisible?: boolean;
   animate?: boolean;
   fitBoundsOptions?: unknown;
+  pickBufferScale?: number;
 }
 
 // interface IValidateResult {
