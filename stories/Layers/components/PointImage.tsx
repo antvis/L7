@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 export default class PointImage extends React.Component {
   // @ts-ignore
@@ -15,13 +15,14 @@ export default class PointImage extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [121.4, 31.258134],
         zoom: 15,
         pitch: 0,
         style: 'dark',
       }),
     });
+    this.scene = scene;
     scene.addImage(
       '00',
       'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Rq6tQ5b4_JMAAAAAAAAAAABkARQnAQ',
@@ -32,20 +33,30 @@ export default class PointImage extends React.Component {
     );
     scene.addImage(
       '02',
-      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
+      'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
     );
-
-    const imageLayer = new PointLayer({})
-      .source(await response.json(), {
-        parser: {
-          type: 'json',
-          x: 'longitude',
-          y: 'latitude',
-        },
-      })
-      .shape('name', ['00', '01', '02'])
-      .size(30);
-    scene.addLayer(imageLayer);
+    let i = 0;
+    const data = await response.json();
+    while (i < 1) {
+      const imageLayer = new PointLayer()
+        .source(data, {
+          parser: {
+            type: 'json',
+            x: 'longitude',
+            y: 'latitude',
+          },
+        })
+        .shape('name', ['00', '01', '02'])
+        // .shape('triangle')
+        // .color('red')
+        .active(true)
+        .size(20);
+      // imageLayer.on('click', (e) => {
+      //   console.log(e);
+      // });
+      scene.addLayer(imageLayer);
+      i++;
+    }
   }
 
   public render() {

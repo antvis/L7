@@ -5,14 +5,16 @@ import {
   ILayer,
   ILayerPlugin,
   ILogService,
+  IModelUniform,
   IRasterParserDataItem,
   IStyleAttributeService,
   ITexture2D,
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
+
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
-import { generateColorRamp, IColorRamp } from '../utils/color';
 import { RasterTriangulation } from './buffers/triangulation';
 import rasterFrag from './shaders/raster_frag.glsl';
 import rasterVert from './shaders/raster_vert.glsl';
@@ -26,23 +28,36 @@ interface IRasterLayerStyleOptions {
 }
 
 export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
-  public name: string = 'e';
+  public type: string = 'RasterLayer';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
+  public getAnimateUniforms(): IModelUniform {
+    return {};
   }
 
-  protected renderModels() {
+  public buildModels() {
+    const parserDataItem = this.getSource().data.dataArray[0];
+    const { createTexture2D } = this.rendererService;
+    this.texture = createTexture2D({
+      data: parserDataItem.data,
+      width: parserDataItem.width,
+      height: parserDataItem.height,
+      format: gl.LUMINANCE,
+      type: gl.FLOAT,
+      aniso: 4,
+    });
+    const { rampColors } = this.getLayerConfig();
+    const imageData = generateColorRamp(rampColors as IColorRamp);
+    this.colorTexture = createTexture2D({
+      data: imageData.data,
+      width: imageData.width,
+      height: imageData.height,
+      flipY: false,
+    });
+    this.models = [this.buildRasterModel()];
+  }
+  public renderModels() {
     const { opacity, heightRatio = 10 } = this.getLayerConfig();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { coordinates, width, height, min, max } = parserDataItem;
@@ -64,28 +79,18 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
 
     return this;
   }
-
-  protected buildModels() {
-    const parserDataItem = this.getSource().data.dataArray[0];
-    const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
-      data: parserDataItem.data,
-      width: parserDataItem.width,
-      height: parserDataItem.height,
-      format: gl.LUMINANCE,
-      type: gl.FLOAT,
-      aniso: 4,
-    });
-    const { rampColors } = this.getLayerConfig();
-    const imageData = generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: true,
-    });
-    this.models = [this.buildRasterModel()];
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
   }
+
   private buildRasterModel() {
     const source = this.getSource();
     const sourceFeature = source.data.dataArray[0];

@@ -1,15 +1,24 @@
-import Ajv from 'ajv';
+// import Ajv from 'ajv';
 import { injectable, postConstruct } from 'inversify';
+import { merge } from 'lodash';
 import { ILayerConfig } from '../layer/ILayerService';
+import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
-import mapConfigSchema from './mapConfigSchema';
-import sceneConfigSchema from './sceneConfigSchema';
+import WarnInfo, { IWarnInfo } from './warnInfo';
 
 /**
  * 场景默认配置项
  */
-const defaultSceneConfig: Partial<ISceneConfig> = {
+const defaultSceneConfig: Partial<ISceneConfig & IRenderConfig> = {
   id: 'map',
+  logoPosition: 'bottomleft',
+  logoVisible: true,
+  antialias: true,
+  preserveDrawingBuffer: false,
+  pickBufferScale: 1.0,
+  fitBoundsOptions: {
+    animate: false,
+  },
 };
 
 /**
@@ -44,28 +53,39 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
     'vesica',
   ],
   shape3d: ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'],
-  minZoom: 0,
-  maxZoom: 20,
+  minZoom: -1,
+  maxZoom: 24,
   visible: true,
   autoFit: false,
+  pickingBuffer: 0,
+  enablePropagation: false,
   zIndex: 0,
+  blend: 'normal',
   pickedFeatureID: -1,
-  enableMultiPassRenderer: true,
+  enableMultiPassRenderer: false,
   enablePicking: true,
   active: false,
-  activeColor: 'red',
+  activeColor: '#2f54eb',
   enableHighlight: false,
-  highlightColor: 'red',
+  enableSelect: false,
+  highlightColor: '#2f54eb',
+  selectColor: 'blue',
   enableTAA: false,
   jitterScale: 1,
   enableLighting: false,
+  animateOption: {
+    enable: false,
+    interval: 0.2,
+    duration: 4,
+    trailLength: 0.15,
+  },
 };
 
 // @see https://github.com/epoberezkin/ajv#options
-const ajv = new Ajv({
-  allErrors: true,
-  verbose: true,
-});
+// const ajv = new Ajv({
+//   allErrors: true,
+//   verbose: true,
+// });
 
 @injectable()
 export default class GlobalConfigService implements IGlobalConfigService {
@@ -79,12 +99,12 @@ export default class GlobalConfigService implements IGlobalConfigService {
   /**
    * 场景配置项校验器
    */
-  private sceneConfigValidator: Ajv.ValidateFunction;
+  // private sceneConfigValidator: Ajv.ValidateFunction;
 
   /**
    * 地图配置项校验器
    */
-  private mapConfigValidator: Ajv.ValidateFunction;
+  // private mapConfigValidator: Ajv.ValidateFunction;
 
   /**
    * 全部图层配置项缓存
@@ -96,12 +116,16 @@ export default class GlobalConfigService implements IGlobalConfigService {
   /**
    * 保存每一种 Layer 配置项的校验器
    */
-  private layerConfigValidatorCache: {
-    [layerName: string]: Ajv.ValidateFunction;
-  } = {};
+  // private layerConfigValidatorCache: {
+  //   [layerName: string]: Ajv.ValidateFunction;
+  // } = {};
 
   public getSceneConfig(sceneId: string) {
     return this.sceneConfigCache[sceneId];
+  }
+
+  public getSceneWarninfo(id: string) {
+    return WarnInfo[id];
   }
 
   public setSceneConfig(sceneId: string, config: Partial<ISceneConfig>) {
@@ -111,13 +135,13 @@ export default class GlobalConfigService implements IGlobalConfigService {
     };
   }
 
-  public validateSceneConfig(data: object) {
-    return this.validate(this.sceneConfigValidator, data);
-  }
+  // public validateSceneConfig(data: object) {
+  //   return this.validate(this.sceneConfigValidator, data);
+  // }
 
-  public validateMapConfig(data: object) {
-    return this.validate(this.mapConfigValidator, data);
-  }
+  // public validateMapConfig(data: object) {
+  //   return this.validate(this.mapConfigValidator, data);
+  // }
 
   public getLayerConfig<IChildLayerConfig>(
     layerId: string,
@@ -133,51 +157,49 @@ export default class GlobalConfigService implements IGlobalConfigService {
   ) {
     // @ts-ignore
     this.layerConfigCache[layerId] = {
-      ...this.sceneConfigCache[sceneId],
-      ...defaultLayerConfig,
-      ...config,
+      ...merge({}, this.sceneConfigCache[sceneId], defaultLayerConfig, config),
     };
   }
 
-  public registerLayerConfigSchemaValidator(layerName: string, schema: object) {
-    if (!this.layerConfigValidatorCache[layerName]) {
-      this.layerConfigValidatorCache[layerName] = ajv.compile(schema);
-    }
-  }
+  // public registerLayerConfigSchemaValidator(layerName: string, schema: object) {
+  //   if (!this.layerConfigValidatorCache[layerName]) {
+  //     this.layerConfigValidatorCache[layerName] = ajv.compile(schema);
+  //   }
+  // }
 
-  public validateLayerConfig(layerName: string, data: object) {
-    return this.validate(this.layerConfigValidatorCache[layerName], data);
-  }
+  // public validateLayerConfig(layerName: string, data: object) {
+  //   return this.validate(this.layerConfigValidatorCache[layerName], data);
+  // }
 
   public clean() {
     this.sceneConfigCache = {};
     this.layerConfigCache = {};
   }
 
-  @postConstruct()
-  private registerSceneConfigSchemaValidator() {
-    this.sceneConfigValidator = ajv.compile(sceneConfigSchema);
-    this.mapConfigValidator = ajv.compile(mapConfigSchema);
-  }
+  // @postConstruct()
+  // private registerSceneConfigSchemaValidator() {
+  //   this.sceneConfigValidator = ajv.compile(sceneConfigSchema);
+  //   this.mapConfigValidator = ajv.compile(mapConfigSchema);
+  // }
 
-  private validate(
-    validateFunc: Ajv.ValidateFunction | undefined,
-    data: object,
-  ) {
-    if (validateFunc) {
-      const valid = validateFunc(data);
-      if (!valid) {
-        return {
-          valid,
-          errors: validateFunc.errors,
-          errorText: ajv.errorsText(validateFunc.errors),
-        };
-      }
-    }
-    return {
-      valid: true,
-      errors: null,
-      errorText: null,
-    };
-  }
+  // private validate(
+  //   validateFunc: Ajv.ValidateFunction | undefined,
+  //   data: object,
+  // ) {
+  //   if (validateFunc) {
+  //     const valid = validateFunc(data);
+  //     if (!valid) {
+  //       return {
+  //         valid,
+  //         errors: validateFunc.errors,
+  //         errorText: ajv.errorsText(validateFunc.errors),
+  //       };
+  //     }
+  //   }
+  //   return {
+  //     valid: true,
+  //     errors: null,
+  //     errorText: null,
+  //   };
+  // }
 }

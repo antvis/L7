@@ -1,9 +1,11 @@
+import { IControlOption } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import Control, { PositionType } from './BaseControl';
 export default class Logo extends Control {
   public getDefault() {
     return {
       position: PositionType.BOTTOMLEFT,
+      name: 'logo',
     };
   }
   public onAdd() {
@@ -20,5 +22,9 @@ export default class Logo extends Control {
     anchor.setAttribute('rel', 'noopener nofollow');
     container.appendChild(anchor);
     return container;
+  }
+
+  public onRemove() {
+    return null;
   }
 }

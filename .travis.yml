@@ -22,6 +22,8 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 
 install:
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - yarn install
 
 before_script:
@@ -31,3 +33,6 @@ script:
   - yarn lint
   - yarn test
   - yarn build
+
+notifications:
+   webhooks: https://oapi.dingtalk.com/robot/send?access_token=2dacc76d8b1ea8bcdc792b50f103d13efdba9ef53ec0caeb70631bc3add56118

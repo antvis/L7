@@ -1,4 +1,7 @@
+// @ts-ignore
+import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import {
+  BlendType,
   gl,
   IActiveOption,
   IAnimateOption,
@@ -32,6 +35,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  ScaleAttributeType,
   ScaleTypeName,
   ScaleTypes,
   StyleAttributeField,
@@ -39,14 +43,14 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { bindAll } from '@antv/l7-utils';
+import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
+import { BlendTypes } from '../utils/blend';
 import baseLayerSchema from './schema';
 /**
  * 分配 layer id
@@ -56,14 +60,16 @@ let layerIdCounter = 0;
 export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
-  public name: string;
+  public name: string = `${layerIdCounter}`;
+  public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
   public minZoom: number;
   public maxZoom: number;
   public inited: boolean = false;
   public layerModelNeedUpdate: boolean = false;
-  public pickedFeatureID: number = -1;
+  public pickedFeatureID: number | null = null;
+  public selectedFeatureID: number | null = null;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -74,17 +80,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   };
   // 生命周期钩子
   public hooks = {
-    init: new SyncBailHook<void, boolean | void>(),
-    afterInit: new SyncBailHook<void, boolean | void>(),
-    beforeRender: new SyncBailHook<void, boolean | void>(),
-    beforeRenderData: new SyncWaterfallHook<void | boolean>(['data']),
-    afterRender: new SyncHook<void>(),
-    beforePickingEncode: new SyncHook<void>(),
-    afterPickingEncode: new SyncHook<void>(),
-    beforeHighlight: new SyncHook<[number[]]>(['pickedColor']),
-    afterHighlight: new SyncHook<void>(),
-    beforeDestroy: new SyncHook<void>(),
-    afterDestroy: new SyncHook<void>(),
+    init: new SyncBailHook(),
+    afterInit: new SyncBailHook(),
+    beforeRender: new SyncBailHook(),
+    beforeRenderData: new SyncWaterfallHook(),
+    afterRender: new SyncHook(),
+    beforePickingEncode: new SyncHook(),
+    afterPickingEncode: new SyncHook(),
+    beforeHighlight: new SyncHook(['pickedColor']),
+    afterHighlight: new SyncHook(),
+    beforeSelect: new SyncHook(['pickedColor']),
+    afterSelect: new SyncHook(),
+    beforeDestroy: new SyncHook(),
+    afterDestroy: new SyncHook(),
   };
 
   // 待渲染 model 列表
@@ -100,6 +108,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     data: any;
     options?: ISourceCFG;
   };
+
+  public layerModel: ILayerModel;
 
   @lazyInject(TYPES.ILogService)
   protected readonly logger: ILogService;
@@ -135,8 +145,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   ) => IPostProcessingPass<unknown>;
   protected normalPassFactory: (name: string) => IPass<unknown>;
 
-  protected layerModel: ILayerModel;
-
   protected animateOptions: IAnimateOption = { enable: false };
 
   /**
@@ -147,6 +155,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   private encodedData: IEncodeFeature[];
 
   private configSchema: object;
+
+  private currentPickId: number | null = null;
 
   private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
@@ -165,8 +175,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private scaleOptions: IScaleOptions = {};
 
-  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions>) {
+  private animateStartTime: number;
+
+  private aniamateStatus: boolean = false;
+
+  // private pickingPassRender: IPass<'pixelPicking'>;
+
+  constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
+    this.name = config.name || this.id;
+    this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
   }
 
@@ -220,13 +238,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public init() {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
-    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
+    // 初始化图层配置项
+    const { enableMultiPassRenderer = false } = this.rawConfig;
+    this.configService.setLayerConfig(sceneId, this.id, {
+      enableMultiPassRenderer,
+    });
 
     // 全局容器服务
+
+    // 场景容器服务
     this.iconService = this.container.get<IIconService>(TYPES.IIconService);
     this.fontService = this.container.get<IFontService>(TYPES.IFontService);
 
-    // 场景容器服务
     this.rendererService = this.container.get<IRendererService>(
       TYPES.IRendererService,
     );
@@ -257,13 +280,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 完成样式服务注册完成前添加的属性
     this.pendingStyleAttributes.forEach(
-      ({
-        attributeName,
-        attributeField,
-        attributeValues,
-        defaultName,
-        updateOptions,
-      }) => {
+      ({ attributeName, attributeField, attributeValues, updateOptions }) => {
         this.styleAttributeService.updateStyleAttribute(
           attributeName,
           {
@@ -274,7 +291,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
                 // @ts-ignore
                 attributeValues,
                 // @ts-ignore
-                this.getLayerConfig()[defaultName || attributeName],
+                this.getLayerConfig()[attributeName],
               ),
             },
           },
@@ -300,29 +317,53 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
-    this.inited = true;
-
+    // this.pickingPassRender = this.normalPassFactory('pixelPicking');
+    // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
 
-    this.buildModels();
     // 触发初始化完成事件;
-    this.emit('inited');
+    this.emit('inited', {
+      target: this,
+      type: 'inited',
+    });
+    this.emit('add', {
+      target: this,
+      type: 'add',
+    });
     return this;
   }
+  /**
+   * Model初始化前需要更新Model样式
+   */
+  public prepareBuildModel() {
+    this.inited = true;
+    this.updateLayerConfig({
+      ...(this.getDefaultConfig() as object),
+      ...this.rawConfig,
+    });
 
+    // 启动动画
+    const { animateOption } = this.getLayerConfig();
+    if (animateOption?.enable) {
+      this.layerService.startAnimate();
+      this.aniamateStatus = true;
+    }
+  }
   public color(
     field: StyleAttributeField,
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     // 设置 color、size、shape、style 时由于场景服务尚未完成（并没有调用 scene.addLayer），因此暂时加入待更新属性列表
-    this.pendingStyleAttributes.push({
-      attributeName: 'color',
-      attributeField: field,
-      attributeValues: values,
-      defaultName: 'colors',
-      updateOptions,
-    });
+    this.updateStyleAttribute('color', field, values, updateOptions);
+
+    // this.pendingStyleAttributes.push({
+    //   attributeName: 'color',
+    //   attributeField: field,
+    //   attributeValues: values,
+    //   defaultName: 'colors',
+    //   updateOptions,
+    // });
     return this;
   }
 
@@ -331,12 +372,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'size',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
+    this.updateStyleAttribute('size', field, values, updateOptions);
     return this;
   }
   // 对mapping后的数据过滤，scale保持不变
@@ -345,13 +381,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'filter',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
-    this.dataState.dataMappingNeedUpdate = true;
+    this.updateStyleAttribute('filter', field, values, updateOptions);
     return this;
   }
 
@@ -360,12 +390,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'shape',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
+    this.updateStyleAttribute('shape', field, values, updateOptions);
     return this;
   }
   public label(
@@ -381,8 +406,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     return this;
   }
-  public animate(options: IAnimateOption) {
-    this.animateOptions = options;
+  public animate(options: IAnimateOption | boolean) {
+    let rawAnimate: Partial<IAnimateOption> = {};
+    if (isObject(options)) {
+      rawAnimate.enable = true;
+      rawAnimate = {
+        ...rawAnimate,
+        ...options,
+      };
+    } else {
+      rawAnimate.enable = options;
+    }
+    this.updateLayerConfig({
+      animateOption: rawAnimate,
+    });
+    // this.animateOptions = options;
     return this;
   }
 
@@ -395,13 +433,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public setData(data: any, options?: ISourceCFG) {
-    this.sourceOption.data = data;
-    this.sourceOption.options = options;
-    this.hooks.init.call();
-    this.buildModels();
+    if (this.inited) {
+      this.layerSource.setData(data);
+    } else {
+      this.on('inited', () => {
+        this.layerSource.setData(data);
+      });
+    }
+
     return this;
   }
-  public style(options: object & Partial<ILayerConfig>): ILayer {
+  public style(
+    options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
+  ): ILayer {
     const { passes, ...rest } = options;
 
     // passes 特殊处理
@@ -428,7 +472,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this;
   }
-  public scale(field: ScaleTypeName | IScaleOptions, cfg: IScale) {
+  public scale(field: string | IScaleOptions, cfg: IScale) {
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -440,21 +484,36 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
   public render(): ILayer {
-    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
-      this.multiPassRenderer.render();
-    } else {
-      this.renderModels();
-    }
+    // if (
+    //   this.needPick() &&
+    //   this.multiPassRenderer &&
+    //   this.multiPassRenderer.getRenderFlag()
+    // ) {
+    //   this.multiPassRenderer.render();
+    // } else if (this.needPick() && this.multiPassRenderer) {
+    //   this.renderModels();
+    // } else {
+    //   this.renderModels();
+    // }
+
+    this.renderModels();
+    // this.multiPassRenderer.render();
+    // this.renderModels();
     return this;
   }
 
   public active(options: IActiveOption) {
-    this.updateLayerConfig({
-      enableHighlight: isObject(options) ? true : options,
-      highlightColor: isObject(options)
-        ? options.color
-        : this.getLayerConfig().highlightColor,
-    });
+    const activeOption: Partial<ILayerConfig> = {};
+    activeOption.enableHighlight = isObject(options) ? true : options;
+    if (isObject(options)) {
+      activeOption.enableHighlight = true;
+      if (options.color) {
+        activeOption.highlightColor = options.color;
+      }
+    } else {
+      activeOption.enableHighlight = !!options;
+    }
+    this.updateLayerConfig(activeOption);
     return this;
   }
   public setActive(
@@ -476,10 +535,29 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
+      this.hooks.beforeSelect
+        .call(encodePickingColor(id as number) as number[])
+        // @ts-ignore
+        .then(() => {
+          setTimeout(() => {
+            this.reRender();
+          }, 1);
+        });
     }
   }
 
-  public select(option: IActiveOption | false): ILayer {
+  public select(option: IActiveOption | boolean): ILayer {
+    const activeOption: Partial<ILayerConfig> = {};
+    activeOption.enableSelect = isObject(option) ? true : option;
+    if (isObject(option)) {
+      activeOption.enableSelect = true;
+      if (option.color) {
+        activeOption.selectColor = option.color;
+      }
+    } else {
+      activeOption.enableSelect = !!option;
+    }
+    this.updateLayerConfig(activeOption);
     return this;
   }
 
@@ -487,12 +565,43 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     id: number | { x: number; y: number },
     options?: IActiveOption,
   ): void {
-    throw new Error('Method not implemented.');
+    if (isObject(id)) {
+      const { x = 0, y = 0 } = id;
+      this.updateLayerConfig({
+        selectColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().selectColor,
+      });
+      this.pick({ x, y });
+    } else {
+      this.updateLayerConfig({
+        pickedFeatureID: id,
+        selectColor: isObject(options)
+          ? options.color
+          : this.getLayerConfig().selectColor,
+      });
+      this.hooks.beforeSelect
+        .call(encodePickingColor(id as number) as number[])
+        // @ts-ignore
+        .then(() => {
+          setTimeout(() => {
+            this.reRender();
+          }, 1);
+        });
+    }
+  }
+  public setBlend(type: keyof typeof BlendType): void {
+    this.updateLayerConfig({
+      blend: type,
+    });
+    this.layerModelNeedUpdate = true;
+    this.reRender();
   }
   public show(): ILayer {
     this.updateLayerConfig({
       visible: true,
     });
+    this.reRender();
     return this;
   }
 
@@ -500,18 +609,32 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.updateLayerConfig({
       visible: false,
     });
+    this.reRender();
     return this;
   }
-
   public setIndex(index: number): ILayer {
     this.zIndex = index;
     this.layerService.updateRenderOrder();
     return this;
   }
 
+  public setCurrentPickId(id: number) {
+    this.currentPickId = id;
+  }
+
+  public getCurrentPickId(): number | null {
+    return this.currentPickId;
+  }
+
+  public setCurrentSelectedId(id: number) {
+    this.selectedFeatureID = id;
+  }
+
+  public getCurrentSelectedId(): number | null {
+    return this.selectedFeatureID;
+  }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
-
     const {
       visible,
       minZoom = -Infinity,
@@ -527,6 +650,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public getMinZoom(): number {
+    const { minZoom } = this.getLayerConfig();
+    return minZoom as number;
+  }
+
+  public getMaxZoom(): number {
+    const { maxZoom } = this.getLayerConfig();
+    return maxZoom as number;
+  }
+
+  public get(name: string) {
+    const cfg = this.getLayerConfig();
+    // @ts-ignore
+    return cfg[name];
+  }
+
   public setMaxZoom(maxZoom: number): ILayer {
     this.updateLayerConfig({
       maxZoom,
@@ -536,7 +675,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   /**
    * zoom to layer Bounds
    */
-  public fitBounds(): ILayer {
+  public fitBounds(fitBoundsOptions?: unknown): ILayer {
     if (!this.inited) {
       this.updateLayerConfig({
         autoFit: true,
@@ -545,15 +684,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     const source = this.getSource();
     const extent = source.extent;
-    this.mapService.fitBounds([
-      [extent[0], extent[1]],
-      [extent[2], extent[3]],
-    ]);
+    this.mapService.fitBounds(
+      [
+        [extent[0], extent[1]],
+        [extent[2], extent[3]],
+      ],
+      fitBoundsOptions,
+    );
     return this;
   }
 
   public destroy() {
     this.hooks.beforeDestroy.call();
+    // 清除sources事件
+    this.layerSource.off('update', this.sourceEvent);
+
+    this.multiPassRenderer.destroy();
 
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
@@ -561,6 +707,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.models.forEach((model) => model.destroy());
 
     this.hooks.afterDestroy.call();
+
+    this.emit('remove', {
+      target: this,
+      type: 'remove',
+    });
 
     this.removeAllListeners();
 
@@ -586,11 +737,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public setSource(source: Source) {
     this.layerSource = source;
-    const bounds = this.mapService.getBounds();
     const zoom = this.mapService.getZoom();
     if (this.layerSource.cluster) {
       this.layerSource.updateClusterData(zoom);
     }
+    // source 可能会复用，会在其它layer被修改
+    this.layerSource.on('update', this.sourceEvent);
   }
   public getSource() {
     return this.layerSource;
@@ -617,6 +769,30 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       ]);
     }
     return this.configSchema;
+  }
+  public getLegendItems(name: string): any {
+    const scale = this.styleAttributeService.getLayerAttributeScale(name);
+    if (scale) {
+      if (scale.ticks) {
+        const items = scale.ticks().map((item: any) => {
+          return {
+            value: item,
+            [name]: scale(item),
+          };
+        });
+        return items;
+      } else if (scale.invertExtent) {
+        const items = scale.range().map((item: any) => {
+          return {
+            value: scale.invertExtent(item),
+            [name]: item,
+          };
+        });
+        return items;
+      }
+    } else {
+      return [];
+    }
   }
 
   public pick({ x, y }: { x: number; y: number }) {
@@ -653,31 +829,101 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       fs,
       vs,
       elements,
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: gl.SRC_ALPHA,
-          srcAlpha: 1,
-          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-          dstAlpha: 1,
-        },
-      },
+      blend: BlendTypes[BlendType.normal],
       ...rest,
     });
+  }
+
+  public getTime() {
+    return this.layerService.clock.getDelta();
+  }
+  public setAnimateStartTime() {
+    this.animateStartTime = this.layerService.clock.getElapsedTime();
+  }
+  public stopAnimate() {
+    if (this.aniamateStatus) {
+      this.layerService.stopAnimate();
+      this.aniamateStatus = false;
+      this.updateLayerConfig({
+        animateOption: {
+          enable: false,
+        },
+      });
+    }
+  }
+  public getLayerAnimateTime(): number {
+    return this.layerService.clock.getElapsedTime() - this.animateStartTime;
+  }
+
+  public needPick(type: string): boolean {
+    const {
+      enableHighlight = true,
+      enableSelect = true,
+    } = this.getLayerConfig();
+    // 判断layer是否监听事件;
+    let isPick =
+      this.eventNames().indexOf(type) !== -1 ||
+      this.eventNames().indexOf('un' + type) !== -1;
+    if ((type === 'click' || type === 'dblclick') && enableSelect) {
+      isPick = true;
+    }
+    if (
+      type === 'mousemove' &&
+      (enableHighlight ||
+        this.eventNames().indexOf('mouseenter') !== -1 ||
+        this.eventNames().indexOf('unmousemove') !== -1 ||
+        this.eventNames().indexOf('mouseout') !== -1)
+    ) {
+      isPick = true;
+    }
+    return this.isVisible() && isPick;
+  }
+
+  public buildModels() {
+    throw new Error('Method not implemented.');
+  }
+
+  public renderModels() {
+    if (this.layerModelNeedUpdate && this.layerModel) {
+      this.models = this.layerModel.buildModels();
+      this.hooks.beforeRender.call();
+      this.layerModelNeedUpdate = false;
+    }
+    this.models.forEach((model) => {
+      model.draw({
+        uniforms: this.layerModel.getUninforms(),
+      });
+    });
+    return this;
   }
 
   protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }
 
-  protected buildModels() {
+  protected getModelType(): unknown {
     throw new Error('Method not implemented.');
   }
-
-  protected renderModels() {
-    throw new Error('Method not implemented.');
+  protected getDefaultConfig() {
+    return {};
   }
 
+  private sourceEvent = () => {
+    this.dataState.dataSourceNeedUpdate = true;
+    const { autoFit, fitBoundsOptions } = this.getLayerConfig();
+    if (autoFit) {
+      this.fitBounds(fitBoundsOptions);
+    }
+
+    this.emit('dataUpdate');
+    this.reRender();
+  };
+
+  private reRender() {
+    if (this.inited) {
+      this.layerService.renderLayers();
+    }
+  }
   private splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],
@@ -690,7 +936,37 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     };
   }
 
-  private layerMapHander(type: string, data: any) {
-    this.emit(type, data);
+  private updateStyleAttribute(
+    type: string,
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    if (!this.inited) {
+      this.pendingStyleAttributes.push({
+        attributeName: type,
+        attributeField: field,
+        attributeValues: values,
+        updateOptions,
+      });
+    } else {
+      this.styleAttributeService.updateStyleAttribute(
+        type,
+        {
+          // @ts-ignore
+          scale: {
+            field,
+            ...this.splitValuesAndCallbackInAttribute(
+              // @ts-ignore
+              values,
+              // @ts-ignore
+              this.getLayerConfig()[field],
+            ),
+          },
+        },
+        // @ts-ignore
+        updateOptions,
+      );
+    }
   }
 }

@@ -4,10 +4,15 @@ import PointModels, { PointType } from './models/index';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
-  strokeColor: string;
+  stroke: string;
 }
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'PointLayer';
+  public type: string = 'PointLayer';
+  public buildModels() {
+    const modelType = this.getModelType();
+    this.layerModel = new PointModels[modelType](this);
+    this.models = this.layerModel.buildModels();
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -19,26 +24,24 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     };
   }
-  protected renderModels() {
-    if (this.layerModelNeedUpdate) {
-      this.models = this.layerModel.buildModels();
-      this.layerModelNeedUpdate = false;
-    }
-    this.models.forEach((model) => {
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      });
-    });
-    return this;
+  protected getDefaultConfig() {
+    const type = this.getModelType();
+    const defaultConfig = {
+      normal: {
+        blend: 'additive',
+      },
+      fill: { blend: 'normal' },
+      extrude: {},
+      image: {},
+      icon: {},
+      text: {
+        blend: 'normal',
+      },
+    };
+    return defaultConfig[type];
   }
 
-  protected buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new PointModels[modelType](this);
-    this.models = this.layerModel.buildModels();
-  }
-
-  private getModelType(): PointType {
+  protected getModelType(): PointType {
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
@@ -51,6 +54,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       return 'normal';
     } else {
       const shape = item.shape;
+      if (shape === 'dot') {
+        return 'normal';
+      }
       if (shape2d?.indexOf(shape as string) !== -1) {
         return 'fill';
       }
@@ -60,12 +66,10 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (iconMap.hasOwnProperty(shape as string)) {
         return 'image';
       }
+      if (this.fontService.getGlyph(shape as string) !== '') {
+        return 'icon';
+      }
       return 'text';
     }
-  }
-
-  private updateData() {
-    // const bounds = this.mapService.getBounds();
-    // console.log(bounds);
   }
 }

@@ -4,15 +4,25 @@ uniform sampler2D u_texture;
 uniform sampler2D u_colorTexture;
 uniform float u_min;
 uniform float u_max;
+uniform vec2 u_domain;
+uniform float u_noDataValue;
+uniform bool u_clampLow: true;
+uniform bool u_clampHigh: true;
 varying vec2 v_texCoord;
 
 void main() {
 
-  float value = texture2D(u_texture,vec2(v_texCoord.x,v_texCoord.y)).a;
-   value = clamp(value,u_min,u_max);
-  float value1 =  (value - u_min) / (u_max -u_min);
-  vec2 ramp_pos = vec2(
-        fract(16.0 * (1.0 - value1)),
-        floor(16.0 * (1.0 - value1)) / 16.0);
-  gl_FragColor =  texture2D(u_colorTexture,ramp_pos);;
+  float value = texture2D(u_texture,vec2(v_texCoord.x,v_texCoord.y)).r;
+  if (value == u_noDataValue)
+    gl_FragColor = vec4(0.0, 0, 0, 0.0);
+  else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1]))
+    gl_FragColor = vec4(0, 0, 0, 0);
+  else {
+    float normalisedValue =(value - u_domain[0]) / (u_domain[1] -u_domain[0]);
+    vec4 color = texture2D(u_colorTexture,vec2(normalisedValue, 0));
+    gl_FragColor = color;
+    gl_FragColor.a =  gl_FragColor.a * u_opacity ;
+  }
+
+
 }

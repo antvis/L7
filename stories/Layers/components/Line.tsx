@@ -12,47 +12,46 @@ export default class LineDemo extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
+      'https://arcgis.github.io/arcgis-samples-javascript/sample-data/custom-gl-animated-lines/lines.json',
     );
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        center: [102.602992, 23.107329],
-        pitch: 0,
-        style: 'mapbox://styles/mapbox/dark-v9',
-        zoom: 13,
+        center: [-74.006, 40.7128],
+        zoom: 11.5,
+        style: 'dark',
       }),
     });
     const lineLayer = new LineLayer({
-      enableMultiPassRenderer: true,
-      enablePicking: true,
-      enableHighlight: true,
-      // onHover: (pickedFeature: any) => {
-      //   // tslint:disable-next-line:no-console
-      //   console.log('Scene4', pickedFeature);
-      // },
+      minZoom: 12,
+      maxZoom: 15,
     })
-      .source(await response.json())
-      .size(1)
+      .source(await response.json(), {
+        parser: {
+          type: 'json',
+          coordinates: 'path',
+        },
+      })
+      .size(3)
       .shape('line')
-      .color(
-        'ELEV',
-        [
-          '#E8FCFF',
-          '#CFF6FF',
-          '#A1E9ff',
-          '#65CEF7',
-          '#3CB1F0',
-          '#2894E0',
-          '#1772c2',
-          '#105CB3',
-          '#0D408C',
-          '#002466',
-        ].reverse(),
-      );
+      .active(true)
+      .color('color', (v) => {
+        return `rgb(${v})`;
+      })
+      .animate({
+        enable: true,
+        interval: 0.5,
+        trailLength: 0.4,
+        duration: 4,
+      })
+      .style({
+        opacity: 1.0,
+      });
 
+    lineLayer.on('click', (e) => {
+      console.log(e);
+    });
     scene.addLayer(lineLayer);
-    scene.render();
     this.scene = scene;
   }
 

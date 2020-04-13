@@ -1,6 +1,9 @@
+// @ts-ignore
+import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
   IMapService,
+  IParseDataItem,
   IParserCfg,
   IParserData,
   ISourceCFG,
@@ -17,10 +20,10 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
 import { cloneDeep, isFunction, isString } from 'lodash';
-import Supercluster from 'supercluster';
-import { SyncHook } from 'tapable';
+// @ts-ignore
+// tslint:disable-next-line:no-submodule-imports
+import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
@@ -31,9 +34,7 @@ export default class Source extends EventEmitter {
   public extent: BBox;
   // 生命周期钩子
   public hooks = {
-    init: new SyncHook(['source']),
-    layout: new SyncHook(['source']),
-    update: new SyncHook(['source']),
+    init: new SyncHook(),
   };
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];
@@ -85,21 +86,33 @@ export default class Source extends EventEmitter {
     this.init();
   }
 
+  public setData(data: any) {
+    this.rawData = data;
+    this.originData = cloneDeep(data);
+    this.init();
+    this.emit('update');
+  }
+  public getClusters(zoom: number): any {
+    return this.clusterIndex.getClusters(this.extent, zoom);
+  }
+  public getClustersLeaves(id: number): any {
+    return this.clusterIndex.getLeaves(id, Infinity);
+  }
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
     let data = this.clusterIndex.getClusters(this.extent, zoom);
     this.clusterOptions.zoom = zoom;
-    data.forEach((p) => {
+    data.forEach((p: any) => {
       if (!p.id) {
         p.properties.point_count = 1;
       }
     });
     if (field || isFunction(method)) {
-      data = data.map((item) => {
+      data = data.map((item: any) => {
         const id = item.id as number;
         if (id) {
           const points = this.clusterIndex.getLeaves(id, Infinity);
-          const properties = points.map((d) => d.properties);
+          const properties = points.map((d: any) => d.properties);
           let statNum;
           if (isString(method) && field) {
             const column = getColumn(properties, field);
@@ -123,13 +136,21 @@ export default class Source extends EventEmitter {
   }
   public getFeatureById(id: number): unknown {
     const { type = 'geojson' } = this.parser;
-    if (type === 'geojson') {
-      return id < this.rawData.features.length
-        ? this.rawData.features[id]
+    if (type === 'geojson' && !this.cluster && this.transforms.length === 0) {
+      //  TODO： 聚合图层返回聚合和后的数据
+      return id < this.originData.features.length
+        ? this.originData.features[id]
         : 'null';
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
     }
+  }
+
+  public getFeatureId(field: string, value: any): number | undefined {
+    const feature = this.data.dataArray.find((dataItem: IParseDataItem) => {
+      return dataItem[field] === name;
+    });
+    return feature?._id;
   }
 
   private excuteParser(): void {

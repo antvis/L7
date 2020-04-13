@@ -7,8 +7,12 @@ import {
   IRendererService,
   IStyleAttributeService,
 } from '@antv/l7-core';
+import {
+  decodePickingColor,
+  encodePickingColor,
+  rgb2arr,
+} from '@antv/l7-utils';
 import { injectable } from 'inversify';
-import { encodePickingColor, rgb2arr } from '../utils/color';
 
 const PickingStage = {
   NONE: 0.0,
@@ -45,9 +49,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           update: (feature: IEncodeFeature, featureIdx: number) => {
             // 只有开启拾取才需要 encode
             const { id } = feature;
-            return enablePicking && layer.isVisible()
-              ? encodePickingColor(id as number)
-              : [0, 0, 0];
+            return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
           },
         },
       });
@@ -67,12 +69,11 @@ export default class PixelPickingPlugin implements ILayerPlugin {
 
     layer.hooks.afterPickingEncode.tap('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getLayerConfig();
+      // 区分选中高亮 和滑过高亮
       if (enablePicking && layer.isVisible()) {
         layer.models.forEach((model) =>
           model.addUniforms({
-            u_PickingStage: PickingStage.NONE,
-            u_PickingColor: [0, 0, 0],
-            u_HighlightColor: [0, 0, 0, 0],
+            u_PickingStage: PickingStage.HIGHLIGHT,
           }),
         );
       }
@@ -86,6 +87,30 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           typeof highlightColor === 'string'
             ? rgb2arr(highlightColor)
             : highlightColor || [1, 0, 0, 1];
+        layer.updateLayerConfig({
+          pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
+        });
+        layer.models.forEach((model) =>
+          model.addUniforms({
+            u_PickingStage: PickingStage.HIGHLIGHT,
+            u_PickingColor: pickedColor,
+            u_HighlightColor: highlightColorInArray.map((c) => c * 255),
+          }),
+        );
+      },
+    );
+
+    layer.hooks.beforeSelect.tap(
+      'PixelPickingPlugin',
+      (pickedColor: number[]) => {
+        const { selectColor } = layer.getLayerConfig();
+        const highlightColorInArray =
+          typeof selectColor === 'string'
+            ? rgb2arr(selectColor)
+            : selectColor || [1, 0, 0, 1];
+        layer.updateLayerConfig({
+          pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
+        });
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,

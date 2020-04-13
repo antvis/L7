@@ -58,4 +58,5 @@ export interface IMultiPassRenderer {
   getRenderFlag(): boolean;
   setRenderFlag(enabled: boolean): void;
   setLayer(layer: ILayer): void;
+  destroy(): void;
 }

@@ -22,7 +22,7 @@ export default class Column extends React.Component {
         rotation: 134.9507,
       }),
     });
-
+    this.scene = scene;
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
     )
@@ -43,7 +43,7 @@ export default class Column extends React.Component {
             'squareColumn',
           ])
           .size('unit_price', (h) => {
-            return [6, 6, h / 500];
+            return [6, 6, 100];
           })
           .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
           .style({

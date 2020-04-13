@@ -10,19 +10,27 @@ export default class DataSourcePlugin implements ILayerPlugin {
     layer.hooks.init.tap('DataSourcePlugin', () => {
       const { data, options } = layer.sourceOption;
       layer.setSource(new Source(data, options));
+      this.updateClusterData(layer);
     });
 
-    // 检测数据是不否需要更新
-    layer.hooks.beforeRenderData.tap('DataSourcePlugin', (flag) => {
-      const source = layer.getSource();
-      const cluster = source.cluster;
-      const { zoom = 0, maxZoom = 16 } = source.clusterOptions;
-      const newZoom = this.mapService.getZoom();
-      if (cluster && Math.abs(zoom - newZoom) > 1 && maxZoom > zoom) {
-        source.updateClusterData(Math.floor(newZoom) + 1);
-        return true;
-      }
-      return false;
+    // 检测数据不否需要更新
+    layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
+      const neeUpdate1 = this.updateClusterData(layer);
+      const neeUpdate2 = layer.dataState.dataSourceNeedUpdate;
+      layer.dataState.dataSourceNeedUpdate = false;
+      return neeUpdate1 || neeUpdate2;
     });
+  }
+
+  private updateClusterData(layer: ILayer): boolean {
+    const source = layer.getSource();
+    const cluster = source.cluster;
+    const { zoom = 0, maxZoom = 16 } = source.clusterOptions;
+    const newZoom = this.mapService.getZoom() - 1;
+    if (cluster && Math.abs(zoom - newZoom) > 1 && maxZoom > zoom) {
+      source.updateClusterData(Math.floor(newZoom));
+      return true;
+    }
+    return false;
   }
 }

@@ -1,5 +1,7 @@
 import { isNil } from 'lodash';
 import {
+  IAttributeScale,
+  IScaleOption,
   IStyleAttribute,
   StyleScaleType,
 } from '../layer/IStyleAttributeService';
@@ -22,10 +24,7 @@ export default class StyleAttribute implements IStyleAttribute {
     field: string | string[];
     values: unknown[];
     callback?: (...args: any[]) => [];
-    scalers?: Array<{
-      field: string;
-      func: unknown;
-    }>;
+    scalers?: IAttributeScale[];
   };
   public descriptor: IVertexAttributeDescriptor;
   public featureBufferLayout: Array<{
@@ -58,7 +57,7 @@ export default class StyleAttribute implements IStyleAttribute {
      */
     if (this.scale?.callback) {
       // 使用用户返回的值处理
-      const ret = this.scale?.callback(params);
+      const ret = this.scale?.callback(...params);
       if (!isNil(ret)) {
         return [ret];
       }

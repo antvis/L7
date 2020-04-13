@@ -38,6 +38,10 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
   private layer: ILayer;
   private renderFlag: boolean;
 
+  private width: number = 0;
+
+  private height: number = 0;
+
   public setLayer(layer: ILayer) {
     this.layer = layer;
   }
@@ -58,11 +62,16 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
     for (const pass of this.passes) {
       await pass.render(this.layer);
     }
-    await this.postProcessor.render(this.layer);
+    this.layer.renderModels();
+    // await this.postProcessor.render(this.layer);
   }
 
   public resize(width: number, height: number) {
-    this.postProcessor.resize(width, height);
+    if (this.width !== width || this.height !== height) {
+      this.postProcessor.resize(width, height);
+      this.width = width;
+      this.height = height;
+    }
   }
 
   public add<T>(pass: IPass<T>, config?: Partial<T>) {
@@ -81,5 +90,9 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
   public insert<T>(pass: IPass<T>, config: Partial<T>, index: number) {
     pass.init(this.layer, config);
     this.passes.splice(index, 0, pass);
+  }
+
+  public destroy() {
+    this.passes.length = 0;
   }
 }

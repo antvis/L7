@@ -10,15 +10,23 @@ export interface IPoint {
   x: number;
   y: number;
 }
-
 export interface IMercator {
   x: number;
   y: number;
   z: number;
 }
-
+export interface IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+}
+export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
-  setContainer(container: Container, id: string): void;
+  setContainer(container: Container, id: string | HTMLDivElement): void;
 }
 
 export interface IMapService<RawMap = {}> {
@@ -48,16 +56,21 @@ export interface IMapService<RawMap = {}> {
   getRotation(): number;
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
+  getMapCanvasContainer(): HTMLElement;
 
   // control with raw map
   setRotation(rotation: number): void;
-  zoomIn(): void;
-  zoomOut(): void;
+  zoomIn(option?: any, eventData?: any): void;
+  zoomOut(option?: any, eventData?: any): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
-  fitBounds(bound: Bounds): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
   setZoomAndCenter(zoom: number, center: Point): void;
-  setMapStyle(style: string): void;
+  setCenter(center: [number, number]): void;
+  setPitch(pitch: number): void;
+  setZoom(zoom: number): void;
+  setMapStyle(style: any): void;
+  setMapStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;
@@ -72,6 +85,7 @@ export interface IMapService<RawMap = {}> {
     scale: [number, number, number],
     origin: IMercator,
   ): number[];
+  exportMap(type: 'jpg' | 'png'): string;
 }
 
 export const MapServiceEvent = ['mapload'];
@@ -79,11 +93,19 @@ export const MapServiceEvent = ['mapload'];
 /**
  * 地图初始化配置项
  */
-export interface IMapConfig {
+export interface IMapConfig<RawMap = {}> {
+  /**
+   * 地图实例
+   */
+  mapInstance?: RawMap;
+  /**
+   * 高德地图API插件
+   */
+  plugin?: string[];
   /**
    * 容器 DOM id
    */
-  id: string;
+  id: string | HTMLDivElement;
 
   /**
    * 地图
@@ -113,7 +135,7 @@ export interface IMapConfig {
   /**
    * 底图样式
    */
-  style?: string;
+  style?: MapStyle;
   /**
    * 最小缩放等级
    */
@@ -125,6 +147,8 @@ export interface IMapConfig {
   maxZoom?: number;
 
   attributionControl?: boolean;
+
+  [key: string]: any;
 }
 
 /**

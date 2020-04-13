@@ -3,6 +3,437 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
+
+### Bug Fixes
+
+- 采用非偏移坐标系坐标系解决高德地图中国区域抖动的问题 ([124a1d2](https://github.com/antvis/L7/commit/124a1d27aa97c9a6af1de6d041785c420f02ce4c))
+- **heatmap:** 修复热力图某些设备上黑色 fix [#278](https://github.com/antvis/L7/issues/278) ([b8f5899](https://github.com/antvis/L7/commit/b8f58992d1fce38fdaac9d82ebfbec14e35298bd))
+- 绘制组件高德地图 mousedown 事件不能监听的问题 ([1eb3313](https://github.com/antvis/L7/commit/1eb3313919b2c7c9162bee70a249846b897ef4b4))
+
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+### Bug Fixes
+
+- marker event ([ce6eefd](https://github.com/antvis/L7/commit/ce6eefdeb87935f48d7ca2779837270f1498f3a5))
+
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+### Bug Fixes
+
+- 3d 热力图抖动问题 fixes [#138](https://github.com/antvis/L7/issues/138) [#263](https://github.com/antvis/L7/issues/263) ([d56e8d6](https://github.com/antvis/L7/commit/d56e8d6205942ca12fa7ac3dfd226aecbb850ed2))
+- 拾取 invalid x offset ([8282007](https://github.com/antvis/L7/commit/82820077f40998e156337b266623309eff6b2d60))
+
+## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
+
+### Bug Fixes
+
+- 修复颜色纹理取色问题 & 图片标注默认颜色问题 ([9d6b198](https://github.com/antvis/L7/commit/9d6b198f76b44c55ce0a094c6649c9e4130a398b))
+
+## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
+
+### Bug Fixes
+
+- observerable 打包问题 ([412e2a8](https://github.com/antvis/L7/commit/412e2a83f78a9a448f0a5b65ccaf2ea97f78b47a))
+- picking ([d6c6694](https://github.com/antvis/L7/commit/d6c66941323fb21e6810e1d72d5b43e40867be71))
+
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+### Bug Fixes
+
+- fix build layer opactiy ([5a58ab8](https://github.com/antvis/L7/commit/5a58ab8f86ec969ca384e984784355c2c91b1a47))
+- fix build layer opactiy ([0ccca2b](https://github.com/antvis/L7/commit/0ccca2b383964e058ed87cc980c57c9c67917cf5))
+- ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+- ios touchstart && double touch ([4fc3a11](https://github.com/antvis/L7/commit/4fc3a11de953918a9f5ba13d767c00429d1711cd))
+- mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+- mapbox 光照问题 ([88aa585](https://github.com/antvis/L7/commit/88aa585c2a8339f6eb7518a92e5544733ba356e3))
+- update demo style ([c1960b5](https://github.com/antvis/L7/commit/c1960b50ef3e3d3aed6eb0f1934515678c2dbde8))
+- 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+### Bug Fixes
+
+- ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+- ios touchstart && double touch ([4fc3a11](https://github.com/antvis/L7/commit/4fc3a11de953918a9f5ba13d767c00429d1711cd))
+- mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+- mapbox 光照问题 ([88aa585](https://github.com/antvis/L7/commit/88aa585c2a8339f6eb7518a92e5544733ba356e3))
+- update demo style ([c1960b5](https://github.com/antvis/L7/commit/c1960b50ef3e3d3aed6eb0f1934515678c2dbde8))
+- 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
+## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
+
+### Bug Fixes
+
+- ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+- mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+- mapbox 光照问题 ([88aa585](https://github.com/antvis/L7/commit/88aa585c2a8339f6eb7518a92e5544733ba356e3))
+- update demo style ([c1960b5](https://github.com/antvis/L7/commit/c1960b50ef3e3d3aed6eb0f1934515678c2dbde8))
+
+## [2.0.34](https://github.com/antvis/L7/compare/v2.0.32...v2.0.34) (2020-03-02)
+
+### Bug Fixes
+
+- fix map reference ([79e16f5](https://github.com/antvis/L7/commit/79e16f5393c6c31cc088e946dc865cdddfde9b73))
+
+# [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
+
+### Bug Fixes
+
+- **pointlayer:** point amimate ([fd66d90](https://github.com/antvis/L7/commit/fd66d90c1dad1925d1b8a3c99e89172a16bb9f60))
+- rollup plugin ([2e6fc51](https://github.com/antvis/L7/commit/2e6fc512f918c637dec6009d99157a8941b3b7fb))
+- **package:** fix package fsevents version ([f1ff9d7](https://github.com/antvis/L7/commit/f1ff9d7afeecadf42409f133a165a5d570046841))
+- **package:** fix package fsevents version ([1b856b2](https://github.com/antvis/L7/commit/1b856b2279d13d7837fe41eae363db1d706a5357))
+- animate time ([d2b8041](https://github.com/antvis/L7/commit/d2b8041ebe77753f5687383ce690950b745f748c))
+- **doc:** add Scale example ([5e49ff2](https://github.com/antvis/L7/commit/5e49ff276d75980f12e7af61f712fbd1fa7f33f9))
+- layer style storkeColor->stroke ([27f66a9](https://github.com/antvis/L7/commit/27f66a9918a3568f7f591af161953ac498d2dcba))
+- layer style storkeColor->stroke ([ac8477b](https://github.com/antvis/L7/commit/ac8477bb44e861df2f5d0a0a2b06bd5795054c3b))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- add raster layer ([2b28380](https://github.com/antvis/L7/commit/2b2838015198b8586b0c30fdc154116252a76f29))
+- point text add overlap ([98869d8](https://github.com/antvis/L7/commit/98869d876b0e98dd9258c97b9be9f5a69c0a1612))
+- polygon 支持 text ([f5a1546](https://github.com/antvis/L7/commit/f5a15465e230e6f58c92bec5f12b132bc9a9ae91))
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add citybuildinglayer & add line add animate ([d657286](https://github.com/antvis/L7/commit/d657286d58c795ba968ae930eb382ca422bdbd08))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- **layer:** pointLayer add text model ([84a9193](https://github.com/antvis/L7/commit/84a9193e3a8a311bb52bbedabc8847eabba7dc9a))
+- **layer:** pointLayer add text model ([20ad754](https://github.com/antvis/L7/commit/20ad7540974fdf0a6e902e2ea3700dcd5cf28d1d))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.27) (2020-01-01)
+
+### Bug Fixes
+
+- **pointlayer:** point amimate ([fd66d90](https://github.com/antvis/L7/commit/fd66d90c1dad1925d1b8a3c99e89172a16bb9f60))
+- rollup plugin ([2e6fc51](https://github.com/antvis/L7/commit/2e6fc512f918c637dec6009d99157a8941b3b7fb))
+- **package:** fix package fsevents version ([f1ff9d7](https://github.com/antvis/L7/commit/f1ff9d7afeecadf42409f133a165a5d570046841))
+- **package:** fix package fsevents version ([1b856b2](https://github.com/antvis/L7/commit/1b856b2279d13d7837fe41eae363db1d706a5357))
+- animate time ([d2b8041](https://github.com/antvis/L7/commit/d2b8041ebe77753f5687383ce690950b745f748c))
+- **doc:** add Scale example ([5e49ff2](https://github.com/antvis/L7/commit/5e49ff276d75980f12e7af61f712fbd1fa7f33f9))
+- layer style storkeColor->stroke ([27f66a9](https://github.com/antvis/L7/commit/27f66a9918a3568f7f591af161953ac498d2dcba))
+- layer style storkeColor->stroke ([ac8477b](https://github.com/antvis/L7/commit/ac8477bb44e861df2f5d0a0a2b06bd5795054c3b))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- point text add overlap ([98869d8](https://github.com/antvis/L7/commit/98869d876b0e98dd9258c97b9be9f5a69c0a1612))
+- polygon 支持 text ([f5a1546](https://github.com/antvis/L7/commit/f5a15465e230e6f58c92bec5f12b132bc9a9ae91))
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add citybuildinglayer & add line add animate ([d657286](https://github.com/antvis/L7/commit/d657286d58c795ba968ae930eb382ca422bdbd08))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- **layer:** pointLayer add text model ([84a9193](https://github.com/antvis/L7/commit/84a9193e3a8a311bb52bbedabc8847eabba7dc9a))
+- **layer:** pointLayer add text model ([20ad754](https://github.com/antvis/L7/commit/20ad7540974fdf0a6e902e2ea3700dcd5cf28d1d))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-alpha.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.28) (2020-01-01)
+
+### Bug Fixes
+
+- rollup plugin ([2e6fc51](https://github.com/antvis/L7/commit/2e6fc512f918c637dec6009d99157a8941b3b7fb))
+- **package:** fix package fsevents version ([f1ff9d7](https://github.com/antvis/L7/commit/f1ff9d7afeecadf42409f133a165a5d570046841))
+- **package:** fix package fsevents version ([1b856b2](https://github.com/antvis/L7/commit/1b856b2279d13d7837fe41eae363db1d706a5357))
+- animate time ([d2b8041](https://github.com/antvis/L7/commit/d2b8041ebe77753f5687383ce690950b745f748c))
+- **doc:** add Scale example ([5e49ff2](https://github.com/antvis/L7/commit/5e49ff276d75980f12e7af61f712fbd1fa7f33f9))
+- layer style storkeColor->stroke ([27f66a9](https://github.com/antvis/L7/commit/27f66a9918a3568f7f591af161953ac498d2dcba))
+- layer style storkeColor->stroke ([ac8477b](https://github.com/antvis/L7/commit/ac8477bb44e861df2f5d0a0a2b06bd5795054c3b))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- point text add overlap ([98869d8](https://github.com/antvis/L7/commit/98869d876b0e98dd9258c97b9be9f5a69c0a1612))
+- polygon 支持 text ([f5a1546](https://github.com/antvis/L7/commit/f5a15465e230e6f58c92bec5f12b132bc9a9ae91))
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add citybuildinglayer & add line add animate ([d657286](https://github.com/antvis/L7/commit/d657286d58c795ba968ae930eb382ca422bdbd08))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- **layer:** pointLayer add text model ([84a9193](https://github.com/antvis/L7/commit/84a9193e3a8a311bb52bbedabc8847eabba7dc9a))
+- **layer:** pointLayer add text model ([20ad754](https://github.com/antvis/L7/commit/20ad7540974fdf0a6e902e2ea3700dcd5cf28d1d))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-alpha.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.27) (2019-12-31)
+
+### Bug Fixes
+
+- rollup plugin ([2e6fc51](https://github.com/antvis/L7/commit/2e6fc512f918c637dec6009d99157a8941b3b7fb))
+- **package:** fix package fsevents version ([f1ff9d7](https://github.com/antvis/L7/commit/f1ff9d7afeecadf42409f133a165a5d570046841))
+- **package:** fix package fsevents version ([1b856b2](https://github.com/antvis/L7/commit/1b856b2279d13d7837fe41eae363db1d706a5357))
+- animate time ([d2b8041](https://github.com/antvis/L7/commit/d2b8041ebe77753f5687383ce690950b745f748c))
+- **doc:** add Scale example ([5e49ff2](https://github.com/antvis/L7/commit/5e49ff276d75980f12e7af61f712fbd1fa7f33f9))
+- layer style storkeColor->stroke ([27f66a9](https://github.com/antvis/L7/commit/27f66a9918a3568f7f591af161953ac498d2dcba))
+- layer style storkeColor->stroke ([ac8477b](https://github.com/antvis/L7/commit/ac8477bb44e861df2f5d0a0a2b06bd5795054c3b))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- point text add overlap ([98869d8](https://github.com/antvis/L7/commit/98869d876b0e98dd9258c97b9be9f5a69c0a1612))
+- polygon 支持 text ([f5a1546](https://github.com/antvis/L7/commit/f5a15465e230e6f58c92bec5f12b132bc9a9ae91))
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add citybuildinglayer & add line add animate ([d657286](https://github.com/antvis/L7/commit/d657286d58c795ba968ae930eb382ca422bdbd08))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- **layer:** pointLayer add text model ([84a9193](https://github.com/antvis/L7/commit/84a9193e3a8a311bb52bbedabc8847eabba7dc9a))
+- **layer:** pointLayer add text model ([20ad754](https://github.com/antvis/L7/commit/20ad7540974fdf0a6e902e2ea3700dcd5cf28d1d))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.26](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.26) (2019-12-30)
+
+### Bug Fixes
+
+- **package:** fix package fsevents version ([f1ff9d7](https://github.com/antvis/L7/commit/f1ff9d7afeecadf42409f133a165a5d570046841))
+- **package:** fix package fsevents version ([1b856b2](https://github.com/antvis/L7/commit/1b856b2279d13d7837fe41eae363db1d706a5357))
+- animate time ([d2b8041](https://github.com/antvis/L7/commit/d2b8041ebe77753f5687383ce690950b745f748c))
+- **doc:** add Scale example ([5e49ff2](https://github.com/antvis/L7/commit/5e49ff276d75980f12e7af61f712fbd1fa7f33f9))
+- layer style storkeColor->stroke ([27f66a9](https://github.com/antvis/L7/commit/27f66a9918a3568f7f591af161953ac498d2dcba))
+- layer style storkeColor->stroke ([ac8477b](https://github.com/antvis/L7/commit/ac8477bb44e861df2f5d0a0a2b06bd5795054c3b))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- point text add overlap ([98869d8](https://github.com/antvis/L7/commit/98869d876b0e98dd9258c97b9be9f5a69c0a1612))
+- polygon 支持 text ([f5a1546](https://github.com/antvis/L7/commit/f5a15465e230e6f58c92bec5f12b132bc9a9ae91))
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add citybuildinglayer & add line add animate ([d657286](https://github.com/antvis/L7/commit/d657286d58c795ba968ae930eb382ca422bdbd08))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- **layer:** pointLayer add text model ([84a9193](https://github.com/antvis/L7/commit/84a9193e3a8a311bb52bbedabc8847eabba7dc9a))
+- **layer:** pointLayer add text model ([20ad754](https://github.com/antvis/L7/commit/20ad7540974fdf0a6e902e2ea3700dcd5cf28d1d))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.25](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.25) (2019-12-27)
+
+### Bug Fixes
+
+- **doc:** add Scale example ([5e49ff2](https://github.com/antvis/L7/commit/5e49ff276d75980f12e7af61f712fbd1fa7f33f9))
+- 高德地图底图模式,事件交互注册顺序的问题导致不生效 ([2ad4289](https://github.com/antvis/L7/commit/2ad4289e75519f956a9cb1b44a7231b1151c88fb))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- layer style storkeColor->stroke ([27f66a9](https://github.com/antvis/L7/commit/27f66a9918a3568f7f591af161953ac498d2dcba))
+- layer style storkeColor->stroke ([ac8477b](https://github.com/antvis/L7/commit/ac8477bb44e861df2f5d0a0a2b06bd5795054c3b))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add citybuildinglayer & add line add animate ([d657286](https://github.com/antvis/L7/commit/d657286d58c795ba968ae930eb382ca422bdbd08))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- **layer:** pointLayer add text model ([84a9193](https://github.com/antvis/L7/commit/84a9193e3a8a311bb52bbedabc8847eabba7dc9a))
+- **layer:** pointLayer add text model ([20ad754](https://github.com/antvis/L7/commit/20ad7540974fdf0a6e902e2ea3700dcd5cf28d1d))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.24](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.24) (2019-12-23)### Bug Fixes
+
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.23](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.23) (2019-12-23)
+
+### Bug Fixes
+
+- remove error yarn.lock ([a1a3eff](https://github.com/antvis/L7/commit/a1a3eff2eb3599761105de92987873ec475b0514))
+- remove error yarn.lock ([64c7c65](https://github.com/antvis/L7/commit/64c7c650453f73b8d96e8510be58f5dada86900e))
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- **layer:** fix default model config ([2301419](https://github.com/antvis/L7/commit/2301419aadf00a887fc22728b9797e6c1149bead))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.21](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.21) (2019-12-18)
+
+### Bug Fixes
+
+- **doc:** remove duplicated method ([9e1dfaa](https://github.com/antvis/L7/commit/9e1dfaa9dbdec761f92447874ae7a19bab968cdf))
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- mapbox token 校验问题 ([6c1f934](https://github.com/antvis/L7/commit/6c1f93425676c5baad90e464b3915068ba4157e2))
+- render 将 gl 模块移动到开发分支, update tslint rule ([fe8b480](https://github.com/antvis/L7/commit/fe8b480895a3d6d919e63f93306a203f5582e5d6))
+- source 聚合方法接口定义问题 ([27bdd02](https://github.com/antvis/L7/commit/27bdd02e76f3374b3e1568553ca20455ee7c1511))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **layer:** add blend 效果配置支持 normal,additive ([e0ab4cd](https://github.com/antvis/L7/commit/e0ab4cd386f53ba4e93aaebfb1fa05b6e438710e))
+- **layer:** add blend 效果配置支持 normal,additive ([07da3f7](https://github.com/antvis/L7/commit/07da3f7d1cc6a81b115312be266cff1afb64ecdb))
+- **layer:** add setSelect setActive 方法 & refactor color util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+- scene 实例化支持传入地图实例 & 更新文档 ([cb1d4b6](https://github.com/antvis/L7/commit/cb1d4b6c7d0e65a5e15138ae01adb56cd1b6ee43))
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
+# [2.0.0-beta.20](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.20) (2019-12-12)
+
+### Bug Fixes
+
+- 修复 webgl 扩展兼容问题 ([cd6f5fc](https://github.com/antvis/L7/commit/cd6f5fc7d202f7db1424f3c8b263a99d39d7c778))
+- **gatsby:** gastsby node ([1d96603](https://github.com/antvis/L7/commit/1d966035c4a3bdc34927eb1db16a72ead78ab2dc))
+- **gatsby:** gastsby node ([1c2d35f](https://github.com/antvis/L7/commit/1c2d35facb2fe60bbde4985bc6a0ddb5a21e3f04))
+- **lint:** igonre lint test data lint ([1782893](https://github.com/antvis/L7/commit/178289348a26586b1ccbc8f75baa3b7312693a8c))
+- **parser:** fix multipolygom parser ([2ad8c9f](https://github.com/antvis/L7/commit/2ad8c9f0a858f1eb1015a20b267d66c4478caf2d))
+- **scene:** contianer resize ([1c3be82](https://github.com/antvis/L7/commit/1c3be82711999b70a802a7f0c24ff9ccf76e2d94))
+- **tslint:** igonre lint test data lint ([c1cf91e](https://github.com/antvis/L7/commit/c1cf91e346f8130acb93e2bead29fcf1d0b03233))
+
+### Features
+
+- **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+- **source:** add join transfroms ([6da2528](https://github.com/antvis/L7/commit/6da252879c03980dc61a4a5efd61a00986797d61))
+- **source:** wip cluster ([3203959](https://github.com/antvis/L7/commit/320395942499b4123de2155d20ff6cecec6100b9))
+- **source render:** source transfrom, layer event ([27a09a7](https://github.com/antvis/L7/commit/27a09a7a7a79b50598af22a0de18b062d60afcac))
+
 # [2.0.0-beta.19](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.19) (2019-12-08)
 
 ### Bug Fixes

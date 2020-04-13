@@ -2,11 +2,19 @@
 
 [![travis ci](https://travis-ci.com/antvis/L7.svg?branch=master)](https://travis-ci.com/antvis/L7) [![](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
 
+[README](./README.md)
+
+[GitHub](https://github.com/antvis/L7)
+
+```bash
+  git clone https://github.com/antvis/L7  --depth=1
+```
+
 L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。L7 中的 L 代表 Location，7 代表世界七大洲，寓意能为全球位置数据提供可视分析的能力。L7 专注数据可视化化表达，通过颜色、大小、纹理，方向，体积等视觉变量设置实现从数据到信息清晰，有效的表达。
 
 L7 能够满足常见的地图图表，BI 系统的可视化分析、以及 GIS，交通，电力，国土，农业，城市等领域的空间信息管理，分析等应用系统开发需求。
 
-![l7 demo](https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*JS8vTY5aeCcAAAAAAAAAAABkARQnAQ)
+![l7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
 ## 🌟 核心特性
 

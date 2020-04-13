@@ -10,9 +10,10 @@ const scene = new Scene({
     zoom: 4
   })
 });
-addMarkers();
-scene.render();
-
+scene.on('loaded', () => {
+  addMarkers();
+  scene.render();
+});
 function addMarkers() {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json'
@@ -24,7 +25,7 @@ function addMarkers() {
           continue;
         }
         const el = document.createElement('label');
-        el.className = 'lableclass';
+        el.className = 'labelclass';
         el.textContent = nodes[i].v + '℃';
         el.style.background = getColor(nodes[i].v);
         el.style.borderColor = getColor(nodes[i].v);

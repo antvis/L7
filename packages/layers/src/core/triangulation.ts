@@ -2,6 +2,7 @@ import { IEncodeFeature } from '@antv/l7-core';
 import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
+import { calculteCentroid } from '../utils/geo';
 import getNormals from '../utils/polylineNormal';
 import extrudePolygon, {
   extrude_PolygonNormal,
@@ -24,7 +25,7 @@ const GeometryCache: IGeometryCache = {};
  * @param feature 映射feature
  */
 export function PointFillTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
+  const coordinates = calculteCentroid(feature.coordinates);
   return {
     vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
     indices: [0, 1, 2, 2, 3, 0],
@@ -46,8 +47,7 @@ export function PointExtrudeTriangulation(feature: IEncodeFeature) {
     vertices: positions,
     indices: index,
     normals,
-    // normals: Array.from(computeVertexNormals(positions, index, 3, false)),
-    size: 3,
+    size: 5,
   };
 }
 
@@ -56,7 +56,7 @@ export function PointExtrudeTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  */
 export function PointImageTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as number[];
+  const coordinates = calculteCentroid(feature.coordinates);
   return {
     vertices: [...coordinates],
     indices: [0],
@@ -103,10 +103,10 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   );
 
   return {
-    vertices: positions, // [ x, y, z ]
+    vertices: positions, // [ x, y, z, uv.x,uv.y ]
     indices: index,
     normals,
-    size: 3,
+    size: 5,
   };
 }
 

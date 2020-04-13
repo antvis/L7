@@ -3,6 +3,29 @@ import { IAttribute } from './IAttribute';
 import { IElements } from './IElements';
 import { IUniform } from './IUniform';
 
+export interface IBlendOptions {
+  // gl.enable(gl.BLEND)
+  enable: boolean;
+  // gl.blendFunc
+  func: BlendingFunctionSeparate;
+  // gl.blendEquation
+  equation: {
+    rgb:
+      | gl.FUNC_ADD
+      | gl.FUNC_SUBTRACT
+      | gl.FUNC_REVERSE_SUBTRACT
+      | gl.MIN_EXT
+      | gl.MAX_EXT;
+    alpha?:
+      | gl.FUNC_ADD
+      | gl.FUNC_SUBTRACT
+      | gl.FUNC_REVERSE_SUBTRACT
+      | gl.MIN_EXT
+      | gl.MAX_EXT;
+  };
+  // gl.blendColor
+  color: [number, number, number, number];
+}
 type stencilOp =
   | gl.ZERO
   | gl.KEEP
@@ -153,20 +176,7 @@ export interface IModelInitializationOptions {
   /**
    * blending
    */
-  blend?: Partial<{
-    // gl.enable(gl.BLEND)
-    enable: boolean;
-    // gl.blendFunc
-    func: BlendingFunctionSeparate;
-    // gl.blendEquation
-    equation: {
-      // TODO: EXT_blend_minmax
-      rgb: gl.FUNC_ADD | gl.FUNC_SUBTRACT | gl.FUNC_REVERSE_SUBTRACT;
-      alpha: gl.FUNC_ADD | gl.FUNC_SUBTRACT | gl.FUNC_REVERSE_SUBTRACT;
-    };
-    // gl.blendColor
-    color: [number, number, number, number];
-  }>;
+  blend?: Partial<IBlendOptions>;
 
   /**
    * stencil
@@ -221,6 +231,8 @@ export interface IModelDrawOptions {
     [key: string]: IAttribute;
   };
   elements?: IElements;
+
+  blend?: IBlendOptions;
 }
 
 /**

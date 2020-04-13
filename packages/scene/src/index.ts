@@ -5,13 +5,17 @@ import {
   createSceneContainer,
   IControl,
   IControlService,
+  IFontService,
+  IIconFontGlyph,
   IIconService,
   IImage,
+  IInteractionService,
   ILayer,
   ILayerService,
   ILngLat,
   IMapService,
   IMarker,
+  IMarkerLayer,
   IMarkerService,
   IPoint,
   IPopup,
@@ -20,6 +24,7 @@ import {
   IRendererService,
   ISceneConfig,
   ISceneService,
+  IStatusOptions,
   Point,
   SceneEventList,
   TYPES,
@@ -52,16 +57,15 @@ class Scene
   private iconService: IIconService;
   private markerService: IMarkerService;
   private popupService: IPopupService;
-
+  private fontService: IFontService;
+  private interactionService: IInteractionService;
   private container: Container;
 
   public constructor(config: ISceneConfig) {
     const { id, map } = config;
-
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
-
     // 绑定地图服务
     map.setContainer(sceneContainer, id);
 
@@ -77,6 +81,7 @@ class Scene
       TYPES.IMapService,
     );
     this.iconService = sceneContainer.get<IIconService>(TYPES.IIconService);
+    this.fontService = sceneContainer.get<IFontService>(TYPES.IFontService);
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
     );
@@ -85,7 +90,9 @@ class Scene
     this.markerService = sceneContainer.get<IMarkerService>(
       TYPES.IMarkerService,
     );
-
+    this.interactionService = sceneContainer.get<IInteractionService>(
+      TYPES.IInteractionService,
+    );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
 
     this.initComponent(id);
@@ -93,19 +100,47 @@ class Scene
     // 初始化 scene
     this.sceneService.init(config);
     // TODO: 初始化组件
-    this.addControl(new Logo());
+
+    this.initControl();
+  }
+  public getSize(): [number, number] {
+    return this.mapService.getSize();
+  }
+  public getMinZoom(): number {
+    return this.mapService.getMinZoom();
+  }
+  public getMaxZoom(): number {
+    return this.mapService.getMaxZoom();
+  }
+  public getType(): string {
+    return this.mapService.getType();
+  }
+  public getMapContainer(): HTMLElement | null {
+    return this.mapService.getMapContainer();
+  }
+  public getMapCanvasContainer(): HTMLElement {
+    return this.mapService.getMapCanvasContainer() as HTMLElement;
   }
 
   public getMapService(): IMapService<unknown> {
     return this.mapService;
+  }
+  public exportPng(type?: 'png' | 'jpg'): string {
+    return this.sceneService.exportPng(type);
+  }
+
+  public exportMap(type?: 'png' | 'jpg'): string {
+    return this.sceneService.exportPng(type);
   }
 
   public get map() {
     return this.mapService.map;
   }
 
+  // layer 管理
   public addLayer(layer: ILayer): void {
     // 为当前图层创建一个容器
+    // TODO: 初始化的时候设置 容器
     const layerContainer = createLayerContainer(this.container);
     layer.setContainer(layerContainer);
     this.sceneService.addLayer(layer);
@@ -119,8 +154,16 @@ class Scene
     return this.layerService.getLayer(id);
   }
 
+  public getLayerByName(name: string): ILayer | undefined {
+    return this.layerService.getLayerByName(name);
+  }
+
   public removeLayer(layer: ILayer): void {
     this.layerService.remove(layer);
+  }
+
+  public removeAllLayer(): void {
+    this.layerService.removeAllLayers();
   }
 
   public render(): void {
@@ -140,6 +183,10 @@ class Scene
     this.iconService.removeImage(id);
   }
 
+  public addIconFontGlyphs(fontFamily: string, glyphs: IIconFontGlyph[]) {
+    this.fontService.addIconGlyphs(glyphs);
+  }
+
   // map control method
   public addControl(ctr: IControl) {
     this.controlService.addControl(ctr, this.container);
@@ -149,14 +196,31 @@ class Scene
     this.controlService.removeControl(ctr);
   }
 
+  public getControlByName(name: string) {
+    return this.controlService.getControlByName(name);
+  }
+
   // marker
   public addMarker(marker: IMarker) {
     this.markerService.addMarker(marker);
   }
 
+  public addMarkerLayer(layer: IMarkerLayer) {
+    this.markerService.addMarkerLayer(layer);
+  }
+
+  public removeMarkerLayer(layer: IMarkerLayer) {
+    this.markerService.removeMarkerLayer(layer);
+  }
+
+  public removeAllMakers() {
+    this.markerService.removeAllMarkers();
+  }
+
   public addPopup(popup: IPopup) {
     this.popupService.addPopup(popup);
   }
+
   public on(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1
       ? this.mapService.on(type, handle)
@@ -179,8 +243,16 @@ class Scene
     return this.mapService.getCenter();
   }
 
+  public setCenter(center: [number, number]) {
+    return this.mapService.setCenter(center);
+  }
+
   public getPitch(): number {
     return this.mapService.getPitch();
+  }
+
+  public setPitch(pitch: number) {
+    return this.mapService.setPitch(pitch);
   }
 
   public getRotation(): number {
@@ -210,16 +282,34 @@ class Scene
     this.mapService.panTo(pixel);
   }
 
-  public fitBounds(bound: Bounds): void {
-    this.mapService.fitBounds(bound);
+  public getContainer() {
+    return this.mapService.getContainer();
+  }
+  public setZoom(zoom: number): void {
+    this.mapService.setZoom(zoom);
+  }
+  public fitBounds(bound: Bounds, options?: unknown): void {
+    const { fitBoundsOptions, animate } = this.sceneService.getSceneConfig();
+    this.mapService.fitBounds(
+      bound,
+      // 选项优先级：用户传入，覆盖animate直接配置，覆盖Scene配置项传入
+      options || {
+        ...(fitBoundsOptions as object),
+        animate,
+      },
+    );
   }
 
   public setZoomAndCenter(zoom: number, center: Point): void {
     this.mapService.setZoomAndCenter(zoom, center);
   }
 
-  public setMapStyle(style: string): void {
+  public setMapStyle(style: any): void {
     this.mapService.setMapStyle(style);
+  }
+
+  public setMapStatus(options: Partial<IStatusOptions>) {
+    this.mapService.setMapStatus(options);
   }
 
   // conversion Method
@@ -263,6 +353,13 @@ class Scene
     );
     this.markerService.init(this.container);
     this.popupService.init(this.container);
+  }
+
+  private initControl() {
+    const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
+    if (logoVisible) {
+      this.addControl(new Logo({ position: logoPosition }));
+    }
   }
   // 资源管理
 }

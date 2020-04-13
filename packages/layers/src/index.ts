@@ -1,35 +1,37 @@
 import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
+import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
-import DashLineLayer from './line/dash';
+import ImageLayer from './image';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
-import ImageLayer from './raster/image';
-import RasterLayer from './raster/raster';
+import RasterLayer from './raster';
 import ThreeJSLayer from './three';
 
-import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
+// import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
+import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
+import LayerModelPlugin from './plugins/LayerModelPlugin';
 import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
 import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
 import PixelPickingPlugin from './plugins/PixelPickingPlugin';
 import RegisterStyleAttributePlugin from './plugins/RegisterStyleAttributePlugin';
 import ShaderUniformPlugin from './plugins/ShaderUniformPlugin';
+import UpdateModelPlugin from './plugins/UpdateModelPlugin';
 import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
-
 /**
  * 校验传入参数配置项的正确性
  * @see /dev-docs/ConfigSchemaValidation.md
  */
-container
-  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
-  .to(ConfigSchemaValidationPlugin)
-  .inRequestScope();
+// container
+//   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+//   .to(ConfigSchemaValidationPlugin)
+//   .inRequestScope();
 /**
  * 获取 Source
  */
@@ -74,6 +76,15 @@ container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(UpdateStyleAttributePlugin)
   .inRequestScope();
+
+/**
+ * 负责Model更新
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(UpdateModelPlugin)
+  .inRequestScope();
+
 /**
  * Multi Pass 自定义渲染管线
  */
@@ -87,6 +98,14 @@ container
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(ShaderUniformPlugin)
+  .inRequestScope();
+
+/**
+ * 传入动画参数
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerAnimateStylePlugin)
   .inRequestScope();
 /**
  * 传入光照相关参数
@@ -102,13 +121,20 @@ container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(PixelPickingPlugin)
   .inRequestScope();
+/**
+ * 初始化Model
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerModelPlugin)
+  .inRequestScope();
 
 export {
   BaseLayer,
   PointLayer,
   PolygonLayer,
   LineLayer,
-  DashLineLayer,
+  CityBuildingLayer,
   ImageLayer,
   RasterLayer,
   HeatmapLayer,

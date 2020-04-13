@@ -14,7 +14,7 @@ export interface ICircleVertex {
   color: number[];
   radius: number;
   opacity: number;
-  strokeColor: number[];
+  stroke: number[];
   strokeWidth: number;
   strokeOpacity: number;
 }
@@ -68,7 +68,7 @@ export function packCircleVertex(
     tileY,
     shape,
     opacity, // packed buffer1
-    strokeColor,
+    stroke,
     strokeWidth,
     strokeOpacity, // packed buffer2
   } = props;
@@ -81,8 +81,8 @@ export function packCircleVertex(
     packUint8ToFloat(color[2], color[3]),
   ];
   const packedStrokeColor: [number, number] = [
-    packUint8ToFloat(strokeColor[0], strokeColor[1]),
-    packUint8ToFloat(strokeColor[2], strokeColor[3]),
+    packUint8ToFloat(stroke[0], stroke[1]),
+    packUint8ToFloat(stroke[2], stroke[3]),
   ];
 
   [

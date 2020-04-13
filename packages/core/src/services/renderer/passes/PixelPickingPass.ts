@@ -1,19 +1,17 @@
+import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../types';
-import { InteractionEvent } from '../../interaction/IInteractionService';
+import {
+  IInteractionTarget,
+  InteractionEvent,
+} from '../../interaction/IInteractionService';
 import { ILayer } from '../../layer/ILayerService';
 import { ILogService } from '../../log/ILogService';
+import { ILngLat } from '../../map/IMapService';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
 import { PassType } from '../IMultiPassRenderer';
 import BaseNormalPass from './BaseNormalPass';
-
-function decodePickingColor(color: Uint8Array): number {
-  const [i1, i2, i3] = color;
-  // 1 was added to seperate from no selection
-  const index = i1 + i2 * 256 + i3 * 65536 - 1;
-  return index;
-}
 
 /**
  * color-based PixelPickingPass
@@ -36,6 +34,10 @@ export default class PixelPickingPass<
    */
   private layer: ILayer;
 
+  private width: number = 0;
+
+  private height: number = 0;
+
   /**
    * 简单的 throttle，防止连续触发 hover 时导致频繁渲染到 picking framebuffer
    */
@@ -52,13 +54,17 @@ export default class PixelPickingPass<
   public init(layer: ILayer, config?: Partial<InitializationOptions>) {
     super.init(layer, config);
     this.layer = layer;
-    const { createTexture2D, createFramebuffer } = this.rendererService;
-
+    const {
+      createTexture2D,
+      createFramebuffer,
+      getViewportSize,
+    } = this.rendererService;
+    const { width, height } = getViewportSize();
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
       color: createTexture2D({
-        width: 1,
-        height: 1,
+        width,
+        height,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
       }),
@@ -66,6 +72,14 @@ export default class PixelPickingPass<
 
     // 监听 hover 事件
     this.interactionService.on(InteractionEvent.Hover, this.pickFromPickingFBO);
+    this.interactionService.on(
+      InteractionEvent.Select,
+      this.selectFeatureHandle.bind(this),
+    );
+    this.interactionService.on(
+      InteractionEvent.Active,
+      this.highlightFeatureHandle.bind(this),
+    );
   }
 
   public render(layer: ILayer) {
@@ -80,8 +94,11 @@ export default class PixelPickingPass<
     this.alreadyInRendering = true;
 
     // resize first, fbo can't be resized in use
-    this.pickingFBO.resize({ width, height });
-
+    if (this.width !== width || this.height !== height) {
+      this.pickingFBO.resize({ width, height });
+      this.width = width;
+      this.height = height;
+    }
     useFramebuffer(this.pickingFBO, () => {
       clear({
         framebuffer: this.pickingFBO,
@@ -112,16 +129,8 @@ export default class PixelPickingPass<
    * 拾取视口指定坐标属于的要素
    * TODO：支持区域拾取
    */
-  private pickFromPickingFBO = ({
-    x,
-    y,
-    type,
-  }: {
-    x: number;
-    y: number;
-    type: string;
-  }) => {
-    if (!this.layer.isVisible()) {
+  private pickFromPickingFBO = ({ x, y, lngLat, type }: IInteractionTarget) => {
+    if (!this.layer.isVisible() || !this.layer.needPick(type)) {
       return;
     }
     const {
@@ -130,7 +139,7 @@ export default class PixelPickingPass<
       useFramebuffer,
     } = this.rendererService;
     const { width, height } = getViewportSize();
-    const { enableHighlight } = this.layer.getLayerConfig();
+    const { enableHighlight, enableSelect } = this.layer.getLayerConfig();
 
     const xInDevicePixel = x * window.devicePixelRatio;
     const yInDevicePixel = y * window.devicePixelRatio;
@@ -142,7 +151,6 @@ export default class PixelPickingPass<
     ) {
       return;
     }
-
     let pickedColors: Uint8Array | undefined;
     useFramebuffer(this.pickingFBO, () => {
       // avoid realloc
@@ -166,54 +174,63 @@ export default class PixelPickingPass<
         const rawFeature = this.layer
           .getSource()
           .getFeatureById(pickedFeatureIdx);
-
+        const target = {
+          x,
+          y,
+          type,
+          lngLat,
+          featureId: pickedFeatureIdx,
+          feature: rawFeature,
+        };
         if (!rawFeature) {
           // this.logger.error(
           //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
           // );
         } else {
           // trigger onHover/Click callback on layer
-          this.triggerHoverOnLayer({ x, y, type, feature: rawFeature });
+          this.layer.setCurrentPickId(pickedFeatureIdx);
+          this.triggerHoverOnLayer(target);
         }
+      } else {
+        const target = {
+          x,
+          y,
+          lngLat,
+          type:
+            this.layer.getCurrentPickId() === null ? 'un' + type : 'mouseout',
+          featureId: null,
+          feature: null,
+        };
+        this.triggerHoverOnLayer({
+          ...target,
+          type: 'unpick',
+        });
+        this.triggerHoverOnLayer(target);
+        this.layer.setCurrentPickId(null);
+      }
+
+      if (enableHighlight) {
+        this.highlightPickedFeature(pickedColors);
+      }
+      if (
+        enableSelect &&
+        type === 'click' &&
+        pickedColors?.toString() !== [0, 0, 0, 0].toString()
+      ) {
+        this.selectFeature(pickedColors);
       }
     });
-
-    if (enableHighlight) {
-      this.highlightPickedFeature(pickedColors);
-    }
   };
 
-  private triggerHoverOnLayer({
-    x,
-    y,
-    type,
-    feature,
-  }: {
+  private triggerHoverOnLayer(target: {
     x: number;
     y: number;
     type: string;
+    lngLat: ILngLat;
     feature: unknown;
+    featureId: number | null;
   }) {
-    const { onHover, onClick } = this.layer.getLayerConfig();
-    // if (onHover) {
-    //   onHover({
-    //     x,
-    //     y,
-    //     feature,
-    //   });
-    // }
-    // if (onClick) {
-    //   onClick({
-    //     x,
-    //     y,
-    //     feature,
-    //   });
-    // }
-    this.layer.emit(type, {
-      x,
-      y,
-      feature,
-    });
+    this.layer.emit(target.type, target);
   }
 
   /**
@@ -231,30 +248,23 @@ export default class PixelPickingPass<
    */
   private highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     const [r, g, b] = pickedColors;
-    const { clear, useFramebuffer } = this.rendererService;
+    this.layer.hooks.beforeHighlight.call([r, g, b]);
+    this.layerService.renderLayers();
+  }
 
-    // 先输出到 PostProcessor
-    const readFBO = this.layer.multiPassRenderer
-      .getPostProcessor()
-      .getReadFBO();
-    this.layer.hooks.beforeRender.call();
-    useFramebuffer(readFBO, () => {
-      clear({
-        color: [0, 0, 0, 0],
-        depth: 1,
-        stencil: 0,
-        framebuffer: readFBO,
-      });
+  private selectFeature(pickedColors: Uint8Array | undefined) {
+    const [r, g, b] = pickedColors;
+    this.layer.hooks.beforeSelect.call([r, g, b]);
+    this.layerService.renderLayers();
+  }
 
-      // TODO: highlight pass 需要 multipass
-      const originRenderFlag = this.layer.multiPassRenderer.getRenderFlag();
-      this.layer.multiPassRenderer.setRenderFlag(false);
-      this.layer.hooks.beforeHighlight.call([r, g, b]);
-      this.layer.render();
-      this.layer.hooks.afterHighlight.call();
-      this.layer.hooks.afterRender.call();
-      this.layer.multiPassRenderer.setRenderFlag(originRenderFlag);
-    });
-    this.layer.multiPassRenderer.getPostProcessor().render(this.layer);
+  private selectFeatureHandle({ featureId }: Partial<IInteractionTarget>) {
+    const pickedColors = encodePickingColor(featureId as number);
+    this.selectFeature(new Uint8Array(pickedColors));
+  }
+
+  private highlightFeatureHandle({ featureId }: Partial<IInteractionTarget>) {
+    const pickedColors = encodePickingColor(featureId as number);
+    this.highlightPickedFeature(new Uint8Array(pickedColors));
   }
 }

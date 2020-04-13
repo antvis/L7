@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PolygonLayer, Scene, Zoom } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 import * as React from 'react';
 
@@ -18,10 +18,12 @@ export default class ZoomComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+      map: new GaodeMap({
+        style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
+        minZoom: 2,
+        maxZoom: 6,
         zoom: 3,
       }),
     });
@@ -31,17 +33,11 @@ export default class ZoomComponent extends React.Component {
     layer
       .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
-      .color('name', [
-        '#2E8AE6',
-        '#69D1AB',
-        '#DAF291',
-        '#FFD591',
-        '#FF7A45',
-        '#CF1D49',
-      ])
-      .shape('fill')
+      .color('#fff')
+      .shape('name', 'text')
+      .size(12)
       .style({
-        opacity: 0.3,
+        opacity: 1.0,
       });
     scene.addLayer(layer);
     const zoomControl = new Zoom({

@@ -1,7 +1,6 @@
 // @see https://babeljs.io/docs/en/next/config-files#project-wide-configuration
 module.exports = api => {
   api.cache(() => process.env.NODE_ENV);
-
   const isSite = api.env('site');
   const isCDNBundle = api.env('bundle');
   const isCommonJS = api.env('cjs');
@@ -16,6 +15,7 @@ module.exports = api => {
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
         '@babel/plugin-proposal-nullish-coalescing-operator',
+        'transform-inline-environment-variables',
         [
           '@babel/plugin-proposal-decorators',
           {
@@ -42,10 +42,17 @@ module.exports = api => {
       [
         '@babel/env',
         {
+          // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
+          // useBuiltIns: 'usage',
+          ...isCDNBundle ? { corejs: '3.0.0' } : {},
           useBuiltIns: isCDNBundle ? 'usage' : false,
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
-          modules: (isCDNBundle || isESModule) ? false : 'auto'
+          modules: (isCDNBundle || isESModule) ? false : 'auto',
+          targets: {
+            chrome: 58,
+            browsers: [ 'ie >= 11' ]
+          }
         }
       ],
       [
@@ -54,12 +61,16 @@ module.exports = api => {
           development: isCommonJS
         }
       ],
-      '@babel/preset-typescript',
+      '@babel/preset-typescript'
     ],
     plugins: [
+      isCDNBundle ? {} : '@babel/plugin-transform-runtime',
       '@babel/plugin-proposal-object-rest-spread',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
+      '@babel/plugin-syntax-async-generators',
+      // '@babel/plugin-transform-parameters',
+      'transform-node-env-inline',
       [
         '@babel/plugin-proposal-decorators',
         {
@@ -105,6 +116,7 @@ module.exports = api => {
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],
     ignore: [
+      // /node_modules\/(?![kdbush|supercluster|async])/,
       'node_modules',
       ...!isTest ? [
         '**/*.test.tsx',

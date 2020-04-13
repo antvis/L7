@@ -1,5 +1,6 @@
+import { IControlOption } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
-import Control, { IControlOption, PositionType } from './BaseControl';
+import Control, { PositionType } from './BaseControl';
 export interface IZoomControlOption extends IControlOption {
   zoomInText: string;
   zoomInTitle: string;
@@ -22,10 +23,11 @@ export default class Zoom extends Control {
       zoomInTitle: 'Zoom in',
       zoomOutText: '&#x2212;',
       zoomOutTitle: 'Zoom out',
+      name: 'zoom',
     };
   }
 
-  public onAdd() {
+  public onAdd(): HTMLElement {
     const zoomName = 'l7-control-zoom';
     const container = DOM.create('div', zoomName + ' l7-bar');
 
@@ -91,7 +93,8 @@ export default class Zoom extends Control {
   ) {
     const link = DOM.create('a', className, container) as HTMLLinkElement;
     link.innerHTML = html;
-    link.href = '#';
+    link.title = tile;
+    link.href = 'javascript:void(0)';
     link.addEventListener('click', fn);
     return link;
   }

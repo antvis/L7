@@ -1,10 +1,6 @@
-import { IMapService } from '@antv/l7-core';
+import { IControlOption, PositionName, PositionType } from '@antv/l7-core';
 import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
-import Control, {
-  IControlOption,
-  PositionName,
-  PositionType,
-} from './BaseControl';
+import Control from './BaseControl';
 export interface ILayerControlOption extends IControlOption {
   collapsed: boolean;
   autoZIndex: boolean;
@@ -55,6 +51,7 @@ export default class Layers extends Control {
       autoZIndex: true,
       hideSingleBase: false,
       sortLayers: false,
+      name: 'layers',
     };
   }
   public onAdd() {
@@ -92,24 +89,32 @@ export default class Layers extends Control {
     return this;
   }
 
+  public onRemove() {
+    if (!this.mapsService) {
+      return;
+    }
+    this.mapsService.off('click', this.collapse);
+    this.layers.forEach((layerItem) => {
+      layerItem.layer.off('remove', this.onLayerChange);
+      layerItem.layer.off('add', this.onLayerChange);
+    });
+  }
   private initLayout() {
     const className = 'l7-control-layers';
     const container = (this.container = DOM.create('div', className));
     const { collapsed } = this.controlOption;
-
     // makes this work on IE touch devices by stopping it from firing a mouseout event when the touch is released
     container.setAttribute('aria-haspopup', 'true');
-
     const form = (this.form = DOM.create(
       'form',
       className + '-list',
     ) as HTMLElement);
 
-    // if (collapsed) {
-    //   this.mapsService.on('click', this.collapse);
-    //   container.addEventListener('mouseenter', this.expand);
-    //   container.addEventListener('mouseleave', this.collapse);
-    // }
+    if (collapsed) {
+      this.mapsService.on('click', this.collapse);
+      container.addEventListener('mouseenter', this.expand);
+      container.addEventListener('mouseleave', this.collapse);
+    }
 
     this.layersLink = DOM.create('a', className + '-toggle', container);
     const link = this.layersLink;
@@ -118,8 +123,6 @@ export default class Layers extends Control {
     if (!collapsed) {
       this.expand();
     }
-    this.expand();
-
     this.baseLayersList = DOM.create('div', className + '-base', form);
     this.separator = DOM.create('div', className + '-separator', form);
     this.overlaysList = DOM.create('div', className + '-overlays', form);
@@ -181,8 +184,12 @@ export default class Layers extends Control {
     for (let i = inputs.length - 1; i >= 0; i--) {
       input = inputs[i];
       layer = this.layerService.getLayer(input.layerId);
-      if (layer) {
-        input.disabled = !layer.inited || !layer.isVisible();
+
+      if (layer && layer.inited) {
+        const minZoom = layer.getMinZoom();
+        const maxZoom = layer.getMaxZoom();
+
+        input.disabled = zoom < minZoom || zoom > maxZoom;
       }
     }
   }
@@ -236,7 +243,7 @@ export default class Layers extends Control {
       : null;
 
     if (type) {
-      this.emit(type, obj); // TODO:图
+      this.emit(type, obj);
     }
   }
 
@@ -297,7 +304,6 @@ export default class Layers extends Control {
     for (let i = inputs.length - 1; i >= 0; i--) {
       input = inputs[i];
       layer = this.layerService.getLayer(input.layerId);
-
       if (input.checked) {
         addedLayers.push(layer);
       } else if (!input.checked) {

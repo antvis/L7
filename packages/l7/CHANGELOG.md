@@ -3,6 +3,205 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
+
+
+### Bug Fixes
+
+* **heatmap:** 修复热力图某些设备上黑色 fix [#278](https://github.com/antvis/L7/issues/278) ([b8f5899](https://github.com/antvis/L7/commit/b8f58992d1fce38fdaac9d82ebfbec14e35298bd))
+
+
+
+
+
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+**Note:** Version bump only for package @antv/l7
+
+
+
+
+
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+**Note:** Version bump only for package @antv/l7
+
+
+
+
+
+## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
+
+**Note:** Version bump only for package @antv/l7
+
+
+
+
+
+## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
+
+
+### Bug Fixes
+
+* observerable打包问题 ([412e2a8](https://github.com/antvis/L7/commit/412e2a83f78a9a448f0a5b65ccaf2ea97f78b47a))
+
+
+
+
+
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+
+### Bug Fixes
+
+* ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+
+
+
+
+
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+
+### Bug Fixes
+
+* ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+
+
+
+
+
+## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
+
+
+### Bug Fixes
+
+* ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+
+
+
+
+
+## [2.0.34](https://github.com/antvis/L7/compare/v2.0.32...v2.0.34) (2020-03-02)
+
+**Note:** Version bump only for package @antv/l7
+
+
+
+
+
+# [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.27) (2020-01-01)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-alpha.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.28) (2020-01-01)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-alpha.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.27) (2019-12-31)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.26](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.26) (2019-12-30)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.25](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.25) (2019-12-27)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.24](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.24) (2019-12-23)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.23](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.23) (2019-12-23)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.21](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.21) (2019-12-18)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
+# [2.0.0-beta.20](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.20) (2019-12-12)
+
+
+### Features
+
+* **source:** add join transfroms ([ec3cae2](https://github.com/antvis/L7/commit/ec3cae2f5fd0491a895cf4ba3953da94b5af2c84))
+
+
+
+
+
 # [2.0.0-beta.19](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.19) (2019-12-08)
 
 **Note:** Version bump only for package @antv/l7

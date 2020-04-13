@@ -1,62 +1,63 @@
 ---
-title: Map Layer
+title: Base Layer
 order: 0
 ---
 
-# Layer
-
 ## 简介
 
-L7 Layer 接口设计遵循图形语法，在可视表达上
+L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
 
 语法示例
 
 ```javascript
-new Layer(option)
+const layer = new Layer(option)
   .source()
   .color()
   .size()
   .shape()
   .style();
+
+scene.addLayer(layer);
 ```
 
 ## 构造函数
 
 ## 配置项
 
-### visable
+### name
+
+设置图层名称,可根据 name 获取 layer;
+
+### visible
 
 图层是否可见   {bool } default true
 
 ### zIndex
 
-图层绘制顺序，数值越小优先绘制，可以控制图层绘制的上下层级 {int}   default 0
+图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级 {int}   default 0
 
 ### minZoom
 
-图层显示最小缩放等级，（0-18）   {number}  default 0
+图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （3-18）
 
 ### maxZoom
 
-图层显示最大缩放等级 （0-18）   {number}  default 18
+图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （3-18）
 
-## 鼠标事件
+### autoFit
 
-⚠️ beta 版当前不支持，正式版会支持
+layer 初始化完成之后，是否自动缩放到图层范围 {bool } default false
 
-```javascript
-layer.on('click', (ev) => {}); // 鼠标左键点击图层事件
-layer.on('dblclick', (ev) => {}); // 鼠标左键双击图层事件
-layer.on('mousemove', (ev) => {}); // 鼠标在图层上移动时触发
-layer.on('mouseover', (ev) => {}); // 鼠标移入图层要素内时触发
-layer.on('mouseout', (ev) => {}); // 鼠标移出图层要素时触发
-layer.on('mouseup', (ev) => {}); // 鼠标在图层上单击抬起时触发
-layer.on('mousedown', (ev) => {}); // 鼠标在图层上单击按下时触发
-layer.on('mouseleave', (ev) => {}); // 鼠标离开图层要素
-layer.on('rightclick', (ev) => {}); // 鼠标右键图层要素
-```
+### blend
 
-## 方法
+图层元素混合效果
+
+- normal 正常效果 默认
+- additive 叠加模式
+- subtractive 相减模式
+- max 最大值
+
+# 方法
 
 ### source
 
@@ -70,7 +71,7 @@ layer.on('rightclick', (ev) => {}); // 鼠标右键图层要素
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换 可设置多个
 
-parser 和  transforms [见 source 文档](https://www.yuque.com/antv/l7/source)
+parser 和  transforms [见 source 文档](../source/source)
 
 ```javascript
 layer.source(data, {
@@ -101,39 +102,57 @@ layer.source(data, {
 });
 ```
 
-###
-
 ### scale
 
-cscle('field', scaleConfig)
-
-(field: string, scaleConfig: object)
-
-为指定的数据字段进行列定义，返回 layer 实例。
+设置数据字段映射方法
 
 - `field` 字段名。
 
 - `scaleConfig` 列定义配置，对象类型，可配置的属性如下：
 
+#### scale 类型
+
+**连续型**
+
+- linear 线性
+- log
+- pow 指数型
+
+**连续分类型**
+
+- quantile 等分位
+- quantize 等间距
+
+**枚举型**
+
+- cat 枚举
+
 ```javascript
-{
-  type: 'linear'; // 指定数据类型，可声明的类型为：identity、linear、cat、time、timeCat、log、pow,  quantile,quantize
-}
+layer.scale('name', {
+  type: 'cat',
+});
+
+// 设置多个scale
+
+// 字段名为 key, value 为scale配置项
+
+layer.scale({
+  name: {
+    type: 'cat',
+  },
+  value: {
+    type: 'linear',
+  },
+});
 ```
+
+## 视觉编码方法
+
+可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
 
 ### size
 
-将数据值映射到图形的大小上的方法。
-
-**注意：**
-
-不同图层的 size 的含义有所差别：
-
-- point 图形的 size 影响点的半径大小和高度；
-
-- line, arc, path 中的 size 影响线的粗细,和高度；
-
-- polygon size 影响的是高度
+将数据值映射到图形的大小上的方法,具体 size 的表示具体意义可以查看对应图层的文档
 
 ```javascript
 pointLayer.size(10); // 常量
@@ -219,7 +238,7 @@ layer.color('white'); // 指定颜色
 
 - `colors`: string | array | function
 
-colors 的参数有以下情况：  如果为空，即未指定颜色的数组，那么使用内置的全局的颜色；如果需要指定颜色，则需要以数组格式传入，那么分类的颜色按照数组中的颜色确定。对于颜色的分配顺序。
+colors 的参数有以下情况：  如果为空，即未指定颜色的数组，那么使用内置的全局的颜色；如果需要指定颜色，则需要以数组格式传入，那么分类的颜色按照数组中的颜色确定.
 
 ```javascript
 layer.color('name'); // 使用默认的颜色
@@ -265,23 +284,57 @@ layer.color('gender*age', (gender, age) => {
 
 ### style
 
-用于配置几何体显示图像属性目前支持以下属性，其他属性会逐步开放
-
-- fill
+全局设置图形显示属性
 
 - opacity   设置透明度
 
-- stroke 线填充颜色
+- stroke 线填充颜色 仅点图层支持
 
-- strokeWidth 线的宽度
+- strokeWidth 线的宽度 仅点图层支持
 
 ```javascript
 layer.style({
-  fill: 'red',
   opacity: 0.8,
   stroke: 'white',
 });
 ```
+
+## 图层更新方法
+
+如果已经添加了图层，需要修改图层显示样式可以再次调用图形映射方法，然后调用 `scene.render()`更新渲染即可
+
+### 样式更新
+
+```javascript
+layer.color('blue');
+layer.size(10);
+layer.style({});
+scene.render();
+```
+
+### setData
+
+更新 Source 数据
+
+参数:
+
+- data 数据
+- option 默认和初始配置项一致，如果数据格式相同可不设置
+
+调用 setData 方法会自动更新图层渲染
+
+```javascript
+layer.setData(data);
+```
+
+### setBlend(type)
+
+设置图层叠加方法
+参数：
+
+- type blend 类型
+
+## 图层控制方法
 
 ### show
 
@@ -299,6 +352,16 @@ layer.show();
 layer.hide();
 ```
 
+### isVisible
+
+图层是否可见
+
+return `true | false`
+
+### setIndex
+
+设置图层绘制顺序
+
 ### fitBounds
 
 缩放到图层范围
@@ -306,3 +369,215 @@ layer.hide();
 ```javascript
 layer.fitBounds();
 ```
+
+### setMinZoom
+
+设置图层最小缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
+### setMaxZoom
+
+设置图层最大缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
+设置图层最大缩放等级
+
+参数
+
+- zoom {number}
+
+```javascript
+layer.setMinZoom(zoom);
+```
+
+## 图层交互方法
+
+### active
+
+开启或者关闭 mousehover 元素高亮效果
+
+参数： activeOption | boolean
+
+activeOption
+-color 填充颜色
+
+```javascript
+// 开启 Active  使用默认高亮颜色
+layer.active(true);
+
+//  开启 Active  自定义高亮颜色
+
+layer.active({
+  color: 'red',
+});
+
+// 关闭高亮效果
+layer.active(false);
+```
+
+### setActive
+
+根据元素 ID 设置指定元素 hover 高亮
+
+```javascript
+layer.setActive(id);
+```
+
+### select
+
+开启或者关闭 mouseclick 元素选中高亮效果
+
+参数： selectOption | boolean
+
+selectOption
+-color 填充颜色
+
+```javascript
+// 开启 Active  使用默认高亮颜色
+layer.select(true);
+
+//  开启 Active  自定义高亮颜色
+
+layer.select({
+  color: 'red',
+});
+
+// 关闭高亮效果
+layer.select(false);
+```
+
+### setSelect
+
+根据元素 ID 设置指定元素 click 选中 高亮
+
+```javascript
+layer.setSelect(id);
+```
+
+## 鼠标事件
+
+鼠标事件回调参数 target
+
+```typescript
+```
+
+- x: number 鼠标  在地图位置 x 坐标
+- y: number 鼠标  在地图位置 y 坐标
+- type: string 鼠标事件类型
+- lngLat: 经度度对象 {lng:number, lat: number }; 鼠标所在位置经纬度
+- feature: any; 数据选中的地理要素信息
+- featureId: number | null; 数据选中的地理要素的 ID
+
+### click
+
+点击事件
+
+### mousemove
+
+鼠标移动事件
+
+### mouseout
+
+鼠标移除
+
+### mouseup
+
+鼠标按下
+
+### mousedown
+
+鼠标向下
+
+### contextmenu
+
+鼠标右键
+
+### unclick
+
+点击未拾取到元素
+
+### unmousemove
+
+鼠标移动未拾取到元素
+
+### unmouseup
+
+鼠标抬起未拾取到元素
+
+### unmousedown
+
+鼠标按下未拾取到元素
+
+### uncontextmenu
+
+鼠标右键位拾取到元素
+
+### unpick
+
+所有鼠标事件未拾取到
+
+使用示例
+
+```javascript
+layer.on('click', (ev) => {}); // 鼠标左键点击图层事件
+layer.on('mousemove', (ev) => {}); // 鼠标在图层上移动时触发
+layer.on('mouseout', (ev) => {}); // 鼠标移出图层要素时触发
+layer.on('mouseup', (ev) => {}); // 鼠标在图层上单击抬起时触发
+layer.on('mousedown', (ev) => {}); // 鼠标在图层上单击按下时触发
+layer.on('contextmenu', (ev) => {}); // 图层要素点击右键菜单
+
+// 鼠标在图层外的事件
+layer.on('unclick', (ev) => {}); // 图层外点击
+layer.on('unmousemove', (ev) => {}); // 图层外移动
+layer.on('unmouseup', (ev) => {}); // 图层外鼠标抬起
+layer.on('unmousedown', (ev) => {}); // 图层外单击按下时触发
+layer.on('uncontextmenu', (ev) => {}); // 图层外点击右键
+layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
+```
+
+## 图层事件
+
+### inited
+
+参数 option
+
+- target 当前 layer
+- type 事件类型
+
+图层初始化完成后触发
+
+```javascript
+layer.on('inited', (option) => {});
+```
+
+### add
+
+图层添加到 scene
+
+参数 option
+
+- target 当前 layer
+- type 事件类型
+
+### remove
+
+图层移除时触发
+
+参数 option
+
+- target 当前 layer
+- type 事件类型

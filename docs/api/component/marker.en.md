@@ -16,7 +16,7 @@ Marker
 - color        `string` ![L7 Marker](https://gw.alipayobjects.com/zos/basement_prod/b10e0efd-8379-4b04-bcbb-5cfefaa0327f.svg)设置默认 marker 的颜色
 - element    `Dom|string`    自定义 marker Dom 节点，可以是 dom 实例，也可以是 dom id
 - anchor     `string`  锚点位置   支持 center, top, top-left, top-right, bottom, bottom-left,bottom-                        right,left, right
-- offset    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
+- offsets    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
 
 ### 添加到 Scene
 
@@ -29,10 +29,6 @@ scene.addMarker(marker);
 #### setLnglat
 
 设置 marker 经纬度位置
-
-#### addTo
-
-将 marker 添加到地图 Scene
 
 #### remove
 
@@ -62,20 +58,18 @@ scene.addMarker(marker);
 
 #### 默认 Marker
 
-\*\*<br />`const marker = new L7.Marker({color:'blue'})`
+`const marker = new L7.Marker({color:'blue'})`
 
 #### 自定义 Marker
 
 ```javascript
 var el = document.createElement('label');
-el.className = 'lableclass';
+el.className = 'labelclass';
 el.textContent = data[i].v;
 el.style.background = getColor(data[i].v);
 new L7.Marker({
   element: el,
-})
-  .setLnglat([data[i].x * 1, data[i].y])
-  .addTo(scene);
+}).setLnglat([data[i].x * 1, data[i].y]);
 ```
 
 #### 设置 popup

@@ -35,8 +35,11 @@ export type ScaleTypeName =
   | 'quantize'
   | 'threshold'
   | 'cat';
+
+export type ScaleAttributeType = 'color' | 'size' | 'shape';
 export interface IScale {
   type: ScaleTypeName;
+  field?: string;
   ticks?: any[];
   nice?: boolean;
   format?: () => any;
@@ -49,6 +52,7 @@ export enum StyleScaleType {
 }
 export interface IScaleOption {
   field?: string;
+  attr?: ScaleAttributeType;
   type: ScaleTypeName;
   ticks?: any[];
   nice?: boolean;
@@ -60,7 +64,7 @@ export interface IScaleOptions {
 }
 export interface IStyleScale {
   scale: any;
-  field: string;
+  field: string | number;
   type: StyleScaleType;
   option: IScaleOption | undefined;
 }
@@ -75,6 +79,9 @@ export interface IAnimateOption {
   interval?: number;
   duration?: number;
   trailLength?: number;
+  repeat?: number;
+  speed?: number;
+  rings?: number;
 }
 
 export interface IEncodeFeature {
@@ -109,23 +116,25 @@ export interface IVertexAttributeDescriptor
 type Position = number[];
 type Color = [number, number, number, number];
 type CallBack = (...args: any[]) => any;
-export type StyleAttributeField = string | string[];
+export type StyleAttributeField = string | string[] | number[];
 export type StyleAttributeOption = string | number | boolean | any[] | CallBack;
 export type StyleAttrField = string | string[] | number | number[];
+export interface IAttributeScale {
+  field: string | number;
+  func: unknown;
+  option: IScaleOption | undefined;
+}
 
 export interface IStyleAttributeInitializationOptions {
   name: string;
   type: AttributeType;
   scale?: {
     field: StyleAttributeField;
-    values: unknown[];
-    names: string[];
+    values: unknown[] | string;
+    names: string[] | number[];
     type: StyleScaleType;
     callback?: (...args: any[]) => [];
-    scalers?: Array<{
-      field: string;
-      func: unknown;
-    }>;
+    scalers?: IAttributeScale[];
   };
   descriptor: IVertexAttributeDescriptor;
 }
@@ -183,6 +192,7 @@ export interface IStyleAttributeService {
   ): void;
   getLayerStyleAttributes(): IStyleAttribute[] | undefined;
   getLayerStyleAttribute(attributeName: string): IStyleAttribute | undefined;
+  getLayerAttributeScale(attributeName: string): any;
   createAttributesAndIndices(
     encodedFeatures: IEncodeFeature[],
     triangulation?: Triangulation,

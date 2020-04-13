@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.0.0-beta.19",
+  "version": "2.1.14",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -15,14 +15,16 @@
     "tsc": "tsc --project tsconfig.build.json",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "run-p build:*",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "build:cjs": "cross-env BABEL_ENV=cjs NODE_ENV=production  babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "cross-env BABEL_ENV=esm NODE_ENV=production  babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-utils": "^2.0.0-beta.19",
+    "@antv/async-hook": "^2.1.0",
+    "@antv/l7-utils": "2.1.14",
+    "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
     "element-resize-event": "^3.0.3",
@@ -35,7 +37,6 @@
     "merge-json-schemas": "^1.0.0",
     "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
-    "tapable": "^2.0.0-beta.8",
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
@@ -45,7 +46,7 @@
     "@types/lodash": "^4.14.138",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
+  "gitHead": "a5d354b66873f700730248d015c5e539c54b34b7",
   "publishConfig": {
     "access": "public"
   }

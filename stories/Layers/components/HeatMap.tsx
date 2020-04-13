@@ -1,5 +1,5 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as React from 'react';
 
@@ -20,40 +20,38 @@ export default class HeatMapLayerDemo extends React.Component {
       map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,
-        style: 'mapbox://styles/mapbox/dark-v10',
-        zoom: 2,
+        style: 'dark',
+        zoom: 12,
       }),
     });
-    const layer = new HeatmapLayer({
-      enableTAA: false,
-    });
+    const data = await response.json();
+
+    const layer = new HeatmapLayer();
     layer
-      .source(await response.json())
-      .size('mag', [0, 1]) // weight映射通道
+      .source(data)
+      .shape('heatmap3D')
+      .size('mag', [0, 1.0]) // weight映射通道
       .style({
         intensity: 2,
         radius: 20,
-        opacity: 0.6,
+        opacity: 1.0,
         rampColors: {
           colors: [
-            '#2E8AE6',
-            '#69D1AB',
-            '#DAF291',
-            '#FFD591',
-            '#FF7A45',
-            '#CF1D49',
+            'rgba(33,102,172,0)',
+            'rgb(103,169,207)',
+            'rgb(209,229,240)',
+            'rgb(253,219,199)',
+            'rgb(239,138,98)',
+            'rgb(178,24,43)',
           ],
           positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
         },
       });
     scene.addLayer(layer);
-    // requestAnimationFrame(run);
-    scene.render();
+    scene.on('zoom', () => {
+      console.log(scene.getZoom());
+    });
     this.scene = scene;
-    // function run() {
-    //   scene.render();
-    //   requestAnimationFrame(run);
-    // }
   }
 
   public render() {

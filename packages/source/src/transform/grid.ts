@@ -1,9 +1,8 @@
 /**
  * 生成四边形热力图
  */
-import { IParserCfg, IParserData, ISourceCFG, ITransform } from '@antv/l7-core';
-import { aProjectFlat, metersToLngLat } from '@antv/l7-utils';
-import { statMap } from './statistics';
+import { IParserData, ITransform } from '@antv/l7-core';
+import { Satistics } from '@antv/l7-utils';
 
 interface IGridHash {
   [key: string]: any;
@@ -20,8 +19,8 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
   const { gridHash, gridOffset } = _pointsGridHash(dataArray, size);
   const layerData = _getGridLayerDataFromGridHash(gridHash, gridOffset, option);
   return {
-    yOffset: gridOffset.yOffset / 1.8,
-    xOffset: gridOffset.xOffset / 1.8,
+    yOffset: gridOffset.yOffset / 2,
+    xOffset: gridOffset.xOffset / 2,
     radius: gridOffset.xOffset,
     type: 'grid',
     dataArray: layerData,
@@ -32,6 +31,7 @@ function _pointsGridHash(dataArray: any[], size: number) {
   let latMin = Infinity;
   let latMax = -Infinity;
   let pLat;
+
   for (const point of dataArray) {
     pLat = point.coordinates[1];
     if (Number.isFinite(pLat)) {
@@ -39,8 +39,8 @@ function _pointsGridHash(dataArray: any[], size: number) {
       latMax = pLat > latMax ? pLat : latMax;
     }
   }
-  // const centerLat = (latMin + latMax) / 2;
-  const centerLat = 34.54083;
+  const centerLat = (latMin + latMax) / 2;
+  // const centerLat = 34.54083;
   const gridOffset = _calculateGridLatLonOffset(size, centerLat);
   if (gridOffset.xOffset <= 0 || gridOffset.yOffset <= 0) {
     return { gridHash: {}, gridOffset };
@@ -90,24 +90,20 @@ function _getGridLayerDataFromGridHash(
       [key: string]: any;
     } = {};
     if (option.field && option.method) {
-      const columns = getColumn(gridHash[key].points, option.field);
-      item[option.method] = statMap[option.method](columns);
+      const columns = Satistics.getColumn(gridHash[key].points, option.field);
+      item[option.method] = Satistics.statMap[option.method](columns);
     }
     Object.assign(item, {
-      _id: i + 1,
+      _id: i,
       coordinates: [
-        -180 + gridOffset.xOffset * lonIdx,
-        -90 + gridOffset.yOffset * latIdx,
+        -180 + gridOffset.xOffset * (lonIdx + 0.5),
+        -90 + gridOffset.yOffset * (latIdx + 0.5),
       ],
+      rawData: gridHash[key].points,
       count: gridHash[key].count,
     });
     // @ts-ignore
     accu.push(item);
     return accu;
   }, []);
-}
-function getColumn(data: any[], columnName: string) {
-  return data.map((item) => {
-    return item[columnName] * 1;
-  });
 }

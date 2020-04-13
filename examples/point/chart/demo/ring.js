@@ -44,7 +44,9 @@ const scene = new Scene({
     zoom: 3.802
   })
 });
-addChart();
+scene.on('loaded', () => {
+  addChart();
+});
 scene.render();
 function addChart() {
   Promise.all([

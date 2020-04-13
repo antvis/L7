@@ -12,20 +12,20 @@ export default class ArcLineDemo extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt',
+      'https://gw.alipayobjects.com/os/bmw-prod/4ededeaa-f290-46b7-a042-08210433e8f9.csv',
     );
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
         center: [116.2825, 39.9],
         pitch: 0,
-        style: 'mapbox://styles/mapbox/dark-v9',
+        style: 'dark',
         zoom: 2,
       }),
     });
+    this.scene = scene;
     const lineLayer = new LineLayer({
-      enablePicking: true,
-      enableHighlight: true,
+      blend: 'normal',
     })
       .source(await response.text(), {
         parser: {
@@ -36,9 +36,18 @@ export default class ArcLineDemo extends React.Component {
           y1: 'lat2',
         },
       })
-      .size(0.5)
+      // .size(1)
       .shape('arc')
-      .color('rgb(13,64,140)');
+      .select({
+        color: 'red',
+      })
+      .active({
+        color: 'red',
+      })
+      // .color('rgb(13,64,140)')
+      .style({
+        opacity: 1,
+      });
     scene.addLayer(lineLayer);
     scene.render();
     this.scene = scene;

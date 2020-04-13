@@ -1,19 +1,23 @@
-import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
-import { bindAll, DOM } from '@antv/l7-utils';
+import {
+  ILngLat,
+  IMapService,
+  IPoint,
+  IPopup,
+  IPopupOption,
+  TYPES,
+} from '@antv/l7-core';
+import {
+  anchorTranslate,
+  anchorType,
+  applyAnchorClass,
+  bindAll,
+  DOM,
+} from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 
 /** colse event */
 
-export interface IPopupOption {
-  closeButton: boolean;
-  closeOnClick: boolean;
-  maxWidth: string;
-  anchor: anchorType;
-  className: string;
-  offsets: number[];
-}
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
   private mapsService: IMapService<unknown>;
@@ -23,6 +27,7 @@ export default class Popup extends EventEmitter implements IPopup {
   private timeoutInstance: any;
   private container: HTMLElement;
   private tip: HTMLElement;
+  private scene: Container;
 
   constructor(cfg?: Partial<IPopupOption>) {
     super();
@@ -36,13 +41,23 @@ export default class Popup extends EventEmitter implements IPopup {
   public addTo(scene: Container) {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.mapsService.on('camerachange', this.update);
+    this.scene = scene;
     this.update();
     if (this.popupOption.closeOnClick) {
       this.timeoutInstance = setTimeout(() => {
         this.mapsService.on('click', this.onClickClose);
       }, 30);
     }
+    this.emit('open');
     return this;
+  }
+
+  public close(): void {
+    this.remove();
+  }
+
+  public open(): void {
+    this.addTo(this.scene);
   }
 
   public setHTML(html: string) {
@@ -61,7 +76,7 @@ export default class Popup extends EventEmitter implements IPopup {
     return this.setDOMContent(frag);
   }
 
-  public setLnglat(lngLat: ILngLat): this {
+  public setLnglat(lngLat: ILngLat | number[]): this {
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {
@@ -165,7 +180,10 @@ export default class Popup extends EventEmitter implements IPopup {
     };
   }
 
-  private onClickClose() {
+  private onClickClose(e: Event) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
     this.remove();
   }
 
@@ -191,6 +209,9 @@ export default class Popup extends EventEmitter implements IPopup {
           .forEach((name) => this.container.classList.add(name));
       }
       this.container.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+      });
+      this.container.addEventListener('click', (e) => {
         e.stopPropagation();
       });
     }

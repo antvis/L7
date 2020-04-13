@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.0.0-beta.19",
+  "version": "2.1.14",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,15 +22,16 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.19",
-    "@antv/l7-source": "^2.0.0-beta.19",
-    "@antv/l7-utils": "^2.0.0-beta.19",
+    "@antv/async-hook": "^2.1.0",
+    "@antv/l7-core": "2.1.14",
+    "@antv/l7-source": "2.1.14",
+    "@antv/l7-utils": "2.1.14",
+    "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.1.0",
     "@turf/meta": "^6.0.2",
-    "@types/d3-color": "^1.2.2",
-    "d3-array": "^2.3.1",
+    "d3-array": "1",
     "d3-color": "^1.4.0",
-    "d3-scale": "^3.1.0",
+    "d3-scale": "2",
     "earcut": "^2.2.1",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
@@ -39,18 +40,18 @@
     "lodash": "^4.17.15",
     "merge-json-schemas": "1.0.0",
     "polyline-miter-util": "^1.0.1",
-    "reflect-metadata": "^0.1.13",
-    "tapable": "^2.0.0-beta.8",
-    "three": "^0.111.0"
+    "three": "^0.111.0",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
+    "@types/d3-color": "^1.2.2",
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5",
     "@types/lodash": "^4.14.138"
   },
-  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
+  "gitHead": "a5d354b66873f700730248d015c5e539c54b34b7",
   "publishConfig": {
     "access": "public"
   }

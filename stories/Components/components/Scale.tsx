@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PolygonLayer, Scale, Scene } from '@antv/l7';
+import { Layers, PointLayer, PolygonLayer, Scale, Scene, Zoom } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -14,18 +14,25 @@ export default class ScaleComponent extends React.Component {
     const response = await fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     );
+    const response2 = await fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+    );
+    const pointsData = await response2.json();
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
+      logoVisible: false,
       map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 3,
       }),
     });
     this.scene = scene;
-    const layer = new PolygonLayer({});
+    const layer = new PolygonLayer({
+      name: '01',
+    });
 
     layer
       .source(data)
@@ -39,13 +46,57 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
+      .select(true)
       .style({
-        opacity: 0.3,
+        opacity: 1.0,
       });
     scene.addLayer(layer);
-
+    const pointLayer = new PointLayer({
+      name: '02',
+      enablePropagation: true,
+    })
+      .source(pointsData, {
+        cluster: true,
+      })
+      .shape('circle')
+      .scale('point_count', {
+        type: 'quantile',
+      })
+      .size('point_count', [5, 10, 15, 20, 25])
+      .animate(false)
+      .active(false)
+      .color('yellow')
+      .style({
+        opacity: 0.5,
+        strokeWidth: 1,
+      });
+    scene.addLayer(pointLayer);
+    layer.on('click', (e) => {
+      console.log(1, e);
+      // layer.setSelect(e.featureId);
+    });
+    pointLayer.on('click', (e) => {
+      console.log(2, e);
+    });
+    pointLayer.on('mouseout', (e) => {
+      console.log(2, e);
+    });
     const scaleControl = new Scale();
+    const layers = {
+      点图层: pointLayer,
+      面图层: layer,
+    };
+    const layerControl = new Layers({
+      overlayers: layers,
+      position: 'bottomright',
+    });
+
     scene.addControl(scaleControl);
+    scene.addControl(layerControl);
+    const zoomControl = new Zoom({
+      position: 'bottomright',
+    });
+    scene.addControl(zoomControl);
   }
 
   public render() {

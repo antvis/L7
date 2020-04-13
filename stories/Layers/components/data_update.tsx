@@ -45,24 +45,22 @@ export default class DataUpdate extends React.Component {
       .source(pointOnCircle(0))
       .shape('circle')
       .size(15) // default 1
+      .active(false)
       .color('#2F54EB')
       .style({
-        strokeColor: '#fff',
+        stroke: '#fff',
         strokeWidth: 2,
         opacity: 1,
       });
     scene.addLayer(layer);
+    layer.setData(pointOnCircle(1000));
+    this.scene = scene;
     function animateMarker(timestamp: number) {
       layer.setData(pointOnCircle(timestamp / 1000));
-
       scene.render();
-
-      // setTimeout(animateMarker, 100);
       requestAnimationFrame(animateMarker);
     }
-    layer.on('inited', () => {
-      animateMarker(0);
-    });
+    animateMarker(0);
   }
 
   public render() {

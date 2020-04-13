@@ -42,19 +42,7 @@ export default class ThreeJSLayer extends BaseLayer<{
     );
   }
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        // opacity: {
-        //   type: 'altitude',
-        //   minimum: 0,
-        //   maximum: 100,
-        // },
-      },
-    };
-  }
-
-  protected buildModels() {
+  public buildModels() {
     const canvas = this.rendererService.getCanvas();
     const gl = this.rendererService.getGLContext();
     if (canvas && gl) {
@@ -89,7 +77,7 @@ export default class ThreeJSLayer extends BaseLayer<{
     }
   }
 
-  protected renderModels() {
+  public renderModels() {
     const { width, height } = this.rendererService.getViewportSize();
     this.renderer.setSize(width, height, false);
 
@@ -107,8 +95,20 @@ export default class ThreeJSLayer extends BaseLayer<{
     this.camera.projectionMatrix = mercatorMatrix.multiply(
       this.cameraTransform,
     );
-
     this.renderer.state.reset();
     this.renderer.render(this.scene, this.camera);
+    return this;
+  }
+
+  protected getConfigSchema() {
+    return {
+      properties: {
+        // opacity: {
+        //   type: 'altitude',
+        //   minimum: 0,
+        //   maximum: 100,
+        // },
+      },
+    };
   }
 }

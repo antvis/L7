@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.0.0-beta.19",
+  "version": "2.1.14",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,8 +24,10 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.0-beta.19",
-    "@antv/l7-utils": "^2.0.0-beta.19",
+    "@antv/async-hook": "^2.1.0",
+    "@antv/l7-core": "2.1.14",
+    "@antv/l7-utils": "2.1.14",
+    "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
@@ -33,23 +35,16 @@
     "d3-dsv": "^1.1.1",
     "d3-hexbin": "^0.2.2",
     "eventemitter3": "^4.0.0",
-    "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
-    "inversify-inject-decorators": "^3.1.0",
-    "inversify-logging": "^0.2.1",
     "lodash": "^4.17.15",
-    "reflect-metadata": "^0.1.13",
-    "supercluster": "^6.0.2",
-    "tapable": "^2.0.0-beta.8"
+    "supercluster": "^6.0.2"
   },
   "devDependencies": {
     "@types/d3-dsv": "^1.0.36",
     "@types/d3-hexbin": "^0.2.3",
-    "@types/gl-matrix": "^2.4.5",
-    "@types/lodash": "^4.14.138",
-    "@types/viewport-mercator-project": "^6.1.0"
+    "@types/lodash": "^4.14.138"
   },
-  "gitHead": "00d23ef70d9ec76eec26833fc50ac18fe584cf26",
+  "gitHead": "a5d354b66873f700730248d015c5e539c54b34b7",
   "publishConfig": {
     "access": "public"
   }

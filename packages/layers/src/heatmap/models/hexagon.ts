@@ -13,6 +13,7 @@ import heatmapGridVert from '../shaders/hexagon_vert.glsl';
 interface IHeatMapLayerStyleOptions {
   opacity: number;
   coverage: number;
+  angle: number;
 }
 
 export default class HexagonModel extends BaseModel {
@@ -20,10 +21,12 @@ export default class HexagonModel extends BaseModel {
     const {
       opacity,
       coverage,
+      angle,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
+      u_angle: angle || 0,
       u_radius: [
         this.layer.getSource().data.xOffset,
         this.layer.getSource().data.yOffset,
@@ -40,36 +43,11 @@ export default class HexagonModel extends BaseModel {
         triangulation: HeatmapGridTriangulation,
         depth: { enable: false },
         primitive: gl.TRIANGLES,
+        blend: this.getBlend(),
       }),
     ];
   }
   protected registerBuiltinAttributes() {
-    // point layer size;
-    // this.styleAttributeService.registerStyleAttribute({
-    //   name: 'size',
-    //   type: AttributeType.Attribute,
-    //   descriptor: {
-    //     name: 'a_Size',
-    //     buffer: {
-    //       // give the WebGL driver a hint that this buffer may change
-    //       usage: gl.DYNAMIC_DRAW,
-    //       data: [],
-    //       type: gl.FLOAT,
-    //     },
-    //     size: 1,
-    //     update: (
-    //       feature: IEncodeFeature,
-    //       featureIdx: number,
-    //       vertex: number[],
-    //       attributeIdx: number,
-    //     ) => {
-    //       const { size } = feature;
-    //       return Array.isArray(size) ? [size[0]] : [size as number];
-    //     },
-    //   },
-    // });
-
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,

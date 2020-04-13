@@ -1,20 +1,22 @@
 import {
   AttributeType,
+  BlendType,
   gl,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
 
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { rgb2arr } from '../../utils/color';
+import { BlendTypes } from '../../utils/blend';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
-  strokeColor: string;
+  stroke: string;
 }
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -26,19 +28,23 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class NormalModel extends BaseModel {
+  public getDefaultStyle(): Partial<IPointLayerStyleOptions & ILayerConfig> {
+    return {
+      blend: 'additive',
+    };
+  }
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      strokeColor = 'rgb(0,0,0,0)',
+      stroke = 'rgb(0,0,0,0)',
       strokeWidth = 1,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
-      u_stroke_color: rgb2arr(strokeColor),
+      u_stroke_color: rgb2arr(stroke),
     };
   }
-
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
@@ -48,15 +54,7 @@ export default class NormalModel extends BaseModel {
         triangulation: PointTriangulation,
         depth: { enable: false },
         primitive: gl.POINTS,
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.ONE,
-            srcAlpha: 1,
-            dstRGB: gl.ONE,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }
@@ -81,10 +79,17 @@ export default class NormalModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
+  }
+  private defaultStyleOptions(): Partial<
+    IPointLayerStyleOptions & ILayerConfig
+  > {
+    return {
+      blend: BlendType.additive,
+    };
   }
 }

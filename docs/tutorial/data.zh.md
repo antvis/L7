@@ -7,7 +7,9 @@ order: 2
 
 目前L7支持的数据格式有GeoJson,CSV,JSon Image
 
-GeoJSON 支持点、线、面，等所有的空间数据格式。<br />CSV 支持，点，线段，弧线的支持。<br />JSON 支持简单的点、线，面，不支持多点，多线的，多面数据格式。
+- GeoJSON 支持点、线、面等所有的标准空间数据格式。
+- CSV 支持点、线段、弧线等数据类型。
+- JSON 支持简单的点、线，面数据类型，不支持多点，多线的，多面数据格式。
 
 
 ## GeoJSON
@@ -66,8 +68,8 @@ GeoJSON 支持点、线、面，等所有的空间数据格式。<br />CSV 支�
 
 ## 数据资源
 
-#### 全国行政区划边界 
-[支持 geojson, svg下载](http://datav.aliyun.com/tools/atlas/#&lat=33.50475906922609&lng=104.32617187499999&zoom=4)
+#### 全国行政区划GeoJON 支持省市县维度 
+[geojson, svg下载](http://datav.aliyun.com/tools/atlas/#&lat=33.50475906922609&lng=104.32617187499999&zoom=4)
 
 #### HighCharts 全球行政区划数据集
 

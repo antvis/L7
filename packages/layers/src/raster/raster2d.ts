@@ -1,7 +1,7 @@
 import { AttributeType, gl, IEncodeFeature, ITexture2D } from '@antv/l7-core';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
 import { RasterImageTriangulation } from '../core/triangulation';
-import { generateColorRamp, IColorRamp } from '../utils/color';
 import rasterImageFrag from './shaders/raster_2d_frag.glsl';
 import rasterImageVert from './shaders/raster_2d_vert.glsl';
 interface IRasterLayerStyleOptions {
@@ -12,44 +12,11 @@ interface IRasterLayerStyleOptions {
 }
 
 export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
-  public name: string = 'RasterLayer';
+  public type: string = 'RasterLayer';
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
-  protected renderModels() {
-    const { opacity } = this.getLayerConfig();
-    const parserDataItem = this.getSource().data.dataArray[0];
-    const { min, max } = parserDataItem;
-    if (this.texture) {
-      this.models.forEach((model) =>
-        model.draw({
-          uniforms: {
-            u_opacity: opacity || 1,
-            u_texture: this.texture,
-            u_min: min,
-            u_max: max,
-            u_colorTexture: this.colorTexture,
-          },
-        }),
-      );
-    }
-
-    return this;
-  }
-
-  protected buildModels() {
+  public buildModels() {
     this.registerBuiltinAttributes();
     const source = this.getSource();
     const { createTexture2D } = this.rendererService;
@@ -68,7 +35,7 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
-      flipY: true,
+      flipY: false,
     });
     this.models = [
       this.buildLayerModel({
@@ -89,6 +56,38 @@ export default class Raster2dLayer extends BaseLayer<IRasterLayerStyleOptions> {
         },
       }),
     ];
+  }
+  public renderModels() {
+    const { opacity } = this.getLayerConfig();
+    const parserDataItem = this.getSource().data.dataArray[0];
+    const { min, max } = parserDataItem;
+    if (this.texture) {
+      this.models.forEach((model) =>
+        model.draw({
+          uniforms: {
+            u_opacity: opacity || 1,
+            u_texture: this.texture,
+            u_min: min,
+            u_max: max,
+            u_colorTexture: this.colorTexture,
+          },
+        }),
+      );
+    }
+
+    return this;
+  }
+
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
   }
 
   private registerBuiltinAttributes() {

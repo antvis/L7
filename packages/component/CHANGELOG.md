@@ -3,6 +3,239 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
+## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
+## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+
+### Bug Fixes
+
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+
+
+
+
+
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+
+### Bug Fixes
+
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+
+
+
+
+
+## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
+
+
+### Bug Fixes
+
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+
+
+
+
+
+## [2.0.34](https://github.com/antvis/L7/compare/v2.0.32...v2.0.34) (2020-03-02)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
+# [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.27) (2020-01-01)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-alpha.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.28) (2020-01-01)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-alpha.27](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-alpha.27) (2019-12-31)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.26](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.26) (2019-12-30)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.25](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.25) (2019-12-27)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.24](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.24) (2019-12-23)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.23](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.23) (2019-12-23)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.21](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.21) (2019-12-18)
+
+
+### Bug Fixes
+
+* merge master fix conflict ([652e5d1](https://github.com/antvis/L7/commit/652e5d1cafc350fe98d569f32bf6c592c6a79b89))
+
+
+### Features
+
+* **layer:** add setSelect setActive 方法 & refactor color  util ([5c27d66](https://github.com/antvis/L7/commit/5c27d66a6401192f5e0406a2f4c3e0983dc2867c))
+
+
+
+
+
+# [2.0.0-beta.20](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.20) (2019-12-12)
+
+**Note:** Version bump only for package @antv/l7-component
+
+
+
+
+
 # [2.0.0-beta.19](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.19) (2019-12-08)
 
 **Note:** Version bump only for package @antv/l7-component

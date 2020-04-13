@@ -7,6 +7,7 @@ import { IRendererService } from '../renderer/IRendererService';
 import { IParseDataItem } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 import {
+  IAttributeScale,
   IEncodeFeature,
   IStyleAttribute,
   IStyleAttributeInitializationOptions,
@@ -38,6 +39,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
+  private triangulation: Triangulation;
 
   private featureLayout: {
     sizePerElement: number;
@@ -102,6 +104,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
     );
   }
 
+  public getLayerAttributeScale(name: string) {
+    const attribute = this.getLayerStyleAttribute(name);
+    const scale = attribute?.scale?.scalers as IAttributeScale[];
+    if (scale && scale[0]) {
+      return scale[0].func;
+    }
+    return null;
+  }
+
   public updateAttributeByFeatureRange(
     attributeName: string,
     features: IEncodeFeature[],
@@ -119,7 +130,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
         const { elements, sizePerElement } = this.featureLayout;
         // 截取待更新的 feature 范围
         const featuresToUpdate = elements.slice(startFeatureIdx, endFeatureIdx);
-
         // [n, n] 中断更新
         if (!featuresToUpdate.length) {
           return;
@@ -178,6 +188,14 @@ export default class StyleAttributeService implements IStyleAttributeService {
     };
     elements: IElements;
   } {
+    // 每次创建的初始化化 LayerOut
+    this.featureLayout = {
+      sizePerElement: 0,
+      elements: [],
+    };
+    if (triangulation) {
+      this.triangulation = triangulation;
+    }
     const descriptors = this.attributes.map((attr) => {
       attr.resetDescriptor();
       return attr.descriptor;
@@ -187,7 +205,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const indices: number[] = [];
     const normals: number[] = [];
     let size = 3;
-
     features.forEach((feature, featureIdx) => {
       // 逐 feature 进行三角化
       const {
@@ -195,11 +212,18 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
-      } = triangulation(feature);
-      indices.push(...indicesForCurrentFeature.map((i) => i + verticesNum));
-      vertices.push(...verticesForCurrentFeature);
+      } = this.triangulation(feature);
+      indicesForCurrentFeature.forEach((i) => {
+        indices.push(i + verticesNum);
+      });
+      verticesForCurrentFeature.forEach((index) => {
+        vertices.push(index);
+      });
+      // fix Maximum call stack size exceeded https://stackoverflow.com/questions/22123769/rangeerror-maximum-call-stack-size-exceeded-why
       if (normalsForCurrentFeature) {
-        normals.push(...normalsForCurrentFeature);
+        normalsForCurrentFeature.forEach((normal) => {
+          normals.push(normal);
+        });
       }
       size = vertexSize;
       const verticesNumForCurrentFeature =

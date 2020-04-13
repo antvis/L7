@@ -9,6 +9,7 @@ uniform float u_stroke_opacity : 1;
 uniform float u_opacity : 1;
 
 varying float v_size;
+#pragma include "picking"
 void main(){
 vec2 pos= v_uv / u_textSize + gl_PointCoord / u_textSize * 64.;
 vec2 fragmentPosition = 2.0*gl_PointCoord - 1.0;
@@ -19,10 +20,11 @@ float r = 1.0 - smoothstep(radius-(radius*0.01),
                          radius+(radius*0.01),
                          distanceSqrd);
   vec4 textureColor=texture2D(u_texture,pos);
-  if(v_color == vec4(0.)){
-        gl_FragColor= vec4(textureColor.xyz, textureColor.w * r);
+  if(v_color == vec4(1.0)){
+        gl_FragColor= vec4(textureColor.xyz, textureColor.w);
   }else {
-        gl_FragColor= step(0.01, textureColor.x) * v_color;
+        gl_FragColor= step(0.01, textureColor.z) * v_color;
   }
-  return;
+  gl_FragColor.a =gl_FragColor.a * u_opacity;
+  gl_FragColor = filterColor(gl_FragColor);
 }

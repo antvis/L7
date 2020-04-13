@@ -27,7 +27,7 @@ json 数据解析使用对应 JSON parser
 
 如果数据是点数据，只需要设置 x,y 字段即可
 
-如果是线段，弧线数据，需要知道起始点坐标既，x,y,x1,y1
+如果是线段，弧线数据，需要知道起止点坐标既，x,y,x1,y1
 
 ```javascript
 layer.source(data, {
@@ -122,37 +122,35 @@ layer.source(data, {
 - x1 `string` 经度
 - x2 `string` 纬度
 
-简易解析只支持两个点组成的线段，主要再绘制弧线的时候比较常用，只需指定线段的起始点坐标
+简易解析只支持两个点组成的线段，主要再绘制弧线的时候比较常用，只需指定线段的起止点坐标
 
 ```javascript
-const data = [{
-   lng1:112.345,
-   lat1:30.455,
-   lng2:112.345,
-   lat2:30.455,
-   value: 10
+const data = [
+  {
+    lng1: 112.345,
+    lat1: 30.455,
+    lng2: 112.345,
+    lat2: 30.455,
+    value: 10,
   },
   {
-   lng1:114.345,
-   lat1:31.455,
-   lng2:112.345,
-   lat2:30.455,
-   value: 10
-  }
+    lng1: 114.345,
+    lat1: 31.455,
+    lng2: 112.345,
+    lat2: 30.455,
+    value: 10,
+  },
 ];
 
-layer.source(
-  data,
-   {
-    parser:{
-        type:'json',
-        x:'lng1',
-        y:'lat1' ,
-        x1:'lng1',
-        y1:'lat2' ,
-    }
-  }
-})
+layer.source(data, {
+  parser: {
+    type: 'json',
+    x: 'lng1',
+    y: 'lat1',
+    x1: 'lng1',
+    y1: 'lat2',
+  },
+});
 ```
 
 #### 通用解析
@@ -164,32 +162,21 @@ coordinates 包含两个坐标，
 第二个坐标 对应 x1, y1
 
 ```javascript
- const data = [
-   {
-  "id": "1",
-  "coord": [
-      [
-        101.953125,
-        50.51342652633956
-      ],
-      [
-        119.17968749999999,
-        33.137551192346145
-      ]
-    ]
-   }
-
-layer.source(
-  data,
-   {
-    parser:{
-        type:'json',
-        coordinates: "coord",
-
-    }
-  }
-})
-
+const data = [
+  {
+    id: '1',
+    coord: [
+      [101.953125, 50.51342652633956],
+      [119.17968749999999, 33.137551192346145],
+    ],
+  },
+];
+layer.source(data, {
+  parser: {
+    type: 'json',
+    coordinates: 'coord',
+  },
+});
 ```
 
 如果需要使用绘制轨迹数据，需要通过 coodinates 指定线的点序列。
@@ -214,16 +201,12 @@ const data = {
 使用时通过 coordinates 指定
 
 ```javascript
-layer.source(
-  data,
-   {
-    parser:{
-        type:'json',
-        coordinates:'path'
-    }
-  }
-})
-
+layer.source(data, {
+  parser: {
+    type: 'json',
+    coordinates: 'path',
+  },
+});
 ```
 
 ### 面数据

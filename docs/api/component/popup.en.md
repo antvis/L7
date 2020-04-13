@@ -1,9 +1,7 @@
 ---
 title: Popup
-order: 4
+order: 0
 ---
-
-# popup
 
 地图标注信息窗口，用于展示地图要素的属性信息
 
@@ -22,43 +20,61 @@ const popup = new L7.Popup(option);
 - maxWidth
 - anchor
 
+#### 添加到地图
+
+```javascript
+scene.addPopup(popup);
+```
+
 ## 方法
 
 #### setLnglat
 
-设置 popup 的经纬度位置<br />**参数**：lnglat 经纬度数组 [112,32]
+设置 popup 的经纬度位置
+
+**参数**：lnglat
+
+支持数组
+
+```javascript
+[112, 32];
+```
+
+经纬度对象
+
+```javascript
+const lnglat = {
+  lng: 112.323,
+  lat: 30.456,
+};
+```
 
 ```javascript
 popup.setLnglat([112, 32]);
 ```
 
-#### addTo
-
-**参数**：scene 地图 scene 实例
-
-将 popup 添加到地图 scene 显示
-
-```javascript
-popup.addTo(scene);
-```
-
-#### setHtml
+#### setHTML
 
 **参数**：html 字符串
 
 设置 popup html 内容
 
 ```javascript
-var html =
-  '<p>\u7701\u4EFD\uFF1A' +
-  feature.s +
-  '</p>\n        <p>\u5730\u533A\uFF1A' +
-  feature.m +
-  '</p>\n        <p>\u6E29\u5EA6\uFF1A' +
-  feature.t +
-  '</p>\n        ';
-popup.setHtml(html);
+var html = `<p>省份
+  ${feature.s} </p><p>地区
+  ${feature.m}</p><p>数值
+  ${feature.t}</p>`;
+popup.setHTML(html);
 ```
+
+#### setDOMContent
+
+- 参数 htmlNode dom 对象
+  区别于 setHtml 对象只能传字符串
+
+**tips**
+
+如果需要将 react 组件渲染到 popup 可以用此方法。
 
 #### setText
 
@@ -66,6 +82,38 @@ popup.setHtml(html);
 
 ```javascript
 popup.setText('hello world');
+```
+
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
+```
+
+#### open
+
+显示 popup
+
+```javascript
+popup.open();
+```
+
+#### close
+
+显示 popup
+
+```javascript
+popup.close();
 ```
 
 #### remove
@@ -77,6 +125,12 @@ popup.remove();
 ```
 
 ## 事件
+
+### open
+
+```javascript
+popup.on('open', () => {});
+```
 
 #### close
 
@@ -90,7 +144,11 @@ popup.on('close', () => {});
 
 ```
   var html = '<p>'+feature.m+'</p>';
-  const new L7.Popup().setLnglat([112, 32]).setHTML(html).addTo(scene);
+  const popup= new L7.Popup().setLnglat([112, 32]).setHTML(html);
+  scene.addPopup(popup);
 ```
 
-### FAQ
+## demo 地址
+
+[demo1](../../../examples/point/column)
+[demo2](../../../examples/line/path)

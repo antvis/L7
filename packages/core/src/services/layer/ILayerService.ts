@@ -1,9 +1,14 @@
+// @ts-ignore
+import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import { Container } from 'inversify';
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
-import { IModel, IModelInitializationOptions } from '../renderer/IModel';
+import {
+  IBlendOptions,
+  IModel,
+  IModelInitializationOptions,
+} from '../renderer/IModel';
 import {
   IMultiPassRenderer,
   IPass,
@@ -18,10 +23,21 @@ import {
   IScale,
   IScaleOptions,
   IStyleAttributeService,
+  ScaleAttributeType,
   StyleAttrField,
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+export enum BlendType {
+  normal = 'normal',
+  additive = 'additive',
+  subtractive = 'subtractive',
+  min = 'min',
+  max = 'max',
+}
+export interface IBlendTypes {
+  [key: string]: Partial<IBlendOptions>;
+}
 export interface IDataState {
   dataSourceNeedUpdate: boolean;
   dataMappingNeedUpdate: boolean;
@@ -38,7 +54,10 @@ export interface ILayerModelInitializationOptions {
 export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
+  getDefaultStyle(): unknown;
+  getAnimateUniforms(): IModelUniform;
   buildModels(): IModel[];
+  needUpdate(): boolean;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -57,25 +76,29 @@ export interface IActiveOption {
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
-  name: string; // 代表 Layer 的类型
+  type: string; // 代表 Layer 的类型
+  name: string; //
   inited: boolean; // 是否初始化完成
   zIndex: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
+  layerModel: ILayerModel;
   dataState: IDataState; // 数据流状态
-  pickedFeatureID: number;
+  pickedFeatureID: number | null;
   hooks: {
-    init: SyncBailHook<void, boolean | void>;
-    afterInit: SyncBailHook<void, boolean | void>;
-    beforeRenderData: SyncWaterfallHook<boolean | void>;
-    beforeRender: SyncBailHook<void, boolean | void>;
-    afterRender: SyncHook<void>;
-    beforePickingEncode: SyncHook<void>;
-    afterPickingEncode: SyncHook<void>;
-    beforeHighlight: SyncHook<[number[]]>;
-    afterHighlight: SyncHook<void>;
-    beforeDestroy: SyncHook<void>;
-    afterDestroy: SyncHook<void>;
+    init: SyncBailHook;
+    afterInit: SyncBailHook;
+    beforeRenderData: SyncWaterfallHook;
+    beforeRender: SyncBailHook;
+    afterRender: SyncHook;
+    beforePickingEncode: SyncHook;
+    afterPickingEncode: SyncHook;
+    beforeHighlight: SyncHook;
+    beforeSelect: SyncHook;
+    afterSelect: SyncHook;
+    afterHighlight: SyncHook;
+    beforeDestroy: SyncHook;
+    afterDestroy: SyncHook;
   };
   models: IModel[];
   sourceOption: {
@@ -83,20 +106,28 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+  needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
   setContainer(container: Container): void;
+  setCurrentPickId(id: number | null): void;
+  getCurrentPickId(): number | null;
+  setCurrentSelectedId(id: number | null): void;
+  getCurrentSelectedId(): number | null;
+  prepareBuildModel(): void;
+  renderModels(): void;
+  buildModels(): void;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
   init(): ILayer;
-  scale(field: string | IScaleOptions, cfg: IScale): ILayer;
+  scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  animate(option: IAnimateOption): ILayer;
+  animate(option: Partial<IAnimateOption> | boolean): ILayer;
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   filter(field: string, value: StyleAttributeOption): ILayer;
   active(option: IActiveOption | boolean): ILayer;
@@ -104,7 +135,7 @@ export interface ILayer {
     id: number | { x: number; y: number },
     option?: IActiveOption,
   ): void;
-  select(option: IActiveOption | false): ILayer;
+  select(option: IActiveOption | boolean): ILayer;
   setSelect(
     id: number | { x: number; y: number },
     option?: IActiveOption,
@@ -112,16 +143,21 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
+  getLegendItems(name: string): any;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;
+  getMinZoom(): number;
+  getMaxZoom(): number;
+  get(name: string): number;
+  setBlend(type: keyof typeof BlendType): void;
   // animate(field: string, option: any): ILayer;
   render(): ILayer;
   destroy(): void;
   source(data: any, option?: ISourceCFG): ILayer;
   setData(data: any, option?: ISourceCFG): ILayer;
-  fitBounds(): ILayer;
+  fitBounds(fitBoundsOptions?: unknown): ILayer;
   /**
    * 向当前图层注册插件
    * @param plugin 插件实例
@@ -136,10 +172,10 @@ export interface ILayer {
   /**
    * 事件
    */
-  on(type: string, hander: (...args: any[]) => void): void;
-  off(type: string, hander: (...args: any[]) => void): void;
-  emit(type: string, hander: unknown): void;
-  once(type: string, hander: (...args: any[]) => void): void;
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  emit(type: string, handler: unknown): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   /**
    * JSON Schema 用于校验配置项
    */
@@ -151,6 +187,8 @@ export interface ILayer {
   pick(query: { x: number; y: number }): void;
 
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
+  setAnimateStartTime(): void;
+  getLayerAnimateTime(): number;
 }
 
 /**
@@ -185,7 +223,12 @@ export interface ILayerConfig {
   maxZoom: number;
   visible: boolean;
   zIndex: number;
+  pickingBuffer: number;
+  enablePropagation: boolean;
   autoFit: boolean;
+  fitBoundsOptions?: unknown;
+  name: string; //
+  blend: keyof typeof BlendType;
   pickedFeatureID: number;
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
@@ -198,10 +241,13 @@ export interface ILayerConfig {
    * 开启高亮
    */
   enableHighlight: boolean;
+
+  enableSelect: boolean;
   /**
    * 高亮颜色
    */
   highlightColor: string | number[];
+  selectColor: string | number[];
   active: boolean;
   activeColor: string | number[];
   /**
@@ -216,6 +262,7 @@ export interface ILayerConfig {
    * 开启光照
    */
   enableLighting: boolean;
+  animateOption: Partial<IAnimateOption>;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }
@@ -225,13 +272,16 @@ export interface ILayerConfig {
  */
 export interface ILayerService {
   clock: Clock;
+  alreadyInRendering: boolean;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
   getLayers(): ILayer[];
-  getLayer(name: string): ILayer | undefined;
+  getLayer(id: string): ILayer | undefined;
+  getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer): void;
+  removeAllLayers(): void;
   updateRenderOrder(): void;
   renderLayers(): void;
   destroy(): void;

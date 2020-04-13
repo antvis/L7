@@ -1,12 +1,15 @@
 import BaseLayer from '../core/BaseLayer';
+import { ILineLayerStyleOptions } from '../core/interface';
 import LineModels, { LineModelType } from './models';
-interface IPointLayerStyleOptions {
-  opacity: number;
-}
-export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'LineLayer';
 
-  private animateStartTime: number = 0;
+export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
+  public type: string = 'LineLayer';
+
+  public buildModels() {
+    const shape = this.getModelType();
+    this.layerModel = new LineModels[shape](this);
+    this.models = this.layerModel.buildModels();
+  }
 
   protected getConfigSchema() {
     return {
@@ -19,34 +22,21 @@ export default class LineLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
     };
   }
-
-  protected renderModels() {
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      }),
-    );
-    return this;
+  protected getDefaultConfig() {
+    const type = this.getModelType();
+    const defaultConfig = {
+      line: {},
+      arc3d: { blend: 'additive' },
+      arc: { blend: 'additive' },
+      greatcircle: { blend: 'additive' },
+    };
+    return defaultConfig[type];
   }
-
-  protected buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new LineModels[shape](this);
-    this.models = this.layerModel.buildModels();
-  }
-  private getModelType(): LineModelType {
+  protected getModelType(): LineModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
     const shape = shapeAttribute?.scale?.field as LineModelType;
     return shape || 'line';
-  }
-  // 拆分的动画插件
-  private initAnimate() {
-    const { enable } = this.animateOptions;
-    if (enable) {
-      this.layerService.startAnimate();
-      this.animateStartTime = this.layerService.clock.getElapsedTime();
-    }
   }
 }

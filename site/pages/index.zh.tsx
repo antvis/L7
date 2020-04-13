@@ -78,7 +78,7 @@ const IndexPage = () => {
   const bannerButtons = [
     {
       text: t('图表示例'),
-      link: `/${i18n.language}/examples/gallery/basic`,
+      link: `/${i18n.language}/examples/gallery`,
       type: 'primary',
     },
     {
@@ -89,10 +89,16 @@ const IndexPage = () => {
 
   const notifications = [
     {
-      type: t('测试'),
-      title: t('L7  2.0 beta'),
-      date: '2019.12.04',
-      link: '#',
+      type: t('推荐'),
+      title: t('如何制作不一样的疫情世界地图-酷炫、动感的地理可视化'),
+      date: '2020.03.12',
+      link: 'https://www.yuque.com/antv/blog/wigku2',
+    },
+    {
+      type: t('新版发布'),
+      title: t('L7 2.1 正式版'),
+      date: '2020.03.12',
+      link: ' https://www.yuque.com/antv/blog/ows55v',
     },
   ];
 
@@ -137,12 +143,12 @@ const IndexPage = () => {
           '蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。',
         )}
         buttons={bannerButtons}
-        // notifications={notifications}
+        notifications={notifications}
         className="banner"
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />
       <Features features={features} style={{ width: '100%' }} />
-      <Cases style={{ width: '102%' }} cases={cases} />
+      <Cases cases={cases} />
       <Companies title={t('感谢信赖')} companies={companies} />
     </>
   );

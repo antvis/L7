@@ -1,11 +1,37 @@
 import { AttributeType, gl, IEncodeFeature, ILayer } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import HeatMapModels, { HeatMapModelType } from './models';
-interface IPointLayerStyleOptions {
+interface IHeatMapLayerStyleOptions {
   opacity: number;
 }
-export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
-  public name: string = 'HeatMapLayer';
+export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
+  public type: string = 'HeatMapLayer';
+
+  public buildModels() {
+    const shape = this.getModelType();
+    this.layerModel = new HeatMapModels[shape](this);
+    this.models = this.layerModel.buildModels();
+  }
+  public renderModels() {
+    const shape = this.getModelType();
+    if (shape === 'heatmap') {
+      if (this.layerModel) {
+        this.layerModel.render(); // 独立的渲染流程
+      }
+
+      return this;
+    }
+    if (this.layerModelNeedUpdate) {
+      this.models = this.layerModel.buildModels();
+      this.layerModelNeedUpdate = false;
+    }
+    this.models.forEach((model) =>
+      model.draw({
+        uniforms: this.layerModel.getUninforms(),
+      }),
+    );
+    return this;
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -18,26 +44,7 @@ export default class HeatMapLayer extends BaseLayer<IPointLayerStyleOptions> {
     };
   }
 
-  protected renderModels() {
-    const shape = this.getModelType();
-    if (shape === 'heatmap') {
-      this.layerModel.render();
-      return;
-    }
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      }),
-    );
-    return this;
-  }
-
-  protected buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new HeatMapModels[shape](this);
-    this.models = this.layerModel.buildModels();
-  }
-  private getModelType(): HeatMapModelType {
+  protected getModelType(): HeatMapModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

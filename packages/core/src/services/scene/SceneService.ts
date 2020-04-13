@@ -1,8 +1,9 @@
+// @ts-ignore
+import { AsyncParallelHook } from '@antv/async-hook';
 import { DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
-import { AsyncParallelHook } from 'tapable';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
 import { IFontService } from '../asset/IFontService';
@@ -10,20 +11,29 @@ import { IIconService } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
 import { IMarkerService } from '../component/IMarkerService';
+import { IPopupService } from '../component/IPopupService';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
-import { IInteractionService } from '../interaction/IInteractionService';
+import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
+import {
+  IInteractionService,
+  IInteractionTarget,
+  InteractionEvent,
+} from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILogService } from '../log/ILogService';
-import { IMapCamera, IMapService } from '../map/IMapService';
-import { IRendererService } from '../renderer/IRendererService';
+import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
+import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
 
 /**
- * will emit `loaded` `resize` `destroy` event
+ * will emit `loaded` `resize` `destroy` event panstart panmove panend
  */
 @injectable()
 export default class Scene extends EventEmitter implements ISceneService {
+  public destroyed: boolean = false;
+
   @inject(TYPES.SceneID)
   private readonly id: string;
   /**
@@ -47,6 +57,9 @@ export default class Scene extends EventEmitter implements ISceneService {
   @inject(TYPES.IMapService)
   private readonly map: IMapService;
 
+  @inject(TYPES.ICoordinateSystemService)
+  private readonly coordinateSystemService: ICoordinateSystemService;
+
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
@@ -59,11 +72,17 @@ export default class Scene extends EventEmitter implements ISceneService {
   @inject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
 
+  @inject(TYPES.IPickingService)
+  private readonly pickingService: IPickingService;
+
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
 
   @inject(TYPES.IMarkerService)
   private readonly markerService: IMarkerService;
+
+  @inject(TYPES.IPopupService)
+  private readonly popupService: IPopupService;
 
   /**
    * 是否首次渲染
@@ -80,7 +99,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   private $container: HTMLDivElement | null;
 
   private hooks: {
-    init: AsyncParallelHook<unknown>;
+    init: AsyncParallelHook;
   };
 
   public constructor() {
@@ -93,7 +112,7 @@ export default class Scene extends EventEmitter implements ISceneService {
        * 2. initRenderer：初始化渲染引擎
        * 3. initWorker：初始化 Worker
        */
-      init: new AsyncParallelHook(['config']),
+      init: new AsyncParallelHook(),
     };
   }
 
@@ -102,13 +121,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.configService.setSceneConfig(this.id, sceneConfig);
 
     // 校验场景配置项，失败则终止初始化过程
-    const { valid, errorText } = this.configService.validateSceneConfig(
-      this.configService.getSceneConfig(this.id),
-    );
-    if (!valid) {
-      this.logger.error(errorText || '');
-      return;
-    }
+    // const { valid, errorText } = this.configService.validateSceneConfig(
+    //   this.configService.getSceneConfig(this.id),
+    // );
+    // if (!valid) {
+    //   this.logger.error(errorText || '');
+    //   return;
+    // }
 
     // 初始化 ShaderModule
     this.shaderModuleService.registerBuiltinModules();
@@ -135,9 +154,18 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
+
       // 初始化未加载的marker;
       this.markerService.addMarkers();
-      this.logger.debug('map loaded');
+      this.markerService.addMarkerLayers();
+      this.popupService.initPopup();
+      // 地图初始化之后 才能初始化 container 上的交互
+      this.interactionService.init();
+      this.interactionService.on(
+        InteractionEvent.Drag,
+        this.addSceneEvent.bind(this),
+      );
+      this.logger.debug(`map ${this.id} loaded`);
     });
 
     /**
@@ -150,26 +178,31 @@ export default class Scene extends EventEmitter implements ISceneService {
       );
       this.$container = $container;
       if ($container) {
-        await this.rendererService.init($container);
+        await this.rendererService.init(
+          $container,
+          this.configService.getSceneConfig(this.id) as IRenderConfig,
+        );
         elementResizeEvent(
           this.$container as HTMLDivElement,
           this.handleWindowResized,
         );
-        // window.addEventListener('resize', this.handleWindowResized, false);
+        window
+          .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
+          .addListener(this.handleWindowResized);
       } else {
         this.logger.error('容器 id 不存在');
       }
+      this.pickingService.init(this.id);
 
-      // 初始化 container 上的交互
-      this.interactionService.init();
       this.logger.debug(`scene ${this.id} renderer loaded`);
     });
     // TODO：init worker, fontAtlas...
 
     // 执行异步并行初始化任务
-    this.initPromise = this.hooks.init.promise(
-      this.configService.getSceneConfig(this.id),
-    );
+    // @ts-ignore
+    this.initPromise = this.hooks.init.promise();
+
+    this.render();
   }
 
   public addLayer(layer: ILayer) {
@@ -179,46 +212,73 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-    if (this.rendering) {
+    if (this.rendering || this.destroyed) {
       return;
     }
 
     this.rendering = true;
-
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
-
       await this.initPromise;
+      if (this.destroyed) {
+        this.destroy();
+      }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
-
       this.logger.info(' render inited');
+      this.layerService.initLayers();
+      this.controlService.addControls();
       this.emit('loaded');
       this.inited = true;
     }
 
     // 尝试初始化未初始化的图层
-    this.layerService.initLayers();
     this.layerService.renderLayers();
     // 组件需要等待layer 初始化完成之后添加
-    this.controlService.addControls();
+
     this.logger.debug(`scene ${this.id} render`);
 
     this.rendering = false;
   }
 
+  public getSceneContainer(): HTMLDivElement {
+    return this.$container as HTMLDivElement;
+  }
+
+  public exportPng(type?: 'png' | 'jpg'): string {
+    const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
+    this.render();
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
+  }
+
+  public getSceneConfig(): Partial<ISceneConfig> {
+    return this.configService.getSceneConfig(this.id as string);
+  }
+
   public destroy() {
+    if (!this.inited) {
+      this.destroyed = true;
+      return;
+    }
     this.emit('destroy');
-    this.inited = false;
+
     this.layerService.destroy();
+    this.rendererService.destroy();
+    this.map.destroy();
+
     this.interactionService.destroy();
     this.controlService.destroy();
     this.markerService.destroy();
     this.removeAllListeners();
-    this.rendererService.destroy();
-    this.map.destroy();
+    this.inited = false;
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    // window.removeEventListener('resize', this.handleWindowResized, false);
+    window
+      .matchMedia('screen and (min-resolution: 2dppx)')
+      .removeListener(this.handleWindowResized);
   }
 
   private handleWindowResized = () => {
@@ -235,7 +295,8 @@ export default class Scene extends EventEmitter implements ISceneService {
         w = bounds.right - bounds.left;
         h = bounds.bottom - bounds.top;
       }
-
+      const canvas = this.$container?.getElementsByTagName('canvas')[0];
+      // this.$container.
       this.rendererService.viewport({
         x: 0,
         y: 0,
@@ -244,6 +305,11 @@ export default class Scene extends EventEmitter implements ISceneService {
       });
       // 触发 Map， canvas
       DOM.triggerResize();
+      this.coordinateSystemService.needRefresh = true;
+      if (canvas) {
+        canvas.width = w * pixelRatio;
+        canvas.height = h * pixelRatio;
+      }
       //  repaint layers
       this.render();
     }
@@ -253,4 +319,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.cameraService.update(viewport);
     this.render();
   };
+
+  private addSceneEvent(target: IInteractionTarget) {
+    this.emit(target.type, target);
+  }
 }

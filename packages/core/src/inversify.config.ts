@@ -17,6 +17,7 @@ import { IControlService } from './services/component/IControlService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
 import { IInteractionService } from './services/interaction/IInteractionService';
+import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
 import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
 import { ILogService } from './services/log/ILogService';
@@ -33,6 +34,7 @@ import PopupService from './services/component/PopupService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
 import InteractionService from './services/interaction/InteractionService';
+import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
 import StyleAttributeService from './services/layer/StyleAttributeService';
 import LogService from './services/log/LogService';
@@ -73,10 +75,10 @@ container
   .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
   .to(GlobalConfigService)
   .inSingletonScope();
-container
-  .bind<IIconService>(TYPES.IIconService)
-  .to(IconService)
-  .inSingletonScope();
+// container
+//   .bind<IIconService>(TYPES.IIconService)
+//   .to(IconService)
+//   .inSingletonScope();
 container
   .bind<IShaderModuleService>(TYPES.IShaderModuleService)
   .to(ShaderModuleService)
@@ -85,10 +87,10 @@ container
   .bind<ILogService>(TYPES.ILogService)
   .to(LogService)
   .inSingletonScope();
-container
-  .bind<IFontService>(TYPES.IFontService)
-  .to(FontService)
-  .inSingletonScope();
+// container
+//   .bind<IFontService>(TYPES.IFontService)
+//   .to(FontService)
+//   .inSingletonScope();
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
 decorate(injectable(), EventEmitter);
@@ -160,7 +162,6 @@ export function createSceneContainer() {
   sceneContainer
     .bind<string>(TYPES.SceneID)
     .toConstantValue(`${sceneIdCounter++}`);
-
   sceneContainer
     .bind<ILayerService>(TYPES.ILayerService)
     .to(LayerService)
@@ -182,12 +183,24 @@ export function createSceneContainer() {
     .to(InteractionService)
     .inSingletonScope();
   sceneContainer
+    .bind<IPickingService>(TYPES.IPickingService)
+    .to(PickingService)
+    .inSingletonScope();
+  sceneContainer
     .bind<IControlService>(TYPES.IControlService)
     .to(ControlService)
     .inSingletonScope();
   sceneContainer
     .bind<IMarkerService>(TYPES.IMarkerService)
     .to(MarkerService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IIconService>(TYPES.IIconService)
+    .to(IconService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IFontService>(TYPES.IFontService)
+    .to(FontService)
     .inSingletonScope();
 
   sceneContainer

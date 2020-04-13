@@ -11,7 +11,7 @@ import BaseModel from '../../core/BaseModel';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
-interface IPointLayerStyleOptions {
+interface IImageLayerStyleOptions {
   opacity: number;
 }
 
@@ -19,7 +19,7 @@ export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_texture: this.texture,
@@ -42,15 +42,7 @@ export default class ImageModel extends BaseModel {
         triangulation: PointImageTriangulation,
         primitive: gl.POINTS,
         depth: { enable: false },
-        blend: {
-          enable: true,
-          func: {
-            srcRGB: gl.SRC_ALPHA,
-            srcAlpha: 1,
-            dstRGB: gl.ONE_MINUS_SRC_ALPHA,
-            dstAlpha: 1,
-          },
-        },
+        blend: this.getBlend(),
       }),
     ];
   }
@@ -75,7 +67,7 @@ export default class ImageModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
@@ -114,6 +106,8 @@ export default class ImageModel extends BaseModel {
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
+      mag: gl.LINEAR,
+      min: gl.LINEAR,
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });

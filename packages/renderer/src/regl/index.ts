@@ -15,6 +15,7 @@ import {
   IModel,
   IModelInitializationOptions,
   IReadPixelsOptions,
+  IRenderConfig,
   IRendererService,
   ITexture2D,
   ITexture2DInitializationOptions,
@@ -36,7 +37,10 @@ export default class ReglRendererService implements IRendererService {
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
 
-  public async init($container: HTMLDivElement): Promise<void> {
+  public async init(
+    $container: HTMLDivElement,
+    cfg: IRenderConfig,
+  ): Promise<void> {
     this.$container = $container;
     // tslint:disable-next-line:typedef
     this.gl = await new Promise((resolve, reject) => {
@@ -46,20 +50,23 @@ export default class ReglRendererService implements IRendererService {
           alpha: true,
           // use TAA instead of MSAA
           // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-          antialias: true,
+          antialias: cfg.antialias,
           premultipliedAlpha: true,
+          preserveDrawingBuffer: cfg.preserveDrawingBuffer,
         },
         // TODO: use extensions
         extensions: [
           'OES_element_index_uint',
-          // 'EXT_shader_texture_lod', // IBL 兼容性问题
           'OES_standard_derivatives', // wireframe
-          // 'OES_texture_float', // shadow map 兼容性问题
-          'WEBGL_depth_texture',
-          'angle_instanced_arrays',
-          'EXT_texture_filter_anisotropic', // VSM shadow map
+          'angle_instanced_arrays', // VSM shadow map
         ],
-        // optionalExtensions: ['oes_texture_float_linear'],
+        optionalExtensions: [
+          'oes_texture_float_linear',
+          'OES_texture_float',
+          'EXT_texture_filter_anisotropic',
+          'EXT_blend_minmax',
+          'WEBGL_depth_texture',
+        ],
         profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
           if (err || !r) {

@@ -1,33 +1,45 @@
 import {
   AttributeType,
   gl,
+  IAnimateOption,
   IAttribute,
   IElements,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
-import { rgb2arr } from '../../utils/color';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
   strokeWidth: number;
-  strokeColor: string;
+  stroke: string;
+  strokeOpacity: number;
 }
 export default class FillModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      strokeColor = 'rgb(0,0,0,0)',
+      stroke = 'rgb(0,0,0,0)',
       strokeWidth = 1,
+      strokeOpacity = 1,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
-      u_stroke_color: rgb2arr(strokeColor),
+      u_stroke_color: rgb2arr(stroke),
+      u_stroke_opacity: strokeOpacity,
+    };
+  }
+  public getAnimateUniforms(): IModelUniform {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    return {
+      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
@@ -50,10 +62,13 @@ export default class FillModel extends BaseModel {
         fragmentShader: pointFillFrag,
         triangulation: PointFillTriangulation,
         depth: { enable: false },
+        blend: this.getBlend(),
       }),
     ];
   }
-
+  protected animateOption2Array(option: IAnimateOption): number[] {
+    return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
+  }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
@@ -73,7 +88,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const extrude = [-1, -1, 1, -1, 1, 1, -1, 1];
+          const extrude = [1, 1, -1, 1, -1, -1, 1, -1];
           const extrudeIndex = (attributeIdx % 4) * 2;
           return [extrude[extrudeIndex], extrude[extrudeIndex + 1]];
         },
@@ -99,7 +114,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },

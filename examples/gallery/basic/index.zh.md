@@ -1,6 +1,4 @@
 ---
-title: Gallery
-order: 0
-redirect_from:
-  - /zh/examples
+title: 基础可视化
+order: 1
 ---

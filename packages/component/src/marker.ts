@@ -1,24 +1,32 @@
-import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
-import { bindAll, DOM } from '@antv/l7-utils';
+import {
+  ILngLat,
+  IMapService,
+  IMarkerOption,
+  IPoint,
+  IPopup,
+  TYPES,
+} from '@antv/l7-core';
+import {
+  anchorTranslate,
+  anchorType,
+  applyAnchorClass,
+  bindAll,
+  DOM,
+} from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
-//  marker 支持 dragger 未完成
 
-export interface IMarkerOption {
-  element: HTMLElement | undefined;
-  anchor: anchorType;
-  color: string;
-  offset: number[];
-  draggable: boolean;
-}
-export default class Marker {
+//  marker 支持 dragger 未完成
+export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
   private defaultMarker: boolean;
-  private popup: IPopup; // TODO: POPup
+  private popup: IPopup;
   private mapsService: IMapService<unknown>;
   private lngLat: ILngLat;
   private scene: Container;
+  private added: boolean = false;
   constructor(option?: Partial<IMarkerOption>) {
+    super();
     this.markerOption = {
       ...this.getDefault(),
       ...option,
@@ -31,21 +39,23 @@ export default class Marker {
     return {
       element: undefined, // DOM element
       anchor: anchorType.BOTTOM,
-      offset: [0, 0],
+      offsets: [0, 0],
       color: '#5B8FF9',
       draggable: false,
     };
   }
 
   public addTo(scene: Container) {
-    this.remove();
+    // this.remove();
     this.scene = scene;
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     const { element, draggable } = this.markerOption;
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
+    this.registerMarkerEvent(element as HTMLElement);
     this.mapsService.on('camerachange', this.update);
-    // this.setDraggable(draggable);
     this.update();
+    this.added = true;
+    this.emit('added');
     return this;
   }
 
@@ -59,6 +69,8 @@ export default class Marker {
       this.mapsService.off('mouseup', this.onUp);
       this.mapsService.off('touchend', this.onUp);
     }
+    this.unRegisterMarkerEvent();
+    this.removeAllListeners();
     const { element } = this.markerOption;
     if (element) {
       DOM.remove(element);
@@ -81,6 +93,7 @@ export default class Marker {
     if (this.popup) {
       this.popup.setLnglat(this.lngLat);
     }
+    this.update();
     return this;
   }
 
@@ -90,6 +103,55 @@ export default class Marker {
 
   public getElement(): HTMLElement {
     return this.markerOption.element as HTMLElement;
+  }
+
+  public setElement(el: HTMLElement): this {
+    if (!this.added) {
+      this.once('added', () => {
+        this.setElement(el);
+      });
+      return this;
+    }
+    const { element } = this.markerOption;
+    if (element) {
+      DOM.remove(element);
+    }
+    this.markerOption.element = el;
+    this.init();
+    this.mapsService.getMarkerContainer().appendChild(el as HTMLElement);
+    this.registerMarkerEvent(el as HTMLElement);
+    this.update();
+    return this;
+  }
+
+  public openPopup(): this {
+    if (!this.added) {
+      this.once('added', () => {
+        this.openPopup();
+      });
+      return this;
+    }
+    const popup = this.popup;
+    if (!popup) {
+      return this;
+    }
+    if (!popup.isOpen()) {
+      popup.addTo(this.scene);
+    }
+    return this;
+  }
+
+  public closePopup(): this {
+    if (!this.added) {
+      this.once('added', () => {
+        this.closePopup();
+      });
+    }
+    const popup = this.popup;
+    if (popup) {
+      popup.remove();
+    }
+    return this;
   }
 
   public setPopup(popup: IPopup) {
@@ -117,7 +179,7 @@ export default class Marker {
   }
 
   public getOffset(): number[] {
-    return this.markerOption.offset;
+    return this.markerOption.offsets;
   }
 
   public setDraggable(draggable: boolean) {
@@ -126,6 +188,14 @@ export default class Marker {
 
   public isDraggable() {
     return this.markerOption.draggable;
+  }
+
+  public getExtData() {
+    return this.markerOption.extData;
+  }
+
+  public setExtData(data: any) {
+    this.markerOption.extData = data;
   }
 
   private update() {
@@ -148,12 +218,12 @@ export default class Marker {
     if (!this.mapsService) {
       return;
     }
-    const { element } = this.markerOption;
+    const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
-      element.style.left = pos.x + 'px';
-      element.style.top = pos.y + 'px';
+      element.style.left = pos.x + offsets[0] + 'px';
+      element.style.top = pos.y - offsets[1] + 'px';
     }
   }
 
@@ -187,9 +257,38 @@ export default class Marker {
     element.addEventListener('click', (e: MouseEvent) => {
       this.onMapClick(e);
     });
+    element.addEventListener('click', this.eventHandle);
     applyAnchorClass(element, anchor, 'marker');
   }
+  private registerMarkerEvent(element: HTMLElement) {
+    element.addEventListener('mousemove', this.eventHandle);
+    element.addEventListener('click', this.eventHandle);
+    element.addEventListener('mousedown', this.eventHandle);
+    element.addEventListener('mouseup', this.eventHandle);
+    element.addEventListener('dblclick', this.eventHandle);
+    element.addEventListener('contextmenu', this.eventHandle);
+    element.addEventListener('mouseover', this.eventHandle);
+    element.addEventListener('mouseout', this.eventHandle);
+  }
+  private unRegisterMarkerEvent() {
+    const element = this.getElement();
+    element.removeEventListener('mousemove', this.eventHandle);
+    element.removeEventListener('click', this.eventHandle);
+    element.removeEventListener('mousedown', this.eventHandle);
+    element.removeEventListener('mouseup', this.eventHandle);
+    element.removeEventListener('dblclick', this.eventHandle);
+    element.removeEventListener('contextmenu', this.eventHandle);
+    element.removeEventListener('mouseover', this.eventHandle);
+    element.removeEventListener('mouseout', this.eventHandle);
+  }
 
+  private eventHandle = (e: MouseEvent) => {
+    this.emit(e.type, {
+      target: e,
+      data: this.markerOption.extData,
+      lngLat: this.lngLat,
+    });
+  };
   private addDragHandler(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }
