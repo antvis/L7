@@ -35,8 +35,9 @@ export default class Arc2DLineDemo extends React.Component {
           y: 'lat2',
         },
       })
-      .size(3)
+      .size(1)
       .shape('arc')
+      .animate(true)
       .color('#8C1EB2')
       .style({
         opacity: 1,
