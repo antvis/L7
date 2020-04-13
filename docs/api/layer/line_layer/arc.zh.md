@@ -52,6 +52,12 @@ layer.animate({
   
 })
 ```
+##### 参数动画介绍
+L7 目前动画参数为相对单位，我们默认一条线段的长度为1
+![L7 动画参数](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*IBBfSIkb51cAAAAAAAAAAABkARQnAQ)
+
+如果 interval = 0.2,则一条轨迹将会分成5段，如果 interval = 0.5 则为两段。
+
 
 
 ### 示例代码

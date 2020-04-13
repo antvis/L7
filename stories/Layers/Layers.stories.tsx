@@ -7,12 +7,14 @@ import CityBuildingLayerDemo from './components/citybuilding';
 import Column from './components/column';
 import DashLineDemo from './components/dash';
 import DataUpdate from './components/data_update';
+import GridTest from './components/gridtest';
 import HeatMapDemo from './components/HeatMap';
-import HeatMapDemo3D from './components/heatmap3d';
 import HeatMap3D_2 from './components/heatmap2';
+import HeatMapDemo3D from './components/heatmap3d';
 import HexagonLayerDemo from './components/hexagon';
 import LightDemo from './components/light';
 import LineLayer from './components/Line';
+import LineAnimate from './components/lineAnimate';
 import PointDemo from './components/Point';
 import Point3D from './components/Point3D';
 import PointImage from './components/PointImage';
@@ -22,7 +24,6 @@ import WorldDemo from './components/polygon_line';
 import ImageLayerDemo from './components/RasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 import TextLayerDemo from './components/Text';
-import GridTest from './components/gridtest';
 
 // @ts-ignore
 storiesOf('图层', module)
@@ -38,6 +39,7 @@ storiesOf('图层', module)
   .add('面图层', () => <PolygonDemo />)
   .add('点亮城市', () => <CityBuildingLayerDemo />)
   .add('线图层', () => <LineLayer />)
+  .add('线图层2', () => <LineAnimate />)
   .add('虚线', () => <DashLineDemo />)
   .add('3D弧线', () => <ArcLineDemo />)
   .add('2D弧线', () => <Arc2DLineDemo />)

@@ -17,7 +17,9 @@ scene.on('loaded', () => {
   )
     .then(res => res.text())
     .then(data => {
-      const layer = new LineLayer({})
+      const layer = new LineLayer({
+        blend: 'normal'
+      })
         .source(data, {
           parser: {
             type: 'csv',
@@ -27,17 +29,16 @@ scene.on('loaded', () => {
             y1: 'end station latitude'
           }
         })
-        .size(1)
+        .size(2)
         .shape('arc3d')
         .color('#0C47BF')
         .animate({
-          interval: 0.4,
-          trailLength: 0.2,
-          duration: 1
+          interval: 0.5,
+          trailLength: 0.5,
+          duration: 5
         })
         .style({
-          opacity: 1,
-          blur: 0.9
+          opacity: 1
         });
       scene.addLayer(layer);
     });

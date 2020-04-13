@@ -15,7 +15,9 @@ scene.on('loaded', () => {
   fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
     .then(res => res.text())
     .then(data => {
-      const layer = new LineLayer({})
+      const layer = new LineLayer({
+        blend: 'normal'
+      })
         .source(data, {
           parser: {
             type: 'csv',
@@ -28,7 +30,12 @@ scene.on('loaded', () => {
         .size(1)
         .shape('arc3d')
         .color('#FF7C6A')
-        .animate(true)
+        .animate({
+          enable: true,
+          interval: 0.1,
+          trailLength: 0.5,
+          duration: 2
+        })
         .style({
           opacity: 0.8
         });

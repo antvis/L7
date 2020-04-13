@@ -28,7 +28,12 @@ scene.on('loaded', () => {
         })
         .size(1)
         .shape('greatcircle')
-        .animate(true)
+        .animate({
+          enable: true,
+          interval: 0.1,
+          trailLength: 0.5,
+          duration: 2
+        })
         .color('#8C1EB2')
         .style({
           opacity: 0.8
