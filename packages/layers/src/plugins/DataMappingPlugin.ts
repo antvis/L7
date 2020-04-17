@@ -51,7 +51,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
         filterData = dataArray.filter((record: IParseDataItem) => {
           return this.applyAttributeMapping(filter, record)[0];
         });
-        filter.needRemapping = false;
       }
       if (attributesToRemapping.length) {
         // 过滤数据
