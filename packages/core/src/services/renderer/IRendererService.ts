@@ -60,5 +60,7 @@ export interface IRendererService {
   getGLContext(): WebGLRenderingContext;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
   readPixels(options: IReadPixelsOptions): Uint8Array;
+  setBaseState(): void;
+  setCustomLayerDefaults(): void;
   destroy(): void;
 }

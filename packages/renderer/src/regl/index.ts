@@ -36,6 +36,8 @@ import ReglTexture2D from './ReglTexture2D';
 export default class ReglRendererService implements IRendererService {
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
+  private width: number;
+  private height: number;
 
   public async init(
     $container: HTMLDivElement,
@@ -146,6 +148,8 @@ export default class ReglRendererService implements IRendererService {
       renderCanvas.style.height = height / 2 + 'px';
     }
     this.gl._gl.viewport(x, y, width, height);
+    this.width = width;
+    this.height = height;
     this.gl._refresh();
   };
 
@@ -181,6 +185,31 @@ export default class ReglRendererService implements IRendererService {
   public getGLContext = () => {
     return this.gl._gl;
   };
+
+  public setBaseState() {
+    this.gl({
+      cull: {
+        enable: false,
+        face: 'back',
+      },
+      viewport: {
+        x: 0,
+        y: 0,
+        height: this.width,
+        width: this.height,
+      },
+      blend: {
+        enable: false,
+        equation: 'add',
+      },
+      framebuffer: null,
+    });
+    this.gl._refresh();
+  }
+  public setCustomLayerDefaults() {
+    const gl = this.getGLContext();
+    gl.disable(gl.CULL_FACE);
+  }
 
   public destroy = () => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up

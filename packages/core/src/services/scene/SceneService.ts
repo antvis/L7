@@ -34,6 +34,8 @@ import { ISceneService } from './ISceneService';
 export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
+  public loaded: boolean = false;
+
   @inject(TYPES.SceneID)
   private readonly id: string;
   /**
@@ -228,6 +230,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.logger.info(' render inited');
       this.layerService.initLayers();
       this.controlService.addControls();
+      this.loaded = true;
       this.emit('loaded');
       this.inited = true;
     }

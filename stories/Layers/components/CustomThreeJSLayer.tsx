@@ -7,6 +7,7 @@ import {
   DirectionalLight,
   Mesh,
   MeshLambertMaterial,
+  Matrix4,
   Scene as ThreeScene,
 } from 'three';
 // @ts-ignore
@@ -71,7 +72,11 @@ export default class ThreeJSLayerComponent extends React.Component {
         });
         const cube = new Mesh(geometry, redMaterial);
         cube.applyMatrix(
-          layer.getModelMatrix([120.19382669582967, 30.258134], 10, [0, 0, 0]),
+          layer.getModelMatrix([120.19382669582967, 30.258134], 10, [
+            0,
+            0,
+            0,
+          ]) as Matrix4,
         );
         cube.frustumCulled = false;
         threeScene.add(cube);

@@ -240,13 +240,12 @@ export default class MapboxService
     lnglat: [number, number],
     altitude: number,
   ): IMercator {
-    return {
-      x: 0,
-      y: 0,
-      z: 0,
-    };
+    const { x = 0, y = 0, z = 0 } = mapboxgl.MercatorCoordinate.fromLngLat(
+      lnglat,
+      altitude,
+    );
+    return { x, y, z };
   }
-
   public getModelMatrix(
     lnglat: [number, number],
     altitude: number,

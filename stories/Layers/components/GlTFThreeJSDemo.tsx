@@ -1,7 +1,7 @@
 import { Scene, ThreeJSLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
-import { DirectionalLight, Scene as ThreeScene } from 'three';
+import { DirectionalLight, Matrix4, Scene as ThreeScene } from 'three';
 // tslint:disable-next-line:no-submodule-imports
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -25,7 +25,7 @@ export default class GlTFThreeJSDemo extends React.Component {
         center: [121.434765, 31.256735],
         pitch: 45,
         rotation: 30,
-        zoom: 16,
+        zoom: 18,
       }),
     });
     this.scene = scene;
@@ -46,7 +46,8 @@ export default class GlTFThreeJSDemo extends React.Component {
         loader.load(
           // 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
           // 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/AnimatedCube/glTF/AnimatedCube.gltf',
-          'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf',
+          'https://gw.alipayobjects.com/os/antvdemo/assets/gltf/radar/34M_17.gltf',
+          // 'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
           (gltf) => {
             // 根据 GeoJSON 数据放置模型
             layer.getSource().data.dataArray.forEach(({ coordinates }) => {

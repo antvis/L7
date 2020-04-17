@@ -183,8 +183,5 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "version": "0.0.0",
-  "dependencies": {
-    "@turf/turf": "^5.1.6"
-  }
+  "version": "0.0.0"
 }
