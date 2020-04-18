@@ -39,7 +39,7 @@ export default {
   output: [
     {
       format: 'umd',
-      name: 'L7-Draw',
+      name: 'L7.Draw',
       file: pkg.unpkg,
       sourcemap: true,
       globals: {

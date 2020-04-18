@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@antv/g2": "^3.5.9",
-    "@antv/gatsby-theme-antv": "^0.10.43",
+    "@antv/gatsby-theme-antv": "0.10.43",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -67,7 +67,7 @@
     "gatsby": "^2.19.15",
     "gatsby-plugin-google-analytics": "^2.1.27",
     "gatsby-remark-prettier": "^1.0.0",
-    "geotiff": "^1.0.0-beta.6",
+    "geotiff": "1.0.0-beta.10",
     "gh-pages": "^2.1.1",
     "gl": "^4.4.0",
     "glsl-minifier": "^0.0.13",
@@ -185,6 +185,7 @@
   },
   "version": "0.0.0",
   "dependencies": {
-    "@turf/turf": "^5.1.6"
+    "@turf/turf": "^5.1.6",
+    "gatsby-cli": "2.11.0"
   }
 }

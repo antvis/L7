@@ -78,10 +78,18 @@ module.exports = {
         order: 1
       },
       {
+        slug: 'api/draw',
+        title: {
+          zh: '绘制组件',
+          en: 'Draw Component'
+        },
+        order: 2
+      },
+      {
         slug: 'api/react',
         title: {
           zh: 'React 组件',
-          en: 'react component'
+          en: 'React Component'
         },
         order: 2
       },
@@ -91,7 +99,7 @@ module.exports = {
           zh: '图层 Layer',
           en: 'Layer'
         },
-        order: 4
+        order: 5
       },
       {
         slug: 'api/layer/point_layer',

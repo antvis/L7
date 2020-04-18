@@ -14,9 +14,9 @@ void main() {
    gl_FragColor = v_color;
   //  gl_FragColor.a = v_distance_ratio;
   // anti-alias
-  float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy)) * u_opacity;
+  // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy)) * u_opacity;
   // gl_FragColor.a *= blur  * ceil(mod(v_distance_ratio, v_dash_array.x) - v_dash_array.y);
-  gl_FragColor.a *= blur  * (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
+  gl_FragColor.a *= u_opacity  * (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
 
 
 }
