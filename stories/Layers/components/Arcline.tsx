@@ -36,15 +36,15 @@ export default class ArcLineDemo extends React.Component {
           y1: 'lat2',
         },
       })
-      // .size(1)
-      .shape('arc')
+      .size(2)
+      .shape('arc3d')
       .select({
         color: 'red',
       })
       .active({
         color: 'red',
       })
-      // .color('rgb(13,64,140)')
+      .color('rgb(13,64,140)')
       .style({
         opacity: 1,
       });

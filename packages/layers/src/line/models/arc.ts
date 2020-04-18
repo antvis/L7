@@ -29,6 +29,7 @@ export default class ArcModel extends BaseModel {
       segmentNumber: 30,
       u_line_type: lineStyleObj[lineType || 'solid'],
       u_dash_array: dashArray,
+      u_blur: 0.9,
     };
   }
 

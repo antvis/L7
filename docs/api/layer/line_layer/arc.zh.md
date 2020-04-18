@@ -9,6 +9,7 @@ order: 1
 ### 数据
 绘制弧线只需提供起止点坐标即可
 
+
 ```javascript
  source(data, {
         parser: {
@@ -74,3 +75,6 @@ const layer = new LineLayer({})
         opacity: 0.8,
       });
 ```
+
+### demo 示例
+[弧线demo](../../../../examples/gallery/basic#arcCircle)
