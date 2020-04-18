@@ -5,10 +5,8 @@ import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
 import CityBuildingLayerDemo from './components/citybuilding';
 import Column from './components/column';
-import CustomThreeJSDemo from './components/CustomThreeJSLayer';
 import DashLineDemo from './components/dash';
 import DataUpdate from './components/data_update';
-import GlTFThreeJSDemo from './components/GlTFThreeJSDemo';
 import HeatMapDemo from './components/HeatMap';
 import HeatMapDemo3D from './components/heatmap3d';
 import HeatMap3D_2 from './components/heatmap2';
@@ -49,7 +47,5 @@ storiesOf('图层', module)
   .add('网格热力图', () => <HexagonLayerDemo />)
   .add('栅格', () => <RasterLayerDemo />)
   .add('图片', () => <ImageLayerDemo />)
-  .add('Three.js 图层', () => <CustomThreeJSDemo />)
-  .add('glTF 图层', () => <GlTFThreeJSDemo />)
   .add('网格测试', () => <GridTest />)
   .add('世界地图', () => <WorldDemo />);

@@ -1,4 +1,4 @@
-import { Scene, PolygonLayer, ThreeJSLayer } from '@antv/l7';
+import { PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as React from 'react';
@@ -75,7 +75,7 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene.clone();
-                gltfScene.applyMatrix(
+                gltfScene.applyMatrix4(
                   // 生成模型矩阵
                   layer.getModelMatrix(
                     [coordinates[0], coordinates[1]], // 经纬度坐标

@@ -8,7 +8,6 @@ import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
-import ThreeJSLayer from './three';
 
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -138,5 +137,4 @@ export {
   ImageLayer,
   RasterLayer,
   HeatmapLayer,
-  ThreeJSLayer,
 };

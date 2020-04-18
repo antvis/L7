@@ -39,10 +39,13 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "three": "^0.115.0",
+
     "@antv/l7": "2.1.15",
     "@babel/runtime": "^7.7.7",
     "rollup": "^2.3.3",
     "rollup-plugin-less": "^1.1.2"
+  },
+  "devDependencies": {
+    "three": "^0.115.0"
   }
 }

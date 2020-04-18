@@ -87,7 +87,7 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene;
-                gltfScene.applyMatrix(
+                gltfScene.applyMatrix4(
                   // 生成模型矩阵
                   layer.getModelMatrix(
                     [coordinates[0], coordinates[1]], // 经纬度坐标
