@@ -28,6 +28,11 @@ import { DrawControl } from '@antv/l7-draw';
 const control = new DrawControl(scene, option);
 ```
 
+```javascript
+// CDN 引用
+const control = new L7.Draw.DrawControl(scene, option);
+```
+
 #### scene
 
 scene 对象

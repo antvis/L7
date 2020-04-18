@@ -17,8 +17,9 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
 void main() {
   gl_FragColor = v_color;
-  float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
-  gl_FragColor.a *= u_opacity * blur;
+  // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
+  // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
+  gl_FragColor.a *= u_opacity;
   if(u_line_type == LineTypeDash) {
     gl_FragColor.a *= blur  * (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
   }
