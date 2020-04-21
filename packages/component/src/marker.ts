@@ -220,8 +220,22 @@ export default class Marker extends EventEmitter {
     }
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
+    const bounds = this.mapsService.getBounds();
+    // if (
+    //   lng < bounds[0][0] ||
+    //   lng > bounds[1][0] ||
+    //   lat < bounds[0][1] ||
+    //   lat > bounds[1][1]
+    // ) {
+    //   if (element) {
+    //     element.style.display = 'none';
+    //   }
+
+    //   return;
+    // }
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
+      element.style.display = 'block';
       element.style.left = pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
     }

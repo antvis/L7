@@ -33,6 +33,7 @@ script:
   - yarn lint
   - yarn test
   - yarn build
+  - yarn bundle
 
 notifications:
-   webhooks: $dingdingWebhooks
+   webhooks: ${dingdingWebhooks}

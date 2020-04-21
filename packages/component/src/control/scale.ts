@@ -33,13 +33,19 @@ export default class Scale extends Control {
     this.addScales(className + '-line', container);
     const { updateWhenIdle } = this.controlOption;
     // TODO: 高德地图和MapBox地图事件不一致问题
+    // 高德zoomchange
     this.mapsService.on(updateWhenIdle ? 'moveend' : 'mapmove', this.update);
+    this.mapsService.on(updateWhenIdle ? 'zoomend' : 'zoomchange', this.update);
     this.update();
 
     return container;
   }
   public onRemove() {
     const { updateWhenIdle } = this.controlOption;
+    this.mapsService.off(
+      updateWhenIdle ? 'zoomend' : 'zoomchange',
+      this.update,
+    );
     this.mapsService.off(updateWhenIdle ? 'moveend' : 'mapmove', this.update);
   }
   public update() {
