@@ -22,13 +22,7 @@ scene.on('loaded', () => {
         .source(data)
         .color(
           'name',
-          [
-            'rgb(239,243,255)',
-            'rgb(189,215,231)',
-            'rgb(107,174,214)',
-            'rgb(49,130,189)',
-            'rgb(8,81,156)'
-          ]
+          [ '#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15' ]
         )
         .shape('fill')
         .style({
@@ -39,8 +33,8 @@ scene.on('loaded', () => {
         zIndex: 2
       })
         .source(data)
-        .color('rgb(93,112,146)')
-        .size(0.6)
+        .color('#fff')
+        .size(0.5)
         .style({
           opacity: 1
         });
@@ -50,7 +44,7 @@ scene.on('loaded', () => {
     });
 
   fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/ba8fa803-a8c3-4c67-b806-fe1c444546bd.json' //  国界线
+    'https://gw.alipayobjects.com/os/bmw-prod/ab42a860-f874-4452-a8b6-4168a36c1f2c.json' //  国界线
   ).then(res => res.json())
     .then(data => {
       const boundaries = new LineLayer({
