@@ -33,6 +33,7 @@ script:
   - yarn lint
   - yarn test
   - yarn build
+  - yarn bundle
 
 notifications:
    webhooks: https://oapi.dingtalk.com/robot/send?access_token=2dacc76d8b1ea8bcdc792b50f103d13efdba9ef53ec0caeb70631bc3add56118

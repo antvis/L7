@@ -13,7 +13,8 @@ const scene = new Scene({
 });
 scene.on('loaded', () => {
   fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/1981b358-28d8-4a2f-9c74-a857d5925ef1.json' //  获取行政区划P噢利用
+    //'https://gw.alipayobjects.com/os/bmw-prod/1981b358-28d8-4a2f-9c74-a857d5925ef1.json' //  获取行政区划P噢利用
+    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json'
   )
     .then(res => res.json())
     .then(data => {
@@ -49,24 +50,6 @@ scene.on('loaded', () => {
       scene.addLayer(chinaPolygonLayer);
       scene.addLayer(layer2);
     });
-
-  fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/ba8fa803-a8c3-4c67-b806-fe1c444546bd.json' //  国界线
-  ).then(res => res.json())
-    .then(data => {
-      const boundaries = new LineLayer({
-        zIndex: 2
-      })
-        .source(data)
-        .color('rgb(93,112,146)')
-        .size(0.6)
-        .style({
-          opacity: 1
-        });
-
-      scene.addLayer(boundaries);
-    });
-
   fetch(
     'https://gw.alipayobjects.com/os/bmw-prod/c4a6aa9d-8923-4193-a695-455fd8f6638c.json' //  标注数据
   ).then(res => res.json())
