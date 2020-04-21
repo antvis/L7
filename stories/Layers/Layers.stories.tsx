@@ -12,7 +12,6 @@ import HeatMapDemo from './components/HeatMap';
 import HeatMap3D_2 from './components/heatmap2';
 import HeatMapDemo3D from './components/heatmap3d';
 import HexagonLayerDemo from './components/hexagon';
-import LightDemo from './components/light';
 import LineLayer from './components/Line';
 import LineAnimate from './components/lineAnimate';
 import PointDemo from './components/Point';
@@ -29,7 +28,6 @@ import TextLayerDemo from './components/Text';
 storiesOf('图层', module)
   .add('点图层', () => <PointDemo />)
   .add('数据更新', () => <DataUpdate />)
-  .add('亮度图', () => <LightDemo />)
   .add('点动画', () => <AnimatePoint />)
   .add('3D点', () => <Point3D />)
   .add('文字', () => <TextLayerDemo />)
