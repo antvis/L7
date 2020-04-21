@@ -25,6 +25,7 @@ import { cloneDeep, isFunction, isString } from 'lodash';
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './';
+import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
 export default class Source extends EventEmitter {
@@ -100,7 +101,7 @@ export default class Source extends EventEmitter {
   }
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
-    let data = this.clusterIndex.getClusters(this.extent, zoom);
+    let data = this.clusterIndex.getClusters(this.extent, Math.floor(zoom));
     this.clusterOptions.zoom = zoom;
     data.forEach((p: any) => {
       if (!p.id) {
@@ -177,13 +178,15 @@ export default class Source extends EventEmitter {
     if (!this.cluster) {
       return;
     }
-    const { radius, minZoom = 0, maxZoom } = this.clusterOptions;
-    this.clusterIndex = new Supercluster({
-      radius,
-      minZoom,
-      maxZoom,
-    });
-    this.clusterIndex.load(this.rawData.features);
+
+    const clusterOptions = this.clusterOptions || {};
+    this.clusterIndex = cluster(this.data, clusterOptions);
+    // this.clusterIndex = new Supercluster({
+    //   radius,
+    //   minZoom,
+    //   maxZoom,
+    // });
+    // this.clusterIndex.load(this.rawData.features);
   }
 
   private init() {

@@ -23,10 +23,12 @@ import ImageLayerDemo from './components/RasterImage';
 import RasterLayerDemo from './components/RasterLayer';
 import TextLayerDemo from './components/Text';
 import GridTest from './components/gridtest';
+import ClusterDemo from './components/cluster';
 
 // @ts-ignore
 storiesOf('图层', module)
   .add('点图层', () => <PointDemo />)
+  .add('聚合图', () => <ClusterDemo />)
   .add('数据更新', () => <DataUpdate />)
   .add('亮度图', () => <LightDemo />)
   .add('点动画', () => <AnimatePoint />)
