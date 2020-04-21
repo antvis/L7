@@ -120,15 +120,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 设置场景配置项
     this.configService.setSceneConfig(this.id, sceneConfig);
 
-    // 校验场景配置项，失败则终止初始化过程
-    // const { valid, errorText } = this.configService.validateSceneConfig(
-    //   this.configService.getSceneConfig(this.id),
-    // );
-    // if (!valid) {
-    //   this.logger.error(errorText || '');
-    //   return;
-    // }
-
     // 初始化 ShaderModule
     this.shaderModuleService.registerBuiltinModules();
 

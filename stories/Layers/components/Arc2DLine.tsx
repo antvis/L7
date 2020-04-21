@@ -1,5 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { Mapbox, GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Arc2DLineDemo extends React.Component {
@@ -26,17 +26,33 @@ export default class Arc2DLineDemo extends React.Component {
     const lineLayer = new LineLayer({
       blend: 'normal',
     })
-      .source(await response.text(), {
-        parser: {
-          type: 'csv',
-          x1: 'lng1',
-          y1: 'lat1',
-          x: 'lng2',
-          y: 'lat2',
+      .source(
+        [
+          {
+            lng1: 84.375,
+            lat1: 47.517200697839414,
+            lng2: 117.94921874999999,
+            lat2: 22.268764039073968,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x1: 'lng1',
+            y1: 'lat1',
+            x: 'lng2',
+            y: 'lat2',
+          },
         },
-      })
-      .size(3)
+      )
+      .size(2)
       .shape('arc')
+      .animate({
+        enable: true,
+        interval: 0.1,
+        trailLength: 0.5,
+        duration: 0.5,
+      })
       .color('#8C1EB2')
       .style({
         opacity: 1,
