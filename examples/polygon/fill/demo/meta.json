@@ -5,9 +5,14 @@
   },
   "demos": [
     {
-      "filename": "polygon.js",
-      "title": "全国地图行政区划",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*IhtZRKYmPuMAAAAAAAAAAABkARQnAQ"
+      "filename": "province.js",
+      "title": "中国地图省级",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*kZuyQ5LlfrAAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "city.js",
+      "title": "中国地图市级",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*GfGdRqWvJfAAAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "usa.js",

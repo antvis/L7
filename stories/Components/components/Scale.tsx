@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Layers, PointLayer, PolygonLayer, Scale, Scene, Zoom } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
