@@ -63,6 +63,7 @@ module.exports = [
       ),
       json(),
       postcss({
+        extract: false,
         plugins: [
           url({ url: 'inline' })
         ]

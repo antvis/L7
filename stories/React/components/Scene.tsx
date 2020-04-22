@@ -21,6 +21,9 @@ export default React.memo(function Map() {
     };
     fetchData();
   }, []);
+  const popupClick = () => {
+    alert('11333');
+  };
   return (
     <>
       <AMapScene
@@ -38,11 +41,16 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
-        <Popup lnglat={[110.1938, 50.25] as number[]}>
-          <p>122222</p>
+        <Popup
+          option={{
+            closeOnClick: false,
+          }}
+          lnglat={[110.1938, 50.25] as number[]}
+        >
+          <p onClick={popupClick}>122222</p>
         </Popup>
         <Marker lnglat={[110.1938, 30.25] as number[]}>
-          <p>122222</p>
+          <p onClick={popupClick}>122222</p>
         </Marker>
         <LineLayer
           key={'2'}

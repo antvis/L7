@@ -2,7 +2,7 @@
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
  * @Last Modified by: lzxue
- * @Last Modified time: 2020-04-20 20:40:33
+ * @Last Modified time: 2020-04-22 19:09:42
  */
 import { Control, DOM, IControlOption, PositionType, Scene } from '@antv/l7';
 import './css/draw.less';

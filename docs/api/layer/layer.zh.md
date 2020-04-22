@@ -48,6 +48,10 @@ scene.addLayer(layer);
 
 layer 初始化完成之后，是否自动缩放到图层范围 {bool } default false
 
+### pickingBuffer
+
+图层拾取缓存机制，如 1px 宽度的线鼠标很难拾取(点击)到, 通过设置该参数可扩大拾取的范围 {number} default 0
+
 ### blend
 
 图层元素混合效果

@@ -270,7 +270,7 @@ export default class TextModel extends BaseModel {
    */
   private initTextFont() {
     const {
-      fontWeight = '800',
+      fontWeight = '400',
       fontFamily = 'sans-serif',
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
