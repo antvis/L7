@@ -62,5 +62,7 @@ export interface IRendererService {
   readPixels(options: IReadPixelsOptions): Uint8Array;
   setBaseState(): void;
   setCustomLayerDefaults(): void;
+  setDirty(flag: boolean): void;
+  getDirty(): boolean;
   destroy(): void;
 }

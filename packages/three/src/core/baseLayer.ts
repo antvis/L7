@@ -82,6 +82,7 @@ export default class ThreeJSLayer
       mixer.update(this.getTime());
     });
     this.rendererService.setBaseState();
+    this.rendererService.setDirty(true);
     return this;
   }
 
@@ -99,6 +100,7 @@ export default class ThreeJSLayer
       mixer.update(this.getTime());
     });
     this.rendererService.setBaseState();
+    this.rendererService.setDirty(true);
     return this;
   }
 
