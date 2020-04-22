@@ -192,6 +192,14 @@ module.exports = {
         }
       },
       {
+        slug: 'draw',
+        icon: 'map',
+        title: {
+          zh: '绘制 组件',
+          en: 'L7 Draw'
+        }
+      },
+      {
         slug: 'point',
         icon: 'point',
         title: {

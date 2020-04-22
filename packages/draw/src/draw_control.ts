@@ -1,8 +1,8 @@
 /*
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-04-09 19:34:41
+ * @Last Modified by: lzxue
+ * @Last Modified time: 2020-04-20 20:40:33
  */
 import { Control, DOM, IControlOption, PositionType, Scene } from '@antv/l7';
 import './css/draw.less';
@@ -90,6 +90,7 @@ export class DrawControl extends Control {
           draw.title,
           'draw-' + type,
           container,
+          'click',
           this.onButtonClick.bind(null, type),
         );
       } else if (type === 'delete' && controls[type] !== false) {
@@ -99,6 +100,7 @@ export class DrawControl extends Control {
           draw.title,
           'draw-' + type,
           container,
+          'mousedown',
           this.onDeleteMode.bind(null, type),
         );
       }
@@ -109,11 +111,12 @@ export class DrawControl extends Control {
     tile: string,
     className: string,
     container: HTMLElement,
+    eventType: string,
     fn: (...arg: any[]) => any,
   ) {
     const link = DOM.create('button', className, container);
     link.title = tile;
-    link.addEventListener('mouseup', fn, false);
+    link.addEventListener(eventType, fn, false);
     return link;
   }
 
