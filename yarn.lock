@@ -202,6 +202,19 @@
   resolved "https://registry.npmjs.org/@antv/gl-matrix/-/gl-matrix-2.7.1.tgz#acb8e37f7ab3df01345aba4372d7942be42eba14"
   integrity sha512-oOWcVNlpELIKi9x+Mm1Vwbz8pXfkbJKykoCIOJ/dNK79hSIANbpXJ5d3Rra9/wZqK6MC961B7sybFhPlLraT3Q==
 
+"@antv/l7@2.1.15":
+  version "2.1.15"
+  resolved "https://registry.npmjs.org/@antv/l7/-/l7-2.1.15.tgz#27121b8f22838b5ad17114a1b2895389b6b0a800"
+  integrity sha512-goR3M1e2YXXEo5jp/QYd1VF9rKoAy/DlKrJ5KLE/jhzuqgw9Kp0iHSOaGE+M7tFIyL8hCoG8JXHmAK1tVyeaIw==
+  dependencies:
+    "@antv/l7-component" "^2.1.15"
+    "@antv/l7-core" "^2.1.15"
+    "@antv/l7-layers" "^2.1.15"
+    "@antv/l7-maps" "^2.1.15"
+    "@antv/l7-scene" "^2.1.15"
+    "@antv/l7-utils" "^2.1.15"
+    "@babel/runtime" "^7.7.7"
+
 "@antv/scale@~0.1.1":
   version "0.1.5"
   resolved "https://registry.npmjs.org/@antv/scale/-/scale-0.1.5.tgz#243266e8b9047cf64b2fdfc40f9834cf0846496e"

@@ -38,6 +38,7 @@ export default class ReglRendererService implements IRendererService {
   private $container: HTMLDivElement | null;
   private width: number;
   private height: number;
+  private isDirty: boolean;
 
   public async init(
     $container: HTMLDivElement,
@@ -209,6 +210,14 @@ export default class ReglRendererService implements IRendererService {
   public setCustomLayerDefaults() {
     const gl = this.getGLContext();
     gl.disable(gl.CULL_FACE);
+  }
+
+  public setDirty(flag: boolean): void {
+    this.isDirty = flag;
+  }
+
+  public getDirty(): boolean {
+    return this.isDirty;
   }
 
   public destroy = () => {
