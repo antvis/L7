@@ -24,7 +24,9 @@ order: 4
 ```jsx
 import { Popup } from '@antv/l7-react';
 
-<Popup option={{}} lnglat={[]} />;
+<Popup option={{
+  closeOnClick: false;// 如果Popup内需要响应Dom事件需设置成false,否则事件不生效
+}} lnglat={[]} />;
 ```
 
 [popup 使用完整 demo](../../../examples/react/covid#covid_bubble)

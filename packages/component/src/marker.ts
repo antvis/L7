@@ -221,18 +221,20 @@ export default class Marker extends EventEmitter {
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
     const bounds = this.mapsService.getBounds();
-    // if (
-    //   lng < bounds[0][0] ||
-    //   lng > bounds[1][0] ||
-    //   lat < bounds[0][1] ||
-    //   lat > bounds[1][1]
-    // ) {
-    //   if (element) {
-    //     element.style.display = 'none';
-    //   }
+    const zoom = this.mapsService.getZoom();
+    if (
+      (lng < bounds[0][0] ||
+        lng > bounds[1][0] ||
+        lat < bounds[0][1] ||
+        lat > bounds[1][1]) &&
+      zoom > 3
+    ) {
+      if (element) {
+        element.style.display = 'none';
+      }
 
-    //   return;
-    // }
+      return;
+    }
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
       element.style.display = 'block';

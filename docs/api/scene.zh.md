@@ -275,6 +275,22 @@ scene.setRotation(rotation);
 
 参数： `rotation` {number}
 
+### setMapStatus
+
+设置地图交互状态
+
+参数 `IStatusOptions`
+
+```ts
+IStatusOptions {
+  dragEnable: boolean; //是否允许地图拖拽
+  keyboardEnable: boolean; // 是否允许形键盘事件
+  doubleClickZoom: boolean; // 双击放大
+  zoomEnable: boolean; // 滚动缩放
+  rotateEnable: boolean; // 旋转
+}
+```
+
 ### zoomIn
 
 地图放大一级
@@ -359,7 +375,9 @@ scene.removeLayer(layer);
 
 - 参数 type `png|jpg` 默认 png
 
-scene.exportMap('png')
+```javascript
+scene.exportMap('png');
+```
 
 ## 事件
 
@@ -429,3 +447,15 @@ scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
 ```
+
+## FAQ
+
+### 禁止地图交互
+
+1. 初始化的时候可以在 map 配置项设置
+
+- 高德地图可查看 https://lbs.amap.com/api/javascript-api/reference/map
+- mapbox https://docs.mapbox.com/mapbox-gl-js/api/#map
+
+2. 加载完成后设置
+   调用 scene 的 [setMapStatus](./scene/#setMapStatus) 方法
