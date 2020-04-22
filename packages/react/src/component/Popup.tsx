@@ -11,7 +11,7 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { SceneContext } from './SceneContext';
 interface IPopupProps {
-  option?: IPopupOption;
+  option?: Partial<IPopupOption>;
   lnglat: number[];
   children?: React.ReactNode;
 }
