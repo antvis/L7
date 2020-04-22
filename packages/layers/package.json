@@ -39,6 +39,7 @@
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "merge-json-schemas": "1.0.0",
+    "polyline-miter-util": "^1.0.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

@@ -202,6 +202,19 @@
   resolved "https://registry.npmjs.org/@antv/gl-matrix/-/gl-matrix-2.7.1.tgz#acb8e37f7ab3df01345aba4372d7942be42eba14"
   integrity sha512-oOWcVNlpELIKi9x+Mm1Vwbz8pXfkbJKykoCIOJ/dNK79hSIANbpXJ5d3Rra9/wZqK6MC961B7sybFhPlLraT3Q==
 
+"@antv/l7@2.1.15":
+  version "2.1.15"
+  resolved "https://registry.npmjs.org/@antv/l7/-/l7-2.1.15.tgz#27121b8f22838b5ad17114a1b2895389b6b0a800"
+  integrity sha512-goR3M1e2YXXEo5jp/QYd1VF9rKoAy/DlKrJ5KLE/jhzuqgw9Kp0iHSOaGE+M7tFIyL8hCoG8JXHmAK1tVyeaIw==
+  dependencies:
+    "@antv/l7-component" "^2.1.15"
+    "@antv/l7-core" "^2.1.15"
+    "@antv/l7-layers" "^2.1.15"
+    "@antv/l7-maps" "^2.1.15"
+    "@antv/l7-scene" "^2.1.15"
+    "@antv/l7-utils" "^2.1.15"
+    "@babel/runtime" "^7.7.7"
+
 "@antv/scale@~0.1.1":
   version "0.1.5"
   resolved "https://registry.npmjs.org/@antv/scale/-/scale-0.1.5.tgz#243266e8b9047cf64b2fdfc40f9834cf0846496e"
@@ -12647,7 +12660,7 @@ gl-matrix@^3.0.0, gl-matrix@^3.1.0:
   resolved "https://registry.npmjs.org/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
   integrity sha512-COb7LDz+SXaHtl/h4LeaFcNdJdAQSDeVqjiIihSXNrkWObZLhDI4hIkZC11Aeqp7bcE72clzB0BnDXr2SmslRA==
 
-gl-vec2@^1.3.0:
+gl-vec2@^1.0.0, gl-vec2@^1.3.0:
   version "1.3.0"
   resolved "https://registry.npmjs.org/gl-vec2/-/gl-vec2-1.3.0.tgz#83d472ed46034de8e09cbc857123fb6c81c51199"
   integrity sha512-YiqaAuNsheWmUV0Sa8k94kBB0D6RWjwZztyO+trEYS8KzJ6OQB/4686gdrf59wld4hHFIvaxynO3nRxpk1Ij/A==
@@ -19002,6 +19015,13 @@ polished@^3.3.1:
   dependencies:
     "@babel/runtime" "^7.8.7"
 
+polyline-miter-util@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/polyline-miter-util/-/polyline-miter-util-1.0.1.tgz#b693f2389ea0ded36a6bcf5ecd2ece4b6917d957"
+  integrity sha1-tpPyOJ6g3tNqa89ezS7OS2kX2Vc=
+  dependencies:
+    gl-vec2 "^1.0.0"
+
 popper.js@^1.14.4, popper.js@^1.14.7:
   version "1.16.1"
   resolved "https://registry.npmjs.org/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
@@ -24041,6 +24061,11 @@ threads@^1.3.1:
     observable-fns "^0.5.1"
   optionalDependencies:
     tiny-worker ">= 2"
+
+three@0.115.0, three@^0.115.0:
+  version "0.115.0"
+  resolved "https://registry.npmjs.org/three/-/three-0.115.0.tgz#540d800c381b9da2334c024f0fbe4d23f84eb05e"
+  integrity sha512-mAV2Ky3RdcbdSbR9capI+tKLvRldWYxd4151PZTT/o7+U2jh9Is3a4KmnYwzyUAhB2ZA3pXSgCd2DOY4Tj5kow==
 
 throat@^4.0.0:
   version "4.1.0"

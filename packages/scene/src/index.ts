@@ -103,6 +103,9 @@ class Scene
 
     this.initControl();
   }
+  public getServiceContainer(): Container {
+    return this.container;
+  }
   public getSize(): [number, number] {
     return this.mapService.getSize();
   }
@@ -131,6 +134,18 @@ class Scene
 
   public exportMap(type?: 'png' | 'jpg'): string {
     return this.sceneService.exportPng(type);
+  }
+
+  public registerRenderService(render: any) {
+    if (this.sceneService.loaded) {
+      const renderSerivce = new render(this);
+      renderSerivce.init();
+    } else {
+      this.on('loaded', () => {
+        const renderSerivce = new render(this);
+        renderSerivce.init();
+      });
+    }
   }
 
   public get map() {

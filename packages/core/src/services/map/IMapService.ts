@@ -10,7 +10,11 @@ export interface IPoint {
   x: number;
   y: number;
 }
-
+export interface IMercator {
+  x: number;
+  y: number;
+  z: number;
+}
 export interface IStatusOptions {
   showIndoorMap: boolean;
   resizeEnable: boolean;
@@ -73,6 +77,14 @@ export interface IMapService<RawMap = {}> {
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
+  lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
+  getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number],
+    origin: IMercator,
+  ): number[];
   exportMap(type: 'jpg' | 'png'): string;
 }
 

@@ -2,6 +2,7 @@ import { RasterLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 // @ts-ignore
+// tslint:disable-next-line:no-submodule-imports
 import * as GeoTIFF from 'geotiff';
 import * as React from 'react';
 import { colorScales } from '../lib/colorscales';
