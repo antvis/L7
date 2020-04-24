@@ -1,0 +1,59 @@
+{
+  "name": "@antv/l7-district",
+  "version": "2.2.0",
+  "description": "L7 district moudules",
+  "keywords": [],
+  "author": "thinkinggis <lzx199065@gmail.com>",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/l7-district.js",
+  "types": "es/index.d.ts",
+  "sideEffects": true,
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antvis/L7.git"
+  },
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "run-p build:*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:cdn": "node_modules/.bin/rollup -c",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@antv/l7": "^2.2.0",
+    "@babel/runtime": "^7.7.7",
+    "@turf/turf": "^5.1.6",
+    "@turf/circle": "^6.0.1",
+    "@turf/distance": "^6.0.1",
+    "@turf/helpers": "^6.1.4",
+    "@turf/midpoint": "^5.1.5",
+    "lodash": "^4.6.2"
+  },
+  "peerDependencies": {
+    "@antv/l7": "^2.1.15"
+  },
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+  "homepage": "https://github.com/antvis/L7#readme",
+  "devDependencies": {
+    "postcss": "^7.0.27",
+    "postcss-url": "^8.0.0",
+    "rollup": "^2.3.3",
+    "rollup-plugin-less": "^1.1.2"
+  }
+}

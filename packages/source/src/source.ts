@@ -137,11 +137,18 @@ export default class Source extends EventEmitter {
   }
   public getFeatureById(id: number): unknown {
     const { type = 'geojson' } = this.parser;
-    if (type === 'geojson' && !this.cluster && this.transforms.length === 0) {
-      //  TODO： 聚合图层返回聚合和后的数据
-      return id < this.originData.features.length
-        ? this.originData.features[id]
-        : 'null';
+    if (type === 'geojson' && !this.cluster) {
+      const feature =
+        id < this.originData.features.length
+          ? this.originData.features[id]
+          : 'null';
+      if (this.transforms.length !== 0) {
+        const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
+          return dataItem._id === id;
+        });
+        feature.properties = item;
+      }
+      return feature;
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
     }
