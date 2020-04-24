@@ -21,7 +21,7 @@ void main() {
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
   gl_FragColor.a *= u_opacity;
   if(u_line_type == LineTypeDash) {
-    gl_FragColor.a *= blur  * (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
+    gl_FragColor.a *= (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
   }
 
   if(u_aimate.x == Animate) {
