@@ -1,31 +1,34 @@
 import { ScaleTypeName, StyleAttributeOption } from '@antv/l7';
+export interface ILabelOption {
+  enable: boolean;
+  color: string;
+  field: string;
+  size: number;
+  stroke: string;
+  strokeWidth: number;
+  textAllowOverlap: boolean;
+  opacity: number;
+}
 export interface IDistrictLayerOption {
   zIndex: number;
   data?: Array<{ [key: string]: any }>;
-  depth: 0 | 1 | 2;
-  label: {
-    enable: boolean;
-    color: string;
-    field: string;
-    size: number;
-    stroke: string;
-    strokeWidth: number;
-    textAllowOverlap: boolean;
-    opacity: number;
-  };
-  fill: {
+  depth: 0 | 1 | 2 | 3;
+  label: Partial<ILabelOption>;
+  fill: Partial<{
     scale: ScaleTypeName | null;
     field: string | null;
     values: StyleAttributeOption;
-  };
+  }>;
+  autoFit: boolean;
   stroke: string;
   strokeWidth: number;
   coastlineStroke: string;
   coastlineWidth: number;
   nationalStroke: string;
   nationalWidth: number;
-  popup: {
+  popup: Partial<{
     enable: boolean;
     triggerEvent: 'mousemove' | 'click';
-  };
+    Html: (properties: any) => string;
+  }>;
 }

@@ -20,7 +20,7 @@ export default class Country extends React.Component {
         style: 'blank',
         zoom: 3,
         minZoom: 3,
-        maxZoom: 4,
+        maxZoom: 10,
       }),
     });
     scene.on('loaded', () => {
@@ -266,11 +266,19 @@ export default class Country extends React.Component {
       ];
       const Layer = new CountryLayer(scene, {
         data,
+        depth: 1,
         fill: {
           scale: 'quantile',
           field: 'confirm',
-          values: ['#feedde','#fdd0a2','#fdae6b','#fd8d3c','#e6550d','#a63603']
-        }
+          values: [
+            '#feedde',
+            '#fdd0a2',
+            '#fdae6b',
+            '#fd8d3c',
+            '#e6550d',
+            '#a63603',
+          ],
+        },
       });
     });
     this.scene = scene;
