@@ -68,6 +68,10 @@ export class DrawControl extends Control {
     const { controls } = this.controlOption as IDrawControlOption;
     const container = DOM.create('div', controlClass) as HTMLElement;
     this.addControls(controls, container);
+
+    // 代理每个绘制组件的事件
+
+    this.addControlEvent();
     // 监听组件 选中, 编辑
     return container;
   }
@@ -79,6 +83,32 @@ export class DrawControl extends Control {
       }
     }
   }
+
+  public getDraw(type: string): DrawFeature | null {
+    const { controls } = this.controlOption as IDrawControlOption;
+    if (controls[type]) {
+      return this.draw[type];
+    }
+    return null;
+  }
+
+  public getAllData() {
+    const res: { [key: string]: any } = {};
+    for (const draw in this.draw) {
+      if (this.draw[draw]) {
+        res[draw] = this.draw[draw].getData();
+      }
+    }
+    return res;
+  }
+  public removeAllData() {
+    for (const draw in this.draw) {
+      if (this.draw[draw]) {
+        this.draw[draw].removeAllData();
+      }
+    }
+  }
+
   private addControls(controls: IControls, container: HTMLElement) {
     for (const type in controls) {
       if (DrawType[type] && controls[type] !== false) {
@@ -107,6 +137,22 @@ export class DrawControl extends Control {
     }
   }
 
+  private addControlEvent() {
+    for (const draw in this.draw) {
+      if (this.draw[draw]) {
+        ['draw.create', 'draw.update', 'draw.delete'].forEach(
+          (type: string) => {
+            this.draw[draw].on('draw.create', (feature) => {
+              this.emit(type, {
+                drawType: draw,
+                feature,
+              });
+            });
+          },
+        );
+      }
+    }
+  }
   private createButton(
     tile: string,
     className: string,

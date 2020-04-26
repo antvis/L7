@@ -1,4 +1,6 @@
 import { Feature, FeatureCollection } from '@turf/helpers';
+// tslint:disable-next-line:no-submodule-imports
+import cloneDeep from 'lodash/cloneDeep';
 export default class DrawSource {
   public data: FeatureCollection;
   constructor(data?: FeatureCollection) {
@@ -9,12 +11,29 @@ export default class DrawSource {
     this.data.features.push(feature);
   }
 
+  public getData() {
+    const features = cloneDeep(this.data.features).map((feature: Feature) => {
+      feature.properties = {
+        id: feature?.properties?.id,
+        type: feature?.properties?.type,
+      };
+      return feature;
+    });
+    return {
+      type: 'FeatureCollection',
+      features,
+    };
+  }
+
   public getFeature(id: string): Feature | undefined {
     const result = this.data.features.find((fe: Feature) => {
       return fe?.properties?.id === id;
     });
 
     return result;
+  }
+  public removeAllFeatures() {
+    this.data = this.getDefaultData();
   }
   public removeFeature(feature: Feature) {
     const index = this.getFeatureIndex(feature);

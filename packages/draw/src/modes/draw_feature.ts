@@ -63,7 +63,6 @@ export default abstract class DrawFeature extends DrawMode {
   public setCurrentFeature(feature: Feature) {
     this.currentFeature = feature as Feature;
     // @ts-ignore
-    // @ts-ignore
     this.pointFeatures = feature.properties.pointFeatures;
 
     this.source.setFeatureActive(feature);
@@ -78,6 +77,20 @@ export default abstract class DrawFeature extends DrawMode {
   public enableLayer() {
     this.drawLayer.enableSelect();
   }
+
+  public getData() {
+    return this.source.getData();
+  }
+
+  public removeAllData() {
+    this.source.removeAllFeatures();
+    this.currentFeature = null;
+    this.drawLayer.hide();
+    this.drawVertexLayer.hide();
+    this.normalLayer.hide();
+    this.hideOtherLayer();
+  }
+
   public clear() {
     this.drawLayer.hide();
     this.drawVertexLayer.hide();

@@ -23,7 +23,32 @@ export default class Circle extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      const drawPolygon = new DrawPolygon(scene);
+      const drawPolygon = new DrawPolygon(scene, {
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Polygon',
+                coordinates: [
+                  [
+                    [44.29687499999999, 55.3791104480105],
+                    [28.4765625, 47.754097979680026],
+                    [27.0703125, 38.8225909761771],
+                    [42.890625, 33.43144133557529],
+                    [73.47656249999999, 37.43997405227057],
+                    [85.4296875, 47.989921667414194],
+                    [79.1015625, 60.58696734225869],
+                    [44.29687499999999, 55.3791104480105],
+                  ],
+                ],
+              },
+            },
+          ],
+        },
+      });
       drawPolygon.enable();
     });
   }
