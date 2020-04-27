@@ -35,8 +35,7 @@ const control = new L7.Draw.DrawControl(scene, option);
 
 #### scene
 
-scene 对象, 绘制控件需要传入scene实例
-
+scene 对象, 绘制控件需要传入 scene 实例
 
 #### options
 

@@ -11,7 +11,7 @@ export default class DrawSource {
     this.data.features.push(feature);
   }
 
-  public getData() {
+  public getData(): FeatureCollection {
     const features = cloneDeep(this.data.features).map((feature: Feature) => {
       feature.properties = {
         id: feature?.properties?.id,
