@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,8 +25,8 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.2.1",
-    "@antv/l7-utils": "^2.2.1",
+    "@antv/l7-core": "2.2.2",
+    "@antv/l7-utils": "2.2.2",
     "@babel/runtime": "^7.7.7",
     "@types/amap-js-api": "^1.4.6",
     "gl-matrix": "^3.1.0",
