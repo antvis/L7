@@ -158,7 +158,7 @@ drawPoint.enable();
 开始编辑，绘制完成之后会自动结束。
 
 ```javascript
-draw.enable()
+draw.enable();
 ```
 
 #### disable
@@ -166,7 +166,7 @@ draw.enable()
 结束编辑
 
 ```javascript
-draw.enable()
+draw.enable();
 ```
 
 ### 事件

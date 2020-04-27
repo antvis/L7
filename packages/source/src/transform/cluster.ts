@@ -39,7 +39,9 @@ export function cluster(
         type: 'Point',
         coordinates: item.coordinates,
       },
-      properties: {},
+      properties: {
+        ...item,
+      },
     };
   });
   pointIndex.load(geojson.features);

@@ -2,6 +2,7 @@
 title: Draw UI Component
 order: 2
 ---
+
 地图绘制组件，支持点、线、面， 圆、矩形、的绘制编辑。
 
 # 使用
@@ -104,28 +105,27 @@ scene.removeControl(control);
 
 ```javascript
 const pointDraw = drawcontrol.get('point');
-
 ```
 
 ### getAllData()
 
-获取每个Draw 实例绘制的结果数据
+获取每个 Draw 实例绘制的结果数据
 
 返回数据格式如下
 
 ```javascript
 {
-  point: []
-  line: []
+  point: [];
+  line: [];
 }
 ```
 
 ### 事件
 
-drawControl 的事件类型和每个Draw的事件一致，如果在 drawControl 监听事件会为每个draw增加事件监听。
+drawControl 的事件类型和每个 Draw 的事件一致，如果在 drawControl 监听事件会为每个 draw 增加事件监听。
 
- - drawType: Draw 类型
- - feature: 对应的数据
+- drawType: Draw 类型
+- feature: 对应的数据
 
 #### draw.create
 
@@ -140,14 +140,12 @@ drawControl 的事件类型和每个Draw的事件一致，如果在 drawControl 
 图形更新时触发该事件，图形的平移，顶点的编辑
 
 ```javascript
-  drawControl.on('draw.delete',(e) => {
-
-  })
+drawControl.on('draw.delete', (e) => {});
 ```
 
 ### style
 
-style 配置项可以按需配置，内部会和默认值进行merge
+style 配置项可以按需配置，内部会和默认值进行 merge
 
 - active 绘制过程中高亮颜色
 - normal 正常显示状态
@@ -245,6 +243,3 @@ const style = {
   },
 };
 ```
-
-
-

@@ -65,6 +65,20 @@ layer.source(data);
 ```javascript
 layer.setData(data);
 ```
+### 方法
+
+#### getClustersLeaves(cluster_id)
+聚合图使用，获取聚合节点的原始数据
+
+参数： 
+ id 聚合节点的 cluster_id
+
+```javascript
+ layer.on('click', (e) => {
+     console.log(source.getClustersLeaves(e.feature.cluster_id));
+  });
+```
+
 
 #### JSON
 
