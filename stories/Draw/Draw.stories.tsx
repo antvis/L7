@@ -6,7 +6,6 @@ import DrawCircle from './Components/DrawCircle';
 import DrawControl from './Components/DrawControl';
 import Line from './Components/DrawLine';
 import Point from './Components/DrawPoint';
-import DrawPolygon from './Components/DrawPolygon';
 import DrawRect from './Components/DrawRect';
 import Polygon from './Components/Polygon';
 
@@ -18,5 +17,4 @@ storiesOf('绘制', module)
   .add('路径', () => <Line />, {})
   .add('绘制组件', () => <DrawControl />, {})
   .add('绘制圆', () => <DrawCircle />, {})
-  .add('高德地图', () => <AMapDraw />, {})
-  .add('绘制面', () => <DrawPolygon />, {});
+  .add('高德地图', () => <AMapDraw />, {});

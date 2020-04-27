@@ -29,6 +29,11 @@ export default class DrawPolygon extends DrawFeature {
     this.type = 'polygon';
     this.drawMidVertexLayer = new DrawMidVertex(this);
     this.on(DrawEvent.MODE_CHANGE, this.addMidLayerEvent);
+    if (this.options.data) {
+      this.initData();
+      this.normalLayer.update(this.source.data);
+      this.normalLayer.enableSelect();
+    }
   }
   public enable() {
     super.enable();
@@ -116,9 +121,7 @@ export default class DrawPolygon extends DrawFeature {
     this.endPoint = lngLat;
     this.points.push(lngLat);
     const feature = this.createFeature(this.points);
-    const properties = feature.properties as { pointFeatures: Feature[] };
     const pointfeatures = createPoint([this.points[0], this.endPoint]);
-    // this.pointFeatures = pointfeatures.features;
     this.drawLayer.update(featureCollection([feature]));
     this.drawVertexLayer.update(featureCollection(pointfeatures.features));
     this.onDraw();
@@ -155,13 +158,17 @@ export default class DrawPolygon extends DrawFeature {
     };
     this.setCurrentFeature(newFeature[0]);
   }
-  protected createFeature(points: ILngLat[]): Feature {
-    const pointfeatures = createPoint(this.points);
+  protected createFeature(
+    points: ILngLat[],
+    id?: string,
+    active: boolean = true,
+  ): Feature {
+    const pointfeatures = createPoint(points);
     this.pointFeatures = pointfeatures.features;
     const feature = createPolygon(points, {
-      id: this.getUniqId(),
+      id: id || this.getUniqId(),
       type: 'polygon',
-      active: true,
+      active,
       pointFeatures: this.pointFeatures,
     });
     this.setCurrentFeature(feature as Feature);
@@ -251,6 +258,26 @@ export default class DrawPolygon extends DrawFeature {
     this.drawLayer.updateData(
       featureCollection([this.currentFeature as Feature]),
     );
+  }
+
+  private initData() {
+    const features: Feature[] = [];
+    this.source.data.features.forEach((feature) => {
+      if (feature.geometry.type === 'Polygon') {
+        const points = (feature.geometry.coordinates[0] as Position[]).map(
+          (coord) => {
+            return {
+              lng: coord[0],
+              lat: coord[1],
+            };
+          },
+        );
+        features.push(
+          this.createFeature(points.slice(1), feature?.properties?.id, false),
+        );
+      }
+    });
+    this.source.data.features = features;
   }
 }
 /**

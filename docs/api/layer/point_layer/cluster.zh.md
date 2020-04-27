@@ -52,6 +52,18 @@ layer.source(pointsData, {
         });
 ```
 
+### 方法
+获取聚合节点的原始数据,通过Source的 getClustersLeaves方法
+
+
+
+```javascript
+ const source = layer.getSource();
+ source.getClustersLeaves(id)
+   layer.on('click', (e) => {
+     console.log(source.getClustersLeaves(e.feature.cluster_id));
+  });
+```
 
 ### 完整示例
 
