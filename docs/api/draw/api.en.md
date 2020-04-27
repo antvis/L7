@@ -1,6 +1,6 @@
 ---
 title: Draw Component
-order: 2
+order: 3
 ---
 
 地图绘制组件，支持点、线、面， 圆、矩形、的绘制编辑。
