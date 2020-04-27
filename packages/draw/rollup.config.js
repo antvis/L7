@@ -25,7 +25,7 @@ export default {
     commonjs({
       namedExports: {
         eventemitter3: [ 'EventEmitter' ],
-        lodash: [ 'merge' ]
+        lodash: [ 'merge', 'clone' ]
       }
     }),
     buble({
