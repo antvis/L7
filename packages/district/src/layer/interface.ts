@@ -22,6 +22,13 @@ export interface IDistrictLayerOption {
   autoFit: boolean;
   stroke: string;
   strokeWidth: number;
+  provinceStroke: string;
+  cityStroke: string;
+  provinceStrokeWidth: number;
+  cityStrokeWidth: number;
+  countyStroke: string;
+  countyStrokeWidth: number;
+
   coastlineStroke: string;
   coastlineWidth: number;
   nationalStroke: string;

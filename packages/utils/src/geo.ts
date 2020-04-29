@@ -169,7 +169,7 @@ export function aProjectFlat(lnglat: number[]) {
   d = 0.5;
   x = scale * (a * x + b);
   y = scale * (c * y + d);
-  return [parseInt(x.toString(), 10), parseInt(y.toString(), 10)];
+  return [Math.floor(x), Math.floor(y)];
 }
 export function unProjectFlat(px: number[]): [number, number] {
   const a = 0.5 / Math.PI;

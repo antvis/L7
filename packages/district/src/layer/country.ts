@@ -13,40 +13,85 @@ import { IDistrictLayerOption } from './interface';
 export default class CountryLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
-    this.loadData().then(
-      ([fillData, fillLine, fillLabel, borld1, borld2, island]) => {
-        this.addNationBorder(borld1, borld2, island);
-        this.addFillLayer(fillData);
-        this.addFillLine(fillLine || fillData);
-        if (fillLabel && this.options.label?.enable) {
-          this.addLableLayer(fillLabel);
-        }
-      },
-    );
+    const { depth } = this.options;
+    this.loadData().then(([fillData, fillLabel]) => {
+      this.addFillLayer(fillData);
+      if (fillLabel && this.options.label?.enable) {
+        this.addLableLayer(fillLabel);
+      }
+    });
+    const countryConfig = DataConfig.country.CHN[depth];
+
+    this.addProvinceLine(countryConfig.provinceLine);
+
+    if (depth === 2 * 1) {
+      this.addCityBorder(countryConfig.cityLine);
+    }
+    if (depth === 3 * 1) {
+      this.addCountryBorder(countryConfig.countryLine);
+    }
   }
+  // 国界,省界
+  protected async addProvinceLine(cfg: any) {
+    const lineData = await this.fetchData(cfg);
+    const border1 = lineData.features.filter((feature: any) => {
+      const type = feature.properties.type;
+      return type === '1' || type === '4';
+    });
+    const borderFc = {
+      type: 'FeatureCollection',
+      features: border1,
+    };
+    const nationalBorder = lineData.features.filter((feature: any) => {
+      const type = feature.properties.type;
+      return type !== '1' && type !== '4';
+    });
+    const nationalFc = {
+      type: 'FeatureCollection',
+      features: nationalBorder,
+    };
+    this.addNationBorder(nationalFc, borderFc);
+  }
+
+  // 国界,省界
+  protected addFillLine(lineData: any) {
+    const border1 = lineData.features.filter((feature: any) => {
+      const type = feature.properties.type;
+      return type === '1' || type === '4';
+    });
+    const borderFc = {
+      type: 'FeatureCollection',
+      features: border1,
+    };
+    const nationalBorder = lineData.features.filter((feature: any) => {
+      const type = feature.properties.type;
+      return type !== '1' && type !== '4';
+    });
+    const nationalFc = {
+      type: 'FeatureCollection',
+      features: nationalBorder,
+    };
+    this.addNationBorder(nationalFc, borderFc);
+  }
+
   private async loadData() {
     const { depth } = this.options;
     const countryConfig = DataConfig.country.CHN[depth];
-    const bordConfig = DataConfig.country.CHN;
     const fillData = await this.fetchData(countryConfig.fill);
-    const fillLine = countryConfig.line
-      ? await this.fetchData(countryConfig.line)
-      : null;
     const fillLabel = countryConfig.label
       ? await this.fetchData(countryConfig.label)
       : null;
-    const borld1 = await this.fetchData(bordConfig.nationalBoundaries);
-    const borld2 = await this.fetchData(bordConfig.nationalBoundaries2);
-    const island = await this.fetchData(bordConfig.island);
-    return [fillData, fillLine, fillLabel, borld1, borld2, island];
+    return [fillData, fillLabel];
   }
-  // 添加行政区边界
-  private addNationBorder(boundaries: any, boundaries2: any, island: any) {
+  // 省级行政区划
+  private async addNationBorder(boundaries: any, boundaries2: any) {
     const {
       nationalStroke,
       nationalWidth,
       coastlineStroke,
       coastlineWidth,
+      stroke,
+      strokeWidth,
       zIndex,
     } = this.options;
     // 添加国界线
@@ -54,12 +99,28 @@ export default class CountryLayer extends BaseLayer {
       zIndex: zIndex + 1,
     })
       .source(boundaries)
-      .size('type', (v: number) => {
-        return v * 1 === 0 ? coastlineWidth : nationalWidth;
+      .size('type', (v: string) => {
+        if (v === '3') {
+          return strokeWidth;
+        } else if (v === '2') {
+          return coastlineWidth;
+        } else if (v === '0') {
+          return nationalWidth;
+        } else {
+          return '#fff';
+        }
       })
       .shape('line')
-      .color('type', (v: number) => {
-        return v * 1 === 0 ? coastlineStroke : nationalStroke;
+      .color('type', (v: string) => {
+        if (v === '3') {
+          return stroke;
+        } else if (v === '2') {
+          return coastlineStroke;
+        } else if (v === '0') {
+          return nationalStroke;
+        } else {
+          return '#fff';
+        }
       });
     // 添加未定国界
     const lineLayer2 = new LineLayer({
@@ -74,27 +135,42 @@ export default class CountryLayer extends BaseLayer {
         dashArray: [2, 2],
       });
 
-    // 添加岛屿填充
-    const fillLayer1 = new PolygonLayer()
-      .source(island)
-      .color(coastlineStroke)
-      .shape('fill')
-      .style({
-        opacity: 1,
-      });
-    // 添加岛屿填充
-    const fillLayer2 = new LineLayer()
-      .source(island)
-      .color(coastlineStroke)
-      .shape('line')
-      .size(1)
-      .style({
-        opacity: 1,
-      });
     this.scene.addLayer(lineLayer);
     this.scene.addLayer(lineLayer2);
-    this.scene.addLayer(fillLayer1);
-    this.scene.addLayer(fillLayer2);
-    this.layers.push(lineLayer, lineLayer2, fillLayer1, fillLayer2);
+    this.layers.push(lineLayer, lineLayer2);
+  }
+  // 升级边界
+  private async addCityBorder(cfg: any) {
+    const border1 = await this.fetchData(cfg);
+    const { cityStroke, cityStrokeWidth } = this.options;
+    const cityline = new LineLayer({
+      zIndex: 2,
+    })
+      .source(border1)
+      .color(cityStroke)
+      .size(cityStrokeWidth)
+      .style({
+        opacity: 0.5,
+      });
+    this.scene.addLayer(cityline);
+    this.layers.push(cityline);
+  }
+
+  // 县级边界
+  private async addCountryBorder(cfg: any) {
+    // const bordConfig = DataConfig.country.CHN[3];
+    const border1 = await this.fetchData(cfg);
+    const { countyStrokeWidth, countyStroke } = this.options;
+    const cityline = new LineLayer({
+      zIndex: 2,
+    })
+      .source(border1)
+      .color(countyStroke)
+      .size(countyStrokeWidth)
+      .style({
+        opacity: 0.5,
+      });
+    this.scene.addLayer(cityline);
+    this.layers.push(cityline);
   }
 }

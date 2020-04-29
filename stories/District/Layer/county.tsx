@@ -1,5 +1,5 @@
 import { Scene } from '@antv/l7';
-import { CountryLayer } from '@antv/l7-district';
+import { CountyLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -24,9 +24,10 @@ export default class Country extends React.Component {
       }),
     });
     scene.on('loaded', () => {
-      const Layer = new CountryLayer(scene, {
+      const Layer = new CountyLayer(scene, {
         data: [],
-        depth: 1,
+        adcode: ['110101', '110102'],
+        depth: 3,
         fill: {
           field: 'NAME_CHN',
           values: [

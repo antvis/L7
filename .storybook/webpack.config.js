@@ -1,3 +1,4 @@
+const path = require("path");
 module.exports = ({ config }) => {
 
   // config.module.rules.push({
@@ -28,8 +29,11 @@ module.exports = ({ config }) => {
     // ],
     enforce: 'pre',
   },{
-    test: /\.stories\.css?$/,
-    use: ['style-loader', 'css-loader'],
+    test: /.css?$/,
+    include: [
+      path.resolve(__dirname, "../src"),
+    ],
+    use:  ["style-loader", "css-loader", "sass-loader"]
   },
   {
     test: /\.stories\.svg$/,

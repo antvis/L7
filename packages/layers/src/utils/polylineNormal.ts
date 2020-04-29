@@ -16,10 +16,10 @@ export function computeMiter(
 export function computeNormal(out: vec2, dir: vec2) {
   return vec2.set(out, -dir[1], dir[0]);
 }
-export function direction(out: vec2, a: vec2, b: vec2) {
-  const a1 = aProjectFlat([a[0], a[1]]) as [number, number];
-  const b1 = aProjectFlat([b[0], b[1]]) as [number, number];
-  vec2.sub(out, a1, b1);
+export function direction(out: vec2, a: [number, number], b: [number, number]) {
+  // const a1 = aProjectFlat([a[0], a[1]]) as [number, number];
+  // const b1 = aProjectFlat([b[0], b[1]]) as [number, number];
+  vec2.sub(out, a, b);
   vec2.normalize(out, out);
   return out;
 }
@@ -47,9 +47,7 @@ function addNext(
   miters.push(length);
 }
 
-function lineSegmentDistance(end: vec2, start: vec2) {
-  const a1 = aProjectFlat([start[0], start[1]]);
-  const b1 = aProjectFlat([end[0], end[1]]);
+function lineSegmentDistance(b1: vec2, a1: vec2) {
   const dx = a1[0] - b1[0];
   const dy = a1[1] - b1[1];
   return Math.sqrt(dx * dx + dy * dy);
@@ -110,11 +108,14 @@ export default function(
       }
     }
     let d = 0;
+    const flatCur = aProjectFlat([cur[0], cur[1]]) as [number, number];
+    const flatLast = aProjectFlat([last[0], last[1]]) as [number, number];
     if (isDash) {
-      const lineDistance = lineSegmentDistance(cur, last);
+      const lineDistance = lineSegmentDistance(flatCur, flatLast);
       d = lineDistance + attrDistance[attrDistance.length - 1];
     }
-    direction(lineA, cur, last);
+
+    direction(lineA, flatCur, flatLast);
     if (!lineNormal) {
       lineNormal = vec2.create();
       computeNormal(lineNormal, lineA);
@@ -136,8 +137,9 @@ export default function(
       attrIndex.push(index + 1, index + 2, index + 3);
       count += 2;
     } else {
+      const flatNext = aProjectFlat([next[0], next[1]]) as [number, number];
       // get unit dir of next line
-      direction(lineB, next, cur);
+      direction(lineB, flatNext, flatCur);
 
       // stores tangent & miter
       let miterLen = computeMiter(

@@ -1,8 +1,10 @@
 import { Scene } from '@antv/l7';
-import { CountryLayer } from '@antv/l7-district';
+import { ProvinceLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import 'antd/dist/antd.css';
+import { Select } from 'antd';
 import * as React from 'react';
-
+const { Option } = Select;
 export default class Country extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -24,8 +26,9 @@ export default class Country extends React.Component {
       }),
     });
     scene.on('loaded', () => {
-      const Layer = new CountryLayer(scene, {
+      const Layer = new ProvinceLayer(scene, {
         data: [],
+        adcode: ['440000', '110000'],
         depth: 1,
         fill: {
           field: 'NAME_CHN',
@@ -51,16 +54,23 @@ export default class Country extends React.Component {
 
   public render() {
     return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
+      <>
+        <Select defaultValue="lucy" style={{ width: 120 }}>
+          <Option value="jack">Jack</Option>
+          <Option value="lucy">Lucy</Option>
+          <Option value="Yiminghe">yiminghe</Option>
+        </Select>
+        <div
+          id="map"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+        />
+      </>
     );
   }
 }

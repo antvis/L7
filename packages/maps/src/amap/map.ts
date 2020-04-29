@@ -331,7 +331,7 @@ export default class AMapService
         amapLoaded = true;
         plugin.push('Map3D');
         this.loadAMapScript(
-          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=${plugin.join(
+          `//webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=${plugin.join(
             ',',
           )}`,
         ).then(() => {

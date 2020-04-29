@@ -32,7 +32,7 @@ export default class Country extends React.Component {
         nationalWidth: 0.5,
         fill: {
           // scale: 'quantile',
-          field: 'name',
+          field: 'NAME_CHN',
           values: [
             '#feedde',
             '#fdd0a2',
@@ -41,6 +41,12 @@ export default class Country extends React.Component {
             '#e6550d',
             '#a63603',
           ],
+        },
+        popup: {
+          enable: true,
+          Html: (props) => {
+            return `<span>${props.NAME_CHN}</span>`;
+          },
         },
       });
     });

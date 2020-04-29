@@ -1,11 +1,4 @@
-import {
-  ILayer,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Scene,
-  StyleAttrField,
-} from '@antv/l7';
+import { Scene } from '@antv/l7';
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
 import { DataConfig } from '../config';
@@ -18,33 +11,33 @@ export interface IProvinceLayerOption extends IDistrictLayerOption {
 export default class CityLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IProvinceLayerOption> = {}) {
     super(scene, option);
-    this.addCityFillLayer();
-    this.addCityLineLayer();
+    this.addCountyFillLayer();
+    this.addCountyLineLayer();
   }
   protected getdefaultOption(): IProvinceLayerOption {
     const config = super.getdefaultOption();
     return merge({}, config, {
-      adcode: ['110000'],
+      adcode: ['110100'],
       depth: 3,
     });
   }
-  private async addCityFillLayer() {
+  private async addCountyFillLayer() {
     const { depth, adcode } = this.options as IProvinceLayerOption;
     const countryConfig = DataConfig.country.CHN[depth];
     const fillData = await this.fetchData(countryConfig.fill);
     const data = fillData.features.filter((fe: any) => {
-      const code = fe.properties.adcode_cit;
+      const code = fe.properties.adcode;
       return adcode.indexOf('' + code) !== -1;
     });
     this.addFillLayer({ type: 'FeatureCollection', features: data });
   }
 
-  private async addCityLineLayer() {
+  private async addCountyLineLayer() {
     const { depth, adcode } = this.options as IProvinceLayerOption;
     const countryConfig = DataConfig.country.CHN[depth];
     const fillData = await this.fetchData(countryConfig.line);
     const data = fillData.features.filter((fe: any) => {
-      const code = fe.properties.adcode_cit;
+      const code = fe.properties.adcode;
       return adcode.indexOf(code) !== -1 || adcode.indexOf('' + code) !== -1;
     });
     this.addFillLine({ type: 'FeatureCollection', features: data });

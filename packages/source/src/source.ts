@@ -56,7 +56,7 @@ export default class Source extends EventEmitter {
 
   constructor(data: any, cfg?: ISourceCFG) {
     super();
-    this.rawData = cloneDeep(data);
+    // this.rawData = cloneDeep(data);
     this.originData = data;
     if (cfg) {
       if (cfg.parser) {
@@ -89,7 +89,7 @@ export default class Source extends EventEmitter {
 
   public setData(data: any) {
     this.rawData = data;
-    this.originData = cloneDeep(data);
+    this.originData = data;
     this.init();
     this.emit('update');
   }

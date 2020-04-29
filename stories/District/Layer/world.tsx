@@ -27,7 +27,7 @@ export default class Country extends React.Component {
       const Layer = new WorldLayer(scene, {
         data: [],
         fill: {
-          field: 'Short_Name_ZH',
+          field: 'NAME_CHN',
           values: [
             '#feedde',
             '#fdd0a2',
@@ -39,8 +39,15 @@ export default class Country extends React.Component {
         },
         stroke: '#ccc',
         label: {
+          enable: false,
           textAllowOverlap: false,
           field: 'Short_Name_ZH',
+        },
+        popup: {
+          enable: false,
+          Html: (props) => {
+            return `<span>${props.Short_Name_ZH}</span>`;
+          },
         },
       });
     });
