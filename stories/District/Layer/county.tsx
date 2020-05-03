@@ -1,17 +1,28 @@
 import { Scene } from '@antv/l7';
 import { CountyLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { Cascader } from 'antd';
 import * as React from 'react';
-
 export default class Country extends React.Component {
+  public state = {
+    options: [],
+  };
   // @ts-ignore
   private scene: Scene;
+  private countyLayer: CountyLayer;
 
   public componentWillUnmount() {
     this.scene.destroy();
   }
 
   public async componentDidMount() {
+    const res = await fetch(
+      'https://gw.alipayobjects.com/os/bmw-prod/04de56cc-5998-4f7e-9ad3-e87e9ac5fd39.json',
+    );
+    const options = await res.json();
+    this.setState({
+      options,
+    });
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
@@ -24,10 +35,13 @@ export default class Country extends React.Component {
       }),
     });
     scene.on('loaded', () => {
-      const Layer = new CountyLayer(scene, {
+      this.countyLayer = new CountyLayer(scene, {
         data: [],
-        adcode: ['110101', '110102'],
+        adcode: ['110101'],
         depth: 3,
+        label: {
+          field: 'NAME_CHN',
+        },
         fill: {
           field: 'NAME_CHN',
           values: [
@@ -52,16 +66,35 @@ export default class Country extends React.Component {
 
   public render() {
     return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
+      <>
+        <Cascader
+          style={{
+            width: 200,
+            zIndex: 2,
+            position: 'absolute',
+            right: '10px',
+            top: '10px',
+          }}
+          options={this.state.options}
+          defaultValue={['110000', '110100', '110101']}
+          onChange={this.handleProvinceChange}
+          placeholder="Please select"
+        />
+        <div
+          id="map"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+        />
+      </>
     );
   }
+
+  private handleProvinceChange = (value: string[]) => {
+    this.countyLayer.updateDistrict([value[2]]);
+  };
 }

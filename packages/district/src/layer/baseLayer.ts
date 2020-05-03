@@ -17,6 +17,8 @@ import Pbf from 'pbf';
 import { IDistrictLayerOption } from './interface';
 export default class BaseLayer {
   public fillLayer: ILayer;
+  public lineLayer: ILayer;
+  public labelLayer: ILayer;
   protected scene: Scene;
   protected options: IDistrictLayerOption;
   protected layers: ILayer[] = [];
@@ -134,9 +136,9 @@ export default class BaseLayer {
   }
 
   protected addFillLine(provinceLine: any) {
-    const { stroke, strokeWidth } = this.options;
+    const { stroke, strokeWidth, zIndex } = this.options;
     const layer2 = new LineLayer({
-      zIndex: 2,
+      zIndex: zIndex + 1,
     })
       .source(provinceLine)
       .color(stroke)
@@ -146,9 +148,10 @@ export default class BaseLayer {
       });
     this.scene.addLayer(layer2);
     this.layers.push(layer2);
+    this.lineLayer = layer2;
   }
 
-  protected addLableLayer(labelData: any, type: string = 'json') {
+  protected addLabelLayer(labelData: any, type: string = 'json') {
     const { label, zIndex } = this.options;
     const labelLayer = new PointLayer({
       zIndex: zIndex + 2,
@@ -170,6 +173,7 @@ export default class BaseLayer {
       });
     this.scene.addLayer(labelLayer);
     this.layers.push(labelLayer);
+    this.labelLayer = labelLayer;
   }
 
   protected addPopup() {

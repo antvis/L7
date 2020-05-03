@@ -17,7 +17,7 @@ export default class CountryLayer extends BaseLayer {
     this.loadData().then(([fillData, fillLabel]) => {
       this.addFillLayer(fillData);
       if (fillLabel && this.options.label?.enable) {
-        this.addLableLayer(fillLabel);
+        this.addLabelLayer(fillLabel);
       }
     });
     const countryConfig = DataConfig.country.CHN[depth];

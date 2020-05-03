@@ -9,6 +9,7 @@ export interface ILabelOption {
   textAllowOverlap: boolean;
   opacity: number;
 }
+export type adcodeType = string[] | string | number | number[];
 export interface IDistrictLayerOption {
   zIndex: number;
   data?: Array<{ [key: string]: any }>;

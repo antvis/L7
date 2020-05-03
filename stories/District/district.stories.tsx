@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/react';
+require('./../assets/css/antd.css');
 import * as React from 'react';
 import City from './Layer/city';
 import Country from './Layer/Country';

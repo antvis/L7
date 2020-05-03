@@ -17,7 +17,7 @@ export default class WorldLayer extends BaseLayer {
       this.addFillLayer(fillData);
       this.addFillLine(lineData);
       if (this.options.label?.enable) {
-        this.addLableLayer(fillLabel, 'geojson');
+        this.addLabelLayer(fillLabel, 'geojson');
       }
     });
   }
