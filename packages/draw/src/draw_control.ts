@@ -142,7 +142,7 @@ export class DrawControl extends Control {
       if (this.draw[draw]) {
         ['draw.create', 'draw.update', 'draw.delete'].forEach(
           (type: string) => {
-            this.draw[draw].on('draw.create', (feature) => {
+            this.draw[draw].on(type, (feature) => {
               this.emit(type, {
                 drawType: draw,
                 feature,
