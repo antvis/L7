@@ -21225,10 +21225,10 @@ regjsparser@^0.6.4:
   dependencies:
     jsesc "~0.5.0"
 
-regl@1.3.13:
-  version "1.3.13"
-  resolved "https://registry.npmjs.org/regl/-/regl-1.3.13.tgz#c376bfa6477995a9be9cd21495a0c9beb9b2f3af"
-  integrity sha512-TTiCabJbbUykCL4otjqOvKqDFJhvJOT7xB51JxcDeSHGrEJl1zz4RthPcoOogqfuR3ECN4Te790DfHCXzli5WQ==
+regl@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/regl/-/regl-1.4.2.tgz#6593c38868b569ea68410364048360367a21e813"
+  integrity sha512-wc/kE6kGmGfQk3G9f1Pai4TZ0K1pWxkD1Jeaj6CxJwEiB1jwHgEpqD84G2t7F0DmNXfQh7IUnoG1opxoONJ7Xg==
 
 rehype-react@^5.0.0:
   version "5.0.1"
