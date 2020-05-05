@@ -76,7 +76,7 @@
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-electron": "^0.1.11",
-    "jest-styled-components": "^6.2.1",
+    "jest-styled-components": "^7.0.2",
     "lerna": "^3.16.4",
     "lint-staged": "^9.2.4",
     "load-styles": "^2.0.0",
