@@ -91,7 +91,7 @@
     "react-docgen-typescript-loader": "^3.1.0",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.0.1",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.2",
     "rollup": "^1.27.14",
     "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-babel": "^4.3.3",
