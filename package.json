@@ -72,7 +72,7 @@
     "gh-pages": "^2.1.1",
     "gl": "^4.4.0",
     "glsl-minifier": "^0.0.13",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^4.3.0",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-electron": "^0.1.11",
