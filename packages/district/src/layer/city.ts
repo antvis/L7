@@ -16,8 +16,8 @@ export interface IProvinceLayerOption extends IDistrictLayerOption {
   adcode: string[];
 }
 export default class CityLayer extends ProvinceLayer {
-  protected getdefaultOption(): IProvinceLayerOption {
-    const config = super.getdefaultOption();
+  protected getDefaultOption(): IProvinceLayerOption {
+    const config = super.getDefaultOption();
     return merge({}, config, {
       adcode: ['110000'],
       depth: 3,

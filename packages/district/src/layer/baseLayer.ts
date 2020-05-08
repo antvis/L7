@@ -26,7 +26,7 @@ export default class BaseLayer {
 
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     this.scene = scene;
-    this.options = merge(this.getdefaultOption(), option);
+    this.options = merge(this.getDefaultOption(), option);
   }
 
   public destroy() {
@@ -49,7 +49,7 @@ export default class BaseLayer {
       return (await fetch(data.url)).json();
     }
   }
-  protected getdefaultOption(): IDistrictLayerOption {
+  protected getDefaultOption(): IDistrictLayerOption {
     return {
       zIndex: 0,
       depth: 1,

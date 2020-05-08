@@ -26,12 +26,17 @@ export default class ProvinceLayer extends BaseLayer {
   }
   // 通过adcode 更新
   public updateDistrict(adcode: adcodeType) {
+    if (!adcode && Array.isArray(adcode) && adcode.length === 0) {
+      this.hide();
+      return;
+    }
     const fillData = this.filterData(this.fillData, adcode);
     const lineData = this.filterData(this.lineData, adcode);
     const labelData = this.filterLabelData(this.labelData, adcode);
     this.fillLayer.setData(fillData);
     this.lineLayer.setData(lineData);
     this.labelLayer.setData(labelData);
+    this.show();
   }
 
   // 更新渲染数据
@@ -40,11 +45,32 @@ export default class ProvinceLayer extends BaseLayer {
     return 'update data';
   }
 
-  protected getdefaultOption(): IProvinceLayerOption {
-    const config = super.getdefaultOption();
+  protected getDefaultOption(): IProvinceLayerOption {
+    const config = super.getDefaultOption();
     return merge({}, config, {
       adcode: ['110000'],
       depth: 2,
+      label: {
+        field: 'NAME_CHN',
+        textAllowOverlap: false,
+      },
+      fill: {
+        field: 'NAME_CHN',
+        values: [
+          '#feedde',
+          '#fdd0a2',
+          '#fdae6b',
+          '#fd8d3c',
+          '#e6550d',
+          '#a63603',
+        ],
+      },
+      popup: {
+        enable: true,
+        Html: (props: any) => {
+          return `<span>${props.NAME_CHN}</span>`;
+        },
+      },
     });
   }
 

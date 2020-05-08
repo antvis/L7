@@ -139,7 +139,7 @@ export default class CountryLayer extends BaseLayer {
     this.scene.addLayer(lineLayer2);
     this.layers.push(lineLayer, lineLayer2);
   }
-  // 升级边界
+  // 省级边界
   private async addCityBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
     const { cityStroke, cityStrokeWidth } = this.options;

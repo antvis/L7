@@ -7,7 +7,7 @@ let DataConfig: { [key: string]: any } = {
       url:
         '//gw.alipayobjects.com/os/bmw-prod/21bdf832-1dfc-4cae-92d1-aa8d156df40f.bin',
     },
-    provinceLine: {
+    line: {
       type: 'pbf',
       url:
         '//gw.alipayobjects.com/os/bmw-prod/76914518-e04c-42c9-8c4b-1ae71aabb024.bin',
