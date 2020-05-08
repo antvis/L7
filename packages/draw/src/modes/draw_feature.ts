@@ -92,6 +92,8 @@ export default abstract class DrawFeature extends DrawMode {
   }
 
   public clear() {
+    this.drawLayer.disableSelect();
+    this.drawLayer.disableEdit();
     this.drawLayer.hide();
     this.drawVertexLayer.hide();
     this.hideOtherLayer();
@@ -197,6 +199,8 @@ export default abstract class DrawFeature extends DrawMode {
         break;
       case DrawModes.STATIC:
         this.source.updateFeature(this.currentFeature as Feature);
+        this.selectMode.disable();
+        this.editMode.disable();
         this.source.clearFeatureActive();
         this.drawVertexLayer.hide();
         this.drawVertexLayer.disableEdit();
@@ -218,7 +222,9 @@ export default abstract class DrawFeature extends DrawMode {
   };
 
   private onDrawMove = (delta: ILngLat) => {
-    this.moveFeature(delta);
+    if (this.drawStatus === 'DrawSelected') {
+      this.moveFeature(delta);
+    }
   };
 
   private onDrawEdit = (endpoint: ILngLat) => {
@@ -231,7 +237,9 @@ export default abstract class DrawFeature extends DrawMode {
       this.source.removeFeature(this.currentFeature as Feature);
       this.normalLayer.update(this.source.data);
       this.drawLayer.disableSelect();
+      this.selectMode.disable();
       this.currentFeature = null;
+      // this.drawStatus = 'DrawDelete';
     }
   };
 
