@@ -17,7 +17,8 @@ export type DrawStatus =
   | 'DrawSelected'
   | 'DrawEdit'
   | 'DrawFinish'
-  | 'EditFinish';
+  | 'EditFinish'
+  | 'DrawDelete';
 
 let DrawFeatureId = 0;
 
