@@ -48,7 +48,7 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-plugin-transform-node-env-inline": "^0.4.3",
     "babel-plugin-transform-postcss": "^0.3.0",
-    "babel-preset-gatsby": "^0.2.22",
+    "babel-preset-gatsby": "^0.4.1",
     "babel-template": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",
     "commitizen": "^4.0.3",
