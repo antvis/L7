@@ -27,7 +27,7 @@
     "@antv/l7-source": "2.2.3",
     "@antv/l7-utils": "2.2.3",
     "@babel/runtime": "^7.7.7",
-    "@mapbox/martini": "^0.1.0",
+    "@mapbox/martini": "^0.2.0",
     "@turf/meta": "^6.0.2",
     "d3-array": "1",
     "d3-color": "^1.4.0",
