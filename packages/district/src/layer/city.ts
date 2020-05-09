@@ -13,7 +13,7 @@ import { adcodeType, IDistrictLayerOption } from './interface';
 import ProvinceLayer from './province';
 
 export interface IProvinceLayerOption extends IDistrictLayerOption {
-  adcode: string[];
+  adcode: adcodeType;
 }
 export default class CityLayer extends ProvinceLayer {
   protected getDefaultOption(): IProvinceLayerOption {

@@ -1,6 +1,6 @@
 ---
-title: Draw Component
-order: 3
+title: 绘制 UI 组件
+order: 2
 ---
 
 地图绘制组件，支持点、线、面， 圆、矩形、的绘制编辑。
@@ -26,6 +26,11 @@ import { DrawControl } from '@antv/l7-draw';
 
 ```javascript
 const control = new DrawControl(scene, option);
+```
+
+```javascript
+// CDN 引用
+const control = new L7.Draw.DrawControl(scene, option);
 ```
 
 #### scene
@@ -92,84 +97,45 @@ scene.addControl(control);
 scene.removeControl(control);
 ```
 
-### Draw Type
+## 方法
 
-可以不依赖 Draw UI 组件，独立的使用每一个 Draw
+### getDraw(type)
 
-#### DrawCircle
+获取 draw 实例
 
-绘制圆形
+参数： type 绘制实例 `point|line|polygon|rect| circle`
 
 ```javascript
-import { DrawCircle } from '@antv/l7-draw';
-const drawCircle = new DrawCircle(scene);
-drawCircle.enable();
+const pointDraw = drawcontrol.get('point');
 ```
 
-#### DrawRect
+### getAllData()
 
-绘制四边形
+获取每个 Draw 实例绘制的结果数据
+
+返回数据格式如下
 
 ```javascript
-import { DrawRect } from '@antv/l7-draw';
-const drawRect = new DrawRect(scene);
-drawRect.enable();
+{
+  point: []; // geojson数据格式
+  line: [];
+}
 ```
 
-#### DrawLine
+### removeAllData()
 
-绘制路径
-
-```javascript
-import { DrawLine } from '@antv/l7-draw';
-const drawLine = new DrawLine(scene);
-drawLine.enable();
-```
-
-#### DrawPoint
-
-绘制点
+移除绘制的的所有数据
 
 ```javascript
-import { DrawPoint } from '@antv/l7-draw';
-const drawPoint = new DrawPoint(scene);
-drawPoint.enable();
-```
-
-#### DrawPolygon
-
-绘制多边形
-
-```javascript
-import { DrawPolygon } from '@antv/l7-draw';
-const drawPoint = new DrawPolygon(scene);
-drawPoint.enable();
-```
-
-### 配置项 DrawOption
-
-- editEnable boolean 是否允许编辑
-- selectEnable boolean 是否允许选中
-
-### 方法
-
-#### enable
-
-开始编辑，绘制完成之后会自动结束。
-
-```javascript
-draw.enable();
-```
-
-#### disable
-
-结束编辑
-
-```javascript
-draw.enable();
+drawcontrol.removeAllData();
 ```
 
 ### 事件
+
+drawControl 的事件类型和每个 Draw 的事件一致，如果在 drawControl 监听事件会为每个 draw 增加事件监听。
+
+- drawType: Draw 类型
+- feature: 对应的数据
 
 #### draw.create
 
@@ -183,12 +149,19 @@ draw.enable();
 
 图形更新时触发该事件，图形的平移，顶点的编辑
 
+```javascript
+drawControl.on('draw.delete', (e) => {});
+```
+
 ### style
+
+style 配置项可以按需配置，内部会和默认值进行 merge
 
 - active 绘制过程中高亮颜色
 - normal 正常显示状态
 
 ```javascript
+// 默认配置参数
 const style = {
   active: {
     point: {

@@ -63,7 +63,6 @@ export default abstract class DrawFeature extends DrawMode {
   public setCurrentFeature(feature: Feature) {
     this.currentFeature = feature as Feature;
     // @ts-ignore
-    // @ts-ignore
     this.pointFeatures = feature.properties.pointFeatures;
 
     this.source.setFeatureActive(feature);
@@ -78,7 +77,23 @@ export default abstract class DrawFeature extends DrawMode {
   public enableLayer() {
     this.drawLayer.enableSelect();
   }
+
+  public getData(): FeatureCollection {
+    return this.source.getData();
+  }
+
+  public removeAllData(): void {
+    this.source.removeAllFeatures();
+    this.currentFeature = null;
+    this.drawLayer.hide();
+    this.drawVertexLayer.hide();
+    this.normalLayer.hide();
+    this.hideOtherLayer();
+  }
+
   public clear() {
+    this.drawLayer.disableSelect();
+    this.drawLayer.disableEdit();
     this.drawLayer.hide();
     this.drawVertexLayer.hide();
     this.hideOtherLayer();
@@ -184,6 +199,8 @@ export default abstract class DrawFeature extends DrawMode {
         break;
       case DrawModes.STATIC:
         this.source.updateFeature(this.currentFeature as Feature);
+        this.selectMode.disable();
+        this.editMode.disable();
         this.source.clearFeatureActive();
         this.drawVertexLayer.hide();
         this.drawVertexLayer.disableEdit();
@@ -205,7 +222,9 @@ export default abstract class DrawFeature extends DrawMode {
   };
 
   private onDrawMove = (delta: ILngLat) => {
-    this.moveFeature(delta);
+    if (this.drawStatus === 'DrawSelected') {
+      this.moveFeature(delta);
+    }
   };
 
   private onDrawEdit = (endpoint: ILngLat) => {
@@ -218,7 +237,9 @@ export default abstract class DrawFeature extends DrawMode {
       this.source.removeFeature(this.currentFeature as Feature);
       this.normalLayer.update(this.source.data);
       this.drawLayer.disableSelect();
+      this.selectMode.disable();
       this.currentFeature = null;
+      // this.drawStatus = 'DrawDelete';
     }
   };
 

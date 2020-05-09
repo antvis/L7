@@ -20,6 +20,7 @@ export function renderFeature(fe: FeatureCollection, style: any): ILayer[] {
 function drawPoint(fe: FeatureCollection, style: any) {
   const layer = new PointLayer({
     zIndex: 2,
+    pickingBuffer: 3,
   })
     .source(fe)
     .shape('circle')

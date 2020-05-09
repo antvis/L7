@@ -60,6 +60,7 @@ export default class DrawPoint extends DrawFeature {
   protected createFeature(p: ILngLat): Feature {
     const feature = point([p.lng, p.lat], {
       id: this.getUniqId(),
+      type: 'point',
       pointFeatures: [point([p.lng, p.lat])],
     });
     this.setCurrentFeature(feature as Feature);

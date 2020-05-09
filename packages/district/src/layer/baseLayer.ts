@@ -8,6 +8,7 @@ import {
   Scene,
   StyleAttrField,
 } from '@antv/l7';
+import { EventEmitter } from 'eventemitter3';
 // @ts-ignore
 import geobuf from 'geobuf';
 // tslint:disable-next-line: no-submodule-imports
@@ -15,7 +16,7 @@ import merge from 'lodash/merge';
 // @ts-ignore
 import Pbf from 'pbf';
 import { IDistrictLayerOption } from './interface';
-export default class BaseLayer {
+export default class BaseLayer extends EventEmitter {
   public fillLayer: ILayer;
   public lineLayer: ILayer;
   public labelLayer: ILayer;
@@ -25,8 +26,9 @@ export default class BaseLayer {
   private popup: IPopup;
 
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
+    super();
     this.scene = scene;
-    this.options = merge(this.getDefaultOption(), option);
+    this.options = merge({}, this.getDefaultOption(), option);
   }
 
   public destroy() {
@@ -53,6 +55,7 @@ export default class BaseLayer {
     return {
       zIndex: 0,
       depth: 1,
+      adcode: [],
       label: {
         enable: true,
         color: '#000',
@@ -133,6 +136,7 @@ export default class BaseLayer {
     if (popup.enable) {
       this.addPopup();
     }
+    this.emit('loaded');
   }
 
   protected addFillLine(provinceLine: any) {

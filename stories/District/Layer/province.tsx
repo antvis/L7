@@ -171,7 +171,7 @@ export default class Country extends React.Component {
       const { province } = this.state;
       this.provinceLayer = new ProvinceLayer(scene, {
         data: [],
-        adcode: [province],
+        adcode: [],
         depth: 3,
         label: {
           field: 'NAME_CHN',

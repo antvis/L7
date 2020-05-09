@@ -9,17 +9,29 @@ export default class DrillDownLayer {
   private cityLayer: CityLayer;
   private countryLayer: CountryLayer;
   constructor(scene: Scene, option: Partial<IDistrictLayerOption>) {
+    const cfg = this.getDefaultOption();
     this.countryLayer = new CountryLayer(scene, option);
-    this.provinceLayer = new ProvinceLayer(scene);
+    this.provinceLayer = new ProvinceLayer(scene, cfg.city);
+    // this.cityLayer = new CityLayer(scene);
+    // this.provinceLayer.hide();
+    // this.cityLayer.hide();
+    this.countryLayer.on('loaded', () => {
+      this.addProvinceEvent();
+    });
   }
   public getDefaultOption() {
     return {
       province: {},
-      city: {},
-      county: {},
+      city: {
+        adcode: '',
+      },
+      county: {
+        adcode: [],
+      },
     };
   }
   public addProvinceEvent() {
-    return 'event';
+    // this.countryLayer.fillLayer.on('click', (e: any) => {
+    // });
   }
 }

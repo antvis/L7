@@ -1,8 +1,12 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.1.15",
+  "version": "2.2.3",
   "description": "three for L7 ",
-  "keywords": ["3D", "L7", "three"],
+  "keywords": [
+    "3D",
+    "L7",
+    "three"
+  ],
   "author": "thinkinggis <lzx199065@gmail.com>",
   "license": "ISC",
   "main": "lib/index.js",
@@ -39,12 +43,16 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7": "2.2.0",
+    "@antv/l7": "2.2.3",
     "@babel/runtime": "^7.7.7",
     "rollup": "^2.3.3",
     "rollup-plugin-less": "^1.1.2"
   },
   "devDependencies": {
     "three": "^0.115.0"
+  },
+  "gitHead": "532ade40831b35b04a677b351d092e54c00613d8",
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -22,7 +22,12 @@ export default {
         url({ url: 'inline' })
       ]
     }),
-    commonjs(),
+    commonjs({
+      namedExports: {
+        eventemitter3: [ 'EventEmitter' ],
+        lodash: [ 'merge', 'clone' ]
+      }
+    }),
     buble({
       transforms: { generator: false }
     }),

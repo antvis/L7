@@ -36,6 +36,9 @@ export default class Circle extends React.Component {
         },
       });
       scene.on('click', () => {});
+      drawControl.on('draw.update', (e: any) => {
+        console.log('update', e);
+      });
       scene.addControl(drawControl);
     });
   }
