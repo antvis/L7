@@ -1,4 +1,4 @@
-import BaseLayer from '../layer/baseLayer';
+import BaseLayer from '../src/layer/baseLayer';
 describe('baseLayer', () => {
   it('set option', () => {
     const option = {

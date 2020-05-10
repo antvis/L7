@@ -34,7 +34,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@antv/l7": "^2.2.0",
+    "@antv/l7": "^2.2.3",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
     "@turf/distance": "^6.0.1",
@@ -47,7 +47,7 @@
     "pbf": "^3.2.1"
   },
   "peerDependencies": {
-    "@antv/l7": "^2.1.15"
+    "@antv/l7": "^2.2.3"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
