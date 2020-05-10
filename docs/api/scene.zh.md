@@ -379,6 +379,14 @@ scene.removeLayer(layer);
 scene.exportMap('png');
 ```
 
+### destroy
+
+scene 销毁方法，离开页面，或者不需要使用地图可以调用
+
+```
+scene.destroy();
+```
+
 ## 事件
 
 ### on

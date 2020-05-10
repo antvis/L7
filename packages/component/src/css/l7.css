@@ -457,11 +457,11 @@
   display: block;
   padding: 8px;
   }
-.l7-control-layers label input[type="radio"], input[type="checkbox"]{
+  .l7-control-layers label input[type="radio"],
+  .l7-control-layers label input[type="checkbox"] {
   width: 14px;
   height: 14px;
   margin: 0;
-  vertical-align: middle;
 }
 .l7-control-layers-separator {
 	height: 0;
