@@ -31,7 +31,7 @@
     "@turf/meta": "^6.0.2",
     "d3-array": "1",
     "d3-color": "^1.4.0",
-    "d3-scale": "2",
+    "d3-scale": "3",
     "earcut": "^2.2.1",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
