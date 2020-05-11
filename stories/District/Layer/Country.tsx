@@ -19,7 +19,7 @@ export default class Country extends React.Component {
         pitch: 0,
         style: 'blank',
         zoom: 3,
-        minZoom: 3,
+        minZoom: 0,
         maxZoom: 10,
       }),
     });

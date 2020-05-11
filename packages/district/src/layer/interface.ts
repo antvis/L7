@@ -35,6 +35,8 @@ export interface IDistrictLayerOption {
   coastlineWidth: number;
   nationalStroke: string;
   nationalWidth: number;
+  chinaNationalStroke: string;
+  chinaNationalWidth: number;
   popup: Partial<{
     enable: boolean;
     triggerEvent: 'mousemove' | 'click';

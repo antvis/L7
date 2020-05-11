@@ -684,6 +684,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     const source = this.getSource();
     const extent = source.extent;
+    const isValid = extent.some((v) => Math.abs(v) === Infinity);
+    if (isValid) {
+      return this;
+    }
     this.mapService.fitBounds(
       [
         [extent[0], extent[1]],

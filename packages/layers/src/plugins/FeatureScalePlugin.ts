@@ -61,6 +61,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
+      if (dataArray.length === 0) {
+        return;
+      }
       this.caculateScalesForAttributes(attributes || [], dataArray);
     });
 
@@ -69,6 +72,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
+      if (dataArray.length === 0) {
+        return;
+      }
       this.caculateScalesForAttributes(attributes || [], dataArray);
       return true;
     });
@@ -78,6 +84,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
         const { dataArray } = layer.getSource().data;
+        if (dataArray.length === 0) {
+          return;
+        }
         const attributesToRescale = attributes.filter(
           (attribute) => attribute.needRescale,
         );
