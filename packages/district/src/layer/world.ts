@@ -74,7 +74,18 @@ export default class WorldLayer extends BaseLayer {
       zIndex: zIndex + 1,
     })
       .source(boundaries)
-      .size(0.6)
+      // .size(0.6)
+      .size('type', (v: string) => {
+        if (v === '0') {
+          return chinaNationalWidth; // 中国国界线
+        } else if (v === '2' || v === '9') {
+          return coastlineWidth; // 中国海岸线
+        } else if (v === '7') {
+          return nationalWidth; // 国外国界
+        } else {
+          return nationalWidth;
+        }
+      })
       .color('type', (v: string) => {
         if (v === '0') {
           return chinaNationalStroke; // 中国国界线

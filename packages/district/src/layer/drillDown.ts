@@ -42,8 +42,9 @@ export default class DrillDownLayer {
     this.countryLayer.fillLayer.on('click', (e: any) => {
       this.countryLayer.hide();
       // 更新市级行政区划
-      this.provinceLayer.updateDistrict([e.feature.properties.adcode]);
-      this.drillState = 'city';
+      // this.provinceLayer.updateDistrict([e.feature.properties.adcode]);
+      // this.drillState = 'city';
+      this.drillDown(e.feature.properties.adcode);
     });
   }
 
@@ -52,14 +53,16 @@ export default class DrillDownLayer {
       this.drillUp();
     });
     this.provinceLayer.fillLayer.on('click', (e: any) => {
-      this.provinceLayer.hide();
-      let adcode = e.feature.properties.adcode.toFixed(0);
-      if (adcode.substr(2, 2) === '00') {
-        adcode = adcode.substr(0, 2) + '0100';
-      }
-      // 更新县级行政区划
-      this.cityLayer.updateDistrict([adcode]);
-      this.drillState = 'county';
+      // this.provinceLayer.hide();
+      // const adcode = e.feature.properties.adcode.toFixed(0);
+      this.drillDown(e.feature.properties.adcode);
+      // if (adcode.substr(2, 2) === '00') {
+      //   adcode = adcode.substr(0, 2) + '0100';
+      // }
+      // // 更新县级行政区划
+      // this.cityLayer.updateDistrict([adcode]);
+      // this.drillState = 'county';
+      // this.showCityView(adcode);
     });
   }
 
@@ -75,15 +78,30 @@ export default class DrillDownLayer {
     this.cityLayer.destroy();
   }
 
-  public showProvinceView() {
+  public showProvinceView(
+    adcode: adcodeType,
+    newData: Array<{ [key: string]: any }> = [],
+    joinByField?: [string, string],
+  ) {
     this.provinceLayer.show();
+    this.provinceLayer.updateDistrict(adcode, newData, joinByField);
     this.provinceLayer.fillLayer.fitBounds();
     this.cityLayer.hide();
     this.drillState = 'city';
   }
-  public showCityView() {
-    this.countryLayer.show();
-    this.countryLayer.fillLayer.fitBounds();
+  public showCityView(
+    code: adcodeType,
+    newData: Array<{ [key: string]: any }> = [],
+    joinByField?: [string, string],
+  ) {
+    this.cityLayer.show();
+    let adcode = `${code}`;
+    if (adcode.substr(2, 2) === '00') {
+      adcode = adcode.substr(0, 2) + '0100';
+    }
+    // 更新县级行政区划
+    this.cityLayer.updateDistrict(adcode, newData, joinByField);
+    this.cityLayer.fillLayer.fitBounds();
     this.provinceLayer.hide();
     this.drillState = 'county';
   }
@@ -107,13 +125,17 @@ export default class DrillDownLayer {
         break;
     }
   }
-  public DrillDown(adcode: adcodeType, data: any) {
+  public drillDown(
+    adcode: adcodeType,
+    newData: Array<{ [key: string]: any }> = [],
+    joinByField?: [string, string],
+  ) {
     switch (this.drillState) {
       case 'province':
-        this.showProvinceView();
+        this.showProvinceView(adcode);
         break;
       case 'city':
-        this.showCityView();
+        this.showCityView(adcode);
         break;
     }
   }

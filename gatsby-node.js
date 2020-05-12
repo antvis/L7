@@ -20,6 +20,7 @@ exports.onCreateWebpackConfig = ({ getConfig }) => {
     '@antv/l7-source': path.resolve(__dirname, 'packages/source/src'),
     '@antv/l7-utils': path.resolve(__dirname, 'packages/utils/src'),
     '@antv/l7-react': path.resolve(__dirname, 'packages/react/src'),
-    '@antv/l7-draw': path.resolve(__dirname, 'packages/draw/src')
+    '@antv/l7-draw': path.resolve(__dirname, 'packages/draw/src'),
+    '@antv/l7-district': path.resolve(__dirname, 'packages/district/src')
   };
 };
