@@ -192,10 +192,18 @@ module.exports = {
         }
       },
       {
+        slug: 'district',
+        icon: 'map',
+        title: {
+          zh: '行政区划',
+          en: 'L7 District'
+        }
+      },
+      {
         slug: 'draw',
         icon: 'map',
         title: {
-          zh: '绘制 组件',
+          zh: '绘制组件',
           en: 'L7 Draw'
         }
       },

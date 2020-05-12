@@ -29,6 +29,7 @@ export default class BaseLayer extends EventEmitter {
   protected scene: Scene;
   protected options: IDistrictLayerOption;
   protected layers: ILayer[] = [];
+  protected fillData: any;
   private popup: IPopup;
 
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
@@ -48,6 +49,34 @@ export default class BaseLayer extends EventEmitter {
   public hide() {
     this.layers.forEach((layer) => layer.hide());
   }
+
+  public setOption(newOption: { [key: string]: any }) {
+    this.options = merge(this.options, newOption);
+  }
+
+  public updateData(
+    newData: Array<{ [key: string]: any }>,
+    joinByField?: [string, string],
+  ) {
+    this.setOption({
+      data: newData,
+      joinBy: joinByField,
+    });
+    const { data = [], joinBy } = this.options;
+    this.fillLayer.setData(this.fillData, {
+      transforms:
+        data.length === 0
+          ? []
+          : [
+              {
+                type: 'join',
+                sourceField: joinBy[1], // data1 对应字段名
+                targetField: joinBy[0], // data 对应字段名 绑定到的地理数据
+                data,
+              },
+            ],
+    });
+  }
   protected async fetchData(data: { url: string; type: string }) {
     if (data.type === 'pbf') {
       const buffer = await (await fetch(data.url)).arrayBuffer();
@@ -62,6 +91,7 @@ export default class BaseLayer extends EventEmitter {
       zIndex: 0,
       depth: 1,
       adcode: [],
+      joinBy: ['name', 'name'],
       label: {
         enable: true,
         color: '#000',
@@ -76,16 +106,20 @@ export default class BaseLayer extends EventEmitter {
         scale: null,
         field: null,
         values: '#fff',
+        style: {
+          opacity: 1.0,
+        },
+        activeColor: 'rgba(0,0,255,0.3)',
       },
       autoFit: true,
-      stroke: '#d95f0e',
+      stroke: '#bdbdbd',
       strokeWidth: 0.6,
-      cityStroke: 'rgba(255,255,255,0.6)',
+      cityStroke: '#636363',
       cityStrokeWidth: 0.6,
       countyStrokeWidth: 0.6,
       provinceStrokeWidth: 0.6,
-      provinceStroke: '#fff',
-      countyStroke: 'rgba(255,255,255,0.6)',
+      provinceStroke: '#f0f0f0',
+      countyStroke: '#525252',
       coastlineStroke: '#4190da',
       coastlineWidth: 1,
       nationalStroke: '#c994c7',
@@ -104,7 +138,8 @@ export default class BaseLayer extends EventEmitter {
 
   protected addFillLayer(fillCountry: any) {
     // 添加省份填充
-    const { popup, data = [], fill, autoFit } = this.options;
+    const { popup, data = [], fill, autoFit, joinBy } = this.options;
+    this.fillData = fillCountry;
     const fillLayer = new PolygonLayer({
       autoFit,
     }).source(fillCountry, {
@@ -114,8 +149,8 @@ export default class BaseLayer extends EventEmitter {
           : [
               {
                 type: 'join',
-                sourceField: 'name', // data1 对应字段名
-                targetField: 'name', // data 对应字段名 绑定到的地理数据
+                sourceField: joinBy[1], // data1 对应字段名
+                targetField: joinBy[0], // data 对应字段名 绑定到的地理数据
                 data,
               },
             ],
@@ -133,11 +168,9 @@ export default class BaseLayer extends EventEmitter {
     fillLayer
       .shape('fill')
       .active({
-        color: 'rgba(0,0,255,0.3)',
+        color: fill.activeColor as string,
       })
-      .style({
-        opacity: 1,
-      });
+      .style(fill.style);
     this.fillLayer = fillLayer;
     this.layers.push(fillLayer);
     this.scene.addLayer(fillLayer);

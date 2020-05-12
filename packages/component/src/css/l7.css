@@ -468,3 +468,11 @@
 	border-top: 1px solid #D8D8D8;
 	margin: 5px -10px 5px -6px;
 }
+.mapboxgl-ctrl-logo {
+  display: none !important;
+ }
+ .amap-logo{
+  display: none !important;
+ }
+
+

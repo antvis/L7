@@ -24,6 +24,5 @@ export function join(geoData: IParserData, options: IJoinOption) {
       ...item,
     };
   });
-
   return geoData;
 }

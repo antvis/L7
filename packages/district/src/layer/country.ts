@@ -16,6 +16,12 @@ export default class CountryLayer extends BaseLayer {
     const { depth } = this.options;
     this.loadData().then(([fillData, fillLabel]) => {
       this.addFillLayer(fillData);
+      // const labeldata = fillData.features.map((feature: any) => {
+      //   return {
+      //     ...feature.properties,
+      //     center: [feature.properties.x, feature.properties.y],
+      //   };
+      // });
       if (fillLabel && this.options.label?.enable) {
         this.addLabelLayer(
           fillLabel.filter((v: any) => {
@@ -33,7 +39,7 @@ export default class CountryLayer extends BaseLayer {
       this.addCityBorder(countryConfig.cityLine);
     }
     if (depth === 3 * 1) {
-      this.addCountryBorder(countryConfig.countryLine);
+      this.addCountyBorder(countryConfig.countryLine);
     }
   }
   // 国界,省界
@@ -92,6 +98,8 @@ export default class CountryLayer extends BaseLayer {
   private async addNationBorder(boundaries: any, boundaries2: any) {
     const {
       nationalStroke,
+      provinceStroke,
+      provinceStrokeWidth,
       nationalWidth,
       chinaNationalStroke,
       chinaNationalWidth,
@@ -108,7 +116,7 @@ export default class CountryLayer extends BaseLayer {
       .source(boundaries)
       .size('type', (v: string) => {
         if (v === '3') {
-          return strokeWidth;
+          return provinceStrokeWidth;
         } else if (v === '2') {
           return coastlineWidth;
         } else if (v === '0') {
@@ -120,7 +128,7 @@ export default class CountryLayer extends BaseLayer {
       .shape('line')
       .color('type', (v: string) => {
         if (v === '3') {
-          return stroke;
+          return provinceStroke;
         } else if (v === '2') {
           return coastlineStroke;
         } else if (v === '0') {
@@ -146,7 +154,7 @@ export default class CountryLayer extends BaseLayer {
     this.scene.addLayer(lineLayer2);
     this.layers.push(lineLayer, lineLayer2);
   }
-  // 省级边界
+  // 市边界
   private async addCityBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
     const { cityStroke, cityStrokeWidth } = this.options;
@@ -164,7 +172,7 @@ export default class CountryLayer extends BaseLayer {
   }
 
   // 县级边界
-  private async addCountryBorder(cfg: any) {
+  private async addCountyBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
     const { countyStrokeWidth, countyStroke } = this.options;
     const cityline = new LineLayer({
@@ -196,7 +204,7 @@ export default class CountryLayer extends BaseLayer {
     this.scene.addLayer(labelLayer);
     this.scene.addLayer(labelLayer1);
     this.scene.addLayer(labelLayer2);
-    this.layers.push(labelLayer, labelLayer1);
+    this.layers.push(labelLayer, labelLayer1, labelLayer2);
   }
 
   private addText(labelData: any, option: any, offset: [number, number]) {

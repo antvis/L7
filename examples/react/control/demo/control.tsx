@@ -1,4 +1,4 @@
-import { AMapScene, Control, LineLayer } from '@antv/l7-react';
+import { AMapScene, Control } from '@antv/l7-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 const MapScene = React.memo(function Map() {

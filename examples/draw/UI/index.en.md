@@ -1,4 +1,4 @@
 ---
-title: L7 Draw
+title: Draw Control
 order: 3
 ---

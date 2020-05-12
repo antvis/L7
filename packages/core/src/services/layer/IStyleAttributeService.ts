@@ -131,6 +131,7 @@ export interface IStyleAttributeInitializationOptions {
   scale?: {
     field: StyleAttributeField;
     values: unknown[] | string;
+    defaultValues: unknown[] | string;
     names: string[] | number[];
     type: StyleScaleType;
     callback?: (...args: any[]) => [];

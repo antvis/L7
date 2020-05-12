@@ -39,7 +39,7 @@ export default class Country extends React.Component {
         },
         stroke: '#ccc',
         label: {
-          enable: false,
+          enable: true,
           textAllowOverlap: false,
           field: 'Short_Name_ZH',
         },

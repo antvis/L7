@@ -133,7 +133,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                     scale.scale.domain(tick);
                   }
                 }
-                scale.scale.range(attributeScale.values);
+                scale.scale.range(attributeScale.values); // 判断常量, 默认值
               } else if (scale.option?.type === 'cat') {
                 // 如果没有设置初值且 类型为cat，range ==domain;
 
@@ -144,7 +144,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         } else {
           // 设置attribute 常量值 常量直接在value取值
           attributeScale.type = StyleScaleType.CONSTANT;
-          attributeScale.values = scales.map((scale, index) => {
+          attributeScale.defaultValues = scales.map((scale, index) => {
             return scale.scale(attributeScale.names[index]);
           });
         }

@@ -16,33 +16,33 @@ export interface IProvinceLayerOption extends IDistrictLayerOption {
   adcode: adcodeType;
 }
 export default class ProvinceLayer extends BaseLayer {
-  private fillData: any;
-  private lineData: any;
-  private labelData: any;
+  private fillRawData: any;
+  private lineRawData: any;
+  private labelRawData: any;
   constructor(scene: Scene, option: Partial<IProvinceLayerOption> = {}) {
     super(scene, option);
     this.addProvinceFillLayer();
     this.addProvinceLineLayer();
   }
   // 通过adcode 更新
-  public updateDistrict(adcode: adcodeType) {
+  public updateDistrict(
+    adcode: adcodeType,
+    newData: Array<{ [key: string]: any }> = [],
+    joinByField?: [string, string],
+  ) {
     if (!adcode && Array.isArray(adcode) && adcode.length === 0) {
       this.hide();
       return;
     }
-    const fillData = this.filterData(this.fillData, adcode);
-    const lineData = this.filterData(this.lineData, adcode);
-    const labelData = this.filterLabelData(this.labelData, adcode);
-    this.fillLayer.setData(fillData);
+    this.setOption({ adcode });
+    const fillData = this.filterData(this.fillRawData, adcode);
+    const lineData = this.filterData(this.lineRawData, adcode);
+    const labelData = this.filterLabelData(this.labelRawData, adcode);
+    this.fillData = fillData;
+    this.updateData(newData, joinByField);
     this.lineLayer.setData(lineData);
     this.labelLayer.setData(labelData);
     this.show();
-  }
-
-  // 更新渲染数据
-
-  public updateData() {
-    return 'update data';
   }
 
   protected getDefaultOption(): IProvinceLayerOption {
@@ -102,15 +102,15 @@ export default class ProvinceLayer extends BaseLayer {
     const countryConfig = DataConfig.country.CHN[depth];
     const fillData = await this.fetchData(countryConfig.fill);
 
-    this.labelData = fillData.features.map((feature: any) => {
+    this.labelRawData = fillData.features.map((feature: any) => {
       return {
         ...feature.properties,
         center: [feature.properties.x, feature.properties.y],
       };
     });
     const data = this.filterData(fillData, adcode);
-    const labelData = this.filterLabelData(this.labelData, adcode);
-    this.fillData = fillData;
+    const labelData = this.filterLabelData(this.labelRawData, adcode);
+    this.fillRawData = fillData;
     this.addFillLayer(data);
     this.addLabelLayer(labelData);
   }
@@ -120,7 +120,7 @@ export default class ProvinceLayer extends BaseLayer {
     const countryConfig = DataConfig.country.CHN[depth];
     const fillData = await this.fetchData(countryConfig.line);
     const data = this.filterData(fillData, adcode);
-    this.lineData = fillData;
+    this.lineRawData = fillData;
     this.addFillLine(data);
   }
 }
