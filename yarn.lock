@@ -9605,7 +9605,7 @@ cz-conventional-changelog@3.2.0, cz-conventional-changelog@^3.0.2:
   optionalDependencies:
     "@commitlint/load" ">6.1.1"
 
-d3-array@1, d3-array@^1.2.0:
+d3-array@1, d3-array@2, d3-array@^1.2.0:
   version "1.2.4"
   resolved "https://registry.npmjs.org/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
   integrity sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==
