@@ -49,7 +49,7 @@
     "rollup-plugin-less": "^1.1.2"
   },
   "devDependencies": {
-    "three": "^0.115.0"
+    "three": "^0.116.1"
   },
   "gitHead": "532ade40831b35b04a677b351d092e54c00613d8",
   "publishConfig": {
