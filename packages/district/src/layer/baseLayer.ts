@@ -12,10 +12,16 @@ import { EventEmitter } from 'eventemitter3';
 // @ts-ignore
 import geobuf from 'geobuf';
 // tslint:disable-next-line: no-submodule-imports
-import merge from 'lodash/merge';
+import merge from 'lodash/mergeWith';
 // @ts-ignore
 import Pbf from 'pbf';
 import { IDistrictLayerOption } from './interface';
+
+function mergeCustomizer(objValue: any, srcValue: any) {
+  if (Array.isArray(srcValue)) {
+    return srcValue;
+  }
+}
 export default class BaseLayer extends EventEmitter {
   public fillLayer: ILayer;
   public lineLayer: ILayer;
@@ -28,7 +34,7 @@ export default class BaseLayer extends EventEmitter {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super();
     this.scene = scene;
-    this.options = merge({}, this.getDefaultOption(), option);
+    this.options = merge(this.getDefaultOption(), option, mergeCustomizer);
   }
 
   public destroy() {
@@ -82,8 +88,10 @@ export default class BaseLayer extends EventEmitter {
       countyStroke: 'rgba(255,255,255,0.6)',
       coastlineStroke: '#4190da',
       coastlineWidth: 1,
-      nationalStroke: 'gray',
-      nationalWidth: 1,
+      nationalStroke: '#c994c7',
+      nationalWidth: 0.5,
+      chinaNationalStroke: 'gray',
+      chinaNationalWidth: 1,
       popup: {
         enable: true,
         triggerEvent: 'mousemove',
@@ -156,6 +164,13 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addLabelLayer(labelData: any, type: string = 'json') {
+    const labelLayer = this.addLabel(labelData, type);
+    this.scene.addLayer(labelLayer);
+    this.layers.push(labelLayer);
+    this.labelLayer = labelLayer;
+  }
+
+  protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex } = this.options;
     const labelLayer = new PointLayer({
       zIndex: zIndex + 2,
@@ -175,9 +190,7 @@ export default class BaseLayer extends EventEmitter {
         strokeWidth: label.strokeWidth,
         textAllowOverlap: label.textAllowOverlap,
       });
-    this.scene.addLayer(labelLayer);
-    this.layers.push(labelLayer);
-    this.labelLayer = labelLayer;
+    return labelLayer;
   }
 
   protected addPopup() {

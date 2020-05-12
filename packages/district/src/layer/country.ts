@@ -17,7 +17,12 @@ export default class CountryLayer extends BaseLayer {
     this.loadData().then(([fillData, fillLabel]) => {
       this.addFillLayer(fillData);
       if (fillLabel && this.options.label?.enable) {
-        this.addLabelLayer(fillLabel);
+        this.addLabelLayer(
+          fillLabel.filter((v: any) => {
+            return v.name !== '澳门';
+          }),
+        );
+        this.addMCLabel();
       }
     });
     const countryConfig = DataConfig.country.CHN[depth];
@@ -88,6 +93,8 @@ export default class CountryLayer extends BaseLayer {
     const {
       nationalStroke,
       nationalWidth,
+      chinaNationalStroke,
+      chinaNationalWidth,
       coastlineStroke,
       coastlineWidth,
       stroke,
@@ -105,7 +112,7 @@ export default class CountryLayer extends BaseLayer {
         } else if (v === '2') {
           return coastlineWidth;
         } else if (v === '0') {
-          return nationalWidth;
+          return chinaNationalWidth;
         } else {
           return '#fff';
         }
@@ -117,7 +124,7 @@ export default class CountryLayer extends BaseLayer {
         } else if (v === '2') {
           return coastlineStroke;
         } else if (v === '0') {
-          return nationalStroke;
+          return chinaNationalStroke;
         } else {
           return '#fff';
         }
@@ -158,7 +165,6 @@ export default class CountryLayer extends BaseLayer {
 
   // 县级边界
   private async addCountryBorder(cfg: any) {
-    // const bordConfig = DataConfig.country.CHN[3];
     const border1 = await this.fetchData(cfg);
     const { countyStrokeWidth, countyStroke } = this.options;
     const cityline = new LineLayer({
@@ -172,5 +178,49 @@ export default class CountryLayer extends BaseLayer {
       });
     this.scene.addLayer(cityline);
     this.layers.push(cityline);
+  }
+
+  private addMCLabel() {
+    const data = [
+      {
+        name: '澳门',
+        center: [113.537747, 22.187009],
+      },
+    ];
+    const labelLayer1 = this.addText(data, { maxZoom: 3 }, [-45, -10]);
+    const labelLayer2 = this.addText(data, { minZoom: 3, maxZoom: 4 }, [
+      -35,
+      -10,
+    ]);
+    const labelLayer = this.addText(data, { minZoom: 4 }, [0, 0]);
+    this.scene.addLayer(labelLayer);
+    this.scene.addLayer(labelLayer1);
+    this.scene.addLayer(labelLayer2);
+    this.layers.push(labelLayer, labelLayer1);
+  }
+
+  private addText(labelData: any, option: any, offset: [number, number]) {
+    const { label, zIndex } = this.options;
+    const labelLayer = new PointLayer({
+      zIndex: zIndex + 2,
+      ...option,
+    })
+      .source(labelData, {
+        parser: {
+          type: 'json',
+          coordinates: 'center',
+        },
+      })
+      .color(label.color as StyleAttrField)
+      .shape(label.field as StyleAttrField, 'text')
+      .size(10)
+      .style({
+        opacity: label.opacity,
+        stroke: label.stroke,
+        strokeWidth: label.strokeWidth,
+        textAllowOverlap: label.textAllowOverlap,
+        textOffset: offset,
+      });
+    return labelLayer;
   }
 }

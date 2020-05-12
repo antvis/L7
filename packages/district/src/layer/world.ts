@@ -13,7 +13,6 @@ export default class WorldLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
     this.loadData().then(([fillData, lineData, fillLabel]) => {
-      // this.addWorldBorder(border1, border2, island);
       this.addFillLayer(fillData);
       this.addFillLine(lineData);
       if (this.options.label?.enable) {
@@ -28,18 +27,21 @@ export default class WorldLayer extends BaseLayer {
       return (
         feature.properties.type === '10' ||
         feature.properties.type === '1' ||
-        feature.properties.type === '11'
+        feature.properties.type === '11' ||
+        feature.properties.type === '8'
       );
     });
     const bordFc = {
       type: 'FeatureCollection',
       features: bord1,
     };
+    // 已确定国界
     const nationalBorder = data.features.filter((feature: any) => {
       return (
         feature.properties.type !== '10' &&
         feature.properties.type !== '1' &&
-        feature.properties.type !== '11'
+        feature.properties.type !== '11' &&
+        feature.properties.type !== '8'
       );
     });
     const nationalFc = {
@@ -62,6 +64,8 @@ export default class WorldLayer extends BaseLayer {
       nationalStroke,
       nationalWidth,
       coastlineStroke,
+      chinaNationalStroke,
+      chinaNationalWidth,
       coastlineWidth,
       zIndex,
     } = this.options;
@@ -73,15 +77,13 @@ export default class WorldLayer extends BaseLayer {
       .size(0.6)
       .color('type', (v: string) => {
         if (v === '0') {
-          return 'rgb(99,100, 99)'; // 中国国界线
-        } else if (v === '2') {
-          return 'rgb(0,136, 191)'; // 中国海岸线
-        } else if (v === '9') {
-          return 'rgb(0,136, 191)'; // 国外海岸线
+          return chinaNationalStroke; // 中国国界线
+        } else if (v === '2' || v === '9') {
+          return coastlineStroke; // 中国海岸线
         } else if (v === '7') {
-          return '#9ecae1'; // 国外国界
+          return nationalStroke; // 国外国界
         } else {
-          return '#9ecae1';
+          return nationalStroke;
         }
       });
     // 添加未定国界
@@ -89,13 +91,19 @@ export default class WorldLayer extends BaseLayer {
       zIndex: zIndex + 1,
     })
       .source(boundaries2)
-      .size(nationalWidth)
+      .size('type', (v: string) => {
+        if (v === '1') {
+          return chinaNationalWidth;
+        } else {
+          return nationalWidth;
+        }
+      })
       .shape('line')
       .color('type', (v: string) => {
         if (v === '1') {
-          return 'rgb(99,100, 99)';
+          return chinaNationalStroke;
         } else {
-          return '#9ecae1';
+          return nationalStroke;
         }
       })
       .style({

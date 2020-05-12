@@ -112,8 +112,12 @@ export default class TextLayerDemo extends React.Component {
     });
     scene.on('loaded', () => {
       const layer = new PolygonLayer({})
-        .source(data)
+        .source({
+          type: 'FeatureCollection',
+          features: [],
+        })
         .shape('fill')
+        // .color('red')
         .color('childrenNum', [
           'rgb(247,252,240)',
           'rgb(224,243,219)',
@@ -128,6 +132,10 @@ export default class TextLayerDemo extends React.Component {
           opacity: 1.0,
         });
       scene.addLayer(layer);
+      setTimeout(() => {
+        layer.setData(data);
+        console.log('update');
+      }, 2000);
       layer.on('click', (e) => {
         console.log(e);
       });
