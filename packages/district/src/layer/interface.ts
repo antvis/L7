@@ -13,6 +13,7 @@ export type adcodeType = string[] | string | number | number[];
 export interface IDistrictLayerOption {
   zIndex: number;
   data?: Array<{ [key: string]: any }>;
+  joinBy: [string, string];
   adcode: adcodeType;
   depth: 0 | 1 | 2 | 3;
   label: Partial<ILabelOption>;
@@ -20,6 +21,8 @@ export interface IDistrictLayerOption {
     scale: ScaleTypeName | null;
     field: string | null;
     values: StyleAttributeOption;
+    style: any;
+    activeColor: string;
   }>;
   autoFit: boolean;
   stroke: string;
