@@ -40,6 +40,9 @@ export default class BaseRenderLayer {
   }
 
   public updateData(data: any) {
+    if (this.drawLayers.length === 0) {
+      this.update(data);
+    }
     this.drawLayers.forEach((layer) => layer.setData(data));
   }
 

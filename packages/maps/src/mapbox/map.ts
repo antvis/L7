@@ -26,7 +26,6 @@ import mapboxgl, { IControl, Map } from 'mapbox-gl';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { IMapboxInstance } from '../../typings/index';
-import './logo.css';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;

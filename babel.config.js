@@ -95,7 +95,7 @@ module.exports = api => {
         {
           extensions: [
             // 由于使用了 TS 的 resolveJsonModule 选项，JSON 可以直接引入，不需要当作纯文本
-            '.json',
+            // '.json',
             '.glsl'
           ]
         }

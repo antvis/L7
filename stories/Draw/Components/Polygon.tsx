@@ -1,4 +1,4 @@
-import { LineLayer, PointLayer, PolygonLayer, Popup, Scene } from '@antv/l7';
+import { Scene } from '@antv/l7';
 import { DrawPolygon } from '@antv/l7-draw';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 
@@ -16,8 +16,8 @@ export default class Circle extends React.Component {
       map: new Mapbox({
         pitch: 0,
         style: 'light',
-        center: [113.775374, 28.31067],
-        zoom: 12,
+        center: [44.29687499999999, 55.3791104480105],
+        zoom: 3,
       }),
     });
     this.scene = scene;
@@ -49,7 +49,7 @@ export default class Circle extends React.Component {
           ],
         },
       });
-      drawPolygon.enable();
+      // drawPolygon.enable();
     });
   }
 

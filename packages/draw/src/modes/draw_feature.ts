@@ -184,10 +184,11 @@ export default abstract class DrawFeature extends DrawMode {
         }
         this.selectMode.setSelectedFeature(this.currentFeature as Feature);
         this.selectMode.enable();
-        this.drawLayer.enableSelect();
         this.drawLayer.updateData(
+          // TODO:导入数据不能正常使用
           featureCollection([this.currentFeature as Feature]),
         );
+        this.drawLayer.enableSelect();
         this.drawVertexLayer.updateData(
           featureCollection(this.currentFeature?.properties?.pointFeatures),
         );
