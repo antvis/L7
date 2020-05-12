@@ -24,6 +24,17 @@ export default class Country extends React.Component {
     this.setState({
       options,
     });
+    const response = await fetch(
+      'https://gw.alipayobjects.com/os/bmw-prod/149b599d-21ef-4c24-812c-20deaee90e20.json',
+    );
+    const provinceData = await response.json();
+    const data = Object.keys(provinceData).map((key: string) => {
+      return {
+        code: parseInt(key),
+        name: provinceData[key][0],
+        pop: provinceData[key][2] * 1,
+      };
+    });
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
@@ -37,16 +48,17 @@ export default class Country extends React.Component {
     });
     scene.on('loaded', () => {
       this.cityLayer = new CityLayer(scene, {
-        data: [],
-        adcode: ['110100'],
+        data,
+        joinBy: ['adcode', 'code'],
+        adcode: ['330000', '330100'],
         depth: 3,
         label: {
           field: 'NAME_CHN',
           textAllowOverlap: false,
         },
         fill: {
-          field: 'NAME_CHN',
-          values: [
+          field: 'pop',
+          values: [ 
             '#feedde',
             '#fdd0a2',
             '#fdae6b',
@@ -58,7 +70,7 @@ export default class Country extends React.Component {
         popup: {
           enable: true,
           Html: (props) => {
-            return `<span>${props.NAME_CHN}</span>`;
+            return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`;
           },
         },
       });
@@ -78,7 +90,7 @@ export default class Country extends React.Component {
             top: '10px',
           }}
           options={this.state.options}
-          defaultValue={['110000', '110100']}
+          defaultValue={['330000', '330100']}
           onChange={this.handleProvinceChange}
           placeholder="Please select"
         />
@@ -97,5 +109,6 @@ export default class Country extends React.Component {
   }
   private handleProvinceChange = (value: string[]) => {
     this.cityLayer.updateDistrict([value[1]]);
+    console.log(this.cityLayer.fillLayer);
   };
 }

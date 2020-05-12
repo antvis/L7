@@ -23,6 +23,7 @@ export default class StyleAttribute implements IStyleAttribute {
     names: string[];
     field: string | string[];
     values: unknown[];
+    defaultValues: unknown[];
     callback?: (...args: any[]) => [];
     scalers?: IAttributeScale[];
   };
@@ -76,7 +77,7 @@ export default class StyleAttribute implements IStyleAttribute {
   private defaultCallback = (params: unknown[]): unknown[] => {
     // 没有 params 的情况，是指没有指定 fields，直接返回配置的 values 常量
     if (params.length === 0) {
-      return this.scale?.values || [];
+      return this.scale?.defaultValues || [];
     }
     return params.map((param, idx) => {
       const scaleFunc = this.scale?.scalers![idx].func;
