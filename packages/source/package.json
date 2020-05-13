@@ -37,7 +37,7 @@
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
-    "supercluster": "^6.0.2"
+    "supercluster": "^7.0.0"
   },
   "devDependencies": {
     "@types/d3-dsv": "^1.0.36",

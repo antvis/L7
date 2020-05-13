@@ -24800,13 +24800,6 @@ sumchecker@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-supercluster@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.npmjs.org/supercluster/-/supercluster-6.0.2.tgz#aa2eaae185ef97872f388c683ec29f6991721ee3"
-  integrity sha512-aa0v2HURjBTOpbcknilcfxGDuArM8khklKSmZ/T8ZXL0BuRwb5aRw95lz+2bmWpFvCXDX/+FzqHxmg0TIaJErw==
-  dependencies:
-    kdbush "^3.0.0"
-
 supercluster@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/supercluster/-/supercluster-7.0.0.tgz#75d474fafb0a055db552ed7bd7bbda583f6ab321"
