@@ -6982,9 +6982,9 @@ babel-preset-gatsby@^0.3.0:
     gatsby-core-utils "^1.1.3"
 
 babel-preset-gatsby@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/babel-preset-gatsby/-/babel-preset-gatsby-0.4.1.tgz#53a41a37e117f4c695f3e0c66066892c41f6c07a"
-  integrity sha512-GLRCawxuCKg+EiGaLJdyYcI+NZP8ZPcebqwrvY7vinSmGoKZlBuGcZYO4C9uFVErS4p5168EjVFxWnaJDJ/r1Q==
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/babel-preset-gatsby/-/babel-preset-gatsby-0.4.2.tgz#54869c5d5df8e3fb911f93d041cab2ebf424d252"
+  integrity sha512-PegbKTUBGCkDqwI68uF/rKrHNJ2ZP/WYiSgVa+xmseywqRtrw03kKIcmzM/j3jAOVo/efVW545KKzd2wPc9wjw==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.8.3"
     "@babel/plugin-proposal-nullish-coalescing-operator" "^7.8.3"
@@ -6998,7 +6998,7 @@ babel-preset-gatsby@^0.4.1:
     babel-plugin-dynamic-import-node "^2.3.3"
     babel-plugin-macros "^2.8.0"
     babel-plugin-transform-react-remove-prop-types "^0.4.24"
-    gatsby-core-utils "^1.2.1"
+    gatsby-core-utils "^1.2.2"
 
 babel-preset-jest@^24.9.0:
   version "24.9.0"
@@ -12296,10 +12296,10 @@ gatsby-cli@^2.12.16:
     ink "^2.7.1"
     ink-spinner "^3.0.1"
 
-gatsby-core-utils@^1.1.3, gatsby-core-utils@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/gatsby-core-utils/-/gatsby-core-utils-1.2.1.tgz#9d5e89d0cf7b9e5d7d77a9dcb47071684f68ffd5"
-  integrity sha512-uyXgjvKdzfJ0yB8oTYmBjMUqM0AACx7aA8Ioubn6k/51C4tE5+LzrG/iG42di2UaTIbcBj6vcwrvRosNKWeeBQ==
+gatsby-core-utils@^1.1.3, gatsby-core-utils@^1.2.1, gatsby-core-utils@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/gatsby-core-utils/-/gatsby-core-utils-1.2.2.tgz#19ad6e3917e4748333d952a04ec30ade02fe81fd"
+  integrity sha512-EdVUq0K7C9t32V7wndldUmUGzZp8EwU8gNMc1dtI1whyDUaUuZa6zlkbkpJwbwhPhRHdao5zhvHJXydhgzTEog==
   dependencies:
     ci-info "2.0.0"
     configstore "^5.0.1"
