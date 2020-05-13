@@ -33,7 +33,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/gl": "^4.1.0",
     "@types/jest": "^25.2.1",
-    "@types/node": "13.11.1",
+    "@types/node": "14.0.1",
     "@types/storybook__react": "^4.0.2",
     "@types/supercluster": "^5.0.1",
     "awesome-typescript-loader": "^5.2.1",
