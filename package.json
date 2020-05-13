@@ -73,7 +73,7 @@
     "gl": "^4.4.0",
     "glsl-minifier": "^0.0.13",
     "html-webpack-plugin": "^4.3.0",
-    "husky": "^3.0.9",
+    "husky": "^4.2.5",
     "jest": "^24.9.0",
     "jest-electron": "^0.1.11",
     "jest-styled-components": "^6.2.1",
