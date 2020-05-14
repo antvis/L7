@@ -28,7 +28,7 @@
     "@antv/l7-core": "2.2.5",
     "@antv/l7-utils": "2.2.5",
     "@babel/runtime": "^7.7.7",
-    "@mapbox/geojson-rewind": "^0.4.0",
+    "@mapbox/geojson-rewind": "^0.5.0",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
