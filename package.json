@@ -93,7 +93,7 @@
     "react-i18next": "^11.0.1",
     "react-scripts": "^3.4.1",
     "rimraf": "^3.0.2",
-    "rollup": "^1.27.14",
+    "rollup": "^2.10.0",
     "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-buble": "^0.19.8",
