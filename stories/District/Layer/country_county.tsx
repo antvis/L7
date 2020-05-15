@@ -32,16 +32,17 @@ export default class Country extends React.Component {
         coastlineWidth: 0.5,
         nationalWidth: 0.5,
         fill: {
-          // scale: 'quantile',
-          field: 'NAME_CHN',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
         popup: {
           enable: true,

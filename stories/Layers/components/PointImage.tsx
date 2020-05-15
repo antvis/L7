@@ -35,28 +35,31 @@ export default class PointImage extends React.Component {
       '02',
       'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
     );
-    let i = 0;
+    const i = 0;
     const data = await response.json();
-    while (i < 1) {
-      const imageLayer = new PointLayer()
-        .source(data, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        .shape('name', ['00', '01', '02'])
-        // .shape('triangle')
-        // .color('red')
-        .active(true)
-        .size(20);
-      // imageLayer.on('click', (e) => {
-      //   console.log(e);
-      // });
-      scene.addLayer(imageLayer);
-      i++;
-    }
+    const newData = data.map((item: any) => {
+      item.type = '00';
+      return item;
+    });
+    const imageLayer = new PointLayer()
+      .source(newData, {
+        parser: {
+          type: 'json',
+          x: 'longitude',
+          y: 'latitude',
+        },
+      })
+      .shape('type', (v: any) => {
+        return v;
+      })
+      // .shape('triangle')
+      // .color('red')
+      .active(true)
+      .size(20);
+    // imageLayer.on('click', (e) => {
+    //   console.log(e);
+    // });
+    scene.addLayer(imageLayer);
   }
 
   public render() {

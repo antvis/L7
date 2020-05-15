@@ -16,12 +16,6 @@ export default class CountryLayer extends BaseLayer {
     const { depth } = this.options;
     this.loadData().then(([fillData, fillLabel]) => {
       this.addFillLayer(fillData);
-      // const labeldata = fillData.features.map((feature: any) => {
-      //   return {
-      //     ...feature.properties,
-      //     center: [feature.properties.x, feature.properties.y],
-      //   };
-      // });
       if (fillLabel && this.options.label?.enable) {
         this.addLabelLayer(
           fillLabel.filter((v: any) => {
@@ -111,7 +105,7 @@ export default class CountryLayer extends BaseLayer {
     } = this.options;
     // 添加国界线
     const lineLayer = new LineLayer({
-      zIndex: zIndex + 1,
+      zIndex: zIndex + 0.1,
     })
       .source(boundaries)
       .size('type', (v: string) => {
@@ -139,7 +133,7 @@ export default class CountryLayer extends BaseLayer {
       });
     // 添加未定国界
     const lineLayer2 = new LineLayer({
-      zIndex: zIndex + 1,
+      zIndex: zIndex + 0.1,
     })
       .source(boundaries2)
       .size(nationalWidth)
@@ -210,7 +204,7 @@ export default class CountryLayer extends BaseLayer {
   private addText(labelData: any, option: any, offset: [number, number]) {
     const { label, zIndex } = this.options;
     const labelLayer = new PointLayer({
-      zIndex: zIndex + 2,
+      zIndex: zIndex + 0.4,
       ...option,
     })
       .source(labelData, {
@@ -220,7 +214,7 @@ export default class CountryLayer extends BaseLayer {
         },
       })
       .color(label.color as StyleAttrField)
-      .shape(label.field as StyleAttrField, 'text')
+      .shape('name', 'text')
       .size(10)
       .style({
         opacity: label.opacity,

@@ -5,7 +5,7 @@ let DataConfig: { [key: string]: any } = {
     fill: {
       type: 'pbf',
       url:
-        '//gw.alipayobjects.com/os/bmw-prod/21bdf832-1dfc-4cae-92d1-aa8d156df40f.bin',
+        '//gw.alipayobjects.com/os/bmw-prod/56cb34eb-cf61-4512-a6f3-fe4a45a7b1a3.bin',
     },
     line: {
       type: 'pbf',
