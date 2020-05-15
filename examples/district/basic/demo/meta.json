@@ -4,7 +4,6 @@
     "en": "District"
   },
   "demos": [
-
     {
       "filename": "china_map.js",
       "title": "中国地图",
@@ -29,11 +28,6 @@
       "filename": "county.js",
       "title": "中国县地图",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*iVwLSpIf_ckAAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "drill_down.js",
-      "title": "中国地图上钻下取",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*xjjARqU70xoAAAAAAAAAAABkARQnAQ"
     }
   ]
 }

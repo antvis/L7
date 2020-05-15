@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/react';
 require('./../assets/css/antd.css');
 import * as React from 'react';
+import ChinaBubble from './Layer/country_bubble';
 import City from './Layer/city';
 import Country from './Layer/Country';
 import Country2 from './Layer/Country2';
@@ -14,6 +15,7 @@ import World from './Layer/world';
 storiesOf('行政区划', module)
   .add('世界地图', () => <World />)
   .add('中国地图', () => <Country />)
+  .add('中国地图气泡', () => <ChinaBubble />)
   .add('中国地图市级', () => <CountryCity />)
   .add('中国地图县级', () => <CountryCounty />)
   .add('中国地图附图', () => <Country2 />)

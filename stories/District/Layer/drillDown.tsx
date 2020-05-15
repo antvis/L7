@@ -31,18 +31,19 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       this.scene = scene;
       this.drillDown = new DrillDownLayer(scene, {
-        data: [],
-        depth: 1,
+        drillDepth: 2,
         fill: {
-          field: 'NAME_CHN',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
         popup: {
           enable: true,

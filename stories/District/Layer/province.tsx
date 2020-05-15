@@ -224,16 +224,19 @@ export default class Country extends React.Component {
           field: 'NAME_CHN',
           textAllowOverlap: false,
         },
-        fill: {
-          field: 'pop',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+        bubble: {
+          enable: true,
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
         popup: {
           enable: true,

@@ -1,35 +1,57 @@
 import { Scene } from '@antv/l7';
+// tslint:disable-next-line: no-submodule-imports
+import mergeWith from 'lodash/mergeWith';
 import CityLayer from './city';
 import CountryLayer from './country';
-import { adcodeType, IDistrictLayerOption } from './interface';
+import { adcodeType, IDrillDownOption } from './interface';
 import ProvinceLayer from './province';
-
+function mergeCustomizer(objValue: any, srcValue: any) {
+  if (Array.isArray(srcValue)) {
+    return srcValue;
+  }
+}
 export default class DrillDownLayer {
-  private provinceLayer: ProvinceLayer;
-  private cityLayer: CityLayer;
-  private countryLayer: CountryLayer;
+  private options: Partial<IDrillDownOption>;
+  private cityLayer: ProvinceLayer;
+  private countyLayer: CityLayer;
+  private provinceLayer: CountryLayer;
   private scene: Scene;
-  private drillState: 'province' | 'city' | 'county' = 'province';
-  constructor(scene: Scene, option: Partial<IDistrictLayerOption>) {
-    const cfg = this.getDefaultOption();
+  private drillState: 0 | 1 | 2 = 0;
+  private layers: any = [];
+  constructor(scene: Scene, option: Partial<IDrillDownOption>) {
+    this.options = mergeWith(this.getDefaultOption(), option, mergeCustomizer);
     this.scene = scene;
-    this.countryLayer = new CountryLayer(scene, option);
-    this.provinceLayer = new ProvinceLayer(scene, cfg.city);
-    this.cityLayer = new CityLayer(scene, cfg.county);
+    this.provinceLayer = new CountryLayer(
+      scene,
+      this.getLayerOption('province'),
+    );
+    this.cityLayer = new ProvinceLayer(scene, this.getLayerOption('city'));
+    this.countyLayer = new CityLayer(scene, this.getLayerOption('county'));
     this.scene.setMapStatus({ doubleClickZoom: false });
-    this.countryLayer.on('loaded', () => {
-      this.addCountryEvent();
-    });
-    this.provinceLayer.on('loaded', () => {
-      this.addProvinceEvent();
-    });
-    this.cityLayer.on('loaded', () => {
-      this.addCityEvent();
-    });
+    if (!this.options.customTrigger) {
+      this.provinceLayer.on('loaded', () => {
+        this.addCountryEvent();
+        this.layers.push(this.provinceLayer);
+      });
+      this.cityLayer.on('loaded', () => {
+        this.addProvinceEvent();
+        this.layers.push(this.cityLayer);
+      });
+      this.countyLayer.on('loaded', () => {
+        this.addCityEvent();
+        this.layers.push(this.cityLayer);
+      });
+    }
   }
   public getDefaultOption() {
     return {
-      province: {},
+      drillDepth: 2,
+      customTrigger: false,
+      drillDownTriggerEvent: 'click',
+      drillUpTriggerEvent: 'unclick',
+      provinceData: [],
+      cityData: [],
+      countyData: [],
       city: {
         adcode: [],
       },
@@ -39,43 +61,43 @@ export default class DrillDownLayer {
     };
   }
   public addCountryEvent() {
-    this.countryLayer.fillLayer.on('click', (e: any) => {
-      this.countryLayer.hide();
-      // 更新市级行政区划
-      // this.provinceLayer.updateDistrict([e.feature.properties.adcode]);
-      // this.drillState = 'city';
-      this.drillDown(e.feature.properties.adcode);
-    });
+    const { drillDownTriggerEvent, drillUpTriggleEvent } = this.options;
+    this.provinceLayer.fillLayer.on(
+      drillDownTriggerEvent as string,
+      (e: any) => {
+        this.provinceLayer.hide();
+        this.drillDown(e.feature.properties.adcode);
+      },
+    );
   }
 
   public addProvinceEvent() {
-    this.provinceLayer.fillLayer.on('undblclick', () => {
+    const { drillDownTriggerEvent, drillUpTriggleEvent } = this.options;
+    this.cityLayer.fillLayer.on(drillUpTriggleEvent as string, () => {
       this.drillUp();
     });
-    this.provinceLayer.fillLayer.on('click', (e: any) => {
-      // this.provinceLayer.hide();
-      // const adcode = e.feature.properties.adcode.toFixed(0);
+    this.cityLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
       this.drillDown(e.feature.properties.adcode);
-      // if (adcode.substr(2, 2) === '00') {
-      //   adcode = adcode.substr(0, 2) + '0100';
-      // }
-      // // 更新县级行政区划
-      // this.cityLayer.updateDistrict([adcode]);
-      // this.drillState = 'county';
-      // this.showCityView(adcode);
     });
   }
 
   public addCityEvent() {
-    this.cityLayer.fillLayer.on('undblclick', () => {
+    const { drillDownTriggerEvent, drillUpTriggleEvent } = this.options;
+    this.countyLayer.fillLayer.on(drillUpTriggleEvent as string, () => {
       this.drillUp();
     });
   }
 
+  public show() {
+    this.layers.forEach((layer: any) => layer.show());
+  }
+
+  public hide() {
+    this.layers.forEach((layer: any) => layer.hide());
+  }
+
   public destroy() {
-    this.countryLayer.destroy();
-    this.provinceLayer.destroy();
-    this.cityLayer.destroy();
+    this.layers.forEach((layer: any) => layer.destroy());
   }
 
   public showProvinceView(
@@ -83,27 +105,27 @@ export default class DrillDownLayer {
     newData: Array<{ [key: string]: any }> = [],
     joinByField?: [string, string],
   ) {
-    this.provinceLayer.show();
-    this.provinceLayer.updateDistrict(adcode, newData, joinByField);
-    this.provinceLayer.fillLayer.fitBounds();
-    this.cityLayer.hide();
-    this.drillState = 'city';
+    this.cityLayer.show();
+    this.cityLayer.updateDistrict(adcode, newData, joinByField);
+    this.cityLayer.fillLayer.fitBounds();
+    this.countyLayer.hide();
+    this.drillState = 1;
   }
   public showCityView(
     code: adcodeType,
     newData: Array<{ [key: string]: any }> = [],
     joinByField?: [string, string],
   ) {
-    this.cityLayer.show();
+    this.countyLayer.show();
     let adcode = `${code}`;
     if (adcode.substr(2, 2) === '00') {
       adcode = adcode.substr(0, 2) + '0100';
     }
     // 更新县级行政区划
-    this.cityLayer.updateDistrict(adcode, newData, joinByField);
-    this.cityLayer.fillLayer.fitBounds();
-    this.provinceLayer.hide();
-    this.drillState = 'county';
+    this.countyLayer.updateDistrict(adcode, newData, joinByField);
+    this.countyLayer.fillLayer.fitBounds();
+    this.cityLayer.hide();
+    this.drillState = 2;
   }
 
   /**
@@ -111,17 +133,17 @@ export default class DrillDownLayer {
    */
   public drillUp() {
     switch (this.drillState) {
-      case 'county':
+      case 2:
+        this.cityLayer.show();
+        this.cityLayer.fillLayer.fitBounds();
+        this.countyLayer.hide();
+        this.drillState = 1;
+        break;
+      case 1:
         this.provinceLayer.show();
         this.provinceLayer.fillLayer.fitBounds();
         this.cityLayer.hide();
-        this.drillState = 'city';
-        break;
-      case 'city':
-        this.countryLayer.show();
-        this.countryLayer.fillLayer.fitBounds();
-        this.provinceLayer.hide();
-        this.drillState = 'province';
+        this.drillState = 0;
         break;
     }
   }
@@ -130,13 +152,51 @@ export default class DrillDownLayer {
     newData: Array<{ [key: string]: any }> = [],
     joinByField?: [string, string],
   ) {
+    const { drillDepth } = this.options;
+    if (this.drillState === drillDepth) {
+      return;
+    }
     switch (this.drillState) {
-      case 'province':
-        this.showProvinceView(adcode);
+      case 0:
+        this.showProvinceView(adcode, newData, joinByField);
         break;
-      case 'city':
-        this.showCityView(adcode);
+      case 1:
+        this.showCityView(adcode, newData, joinByField);
         break;
     }
+  }
+
+  public updateData(
+    layer: 'province' | 'city' | 'county',
+    newData: Array<{ [key: string]: any }>,
+    joinByField?: [string, string],
+  ) {
+    switch (layer) {
+      case 'province':
+        this.provinceLayer.updateData(newData, joinByField);
+        break;
+      case 'city':
+        this.cityLayer.updateData(newData, joinByField);
+        break;
+      case 'county':
+        this.countyLayer.updateData(newData, joinByField);
+    }
+  }
+
+  private getLayerOption(type: 'province' | 'city' | 'county') {
+    const { joinBy, label, bubble, fill, popup, province } = this.options;
+    const datatype = (type + 'Data') as
+      | 'provinceData'
+      | 'cityData'
+      | 'countyData';
+    return {
+      data: this.options[datatype],
+      joinBy,
+      label,
+      bubble,
+      fill,
+      popup,
+      ...this.options[type],
+    };
   }
 }

@@ -1,9 +1,9 @@
 import { Scene } from '@antv/l7';
 import { ProvinceLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import ReactDOM from 'react-dom';
 import { Select } from 'antd';
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 const { Option } = Select;
 
 const ProvinceData = [
@@ -223,15 +223,17 @@ class Province extends React.Component {
           textAllowOverlap: false,
         },
         fill: {
-          field: 'NAME_CHN',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
         popup: {
           enable: true,
@@ -287,4 +289,4 @@ class Province extends React.Component {
     this.provinceLayer.updateDistrict([value]);
   };
 }
-ReactDOM.render(<Province />, document.getElementById('map'))
+ReactDOM.render(<Province />, document.getElementById('map'));

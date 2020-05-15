@@ -1,0 +1,33 @@
+{
+  "title": {
+    "zh": "行政区划",
+    "en": "District"
+  },
+  "demos": [
+    {
+      "filename": "china_bubble.js",
+      "title": "中国地图气泡图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_b82228/afts/img/A*U86gSZpLV54AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "world_map.js",
+      "title": "世界地图气泡",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_b82228/afts/img/A*jljdRbDWNIgAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "province.js",
+      "title": "中国省级地图气泡",
+      "screenshot":  "https://gw.alipayobjects.com/mdn/rms_b82228/afts/img/A*wS2QRa4kPTAAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "city.js",
+      "title": "中国市地图气泡",
+      "screenshot":  "https://gw.alipayobjects.com/mdn/rms_b82228/afts/img/A*usBDQ4cHxtsAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "county.js",
+      "title": "中国县地图气泡",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_b82228/afts/img/A*0p7aSJ8AXoMAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

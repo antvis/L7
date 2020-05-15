@@ -12,10 +12,12 @@ import { EventEmitter } from 'eventemitter3';
 // @ts-ignore
 import geobuf from 'geobuf';
 // tslint:disable-next-line: no-submodule-imports
-import merge from 'lodash/mergeWith';
+import isObject from 'lodash/isObject';
+// tslint:disable-next-line: no-submodule-imports
+import mergeWith from 'lodash/mergeWith';
 // @ts-ignore
 import Pbf from 'pbf';
-import { IDistrictLayerOption } from './interface';
+import { AttributeType, IDistrictLayerOption } from './interface';
 
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
@@ -26,6 +28,7 @@ export default class BaseLayer extends EventEmitter {
   public fillLayer: ILayer;
   public lineLayer: ILayer;
   public labelLayer: ILayer;
+  public bubbleLayer: ILayer;
   protected scene: Scene;
   protected options: IDistrictLayerOption;
   protected layers: ILayer[] = [];
@@ -35,7 +38,7 @@ export default class BaseLayer extends EventEmitter {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super();
     this.scene = scene;
-    this.options = merge(this.getDefaultOption(), option, mergeCustomizer);
+    this.options = mergeWith(this.getDefaultOption(), option, mergeCustomizer);
   }
 
   public destroy() {
@@ -51,7 +54,7 @@ export default class BaseLayer extends EventEmitter {
   }
 
   public setOption(newOption: { [key: string]: any }) {
-    this.options = merge(this.options, newOption);
+    this.options = mergeWith(this.options, newOption);
   }
 
   public updateData(
@@ -102,10 +105,20 @@ export default class BaseLayer extends EventEmitter {
         textAllowOverlap: true,
         opacity: 1,
       },
+      bubble: {
+        enable: false,
+        shape: 'circle',
+        color: '#1AA9FF',
+        size: 15,
+        style: {
+          opacity: 1,
+          stroke: '#fff',
+          strokeWidth: 1,
+        },
+      },
       fill: {
         scale: null,
-        field: null,
-        values: '#fff',
+        color: '#ddd',
         style: {
           opacity: 1.0,
         },
@@ -128,7 +141,9 @@ export default class BaseLayer extends EventEmitter {
       chinaNationalWidth: 1,
       popup: {
         enable: true,
-        triggerEvent: 'mousemove',
+        openTriggerEvent: 'mouseenter',
+        closeTriggerEvent: 'mouseout',
+        option: {},
         Html: (properties: any) => {
           return `${properties.name}`;
         },
@@ -155,14 +170,11 @@ export default class BaseLayer extends EventEmitter {
               },
             ],
     });
-    fill.field
-      ? fillLayer.color(fill.field, fill.values)
-      : fillLayer.color(fill.values as string);
-
-    if (fill.scale) {
+    this.setLayerAttribute(fillLayer, 'color', fill.color as AttributeType);
+    if (fill.scale && isObject(fill.color)) {
       fillLayer.scale('color', {
-        type: 'quantile',
-        field: fill.field as string,
+        type: fill.scale,
+        field: fill.color.field as string,
       });
     }
     fillLayer
@@ -174,16 +186,26 @@ export default class BaseLayer extends EventEmitter {
     this.fillLayer = fillLayer;
     this.layers.push(fillLayer);
     this.scene.addLayer(fillLayer);
+    if (this.options.bubble && this.options.bubble?.enable !== false) {
+      const labeldata = fillCountry.features.map((feature: any) => {
+        return {
+          ...feature.properties,
+          center: [feature.properties.x, feature.properties.y],
+        };
+      });
+      this.addBubbleLayer(labeldata);
+    }
     if (popup.enable) {
       this.addPopup();
     }
+
     this.emit('loaded');
   }
 
   protected addFillLine(provinceLine: any) {
     const { stroke, strokeWidth, zIndex } = this.options;
     const layer2 = new LineLayer({
-      zIndex: zIndex + 1,
+      zIndex: zIndex + 0.1,
     })
       .source(provinceLine)
       .color(stroke)
@@ -203,10 +225,46 @@ export default class BaseLayer extends EventEmitter {
     this.labelLayer = labelLayer;
   }
 
+  protected addBubbleLayer(labelData: any, type: string = 'json') {
+    const { bubble, zIndex, data = [], joinBy } = this.options;
+    const bubbleLayer = new PointLayer({
+      zIndex: zIndex + 0.3,
+    }).source(labelData, {
+      parser: {
+        type,
+        coordinates: 'center',
+      },
+      transforms:
+        data.length === 0
+          ? []
+          : [
+              {
+                type: 'join',
+                sourceField: joinBy[1], // data1 对应字段名
+                targetField: joinBy[0], // data 对应字段名 绑定到的地理数据
+                data,
+              },
+            ],
+    });
+    this.setLayerAttribute(bubbleLayer, 'color', bubble.color as AttributeType);
+    this.setLayerAttribute(bubbleLayer, 'size', bubble.size as AttributeType);
+    this.setLayerAttribute(bubbleLayer, 'shape', bubble.shape as AttributeType);
+    if (bubble.scale) {
+      bubbleLayer.scale(bubble.scale.field, {
+        type: bubble.scale.type,
+      });
+    }
+    bubbleLayer.style(bubble.style);
+    this.scene.addLayer(bubbleLayer);
+    this.layers.push(bubbleLayer);
+    this.bubbleLayer = bubbleLayer;
+    return bubbleLayer;
+  }
+
   protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex } = this.options;
     const labelLayer = new PointLayer({
-      zIndex: zIndex + 2,
+      zIndex: zIndex + 0.4,
     })
       .source(labelData, {
         parser: {
@@ -228,13 +286,42 @@ export default class BaseLayer extends EventEmitter {
 
   protected addPopup() {
     const { popup } = this.options;
-    this.fillLayer.on('mousemove', (e) => {
+    let popupLayer;
+    if (popup.triggerLayer) {
+      popupLayer =
+        popup.triggerLayer === 'bubble' ? this.bubbleLayer : this.fillLayer;
+    } else {
+      popupLayer = this.options.bubble.enable
+        ? this.bubbleLayer
+        : this.fillLayer;
+    }
+    popupLayer.on(popup.openTriggerEvent as string, (e) => {
+      const html = popup.Html
+        ? popup.Html(e.feature.properties ? e.feature.properties : e.feature)
+        : '';
       this.popup = new Popup({
         closeButton: false,
+        ...popup.option,
       })
         .setLnglat(e.lngLat)
-        .setHTML(popup.Html ? popup.Html(e.feature.properties) : '');
+        .setHTML(html);
       this.scene.addPopup(this.popup);
     });
+
+    popupLayer.on(popup.closeTriggerEvent as string, (e) => {
+      this.popup.remove();
+    });
+  }
+
+  private setLayerAttribute(
+    layer: ILayer,
+    type: 'color' | 'size' | 'shape',
+    attr: AttributeType,
+  ) {
+    if (isObject(attr)) {
+      layer[type](attr.field, attr.values);
+    } else {
+      layer[type](attr);
+    }
   }
 }
