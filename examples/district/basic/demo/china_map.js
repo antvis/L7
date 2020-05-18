@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
