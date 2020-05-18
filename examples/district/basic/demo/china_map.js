@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
@@ -189,26 +190,24 @@ scene.on('loaded', () => {
   new CountryLayer(scene, {
     data: ProvinceData,
     joinBy: [ 'NAME_CHN', 'name' ],
-    // label: {
-    //   field: 'NAME_CHN',
-    //   textAllowOverlap: true,
-    // },
     depth: 1,
     fill: {
-      field: 'value',
-      values: [
-        '#feedde',
-        '#fdd0a2',
-        '#fdae6b',
-        '#fd8d3c',
-        '#e6550d',
-        '#a63603'
-      ]
+      color: {
+        field: 'value',
+        values: [
+          '#feedde',
+          '#fdd0a2',
+          '#fdae6b',
+          '#fd8d3c',
+          '#e6550d',
+          '#a63603'
+        ]
+      }
     },
     popup: {
       enable: true,
       Html: props => {
-        return `<span>${props.NAME_CHN}:</span><span>${props.value}</span>`;
+        return `<span>${props.NAME_CHN}</span>`;
       }
     }
   });

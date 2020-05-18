@@ -38,6 +38,15 @@ export default class ProvinceLayer extends BaseLayer {
     const fillData = this.filterData(this.fillRawData, adcode);
     const lineData = this.filterData(this.lineRawData, adcode);
     const labelData = this.filterLabelData(this.labelRawData, adcode);
+    if (this.options.bubble && this.options.bubble?.enable !== false) {
+      const bubbleData = fillData.features.map((feature: any) => {
+        return {
+          ...feature.properties,
+          center: [feature.properties.x, feature.properties.y],
+        };
+      });
+      this.bubbleLayer.setData(bubbleData);
+    }
     this.fillData = fillData;
     this.updateData(newData, joinByField);
     this.lineLayer.setData(lineData);
@@ -53,17 +62,6 @@ export default class ProvinceLayer extends BaseLayer {
       label: {
         field: 'NAME_CHN',
         textAllowOverlap: false,
-      },
-      fill: {
-        field: 'NAME_CHN',
-        values: [
-          '#feedde',
-          '#fdd0a2',
-          '#fdae6b',
-          '#fd8d3c',
-          '#e6550d',
-          '#a63603',
-        ],
       },
       popup: {
         enable: true,

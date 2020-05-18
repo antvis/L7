@@ -16,15 +16,17 @@ scene.on('loaded', () => {
   new WorldLayer(scene, {
     data: [],
     fill: {
-      field: 'NAME_CHN',
-      values: [
-        '#feedde',
-        '#fdd0a2',
-        '#fdae6b',
-        '#fd8d3c',
-        '#e6550d',
-        '#a63603'
-      ]
+      color: {
+        field: 'NAME_CHN',
+        values: [
+          '#feedde',
+          '#fdd0a2',
+          '#fdae6b',
+          '#fd8d3c',
+          '#e6550d',
+          '#a63603'
+        ]
+      }
     },
     stroke: '#ccc',
     label: {

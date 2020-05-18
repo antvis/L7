@@ -269,15 +269,17 @@ export default class Country extends React.Component {
         depth: 1,
         fill: {
           scale: 'quantile',
-          field: 'confirm',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'confirm',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
       });
     });
@@ -307,15 +309,17 @@ export default class Country extends React.Component {
         autoFit: false,
         fill: {
           scale: 'quantile',
-          field: 'confirm',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'confirm',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
       });
     });

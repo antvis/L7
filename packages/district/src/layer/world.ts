@@ -71,7 +71,7 @@ export default class WorldLayer extends BaseLayer {
     } = this.options;
     // 添加国界线
     const lineLayer = new LineLayer({
-      zIndex: zIndex + 1,
+      zIndex: zIndex + 0.1,
     })
       .source(boundaries)
       // .size(0.6)
@@ -99,7 +99,7 @@ export default class WorldLayer extends BaseLayer {
       });
     // 添加未定国界
     const lineLayer2 = new LineLayer({
-      zIndex: zIndex + 1,
+      zIndex: zIndex + 0.1,
     })
       .source(boundaries2)
       .size('type', (v: string) => {

@@ -2,7 +2,7 @@
  * @Author: lzxue
  * @Date: 2020-04-03 19:24:16
  * @Last Modified by: lzxue
- * @Last Modified time: 2020-04-22 19:09:42
+ * @Last Modified time: 2020-05-13 11:58:01
  */
 import { Control, DOM, IControlOption, PositionType, Scene } from '@antv/l7';
 import './css/draw.less';
@@ -35,6 +35,7 @@ export interface IDrawControlOption extends IControlOption {
   pickBuffer: number;
   controls: IControls;
   layout: 'horizontal' | 'vertical';
+  style: any;
 }
 export class DrawControl extends Control {
   private draw: {
@@ -110,9 +111,15 @@ export class DrawControl extends Control {
   }
 
   private addControls(controls: IControls, container: HTMLElement) {
+    const { style } = this.controlOption as IDrawControlOption;
     for (const type in controls) {
       if (DrawType[type] && controls[type] !== false) {
-        const drawOption = isObject(controls[type]) ? controls[type] : false;
+        const drawOption: Partial<IDrawFeatureOption> = isObject(controls[type])
+          ? (controls[type] as Partial<IDrawFeatureOption>)
+          : {};
+        if (style) {
+          drawOption.style = style;
+        }
         const draw = new DrawType[type](this.scene, drawOption);
         draw.on(DrawEvent.MODE_CHANGE, this.onModeChange.bind(null, type));
         this.draw[type] = draw;
