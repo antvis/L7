@@ -31,12 +31,6 @@ scene.on('loaded', () => {
           '#a63603'
         ]
       }
-    },
-    popup: {
-      enable: true,
-      Html: props => {
-        return `<span>${props.NAME_CHN}</span>`;
-      }
     }
   });
 });
