@@ -189,10 +189,6 @@ scene.on('loaded', () => {
   new CountryLayer(scene, {
     data: ProvinceData,
     joinBy: [ 'NAME_CHN', 'name' ],
-    // label: {
-    //   field: 'NAME_CHN',
-    //   textAllowOverlap: true,
-    // },
     depth: 1,
     fill: {
       color: {
