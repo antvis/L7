@@ -206,7 +206,7 @@ scene.on('loaded', () => {
     popup: {
       enable: true,
       Html: props => {
-        return `<span>${props.NAME_CHN}:</span><span>${props.value}</span>`;
+        return `<span>${props.NAME_CHN}</span>`;
       }
     }
   });
