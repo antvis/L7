@@ -187,8 +187,5 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "version": "0.0.0",
-  "dependencies": {
-    "babel-eslint": "7.2.3"
-  }
+  "version": "0.0.0"
 }

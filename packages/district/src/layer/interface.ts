@@ -107,7 +107,7 @@ export interface IDrillDownOption {
   drillDepth: 0 | 1 | 2;
   customTrigger: boolean;
   drillDownTriggerEvent: TriggeEventType;
-  drillUpTriggleEvent: TriggeEventType & DrillUpTriggeEventType;
+  drillUpTriggerEvent: TriggeEventType & DrillUpTriggeEventType;
   provinceData?: Array<{ [key: string]: any }>;
   cityData?: Array<{ [key: string]: any }>;
   countyData?: Array<{ [key: string]: any }>;
