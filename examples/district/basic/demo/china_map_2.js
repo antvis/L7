@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
@@ -188,8 +187,8 @@ const scene = new Scene({
 
 scene.on('loaded', () => {
   new CountryLayer(scene, {
-    // data: ProvinceData,
-    // joinBy: [ 'NAME_CHN', 'name' ],
+    data: ProvinceData,
+    joinBy: [ 'NAME_CHN', 'name' ],
     depth: 1,
     fill: {
       color: {
