@@ -18,15 +18,6 @@
     "html"
   ],
   "rules": {
-    "no-console": [
-      "warn",
-      {
-        "allow": [
-          "warn",
-          "error"
-        ]
-      }
-    ],
     "no-bitwise": [
       0
     ],
@@ -42,7 +33,7 @@
       0
     ],
     "indent": ["error", 2, {
-      "ignoredNodes": ["TemplateLiteral"]
-    }]
+    "ignoredNodes": ["TemplateLiteral"]
+  }]
   }
 }
