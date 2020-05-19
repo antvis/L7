@@ -37,6 +37,7 @@
     "@types/storybook__react": "^4.0.2",
     "@types/supercluster": "^5.0.1",
     "awesome-typescript-loader": "^5.2.1",
+    "babel-eslint": "8.2.5",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-const-enum": "^0.0.2",
