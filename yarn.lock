@@ -10893,10 +10893,10 @@ escodegen@^1.11.0, escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-egg@^7.5.1:
-  version "7.5.1"
-  resolved "https://registry.npmjs.org/eslint-config-egg/-/eslint-config-egg-7.5.1.tgz#d62a345e1a541cce7601750941b5840c476e27cc"
-  integrity sha512-HNu+M0Od4HH7SMqo17oFe2n2mwMcKaNA52SQuCXIb3i0KazBxvaaa9DmNvoymQXlbxsZYtSN1J1eKmfZJiISkg==
+eslint-config-egg@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-egg/-/eslint-config-egg-8.0.1.tgz#cc68cb060fd9e054dc2983b145753c647e4bb79a"
+  integrity sha512-YArVIQdfbC78mTQtdKU3v7xrLqcKcrM0wA6H6QU5OGNFKuj+mZYwePeiXcS0QWV3eQtAEStXglEUK8DUtXeang==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^2.0.0"
     "@typescript-eslint/parser" "^2.0.0"

@@ -63,7 +63,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
     "eslint": "^6.6.0",
-    "eslint-config-egg": "^7.5.1",
+    "eslint-config-egg": "^8.0.1",
     "eslint-plugin-html": "^6.0.0",
     "gatsby": "^2.19.15",
     "gatsby-plugin-google-analytics": "^2.1.27",
