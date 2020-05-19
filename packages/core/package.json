@@ -37,7 +37,7 @@
     "merge-json-schemas": "^1.0.0",
     "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
-    "viewport-mercator-project": "^6.2.1"
+    "viewport-mercator-project": "^7.0.1"
   },
   "devDependencies": {
     "@types/element-resize-event": "^2.0.0",

@@ -32,7 +32,7 @@
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
-    "viewport-mercator-project": "^6.2.1"
+    "viewport-mercator-project": "^7.0.1"
   },
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
