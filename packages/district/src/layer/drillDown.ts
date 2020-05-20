@@ -48,7 +48,7 @@ export default class DrillDownLayer {
       drillDepth: 2,
       customTrigger: false,
       drillDownTriggerEvent: 'click',
-      drillUpTriggerEvent: 'unclick',
+      drillUpTriggerEvent: 'undblclick',
       provinceData: [],
       cityData: [],
       countyData: [],
@@ -61,7 +61,7 @@ export default class DrillDownLayer {
     };
   }
   public addCountryEvent() {
-    const { drillDownTriggerEvent, drillUpTriggleEvent } = this.options;
+    const { drillDownTriggerEvent } = this.options;
     this.provinceLayer.fillLayer.on(
       drillDownTriggerEvent as string,
       (e: any) => {
@@ -72,8 +72,8 @@ export default class DrillDownLayer {
   }
 
   public addProvinceEvent() {
-    const { drillDownTriggerEvent, drillUpTriggleEvent } = this.options;
-    this.cityLayer.fillLayer.on(drillUpTriggleEvent as string, () => {
+    const { drillDownTriggerEvent, drillUpTriggerEvent } = this.options;
+    this.cityLayer.fillLayer.on(drillUpTriggerEvent as string, () => {
       this.drillUp();
     });
     this.cityLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
@@ -82,8 +82,8 @@ export default class DrillDownLayer {
   }
 
   public addCityEvent() {
-    const { drillDownTriggerEvent, drillUpTriggleEvent } = this.options;
-    this.countyLayer.fillLayer.on(drillUpTriggleEvent as string, () => {
+    const { drillDownTriggerEvent, drillUpTriggerEvent } = this.options;
+    this.countyLayer.fillLayer.on(drillUpTriggerEvent as string, () => {
       this.drillUp();
     });
   }

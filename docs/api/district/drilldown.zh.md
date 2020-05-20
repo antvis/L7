@@ -43,9 +43,9 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 下钻各个层级的配置项，可以独立配置，每一层级的样式，不设置和上一层就保持一致
 
 - joinBy: [string, string];
-- label: Partial<ILabelOption>;
-- bubble: Partial<IBubbleOption>;
-- fill: Partial<IFillOptions>;
+- label: `Partial<ILabelOption>`;
+- bubble: `Partial<IBubbleOption>`;
+- fill: `Partial<IFillOptions>`;
 
 #### labelOption
 
