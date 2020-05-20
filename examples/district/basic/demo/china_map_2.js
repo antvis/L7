@@ -192,7 +192,7 @@ scene.on('loaded', () => {
     depth: 1,
     fill: {
       color: {
-        field: 'value',
+        field: 'NAME_CHN',
         values: [
           '#feedde',
           '#fdd0a2',
