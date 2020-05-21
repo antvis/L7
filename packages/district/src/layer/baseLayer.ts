@@ -134,7 +134,7 @@ export default class BaseLayer extends EventEmitter {
       provinceStroke: '#f0f0f0',
       countyStroke: '#525252',
       coastlineStroke: '#4190da',
-      coastlineWidth: 1,
+      coastlineWidth: 0.6,
       nationalStroke: '#c994c7',
       nationalWidth: 0.5,
       chinaNationalStroke: 'gray',

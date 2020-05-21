@@ -8,7 +8,7 @@ import {
 } from '@antv/l7';
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
-import { DataConfig } from '../config';
+import { DataConfig } from '../config_1';
 import BaseLayer from './baseLayer';
 import { adcodeType, IDistrictLayerOption } from './interface';
 

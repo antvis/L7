@@ -30,7 +30,6 @@ District 支持下面几种图
 - ProvinceLayer 省级地图
 - CityLayer 市级地图
 - CountyLayer 县级地图
-- DrillDownLayer 上钻下取地图
 
 
 ## 构造函数

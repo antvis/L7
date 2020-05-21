@@ -6,7 +6,7 @@ import {
   Scene,
   StyleAttrField,
 } from '@antv/l7';
-import { DataConfig } from '../config';
+import { DataConfig } from '../config_1';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
 
@@ -14,17 +14,8 @@ export default class CountryLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
     const { depth } = this.options;
-    this.loadData().then(([fillData, fillLabel]) => {
-      this.addFillLayer(fillData);
-      if (fillLabel && this.options.label?.enable) {
-        this.addLabelLayer(
-          fillLabel.filter((v: any) => {
-            return v.name !== '澳门';
-          }),
-        );
-        this.addMCLabel();
-      }
-    });
+    this.addProvinceFill();
+    this.addProvinceLabel();
     const countryConfig = DataConfig.country.CHN[depth];
 
     this.addProvinceLine(countryConfig.provinceLine);
@@ -34,6 +25,27 @@ export default class CountryLayer extends BaseLayer {
     }
     if (depth === 3 * 1) {
       this.addCountyBorder(countryConfig.countryLine);
+    }
+  }
+  protected async addProvinceFill() {
+    const { depth } = this.options;
+    const countryConfig = DataConfig.country.CHN[depth];
+    const fillData = await this.fetchData(countryConfig.fill);
+    this.addFillLayer(fillData);
+  }
+  protected async addProvinceLabel() {
+    const { depth } = this.options;
+    const countryConfig = DataConfig.country.CHN[depth];
+    const fillLabel = countryConfig.label
+      ? await this.fetchData(countryConfig.label)
+      : null;
+    if (fillLabel && this.options.label?.enable) {
+      this.addLabelLayer(
+        fillLabel.filter((v: any) => {
+          return v.name !== '澳门';
+        }),
+      );
+      this.addMCLabel();
     }
   }
   // 国界,省界
