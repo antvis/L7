@@ -1,10 +1,10 @@
 import { storiesOf } from '@storybook/react';
 require('./../assets/css/antd.css');
 import * as React from 'react';
-import ChinaBubble from './Layer/country_bubble';
 import City from './Layer/city';
 import Country from './Layer/Country';
 import Country2 from './Layer/Country2';
+import ChinaBubble from './Layer/country_bubble';
 import CountryCity from './Layer/country_city';
 import CountryCounty from './Layer/country_county';
 import County from './Layer/county';

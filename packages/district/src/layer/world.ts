@@ -6,7 +6,7 @@ import {
   Scene,
   StyleAttrField,
 } from '@antv/l7';
-import { DataConfig } from '../config';
+import { DataConfig } from '../config_1';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
 export default class WorldLayer extends BaseLayer {

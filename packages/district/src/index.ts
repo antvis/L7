@@ -1,4 +1,4 @@
-import { setDataConfig } from './config';
+import { setDataConfig } from './config_1';
 import CityLayer from './layer/city';
 import CountryLayer from './layer/country';
 import CountyLayer from './layer/county';
