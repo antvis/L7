@@ -1,7 +1,6 @@
 import { Scene } from '@antv/l7';
 import { DrillDownLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { Cascader } from 'antd';
 import * as React from 'react';
 
 export default class Country extends React.Component {

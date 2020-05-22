@@ -5980,7 +5980,7 @@ ansicolors@~0.2.1:
   resolved "https://registry.npmjs.org/ansicolors/-/ansicolors-0.2.1.tgz#be089599097b74a5c9c4a84a0cdbcdb62bd87aef"
   integrity sha1-vgiVmQl7dKXJxKhKDNvNtivYeu8=
 
-antd@^4.0.0:
+antd@^4.0.0, antd@^4.2.4:
   version "4.2.4"
   resolved "https://registry.npmjs.org/antd/-/antd-4.2.4.tgz#0a75e178643858960189912b8fe48bf7e8f6abf8"
   integrity sha512-g61c1+Ji/tbY+G1GMdk0LsCN3S1ZfoHyj+zcjXmvqZjWfdkJ/bBEzw08I3ytTe5TV8RFued0nnSjT51ruagpSA==
