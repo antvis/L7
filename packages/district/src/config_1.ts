@@ -32,7 +32,7 @@ let DataConfig: { [key: string]: any } = {
         fill: {
           type: 'pbf',
           url:
-            'https://gw.alipayobjects.com/os/bmw-prod/dc890ed9-8b64-4fe6-bc51-5742753784fb.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/25228941-b2ac-4591-b07d-8261ac08d06f.bin',
         },
         line: {
           type: 'pbf',
