@@ -80,13 +80,13 @@ export default class BaseLayer extends EventEmitter {
             ],
     });
   }
-  protected async fetchData(data: { url: string; type: string }) {
+  protected async fetchData(data: { url: any; type: string }) {
     if (data.type === 'pbf') {
       const buffer = await (await fetch(data.url)).arrayBuffer();
       const geojson = geobuf.decode(new Pbf(buffer));
       return geojson;
     } else {
-      return (await fetch(data.url)).json();
+      return isObject(data.url) ? data.url : (await fetch(data.url)).json();
     }
   }
   protected getDefaultOption(): IDistrictLayerOption {

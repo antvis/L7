@@ -6,7 +6,7 @@ import {
   Scene,
   StyleAttrField,
 } from '@antv/l7';
-import { DataConfig } from '../config_1';
+import { DataConfig } from '../index';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
 
@@ -201,12 +201,12 @@ export default class CountryLayer extends BaseLayer {
         center: [113.537747, 22.187009],
       },
     ];
-    const labelLayer1 = this.addText(data, { maxZoom: 3 }, [-45, -10]);
+    const labelLayer1 = this.addText(data, { maxZoom: 2.9 }, [-45, -10]);
     const labelLayer2 = this.addText(data, { minZoom: 3, maxZoom: 4 }, [
       -35,
       -10,
     ]);
-    const labelLayer = this.addText(data, { minZoom: 4 }, [0, 0]);
+    const labelLayer = this.addText(data, { minZoom: 4.1 }, [0, 0]);
     this.scene.addLayer(labelLayer);
     this.scene.addLayer(labelLayer1);
     this.scene.addLayer(labelLayer2);

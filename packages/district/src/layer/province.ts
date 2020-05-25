@@ -8,7 +8,7 @@ import {
 } from '@antv/l7';
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
-import { DataConfig } from '../config_1';
+import { DataConfig } from '../';
 import BaseLayer from './baseLayer';
 import { adcodeType, IDistrictLayerOption } from './interface';
 
@@ -22,7 +22,7 @@ export default class ProvinceLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IProvinceLayerOption> = {}) {
     super(scene, option);
     this.addProvinceFillLayer();
-    this.addProvinceLineLayer();
+    // this.addProvinceLineLayer();
   }
   // 通过adcode 更新
   public updateDistrict(
@@ -111,6 +111,8 @@ export default class ProvinceLayer extends BaseLayer {
     this.fillRawData = fillData;
     this.addFillLayer(data);
     this.addLabelLayer(labelData);
+    this.lineRawData = fillData;
+    this.addFillLine(data);
   }
 
   private async addProvinceLineLayer() {
