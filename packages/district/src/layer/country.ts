@@ -1,12 +1,5 @@
-import {
-  ILayer,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Scene,
-  StyleAttrField,
-} from '@antv/l7';
-import { DataConfig } from '../index';
+import { LineLayer, PointLayer, Scene, StyleAttrField } from '@antv/l7';
+import { getDataConfig } from '../index';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
 
@@ -16,7 +9,9 @@ export default class CountryLayer extends BaseLayer {
     const { depth } = this.options;
     this.addProvinceFill();
     this.addProvinceLabel();
-    const countryConfig = DataConfig.country.CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
+      depth
+    ];
 
     this.addProvinceLine(countryConfig.provinceLine);
 
@@ -29,13 +24,15 @@ export default class CountryLayer extends BaseLayer {
   }
   protected async addProvinceFill() {
     const { depth } = this.options;
-    const countryConfig = DataConfig.country.CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).CHN[depth];
     const fillData = await this.fetchData(countryConfig.fill);
     this.addFillLayer(fillData);
   }
   protected async addProvinceLabel() {
     const { depth } = this.options;
-    const countryConfig = DataConfig.country.CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
+      depth
+    ];
     const fillLabel = countryConfig.label
       ? await this.fetchData(countryConfig.label)
       : null;
@@ -93,7 +90,9 @@ export default class CountryLayer extends BaseLayer {
 
   private async loadData() {
     const { depth } = this.options;
-    const countryConfig = DataConfig.country.CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
+      depth
+    ];
     const fillData = await this.fetchData(countryConfig.fill);
     const fillLabel = countryConfig.label
       ? await this.fetchData(countryConfig.label)

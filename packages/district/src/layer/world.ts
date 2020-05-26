@@ -6,7 +6,7 @@ import {
   Scene,
   StyleAttrField,
 } from '@antv/l7';
-import { DataConfig } from '../';
+import { getDataConfig } from '../';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
 export default class WorldLayer extends BaseLayer {
@@ -16,7 +16,7 @@ export default class WorldLayer extends BaseLayer {
       this.addFillLayer(fillData);
       this.addFillLine(lineData);
       if (this.options.label?.enable) {
-        this.addLabelLayer(fillLabel, 'geojson');
+        this.addLabelLayer(fillLabel, 'json');
       }
     });
   }
@@ -52,11 +52,17 @@ export default class WorldLayer extends BaseLayer {
   }
 
   private async loadData() {
-    const countryConfig = DataConfig.world;
+    const countryConfig = getDataConfig(this.options.geoDataLevel).world;
 
     const fillData = await this.fetchData(countryConfig.fill);
     const lineData = await this.fetchData(countryConfig.line);
-    const fillLabel = await this.fetchData(countryConfig.label);
+    // const fillLabel = await this.fetchData(countryConfig.label);
+    const fillLabel = fillData.features.map((feature: any) => {
+      return {
+        ...feature.properties,
+        center: [feature.properties.x, feature.properties.y],
+      };
+    });
     return [fillData, lineData, fillLabel];
   }
   private addNationBorder(boundaries: any, boundaries2: any) {

@@ -26,7 +26,7 @@ scene.on('loaded', () => {
           transforms: [
             {
               type: 'hexagon',
-              size: 17000,
+              size: 200000,
               field: 'v',
               method: 'sum'
             }

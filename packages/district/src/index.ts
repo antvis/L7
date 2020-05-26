@@ -1,4 +1,4 @@
-import { DataConfig, setDataConfig } from './config_1';
+// import { DataConfig, setDataConfig } from './config_1';
 import CityLayer from './layer/city';
 import CountryLayer from './layer/country';
 import CountyLayer from './layer/county';
@@ -12,6 +12,5 @@ export {
   CityLayer,
   CountyLayer,
   DrillDownLayer,
-  setDataConfig,
-  DataConfig,
 };
+export * from './config';

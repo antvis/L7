@@ -16,7 +16,7 @@ export default class HexagonLayerDemo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         pitch: 0,
         style: 'blank',
         center: [140.067171, 36.26186],
@@ -26,40 +26,46 @@ export default class HexagonLayerDemo extends React.Component {
     });
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/3dadb1f5-8f54-4449-8206-72db6e142c40.json',
+        'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
       )
-        .then((res) => res.json())
+        .then((res) => res.text())
         .then((data) => {
           const pointLayer = new HeatmapLayer({
             autoFit: true,
           })
             .source(data, {
+              parser: {
+                type: 'csv',
+                x: 'lng',
+                y: 'lat',
+              },
               transforms: [
                 {
-                  type: 'grid',
-                  size: 500000,
-                  field: 'name',
-                  method: 'mode',
+                  type: 'hexagon',
+                  size: 200000,
+                  field: 'v',
+                  method: 'sum',
                 },
               ],
             })
-            .shape('square') // 支持 circle, hexagon,triangle
-            .color('mode', [
-              '#ffffe5',
-              '#fff7bc',
-              '#fee391',
-              '#fec44f',
-              '#fe9929',
-              '#ec7014',
-              '#cc4c02',
-              '#993404',
-              '#662506',
-            ])
-            .active(false)
+            .size('sum', (value) => {
+              return value * 20;
+            })
+            .shape('hexagonColumn')
+            .color(
+              'count',
+              [
+                '#FF4818',
+                '#F7B74A',
+                '#FFF598',
+                '#FF40F3',
+                '#9415FF',
+                '#421EB2',
+              ].reverse(),
+            )
             .style({
-              coverage: 0.7,
-              // angle: 0.5,
-              opacity: 1.0,
+              coverage: 0.9,
+              angle: 0,
             });
           scene.addLayer(pointLayer);
           console.log(pointLayer.getSource());
