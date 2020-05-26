@@ -1,11 +1,3 @@
-import {
-  ILayer,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Scene,
-  StyleAttrField,
-} from '@antv/l7';
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
 

@@ -8,7 +8,7 @@ import {
 } from '@antv/l7';
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
-import { DataConfig } from '../';
+import { getDataConfig } from '../';
 import BaseLayer from './baseLayer';
 import { adcodeType, IDistrictLayerOption } from './interface';
 
@@ -97,7 +97,9 @@ export default class ProvinceLayer extends BaseLayer {
   }
   private async addProvinceFillLayer() {
     const { depth, adcode } = this.options as IProvinceLayerOption;
-    const countryConfig = DataConfig.country.CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
+      depth
+    ];
     const fillData = await this.fetchData(countryConfig.fill);
 
     this.labelRawData = fillData.features.map((feature: any) => {
@@ -117,7 +119,9 @@ export default class ProvinceLayer extends BaseLayer {
 
   private async addProvinceLineLayer() {
     const { depth, adcode } = this.options as IProvinceLayerOption;
-    const countryConfig = DataConfig.country.CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
+      depth
+    ];
     const fillData = await this.fetchData(countryConfig.line);
     const data = this.filterData(fillData, adcode);
     this.lineRawData = fillData;

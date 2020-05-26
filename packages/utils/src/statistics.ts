@@ -42,27 +42,12 @@ function sum(x: number[]) {
   // Initializing the sum as the first number in the array
   let sumNum = x[0] * 1;
 
-  // Keeping track of the floating-point error correction
-  let correction = 0;
-
-  let transition;
-
   for (let i = 1; i < x.length; i++) {
-    transition = sumNum + x[i] * 1;
-
-    // Here we need to update the correction in a different fashion
-    // if the new absolute value is greater than the absolute sum
-    if (Math.abs(sumNum) >= Math.abs(x[i])) {
-      correction += sumNum - transition + x[i];
-    } else {
-      correction += x[i] - transition + sumNum;
-    }
-
-    sumNum = transition;
+    sumNum += x[i] * 1;
   }
 
   // Returning the corrected sum
-  return sumNum + correction * 1;
+  return sumNum;
 }
 function mean(x: number[]) {
   if (x.length === 0) {

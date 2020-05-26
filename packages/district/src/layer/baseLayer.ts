@@ -17,6 +17,7 @@ import isObject from 'lodash/isObject';
 import mergeWith from 'lodash/mergeWith';
 // @ts-ignore
 import Pbf from 'pbf';
+import { setDataLevel } from '../config';
 import { AttributeType, IDistrictLayerOption } from './interface';
 
 function mergeCustomizer(objValue: any, srcValue: any) {
@@ -39,6 +40,7 @@ export default class BaseLayer extends EventEmitter {
     super();
     this.scene = scene;
     this.options = mergeWith(this.getDefaultOption(), option, mergeCustomizer);
+    setDataLevel(this.options.geoDataLevel);
   }
 
   public destroy() {
@@ -92,6 +94,7 @@ export default class BaseLayer extends EventEmitter {
   protected getDefaultOption(): IDistrictLayerOption {
     return {
       zIndex: 0,
+      geoDataLevel: 2,
       depth: 1,
       adcode: [],
       joinBy: ['name', 'name'],
@@ -141,7 +144,7 @@ export default class BaseLayer extends EventEmitter {
       chinaNationalWidth: 1,
       popup: {
         enable: true,
-        openTriggerEvent: 'mouseenter',
+        openTriggerEvent: 'mousemove',
         closeTriggerEvent: 'mouseout',
         option: {},
         Html: (properties: any) => {

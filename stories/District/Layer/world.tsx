@@ -44,12 +44,12 @@ export default class Country extends React.Component {
         label: {
           enable: true,
           textAllowOverlap: false,
-          field: 'Short_Name_ZH',
+          field: 'NAME_CHN',
         },
         popup: {
           enable: false,
           Html: (props) => {
-            return `<span>${props.Short_Name_ZH}</span>`;
+            return `<span>${props.NAME_CHN}</span>`;
           },
         },
       });
