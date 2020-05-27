@@ -21,8 +21,7 @@ export default class Circle extends React.Component {
       }),
     });
     this.scene = scene;
-
-    scene.on('loaded', () => {
+    const line = scene.on('loaded', () => {
       const drawLine = new DrawLine(scene);
       drawLine.enable();
     });

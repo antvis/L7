@@ -14,7 +14,7 @@ function max(x: number[]) {
       value = x[i];
     }
   }
-  return value;
+  return value * 1;
 }
 
 function min(x: number[]) {
@@ -30,7 +30,7 @@ function min(x: number[]) {
       value = x[i];
     }
   }
-  return value;
+  return value * 1;
 }
 
 function sum(x: number[]) {
@@ -81,7 +81,7 @@ function mode(x: any[]) {
       seenThis++;
     }
   }
-  return value;
+  return value * 1;
 }
 
 export { sum, max, min, mean, mode };
