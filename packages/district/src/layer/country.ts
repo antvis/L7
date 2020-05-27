@@ -24,7 +24,9 @@ export default class CountryLayer extends BaseLayer {
   }
   protected async addProvinceFill() {
     const { depth } = this.options;
-    const countryConfig = getDataConfig(this.options.geoDataLevel).CHN[depth];
+    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
+      depth
+    ];
     const fillData = await this.fetchData(countryConfig.fill);
     this.addFillLayer(fillData);
   }
