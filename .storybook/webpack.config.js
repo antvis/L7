@@ -36,6 +36,9 @@ module.exports = ({ config }) => {
     loader: 'svg-inline-loader'
   }
   );
+  config.resolve.alias = {
+    '@antv/l7-district': path.resolve(__dirname, '../packages/boundry/src'),
+  }
 
   config.resolve.extensions.push('.ts', '.tsx', 'css', '.js', '.glsl');
 
