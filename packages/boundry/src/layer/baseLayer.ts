@@ -312,7 +312,9 @@ export default class BaseLayer extends EventEmitter {
     });
 
     popupLayer.on(popup.closeTriggerEvent as string, (e) => {
-      this.popup.remove();
+      if (this.popup) {
+        this.popup.remove();
+      }
     });
   }
 
