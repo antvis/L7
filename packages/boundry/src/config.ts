@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
 
-let DataLevel = 1;
+let DataLevel = 2;
 const dataLevel1: { [key: string]: any } = {
   world: {
     fill: {
@@ -244,7 +244,7 @@ const dataLevel2: { [key: string]: any } = {
 };
 
 const DataLevelMap: { [key: string]: any } = {
-  1: dataLevel1,
+  1: dataLevel1, // 高精度数据
   2: dataLevel2,
 };
 
