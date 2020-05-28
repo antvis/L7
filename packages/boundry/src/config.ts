@@ -1,8 +1,8 @@
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
 
-let DataLevel = 1;
-const dataLevel1: { [key: string]: any } = {
+let DataLevel = 2;
+const dataLevel2: { [key: string]: any } = {
   world: {
     fill: {
       type: 'pbf',
@@ -122,7 +122,7 @@ const dataLevel1: { [key: string]: any } = {
     110000: '',
   },
 };
-const dataLevel2: { [key: string]: any } = {
+const dataLevel1: { [key: string]: any } = {
   world: {
     fill: {
       type: 'pbf',
@@ -181,12 +181,12 @@ const dataLevel2: { [key: string]: any } = {
         line: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/8bfbfe7e-bd0e-4bbe-84d8-629f4dc7abc4.bin',
+            '//gw.alipayobjects.com/os/bmw-prod/561e2cfe-9460-42d1-a2f8-3fd2e1274c52.bin',
         },
         cityLine: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/8bfbfe7e-bd0e-4bbe-84d8-629f4dc7abc4.bin',
+            '//gw.alipayobjects.com/os/bmw-prod/561e2cfe-9460-42d1-a2f8-3fd2e1274c52.bin',
         },
         provinceLine: {
           type: 'pbf',
@@ -244,7 +244,7 @@ const dataLevel2: { [key: string]: any } = {
 };
 
 const DataLevelMap: { [key: string]: any } = {
-  1: dataLevel1,
+  1: dataLevel1, // 高精度数据
   2: dataLevel2,
 };
 

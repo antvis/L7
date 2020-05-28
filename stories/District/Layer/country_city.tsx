@@ -45,7 +45,7 @@ export default class Country extends React.Component {
         },
         popup: {
           enable: true,
-          Html: (props) => {
+          Html: (props: any) => {
             return `<span>${props.NAME_CHN}</span>`;
           },
         },

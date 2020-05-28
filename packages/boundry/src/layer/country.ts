@@ -16,10 +16,10 @@ export default class CountryLayer extends BaseLayer {
     this.addProvinceLine(countryConfig.provinceLine);
 
     if (depth === 2 * 1) {
-      this.addCityBorder(countryConfig.cityLine);
+      this.addCityBorder(countryConfig.fill);
     }
     if (depth === 3 * 1) {
-      this.addCountyBorder(countryConfig.countryLine);
+      this.addCountyBorder(countryConfig.fill);
     }
   }
   protected async addProvinceFill() {
