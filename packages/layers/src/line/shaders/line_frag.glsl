@@ -12,7 +12,7 @@ varying vec2 v_normal;
 uniform float u_dash_offset : 0.0;
 uniform float u_dash_ratio : 0.1;
 varying float v_distance_ratio;
-varying vec2 v_dash_array;
+varying vec4 v_dash_array;
 varying float v_side;
 
 
@@ -35,7 +35,13 @@ void main() {
   }
  // dash line
   if(u_line_type == LineTypeDash) {
-    gl_FragColor.a *=(1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
+    float flag = 0.;
+    float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
+    if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
+      flag = 1.;
+    }
+    gl_FragColor.a *=flag;
+    // gl_FragColor.a *=(1.0- step(v_dash_array.x, mod(v_distance_ratio, dashLength)));
   }
 
   gl_FragColor = filterColor(gl_FragColor);

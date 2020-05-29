@@ -20,26 +20,27 @@ export default class Country extends React.Component {
         style: 'blank',
         zoom: 3,
         minZoom: 3,
-        maxZoom: 10,
+        maxZoom: 6,
       }),
     });
     scene.on('loaded', () => {
       const Layer = new CountryLayer(scene, {
         data: [],
+        geoDataLevel: 2,
         depth: 2,
-        stroke: '#fff',
+        provinceStroke: '#783D2D',
+        cityStroke: '#EBCCB4',
         coastlineWidth: 0.5,
         nationalWidth: 0.5,
         fill: {
           color: {
             field: 'NAME_CHN',
             values: [
-              '#feedde',
-              '#fdd0a2',
-              '#fdae6b',
-              '#fd8d3c',
-              '#e6550d',
-              '#a63603',
+              '#D92568',
+              '#E3507E',
+              '#FC7AAB',
+              '#F1D3E5',
+              '#F2EEFF'
             ],
           },
         },

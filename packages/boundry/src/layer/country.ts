@@ -52,12 +52,23 @@ export default class CountryLayer extends BaseLayer {
     const lineData = await this.fetchData(cfg);
     const border1 = lineData.features.filter((feature: any) => {
       const type = feature.properties.type;
-      return type === '1' || type === '4';
+      return type === '1';
+    });
+    // 香港 澳门
+    const border2 = lineData.features.filter((feature: any) => {
+      const type = feature.properties.type;
+      return type === '4';
     });
     const borderFc = {
       type: 'FeatureCollection',
       features: border1,
     };
+
+    const borderFc2 = {
+      type: 'FeatureCollection',
+      features: border2,
+    };
+
     const nationalBorder = lineData.features.filter((feature: any) => {
       const type = feature.properties.type;
       return type !== '1' && type !== '4';
@@ -66,29 +77,29 @@ export default class CountryLayer extends BaseLayer {
       type: 'FeatureCollection',
       features: nationalBorder,
     };
-    this.addNationBorder(nationalFc, borderFc);
+    this.addNationBorder(nationalFc, borderFc, borderFc2);
   }
 
   // 国界,省界
-  protected addFillLine(lineData: any) {
-    const border1 = lineData.features.filter((feature: any) => {
-      const type = feature.properties.type;
-      return type === '1' || type === '4';
-    });
-    const borderFc = {
-      type: 'FeatureCollection',
-      features: border1,
-    };
-    const nationalBorder = lineData.features.filter((feature: any) => {
-      const type = feature.properties.type;
-      return type !== '1' && type !== '4';
-    });
-    const nationalFc = {
-      type: 'FeatureCollection',
-      features: nationalBorder,
-    };
-    this.addNationBorder(nationalFc, borderFc);
-  }
+  // protected addFillLine(lineData: any) {
+  //   const border1 = lineData.features.filter((feature: any) => {
+  //     const type = feature.properties.type;
+  //     return type === '1' || type === '4';
+  //   });
+  //   const borderFc = {
+  //     type: 'FeatureCollection',
+  //     features: border1,
+  //   };
+  //   const nationalBorder = lineData.features.filter((feature: any) => {
+  //     const type = feature.properties.type;
+  //     return type !== '1' && type !== '4';
+  //   });
+  //   const nationalFc = {
+  //     type: 'FeatureCollection',
+  //     features: nationalBorder,
+  //   };
+  //   this.addNationBorder(nationalFc, borderFc);
+  // }
 
   private async loadData() {
     const { depth } = this.options;
@@ -102,7 +113,11 @@ export default class CountryLayer extends BaseLayer {
     return [fillData, fillLabel];
   }
   // 省级行政区划
-  private async addNationBorder(boundaries: any, boundaries2: any) {
+  private async addNationBorder(
+    boundaries: any,
+    boundaries2: any,
+    boundaries3: any,
+  ) {
     const {
       nationalStroke,
       provinceStroke,
@@ -149,17 +164,31 @@ export default class CountryLayer extends BaseLayer {
       zIndex: zIndex + 0.1,
     })
       .source(boundaries2)
-      .size(nationalWidth)
+      .size(chinaNationalWidth)
       .shape('line')
-      .color('gray')
+      .color(chinaNationalStroke)
       .style({
         lineType: 'dash',
         dashArray: [2, 2],
       });
 
+    // 添加澳门香港界限
+    const lineLayer3 = new LineLayer({
+      zIndex: zIndex + 0.1,
+    })
+      .source(boundaries3)
+      .size(provinceStrokeWidth)
+      .shape('line')
+      .color(provinceStroke)
+      .style({
+        lineType: 'dash',
+        dashArray: [4, 2, 2, 2],
+      });
+
     this.scene.addLayer(lineLayer);
     this.scene.addLayer(lineLayer2);
-    this.layers.push(lineLayer, lineLayer2);
+    this.scene.addLayer(lineLayer3);
+    this.layers.push(lineLayer, lineLayer2, lineLayer3);
   }
   // 市边界
   private async addCityBorder(cfg: any) {
