@@ -112,8 +112,12 @@ export default class MarkerLayer extends EventEmitter {
     this.markers.forEach((marker: IMarker) => {
       marker.remove();
     });
+    this.clusterMarkers.forEach((clusterMarker: IMarker) => {
+      clusterMarker.remove();
+    });
     this.mapsService.off('camerachange', this.update);
     this.markers = [];
+    this.clusterMarkers = [];
   }
 
   public destroy() {
