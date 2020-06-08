@@ -1,5 +1,5 @@
 import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 function convertRGB2Hex(rgb: number[]) {
@@ -27,17 +27,57 @@ export default class MultiPolygon extends React.Component {
       map: new GaodeMap({
         pitch: 0,
         style: 'dark',
-        center: [121.775374, 31.31067],
-        zoom: 5,
+        center: [118.70796203613281, 31.84956532831343],
+        zoom: 12,
       }),
     });
     const data = await response.json();
     // console.log(data.features[5]);
     // data.features = data.features.slice(6);
-    const layer = new LineLayer()
-      .source(data)
-      .shape('line')
-      .size(1)
+    const layer = new PolygonLayer()
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
+                [
+                  [118.70796203613281, 31.84956532831343],
+                  [118.67019653320312, 31.783049527817784],
+                  [118.70384216308594, 31.757947795369688],
+                  [118.7944793701172, 31.79647323968844],
+                  [118.78829956054686, 31.85073184447357],
+                  [118.70796203613281, 31.84956532831343],
+                ],
+              ],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
+                [
+                  [116.96044921875, 29.38217507514529],
+                  [114.41162109375, 30.315987718557867],
+                  [114.78515624999999, 28.43971381702788],
+                  [114.93896484374999, 27.0982539061379],
+                  [116.98242187499999, 27.01998400798257],
+                  [119.20166015625, 28.091366281406945],
+                  [119.17968749999999, 29.38217507514529],
+                  [116.96044921875, 29.38217507514529],
+                ],
+              ],
+            },
+          },
+        ],
+      })
+      .shape('extrude')
+      .size(10)
       .color('red')
       .style({
         opacity: 1.0,

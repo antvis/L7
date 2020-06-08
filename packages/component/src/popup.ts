@@ -208,11 +208,10 @@ export default class Popup extends EventEmitter implements IPopup {
           .split(' ')
           .forEach((name) => this.container.classList.add(name));
       }
-      this.container.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-      });
-      this.container.addEventListener('click', (e) => {
-        e.stopPropagation();
+      ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
+        this.container.addEventListener(type, (e) => {
+          e.stopPropagation();
+        });
       });
     }
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {

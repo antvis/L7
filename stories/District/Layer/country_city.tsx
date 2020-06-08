@@ -20,7 +20,7 @@ export default class Country extends React.Component {
         style: 'blank',
         zoom: 3,
         minZoom: 3,
-        maxZoom: 6,
+        maxZoom: 10,
       }),
     });
     scene.on('loaded', () => {
@@ -35,13 +35,7 @@ export default class Country extends React.Component {
         fill: {
           color: {
             field: 'NAME_CHN',
-            values: [
-              '#D92568',
-              '#E3507E',
-              '#FC7AAB',
-              '#F1D3E5',
-              '#F2EEFF'
-            ],
+            values: ['#D92568', '#E3507E', '#FC7AAB', '#F1D3E5', '#F2EEFF'],
           },
         },
         popup: {

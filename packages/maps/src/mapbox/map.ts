@@ -27,6 +27,7 @@ import mapboxgl, { IControl, Map } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { IMapboxInstance } from '../../typings/index';
 import Viewport from './Viewport';
+window.mapboxgl = mapboxgl;
 const EventMap: {
   [key: string]: any;
 } = {
@@ -239,10 +240,11 @@ export default class MapboxService
     lnglat: [number, number],
     altitude: number,
   ): IMercator {
-    const { x = 0, y = 0, z = 0 } = mapboxgl.MercatorCoordinate.fromLngLat(
-      lnglat,
-      altitude,
-    );
+    const {
+      x = 0,
+      y = 0,
+      z = 0,
+    } = window.mapboxgl.MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
   public getModelMatrix(
@@ -252,7 +254,7 @@ export default class MapboxService
     scale: [number, number, number] = [1, 1, 1],
     origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
-    const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+    const modelAsMercatorCoordinate = window.mapboxgl.MercatorCoordinate.fromLngLat(
       lnglat,
       altitude,
     );
@@ -302,7 +304,7 @@ export default class MapboxService
      */
 
     // 判断全局 mapboxgl 对象的加载
-    if (!mapInstance && !mapboxgl) {
+    if (!mapInstance && !window.mapboxgl) {
       // 用户有时传递进来的实例是继承于 mapbox 实例化的，不一定是 mapboxgl 对象。
       this.logger.error(this.configService.getSceneWarninfo('SDK'));
     }
@@ -310,16 +312,16 @@ export default class MapboxService
     if (
       token === MAPBOX_API_KEY &&
       style !== 'blank' &&
-      !mapboxgl.accessToken &&
+      !window.mapboxgl.accessToken &&
       !mapInstance // 如果用户传递了 mapInstance，应该不去干预实例的 accessToken。
     ) {
       this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
     }
 
     // 判断是否设置了 accessToken
-    if (!mapInstance && !mapboxgl.accessToken) {
+    if (!mapInstance && !window.mapboxgl.accessToken) {
       // 用户有时传递进来的实例是继承于 mapbox 实例化的，不一定是 mapboxgl 对象。
-      mapboxgl.accessToken = token;
+      window.mapboxgl.accessToken = token;
     }
 
     if (mapInstance) {
@@ -329,7 +331,7 @@ export default class MapboxService
     } else {
       this.$mapContainer = this.creatAmapContainer(id);
       // @ts-ignore
-      this.map = new mapboxgl.Map({
+      this.map = new window.mapboxgl.Map({
         container: this.$mapContainer,
         style: this.getMapStyle(style),
         attributionControl,
