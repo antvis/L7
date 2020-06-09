@@ -1,0 +1,46 @@
+{
+  "name": "@antv/l7-map",
+  "version": "2.2.11",
+  "description": "l7 map",
+  "keywords": [],
+  "author": "thinkinggis <lzx199065@gmail.com>",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/l7-map.js",
+  "types": "es/index.d.ts",
+  "sideEffects": true,
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antvis/L7.git"
+  },
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "run-p build:*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "test": "jest"
+  },
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+  "homepage": "https://github.com/antvis/L7#readme",
+  "dependencies": {
+    "@antv/l7-utils": "2.2.11",
+    "@mapbox/point-geometry": "^0.1.0",
+    "@mapbox/unitbezier": "^0.0.0",
+    "eventemitter3": "^4.0.4",
+    "lodash": "^4.17.15"
+  }
+}
