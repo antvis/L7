@@ -181,17 +181,17 @@ const dataLevel1: { [key: string]: any } = {
         line: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/561e2cfe-9460-42d1-a2f8-3fd2e1274c52.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/8bfbfe7e-bd0e-4bbe-84d8-629f4dc7abc4.bin',
         },
         cityLine: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/561e2cfe-9460-42d1-a2f8-3fd2e1274c52.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/8bfbfe7e-bd0e-4bbe-84d8-629f4dc7abc4.bin',
         },
         provinceLine: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/778ad7ba-5a3f-4ed6-a94a-b8ab8acae9d6.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/778ad7ba-5a3f-4ed6-a94a-b8ab8acae9d6.bin',
         },
       },
       3: {

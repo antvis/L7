@@ -23,6 +23,9 @@ export default class Arc3DModel extends BaseModel {
       lineType = 'solid',
       dashArray = [10, 5],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (dashArray.length === 2) {
+      dashArray.push(0, 0);
+    }
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,

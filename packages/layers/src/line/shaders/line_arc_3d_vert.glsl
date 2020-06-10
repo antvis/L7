@@ -13,9 +13,8 @@ varying vec4 v_color;
 varying vec2 v_normal;
 varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
-uniform vec2 u_dash_array: [10.0, 5.];
-
-varying vec2 v_dash_array;
+uniform vec4 u_dash_array: [10.0, 5., 0, 0];
+varying vec4 v_dash_array;
 
 #pragma include "projection"
 #pragma include "project"
