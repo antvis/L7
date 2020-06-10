@@ -64,26 +64,28 @@ District 支持下面几种图
     - size 气泡大小 支持常量、数据映射
     - shape 气泡形状 支持常量、数据映射
     - style 气泡图样式 同 PointLayer
-  - stroke 填充描边颜色 
-  - strokeWidth 填充描边宽度
+  - stroke 填充描边颜色 `ProvinceLayer, CityLayer, CountyLayer`
+  - strokeWidth 填充描边宽度 `ProvinceLayer, CityLayer, CountyLayer`
   - autoFit 是否自动缩放到图层范围 `boolean`
   - popup 信息窗口
       - enable 是否开启 `boolean`
       - triggerEvent 触发事件 例如 'mousemove' | 'click';
       - Html popup html字符串，支持回调函数  (properties: any) => string;
 
-  - chinaNationalStroke 中国国界线颜色
-  - chinaNationalWidth 中国国界线宽度
-  - coastlineStroke 海岸线颜色
+  - chinaNationalStroke 中国国界线颜色 `CountryLayer`
+  - chinaNationalWidth 中国国界线宽度 `CountryLayer`
+  - coastlineStroke 海岸线颜色  `CountryLayer`
   - coastlineWidth 海岸线宽度 `WorldLayer` `CountryLayer`
   - nationalWidth 国界线 `WorldLayer` `CountryLayer`
   - nationalStroke 国界线 `WorldLayer` `CountryLayer`
-  - provinceStroke 省界颜色 `CountryLayer`
-  - provinceStrokeWidth 省界宽度 `CountryLayer`
-  - cityStroke 市级边界颜色 `CountryLayer`
-  - cityStrokeWidth 市级边界宽度 `CountryLayer`
-  - countyStroke 县级边界颜色 `CountryLayer`
-  - countyStrokeWidth 县级边界宽度  `CountryLayer`
+  - provinceStroke 省界颜色 `CountryLayer depth= 0，1，2时生效`
+  - provinceStrokeWidth 省界宽度 `CountryLayer depth = 0，1，2时生效 `
+  - cityStroke 市级边界颜色 `CountryLayer depth =1，2时生效`
+  - cityStrokeWidth 市级边界宽度 `CountryLayer depth =1，2 时生效`
+  - countyStroke 县级边界颜色 `CountryLayer depth =2时生效`
+  - countyStrokeWidth 县级边界宽度 `CountryLayer depth =2时生效`
+
+⛔ ProvinceLayer, CityLayer, CountyLayer 如需要设置描边颜色，宽度使用storke,strokeWidth配置。
 
 ### 数据
 District 提供polygon数据需要跟用户的属性数据，通过关系字段进行连接

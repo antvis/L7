@@ -129,11 +129,13 @@ export default class CountryLayer extends BaseLayer {
       coastlineWidth,
       stroke,
       strokeWidth,
+      visible,
       zIndex,
     } = this.options;
     // 添加国界线
     const lineLayer = new LineLayer({
       zIndex: zIndex + 0.1,
+      visible,
     })
       .source(boundaries)
       .size('type', (v: string) => {
@@ -162,6 +164,7 @@ export default class CountryLayer extends BaseLayer {
     // 添加未定国界
     const lineLayer2 = new LineLayer({
       zIndex: zIndex + 0.1,
+      visible,
     })
       .source(boundaries2)
       .size(chinaNationalWidth)
@@ -175,6 +178,7 @@ export default class CountryLayer extends BaseLayer {
     // 添加澳门香港界限
     const lineLayer3 = new LineLayer({
       zIndex: zIndex + 0.1,
+      visible,
     })
       .source(boundaries3)
       .size(provinceStrokeWidth)
@@ -193,9 +197,10 @@ export default class CountryLayer extends BaseLayer {
   // 市边界
   private async addCityBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
-    const { cityStroke, cityStrokeWidth } = this.options;
+    const { cityStroke, cityStrokeWidth, visible } = this.options;
     const cityline = new LineLayer({
       zIndex: 2,
+      visible,
     })
       .source(border1)
       .color(cityStroke)
@@ -210,9 +215,10 @@ export default class CountryLayer extends BaseLayer {
   // 县级边界
   private async addCountyBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
-    const { countyStrokeWidth, countyStroke } = this.options;
+    const { countyStrokeWidth, countyStroke, visible } = this.options;
     const cityline = new LineLayer({
       zIndex: 2,
+      visible,
     })
       .source(border1)
       .color(countyStroke)
@@ -244,9 +250,10 @@ export default class CountryLayer extends BaseLayer {
   }
 
   private addText(labelData: any, option: any, offset: [number, number]) {
-    const { label, zIndex } = this.options;
+    const { label, zIndex, visible } = this.options;
     const labelLayer = new PointLayer({
       zIndex: zIndex + 0.4,
+      visible,
       ...option,
     })
       .source(labelData, {
