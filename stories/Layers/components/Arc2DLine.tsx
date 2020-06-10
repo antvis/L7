@@ -25,6 +25,7 @@ export default class Arc2DLineDemo extends React.Component {
     });
     const lineLayer = new LineLayer({
       blend: 'normal',
+      pickingBuffer: 10,
     })
       .source(
         [
@@ -48,7 +49,7 @@ export default class Arc2DLineDemo extends React.Component {
       .size(2)
       .shape('arc')
       .animate({
-        enable: true,
+        enable: false,
         interval: 0.1,
         trailLength: 0.5,
         duration: 0.5,

@@ -73,11 +73,13 @@ export default class WorldLayer extends BaseLayer {
       chinaNationalStroke,
       chinaNationalWidth,
       coastlineWidth,
+      visible,
       zIndex,
     } = this.options;
     // 添加国界线
     const lineLayer = new LineLayer({
       zIndex: zIndex + 0.1,
+      visible,
     })
       .source(boundaries)
       // .size(0.6)
@@ -106,6 +108,7 @@ export default class WorldLayer extends BaseLayer {
     // 添加未定国界
     const lineLayer2 = new LineLayer({
       zIndex: zIndex + 0.1,
+      visible,
     })
       .source(boundaries2)
       .size('type', (v: string) => {

@@ -38,6 +38,15 @@ DrillDownLayer 提供默认提供通过Layer的交互事件，实现上钻下钻
   - label: Partial<ILabelOption>;
   - bubble: Partial<IBubbleOption>;
   - fill: Partial<IFillOptions>;
+   ⛔中国地图视角设置，省界，海岸线，宽度通过以下属性
+  - chinaNationalStroke 中国国界线颜色 
+  - chinaNationalWidth 中国国界线宽度 
+  - coastlineStroke 海岸线颜色 
+  - coastlineWidth 海岸线宽度 
+  - nationalWidth 国界线 
+  - nationalStroke 国界线 
+  - provinceStroke 省界颜色 
+  - provinceStrokeWidth 省界宽度 
 
 #### labelOption
   文本标注配置项，目前只支持常量配置，不支持数据映射

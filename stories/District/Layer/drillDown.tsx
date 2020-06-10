@@ -34,14 +34,7 @@ export default class Country extends React.Component {
         fill: {
           color: {
             field: 'NAME_CHN',
-            values: [
-              '#feedde',
-              '#fdd0a2',
-              '#fdae6b',
-              '#fd8d3c',
-              '#e6550d',
-              '#a63603',
-            ],
+            values: ['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b']
           },
         },
         popup: {

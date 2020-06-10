@@ -94,6 +94,7 @@ export default class BaseLayer extends EventEmitter {
   protected getDefaultOption(): IDistrictLayerOption {
     return {
       zIndex: 0,
+      visible: true,
       geoDataLevel: 2,
       depth: 1,
       adcode: [],
@@ -156,10 +157,11 @@ export default class BaseLayer extends EventEmitter {
 
   protected addFillLayer(fillCountry: any) {
     // 添加省份填充
-    const { popup, data = [], fill, autoFit, joinBy } = this.options;
+    const { popup, data = [], fill, autoFit, joinBy, visible} = this.options;
     this.fillData = fillCountry;
     const fillLayer = new PolygonLayer({
       autoFit,
+      visible,
     }).source(fillCountry, {
       transforms:
         data.length === 0
@@ -206,9 +208,10 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addFillLine(provinceLine: any) {
-    const { stroke, strokeWidth, zIndex } = this.options;
+    const { stroke, strokeWidth, zIndex, visible } = this.options;
     const layer2 = new LineLayer({
       zIndex: zIndex + 0.1,
+      visible,
     })
       .source(provinceLine)
       .color(stroke)
@@ -229,9 +232,10 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addBubbleLayer(labelData: any, type: string = 'json') {
-    const { bubble, zIndex, data = [], joinBy } = this.options;
+    const { bubble, zIndex, data = [], joinBy, visible } = this.options;
     const bubbleLayer = new PointLayer({
       zIndex: zIndex + 0.3,
+      visible,
     }).source(labelData, {
       parser: {
         type,
@@ -265,9 +269,10 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addLabel(labelData: any, type: string = 'json') {
-    const { label, zIndex } = this.options;
+    const { label, zIndex, visible } = this.options;
     const labelLayer = new PointLayer({
       zIndex: zIndex + 0.4,
+      visible,
     })
       .source(labelData, {
         parser: {
