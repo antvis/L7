@@ -29,7 +29,6 @@
     "@antv/l7-utils": "^2.2.12",
     "@babel/runtime": "^7.7.7",
     "@types/amap-js-api": "^1.4.6",
-    "antd": "4.2.5",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",

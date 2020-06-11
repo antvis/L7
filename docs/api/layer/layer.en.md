@@ -10,7 +10,12 @@ L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
 语法示例
 
 ```javascript
-const layer = new Layer(option).source().color().size().shape().style();
+const layer = new Layer(option)
+  .source()
+  .color()
+  .size()
+  .shape()
+  .style();
 
 scene.addLayer(layer);
 ```
@@ -78,7 +83,7 @@ layer.source(data, {
   transforms: [
     {
       type: 'map',
-      callback: function (item) {
+      callback: function(item) {
         const [x, y] = item.coordinates;
         item.lat = item.lat * 1;
         item.lng = item.lng * 1;
