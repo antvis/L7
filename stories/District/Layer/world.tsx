@@ -27,7 +27,7 @@ export default class Country extends React.Component {
       const Layer = new WorldLayer(scene, {
         data: [],
         bubble: {
-          enable: true,
+          enable: false,
           color: {
             field: 'NAME_CHN',
             values: [
