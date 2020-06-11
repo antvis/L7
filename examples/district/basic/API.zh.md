@@ -38,6 +38,7 @@ District 支持下面几种图
 - option 行政区划配置项
   - zIndex 图层绘制顺序
   - data `Array` 属性数据用于可视化渲染
+  - visible 地图是否可见
   - joinBy 数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
     对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名
   - depth 数据显示层级 0：国家级，1:省级，2: 市级，3：线级
