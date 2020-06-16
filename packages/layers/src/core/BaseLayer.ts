@@ -434,10 +434,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public setData(data: any, options?: ISourceCFG) {
     if (this.inited) {
-      this.layerSource.setData(data);
+      this.layerSource.setData(data, options);
     } else {
       this.on('inited', () => {
-        this.layerSource.setData(data);
+        this.layerSource.setData(data, options);
       });
     }
 

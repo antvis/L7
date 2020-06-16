@@ -26,10 +26,10 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       const Layer = new WorldLayer(scene, {
         data: [],
-        bubble: {
-          enable: false,
+        joinBy: ['SOC', 'SOC'],
+        fill: {
           color: {
-            field: 'NAME_CHN',
+            field: 'value',
             values: [
               '#feedde',
               '#fdd0a2',
@@ -47,11 +47,31 @@ export default class Country extends React.Component {
           field: 'NAME_CHN',
         },
         popup: {
-          enable: false,
+          enable: true,
           Html: (props: any) => {
-            return `<span>${props.NAME_CHN}</span>`;
+            return `<span>${props.NAME_CHN + ':' + props.value}</span>`;
           },
         },
+      });
+      Layer.on('loaded', () => {
+        console.log('完成');
+        Layer.updateData(
+          [
+            {
+              SOC: 'CHN',
+              value: 3000,
+            },
+            {
+              SOC: 'CAN',
+              value: 5000,
+            },
+            {
+              SOC: 'RUS',
+              value: 4000,
+            },
+          ],
+          ['SOC', 'SOC'],
+        );
       });
     });
     this.scene = scene;
