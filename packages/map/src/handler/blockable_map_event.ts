@@ -1,7 +1,7 @@
 import Point from '@mapbox/point-geometry';
 import { Map } from '../map';
 import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';
-export class BlockableMapEventHandler {
+export default class BlockableMapEventHandler {
   private map: Map;
   private delayContextMenu: boolean;
   private contextMenuEvent: MouseEvent;
@@ -40,7 +40,7 @@ export class BlockableMapEventHandler {
       this.contextMenuEvent = e;
     } else {
       // Windows: contextmenu fired on mouseup, so fire event now
-      this.map.emit(new MapMouseEvent(e.type, this.map, e));
+      this.map.emit(e.type, new MapMouseEvent(e.type, this.map, e));
     }
 
     // prevent browser context menu when necessary

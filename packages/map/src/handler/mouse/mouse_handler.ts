@@ -1,13 +1,13 @@
-import { DOM } from '@antv/l7-utils';
 import Point from '@mapbox/point-geometry';
+import DOM from '../../utils/dom';
 import { buttonStillPressed } from './util';
-class MouseHandler {
-  private enabled: boolean;
-  private active: boolean;
-  private lastPoint: Point;
-  private eventButton: number;
-  private moved: boolean;
-  private clickTolerance: number;
+export default class MouseHandler {
+  protected enabled: boolean;
+  protected active: boolean;
+  protected lastPoint: Point;
+  protected eventButton: number;
+  protected moved: boolean;
+  protected clickTolerance: number;
 
   constructor(options: { clickTolerance: number }) {
     this.reset();
@@ -94,12 +94,12 @@ class MouseHandler {
     return this.active;
   }
 
-  private correctButton(e: MouseEvent, button: number) {
+  protected correctButton(e: MouseEvent, button: number) {
     // eslint-disable-line
     return false; // implemented by child
   }
 
-  private move(lastPoint: Point, point: Point) {
+  protected move(lastPoint: Point, point: Point) {
     // eslint-disable-line
     return {}; // implemented by child
   }

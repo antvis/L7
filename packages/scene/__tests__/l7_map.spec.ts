@@ -13,7 +13,7 @@ describe('template', () => {
     map: new Map({
       center: [110.19382669582967, 30.258134],
       pitch: 0,
-      zoom: 9,
+      zoom: 2,
     }),
   });
   fetch(

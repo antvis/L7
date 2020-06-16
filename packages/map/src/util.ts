@@ -1,5 +1,8 @@
 import UnitBezier from '@mapbox/unitbezier';
 let reducedMotionQuery: MediaQueryList;
+export interface ICancelable {
+  cancel: () => void;
+}
 export function wrap(n: number, min: number, max: number): number {
   const d = max - min;
   const w = ((((n - min) % d) + d) % d) + min;
@@ -71,3 +74,10 @@ export const cancel =
   window.webkitCancelAnimationFrame ||
   // @ts-ignore
   window.msCancelAnimationFrame;
+
+export function renderframe(
+  fn: (paintStartTimestamp: number) => void,
+): ICancelable {
+  const frame = raf(fn);
+  return { cancel: () => cancel(frame) };
+}

@@ -5,7 +5,30 @@ import Camera from './camera';
 import './css/l7.css';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
+import BlockableMapEventHandler from './handler/blockable_map_event';
+import BoxZoomHandler from './handler/box_zoom';
+import ClickZoomHandler from './handler/click_zoom';
+import HandlerManager from './handler/handler_manager';
+import KeyboardHandler from './handler/keyboard';
+import MapEventHandler from './handler/map_event';
+import {
+  MousePanHandler,
+  MousePitchHandler,
+  MouseRotateHandler,
+} from './handler/mouse';
+import ScrollZoomHandler from './handler/scroll_zoom';
+import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
+import DragPanHandler from './handler/shim/drag_pan';
+import DragRotateHandler from './handler/shim/drag_rotate';
+import TouchZoomRotateHandler from './handler/shim/touch_zoom_rotate';
+import TapDragZoomHandler from './handler/tap/tap_drag_zoom';
+import TapZoomHandler from './handler/tap/tap_zoom';
+import { TouchPitchHandler } from './handler/touch';
 import { IMapOptions } from './interface';
+import { renderframe } from './util';
+import { PerformanceUtils } from './utils/performance';
+import TaskQueue, { TaskID } from './utils/task_queue';
+
 const defaultMinZoom = -2;
 const defaultMaxZoom = 22;
 
@@ -38,13 +61,29 @@ const DefaultOptions: IMapOptions = {
   renderWorldCopies: true,
 };
 export class Map extends Camera {
+  public doubleClickZoom: DoubleClickZoomHandler;
+  public dragRotate: DragRotateHandler;
+  public dragPan: DragPanHandler;
+  public touchZoomRotate: TouchZoomRotateHandler;
+  public scrollZoom: ScrollZoomHandler;
+  public keyboard: KeyboardHandler;
+  public touchPitch: TouchPitchHandler;
+  public boxZoom: BoxZoomHandler;
+  public handlers: HandlerManager;
+
   private container: HTMLElement;
   private canvas: HTMLCanvasElement;
   private canvasContainer: HTMLElement;
+  private renderTaskQueue: TaskQueue = new TaskQueue();
+  private frame: { cancel: () => void } | null;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
     this.initContainer();
     this.resize();
+    this.handlers = new HandlerManager(this, this.options);
+    // this.on('move', () => this.update());
+    // this.on('moveend', () => this.update());
+    // this.on('zoom', () => this.update());
     this.flyTo({
       center: options.center,
       zoom: options.zoom,
@@ -57,6 +96,7 @@ export class Map extends Camera {
     const dimensions = this.containerDimensions();
     const width = dimensions[0];
     const height = dimensions[1];
+
     this.resizeCanvas(width, height);
     this.transform.resize(width, height);
   }
@@ -196,7 +236,40 @@ export class Map extends Camera {
   }
 
   public remove() {
-    throw new Error('空');
+    if (this.frame) {
+      this.frame.cancel();
+      this.frame = null;
+    }
+    this.renderTaskQueue.clear();
+  }
+
+  public requestRenderFrame(callback: () => void): TaskID {
+    this.update();
+    return this.renderTaskQueue.add(callback);
+  }
+
+  public cancelRenderFrame(id: TaskID) {
+    this.renderTaskQueue.remove(id);
+  }
+
+  public triggerRepaint() {
+    if (!this.frame) {
+      this.frame = renderframe((paintStartTimeStamp: number) => {
+        PerformanceUtils.frame(paintStartTimeStamp);
+        this.frame = null;
+        this.update(paintStartTimeStamp);
+      });
+    }
+  }
+
+  public update(time?: number) {
+    if (!this.frame) {
+      this.frame = renderframe((paintStartTimeStamp: number) => {
+        PerformanceUtils.frame(paintStartTimeStamp);
+        this.frame = null;
+        this.renderTaskQueue.run(time);
+      });
+    }
   }
 
   private initContainer() {

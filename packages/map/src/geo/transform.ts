@@ -185,7 +185,7 @@ export default class Transform {
   }
 
   get point(): Point {
-    return this.project(this._center);
+    return this.project(this.center);
   }
   public tileSize: number;
   public tileZoom: number;
@@ -388,7 +388,7 @@ export default class Transform {
   //     z = options.maxzoom;
   //   }
 
-  //   const centerCoord = MercatorCoordinate.fromLngLat(this._center);
+  //   const centerCoord = MercatorCoordinate.fromLngLat(this.center);
   //   const numTiles = Math.pow(2, z);
   //   const centerPoint = [numTiles * centerCoord.x, numTiles * centerCoord.y, 0];
   //   const cameraFrustum = Frustum.fromInvProjectionMatrix(
@@ -551,9 +551,9 @@ export default class Transform {
       loc.x - (a.x - b.x),
       loc.y - (a.y - b.y),
     );
-    this._center = this.coordinateLocation(newCenter);
+    this.center = this.coordinateLocation(newCenter);
     if (this._renderWorldCopies) {
-      this._center = this._center.wrap();
+      this.center = this.center.wrap();
     }
   }
 
@@ -803,7 +803,7 @@ export default class Transform {
   // }
 
   private constrain() {
-    if (!this._center || !this.width || !this.height || this.constraining) {
+    if (!this.center || !this.width || !this.height || this.constraining) {
       return;
     }
 
@@ -840,7 +840,7 @@ export default class Transform {
     const s = Math.max(sx || 0, sy || 0);
 
     if (s) {
-      this._center = this.unproject(
+      this.center = this.unproject(
         new Point(
           sx ? (maxX + minX) / 2 : point.x,
           sy ? (maxY + minY) / 2 : point.y,
@@ -878,7 +878,7 @@ export default class Transform {
 
     // pan the map if the screen goes off the range
     if (x2 !== undefined || y2 !== undefined) {
-      this._center = this.unproject(
+      this.center = this.unproject(
         new Point(
           x2 !== undefined ? x2 : point.x,
           y2 !== undefined ? y2 : point.y,
@@ -960,7 +960,7 @@ export default class Transform {
       vec3.fromValues(
         1,
         1,
-        mercatorZfromAltitude(1, this._center.lat) * this.worldSize,
+        mercatorZfromAltitude(1, this.center.lat) * this.worldSize,
       ),
     );
 

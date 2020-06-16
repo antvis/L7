@@ -5,6 +5,7 @@ import { IPaddingOptions } from './geo/edge_insets';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
 import Transform from './geo/transform';
+import { Event } from './handler/events/event';
 import { IMapOptions } from './interface';
 import {
   cancel,
@@ -36,7 +37,9 @@ export interface IAnimationOptions {
 }
 
 export default class Camera extends EventEmitter {
-  protected transform: Transform;
+  public transform: Transform;
+  // public requestRenderFrame: (_: any) => number;
+  // public cancelRenderFrame: (_: number) => void;
   protected options: IMapOptions;
   private moving: boolean;
   private zooming: boolean;
@@ -55,8 +58,6 @@ export default class Camera extends EventEmitter {
   private onEaseFrame: (_: number) => void;
   private onEaseEnd: (easeId?: string) => void;
   private easeFrameId: number;
-  private requestRenderFrame: (_: any) => number = raf;
-  private cancelRenderFrame: (_: number) => void = cancel;
 
   constructor(options: IMapOptions) {
     super();
@@ -72,6 +73,12 @@ export default class Camera extends EventEmitter {
       maxPitch,
       renderWorldCopies,
     );
+  }
+  public requestRenderFrame(_: any): number {
+    return 0;
+  }
+  public cancelRenderFrame(_: number) {
+    return 0;
   }
 
   public getCenter() {
@@ -415,7 +422,6 @@ export default class Camera extends EventEmitter {
       },
       options,
     );
-
     const tr = this.transform;
     const startZoom = this.getZoom();
     const startBearing = this.getBearing();
@@ -604,7 +610,7 @@ export default class Camera extends EventEmitter {
   }
   public stop(allowGestures?: boolean, easeId?: string) {
     if (this.easeFrameId) {
-      window.cancelAnimationFrame(this.easeFrameId);
+      this.cancelRenderFrame(this.easeFrameId);
       delete this.easeFrameId;
       delete this.onEaseFrame;
     }
@@ -627,7 +633,8 @@ export default class Camera extends EventEmitter {
     const t = Math.min((now() - this.easeStart) / this.easeOptions.duration, 1);
     this.onEaseFrame(this.easeOptions.easing(t));
     if (t < 1) {
-      this.easeFrameId = window.requestAnimationFrame(this.renderFrameCallback);
+      // this.easeFrameId = window.requestAnimationFrame(this.renderFrameCallback);
+      this.easeFrameId = this.requestRenderFrame(this.renderFrameCallback);
     } else {
       this.stop();
     }
@@ -733,7 +740,7 @@ export default class Camera extends EventEmitter {
       this.easeOptions = options;
       this.onEaseFrame = frame;
       this.onEaseEnd = finish;
-      this.easeFrameId = window.requestAnimationFrame(this.renderFrameCallback);
+      this.easeFrameId = this.requestRenderFrame(this.renderFrameCallback);
     }
   }
 

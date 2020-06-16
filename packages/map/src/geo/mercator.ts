@@ -1,5 +1,3 @@
-// @flow
-
 import LngLat, { earthRadius, LngLatLike } from '../geo/lng_lat';
 
 /*
