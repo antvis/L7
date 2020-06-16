@@ -58,22 +58,7 @@ export default class Source extends EventEmitter {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;
-    if (cfg) {
-      if (cfg.parser) {
-        this.parser = cfg.parser;
-      }
-      if (cfg.transforms) {
-        this.transforms = cfg.transforms;
-      }
-      this.cluster = cfg.cluster || false;
-      if (cfg.clusterOptions) {
-        this.cluster = true;
-        this.clusterOptions = {
-          ...this.clusterOptions,
-          ...cfg.clusterOptions,
-        };
-      }
-    }
+    this.initCfg(cfg);
 
     this.hooks.init.tap('parser', () => {
       this.excuteParser();
@@ -87,9 +72,10 @@ export default class Source extends EventEmitter {
     this.init();
   }
 
-  public setData(data: any) {
+  public setData(data: any, options?: ISourceCFG) {
     this.rawData = data;
     this.originData = data;
+    this.initCfg(options);
     this.init();
     this.emit('update');
   }
@@ -161,6 +147,24 @@ export default class Source extends EventEmitter {
     return feature?._id;
   }
 
+  private initCfg(cfg?: ISourceCFG) {
+    if (cfg) {
+      if (cfg.parser) {
+        this.parser = cfg.parser;
+      }
+      if (cfg.transforms) {
+        this.transforms = cfg.transforms;
+      }
+      this.cluster = cfg.cluster || false;
+      if (cfg.clusterOptions) {
+        this.cluster = true;
+        this.clusterOptions = {
+          ...this.clusterOptions,
+          ...cfg.clusterOptions,
+        };
+      }
+    }
+  }
   private excuteParser(): void {
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
