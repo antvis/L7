@@ -1,6 +1,8 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import { Map } from '../map';
 import DOM from '../utils/dom';
+import { Event } from './events/event';
 
 /**
  * The `BoxZoomHandler` allows the user to zoom the map to fit within a bounding box.
@@ -111,16 +113,16 @@ class BoxZoomHandler {
       this.container.classList.add('l7-crosshair');
       this.fireEvent('boxzoomstart', e);
     }
-
     const minX = Math.min(p0.x, pos.x);
     const maxX = Math.max(p0.x, pos.x);
     const minY = Math.min(p0.y, pos.y);
     const maxY = Math.max(p0.y, pos.y);
 
     DOM.setTransform(this.box, `translate(${minX}px,${minY}px)`);
-
-    this.box.style.width = `${maxX - minX}px`;
-    this.box.style.height = `${maxY - minY}px`;
+    if (this.box) {
+      this.box.style.width = `${maxX - minX}px`;
+      this.box.style.height = `${maxY - minY}px`;
+    }
   }
 
   public mouseupWindow(e: MouseEvent, point: Point) {
@@ -147,7 +149,7 @@ class BoxZoomHandler {
         new Event('boxzoomend', { originalEvent: e }),
       );
       return {
-        cameraAnimation: (map) =>
+        cameraAnimation: (map: Map) =>
           map.fitScreenCoordinates(p0, p1, this.map.getBearing(), {
             linear: true,
           }),

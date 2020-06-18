@@ -1,34 +1,27 @@
 import { DOM } from '@antv/l7-utils';
+// @ts-ignore
 import Point, { PointLike } from '@mapbox/point-geometry';
 import { merge } from 'lodash';
 import Camera from './camera';
 import './css/l7.css';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
-import BlockableMapEventHandler from './handler/blockable_map_event';
 import BoxZoomHandler from './handler/box_zoom';
-import ClickZoomHandler from './handler/click_zoom';
 import HandlerManager from './handler/handler_manager';
 import KeyboardHandler from './handler/keyboard';
-import MapEventHandler from './handler/map_event';
-import {
-  MousePanHandler,
-  MousePitchHandler,
-  MouseRotateHandler,
-} from './handler/mouse';
+
 import ScrollZoomHandler from './handler/scroll_zoom';
 import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
 import DragPanHandler from './handler/shim/drag_pan';
 import DragRotateHandler from './handler/shim/drag_rotate';
 import TouchZoomRotateHandler from './handler/shim/touch_zoom_rotate';
-import TapDragZoomHandler from './handler/tap/tap_drag_zoom';
-import TapZoomHandler from './handler/tap/tap_zoom';
 import { TouchPitchHandler } from './handler/touch';
+import Hash from './hash';
 import { IMapOptions } from './interface';
 import { renderframe } from './util';
 import { PerformanceUtils } from './utils/performance';
 import TaskQueue, { TaskID } from './utils/task_queue';
-
+type CallBack = (_: number) => void;
 const defaultMinZoom = -2;
 const defaultMaxZoom = 22;
 
@@ -37,6 +30,7 @@ const defaultMinPitch = 0;
 const defaultMaxPitch = 60;
 
 const DefaultOptions: IMapOptions = {
+  hash: false,
   zoom: -1,
   center: [112, 32],
   pitch: 0,
@@ -76,6 +70,8 @@ export class Map extends Camera {
   private canvasContainer: HTMLElement;
   private renderTaskQueue: TaskQueue = new TaskQueue();
   private frame: { cancel: () => void } | null;
+  private trackResize: boolean = true;
+  private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
     this.initContainer();
@@ -83,22 +79,62 @@ export class Map extends Camera {
     this.handlers = new HandlerManager(this, this.options);
     // this.on('move', () => this.update());
     // this.on('moveend', () => this.update());
-    // this.on('zoom', () => this.update());
-    this.flyTo({
-      center: options.center,
-      zoom: options.zoom,
-      bearing: options.bearing,
-      pitch: options.pitch,
-    });
+    // this.on('zoom', () => {
+    //   console.log('zoom');
+    // });
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', this.onWindowOnline, false);
+      window.addEventListener('resize', this.onWindowResize, false);
+      window.addEventListener('orientationchange', this.onWindowResize, false);
+    }
+
+    const hashName =
+      (typeof options.hash === 'string' && options.hash) || undefined;
+    if (options.hash) {
+      this.hash = new Hash(hashName).addTo(this) as Hash;
+    }
+
+    // don't set position from options if set through hash
+    if (!this.hash || !this.hash.onHashChange()) {
+      this.jumpTo({
+        center: options.center,
+        zoom: options.zoom,
+        bearing: options.bearing,
+        pitch: options.pitch,
+      });
+
+      if (options.bounds) {
+        this.resize();
+        this.fitBounds(
+          options.bounds,
+          merge({}, options.fitBoundsOptions, { duration: 0 }),
+        );
+      }
+    }
   }
 
-  public resize() {
+  public resize(eventData?: any) {
     const dimensions = this.containerDimensions();
     const width = dimensions[0];
     const height = dimensions[1];
 
     this.resizeCanvas(width, height);
     this.transform.resize(width, height);
+    const fireMoving = !this.moving;
+    if (fireMoving) {
+      this.stop();
+      this.emit('movestart', new Event('movestart', eventData));
+      this.emit('move', new Event('move', eventData));
+    }
+
+    this.emit('resize', new Event('resize', eventData));
+
+    if (fireMoving) {
+      this.emit('moveend', new Event('moveend', eventData));
+    }
+
+    return this;
   }
 
   public getContainer() {
@@ -133,6 +169,9 @@ export class Map extends Camera {
     this.transform.setMaxBounds(LngLatBounds.convert(bounds));
   }
 
+  public setStyle(style: any) {
+    return;
+  }
   public setMinZoom(minZoom?: number) {
     minZoom =
       minZoom === null || minZoom === undefined ? defaultMinZoom : minZoom;
@@ -243,13 +282,13 @@ export class Map extends Camera {
     this.renderTaskQueue.clear();
   }
 
-  public requestRenderFrame(callback: () => void): TaskID {
+  public requestRenderFrame(cb: CallBack): TaskID {
     this.update();
-    return this.renderTaskQueue.add(callback);
+    return this.renderTaskQueue.add(cb);
   }
 
   public cancelRenderFrame(id: TaskID) {
-    this.renderTaskQueue.remove(id);
+    return this.renderTaskQueue.remove(id);
   }
 
   public triggerRepaint() {
@@ -305,7 +344,7 @@ export class Map extends Camera {
       'l7-canvas',
       canvasContainer,
     ) as HTMLCanvasElement;
-    this.canvas.setAttribute('tabindex', '0');
+    this.canvas.setAttribute('tabindex', '-');
     this.canvas.setAttribute('aria-label', 'Map');
   }
 
@@ -328,4 +367,14 @@ export class Map extends Camera {
     this.canvas.style.width = `${width}px`;
     this.canvas.style.height = `${height}px`;
   }
+
+  private onWindowOnline = () => {
+    this.update();
+  };
+
+  private onWindowResize = (event: Event) => {
+    if (this.trackResize) {
+      this.resize({ originalEvent: event }).update();
+    }
+  };
 }

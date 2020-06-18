@@ -13,11 +13,10 @@ export interface IDragPanOptions {
  * the cursor.
  */
 export default class DragPanHandler {
+  public inertiaOptions: IDragPanOptions;
   private el: HTMLElement;
   private mousePan: MousePanHandler;
   private touchPan: TouchPanHandler;
-  private inertiaOptions: IDragPanOptions;
-
   /**
    * @private
    */

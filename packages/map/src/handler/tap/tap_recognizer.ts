@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import SingleTapRecognizer, {
   MAX_DIST,

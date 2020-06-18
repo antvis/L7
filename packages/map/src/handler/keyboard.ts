@@ -45,7 +45,6 @@ class KeyboardHandler {
     if (e.altKey || e.ctrlKey || e.metaKey) {
       return;
     }
-
     let zoomDir = 0;
     let bearingDir = 0;
     let pitchDir = 0;

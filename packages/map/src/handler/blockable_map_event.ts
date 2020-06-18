@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import { Map } from '../map';
 import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';

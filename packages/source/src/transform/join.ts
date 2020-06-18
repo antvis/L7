@@ -20,8 +20,8 @@ export function join(geoData: IParserData, options: IJoinOption) {
   geoData.dataArray = geoData.dataArray.map((item: IParseDataItem) => {
     const joinName = item[targetField];
     return {
-      ...dataObj[joinName],
       ...item,
+      ...dataObj[joinName],
     };
   });
   return geoData;

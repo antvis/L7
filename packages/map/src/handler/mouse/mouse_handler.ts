@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import DOM from '../../utils/dom';
 import { buttonStillPressed } from './util';
@@ -5,7 +6,7 @@ export default class MouseHandler {
   protected enabled: boolean;
   protected active: boolean;
   protected lastPoint: Point;
-  protected eventButton: number;
+  protected eventButton: 1 | 2;
   protected moved: boolean;
   protected clickTolerance: number;
 
@@ -101,6 +102,6 @@ export default class MouseHandler {
 
   protected move(lastPoint: Point, point: Point) {
     // eslint-disable-line
-    return {}; // implemented by child
+    return; // implemented by child
   }
 }

@@ -35,7 +35,7 @@ export default class LngLatBounds {
     return this;
   }
 
-  public extend(obj: LngLatLike | LngLatBoundsLike) {
+  public extend(obj: LngLatLike | LngLatBoundsLike): this {
     const sw = this.sw;
     const ne = this.ne;
     let sw2: any;

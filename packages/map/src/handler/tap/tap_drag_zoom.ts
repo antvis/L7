@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import { MAX_TAP_INTERVAL } from './single_tap_recognizer';
 import TapRecognizer from './tap_recognizer';

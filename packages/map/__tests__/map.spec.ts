@@ -1,4 +1,4 @@
-import Map from '../src/map';
+import { Map } from '../src/map';
 describe('Map', () => {
   const el = document.createElement('div');
   el.id = 'test-div-id';

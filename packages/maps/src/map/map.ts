@@ -64,6 +64,7 @@ export default class L7MapService implements IMapService<Map> {
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
+    this.markerContainer.setAttribute('tabindex', '-1');
   }
 
   public getMarkerContainer(): HTMLElement {
@@ -159,7 +160,7 @@ export default class L7MapService implements IMapService<Map> {
     this.panTo(pixel);
   }
 
-  public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
+  public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
     this.map.fitBounds(bound, fitBoundsOptions);
   }
 
@@ -267,7 +268,6 @@ export default class L7MapService implements IMapService<Map> {
       this.map = new Map({
         container: this.$mapContainer,
         style: this.getMapStyle(style),
-        attributionControl,
         bearing: rotation,
         ...rest,
       });

@@ -1,3 +1,4 @@
+// @ts-ignore
 import UnitBezier from '@mapbox/unitbezier';
 let reducedMotionQuery: MediaQueryList;
 export interface ICancelable {

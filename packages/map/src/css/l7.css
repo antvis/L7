@@ -77,3 +77,22 @@
 .l7-ctrl-top-right .l7-ctrl    { margin: 10px 10px 0 0; float: right; }
 .l7-ctrl-bottom-left .l7-ctrl  { margin: 0 0 10px 10px; float: left; }
 .l7-ctrl-bottom-right .l7-ctrl { margin: 0 10px 10px 0; float: right; }
+
+
+.l7-crosshair,
+.l7-crosshair .l7-interactive,
+.l7-crosshair .l7-interactive:active {
+    cursor: crosshair;
+}
+
+.l7-boxzoom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    background: #fff;
+    border: 2px dotted #202020;
+    opacity: 0.5;
+    z-index: 10;
+}

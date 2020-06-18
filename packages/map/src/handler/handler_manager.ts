@@ -1,5 +1,5 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
-
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
 import { Map } from '../map';
@@ -34,7 +34,7 @@ import {
 
 export type InputEvent = MouseEvent | TouchEvent | KeyboardEvent | WheelEvent;
 
-const isMoving = (p) => p.zoom || p.drag || p.pitch || p.rotate;
+const isMoving = (p: any) => p.zoom || p.drag || p.pitch || p.rotate;
 
 function hasChange(result: IHandlerResult) {
   return (
@@ -138,7 +138,6 @@ class HandlerManager {
       // @ts-ignore
       [window, 'blur', undefined],
     ];
-
     for (const [target, type, listenerOptions] of this.listeners) {
       // @ts-ignore
       DOM.addEventListener(
@@ -156,6 +155,7 @@ class HandlerManager {
       DOM.removeEventListener(
         target,
         type,
+        // @ts-ignore
         target === window.document ? this.handleWindowEvent : this.handleEvent,
         listenerOptions,
       );
@@ -221,7 +221,8 @@ class HandlerManager {
     const activeHandlers: { [key: string]: any } = {};
     // @ts-ignore
     const mapTouches = e.touches
-      ? this.getMapTouches((e as TouchEvent).touches)
+      ? // @ts-ignore
+        this.getMapTouches(e.touches as Touch[])
       : undefined;
     const points = mapTouches
       ? DOM.touchPos(this.el, mapTouches)
@@ -327,7 +328,7 @@ class HandlerManager {
 
   public triggerRenderFrame() {
     if (this.frameId === undefined) {
-      this.frameId = this.map.requestRenderFrame((timeStamp: any) => {
+      this.frameId = this.map.requestRenderFrame((timeStamp: number) => {
         delete this.frameId;
         this.handleEvent(new RenderFrameEvent('renderFrame', { timeStamp }));
         this.applyChanges();
@@ -397,7 +398,9 @@ class HandlerManager {
       'scrollZoom',
       'keyboard',
     ]) {
+      // @ts-ignore
       if (options.interactive && options[name]) {
+        // @ts-ignore
         map[name].enable(options[name]);
       }
     }
@@ -424,7 +427,7 @@ class HandlerManager {
     return false;
   }
 
-  private getMapTouches(touches: TouchList): TouchList {
+  private getMapTouches(touches: Touch[]): Touch[] {
     const mapTouches = [];
     for (const t of touches) {
       const target = t.target as Node;
@@ -432,7 +435,7 @@ class HandlerManager {
         mapTouches.push(t);
       }
     }
-    return mapTouches as TouchList;
+    return mapTouches;
   }
 
   private applyChanges() {
@@ -599,7 +602,7 @@ class HandlerManager {
         this.map.dragPan.inertiaOptions,
       );
 
-      const shouldSnapToNorth = (bearing) =>
+      const shouldSnapToNorth = (bearing: number) =>
         bearing !== 0 &&
         -this.bearingSnap < bearing &&
         bearing < this.bearingSnap;

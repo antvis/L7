@@ -1,7 +1,8 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import TwoTouchHandler from './two_touch';
 
-function isVertical(vector) {
+function isVertical(vector: { x: number; y: number }) {
   return Math.abs(vector.y) > Math.abs(vector.x);
 }
 

@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import DOM from '../../utils/dom';
 
@@ -21,7 +22,7 @@ export default class TwoTouchHandler {
     return;
   } // eslint-disable-line
   public move(points: [Point, Point], pinchAround: Point, e: TouchEvent) {
-    return {};
+    return;
   } // eslint-disable-line
 
   public touchstart(e: TouchEvent, points: Point[], mapTouches: Touch[]) {

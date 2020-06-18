@@ -47,11 +47,14 @@ export const PerformanceUtils = {
       'loadTime',
       PerformanceMarkers.create,
       PerformanceMarkers.load,
+      // @ts-ignore
     ).duration;
+
     const fullLoadTime = performance.measure(
       'fullLoadTime',
       PerformanceMarkers.create,
       PerformanceMarkers.fullLoad,
+      // @ts-ignore
     ).duration;
     const totalFrames = frameTimes.length;
 

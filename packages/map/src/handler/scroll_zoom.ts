@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import LngLat from '../geo/lng_lat';
 import { Map } from '../map';
@@ -31,7 +32,7 @@ class ScrollZoomHandler {
   private aroundPoint: Point;
   private type: 'wheel' | 'trackpad' | null;
   private lastValue: number;
-  private timeout: number; // used for delayed-handling of a single wheel movement
+  private timeout: number | null; // used for delayed-handling of a single wheel movement
   private finishTimeout: number; // used to delay final '{move,zoom}end' events
 
   private lastWheelEvent: any;
@@ -47,7 +48,7 @@ class ScrollZoomHandler {
     easing: (_: number) => number;
   };
 
-  private frameId: boolean;
+  private frameId: boolean | null;
   private handler: HandlerManager;
 
   private defaultZoomRate: number;
@@ -62,7 +63,6 @@ class ScrollZoomHandler {
     this.handler = handler;
 
     this.delta = 0;
-
     this.defaultZoomRate = defaultZoomRate;
     this.wheelZoomRate = wheelZoomRate;
   }
@@ -122,7 +122,7 @@ class ScrollZoomHandler {
    * @example
    *  map.scrollZoom.enable({ around: 'center' })
    */
-  public enable(options: any) {
+  public enable(options?: any) {
     if (this.isEnabled()) {
       return;
     }
@@ -208,7 +208,7 @@ class ScrollZoomHandler {
     this.active = false;
   }
 
-  private onScrollFrame() {
+  private onScrollFrame = () => {
     if (!this.frameId) {
       return;
     }
@@ -297,7 +297,7 @@ class ScrollZoomHandler {
       around: this.aroundPoint,
       originalEvent: this.lastWheelEvent,
     };
-  }
+  };
 
   private onTimeout(initialEvent: any) {
     this.type = 'wheel';

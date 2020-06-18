@@ -70,6 +70,7 @@ export default class MapboxService
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
+    this.markerContainer.setAttribute('tabindex', '-1');
   }
 
   public getMarkerContainer(): HTMLElement {

@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import DOM from '../../utils/dom';
 import TwoTouchHandler from './two_touch';

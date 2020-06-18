@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 import { mat2, mat4, vec3, vec4 } from 'gl-matrix';
 import { clamp, interpolate, wrap } from '../util';
@@ -629,7 +630,7 @@ export default class Transform {
       this.latRange = [bounds.getSouth(), bounds.getNorth()];
       this.constrain();
     } else {
-      this.lngRange = null;
+      this.lngRange = undefined;
       this.latRange = [-this.maxValidLatitude, this.maxValidLatitude];
     }
   }

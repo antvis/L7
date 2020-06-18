@@ -8,7 +8,11 @@ export default class Aabb {
   constructor(min: vec3, max: vec3) {
     this.min = min;
     this.max = max;
-    this.center = vec3.scale([], vec3.add([], this.min, this.max), 0.5);
+    this.center = vec3.scale(
+      new Float32Array(3),
+      vec3.add(new Float32Array(3), this.min, this.max),
+      0.5,
+    );
   }
 
   public quadrant(index: number): Aabb {

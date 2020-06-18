@@ -1,4 +1,8 @@
+import { LngLatBoundsLike } from './geo/lng_lat_bounds';
+
 export interface IMapOptions {
+  hash: boolean;
+  style?: any;
   container?: HTMLElement | string;
   center: [number, number];
   zoom: number;
@@ -6,6 +10,9 @@ export interface IMapOptions {
   pitch: number;
   interactive: boolean;
   scrollZoom: boolean;
+  bounds?: LngLatBoundsLike;
+  maxBounds?: LngLatBoundsLike;
+  fitBoundsOptions?: any;
   minZoom: number;
   maxZoom: number;
   minPitch: number;

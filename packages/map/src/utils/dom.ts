@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 
 const DOM: {
@@ -23,7 +24,7 @@ DOM.createNS = (namespaceURI: string, tagName: string) => {
 
 const docStyle = window.document && window.document.documentElement.style;
 
-function testProp(props) {
+function testProp(props: any) {
   if (!docStyle) {
     return props[0];
   }
@@ -41,7 +42,7 @@ const selectProp = testProp([
   'WebkitUserSelect',
   'msUserSelect',
 ]);
-let userSelect;
+let userSelect: any;
 
 DOM.disableDrag = () => {
   if (docStyle && selectProp) {
@@ -109,7 +110,7 @@ DOM.removeEventListener = (
 };
 
 // Suppress the next click, but only if it's immediate.
-const suppressClick = (e) => {
+const suppressClick = (e: MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
   window.removeEventListener('click', suppressClick, true);
@@ -130,7 +131,7 @@ DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
   );
 };
 
-DOM.touchPos = (el: HTMLElement, touches: TouchList) => {
+DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
   const rect = el.getBoundingClientRect();
   const points = [];
   for (const touche of touches) {
@@ -145,8 +146,8 @@ DOM.touchPos = (el: HTMLElement, touches: TouchList) => {
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
-  // @ts-ignore
   if (
+    // @ts-ignore
     typeof window.InstallTrigger !== 'undefined' &&
     e.button === 2 &&
     e.ctrlKey &&

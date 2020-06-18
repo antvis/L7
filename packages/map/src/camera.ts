@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point, { PointLike } from '@mapbox/point-geometry';
 import { EventEmitter } from 'eventemitter3';
 import { merge } from 'lodash';
@@ -7,6 +8,7 @@ import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
 import Transform from './geo/transform';
 import { Event } from './handler/events/event';
 import { IMapOptions } from './interface';
+type CallBack = (_: number) => void;
 import {
   cancel,
   clamp,
@@ -34,6 +36,7 @@ export interface IAnimationOptions {
   offset?: PointLike;
   animate?: boolean;
   essential?: boolean;
+  linear?: boolean;
 }
 
 export default class Camera extends EventEmitter {
@@ -41,11 +44,11 @@ export default class Camera extends EventEmitter {
   // public requestRenderFrame: (_: any) => number;
   // public cancelRenderFrame: (_: number) => void;
   protected options: IMapOptions;
-  private moving: boolean;
-  private zooming: boolean;
-  private rotating: boolean;
-  private pitching: boolean;
-  private padding: boolean;
+  protected moving: boolean;
+  protected zooming: boolean;
+  protected rotating: boolean;
+  protected pitching: boolean;
+  protected padding: boolean;
 
   private bearingSnap: number;
   private easeEndTimeoutID: number;
@@ -74,11 +77,11 @@ export default class Camera extends EventEmitter {
       renderWorldCopies,
     );
   }
-  public requestRenderFrame(_: any): number {
+  public requestRenderFrame(cb: CallBack): number {
     return 0;
   }
-  public cancelRenderFrame(_: number) {
-    return 0;
+  public cancelRenderFrame(_: number): void {
+    return;
   }
 
   public getCenter() {
@@ -94,7 +97,11 @@ export default class Camera extends EventEmitter {
     return this.transform.pitch;
   }
 
-  public setPitch(pitch: number, eventData?: object) {
+  public setCenter(center: LngLatLike, eventData?: any) {
+    return this.jumpTo({ center }, eventData);
+  }
+
+  public setPitch(pitch: number, eventData?: any) {
     this.jumpTo({ pitch }, eventData);
     return this;
   }
@@ -106,7 +113,7 @@ export default class Camera extends EventEmitter {
   public panTo(
     lnglat: LngLatLike,
     options?: IAnimationOptions,
-    eventData?: object,
+    eventData?: any,
   ) {
     return this.easeTo(
       merge(
@@ -119,26 +126,26 @@ export default class Camera extends EventEmitter {
     );
   }
 
-  public zoomOut(options?: IAnimationOptions, eventData?: object) {
+  public zoomOut(options?: IAnimationOptions, eventData?: any) {
     this.zoomTo(this.getZoom() - 1, options, eventData);
     return this;
   }
 
-  public setBearing(bearing: number, eventData?: object) {
+  public setBearing(bearing: number, eventData?: any) {
     this.jumpTo({ bearing }, eventData);
     return this;
   }
-  public setZoom(zoom: number, eventData?: object) {
+  public setZoom(zoom: number, eventData?: any) {
     this.jumpTo({ zoom }, eventData);
     return this;
   }
 
-  public zoomIn(options?: IAnimationOptions, eventData?: object) {
+  public zoomIn(options?: IAnimationOptions, eventData?: any) {
     this.zoomTo(this.getZoom() + 1, options, eventData);
     return this;
   }
 
-  public zoomTo(zoom: number, options?: IAnimationOptions, eventData?: object) {
+  public zoomTo(zoom: number, options?: IAnimationOptions, eventData?: any) {
     return this.easeTo(
       merge(
         {
@@ -154,7 +161,7 @@ export default class Camera extends EventEmitter {
     return this.transform.padding;
   }
 
-  public setPadding(padding: IPaddingOptions, eventData?: object) {
+  public setPadding(padding: IPaddingOptions, eventData?: any) {
     this.jumpTo({ padding }, eventData);
     return this;
   }
@@ -162,7 +169,7 @@ export default class Camera extends EventEmitter {
   public rotateTo(
     bearing: number,
     options?: IAnimationOptions,
-    eventData?: object,
+    eventData?: any,
   ) {
     return this.easeTo(
       merge(
@@ -175,12 +182,12 @@ export default class Camera extends EventEmitter {
     );
   }
 
-  public resetNorth(options?: IAnimationOptions, eventData?: object) {
+  public resetNorth(options?: IAnimationOptions, eventData?: any) {
     this.rotateTo(0, merge({ duration: 1000 }, options), eventData);
     return this;
   }
 
-  public resetNorthPitch(options?: IAnimationOptions, eventData?: object) {
+  public resetNorthPitch(options?: IAnimationOptions, eventData?: any) {
     this.easeTo(
       merge(
         {
@@ -197,7 +204,7 @@ export default class Camera extends EventEmitter {
   public fitBounds(
     bounds: LngLatBoundsLike,
     options?: IAnimationOptions & ICameraOptions,
-    eventData?: object,
+    eventData?: any,
   ) {
     return this.fitInternal(
       // @ts-ignore
@@ -220,14 +227,14 @@ export default class Camera extends EventEmitter {
     );
   }
 
-  public snapToNorth(options?: IAnimationOptions, eventData?: object) {
+  public snapToNorth(options?: IAnimationOptions, eventData?: any) {
     if (Math.abs(this.getBearing()) < this.bearingSnap) {
       return this.resetNorth(options, eventData);
     }
     return this;
   }
 
-  public jumpTo(options: ICameraOptions = {}, eventData?: object) {
+  public jumpTo(options: ICameraOptions = {}, eventData?: any) {
     this.stop();
 
     const tr = this.transform;
@@ -593,7 +600,7 @@ export default class Camera extends EventEmitter {
     p1: PointLike,
     bearing: number,
     options?: IAnimationOptions & ICameraOptions,
-    eventData?: object,
+    eventData?: any,
   ) {
     return this.fitInternal(
       // @ts-ignore
@@ -661,7 +668,7 @@ export default class Camera extends EventEmitter {
     center.lng += delta > 180 ? -360 : delta < -180 ? 360 : 0;
   }
 
-  private fireMoveEvents(eventData?: object) {
+  private fireMoveEvents(eventData?: any) {
     this.emit('move', new Event('move', eventData));
     if (this.zooming) {
       this.emit('zoom', new Event('zoom', eventData));
@@ -864,7 +871,7 @@ export default class Camera extends EventEmitter {
   private fitInternal(
     calculatedOptions?: ICameraOptions & IAnimationOptions,
     options?: IAnimationOptions & ICameraOptions,
-    eventData?: object,
+    eventData?: any,
   ) {
     // cameraForBounds warns + returns undefined if unable to fit:
     if (!calculatedOptions) {

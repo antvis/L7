@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 
 // tslint:disable-next-line:no-submodule-imports
@@ -177,14 +178,18 @@ export default class HandlerInertia {
 
 // Unfortunately zoom, bearing, etc can't have different durations and easings so
 // we need to choose one. We use the longest duration and it's corresponding easing.
-function extendDuration(easeOptions, result) {
+function extendDuration(easeOptions: any, result: any) {
   if (!easeOptions.duration || easeOptions.duration < result.duration) {
     easeOptions.duration = result.duration;
     easeOptions.easing = result.easing;
   }
 }
 
-function calculateEasing(amount, inertiaDuration: number, inertiaOptions) {
+function calculateEasing(
+  amount: number,
+  inertiaDuration: number,
+  inertiaOptions: IInertiaOptions,
+) {
   const { maxSpeed, linearity, deceleration } = inertiaOptions;
   const speed = clamp(
     (amount * linearity) / (inertiaDuration / 1000),

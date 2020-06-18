@@ -1,3 +1,4 @@
+// @ts-ignore
 import Point from '@mapbox/point-geometry';
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
