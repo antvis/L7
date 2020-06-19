@@ -58,6 +58,10 @@ export default abstract class DrawFeature extends DrawMode {
     this.on(DrawEvent.CREATE, this.onDrawCreate);
     this.on(DrawEvent.MODE_CHANGE, this.onModeChange);
     document.addEventListener('keydown', this.addKeyDownEvent);
+    if (this.options.data && this.initData()) {
+      this.normalLayer.update(this.source.data);
+      this.normalLayer.enableSelect();
+    }
   }
   public abstract drawFinish(): void;
   public setCurrentFeature(feature: Feature) {
@@ -143,6 +147,9 @@ export default abstract class DrawFeature extends DrawMode {
   protected abstract hideOtherLayer(): void;
 
   protected abstract showOtherLayer(): void;
+  protected initData(): boolean {
+    return false;
+  }
 
   private addDrawPopup(lnglat: ILngLat, dis: number) {
     const popup = new Popup({

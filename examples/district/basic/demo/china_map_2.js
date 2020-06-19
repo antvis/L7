@@ -190,6 +190,9 @@ scene.on('loaded', () => {
     data: ProvinceData,
     joinBy: [ 'NAME_CHN', 'name' ],
     depth: 1,
+    provinceStroke: '#783D2D',
+    cityStroke: '#EBCCB4',
+    cityStrokeWidth: 1,
     fill: {
       color: {
         field: 'NAME_CHN',

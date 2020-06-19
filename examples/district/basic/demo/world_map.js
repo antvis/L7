@@ -9,7 +9,7 @@ const scene = new Scene({
     style: 'blank',
     zoom: 0,
     minZoom: 0,
-    maxZoom: 10
+    maxZoom: 5
   })
 });
 scene.on('loaded', () => {

@@ -23,7 +23,37 @@ export default class Circle extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      const drawPoint = new DrawPoint(scene);
+      const drawPoint = new DrawPoint(scene, {
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: [88.9453125, 53.330872983017066],
+              },
+            },
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: [109.3359375, 28.613459424004414],
+              },
+            },
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: [97.734375, 35.460669951495305],
+              },
+            },
+          ],
+        },
+      });
       drawPoint.enable();
     });
   }

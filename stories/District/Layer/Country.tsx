@@ -197,6 +197,7 @@ export default class Country extends React.Component {
     ];
     scene.on('loaded', () => {
       const Layer = new CountryLayer(scene, {
+        visible: true,
         data: ProvinceData,
         joinBy: ['NAME_CHN', 'name'],
         // label: {

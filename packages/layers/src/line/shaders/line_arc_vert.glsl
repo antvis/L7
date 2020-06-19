@@ -13,8 +13,8 @@ varying vec2 v_normal;
 
 varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
-uniform vec2 u_dash_array: [10.0, 5.];
-varying vec2 v_dash_array;
+uniform vec4 u_dash_array: [10.0, 5., 0, 0];
+varying vec4 v_dash_array;
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
@@ -48,7 +48,7 @@ vec2 getExtrusionOffset(vec2 line_clipspace, float offset_direction) {
   vec2 dir_screenspace = normalize(line_clipspace);
   // rotate by 90 degrees
    dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
-  vec2 offset = dir_screenspace * offset_direction * a_Size / 2.0;
+  vec2 offset = dir_screenspace * offset_direction * setPickingSize(a_Size) / 2.0;
   return offset;
 }
 vec2 getNormal(vec2 line_clipspace, float offset_direction) {

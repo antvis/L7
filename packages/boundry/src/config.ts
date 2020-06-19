@@ -7,12 +7,12 @@ const dataLevel2: { [key: string]: any } = {
     fill: {
       type: 'pbf',
       url:
-        'https://gw.alipayobjects.com/os/bmw-prod/d666a08d-fce1-48e2-913a-87d81772bcc9.bin',
+        'https://gw.alipayobjects.com/os/bmw-prod/e66cdd3f-cd41-4533-9746-d8fdbe0a0056.bin',
     },
     line: {
       type: 'pbf',
       url:
-        'https://gw.alipayobjects.com/os/bmw-prod/62f61f5f-cca7-4137-845d-13c8f9969664.bin',
+        'https://gw.alipayobjects.com/os/bmw-prod/f1b0fd97-ac90-4adb-b99c-01709e0e52c8.bin',
     },
     label: {
       type: 'pbf',
@@ -181,17 +181,17 @@ const dataLevel1: { [key: string]: any } = {
         line: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/561e2cfe-9460-42d1-a2f8-3fd2e1274c52.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/8bfbfe7e-bd0e-4bbe-84d8-629f4dc7abc4.bin',
         },
         cityLine: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/561e2cfe-9460-42d1-a2f8-3fd2e1274c52.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/8bfbfe7e-bd0e-4bbe-84d8-629f4dc7abc4.bin',
         },
         provinceLine: {
           type: 'pbf',
           url:
-            '//gw.alipayobjects.com/os/bmw-prod/778ad7ba-5a3f-4ed6-a94a-b8ab8acae9d6.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/778ad7ba-5a3f-4ed6-a94a-b8ab8acae9d6.bin',
         },
       },
       3: {

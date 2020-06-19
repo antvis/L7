@@ -22,8 +22,11 @@ export default class LineModel extends BaseModel {
     const {
       opacity,
       lineType = 'solid',
-      dashArray = [10, 5],
+      dashArray = [10, 5, 0, 0],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (dashArray.length === 2) {
+      dashArray.push(0, 0);
+    }
     return {
       u_opacity: opacity || 1.0,
       u_line_type: lineStyleObj[lineType],

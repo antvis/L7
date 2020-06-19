@@ -14,3 +14,4 @@ export {
   DrillDownLayer,
 };
 export * from './config';
+export * from './layer/interface';
