@@ -766,6 +766,9 @@ export default class Transform {
     return coord.toLngLat();
   }
 
+  public getProjectionMatrix(): mat4 {
+    return this.projMatrix;
+  }
   /**
    * Calculate the posMatrix that, given a tile coordinate, would be used to display the tile on a map.
    * @param {UnwrappedTileID} unwrappedTileID;
@@ -952,7 +955,6 @@ export default class Transform {
       this.worldSize,
       this.worldSize,
     ]);
-
     // scale vertically to meters per pixel (inverse of ground resolution):
 
     mat4.scale(

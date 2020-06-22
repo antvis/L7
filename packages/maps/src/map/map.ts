@@ -323,7 +323,6 @@ export default class L7MapService implements IMapService<Map> {
       // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
       cameraHeight: 0,
     });
-
     // set coordinate system
     if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
       this.coordinateSystemService.setCoordinateSystem(
