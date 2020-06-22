@@ -1,10 +1,10 @@
 // @ts-ignore
-import Point, { PointLike } from '@mapbox/point-geometry';
 import { EventEmitter } from 'eventemitter3';
 import { merge } from 'lodash';
 import { IPaddingOptions } from './geo/edge_insets';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
+import Point, { PointLike } from './geo/point';
 import Transform from './geo/transform';
 import { Event } from './handler/events/event';
 import { IMapOptions } from './interface';

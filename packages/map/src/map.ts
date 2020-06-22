@@ -1,11 +1,11 @@
 import { DOM } from '@antv/l7-utils';
-// @ts-ignore
-import Point, { PointLike } from '@mapbox/point-geometry';
 import { merge } from 'lodash';
 import Camera from './camera';
 import './css/l7.css';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
+// @ts-ignore
+import Point, { PointLike } from './geo/point';
 import BoxZoomHandler from './handler/box_zoom';
 import HandlerManager from './handler/handler_manager';
 import KeyboardHandler from './handler/keyboard';

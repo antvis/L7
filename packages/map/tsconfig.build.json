@@ -3,7 +3,10 @@
   "compilerOptions": {
     "declarationDir": "./es",
     "rootDir": "./src",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules", "typings/*"]
+    }
   },
   "include": ["./src"]
 }

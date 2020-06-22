@@ -1,6 +1,6 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
 import LngLat from '../geo/lng_lat';
+import Point from '../geo/point';
 import { Map } from '../map';
 import { bezier, ease, interpolate, now } from '../util';
 import DOM from '../utils/dom';
@@ -28,7 +28,7 @@ class ScrollZoomHandler {
   private active: boolean;
   private zooming: boolean;
   private aroundCenter: boolean;
-  private around: Point;
+  private around: LngLat;
   private aroundPoint: Point;
   private type: 'wheel' | 'trackpad' | null;
   private lastValue: number;
@@ -169,6 +169,7 @@ class ScrollZoomHandler {
       this.lastValue = value;
 
       // Start a timeout in case this was a singular event, and dely it by up to 40ms.
+      // @ts-ignore
       this.timeout = setTimeout(this.onTimeout, 40, e);
     } else if (!this.type) {
       // This is a repeating event, but we don't know the type of event just yet.
@@ -282,6 +283,7 @@ class ScrollZoomHandler {
 
     if (finished) {
       this.active = false;
+      // @ts-ignore
       this.finishTimeout = setTimeout(() => {
         this.zooming = false;
         this.handler.triggerRenderFrame();

@@ -1,6 +1,6 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
 import LngLat from '../../geo/lng_lat';
+import Point from '../../geo/point';
 import { Map } from '../../map';
 import DOM from '../../utils/dom';
 import { Event } from './event';
@@ -61,7 +61,7 @@ export default class MapTouchEvent extends Event {
     const points = DOM.touchPos(map.getCanvasContainer(), touches);
     const lngLats = points.map((t: Point) => map.unproject(t));
     const point = points.reduce(
-      (prev: Point, curr: Point, i: number, arr: Point) => {
+      (prev: Point, curr: Point, i: number, arr: Point[]) => {
         return prev.add(curr.div(arr.length));
       },
       new Point(0, 0),

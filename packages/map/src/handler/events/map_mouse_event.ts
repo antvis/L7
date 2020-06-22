@@ -1,8 +1,8 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
 import LngLat from '../../geo/lng_lat';
+import Point from '../../geo/point';
 import { Map } from '../../map';
 import DOM from '../../utils/dom';
 import { Event } from './event';
