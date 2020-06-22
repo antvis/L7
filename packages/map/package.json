@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7-utils": "2.2.11",
+    "@antv/l7-utils": "2.2.14",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",
     "eventemitter3": "^4.0.4",

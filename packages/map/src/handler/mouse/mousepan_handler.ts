@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
+import Point from '../../geo/point';
 import DOM from '../../utils/dom';
 import MouseHandler from './mouse_handler';
 import { buttonStillPressed, LEFT_BUTTON } from './util';

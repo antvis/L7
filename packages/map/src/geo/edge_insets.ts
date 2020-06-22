@@ -1,6 +1,6 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
 import { clamp, interpolate } from '../util';
+import Point from './point';
 
 /**
  * An `EdgeInset` object represents screen space padding applied to the edges of the viewport.

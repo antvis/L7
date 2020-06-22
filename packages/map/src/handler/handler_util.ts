@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
+import Point from '../geo/point';
 
 export function indexTouches(touches: Touch[], points: Point[]) {
   const obj: { [key: string]: any } = {};

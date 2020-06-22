@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
+import Point from '../../geo/point';
 import TwoTouchHandler from './two_touch';
 
 function isVertical(vector: { x: number; y: number }) {

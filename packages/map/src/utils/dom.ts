@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
+import Point from '../geo/point';
 
 const DOM: {
   [key: string]: (...arg: any[]) => any;

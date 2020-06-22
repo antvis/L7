@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '@mapbox/point-geometry';
+import Point from '../../geo/point';
 import { indexTouches } from '../handler_util';
 
 function getCentroid(points: Point[]) {
