@@ -1,18 +1,18 @@
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
 
-let DataLevel = 2;
+let DataLevel = 2; // d
 const dataLevel2: { [key: string]: any } = {
   world: {
     fill: {
       type: 'pbf',
       url:
-        'https://gw.alipayobjects.com/os/bmw-prod/e66cdd3f-cd41-4533-9746-d8fdbe0a0056.bin',
+        'https://gw.alipayobjects.com/os/bmw-prod/c95e3e43-d68b-4144-b366-3977ca64a822.bin',
     },
     line: {
       type: 'pbf',
       url:
-        'https://gw.alipayobjects.com/os/bmw-prod/f1b0fd97-ac90-4adb-b99c-01709e0e52c8.bin',
+        'https://gw.alipayobjects.com/os/bmw-prod/62f61f5f-cca7-4137-845d-13c8f9969664.bin',
     },
     label: {
       type: 'pbf',

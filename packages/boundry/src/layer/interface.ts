@@ -36,7 +36,8 @@ export interface IFillOptions {
   color: AttributeType;
   values: StyleAttributeOption;
   style: any;
-  activeColor: string;
+  activeColor: string | boolean;
+  filter: AttributeType;
 }
 export type TriggeEventType =
   | 'mousemove'
@@ -60,6 +61,7 @@ export interface IBubbleOption {
   shape: AttributeType;
   size: AttributeType;
   color: AttributeType;
+  filter: AttributeType;
   scale: {
     field: string;
     type: ScaleTypeName;

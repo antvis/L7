@@ -126,7 +126,7 @@ export default class BaseLayer extends EventEmitter {
         style: {
           opacity: 1.0,
         },
-        activeColor: 'rgba(0,0,255,0.3)',
+        activeColor: false,
       },
       autoFit: true,
       stroke: '#bdbdbd',
@@ -176,18 +176,20 @@ export default class BaseLayer extends EventEmitter {
             ],
     });
     this.setLayerAttribute(fillLayer, 'color', fill.color as AttributeType);
+    this.setLayerAttribute(fillLayer, 'filter', fill.filter as AttributeType);
     if (fill.scale && isObject(fill.color)) {
       fillLayer.scale('color', {
         type: fill.scale,
         field: fill.color.field as string,
       });
     }
-    fillLayer
-      .shape('fill')
-      .active({
+    fillLayer.shape('fill').style(fill.style);
+
+    if (fill.activeColor) {
+      fillLayer.active({
         color: fill.activeColor as string,
-      })
-      .style(fill.style);
+      });
+    }
     this.fillLayer = fillLayer;
     this.layers.push(fillLayer);
     this.scene.addLayer(fillLayer);
@@ -256,6 +258,11 @@ export default class BaseLayer extends EventEmitter {
     this.setLayerAttribute(bubbleLayer, 'color', bubble.color as AttributeType);
     this.setLayerAttribute(bubbleLayer, 'size', bubble.size as AttributeType);
     this.setLayerAttribute(bubbleLayer, 'shape', bubble.shape as AttributeType);
+    this.setLayerAttribute(
+      bubbleLayer,
+      'filter',
+      bubble.filter as AttributeType,
+    );
     if (bubble.scale) {
       bubbleLayer.scale(bubble.scale.field, {
         type: bubble.scale.type,
@@ -325,12 +332,17 @@ export default class BaseLayer extends EventEmitter {
 
   private setLayerAttribute(
     layer: ILayer,
-    type: 'color' | 'size' | 'shape',
+    type: 'color' | 'size' | 'shape' | 'filter',
     attr: AttributeType,
   ) {
+    if (!attr) {
+      return;
+    }
     if (isObject(attr)) {
+      // @ts-ignore
       layer[type](attr.field, attr.values);
     } else {
+      // @ts-ignore
       layer[type](attr);
     }
   }

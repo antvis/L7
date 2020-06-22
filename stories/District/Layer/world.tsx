@@ -39,12 +39,18 @@ export default class Country extends React.Component {
               '#a63603',
             ],
           },
+          filter: {
+            field: 'NAME_CHN',
+            values: (v: any) => {
+              return v.length > 5;
+            },
+          },
         },
         stroke: '#ccc',
         label: {
           enable: true,
           textAllowOverlap: false,
-          field: 'NAME_CHN',
+          field: 'NAME_ENG',
         },
         popup: {
           enable: true,
@@ -54,7 +60,6 @@ export default class Country extends React.Component {
         },
       });
       Layer.on('loaded', () => {
-        console.log('完成');
         Layer.updateData(
           [
             {
