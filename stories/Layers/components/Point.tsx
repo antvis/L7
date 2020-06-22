@@ -61,6 +61,21 @@ export default class Point3D extends React.Component {
 
           scene.addLayer(pointLayer);
           this.scene = scene;
+          setTimeout(() => {
+            console.log('updatedata');
+            pointLayer.setData(
+              {
+                type: 'FeatureCollection',
+                features: [],
+              },
+              {
+                parser: {
+                  type: 'geojson',
+                },
+              },
+            );
+            console.log(pointLayer);
+          }, 3000);
         });
     });
   }
