@@ -243,6 +243,7 @@ export default abstract class DrawFeature extends DrawMode {
     if (this.drawStatus === 'DrawSelected') {
       this.clear();
       this.source.removeFeature(this.currentFeature as Feature);
+
       this.normalLayer.update(this.source.data);
       this.drawLayer.disableSelect();
       this.selectMode.disable();
