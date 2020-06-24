@@ -56,7 +56,7 @@ export default class BaseLayer extends EventEmitter {
   }
 
   public setOption(newOption: { [key: string]: any }) {
-    this.options = mergeWith(this.options, newOption);
+    this.options = mergeWith(this.options, newOption, mergeCustomizer);
   }
 
   public updateData(
@@ -296,6 +296,8 @@ export default class BaseLayer extends EventEmitter {
         strokeWidth: label.strokeWidth,
         textAllowOverlap: label.textAllowOverlap,
       });
+
+    this.setLayerAttribute(labelLayer, 'filter', label.filter);
     return labelLayer;
   }
 
@@ -333,7 +335,7 @@ export default class BaseLayer extends EventEmitter {
   private setLayerAttribute(
     layer: ILayer,
     type: 'color' | 'size' | 'shape' | 'filter',
-    attr: AttributeType,
+    attr: AttributeType | undefined,
   ) {
     if (!attr) {
       return;

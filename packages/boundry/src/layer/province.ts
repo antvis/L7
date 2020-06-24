@@ -96,7 +96,7 @@ export default class ProvinceLayer extends BaseLayer {
     return features;
   }
   private async addProvinceFillLayer() {
-    const { depth, adcode } = this.options as IProvinceLayerOption;
+    const { depth, adcode, label } = this.options as IProvinceLayerOption;
     const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
       depth
     ];
@@ -112,7 +112,9 @@ export default class ProvinceLayer extends BaseLayer {
     const labelData = this.filterLabelData(this.labelRawData, adcode);
     this.fillRawData = fillData;
     this.addFillLayer(data);
-    this.addLabelLayer(labelData);
+    if (label.enable) {
+      this.addLabelLayer(labelData);
+    }
     this.lineRawData = fillData;
     this.addFillLine(data);
   }
