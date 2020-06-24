@@ -13,6 +13,7 @@ export interface ILabelOption {
   strokeWidth: number;
   textAllowOverlap: boolean;
   opacity: number;
+  filter: AttributeType;
 }
 
 export interface IAttributeOption {

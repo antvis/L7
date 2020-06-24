@@ -26,10 +26,11 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       const Layer = new WorldLayer(scene, {
         data: [],
+        geoDataLevel: 2,
         joinBy: ['SOC', 'SOC'],
         fill: {
           color: {
-            field: 'value',
+            field: 'NAME_CHN',
             values: [
               '#feedde',
               '#fdd0a2',
@@ -38,12 +39,6 @@ export default class Country extends React.Component {
               '#e6550d',
               '#a63603',
             ],
-          },
-          filter: {
-            field: 'NAME_CHN',
-            values: (v: any) => {
-              return v.length > 5;
-            },
           },
         },
         stroke: '#ccc',
@@ -59,24 +54,9 @@ export default class Country extends React.Component {
           },
         },
       });
+      console.time('layer');
       Layer.on('loaded', () => {
-        Layer.updateData(
-          [
-            {
-              SOC: 'CHN',
-              value: 3000,
-            },
-            {
-              SOC: 'CAN',
-              value: 5000,
-            },
-            {
-              SOC: 'RUS',
-              value: 4000,
-            },
-          ],
-          ['SOC', 'SOC'],
-        );
+        console.timeEnd('layer');
       });
     });
     this.scene = scene;

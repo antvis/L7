@@ -217,15 +217,14 @@ export default class Country extends React.Component {
       const { province } = this.state;
       this.provinceLayer = new ProvinceLayer(scene, {
         data,
+        geoDataLevel: 1,
         joinBy: ['adcode', 'code'],
         adcode: ['330000'],
-        depth: 3,
+        depth: 2,
         label: {
-          field: 'NAME_CHN',
-          textAllowOverlap: false,
+          enable: false,
         },
-        bubble: {
-          enable: true,
+        fill: {
           color: {
             field: 'NAME_CHN',
             values: [
@@ -239,7 +238,7 @@ export default class Country extends React.Component {
           },
         },
         popup: {
-          enable: true,
+          enable: false,
           Html: (props) => {
             return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`;
           },
