@@ -217,7 +217,7 @@ class Province extends React.Component {
       const { province } = this.state;
       this.provinceLayer = new ProvinceLayer(scene, {
         adcode: ['230000'],
-        depth: 3,
+        depth: 1,
         label: {
           field: 'NAME_CHN',
           textAllowOverlap: false,
