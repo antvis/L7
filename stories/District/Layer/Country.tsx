@@ -199,6 +199,7 @@ export default class Country extends React.Component {
       const Layer = new CountryLayer(scene, {
         visible: true,
         data: ProvinceData,
+        geoDataLevel: 1,
         joinBy: ['NAME_CHN', 'name'],
         // label: {
         //   field: 'NAME_CHN',
