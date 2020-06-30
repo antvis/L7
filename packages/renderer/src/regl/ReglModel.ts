@@ -1,5 +1,6 @@
 import {
   gl,
+  IAttribute,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
@@ -26,7 +27,10 @@ import ReglTexture2D from './ReglTexture2D';
  */
 export default class ReglModel implements IModel {
   private reGl: regl.Regl;
+  private destroyed: boolean = false;
   private drawCommand: regl.DrawCommand;
+  private drawParams: regl.DrawConfig;
+  private options: IModelInitializationOptions;
   private uniforms: {
     [key: string]: IUniform;
   } = {};
@@ -48,6 +52,7 @@ export default class ReglModel implements IModel {
       instances,
     } = options;
     const reglUniforms: { [key: string]: IUniform } = {};
+    this.options = options;
     if (uniforms) {
       this.uniforms = this.extractUniforms(uniforms);
       Object.keys(uniforms).forEach((uniformName) => {
@@ -86,7 +91,9 @@ export default class ReglModel implements IModel {
     this.initBlendDrawParams({ blend }, drawParams);
     this.initStencilDrawParams({ stencil }, drawParams);
     this.initCullDrawParams({ cull }, drawParams);
+
     this.drawCommand = reGl(drawParams);
+    this.drawParams = drawParams;
   }
 
   public addUniforms(uniforms: { [key: string]: IUniform }) {
@@ -97,6 +104,12 @@ export default class ReglModel implements IModel {
   }
 
   public draw(options: IModelDrawOptions) {
+    if (
+      this.drawParams.attributes &&
+      Object.keys(this.drawParams.attributes).length === 0
+    ) {
+      return;
+    }
     const uniforms: {
       [key: string]: IUniform;
     } = {
@@ -135,7 +148,15 @@ export default class ReglModel implements IModel {
   }
 
   public destroy() {
-    // don't need do anything since we will call `rendererService.cleanup()`
+    // @ts-ignore
+    this.drawParams.elements.destroy();
+    if (this.options.attributes) {
+      Object.values(this.options.attributes).forEach((attr: any) => {
+        // @ts-ignore
+        (attr as ReglAttribute).destroy();
+      });
+    }
+    this.destroyed = true;
   }
 
   /**

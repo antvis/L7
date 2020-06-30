@@ -30,13 +30,17 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     this.registerBuiltinAttributes();
     this.updateTexture();
     this.iconService.on('imageUpdate', () => {
       this.updateTexture();
       this.layer.render(); // TODO 调用全局render
     });
+    return this.buildModels();
+  }
+
+  public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointImage',
@@ -49,7 +53,6 @@ export default class ImageModel extends BaseModel {
       }),
     ];
   }
-
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
@@ -107,6 +110,9 @@ export default class ImageModel extends BaseModel {
 
   private updateTexture() {
     const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.destroy();
+    }
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.LINEAR,

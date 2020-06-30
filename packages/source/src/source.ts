@@ -147,6 +147,14 @@ export default class Source extends EventEmitter {
     return feature?._id;
   }
 
+  public destroy() {
+    this.removeAllListeners();
+    this.originData = null;
+    this.clusterIndex = null;
+    // @ts-ignore
+    this.data = null;
+  }
+
   private initCfg(cfg?: ISourceCFG) {
     if (cfg) {
       if (cfg.parser) {
@@ -192,12 +200,6 @@ export default class Source extends EventEmitter {
 
     const clusterOptions = this.clusterOptions || {};
     this.clusterIndex = cluster(this.data, clusterOptions);
-    // this.clusterIndex = new Supercluster({
-    //   radius,
-    //   minZoom,
-    //   maxZoom,
-    // });
-    // this.clusterIndex.load(this.rawData.features);
   }
 
   private init() {

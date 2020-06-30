@@ -50,7 +50,7 @@ export default class RasterModel extends BaseModel {
     };
   }
 
-  public buildModels() {
+  public initModels() {
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
@@ -85,6 +85,9 @@ export default class RasterModel extends BaseModel {
     ];
   }
 
+  public buildModels() {
+    return this.initModels();
+  }
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({

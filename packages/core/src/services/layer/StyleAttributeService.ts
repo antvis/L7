@@ -320,6 +320,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
         attribute.vertexAttribute.destroy();
       }
     });
+
+    this.attributesAndIndices.elements.destroy();
     this.attributes = [];
   }
 }

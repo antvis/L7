@@ -708,7 +708,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
-    this.models.forEach((model) => model.destroy());
+    // this.models.forEach((model) => model.destroy());
 
     this.hooks.afterDestroy.call();
 
@@ -725,6 +725,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public clear() {
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
+  }
+  public clearModels() {
     this.models.forEach((model) => model.destroy());
   }
 
@@ -884,6 +886,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public buildModels() {
+    throw new Error('Method not implemented.');
+  }
+  public rebuildModels() {
     throw new Error('Method not implemented.');
   }
 
