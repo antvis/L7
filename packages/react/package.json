@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-react",
-  "version": "2.2.17",
+  "version": "2.2.18",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,8 +24,8 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7": "2.2.17",
-    "@antv/l7-maps": "2.2.17",
+    "@antv/l7": "2.2.18",
+    "@antv/l7-maps": "2.2.18",
     "@babel/runtime": "^7.7.7",
     "load-styles": "^2.0.0"
   },
@@ -33,7 +33,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.10.2"
   },
-  "gitHead": "532ade40831b35b04a677b351d092e54c00613d8",
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
   "publishConfig": {
     "access": "public"
   }
