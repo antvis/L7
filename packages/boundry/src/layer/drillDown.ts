@@ -184,7 +184,7 @@ export default class DrillDownLayer {
   }
 
   private getLayerOption(type: 'province' | 'city' | 'county') {
-    const { joinBy, label, bubble, fill, popup, province } = this.options;
+    const { joinBy, label, bubble, fill, popup, geoDataLevel } = this.options;
     const datatype = (type + 'Data') as
       | 'provinceData'
       | 'cityData'
@@ -196,6 +196,7 @@ export default class DrillDownLayer {
       bubble,
       fill,
       popup,
+      geoDataLevel,
       ...this.options[type],
     };
   }

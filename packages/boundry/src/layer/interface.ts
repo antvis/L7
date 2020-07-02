@@ -113,6 +113,7 @@ interface IDrawOption {
 }
 export interface IDrillDownOption {
   drillDepth: 0 | 1 | 2;
+  geoDataLevel: 1 | 2;
   customTrigger: boolean;
   drillDownTriggerEvent: TriggeEventType;
   drillUpTriggerEvent: TriggeEventType & DrillUpTriggeEventType;
