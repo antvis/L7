@@ -59,6 +59,10 @@ export default class BaseLayer extends EventEmitter {
     this.options = mergeWith(this.options, newOption, mergeCustomizer);
   }
 
+  public getFillData() {
+    return this.fillData;
+  }
+
   public updateData(
     newData: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
@@ -129,13 +133,16 @@ export default class BaseLayer extends EventEmitter {
         activeColor: false,
       },
       autoFit: true,
+      showBorder: true,
       stroke: '#bdbdbd',
+      strokeVisible: true,
       strokeWidth: 0.6,
       cityStroke: '#636363',
       cityStrokeWidth: 0.6,
       countyStrokeWidth: 0.6,
       provinceStrokeWidth: 0.6,
       provinceStroke: '#f0f0f0',
+      provinceStrokeVisible: true,
       countyStroke: '#525252',
       coastlineStroke: '#4190da',
       coastlineWidth: 0.6,

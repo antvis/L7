@@ -14,7 +14,9 @@ export default class WorldLayer extends BaseLayer {
     super(scene, option);
     this.loadData().then(([fillData, lineData, fillLabel]) => {
       this.addFillLayer(fillData);
-      this.addFillLine(lineData);
+      if (this.options.showBorder) {
+        this.addFillLine(lineData);
+      }
       if (this.options.label?.enable) {
         this.addLabelLayer(fillLabel, 'json');
       }

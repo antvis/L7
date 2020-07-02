@@ -34,6 +34,7 @@ export default class ProvinceLayer extends BaseLayer {
       this.hide();
       return;
     }
+    const { label, showBorder } = this.options;
     this.setOption({ adcode });
     const fillData = this.filterData(this.fillRawData, adcode);
     const lineData = this.filterData(this.lineRawData, adcode);
@@ -49,8 +50,13 @@ export default class ProvinceLayer extends BaseLayer {
     }
     this.fillData = fillData;
     this.updateData(newData, joinByField);
-    this.lineLayer.setData(lineData);
-    this.labelLayer.setData(labelData);
+    if (showBorder) {
+      this.lineLayer.setData(lineData);
+    }
+    if (label.enable) {
+      this.labelLayer.setData(labelData);
+    }
+
     this.show();
   }
 

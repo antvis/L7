@@ -51,8 +51,7 @@ order: 2
     - size 气泡大小 支持常量、数据映射
     - shape 气泡形状 支持常量、数据映射
     - style 气泡图样式 同 PointLayer
-    - filter 图层过滤方法，支持常量和数据映射 同 layer.filter 方法
-      数据映射 - field 填充映射字段 - values 回调函数 `false` 返回值将会被过滤掉
+  - showBorder `boolean` 是否显示国界线，默认显示，不建议不显示
   - stroke 填充描边颜色 `ProvinceLayer, CityLayer, CountyLayer`
   - strokeWidth 填充描边宽度 `ProvinceLayer, CityLayer, CountyLayer`
   - autoFit 是否自动缩放到图层范围 `boolean`
@@ -105,6 +104,10 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 
 - data 需要更新的数据
 - joinBy 关联字段 可选，如果不设置保持和初始化一致。
+
+### getFillData
+
+获取填充数据，可用于绘制独立的边界线
 
 #### show
 

@@ -1,4 +1,4 @@
-import { Scene } from '@antv/l7';
+import { LineLayer, Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
@@ -201,6 +201,7 @@ export default class Country extends React.Component {
         data: ProvinceData,
         geoDataLevel: 1,
         joinBy: ['NAME_CHN', 'name'],
+        showBorder: false,
         // label: {
         //   field: 'NAME_CHN',
         //   textAllowOverlap: true,
@@ -208,7 +209,7 @@ export default class Country extends React.Component {
         depth: 1,
         fill: {
           color: {
-            field: 'value',
+            field: 'NAME_CHN',
             values: [
               '#feedde',
               '#fdd0a2',
@@ -225,6 +226,60 @@ export default class Country extends React.Component {
             return `<span>${props.NAME_CHN}:</span><span>${props.value}</span>`;
           },
         },
+      });
+      Layer.on('loaded', () => {
+        const filldata = Layer.getFillData();
+        const border = new LineLayer({
+          zIndex: 3, // 设置显示层级
+        })
+          .source(filldata)
+          .shape('line')
+          .size(0.6)
+          .color('#a00')
+          .style({
+            opacity: 1,
+          });
+        const hightLayer = new LineLayer({
+          zIndex: 7, // 设置显示层级
+          name: 'line3',
+        })
+          .source({
+            type: 'FeatureCollection',
+            features: [],
+          })
+          .shape('line')
+          .size(0.6)
+          .color('#000')
+          .style({
+            opacity: 1,
+          });
+        const hightLayer2 = new LineLayer({
+          zIndex: 6, // 设置显示层级
+          name: 'line3',
+        })
+          .source({
+            type: 'FeatureCollection',
+            features: [],
+          })
+          .shape('line')
+          .size(2)
+          .color('#fff')
+          .style({
+            opacity: 1,
+          });
+        scene.addLayer(border);
+        scene.addLayer(hightLayer);
+        scene.addLayer(hightLayer2);
+        Layer.fillLayer.on('click', (feature) => {
+          hightLayer.setData({
+            type: 'FeatureCollection',
+            features: [feature.feature],
+          });
+          hightLayer2.setData({
+            type: 'FeatureCollection',
+            features: [feature.feature],
+          });
+        });
       });
     });
     this.scene = scene;
