@@ -495,7 +495,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // } else {
     //   this.renderModels();
     // }
-
     this.renderModels();
     // this.multiPassRenderer.render();
     // this.renderModels();

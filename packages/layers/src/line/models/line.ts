@@ -123,7 +123,9 @@ export default class LineModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
+          return Array.isArray(size)
+            ? [size[0], size[1] + this.layer.zIndex]
+            : [size as number, this.layer.zIndex];
         },
       },
     });

@@ -6,14 +6,15 @@ import { IDistrictLayerOption } from './interface';
 export default class CountryLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
-    const { depth } = this.options;
+    const { depth, showBorder } = this.options;
     this.addProvinceFill();
     this.addProvinceLabel();
     const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
       depth
     ];
-
-    this.addProvinceLine(countryConfig.provinceLine);
+    if (showBorder) {
+      this.addProvinceLine(countryConfig.provinceLine);
+    }
 
     if (depth === 2 * 1) {
       this.addCityBorder(countryConfig.fill);
@@ -127,6 +128,7 @@ export default class CountryLayer extends BaseLayer {
       chinaNationalWidth,
       coastlineStroke,
       coastlineWidth,
+      showBorder,
       stroke,
       strokeWidth,
       visible,
@@ -135,7 +137,7 @@ export default class CountryLayer extends BaseLayer {
     // 添加国界线
     const lineLayer = new LineLayer({
       zIndex: zIndex + 0.1,
-      visible,
+      visible: visible && showBorder,
     })
       .source(boundaries)
       .size('type', (v: string) => {
@@ -152,11 +154,11 @@ export default class CountryLayer extends BaseLayer {
       .shape('line')
       .color('type', (v: string) => {
         if (v === '3') {
-          return provinceStroke;
+          return provinceStroke; // 省界
         } else if (v === '2') {
-          return coastlineStroke;
+          return coastlineStroke; // 海岸线
         } else if (v === '0') {
-          return chinaNationalStroke;
+          return chinaNationalStroke; // 中国国界线
         } else {
           return '#fff';
         }
@@ -164,7 +166,7 @@ export default class CountryLayer extends BaseLayer {
     // 添加未定国界
     const lineLayer2 = new LineLayer({
       zIndex: zIndex + 0.1,
-      visible,
+      visible: visible && showBorder,
     })
       .source(boundaries2)
       .size(chinaNationalWidth)
@@ -178,7 +180,7 @@ export default class CountryLayer extends BaseLayer {
     // 添加澳门香港界限
     const lineLayer3 = new LineLayer({
       zIndex: zIndex + 0.1,
-      visible,
+      visible: visible && showBorder,
     })
       .source(boundaries3)
       .size(provinceStrokeWidth)

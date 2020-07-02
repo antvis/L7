@@ -85,10 +85,13 @@ export interface IDistrictLayerOption {
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;
   fill: Partial<IFillOptions>;
+  showBorder: boolean;
   autoFit: boolean;
   stroke: string;
+  strokeVisible: boolean;
   strokeWidth: number;
   provinceStroke: string;
+  provinceStrokeVisible: boolean;
   cityStroke: string;
   provinceStrokeWidth: number;
   cityStrokeWidth: number;
