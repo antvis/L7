@@ -34,6 +34,9 @@ order: 2
     - strokeWidth 文字描边宽度
     - textAllowOverlap 是否允许文字压盖
     - opacity 标注透明度
+    - spacing:  `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+    - padding:  `[number, number]`  文本相对锚点的偏移量 [x, y]
+    其他包括 text [style 的配置](../layer/point_layer/text#style)
 
   - fill 填充配置项 支持数据映射
     - color 图层填充颜色，支持常量和数据映射

@@ -53,6 +53,9 @@ District 支持下面几种图
       - strokeWidth 文字描边宽度
       - textAllowOverlap 是否允许文字压盖
       - opacity 标注透明度
+      - spacing:  `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+      - padding:  `[number, number]`  文本相对锚点的偏移量 [x, y]
+    其他包括 text [style 的配置](../layer/point_layer/text#style)
   - fill 填充配置项 支持数据映射
       - color 图层填充颜色，支持常量和数据映射
           常量：统一设置成一样的颜色
@@ -67,6 +70,7 @@ District 支持下面几种图
     - size 气泡大小 支持常量、数据映射
     - shape 气泡形状 支持常量、数据映射
     - style 气泡图样式 同 PointLayer
+
   - stroke 填充描边颜色 
   - strokeWidth 填充描边宽度
   - autoFit 是否自动缩放到图层范围 `boolean`

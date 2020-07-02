@@ -70,6 +70,9 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 - strokeWidth `number` 描边宽度 `2`
 - textAllowOverlap: `boolean` 文字是否允许压盖 `true`
 - opacity `number` 透明度 `1`
+- spacing:  `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+- padding:  `[number, number]`  文本相对锚点的偏移量 [x, y]
+    其他包括 text [style 的配置](../layer/point_layer/text#style)
 
 #### bubbleOption
 

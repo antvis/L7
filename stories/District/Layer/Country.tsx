@@ -204,6 +204,7 @@ export default class Country extends React.Component {
         showBorder: false,
         label: {
           field: 'name',
+          size: 20,
           padding: [5, 5],
           textAllowOverlap: true,
         },

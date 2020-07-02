@@ -21,9 +21,9 @@ export type anchorType =
   | 'center';
 export interface ILabelOption {
   enable: boolean;
-  color: string;
+  color: AttributeType;
   field: string;
-  size: number;
+  size: AttributeType;
   stroke: string;
   strokeWidth: number;
   textAllowOverlap: boolean;

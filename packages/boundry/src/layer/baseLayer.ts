@@ -107,7 +107,7 @@ export default class BaseLayer extends EventEmitter {
         enable: true,
         color: '#000',
         field: 'name',
-        size: 8,
+        size: 10,
         stroke: '#fff',
         strokeWidth: 2,
         textAllowOverlap: true,
@@ -296,11 +296,10 @@ export default class BaseLayer extends EventEmitter {
           coordinates: 'center',
         },
       })
-      .color(label.color as StyleAttrField)
       .shape(label.field as StyleAttrField, 'text')
-      .size(10)
       .style(label);
-
+    this.setLayerAttribute(labelLayer, 'color', label.color as AttributeType);
+    this.setLayerAttribute(labelLayer, 'size', label.size as AttributeType);
     this.setLayerAttribute(labelLayer, 'filter', label.filter);
     return labelLayer;
   }

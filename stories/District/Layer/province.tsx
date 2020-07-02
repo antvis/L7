@@ -222,6 +222,7 @@ export default class Country extends React.Component {
         adcode: ['330000'],
         stroke: '#7096B3',
         depth: 2,
+        showBorder: false,
         label: {
           enable: false,
         },
