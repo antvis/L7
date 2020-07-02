@@ -31,6 +31,7 @@ export default class Country extends React.Component {
       this.scene = scene;
       this.drillDown = new DrillDownLayer(scene, {
         drillDepth: 2,
+        geoDataLevel: 2,
         fill: {
           color: {
             field: 'NAME_CHN',

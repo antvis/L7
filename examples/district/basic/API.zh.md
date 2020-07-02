@@ -19,7 +19,6 @@ import { WorldLayer } from '@antv/l7-district';
   <script src="https://unpkg.com/@antv/l7-district"></script>
 </head>
 ```
-⚠️⚠️⚠️ District 相关配置和接口还在完善中，你可以适用体验，某些配置和接口可能会进行调整
 
 ## 简介
 
@@ -58,13 +57,22 @@ District 支持下面几种图
           数据映射
           - field 填充映射字段
           - values  映射值，同color方法第二个参数数组，回调函数
+      - filter 图层过滤方法，支持常量和数据映射 同layer.filter方法
+          数据映射
+              - field 填充映射字段
+              - values  回调函数 `false` 返回值将会被过滤掉
       - style 同 polygonLayer的style方法
-      - activeColor 鼠标滑过高亮颜色
+      - activeColor 鼠标滑过高亮颜色,  `string | boolean` 如果设置为 `false`取消高亮
+
   - bubble 气泡图
     - enable `boolean` 是否显示气泡  default false
     - color 气泡颜色 支持常量、数据映射
     - size 气泡大小 支持常量、数据映射
     - shape 气泡形状 支持常量、数据映射
+    - filter 图层过滤方法，支持常量和数据映射 同layer.filter方法
+          数据映射
+              - field 填充映射字段
+              - values  回调函数 `false` 返回值将会被过滤掉
     - style 气泡图样式 同 PointLayer
   - stroke 填充描边颜色 `ProvinceLayer, CityLayer, CountyLayer`
   - strokeWidth 填充描边宽度 `ProvinceLayer, CityLayer, CountyLayer`

@@ -28,6 +28,16 @@
       "filename": "county.js",
       "title": "中国县地图",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*iVwLSpIf_ckAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "attach_map.js",
+      "title": "中国地图附图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*bGX-Tbw5uVAAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "hainan.js",
+      "title": "海南省地图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*nHOTQ61hFbYAAAAAAAAAAABkARQnAQ"
     }
   ]
 }
