@@ -4,6 +4,21 @@ import {
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7';
+export type anchorType =
+  | 'right'
+  | 'top-right'
+  | 'left'
+  | 'bottom-right'
+  | 'left'
+  | 'top-left'
+  | 'bottom-left'
+  | 'bottom'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top'
+  | 'top-right'
+  | 'top-left'
+  | 'center';
 export interface ILabelOption {
   enable: boolean;
   color: string;
@@ -12,6 +27,12 @@ export interface ILabelOption {
   stroke: string;
   strokeWidth: number;
   textAllowOverlap: boolean;
+  padding: [number, number];
+  strokeOpacity: number;
+  fontWeight: number;
+  spacing: number;
+  textAnchor: anchorType;
+  textOffset: [number, number];
   opacity: number;
   filter: AttributeType;
 }

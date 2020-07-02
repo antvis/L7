@@ -202,10 +202,11 @@ export default class Country extends React.Component {
         geoDataLevel: 1,
         joinBy: ['NAME_CHN', 'name'],
         showBorder: false,
-        // label: {
-        //   field: 'NAME_CHN',
-        //   textAllowOverlap: true,
-        // },
+        label: {
+          field: 'name',
+          padding: [5, 5],
+          textAllowOverlap: true,
+        },
         depth: 1,
         fill: {
           color: {

@@ -46,6 +46,7 @@ export default class Country extends React.Component {
           enable: true,
           textAllowOverlap: false,
           field: 'NAME_ENG',
+          padding: [5, 5],
         },
         popup: {
           enable: true,

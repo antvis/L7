@@ -112,6 +112,8 @@ export default class BaseLayer extends EventEmitter {
         strokeWidth: 2,
         textAllowOverlap: true,
         opacity: 1,
+        textOffset: [0, 0],
+        padding: [0, 0],
       },
       bubble: {
         enable: false,
@@ -285,7 +287,7 @@ export default class BaseLayer extends EventEmitter {
   protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex, visible } = this.options;
     const labelLayer = new PointLayer({
-      zIndex: zIndex + 0.4,
+      zIndex: zIndex + 5,
       visible,
     })
       .source(labelData, {
@@ -297,12 +299,7 @@ export default class BaseLayer extends EventEmitter {
       .color(label.color as StyleAttrField)
       .shape(label.field as StyleAttrField, 'text')
       .size(10)
-      .style({
-        opacity: label.opacity,
-        stroke: label.stroke,
-        strokeWidth: label.strokeWidth,
-        textAllowOverlap: label.textAllowOverlap,
-      });
+      .style(label);
 
     this.setLayerAttribute(labelLayer, 'filter', label.filter);
     return labelLayer;
