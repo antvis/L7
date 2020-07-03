@@ -82,6 +82,7 @@ export interface ILayer {
   zIndex: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
+  styleNeedUpdate: boolean;
   layerModel: ILayerModel;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;

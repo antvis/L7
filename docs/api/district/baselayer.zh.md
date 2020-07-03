@@ -22,6 +22,7 @@ order: 2
   - data `Array` 属性数据用于可视化渲染
   - visible 地图是否可见
   - joinBy 数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
+  - simplifyTolerance 数据抽稀容差,默认不抽稀 `boolean | number` 单位为度，一度约111km，数字越大精度越低。参考设置数据 0.01
     对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名
   - depth 数据显示层级 0：国家级，1:省级，2: 市级，3：线级
   - label 标注配置项 支持常量，不支持数据映射

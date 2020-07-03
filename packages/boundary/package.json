@@ -44,7 +44,8 @@
     "eventemitter3": "^4.0.0",
     "geobuf": "^3.0.1",
     "lodash": "^4.6.2",
-    "pbf": "^3.2.1"
+    "pbf": "^3.2.1",
+    "simplify-geojson": "^1.0.3"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"

@@ -102,6 +102,7 @@ export interface IDistrictLayerOption {
   data?: Array<{ [key: string]: any }>;
   joinBy: [string, string];
   adcode: adcodeType;
+  simplifyTolerance: number | boolean;
   depth: 0 | 1 | 2 | 3;
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;

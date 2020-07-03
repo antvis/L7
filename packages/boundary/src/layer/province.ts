@@ -116,6 +116,7 @@ export default class ProvinceLayer extends BaseLayer {
       };
     });
     const data = this.filterData(fillData, adcode);
+    this.fillData = data;
     const labelData = this.filterLabelData(this.labelRawData, adcode);
     this.fillRawData = fillData;
     this.addFillLayer(data);

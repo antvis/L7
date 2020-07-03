@@ -17,6 +17,8 @@ import isObject from 'lodash/isObject';
 import mergeWith from 'lodash/mergeWith';
 // @ts-ignore
 import Pbf from 'pbf';
+// @ts-ignore
+import simplify from 'simplify-geojson';
 import { setDataLevel } from '../config';
 import { AttributeType, IDistrictLayerOption } from './interface';
 
@@ -89,7 +91,10 @@ export default class BaseLayer extends EventEmitter {
   protected async fetchData(data: { url: any; type: string }) {
     if (data.type === 'pbf') {
       const buffer = await (await fetch(data.url)).arrayBuffer();
-      const geojson = geobuf.decode(new Pbf(buffer));
+      let geojson = geobuf.decode(new Pbf(buffer));
+      if (this.options.simplifyTolerance !== false) {
+        geojson = simplify(geojson, this.options.simplifyTolerance);
+      }
       return geojson;
     } else {
       return isObject(data.url) ? data.url : (await fetch(data.url)).json();
@@ -103,6 +108,7 @@ export default class BaseLayer extends EventEmitter {
       depth: 1,
       adcode: [],
       joinBy: ['name', 'name'],
+      simplifyTolerance: false,
       label: {
         enable: true,
         color: '#000',

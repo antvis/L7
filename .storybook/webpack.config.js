@@ -37,7 +37,7 @@ module.exports = ({ config }) => {
   }
   );
   config.resolve.alias = {
-    '@antv/l7-district': path.resolve(__dirname, '../packages/boundry/src'),
+    '@antv/l7-district': path.resolve(__dirname, '../packages/boundary/src'),
   }
 
   config.resolve.extensions.push('.ts', '.tsx', 'css', '.js', '.glsl');
