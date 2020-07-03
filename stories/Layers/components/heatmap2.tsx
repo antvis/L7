@@ -71,6 +71,7 @@ export default class HeatMapLayerDemo extends React.Component {
                 positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
               },
             });
+            scene.render();
             console.log('更新完成');
           }, 2000);
         });
