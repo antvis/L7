@@ -119,7 +119,7 @@ export default class BaseLayer extends EventEmitter {
         textAllowOverlap: true,
         opacity: 1,
         textOffset: [0, 0],
-        padding: [0, 0],
+        padding: [5, 5],
       },
       bubble: {
         enable: false,
