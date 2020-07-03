@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.2.19",
+  "version": "2.2.20",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
