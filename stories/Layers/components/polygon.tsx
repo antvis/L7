@@ -133,14 +133,18 @@ export default class TextLayerDemo extends React.Component {
         })
         .size('childrenNum', [10, 100000000])
         // .color('red')
-        .color('childrenNum', [
-          '#D92568',
-          '#E3507E',
-          '#FC7AAB',
-          '#F1D3E5',
-          '#A7B5E3',
-          '#F2EEFF',
-        ])
+        // .color('childrenNum', [
+        //   '#D92568',
+        //   '#E3507E',
+        //   '#FC7AAB',
+        //   '#F1D3E5',
+        //   '#A7B5E3',
+        //   '#F2EEFF',
+        // ])
+        .color('childrenNum*name', (childrenNum, name) => {
+          console.log(childrenNum, name);
+          return 'red';
+        })
         .style({
           opacity: 1.0,
         });
