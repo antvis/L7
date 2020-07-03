@@ -22,6 +22,7 @@ order: 2
   - data `Array` 属性数据用于可视化渲染
   - visible 地图是否可见
   - joinBy 数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
+  - simplifyTolerance 数据抽稀容差,默认不抽稀 `boolean | number` 单位为度，一度约 111km，数字越大精度越低。参考设置数据 0.01
     对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名
   - depth 数据显示层级 0：国家级，1:省级，2: 市级，3：线级
   - label 标注配置项 支持常量，不支持数据映射
@@ -34,6 +35,9 @@ order: 2
     - strokeWidth 文字描边宽度
     - textAllowOverlap 是否允许文字压盖
     - opacity 标注透明度
+    - spacing: `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+    - padding: `[number, number]` 文本相对锚点的偏移量 [x, y]
+      其他包括 text [style 的配置](../layer/point_layer/text#style)
 
   - fill 填充配置项 支持数据映射
     - color 图层填充颜色，支持常量和数据映射
@@ -93,6 +97,8 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 行政区划组件每个图层有多个子图层组成，如标注层，国界线、省界线等等，
 
 #### fillLayer
+
+图层事件可以通过该属性进行设置
 
 ### 方法
 

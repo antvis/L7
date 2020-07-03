@@ -4,14 +4,35 @@ import {
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7';
+export type anchorType =
+  | 'right'
+  | 'top-right'
+  | 'left'
+  | 'bottom-right'
+  | 'left'
+  | 'top-left'
+  | 'bottom-left'
+  | 'bottom'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top'
+  | 'top-right'
+  | 'top-left'
+  | 'center';
 export interface ILabelOption {
   enable: boolean;
-  color: string;
+  color: AttributeType;
   field: string;
-  size: number;
+  size: AttributeType;
   stroke: string;
   strokeWidth: number;
   textAllowOverlap: boolean;
+  padding: [number, number];
+  strokeOpacity: number;
+  fontWeight: number;
+  spacing: number;
+  textAnchor: anchorType;
+  textOffset: [number, number];
   opacity: number;
   filter: AttributeType;
 }
@@ -81,6 +102,7 @@ export interface IDistrictLayerOption {
   data?: Array<{ [key: string]: any }>;
   joinBy: [string, string];
   adcode: adcodeType;
+  simplifyTolerance: number | boolean;
   depth: 0 | 1 | 2 | 3;
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;

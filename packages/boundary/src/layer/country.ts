@@ -1,4 +1,4 @@
-import { LineLayer, PointLayer, Scene, StyleAttrField } from '@antv/l7';
+import { AttributeType, LineLayer, PointLayer, Scene } from '@antv/l7';
 import { getDataConfig } from '../index';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
@@ -14,13 +14,12 @@ export default class CountryLayer extends BaseLayer {
     ];
     if (showBorder) {
       this.addProvinceLine(countryConfig.provinceLine);
-    }
-
-    if (depth === 2 * 1) {
-      this.addCityBorder(countryConfig.fill);
-    }
-    if (depth === 3 * 1) {
-      this.addCountyBorder(countryConfig.fill);
+      if (depth === 2 * 1) {
+        this.addCityBorder(countryConfig.fill);
+      }
+      if (depth === 3 * 1) {
+        this.addCountyBorder(countryConfig.fill);
+      }
     }
   }
   protected async addProvinceFill() {
@@ -264,9 +263,9 @@ export default class CountryLayer extends BaseLayer {
           coordinates: 'center',
         },
       })
-      .color(label.color as StyleAttrField)
+      .color(label.color as AttributeType)
       .shape('name', 'text')
-      .size(10)
+      .size(label.size as AttributeType)
       .style({
         opacity: label.opacity,
         stroke: label.stroke,

@@ -1,4 +1,4 @@
-import { LineLayer, Scene } from '@antv/l7';
+import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
@@ -20,7 +20,7 @@ export default class Country extends React.Component {
         style: 'blank',
         zoom: 3,
         minZoom: 0,
-        maxZoom: 10,
+        maxZoom: 15,
       }),
     });
     const ProvinceData = [
@@ -199,14 +199,16 @@ export default class Country extends React.Component {
       const Layer = new CountryLayer(scene, {
         visible: true,
         data: ProvinceData,
-        geoDataLevel: 1,
+        geoDataLevel: 2,
         joinBy: ['NAME_CHN', 'name'],
         showBorder: false,
-        // label: {
-        //   field: 'NAME_CHN',
-        //   textAllowOverlap: true,
-        // },
-        depth: 1,
+        label: {
+          field: 'name',
+          size: 10,
+          padding: [5, 5],
+          textAllowOverlap: true,
+        },
+        depth: 2,
         fill: {
           color: {
             field: 'NAME_CHN',
@@ -230,7 +232,7 @@ export default class Country extends React.Component {
       Layer.on('loaded', () => {
         const filldata = Layer.getFillData();
         const border = new LineLayer({
-          zIndex: 3, // 设置显示层级
+          zIndex: 5, // 设置显示层级
         })
           .source(filldata)
           .shape('line')
@@ -240,29 +242,23 @@ export default class Country extends React.Component {
             opacity: 1,
           });
         const hightLayer = new LineLayer({
-          zIndex: 7, // 设置显示层级
+          zIndex: 4, // 设置显示层级
           name: 'line3',
         })
-          .source({
-            type: 'FeatureCollection',
-            features: [],
-          })
+          .source(filldata)
           .shape('line')
-          .size(0.6)
+          .size(1.2)
           .color('#000')
           .style({
             opacity: 1,
           });
         const hightLayer2 = new LineLayer({
-          zIndex: 6, // 设置显示层级
+          zIndex: 3, // 设置显示层级
           name: 'line3',
         })
-          .source({
-            type: 'FeatureCollection',
-            features: [],
-          })
+          .source(filldata)
           .shape('line')
-          .size(2)
+          .size(2.4)
           .color('#fff')
           .style({
             opacity: 1,

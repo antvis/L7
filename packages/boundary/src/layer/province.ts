@@ -102,7 +102,8 @@ export default class ProvinceLayer extends BaseLayer {
     return features;
   }
   private async addProvinceFillLayer() {
-    const { depth, adcode, label } = this.options as IProvinceLayerOption;
+    const { depth, adcode, label, showBorder } = this
+      .options as IProvinceLayerOption;
     const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
       depth
     ];
@@ -115,6 +116,7 @@ export default class ProvinceLayer extends BaseLayer {
       };
     });
     const data = this.filterData(fillData, adcode);
+    this.fillData = data;
     const labelData = this.filterLabelData(this.labelRawData, adcode);
     this.fillRawData = fillData;
     this.addFillLayer(data);
@@ -122,7 +124,9 @@ export default class ProvinceLayer extends BaseLayer {
       this.addLabelLayer(labelData);
     }
     this.lineRawData = fillData;
-    this.addFillLine(data);
+    if (showBorder) {
+      this.addFillLine(data);
+    }
   }
 
   private async addProvinceLineLayer() {

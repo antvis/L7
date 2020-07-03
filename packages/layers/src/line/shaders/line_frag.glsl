@@ -24,8 +24,8 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 void main() {
   gl_FragColor = v_color;
   // anti-alias
-  // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
-  gl_FragColor.a *= u_opacity;
+  float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
+  gl_FragColor.a *= u_opacity * blur ;
 
   if(u_aimate.x == Animate) {
       float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
