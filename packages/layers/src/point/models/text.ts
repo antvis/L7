@@ -141,7 +141,7 @@ export default class TextModel extends BaseModel {
     };
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     this.layer.on('remapping', () => {
       this.initGlyph();
       this.updateTexture();
@@ -156,6 +156,10 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
+    return this.buildModels();
+  }
+
+  public buildModels(): IModel[] {
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
@@ -391,6 +395,9 @@ export default class TextModel extends BaseModel {
     const { createTexture2D } = this.rendererService;
     const { canvas } = this.fontService;
     this.textureHeight = canvas.height;
+    if (this.texture) {
+      this.texture.destroy();
+    }
     this.texture = createTexture2D({
       data: canvas,
       mag: gl.LINEAR,

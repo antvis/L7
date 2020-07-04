@@ -14,6 +14,9 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new RasterModels[modelType](this);
+    this.models = this.layerModel.initModels();
+  }
+  public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
   protected getConfigSchema() {

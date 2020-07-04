@@ -54,6 +54,9 @@ export default class FillModel extends BaseModel {
       PointFillTriangulation,
     );
   }
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({

@@ -97,6 +97,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public buildModels(): IModel[] {
     throw new Error('Method not implemented.');
   }
+  public initModels(): IModel[] {
+    throw new Error('Method not implemented.');
+  }
   public getAttribute(): {
     attributes: {
       [attributeName: string]: IAttribute;

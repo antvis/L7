@@ -55,7 +55,7 @@ export default class HeatMapModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     const {
       createFramebuffer,
       clear,
@@ -99,6 +99,11 @@ export default class HeatMapModel extends BaseModel {
 
     return [this.intensityModel, this.colorModel];
   }
+
+  public buildModels(): IModel[] {
+    return this.initModels();
+  }
+
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'dir',

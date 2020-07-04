@@ -17,8 +17,10 @@ export default class LayerModelPlugin implements ILayerPlugin {
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
       // 更新Model 配置项
       layer.prepareBuildModel();
+
+      layer.clearModels();
       // 初始化 Model
-      layer.buildModels();
+      layer.rebuildModels();
       layer.layerModelNeedUpdate = false;
       return false;
     });
