@@ -70,6 +70,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public layerModelNeedUpdate: boolean = false;
   public pickedFeatureID: number | null = null;
   public selectedFeatureID: number | null = null;
+  public styleNeedUpdate: boolean = false;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -469,6 +470,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     if (this.container) {
       this.updateLayerConfig(this.rawConfig);
+      this.styleNeedUpdate = true;
     }
     return this;
   }
@@ -495,7 +497,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // } else {
     //   this.renderModels();
     // }
-
     this.renderModels();
     // this.multiPassRenderer.render();
     // this.renderModels();

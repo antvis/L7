@@ -27,7 +27,9 @@ export default class HeatMapLayerDemo extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          const layer = new HeatmapLayer({})
+          const layer = new HeatmapLayer({
+            autoFit: true,
+          })
             .source(data, {
               parser: {
                 type: 'json',
@@ -36,7 +38,7 @@ export default class HeatMapLayerDemo extends React.Component {
               },
             })
             .size('count', [0, 1])
-            .shape('heatmap3D')
+            .shape('heatmap')
             // weight映射通道
             .style({
               intensity: 10,
@@ -55,6 +57,23 @@ export default class HeatMapLayerDemo extends React.Component {
               },
             });
           scene.addLayer(layer);
+          setTimeout(() => {
+            layer.style({
+              rampColors: {
+                colors: [
+                  '#fee5d9',
+                  '#fcbba1',
+                  '#fc9272',
+                  '#fb6a4a',
+                  '#de2d26',
+                  '#a50f15',
+                ],
+                positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+              },
+            });
+            scene.render();
+            console.log('更新完成');
+          }, 2000);
         });
     });
 

@@ -1,7 +1,24 @@
+import { type } from 'os';
+
 interface IPoint {
   x: number;
   y: number;
 }
+export type anchorType =
+  | 'right'
+  | 'top-right'
+  | 'left'
+  | 'bottom-right'
+  | 'left'
+  | 'top-left'
+  | 'bottom-left'
+  | 'bottom'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top'
+  | 'top-right'
+  | 'top-left'
+  | 'center';
 export interface IGlyphQuad {
   tr: IPoint;
   tl: IPoint;
@@ -22,10 +39,9 @@ export interface IGlyphQuad {
  * @param {string} anchor 锚点位置
  * @return {alignment} alignment
  */
-function getAnchorAlignment(anchor: string) {
+function getAnchorAlignment(anchor: anchorType) {
   let horizontalAlign = 0.5;
   let verticalAlign = 0.5;
-
   switch (anchor) {
     case 'right':
     case 'top-right':
@@ -109,7 +125,7 @@ function shapeLines(
   glyphMap: any,
   lines: any[],
   lineHeight: number,
-  textAnchor: string,
+  textAnchor: anchorType,
   textJustify: string,
   spacing: number,
 ) {
@@ -197,7 +213,7 @@ export function shapeText(
   text: string,
   glyphs: any,
   lineHeight: number,
-  textAnchor: string,
+  textAnchor: anchorType,
   textJustify: string,
   spacing: number,
   translate: [number, number] = [0, 0],

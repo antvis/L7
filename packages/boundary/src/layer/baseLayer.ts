@@ -17,6 +17,8 @@ import isObject from 'lodash/isObject';
 import mergeWith from 'lodash/mergeWith';
 // @ts-ignore
 import Pbf from 'pbf';
+// @ts-ignore
+import simplify from 'simplify-geojson';
 import { setDataLevel } from '../config';
 import { AttributeType, IDistrictLayerOption } from './interface';
 
@@ -59,6 +61,10 @@ export default class BaseLayer extends EventEmitter {
     this.options = mergeWith(this.options, newOption, mergeCustomizer);
   }
 
+  public getFillData() {
+    return this.fillData;
+  }
+
   public updateData(
     newData: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
@@ -85,7 +91,10 @@ export default class BaseLayer extends EventEmitter {
   protected async fetchData(data: { url: any; type: string }) {
     if (data.type === 'pbf') {
       const buffer = await (await fetch(data.url)).arrayBuffer();
-      const geojson = geobuf.decode(new Pbf(buffer));
+      let geojson = geobuf.decode(new Pbf(buffer));
+      if (this.options.simplifyTolerance !== false) {
+        geojson = simplify(geojson, this.options.simplifyTolerance);
+      }
       return geojson;
     } else {
       return isObject(data.url) ? data.url : (await fetch(data.url)).json();
@@ -99,15 +108,18 @@ export default class BaseLayer extends EventEmitter {
       depth: 1,
       adcode: [],
       joinBy: ['name', 'name'],
+      simplifyTolerance: false,
       label: {
         enable: true,
         color: '#000',
         field: 'name',
-        size: 8,
+        size: 10,
         stroke: '#fff',
         strokeWidth: 2,
         textAllowOverlap: true,
         opacity: 1,
+        textOffset: [0, 0],
+        padding: [5, 5],
       },
       bubble: {
         enable: false,
@@ -129,13 +141,16 @@ export default class BaseLayer extends EventEmitter {
         activeColor: false,
       },
       autoFit: true,
+      showBorder: true,
       stroke: '#bdbdbd',
+      strokeVisible: true,
       strokeWidth: 0.6,
       cityStroke: '#636363',
       cityStrokeWidth: 0.6,
       countyStrokeWidth: 0.6,
       provinceStrokeWidth: 0.6,
       provinceStroke: '#f0f0f0',
+      provinceStrokeVisible: true,
       countyStroke: '#525252',
       coastlineStroke: '#4190da',
       coastlineWidth: 0.6,
@@ -278,7 +293,7 @@ export default class BaseLayer extends EventEmitter {
   protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex, visible } = this.options;
     const labelLayer = new PointLayer({
-      zIndex: zIndex + 0.4,
+      zIndex: zIndex + 5,
       visible,
     })
       .source(labelData, {
@@ -287,16 +302,10 @@ export default class BaseLayer extends EventEmitter {
           coordinates: 'center',
         },
       })
-      .color(label.color as StyleAttrField)
       .shape(label.field as StyleAttrField, 'text')
-      .size(10)
-      .style({
-        opacity: label.opacity,
-        stroke: label.stroke,
-        strokeWidth: label.strokeWidth,
-        textAllowOverlap: label.textAllowOverlap,
-      });
-
+      .style(label);
+    this.setLayerAttribute(labelLayer, 'color', label.color as AttributeType);
+    this.setLayerAttribute(labelLayer, 'size', label.size as AttributeType);
     this.setLayerAttribute(labelLayer, 'filter', label.filter);
     return labelLayer;
   }

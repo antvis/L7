@@ -17,7 +17,7 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@antv/l7-district": ["packages/boundry/src"],
+      "@antv/l7-district": ["packages/boundary/src"],
       "@antv/l7-*": ["packages/*/src"],
       "@antv/l7": ["packages/l7/src"],
       "*": ["node_modules", "packages", "typings/*"]

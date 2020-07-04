@@ -27,7 +27,21 @@ layer.shape('name','text')
 ### style
 
 - opacity  `number`  
-- textAnchor  `string` 文本相对锚点的位置 center|left|right|top|bottom|top-left
+- textAnchor  `string` 文本相对锚点的位置 
+`'right' 
+  | 'top-right'
+  | 'left'
+  | 'bottom-right'
+  | 'left'
+  | 'top-left'
+  | 'bottom-left'
+  | 'bottom'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top'
+  | 'top-right'
+  | 'top-left'
+  | 'center';`
 - spacing:  `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
 - padding:  `[number, number]`  文本相对锚点的偏移量 [x, y]
 - stroke: `string`; 描边颜色

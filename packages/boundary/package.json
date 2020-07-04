@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.16",
+  "version": "2.2.20",
   "description": "L7 district moudules",
   "keywords": [],
   "author": "thinkinggis <lzx199065@gmail.com>",
@@ -34,7 +34,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@antv/l7": "2.2.16",
+    "@antv/l7": "2.2.20",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
     "@turf/distance": "^6.0.1",
@@ -44,7 +44,8 @@
     "eventemitter3": "^4.0.0",
     "geobuf": "^3.0.1",
     "lodash": "^4.6.2",
-    "pbf": "^3.2.1"
+    "pbf": "^3.2.1",
+    "simplify-geojson": "^1.0.3"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
@@ -55,5 +56,6 @@
     "postcss-url": "^8.0.0",
     "rollup": "^2.3.3",
     "rollup-plugin-less": "^1.1.2"
-  }
+  },
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0"
 }

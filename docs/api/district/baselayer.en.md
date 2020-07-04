@@ -24,6 +24,8 @@ order: 2
   - joinBy 数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
     对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名
   - depth 数据显示层级 0：国家级，1:省级，2: 市级，3：线级
+  - showBorder `boolean` 是否显示国界线，默认显示，不建议不显示
+  - simplifyTolerance 数据抽稀容差,默认不抽稀 `boolean | number` 单位为度，一度约 111km，数字越大精度越低。参考设置数据 0.01
   - label 标注配置项 支持常量，不支持数据映射
 
     - enable `boolean` 是否显示标注
@@ -91,6 +93,8 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 
 #### fillLayer
 
+图层事件可以通过该属性进行设置
+
 ### 方法
 
 #### updateData(data, joinBy)
@@ -101,6 +105,10 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 
 - data 需要更新的数据
 - joinBy 关联字段 可选，如果不设置保持和初始化一致。
+
+### getFillData
+
+获取填充数据，可用于绘制独立的边界线
 
 #### show
 

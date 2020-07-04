@@ -14,6 +14,7 @@ import BaseModel from '../../core/BaseModel';
 import CollisionIndex from '../../utils/collision-index';
 import { calculteCentroid } from '../../utils/geo';
 import {
+  anchorType,
   getGlyphQuads,
   IGlyphQuad,
   shapeText,
@@ -22,7 +23,7 @@ import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
 interface IPointTextLayerStyleOptions {
   opacity: number;
-  textAnchor: string;
+  textAnchor: anchorType;
   spacing: number;
   padding: [number, number];
   stroke: string;

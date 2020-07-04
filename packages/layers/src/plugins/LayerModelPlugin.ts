@@ -11,6 +11,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
       layer.prepareBuildModel();
       // 初始化 Model
       layer.buildModels();
+      layer.styleNeedUpdate = false;
     });
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
