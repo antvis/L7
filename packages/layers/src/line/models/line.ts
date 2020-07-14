@@ -52,6 +52,7 @@ export default class LineModel extends BaseModel {
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: LineTriangulation,
+        primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         depth: { enable: false },
       }),
@@ -146,6 +147,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
+        // @ts-ignore
         update: (
           feature: IEncodeFeature,
           featureIdx: number,

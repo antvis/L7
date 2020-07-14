@@ -220,18 +220,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
       indicesForCurrentFeature.forEach((i) => {
         indices.push(i + verticesNum);
       });
-      verticesForCurrentFeature.forEach((index) => {
-        vertices.push(index);
-      });
-      // fix Maximum call stack size exceeded https://stackoverflow.com/questions/22123769/rangeerror-maximum-call-stack-size-exceeded-why
-      if (normalsForCurrentFeature) {
-        normalsForCurrentFeature.forEach((normal) => {
-          normals.push(normal);
-        });
-      }
-      // if (featureIdx % 500 === 0) {
-      //   await sleep(100);
-      // }
       size = vertexSize;
       const verticesNumForCurrentFeature =
         verticesForCurrentFeature.length / vertexSize;
@@ -252,21 +240,20 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertexIdx < verticesNumForCurrentFeature;
         vertexIdx++
       ) {
+        const normal =
+          normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) ||
+          [];
+        const vertice = verticesForCurrentFeature.slice(
+          vertexIdx * vertexSize,
+          vertexIdx * vertexSize + vertexSize,
+        );
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
-            const normal =
-              normalsForCurrentFeature?.slice(
-                vertexIdx * 3,
-                vertexIdx * 3 + 3,
-              ) || [];
             (descriptor.buffer.data as number[]).push(
               ...descriptor.update(
                 feature,
                 featureIdx,
-                verticesForCurrentFeature.slice(
-                  vertexIdx * vertexSize,
-                  vertexIdx * vertexSize + vertexSize,
-                ),
+                vertice,
                 vertexIdx, // 当前顶点所在feature索引
                 normal,
                 // TODO: 传入顶点索引 vertexIdx
