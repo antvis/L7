@@ -30,7 +30,7 @@
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
-    "regl": "1.3.13"
+    "regl": "^1.6.1"
   },
   "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
   "publishConfig": {
