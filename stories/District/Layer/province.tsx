@@ -219,12 +219,12 @@ export default class Country extends React.Component {
         data,
         geoDataLevel: 1,
         joinBy: ['adcode', 'code'],
-        adcode: ['330000'],
+        adcode: [],
         stroke: '#7096B3',
         depth: 2,
         showBorder: false,
         label: {
-          enable: false,
+          enable: true,
         },
         fill: {
           color: '#A3D7FF',

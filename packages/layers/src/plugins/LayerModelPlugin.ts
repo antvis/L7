@@ -20,7 +20,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
 
       layer.clearModels();
       // 初始化 Model
-      layer.rebuildModels();
+      layer.buildModels();
       layer.layerModelNeedUpdate = false;
       return false;
     });

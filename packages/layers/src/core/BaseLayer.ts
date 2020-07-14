@@ -729,6 +729,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
   public clearModels() {
     this.models.forEach((model) => model.destroy());
+    this.layerModel.clearModels();
   }
 
   public isDirty() {

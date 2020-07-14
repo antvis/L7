@@ -19,6 +19,7 @@ export interface IICONMap {
 export interface IIconService {
   canvasHeight: number;
   on(event: string, fn: EventEmitter.ListenerFn, context?: any): this;
+  off(event: string, fn: EventEmitter.ListenerFn, context?: any): this;
   init(): void;
   addImage(id: string, image: IImage): void;
   hasImage(id: string): boolean;
