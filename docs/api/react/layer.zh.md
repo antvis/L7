@@ -49,7 +49,7 @@ import { PointLayer } '@antv/l7-react';
 | minZoom       | `number`  | 0                       | 设置 layer 最小可见等级，小于则不显示                                                                    |
 | maxZoom       | `number`  | 与 map 最大缩放等级一致 | 设置 layerd 的最大可见等级，大于则不显示                                                                 |
 | aotoFit       | `boolean` | `false`                 | 是否缩放到图层范围                                                                                       |
-| blend         | 'string'  | 'normal'                | 图层元素混合效果 [详情]('../layer/layer/#blend')                                                         |
+| blend         | 'string'  | 'normal'                | 图层元素混合效果 [详情](../layer/layer/#blend)                                                           |
 | pickingBuffer | 'number'  | '0'                     | 图层拾取缓存机制，如 1px 宽度的线鼠标很难拾取(点击)到, 通过设置该参数可扩大拾取的范围 {number} default 0 |
 
 ### attribute Option
