@@ -122,5 +122,4 @@ export default class ImageModel extends BaseModel {
       height: this.iconService.canvasHeight || 128,
     });
   };
-
 }
