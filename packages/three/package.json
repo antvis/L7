@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.2.20",
+  "version": "2.2.21",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7": "2.2.20",
+    "@antv/l7": "2.2.21",
     "@babel/runtime": "^7.7.7",
     "rollup": "^2.3.3",
     "rollup-plugin-less": "^1.1.2"
