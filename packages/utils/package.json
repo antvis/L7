@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.2.14",
+  "version": "2.2.21",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/d3-color": "^1.2.2"
   },
-  "gitHead": "532ade40831b35b04a677b351d092e54c00613d8",
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
   "publishConfig": {
     "access": "public"
   }

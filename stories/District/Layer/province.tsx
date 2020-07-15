@@ -217,29 +217,20 @@ export default class Country extends React.Component {
       const { province } = this.state;
       this.provinceLayer = new ProvinceLayer(scene, {
         data,
+        geoDataLevel: 1,
         joinBy: ['adcode', 'code'],
-        adcode: ['330000'],
-        depth: 3,
+        adcode: [],
+        stroke: '#7096B3',
+        depth: 2,
+        showBorder: false,
         label: {
-          field: 'NAME_CHN',
-          textAllowOverlap: false,
-        },
-        bubble: {
           enable: true,
-          color: {
-            field: 'NAME_CHN',
-            values: [
-              '#feedde',
-              '#fdd0a2',
-              '#fdae6b',
-              '#fd8d3c',
-              '#e6550d',
-              '#a63603',
-            ],
-          },
+        },
+        fill: {
+          color: '#A3D7FF',
         },
         popup: {
-          enable: true,
+          enable: false,
           Html: (props) => {
             return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`;
           },

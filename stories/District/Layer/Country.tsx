@@ -1,4 +1,4 @@
-import { Scene } from '@antv/l7';
+import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
@@ -20,7 +20,7 @@ export default class Country extends React.Component {
         style: 'blank',
         zoom: 3,
         minZoom: 0,
-        maxZoom: 10,
+        maxZoom: 15,
       }),
     });
     const ProvinceData = [
@@ -199,15 +199,20 @@ export default class Country extends React.Component {
       const Layer = new CountryLayer(scene, {
         visible: true,
         data: ProvinceData,
+        geoDataLevel: 1,
         joinBy: ['NAME_CHN', 'name'],
-        // label: {
-        //   field: 'NAME_CHN',
-        //   textAllowOverlap: true,
-        // },
+        showBorder: true,
+        provinceStroke: 'red',
+        label: {
+          field: 'name',
+          size: 10,
+          padding: [5, 5],
+          textAllowOverlap: true,
+        },
         depth: 1,
         fill: {
           color: {
-            field: 'value',
+            field: 'NAME_CHN',
             values: [
               '#feedde',
               '#fdd0a2',
@@ -224,6 +229,20 @@ export default class Country extends React.Component {
             return `<span>${props.NAME_CHN}:</span><span>${props.value}</span>`;
           },
         },
+      });
+      Layer.on('loaded', () => {
+        // const filldata = Layer.getFillData();
+        // const border = new LineLayer({
+        //   zIndex: 5, // 设置显示层级
+        // })
+        //   .source(filldata)
+        //   .shape('line')
+        //   .size(4)
+        //   .color('#a00')
+        //   .style({
+        //     opacity: 1,
+        //   });
+        // scene.addLayer(border);
       });
     });
     this.scene = scene;

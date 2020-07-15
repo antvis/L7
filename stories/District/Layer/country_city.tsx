@@ -28,6 +28,7 @@ export default class Country extends React.Component {
         data: [],
         geoDataLevel: 2,
         depth: 2,
+        showBorder: false,
         provinceStroke: '#783D2D',
         cityStroke: '#EBCCB4',
         coastlineWidth: 0.5,

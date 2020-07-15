@@ -4,15 +4,37 @@ import {
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7';
+export type anchorType =
+  | 'right'
+  | 'top-right'
+  | 'left'
+  | 'bottom-right'
+  | 'left'
+  | 'top-left'
+  | 'bottom-left'
+  | 'bottom'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top'
+  | 'top-right'
+  | 'top-left'
+  | 'center';
 export interface ILabelOption {
   enable: boolean;
-  color: string;
+  color: AttributeType;
   field: string;
-  size: number;
+  size: AttributeType;
   stroke: string;
   strokeWidth: number;
   textAllowOverlap: boolean;
+  padding: [number, number];
+  strokeOpacity: number;
+  fontWeight: number;
+  spacing: number;
+  textAnchor: anchorType;
+  textOffset: [number, number];
   opacity: number;
+  filter: AttributeType;
 }
 
 export interface IAttributeOption {
@@ -36,7 +58,8 @@ export interface IFillOptions {
   color: AttributeType;
   values: StyleAttributeOption;
   style: any;
-  activeColor: string;
+  activeColor: string | boolean;
+  filter: AttributeType;
 }
 export type TriggeEventType =
   | 'mousemove'
@@ -60,6 +83,7 @@ export interface IBubbleOption {
   shape: AttributeType;
   size: AttributeType;
   color: AttributeType;
+  filter: AttributeType;
   scale: {
     field: string;
     type: ScaleTypeName;
@@ -78,14 +102,18 @@ export interface IDistrictLayerOption {
   data?: Array<{ [key: string]: any }>;
   joinBy: [string, string];
   adcode: adcodeType;
+  simplifyTolerance: number | boolean;
   depth: 0 | 1 | 2 | 3;
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;
   fill: Partial<IFillOptions>;
+  showBorder: boolean;
   autoFit: boolean;
   stroke: string;
+  strokeVisible: boolean;
   strokeWidth: number;
   provinceStroke: string;
+  provinceStrokeVisible: boolean;
   cityStroke: string;
   provinceStrokeWidth: number;
   cityStrokeWidth: number;
@@ -107,6 +135,7 @@ interface IDrawOption {
 }
 export interface IDrillDownOption {
   drillDepth: 0 | 1 | 2;
+  geoDataLevel: 1 | 2;
   customTrigger: boolean;
   drillDownTriggerEvent: TriggeEventType;
   drillUpTriggerEvent: TriggeEventType & DrillUpTriggeEventType;

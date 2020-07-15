@@ -14,7 +14,7 @@ export default class Country extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [116.2825, 39.9],
         pitch: 0,
         style: 'blank',
@@ -26,10 +26,11 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       const Layer = new WorldLayer(scene, {
         data: [],
+        geoDataLevel: 2,
         joinBy: ['SOC', 'SOC'],
         fill: {
           color: {
-            field: 'value',
+            field: 'NAME_CHN',
             values: [
               '#feedde',
               '#fdd0a2',
@@ -44,7 +45,8 @@ export default class Country extends React.Component {
         label: {
           enable: true,
           textAllowOverlap: false,
-          field: 'NAME_CHN',
+          field: 'NAME_ENG',
+          padding: [5, 5],
         },
         popup: {
           enable: true,
@@ -53,25 +55,9 @@ export default class Country extends React.Component {
           },
         },
       });
+      console.time('layer');
       Layer.on('loaded', () => {
-        console.log('完成');
-        Layer.updateData(
-          [
-            {
-              SOC: 'CHN',
-              value: 3000,
-            },
-            {
-              SOC: 'CAN',
-              value: 5000,
-            },
-            {
-              SOC: 'RUS',
-              value: 4000,
-            },
-          ],
-          ['SOC', 'SOC'],
-        );
+        console.timeEnd('layer');
       });
     });
     this.scene = scene;

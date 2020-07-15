@@ -128,13 +128,14 @@ export default class Source extends EventEmitter {
         id < this.originData.features.length
           ? this.originData.features[id]
           : 'null';
+      const newFeature = cloneDeep(feature);
       if (this.transforms.length !== 0) {
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;
         });
-        feature.properties = item;
+        newFeature.properties = item;
       }
-      return feature;
+      return newFeature;
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
     }
@@ -145,6 +146,14 @@ export default class Source extends EventEmitter {
       return dataItem[field] === name;
     });
     return feature?._id;
+  }
+
+  public destroy() {
+    this.removeAllListeners();
+    this.originData = null;
+    this.clusterIndex = null;
+    // @ts-ignore
+    this.data = null;
   }
 
   private initCfg(cfg?: ISourceCFG) {
@@ -192,12 +201,6 @@ export default class Source extends EventEmitter {
 
     const clusterOptions = this.clusterOptions || {};
     this.clusterIndex = cluster(this.data, clusterOptions);
-    // this.clusterIndex = new Supercluster({
-    //   radius,
-    //   minZoom,
-    //   maxZoom,
-    // });
-    // this.clusterIndex.load(this.rawData.features);
   }
 
   private init() {

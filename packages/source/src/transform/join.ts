@@ -15,6 +15,7 @@ export function join(geoData: IParserData, options: IJoinOption) {
   const { sourceField, targetField, data } = options;
   const dataObj: { [key: string]: any } = {};
   data.forEach((element: { [key: string]: any }) => {
+    // 属性数据
     dataObj[element[sourceField]] = element;
   });
   geoData.dataArray = geoData.dataArray.map((item: IParseDataItem) => {

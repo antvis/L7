@@ -70,6 +70,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public layerModelNeedUpdate: boolean = false;
   public pickedFeatureID: number | null = null;
   public selectedFeatureID: number | null = null;
+  public styleNeedUpdate: boolean = false;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -469,6 +470,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     if (this.container) {
       this.updateLayerConfig(this.rawConfig);
+      this.styleNeedUpdate = true;
     }
     return this;
   }
@@ -495,7 +497,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // } else {
     //   this.renderModels();
     // }
-
     this.renderModels();
     // this.multiPassRenderer.render();
     // this.renderModels();
@@ -708,7 +709,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
-    this.models.forEach((model) => model.destroy());
+    // this.models.forEach((model) => model.destroy());
 
     this.hooks.afterDestroy.call();
 
@@ -725,7 +726,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public clear() {
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
+  }
+  public clearModels() {
     this.models.forEach((model) => model.destroy());
+    this.layerModel.clearModels();
   }
 
   public isDirty() {
@@ -884,6 +888,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public buildModels() {
+    throw new Error('Method not implemented.');
+  }
+  public rebuildModels() {
     throw new Error('Method not implemented.');
   }
 

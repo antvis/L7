@@ -41,6 +41,10 @@ export default class LineModel extends BaseModel {
     };
   }
 
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
+
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
@@ -48,7 +52,9 @@ export default class LineModel extends BaseModel {
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: LineTriangulation,
+        primitive: gl.TRIANGLES,
         blend: this.getBlend(),
+        depth: { enable: false },
       }),
     ];
   }
@@ -66,7 +72,7 @@ export default class LineModel extends BaseModel {
         name: 'a_Distance',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
@@ -88,7 +94,7 @@ export default class LineModel extends BaseModel {
         name: 'a_Total_Distance',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
@@ -141,6 +147,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
+        // @ts-ignore
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -160,7 +167,7 @@ export default class LineModel extends BaseModel {
         name: 'a_Miter',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },

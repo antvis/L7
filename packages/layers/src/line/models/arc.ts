@@ -44,6 +44,10 @@ export default class ArcModel extends BaseModel {
     };
   }
 
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
+
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({

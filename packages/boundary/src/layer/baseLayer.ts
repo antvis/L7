@@ -17,6 +17,8 @@ import isObject from 'lodash/isObject';
 import mergeWith from 'lodash/mergeWith';
 // @ts-ignore
 import Pbf from 'pbf';
+// @ts-ignore
+import simplify from 'simplify-geojson';
 import { setDataLevel } from '../config';
 import { AttributeType, IDistrictLayerOption } from './interface';
 
@@ -56,7 +58,11 @@ export default class BaseLayer extends EventEmitter {
   }
 
   public setOption(newOption: { [key: string]: any }) {
-    this.options = mergeWith(this.options, newOption);
+    this.options = mergeWith(this.options, newOption, mergeCustomizer);
+  }
+
+  public getFillData() {
+    return this.fillData;
   }
 
   public updateData(
@@ -85,7 +91,10 @@ export default class BaseLayer extends EventEmitter {
   protected async fetchData(data: { url: any; type: string }) {
     if (data.type === 'pbf') {
       const buffer = await (await fetch(data.url)).arrayBuffer();
-      const geojson = geobuf.decode(new Pbf(buffer));
+      let geojson = geobuf.decode(new Pbf(buffer));
+      if (this.options.simplifyTolerance !== false) {
+        geojson = simplify(geojson, this.options.simplifyTolerance);
+      }
       return geojson;
     } else {
       return isObject(data.url) ? data.url : (await fetch(data.url)).json();
@@ -99,15 +108,18 @@ export default class BaseLayer extends EventEmitter {
       depth: 1,
       adcode: [],
       joinBy: ['name', 'name'],
+      simplifyTolerance: false,
       label: {
         enable: true,
         color: '#000',
         field: 'name',
-        size: 8,
+        size: 10,
         stroke: '#fff',
         strokeWidth: 2,
         textAllowOverlap: true,
         opacity: 1,
+        textOffset: [0, 0],
+        padding: [5, 5],
       },
       bubble: {
         enable: false,
@@ -126,16 +138,19 @@ export default class BaseLayer extends EventEmitter {
         style: {
           opacity: 1.0,
         },
-        activeColor: 'rgba(0,0,255,0.3)',
+        activeColor: false,
       },
       autoFit: true,
+      showBorder: true,
       stroke: '#bdbdbd',
+      strokeVisible: true,
       strokeWidth: 0.6,
       cityStroke: '#636363',
       cityStrokeWidth: 0.6,
       countyStrokeWidth: 0.6,
       provinceStrokeWidth: 0.6,
       provinceStroke: '#f0f0f0',
+      provinceStrokeVisible: true,
       countyStroke: '#525252',
       coastlineStroke: '#4190da',
       coastlineWidth: 0.6,
@@ -176,18 +191,20 @@ export default class BaseLayer extends EventEmitter {
             ],
     });
     this.setLayerAttribute(fillLayer, 'color', fill.color as AttributeType);
+    this.setLayerAttribute(fillLayer, 'filter', fill.filter as AttributeType);
     if (fill.scale && isObject(fill.color)) {
       fillLayer.scale('color', {
         type: fill.scale,
         field: fill.color.field as string,
       });
     }
-    fillLayer
-      .shape('fill')
-      .active({
+    fillLayer.shape('fill').style(fill.style);
+
+    if (fill.activeColor) {
+      fillLayer.active({
         color: fill.activeColor as string,
-      })
-      .style(fill.style);
+      });
+    }
     this.fillLayer = fillLayer;
     this.layers.push(fillLayer);
     this.scene.addLayer(fillLayer);
@@ -256,6 +273,11 @@ export default class BaseLayer extends EventEmitter {
     this.setLayerAttribute(bubbleLayer, 'color', bubble.color as AttributeType);
     this.setLayerAttribute(bubbleLayer, 'size', bubble.size as AttributeType);
     this.setLayerAttribute(bubbleLayer, 'shape', bubble.shape as AttributeType);
+    this.setLayerAttribute(
+      bubbleLayer,
+      'filter',
+      bubble.filter as AttributeType,
+    );
     if (bubble.scale) {
       bubbleLayer.scale(bubble.scale.field, {
         type: bubble.scale.type,
@@ -271,7 +293,7 @@ export default class BaseLayer extends EventEmitter {
   protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex, visible } = this.options;
     const labelLayer = new PointLayer({
-      zIndex: zIndex + 0.4,
+      zIndex: zIndex + 5,
       visible,
     })
       .source(labelData, {
@@ -280,15 +302,11 @@ export default class BaseLayer extends EventEmitter {
           coordinates: 'center',
         },
       })
-      .color(label.color as StyleAttrField)
       .shape(label.field as StyleAttrField, 'text')
-      .size(10)
-      .style({
-        opacity: label.opacity,
-        stroke: label.stroke,
-        strokeWidth: label.strokeWidth,
-        textAllowOverlap: label.textAllowOverlap,
-      });
+      .style(label);
+    this.setLayerAttribute(labelLayer, 'color', label.color as AttributeType);
+    this.setLayerAttribute(labelLayer, 'size', label.size as AttributeType);
+    this.setLayerAttribute(labelLayer, 'filter', label.filter);
     return labelLayer;
   }
 
@@ -325,12 +343,17 @@ export default class BaseLayer extends EventEmitter {
 
   private setLayerAttribute(
     layer: ILayer,
-    type: 'color' | 'size' | 'shape',
-    attr: AttributeType,
+    type: 'color' | 'size' | 'shape' | 'filter',
+    attr: AttributeType | undefined,
   ) {
+    if (!attr) {
+      return;
+    }
     if (isObject(attr)) {
+      // @ts-ignore
       layer[type](attr.field, attr.values);
     } else {
+      // @ts-ignore
       layer[type](attr);
     }
   }

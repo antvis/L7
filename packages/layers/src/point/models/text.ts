@@ -14,6 +14,7 @@ import BaseModel from '../../core/BaseModel';
 import CollisionIndex from '../../utils/collision-index';
 import { calculteCentroid } from '../../utils/geo';
 import {
+  anchorType,
   getGlyphQuads,
   IGlyphQuad,
   shapeText,
@@ -22,7 +23,7 @@ import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
 interface IPointTextLayerStyleOptions {
   opacity: number;
-  textAnchor: string;
+  textAnchor: anchorType;
   spacing: number;
   padding: [number, number];
   stroke: string;
@@ -140,12 +141,8 @@ export default class TextModel extends BaseModel {
     };
   }
 
-  public buildModels(): IModel[] {
-    this.layer.on('remapping', () => {
-      this.initGlyph();
-      this.updateTexture();
-      this.reBuildModel();
-    });
+  public initModels(): IModel[] {
+    this.layer.on('remapping', this.buildModels);
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -155,6 +152,10 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
+    return this.buildModels();
+  }
+
+  public buildModels = () => {
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
@@ -168,7 +169,7 @@ export default class TextModel extends BaseModel {
         blend: this.getBlend(),
       }),
     ];
-  }
+  };
   public needUpdate() {
     const {
       textAllowOverlap = false,
@@ -188,6 +189,9 @@ export default class TextModel extends BaseModel {
     return false;
   }
 
+  public clearModels() {
+    this.layer.off('remapping', this.buildModels);
+  }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
@@ -390,6 +394,9 @@ export default class TextModel extends BaseModel {
     const { createTexture2D } = this.rendererService;
     const { canvas } = this.fontService;
     this.textureHeight = canvas.height;
+    if (this.texture) {
+      this.texture.destroy();
+    }
     this.texture = createTexture2D({
       data: canvas,
       mag: gl.LINEAR,

@@ -12,9 +12,11 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new PolygonModels[shape](this);
+    this.models = this.layerModel.initModels();
+  }
+  public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
-
   protected getConfigSchema() {
     return {
       properties: {
