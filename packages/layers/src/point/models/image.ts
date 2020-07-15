@@ -33,11 +33,12 @@ export default class ImageModel extends BaseModel {
   public initModels(): IModel[] {
     this.registerBuiltinAttributes();
     this.updateTexture();
-    this.iconService.on('imageUpdate', () => {
-      this.updateTexture();
-      this.layer.render(); // TODO 调用全局render
-    });
+    this.iconService.on('imageUpdate', this.updateTexture);
     return this.buildModels();
+  }
+
+  public clearModels() {
+    this.iconService.off('imageUpdate', this.updateTexture);
   }
 
   public buildModels(): IModel[] {
@@ -108,7 +109,7 @@ export default class ImageModel extends BaseModel {
     });
   }
 
-  private updateTexture() {
+  private updateTexture = () => {
     const { createTexture2D } = this.rendererService;
     if (this.texture) {
       this.texture.destroy();
@@ -120,5 +121,5 @@ export default class ImageModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
-  }
+  };
 }

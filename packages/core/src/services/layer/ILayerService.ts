@@ -59,6 +59,7 @@ export interface ILayerModel {
   buildModels(): IModel[];
   initModels(): IModel[];
   needUpdate(): boolean;
+  clearModels(): void;
 }
 export interface IModelUniform {
   [key: string]: IUniform;

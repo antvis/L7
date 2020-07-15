@@ -199,16 +199,17 @@ export default class Country extends React.Component {
       const Layer = new CountryLayer(scene, {
         visible: true,
         data: ProvinceData,
-        geoDataLevel: 2,
+        geoDataLevel: 1,
         joinBy: ['NAME_CHN', 'name'],
-        showBorder: false,
+        showBorder: true,
+        provinceStroke: 'red',
         label: {
           field: 'name',
           size: 10,
           padding: [5, 5],
           textAllowOverlap: true,
         },
-        depth: 2,
+        depth: 1,
         fill: {
           color: {
             field: 'NAME_CHN',
@@ -230,52 +231,18 @@ export default class Country extends React.Component {
         },
       });
       Layer.on('loaded', () => {
-        const filldata = Layer.getFillData();
-        const border = new LineLayer({
-          zIndex: 5, // 设置显示层级
-        })
-          .source(filldata)
-          .shape('line')
-          .size(0.6)
-          .color('#a00')
-          .style({
-            opacity: 1,
-          });
-        const hightLayer = new LineLayer({
-          zIndex: 4, // 设置显示层级
-          name: 'line3',
-        })
-          .source(filldata)
-          .shape('line')
-          .size(1.2)
-          .color('#000')
-          .style({
-            opacity: 1,
-          });
-        const hightLayer2 = new LineLayer({
-          zIndex: 3, // 设置显示层级
-          name: 'line3',
-        })
-          .source(filldata)
-          .shape('line')
-          .size(2.4)
-          .color('#fff')
-          .style({
-            opacity: 1,
-          });
-        scene.addLayer(border);
-        scene.addLayer(hightLayer);
-        scene.addLayer(hightLayer2);
-        Layer.fillLayer.on('click', (feature) => {
-          hightLayer.setData({
-            type: 'FeatureCollection',
-            features: [feature.feature],
-          });
-          hightLayer2.setData({
-            type: 'FeatureCollection',
-            features: [feature.feature],
-          });
-        });
+        // const filldata = Layer.getFillData();
+        // const border = new LineLayer({
+        //   zIndex: 5, // 设置显示层级
+        // })
+        //   .source(filldata)
+        //   .shape('line')
+        //   .size(4)
+        //   .color('#a00')
+        //   .style({
+        //     opacity: 1,
+        //   });
+        // scene.addLayer(border);
       });
     });
     this.scene = scene;

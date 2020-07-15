@@ -14,7 +14,7 @@ export default class Country extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [116.2825, 39.9],
         pitch: 0,
         style: 'blank',

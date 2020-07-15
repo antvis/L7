@@ -142,11 +142,7 @@ export default class TextModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-    this.layer.on('remapping', () => {
-      this.initGlyph();
-      this.updateTexture();
-      this.reBuildModel();
-    });
+    this.layer.on('remapping', this.buildModels);
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -159,7 +155,7 @@ export default class TextModel extends BaseModel {
     return this.buildModels();
   }
 
-  public buildModels(): IModel[] {
+  public buildModels = () => {
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
@@ -173,7 +169,7 @@ export default class TextModel extends BaseModel {
         blend: this.getBlend(),
       }),
     ];
-  }
+  };
   public needUpdate() {
     const {
       textAllowOverlap = false,
@@ -193,6 +189,9 @@ export default class TextModel extends BaseModel {
     return false;
   }
 
+  public clearModels() {
+    this.layer.off('remapping', this.buildModels);
+  }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
