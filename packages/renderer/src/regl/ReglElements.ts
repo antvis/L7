@@ -35,6 +35,6 @@ export default class ReglElements implements IElements {
   }
 
   public destroy() {
-    this.elements.destroy();
+    // this.elements.destroy();
   }
 }
