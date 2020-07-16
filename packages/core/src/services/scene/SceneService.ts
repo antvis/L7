@@ -285,9 +285,11 @@ export default class Scene extends EventEmitter implements ISceneService {
       let w = window.innerWidth;
       let h = window.innerHeight;
       if (this.$container !== document.body) {
-        const bounds = this.$container.getBoundingClientRect();
-        w = bounds.right - bounds.left;
-        h = bounds.bottom - bounds.top;
+        // const bounds = this.$container.getBoundingClientRect();
+        // w = bounds.right - bounds.left;
+        // h = bounds.bottom - bounds.top;
+        w = this.$container.clientWidth || 400;
+        h = this.$container.clientHeight || 300;
       }
       const canvas = this.$container?.getElementsByTagName('canvas')[0];
       // this.$container.
@@ -303,6 +305,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       if (canvas) {
         canvas.width = w * pixelRatio;
         canvas.height = h * pixelRatio;
+        canvas.style.width = `${w}px`;
+        canvas.style.height = `${h}px`;
       }
       //  repaint layers
       this.render();
