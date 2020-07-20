@@ -354,7 +354,10 @@ scene.setPitch(pitch);
 - `extent` { array} 经纬度范围 [[minlng,minlat],[maxlng,maxlat]]
 
 ```javascript
-scene.fitBounds([[112, 32], [114, 35]]);
+scene.fitBounds([
+  [112, 32],
+  [114, 35],
+]);
 ```
 
 ### removeLayer
