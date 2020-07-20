@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.2.22",
+  "version": "2.2.23",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,9 +23,9 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-core": "2.2.22",
-    "@antv/l7-source": "2.2.22",
-    "@antv/l7-utils": "2.2.22",
+    "@antv/l7-core": "2.2.23",
+    "@antv/l7-source": "2.2.23",
+    "@antv/l7-utils": "2.2.23",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
     "@turf/meta": "^6.0.2",
