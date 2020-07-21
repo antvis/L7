@@ -31,7 +31,8 @@
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:cdn": "node_modules/.bin/rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@antv/l7": "2.2.24",
