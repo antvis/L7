@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.2.24",
+  "version": "2.2.26",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -19,17 +19,18 @@
     "build": "run-p build:*",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "sync": "tnpm sync"
   },
   "author": "antv",
   "license": "MIT",
   "dependencies": {
-    "@antv/l7-component": "2.2.24",
-    "@antv/l7-core": "2.2.24",
-    "@antv/l7-layers": "2.2.24",
-    "@antv/l7-maps": "2.2.24",
-    "@antv/l7-scene": "2.2.24",
-    "@antv/l7-utils": "2.2.24",
+    "@antv/l7-component": "2.2.26",
+    "@antv/l7-core": "2.2.26",
+    "@antv/l7-layers": "2.2.26",
+    "@antv/l7-maps": "2.2.26",
+    "@antv/l7-scene": "2.2.26",
+    "@antv/l7-utils": "2.2.26",
     "@babel/runtime": "^7.7.7"
   },
   "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",

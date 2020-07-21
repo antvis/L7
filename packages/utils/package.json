@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.2.24",
+  "version": "2.2.26",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -17,7 +17,8 @@
     "build": "run-p build:*",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "sync": "tnpm sync"
   },
   "author": "lzxue",
   "license": "ISC",

@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.24",
+  "version": "2.2.26",
   "description": "L7 district moudules",
   "keywords": [],
   "author": "thinkinggis <lzx199065@gmail.com>",
@@ -31,10 +31,11 @@
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:cdn": "node_modules/.bin/rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7": "2.2.24",
+    "@antv/l7": "2.2.26",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
     "@turf/distance": "^6.0.1",

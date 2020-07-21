@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.2.24",
+  "version": "2.2.26",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -17,13 +17,14 @@
     "build": "run-p build:*",
     "build:cjs": "cross-env BABEL_ENV=cjs NODE_ENV=production  babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "cross-env BABEL_ENV=esm NODE_ENV=production  babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "watch": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "sync": "tnpm sync"
   },
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-utils": "2.2.24",
+    "@antv/l7-utils": "2.2.26",
     "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
