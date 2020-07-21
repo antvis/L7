@@ -42,7 +42,7 @@ export interface IReadPixelsOptions {
 }
 
 export interface IRendererService {
-  init($container: HTMLDivElement, cfg: IRenderConfig): Promise<void>;
+  init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void>;
   clear(options: IClearOptions): void;
   createModel(options: IModelInitializationOptions): IModel;
   createAttribute(options: IAttributeInitializationOptions): IAttribute;
