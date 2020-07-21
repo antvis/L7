@@ -48,10 +48,12 @@ export default class PickingService implements IPickingService {
       getViewportSize,
       getContainer,
     } = this.rendererService;
-    const {
+    let {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
+    width *= window.devicePixelRatio;
+    height *= window.devicePixelRatio;
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
     // 创建 picking framebuffer，后续实时 resize
@@ -86,10 +88,12 @@ export default class PickingService implements IPickingService {
       clear,
       getContainer,
     } = this.rendererService;
-    const {
+    let {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
+    width *= window.devicePixelRatio;
+    height *= window.devicePixelRatio;
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
@@ -125,10 +129,12 @@ export default class PickingService implements IPickingService {
   ) => {
     let isPicked = false;
     const { getViewportSize, readPixels, getContainer } = this.rendererService;
-    const {
+    let {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
+    width *= window.devicePixelRatio;
+    height *= window.devicePixelRatio;
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
     const xInDevicePixel = x * window.devicePixelRatio;

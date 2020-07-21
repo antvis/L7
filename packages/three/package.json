@@ -36,7 +36,8 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:cdn": "node_modules/.bin/rollup -c",
     "lint:ts": "run-p -c lint:ts-*",
-    "test": "jest"
+    "test": "jest",
+    "sync": "tnpm sync"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
