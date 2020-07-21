@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.2.24",
+  "version": "2.2.26",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -19,14 +19,15 @@
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "lint:ts": "run-p -c lint:ts-*",
-    "test": "jest"
+    "test": "jest",
+    "sync": "tnpm sync"
   },
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-core": "2.2.24",
-    "@antv/l7-utils": "2.2.24",
+    "@antv/l7-core": "2.2.26",
+    "@antv/l7-utils": "2.2.26",
     "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
     "@turf/helpers": "^6.1.4",
