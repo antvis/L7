@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-component",
-  "version": "2.2.25",
+  "version": "2.2.26",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,8 +25,8 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "2.2.25",
-    "@antv/l7-utils": "2.2.25",
+    "@antv/l7-core": "2.2.26",
+    "@antv/l7-utils": "2.2.26",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
