@@ -225,13 +225,13 @@ export default class StyleAttributeService implements IStyleAttributeService {
         verticesForCurrentFeature.length / vertexSize;
 
       // 记录三角化结果，用于后续精确更新指定 feature
-      // this.featureLayout.sizePerElement = size;
-      // this.featureLayout.elements.push({
-      //   featureIdx,
-      //   vertices: verticesForCurrentFeature,
-      //   normals: normalsForCurrentFeature as number[],
-      //   offset: verticesNum,
-      // });
+      this.featureLayout.sizePerElement = size;
+      this.featureLayout.elements.push({
+        featureIdx,
+        vertices: verticesForCurrentFeature,
+        normals: normalsForCurrentFeature as number[],
+        offset: verticesNum,
+      });
 
       verticesNum += verticesNumForCurrentFeature;
       // 根据 position 顶点生成其他顶点数据

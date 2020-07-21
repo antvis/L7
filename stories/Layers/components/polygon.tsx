@@ -123,41 +123,27 @@ export default class TextLayerDemo extends React.Component {
     });
     scene.on('loaded', () => {
       const layer = new PolygonLayer({})
-        .source({
-          type: 'FeatureCollection',
-          features: [],
-        })
-        .shape('extrude')
+        .source(data)
+        .shape('fill')
         .scale('childrenNum', {
           type: 'quantile',
         })
-        .size('childrenNum', [10, 100000000])
-        // .color('red')
-        // .color('childrenNum', [
-        //   '#D92568',
-        //   '#E3507E',
-        //   '#FC7AAB',
-        //   '#F1D3E5',
-        //   '#A7B5E3',
-        //   '#F2EEFF',
-        // ])
-        .color('childrenNum*name', (childrenNum, name) => {
-          console.log(childrenNum, name);
-          return 'red';
-        })
+        .color('childrenNum', [
+          '#D92568',
+          '#E3507E',
+          '#FC7AAB',
+          '#F1D3E5',
+          '#A7B5E3',
+          '#F2EEFF',
+        ])
         .style({
           opacity: 1.0,
         });
       scene.addLayer(layer);
-      setTimeout(() => {
-        layer.setData(data);
-        console.log('update');
-      }, 2000);
-      layer.on('click', (e) => {
-        console.log(e);
-      });
       this.scene = scene;
-
+      layer.on('remapping', () => {
+        console.log('remapinbg event');
+      });
       const gui = new dat.GUI();
       this.gui = gui;
       const styleOptions = {
@@ -206,6 +192,7 @@ export default class TextLayerDemo extends React.Component {
         ])
         .onChange((color: any) => {
           layer.color('childrenNum', RMBColor[color] as string[]);
+          // layer.shape('fill');
           scene.render();
         });
     });
