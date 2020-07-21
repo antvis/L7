@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.24",
+  "version": "2.2.25",
   "description": "L7 district moudules",
   "keywords": [],
   "author": "thinkinggis <lzx199065@gmail.com>",
@@ -35,7 +35,7 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7": "2.2.24",
+    "@antv/l7": "2.2.25",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
     "@turf/distance": "^6.0.1",
