@@ -288,6 +288,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     // @ts-check
     if (this.$container) {
       this.initContainer();
+      DOM.triggerResize();
       this.coordinateSystemService.needRefresh = true;
 
       //  repaint layers
