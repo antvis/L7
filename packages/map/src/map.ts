@@ -119,7 +119,7 @@ export class Map extends Camera {
     const width = dimensions[0];
     const height = dimensions[1];
 
-    this.resizeCanvas(width, height);
+    // this.resizeCanvas(width, height);
     this.transform.resize(width, height);
     const fireMoving = !this.moving;
     if (fireMoving) {
@@ -339,13 +339,13 @@ export class Map extends Camera {
       canvasContainer.classList.add('l7-interactive');
     }
 
-    this.canvas = DOM.create(
-      'canvas',
-      'l7-canvas',
-      canvasContainer,
-    ) as HTMLCanvasElement;
-    this.canvas.setAttribute('tabindex', '-');
-    this.canvas.setAttribute('aria-label', 'Map');
+    // this.canvas = DOM.create(
+    //   'canvas',
+    //   'l7-canvas',
+    //   canvasContainer,
+    // ) as HTMLCanvasElement;
+    // this.canvas.setAttribute('tabindex', '-');
+    // this.canvas.setAttribute('aria-label', 'Map');
   }
 
   private containerDimensions(): [number, number] {
