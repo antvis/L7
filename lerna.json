@@ -9,7 +9,8 @@
       ],
       "allowBranch": [
         "master",
-        "docs"
+        "docs",
+        "v2.2.2-ie11-win7-fix"
       ],
       "message": "chore: publish"
     }
