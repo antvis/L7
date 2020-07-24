@@ -78,7 +78,7 @@ export default abstract class DrawFeature extends DrawMode {
     this.drawLayer.enableSelect();
   }
 
-  public getData() {
+  public getData(): FeatureCollection {
     return this.source.getData();
   }
 
