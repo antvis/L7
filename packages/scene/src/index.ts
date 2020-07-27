@@ -191,7 +191,7 @@ class Scene
   }
 
   public hasImage(id: string) {
-    this.iconService.hasImage(id);
+    return this.iconService.hasImage(id);
   }
 
   public removeImage(id: string) {
