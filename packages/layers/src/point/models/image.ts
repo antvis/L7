@@ -21,7 +21,7 @@ export default class ImageModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     if (this.rendererService.getDirty()) {
-      this.texture.update();
+      this.texture.bind();
     }
     return {
       u_opacity: opacity || 1.0,
@@ -112,7 +112,11 @@ export default class ImageModel extends BaseModel {
   private updateTexture = () => {
     const { createTexture2D } = this.rendererService;
     if (this.texture) {
-      this.texture.destroy();
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
+      return;
     }
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
@@ -121,6 +125,5 @@ export default class ImageModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
-    this.layer.render();
   };
 }

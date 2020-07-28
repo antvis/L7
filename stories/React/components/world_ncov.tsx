@@ -70,7 +70,7 @@ export default React.memo(function Map() {
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
-        fetch('https://lab.isaaclin.cn/nCoV/api/area?latest=1').then((d) =>
+        fetch('https://gw.alipayobjects.com/os/bmw-prod/55a7dd2e-3fb4-4442-8899-900bb03ee67a.json').then((d) =>
           d.json(),
         ),
       ]);

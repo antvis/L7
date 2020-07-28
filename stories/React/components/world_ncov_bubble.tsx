@@ -85,7 +85,7 @@ export default React.memo(function Map() {
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
-        fetch('https://lab.isaaclin.cn/nCoV/api/area?latest=1').then((d) =>
+        fetch('https://gw.alipayobjects.com/os/bmw-prod/55a7dd2e-3fb4-4442-8899-900bb03ee67a.json').then((d) =>
           d.json(),
         ),
       ]);
@@ -133,7 +133,12 @@ export default React.memo(function Map() {
                 margin: 0,
               }}
             >
-              <li>现有确诊:{popupInfo.feature.currentConfirmedCount}</li>
+              <li>
+                <button onMouseDown={() => {
+                  alert('test');
+                }} value="点击">点击</button>
+                现有确诊:{popupInfo.feature.currentConfirmedCount}
+              </li>
               <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
               <li>治愈:{popupInfo.feature.curedCount}</li>
               <li>死亡:{popupInfo.feature.deadCount}</li>
@@ -204,22 +209,7 @@ export default React.memo(function Map() {
               },
             }}
             color={{
-              field: 'confirmedCount',
-              values: (count) => {
-                return count > 10000
-                  ? colors[6]
-                  : count > 1000
-                  ? colors[5]
-                  : count > 500
-                  ? colors[4]
-                  : count > 100
-                  ? colors[3]
-                  : count > 10
-                  ? colors[2]
-                  : count > 1
-                  ? colors[1]
-                  : colors[0];
-              },
+              values: '#b10026',
             }}
             shape={{
               values: 'circle',
@@ -237,8 +227,8 @@ export default React.memo(function Map() {
               opacity: 0.6,
             }}
           >
-            <LayerEvent type="mousemove" handler={showPopup} />
-            <LayerEvent type="mouseout" handler={hidePopup} />
+            <LayerEvent type="click" handler={showPopup} />
+            {/* <LayerEvent type="mouseout" handler={hidePopup} /> */}
           </PointLayer>,
           <PointLayer
             key={'5'}
@@ -269,7 +259,7 @@ export default React.memo(function Map() {
               opacity: 1,
             }}
           >
-            <LayerEvent type="mousemove" handler={showPopup} />
+            <LayerEvent type="click" handler={showPopup} />
           </PointLayer>,
         ]}
       </MapboxScene>

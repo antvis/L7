@@ -25,7 +25,10 @@ export default class PopupComponet extends React.PureComponent<IPopupProps> {
   }
   public componentDidMount() {
     const { lnglat, children, option } = this.props;
-    const p = new Popup(option);
+    const p = new Popup({
+      stopPropagation: false,
+      ...option,
+    });
 
     if (lnglat) {
       p.setLnglat(lnglat);

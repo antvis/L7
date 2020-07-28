@@ -27,7 +27,7 @@ export default class MarkerComponent extends React.Component {
 
     const popup = new Popup({
       offsets: [0, 20],
-    }).setText('hello');
+    }).setHTML('<h1 onclick= alert("12223")>11111</h1>');
 
     const marker = new Marker({
       offsets: [0, -20],

@@ -177,6 +177,7 @@ export default class Popup extends EventEmitter implements IPopup {
       offsets: [0, 0],
       anchor: anchorType.BOTTOM,
       className: '',
+      stopPropagation: true,
     };
   }
 
@@ -208,11 +209,14 @@ export default class Popup extends EventEmitter implements IPopup {
           .split(' ')
           .forEach((name) => this.container.classList.add(name));
       }
-      ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
-        this.container.addEventListener(type, (e) => {
-          e.stopPropagation();
+
+      if (this.popupOption.stopPropagation) {
+        ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
+          this.container.addEventListener(type, (e) => {
+            e.stopPropagation();
+          });
         });
-      });
+      }
     }
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {
       this.container.style.maxWidth = maxWidth;
