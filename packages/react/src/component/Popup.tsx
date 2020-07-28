@@ -12,7 +12,7 @@ import { createPortal } from 'react-dom';
 import { SceneContext } from './SceneContext';
 interface IPopupProps {
   option?: Partial<IPopupOption>;
-  lnglat: number[];
+  lnglat: number[] | { lng: number; lat: number };
   children?: React.ReactNode;
 }
 export default class PopupComponet extends React.PureComponent<IPopupProps> {
@@ -26,8 +26,8 @@ export default class PopupComponet extends React.PureComponent<IPopupProps> {
   public componentDidMount() {
     const { lnglat, children, option } = this.props;
     const p = new Popup({
-      stopPropagation: false,
       ...option,
+      stopPropagation: false,
     });
 
     if (lnglat) {
@@ -41,12 +41,21 @@ export default class PopupComponet extends React.PureComponent<IPopupProps> {
   }
 
   public componentDidUpdate(prevProps: IPopupProps) {
-    const positionChanged =
-      prevProps?.lnglat?.toString() !== this.props?.lnglat?.toString();
+    // @ts-ignore
+    const preLnglat = Array.isArray(prevProps.lnglat)
+      ? prevProps.lnglat
+      : [prevProps?.lnglat?.lng, prevProps?.lnglat?.lat];
+    const nowLnglat = Array.isArray(this.props.lnglat)
+      ? this.props.lnglat
+      : [this.props?.lnglat?.lng, this.props?.lnglat?.lat];
+    const positionChanged = preLnglat.toString() !== nowLnglat.toString();
 
     if (positionChanged) {
       this.popup.remove();
-      this.popup = new Popup(this.props.option);
+      this.popup = new Popup({
+        ...this.props.option,
+        stopPropagation: false,
+      });
       this.popup.setLnglat(this.props.lnglat);
       this.popup.setDOMContent(this.el);
       this.scene.addPopup(this.popup);

@@ -37,7 +37,7 @@ const EventMap: {
   dragging: 'drag',
 };
 import { MapTheme } from './theme';
-
+let mapdivCount = 0;
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 const MAPBOX_API_KEY =
   'pk.eyJ1IjoibHp4dWUiLCJhIjoiYnhfTURyRSJ9.Ugm314vAKPHBzcPmY1p4KQ';
@@ -405,12 +405,28 @@ export default class MapboxService
     this.cameraChangedCallback(this.viewport);
   };
 
+  // private creatAmapContainer(id: string | HTMLDivElement) {
+  //   let $wrapper = id as HTMLDivElement;
+  //   if (typeof id === 'string') {
+  //     $wrapper = document.getElementById(id) as HTMLDivElement;
+  //   }
+  //   return $wrapper;
+  // }
   private creatAmapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {
       $wrapper = document.getElementById(id) as HTMLDivElement;
     }
-    return $wrapper;
+    const $amapdiv = document.createElement('div');
+    $amapdiv.style.cssText += `
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    `;
+    $amapdiv.id = 'l7_mapbox_div' + mapdivCount++;
+    $wrapper.appendChild($amapdiv);
+    return $amapdiv;
   }
   private getMapStyle(name: MapStyle) {
     if (typeof name !== 'string') {

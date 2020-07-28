@@ -2,6 +2,7 @@ import {
   LayerEvent,
   LineLayer,
   MapboxScene,
+  AMapScene,
   Marker,
   PolygonLayer,
   Popup,
@@ -71,6 +72,7 @@ export default React.memo(function Map() {
   }>();
 
   function showPopup(args: any): void {
+    console.log(args.lngLat);
     setPopupInfo({
       lnglat: args.lngLat,
       feature: args.feature,
@@ -92,7 +94,7 @@ export default React.memo(function Map() {
   }, []);
   return (
     <>
-      <MapboxScene
+      <AMapScene
         map={{
           center: [110.19382669582967, 50.258134],
           pitch: 0,
@@ -116,9 +118,14 @@ export default React.memo(function Map() {
               }}
             >
               <li>
-                <button onMouseDown={() => {
-                  alert('test');
-                }} value="点击">点击</button>
+                <button
+                  onClick={() => {
+                    alert('test');
+                  }}
+                  value="点击"
+                >
+                  点击
+                </button>
                 现有确诊:{popupInfo.feature.currentConfirmedCount}
               </li>
               <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
@@ -193,7 +200,7 @@ export default React.memo(function Map() {
             }}
           />,
         ]}
-      </MapboxScene>
+      </AMapScene>
     </>
   );
 });

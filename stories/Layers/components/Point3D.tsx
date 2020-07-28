@@ -22,9 +22,9 @@ export default class Point3D extends React.Component {
       }),
     });
     const pointLayer = new PointLayer();
-    scene.on('resize',()=>{
-      console.log('resize')
-    })
+    scene.on('resize', () => {
+      console.log('resize');
+    });
     pointLayer
       .source(data, {
         cluster: true,
