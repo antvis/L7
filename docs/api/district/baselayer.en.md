@@ -55,10 +55,11 @@ order: 2
   - strokeWidth 填充描边宽度 `ProvinceLayer, CityLayer, CountyLayer`
   - autoFit 是否自动缩放到图层范围 `boolean`
   - popup 信息窗口
-
-    - enable 是否开启 `boolean`
-    - triggerEvent 触发事件 例如 'mousemove' | 'click';
-    - Html popup html 字符串，支持回调函数 (properties: any) => string;
+  - openTriggerEvent 触发事件 例如 'mousemove' | 'click';
+  - closeTriggerEvent 触发事件 例如 'mousemove' | 'click';
+  - enable 是否开启 `boolean`
+  - triggerEvent 触发事件 例如 'mousemove' | 'click';
+  - Html popup html 字符串，支持回调函数 (properties: any) => string;
 
   - chinaNationalStroke 中国国界线颜色 `CountryLayer`
   - chinaNationalWidth 中国国界线宽度 `CountryLayer`

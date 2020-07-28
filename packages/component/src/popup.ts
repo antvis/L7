@@ -4,6 +4,7 @@ import {
   IPoint,
   IPopup,
   IPopupOption,
+  ISceneService,
   TYPES,
 } from '@antv/l7-core';
 import {
@@ -21,6 +22,7 @@ import { Container } from 'inversify';
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
   private mapsService: IMapService<unknown>;
+  private sceneSerive: ISceneService;
   private lngLat: ILngLat;
   private content: HTMLElement;
   private closeButton: HTMLElement;
@@ -40,6 +42,7 @@ export default class Popup extends EventEmitter implements IPopup {
 
   public addTo(scene: Container) {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
     this.mapsService.on('camerachange', this.update);
     this.scene = scene;
     this.update();
@@ -177,6 +180,7 @@ export default class Popup extends EventEmitter implements IPopup {
       offsets: [0, 0],
       anchor: anchorType.BOTTOM,
       className: '',
+      stopPropagation: true,
     };
   }
 
@@ -193,12 +197,12 @@ export default class Popup extends EventEmitter implements IPopup {
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
-    const markerContainer = this.mapsService.getMarkerContainer();
-    if (!this.container && markerContainer) {
+    const popupContainer = this.sceneSerive.getSceneContainer();
+    if (!this.container && popupContainer) {
       this.container = this.creatDom(
         'div',
         'l7-popup',
-        markerContainer.parentNode as HTMLElement,
+        popupContainer as HTMLElement,
       );
 
       this.tip = this.creatDom('div', 'l7-popup-tip', this.container);
@@ -208,11 +212,12 @@ export default class Popup extends EventEmitter implements IPopup {
           .split(' ')
           .forEach((name) => this.container.classList.add(name));
       }
-      ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
-        this.container.addEventListener(type, (e) => {
-          e.stopPropagation();
-        });
-      });
+
+      // ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
+      //   this.container.addEventListener(type, (e) => {
+      //     e.stopPropagation();
+      //   });
+      // });
     }
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {
       this.container.style.maxWidth = maxWidth;

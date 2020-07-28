@@ -62,7 +62,8 @@ order: 2
   - popup 信息窗口
 
     - enable 是否开启 `boolean`
-    - triggerEvent 触发事件 例如 'mousemove' | 'click';
+    - openTriggerEvent 触发事件 例如 'mousemove' | 'click';
+    - closeTriggerEvent 触发事件 例如 'mousemove' | 'click';
     - Html popup html 字符串，支持回调函数 (properties: any) => string;
 
   - chinaNationalStroke 中国国界线颜色 `CountryLayer`

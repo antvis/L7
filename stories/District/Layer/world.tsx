@@ -14,7 +14,7 @@ export default class Country extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [116.2825, 39.9],
         pitch: 0,
         style: 'blank',
@@ -50,8 +50,11 @@ export default class Country extends React.Component {
         },
         popup: {
           enable: true,
+          openTriggerEvent: 'click',
           Html: (props: any) => {
-            return `<span>${props.NAME_CHN + ':' + props.value}</span>`;
+            return `<span><button onclick='alert(11111)'>点击</button>${props.NAME_CHN +
+              ':' +
+              props.value}</span>`;
           },
         },
       });

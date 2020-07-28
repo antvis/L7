@@ -73,7 +73,11 @@ export default class ReglTexture2D implements ITexture2D {
   public get() {
     return this.texture;
   }
-  public update() {
+  public update(props: regl.Texture2DOptions = {}) {
+    this.texture(props);
+  }
+
+  public bind() {
     // @ts-ignore
     this.texture._texture.bind();
   }

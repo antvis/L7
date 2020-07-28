@@ -9,6 +9,7 @@ export interface IPopupOption {
   anchor: anchorType[any];
   className: string;
   offsets: number[];
+  stopPropagation: boolean;
 }
 export interface IPopup {
   addTo(scene: Container): this;

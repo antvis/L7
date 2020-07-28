@@ -308,7 +308,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       }
     });
 
-    this.attributesAndIndices.elements.destroy();
+    this.attributesAndIndices?.elements.destroy();
     this.attributes = [];
   }
 }

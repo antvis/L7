@@ -80,7 +80,8 @@ export interface ITexture2DInitializationOptions {
 
 export interface ITexture2D {
   get(): unknown;
-  update(): void;
+  update(options: any): void;
+  bind(): void;
   resize(options: { width: number; height: number }): void;
 
   /**
