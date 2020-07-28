@@ -28,6 +28,7 @@
   "dependencies": {
     "@antv/l7-core": "2.2.28",
     "@antv/l7-utils": "2.2.28",
+    "@antv/l7-map": "2.2.28",
     "@babel/runtime": "^7.7.7",
     "@types/amap-js-api": "^1.4.6",
     "gl-matrix": "^3.1.0",
