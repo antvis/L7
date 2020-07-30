@@ -29,7 +29,7 @@ export default class CityBuildModel extends BaseModel {
     };
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     this.startModelAnimate();
     return [
       this.layer.buildLayerModel({

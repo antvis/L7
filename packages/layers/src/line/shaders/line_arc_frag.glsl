@@ -6,7 +6,7 @@ uniform float u_opacity;
 uniform float u_blur : 0.9;
 uniform float u_line_type: 0.0;
 varying vec2 v_normal;
-varying vec2 v_dash_array;
+varying vec4 v_dash_array;
 varying float v_distance_ratio;
 varying vec4 v_color;
 
@@ -21,7 +21,12 @@ void main() {
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
   gl_FragColor.a *= u_opacity;
   if(u_line_type == LineTypeDash) {
-    gl_FragColor.a *= (1.0- step(v_dash_array.x, mod(v_distance_ratio, v_dash_array.x +v_dash_array.y)));
+   float flag = 0.;
+    float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
+    if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
+      flag = 1.;
+    }
+    gl_FragColor.a *=flag;
   }
 
   if(u_aimate.x == Animate) {

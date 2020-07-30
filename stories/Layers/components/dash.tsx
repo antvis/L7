@@ -1,5 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { Mapbox, GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class DashLineDemo extends React.Component {
@@ -46,7 +46,8 @@ export default class DashLineDemo extends React.Component {
         ].reverse(),
       )
       .style({
-        // lineType: 'dash',
+        lineType: 'dash',
+        dashArray: [4, 2, 2, 2],
         opacity: 1.0,
       });
 

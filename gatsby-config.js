@@ -78,6 +78,14 @@ module.exports = {
         order: 1
       },
       {
+        slug: 'api/district',
+        title: {
+          zh: '行政区划',
+          en: 'District'
+        },
+        order: 2
+      },
+      {
         slug: 'api/draw',
         title: {
           zh: '绘制组件',

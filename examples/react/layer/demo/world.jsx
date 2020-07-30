@@ -7,7 +7,7 @@ const World = React.memo(function Map() {
   React.useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/68dc6756-627b-4e9e-a5ba-e834f6ba48f8.json'
+        'https://gw.alipayobjects.com/os/antvdemo/assets/data/world.geo.json'
       );
       const data = await response.json();
       setData(data);

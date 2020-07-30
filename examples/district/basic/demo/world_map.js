@@ -9,33 +9,35 @@ const scene = new Scene({
     style: 'blank',
     zoom: 0,
     minZoom: 0,
-    maxZoom: 10
+    maxZoom: 5
   })
 });
 scene.on('loaded', () => {
   new WorldLayer(scene, {
     data: [],
     fill: {
-      field: 'NAME_CHN',
-      values: [
-        '#feedde',
-        '#fdd0a2',
-        '#fdae6b',
-        '#fd8d3c',
-        '#e6550d',
-        '#a63603'
-      ]
+      color: {
+        field: 'NAME_CHN',
+        values: [
+          '#feedde',
+          '#fdd0a2',
+          '#fdae6b',
+          '#fd8d3c',
+          '#e6550d',
+          '#a63603'
+        ]
+      }
     },
     stroke: '#ccc',
     label: {
       enable: true,
       textAllowOverlap: false,
-      field: 'Short_Name_ZH'
+      field: 'NAME_CHN'
     },
     popup: {
       enable: false,
       Html: props => {
-        return `<span>${props.Short_Name_ZH}</span>`;
+        return `<span>${props.NAME_CHN}</span>`;
       }
     }
   });

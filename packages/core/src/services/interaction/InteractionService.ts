@@ -33,9 +33,12 @@ export default class InteractionService extends EventEmitter
 
   private clickTimer: number;
 
+  private $containter: HTMLElement;
+
   public init() {
     // 注册事件在地图底图上
     this.addEventListenerOnMap();
+    this.$containter = this.mapService.getMapContainer() as HTMLElement;
   }
 
   public destroy() {
@@ -147,7 +150,10 @@ export default class InteractionService extends EventEmitter
     const lngLat = this.mapService.containerToLngLat([clientX, clientY]);
     return { x: clientX, y: clientY, lngLat, type };
   }
-  private onHover = ({ x, y, type }: MouseEvent) => {
+  private onHover = (event: MouseEvent) => {
+    let { x, y } = event;
+    const type = event.type;
+
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       const { top, left } = $containter.getBoundingClientRect();

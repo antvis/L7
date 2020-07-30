@@ -45,6 +45,9 @@ export default class HeatMapModel extends BaseModel {
       });
       this.drawIntensityMode();
     });
+    if (this.layer.styleNeedUpdate) {
+      this.updateColorTexture();
+    }
     this.shapeType === 'heatmap' ? this.drawColorMode() : this.draw3DHeatMap();
   }
 
@@ -52,7 +55,7 @@ export default class HeatMapModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     const {
       createFramebuffer,
       clear,
@@ -92,20 +95,15 @@ export default class HeatMapModel extends BaseModel {
       depth: false,
     });
 
-    // 初始化颜色纹理
-    this.colorTexture = createTexture2D({
-      data: new Uint8Array(imageData.data),
-      width: imageData.width,
-      height: imageData.height,
-      wrapS: gl.CLAMP_TO_EDGE,
-      wrapT: gl.CLAMP_TO_EDGE,
-      min: gl.NEAREST,
-      mag: gl.NEAREST,
-      flipY: false,
-    });
+    this.updateColorTexture();
 
     return [this.intensityModel, this.colorModel];
   }
+
+  public buildModels(): IModel[] {
+    return this.initModels();
+  }
+
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'dir',
@@ -333,6 +331,31 @@ export default class HeatMapModel extends BaseModel {
         type: gl.UNSIGNED_INT,
         count: triangulation.indices.length,
       }),
+    });
+  }
+  private updateStyle() {
+    this.updateColorTexture();
+  }
+
+  private updateColorTexture() {
+    const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.destroy();
+    }
+
+    const {
+      rampColors,
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const imageData = generateColorRamp(rampColors as IColorRamp);
+    this.colorTexture = createTexture2D({
+      data: new Uint8Array(imageData.data),
+      width: imageData.width,
+      height: imageData.height,
+      wrapS: gl.CLAMP_TO_EDGE,
+      wrapT: gl.CLAMP_TO_EDGE,
+      min: gl.NEAREST,
+      mag: gl.NEAREST,
+      flipY: false,
     });
   }
 }

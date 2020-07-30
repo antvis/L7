@@ -137,6 +137,7 @@ describe('uniforms in ReglModel', () => {
     expect(model2.uniforms['u_Struct.k'] instanceof ReglTexture2D).toBeTruthy();
     // @ts-ignore
     expect(
+      // @ts-ignore
       model2.uniforms['u_Struct.l'] instanceof ReglFramebuffer,
     ).toBeTruthy();
     // @ts-ignore
@@ -179,6 +180,7 @@ describe('uniforms in ReglModel', () => {
       u_4: {
         a: 2,
       },
+      // @ts-ignore
       u_5: [
         {
           c: 100, // 只修改第一个

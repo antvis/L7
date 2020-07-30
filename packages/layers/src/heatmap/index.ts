@@ -10,6 +10,9 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new HeatMapModels[shape](this);
+    this.models = this.layerModel.initModels();
+  }
+  public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
   public renderModels() {

@@ -29,11 +29,6 @@ export default class DrawPolygon extends DrawFeature {
     this.type = 'polygon';
     this.drawMidVertexLayer = new DrawMidVertex(this);
     this.on(DrawEvent.MODE_CHANGE, this.addMidLayerEvent);
-    if (this.options.data) {
-      this.initData();
-      this.normalLayer.update(this.source.data);
-      this.normalLayer.enableSelect();
-    }
   }
   public enable() {
     super.enable();
@@ -240,6 +235,26 @@ export default class DrawPolygon extends DrawFeature {
         break;
     }
   }
+  protected initData(): boolean {
+    const features: Feature[] = [];
+    this.source.data.features.forEach((feature) => {
+      if (feature.geometry.type === 'Polygon') {
+        const points = (feature.geometry.coordinates[0] as Position[]).map(
+          (coord) => {
+            return {
+              lng: coord[0],
+              lat: coord[1],
+            };
+          },
+        );
+        features.push(
+          this.createFeature(points.slice(1), feature?.properties?.id, false),
+        );
+      }
+    });
+    this.source.data.features = features;
+    return true;
+  }
 
   private editPolygonVertex(id: number, vertex: ILngLat) {
     const feature = this.currentFeature as Feature<Geometries, Properties>;
@@ -258,26 +273,6 @@ export default class DrawPolygon extends DrawFeature {
     this.drawLayer.updateData(
       featureCollection([this.currentFeature as Feature]),
     );
-  }
-
-  private initData() {
-    const features: Feature[] = [];
-    this.source.data.features.forEach((feature) => {
-      if (feature.geometry.type === 'Polygon') {
-        const points = (feature.geometry.coordinates[0] as Position[]).map(
-          (coord) => {
-            return {
-              lng: coord[0],
-              lat: coord[1],
-            };
-          },
-        );
-        features.push(
-          this.createFeature(points.slice(1), feature?.properties?.id, false),
-        );
-      }
-    });
-    this.source.data.features = features;
   }
 }
 /**

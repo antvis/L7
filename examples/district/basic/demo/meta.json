@@ -4,9 +4,8 @@
     "en": "District"
   },
   "demos": [
-
     {
-      "filename": "china_map.js",
+      "filename": "china_map_2.js",
       "title": "中国地图",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*tClNQoAo5isAAAAAAAAAAABkARQnAQ"
     },
@@ -31,9 +30,14 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*iVwLSpIf_ckAAAAAAAAAAABkARQnAQ"
     },
     {
-      "filename": "drill_down.js",
-      "title": "中国地图上钻下取",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*xjjARqU70xoAAAAAAAAAAABkARQnAQ"
+      "filename": "attach_map.js",
+      "title": "中国地图附图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*bGX-Tbw5uVAAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "hainan.js",
+      "title": "海南省地图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*nHOTQ61hFbYAAAAAAAAAAABkARQnAQ"
     }
   ]
 }

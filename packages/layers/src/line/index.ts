@@ -8,6 +8,9 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new LineModels[shape](this);
+    this.models = this.layerModel.initModels();
+  }
+  public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
 

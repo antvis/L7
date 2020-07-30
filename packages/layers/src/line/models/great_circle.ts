@@ -25,6 +25,9 @@ export default class GreatCircleModel extends BaseModel {
       lineType = 'solid',
       dashArray = [10, 5],
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
+    if (dashArray.length === 2) {
+      dashArray.push(0, 0);
+    }
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,
@@ -38,6 +41,10 @@ export default class GreatCircleModel extends BaseModel {
       u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
+  }
+
+  public initModels(): IModel[] {
+    return this.buildModels();
   }
 
   public buildModels(): IModel[] {

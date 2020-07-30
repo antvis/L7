@@ -58,22 +58,7 @@ export default class Source extends EventEmitter {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;
-    if (cfg) {
-      if (cfg.parser) {
-        this.parser = cfg.parser;
-      }
-      if (cfg.transforms) {
-        this.transforms = cfg.transforms;
-      }
-      this.cluster = cfg.cluster || false;
-      if (cfg.clusterOptions) {
-        this.cluster = true;
-        this.clusterOptions = {
-          ...this.clusterOptions,
-          ...cfg.clusterOptions,
-        };
-      }
-    }
+    this.initCfg(cfg);
 
     this.hooks.init.tap('parser', () => {
       this.excuteParser();
@@ -87,9 +72,10 @@ export default class Source extends EventEmitter {
     this.init();
   }
 
-  public setData(data: any) {
+  public setData(data: any, options?: ISourceCFG) {
     this.rawData = data;
     this.originData = data;
+    this.initCfg(options);
     this.init();
     this.emit('update');
   }
@@ -142,13 +128,14 @@ export default class Source extends EventEmitter {
         id < this.originData.features.length
           ? this.originData.features[id]
           : 'null';
+      const newFeature = cloneDeep(feature);
       if (this.transforms.length !== 0) {
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;
         });
-        feature.properties = item;
+        newFeature.properties = item;
       }
-      return feature;
+      return newFeature;
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
     }
@@ -161,6 +148,32 @@ export default class Source extends EventEmitter {
     return feature?._id;
   }
 
+  public destroy() {
+    this.removeAllListeners();
+    this.originData = null;
+    this.clusterIndex = null;
+    // @ts-ignore
+    this.data = null;
+  }
+
+  private initCfg(cfg?: ISourceCFG) {
+    if (cfg) {
+      if (cfg.parser) {
+        this.parser = cfg.parser;
+      }
+      if (cfg.transforms) {
+        this.transforms = cfg.transforms;
+      }
+      this.cluster = cfg.cluster || false;
+      if (cfg.clusterOptions) {
+        this.cluster = true;
+        this.clusterOptions = {
+          ...this.clusterOptions,
+          ...cfg.clusterOptions,
+        };
+      }
+    }
+  }
   private excuteParser(): void {
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
@@ -188,12 +201,6 @@ export default class Source extends EventEmitter {
 
     const clusterOptions = this.clusterOptions || {};
     this.clusterIndex = cluster(this.data, clusterOptions);
-    // this.clusterIndex = new Supercluster({
-    //   radius,
-    //   minZoom,
-    //   maxZoom,
-    // });
-    // this.clusterIndex.load(this.rawData.features);
   }
 
   private init() {

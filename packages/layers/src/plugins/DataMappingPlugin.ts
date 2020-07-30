@@ -39,6 +39,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
+      if (layer.layerModelNeedUpdate) {
+        return;
+      }
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const filter = styleAttributeService.getLayerStyleAttribute('filter');
       const { dataArray } = layer.getSource().data;

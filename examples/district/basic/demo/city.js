@@ -37,15 +37,16 @@ async function initMap() {
         textAllowOverlap: false
       },
       fill: {
-        field: 'pop',
-        values: [
-          '#feedde',
-          '#fdd0a2',
-          '#fdae6b',
-          '#fd8d3c',
-          '#e6550d',
-          '#a63603'
-        ]
+        color: { field: 'pop',
+          values: [
+            '#feedde',
+            '#fdd0a2',
+            '#fdae6b',
+            '#fd8d3c',
+            '#e6550d',
+            '#a63603'
+          ]
+        }
       },
       popup: {
         enable: true,

@@ -57,14 +57,33 @@ export default class DrawPoint extends DrawFeature {
     };
     return this.currentFeature;
   }
-  protected createFeature(p: ILngLat): Feature {
+  protected createFeature(
+    p: ILngLat,
+    id?: string,
+    active: boolean = true,
+  ): Feature {
     const feature = point([p.lng, p.lat], {
-      id: this.getUniqId(),
+      id: id || this.getUniqId(),
       type: 'point',
+      active,
       pointFeatures: [point([p.lng, p.lat])],
     });
     this.setCurrentFeature(feature as Feature);
     return feature;
+  }
+  protected initData(): boolean {
+    const features: Feature[] = [];
+    this.source.data.features.forEach((feature) => {
+      if (feature.geometry.type === 'Point') {
+        const p = {
+          lng: feature.geometry.coordinates[0] as number,
+          lat: feature.geometry.coordinates[1] as number,
+        };
+        features.push(this.createFeature(p, feature?.properties?.id, false));
+      }
+    });
+    this.source.data.features = features;
+    return true;
   }
 
   protected editFeature(endPoint: ILngLat): void {

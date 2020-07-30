@@ -28,7 +28,7 @@ module.exports = {
   moduleFileExtensions: [ 'ts', 'tsx', 'js' ],
   modulePathIgnorePatterns: [ 'dist' ],
   moduleNameMapper: {
-    '@antv/l7-(.+)$': '<rootDir>packages/$1/src',
+    '@antv/l7-(.+)$': '<rootDir>packages/$1/src'
   },
   notify: true,
   notifyMode: 'always',

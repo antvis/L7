@@ -1,6 +1,8 @@
 import {
+  LayerEvent,
   LineLayer,
   MapboxScene,
+  AMapScene,
   Marker,
   PolygonLayer,
   Popup,
@@ -64,15 +66,27 @@ function joinData(geodata: any, ncovData: any) {
 
 export default React.memo(function Map() {
   const [data, setData] = React.useState();
+  const [popupInfo, setPopupInfo] = React.useState<{
+    lnglat: number[];
+    feature: any;
+  }>();
+
+  function showPopup(args: any): void {
+    console.log(args.lngLat);
+    setPopupInfo({
+      lnglat: args.lngLat,
+      feature: args.feature,
+    });
+  }
   React.useEffect(() => {
     const fetchData = async () => {
       const [geoData, ncovData] = await Promise.all([
         fetch(
           'https://gw.alipayobjects.com/os/bmw-prod/e62a2f3b-ea99-4c98-9314-01d7c886263d.json',
         ).then((d) => d.json()),
-        fetch('https://lab.isaaclin.cn/nCoV/api/area?latest=1').then((d) =>
-          d.json(),
-        ),
+        fetch(
+          'https://gw.alipayobjects.com/os/bmw-prod/55a7dd2e-3fb4-4442-8899-900bb03ee67a.json',
+        ).then((d) => d.json()),
       ]);
       setData(joinData(geoData, ncovData.results));
     };
@@ -80,7 +94,7 @@ export default React.memo(function Map() {
   }, []);
   return (
     <>
-      <MapboxScene
+      <AMapScene
         map={{
           center: [110.19382669582967, 50.258134],
           pitch: 0,
@@ -95,6 +109,31 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
+        {popupInfo && (
+          <Popup lnglat={popupInfo.lnglat}>
+            {popupInfo.feature.name}
+            <ul
+              style={{
+                margin: 0,
+              }}
+            >
+              <li>
+                <button
+                  onClick={() => {
+                    alert('test');
+                  }}
+                  value="点击"
+                >
+                  点击
+                </button>
+                现有确诊:{popupInfo.feature.currentConfirmedCount}
+              </li>
+              <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
+              <li>治愈:{popupInfo.feature.curedCount}</li>
+              <li>死亡:{popupInfo.feature.deadCount}</li>
+            </ul>
+          </Popup>
+        )}
         {data && [
           <PolygonLayer
             key={'1'}
@@ -137,7 +176,11 @@ export default React.memo(function Map() {
             style={{
               opacity: 1,
             }}
-          />,
+          >
+            <LayerEvent type="click" handler={showPopup} />
+            {/* <LayerEvent type="mouseout" handler={hidePopup} /> */}
+          </PolygonLayer>,
+          ,
           <LineLayer
             key={'2'}
             source={{
@@ -157,7 +200,7 @@ export default React.memo(function Map() {
             }}
           />,
         ]}
-      </MapboxScene>
+      </AMapScene>
     </>
   );
 });

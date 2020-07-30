@@ -56,16 +56,19 @@ export default class Country extends React.Component {
           field: 'NAME_CHN',
           textAllowOverlap: false,
         },
-        fill: {
-          field: 'pop',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+        bubble: {
+          enable: true,
+          color: {
+            field: 'pop',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
         popup: {
           enable: true,
@@ -109,6 +112,5 @@ export default class Country extends React.Component {
   }
   private handleProvinceChange = (value: string[]) => {
     this.cityLayer.updateDistrict([value[1]]);
-    console.log(this.cityLayer.fillLayer);
   };
 }

@@ -58,9 +58,9 @@ export default class GlTFThreeJSDemo extends React.Component {
             y: 'latitude',
           },
         })
-        .shape('name', ['00', '01', '02'])
-        // .shape('triangle')
-        // .color('red')
+        // .shape('name', ['00', '01', '02'])
+        .shape('triangle')
+        .color('red')
         .active(true)
         .size(20);
       scene.addLayer(imageLayer);

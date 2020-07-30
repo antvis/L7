@@ -36,19 +36,21 @@ import ReglTexture2D from './ReglTexture2D';
 export default class ReglRendererService implements IRendererService {
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
+  private canvas: HTMLCanvasElement;
   private width: number;
   private height: number;
   private isDirty: boolean;
 
   public async init(
-    $container: HTMLDivElement,
+    canvas: HTMLCanvasElement,
     cfg: IRenderConfig,
   ): Promise<void> {
-    this.$container = $container;
+    // this.$container = $container;
+    this.canvas = canvas;
     // tslint:disable-next-line:typedef
     this.gl = await new Promise((resolve, reject) => {
       regl({
-        container: $container,
+        canvas: this.canvas,
         attributes: {
           alpha: true,
           // use TAA instead of MSAA
@@ -141,13 +143,6 @@ export default class ReglRendererService implements IRendererService {
   }) => {
     // use WebGL context directly
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
-    const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
-    if (renderCanvas) {
-      renderCanvas.width = width;
-      renderCanvas.height = height;
-      renderCanvas.style.width = width / 2 + 'px';
-      renderCanvas.style.height = height / 2 + 'px';
-    }
     this.gl._gl.viewport(x, y, width, height);
     this.width = width;
     this.height = height;
@@ -176,11 +171,12 @@ export default class ReglRendererService implements IRendererService {
   };
 
   public getContainer = () => {
-    return this.$container;
+    return this.canvas?.parentElement;
   };
 
   public getCanvas = () => {
-    return this.$container?.getElementsByTagName('canvas')[0] || null;
+    // return this.$container?.getElementsByTagName('canvas')[0] || null;
+    return this.canvas;
   };
 
   public getGLContext = () => {

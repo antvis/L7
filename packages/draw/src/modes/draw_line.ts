@@ -30,16 +30,39 @@ export default class DrawLine extends DrawPolygon {
     this.pointFeatures = newPointFeture;
     return this.currentFeature;
   }
-  protected createFeature(points: ILngLat[]): Feature {
-    const pointfeatures = createPoint(this.points);
+  protected createFeature(
+    points: ILngLat[],
+    id?: string,
+    active: boolean = true,
+  ): Feature {
+    const pointfeatures = createPoint(points);
     this.pointFeatures = pointfeatures.features;
     const feature = createLine(points, {
-      id: this.getUniqId(),
+      id: id || this.getUniqId(),
       type: 'line',
-      active: true,
+      active,
       pointFeatures: this.pointFeatures,
     });
     this.setCurrentFeature(feature as Feature);
     return feature;
+  }
+  protected initData(): boolean {
+    const features: Feature[] = [];
+    this.source.data.features.forEach((feature) => {
+      if (feature.geometry.type === 'LineString') {
+        // @ts-ignore
+        const points = feature.geometry.coordinates.map((coord) => {
+          return {
+            lng: coord[0],
+            lat: coord[1],
+          };
+        });
+        features.push(
+          this.createFeature(points, feature?.properties?.id, false),
+        );
+      }
+    });
+    this.source.data.features = features;
+    return true;
   }
 }

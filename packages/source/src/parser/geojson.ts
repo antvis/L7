@@ -48,7 +48,7 @@ export default function geoJSON(
     (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
       const coord = getCoords(currentFeature);
       const id = featureIndex;
-      if (currentFeature.geometry.type === 'Polygon') {
+      if (currentFeature.geometry.type === 'MultiPolygon') {
         coord.forEach((coor) => {
           const dataItem = {
             ...currentFeature.properties,

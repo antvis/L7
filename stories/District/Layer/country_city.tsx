@@ -26,25 +26,22 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       const Layer = new CountryLayer(scene, {
         data: [],
+        geoDataLevel: 2,
         depth: 2,
-        stroke: '#fff',
+        showBorder: false,
+        provinceStroke: '#783D2D',
+        cityStroke: '#EBCCB4',
         coastlineWidth: 0.5,
         nationalWidth: 0.5,
         fill: {
-          // scale: 'quantile',
-          field: 'NAME_CHN',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'NAME_CHN',
+            values: ['#D92568', '#E3507E', '#FC7AAB', '#F1D3E5', '#F2EEFF'],
+          },
         },
         popup: {
           enable: true,
-          Html: (props) => {
+          Html: (props: any) => {
             return `<span>${props.NAME_CHN}</span>`;
           },
         },

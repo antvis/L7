@@ -14,14 +14,14 @@ attribute float a_Distance;
 
 uniform mat4 u_ModelMatrix;
 uniform float u_line_type: 0.0;
-uniform vec2 u_dash_array: [10.0, 5.];
+uniform vec4 u_dash_array: [10.0, 5.，0, 0];
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
 #pragma include "projection"
 #pragma include "picking"
 
 varying vec4 v_color;
-varying vec2 v_dash_array;
+varying vec4 v_dash_array;
 varying vec2 v_normal;
 varying float v_distance_ratio;
 varying float v_side;

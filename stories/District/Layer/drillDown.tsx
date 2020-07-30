@@ -1,7 +1,6 @@
 import { Scene } from '@antv/l7';
 import { DrillDownLayer } from '@antv/l7-district';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { Cascader } from 'antd';
 import * as React from 'react';
 
 export default class Country extends React.Component {
@@ -31,18 +30,23 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       this.scene = scene;
       this.drillDown = new DrillDownLayer(scene, {
-        data: [],
-        depth: 1,
+        drillDepth: 2,
+        geoDataLevel: 2,
         fill: {
-          field: 'NAME_CHN',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#f7fbff',
+              '#deebf7',
+              '#c6dbef',
+              '#9ecae1',
+              '#6baed6',
+              '#4292c6',
+              '#2171b5',
+              '#08519c',
+              '#08306b',
+            ],
+          },
         },
         popup: {
           enable: true,
@@ -51,6 +55,7 @@ export default class Country extends React.Component {
           },
         },
       });
+      console.log(this.drillDown);
     });
   }
 

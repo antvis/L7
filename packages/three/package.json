@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.2.5",
+  "version": "2.2.28",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -36,14 +36,15 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:cdn": "node_modules/.bin/rollup -c",
     "lint:ts": "run-p -c lint:ts-*",
-    "test": "jest"
+    "test": "jest",
+    "sync": "tnpm sync"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7": "2.2.5",
+    "@antv/l7": "2.2.28",
     "@babel/runtime": "^7.7.7",
     "rollup": "^2.3.3",
     "rollup-plugin-less": "^1.1.2"
@@ -51,7 +52,7 @@
   "devDependencies": {
     "three": "^0.115.0"
   },
-  "gitHead": "532ade40831b35b04a677b351d092e54c00613d8",
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
   "publishConfig": {
     "access": "public"
   }

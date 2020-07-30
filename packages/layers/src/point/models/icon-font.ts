@@ -29,7 +29,7 @@ export default class IconeModel extends BaseModel {
     };
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     this.initIconFontGlyphs();
     this.registerBuiltinAttributes();
     this.updateTexture();

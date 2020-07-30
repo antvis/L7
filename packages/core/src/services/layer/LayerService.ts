@@ -92,7 +92,6 @@ export default class LayerService implements ILayerService {
     this.layers.sort((pre: ILayer, next: ILayer) => {
       return pre.zIndex - next.zIndex;
     });
-    this.renderLayers();
   }
 
   public destroy() {

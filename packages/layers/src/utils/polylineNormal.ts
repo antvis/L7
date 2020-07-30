@@ -71,7 +71,7 @@ export default function(
   let lineNormal = null;
   const tmp = vec2.create();
   let count = indexOffset || 0;
-  const miterLimit = 3;
+  const miterLimit = 4;
 
   const out: number[] = [];
   const attrPos: number[] = [];
@@ -172,7 +172,6 @@ export default function(
         count += 4;
         continue;
       }
-
       if (bevel) {
         miterLen = miterLimit;
 
@@ -232,7 +231,7 @@ export default function(
   return {
     normals: out,
     attrIndex,
-    attrPos: pickData, // [x,y,z, distance, miter ,tatal ]
+    attrPos: pickData, // [x,y,z, distance, miter ,t0tal ]
   };
 }
 // [x,y,z, distance, miter ]

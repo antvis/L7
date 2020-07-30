@@ -134,5 +134,4 @@ const scene = new Scene({
 });
 ```
 
-离线，无token使用mapbox [demo](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14&hidenavigation=1&theme=dark)<br />![image.png](https://cdn.nlark.com/yuque/0/2019/png/104251/1575463410498-0784ce76-743d-4cc4-8d68-964dfd010925.png#align=left&display=inline&height=514&name=image.png&originHeight=514&originWidth=824&size=156914&status=done&style=none&width=824)
-
+[d离线，无token使用mapbox demo](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14&hidenavigation=1&theme=dark)<br />

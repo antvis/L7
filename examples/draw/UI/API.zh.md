@@ -90,74 +90,38 @@ scene.addControl(control);
 scene.removeControl(control);
 ```
 
-### Draw Type
+## 方法
 
-可以不依赖 Draw UI 组件，独立的使用每一个 Draw
+### getDraw(type)
 
-#### DrawCircle
+获取 draw 实例
 
-绘制圆形
-
-```javascript
-import { DrawCircle } from '@antv/l7-draw';
-const drawCircle = new DrawCircle(scene);
-drawCircle.enable();
-```
-
-#### DrawRect
-
-绘制四边形
+参数： type 绘制实例 `point|line|polygon|rect| circle`
 
 ```javascript
-import { DrawRect } from '@antv/l7-draw';
-const drawRect = new DrawRect(scene);
-drawRect.enable();
+const pointDraw = drawcontrol.get('point');
 ```
 
-#### DrawLine
+### getAllData()
 
-绘制路径
+获取每个 Draw 实例绘制的结果数据
+
+返回数据格式如下
 
 ```javascript
-import { DrawLine } from '@antv/l7-draw';
-const drawLine = new DrawLine(scene);
-drawLine.enable();
+{
+  point: []; // geojson数据格式
+  line: [];
+}
 ```
 
-#### DrawPoint
+### removeAllData()
 
-绘制点
+移除绘制的的所有数据
 
 ```javascript
-import { DrawPoint } from '@antv/l7-draw';
-const drawPoint = new DrawPoint(scene);
-drawPoint.enable();
+drawcontrol.removeAllData();
 ```
-
-#### DrawPolygon
-
-绘制多边形
-
-```javascript
-import { DrawPolygon } from '@antv/l7-draw';
-const drawPoint = new DrawPolygon(scene);
-drawPoint.enable();
-```
-
-### 配置项 DrawOption
-
-- editEnable boolean 是否允许编辑
-- selectEnable boolean 是否允许选中
-
-### 方法
-
-#### enable
-
-开始编辑，绘制完成之后会自动结束。
-
-#### disable
-
-结束编辑
 
 ### 事件
 

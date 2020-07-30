@@ -26,29 +26,41 @@ export default class Country extends React.Component {
     scene.on('loaded', () => {
       const Layer = new WorldLayer(scene, {
         data: [],
+        geoDataLevel: 2,
+        joinBy: ['SOC', 'SOC'],
         fill: {
-          field: 'NAME_CHN',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603',
-          ],
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
         },
         stroke: '#ccc',
         label: {
           enable: true,
           textAllowOverlap: false,
-          field: 'Short_Name_ZH',
+          field: 'NAME_ENG',
+          padding: [5, 5],
         },
         popup: {
-          enable: false,
-          Html: (props) => {
-            return `<span>${props.Short_Name_ZH}</span>`;
+          enable: true,
+          openTriggerEvent: 'click',
+          Html: (props: any) => {
+            return `<span><button onclick='alert(11111)'>点击</button>${props.NAME_CHN +
+              ':' +
+              props.value}</span>`;
           },
         },
+      });
+      console.time('layer');
+      Layer.on('loaded', () => {
+        console.timeEnd('layer');
       });
     });
     this.scene = scene;

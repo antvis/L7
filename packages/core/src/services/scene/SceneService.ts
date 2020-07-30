@@ -100,6 +100,8 @@ export default class Scene extends EventEmitter implements ISceneService {
    */
   private $container: HTMLDivElement | null;
 
+  private canvas: HTMLCanvasElement;
+
   private hooks: {
     init: AsyncParallelHook;
   };
@@ -170,11 +172,17 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.configService.getSceneConfig(this.id).id || '',
       );
       this.$container = $container;
+
       if ($container) {
+        this.canvas = DOM.create('canvas', '', $container) as HTMLCanvasElement;
+        this.setCanvas();
         await this.rendererService.init(
-          $container,
+          // @ts-ignore
+          this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
         );
+        // this.initContainer();
+        // window.addEventListener('resize', this.handleWindowResized);
         elementResizeEvent(
           this.$container as HTMLDivElement,
           this.handleWindowResized,
@@ -279,35 +287,43 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.emit('resize');
     // @ts-check
     if (this.$container) {
-      // recalculate the viewport's size and call gl.viewport
-      // @see https://github.com/regl-project/regl/blob/master/lib/webgl.js#L24-L38
-      const pixelRatio = window.devicePixelRatio;
-      let w = window.innerWidth;
-      let h = window.innerHeight;
-      if (this.$container !== document.body) {
-        const bounds = this.$container.getBoundingClientRect();
-        w = bounds.right - bounds.left;
-        h = bounds.bottom - bounds.top;
-      }
-      const canvas = this.$container?.getElementsByTagName('canvas')[0];
-      // this.$container.
-      this.rendererService.viewport({
-        x: 0,
-        y: 0,
-        width: pixelRatio * w,
-        height: pixelRatio * h,
-      });
-      // 触发 Map， canvas
+      this.initContainer();
       DOM.triggerResize();
       this.coordinateSystemService.needRefresh = true;
-      if (canvas) {
-        canvas.width = w * pixelRatio;
-        canvas.height = h * pixelRatio;
-      }
+
       //  repaint layers
       this.render();
     }
   };
+  private initContainer() {
+    const pixelRatio = window.devicePixelRatio;
+    const w = this.$container?.clientWidth || 400;
+    const h = this.$container?.clientHeight || 300;
+    const canvas = this.canvas;
+    if (canvas) {
+      canvas.width = w * pixelRatio;
+      canvas.height = h * pixelRatio;
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+    }
+    this.rendererService.viewport({
+      x: 0,
+      y: 0,
+      width: pixelRatio * w,
+      height: pixelRatio * h,
+    });
+  }
+
+  private setCanvas() {
+    const pixelRatio = window.devicePixelRatio;
+    const w = this.$container?.clientWidth || 400;
+    const h = this.$container?.clientHeight || 300;
+    const canvas = this.canvas;
+    canvas.width = w * pixelRatio;
+    canvas.height = h * pixelRatio;
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+  }
 
   private handleMapCameraChanged = (viewport: IViewport) => {
     this.cameraService.update(viewport);

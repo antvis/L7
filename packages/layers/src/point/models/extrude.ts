@@ -14,6 +14,9 @@ export default class ExtrudeModel extends BaseModel {
       u_opacity: opacity || 1.0,
     };
   }
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
 
   public buildModels(): IModel[] {
     return [
