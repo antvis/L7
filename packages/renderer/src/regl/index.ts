@@ -59,10 +59,10 @@ export default class ReglRendererService implements IRendererService {
         },
         // TODO: use extensions
         extensions: [
-          'OES_standard_derivatives', // wireframe
           'angle_instanced_arrays', // VSM shadow map
         ],
         optionalExtensions: [
+          'OES_standard_derivatives', // wireframe/*  */
           'OES_element_index_uint',
           'oes_texture_float_linear',
           'OES_texture_float',
