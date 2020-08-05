@@ -148,7 +148,7 @@
     "prerelease": "yarn build && yarn bundle",
     "release": "lerna publish from-package --registry https://registry.npmjs.com/ --force-publish",
     "release-cdn": "antv-bin upload -n @antv/l7",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -h 0.0.0.0 -p 6006",
     "test": "cross-env BABEL_ENV=test jest",
     "test-live": "cross-env BABEL_ENV=test DEBUG_MODE=1 jest --watch",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
