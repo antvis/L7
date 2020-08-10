@@ -1,0 +1,33 @@
+{
+  "title": {
+    "zh": "图库",
+    "en": "Gallery"
+  },
+  "demos": [
+    {
+      "filename": "animate_path.js",
+      "title": "路径动画",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VJX5Qo7ufaAAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "world.js",
+      "title": "流向图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Sbx4S4w7nL8AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "world2.js",
+      "title": "流向图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*u5BsQbn30pkAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "build.js",
+      "title": "点亮城市",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7XkWTYQMfPMAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "animate_line.js",
+      "title": "轨迹动画",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jLo0RY0sDG4AAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

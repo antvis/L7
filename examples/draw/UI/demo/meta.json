@@ -1,0 +1,19 @@
+{
+  "title": {
+    "zh": "栅格图层",
+    "en": "Gallery"
+  },
+  "demos": [
+
+    {
+      "filename": "amap.js",
+      "title": "高德地图绘制",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*nMVTRY3xCuoAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "mapbox.js",
+      "title": "Mapbox 地图绘制",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*oX9uTpfcIJ4AAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

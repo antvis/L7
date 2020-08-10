@@ -1,0 +1,31 @@
+{
+  "title": {
+    "zh": "中文分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "point.js",
+      "title": "气泡图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*fNGiS7YI1tIAAAAAAAAAAABkARQnAQ"
+
+    },
+    {
+      "filename": "color.js",
+      "title": "形状映射",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "world.js",
+      "title": "气泡图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*v5j_QZEL-1YAAAAAAAAAAABkARQnAQ"
+
+    }, {
+      "filename": "scatter.js",
+      "title": "气泡图动画",
+      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*L-wETZt7WHwAAAAAAAAAAABkARQnAQ"
+
+    }
+
+  ]
+}

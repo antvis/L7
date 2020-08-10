@@ -1,0 +1,59 @@
+{
+  "name": "@antv/l7-layers",
+  "version": "2.2.28",
+  "description": "L7's collection of built-in layers",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "es",
+    "README.md"
+  ],
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "run-p build:*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "sync": "tnpm sync"
+  },
+  "author": "xiaoiver",
+  "license": "ISC",
+  "dependencies": {
+    "@antv/async-hook": "^2.1.0",
+    "@antv/l7-core": "2.2.28",
+    "@antv/l7-source": "2.2.28",
+    "@antv/l7-utils": "2.2.28",
+    "@babel/runtime": "^7.7.7",
+    "@mapbox/martini": "^0.2.0",
+    "@turf/meta": "^6.0.2",
+    "d3-array": "1",
+    "d3-color": "^1.4.0",
+    "d3-scale": "2",
+    "earcut": "^2.2.1",
+    "eventemitter3": "^4.0.0",
+    "extrude-polyline": "^1.0.6",
+    "gl-matrix": "^3.1.0",
+    "gl-vec2": "^1.3.0",
+    "inversify": "^5.0.1",
+    "lodash": "^4.17.15",
+    "merge-json-schemas": "1.0.0",
+    "polyline-miter-util": "^1.0.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/d3-array": "^2.0.0",
+    "@types/d3-color": "^1.2.2",
+    "@types/d3-scale": "^2.1.1",
+    "@types/earcut": "^2.1.0",
+    "@types/gl-matrix": "^2.4.5",
+    "@types/lodash": "^4.14.138"
+  },
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
+  "publishConfig": {
+    "access": "public"
+  }
+}

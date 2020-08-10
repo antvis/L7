@@ -1,0 +1,59 @@
+{
+  "name": "@antv/l7-three",
+  "version": "2.2.28",
+  "description": "three for L7 ",
+  "keywords": [
+    "3D",
+    "L7",
+    "three"
+  ],
+  "author": "thinkinggis <lzx199065@gmail.com>",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/l7-tree.js",
+  "types": "es/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antvis/L7.git"
+  },
+  "scripts": {
+    "tsc": "tsc --project tsconfig.build.json",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "run-p build:*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:cdn": "node_modules/.bin/rollup -c",
+    "lint:ts": "run-p -c lint:ts-*",
+    "test": "jest",
+    "sync": "tnpm sync"
+  },
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+  "homepage": "https://github.com/antvis/L7#readme",
+  "dependencies": {
+    "@antv/l7": "2.2.28",
+    "@babel/runtime": "^7.7.7",
+    "rollup": "^2.3.3",
+    "rollup-plugin-less": "^1.1.2"
+  },
+  "devDependencies": {
+    "three": "^0.115.0"
+  },
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
+  "publishConfig": {
+    "access": "public"
+  }
+}

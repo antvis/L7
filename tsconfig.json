@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "downlevelIteration": true,
+    "jsx": "react",
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "types": ["reflect-metadata", "jest", "node"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@antv/l7-district": ["packages/boundary/src"],
+      "@antv/l7-*": ["packages/*/src"],
+      "@antv/l7": ["packages/l7/src"],
+      "*": ["node_modules", "packages", "typings/*"]
+    },
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": true,
+    "babelCore": "@babel/core",
+    "useCache": false
+  },
+  "include": ["packages"],
+  "exclude": ["node_modules", "packages/**/dist"]
+
+}

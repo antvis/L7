@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@antv/l7-*": ["packages/*/src"],
+      "@antv/l7": ["packages/l7/src"],
+      "*": ["node_modules", "packages"]
+    }
+  },
+  "exclude": ["**/*.story.*", "**/__tests__/**/*", "**/*.spec.*", "dist"],
+  "include": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": {
+    "zh": "绘制组件",
+    "en": "Draw"
+  },
+  "demos": [
+
+    {
+      "filename": "draw_circle.js",
+      "title": "绘制圆",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*pawjTqbwM4gAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "draw_polygon.js",
+      "title": "绘制多边形",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_8e1672/afts/img/A*m1eqS4gwgz4AAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}
