@@ -275,22 +275,6 @@ scene.setRotation(rotation);
 
 参数： `rotation` {number}
 
-### setMapStatus
-
-设置地图交互状态
-
-参数 `IStatusOptions`
-
-```ts
-IStatusOptions {
-  dragEnable: boolean; //是否允许地图拖拽
-  keyboardEnable: boolean; // 是否允许形键盘事件
-  doubleClickZoom: boolean; // 双击放大
-  zoomEnable: boolean; // 滚动缩放
-  rotateEnable: boolean; // 旋转
-}
-```
-
 ### zoomIn
 
 地图放大一级
@@ -341,7 +325,23 @@ scene.panBy(x, y);
 scene.setPitch(pitch);
 ```
 
+### setMapStatus
 参数 :
+``` javascript
+ IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+```
+
+``` javascript
+
+scene.setMapStatus({dragEnable: false})
+```
 
 - `pitch` {number}
 
@@ -469,4 +469,4 @@ scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖
 - mapbox https://docs.mapbox.com/mapbox-gl-js/api/#map
 
 2. 加载完成后设置
-   调用 scene 的 [setMapStatus](./scene/#setMapStatus) 方法
+   调用 scene 的 [setMapStatus](./scene/#setmapstatus) 方法
