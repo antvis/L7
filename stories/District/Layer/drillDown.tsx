@@ -55,7 +55,6 @@ export default class Country extends React.Component {
           },
         },
       });
-      console.log(this.drillDown);
     });
   }
 

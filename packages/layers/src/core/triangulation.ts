@@ -71,15 +71,18 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   let path = coordinates as number[][][] | number[][];
-  if (Array.isArray(path[0][0])) {
-    path = coordinates[0] as number[][];
+  if (!Array.isArray(path[0][0])) {
+    path = [coordinates] as number[][][];
   }
   const line = new ExtrudePolyline({
     dash: true,
     join: 'bevel', //
   });
-
-  const linebuffer = line.extrude(path as number[][]);
+  path.forEach((item: any) => {
+    // 处理带洞的多边形
+    line.extrude(item as number[][]);
+  });
+  const linebuffer = line.complex;
   return {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
     indices: linebuffer.indices,

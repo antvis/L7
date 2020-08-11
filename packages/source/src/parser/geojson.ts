@@ -48,23 +48,13 @@ export default function geoJSON(
     (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
       const coord = getCoords(currentFeature);
       const id = featureIndex;
-      if (currentFeature.geometry.type === 'MultiPolygon') {
-        coord.forEach((coor) => {
-          const dataItem = {
-            ...currentFeature.properties,
-            coordinates: [coor],
-            _id: id,
-          };
-          resultData.push(dataItem);
-        });
-      } else {
-        const dataItem: IParseDataItem = {
-          ...currentFeature.properties,
-          coordinates: coord,
-          _id: id,
-        };
-        resultData.push(dataItem);
-      }
+      const dataItem: IParseDataItem = {
+        ...currentFeature.properties,
+        coordinates: coord,
+        _id: id,
+      };
+      resultData.push(dataItem);
+      // }
     },
   );
   return {
