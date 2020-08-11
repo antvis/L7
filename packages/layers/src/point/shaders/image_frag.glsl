@@ -20,7 +20,7 @@ float r = 1.0 - smoothstep(radius-(radius*0.01),
                          radius+(radius*0.01),
                          distanceSqrd);
   vec4 textureColor=texture2D(u_texture,pos);
-  if(v_color == vec4(1.0)){
+  if(all(lessThan(v_color, vec4(1.0+0.00001))) && all(greaterThan(v_color, vec4(1.0-0.00001))) || v_color==vec4(1.0)){
         gl_FragColor= vec4(textureColor.xyz, textureColor.w);
   }else {
         gl_FragColor= step(0.01, textureColor.z) * v_color;
