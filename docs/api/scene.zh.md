@@ -326,8 +326,10 @@ scene.setPitch(pitch);
 ```
 
 ### setMapStatus
+
 参数 :
-``` javascript
+
+```javascript
  IStatusOptions {
   showIndoorMap: boolean;
   resizeEnable: boolean;
@@ -338,9 +340,8 @@ scene.setPitch(pitch);
   rotateEnable: boolean;
 ```
 
-``` javascript
-
-scene.setMapStatus({dragEnable: false})
+```javascript
+scene.setMapStatus({ dragEnable: false });
 ```
 
 - `pitch` {number}
