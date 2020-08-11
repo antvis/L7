@@ -246,6 +246,23 @@ scene.setZoomAndCenter(zoom, center);
 
 - zoom {number}
 - center {LngLat}
+### setMapStatus
+参数 :
+``` javascript
+ IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+```
+
+``` javascript
+
+scene.setMapStatus({dragEnable: false})
+```
 
 ### setRotation
 

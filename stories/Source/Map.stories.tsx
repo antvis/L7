@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import HolePolygon from './components/hole'
 import Line from './components/line';
 import MultiLine from './components/multiLine';
 import MultiPolygon from './components/multiPolygon';
@@ -11,4 +12,5 @@ storiesOf('数据', module)
   .add('multiPolygon', () => <MultiPolygon />, {})
   .add('updatePolygon', () => <UpdatePolygon />, {})
   .add('MultiLine', () => <MultiLine />, {})
+  .add('HolePolygon', () => <HolePolygon />, {})
   .add('折线', () => <Line />, {});
