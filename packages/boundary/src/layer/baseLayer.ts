@@ -66,7 +66,7 @@ export default class BaseLayer extends EventEmitter {
   }
 
   public updateData(
-    newData: Array<{ [key: string]: any }>,
+    newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
     this.setOption({

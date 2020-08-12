@@ -27,7 +27,7 @@ export default class ProvinceLayer extends BaseLayer {
   // 通过adcode 更新
   public updateDistrict(
     adcode: adcodeType,
-    newData: Array<{ [key: string]: any }> = [],
+    newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
     if (!adcode && Array.isArray(adcode) && adcode.length === 0) {

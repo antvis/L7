@@ -32,6 +32,25 @@ export default class Country extends React.Component {
       this.drillDown = new DrillDownLayer(scene, {
         drillDepth: 2,
         geoDataLevel: 2,
+        joinBy: ['NAME_CHN', 'name'],
+        provinceData: [
+          {
+            name: '青海省',
+            value: '1223',
+          },
+        ],
+        cityData: [
+          {
+            name: '海东市',
+            value: '1223e',
+          },
+        ],
+        countyData: [
+          {
+            name: '平安区',
+            value: '456',
+          },
+        ],
         fill: {
           color: {
             field: 'NAME_CHN',
@@ -51,7 +70,7 @@ export default class Country extends React.Component {
         popup: {
           enable: true,
           Html: (props) => {
-            return `<span>${props.NAME_CHN}</span>`;
+            return `<span>${props.NAME_CHN} ${props.value}</span>`;
           },
         },
       });

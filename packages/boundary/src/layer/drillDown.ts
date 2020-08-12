@@ -62,6 +62,7 @@ export default class DrillDownLayer {
   }
   public addCountryEvent() {
     const { drillDownTriggerEvent } = this.options;
+    // 省级下钻到市
     this.provinceLayer.fillLayer.on(
       drillDownTriggerEvent as string,
       (e: any) => {
@@ -102,7 +103,7 @@ export default class DrillDownLayer {
 
   public showProvinceView(
     adcode: adcodeType,
-    newData: Array<{ [key: string]: any }> = [],
+    newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
     this.cityLayer.show();
@@ -113,7 +114,7 @@ export default class DrillDownLayer {
   }
   public showCityView(
     code: adcodeType,
-    newData: Array<{ [key: string]: any }> = [],
+    newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
     this.countyLayer.show();
@@ -149,7 +150,7 @@ export default class DrillDownLayer {
   }
   public drillDown(
     adcode: adcodeType,
-    newData: Array<{ [key: string]: any }> = [],
+    newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
     const { drillDepth } = this.options;
