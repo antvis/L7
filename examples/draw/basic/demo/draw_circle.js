@@ -13,9 +13,13 @@ const scene = new Scene({
 });
 scene.on('loaded', () => {
   const drawCircle = new DrawCircle(scene);
+  console.log(drawCircle)
   drawCircle.enable();
   drawCircle.on('draw.create', e => {
     console.log(e);
+  });
+  drawCircle.on('draw.change', e => {
+    console.log('change', e);
   });
   drawCircle.on('draw.update', e => {
     console.log('update', e);
