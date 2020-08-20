@@ -32,7 +32,6 @@ export default class HexagonLayerDemo extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           const layer = new HeatmapLayer({})
             .source(data, {
               transforms: [

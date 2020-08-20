@@ -4,6 +4,7 @@ export enum DrawEvent {
   Move = 'draw.move',
   Edit = 'draw.edit',
   UPDATE = 'draw.update',
+  CHANGE = 'draw.change',
   SELECTION_CHANGE = 'draw.selectionchange',
   MODE_CHANGE = 'draw.modechange',
   ACTIONABLE = 'draw.actionable',

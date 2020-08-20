@@ -41,7 +41,6 @@ function _pointsGridHash(dataArray: any[], size: number) {
     }
   }
   const centerLat = (latMin + latMax) / 2;
-  // const centerLat = 34.54083;
   const gridOffset = _calculateGridLatLonOffset(size, centerLat);
   if (gridOffset.xOffset <= 0 || gridOffset.yOffset <= 0) {
     return { gridHash: {}, gridOffset };
