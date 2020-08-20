@@ -19,8 +19,7 @@ export default class HexagonLayerDemo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        style: 'amap://styles/5bc1b736cf9101299e65294181018ccc',
-        token: '86a00a9bbb3671370aefe8f1c9d22bf8',
+        token: '8e2254ff173dbf7ff5029e9c9df20bc3',
         pitch: 56.499,
         center: [114.07737552216226, 22.542656745583486],
         rotation: 39.19,
