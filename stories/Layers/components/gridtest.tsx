@@ -14,48 +14,54 @@ export default class HexagonLayerDemo extends React.Component {
     }
   }
   public async componentDidMount() {
-    const testPoint: [number, number] = [113.868222, 22.506306];
 
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: testPoint,
-        pitch: 0,
-        zoom: 17,
         token: '8e2254ff173dbf7ff5029e9c9df20bc3',
+        pitch: 56.499,
+        center: [114.07737552216226, 22.542656745583486],
+        rotation: 39.19,
+        zoom: 12.47985,
       }),
     });
 
     scene.on('loaded', () => {
-      // 网格热力图
-      const testList = [{ lng: testPoint[0], lat: testPoint[1], lev: 1 }];
-      const layer = new HeatmapLayer({})
-        .source(testList, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-          transforms: [
-            {
-              type: 'grid',
-              size: 100,
-              field: 'lev',
-              method: 'sum',
-            },
-          ],
-        })
-        .shape('circle')
-        .style({
-          coverage: 1,
-        })
-        .color('count', ['#0B0030', '#6BD5A0'].reverse());
-      scene.addLayer(layer);
-
-      // marker
-      // @ts-ignore
-      const marker = new Marker().setLnglat(testPoint);
-      scene.addMarker(marker);
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          const layer = new HeatmapLayer({})
+            .source(data, {
+              transforms: [
+                {
+                  type: 'grid',
+                  size: 200,
+                  field: 'h12',
+                  method: 'sum',
+                },
+              ],
+            })
+            .size('sum', [0, 600])
+            .shape('squareColumn')
+            .style({
+              coverage: 1,
+              angle: 0,
+              opacity: 1.0,
+            })
+            .color(
+              'sum',
+              [
+                'rgba(0,18,255,1)',
+                'rgba(0,144,255,0.9)',
+                'rgba(0,222,254,0.8)',
+                'rgba(22,226,159,0.6)',
+              ].reverse(),
+            );
+          scene.addLayer(layer);
+        });
     });
   }
 
