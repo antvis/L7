@@ -41,6 +41,12 @@ export interface IExtrudeLineOption {
   thickness: number;
 }
 export default class ExtrudePolyline {
+  public complex: {
+    positions: number[];
+    indices: number[];
+    normals: number[];
+    startIndex: number;
+  };
   private join: string;
   private cap: string;
   private miterLimit: number;
@@ -58,17 +64,15 @@ export default class ExtrudePolyline {
     this.miterLimit = opts.miterLimit || 10;
     this.thickness = opts.thickness || 1;
     this.dash = opts.dash || false;
-  }
-  public extrude(points: number[][]) {
-    const complex: {
-      positions: number[];
-      indices: number[];
-      normals: number[];
-    } = {
+    this.complex = {
       positions: [],
       indices: [],
       normals: [],
+      startIndex: 0,
     };
+  }
+  public extrude(points: number[][]) {
+    const complex = this.complex;
     if (points.length <= 1) {
       return complex;
     }
@@ -77,7 +81,8 @@ export default class ExtrudePolyline {
     this.normal = null;
     this.totalDistance = 0;
     const total = points.length;
-    for (let i = 1, count = 0; i < total; i++) {
+    let count = complex.startIndex;
+    for (let i = 1; i < total; i++) {
       const last = points[i - 1] as vec2;
       const cur = points[i] as vec2;
       const next = i < points.length - 1 ? points[i + 1] : null;
@@ -93,7 +98,7 @@ export default class ExtrudePolyline {
         complex.positions[i * 6 + 5] = this.totalDistance;
       }
     }
-
+    complex.startIndex = complex.positions.length / 6;
     return complex;
   }
   private segment(

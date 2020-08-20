@@ -247,6 +247,25 @@ scene.setZoomAndCenter(zoom, center);
 - zoom {number}
 - center {LngLat}
 
+### setMapStatus
+
+参数 :
+
+```javascript
+ IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+```
+
+```javascript
+scene.setMapStatus({ dragEnable: false });
+```
+
 ### setRotation
 
 设置地图顺时针旋转角度，旋转原点为地图容器中心点，取值范围 [0-360]

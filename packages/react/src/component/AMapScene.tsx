@@ -32,13 +32,34 @@ const AMapScene = React.memo((props: IMapSceneConig) => {
       sceneInstance.destroy();
     };
   }, []);
+  // 更新地图样式
   useEffect(() => {
-    if (!scene) {
-      return;
+    if (scene && map.style) {
+      scene.setMapStyle(map.style);
     }
-    scene.setMapStyle(map.style);
-  }, [map.style]);
+  }, [JSON.stringify(map.style)]);
 
+  useEffect(() => {
+    if (scene && map.zoom) {
+      scene.setZoom(map.zoom);
+    }
+  }, [map.zoom]);
+
+  useEffect(() => {
+    if (scene && map.center) {
+      scene.setCenter(map.center);
+    }
+  }, [JSON.stringify(map.center)]);
+  useEffect(() => {
+    if (scene && map.pitch) {
+      scene.setPitch(map.pitch);
+    }
+  }, [map.pitch]);
+  useEffect(() => {
+    if (scene && map.rotation) {
+      scene.setRotation(map.rotation);
+    }
+  }, [map.rotation]);
   return (
     <SceneContext.Provider value={scene}>
       {createElement(
