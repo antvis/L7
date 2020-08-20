@@ -38,7 +38,7 @@ export default class ImageModel extends BaseModel {
   }
 
   public clearModels() {
-    if(this.texture){
+    if (this.texture) {
       this.texture.destroy();
     }
     this.iconService.off('imageUpdate', this.updateTexture);
