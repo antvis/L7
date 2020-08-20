@@ -14,7 +14,6 @@ export default class HexagonLayerDemo extends React.Component {
     }
   }
   public async componentDidMount() {
-    const testPoint: [number, number] = [113.868222, 22.506306];
 
     const scene = new Scene({
       id: 'map',
