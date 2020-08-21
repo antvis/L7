@@ -65,11 +65,10 @@ export default class HexagonLayerDemo extends React.Component {
               ].reverse(),
             )
             .style({
-              coverage: 0.9,
+              coverage: 1,
               angle: 0,
             });
           scene.addLayer(pointLayer);
-          console.log(pointLayer.getSource());
           this.scene = scene;
         });
     });
