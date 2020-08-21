@@ -14,7 +14,6 @@ export default class HexagonLayerDemo extends React.Component {
     }
   }
   public async componentDidMount() {
-
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
