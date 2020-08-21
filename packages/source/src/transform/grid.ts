@@ -2,7 +2,7 @@
  * 生成四边形热力图
  */
 import { IParserData, ITransform } from '@antv/l7-core';
-import { Satistics } from '@antv/l7-utils';
+import { aProjectFlat, Satistics } from '@antv/l7-utils';
 
 interface IGridHash {
   [key: string]: any;
@@ -16,12 +16,13 @@ const R_EARTH = 6378000;
 export function aggregatorToGrid(data: IParserData, option: ITransform) {
   const dataArray = data.dataArray;
   const { size = 10 } = option;
+  const pixlSize = ((size / (2 * Math.PI * R_EARTH)) * (256 << 20)) / 2;
   const { gridHash, gridOffset } = _pointsGridHash(dataArray, size);
   const layerData = _getGridLayerDataFromGridHash(gridHash, gridOffset, option);
   return {
-    yOffset: gridOffset.yOffset / 2,
-    xOffset: gridOffset.xOffset / 2,
-    radius: gridOffset.xOffset,
+    yOffset: pixlSize,
+    xOffset: pixlSize,
+    radius: pixlSize,
     type: 'grid',
     dataArray: layerData,
   };
@@ -40,7 +41,6 @@ function _pointsGridHash(dataArray: any[], size: number) {
     }
   }
   const centerLat = (latMin + latMax) / 2;
-  // const centerLat = 34.54083;
   const gridOffset = _calculateGridLatLonOffset(size, centerLat);
   if (gridOffset.xOffset <= 0 || gridOffset.yOffset <= 0) {
     return { gridHash: {}, gridOffset };
@@ -95,10 +95,10 @@ function _getGridLayerDataFromGridHash(
     }
     Object.assign(item, {
       _id: i,
-      coordinates: [
+      coordinates: aProjectFlat([
         -180 + gridOffset.xOffset * (lonIdx + 0.5),
         -90 + gridOffset.yOffset * (latIdx + 0.5),
-      ],
+      ]),
       rawData: gridHash[key].points,
       count: gridHash[key].count,
     });
