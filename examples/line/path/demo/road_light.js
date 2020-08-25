@@ -11,16 +11,17 @@ const scene = new Scene({
     style: 'light'
   })
 });
-
-fetch(
-  'https://gw.alipayobjects.com/os/basement_prod/0d2f0113-f48b-4db9-8adc-a3937243d5a3.json'
-)
-  .then(res => res.json())
-  .then(data => {
-    const layer = new LineLayer({})
-      .source(data)
-      .size(1.5)
-      .shape('line')
-      .color('标准名称', [ '#5B8FF9', '#5CCEA1', '#5D7092' ]);
-    scene.addLayer(layer);
-  });
+scene.on('loaded', () => {
+  fetch(
+    'https://gw.alipayobjects.com/os/basement_prod/0d2f0113-f48b-4db9-8adc-a3937243d5a3.json'
+  )
+    .then(res => res.json())
+    .then(data => {
+      const layer = new LineLayer({})
+        .source(data)
+        .size(1.5)
+        .shape('line')
+        .color('标准名称', [ '#5B8FF9', '#5CCEA1', '#5D7092' ]);
+      scene.addLayer(layer);
+    });
+});

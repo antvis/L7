@@ -78,12 +78,36 @@ module.exports = {
         order: 1
       },
       {
+        slug: 'api/district',
+        title: {
+          zh: '行政区划',
+          en: 'District'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/draw',
+        title: {
+          zh: '绘制组件',
+          en: 'Draw Component'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/react',
+        title: {
+          zh: 'React 组件',
+          en: 'React Component'
+        },
+        order: 2
+      },
+      {
         slug: 'api/layer',
         title: {
           zh: '图层 Layer',
           en: 'Layer'
         },
-        order: 3
+        order: 5
       },
       {
         slug: 'api/layer/point_layer',
@@ -147,7 +171,7 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source'
         },
-        order: 2
+        order: 5
       },
       {
         slug: 'api/component',
@@ -155,7 +179,7 @@ module.exports = {
           zh: '组件 Component',
           en: 'Component'
         },
-        order: 4
+        order: 6
       }
     ],
     examples: [
@@ -165,6 +189,30 @@ module.exports = {
         title: {
           zh: '官方精品库',
           en: 'Featured'
+        }
+      },
+      {
+        slug: 'react',
+        icon: 'map',
+        title: {
+          zh: 'React 组件',
+          en: 'React Demo'
+        }
+      },
+      {
+        slug: 'district',
+        icon: 'map',
+        title: {
+          zh: '行政区划',
+          en: 'L7 District'
+        }
+      },
+      {
+        slug: 'draw',
+        icon: 'map',
+        title: {
+          zh: '绘制组件',
+          en: 'L7 Draw'
         }
       },
       {

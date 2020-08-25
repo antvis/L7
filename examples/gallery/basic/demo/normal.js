@@ -10,23 +10,24 @@ const scene = new Scene({
     zoom: 11
   })
 });
+scene.on('loaded', () => {
+  fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
+    .then(res => res.text())
+    .then(data => {
+      const pointLayer = new PointLayer({})
+        .source(data, {
+          parser: {
+            type: 'csv',
+            y: 'lat',
+            x: 'lng'
+          }
+        })
+        .size(0.5)
+        .color('#080298')
+        .style({
+          opacity: 1
+        });
 
-fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
-  .then(res => res.text())
-  .then(data => {
-    const pointLayer = new PointLayer({})
-      .source(data, {
-        parser: {
-          type: 'csv',
-          y: 'lat',
-          x: 'lng'
-        }
-      })
-      .size(0.5)
-      .color('#080298')
-      .style({
-        opacity: 1
-      });
-
-    scene.addLayer(pointLayer);
-  });
+      scene.addLayer(pointLayer);
+    });
+});

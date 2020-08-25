@@ -16,7 +16,7 @@ const imageSize = 64;
 @injectable()
 export default class IconService extends EventEmitter implements IIconService {
   public canvasHeight: number;
-  private textrure: ITexture2D;
+  private texture: ITexture2D;
   private canvas: HTMLCanvasElement;
   private iconData: IIcon[];
   private iconMap: IICONMap;
@@ -58,7 +58,7 @@ export default class IconService extends EventEmitter implements IIconService {
   }
 
   public getTexture(): ITexture2D {
-    return this.textrure;
+    return this.texture;
   }
 
   public getIconMap() {

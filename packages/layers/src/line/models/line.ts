@@ -22,8 +22,11 @@ export default class LineModel extends BaseModel {
     const {
       opacity,
       lineType = 'solid',
-      dashArray = [10, 5],
+      dashArray = [10, 5, 0, 0],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (dashArray.length === 2) {
+      dashArray.push(0, 0);
+    }
     return {
       u_opacity: opacity || 1.0,
       u_line_type: lineStyleObj[lineType],
@@ -38,6 +41,10 @@ export default class LineModel extends BaseModel {
     };
   }
 
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
+
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
@@ -45,7 +52,9 @@ export default class LineModel extends BaseModel {
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: LineTriangulation,
+        primitive: gl.TRIANGLES,
         blend: this.getBlend(),
+        depth: { enable: false },
       }),
     ];
   }
@@ -63,7 +72,7 @@ export default class LineModel extends BaseModel {
         name: 'a_Distance',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
@@ -85,7 +94,7 @@ export default class LineModel extends BaseModel {
         name: 'a_Total_Distance',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
@@ -138,6 +147,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
+        // @ts-ignore
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -157,7 +167,7 @@ export default class LineModel extends BaseModel {
         name: 'a_Miter',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },

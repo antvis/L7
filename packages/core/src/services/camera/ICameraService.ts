@@ -16,6 +16,7 @@ export interface IViewport {
   getProjectionMatrix(): number[];
   getViewMatrix(): number[];
   getViewMatrixUncentered(): number[];
+  getViewProjectionMatrixUncentered(): number[];
   getViewProjectionMatrix(): number[];
   getZoom(): number;
   getZoomScale(): number;

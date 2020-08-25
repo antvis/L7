@@ -1,5 +1,5 @@
 ---
-title: Marker
+title: Marker 标注
 order: 3
 ---
 
@@ -20,15 +20,17 @@ Marker
 - offsets    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
 - extData 用户自定义属性，支持任意数据类型，存储 marker 属性信息
 
+### 添加到 Scene
+
+```javascript
+scene.addMarker(marker);
+```
+
 ## 方法
 
 #### setLnglat
 
 设置 marker 经纬度位置
-
-#### addTo
-
-将 marker 添加到地图 Scene
 
 #### remove
 
@@ -89,11 +91,12 @@ var el = document.createElement('label');
 el.className = 'labelclass';
 el.textContent = data[i].v;
 el.style.background = getColor(data[i].v);
-new L7.Marker({
+
+const marker = new L7.Marker({
   element: el,
-})
-  .setLnglat([data[i].x * 1, data[i].y])
-  .addTo(scene);
+}).setLnglat([data[i].x * 1, data[i].y]);
+
+scene.addMarker(marker);
 ```
 
 #### 设置 popup
@@ -107,8 +110,7 @@ new L7.Marker({
   element: el,
 })
   .setLnglat(item.coordinates)
-  .setPopup(popup)
-  .addTo(scene);
+  .setPopup(popup);
 ```
 
 ## 事件

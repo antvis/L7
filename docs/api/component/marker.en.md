@@ -30,10 +30,6 @@ scene.addMarker(marker);
 
 设置 marker 经纬度位置
 
-#### addTo
-
-将 marker 添加到地图 Scene
-
 #### remove
 
 移除 marker
@@ -73,9 +69,7 @@ el.textContent = data[i].v;
 el.style.background = getColor(data[i].v);
 new L7.Marker({
   element: el,
-})
-  .setLnglat([data[i].x * 1, data[i].y])
-  .addTo(scene);
+}).setLnglat([data[i].x * 1, data[i].y]);
 ```
 
 #### 设置 popup

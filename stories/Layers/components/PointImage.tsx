@@ -33,24 +33,33 @@ export default class PointImage extends React.Component {
     );
     scene.addImage(
       '02',
-      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o16fSIvcKdUAAAAAAAAAAABkARQnAQ',
+      'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
     );
-
-    const imageLayer = new PointLayer({})
-      .source(await response.json(), {
+    const i = 0;
+    const data = await response.json();
+    const newData = data.map((item: any) => {
+      item.type = '00';
+      return item;
+    });
+    const imageLayer = new PointLayer()
+      .source(newData, {
         parser: {
           type: 'json',
           x: 'longitude',
           y: 'latitude',
         },
       })
-      .shape('name', ['00', '01', '02'])
+      .shape('type', (v: any) => {
+        return v;
+      })
+      // .shape('triangle')
+      // .color('red')
       .active(true)
-      .size(30);
+      .size(20);
+    // imageLayer.on('click', (e) => {
+    //   console.log(e);
+    // });
     scene.addLayer(imageLayer);
-    imageLayer.on('click', (e) => {
-      console.log(e);
-    });
   }
 
   public render() {
@@ -63,6 +72,7 @@ export default class PointImage extends React.Component {
           left: 0,
           right: 0,
           bottom: 0,
+          transform: 'scale(0.8)',
         }}
       />
     );

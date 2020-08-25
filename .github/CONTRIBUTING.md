@@ -82,3 +82,18 @@ yarn add -W -D typescript jest
 ```bash
 yarn commit
 ```
+
+## 发布
+
+### 设置版本号
+
+```bash
+yarn run version:prerelease
+```
+设置完成后需要commit一下代码
+
+### 发布
+ 
+yarn run release
+
+

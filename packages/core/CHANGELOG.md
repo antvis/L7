@@ -3,6 +3,107 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
+
+
+### Bug Fixes
+
+* 绘制组件高德地图mousedown事件不能监听的问题 ([1eb3313](https://github.com/antvis/L7/commit/1eb3313919b2c7c9162bee70a249846b897ef4b4))
+* 采用非偏移坐标系坐标系解决高德地图中国区域抖动的问题 ([124a1d2](https://github.com/antvis/L7/commit/124a1d27aa97c9a6af1de6d041785c420f02ce4c))
+
+
+
+
+
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+
+### Bug Fixes
+
+* marker event ([ce6eefd](https://github.com/antvis/L7/commit/ce6eefdeb87935f48d7ca2779837270f1498f3a5))
+
+
+
+
+
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+
+### Bug Fixes
+
+* 拾取 invalid x offset ([8282007](https://github.com/antvis/L7/commit/82820077f40998e156337b266623309eff6b2d60))
+
+
+
+
+
+## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
+
+**Note:** Version bump only for package @antv/l7-core
+
+
+
+
+
+## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
+
+
+### Bug Fixes
+
+* picking ([d6c6694](https://github.com/antvis/L7/commit/d6c66941323fb21e6810e1d72d5b43e40867be71))
+
+
+
+
+
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+
+### Bug Fixes
+
+* ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+* ios touchstart && double touch ([4fc3a11](https://github.com/antvis/L7/commit/4fc3a11de953918a9f5ba13d767c00429d1711cd))
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+
+
+
+
+
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+
+### Bug Fixes
+
+* ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+* ios touchstart && double touch ([4fc3a11](https://github.com/antvis/L7/commit/4fc3a11de953918a9f5ba13d767c00429d1711cd))
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+
+
+
+
+
+## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
+
+
+### Bug Fixes
+
+* ios 12 点击事件问题 & regl 版本锁定 ([ad52e8e](https://github.com/antvis/L7/commit/ad52e8e8fde4a7b4b3e16d86a6035bd7c07fb80c))
+* mapbox 光照问题 ([20d2a6d](https://github.com/antvis/L7/commit/20d2a6d8b803ca3ad87cc1ef69a59d1e3d348cef))
+
+
+
+
+
+## [2.0.34](https://github.com/antvis/L7/compare/v2.0.32...v2.0.34) (2020-03-02)
+
+**Note:** Version bump only for package @antv/l7-core
+
+
+
+
+
 # [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
 
 

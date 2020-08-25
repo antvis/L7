@@ -11,6 +11,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
+    this.models = this.layerModel.initModels();
+  }
+  public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
   protected getConfigSchema() {
@@ -30,9 +33,10 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       normal: {
         blend: 'additive',
       },
-      fill: {},
+      fill: { blend: 'normal' },
       extrude: {},
       image: {},
+      icon: {},
       text: {
         blend: 'normal',
       },
@@ -64,6 +68,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
       if (iconMap.hasOwnProperty(shape as string)) {
         return 'image';
+      }
+      if (this.fontService.getGlyph(shape as string) !== '') {
+        return 'icon';
       }
       return 'text';
     }

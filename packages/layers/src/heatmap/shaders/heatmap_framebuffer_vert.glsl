@@ -8,11 +8,12 @@ varying vec2 v_extrude;
 varying float v_weight;
 uniform mat4 u_ModelMatrix;
 
+#define GAUSS_COEF  0.3989422804014327
+
 #pragma include "projection"
 
 void main(){
     v_weight = a_Size;
-    float GAUSS_COEF = 0.3989422804014327;
     float ZERO = 1.0 / 255.0 / 16.0;
     float extrude_x = a_Dir.x * 2.0 -1.0;
     float extrude_y = a_Dir.y * 2.0 -1.0;

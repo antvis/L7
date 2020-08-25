@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
@@ -22,6 +22,9 @@ export default class Point3D extends React.Component {
       }),
     });
     const pointLayer = new PointLayer();
+    scene.on('resize', () => {
+      console.log('resize');
+    });
     pointLayer
       .source(data, {
         cluster: true,
@@ -34,7 +37,6 @@ export default class Point3D extends React.Component {
     setTimeout(() => {
       pointLayer.size([20, 100]);
       scene.render();
-      console.log('update size');
     }, 2000);
     scene.render();
     this.scene = scene;

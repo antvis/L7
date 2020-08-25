@@ -1,3 +1,4 @@
+const path = require("path");
 module.exports = ({ config }) => {
 
   // config.module.rules.push({
@@ -12,32 +13,34 @@ module.exports = ({ config }) => {
   //     options: { inline: true, fallback: false }
   //   }
   // });
+  config.module.rules =[];
 
-  config.module.rules.push({
+  config.module.rules.push(
+
+    {
+
     test: /\.(ts|tsx)$/,
     loader: require.resolve('awesome-typescript-loader'),
+
   });
 
-  config.module.rules.push({
-    test: /\.stories\.tsx?$/,
-    // loaders: [
-    //   {
-    //     loader: require.resolve('@storybook/addon-storysource/loader'),
-    //     options: { parser: 'typescript' },
-    //   },
-    // ],
+  config.module.rules.push(
+  {
+    test: /.css$/,
+    use:  ["style-loader", "css-loader", 'sass-loader'],
+
     enforce: 'pre',
-  },{
-    test: /\.stories\.css?$/,
-    use: ['style-loader', 'css-loader'],
   },
   {
     test: /\.stories\.svg$/,
     loader: 'svg-inline-loader'
   }
   );
+  config.resolve.alias = {
+    '@antv/l7-district': path.resolve(__dirname, '../packages/boundary/src'),
+  }
 
-  config.resolve.extensions.push('.ts', '.tsx', '.js', '.glsl');
+  config.resolve.extensions.push('.ts', '.tsx', 'css', '.js', '.glsl');
 
   return config;
 };

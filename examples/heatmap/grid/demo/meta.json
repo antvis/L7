@@ -5,6 +5,11 @@
   },
   "demos": [
     {
+      "filename": "grid_world.js",
+      "title": "网格世界地图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*1PeGSboLGUUAAAAAAAAAAABkARQnAQ"
+    },
+    {
       "filename": "china.js",
       "title": "网格热力图",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*XPBuSIPPgsgAAAAAAAAAAABkARQnAQ"

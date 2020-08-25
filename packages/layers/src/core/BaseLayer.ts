@@ -1,8 +1,12 @@
+// @ts-ignore
+import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import {
   BlendType,
   gl,
   IActiveOption,
   IAnimateOption,
+  ICameraService,
+  ICoordinateSystemService,
   IDataState,
   IEncodeFeature,
   IFontService,
@@ -31,6 +35,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  ScaleAttributeType,
   ScaleTypeName,
   ScaleTypes,
   StyleAttributeField,
@@ -44,7 +49,6 @@ import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
 // @ts-ignore
 import mergeJsonSchemas from 'merge-json-schemas';
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from 'tapable';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import baseLayerSchema from './schema';
@@ -64,7 +68,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public maxZoom: number;
   public inited: boolean = false;
   public layerModelNeedUpdate: boolean = false;
-  public pickedFeatureID: number = -1;
+  public pickedFeatureID: number | null = null;
+  public selectedFeatureID: number | null = null;
+  public styleNeedUpdate: boolean = false;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -75,19 +81,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   };
   // 生命周期钩子
   public hooks = {
-    init: new SyncBailHook<void, boolean | void>(),
-    afterInit: new SyncBailHook<void, boolean | void>(),
-    beforeRender: new SyncBailHook<void, boolean | void>(),
-    beforeRenderData: new SyncWaterfallHook<void | boolean>(['data']),
-    afterRender: new SyncHook<void>(),
-    beforePickingEncode: new SyncHook<void>(),
-    afterPickingEncode: new SyncHook<void>(),
-    beforeHighlight: new SyncHook<[number[]]>(['pickedColor']),
-    afterHighlight: new SyncHook<void>(),
-    beforeSelect: new SyncHook<[number[]]>(['pickedColor']),
-    afterSelect: new SyncHook<void>(),
-    beforeDestroy: new SyncHook<void>(),
-    afterDestroy: new SyncHook<void>(),
+    init: new SyncBailHook(),
+    afterInit: new SyncBailHook(),
+    beforeRender: new SyncBailHook(),
+    beforeRenderData: new SyncWaterfallHook(),
+    afterRender: new SyncHook(),
+    beforePickingEncode: new SyncHook(),
+    afterPickingEncode: new SyncHook(),
+    beforeHighlight: new SyncHook(['pickedColor']),
+    afterHighlight: new SyncHook(),
+    beforeSelect: new SyncHook(['pickedColor']),
+    afterSelect: new SyncHook(),
+    beforeDestroy: new SyncHook(),
+    afterDestroy: new SyncHook(),
   };
 
   // 待渲染 model 列表
@@ -114,6 +120,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   @lazyInject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
+
+  protected cameraService: ICameraService;
+
+  protected coordinateService: ICoordinateSystemService;
 
   protected iconService: IIconService;
 
@@ -169,6 +179,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   private animateStartTime: number;
 
   private aniamateStatus: boolean = false;
+
+  // private pickingPassRender: IPass<'pixelPicking'>;
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
@@ -228,7 +240,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
-    this.configService.setLayerConfig(sceneId, this.id, {});
+    const { enableMultiPassRenderer = false } = this.rawConfig;
+    this.configService.setLayerConfig(sceneId, this.id, {
+      enableMultiPassRenderer,
+    });
 
     // 全局容器服务
 
@@ -244,6 +259,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       TYPES.IInteractionService,
     );
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
+    this.cameraService = this.container.get<ICameraService>(
+      TYPES.ICameraService,
+    );
+    this.coordinateService = this.container.get<ICoordinateSystemService>(
+      TYPES.ICoordinateSystemService,
+    );
     this.postProcessingPassFactory = this.container.get(
       TYPES.IFactoryPostProcessingPass,
     );
@@ -297,6 +318,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // 触发 init 生命周期插件
     this.hooks.init.call();
+    // this.pickingPassRender = this.normalPassFactory('pixelPicking');
+    // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
 
     // 触发初始化完成事件;
@@ -360,7 +383,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     this.updateStyleAttribute('filter', field, values, updateOptions);
-    this.dataState.dataMappingNeedUpdate = true;
     return this;
   }
 
@@ -413,10 +435,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public setData(data: any, options?: ISourceCFG) {
     if (this.inited) {
-      this.layerSource.setData(data);
+      this.layerSource.setData(data, options);
     } else {
       this.on('inited', () => {
-        this.layerSource.setData(data);
+        this.layerSource.setData(data, options);
       });
     }
 
@@ -448,10 +470,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     if (this.container) {
       this.updateLayerConfig(this.rawConfig);
+      this.styleNeedUpdate = true;
     }
     return this;
   }
-  public scale(field: ScaleTypeName | IScaleOptions, cfg: IScale) {
+  public scale(field: string | IScaleOptions, cfg: IScale) {
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -463,11 +486,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
   public render(): ILayer {
-    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
-      this.multiPassRenderer.render();
-    } else {
-      this.renderModels();
-    }
+    // if (
+    //   this.needPick() &&
+    //   this.multiPassRenderer &&
+    //   this.multiPassRenderer.getRenderFlag()
+    // ) {
+    //   this.multiPassRenderer.render();
+    // } else if (this.needPick() && this.multiPassRenderer) {
+    //   this.renderModels();
+    // } else {
+    //   this.renderModels();
+    // }
+    this.renderModels();
+    // this.multiPassRenderer.render();
+    // this.renderModels();
     return this;
   }
 
@@ -504,14 +536,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().highlightColor,
       });
-      this.hooks.beforeSelect.callAsync(
-        encodePickingColor(id as number) as number[],
-        () => {
+      this.hooks.beforeSelect
+        .call(encodePickingColor(id as number) as number[])
+        // @ts-ignore
+        .then(() => {
           setTimeout(() => {
             this.reRender();
           }, 1);
-        },
-      );
+        });
     }
   }
 
@@ -549,14 +581,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
           ? options.color
           : this.getLayerConfig().selectColor,
       });
-      this.hooks.beforeSelect.callAsync(
-        encodePickingColor(id as number) as number[],
-        () => {
+      this.hooks.beforeSelect
+        .call(encodePickingColor(id as number) as number[])
+        // @ts-ignore
+        .then(() => {
           setTimeout(() => {
             this.reRender();
           }, 1);
-        },
-      );
+        });
     }
   }
   public setBlend(type: keyof typeof BlendType): void {
@@ -593,6 +625,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public getCurrentPickId(): number | null {
     return this.currentPickId;
+  }
+
+  public setCurrentSelectedId(id: number) {
+    this.selectedFeatureID = id;
+  }
+
+  public getCurrentSelectedId(): number | null {
+    return this.selectedFeatureID;
   }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
@@ -636,7 +676,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   /**
    * zoom to layer Bounds
    */
-  public fitBounds(): ILayer {
+  public fitBounds(fitBoundsOptions?: unknown): ILayer {
     if (!this.inited) {
       this.updateLayerConfig({
         autoFit: true,
@@ -645,10 +685,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     const source = this.getSource();
     const extent = source.extent;
-    this.mapService.fitBounds([
-      [extent[0], extent[1]],
-      [extent[2], extent[3]],
-    ]);
+    const isValid = extent.some((v) => Math.abs(v) === Infinity);
+    if (isValid) {
+      return this;
+    }
+    this.mapService.fitBounds(
+      [
+        [extent[0], extent[1]],
+        [extent[2], extent[3]],
+      ],
+      fitBoundsOptions,
+    );
     return this;
   }
 
@@ -662,7 +709,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 清除所有属性以及关联的 vao
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
-    this.models.forEach((model) => model.destroy());
+    // this.models.forEach((model) => model.destroy());
 
     this.hooks.afterDestroy.call();
 
@@ -679,7 +726,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public clear() {
     this.styleAttributeService.clearAllAttributes();
     // 销毁所有 model
+  }
+  public clearModels() {
     this.models.forEach((model) => model.destroy());
+    this.layerModel.clearModels();
   }
 
   public isDirty() {
@@ -727,6 +777,30 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       ]);
     }
     return this.configSchema;
+  }
+  public getLegendItems(name: string): any {
+    const scale = this.styleAttributeService.getLayerAttributeScale(name);
+    if (scale) {
+      if (scale.ticks) {
+        const items = scale.ticks().map((item: any) => {
+          return {
+            value: item,
+            [name]: scale(item),
+          };
+        });
+        return items;
+      } else if (scale.invertExtent) {
+        const items = scale.range().map((item: any) => {
+          return {
+            value: scale.invertExtent(item),
+            [name]: item,
+          };
+        });
+        return items;
+      }
+    } else {
+      return [];
+    }
   }
 
   public pick({ x, y }: { x: number; y: number }) {
@@ -789,17 +863,41 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.layerService.clock.getElapsedTime() - this.animateStartTime;
   }
 
+  public needPick(type: string): boolean {
+    const {
+      enableHighlight = true,
+      enableSelect = true,
+    } = this.getLayerConfig();
+    // 判断layer是否监听事件;
+    let isPick =
+      this.eventNames().indexOf(type) !== -1 ||
+      this.eventNames().indexOf('un' + type) !== -1;
+    if ((type === 'click' || type === 'dblclick') && enableSelect) {
+      isPick = true;
+    }
+    if (
+      type === 'mousemove' &&
+      (enableHighlight ||
+        this.eventNames().indexOf('mouseenter') !== -1 ||
+        this.eventNames().indexOf('unmousemove') !== -1 ||
+        this.eventNames().indexOf('mouseout') !== -1)
+    ) {
+      isPick = true;
+    }
+    return this.isVisible() && isPick;
+  }
+
   public buildModels() {
     throw new Error('Method not implemented.');
   }
-
-  protected getConfigSchema() {
+  public rebuildModels() {
     throw new Error('Method not implemented.');
   }
 
-  protected renderModels() {
-    if (this.layerModelNeedUpdate) {
+  public renderModels() {
+    if (this.layerModelNeedUpdate && this.layerModel) {
       this.models = this.layerModel.buildModels();
+      this.hooks.beforeRender.call();
       this.layerModelNeedUpdate = false;
     }
     this.models.forEach((model) => {
@@ -808,6 +906,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       });
     });
     return this;
+  }
+
+  protected getConfigSchema() {
+    throw new Error('Method not implemented.');
   }
 
   protected getModelType(): unknown {
@@ -819,6 +921,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
+    const { autoFit, fitBoundsOptions } = this.getLayerConfig();
+    if (autoFit) {
+      this.fitBounds(fitBoundsOptions);
+    }
+
+    this.emit('dataUpdate');
     this.reRender();
   };
 

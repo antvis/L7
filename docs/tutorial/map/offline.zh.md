@@ -70,14 +70,12 @@ const scene = new Scene({
 
 blank 样式以为无底图样式，这种样式下就不需要使用mapbox服务，也不需要使用mapbox的token了
 
-<a name="cGfei"></a>
 #### 本地化雪碧图
 如果你需要使用mapbox字段的图片标注，你需要本地化雪碧图资源<br />只需要下载两个文件即可<br />sprite.json 主要记录每个图表在大图上位置<br />sprite.png  每个小图标组成的大图
 
 在线雪碧图服务地址:<br />[https://lzxue.github.io/font-glyphs/sprite/sprite](https://lzxue.github.io/font-glyphs/sprite/sprite)
 
 
-<a name="KWyGs"></a>
 #### 本地化字体
  如果需要使用mapbox文章标注功能需要本地化，如果你的渲染能力都是用L7实现的，这个过程也是不需要的。
 
@@ -94,7 +92,6 @@ _如果你有新的字体需求可提PR，帮你自动生成在线可用的字�
 
 **你也可以使用在线服务**<br />**<br />github服务<br />[https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf](https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf)<br />蚂蚁CDN：<br />[https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf](https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf)
 
-<a name="oeqps"></a>
 #### 地图服务本地化
 1.加载[第三方底图](https://github.com/htoooth/Leaflet.ChineseTmsProviders)，栅格瓦片图层做底图，如天地图，高德，google的栅格瓦片都可以<br />2.下载[opensteetmap ](https://openmaptiles.com/downloads/planet/)矢量瓦片地图做底图<br />3.自己业务数据发布底图服务，或者矢量瓦片服务。
 
@@ -135,5 +132,4 @@ const scene = new Scene({
 });
 ```
 
-离线，无token使用mapbox [demo](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14&hidenavigation=1&theme=dark)<br />![image.png](https://cdn.nlark.com/yuque/0/2019/png/104251/1575463410498-0784ce76-743d-4cc4-8d68-964dfd010925.png#align=left&display=inline&height=514&name=image.png&originHeight=514&originWidth=824&size=156914&status=done&style=none&width=824)
-
+离线，无token使用mapbox [demo](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14&hidenavigation=1&theme=dark)

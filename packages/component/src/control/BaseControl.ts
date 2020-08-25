@@ -83,6 +83,10 @@ export default class Control extends EventEmitter {
   public onAdd(): HTMLElement {
     throw new Error('Method not implemented.');
   }
+
+  public onRemove(): void {
+    throw new Error('Method not implemented.');
+  }
   public hide() {
     const container = this.container;
     DOM.addClass(container, 'l7-control-hide');
@@ -98,6 +102,7 @@ export default class Control extends EventEmitter {
       return this;
     }
     DOM.remove(this.container);
+    this.onRemove();
   }
   public _refocusOnMap(e: MouseEvent) {
     // if map exists and event is not a keyboard event

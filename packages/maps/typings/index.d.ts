@@ -1,6 +1,4 @@
 /// <reference types="amap-js-api" />
-/// <reference path="../../../node_modules/eventemitter3/index.d.ts" />
-
 import { IControl } from 'mapbox-gl';
 
 interface Window {

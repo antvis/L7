@@ -53,23 +53,11 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
-      flipY: true,
+      flipY: false,
     });
     this.models = [this.buildRasterModel()];
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
-  protected renderModels() {
+  public renderModels() {
     const { opacity, heightRatio = 10 } = this.getLayerConfig();
     const parserDataItem = this.getSource().data.dataArray[0];
     const { coordinates, width, height, min, max } = parserDataItem;
@@ -91,6 +79,18 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
 
     return this;
   }
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
+  }
+
   private buildRasterModel() {
     const source = this.getSource();
     const sourceFeature = source.data.dataArray[0];

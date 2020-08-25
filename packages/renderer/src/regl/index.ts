@@ -15,6 +15,7 @@ import {
   IModel,
   IModelInitializationOptions,
   IReadPixelsOptions,
+  IRenderConfig,
   IRendererService,
   ITexture2D,
   ITexture2DInitializationOptions,
@@ -35,31 +36,42 @@ import ReglTexture2D from './ReglTexture2D';
 export default class ReglRendererService implements IRendererService {
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
+  private canvas: HTMLCanvasElement;
+  private width: number;
+  private height: number;
+  private isDirty: boolean;
 
-  public async init($container: HTMLDivElement): Promise<void> {
-    this.$container = $container;
+  public async init(
+    canvas: HTMLCanvasElement,
+    cfg: IRenderConfig,
+  ): Promise<void> {
+    // this.$container = $container;
+    this.canvas = canvas;
     // tslint:disable-next-line:typedef
     this.gl = await new Promise((resolve, reject) => {
       regl({
-        container: $container,
+        canvas: this.canvas,
         attributes: {
           alpha: true,
           // use TAA instead of MSAA
           // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-          antialias: true,
+          antialias: cfg.antialias,
           premultipliedAlpha: true,
+          preserveDrawingBuffer: cfg.preserveDrawingBuffer,
         },
         // TODO: use extensions
         extensions: [
           'OES_element_index_uint',
-          'EXT_blend_minmax',
           'OES_standard_derivatives', // wireframe
-          // 'OES_texture_float', // shadow map 兼容性问题
-          'WEBGL_depth_texture',
-          'angle_instanced_arrays',
-          'EXT_texture_filter_anisotropic', // VSM shadow map
+          'angle_instanced_arrays', // VSM shadow map
         ],
-        optionalExtensions: ['oes_texture_float_linear', 'OES_texture_float'],
+        optionalExtensions: [
+          'oes_texture_float_linear',
+          'OES_texture_float',
+          'EXT_texture_filter_anisotropic',
+          'EXT_blend_minmax',
+          'WEBGL_depth_texture',
+        ],
         profile: true,
         onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
           if (err || !r) {
@@ -131,14 +143,9 @@ export default class ReglRendererService implements IRendererService {
   }) => {
     // use WebGL context directly
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
-    const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
-    if (renderCanvas) {
-      renderCanvas.width = width;
-      renderCanvas.height = height;
-      renderCanvas.style.width = width / 2 + 'px';
-      renderCanvas.style.height = height / 2 + 'px';
-    }
     this.gl._gl.viewport(x, y, width, height);
+    this.width = width;
+    this.height = height;
     this.gl._refresh();
   };
 
@@ -164,8 +171,50 @@ export default class ReglRendererService implements IRendererService {
   };
 
   public getContainer = () => {
-    return this.$container;
+    return this.canvas?.parentElement;
   };
+
+  public getCanvas = () => {
+    // return this.$container?.getElementsByTagName('canvas')[0] || null;
+    return this.canvas;
+  };
+
+  public getGLContext = () => {
+    return this.gl._gl;
+  };
+
+  public setBaseState() {
+    this.gl({
+      cull: {
+        enable: false,
+        face: 'back',
+      },
+      viewport: {
+        x: 0,
+        y: 0,
+        height: this.width,
+        width: this.height,
+      },
+      blend: {
+        enable: false,
+        equation: 'add',
+      },
+      framebuffer: null,
+    });
+    this.gl._refresh();
+  }
+  public setCustomLayerDefaults() {
+    const gl = this.getGLContext();
+    gl.disable(gl.CULL_FACE);
+  }
+
+  public setDirty(flag: boolean): void {
+    this.isDirty = flag;
+  }
+
+  public getDirty(): boolean {
+    return this.isDirty;
+  }
 
   public destroy = () => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up

@@ -59,8 +59,8 @@ vec3 calc_directional_light(DirectionalLight light, vec3 normal, vec3 viewDir) {
 //   float spec = pow(max(dot(viewDir, reflectDir), 0.0), SHININESS);
 //   // attenuation
 //   float distance = length(light.position - fragPos);
-//   float attenuation = 1.0 / (light.constant + light.linear * distance + 
-//           light.quadratic * (distance * distance));    
+//   float attenuation = 1.0 / (light.constant + light.linear * distance +
+//           light.quadratic * (distance * distance));
 
 //   vec3 ambient = light.ambient * u_Ambient;
 //   vec3 diffuse = light.diffuse * diff * u_Diffuse;

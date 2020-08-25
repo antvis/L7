@@ -31,7 +31,7 @@ export default class ImageModel extends BaseModel {
       u_texture: this.texture,
     };
   }
-  public buildModels() {
+  public initModels() {
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
@@ -57,6 +57,9 @@ export default class ImageModel extends BaseModel {
         blend: this.getBlend(),
       }),
     ];
+  }
+  public buildModels() {
+    return this.initModels();
   }
 
   protected getConfigSchema() {

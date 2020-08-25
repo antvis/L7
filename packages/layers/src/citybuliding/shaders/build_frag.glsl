@@ -42,8 +42,6 @@ float sdRect(vec2 p, vec2 sz) {
 
 void main() {
   gl_FragColor = v_Color;
-  gl_FragColor.a *= u_opacity;
-
   vec3 baseColor = u_baseColor.xyz;
   vec3 brightColor = u_brightColor.xyz;
   vec3 windowColor = u_windowColor.xyz;
@@ -100,5 +98,6 @@ void main() {
 
         gl_FragColor = vec4(foggedColor,1.0);
   }
+  gl_FragColor.a *= u_opacity;
   gl_FragColor = filterColor(gl_FragColor);
 }

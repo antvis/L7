@@ -11,7 +11,7 @@ float calc_lighting(vec4 pos) {
       // //cal light weight
     vec3 viewDir = normalize(u_CameraPosition - worldPos);
 
-    vec3 lightDir = normalize(reverse_offset_normal(vec3(1, 10.5, 12)));
+    vec3 lightDir = normalize(vec3(1, -10.5, 12));
 
     vec3 halfDir = normalize(viewDir+lightDir);
       // //lambert

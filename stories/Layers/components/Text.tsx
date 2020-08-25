@@ -1,7 +1,7 @@
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import * as React from 'react';
 import * as dat from 'dat.gui';
+import * as React from 'react';
 // @ts-ignore
 import data from '../data/data.json';
 export default class TextLayerDemo extends React.Component {
@@ -23,7 +23,7 @@ export default class TextLayerDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'dark',
@@ -39,51 +39,45 @@ export default class TextLayerDemo extends React.Component {
           y: 'w',
         },
       })
-      .shape('m', 'text')
-      .size(12)
-      .color('#fff')
+      .shape('s', 'text')
+      // .shape('circle')
+      .size(18)
+      .filter('t', (t) => {
+        return t < 5;
+      })
+      .color('#f00')
       .style({
-        textAllowOverlap: true,
+        textAllowOverlap: false,
         // fontWeight: 200,
         // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
         // textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
         // spacing: 2, // 字符间距
         // padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-        // stroke: 'red', // 描边颜色
-        // strokeWidth: 2, // 描边宽度
+        stroke: '#fff', // 描边颜色
+        strokeWidth: 1, // 描边宽度
         // strokeOpacity: 1.0,
       });
     scene.addLayer(pointLayer);
-    pointLayer.on('click', (e) => {
-      console.log(e);
-    });
-
     this.scene = scene;
 
     const gui = new dat.GUI();
     this.gui = gui;
     const styleOptions = {
-      textAnchor: 'center',
-      strokeWidth: 1,
+      field: 'w',
+      strokeWidth: 0,
+      stroke: '#fff',
+      textAllowOverlap: false,
       opacity: 1,
+      size: 8,
+      color: '#fff',
+      halo: 0.5,
+      gamma: 2.0,
     };
     const rasterFolder = gui.addFolder('文本可视化');
     rasterFolder
-      .add(styleOptions, 'textAnchor', [
-        'center',
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'top-left',
-        'bottom-right',
-        'bottom-left',
-        'top-right',
-      ])
+      .add(styleOptions, 'field', ['w', 's', 'l', 'm', 'j', 'h'])
       .onChange((anchor: string) => {
-        pointLayer.style({
-          textAnchor: anchor,
-        });
+        pointLayer.shape(anchor, 'text');
         scene.render();
       });
 
@@ -92,6 +86,37 @@ export default class TextLayerDemo extends React.Component {
       .onChange((strokeWidth: number) => {
         pointLayer.style({
           strokeWidth,
+        });
+        // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+        scene.render();
+      });
+
+    rasterFolder.add(styleOptions, 'size', 5, 30).onChange((size: number) => {
+      pointLayer.size(size);
+      // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+      scene.render();
+    });
+
+    rasterFolder.add(styleOptions, 'gamma', 0, 10).onChange((gamma: number) => {
+      pointLayer.style({
+        gamma,
+      });
+      // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+      scene.render();
+    });
+
+    rasterFolder.add(styleOptions, 'halo', 0, 10).onChange((halo: number) => {
+      pointLayer.style({
+        halo,
+      });
+      // pointLayer.setData(pointsData.list.slice(0, strokeWidth));
+      scene.render();
+    });
+    rasterFolder
+      .add(styleOptions, 'textAllowOverlap', 0, 10)
+      .onChange((textAllowOverlap: boolean) => {
+        pointLayer.style({
+          textAllowOverlap,
         });
         scene.render();
       });
@@ -102,7 +127,14 @@ export default class TextLayerDemo extends React.Component {
           opacity,
         });
         scene.render();
+        setTimeout(() => {
+          scene.render();
+        }, 10);
       });
+    rasterFolder.addColor(styleOptions, 'color').onChange((color: string) => {
+      pointLayer.color(color);
+      scene.render();
+    });
     // });
   }
 

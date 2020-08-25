@@ -20,6 +20,9 @@ export default class ImageModel extends BaseModel {
 
   public getUninforms(): IModelUniform {
     const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    if (this.rendererService.getDirty()) {
+      this.texture.bind();
+    }
     return {
       u_opacity: opacity || 1.0,
       u_texture: this.texture,
@@ -27,13 +30,21 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public buildModels(): IModel[] {
+  public initModels(): IModel[] {
     this.registerBuiltinAttributes();
     this.updateTexture();
-    this.iconService.on('imageUpdate', () => {
-      this.updateTexture();
-      this.layer.render(); // TODO 调用全局render
-    });
+    this.iconService.on('imageUpdate', this.updateTexture);
+    return this.buildModels();
+  }
+
+  public clearModels() {
+    if (this.texture) {
+      this.texture.destroy();
+    }
+    this.iconService.off('imageUpdate', this.updateTexture);
+  }
+
+  public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointImage',
@@ -46,7 +57,6 @@ export default class ImageModel extends BaseModel {
       }),
     ];
   }
-
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
@@ -67,7 +77,7 @@ export default class ImageModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
@@ -102,8 +112,15 @@ export default class ImageModel extends BaseModel {
     });
   }
 
-  private updateTexture() {
+  private updateTexture = () => {
     const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
+      return;
+    }
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.LINEAR,
@@ -111,5 +128,5 @@ export default class ImageModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
-  }
+  };
 }

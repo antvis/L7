@@ -90,15 +90,15 @@ const IndexPage = () => {
   const notifications = [
     {
       type: t('推荐'),
-      title: t('如何用L7制作省市下钻疫情地图'),
-      date: '2020.01.31',
-      link: 'https://www.yuque.com/xiaofengcanyue/scpehq/zf094u',
+      title: t('如何制作不一样的疫情世界地图-酷炫、动感的地理可视化'),
+      date: '2020.03.12',
+      link: 'https://www.yuque.com/antv/blog/wigku2',
     },
     {
       type: t('新版发布'),
-      title: t('L7 2.0 正式版'),
-      date: '2020.01.06',
-      link: 'https://www.yuque.com/antv/blog/haygzb',
+      title: t('L7 2.1 正式版'),
+      date: '2020.03.12',
+      link: ' https://www.yuque.com/antv/blog/ows55v',
     },
   ];
 

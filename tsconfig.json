@@ -7,7 +7,7 @@
     "jsx": "react",
     "target": "es5",
     "lib": ["es6", "dom"],
-    "types": ["reflect-metadata", "jest" ],
+    "types": ["reflect-metadata", "jest", "node"],
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -17,10 +17,11 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
+      "@antv/l7-district": ["packages/boundary/src"],
       "@antv/l7-*": ["packages/*/src"],
       "@antv/l7": ["packages/l7/src"],
       "*": ["node_modules", "packages", "typings/*"]
-    }
+    },
   },
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true,

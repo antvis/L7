@@ -40,7 +40,7 @@ export default class Polygon3D extends React.Component {
     const layer = new PolygonLayer({})
       .source(await response.json())
       .shape('extrude')
-      .size('h20', [100, 120, 160, 200, 260, 500])
+      .size('h20', [10, 12, 16, 20, 26, 50])
       .active({ color: 'blue' })
       .color('h20', [
         '#816CAD',

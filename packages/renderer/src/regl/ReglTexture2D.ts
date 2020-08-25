@@ -15,6 +15,8 @@ import {
  */
 export default class ReglTexture2D implements ITexture2D {
   private texture: regl.Texture2D;
+  private width: number;
+  private height: number;
 
   constructor(reGl: regl.Regl, options: ITexture2DInitializationOptions) {
     const {
@@ -32,8 +34,10 @@ export default class ReglTexture2D implements ITexture2D {
       premultiplyAlpha = false,
       mag = gl.NEAREST,
       min = gl.NEAREST,
-      colorSpace = gl.NONE,
+      colorSpace = gl.BROWSER_DEFAULT_WEBGL,
     } = options;
+    this.width = width;
+    this.height = height;
 
     const textureOptions: regl.Texture2DOptions = {
       width,
@@ -69,9 +73,19 @@ export default class ReglTexture2D implements ITexture2D {
   public get() {
     return this.texture;
   }
+  public update(props: regl.Texture2DOptions = {}) {
+    this.texture(props);
+  }
+
+  public bind() {
+    // @ts-ignore
+    this.texture._texture.bind();
+  }
 
   public resize({ width, height }: { width: number; height: number }): void {
     this.texture.resize(width, height);
+    this.width = width;
+    this.height = height;
   }
 
   public destroy() {

@@ -16,6 +16,10 @@ export default class ExtrudeModel extends BaseModel {
     };
   }
 
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
+
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
@@ -71,7 +75,7 @@ export default class ExtrudeModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 10 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },

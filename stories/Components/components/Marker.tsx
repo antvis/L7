@@ -24,11 +24,10 @@ export default class MarkerComponent extends React.Component {
         zoom: 18,
       }),
     });
-    this.scene = scene;
 
     const popup = new Popup({
       offsets: [0, 20],
-    }).setText('hello');
+    }).setHTML('<h1 onclick= alert("12223")>11111</h1>');
 
     const marker = new Marker({
       offsets: [0, -20],
@@ -74,9 +73,8 @@ export default class MarkerComponent extends React.Component {
 
     scene.on('loaded', () => {
       // @ts-ignore
-      marker.on('click', (e) => {
-        console.log(this.scene.getZoom());
-      });
+      // marker.on('click', (e) => {
+      // });
       // const marker1 = new AMap.Marker({
       //   map: scene.map,
       //   position: [120.184824, 30.248341],
@@ -90,6 +88,7 @@ export default class MarkerComponent extends React.Component {
       //  console.log(this.scene.getZoom());
       //   console.log('选中的点', 1111);
       // });
+      this.scene = scene;
     });
   }
 

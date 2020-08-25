@@ -3,6 +3,97 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
+
+
+### Bug Fixes
+
+* 采用非偏移坐标系坐标系解决高德地图中国区域抖动的问题 ([124a1d2](https://github.com/antvis/L7/commit/124a1d27aa97c9a6af1de6d041785c420f02ce4c))
+* **heatmap:** 修复热力图某些设备上黑色 fix [#278](https://github.com/antvis/L7/issues/278) ([b8f5899](https://github.com/antvis/L7/commit/b8f58992d1fce38fdaac9d82ebfbec14e35298bd))
+
+
+
+
+
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+**Note:** Version bump only for package @antv/l7-layers
+
+
+
+
+
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+
+### Bug Fixes
+
+* 3d 热力图抖动问题 fixes [#138](https://github.com/antvis/L7/issues/138) [#263](https://github.com/antvis/L7/issues/263) ([d56e8d6](https://github.com/antvis/L7/commit/d56e8d6205942ca12fa7ac3dfd226aecbb850ed2))
+
+
+
+
+
+## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
+
+
+### Bug Fixes
+
+* 修复颜色纹理取色问题 & 图片标注默认颜色问题 ([9d6b198](https://github.com/antvis/L7/commit/9d6b198f76b44c55ce0a094c6649c9e4130a398b))
+
+
+
+
+
+## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
+
+**Note:** Version bump only for package @antv/l7-layers
+
+
+
+
+
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+
+### Bug Fixes
+
+* fix build layer opactiy ([5a58ab8](https://github.com/antvis/L7/commit/5a58ab8f86ec969ca384e984784355c2c91b1a47))
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+* 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
+
+
+
+
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+
+### Bug Fixes
+
+* merge conflict ([89c8cb2](https://github.com/antvis/L7/commit/89c8cb2c0250eb5a28d96d82c87b804bf3db4c30))
+* 图层不可见,取消拾取 ([f4abe6a](https://github.com/antvis/L7/commit/f4abe6a6b91d9d568573018ed4cad6cf01c592d3))
+
+
+
+
+
+## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
+
+**Note:** Version bump only for package @antv/l7-layers
+
+
+
+
+
+## [2.0.34](https://github.com/antvis/L7/compare/v2.0.32...v2.0.34) (2020-03-02)
+
+**Note:** Version bump only for package @antv/l7-layers
+
+
+
+
+
 # [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
 
 

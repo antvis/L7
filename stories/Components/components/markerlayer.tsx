@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Marker, MarkerLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 export default class MarkerLayerComponent extends React.Component {
   private scene: Scene;

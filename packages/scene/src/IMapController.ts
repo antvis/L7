@@ -1,4 +1,4 @@
-import { Bounds, ILngLat, IPoint, Point } from '@antv/l7-core';
+import { Bounds, ILngLat, IPoint, IStatusOptions, Point } from '@antv/l7-core';
 
 export default interface IMapController {
   /**
@@ -49,19 +49,31 @@ export default interface IMapController {
   /**
    * 调整地图适合指定区域
    */
-  fitBounds(bound: Bounds): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
 
+  getContainer(): HTMLElement | null;
+  getSize(): [number, number];
+  // get map status method
+  getMinZoom(): number;
+  getMaxZoom(): number;
+  // get map params
+  getType(): string;
+  getMapContainer(): HTMLElement | null;
+  getMapCanvasContainer(): HTMLElement;
+
+  // control with raw map
   setRotation(rotation: number): void;
-
   setZoomAndCenter(zoom: number, center: Point): void;
+  setCenter(center: [number, number]): void;
+  setPitch(pitch: number): void;
+  setZoom(zoom: number): void;
+  setMapStyle(style: any): void;
+  setMapStatus(option: Partial<IStatusOptions>): void;
 
-  setMapStyle(style: string): void;
-
+  // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;
-
   lngLatToPixel(lnglat: Point): IPoint;
-
   containerToLngLat(pixel: Point): ILngLat;
-
   lngLatToContainer(lnglat: Point): IPoint;
+  exportMap(type: 'jpg' | 'png'): string;
 }

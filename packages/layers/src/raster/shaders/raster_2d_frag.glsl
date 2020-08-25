@@ -19,10 +19,9 @@ void main() {
     gl_FragColor = vec4(0, 0, 0, 0);
   else {
     float normalisedValue =(value - u_domain[0]) / (u_domain[1] -u_domain[0]);
-    vec2 ramp_pos = vec2(
-        fract(16.0 * (1.0 - normalisedValue)),
-        floor(16.0 * (1.0 - normalisedValue)) / 16.0);
-    gl_FragColor = texture2D(u_colorTexture, ramp_pos);
+    vec4 color = texture2D(u_colorTexture,vec2(normalisedValue, 0));
+    gl_FragColor = color;
+    gl_FragColor.a =  gl_FragColor.a * u_opacity ;
   }
 
 

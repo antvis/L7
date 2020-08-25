@@ -10,18 +10,24 @@ import {
   ILogService,
   IMapConfig,
   IMapService,
+  IMercator,
   IPoint,
+  IStatusOptions,
   IViewport,
   MapServiceEvent,
   MapStyle,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
+import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
 let mapdivCount = 0;
+// @ts-ignore
+window.forceWebGL = true;
 
 const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_VERSION: string = '1.4.15';
@@ -105,6 +111,12 @@ export default class AMapService
     return this.map.getContainer();
   }
 
+  public getMapCanvasContainer(): HTMLElement {
+    return this.map
+      .getContainer()
+      ?.getElementsByClassName('amap-maps')[0] as HTMLElement;
+  }
+
   public getSize(): [number, number] {
     const size = this.map.getSize();
     return [size.getWidth(), size.getHeight()];
@@ -129,7 +141,9 @@ export default class AMapService
       lat: center.getLat(),
     };
   }
-
+  public setCenter(lnglat: [number, number]): void {
+    this.map.setCenter(lnglat);
+  }
   public getPitch(): number {
     return this.map.getPitch();
   }
@@ -169,6 +183,9 @@ export default class AMapService
     return this.map.setRotation(rotation);
   }
 
+  public setPitch(pitch: number) {
+    return this.map.setPitch(pitch);
+  }
   public zoomIn(): void {
     this.map.zoomIn();
   }
@@ -193,6 +210,10 @@ export default class AMapService
   }
   public setMapStyle(style: string): void {
     this.map.setMapStyle(this.getMapStyle(style));
+  }
+
+  public setMapStatus(option: Partial<IStatusOptions>): void {
+    this.map.setStatus(option);
   }
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
@@ -222,6 +243,45 @@ export default class AMapService
     };
   }
 
+  public lngLatToMercator(
+    lnglat: [number, number],
+    altitude: number,
+  ): IMercator {
+    return {
+      x: 0,
+      y: 0,
+      z: 0,
+    };
+  }
+
+  public getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number] = [1, 1, 1],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ): number[] {
+    const flat = this.viewport.projectFlat(lnglat);
+    // @ts-ignore
+    const modelMatrix = mat4.create();
+
+    mat4.translate(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(flat[0], flat[1], altitude),
+    );
+    mat4.scale(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(scale[0], scale[1], scale[2]),
+    );
+
+    mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
+    mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
+    mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
+
+    return (modelMatrix as unknown) as number[];
+  }
   public async init(): Promise<void> {
     const {
       id,
@@ -292,6 +352,18 @@ export default class AMapService
 
     this.viewport = new Viewport();
   }
+
+  public exportMap(type: 'jpg' | 'png'): string {
+    const renderCanvas = this.getContainer()?.getElementsByClassName(
+      'amap-layer',
+    )[0] as HTMLCanvasElement;
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
+  }
+
   public emit(name: string, ...args: any[]) {
     this.eventEmitter.emit(name, ...args);
   }

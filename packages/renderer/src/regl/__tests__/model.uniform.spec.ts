@@ -57,6 +57,7 @@ describe('uniforms in ReglModel', () => {
       attributes: {},
       // @ts-ignore
       uniforms: {
+        // @ts-ignore
         u_Struct: [
           {
             a: 1,
@@ -86,6 +87,7 @@ describe('uniforms in ReglModel', () => {
       attributes: {},
       // @ts-ignore
       uniforms: {
+        // @ts-ignore
         u_Struct: {
           a: 1,
           b: [1, 2],
@@ -135,6 +137,7 @@ describe('uniforms in ReglModel', () => {
     expect(model2.uniforms['u_Struct.k'] instanceof ReglTexture2D).toBeTruthy();
     // @ts-ignore
     expect(
+      // @ts-ignore
       model2.uniforms['u_Struct.l'] instanceof ReglFramebuffer,
     ).toBeTruthy();
     // @ts-ignore
@@ -155,6 +158,7 @@ describe('uniforms in ReglModel', () => {
           a: 1,
           b: 2,
         },
+        // @ts-ignore
         u_5: [
           {
             c: 1,
@@ -176,6 +180,7 @@ describe('uniforms in ReglModel', () => {
       u_4: {
         a: 2,
       },
+      // @ts-ignore
       u_5: [
         {
           c: 100, // 只修改第一个

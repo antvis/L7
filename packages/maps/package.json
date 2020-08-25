@@ -1,12 +1,14 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.0.17",
+  "version": "2.2.32",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
+  "unpkg": "dist/l7-maps.js",
   "sideEffects": false,
   "files": [
+    "dist",
     "lib",
     "es",
     "typings/index.d.ts",
@@ -18,26 +20,28 @@
     "build": "run-p build:*",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "sync": "tnpm sync"
   },
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "^2.0.17",
-    "@antv/l7-utils": "^2.0.17",
+    "@antv/l7-core": "2.2.32",
+    "@antv/l7-map": "2.2.32",
+    "@antv/l7-utils": "2.2.32",
     "@babel/runtime": "^7.7.7",
+    "@types/amap-js-api": "^1.4.6",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
-    "@types/amap-js-api": "^1.4.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/mapbox-gl": "^0.54.3",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "f2bd3c6473df79d815467b1677c6f985cf68800e",
+  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
   "publishConfig": {
     "access": "public"
   }

@@ -8,6 +8,9 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new ImageModels[modelType](this);
+    this.models = this.layerModel.initModels();
+  }
+  public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
   protected getConfigSchema() {

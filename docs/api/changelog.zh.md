@@ -3,6 +3,54 @@ title: 发布日志
 order: 10
 ---
 
+## 2020.04.20 2.2 正式版本
+
+###✨ Features
+
+#### [L7-Draw 地图绘制组件发布](../draw/start)
+
+支持基础图形绘制、平移、修改、删除
+
+- 绘制 UI 组件支持
+- 绘制圆形
+- 绘制矩形
+- 绘制点
+- 绘制线
+- 绘制面
+
+### 🍏 Improvements
+
+- 要素拾取支持添加 buffer
+- 图层拾取支持冒泡机制，默认拾取最上层
+
+### 🐞 Bug Fixes
+
+- pointLayer 聚合支持多种数据格式化
+- 修复热力图移动端不能正常渲染
+- 修复 3D 热力图高德地图正使用
+- L7 版本锁定
+- 修复点图层描边模糊问题
+
+## 2020.03.12 2.1 正式版
+
+###✨ Features
+
+- 新增 l7-react 版本
+- 可自定义样式的聚合图 MakerLayer
+- 新增 quantile、quantize 度量
+- 地图导出功能
+
+### 🍏 Improvements
+
+- IE 11 支持
+- 更新拾取机制，拾取更高效
+- 优化依赖包减少包体积
+
+### 🐞 Bug Fixes
+
+- setData 更新机制
+- color,size,shape 更新重绘问题
+
 ## 2020.01.06 2.0 正式版
 
 [Github](https://github.com/antvis/L7) https://github.com/antvis/L7 欢迎 Star

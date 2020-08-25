@@ -11,9 +11,11 @@ export default class LayerStylePlugin implements ILayerPlugin {
     layer.hooks.afterInit.tap('LayerStylePlugin', () => {
       // 更新图层默认状态
       layer.updateLayerConfig({});
-      const { autoFit } = layer.getLayerConfig();
+      const { autoFit, fitBoundsOptions } = layer.getLayerConfig();
       if (autoFit) {
-        layer.fitBounds();
+        setTimeout(() => {
+          layer.fitBounds(fitBoundsOptions);
+        }, 100);
       }
     });
   }

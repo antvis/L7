@@ -2,7 +2,8 @@ import { RasterLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 // @ts-ignore
-import * as GeoTIFF from 'geotiff/dist/geotiff.bundle.js';
+// tslint:disable-next-line:no-submodule-imports
+import * as GeoTIFF from 'geotiff';
 import * as React from 'react';
 import { colorScales } from '../lib/colorscales';
 export default class ImageLayerDemo extends React.Component {

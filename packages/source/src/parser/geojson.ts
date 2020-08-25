@@ -21,7 +21,6 @@ export default function geoJSON(
   data: FeatureCollection<Geometries, Properties>,
   cfg?: IParserCFG,
 ): IParserData {
-  rewind(data, true); // 设置地理多边形方向 If clockwise is true, the outer ring is clockwise, otherwise it is counterclockwise.
   const resultData: IParseDataItem[] = [];
   const featureKeys: IFeatureKey = {};
   data.features = data.features.filter((item: Feature) => {
@@ -34,6 +33,7 @@ export default function geoJSON(
       geometry.coordinates.length > 0
     );
   });
+  rewind(data, true); // 设置地理多边形方向 If clockwise is true, the outer ring is clockwise, otherwise it is counterclockwise.
   if (data.features.length === 0) {
     return {
       dataArray: [],
@@ -48,23 +48,13 @@ export default function geoJSON(
     (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
       const coord = getCoords(currentFeature);
       const id = featureIndex;
-      if (currentFeature.geometry.type === 'Polygon') {
-        coord.forEach((coor) => {
-          const dataItem = {
-            ...currentFeature.properties,
-            coordinates: [coor],
-            _id: id,
-          };
-          resultData.push(dataItem);
-        });
-      } else {
-        const dataItem: IParseDataItem = {
-          ...currentFeature.properties,
-          coordinates: coord,
-          _id: id,
-        };
-        resultData.push(dataItem);
-      }
+      const dataItem: IParseDataItem = {
+        ...currentFeature.properties,
+        coordinates: coord,
+        _id: id,
+      };
+      resultData.push(dataItem);
+      // }
     },
   );
   return {

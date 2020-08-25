@@ -1,6 +1,6 @@
 // @ts-ignore
-import { Layers, PointLayer, PolygonLayer, Scale, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Layers, PointLayer, PolygonLayer, Scale, Scene, Zoom } from '@antv/l7';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
@@ -21,6 +21,7 @@ export default class ScaleComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
+      logoVisible: false,
       map: new Mapbox({
         style: 'dark',
         center: [110.19382669582967, 30.258134],
@@ -45,13 +46,14 @@ export default class ScaleComponent extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
-      // .select(true)
+      .select(true)
       .style({
         opacity: 1.0,
       });
     scene.addLayer(layer);
     const pointLayer = new PointLayer({
       name: '02',
+      enablePropagation: true,
     })
       .source(pointsData, {
         cluster: true,
@@ -62,7 +64,7 @@ export default class ScaleComponent extends React.Component {
       })
       .size('point_count', [5, 10, 15, 20, 25])
       .animate(false)
-      .select(true)
+      .active(false)
       .color('yellow')
       .style({
         opacity: 0.5,
@@ -70,7 +72,14 @@ export default class ScaleComponent extends React.Component {
       });
     scene.addLayer(pointLayer);
     layer.on('click', (e) => {
-      layer.setSelect(e.featureId);
+      console.log(1, e);
+      // layer.setSelect(e.featureId);
+    });
+    pointLayer.on('click', (e) => {
+      console.log(2, e);
+    });
+    pointLayer.on('mouseout', (e) => {
+      console.log(2, e);
     });
     const scaleControl = new Scale();
     const layers = {
@@ -79,10 +88,15 @@ export default class ScaleComponent extends React.Component {
     };
     const layerControl = new Layers({
       overlayers: layers,
+      position: 'bottomright',
     });
 
     scene.addControl(scaleControl);
     scene.addControl(layerControl);
+    const zoomControl = new Zoom({
+      position: 'bottomright',
+    });
+    scene.addControl(zoomControl);
   }
 
   public render() {

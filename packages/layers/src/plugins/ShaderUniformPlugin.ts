@@ -34,7 +34,6 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       this.coordinateSystemService.refresh();
 
       const { width, height } = this.rendererService.getViewportSize();
-
       layer.models.forEach((model) =>
         model.addUniforms({
           // 相机参数，包含 VP 矩阵、缩放等级
@@ -56,6 +55,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           u_ViewportSize: [width, height],
           u_DevicePixelRatio: window.devicePixelRatio,
           u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+          u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
         }),
       );
 

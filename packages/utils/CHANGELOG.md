@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.1.11](https://github.com/antvis/L7/compare/v2.1.10...v2.1.11) (2020-04-07)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.1.8](https://github.com/antvis/L7/compare/v2.1.7...v2.1.8) (2020-03-26)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.1.7](https://github.com/antvis/L7/compare/v2.1.6...v2.1.7) (2020-03-26)
+
+
+### Bug Fixes
+
+* 修复颜色纹理取色问题 & 图片标注默认颜色问题 ([9d6b198](https://github.com/antvis/L7/commit/9d6b198f76b44c55ce0a094c6649c9e4130a398b))
+
+
+
+
+
+## [2.1.5](https://github.com/antvis/L7/compare/v2.1.4...v2.1.5) (2020-03-20)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.1.3](https://github.com/antvis/L7/compare/v2.0.36...v2.1.3) (2020-03-17)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.1.2](https://github.com/antvis/L7/compare/v2.0.36...v2.1.2) (2020-03-15)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.1.1](https://github.com/antvis/L7/compare/v2.0.36...v2.1.1) (2020-03-15)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
+## [2.0.34](https://github.com/antvis/L7/compare/v2.0.32...v2.0.34) (2020-03-02)
+
+**Note:** Version bump only for package @antv/l7-utils
+
+
+
+
+
 # [2.0.0-beta.28](https://github.com/antvis/L7/compare/v2.0.0-beta.16...v2.0.0-beta.28) (2020-01-02)
 
 

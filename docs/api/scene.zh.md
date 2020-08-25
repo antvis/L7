@@ -5,8 +5,6 @@ order: 2
 
 # 简介
 
-## Scene
-
 ```javascript
 // Module 引用
 import { Scene } from '@antv/l7';
@@ -89,9 +87,19 @@ L7 Logo 的显示位置 默认左下角
 
 是否显示 L7 的 Logo {boolean} true
 
+### antialias
+
+是否开始前抗锯齿 `boolean` `true`
+
+### preserveDrawingBuffer
+
+是否保留缓冲区数据 `boolean` `false`
+
+## Map 配置项
+
 ### zoom
 
-地图初始显示级别 {number} （0-22）
+地图初始显示级别 {number} Mapbox （0-24） 高德 （3-18）
 
 ### center
 
@@ -114,6 +122,8 @@ L7 Logo 的显示位置 默认左下角
 
 比如高德地图
 
+⚠️ 高德地图样式 增加 `isPublic=true` 参数
+
 ```javascript
 {
   style: 'amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true'; // 设置方法和高德地图一致
@@ -122,11 +132,11 @@ L7 Logo 的显示位置 默认左下角
 
 ### minZoom
 
-地图最小缩放等级 {number}  default 0 (0-22)
+地图最小缩放等级 {number}  default 0 Mapbox 0-24） 高德 （3-18）
 
 ### maxZoom
 
-地图最大缩放等级 {number}  default 22 (0-22)
+地图最大缩放等级 {number}  default 22 Mapbox（0-24） 高德 （3-18）
 
 ### rotateEnable
 
@@ -197,6 +207,14 @@ scene.getPitch();
 ```
 
 return {number} pitch
+
+### getContainer
+
+获取地图容器 return htmlElement
+
+```javascript
+scene.getContainer();
+```
 
 ### setMapStyle
 
@@ -307,7 +325,24 @@ scene.panBy(x, y);
 scene.setPitch(pitch);
 ```
 
+### setMapStatus
+
 参数 :
+
+```javascript
+ IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+```
+
+```javascript
+scene.setMapStatus({ dragEnable: false });
+```
 
 - `pitch` {number}
 
@@ -317,10 +352,13 @@ scene.setPitch(pitch);
 
 参数 :
 
-- `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
+- `extent` { array} 经纬度范围 [[minlng,minlat],[maxlng,maxlat]]
 
 ```javascript
-scene.fitBounds([112, 32, 114, 35]);
+scene.fitBounds([
+  [112, 32],
+  [114, 35],
+]);
 ```
 
 ### removeLayer
@@ -334,6 +372,24 @@ scene.removeLayer(layer);
 参数
 
 - `layer` {Layer}
+
+### exportMap
+
+导出地图，目前仅支持导出可视化层，不支持底图导出
+
+- 参数 type `png|jpg` 默认 png
+
+```javascript
+scene.exportMap('png');
+```
+
+### destroy
+
+scene 销毁方法，离开页面，或者不需要使用地图可以调用
+
+```
+scene.destroy();
+```
 
 ## 事件
 
@@ -382,6 +438,11 @@ scene.on('zoomstart', () => {}); // 缩放开始时触发
 scene.on('zoomend', () => {}); // 缩放停止时触发
 ```
 
+其他地图事件可以查看相应底图的事件文档,地图事件也可以通过 Scene.map 进行设置
+
+[Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/#map.event)
+[高德](https://lbs.amap.com/api/javascript-api/reference/map)
+
 ### 鼠标事件
 
 ```javascript
@@ -398,3 +459,15 @@ scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
 ```
+
+## FAQ
+
+### 禁止地图交互
+
+1. 初始化的时候可以在 map 配置项设置
+
+- 高德地图可查看 https://lbs.amap.com/api/javascript-api/reference/map
+- mapbox https://docs.mapbox.com/mapbox-gl-js/api/#map
+
+2. 加载完成后设置
+   调用 scene 的 [setMapStatus](./scene/#setmapstatus) 方法

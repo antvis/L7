@@ -9,7 +9,7 @@ describe('parser.geojson', () => {
   });
   it('parser multiPolygon', () => {
     const result = geojson(multiPolygon);
-    expect(result.dataArray.length).toEqual(11);
+    expect(result.dataArray.length).toEqual(1);
     expect(result.dataArray[0]._id).toEqual(0);
   });
   it('parset multiLine', () => {

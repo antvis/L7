@@ -1,5 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class DashLineDemo extends React.Component {
@@ -23,10 +23,13 @@ export default class DashLineDemo extends React.Component {
         zoom: 14,
       }),
     });
-    const lineLayer = new LineLayer()
+    const lineLayer = new LineLayer({
+      pickingBuffer: 5,
+    })
       .source(await response.json())
       .size(1)
       .shape('line')
+      .active({ color: 'red' })
       .color(
         'ELEV',
         [
@@ -43,8 +46,9 @@ export default class DashLineDemo extends React.Component {
         ].reverse(),
       )
       .style({
-        // lineType: 'dash',
-        opacity: 0.5,
+        lineType: 'dash',
+        dashArray: [4, 2, 2, 2],
+        opacity: 1.0,
       });
 
     scene.addLayer(lineLayer);

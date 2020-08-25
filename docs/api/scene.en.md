@@ -1,5 +1,5 @@
 ---
-title: 场景 Scene
+title: Scene
 order: 2
 ---
 
@@ -247,6 +247,25 @@ scene.setZoomAndCenter(zoom, center);
 - zoom {number}
 - center {LngLat}
 
+### setMapStatus
+
+参数 :
+
+```javascript
+ IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+```
+
+```javascript
+scene.setMapStatus({ dragEnable: false });
+```
+
 ### setRotation
 
 设置地图顺时针旋转角度，旋转原点为地图容器中心点，取值范围 [0-360]
@@ -317,10 +336,21 @@ scene.setPitch(pitch);
 
 参数 :
 
-- `extent` { array} 经纬度范围 [minlng,minlat,maxlng,maxlat]
+- `extent` { array} 经纬度范围 [[minlng,minlat],[maxlng,maxlat]]
 
 ```javascript
-scene.fitBounds([112, 32, 114, 35]);
+scene.fitBounds([
+  [112, 32],
+  [114, 35],
+]);
+```
+
+### getContainer
+
+获取地图容器 return htmlElement
+
+```javascript
+scene.getContainer();
 ```
 
 ### removeLayer
@@ -334,6 +364,14 @@ scene.removeLayer(layer);
 参数
 
 - `layer` {Layer}
+
+### exportMap
+
+导出地图，目前仅支持导出可视化层，不支持底图导出
+
+- 参数 type `png|jpg` 默认 png
+
+scene.exportMap('png')
 
 ## 事件
 

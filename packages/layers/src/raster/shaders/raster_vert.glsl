@@ -24,10 +24,7 @@ void main() {
   //  v_texCoord = a_Uv;
   value = clamp(value,u_min,u_max);
   float value1 =  (value - u_min) / (u_max -u_min);
-  vec2 ramp_pos = vec2(
-        fract(16.0 * (1.0 - value1)),
-        floor(16.0 * (1.0 - value1)) / 16.0);
-  v_color = texture2D(u_colorTexture,ramp_pos);
+  vec4 color = texture2D(u_colorTexture,vec2(intensity, 0));
 
   // if(uv.x > 1.0 || uv.y > 1.0) {
   //   v_color = vec4(0.);

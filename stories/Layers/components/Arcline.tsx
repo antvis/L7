@@ -12,7 +12,7 @@ export default class ArcLineDemo extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt',
+      'https://gw.alipayobjects.com/os/bmw-prod/4ededeaa-f290-46b7-a042-08210433e8f9.csv',
     );
     const scene = new Scene({
       id: 'map',
@@ -36,7 +36,7 @@ export default class ArcLineDemo extends React.Component {
           y1: 'lat2',
         },
       })
-      .size(1)
+      .size(2)
       .shape('arc3d')
       .select({
         color: 'red',
@@ -45,15 +45,8 @@ export default class ArcLineDemo extends React.Component {
         color: 'red',
       })
       .color('rgb(13,64,140)')
-      .animate({
-        enable: true,
-        interval: 0.1,
-        duration: 2,
-        trailLength: 1.0,
-      })
       .style({
-        lineType: 'dash',
-        opacity: 0.5,
+        opacity: 1,
       });
     scene.addLayer(lineLayer);
     scene.render();

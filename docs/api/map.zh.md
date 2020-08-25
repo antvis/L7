@@ -12,11 +12,10 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 
 ### 引入 Map
 
-```javascropt
+```javascript
+import { GaodeMap } from '@antv/l7-maps';
 
-   import { GaodeMap } from '@antv/l7-maps';
-
-   import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-maps';
 ```
 
 ### 实例化

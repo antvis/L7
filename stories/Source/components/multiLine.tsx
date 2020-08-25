@@ -21,8 +21,8 @@ export default class MultiLine extends React.Component {
       map: new GaodeMap({
         pitch: 0,
         style: 'dark',
-        center: [101.775374, 3],
-        zoom: 14.1,
+        center: [101.775374, 20],
+        zoom: 3,
       }),
     });
 
@@ -37,12 +37,16 @@ export default class MultiLine extends React.Component {
               type: 'MultiLineString',
               coordinates: [
                 [
-                  [100, 0],
-                  [101, 1],
+                  [142.03125, 65.36683689226321],
+                  [187.03125, 50.28933925329178],
+                  [187.734375, 21.94304553343818],
+                  [155.390625, -4.214943141390639],
                 ],
                 [
-                  [102, 2],
-                  [103, 3],
+                  [217.96875, 70.61261423801925],
+                  [257.34375, 51.6180165487737],
+                  [257.34375, -39.90973623453718],
+                  [223.59375, -45.08903556483102],
                 ],
               ],
             },
@@ -51,8 +55,11 @@ export default class MultiLine extends React.Component {
       })
       .shape('line')
       .color('red')
+      .size(2)
       .style({
-        opacity: 1.0,
+        opacity: 0.5,
+        lineType: 'dash',
+        dashArray: [2, 2, 4, 2],
       });
     scene.addLayer(layer);
   }

@@ -1,0 +1,98 @@
+.l7-map {
+  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.l7-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.l7-map:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.l7-canary {
+  background-color: salmon;
+}
+
+.l7-canvas-container.l7-interactive,
+.l7-ctrl-group button.l7-ctrl-compass {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.l7-canvas-container.l7-interactive.l7-track-pointer {
+  cursor: pointer;
+}
+
+.l7-canvas-container.l7-interactive:active,
+.l7-ctrl-group button.l7-ctrl-compass:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
+
+.l7-canvas-container.l7-touch-zoom-rotate,
+.l7-canvas-container.l7-touch-zoom-rotate .l7-canvas {
+  touch-action: pan-x pan-y;
+}
+
+.l7-canvas-container.l7-touch-drag-pan,
+.l7-canvas-container.l7-touch-drag-pan .l7-canvas {
+  touch-action: pinch-zoom;
+}
+
+.l7-canvas-container.l7-touch-zoom-rotate.l7-touch-drag-pan,
+.l7-canvas-container.l7-touch-zoom-rotate.l7-touch-drag-pan .l7-canvas {
+  touch-action: none;
+}
+
+.l7-ctrl-top-left,
+.l7-ctrl-top-right,
+.l7-ctrl-bottom-left,
+.l7-ctrl-bottom-right { position: absolute; pointer-events: none; z-index: 2; }
+.l7-ctrl-top-left     { top: 0; left: 0; }
+.l7-ctrl-top-right    { top: 0; right: 0; }
+.l7-ctrl-bottom-left  { bottom: 0; left: 0; }
+.l7-ctrl-bottom-right { right: 0; bottom: 0; }
+
+.l7-ctrl {
+  clear: both;
+  pointer-events: auto;
+
+  /* workaround for a Safari bug https://github.com/mapbox/mapbox-gl-js/issues/8185 */
+  transform: translate(0, 0);
+}
+.l7-ctrl-top-left .l7-ctrl     { margin: 10px 0 0 10px; float: left; }
+.l7-ctrl-top-right .l7-ctrl    { margin: 10px 10px 0 0; float: right; }
+.l7-ctrl-bottom-left .l7-ctrl  { margin: 0 0 10px 10px; float: left; }
+.l7-ctrl-bottom-right .l7-ctrl { margin: 0 10px 10px 0; float: right; }
+
+
+.l7-crosshair,
+.l7-crosshair .l7-interactive,
+.l7-crosshair .l7-interactive:active {
+    cursor: crosshair;
+}
+
+.l7-boxzoom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    background: #fff;
+    border: 2px dotted #202020;
+    opacity: 0.5;
+    z-index: 10;
+}

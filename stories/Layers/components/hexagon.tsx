@@ -2,8 +2,6 @@ import { HeatmapLayer, PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
-// @ts-ignore
-import data from '../data/data.json';
 export default class HexagonLayerDemo extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -16,87 +14,64 @@ export default class HexagonLayerDemo extends React.Component {
     }
   }
   public async componentDidMount() {
-    const response = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
-    );
-    const pointsData = await response.json();
-
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        center: [120.19382669582967, 30.258134],
         pitch: 0,
-        style: 'light',
+        style: 'blank',
+        center: [140.067171, 36.26186],
         zoom: 3,
+
+        maxZoom: 0,
       }),
     });
-    const pointLayer = new HeatmapLayer({})
-      .source(pointsData, {
-        transforms: [
-          {
-            type: 'grid',
-            size: 500000,
-            field: 'capacity',
-            method: 'sum',
-          },
-        ],
-      })
-      .shape('hexagon')
-      .style({
-        coverage: 0.9,
-        angle: 0,
-        opacity: 0.6,
-      })
-      .color(
-        'sum',
-        [
-          '#3F4BBA',
-          '#3F4BBA',
-          '#3F4BBA',
-          '#3F4BBA',
-          '#3C73DA',
-          '#3C73DA',
-          '#3C73DA',
-          '#0F62FF',
-          '#0F62FF',
-          '#30B2E9',
-          '#30B2E9',
-          '#40C4CE',
-        ].reverse(),
-      );
-    scene.addLayer(pointLayer);
-    pointLayer.on('click', (e) => {
-      console.log(e);
-    });
-
-    this.scene = scene;
-
-    const gui = new dat.GUI();
-    this.gui = gui;
-    const styleOptions = {
-      textAnchor: 'center',
-      strokeWidth: 1,
-    };
-    const rasterFolder = gui.addFolder('栅格可视化');
-    rasterFolder
-      .add(styleOptions, 'textAnchor', [
-        'center',
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'top-left',
-        'bottom-right',
-        'bottom-left',
-        'top-right',
-      ])
-      .onChange((anchor: string) => {
-        pointLayer.style({
-          textAnchor: anchor,
+    scene.on('loaded', () => {
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
+      )
+        .then((res) => res.text())
+        .then((data) => {
+          const pointLayer = new HeatmapLayer({
+            autoFit: true,
+          })
+            .source(data, {
+              parser: {
+                type: 'csv',
+                x: 'lng',
+                y: 'lat',
+              },
+              transforms: [
+                {
+                  type: 'grid',
+                  size: 200000,
+                  field: 'v',
+                  method: 'sum',
+                },
+              ],
+            })
+            .size('sum', (value) => {
+              return value * 20;
+            })
+            .shape('squareColumn')
+            .color(
+              'count',
+              [
+                '#FF4818',
+                '#F7B74A',
+                '#FFF598',
+                '#FF40F3',
+                '#9415FF',
+                '#421EB2',
+              ].reverse(),
+            )
+            .style({
+              coverage: 1,
+              angle: 0,
+            });
+          scene.addLayer(pointLayer);
+          this.scene = scene;
         });
-        scene.render();
-      });
-    // });
+    });
   }
 
   public render() {

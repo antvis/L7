@@ -1,5 +1,5 @@
 ---
-title: GaodeMap BaseMap
+title: GaodeMap
 order: 0
 ---
 

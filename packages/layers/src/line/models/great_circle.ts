@@ -11,8 +11,8 @@ import {
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-import line_arc2d_vert from '../shaders/line_arc2d_vert.glsl';
 import line_arc_frag from '../shaders/line_arc_frag.glsl';
+import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -25,6 +25,9 @@ export default class GreatCircleModel extends BaseModel {
       lineType = 'solid',
       dashArray = [10, 5],
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
+    if (dashArray.length === 2) {
+      dashArray.push(0, 0);
+    }
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,
@@ -38,6 +41,10 @@ export default class GreatCircleModel extends BaseModel {
       u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
+  }
+
+  public initModels(): IModel[] {
+    return this.buildModels();
   }
 
   public buildModels(): IModel[] {
@@ -71,7 +78,7 @@ export default class GreatCircleModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },

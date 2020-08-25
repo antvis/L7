@@ -76,11 +76,11 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     });
 
     layer.hooks.beforeRender.tap('MultiPassRendererPlugin', () => {
-      if (this.enabled) {
-        // 渲染前根据 viewport 调整 FBO size
-        const { width, height } = rendererService.getViewportSize();
-        layer.multiPassRenderer.resize(width, height);
-      }
+      // if (this.enabled) {
+      //   // 渲染前根据 viewport 调整 FBO size
+      //   const { width, height } = rendererService.getViewportSize();
+      //   layer.multiPassRenderer.resize(width, height);
+      // }
     });
   }
 
@@ -103,26 +103,26 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     }
 
     // use TAA pass if enabled instead of render pass
-    if (enableTAA) {
-      multiPassRenderer.add(normalPassFactory('taa'));
-    } else {
-      // render all layers in this pass
-      multiPassRenderer.add(normalPassFactory('render'));
-    }
+    // if (enableTAA) {
+    //   multiPassRenderer.add(normalPassFactory('taa'));
+    // } else {
+    //   // render all layers in this pass
+    //   multiPassRenderer.add(normalPassFactory('render'));
+    // }
 
     // post processing
-    normalizePasses(passes).forEach(
-      (pass: [string, { [key: string]: unknown }]) => {
-        const [passName, initializationOptions] = pass;
-        multiPassRenderer.add(
-          postProcessingPassFactory(passName),
-          initializationOptions,
-        );
-      },
-    );
+    // normalizePasses(passes).forEach(
+    //   (pass: [string, { [key: string]: unknown }]) => {
+    //     const [passName, initializationOptions] = pass;
+    //     multiPassRenderer.add(
+    //       postProcessingPassFactory(passName),
+    //       initializationOptions,
+    //     );
+    //   },
+    // );
 
     // 末尾为固定的 CopyPass
-    multiPassRenderer.add(postProcessingPassFactory('copy'));
+    // multiPassRenderer.add(postProcessingPassFactory('copy'));
 
     return multiPassRenderer;
   }

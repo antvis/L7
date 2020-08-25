@@ -17,11 +17,9 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
       coords = [parseFloat(col[x]), parseFloat(col[y])];
     } // 点数据
     if (x && y && x1 && y1) {
-      // 弧线 或者线段
-      coords = [
-        [parseFloat(col[x]), parseFloat(col[y])],
-        [parseFloat(col[x1]), parseFloat(col[y1])],
-      ];
+      const from = [parseFloat(col[x]), parseFloat(col[y])];
+      const to = [parseFloat(col[x1]), parseFloat(col[y1])];
+      coords = [from, to];
     }
     if (coordinates) {
       let type = 'Polygon';

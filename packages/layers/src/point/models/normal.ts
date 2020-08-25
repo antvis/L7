@@ -45,6 +45,11 @@ export default class NormalModel extends BaseModel {
       u_stroke_color: rgb2arr(stroke),
     };
   }
+
+  public initModels(): IModel[] {
+    return this.buildModels();
+  }
+
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
@@ -79,7 +84,7 @@ export default class NormalModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const { size } = feature;
+          const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },

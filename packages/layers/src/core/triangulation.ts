@@ -2,8 +2,8 @@ import { IEncodeFeature } from '@antv/l7-core';
 import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
+import ExtrudePolyline from '../utils/extrude_polyline';
 import { calculteCentroid } from '../utils/geo';
-import getNormals from '../utils/polylineNormal';
 import extrudePolygon, {
   extrude_PolygonNormal,
   fillPolygon,
@@ -71,14 +71,22 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   let path = coordinates as number[][][] | number[][];
-  if (Array.isArray(path[0][0])) {
-    path = coordinates[0] as number[][];
+  if (!Array.isArray(path[0][0])) {
+    path = [coordinates] as number[][][];
   }
-  const line = getNormals(path as number[][], false, 0);
+  const line = new ExtrudePolyline({
+    dash: true,
+    join: 'bevel', //
+  });
+  path.forEach((item: any) => {
+    // 处理带洞的多边形
+    line.extrude(item as number[][]);
+  });
+  const linebuffer = line.complex;
   return {
-    vertices: line.attrPos, // [ x,y,z, distance, miter,total ]
-    indices: line.attrIndex,
-    normals: line.normals,
+    vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
+    indices: linebuffer.indices,
+    normals: linebuffer.normals,
     size: 6,
   };
 }
@@ -87,7 +95,6 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
-
   return {
     indices: earcut(vertices, holes, dimensions),
     vertices,

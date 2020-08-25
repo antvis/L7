@@ -7,7 +7,7 @@ redirect_from:
 
 ## L7 
 
-Current version:  ![L7 2.0版本号](https://badgen.net/npm/v/@antv/l7/beta)
+Current version:  ![L7 2.0版本号](https://badgen.net/npm/v/@antv/l7)
 
 # 使用方法
 

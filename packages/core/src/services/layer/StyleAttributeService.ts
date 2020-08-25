@@ -7,6 +7,7 @@ import { IRendererService } from '../renderer/IRendererService';
 import { IParseDataItem } from '../source/ISourceService';
 import { ILayer } from './ILayerService';
 import {
+  IAttributeScale,
   IEncodeFeature,
   IStyleAttribute,
   IStyleAttributeInitializationOptions,
@@ -17,13 +18,15 @@ import {
 } from './IStyleAttributeService';
 import StyleAttribute from './StyleAttribute';
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const bytesPerElementMap = {
   [gl.FLOAT]: 4,
   [gl.UNSIGNED_BYTE]: 1,
   [gl.UNSIGNED_SHORT]: 2,
 };
-
-let counter = 0;
 
 /**
  * 每个 Layer 都拥有一个，用于管理样式属性的注册和更新
@@ -40,10 +43,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
-
   private triangulation: Triangulation;
-
-  private c = counter++;
 
   private featureLayout: {
     sizePerElement: number;
@@ -108,6 +108,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
     );
   }
 
+  public getLayerAttributeScale(name: string) {
+    const attribute = this.getLayerStyleAttribute(name);
+    const scale = attribute?.scale?.scalers as IAttributeScale[];
+    if (scale && scale[0]) {
+      return scale[0].func;
+    }
+    return null;
+  }
+
   public updateAttributeByFeatureRange(
     attributeName: string,
     features: IEncodeFeature[],
@@ -125,7 +134,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
         const { elements, sizePerElement } = this.featureLayout;
         // 截取待更新的 feature 范围
         const featuresToUpdate = elements.slice(startFeatureIdx, endFeatureIdx);
-
         // [n, n] 中断更新
         if (!featuresToUpdate.length) {
           return;
@@ -177,13 +185,18 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
   public createAttributesAndIndices(
     features: IEncodeFeature[],
-    triangulation?: Triangulation,
+    triangulation: Triangulation,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
   } {
+    // 每次创建的初始化化 LayerOut
+    this.featureLayout = {
+      sizePerElement: 0,
+      elements: [],
+    };
     if (triangulation) {
       this.triangulation = triangulation;
     }
@@ -196,7 +209,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const indices: number[] = [];
     const normals: number[] = [];
     let size = 3;
-
     features.forEach((feature, featureIdx) => {
       // 逐 feature 进行三角化
       const {
@@ -208,15 +220,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
       indicesForCurrentFeature.forEach((i) => {
         indices.push(i + verticesNum);
       });
-      verticesForCurrentFeature.forEach((index) => {
-        vertices.push(index);
-      });
-      // fix Maximum call stack size exceeded https://stackoverflow.com/questions/22123769/rangeerror-maximum-call-stack-size-exceeded-why
-      if (normalsForCurrentFeature) {
-        normalsForCurrentFeature.forEach((normal) => {
-          normals.push(normal);
-        });
-      }
       size = vertexSize;
       const verticesNumForCurrentFeature =
         verticesForCurrentFeature.length / vertexSize;
@@ -237,21 +240,20 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertexIdx < verticesNumForCurrentFeature;
         vertexIdx++
       ) {
+        const normal =
+          normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) ||
+          [];
+        const vertice = verticesForCurrentFeature.slice(
+          vertexIdx * vertexSize,
+          vertexIdx * vertexSize + vertexSize,
+        );
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
-            const normal =
-              normalsForCurrentFeature?.slice(
-                vertexIdx * 3,
-                vertexIdx * 3 + 3,
-              ) || [];
             (descriptor.buffer.data as number[]).push(
               ...descriptor.update(
                 feature,
                 featureIdx,
-                verticesForCurrentFeature.slice(
-                  vertexIdx * vertexSize,
-                  vertexIdx * vertexSize + vertexSize,
-                ),
+                vertice,
                 vertexIdx, // 当前顶点所在feature索引
                 normal,
                 // TODO: 传入顶点索引 vertexIdx
@@ -305,6 +307,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
         attribute.vertexAttribute.destroy();
       }
     });
+
+    this.attributesAndIndices?.elements.destroy();
     this.attributes = [];
   }
 }

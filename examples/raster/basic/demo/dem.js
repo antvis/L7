@@ -10,7 +10,9 @@ const scene = new Scene({
     zoom: 3
   })
 });
-addLayer();
+scene.on('loaded', () => {
+  addLayer();
+});
 async function getTiffData() {
   const response = await fetch(
     'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat'

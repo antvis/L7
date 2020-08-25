@@ -3,8 +3,6 @@ title: PointLayer
 order: 0
 ---
 
-# PointLayer
-
 ## 简介
 
 点数据的展示，数据源支持 JSON,GeoJSON,CSV 三种数据格式。
@@ -29,9 +27,9 @@ shape 支持
 
 点数据类型，根据经纬点绘制图形,目前支持三种数据结构
 
-- [GeoJOSN]('../source/geojson/#point')
-- [CSV]()
-- [JSON](../source/json/#点数据)
+- [GeoJSON]('../../../../source/geojson/#point')
+- [CSV](../../../../source/csv/#parser)
+- [JSON](../../../../source/json/#点数据)
 
 **图片标注**
 

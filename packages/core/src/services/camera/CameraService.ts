@@ -67,6 +67,10 @@ export default class CameraService implements ICameraService {
     return this.viewport.getViewMatrixUncentered();
   }
 
+  public getViewProjectionMatrixUncentered(): number[] {
+    return this.viewport.getViewProjectionMatrixUncentered();
+  }
+
   public getViewProjectionMatrix(): number[] {
     return (
       this.overridedViewProjectionMatrix ||

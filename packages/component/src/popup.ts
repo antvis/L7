@@ -1,22 +1,28 @@
-import { ILngLat, IMapService, IPoint, IPopup, TYPES } from '@antv/l7-core';
-import { bindAll, DOM } from '@antv/l7-utils';
+import {
+  ILngLat,
+  IMapService,
+  IPoint,
+  IPopup,
+  IPopupOption,
+  ISceneService,
+  TYPES,
+} from '@antv/l7-core';
+import {
+  anchorTranslate,
+  anchorType,
+  applyAnchorClass,
+  bindAll,
+  DOM,
+} from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { anchorTranslate, anchorType, applyAnchorClass } from './utils/anchor';
 
 /** colse event */
 
-export interface IPopupOption {
-  closeButton: boolean;
-  closeOnClick: boolean;
-  maxWidth: string;
-  anchor: anchorType;
-  className: string;
-  offsets: number[];
-}
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
   private mapsService: IMapService<unknown>;
+  private sceneSerive: ISceneService;
   private lngLat: ILngLat;
   private content: HTMLElement;
   private closeButton: HTMLElement;
@@ -36,6 +42,7 @@ export default class Popup extends EventEmitter implements IPopup {
 
   public addTo(scene: Container) {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
     this.mapsService.on('camerachange', this.update);
     this.scene = scene;
     this.update();
@@ -72,7 +79,7 @@ export default class Popup extends EventEmitter implements IPopup {
     return this.setDOMContent(frag);
   }
 
-  public setLnglat(lngLat: ILngLat): this {
+  public setLnglat(lngLat: ILngLat | number[]): this {
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {
@@ -173,6 +180,7 @@ export default class Popup extends EventEmitter implements IPopup {
       offsets: [0, 0],
       anchor: anchorType.BOTTOM,
       className: '',
+      stopPropagation: true,
     };
   }
 
@@ -189,12 +197,12 @@ export default class Popup extends EventEmitter implements IPopup {
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
-    const markerContainer = this.mapsService.getMarkerContainer();
-    if (!this.container && markerContainer) {
+    const popupContainer = this.sceneSerive.getSceneContainer();
+    if (!this.container && popupContainer) {
       this.container = this.creatDom(
         'div',
         'l7-popup',
-        markerContainer.parentNode as HTMLElement,
+        popupContainer as HTMLElement,
       );
 
       this.tip = this.creatDom('div', 'l7-popup-tip', this.container);
@@ -204,12 +212,12 @@ export default class Popup extends EventEmitter implements IPopup {
           .split(' ')
           .forEach((name) => this.container.classList.add(name));
       }
-      this.container.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-      });
-      this.container.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
+
+      // ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
+      //   this.container.addEventListener(type, (e) => {
+      //     e.stopPropagation();
+      //   });
+      // });
     }
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {
       this.container.style.maxWidth = maxWidth;

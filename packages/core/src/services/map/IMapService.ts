@@ -10,7 +10,20 @@ export interface IPoint {
   x: number;
   y: number;
 }
-
+export interface IMercator {
+  x: number;
+  y: number;
+  z: number;
+}
+export interface IStatusOptions {
+  showIndoorMap: boolean;
+  resizeEnable: boolean;
+  dragEnable: boolean;
+  keyboardEnable: boolean;
+  doubleClickZoom: boolean;
+  zoomEnable: boolean;
+  rotateEnable: boolean;
+}
 export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
   setContainer(container: Container, id: string | HTMLDivElement): void;
@@ -43,23 +56,36 @@ export interface IMapService<RawMap = {}> {
   getRotation(): number;
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
+  getMapCanvasContainer(): HTMLElement;
 
   // control with raw map
   setRotation(rotation: number): void;
-  zoomIn(): void;
-  zoomOut(): void;
+  zoomIn(option?: any, eventData?: any): void;
+  zoomOut(option?: any, eventData?: any): void;
   panTo(p: Point): void;
   panBy(pixel: Point): void;
-  fitBounds(bound: Bounds): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
   setZoomAndCenter(zoom: number, center: Point): void;
+  setCenter(center: [number, number]): void;
+  setPitch(pitch: number): void;
   setZoom(zoom: number): void;
-  setMapStyle(style: string): void;
+  setMapStyle(style: any): void;
+  setMapStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
   pixelToLngLat(pixel: Point): ILngLat;
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
+  lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
+  getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number],
+    origin: IMercator,
+  ): number[];
+  exportMap(type: 'jpg' | 'png'): string;
 }
 
 export const MapServiceEvent = ['mapload'];
@@ -121,6 +147,8 @@ export interface IMapConfig<RawMap = {}> {
   maxZoom?: number;
 
   attributionControl?: boolean;
+
+  [key: string]: any;
 }
 
 /**
