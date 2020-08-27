@@ -1,6 +1,7 @@
 /**
  * AMapService
  */
+import AMapLoader from '@amap/amap-jsapi-loader';
 import {
   Bounds,
   CoordinateSystem,
@@ -330,17 +331,22 @@ export default class AMapService
         }
         amapLoaded = true;
         plugin.push('Map3D');
-        this.loadAMapScript(
-          `https://webapi.amap.com/maps?v=${AMAP_VERSION}&key=${token}&plugin=${plugin.join(
-            ',',
-          )}`,
-        ).then(() => {
-          resolveMap();
-          if (pendingResolveQueue.length) {
-            pendingResolveQueue.forEach((r) => r());
-            pendingResolveQueue = [];
-          }
-        });
+        AMapLoader.load({
+          key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
+          version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+          plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+        })
+          .then((AMap) => {
+            resolveMap();
+
+            if (pendingResolveQueue.length) {
+              pendingResolveQueue.forEach((r) => r());
+              pendingResolveQueue = [];
+            }
+          })
+          .catch((e) => {
+            throw new Error(e);
+          });
       } else {
         if ((amapLoaded && window.AMap) || mapInstance) {
           resolveMap();
@@ -450,16 +456,5 @@ export default class AMapService
     $amapdiv.id = 'l7_amap_div' + mapdivCount++;
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
-  }
-  private loadAMapScript(src: string) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => {
-        resolve();
-      };
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
   }
 }
