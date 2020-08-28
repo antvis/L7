@@ -34,12 +34,17 @@ function isPointEqual(a: vec2, b: vec2) {
 }
 
 function getArrayUnique(matrix: number[][]) {
-  const result: number[][] = [];
-  matrix.map((item) => {
-    item.sort((a, b) => b - a);
-    result.push(item);
-  });
-  return result;
+  const map = new Map();
+  for (let i = 0; i < matrix.length; i++) {
+    const key = matrix[0].toString() + '-' + matrix[1].toString();
+    if (map.get(key)) {
+      matrix.splice(i, 1);
+      i++;
+    } else {
+      map.set(key, key);
+    }
+  }
+  return matrix;
 }
 
 export interface IExtrudeLineOption {

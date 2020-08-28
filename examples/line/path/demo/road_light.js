@@ -1,27 +1,80 @@
-import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import {
+  Scene,
+  LineLayer
+} from '@antv/l7';
+import {
+  Mapbox
+} from '@antv/l7-maps';
+import {
+  GaodeMap
+} from "@antv/l7-maps";
 
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    center: [ 116.3956, 39.9392 ],
-    pitch: 0,
-    zoom: 10,
-    rotation: 0,
-    style: 'light'
+let mapData = [{
+  path: [
+    [118.186546, 39.666597],
+    [118.186546, 39.666597],
+    [118.186546, 39.666597],
+    [118.186546, 39.666597],
+    [118.186747, 39.664297],
+    [118.186751, 39.664301],
+    [118.186751, 39.664301],
+    [118.186751, 39.664301],
+    [118.186751, 39.664301],
+    [118.186751, 39.664301],
+    [118.195929, 39.670589],
+    [118.195929, 39.670589],
+    [118.195929, 39.670589],
+    [118.195929, 39.670589],
+    [118.142168, 39.646454],
+    [118.142168, 39.646453],
+    [118.142168, 39.646453],
+    [118.142168, 39.646453],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825],
+    [118.437412, 39.88825]
+  ]
+}];
+
+let map = new Scene({
+  id: "map",
+  map: new GaodeMap({
+    center: [118.142858, 39.674508],
+    zoom: 14,
+    type: "amap",
+    style: "light",
+    pitch: 0
   })
 });
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/0d2f0113-f48b-4db9-8adc-a3937243d5a3.json'
-  )
-    .then(res => res.json())
-    .then(data => {
-      const layer = new LineLayer({})
-        .source(data)
-        .size(1.5)
-        .shape('line')
-        .color('标准名称', [ '#5B8FF9', '#5CCEA1', '#5D7092' ]);
-      scene.addLayer(layer);
-    });
-});
+let line = new LineLayer()
+  .source(mapData, {
+    parser: {
+      type: "json",
+      coordinates: "path"
+    }
+  })
+  .size(5, 10)
+  .shape("line")
+  .color("#25d8b7")
+  .select({
+    color: "#eb4c44",
+    zIndex: 999
+  })
+  .animate({
+    interval: 1,
+    duration: 5,
+    trailLength: 2
+  });
+map.addLayer(line);
