@@ -6,6 +6,7 @@ describe('template', () => {
   el.id = 'test-div-id';
   el.style.width = '500px';
   el.style.height = '500px';
+  el.style.position = 'absolute';
   document.querySelector('body')?.appendChild(el);
   const scene = new Scene({
     id: 'test-div-id',
