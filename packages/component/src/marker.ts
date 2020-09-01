@@ -4,6 +4,7 @@ import {
   IMarkerOption,
   IPoint,
   IPopup,
+  ISceneService,
   TYPES,
 } from '@antv/l7-core';
 import {
@@ -22,6 +23,7 @@ export default class Marker extends EventEmitter {
   private defaultMarker: boolean;
   private popup: IPopup;
   private mapsService: IMapService<unknown>;
+  private sceneSerive: ISceneService;
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
@@ -49,7 +51,9 @@ export default class Marker extends EventEmitter {
     // this.remove();
     this.scene = scene;
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
     const { element, draggable } = this.markerOption;
+    // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
     this.mapsService.on('camerachange', this.update);

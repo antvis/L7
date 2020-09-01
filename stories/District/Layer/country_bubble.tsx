@@ -211,8 +211,8 @@ export default class Country extends React.Component {
         name: '贵州省',
         code: 520000,
         value: 148060.45,
-      }
-    ]
+      },
+    ];
     scene.on('loaded', () => {
       const Layer = new CountryLayer(scene, {
         data: ProvinceData,
