@@ -195,6 +195,24 @@ export default class Country extends React.Component {
         value: null,
       },
     ];
+
+    const ProvinceData2 = [
+      {
+        name: '云南省',
+        code: 530000,
+        value: 178810.12,
+      },
+      {
+        name: '黑龙江省',
+        code: 230000,
+        value: 163610.62,
+      },
+      {
+        name: '贵州省',
+        code: 520000,
+        value: 148060.45,
+      }
+    ]
     scene.on('loaded', () => {
       const Layer = new CountryLayer(scene, {
         data: ProvinceData,
@@ -204,7 +222,7 @@ export default class Country extends React.Component {
           enable: true,
           size: {
             field: 'value',
-            values: [3, 20],
+            values: [8, 20],
           },
         },
         popup: {
@@ -214,6 +232,10 @@ export default class Country extends React.Component {
           },
         },
       });
+
+      setTimeout(() => {
+        Layer.updateData(ProvinceData2);
+      }, 2000);
     });
     this.scene = scene;
   }
