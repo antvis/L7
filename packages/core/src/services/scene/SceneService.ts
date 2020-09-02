@@ -173,7 +173,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       const $container = createRendererContainer(
         this.configService.getSceneConfig(this.id).id || '',
       );
-      
+
       // 添加marker container;
       this.$container = $container;
 
