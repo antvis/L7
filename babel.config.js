@@ -40,11 +40,11 @@ module.exports = api => {
   return {
     presets: [
       [
-        '@babel/env',
+        '@babel/preset-env',
         {
           // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
           // useBuiltIns: 'usage',
-          ...isCDNBundle ? { corejs: '3.0.0' } : {},
+          ...isCDNBundle ? { corejs: 3 } : {},
           useBuiltIns: isCDNBundle ? 'usage' : false,
           // set `modules: false` when building CDN bundle, let rollup do commonjs works
           // @see https://github.com/rollup/rollup-plugin-babel#modules
