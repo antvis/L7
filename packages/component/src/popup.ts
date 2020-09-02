@@ -197,7 +197,7 @@ export default class Popup extends EventEmitter implements IPopup {
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
-    const popupContainer = this.sceneSerive.getSceneContainer();
+    const popupContainer = this.mapsService.getMarkerContainer();
     if (!this.container && popupContainer) {
       this.container = this.creatDom(
         'div',
@@ -213,11 +213,14 @@ export default class Popup extends EventEmitter implements IPopup {
           .forEach((name) => this.container.classList.add(name));
       }
 
-      // ['mousemove', 'mousedown', 'mouseup', 'click'].forEach((type) => {
-      //   this.container.addEventListener(type, (e) => {
-      //     e.stopPropagation();
-      //   });
-      // });
+      // 高德地图需要阻止事件冒泡 // 测试mapbox 地图不需要添加
+      ['mousemove', 'mousedown', 'mouseup', 'click', 'dblclick'].forEach(
+        (type) => {
+          this.container.addEventListener(type, (e) => {
+            e.stopPropagation();
+          });
+        },
+      );
     }
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {
       this.container.style.maxWidth = maxWidth;

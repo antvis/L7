@@ -14,6 +14,7 @@ export interface ISceneService {
   getSceneConfig(): Partial<ISceneConfig>;
   render(): void;
   getSceneContainer(): HTMLDivElement;
+  getMarkerContainer(): HTMLElement;
   exportPng(type?: 'png' | 'jpg'): string;
   destroy(): void;
 }
