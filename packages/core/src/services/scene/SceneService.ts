@@ -271,14 +271,17 @@ export default class Scene extends EventEmitter implements ISceneService {
     // @ts-ignore
     const mapContainer = this.$container.parentElement as HTMLElement;
     if (mapContainer !== null) {
-      this.markerContainer = DOM.create('div', 'l7-marker-container', mapContainer);
+      this.markerContainer = DOM.create(
+        'div',
+        'l7-marker-container',
+        mapContainer,
+      );
     }
   }
 
   public getMarkerContainer() {
     return this.markerContainer;
   }
-
 
   public destroy() {
     if (!this.inited) {
@@ -352,5 +355,4 @@ export default class Scene extends EventEmitter implements ISceneService {
   private addSceneEvent(target: IInteractionTarget) {
     this.emit(target.type, target);
   }
-  
 }
