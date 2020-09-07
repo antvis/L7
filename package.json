@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@antv/g2": "^3.5.9",
-    "@antv/gatsby-theme-antv": "^0.11.5",
+    "@antv/gatsby-theme-antv": "^0.10.71",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -50,7 +50,7 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-plugin-transform-node-env-inline": "^0.4.3",
     "babel-plugin-transform-postcss": "^0.3.0",
-    "babel-preset-gatsby": "^0.4.1",
+    "babel-preset-gatsby": "^0.5.8",
     "babel-template": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",
     "commitizen": "^4.0.3",

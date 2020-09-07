@@ -36,6 +36,7 @@ export default class BaseLayer extends EventEmitter {
   protected options: IDistrictLayerOption;
   protected layers: ILayer[] = [];
   protected fillData: any;
+  protected bubbleData: any;
   private popup: IPopup;
 
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
@@ -87,6 +88,23 @@ export default class BaseLayer extends EventEmitter {
               },
             ],
     });
+
+    // 气泡图也需要更新
+    if (this.bubbleLayer) {
+      this.bubbleLayer.setData(this.bubbleData, {
+        transforms:
+          data.length === 0
+            ? []
+            : [
+                {
+                  type: 'join',
+                  sourceField: joinBy[1], // data1 对应字段名
+                  targetField: joinBy[0], // data 对应字段名 绑定到的地理数据
+                  data,
+                },
+              ],
+      });
+    }
   }
   protected async fetchData(data: { url: any; type: string }) {
     if (data.type === 'pbf') {
@@ -215,6 +233,8 @@ export default class BaseLayer extends EventEmitter {
           center: [feature.properties.x, feature.properties.y],
         };
       });
+
+      this.bubbleData = labeldata;
       this.addBubbleLayer(labeldata);
     }
     if (popup.enable) {
