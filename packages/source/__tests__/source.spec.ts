@@ -1,6 +1,7 @@
 import Source from '../src/source';
 import Point from './data/point';
 import Polygon from './data/polygon';
+import { bBoxToBounds } from '@antv/l7-utils';
 
 describe('source constructor', () => {
   it('source.constructor', () => {
@@ -20,6 +21,6 @@ describe('source constructor', () => {
         field: 'mag',
       },
     });
-    source.updateClusterData(2);
+    source.updateClusterData(bBoxToBounds(source.extent), 2);
   });
 });
