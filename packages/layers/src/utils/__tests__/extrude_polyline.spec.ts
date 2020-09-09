@@ -18,6 +18,6 @@ describe('extrude polyline', () => {
       coord[1] = lat;
     });
     const mesh = extrude.extrude(coords);
-    expect(mesh.indices.length).toBe(6);
+    expect(mesh.indices.length).toBe(12);
   });
 });

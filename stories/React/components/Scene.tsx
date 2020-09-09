@@ -2,6 +2,8 @@ import {
   AMapScene,
   LayerContext,
   LineLayer,
+  PolygonLayer,
+  MapboxScene,
   Marker,
   Popup,
   SceneContext,
@@ -45,14 +47,14 @@ export default React.memo(function Map() {
           option={{
             closeOnClick: false,
           }}
-          lnglat={[110.1938, 50.25] as number[]}
+          lnglat={[110.1938, 30.25] as number[]}
         >
-          <p onClick={popupClick}>122222</p>
+          <p onClick={popupClick}>122224</p>
         </Popup>
-        <Marker lnglat={[110.1938, 30.25] as number[]}>
-          <p onClick={popupClick}>122222</p>
+        <Marker lnglat={[100.1938, 30.25] as number[]}>
+          <p onClick={popupClick}>tes</p>
         </Marker>
-        <LineLayer
+        <PolygonLayer
           key={'2'}
           source={{
             data,
@@ -64,7 +66,7 @@ export default React.memo(function Map() {
             values: '#fff',
           }}
           shape={{
-            values: 'line',
+            values: 'fill',
           }}
           style={{
             opacity: 1,
@@ -76,7 +78,7 @@ export default React.memo(function Map() {
               return null;
             }}
           </LayerContext.Consumer>
-        </LineLayer>
+        </PolygonLayer>
       </AMapScene>
     </>
   );

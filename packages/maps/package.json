@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
-    "@types/mapbox-gl": "^0.54.3",
+    "@types/mapbox-gl": "^1.11.2",
     "@types/viewport-mercator-project": "^6.1.0"
   },
   "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",

@@ -5429,10 +5429,10 @@
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.161.tgz?cache=0&sync_timestamp=1598664997598&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Flodash%2Fdownload%2F%40types%2Flodash-4.14.161.tgz#a21ca0777dabc6e4f44f3d07f37b765f54188b18"
   integrity sha1-ohygd32rxuT0Tz0H83t2X1QYixg=
 
-"@types/mapbox-gl@^0.54.3":
-  version "0.54.5"
-  resolved "https://registry.npm.taobao.org/@types/mapbox-gl/download/@types/mapbox-gl-0.54.5.tgz#d50285796cb9d3544121d9e2b5314da99f9774bf"
-  integrity sha1-1QKFeWy501RBIdnitTFNqZ+XdL8=
+"@types/mapbox-gl@^1.11.2":
+  version "1.11.2"
+  resolved "https://registry.npmjs.org/@types/mapbox-gl/-/mapbox-gl-1.11.2.tgz#e989264075ac6be633837c21241f4acd54692ceb"
+  integrity sha512-IXfOnFPAbxnEhSG89MjFxuqIX6bJioPHA55yExM0qAaVdT+kfJX7P4d0wfW0Br3iSdq9ym8C9jCYHpuLT4FE6Q==
   dependencies:
     "@types/geojson" "*"
 
