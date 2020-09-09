@@ -214,8 +214,8 @@ export default class Popup extends EventEmitter implements IPopup {
       }
 
       // 高德地图需要阻止事件冒泡 // 测试mapbox 地图不需要添加
-      const { stopPropagation} = this.popupOption;
-      if(stopPropagation) {
+      const { stopPropagation } = this.popupOption;
+      if (stopPropagation) {
         ['mousemove', 'mousedown', 'mouseup', 'click', 'dblclick'].forEach(
           (type) => {
             this.container.addEventListener(type, (e) => {
