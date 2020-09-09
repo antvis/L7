@@ -88,13 +88,26 @@ export default class DrawCircle extends DrawFeature {
       lat: newStartPoint[1],
       lng: newStartPoint[0],
     };
+    const newEndPoint = movePoint(
+      [this.endPoint.lng, this.endPoint.lat],
+      delta,
+    );
+    const endPointObj = {
+      lat: newEndPoint[1],
+      lng: newEndPoint[0],
+    };
     newFeature[0].properties = {
       ...newFeature[0].properties,
       startPoint: this.startPoint,
+      endPoint: endPointObj,
       pointFeatures: newPointFeture,
     };
     this.centerLayer.setData([this.startPoint]);
     this.setCurrentFeature(newFeature[0]);
+    const changeFeature = {
+      ...newFeature[0],
+    };
+    this.emit(DrawEvent.CHANGE, changeFeature);
   }
 
   protected createFeature(id: string = '0'): Feature {
@@ -121,6 +134,7 @@ export default class DrawCircle extends DrawFeature {
     this.drawVertexLayer.updateData(
       featureCollection(properties.pointFeatures),
     );
+    this.emit(DrawEvent.CHANGE, featureCollection([newFeature]).features[0]);
   }
 
   protected showOtherLayer() {

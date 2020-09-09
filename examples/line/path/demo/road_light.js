@@ -1,5 +1,10 @@
-import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import {
+  Scene,
+  LineLayer
+} from '@antv/l7';
+import {
+  Mapbox
+} from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',

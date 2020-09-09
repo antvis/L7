@@ -22,13 +22,29 @@ export function computeMiter(
 export function computeNormal(out: vec2, dir: vec2) {
   return vec2.set(out, -dir[1], dir[0]);
 }
+
 export function direction(out: vec2, a: vec2, b: vec2) {
   vec2.sub(out, a, b);
   vec2.normalize(out, out);
   return out;
 }
+
 function isPointEqual(a: vec2, b: vec2) {
   return a[0] === b[0] && a[1] === b[1];
+}
+
+function getArrayUnique(matrix: number[][]) {
+  const map = new Map();
+  for (let i = 0; i < matrix.length; i++) {
+    const key = matrix[0].toString() + '-' + matrix[1].toString();
+    if (map.get(key)) {
+      matrix.splice(i, 1);
+      i++;
+    } else {
+      map.set(key, key);
+    }
+  }
+  return matrix;
 }
 
 export interface IExtrudeLineOption {
@@ -80,16 +96,14 @@ export default class ExtrudePolyline {
     this.started = false;
     this.normal = null;
     this.totalDistance = 0;
+    // 去除数组里重复的点
+    points = getArrayUnique(points);
     const total = points.length;
     let count = complex.startIndex;
     for (let i = 1; i < total; i++) {
       const last = points[i - 1] as vec2;
       const cur = points[i] as vec2;
       const next = i < points.length - 1 ? points[i + 1] : null;
-      // 如果当前点和前一点相同，跳过
-      if (isPointEqual(last, cur)) {
-        continue;
-      }
       const amt = this.segment(complex, count, last, cur, next as vec2);
       count += amt;
     }

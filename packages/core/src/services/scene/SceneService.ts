@@ -102,6 +102,8 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   private canvas: HTMLCanvasElement;
 
+  private markerContainer: HTMLElement;
+
   private hooks: {
     init: AsyncParallelHook;
   };
@@ -171,7 +173,11 @@ export default class Scene extends EventEmitter implements ISceneService {
       const $container = createRendererContainer(
         this.configService.getSceneConfig(this.id).id || '',
       );
+
+      // 添加marker container;
       this.$container = $container;
+
+      // this.addMarkerContainer();
 
       if ($container) {
         this.canvas = DOM.create('canvas', '', $container) as HTMLCanvasElement;
@@ -259,6 +265,22 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   public getSceneConfig(): Partial<ISceneConfig> {
     return this.configService.getSceneConfig(this.id as string);
+  }
+
+  public addMarkerContainer(): void {
+    // @ts-ignore
+    const mapContainer = this.$container.parentElement as HTMLElement;
+    if (mapContainer !== null) {
+      this.markerContainer = DOM.create(
+        'div',
+        'l7-marker-container',
+        mapContainer,
+      );
+    }
+  }
+
+  public getMarkerContainer() {
+    return this.markerContainer;
   }
 
   public destroy() {
