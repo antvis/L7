@@ -11,7 +11,7 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import { extent } from '@antv/l7-utils';
+import { extent, boundsContains, bBoxToBounds } from '@antv/l7-utils';
 import {
   BBox,
   Feature,
@@ -85,9 +85,12 @@ export default class Source extends EventEmitter {
   public getClustersLeaves(id: number): any {
     return this.clusterIndex.getLeaves(id, Infinity);
   }
-  public updateClusterData(zoom: number): void {
+  public updateClusterData(bbox: [[number,number],[number,number]],zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
-    let data = this.clusterIndex.getClusters(this.extent, Math.floor(zoom));
+    if (!boundsContains(bbox, bBoxToBounds(this.extent))) {
+      return;
+    }
+    let data = this.clusterIndex.getClusters(bbox[0].concat(bbox[1]), Math.floor(zoom));
     this.clusterOptions.zoom = zoom;
     data.forEach((p: any) => {
       if (!p.id) {

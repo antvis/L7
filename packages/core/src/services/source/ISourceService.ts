@@ -62,7 +62,7 @@ export interface ISource {
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   setData(data: any): void;
-  updateClusterData(zoom: number): void;
+  updateClusterData(bbox: [[number, number], [number, number]], zoom: number): void;
   getFeatureById(id: number): unknown;
   getFeatureId(field: string, value: any): number | undefined;
   getClusters(zoom: number): any;

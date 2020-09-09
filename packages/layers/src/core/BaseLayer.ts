@@ -746,8 +746,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public setSource(source: Source) {
     this.layerSource = source;
     const zoom = this.mapService.getZoom();
+    const viewBounds = this.mapService.getBounds();
     if (this.layerSource.cluster) {
-      this.layerSource.updateClusterData(zoom);
+      this.layerSource.updateClusterData(viewBounds, zoom);
     }
     // source 可能会复用，会在其它layer被修改
     this.layerSource.on('update', this.sourceEvent);
