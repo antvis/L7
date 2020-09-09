@@ -242,8 +242,11 @@ export function boundsContains(b1: IBounds, b2: IBounds): boolean {
 /**
  * bbox 转换为Bounds
  * @param b1 bbox
- * 
+ *
  */
 export function bBoxToBounds(b1: BBox): IBounds {
-  return [[b1[0], b1[1]], [b1[2], b1[3]]];
+  return [
+    [b1[0], b1[1]],
+    [b1[2], b1[3]],
+  ];
 }
