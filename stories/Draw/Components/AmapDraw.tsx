@@ -23,6 +23,13 @@ export default class AMapDraw extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
+      const layer1 = new AMap.TileLayer.Satellite();
+      if(scene.map instanceof AMap.Map){
+
+        scene.map.setLayers([]);
+        layer1.setMap(scene.map);
+      }
+     
       const drawControl = new DrawControl(scene, {
         position: 'topright',
         layout: 'horizontal', // horizontal vertical

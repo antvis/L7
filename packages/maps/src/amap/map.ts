@@ -427,7 +427,7 @@ export default class AMapService
       });
 
       // set coordinate system
-      if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+      if (this.map.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
         this.coordinateSystemService.setCoordinateSystem(
           CoordinateSystem.P20_OFFSET,
         );

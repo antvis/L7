@@ -44,6 +44,7 @@ export default class DrawPolygon extends DrawFeature {
   }
 
   public drawFinish() {
+    this.points = this.points.reverse();
     const feature = this.createFeature(this.points);
     const properties = feature.properties as { pointFeatures: Feature[] };
     this.drawLayer.update(featureCollection([feature]));
