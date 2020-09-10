@@ -147,7 +147,7 @@ export default class InteractionService extends EventEmitter
     const lngLat = this.mapService.containerToLngLat([clientX, clientY]);
     return { x: clientX, y: clientY, lngLat, type };
   }
-  private onHover = ({ x, y, type }: MouseEvent) => {
+  private onHover = ({ clientX: x, clientY: y, type }: MouseEvent) => {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       const { top, left } = $containter.getBoundingClientRect();
