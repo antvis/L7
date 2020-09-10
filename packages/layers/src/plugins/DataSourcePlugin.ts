@@ -27,9 +27,8 @@ export default class DataSourcePlugin implements ILayerPlugin {
     const cluster = source.cluster;
     const { zoom = 0, maxZoom = 16 } = source.clusterOptions;
     const newZoom = this.mapService.getZoom() - 1;
-    const viewBounds = this.mapService.getBounds();
     if (cluster && Math.abs(zoom - newZoom) > 1 && maxZoom > zoom) {
-      source.updateClusterData(viewBounds, Math.floor(newZoom));
+      source.updateClusterData(Math.floor(newZoom));
       return true;
     }
     return false;
