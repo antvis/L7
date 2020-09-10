@@ -97,7 +97,7 @@ export default class ExtrudePolyline {
     this.normal = null;
     this.totalDistance = 0;
     // 去除数组里重复的点
-    points = getArrayUnique(points);
+    // points = getArrayUnique(points);
     const total = points.length;
     let count = complex.startIndex;
     for (let i = 1; i < total; i++) {

@@ -239,3 +239,14 @@ export function boundsContains(b1: IBounds, b2: IBounds): boolean {
     b1[1][1] >= b2[1][1]
   );
 }
+/**
+ * bbox 转换为Bounds
+ * @param b1 bbox
+ *
+ */
+export function bBoxToBounds(b1: BBox): IBounds {
+  return [
+    [b1[0], b1[1]],
+    [b1[2], b1[3]],
+  ];
+}
