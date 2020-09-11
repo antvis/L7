@@ -1,7 +1,6 @@
 import { aProjectFlat } from '@antv/l7-utils';
 import { vec2 } from 'gl-matrix';
 const tmp = vec2.create();
-const capEnd = vec2.create();
 const lineA = vec2.create();
 const lineB = vec2.create();
 const tangent = vec2.create();
@@ -33,20 +32,6 @@ function isPointEqual(a: vec2, b: vec2) {
   return a[0] === b[0] && a[1] === b[1];
 }
 
-function getArrayUnique(matrix: number[][]) {
-  const map = new Map();
-  for (let i = 0; i < matrix.length; i++) {
-    const key = matrix[0].toString() + '-' + matrix[1].toString();
-    if (map.get(key)) {
-      matrix.splice(i, 1);
-      i++;
-    } else {
-      map.set(key, key);
-    }
-  }
-  return matrix;
-}
-
 export interface IExtrudeLineOption {
   join: string;
   cap: string;
@@ -69,7 +54,6 @@ export default class ExtrudePolyline {
   private thickness: number;
   private normal: vec2 | null;
   private lastFlip: number = -1;
-  private miter: vec2 = vec2.fromValues(0, 0);
   private started: boolean = false;
   private dash: boolean = false;
   private totalDistance: number = 0;
@@ -96,14 +80,23 @@ export default class ExtrudePolyline {
     this.started = false;
     this.normal = null;
     this.totalDistance = 0;
-    // 去除数组里重复的点
-    // points = getArrayUnique(points);
     const total = points.length;
     let count = complex.startIndex;
+    let nextIdx = -1;
     for (let i = 1; i < total; i++) {
       const last = points[i - 1] as vec2;
       const cur = points[i] as vec2;
-      const next = i < points.length - 1 ? points[i + 1] : null;
+      nextIdx = i + 1;
+      let next = this.getNext(nextIdx, points);
+      if (isPointEqual(cur, last)) {
+        continue;
+      }
+      //Until find next different one or null
+      while (next !== null && isPointEqual(cur, next)) {
+        i = nextIdx;
+        nextIdx = nextIdx + 1;
+        next = this.getNext(nextIdx, points);
+      }
       const amt = this.segment(complex, count, last, cur, next as vec2);
       count += amt;
     }
@@ -115,6 +108,12 @@ export default class ExtrudePolyline {
     complex.startIndex = complex.positions.length / 6;
     return complex;
   }
+
+  private getNext(idx: number, arr: any[]) {
+
+    return idx <= arr.length - 1 ? arr[idx] : null;
+  }
+
   private segment(
     complex: any,
     index: number,
