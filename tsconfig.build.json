@@ -7,7 +7,17 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@antv/l7-*": ["packages/*/src"],
+      "@antv/l7-core": ["packages/core/src"],
+      "@antv/l7-component": ["packages/component/src"],
+      "@antv/l7-layers": ["packages/layers/src"],
+      "@antv/l7-map": ["packages/map/src"],
+      "@antv/l7-maps": ["packages/maps/src"],
+      "@antv/l7-scene": ["packages/scene/src"],
+      "@antv/l7-scene": ["packages/scene/src"],
+      "@antv/l7-renderer": ["packages/renderer/src"],
+      "@antv/l7-three": ["packages/three/src"],
+      "@antv/l7-mini": ["packages/mini/src"],
+      "@antv/l7-utils": ["packages/utils/src"],
       "@antv/l7": ["packages/l7/src"],
       "*": ["node_modules", "packages"]
     }
