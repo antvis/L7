@@ -141,9 +141,6 @@ export default class TextLayerDemo extends React.Component {
         });
       scene.addLayer(layer);
       this.scene = scene;
-      layer.on('remapping', () => {
-        console.log('remapinbg event');
-      });
       const gui = new dat.GUI();
       this.gui = gui;
       const styleOptions = {
