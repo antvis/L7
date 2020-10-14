@@ -148,7 +148,7 @@ export default class InteractionService extends EventEmitter
       clientY -= top;
     }
     const lngLat = this.mapService.containerToLngLat([clientX, clientY]);
-    return { x: clientX, y: clientY, lngLat, type };
+    return { x: clientX, y: clientY, lngLat, type, target: target.srcEvent };
   }
   private onHover = (event: MouseEvent) => {
     const { clientX, clientY } = event;
@@ -180,6 +180,7 @@ export default class InteractionService extends EventEmitter
         y,
         lngLat,
         type,
+        target: event,
       });
     }
   };

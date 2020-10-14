@@ -12,6 +12,7 @@ export interface IInteractionTarget {
   lngLat: ILngLat;
   type: string;
   featureId?: number;
+  target: MouseEvent | TouchEvent;
 }
 
 export interface IInteractionService {
