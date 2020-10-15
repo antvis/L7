@@ -1,5 +1,5 @@
 import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap,Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class LineDemo extends React.Component {
@@ -14,7 +14,7 @@ export default class LineDemo extends React.Component {
     const response = await fetch(
       'https://gw-office.alipayobjects.com/bmw-prod/037b4240-f9ee-4dd8-b90c-178af4e4c9b8.json',
     );
-    const data = await response.json()
+    const data = await response.json();
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -64,4 +64,3 @@ export default class LineDemo extends React.Component {
     );
   }
 }
-
