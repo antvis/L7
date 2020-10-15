@@ -16,10 +16,10 @@ export default class DashLineDemo extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [102.602992, 23.107329],
         pitch: 0,
-        style: 'dark',
+        style: 'light',
         zoom: 14,
       }),
     });
@@ -46,8 +46,8 @@ export default class DashLineDemo extends React.Component {
         ].reverse(),
       )
       .style({
-        lineType: 'dash',
-        dashArray: [4, 2, 2, 2],
+        // lineType: 'dash',
+        // dashArray: [4, 2, 2, 2],
         opacity: 1.0,
       });
 

@@ -1,5 +1,5 @@
-import { LineLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
+import { GaodeMap,Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class LineDemo extends React.Component {
@@ -12,45 +12,39 @@ export default class LineDemo extends React.Component {
 
   public async componentDidMount() {
     const response = await fetch(
-      'https://arcgis.github.io/arcgis-samples-javascript/sample-data/custom-gl-animated-lines/lines.json',
+      'https://gw-office.alipayobjects.com/bmw-prod/037b4240-f9ee-4dd8-b90c-178af4e4c9b8.json',
     );
+    const data = await response.json()
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        center: [-74.006, 40.7128],
+      map: new GaodeMap({
+        center: [120, 30.7128],
         zoom: 11.5,
-        style: 'dark',
+        style: 'light',
       }),
     });
-    const lineLayer = new LineLayer({
-      minZoom: 12,
-      maxZoom: 15,
+    const polygonLayer = new PolygonLayer({
+      autoFit: true,
     })
-      .source(await response.json(), {
-        parser: {
-          type: 'json',
-          coordinates: 'path',
-        },
-      })
-      .size(3)
+      .source(data)
+      .size(1)
+      .shape('fill')
+      .color('rgb(254,153,41)')
+      .style({
+        opacity: 1.0,
+      });
+    const lineLayer = new PolygonLayer({
+      autoFit: true,
+    })
+      .source(data)
+      .size(1)
       .shape('line')
-      .active(true)
-      .color('color', (v) => {
-        return `rgb(${v})`;
-      })
-      .animate({
-        enable: true,
-        interval: 0.5,
-        trailLength: 0.4,
-        duration: 4,
-      })
+      .color('#f00')
       .style({
         opacity: 1.0,
       });
 
-    lineLayer.on('click', (e) => {
-      console.log(e);
-    });
+    scene.addLayer(polygonLayer);
     scene.addLayer(lineLayer);
     this.scene = scene;
   }
@@ -70,3 +64,4 @@ export default class LineDemo extends React.Component {
     );
   }
 }
+
