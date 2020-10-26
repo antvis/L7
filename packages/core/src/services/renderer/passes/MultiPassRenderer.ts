@@ -68,7 +68,7 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
 
   public resize(width: number, height: number) {
     if (this.width !== width || this.height !== height) {
-      this.postProcessor.resize(width, height);
+      // this.postProcessor.resize(width, height);
       this.width = width;
       this.height = height;
     }

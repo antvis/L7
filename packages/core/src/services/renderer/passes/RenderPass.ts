@@ -24,13 +24,13 @@ export default class RenderPass<
 
   public render(layer: ILayer) {
     const { useFramebuffer, clear } = this.rendererService;
-    const readFBO = layer.multiPassRenderer.getPostProcessor().getReadFBO();
-    useFramebuffer(readFBO, () => {
+    // const readFBO = layer.multiPassRenderer.getPostProcessor().getReadFBO();
+    useFramebuffer(null, () => {
       clear({
         color: [0, 0, 0, 0],
         depth: 1,
         stencil: 0,
-        framebuffer: readFBO,
+        // framebuffer: readFBO,
       });
 
       // render to post processor
