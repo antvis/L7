@@ -1,5 +1,5 @@
 ---
-title: map
+title: Map
 order: 0
 ---
 
