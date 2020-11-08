@@ -30,14 +30,9 @@ export default class ZoomComponent extends React.Component {
     this.scene = scene;
     const layer = new PolygonLayer({});
 
-    layer
-      .source(data)
-      .color('#fff')
-      .shape('name', 'text')
-      .size(16)
-      .style({
-        opacity: 1.0,
-      });
+    layer.source(data).color('#fff').shape('name', 'text').size(16).style({
+      opacity: 1.0,
+    });
     scene.addLayer(layer);
     const zoomControl = new Zoom({
       position: 'bottomright',
