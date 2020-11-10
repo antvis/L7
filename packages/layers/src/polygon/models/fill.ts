@@ -40,6 +40,7 @@ export default class FillModel extends BaseModel {
         vertexShader: polygon_vert,
         fragmentShader: polygon_frag,
         triangulation: polygonTriangulation,
+        blend: this.getBlend(),
         depth: { enable: false },
       }),
     ];

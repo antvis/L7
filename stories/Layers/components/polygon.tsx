@@ -140,7 +140,7 @@ export default class TextLayerDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'blank',
@@ -148,7 +148,9 @@ export default class TextLayerDemo extends React.Component {
       }),
     });
     scene.on('loaded', () => {
-      const layer = new PolygonLayer({})
+      const layer = new PolygonLayer({
+        blend: 'none',
+      })
         .source(geoJSONhole)
         .shape('fill')
         .scale('childrenNum', {
