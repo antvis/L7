@@ -160,7 +160,6 @@ export function extrude_PolygonNormal(
     normals = normals.concat((normal as unknown) as any[]);
     normals = normals.concat((normal as unknown) as any[]);
     normals = normals.concat((normal as unknown) as any[]);
-    normals = normals.concat((normal as unknown) as any[]);
     [1, 2, 0, 3, 2, 1].map((v) => indexArray.push(v + indexOffset));
   }
   return {
