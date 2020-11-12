@@ -65,7 +65,7 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
       nextPoint[1],
       0,
     );
-    indexArray.push(...[0, 2, 1, 2, 3, 1].map((v) => v + indexOffset));
+    [0, 2, 1, 2, 3, 1].map((v) => indexArray.push(v + indexOffset));
   }
   return {
     positions,
@@ -99,7 +99,7 @@ export function extrude_PolygonNormal(
   const { vertices, dimensions } = flattengeo;
   const positions = [];
   const indexArray = [];
-  const normals = [];
+  let normals = [];
   // 设置顶部z值 position uv
   for (let j = 0; j < vertices.length / dimensions; j++) {
     if (dimensions === 2) {
@@ -156,8 +156,12 @@ export function extrude_PolygonNormal(
       [prePoint[0], prePoint[1], 1],
       needFlat,
     );
-    normals.push(...normal, ...normal, ...normal, ...normal);
-    indexArray.push(...[1, 2, 0, 3, 2, 1].map((v) => v + indexOffset));
+    normals = normals.concat((normal as unknown) as any[]);
+    normals = normals.concat((normal as unknown) as any[]);
+    normals = normals.concat((normal as unknown) as any[]);
+    normals = normals.concat((normal as unknown) as any[]);
+    normals = normals.concat((normal as unknown) as any[]);
+    [1, 2, 0, 3, 2, 1].map((v) => indexArray.push(v + indexOffset));
   }
   return {
     positions,

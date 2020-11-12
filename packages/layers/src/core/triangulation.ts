@@ -178,7 +178,7 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
   const segNum = 30;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
-  const indexArray = [];
+  const indexArray = [] as number[];
   for (let i = 0; i < segNum; i++) {
     // 上线两个顶点
     // [ x, y, z, sx,sy, tx,ty]
@@ -199,11 +199,8 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
       coordinates[1][1],
     );
     if (i !== segNum - 1) {
-      indexArray.push(
-        ...[0, 1, 2, 1, 3, 2].map((v) => {
-          return i * 2 + v;
-        }),
-      );
+      // 因为babel无法正确解析 ...func 的形式
+      [0, 1, 2, 1, 3, 2].map((v: number) => indexArray.push(i * 2 + v))
     }
   }
   return {

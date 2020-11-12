@@ -53,7 +53,7 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
       nextPoint[1],
       0,
     );
-    indexArray.push(...[1, 2, 0, 3, 2, 1].map((v) => v + indexOffset));
+    [1, 2, 0, 3, 2, 1].map((v) => indexArray.push(v + indexOffset));
   }
   return {
     positions,
