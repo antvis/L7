@@ -9,6 +9,9 @@ export const BlendTypes: IBlendTypes = {
       dstAlpha: 1,
     },
   },
+  [BlendType.none]: {
+    enable: false,
+  },
   [BlendType.normal]: {
     enable: true,
     func: {

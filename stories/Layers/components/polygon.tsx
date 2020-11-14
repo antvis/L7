@@ -95,6 +95,32 @@ const RMBColor: { [key: string]: string[] } = {
   '2角': ['#4D6256', '#5F6F63', '#648F96', '#A5AF9C', '#C4DAE2', '#8A9A8E'],
   '1角': ['#653E40', '#6C4547', '#AC8486', '#D1A6A1', '#CAB8B8', '#D5C1A4'],
 };
+
+// earcut结果： [5, 0, 1, 1, 2, 3, 3, 4, 5, 5, 1, 3] 0
+const geoJSONhole = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [100.1953125, 42.5530802889558],
+            [111.533203125, 37.16031654673677],
+            [104.67773437499999, 34.88593094075317], //**
+            [108.4130859375, 28.14950321154457], ///
+            [127.529296875, 33.063924198120645],
+            [115.48828125000001, 47.45780853075031],
+            [100.1953125, 42.5530802889558], //
+          ],
+        ],
+      },
+    },
+  ],
+};
+
 export default class TextLayerDemo extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -114,7 +140,7 @@ export default class TextLayerDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         style: 'blank',
@@ -122,22 +148,17 @@ export default class TextLayerDemo extends React.Component {
       }),
     });
     scene.on('loaded', () => {
-      const layer = new PolygonLayer({})
-        .source(data)
+      const layer = new PolygonLayer({
+        blend: 'none',
+      })
+        .source(geoJSONhole)
         .shape('fill')
         .scale('childrenNum', {
           type: 'quantile',
         })
-        .color('childrenNum', [
-          '#D92568',
-          '#E3507E',
-          '#FC7AAB',
-          '#F1D3E5',
-          '#A7B5E3',
-          '#F2EEFF',
-        ])
+        .color('#D92568')
         .style({
-          opacity: 1.0,
+          opacity: 0.3,
         });
       scene.addLayer(layer);
       this.scene = scene;
@@ -147,7 +168,7 @@ export default class TextLayerDemo extends React.Component {
         textAnchor: 'center',
         filter: 1,
         textAllowOverlap: 4,
-        opacity: 1,
+        opacity: 0.3,
         color: '100元',
       };
       const rasterFolder = gui.addFolder('面图层可视化');

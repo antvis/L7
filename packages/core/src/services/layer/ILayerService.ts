@@ -34,6 +34,7 @@ export enum BlendType {
   subtractive = 'subtractive',
   min = 'min',
   max = 'max',
+  none = 'none',
 }
 export interface IBlendTypes {
   [key: string]: Partial<IBlendOptions>;
