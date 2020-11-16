@@ -63,3 +63,4 @@ heatmapLayer()
     },
   });
 ```
+`markdown:docs/common/layer/base.md`

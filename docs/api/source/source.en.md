@@ -2,6 +2,7 @@
 title: Source
 order: 0
 ---
+`markdown:docs/common/style.md`
 
 ## 概述
 

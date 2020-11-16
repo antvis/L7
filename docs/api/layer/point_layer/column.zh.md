@@ -57,3 +57,4 @@ const column = new PointLayer({})
     opacity: 1.0,
   });
 ```
+`markdown:docs/common/layer/base.md`

@@ -2,6 +2,7 @@
 title: 标准地图
 order: 2
 ---
+`markdown:docs/common/style.md`
 
 ## 五种地图类型
 

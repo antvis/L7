@@ -1,6 +1,7 @@
 ---
 title: API
 ---
+`markdown:docs/common/style.md`
 
 ## 使用
 

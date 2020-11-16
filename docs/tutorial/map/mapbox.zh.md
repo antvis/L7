@@ -2,7 +2,7 @@
 title: MapBox地图
 order: 0
 ---
-
+`markdown:docs/common/style.md`
 ## 使用Mapbox 地图
 
 1、注册MapBox token

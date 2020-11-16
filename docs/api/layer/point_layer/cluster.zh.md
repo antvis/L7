@@ -90,3 +90,5 @@ const pointLayer = new PointLayer({})
 PointLayer 的聚合图采用 WebGL 绘制，不支持自定义具体聚合样式，如果有自定义的需求可以使用 MarkerLayer 的聚合功能，你可以通过 Dom 完全自定义样式。
 
 [MarkerLayer 聚合](../../component/markerLayer)
+
+`markdown:docs/common/layer/base.md`

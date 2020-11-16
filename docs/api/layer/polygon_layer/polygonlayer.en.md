@@ -25,4 +25,4 @@ PolyonLayer.shape('line').size(1); // size 表示线宽度
 PolyonLayer.shape('extrude'); // size 表示高度
 ```
 
-其他方法，事件，同基类 [Layer](/zh/docs/api/layer/layer)
+`markdown:docs/common/layer/base.md`

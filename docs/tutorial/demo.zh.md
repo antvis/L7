@@ -2,7 +2,7 @@
 title: 本地运行demo
 order: 1
 ---
-
+`markdown:docs/common/style.md`
 
 ### 一、打开L7demo页面
 

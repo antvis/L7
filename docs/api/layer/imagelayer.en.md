@@ -2,6 +2,7 @@
 title: ImageLayer
 order: 5
 ---
+`markdown:docs/common/style.md`
 
 ## 简介
 

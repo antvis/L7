@@ -2,6 +2,7 @@
 title: Control 控件
 order: 3
 ---
+`markdown:docs/common/style.md`
 
 地图组件用于控制地图的状态如果平移，缩放，或者展示地图一些的辅助信息如图例、比例尺
 

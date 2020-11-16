@@ -22,10 +22,4 @@ layer.shape('fill');
 
 填充图无 size 不需要设置 size
 
-### color
-
-同 [layer#color](../layer/#color)
-
-### style
-
-同 [layer#style](../layer/#style)
+`markdown:docs/common/layer/base.md`

@@ -2,7 +2,7 @@
 title: Scene
 order: 2
 ---
-
+`markdown:docs/common/style.md`
 # 简介
 
 ## Scene

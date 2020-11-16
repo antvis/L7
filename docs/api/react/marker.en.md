@@ -2,7 +2,7 @@
 title: Marker
 order: 3
 ---
-
+`markdown:docs/common/style.md`
 ## Marker Props
 
 | prop name      | Type              | Default | Description       |

@@ -267,7 +267,7 @@
     react-dat-gui "^4.0.3"
     simplify-geojson "^1.0.3"
 
-"@antv/l7-draw@2.3.40":
+"@antv/l7-draw@^2.3.40":
   version "2.3.40"
   resolved "https://registry.npmjs.org/@antv/l7-draw/-/l7-draw-2.3.40.tgz#21a04626a06add9fc053dbf7f69e42a295dac073"
   integrity sha512-ZkrDlFI8iKWHBCZBxlVTmq+vrtPsrMQ7AxB41y6Fj+Tp7bU+HSY8ziZ7Po6UfCHNdNz6+ll0RCYQoLa/UciQuQ==

@@ -81,3 +81,4 @@ const layer = new LineLayer({})
     opacity: 0.8,
   });
 ```
+`markdown:docs/common/layer/base.md`

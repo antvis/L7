@@ -3,6 +3,8 @@ title: 图片图层
 order: 5
 ---
 
+`markdown:docs/common/style.md`
+
 ## 简介
 
 将图片添加到地图上，需要指定图片的经纬度范围

@@ -2,7 +2,7 @@
 title: 图层基类
 order: 0
 ---
-
+`markdown:docs/common/style.md`
 ## 简介
 
 L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
@@ -20,6 +20,7 @@ scene.addLayer(layer);
 ## 配置项
 
 ### name
+<description> _string_ **optional** _default:_ 自动数字编号</description>
 
 设置图层名称,可根据 name 获取 layer;
 

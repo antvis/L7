@@ -42,4 +42,4 @@ const scatter = new PointLayer()
   });
 ```
 
-## 相关 demo
+`markdown:docs/common/layer/base.md`

@@ -147,3 +147,4 @@ const layer = new HeatmapLayer({})
 
 scene.addLayer(layer);
 ```
+`markdown:docs/common/layer/base.md`

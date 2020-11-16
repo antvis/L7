@@ -8,19 +8,6 @@ order: 6
 ```javascript
 import { CityBuildingLayer } from '@antv/l7';
 ```
-
-### source
-
-同 [PolygonLayer](./polygon_layer/extrude)
-
-### size
-
-同 [PolygonLayer](./polygon_layer/extrude)
-
-### color
-
-[PolygonLayer](./polygon_layer/extrude)
-
 ### animate
 
 开启动画效果
@@ -71,3 +58,5 @@ pointLayer
   });
 scene.addLayer(pointLayer);
 ```
+
+`markdown:docs/common/layer/base.md`

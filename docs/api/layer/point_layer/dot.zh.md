@@ -45,3 +45,5 @@ scene.addLayer(pointLayer);
 ## 相关 demo
 
 [城市亮度图](../../../../examples/point/dot)
+
+`markdown:docs/common/layer/base.md`

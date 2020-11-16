@@ -43,3 +43,5 @@ layer.shape('name', 'text');
 ## 相关 demo
 
 [文本标注](../../../../examples/point/text)
+
+`markdown:docs/common/layer/base.md`

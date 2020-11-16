@@ -129,3 +129,4 @@ const layer = new HeatmapLayer({
     coverage: 0.8,
   });
 ```
+`markdown:docs/common/layer/base.md`

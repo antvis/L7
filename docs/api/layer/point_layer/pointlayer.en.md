@@ -84,3 +84,4 @@ const layer = new PointLayer({
   .shape('local')
   .color('#0D408C');
 ```
+`markdown:docs/common/layer/base.md`

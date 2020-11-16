@@ -1,6 +1,7 @@
 ---
 title: API
 ---
+`markdown:docs/common/style.md`
 地图行政区划组件，支持世界地图，中国地图省市县三级，支持中国地图省市县上钻下取。
 
 ## 使用
@@ -89,29 +90,29 @@ District 提供polygon数据需要跟用户的属性数据，通过关系字段�
   - [市级行政区划及编码](https://gw.alipayobjects.com/os/bmw-prod/d2aefd78-f5df-486f-9310-7449cc7f5569.csv)
 
   - [县级行政区名称级编码](https://gw.alipayobjects.com/os/bmw-prod/fafd299e-0e1e-4fa2-a8ac-10a984c6e983.csv)
-### 属性
+## 属性
   
   行政区划组件每个图层有多个子图层组成，如标注层，国界线、省界线等等，
   
-  #### fillLayer
+  ### fillLayer
 
 ### 方法
 
-#### updateData(data, joinBy)
+### updateData(data, joinBy)
 更新显示数据，
 
 参数：
 - data 需要更新的数据
 - joinBy 关联字段 可选，如果不设置保持和初始化一致。
 
-#### show
+### show
 
 显示图层
 
-#### hide
+### hide
 图层隐藏不显示
 
-#### destroy
+### destroy
 
 移除并销毁图层
 
