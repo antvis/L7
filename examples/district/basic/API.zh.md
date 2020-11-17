@@ -108,16 +108,27 @@ District 提供polygon数据需要跟用户的属性数据，通过关系字段�
   - [市级行政区划及编码](https://gw.alipayobjects.com/os/bmw-prod/d2aefd78-f5df-486f-9310-7449cc7f5569.csv)
 
   - [县级行政区名称级编码](https://gw.alipayobjects.com/os/bmw-prod/fafd299e-0e1e-4fa2-a8ac-10a984c6e983.csv)
-## 属性
-  
-  行政区划组件每个图层有多个子图层组成，如标注层，国界线、省界线等等，
-  
-  ### fillLayer
-  图层事件可以通过该属性进行设置
 
 ## 方法
 
-#### updateData(data, joinBy)
+### updateLayerAttribute
+  更新图层渲染样式
+
+### updateDistrict
+ 根据 adcode 更新 行政区块
+ 
+ 参数
+  - adcode 行政区划编码
+  - data 数据
+  - joinByField 绑定字段
+
+
+```javascript
+  citylayer.updateDistrict(['330100','340100']);
+
+```
+
+### updateData(data, joinBy)
 更新显示数据，
 
 参数：
@@ -140,4 +151,30 @@ District 提供polygon数据需要跟用户的属性数据，通过关系字段�
 移除并销毁图层
 
 ## 事件
+
+行政区划图事件监听默认添加在 fillLayer上，你点击填充的色块才能接收到事件响应。
+
+支持的事件类型同 
+
+### on 添加事件
+  参数
+  - type
+  - handle
+  - layerType 可选  ```'fill' | 'line' | 'label' | 'bubble'``` 默认值 `fill`
+
+
+```javascript
+  const layer = new CountryLayer();
+  layer.on('click',(e)=>{
+    console.log(e);
+  })
+```
+
+
+### off 移除事件
+
+ 参数
+  - type
+  - handle
+  - layerType 可选  ```'fill' | 'line' | 'label' | 'bubble'``` 默认值 `fill`
 

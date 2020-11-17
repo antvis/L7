@@ -246,12 +246,12 @@
   resolved "https://registry.npmjs.org/@antv/gl-matrix/-/gl-matrix-2.7.1.tgz#acb8e37f7ab3df01345aba4372d7942be42eba14"
   integrity sha512-oOWcVNlpELIKi9x+Mm1Vwbz8pXfkbJKykoCIOJ/dNK79hSIANbpXJ5d3Rra9/wZqK6MC961B7sybFhPlLraT3Q==
 
-"@antv/l7-district@^2.2.37":
-  version "2.2.42"
-  resolved "https://registry.npmjs.org/@antv/l7-district/-/l7-district-2.2.42.tgz#5bff1e096bc8fe0e75b09f2ea36618f2763b73da"
-  integrity sha512-6PxYhCUVH45QgKTpirv7VT40cOVLZ3cbGB/gSFaTDbARxoemACGWPAwPprspBXXYnkBbfqIyegWNHjXh7BJ6qQ==
+"@antv/l7-district@^2.2.44":
+  version "2.2.44"
+  resolved "https://registry.npmjs.org/@antv/l7-district/-/l7-district-2.2.44.tgz#b502af24a9d2262b8d4950081fc52309f51f7978"
+  integrity sha512-OQK1C1ZNYyofF5ZWbzZnWk3feh7oNAspS1MqDX/VK3/bMEXf8myRCjWV3gCKcj6jMlhNQGCBWKZF1s46usUZ9g==
   dependencies:
-    "@antv/l7" "^2.2.37"
+    "@antv/l7" "^2.2.41"
     "@antv/l7-maps" "^2.2.37"
     "@babel/runtime" "^7.7.7"
     "@turf/circle" "^6.0.1"

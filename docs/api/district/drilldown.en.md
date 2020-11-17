@@ -2,6 +2,7 @@
 title: 钻取地图
 order: 2
 ---
+
 `markdown:docs/common/style.md`
 
 钻取是改变展现数据维度的层次，变换分析的粒度。它包括向上钻取（drillup）和向下钻取（drilldown）。
@@ -93,7 +94,7 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
   strokeWidth: number; 填充宽度
   };
 
-#### fill
+#### fillOption
 
 填充图样式
 

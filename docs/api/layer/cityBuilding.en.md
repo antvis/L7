@@ -8,6 +8,7 @@ order: 6
 ```javascript
 import { CityBuildingLayer } from '@antv/l7';
 ```
+
 ### animate
 
 开启动画效果

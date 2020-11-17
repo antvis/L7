@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@antv/g2": "^3.5.9",
-    "@antv/l7-district": "^2.2.42",
+    "@antv/l7-district": "^2.2.44",
     "@antv/l7-draw": "^2.3.40",
     "@antv/l7-react": "^2.2.37",
     "@antv/gatsby-theme-antv": "^1.0.0-beta.11",

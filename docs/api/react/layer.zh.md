@@ -2,7 +2,9 @@
 title: Layer 组件
 order: 2
 ---
+
 `markdown:docs/common/style.md`
+
 ## Layer 类型
 
 React 各个组件名称和 L7 名称保持一致

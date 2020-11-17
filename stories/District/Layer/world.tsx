@@ -52,9 +52,9 @@ export default class Country extends React.Component {
           enable: true,
           openTriggerEvent: 'click',
           Html: (props: any) => {
-            return `<span><button onclick='alert(11111)'>点击</button>${
-              props.NAME_CHN + ':' + props.value
-            }</span>`;
+            return `<span><button onclick='alert(11111)'>点击</button>${props.NAME_CHN +
+              ':' +
+              props.value}</span>`;
           },
         },
       });

@@ -2,7 +2,9 @@
 title: 场景 Scene
 order: 2
 ---
+
 `markdown:docs/common/style.md`
+
 # 简介
 
 ```javascript
@@ -40,7 +42,6 @@ L7 地理可视化侧重于地理数据的可视化表达，地图层需要依�
 - MapBox 国际业务，或者内网离线部署场景
 
 ### map
-
 
 可以通过 scene map 属性获取 map 实例
 
@@ -88,7 +89,8 @@ L7 Logo 的显示位置 默认左下角
 - bottomleft,
 - topleft`
 
-### logoVisible logo是否可见
+### logoVisible logo 是否可见
+
 <description> _bottomleft_ **可选** _default: true_ </description>
 
 是否显示 L7 的 Logo {boolean} true
@@ -109,7 +111,7 @@ L7 Logo 的显示位置 默认左下角
 
 ### zoom 初始化缩放等级
 
-<description> _number_  </description>
+<description> _number_ </description>
 
 地图初始显示级别 {number} Mapbox （0-24） 高德 （3-18）
 

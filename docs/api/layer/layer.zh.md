@@ -2,7 +2,9 @@
 title: 图层基类
 order: 0
 ---
+
 `markdown:docs/common/style.md`
+
 ## 简介
 
 L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
@@ -10,7 +12,12 @@ L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
 语法示例
 
 ```javascript
-const layer = new Layer(option).source().color().size().shape().style();
+const layer = new Layer(option)
+  .source()
+  .color()
+  .size()
+  .shape()
+  .style();
 
 scene.addLayer(layer);
 ```
@@ -20,6 +27,7 @@ scene.addLayer(layer);
 ## 配置项
 
 ### name
+
 <description> _string_ **optional** _default:_ 自动数字编号</description>
 
 设置图层名称,可根据 name 获取 layer;
@@ -83,7 +91,7 @@ layer.source(data, {
   transforms: [
     {
       type: 'map',
-      callback: function (item) {
+      callback: function(item) {
         const [x, y] = item.coordinates;
         item.lat = item.lat * 1;
         item.lng = item.lng * 1;

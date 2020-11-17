@@ -2,6 +2,7 @@
 title: 钻取地图
 order: 2
 ---
+
 `markdown:docs/common/style.md`
 
 钻取是改变展现数据维度的层次，变换分析的粒度。它包括向上钻取（drillup）和向下钻取（drilldown）。

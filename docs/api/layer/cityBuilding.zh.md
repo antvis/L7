@@ -59,4 +59,5 @@ pointLayer
   });
 scene.addLayer(pointLayer);
 ```
+
 `markdown:docs/common/layer/base.md`
