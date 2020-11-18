@@ -3,6 +3,8 @@ title: Draw 实例
 order: 3
 ---
 
+`markdown:docs/common/style.md`
+
 ### Draw Type
 
 可以不依赖 Draw UI 组件，独立的使用每一个 Draw

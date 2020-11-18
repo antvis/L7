@@ -6,12 +6,17 @@ import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: number;
+  offsets: [number, number];
 }
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
-    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      opacity,
+      offsets,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
+      u_offsets: offsets || [0, 0],
     };
   }
   public initModels(): IModel[] {

@@ -3,6 +3,8 @@ title: ChangeLog
 order: 10
 ---
 
+`markdown:docs/common/style.md`
+
 ## 2020.03.12 2.1 正式版
 
 ###✨ Features

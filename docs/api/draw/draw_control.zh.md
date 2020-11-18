@@ -3,6 +3,8 @@ title: 绘制 UI 组件
 order: 2
 ---
 
+`markdown:docs/common/style.md`
+
 地图绘制组件，支持点、线、面， 圆、矩形、的绘制编辑。
 
 # 使用

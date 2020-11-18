@@ -1,6 +1,7 @@
 ---
 title: API
 ---
+`markdown:docs/common/style.md`
 地图行政区划组件，支持世界地图，中国地图省市县三级，支持中国地图省市县上钻下取。
 
 ## 使用

@@ -3,6 +3,8 @@ title: Source
 order: 0
 ---
 
+`markdown:docs/common/style.md`
+
 ## 概述
 
 source 地理数据处理模块，主要包含数据解析（parser)，和数据处理(transform);

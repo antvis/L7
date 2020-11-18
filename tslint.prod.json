@@ -5,6 +5,6 @@
     "no-implicit-dependencies": false
   },
   "linterOptions": {
-    "exclude": ["**/*.d.ts", "**/data/*.ts", "**/*.{test,story}.ts{,x}"]
+    "exclude": ["**/*.d.ts", "**/data/*.ts", "**/*.{test,story}.ts{,x}", "node_modules/**/*.d.ts"]
   }
 }

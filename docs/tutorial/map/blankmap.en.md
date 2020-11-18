@@ -2,7 +2,7 @@
 title: Blank BaseMap With Mapbox
 order: 2
 ---
-
+`markdown:docs/common/style.md`
 很多情况下我们只是做些简单的地理可视化，不需要加载地图.
 本教程就是告诉大家如果在L7中使用无底图模式。
 

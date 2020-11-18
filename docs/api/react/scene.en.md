@@ -3,6 +3,8 @@ title: Scene
 order: 1
 ---
 
+`markdown:docs/common/style.md`
+
 ## 使用
 
 在 React 版本中 Mapbox 和高德地图作为两个组件封装的。

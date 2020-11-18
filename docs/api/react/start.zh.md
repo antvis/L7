@@ -3,6 +3,8 @@ title: 快速开始
 order: 0
 ---
 
+`markdown:docs/common/style.md`
+
 ### 安装
 
 ```bash

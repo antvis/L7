@@ -85,3 +85,4 @@ const layer = new LineLayer({})
 ### demo 示例
 
 [弧线 demo](../../../../examples/gallery/basic#arcCircle)
+`markdown:docs/common/layer/base.md`

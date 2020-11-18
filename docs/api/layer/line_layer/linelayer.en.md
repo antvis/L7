@@ -68,3 +68,4 @@ order: 2
 lineLayer.size(1); // 线的宽度为 1
 lineLayer.size([1, 2]); // 宽度为1，高度2
 ```
+`markdown:docs/common/layer/base.md`

@@ -19,6 +19,7 @@ interface IPointLayerStyleOptions {
   strokeWidth: number;
   stroke: string;
   strokeOpacity: number;
+  offsets: [number, number];
 }
 export default class FillModel extends BaseModel {
   public getUninforms(): IModelUniform {
@@ -27,12 +28,14 @@ export default class FillModel extends BaseModel {
       stroke = 'rgb(0,0,0,0)',
       strokeWidth = 1,
       strokeOpacity = 1,
+      offsets = [0, 0],
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_opacity: opacity,
       u_stroke_width: strokeWidth,
       u_stroke_color: rgb2arr(stroke),
       u_stroke_opacity: strokeOpacity,
+      u_offsets: [-offsets[0], offsets[1]],
     };
   }
   public getAnimateUniforms(): IModelUniform {

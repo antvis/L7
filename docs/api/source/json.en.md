@@ -3,6 +3,8 @@ title: JSON
 order: 2
 ---
 
+`markdown:docs/common/style.md`
+
 GeoJSON 虽然是通用的的地理数据格式，在具体使用场景中，数据服务人员可能并不熟悉 GeoJON,或者没有生成 GeoJON 的工具， 因此 L7 对数据定义了 Parser 的概念，你的数据可以是任何格式，使用指定数据对应的地理信息字段即可。
 
 ## JSON

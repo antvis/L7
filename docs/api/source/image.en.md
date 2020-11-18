@@ -3,6 +3,7 @@ title: Image
 order: 4
 ---
 
+`markdown:docs/common/style.md`
 Image 数据主要用于在地图根据经纬度范围添加图图片，不如一幅纸制地图扫描版你要放在地图显示。
 
 ## parser

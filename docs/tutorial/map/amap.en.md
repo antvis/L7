@@ -2,7 +2,7 @@
 title: GaodeMap
 order: 0
 ---
-
+`markdown:docs/common/style.md`
 ## 使用高德地图
 
 ### 注册账号并申请Key

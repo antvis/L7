@@ -1,6 +1,7 @@
 ---
 title: API
 ---
+`markdown:docs/common/style.md`
 ## Layer 类型
 
 React 各个组件名称和 L7 名称保持一致

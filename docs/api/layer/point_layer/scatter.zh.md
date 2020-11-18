@@ -42,3 +42,4 @@ const scatter = new PointLayer()
     strokeWidth: 1,
   });
 ```
+`markdown:docs/common/layer/base.md`

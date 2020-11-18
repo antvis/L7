@@ -3,6 +3,8 @@ title: Map
 order: 2
 ---
 
+`markdown:docs/common/style.md`
+
 # 简介
 
 L7 专注数据可视化层数据表达，目前 L7 还不支持独立的地图引擎，需要引入第三方引擎，目前支持高德地图和 MapBox 两种。

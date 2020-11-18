@@ -3,6 +3,8 @@ title: 1.x 历史版本
 order: 9
 ---
 
+`markdown:docs/common/style.md`
+
 ## L7 1.x 版本
 
 ## [旧版地址](https://antv-2018.alipay.com/zh-cn/l7/1.x/index.html)

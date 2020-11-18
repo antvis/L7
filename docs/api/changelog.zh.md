@@ -3,6 +3,8 @@ title: 发布日志
 order: 10
 ---
 
+`markdown:docs/common/style.md`
+
 ## 2020.04.20 2.2 正式版本
 
 ###✨ Features

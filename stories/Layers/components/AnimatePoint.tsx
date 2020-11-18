@@ -43,9 +43,27 @@ export default class AnimatePoint extends React.Component {
           .color('#ffa842')
           .style({
             opacity: 1,
+            offsets: [40, 40],
+          });
+        const pointLayer2 = new PointLayer({})
+          .source(data, {
+            parser: {
+              type: 'csv',
+              x: 'Longitude',
+              y: 'Latitude',
+            },
+          })
+          .shape('circle')
+          .active(true)
+          .animate(true)
+          .size(10)
+          .color('#f00')
+          .style({
+            opacity: 1,
           });
 
         scene.addLayer(pointLayer);
+        scene.addLayer(pointLayer2);
       });
 
     this.scene = scene;
@@ -61,7 +79,7 @@ export default class AnimatePoint extends React.Component {
           left: 0,
           right: 0,
           bottom: 0,
-          transform: 'scale(1.5)',
+          // transform: 'scale(1.5)',
         }}
       />
     );

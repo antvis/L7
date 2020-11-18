@@ -3,6 +3,8 @@ title: 场景 Scene
 order: 2
 ---
 
+`markdown:docs/common/style.md`
+
 # 简介
 
 ```javascript
@@ -72,9 +74,13 @@ const scene = new L7.Scene({
 
 ### id
 
-需传入 dom 容器或者容器 id  {domObject || string} [必选]
+<description> _string | HTMLElement_ **必选** </description>
+
+需传入 dom 容器或者容器 id
 
 ### logoPosition
+
+<description> _bottomleft_ **可选** </description>
 
 L7 Logo 的显示位置 默认左下角
 
@@ -83,33 +89,41 @@ L7 Logo 的显示位置 默认左下角
 - bottomleft,
 - topleft`
 
-### logoVisible
+### logoVisible logo 是否可见
+
+<description> _bottomleft_ **可选** _default: true_ </description>
 
 是否显示 L7 的 Logo {boolean} true
 
-### antialias
+### antialias 是否开启抗锯齿
+
+<description> _boolean_ **可选** _default: true_ </description>
 
 是否开始前抗锯齿 `boolean` `true`
 
 ### preserveDrawingBuffer
 
+<description> _boolean_ **可选** _default: false_ </description>
+
 是否保留缓冲区数据 `boolean` `false`
 
 ## Map 配置项
 
-### zoom
+### zoom 初始化缩放等级
+
+<description> _number_ </description>
 
 地图初始显示级别 {number} Mapbox （0-24） 高德 （3-18）
 
-### center
+### center 地图中心
 
 地图初始中心经纬度 {Lnglat}
 
-### pitch
+### pitch 地图倾角
 
 地图初始俯仰角度 {number}  default 0
 
-### style
+### style 地图图样式
 
 简化地图样式设置，L7 内置了三种主题默认样式 高德，mapbox 都可以使用
 
@@ -130,21 +144,21 @@ L7 Logo 的显示位置 默认左下角
 }
 ```
 
-### minZoom
+### minZoom 最小缩放等级
 
 地图最小缩放等级 {number}  default 0 Mapbox 0-24） 高德 （3-18）
 
-### maxZoom
+### maxZoom 最大缩放等级
 
 地图最大缩放等级 {number}  default 22 Mapbox（0-24） 高德 （3-18）
 
-### rotateEnable
+### rotateEnable 是否允许旋转
 
 地图是否可旋转 {Boolean} default true
 
 ## 方法
 
-### getZoom
+### getZoom 获取缩放等级
 
 获取当前缩放等级
 
@@ -154,7 +168,7 @@ scene.getZoom();
 
 return {float}   当前缩放等级
 
-### getLayers()
+### getLayers() 获取所有图层
 
 获取所有的地图图层
 
@@ -162,7 +176,7 @@ return {float}   当前缩放等级
 scene.getLayers();
 ```
 
-### getLayerByName(name)
+### getLayerByName(name) 根据名称获取图层
 
 根据图层名称获取图层
 
@@ -178,7 +192,7 @@ scene.getLayerByName(name);
 
 return Layer 图层对象
 
-### getCenter()
+### getCenter() 获取地图中心
 
 获取地图中心点
 
@@ -188,7 +202,7 @@ scene.getCenter();
 
 return {Lnglat} :地图中心点
 
-### getSize()
+### getSize() 获取地图容器大小
 
 获取地图容器大小
 
@@ -198,7 +212,7 @@ scene.getSize();
 
 return { Object } 地图容器的 width,height
 
-### getPitch()
+### getPitch() 获取地图倾角
 
 获取地图俯仰角
 
@@ -208,7 +222,7 @@ scene.getPitch();
 
 return {number} pitch
 
-### getContainer
+### getContainer 获取地图容器
 
 获取地图容器 return htmlElement
 
@@ -216,7 +230,7 @@ return {number} pitch
 scene.getContainer();
 ```
 
-### setMapStyle
+### setMapStyle 设置地图样式
 
 参数：`style` {string} 地图样式 具体样式格式和各底图设置方法一致
 
@@ -242,7 +256,7 @@ scene.setMapStyle(
 );
 ```
 
-### setCenter()
+### setCenter() 设置地图中心点
 
 设置地图中心点坐标
 
@@ -252,7 +266,7 @@ scene.setCenter([lng, lat]);
 
 参数：`center` {LngLat} 地图中心点
 
-### setZoomAndCenter
+### setZoomAndCenter 设置地图缩放等级和中心点
 
 设置地图等级和中心
 
@@ -265,7 +279,7 @@ scene.setZoomAndCenter(zoom, center);
 - zoom {number}
 - center {LngLat}
 
-### setRotation
+### setRotation 设置地图旋转
 
 设置地图顺时针旋转角度，旋转原点为地图容器中心点，取值范围 [0-360]
 
@@ -275,7 +289,7 @@ scene.setRotation(rotation);
 
 参数： `rotation` {number}
 
-### zoomIn
+### zoomIn 地图放大一级
 
 地图放大一级
 
@@ -283,7 +297,7 @@ scene.setRotation(rotation);
 scene.zoomIn();
 ```
 
-### zoomOut
+### zoomOut 地图缩小一级
 
 地图缩小一级
 
@@ -291,7 +305,7 @@ scene.zoomIn();
 scene.ZoomOUt();
 ```
 
-### panTo
+### panTo 地图移动到
 
 地图平移到指定的位置
 
@@ -303,7 +317,7 @@ scene.panTo(LngLat);
 
 - `center` LngLat 中心位置坐标
 
-### panBy
+### panBy 地图平移
 
 以像素为单位沿 X 方向和 Y 方向移动地图
 
@@ -317,7 +331,7 @@ scene.panBy(x, y);
 
 - `y` {number} 垂直方向移动像素 向下为正方向
 
-### setPitch
+### setPitch 设置地图倾角
 
 设置地图仰俯角度
 
@@ -325,7 +339,7 @@ scene.panBy(x, y);
 scene.setPitch(pitch);
 ```
 
-### setMapStatus
+### setMapStatus 设置地图状态
 
 参数 :
 
@@ -346,7 +360,7 @@ scene.setMapStatus({ dragEnable: false });
 
 - `pitch` {number}
 
-### fitBounds
+### fitBounds 设置地图缩放范围
 
 地图缩放到某个范围内
 
@@ -361,7 +375,7 @@ scene.fitBounds([
 ]);
 ```
 
-### removeLayer
+### removeLayer 移除图层
 
 移除 layer
 
@@ -373,7 +387,7 @@ scene.removeLayer(layer);
 
 - `layer` {Layer}
 
-### exportMap
+### exportMap 导出地图图片
 
 导出地图，目前仅支持导出可视化层，不支持底图导出
 
@@ -383,7 +397,7 @@ scene.removeLayer(layer);
 scene.exportMap('png');
 ```
 
-### destroy
+### destroy 场景销毁
 
 scene 销毁方法，离开页面，或者不需要使用地图可以调用
 

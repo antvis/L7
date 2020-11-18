@@ -3,6 +3,8 @@ title: Marker 组件
 order: 3
 ---
 
+`markdown:docs/common/style.md`
+
 ## Marker Props
 
 | prop name      | Type              | Default | Description       |

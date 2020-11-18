@@ -33,10 +33,4 @@ layer.size('floor', (floor) => {
 });
 ```
 
-### color
-
-同 [layer#color](../layer/#color)
-
-### style
-
-同 [layer#style](../layer/#style)
+`markdown:docs/common/layer/base.md`

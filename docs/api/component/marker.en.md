@@ -3,6 +3,8 @@ title: Marker
 order: 3
 ---
 
+`markdown:docs/common/style.md`
+
 Marker 地图标注 目前只支持 2D dom 标注
 
 ## 构造函数

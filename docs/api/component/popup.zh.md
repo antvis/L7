@@ -3,6 +3,8 @@ title: Popup 信息框
 order: 0
 ---
 
+`markdown:docs/common/style.md`
+
 地图标注信息窗口，用于展示地图要素的属性信息
 
 ## 构造函数

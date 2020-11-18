@@ -80,3 +80,4 @@ layer.style({
   dashArray: [5, 5],
 });
 ```
+`markdown:docs/common/layer/base.md`

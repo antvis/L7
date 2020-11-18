@@ -3,6 +3,8 @@ title: CSV
 order: 3
 ---
 
+`markdown:docs/common/style.md`
+
 L7 支持 CSV 以逗号分隔的 CSV 数据加载。
 
 CSV 是文本数据结构，很难表达复杂的地理数据结构，因此 CSV 仅支持两种数据结构

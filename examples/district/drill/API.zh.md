@@ -13,26 +13,48 @@ import { DrillDownLayer } from '@antv/l7-district';
 ```
 DrillDownLayer 提供默认提供通过Layer的交互事件，实现上钻下钻的交互，默认点击当前图层(click)向下钻取，双击非地图区域(undblclick)向上钻取。你可以更改默认交互的的触发事件。通过也可以更改默认的交互行为。
 
-### 构造函数
-- scene L7 scene 对象
-- option 行政区划配置项
-    - drillDepth `number` 下钻深度 `0 | 1 | 2 ` 1 市级 2，县级
-    - customTrigger 是否自定义下钻交互，默认 `false`
-    - drillDownTriggerEvent 向下钻取的触发事件  ⛔customTrigger为 true 时不生效
-    - drillUpTriggleEvent 向上钻取的触发事件    ⛔customTrigger为 true 时不生效
-    - provinceData 省级数据 
-    - cityData 市级数据 可以是全量的数据，下钻时可以不需要重新设置数据
-    - countyData 县级数据  可以是全量的数据，下钻时可以不需要重新设置数据
-    - joinBy 数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
-    对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名
-    - label 文本配置项 `labelOption`
-    - bubble 气泡配置项 `bubbleOption`
-    - fill 填充配置项 `fillOption`
-    - province  `layerOption` 省级图层配置，如果不设置等同全局配置  
-    - city `layerOption`  市级图层配置，如果不设置等同全局配置
-    - county  `layerOption` 县级图层配置，如果不设置等同全局配置
+## 构造函数
+
+### scene L7 scene 对象
+
+### option 行政区划配置项
+
+## 配置项
+
+  ### customTrigger 
+  是否自定义下钻交互，默认 `false`
+  ### drillDownTriggerEvent
+   向下钻取的触发事件  ⛔customTrigger为 true 时不生效
+  ### drillUpTriggleEvent 
+  向上钻取的触发事件    ⛔customTrigger为 true 时不生效
+  ### provinceData 
+  省级数据 
+  ### cityData 
+  市级数据 可以是全量的数据，下钻时可以不需要重新设置数据
+  ### countyData
+   县级数据  可以是全量的数据，下钻时可以不需要重新设置数据
+  ### joinBy 
+  数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
+  对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名
+  ### label 
+   文本配置项 `labelOption`
+  ### bubble 
+   气泡配置项 `bubbleOption`
+  ### fill 
+  填充配置项 `fillOption`
+  ### province  
+  `layerOption` 省级图层配置，如果不设置等同全局配置  
+  ### city 
+  `layerOption`  市级图层配置，如果不设置等同全局配置
+  ### county 
+   `layerOption` 县级图层配置，如果不设置等同全局配置
+  ### viewStart 
+  起始下钻视图 `Country' | 'Province' | 'City' | 'County`;  用于定义下钻层级，
+  ### viewEnd   
+  结束下钻视图 `Country' | 'Province' | 'City' | 'County`;  用于定义下钻层级，
 
 #### layerOption
+
  下钻各个层级的配置项，可以独立配置，每一层级的样式，不设置和上一层就保持一致
   - joinBy: [string, string];
   - label: Partial<ILabelOption>;

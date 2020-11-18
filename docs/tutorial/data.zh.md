@@ -2,7 +2,7 @@
 title: 数据
 order: 2
 ---
-
+`markdown:docs/common/style.md`
 ## 数据
 
 目前L7支持的数据格式有GeoJson,CSV,JSon Image
