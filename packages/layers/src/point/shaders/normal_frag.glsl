@@ -1,6 +1,8 @@
 
 uniform float u_opacity : 1;
+uniform vec2 u_offsets;
 varying vec4 v_color;
+
 #pragma include "picking"
 void main() {
   gl_FragColor = v_color;

@@ -13,13 +13,17 @@ import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
 interface IImageLayerStyleOptions {
   opacity: number;
+  offsets: [number, number];
 }
 
 export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    const {
+      opacity,
+      offsets = [0, 0],
+    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
@@ -27,6 +31,7 @@ export default class ImageModel extends BaseModel {
       u_opacity: opacity || 1.0,
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
+      u_offsets: [-offsets[0], offsets[1]],
     };
   }
 

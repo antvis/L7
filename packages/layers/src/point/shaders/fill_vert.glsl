@@ -6,6 +6,7 @@ attribute float a_Shape;
 uniform mat4 u_ModelMatrix;
 
 uniform float u_stroke_width : 2;
+uniform vec2 u_offsets;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -26,7 +27,7 @@ void main() {
   // radius(16-bit)
   v_radius = newSize;
 
-  vec2 offset = project_pixel(extrude * (newSize + u_stroke_width));
+  vec2 offset = project_pixel(extrude * (newSize + u_stroke_width) + u_offsets);
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
 
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
