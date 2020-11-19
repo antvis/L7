@@ -23,8 +23,8 @@ layer.shape('name', 'text');
 - opacity `number`
 - textAnchor `string` 文本相对锚点的位置
   `'right' | 'top-right' | 'left' | 'bottom-right' | 'left' | 'top-left' | 'bottom-left' | 'bottom' | 'bottom-right' | 'bottom-left' | 'top' | 'top-right' | 'top-left' | 'center';`
-- spacing: `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-- padding: `[number, number]` 文本相对锚点的偏移量 [x, y]
+- padding: `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+- spacing: number 文本间隔
 - stroke: `string`; 描边颜色
 - strokeWidth `number` 描边宽度
 - strokeOpacity `number` 描边透明度

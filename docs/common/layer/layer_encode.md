@@ -226,6 +226,8 @@ layer.color('gender*age', (gender, age) => {
 
 - stroke 线填充颜色 仅点图层支持
 
+- offsets 偏移量  [number, number] x 和 y 方向偏移 仅支持 pointLayer
+
 - strokeWidth 线的宽度 仅点图层支持
 
 ```javascript

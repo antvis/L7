@@ -55,11 +55,31 @@ export default class PointImage extends React.Component {
       // .shape('triangle')
       // .color('red')
       .active(true)
-      .size(20);
+      .size(20)
+      .style({
+        offsets: [40, 40],
+      });
     // imageLayer.on('click', (e) => {
     //   console.log(e);
     // });
+
+    const imageLayer2 = new PointLayer()
+      .source(newData, {
+        parser: {
+          type: 'json',
+          x: 'longitude',
+          y: 'latitude',
+        },
+      })
+      .shape('type', (v: any) => {
+        return v;
+      })
+      // .shape('triangle')
+      // .color('red')
+      .active(true)
+      .size(10);
     scene.addLayer(imageLayer);
+    scene.addLayer(imageLayer2);
   }
 
   public render() {

@@ -3,7 +3,7 @@ title: API
 ---
 地图绘制组件，支持点、线、面， 圆、矩形、的绘制编辑。
 
-# 使用
+## 使用
 
 **using modules**
 
@@ -20,7 +20,7 @@ import { DrawControl } from '@antv/l7-draw';
 </head>
 ```
 
-### 参数
+## 参数
 
 ```javascript
 const control = new DrawControl(scene, option);
@@ -90,11 +90,11 @@ scene.addControl(control);
 scene.removeControl(control);
 ```
 
-### Draw Type
+## Draw Type
 
 可以不依赖 Draw UI 组件，独立的使用每一个 Draw
 
-#### DrawCircle
+### DrawCircle
 
 绘制圆形
 
@@ -104,7 +104,7 @@ const drawCircle = new DrawCircle(scene);
 drawCircle.enable();
 ```
 
-#### DrawRect
+### DrawRect
 
 绘制四边形
 
@@ -114,7 +114,7 @@ const drawRect = new DrawRect(scene);
 drawRect.enable();
 ```
 
-#### DrawLine
+### DrawLine
 
 绘制路径
 
@@ -124,7 +124,7 @@ const drawLine = new DrawLine(scene);
 drawLine.enable();
 ```
 
-#### DrawPoint
+### DrawPoint
 
 绘制点
 
@@ -134,7 +134,7 @@ const drawPoint = new DrawPoint(scene);
 drawPoint.enable();
 ```
 
-#### DrawPolygon
+### DrawPolygon
 
 绘制多边形
 
@@ -149,27 +149,27 @@ drawPoint.enable();
 - editEnable boolean 是否允许编辑
 - selectEnable boolean 是否允许选中
 
-### 方法
+## 方法
 
-#### enable
+### enable
 
 开始编辑，绘制完成之后会自动结束。
 
-#### disable
+### disable
 
 结束编辑
 
-### 事件
+## 事件
 
-#### draw.create
+### draw.create
 
 绘制完成时触发该事件
 
-#### draw.delete
+### draw.delete
 
 图形删除时触发该事件
 
-#### draw.update
+### draw.update
 
 图形更新时触发该事件，图形的平移，顶点的编辑
 
