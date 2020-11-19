@@ -1,6 +1,7 @@
 import { Scene } from '@antv/l7';
 import { ProvinceLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
+const colors = ['#B8E1FF','#7DAAFF', '#3D76DD','#0047A5','#001D70']
 async function initMap() {
   const response = await fetch(
     'https://gw.alipayobjects.com/os/bmw-prod/149b599d-21ef-4c24-812c-20deaee90e20.json'
@@ -39,14 +40,7 @@ async function initMap() {
       fill: {
         color: {
           field: 'pop',
-          values: [
-            '#feedde',
-            '#fdd0a2',
-            '#fdae6b',
-            '#fd8d3c',
-            '#e6550d',
-            '#a63603'
-          ]
+          values: colors
         }
       },
       popup: {

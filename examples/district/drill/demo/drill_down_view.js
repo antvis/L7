@@ -16,9 +16,9 @@ const scene = new Scene({
 scene.on('loaded', () => {
   new DrillDownLayer(scene, {
     data: [],
-    depth: 1,
-    bubble: {
-      enable: true,
+    viewStart: 'Country',
+    viewEnd: 'Province',
+    fill: {
       color: {
         field: 'NAME_CHN',
         values: colors

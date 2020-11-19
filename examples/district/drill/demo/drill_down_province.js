@@ -16,13 +16,16 @@ const scene = new Scene({
 scene.on('loaded', () => {
   new DrillDownLayer(scene, {
     data: [],
-    depth: 1,
-    bubble: {
-      enable: true,
+    viewStart: 'Province',
+    viewEnd: 'County',
+    fill: {
       color: {
         field: 'NAME_CHN',
         values: colors
       }
+    },
+    city:{
+      adcode:[330000]
     },
     popup: {
       enable: true,

@@ -19,7 +19,7 @@ void main() {
    vec4 project_pos = project_position(vec4(a_Position, 1.0));
    v_size = a_Size;
    vec2 offset = project_pixel(u_offsets);
-   gl_Position = project_common_position_to_clipspace(vec4(vec2(project_pos.xy + offset) project_pos.z, 1.0));
+   gl_Position = project_common_position_to_clipspace(vec4(vec2(project_pos.xy + offset),project_pos.z, 1.0));
    gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
 
   setPickingColor(a_PickingColor);

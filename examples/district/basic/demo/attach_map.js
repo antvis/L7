@@ -1,6 +1,7 @@
 import { Scene } from '@antv/l7';
 import { CountryLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
+const colors = ['#B8E1FF','#7DAAFF', '#3D76DD','#0047A5','#001D70']
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({
@@ -27,7 +28,7 @@ scene.on('loaded', () => {
     data: [],
     joinBy: [ 'NAME_CHN', 'name' ],
     depth: 1,
-    provinceStroke: '#783D2D',
+    provinceStroke: '#fff',
     cityStroke: '#EBCCB4',
     cityStrokeWidth: 1,
     label: {
@@ -36,14 +37,7 @@ scene.on('loaded', () => {
     fill: {
       color: {
         field: 'NAME_CHN',
-        values: [
-          '#feedde',
-          '#fdd0a2',
-          '#fdae6b',
-          '#fd8d3c',
-          '#e6550d',
-          '#a63603'
-        ]
+        values: colors
       }
     },
     popup: {

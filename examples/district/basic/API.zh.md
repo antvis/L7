@@ -33,7 +33,7 @@ District 支持下面几种图
 - CountyLayer 县级地图
 
 
-## option 行政区划配置项
+## 配置项
 
   ### zIndex 
   
@@ -92,9 +92,11 @@ District 支持下面几种图
   县级边界宽度 `CountryLayer depth =2时生效`
 
 
-`markdown:docs/common/district/label.md`
+`markdown:docs/common/district/label.zh.md`
 
 `markdown:docs/common/district/fill.zh.md`
+
+`markdown:docs/common/district/popup.zh.md`
  
 `markdown:docs/common/district/bubble.zh.md`
 
