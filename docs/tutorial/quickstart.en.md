@@ -4,7 +4,7 @@ order: 0
 redirect_from:
   - /en/docs/tutorial
 ---
-`markdown:docs/common/style.md`
+`markdown:docs/tutorial/quickstart.zh.md`
 ## L7 
 
 Current version:  ![L7 2.0版本号](https://badgen.net/npm/v/@antv/l7)

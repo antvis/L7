@@ -2,6 +2,7 @@
 title: 散点图
 order: 2
 ---
+`markdown:docs/common/style.md`
 
 在地理区域上放置相等大小的圆点，用来表示地域上的空间布局或数据分布。
 

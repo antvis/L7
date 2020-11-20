@@ -2,7 +2,7 @@
 title: 气泡图
 order: 1
 ---
-
+`markdown:docs/common/style.md`
 气泡图地理区域上方会显示不同大小的圆点，圆形面积与其在数据集中的数值会成正比。
 
 ## 基础使用

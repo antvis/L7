@@ -2,6 +2,7 @@
 title: 填充图
 order: 1
 ---
+`markdown:docs/common/style.md`
 
 ## 使用
 

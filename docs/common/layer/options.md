@@ -1,5 +1,3 @@
-## 配置项
-
 ### name
 <description> _string_ **可选** _default:_ 自动数字编号</description>
 

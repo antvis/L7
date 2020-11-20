@@ -2,6 +2,7 @@
 title: 符号图
 order: 4
 ---
+`markdown:docs/common/style.md`
 
 在地理区域上放置不同图片作为符号，通常表示不同地理要素分布情况
 

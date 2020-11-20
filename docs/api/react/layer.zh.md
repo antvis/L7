@@ -2,7 +2,6 @@
 title: Layer 组件
 order: 2
 ---
-
 `markdown:docs/common/style.md`
 
 ## Layer 类型
@@ -26,44 +25,13 @@ import { PointLayer } '@antv/l7-react';
 
 ## Layer Props
 
-| prop name     | Type                           | Default                                                   | Description                             |
-| ------------- | ------------------------------ | --------------------------------------------------------- | --------------------------------------- |
-| options       | `layer options`                |                                                           | layer 配置项                            |
-| source        | `sourceOption`                 |                                                           | 数据源配置项                            |
-| color         | `attributeOption`              |                                                           | 颜色通道                                |
-| shape         | `attributeOption`              |                                                           | 图层形状属性                            |
-| size          | `attributeOption`              |                                                           | 图层大小属性                            |
-| style         | `Object`                       |                                                           | 图层样式                                |
-| scale         | `scale Option`                 | 默认会数值类设定 scale，数值类型 linear，字符串类型为 cat | 图层度量                                |
-| filter        | `Function`                     |                                                           | 图层数据过滤方法                        |
-| select        | `boolean` `interaction option` |                                                           | 图层选中高亮                            |
-| active        | `boolean` `interaction option` | `false`                                                   | 图层 hover 高亮                         |
-| animate       | `animate Option`               | `null`                                                    | 图层动画配置                            |
-| onLayerLoaded | `Function`                     |                                                           | 图层添加完成后回调，用于获取 layer 对象 |
+###  options 图层 配置
+<description> _layer options_ _ **可选** </description>
 
-### layer options
+`markdown:docs/common/layer/options.md`
 
-| prop name     | Type      | Default                 | Description                                                                                              |
-| ------------- | --------- | ----------------------- | -------------------------------------------------------------------------------------------------------- |
-| name          | `string`  |                         | 图层名字，可根据名称获取 layer                                                                           |
-| visible       | `boolean` | `true`                  | 图层是否可见                                                                                             |
-| zIndex        | `number`  | 0                       | 图层绘制顺序，                                                                                           |
-| minZoom       | `number`  | 0                       | 设置 layer 最小可见等级，小于则不显示                                                                    |
-| maxZoom       | `number`  | 与 map 最大缩放等级一致 | 设置 layerd 的最大可见等级，大于则不显示                                                                 |
-| aotoFit       | `boolean` | `false`                 | 是否缩放到图层范围                                                                                       |
-| blend         | 'string'  | 'normal'                | 图层元素混合效果 [详情](../layer/layer/#blend)                                                           |
-| pickingBuffer | 'number'  | '0'                     | 图层拾取缓存机制，如 1px 宽度的线鼠标很难拾取(点击)到, 通过设置该参数可扩大拾取的范围 {number} default 0 |
-
-### attribute Option
-
-color, size, shape 等图形映射通道，通过下面参数配置
-
-- field 映射字段，如果是常量设置为 null
-- values 映射值 支持 常量，数组，回调函数，如果 values 为数组或回调需要设置 field 字段
-
-详细[配置项](../layer/layer/#size)
-
-### source Option
+###  source 图层数据
+<description> _sourceOption_ **必选** _default:_ `0`</description>
 
 数据源配置项
 
@@ -71,9 +39,47 @@ color, size, shape 等图形映射通道，通过下面参数配置
 - parser 数据解析配置项
 - transforms 数据处理配置项
 
-详细[配置项](../source/source/#parser-1)
+```jsx
+<PointLayer
+  source={{
+    data: [],
+    parser: {
+      type:'geojson'
+    },
+    transforms:[
 
-### scale Option
+    ]
+   }
+  }
+/>
+```
+
+###  color 图层颜色
+<description> _attributeOption_ **必选** _default:_ `0`</description>
+
+### shape 图形形状
+<description> _attributeOption_ **必选** _default:_ `0`</description>
+
+### size 图形大小
+
+<description> _attributeOption_ **必选** </description>
+
+### select 选中高亮
+<description> _interaction option_ **可选** </description>
+
+### active 滑过高亮
+<description> _interaction option_ **可选** </description>
+
+### animate 动画
+<description> _animate Option_ **可选** </description>
+
+### style 样式
+<description> _styleOption_ **可选** </description>
+
+`markdown:docs/common/layer/layer_style.md`
+
+###  scale 度量
+<description> _scale Option_ **可选** </description>
 
 度量配置项
 
@@ -94,6 +100,25 @@ const scales = {
 };
 ```
 
+### onLayerLoaded 图层回调
+<description> _Function_ **可选** </description>
+
+获取图层对象方法
+
+
+
+### attribute Option
+
+color, size, shape 等图形映射通道，通过下面参数配置
+
+- field 映射字段，如果是常量设置为 null
+- values 映射值 支持 常量，数组，回调函数，如果 values 为数组或回调需要设置 field 字段
+
+
+### scale Option
+
+
+
 ### interaction option
 
 active，select 配置项
@@ -103,12 +128,19 @@ active，select 配置项
 - color 设置交互的颜色，指滑过或者选中的
 
 ```jsx
-<>
+<PointLayer
+  active={{
+    option:{
+      color:'red'
+    }
+   }
+  }
+/>
 ```
 
-### 获取 layer 对象
+## 获取 layer 对象
 
-#### onLayerLoaded
+### onLayerLoaded
 
 回调函数获取 layer, scene 对象
 
@@ -116,7 +148,7 @@ active，select 配置项
 onLayerLoaded = (layer, scene) => {};
 ```
 
-#### Context API
+### Context API
 
 ```jsx
 import { LayerContext } from '@antv/l7-react';
@@ -127,7 +159,7 @@ import { LayerContext } from '@antv/l7-react';
 </LayerContext.Consumer>;
 ```
 
-### Layer 示例
+## Layer 示例
 
 ```jsx
 import { PolygonLayer } from '@antv/l7-react';

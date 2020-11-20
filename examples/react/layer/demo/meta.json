@@ -4,15 +4,24 @@
     "en": "Layer Component"
   },
   "demos": [
-
-    {
-      "filename": "world.jsx",
-      "title": "世界地图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*SPnxSLCgZ7IAAAAAAAAAAABkARQnAQ"
-    },
     {
       "filename": "Point_image.tsx",
       "title": "点标注图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*HQShTKuKq6wAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "marker.tsx",
+      "title": "点标注图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*HQShTKuKq6wAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "popup.tsx",
+      "title": "信息窗",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*HQShTKuKq6wAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "control.tsx",
+      "title": "组件",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*HQShTKuKq6wAAAAAAAAAAABkARQnAQ"
     }
   ]

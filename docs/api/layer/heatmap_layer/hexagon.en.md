@@ -2,6 +2,7 @@
 title: Hexagon HeatMap
 order: 1
 ---
+`markdown:docs/common/style.md`
 
 将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局
 

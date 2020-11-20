@@ -2,6 +2,7 @@
 title: PointLayer
 order: 0
 ---
+`markdown:docs/common/style.md`
 
 ## 简介
 
