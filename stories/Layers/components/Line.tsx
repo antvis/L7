@@ -41,7 +41,7 @@ export default class LineDemo extends React.Component {
       .shape('line')
       .color('#f00')
       .style({
-        opacity: 1.0,
+        opacity: 0.5,
       });
 
     scene.addLayer(polygonLayer);

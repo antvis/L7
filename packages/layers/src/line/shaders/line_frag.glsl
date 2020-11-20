@@ -25,7 +25,7 @@ void main() {
   gl_FragColor = v_color;
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
-  // gl_FragColor.a *= u_opacity * blur ;
+  gl_FragColor.a *= u_opacity;
   if(u_aimate.x == Animate) {
       float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
