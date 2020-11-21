@@ -2,6 +2,7 @@ import { AMapScene, Marker, PointLayer } from '@antv/l7-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import './index.less';
+
 const MarkerPinImg = {
   green:
     'https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*JhBbT4LvHpQAAAAAAAAAAAAAARQnAQ',
@@ -12,15 +13,38 @@ const MarkerInfo = ({ title }) => {
   return (
     <div className="markerContent">
       <div
-        className="info"
         style={{
+          display: 'flex',
+          alignItems: 'center',
+          height: '32px',
+          padding: '0.05rem',
           background: '#1677ff',
+          borderRadius: '44px',
         }}
       >
-        <div className="text">{title}</div>
+        <div
+          style={{
+            color: '#fff',
+            fontSize: '12px',
+          }}
+        >
+          {title}
+        </div>
       </div>
-      <div className="marker-pin">
-        <img alt="marker" src={MarkerPinImg.blue} />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <img
+          style={{
+            width: '20px',
+            height: '30px',
+          }}
+          alt="marker"
+          src={MarkerPinImg.blue}
+        />
       </div>
     </div>
   );
@@ -41,10 +65,10 @@ const World = React.memo(function Map() {
   return (
     <AMapScene
       map={{
-        center: [0.19382669582967, 50.258134],
+        center: [121.4316962, 31.26082325],
         pitch: 0,
         style: 'light',
-        zoom: 6,
+        zoom: 15,
       }}
       style={{
         position: 'absolute',

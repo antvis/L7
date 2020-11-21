@@ -127,8 +127,8 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 气泡图配置项
 
 - enable
- `boolean` 是否显示气泡 `true`
- 
+  `boolean` 是否显示气泡 `true`
+
 - shape: AttributeType; 气泡形状支持数据映射
 - size: AttributeType; 气泡大小支持数据映射
 - color: AttributeType; 气泡颜色支持数据映射

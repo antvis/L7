@@ -10,9 +10,10 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 
 const World = React.memo(function Map() {
-  const [popInfo, setPopInfo] = React.useState();
+  const [popupInfo, setPopInfo] = React.useState();
   const hoverHandle = (e) => {
-    setPopInfo(e)
+    console.log(e);
+    setPopInfo(e);
   };
   const hoverOutHandle = () => {
     setPopInfo(undefined);
@@ -41,7 +42,7 @@ const World = React.memo(function Map() {
   return (
     <AMapScene
       map={{
-        center: [0.19382669582967, 50.258134],
+        center: [111.9287109375, 28.22697003891834],
         pitch: 0,
         style: 'dark',
         zoom: 6,
@@ -58,7 +59,7 @@ const World = React.memo(function Map() {
         <PolygonLayer
           key={'2'}
           options={{
-            autoFit: true,
+            autoFit: false,
           }}
           source={{
             data,
@@ -92,13 +93,15 @@ const World = React.memo(function Map() {
           }}
         />,
       ]}
-      <Popup
-        key="popup"
-        lnglat={popupInfo.lnglat}
-        option={{ closeButton: false, offsets: [0, 10] }}
-      >
-         <span>这是个信息框</span>
-      </Popup>
+      {popupInfo && (
+        <Popup
+          key="popup"
+          lnglat={popupInfo.lngLat}
+          option={{ closeButton: false, offsets: [0, 10] }}
+        >
+          <span>这是个信息框</span>
+        </Popup>
+      )}
     </AMapScene>
   );
 });

@@ -2,6 +2,7 @@
 title: Layer 组件
 order: 2
 ---
+
 `markdown:docs/common/style.md`
 
 ## Layer 类型
@@ -25,12 +26,14 @@ import { PointLayer } '@antv/l7-react';
 
 ## Layer Props
 
-###  options 图层 配置
-<description> _layer options_ _ **可选** </description>
+### options 图层 配置
+
+<description> _layer options_ \_ **可选** </description>
 
 `markdown:docs/common/layer/options.md`
 
-###  source 图层数据
+### source 图层数据
+
 <description> _sourceOption_ **必选** _default:_ `0`</description>
 
 数据源配置项
@@ -44,20 +47,19 @@ import { PointLayer } '@antv/l7-react';
   source={{
     data: [],
     parser: {
-      type:'geojson'
+      type: 'geojson',
     },
-    transforms:[
-
-    ]
-   }
-  }
+    transforms: [],
+  }}
 />
 ```
 
-###  color 图层颜色
+### color 图层颜色
+
 <description> _attributeOption_ **必选** _default:_ `0`</description>
 
 ### shape 图形形状
+
 <description> _attributeOption_ **必选** _default:_ `0`</description>
 
 ### size 图形大小
@@ -65,20 +67,25 @@ import { PointLayer } '@antv/l7-react';
 <description> _attributeOption_ **必选** </description>
 
 ### select 选中高亮
+
 <description> _interaction option_ **可选** </description>
 
 ### active 滑过高亮
+
 <description> _interaction option_ **可选** </description>
 
 ### animate 动画
+
 <description> _animate Option_ **可选** </description>
 
 ### style 样式
+
 <description> _styleOption_ **可选** </description>
 
 `markdown:docs/common/layer/layer_style.md`
 
-###  scale 度量
+### scale 度量
+
 <description> _scale Option_ **可选** </description>
 
 度量配置项
@@ -101,11 +108,10 @@ const scales = {
 ```
 
 ### onLayerLoaded 图层回调
+
 <description> _Function_ **可选** </description>
 
 获取图层对象方法
-
-
 
 ### attribute Option
 
@@ -114,10 +120,7 @@ color, size, shape 等图形映射通道，通过下面参数配置
 - field 映射字段，如果是常量设置为 null
 - values 映射值 支持 常量，数组，回调函数，如果 values 为数组或回调需要设置 field 字段
 
-
 ### scale Option
-
-
 
 ### interaction option
 
@@ -130,11 +133,10 @@ active，select 配置项
 ```jsx
 <PointLayer
   active={{
-    option:{
-      color:'red'
-    }
-   }
-  }
+    option: {
+      color: 'red',
+    },
+  }}
 />
 ```
 
