@@ -139,10 +139,10 @@
     d3-timer "~1.0.6"
     detect-browser "^5.1.0"
 
-"@antv/gatsby-theme-antv@^1.0.0-beta.15":
-  version "1.0.0-beta.15"
-  resolved "https://registry.npmjs.org/@antv/gatsby-theme-antv/-/gatsby-theme-antv-1.0.0-beta.15.tgz#016ec25e2c5476b6a79fd176db27732deb904cea"
-  integrity sha512-vIeEgZqCLbQLsMPdQlBhjD1bBTxMhiVzu2sSqQ9mMDOSiTGwJjsDTVEnDdokMk/Q2w5UhF4cKLBDdRPdIVPUUA==
+"@antv/gatsby-theme-antv@^1.0.0-beta.18":
+  version "1.0.0-beta.19"
+  resolved "https://registry.npmjs.org/@antv/gatsby-theme-antv/-/gatsby-theme-antv-1.0.0-beta.19.tgz#16386abdede265802d8549c381485baf244d8a82"
+  integrity sha512-Ha4w0sMjx1gg2ikohJ293nTuuviXtmxhaq761UIRMuLCMCVdxNffC/KpViewU42xJXYvB7KRKKim+zHsFmC0nA==
   dependencies:
     "@ant-design/icons" "^4.1.0"
     "@babel/plugin-transform-modules-umd" "^7.2.0"
