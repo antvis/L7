@@ -2,6 +2,7 @@
 title: PolygonLayer
 order: 0
 ---
+`markdown:docs/common/style.md`
 
 绘制 2D 多边形以及沿 Z 轴拉伸后的 3D 图形。
 

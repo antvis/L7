@@ -2,6 +2,7 @@
 title: 蜂窝热力图
 order: 1
 ---
+`markdown:docs/common/style.md`
 
 将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局
 
@@ -11,7 +12,7 @@ order: 1
 import { HeatMapLayer } from '@antv/l7';
 ```
 
-## source
+### source
 
 网格数据只支持点数据作为数据源，数据格式支持 csv、json、geojson.
 
@@ -42,11 +43,11 @@ layer.source(data, {
 });
 ```
 
-## shape
+### shape
 
 网格热力图虽然是以标准四边形网格进行数据聚合，但是展示效果上可以设置为其形状，形状只支持常量
 
-### 2d
+#### 2d
 
 - circle,
 - triangle
@@ -57,7 +58,7 @@ layer.source(data, {
 layer.shape('circle');
 ```
 
-### 3d
+#### 3d
 
 - cylinder
 - triangleColumn
@@ -68,7 +69,7 @@ layer.shape('circle');
 layer.shape('cylinder');
 ```
 
-## size
+### size
 
 ### 2D shape
 
@@ -84,11 +85,11 @@ layer.size('value', [10, 50]); // 根据value 字段映射大小
 layer.size('value', (value) => {}); // 回调函数设置高度
 ```
 
-## color
+### color
 
 同 layer color 方法
 
-## style
+### style
 
 - coverage 网格覆盖度 0 - 1
 - angle 网格旋转角度 0 - 360

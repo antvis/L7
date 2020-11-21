@@ -2,7 +2,7 @@
 title: Local demo
 order: 1
 ---
-`markdown:docs/common/style.md`
+`markdown:docs/tutorial/demo.zh.md`
 
 ### 一、打开L7demo页面
 

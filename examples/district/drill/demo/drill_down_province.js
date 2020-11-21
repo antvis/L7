@@ -1,7 +1,7 @@
 import { Scene } from '@antv/l7';
 import { DrillDownLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
-const colors = ['#B8E1FF','#7DAAFF', '#3D76DD','#0047A5','#001D70']
+const colors = [ '#B8E1FF', '#7DAAFF', '#3D76DD', '#0047A5', '#001D70' ];
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({
@@ -24,8 +24,8 @@ scene.on('loaded', () => {
         values: colors
       }
     },
-    city:{
-      adcode:[330000]
+    city: {
+      adcode: [ 330000 ]
     },
     popup: {
       enable: true,

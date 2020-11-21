@@ -2,6 +2,7 @@
 title: 经典热力图
 order: 1
 ---
+`markdown:docs/common/style.md`
 
 ## 使用
 
@@ -9,7 +10,7 @@ order: 1
 import { HeatMapLayer } from '@antv/l7';
 ```
 
-## shape
+### shape
 
 常量 heatmap
 
@@ -17,7 +18,7 @@ import { HeatMapLayer } from '@antv/l7';
 layer.shape('heatmap');
 ```
 
-## size
+### size
 
 - field: 热力图权重字段
 - values: 数据映射区间 热力图显示 [0, 1] 效果最佳
@@ -26,11 +27,11 @@ layer.shape('heatmap');
 layer.size('weight', [0, 1]);
 ```
 
-## color
+### color
 
 heatmap 需要设置 color 方法，样式通过 style 设置
 
-## style
+### style
 
 - intensity    全局热力权重     推荐权重范围 1-5
 - radius   热力半径，单位像素

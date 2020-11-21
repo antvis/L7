@@ -2,7 +2,7 @@
 title: LineLayer
 order: 2
 ---
-
+`markdown:docs/common/style.md`
 ## 线图层
 
 ### shape

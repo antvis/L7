@@ -2,6 +2,7 @@
 title: Cluster Map
 order: 5
 ---
+`markdown:docs/api/layer/point_layer/cluster.zh.md`
 
 ## 使用
 

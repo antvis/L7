@@ -2,6 +2,7 @@
 title: 文本标注
 order: 4
 ---
+`markdown:docs/common/style.md`
 
 为图层添加文本标注
 
