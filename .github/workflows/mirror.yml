@@ -37,3 +37,5 @@ jobs:
           gitee-password: ${{ secrets.GITEE_PASSWORD }}
           # 注意替换为你的 Gitee 仓库
           gitee-repo: antv-l7/antv-l7
+          # 要部署的分支
+          branch: gh-pages
