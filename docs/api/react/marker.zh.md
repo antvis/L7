@@ -32,10 +32,7 @@ order: 3
 ```jsx
 import { Marker} from '@antv/l7-react'
 <Marker
- option = {{
-   color:'red'
- }}
- lnglat ={{[120,32]}}
+ lnglat={[120,32]}
 />
 
 ```
