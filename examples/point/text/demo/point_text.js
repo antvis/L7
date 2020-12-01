@@ -24,6 +24,9 @@ scene.on('loaded', () => {
         })
         .shape('m', 'text')
         .size(12)
+        // .rotate("j",()=>{
+        //   return  Math.random()*3*(Math.random()>0.5?1:-1)
+        // })
         .color('w', [ '#0e0030', '#0e0030', '#0e0030' ])
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
