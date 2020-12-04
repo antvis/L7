@@ -368,6 +368,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public rotate(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.updateStyleAttribute('rotate', field, values, updateOptions);
+    return this;
+  }
   public size(
     field: StyleAttributeField,
     values?: StyleAttributeOption,
