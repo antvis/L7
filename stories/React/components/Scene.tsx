@@ -1,10 +1,11 @@
 import {
   AMapScene,
   LayerContext,
+  LayerEvent,
   LineLayer,
-  PolygonLayer,
   MapboxScene,
   Marker,
+  PolygonLayer,
   Popup,
   SceneContext,
   SceneEvent,
@@ -23,7 +24,8 @@ export default React.memo(function Map() {
     };
     fetchData();
   }, []);
-  const popupClick = () => {
+  const popupClick = (e: any) => {
+    e.stopPropagation();
     alert('11333');
   };
   return (
@@ -46,6 +48,7 @@ export default React.memo(function Map() {
         <Popup
           option={{
             closeOnClick: false,
+            stopPropagation: false,
           }}
           lnglat={[110.1938, 30.25] as number[]}
         >
@@ -63,7 +66,15 @@ export default React.memo(function Map() {
             values: 1,
           }}
           color={{
-            values: '#fff',
+            field:'name',
+            values: [
+              '#2E8AE6',
+              '#69D1AB',
+              '#DAF291',
+              '#FFD591',
+              '#FF7A45',
+              '#CF1D49',
+            ],
           }}
           shape={{
             values: 'fill',
@@ -72,12 +83,12 @@ export default React.memo(function Map() {
             opacity: 1,
           }}
         >
-          <LayerContext.Consumer>
-            {(layer) => {
-              console.log(layer);
-              return null;
+          <LayerEvent
+            type="click"
+            handler={(e) => {
+              console.log(e);
             }}
-          </LayerContext.Consumer>
+          />
         </PolygonLayer>
       </AMapScene>
     </>

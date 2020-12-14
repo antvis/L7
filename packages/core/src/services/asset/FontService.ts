@@ -177,11 +177,10 @@ export default class FontService implements IFontService {
 
     // 2. update canvas
     // copy old canvas data to new canvas only when height changed
-    if (canvas.height !== canvasHeight) {
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      canvas.height = canvasHeight;
-      ctx.putImageData(imageData, 0, 0);
-    }
+    // TODO safari 不能正常更新
+    const copyImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    canvas.height = canvasHeight;
+    ctx.putImageData(copyImageData, 0, 0);
     setTextStyle(ctx, fontFamily, fontSize, fontWeight);
 
     // 3. layout characters
@@ -197,7 +196,6 @@ export default class FontService implements IFontService {
       // used to store distance values from tinySDF
       // tinySDF.size equals `fontSize + buffer * 2`
       const imageData = ctx.getImageData(0, 0, tinySDF.size, tinySDF.size);
-
       for (const char of characterSet) {
         populateAlphaChannel(tinySDF.draw(char), imageData);
         // 考虑到描边，需要保留 sdf 的 buffer，不能像 deck.gl 一样直接减去
