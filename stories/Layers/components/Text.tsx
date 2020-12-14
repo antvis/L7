@@ -65,6 +65,7 @@ export default class TextLayerDemo extends React.Component {
     const styleOptions = {
       field: 'w',
       strokeWidth: 0,
+      fontWeight: 500,
       stroke: '#fff',
       textAllowOverlap: false,
       opacity: 1,

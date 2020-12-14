@@ -15,12 +15,17 @@ const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
 @injectable()
 export default class IconService extends EventEmitter implements IIconService {
-  public canvasHeight: number;
+  public canvasHeight: number = 128;
   private texture: ITexture2D;
   private canvas: HTMLCanvasElement;
   private iconData: IIcon[];
   private iconMap: IICONMap;
   private ctx: CanvasRenderingContext2D;
+  private loadingImageCount = 0;
+
+  public isLoading() {
+    return this.loadingImageCount === 0;
+  }
   public init() {
     this.iconData = [];
     this.iconMap = {};
@@ -30,13 +35,13 @@ export default class IconService extends EventEmitter implements IIconService {
 
   public addImage(id: string, image: IImage) {
     let imagedata = new Image();
+    this.loadingImageCount++;
     if (this.hasImage(id)) {
       throw new Error('Image Id already exists');
     }
     this.iconData.push({
       id,
-      width: imageSize,
-      height: imageSize,
+      size: imageSize,
     });
     this.updateIconMap();
     this.loadImage(image).then((img) => {
@@ -46,13 +51,9 @@ export default class IconService extends EventEmitter implements IIconService {
       });
       if (iconImage) {
         iconImage.image = imagedata;
+        iconImage.width = imagedata.width;
+        iconImage.height = imagedata.height;
       }
-      // this.iconData.push({
-      //   id,
-      //   image: imagedata,
-      //   width: imageSize,
-      //   height: imageSize,
-      // });
       this.update();
     });
   }
@@ -89,16 +90,29 @@ export default class IconService extends EventEmitter implements IIconService {
   private update() {
     this.updateIconMap();
     this.updateIconAtlas();
-    this.emit('imageUpdate');
+    this.loadingImageCount--;
+    if (this.loadingImageCount === 0) {
+      this.emit('imageUpdate');
+    }
   }
 
   private updateIconAtlas() {
     this.canvas.width = MAX_CANVAS_WIDTH;
     this.canvas.height = this.canvasHeight;
     Object.keys(this.iconMap).forEach((item: string) => {
-      const { x, y, image } = this.iconMap[item];
+      const { x, y, image, width = 64, height = 64 } = this.iconMap[item];
+      const max = Math.max(width as number, height as number);
+      const ratio = max / imageSize;
+      const drawHeight = height / ratio;
+      const drawWidth = width / ratio;
       if (image) {
-        this.ctx.drawImage(image, x, y, imageSize, imageSize);
+        this.ctx.drawImage(
+          image,
+          x + (imageSize - drawWidth) / 2,
+          y + (imageSize - drawHeight) / 2,
+          drawWidth,
+          drawHeight,
+        );
       }
     });
   }
