@@ -66,7 +66,7 @@ export default React.memo(function Map() {
             values: 1,
           }}
           color={{
-            field:'name',
+            field: 'name',
             values: [
               '#2E8AE6',
               '#69D1AB',

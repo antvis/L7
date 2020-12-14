@@ -70,7 +70,7 @@ export default class Country extends React.Component {
             ],
           },
         },
-        drillDownEvent:()=>{
+        drillDownEvent: () => {
           console.log(scene);
         },
         popup: {
@@ -81,7 +81,6 @@ export default class Country extends React.Component {
         },
       });
     });
-
   }
 
   public render() {
