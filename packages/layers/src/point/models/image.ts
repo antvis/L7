@@ -128,8 +128,9 @@ export default class ImageModel extends BaseModel {
     }
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
-      mag: gl.LINEAR,
-      min: gl.LINEAR,
+      mag: gl.NEAREST,
+      min: gl.NEAREST,
+      premultiplyAlpha: false,
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });

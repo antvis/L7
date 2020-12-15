@@ -15,25 +15,25 @@ export default class PointImage extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [121.4, 31.258134],
-        zoom: 15,
+        zoom: 5,
         pitch: 0,
-        style: 'dark',
+        style: 'normal',
       }),
     });
     this.scene = scene;
     scene.addImage(
       '00',
-      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Rq6tQ5b4_JMAAAAAAAAAAABkARQnAQ',
+      'https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*g8cUQ7pPT9YAAAAAAAAAAAAAARQnAQ',
     );
     scene.addImage(
       '01',
-      'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*0D0SQ6AgkRMAAAAAAAAAAABkARQnAQ',
+      'https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*LTcXTLBM7kYAAAAAAAAAAAAAARQnAQ',
     );
     scene.addImage(
       '02',
-      'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
+      'https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*g8cUQ7pPT9YAAAAAAAAAAAAAARQnAQ',
     );
     const i = 0;
     const data = await response.json();
@@ -41,7 +41,9 @@ export default class PointImage extends React.Component {
       item.type = '00';
       return item;
     });
-    const imageLayer = new PointLayer()
+    const imageLayer = new PointLayer({
+      blend: 'normal',
+    })
       .source(newData, {
         parser: {
           type: 'json',
@@ -50,36 +52,14 @@ export default class PointImage extends React.Component {
         },
       })
       .shape('type', (v: any) => {
+        console.log(v);
         return v;
       })
       // .shape('triangle')
       // .color('red')
-      .active(true)
-      .size(20)
-      .style({
-        offsets: [40, 40],
-      });
-    // imageLayer.on('click', (e) => {
-    //   console.log(e);
-    // });
-
-    const imageLayer2 = new PointLayer()
-      .source(newData, {
-        parser: {
-          type: 'json',
-          x: 'longitude',
-          y: 'latitude',
-        },
-      })
-      .shape('type', (v: any) => {
-        return v;
-      })
-      // .shape('triangle')
-      // .color('red')
-      .active(true)
-      .size(10);
+      .active(false)
+      .size(20);
     scene.addLayer(imageLayer);
-    scene.addLayer(imageLayer2);
   }
 
   public render() {
@@ -92,7 +72,6 @@ export default class PointImage extends React.Component {
           left: 0,
           right: 0,
           bottom: 0,
-          transform: 'scale(0.8)',
         }}
       />
     );

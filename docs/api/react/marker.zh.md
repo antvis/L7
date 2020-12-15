@@ -30,9 +30,6 @@ order: 3
 ## 实例
 
 ```jsx
-import { Marker} from '@antv/l7-react'
-<Marker
- lnglat={[120,32]}
-/>
-
+import { Marker } from '@antv/l7-react';
+<Marker lnglat={[120, 32]} />;
 ```

@@ -29,6 +29,9 @@ export default class Country extends React.Component {
     });
     scene.on('loaded', () => {
       this.scene = scene;
+      // @ts-ignore
+      window.scene = scene;
+      console.log(scene);
       this.drillDown = new DrillDownLayer(scene, {
         drillDepth: 2,
         geoDataLevel: 2,
@@ -66,6 +69,9 @@ export default class Country extends React.Component {
               '#08306b',
             ],
           },
+        },
+        drillDownEvent: () => {
+          console.log(scene);
         },
         popup: {
           enable: true,
