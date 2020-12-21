@@ -156,14 +156,15 @@ L7 Logo 的显示位置 默认左下角
 
 地图是否可旋转 {Boolean} default true
 
-
 ## 实验参数
+
 参数可能会废弃
+
 ### offsetCoordinate
 
 { boolean } default true
 
- 高德地图适用,是否关闭偏移坐标系
+高德地图适用,是否关闭偏移坐标系
 
 ## 方法
 
