@@ -274,6 +274,10 @@ export default class Marker extends EventEmitter {
       element.appendChild(svg);
     }
     DOM.addClass(element, 'l7-marker');
+    Object.keys(this.markerOption.style || {}).forEach((key: string) => {
+      // @ts-ignore
+      element?.style[key] = this.markerOption?.style[key];
+    });
     element.addEventListener('click', (e: MouseEvent) => {
       this.onMapClick(e);
     });

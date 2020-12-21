@@ -311,6 +311,7 @@ export default class L7MapService implements IMapService<Map> {
 
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
+    const { offsetCoordinate = false } = this.config;
 
     // resync
     this.viewport.syncWithMapCamera({
@@ -324,7 +325,10 @@ export default class L7MapService implements IMapService<Map> {
       cameraHeight: 0,
     });
     // set coordinate system
-    if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+    if (
+      this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD &&
+      offsetCoordinate
+    ) {
       this.coordinateSystemService.setCoordinateSystem(
         CoordinateSystem.LNGLAT_OFFSET,
       );

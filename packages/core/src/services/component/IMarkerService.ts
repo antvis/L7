@@ -17,6 +17,7 @@ export interface IMarkerOption {
   offsets: number[];
   draggable: boolean;
   extData?: any;
+  style?: CSSStyleDeclaration;
 }
 export interface IMarker {
   addTo(scene: Container): void;

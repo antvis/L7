@@ -148,6 +148,8 @@ export interface IMapConfig<RawMap = {}> {
 
   attributionControl?: boolean;
 
+  offsetCoordinate?: boolean;
+
   [key: string]: any;
 }
 
