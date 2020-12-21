@@ -252,7 +252,7 @@ export default class Marker extends EventEmitter {
     const { color, anchor } = this.markerOption;
     if (!element) {
       this.defaultMarker = true;
-      element = DOM.create('div');
+      element = DOM.create('div') as HTMLDivElement;
       this.markerOption.element = element;
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttributeNS(null, 'display', 'block');
@@ -274,10 +274,18 @@ export default class Marker extends EventEmitter {
       element.appendChild(svg);
     }
     DOM.addClass(element, 'l7-marker');
-    Object.keys(this.markerOption.style || {}).forEach((key: string) => {
+    Object.keys(this.markerOption.style || {}).forEach(
       // @ts-ignore
-      element?.style[key] = this.markerOption?.style[key];
-    });
+      (key: keyof CSSStyleDeclaration) => {
+        const value =
+          this.markerOption?.style && (this.markerOption?.style[key] as string);
+        if (element) {
+          // @ts-ignore
+          (element.style as CSSStyleDeclaration)[key] = value;
+        }
+      },
+    );
+
     element.addEventListener('click', (e: MouseEvent) => {
       this.onMapClick(e);
     });

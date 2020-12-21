@@ -311,7 +311,7 @@ export default class L7MapService implements IMapService<Map> {
 
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
-    const { offsetCoordinate = false } = this.config;
+    const { offsetCoordinate = true } = this.config;
 
     // resync
     this.viewport.syncWithMapCamera({
