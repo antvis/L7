@@ -1,4 +1,4 @@
-import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
+import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../types';
 import {
@@ -141,8 +141,8 @@ export default class PixelPickingPass<
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = this.layer.getLayerConfig();
 
-    const xInDevicePixel = x * window.devicePixelRatio;
-    const yInDevicePixel = y * window.devicePixelRatio;
+    const xInDevicePixel = x * DOM.DPR;
+    const yInDevicePixel = y * DOM.DPR;
     if (
       xInDevicePixel > width ||
       xInDevicePixel < 0 ||
@@ -157,7 +157,7 @@ export default class PixelPickingPass<
       pickedColors = readPixels({
         x: Math.round(xInDevicePixel),
         // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-        y: Math.round(height - (y + 1) * window.devicePixelRatio),
+        y: Math.round(height - (y + 1) * DOM.DPR),
         width: 1,
         height: 1,
         data: new Uint8Array(1 * 1 * 4),

@@ -318,7 +318,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
   };
   private initContainer() {
-    const pixelRatio = window.devicePixelRatio;
+    const pixelRatio = DOM.DPR;
     const w = this.$container?.clientWidth || 400;
     const h = this.$container?.clientHeight || 300;
     const canvas = this.canvas;
@@ -337,7 +337,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   private setCanvas() {
-    const pixelRatio = window.devicePixelRatio;
+    const pixelRatio = DOM.DPR;
     const w = this.$container?.clientWidth || 400;
     const h = this.$container?.clientHeight || 300;
     const canvas = this.canvas;

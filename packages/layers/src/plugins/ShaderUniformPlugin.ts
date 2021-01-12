@@ -53,7 +53,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           [CoordinateUniform.PixelsPerMeter]: this.coordinateSystemService.getPixelsPerMeter(),
           // 其他参数，例如视口大小、DPR 等
           u_ViewportSize: [width, height],
-          u_DevicePixelRatio: window.devicePixelRatio,
+          u_DevicePixelRatio: DOM.DPR,
           u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
         }),

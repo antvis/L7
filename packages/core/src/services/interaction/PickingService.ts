@@ -1,4 +1,4 @@
-import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
+import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import {
   IMapService,
@@ -52,8 +52,8 @@ export default class PickingService implements IPickingService {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
-    width *= window.devicePixelRatio;
-    height *= window.devicePixelRatio;
+    width *= DOM.DPR;
+    height *= DOM.DPR;
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
     // 创建 picking framebuffer，后续实时 resize
@@ -92,8 +92,8 @@ export default class PickingService implements IPickingService {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
-    width *= window.devicePixelRatio;
-    height *= window.devicePixelRatio;
+    width *= DOM.DPR;
+    height *= DOM.DPR;
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
@@ -133,16 +133,16 @@ export default class PickingService implements IPickingService {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
-    width *= window.devicePixelRatio;
-    height *= window.devicePixelRatio;
+    width *= DOM.DPR;
+    height *= DOM.DPR;
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
-    const xInDevicePixel = x * window.devicePixelRatio;
-    const yInDevicePixel = y * window.devicePixelRatio;
+    const xInDevicePixel = x * DOM.DPR;
+    const yInDevicePixel = y * DOM.DPR;
     if (
-      xInDevicePixel > width - 1 * window.devicePixelRatio ||
+      xInDevicePixel > width - 1 * DOM.DPR ||
       xInDevicePixel < 0 ||
-      yInDevicePixel > height - 1 * window.devicePixelRatio ||
+      yInDevicePixel > height - 1 * DOM.DPR ||
       yInDevicePixel < 0
     ) {
       return false;
@@ -151,9 +151,7 @@ export default class PickingService implements IPickingService {
     pickedColors = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor(
-        (height - (y + 1) * window.devicePixelRatio) / this.pickBufferScale,
-      ),
+      y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
       width: 1,
       height: 1,
       data: new Uint8Array(1 * 1 * 4),

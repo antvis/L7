@@ -359,7 +359,7 @@ export class Map extends Camera {
   }
 
   private resizeCanvas(width: number, height: number) {
-    const pixelRatio = window.devicePixelRatio || 1;
+    const pixelRatio = DOM.DPR || 1;
     this.canvas.width = pixelRatio * width;
     this.canvas.height = pixelRatio * height;
 
