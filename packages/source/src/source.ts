@@ -20,7 +20,7 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { cloneDeep, isFunction, isString } from 'lodash';
+import { cloneDeep, isFunction, isString, merge } from 'lodash';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
@@ -37,6 +37,7 @@ export default class Source extends EventEmitter {
   public hooks = {
     init: new SyncHook(),
   };
+
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];
   public cluster: boolean = false;
@@ -51,6 +52,7 @@ export default class Source extends EventEmitter {
   // 原始数据
   private originData: any;
   private rawData: any;
+  private cfg: any = {};
 
   private clusterIndex: Supercluster;
 
@@ -58,6 +60,7 @@ export default class Source extends EventEmitter {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;
+
     this.initCfg(cfg);
 
     this.hooks.init.tap('parser', () => {
@@ -75,7 +78,7 @@ export default class Source extends EventEmitter {
   public setData(data: any, options?: ISourceCFG) {
     this.rawData = data;
     this.originData = data;
-    this.initCfg(options);
+    this.initCfg(this.cfg);
     this.init();
     this.emit('update');
   }
@@ -160,7 +163,9 @@ export default class Source extends EventEmitter {
     this.data = null;
   }
 
-  private initCfg(cfg?: ISourceCFG) {
+  private initCfg(option?: ISourceCFG) {
+    this.cfg = merge(this.cfg, option);
+    const cfg = this.cfg;
     if (cfg) {
       if (cfg.parser) {
         this.parser = cfg.parser;

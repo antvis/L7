@@ -8,6 +8,7 @@ import {
   IRendererService,
   TYPES,
 } from '@antv/l7-core';
+import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 
 /**

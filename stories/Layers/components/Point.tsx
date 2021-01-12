@@ -14,7 +14,7 @@ export default class Point3D extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      pickBufferScale: 3.0,
+      pickBufferScale: 1.0,
       map: new GaodeMap({
         style: 'light',
         center: [-121.24357, 37.58264],
@@ -59,23 +59,35 @@ export default class Point3D extends React.Component {
               stroke: '#fff',
             });
 
-          scene.addLayer(pointLayer);
-          this.scene = scene;
-          setTimeout(() => {
-            console.log('updatedata');
-            pointLayer.setData(
-              {
-                type: 'FeatureCollection',
-                features: [],
+          const textLayer = new PointLayer({})
+            .source(data, {
+              parser: {
+                type: 'csv',
+                x: 'Longitude',
+                y: 'Latitude',
               },
-              {
-                parser: {
-                  type: 'geojson',
-                },
+            })
+            .shape('EventID', 'text')
+            .size(8)
+
+            .color('red')
+            .style({
+              opacity: 1,
+              strokeWidth: 0,
+              stroke: '#fff',
+            });
+
+          scene.addLayer(pointLayer);
+          scene.addLayer(textLayer);
+          pointLayer.on('click', (e) => {
+            const res = pointLayer.boxSelect(
+              [e.x - 10, e.y - 10, e.x + 10, e.y + 10],
+              (fe) => {
+                console.log(fe);
               },
             );
-            console.log(pointLayer);
-          }, 3000);
+          });
+          this.scene = scene;
         });
     });
   }

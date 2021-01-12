@@ -155,8 +155,8 @@ export function printCanvas(canvas: HTMLCanvasElement) {
 
 export function getViewPortScale() {
   const meta = document.querySelector('meta[name="viewport"]');
-  const contentItems = meta.content.split(',');
-  const scale = contentItems.find((item) => {
+  const contentItems = (meta as any).content?.split(',');
+  const scale = contentItems.find((item: string) => {
     const [key, value] = item.split('=');
     return key === 'initial-scale';
   });

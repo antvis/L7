@@ -25,6 +25,7 @@ import {
   IModelInitializationOptions,
   IMultiPassRenderer,
   IPass,
+  IPickingService,
   IPostProcessingPass,
   IRendererService,
   IScale,
@@ -128,6 +129,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   protected iconService: IIconService;
 
   protected fontService: IFontService;
+
+  protected pickingService: IPickingService;
 
   protected rendererService: IRendererService;
 
@@ -257,6 +260,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
     this.interactionService = this.container.get<IInteractionService>(
       TYPES.IInteractionService,
+    );
+
+    this.pickingService = this.container.get<IPickingService>(
+      TYPES.IPickingService,
     );
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
     this.cameraService = this.container.get<ICameraService>(
@@ -813,6 +820,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public pick({ x, y }: { x: number; y: number }) {
     this.interactionService.triggerHover({ x, y });
+  }
+
+  public boxSelect(
+    box: [number, number, number, number],
+    cb: (...args: any[]) => void,
+  ) {
+    this.pickingService.boxPickLayer(this, box, cb);
   }
 
   public buildLayerModel(

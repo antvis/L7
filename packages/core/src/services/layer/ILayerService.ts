@@ -192,6 +192,10 @@ export interface ILayer {
    * 直接调用拾取方法，在非鼠标交互场景中使用
    */
   pick(query: { x: number; y: number }): void;
+  boxSelect(
+    box: [number, number, number, number],
+    cb: (...args: any[]) => void,
+  ): void;
 
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
   setAnimateStartTime(): void;

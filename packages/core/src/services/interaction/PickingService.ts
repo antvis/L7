@@ -72,6 +72,75 @@ export default class PickingService implements IPickingService {
       this.pickingAllLayer.bind(this),
     );
   }
+
+  public async boxPickLayer(
+    layer: ILayer,
+    box: [number, number, number, number],
+    cb: (...args: any[]) => void
+  ): Promise<any> {
+    const { useFramebuffer, clear, getContainer } = this.rendererService;
+    this.resizePickingFBO();
+    useFramebuffer(this.pickingFBO, () => {
+      clear({
+        framebuffer: this.pickingFBO,
+        color: [0, 0, 0, 0],
+        stencil: 0,
+        depth: 1,
+      });
+      layer.hooks.beforePickingEncode.call();
+      layer.renderModels();
+      layer.hooks.afterPickingEncode.call();
+      const features = this.pickBox(layer, box);
+      cb(features);
+    });
+  }
+
+  public pickBox(layer: ILayer, box: [number, number, number, number]): any[] {
+    const [xMin, yMin, xMax, yMax] = box.map((v) => {
+      const tmpV = v < 0 ? 0 : v;
+      return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
+    });
+    const { getViewportSize, readPixels, getContainer } = this.rendererService;
+    let {
+      width,
+      height,
+    } = (getContainer() as HTMLElement).getBoundingClientRect();
+    width *= DOM.DPR;
+    height *= DOM.DPR;
+    if (
+      xMin > ((width - 1) * DOM.DPR) / this.pickBufferScale ||
+      xMax < 0 ||
+      yMin > ((height - 1) * DOM.DPR) / this.pickBufferScale ||
+      yMax < 0
+    ) {
+      return [];
+    }
+    let pickedColors: Uint8Array | undefined;
+    const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
+    const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
+    pickedColors = readPixels({
+      x: xMin,
+      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+      y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
+      width: w,
+      height: h,
+      data: new Uint8Array(w * h * 4),
+      framebuffer: this.pickingFBO,
+    });
+
+    const features = [];
+    const featuresIdMap: { [key: string]: boolean } = {};
+    for (let i = 0; i < pickedColors.length / 4; i = i + 1) {
+      const color = pickedColors.slice(i * 4, i * 4 + 4);
+      const pickedFeatureIdx = decodePickingColor(color);
+      if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
+        const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+        features.push(rawFeature);
+        featuresIdMap[pickedFeatureIdx] = true;
+      }
+    }
+    return features;
+  }
   private async pickingAllLayer(target: IInteractionTarget) {
     if (this.alreadyInPicking || this.layerService.alreadyInRendering) {
       return;
@@ -81,13 +150,9 @@ export default class PickingService implements IPickingService {
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
-  private async pickingLayers(target: IInteractionTarget) {
-    const {
-      getViewportSize,
-      useFramebuffer,
-      clear,
-      getContainer,
-    } = this.rendererService;
+
+  private resizePickingFBO() {
+    const { getContainer } = this.rendererService;
     let {
       width,
       height,
@@ -102,6 +167,16 @@ export default class PickingService implements IPickingService {
       this.width = width;
       this.height = height;
     }
+  }
+  private async pickingLayers(target: IInteractionTarget) {
+    const {
+      getViewportSize,
+      useFramebuffer,
+      clear,
+      getContainer,
+    } = this.rendererService;
+
+    this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getLayers();
@@ -123,6 +198,7 @@ export default class PickingService implements IPickingService {
         });
     });
   }
+
   private pickFromPickingFBO = (
     layer: ILayer,
     { x, y, lngLat, type, target }: IInteractionTarget,

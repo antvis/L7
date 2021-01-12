@@ -46,6 +46,7 @@ export * from './services/component/IMarkerService';
 export * from './services/component/IPopupService';
 export * from './services/log/ILogService';
 export * from './services/interaction/IInteractionService';
+export * from './services/interaction/IPickingService';
 
 /** 全部渲染服务接口 */
 export * from './services/renderer/IAttribute';
