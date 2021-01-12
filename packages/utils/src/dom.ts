@@ -152,3 +152,15 @@ export function printCanvas(canvas: HTMLCanvasElement) {
   // tslint:disable-next-line:no-console
   console.log('%c\n', css.join(''));
 }
+
+export function getViewPortScale() {
+  const meta = document.querySelector('meta[name="viewport"]');
+  const contentItems = (meta as any).content?.split(',');
+  const scale = contentItems.find((item: string) => {
+    const [key, value] = item.split('=');
+    return key === 'initial-scale';
+  });
+  return scale ? scale.split('=')[1] * 1 : 1;
+}
+
+export const DPR = getViewPortScale() < 1 ? 1 : window.devicePixelRatio;

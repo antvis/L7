@@ -1,4 +1,4 @@
-import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
+import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import {
   IMapService,
@@ -52,8 +52,8 @@ export default class PickingService implements IPickingService {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
-    width *= window.devicePixelRatio;
-    height *= window.devicePixelRatio;
+    width *= DOM.DPR;
+    height *= DOM.DPR;
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
     // 创建 picking framebuffer，后续实时 resize
@@ -72,6 +72,75 @@ export default class PickingService implements IPickingService {
       this.pickingAllLayer.bind(this),
     );
   }
+
+  public async boxPickLayer(
+    layer: ILayer,
+    box: [number, number, number, number],
+    cb: (...args: any[]) => void
+  ): Promise<any> {
+    const { useFramebuffer, clear, getContainer } = this.rendererService;
+    this.resizePickingFBO();
+    useFramebuffer(this.pickingFBO, () => {
+      clear({
+        framebuffer: this.pickingFBO,
+        color: [0, 0, 0, 0],
+        stencil: 0,
+        depth: 1,
+      });
+      layer.hooks.beforePickingEncode.call();
+      layer.renderModels();
+      layer.hooks.afterPickingEncode.call();
+      const features = this.pickBox(layer, box);
+      cb(features);
+    });
+  }
+
+  public pickBox(layer: ILayer, box: [number, number, number, number]): any[] {
+    const [xMin, yMin, xMax, yMax] = box.map((v) => {
+      const tmpV = v < 0 ? 0 : v;
+      return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
+    });
+    const { getViewportSize, readPixels, getContainer } = this.rendererService;
+    let {
+      width,
+      height,
+    } = (getContainer() as HTMLElement).getBoundingClientRect();
+    width *= DOM.DPR;
+    height *= DOM.DPR;
+    if (
+      xMin > ((width - 1) * DOM.DPR) / this.pickBufferScale ||
+      xMax < 0 ||
+      yMin > ((height - 1) * DOM.DPR) / this.pickBufferScale ||
+      yMax < 0
+    ) {
+      return [];
+    }
+    let pickedColors: Uint8Array | undefined;
+    const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
+    const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
+    pickedColors = readPixels({
+      x: xMin,
+      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+      y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
+      width: w,
+      height: h,
+      data: new Uint8Array(w * h * 4),
+      framebuffer: this.pickingFBO,
+    });
+
+    const features = [];
+    const featuresIdMap: { [key: string]: boolean } = {};
+    for (let i = 0; i < pickedColors.length / 4; i = i + 1) {
+      const color = pickedColors.slice(i * 4, i * 4 + 4);
+      const pickedFeatureIdx = decodePickingColor(color);
+      if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
+        const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+        features.push(rawFeature);
+        featuresIdMap[pickedFeatureIdx] = true;
+      }
+    }
+    return features;
+  }
   private async pickingAllLayer(target: IInteractionTarget) {
     if (this.alreadyInPicking || this.layerService.alreadyInRendering) {
       return;
@@ -81,19 +150,15 @@ export default class PickingService implements IPickingService {
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
-  private async pickingLayers(target: IInteractionTarget) {
-    const {
-      getViewportSize,
-      useFramebuffer,
-      clear,
-      getContainer,
-    } = this.rendererService;
+
+  private resizePickingFBO() {
+    const { getContainer } = this.rendererService;
     let {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
-    width *= window.devicePixelRatio;
-    height *= window.devicePixelRatio;
+    width *= DOM.DPR;
+    height *= DOM.DPR;
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
@@ -102,6 +167,16 @@ export default class PickingService implements IPickingService {
       this.width = width;
       this.height = height;
     }
+  }
+  private async pickingLayers(target: IInteractionTarget) {
+    const {
+      getViewportSize,
+      useFramebuffer,
+      clear,
+      getContainer,
+    } = this.rendererService;
+
+    this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getLayers();
@@ -123,6 +198,7 @@ export default class PickingService implements IPickingService {
         });
     });
   }
+
   private pickFromPickingFBO = (
     layer: ILayer,
     { x, y, lngLat, type, target }: IInteractionTarget,
@@ -133,16 +209,16 @@ export default class PickingService implements IPickingService {
       width,
       height,
     } = (getContainer() as HTMLElement).getBoundingClientRect();
-    width *= window.devicePixelRatio;
-    height *= window.devicePixelRatio;
+    width *= DOM.DPR;
+    height *= DOM.DPR;
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
-    const xInDevicePixel = x * window.devicePixelRatio;
-    const yInDevicePixel = y * window.devicePixelRatio;
+    const xInDevicePixel = x * DOM.DPR;
+    const yInDevicePixel = y * DOM.DPR;
     if (
-      xInDevicePixel > width - 1 * window.devicePixelRatio ||
+      xInDevicePixel > width - 1 * DOM.DPR ||
       xInDevicePixel < 0 ||
-      yInDevicePixel > height - 1 * window.devicePixelRatio ||
+      yInDevicePixel > height - 1 * DOM.DPR ||
       yInDevicePixel < 0
     ) {
       return false;
@@ -151,9 +227,7 @@ export default class PickingService implements IPickingService {
     pickedColors = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor(
-        (height - (y + 1) * window.devicePixelRatio) / this.pickBufferScale,
-      ),
+      y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
       width: 1,
       height: 1,
       data: new Uint8Array(1 * 1 * 4),
