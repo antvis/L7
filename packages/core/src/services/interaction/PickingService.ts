@@ -76,7 +76,7 @@ export default class PickingService implements IPickingService {
   public async boxPickLayer(
     layer: ILayer,
     box: [number, number, number, number],
-    cb: (...args: any[]) => void
+    cb: (...args: any[]) => void,
   ): Promise<any> {
     const { useFramebuffer, clear, getContainer } = this.rendererService;
     this.resizePickingFBO();
