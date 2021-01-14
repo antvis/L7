@@ -81,11 +81,10 @@ export default class InteractionService extends EventEmitter
       // hammertime.get('pinch').set({ enable: true });
       hammertime.on('dblclick click', this.onHammer);
       hammertime.on('panstart panmove panend pancancel', this.onDrag);
-      // hammertime.on('press pressup', this.onHammer);
       // $containter.addEventListener('touchstart', this.onTouch);
       $containter.addEventListener('mousemove', this.onHover);
       // $containter.addEventListener('click', this.onHover);
-      $containter.addEventListener('mousedown', this.onHover);
+      $containter.addEventListener('mousedown', this.onHover, true);
       $containter.addEventListener('mouseup', this.onHover);
       $containter.addEventListener('contextmenu', this.onHover);
 

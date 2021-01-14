@@ -15,9 +15,9 @@ export default class PointImage extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [121.4, 31.258134],
-        zoom: 5,
+        zoom: 12,
         pitch: 0,
         style: 'normal',
       }),
@@ -52,7 +52,6 @@ export default class PointImage extends React.Component {
         },
       })
       .shape('type', (v: any) => {
-        console.log(v);
         return v;
       })
       // .shape('triangle')
@@ -60,6 +59,12 @@ export default class PointImage extends React.Component {
       .active(false)
       .size(20);
     scene.addLayer(imageLayer);
+    imageLayer.on('mousedown', (e) => {
+      console.log('mousedown', e);
+    });
+    imageLayer.on('click', (e) => {
+      console.log('click', e);
+    });
   }
 
   public render() {
