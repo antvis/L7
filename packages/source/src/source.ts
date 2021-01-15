@@ -78,7 +78,7 @@ export default class Source extends EventEmitter {
   public setData(data: any, options?: ISourceCFG) {
     this.rawData = data;
     this.originData = data;
-    this.initCfg(this.cfg);
+    this.initCfg(options);
     this.init();
     this.emit('update');
   }
