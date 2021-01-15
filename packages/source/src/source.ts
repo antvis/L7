@@ -20,7 +20,7 @@ import {
   Properties,
 } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { cloneDeep, isFunction, isString, merge } from 'lodash';
+import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
@@ -28,6 +28,12 @@ import { getParser, getTransform } from './';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
+function mergeCustomizer(objValue: any, srcValue: any) {
+  if (Array.isArray(srcValue)) {
+    return srcValue;
+  }
+}
+
 export default class Source extends EventEmitter {
   public data: IParserData;
 
@@ -164,7 +170,7 @@ export default class Source extends EventEmitter {
   }
 
   private initCfg(option?: ISourceCFG) {
-    this.cfg = merge(this.cfg, option);
+    this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
     const cfg = this.cfg;
     if (cfg) {
       if (cfg.parser) {
