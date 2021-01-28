@@ -160,16 +160,26 @@ export default class AMapService
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
     const center = this.getCenter();
-    const maxlng =
-      center.lng > NE.getLng() || center.lng < SW.getLng()
-        ? 180 - NE.getLng()
-        : NE.getLng();
-    const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
-    // 兼容 Mapbox，统一返回西南、东北
-    return [
-      [minlng, SW.getLat()],
-      [maxlng, NE.getLat()],
-    ];
+    // const maxlng =
+    //   center.lng > NE.getLng() || center.lng < SW.getLng()
+    //     ? 180 - NE.getLng()
+    //     : NE.getLng();
+    // const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
+    // // 兼容 Mapbox，统一返回西南、东北
+    // return [
+    //   [minlng, SW.getLat()],
+    //   [maxlng, NE.getLat()],
+    // ];
+    
+    // 修复跨日界线bound不正确问题
+    let nelng = NE.getLng();
+    let swlng = SW.getLng();
+    if (nelng > 0 && swlng < 0 && (center.lng > nelng && center.lng > swlng) || (center.lng < nelng && center.lng < swlng)) {
+      // 跨日界线
+      return [[nelng, SW.getLat()], [180, NE.getLat()], [-180, SW.getLat()], [swlng, NE.getLat()]];
+    } else {
+      return [[swlng, SW.getLat()], [nelng, NE.getLat()]];
+    }
   }
 
   public getMinZoom(): number {

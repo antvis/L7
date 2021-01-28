@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 import { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
-export type Bounds = [[number, number], [number, number]];
+export type Bounds = [[number, number], [number, number], [number, number]?, [number, number]?];
 export interface ILngLat {
   lng: number;
   lat: number;

@@ -226,18 +226,28 @@ export default class Marker extends EventEmitter {
     const { lng, lat } = this.lngLat;
     const bounds = this.mapsService.getBounds();
     const zoom = this.mapsService.getZoom();
-    if (
-      (lng < bounds[0][0] ||
-        lng > bounds[1][0] ||
-        lat < bounds[0][1] ||
-        lat > bounds[1][1]) &&
-      zoom > 3
-    ) {
-      if (element) {
-        element.style.display = 'none';
-      }
+    // if (
+    //   (lng < bounds[0][0] ||
+    //     lng > bounds[1][0] ||
+    //     lat < bounds[0][1] ||
+    //     lat > bounds[1][1]) &&
+    //   zoom > 3
+    // ) {
+    //   if (element) {
+    //     element.style.display = 'none';
+    //   }
 
-      return;
+    //   return;
+    // }
+
+    // 修复可视区域内点不显示问题
+    if (zoom > 3) {
+      if ((bounds[2] && (lng < bounds[0][0] && lng > bounds[3][0])) || (!bounds[2] && (lng < bounds[0][0] || lng > bounds[1][0])) || lat < bounds[0][1] || lat > bounds[1][1]) {
+        if (element) {
+          element.style.display = 'none';
+        }
+        return;
+      }
     }
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
