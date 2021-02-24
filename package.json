@@ -10,7 +10,7 @@
     "@antv/l7-district": "^2.2.46",
     "@antv/l7-draw": "^2.3.40",
     "@antv/l7-react": "^2.2.37",
-    "@antv/gatsby-theme-antv": "^1.0.0-beta.18",
+    "@antv/gatsby-theme-antv": "^1.0.6",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
