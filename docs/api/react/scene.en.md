@@ -57,7 +57,7 @@ import { MapboxScene } from '@antv/l7-react';
 
 | option   | Type       | Default            | Description                                                                                                     |
 | -------- | ---------- | ------------------ | --------------------------------------------------------------------------------------------------------------- |
-| style    | `string`   | `light`            | 地图样式 `dark|light|normal|blank` L7 默认提供四种样式，同时也支持自定义样式                                    |
+| style    | `string`   | `light`            | 地图样式 `dark | light | normal | blank` L7 默认提供四种样式，同时也支持自定义样式                              |
 | token    | `string`   | `Required`         | 地图密钥，需要平台申请                                                                                          |
 | plugin   | `string[]` | `null`             | 高德地图[API 插件](https://lbs.amap.com/api/javascript-api/guide/abc/plugins) `['AMap.ToolBar','AMap.Driving']` |
 | center   | `number`   | null               | 地图中心点                                                                                                      |
@@ -76,12 +76,12 @@ Mapbox Map 地图配置项 [配置项](https://docs.mapbox.com/mapbox-gl-js/api/
 
 ### scene option
 
-| option                | Type      | Default      | Description                                         |
-| --------------------- | --------- | ------------ | --------------------------------------------------- |
-| logoPosition          | string    | `bottomleft` | logo 位置 `bottomright|topright|bottomleft|topleft` |
-| logoVisible           | `boolean` | `true`       | 是否显示 logo                                       |
-| antialias             | `boolean` | `true`       | 是否开启抗锯齿                                      |
-| preserveDrawingBuffer | `boolean` | `false`      | 是否保留缓冲区数据                                  |
+| option                | Type      | Default      | Description                                               |
+| --------------------- | --------- | ------------ | --------------------------------------------------------- |
+| logoPosition          | string    | `bottomleft` | logo 位置 `bottomright | topright | bottomleft | topleft` |
+| logoVisible           | `boolean` | `true`       | 是否显示 logo                                             |
+| antialias             | `boolean` | `true`       | 是否开启抗锯齿                                            |
+| preserveDrawingBuffer | `boolean` | `false`      | 是否保留缓冲区数据                                        |
 
 ### 获取 scene 对象
 

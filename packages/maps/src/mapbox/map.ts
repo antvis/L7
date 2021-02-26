@@ -393,8 +393,10 @@ export default class MapboxService
       cameraHeight: 0,
     });
 
+    const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
+
     // set coordinate system
-    if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+    if (this.viewport.getZoom() > offsetZoom) {
       this.coordinateSystemService.setCoordinateSystem(
         CoordinateSystem.LNGLAT_OFFSET,
       );

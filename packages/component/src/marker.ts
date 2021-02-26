@@ -226,7 +226,7 @@ export default class Marker extends EventEmitter {
     const { lng, lat } = this.lngLat;
     const bounds = this.mapsService.getBounds();
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
-    
+
     if (element) {
       element.style.display = 'block';
       const container = this.mapsService.getContainer();
@@ -236,21 +236,26 @@ export default class Marker extends EventEmitter {
         containerWidth = container.scrollWidth;
         containerHeight = container.scrollHeight;
       }
-      //当前可视区域包含跨日界线
-      if(Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) >180){
-        if(pos.x > containerWidth){
+      // 当前可视区域包含跨日界线
+      if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
+        if (pos.x > containerWidth) {
           // 日界线右侧点左移
-          let newPos = this.mapsService.lngLatToContainer([lng - 360, lat]);
+          const newPos = this.mapsService.lngLatToContainer([lng - 360, lat]);
           pos.x = newPos.x;
         }
-        if(pos.x < 0){
+        if (pos.x < 0) {
           // 日界线左侧点右移
-          let newPos = this.mapsService.lngLatToContainer([lng + 360, lat]);
+          const newPos = this.mapsService.lngLatToContainer([lng + 360, lat]);
           pos.x = newPos.x;
         }
       }
       // 不在当前可视区域内隐藏点
-      if (pos.x > containerWidth || pos.x < 0 || pos.y > containerHeight || pos.y < 0) {
+      if (
+        pos.x > containerWidth ||
+        pos.x < 0 ||
+        pos.y > containerHeight ||
+        pos.y < 0
+      ) {
         element.style.display = 'none';
       }
       element.style.left = pos.x + offsets[0] + 'px';
