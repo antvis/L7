@@ -20,7 +20,6 @@ export default class World extends React.Component {
   }
 
   public async componentDidMount() {
-
     const scene = new Scene({
       id: 'map',
       logoVisible: false,
@@ -45,16 +44,16 @@ export default class World extends React.Component {
 
     layer
       .source(data.geo_data)
-      .color( '#CF1D49')
+      .color('#CF1D49')
       .shape('line')
       .size(1)
       .select(true)
       .style({
         opacity: 0.8,
       });
-      layer2
+    layer2
       .source(data.geo_data)
-      .color( '#CF1')
+      .color('#CF1')
       .shape('fill')
       .select(true)
       .style({
