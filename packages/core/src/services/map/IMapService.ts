@@ -150,6 +150,8 @@ export interface IMapConfig<RawMap = {}> {
 
   offsetCoordinate?: boolean;
 
+  offsetZoom?: number;
+
   [key: string]: any;
 }
 

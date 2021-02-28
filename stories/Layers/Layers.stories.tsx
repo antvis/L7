@@ -16,6 +16,7 @@ import HexagonLayerDemo from './components/hexagon';
 import HighLight from './components/highlight';
 import LineLayer from './components/Line';
 import LineAnimate from './components/lineAnimate';
+import OffsetTest from './components/offsetTest';
 import PointDemo from './components/Point';
 import Point3D from './components/Point3D';
 import PointImage from './components/PointImage';
@@ -51,6 +52,6 @@ storiesOf('图层', module)
   .add('网格热力图2', () => <GridTest />)
   .add('栅格', () => <RasterLayerDemo />)
   .add('图片', () => <ImageLayerDemo />)
-  .add('网格测试', () => <GridTest />)
+  .add('网格测试', () => <OffsetTest />)
   .add('图层高亮', () => <HighLight />)
   .add('世界地图', () => <WorldDemo />);

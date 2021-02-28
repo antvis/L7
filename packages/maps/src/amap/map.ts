@@ -425,9 +425,10 @@ export default class AMapService
         center: [lng, lat],
         offsetOrigin: [position.x, position.y],
       });
+      const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
 
       // set coordinate system
-      if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD) {
+      if (this.viewport.getZoom() > offsetZoom) {
         this.coordinateSystemService.setCoordinateSystem(
           CoordinateSystem.P20_OFFSET,
         );
