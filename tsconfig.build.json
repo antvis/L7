@@ -13,7 +13,6 @@
       "@antv/l7-map": ["packages/map/src"],
       "@antv/l7-maps": ["packages/maps/src"],
       "@antv/l7-scene": ["packages/scene/src"],
-      "@antv/l7-scene": ["packages/scene/src"],
       "@antv/l7-renderer": ["packages/renderer/src"],
       "@antv/l7-three": ["packages/three/src"],
       "@antv/l7-mini": ["packages/mini/src"],
