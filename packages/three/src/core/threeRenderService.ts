@@ -1,5 +1,6 @@
-import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7';
 import { inject, injectable } from 'inversify';
+import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7';
+
 import {
   AnimationMixer,
   Camera,
