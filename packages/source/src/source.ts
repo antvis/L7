@@ -11,7 +11,12 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import { bBoxToBounds, extent, padBounds } from '@antv/l7-utils';
+import {
+  bBoxToBounds,
+  extent,
+  lnglatDistance,
+  padBounds,
+} from '@antv/l7-utils';
 import {
   BBox,
   Feature,
@@ -54,6 +59,8 @@ export default class Source extends EventEmitter {
     zoom: -99,
     method: 'count',
   };
+  // 数据范围框的对角线长度
+  private extentDiagonalLength: number;
 
   // 原始数据
   private originData: any;
@@ -89,16 +96,15 @@ export default class Source extends EventEmitter {
     this.emit('update');
   }
   public getClusters(zoom: number): any {
-    return this.clusterIndex.getClusters(this.extent, zoom);
+    return this.clusterIndex.getClusters(this.caculClusterExtent(2), zoom);
   }
   public getClustersLeaves(id: number): any {
     return this.clusterIndex.getLeaves(id, Infinity);
   }
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
-    const newBounds = padBounds(bBoxToBounds(this.extent), 2);
     let data = this.clusterIndex.getClusters(
-      newBounds[0].concat(newBounds[1]),
+      this.caculClusterExtent(2),
       Math.floor(zoom),
     );
     this.clusterOptions.zoom = zoom;
@@ -169,6 +175,17 @@ export default class Source extends EventEmitter {
     this.data = null;
   }
 
+  private caculClusterExtent(bufferRatio: number): any {
+    let newBounds = [
+      [-Infinity, -Infinity],
+      [Infinity, Infinity],
+    ];
+    if (this.extentDiagonalLength > 0) {
+      newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
+    }
+    return newBounds[0].concat(newBounds[1]);
+  }
+
   private initCfg(option?: ISourceCFG) {
     this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
     const cfg = this.cfg;
@@ -196,6 +213,10 @@ export default class Source extends EventEmitter {
     this.data = sourceParser(this.originData, parser);
     // 计算范围
     this.extent = extent(this.data.dataArray);
+    this.extentDiagonalLength = lnglatDistance(
+      [this.extent[0], this.extent[1]],
+      [this.extent[2], this.extent[3]],
+    );
   }
   /**
    * 数据统计
