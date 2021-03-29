@@ -14,7 +14,6 @@ import {
 import {
   bBoxToBounds,
   extent,
-  lnglatDistance,
   padBounds,
 } from '@antv/l7-utils';
 import {
@@ -59,8 +58,8 @@ export default class Source extends EventEmitter {
     zoom: -99,
     method: 'count',
   };
-  // 数据范围框的对角线长度
-  private extentDiagonalLength: number;
+  // 是否有效范围
+  private invalidExtent: boolean = false;
 
   // 原始数据
   private originData: any;
@@ -180,7 +179,9 @@ export default class Source extends EventEmitter {
       [-Infinity, -Infinity],
       [Infinity, Infinity],
     ];
-    if (this.extentDiagonalLength > 0) {
+
+    if (!this.invalidExtent) {
+
       newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
     }
     return newBounds[0].concat(newBounds[1]);
@@ -213,10 +214,8 @@ export default class Source extends EventEmitter {
     this.data = sourceParser(this.originData, parser);
     // 计算范围
     this.extent = extent(this.data.dataArray);
-    this.extentDiagonalLength = lnglatDistance(
-      [this.extent[0], this.extent[1]],
-      [this.extent[2], this.extent[3]],
-    );
+    this.invalidExtent = this.extent[0]===this.extent[2] || this.extent[1]===this.extent[3]
+    
   }
   /**
    * 数据统计
