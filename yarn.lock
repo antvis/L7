@@ -127,10 +127,10 @@
     d3-timer "~1.0.6"
     detect-browser "^5.1.0"
 
-"@antv/gatsby-theme-antv@^1.0.6":
-  version "1.1.0"
-  resolved "https://registry.npm.alibaba-inc.com/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-1.1.0.tgz#1ca58453cb21a600d6cc307c4c762a449bdf00f2"
-  integrity sha1-HKWEU8shpgDWzDB8THYqRJvfAPI=
+"@antv/gatsby-theme-antv@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.alibaba-inc.com/@antv/gatsby-theme-antv/download/@antv/gatsby-theme-antv-1.1.1.tgz#2a8c78b0a08f6f4e693cdc735dd670b53ae60fa4"
+  integrity sha1-Kox4sKCPb05pPNxzXdZwtTrmD6Q=
   dependencies:
     "@ant-design/icons" "^4.1.0"
     "@babel/plugin-transform-modules-umd" "^7.2.0"

@@ -19,7 +19,7 @@ export default class Point3D extends React.Component {
         style: 'light',
         center: [-121.24357, 37.58264],
         pitch: 0,
-        zoom: 10.45,
+        zoom: 6.45,
       }),
     });
     scene.on('loaded', () => {
@@ -29,7 +29,7 @@ export default class Point3D extends React.Component {
         .then((res) => res.text())
         .then((data) => {
           const pointLayer = new PointLayer({})
-            .source(data, {
+            .source(data.slice(0,1000), {
               parser: {
                 type: 'csv',
                 x: 'Longitude',
@@ -37,8 +37,8 @@ export default class Point3D extends React.Component {
               },
             })
             .shape('circle')
-            .size(8)
-            .active({
+            .size(16)
+            .select({
               color: 'red',
             })
             .color('Magnitude', [
@@ -59,34 +59,7 @@ export default class Point3D extends React.Component {
               stroke: '#fff',
             });
 
-          const textLayer = new PointLayer({})
-            .source(data, {
-              parser: {
-                type: 'csv',
-                x: 'Longitude',
-                y: 'Latitude',
-              },
-            })
-            .shape('EventID', 'text')
-            .size(8)
-
-            .color('red')
-            .style({
-              opacity: 1,
-              strokeWidth: 0,
-              stroke: '#fff',
-            });
-
           scene.addLayer(pointLayer);
-          scene.addLayer(textLayer);
-          pointLayer.on('click', (e) => {
-            const res = pointLayer.boxSelect(
-              [e.x - 10, e.y - 10, e.x + 10, e.y + 10],
-              (fe) => {
-                console.log(fe);
-              },
-            );
-          });
           this.scene = scene;
         });
     });
