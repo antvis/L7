@@ -25,6 +25,7 @@
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
     "@antv/l7-core": "2.3.9",
+    "@antv/l7-layers": "2.3.9",
     "@antv/l7-source": "2.3.9",
     "@antv/l7-utils": "2.3.9",
     "@babel/runtime": "^7.7.7",

@@ -29,7 +29,7 @@ export default class Point3D extends React.Component {
         .then((res) => res.text())
         .then((data) => {
           const pointLayer = new PointLayer({})
-            .source(data.slice(0,1000), {
+            .source(data.slice(0, 1000), {
               parser: {
                 type: 'csv',
                 x: 'Longitude',

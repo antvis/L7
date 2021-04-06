@@ -3,6 +3,7 @@ import {
   Bounds,
   createLayerContainer,
   createSceneContainer,
+  ICameraOptions,
   IControl,
   IControlService,
   IFontService,
@@ -254,12 +255,12 @@ class Scene
     return this.mapService.getZoom();
   }
 
-  public getCenter(): ILngLat {
-    return this.mapService.getCenter();
+  public getCenter(options?: ICameraOptions): ILngLat {
+    return this.mapService.getCenter(options);
   }
 
-  public setCenter(center: [number, number]) {
-    return this.mapService.setCenter(center);
+  public setCenter(center: [number, number], options?: ICameraOptions) {
+    return this.mapService.setCenter(center, options);
   }
 
   public getPitch(): number {
