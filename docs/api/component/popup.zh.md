@@ -12,10 +12,11 @@ order: 0
 Popup
 
 ```javascript
+const option = {};
 const popup = new L7.Popup(option);
 ```
 
-#### option
+### option
 
 - closeButton
 - closeOnClick

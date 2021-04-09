@@ -30,3 +30,8 @@ void setPickingColor(vec3 pickingColor) {
 float setPickingSize(float x) {
    return u_PickingStage == PICKING_ENCODE ? x + u_PickingBuffer : x;
 }
+
+float setPickingOrder(float z) {
+   bool selected = bool(v_PickingResult.a);
+   return selected ? z + 1. : 0.;
+}
