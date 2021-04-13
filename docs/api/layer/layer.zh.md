@@ -542,6 +542,7 @@ layer.setSelect(id);
 
 ```javascript
 layer.on('click', (ev) => {}); // 鼠标左键点击图层事件
+layer.on('mouseenter', (ev) => {}); // 鼠标进入图层要素
 layer.on('mousemove', (ev) => {}); // 鼠标在图层上移动时触发
 layer.on('mouseout', (ev) => {}); // 鼠标移出图层要素时触发
 layer.on('mouseup', (ev) => {}); // 鼠标在图层上单击抬起时触发

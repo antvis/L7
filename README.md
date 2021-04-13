@@ -86,12 +86,11 @@ scene.addLayer(pointLayer);
 - [Examples](https://l7.antv.vision/en/examples/gallery/basic)
 - [Contributor documentation](./.github/CONTRIBUTING.md)
 
-## 🔗 Links 
+## 🔗 Links
 
 - [L7 React](https://github.com/antvis/L7-React)
 - [L7 Boundary](https://github.com/antvis/L7-boundary)
 - [L7 draw](https://github.com/antvis/L7-draw)
-
 
 ## ✅ License
 
