@@ -19,7 +19,7 @@ module.exports = api => {
         [
           '@babel/plugin-proposal-decorators',
           {
-            legacy: true
+            legacy: true,
           }
         ],
         [
