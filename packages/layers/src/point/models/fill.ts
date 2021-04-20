@@ -67,7 +67,7 @@ export default class FillModel extends BaseModel {
         vertexShader: pointFillVert,
         fragmentShader: pointFillFrag,
         triangulation: PointFillTriangulation,
-        depth: { enable: true },
+        depth: { enable: false },
         blend: this.getBlend(),
       }),
     ];
