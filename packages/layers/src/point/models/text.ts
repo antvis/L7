@@ -330,8 +330,7 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '', coordinates, id, size = 1 } = feature;
-
+      const { shape = '', id, size = 1 } = feature;
       const shaping = shapeText(
         shape.toString(),
         mapping,
@@ -345,17 +344,28 @@ export default class TextModel extends BaseModel {
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
-      feature.centroid = calculteCentroid(coordinates);
+      // feature.centroid = calculteCentroid(coordinates);
+
+      feature.centroid = calculteCentroid(feature.coordinates);
+      // if (feature.version === 'GAODE2.x') {
+      //   // 此时地图为高德2.0
+      //   feature.originCentroid = calculteCentroid(feature.originCoordinates);
+      // } else {
+      //   // 此时地图不是高德2.0 originCentroid == centroid
+      //   feature.originCentroid = feature.centroid;
+      // }
+      feature.originCentroid = feature.version === 'GAODE2.x'?calculteCentroid(feature.originCoordinates):feature.originCentroid = feature.centroid;
+
       this.glyphInfoMap[id as number] = {
         shaping,
         glyphQuads,
-        centroid: calculteCentroid(coordinates),
+        centroid: calculteCentroid(feature.coordinates),
       };
       return feature;
     });
   }
   /**
-   * 文字避让
+   * 文字避让 depend on originCentorid
    */
   private filterGlyphs() {
     const {
@@ -374,7 +384,9 @@ export default class TextModel extends BaseModel {
     const collisionIndex = new CollisionIndex(width, height);
     const filterData = this.glyphInfo.filter((feature: IEncodeFeature) => {
       const { shaping, id = 0 } = feature;
-      const centroid = feature.centroid as [number, number];
+      // const centroid = feature.centroid as [number, number];
+      // const centroid = feature.originCentroid as [number, number];
+      const centroid = (feature.version === 'GAODE2.x'?feature.originCentroid:feature.centroid) as [number, number];
       const size = feature.size as number;
       const fontScale: number = size / 24;
       const pixels = this.mapService.lngLatToContainer(centroid);

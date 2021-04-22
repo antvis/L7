@@ -18,6 +18,7 @@ import {
   IViewport,
   MapServiceEvent,
   MapStyle,
+  Point,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
@@ -29,12 +30,15 @@ import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
+
 let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
 
-const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
-const AMAP_VERSION: string = '1.4.15';
+// const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
+const AMAP_API_KEY: string = 'ff533602d57df6f8ab3b0fea226ae52f';
+// const AMAP_VERSION: string = '1.4.15';
+const AMAP_VERSION: string = '2.0';
 /**
  * 确保多个场景只引入一个高德地图脚本
  */
@@ -47,7 +51,6 @@ let amapLoaded = false;
  * 高德地图脚本加载成功等待队列，成功之后依次触发
  */
 let pendingResolveQueue: Array<() => void> = [];
-const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标系，不同底图的高度位置
 
 /**
  * AMapService
@@ -55,11 +58,17 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 @injectable()
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
-  public version: string = Version['GAODE1.x'];
+  public version: string = Version['GAODE2.x'];
   /**
    * 原始地图实例
    */
   public map: AMap.Map & IAMapInstance;
+
+  /**
+   * 用于 customCooords 数据的计算
+   */
+  public sceneCenter!: [number, number]; // 一般使用用户数据的第一个
+  public sceneCenterMKT!: [number, number]; // 莫卡托
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
@@ -82,6 +91,55 @@ export default class AMapService
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+
+  /**
+   *   设置数据的绘制中心 高德2.0
+   */
+  public setCustomCoordCenter(center: [number, number]) {
+    this.sceneCenter = center;
+    // @ts-ignore
+    this.sceneCenterMKT = this.map.getProjection().project(...this.sceneCenter);
+  }
+
+  public getCustomCoordCenter(): [number, number] {
+    return this.sceneCenterMKT;
+  }
+  /**
+   * 根据数据的绘制中心转换经纬度数据 高德2.0
+   */
+  public lngLatToCoord(lnglat: [number, number]) {
+    // @ts-ignore
+    const proj = this.map.getProjection();
+    const project = proj.project;
+    // console.log('proj', proj.project)
+    // 单点
+    if (!this.sceneCenter) {
+      // @ts-ignore
+      this.map.customCoords.setCenter(lnglat);
+      this.setCustomCoordCenter(lnglat);
+    }
+    return this._sub(project(lnglat[0], lnglat[1]), this.sceneCenterMKT);
+  }
+
+  /**
+   * 转化线、面类型的点位数据
+   */
+  // public lngLatToCoords(lnglatArray: Array<Array<[number, number]>> | Array<[number, number]>): Array<Array<[number, number]>>|Array<[number, number]> {
+  public lngLatToCoords(
+    lnglatArray: number[][][] | number[][],
+  ): number[][][] | number[][] {
+    // @ts-ignore
+    return lnglatArray.map((lnglats) => {
+      if (typeof lnglats[0] === 'number') {
+        return this.lngLatToCoord(lnglats);
+      } else {
+        // @ts-ignore
+        return lnglats.map((lnglat) => {
+          return this.lngLatToCoord(lnglat);
+        });
+      }
+    });
+  }
 
   public addMarkerContainer(): void {
     const mapContainer = this.map.getContainer();
@@ -190,9 +248,16 @@ export default class AMapService
 
   public getBounds(): Bounds {
     // @ts-ignore
-    const amapBound = this.map.getBounds().toBounds();
-    const NE = amapBound.getNorthEast();
-    const SW = amapBound.getSouthWest();
+    // const amapBound = this.map.getBounds().toBounds();
+    // const NE = amapBound.getNorthEast();
+    // const SW = amapBound.getSouthWest();
+    const bounds = this.map.getBounds();
+    // console.log('bounds', bounds)
+
+    // @ts-ignore
+    const NE = bounds.getNorthEast();
+    // @ts-ignore
+    const SW = bounds.getSouthWest();
     const center = this.getCenter();
     const maxlng =
       center.lng > NE.getLng() || center.lng < SW.getLng()
@@ -329,14 +394,16 @@ export default class AMapService
       ...rest
     } = this.config;
     // 高德地图创建独立的container；
+
     // tslint:disable-next-line:typedef
     await new Promise<void>((resolve) => {
       const resolveMap = () => {
         if (mapInstance) {
           this.map = mapInstance as AMap.Map & IAMapInstance;
           this.$mapContainer = this.map.getContainer();
+
           setTimeout(() => {
-            this.map.on('camerachange', this.handleCameraChanged);
+            this.map.on('viewchange', this.handleViewChanged);
             resolve();
           }, 30);
         } else {
@@ -350,15 +417,25 @@ export default class AMapService
             viewMode: '3D',
             ...rest,
           });
-          // 监听地图相机事件
-          map.on('camerachange', this.handleCameraChanged);
           // @ts-ignore
           this.map = map;
+
+          // 在使用 map.customCoords 的时候必须使用
+          const mapInitCenter = map.getCenter();
+          // @ts-ignore
+          map.customCoords.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
+
+          // @ts-ignore
+          this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
+          // 监听地图相机事件
+          map.on('viewchange', this.handleViewChanged);
+
           setTimeout(() => {
             resolve();
           }, 10);
         }
       };
+      this.viewport = new Viewport();
       if (!amapLoaded && !mapInstance) {
         if (token === AMAP_API_KEY) {
           this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
@@ -372,7 +449,6 @@ export default class AMapService
         })
           .then((AMap) => {
             resolveMap();
-
             if (pendingResolveQueue.length) {
               pendingResolveQueue.forEach((r) => r());
               pendingResolveQueue = [];
@@ -389,8 +465,6 @@ export default class AMapService
         }
       }
     });
-
-    this.viewport = new Viewport();
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
@@ -430,44 +504,100 @@ export default class AMapService
     this.cameraChangedCallback = callback;
   }
 
-  private handleCameraChanged = (e: IAMapEvent): void => {
+  public initViewPort() {
+    // @ts-ignore
     const {
+      // @ts-ignore
       fov,
+      // @ts-ignore
       near,
+      // @ts-ignore
       far,
-      height,
-      pitch,
-      rotation,
+      // @ts-ignore
       aspect,
+      // @ts-ignore
       position,
-    } = e.camera;
-    const { lng, lat } = this.getCenter();
+      // @ts-ignore
+      lookAt,
+      // @ts-ignore
+      up,
+      // @ts-ignore
+    } = this.map.customCoords.getCameraParams();
+    const center = this.map.getCenter();
+    const zoom = this.map.getZoom();
+
+    if (this.cameraChangedCallback) {
+      this.viewport.syncWithMapCamera({
+        aspect,
+        far,
+        fov,
+        cameraPosition: position,
+        lookAt,
+        near,
+        up,
+        // AMap 定义的缩放等级 与 Mapbox 相差 1
+        zoom: zoom - 1, // 与amap1.x对比相差一个级别
+        center: [center.getLat(), center.getLng()],
+        offsetOrigin: [position[0], position[1]],
+      });
+
+      // set coordinate system
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_2);
+      this.cameraChangedCallback(this.viewport);
+    }
+  }
+
+  private _sub(a: number[] | vec3 | vec2, b: number[]): [number, number] {
+    const r: [number, number] = [0, 0];
+    r[0] = a[0] - b[0];
+    r[1] = a[1] - b[1];
+    return r;
+  }
+
+  /**
+   *
+   * @param e
+   */
+  private handleViewChanged = (e: any): void => {
+    // @ts-ignore
+    const {
+      // @ts-ignore
+      fov,
+      // @ts-ignore
+      near,
+      // @ts-ignore
+      far,
+      // @ts-ignore
+      aspect,
+      // @ts-ignore
+      position,
+      // @ts-ignore
+      lookAt,
+      // @ts-ignore
+      up,
+      // @ts-ignore
+    } = this.map.customCoords.getCameraParams();
+    const { zoom } = e;
+    // console.log('zoom', zoom, this.map.getZoom())
+    const center = this.map.getCenter();
     if (this.cameraChangedCallback) {
       // resync viewport
       this.viewport.syncWithMapCamera({
         aspect,
-        // AMap 定义 rotation 为顺时针方向，而 Mapbox 为逆时针
-        // @see https://docs.mapbox.com/mapbox-gl-js/api/#map#getbearing
-        bearing: 360 - rotation,
         far,
         fov,
-        cameraHeight: height,
+        cameraPosition: position,
+        lookAt,
+        up,
         near,
-        pitch,
         // AMap 定义的缩放等级 与 Mapbox 相差 1
-        zoom: this.map.getZoom() - 1,
-        center: [lng, lat],
-        offsetOrigin: [position.x, position.y],
+        zoom: zoom - 1, // 与amap1.x对比相差一个级别
+        center: [center.getLat(), center.getLng()],
+        offsetOrigin: [position[0], position[1]],
       });
-      const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
+
       // set coordinate system
-      if (this.viewport.getZoom() > offsetZoom) {
-        this.coordinateSystemService.setCoordinateSystem(
-          CoordinateSystem.P20_OFFSET,
-        );
-      } else {
-        this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
-      }
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_2);
       this.cameraChangedCallback(this.viewport);
     }
   };
@@ -475,6 +605,7 @@ export default class AMapService
   private getMapStyle(name: string): string {
     return MapTheme[name] ? MapTheme[name] : name;
   }
+
   private creatAmapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {

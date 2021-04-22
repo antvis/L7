@@ -11,6 +11,7 @@ attribute vec3 a_Size;
 attribute vec3 a_Normal;
 
 uniform mat4 u_ModelMatrix;
+uniform mat4 u_Mvp;
 uniform vec2 u_offsets;
 varying vec4 v_color;
 
@@ -30,6 +31,12 @@ void main() {
   float lightWeight = calc_lighting(pos);
   v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);
 
-  gl_Position = project_common_position_to_clipspace(pos);
+  // gl_Position = project_common_position_to_clipspace(pos);
+
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    gl_Position = u_Mvp * pos;
+  } else {
+    gl_Position = project_common_position_to_clipspace(pos);
+  }
   setPickingColor(a_PickingColor);
 }

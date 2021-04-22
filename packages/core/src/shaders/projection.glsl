@@ -10,6 +10,8 @@
 #define COORDINATE_SYSTEM_P20_OFFSET 6.0
 #define COORDINATE_SYSTEM_METER_OFFSET 7.0
 
+#define COORDINATE_SYSTEM_P20_2 8.0
+
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_ProjectionMatrix;
 uniform mat4 u_ViewProjectionMatrix;
@@ -28,6 +30,8 @@ uniform float u_DevicePixelRatio;
 uniform float u_FocalDistance;
 uniform vec3 u_CameraPosition;
 
+// uniform mat4 u_Mvp;
+
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
   float x = lnglat.x;
@@ -38,7 +42,13 @@ vec2 project_mercator(vec2 lnglat) {
 }
 
 float project_scale(float meters) {
-  return meters * u_PixelsPerMeter.z;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { 
+    // 因为高德2.0和1.x的相机控制方向相反，而u_PixelsPerMeter的计算与此相关（计算结果也相反）
+    // 可通过 shaderUniformPlugin -> CoordinateSystemService -> project 的顺序查看区别
+    return meters * u_PixelsPerMeter.z * -1.0;
+  } else {
+    return meters * u_PixelsPerMeter.z;
+  }
 }
 
 
@@ -69,6 +79,10 @@ vec3 reverse_offset_normal(vec3 vector) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET ) {
     return vector * vec3(1.0, -1.0, 1.0);
   }
+
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.0
+    return vector * vec3(1.0, -1.0, 1.0);
+  }
   return vector;
 }
 
@@ -97,6 +111,17 @@ vec4 project_position(vec4 position) {
       position.w
     );
   }
+
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // return vec4(
+    //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.), 
+    //   project_scale(position.z), 
+    //   position.w);
+     return vec4(
+      position.xy, 
+      project_scale(position.z), 
+      position.w);
+  }
   return position;
 
   // TODO: 瓦片坐标系 & 常规世界坐标系
@@ -111,12 +136,20 @@ float project_pixel(float pixel) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
     return pixel * pow(2.0, (19.0 - u_Zoom));
   }
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+  }
   return pixel;
 }
 vec2 project_pixel(vec2 pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
     return pixel * pow(2.0, (19.0 - u_Zoom));
+  }
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
   }
   return pixel * -1.;
 }
@@ -127,6 +160,7 @@ vec4 project_common_position_to_clipspace(vec4 position, mat4 viewProjectionMatr
     // Needs to be divided with project_uCommonUnitsPerMeter
     position.w *= u_PixelsPerMeter.z;
   }
+
   return viewProjectionMatrix * position + center;
 }
 
@@ -154,4 +188,3 @@ vec4 unproject_clipspace_to_position(vec4 clipspacePos, mat4 u_InverseViewProjec
 bool isEqual( float a,  float b) {
     return  a< b + 0.001 && a > b - 0.001;
 }
-

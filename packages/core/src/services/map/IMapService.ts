@@ -30,8 +30,10 @@ export interface IMapWrapper {
 }
 
 export interface IMapService<RawMap = {}> {
+  version: string;
   map: RawMap;
   init(): void;
+  initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
@@ -85,6 +87,12 @@ export interface IMapService<RawMap = {}> {
     scale: [number, number, number],
     origin: IMercator,
   ): number[];
+  lngLatToCoord?(lnglat: [number, number]): [number, number];
+  lngLatToCoords?(
+    lnglatArray: number[][][] | number[][],
+  ): number[][][] | number[][] | number[][][] | number[][];
+  // lngLatToCoords?(lnglatArray: any): any;
+  getCustomCoordCenter?(): [number, number];
   exportMap(type: 'jpg' | 'png'): string;
 }
 
@@ -178,6 +186,9 @@ export interface IMapCamera {
   center: [number, number];
   // 相机高度
   cameraHeight: number;
+  cameraPosition?: [number, number, number];
+  up?: [number, number, number];
+  lookAt?: [number, number, number];
   // 偏移原点，例如 P20 坐标系下
   offsetOrigin: [number, number];
 }

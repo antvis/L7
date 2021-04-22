@@ -69,19 +69,48 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  */
 export function LineTriangulation(feature: IEncodeFeature) {
-  const { coordinates } = feature;
-  let path = coordinates as number[][][] | number[][];
-  if (!Array.isArray(path[0][0])) {
-    path = [coordinates] as number[][][];
-  }
+  const { coordinates, originCoordinates, version } = feature;
+  // let path = coordinates as number[][][] | number[][];
+  // if (!Array.isArray(path[0][0])) {
+  //   path = [coordinates] as number[][][];
+  // }
+
   const line = new ExtrudePolyline({
     dash: true,
-    join: 'bevel', //
+    join: 'bevel',
   });
-  path.forEach((item: any) => {
-    // 处理带洞的多边形
-    line.extrude(item as number[][]);
-  });
+
+  if (version === 'GAODE2.x') {
+    // 处理高德2.0几何体构建
+    let path1 = coordinates as number[][][] | number[][];
+    if (!Array.isArray(path1[0][0])) {
+      path1 = [coordinates] as number[][][];
+    }
+    let path2 = originCoordinates as number[][][] | number[][];
+    if (!Array.isArray(path2[0][0])) {
+      path2 = [originCoordinates] as number[][][];
+    }
+
+    path1.forEach((item: any) => {
+      // 处理带洞的多边形
+      line.extrude1(item as number[][]);
+    });
+
+    path2.forEach((item: any) => {
+      // 处理带洞的多边形
+      line.extrude2(item as number[][]);
+    });
+  } else {
+    // 处理非高德2.0的几何体构建
+    let path = coordinates as number[][][] | number[][];
+    if (!Array.isArray(path[0][0])) {
+      path = [coordinates] as number[][][];
+    }
+    path.forEach((item: any) => {
+      line.extrude(item as number[][]);
+    });
+  }
+
   const linebuffer = line.complex;
   return {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
@@ -207,6 +236,7 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
       );
     }
   }
+  // console.log('positions', positions)
   return {
     vertices: positions,
     indices: indexArray,

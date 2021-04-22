@@ -139,15 +139,32 @@ export default class Scene extends EventEmitter implements ISceneService {
      */
     this.hooks.init.tapPromise('initMap', async () => {
       // 等待首次相机同步
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
-          resolve();
+          if (this.map.version !== 'GAODE2.x') {
+            // not amap2
+            resolve();
+          }
         });
-        this.map.init();
+
+        if (this.map.version !== 'GAODE2.x') {
+          // not amap2
+          this.map.init();
+        } else {
+          // amap2
+          resolve();
+        }
       });
+
+      if (this.map.version === 'GAODE2.x' && this.map.initViewPort) {
+        // amap2
+        await this.map.init();
+        this.map.initViewPort();
+      }
       // this.controlService.addControls();
+
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
@@ -208,7 +225,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 执行异步并行初始化任务
     // @ts-ignore
     this.initPromise = this.hooks.init.promise();
-
     this.render();
   }
 
@@ -222,11 +238,11 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (this.rendering || this.destroyed) {
       return;
     }
-
     this.rendering = true;
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
+
       await this.initPromise;
       if (this.destroyed) {
         this.destroy();
@@ -243,9 +259,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 尝试初始化未初始化的图层
     this.layerService.renderLayers();
     // 组件需要等待layer 初始化完成之后添加
-
     this.logger.debug(`scene ${this.id} render`);
-
     this.rendering = false;
   }
 

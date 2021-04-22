@@ -1,6 +1,13 @@
-import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
+import {
+  ILayer,
+  ILayerPlugin,
+  ILngLat,
+  IMapService,
+  TYPES,
+} from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
+import { cloneDeep } from 'lodash';
 
 @injectable()
 export default class DataSourcePlugin implements ILayerPlugin {

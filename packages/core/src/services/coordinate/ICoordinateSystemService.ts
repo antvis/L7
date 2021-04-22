@@ -17,6 +17,7 @@ export enum CoordinateSystem {
   P20 = 5.0,
   P20_OFFSET = 6.0,
   METER_OFFSET = 7.0,
+  P20_2 = 8.0,
 }
 
 // 后续传入 Shader 的变量
@@ -27,6 +28,8 @@ export const CoordinateUniform = {
   PixelsPerDegree: 'u_PixelsPerDegree',
   PixelsPerDegree2: 'u_PixelsPerDegree2',
   PixelsPerMeter: 'u_PixelsPerMeter',
+
+  Mvp: 'u_Mvp',
 };
 
 export interface ICoordinateSystemService {

@@ -1,5 +1,6 @@
 import GaodeMap from './amap/';
+import GaodeMap2 from './amap2/';
 import Map from './map/';
 import Mapbox from './mapbox/';
 
-export { GaodeMap, Mapbox, Map };
+export { GaodeMap, GaodeMap2, Mapbox, Map };

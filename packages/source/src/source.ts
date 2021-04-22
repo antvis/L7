@@ -28,6 +28,7 @@ import { getParser, getTransform } from './';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
+
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
     return srcValue;
@@ -54,6 +55,7 @@ export default class Source extends EventEmitter {
     zoom: -99,
     method: 'count',
   };
+  private readonly mapService: IMapService;
 
   // 原始数据
   private originData: any;
@@ -66,7 +68,6 @@ export default class Source extends EventEmitter {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;
-
     this.initCfg(cfg);
 
     this.hooks.init.tap('parser', () => {
@@ -204,6 +205,7 @@ export default class Source extends EventEmitter {
     const trans = this.transforms;
     trans.forEach((tran: ITransform) => {
       const { type } = tran;
+
       const data = getTransform(type)(this.data, tran);
       Object.assign(this.data, data);
     });
