@@ -354,7 +354,10 @@ export default class TextModel extends BaseModel {
       //   // 此时地图不是高德2.0 originCentroid == centroid
       //   feature.originCentroid = feature.centroid;
       // }
-      feature.originCentroid = feature.version === 'GAODE2.x'?calculteCentroid(feature.originCoordinates):feature.originCentroid = feature.centroid;
+      feature.originCentroid =
+        feature.version === 'GAODE2.x'
+          ? calculteCentroid(feature.originCoordinates)
+          : (feature.originCentroid = feature.centroid);
 
       this.glyphInfoMap[id as number] = {
         shaping,
@@ -386,7 +389,9 @@ export default class TextModel extends BaseModel {
       const { shaping, id = 0 } = feature;
       // const centroid = feature.centroid as [number, number];
       // const centroid = feature.originCentroid as [number, number];
-      const centroid = (feature.version === 'GAODE2.x'?feature.originCentroid:feature.centroid) as [number, number];
+      const centroid = (feature.version === 'GAODE2.x'
+        ? feature.originCentroid
+        : feature.centroid) as [number, number];
       const size = feature.size as number;
       const fontScale: number = size / 24;
       const pixels = this.mapService.lngLatToContainer(centroid);
