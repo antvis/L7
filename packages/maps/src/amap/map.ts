@@ -5,6 +5,7 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import {
   Bounds,
   CoordinateSystem,
+  ICameraOptions,
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
@@ -23,6 +24,7 @@ import { DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import { toPaddingOptions } from '../utils';
 import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
@@ -135,15 +137,45 @@ export default class AMapService
     return this.map.setZoom(zoom);
   }
 
-  public getCenter(): ILngLat {
+  public getCenter(options?: ICameraOptions): ILngLat {
+    if (options?.padding) {
+      const originCenter = this.getCenter();
+      const [w, h] = this.getSize();
+      const padding = toPaddingOptions(options.padding);
+      const px = this.lngLatToPixel([originCenter.lng, originCenter.lat]);
+      const offsetPx = [
+        (padding.right - padding.left) / 2,
+        (padding.bottom - padding.top) / 2,
+      ];
+
+      const newCenter = this.pixelToLngLat([
+        px.x - offsetPx[0],
+        px.y - offsetPx[1],
+      ]);
+      return newCenter;
+    }
     const center = this.map.getCenter();
     return {
       lng: center.getLng(),
       lat: center.getLat(),
     };
   }
-  public setCenter(lnglat: [number, number]): void {
-    this.map.setCenter(lnglat);
+  public setCenter(lnglat: [number, number], options?: ICameraOptions): void {
+    if (options?.padding) {
+      const padding = toPaddingOptions(options.padding);
+      const px = this.lngLatToPixel(lnglat);
+      const offsetPx = [
+        (padding.right - padding.left) / 2,
+        (padding.bottom - padding.top) / 2,
+      ];
+      const newCenter = this.pixelToLngLat([
+        px.x + offsetPx[0],
+        px.y + offsetPx[1],
+      ]);
+      this.map.setCenter([newCenter.lng, newCenter.lat]);
+    } else {
+      this.map.setCenter(lnglat);
+    }
   }
   public getPitch(): number {
     return this.map.getPitch();

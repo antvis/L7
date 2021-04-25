@@ -1,4 +1,11 @@
-import { Bounds, ILngLat, IPoint, IStatusOptions, Point } from '@antv/l7-core';
+import {
+  Bounds,
+  ICameraOptions,
+  ILngLat,
+  IPoint,
+  IStatusOptions,
+  Point,
+} from '@antv/l7-core';
 
 export default interface IMapController {
   /**
@@ -9,7 +16,7 @@ export default interface IMapController {
   /**
    * 中心点经纬度
    */
-  getCenter(): ILngLat;
+  getCenter(options?: ICameraOptions): ILngLat;
 
   /**
    * 仰角
@@ -64,7 +71,7 @@ export default interface IMapController {
   // control with raw map
   setRotation(rotation: number): void;
   setZoomAndCenter(zoom: number, center: Point): void;
-  setCenter(center: [number, number]): void;
+  setCenter(center: [number, number], options?: ICameraOptions): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
   setMapStyle(style: any): void;

@@ -1,9 +1,0 @@
-{
-  "extends": ["./tslint.json"],
-  "rules": {
-    "no-implicit-dependencies": [false, "dev"]
-  },
-  "linterOptions": {
-    "exclude": ["**/*.d.ts", "**/data/*.ts"]
-  }
-}

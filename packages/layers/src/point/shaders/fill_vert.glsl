@@ -30,7 +30,9 @@ void main() {
   vec2 offset = project_pixel(extrude * (newSize + u_stroke_width) + u_offsets);
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
 
-  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+
+
+
 
   // TODO: billboard
   // anti-alias
@@ -40,4 +42,7 @@ void main() {
   v_data = vec4(extrude, antialiasblur,shape_type);
 
   setPickingColor(a_PickingColor);
+
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+
 }
