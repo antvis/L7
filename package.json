@@ -188,7 +188,9 @@
     }
   },
   "resolutions": {
-    "d3-array": "1"
+    "d3-array": "1",
+    "monaco-editor-webpack-plugin": "2.0.0",
+    "monaco-editor": "0.21.0"
   },
   "tnpm": {
     "mode": "yarn"
