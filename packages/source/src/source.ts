@@ -11,11 +11,7 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import {
-  bBoxToBounds,
-  extent,
-  padBounds,
-} from '@antv/l7-utils';
+import { bBoxToBounds, extent, padBounds } from '@antv/l7-utils';
 import {
   BBox,
   Feature,
@@ -181,7 +177,6 @@ export default class Source extends EventEmitter {
     ];
 
     if (!this.invalidExtent) {
-
       newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
     }
     return newBounds[0].concat(newBounds[1]);
@@ -214,8 +209,8 @@ export default class Source extends EventEmitter {
     this.data = sourceParser(this.originData, parser);
     // 计算范围
     this.extent = extent(this.data.dataArray);
-    this.invalidExtent = this.extent[0]===this.extent[2] || this.extent[1]===this.extent[3]
-    
+    this.invalidExtent =
+      this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
   }
   /**
    * 数据统计
