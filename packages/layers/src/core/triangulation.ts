@@ -247,8 +247,8 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
 
 /**
  * 构建热力图密度图的顶点
- * @param feature 
- * @returns 
+ * @param feature
+ * @returns
  */
 export function HeatmapTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];

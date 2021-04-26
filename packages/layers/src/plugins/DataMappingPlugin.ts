@@ -137,9 +137,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 根据地图的类型判断是否需要对点位数据进行处理
     if (this.mapService.version === 'GAODE2.x') {
       // 若是高德2.0则需要对坐标进行相对偏移
-      
+
       if (typeof mappedData[0].coordinates[0] === 'number') {
-    
         // console.log('111', mappedData)
         // 单个的点数据
         // @ts-ignore

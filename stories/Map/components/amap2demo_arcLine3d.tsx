@@ -1,5 +1,3 @@
-import { vec2, vec3 } from 'gl-matrix';
-// @ts-ignore
 import { ILngLat, PointLayer, LineLayer, Scene } from '@antv/l7';
 import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
 import * as React from 'react';
@@ -17,26 +15,36 @@ export default class Amap2demo_arcLine3d extends React.Component {
       id: 'map',
       map: new GaodeMap2({
         pitch: 40,
-        center: [ 3.438, 40.16797 ],
-        zoom: 0
+        center: [3.438, 40.16797],
+        zoom: 0,
       }),
     });
     this.scene = scene;
 
     scene.on('loaded', () => {
       Promise.all([
-        fetch('https://gw.alipayobjects.com/os/basement_prod/dbd008f1-9189-461c-88aa-569357ffc07d.json').then(d => d.json()),
-        fetch('https://gw.alipayobjects.com/os/basement_prod/4472780b-fea1-4fc2-9e4b-3ca716933dc7.json').then(d => d.text()),
-        fetch('https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json').then(d => d.text())
-      ]).then(function onLoad([ world, dot, flyline ]) {
+        fetch(
+          'https://gw.alipayobjects.com/os/basement_prod/dbd008f1-9189-461c-88aa-569357ffc07d.json',
+        ).then((d) => d.json()),
+        fetch(
+          'https://gw.alipayobjects.com/os/basement_prod/4472780b-fea1-4fc2-9e4b-3ca716933dc7.json',
+        ).then((d) => d.text()),
+        fetch(
+          'https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json',
+        ).then((d) => d.text()),
+      ]).then(function onLoad([world, dot, flyline]) {
         const dotData = eval(dot);
         // @ts-ignore
-        const flydata = eval(flyline).map(item => {
+        const flydata = eval(flyline).map((item) => {
           // @ts-ignore
-          const latlng1 = item.from.split(',').map(e => { return e * 1; });
+          const latlng1 = item.from.split(',').map((e) => {
+            return e * 1;
+          });
           // @ts-ignore
-          const latlng2 = item.to.split(',').map(e => { return e * 1; });
-          return { coord: [ latlng1, latlng2 ] };
+          const latlng2 = item.to.split(',').map((e) => {
+            return e * 1;
+          });
+          return { coord: [latlng1, latlng2] };
         });
         // const worldFill = new PolygonLayer()
         //   .source(world)
@@ -45,35 +53,35 @@ export default class Amap2demo_arcLine3d extends React.Component {
         //   .style({
         //     opacity: 1
         //   });
-    
+
         const worldLine = new LineLayer()
           .source(world)
           .color('#41fc9d')
           .size(0.5)
           .style({
-            opacity: 0.4
+            opacity: 0.4,
           });
         const dotPoint = new PointLayer()
           .source(dotData, {
             parser: {
               type: 'json',
               x: 'lng',
-              y: 'lat'
-            }
+              y: 'lat',
+            },
           })
           .shape('circle')
           .color('#ffed11')
           .animate(true)
           .size(40)
           .style({
-            opacity: 1.0
+            opacity: 1.0,
           });
         const flyLine = new LineLayer()
           .source(flydata, {
             parser: {
               type: 'json',
-              coordinates: 'coord'
-            }
+              coordinates: 'coord',
+            },
           })
           .color('#ff6b34')
           .shape('arc3d')
@@ -82,10 +90,10 @@ export default class Amap2demo_arcLine3d extends React.Component {
           .animate({
             interval: 2,
             trailLength: 2,
-            duration: 1
+            duration: 1,
           })
           .style({
-            opacity: 1
+            opacity: 1,
           });
         // scene.addLayer(worldFill);
         scene.addLayer(worldLine);

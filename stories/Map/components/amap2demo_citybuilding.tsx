@@ -1,8 +1,6 @@
 import { PointLayer, CityBuildingLayer, Scene } from '@antv/l7';
 import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
 import * as React from 'react';
-import * as dat from 'dat.gui';
-
 
 export default class Amap2demo_citybuilding extends React.Component {
   // @ts-ignore
@@ -22,7 +20,7 @@ export default class Amap2demo_citybuilding extends React.Component {
         style: 'dark',
         center: [121.507674, 31.223043],
         pitch: 65.59312320916906,
-        zoom: 15.4
+        zoom: 15.4,
       }),
     });
     const pointLayer = new CityBuildingLayer();
@@ -42,7 +40,6 @@ export default class Amap2demo_citybuilding extends React.Component {
     scene.addLayer(pointLayer);
 
     this.scene = scene;
-  
   }
 
   public render() {

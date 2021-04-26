@@ -32,14 +32,24 @@ export default class Viewport implements IViewport {
     this.center = center;
 
     // 计算透视投影矩阵 projectionMatrix
-    mat4.perspective(this.projectionMatrix, fov/180*Math.PI, aspect, near, far);
+    mat4.perspective(
+      this.projectionMatrix,
+      (fov / 180) * Math.PI,
+      aspect,
+      near,
+      far,
+    );
     // mat4.perspective(this.projectionMatrix, 0.91, aspect, near, far);
     // const pitchInRadians = pitch * DEGREES_TO_RADIANS;
     // const rotationInRadians = (360 - bearing) * DEGREES_TO_RADIANS;
 
     // 计算相机矩阵 viewMatrix
     // const eyePoint = vec3.fromValues(...cameraPosition);
-    const eyePoint = vec3.fromValues(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+    const eyePoint = vec3.fromValues(
+      cameraPosition[0],
+      cameraPosition[1],
+      cameraPosition[2],
+    );
     // 计算相机矩阵 viewMatrix
     // const eyePoint = vec3.fromValues(
     //   (cameraPosition[2]) * Math.sin(pitchInRadians) * Math.sin(rotationInRadians),

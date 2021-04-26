@@ -37,7 +37,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     const version = this.mapService.version;
 
     let mvp = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; // default matrix (for gaode2.x)
-    let sceneCenterMKT = [0, 0]
+    let sceneCenterMKT = [0, 0];
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
       // 重新计算坐标系参数
       this.coordinateSystemService.refresh();
@@ -47,7 +47,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         mvp = this.mapService.map.customCoords.getMVPMatrix();
         // mvp = amapCustomCoords.getMVPMatrix()
         // @ts-ignore
-        sceneCenterMKT = this.mapService.getCustomCoordCenter()
+        sceneCenterMKT = this.mapService.getCustomCoordCenter();
       }
 
       const { width, height } = this.rendererService.getViewportSize();

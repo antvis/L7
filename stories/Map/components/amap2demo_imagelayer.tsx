@@ -24,16 +24,16 @@ export default class Amap2demo_imageLayer extends React.Component {
 
     scene.on('loaded', () => {
       const layer = new ImageLayer({});
-    layer.source(
-      'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
-      {
-        parser: {
-          type: 'image',
-          extent: [121.168, 30.2828, 121.384, 30.4219],
+      layer.source(
+        'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
+        {
+          parser: {
+            type: 'image',
+            extent: [121.168, 30.2828, 121.384, 30.4219],
+          },
         },
-      },
-    );
-    scene.addLayer(layer);
+      );
+      scene.addLayer(layer);
     });
   }
 

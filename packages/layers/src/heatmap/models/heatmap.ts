@@ -5,10 +5,11 @@ import {
   IFramebuffer,
   IModel,
   IModelUniform,
-  ITexture2D
+  ITexture2D,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
+import { inject, injectable } from 'inversify';
 import BaseModel from '../../core/BaseModel';
 import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
@@ -18,7 +19,6 @@ import heatmapFrag from '../shaders/heatmap_framebuffer_frag.glsl';
 import heatmapVert from '../shaders/heatmap_framebuffer_vert.glsl';
 import heatmapColorVert from '../shaders/heatmap_vert.glsl';
 import { heatMap3DTriangulation } from '../triangulation';
-import { inject, injectable } from 'inversify';
 interface IHeatMapLayerStyleOptions {
   opacity: number;
   intensity: number;
@@ -28,7 +28,6 @@ interface IHeatMapLayerStyleOptions {
 }
 @injectable()
 export default class HeatMapModel extends BaseModel {
-
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
   protected heatmapFramerBuffer: IFramebuffer;

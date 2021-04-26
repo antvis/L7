@@ -1,11 +1,6 @@
-import { vec2, vec3 } from 'gl-matrix';
-// @ts-ignore
 import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
 import * as React from 'react';
-
-import { mat4 } from 'gl-matrix';
-
 export default class Amap2demo extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -48,9 +43,9 @@ export default class Amap2demo extends React.Component {
     scene.on('loaded', () => {
       console.log('event test');
       // @ts-ignore
-      console.log(scene.map.getProjection().project)
+      console.log(scene.map.getProjection().project);
       // @ts-ignore
-      console.log(scene.map.customCoords.lngLatToCoord)
+      console.log(scene.map.customCoords.lngLatToCoord);
       const layer = new PointLayer()
         .source(originData, {
           parser: {

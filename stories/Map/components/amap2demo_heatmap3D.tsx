@@ -1,6 +1,10 @@
-import { vec2, vec3 } from 'gl-matrix';
-// @ts-ignore
-import { ILngLat, PointLayer, PolygonLayer, Scene, HeatmapLayer } from '@antv/l7';
+import {
+  ILngLat,
+  PointLayer,
+  PolygonLayer,
+  Scene,
+  HeatmapLayer,
+} from '@antv/l7';
 import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -18,24 +22,24 @@ export default class Amap2demo_heatmap extends React.Component {
       map: new GaodeMap2({
         // pitch: 58.5,
         pitch: 0,
-        center: [ 111.8759, 30.6942 ],
+        center: [111.8759, 30.6942],
         rotation: 0.519,
-        zoom: 3.6116
+        zoom: 3.6116,
       }),
     });
     this.scene = scene;
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'
+        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
       )
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           const layer = new HeatmapLayer({})
             .source(data)
-            .size('capacity', [ 0, 1 ])
+            .size('capacity', [0, 1])
             .shape('heatmap3D')
-          // weight映射通道
+            // weight映射通道
             .style({
               intensity: 10,
               radius: 5,
@@ -47,10 +51,10 @@ export default class Amap2demo_heatmap extends React.Component {
                   '#DAF291',
                   '#FFD591',
                   '#FF7A45',
-                  '#CF1D49'
+                  '#CF1D49',
                 ],
-                positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
-              }
+                positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+              },
             });
           scene.addLayer(layer);
         });
