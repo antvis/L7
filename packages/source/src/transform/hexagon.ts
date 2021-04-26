@@ -33,7 +33,6 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
     .x((d: IRawData) => d.coordinates[0])
     .y((d: IRawData) => d.coordinates[1]);
   const hexbinBins = newHexbin(screenPoints);
-
   const result: IParserData = {
     dataArray: hexbinBins.map((hex: IHexBinItem<IRawData>, index: number) => {
       if (option.field && method) {

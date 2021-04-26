@@ -124,18 +124,17 @@ export default class AMapService
   /**
    * 转化线、面类型的点位数据
    */
-  // public lngLatToCoords(lnglatArray: Array<Array<[number, number]>> | Array<[number, number]>): Array<Array<[number, number]>>|Array<[number, number]> {
   public lngLatToCoords(
     lnglatArray: number[][][] | number[][],
   ): number[][][] | number[][] {
     // @ts-ignore
     return lnglatArray.map((lnglats) => {
       if (typeof lnglats[0] === 'number') {
-        return this.lngLatToCoord(lnglats);
+        return this.lngLatToCoord(lnglats as [number, number]);
       } else {
         // @ts-ignore
         return lnglats.map((lnglat) => {
-          return this.lngLatToCoord(lnglat);
+          return this.lngLatToCoord(lnglat as [number, number]);
         });
       }
     });
@@ -523,9 +522,13 @@ export default class AMapService
       up,
       // @ts-ignore
     } = this.map.customCoords.getCameraParams();
-    const center = this.map.getCenter();
-    const zoom = this.map.getZoom();
 
+    // @ts-ignore
+    const center = this.map.customCoords.getCenter() as [number, number]
+    const zoom = this.map.getZoom();
+    const pitch = this.map.getPitch()
+    const rotation = this.map.getRotation()
+    // @ts-ignore
     if (this.cameraChangedCallback) {
       this.viewport.syncWithMapCamera({
         aspect,
@@ -537,10 +540,16 @@ export default class AMapService
         up,
         // AMap 定义的缩放等级 与 Mapbox 相差 1
         zoom: zoom - 1, // 与amap1.x对比相差一个级别
-        center: [center.getLat(), center.getLng()],
+        // center: [center.getLng(), center.getLat()],
+        center: center,
         offsetOrigin: [position[0], position[1]],
+
+        pitch,
+        bearing: 360 - rotation,
       });
 
+      // console.log('this.viewport', this.viewport)
+      // console.log('position', position)
       // set coordinate system
       this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_2);
       this.cameraChangedCallback(this.viewport);
@@ -559,6 +568,7 @@ export default class AMapService
    * @param e
    */
   private handleViewChanged = (e: any): void => {
+
     // @ts-ignore
     const {
       // @ts-ignore
@@ -577,9 +587,12 @@ export default class AMapService
       up,
       // @ts-ignore
     } = this.map.customCoords.getCameraParams();
-    const { zoom } = e;
+    const { zoom, pitch, rotation } = e;
+    // console.log(this.viewport)
     // console.log('zoom', zoom, this.map.getZoom())
-    const center = this.map.getCenter();
+    // const center = this.map.getCenter();
+     // @ts-ignore
+     const center = this.map.customCoords.getCenter() as [number, number]
     if (this.cameraChangedCallback) {
       // resync viewport
       this.viewport.syncWithMapCamera({
@@ -592,8 +605,14 @@ export default class AMapService
         near,
         // AMap 定义的缩放等级 与 Mapbox 相差 1
         zoom: zoom - 1, // 与amap1.x对比相差一个级别
-        center: [center.getLat(), center.getLng()],
+        // center: [center.getLng(), center.getLat()],
+        center: center,
         offsetOrigin: [position[0], position[1]],
+
+        pitch,
+        bearing: 360 - rotation,
+        // // @ts-ignore
+        // mvp: this.map.customCoords.getMVPMatrix()
       });
 
       // set coordinate system

@@ -18,7 +18,7 @@ import BaseLayer from '../core/BaseLayer';
 import { RasterTriangulation } from './buffers/triangulation';
 import rasterFrag from './shaders/raster_frag.glsl';
 import rasterVert from './shaders/raster_vert.glsl';
-interface IRasterLayerStyleOptions {
+interface IRasterLayerStyleOptions { 
   opacity: number;
   min: number;
   max: number;

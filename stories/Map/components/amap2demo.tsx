@@ -47,7 +47,10 @@ export default class Amap2demo extends React.Component {
 
     scene.on('loaded', () => {
       console.log('event test');
-
+      // @ts-ignore
+      console.log(scene.map.getProjection().project)
+      // @ts-ignore
+      console.log(scene.map.customCoords.lngLatToCoord)
       const layer = new PointLayer()
         .source(originData, {
           parser: {

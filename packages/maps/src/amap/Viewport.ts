@@ -33,7 +33,6 @@ export default class Viewport implements IViewport {
 
     // 计算透视投影矩阵 projectionMatrix
     mat4.perspective(this.projectionMatrix, fov, aspect, near, far);
-
     // 计算相机矩阵 viewMatrix
     const eye = vec3.fromValues(
       cameraHeight * Math.sin(pitchInRadians) * Math.sin(rotationInRadians),
@@ -46,7 +45,6 @@ export default class Viewport implements IViewport {
       Math.sin(pitchInRadians),
     );
     mat4.lookAt(this.viewMatrix, eye, vec3.fromValues(0, 0, 0), up);
-
     this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);
 
     // 移动相机位置

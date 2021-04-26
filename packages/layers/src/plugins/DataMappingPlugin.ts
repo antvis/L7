@@ -11,7 +11,7 @@ import {
   IStyleAttributeService,
   TYPES,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { rgb2arr, unProjectFlat } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 
@@ -131,12 +131,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
       return encodeRecord;
     }) as IEncodeFeature[];
 
-    // console.log('mappedData', mappedData)
+    // console.log('mappedData', unProjectFlat(mappedData[0].coordinates as [number, number]))
+    // @ts-ignore
+    // console.log(this.mapService.getCustomCoordCenter())
     // 根据地图的类型判断是否需要对点位数据进行处理
     if (this.mapService.version === 'GAODE2.x') {
       // 若是高德2.0则需要对坐标进行相对偏移
-
+      
       if (typeof mappedData[0].coordinates[0] === 'number') {
+    
+        // console.log('111', mappedData)
         // 单个的点数据
         // @ts-ignore
         mappedData.map((d) => {
@@ -145,8 +149,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
           // @ts-ignore
           d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+          // d.coordinates = this.mapService.lngLatToCoord(unProjectFlat(d.coordinates));
         });
       } else {
+        // console.log('2')
         // 连续的线、面数据
         // @ts-ignore
         mappedData.map((d) => {

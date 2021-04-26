@@ -5,11 +5,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
+import { aProjectFlat, Satistics, unProjectFlat } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import heatmapGrid3dVert from '../shaders/hexagon_3d_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
-
 interface IHeatMapLayerStyleOptions {
   opacity: number;
   coverage: number;
@@ -112,7 +112,9 @@ export default class Grid3DModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number) => {
-          const coordinates = feature.coordinates as number[];
+          const coordinates = (feature.version==='GAODE2.x'?feature.originCoordinates:feature.coordinates) as number[];
+          // const coordinates = feature.coordinates as number[];
+          // const coordinates = feature.originCoordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

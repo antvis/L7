@@ -42,13 +42,7 @@ vec2 project_mercator(vec2 lnglat) {
 }
 
 float project_scale(float meters) {
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { 
-    // 因为高德2.0和1.x的相机控制方向相反，而u_PixelsPerMeter的计算与此相关（计算结果也相反）
-    // 可通过 shaderUniformPlugin -> CoordinateSystemService -> project 的顺序查看区别
-    return meters * u_PixelsPerMeter.z * -1.0;
-  } else {
-    return meters * u_PixelsPerMeter.z;
-  }
+  return meters * u_PixelsPerMeter.z;
 }
 
 
@@ -117,6 +111,7 @@ vec4 project_position(vec4 position) {
     //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.), 
     //   project_scale(position.z), 
     //   position.w);
+
      return vec4(
       position.xy, 
       project_scale(position.z), 

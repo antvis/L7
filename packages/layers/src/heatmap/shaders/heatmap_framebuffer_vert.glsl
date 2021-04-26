@@ -7,6 +7,7 @@ uniform float u_radius;
 varying vec2 v_extrude;
 varying float v_weight;
 uniform mat4 u_ModelMatrix;
+uniform mat4 u_Mvp;
 
 #define GAUSS_COEF  0.3989422804014327
 
@@ -24,5 +25,11 @@ void main(){
     vec2 offset = project_pixel(v_extrude * u_radius);
     vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
 
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+    // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+        gl_Position = u_Mvp * (vec4(project_pos.xy + offset, 0.0, 1.0));
+    } else {
+        gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+    }
 }

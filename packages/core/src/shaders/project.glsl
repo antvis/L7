@@ -38,3 +38,17 @@ float pixelDistance(vec2 from, vec2 to) {
  vec2 b1 = ProjectFlat(to);
  return distance(a1, b1);
 }
+
+vec2 customProject(vec2 lnglat) {
+  float t = lnglat.x;
+  float e = lnglat.y;
+  float Sm = 180.0 / PI;
+  float Tm = 6378137.0;
+  float Rm = PI / 180.0;
+  float r = 85.0511287798;
+  e = max(min(r, e), -r);
+  t *= Rm;
+  e *= Rm;
+  e = log(tan(PI / 4.0 + e / 2.0));
+  return vec2(t * Tm, e * Tm);
+}

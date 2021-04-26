@@ -39,6 +39,7 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
  */
 export function PointExtrudeTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
+  // console.log('PointExtrudeTriangulation', feature)
   const { positions, index, normals } = getGeometry(
     shape as ShapeType3D,
     false,
@@ -244,6 +245,11 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
   };
 }
 
+/**
+ * 构建热力图密度图的顶点
+ * @param feature 
+ * @returns 
+ */
 export function HeatmapTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
   if (coordinates.length === 2) {
@@ -286,6 +292,7 @@ function getGeometry(shape: ShapeType3D, needFlat = false): IExtrudeGeomety {
     : geometryShape.cylinder();
   const geometry = extrude_PolygonNormal([path], needFlat);
   GeometryCache[shape] = geometry;
+  // console.log('geometry', geometry)
   return geometry;
 }
 

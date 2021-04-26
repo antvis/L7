@@ -7,6 +7,7 @@ attribute vec4 a_Color;
 attribute float a_Size;
 
 uniform mat4 u_ModelMatrix;
+uniform mat4 u_Mvp;
 uniform float segmentNumber;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 varying vec4 v_color;
@@ -85,6 +86,11 @@ void main() {
   vec2 offset = getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y);
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
 
-  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
+  // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    gl_Position = u_Mvp * (vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
+  } else {
+    gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
+  }
   setPickingColor(a_PickingColor);
 }

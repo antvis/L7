@@ -44,5 +44,7 @@ void main() {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
   }
 
+  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+
   setPickingColor(a_PickingColor);
 }

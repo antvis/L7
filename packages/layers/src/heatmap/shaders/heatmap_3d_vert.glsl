@@ -8,6 +8,7 @@ uniform mat4 u_InverseViewProjectionMatrix;
 uniform mat4 u_ViewProjectionMatrixUncentered;
 varying float v_intensity;
 
+
 vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {
     float t2 = t * t;
     float one_minus_t = 1.0 - t;
@@ -21,26 +22,25 @@ vec2 toBezier(float t, vec4 p){
 void main() {
   v_texCoord = a_Uv;
 
-  vec2 pos =(a_Uv * vec2(2.0) - vec2(1.0));
+  vec2 pos = a_Uv * vec2(2.0) - vec2(1.0); // 将原本 0 -> 1 的 uv 转换为 -1 -> 1 的标准坐标空间（NDC）
 
+  vec4 p1 = vec4(pos, 0.0, 1.0); // x/y 平面上的点（z == 0）可以认为是三维上的点被投影到平面后的点
+	vec4 p2 = vec4(pos, 1.0, 1.0); // 平行于x/y平面、z==1 的平面上的点
 
-  vec4 p1 = vec4(pos, 0.0, 1.0);
-	vec4 p2 = vec4(pos, 1.0, 1.0);
-
-	vec4 inverseP1 = u_InverseViewProjectionMatrix * p1;
+	vec4 inverseP1 = u_InverseViewProjectionMatrix * p1; // 根据视图投影矩阵的逆矩阵平面上的反算出三维空间中的点（p1平面上的点）
 	vec4 inverseP2 = u_InverseViewProjectionMatrix * p2;
 
-  inverseP1 = inverseP1 / inverseP1.w;
+  inverseP1 = inverseP1 / inverseP1.w; // 归一化操作（归一化后为世界坐标）
 	inverseP2 = inverseP2 / inverseP2.w;
 
-	float zPos = (0.0 - inverseP1.z) / (inverseP2.z - inverseP1.z);
+	float zPos = (0.0 - inverseP1.z) / (inverseP2.z - inverseP1.z); // ??
 	vec4 position = inverseP1 + zPos * (inverseP2 - inverseP1);
 
-  vec4 b= vec4(0.5000, 0, 1, 0.5000);
+  vec4 b= vec4(0.5000, 0.0, 1.0, 0.5000);
   float fh;
 
   v_intensity = texture2D(u_texture, v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
   gl_Position = u_ViewProjectionMatrixUncentered * vec4(position.xy, fh * project_pixel(50.), 1.0);
-
+ 
 }

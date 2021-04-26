@@ -444,6 +444,10 @@ export default class AMapService
     const { lng, lat } = this.getCenter();
     if (this.cameraChangedCallback) {
       // resync viewport
+      // console.log('cameraHeight', height)
+      // console.log('pitch', pitch)
+      // console.log('rotation', rotation)
+      // console.log('zoom', this.map.getZoom())
       this.viewport.syncWithMapCamera({
         aspect,
         // AMap 定义 rotation 为顺时针方向，而 Mapbox 为逆时针
@@ -460,6 +464,7 @@ export default class AMapService
         offsetOrigin: [position.x, position.y],
       });
       const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
+      // console.log('this.viewport', this.viewport)
       // set coordinate system
       if (this.viewport.getZoom() > offsetZoom) {
         this.coordinateSystemService.setCoordinateSystem(

@@ -1,6 +1,7 @@
 precision highp float;
 attribute vec3 a_Position;
 uniform mat4 u_ModelMatrix;
+uniform mat4 u_Mvp;
 uniform vec4 u_extent;
 uniform sampler2D u_texture;
 uniform sampler2D u_colorTexture;
@@ -32,6 +33,12 @@ void main() {
 
   //  vec2 range = u_extent.zw - u_extent.xy;
   //  vec4 project_pos = project_position(vec4(pos, 0, 1.0));
-   gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * u_heightRatio, 1.0));
+  //  gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * u_heightRatio, 1.0));
+
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    gl_Position = u_Mvp * (vec4(pos.xy, project_scale(value) * u_heightRatio, 1.0));
+  } else {
+    gl_Position = project_common_position_to_clipspace(vec4(pos.xy, project_scale(value) * u_heightRatio, 1.0));
+  }
 
 }
