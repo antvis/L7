@@ -10,13 +10,13 @@ const scene = new Scene({
     zoom: 3
   })
 });
-let fontFamily = 'iconfont';
-let fontPath = '//at.alicdn.com/t/font_2534097_99x8u6zpili.woff2?t=1621842922496';
+const fontFamily = 'iconfont';
+const fontPath = '//at.alicdn.com/t/font_2534097_99x8u6zpili.woff2?t=1621842922496';
 scene.addFontFace(fontFamily, fontPath);
-scene.addIconFont("icon1", "&#xe98c;")
+scene.addIconFont('icon1', '&#xe98c;');
 
 scene.on('loaded', () => {
-    fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
+  fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
     .then(res => res.json())
     .then(data => {
       const pointLayer = new PointLayer({})
@@ -46,32 +46,32 @@ scene.on('loaded', () => {
       scene.addLayer(pointLayer);
     });
 
-    fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json',
-    )
-    .then((res) => res.json())
-    .then((data) => {
-        const pointLayer = new PointLayer({})
+  fetch(
+    'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json'
+  )
+    .then(res => res.json())
+    .then(data => {
+      const pointLayer = new PointLayer({})
         .source(data.list, {
-            parser: {
+          parser: {
             type: 'json',
             x: 'j',
-            y: 'w',
-            },
+            y: 'w'
+          }
         })
         .shape('icon', 'text')
         .size(12)
-        .color('w', ['#f00', '#f00', '#0f0'])
+        .color('w', [ '#f00', '#f00', '#0f0' ])
         .style({
-            textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-            textOffset: [-10, 0], // 文本相对锚点的偏移量 [水平, 垂直]
-            spacing: 2, // 字符间距
-            padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-            stroke: '#ffffff', // 描边颜色
-            fontFamily,
-            iconfont: true,
-            // textAllowOverlap: true,
+          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [ -10, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: '#ffffff', // 描边颜色
+          fontFamily,
+          iconfont: true
+          // textAllowOverlap: true,
         });
-        scene.addLayer(pointLayer);
-    })
+      scene.addLayer(pointLayer);
+    });
 });

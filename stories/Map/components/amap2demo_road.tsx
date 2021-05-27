@@ -18,21 +18,20 @@ export default class Amap2demo_road extends React.Component {
         center: [120.1145, 30.221],
         pitch: 50,
         zoom: 16.8,
-        viewMode: '3D'
+        viewMode: '3D',
       }),
     });
     this.scene = scene;
-    
+
     scene.on('loaded', () => {
       fetch(
         'https://gw.alipayobjects.com/os/bmw-prod/91d27a97-869a-459b-a617-498dcc9c3e7f.json',
       )
         .then((res) => res.json())
         .then((data) => {
-
           scene.addImage(
             'road',
-            'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*haGlTpW2BQgAAAAAAAAAAAAAARQnAQ'
+            'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*haGlTpW2BQgAAAAAAAAAAAAAARQnAQ',
           );
 
           const layer = new LineLayer()
@@ -77,43 +76,59 @@ export default class Amap2demo_road extends React.Component {
             'https://gw.alipayobjects.com/zos/bmw-prod/59717737-5652-479f-9e6b-e7d2c5441446.svg',
           );
           const imageLayer = new PointLayer()
-            .source([{
-              lng: 120.11025885601617,
-              lat: 30.22006389085372,
-              icon: 'start'
-            },{
-              lng: 120.11123578376913,
-              lat: 30.220443561196277,
-              icon: 'visitor'
-            },{
-              lng: 120.11408457779198,
-              lat: 30.22019805564678,
-              icon: 'museum'
-            },{
-              lng: 120.11683172384723,
-              lat: 30.21875509667716,
-              icon: 'supermarket'
-            },{
-              lng: 120.11945546294194,
-              lat: 30.218724022876376,
-              icon: 'tower'
-            },{
-              lng: 120.1184189041221,
-              lat: 30.21783201718256,
-              icon: 'end'
-            }
-          ], {
-              parser: {
-                type: 'json',
-                x: 'lng',
-                y: 'lat',
+            .source(
+              [
+                {
+                  lng: 120.11025885601617,
+                  lat: 30.22006389085372,
+                  icon: 'start',
+                },
+                {
+                  lng: 120.11123578376913,
+                  lat: 30.220443561196277,
+                  icon: 'visitor',
+                },
+                {
+                  lng: 120.11408457779198,
+                  lat: 30.22019805564678,
+                  icon: 'museum',
+                },
+                {
+                  lng: 120.11683172384723,
+                  lat: 30.21875509667716,
+                  icon: 'supermarket',
+                },
+                {
+                  lng: 120.11945546294194,
+                  lat: 30.218724022876376,
+                  icon: 'tower',
+                },
+                {
+                  lng: 120.1184189041221,
+                  lat: 30.21783201718256,
+                  icon: 'end',
+                },
+              ],
+              {
+                parser: {
+                  type: 'json',
+                  x: 'lng',
+                  y: 'lat',
+                },
               },
-            })
-            .shape('icon', ['start', 'visitor', 'museum', 'supermarket', 'tower', 'end'])
+            )
+            .shape('icon', [
+              'start',
+              'visitor',
+              'museum',
+              'supermarket',
+              'tower',
+              'end',
+            ])
             .size(35)
             .style({
-              offsets: [0, 20]
-            })
+              offsets: [0, 20],
+            });
           scene.addLayer(imageLayer);
         });
     });

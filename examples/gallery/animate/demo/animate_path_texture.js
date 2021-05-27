@@ -13,7 +13,7 @@ const scene = new Scene({
 scene.on('loaded', () => {
   scene.addImage(
     '02',
-    'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg',
+    'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg'
   );
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json'
@@ -33,8 +33,8 @@ scene.on('loaded', () => {
         })
         .style({
           lineTexture: true, // 开启线的贴图功能
-          iconStep: 100, // 设置贴图纹理的间距
-        })
+          iconStep: 100 // 设置贴图纹理的间距
+        });
       scene.addLayer(layer);
     });
 });

@@ -15,7 +15,6 @@ export default class Amap2demo_iconfont extends React.Component {
     let fontPath =
       '//at.alicdn.com/t/font_2534097_ao9soua2obv.woff2?t=1622021146076';
 
-
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -24,7 +23,7 @@ export default class Amap2demo_iconfont extends React.Component {
         style: 'normal',
         zoom: 9,
         zooms: [8, 10],
-        viewMode: '2D'
+        viewMode: '2D',
       }),
     });
     this.scene = scene;
@@ -44,109 +43,109 @@ export default class Amap2demo_iconfont extends React.Component {
           lng: 120,
           lat: 30,
           iconType: 'sun',
-          iconColor: "#FFA500",
-          backgoundColor: "#00BFFF",
+          iconColor: '#FFA500',
+          backgoundColor: '#00BFFF',
           temperature: '28℃',
-          weather: '晴朗'
+          weather: '晴朗',
         },
         {
           lng: 120.2,
           lat: 30.5,
           iconType: 'sun',
-          iconColor: "#FFA500",
-          backgoundColor: "#00BFFF",
+          iconColor: '#FFA500',
+          backgoundColor: '#00BFFF',
           temperature: '28℃',
-          weather: '晴朗'
+          weather: '晴朗',
         },
         {
           lng: 121.5,
           lat: 31.4,
           iconType: 'cloud',
-          iconColor: "#F0F8FF",
-          backgoundColor: "#1E90FF",
+          iconColor: '#F0F8FF',
+          backgoundColor: '#1E90FF',
           temperature: '22℃',
-          weather: '多云'
+          weather: '多云',
         },
         {
           lng: 120,
           lat: 31,
           iconType: 'cloud',
-          iconColor: "#F0F8FF",
-          backgoundColor: "#1E90FF",
+          iconColor: '#F0F8FF',
+          backgoundColor: '#1E90FF',
           temperature: '22℃',
-          weather: '多云'
+          weather: '多云',
         },
         {
           lng: 120.6,
           lat: 30.8,
           iconType: 'cloud',
-          iconColor: "#F0F8FF",
-          backgoundColor: "#1E90FF",
+          iconColor: '#F0F8FF',
+          backgoundColor: '#1E90FF',
           temperature: '22℃',
-          weather: '多云'
+          weather: '多云',
         },
         {
           lng: 120.5,
           lat: 31.3,
           iconType: 'cloud',
-          iconColor: "#F0F8FF",
-          backgoundColor: "#1E90FF",
+          iconColor: '#F0F8FF',
+          backgoundColor: '#1E90FF',
           temperature: '22℃',
-          weather: '多云'
+          weather: '多云',
         },
         {
           lng: 121.3,
           lat: 30.2,
           iconType: 'smallRain',
-          iconColor: "#6EA0FF",
-          backgoundColor: "#4678AA",
+          iconColor: '#6EA0FF',
+          backgoundColor: '#4678AA',
           temperature: '22℃',
-          weather: '小雨'
+          weather: '小雨',
         },
         {
           lng: 121,
           lat: 30.5,
           iconType: 'smallRain',
-          iconColor: "#6EA0FF",
-          backgoundColor: "#4678AA",
+          iconColor: '#6EA0FF',
+          backgoundColor: '#4678AA',
           temperature: '22℃',
-          weather: '小雨'
+          weather: '小雨',
         },
         {
           lng: 120.6,
           lat: 30,
           iconType: 'middleRain',
-          iconColor: "#6495ED",
-          backgoundColor: "#326EA0",
+          iconColor: '#6495ED',
+          backgoundColor: '#326EA0',
           temperature: '24℃',
-          weather: '中雨'
+          weather: '中雨',
         },
         {
           lng: 120.2,
           lat: 29.7,
           iconType: 'smallRain',
-          iconColor: "#6EA0FF",
-          backgoundColor: "#4678AA",
+          iconColor: '#6EA0FF',
+          backgoundColor: '#4678AA',
           temperature: '22℃',
-          weather: '小雨'
+          weather: '小雨',
         },
         {
           lng: 121.7,
           lat: 29.8,
           iconType: 'middleRain',
-          iconColor: "#6495ED",
-          backgoundColor: "#326EA0",
+          iconColor: '#6495ED',
+          backgoundColor: '#326EA0',
           temperature: '24℃',
-          weather: '中雨'
+          weather: '中雨',
         },
         {
           lng: 121.5,
           lat: 30,
           iconType: 'hugeRain',
-          iconColor: "#4678D2",
-          backgoundColor: "#285A8C",
+          iconColor: '#4678D2',
+          backgoundColor: '#285A8C',
           temperature: '20℃',
-          weather: '大雨'
+          weather: '大雨',
         },
       ];
 
@@ -160,19 +159,17 @@ export default class Amap2demo_iconfont extends React.Component {
         })
         .shape('circle')
         .color('backgoundColor')
-        .size(40)
+        .size(40);
       scene.addLayer(layer);
-
 
       const pointIconFontLayer = new PointLayer({})
         .source(originData, {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            }
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
           },
-        )
+        })
         .shape('iconType', 'text')
         .size(30)
         .color('iconColor')
@@ -186,15 +183,13 @@ export default class Amap2demo_iconfont extends React.Component {
       scene.addLayer(pointIconFontLayer);
 
       const textLayer = new PointLayer({})
-        .source(originData,
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
+        .source(originData, {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
           },
-        )
+        })
         .shape('temperature', 'text')
         .size(10)
         .color('#ffffff')
@@ -206,21 +201,19 @@ export default class Amap2demo_iconfont extends React.Component {
           stroke: '#ffffff', // 描边颜色
           strokeWidth: 0.3, // 描边宽度
           strokeOpacity: 1.0,
-          fontFamily: "Times New Roman",
+          fontFamily: 'Times New Roman',
           textAllowOverlap: true,
         });
       scene.addLayer(textLayer);
 
       const textLayer2 = new PointLayer({})
-        .source(originData,
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat'
-            },
+        .source(originData, {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
           },
-        )
+        })
         .shape('weather', 'text')
         .size(14)
         .color('#ffffff')
@@ -232,11 +225,10 @@ export default class Amap2demo_iconfont extends React.Component {
           stroke: '#ffffff', // 描边颜色
           strokeWidth: 0.3, // 描边宽度
           strokeOpacity: 1.0,
-          fontFamily: "Times New Roman",
+          fontFamily: 'Times New Roman',
           textAllowOverlap: true,
         });
       scene.addLayer(textLayer2);
-
     });
   }
 

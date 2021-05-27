@@ -173,6 +173,7 @@ L7 Logo 的显示位置 默认左下角
 增加图层对象
 
 参数 :
+
 - `layer` {ILayer} 图层对象
 
 ```javascript
@@ -184,10 +185,13 @@ scene.addLayer(layer);
 获取对应的图层对象
 
 参数 :
+
 - `id` {string}
+
 ```javascript
 scene.getLayer('layerID');
 ```
+
 ### getLayers() 获取所有的地图图层
 
 获取所有的地图图层
@@ -208,8 +212,7 @@ scene.getLayers();
 scene.getLayerByName(name); // return Layer 图层对象
 ```
 
-
-### removeLayer  移除 layer 图层
+### removeLayer 移除 layer 图层
 
 移除 layer 图层
 
@@ -261,16 +264,15 @@ scene.removeControl(ctl);
 
 - `name` { string }
 
-
 ```javascript
-const zoomControl = new Zoom({  // zoom 控件
+const zoomControl = new Zoom({
+  // zoom 控件
   name: 'z1', // 用户传入的控件名称（也可以不传入，该控件默认名称为 zoom）
-  position: 'topright'
+  position: 'topright',
 });
 
 scene.getControlByName('z1');
 ```
-
 
 ## 标记方法
 
@@ -284,22 +286,24 @@ scene.getControlByName('z1');
 
 ```javascript
 const marker = new Marker({
-  element: el
+  element: el,
 }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
 scene.addMarker(marker);
 ```
 
 ### addMarkerLayer(layer) 添加 Marker 统一管理图层
+
 当用户需要添加许多个 Marker 实例时，为了方便管理可以使用 markerLayer 对象统一管理
 
 参数 :
 
--  `layer` { IMarkerLayer } 标记图层对象
+- `layer` { IMarkerLayer } 标记图层对象
 
 ```javascript
 const markerLayer = new MarkerLayer();
 scene.addMarkerLayer(markerLayer);
 ```
+
 [示例地址](/zh/examples/point/marker#markerlayer)
 
 ### removeMarkerLayer(layer) 移除标签图层
@@ -333,7 +337,6 @@ scene.getZoom();
 ```
 
 return {float}   当前缩放等级
-
 
 ### getCenter() 获取地图中心
 
@@ -518,7 +521,6 @@ scene.fitBounds([
 ]);
 ```
 
-
 ### exportMap 导出地图图片
 
 导出地图，目前仅支持导出可视化层，不支持底图导出
@@ -536,6 +538,7 @@ scene 销毁方法，离开页面，或者不需要使用地图可以调用
 ```javascript
 scene.destroy();
 ```
+
 ## iconfont 映射支持
 
 ### addIconFont(name, fontUnicode) 增加对数据中 unicode 的映射支持
@@ -548,37 +551,40 @@ scene.destroy();
 - `fontUnicode` {string}
 
 ```javascript
-    scene.addIconFont("icon1", "&#xe64b;")
-    scene.addIconFont("icon2", "&#xe64c;")
-    scene.addFontFace(fontFamily, fontPath);
-    const pointIconFontLayer = new PointLayer({})
-      .source(
-        [{
-            j: 140,
-            w: 34,
-            m: 'icon1',
-          },{
-            j: 140,
-            w: 36,
-            m: 'icon2',
-          }],
-        {
-          parser: {
-            type: 'json',
-            x: 'j',
-            y: 'w',
-          },
-        },
-      )
-      .shape('m', 'text')
-      .size(12)
-      .color('w', ['#f00', '#f00', '#0f0'])
-      .style({
-        fontFamily,
-        iconfont: true,
-        textAllowOverlap: true,
-      });
-    scene.addLayer(pointIconFontLayer);
+scene.addIconFont('icon1', '&#xe64b;');
+scene.addIconFont('icon2', '&#xe64c;');
+scene.addFontFace(fontFamily, fontPath);
+const pointIconFontLayer = new PointLayer({})
+  .source(
+    [
+      {
+        j: 140,
+        w: 34,
+        m: 'icon1',
+      },
+      {
+        j: 140,
+        w: 36,
+        m: 'icon2',
+      },
+    ],
+    {
+      parser: {
+        type: 'json',
+        x: 'j',
+        y: 'w',
+      },
+    },
+  )
+  .shape('m', 'text')
+  .size(12)
+  .color('w', ['#f00', '#f00', '#0f0'])
+  .style({
+    fontFamily,
+    iconfont: true,
+    textAllowOverlap: true,
+  });
+scene.addLayer(pointIconFontLayer);
 ```
 
 ### addIconFonts(options) 同时传入多组 name - unicode 的键值对
@@ -586,14 +592,16 @@ scene.destroy();
 同时传入多组 name - unicode 的键值对
 
 参数 :
+
 - `options` { Array<[name, unicode]> }
 
 ```javascript
-    scene.addIconFonts([
-      ['icon1', '&#xe64b;'],
-      ['icon2', '&#xe64c;'],
-    ]);
+scene.addIconFonts([
+  ['icon1', '&#xe64b;'],
+  ['icon2', '&#xe64c;'],
+]);
 ```
+
 ## 全局资源
 
 ### addImage(id, img) 全局中添加的图片资源
@@ -601,11 +609,17 @@ scene.destroy();
 在 L7 的图层对象可以使用在 scene 全局中添加的图片资源
 
 参数 :
+
 - `id` {string}
 - `img` {HTMLImageElement | File | string}
+
 ```javascript
-scene.addImage('02', 'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg');
+scene.addImage(
+  '02',
+  'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg',
+);
 ```
+
 [示例地址](/zh/examples/gallery/animate#animate_path_texture)
 
 ### hasImage(id) 判断全局图片资源
@@ -613,9 +627,11 @@ scene.addImage('02', 'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-41
 判断是否已经在全局添加过相应的图片资源
 
 参数 :
+
 - `id` {string}
+
 ```javascript
-scene.hasImage('imageID')
+scene.hasImage('imageID');
 ```
 
 ### removeImage(id) 全局删除图片资源
@@ -623,9 +639,11 @@ scene.hasImage('imageID')
 从全局删除对应的图片资源
 
 参数 :
+
 - `id` {string}
+
 ```javascript
-scene.removeImage('imageID')
+scene.removeImage('imageID');
 ```
 
 ### addFontFace(fontFamily, fontPath) 添加字体文件
@@ -633,11 +651,14 @@ scene.removeImage('imageID')
 添加字体文件
 
 参数 :
+
 - `fontFamily` {string} 用户为自己定义的字体名称
 - `fontPath` {string} 导入的文件地址
+
 ```javascript
 let fontFamily = 'iconfont';
-let fontPath = '//at.alicdn.com/t/font_2534097_iiet9d3nekn.woff2?t=1620444089776';
+let fontPath =
+  '//at.alicdn.com/t/font_2534097_iiet9d3nekn.woff2?t=1620444089776';
 scene.addFontFace(fontFamily, fontPath);
 ```
 

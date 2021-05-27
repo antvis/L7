@@ -15,7 +15,7 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 ### 引入 Map
 
 ```javascript
-import { GaodeMap } from '@antv/l7-maps';   // 默认引入高德2.0
+import { GaodeMap } from '@antv/l7-maps'; // 默认引入高德2.0
 import { GaodeMapV1 } from '@antv/l7-maps'; // 默认引入高德1.x 版本
 
 import { Mapbox } from '@antv/l7-maps';
@@ -78,8 +78,8 @@ const scene = new Scene({
 ```javascript
 const map = new AMap.Map('map', {
   viewMode: '3D',
-  resizeEnable: true,             // 是否监控地图容器尺寸变化
-  zoom: 11,                       // 初始化地图层级
+  resizeEnable: true, // 是否监控地图容器尺寸变化
+  zoom: 11, // 初始化地图层级
   center: [116.397428, 39.90923], // 初始化地图中心点
 });
 const scene = new Scene({
@@ -101,10 +101,10 @@ const scene = new Scene({
 ```javascript
 mapboxgl.accessToken = 'xxxx - token';
 const map = new mapboxgl.Map({
-  container: 'map',                             // container id
-  style: 'mapbox://styles/mapbox/streets-v11',  // stylesheet location
-  center: [-74.5, 40],                          // starting position [lng, lat]
-  zoom: 9,                                      // starting zoom
+  container: 'map', // container id
+  style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+  center: [-74.5, 40], // starting position [lng, lat]
+  zoom: 9, // starting zoom
 });
 
 const scene = new Scene({

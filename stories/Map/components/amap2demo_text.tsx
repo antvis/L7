@@ -46,7 +46,7 @@ export default class Amap2demo_text extends React.Component {
       }),
     });
     this.scene = scene;
-    scene.addIconFont("icon1", "&#xe98c;")
+    scene.addIconFont('icon1', '&#xe98c;');
     // scene.addIconFont("icon2", "&#xe64c;")
 
     // scene.addIconFonts([
@@ -56,7 +56,6 @@ export default class Amap2demo_text extends React.Component {
 
     scene.addFontFace(fontFamily, fontPath);
     scene.on('loaded', () => {
-
       fetch(
         'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json',
       )
@@ -87,7 +86,7 @@ export default class Amap2demo_text extends React.Component {
               // textAllowOverlap: true,
             });
           scene.addLayer(pointLayer);
-        })
+        });
 
       // https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json
       // const pointIconFontLayer = new PointLayer({})
