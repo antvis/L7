@@ -5,6 +5,11 @@
   },
   "demos": [
     {
+      "filename": "animate_path_texture.js",
+      "title": "路径贴图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*TLt7RI9bAWMAAAAAAAAAAAAAARQnAQ"
+    },
+    {
       "filename": "animate_path.js",
       "title": "路径动画",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VJX5Qo7ufaAAAAAAAAAAAABkARQnAQ"

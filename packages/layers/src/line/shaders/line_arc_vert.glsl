@@ -15,6 +15,7 @@ varying vec2 v_normal;
 varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
+uniform float u_lineDir: 1.0;
 varying vec4 v_dash_array;
 #pragma include "projection"
 #pragma include "project"
@@ -32,7 +33,14 @@ vec2 midPoint(vec2 source, vec2 target) {
   float r2 = r / 2.0 / cos(thetaOffset);
   float theta2 = theta + thetaOffset;
   vec2 mid = vec2(r2*cos(theta2) + source.x, r2*sin(theta2) + source.y);
-  return mid;
+  if(u_lineDir == 1.0) { // 正向
+    return mid;
+  } else { // 逆向
+    // (mid + vmin)/2 = (s + t)/2
+    vec2 vmid = source + target - mid;
+    return vmid;
+  }
+  // return mid;
 }
 float getSegmentRatio(float index) {
     return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
@@ -75,6 +83,9 @@ void main() {
     }
   if(u_aimate.x == Animate) {
       v_distance_ratio = segmentIndex / segmentNumber;
+      if(u_lineDir != 1.0) {
+        v_distance_ratio = 1.0 - v_distance_ratio;
+      }
   }
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));

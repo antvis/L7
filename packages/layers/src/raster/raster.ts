@@ -29,7 +29,7 @@ interface IRasterLayerStyleOptions {
 
 export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
-  protected texture: ITexture2D;
+  protected rasterTexture: ITexture2D;
   protected colorTexture: ITexture2D;
 
   public getAnimateUniforms(): IModelUniform {
@@ -39,7 +39,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public buildModels() {
     const parserDataItem = this.getSource().data.dataArray[0];
     const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
+    this.rasterTexture = createTexture2D({
       data: parserDataItem.data,
       width: parserDataItem.width,
       height: parserDataItem.height,
@@ -65,7 +65,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       model.draw({
         uniforms: {
           u_opacity: opacity || 1,
-          u_texture: this.texture,
+          u_texture: this.rasterTexture,
           u_min: min,
           u_width: width,
           u_height: height,

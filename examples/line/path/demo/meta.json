@@ -16,13 +16,18 @@
     },
     {
       "filename": "road_light.js",
-      "title": "路径",
+      "title": "路径light",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*LuXiTZAq_84AAAAAAAAAAABkARQnAQ"
     },
     {
       "filename": "road_dark.js",
-      "title": "路径",
+      "title": "路径dark",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*DDjQRLEnwpoAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "road_red.js",
+      "title": "路径2d",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*1cF2RYwkcq8AAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "road_dark_dash.js",

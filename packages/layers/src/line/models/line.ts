@@ -3,9 +3,11 @@ import {
   gl,
   IAnimateOption,
   IEncodeFeature,
+  IImage,
   ILayerConfig,
   IModel,
   IModelUniform,
+  ITexture2D,
 } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
@@ -18,19 +20,32 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class LineModel extends BaseModel {
+  protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       opacity,
       lineType = 'solid',
       dashArray = [10, 5, 0, 0],
+      lineTexture = false,
+      iconStep = 100,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
+
+    if (this.rendererService.getDirty()) {
+      this.texture.bind();
+    }
+
     return {
       u_opacity: opacity || 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
+
+      u_texture: this.texture, // 贴图
+      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+      u_icon_step: iconStep,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -42,7 +57,31 @@ export default class LineModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    // const { createTexture2D } = this.rendererService;
+    // this.texture = createTexture2D({
+    //   height: 0,
+    //   width: 0,
+    // });
+    // let url = 'https://gw-office.alipayobjects.com/bmw-prod/e91c3630-b79e-45a3-a2b9-feee4b4ccd41.svg'
+    // this.loadImage(url).then((img) => {
+    //   this.texture = createTexture2D({
+    //     data: img as HTMLImageElement,
+    //     width: (img as HTMLImageElement).width,
+    //     height: (img as HTMLImageElement).height,
+    //   });
+    //   this.layerService.renderLayers();
+    // })
+    this.updateTexture();
+    this.iconService.on('imageUpdate', this.updateTexture);
+
     return this.buildModels();
+  }
+
+  public clearModels() {
+    if (this.texture) {
+      this.texture.destroy();
+    }
+    this.iconService.off('imageUpdate', this.updateTexture);
   }
 
   public buildModels(): IModel[] {
@@ -182,5 +221,68 @@ export default class LineModel extends BaseModel {
         },
       },
     });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'uv',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_iconMapUV',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          const iconMap = this.iconService.getIconMap();
+          const { texture } = feature;
+          const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
+          return [x, y];
+        },
+      },
+    });
   }
+
+  private loadImage(url: IImage) {
+    return new Promise((resolve, reject) => {
+      if (url instanceof HTMLImageElement) {
+        resolve(url);
+        return;
+      }
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = () => {
+        reject(new Error('Could not load image at ' + url));
+      };
+      image.src = url instanceof File ? URL.createObjectURL(url) : url;
+    });
+  }
+
+  private updateTexture = () => {
+    const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
+      return;
+    }
+    this.texture = createTexture2D({
+      data: this.iconService.getCanvas(),
+      mag: gl.NEAREST,
+      min: gl.NEAREST,
+      premultiplyAlpha: false,
+      width: 1024,
+      height: this.iconService.canvasHeight || 128,
+    });
+  };
 }

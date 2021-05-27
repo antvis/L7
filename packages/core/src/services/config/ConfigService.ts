@@ -79,6 +79,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
     duration: 4,
     trailLength: 0.15,
   },
+  forward: true, // 默认是正方向
 };
 
 // @see https://github.com/epoberezkin/ajv#options

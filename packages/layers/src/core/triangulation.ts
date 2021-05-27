@@ -83,24 +83,21 @@ export function LineTriangulation(feature: IEncodeFeature) {
 
   if (version === 'GAODE2.x') {
     // 处理高德2.0几何体构建
-    let path1 = coordinates as number[][][] | number[][];
+    let path1 = coordinates as number[][][] | number[][]; // 计算位置
     if (!Array.isArray(path1[0][0])) {
       path1 = [coordinates] as number[][][];
     }
-    let path2 = originCoordinates as number[][][] | number[][];
+    let path2 = originCoordinates as number[][][] | number[][]; // 计算法线
     if (!Array.isArray(path2[0][0])) {
       path2 = [originCoordinates] as number[][][];
     }
 
-    path1.forEach((item: any) => {
-      // 处理带洞的多边形
-      line.extrude1(item as number[][]);
-    });
-
-    path2.forEach((item: any) => {
-      // 处理带洞的多边形
-      line.extrude2(item as number[][]);
-    });
+    for (let i = 0; i < path1.length; i++) {
+      // 高德2.0在计算线时，需要使用经纬度计算发现，使用 customCoords.lnglatToCoords 计算的数据来计算顶点的位置
+      const item1 = path1[i];
+      const item2 = path2[i];
+      line.extrude_gaode2(item1 as number[][], item2 as number[][]);
+    }
   } else {
     // 处理非高德2.0的几何体构建
     let path = coordinates as number[][][] | number[][];
@@ -229,6 +226,7 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
       coordinates[1][0],
       coordinates[1][1],
     );
+
     if (i !== segNum - 1) {
       indexArray.push(
         ...[0, 1, 2, 1, 3, 2].map((v) => {
@@ -237,7 +235,6 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
       );
     }
   }
-  // console.log('positions', positions)
   return {
     vertices: positions,
     indices: indexArray,

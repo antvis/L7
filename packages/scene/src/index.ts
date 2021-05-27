@@ -187,6 +187,29 @@ class Scene
   }
 
   // asset method
+  /**
+   * 为 layer/point/text 支持 iconfont 模式支持
+   * @param fontUnicode
+   * @param name
+   */
+  public addIconFont(name: string, fontUnicode: string): void {
+    this.fontService.addIconFont(name, fontUnicode);
+  }
+
+  public addIconFonts(options: string[][]): void {
+    options.forEach(([name, fontUnicode]) => {
+      this.fontService.addIconFont(name, fontUnicode);
+    });
+  }
+  /**
+   * 用户自定义添加第三方字体
+   * @param fontFamily
+   * @param fontPath
+   */
+  public addFontFace(fontFamily: string, fontPath: string): void {
+    this.sceneService.addFontFace(fontFamily, fontPath);
+  }
+
   public addImage(id: string, img: IImage) {
     this.iconService.addImage(id, img);
   }

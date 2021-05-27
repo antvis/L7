@@ -32,6 +32,7 @@ const VALID_PROPS = [
   'cutoff',
   'radius',
 ];
+
 function getDefaultCharacterSet() {
   const charSet = [];
   for (let i = 32; i < 128; i++) {
@@ -51,6 +52,7 @@ function setTextStyle(
   ctx.textBaseline = 'middle';
   // ctx.textAlign = 'left';
 }
+
 function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
   // populate distance value from tinySDF to image alpha channel
   for (let i = 0; i < alphaChannel.length; i++) {
@@ -60,7 +62,23 @@ function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
 
 @injectable()
 export default class FontService implements IFontService {
+  public get scale() {
+    return HEIGHT_SCALE;
+  }
+
+  public get canvas(): HTMLCanvasElement {
+    const data = this.cache.get(this.key);
+    return data && data.data;
+  }
+
+  public get mapping(): IFontMapping {
+    const data = this.cache.get(this.key);
+    return data && data.mapping;
+  }
   public fontAtlas: IFontAtlas;
+
+  // iconFontMap 记录用户设置的 iconfont unicode 和名称的键值关系
+  public iconFontMap: Map<string, string>;
   private iconFontGlyphs: {
     [key: string]: string;
   } = {};
@@ -79,32 +97,40 @@ export default class FontService implements IFontService {
       sdf: true,
       cutoff: DEFAULT_CUTOFF,
       radius: DEFAULT_RADIUS,
+      iconfont: false,
     };
     this.key = '';
+    this.iconFontMap = new Map();
   }
   public addIconGlyphs(glyphs: IIconFontGlyph[]): void {
     glyphs.forEach((glyph) => {
       this.iconFontGlyphs[glyph.name] = glyph.unicode;
     });
   }
+
+  /**
+   * 添加对 iconfont unicode 的映射
+   * @param fontUnicode
+   * @param name
+   */
+  public addIconFont(name: string, fontUnicode: string): void {
+    this.iconFontMap.set(name, fontUnicode);
+  }
+
+  /**
+   * 获取自定义 iconfont 别称对应的 unicode 编码，若是当前的 map 中没有对应的键值对，那么就返回原值
+   * @param name
+   * @returns
+   */
+  public getIconFontKey(name: string): string {
+    return this.iconFontMap.get(name) || name;
+  }
+
   public getGlyph(name: string): string {
     if (this.iconFontGlyphs[name]) {
       return String.fromCharCode(parseInt(this.iconFontGlyphs[name], 16));
     }
     return '';
-  }
-  public get scale() {
-    return HEIGHT_SCALE;
-  }
-
-  public get canvas(): HTMLCanvasElement {
-    const data = this.cache.get(this.key);
-    return data && data.data;
-  }
-
-  public get mapping(): IFontMapping {
-    const data = this.cache.get(this.key);
-    return data && data.mapping;
   }
 
   public setFontOptions(option: Partial<IFontOptions>) {
@@ -112,13 +138,11 @@ export default class FontService implements IFontService {
       ...this.fontOptions,
       ...option,
     };
-
     // const oldKey = this.key;
     this.key = this.getKey();
 
     const charSet = this.getNewChars(this.key, this.fontOptions.characterSet);
     const cachedFontAtlas = this.cache.get(this.key);
-
     if (cachedFontAtlas && charSet.length === 0) {
       // update texture with cached fontAtlas
       return;
@@ -137,6 +161,7 @@ export default class FontService implements IFontService {
 
   public destroy(): void {
     this.cache.clear();
+    this.iconFontMap.clear();
   }
 
   private generateFontAtlas(
@@ -152,6 +177,7 @@ export default class FontService implements IFontService {
       sdf,
       radius,
       cutoff,
+      iconfont,
     } = this.fontOptions;
     let canvas = cachedFontAtlas && cachedFontAtlas.data;
     if (!canvas) {
@@ -197,7 +223,22 @@ export default class FontService implements IFontService {
       // tinySDF.size equals `fontSize + buffer * 2`
       const imageData = ctx.getImageData(0, 0, tinySDF.size, tinySDF.size);
       for (const char of characterSet) {
-        populateAlphaChannel(tinySDF.draw(char), imageData);
+        if (iconfont) {
+          // @ts-ignore
+          // const icon = eval(
+          //   '("' + char.replace('&#x', '\\u').replace(';', '') + '")',
+          // );
+
+          const icon = String.fromCharCode(
+            parseInt(char.replace('&#x', '').replace(';', ''), 16),
+          );
+          const iconData = tinySDF.draw(icon);
+          populateAlphaChannel(iconData, imageData);
+        } else {
+          populateAlphaChannel(tinySDF.draw(char), imageData);
+        }
+        // populateAlphaChannel(tinySDF.draw(char), imageData);
+
         // 考虑到描边，需要保留 sdf 的 buffer，不能像 deck.gl 一样直接减去
         ctx.putImageData(imageData, mapping[char].x, mapping[char].y);
       }
@@ -221,6 +262,7 @@ export default class FontService implements IFontService {
   }
 
   private getKey() {
+    return 'key';
     const {
       fontFamily,
       fontWeight,
@@ -231,11 +273,18 @@ export default class FontService implements IFontService {
       cutoff,
     } = this.fontOptions;
     if (sdf) {
-      return `${fontFamily} ${fontWeight} ${fontSize} ${buffer} ${radius} ${cutoff}`;
+      return `${fontFamily} ${fontWeight} ${fontSize} ${buffer} ${radius} ${cutoff} `;
     }
     return `${fontFamily} ${fontWeight} ${fontSize} ${buffer}`;
   }
 
+  /**
+   *
+   * @param key
+   * @param characterSet
+   * @returns
+   * 若是相同的 key，那么将字符存储到同同一个字符列表中
+   */
   private getNewChars(key: string, characterSet: string[]): string[] {
     const cachedFontAtlas = this.cache.get(key);
     if (!cachedFontAtlas) {

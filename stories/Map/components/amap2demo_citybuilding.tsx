@@ -1,5 +1,6 @@
-import { PointLayer, CityBuildingLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+// @ts-ignore
+import { CityBuildingLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_citybuilding extends React.Component {
@@ -16,11 +17,12 @@ export default class Amap2demo_citybuilding extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         style: 'dark',
         center: [121.507674, 31.223043],
         pitch: 65.59312320916906,
         zoom: 15.4,
+        viewMode: '3D',
       }),
     });
     const pointLayer = new CityBuildingLayer();

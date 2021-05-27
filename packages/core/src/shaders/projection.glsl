@@ -75,7 +75,7 @@ vec3 reverse_offset_normal(vec3 vector) {
   }
 
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.0
-    return vector * vec3(1.0, -1.0, 1.0);
+    return vector;
   }
   return vector;
 }

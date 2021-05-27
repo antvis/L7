@@ -42,11 +42,11 @@ scene.addLayer(layer);
 
 ### minZoom
 
-图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （3-18）
+图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （2-19）
 
 ### maxZoom
 
-图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （3-18）
+图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （2-19）
 
 ### autoFit
 

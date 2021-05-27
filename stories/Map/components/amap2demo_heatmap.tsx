@@ -1,11 +1,6 @@
-import {
-  ILngLat,
-  PointLayer,
-  PolygonLayer,
-  Scene,
-  HeatmapLayer,
-} from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+// @ts-ignore
+import { Scene, HeatmapLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_heatmap extends React.Component {
@@ -19,7 +14,7 @@ export default class Amap2demo_heatmap extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         pitch: 0,
         center: [127.5671666579043, 7.445038892195569],
         zoom: 2.632456779444394,

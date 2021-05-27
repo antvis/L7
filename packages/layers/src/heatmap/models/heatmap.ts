@@ -257,13 +257,20 @@ export default class HeatMapModel extends BaseModel {
     const {
       opacity,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    const invert = mat4.invert(
-      mat4.create(),
-      mat4.fromValues(
-        // @ts-ignore
-        ...this.cameraService.getViewProjectionMatrixUncentered(),
-      ),
-    ) as mat4;
+
+    // const invert = mat4.invert(
+    //   mat4.create(),
+    //   mat4.fromValues(
+    //     // @ts-ignore
+    //     ...this.cameraService.getViewProjectionMatrixUncentered(),
+    //   ),
+    // ) as mat4;
+    const invert = mat4.create();
+    mat4.invert(
+      invert,
+      this.cameraService.getViewProjectionMatrixUncentered() as mat4,
+    );
+
     this.colorModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,

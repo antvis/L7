@@ -23,6 +23,7 @@ export default class ArcModel extends BaseModel {
       opacity,
       lineType = 'solid',
       dashArray = [10, 5],
+      forward = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -33,6 +34,7 @@ export default class ArcModel extends BaseModel {
       u_line_type: lineStyleObj[lineType || 'solid'],
       u_dash_array: dashArray,
       u_blur: 0.9,
+      u_lineDir: forward ? 1 : -1,
     };
   }
 

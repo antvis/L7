@@ -1,5 +1,6 @@
-import { ILngLat, PointLayer, LineLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+// @ts-ignore
+import { LineLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLine_greatCircle extends React.Component {
@@ -13,10 +14,11 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         pitch: 0,
         center: [107.77791556935472, 35.443286920228644],
         zoom: 2.9142882493605033,
+        viewMode: '3D',
       }),
     });
     this.scene = scene;

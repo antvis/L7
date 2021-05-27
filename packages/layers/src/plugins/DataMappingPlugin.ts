@@ -1,5 +1,6 @@
 import {
   IEncodeFeature,
+  IFontService,
   IGlobalConfigService,
   ILayer,
   ILayerPlugin,
@@ -25,6 +26,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
+
+  @inject(TYPES.IFontService)
+  private readonly fontService: IFontService;
 
   public apply(
     layer: ILayer,
@@ -105,6 +109,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
   ): IEncodeFeature[] {
+    // console.log('data', data[0])
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -112,6 +117,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
+
       attributes
         .filter((attribute) => attribute.scale !== undefined)
         .forEach((attribute: IStyleAttribute) => {
@@ -127,19 +133,21 @@ export default class DataMappingPlugin implements ILayerPlugin {
           // @ts-ignore
           encodeRecord[attribute.name] =
             Array.isArray(values) && values.length === 1 ? values[0] : values;
+
+          // 增加对 layer/text/iconfont unicode 映射的解析
+          if (attribute.name === 'shape') {
+            encodeRecord.shape = this.fontService.getIconFontKey(
+              encodeRecord[attribute.name] as string,
+            );
+          }
         });
       return encodeRecord;
     }) as IEncodeFeature[];
+    // console.log('mappedData', mappedData[0])
 
-    // console.log('mappedData', unProjectFlat(mappedData[0].coordinates as [number, number]))
-    // @ts-ignore
-    // console.log(this.mapService.getCustomCoordCenter())
-    // 根据地图的类型判断是否需要对点位数据进行处理
-    if (this.mapService.version === 'GAODE2.x') {
-      // 若是高德2.0则需要对坐标进行相对偏移
-
+    // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
+    if (mappedData.length > 0 && this.mapService.version === 'GAODE2.x') {
       if (typeof mappedData[0].coordinates[0] === 'number') {
-        // console.log('111', mappedData)
         // 单个的点数据
         // @ts-ignore
         mappedData.map((d) => {
@@ -151,7 +159,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           // d.coordinates = this.mapService.lngLatToCoord(unProjectFlat(d.coordinates));
         });
       } else {
-        // console.log('2')
         // 连续的线、面数据
         // @ts-ignore
         mappedData.map((d) => {

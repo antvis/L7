@@ -1,5 +1,6 @@
-import { ILngLat, PointLayer, LineLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+// @ts-ignore
+import { PointLayer, LineLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLine3d extends React.Component {
@@ -13,10 +14,11 @@ export default class Amap2demo_arcLine3d extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         pitch: 40,
         center: [3.438, 40.16797],
         zoom: 0,
+        viewMode: '3D',
       }),
     });
     this.scene = scene;

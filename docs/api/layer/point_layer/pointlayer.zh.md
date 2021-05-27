@@ -34,7 +34,7 @@ shape 支持
 
 **图片标注**
 
-通过 `Scene.addImage()` 可以添加图片资源，
+通过 `Scene.addImage()` 可以添加图片资源
 
 ### 代码示例
 

@@ -96,6 +96,7 @@ const World = React.memo(function Map() {
       {popupInfo && (
         <Popup
           key="popup"
+          // @ts-ignore
           lnglat={popupInfo.lngLat}
           option={{ closeButton: false, offsets: [0, 10] }}
         >

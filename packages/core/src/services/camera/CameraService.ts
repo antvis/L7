@@ -24,7 +24,8 @@ export default class CameraService implements ICameraService {
   /**
    * ViewMatrix 逆矩阵，用于计算相机位置
    */
-  private viewMatrixInverse: number[];
+  // private viewMatrixInverse: number[];
+  private viewMatrixInverse: mat4;
 
   /**
    * 相机位置
@@ -42,10 +43,12 @@ export default class CameraService implements ICameraService {
     this.viewport = viewport;
 
     // 计算逆矩阵
-    this.viewMatrixInverse = (mat4.invert(
-      mat4.create(),
-      (this.getViewMatrix() as unknown) as mat4,
-    ) as unknown) as number[];
+    // this.viewMatrixInverse = (mat4.invert(
+    //   mat4.create(), (this.getViewMatrix() as unknown) as mat4,
+    // ) as unknown) as number[];
+
+    this.viewMatrixInverse = mat4.create();
+    mat4.invert(this.viewMatrixInverse, viewport.getViewMatrix() as mat4);
 
     this.cameraPosition = [
       this.viewMatrixInverse[12],

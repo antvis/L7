@@ -15,7 +15,8 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 ### 引入 Map
 
 ```javascript
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';   // 默认引入高德2.0
+import { GaodeMapV1 } from '@antv/l7-maps'; // 默认引入高德1.x 版本
 
 import { Mapbox } from '@antv/l7-maps';
 ```
@@ -70,15 +71,15 @@ const scene = new Scene({
 
 ⚠️ 传入地图实例需要自行引入相关地图的 API
 
-⚠️ viewMode 设置为 3D 模式
+⚠️ viewMode 设置为 3D 模式（GaodeMap2.0 支持 2D 模式，可以不设置）
 
 #### 传入高德地图实例
 
 ```javascript
 const map = new AMap.Map('map', {
   viewMode: '3D',
-  resizeEnable: true, // 是否监控地图容器尺寸变化
-  zoom: 11, // 初始化地图层级
+  resizeEnable: true,             // 是否监控地图容器尺寸变化
+  zoom: 11,                       // 初始化地图层级
   center: [116.397428, 39.90923], // 初始化地图中心点
 });
 const scene = new Scene({
@@ -92,16 +93,18 @@ const scene = new Scene({
 [示例地址](/zh/examples/tutorial/map#amapInstance)
 [代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
+[示例地址（ 2D ）](/zh/examples/tutorial/map#amapInstance2d)
+[代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
+
 #### 传入 Mapbox 地图实例
 
 ```javascript
-mapboxgl.accessToken =
-  'pk.eyJ1IjoibHp4dWUiLCJhIjoiYnhfTURyRSJ9.Ugm314vAKPHBzcPmY1p4KQ';
+mapboxgl.accessToken = 'xxxx - token';
 const map = new mapboxgl.Map({
-  container: 'map', // container id
-  style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-  center: [-74.5, 40], // starting position [lng, lat]
-  zoom: 9, // starting zoom
+  container: 'map',                             // container id
+  style: 'mapbox://styles/mapbox/streets-v11',  // stylesheet location
+  center: [-74.5, 40],                          // starting position [lng, lat]
+  zoom: 9,                                      // starting zoom
 });
 
 const scene = new Scene({

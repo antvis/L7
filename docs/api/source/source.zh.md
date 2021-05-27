@@ -7,7 +7,7 @@ order: 0
 
 ## 概述
 
-source 地理数据处理模块，主要包含数据解析（parser)，和数据处理(transform);
+source 地理数据处理模块，主要包含数据解析（parser)，和数据处理（transform）
 
 - data
 - option
@@ -18,7 +18,7 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 
 ### parser
 
-不同数据类型处理成统一数据格式。矢量数据包括 GeoJON, CSV，Json 等不同数据格式，栅格数据，包括 Raster，Image 数据。将来还会支持瓦片格式数据。
+不同数据类型处理成统一数据格式。矢量数据包括 GeoJON， CSV，Json 等不同数据格式，栅格数据，包括 Raster，Image 数据。将来还会支持瓦片格式数据。
 
 空间数据分矢量数据和栅格数据两大类
 

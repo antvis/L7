@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amapdemo_extrude extends React.Component {

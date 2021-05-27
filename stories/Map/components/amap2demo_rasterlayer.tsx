@@ -1,5 +1,6 @@
-import { PointLayer, RasterLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+// @ts-ignore
+import { RasterLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 // tslint:disable-next-line:no-submodule-imports
 // @ts-ignore
@@ -36,7 +37,7 @@ export default class Amap2demo_rasterLayer extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'dark',

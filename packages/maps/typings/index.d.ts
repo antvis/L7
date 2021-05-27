@@ -25,6 +25,7 @@ interface CustomCoords {
 }
 interface IAMapInstance {
   get(key: string): unknown;
+  getZooms?(): number[];
   customCoords?: CustomCoords;
 }
 

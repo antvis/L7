@@ -1,21 +1,9 @@
-import { vec2, vec3 } from 'gl-matrix';
 // @ts-ignore
-import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { DrawPolygon } from '@antv/l7-draw';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+import { PolygonLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-import { mat4 } from 'gl-matrix';
-
-function convertRGB2Hex(rgb: number[]) {
-  return (
-    '#' + rgb.map((r) => ('0' + Math.floor(r).toString(16)).slice(-2)).join('')
-  );
-}
-
 export default class Amap2demo_polygon extends React.Component {
-  private gui: dat.GUI;
-  private $stats: Node;
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -29,7 +17,7 @@ export default class Amap2demo_polygon extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         pitch: 0,
         // style: 'dark',
         center: [-44.40673828125, -18.375379094031825],

@@ -35,6 +35,10 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
+  // loadFont 判断用户当前是否添加自定义字体
+  public loadFont: boolean = false;
+  // fontFamily 用户当前自己添加的字体的名称
+  public fontFamily: string = '';
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -247,6 +251,11 @@ export default class Scene extends EventEmitter implements ISceneService {
       if (this.destroyed) {
         this.destroy();
       }
+      // @ts-ignore
+      if (this.loadFont && document.fonts) {
+        // @ts-ignore
+        await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');
+      }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.logger.info(' render inited');
       this.layerService.initLayers();
@@ -261,6 +270,26 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 组件需要等待layer 初始化完成之后添加
     this.logger.debug(`scene ${this.id} render`);
     this.rendering = false;
+  }
+
+  /**
+   * 用户自定义添加第三方字体 （用户使用 layer/point/text/iconfont 的前提需要加载第三方字体文件）
+   * @param fontFamily
+   * @param fontPath
+   */
+  public addFontFace(fontFamily: string, fontPath: string): void {
+    this.fontFamily = fontFamily;
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerText = `
+        @font-face{
+            font-family: '${fontFamily}';
+            src: url('${fontPath}') format('woff2'),
+            url('${fontPath}') format('woff'),
+            url('${fontPath}') format('truetype');
+        }`;
+    document.getElementsByTagName('head')[0].appendChild(style);
+    this.loadFont = true;
   }
 
   public getSceneContainer(): HTMLDivElement {

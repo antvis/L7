@@ -98,7 +98,10 @@ export default class AMapService
   public setCustomCoordCenter(center: [number, number]) {
     this.sceneCenter = center;
     // @ts-ignore
-    this.sceneCenterMKT = this.map.getProjection().project(...this.sceneCenter);
+    this.sceneCenterMKT = this.map
+      // @ts-ignore
+      .getProjection()
+      .project(...this.sceneCenter);
   }
 
   public getCustomCoordCenter(): [number, number] {
@@ -111,7 +114,6 @@ export default class AMapService
     // @ts-ignore
     const proj = this.map.getProjection();
     const project = proj.project;
-    // console.log('proj', proj.project)
     // 单点
     if (!this.sceneCenter) {
       // @ts-ignore
@@ -141,12 +143,16 @@ export default class AMapService
   }
 
   public addMarkerContainer(): void {
+    if (!this.map) {
+      return;
+    }
     const mapContainer = this.map.getContainer();
     if (mapContainer !== null) {
-      const amap = mapContainer.getElementsByClassName(
-        'amap-maps',
-      )[0] as HTMLElement;
-      this.markerContainer = DOM.create('div', 'l7-marker-container', amap);
+      // const amap = mapContainer.getElementsByClassName(
+      //   'amap-maps',
+      // )[0] as HTMLElement;
+      // this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
+      this.markerContainer = mapContainer;
     }
   }
   public getMarkerContainer(): HTMLElement {
@@ -185,11 +191,10 @@ export default class AMapService
   }
 
   public getType() {
-    return 'amap';
+    return 'amap2';
   }
   public getZoom(): number {
-    // 统一返回 Mapbox 缩放等级
-    return this.map.getZoom() - 1;
+    return this.map.getZoom();
   }
 
   public setZoom(zoom: number): void {
@@ -251,7 +256,6 @@ export default class AMapService
     // const NE = amapBound.getNorthEast();
     // const SW = amapBound.getSouthWest();
     const bounds = this.map.getBounds();
-    // console.log('bounds', bounds)
 
     // @ts-ignore
     const NE = bounds.getNorthEast();
@@ -271,11 +275,15 @@ export default class AMapService
   }
 
   public getMinZoom(): number {
-    const zooms = this.map.get('zooms') as [number, number];
+    // const zooms = this.map.get('zooms') as [number, number];
+    // @ts-ignore
+    const zooms = this.map.getZooms() as [number, number];
     return zooms[0] - 1;
   }
   public getMaxZoom(): number {
-    const zooms = this.map.get('zooms') as [number, number];
+    // const zooms = this.map.get('zooms') as [number, number];
+    // @ts-ignore
+    const zooms = this.map.getZooms() as [number, number];
     return zooms[1] - 1;
   }
   public setRotation(rotation: number): void {
@@ -393,13 +401,24 @@ export default class AMapService
       ...rest
     } = this.config;
     // 高德地图创建独立的container；
-
     // tslint:disable-next-line:typedef
     await new Promise<void>((resolve) => {
       const resolveMap = () => {
         if (mapInstance) {
           this.map = mapInstance as AMap.Map & IAMapInstance;
           this.$mapContainer = this.map.getContainer();
+
+          // 在使用 map.customCoords 的时候必须使用
+          const mapInitCenter = this.map.getCenter();
+          // @ts-ignore
+          this.map.customCoords?.setCenter([
+            // @ts-ignore
+            mapInitCenter.lng,
+            // @ts-ignore
+            mapInitCenter.lat,
+          ]);
+          // @ts-ignore
+          this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
 
           setTimeout(() => {
             this.map.on('viewchange', this.handleViewChanged);
@@ -409,7 +428,6 @@ export default class AMapService
           this.$mapContainer = this.creatAmapContainer(
             id as string | HTMLDivElement,
           );
-
           const map = new AMap.Map(this.$mapContainer, {
             mapStyle: this.getMapStyle(style as string),
             zooms: [minZoom, maxZoom],
@@ -418,12 +436,10 @@ export default class AMapService
           });
           // @ts-ignore
           this.map = map;
-
           // 在使用 map.customCoords 的时候必须使用
           const mapInitCenter = map.getCenter();
           // @ts-ignore
           map.customCoords.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
-
           // @ts-ignore
           this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
           // 监听地图相机事件
@@ -521,13 +537,16 @@ export default class AMapService
       // @ts-ignore
       up,
       // @ts-ignore
-    } = this.map.customCoords.getCameraParams();
+      // left, right, bottom, top
+      // @ts-ignore
+    } = this.map.customCoords?.getCameraParams();
+    // // @ts-ignore
+    // console.log('this.map.customCoords.getCameraParams()', this.map.customCoords.getCameraParams())
+    // const { left, right, bottom, top, near, far, position } = this.map.customCoords.getCameraParams();
 
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     const zoom = this.map.getZoom();
-    const pitch = this.map.getPitch();
-    const rotation = this.map.getRotation();
     // @ts-ignore
     if (this.cameraChangedCallback) {
       this.viewport.syncWithMapCamera({
@@ -540,16 +559,12 @@ export default class AMapService
         up,
         // AMap 定义的缩放等级 与 Mapbox 相差 1
         zoom: zoom - 1, // 与amap1.x对比相差一个级别
-        // center: [center.getLng(), center.getLat()],
         center,
         offsetOrigin: [position[0], position[1]],
 
-        pitch,
-        bearing: 360 - rotation,
+        // @ts-ignore
+        // left, right, bottom, top
       });
-
-      // console.log('this.viewport', this.viewport)
-      // console.log('position', position)
       // set coordinate system
       this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_2);
       this.cameraChangedCallback(this.viewport);
@@ -568,7 +583,6 @@ export default class AMapService
    * @param e
    */
   private handleViewChanged = (e: any): void => {
-    // @ts-ignore
     const {
       // @ts-ignore
       fov,
@@ -585,11 +599,10 @@ export default class AMapService
       // @ts-ignore
       up,
       // @ts-ignore
+      // left, right, bottom, top
+      // @ts-ignore
     } = this.map.customCoords.getCameraParams();
-    const { zoom, pitch, rotation } = e;
-    // console.log(this.viewport)
-    // console.log('zoom', zoom, this.map.getZoom())
-    // const center = this.map.getCenter();
+    const { zoom } = e;
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     if (this.cameraChangedCallback) {
@@ -604,16 +617,12 @@ export default class AMapService
         near,
         // AMap 定义的缩放等级 与 Mapbox 相差 1
         zoom: zoom - 1, // 与amap1.x对比相差一个级别
-        // center: [center.getLng(), center.getLat()],
         center,
         offsetOrigin: [position[0], position[1]],
 
-        pitch,
-        bearing: 360 - rotation,
-        // // @ts-ignore
-        // mvp: this.map.customCoords.getMVPMatrix()
+        // @ts-ignore
+        // left, right, bottom, top
       });
-
       // set coordinate system
       this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_2);
       this.cameraChangedCallback(this.viewport);

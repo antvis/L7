@@ -1,7 +1,5 @@
 import { IMapCamera, IViewport } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
-
-const DEGREES_TO_RADIANS = Math.PI / 180;
 export default class Viewport implements IViewport {
   private projectionMatrix: mat4 = mat4.create();
   private viewMatrix: mat4 = mat4.create();
@@ -22,11 +20,12 @@ export default class Viewport implements IViewport {
       aspect = 1,
       near = 0.1,
       far = 1000,
-      fov = 0,
-
-      pitch = 0,
-      bearing = 0,
-      cameraHeight = 1,
+      fov = 45,
+      // @ts-ignore
+      // left,
+      // right,
+      // bottom,
+      // top,
     } = mapCamera;
     this.zoom = zoom;
     this.center = center;
@@ -39,31 +38,23 @@ export default class Viewport implements IViewport {
       near,
       far,
     );
-    // mat4.perspective(this.projectionMatrix, 0.91, aspect, near, far);
-    // const pitchInRadians = pitch * DEGREES_TO_RADIANS;
-    // const rotationInRadians = (360 - bearing) * DEGREES_TO_RADIANS;
 
+    // ortho(out, left, right, bottom, top, near, far)
+    // mat4.ortho(this.projectionMatrix, left, right, bottom, top, near, far)
+    // console.log(left, right, bottom, top, near, far)
     // 计算相机矩阵 viewMatrix
-    // const eyePoint = vec3.fromValues(...cameraPosition);
-    const eyePoint = vec3.fromValues(
-      cameraPosition[0],
-      cameraPosition[1],
-      cameraPosition[2],
-    );
+    // console.log(cameraPosition)
+    const eyePoint = vec3.fromValues(...cameraPosition);
+    // const eyePoint = vec3.fromValues(cameraPosition[0], cameraPosition[1], 0.1);
     // 计算相机矩阵 viewMatrix
-    // const eyePoint = vec3.fromValues(
-    //   (cameraPosition[2]) * Math.sin(pitchInRadians) * Math.sin(rotationInRadians),
-    //   -(cameraPosition[2]) * Math.sin(pitchInRadians) * Math.cos(rotationInRadians),
-    //   (cameraPosition[2]) * Math.cos(pitchInRadians),
-    // );
+
     const lookAtPoint = vec3.fromValues(...lookAt);
+    // const lookAtPoint = vec3.fromValues(...cameraPosition);
+    // const lookAtPoint = vec3.fromValues(cameraPosition[0], cameraPosition[1], -0.1);
     // const lookAtPoint = vec3.fromValues(0, 0, 0);
+
     const upDirect = vec3.fromValues(...up);
-    // const upDirect = vec3.fromValues(
-    //   -Math.cos(pitchInRadians) * Math.sin(rotationInRadians),
-    //   Math.cos(pitchInRadians) * Math.cos(rotationInRadians),
-    //   Math.sin(pitchInRadians),
-    // );
+    // const upDirect = vec3.fromValues(0, 1, 0);
     mat4.lookAt(this.viewMatrix, eyePoint, lookAtPoint, upDirect);
 
     this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);
@@ -92,8 +83,8 @@ export default class Viewport implements IViewport {
   }
 
   public getZoomScale(): number {
-    // 512 尺寸下的缩放：2 ^ 19
-    return 524288;
+    // 512 尺寸下的缩放：2 ^ 20
+    return 1048576;
   }
 
   public getCenter(): [number, number] {

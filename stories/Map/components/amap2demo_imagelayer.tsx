@@ -1,5 +1,6 @@
+// @ts-ignore
 import { ImageLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_imageLayer extends React.Component {
@@ -13,11 +14,12 @@ export default class Amap2demo_imageLayer extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
+      map: new GaodeMap({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
         zoom: 10,
+        viewMode: '3D',
       }),
     });
     this.scene = scene;

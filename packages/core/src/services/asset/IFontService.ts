@@ -7,6 +7,7 @@ export interface IFontOptions {
   sdf: boolean;
   cutoff: number;
   radius: number;
+  iconfont: boolean;
 }
 export interface IFontMappingOption {
   characterSet: string[];
@@ -29,6 +30,10 @@ export interface IFontMapping {
   [key: string]: IFontMappingItem;
   [key: number]: IFontMappingItem;
 }
+
+export interface IFontIconFontMapItem {
+  [key: string]: string;
+}
 export interface IFontAtlas {
   xOffset: number;
   yOffset: number;
@@ -44,11 +49,14 @@ export interface IIconFontGlyph {
 }
 export interface IFontService {
   mapping: IFontMapping;
+  iconFontMap: Map<string, string>;
   fontAtlas: IFontAtlas;
   canvas: HTMLCanvasElement;
   scale: number;
   init(): void;
   addIconGlyphs(glyphs: IIconFontGlyph[]): void;
+  addIconFont(name: string, fontUnicode: string): void;
+  getIconFontKey(name: string): string;
   getGlyph(name: string): string;
   setFontOptions(option: Partial<IFontOptions>): void;
   destroy(): void;

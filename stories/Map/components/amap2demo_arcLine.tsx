@@ -1,10 +1,7 @@
-import { vec2, vec3 } from 'gl-matrix';
 // @ts-ignore
-import { ILngLat, PointLayer, LineLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMap2 } from '@antv/l7-maps';
+import { LineLayer, Scene } from '@antv/l7';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
-
-import { mat4 } from 'gl-matrix';
 
 export default class Amap2demo_arcLine extends React.Component {
   // @ts-ignore
@@ -17,17 +14,16 @@ export default class Amap2demo_arcLine extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap2({
-        pitch: 0,
+      map: new GaodeMap({
+        pitch: 40,
         center: [107.77791556935472, 35.443286920228644],
         zoom: 2.9142882493605033,
+        viewMode: '3D',
       }),
     });
     this.scene = scene;
 
     scene.on('loaded', () => {
-      console.log('event test');
-
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt',
       )
@@ -50,6 +46,7 @@ export default class Amap2demo_arcLine extends React.Component {
               opacity: 0.8,
               blur: 0.99,
             });
+          // .forward(false)
           scene.addLayer(layer);
         });
     });

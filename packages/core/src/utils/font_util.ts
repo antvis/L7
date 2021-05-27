@@ -35,7 +35,6 @@ export function buildMapping({
   });
 
   const rowHeight = fontHeight + buffer * 2;
-
   return {
     mapping,
     xOffset: x,
