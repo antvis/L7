@@ -30,7 +30,7 @@ export interface IMapWrapper {
 }
 
 export interface IMapService<RawMap = {}> {
-  version: string;
+  version?: string;
   map: RawMap;
   init(): void;
   initViewPort?(): void;

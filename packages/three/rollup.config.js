@@ -26,7 +26,7 @@ export default {
       namedExports: {
         eventemitter3: [ 'EventEmitter' ],
         lodash: [ 'merge' ],
-        inversify: ['inject','injectable']
+        // inversify: ['inject','injectable']
       },
       dynamicRequireTargets: [
             'node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js',
