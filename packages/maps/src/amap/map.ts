@@ -25,6 +25,7 @@ import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { toPaddingOptions } from '../utils';
+import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
@@ -54,6 +55,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 @injectable()
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
+  public version: string = Version['GAODE1.x'];
   /**
    * 原始地图实例
    */
@@ -328,7 +330,7 @@ export default class AMapService
     } = this.config;
     // 高德地图创建独立的container；
     // tslint:disable-next-line:typedef
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       const resolveMap = () => {
         if (mapInstance) {
           this.map = mapInstance as AMap.Map & IAMapInstance;
@@ -442,6 +444,10 @@ export default class AMapService
     const { lng, lat } = this.getCenter();
     if (this.cameraChangedCallback) {
       // resync viewport
+      // console.log('cameraHeight', height)
+      // console.log('pitch', pitch)
+      // console.log('rotation', rotation)
+      // console.log('zoom', this.map.getZoom())
       this.viewport.syncWithMapCamera({
         aspect,
         // AMap 定义 rotation 为顺时针方向，而 Mapbox 为逆时针
@@ -458,7 +464,7 @@ export default class AMapService
         offsetOrigin: [position.x, position.y],
       });
       const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
-
+      // console.log('this.viewport', this.viewport)
       // set coordinate system
       if (this.viewport.getZoom() > offsetZoom) {
         this.coordinateSystemService.setCoordinateSystem(

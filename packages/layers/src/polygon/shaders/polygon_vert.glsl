@@ -3,6 +3,7 @@ attribute vec3 a_Position;
 attribute vec3 a_Normal;
 attribute float a_Size;
 uniform mat4 u_ModelMatrix;
+uniform mat4 u_Mvp;
 
 varying vec4 v_Color;
 
@@ -12,7 +13,13 @@ varying vec4 v_Color;
 void main() {
   v_Color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
-  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    gl_Position = u_Mvp * (vec4(project_pos.xyz, 1.0));
+  } else {
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+  }
 
   setPickingColor(a_PickingColor);
 }

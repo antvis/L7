@@ -22,10 +22,10 @@ import { DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import mapboxgl, { IControl, Map } from 'mapbox-gl';
-
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { IMapboxInstance } from '../../typings/index';
+import { Version } from '../version';
 import Viewport from './Viewport';
 window.mapboxgl = mapboxgl;
 const EventMap: {
@@ -47,6 +47,7 @@ const MAPBOX_API_KEY =
 @injectable()
 export default class MapboxService
   implements IMapService<Map & IMapboxInstance> {
+  public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
 
   @inject(TYPES.MapConfig)

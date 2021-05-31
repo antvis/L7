@@ -16,11 +16,11 @@
 ### minZoom
 <description> _number_ **可选** _default:_ `0`</description>
 
-图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （3-18）
+图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （2-19）
 
 ### maxZoom
 <description> _number_ **可选** _default:_ `22`</description>
-图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （3-18）
+图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （2-19）
 
 ### autoFit
 <description> _bool_ **可选** _default:_ `false`</description>

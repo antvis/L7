@@ -35,5 +35,16 @@ void main() {
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
   }
+
+  // if(u_line_texture == LineTexture) { // while load texture
+  //    //v_u; // 水平
+  //   float v = length(v_offset)/(v_a); // 横向
+  //   vec2 uv= v_iconMapUV / u_textSize + vec2(v_u, v) / u_textSize * 64.;
+  //   // gl_FragColor = vec4(v_u, v, 0.0, 1.0);
+  //   // gl_FragColor = vec4(1.0, 0.0, 0.0, v_u);
+  //   gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
+  // } else {
+  //    gl_FragColor = filterColor(gl_FragColor);
+  // }
   gl_FragColor = filterColor(gl_FragColor);
 }

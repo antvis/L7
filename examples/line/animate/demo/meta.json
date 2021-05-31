@@ -5,6 +5,11 @@
   },
   "demos": [
     {
+      "filename": "wind.js",
+      "title": "风场弧线",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*LpcBTKiazZcAAAAAAAAAAAAAARQnAQ"
+    },
+    {
       "filename": "arcCircle.js",
       "title": "大圆弧线",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6Qm_QY69sBMAAAAAAAAAAABkARQnAQ"

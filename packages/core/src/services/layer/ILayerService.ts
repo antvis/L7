@@ -130,6 +130,7 @@ export interface ILayer {
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   animate(option: Partial<IAnimateOption> | boolean): ILayer;
@@ -244,6 +245,8 @@ export interface ILayerConfig {
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
+  forward: boolean; // 正方向
+
   /**
    * 开启拾取
    */
@@ -274,6 +277,10 @@ export interface ILayerConfig {
    */
   enableLighting: boolean;
   animateOption: Partial<IAnimateOption>;
+  /**
+   * layer point text 是否是 iconfont 模式
+   */
+  iconfont: boolean;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }

@@ -11,5 +11,4 @@ void main(){
     gl_FragColor = color;
     // gl_FragColor.a = color.a * smoothstep(0.1,0.2,intensity)* u_opacity;
      gl_FragColor.a = color.a * smoothstep(0.,0.1,intensity) * u_opacity;
-
 }

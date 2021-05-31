@@ -35,6 +35,10 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
+  // loadFont 判断用户当前是否添加自定义字体
+  public loadFont: boolean = false;
+  // fontFamily 用户当前自己添加的字体的名称
+  public fontFamily: string = '';
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -139,15 +143,32 @@ export default class Scene extends EventEmitter implements ISceneService {
      */
     this.hooks.init.tapPromise('initMap', async () => {
       // 等待首次相机同步
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
-          resolve();
+          if (this.map.version !== 'GAODE2.x') {
+            // not amap2
+            resolve();
+          }
         });
-        this.map.init();
+
+        if (this.map.version !== 'GAODE2.x') {
+          // not amap2
+          this.map.init();
+        } else {
+          // amap2
+          resolve();
+        }
       });
+
+      if (this.map.version === 'GAODE2.x' && this.map.initViewPort) {
+        // amap2
+        await this.map.init();
+        this.map.initViewPort();
+      }
       // this.controlService.addControls();
+
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
@@ -208,7 +229,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 执行异步并行初始化任务
     // @ts-ignore
     this.initPromise = this.hooks.init.promise();
-
     this.render();
   }
 
@@ -222,14 +242,19 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (this.rendering || this.destroyed) {
       return;
     }
-
     this.rendering = true;
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
+
       await this.initPromise;
       if (this.destroyed) {
         this.destroy();
+      }
+      // @ts-ignore
+      if (this.loadFont && document.fonts) {
+        // @ts-ignore
+        await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');
       }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.logger.info(' render inited');
@@ -243,10 +268,28 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 尝试初始化未初始化的图层
     this.layerService.renderLayers();
     // 组件需要等待layer 初始化完成之后添加
-
     this.logger.debug(`scene ${this.id} render`);
-
     this.rendering = false;
+  }
+
+  /**
+   * 用户自定义添加第三方字体 （用户使用 layer/point/text/iconfont 的前提需要加载第三方字体文件）
+   * @param fontFamily
+   * @param fontPath
+   */
+  public addFontFace(fontFamily: string, fontPath: string): void {
+    this.fontFamily = fontFamily;
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerText = `
+        @font-face{
+            font-family: '${fontFamily}';
+            src: url('${fontPath}') format('woff2'),
+            url('${fontPath}') format('woff'),
+            url('${fontPath}') format('truetype');
+        }`;
+    document.getElementsByTagName('head')[0].appendChild(style);
+    this.loadFont = true;
   }
 
   public getSceneContainer(): HTMLDivElement {

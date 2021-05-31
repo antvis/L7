@@ -13,7 +13,26 @@
       "filename": "polygon_text.js",
       "title": "面数据标注",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*rCFqRp3iQosAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "iconfont.js",
+      "title": "图标标注",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*8PfqQ6-lQ0EAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "iconfonts.js",
+      "title": "天气图标标注",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*JAhxTaabap4AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "temperture.js",
+      "title": "气温图标标注",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*36umQaf_hVEAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "updown.js",
+      "title": "走势图标标注",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*P5plS5ZsYZkAAAAAAAAAAAAAARQnAQ"
     }
-
   ]
 }

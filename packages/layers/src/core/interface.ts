@@ -8,4 +8,7 @@ export interface ILineLayerStyleOptions {
   lineType?: keyof typeof lineStyleType;
   dashArray?: [number, number];
   segmentNumber: number;
+  forward?: boolean;
+  lineTexture?: boolean;
+  iconStep?: number;
 }

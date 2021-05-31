@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PolygonLayer, Popup, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox, GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class PopupComponent extends React.Component {
@@ -17,7 +17,7 @@ export default class PopupComponent extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         style: 'mapbox://styles/mapbox/streets-v9',
         center: [110.19382669582967, 30.258134],
         pitch: 0,

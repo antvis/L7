@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class GaodeMapComponent extends React.Component {
@@ -14,11 +14,11 @@ export default class GaodeMapComponent extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV1({
         center: [121.107846, 30.267069],
         pitch: 0,
         style: 'normal',
-        zoom: 11,
+        zoom: 13,
         animateEnable: false,
       }),
     });
@@ -30,6 +30,18 @@ export default class GaodeMapComponent extends React.Component {
             lng: 121.107846,
             lat: 30.267069,
           },
+          {
+            lng: 121.1,
+            lat: 30.267069,
+          },
+          {
+            lng: 120.107846,
+            lat: 30.267069,
+          },
+          {
+            lng: 38.54,
+            lat: 77.02,
+          },
         ],
         {
           parser: {
@@ -40,6 +52,7 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
+      // .shape('normal')
       .color('blue')
       .size(10)
       .style({
@@ -51,27 +64,25 @@ export default class GaodeMapComponent extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      const padding = {
-        top: 50,
-        right: 0,
-        bottom: 200,
-        left: 800,
-      };
+      // const padding = {
+      //   top: 50,
+      //   right: 0,
+      //   bottom: 200,
+      //   left: 800,
+      // };
       // const px = scene.lngLatToPixel([center.lng, center.lat]);
       // const offsetPx = [
       //   (padding.right - padding.left) / 2,
       //   (padding.bottom - padding.top) / 2,
       // ];
-      scene.setCenter([121.107846, 30.267069], { padding });
+      // scene.setCenter([121.107846, 30.267069], { padding });
       // const newCenter = scene.pixelToLngLat([
       //   px.x + offsetPx[0],
       //   px.y + offsetPx[1],
       // ]);
       // @ts-ignore
       // scene.setCenter();
-
       // get originCenter
-
       // const originCenter = scene.getCenter();
       // const originPx = scene.lngLatToPixel([
       //   originCenter.lng,
@@ -85,7 +96,6 @@ export default class GaodeMapComponent extends React.Component {
       //   originPx.x - offsetPx[0],
       //   originPx.y - offsetPx[1],
       // ]);
-
       // lngLatToContainer
       // 获取当前地图像素坐标
       // console.log(originCenter, center, newCenter2);
@@ -106,7 +116,7 @@ export default class GaodeMapComponent extends React.Component {
             bottom: 0,
           }}
         />
-        <div
+        {/* <div
           style={{
             position: 'absolute',
             bottom: '0px',
@@ -115,8 +125,8 @@ export default class GaodeMapComponent extends React.Component {
             height: '200px',
             width: '100%',
           }}
-        />
-        <div
+        /> */}
+        {/* <div
           style={{
             position: 'absolute',
             top: '0px',
@@ -135,7 +145,7 @@ export default class GaodeMapComponent extends React.Component {
             height: '100%',
             width: '800px',
           }}
-        />
+        /> */}
       </>
     );
   }

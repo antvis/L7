@@ -65,7 +65,12 @@ export default class HexagonModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number) => {
-          const coordinates = feature.coordinates as number[];
+          // const coordinates = (feature.verison==='GAODE2.x'?feature.originoordinates:feature.coordinates) as number[];
+          const coordinates = (feature.version === 'GAODE2.x'
+            ? feature.originCoordinates
+            : feature.coordinates) as number[];
+          // const coordinates = feature.coordinates as number[];
+          // const coordinates = feature.originCoordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

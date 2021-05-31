@@ -375,6 +375,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  // 为对应的图层传入纹理的编号名称（point/image 在 shape 方法中传入纹理名称的方法并不通用）
+  public texture(
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    this.updateStyleAttribute('texture', field, values, updateOptions);
+    return this;
+  }
+
   public rotate(
     field: StyleAttributeField,
     values?: StyleAttributeOption,
@@ -482,7 +492,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       ...this.rawConfig,
       ...rest,
     };
-
     if (this.container) {
       this.updateLayerConfig(this.rawConfig);
       this.styleNeedUpdate = true;
@@ -500,6 +509,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this;
   }
+
   public render(): ILayer {
     // if (
     //   this.needPick() &&

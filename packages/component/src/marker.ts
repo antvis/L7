@@ -56,7 +56,8 @@ export default class Marker extends EventEmitter {
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
-    this.mapsService.on('camerachange', this.update);
+    this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
+    this.mapsService.on('viewchange', this.update); // 注册高德2.0 的地图事件监听
     this.update();
     this.added = true;
     this.emit('added');

@@ -1,3 +1,4 @@
+// @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';

@@ -17,8 +17,16 @@ interface IAMapEvent {
   };
 }
 
+interface CustomCoords {
+  getCameraParams(): void;
+  getCenter(): void;
+  getMVPMatrix(): void;
+  [other:string]:any
+}
 interface IAMapInstance {
   get(key: string): unknown;
+  getZooms?(): number[];
+  customCoords?: CustomCoords;
 }
 
 interface IMapboxInstance {

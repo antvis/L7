@@ -1,5 +1,5 @@
 import { Scene } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, GaodeMapV1 } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
@@ -23,7 +23,8 @@ export default class GlTFThreeJSDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      // map: new GaodeMap({
+      map: new GaodeMapV1({
         center: [111.4453125, 32.84267363195431],
         pitch: 45,
         rotation: 30,

@@ -292,7 +292,7 @@ export default class TextModel extends BaseModel {
     return padBounds(bounds, 0.5);
   }
   /**
-   * 生成文字纹理
+   * 生成文字纹理（生成文字纹理字典）
    */
   private initTextFont() {
     const {
@@ -315,12 +315,39 @@ export default class TextModel extends BaseModel {
       characterSet,
       fontWeight,
       fontFamily,
+      iconfont: false,
     });
   }
+
   /**
-   * 生成文字布局
+   * 生成 iconfont 纹理字典
    */
-  private generateGlyphLayout() {
+  private initIconFontTex() {
+    const {
+      fontWeight = '400',
+      fontFamily = 'sans-serif',
+    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    const data = this.layer.getEncodedData();
+    const characterSet: string[] = [];
+    data.forEach((item: IEncodeFeature) => {
+      let { shape = '' } = item;
+      shape = shape.toString();
+      if (characterSet.indexOf(shape) === -1) {
+        characterSet.push(shape);
+      }
+    });
+    this.fontService.setFontOptions({
+      characterSet,
+      fontWeight,
+      fontFamily,
+      iconfont: true,
+    });
+  }
+
+  /**
+   * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
+   */
+  private generateGlyphLayout(iconfont: boolean) {
     // TODO:更新文字布局
     const { mapping } = this.fontService;
     const {
@@ -330,7 +357,7 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '', coordinates, id, size = 1 } = feature;
+      const { shape = '', id, size = 1 } = feature;
 
       const shaping = shapeText(
         shape.toString(),
@@ -341,21 +368,31 @@ export default class TextModel extends BaseModel {
         'center',
         spacing,
         textOffset,
+        iconfont,
       );
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
-      feature.centroid = calculteCentroid(coordinates);
+      // feature.centroid = calculteCentroid(coordinates);
+
+      feature.centroid = calculteCentroid(feature.coordinates);
+
+      // 此时地图高德2.0 originCentroid == centroid
+      feature.originCentroid =
+        feature.version === 'GAODE2.x'
+          ? calculteCentroid(feature.originCoordinates)
+          : (feature.originCentroid = feature.centroid);
+
       this.glyphInfoMap[id as number] = {
         shaping,
         glyphQuads,
-        centroid: calculteCentroid(coordinates),
+        centroid: calculteCentroid(feature.coordinates),
       };
       return feature;
     });
   }
   /**
-   * 文字避让
+   * 文字避让 depend on originCentorid
    */
   private filterGlyphs() {
     const {
@@ -374,7 +411,11 @@ export default class TextModel extends BaseModel {
     const collisionIndex = new CollisionIndex(width, height);
     const filterData = this.glyphInfo.filter((feature: IEncodeFeature) => {
       const { shaping, id = 0 } = feature;
-      const centroid = feature.centroid as [number, number];
+      // const centroid = feature.centroid as [number, number];
+      // const centroid = feature.originCentroid as [number, number];
+      const centroid = (feature.version === 'GAODE2.x'
+        ? feature.originCentroid
+        : feature.centroid) as [number, number];
       const size = feature.size as number;
       const fontScale: number = size / 24;
       const pixels = this.mapService.lngLatToContainer(centroid);
@@ -404,10 +445,13 @@ export default class TextModel extends BaseModel {
    * 初始化文字布局
    */
   private initGlyph() {
-    // 1.生成文字纹理
-    this.initTextFont();
+    const { iconfont = false } = this.layer.getLayerConfig();
+    // 1.生成文字纹理（或是生成 iconfont）
+    iconfont ? this.initIconFontTex() : this.initTextFont();
+    // this.initTextFont();
+
     // 2.生成文字布局
-    this.generateGlyphLayout();
+    this.generateGlyphLayout(iconfont);
   }
   /**
    * 更新文字纹理

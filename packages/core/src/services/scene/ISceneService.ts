@@ -6,6 +6,8 @@ import { IRenderConfig } from '../renderer/IRendererService';
 export interface ISceneService {
   destroyed: boolean;
   loaded: boolean;
+  fontFamily: string;
+  loadFont: boolean;
   on(type: string, handle: (...args: any[]) => void): void;
   off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
@@ -16,6 +18,7 @@ export interface ISceneService {
   getSceneContainer(): HTMLDivElement;
   getMarkerContainer(): HTMLElement;
   exportPng(type?: 'png' | 'jpg'): string;
+  addFontFace(fontname: string, fontpath: string): void;
   destroy(): void;
 }
 // scene 事件

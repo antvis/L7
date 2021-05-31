@@ -14,6 +14,7 @@ attribute vec2 a_Uv;
 varying vec2 v_texCoord;
 
 varying vec4 v_Color;
+uniform mat4 u_Mvp;
 
 #pragma include "projection"
 #pragma include "light"
@@ -23,7 +24,12 @@ void main() {
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
   vec4 project_pos = project_position(pos);
    v_texCoord = a_Uv;
-  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    gl_Position = u_Mvp * (vec4(project_pos.xyz, 1.0));
+  } else {
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+  }
 
   float lightWeight = calc_lighting(pos);
   // v_Color = a_Color;

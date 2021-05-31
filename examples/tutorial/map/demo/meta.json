@@ -17,7 +17,12 @@
     {
       "filename": "amapInstance.js",
       "title": "通过高德地图实例化",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*_SIYR50bbcoAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*C5d2RJ08hOkAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "amapInstance2d.js",
+      "title": "通过高德地图实例化(2d)",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*C5d2RJ08hOkAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

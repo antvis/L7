@@ -6,5 +6,5 @@ import ThreeRender from './Components/threeRender';
 
 storiesOf('3D 模型', module)
   .add('ThreeJS Render', () => <ThreeRender />, {})
-  .add('高德模型', () => <AMapModel />, {})
+  .add('高德模型1.x', () => <AMapModel />, {})
   .add('Mapbox模型', () => <MapboxModel />, {});

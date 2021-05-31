@@ -9,6 +9,7 @@ import {
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
+import { inject, injectable } from 'inversify';
 import BaseModel from '../../core/BaseModel';
 import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
@@ -25,7 +26,7 @@ interface IHeatMapLayerStyleOptions {
   angle: number;
   rampColors: IColorRamp;
 }
-
+@injectable()
 export default class HeatMapModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
@@ -256,13 +257,20 @@ export default class HeatMapModel extends BaseModel {
     const {
       opacity,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    const invert = mat4.invert(
-      mat4.create(),
-      mat4.fromValues(
-        // @ts-ignore
-        ...this.cameraService.getViewProjectionMatrixUncentered(),
-      ),
-    ) as mat4;
+
+    // const invert = mat4.invert(
+    //   mat4.create(),
+    //   mat4.fromValues(
+    //     // @ts-ignore
+    //     ...this.cameraService.getViewProjectionMatrixUncentered(),
+    //   ),
+    // ) as mat4;
+    const invert = mat4.create();
+    mat4.invert(
+      invert,
+      this.cameraService.getViewProjectionMatrixUncentered() as mat4,
+    );
+
     this.colorModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,

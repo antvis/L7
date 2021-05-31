@@ -5,6 +5,7 @@ import {
   ICoordinateSystemService,
   ILayer,
   ILayerPlugin,
+  IMapService,
   IRendererService,
   TYPES,
 } from '@antv/l7-core';
@@ -29,13 +30,28 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
+
   public apply(layer: ILayer) {
+    const version = this.mapService.version;
+
+    let mvp = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; // default matrix (for gaode2.x)
+    let sceneCenterMKT = [0, 0];
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
       // 重新计算坐标系参数
       this.coordinateSystemService.refresh();
 
+      if (version === 'GAODE2.x') {
+        // @ts-ignore
+        mvp = this.mapService.map.customCoords.getMVPMatrix();
+        // mvp = amapCustomCoords.getMVPMatrix()
+        // @ts-ignore
+        sceneCenterMKT = this.mapService.getCustomCoordCenter();
+      }
+
       const { width, height } = this.rendererService.getViewportSize();
-      layer.models.forEach((model) =>
+      layer.models.forEach((model) => {
         model.addUniforms({
           // 相机参数，包含 VP 矩阵、缩放等级
           [CameraUniform.ProjectionMatrix]: this.cameraService.getProjectionMatrix(),
@@ -52,13 +68,16 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           [CoordinateUniform.PixelsPerDegree]: this.coordinateSystemService.getPixelsPerDegree(),
           [CoordinateUniform.PixelsPerDegree2]: this.coordinateSystemService.getPixelsPerDegree2(),
           [CoordinateUniform.PixelsPerMeter]: this.coordinateSystemService.getPixelsPerMeter(),
+          // 坐标系是高德2.0的时候单独计算
+          [CoordinateUniform.Mvp]: mvp,
+          u_SceneCenterMKT: sceneCenterMKT,
           // 其他参数，例如视口大小、DPR 等
           u_ViewportSize: [width, height],
           u_DevicePixelRatio: window.devicePixelRatio,
           u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
-        }),
-      );
+        });
+      });
 
       // TODO：脏检查，决定是否需要渲染
     });

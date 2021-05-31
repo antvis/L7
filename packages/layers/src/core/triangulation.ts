@@ -39,6 +39,7 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
  */
 export function PointExtrudeTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
+  // console.log('PointExtrudeTriangulation', feature)
   const { positions, index, normals } = getGeometry(
     shape as ShapeType3D,
     false,
@@ -69,19 +70,45 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  */
 export function LineTriangulation(feature: IEncodeFeature) {
-  const { coordinates } = feature;
-  let path = coordinates as number[][][] | number[][];
-  if (!Array.isArray(path[0][0])) {
-    path = [coordinates] as number[][][];
-  }
+  const { coordinates, originCoordinates, version } = feature;
+  // let path = coordinates as number[][][] | number[][];
+  // if (!Array.isArray(path[0][0])) {
+  //   path = [coordinates] as number[][][];
+  // }
+
   const line = new ExtrudePolyline({
     dash: true,
-    join: 'bevel', //
+    join: 'bevel',
   });
-  path.forEach((item: any) => {
-    // 处理带洞的多边形
-    line.extrude(item as number[][]);
-  });
+
+  if (version === 'GAODE2.x') {
+    // 处理高德2.0几何体构建
+    let path1 = coordinates as number[][][] | number[][]; // 计算位置
+    if (!Array.isArray(path1[0][0])) {
+      path1 = [coordinates] as number[][][];
+    }
+    let path2 = originCoordinates as number[][][] | number[][]; // 计算法线
+    if (!Array.isArray(path2[0][0])) {
+      path2 = [originCoordinates] as number[][][];
+    }
+
+    for (let i = 0; i < path1.length; i++) {
+      // 高德2.0在计算线时，需要使用经纬度计算发现，使用 customCoords.lnglatToCoords 计算的数据来计算顶点的位置
+      const item1 = path1[i];
+      const item2 = path2[i];
+      line.extrude_gaode2(item1 as number[][], item2 as number[][]);
+    }
+  } else {
+    // 处理非高德2.0的几何体构建
+    let path = coordinates as number[][][] | number[][];
+    if (!Array.isArray(path[0][0])) {
+      path = [coordinates] as number[][][];
+    }
+    path.forEach((item: any) => {
+      line.extrude(item as number[][]);
+    });
+  }
+
   const linebuffer = line.complex;
   return {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
@@ -199,6 +226,7 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
       coordinates[1][0],
       coordinates[1][1],
     );
+
     if (i !== segNum - 1) {
       indexArray.push(
         ...[0, 1, 2, 1, 3, 2].map((v) => {
@@ -214,6 +242,11 @@ export function LineArcTriangulation(feature: IEncodeFeature) {
   };
 }
 
+/**
+ * 构建热力图密度图的顶点
+ * @param feature
+ * @returns
+ */
 export function HeatmapTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
   if (coordinates.length === 2) {
@@ -256,6 +289,7 @@ function getGeometry(shape: ShapeType3D, needFlat = false): IExtrudeGeomety {
     : geometryShape.cylinder();
   const geometry = extrude_PolygonNormal([path], needFlat);
   GeometryCache[shape] = geometry;
+  // console.log('geometry', geometry)
   return geometry;
 }
 

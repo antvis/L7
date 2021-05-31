@@ -6,6 +6,7 @@ attribute vec3 a_Position;
 attribute vec4 a_Instance;
 attribute float a_Size;
 uniform mat4 u_ModelMatrix;
+uniform mat4 u_Mvp;
 uniform float segmentNumber;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 varying vec4 v_color;
@@ -68,21 +69,44 @@ float getAngularDist (vec2 source, vec2 target) {
     sin_half_delta.x * sin_half_delta.x;
   return 2.0 * atan(sqrt(a), sqrt(1.0 - a));
 }
+
+vec2 midPoint(vec2 source, vec2 target) {
+  vec2 center = target - source;
+  float r = length(center);
+  float theta = atan(center.y, center.x);
+  float thetaOffset = 0.314;
+  float r2 = r / 2.0 / cos(thetaOffset);
+  float theta2 = theta + thetaOffset;
+  vec2 mid = vec2(r2*cos(theta2) + source.x, r2*sin(theta2) + source.y);
+  return mid;
+}
+float bezier3(vec3 arr, float t) {
+  float ut = 1. - t;
+  return (arr.x * ut + arr.y * t) * ut + (arr.y * ut + arr.z * t) * t;
+}
+
 vec2 interpolate (vec2 source, vec2 target, float angularDist, float t) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation
-  if(abs(angularDist - PI) < 0.001) {
-    return (1.0 - t) * source + t * target;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    vec2 mid = midPoint(source, target);
+    vec3 x = vec3(source.x, mid.x, target.x);
+    vec3 y = vec3(source.y, mid.y, target.y);
+    return vec2(bezier3(x ,t), bezier3(y,t));
+  }else {
+    if(abs(angularDist - PI) < 0.001) {
+      return (1.0 - t) * source + t * target;
+    }
+    float a = sin((1.0 - t) * angularDist) / sin(angularDist);
+    float b = sin(t * angularDist) / sin(angularDist);
+    vec2 sin_source = sin(source);
+    vec2 cos_source = cos(source);
+    vec2 sin_target = sin(target);
+    vec2 cos_target = cos(target);
+    float x = a * cos_source.y * cos_source.x + b * cos_target.y * cos_target.x;
+    float y = a * cos_source.y * sin_source.x + b * cos_target.y * sin_target.x;
+    float z = a * sin_source.y + b * sin_target.y;
+    return vec2(atan(y, x), atan(z, sqrt(x * x + y * y)));
   }
-  float a = sin((1.0 - t) * angularDist) / sin(angularDist);
-  float b = sin(t * angularDist) / sin(angularDist);
-  vec2 sin_source = sin(source);
-  vec2 cos_source = cos(source);
-  vec2 sin_target = sin(target);
-  vec2 cos_target = cos(target);
-  float x = a * cos_source.y * cos_source.x + b * cos_target.y * cos_target.x;
-  float y = a * cos_source.y * sin_source.x + b * cos_target.y * sin_target.x;
-  float z = a * sin_source.y + b * sin_target.y;
-  return vec2(atan(y, x), atan(z, sqrt(x * x + y * y)));
 }
 
 void main() {
@@ -108,7 +132,13 @@ void main() {
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
   //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
-  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
+  // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
+
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    gl_Position = u_Mvp * (vec4(curr.xy + offset, curr.z, 1.0));
+  } else {
+    gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
+  }
   setPickingColor(a_PickingColor);
 }
 

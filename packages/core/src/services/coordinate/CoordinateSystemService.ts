@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { getDistanceScales } from '../../utils/project';
 import { ICameraService } from '../camera/ICameraService';
+// import { IMapService } from '../map/IMapService'
 import {
   CoordinateSystem,
   ICoordinateSystemService,
@@ -16,6 +17,10 @@ export default class CoordinateSystemService
   public needRefresh: boolean = true;
   @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
+
+  // map.getCenter
+  // @inject(TYPES.IMapService)
+  // private readonly mapService: IMapService
 
   /**
    * 1. Web 墨卡托坐标系

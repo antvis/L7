@@ -197,6 +197,81 @@ function shapeLines(
   shaping.right = shaping.left + maxLineLength;
 }
 
+function shapeIconFont(
+  shaping: any,
+  glyphMap: any,
+  iconfonts: any[],
+  lineHeight: number,
+  textAnchor: anchorType,
+  textJustify: string,
+  spacing: number,
+) {
+  // buffer 为 4
+  const yOffset = -8;
+
+  let x = 0;
+  let y = yOffset;
+
+  let maxLineLength = 0;
+  const positionedGlyphs = shaping.positionedGlyphs;
+
+  const justify =
+    textJustify === 'right' ? 1 : textJustify === 'left' ? 0 : 0.5;
+
+  const lineStartIndex = positionedGlyphs.length;
+  iconfonts.forEach((iconfont) => {
+    const glyph = glyphMap[iconfont];
+    const baselineOffset = 0;
+
+    if (glyph) {
+      positionedGlyphs.push({
+        glyph: iconfont,
+        x,
+        y: y + baselineOffset,
+        vertical: false, // TODO：目前只支持水平方向
+        scale: 1,
+        metrics: glyph,
+      });
+      x += glyph.advance + spacing;
+    }
+
+    // 左右对齐
+    if (positionedGlyphs.length !== lineStartIndex) {
+      const lineLength = x - spacing;
+      maxLineLength = Math.max(lineLength, maxLineLength);
+      justifyLine(
+        positionedGlyphs,
+        glyphMap,
+        lineStartIndex,
+        positionedGlyphs.length - 1,
+        justify,
+      );
+    }
+
+    x = 0;
+    y += lineHeight;
+  });
+
+  const { horizontalAlign, verticalAlign } = getAnchorAlignment(textAnchor);
+  align(
+    positionedGlyphs,
+    justify,
+    horizontalAlign,
+    verticalAlign,
+    maxLineLength,
+    lineHeight,
+    iconfonts.length,
+  );
+
+  // 计算包围盒
+  const height = y - yOffset;
+
+  shaping.top += -verticalAlign * height;
+  shaping.bottom = shaping.top + height;
+  shaping.left += -horizontalAlign * maxLineLength;
+  shaping.right = shaping.left + maxLineLength;
+}
+
 /**
  * 计算文本中每个独立字符相对锚点的位置
  *
@@ -207,6 +282,7 @@ function shapeLines(
  * @param {string} textJustify 左右对齐
  * @param {number} spacing 字符间距
  * @param {[number, number]} translate 文本水平 & 垂直偏移量
+ * @param {[boolean]} isIconFont 是否是 iconfont
  * @return {boolean|shaping} 每个字符相对于锚点的位置
  */
 export function shapeText(
@@ -217,6 +293,7 @@ export function shapeText(
   textJustify: string,
   spacing: number,
   translate: [number, number] = [0, 0],
+  isIconFont: boolean,
 ) {
   // TODO：处理换行
   const lines = text.split('\n');
@@ -231,16 +308,25 @@ export function shapeText(
     lineCount: lines.length,
     text,
   };
-
-  shapeLines(
-    shaping,
-    glyphs,
-    lines,
-    lineHeight,
-    textAnchor,
-    textJustify,
-    spacing,
-  );
+  isIconFont
+    ? shapeIconFont(
+        shaping,
+        glyphs,
+        lines,
+        lineHeight,
+        textAnchor,
+        textJustify,
+        spacing,
+      )
+    : shapeLines(
+        shaping,
+        glyphs,
+        lines,
+        lineHeight,
+        textAnchor,
+        textJustify,
+        spacing,
+      );
   if (!positionedGlyphs.length) {
     return false;
   }
