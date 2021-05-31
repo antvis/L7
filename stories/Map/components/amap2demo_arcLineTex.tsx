@@ -71,9 +71,8 @@ export default class Amap2demo_arcLineTex extends React.Component {
           // lineTexture: true, // 开启线的贴图功能
           // iconStep: 100, // 设置贴图纹理的间距
         })
-        .animate(true)
+        .animate(true);
       scene.addLayer(layer);
-
     });
   }
 

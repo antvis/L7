@@ -31,7 +31,7 @@ scene.on('loaded', () => {
         })
         .shape('icon', 'text')
         .size(20)
-        .color('w', ['#f0f9e8','#bae4bc','#7bccc4','#43a2ca','#0868ac'])
+        .color('w', [ '#f0f9e8', '#bae4bc', '#7bccc4', '#43a2ca', '#0868ac' ])
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
           textOffset: [ 40, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
@@ -39,7 +39,7 @@ scene.on('loaded', () => {
           stroke: '#ffffff', // 描边颜色
           fontFamily,
           iconfont: true,
-          textAllowOverlap: true,
+          textAllowOverlap: true
         });
       scene.addLayer(pointLayer);
     });

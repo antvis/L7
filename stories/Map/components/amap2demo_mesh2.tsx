@@ -66,7 +66,7 @@ export default class Amap2demo_mesh2 extends React.Component {
             .source(data)
             .shape('icon', 'text')
             .size(15)
-            .color('count', n => n>0?'#0f0':"#f00")
+            .color('count', (n) => (n > 0 ? '#0f0' : '#f00'))
             .style({
               textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
               textOffset: [30, 5],
@@ -83,7 +83,7 @@ export default class Amap2demo_mesh2 extends React.Component {
             .source(data)
             .shape('count', 'text')
             .size(12)
-            .color('count', n => n>0?'#0f0':"#f00")
+            .color('count', (n) => (n > 0 ? '#0f0' : '#f00'))
             .style({
               textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
               textOffset: [40, 10],

@@ -24,7 +24,7 @@ const originData = [
   },
   {
     lng: 119.2,
-    lat: 30.,
+    lat: 30.0,
     iconType: 'smallRain',
     iconColor: '#6EA0FF',
     backgoundColor: '#4678AA',
