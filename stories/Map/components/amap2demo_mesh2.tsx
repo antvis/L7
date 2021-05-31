@@ -2,7 +2,7 @@
 import { PointLayer, Scene, PolygonLayer, LineLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-export default class Amap2demo_mesh extends React.Component {
+export default class Amap2demo_mesh2 extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -24,29 +24,14 @@ export default class Amap2demo_mesh extends React.Component {
     this.scene = scene;
     let fontFamily = 'iconfont';
     let fontPath =
-      '//at.alicdn.com/t/font_2534097_x6rsov3i1g.woff2?t=1622107341225';
-    scene.addIconFont('icon', '&#xe69e;');
+      '//at.alicdn.com/t/font_2534097_bl34aphh10n.woff2?t=1622180820063';
+    scene.addIconFont('up', '&#xe61d;');
+    scene.addIconFont('down', '&#xe61e;');
     scene.addFontFace(fontFamily, fontPath);
-
-    let colors = [
-      '#87CEFA',
-      '#00BFFF',
-
-      '#7FFFAA',
-      '#00FF7F',
-      '#32CD32',
-
-      '#F0E68C',
-      '#FFD700',
-
-      '#FF7F50',
-      '#FF6347',
-      '#FF0000',
-    ];
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json',
+        'https://gw.alipayobjects.com/os/bmw-prod/41802695-0f7e-4a81-ab16-539c4e39df0d.json',
       )
         .then((res) => res.json())
         .then((data) => {
@@ -57,21 +42,6 @@ export default class Amap2demo_mesh extends React.Component {
             .source(data)
             .shape('fill')
             .color('count', ['rgb(194, 143, 133)', 'rgb(148, 167, 192)'])
-            // .color('count', [
-            //   '#87CEFA',
-            //   '#00BFFF',
-
-            //   '#7FFFAA',
-            //   '#00FF7F',
-            //   '#32CD32',
-
-            //   '#F0E68C',
-            //   '#FFD700',
-
-            //   '#FF7F50',
-            //   '#FF6347',
-            //   '#FF0000'
-            // ])
             .style({
               opacity: 0.5,
             });
@@ -95,11 +65,8 @@ export default class Amap2demo_mesh extends React.Component {
           })
             .source(data)
             .shape('icon', 'text')
-            .size(30)
-            .color('count', (t) => {
-              let c = Number(t.replace('℃', ''));
-              return colors[Math.floor(((c - 18) / 16) * 10)];
-            })
+            .size(15)
+            .color('count', n => n>0?'#0f0':"#f00")
             .style({
               textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
               textOffset: [30, 5],
@@ -110,37 +77,19 @@ export default class Amap2demo_mesh extends React.Component {
             });
           scene.addLayer(pointLayer);
 
-          const tempertureLayer = new PointLayer({
+          const textLayer = new PointLayer({
             zIndex: 10,
           })
             .source(data)
             .shape('count', 'text')
             .size(12)
-            // .color('count', [
-            //   '#87CEFA',
-            //   '#00BFFF',
-
-            //   '#7FFFAA',
-            //   '#00FF7F',
-            //   '#32CD32',
-
-            //   '#F0E68C',
-            //   '#FFD700',
-
-            //   '#FF7F50',
-            //   '#FF6347',
-            //   '#FF0000'
-            // ])
-            .color('count', (t) => {
-              let c = Number(t.replace('℃', ''));
-              return colors[Math.floor(((c - 18) / 16) * 10)];
-            })
+            .color('count', n => n>0?'#0f0':"#f00")
             .style({
               textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-              textOffset: [35, 30],
+              textOffset: [40, 10],
               padding: [1, 1],
             });
-          scene.addLayer(tempertureLayer);
+          scene.addLayer(textLayer);
         });
     });
   }

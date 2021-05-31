@@ -6,13 +6,49 @@ const scene = new Scene({
   map: new GaodeMap({
     center: [ 120.5, 30.2 ],
     pitch: 0,
-    style: 'light',
+    style: 'amap://styles/453e2f8e11603fc8f7548fe18959e9e9',
     zoom: 8.5,
     zooms: [ 8, 10 ],
     viewMode: '2D'
   })
 });
 const originData = [
+  {
+    lng: 121.7,
+    lat: 30.6,
+    iconType: 'hugeRain',
+    iconColor: '#4678D2',
+    backgoundColor: '#285A8C',
+    temperature: '20℃',
+    weather: '大雨'
+  },
+  {
+    lng: 119.2,
+    lat: 30.,
+    iconType: 'smallRain',
+    iconColor: '#6EA0FF',
+    backgoundColor: '#4678AA',
+    temperature: '22℃',
+    weather: '小雨'
+  },
+  {
+    lng: 119.67,
+    lat: 30.2,
+    iconType: 'sun',
+    iconColor: '#FFA500',
+    backgoundColor: '#00BFFF',
+    temperature: '28℃',
+    weather: '晴朗'
+  },
+  {
+    lng: 119.63,
+    lat: 30.6,
+    iconType: 'sun',
+    iconColor: '#FFA500',
+    backgoundColor: '#00BFFF',
+    temperature: '28℃',
+    weather: '晴朗'
+  },
   {
     lng: 120,
     lat: 30,
@@ -145,7 +181,7 @@ scene.on('loaded', () => {
     })
     .shape('circle')
     .color('backgoundColor')
-    .size(40);
+    .size(42);
   scene.addLayer(layer);
 
 
