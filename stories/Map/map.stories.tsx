@@ -5,6 +5,7 @@ import Amap2demo from './components/amap2demo'
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
 import Amap2demo_text from './components/amap2demo_text'
+import Amap2demo_textSelect from './components/amap2demo_textSelect'
 import Amap2demo_iconfont from './components/amap2demo_iconfont';
 import Amap2demo_image from './components/amap2demo_image'
 
@@ -54,6 +55,7 @@ storiesOf('地图方法', module)
         .add('高德地图 point/extrude', () => <Amapdemo_extrude />)
         .add('高德地图2.0 point/extrude', () => <Amap2demo_extrude />)
         .add('高德地图2.0 point/text', () => <Amap2demo_text />)
+        .add('高德地图2.0 point/textSelect', () => <Amap2demo_textSelect />)
         .add('高德地图2.0 point/iconfont', () => <Amap2demo_iconfont />)
         .add('高德地图2.0 point/image', () => <Amap2demo_image />)
 

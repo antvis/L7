@@ -32,7 +32,7 @@ scene.on('loaded', () => {
         })
         .shape('icon', 'text')
         .size(20)
-        .color('w', ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99'])
+        .color('w', [ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99' ])
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
           textOffset: [ 40, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]

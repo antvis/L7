@@ -30,7 +30,7 @@ scene.on('loaded', () => {
       })
         .source(data)
         .shape('fill')
-        .color('count', ['#f2f0f7','#dadaeb','#bcbddc','#9e9ac8','#756bb1','#54278f'])
+        .color('count', [ '#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f' ])
         .style({
           opacity: 0.6
         });

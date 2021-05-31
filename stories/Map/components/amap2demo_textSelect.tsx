@@ -2,7 +2,7 @@
 import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-export default class Amap2demo_text extends React.Component {
+export default class Amap2demo_textSelect extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -15,24 +15,6 @@ export default class Amap2demo_text extends React.Component {
     let fontPath =
       '//at.alicdn.com/t/font_2534097_99x8u6zpili.woff2?t=1621842922496';
 
-    // let style = document.createElement('style')
-    // style.type = "text/css"
-    // style.innerText = `
-    //     @font-face{
-    //         font-family: '${fontname}';
-    //         src: url('${fontpath}') format('woff2')
-    //     }`
-    // document.getElementsByTagName('head')[0].appendChild(style)
-    var mask = [
-      [
-        [
-          [110, 40],
-          [130, 40],
-          [130, 20],
-          [110, 20],
-        ],
-      ],
-    ];
 
     const scene = new Scene({
       id: 'map',
@@ -61,6 +43,7 @@ export default class Amap2demo_text extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
+          console.log(data.list[0])
           const pointLayer = new PointLayer({})
             .source(data.list, {
               parser: {
@@ -86,9 +69,12 @@ export default class Amap2demo_text extends React.Component {
               // textAllowOverlap: true,
             });
           scene.addLayer(pointLayer);
-          
+          pointLayer.boxSelect([0, 0, 155, 278], (f) => {
+            console.log('======')
+            console.log(f)
+          })
         });
-
+    
 
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',

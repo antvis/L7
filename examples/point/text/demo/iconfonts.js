@@ -13,12 +13,12 @@ const scene = new Scene({
   })
 });
 const dataColor = {
-  bigRainBC: "#285A8C",
-  middleRainBC: "#326EA0",
-  smallRainBC: "#4678AA",
-  sunBC: "#00BFFF",
-  cloudBC: "#1E90FF"
-}
+  bigRainBC: '#285A8C',
+  middleRainBC: '#326EA0',
+  smallRainBC: '#4678AA',
+  sunBC: '#00BFFF',
+  cloudBC: '#1E90FF'
+};
 const originData = [
   {
     lng: 121.7,
