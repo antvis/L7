@@ -4,10 +4,11 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    center: [ 115, 30 ],
+    center: [ 110, 30 ],
     pitch: 0,
-    style: 'light',
-    zoom: 6
+    // style: 'light',
+    style: 'amap://styles/453e2f8e11603fc8f7548fe18959e9e9',
+    zoom: 5
   })
 });
 const fontFamily = 'iconfont';
@@ -31,7 +32,7 @@ scene.on('loaded', () => {
         })
         .shape('icon', 'text')
         .size(20)
-        .color('w', [ '#f0f9e8', '#bae4bc', '#7bccc4', '#43a2ca', '#0868ac' ])
+        .color('w', ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99'])
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
           textOffset: [ 40, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
