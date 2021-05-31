@@ -596,6 +596,7 @@ layer.on('inited', (option) => {});
 ### boxSelect
 
 参数 option
+
 - box [x1: number, y1: number, x2: number, y2: number] 相较于
 - cb (...args: any[]) => void 传入的回调方法，返回框选内部的 feature
 
