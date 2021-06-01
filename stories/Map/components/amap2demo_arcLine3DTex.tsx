@@ -19,7 +19,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
         center: [107.77791556935472, 35.443286920228644],
         zoom: 2.9142882493605033,
         viewMode: '3D',
-        style: "dark"
+        style: 'dark',
       }),
     });
     this.scene = scene;
@@ -60,15 +60,13 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           // lineTexture: true, // 开启线的贴图功能
           // iconStep: 100, // 设置贴图纹理的间距
           // // opacity: 0
-        })
+        });
       // .animate({
       //   duration: 50,
       //   interval: 0.3,
       //   trailLength: 0.1,
       // });
       scene.addLayer(layer);
-
-
     });
   }
 

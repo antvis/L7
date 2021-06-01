@@ -6,7 +6,7 @@ import {
   ILayerConfig,
   IModel,
   IModelUniform,
-  ITexture2D
+  ITexture2D,
 } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
@@ -63,7 +63,6 @@ export default class ArcModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
