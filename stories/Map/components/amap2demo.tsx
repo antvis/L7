@@ -17,8 +17,7 @@ export default class Amap2demo extends React.Component {
         center: [121.107846, 30.267069],
         pitch: 0,
         style: 'normal',
-        zoom: 20
-        ,
+        zoom: 20,
         animateEnable: false,
       }),
     });
