@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/d3-color": "^1.2.2"
   },
-  "gitHead": "63b844ca371bc344a54f51e10b14d302b4f5ca41",
+  "gitHead": "488447e4f819c80c3325bd7a6c25d276fe868f83",
   "publishConfig": {
     "access": "public"
   }
