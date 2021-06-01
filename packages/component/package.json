@@ -32,7 +32,7 @@
     "inversify": "^5.0.1",
     "load-styles": "^2.0.0"
   },
-  "gitHead": "f2d0f2f45853686f170369943a355d259581240b",
+  "gitHead": "1ac42067b1da2ee3d919410a05f9b1fab81b594c",
   "publishConfig": {
     "access": "public"
   }
