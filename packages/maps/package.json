@@ -43,7 +43,7 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/viewport-mercator-project": "^6.1.0"
   },
-  "gitHead": "488447e4f819c80c3325bd7a6c25d276fe868f83",
+  "gitHead": "0aab2458a17b35b3c083b0113848effe9473e9fd",
   "publishConfig": {
     "access": "public"
   }
