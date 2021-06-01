@@ -43,5 +43,6 @@
     "@mapbox/unitbezier": "^0.0.0",
     "eventemitter3": "^4.0.4",
     "lodash": "^4.17.15"
-  }
+  },
+  "gitHead": "63b844ca371bc344a54f51e10b14d302b4f5ca41"
 }
