@@ -17,7 +17,8 @@ export default class Amap2demo extends React.Component {
         center: [121.107846, 30.267069],
         pitch: 0,
         style: 'normal',
-        zoom: 13,
+        zoom: 20
+        ,
         animateEnable: false,
       }),
     });
@@ -27,7 +28,7 @@ export default class Amap2demo extends React.Component {
         lat: 30.267069,
       },
       {
-        lng: 121.1,
+        lng: 121.107,
         lat: 30.267069,
       },
       {
