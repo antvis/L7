@@ -1,7 +1,8 @@
 #define LineTypeSolid 0.0
 #define LineTypeDash 1.0
 #define Animate 0.0
-// #define LineTexture 1.0
+#define LineTexture 1.0
+
 attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec4 a_Instance;
@@ -19,14 +20,15 @@ uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_lineDir: 1.0;
 varying vec4 v_dash_array;
 
-// uniform float u_icon_step: 100;
-// uniform float u_line_texture;
+uniform float u_icon_step: 100;
+uniform float u_line_texture: 0.0;
 varying float v_segmentIndex;
-varying float v_u;
-// varying vec2 v_offset;
-// varying float v_a;
-// attribute vec2 a_iconMapUV;
-// varying vec2 v_iconMapUV;
+varying float v_arcDistrance;
+varying float v_pixelLen;
+varying float v_a;
+varying vec2 v_offset;
+attribute vec2 a_iconMapUV;
+varying vec2 v_iconMapUV;
 
 #pragma include "projection"
 #pragma include "project"
@@ -81,7 +83,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 
 void main() {
   v_color = a_Color;
-  v_segmentIndex = a_Position.x + 1.0;
+  
 
   vec2 source = a_Instance.rg;
   vec2 target =  a_Instance.ba;
@@ -107,32 +109,15 @@ void main() {
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
-  // if(LineTexture == u_line_texture) { // 开启贴图模式
-  //   v_iconMapUV = a_iconMapUV;
-  // float r = (segmentIndex + 1.0)/30.0;
-  // if(segmentIndex < 15.0) {
-  //   // v_u = (segmentIndex + 1.0)/15.0;
-  //   v_color = vec4(1.0, 0.0, 0.0, 1.0);
-  // } else {
-  //   // v_u = (segmentIndex + 1.0 - 15.0)/15.0;
-  //   // v_u = 0.0;
-  //   v_color = vec4(1.0, 1.0, 0.0, 1.0);
-  // }
-  // v_u = fract(r * 2.0);
-  //   float arctotal_Distance = length(source - target);
-  //   float pixelLen = project_pixel(u_icon_step);
-  //   v_u = fract(segmentRatio * (floor(arctotal_Distance/pixelLen)));
-  //   // v_u = fract(segmentIndex/(segmentNumber) * (2.0));
-  //   // v_u = fract(segmentIndex/(segmentNumber - 1.0) * 1.0  + 0.3);
-  //   // v_u = fract(mod(1.0- v_distance_ratio, 0.2)* (1.0/ 0.5));
-  //   // v_u = fract(clamp(v_u, 0.0, 1.0)*2.0);
-  //   // v_u = fract(((segmentIndex * indexDir) / (segmentNumber - 1.)) * (floor(arctotal_Distance/pixelLen)));
-  //   // float s = 6.0;
-  //   // float l = segmentNumber/s;
-  //   // v_u = mod(segmentIndex, l) / (segmentNumber/s);
-  //   v_a = project_pixel(a_Size);
-  //   v_offset = offset + offset * sign(a_Position.y);
-  // }
+  if(LineTexture == u_line_texture) { // 开启贴图模式
+
+    v_segmentIndex = a_Position.x + 1.0;
+    v_arcDistrance = length(source - target);
+    v_iconMapUV = a_iconMapUV;
+    v_pixelLen = project_pixel(u_icon_step);
+    v_a = project_pixel(a_Size);
+    v_offset = offset + offset * sign(a_Position.y);
+  }
   
 
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
