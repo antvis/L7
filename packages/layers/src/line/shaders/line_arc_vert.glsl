@@ -21,7 +21,8 @@ varying vec4 v_dash_array;
 
 // uniform float u_icon_step: 100;
 // uniform float u_line_texture;
-// varying float v_u;
+varying float v_segmentIndex;
+varying float v_u;
 // varying vec2 v_offset;
 // varying float v_a;
 // attribute vec2 a_iconMapUV;
@@ -80,6 +81,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 
 void main() {
   v_color = a_Color;
+  v_segmentIndex = a_Position.x + 1.0;
 
   vec2 source = a_Instance.rg;
   vec2 target =  a_Instance.ba;
@@ -107,7 +109,16 @@ void main() {
 
   // if(LineTexture == u_line_texture) { // 开启贴图模式
   //   v_iconMapUV = a_iconMapUV;
-
+  // float r = (segmentIndex + 1.0)/30.0;
+  // if(segmentIndex < 15.0) {
+  //   // v_u = (segmentIndex + 1.0)/15.0;
+  //   v_color = vec4(1.0, 0.0, 0.0, 1.0);
+  // } else {
+  //   // v_u = (segmentIndex + 1.0 - 15.0)/15.0;
+  //   // v_u = 0.0;
+  //   v_color = vec4(1.0, 1.0, 0.0, 1.0);
+  // }
+  // v_u = fract(r * 2.0);
   //   float arctotal_Distance = length(source - target);
   //   float pixelLen = project_pixel(u_icon_step);
   //   v_u = fract(segmentRatio * (floor(arctotal_Distance/pixelLen)));

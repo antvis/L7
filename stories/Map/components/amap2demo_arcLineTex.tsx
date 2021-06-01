@@ -30,18 +30,6 @@ export default class Amap2demo_arcLineTex extends React.Component {
       );
 
       let data = [
-        // {
-        //   lng1: 91.111891,
-        //   lat1: 40.662557,
-        //   lng2: 120.342625,
-        //   lat2: 37.373799,
-        // },
-        // {
-        //   lng1: 116.98242187499999,
-        //   lat1: 43.004647127794435,
-        //   lng2: 105.64453124999999,
-        //   lat2: 28.998531814051795,
-        // },
         {
           lng1: 75.76171875,
           lat1: 36.31512514748051,
@@ -71,7 +59,7 @@ export default class Amap2demo_arcLineTex extends React.Component {
           // lineTexture: true, // 开启线的贴图功能
           // iconStep: 100, // 设置贴图纹理的间距
         })
-        .animate(true);
+        // .animate(true);
       scene.addLayer(layer);
     });
   }

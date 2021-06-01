@@ -13,6 +13,9 @@ varying vec4 v_color;
 uniform float u_time;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
+varying float v_u;
+varying float v_segmentIndex;
+
 #pragma include "picking"
 
 void main() {
@@ -47,4 +50,15 @@ void main() {
   //    gl_FragColor = filterColor(gl_FragColor);
   // }
   gl_FragColor = filterColor(gl_FragColor);
+  // gl_FragColor.a = v_u;
+  gl_FragColor = v_color;
+
+  if(v_segmentIndex < 15.0) {
+    // v_u = (segmentIndex + 1.0)/15.0;
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  } else {
+    // v_u = (segmentIndex + 1.0 - 15.0)/15.0;
+    // v_u = 0.0;
+    gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+  }
 }
