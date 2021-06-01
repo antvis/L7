@@ -3,7 +3,7 @@ import { LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_arcLineTex extends React.Component {
+export default class Amap2demo_arcLine3DTex extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -51,21 +51,21 @@ export default class Amap2demo_arcLineTex extends React.Component {
             y1: 'lat2',
           },
         })
-        .size(20)
-        .shape('arc')
-        .texture('02')
+        .size(10)
+        .shape('arc3d')
+        // .texture('02')
         .color('#8C1EB2')
         .style({
-          forward: false,
-          lineTexture: true, // 开启线的贴图功能
-          iconStep: 100, // 设置贴图纹理的间距
-          opacity: 0,
-        })
-        .animate({
-          duration: 50,
-          interval: 0.3,
-          trailLength: 0.1,
+          // forward: false,
+          // lineTexture: true, // 开启线的贴图功能
+          // iconStep: 100, // 设置贴图纹理的间距
+          // // opacity: 0
         });
+      // .animate({
+      //   duration: 50,
+      //   interval: 0.3,
+      //   trailLength: 0.1,
+      // });
       scene.addLayer(layer);
     });
   }

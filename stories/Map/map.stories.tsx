@@ -21,6 +21,7 @@ import Amap2demo_lineHeight from "./components/amap2demo_lineHeight"
 import Amap2demo_lineDash from "./components/amap2demo_lineDash"
 import Amap2demo_arcLineDir from "./components/amap2demo_arcLineDir"
 import Amap2demo_arcLineTex from './components/amap2demo_arcLineTex';
+import Amap2demo_arcLine3DTex from './components/amap2demo_arcLine3DTex';
 import Amap2demo_lineStreet from './components/amap2demo_lineStreet';
 import Amap2demo_road from './components/amap2demo_road';
 import Amap2demo_road2 from './components/amap2demo_road2';
@@ -67,8 +68,11 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 line_arc3d_greatCircle', () => <Amap2demo_arcLine_greatCircle />)
         .add('高德地图2.0 lineHeight', () => <Amap2demo_lineHeight />)
         .add('高德地图2.0 lineDash', () => <Amap2demo_lineDash />)
+
         .add('高德地图2.0 line_arcDir', () => <Amap2demo_arcLineDir />)
         .add('高德地图2.0 line_arcTex', () => <Amap2demo_arcLineTex />)
+        .add('高德地图2.0 line_arc3DTex', () => <Amap2demo_arcLine3DTex />)
+
         .add('高德地图2.0 line_winds', () => <Amap2demo_winds />)
         .add('高德地图2.0 line_Street', () => <Amap2demo_lineStreet />)
         .add('高德地图2.0 road', () => <Amap2demo_road />)

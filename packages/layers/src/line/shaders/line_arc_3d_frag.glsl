@@ -1,7 +1,6 @@
 #define LineTypeSolid 0.0
 #define LineTypeDash 1.0
 #define Animate 0.0
-#define LineTexture 1.0
 
 uniform float u_opacity;
 uniform float u_blur : 0.9;
@@ -14,23 +13,9 @@ varying vec4 v_color;
 uniform float u_time;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
-uniform float u_line_texture;
-uniform sampler2D u_texture;
-uniform vec2 u_textSize;
-
-uniform float segmentNumber;
-varying float v_segmentIndex;
-varying float v_arcDistrance;
-varying float v_pixelLen;
-varying float v_a;
-varying vec2 v_offset;
-varying vec2 v_iconMapUV;
-
 #pragma include "picking"
 
 void main() {
-  float animateSpeed = 0.0; // 运动速度
-
   gl_FragColor = v_color;
   // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
@@ -45,32 +30,21 @@ void main() {
   }
 
   if(u_aimate.x == Animate) {
-      animateSpeed = u_time / u_aimate.y;
       float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
   }
 
-  if(u_line_texture == LineTexture) { // while load texture
-    float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / (segmentNumber - 1.0)));
-    float count = floor(v_arcDistrance/v_pixelLen);
-
-    float u = 1.0 - fract(arcRadio * count + animateSpeed);
-    float alpha = 1.0;
-    if(u_aimate.x == Animate) {
-      u = gl_FragColor.a;
-      alpha = gl_FragColor.a;
-    }
-    float v = length(v_offset)/(v_a); // 横向
-    vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
-    
-    gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
-    gl_FragColor.a *= alpha;
-    
-  } else {
-     gl_FragColor = filterColor(gl_FragColor);
-  }
-  // gl_FragColor = filterColor(gl_FragColor);
-
+  // if(u_line_texture == LineTexture) { // while load texture
+  //    //v_u; // 水平
+  //   float v = length(v_offset)/(v_a); // 横向
+  //   vec2 uv= v_iconMapUV / u_textSize + vec2(v_u, v) / u_textSize * 64.;
+  //   // gl_FragColor = vec4(v_u, v, 0.0, 1.0);
+  //   // gl_FragColor = vec4(1.0, 0.0, 0.0, v_u);
+  //   gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
+  // } else {
+  //    gl_FragColor = filterColor(gl_FragColor);
+  // }
+  gl_FragColor = filterColor(gl_FragColor);
 }
