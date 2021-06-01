@@ -86,9 +86,7 @@ export default class Amap2demo_text extends React.Component {
               // textAllowOverlap: true,
             });
           scene.addLayer(pointLayer);
-          
         });
-
 
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',

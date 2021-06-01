@@ -15,7 +15,6 @@ export default class Amap2demo_textSelect extends React.Component {
     let fontPath =
       '//at.alicdn.com/t/font_2534097_99x8u6zpili.woff2?t=1621842922496';
 
-
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -43,7 +42,7 @@ export default class Amap2demo_textSelect extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.list[0])
+          console.log(data.list[0]);
           const pointLayer = new PointLayer({})
             .source(data.list, {
               parser: {
@@ -70,11 +69,10 @@ export default class Amap2demo_textSelect extends React.Component {
             });
           scene.addLayer(pointLayer);
           pointLayer.boxSelect([0, 0, 155, 278], (f) => {
-            console.log('======')
-            console.log(f)
-          })
+            console.log('======');
+            console.log(f);
+          });
         });
-    
 
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',

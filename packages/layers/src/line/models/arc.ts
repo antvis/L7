@@ -6,6 +6,7 @@ import {
   ILayerConfig,
   IModel,
   IModelUniform,
+  ITexture2D,
 } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
@@ -18,16 +19,25 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class ArcModel extends BaseModel {
+  protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       opacity,
       lineType = 'solid',
       dashArray = [10, 5],
       forward = true,
+      lineTexture = false,
+      iconStep = 100,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
+
+    if (this.rendererService.getDirty()) {
+      this.texture.bind();
+    }
+
     return {
       u_opacity: opacity || 1,
       segmentNumber: 30,
@@ -35,11 +45,17 @@ export default class ArcModel extends BaseModel {
       u_dash_array: dashArray,
       u_blur: 0.9,
       u_lineDir: forward ? 1 : -1,
+
+      u_texture: this.texture, // 贴图
+      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+      u_icon_step: iconStep,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
     };
   }
 
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    // console.log('animateOption', animateOption)
     return {
       u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -47,7 +63,17 @@ export default class ArcModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.updateTexture();
+    this.iconService.on('imageUpdate', this.updateTexture);
+
     return this.buildModels();
+  }
+
+  public clearModels() {
+    if (this.texture) {
+      this.texture.destroy();
+    }
+    this.iconService.off('imageUpdate', this.updateTexture);
   }
 
   public buildModels(): IModel[] {
@@ -110,5 +136,50 @@ export default class ArcModel extends BaseModel {
         },
       },
     });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'uv',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_iconMapUV',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          const iconMap = this.iconService.getIconMap();
+          const { texture } = feature;
+          const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
+          return [x, y];
+        },
+      },
+    });
   }
+
+  private updateTexture = () => {
+    const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
+      return;
+    }
+    this.texture = createTexture2D({
+      data: this.iconService.getCanvas(),
+      mag: gl.NEAREST,
+      min: gl.NEAREST,
+      premultiplyAlpha: false,
+      width: 1024,
+      height: this.iconService.canvasHeight || 128,
+    });
+  };
 }
