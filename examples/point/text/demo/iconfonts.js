@@ -6,19 +6,62 @@ const scene = new Scene({
   map: new GaodeMap({
     center: [ 120.5, 30.2 ],
     pitch: 0,
-    style: 'light',
+    style: 'amap://styles/453e2f8e11603fc8f7548fe18959e9e9',
     zoom: 8.5,
     zooms: [ 8, 10 ],
     viewMode: '2D'
   })
 });
+const dataColor = {
+  bigRainBC: '#285A8C',
+  middleRainBC: '#326EA0',
+  smallRainBC: '#4678AA',
+  sunBC: '#00BFFF',
+  cloudBC: '#1E90FF'
+};
 const originData = [
+  {
+    lng: 121.7,
+    lat: 30.6,
+    iconType: 'hugeRain',
+    iconColor: '#4678D2',
+    backgoundColor: dataColor.bigRainBC,
+    temperature: '20℃',
+    weather: '大雨'
+  },
+  {
+    lng: 119.2,
+    lat: 30.0,
+    iconType: 'smallRain',
+    iconColor: '#6EA0FF',
+    backgoundColor: dataColor.smallRainBC,
+    temperature: '22℃',
+    weather: '小雨'
+  },
+  {
+    lng: 119.67,
+    lat: 30.2,
+    iconType: 'sun',
+    iconColor: '#FFA500',
+    backgoundColor: dataColor.sunBC,
+    temperature: '28℃',
+    weather: '晴朗'
+  },
+  {
+    lng: 119.63,
+    lat: 30.6,
+    iconType: 'sun',
+    iconColor: '#FFA500',
+    backgoundColor: dataColor.sunBC,
+    temperature: '28℃',
+    weather: '晴朗'
+  },
   {
     lng: 120,
     lat: 30,
     iconType: 'sun',
     iconColor: '#FFA500',
-    backgoundColor: '#00BFFF',
+    backgoundColor: dataColor.sunBC,
     temperature: '28℃',
     weather: '晴朗'
   },
@@ -27,7 +70,7 @@ const originData = [
     lat: 30.5,
     iconType: 'sun',
     iconColor: '#FFA500',
-    backgoundColor: '#00BFFF',
+    backgoundColor: dataColor.sunBC,
     temperature: '28℃',
     weather: '晴朗'
   },
@@ -36,7 +79,7 @@ const originData = [
     lat: 31.4,
     iconType: 'cloud',
     iconColor: '#F0F8FF',
-    backgoundColor: '#1E90FF',
+    backgoundColor: dataColor.cloudBC,
     temperature: '22℃',
     weather: '多云'
   },
@@ -45,7 +88,7 @@ const originData = [
     lat: 31,
     iconType: 'cloud',
     iconColor: '#F0F8FF',
-    backgoundColor: '#1E90FF',
+    backgoundColor: dataColor.cloudBC,
     temperature: '22℃',
     weather: '多云'
   },
@@ -54,7 +97,7 @@ const originData = [
     lat: 30.8,
     iconType: 'cloud',
     iconColor: '#F0F8FF',
-    backgoundColor: '#1E90FF',
+    backgoundColor: dataColor.cloudBC,
     temperature: '22℃',
     weather: '多云'
   },
@@ -63,7 +106,7 @@ const originData = [
     lat: 31.3,
     iconType: 'cloud',
     iconColor: '#F0F8FF',
-    backgoundColor: '#1E90FF',
+    backgoundColor: dataColor.cloudBC,
     temperature: '22℃',
     weather: '多云'
   },
@@ -72,7 +115,7 @@ const originData = [
     lat: 30.2,
     iconType: 'smallRain',
     iconColor: '#6EA0FF',
-    backgoundColor: '#4678AA',
+    backgoundColor: dataColor.smallRainBC,
     temperature: '22℃',
     weather: '小雨'
   },
@@ -81,7 +124,7 @@ const originData = [
     lat: 30.5,
     iconType: 'smallRain',
     iconColor: '#6EA0FF',
-    backgoundColor: '#4678AA',
+    backgoundColor: dataColor.smallRainBC,
     temperature: '22℃',
     weather: '小雨'
   },
@@ -90,7 +133,7 @@ const originData = [
     lat: 30,
     iconType: 'middleRain',
     iconColor: '#6495ED',
-    backgoundColor: '#326EA0',
+    backgoundColor: dataColor.middleRainBC,
     temperature: '24℃',
     weather: '中雨'
   },
@@ -99,7 +142,7 @@ const originData = [
     lat: 29.7,
     iconType: 'smallRain',
     iconColor: '#6EA0FF',
-    backgoundColor: '#4678AA',
+    backgoundColor: dataColor.smallRainBC,
     temperature: '22℃',
     weather: '小雨'
   },
@@ -108,7 +151,7 @@ const originData = [
     lat: 29.8,
     iconType: 'middleRain',
     iconColor: '#6495ED',
-    backgoundColor: '#326EA0',
+    backgoundColor: dataColor.middleRainBC,
     temperature: '24℃',
     weather: '中雨'
   },
@@ -117,7 +160,7 @@ const originData = [
     lat: 30,
     iconType: 'hugeRain',
     iconColor: '#4678D2',
-    backgoundColor: '#285A8C',
+    backgoundColor: dataColor.bigRainBC,
     temperature: '20℃',
     weather: '大雨'
   }
@@ -145,7 +188,7 @@ scene.on('loaded', () => {
     })
     .shape('circle')
     .color('backgoundColor')
-    .size(40);
+    .size(42);
   scene.addLayer(layer);
 
 

@@ -5,6 +5,7 @@ import Amap2demo from './components/amap2demo'
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
 import Amap2demo_text from './components/amap2demo_text'
+import Amap2demo_textSelect from './components/amap2demo_textSelect'
 import Amap2demo_iconfont from './components/amap2demo_iconfont';
 import Amap2demo_image from './components/amap2demo_image'
 
@@ -19,8 +20,10 @@ import Amap2demo_arcLine_greatCircle from "./components/amap2demo_arcLine_greatC
 import Amap2demo_lineHeight from "./components/amap2demo_lineHeight"
 import Amap2demo_lineDash from "./components/amap2demo_lineDash"
 import Amap2demo_arcLineDir from "./components/amap2demo_arcLineDir"
+import Amap2demo_arcLineTex from './components/amap2demo_arcLineTex';
 import Amap2demo_lineStreet from './components/amap2demo_lineStreet';
 import Amap2demo_road from './components/amap2demo_road';
+import Amap2demo_road2 from './components/amap2demo_road2';
 
 import Amap2demo_heatmap from "./components/amap2demo_heatmap"
 import Amap2demo_heatmap3D from "./components/amap2demo_heatmap3D"
@@ -43,6 +46,7 @@ import Amap2demo_instance from "./components/amap2demo_instance"
 import Amap2demo_drawControl from "./components/amap2demo_drawControl"
 
 import Amap2demo_mesh from "./components/amap2demo_mesh"
+import Amap2demo_mesh2 from "./components/amap2demo_mesh2"
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -51,6 +55,7 @@ storiesOf('地图方法', module)
         .add('高德地图 point/extrude', () => <Amapdemo_extrude />)
         .add('高德地图2.0 point/extrude', () => <Amap2demo_extrude />)
         .add('高德地图2.0 point/text', () => <Amap2demo_text />)
+        .add('高德地图2.0 point/textSelect', () => <Amap2demo_textSelect />)
         .add('高德地图2.0 point/iconfont', () => <Amap2demo_iconfont />)
         .add('高德地图2.0 point/image', () => <Amap2demo_image />)
 
@@ -63,9 +68,11 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 lineHeight', () => <Amap2demo_lineHeight />)
         .add('高德地图2.0 lineDash', () => <Amap2demo_lineDash />)
         .add('高德地图2.0 line_arcDir', () => <Amap2demo_arcLineDir />)
+        .add('高德地图2.0 line_arcTex', () => <Amap2demo_arcLineTex />)
         .add('高德地图2.0 line_winds', () => <Amap2demo_winds />)
         .add('高德地图2.0 line_Street', () => <Amap2demo_lineStreet />)
         .add('高德地图2.0 road', () => <Amap2demo_road />)
+        .add('高德地图2.0 road2', () => <Amap2demo_road2 />)
 
         .add('高德地图2.0 heatmap', () => <Amap2demo_heatmap />)
         .add('高德地图2.0 heatmap3D', () => <Amap2demo_heatmap3D />)
@@ -85,3 +92,4 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 drawControl实例', () => <Amap2demo_drawControl />)
 
         .add('高德地图2.0 mesh实例', () => <Amap2demo_mesh />)
+        .add('高德地图2.0 mesh实例2', () => <Amap2demo_mesh2 />)

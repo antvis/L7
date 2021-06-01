@@ -44,7 +44,7 @@ export default class Control extends EventEmitter {
       name: `${controlId++}`,
     };
   }
-
+  
   public setPosition(position: PositionName = 'bottomright') {
     // 考虑组件的自动布局，需要销毁重建
     const controlService = this.controlService;
