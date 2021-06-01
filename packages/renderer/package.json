@@ -33,7 +33,7 @@
     "reflect-metadata": "^0.1.13",
     "regl": "^1.6.1"
   },
-  "gitHead": "0aab2458a17b35b3c083b0113848effe9473e9fd",
+  "gitHead": "90c86832690592d2e94c250a6d07191fba91444a",
   "publishConfig": {
     "access": "public"
   }
