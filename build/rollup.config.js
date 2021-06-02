@@ -72,7 +72,7 @@ module.exports = [
       commonjs({
         namedExports: {
           eventemitter3: [ 'EventEmitter' ],
-          // inversify: ['injectable','Container','interfaces'],
+          // inversify: ['inject','injectable','postConstruct','Container','decorate','interfaces'],
           // @see https://github.com/rollup/rollup-plugin-commonjs/issues/266
           lodash: [
             'isNil',

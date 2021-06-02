@@ -53,7 +53,7 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/lodash": "^4.14.138"
   },
-  "gitHead": "20154fe30d512024b03ac5e40f77731bc0580bb0",
+  "gitHead": "488447e4f819c80c3325bd7a6c25d276fe868f83",
   "publishConfig": {
     "access": "public"
   }
