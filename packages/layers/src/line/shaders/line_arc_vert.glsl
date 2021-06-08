@@ -118,9 +118,9 @@ void main() {
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
+  v_segmentIndex = a_Position.x + 1.0;
   if(LineTexture == u_line_texture) { // 开启贴图模式
 
-    v_segmentIndex = a_Position.x + 1.0;
     v_arcDistrance = length(source - target);
     v_iconMapUV = a_iconMapUV;
     v_pixelLen = project_pixel(u_icon_step);

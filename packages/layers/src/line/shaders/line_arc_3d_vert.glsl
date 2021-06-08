@@ -106,8 +106,8 @@ void main() {
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
 
 
-  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式
-    v_segmentIndex = a_Position.x;
+  v_segmentIndex = a_Position.x;
+  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式  
     v_arcDistrance = length(source - target);
     v_pixelLen = project_pixel(u_icon_step);
 

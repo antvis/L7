@@ -61,10 +61,12 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           // opacity: 0,
           opacity: 0.8,
           // opacity: 0.2,
-          lineType: 'dash',
-          dashArray: [5, 5],
-          textureBlend: 'replace',
+          // lineType: 'dash',
+          // dashArray: [5, 5],
+          // textureBlend: 'replace',
           // textureBlend: 'normal',
+          sourceColor: "#f00",
+          targetColor: "#0f0"
         });
       // .animate({
       //   duration: 50,

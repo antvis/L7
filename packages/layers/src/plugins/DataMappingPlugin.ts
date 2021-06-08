@@ -127,6 +127,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
           // TODO: 支持每个属性配置 postprocess
           if (attribute.name === 'color') {
+            // console.log('attribute', attribute)
             values = values.map((c: unknown) => {
               return rgb2arr(c as string);
             });

@@ -15,6 +15,7 @@ import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
+import { rgb2arr } from '@antv/l7-utils'
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -24,6 +25,8 @@ export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
+      sourceColor,
+      targetColor,
       textureBlend = 'normal',
       lineType = 'solid',
       dashArray = [10, 5, 0, 0],
@@ -38,16 +41,32 @@ export default class LineModel extends BaseModel {
       this.texture.bind();
     }
 
+     // 转化渐变色
+     let useLinearColor = 0  // 默认不生效
+     let sourceColorArr = [0, 0, 0, 0]
+     let targetColorArr = [0, 0, 0, 0]
+     if(sourceColor && targetColor) {
+       sourceColorArr = rgb2arr(sourceColor)
+       targetColorArr = rgb2arr(targetColor)
+       useLinearColor = 1
+     }
+
     return {
       u_opacity: opacity === undefined ? 1 : opacity,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
 
+      // 纹理支持参数
       u_texture: this.texture, // 贴图
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_icon_step: iconStep,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
+
+       // 渐变色支持参数
+       u_linearColor: useLinearColor,
+       u_sourceColor: sourceColorArr,
+       u_targetColor: targetColorArr
     };
   }
   public getAnimateUniforms(): IModelUniform {

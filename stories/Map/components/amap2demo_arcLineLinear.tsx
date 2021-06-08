@@ -3,7 +3,7 @@ import { LineLayer, Scene } from '@antv/l7';
 import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_arcLineTex extends React.Component {
+export default class Amap2demo_arcLineLinear extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -54,10 +54,9 @@ export default class Amap2demo_arcLineTex extends React.Component {
         })
         .size(20)
         .shape('arc')
-        .texture('02')
-        .color('#8C1EB2')
+        .color('#f00')
         .style({
-          forward: false,
+          // forward: false,
           lineTexture: true, // 开启线的贴图功能
           iconStep: 30, // 设置贴图纹理的间距
           // opacity: 0.5,
@@ -66,6 +65,8 @@ export default class Amap2demo_arcLineTex extends React.Component {
           // dashArray: [5, 5],
           // textureBlend: 'replace',
           // textureBlend: 'normal',
+          sourceColor: "#f00",
+          targetColor: "#0f0"
         })
         // .animate({
         //   duration: 50,

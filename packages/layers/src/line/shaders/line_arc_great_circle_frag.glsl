@@ -26,11 +26,22 @@ varying vec2 v_offset;
 varying float v_a;
 varying vec2 v_iconMapUV;
 
+uniform float u_linearColor: 0;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
+
 #pragma include "picking"
 
 void main() {
   float animateSpeed = 0.0;
-  gl_FragColor = v_color;
+  // gl_FragColor = v_color;
+  
+  if(u_linearColor == 1.0) { // 使用渐变颜色
+    gl_FragColor = mix(u_sourceColor, u_targetColor, v_segmentIndex/segmentNumber);
+  } else { // 使用 color 方法传入的颜色
+     gl_FragColor = v_color;
+  }
+
   // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
   gl_FragColor.a *= u_opacity;

@@ -335,13 +335,13 @@ export default class PickingService implements IPickingService {
   private isEventCrash(obj: any) {
     let notCrash = true;
     obj.target.path.map((p: HTMLElement) => {
-       if(p.classList) {
+      if (p.classList) {
         p.classList.forEach((n: any) => {
           if (n === 'l7-marker' || n === 'l7-popup') {
             notCrash = false;
           }
         });
-       }
+      }
     });
     return notCrash;
   }

@@ -14,6 +14,7 @@ import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_vert.glsl';
+import { rgb2arr } from '@antv/l7-utils'
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -23,6 +24,8 @@ export default class ArcModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
+      sourceColor,
+      targetColor,
       textureBlend = 'normal',
       lineType = 'solid',
       dashArray = [10, 5],
@@ -33,6 +36,16 @@ export default class ArcModel extends BaseModel {
 
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
+    }
+
+    // 转化渐变色
+    let useLinearColor = 0  // 默认不生效
+    let sourceColorArr = [0, 0, 0, 0]
+    let targetColorArr = [0, 0, 0, 0]
+    if(sourceColor && targetColor) {
+      sourceColorArr = rgb2arr(sourceColor)
+      targetColorArr = rgb2arr(targetColor)
+      useLinearColor = 1
     }
 
     if (this.rendererService.getDirty()) {
@@ -48,10 +61,16 @@ export default class ArcModel extends BaseModel {
       u_blur: 0.9,
       u_lineDir: forward ? 1 : -1,
 
+      // 纹理支持参数
       u_texture: this.texture, // 贴图
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_icon_step: iconStep,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
+
+      // 渐变色支持参数
+      u_linearColor: useLinearColor,
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr
     };
   }
 

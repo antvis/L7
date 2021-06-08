@@ -63,15 +63,17 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
         .color('#ff0000')
         .texture('02')
         .style({
-          // opacity: 0.0,
+          opacity: 0.6,
           // textureBlend: 'replace',
           // textureBlend: 'normal',
           blur: 0.99,
-          // lineTexture: true, // 开启线的贴图功能
+          lineTexture: true, // 开启线的贴图功能
           iconStep: 5, // 设置贴图纹理的间距
 
           // lineType: 'dash',
           // dashArray: [5, 5],
+          sourceColor: "#f00",
+          targetColor: "#0f0"
         });
       // .animate({
       //   duration: 5,

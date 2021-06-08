@@ -156,8 +156,8 @@ void main() {
   //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
 
-  if(LineTexture == u_line_texture) { // 开启贴图模式
-    v_segmentIndex = a_Position.x;
+  v_segmentIndex = a_Position.x;
+  if(LineTexture == u_line_texture) { // 开启贴图模式  
     v_arcDistrance = length(source - target);
     v_pixelLen = project_pixel(u_icon_step)/8.0;
 

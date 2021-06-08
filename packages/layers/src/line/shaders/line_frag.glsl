@@ -28,6 +28,10 @@ varying float v_pixelLen;
 varying vec2 v_iconMapUV;
 varying float v_strokeWidth;
 
+uniform float u_linearColor: 0;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
+
 #pragma include "picking"
 
 uniform float u_time;
@@ -35,7 +39,14 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ]; // 控制运动
 // [animate, duration, interval, trailLength],
 void main() {
   float animateSpeed = 0.0; // 运动速度
-  gl_FragColor = v_color;
+  // gl_FragColor = v_color;
+
+  if(u_linearColor == 1.0) { // 使用渐变颜色
+    gl_FragColor = mix(u_sourceColor, u_targetColor, v_distance_ratio);
+  } else { // 使用 color 方法传入的颜色
+     gl_FragColor = v_color;
+  }
+
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
   gl_FragColor.a *= u_opacity; // 全局透明度
