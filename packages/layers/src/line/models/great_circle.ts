@@ -6,12 +6,14 @@ import {
   ILayerConfig,
   IModel,
   IModelUniform,
+  ITexture2D,
 } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-import line_arc_frag from '../shaders/line_arc_frag.glsl';
+// import line_arc_frag from '../shaders/line_arc_frag.glsl';
+import line_arc_frag from '../shaders/line_arc_great_circle_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -19,20 +21,35 @@ const lineStyleObj: { [key: string]: number } = {
 };
 
 export default class GreatCircleModel extends BaseModel {
+  protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       opacity,
+      textureBlend = 'normal',
       lineType = 'solid',
       dashArray = [10, 5],
+      lineTexture = false,
+      iconStep = 100,
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
+    // console.log('opacity', opacity)
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
+
+    if (this.rendererService.getDirty()) {
+      this.texture.bind();
+    }
     return {
-      u_opacity: opacity || 1,
+      u_opacity: opacity === undefined ? 1 : opacity,
+      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber: 30,
       u_line_type: lineStyleObj[lineType as string] || 0.0,
       u_dash_array: dashArray,
+
+      u_texture: this.texture, // 贴图
+      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+      u_icon_step: iconStep,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -44,7 +61,17 @@ export default class GreatCircleModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.updateTexture();
+    this.iconService.on('imageUpdate', this.updateTexture);
+
     return this.buildModels();
+  }
+
+  public clearModels() {
+    if (this.texture) {
+      this.texture.destroy();
+    }
+    this.iconService.off('imageUpdate', this.updateTexture);
   }
 
   public buildModels(): IModel[] {
@@ -105,5 +132,51 @@ export default class GreatCircleModel extends BaseModel {
         },
       },
     });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'uv',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_iconMapUV',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          const iconMap = this.iconService.getIconMap();
+          const { texture } = feature;
+          // console.log('icon feature', feature)
+          const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
+          return [x, y];
+        },
+      },
+    });
   }
+
+  private updateTexture = () => {
+    const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
+      return;
+    }
+    this.texture = createTexture2D({
+      data: this.iconService.getCanvas(),
+      mag: gl.NEAREST,
+      min: gl.NEAREST,
+      premultiplyAlpha: false,
+      width: 1024,
+      height: this.iconService.canvasHeight || 128,
+    });
+  };
 }

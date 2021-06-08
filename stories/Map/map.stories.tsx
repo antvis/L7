@@ -17,6 +17,7 @@ import Amap2demo_polygon_extrude from './components/amap2demo_polygon_extrude'
 import Amap2demo_arcLine from "./components/amap2demo_arcLine"
 import Amap2demo_arcLine3d from "./components/amap2demo_arcLine3d"
 import Amap2demo_arcLine_greatCircle from "./components/amap2demo_arcLine_greatCircle"
+import Amap2demo_arcLine_greatCircleTex from "./components/amap2demo_arcLine_greatCircleTex"
 import Amap2demo_lineHeight from "./components/amap2demo_lineHeight"
 import Amap2demo_lineDash from "./components/amap2demo_lineDash"
 import Amap2demo_arcLineDir from "./components/amap2demo_arcLineDir"
@@ -65,7 +66,8 @@ storiesOf('地图方法', module)
 
         .add('高德地图2.0 line_arc', () => <Amap2demo_arcLine />)
         .add('高德地图2.0 line_arc3d', () => <Amap2demo_arcLine3d />)
-        .add('高德地图2.0 line_arc3d_greatCircle', () => <Amap2demo_arcLine_greatCircle />)
+        .add('高德地图2.0 line_arc_greatCircle', () => <Amap2demo_arcLine_greatCircle />)
+        .add('高德地图2.0 line_arc_greatCircleTex', () => <Amap2demo_arcLine_greatCircleTex />)
         .add('高德地图2.0 lineHeight', () => <Amap2demo_lineHeight />)
         .add('高德地图2.0 lineDash', () => <Amap2demo_lineDash />)
 

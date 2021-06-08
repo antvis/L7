@@ -33,7 +33,7 @@ export default class Amap2demo_road2 extends React.Component {
             '02',
             'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg',
           );
-
+          // @ts-ignore
           const layer = new LineLayer({})
             .source(data)
             .size(5)

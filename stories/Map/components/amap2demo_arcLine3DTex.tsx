@@ -38,7 +38,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           lat2: 52.802761415419674,
         },
       ];
-
+      //// @ts-ignore
       const layer = new LineLayer({
         blend: 'normal',
       })
@@ -53,18 +53,23 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
         })
         .size(10)
         .shape('arc3d')
-        // .texture('02')
+        .texture('02')
         .color('#8C1EB2')
         .style({
-          // forward: false,
-          // lineTexture: true, // 开启线的贴图功能
-          // iconStep: 100, // 设置贴图纹理的间距
-          // // opacity: 0
+          lineTexture: true, // 开启线的贴图功能
+          iconStep: 10, // 设置贴图纹理的间距
+          // opacity: 0,
+          opacity: 0.8,
+          // opacity: 0.2,
+          lineType: 'dash',
+          dashArray: [5, 5],
+          textureBlend: 'replace',
+          // textureBlend: 'normal',
         });
       // .animate({
       //   duration: 50,
-      //   interval: 0.3,
-      //   trailLength: 0.1,
+      //   interval: 0.2,
+      //   trailLength: 0.02,
       // });
       scene.addLayer(layer);
     });

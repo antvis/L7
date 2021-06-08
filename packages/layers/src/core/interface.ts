@@ -11,4 +11,5 @@ export interface ILineLayerStyleOptions {
   forward?: boolean;
   lineTexture?: boolean;
   iconStep?: number;
+  textureBlend?: string; // 可选参数、供给纹理贴图使用
 }

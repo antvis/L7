@@ -41,22 +41,27 @@ export default class Amap2demo_lineStreet extends React.Component {
             '02',
             'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg',
           );
-
+          // @ts-ignore
           const layer = new LineLayer({})
             .source(data)
             .size(5)
             .shape('line')
-            .texture('02')
+            .texture('01')
             .color('#25d8b7')
-            .animate({
-              interval: 1, // 间隔
-              duration: 1, // 持续时间，延时
-              trailLength: 2, // 流线长度
-            })
+            // .animate({
+            //   interval: 1, // 间隔
+            //   duration: 1, // 持续时间，延时
+            //   trailLength: 2, // 流线长度
+            // })
             .style({
-              // opacity: 0.5,
+              opacity: 0.5,
+              // opacity: 0,
               lineTexture: true, // 开启线的贴图功能
               iconStep: 50, // 设置贴图纹理的间距
+              // lineType: 'dash',
+              // dashArray: [5, 5],
+              textureBlend: 'replace',
+              // textureBlend: 'normal',
             });
           scene.addLayer(layer);
         });

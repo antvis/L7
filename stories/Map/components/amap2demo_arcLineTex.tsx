@@ -1,6 +1,6 @@
 // @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLineTex extends React.Component {
@@ -14,6 +14,7 @@ export default class Amap2demo_arcLineTex extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
+      // map: new GaodeMapV1({
       map: new GaodeMap({
         pitch: 40,
         center: [107.77791556935472, 35.443286920228644],
@@ -38,7 +39,7 @@ export default class Amap2demo_arcLineTex extends React.Component {
           lat2: 52.802761415419674,
         },
       ];
-
+      // @ts-ignore
       const layer = new LineLayer({
         blend: 'normal',
       })
@@ -58,8 +59,13 @@ export default class Amap2demo_arcLineTex extends React.Component {
         .style({
           forward: false,
           lineTexture: true, // 开启线的贴图功能
-          iconStep: 100, // 设置贴图纹理的间距
-          opacity: 0,
+          iconStep: 30, // 设置贴图纹理的间距
+          // opacity: 0.5,
+          // opacity: 0.2,
+          // lineType: 'dash',
+          // dashArray: [5, 5],
+          // textureBlend: 'replace',
+          // textureBlend: 'normal',
         })
         .animate({
           duration: 50,

@@ -24,6 +24,7 @@ export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
+      textureBlend = 'normal',
       lineType = 'solid',
       dashArray = [10, 5, 0, 0],
       lineTexture = false,
@@ -38,7 +39,8 @@ export default class LineModel extends BaseModel {
     }
 
     return {
-      u_opacity: opacity || 1.0,
+      u_opacity: opacity === undefined ? 1 : opacity,
+      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
 

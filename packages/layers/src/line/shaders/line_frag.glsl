@@ -5,6 +5,7 @@
 uniform float u_blur : 0.99;
 uniform float u_line_type: 0.0;
 uniform float u_opacity : 1.0;
+uniform float u_textureBlend;
 varying vec4 v_color;
 varying vec2 v_normal;
 
@@ -56,13 +57,25 @@ void main() {
     // gl_FragColor.a *=(1.0- step(v_dash_array.x, mod(v_distance_ratio, dashLength)));
   }
 
-  if(u_line_texture == LineTexture) { // while load texture
+  if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
     float u = fract(mod(v_distance, v_pixelLen)/v_pixelLen - animateSpeed);
     float v = length(v_offset)/(v_a*2.0);
     v = max(smoothstep(0.95, 1.0, v), v);
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, vec2(u, v)));
-    gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
+    // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
+     vec4 pattern = texture2D(u_texture, uv);
+
+    if(u_textureBlend == 0.0) { // normal
+      pattern.a = 0.0;
+      gl_FragColor = filterColor(gl_FragColor + pattern);
+    } else { // replace
+        pattern.a *= u_opacity;
+        if(gl_FragColor.a <= 0.0) {
+          pattern.a = 0.0;
+        }
+        gl_FragColor = filterColor(pattern);
+    }
   } else {
     gl_FragColor = filterColor(gl_FragColor);
   }

@@ -117,7 +117,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-
+      // console.log('encodeRecord', encodeRecord)
+      // console.log('attributes', attributes)
       attributes
         .filter((attribute) => attribute.scale !== undefined)
         .forEach((attribute: IStyleAttribute) => {

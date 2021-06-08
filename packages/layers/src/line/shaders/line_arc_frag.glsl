@@ -4,6 +4,7 @@
 #define LineTexture 1.0
 
 uniform float u_opacity;
+uniform float u_textureBlend;
 uniform float u_blur : 0.9;
 uniform float u_line_type: 0.0;
 varying vec2 v_normal;
@@ -48,25 +49,39 @@ void main() {
       animateSpeed = u_time / u_aimate.y;
       float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
-      alpha = smoothstep(0., 1., alpha);
+      // alpha = smoothstep(0., 1., alpha);
+      alpha = clamp(alpha, 0.0, 1.0);
       gl_FragColor.a *= alpha;
   }
 
-  if(u_line_texture == LineTexture) { // while load texture
-    float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / (segmentNumber - 1.0)));
+  if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
+    float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / segmentNumber));
+    // float arcRadio = v_segmentIndex / (segmentNumber - 1.0);
     float count = floor(v_arcDistrance/v_pixelLen);
 
     float u = 1.0 - fract(arcRadio * count + animateSpeed);
-    float alpha = 1.0;
+
     if(u_aimate.x == Animate) {
-      u = gl_FragColor.a;
-      alpha = gl_FragColor.a;
+      u = gl_FragColor.a/u_opacity;
     }
     float v = length(v_offset)/(v_a); // 横向
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
+
+    vec4 pattern = texture2D(u_texture, uv);
+
+    if(u_textureBlend == 0.0) { // normal
+      pattern.a = 0.0;
+      gl_FragColor = filterColor(gl_FragColor + pattern);
+    } else { // replace
+        pattern.a *= u_opacity;
+        if(gl_FragColor.a <= 0.0) {
+          pattern.a = 0.0;
+        }
+        gl_FragColor = filterColor(pattern);
+    }
     
-    gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
-    gl_FragColor.a *= alpha;
+    // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
+    // gl_FragColor = filterColor(texture2D(u_texture, uv));
     
   } else {
      gl_FragColor = filterColor(gl_FragColor);

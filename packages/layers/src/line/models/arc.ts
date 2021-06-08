@@ -23,6 +23,7 @@ export default class ArcModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity,
+      textureBlend = 'normal',
       lineType = 'solid',
       dashArray = [10, 5],
       forward = true,
@@ -39,7 +40,8 @@ export default class ArcModel extends BaseModel {
     }
 
     return {
-      u_opacity: opacity || 1,
+      u_opacity: opacity === undefined ? 1 : opacity,
+      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber: 30,
       u_line_type: lineStyleObj[lineType || 'solid'],
       u_dash_array: dashArray,
