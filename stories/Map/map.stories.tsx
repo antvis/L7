@@ -42,6 +42,7 @@ import Amap2demo_citybuilding from "./components/amap2demo_citybuilding"
 import Amap2demo_drilldown from "./components/amap2demo_drilldown"
 
 import Amap2demo_markerlayer from "./components/amap2demo_markerlayer"
+import Amap2demo_clustermarker from './components/amap2demo_clustermarker';
 
 import Amap2demo_instance from "./components/amap2demo_instance"
 
@@ -92,6 +93,7 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 点击下钻', () => <Amap2demo_drilldown />)
 
         .add('高德地图2.0 Marker图层', () => <Amap2demo_markerlayer />)
+        .add('高德地图2.0 clusterMarker图层', () => <Amap2demo_clustermarker />)
 
         .add('高德地图2.0 instance实例', () => <Amap2demo_instance />)
 
