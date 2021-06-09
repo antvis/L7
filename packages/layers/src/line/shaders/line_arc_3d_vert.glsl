@@ -1,6 +1,7 @@
 #define LineTypeSolid 0.0
 #define LineTypeDash 1.0
 #define Animate 0.0
+#define LineTexture 1.0
 attribute vec3 a_Position;
 attribute vec4 a_Instance;
 attribute vec4 a_Color;
@@ -16,6 +17,16 @@ varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 varying vec4 v_dash_array;
+
+uniform float u_icon_step: 100;
+uniform float u_line_texture: 0.0;
+varying float v_segmentIndex;
+varying float v_arcDistrance;
+varying float v_pixelLen;
+varying float v_a;
+varying vec2 v_offset;
+attribute vec2 a_iconMapUV;
+varying vec2 v_iconMapUV;
 
 #pragma include "projection"
 #pragma include "project"
@@ -73,7 +84,15 @@ void main() {
 
    if(u_line_type == LineTypeDash) {
     v_distance_ratio = segmentIndex / segmentNumber;
-    float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
+    // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
+    vec2 s = source;
+    vec2 t = target;
+    
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+      s = unProjCustomCoord(source);
+      t = unProjCustomCoord(target);
+    }
+    float total_Distance = pixelDistance(s, t) / 2.0 * PI;
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
   }
     if(u_aimate.x == Animate) {
@@ -85,6 +104,19 @@ void main() {
   vec3 next = getPos(source, target, nextSegmentRatio);
   vec2 offset = getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y);
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+
+
+  v_segmentIndex = a_Position.x;
+  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式  
+    v_arcDistrance = length(source - target);
+    v_pixelLen = project_pixel(u_icon_step);
+
+    vec2 projectOffset = project_pixel(offset);
+    v_offset = projectOffset + projectOffset * sign(a_Position.y);
+    v_a = project_pixel(a_Size);
+    v_iconMapUV = a_iconMapUV;
+  }
+  
 
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x

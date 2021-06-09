@@ -6,7 +6,9 @@ import {
   ILayerConfig,
   IModel,
   IModelUniform,
+  ITexture2D,
 } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
@@ -17,22 +19,57 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class Arc3DModel extends BaseModel {
+  protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       opacity,
+      sourceColor,
+      targetColor,
+      textureBlend = 'normal',
       lineType = 'solid',
       dashArray = [10, 5],
+      lineTexture = false,
+      iconStep = 100,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
+
+    // 转化渐变色
+    let useLinearColor = 0; // 默认不生效
+    let sourceColorArr = [0, 0, 0, 0];
+    let targetColorArr = [0, 0, 0, 0];
+    if (sourceColor && targetColor) {
+      sourceColorArr = rgb2arr(sourceColor);
+      targetColorArr = rgb2arr(targetColor);
+      useLinearColor = 1;
+    }
+
+    if (this.rendererService.getDirty()) {
+      this.texture.bind();
+    }
+
     return {
-      u_opacity: opacity || 1,
+      u_opacity: opacity === undefined ? 1 : opacity,
+      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber: 30,
       u_line_type: lineStyleObj[lineType as string] || 0.0,
       u_dash_array: dashArray,
+
+      // 纹理支持参数
+      u_texture: this.texture, // 贴图
+      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+      u_icon_step: iconStep,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
+
+      // 渐变色支持参数
+      u_linearColor: useLinearColor,
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
     };
   }
+
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
@@ -42,7 +79,17 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.updateTexture();
+    this.iconService.on('imageUpdate', this.updateTexture);
+
     return this.buildModels();
+  }
+
+  public clearModels() {
+    if (this.texture) {
+      this.texture.destroy();
+    }
+    this.iconService.off('imageUpdate', this.updateTexture);
   }
 
   public buildModels(): IModel[] {
@@ -103,5 +150,50 @@ export default class Arc3DModel extends BaseModel {
         },
       },
     });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'uv',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_iconMapUV',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          const iconMap = this.iconService.getIconMap();
+          const { texture } = feature;
+          const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
+          return [x, y];
+        },
+      },
+    });
   }
+
+  private updateTexture = () => {
+    const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
+      return;
+    }
+    this.texture = createTexture2D({
+      data: this.iconService.getCanvas(),
+      mag: gl.NEAREST,
+      min: gl.NEAREST,
+      premultiplyAlpha: false,
+      width: 1024,
+      height: this.iconService.canvasHeight || 128,
+    });
+  };
 }

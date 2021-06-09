@@ -1,6 +1,8 @@
 #define LineTypeSolid 0.0
 #define LineTypeDash 1.0
 #define Animate 0.0
+#define LineTexture 1.0
+
 attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec4 a_Instance;
@@ -16,6 +18,17 @@ varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 varying vec4 v_dash_array;
+
+uniform float u_icon_step: 100;
+uniform float u_line_texture: 0.0;
+varying float v_segmentIndex;
+varying float v_arcDistrance;
+varying float v_pixelLen;
+varying vec2 v_offset;
+varying float v_a;
+
+attribute vec2 a_iconMapUV;
+varying vec2 v_iconMapUV;
 
 #pragma include "projection"
 #pragma include "project"
@@ -119,7 +132,16 @@ void main() {
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   if(u_line_type == LineTypeDash) {
     v_distance_ratio = segmentIndex / segmentNumber;
-    float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba);
+    vec2 s = source;
+    vec2 t = target;
+    
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+      s = unProjCustomCoord(source);
+      t = unProjCustomCoord(target);
+    }
+    float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+    total_Distance = total_Distance*8.0;
+    // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba);
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
   }
   if(u_aimate.x == Animate) {
@@ -133,6 +155,16 @@ void main() {
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
   //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
+
+  v_segmentIndex = a_Position.x;
+  if(LineTexture == u_line_texture) { // 开启贴图模式  
+    v_arcDistrance = length(source - target);
+    v_pixelLen = project_pixel(u_icon_step)/8.0;
+
+    v_a = project_pixel(a_Size);
+    v_offset = offset + offset * sign(a_Position.y);
+    v_iconMapUV = a_iconMapUV;
+  }
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * (vec4(curr.xy + offset, curr.z, 1.0));

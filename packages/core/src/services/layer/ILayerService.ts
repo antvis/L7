@@ -130,7 +130,7 @@ export interface ILayer {
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  texture?(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   animate(option: Partial<IAnimateOption> | boolean): ILayer;

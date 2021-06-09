@@ -33,7 +33,7 @@ export default class Amap2demo_road extends React.Component {
             'road',
             'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*haGlTpW2BQgAAAAAAAAAAAAAARQnAQ',
           );
-
+          // @ts-ignore
           const layer = new LineLayer()
             .source(data)
             .size(10)

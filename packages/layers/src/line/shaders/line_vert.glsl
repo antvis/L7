@@ -36,6 +36,7 @@ varying float v_size;
 varying float v_a;
 varying float v_pixelLen;
 varying vec2 v_iconMapUV;
+uniform float u_linearColor: 0;
 // varying float v_strokeWidth;
 
 void main() {
@@ -49,7 +50,7 @@ void main() {
     // v_distance_ratio = 0.01;
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
   }
-  if(u_aimate.x == Animate) {
+  if(u_aimate.x == Animate || u_linearColor == 1.0) {
       v_distance_ratio = a_Distance / a_Total_Distance;
   }
   v_normal = vec2(reverse_offset_normal(a_Normal) * sign(a_Miter));

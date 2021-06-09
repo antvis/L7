@@ -25,8 +25,15 @@ export default React.memo(function Map() {
     fetchData();
   }, []);
   const popupClick = (e: any) => {
-    e.stopPropagation();
+    console.log(e);
+    // e.stopPropagation();
     alert('11333');
+  };
+
+  const markerClick = (e: any) => {
+    console.log(e);
+    // e.stopPropagation();
+    alert('marker');
   };
   return (
     <>
@@ -50,12 +57,20 @@ export default React.memo(function Map() {
             closeOnClick: false,
             stopPropagation: false,
           }}
-          lnglat={[110.1938, 30.25] as number[]}
+          lnglat={[115, 30.25] as number[]}
         >
           <p onClick={popupClick}>122224</p>
         </Popup>
-        <Marker lnglat={[100.1938, 30.25] as number[]}>
-          <p onClick={popupClick}>tes</p>
+        <Marker lnglat={[100.1938, 27.25] as number[]}>
+          <div
+            style={{
+              border: '1px solid #fff',
+              background: '#FFF',
+              fontSize: '24px',
+            }}
+          >
+            <p onClick={markerClick}>tes</p>
+          </div>
         </Marker>
         <PolygonLayer
           key={'2'}
@@ -86,7 +101,7 @@ export default React.memo(function Map() {
           <LayerEvent
             type="click"
             handler={(e) => {
-              console.log(e);
+              console.log('LayerEvent', e);
             }}
           />
         </PolygonLayer>

@@ -15,8 +15,8 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 ### 引入 Map
 
 ```javascript
-import { GaodeMap } from '@antv/l7-maps'; // 默认引入高德2.0
-import { GaodeMapV1 } from '@antv/l7-maps'; // 默认引入高德1.x 版本
+import { GaodeMap } from '@antv/l7-maps'; // 默认引入高德1.x
+import { GaodeMapV2 } from '@antv/l7-maps'; // 默认引入高德2.0 版本
 
 import { Mapbox } from '@antv/l7-maps';
 ```

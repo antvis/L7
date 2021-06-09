@@ -117,7 +117,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-
+      // console.log('encodeRecord', encodeRecord)
+      // console.log('attributes', attributes)
       attributes
         .filter((attribute) => attribute.scale !== undefined)
         .forEach((attribute: IStyleAttribute) => {
@@ -126,6 +127,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
           // TODO: 支持每个属性配置 postprocess
           if (attribute.name === 'color') {
+            // console.log('attribute', attribute)
             values = values.map((c: unknown) => {
               return rgb2arr(c as string);
             });

@@ -3,7 +3,7 @@ import { LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_arcLine3DTex extends React.Component {
+export default class Amap2demo_arcLine_greatCircle extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -15,67 +15,72 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        pitch: 40,
+        pitch: 0,
         center: [107.77791556935472, 35.443286920228644],
         zoom: 2.9142882493605033,
         viewMode: '3D',
-        style: 'dark',
       }),
     });
     this.scene = scene;
 
     scene.on('loaded', () => {
-      setTimeout(() => {
-        scene.setPitch(0);
-      }, 4000);
+      scene.addImage(
+        '00',
+        'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+        // "https://gw-office.alipayobjects.com/bmw-prod/ae2a8580-da3d-43ff-add4-ae9c1bfc75bb.svg"
+      );
+      scene.addImage(
+        '01',
+        'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg',
+      );
       scene.addImage(
         '02',
         'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
       );
 
-      let data = [
-        {
-          lng1: 75.76171875,
-          lat1: 36.31512514748051,
-          lng2: 46.23046874999999,
-          lat2: 52.802761415419674,
-        },
-      ];
-      //// @ts-ignore
-      const layer = new LineLayer({
-        blend: 'normal',
-      })
-        .source(data, {
-          parser: {
-            type: 'json',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2',
+      const layer = new LineLayer({ blend: 'normal' })
+        .source(
+          [
+            {
+              lng1: 75.9375,
+              lat1: 37.71859032558816,
+              lng2: 123.3984375,
+              lat2: 39.639537564366684,
+            },
+          ],
+          {
+            parser: {
+              type: 'json',
+              x: 'lng1',
+              y: 'lat1',
+              x1: 'lng2',
+              y1: 'lat2',
+            },
           },
-        })
-        .size(10)
-        .shape('arc3d')
+        )
+        .size(20)
+        .shape('greatcircle')
+        .color('#ff0000')
         .texture('02')
-        .color('#8C1EB2')
         .style({
-          lineTexture: true, // 开启线的贴图功能
-          iconStep: 10, // 设置贴图纹理的间距
-          // opacity: 0,
-          opacity: 0.8,
-          // opacity: 0.2,
-          // lineType: 'dash',
-          // dashArray: [5, 5],
+          opacity: 0.6,
           // textureBlend: 'replace',
           // textureBlend: 'normal',
+          blur: 0.99,
+          lineTexture: true, // 开启线的贴图功能
+          iconStep: 5, // 设置贴图纹理的间距
+
+          // lineType: 'dash',
+          // dashArray: [5, 5],
           sourceColor: '#f00',
           targetColor: '#0f0',
         });
       // .animate({
-      //   duration: 50,
+      //   duration: 5,
       //   interval: 0.2,
-      //   trailLength: 0.02,
+      //   trailLength: 0.4,
       // });
+      // .animate(true);
       scene.addLayer(layer);
     });
   }

@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 import { TYPES } from '../../types';
 import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';

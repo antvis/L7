@@ -1,6 +1,6 @@
 //@ts-ignore
 import { MarkerLayer, Marker, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 export default class Amap2demo_markerlayer extends React.Component {
   // @ts-ignore
@@ -58,7 +58,20 @@ export default class Amap2demo_markerlayer extends React.Component {
       markerLayer.addMarker(marker);
     }
     scene.addMarkerLayer(markerLayer);
+    // scene.on('loaded', () => {
+    //   markerLayer.hide()
+    // })
 
+    let f = 0;
+    setInterval(() => {
+      if (f === 0) {
+        markerLayer.hide();
+        f = 1;
+      } else {
+        markerLayer.show();
+        f = 0;
+      }
+    }, 800);
     this.scene = scene;
   }
 

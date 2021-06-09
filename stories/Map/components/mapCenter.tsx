@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class GaodeMapComponent extends React.Component {
@@ -14,7 +14,7 @@ export default class GaodeMapComponent extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV1({
+      map: new GaodeMap({
         center: [121.107846, 30.267069],
         pitch: 0,
         style: 'normal',
@@ -58,6 +58,7 @@ export default class GaodeMapComponent extends React.Component {
       .style({
         stroke: '#fff',
         storkeWidth: 2,
+        offsets: [100, 100],
       });
     scene.addLayer(layer);
     scene.render();

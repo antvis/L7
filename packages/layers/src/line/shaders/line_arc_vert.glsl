@@ -94,24 +94,35 @@ void main() {
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   if(u_line_type == LineTypeDash) {
       v_distance_ratio = segmentIndex / segmentNumber;
-      float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
+      vec2 s = source;
+      vec2 t = target;
+      
+      if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+        s = unProjCustomCoord(source);
+        t = unProjCustomCoord(target);
+      }
+      float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+      // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
       v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
-    }
+  }
+  
   if(u_aimate.x == Animate) {
       v_distance_ratio = segmentIndex / segmentNumber;
       if(u_lineDir != 1.0) {
         v_distance_ratio = 1.0 - v_distance_ratio;
       }
   }
+
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+  //unProjCustomCoord
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
+  v_segmentIndex = a_Position.x + 1.0;
   if(LineTexture == u_line_texture) { // 开启贴图模式
 
-    v_segmentIndex = a_Position.x + 1.0;
     v_arcDistrance = length(source - target);
     v_iconMapUV = a_iconMapUV;
     v_pixelLen = project_pixel(u_icon_step);
@@ -122,6 +133,7 @@ void main() {
 
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    // gl_Position = u_Mvp * (vec4(curr.xy + offset, 0, 1.0));
     gl_Position = u_Mvp * (vec4(curr.xy + offset, 0, 1.0));
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));

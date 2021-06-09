@@ -42,11 +42,11 @@ export default class Amap2demo extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      console.log('event test');
+      // console.log('event test');
       // @ts-ignore
-      console.log(scene.map.getProjection().project);
+      // console.log(scene.map.getProjection().project);
       // @ts-ignore
-      console.log(scene.map.customCoords.lngLatToCoord);
+      // console.log(scene.map.customCoords.lngLatToCoord);
       const layer = new PointLayer()
         .source(originData, {
           parser: {
@@ -55,13 +55,15 @@ export default class Amap2demo extends React.Component {
             y: 'lat',
           },
         })
-        .shape('circle')
+        // .shape('circle')
         // .shape('normal')
+        .shape('fill')
         .color('rgba(255, 0, 0, 0.9)')
         .size(10)
         .style({
           stroke: '#fff',
           storkeWidth: 2,
+          offsets: [100, 100],
         })
         .active(true);
       scene.addLayer(layer);

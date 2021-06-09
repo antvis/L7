@@ -3,7 +3,7 @@ import { LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_arcLine3DTex extends React.Component {
+export default class Amap2demo_arcLineLinear extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -25,9 +25,6 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      setTimeout(() => {
-        scene.setPitch(0);
-      }, 4000);
       scene.addImage(
         '02',
         'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
@@ -41,7 +38,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           lat2: 52.802761415419674,
         },
       ];
-      //// @ts-ignore
+      // @ts-ignore
       const layer = new LineLayer({
         blend: 'normal',
       })
@@ -54,15 +51,14 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
             y1: 'lat2',
           },
         })
-        .size(10)
-        .shape('arc3d')
-        .texture('02')
-        .color('#8C1EB2')
+        .size(20)
+        .shape('arc')
+        .color('#f00')
         .style({
+          // forward: false,
           lineTexture: true, // 开启线的贴图功能
-          iconStep: 10, // 设置贴图纹理的间距
-          // opacity: 0,
-          opacity: 0.8,
+          iconStep: 30, // 设置贴图纹理的间距
+          // opacity: 0.5,
           // opacity: 0.2,
           // lineType: 'dash',
           // dashArray: [5, 5],
@@ -73,8 +69,8 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
         });
       // .animate({
       //   duration: 50,
-      //   interval: 0.2,
-      //   trailLength: 0.02,
+      //   interval: 0.3,
+      //   trailLength: 0.1,
       // });
       scene.addLayer(layer);
     });
