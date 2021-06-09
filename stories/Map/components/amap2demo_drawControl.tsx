@@ -1,6 +1,6 @@
 //@ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import { DrawControl } from '@antv/l7-draw';
 import * as React from 'react';
 export default class Amap2demo_drawControl extends React.Component {
@@ -14,7 +14,7 @@ export default class Amap2demo_drawControl extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV1({
+      map: new GaodeMap({
         pitch: 0,
         style: 'light',
         layers: [],

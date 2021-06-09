@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Scene, HeatmapLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_heatmap_hexagon extends React.Component {
@@ -47,7 +47,7 @@ export default class Amap2demo_heatmap_hexagon extends React.Component {
               ],
             })
             .size('sum', (sum) => {
-              return sum * 200;
+              return sum * 20000;
             })
             .shape('hexagonColumn')
             .style({

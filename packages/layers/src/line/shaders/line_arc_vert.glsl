@@ -104,13 +104,15 @@ void main() {
       float total_Distance = pixelDistance(s, t) / 2.0 * PI;
       // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
       v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
-    }
+  }
+  
   if(u_aimate.x == Animate) {
       v_distance_ratio = segmentIndex / segmentNumber;
       if(u_lineDir != 1.0) {
         v_distance_ratio = 1.0 - v_distance_ratio;
       }
   }
+
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);

@@ -25,6 +25,9 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
+      setTimeout(() => {
+        scene.setPitch(0);
+      }, 4000);
       scene.addImage(
         '02',
         'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
@@ -65,8 +68,8 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           // dashArray: [5, 5],
           // textureBlend: 'replace',
           // textureBlend: 'normal',
-          sourceColor: "#f00",
-          targetColor: "#0f0"
+          sourceColor: '#f00',
+          targetColor: '#0f0',
         });
       // .animate({
       //   duration: 50,

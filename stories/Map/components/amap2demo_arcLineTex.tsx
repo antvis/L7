@@ -1,6 +1,6 @@
 // @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLineTex extends React.Component {
@@ -14,7 +14,7 @@ export default class Amap2demo_arcLineTex extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      // map: new GaodeMapV1({
+      // map: new GaodeMapV2({
       map: new GaodeMap({
         pitch: 40,
         center: [107.77791556935472, 35.443286920228644],
@@ -52,7 +52,7 @@ export default class Amap2demo_arcLineTex extends React.Component {
             y1: 'lat2',
           },
         })
-        .size(20)
+        .size(25)
         .shape('arc')
         .texture('02')
         .color('#8C1EB2')
@@ -66,12 +66,12 @@ export default class Amap2demo_arcLineTex extends React.Component {
           // dashArray: [5, 5],
           // textureBlend: 'replace',
           // textureBlend: 'normal',
-        })
-        // .animate({
-        //   duration: 50,
-        //   interval: 0.3,
-        //   trailLength: 0.1,
-        // });
+        });
+      // .animate({
+      //   duration: 50,
+      //   interval: 0.3,
+      //   trailLength: 0.1,
+      // })
       scene.addLayer(layer);
     });
   }

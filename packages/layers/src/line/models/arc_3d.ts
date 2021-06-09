@@ -8,12 +8,12 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/line_arc_3d_frag.glsl';
 import line_arc_vert from '../shaders/line_arc_3d_vert.glsl';
-import { rgb2arr } from '@antv/l7-utils'
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -36,15 +36,15 @@ export default class Arc3DModel extends BaseModel {
       dashArray.push(0, 0);
     }
 
-     // 转化渐变色
-     let useLinearColor = 0  // 默认不生效
-     let sourceColorArr = [0, 0, 0, 0]
-     let targetColorArr = [0, 0, 0, 0]
-     if(sourceColor && targetColor) {
-       sourceColorArr = rgb2arr(sourceColor)
-       targetColorArr = rgb2arr(targetColor)
-       useLinearColor = 1
-     }
+    // 转化渐变色
+    let useLinearColor = 0; // 默认不生效
+    let sourceColorArr = [0, 0, 0, 0];
+    let targetColorArr = [0, 0, 0, 0];
+    if (sourceColor && targetColor) {
+      sourceColorArr = rgb2arr(sourceColor);
+      targetColorArr = rgb2arr(targetColor);
+      useLinearColor = 1;
+    }
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
@@ -63,10 +63,10 @@ export default class Arc3DModel extends BaseModel {
       u_icon_step: iconStep,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
 
-       // 渐变色支持参数
-       u_linearColor: useLinearColor,
-       u_sourceColor: sourceColorArr,
-       u_targetColor: targetColorArr
+      // 渐变色支持参数
+      u_linearColor: useLinearColor,
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
     };
   }
 

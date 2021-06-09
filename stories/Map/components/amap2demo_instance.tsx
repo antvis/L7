@@ -1,6 +1,6 @@
 //@ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2 } from '@antv/l7-maps';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import * as React from 'react';
 export default class Amap2demo_instance extends React.Component {
@@ -12,10 +12,10 @@ export default class Amap2demo_instance extends React.Component {
   }
 
   public async componentDidMount() {
-    // const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
-    // const AMAP_VERSION: string = '1.4.15';
-    const AMAP_API_KEY: string = 'ff533602d57df6f8ab3b0fea226ae52f';
-    const AMAP_VERSION: string = '2.0';
+    const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
+    const AMAP_VERSION: string = '1.4.15';
+    // const AMAP_API_KEY: string = 'ff533602d57df6f8ab3b0fea226ae52f';
+    // const AMAP_VERSION: string = '2.0';
 
     AMapLoader.load({
       key: AMAP_API_KEY, // 申请好的Web端开发者Key，首次调用 load 时必填

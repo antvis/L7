@@ -62,8 +62,8 @@ export default class Amap2demo_lineLinear extends React.Component {
               // dashArray: [5, 5],
               // textureBlend: 'replace',
               // textureBlend: 'normal',
-              sourceColor: "#f00",
-              targetColor: "#0f0"
+              sourceColor: '#f00',
+              targetColor: '#0f0',
             });
           scene.addLayer(layer);
         });

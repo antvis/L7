@@ -1,6 +1,6 @@
 // @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLine_greatCircle extends React.Component {
@@ -72,8 +72,8 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
 
           // lineType: 'dash',
           // dashArray: [5, 5],
-          sourceColor: "#f00",
-          targetColor: "#0f0"
+          sourceColor: '#f00',
+          targetColor: '#0f0',
         });
       // .animate({
       //   duration: 5,

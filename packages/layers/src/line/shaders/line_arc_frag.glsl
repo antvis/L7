@@ -67,6 +67,7 @@ void main() {
 
   if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
     float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / segmentNumber));
+    // float arcRadio = smoothstep( 0.0, 1.0, v_distance_ratio);
     // float arcRadio = v_segmentIndex / (segmentNumber - 1.0);
     float count = floor(v_arcDistrance/v_pixelLen);
 
@@ -90,7 +91,7 @@ void main() {
         }
         gl_FragColor = filterColor(pattern);
     }
-    
+    // gl_FragColor = vec4(arcRadio, 0.0, 0.0, 1.0);
     // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
     // gl_FragColor = filterColor(texture2D(u_texture, uv));
     

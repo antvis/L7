@@ -9,13 +9,13 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 // import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc_frag from '../shaders/line_arc_great_circle_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
-import { rgb2arr } from '@antv/l7-utils'
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -44,13 +44,13 @@ export default class GreatCircleModel extends BaseModel {
     }
 
     // 转化渐变色
-    let useLinearColor = 0  // 默认不生效
-    let sourceColorArr = [0, 0, 0, 0]
-    let targetColorArr = [0, 0, 0, 0]
-    if(sourceColor && targetColor) {
-      sourceColorArr = rgb2arr(sourceColor)
-      targetColorArr = rgb2arr(targetColor)
-      useLinearColor = 1
+    let useLinearColor = 0; // 默认不生效
+    let sourceColorArr = [0, 0, 0, 0];
+    let targetColorArr = [0, 0, 0, 0];
+    if (sourceColor && targetColor) {
+      sourceColorArr = rgb2arr(sourceColor);
+      targetColorArr = rgb2arr(targetColor);
+      useLinearColor = 1;
     }
 
     return {
@@ -69,7 +69,7 @@ export default class GreatCircleModel extends BaseModel {
       // 渐变色支持参数
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr
+      u_targetColor: targetColorArr,
     };
   }
   public getAnimateUniforms(): IModelUniform {
