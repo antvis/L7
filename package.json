@@ -153,7 +153,7 @@
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
-    "release": "lerna publish from-package --registry http://registry.npmjs.com/ --force-publish && lerna run sync",
+    "release": "lerna publish from-package --registry https://registry.npmjs.com/ --force-publish && lerna run sync",
     "release-cdn": "antv-bin upload -n @antv/l7",
     "storybook": "start-storybook -p 6006",
     "test": "cross-env BABEL_ENV=test jest",
