@@ -321,10 +321,11 @@ export default class PickingService implements IPickingService {
       featureId: number | null;
     },
   ) {
+    layer.emit(target.type, target);
     // 判断是否发生事件冲突
-    if (this.isEventCrash(target)) {
-      layer.emit(target.type, target);
-    }
+    // if (this.isEventCrash(target)) {
+    //   layer.emit(target.type, target);
+    // }
   }
 
   /**

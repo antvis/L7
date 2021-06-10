@@ -91,7 +91,7 @@ void main() {
         }
         gl_FragColor = filterColor(pattern);
     }
-    // gl_FragColor = vec4(arcRadio, 0.0, 0.0, 1.0);
+    // gl_FragColor = vec4(1.0 - fract(arcRadio * 20000.0), 0.0, 0.0, 1.0);
     // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
     // gl_FragColor = filterColor(texture2D(u_texture, uv));
     
