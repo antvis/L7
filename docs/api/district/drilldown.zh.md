@@ -36,7 +36,7 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 
 向下钻取的触发事件 ⛔customTrigger 为 true 时不生效
 
-### drillUpTriggleEvent
+### drillUpTrigglerEvent
 
 向上钻取的触发事件 ⛔customTrigger 为 true 时不生效
 
