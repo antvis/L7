@@ -2,6 +2,7 @@ attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec2 a_Extrude;
 attribute float a_Size;
+attribute float a_Opacity;
 attribute float a_Shape;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
@@ -12,6 +13,7 @@ uniform vec2 u_offsets;
 varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
+varying float v_opacity;
 
 #pragma include "projection"
 #pragma include "picking"
@@ -23,6 +25,7 @@ void main() {
 
   // unpack color(vec2)
   v_color = a_Color;
+  v_opacity = a_Opacity;
 
   // radius(16-bit)
   v_radius = newSize;

@@ -940,6 +940,40 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public updateStyleAttribute(
+    type: string,
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    if (!this.inited) {
+      this.pendingStyleAttributes.push({
+        attributeName: type,
+        attributeField: field,
+        attributeValues: values,
+        updateOptions,
+      });
+    } else {
+      this.styleAttributeService.updateStyleAttribute(
+        type,
+        {
+          // @ts-ignore
+          scale: {
+            field,
+            ...this.splitValuesAndCallbackInAttribute(
+              // @ts-ignore
+              values,
+              // @ts-ignore
+              this.getLayerConfig()[field],
+            ),
+          },
+        },
+        // @ts-ignore
+        updateOptions,
+      );
+    }
+  }
+
   protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }
@@ -977,39 +1011,5 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         : valuesOrCallback || defaultValues,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
-  }
-
-  private updateStyleAttribute(
-    type: string,
-    field: StyleAttributeField,
-    values?: StyleAttributeOption,
-    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
-  ) {
-    if (!this.inited) {
-      this.pendingStyleAttributes.push({
-        attributeName: type,
-        attributeField: field,
-        attributeValues: values,
-        updateOptions,
-      });
-    } else {
-      this.styleAttributeService.updateStyleAttribute(
-        type,
-        {
-          // @ts-ignore
-          scale: {
-            field,
-            ...this.splitValuesAndCallbackInAttribute(
-              // @ts-ignore
-              values,
-              // @ts-ignore
-              this.getLayerConfig()[field],
-            ),
-          },
-        },
-        // @ts-ignore
-        updateOptions,
-      );
-    }
   }
 }

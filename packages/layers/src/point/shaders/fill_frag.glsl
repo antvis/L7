@@ -8,6 +8,7 @@ uniform float u_stroke_opacity : 1;
 
 varying vec4 v_data;
 varying vec4 v_color;
+varying float v_opacity;
 varying float v_radius;
 uniform float u_time;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
@@ -67,7 +68,14 @@ void main() {
 
   // gl_FragColor = v_color * color_t;
   // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
-  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
+  // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * v_opacity), strokeColor * u_stroke_opacity, color_t);
+
+  if(v_opacity < 0.0) { // style 中的 opacity 为 number
+    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
+  } else { // style 中的 opacity 为 string ｜ function
+    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * v_opacity), strokeColor * u_stroke_opacity, color_t);
+  }
+  
   gl_FragColor.a = gl_FragColor.a * opacity_t;
   if(u_aimate.x == Animate) {
     float d = length(v_data.xy);

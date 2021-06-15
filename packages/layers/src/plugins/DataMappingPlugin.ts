@@ -109,7 +109,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
   ): IEncodeFeature[] {
-    // console.log('data', data[0])
+    // console.log('data', data)
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -117,12 +117,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-      // console.log('encodeRecord', encodeRecord)
       // console.log('attributes', attributes)
       attributes
         .filter((attribute) => attribute.scale !== undefined)
         .forEach((attribute: IStyleAttribute) => {
+          // console.log('attribute', attribute)
+          // console.log('record', record)
           let values = this.applyAttributeMapping(attribute, record);
+          // console.log('values', values)
           attribute.needRemapping = false;
 
           // TODO: 支持每个属性配置 postprocess
@@ -145,7 +147,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         });
       return encodeRecord;
     }) as IEncodeFeature[];
-    // console.log('mappedData', mappedData[0])
+    // console.log('mappedData', mappedData)
 
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
     if (mappedData.length > 0 && this.mapService.version === 'GAODE2.x') {
@@ -194,6 +196,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
         params.push(record[field]);
       }
     });
+    // console.log('params', params)
+    // console.log('attribute', attribute)
+    // console.log('mapping',attribute.mapping ? attribute.mapping(params) : [])
     return attribute.mapping ? attribute.mapping(params) : [];
   }
 }

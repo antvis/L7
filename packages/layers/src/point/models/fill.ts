@@ -14,24 +14,37 @@ import BaseModel from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
+
+import { isNumber } from 'lodash';
+import { handleStyleOpacity } from '../../utils/dataMappingStyle';
 interface IPointLayerStyleOptions {
-  opacity: number;
+  opacity: any;
   strokeWidth: number;
   stroke: string;
   strokeOpacity: number;
   offsets: [number, number];
 }
+
+// 用于判断 opacity 的值是否发生该改变
+let curretnOpacity: any = '';
 export default class FillModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
+      opacity = 1.0,
       stroke = 'rgb(0,0,0,0)',
       strokeWidth = 1,
       strokeOpacity = 1,
       offsets = [0, 0],
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+
+    // style 中 opacity 属性的处理（数据映射）
+    if (curretnOpacity !== JSON.stringify(opacity)) {
+      handleStyleOpacity(this.layer, opacity);
+      curretnOpacity = JSON.stringify(opacity);
+    }
+
     return {
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_width: strokeWidth,
       u_stroke_color: rgb2arr(stroke),
       u_stroke_opacity: strokeOpacity,
@@ -58,6 +71,8 @@ export default class FillModel extends BaseModel {
     );
   }
   public initModels(): IModel[] {
+    this.getUninforms();
+
     return this.buildModels();
   }
   public buildModels(): IModel[] {
@@ -76,6 +91,7 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
+    const { opacity } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,

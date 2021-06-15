@@ -28,6 +28,11 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+
+import {
+  IStyleAttributeUpdateOptions,
+  StyleAttributeField,
+} from '@antv/l7-core';
 export enum BlendType {
   normal = 'normal',
   additive = 'additive',
@@ -126,10 +131,17 @@ export interface ILayer {
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
+  updateStyleAttribute(
+    type: string,
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ): void;
   init(): ILayer;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  // opacity(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
