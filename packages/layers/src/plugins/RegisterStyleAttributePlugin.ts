@@ -92,10 +92,10 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       },
     });
     styleAttributeService.registerStyleAttribute({
-      name: 'opacity',
+      name: 'strokeOpacity',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Opacity',
+        name: 'a_stroke_opacity',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -104,10 +104,10 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         },
         size: 1,
         update: (feature: IEncodeFeature, featureIdx: number) => {
-          const { opacity } = feature;
+          const { strokeOpacity } = feature;
           // console.log('feature', feature)
-          // console.log('opacity', opacity)
-          return !isNumber(opacity) ? [1.0] : [opacity];
+          // console.log('strokeOpacity', strokeOpacity)
+          return !isNumber(strokeOpacity) ? [1.0] : [strokeOpacity];
         },
       },
     });

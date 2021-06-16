@@ -31,6 +31,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     // });
 
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
+
       if (layer.layerModelNeedUpdate) {
         return;
       }

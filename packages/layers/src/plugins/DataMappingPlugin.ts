@@ -83,6 +83,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         // 处理文本更新
         layer.emit('remapping', null);
       }
+        
     });
   }
   private generateMaping(
@@ -174,6 +175,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         });
       }
     }
+    // console.log('mappedData', mappedData)
     return mappedData;
   }
 

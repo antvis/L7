@@ -267,6 +267,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     // 尝试初始化未初始化的图层
     this.layerService.renderLayers();
+    
     // 组件需要等待layer 初始化完成之后添加
     this.logger.debug(`scene ${this.id} render`);
     this.rendering = false;

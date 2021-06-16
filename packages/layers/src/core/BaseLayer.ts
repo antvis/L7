@@ -53,6 +53,7 @@ import mergeJsonSchemas from 'merge-json-schemas';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import baseLayerSchema from './schema';
+import { handleStyleOpacity, handleStyleStrokeOpacity } from '../utils/dataMappingStyle'
 /**
  * 分配 layer id
  */
@@ -206,6 +207,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       };
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
+      // @ts-ignore
+      if(configToUpdate.opacity){
+        // @ts-ignore
+        handleStyleOpacity('opacity', this, configToUpdate.opacity);
+      }
+      // @ts-ignore
+      if(configToUpdate.strokeOpacity){
+        // @ts-ignore
+        handleStyleStrokeOpacity('strokeOpacity', this, configToUpdate.strokeOpacity);
+      }
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,

@@ -5,10 +5,13 @@ uniform float u_opacity : 1;
 uniform float u_stroke_width : 1;
 uniform vec4 u_stroke_color : [0, 0, 0, 0];
 uniform float u_stroke_opacity : 1;
+varying float v_stroke_opacity;
+
+uniform sampler2D u_opacity_texture;
+varying vec2 v_featureId;
 
 varying vec4 v_data;
 varying vec4 v_color;
-varying float v_opacity;
 varying float v_radius;
 uniform float u_time;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
@@ -18,6 +21,17 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
 void main() {
   int shape = int(floor(v_data.w + 0.5));
+  // 处理透明度
+  // float opacity = texture2D(u_opacity_texture, v_featureId).a?texture2D(u_opacity_texture, v_featureId).a:1.0;
+  float opacity = u_opacity;
+  if(u_opacity < 0.0) {
+    opacity = texture2D(u_opacity_texture, v_featureId).a;
+  }
+
+  float stroke_opacity = u_stroke_opacity;
+  if(v_stroke_opacity > 0.0) {
+    stroke_opacity = v_stroke_opacity;
+  }
 
   lowp float antialiasblur = v_data.z;
   float antialiased_blur = -max(u_blur, antialiasblur);
@@ -68,13 +82,8 @@ void main() {
 
   // gl_FragColor = v_color * color_t;
   // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
-  // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * v_opacity), strokeColor * u_stroke_opacity, color_t);
+  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
 
-  if(v_opacity < 0.0) { // style 中的 opacity 为 number
-    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
-  } else { // style 中的 opacity 为 string ｜ function
-    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * v_opacity), strokeColor * u_stroke_opacity, color_t);
-  }
   
   gl_FragColor.a = gl_FragColor.a * opacity_t;
   if(u_aimate.x == Animate) {
@@ -84,4 +93,6 @@ void main() {
   }
 
   gl_FragColor = filterColor(gl_FragColor);
+
+  
 }
