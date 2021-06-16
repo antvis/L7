@@ -52,8 +52,11 @@ import { isFunction, isObject } from 'lodash';
 import mergeJsonSchemas from 'merge-json-schemas';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
+import {
+  handleStyleOpacity,
+  handleStyleStrokeOpacity,
+} from '../utils/dataMappingStyle';
 import baseLayerSchema from './schema';
-import { handleStyleOpacity, handleStyleStrokeOpacity } from '../utils/dataMappingStyle'
 /**
  * 分配 layer id
  */
@@ -208,14 +211,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
       // @ts-ignore
-      if(configToUpdate.opacity){
+      if (configToUpdate.opacity) {
         // @ts-ignore
         handleStyleOpacity('opacity', this, configToUpdate.opacity);
       }
       // @ts-ignore
-      if(configToUpdate.strokeOpacity){
+      if (configToUpdate.strokeOpacity) {
         // @ts-ignore
-        handleStyleStrokeOpacity('strokeOpacity', this, configToUpdate.strokeOpacity);
+        handleStyleStrokeOpacity(
+          'strokeOpacity',
+          this,
+          // @ts-ignore
+          configToUpdate.strokeOpacity,
+        );
       }
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),

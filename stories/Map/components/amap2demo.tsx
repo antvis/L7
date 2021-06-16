@@ -26,19 +26,19 @@ export default class Amap2demo extends React.Component {
         lng: 121.107846,
         lat: 30.267069,
         opacity2: 0.2,
-        strokeOpacity2: 0.2
+        strokeOpacity2: 0.2,
       },
       {
         lng: 121.107,
         lat: 30.267069,
         opacity2: 0.4,
-        strokeOpacity2: 0.4
+        strokeOpacity2: 0.4,
       },
       {
         lng: 121.107846,
         lat: 30.26718,
         opacity2: 0.6,
-        strokeOpacity2: 0.6
+        strokeOpacity2: 0.6,
       },
       // {
       //   lng: 38.54,
@@ -67,12 +67,15 @@ export default class Amap2demo extends React.Component {
           storkeWidth: 2,
           // strokeOpacity: 0.2,
           // strokeOpacity: 'strokeOpacity2',
-          strokeOpacity: ['strokeOpacity2', (d: any) => {
-            return d
-          }],
+          strokeOpacity: [
+            'strokeOpacity2',
+            (d: any) => {
+              return d;
+            },
+          ],
           // strokeOpacity: ['opacity2', [0.2, 0.6]],
           // offsets: [100, 100],
-          opacity: 'opacity2'
+          opacity: 'opacity2',
           // opacity: 0.2
           // opacity: ['opacity2', (d: any) => {
           //   return d
