@@ -15,8 +15,12 @@ export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tap('DataSourcePlugin', () => {
-      const { data, options } = layer.sourceOption;
-      layer.setSource(new Source(data, options));
+      const source = layer.getSource();
+      if (!source) {
+        const { data, options } = layer.sourceOption;
+        layer.setSource(new Source(data, options));
+      }
+
       this.updateClusterData(layer);
     });
 
