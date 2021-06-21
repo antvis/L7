@@ -18,14 +18,40 @@ import {
   IRendererService,
   IShaderModuleService,
   IStyleAttributeService,
+  ITexture2D,
+  ITexture2DInitializationOptions,
   lazyInject,
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
 import { BlendTypes } from '../utils/blend';
+import { getSize } from '../utils/dataMappingStyle';
+
+interface IDataLayout {
+  widthCount: number;
+  heightCount: number;
+  widthStep: number;
+  widthStart: number;
+  heightStep: number;
+  heightStart: number;
+}
 export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel {
   public triangulation: Triangulation;
+
+  // style texture data mapping
+  public createTexture2D: (
+    options: ITexture2DInitializationOptions,
+  ) => ITexture2D;
+  public dataLayout: IDataLayout = {
+    // 默认值
+    widthCount: 1024,
+    heightCount: 1,
+    widthStep: 1 / 1024,
+    widthStart: 1 / 2048,
+    heightStep: 1,
+    heightStart: 0.5,
+  };
 
   protected layer: ILayer;
 
@@ -48,6 +74,12 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected mapService: IMapService;
   protected cameraService: ICameraService;
   protected layerService: ILayerService;
+
+  protected opacityTexture: ITexture2D;
+  protected strokeOpacityTexture: ITexture2D;
+  protected strokeTexture: ITexture2D;
+  protected strokeWidthTexture: ITexture2D;
+  // style texture data mapping
 
   constructor(layer: ILayer) {
     this.layer = layer;
@@ -75,7 +107,28 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.registerBuiltinAttributes();
     // 开启动画
     this.startModelAnimate();
+
+    const { createTexture2D } = this.rendererService;
+    this.createTexture2D = createTexture2D;
+    // 根据数据长度构建样式数据映射到纹理上时需要到布局数值 为纹理贴图映射样式数据做准备工作
+    this.initEncodeDataLayout(this.layer.getEncodedData().length);
   }
+
+  /**
+   * 根据数据长度构建样式数据映射到纹理上时需要到布局数值
+   * @param dataLength
+   */
+  public initEncodeDataLayout(dataLength: number) {
+    const { width: widthCount, height: heightCount } = getSize(dataLength);
+    this.dataLayout.widthCount = widthCount;
+    this.dataLayout.heightCount = heightCount;
+
+    this.dataLayout.widthStep = 1 / widthCount;
+    this.dataLayout.widthStart = this.dataLayout.widthStep / 2;
+    this.dataLayout.heightStep = 1 / heightCount;
+    this.dataLayout.heightStart = this.dataLayout.heightStep / 2;
+  }
+
   public getBlend(): IBlendOptions {
     const { blend = 'normal' } = this.layer.getLayerConfig();
     return BlendTypes[BlendType[blend]] as IBlendOptions;

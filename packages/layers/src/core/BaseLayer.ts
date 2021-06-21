@@ -52,10 +52,7 @@ import { isFunction, isObject } from 'lodash';
 import mergeJsonSchemas from 'merge-json-schemas';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
-import {
-  handleStyleOpacity,
-  handleStyleStrokeOpacity,
-} from '../utils/dataMappingStyle';
+import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import baseLayerSchema from './schema';
 /**
  * 分配 layer id
@@ -210,21 +207,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       };
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
+
       // @ts-ignore
-      if (configToUpdate.opacity) {
-        // @ts-ignore
-        handleStyleOpacity('opacity', this, configToUpdate.opacity);
-      }
-      // @ts-ignore
-      if (configToUpdate.strokeOpacity) {
-        // @ts-ignore
-        handleStyleStrokeOpacity(
-          'strokeOpacity',
-          this,
-          // @ts-ignore
-          configToUpdate.strokeOpacity,
-        );
-      }
+      handleStyleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
+
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -1024,6 +1010,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],
   ) {
+    // console.log({
+    //   values: isFunction(valuesOrCallback)
+    //     ? undefined
+    //     : valuesOrCallback || defaultValues,
+    //   callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
+    // })
     return {
       values: isFunction(valuesOrCallback)
         ? undefined

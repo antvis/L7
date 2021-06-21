@@ -1,14 +1,24 @@
 import {
+  gl,
   ILayer,
   IStyleAttributeUpdateOptions,
   ITexture2D,
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import { isArray, isFunction, isNumber, isString } from 'lodash';
 /**
  * 该文件中的工具方法主要用于对 style 中的属性进行 数据映射
  */
+
+interface IConfigToUpdate {
+  opacity?: any;
+  strokeOpacity?: any;
+  stroke?: any;
+  strokeWidth?: any;
+  offsets?: any;
+}
 
 // 画布默认的宽度
 const WIDTH = 1024;
@@ -19,7 +29,7 @@ const WIDTH = 1024;
  * @param values
  * @param updateOptions
  */
-function registerOpacityAttribute(
+function registerStyleAttribute(
   fieldName: string,
   layer: ILayer,
   field: StyleAttributeField,
@@ -29,47 +39,122 @@ function registerOpacityAttribute(
   layer.updateStyleAttribute(fieldName, field, values, updateOptions);
 }
 
-/**
- * 根据传入参数 opacity 的类型和值做相应的操作
- */
-function handleStyleOpacity(fieldName: string, layer: ILayer, opacity: any) {
-  if (isString(opacity)) {
-    // opacity = 'string'
-    registerOpacityAttribute(fieldName, layer, opacity, (value: any) => {
-      return value;
-    });
-  } else if (isNumber(opacity)) {
-    // opacity = 0.4 -> opacity 传入数字
-    registerOpacityAttribute(fieldName, layer, [opacity], undefined);
-  } else if (isArray(opacity) && opacity.length === 2) {
-    if (isString(opacity[0]) && isFunction(opacity[1])) {
-      // opacity = ['string', callback]
-      registerOpacityAttribute(fieldName, layer, opacity[0], opacity[1]);
-    } else if (
-      isString(opacity[0]) &&
-      isArray(opacity[1]) &&
-      isNumber(opacity[1][0]) &&
-      isNumber(opacity[1][1])
-    ) {
-      // opacity = ['string', [start: number, end: nuber]]
-      registerOpacityAttribute(fieldName, layer, opacity[0], opacity[1]);
-    } else {
-      registerOpacityAttribute(fieldName, layer, [1.0], undefined);
-    }
-  } else {
-    registerOpacityAttribute(fieldName, layer, [1.0], undefined);
+function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
+  if (configToUpdate.opacity) {
+    // 处理 style 中 opacity 属性的数据映射
+
+    handleStyleFloat('opacity', layer, configToUpdate.opacity);
+  }
+
+  if (configToUpdate.strokeWidth) {
+    // 处理 style 中 strokeWidth 属性的数据映射
+
+    handleStyleFloat('strokeWidth', layer, configToUpdate.strokeWidth);
+  }
+
+  if (configToUpdate.strokeOpacity) {
+    // 处理 style 中 strokeOpacity 属性的数据映射
+
+    handleStyleFloat('strokeOpacity', layer, configToUpdate.strokeOpacity);
+  }
+
+  if (configToUpdate.stroke) {
+    // 处理 style 中 stroke (strokeColor) 属性的数据映射
+    handleStyleColor('stroke', layer, configToUpdate.stroke);
+  }
+
+  if (configToUpdate.offsets) {
+    handleStyleOffsets('offsets', layer, configToUpdate.offsets);
   }
 }
 
 /**
- * 根据传入参数 strokeOpacity 的类型和值做相应的操作
+ * 根据传入参数 opacity 的类型和值做相应的操作
  */
-function handleStyleStrokeOpacity(
+function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
+  if (isString(styleFloat)) {
+    // opacity = 'string'
+    registerStyleAttribute(fieldName, layer, styleFloat, (value: any) => {
+      return value;
+    });
+  } else if (isNumber(styleFloat)) {
+    // opacity = 0.4 -> opacity 传入数字
+    registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
+  } else if (isArray(styleFloat) && styleFloat.length === 2) {
+    if (isString(styleFloat[0]) && isFunction(styleFloat[1])) {
+      // opacity = ['string', callback]
+      registerStyleAttribute(fieldName, layer, styleFloat[0], styleFloat[1]);
+    } else if (
+      isString(styleFloat[0]) &&
+      isArray(styleFloat[1]) &&
+      isNumber(styleFloat[1][0]) &&
+      isNumber(styleFloat[1][1])
+    ) {
+      // opacity = ['string', [start: number, end: nuber]]
+      registerStyleAttribute(fieldName, layer, styleFloat[0], styleFloat[1]);
+    } else {
+      registerStyleAttribute(fieldName, layer, [1.0], undefined);
+    }
+  } else {
+    registerStyleAttribute(fieldName, layer, [1.0], undefined);
+  }
+}
+
+function handleStyleOffsets(
   fieldName: string,
   layer: ILayer,
-  strokeOpacity: any,
+  styleOffsets: any,
 ) {
-  handleStyleOpacity(fieldName, layer, strokeOpacity);
+  if (isString(styleOffsets)) {
+    // 字符串
+    registerStyleAttribute(fieldName, layer, styleOffsets, (value: any) => {
+      return value;
+    });
+  } else if (
+    isArray(styleOffsets) &&
+    styleOffsets.length === 2 &&
+    isString(styleOffsets[0]) &&
+    isFunction(styleOffsets[1])
+  ) {
+    // callback
+    registerStyleAttribute(fieldName, layer, styleOffsets[0], styleOffsets[1]);
+  } else if (
+    isArray(styleOffsets) &&
+    styleOffsets.length === 2 &&
+    isNumber(styleOffsets[0]) &&
+    isNumber(styleOffsets[1])
+  ) {
+    // normal
+    registerStyleAttribute(fieldName, layer, styleOffsets, undefined);
+  } else {
+    registerStyleAttribute(fieldName, layer, [0, 0], undefined);
+  }
+}
+
+/**
+ * 根据传入参数 stroke / color 的类型和值做相应的操作
+ * @param fieldName
+ * @param layer
+ * @param styleColor
+ */
+function handleStyleColor(fieldName: string, layer: ILayer, styleColor: any) {
+  if (isString(styleColor)) {
+    registerStyleAttribute(fieldName, layer, styleColor, undefined);
+  } else if (isArray(styleColor) && styleColor.length === 2) {
+    if (isString(styleColor[0]) && isFunction(styleColor[1])) {
+      registerStyleAttribute(fieldName, layer, styleColor[0], styleColor[1]);
+    } else if (
+      isString(styleColor[0]) &&
+      isArray(styleColor[1]) &&
+      styleColor[1].length > 0
+    ) {
+      registerStyleAttribute(fieldName, layer, styleColor[0], styleColor[1]);
+    } else {
+      registerStyleAttribute(fieldName, layer, '#fff', undefined);
+    }
+  } else {
+    registerStyleAttribute(fieldName, layer, '#fff', undefined);
+  }
 }
 
 /**
@@ -113,7 +198,47 @@ function getUvPosition(
 
 /**
  * 1、根据输入的 field 字段从 originData 中取值 （style 样式用于数据映射的值）
- * 2、根据输入的 heightCount 以及默认的 WIDTH 为纹理对象提供数据
+ * 2、根据输入的 heightCount 以及默认的 WIDTH 为纹理对象提供数据 (float)
+ * 3、根据输入的 createTexture2D 构建纹理对象
+ * 4、存储
+ * @param heightCount
+ * @param createTexture2D
+ * @param originData
+ * @param field
+ * @returns
+ */
+function initTextureFloatData(
+  heightCount: number,
+  createTexture2D: any,
+  originData: any,
+  field: string,
+): ITexture2D {
+  const d = [];
+
+  for (let i = 0; i < WIDTH * heightCount; i++) {
+    if (originData[i] && originData[i][field]) {
+      const v = originData[i][field];
+      d.push(v);
+    } else {
+      d.push(0);
+    }
+  }
+
+  const texture = createTexture2D({
+    flipY: true,
+    data: d,
+    format: gl.LUMINANCE,
+    type: gl.FLOAT,
+    width: WIDTH,
+    height: heightCount,
+  });
+
+  return texture;
+}
+
+/**
+ * 1、根据输入的 field 字段从 originData 中取值 （style 样式用于数据映射的值）
+ * 2、根据输入的 heightCount 以及默认的 WIDTH 为纹理对象提供数据 (color)
  * 3、根据输入的 createTexture2D 构建纹理对象
  * @param heightCount
  * @param createTexture2D
@@ -121,7 +246,7 @@ function getUvPosition(
  * @param field
  * @returns
  */
-function initTextureData(
+function initTextureVec4Data(
   heightCount: number,
   createTexture2D: any,
   originData: any,
@@ -130,8 +255,8 @@ function initTextureData(
   const d = [];
   for (let i = 0; i < WIDTH * heightCount; i++) {
     if (originData[i] && originData[i][field]) {
-      const v = originData[i][field] * 255;
-      d.push(v, v, v, v);
+      const [r, g, b, a] = rgb2arr(originData[i][field]);
+      d.push(r * 255, g * 255, b * 255, a * 255);
     } else {
       d.push(0, 0, 0, 0);
     }
@@ -149,32 +274,12 @@ function initTextureData(
   return texture;
 }
 
-function initDefaultTextureData(
-  heightCount: number,
-  createTexture2D: any,
-): ITexture2D {
-  const d = [];
-  for (let i = 0; i < WIDTH * heightCount; i++) {
-    d.push(255, 255, 255, 255);
-  }
-  const arr = new Uint8ClampedArray(d);
-  const imageData = new ImageData(arr, WIDTH, heightCount); // (arr, width, height)
-
-  const texture = createTexture2D({
-    flipY: true,
-    data: new Uint8Array(imageData.data),
-    width: imageData.width,
-    height: imageData.height,
-  });
-
-  return texture;
-}
-
 export {
-  handleStyleOpacity,
-  handleStyleStrokeOpacity,
+  handleStyleDataMapping,
+  handleStyleFloat,
   getSize,
   getUvPosition,
-  initTextureData,
-  initDefaultTextureData,
+  initTextureFloatData,
+  initTextureVec4Data,
+  handleStyleColor,
 };

@@ -91,25 +91,25 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         },
       },
     });
-    styleAttributeService.registerStyleAttribute({
-      name: 'strokeOpacity',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_stroke_opacity',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
-          const { strokeOpacity } = feature;
-          // console.log('feature', feature)
-          // console.log('strokeOpacity', strokeOpacity)
-          return !isNumber(strokeOpacity) ? [1.0] : [strokeOpacity];
-        },
-      },
-    });
+    // styleAttributeService.registerStyleAttribute({
+    //   name: 'strokeOpacity',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_stroke_opacity',
+    //     buffer: {
+    //       // give the WebGL driver a hint that this buffer may change
+    //       usage: gl.DYNAMIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 1,
+    //     update: (feature: IEncodeFeature, featureIdx: number) => {
+    //       const { strokeOpacity } = feature;
+    //       // console.log('feature', feature)
+    //       // console.log('strokeOpacity', strokeOpacity)
+    //       return !isNumber(strokeOpacity) ? [1.0] : [strokeOpacity];
+    //     },
+    //   },
+    // });
   }
 }
