@@ -1010,12 +1010,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],
   ) {
-    // console.log({
-    //   values: isFunction(valuesOrCallback)
-    //     ? undefined
-    //     : valuesOrCallback || defaultValues,
-    //   callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
-    // })
     return {
       values: isFunction(valuesOrCallback)
         ? undefined

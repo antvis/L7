@@ -39,6 +39,11 @@ function registerStyleAttribute(
   layer.updateStyleAttribute(fieldName, field, values, updateOptions);
 }
 
+/**
+ * 当样式发生变化时判断是否需要进行数据映射
+ * @param configToUpdate
+ * @param layer
+ */
 function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
   if (configToUpdate.opacity) {
     // 处理 style 中 opacity 属性的数据映射
@@ -64,12 +69,13 @@ function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
   }
 
   if (configToUpdate.offsets) {
+    // 处理 style 中 offsets 属性的数据映射
     handleStyleOffsets('offsets', layer, configToUpdate.offsets);
   }
 }
 
 /**
- * 根据传入参数 opacity 的类型和值做相应的操作
+ * 根据传入参数 float 的类型和值做相应的操作
  */
 function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
   if (isString(styleFloat)) {
@@ -99,7 +105,12 @@ function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
     registerStyleAttribute(fieldName, layer, [1.0], undefined);
   }
 }
-
+/**
+ * 根据传入参数 offsets 的类型和值做相应的操作
+ * @param fieldName
+ * @param layer
+ * @param styleOffsets
+ */
 function handleStyleOffsets(
   fieldName: string,
   layer: ILayer,
@@ -157,129 +168,4 @@ function handleStyleColor(fieldName: string, layer: ILayer, styleColor: any) {
   }
 }
 
-/**
- * 根据输入的 feature 的长度以及默认的宽度计算画布的大小
- * @param encodeDatalength
- * @returns
- */
-function getSize(encodeDatalength: number) {
-  const width = WIDTH;
-  const height = Math.ceil(encodeDatalength / width);
-  return { width, height };
-}
-
-/**
- * 根据输入的宽高边距信息，为需要为 index 的 feature 计算在画布上对应的 uv 值
- * @param widthStep
- * @param widthStart
- * @param heightStep
- * @param heightStart
- * @param id
- * @returns
- */
-function getUvPosition(
-  widthStep: number,
-  widthStart: number,
-  heightStep: number,
-  heightStart: number,
-  index: number,
-) {
-  // index 从零开始
-  const row = Math.ceil((index + 1) / WIDTH); // 当前 index 所在的行
-  let column = (index + 1) % WIDTH;
-  if (column === 0) {
-    // 取余等于零
-    column = WIDTH;
-  }
-  const u = widthStart + (column - 1) * widthStep;
-  const v = 1 - (heightStart + (row - 1) * heightStep);
-  return [u, v];
-}
-
-/**
- * 1、根据输入的 field 字段从 originData 中取值 （style 样式用于数据映射的值）
- * 2、根据输入的 heightCount 以及默认的 WIDTH 为纹理对象提供数据 (float)
- * 3、根据输入的 createTexture2D 构建纹理对象
- * 4、存储
- * @param heightCount
- * @param createTexture2D
- * @param originData
- * @param field
- * @returns
- */
-function initTextureFloatData(
-  heightCount: number,
-  createTexture2D: any,
-  originData: any,
-  field: string,
-): ITexture2D {
-  const d = [];
-
-  for (let i = 0; i < WIDTH * heightCount; i++) {
-    if (originData[i] && originData[i][field]) {
-      const v = originData[i][field];
-      d.push(v);
-    } else {
-      d.push(0);
-    }
-  }
-
-  const texture = createTexture2D({
-    flipY: true,
-    data: d,
-    format: gl.LUMINANCE,
-    type: gl.FLOAT,
-    width: WIDTH,
-    height: heightCount,
-  });
-
-  return texture;
-}
-
-/**
- * 1、根据输入的 field 字段从 originData 中取值 （style 样式用于数据映射的值）
- * 2、根据输入的 heightCount 以及默认的 WIDTH 为纹理对象提供数据 (color)
- * 3、根据输入的 createTexture2D 构建纹理对象
- * @param heightCount
- * @param createTexture2D
- * @param originData
- * @param field
- * @returns
- */
-function initTextureVec4Data(
-  heightCount: number,
-  createTexture2D: any,
-  originData: any,
-  field: string,
-): ITexture2D {
-  const d = [];
-  for (let i = 0; i < WIDTH * heightCount; i++) {
-    if (originData[i] && originData[i][field]) {
-      const [r, g, b, a] = rgb2arr(originData[i][field]);
-      d.push(r * 255, g * 255, b * 255, a * 255);
-    } else {
-      d.push(0, 0, 0, 0);
-    }
-  }
-  const arr = new Uint8ClampedArray(d);
-  const imageData = new ImageData(arr, WIDTH, heightCount); // (arr, width, height)
-
-  const texture = createTexture2D({
-    flipY: true,
-    data: new Uint8Array(imageData.data),
-    width: imageData.width,
-    height: imageData.height,
-  });
-
-  return texture;
-}
-
-export {
-  handleStyleDataMapping,
-  handleStyleFloat,
-  getSize,
-  getUvPosition,
-  initTextureFloatData,
-  initTextureVec4Data,
-  handleStyleColor,
-};
+export { handleStyleDataMapping, handleStyleFloat, handleStyleColor };

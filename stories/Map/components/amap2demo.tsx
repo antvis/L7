@@ -90,9 +90,9 @@ export default class Amap2demo extends React.Component {
               .size(10)
               .style({
                 opacity: 'customOpacity',
-                strokeOpacity: 'customStrokeOpacity',
-                strokeWidth: 'customStrokeWidth',
-                stroke: 'customStroke',
+                // strokeOpacity: 'customStrokeOpacity',
+                // strokeWidth: 'customStrokeWidth',
+                // stroke: 'customStroke',
               });
             scene.addLayer(layer);
           });
@@ -114,7 +114,7 @@ export default class Amap2demo extends React.Component {
         //   .style({
         //     // stroke: '#000',
         //     // stroke: 'rgba(0, 255, 0, 1)',
-        //     // stroke: 'strokeColor',
+        //     stroke: 'strokeColor',
         //     // stroke: ['strokeColor', (d: any) => {
         //     //   return d
         //     // }],
@@ -123,9 +123,9 @@ export default class Amap2demo extends React.Component {
         //     // strokeWidth: 4,
         //     // strokeWidth: "strokeWidth",
         //     // strokeWidth: ["strokeWidth", [1, 2]],
-        //     // strokeWidth: ["strokeWidth", (d: any) => {
-        //     //   return d * 2
-        //     // }],
+        //     strokeWidth: ["strokeWidth", (d: any) => {
+        //       return d * 2
+        //     }],
 
         //     // strokeOpacity: 0.5,
         //     // strokeOpacity: 'strokeOpacity2',
@@ -140,10 +140,10 @@ export default class Amap2demo extends React.Component {
         //     // strokeOpacity: ['opacity2', [0.2, 0.6]],
 
         //     // offsets: [100, 100],
-        //     // offsets: 'offsets2',
+        //     offsets: 'offsets2',
         //     // offsets: ['offsets2', (d: any) => d],
 
-        //     // opacity: 'opacity2',
+        //     opacity: 'opacity2',
         //     // opacity: 0.2
         //     // opacity: 0,
         //     // opacity: ['opacity2', (d: any) => {

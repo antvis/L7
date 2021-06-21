@@ -6,7 +6,7 @@ attribute float a_Shape;
 
 attribute float a_vertexId;
 uniform mat4 u_cellTypeLayout;
-uniform sampler2D u_testTexture;
+uniform sampler2D u_dataTexture;
 varying mat4 styleMappingMat;
 
 uniform mat4 u_ModelMatrix;
@@ -49,7 +49,7 @@ vec2 nextPos(float currentRow, float currentColumn, float columnCount, float nex
 float pos2value(vec2 pos, float columnWidth, float rowHeight) {
   float u = (pos.r - 1.0) * columnWidth + columnWidth/2.0;
   float v = 1.0 - ((pos.g - 1.0) * rowHeight + rowHeight/2.0);
-  return texture2D(u_testTexture, vec2(u, v)).r;
+  return texture2D(u_dataTexture, vec2(u, v)).r;
 }
 
 bool hasOpacity() { // 判断 cell 中是否存在 opacity 的数据

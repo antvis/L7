@@ -24,17 +24,13 @@ import {
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
+import { isColor, rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
-import { getSize } from '../utils/dataMappingStyle';
-
-interface IDataLayout {
-  widthCount: number;
-  heightCount: number;
-  widthStep: number;
-  widthStart: number;
-  heightStep: number;
-  heightStart: number;
+interface ICellProperty {
+  attr: string;
+  count: number;
 }
+
 export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel {
   public triangulation: Triangulation;
@@ -43,17 +39,22 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public createTexture2D: (
     options: ITexture2DInitializationOptions,
   ) => ITexture2D;
-  public dataLayout: IDataLayout = {
-    // 默认值
-    widthCount: 1024,
-    heightCount: 1,
-    widthStep: 1 / 1024,
-    widthStart: 1 / 2048,
-    heightStep: 1,
-    heightStart: 0.5,
-  };
 
   protected layer: ILayer;
+  protected DATA_TEXTURE_WIDTH: number; // 默认有多少列（宽度）
+  protected rowCount: number; // 计算得到的当前数据纹理有多少行（高度）
+  protected curretnOpacity: any = ''; // 当前的 opacity 值
+  protected curretnStrokeOpacity: any = ''; // 当前的 strokeOpacity 值
+  protected currentStrokeColor: any = ''; // 当前的 strokeColor 值
+  protected currentStrokeWidth: any = ''; // 当前的 strokeWidth 值
+  protected currentOffsets: any = ''; // 当前的 strokeOffsets 值
+  protected cellLength: number; // 单个 cell 的长度
+  protected cellProperties: ICellProperty[]; // 需要进行数据映射的属性集合
+  protected hasOpacity: number = 0;
+  protected hasStrokeOpacity: number = 0;
+  protected hasStrokeWidth: number = 0;
+  protected hasStroke: number = 0;
+  protected hasOffsets: number = 0;
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -75,10 +76,6 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected cameraService: ICameraService;
   protected layerService: ILayerService;
 
-  protected opacityTexture: ITexture2D;
-  protected strokeOpacityTexture: ITexture2D;
-  protected strokeTexture: ITexture2D;
-  protected strokeWidthTexture: ITexture2D;
   // style texture data mapping
 
   constructor(layer: ILayer) {
@@ -110,24 +107,100 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
 
     const { createTexture2D } = this.rendererService;
     this.createTexture2D = createTexture2D;
-    // 根据数据长度构建样式数据映射到纹理上时需要到布局数值 为纹理贴图映射样式数据做准备工作
-    this.initEncodeDataLayout(this.layer.getEncodedData().length);
+    this.DATA_TEXTURE_WIDTH = 1024; // 数据纹理固定宽度
+    this.rowCount = 1;
+    this.cellLength = 0;
+    this.cellProperties = [];
+  }
+
+  // style datatexture mapping
+
+  /**
+   * 补空位
+   * @param d
+   * @param count
+   */
+  public patchMod(d: number[], count: number) {
+    for (let i = 0; i < count; i++) {
+      d.push(-1);
+    }
   }
 
   /**
-   * 根据数据长度构建样式数据映射到纹理上时需要到布局数值
-   * @param dataLength
+   * 根据映射的数据字段往推入数据
+   * @param d
+   * @param cellData
+   * @param cellPropertiesLayouts
    */
-  public initEncodeDataLayout(dataLength: number) {
-    const { width: widthCount, height: heightCount } = getSize(dataLength);
-    this.dataLayout.widthCount = widthCount;
-    this.dataLayout.heightCount = heightCount;
+  public patchData(d: number[], cellData: any, cellPropertiesLayouts: any) {
+    for (const layout of cellPropertiesLayouts) {
+      const { attr, count } = layout;
+      if (!cellData) {
+        if (attr === 'stroke') {
+          d.push(-1, -1, -1, -1);
+        } else if (attr === 'offsets') {
+          d.push(-1, -1);
+        } else {
+          d.push(-1);
+        }
+      } else {
+        const value = cellData[attr];
 
-    this.dataLayout.widthStep = 1 / widthCount;
-    this.dataLayout.widthStart = this.dataLayout.widthStep / 2;
-    this.dataLayout.heightStep = 1 / heightCount;
-    this.dataLayout.heightStart = this.dataLayout.heightStep / 2;
+        if (value) {
+          // 数据中存在该属性
+          if (attr === 'stroke') {
+            d.push(...rgb2arr(value));
+          } else if (attr === 'offsets') {
+            // d.push(...value)
+            d.push(-value[0], value[1]);
+          } else {
+            d.push(value);
+          }
+        } else {
+          // 若不存在时则补位
+          this.patchMod(d, count);
+        }
+      }
+    }
   }
+
+  /**
+   * 计算推入数据纹理的数据
+   * @param cellLength
+   * @param encodeData
+   * @param cellPropertiesLayouts
+   * @returns
+   */
+  public calDataFrame(
+    cellLength: number,
+    encodeData: any,
+    cellPropertiesLayouts: any,
+  ): any {
+    if (cellLength > this.DATA_TEXTURE_WIDTH) {
+      // console.log('failed');
+      return false;
+    }
+
+    const encodeDatalength = encodeData.length;
+    const rowCount = Math.ceil(
+      (encodeDatalength * cellLength) / this.DATA_TEXTURE_WIDTH,
+    ); // 有多少行
+
+    const totalLength = rowCount * this.DATA_TEXTURE_WIDTH;
+    const d: number[] = [];
+    for (let i = 0; i < encodeDatalength; i++) {
+      // 根据 encodeData 数据推入数据
+      const cellData = encodeData[i];
+      this.patchData(d, cellData, cellPropertiesLayouts);
+    }
+    for (let i = d.length; i < totalLength; i++) {
+      // 每行不足的部分用 -1 补足（数据纹理时 width * height 的矩形数据集合）
+      d.push(-1);
+    }
+    return { data: d, width: this.DATA_TEXTURE_WIDTH, height: rowCount };
+  }
+
+  // style datatexture mapping
 
   public getBlend(): IBlendOptions {
     const { blend = 'normal' } = this.layer.getLayerConfig();

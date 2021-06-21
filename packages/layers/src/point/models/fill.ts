@@ -17,12 +17,6 @@ import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
 import { isArray, isNumber, isString } from 'lodash';
-import {
-  getSize,
-  getUvPosition,
-  initTextureFloatData,
-  initTextureVec4Data,
-} from '../../utils/dataMappingStyle';
 interface IPointLayerStyleOptions {
   opacity: any;
   strokeWidth: number;
@@ -30,115 +24,10 @@ interface IPointLayerStyleOptions {
   strokeOpacity: number;
   offsets: [number, number];
 }
-
-// 用于判断 opacity 的值是否发生该改变
-const curretnOpacity: any = '';
-const curretnStrokeOpacity: any = '';
-const currentStrokeColor: any = '';
-const currentStrokeWidth: any = '';
-
-let testTexture = true;
-
-const cellPropertiesLayout = [
-  { attr: 'opacity', flag: true, count: 1 },
-  { attr: 'strokeOpacity', flag: true, count: 1 },
-  { attr: 'strokeWidth', flag: true, count: 1 },
-  { attr: 'stroke', flag: true, count: 4 },
-];
-
-const WIDTH = 1024; // 数据纹理的固定长度
-// let WIDTH = 10
-let calHeight = 1;
-/**
- * 根据映射的数据字段往推入数据
- * @param d
- * @param cellData
- * @param cellPropertiesLayouts
- */
-function patchData(d: number[], cellData: any, cellPropertiesLayouts: any) {
-  for (const layout of cellPropertiesLayouts) {
-    const { attr, count } = layout;
-    if (!cellData) {
-      if (attr === 'stroke') {
-        d.push(-1, -1, -1, -1);
-      } else if (attr === 'offsets') {
-        d.push(-1, -1);
-      } else {
-        d.push(-1);
-      }
-    } else {
-      const value = cellData[attr];
-
-      if (value) {
-        // 数据中存在该属性
-        if (attr === 'stroke') {
-          d.push(...rgb2arr(value));
-        } else if (attr === 'offsets') {
-          // d.push(...value)
-          d.push(-value[0], value[1]);
-        } else {
-          d.push(value);
-        }
-      } else {
-        // 若不存在时则补位
-        patchMod(d, count);
-      }
-    }
-  }
-}
-/**
- * 补空位
- * @param d
- * @param count
- */
-function patchMod(d: number[], count: number) {
-  for (let i = 0; i < count; i++) {
-    d.push(-1);
-  }
-}
-/**
- * 计算推入数据纹理的数据
- * @param cellLength
- * @param encodeData
- * @param cellPropertiesLayouts
- * @returns
- */
-function calDataFrame(
-  cellLength: number,
-  encodeData: any,
-  cellPropertiesLayouts: any,
-): any {
-  if (cellLength > WIDTH) {
-    // console.log('failed');
-    return false;
-  }
-
-  const encodeDatalength = encodeData.length;
-  // WIDTH 行数固定
-  const rowCount = Math.ceil((encodeDatalength * cellLength) / WIDTH); // 有多少行
-
-  const totalLength = rowCount * WIDTH;
-  const d: number[] = [];
-  for (let i = 0; i < encodeDatalength; i++) {
-    // 根据 encodeData 数据推入数据
-    const cellData = encodeData[i];
-    patchData(d, cellData, cellPropertiesLayouts);
-  }
-  for (let i = d.length; i < totalLength; i++) {
-    // 每行不足的部分用 -1 补足（数据纹理时 width * height 的矩形数据集合）
-    d.push(-1);
-  }
-  // console.log(d, rowCount)
-  return { data: d, width: WIDTH, height: rowCount };
-}
 // 判断当前使用的 style 中的变量属性是否需要进行数据映射
-let hasOpacity = 0;
-let hasStrokeOpacity = 0;
-let hasStrokeWidth = 0;
-let hasStroke = 0;
-let hasOffsets = 0;
+
 export default class FillModel extends BaseModel {
-  protected testDataTexture: ITexture2D;
+  protected dataTexture: ITexture2D;
 
   /**
    * 判断 offsets 是否是常量
@@ -158,100 +47,133 @@ export default class FillModel extends BaseModel {
     }
   }
 
-  public isColorStatic(stroke: any) {
-    if (
-      isArray(stroke) &&
-      stroke.length === 4 &&
-      isNumber(stroke[0]) &&
-      isNumber(stroke[1]) &&
-      isNumber(stroke[2]) &&
-      isNumber(stroke[3])
-    ) {
-      return true;
-    } else {
-      return false;
+  /**
+   * 判断数据纹理是否需要重新计算 - 每一个layer 对象需要进行判断的条件都不一样，所以需要单独实现
+   * @param opacity
+   * @param strokeOpacity
+   * @param strokeWidth
+   * @param stroke
+   * @param offsets
+   * @returns
+   */
+  public isDataTextureUpdate(
+    opacity: any,
+    strokeOpacity: any,
+    strokeWidth: any,
+    stroke: any,
+    offsets: any,
+  ) {
+    let isUpdate = false;
+    if (this.curretnOpacity !== JSON.stringify(opacity)) {
+      // 判断 opacity 是否发生改变
+      isUpdate = true;
+      this.curretnOpacity = JSON.stringify(opacity);
     }
+    if (this.curretnStrokeOpacity !== JSON.stringify(strokeOpacity)) {
+      // 判断 strokeOpacity 是否发生改变
+      isUpdate = true;
+      this.curretnStrokeOpacity = JSON.stringify(strokeOpacity);
+    }
+    if (this.currentStrokeWidth !== JSON.stringify(strokeWidth)) {
+      // 判断 strokeWidth 是否发生改变
+      isUpdate = true;
+      this.currentStrokeWidth = JSON.stringify(strokeWidth);
+    }
+    if (this.currentStrokeColor !== JSON.stringify(stroke)) {
+      // 判断 stroke 是否发生改变
+      isUpdate = true;
+      this.currentStrokeColor = JSON.stringify(stroke);
+    }
+    if (this.currentOffsets !== JSON.stringify(offsets)) {
+      // 判断 offsets 是否发生改变
+      isUpdate = true;
+      this.currentOffsets = JSON.stringify(offsets);
+    }
+    if (this.dataTexture === undefined) {
+      isUpdate = true;
+    }
+    return isUpdate;
+  }
+
+  /**
+   * 清除上一次的计算结果 - 每一个layer 对象需要进行清除的内容都不一样，所以需要单独实现
+   */
+  public clearLastCalRes() {
+    this.cellProperties = []; // 清空上一次计算的需要进行数据映射的属性集合
+    this.cellLength = 0; // 清空上一次计算的 cell 的长度
+    this.hasOpacity = 0; // 清空上一次是否需要对 opacity 属性进行数据映射的判断
+    this.hasStrokeOpacity = 0; // 清空上一次是否需要对 strokeOpacity 属性进行数据映射的判断
+    this.hasStrokeWidth = 0; // 清空上一次是否需要对 strokeWidth 属性进行数据映射的判断
+    this.hasStroke = 0; // 清空上一次是否需要对 stroke 属性进行数据映射的判断
+    this.hasOffsets = 0; // 清空上一次是否需要对 offsets 属性进行数据映射的判断
   }
 
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
       strokeOpacity = 1,
-      strokeWidth = 2,
-      stroke = [0, 0, 0, 0],
+      strokeWidth = 0,
+      stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    if (testTexture) {
-      const cellProperties = []; // cell 的布局
-      let cellLength = 0; // cell 的长度
+    if (
+      this.isDataTextureUpdate(
+        opacity,
+        strokeOpacity,
+        strokeWidth,
+        stroke,
+        offsets,
+      )
+    ) {
+      this.clearLastCalRes(); // 清除上一次的计算结果
 
-      if (!isNumber(opacity) && opacity !== undefined) {
+      if (!isNumber(opacity)) {
         // 数据映射
-        cellProperties.push({ attr: 'opacity', flag: true, count: 1 });
-        hasOpacity = 1;
-        cellLength += 1;
-      } else {
-        // 常量
-        hasOpacity = 0;
+        this.cellProperties.push({ attr: 'opacity', count: 1 });
+        this.hasOpacity = 1;
+        this.cellLength += 1;
       }
 
-      if (!isNumber(strokeOpacity) && strokeOpacity !== undefined) {
+      if (!isNumber(strokeOpacity)) {
         // 数据映射
-        cellProperties.push({ attr: 'strokeOpacity', flag: true, count: 1 });
-        hasStrokeOpacity = 1;
-        cellLength += 1;
-      } else {
-        // 常量
-        hasStrokeOpacity = 0;
+        this.cellProperties.push({ attr: 'strokeOpacity', count: 1 });
+        this.hasStrokeOpacity = 1;
+        this.cellLength += 1;
       }
 
-      if (!isNumber(strokeWidth) && strokeWidth !== undefined) {
+      if (!isNumber(strokeWidth)) {
         // 数据映射
-        cellProperties.push({ attr: 'strokeWidth', flag: true, count: 1 });
-        hasStrokeWidth = 1;
-        cellLength += 1;
-      } else {
-        // 常量
-        hasStrokeWidth = 0;
+        this.cellProperties.push({ attr: 'strokeWidth', count: 1 });
+        this.hasStrokeWidth = 1;
+        this.cellLength += 1;
       }
-      // console.log('stroke', stroke);
-      // if((!isString(stroke) || !isColor(stroke)) && stroke !== undefined) { // 数据映射
-      if (!this.isColorStatic(stroke)) {
+
+      if (!isColor(stroke)) {
         // 数据映射
-        cellProperties.push({ attr: 'stroke', flag: true, count: 4 });
-        cellLength += 4;
-        hasStroke = 1;
-      } else {
-        // 常量
-        hasStroke = 0;
+        this.cellProperties.push({ attr: 'stroke', count: 4 });
+        this.cellLength += 4;
+        this.hasStroke = 1;
       }
 
       if (!this.isOffsetStatic(offsets)) {
-        cellProperties.push({ attr: 'offsets', flag: true, count: 2 });
-        cellLength += 2;
-        hasOffsets = 1;
-      } else {
-        hasOffsets = 0;
+        // 数据映射
+        this.cellProperties.push({ attr: 'offsets', count: 2 });
+        this.cellLength += 2;
+        this.hasOffsets = 1;
       }
 
-      // console.log('cellProperties', cellProperties);
-      // console.log('cellLength', cellLength);
-      // console.log('hasStrokeOpacity', hasStrokeOpacity)
-      // console.log('hasStrokeWidth', hasStrokeWidth)
-
       const encodeData = this.layer.getEncodedData();
-      // console.log('encodeData', encodeData)
-      // let {data, width, height } = calDataFrame(cellLength, encodeData, cellPropertiesLayout)
-      if (cellLength > 0) {
-        const { data, width, height } = calDataFrame(
-          cellLength,
+      if (this.cellLength > 0) {
+        // 需要构建数据纹理
+        const { data, width, height } = this.calDataFrame(
+          this.cellLength,
           encodeData,
-          cellProperties,
+          this.cellProperties,
         );
-        calHeight = height;
+        this.rowCount = height; // 当前数据纹理有多少行
 
-        this.testDataTexture = this.createTexture2D({
+        this.dataTexture = this.createTexture2D({
           flipY: true,
           data,
           format: gl.LUMINANCE,
@@ -260,7 +182,8 @@ export default class FillModel extends BaseModel {
           height,
         });
       } else {
-        this.testDataTexture = this.createTexture2D({
+        // 不需要构建数据纹理 - 构建一个空纹理
+        this.dataTexture = this.createTexture2D({
           flipY: true,
           data: [1],
           format: gl.LUMINANCE,
@@ -269,27 +192,24 @@ export default class FillModel extends BaseModel {
           height: 1,
         });
       }
-
-      // console.log('strokeOpacity', strokeOpacity, isNumber(strokeOpacity)? strokeOpacity : 1.0)
-      testTexture = false;
     }
 
     return {
-      u_testTexture: this.testDataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
+      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: [
         // 传递样式数据映射信息 - 当前纹理大小以及有哪些字段需要映射
-        calHeight,
-        WIDTH,
-        0.0,
-        0.0, // rowCount columnCount - 几行几列
-        hasOpacity,
-        hasStrokeOpacity,
-        hasStrokeWidth,
-        hasStroke, // opacity strokeOpacity strokeWidth stroke
-        hasOffsets,
+        this.rowCount, // 数据纹理有几行
+        this.DATA_TEXTURE_WIDTH, // 数据纹理有几列
         0.0,
         0.0,
-        0.0, // offsets
+        this.hasOpacity, // cell 中是否存在 opacity
+        this.hasStrokeOpacity, // cell 中是否存在 strokeOpacity
+        this.hasStrokeWidth, // cell 中是否存在 strokeWidth
+        this.hasStroke, // cell 中是否存在 stroke
+        this.hasOffsets, // cell 中是否存在 offsets
+        0.0,
+        0.0,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -327,36 +247,6 @@ export default class FillModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-    // if(cellLength < 1) {
-    //   console.log('err')
-    // }
-    // let encodeData = this.layer.getEncodedData()
-
-    // dataFrameArr = []
-
-    // let mod = WIDTH%cellLength
-    // let rowCellCount = (WIDTH-mod)/cellLength
-    // let encodeDatalength = encodeData.length
-    // let heightCount = Math.ceil(encodeDatalength * cellLength / (WIDTH - mod))
-
-    // let heightStep = 1/heightCount
-    // let heightStart = heightStep/2
-    // let widthStart = (1/WIDTH)/2
-    // let widthStep = (1/WIDTH) * (cellLength - 1.0)
-
-    // for(let i = 0; i < heightCount; i++) { // 行
-    //   for(let j = 0; j < rowCellCount; j++) {
-
-    //     let startU = widthStart + widthStep * j
-    //     let startV = 1 - (heightStart + heightStep * i)
-    //     let endU = startU + widthStep
-    //     let endV = startV
-
-    //     dataFrameArr.push({ startU, startV, endU, endV })
-
-    //   }
-    // }
-    // console.log('dataFrameArr', dataFrameArr)
     return this.buildModels();
   }
 
