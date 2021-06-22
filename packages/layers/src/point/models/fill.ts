@@ -8,106 +8,23 @@ import {
   ILayerConfig,
   IModel,
   IModelUniform,
-  ITexture2D,
 } from '@antv/l7-core';
-import { isColor, rgb2arr } from '@antv/l7-utils';
-import BaseModel from '../../core/BaseModel';
+import { rgb2arr } from '@antv/l7-utils';
+import BaseModel, { styleColor, styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
-import { isArray, isNumber, isString } from 'lodash';
+import { isNumber, isString } from 'lodash';
 interface IPointLayerStyleOptions {
-  opacity: any;
-  strokeWidth: number;
-  stroke: string;
-  strokeOpacity: number;
-  offsets: [number, number];
+  opacity: styleSingle;
+  strokeWidth: styleSingle;
+  stroke: styleColor;
+  strokeOpacity: styleSingle;
+  offsets: styleOffset;
 }
 // 判断当前使用的 style 中的变量属性是否需要进行数据映射
-
 export default class FillModel extends BaseModel {
-  protected dataTexture: ITexture2D;
-
-  /**
-   * 判断 offsets 是否是常量
-   * @param offsets
-   * @returns
-   */
-  public isOffsetStatic(offsets: any) {
-    if (
-      isArray(offsets) &&
-      offsets.length === 2 &&
-      isNumber(offsets[0]) &&
-      isNumber(offsets[1])
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * 判断数据纹理是否需要重新计算 - 每一个layer 对象需要进行判断的条件都不一样，所以需要单独实现
-   * @param opacity
-   * @param strokeOpacity
-   * @param strokeWidth
-   * @param stroke
-   * @param offsets
-   * @returns
-   */
-  public isDataTextureUpdate(
-    opacity: any,
-    strokeOpacity: any,
-    strokeWidth: any,
-    stroke: any,
-    offsets: any,
-  ) {
-    let isUpdate = false;
-    if (this.curretnOpacity !== JSON.stringify(opacity)) {
-      // 判断 opacity 是否发生改变
-      isUpdate = true;
-      this.curretnOpacity = JSON.stringify(opacity);
-    }
-    if (this.curretnStrokeOpacity !== JSON.stringify(strokeOpacity)) {
-      // 判断 strokeOpacity 是否发生改变
-      isUpdate = true;
-      this.curretnStrokeOpacity = JSON.stringify(strokeOpacity);
-    }
-    if (this.currentStrokeWidth !== JSON.stringify(strokeWidth)) {
-      // 判断 strokeWidth 是否发生改变
-      isUpdate = true;
-      this.currentStrokeWidth = JSON.stringify(strokeWidth);
-    }
-    if (this.currentStrokeColor !== JSON.stringify(stroke)) {
-      // 判断 stroke 是否发生改变
-      isUpdate = true;
-      this.currentStrokeColor = JSON.stringify(stroke);
-    }
-    if (this.currentOffsets !== JSON.stringify(offsets)) {
-      // 判断 offsets 是否发生改变
-      isUpdate = true;
-      this.currentOffsets = JSON.stringify(offsets);
-    }
-    if (this.dataTexture === undefined) {
-      isUpdate = true;
-    }
-    return isUpdate;
-  }
-
-  /**
-   * 清除上一次的计算结果 - 每一个layer 对象需要进行清除的内容都不一样，所以需要单独实现
-   */
-  public clearLastCalRes() {
-    this.cellProperties = []; // 清空上一次计算的需要进行数据映射的属性集合
-    this.cellLength = 0; // 清空上一次计算的 cell 的长度
-    this.hasOpacity = 0; // 清空上一次是否需要对 opacity 属性进行数据映射的判断
-    this.hasStrokeOpacity = 0; // 清空上一次是否需要对 strokeOpacity 属性进行数据映射的判断
-    this.hasStrokeWidth = 0; // 清空上一次是否需要对 strokeWidth 属性进行数据映射的判断
-    this.hasStroke = 0; // 清空上一次是否需要对 stroke 属性进行数据映射的判断
-    this.hasOffsets = 0; // 清空上一次是否需要对 offsets 属性进行数据映射的判断
-  }
-
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -118,80 +35,42 @@ export default class FillModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
-      this.isDataTextureUpdate(
+      this.dataTextureNeedUpdate({
         opacity,
         strokeOpacity,
         strokeWidth,
         stroke,
         offsets,
-      )
+      })
     ) {
-      this.clearLastCalRes(); // 清除上一次的计算结果
-
-      if (!isNumber(opacity)) {
-        // 数据映射
-        this.cellProperties.push({ attr: 'opacity', count: 1 });
-        this.hasOpacity = 1;
-        this.cellLength += 1;
-      }
-
-      if (!isNumber(strokeOpacity)) {
-        // 数据映射
-        this.cellProperties.push({ attr: 'strokeOpacity', count: 1 });
-        this.hasStrokeOpacity = 1;
-        this.cellLength += 1;
-      }
-
-      if (!isNumber(strokeWidth)) {
-        // 数据映射
-        this.cellProperties.push({ attr: 'strokeWidth', count: 1 });
-        this.hasStrokeWidth = 1;
-        this.cellLength += 1;
-      }
-
-      if (!isColor(stroke)) {
-        // 数据映射
-        this.cellProperties.push({ attr: 'stroke', count: 4 });
-        this.cellLength += 4;
-        this.hasStroke = 1;
-      }
-
-      if (!this.isOffsetStatic(offsets)) {
-        // 数据映射
-        this.cellProperties.push({ attr: 'offsets', count: 2 });
-        this.cellLength += 2;
-        this.hasOffsets = 1;
-      }
+      // 判断当前的样式中哪些是需要进行数据映射的，哪些是常量，同时计算用于构建数据纹理的一些中间变量
+      this.judgeStyleAttributes({
+        opacity,
+        strokeOpacity,
+        strokeWidth,
+        stroke,
+        offsets,
+      });
 
       const encodeData = this.layer.getEncodedData();
-      if (this.cellLength > 0) {
-        // 需要构建数据纹理
-        const { data, width, height } = this.calDataFrame(
-          this.cellLength,
-          encodeData,
-          this.cellProperties,
-        );
-        this.rowCount = height; // 当前数据纹理有多少行
+      const { data, width, height } = this.calDataFrame(
+        this.cellLength,
+        encodeData,
+        this.cellProperties,
+      );
+      this.rowCount = height; // 当前数据纹理有多少行
 
-        this.dataTexture = this.createTexture2D({
-          flipY: true,
-          data,
-          format: gl.LUMINANCE,
-          type: gl.FLOAT,
-          width,
-          height,
-        });
-      } else {
-        // 不需要构建数据纹理 - 构建一个空纹理
-        this.dataTexture = this.createTexture2D({
-          flipY: true,
-          data: [1],
-          format: gl.LUMINANCE,
-          type: gl.FLOAT,
-          width: 1,
-          height: 1,
-        });
-      }
+      this.dataTexture =
+        this.cellLength > 0
+          ? this.createTexture2D({
+              flipY: true,
+              data,
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width,
+              height,
+            })
+          : this.defaultDataTexture;
     }
 
     return {
@@ -220,9 +99,11 @@ export default class FillModel extends BaseModel {
       u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
       u_stroke_color:
-        isString(stroke) && isColor(stroke) ? rgb2arr(stroke) : [0, 0, 0, 0],
+        isString(stroke) && this.isStaticColor(stroke)
+          ? rgb2arr(stroke)
+          : [0, 0, 0, 0],
       u_offsets: this.isOffsetStatic(offsets)
-        ? [-offsets[0], offsets[1]]
+        ? (offsets as [number, number])
         : [0, 0],
     };
   }
@@ -313,30 +194,6 @@ export default class FillModel extends BaseModel {
           const { size = 5 } = feature;
           // console.log('featureIdx', featureIdx, feature)
           return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
-    // vertex id 用于作为数据纹理取值的唯一编号
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'vertexId',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_vertexId',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [featureIdx];
         },
       },
     });

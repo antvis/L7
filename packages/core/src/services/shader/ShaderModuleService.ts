@@ -12,7 +12,7 @@ import pickingVert from '../../shaders/picking.vert.glsl';
 import project from '../../shaders/project.glsl';
 import projection from '../../shaders/projection.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
-// import styleTextureMapping_frag from '../../shaders/styleTextureMapping_frag.glsl'
+import styleMapping from '../../shaders/styleMapping.glsl';
 
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
@@ -34,7 +34,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('lighting', { vs: lighting, fs: '' });
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
-    // this.registerModule('styleTextureMapping_frag', { vs: '', fs: styleTextureMapping_frag });
+    this.registerModule('styleMapping', { vs: styleMapping, fs: '' });
   }
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {

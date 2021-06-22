@@ -1,10 +1,12 @@
 import {
   BlendType,
+  gl,
   IAnimateOption,
   IAttribute,
   IBlendOptions,
   ICameraService,
   IElements,
+  IEncodeFeature,
   IFontService,
   IGlobalConfigService,
   IIconService,
@@ -24,11 +26,32 @@ import {
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
-import { isColor, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
+import { color } from 'd3-color';
+import { isArray, isEqual, isFunction, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 interface ICellProperty {
   attr: string;
   count: number;
+}
+
+export type styleSingle =
+  | number
+  | string
+  | [string, (single: any) => number]
+  | [string, [number, number]];
+export type styleOffset =
+  | string
+  | [number, number]
+  | [string, (single: any) => number];
+export type styleColor =
+  | string
+  | [string, (single: any) => string]
+  | [string, [string, string]];
+export interface IDataTextureFrame {
+  data: number[];
+  width: number;
+  height: number;
 }
 
 export default class BaseModel<ChildLayerStyleOptions = {}>
@@ -41,13 +64,15 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   ) => ITexture2D;
 
   protected layer: ILayer;
+  protected defaultDataTexture: ITexture2D; // 默认的数据纹理
+  protected dataTexture: ITexture2D; // 用于数据传递的数据纹理
   protected DATA_TEXTURE_WIDTH: number; // 默认有多少列（宽度）
   protected rowCount: number; // 计算得到的当前数据纹理有多少行（高度）
-  protected curretnOpacity: any = ''; // 当前的 opacity 值
-  protected curretnStrokeOpacity: any = ''; // 当前的 strokeOpacity 值
-  protected currentStrokeColor: any = ''; // 当前的 strokeColor 值
-  protected currentStrokeWidth: any = ''; // 当前的 strokeWidth 值
-  protected currentOffsets: any = ''; // 当前的 strokeOffsets 值
+  protected curretnOpacity: styleSingle | undefined = undefined; // 当前的 opacity 值
+  protected curretnStrokeOpacity: styleSingle | undefined = undefined; // 当前的 strokeOpacity 值
+  protected currentStrokeColor: styleColor | undefined = undefined; // 当前的 strokeColor 值
+  protected currentStrokeWidth: styleSingle | undefined = undefined; // 当前的 strokeWidth 值
+  protected currentOffsets: styleOffset | undefined = undefined; // 当前的 strokeOffsets 值
   protected cellLength: number; // 单个 cell 的长度
   protected cellProperties: ICellProperty[]; // 需要进行数据映射的属性集合
   protected hasOpacity: number = 0;
@@ -111,9 +136,160 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.rowCount = 1;
     this.cellLength = 0;
     this.cellProperties = [];
+    this.defaultDataTexture = createTexture2D({
+      flipY: true,
+      data: [1],
+      format: gl.LUMINANCE,
+      type: gl.FLOAT,
+      width: 1,
+      height: 1,
+    });
   }
 
   // style datatexture mapping
+
+  /**
+   * 清除上一次的计算结果 - 全量清除
+   */
+  public clearLastCalRes() {
+    this.cellProperties = []; // 清空上一次计算的需要进行数据映射的属性集合
+    this.cellLength = 0; // 清空上一次计算的 cell 的长度
+    this.hasOpacity = 0; // 清空上一次是否需要对 opacity 属性进行数据映射的判断
+    this.hasStrokeOpacity = 0; // 清空上一次是否需要对 strokeOpacity 属性进行数据映射的判断
+    this.hasStrokeWidth = 0; // 清空上一次是否需要对 strokeWidth 属性进行数据映射的判断
+    this.hasStroke = 0; // 清空上一次是否需要对 stroke 属性进行数据映射的判断
+    this.hasOffsets = 0; // 清空上一次是否需要对 offsets 属性进行数据映射的判断
+  }
+
+  /**
+   * 判断数据纹理是否需要重新计算 - 根据传入的值进行判断
+   * @param options
+   * @returns
+   */
+  public dataTextureNeedUpdate(options: {
+    opacity?: styleSingle;
+    strokeOpacity?: styleSingle;
+    strokeWidth?: styleSingle;
+    stroke?: styleColor;
+    offsets?: styleOffset;
+  }): boolean {
+    let isUpdate = false;
+    if (!isEqual(options.opacity, this.curretnOpacity)) {
+      isUpdate = true;
+      this.curretnOpacity = options.opacity;
+    }
+    if (!isEqual(options.strokeOpacity, this.curretnStrokeOpacity)) {
+      isUpdate = true;
+      this.curretnStrokeOpacity = options.strokeOpacity;
+    }
+    if (!isEqual(options.strokeWidth, this.currentStrokeWidth)) {
+      isUpdate = true;
+      this.currentStrokeWidth = options.strokeWidth;
+    }
+    if (!isEqual(options.stroke, this.currentStrokeColor)) {
+      isUpdate = true;
+      this.currentStrokeColor = options.stroke;
+    }
+    if (!isEqual(options.offsets, this.currentOffsets)) {
+      isUpdate = true;
+      this.currentOffsets = options.offsets;
+    }
+    if (this.defaultDataTexture) {
+      isUpdate = true;
+    }
+    if (this.dataTexture === undefined) {
+      isUpdate = true;
+    }
+    return isUpdate;
+  }
+  /**
+   * 判断当前的样式中哪些是需要进行数据映射的，哪些是常量，同时计算用于构建数据纹理的一些中间变量
+   * @param options
+   */
+  public judgeStyleAttributes(options: {
+    opacity?: styleSingle;
+    strokeOpacity?: styleSingle;
+    strokeWidth?: styleSingle;
+    stroke?: styleColor;
+    offsets?: styleOffset;
+  }) {
+    this.clearLastCalRes(); // 清除上一次的计算结果 - 全量清除
+
+    if (options.opacity !== undefined && !isNumber(options.opacity)) {
+      // 数据映射
+      this.cellProperties.push({ attr: 'opacity', count: 1 });
+      this.hasOpacity = 1;
+      this.cellLength += 1;
+    }
+
+    if (
+      options.strokeOpacity !== undefined &&
+      !isNumber(options.strokeOpacity)
+    ) {
+      // 数据映射
+      this.cellProperties.push({ attr: 'strokeOpacity', count: 1 });
+      this.hasStrokeOpacity = 1;
+      this.cellLength += 1;
+    }
+
+    if (options.strokeWidth !== undefined && !isNumber(options.strokeWidth)) {
+      // 数据映射
+      this.cellProperties.push({ attr: 'strokeWidth', count: 1 });
+      this.hasStrokeWidth = 1;
+      this.cellLength += 1;
+    }
+
+    if (options.stroke !== undefined && !this.isStaticColor(options.stroke)) {
+      // 数据映射
+      this.cellProperties.push({ attr: 'stroke', count: 4 });
+      this.cellLength += 4;
+      this.hasStroke = 1;
+    }
+
+    if (
+      options.offsets !== undefined &&
+      !this.isOffsetStatic(options.offsets)
+    ) {
+      // 数据映射
+      this.cellProperties.push({ attr: 'offsets', count: 2 });
+      this.cellLength += 2;
+      this.hasOffsets = 1;
+    }
+  }
+
+  /**
+   * 判断变量 stroke 是否是常量值
+   * @param stroke
+   * @returns
+   */
+  public isStaticColor(stroke: styleColor): boolean {
+    if (isString(stroke)) {
+      if (color(stroke)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 判断 offsets 是否是常量
+   * @param offsets
+   * @returns
+   */
+  public isOffsetStatic(offsets: styleOffset) {
+    if (
+      isArray(offsets) &&
+      offsets.length === 2 &&
+      isNumber(offsets[0]) &&
+      isNumber(offsets[1])
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   /**
    * 补空位
@@ -132,34 +308,29 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @param cellData
    * @param cellPropertiesLayouts
    */
-  public patchData(d: number[], cellData: any, cellPropertiesLayouts: any) {
+  public patchData(
+    d: number[],
+    cellData: IEncodeFeature,
+    cellPropertiesLayouts: ICellProperty[],
+  ) {
     for (const layout of cellPropertiesLayouts) {
       const { attr, count } = layout;
-      if (!cellData) {
+
+      const value = cellData[attr];
+
+      if (value) {
+        // 数据中存在该属性
         if (attr === 'stroke') {
-          d.push(-1, -1, -1, -1);
+          d.push(...rgb2arr(value));
         } else if (attr === 'offsets') {
-          d.push(-1, -1);
+          // d.push(...value)
+          d.push(-value[0], value[1]);
         } else {
-          d.push(-1);
+          d.push(value);
         }
       } else {
-        const value = cellData[attr];
-
-        if (value) {
-          // 数据中存在该属性
-          if (attr === 'stroke') {
-            d.push(...rgb2arr(value));
-          } else if (attr === 'offsets') {
-            // d.push(...value)
-            d.push(-value[0], value[1]);
-          } else {
-            d.push(value);
-          }
-        } else {
-          // 若不存在时则补位
-          this.patchMod(d, count);
-        }
+        // 若不存在时则补位
+        this.patchMod(d, count);
       }
     }
   }
@@ -173,14 +344,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    */
   public calDataFrame(
     cellLength: number,
-    encodeData: any,
-    cellPropertiesLayouts: any,
-  ): any {
-    if (cellLength > this.DATA_TEXTURE_WIDTH) {
-      // console.log('failed');
-      return false;
-    }
-
+    encodeData: IEncodeFeature[],
+    cellPropertiesLayouts: ICellProperty[],
+  ): IDataTextureFrame {
     const encodeDatalength = encodeData.length;
     const rowCount = Math.ceil(
       (encodeDatalength * cellLength) / this.DATA_TEXTURE_WIDTH,

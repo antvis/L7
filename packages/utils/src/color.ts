@@ -15,10 +15,6 @@ export function rgb2arr(str: string) {
   return arr;
 }
 
-export function isColor(str: string) {
-  return d3.color(str);
-}
-
 export function decodePickingColor(color: Uint8Array): number {
   const i1 = color && color[0];
   const i2 = color && color[1];

@@ -91,25 +91,28 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         },
       },
     });
-    // styleAttributeService.registerStyleAttribute({
-    //   name: 'strokeOpacity',
-    //   type: AttributeType.Attribute,
-    //   descriptor: {
-    //     name: 'a_stroke_opacity',
-    //     buffer: {
-    //       // give the WebGL driver a hint that this buffer may change
-    //       usage: gl.DYNAMIC_DRAW,
-    //       data: [],
-    //       type: gl.FLOAT,
-    //     },
-    //     size: 1,
-    //     update: (feature: IEncodeFeature, featureIdx: number) => {
-    //       const { strokeOpacity } = feature;
-    //       // console.log('feature', feature)
-    //       // console.log('strokeOpacity', strokeOpacity)
-    //       return !isNumber(strokeOpacity) ? [1.0] : [strokeOpacity];
-    //     },
-    //   },
-    // });
+    styleAttributeService.registerStyleAttribute({
+      // 统一注册每个顶点的唯一编号（目前用于样式的数据映射计算使用）
+      name: 'vertexId',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_vertexId',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          return [featureIdx];
+        },
+      },
+    });
   }
 }
