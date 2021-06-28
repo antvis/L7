@@ -3,7 +3,7 @@ import { PointLayer, LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_arcLine3d extends React.Component {
+export default class Amap2demo_arcLine3dLinear extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -25,10 +25,10 @@ export default class Amap2demo_arcLine3d extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      scene.addImage(
-        'plane',
-        'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
-      );
+      // scene.addImage(
+      //   'plane',
+      //   'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
+      // );
       Promise.all([
         fetch(
           'https://gw.alipayobjects.com/os/basement_prod/dbd008f1-9189-461c-88aa-569357ffc07d.json',
@@ -84,45 +84,46 @@ export default class Amap2demo_arcLine3d extends React.Component {
             },
           })
           .color('#ff6b34')
-          .texture('plane')
+          // .texture('plane')
           .shape('arc3d')
           // .shape('arc')
-          .size(20)
+          .size(2)
           // .active(true)
           .animate({
-            duration: 10,
-            interval: 0.2,
-            trailLength: 0.05,
+            duration: 2,
+            interval: 2,
+            trailLength: 2,
           })
           .style({
-            textureBlend: 'replace',
-            lineTexture: true, // 开启线的贴图功能
-            iconStep: 10, // 设置贴图纹理的间距
-            opacity: 1,
-          });
-          
-
-          const flyLine2 = new LineLayer()
-          .source(flydata, {
-            parser: {
-              type: 'json',
-              coordinates: 'coord',
-            },
-          })
-          .color('#ff6b34')
-          .shape('arc3d')
-          // .shape('arc')
-          .size(1)
-          // .active(true)
-          .style({
-            lineType: 'dash',
-            dashArray: [5, 5],
+            // textureBlend: 'replace',
+            // lineTexture: true, // 开启线的贴图功能
+            // iconStep: 10, // 设置贴图纹理的间距
+            sourceColor: '#f00',
+            targetColor: '#0f0',
             opacity: 0.5
           });
+
+          // const flyLine2 = new LineLayer({blend: 'normal'})
+          // .source(flydata, {
+          //   parser: {
+          //     type: 'json',
+          //     coordinates: 'coord',
+          //   },
+          // })
+          // .color('#ff6b34')
+          // // .shape('arc3d')
+          // .shape('arc')
+          // .size(1)
+          // // .active(true)
+          // .style({
+          //   lineType: 'dash',
+          //   dashArray: [5, 5],
+          //   opacity: 0.5
+          // });
         scene.addLayer(worldLine);
         scene.addLayer(dotPoint);
-        scene.addLayer(flyLine2)
-        scene.addLayer(flyLine)
+        // scene.addLayer(flyLine2)
+        scene.addLayer(flyLine);
       });
     });
   }

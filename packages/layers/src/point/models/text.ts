@@ -10,7 +10,11 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { boundsContains, padBounds, rgb2arr } from '@antv/l7-utils';
-import BaseModel from '../../core/BaseModel';
+import BaseModel, {
+  styleColor,
+  styleOffset,
+  styleSingle,
+} from '../../core/BaseModel';
 import CollisionIndex from '../../utils/collision-index';
 import { calculteCentroid } from '../../utils/geo';
 import {
@@ -19,21 +23,22 @@ import {
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
+import { isNumber, isString } from 'lodash';
 import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
 interface IPointTextLayerStyleOptions {
-  opacity: number;
+  opacity: styleSingle;
+  strokeWidth: styleSingle;
+  stroke: styleColor;
+  textOffset: [number, number];
+
   textAnchor: anchorType;
   spacing: number;
   padding: [number, number];
-  stroke: string;
   halo: number;
   gamma: number;
-  strokeWidth: number;
-  strokeOpacity: number;
   fontWeight: string;
   fontFamily: string;
-  textOffset: [number, number];
   textAllowOverlap: boolean;
 }
 export function TextTriangulation(feature: IEncodeFeature) {
@@ -114,7 +119,6 @@ export default class TextModel extends BaseModel {
       opacity = 1.0,
       stroke = '#fff',
       strokeWidth = 0,
-      strokeOpacity = 1,
       textAnchor = 'center',
       textAllowOverlap = false,
       halo = 0.5,
@@ -129,15 +133,64 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
+
+    if (this.dataTextureTest &&
+      this.dataTextureNeedUpdate({
+        opacity,
+        strokeWidth,
+        stroke
+      })
+    ) {
+      this.judgeStyleAttributes({
+        opacity,
+        strokeWidth,
+        stroke
+      });
+
+      const encodeData = this.layer.getEncodedData();
+      const { data, width, height } = this.calDataFrame(
+        this.cellLength,
+        encodeData,
+        this.cellProperties,
+      );
+      this.rowCount = height; // 当前数据纹理有多少行
+
+      this.dataTexture =
+        this.cellLength > 0
+          ? this.createTexture2D({
+              flipY: true,
+              data,
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width,
+              height,
+            })
+          : this.createTexture2D({
+            flipY: true,
+            data: [1],
+            format: gl.LUMINANCE,
+            type: gl.FLOAT,
+            width: 1,
+            height: 1,
+          })
+    }
+
     return {
-      u_opacity: opacity,
-      u_stroke_opacity: strokeOpacity,
+      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
+      u_cellTypeLayout: this.getCellTypeLayout(),
+      
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_stroke_color:
+        isString(stroke) && this.isStaticColor(stroke)
+          ? rgb2arr(stroke)
+          : [0, 0, 0, 0],
+
       u_sdf_map: this.texture,
-      u_stroke: rgb2arr(stroke),
       u_halo_blur: halo,
       u_gamma_scale: gamma,
       u_sdf_map_size: [canvas.width, canvas.height],
-      u_strokeWidth: strokeWidth,
+      
     };
   }
 
@@ -159,6 +212,7 @@ export default class TextModel extends BaseModel {
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
+    this.reBuildModel()
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointText',
@@ -233,6 +287,7 @@ export default class TextModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
+          // console.log([vertex[5], vertex[6]])
           return [vertex[5], vertex[6]];
         },
       },
@@ -353,11 +408,12 @@ export default class TextModel extends BaseModel {
     const {
       spacing = 2,
       textAnchor = 'center',
-      textOffset,
+      // textOffset,
     } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
     const data = this.layer.getEncodedData();
+
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '', id, size = 1 } = feature;
+      const { shape = '', id, size = 1, textOffset = [0, 0] } = feature;
 
       const shaping = shapeText(
         shape.toString(),

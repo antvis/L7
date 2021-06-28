@@ -1,6 +1,6 @@
 // @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLine_greatCircle extends React.Component {
@@ -46,6 +46,7 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
               lat1: 37.71859032558816,
               lng2: 123.3984375,
               lat2: 39.639537564366684,
+              testOpacity: 0.5
             },
           ],
           {
@@ -63,7 +64,7 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
         .color('#ff0000')
         .texture('02')
         .style({
-          opacity: 0.6,
+          opacity: 'testOpacity',
           // textureBlend: 'replace',
           // textureBlend: 'normal',
           blur: 0.99,
@@ -72,14 +73,14 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
 
           // lineType: 'dash',
           // dashArray: [5, 5],
-          sourceColor: '#f00',
-          targetColor: '#0f0',
-        });
-      // .animate({
-      //   duration: 5,
-      //   interval: 0.2,
-      //   trailLength: 0.4,
-      // });
+          // sourceColor: '#f00',
+          // targetColor: '#0f0',
+        })
+      .animate({
+        duration: 5,
+        interval: 0.2,
+        trailLength: 0.4,
+      });
       // .animate(true);
       scene.addLayer(layer);
     });

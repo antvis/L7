@@ -18,6 +18,7 @@ interface IConfigToUpdate {
   stroke?: any;
   strokeWidth?: any;
   offsets?: any;
+  textOffset?: any;
 }
 
 // 画布默认的宽度
@@ -71,6 +72,11 @@ function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
   if (configToUpdate.offsets) {
     // 处理 style 中 offsets 属性的数据映射
     handleStyleOffsets('offsets', layer, configToUpdate.offsets);
+  }
+
+  if(configToUpdate.textOffset) {
+      // 处理 style 中 textOffset 属性的数据映射
+    handleStyleOffsets('textOffset', layer, configToUpdate.textOffset);
   }
 }
 

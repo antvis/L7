@@ -19,6 +19,7 @@ import {
   IRendererService,
   ITexture2D,
   ITexture2DInitializationOptions,
+  IExtensions
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import regl from 'regl';
@@ -40,6 +41,8 @@ export default class ReglRendererService implements IRendererService {
   private width: number;
   private height: number;
   private isDirty: boolean;
+
+  public extensionObject: IExtensions;
 
   public async init(
     canvas: HTMLCanvasElement,
@@ -81,6 +84,14 @@ export default class ReglRendererService implements IRendererService {
         },
       });
     });
+
+    this.extensionObject = {
+      OES_texture_float: this.testExtension('OES_texture_float')
+    }
+  }
+
+  public testExtension(name: string) { // OES_texture_float
+    return !!this.getGLContext().getExtension(name)
   }
 
   public createModel = (options: IModelInitializationOptions): IModel =>

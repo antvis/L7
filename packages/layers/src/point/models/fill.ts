@@ -10,7 +10,11 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
-import BaseModel, { styleColor, styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel, {
+  styleColor,
+  styleOffset,
+  styleSingle,
+} from '../../core/BaseModel';
 import { PointFillTriangulation } from '../../core/triangulation';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
@@ -35,6 +39,7 @@ export default class FillModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
+      this.dataTextureTest &&
       this.dataTextureNeedUpdate({
         opacity,
         strokeOpacity,
@@ -70,30 +75,18 @@ export default class FillModel extends BaseModel {
               width,
               height,
             })
-          : this.defaultDataTexture;
+          : this.createTexture2D({
+            flipY: true,
+            data: [1],
+            format: gl.LUMINANCE,
+            type: gl.FLOAT,
+            width: 1,
+            height: 1,
+          })
     }
-
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: [
-        // 传递样式数据映射信息 - 当前纹理大小以及有哪些字段需要映射
-        this.rowCount, // 数据纹理有几行
-        this.DATA_TEXTURE_WIDTH, // 数据纹理有几列
-        0.0,
-        0.0,
-        this.hasOpacity, // cell 中是否存在 opacity
-        this.hasStrokeOpacity, // cell 中是否存在 strokeOpacity
-        this.hasStrokeWidth, // cell 中是否存在 strokeWidth
-        this.hasStroke, // cell 中是否存在 stroke
-        this.hasOffsets, // cell 中是否存在 offsets
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-      ],
+      u_cellTypeLayout: this.getCellTypeLayout(),
 
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,

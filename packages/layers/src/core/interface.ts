@@ -1,10 +1,13 @@
+import {
+  styleSingle,
+} from '../core/BaseModel'
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
 }
 
 export interface ILineLayerStyleOptions {
-  opacity: number;
+  opacity: styleSingle;
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
   dashArray?: [number, number]; //  可选参数、虚线间隔
   segmentNumber: number;

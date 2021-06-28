@@ -20,6 +20,10 @@ uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 uniform vec2 u_offsets;
 
 #pragma include "styleMapping"
+#pragma include "styleMappingCalOpacity"
+#pragma include "styleMappingCalStrokeOpacity"
+#pragma include "styleMappingCalStrokeWidth"
+
 #pragma include "projection"
 #pragma include "picking"
 

@@ -30,6 +30,12 @@ varying float v_a;
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
 
+uniform float u_opacity: 1.0;
+varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
+
+#pragma include "styleMapping"
+#pragma include "styleMappingCalOpacity"
+
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
@@ -123,6 +129,32 @@ vec2 interpolate (vec2 source, vec2 target, float angularDist, float t) {
 }
 
 void main() {
+  // cal style mapping - 数据纹理映射部分的计算
+  styleMappingMat = mat4(
+    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
+    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
+    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
+    0.0, 0.0, 0.0, 0.0
+  );
+
+  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
+  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
+  float columnWidth = 1.0/columnCount;  // 列宽
+  float rowHeight = 1.0/rowCount;       // 行高
+  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
+  float id = a_vertexId; // 第n个顶点
+  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
+  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
+  
+  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
+  // 按顺序从 cell 中取值、若没有则自动往下取值
+  float textureOffset = 0.0; // 在 cell 中取值的偏移量
+
+  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
+  styleMappingMat[0][0] = opacityAndOffset.r;
+  textureOffset = opacityAndOffset.g;
+  // cal style mapping - 数据纹理映射部分的计算
+
   v_color = a_Color;
   vec2 source = radians(a_Instance.rg);
   vec2 target = radians(a_Instance.ba);
@@ -158,7 +190,16 @@ void main() {
 
   v_segmentIndex = a_Position.x;
   if(LineTexture == u_line_texture) { // 开启贴图模式  
+    // v_arcDistrance = length(source - target);
+    // float mapZoomScale = u_CoordinateSystem !== COORDINATE_SYSTEM_P20_2?10000000.0:1.0;
     v_arcDistrance = length(source - target);
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
+      v_arcDistrance = v_arcDistrance * 1000000.0;
+    }
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) { // mapbox
+    //   v_arcDistrance *= 10.0;
+      v_arcDistrance = project_pixel_allmap(v_arcDistrance);
+    }
     v_pixelLen = project_pixel(u_icon_step)/8.0;
 
     v_a = project_pixel(a_Size);

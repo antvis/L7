@@ -50,18 +50,21 @@ export default class Amap2demo_arcLineDir extends React.Component {
           lat1: 40.662557,
           lng2: 120.342625,
           lat2: 37.373799,
+          testOpacity: 0.4
         },
         {
           lng1: 116.98242187499999,
           lat1: 43.004647127794435,
           lng2: 105.64453124999999,
           lat2: 28.998531814051795,
+          testOpacity: 0.4
         },
         {
           lng1: 75.76171875,
           lat1: 36.31512514748051,
           lng2: 46.23046874999999,
           lat2: 52.802761415419674,
+          testOpacity: 0.8
         },
       ];
       let data2 = [
@@ -70,6 +73,7 @@ export default class Amap2demo_arcLineDir extends React.Component {
           lat1: 52.53627304145948,
           lng2: 119.794921875,
           lat2: 46.07323062540835,
+          testOpacity: 0.6
         },
         // {
         //   lng2: 88.59374999999999,
@@ -96,6 +100,7 @@ export default class Amap2demo_arcLineDir extends React.Component {
         .color('#8C1EB2')
         .style({
           forward: false,
+          opacity: 'testOpacity'
         });
       scene.addLayer(layer);
 
@@ -111,7 +116,10 @@ export default class Amap2demo_arcLineDir extends React.Component {
         })
         .size(10)
         .shape('arc')
-        .color('#8C1EB2');
+        .color('#8C1EB2')
+        .style({
+          opacity: 'testOpacity'
+        })
       scene.addLayer(layer2);
 
       const layer3 = new LineLayer({ blend: 'normal' })
@@ -127,6 +135,9 @@ export default class Amap2demo_arcLineDir extends React.Component {
         .size(10)
         .shape('arc')
         .color('#8C1EB2')
+        .style({
+          opacity: 'testOpacity'
+        })
         .animate(true);
       scene.addLayer(layer3);
 
@@ -145,6 +156,7 @@ export default class Amap2demo_arcLineDir extends React.Component {
         .color('#8C1EB2')
         .style({
           forward: false,
+          opacity: "testopacity"
         })
         .animate({
           duration: 4,

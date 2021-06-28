@@ -25,28 +25,16 @@ export default class Amap2demo_lineLinear extends React.Component {
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
+        // 'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
+        'https://gw.alipayobjects.com/os/bmw-prod/459591a6-8aa5-4ce7-87a1-0e1e7bce3e60.json'
       )
         .then((res) => res.json())
         .then((data) => {
-          scene.addImage(
-            '00',
-            'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-          );
-          scene.addImage(
-            '01',
-            'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg',
-          );
-          scene.addImage(
-            '02',
-            'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg',
-          );
           // @ts-ignore
           const layer = new LineLayer({})
             .source(data)
             .size(5)
             .shape('line')
-            .texture('01')
             .color('#25d8b7')
             // .animate({
             //   interval: 1, // 间隔
@@ -54,7 +42,7 @@ export default class Amap2demo_lineLinear extends React.Component {
             //   trailLength: 2, // 流线长度
             // })
             .style({
-              opacity: 0.5,
+              opacity: 'testOpacity',
               // opacity: 0,
               // lineTexture: true, // 开启线的贴图功能
               // iconStep: 50, // 设置贴图纹理的间距

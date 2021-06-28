@@ -106,10 +106,11 @@ export default class Amap2demo extends React.Component {
           })
           .shape('circle')
           // .shape('normal')
-          // .shape('fill')
           // .color('rgba(255, 0, 0, 0.9)')
+          // .shape('cylinder')
           .color('rgba(255, 0, 0, 1.0)')
-          .size(10)
+          // .size(10)
+          .size([10, 10, 100])
           // .offsets('123')
           .style({
             // stroke: '#000',
@@ -128,7 +129,7 @@ export default class Amap2demo extends React.Component {
             // }],
 
             // strokeOpacity: 0.5,
-            strokeOpacity: 'strokeOpacity2',
+            // strokeOpacity: 'strokeOpacity2',
             // strokeOpacity: 1.0,
             // strokeOpacity: [
             //   'strokeOpacity2',

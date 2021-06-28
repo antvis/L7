@@ -42,7 +42,9 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       features: [
         {
           type: 'Feature',
-          properties: {},
+          properties: {
+            testOpacity: 0.4,
+          },
           geometry: {
             type: 'MultiPolygon',
             coordinates: [
@@ -76,7 +78,9 @@ export default class Amap2demo_polygon_extrude extends React.Component {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: {
+            testOpacity: 1,
+          },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -109,7 +113,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       .color('red')
       .size(6000000)
       .style({
-        opacity: 1.0,
+        opacity: 'testOpacity'
       })
       .active(true);
     scene.addLayer(layer);

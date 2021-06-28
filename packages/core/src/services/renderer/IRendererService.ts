@@ -41,8 +41,14 @@ export interface IReadPixelsOptions {
   data?: Uint8Array;
 }
 
+export interface IExtensions {
+  OES_texture_float: boolean;
+}
+
 export interface IRendererService {
+  extensionObject: IExtensions;
   init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void>;
+  testExtension(name: string): boolean;
   clear(options: IClearOptions): void;
   createModel(options: IModelInitializationOptions): IModel;
   createAttribute(options: IAttributeInitializationOptions): IAttribute;

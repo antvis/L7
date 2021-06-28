@@ -29,6 +29,7 @@ import {
   Triangulation,
 } from './IStyleAttributeService';
 
+
 import {
   IStyleAttributeUpdateOptions,
   StyleAttributeField,
@@ -57,6 +58,8 @@ export interface ILayerModelInitializationOptions {
   fragmentShader: string;
   triangulation: Triangulation;
 }
+
+
 export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
@@ -212,6 +215,8 @@ export interface ILayer {
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
   setAnimateStartTime(): void;
   getLayerAnimateTime(): number;
+
+
 }
 
 /**
@@ -313,5 +318,6 @@ export interface ILayerService {
   removeAllLayers(): void;
   updateRenderOrder(): void;
   renderLayers(): void;
+  getOESTextureFloat(): boolean;
   destroy(): void;
 }

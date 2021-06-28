@@ -208,6 +208,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
         );
+
         // this.initContainer();
         // window.addEventListener('resize', this.handleWindowResized);
         elementResizeEvent(

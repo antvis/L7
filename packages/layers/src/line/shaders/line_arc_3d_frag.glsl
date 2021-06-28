@@ -30,11 +30,13 @@ uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
 
+varying mat4 styleMappingMat;
+
 #pragma include "picking"
 
 void main() {
+  float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0; // 运动速度
-  // gl_FragColor = v_color;
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
     gl_FragColor = mix(u_sourceColor, u_targetColor, v_segmentIndex/segmentNumber);
@@ -44,7 +46,7 @@ void main() {
 
   // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
-  gl_FragColor.a *= u_opacity;
+  gl_FragColor.a *= opacity;
   if(u_line_type == LineTypeDash) {
    float flag = 0.;
     float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
@@ -72,7 +74,7 @@ void main() {
     float u = fract(arcRadio * count - animateSpeed * count);
  
     if(u_aimate.x == Animate) {
-      u = gl_FragColor.a/u_opacity;
+      u = gl_FragColor.a/opacity;
     }
     float v = length(v_offset)/(v_a); // 横向
 
@@ -83,15 +85,14 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);
     } else { // replace
-        pattern.a *= u_opacity;
+        pattern.a *= opacity;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
+          discard;
+        } else {
+          gl_FragColor = filterColor(pattern);
         }
-        gl_FragColor = filterColor(pattern);
     }
-    
-
-    // gl_FragColor = filterColor(gl_FragColor + pattern);
 
   } else {
     gl_FragColor = filterColor(gl_FragColor);

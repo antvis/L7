@@ -48,37 +48,6 @@ vec2 nextPos(float currentRow, float currentColumn, float columnCount, float nex
   return vec2(nextColumn, nextRow);
 }
 
-// 计算 opacity 和标示在 cell 中取值位置的偏移量 textureOffset
-vec2 calOpacityAndOffset(float cellCurrentRow, float cellCurrentColumn, float columnCount, float textureOffset, float columnWidth, float rowHeight) {
-  if(!hasOpacity()) { // 数据纹理中不存在 opacity 的时候取默认值（用户在 style 中传入的是常量）
-    return vec2(u_opacity, textureOffset);
-  } else {
-    vec2 valuePos = nextPos(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset);
-    float textureOpacity = pos2value(valuePos, columnWidth, rowHeight);
-    return vec2(textureOpacity, textureOffset + 1.0);
-  }
-}
-// 计算 strokeOpaicty 和标示在 cell 中取值位置的偏移量 textureOffset
-vec2 calStrokeOpacityAndOffset(float cellCurrentRow, float cellCurrentColumn, float columnCount, float textureOffset, float columnWidth, float rowHeight) {
-  if(!hasStrokeOpacity()) {
-    return vec2(u_stroke_opacity, textureOffset);
-  } else {
-    vec2 valuePos = nextPos(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset);
-    float textureStrokeOpacity = pos2value(valuePos, columnWidth, rowHeight);
-    return vec2(textureStrokeOpacity, textureOffset + 1.0);
-  }
-}
-// 计算 strokeWidth 和标示在 cell 中取值位置的偏移量 textureOffset
-vec2 calStrokeWidthAndOffset(float cellCurrentRow, float cellCurrentColumn, float columnCount, float textureOffset, float columnWidth, float rowHeight) {
-  if(!hasStrokeWidth()) {
-    return vec2(u_stroke_width, textureOffset);
-  } else {
-    vec2 valuePos = nextPos(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset);
-    float textureStrokeWidth = pos2value(valuePos, columnWidth, rowHeight);
-    return vec2(textureStrokeWidth, textureOffset + 1.0);
-  }
-}
-
 // 计算当前单个 cell 的大小
 float calCellCount() { 
   //   u_cellTypeLayout

@@ -2,7 +2,6 @@ import { ISceneConfig } from '../config/IConfigService';
 import { ILayer } from '../layer/ILayerService';
 import { IMapConfig } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
-
 export interface ISceneService {
   destroyed: boolean;
   loaded: boolean;
