@@ -46,7 +46,7 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
               lat1: 37.71859032558816,
               lng2: 123.3984375,
               lat2: 39.639537564366684,
-              testOpacity: 0.5
+              testOpacity: 0.5,
             },
           ],
           {
@@ -76,11 +76,11 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
           // sourceColor: '#f00',
           // targetColor: '#0f0',
         })
-      .animate({
-        duration: 5,
-        interval: 0.2,
-        trailLength: 0.4,
-      });
+        .animate({
+          duration: 5,
+          interval: 0.2,
+          trailLength: 0.4,
+        });
       // .animate(true);
       scene.addLayer(layer);
     });

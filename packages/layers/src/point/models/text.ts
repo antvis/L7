@@ -10,6 +10,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { boundsContains, padBounds, rgb2arr } from '@antv/l7-utils';
+import { isNumber, isString } from 'lodash';
 import BaseModel, {
   styleColor,
   styleOffset,
@@ -23,7 +24,6 @@ import {
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
-import { isNumber, isString } from 'lodash';
 import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
 interface IPointTextLayerStyleOptions {
@@ -134,17 +134,18 @@ export default class TextModel extends BaseModel {
       textAllowOverlap,
     };
 
-    if (this.dataTextureTest &&
+    if (
+      this.dataTextureTest &&
       this.dataTextureNeedUpdate({
         opacity,
         strokeWidth,
-        stroke
+        stroke,
       })
     ) {
       this.judgeStyleAttributes({
         opacity,
         strokeWidth,
-        stroke
+        stroke,
       });
 
       const encodeData = this.layer.getEncodedData();
@@ -166,19 +167,19 @@ export default class TextModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
 
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
       u_stroke_color:
@@ -190,7 +191,6 @@ export default class TextModel extends BaseModel {
       u_halo_blur: halo,
       u_gamma_scale: gamma,
       u_sdf_map_size: [canvas.width, canvas.height],
-      
     };
   }
 
@@ -212,7 +212,7 @@ export default class TextModel extends BaseModel {
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
-    this.reBuildModel()
+    this.reBuildModel();
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointText',

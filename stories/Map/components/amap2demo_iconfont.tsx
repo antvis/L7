@@ -49,8 +49,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '晴朗',
           opacity: 0.5,
           strokeWidth2: 1,
-          stroke: "#f00",
-          testTextOffset: [5, -55]
+          stroke: '#f00',
+          testTextOffset: [5, -55],
         },
         {
           lng: 120.2,
@@ -62,8 +62,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '晴朗',
           opacity: 0.5,
           strokeWidth2: 1,
-          stroke: "#f00",
-          testTextOffset: [5, -55]
+          stroke: '#f00',
+          testTextOffset: [5, -55],
         },
         {
           lng: 121.5,
@@ -75,8 +75,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '多云',
           opacity: 0.5,
           strokeWidth2: 1,
-          stroke: "#f00",
-          testTextOffset: [5, -55]
+          stroke: '#f00',
+          testTextOffset: [5, -55],
         },
         {
           lng: 120,
@@ -88,8 +88,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '多云',
           opacity: 0.5,
           strokeWidth2: 1,
-          stroke: "#f00",
-          testTextOffset: [5, -55]
+          stroke: '#f00',
+          testTextOffset: [5, -55],
         },
         {
           lng: 120.6,
@@ -101,8 +101,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '多云',
           opacity: 0.5,
           strokeWidth2: 1,
-          stroke: "#f00",
-          testTextOffset: [5, -55]
+          stroke: '#f00',
+          testTextOffset: [5, -55],
         },
         {
           lng: 120.5,
@@ -114,8 +114,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '多云',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [5, -55]
+          stroke: '#ff0',
+          testTextOffset: [5, -55],
         },
         {
           lng: 121.3,
@@ -127,8 +127,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '小雨',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [5, -55]
+          stroke: '#ff0',
+          testTextOffset: [5, -55],
         },
         {
           lng: 121,
@@ -140,8 +140,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '小雨',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [5, -55]
+          stroke: '#ff0',
+          testTextOffset: [5, -55],
         },
         {
           lng: 120.6,
@@ -153,8 +153,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '中雨',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [5, -55]
+          stroke: '#ff0',
+          testTextOffset: [5, -55],
         },
         {
           lng: 120.2,
@@ -166,8 +166,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '小雨',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [5, -55]
+          stroke: '#ff0',
+          testTextOffset: [5, -55],
         },
         {
           lng: 121.7,
@@ -179,8 +179,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '中雨',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [5, -55]
+          stroke: '#ff0',
+          testTextOffset: [5, -55],
         },
         {
           lng: 121.5,
@@ -192,8 +192,8 @@ export default class Amap2demo_iconfont extends React.Component {
           weather: '大雨-',
           opacity: 1,
           strokeWidth2: 3,
-          stroke: "#ff0",
-          testTextOffset: [10, -55]
+          stroke: '#ff0',
+          testTextOffset: [10, -55],
         },
       ];
 
@@ -251,7 +251,7 @@ export default class Amap2demo_iconfont extends React.Component {
           textAllowOverlap: true,
           stroke: 'iconColor', // 描边颜色
           strokeWidth: 'strokeWidth2', // 描边宽度
-          opacity: "opacity"
+          opacity: 'opacity',
         });
       scene.addLayer(textLayer);
 

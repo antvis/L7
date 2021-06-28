@@ -113,7 +113,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       .color('red')
       .size(6000000)
       .style({
-        opacity: 'testOpacity'
+        opacity: 'testOpacity',
       })
       .active(true);
     scene.addLayer(layer);

@@ -1,11 +1,9 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
-import BaseModel, {
-  styleSingle,
-} from '../../core/BaseModel';
+import { isNumber } from 'lodash';
+import BaseModel, { styleSingle } from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';
 import polygonExtrudeVert from '../shaders/polygon_extrude_vert.glsl';
-import { isNumber } from 'lodash';
 interface IPolygonLayerStyleOptions {
   opacity: styleSingle;
 }
@@ -15,10 +13,8 @@ export default class ExtrudeModel extends BaseModel {
       opacity = 1,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
-    if (this.dataTextureTest &&
-      this.dataTextureNeedUpdate({ opacity })
-    ) {
-      this.judgeStyleAttributes({ opacity, });
+    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
+      this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
         this.cellLength,
@@ -38,13 +34,13 @@ export default class ExtrudeModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
 
     return {

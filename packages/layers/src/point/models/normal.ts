@@ -9,14 +9,11 @@ import {
 } from '@antv/l7-core';
 
 import { rgb2arr } from '@antv/l7-utils';
-import BaseModel, {
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
+import { isNumber } from 'lodash';
+import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { BlendTypes } from '../../utils/blend';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-import { isNumber } from 'lodash';
 interface IPointLayerStyleOptions {
   opacity: styleSingle;
   offsets: styleOffset;
@@ -42,7 +39,8 @@ export default class NormalModel extends BaseModel {
       offsets = [0, 0],
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    if (this.dataTextureTest &&
+    if (
+      this.dataTextureTest &&
       this.dataTextureNeedUpdate({
         opacity,
         offsets,
@@ -72,13 +70,13 @@ export default class NormalModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]

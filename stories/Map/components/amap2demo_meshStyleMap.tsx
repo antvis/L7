@@ -65,9 +65,9 @@ export default class Amap2demo_meshStyleMap extends React.Component {
               // opacity: ['unit_price', (unit_price: any) => {
               //   return unit_price/100000
               // }],
-              opacity: ['unit_price', [0, 1]]
+              opacity: ['unit_price', [0, 1]],
             })
-            .active(true)
+            .active(true);
           scene.addLayer(filllayer);
 
           // const linelayer = new LineLayer({
@@ -101,7 +101,7 @@ export default class Amap2demo_meshStyleMap extends React.Component {
           //     iconfont: true,
           //   });
           // scene.addLayer(pointLayer);
-          
+
           // const tempertureLayer = new PointLayer({
           //   zIndex: 10,
           // })

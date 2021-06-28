@@ -26,7 +26,7 @@ export default class Amap2demo_lineLinear extends React.Component {
     scene.on('loaded', () => {
       fetch(
         // 'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
-        'https://gw.alipayobjects.com/os/bmw-prod/459591a6-8aa5-4ce7-87a1-0e1e7bce3e60.json'
+        'https://gw.alipayobjects.com/os/bmw-prod/459591a6-8aa5-4ce7-87a1-0e1e7bce3e60.json',
       )
         .then((res) => res.json())
         .then((data) => {

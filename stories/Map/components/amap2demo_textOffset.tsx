@@ -28,7 +28,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'sun',
         iconColor: '#FFA500',
         weather: '晴朗',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
       {
         lng: 120.2,
@@ -36,7 +36,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'sun',
         iconColor: '#FFA500',
         weather: '晴朗 - 高温预警',
-        textOffset: [-25, 0]
+        textOffset: [-25, 0],
       },
       {
         lng: 121.5,
@@ -44,7 +44,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'cloud',
         iconColor: '#F0F8FF',
         weather: '多云',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
       {
         lng: 120,
@@ -52,7 +52,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'cloud',
         iconColor: '#F0F8FF',
         weather: '多云 - 温度适宜',
-        textOffset: [-25, 0]
+        textOffset: [-25, 0],
       },
       {
         lng: 120.6,
@@ -60,7 +60,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'cloud',
         iconColor: '#F0F8FF',
         weather: '多云',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
       {
         lng: 120.5,
@@ -68,7 +68,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'cloud',
         iconColor: '#F0F8FF',
         weather: '多云 - 今日适宜出门',
-        textOffset: [-40, 0]
+        textOffset: [-40, 0],
       },
       {
         lng: 121.3,
@@ -76,7 +76,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'smallRain',
         iconColor: '#6EA0FF',
         weather: '中雨转小雨',
-        textOffset: [-10, 0]
+        textOffset: [-10, 0],
       },
       {
         lng: 121,
@@ -84,7 +84,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'smallRain',
         iconColor: '#6EA0FF',
         weather: '小雨',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
       {
         lng: 120.6,
@@ -92,7 +92,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'middleRain',
         iconColor: '#6495ED',
         weather: '中雨',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
       {
         lng: 120.2,
@@ -100,7 +100,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'smallRain',
         iconColor: '#6EA0FF',
         weather: '小雨',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
       {
         lng: 121.7,
@@ -108,7 +108,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'middleRain',
         iconColor: '#6495ED',
         weather: '大雨转中雨',
-        textOffset: [-15, 0]
+        textOffset: [-15, 0],
       },
       {
         lng: 121.5,
@@ -116,7 +116,7 @@ export default class Amap2demo_textOffset extends React.Component {
         iconType: 'hugeRain',
         iconColor: '#4678D2',
         weather: '大雨',
-        textOffset: [10, 0]
+        textOffset: [10, 0],
       },
     ];
     let fontFamily = 'iconfont';
@@ -153,7 +153,7 @@ export default class Amap2demo_textOffset extends React.Component {
         });
       scene.addLayer(pointIconFontLayer);
 
-       const textLayer = new PointLayer({})
+      const textLayer = new PointLayer({})
         .source(originData, {
           parser: {
             type: 'json',
@@ -170,10 +170,9 @@ export default class Amap2demo_textOffset extends React.Component {
           spacing: 2, // 字符间距
           padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
           fontFamily: 'Times New Roman',
-          textAllowOverlap: true
+          textAllowOverlap: true,
         });
       scene.addLayer(textLayer);
-
     });
   }
 

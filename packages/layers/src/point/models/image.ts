@@ -6,14 +6,11 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import BaseModel, {
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
+import { isNumber } from 'lodash';
+import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
-import { isNumber } from 'lodash';
 interface IImageLayerStyleOptions {
   opacity: styleSingle;
   offsets: styleOffset;
@@ -60,18 +57,18 @@ export default class ImageModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      
+
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
       // u_opacity: opacity || 1.0,

@@ -76,7 +76,7 @@ export default class Amap2demo_arcLine3d extends React.Component {
           .style({
             opacity: 1.0,
           });
-        const flyLine = new LineLayer({blend: 'normal'})
+        const flyLine = new LineLayer({ blend: 'normal' })
           .source(flydata, {
             parser: {
               type: 'json',
@@ -100,9 +100,8 @@ export default class Amap2demo_arcLine3d extends React.Component {
             iconStep: 10, // 设置贴图纹理的间距
             opacity: 1,
           });
-          
 
-          const flyLine2 = new LineLayer()
+        const flyLine2 = new LineLayer()
           .source(flydata, {
             parser: {
               type: 'json',
@@ -117,12 +116,12 @@ export default class Amap2demo_arcLine3d extends React.Component {
           .style({
             lineType: 'dash',
             dashArray: [5, 5],
-            opacity: 0.5
+            opacity: 0.5,
           });
         scene.addLayer(worldLine);
         scene.addLayer(dotPoint);
-        scene.addLayer(flyLine2)
-        scene.addLayer(flyLine)
+        scene.addLayer(flyLine2);
+        scene.addLayer(flyLine);
       });
     });
   }

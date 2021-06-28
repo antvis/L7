@@ -39,7 +39,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           lat1: 36.31512514748051,
           lng2: 46.23046874999999,
           lat2: 52.802761415419674,
-          testOpacity: 0.3
+          testOpacity: 0.3,
         },
       ];
       //// @ts-ignore
@@ -64,7 +64,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           iconStep: 10, // 设置贴图纹理的间距
           // opacity: 0,
           // opacity: ['testOpacity', ((d: any) => d*2)],
-          opacity: "testOpacity",
+          opacity: 'testOpacity',
           // opacity: 0.2,
           // lineType: 'dash',
           // dashArray: [5, 5],
@@ -72,7 +72,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           // textureBlend: 'normal',
           // sourceColor: '#f00',
           // targetColor: '#0f0',
-        })
+        });
       // .animate({
       //   duration: 50,
       //   interval: 0.2,

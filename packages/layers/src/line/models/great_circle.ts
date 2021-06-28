@@ -10,13 +10,13 @@ import {
 } from '@antv/l7-core';
 
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 // import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc_frag from '../shaders/line_arc_great_circle_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
-import { isNumber } from 'lodash';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -54,9 +54,7 @@ export default class GreatCircleModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if (this.dataTextureTest &&
-      this.dataTextureNeedUpdate({ opacity })
-    ) {
+    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
@@ -77,13 +75,13 @@ export default class GreatCircleModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
 
     return {

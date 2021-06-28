@@ -44,16 +44,16 @@ export type styleColor =
   | string
   | [string, (single: any) => string]
   | [string, [string, string]];
-  export interface IDataTextureFrame {
-    data: number[];
-    width: number;
-    height: number;
-  }
-  
-  export interface ICellProperty {
-    attr: string;
-    count: number;
-  }
+export interface IDataTextureFrame {
+  data: number[];
+  width: number;
+  height: number;
+}
+
+export interface ICellProperty {
+  attr: string;
+  count: number;
+}
 
 export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel {
@@ -68,23 +68,25 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected dataTexture: ITexture2D; // 用于数据传递的数据纹理
   protected DATA_TEXTURE_WIDTH: number; // 默认有多少列（宽度）
   protected rowCount: number; // 计算得到的当前数据纹理有多少行（高度）
-  protected cacheStyleProperties: { // 记录存储上一次样式字段的值
-    opacity: styleSingle | undefined,
-    strokeOpacity: styleSingle | undefined,
-    strokeWidth: styleSingle | undefined,
-    stroke: styleColor | undefined,
-    offsets: styleOffset | undefined
-  }
+  protected cacheStyleProperties: {
+    // 记录存储上一次样式字段的值
+    opacity: styleSingle | undefined;
+    strokeOpacity: styleSingle | undefined;
+    strokeWidth: styleSingle | undefined;
+    stroke: styleColor | undefined;
+    offsets: styleOffset | undefined;
+  };
   protected cellLength: number; // 单个 cell 的长度
   protected cellProperties: ICellProperty[]; // 需要进行数据映射的属性集合
   protected cellTypeLayout: number[];
-  protected stylePropertyesExist: { // 记录 style 属性是否存在的中间变量
-    hasOpacity: number,
-    hasStrokeOpacity: number,
-    hasStrokeWidth: number,
-    hasStroke: number,
-    hasOffsets: number
-  }
+  protected stylePropertyesExist: {
+    // 记录 style 属性是否存在的中间变量
+    hasOpacity: number;
+    hasStrokeOpacity: number;
+    hasStrokeWidth: number;
+    hasStroke: number;
+    hasOffsets: number;
+  };
   protected dataTextureTest: boolean;
 
   @lazyInject(TYPES.IGlobalConfigService)
@@ -147,16 +149,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       strokeOpacity: undefined,
       strokeWidth: undefined,
       stroke: undefined,
-      offsets: undefined
-    }
+      offsets: undefined,
+    };
     this.stylePropertyesExist = {
       hasOpacity: 0,
       hasStrokeOpacity: 0,
       hasStrokeWidth: 0,
       hasStroke: 0,
-      hasOffsets: 0
-    }
-    this.dataTextureTest  = this.layerService.getOESTextureFloat()
+      hasOffsets: 0,
+    };
+    this.dataTextureTest = this.layerService.getOESTextureFloat();
   }
 
   // style datatexture mapping
@@ -167,17 +169,18 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public clearLastCalRes() {
     this.cellProperties = []; // 清空上一次计算的需要进行数据映射的属性集合
     this.cellLength = 0; // 清空上一次计算的 cell 的长度
-    this.stylePropertyesExist = { // 全量清空上一次是否需要对 style 属性进行数据映射的判断
+    this.stylePropertyesExist = {
+      // 全量清空上一次是否需要对 style 属性进行数据映射的判断
       hasOpacity: 0,
       hasStrokeOpacity: 0,
       hasStrokeWidth: 0,
       hasStroke: 0,
-      hasOffsets: 0
-    }
+      hasOffsets: 0,
+    };
   }
 
   public getCellTypeLayout() {
-    if(this.dataTextureTest) {
+    if (this.dataTextureTest) {
       return [
         this.rowCount, // 数据纹理有几行
         this.DATA_TEXTURE_WIDTH, // 数据纹理有几列
@@ -195,7 +198,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         0.0,
         0.0,
         0.0,
-      ]
+      ];
     } else {
       return [
         1.0, // 数据纹理有几行
@@ -214,9 +217,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         0.0,
         0.0,
         0.0,
-      ]
+      ];
     }
-    
   }
 
   /**
@@ -237,7 +239,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       isUpdate = true;
       this.cacheStyleProperties.opacity = options.opacity;
     }
-    if (!isEqual(options.strokeOpacity, this.cacheStyleProperties.strokeOpacity)) {
+    if (
+      !isEqual(options.strokeOpacity, this.cacheStyleProperties.strokeOpacity)
+    ) {
       isUpdate = true;
       this.cacheStyleProperties.strokeOpacity = options.strokeOpacity;
     }
@@ -274,7 +278,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     if (options.opacity !== undefined && !isNumber(options.opacity)) {
       // 数据映射
       this.cellProperties.push({ attr: 'opacity', count: 1 });
-      this.stylePropertyesExist.hasOpacity = 1
+      this.stylePropertyesExist.hasOpacity = 1;
       this.cellLength += 1;
     }
 
@@ -284,21 +288,21 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     ) {
       // 数据映射
       this.cellProperties.push({ attr: 'strokeOpacity', count: 1 });
-      this.stylePropertyesExist.hasStrokeOpacity = 1
+      this.stylePropertyesExist.hasStrokeOpacity = 1;
       this.cellLength += 1;
     }
 
     if (options.strokeWidth !== undefined && !isNumber(options.strokeWidth)) {
       // 数据映射
       this.cellProperties.push({ attr: 'strokeWidth', count: 1 });
-      this.stylePropertyesExist.hasStrokeWidth = 1
+      this.stylePropertyesExist.hasStrokeWidth = 1;
       this.cellLength += 1;
     }
 
     if (options.stroke !== undefined && !this.isStaticColor(options.stroke)) {
       // 数据映射
       this.cellProperties.push({ attr: 'stroke', count: 4 });
-      this.stylePropertyesExist.hasStroke = 1
+      this.stylePropertyesExist.hasStroke = 1;
       this.cellLength += 4;
     }
 
@@ -308,7 +312,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     ) {
       // 数据映射
       this.cellProperties.push({ attr: 'offsets', count: 2 });
-      this.stylePropertyesExist.hasOffsets = 1
+      this.stylePropertyesExist.hasOffsets = 1;
       this.cellLength += 2;
     }
     // console.log('this.cellLength', this.cellLength)
@@ -379,13 +383,13 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         if (attr === 'stroke') {
           d.push(...rgb2arr(value));
         } else if (attr === 'offsets') {
-          if(this.isOffsetStatic(value)) {
+          if (this.isOffsetStatic(value)) {
             d.push(-value[0], value[1]);
           } else {
-            d.push(0, 0)
+            d.push(0, 0);
           }
         } else {
-          d.push(isNumber(value)?value:1.0);
+          d.push(isNumber(value) ? value : 1.0);
         }
       } else {
         // 若不存在时则补位

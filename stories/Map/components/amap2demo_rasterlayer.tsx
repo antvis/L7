@@ -47,7 +47,7 @@ export default class Amap2demo_rasterLayer extends React.Component {
     this.scene = scene;
 
     const tiffdata = await this.getTiffData();
-    console.log('tiffdata', tiffdata)
+    console.log('tiffdata', tiffdata);
     const layer = new RasterLayer({});
     const mindata = -0;
     const maxdata = 8000;

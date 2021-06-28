@@ -114,6 +114,10 @@ export default class LayerService implements ILayerService {
     }
   }
 
+  public getOESTextureFloat() {
+    return this.renderService.extensionObject.OES_texture_float;
+  }
+
   private clear() {
     this.renderService.clear({
       color: [0, 0, 0, 0],
@@ -130,9 +134,5 @@ export default class LayerService implements ILayerService {
 
   private stopRender() {
     cancelAnimationFrame(this.layerRenderID);
-  }
-
-  public getOESTextureFloat() {
-    return this.renderService.extensionObject.OES_texture_float
   }
 }

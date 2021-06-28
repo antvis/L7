@@ -74,8 +74,8 @@ function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
     handleStyleOffsets('offsets', layer, configToUpdate.offsets);
   }
 
-  if(configToUpdate.textOffset) {
-      // 处理 style 中 textOffset 属性的数据映射
+  if (configToUpdate.textOffset) {
+    // 处理 style 中 textOffset 属性的数据映射
     handleStyleOffsets('textOffset', layer, configToUpdate.textOffset);
   }
 }

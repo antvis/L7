@@ -38,9 +38,18 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
     this.registerModule('styleMapping', { vs: styleMapping, fs: '' });
-    this.registerModule('styleMappingCalOpacity', { vs: styleMappingCalOpacity, fs: '' });
-    this.registerModule('styleMappingCalStrokeOpacity', { vs: styleMappingCalStrokeOpacity, fs: '' });
-    this.registerModule('styleMappingCalStrokeWidth', { vs: styleMappingCalStrokeWidth, fs: '' });
+    this.registerModule('styleMappingCalOpacity', {
+      vs: styleMappingCalOpacity,
+      fs: '',
+    });
+    this.registerModule('styleMappingCalStrokeOpacity', {
+      vs: styleMappingCalStrokeOpacity,
+      fs: '',
+    });
+    this.registerModule('styleMappingCalStrokeWidth', {
+      vs: styleMappingCalStrokeWidth,
+      fs: '',
+    });
   }
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {

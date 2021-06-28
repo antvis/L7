@@ -76,7 +76,7 @@ export default class Amap2demo_arcLine3dLinear extends React.Component {
           .style({
             opacity: 1.0,
           });
-        const flyLine = new LineLayer({blend: 'normal'})
+        const flyLine = new LineLayer({ blend: 'normal' })
           .source(flydata, {
             parser: {
               type: 'json',
@@ -100,26 +100,26 @@ export default class Amap2demo_arcLine3dLinear extends React.Component {
             // iconStep: 10, // 设置贴图纹理的间距
             sourceColor: '#f00',
             targetColor: '#0f0',
-            opacity: 0.5
+            opacity: 0.5,
           });
 
-          // const flyLine2 = new LineLayer({blend: 'normal'})
-          // .source(flydata, {
-          //   parser: {
-          //     type: 'json',
-          //     coordinates: 'coord',
-          //   },
-          // })
-          // .color('#ff6b34')
-          // // .shape('arc3d')
-          // .shape('arc')
-          // .size(1)
-          // // .active(true)
-          // .style({
-          //   lineType: 'dash',
-          //   dashArray: [5, 5],
-          //   opacity: 0.5
-          // });
+        // const flyLine2 = new LineLayer({blend: 'normal'})
+        // .source(flydata, {
+        //   parser: {
+        //     type: 'json',
+        //     coordinates: 'coord',
+        //   },
+        // })
+        // .color('#ff6b34')
+        // // .shape('arc3d')
+        // .shape('arc')
+        // .size(1)
+        // // .active(true)
+        // .style({
+        //   lineType: 'dash',
+        //   dashArray: [5, 5],
+        //   opacity: 0.5
+        // });
         scene.addLayer(worldLine);
         scene.addLayer(dotPoint);
         // scene.addLayer(flyLine2)

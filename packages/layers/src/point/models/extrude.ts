@@ -1,16 +1,13 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
-import BaseModel, {
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
+import { isNumber } from 'lodash';
+import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { calculteCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
-import { isNumber } from 'lodash';
 interface IPointLayerStyleOptions {
   opacity: styleSingle;
-  offsets: styleOffset
+  offsets: styleOffset;
 }
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
@@ -20,11 +17,11 @@ export default class ExtrudeModel extends BaseModel {
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
-        opacity
+        opacity,
       })
     ) {
       this.judgeStyleAttributes({
-        opacity
+        opacity,
       });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
@@ -45,13 +42,13 @@ export default class ExtrudeModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]

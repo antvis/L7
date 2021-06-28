@@ -10,12 +10,12 @@ import {
 } from '@antv/l7-core';
 
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_vert.glsl';
-import { isNumber } from 'lodash';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -35,10 +35,8 @@ export default class ArcModel extends BaseModel {
       iconStep = 100,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
-    if (this.dataTextureTest &&
-      this.dataTextureNeedUpdate({ opacity })
-    ) {
-      this.judgeStyleAttributes({ opacity, });
+    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
+      this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
         this.cellLength,
@@ -58,13 +56,13 @@ export default class ArcModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
 
     if (dashArray.length === 2) {
@@ -88,7 +86,7 @@ export default class ArcModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber: 30,

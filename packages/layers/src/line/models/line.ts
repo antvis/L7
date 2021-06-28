@@ -11,12 +11,12 @@ import {
 } from '@antv/l7-core';
 
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
-import { isNumber } from 'lodash';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -52,10 +52,8 @@ export default class LineModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if (this.dataTextureTest &&
-      this.dataTextureNeedUpdate({ opacity })
-    ) {
-      this.judgeStyleAttributes({ opacity, });
+    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
+      this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
         this.cellLength,
@@ -75,13 +73,13 @@ export default class LineModel extends BaseModel {
               height,
             })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          })
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
 
     return {

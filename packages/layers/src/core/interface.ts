@@ -1,6 +1,4 @@
-import {
-  styleSingle,
-} from '../core/BaseModel'
+import { styleSingle } from '../core/BaseModel';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,

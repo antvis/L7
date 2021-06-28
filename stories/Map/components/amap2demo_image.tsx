@@ -23,49 +23,55 @@ export default class Amap2demo_image extends React.Component {
       }),
     });
     this.scene = scene;
-    let originData = [{
-      "id": "5011000000404",
-      "name": "铁路新村(华池路)",
-      "longitude": 121.4316962,
-      "latitude": 31.26082325,
-      "unit_price": 71469.4,
-      "count": 2,
-      opacity: 0.5,
-      offsets: [0, 0]
-    }, {
-      "id": "5011000002716",
-      "name": "金元坊",
-      "longitude": 121.3810096,
-      "latitude": 31.25302026,
-      "unit_price": 47480.5,
-      "count": 2,
-      opacity: 0.5,
-      offsets: [100, 0]
-    }, {
-      "id": "5011000003403",
-      "name": "兰溪路231弄",
-      "longitude": 121.4086229,
-      "latitude": 31.25291206,
-      "unit_price": 55218.4,
-      "count": 2,
-      opacity: 0.8
-    }, {
-      "id": "5011000003652",
-      "name": "兰溪公寓",
-      "longitude": 121.409227,
-      "latitude": 31.251014,
-      "unit_price": 55577.8,
-      "count": 2,
-      opacity: 0.8
-    }, {
-      "id": "5011000004139",
-      "name": "梅岭新村",
-      "longitude": 121.400946,
-      "latitude": 31.24946565,
-      "unit_price": 63028.1,
-      "count": 2,
-      opacity: 1.0
-    }]
+    let originData = [
+      {
+        id: '5011000000404',
+        name: '铁路新村(华池路)',
+        longitude: 121.4316962,
+        latitude: 31.26082325,
+        unit_price: 71469.4,
+        count: 2,
+        opacity: 0.5,
+        offsets: [0, 0],
+      },
+      {
+        id: '5011000002716',
+        name: '金元坊',
+        longitude: 121.3810096,
+        latitude: 31.25302026,
+        unit_price: 47480.5,
+        count: 2,
+        opacity: 0.5,
+        offsets: [100, 0],
+      },
+      {
+        id: '5011000003403',
+        name: '兰溪路231弄',
+        longitude: 121.4086229,
+        latitude: 31.25291206,
+        unit_price: 55218.4,
+        count: 2,
+        opacity: 0.8,
+      },
+      {
+        id: '5011000003652',
+        name: '兰溪公寓',
+        longitude: 121.409227,
+        latitude: 31.251014,
+        unit_price: 55577.8,
+        count: 2,
+        opacity: 0.8,
+      },
+      {
+        id: '5011000004139',
+        name: '梅岭新村',
+        longitude: 121.400946,
+        latitude: 31.24946565,
+        unit_price: 63028.1,
+        count: 2,
+        opacity: 1.0,
+      },
+    ];
     scene.addImage(
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
@@ -100,20 +106,20 @@ export default class Amap2demo_image extends React.Component {
       //     scene.addLayer(imageLayer);
       //   });
       const imageLayer = new PointLayer()
-            .source(originData, {
-              parser: {
-                type: 'json',
-                x: 'longitude',
-                y: 'latitude',
-              },
-            })
-            .shape('name', ['00', '01', '02'])
-            .size(20)
-            .style({
-              opacity: 'opacity',
-              offsets: 'offsets'
-            })
-          scene.addLayer(imageLayer);
+        .source(originData, {
+          parser: {
+            type: 'json',
+            x: 'longitude',
+            y: 'latitude',
+          },
+        })
+        .shape('name', ['00', '01', '02'])
+        .size(20)
+        .style({
+          opacity: 'opacity',
+          offsets: 'offsets',
+        });
+      scene.addLayer(imageLayer);
     });
   }
 
