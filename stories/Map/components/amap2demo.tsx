@@ -1,4 +1,3 @@
-//@ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';

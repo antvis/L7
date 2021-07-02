@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Scene } from '@antv/l7';
 import { DrillDownLayer } from '@antv/l7-district';
 import { GaodeMap } from '@antv/l7-maps';

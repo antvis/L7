@@ -1,4 +1,3 @@
-// @ts-ignore
 import { CityBuildingLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';

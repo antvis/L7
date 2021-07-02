@@ -159,7 +159,7 @@ void main() {
     if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
       v_arcDistrance *= 1000000.0;
     }
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) { // mapbox
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) { // mapbox
       // v_arcDistrance *= 8.0;
       v_arcDistrance = project_pixel_allmap(v_arcDistrance);
     }

@@ -1,7 +1,4 @@
-import { vec2, vec3 } from 'gl-matrix';
-// @ts-ignore
-import { ILngLat, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { DrawPolygon } from '@antv/l7-draw';
+import { PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -16,6 +13,7 @@ function convertRGB2Hex(rgb: number[]) {
 export default class Amap2demo_polygon_extrude extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {

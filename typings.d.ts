@@ -1,0 +1,1 @@
+declare module '@antv/l7';
