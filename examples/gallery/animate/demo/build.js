@@ -26,7 +26,7 @@ scene.on('loaded', () => {
       );
       layer
         .source(data)
-        .size('floor', [ 100, 3000 ])
+        .size('floor', [ 100, 500 ])
         .color('rgba(242,246,250,0.5)')
         .animate({
           enable: true

@@ -333,6 +333,23 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     }
     return false;
   }
+  /**
+   * 获取 stroke 颜色并做兼容处理
+   * @param stroke
+   * @returns
+   */
+  public getStrokeColor(stroke: styleColor) {
+    if (this.isStaticColor(stroke)) {
+      const strokeColor = rgb2arr(stroke as string);
+      strokeColor[0] = strokeColor[0] ? strokeColor[0] : 0;
+      strokeColor[1] = strokeColor[1] ? strokeColor[1] : 0;
+      strokeColor[2] = strokeColor[2] ? strokeColor[2] : 0;
+      strokeColor[3] = strokeColor[3] ? strokeColor[3] : 0;
+      return strokeColor;
+    } else {
+      return [0, 0, 0, 0];
+    }
+  }
 
   /**
    * 判断 offsets 是否是常量

@@ -6,10 +6,9 @@ const scene = new Scene({
   map: new GaodeMap({
     center: [ 120.5, 30.2 ],
     pitch: 0,
-    style: 'amap://styles/453e2f8e11603fc8f7548fe18959e9e9',
+    style: 'dark',
     zoom: 8.5,
-    zooms: [ 8, 10 ],
-    viewMode: '2D'
+    zooms: [ 8, 10 ]
   })
 });
 const dataColor = {

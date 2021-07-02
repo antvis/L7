@@ -121,7 +121,7 @@ export default class Amap2demo extends React.Component {
             // }],
             // stroke: ['strokeColor', ["#f00", "#ff0"]],
 
-            // strokeWidth: 4,
+            strokeWidth: 4,
             // strokeWidth: "strokeWidth",
             // strokeWidth: ["strokeWidth", [1, 2]],
             // strokeWidth: ["strokeWidth", (d: any) => {

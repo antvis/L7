@@ -84,10 +84,17 @@ void main() {
     styleMappingMat[1][3] = pos2value(valueAPos, columnWidth, rowHeight); // A
     textureOffset += 1.0;
   } else {
-    styleMappingMat[1][0] = u_stroke_color.r;
-    styleMappingMat[1][1] = u_stroke_color.g;
-    styleMappingMat[1][2] = u_stroke_color.b;
-    styleMappingMat[1][3] = u_stroke_color.a;
+    if(u_stroke_color == vec4(0.0)) {
+      styleMappingMat[1][0] = v_color.r;
+      styleMappingMat[1][1] = v_color.g;
+      styleMappingMat[1][2] = v_color.b;
+      styleMappingMat[1][3] = v_color.a;
+    } else {
+      styleMappingMat[1][0] = u_stroke_color.r;
+      styleMappingMat[1][1] = u_stroke_color.g;
+      styleMappingMat[1][2] = u_stroke_color.b;
+      styleMappingMat[1][3] = u_stroke_color.a;
+    }
   }
 
   vec2 textrueOffsets = vec2(0.0, 0.0);

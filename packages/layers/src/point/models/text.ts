@@ -182,10 +182,7 @@ export default class TextModel extends BaseModel {
 
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
-      u_stroke_color:
-        isString(stroke) && this.isStaticColor(stroke)
-          ? rgb2arr(stroke)
-          : [0, 0, 0, 0],
+      u_stroke_color: this.getStrokeColor(stroke),
 
       u_sdf_map: this.texture,
       u_halo_blur: halo,
