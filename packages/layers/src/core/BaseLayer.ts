@@ -229,7 +229,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.container;
   }
 
-  public addPlugin(plugin: ILayerPlugin) {
+  public addPlugin(plugin: ILayerPlugin): ILayer {
     // TODO: 控制插件注册顺序
     // @example:
     // pointLayer.addPlugin(new MyCustomPlugin(), {
@@ -457,7 +457,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     };
     return this;
   }
-
   public setData(data: any, options?: ISourceCFG) {
     if (this.inited) {
       this.layerSource.setData(data, options);
@@ -498,7 +497,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     return this;
   }
-  public scale(field: string | IScaleOptions, cfg: IScale) {
+  public scale(field: string | number | IScaleOptions, cfg?: IScale) {
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -528,7 +527,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
-  public active(options: IActiveOption) {
+  public active(options: IActiveOption | boolean) {
     const activeOption: Partial<ILayerConfig> = {};
     activeOption.enableHighlight = isObject(options) ? true : options;
     if (isObject(options)) {
