@@ -9,6 +9,7 @@ export interface ISceneService {
   fontFamily: string;
   loadFont: boolean;
   on(type: string, handle: (...args: any[]) => void): void;
+  once(type: string, handle: (...args: any[]) => void): void;
   off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
   init(config: IMapConfig & IRenderConfig): void;
