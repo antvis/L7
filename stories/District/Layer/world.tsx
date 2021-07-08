@@ -48,22 +48,22 @@ export default class Country extends React.Component {
           field: 'NAME_ENG',
           padding: [5, 5],
         },
-       popup: {
+        popup: {
           // enable: true,
           enable: false,
-          Html: props => {
+          Html: (props) => {
             return `<span>${props.NAME_CHN}</span>`;
           },
         },
       });
-      // console.time('layer');
-      // Layer.on('loaded', () => {
-      //   console.timeEnd('layer');
-      // });
-      console.log('======')
+      console.time('layer');
+      Layer.on('loaded', () => {
+        console.timeEnd('layer');
+      });
+      console.log('======');
       Layer.on('click', (e: any) => {
         // alert(e);
-        console.log(e)
+        console.log(e);
         // alert(1)
       });
     });

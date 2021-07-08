@@ -85,16 +85,17 @@ function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
  */
 function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
   if (isString(styleFloat)) {
-    // opacity = 'string'
+    // 如果传入的 styleFloat 是 string 类型，那么就认为其对应的是传入数据的字段
     registerStyleAttribute(fieldName, layer, styleFloat, (value: any) => {
       return value;
     });
   } else if (isNumber(styleFloat)) {
-    // opacity = 0.4 -> opacity 传入数字
+    // 传入 number、默认值处理
     registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
-  } else if (isArray(styleFloat) && styleFloat.length === 2) {
+  } else if (isArray(styleFloat) && styleFloat.length === 2) { 
+    // 传入的 styleFloat 是长度为 2 的数组
     if (isString(styleFloat[0]) && isFunction(styleFloat[1])) {
-      // opacity = ['string', callback]
+      // 字段回调函数 [string, callback]
       registerStyleAttribute(fieldName, layer, styleFloat[0], styleFloat[1]);
     } else if (
       isString(styleFloat[0]) &&
@@ -102,12 +103,14 @@ function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
       isNumber(styleFloat[1][0]) &&
       isNumber(styleFloat[1][1])
     ) {
-      // opacity = ['string', [start: number, end: nuber]]
+      // 字段映射 [string, [start: number, end: number]]
       registerStyleAttribute(fieldName, layer, styleFloat[0], styleFloat[1]);
     } else {
+      // 兼容
       registerStyleAttribute(fieldName, layer, [1.0], undefined);
     }
   } else {
+    // 兼容
     registerStyleAttribute(fieldName, layer, [1.0], undefined);
   }
 }
@@ -123,7 +126,7 @@ function handleStyleOffsets(
   styleOffsets: any,
 ) {
   if (isString(styleOffsets)) {
-    // 字符串
+    // 如果传入的 styleOffsets 是 string 类型，那么就认为其对应的是传入数据的字段
     registerStyleAttribute(fieldName, layer, styleOffsets, (value: any) => {
       return value;
     });
@@ -133,7 +136,7 @@ function handleStyleOffsets(
     isString(styleOffsets[0]) &&
     isFunction(styleOffsets[1])
   ) {
-    // callback
+    // 字段回调函数 [string, callback]
     registerStyleAttribute(fieldName, layer, styleOffsets[0], styleOffsets[1]);
   } else if (
     isArray(styleOffsets) &&
@@ -141,9 +144,10 @@ function handleStyleOffsets(
     isNumber(styleOffsets[0]) &&
     isNumber(styleOffsets[1])
   ) {
-    // normal
+    // 字段映射 [string, [start: number, end: number]]
     registerStyleAttribute(fieldName, layer, styleOffsets, undefined);
   } else {
+    // 兼容
     registerStyleAttribute(fieldName, layer, [0, 0], undefined);
   }
 }
@@ -156,20 +160,26 @@ function handleStyleOffsets(
  */
 function handleStyleColor(fieldName: string, layer: ILayer, styleColor: any) {
   if (isString(styleColor)) {
+    // 如果传入的 styleColor 是 string 类型，那么就认为其是颜色值
     registerStyleAttribute(fieldName, layer, styleColor, undefined);
   } else if (isArray(styleColor) && styleColor.length === 2) {
+    // 传入的 styleColor 是长度为 2 的数组
     if (isString(styleColor[0]) && isFunction(styleColor[1])) {
+      // 字段回调函数 [string, callback]
       registerStyleAttribute(fieldName, layer, styleColor[0], styleColor[1]);
     } else if (
       isString(styleColor[0]) &&
       isArray(styleColor[1]) &&
       styleColor[1].length > 0
     ) {
+      // 字段映射 [string, [start: string, end: string]]
       registerStyleAttribute(fieldName, layer, styleColor[0], styleColor[1]);
     } else {
+      // 兼容
       registerStyleAttribute(fieldName, layer, '#fff', undefined);
     }
   } else {
+    // 兼容
     registerStyleAttribute(fieldName, layer, '#fff', undefined);
   }
 }
