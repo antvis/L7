@@ -23,16 +23,17 @@ import {
   IScale,
   IScaleOptions,
   IStyleAttributeService,
+  IStyleAttributeUpdateOptions,
   ScaleAttributeType,
   StyleAttrField,
+  StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
-
-import {
-  IStyleAttributeUpdateOptions,
-  StyleAttributeField,
-} from '@antv/l7-core';
+// import {
+//   IStyleAttributeUpdateOptions,
+//   StyleAttributeField,
+// } from '@antv/l7-core';
 export enum BlendType {
   normal = 'normal',
   additive = 'additive',
