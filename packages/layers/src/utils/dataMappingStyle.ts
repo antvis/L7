@@ -92,7 +92,7 @@ function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
   } else if (isNumber(styleFloat)) {
     // 传入 number、默认值处理
     registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
-  } else if (isArray(styleFloat) && styleFloat.length === 2) { 
+  } else if (isArray(styleFloat) && styleFloat.length === 2) {
     // 传入的 styleFloat 是长度为 2 的数组
     if (isString(styleFloat[0]) && isFunction(styleFloat[1])) {
       // 字段回调函数 [string, callback]

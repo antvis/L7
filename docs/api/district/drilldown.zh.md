@@ -56,8 +56,8 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 
 数据关联，属性数据如何内部空间数据关联绑定 目前支持 NAME_CHN,adcode 字段连接
 对照表 `Array [string, string]` 第一个值为空间数据字段，第二个为传入数据字段名。
-- 主要使用场景
 
+- 主要使用场景
 
 ```javascript
     popup: {
@@ -68,9 +68,11 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
     }
 
 ```
+
 - 空间数据字段是 l7-district 内部自己定义的字段 NAME_CHN, adcode
 - joinBy 第二个值是我们传入的数据中的字段
-```javascript
+
+````javascript
   const data = [
       {
         customValue: '34.5',  // 自定义的值
@@ -209,7 +211,7 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 
 ```javascirpt
   drillLayer.drillDown(['110100'])
-```
+````
 
 ### drillUp
 
