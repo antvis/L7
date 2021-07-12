@@ -266,6 +266,12 @@ class Scene
       : this.sceneService.on(type, handle);
   }
 
+  public once(type: string, handle: (...args: any[]) => void): void {
+    SceneEventList.indexOf(type) === -1
+      ? this.mapService.once(type, handle)
+      : this.sceneService.once(type, handle);
+  }
+
   public off(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1
       ? this.mapService.off(type, handle)

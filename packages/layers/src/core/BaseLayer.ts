@@ -774,9 +774,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public setSource(source: Source) {
+    // 清除旧 sources 事件
+    if (this.layerSource) {
+      this.layerSource.off('update', this.sourceEvent);
+    }
+
     this.layerSource = source;
-    const zoom = this.mapService.getZoom();
-    if (this.layerSource.cluster) {
+
+    // 已 inited 且启用聚合进行更新聚合数据
+    if (this.inited && this.layerSource.cluster) {
+      const zoom = this.mapService.getZoom();
       this.layerSource.updateClusterData(zoom);
     }
     // source 可能会复用，会在其它layer被修改
