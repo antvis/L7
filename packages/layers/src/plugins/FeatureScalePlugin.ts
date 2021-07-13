@@ -209,7 +209,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
   ): IStyleScale {
     // scale 支持根据视觉通道和字段
     const scaleOption: IScale | undefined =
-      this.scaleOptions[name] && this.scaleOptions[name].field === field
+      this.scaleOptions[name] && this.scaleOptions[name]?.field === field
         ? this.scaleOptions[name]
         : this.scaleOptions[field];
     const styleScale: IStyleScale = {

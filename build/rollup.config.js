@@ -43,11 +43,11 @@ module.exports = [
           entries: [
             {
               find: /^@antv\/l7-(.*)/,
-              replacement: resolveFile('packages/$1/src'),
+              replacement: resolveFile('packages/$1/src')
             },
             {
               find: /^@antv\/l7$/,
-              replacement: resolveFile('packages/l7/src'),
+              replacement: resolveFile('packages/l7/src')
             }
           ]
         }
@@ -72,7 +72,7 @@ module.exports = [
       commonjs({
         namedExports: {
           eventemitter3: [ 'EventEmitter' ],
-          // inversify: ['inject','injectable','postConstruct','Container','decorate','interfaces'],
+          inversify: [ 'inject', 'injectable', 'postConstruct', 'Container', 'decorate', 'interfaces' ],
           // @see https://github.com/rollup/rollup-plugin-commonjs/issues/266
           lodash: [
             'isNil',
@@ -87,8 +87,8 @@ module.exports = [
           ]
         },
         dynamicRequireTargets: [
-          'node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js',
-        ],
+          'node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js'
+        ]
       }),
       babel({
         extensions: [ '.js', '.ts' ]

@@ -60,7 +60,7 @@ export interface IScaleOption {
   domain?: any[];
 }
 export interface IScaleOptions {
-  [key: string]: IScale;
+  [key: string]: IScale | undefined;
 }
 export interface IStyleScale {
   scale: any;
