@@ -23,11 +23,17 @@ import {
   IScale,
   IScaleOptions,
   IStyleAttributeService,
+  IStyleAttributeUpdateOptions,
   ScaleAttributeType,
   StyleAttrField,
+  StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+// import {
+//   IStyleAttributeUpdateOptions,
+//   StyleAttributeField,
+// } from '@antv/l7-core';y
 export enum BlendType {
   normal = 'normal',
   additive = 'additive',
@@ -52,6 +58,7 @@ export interface ILayerModelInitializationOptions {
   fragmentShader: string;
   triangulation: Triangulation;
 }
+
 export interface ILayerModel {
   render(): void;
   getUninforms(): IModelUniform;
@@ -126,6 +133,12 @@ export interface ILayer {
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
+  updateStyleAttribute(
+    type: string,
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ): void;
   init(): ILayer;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -302,5 +315,6 @@ export interface ILayerService {
   removeAllLayers(): void;
   updateRenderOrder(): void;
   renderLayers(): void;
+  getOESTextureFloat(): boolean;
   destroy(): void;
 }

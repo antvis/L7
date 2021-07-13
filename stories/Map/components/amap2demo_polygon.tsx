@@ -1,9 +1,9 @@
-// @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_polygon extends React.Component {
+  // @ts-ignore
   private scene: Scene;
 
   public componentWillUnmount() {
@@ -30,7 +30,9 @@ export default class Amap2demo_polygon extends React.Component {
       features: [
         {
           type: 'Feature',
-          properties: {},
+          properties: {
+            testOpacity: 0.4,
+          },
           geometry: {
             type: 'MultiPolygon',
             coordinates: [
@@ -64,7 +66,9 @@ export default class Amap2demo_polygon extends React.Component {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: {
+            testOpacity: 0.8,
+          },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -95,20 +99,21 @@ export default class Amap2demo_polygon extends React.Component {
       .shape('fill')
       .color('red')
       .style({
-        opacity: 1.0,
+        // opacity: 1.0,
+        opacity: 'testOpacity',
       });
     scene.addLayer(layer);
 
-    const layer2 = new PolygonLayer({
-      autoFit: true,
-    })
-      .source(data)
-      .shape('line')
-      .color('#000')
-      .style({
-        opacity: 1.0,
-      });
-    scene.addLayer(layer2);
+    // const layer2 = new PolygonLayer({
+    //   autoFit: true,
+    // })
+    //   .source(data)
+    //   .shape('line')
+    //   .color('#000')
+    //   .style({
+    //     opacity: 1.0,
+    //   });
+    // scene.addLayer(layer2);
   }
 
   public render() {

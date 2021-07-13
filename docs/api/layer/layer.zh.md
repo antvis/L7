@@ -307,6 +307,62 @@ layer.style({
 });
 ```
 
+## 通用样式数据纹理映射
+
+从 L7 2.5 开始，各图层样式将逐步支持样式数据映射
+
+| layer 类型        | 支持的样式字段                                       | 备注                              |
+| ----------------- | ---------------------------------------------------- | --------------------------------- |
+| point/fill        | opacity、strokeOpacity、strokeWidth、stroke、offsets | shape circle、triangle...         |
+| point/image       | opacity、offsets                                     | offsets 经纬度偏移                |
+| point/normal      | opacity、offsets                                     |                                   |
+| point/text        | opacity、strokeWidth、stroke、textOffset             | textOffset 相对文字画布位置的偏移 |
+| point/extrude     | opacity                                              |                                   |
+| polygon/fill      | opacity                                              |                                   |
+| polygon/extrude   | opacity                                              |                                   |
+| line/line         | opacity                                              |                                   |
+| line/arc          | opacity                                              |                                   |
+| line/arc3d        | opacity                                              |                                   |
+| line/great_circle | opacity                                              |                                   |
+
+[DEMO 简单事例](../../../examples/point/scatter#scatterStyleMap)
+
+## 线图层纹理方法
+
+目前在线图层上单独加上了纹理方法的支持
+
+### 为图层绑定纹理
+
+```javascript
+// 首先在全局加载图片资源
+scene.addImage(
+  'plane',
+  'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
+);
+
+const layer = new LineLayer({
+  blend: 'normal',
+})
+  .source(data, {
+    parser: {
+      type: 'json',
+      x: 'lng1',
+      y: 'lat1',
+      x1: 'lng2',
+      y1: 'lat2',
+    },
+  })
+  .size(25)
+  .shape('arc')
+  .texture('plane') // 为图层绑定纹理
+  .color('#8C1EB2')
+  .style({
+    lineTexture: true, // 开启线的贴图功能
+    iconStep: 30, // 设置贴图纹理的间距
+    textureBlend: 'replace', // 设置纹理混合方式，默认值为 normal，可选值有 normal/replace 两种
+  });
+```
+
 ## 图层更新方法
 
 如果已经添加了图层，需要修改图层显示样式可以再次调用图形映射方法，然后调用 `scene.render()`更新渲染即可

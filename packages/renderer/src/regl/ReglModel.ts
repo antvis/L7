@@ -124,7 +124,6 @@ export default class ReglModel implements IModel {
         | number[]
         | boolean;
     } = {};
-
     Object.keys(uniforms).forEach((uniformName: string) => {
       const type = typeof uniforms[uniformName];
       if (

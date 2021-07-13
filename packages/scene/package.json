@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-scene",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,18 +23,18 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-component": "^2.4.4",
-    "@antv/l7-core": "^2.4.4",
-    "@antv/l7-layers": "^2.4.4",
-    "@antv/l7-maps": "^2.4.4",
-    "@antv/l7-renderer": "^2.4.4",
-    "@antv/l7-utils": "^2.4.4",
+    "@antv/l7-component": "^2.4.5",
+    "@antv/l7-core": "^2.4.5",
+    "@antv/l7-layers": "^2.4.5",
+    "@antv/l7-maps": "^2.4.5",
+    "@antv/l7-renderer": "^2.4.5",
+    "@antv/l7-utils": "^2.4.5",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
     "reflect-metadata": "^0.1.13"
   },
-  "gitHead": "719d3b75bdfbb7a98767858333b90be92179fed0",
+  "gitHead": "6c4741c32490246e0e3beca65f5b3a95ca4af73d",
   "publishConfig": {
     "access": "public"
   }

@@ -58,7 +58,7 @@ export default class GaodeMapComponent extends React.Component {
       .style({
         stroke: '#fff',
         storkeWidth: 2,
-        offsets: [100, 100],
+        // offsets: [100, 100],
       });
     scene.addLayer(layer);
     scene.render();

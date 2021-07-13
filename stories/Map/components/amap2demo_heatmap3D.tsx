@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Scene, HeatmapLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';

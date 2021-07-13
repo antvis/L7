@@ -4,6 +4,7 @@ import { ILngLat, IMapService } from '../map/IMapService';
 
 export interface IPopupOption {
   closeButton: boolean;
+  closeButtonOffsets?: [number, number];
   closeOnClick: boolean;
   maxWidth: string;
   anchor: anchorType[any];

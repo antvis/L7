@@ -30,9 +30,14 @@ uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
 
+varying mat4 styleMappingMat;
+
 #pragma include "picking"
+#pragma include "project"
+#pragma include "projection"
 
 void main() {
+  float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0;
   // gl_FragColor = v_color;
   
@@ -44,7 +49,7 @@ void main() {
 
   // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
-  gl_FragColor.a *= u_opacity;
+  gl_FragColor.a *= opacity;
   if(u_line_type == LineTypeDash) {
    float flag = 0.;
     float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
@@ -56,13 +61,9 @@ void main() {
 
   if(u_aimate.x == Animate) {
       animateSpeed = u_time / u_aimate.y;
-      // float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / (segmentNumber - 1.0)));
-      // float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       float alpha =1.0 - fract( mod(1.0- smoothstep(0.0, 1.0, v_distance_ratio), u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
       alpha = smoothstep(0., 1., alpha);
-      // alpha = clamp(alpha, 0.1, 1.0);
-      // if(alpha < 0.01) alpha = 0.0;
       gl_FragColor.a *= alpha;
   }
 
@@ -70,11 +71,10 @@ void main() {
     float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / (segmentNumber - 1.0)));
     // float arcRadio = v_segmentIndex / (segmentNumber - 1.0);
     float count = floor(v_arcDistrance/v_pixelLen);
-    // float u = fract(arcRadio * count);
     float u = fract(arcRadio * count - animateSpeed * count);
     // float u = fract(arcRadio * count - animateSpeed);
     if(u_aimate.x == Animate) {
-      u = gl_FragColor.a;
+      u = gl_FragColor.a/opacity;
     }
 
     float v = length(v_offset)/(v_a); // 横向
@@ -87,13 +87,12 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);
     } else { // replace
-        pattern.a *= u_opacity;
+        pattern.a *= opacity;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }
         gl_FragColor = filterColor(pattern);
     }
-    // gl_FragColor = filterColor(gl_FragColor + pattern);
   } else {
     gl_FragColor = filterColor(gl_FragColor);
   }

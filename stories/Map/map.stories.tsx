@@ -16,6 +16,7 @@ import Amap2demo_polygon_extrude from './components/amap2demo_polygon_extrude'
 
 import Amap2demo_arcLine from "./components/amap2demo_arcLine"
 import Amap2demo_arcLine3d from "./components/amap2demo_arcLine3d"
+import Amap2demo_arcLine3dLinear from './components/amap2demo_arcLine3dLinear';
 import Amap2demo_arcLine_greatCircle from "./components/amap2demo_arcLine_greatCircle"
 import Amap2demo_arcLine_greatCircleTex from "./components/amap2demo_arcLine_greatCircleTex"
 import Amap2demo_lineHeight from "./components/amap2demo_lineHeight"
@@ -44,6 +45,7 @@ import Amap2demo_citybuilding from "./components/amap2demo_citybuilding"
 import Amap2demo_drilldown from "./components/amap2demo_drilldown"
 
 import Amap2demo_markerlayer from "./components/amap2demo_markerlayer"
+import Amap2demo_markerPopup from './components/amap2demo_markerPopup';
 import Amap2demo_clustermarker from './components/amap2demo_clustermarker';
 
 import Amap2demo_instance from "./components/amap2demo_instance"
@@ -52,6 +54,11 @@ import Amap2demo_drawControl from "./components/amap2demo_drawControl"
 
 import Amap2demo_mesh from "./components/amap2demo_mesh"
 import Amap2demo_mesh2 from "./components/amap2demo_mesh2"
+import Amap2demo_meshStyleMap from './components/amap2demo_meshStyleMap';
+
+import Amap2demo_styleMap from "./components/amap2demo_styleMap" 
+
+import Amap2demo_textOffset from "./components/amap2demo_textOffset"
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -68,7 +75,8 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 polygon_extrude', () => <Amap2demo_polygon_extrude />)
 
         .add('高德地图2.0 line_arc', () => <Amap2demo_arcLine />)
-        .add('高德地图2.0 line_arc3d', () => <Amap2demo_arcLine3d />)
+        .add('高德地图2.0 line_arc3d_demo', () => <Amap2demo_arcLine3d />)
+        .add('高德地图2.0 line_arc3d_linear_demo', () => <Amap2demo_arcLine3dLinear />)
         .add('高德地图2.0 line_arc_greatCircle', () => <Amap2demo_arcLine_greatCircle />)
         .add('高德地图2.0 line_arc_greatCircleTex', () => <Amap2demo_arcLine_greatCircleTex />)
         .add('高德地图2.0 lineHeight', () => <Amap2demo_lineHeight />)
@@ -97,6 +105,7 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 点击下钻', () => <Amap2demo_drilldown />)
 
         .add('高德地图2.0 Marker图层', () => <Amap2demo_markerlayer />)
+        .add('marker popup', () => <Amap2demo_markerPopup/>)
         .add('高德地图2.0 clusterMarker图层', () => <Amap2demo_clustermarker />)
 
         .add('高德地图2.0 instance实例', () => <Amap2demo_instance />)
@@ -105,3 +114,7 @@ storiesOf('地图方法', module)
 
         .add('高德地图2.0 mesh实例', () => <Amap2demo_mesh />)
         .add('高德地图2.0 mesh实例2', () => <Amap2demo_mesh2 />)
+        .add('高德地图 mesh 样式数据映射', () => <Amap2demo_meshStyleMap/>)
+
+        .add('高德地图 样式数据映射', () => <Amap2demo_styleMap/>)
+        .add('高德地图 样式映射 文字偏移', () => <Amap2demo_textOffset/>)

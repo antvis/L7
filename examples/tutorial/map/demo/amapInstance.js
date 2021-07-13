@@ -52,8 +52,8 @@ window.onLoad = function() {
   });
 };
 
-// const url = 'https://webapi.amap.com/maps?v=1.4.15&key=15cd8a57710d40c9b7c0e3cc120f1200&callback=onLoad';
-const url = 'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f&callback=onLoad';
+const url = 'https://webapi.amap.com/maps?v=1.4.15&key=15cd8a57710d40c9b7c0e3cc120f1200&callback=onLoad';
+// const url = 'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f&callback=onLoad';
 const jsapi = document.createElement('script');
 jsapi.charset = 'utf-8';
 jsapi.src = url;

@@ -52,6 +52,7 @@ import { isFunction, isObject } from 'lodash';
 import mergeJsonSchemas from 'merge-json-schemas';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
+import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import baseLayerSchema from './schema';
 /**
  * 分配 layer id
@@ -206,6 +207,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       };
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
+
+      // @ts-ignore
+      handleStyleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
+
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -946,6 +951,40 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
+  public updateStyleAttribute(
+    type: string,
+    field: StyleAttributeField,
+    values?: StyleAttributeOption,
+    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
+  ) {
+    if (!this.inited) {
+      this.pendingStyleAttributes.push({
+        attributeName: type,
+        attributeField: field,
+        attributeValues: values,
+        updateOptions,
+      });
+    } else {
+      this.styleAttributeService.updateStyleAttribute(
+        type,
+        {
+          // @ts-ignore
+          scale: {
+            field,
+            ...this.splitValuesAndCallbackInAttribute(
+              // @ts-ignore
+              values,
+              // @ts-ignore
+              this.getLayerConfig()[field],
+            ),
+          },
+        },
+        // @ts-ignore
+        updateOptions,
+      );
+    }
+  }
+
   protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }
@@ -983,39 +1022,5 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         : valuesOrCallback || defaultValues,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
-  }
-
-  private updateStyleAttribute(
-    type: string,
-    field: StyleAttributeField,
-    values?: StyleAttributeOption,
-    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
-  ) {
-    if (!this.inited) {
-      this.pendingStyleAttributes.push({
-        attributeName: type,
-        attributeField: field,
-        attributeValues: values,
-        updateOptions,
-      });
-    } else {
-      this.styleAttributeService.updateStyleAttribute(
-        type,
-        {
-          // @ts-ignore
-          scale: {
-            field,
-            ...this.splitValuesAndCallbackInAttribute(
-              // @ts-ignore
-              values,
-              // @ts-ignore
-              this.getLayerConfig()[field],
-            ),
-          },
-        },
-        // @ts-ignore
-        updateOptions,
-      );
-    }
   }
 }

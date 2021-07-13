@@ -208,6 +208,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
         );
+
         // this.initContainer();
         // window.addEventListener('resize', this.handleWindowResized);
         elementResizeEvent(
@@ -267,6 +268,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     // 尝试初始化未初始化的图层
     this.layerService.renderLayers();
+
     // 组件需要等待layer 初始化完成之后添加
     this.logger.debug(`scene ${this.id} render`);
     this.rendering = false;

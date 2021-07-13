@@ -1,5 +1,4 @@
-//@ts-ignore
-import { PointLayer, Scene } from '@antv/l7';
+import { Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import { DrawControl } from '@antv/l7-draw';
 import * as React from 'react';

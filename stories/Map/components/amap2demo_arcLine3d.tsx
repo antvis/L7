@@ -1,4 +1,3 @@
-// @ts-ignore
 import { PointLayer, LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
@@ -19,11 +18,16 @@ export default class Amap2demo_arcLine3d extends React.Component {
         center: [3.438, 40.16797],
         zoom: 0,
         viewMode: '3D',
+        style: 'dark',
       }),
     });
     this.scene = scene;
 
     scene.on('loaded', () => {
+      scene.addImage(
+        'plane',
+        'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
+      );
       Promise.all([
         fetch(
           'https://gw.alipayobjects.com/os/basement_prod/dbd008f1-9189-461c-88aa-569357ffc07d.json',
@@ -48,13 +52,6 @@ export default class Amap2demo_arcLine3d extends React.Component {
           });
           return { coord: [latlng1, latlng2] };
         });
-        // const worldFill = new PolygonLayer()
-        //   .source(world)
-        //   .color('#98E3FA')
-        //   .shape('fill')
-        //   .style({
-        //     opacity: 1
-        //   });
 
         const worldLine = new LineLayer()
           .source(world)
@@ -78,7 +75,32 @@ export default class Amap2demo_arcLine3d extends React.Component {
           .style({
             opacity: 1.0,
           });
-        const flyLine = new LineLayer()
+        const flyLine = new LineLayer({ blend: 'normal' })
+          .source(flydata, {
+            parser: {
+              type: 'json',
+              coordinates: 'coord',
+            },
+          })
+          .color('#ff6b34')
+          .texture('plane')
+          .shape('arc3d')
+          // .shape('arc')
+          .size(20)
+          // .active(true)
+          .animate({
+            duration: 10,
+            interval: 0.2,
+            trailLength: 0.05,
+          })
+          .style({
+            textureBlend: 'replace',
+            lineTexture: true, // 开启线的贴图功能
+            iconStep: 10, // 设置贴图纹理的间距
+            opacity: 1,
+          });
+
+        const flyLine2 = new LineLayer()
           .source(flydata, {
             parser: {
               type: 'json',
@@ -87,19 +109,17 @@ export default class Amap2demo_arcLine3d extends React.Component {
           })
           .color('#ff6b34')
           .shape('arc3d')
-          .size(2)
-          .active(true)
-          .animate({
-            interval: 2,
-            trailLength: 2,
-            duration: 1,
-          })
+          // .shape('arc')
+          .size(1)
+          // .active(true)
           .style({
-            opacity: 1,
+            lineType: 'dash',
+            dashArray: [5, 5],
+            opacity: 0.5,
           });
-        // scene.addLayer(worldFill);
         scene.addLayer(worldLine);
         scene.addLayer(dotPoint);
+        scene.addLayer(flyLine2);
         scene.addLayer(flyLine);
       });
     });

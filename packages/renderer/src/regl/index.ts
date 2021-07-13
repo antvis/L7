@@ -10,6 +10,7 @@ import {
   IClearOptions,
   IElements,
   IElementsInitializationOptions,
+  IExtensions,
   IFramebuffer,
   IFramebufferInitializationOptions,
   IModel,
@@ -34,6 +35,7 @@ import ReglTexture2D from './ReglTexture2D';
  */
 @injectable()
 export default class ReglRendererService implements IRendererService {
+  public extensionObject: IExtensions;
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
   private canvas: HTMLCanvasElement;
@@ -81,6 +83,15 @@ export default class ReglRendererService implements IRendererService {
         },
       });
     });
+
+    this.extensionObject = {
+      OES_texture_float: this.testExtension('OES_texture_float'),
+    };
+  }
+
+  public testExtension(name: string) {
+    // OES_texture_float
+    return !!this.getGLContext().getExtension(name);
   }
 
   public createModel = (options: IModelInitializationOptions): IModel =>

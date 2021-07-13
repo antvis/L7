@@ -121,12 +121,14 @@ export default class Popup extends EventEmitter implements IPopup {
 
     if (this.container) {
       this.removeDom(this.container);
+      // @ts-ignore
       delete this.container;
     }
     if (this.mapsService) {
       // TODO: mapbox AMap 事件同步
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('click', this.onClickClose);
+      // @ts-ignore
       delete this.mapsService;
     }
     clearTimeout(this.timeoutInstance);
@@ -148,6 +150,15 @@ export default class Popup extends EventEmitter implements IPopup {
         'l7-popup-close-button',
         this.content,
       );
+
+      if (this.popupOption.closeButtonOffsets) {
+        // 关闭按钮的偏移
+        this.closeButton.style.right =
+          this.popupOption.closeButtonOffsets[0] + 'px';
+        this.closeButton.style.top =
+          this.popupOption.closeButtonOffsets[1] + 'px';
+      }
+
       // this.closeButton.type = 'button';
       this.closeButton.setAttribute('aria-label', 'Close popup');
       this.closeButton.innerHTML = '&#215;';

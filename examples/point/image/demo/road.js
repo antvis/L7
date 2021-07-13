@@ -35,7 +35,7 @@ scene.on('loaded', () => {
         })
         .style({
           lineTexture: true, // 开启线的贴图功能
-          iconStep: 200 // 设置贴图纹理的间距
+          iconStep: 50 // 设置贴图纹理的间距
         });
       scene.addLayer(layer);
 

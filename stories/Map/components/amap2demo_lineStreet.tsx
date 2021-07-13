@@ -1,6 +1,5 @@
-// @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_lineStreet extends React.Component {
@@ -14,7 +13,7 @@ export default class Amap2demo_lineStreet extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         zoom: 16,

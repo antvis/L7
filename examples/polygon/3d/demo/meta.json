@@ -8,6 +8,11 @@
       "filename": "polygon.js",
       "title": "3D 建筑面",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RCaZSLthUn0AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "polygonStyleMap.js",
+      "title": "3D 几何体样式映射",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*7dEyQKcvVSwAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

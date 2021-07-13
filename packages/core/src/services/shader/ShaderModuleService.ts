@@ -12,6 +12,10 @@ import pickingVert from '../../shaders/picking.vert.glsl';
 import project from '../../shaders/project.glsl';
 import projection from '../../shaders/projection.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
+import styleMapping from '../../shaders/styleMapping.glsl';
+import styleMappingCalOpacity from '../../shaders/styleMappingCalOpacity.glsl';
+import styleMappingCalStrokeOpacity from '../../shaders/styleMappingCalStrokeOpacity.glsl';
+import styleMappingCalStrokeWidth from '../../shaders/styleMappingCalStrokeWidth.glsl';
 
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
@@ -33,6 +37,19 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('lighting', { vs: lighting, fs: '' });
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
+    this.registerModule('styleMapping', { vs: styleMapping, fs: '' });
+    this.registerModule('styleMappingCalOpacity', {
+      vs: styleMappingCalOpacity,
+      fs: '',
+    });
+    this.registerModule('styleMappingCalStrokeOpacity', {
+      vs: styleMappingCalStrokeOpacity,
+      fs: '',
+    });
+    this.registerModule('styleMappingCalStrokeWidth', {
+      vs: styleMappingCalStrokeWidth,
+      fs: '',
+    });
   }
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {

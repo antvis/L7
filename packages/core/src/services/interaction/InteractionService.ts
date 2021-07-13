@@ -10,7 +10,7 @@ const DragEventMap: { [key: string]: string } = {
   panstart: 'dragstart',
   panmove: 'dragging',
   panend: 'dragend',
-  pancancel: 'dragcancle',
+  pancancel: 'dragcancel',
 };
 /**
  * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。

@@ -49,18 +49,22 @@ export default class Country extends React.Component {
           padding: [5, 5],
         },
         popup: {
-          enable: true,
-          openTriggerEvent: 'click',
-          Html: (props: any) => {
-            return `<span><button onclick='alert(11111)'>点击</button>${props.NAME_CHN +
-              ':' +
-              props.value}</span>`;
+          // enable: true,
+          enable: false,
+          Html: (props) => {
+            return `<span>${props.NAME_CHN}</span>`;
           },
         },
       });
       console.time('layer');
       Layer.on('loaded', () => {
         console.timeEnd('layer');
+      });
+      console.log('======');
+      Layer.on('click', (e: any) => {
+        // alert(e);
+        console.log(e);
+        // alert(1)
       });
     });
     this.scene = scene;
