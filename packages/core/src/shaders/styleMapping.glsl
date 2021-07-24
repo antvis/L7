@@ -4,23 +4,23 @@ uniform mat4 u_cellTypeLayout;      // 描述数据纹理 cell 结构的矩阵
 uniform sampler2D u_dataTexture;    // 数据纹理
 
 bool hasOpacity() { // 判断 cell 中是否存在 opacity 的数据
-  return u_cellTypeLayout[1][0] > 0.0;
+  return u_cellTypeLayout[1][0] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
 }
 
 bool hasStrokeOpacity() { // 判断 cell 中是否存在 strokeOpacity 的数据
-  return u_cellTypeLayout[1][1] > 0.0;
+  return u_cellTypeLayout[1][1] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
 }
 
 bool hasStrokeWidth() { // 判断 cell 中是否存在 strokeWidth 的数据
-  return u_cellTypeLayout[1][2] > 0.0;
+  return u_cellTypeLayout[1][2] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
 }
 
 bool hasStroke() { // 判断 cell 中是否存在 stroke 的数据
-  return u_cellTypeLayout[1][3] > 0.0;
+  return u_cellTypeLayout[1][3] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
 }
 
 bool hasOffsets() { // 判断 cell 中是否存在 offsets 的数据
-  return u_cellTypeLayout[2][0] > 0.0;
+  return u_cellTypeLayout[2][0] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
 }
 
 // 根据坐标位置先是计算 uv ，然后根据 uv 从数据纹理中取值

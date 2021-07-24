@@ -159,6 +159,13 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       hasOffsets: 0,
     };
     this.dataTextureTest = this.layerService.getOESTextureFloat();
+    this.dataTexture = this.createTexture2D({
+      data: new ImageData(1, 1).data,
+      mag: gl.NEAREST,
+      min: gl.NEAREST,
+      width: 1,
+      height: 1
+    });
   }
 
   // style datatexture mapping
@@ -197,7 +204,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         0.0,
         0.0,
         0.0,
-        0.0,
+        1.0,
       ];
     } else {
       return [
@@ -216,7 +223,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         0.0,
         0.0,
         0.0,
-        0.0,
+        -1.0,
       ];
     }
   }
