@@ -164,7 +164,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       mag: gl.NEAREST,
       min: gl.NEAREST,
       width: 1,
-      height: 1
+      height: 1,
     });
   }
 
