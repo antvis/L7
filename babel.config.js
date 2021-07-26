@@ -10,7 +10,9 @@ module.exports = api => {
   if (isSite) {
     return {
       presets: [
-        'babel-preset-gatsby'
+        'babel-preset-gatsby', {
+          silence: true
+        }
       ],
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
@@ -19,7 +21,7 @@ module.exports = api => {
         [
           '@babel/plugin-proposal-decorators',
           {
-            legacy: true,
+            legacy: true
           }
         ],
         [
@@ -81,7 +83,7 @@ module.exports = api => {
         '@babel/plugin-proposal-class-properties',
         {
           // @see https://github.com/storybookjs/storybook/issues/6069#issuecomment-472544973
-          loose: true
+          loose: false
         }
       ],
       '@babel/plugin-syntax-dynamic-import',
