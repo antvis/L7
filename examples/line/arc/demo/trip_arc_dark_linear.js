@@ -31,7 +31,7 @@ scene.on('loaded', () => {
         .style({
           opacity: 0.8,
           sourceColor: '#f00',
-          targetColor: '#0f0',
+          targetColor: '#0f0'
         });
       scene.addLayer(layer);
     });
