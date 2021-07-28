@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Scene } from '@antv/l7';
-import { PolygonLayer } from '@antv/l7-layers';
+import { PolygonLayer, PointLayer } from '@antv/l7-layers';
 import { Map } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -26,6 +26,39 @@ export default class ScaleComponent extends React.Component {
     )
       .then((res) => res.json())
       .then((data) => {
+        const textLayer = new PointLayer({})
+          .source(
+            [
+              {
+                lng: 120.5,
+                lat: 31.3,
+                iconType: 'cloud',
+                iconColor: '#F0F8FF',
+                weather: '多云 - 今日适宜出门',
+                textOffset: [-40, 0],
+              },
+            ],
+            {
+              parser: {
+                type: 'json',
+                x: 'lng',
+                y: 'lat',
+              },
+            },
+          )
+          .shape('weather', 'text')
+          .size(16)
+          .color('#f00')
+          .style({
+            textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+            textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+            spacing: 2, // 字符间距
+            padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+            fontFamily: 'Times New Roman',
+            textAllowOverlap: true,
+          });
+        scene.addLayer(textLayer);
+
         const layer = new PolygonLayer({
           name: '01',
         });

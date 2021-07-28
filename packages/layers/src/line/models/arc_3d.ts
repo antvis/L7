@@ -120,9 +120,8 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public clearModels() {
-    if (this.texture) {
-      this.texture.destroy();
-    }
+    this.texture?.destroy();
+    this.dataTexture?.destroy();
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
