@@ -66,6 +66,10 @@ export default class ExtrudeModel extends BaseModel {
     ];
   }
 
+  public clearModels() {
+    this.dataTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({

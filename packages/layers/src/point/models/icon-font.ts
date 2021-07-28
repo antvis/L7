@@ -50,6 +50,10 @@ export default class IconeModel extends BaseModel {
     ];
   }
 
+  public clearModels() {
+    this.dataTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({

@@ -79,6 +79,10 @@ export default class FillModel extends BaseModel {
     ];
   }
 
+  public clearModels() {
+    this.dataTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
   }

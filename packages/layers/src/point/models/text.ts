@@ -241,6 +241,7 @@ export default class TextModel extends BaseModel {
   }
 
   public clearModels() {
+    this.dataTexture?.destroy();
     this.layer.off('remapping', this.buildModels);
   }
   protected registerBuiltinAttributes() {
@@ -516,6 +517,7 @@ export default class TextModel extends BaseModel {
     if (this.texture) {
       this.texture.destroy();
     }
+
     this.texture = createTexture2D({
       data: canvas,
       mag: gl.LINEAR,

@@ -110,6 +110,10 @@ export default class NormalModel extends BaseModel {
     ];
   }
 
+  public clearModels() {
+    this.dataTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
