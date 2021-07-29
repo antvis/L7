@@ -526,7 +526,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // } else {
     //   this.renderModels();
     // }
-    this.renderModels();
+    // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
+    if (this.getEncodedData().length !== 0) {
+      this.renderModels();
+    }
+    // this.renderModels();
+
     // this.multiPassRenderer.render();
     // this.renderModels();
     return this;
@@ -938,16 +943,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public renderModels() {
-    if (this.layerModelNeedUpdate && this.layerModel) {
-      this.models = this.layerModel.buildModels();
-      this.hooks.beforeRender.call();
-      this.layerModelNeedUpdate = false;
-    }
-    this.models.forEach((model) => {
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
+    // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
+    if (this.getEncodedData().length > 0) {
+      if (this.layerModelNeedUpdate && this.layerModel) {
+        this.models = this.layerModel.buildModels();
+        this.hooks.beforeRender.call();
+        this.layerModelNeedUpdate = false;
+      }
+      this.models.forEach((model) => {
+        model.draw({
+          uniforms: this.layerModel.getUninforms(),
+        });
       });
-    });
+    }
     return this;
   }
 

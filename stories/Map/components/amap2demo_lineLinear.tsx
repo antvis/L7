@@ -16,11 +16,41 @@ export default class Amap2demo_lineLinear extends React.Component {
       map: new GaodeMap({
         center: [120.19382669582967, 30.258134],
         pitch: 0,
-        zoom: 16,
+        zoom: 6,
         viewMode: '3D',
       }),
     });
     this.scene = scene;
+    const geoData = {
+      type: 'FeatureCollection',
+      features: [
+        // {
+        //   type: 'Feature',
+        //   properties: {
+        //     testOpacity: 0.8,
+        //   },
+        //   geometry: {
+        //     type: 'Polygon',
+        //     coordinates: [
+        //       [
+        //         [113.8623046875, 30.031055426540206],
+        //         [116.3232421875, 30.031055426540206],
+        //         [116.3232421875, 31.090574094954192],
+        //         [113.8623046875, 31.090574094954192],
+        //         [113.8623046875, 30.031055426540206],
+        //       ],
+        //       [
+        //         [117.26806640625, 32.13840869677249],
+        //         [118.36669921875, 32.13840869677249],
+        //         [118.36669921875, 32.47269502206151],
+        //         [117.26806640625, 32.47269502206151],
+        //         [117.26806640625, 32.13840869677249],
+        //       ],
+        //     ],
+        //   },
+        // },
+      ],
+    };
 
     scene.on('loaded', () => {
       fetch(
@@ -31,7 +61,8 @@ export default class Amap2demo_lineLinear extends React.Component {
         .then((data) => {
           // @ts-ignore
           const layer = new LineLayer({})
-            .source(data)
+            // .source(data)
+            .source(geoData)
             .size(5)
             .shape('line')
             .color('#25d8b7')

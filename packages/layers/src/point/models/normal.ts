@@ -60,7 +60,7 @@ export default class NormalModel extends BaseModel {
       this.rowCount = height; // 当前数据纹理有多少行
 
       this.dataTexture =
-        this.cellLength > 0
+        this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
               flipY: true,
               data,
@@ -140,6 +140,7 @@ export default class NormalModel extends BaseModel {
       },
     });
   }
+
   private defaultStyleOptions(): Partial<
     IPointLayerStyleOptions & ILayerConfig
   > {
