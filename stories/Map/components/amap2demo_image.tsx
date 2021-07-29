@@ -1,10 +1,56 @@
-import { PointLayer, Scene } from '@antv/l7';
+import { PointLayer, Scene, LineLayer, PolygonLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-
+const data = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      properties: {
+        testOpacity: 0.4,
+      },
+      geometry: {
+        type: 'MultiPolygon',
+        coordinates: [
+          [
+            [
+              [110.5224609375, 32.731840896865684],
+              [113.0712890625, 32.731840896865684],
+              [113.0712890625, 34.56085936708384],
+              [110.5224609375, 34.56085936708384],
+              [110.5224609375, 32.731840896865684],
+            ],
+            [
+              [111.26953125, 33.52307880890422],
+              [111.26953125, 34.03445260967645],
+              [112.03857421875, 34.03445260967645],
+              [112.03857421875, 33.52307880890422],
+              [111.26953125, 33.52307880890422],
+            ],
+          ],
+          [
+            [
+              [115.04882812499999, 34.379712580462204],
+              [114.9609375, 33.46810795527896],
+              [115.8837890625, 33.50475906922609],
+              [115.86181640625001, 34.379712580462204],
+              [115.04882812499999, 34.379712580462204],
+            ],
+          ],
+        ],
+      },
+    },
+  ],
+};
 export default class Amap2demo_image extends React.Component {
   // @ts-ignore
   private scene: Scene;
+  private imageLayer: any;
+  private imageLayer2: any;
+  private imageLayer3: any;
+  private lineLayer: any;
+  private polygonLayer: any;
+  private polygonLine: any;
 
   public componentWillUnmount() {
     this.scene.destroy();
@@ -86,39 +132,132 @@ export default class Amap2demo_image extends React.Component {
     );
 
     scene.on('loaded', () => {
-      // fetch(
-      //   'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
-      // )
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     const imageLayer = new PointLayer()
-      //       .source(data, {
-      //         parser: {
-      //           type: 'json',
-      //           x: 'longitude',
-      //           y: 'latitude',
-      //         },
-      //       })
-      //       .shape('name', ['00', '01', '02'])
-      //       // .color("rgba(255, 0, 0, 0.1)")
-      //       .size(20);
-      //     scene.addLayer(imageLayer);
+      // this.polygonLayer = new PolygonLayer({
+      // })
+      // this.polygonLayer.source({
+      //     type: 'FeatureCollection',
+      //     features: [],
+      //   })
+      //   .shape('fill')
+      //   .color('red')
+      //   .style({
+      //     opacity: 0.5
       //   });
-      const imageLayer = new PointLayer()
-        .source(originData, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        .shape('name', ['00', '01', '02'])
-        .size(20)
-        .style({
-          opacity: 'opacity',
-          offsets: 'offsets',
+      // scene.addLayer(this.polygonLayer);
+
+      // this.polygonLine = new PolygonLayer({
+      // })
+
+      //   this.polygonLine.source({
+      //     type: 'FeatureCollection',
+      //     features: [],
+      //   })
+      //   .shape('line')
+      //   .color('#00f')
+      //   .style({
+      //     opacity: 0.8
+      //   });
+      // scene.addLayer(this.polygonLine);
+
+      // this.lineLayer = new LineLayer({
+      //   zIndex: 7,
+      //   pickingBuffer: 4,
+      // });
+      // this.lineLayer
+      //   .source({
+      //     type: 'FeatureCollection',
+      //     features: [],
+      //   })
+      //   .shape('line')
+      //   .size(10)
+      //   .color('#f00')
+      //   scene.addLayer(this.lineLayer)
+      // this.imageLayer = new PointLayer({
+      //   blend: "normal"
+      // })
+      // this.imageLayer.source([], {
+      //     parser: {
+      //       type: 'json',
+      //       x: 'longitude',
+      //       y: 'latitude',
+      //     },
+      //   })
+      //   .shape('name', ['00'])
+      //   .size(20)
+      //   .style({
+      //     opacity: 0.5
+      //   });
+      // scene.addLayer(this.imageLayer);
+      // this.imageLayer2 = new PointLayer({
+      //   blend: "normal"
+      // })
+      // this.imageLayer2.source([], {
+      //     parser: {
+      //       type: 'json',
+      //       x: 'longitude',
+      //       y: 'latitude',
+      //     },
+      //   })
+      //   .shape('name', ['02'])
+      //   .size(20)
+      //   .style({
+      //     opacity: 0.5
+      //   });
+      // scene.addLayer(this.imageLayer2);
+      // this.imageLayer3 = new PointLayer({
+      //   blend: "normal"
+      // })
+      // this.imageLayer3.source([], {
+      //     parser: {
+      //       type: 'json',
+      //       x: 'longitude',
+      //       y: 'latitude',
+      //     },
+      //   })
+      //   .shape('name', ['00'])
+      //   .size(20)
+      //   .style({
+      //     opacity: 0.5
+      //   });
+      // scene.addLayer(this.imageLayer3);
+
+      for (let i = 0; i < 17; i++) {
+        // > 16 * 2
+        // var testdata = [{
+        //   longitude: 121.43 + Math.random() * -0.2 + 0.1,
+        //   latitude: 31.26 + Math.random() + -0.2 + 0.1,
+        // }]
+        var testdata: any[] = [];
+        let layer = new PointLayer({
+          blend: 'normal',
         });
-      scene.addLayer(imageLayer);
+        layer
+          .source(testdata, {
+            parser: {
+              type: 'json',
+              x: 'longitude',
+              y: 'latitude',
+            },
+          })
+          .color('#ff0')
+          // .shape('name', ['00'])
+          .size(20);
+        scene.addLayer(layer);
+
+        // let layer = new PolygonLayer({
+        // })
+        // layer.source({
+        //     type: 'FeatureCollection',
+        //     features: [],
+        //   })
+        //   .shape('fill')
+        //   .color('red')
+        //   .style({
+        //     opacity: 0.5
+        //   });
+        // scene.addLayer(layer);
+      }
+      console.log(scene.getLayers());
     });
   }
 

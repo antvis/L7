@@ -159,13 +159,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       hasOffsets: 0,
     };
     this.dataTextureTest = this.layerService.getOESTextureFloat();
-    this.dataTexture = this.createTexture2D({
-      data: new ImageData(1, 1).data,
-      mag: gl.NEAREST,
-      min: gl.NEAREST,
-      width: 1,
-      height: 1,
-    });
+    // 只有在不支持数据纹理的情况下进行赋值
+    if (!this.dataTextureTest) {
+      this.dataTexture = this.createTexture2D({
+        data: new ImageData(1, 1).data,
+        mag: gl.NEAREST,
+        min: gl.NEAREST,
+        width: 1,
+        height: 1,
+      });
+    }
   }
 
   // style datatexture mapping
