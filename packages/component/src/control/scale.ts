@@ -26,10 +26,11 @@ export default class Scale extends Control {
       name: 'scale',
     };
   }
-
+  // @ts-ignore
   public onAdd() {
     const className = 'l7-control-scale';
     const container = DOM.create('div', className);
+    // @ts-ignore
     this.addScales(className + '-line', container);
     const { updateWhenIdle } = this.controlOption;
     // TODO: 高德地图和MapBox地图事件不一致问题
@@ -103,9 +104,11 @@ export default class Scale extends Control {
   private addScales(className: string, container: HTMLElement) {
     const { metric, imperial } = this.controlOption;
     if (metric) {
+      // @ts-ignore
       this.mScale = DOM.create('div', className, container);
     }
     if (imperial) {
+      // @ts-ignore
       this.iScale = DOM.create('div', className, container);
     }
   }

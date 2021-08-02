@@ -90,7 +90,7 @@ export default class ScaleComponent extends React.Component {
       overlayers: layers,
       position: 'bottomright',
     });
-
+    // @ts-ignore
     scene.addControl(scaleControl);
     scene.addControl(layerControl);
     const zoomControl = new Zoom({

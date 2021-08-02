@@ -89,6 +89,7 @@ export default class AMapService
       const amap = mapContainer.getElementsByClassName(
         'amap-maps',
       )[0] as HTMLElement;
+      // @ts-ignore
       this.markerContainer = DOM.create('div', 'l7-marker-container', amap);
     }
   }

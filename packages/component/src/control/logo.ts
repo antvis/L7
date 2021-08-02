@@ -8,9 +8,11 @@ export default class Logo extends Control {
       name: 'logo',
     };
   }
+  // @ts-ignore
   public onAdd() {
     const className = 'l7-control-logo';
     const container = DOM.create('div', className);
+    // @ts-ignore
     const anchor: HTMLLinkElement = DOM.create(
       'a',
       'l7-ctrl-logo',
@@ -20,6 +22,7 @@ export default class Logo extends Control {
     anchor.href = 'https://antv.alipay.com/l7';
     anchor.setAttribute('aria-label', 'AntV logo');
     anchor.setAttribute('rel', 'noopener nofollow');
+    // @ts-ignore
     container.appendChild(anchor);
     return container;
   }

@@ -65,6 +65,7 @@ export default class ControlService implements IControlService {
   private initControlPos() {
     const corners: IControlCorners = (this.controlCorners = {});
     const l = 'l7-';
+    // @ts-ignore
     const container = (this.controlContainer = DOM.create(
       'div',
       l + 'control-container',
@@ -73,7 +74,7 @@ export default class ControlService implements IControlService {
 
     function createCorner(vSide: string, hSide: string) {
       const className = l + vSide + ' ' + l + hSide;
-
+      // @ts-ignore
       corners[vSide + hSide] = DOM.create('div', className, container);
     }
 
@@ -92,7 +93,9 @@ export default class ControlService implements IControlService {
     if (this.controlContainer) {
       DOM.remove(this.controlContainer);
     }
+    // @ts-ignore
     delete this.controlCorners;
+    // @ts-ignore
     delete this.controlContainer;
   }
 }

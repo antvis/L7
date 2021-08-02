@@ -250,7 +250,9 @@ export default class MarkerLayer extends EventEmitter {
 
   private generateElement(feature: any) {
     const el = DOM.create('div', 'l7-marker-cluster');
+    // @ts-ignore
     const label = DOM.create('div', '', el);
+    // @ts-ignore
     const span = DOM.create('span', '', label);
     const { field, method } = this.markerLayerOption.clusterOption;
     feature.properties.point_count = feature.properties.point_count || 1;
@@ -259,6 +261,7 @@ export default class MarkerLayer extends EventEmitter {
       field && method
         ? feature.properties['point_' + method] || feature.properties[field]
         : feature.properties.point_count;
+    // @ts-ignore
     span.textContent = text;
     return el;
   }

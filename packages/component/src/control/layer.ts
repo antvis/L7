@@ -101,10 +101,13 @@ export default class Layers extends Control {
   }
   private initLayout() {
     const className = 'l7-control-layers';
+    // @ts-ignore
     const container = (this.container = DOM.create('div', className));
     const { collapsed } = this.controlOption;
     // makes this work on IE touch devices by stopping it from firing a mouseout event when the touch is released
+    // @ts-ignore
     container.setAttribute('aria-haspopup', 'true');
+    // @ts-ignore
     const form = (this.form = DOM.create(
       'form',
       className + '-list',
@@ -112,10 +115,13 @@ export default class Layers extends Control {
 
     if (collapsed) {
       this.mapsService.on('click', this.collapse);
+      // @ts-ignore
       container.addEventListener('mouseenter', this.expand);
+      // @ts-ignore
       container.addEventListener('mouseleave', this.collapse);
     }
 
+    // @ts-ignore
     this.layersLink = DOM.create('a', className + '-toggle', container);
     const link = this.layersLink;
     // link.href = '#';
@@ -123,9 +129,13 @@ export default class Layers extends Control {
     if (!collapsed) {
       this.expand();
     }
+    // @ts-ignore
     this.baseLayersList = DOM.create('div', className + '-base', form);
+    // @ts-ignore
     this.separator = DOM.create('div', className + '-separator', form);
+    // @ts-ignore
     this.overlaysList = DOM.create('div', className + '-overlays', form);
+    // @ts-ignore
     container.appendChild(form);
   }
   private initLayers() {

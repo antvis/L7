@@ -7,7 +7,7 @@ import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
 // @ts-ignore
 import Point, { PointLike } from './geo/point';
 import BoxZoomHandler from './handler/box_zoom';
-import HandlerManager from './handler/handler_manager';
+// import HandlerManager from './handler/handler_manager';// l7 - mini
 import KeyboardHandler from './handler/keyboard';
 
 import ScrollZoomHandler from './handler/scroll_zoom';
@@ -63,7 +63,7 @@ export class Map extends Camera {
   public keyboard: KeyboardHandler;
   public touchPitch: TouchPitchHandler;
   public boxZoom: BoxZoomHandler;
-  public handlers: HandlerManager;
+  // public handlers: HandlerManager;// l7 - mini
 
   private container: HTMLElement;
   private canvas: HTMLCanvasElement;
@@ -74,26 +74,26 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-    this.initContainer();
+    // this.initContainer(); // l7 - mini
     this.resize();
-    this.handlers = new HandlerManager(this, this.options);
+    // this.handlers = new HandlerManager(this, this.options);// l7 - mini
     // this.on('move', () => this.update());
     // this.on('moveend', () => this.update());
     // this.on('zoom', () => {
     //   console.log('zoom');
     // });
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('online', this.onWindowOnline, false);
-      window.addEventListener('resize', this.onWindowResize, false);
-      window.addEventListener('orientationchange', this.onWindowResize, false);
-    }
+    // if (typeof window !== 'undefined') {// l7 - mini
+    //   window.addEventListener('online', this.onWindowOnline, false);// l7 - mini
+    //   window.addEventListener('resize', this.onWindowResize, false);// l7 - mini
+    //   window.addEventListener('orientationchange', this.onWindowResize, false);// l7 - mini
+    // }// l7 - mini
 
-    const hashName =
-      (typeof options.hash === 'string' && options.hash) || undefined;
-    if (options.hash) {
-      this.hash = new Hash(hashName).addTo(this) as Hash;
-    }
+    // const hashName =// l7 - mini
+    // (typeof options.hash === 'string' && options.hash) || undefined;// l7 - mini
+    // if (options.hash) {// l7 - mini
+    // this.hash = new Hash(hashName).addTo(this) as Hash;// l7 - mini
+    // }// l7 - mini
 
     // don't set position from options if set through hash
     if (!this.hash || !this.hash.onHashChange()) {
@@ -124,15 +124,15 @@ export class Map extends Camera {
     const fireMoving = !this.moving;
     if (fireMoving) {
       this.stop();
-      this.emit('movestart', new Event('movestart', eventData));
-      this.emit('move', new Event('move', eventData));
+      // this.emit('movestart', new Event('movestart', eventData));
+      // this.emit('move', new Event('move', eventData));
     }
 
-    this.emit('resize', new Event('resize', eventData));
+    // this.emit('resize', new Event('resize', eventData));
 
-    if (fireMoving) {
-      this.emit('moveend', new Event('moveend', eventData));
-    }
+    // if (fireMoving) {// l7 - mini
+    // this.emit('moveend', new Event('moveend', eventData));
+    // }// l7 - mini
 
     return this;
   }
@@ -312,33 +312,30 @@ export class Map extends Camera {
   }
 
   private initContainer() {
-    if (typeof this.options.container === 'string') {
-      this.container = window.document.getElementById(
-        this.options.container,
-      ) as HTMLElement;
-      if (!this.container) {
-        throw new Error(`Container '${this.options.container}' not found.`);
-      }
-    } else if (this.options.container instanceof HTMLElement) {
-      this.container = this.options.container;
-    } else {
-      throw new Error(
-        "Invalid type: 'container' must be a String or HTMLElement.",
-      );
-    }
-
-    const container = this.container;
-    container.classList.add('l7-map');
-
-    const canvasContainer = (this.canvasContainer = DOM.create(
-      'div',
-      'l7-canvas-container',
-      container,
-    ));
-    if (this.options.interactive) {
-      canvasContainer.classList.add('l7-interactive');
-    }
-
+    // if (typeof this.options.container === 'string') { // l7 - mini
+    //   this.container = window.document.getElementById(// l7 - mini
+    //     this.options.container,// l7 - mini
+    //   ) as HTMLElement;// l7 - mini
+    //   if (!this.container) {// l7 - mini
+    //     throw new Error(`Container '${this.options.container}' not found.`);// l7 - mini
+    //   }// l7 - mini
+    // } else if (this.options.container instanceof HTMLElement) {// l7 - mini
+    //   this.container = this.options.container;// l7 - mini
+    // } else {// l7 - mini
+    //   throw new Error(// l7 - mini
+    //     "Invalid type: 'container' must be a String or HTMLElement.",// l7 - mini
+    //   );// l7 - mini
+    // }// l7 - mini
+    // const container = this.container; // l7 - mini
+    // container.classList.add('l7-map');// l7 - mini
+    // const canvasContainer = (this.canvasContainer = DOM.create(// l7 - mini
+    //   'div',// l7 - mini
+    //   'l7-canvas-container',// l7 - mini
+    //   container,// l7 - mini
+    // ));// l7 - mini
+    // if (this.options.interactive) {// l7 - mini
+    //   canvasContainer.classList.add('l7-interactive');// l7 - mini
+    // }// l7 - mini
     // this.canvas = DOM.create(
     //   'canvas',
     //   'l7-canvas',
@@ -349,13 +346,14 @@ export class Map extends Camera {
   }
 
   private containerDimensions(): [number, number] {
-    let width = 0;
-    let height = 0;
-    if (this.container) {
-      width = this.container.clientWidth || 400;
-      height = this.container.clientHeight || 300;
-    }
-    return [width, height];
+    // let width = 0; // l7 - mini
+    // let height = 0;// l7 - mini
+    // if (this.container) {// l7 - mini
+    //   width = this.container.clientWidth || 400;// l7 - mini
+    //   height = this.container.clientHeight || 300;// l7 - mini
+    // }// l7 - mini
+    // return [width, height];// l7 - mini
+    return [400, 300];
   }
 
   private resizeCanvas(width: number, height: number) {
