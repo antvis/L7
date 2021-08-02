@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-component",
-  "version": "2.5.5",
+  "version": "2.5.6-l7mini",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",

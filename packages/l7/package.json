@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.5.5",
+  "version": "2.5.6-l7mini",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "lib/index.js",
   "module": "es/index.js",
