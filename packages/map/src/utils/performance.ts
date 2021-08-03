@@ -1,9 +1,17 @@
+import { isMiniAli } from '../util';
 let lastFrameTime: number | null = null;
 let frameTimes: number[] = [];
 
+const miniPerformance = {
+  // l7 - mini
+  mark: () => '',
+  clearMeasures: () => '',
+  measure: () => '',
+};
+
 const minFramerateTarget = 30;
 const frameTimeTarget = 1000 / minFramerateTarget;
-const performance = window.performance;
+const performance = isMiniAli ? miniPerformance : window.performance;
 
 export interface IPerformanceMetrics {
   loadTime: number;

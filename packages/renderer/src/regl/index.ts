@@ -50,7 +50,6 @@ export default class ReglRendererService implements IRendererService {
     ctx: WebGLRenderingContext, // l7 - mini able
     cfg: IRenderConfig,
   ): Promise<void> {
-    // console.log('regl init');
     // this.$container = $container;
     // this.canvas = canvas; // l7 - mini disable
     // tslint:disable-next-line:typedef
@@ -88,10 +87,9 @@ export default class ReglRendererService implements IRendererService {
         },
       });
     });
-    // console.log('this.gl', this.gl)
-    // this.extensionObject = { // l7 - mini
-    //   OES_texture_float: this.testExtension('OES_texture_float'), // l7 - mini
-    // }; // l7 - mini
+    this.extensionObject = {
+      OES_texture_float: this.testExtension('OES_texture_float'),
+    };
   }
 
   public testExtension(name: string) {
@@ -142,7 +140,6 @@ export default class ReglRendererService implements IRendererService {
       framebuffer === null
         ? framebuffer
         : (framebuffer as ReglFramebuffer).get();
-    // console.log('this.gl', this.gl);
     this.gl.clear(reglClearOptions);
   };
 

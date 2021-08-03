@@ -159,10 +159,11 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       hasOffsets: 0,
     };
     this.dataTextureTest = this.layerService.getOESTextureFloat();
+
     // 只有在不支持数据纹理的情况下进行赋值
     if (!this.dataTextureTest) {
       this.dataTexture = this.createTexture2D({
-        data: new ImageData(1, 1).data,
+        data: new Uint8ClampedArray([0, 0, 0, 0]),
         mag: gl.NEAREST,
         min: gl.NEAREST,
         width: 1,

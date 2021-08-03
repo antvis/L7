@@ -18,7 +18,7 @@ import TouchZoomRotateHandler from './handler/shim/touch_zoom_rotate';
 import { TouchPitchHandler } from './handler/touch';
 import Hash from './hash';
 import { IMapOptions } from './interface';
-import { renderframe } from './util';
+import { isMiniAli, renderframe } from './util';
 import { PerformanceUtils } from './utils/performance';
 import TaskQueue, { TaskID } from './utils/task_queue';
 type CallBack = (_: number) => void;
@@ -83,17 +83,19 @@ export class Map extends Camera {
     //   console.log('zoom');
     // });
 
-    // if (typeof window !== 'undefined') {// l7 - mini
-    //   window.addEventListener('online', this.onWindowOnline, false);// l7 - mini
-    //   window.addEventListener('resize', this.onWindowResize, false);// l7 - mini
-    //   window.addEventListener('orientationchange', this.onWindowResize, false);// l7 - mini
-    // }// l7 - mini
+    if (!isMiniAli && typeof window !== 'undefined') {
+      window.addEventListener('online', this.onWindowOnline, false);
+      window.addEventListener('resize', this.onWindowResize, false);
+      window.addEventListener('orientationchange', this.onWindowResize, false);
+    }
 
-    // const hashName =// l7 - mini
-    // (typeof options.hash === 'string' && options.hash) || undefined;// l7 - mini
-    // if (options.hash) {// l7 - mini
-    // this.hash = new Hash(hashName).addTo(this) as Hash;// l7 - mini
-    // }// l7 - mini
+    if (!isMiniAli) {
+      const hashName =
+        (typeof options.hash === 'string' && options.hash) || undefined;
+      if (options.hash) {
+        this.hash = new Hash(hashName).addTo(this) as Hash;
+      }
+    }
 
     // don't set position from options if set through hash
     if (!this.hash || !this.hash.onHashChange()) {
@@ -119,7 +121,10 @@ export class Map extends Camera {
     const width = dimensions[0];
     const height = dimensions[1];
 
-    // this.resizeCanvas(width, height);
+    if (!isMiniAli && this.canvas) {
+      // l7 - mini
+      this.resizeCanvas(width, height);
+    }
     this.transform.resize(width, height);
     const fireMoving = !this.moving;
     if (fireMoving) {
@@ -346,14 +351,19 @@ export class Map extends Camera {
   }
 
   private containerDimensions(): [number, number] {
-    // let width = 0; // l7 - mini
-    // let height = 0;// l7 - mini
-    // if (this.container) {// l7 - mini
-    //   width = this.container.clientWidth || 400;// l7 - mini
-    //   height = this.container.clientHeight || 300;// l7 - mini
-    // }// l7 - mini
-    // return [width, height];// l7 - mini
-    return [400, 300];
+    if (isMiniAli) {
+      // l7 - mini
+      return [400, 300];
+    } else {
+      let width = 0;
+      let height = 0;
+      if (this.container) {
+        width = this.container.clientWidth || 400;
+        height = this.container.clientHeight || 300;
+      }
+      return [400, 300]; // l7 - mini
+      // return [width, height]; // l7 - mini
+    }
   }
 
   private resizeCanvas(width: number, height: number) {

@@ -1,11 +1,17 @@
-// const docStyle = window.document.documentElement.style;
+// 判断支付宝小程序环境
+import { isMiniAli } from './mini';
+const docStyle = isMiniAli ? null : window.document.documentElement.style;
 type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {
-  // let $dom = domId as HTMLDivElement; // l7 - mini
-  // if (typeof domId === 'string') {// l7 - mini
-  //   $dom = document.getElementById(domId) as HTMLDivElement;// l7 - mini
-  // }// l7 - mini
-  // return $dom;// l7 - mini
+  if (isMiniAli) {
+    return null;
+  } else {
+    let $dom = domId as HTMLDivElement;
+    if (typeof domId === 'string') {
+      $dom = document.getElementById(domId) as HTMLDivElement;
+    }
+    return $dom;
+  }
 }
 
 export function trim(str: string) {
@@ -19,14 +25,16 @@ export function splitWords(str: string) {
 }
 
 function testProp(props: string[]): string {
-  // if (!docStyle) { // l7 - mini
-  //   return props[0];// l7 - mini
-  // }// l7 - mini
-  // for (const i in props) {// l7 - mini
-  //   if (props[i] && props[i] in docStyle) {// l7 - mini
-  //     return props[i];// l7 - mini
-  //   }// l7 - mini
-  // }// l7 - mini
+  if (!isMiniAli) {
+    if (!docStyle) {
+      return props[0];
+    }
+    for (const i in props) {
+      if (props[i] && props[i] in docStyle) {
+        return props[i];
+      }
+    }
+  }
 
   return props[0];
 }
@@ -35,14 +43,17 @@ export function create(
   className?: string,
   container?: HTMLElement,
 ) {
-  // const el = document.createElement(tagName);// l7 - mini
-  // el.className = className || '';// l7 - mini
+  if (isMiniAli) {
+    return null;
+  } else {
+    const el = document.createElement(tagName);
+    el.className = className || '';
 
-  // if (container) {// l7 - mini
-  //   container.appendChild(el);// l7 - mini
-  // }// l7 - mini
-  // return el;// l7 - mini
-  return null;
+    if (container) {
+      container.appendChild(el);
+    }
+    return el;
+  }
 }
 // @function remove(el: HTMLElement)
 // Removes `el` from its parent element
@@ -131,17 +142,19 @@ export function setTransform(el: ELType, value: string) {
 }
 
 export function triggerResize() {
-  // if (typeof Event === 'function') { // l7 - mini
-  //   // modern browsers// l7 - mini
-  //   window.dispatchEvent(new Event('resize'));// l7 - mini
-  // } else {// l7 - mini
-  //   // for IE and other old browsers// l7 - mini
-  //   // causes deprecation warning on modern browsers// l7 - mini
-  //   const evt = window.document.createEvent('UIEvents');// l7 - mini
-  //   // @ts-ignore// l7 - mini
-  //   evt.initUIEvent('resize', true, false, window, 0);// l7 - mini
-  //   window.dispatchEvent(evt);// l7 - mini
-  // }
+  if (!isMiniAli) {
+    if (typeof Event === 'function') {
+      // modern browsers
+      window.dispatchEvent(new Event('resize'));
+    } else {
+      // for IE and other old browsers
+      // causes deprecation warning on modern browsers
+      const evt = window.document.createEvent('UIEvents');
+      // @ts-ignore
+      evt.initUIEvent('resize', true, false, window, 0);
+      window.dispatchEvent(evt);
+    }
+  }
 }
 
 export function printCanvas(canvas: HTMLCanvasElement) {
@@ -155,18 +168,24 @@ export function printCanvas(canvas: HTMLCanvasElement) {
 }
 
 export function getViewPortScale() {
-  // const meta = document.querySelector('meta[name="viewport"]'); // l7 - mini
-  // if (!meta) { // l7 - mini
-  //   return 1; // l7 - mini
-  // } // l7 - mini
-  // const contentItems = (meta as any).content?.split(','); // l7 - mini
-  // const scale = contentItems.find((item: string) => { // l7 - mini
-  //   const [key, value] = item.split('='); // l7 - mini
-  //   return key === 'initial-scale'; // l7 - mini
-  // }); // l7 - mini
-  // return scale ? scale.split('=')[1] * 1 : 1; // l7 - mini
-  return 1;
+  if (isMiniAli) {
+    return 1;
+  } else {
+    const meta = document.querySelector('meta[name="viewport"]');
+    if (!meta) {
+      return 1;
+    }
+    const contentItems = (meta as any).content?.split(',');
+    const scale = contentItems.find((item: string) => {
+      const [key, value] = item.split('=');
+      return key === 'initial-scale';
+    });
+    return scale ? scale.split('=')[1] * 1 : 1;
+  }
 }
 
-// export const DPR = getViewPortScale() < 1 ? 1 : window.devicePixelRatio;
-export const DPR = 1; // l7 - mini
+export const DPR = isMiniAli
+  ? 1
+  : getViewPortScale() < 1
+  ? 1
+  : window.devicePixelRatio;

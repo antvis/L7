@@ -155,7 +155,6 @@ export default container;
 let sceneIdCounter = 0;
 export function createSceneContainer() {
   // @see https://github.com/inversify/InversifyJS/blob/master/wiki/hierarchical_di.md#support-for-hierarchical-di-systems
-  // console.log('createSceneContainer fn')
   const sceneContainer = new Container();
   sceneContainer.parent = container;
 

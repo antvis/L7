@@ -31,7 +31,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { ReglRendererService } from '@antv/l7-renderer';
-// import { DOM } from '@antv/l7-utils'; // l7 - mini
+import { DOM, isMiniAli } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import ILayerManager from './ILayerManager';
 import IMapController from './IMapController';
@@ -65,7 +65,6 @@ class Scene
   public constructor(config: ISceneConfig) {
     const { id, map } = config;
     // 创建场景容器
-    // console.log('createSceneContainer')
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
     // 绑定地图服务
@@ -98,13 +97,19 @@ class Scene
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
 
-    // this.initComponent(id); // l7 - mini
+    if (!isMiniAli) {
+      // 环境检测 - 小程序环境不支持
+      this.initComponent(id);
+    }
 
     // 初始化 scene
     this.sceneService.init(config);
     // TODO: 初始化组件
 
-    // this.initControl(); // l7 - mini
+    if (!isMiniAli) {
+      // 环境检测 - 小程序环境不支持
+      this.initControl();
+    }
   }
   public getServiceContainer(): Container {
     return this.container;
@@ -185,7 +190,6 @@ class Scene
   }
 
   public render(): void {
-    // console.log('this.sceneService.render()');
     this.sceneService.render();
   }
 
@@ -231,7 +235,7 @@ class Scene
 
   // map control method
   public addControl(ctr: IControl) {
-    this.controlService.addControl(ctr, this.container);
+    // this.controlService.addControl(ctr, this.container); // l7 - mini
   }
 
   public removeControl(ctr: IControl) {
@@ -264,7 +268,6 @@ class Scene
   }
 
   public on(type: string, handle: (...args: any[]) => void): void {
-    // console.log('add listener');
     SceneEventList.indexOf(type) === -1
       ? this.mapService.on(type, handle)
       : this.sceneService.on(type, handle);
@@ -394,14 +397,16 @@ class Scene
   }
 
   private initComponent(id: string | HTMLDivElement) {
-    // this.controlService.init( // l7 - mini
-    //   {// l7 - mini
-    //     container: DOM.getContainer(id),// l7 - mini
-    //   },// l7 - mini
-    //   this.container,// l7 - mini
-    // );// l7 - mini
-    // this.markerService.init(this.container);// l7 - mini
-    // this.popupService.init(this.container);// l7 - mini
+    if (!isMiniAli) {
+      this.controlService.init(
+        {
+          container: DOM.getContainer(id) as HTMLElement,
+        },
+        this.container,
+      );
+      this.markerService.init(this.container);
+      this.popupService.init(this.container);
+    }
   }
 
   private initControl() {

@@ -1,6 +1,11 @@
 // @ts-ignore
 import UnitBezier from '@mapbox/unitbezier';
 let reducedMotionQuery: MediaQueryList;
+
+// 检测环境 - 适配支付宝小程序
+export const isMiniAli =
+// @ts-ignore
+  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
 export interface ICancelable {
   cancel: () => void;
 }
@@ -55,34 +60,38 @@ export function pick(
   return result;
 }
 
-// export const now = // l7 - mini
-//   window.performance && window.performance.now// l7 - mini
-//     ? window.performance.now.bind(window.performance)// l7 - mini
-//     : Date.now.bind(Date);// l7 - mini
-export const now = 1;
+export const now = isMiniAli
+  ? () => 1 // l7 - mini
+  : window.performance && window.performance.now
+  ? window.performance.now.bind(window.performance)
+  : Date.now.bind(Date);
 
-export const raf = 1;
-// export const raf =// l7 - mini
-// window.requestAnimationFrame ||// l7 - mini
-// @ts-ignore
-// window.mozRequestAnimationFrame ||// l7 - mini
-// window.webkitRequestAnimationFrame ||// l7 - mini
-// @ts-ignore
-// window.msRequestAnimationFrame;// l7 - mini
+export const raf = isMiniAli
+  ? () => 1 // l7 - mini
+  : window.requestAnimationFrame ||
+    // @ts-ignore
+    window.mozRequestAnimationFrame ||
+    // @ts-ignore
+    window.webkitRequestAnimationFrame ||
+    // @ts-ignore
+    window.msRequestAnimationFrame;
 
-export const cancel = 1;
-// export const cancel =// l7 - mini
-// window.cancelAnimationFrame ||// l7 - mini
-// @ts-ignore
-// window.mozCancelAnimationFrame ||// l7 - mini
-// window.webkitCancelAnimationFrame ||// l7 - mini
-// @ts-ignore
-// window.msCancelAnimationFrame;// l7 - mini
+export const cancel = isMiniAli
+  ? () => 1 // l7 - mini
+  : window.cancelAnimationFrame ||
+    // @ts-ignore
+    window.mozCancelAnimationFrame ||
+    // @ts-ignore
+    window.webkitCancelAnimationFrame ||
+    // @ts-ignore
+    window.msCancelAnimationFrame;
 
 export function renderframe(
   fn: (paintStartTimestamp: number) => void,
   // @ts-ignore
 ): ICancelable {
-  // const frame = raf(fn);// l7 - mini
-  // return { cancel: () => cancel(frame) };// l7 - mini
+  if (!isMiniAli) {
+    const frame = raf(fn);
+    return { cancel: () => cancel(frame) };
+  }
 }
