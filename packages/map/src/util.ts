@@ -55,30 +55,34 @@ export function pick(
   return result;
 }
 
-export const now =
-  window.performance && window.performance.now
-    ? window.performance.now.bind(window.performance)
-    : Date.now.bind(Date);
+// export const now = // l7 - mini
+//   window.performance && window.performance.now// l7 - mini
+//     ? window.performance.now.bind(window.performance)// l7 - mini
+//     : Date.now.bind(Date);// l7 - mini
+export const now = 1;
 
-export const raf =
-  window.requestAnimationFrame ||
-  // @ts-ignore
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  // @ts-ignore
-  window.msRequestAnimationFrame;
+export const raf = 1;
+// export const raf =// l7 - mini
+// window.requestAnimationFrame ||// l7 - mini
+// @ts-ignore
+// window.mozRequestAnimationFrame ||// l7 - mini
+// window.webkitRequestAnimationFrame ||// l7 - mini
+// @ts-ignore
+// window.msRequestAnimationFrame;// l7 - mini
 
-export const cancel =
-  window.cancelAnimationFrame ||
-  // @ts-ignore
-  window.mozCancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  // @ts-ignore
-  window.msCancelAnimationFrame;
+export const cancel = 1;
+// export const cancel =// l7 - mini
+// window.cancelAnimationFrame ||// l7 - mini
+// @ts-ignore
+// window.mozCancelAnimationFrame ||// l7 - mini
+// window.webkitCancelAnimationFrame ||// l7 - mini
+// @ts-ignore
+// window.msCancelAnimationFrame;// l7 - mini
 
 export function renderframe(
   fn: (paintStartTimestamp: number) => void,
+  // @ts-ignore
 ): ICancelable {
-  const frame = raf(fn);
-  return { cancel: () => cancel(frame) };
+  // const frame = raf(fn);// l7 - mini
+  // return { cancel: () => cancel(frame) };// l7 - mini
 }

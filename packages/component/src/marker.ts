@@ -269,6 +269,7 @@ export default class Marker extends EventEmitter {
     const { color, anchor } = this.markerOption;
     if (!element) {
       this.defaultMarker = true;
+      // @ts-ignore
       element = DOM.create('div') as HTMLDivElement;
       this.markerOption.element = element;
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

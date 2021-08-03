@@ -6,14 +6,25 @@ import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
   private scene: Scene;
+  private el: HTMLCanvasElement;
 
   public componentWillUnmount() {
     this.scene.destroy();
   }
 
+  setCanvas() {
+    this.el.width = 400;
+    this.el.height = 300;
+    this.el.style.width = '400px';
+    this.el.style.height = '300px';
+  }
+
   public async componentDidMount() {
+    this.setCanvas();
     const scene = new Scene({
       id: 'map',
+      // @ts-ignore
+      ctx: this.el.getContext('webgl') as WebGLRenderingContext,
       map: new Map({
         hash: true,
         center: [110.19382669582967, 30.258134],
@@ -57,7 +68,7 @@ export default class ScaleComponent extends React.Component {
             fontFamily: 'Times New Roman',
             textAllowOverlap: true,
           });
-        scene.addLayer(textLayer);
+        // scene.addLayer(textLayer);
 
         const layer = new PolygonLayer({
           name: '01',
@@ -79,8 +90,37 @@ export default class ScaleComponent extends React.Component {
           .style({
             opacity: 1.0,
           });
-        scene.addLayer(layer);
+        // scene.addLayer(layer);
       });
+
+    let originData = [
+      {
+        lng: 121.107846,
+        lat: 30.267069,
+      },
+      {
+        lng: 121.107,
+        lat: 30.267069,
+      },
+    ];
+
+    scene.on('loaded', () => {
+      let pointlayer = new PointLayer()
+        .source(originData, {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        })
+        .shape('circle')
+        .color('rgba(255, 0, 0, 1.0)')
+        // .size(10)
+        .size([10, 10, 100]);
+      scene.addLayer(pointlayer);
+    });
+    // console.log('pointlayer')
+    // scene.addLayer(pointlayer);
   }
 
   public render() {
@@ -94,7 +134,16 @@ export default class ScaleComponent extends React.Component {
           right: 0,
           bottom: 0,
         }}
-      />
+      >
+        <canvas
+          style={{
+            position: 'absolute',
+            top: 0,
+            border: '1px solid',
+          }}
+          ref={(el) => (this.el = el as HTMLCanvasElement)}
+        ></canvas>
+      </div>
     );
   }
 }

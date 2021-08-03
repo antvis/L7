@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.5.5",
+  "version": "2.5.6-l7mini",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",

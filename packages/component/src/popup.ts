@@ -73,6 +73,7 @@ export default class Popup extends EventEmitter implements IPopup {
       if (!child) {
         break;
       }
+      // @ts-ignore
       frag.appendChild(child);
     }
 
@@ -108,6 +109,7 @@ export default class Popup extends EventEmitter implements IPopup {
 
   public setDOMContent(htmlNode: ChildNode | DocumentFragment) {
     this.createContent();
+    // @ts-ignore
     this.content.appendChild(htmlNode);
     this.update();
     return this;
@@ -143,8 +145,10 @@ export default class Popup extends EventEmitter implements IPopup {
     if (this.content) {
       DOM.remove(this.content);
     }
+    // @ts-ignore
     this.content = DOM.create('div', 'l7-popup-content', this.container);
     if (this.popupOption.closeButton) {
+      // @ts-ignore
       this.closeButton = DOM.create(
         'button',
         'l7-popup-close-button',
@@ -178,7 +182,9 @@ export default class Popup extends EventEmitter implements IPopup {
   }
 
   private removeDom(node: ChildNode) {
+    // @ts-ignore
     if (node.parentNode) {
+      // @ts-ignore
       node.parentNode.removeChild(node);
     }
   }

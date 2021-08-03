@@ -7,32 +7,34 @@ const DOM: {
 export default DOM;
 
 DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
-  const el = window.document.createElement(tagName);
-  if (className !== undefined) {
-    el.className = className;
-  }
-  if (container) {
-    container.appendChild(el);
-  }
-  return el;
+  // const el = window.document.createElement(tagName); // l7 - mini
+  // if (className !== undefined) {// l7 - mini
+  //   el.className = className;// l7 - mini
+  // }// l7 - mini
+  // if (container) {// l7 - mini
+  //   container.appendChild(el);// l7 - mini
+  // }// l7 - mini
+  // return el;// l7 - mini
+  return null;
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
-  const el = window.document.createElementNS(namespaceURI, tagName);
-  return el;
+  // const el = window.document.createElementNS(namespaceURI, tagName);// l7 - mini
+  // return el;// l7 - mini
+  return null;
 };
 
-const docStyle = window.document && window.document.documentElement.style;
+// const docStyle = window.document && window.document.documentElement.style;// l7 - mini
 
 function testProp(props: any) {
-  if (!docStyle) {
-    return props[0];
-  }
-  for (const i of props) {
-    if (i in docStyle) {
-      return i;
-    }
-  }
+  // if (!docStyle) {// l7 - mini
+  //   return props[0];// l7 - mini
+  // }// l7 - mini
+  // for (const i of props) {// l7 - mini
+  //   if (i in docStyle) {// l7 - mini
+  //     return i;// l7 - mini
+  //   }// l7 - mini
+  // }// l7 - mini
   return props[0];
 }
 
@@ -42,19 +44,19 @@ const selectProp = testProp([
   'WebkitUserSelect',
   'msUserSelect',
 ]);
-let userSelect: any;
+// let userSelect: any;// l7 - mini
 
 DOM.disableDrag = () => {
-  if (docStyle && selectProp) {
-    userSelect = docStyle[selectProp];
-    docStyle[selectProp] = 'none';
-  }
+  // if (docStyle && selectProp) {// l7 - mini
+  //   userSelect = docStyle[selectProp];// l7 - mini
+  //   docStyle[selectProp] = 'none';// l7 - mini
+  // }
 };
 
 DOM.enableDrag = () => {
-  if (docStyle && selectProp) {
-    docStyle[selectProp] = userSelect;
-  }
+  // if (docStyle && selectProp) {// l7 - mini
+  //   docStyle[selectProp] = userSelect;// l7 - mini
+  // }// l7 - mini
 };
 
 const transformProp = testProp(['transform', 'WebkitTransform']);
@@ -77,8 +79,8 @@ try {
       passiveSupported = true;
     },
   });
-  window.addEventListener('test', options, options);
-  window.removeEventListener('test', options, options);
+  // window.addEventListener('test', options, options);// l7 - mini
+  // window.removeEventListener('test', options, options);// l7 - mini
 } catch (err) {
   passiveSupported = false;
 }
@@ -113,14 +115,14 @@ DOM.removeEventListener = (
 const suppressClick = (e: MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
-  window.removeEventListener('click', suppressClick, true);
+  // window.removeEventListener('click', suppressClick, true);// l7 - mini
 };
 
 DOM.suppressClick = () => {
-  window.addEventListener('click', suppressClick, true);
-  window.setTimeout(() => {
-    window.removeEventListener('click', suppressClick, true);
-  }, 0);
+  // window.addEventListener('click', suppressClick, true);// l7 - mini
+  // window.setTimeout(() => {// l7 - mini
+  //   window.removeEventListener('click', suppressClick, true);// l7 - mini
+  // }, 0);// l7 - mini
 };
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
@@ -146,19 +148,19 @@ DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
-  if (
-    // @ts-ignore
-    typeof window.InstallTrigger !== 'undefined' &&
-    e.button === 2 &&
-    e.ctrlKey &&
-    window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
-  ) {
-    // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:
-    // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when
-    // using Control + left click
-    return 0;
-  }
-  return e.button;
+  // if (// l7 - mini
+  //   // @ts-ignore// l7 - mini
+  //   typeof window.InstallTrigger !== 'undefined' &&// l7 - mini
+  //   e.button === 2 &&// l7 - mini
+  //   e.ctrlKey &&// l7 - mini
+  //   window.navigator.platform.toUpperCase().indexOf('MAC') >= 0// l7 - mini
+  // ) {// l7 - mini
+  //   // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:// l7 - mini
+  //   // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when// l7 - mini
+  //   // using Control + left click// l7 - mini
+  //   return 0;// l7 - mini
+  // }// l7 - mini
+  // return e.button;// l7 - mini
 };
 
 DOM.remove = (node: HTMLElement) => {

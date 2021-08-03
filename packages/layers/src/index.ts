@@ -31,6 +31,8 @@ import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
 //   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
 //   .to(ConfigSchemaValidationPlugin)
 //   .inRequestScope();
+
+// console.log('add 5 layer', container)
 /**
  * 获取 Source
  */

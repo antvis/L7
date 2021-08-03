@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import Hammer from 'hammerjs';
+// import Hammer from 'hammerjs'; // l7 - mini
 import { inject, injectable } from 'inversify';
 // @ts-ignore
 import { TYPES } from '../../types';
@@ -25,7 +25,7 @@ export default class InteractionService extends EventEmitter
   @inject(TYPES.ILogService)
   private readonly logger: ILogService;
 
-  private hammertime: HammerManager;
+  // private hammertime: HammerManager;// l7 - mini
 
   private lastClickTime: number = 0;
 
@@ -42,11 +42,11 @@ export default class InteractionService extends EventEmitter
   }
 
   public destroy() {
-    if (this.hammertime) {
-      this.hammertime.destroy();
-    }
-    this.removeEventListenerOnMap();
-    this.off(InteractionEvent.Hover);
+    // if (this.hammertime) {// l7 - mini
+    //   this.hammertime.destroy();// l7 - mini
+    // }// l7 - mini
+    // this.removeEventListenerOnMap();// l7 - mini
+    // this.off(InteractionEvent.Hover);// l7 - mini
   }
 
   public triggerHover({ x, y }: { x: number; y: number }) {
@@ -61,58 +61,58 @@ export default class InteractionService extends EventEmitter
   }
 
   private addEventListenerOnMap() {
-    const $containter = this.mapService.getMapContainer();
-    if ($containter) {
-      const hammertime = new Hammer.Manager($containter);
-      hammertime.add(
-        new Hammer.Tap({
-          event: 'dblclick',
-          taps: 2,
-        }),
-      );
-      hammertime.add(
-        new Hammer.Tap({
-          event: 'click',
-        }),
-      );
-      hammertime.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
-      hammertime.add(new Hammer.Press({}));
-      // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-      // hammertime.get('pinch').set({ enable: true });
-      hammertime.on('dblclick click', this.onHammer);
-      hammertime.on('panstart panmove panend pancancel', this.onDrag);
-      // $containter.addEventListener('touchstart', this.onTouch);
-      $containter.addEventListener('mousemove', this.onHover);
-      // $containter.addEventListener('click', this.onHover);
-      $containter.addEventListener('mousedown', this.onHover, true);
-      $containter.addEventListener('mouseup', this.onHover);
-      $containter.addEventListener('contextmenu', this.onHover);
-
-      this.hammertime = hammertime;
-
-      // TODO: 根据场景注册事件到 L7 canvas 上
-      this.logger.debug('add event listeners on canvas');
-    }
+    // const $containter = this.mapService.getMapContainer();// l7 - mini
+    // if ($containter) {
+    //   const hammertime = new Hammer.Manager($containter);
+    //   hammertime.add(
+    //     new Hammer.Tap({
+    //       event: 'dblclick',
+    //       taps: 2,
+    //     }),
+    //   );
+    //   hammertime.add(
+    //     new Hammer.Tap({
+    //       event: 'click',
+    //     }),
+    //   );
+    //   hammertime.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+    //   hammertime.add(new Hammer.Press({}));
+    //   // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+    //   // hammertime.get('pinch').set({ enable: true });
+    //   hammertime.on('dblclick click', this.onHammer);
+    //   hammertime.on('panstart panmove panend pancancel', this.onDrag);
+    //   // $containter.addEventListener('touchstart', this.onTouch);
+    //   $containter.addEventListener('mousemove', this.onHover);
+    //   // $containter.addEventListener('click', this.onHover);
+    //   $containter.addEventListener('mousedown', this.onHover, true);
+    //   $containter.addEventListener('mouseup', this.onHover);
+    //   $containter.addEventListener('contextmenu', this.onHover);
+    //   this.hammertime = hammertime;
+    //   // TODO: 根据场景注册事件到 L7 canvas 上
+    //   this.logger.debug('add event listeners on canvas');
+    // }// l7 - mini
   }
   private removeEventListenerOnMap() {
-    const $containter = this.mapService.getMapContainer();
-    if ($containter) {
-      $containter.removeEventListener('mousemove', this.onHover);
-      // this.hammertime.off('dblclick click', this.onHammer);
-      this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
-      // $containter.removeEventListener('touchstart', this.onTouch);
-      // $containter.removeEventListener('click', this.onHover);
-      $containter.removeEventListener('mousedown', this.onHover);
-      $containter.removeEventListener('mouseup', this.onHover);
-      // $containter.removeEventListener('dblclick', this.onHover);
-      $containter.removeEventListener('contextmenu', this.onHover);
-    }
+    // const $containter = this.mapService.getMapContainer();// l7 - mini
+    // if ($containter) {
+    //   $containter.removeEventListener('mousemove', this.onHover);
+    //   // this.hammertime.off('dblclick click', this.onHammer);
+    //   this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
+    //   // $containter.removeEventListener('touchstart', this.onTouch);
+    //   // $containter.removeEventListener('click', this.onHover);
+    //   $containter.removeEventListener('mousedown', this.onHover);
+    //   $containter.removeEventListener('mouseup', this.onHover);
+    //   // $containter.removeEventListener('dblclick', this.onHover);
+    //   $containter.removeEventListener('contextmenu', this.onHover);
+    // }// l7 - mini
   }
+  // @ts-ignore
   private onDrag = (target: HammerInput) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
+  // @ts-ignore
   private onHammer = (target: HammerInput) => {
     target.srcEvent.stopPropagation();
     const interactionTarget = this.interactionEvent(target);
@@ -127,7 +127,7 @@ export default class InteractionService extends EventEmitter
       type: 'touch',
     });
   };
-
+  // @ts-ignore
   private interactionEvent(target: HammerInput) {
     const { type, pointerType } = target;
     let clientX;
