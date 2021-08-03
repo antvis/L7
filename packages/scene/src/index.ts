@@ -65,6 +65,7 @@ class Scene
   public constructor(config: ISceneConfig) {
     const { id, map } = config;
     // 创建场景容器
+    // console.log('createSceneContainer')
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
     // 绑定地图服务
