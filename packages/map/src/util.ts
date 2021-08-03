@@ -4,7 +4,7 @@ let reducedMotionQuery: MediaQueryList;
 
 // 检测环境 - 适配支付宝小程序
 export const isMiniAli =
-// @ts-ignore
+  // @ts-ignore
   typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
 export interface ICancelable {
   cancel: () => void;
