@@ -1,14 +1,12 @@
 import { inject, injectable } from 'inversify';
-import {
-  IMapService,
-  IRendererService,
-  IShaderModuleService,
-} from '../../../index';
 import { TYPES } from '../../../types';
 import { ICameraService } from '../../camera/ICameraService';
 import { IInteractionService } from '../../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../../layer/ILayerService';
+import { IMapService } from '../../map/IMapService';
+import { IShaderModuleService } from '../../shader/IShaderModuleService';
 import { IPass, PassType } from '../IMultiPassRenderer';
+import { IRendererService } from '../IRendererService';
 
 /**
  * 常规 Pass 基类
