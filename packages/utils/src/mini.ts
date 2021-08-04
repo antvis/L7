@@ -3,23 +3,22 @@ export const isMiniAli =
   // @ts-ignore
   typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
 
-
 function getWindow() {
-  if(isMiniAli) {
+  if (isMiniAli) {
     return aliMiniWindow;
-  } else if(window) {
-    return window
+  } else if (window) {
+    return window;
   } else {
-    return fakeWindow
+    return fakeWindow;
   }
 }
 
-const l7window = getWindow()
+const l7window = getWindow();
 
 const fakeWindow = {
-  devicePixelRatio: 1
-}
+  devicePixelRatio: 1,
+};
 
 const aliMiniWindow = {
-  devicePixelRatio: 1
-}
+  devicePixelRatio: 1,
+};
