@@ -48,16 +48,16 @@ export default class LngLat {
   public toArray(): [number, number] {
     return [this.lng, this.lat];
   }
-  public toBounds(radius: number = 0) {
-    const earthCircumferenceInMetersAtEquator = 40075017;
-    const latAccuracy = (360 * radius) / earthCircumferenceInMetersAtEquator;
-    const lngAccuracy = latAccuracy / Math.cos((Math.PI / 180) * this.lat);
+  // public toBounds(radius: number = 0) {
+  //   const earthCircumferenceInMetersAtEquator = 40075017;
+  //   const latAccuracy = (360 * radius) / earthCircumferenceInMetersAtEquator;
+  //   const lngAccuracy = latAccuracy / Math.cos((Math.PI / 180) * this.lat);
 
-    return new LngLatBounds(
-      new LngLat(this.lng - lngAccuracy, this.lat - latAccuracy),
-      new LngLat(this.lng + lngAccuracy, this.lat + latAccuracy),
-    );
-  }
+  //   return new LngLatBounds(
+  //     new LngLat(this.lng - lngAccuracy, this.lat - latAccuracy),
+  //     new LngLat(this.lng + lngAccuracy, this.lat + latAccuracy),
+  //   );
+  // }
   public toString() {
     return `LngLat(${this.lng}, ${this.lat})`;
   }
