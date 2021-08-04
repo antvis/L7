@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import blendFS from '../../../shaders/post-processing/blend.glsl';
 import copyFS from '../../../shaders/post-processing/copy.glsl';
 import quadVS from '../../../shaders/post-processing/quad.glsl';

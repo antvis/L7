@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import 'reflect-metadata';
 import ink from '../../../../shaders/post-processing/ink.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import BasePostProcessingPass from '../BasePostProcessingPass';

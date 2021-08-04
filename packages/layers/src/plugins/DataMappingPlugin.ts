@@ -15,6 +15,7 @@ import {
 import { rgb2arr, unProjectFlat } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
+import 'reflect-metadata';
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {

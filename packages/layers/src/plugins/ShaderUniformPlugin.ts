@@ -11,6 +11,7 @@ import {
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 
 /**
  * 在渲染之前需要获取当前 Shader 所需 Uniform，例如：

@@ -35,7 +35,6 @@
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "lodash": "^4.17.15",
-    "merge-json-schemas": "^1.0.0",
     "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "viewport-mercator-project": "^6.2.1"

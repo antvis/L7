@@ -1,5 +1,6 @@
 import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
 import { injectable } from 'inversify';
+import 'reflect-metadata';
 /**
  * Model 更新
  */

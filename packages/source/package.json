@@ -37,6 +37,7 @@
     "d3-hexbin": "^0.2.2",
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13",
     "lodash": "^4.17.15",
     "supercluster": "^7.0.0"
   },

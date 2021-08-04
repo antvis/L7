@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import { TYPES } from '../../../types';
 import { ICameraService } from '../../camera/ICameraService';
 import { IInteractionService } from '../../interaction/IInteractionService';

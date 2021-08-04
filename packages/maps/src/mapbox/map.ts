@@ -24,6 +24,7 @@ import { inject, injectable } from 'inversify';
 import mapboxgl, { IControl, Map } from 'mapbox-gl';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
+import 'reflect-metadata';
 import { IMapboxInstance } from '../../typings/index';
 import { Version } from '../version';
 import Viewport from './Viewport';
