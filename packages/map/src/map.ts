@@ -74,7 +74,10 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-    // this.initContainer(); // l7 - mini
+    if (!isMiniAli) {
+      // l7 - mini
+      this.initContainer();
+    }
     this.resize();
     // this.handlers = new HandlerManager(this, this.options);// l7 - mini
     // this.on('move', () => this.update());
@@ -317,30 +320,35 @@ export class Map extends Camera {
   }
 
   private initContainer() {
-    // if (typeof this.options.container === 'string') { // l7 - mini
-    //   this.container = window.document.getElementById(// l7 - mini
-    //     this.options.container,// l7 - mini
-    //   ) as HTMLElement;// l7 - mini
-    //   if (!this.container) {// l7 - mini
-    //     throw new Error(`Container '${this.options.container}' not found.`);// l7 - mini
-    //   }// l7 - mini
-    // } else if (this.options.container instanceof HTMLElement) {// l7 - mini
-    //   this.container = this.options.container;// l7 - mini
-    // } else {// l7 - mini
-    //   throw new Error(// l7 - mini
-    //     "Invalid type: 'container' must be a String or HTMLElement.",// l7 - mini
-    //   );// l7 - mini
-    // }// l7 - mini
-    // const container = this.container; // l7 - mini
-    // container.classList.add('l7-map');// l7 - mini
-    // const canvasContainer = (this.canvasContainer = DOM.create(// l7 - mini
-    //   'div',// l7 - mini
-    //   'l7-canvas-container',// l7 - mini
-    //   container,// l7 - mini
-    // ));// l7 - mini
-    // if (this.options.interactive) {// l7 - mini
-    //   canvasContainer.classList.add('l7-interactive');// l7 - mini
-    // }// l7 - mini
+    // 采用绘图上下文构建 regl 实例的模式 - mini l7-mini
+    const mode = 'ctx'; // ctx - id - HTMLElement
+    if (mode === 'ctx') {
+      return '';
+    }
+    if (typeof this.options?.container === 'string') {
+      this.container = window.document.getElementById(
+        this.options.container,
+      ) as HTMLElement;
+      if (!this.container) {
+        throw new Error(`Container '${this.options.container}' not found.`);
+      }
+    } else if (this.options.container instanceof HTMLElement) {
+      this.container = this.options.container;
+    } else {
+      throw new Error(
+        "Invalid type: 'container' must be a String or HTMLElement.",
+      );
+    }
+    const container = this.container;
+    container.classList.add('l7-map');
+    const canvasContainer = (this.canvasContainer = DOM.create(
+      'div',
+      'l7-canvas-container',
+      container,
+    ) as HTMLElement);
+    if (this.options.interactive) {
+      canvasContainer?.classList.add('l7-interactive');
+    }
     // this.canvas = DOM.create(
     //   'canvas',
     //   'l7-canvas',

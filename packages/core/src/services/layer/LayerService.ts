@@ -27,7 +27,6 @@ export default class LayerService implements ILayerService {
   private readonly configService: IGlobalConfigService;
 
   public add(layer: ILayer) {
-    // console.log('this.sceneInited', this.sceneInited);
     if (this.sceneInited) {
       layer.init();
     }
@@ -35,11 +34,9 @@ export default class LayerService implements ILayerService {
   }
 
   public initLayers() {
-    // console.log('initLayers');
     this.sceneInited = true;
     this.layers.forEach((layer) => {
       if (!layer.inited) {
-        // console.log('====layer init');
         layer.init();
       }
     });
@@ -85,7 +82,6 @@ export default class LayerService implements ILayerService {
         // trigger hooks
         layer.hooks.beforeRenderData.call();
         layer.hooks.beforeRender.call();
-        // console.log('layer.render', layer.render);
         layer.render();
         layer.hooks.afterRender.call();
       });
@@ -119,8 +115,7 @@ export default class LayerService implements ILayerService {
   }
 
   public getOESTextureFloat() {
-    // return this.renderService.extensionObject.OES_texture_float; // l7 - mini
-    return false; // l7 - mini
+    return this.renderService.extensionObject.OES_texture_float;
   }
 
   private clear() {

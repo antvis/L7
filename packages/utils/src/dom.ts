@@ -1,5 +1,5 @@
 // 判断支付宝小程序环境
-import { isMiniAli } from './mini';
+import { isMiniAli } from './adapterMini';
 const docStyle = isMiniAli ? null : window.document.documentElement.style;
 type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {

@@ -1,7 +1,7 @@
 // @ts-ignore
 export { djb2hash, BKDRHash } from './hash';
 import * as DOM from './dom';
-export * from './mini';
+export * from './adapterMini';
 export * from './fetchData';
 export * from './geo';
 export * from './lru_cache';

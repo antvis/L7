@@ -1,4 +1,5 @@
 // @ts-ignore
+import { isMiniAli } from '@antv/l7-utils';
 import Point from '../geo/point';
 
 const DOM: {
@@ -7,34 +8,43 @@ const DOM: {
 export default DOM;
 
 DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
-  // const el = window.document.createElement(tagName); // l7 - mini
-  // if (className !== undefined) {// l7 - mini
-  //   el.className = className;// l7 - mini
-  // }// l7 - mini
-  // if (container) {// l7 - mini
-  //   container.appendChild(el);// l7 - mini
-  // }// l7 - mini
-  // return el;// l7 - mini
-  return null;
+  if (!isMiniAli) {
+    // l7 - mini
+    const el = window.document.createElement(tagName);
+    if (className !== undefined) {
+      el.className = className;
+    }
+    if (container) {
+      container.appendChild(el);
+    }
+    return el;
+  } else {
+    return null; // l7 - mini
+  }
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
-  // const el = window.document.createElementNS(namespaceURI, tagName);// l7 - mini
-  // return el;// l7 - mini
-  return null;
+  if (!isMiniAli) {
+    // l7 - mini
+    const el = window.document.createElementNS(namespaceURI, tagName);
+    return el;
+  } else {
+    return null; // l7 - mini
+  }
 };
 
-// const docStyle = window.document && window.document.documentElement.style;// l7 - mini
+const docStyle =
+  !isMiniAli && window.document && window.document.documentElement.style; // l7 - mini
 
 function testProp(props: any) {
-  // if (!docStyle) {// l7 - mini
-  //   return props[0];// l7 - mini
-  // }// l7 - mini
-  // for (const i of props) {// l7 - mini
-  //   if (i in docStyle) {// l7 - mini
-  //     return i;// l7 - mini
-  //   }// l7 - mini
-  // }// l7 - mini
+  if (!docStyle) {
+    return props[0];
+  }
+  for (const i of props) {
+    if (i in docStyle) {
+      return i;
+    }
+  }
   return props[0];
 }
 
@@ -44,19 +54,19 @@ const selectProp = testProp([
   'WebkitUserSelect',
   'msUserSelect',
 ]);
-// let userSelect: any;// l7 - mini
+let userSelect: any;
 
 DOM.disableDrag = () => {
-  // if (docStyle && selectProp) {// l7 - mini
-  //   userSelect = docStyle[selectProp];// l7 - mini
-  //   docStyle[selectProp] = 'none';// l7 - mini
-  // }
+  if (docStyle && selectProp) {
+    userSelect = docStyle[selectProp];
+    docStyle[selectProp] = 'none';
+  }
 };
 
 DOM.enableDrag = () => {
-  // if (docStyle && selectProp) {// l7 - mini
-  //   docStyle[selectProp] = userSelect;// l7 - mini
-  // }// l7 - mini
+  if (docStyle && selectProp) {
+    docStyle[selectProp] = userSelect;
+  }
 };
 
 const transformProp = testProp(['transform', 'WebkitTransform']);
@@ -79,8 +89,12 @@ try {
       passiveSupported = true;
     },
   });
-  // window.addEventListener('test', options, options);// l7 - mini
-  // window.removeEventListener('test', options, options);// l7 - mini
+  if (!isMiniAli) {
+    // @ts-ignore
+    window.addEventListener('test', options, options);
+    // @ts-ignore
+    window.removeEventListener('test', options, options);
+  }
 } catch (err) {
   passiveSupported = false;
 }
@@ -113,16 +127,22 @@ DOM.removeEventListener = (
 
 // Suppress the next click, but only if it's immediate.
 const suppressClick = (e: MouseEvent) => {
-  e.preventDefault();
-  e.stopPropagation();
-  // window.removeEventListener('click', suppressClick, true);// l7 - mini
+  if (!isMiniAli) {
+    // l7 - mini
+    e.preventDefault();
+    e.stopPropagation();
+    window.removeEventListener('click', suppressClick, true);
+  }
 };
 
 DOM.suppressClick = () => {
-  // window.addEventListener('click', suppressClick, true);// l7 - mini
-  // window.setTimeout(() => {// l7 - mini
-  //   window.removeEventListener('click', suppressClick, true);// l7 - mini
-  // }, 0);// l7 - mini
+  if (!isMiniAli) {
+    // l7 - mini
+    window.addEventListener('click', suppressClick, true);
+    window.setTimeout(() => {
+      window.removeEventListener('click', suppressClick, true);
+    }, 0);
+  }
 };
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
@@ -148,19 +168,20 @@ DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
-  // if (// l7 - mini
-  //   // @ts-ignore// l7 - mini
-  //   typeof window.InstallTrigger !== 'undefined' &&// l7 - mini
-  //   e.button === 2 &&// l7 - mini
-  //   e.ctrlKey &&// l7 - mini
-  //   window.navigator.platform.toUpperCase().indexOf('MAC') >= 0// l7 - mini
-  // ) {// l7 - mini
-  //   // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:// l7 - mini
-  //   // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when// l7 - mini
-  //   // using Control + left click// l7 - mini
-  //   return 0;// l7 - mini
-  // }// l7 - mini
-  // return e.button;// l7 - mini
+  if (
+    !isMiniAli && // l7 - mini
+    // @ts-ignore
+    typeof window.InstallTrigger !== 'undefined' &&
+    e.button === 2 &&
+    e.ctrlKey &&
+    window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
+  ) {
+    // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:
+    // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when
+    // using Control + left click
+    return 0;
+  }
+  return e.button;
 };
 
 DOM.remove = (node: HTMLElement) => {

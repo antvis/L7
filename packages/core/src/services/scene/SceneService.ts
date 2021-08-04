@@ -1,11 +1,11 @@
 // @ts-ignore
 import { AsyncParallelHook } from '@antv/async-hook';
-import { DOM } from '@antv/l7-utils';
+import { DOM, isMiniAli } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
-// import { createRendererContainer } from '../../utils/dom';// l7 - mini
+import { createRendererContainer } from '../../utils/dom';
 import { IFontService } from '../asset/IFontService';
 // import { IIconService } from '../asset/IIconService';// l7 - mini
 import { ICameraService, IViewport } from '../camera/ICameraService';
@@ -14,14 +14,14 @@ import { ICameraService, IViewport } from '../camera/ICameraService';
 // import { IPopupService } from '../component/IPopupService';// l7 - mini
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
-// import {// l7 - mini
-// IInteractionService,// l7 - mini
-// IInteractionTarget,// l7 - mini
-// InteractionEvent,// l7 - mini
-// } from '../interaction/IInteractionService';// l7 - mini
-// import { IPickingService } from '../interaction/IPickingService';// l7 - mini
+import {
+  IInteractionService,
+  IInteractionTarget,
+  InteractionEvent,
+} from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-// import { ILogService } from '../log/ILogService';// l7 - mini
+import { ILogService } from '../log/ILogService';
 import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
@@ -54,8 +54,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   // @inject(TYPES.IControlService)
   // private readonly controlService: IControlService;
 
-  // @inject(TYPES.ILogService)
-  // private readonly logger: ILogService;
+  @inject(TYPES.ILogService)
+  private readonly logger: ILogService;
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
@@ -78,8 +78,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   // @inject(TYPES.IInteractionService)// l7 - mini
   // private readonly interactionService: IInteractionService; // l7 - mini
 
-  // @inject(TYPES.IPickingService)
-  // private readonly pickingService: IPickingService;
+  @inject(TYPES.IPickingService)
+  private readonly pickingService: IPickingService;
 
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
@@ -102,7 +102,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   /**
    * canvas 容器
    */
-  private $container: HTMLDivElement | null;
+  private $container: HTMLDivElement | null; // l7 - mini
 
   private canvas: HTMLCanvasElement;
 
@@ -143,7 +143,6 @@ export default class Scene extends EventEmitter implements ISceneService {
      * 初始化底图
      */
     this.hooks.init.tapPromise('initMap', async () => {
-      // console.log('init map'); // l7 - mini
       // 等待首次相机同步
       await new Promise<void>((resolve) => {
         this.map.onCameraChanged((viewport: IViewport) => {
@@ -164,16 +163,16 @@ export default class Scene extends EventEmitter implements ISceneService {
         }
       });
 
-      // if (this.map.version === 'GAODE2.x' && this.map.initViewPort) { // l7 - mini
-      //   // amap2 // l7 - mini
-      //   await this.map.init(); // l7 - mini
-      //   this.map.initViewPort(); // l7 - mini
-      // } // l7 - mini
+      if (this.map.version === 'GAODE2.x' && this.map.initViewPort) {
+        // amap2
+        await this.map.init();
+        this.map.initViewPort();
+      }
       // this.controlService.addControls();
 
       // 重新绑定非首次相机更新事件
-      // this.map.onCameraChanged(this.handleMapCameraChanged); // l7 - mini
-      // this.map.addMarkerContainer(); // l7 - mini
+      this.map.onCameraChanged(this.handleMapCameraChanged); // l7 - mini
+      this.map.addMarkerContainer(); // l7 - mini
 
       // 初始化未加载的marker;
       // this.markerService.addMarkers();// l7 - mini
@@ -185,7 +184,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       // InteractionEvent.Drag,// l7 - mini
       // this.addSceneEvent.bind(this),// l7 - mini
       // );// l7 - mini
-      // this.logger.debug(`map ${this.id} loaded`);// l7 - mini
+      this.logger.debug(`map ${this.id} loaded`); // l7 - mini
     });
 
     /**
@@ -193,12 +192,12 @@ export default class Scene extends EventEmitter implements ISceneService {
      */
     this.hooks.init.tapPromise('initRenderer', async () => {
       // 创建底图之上的 container
-      // const $container = createRendererContainer( // l7 - mini
-      //   this.configService.getSceneConfig(this.id).id || '', // l7 - mini
-      // ); // l7 - mini
+      const $container = createRendererContainer(
+        this.configService.getSceneConfig(this.id).id || '',
+      );
 
       // 添加marker container;
-      // this.$container = $container; // l7 - mini
+      this.$container = $container; // l7 - mini
 
       // this.addMarkerContainer();
 
@@ -221,12 +220,12 @@ export default class Scene extends EventEmitter implements ISceneService {
       // window // l7 - mini
       //   .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)') // l7 - mini
       //   .addListener(this.handleWindowResized); // l7 - mini
-      // } else { // l7 - mini
-      // this.logger.error('容器 id 不存在'); // l7 - mini
-      // } // l7 - mini
-      // this.pickingService.init(this.id); // l7 - mini disable
+      // } else {// l7 - mini
+      // this.logger.error('容器 id 不存在');// l7 - mini
+      // }// l7 - mini
+      // !isMiniAli && this.pickingService.init(this.id); // l7 - mini
 
-      // this.logger.debug(`scene ${this.id} renderer loaded`); // l7 - mini
+      this.logger.debug(`scene ${this.id} renderer loaded`);
     });
     // TODO：init worker, fontAtlas...
 
@@ -237,16 +236,14 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public addLayer(layer: ILayer) {
-    // this.logger.debug(`add layer ${layer.name} to scene ${this.id}`);// l7 - mini
+    this.logger.debug(`add layer ${layer.name} to scene ${this.id}`);
     this.layerService.add(layer);
     this.render();
   }
 
   public async render() {
-    // throw new Error('123')
-    // console.log('---render', this.render);
     if (this.rendering || this.destroyed) {
-      return; // l7 - mini
+      return;
     }
     this.rendering = true;
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
@@ -254,21 +251,20 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 还未初始化完成需要等待
 
       await this.initPromise;
-      // if (this.destroyed) {//l7 - mini
-      //   this.destroy();//l7 - mini
-      // }//l7 - mini
-      // // @ts-ignore//l7 - mini
-      // if (this.loadFont && document.fonts) {//l7 - mini
-      //   // @ts-ignorel7 - mini
-      //   await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');//l7 - mini
-      // }//l7 - mini
+      if (this.destroyed) {
+        this.destroy();
+      }
+      // @ts-ignore
+      if (!isMiniAli && this.loadFont && document.fonts) {
+        // l7 - mini
+        // @ts-ignorel7 - mini
+        await document.fonts.load(`24px ${this.fontFamily}`, 'L7text'); // l7 - mini
+      } // l7 - mini
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
-      // this.logger.info(' render inited'); // l7 - mini
-      // console.log('render initLayers')
+      this.logger.info(' render inited');
       this.layerService.initLayers();
       // this.controlService.addControls();//l7 - mini
       this.loaded = true;
-      // console.log('emit loaded')
       this.emit('loaded');
       this.inited = true;
     }
@@ -277,7 +273,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.layerService.renderLayers();
 
     // 组件需要等待layer 初始化完成之后添加
-    // this.logger.debug(`scene ${this.id} render`);// l7 - mini
+    this.logger.debug(`scene ${this.id} render`);
     this.rendering = false;
   }
 
@@ -406,7 +402,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.render();
   };
 
-  // private addSceneEvent(target: IInteractionTarget) {// l7 - mini
-  //   this.emit(target.type, target);// l7 - mini
-  // }// l7 - mini
+  private addSceneEvent(target: IInteractionTarget) {
+    // l7 - mini
+    this.emit(target.type, target); // l7 - mini
+  } // l7 - mini
 }
