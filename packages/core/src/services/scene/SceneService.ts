@@ -4,6 +4,7 @@ import { DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
 import { IFontService } from '../asset/IFontService';

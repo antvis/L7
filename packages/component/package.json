@@ -30,6 +30,7 @@
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13",
     "load-styles": "^2.0.0"
   },
   "gitHead": "7eb8382ede52d803fae13a85fe6af074400260ee",

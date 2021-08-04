@@ -1,4 +1,5 @@
 import { Container, injectable } from 'inversify';
+import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { IMapService } from '../map/IMapService';
 import {

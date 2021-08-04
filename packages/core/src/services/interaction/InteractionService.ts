@@ -1,6 +1,7 @@
 import EventEmitter from 'eventemitter3';
 import Hammer from 'hammerjs';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
 import { ILogService } from '../log/ILogService';

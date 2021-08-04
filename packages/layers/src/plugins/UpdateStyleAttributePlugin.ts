@@ -6,6 +6,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建

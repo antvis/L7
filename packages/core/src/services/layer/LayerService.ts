@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';

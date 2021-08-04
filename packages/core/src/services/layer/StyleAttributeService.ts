@@ -1,4 +1,5 @@
 import { inject, injectable, optional } from 'inversify';
+import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';

@@ -9,6 +9,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 
 const lightTypeUniformMap = {
   directional: {

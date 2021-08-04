@@ -13,6 +13,7 @@ import {
   rgb2arr,
 } from '@antv/l7-utils';
 import { injectable } from 'inversify';
+import 'reflect-metadata';
 
 const PickingStage = {
   NONE: 0.0,

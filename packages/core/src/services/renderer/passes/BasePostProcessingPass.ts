@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { camelCase, isNil, upperFirst } from 'lodash';
+import 'reflect-metadata';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
 import { gl } from '../gl';
 import { IModel } from '../IModel';

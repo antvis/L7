@@ -1,4 +1,5 @@
 import { inject, injectable, postConstruct } from 'inversify';
+import 'reflect-metadata';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { gl } from '../gl';

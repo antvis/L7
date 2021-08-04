@@ -1,5 +1,6 @@
 import { mat4, vec4 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { getDistanceScales } from '../../utils/project';
 import { ICameraService } from '../camera/ICameraService';
