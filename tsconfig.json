@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck":true,
     "noEmit": true,
     "strict": true,
     "strictPropertyInitialization": false,

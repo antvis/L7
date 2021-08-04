@@ -1,5 +1,6 @@
 import { gl, ITexture2D, ITexture2DInitializationOptions } from '@antv/l7-core';
-import regl from 'regl';
+// import regl from 'regl';
+import regl from 'l7regl';
 import {
   colorSpaceMap,
   dataTypeMap,

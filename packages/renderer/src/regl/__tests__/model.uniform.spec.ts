@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import regl from 'regl';
+// import regl from 'regl';
+import regl from 'l7regl';
 import ReglFramebuffer from '../ReglFramebuffer';
 import ReglModel from '../ReglModel';
 import ReglTexture2D from '../ReglTexture2D';
@@ -182,6 +183,7 @@ describe('uniforms in ReglModel', () => {
       },
       // @ts-ignore
       u_5: [
+        // @ts-ignore
         {
           c: 100, // 只修改第一个
         },

@@ -197,6 +197,6 @@
     "mode": "yarn"
   },
   "dependencies": {
-    "l7regl": "^0.0.5"
+    "l7regl": "0.0.9"
   }
 }

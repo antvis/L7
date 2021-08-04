@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.5.6-l7mini",
+  "version": "2.5.6-l7mini2",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -32,7 +32,7 @@
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "regl": "^1.6.1",
-    "l7regl": "^0.0.5"
+    "l7regl": "^0.0.9"
   },
   "gitHead": "7eb8382ede52d803fae13a85fe6af074400260ee",
   "publishConfig": {
