@@ -215,7 +215,6 @@ export default class Scene extends EventEmitter implements ISceneService {
           .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
           .addListener(this.handleWindowResized);
       } else {
-
         console.error('容器 id 不存在');
       }
       this.pickingService.init(this.id);

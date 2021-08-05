@@ -315,7 +315,6 @@ export default class MapboxService
       !window.mapboxgl.accessToken &&
       !mapInstance // 如果用户传递了 mapInstance，应该不去干预实例的 accessToken。
     ) {
-
       console.warn(this.configService.getSceneWarninfo('MapToken'));
     }
 
