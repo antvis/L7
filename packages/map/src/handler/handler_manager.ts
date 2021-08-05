@@ -95,7 +95,6 @@ class HandlerManager {
 
     // Track whether map is currently moving, to compute start/move/end events
     this.eventsInProgress = {};
-
     this.addDefaultHandlers(options);
 
     const el = this.el;

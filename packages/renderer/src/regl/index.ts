@@ -46,17 +46,15 @@ export default class ReglRendererService implements IRendererService {
 
   // @ts-ignore
   public async init(
-    // canvas: HTMLCanvasElement,    // l7 - mini disable
-    ctx: WebGLRenderingContext, // l7 - mini able
+    canvas: HTMLCanvasElement,
     cfg: IRenderConfig,
   ): Promise<void> {
     // this.$container = $container;
-    // this.canvas = canvas; // l7 - mini disable
+    this.canvas = canvas;
     // tslint:disable-next-line:typedef
     this.gl = await new Promise((resolve, reject) => {
       regl({
-        // canvas: this.canvas, // l7 - mini disable
-        gl: ctx, // l7 - mini able
+        canvas: this.canvas,
         attributes: {
           alpha: true,
           // use TAA instead of MSAA

@@ -1,25 +1,25 @@
 import document from '../document';
 import Event from '../Event';
-import { getCanvas } from '../register';
+// import { getCanvas } from '../register';
 
 class TouchEvent extends Event {
   public touches: any[];
   public targetTouches: any[];
   public changedTouches: any[];
 
-  constructor(type) {
+  constructor(type: any) {
     super(type);
 
     this.touches = [];
     this.targetTouches = [];
     this.changedTouches = [];
 
-    this.target = getCanvas();
-    this.currentTarget = getCanvas();
+    // this.target = getCanvas();
+    // this.currentTarget = getCanvas();
   }
 }
 
-function mapEvent(event) {
+function mapEvent(event: any) {
   const { x = 0, y = 0, clientX = 0, clientY = 0 } = event || {};
   // 小程序不支持Object.hasOwnProperty
   // (抹平不同的view事件)[https://docs.alipay.com/mini/framework/event-object]
@@ -32,8 +32,8 @@ function mapEvent(event) {
   }
 }
 
-function eventHandlerFactory(type) {
-  return (rawEvent) => {
+function eventHandlerFactory(type: any) {
+  return (rawEvent: any) => {
     const event = new TouchEvent(type);
 
     event.changedTouches = rawEvent.changedTouches;
@@ -44,7 +44,7 @@ function eventHandlerFactory(type) {
     event.changedTouches.forEach((e) => mapEvent(e));
     event.touches.forEach((e) => mapEvent(e));
     event.targetTouches.forEach((e) => mapEvent(e));
-
+    // @ts-ignore
     document.dispatchEvent(event);
   };
 }

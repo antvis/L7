@@ -7,7 +7,7 @@ import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
 // @ts-ignore
 import Point, { PointLike } from './geo/point';
 import BoxZoomHandler from './handler/box_zoom';
-// import HandlerManager from './handler/handler_manager';// l7 - mini
+import HandlerManager from './handler/handler_manager'; // l7 - mini
 import KeyboardHandler from './handler/keyboard';
 
 import ScrollZoomHandler from './handler/scroll_zoom';
@@ -63,7 +63,7 @@ export class Map extends Camera {
   public keyboard: KeyboardHandler;
   public touchPitch: TouchPitchHandler;
   public boxZoom: BoxZoomHandler;
-  // public handlers: HandlerManager;// l7 - mini
+  public handlers: HandlerManager; // l7 - mini
 
   private container: HTMLElement;
   private canvas: HTMLCanvasElement;
@@ -79,12 +79,13 @@ export class Map extends Camera {
       this.initContainer();
     }
     this.resize();
-    // this.handlers = new HandlerManager(this, this.options);// l7 - mini
-    // this.on('move', () => this.update());
-    // this.on('moveend', () => this.update());
-    // this.on('zoom', () => {
-    //   console.log('zoom');
-    // });
+    this.handlers = new HandlerManager(this, this.options); // l7 - mini
+    // console.log(' this.handlers',  this.handlers)
+    // this.on('move', () => this.update());// l7 - mini
+    // this.on('moveend', () => this.update());// l7 - mini
+    // this.on('zoom', () => {// l7 - mini
+    // console.log('zoom');// l7 - mini
+    // });// l7 - mini
 
     if (!isMiniAli && typeof window !== 'undefined') {
       window.addEventListener('online', this.onWindowOnline, false);
@@ -128,18 +129,18 @@ export class Map extends Camera {
       // l7 - mini
       this.resizeCanvas(width, height);
     }
-    this.transform.resize(width, height);
-    const fireMoving = !this.moving;
-    if (fireMoving) {
-      this.stop();
-      // this.emit('movestart', new Event('movestart', eventData));
-      // this.emit('move', new Event('move', eventData));
-    }
+    this.transform.resize(width, height); // l7 - mini
+    // const fireMoving = !this.moving;// l7 - mini
+    // if (fireMoving) {// l7 - mini
+    // this.stop();// l7 - mini
+    // this.emit('movestart', new Event('movestart', eventData));// l7 - mini
+    // this.emit('move', new Event('move', eventData));// l7 - mini
+    // }// l7 - mini
 
-    // this.emit('resize', new Event('resize', eventData));
+    // this.emit('resize', new Event('resize', eventData));// l7 - mini
 
     // if (fireMoving) {// l7 - mini
-    // this.emit('moveend', new Event('moveend', eventData));
+    // this.emit('moveend', new Event('moveend', eventData));// l7 - mini
     // }// l7 - mini
 
     return this;
@@ -321,31 +322,36 @@ export class Map extends Camera {
 
   private initContainer() {
     // 采用绘图上下文构建 regl 实例的模式 - mini l7-mini
-    const mode = 'ctx'; // ctx - id - HTMLElement
-    if (mode === 'ctx') {
-      return '';
-    }
-    if (typeof this.options?.container === 'string') {
-      this.container = window.document.getElementById(
-        this.options.container,
-      ) as HTMLElement;
-      if (!this.container) {
-        throw new Error(`Container '${this.options.container}' not found.`);
+    // console.log('this.options', this.options);
+    if(!isMiniAli) {
+      if (typeof this.options?.container === 'string') {
+        this.container = window.document.getElementById(
+          this.options.container,
+        ) as HTMLElement;
+        if (!this.container) {
+          throw new Error(`Container '${this.options.container}' not found.`);
+        }
+      } else if (this.options.container instanceof HTMLElement) {
+        this.container = this.options.container;
+      } else {
+        // throw new Error(
+        //   "Invalid type: 'container' must be a String or HTMLElement.",
+        // );
       }
-    } else if (this.options.container instanceof HTMLElement) {
-      this.container = this.options.container;
-    } else {
-      throw new Error(
-        "Invalid type: 'container' must be a String or HTMLElement.",
-      );
     }
+    
+
+    this.container = this.options.canvas as HTMLCanvasElement; // l7 - mini
+
     const container = this.container;
     container.classList.add('l7-map');
-    const canvasContainer = (this.canvasContainer = DOM.create(
-      'div',
-      'l7-canvas-container',
-      container,
-    ) as HTMLElement);
+    // const canvasContainer = (this.canvasContainer = DOM.create(// l7 - mini
+    //   'div',// l7 - mini
+    //   'l7-canvas-container',// l7 - mini
+    //   container,// l7 - mini
+    // ) as HTMLElement);// l7 - mini
+    const canvasContainer = (this.canvasContainer = container); // l7 - mini
+
     if (this.options.interactive) {
       canvasContainer?.classList.add('l7-interactive');
     }

@@ -1,6 +1,6 @@
 import document from '../document';
 import Event from '../Event';
-import { getCanvas } from '../register';
+// import { getCanvas } from '../register';
 
 class PointerEvent extends Event {
   public buttons: number;
@@ -19,11 +19,11 @@ class PointerEvent extends Event {
   public metaKey: boolean;
   public shiftKey: boolean;
 
-  constructor(type) {
+  constructor(type: any) {
     super(type);
 
-    this.target = getCanvas();
-    this.currentTarget = getCanvas();
+    // this.target = getCanvas();
+    // this.currentTarget = getCanvas();
   }
 }
 
@@ -100,17 +100,19 @@ const CLONE_DEFAULTS = [
 
 const POINTER_TYPE = 'touch';
 
+// @ts-ignore
 function touchToPointer(type, touch, rawEvent) {
   const e = new PointerEvent(type);
 
   for (let i = 0; i < CLONE_PROPS.length; i++) {
     const p = CLONE_PROPS[i];
+    // @ts-ignore
     e[p] = touch[p] || CLONE_DEFAULTS[i];
   }
 
   e.type = type;
-  e.target = getCanvas();
-  e.currentTarget = getCanvas();
+  // e.target = getCanvas();
+  // e.currentTarget = getCanvas();
   e.buttons = typeToButtons(type);
   e.which = e.buttons;
 
@@ -142,7 +144,7 @@ function touchToPointer(type, touch, rawEvent) {
   return e;
 }
 
-function typeToButtons(type) {
+function typeToButtons(type: any) {
   let ret = 0;
   if (
     type === 'touchstart' ||
@@ -155,26 +157,26 @@ function typeToButtons(type) {
   return ret;
 }
 
-let firstPointer = null;
+let firstPointer: any = null;
 
-function isPrimaryPointer(touch) {
+function isPrimaryPointer(touch: any) {
   return firstPointer === touch.identifier;
 }
 
-function setPrimaryPointer(touch) {
+function setPrimaryPointer(touch: any) {
   if (firstPointer === null) {
     firstPointer = touch.identifier;
   }
 }
 
-function removePrimaryPointer(touch) {
+function removePrimaryPointer(touch: any) {
   if (firstPointer === touch.identifier) {
     firstPointer = null;
   }
 }
 
-function eventHandlerFactory(type) {
-  return (rawEvent) => {
+function eventHandlerFactory(type: any) {
+  return (rawEvent: any) => {
     const changedTouches = rawEvent.changedTouches;
 
     for (let i = 0; i < changedTouches.length; i++) {
@@ -187,6 +189,7 @@ function eventHandlerFactory(type) {
       }
 
       const event = touchToPointer(type, touch, rawEvent);
+      // @ts-ignore
       document.dispatchEvent(event);
     }
   };

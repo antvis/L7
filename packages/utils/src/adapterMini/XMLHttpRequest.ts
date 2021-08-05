@@ -5,14 +5,19 @@ const requestHeader = new Map();
 const responseHeader = new Map();
 const requestTask = new Map();
 
-function _triggerEvent(type, event = { target: this }) {
+// @ts-ignore
+function _triggerEvent(type: any, event = { target: this }) {
+  // @ts-ignore
   if (typeof this[`on${type}`] === 'function') {
+    // @ts-ignore
     this[`on${type}`].call(this, event);
   }
 }
 
-function _changeReadyState(readyState, event = { readyState }) {
+function _changeReadyState(readyState: any, event = { readyState }) {
+  // @ts-ignore
   this.readyState = readyState;
+  // @ts-ignore
   _triggerEvent.call(this, 'readystatechange', event);
 }
 
@@ -92,11 +97,11 @@ export default class XMLHttpRequest extends EventTarget {
       .join('\n');
   }
 
-  public getResponseHeader(header) {
+  public getResponseHeader(header: any) {
     return responseHeader.get('responseHeader')[header];
   }
 
-  public open(method, url /* GET/POST*/) {
+  public open(method: any, url: any /* GET/POST*/) {
     this.mymethod = method;
     this.myurl = url;
     _changeReadyState.call(this, XMLHttpRequest.OPENED);
@@ -127,6 +132,7 @@ export default class XMLHttpRequest extends EventTarget {
       delete this.response;
       this.response = null;
 
+      // @ts-ignore
       const onSuccess = ({ data: sdata, status, headers }) => {
         status = status === undefined ? 200 : status;
         this.status = status;
@@ -157,6 +163,7 @@ export default class XMLHttpRequest extends EventTarget {
         _triggerEvent.call(this, 'loadend');
       };
 
+      // @ts-ignore
       const onFail = ({ message: errMsg }) => {
         // TODO 规范错误
         if (!errMsg) {
@@ -166,6 +173,7 @@ export default class XMLHttpRequest extends EventTarget {
           _triggerEvent.call(this, 'abort');
         } else {
           _triggerEvent.call(this, 'error', {
+            // @ts-ignore
             message: errMsg,
           });
         }
@@ -185,26 +193,29 @@ export default class XMLHttpRequest extends EventTarget {
     }
   }
 
-  public setRequestHeader(header, value) {
+  public setRequestHeader(header: any, value: any) {
     const myHeader = requestHeader.get('requestHeader');
 
     myHeader[header] = value;
     requestHeader.set('requestHeader', myHeader);
   }
 
-  public addEventListener(type, listener) {
+  public addEventListener(type: any, listener: any) {
     if (typeof listener !== 'function') {
       return;
     }
 
+    // @ts-ignore
     this['on' + type] = (event: any = {}) => {
       event.target = event.target || this;
       listener.call(this, event);
     };
   }
 
-  public removeEventListener(type, listener) {
+  public removeEventListener(type: any, listener: any) {
+    // @ts-ignore
     if (this['on' + type] === listener) {
+      // @ts-ignore
       this['on' + type] = null;
     }
   }

@@ -2,6 +2,7 @@ import { LngLatBoundsLike } from './geo/lng_lat_bounds';
 
 export interface IMapOptions {
   hash: boolean;
+  canvas?: HTMLCanvasElement | null;
   style?: any;
   container?: HTMLElement | string;
   center: [number, number];

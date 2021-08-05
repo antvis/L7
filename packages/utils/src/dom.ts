@@ -41,9 +41,9 @@ function testProp(props: string[]): string {
 export function create(
   tagName: string,
   className?: string,
-  container?: HTMLElement,
+  container?: HTMLElement | null,
 ) {
-  if (isMiniAli) {
+  if (isMiniAli || !container) {
     return null;
   } else {
     const el = document.createElement(tagName);

@@ -2,13 +2,13 @@ import document from '../document';
 import Event from '../Event';
 
 class MouseEvent extends Event {
-  constructor(type) {
+  constructor(type: any) {
     super(type);
   }
 }
 
-function eventHandlerFactory(type) {
-  return (rawEvent) => {
+function eventHandlerFactory(type: any) {
+  return (rawEvent: any) => {
     rawEvent.type = type;
     document.dispatchEvent(rawEvent);
   };
