@@ -9,7 +9,6 @@ import {
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
-  ILogService,
   IMapConfig,
   IMapService,
   IMercator,
@@ -64,9 +63,6 @@ export default class AMapService
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
 
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
@@ -362,7 +358,7 @@ export default class AMapService
       };
       if (!amapLoaded && !mapInstance) {
         if (token === AMAP_API_KEY) {
-          this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+          console.warn(this.configService.getSceneWarninfo('MapToken'));
         }
         amapLoaded = true;
         plugin.push('Map3D');

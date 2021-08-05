@@ -4,7 +4,6 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
-import { ILogService } from '../log/ILogService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { IInteractionService, InteractionEvent } from './IInteractionService';
 const DragEventMap: { [key: string]: string } = {
@@ -22,9 +21,6 @@ export default class InteractionService extends EventEmitter
   implements IInteractionService {
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
-
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
 
   private hammertime: HammerManager;
 
@@ -92,7 +88,6 @@ export default class InteractionService extends EventEmitter
       this.hammertime = hammertime;
 
       // TODO: 根据场景注册事件到 L7 canvas 上
-      this.logger.debug('add event listeners on canvas');
     }
   }
   private removeEventListenerOnMap() {

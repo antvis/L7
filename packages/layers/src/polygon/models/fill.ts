@@ -5,7 +5,6 @@ import {
   ILayer,
   ILayerModel,
   ILayerPlugin,
-  ILogService,
   IModel,
   IStyleAttributeService,
   lazyInject,

@@ -7,7 +7,6 @@ const TYPES = {
   ILayerService: Symbol.for('ILayerService'),
   ILayerMappingService: Symbol.for('ILayerMappingService'),
   ILayerStyleService: Symbol.for('ILayerStyleService'),
-  ILogService: Symbol.for('ILogService'),
   IMapService: Symbol.for('IMapService'),
   IMarkerService: Symbol.for('IMarkerService'),
   IPopupService: Symbol.for('PopupService'),
