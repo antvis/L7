@@ -44,7 +44,6 @@ export * from './services/asset/IFontService';
 export * from './services/component/IControlService';
 export * from './services/component/IMarkerService';
 export * from './services/component/IPopupService';
-export * from './services/log/ILogService';
 export * from './services/interaction/IInteractionService';
 export * from './services/interaction/IPickingService';
 

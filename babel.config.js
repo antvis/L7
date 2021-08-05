@@ -103,7 +103,8 @@ module.exports = api => {
         }
       ],
       isCDNBundle ? {} : [
-        'transform-import-styles'
+        'transform-import-css-l7'
+        // 'transform-import-styles' // babel 编译将样式打包到js
       ],
       [
         // @see https://github.com/babel/babel/issues/8741#issuecomment-509041135

@@ -1,6 +1,5 @@
 import {
   IGlobalConfigService,
-  ILogService,
   IMapConfig,
   IMapService,
   IMapWrapper,
@@ -9,9 +8,6 @@ import {
 } from '@antv/l7-core';
 import { Container } from 'inversify';
 export default class BaseMapWrapper<RawMap> implements IMapWrapper {
-  @lazyInject(TYPES.ILogService)
-  protected readonly logger: ILogService;
-
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
 

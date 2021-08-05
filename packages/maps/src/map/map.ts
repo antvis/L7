@@ -7,7 +7,6 @@ import {
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
-  ILogService,
   IMapConfig,
   IMapService,
   IMercator,
@@ -50,8 +49,6 @@ export default class L7MapService implements IMapService<Map> {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 

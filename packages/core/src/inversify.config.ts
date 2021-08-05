@@ -20,7 +20,6 @@ import { IInteractionService } from './services/interaction/IInteractionService'
 import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
 import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
-import { ILogService } from './services/log/ILogService';
 import { ISceneService } from './services/scene/ISceneService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
@@ -37,7 +36,6 @@ import InteractionService from './services/interaction/InteractionService';
 import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
 import StyleAttributeService from './services/layer/StyleAttributeService';
-import LogService from './services/log/LogService';
 import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 
@@ -82,10 +80,6 @@ container
 container
   .bind<IShaderModuleService>(TYPES.IShaderModuleService)
   .to(ShaderModuleService)
-  .inSingletonScope();
-container
-  .bind<ILogService>(TYPES.ILogService)
-  .to(LogService)
   .inSingletonScope();
 // container
 //   .bind<IFontService>(TYPES.IFontService)

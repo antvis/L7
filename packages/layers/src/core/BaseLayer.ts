@@ -19,7 +19,6 @@ import {
   ILayerModelInitializationOptions,
   ILayerPlugin,
   ILayerService,
-  ILogService,
   IMapService,
   IModel,
   IModelInitializationOptions,
@@ -111,9 +110,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   };
 
   public layerModel: ILayerModel;
-
-  @lazyInject(TYPES.ILogService)
-  protected readonly logger: ILogService;
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;

@@ -15,13 +15,22 @@
       "jsx-double"
     ],
     "no-bitwise": false,
+    "no-console": [true, "log"],
     "object-literal-sort-keys": false,
-    "no-implicit-dependencies": [true, "dev"]
+    "no-implicit-dependencies": [
+      true,
+      "dev"
+    ]
   },
   "globals": {
     "AMap": true
   },
   "linterOptions": {
-    "exclude": ["**/*.d.ts", "**/data/*.ts", "**/*.{test,story}.ts{,x}", "node_modules/**"]
+    "exclude": [
+      "**/*.d.ts",
+      "**/data/*.ts",
+      "**/*.{test,story}.ts{,x}",
+      "node_modules/**"
+    ]
   }
 }
