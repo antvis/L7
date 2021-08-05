@@ -35,7 +35,6 @@
     "@types/mapbox-gl": "^1.11.2",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
-    "load-styles": "^2.0.0",
     "mapbox-gl": "^1.2.1",
     "reflect-metadata": "^0.1.13",
     "viewport-mercator-project": "^6.2.1"
