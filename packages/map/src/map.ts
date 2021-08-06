@@ -74,10 +74,9 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-    if (!isMiniAli) {
-      // l7 - mini
-      this.initContainer();
-    }
+   
+    this.initContainer();
+    
     this.resize();
     this.handlers = new HandlerManager(this, this.options); // l7 - mini
     // console.log(' this.handlers',  this.handlers)
@@ -323,7 +322,7 @@ export class Map extends Camera {
   private initContainer() {
     // 采用绘图上下文构建 regl 实例的模式 - mini l7-mini
     // console.log('this.options', this.options);
-    if(!isMiniAli) {
+    if (!isMiniAli) {
       if (typeof this.options?.container === 'string') {
         this.container = window.document.getElementById(
           this.options.container,
@@ -339,7 +338,6 @@ export class Map extends Camera {
         // );
       }
     }
-    
 
     this.container = this.options.canvas as HTMLCanvasElement; // l7 - mini
 
@@ -350,7 +348,8 @@ export class Map extends Camera {
     //   'l7-canvas-container',// l7 - mini
     //   container,// l7 - mini
     // ) as HTMLElement);// l7 - mini
-    const canvasContainer = (this.canvasContainer = container); // l7 - mini
+    this.canvasContainer = container
+    const canvasContainer = container; // l7 - mini
 
     if (this.options.interactive) {
       canvasContainer?.classList.add('l7-interactive');

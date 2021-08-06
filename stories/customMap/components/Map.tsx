@@ -96,11 +96,11 @@ export default class ScaleComponent extends React.Component {
 
       // @ts-ignore
       // let handler = scene.getMapService().map.handlers.outPutHandleEvent
-      // this.canvasEvent(handler)
+      this.canvasEvent()
     });
   }
 
-  // canvasEvent = (handler: any) => {
+  canvasEvent = () => {
   //   // this.el.addEventListener('click', (e) => {
   //   //   console.log(e)
   //   // }, false)
@@ -108,14 +108,14 @@ export default class ScaleComponent extends React.Component {
   //     handler(e, e.type)
   //   }, false)
 
-  //   this.el.addEventListener('mousemove', (e) => {
-  //     handler(e, e.type)
-  //   }, false)
+    // this.el.addEventListener('mousemove', (e) => {
+    //   console.log('-----')
+    // }, false)
 
   //   this.el.addEventListener('mouseup', (e) => {
   //     handler(e, e.type)
   //   }, false)
-  // }
+  }
 
   public render() {
     return (
