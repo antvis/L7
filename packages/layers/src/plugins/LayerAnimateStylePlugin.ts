@@ -10,6 +10,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 
 @injectable()
 export default class LayerAnimateStylePlugin implements ILayerPlugin {

@@ -197,10 +197,7 @@ export interface ILayer {
   off(type: string, handler: (...args: any[]) => void): void;
   emit(type: string, handler: unknown): void;
   once(type: string, handler: (...args: any[]) => void): void;
-  /**
-   * JSON Schema 用于校验配置项
-   */
-  getConfigSchemaForValidation(): object;
+
   isDirty(): boolean;
   /**
    * 直接调用拾取方法，在非鼠标交互场景中使用

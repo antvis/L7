@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import blendFS from '../../../shaders/post-processing/blend.glsl';
 import copyFS from '../../../shaders/post-processing/copy.glsl';
 import quadVS from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
-import { ILogService } from '../../log/ILogService';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
@@ -41,9 +41,6 @@ export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
 > {
   @inject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
-
-  @inject(TYPES.ILogService)
-  protected readonly logger: ILogService;
 
   /**
    * 低差异序列
@@ -192,8 +189,6 @@ export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
   }
 
   private doRender(layer: ILayer) {
-    this.logger.debug(`accumulatingId: ${this.accumulatingId}`);
-
     const { clear, getViewportSize, useFramebuffer } = this.rendererService;
     const { width, height } = getViewportSize();
     const { jitterScale = 1 } = layer.getLayerConfig();

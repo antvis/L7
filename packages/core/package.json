@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.5.5",
+  "version": "2.5.8",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,7 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-utils": "^2.5.5",
+    "@antv/l7-utils": "^2.5.8",
     "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.1.1",
     "ajv": "^6.10.2",
@@ -35,7 +35,6 @@
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "lodash": "^4.17.15",
-    "merge-json-schemas": "^1.0.0",
     "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "viewport-mercator-project": "^6.2.1"

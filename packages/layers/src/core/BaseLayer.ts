@@ -19,7 +19,6 @@ import {
   ILayerModelInitializationOptions,
   ILayerPlugin,
   ILayerService,
-  ILogService,
   IMapService,
   IModel,
   IModelInitializationOptions,
@@ -48,8 +47,6 @@ import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject } from 'lodash';
-// @ts-ignore
-import mergeJsonSchemas from 'merge-json-schemas';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
@@ -113,9 +110,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   };
 
   public layerModel: ILayerModel;
-
-  @lazyInject(TYPES.ILogService)
-  protected readonly logger: ILogService;
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -806,18 +800,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
   public getEncodedData() {
     return this.encodedData;
-  }
-
-  public getConfigSchemaForValidation() {
-    if (!this.configSchema) {
-      // 相比 allOf, merge 有一些优势
-      // @see https://github.com/goodeggs/merge-json-schemas
-      this.configSchema = mergeJsonSchemas([
-        baseLayerSchema,
-        this.getConfigSchema(),
-      ]);
-    }
-    return this.configSchema;
   }
   public getLegendItems(name: string): any {
     const scale = this.styleAttributeService.getLayerAttributeScale(name);

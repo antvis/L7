@@ -10,6 +10,7 @@ import {
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import BaseModel from '../../core/BaseModel';
 import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';

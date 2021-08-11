@@ -8,6 +8,7 @@ import {
 import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
+import 'reflect-metadata';
 
 @injectable()
 export default class DataSourcePlugin implements ILayerPlugin {

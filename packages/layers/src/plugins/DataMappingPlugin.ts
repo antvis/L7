@@ -5,7 +5,6 @@ import {
   ILayer,
   ILayerPlugin,
   ILngLat,
-  ILogService,
   IMapService,
   IParseDataItem,
   IStyleAttribute,
@@ -15,14 +14,12 @@ import {
 import { rgb2arr, unProjectFlat } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
+import 'reflect-metadata';
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
 
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
@@ -79,7 +76,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
             ),
           );
         }
-        this.logger.debug('remapping finished');
         // 处理文本更新
         layer.emit('remapping', null);
       }

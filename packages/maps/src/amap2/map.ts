@@ -9,7 +9,6 @@ import {
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
-  ILogService,
   IMapConfig,
   IMapService,
   IMercator,
@@ -24,6 +23,7 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
@@ -72,9 +72,6 @@ export default class AMapService
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
 
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
@@ -459,7 +456,7 @@ export default class AMapService
       this.viewport = new Viewport();
       if (!amapLoaded && !mapInstance) {
         if (token === AMAP_API_KEY) {
-          this.logger.warn(this.configService.getSceneWarninfo('MapToken'));
+          console.warn(this.configService.getSceneWarninfo('MapToken'));
         }
         amapLoaded = true;
         plugin.push('Map3D');

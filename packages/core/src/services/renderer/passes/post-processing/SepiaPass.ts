@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import 'reflect-metadata';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import sepia from '../../../../shaders/post-processing/sepia.glsl';
 import BasePostProcessingPass from '../BasePostProcessingPass';

@@ -2,7 +2,6 @@ import {
   IGlobalConfigService,
   ILayer,
   ILayerPlugin,
-  ILogService,
   IScale,
   IScaleOptions,
   IStyleAttribute,
@@ -18,6 +17,7 @@ import { extent, ticks } from 'd3-array';
 import * as d3 from 'd3-scale';
 import { inject, injectable } from 'inversify';
 import { isNil, isString, uniq } from 'lodash';
+import 'reflect-metadata';
 
 const dateRegex = /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
 
@@ -40,10 +40,6 @@ const scaleMap = {
 export default class FeatureScalePlugin implements ILayerPlugin {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
-
   // key = field_attribute name
   private scaleCache: {
     [field: string]: IStyleScale;
@@ -96,7 +92,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         );
         if (attributesToRescale.length) {
           this.caculateScalesForAttributes(attributesToRescale, dataArray);
-          this.logger.debug('rescale finished');
         }
       }
     });

@@ -7,7 +7,6 @@ import {
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
-  ILogService,
   IMapConfig,
   IMapService,
   IMercator,
@@ -22,6 +21,7 @@ import { Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
 import { Version } from '../version';
 import Viewport from './Viewport';
 const EventMap: {
@@ -49,8 +49,6 @@ export default class L7MapService implements IMapService<Map> {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  @inject(TYPES.ILogService)
-  private readonly logger: ILogService;
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 

@@ -1,10 +1,6 @@
 import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
-import {
-  IMapService,
-  IRendererService,
-  IShaderModuleService,
-} from '../../index';
+import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import {
@@ -16,6 +12,7 @@ import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILngLat } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
+import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
 
 @injectable()

@@ -4,7 +4,6 @@ import {
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
-  ILogService,
   IModel,
   IModelUniform,
   IRasterParserDataItem,

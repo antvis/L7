@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import 'reflect-metadata';
 import { ILayer } from '../../layer/ILayerService';
 import BaseNormalPass from './BaseNormalPass';
 

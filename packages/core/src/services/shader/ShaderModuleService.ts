@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { uniq } from 'lodash';
+import 'reflect-metadata';
 import { extractUniforms } from '../../utils/shader-module';
 import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 

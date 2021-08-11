@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { camelCase, isNil, upperFirst } from 'lodash';
-import {
-  gl,
-  IModel,
-  IRendererService,
-  IShaderModuleService,
-} from '../../../index';
+import 'reflect-metadata';
+import { IShaderModuleService } from '../../shader/IShaderModuleService';
+import { gl } from '../gl';
+import { IModel } from '../IModel';
+import { IRendererService } from '../IRendererService';
+
 import quad from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
