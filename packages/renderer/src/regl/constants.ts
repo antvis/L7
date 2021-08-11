@@ -2,7 +2,7 @@
  * @desc 由于 regl 使用大量字符串而非 WebGL 常量，因此需要映射
  */
 import { gl } from '@antv/l7-core';
-import regl from 'regl';
+import regl from 'l7regl';
 
 // @see https://github.com/regl-project/regl/blob/gh-pages/lib/constants/primitives.json
 export const primitiveMap: {
