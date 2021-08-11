@@ -99,7 +99,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   /**
    * canvas 容器
    */
-  private $container: HTMLDivElement | null | HTMLCanvasElement ;
+  private $container: HTMLDivElement | null | HTMLCanvasElement;
 
   private canvas: HTMLCanvasElement;
 
@@ -202,7 +202,6 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.configService.getSceneConfig(this.id) as IRenderConfig,
         );
 
-       
         elementResizeEvent(
           this.$container as HTMLDivElement,
           this.handleWindowResized,
@@ -225,7 +224,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   /**
    * 小程序环境下初始化 Scene
-   * @param sceneConfig 
+   * @param sceneConfig
    */
   public initMiniScene(sceneConfig: ISceneConfig) {
     // 设置场景配置项
@@ -253,13 +252,13 @@ export default class Scene extends EventEmitter implements ISceneService {
             resolve();
           }
         });
-        //@ts-ignore
+        // @ts-ignore
         this.map.initMiniMap();
       });
 
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
-      
+
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
       this.interactionService.on(
@@ -273,16 +272,16 @@ export default class Scene extends EventEmitter implements ISceneService {
      */
     this.hooks.init.tapPromise('initRenderer', async () => {
       // 创建底图之上的 container
-      const $container = sceneConfig.canvas
+      const $container = sceneConfig.canvas;
 
       // 添加marker container;
-      this.$container = $container ? $container : null;  
+      this.$container = $container ? $container : null;
       await this.rendererService.init(
         // @ts-ignore
         sceneConfig.canvas,
         this.configService.getSceneConfig(this.id) as IRenderConfig,
       );
-     
+
       this.pickingService.init(this.id);
     });
     // TODO：init worker, fontAtlas...

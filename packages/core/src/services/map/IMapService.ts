@@ -26,7 +26,11 @@ export interface IStatusOptions {
 }
 export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
-  setContainer(container: Container, id: string | HTMLDivElement, canvas?: HTMLCanvasElement): void;
+  setContainer(
+    container: Container,
+    id: string | HTMLDivElement,
+    canvas?: HTMLCanvasElement,
+  ): void;
 }
 
 export interface IMapService<RawMap = {}> {

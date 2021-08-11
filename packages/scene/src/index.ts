@@ -96,7 +96,7 @@ class Scene
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
 
-    if(isMini) {
+    if (isMini) {
       this.sceneService.initMiniScene(config);
     } else {
       this.initComponent(id);
@@ -107,7 +107,6 @@ class Scene
 
       this.initControl();
     }
-    
   }
   public getServiceContainer(): Container {
     return this.container;

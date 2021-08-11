@@ -292,8 +292,8 @@ export default class L7MapService implements IMapService<Map> {
 
     this.viewport = new Viewport();
 
-    this.$mapContainer = canvas
-    
+    this.$mapContainer = canvas;
+
     this.map = new Map({
       container: this.$mapContainer as HTMLElement,
       style: this.getMapStyle(style),

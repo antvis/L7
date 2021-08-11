@@ -74,12 +74,12 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-    if(isMini) {
-      this.initMiniContainer()
+    if (isMini) {
+      this.initMiniContainer();
     } else {
       this.initContainer();
     }
-    
+
     this.resize();
     this.handlers = new HandlerManager(this, this.options);
 
@@ -120,7 +120,7 @@ export class Map extends Camera {
     const height = dimensions[1];
 
     this.transform.resize(width, height);
-    if(!isMini) {
+    if (!isMini) {
       return this;
     }
     const fireMoving = !this.moving;
@@ -340,7 +340,6 @@ export class Map extends Camera {
     if (this.options.interactive) {
       canvasContainer.classList.add('l7-interactive');
     }
-
   }
 
   /**
