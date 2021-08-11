@@ -1,5 +1,5 @@
-import 'reflect-metadata';
 import regl from 'l7regl';
+import 'reflect-metadata';
 import ReglModel from '../ReglModel';
 import createContext from './utils/create-context';
 
