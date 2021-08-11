@@ -343,7 +343,9 @@ export class Map extends Camera {
     this.container = this.options.canvas as HTMLCanvasElement; // l7 - mini
 
     const container = this.container;
-    container.classList.add('l7-map');
+    if(!isMiniAli) { // l7 - mini
+      container.classList.add('l7-map');
+    }
     // const canvasContainer = (this.canvasContainer = DOM.create(// l7 - mini
     //   'div',// l7 - mini
     //   'l7-canvas-container',// l7 - mini
@@ -352,7 +354,7 @@ export class Map extends Camera {
     this.canvasContainer = container;
     const canvasContainer = container; // l7 - mini
 
-    if (this.options.interactive) {
+    if (!isMiniAli && this.options.interactive) {
       canvasContainer?.classList.add('l7-interactive');
     }
     // this.canvas = DOM.create(

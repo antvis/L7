@@ -1,6 +1,7 @@
 // @ts-ignore
 import Point from '../geo/point';
 import { Map } from '../map';
+import { isMiniAli } from '../util';
 import DOM from '../utils/dom';
 import { Event } from './events/event';
 
@@ -110,7 +111,9 @@ class BoxZoomHandler {
 
     if (!this.box) {
       this.box = DOM.create('div', 'l7-boxzoom', this.container);
-      this.container.classList.add('l7-crosshair');
+      if(!isMiniAli) { // l7 - mini
+        this.container.classList.add('l7-crosshair');
+      }
       this.fireEvent('boxzoomstart', e);
     }
     const minX = Math.min(p0.x, pos.x);
@@ -170,8 +173,9 @@ class BoxZoomHandler {
 
   public reset() {
     this.active = false;
-
-    this.container.classList.remove('l7-crosshair');
+    if(!isMiniAli) { // l7 - mini
+      this.container.classList.remove('l7-crosshair');
+    }
 
     if (this.box) {
       DOM.remove(this.box);

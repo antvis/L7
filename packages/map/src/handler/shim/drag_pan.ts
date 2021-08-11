@@ -1,3 +1,4 @@
+import { isMiniAli } from '../../util';
 import { MousePanHandler } from '../mouse/';
 import { TouchPanHandler } from '../touch/';
 
@@ -53,7 +54,10 @@ export default class DragPanHandler {
     this.inertiaOptions = options || {};
     this.mousePan.enable();
     this.touchPan.enable();
-    this.el.classList.add('l7-touch-drag-pan');
+    if (!isMiniAli) {
+      // l7 - mini
+      this.el.classList.add('l7-touch-drag-pan');
+    }
   }
 
   /**
@@ -65,7 +69,9 @@ export default class DragPanHandler {
   public disable() {
     this.mousePan.disable();
     this.touchPan.disable();
-    this.el.classList.remove('l7-touch-drag-pan');
+    if (!isMiniAli) {
+      this.el.classList.remove('l7-touch-drag-pan');
+    }
   }
 
   /**
