@@ -1,4 +1,4 @@
-const docStyle = window.document.documentElement.style;
+import { isMini, l7window } from './adapterMini'
 type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
@@ -19,12 +19,15 @@ export function splitWords(str: string) {
 }
 
 function testProp(props: string[]): string {
-  if (!docStyle) {
-    return props[0];
-  }
-  for (const i in props) {
-    if (props[i] && props[i] in docStyle) {
-      return props[i];
+  if(!isMini) {
+    const docStyle = window.document.documentElement.style;
+    if (!docStyle) {
+      return props[0];
+    }
+    for (const i in props) {
+      if (props[i] && props[i] in docStyle) {
+        return props[i];
+      }
     }
   }
 
@@ -109,6 +112,7 @@ export function getClass(el: ELType) {
   // Check if the element is an SVGElementInstance and use the correspondingElement instead
   // (Required for linked SVG elements in IE11.)
   if (el instanceof SVGElement) {
+    // @ts-ignore
     el = el.correspondingElement;
   }
   return el.className.baseVal === undefined
@@ -166,4 +170,4 @@ export function getViewPortScale() {
   return scale ? scale.split('=')[1] * 1 : 1;
 }
 
-export const DPR = getViewPortScale() < 1 ? 1 : window.devicePixelRatio;
+export const DPR = getViewPortScale() < 1 ? 1 : l7window.devicePixelRatio;
