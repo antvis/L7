@@ -1,3 +1,4 @@
+import { isMini } from '@antv/l7-utils';
 // @ts-ignore
 import UnitBezier from '@mapbox/unitbezier';
 let reducedMotionQuery: MediaQueryList;
@@ -55,26 +56,31 @@ export function pick(
   return result;
 }
 
-export const now =
-  window.performance && window.performance.now
-    ? window.performance.now.bind(window.performance)
-    : Date.now.bind(Date);
+export const now = isMini
+  ? Date.now.bind(Date)
+  : window.performance && window.performance.now
+  ? window.performance.now.bind(window.performance)
+  : Date.now.bind(Date);
 
-export const raf =
-  window.requestAnimationFrame ||
-  // @ts-ignore
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  // @ts-ignore
-  window.msRequestAnimationFrame;
+export const raf = isMini
+  ? setInterval
+  : window.requestAnimationFrame ||
+    // @ts-ignore
+    window.mozRequestAnimationFrame ||
+    // @ts-ignore
+    window.webkitRequestAnimationFrame ||
+    // @ts-ignore
+    window.msRequestAnimationFrame;
 
-export const cancel =
-  window.cancelAnimationFrame ||
-  // @ts-ignore
-  window.mozCancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  // @ts-ignore
-  window.msCancelAnimationFrame;
+export const cancel = isMini
+  ? clearInterval // l7 - mini
+  : window.cancelAnimationFrame ||
+    // @ts-ignore
+    window.mozCancelAnimationFrame ||
+    // @ts-ignore
+    window.webkitCancelAnimationFrame ||
+    // @ts-ignore
+    window.msCancelAnimationFrame;
 
 export function renderframe(
   fn: (paintStartTimestamp: number) => void,
