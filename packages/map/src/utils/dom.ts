@@ -147,10 +147,22 @@ DOM.suppressClick = () => {
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
   const rect = el.getBoundingClientRect();
-  return new Point(
-    e.clientX - rect.left - el.clientLeft,
-    e.clientY - rect.top - el.clientTop,
-  );
+  if (isMiniAli) {
+    // l7 - mini
+    return new Point(
+      e.clientX - rect.left - el.clientLeft,
+      e.clientY - rect.top - el.clientTop,
+    );
+  } else {
+    return new Point(
+      e.clientX - rect.left - el.clientLeft,
+      e.clientY - rect.top - el.clientTop,
+    );
+  } // l7 - mini
+  // return new Point( // l7 - mini
+  //   e.clientX - rect.left - el.clientLeft, // l7 - mini
+  //   e.clientY - rect.top - el.clientTop, // l7 - mini
+  // ); // l7 - mini
 };
 
 DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {

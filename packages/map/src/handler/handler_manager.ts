@@ -1,6 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
-import merge from 'lodash/merge';
+import { dispatchTouchStart, isMiniAli, l7window } from '@antv/l7-utils';
+import { merge } from 'lodash';
 import Point from '../geo/point';
 import { Map } from '../map';
 import DOM from '../utils/dom';
@@ -105,16 +106,13 @@ class HandlerManager {
       // passive, binding with passive: true causes iOS not to respect
       // e.preventDefault() in _other_ handlers, even if they are non-passive
       // (see https://bugs.webkit.org/show_bug.cgi?id=184251)
-      // [el, 'touchstart', { passive: false }],// l7 - mini
-      // [el, 'touchmove', { passive: false }], // l7 - mini
-      // [el, 'touchend', undefined],// l7 - mini
-      // [el, 'touchcancel', undefined],// l7 - mini
-
+      [el, 'touchstart', { passive: false }], // l7 - mini
+      [el, 'touchmove', { passive: false }], // l7 - mini
+      [el, 'touchend', undefined], // l7 - mini
+      [el, 'touchcancel', undefined], // l7 - mini
       // [el, 'mousedown', undefined],// l7 - mini
       // [el, 'mousemove', undefined], // l7 - mini
-      // [el, 'mousemove', { capture: true }], // l7 - mini
       // [el, 'mouseup', undefined],// l7 - mini
-
       // Bind window-level event listeners for move and up/end events. In the absence of
       // the pointer capture API, which is not supported by all necessary platforms,
       // window-level event listeners give us the best shot at capturing events that
@@ -124,49 +122,68 @@ class HandlerManager {
       // [window.document, 'mousemove', { capture: true }], // l7 - mini
       // @ts-ignore
       // [window.document, 'mouseup', undefined],// l7 - mini
-
       // [el, 'mouseover', undefined], // l7 - mini
       // [el, 'mouseout', undefined],// l7 - mini
-      // [el, 'dblclick', undefined],// l7 - mini
-      // [el, 'click', undefined],// l7 - mini
-
+      [el, 'dblclick', undefined], // l7 - mini
+      [el, 'click', undefined], // l7 - mini
       // [el, 'keydown', { capture: false }],// l7 - mini
       // [el, 'keyup', undefined],// l7 - mini
-
-      // [el, 'wheel', { passive: false }],// l7 - mini
+      [el, 'wheel', { passive: false }], // l7 - mini
       // [el, 'contextmenu', undefined],// l7 - mini
       // @ts-ignore
       // [window, 'blur', undefined],// l7 - mini
     ];
-    // for (const [target, type, listenerOptions] of this.listeners) { // l7 - mini
-    //   console.log(target, type, listenerOptions)// l7 - mini
-    //   // @ts-ignore// l7 - mini
-    //   DOM.addEventListener(// l7 - mini
-    //     target,// l7 - mini
-    //     type,// l7 - mini
-    //     // @ts-ignore// l7 - mini
-    //     target === window.document ? this.handleWindowEvent : this.handleEvent, // l7 - mini
-    //     listenerOptions,// l7 - mini
-    //   );// l7 - mini
-    // }// l7 - mini
+    if (!isMiniAli) {
+      this.listeners.push(
+        // @ts-ignore
+        [window.document, 'mousemove', { capture: true }],
+        [window.document, 'mouseup', undefined],
+        [window, 'blur', undefined],
+      );
+    }
+    for (const [target, type, listenerOptions] of this.listeners) {
+      // l7 - mini
+      // @ts-ignore
+      DOM.addEventListener(
+        target,
+        type,
+        // @ts-ignore
+        // target === window.document ? this.handleWindowEvent : this.handleEvent, // l7 - mini
+        this.getHandleFunction(target, type),
+        listenerOptions,
+      );
+    }
 
-    DOM.addEventListener(
-      el,
-      'mousedown',
-      this.handleEvent,
-      undefined,
-    );
-// @ts-ignore
-    DOM.addEventListener(
-      // window.document,
-      el,
-      'mousemove',
-      this.handleWindowEvent,
-      // { capture: true },
-      undefined
-    );
+    // l7window.document.addEventListener(
+    //   'touchstart',
+    //   (e: any) => {
+    //     console.log('l7 window document touchstart', e);
+    //   },
+    //   {},
+    // );
 
+    // document.addEventListener('mousedown', (e) => {
+    //   console.log('mousedown')
+    //   dispatchTouchStart(e)
+    // })
   }
+
+  /**
+   * 根据环境返回监听器的处理方法
+   * @param target
+   * @param type
+   * @returns
+   */
+  public getHandleFunction(target: HTMLElement | Document, type: string) {
+    if (!isMiniAli) {
+      return target === window.document
+        ? this.handleWindowEvent
+        : this.handleEvent;
+    } else {
+      return type === 'mousemove' ? this.handleWindowEvent : this.handleEvent;
+    }
+  }
+
   public destroy() {
     for (const [target, type, listenerOptions] of this.listeners) {
       // @ts-ignore
@@ -222,11 +239,10 @@ class HandlerManager {
     e: InputEvent | RenderFrameEvent,
     eventName?: string,
   ) => {
-    // if (e.type === 'blur') {// l7 - mini
-    //   this.stop();// l7 - mini
-    //   return;// l7 - mini
-    // }// l7 - mini
-
+    if (e.type === 'blur') {
+      this.stop();
+      return;
+    }
     this.updatingCamera = true;
     const inputEvent = e.type === 'renderFrame' ? undefined : (e as InputEvent);
 
@@ -239,37 +255,31 @@ class HandlerManager {
     const eventsInProgress: { [key: string]: any } = {};
     const activeHandlers: { [key: string]: any } = {};
     // @ts-ignore
-    // console.log('e.touches', e.touches)
     // @ts-ignore
-    // const mapTouches = e.touches// l7 - mini
-    //   ? // @ts-ignore
-    //     this.getMapTouches(e.touches as Touch[])// l7 - mini
-    //   : undefined;// l7 - mini
-    // const points = mapTouches// l7 - mini
-    //   ? DOM.touchPos(this.el, mapTouches)// l7 - mini
-    //   : DOM.mousePos(this.el, e as MouseEvent);// l7 - mini
+    const mapTouches = e.touches
+      ? // @ts-ignore
+        this.getMapTouches(e.touches as Touch[])
+      : undefined;
+    const points = mapTouches
+      ? DOM.touchPos(this.el, mapTouches)
+      : DOM.mousePos(this.el, e as MouseEvent);
+    // console.log('---===');
 
-    const points = DOM.mousePos(this.el, e as MouseEvent);
-
-
-    this.handlers = this.handlers.filter(h => h.handlerName === 'mousePan')
-    // console.log('this.handlers')
     for (const { handlerName, handler, allowed } of this.handlers) {
-      // console.log(handlerName, handler, allowed)
-      // if (!handler.isEnabled()) {// l7 - mini
-      //   continue;// l7 - mini
-      // }// l7 - mini
+      if (!handler.isEnabled()) {
+        continue;
+      }
       let data: IHandlerResult;
-      // if (this.blockedByActive(activeHandlers, allowed, handlerName)) {// l7 - mini
-        // handler.reset();// l7 - mini
-      // } else {// l7 - mini
+      if (this.blockedByActive(activeHandlers, allowed, handlerName)) {
+        handler.reset();
+      } else {
         const handerName = eventName || e.type;
-        // console.log('handerName', handerName)
+
         // @ts-ignore
         if (handler && handler[handerName]) {
           // @ts-ignore
-          // data = handler[handerName](e, points, mapTouches); 
-          data = handler[handerName](e, points, undefined); 
+          data = handler[handerName](e, points, mapTouches);
+
           this.mergeIHandlerResult(
             mergedIHandlerResult,
             eventsInProgress,
@@ -277,25 +287,25 @@ class HandlerManager {
             handlerName,
             inputEvent,
           );
-          
-          // if (data && data.needsRenderFrame) { // l7 - mini
-            // this.triggerRenderFrame(); // l7 - mini
-          // } // l7 - mini
+
+          if (data && data.needsRenderFrame) {
+            this.triggerRenderFrame();
+          }
         }
-      // }// l7 - mini
+      }
       // @ts-ignore
-      // if (data || handler.isActive()) {// l7 - mini
-      //   activeHandlers[handlerName] = handler;// l7 - mini
-      // }// l7 - mini
+      if (data || handler.isActive()) {
+        activeHandlers[handlerName] = handler;
+      }
     }
 
     const deactivatedHandlers: { [key: string]: any } = {};
-    // for (const name in this.previousActiveHandlers) {// l7 - mini
-    //   if (!activeHandlers[name]) {// l7 - mini
-    //     deactivatedHandlers[name] = inputEvent;// l7 - mini
-    //   }// l7 - mini
-    // }// l7 - mini
-    // this.previousActiveHandlers = activeHandlers;// l7 - mini
+    for (const name in this.previousActiveHandlers) {
+      if (!activeHandlers[name]) {
+        deactivatedHandlers[name] = inputEvent;
+      }
+    }
+    this.previousActiveHandlers = activeHandlers;
     if (
       Object.keys(deactivatedHandlers).length ||
       hasChange(mergedIHandlerResult)
@@ -308,9 +318,9 @@ class HandlerManager {
       this.triggerRenderFrame();
     }
 
-    // if (Object.keys(activeHandlers).length || hasChange(mergedIHandlerResult)) {// l7 - mini
-    //   this.map.stop(true);// l7 - mini
-    // }// l7 - mini
+    if (Object.keys(activeHandlers).length || hasChange(mergedIHandlerResult)) {
+      this.map.stop(true);
+    }
 
     this.updatingCamera = false;
 
@@ -359,7 +369,9 @@ class HandlerManager {
   public triggerRenderFrame() {
     if (this.frameId === undefined) {
       this.frameId = this.map.requestRenderFrame((timeStamp: number) => {
+        // @ts-ignore
         delete this.frameId;
+
         this.handleEvent(new RenderFrameEvent('renderFrame', { timeStamp }));
         this.applyChanges();
       });

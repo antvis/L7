@@ -74,9 +74,9 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-   
+
     this.initContainer();
-    
+
     this.resize();
     this.handlers = new HandlerManager(this, this.options); // l7 - mini
     // console.log(' this.handlers',  this.handlers)
@@ -313,6 +313,7 @@ export class Map extends Camera {
     if (!this.frame) {
       this.frame = renderframe((paintStartTimeStamp: number) => {
         PerformanceUtils.frame(paintStartTimeStamp);
+
         this.frame = null;
         this.renderTaskQueue.run(time);
       });
@@ -348,7 +349,7 @@ export class Map extends Camera {
     //   'l7-canvas-container',// l7 - mini
     //   container,// l7 - mini
     // ) as HTMLElement);// l7 - mini
-    this.canvasContainer = container
+    this.canvasContainer = container;
     const canvasContainer = container; // l7 - mini
 
     if (this.options.interactive) {

@@ -39,3 +39,6 @@ const aliMiniWin = {
 };
 
 export const l7window = isMiniAli ? aliMiniWin : window;
+// export const l7window = aliMiniWin;
+
+export * from './EventIniter/index';

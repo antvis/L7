@@ -221,7 +221,10 @@ export default class Scene extends EventEmitter implements ISceneService {
 
         this.canvas = baseCanvas; // l7 - mini
         // this.canvas = DOM.create('canvas', '', $container) as HTMLCanvasElement; // l7 - mini
-        this.setCanvas(); // l7 - mini
+        if (!isMiniAli) {
+          this.setCanvas(); // l7 - mini
+        }
+
         await this.rendererService.init(
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,

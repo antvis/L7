@@ -37,14 +37,21 @@ export function bezier(
 export const ease = bezier(0.25, 0.1, 0.25, 1);
 
 export function prefersReducedMotion(): boolean {
-  if (!window.matchMedia) {
-    return false;
+  if (!isMiniAli) {
+    // l7 - mini
+    if (!window.matchMedia) {
+      return false;
+    }
+    // Lazily initialize media query
+    if (reducedMotionQuery == null) {
+      reducedMotionQuery = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      );
+    }
+    return reducedMotionQuery.matches;
+  } else {
+    return false; // l7 - mini
   }
-  // Lazily initialize media query
-  if (reducedMotionQuery == null) {
-    reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  }
-  return reducedMotionQuery.matches;
 }
 
 export function pick(
@@ -61,13 +68,13 @@ export function pick(
 }
 
 export const now = isMiniAli
-  ? () => 1 // l7 - mini
+  ? Date.now.bind(Date) // l7 - mini
   : window.performance && window.performance.now
   ? window.performance.now.bind(window.performance)
   : Date.now.bind(Date);
 
 export const raf = isMiniAli
-  ? () => 1 // l7 - mini
+  ? setInterval // l7 - mini
   : window.requestAnimationFrame ||
     // @ts-ignore
     window.mozRequestAnimationFrame ||
@@ -77,7 +84,7 @@ export const raf = isMiniAli
     window.msRequestAnimationFrame;
 
 export const cancel = isMiniAli
-  ? () => 1 // l7 - mini
+  ? clearInterval // l7 - mini
   : window.cancelAnimationFrame ||
     // @ts-ignore
     window.mozCancelAnimationFrame ||
@@ -90,8 +97,6 @@ export function renderframe(
   fn: (paintStartTimestamp: number) => void,
   // @ts-ignore
 ): ICancelable {
-  if (!isMiniAli) {
-    const frame = raf(fn);
-    return { cancel: () => cancel(frame) };
-  }
+  const frame = raf(fn);
+  return { cancel: () => cancel(frame) };
 }

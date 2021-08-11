@@ -2,7 +2,7 @@
 import LngLat from '../geo/lng_lat';
 import Point from '../geo/point';
 import { Map } from '../map';
-import { bezier, ease, interpolate, now } from '../util';
+import { bezier, ease, interpolate, isMiniAli, now } from '../util';
 import DOM from '../utils/dom';
 import HandlerManager from './handler_manager';
 
@@ -147,11 +147,14 @@ class ScrollZoomHandler {
     if (!this.isEnabled()) {
       return;
     }
+    // console.log('e.deltaMode', e.deltaMode)
+    // console.log('window.WheelEvent', window.WheelEvent.DOM_DELTA_LINE)
     // Remove `any` cast when https://github.com/facebook/flow/issues/4879 is fixed.
-    let value =
-      e.deltaMode === window.WheelEvent.DOM_DELTA_LINE
-        ? e.deltaY * 40
-        : e.deltaY;
+    let value = isMiniAli
+      ? e.deltaY
+      : e.deltaMode === window.WheelEvent.DOM_DELTA_LINE
+      ? e.deltaY * 40
+      : e.deltaY;
     // @ts-ignore
     const nowTime = now();
     const timeDelta = nowTime - (this.lastWheelEventTime || 0);
