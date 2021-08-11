@@ -1,7 +1,7 @@
 import inject from '@rollup/plugin-inject';
 import modify from '@rollup/plugin-modify';
 
-const module = '@ali/miniprogram-adapter';
+const module = '@oasis-engine/miniprogram-adapter ';
 
 function register(name) {
   return [module, name];
