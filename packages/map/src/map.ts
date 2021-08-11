@@ -343,7 +343,8 @@ export class Map extends Camera {
     this.container = this.options.canvas as HTMLCanvasElement; // l7 - mini
 
     const container = this.container;
-    if(!isMiniAli) { // l7 - mini
+    if (!isMiniAli) {
+      // l7 - mini
       container.classList.add('l7-map');
     }
     // const canvasContainer = (this.canvasContainer = DOM.create(// l7 - mini

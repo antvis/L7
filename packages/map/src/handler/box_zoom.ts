@@ -111,7 +111,8 @@ class BoxZoomHandler {
 
     if (!this.box) {
       this.box = DOM.create('div', 'l7-boxzoom', this.container);
-      if(!isMiniAli) { // l7 - mini
+      if (!isMiniAli) {
+        // l7 - mini
         this.container.classList.add('l7-crosshair');
       }
       this.fireEvent('boxzoomstart', e);
@@ -173,7 +174,8 @@ class BoxZoomHandler {
 
   public reset() {
     this.active = false;
-    if(!isMiniAli) { // l7 - mini
+    if (!isMiniAli) {
+      // l7 - mini
       this.container.classList.remove('l7-crosshair');
     }
 
