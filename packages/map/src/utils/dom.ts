@@ -1,4 +1,4 @@
-import { isMini } from '@antv/l7-utils'
+import { isMini } from '@antv/l7-utils';
 // @ts-ignore
 import Point from '../geo/point';
 
@@ -23,7 +23,9 @@ DOM.createNS = (namespaceURI: string, tagName: string) => {
   return el;
 };
 
-const docStyle = (!isMini)?(window.document && window.document.documentElement.style):false;
+const docStyle = !isMini
+  ? window.document && window.document.documentElement.style
+  : false;
 
 function testProp(props: any) {
   if (!docStyle) {

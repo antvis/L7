@@ -9,7 +9,7 @@ import {
   IRendererService,
   TYPES,
 } from '@antv/l7-core';
-import { l7window } from '@antv/l7-utils'
+import { l7window } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 

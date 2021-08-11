@@ -1,9 +1,9 @@
-import { isMini } from '@antv/l7-utils'
+import { isMini } from '@antv/l7-utils';
 let containerCounter = 0;
 export function createRendererContainer(
   domId: string | HTMLDivElement,
 ): HTMLDivElement | null {
-  if(isMini) {
+  if (isMini) {
     return null;
   }
 

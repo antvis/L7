@@ -1,4 +1,4 @@
-import { isMini, l7window } from './adapterMini'
+import { isMini, l7window } from './adapterMini';
 type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
@@ -19,7 +19,7 @@ export function splitWords(str: string) {
 }
 
 function testProp(props: string[]): string {
-  if(!isMini) {
+  if (!isMini) {
     const docStyle = window.document.documentElement.style;
     if (!docStyle) {
       return props[0];

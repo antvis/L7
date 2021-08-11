@@ -13,6 +13,6 @@ const aliMiniWin = {
     ? // @ts-ignore
       my?.getSystemInfoSync()?.devicePixelRatio || 1
     : 1,
-}
+};
 
 export const l7window = isMiniAli ? aliMiniWin : window;
