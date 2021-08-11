@@ -278,6 +278,38 @@ export default class L7MapService implements IMapService<Map> {
     this.handleCameraChanged();
   }
 
+  // 初始化小程序地图
+  public async initMiniMap(): Promise<void> {
+    const {
+      id = 'map',
+      attributionControl = false,
+      style = 'light',
+      rotation = 0,
+      mapInstance,
+      canvas = null,
+      ...rest
+    } = this.config;
+
+    this.viewport = new Viewport();
+
+    this.$mapContainer = canvas
+    
+    this.map = new Map({
+      container: this.$mapContainer as HTMLElement,
+      style: this.getMapStyle(style),
+      bearing: rotation,
+      // @ts-ignore
+      canvas,
+      ...rest,
+    });
+
+    this.map.on('load', this.handleCameraChanged);
+    this.map.on('move', this.handleCameraChanged);
+
+    // 不同于高德地图，需要手动触发首次渲染
+    this.handleCameraChanged();
+  }
+
   public destroy() {
     this.eventEmitter.removeAllListeners();
     if (this.map) {

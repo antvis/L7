@@ -5,3 +5,4 @@ export const isMiniAli =
 
 // 判断是否是小程序环境
 export const isMini = isMiniAli;
+// export const isMini = true

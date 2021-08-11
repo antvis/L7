@@ -1,4 +1,4 @@
-import { DOM } from '@antv/l7-utils';
+import { DOM, isMini } from '@antv/l7-utils';
 import { merge } from 'lodash';
 import Camera from './camera';
 import './css/l7.css';
@@ -74,14 +74,14 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-    this.initContainer();
+    if(isMini) {
+      this.initMiniContainer()
+    } else {
+      this.initContainer();
+    }
+    
     this.resize();
     this.handlers = new HandlerManager(this, this.options);
-    // this.on('move', () => this.update());
-    // this.on('moveend', () => this.update());
-    // this.on('zoom', () => {
-    //   console.log('zoom');
-    // });
 
     if (typeof window !== 'undefined') {
       window.addEventListener('online', this.onWindowOnline, false);
@@ -119,8 +119,10 @@ export class Map extends Camera {
     const width = dimensions[0];
     const height = dimensions[1];
 
-    // this.resizeCanvas(width, height);
     this.transform.resize(width, height);
+    if(!isMini) {
+      return this;
+    }
     const fireMoving = !this.moving;
     if (fireMoving) {
       this.stop();
@@ -339,13 +341,14 @@ export class Map extends Camera {
       canvasContainer.classList.add('l7-interactive');
     }
 
-    // this.canvas = DOM.create(
-    //   'canvas',
-    //   'l7-canvas',
-    //   canvasContainer,
-    // ) as HTMLCanvasElement;
-    // this.canvas.setAttribute('tabindex', '-');
-    // this.canvas.setAttribute('aria-label', 'Map');
+  }
+
+  /**
+   * 小程序环境构建容器
+   */
+  private initMiniContainer() {
+    this.container = this.options.canvas as HTMLCanvasElement;
+    this.canvasContainer = this.container;
   }
 
   private containerDimensions(): [number, number] {
@@ -356,16 +359,6 @@ export class Map extends Camera {
       height = this.container.clientHeight || 300;
     }
     return [width, height];
-  }
-
-  private resizeCanvas(width: number, height: number) {
-    const pixelRatio = DOM.DPR || 1;
-    this.canvas.width = pixelRatio * width;
-    this.canvas.height = pixelRatio * height;
-
-    // Maintain the same canvas size, potentially downscaling it for HiDPI displays
-    this.canvas.style.width = `${width}px`;
-    this.canvas.style.height = `${height}px`;
   }
 
   private onWindowOnline = () => {
