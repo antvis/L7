@@ -1,3 +1,3 @@
 export default {
-    type: "l7performance"
+  type: 'l7performance',
 };
