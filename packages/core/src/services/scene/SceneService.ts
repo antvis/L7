@@ -7,7 +7,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
 import { IFontService } from '../asset/IFontService';
-// import { IIconService } from '../asset/IIconService';// l7 - mini
+import { IIconService } from '../asset/IIconService';
 import { ICameraService, IViewport } from '../camera/ICameraService';
 import { IControlService } from '../component/IControlService';
 import { IMarkerService } from '../component/IMarkerService';
@@ -45,8 +45,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   /**
    * 使用各种 Service
    */
-  // @inject(TYPES.IIconService)
-  // private readonly iconService: IIconService;
+  @inject(TYPES.IIconService)
+  private readonly iconService: IIconService;
 
   @inject(TYPES.IFontService)
   private readonly fontService: IFontService;
@@ -134,7 +134,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.shaderModuleService.registerBuiltinModules();
 
     // 初始化资源管理 图片
-    // this.iconService.init(); // l7 - mini
+    this.iconService.init(); // l7 - mini
     // 字体资源
     this.fontService.init();
 

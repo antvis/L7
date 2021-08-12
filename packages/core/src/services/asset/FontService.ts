@@ -1,6 +1,7 @@
-import { LRUCache } from '@antv/l7-utils';
+import { LRUCache, isMiniAli } from '@antv/l7-utils';
 // @ts-ignore
-import TinySDF from '@mapbox/tiny-sdf';
+// import TinySDF from '@mapbox/tiny-sdf';
+import TinySDF from 'l7-tiny-sdf'
 import { inject, injectable } from 'inversify';
 import { buildMapping } from '../../utils/font_util';
 import {
@@ -181,7 +182,8 @@ export default class FontService implements IFontService {
     } = this.fontOptions;
     let canvas = cachedFontAtlas && cachedFontAtlas.data;
     if (!canvas) {
-      canvas = document.createElement('canvas');
+      // @ts-ignore
+      canvas = !isMiniAli ? document.createElement('canvas') : my.createOffscreenCanvas(MAX_CANVAS_WIDTH, 100, '2d');
       canvas.width = MAX_CANVAS_WIDTH;
     }
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

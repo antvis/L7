@@ -28,6 +28,7 @@ export default class ScaleComponent extends React.Component {
       zoom: 2,
       // canvas: this.el
     });
+
     // this.map.handlers.outPutHandleEvent
     // console.log('map', map)
     const scene = new Scene({
@@ -76,10 +77,31 @@ export default class ScaleComponent extends React.Component {
       },
     ];
 
-    scene.on('loaded', () => {
-      // @ts-ignore
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
+    // let imageLayer = new PointLayer({
+    //   blend: "normal"
+    // }).source([{
+    //   "id": "5011000000404",
+    //   "name": "铁路新村(华池路)",
+    //   "longitude": 121.4216962,
+    //   "latitude": 31.26082325,
+    //   "unit_price": 71469.4,
+    //   "count": 2
+    // }], {
+    //     parser: {
+    //       type: 'json',
+    //       x: 'longitude',
+    //       y: 'latitude'
+    //     },
+    //   })
+    //   .shape('name', ['00'])
+    //   .size(20)
 
-      // console.log('map', map)
+    scene.on('loaded', () => {
+     
       let pointlayer = new PointLayer()
         .source(originData, {
           parser: {
@@ -93,6 +115,41 @@ export default class ScaleComponent extends React.Component {
         // .size(10)
         .size([10, 10, 100]);
       scene.addLayer(pointlayer);
+
+      const textLayer = new PointLayer({})
+      .source(
+        [
+          {
+            lng: 120.5,
+            lat: 31.3,
+            iconType: 'cloud',
+            iconColor: '#F0F8FF',
+            weather: '多云 - 今日适宜出门',
+            textOffset: [-40, 0],
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('weather', 'text')
+      .size(16)
+      .color('#f00')
+      .style({
+        textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+        textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+        spacing: 2, // 字符间距
+        padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+        fontFamily: 'Times New Roman',
+        textAllowOverlap: true,
+      });
+      scene.addLayer(textLayer)
+
+      // scene.addLayer(imageLayer);
 
       // @ts-ignore
       // let handler = scene.getMapService().map.handlers.outPutHandleEvent
