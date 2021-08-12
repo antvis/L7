@@ -110,7 +110,7 @@ class HandlerManager {
       [el, 'touchmove', { passive: false }], // l7 - mini
       [el, 'touchend', undefined], // l7 - mini
       [el, 'touchcancel', undefined], // l7 - mini
-      [el, 'mousedown', undefined],// l7 - mini
+      [el, 'mousedown', undefined], // l7 - mini
       [el, 'mousemove', undefined], // l7 - mini
       // [el, 'mouseup', undefined],// l7 - mini
       // Bind window-level event listeners for move and up/end events. In the absence of
@@ -129,7 +129,7 @@ class HandlerManager {
       // [el, 'keydown', { capture: false }],// l7 - mini
       // [el, 'keyup', undefined],// l7 - mini
       [el, 'wheel', { passive: false }], // l7 - mini
-      [el, 'contextmenu', undefined],// l7 - mini
+      [el, 'contextmenu', undefined], // l7 - mini
       // @ts-ignore
       // [window, 'blur', undefined],// l7 - mini
     ];
