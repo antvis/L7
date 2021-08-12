@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.5.6-l7mini7",
+  "version": "2.5.6-l7mini8",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",

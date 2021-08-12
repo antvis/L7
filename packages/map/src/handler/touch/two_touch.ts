@@ -41,6 +41,7 @@ export default class TwoTouchHandler {
     // implemented by child classes
     this.start([points[0], points[1]]);
   }
+  
 
   public touchmove(e: TouchEvent, points: Point[], mapTouches: Touch[]) {
     if (!this.firstTwoTouches) {
