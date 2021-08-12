@@ -113,7 +113,7 @@ export default class ScaleComponent extends React.Component {
         .color('rgba(255, 0, 0, 1.0)')
         // .size(10)
         .size([10, 10, 100])
-        .active(true)
+        .active(true);
       scene.addLayer(pointlayer);
 
       const textLayer = new PointLayer({})

@@ -1,5 +1,5 @@
-import { ISceneService } from '../../services/scene/ISceneService';
 import EventEmitter from 'eventemitter3';
+import { ISceneService } from '../../services/scene/ISceneService';
 import { ITexture2D } from '../renderer/ITexture2D';
 export type IImage = HTMLImageElement | File | string;
 export type Listener = (...args: any[]) => void;

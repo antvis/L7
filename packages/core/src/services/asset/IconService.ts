@@ -5,6 +5,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { buildIconMaping } from '../../utils/font_util';
 import { ITexture2D } from '../renderer/ITexture2D';
+import { ISceneService } from '../scene/ISceneService';
 import {
   IIcon,
   IICONMap,
@@ -12,7 +13,6 @@ import {
   IIconValue,
   IImage,
 } from './IIconService';
-import { ISceneService } from '../scene/ISceneService'
 const BUFFER = 3;
 const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
@@ -42,7 +42,7 @@ export default class IconService extends EventEmitter implements IIconService {
 
   public addImage(id: string, image: IImage, sceneService: ISceneService) {
     // 小程序不支持 new Image() 的方法来构建图片对象，需要做兼容处理
-    let canvas = !isMiniAli ? null : sceneService.getSceneConfig().canvas // l7 - mini
+    const canvas = !isMiniAli ? null : sceneService.getSceneConfig().canvas; // l7 - mini
     // @ts-ignore
     let imagedata = !isMiniAli ? new Image() : canvas.createImage(); // l7 - mini
     this.loadingImageCount++;
@@ -54,8 +54,9 @@ export default class IconService extends EventEmitter implements IIconService {
       size: imageSize,
     });
     this.updateIconMap();
-    let fn = !isMiniAli ? this.loadImage : this.loadImageMini; // l7 - mini
-    fn(image, canvas as HTMLCanvasElement).then((img) => { // l7 - mini
+    const fn = !isMiniAli ? this.loadImage : this.loadImageMini; // l7 - mini
+    fn(image, canvas as HTMLCanvasElement).then((img) => {
+      // l7 - mini
       imagedata = img as HTMLImageElement;
       const iconImage = this.iconData.find((icon: IIcon) => {
         return icon.id === id;
@@ -177,8 +178,8 @@ export default class IconService extends EventEmitter implements IIconService {
   /**
    * 小程序兼容 loadImage 方法
    * @param url 目前小程序中 L7 只支持 string 类型的值
-   * @param canvas 
-   * @returns 
+   * @param canvas
+   * @returns
    */
   private loadImageMini(url: IImage, canvas: HTMLCanvasElement) {
     return new Promise((resolve, reject) => {
