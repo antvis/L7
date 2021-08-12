@@ -303,24 +303,6 @@ export default class LineModel extends BaseModel {
     });
   }
 
-  private loadImage(url: IImage) {
-    return new Promise((resolve, reject) => {
-      if (url instanceof HTMLImageElement) {
-        resolve(url);
-        return;
-      }
-      const image = new Image();
-      image.crossOrigin = 'anonymous';
-      image.onload = () => {
-        resolve(image);
-      };
-      image.onerror = () => {
-        reject(new Error('Could not load image at ' + url));
-      };
-      image.src = url instanceof File ? URL.createObjectURL(url) : url;
-    });
-  }
-
   private updateTexture = () => {
     const { createTexture2D } = this.rendererService;
     if (this.texture) {

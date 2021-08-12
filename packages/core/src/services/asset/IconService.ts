@@ -12,6 +12,7 @@ import {
   IIconValue,
   IImage,
 } from './IIconService';
+import { ISceneService } from '../scene/ISceneService'
 const BUFFER = 3;
 const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
@@ -34,13 +35,16 @@ export default class IconService extends EventEmitter implements IIconService {
     // @ts-ignore
     this.canvas = !isMiniAli
       ? document.createElement('canvas')
-      // @ts-ignore
-      : my.createOffscreenCanvas(MAX_CANVAS_WIDTH, this.canvasHeight, '2d');
+      : // @ts-ignore
+        my.createOffscreenCanvas(MAX_CANVAS_WIDTH, this.canvasHeight, '2d');
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
-  public addImage(id: string, image: IImage) {
-    let imagedata = new Image();
+  public addImage(id: string, image: IImage, sceneService: ISceneService) {
+    // 小程序不支持 new Image() 的方法来构建图片对象，需要做兼容处理
+    let canvas = !isMiniAli ? null : sceneService.getSceneConfig().canvas // l7 - mini
+    // @ts-ignore
+    let imagedata = !isMiniAli ? new Image() : canvas.createImage(); // l7 - mini
     this.loadingImageCount++;
     if (this.hasImage(id)) {
       throw new Error('Image Id already exists');
@@ -50,7 +54,8 @@ export default class IconService extends EventEmitter implements IIconService {
       size: imageSize,
     });
     this.updateIconMap();
-    this.loadImage(image).then((img) => {
+    let fn = !isMiniAli ? this.loadImage : this.loadImageMini; // l7 - mini
+    fn(image, canvas as HTMLCanvasElement).then((img) => { // l7 - mini
       imagedata = img as HTMLImageElement;
       const iconImage = this.iconData.find((icon: IIcon) => {
         return icon.id === id;
@@ -62,6 +67,18 @@ export default class IconService extends EventEmitter implements IIconService {
       }
       this.update();
     });
+    // this.loadImage(image).then((img) => {
+    //   imagedata = img as HTMLImageElement;
+    //   const iconImage = this.iconData.find((icon: IIcon) => {
+    //     return icon.id === id;
+    //   });
+    //   if (iconImage) {
+    //     iconImage.image = imagedata;
+    //     iconImage.width = imagedata.width;
+    //     iconImage.height = imagedata.height;
+    //   }
+    //   this.update();
+    // });
   }
 
   public getTexture(): ITexture2D {
@@ -154,6 +171,27 @@ export default class IconService extends EventEmitter implements IIconService {
         reject(new Error('Could not load image at ' + url));
       };
       image.src = url instanceof File ? URL.createObjectURL(url) : url;
+    });
+  }
+
+  /**
+   * 小程序兼容 loadImage 方法
+   * @param url 目前小程序中 L7 只支持 string 类型的值
+   * @param canvas 
+   * @returns 
+   */
+  private loadImageMini(url: IImage, canvas: HTMLCanvasElement) {
+    return new Promise((resolve, reject) => {
+      // @ts-ignore
+      const image = canvas.createImage();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = () => {
+        reject(new Error('Could not load image at ' + url));
+      };
+      image.src = url as string;
     });
   }
 }

@@ -112,7 +112,8 @@ export default class ScaleComponent extends React.Component {
         .shape('circle')
         .color('rgba(255, 0, 0, 1.0)')
         // .size(10)
-        .size([10, 10, 100]);
+        .size([10, 10, 100])
+        .active(true)
       scene.addLayer(pointlayer);
 
       const textLayer = new PointLayer({})

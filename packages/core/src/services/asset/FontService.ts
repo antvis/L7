@@ -185,8 +185,8 @@ export default class FontService implements IFontService {
       // @ts-ignore
       canvas = !isMiniAli
         ? document.createElement('canvas')
-        // @ts-ignore
-        : my.createOffscreenCanvas(MAX_CANVAS_WIDTH, 100, '2d');
+        : // @ts-ignore
+          my.createOffscreenCanvas(MAX_CANVAS_WIDTH, 100, '2d');
       canvas.width = MAX_CANVAS_WIDTH;
     }
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

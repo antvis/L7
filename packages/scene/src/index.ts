@@ -218,7 +218,7 @@ class Scene
   }
 
   public addImage(id: string, img: IImage) {
-    this.iconService.addImage(id, img);
+    this.iconService.addImage(id, img, this.sceneService); // l7 - mini this.sceneService
   }
 
   public hasImage(id: string) {
