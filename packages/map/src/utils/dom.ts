@@ -8,6 +8,9 @@ const DOM: {
 export default DOM;
 
 DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
+  if (isMini) {
+    return null;
+  }
   const el = window.document.createElement(tagName);
   if (className !== undefined) {
     el.className = className;
@@ -19,6 +22,9 @@ DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
+  if (isMini) {
+    return null;
+  }
   const el = window.document.createElementNS(namespaceURI, tagName);
   return el;
 };
@@ -120,6 +126,9 @@ const suppressClick = (e: MouseEvent) => {
 };
 
 DOM.suppressClick = () => {
+  if (isMini) {
+    return;
+  }
   window.addEventListener('click', suppressClick, true);
   window.setTimeout(() => {
     window.removeEventListener('click', suppressClick, true);
@@ -149,6 +158,9 @@ DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
+  if (!isMini) {
+    return e.button;
+  }
   if (
     // @ts-ignore
     typeof window.InstallTrigger !== 'undefined' &&

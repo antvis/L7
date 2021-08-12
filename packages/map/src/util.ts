@@ -33,7 +33,7 @@ export function bezier(
 export const ease = bezier(0.25, 0.1, 0.25, 1);
 
 export function prefersReducedMotion(): boolean {
-  if (!window.matchMedia) {
+  if (isMini || !window.matchMedia) {
     return false;
   }
   // Lazily initialize media query
