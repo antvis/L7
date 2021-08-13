@@ -1,9 +1,6 @@
-// @ts-ignore
-import TinySDF from '@mapbox/tiny-sdf';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { TYPES } from '../../types';
 import { buildIconMaping } from '../../utils/font_util';
 import { ITexture2D } from '../renderer/ITexture2D';
 import {

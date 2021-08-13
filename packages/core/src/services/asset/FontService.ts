@@ -1,6 +1,5 @@
 import { LRUCache } from '@antv/l7-utils';
-// @ts-ignore
-import TinySDF from '@mapbox/tiny-sdf';
+import TinySDF from 'l7-tiny-sdf'
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';

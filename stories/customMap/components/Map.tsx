@@ -72,7 +72,8 @@ export default class ScaleComponent extends React.Component {
             padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
             fontFamily: 'Times New Roman',
             textAllowOverlap: true,
-          });
+          })
+          .active(true)
         scene.addLayer(textLayer);
 
         const layer = new PolygonLayer({
@@ -95,7 +96,7 @@ export default class ScaleComponent extends React.Component {
           .style({
             opacity: 1.0,
           });
-        scene.addLayer(layer);
+        // scene.addLayer(layer);
       });
   }
 

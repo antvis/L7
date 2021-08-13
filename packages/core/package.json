@@ -26,7 +26,7 @@
     "@antv/async-hook": "^2.1.0",
     "@antv/l7-utils": "^2.5.8",
     "@babel/runtime": "^7.7.7",
-    "@mapbox/tiny-sdf": "^1.1.1",
+    "l7-tiny-sdf": "^0.0.1",
     "ajv": "^6.10.2",
     "element-resize-event": "^3.0.3",
     "eventemitter3": "^4.0.0",
@@ -35,7 +35,6 @@
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "lodash": "^4.17.15",
-    "probe.gl": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "viewport-mercator-project": "^6.2.1"
   },
