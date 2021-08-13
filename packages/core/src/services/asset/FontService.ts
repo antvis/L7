@@ -1,7 +1,7 @@
 import { isMiniAli, LRUCache } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 // @ts-ignore
-// import TinySDF from '@mapbox/tiny-sdf';
+// import TinySDF from '@mapbox/tiny-sdf'; // l7- mini
 import TinySDF from 'l7-tiny-sdf';
 import { buildMapping } from '../../utils/font_util';
 import {

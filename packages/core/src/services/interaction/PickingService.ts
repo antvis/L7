@@ -364,11 +364,13 @@ export default class PickingService implements IPickingService {
     layer: ILayer,
     pickedColors: Uint8Array | undefined,
   ) {
+    // @ts-ignore
     const [r, g, b] = pickedColors;
     layer.hooks.beforeHighlight.call([r, g, b]);
   }
 
   private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+    // @ts-ignore
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
   }

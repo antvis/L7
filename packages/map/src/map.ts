@@ -79,12 +79,6 @@ export class Map extends Camera {
 
     this.resize();
     this.handlers = new HandlerManager(this, this.options); // l7 - mini
-    // console.log(' this.handlers',  this.handlers)
-    // this.on('move', () => this.update());// l7 - mini
-    // this.on('moveend', () => this.update());// l7 - mini
-    // this.on('zoom', () => {// l7 - mini
-    // console.log('zoom');// l7 - mini
-    // });// l7 - mini
 
     if (!isMiniAli && typeof window !== 'undefined') {
       window.addEventListener('online', this.onWindowOnline, false);
@@ -358,13 +352,6 @@ export class Map extends Camera {
     if (!isMiniAli && this.options.interactive) {
       canvasContainer?.classList.add('l7-interactive');
     }
-    // this.canvas = DOM.create(
-    //   'canvas',
-    //   'l7-canvas',
-    //   canvasContainer,
-    // ) as HTMLCanvasElement;
-    // this.canvas.setAttribute('tabindex', '-');
-    // this.canvas.setAttribute('aria-label', 'Map');
   }
 
   private containerDimensions(): [number, number] {

@@ -1,5 +1,5 @@
 // const docStyle = window.document.documentElement.style;
-type ELType = HTMLElement | SVGElement;
+// type ELType = HTMLElement | SVGElement;
 import { isMiniAli } from '@antv/l7-utils';
 let containerCounter = 0;
 export function createRendererContainer(

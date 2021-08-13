@@ -176,7 +176,7 @@ export default class IconService extends EventEmitter implements IIconService {
   }
 
   /**
-   * 小程序兼容 loadImage 方法
+   * 小程序兼容 loadImage 方法 l7 - mini
    * @param url 目前小程序中 L7 只支持 string 类型的值
    * @param canvas
    * @returns

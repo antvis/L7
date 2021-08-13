@@ -255,7 +255,6 @@ class HandlerManager {
     const eventsInProgress: { [key: string]: any } = {};
     const activeHandlers: { [key: string]: any } = {};
     // @ts-ignore
-    // @ts-ignore
     const mapTouches = e.touches
       ? // @ts-ignore
         this.getMapTouches(e.touches as Touch[])
@@ -263,7 +262,6 @@ class HandlerManager {
     const points = mapTouches
       ? DOM.touchPos(this.el, mapTouches)
       : DOM.mousePos(this.el, e as MouseEvent);
-    // console.log('---===');
 
     for (const { handlerName, handler, allowed } of this.handlers) {
       if (!handler.isEnabled()) {

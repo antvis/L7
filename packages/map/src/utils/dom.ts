@@ -1,5 +1,5 @@
-// @ts-ignore
 import { isMiniAli } from '@antv/l7-utils';
+// @ts-ignore
 import Point from '../geo/point';
 
 const DOM: {
@@ -8,33 +8,30 @@ const DOM: {
 export default DOM;
 
 DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
-  if (!isMiniAli) {
-    // l7 - mini
-    const el = window.document.createElement(tagName);
-    if (className !== undefined) {
-      el.className = className;
-    }
-    if (container) {
-      container.appendChild(el);
-    }
-    return el;
-  } else {
-    return null; // l7 - mini
+  if (isMiniAli) {
+    return null;
   }
+  const el = window.document.createElement(tagName);
+  if (className !== undefined) {
+    el.className = className;
+  }
+  if (container) {
+    container.appendChild(el);
+  }
+  return el;
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
-  if (!isMiniAli) {
-    // l7 - mini
-    const el = window.document.createElementNS(namespaceURI, tagName);
-    return el;
-  } else {
-    return null; // l7 - mini
+  if (isMiniAli) {
+    return null;
   }
+  const el = window.document.createElementNS(namespaceURI, tagName);
+  return el;
 };
 
-const docStyle =
-  !isMiniAli && window.document && window.document.documentElement.style; // l7 - mini
+const docStyle = !isMiniAli
+  ? window.document && window.document.documentElement.style
+  : false;
 
 function testProp(props: any) {
   if (!docStyle) {
@@ -89,12 +86,10 @@ try {
       passiveSupported = true;
     },
   });
-  if (!isMiniAli) {
-    // @ts-ignore
-    window.addEventListener('test', options, options);
-    // @ts-ignore
-    window.removeEventListener('test', options, options);
-  }
+  // @ts-ignore
+  window.addEventListener('test', options, options);
+  // @ts-ignore
+  window.removeEventListener('test', options, options);
 } catch (err) {
   passiveSupported = false;
 }
@@ -127,42 +122,27 @@ DOM.removeEventListener = (
 
 // Suppress the next click, but only if it's immediate.
 const suppressClick = (e: MouseEvent) => {
-  if (!isMiniAli) {
-    // l7 - mini
-    e.preventDefault();
-    e.stopPropagation();
-    window.removeEventListener('click', suppressClick, true);
-  }
+  e.preventDefault();
+  e.stopPropagation();
+  window.removeEventListener('click', suppressClick, true);
 };
 
 DOM.suppressClick = () => {
-  if (!isMiniAli) {
-    // l7 - mini
-    window.addEventListener('click', suppressClick, true);
-    window.setTimeout(() => {
-      window.removeEventListener('click', suppressClick, true);
-    }, 0);
+  if (isMiniAli) {
+    return;
   }
+  window.addEventListener('click', suppressClick, true);
+  window.setTimeout(() => {
+    window.removeEventListener('click', suppressClick, true);
+  }, 0);
 };
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
   const rect = el.getBoundingClientRect();
-  if (isMiniAli) {
-    // l7 - mini
-    return new Point(
-      e.clientX - rect.left - el.clientLeft,
-      e.clientY - rect.top - el.clientTop,
-    );
-  } else {
-    return new Point(
-      e.clientX - rect.left - el.clientLeft,
-      e.clientY - rect.top - el.clientTop,
-    );
-  } // l7 - mini
-  // return new Point( // l7 - mini
-  //   e.clientX - rect.left - el.clientLeft, // l7 - mini
-  //   e.clientY - rect.top - el.clientTop, // l7 - mini
-  // ); // l7 - mini
+  return new Point(
+    e.clientX - rect.left - el.clientLeft,
+    e.clientY - rect.top - el.clientTop,
+  );
 };
 
 DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
@@ -180,8 +160,10 @@ DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
+  if (!isMiniAli) {
+    return e.button;
+  }
   if (
-    !isMiniAli && // l7 - mini
     // @ts-ignore
     typeof window.InstallTrigger !== 'undefined' &&
     e.button === 2 &&
