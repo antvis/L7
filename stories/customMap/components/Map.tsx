@@ -6,14 +6,30 @@ import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
   private scene: Scene;
+  private el: HTMLCanvasElement;
 
   public componentWillUnmount() {
     this.scene.destroy();
   }
 
+  public setCanvas() {
+    this.el.width = 400;
+    this.el.height = 300;
+    this.el.style.width = '300px';
+    this.el.style.height = '150px';
+    this.el.style.zIndex = '10';
+    this.el.style.position = 'absolute';
+    this.el.style.top = '0';
+    this.el.style.left = '0';
+    this.el.style.border = '1px solid';
+  }
+
   public async componentDidMount() {
+    this.setCanvas();
+
     const scene = new Scene({
       id: 'map',
+      // canvas: this.el,
       map: new Map({
         hash: true,
         center: [110.19382669582967, 30.258134],
@@ -94,7 +110,9 @@ export default class ScaleComponent extends React.Component {
           right: 0,
           bottom: 0,
         }}
-      />
+      >
+        <canvas ref={(el) => (this.el = el as HTMLCanvasElement)}></canvas>
+      </div>
     );
   }
 }
