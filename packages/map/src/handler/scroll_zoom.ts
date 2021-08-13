@@ -287,7 +287,9 @@ class ScrollZoomHandler {
       this.finishTimeout = setTimeout(() => {
         this.zooming = false;
         this.handler.triggerRenderFrame();
+        // @ts-ignore
         delete this.targetZoom;
+        // @ts-ignore
         delete this.finishTimeout;
       }, 200);
     }
@@ -325,6 +327,7 @@ class ScrollZoomHandler {
 
     if (this.finishTimeout) {
       clearTimeout(this.finishTimeout);
+      // @ts-ignore
       delete this.finishTimeout;
     }
 

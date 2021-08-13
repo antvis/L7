@@ -37,6 +37,40 @@ export default class ScaleComponent extends React.Component {
         zoom: 2,
       }),
     });
+
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
+    let imageLayer = new PointLayer({
+      blend: 'normal',
+    })
+      .source(
+        [
+          {
+            id: '5011000000404',
+            name: '铁路新村(华池路)',
+            longitude: 121.4216962,
+            latitude: 31.26082325,
+            unit_price: 71469.4,
+            count: 2,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'longitude',
+            y: 'latitude',
+          },
+        },
+      )
+      .shape('name', ['00'])
+      .size(20);
+
+    scene.on('loaded', () => {
+      scene.addLayer(imageLayer);
+    });
+
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     )
@@ -96,7 +130,7 @@ export default class ScaleComponent extends React.Component {
           .style({
             opacity: 1.0,
           });
-        // scene.addLayer(layer);
+        scene.addLayer(layer);
       });
   }
 

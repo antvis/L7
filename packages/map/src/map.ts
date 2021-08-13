@@ -89,10 +89,12 @@ export class Map extends Camera {
       window.addEventListener('orientationchange', this.onWindowResize, false);
     }
 
-    const hashName =
-      (typeof options.hash === 'string' && options.hash) || undefined;
-    if (options.hash) {
-      this.hash = new Hash(hashName).addTo(this) as Hash;
+    if (!isMini) {
+      const hashName =
+        (typeof options.hash === 'string' && options.hash) || undefined;
+      if (options.hash) {
+        this.hash = new Hash(hashName).addTo(this) as Hash;
+      }
     }
 
     // don't set position from options if set through hash

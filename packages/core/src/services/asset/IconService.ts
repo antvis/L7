@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { buildIconMaping } from '../../utils/font_util';
 import { ITexture2D } from '../renderer/ITexture2D';
+import { ISceneService } from '../scene/ISceneService';
 import {
   IIcon,
   IICONMap,
@@ -45,6 +46,39 @@ export default class IconService extends EventEmitter implements IIconService {
     });
     this.updateIconMap();
     this.loadImage(image).then((img) => {
+      imagedata = img as HTMLImageElement;
+      const iconImage = this.iconData.find((icon: IIcon) => {
+        return icon.id === id;
+      });
+      if (iconImage) {
+        iconImage.image = imagedata;
+        iconImage.width = imagedata.width;
+        iconImage.height = imagedata.height;
+      }
+      this.update();
+    });
+  }
+
+  /**
+   * 适配小程序
+   * @param id
+   * @param image
+   * @param sceneService
+   */
+  public addImageMini(id: string, image: IImage, sceneService: ISceneService) {
+    const canvas = sceneService.getSceneConfig().canvas;
+    // @ts-ignore
+    let imagedata = canvas.createImage();
+    this.loadingImageCount++;
+    if (this.hasImage(id)) {
+      throw new Error('Image Id already exists');
+    }
+    this.iconData.push({
+      id,
+      size: imageSize,
+    });
+    this.updateIconMap();
+    this.loadImageMini(image, canvas as HTMLCanvasElement).then((img) => {
       imagedata = img as HTMLImageElement;
       const iconImage = this.iconData.find((icon: IIcon) => {
         return icon.id === id;
@@ -148,6 +182,26 @@ export default class IconService extends EventEmitter implements IIconService {
         reject(new Error('Could not load image at ' + url));
       };
       image.src = url instanceof File ? URL.createObjectURL(url) : url;
+    });
+  }
+
+  /**
+   * 适配小程序
+   * @param url
+   * @returns
+   */
+  private loadImageMini(url: IImage, canvas: HTMLCanvasElement) {
+    return new Promise((resolve, reject) => {
+      // @ts-ignore
+      const image = canvas.createImage();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = () => {
+        reject(new Error('Could not load image at ' + url));
+      };
+      image.src = url as string;
     });
   }
 }

@@ -20,7 +20,7 @@ export function splitWords(str: string) {
 
 function testProp(props: string[]): string {
   if (!isMini) {
-    const docStyle = window.document.documentElement.style;
+    const docStyle = l7window.document.documentElement.style;
     if (!docStyle) {
       return props[0];
     }

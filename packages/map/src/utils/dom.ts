@@ -1,4 +1,4 @@
-import { isMini } from '@antv/l7-utils';
+import { isMini, l7window } from '@antv/l7-utils';
 // @ts-ignore
 import Point from '../geo/point';
 
@@ -8,10 +8,7 @@ const DOM: {
 export default DOM;
 
 DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
-  if (isMini) {
-    return null;
-  }
-  const el = window.document.createElement(tagName);
+  const el = l7window.document.createElement(tagName) as HTMLElement;
   if (className !== undefined) {
     el.className = className;
   }
@@ -22,16 +19,14 @@ DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
-  if (isMini) {
-    return null;
-  }
-  const el = window.document.createElementNS(namespaceURI, tagName);
+  const el = l7window.document.createElementNS(
+    namespaceURI,
+    tagName,
+  ) as HTMLElement;
   return el;
 };
 
-const docStyle = !isMini
-  ? window.document && window.document.documentElement.style
-  : false;
+const docStyle = l7window.document && l7window.document.documentElement.style;
 
 function testProp(props: any) {
   if (!docStyle) {
@@ -86,8 +81,10 @@ try {
       passiveSupported = true;
     },
   });
-  window.addEventListener('test', options, options);
-  window.removeEventListener('test', options, options);
+  // @ts-ignore
+  l7window.addEventListener('test', options, options);
+  // @ts-ignore
+  l7window.removeEventListener('test', options, options);
 } catch (err) {
   passiveSupported = false;
 }
@@ -122,16 +119,16 @@ DOM.removeEventListener = (
 const suppressClick = (e: MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
-  window.removeEventListener('click', suppressClick, true);
+  l7window.removeEventListener('click', suppressClick, true);
 };
 
 DOM.suppressClick = () => {
   if (isMini) {
     return;
   }
-  window.addEventListener('click', suppressClick, true);
-  window.setTimeout(() => {
-    window.removeEventListener('click', suppressClick, true);
+  l7window.addEventListener('click', suppressClick, true);
+  setTimeout(() => {
+    l7window.removeEventListener('click', suppressClick, true);
   }, 0);
 };
 
@@ -163,10 +160,10 @@ DOM.mouseButton = (e: MouseEvent) => {
   }
   if (
     // @ts-ignore
-    typeof window.InstallTrigger !== 'undefined' &&
+    typeof l7window.InstallTrigger !== 'undefined' &&
     e.button === 2 &&
     e.ctrlKey &&
-    window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
+    l7window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
   ) {
     // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:
     // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when
