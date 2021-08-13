@@ -73,7 +73,7 @@ export default class ScaleComponent extends React.Component {
             fontFamily: 'Times New Roman',
             textAllowOverlap: true,
           })
-          .active(true)
+          .active(true);
         scene.addLayer(textLayer);
 
         const layer = new PolygonLayer({
