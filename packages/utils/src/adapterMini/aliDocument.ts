@@ -16,6 +16,6 @@ export default {
     };
   },
   removeEventListener: () => {
-      return '';
+    return '';
   },
 };
