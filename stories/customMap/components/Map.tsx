@@ -44,7 +44,7 @@ export default class ScaleComponent extends React.Component {
     );
     let imageLayer = new PointLayer({
       blend: 'normal',
-      zIndex: 2
+      zIndex: 2,
     })
       .source(
         [
@@ -107,11 +107,11 @@ export default class ScaleComponent extends React.Component {
             })
             .active(true);
           scene.addLayer(textLayer);
-  
+
           const layer = new PolygonLayer({
             name: '01',
           });
-  
+
           layer
             .source(data)
             .size('name', [0, 10000, 50000, 30000, 100000])
@@ -132,8 +132,6 @@ export default class ScaleComponent extends React.Component {
         });
       scene.addLayer(imageLayer);
     });
-
-   
   }
 
   public render() {
