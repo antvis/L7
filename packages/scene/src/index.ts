@@ -215,12 +215,12 @@ class Scene
   }
 
   public addImage(id: string, img: IImage) {
-    // if(!isMini) {
-    //   this.iconService.addImage(id, img);
-    // } else {
-    //   this.iconService.addImageMini(id, img, this.sceneService);
-    // }
-    this.iconService.addImage(id, img);
+    if (!isMini) {
+      this.iconService.addImage(id, img);
+    } else {
+      this.iconService.addImageMini(id, img, this.sceneService);
+    }
+    // this.iconService.addImage(id, img);
   }
 
   public hasImage(id: string) {

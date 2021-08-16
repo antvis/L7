@@ -1,6 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
-import merge from 'lodash/merge';
+import { isMini, l7window } from '@antv/l7-utils';
+import { merge } from 'lodash';
 import Point from '../geo/point';
 import { Map } from '../map';
 import DOM from '../utils/dom';
@@ -99,53 +100,80 @@ class HandlerManager {
     this.addDefaultHandlers(options);
 
     const el = this.el;
+    this.listeners = [];
+    if (!isMini) {
+      // l7 - mini
+      this.listeners = [
+        // Bind touchstart and touchmove with passive: false because, even though
+        // they only fire a map events and therefore could theoretically be
+        // passive, binding with passive: true causes iOS not to respect
+        // e.preventDefault() in _other_ handlers, even if they are non-passive
+        // (see https://bugs.webkit.org/show_bug.cgi?id=184251)
+        [el, 'touchstart', { passive: false }],
+        [el, 'touchmove', { passive: false }],
+        [el, 'touchend', undefined],
+        [el, 'touchcancel', undefined],
 
-    this.listeners = [
-      // Bind touchstart and touchmove with passive: false because, even though
-      // they only fire a map events and therefore could theoretically be
-      // passive, binding with passive: true causes iOS not to respect
-      // e.preventDefault() in _other_ handlers, even if they are non-passive
-      // (see https://bugs.webkit.org/show_bug.cgi?id=184251)
-      [el, 'touchstart', { passive: false }],
-      [el, 'touchmove', { passive: false }],
-      [el, 'touchend', undefined],
-      [el, 'touchcancel', undefined],
+        [el, 'mousedown', undefined],
+        [el, 'mousemove', undefined],
+        [el, 'mouseup', undefined],
 
-      [el, 'mousedown', undefined],
-      [el, 'mousemove', undefined],
-      [el, 'mouseup', undefined],
-
-      // Bind window-level event listeners for move and up/end events. In the absence of
-      // the pointer capture API, which is not supported by all necessary platforms,
-      // window-level event listeners give us the best shot at capturing events that
-      // fall outside the map canvas element. Use `{capture: true}` for the move event
-      // to prevent map move events from being fired during a drag.
-      // @ts-ignore
-      [window.document, 'mousemove', { capture: true }],
-      // @ts-ignore
-      [window.document, 'mouseup', undefined],
-
-      [el, 'mouseover', undefined],
-      [el, 'mouseout', undefined],
-      [el, 'dblclick', undefined],
-      [el, 'click', undefined],
-
-      [el, 'keydown', { capture: false }],
-      [el, 'keyup', undefined],
-
-      [el, 'wheel', { passive: false }],
-      [el, 'contextmenu', undefined],
-      // @ts-ignore
-      [window, 'blur', undefined],
-    ];
-    for (const [target, type, listenerOptions] of this.listeners) {
-      // @ts-ignore
-      DOM.addEventListener(
-        target,
-        type,
+        // Bind window-level event listeners for move and up/end events. In the absence of
+        // the pointer capture API, which is not supported by all necessary platforms,
+        // window-level event listeners give us the best shot at capturing events that
+        // fall outside the map canvas element. Use `{capture: true}` for the move event
+        // to prevent map move events from being fired during a drag.
         // @ts-ignore
-        target === window.document ? this.handleWindowEvent : this.handleEvent,
-        listenerOptions,
+        [window.document, 'mousemove', { capture: true }],
+        // @ts-ignore
+        [window.document, 'mouseup', undefined],
+
+        [el, 'mouseover', undefined],
+        [el, 'mouseout', undefined],
+        [el, 'dblclick', undefined],
+        [el, 'click', undefined],
+
+        [el, 'keydown', { capture: false }],
+        [el, 'keyup', undefined],
+
+        [el, 'wheel', { passive: false }],
+        [el, 'contextmenu', undefined],
+        // @ts-ignore
+        [window, 'blur', undefined],
+      ];
+      for (const [target, type, listenerOptions] of this.listeners) {
+        // @ts-ignore
+        DOM.addEventListener(
+          target,
+          type,
+          // @ts-ignore
+          target === window.document
+            ? this.handleWindowEvent
+            : this.handleEvent,
+          listenerOptions,
+        );
+      }
+    } else {
+      l7window.document.addEventListener(
+        'touchstart',
+        (e: any) => {
+          this.handleEvent(e);
+        },
+        {},
+      );
+      l7window.document.addEventListener(
+        'touchmove',
+        (e: any) => {
+          this.handleEvent(e);
+        },
+        {},
+      );
+      l7window.document.addEventListener(
+        'touchend',
+        (e: any) => {
+          this.handleEvent(e);
+        },
+        {},
       );
     }
   }

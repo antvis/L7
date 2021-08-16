@@ -2,6 +2,7 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  ILayer,
   IModel,
   IModelUniform,
   ITexture2D,
@@ -166,7 +167,7 @@ export default class ImageModel extends BaseModel {
       this.texture.update({
         data: this.iconService.getCanvas(),
       });
-      this.layer.render();
+      this.layer.renderLayers();
       return;
     }
     this.texture = createTexture2D({

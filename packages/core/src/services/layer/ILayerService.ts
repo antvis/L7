@@ -173,6 +173,7 @@ export interface ILayer {
   setBlend(type: keyof typeof BlendType): void;
   // animate(field: string, option: any): ILayer;
   render(): ILayer;
+  renderLayers(): void;
   clear(): void;
   clearModels(): void;
   destroy(): void;

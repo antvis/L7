@@ -1,5 +1,6 @@
 import aliDocument from './aliDocument';
 import aliPerformance from './aliPerformance';
+import Event from './Event';
 // 判断时候是支付宝小程序环境
 export const isMiniAli =
   // @ts-ignore
@@ -37,6 +38,7 @@ const aliMiniWin = {
   performance: aliPerformance,
   devicePixelRatio: aliDPR,
   matchMedia: undefined,
+  Event,
 };
 
 export const l7window = isMiniAli ? aliMiniWin : window;

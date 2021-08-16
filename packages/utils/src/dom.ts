@@ -158,7 +158,7 @@ export function printCanvas(canvas: HTMLCanvasElement) {
 }
 
 export function getViewPortScale() {
-  const meta = document.querySelector('meta[name="viewport"]');
+  const meta = l7window.document.querySelector('meta[name="viewport"]');
   if (!meta) {
     return 1;
   }
