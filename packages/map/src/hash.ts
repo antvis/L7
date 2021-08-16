@@ -1,6 +1,6 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import { l7window } from '@antv/l7-utils';
+import { $window } from '@antv/l7-utils';
 import { throttle } from 'lodash';
 import { Map } from './map';
 
@@ -23,12 +23,12 @@ class Hash {
   }
   public addTo(map: Map) {
     this.map = map;
-    l7window.addEventListener('hashchange', this.onHashChange, false);
+    $window.addEventListener('hashchange', this.onHashChange, false);
     this.map.on('moveend', this.updateHash);
     return this;
   }
   public remove() {
-    l7window.removeEventListener('hashchange', this.onHashChange, false);
+    $window.removeEventListener('hashchange', this.onHashChange, false);
     this.map.off('moveend', this.updateHash);
     // clearTimeout(this.updateHash());
 

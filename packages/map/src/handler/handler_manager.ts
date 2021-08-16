@@ -1,6 +1,6 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
-import { isMini, l7window } from '@antv/l7-utils';
+import { isMini, $window } from '@antv/l7-utils';
 import { merge } from 'lodash';
 import Point from '../geo/point';
 import { Map } from '../map';
@@ -154,21 +154,21 @@ class HandlerManager {
         );
       }
     } else {
-      l7window.document.addEventListener(
+      $window.document.addEventListener(
         'touchstart',
         (e: any) => {
           this.handleEvent(e);
         },
         {},
       );
-      l7window.document.addEventListener(
+      $window.document.addEventListener(
         'touchmove',
         (e: any) => {
           this.handleEvent(e);
         },
         {},
       );
-      l7window.document.addEventListener(
+      $window.document.addEventListener(
         'touchend',
         (e: any) => {
           this.handleEvent(e);
