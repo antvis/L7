@@ -1,4 +1,4 @@
-import { isMini, $window } from '@antv/l7-utils';
+import { $window, isMini } from '@antv/l7-utils';
 // @ts-ignore
 import Point from '../geo/point';
 

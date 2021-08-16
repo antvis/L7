@@ -1,4 +1,4 @@
-import { $XMLHttpRequest, $window } from './mini-adapter';
+import { $window, $XMLHttpRequest } from './mini-adapter';
 class AJAXError extends Error {
   private status: number;
   private url: string;

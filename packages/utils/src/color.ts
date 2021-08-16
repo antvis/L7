@@ -1,5 +1,5 @@
 import * as d3 from 'd3-color';
-import { isMini, $window } from './mini-adapter';
+import { $window, isMini } from './mini-adapter';
 export interface IColorRamp {
   positions: number[];
   colors: string[];
