@@ -7,7 +7,6 @@ import {
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
-import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
 
 @injectable()

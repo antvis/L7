@@ -26,13 +26,18 @@ export interface IStatusOptions {
 }
 export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
-  setContainer(container: Container, id: string | HTMLDivElement): void;
+  setContainer(
+    container: Container,
+    id: string | HTMLDivElement,
+    canvas?: HTMLCanvasElement,
+  ): void;
 }
 
 export interface IMapService<RawMap = {}> {
   version?: string;
   map: RawMap;
   init(): void;
+  initMiniMap?(): void;
   initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;

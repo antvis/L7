@@ -1,9 +1,12 @@
-const docStyle = window.document.documentElement.style;
-type ELType = HTMLElement | SVGElement;
+import { isMini } from '@antv/l7-utils';
 let containerCounter = 0;
 export function createRendererContainer(
   domId: string | HTMLDivElement,
 ): HTMLDivElement | null {
+  if (isMini) {
+    return null;
+  }
+
   let $wrapper = domId as HTMLDivElement;
   if (typeof domId === 'string') {
     $wrapper = document.getElementById(domId) as HTMLDivElement;

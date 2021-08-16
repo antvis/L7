@@ -12,6 +12,7 @@ export interface ISceneService {
   off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
   init(config: IMapConfig & IRenderConfig): void;
+  initMiniScene(config: IMapConfig & IRenderConfig): void;
   addLayer(layer: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;
   render(): void;

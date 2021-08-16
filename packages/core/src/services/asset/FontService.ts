@@ -1,7 +1,6 @@
-import { LRUCache } from '@antv/l7-utils';
-// @ts-ignore
-import TinySDF from '@mapbox/tiny-sdf';
+import { l7window, LRUCache } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
+import TinySDF from 'l7-tiny-sdf';
 import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';
 import {
@@ -182,7 +181,7 @@ export default class FontService implements IFontService {
     } = this.fontOptions;
     let canvas = cachedFontAtlas && cachedFontAtlas.data;
     if (!canvas) {
-      canvas = document.createElement('canvas');
+      canvas = l7window.document.createElement('canvas');
       canvas.width = MAX_CANVAS_WIDTH;
     }
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

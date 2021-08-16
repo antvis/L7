@@ -1,0 +1,1 @@
+declare module 'l7-tiny-sdf';
