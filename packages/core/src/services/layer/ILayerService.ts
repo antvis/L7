@@ -172,6 +172,7 @@ export interface ILayer {
   get(name: string): number;
   setBlend(type: keyof typeof BlendType): void;
   // animate(field: string, option: any): ILayer;
+  renderLayers(): void;
   render(): ILayer;
   clear(): void;
   clearModels(): void;

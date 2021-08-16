@@ -82,3 +82,8 @@ stories/Test
 packages/draw/node_modules/@turf
 packages/district/src/data
 yarn.lock
+
+# npm command lines
+publish.sh
+latest.sh
+beta.sh

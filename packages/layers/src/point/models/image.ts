@@ -166,7 +166,9 @@ export default class ImageModel extends BaseModel {
       this.texture.update({
         data: this.iconService.getCanvas(),
       });
-      this.layer.render();
+      // this.layer.render();
+      // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
+      this.layer.renderLayers();
       return;
     }
     this.texture = createTexture2D({

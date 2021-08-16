@@ -109,6 +109,7 @@ export function getClass(el: ELType) {
   // Check if the element is an SVGElementInstance and use the correspondingElement instead
   // (Required for linked SVG elements in IE11.)
   if (el instanceof SVGElement) {
+    // @ts-ignore
     el = el.correspondingElement;
   }
   return el.className.baseVal === undefined

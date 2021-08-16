@@ -64,6 +64,7 @@ export const raf =
   window.requestAnimationFrame ||
   // @ts-ignore
   window.mozRequestAnimationFrame ||
+  // @ts-ignore
   window.webkitRequestAnimationFrame ||
   // @ts-ignore
   window.msRequestAnimationFrame;
@@ -72,6 +73,7 @@ export const cancel =
   window.cancelAnimationFrame ||
   // @ts-ignore
   window.mozCancelAnimationFrame ||
+  // @ts-ignore
   window.webkitCancelAnimationFrame ||
   // @ts-ignore
   window.msCancelAnimationFrame;
