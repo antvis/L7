@@ -70,6 +70,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public pickedFeatureID: number | null = null;
   public selectedFeatureID: number | null = null;
   public styleNeedUpdate: boolean = false;
+  public rendering: boolean;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -506,6 +507,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       this.scaleOptions[field] = cfg;
     }
     return this;
+  }
+
+  /**
+ * 渲染所有的图层
+ */
+  public renderLayers(): void {
+    this.rendering = true;
+
+    this.layerService.renderLayers();
+
+    this.rendering = false;
   }
 
   public render(): ILayer {
