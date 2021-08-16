@@ -1,5 +1,5 @@
-import 'reflect-metadata';
 import regl from 'l7regl';
+import 'reflect-metadata';
 import ReglFramebuffer from '../ReglFramebuffer';
 import ReglModel from '../ReglModel';
 import ReglTexture2D from '../ReglTexture2D';

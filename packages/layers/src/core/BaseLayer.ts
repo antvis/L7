@@ -510,8 +510,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   /**
- * 渲染所有的图层
- */
+   * 渲染所有的图层
+   */
   public renderLayers(): void {
     this.rendering = true;
 

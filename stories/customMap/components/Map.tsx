@@ -127,9 +127,9 @@ export default class ScaleComponent extends React.Component {
         scene.addLayer(layer);
       });
 
-      scene.on('loaded', () => {
-        scene.addLayer(imageLayer);
-      });
+    scene.on('loaded', () => {
+      scene.addLayer(imageLayer);
+    });
   }
 
   public render() {

@@ -22,8 +22,8 @@ import {
   ITexture2DInitializationOptions,
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
-import 'reflect-metadata';
 import regl from 'l7regl';
+import 'reflect-metadata';
 import ReglAttribute from './ReglAttribute';
 import ReglBuffer from './ReglBuffer';
 import ReglElements from './ReglElements';
