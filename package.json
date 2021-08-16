@@ -197,6 +197,6 @@
     "mode": "yarn"
   },
   "dependencies": {
-    "l7-tiny-sdf": "^0.0.1"
+    "l7-tiny-sdf": "^0.0.2"
   }
 }

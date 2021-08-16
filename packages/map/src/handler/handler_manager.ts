@@ -460,7 +460,7 @@ class HandlerManager {
     const mapTouches = [];
     for (const t of touches) {
       const target = t.target as Node;
-      if (this.el.contains(target)) {
+      if (this.el.contains(target) || isMini) {
         mapTouches.push(t);
       }
     }
