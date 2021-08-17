@@ -58,35 +58,38 @@ export default class InteractionService extends EventEmitter
   }
 
   private addEventListenerOnMap() {
-    // const $containter = this.mapService.getMapContainer();
-    // if ($containter) {
-    //   const hammertime = new Hammer.Manager($containter);
-    //   hammertime.add(
-    //     new Hammer.Tap({
-    //       event: 'dblclick',
-    //       taps: 2,
-    //     }),
-    //   );
-    //   hammertime.add(
-    //     new Hammer.Tap({
-    //       event: 'click',
-    //     }),
-    //   );
-    //   hammertime.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
-    //   hammertime.add(new Hammer.Press({}));
-    //   // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-    //   // hammertime.get('pinch').set({ enable: true });
-    //   hammertime.on('dblclick click', this.onHammer);
-    //   hammertime.on('panstart panmove panend pancancel', this.onDrag);
-    //   // $containter.addEventListener('touchstart', this.onTouch);
-    //   $containter.addEventListener('mousemove', this.onHover);
-    //   // $containter.addEventListener('click', this.onHover);
-    //   $containter.addEventListener('mousedown', this.onHover, true);
-    //   $containter.addEventListener('mouseup', this.onHover);
-    //   $containter.addEventListener('contextmenu', this.onHover);
-    //   this.hammertime = hammertime;
-    //   // TODO: 根据场景注册事件到 L7 canvas 上
-    // }
+    const $containter = this.mapService.getMapContainer();
+    if ($containter) {
+      // const hammertime = new Hammer.Manager($containter);
+      // $containter.addEventListener('mousemove', this.onHover);
+      // $containter.addEventListener('click', this.onHover);
+
+      // hammertime.add(
+      //   new Hammer.Tap({
+      //     event: 'dblclick',
+      //     taps: 2,
+      //   }),
+      // );
+      // hammertime.add(
+      //   new Hammer.Tap({
+      //     event: 'click',
+      //   }),
+      // );
+      // hammertime.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+      // hammertime.add(new Hammer.Press({}));
+      // // hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+      // // hammertime.get('pinch').set({ enable: true });
+      // hammertime.on('dblclick click', this.onHammer);
+      // hammertime.on('panstart panmove panend pancancel', this.onDrag);
+      // // $containter.addEventListener('touchstart', this.onTouch);
+      // $containter.addEventListener('mousemove', this.onHover);
+      // // $containter.addEventListener('click', this.onHover);
+      // $containter.addEventListener('mousedown', this.onHover, true);
+      // $containter.addEventListener('mouseup', this.onHover);
+      // $containter.addEventListener('contextmenu', this.onHover);
+      // this.hammertime = hammertime;
+      // // TODO: 根据场景注册事件到 L7 canvas 上
+    }
   }
   private removeEventListenerOnMap() {
     // const $containter = this.mapService.getMapContainer();
