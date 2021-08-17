@@ -162,7 +162,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     // 只有在不支持数据纹理的情况下进行赋值
     if (!this.dataTextureTest) {
       this.dataTexture = this.createTexture2D({
-        data: new ImageData(1, 1).data,
+        // data: new ImageData(1, 1).data,
+        data: new Uint8ClampedArray(4),
         mag: gl.NEAREST,
         min: gl.NEAREST,
         width: 1,
