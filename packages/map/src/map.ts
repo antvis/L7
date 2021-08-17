@@ -1,4 +1,4 @@
-import { DOM, isMini, l7window } from '@antv/l7-utils';
+import { $window, DOM, isMini } from '@antv/l7-utils';
 import { merge } from 'lodash';
 import Camera from './camera';
 import './css/l7.css';
@@ -128,14 +128,14 @@ export class Map extends Camera {
     const fireMoving = !this.moving;
     if (fireMoving) {
       this.stop();
-      this.emit('movestart', new l7window.Event('movestart', eventData));
-      this.emit('move', new l7window.Event('move', eventData));
+      this.emit('movestart', new $window.Event('movestart', eventData));
+      this.emit('move', new $window.Event('move', eventData));
     }
 
-    this.emit('resize', new l7window.Event('resize', eventData));
+    this.emit('resize', new $window.Event('resize', eventData));
 
     if (fireMoving) {
-      this.emit('moveend', new l7window.Event('moveend', eventData));
+      this.emit('moveend', new $window.Event('moveend', eventData));
     }
 
     return this;

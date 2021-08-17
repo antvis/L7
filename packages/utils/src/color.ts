@@ -1,5 +1,5 @@
 import * as d3 from 'd3-color';
-import { isMini, l7window } from './adapterMini';
+import { $window, isMini } from './mini-adapter';
 export interface IColorRamp {
   positions: number[];
   colors: string[];
@@ -44,7 +44,7 @@ export interface IImagedata {
 export function generateColorRamp(
   colorRamp: IColorRamp,
 ): ImageData | IImagedata {
-  const canvas = l7window.document.createElement('canvas');
+  const canvas = window.document.createElement('canvas');
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
