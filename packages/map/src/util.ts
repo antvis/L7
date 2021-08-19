@@ -1,4 +1,4 @@
-import { isMini,$window } from '@antv/l7-utils';
+import { $window, isMini } from '@antv/l7-utils';
 // @ts-ignore
 import UnitBezier from '@mapbox/unitbezier';
 let reducedMotionQuery: MediaQueryList;
@@ -39,7 +39,7 @@ export function prefersReducedMotion(): boolean {
   }
   // Lazily initialize media query
   if (reducedMotionQuery == null) {
-  // @ts-ignore
+    // @ts-ignore
     reducedMotionQuery = $window.matchMedia('(prefers-reduced-motion: reduce)');
   }
   return reducedMotionQuery.matches;
