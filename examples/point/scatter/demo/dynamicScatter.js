@@ -5,9 +5,9 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'light',
-    center: [ 120.19382669582967, 30.258134 ],
-    zoom: 10
-  })
+    center: [120.19382669582967, 30.258134],
+    zoom: 10,
+  }),
 });
 
 const radius = 0.1;
@@ -23,11 +23,11 @@ function pointOnCircle(angle) {
           type: 'Point',
           coordinates: [
             120.19382669582967 + Math.cos(angle) * radius,
-            30.258134 + Math.sin(angle) * radius
-          ]
-        }
-      }
-    ]
+            30.258134 + Math.sin(angle) * radius,
+          ],
+        },
+      },
+    ],
   };
 }
 const layer = new PointLayer({})
@@ -39,7 +39,7 @@ const layer = new PointLayer({})
   .style({
     stroke: '#fff',
     strokeWidth: 2,
-    opacity: 1
+    opacity: 1,
   });
 scene.addLayer(layer);
 layer.setData(pointOnCircle(1000));

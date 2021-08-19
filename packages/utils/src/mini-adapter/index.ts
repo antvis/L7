@@ -61,6 +61,10 @@ const window = {
   },
   innerWidth: screen.availWidth,
   innerHeight: screen.availHeight,
+  setTimeout: setTimeout,
+  clearTimeout: clearTimeout,
+  setInterval: setInterval,
+  clearInterval: clearInterval
 };
 
 export {

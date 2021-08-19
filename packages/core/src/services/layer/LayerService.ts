@@ -6,6 +6,7 @@ import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerModel, ILayerService } from './ILayerService';
+import { $window } from '@antv/l7-utils';
 
 @injectable()
 export default class LayerService implements ILayerService {
@@ -130,7 +131,7 @@ export default class LayerService implements ILayerService {
 
   private runRender() {
     this.renderLayers();
-    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
+    this.layerRenderID = $window.requestAnimationFrame(this.runRender.bind(this));
   }
 
   private stopRender() {
