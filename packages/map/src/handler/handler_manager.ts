@@ -175,7 +175,7 @@ class HandlerManager {
         },
         {},
       );
-      l7window.document.addEventListener(
+      $window.document.addEventListener(
         'touchcancel',
         (e: any) => {
           this.handleEvent(e);
