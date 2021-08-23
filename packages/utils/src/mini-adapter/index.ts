@@ -27,7 +27,14 @@ import { WebGLRenderingContext } from './WebGL';
 import { WebGL2RenderingContext } from './WebGL2';
 import { XMLHttpRequest } from './XMLHttpRequest';
 
-const window = {
+// 判断时候是支付宝小程序环境
+export const isMiniAli =
+  // @ts-ignore
+  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
+  
+export const isMini = isMiniAli;
+
+const miniWindow = {
   atob,
   btoa,
   devicePixelRatio,
@@ -41,6 +48,7 @@ const window = {
   HTMLMediaElement,
   HTMLVideoElement,
   Image,
+  ImageData,
   navigator,
   Node,
   requestAnimationFrame,
@@ -49,6 +57,7 @@ const window = {
   XMLHttpRequest,
   performance,
   URL,
+  WebGLRenderingContext,
   WebGL2RenderingContext,
   addEventListener(type, listener, options = {}) {
     document.addEventListener(type, listener, options);
@@ -61,50 +70,51 @@ const window = {
   },
   innerWidth: screen.availWidth,
   innerHeight: screen.availHeight,
-};
+  setTimeout: setTimeout,
+  clearTimeout: clearTimeout,
+  setInterval: setInterval,
+  clearInterval: clearInterval
+} as Window & typeof globalThis;
 
-export {
-  btoa,
-  URL,
-  Blob,
-  window,
-  atob,
-  devicePixelRatio,
-  document,
-  Element,
-  Event,
-  EventTarget,
-  HTMLCanvasElement,
-  HTMLElement,
-  HTMLMediaElement,
-  HTMLVideoElement,
-  Image,
-  navigator,
-  Node,
-  requestAnimationFrame,
-  cancelAnimationFrame,
-  screen,
-  XMLHttpRequest,
-  performance,
-  WebGLRenderingContext,
-  WebGL2RenderingContext,
-  ImageData,
-  location,
-};
-export {
-  window as $window,
-  document as $document,
-  XMLHttpRequest as $XMLHttpRequest,
-  location as $location,
-};
+// export {
+//   btoa,
+//   URL,
+//   Blob,
+//   window,
+//   atob,
+//   devicePixelRatio,
+//   document,
+//   Element,
+//   Event,
+//   EventTarget,
+//   HTMLCanvasElement,
+//   HTMLElement,
+//   HTMLMediaElement,
+//   HTMLVideoElement,
+//   Image,
+//   navigator,
+//   Node,
+//   requestAnimationFrame,
+//   cancelAnimationFrame,
+//   screen,
+//   XMLHttpRequest,
+//   performance,
+//   WebGLRenderingContext,
+//   WebGL2RenderingContext,
+//   ImageData,
+//   location
+// };
+// export {
+//   window as $window,
+//   document as $document,
+//   XMLHttpRequest as $XMLHttpRequest,
+//   location as $location,
+// };
+
+export const $window = isMini ? miniWindow : window;
+export const $XMLHttpRequest = isMini ? XMLHttpRequest: window.XMLHttpRequest;
+export const $location = isMini ? location : window.location;
 
 export { registerCanvas, registerCanvas2D } from './register';
-
-// 判断时候是支付宝小程序环境
-export const isMiniAli =
-  // @ts-ignore
-  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
-  
-export const isMini = isMiniAli;
 
 export * from './EventIniter/index';

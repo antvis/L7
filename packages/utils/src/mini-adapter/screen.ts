@@ -1,12 +1,23 @@
 // @ts-nocheck
-// tslint:disable
-declare let my: any;
-const {
-  screenWidth,
-  screenHeight,
-  windowWidth,
-  windowHeight,
-} = my.getSystemInfoSync();
+import { isMini } from './index';
+let screenWidth;
+let screenHeight;
+let windowWidth;
+let windowHeight;
+if (isMini) {
+  const myOptions = my.getSystemInfoSync();
+  screenWidth = myOptions.screenWidth;
+  screenHeight = myOptions.screenHeight;
+  windowWidth = myOptions.windowWidth;
+  windowHeight = myOptions.windowHeight;
+} else {
+  const { innerWidth, innerHeight } = window;
+  screenWidth = innerWidth;
+  screenHeight = innerHeight;
+  windowWidth = innerWidth;
+  windowHeight = innerHeight;
+}
+
 export const screen = {
   width: screenWidth,
   height: screenHeight,

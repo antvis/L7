@@ -1,5 +1,6 @@
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { $window } from '@antv/l7-utils';
 import * as React from 'react';
 // @ts-ignore
 export default class DataUpdate extends React.Component {
@@ -58,7 +59,7 @@ export default class DataUpdate extends React.Component {
     function animateMarker(timestamp: number) {
       layer.setData(pointOnCircle(timestamp / 1000));
       scene.render();
-      requestAnimationFrame(animateMarker);
+      $window.requestAnimationFrame(animateMarker);
     }
     animateMarker(0);
   }

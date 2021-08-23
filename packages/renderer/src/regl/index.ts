@@ -21,6 +21,7 @@ import {
   ITexture2D,
   ITexture2DInitializationOptions,
 } from '@antv/l7-core';
+import { isMini } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import regl from 'l7regl';
 import 'reflect-metadata';
@@ -184,7 +185,11 @@ export default class ReglRendererService implements IRendererService {
   };
 
   public getContainer = () => {
-    return this.canvas?.parentElement;
+    if (isMini) {
+      return this.canvas;
+    } else {
+      return this.canvas?.parentElement;
+    }
   };
 
   public getCanvas = () => {

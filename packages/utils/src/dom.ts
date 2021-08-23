@@ -3,7 +3,7 @@ type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
   if (typeof domId === 'string') {
-    $dom = document.getElementById(domId) as HTMLDivElement;
+    $dom = $window.document.getElementById(domId) as HTMLDivElement;
   }
   return $dom;
 }
@@ -19,15 +19,13 @@ export function splitWords(str: string) {
 }
 
 function testProp(props: string[]): string {
-  if (!isMini) {
-    const docStyle = $window?.document?.documentElement?.style;
-    if (!docStyle) {
-      return props[0];
-    }
-    for (const i in props) {
-      if (props[i] && props[i] in docStyle) {
-        return props[i];
-      }
+  const docStyle = $window?.document?.documentElement?.style;
+  if (!docStyle) {
+    return props[0];
+  }
+  for (const i in props) {
+    if (props[i] && props[i] in docStyle) {
+      return props[i];
     }
   }
 
@@ -38,7 +36,7 @@ export function create(
   className?: string,
   container?: HTMLElement,
 ) {
-  const el = document.createElement(tagName);
+  const el = $window.document.createElement(tagName);
   el.className = className || '';
 
   if (container) {

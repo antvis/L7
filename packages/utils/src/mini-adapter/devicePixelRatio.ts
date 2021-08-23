@@ -1,5 +1,5 @@
 // @ts-nocheck
-// tslint:disable
-declare let my: any;
-const { pixelRatio: devicePixelRatio } = my.getSystemInfoSync();
-export default devicePixelRatio;
+import { isMini } from './index';
+export default !isMini
+  ? devicePixelRatio
+  : (my.getSystemInfoSync().pixelRatio as number);
