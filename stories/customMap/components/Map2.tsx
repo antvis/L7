@@ -1,6 +1,11 @@
 // @ts-ignore
 import { Scene } from '@antv/l7';
-import { PolygonLayer, PointLayer, LineLayer, HeatmapLayer } from '@antv/l7-layers';
+import {
+  PolygonLayer,
+  PointLayer,
+  LineLayer,
+  HeatmapLayer,
+} from '@antv/l7-layers';
 import { Map } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -45,19 +50,19 @@ export default class ScaleComponent extends React.Component {
       {
         lng: 121.107,
         lat: 30.267069,
-      }
+      },
     ];
     let layer = new PointLayer()
-    .source(originData, {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat',
-      },
-    })
-    .shape('circle')
-    .color('rgba(255, 0, 0, 1.0)')
-    .size(10)
+      .source(originData, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .color('rgba(255, 0, 0, 1.0)')
+      .size(10);
 
     const polygondata = {
       type: 'FeatureCollection',
@@ -137,28 +142,32 @@ export default class ScaleComponent extends React.Component {
       });
 
     let lineData = {
-      "type":"FeatureCollection",
-      "features":[
-      {
-        "type":"Feature","properties":{},
-        "geometry": {
-          "type": "MultiLineString",
-          "coordinates":[
-            [
-              [20,30],
-              [150,30]
-            ]]}}]}
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'MultiLineString',
+            coordinates: [
+              [
+                [20, 30],
+                [150, 30],
+              ],
+            ],
+          },
+        },
+      ],
+    };
 
-            const linelayer = new LineLayer()
-            .source(lineData)
-            .size(8)
-            .shape('line')
-            .color('rgb(20, 180, 90)')
-         
-          
+    const linelayer = new LineLayer()
+      .source(lineData)
+      .size(8)
+      .shape('line')
+      .color('rgb(20, 180, 90)');
 
     scene.on('loaded', () => {
-      console.log('loaded ')
+      console.log('loaded ');
       scene.addLayer(layer);
       scene.addLayer(linelayer);
       scene.addLayer(polygonlayer);
@@ -170,27 +179,25 @@ export default class ScaleComponent extends React.Component {
       .then((res) => res.json())
       .then((data) => {
         var heatlayer = new HeatmapLayer()
-        .source(data, {
-          transforms: [
-            {
-              type: 'hexagon',
-              size: 5 * 100000
-            }
-          ]
-        })
-        .shape('circle')
-        .active(false)
-        .color('#aaa')
-        .style({
-          coverage: 0.7,
-          angle: 0,
-          opacity: 1.0
-        });
-        console.log('add heatLayer')
+          .source(data, {
+            transforms: [
+              {
+                type: 'hexagon',
+                size: 5 * 100000,
+              },
+            ],
+          })
+          .shape('circle')
+          .active(false)
+          .color('#aaa')
+          .style({
+            coverage: 0.7,
+            angle: 0,
+            opacity: 1.0,
+          });
+        console.log('add heatLayer');
         scene.addLayer(heatlayer);
-      })
-
-  
+      });
 
     // fetch(
     //   'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
