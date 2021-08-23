@@ -11,6 +11,12 @@ module.exports = api => {
     return {
       presets: [
         '@babel/preset-env',
+        [
+          '@babel/preset-react',
+          {
+            development: isCommonJS
+          }
+        ],
         // 'babel-preset-gatsby', {
         //   silence: true
         // },
