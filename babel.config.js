@@ -8,19 +8,12 @@ module.exports = api => {
   const isTest = api.env('test');
  
   if (isSite) {
-    console.log('-------------->')
     return {
       presets: [
         '@babel/preset-env',
         // 'babel-preset-gatsby', {
         //   silence: true
         // },
-        [
-          '@babel/preset-react',
-          {
-            development: isCommonJS
-          }
-        ]
       ],
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
