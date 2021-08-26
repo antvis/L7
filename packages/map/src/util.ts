@@ -64,25 +64,23 @@ export const now = isMini
   ? $window.performance.now.bind($window.performance)
   : Date.now.bind(Date);
 
-export const raf = isMini
-  ? setInterval
-  : $window.requestAnimationFrame ||
-    // @ts-ignore
-    $window.mozRequestAnimationFrame ||
-    // @ts-ignore
-    $window.webkitRequestAnimationFrame ||
-    // @ts-ignore
-    $window.msRequestAnimationFrame;
+export const raf =
+  $window.requestAnimationFrame ||
+  // @ts-ignore
+  $window.mozRequestAnimationFrame ||
+  // @ts-ignore
+  $window.webkitRequestAnimationFrame ||
+  // @ts-ignore
+  $window.msRequestAnimationFrame;
 
-export const cancel = isMini
-  ? clearInterval // l7 - mini
-  : $window.cancelAnimationFrame ||
-    // @ts-ignore
-    $window.mozCancelAnimationFrame ||
-    // @ts-ignore
-    $window.webkitCancelAnimationFrame ||
-    // @ts-ignore
-    $window.msCancelAnimationFrame;
+export const cancel =
+  $window.cancelAnimationFrame ||
+  // @ts-ignore
+  $window.mozCancelAnimationFrame ||
+  // @ts-ignore
+  $window.webkitCancelAnimationFrame ||
+  // @ts-ignore
+  $window.msCancelAnimationFrame;
 
 export function renderframe(
   fn: (paintStartTimestamp: number) => void,

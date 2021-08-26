@@ -34,7 +34,7 @@ export const isMiniAli =
   
 export const isMini = isMiniAli;
 
-const miniWindow = {
+export const miniWindow = {
   atob,
   btoa,
   devicePixelRatio,
