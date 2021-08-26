@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.5.8-mini10",
+  "version": "2.5.8-mini11",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,12 +26,12 @@
     "gl": "^4.4.0"
   },
   "dependencies": {
-    "@antv/l7-core": "2.5.8-mini10",
+    "@antv/l7-core": "2.5.8-mini11",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
-    "l7regl": "^0.0.13"
+    "l7regl": "^0.0.14"
   },
   "gitHead": "7eb8382ede52d803fae13a85fe6af074400260ee",
   "publishConfig": {
