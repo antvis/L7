@@ -54,7 +54,7 @@
   "devDependencies": {
     "three": "^0.115.0"
   },
-  "gitHead": "ac7b94d230ae7f171369b403f2cfdd82174cb1bb",
+  "gitHead": "0cdffbe23137f4e7e0973e333d61923a22f7841e",
   "publishConfig": {
     "access": "public"
   }
