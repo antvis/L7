@@ -1,56 +1,10 @@
 import { PointLayer, Scene, LineLayer, PolygonLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-const data = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      properties: {
-        testOpacity: 0.4,
-      },
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            [
-              [110.5224609375, 32.731840896865684],
-              [113.0712890625, 32.731840896865684],
-              [113.0712890625, 34.56085936708384],
-              [110.5224609375, 34.56085936708384],
-              [110.5224609375, 32.731840896865684],
-            ],
-            [
-              [111.26953125, 33.52307880890422],
-              [111.26953125, 34.03445260967645],
-              [112.03857421875, 34.03445260967645],
-              [112.03857421875, 33.52307880890422],
-              [111.26953125, 33.52307880890422],
-            ],
-          ],
-          [
-            [
-              [115.04882812499999, 34.379712580462204],
-              [114.9609375, 33.46810795527896],
-              [115.8837890625, 33.50475906922609],
-              [115.86181640625001, 34.379712580462204],
-              [115.04882812499999, 34.379712580462204],
-            ],
-          ],
-        ],
-      },
-    },
-  ],
-};
 export default class Amap2demo_image extends React.Component {
   // @ts-ignore
   private scene: Scene;
   private imageLayer: any;
-  private imageLayer2: any;
-  private imageLayer3: any;
-  private lineLayer: any;
-  private polygonLayer: any;
-  private polygonLine: any;
 
   public componentWillUnmount() {
     this.scene.destroy();
@@ -119,8 +73,10 @@ export default class Amap2demo_image extends React.Component {
     ];
     scene.addImage(
       '00',
-      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-      // "https://gw-office.alipayobjects.com/bmw-prod/ae2a8580-da3d-43ff-add4-ae9c1bfc75bb.svg"
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg'
+      // "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*qYtMTanpMOcAAAAAAAAAAAAAARQnAQ"
+      // 'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*nGW2RZ3j8c8AAAAAAAAAAAAAARQnAQ'
+      // 'https://gw.alipayobjects.com/zos/bmw-prod/8eee5dbd-c3f5-4806-a9b5-5c8e90d8510c.svg'
     );
     scene.addImage(
       '01',
@@ -132,132 +88,17 @@ export default class Amap2demo_image extends React.Component {
     );
 
     scene.on('loaded', () => {
-      // this.polygonLayer = new PolygonLayer({
-      // })
-      // this.polygonLayer.source({
-      //     type: 'FeatureCollection',
-      //     features: [],
-      //   })
-      //   .shape('fill')
-      //   .color('red')
-      //   .style({
-      //     opacity: 0.5
-      //   });
-      // scene.addLayer(this.polygonLayer);
-
-      // this.polygonLine = new PolygonLayer({
-      // })
-
-      //   this.polygonLine.source({
-      //     type: 'FeatureCollection',
-      //     features: [],
-      //   })
-      //   .shape('line')
-      //   .color('#00f')
-      //   .style({
-      //     opacity: 0.8
-      //   });
-      // scene.addLayer(this.polygonLine);
-
-      // this.lineLayer = new LineLayer({
-      //   zIndex: 7,
-      //   pickingBuffer: 4,
-      // });
-      // this.lineLayer
-      //   .source({
-      //     type: 'FeatureCollection',
-      //     features: [],
-      //   })
-      //   .shape('line')
-      //   .size(10)
-      //   .color('#f00')
-      //   scene.addLayer(this.lineLayer)
-      // this.imageLayer = new PointLayer({
-      //   blend: "normal"
-      // })
-      // this.imageLayer.source([], {
-      //     parser: {
-      //       type: 'json',
-      //       x: 'longitude',
-      //       y: 'latitude',
-      //     },
-      //   })
-      //   .shape('name', ['00'])
-      //   .size(20)
-      //   .style({
-      //     opacity: 0.5
-      //   });
-      // scene.addLayer(this.imageLayer);
-      // this.imageLayer2 = new PointLayer({
-      //   blend: "normal"
-      // })
-      // this.imageLayer2.source([], {
-      //     parser: {
-      //       type: 'json',
-      //       x: 'longitude',
-      //       y: 'latitude',
-      //     },
-      //   })
-      //   .shape('name', ['02'])
-      //   .size(20)
-      //   .style({
-      //     opacity: 0.5
-      //   });
-      // scene.addLayer(this.imageLayer2);
-      // this.imageLayer3 = new PointLayer({
-      //   blend: "normal"
-      // })
-      // this.imageLayer3.source([], {
-      //     parser: {
-      //       type: 'json',
-      //       x: 'longitude',
-      //       y: 'latitude',
-      //     },
-      //   })
-      //   .shape('name', ['00'])
-      //   .size(20)
-      //   .style({
-      //     opacity: 0.5
-      //   });
-      // scene.addLayer(this.imageLayer3);
-
-      for (let i = 0; i < 17; i++) {
-        // > 16 * 2
-        // var testdata = [{
-        //   longitude: 121.43 + Math.random() * -0.2 + 0.1,
-        //   latitude: 31.26 + Math.random() + -0.2 + 0.1,
-        // }]
-        var testdata: any[] = [];
-        let layer = new PointLayer({
-          blend: 'normal',
-        });
-        layer
-          .source(testdata, {
-            parser: {
-              type: 'json',
-              x: 'longitude',
-              y: 'latitude',
-            },
-          })
-          .color('#ff0')
-          // .shape('name', ['00'])
-          .size(20);
-        scene.addLayer(layer);
-
-        // let layer = new PolygonLayer({
-        // })
-        // layer.source({
-        //     type: 'FeatureCollection',
-        //     features: [],
-        //   })
-        //   .shape('fill')
-        //   .color('red')
-        //   .style({
-        //     opacity: 0.5
-        //   });
-        // scene.addLayer(layer);
-      }
-      console.log(scene.getLayers());
+      this.imageLayer = new PointLayer()
+      .source(originData, {
+          parser: {
+            type: 'json',
+            x: 'longitude',
+            y: 'latitude',
+          },
+        })
+        .shape('name', ['00', '01','02'])
+        .size(20)
+      scene.addLayer(this.imageLayer)
     });
   }
 
