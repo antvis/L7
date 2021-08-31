@@ -197,6 +197,15 @@ export interface IMapCamera {
   // 偏移原点，例如 P20 坐标系下
   offsetOrigin: [number, number];
 }
+
+export interface IMiniCameraParams {
+  zoom: number;
+  center: [number, number];
+  viewportHeight: number;
+  viewportWidth: number;
+  projectionMatrix: number[];
+  viewMatrix: number[];
+}
 export interface ICameraOptions {
   padding:
     | number

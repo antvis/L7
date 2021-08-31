@@ -10,6 +10,7 @@ import {
   IMapConfig,
   IMapService,
   IMercator,
+  IMiniCameraParams,
   IPoint,
   IStatusOptions,
   IViewport,
@@ -18,7 +19,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Map } from '@antv/l7-map';
-import { DOM } from '@antv/l7-utils';
+import { $window, DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -308,6 +309,10 @@ export default class L7MapService implements IMapService<Map> {
 
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
+
+    $window.document.addEventListener('mapCameaParams', (e) => {
+      this.handleMiniCamreaChange(e);
+    });
   }
 
   public destroy() {
@@ -338,6 +343,19 @@ export default class L7MapService implements IMapService<Map> {
   }
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
+  }
+
+  public handleMiniCamreaChange(e: any) {
+    const { longitude, latitude, scale } = e.e;
+    const center = [longitude, latitude] as [number, number];
+    this.viewport.syncWithMiniMapCamera({
+      center,
+      zoom: scale as number,
+      viewportHeight: this.map.transform.height,
+      viewportWidth: this.map.transform.width,
+      projectionMatrix: [] as number[],
+      viewMatrix: [] as number[],
+    });
   }
 
   private handleCameraChanged = () => {

@@ -1,4 +1,6 @@
-import { IMapCamera, IViewport } from '@antv/l7-core';
+import { IMapCamera, IMiniCameraParams, IViewport } from '@antv/l7-core';
+import { isMini } from '@antv/l7-utils';
+import { mat4, vec3 } from 'gl-matrix';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 export default class Viewport implements IViewport {
@@ -29,6 +31,16 @@ export default class Viewport implements IViewport {
     });
   }
 
+  public syncWithMiniMapCamera(miniCameraParams: IMiniCameraParams) {
+    const { center, zoom, projectionMatrix, viewMatrix } = miniCameraParams;
+    this.viewport = new WebMercatorViewport({});
+    this.viewport.longitude = center[0];
+    this.viewport.latitude = center[1];
+    this.viewport.zoom = zoom;
+    this.viewport.projectionMatrix = [...projectionMatrix];
+    this.viewport.viewMatrix = [...viewMatrix];
+  }
+
   public getZoom(): number {
     return this.viewport.zoom;
   }
@@ -50,15 +62,24 @@ export default class Viewport implements IViewport {
   }
 
   public getViewMatrixUncentered(): number[] {
+    if (isMini) {
+      return this.viewport.viewMatrix;
+    }
     // @ts-ignore
     return this.viewport.viewMatrixUncentered;
   }
   public getViewProjectionMatrix(): number[] {
+    if (isMini) {
+      return this.viewport.viewMatrix;
+    }
     // @ts-ignore
     return this.viewport.viewProjectionMatrix;
   }
 
   public getViewProjectionMatrixUncentered(): number[] {
+    if (isMini) {
+      return this.viewport.viewMatrix;
+    }
     // @ts-ignore
     return this.viewport.viewProjectionMatrix;
   }
@@ -66,10 +87,32 @@ export default class Viewport implements IViewport {
     return 1;
   }
 
+  /**
+   * P20 坐标系，固定 scale
+   */
+
   public projectFlat(
     lngLat: [number, number],
     scale?: number | undefined,
   ): [number, number] {
-    return this.viewport.projectFlat(lngLat, scale);
+    if (isMini) {
+      const maxs = 85.0511287798;
+      const lat = Math.max(Math.min(maxs, lngLat[1]), -maxs);
+      // tslint:disable-next-line:no-bitwise
+      const zoomScale = 256 << 20;
+      let d = Math.PI / 180;
+      let x = lngLat[0] * d;
+      let y = lat * d;
+      y = Math.log(Math.tan(Math.PI / 4 + y / 2));
+      const a = 0.5 / Math.PI;
+      const b = 0.5;
+      const c = -0.5 / Math.PI;
+      d = 0.5;
+      x = zoomScale * (a * x + b) - 215440491;
+      y = -(zoomScale * (c * y + d) - 106744817);
+      return [x, y];
+    } else {
+      return this.viewport.projectFlat(lngLat, scale);
+    }
   }
 }
