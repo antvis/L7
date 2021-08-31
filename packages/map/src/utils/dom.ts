@@ -77,7 +77,9 @@ try {
       passiveSupported = true;
     },
   });
+  // @ts-ignore
   window.addEventListener('test', options, options);
+  // @ts-ignore
   window.removeEventListener('test', options, options);
 } catch (err) {
   passiveSupported = false;

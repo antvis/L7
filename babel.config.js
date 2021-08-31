@@ -6,13 +6,20 @@ module.exports = api => {
   const isCommonJS = api.env('cjs');
   const isESModule = api.env('esm');
   const isTest = api.env('test');
-
+ 
   if (isSite) {
     return {
       presets: [
-        'babel-preset-gatsby', {
-          silence: true
-        }
+        '@babel/preset-env',
+        [
+          '@babel/preset-react',
+          {
+            development: isCommonJS
+          }
+        ],
+        // 'babel-preset-gatsby', {
+        //   silence: true
+        // },
       ],
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
