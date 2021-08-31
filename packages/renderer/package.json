@@ -29,7 +29,7 @@
     "@antv/l7-core": "^2.5.10",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
-    "l7regl": "^0.0.10",
+    "l7regl": "^0.0.14",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13"
   },
