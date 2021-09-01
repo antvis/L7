@@ -18,8 +18,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Map } from '@antv/l7-map';
-import { DOM } from '@antv/l7-utils';
-import { mat4, vec2, vec3 } from 'gl-matrix';
+import { DOM, $window } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
@@ -303,11 +302,18 @@ export default class L7MapService implements IMapService<Map> {
       ...rest,
     });
 
-    this.map.on('load', this.handleCameraChanged);
-    this.map.on('move', this.handleCameraChanged);
+    // this.map.on('load', this.handleCameraChanged);
+    // this.map.on('move', this.handleCameraChanged);
 
-    // 不同于高德地图，需要手动触发首次渲染
-    this.handleCameraChanged();
+    // // 不同于高德地图，需要手动触发首次渲染
+    // this.handleCameraChanged();
+
+    const center = this.map.getCenter()
+    this.handleMiniCameraChanged(center.lng, center.lat, this.map.getZoom() );
+    $window.document.addEventListener('mapCameaParams', (event: any) => {
+      let { e: { longitude, latitude, scale }} = event
+      this.handleMiniCameraChanged(longitude, latitude, scale - 1 );
+    })
   }
 
   public destroy() {
@@ -338,6 +344,35 @@ export default class L7MapService implements IMapService<Map> {
   }
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
+  }
+
+  private handleMiniCameraChanged = (lng: number, lat: number, zoom: number) => {
+    const { offsetCoordinate = true } = this.config;
+
+    // resync
+    this.viewport.syncWithMapCamera({
+      bearing: this.map.getBearing(),
+      center: [lng, lat],
+      viewportHeight: this.map.transform.height,
+      pitch: this.map.getPitch(),
+      viewportWidth: this.map.transform.width,
+      zoom,
+      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+      cameraHeight: 0,
+    });
+    // set coordinate system
+    if (
+      this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD &&
+      offsetCoordinate
+    ) {
+      this.coordinateSystemService.setCoordinateSystem(
+        CoordinateSystem.LNGLAT_OFFSET,
+      );
+    } else {
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
+    }
+
+    this.cameraChangedCallback(this.viewport);
   }
 
   private handleCameraChanged = () => {

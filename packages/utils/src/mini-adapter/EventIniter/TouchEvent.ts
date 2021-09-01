@@ -51,7 +51,15 @@ function eventHandlerFactory(type) {
   };
 }
 
+function eventMapHandlerFactory(type) {
+  return function (rawEvent) {
+    rawEvent.type = type;
+    document.dispatchEvent(rawEvent);
+  };
+}
+
 const dispatchTouchStart = eventHandlerFactory('touchstart');
 const dispatchTouchMove = eventHandlerFactory('touchmove');
 const dispatchTouchEnd = eventHandlerFactory('touchend');
-export { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd };
+const dispatchMapCameraParams = eventMapHandlerFactory('mapCameaParams');
+export { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd, dispatchMapCameraParams };
