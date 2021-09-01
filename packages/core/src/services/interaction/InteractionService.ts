@@ -1,3 +1,4 @@
+import { $window, isMini } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
 // import Hammer from 'hammerjs'; // l7 - mini
 import { inject, injectable } from 'inversify';
@@ -57,9 +58,25 @@ export default class InteractionService extends EventEmitter
     this.emit(InteractionEvent.Active, { featureId: id });
   }
 
+  public handlMiniEvent(e: any) {
+    // @ts-ignore
+    this.onHover({
+      clientX: e.touches[0].pageX,
+      clientY: e.touches[0].pageY,
+      type: 'touch',
+    });
+  }
+
   private addEventListenerOnMap() {
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
+      if (isMini) {
+        $window.document.addEventListener(
+          'touchstart',
+          this.handlMiniEvent,
+          {},
+        );
+      }
       // const hammertime = new Hammer.Manager($containter);
       // $containter.addEventListener('mousemove', this.onHover);
       // $containter.addEventListener('click', this.onHover);
@@ -91,6 +108,13 @@ export default class InteractionService extends EventEmitter
     }
   }
   private removeEventListenerOnMap() {
+    if (isMini) {
+      $window.document.removeEventListener(
+        'touchstart',
+        this.handlMiniEvent,
+        {},
+      );
+    }
     // const $containter = this.mapService.getMapContainer();
     // if ($containter) {
     //   $containter.removeEventListener('mousemove', this.onHover);
@@ -154,15 +178,25 @@ export default class InteractionService extends EventEmitter
     const type = event.type;
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
-      const { top, left } = $containter.getBoundingClientRect();
-      x = x - left - $containter.clientLeft;
-      y = y - top - $containter.clientTop;
+      if (!isMini) {
+        // l7 - mini
+        const { top, left } = $containter.getBoundingClientRect();
+        x = x - left - $containter.clientLeft;
+        y = y - top - $containter.clientTop;
+      } else {
+        // @ts-ignore
+        x = x - $containter.left - 0;
+        // @ts-ignore
+        y = y - $containter.top - 0;
+      }
     }
     const lngLat = this.mapService.containerToLngLat([x, y]);
 
     if (type === 'click') {
-      if ('ontouchstart' in document.documentElement === true) {
-        return;
+      if (!isMini) {
+        if ('ontouchstart' in document.documentElement === true) {
+          return;
+        }
       }
       this.isDoubleTap(x, y, lngLat);
       return;

@@ -10,7 +10,6 @@ import {
   IMapConfig,
   IMapService,
   IMercator,
-  IMiniCameraParams,
   IPoint,
   IStatusOptions,
   IViewport,
@@ -304,14 +303,39 @@ export default class L7MapService implements IMapService<Map> {
       ...rest,
     });
 
-    this.map.on('load', this.handleCameraChanged);
-    this.map.on('move', this.handleCameraChanged);
+    // this.map.on('load', this.handleCameraChanged);
+    // this.map.on('move', this.handleCameraChanged);
+
+    // // 不同于高德地图，需要手动触发首次渲染
+    // this.handleCameraChanged();
+
+    const currentCenter = this.map.getCenter();
+    const lat = currentCenter.lat;
+    const lng = currentCenter.lng;
+
+    this.map.on('load', () => {
+      const loadCenter = this.map.getCenter();
+      const loadlat = loadCenter.lat;
+      const loadng = loadCenter.lng;
+      this.handleMiniCamreaChange(loadlat, loadng, this.map.getZoom());
+    });
+    this.map.on('move', () => {
+      const moveCenter = this.map.getCenter();
+      const movelat = moveCenter.lat;
+      const movelng = moveCenter.lng;
+      this.handleMiniCamreaChange(movelat, movelng, this.map.getZoom());
+    });
 
     // 不同于高德地图，需要手动触发首次渲染
-    this.handleCameraChanged();
+    this.handleMiniCamreaChange(lat, lng, this.map.getZoom());
 
-    $window.document.addEventListener('mapCameaParams', (e) => {
-      this.handleMiniCamreaChange(e);
+    $window.document.addEventListener('mapCameaParams', (event) => {
+      // @ts-ignore
+      const {
+        // @ts-ignore
+        e: { longitude, latitude, scale },
+      } = event;
+      this.handleMiniCamreaChange(longitude, latitude, scale - 1);
     });
   }
 
@@ -345,17 +369,34 @@ export default class L7MapService implements IMapService<Map> {
     this.cameraChangedCallback = callback;
   }
 
-  public handleMiniCamreaChange(e: any) {
-    const { longitude, latitude, scale } = e.e;
-    const center = [longitude, latitude] as [number, number];
-    this.viewport.syncWithMiniMapCamera({
-      center,
-      zoom: scale as number,
+  public handleMiniCamreaChange(lng: number, lat: number, zoom: number) {
+    // l7 - mini
+    const { offsetCoordinate = true } = this.config;
+
+    // resync
+    this.viewport.syncWithMapCamera({
+      bearing: this.map.getBearing(),
+      center: [lng, lat],
       viewportHeight: this.map.transform.height,
+      pitch: this.map.getPitch(),
       viewportWidth: this.map.transform.width,
-      projectionMatrix: [] as number[],
-      viewMatrix: [] as number[],
+      zoom,
+      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+      cameraHeight: 0,
     });
+    // set coordinate system
+    if (
+      this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD &&
+      offsetCoordinate
+    ) {
+      this.coordinateSystemService.setCoordinateSystem(
+        CoordinateSystem.LNGLAT_OFFSET,
+      );
+    } else {
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
+    }
+
+    this.cameraChangedCallback(this.viewport);
   }
 
   private handleCameraChanged = () => {

@@ -1,9 +1,12 @@
 // @ts-nocheck
-import { isMini } from './index';
+// 判断时候是支付宝小程序环境
+export const isMiniAli =
+  // @ts-ignore
+  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
 let system;
 let platform;
 let language;
-if (isMini) {
+if (isMiniAli) {
   const myOptions = my.getSystemInfoSync();
   system = myOptions.system;
   platform = myOptions.platform;
