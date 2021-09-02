@@ -57,6 +57,7 @@ export interface ILayerModelInitializationOptions {
   vertexShader: string;
   fragmentShader: string;
   triangulation: Triangulation;
+  segmentNumber?: number;
 }
 
 export interface ILayerModel {

@@ -202,8 +202,11 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
  * @param feature 映射数据
  * @param segNum 弧线线段数
  */
-export function LineArcTriangulation(feature: IEncodeFeature) {
-  const segNum = 30;
+export function LineArcTriangulation(
+  feature: IEncodeFeature,
+  segmentNumber?: number,
+) {
+  const segNum = segmentNumber ? segmentNumber : 30;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
   const indexArray = [];
