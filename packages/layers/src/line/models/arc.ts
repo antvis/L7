@@ -33,6 +33,7 @@ export default class ArcModel extends BaseModel {
       forward = true,
       lineTexture = false,
       iconStep = 100,
+      segmentNumber = 30,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
@@ -89,7 +90,7 @@ export default class ArcModel extends BaseModel {
 
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-      segmentNumber: 30,
+      segmentNumber,
       u_line_type: lineStyleObj[lineType || 'solid'],
       u_dash_array: dashArray,
       u_blur: 0.9,
