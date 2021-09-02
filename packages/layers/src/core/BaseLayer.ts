@@ -858,6 +858,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       vertexShader,
       fragmentShader,
       triangulation,
+      segmentNumber,
       ...rest
     } = options;
     this.shaderModuleService.registerModule(moduleName, {
@@ -872,6 +873,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     } = this.styleAttributeService.createAttributesAndIndices(
       this.encodedData,
       triangulation,
+      segmentNumber
     );
     return createModel({
       attributes,

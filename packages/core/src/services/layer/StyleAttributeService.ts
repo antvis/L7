@@ -187,6 +187,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public createAttributesAndIndices(
     features: IEncodeFeature[],
     triangulation: Triangulation,
+    segmentNumber: number
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -217,7 +218,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
-      } = this.triangulation(feature);
+      } = this.triangulation(feature, segmentNumber);
       indicesForCurrentFeature.forEach((i) => {
         indices.push(i + verticesNum);
       });
