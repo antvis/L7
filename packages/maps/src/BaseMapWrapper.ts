@@ -21,7 +21,7 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
     sceneContainer: Container,
     id: string | HTMLDivElement,
     canvas?: HTMLCanvasElement,
-    hasBaseMap?: boolean
+    hasBaseMap?: boolean,
   ) {
     // // 首先使用全局配置服务校验地图参数
     // const { valid, errorText } = this.configService.validateMapConfig(
@@ -37,7 +37,7 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
       ...this.config,
       id,
       canvas,
-      hasBaseMap
+      hasBaseMap,
     });
     sceneContainer
       .bind<IMapService<RawMap>>(TYPES.IMapService)

@@ -303,7 +303,7 @@ export default class L7MapService implements IMapService<Map> {
       ...rest,
     });
 
-    if(!hasBaseMap) {
+    if (!hasBaseMap) {
       // 没有地图底图的模式
       this.map.on('load', this.handleCameraChanged);
       this.map.on('move', this.handleCameraChanged);
