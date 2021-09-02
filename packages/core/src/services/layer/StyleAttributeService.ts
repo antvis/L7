@@ -187,7 +187,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public createAttributesAndIndices(
     features: IEncodeFeature[],
     triangulation: Triangulation,
-    segmentNumber: number
+    segmentNumber: number,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;

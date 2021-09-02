@@ -873,7 +873,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     } = this.styleAttributeService.createAttributesAndIndices(
       this.encodedData,
       triangulation,
-      segmentNumber
+      segmentNumber,
     );
     return createModel({
       attributes,

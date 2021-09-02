@@ -132,8 +132,10 @@ export default class ArcModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-    let { segmentNumber = 30 } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-   
+    const {
+      segmentNumber = 30,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
     return [
       this.layer.buildLayerModel({
         moduleName: 'arc2dline',
@@ -142,7 +144,7 @@ export default class ArcModel extends BaseModel {
         triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
-        segmentNumber
+        segmentNumber,
       }),
     ];
   }
