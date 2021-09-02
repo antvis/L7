@@ -379,7 +379,11 @@ export default class L7MapService implements IMapService<Map> {
     }
 
     this.cameraChangedCallback(this.viewport);
+<<<<<<< HEAD
   };
+=======
+  }
+>>>>>>> 83a9359b64c57bbd7e433c16bf46fea1b56b2fbf
 
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
