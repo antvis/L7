@@ -18,7 +18,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Map } from '@antv/l7-map';
-import { DOM, $window } from '@antv/l7-utils';
+import { $window, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
@@ -308,12 +308,14 @@ export default class L7MapService implements IMapService<Map> {
     // // 不同于高德地图，需要手动触发首次渲染
     // this.handleCameraChanged();
 
-    const center = this.map.getCenter()
-    this.handleMiniCameraChanged(center.lng, center.lat, this.map.getZoom() );
+    const center = this.map.getCenter();
+    this.handleMiniCameraChanged(center.lng, center.lat, this.map.getZoom());
     $window.document.addEventListener('mapCameaParams', (event: any) => {
-      let { e: { longitude, latitude, scale }} = event
-      this.handleMiniCameraChanged(longitude, latitude, scale - 1 );
-    })
+      const {
+        e: { longitude, latitude, scale },
+      } = event;
+      this.handleMiniCameraChanged(longitude, latitude, scale - 1);
+    });
   }
 
   public destroy() {
@@ -346,7 +348,11 @@ export default class L7MapService implements IMapService<Map> {
     this.cameraChangedCallback = callback;
   }
 
-  private handleMiniCameraChanged = (lng: number, lat: number, zoom: number) => {
+  private handleMiniCameraChanged = (
+    lng: number,
+    lat: number,
+    zoom: number,
+  ) => {
     const { offsetCoordinate = true } = this.config;
 
     // resync
@@ -373,7 +379,7 @@ export default class L7MapService implements IMapService<Map> {
     }
 
     this.cameraChangedCallback(this.viewport);
-  }
+  };
 
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
