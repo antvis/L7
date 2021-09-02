@@ -34,6 +34,7 @@ export default class GreatCircleModel extends BaseModel {
       dashArray = [10, 5],
       lineTexture = false,
       iconStep = 100,
+      segmentNumber = 30,
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
     // console.log('opacity', opacity)
     if (dashArray.length === 2) {
@@ -90,7 +91,7 @@ export default class GreatCircleModel extends BaseModel {
       // u_opacity: opacity === undefined ? 1 : opacity,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-      segmentNumber: 30,
+      segmentNumber,
       u_line_type: lineStyleObj[lineType as string] || 0.0,
       u_dash_array: dashArray,
 
