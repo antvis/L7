@@ -3,7 +3,7 @@ import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
 import ExtrudePolyline from '../utils/extrude_polyline';
-import { calculteCentroid } from '../utils/geo';
+import { calculateCentroid } from '../utils/geo';
 import extrudePolygon, {
   extrude_PolygonNormal,
   fillPolygon,
@@ -24,8 +24,9 @@ const GeometryCache: IGeometryCache = {};
  * 计算2D 填充点图顶点
  * @param feature 映射feature
  */
+
 export function PointFillTriangulation(feature: IEncodeFeature) {
-  const coordinates = calculteCentroid(feature.coordinates);
+  const coordinates = calculateCentroid(feature.coordinates);
   return {
     vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
     indices: [0, 1, 2, 2, 3, 0],
@@ -57,7 +58,7 @@ export function PointExtrudeTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  */
 export function PointImageTriangulation(feature: IEncodeFeature) {
-  const coordinates = calculteCentroid(feature.coordinates);
+  const coordinates = calculateCentroid(feature.coordinates);
   return {
     vertices: [...coordinates],
     indices: [0],
