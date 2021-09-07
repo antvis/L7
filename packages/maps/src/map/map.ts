@@ -314,12 +314,12 @@ export default class L7MapService implements IMapService<Map> {
       // 存在地图底图的模式（ L7Mini ）
       const center = this.map.getCenter();
       // 不同于高德地图，需要手动触发首次渲染
-      this.handleMiniCameraChanged(center.lng, center.lat, this.map.getZoom());
+      this.handleMiniCameraChanged(center.lng, center.lat, this.map.getZoom(), this.map.getBearing(), this.map.getPitch());
       $window.document.addEventListener('mapCameaParams', (event: any) => {
         const {
-          e: { longitude, latitude, scale },
+          e: { longitude, latitude, scale, bearing, pitch },
         } = event;
-        this.handleMiniCameraChanged(longitude, latitude, scale - 1);
+        this.handleMiniCameraChanged(longitude, latitude, scale - 1.25, bearing, pitch);
       });
     }
   }
@@ -359,15 +359,19 @@ export default class L7MapService implements IMapService<Map> {
     lng: number,
     lat: number,
     zoom: number,
+    bearing: number,
+    pitch: number
   ) => {
     const { offsetCoordinate = true } = this.config;
 
     // resync
     this.viewport.syncWithMapCamera({
-      bearing: this.map.getBearing(),
+      // bearing: this.map.getBearing(),
+      bearing,
       center: [lng, lat],
       viewportHeight: this.map.transform.height,
-      pitch: this.map.getPitch(),
+      // pitch: this.map.getPitch(),
+      pitch,
       viewportWidth: this.map.transform.width,
       zoom,
       // mapbox 中固定相机高度为 viewport 高度的 1.5 倍

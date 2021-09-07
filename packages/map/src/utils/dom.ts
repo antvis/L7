@@ -133,25 +133,52 @@ DOM.suppressClick = () => {
 };
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
-  const rect = el.getBoundingClientRect();
-  return new Point(
-    e.clientX - rect.left - el.clientLeft,
-    e.clientY - rect.top - el.clientTop,
-  );
+  // 暂时从 el 上获取 top/left， 后面需要动态获取
+  if(!isMini) {
+    const rect = el.getBoundingClientRect();
+    return new Point(
+      e.clientX - rect.left - el.clientLeft,
+      e.clientY - rect.top - el.clientTop,
+    );
+  } else {
+    return new Point(
+      // @ts-ignore
+      e.clientX - el.left - 0,
+      // @ts-ignore
+      e.clientY - el.top - 0,
+    );
+  }
+ 
 };
 
 DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
-  const rect = el.getBoundingClientRect();
-  const points = [];
-  for (const touche of touches) {
-    points.push(
-      new Point(
-        touche.clientX - rect.left - el.clientLeft,
-        touche.clientY - rect.top - el.clientTop,
-      ),
-    );
+  // 暂时从 el 上获取 top/left， 后面需要动态获取
+  if(!isMini) {
+    const rect = el.getBoundingClientRect();
+    const points = [];
+    for (const touche of touches) {
+      points.push(
+        new Point(
+          touche.clientX - rect.left - el.clientLeft,
+          touche.clientY - rect.top - el.clientTop,
+        ),
+      );
+    }
+    return points;
+  } else {
+    const points = [];
+    for (const touche of touches) {
+      points.push(
+        new Point(
+          // @ts-ignore
+          touche.clientX - el.left,
+          // @ts-ignore
+          touche.clientY - el.top,
+        ),
+      );
+    }
+    return points;
   }
-  return points;
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
