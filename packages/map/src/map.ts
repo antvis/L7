@@ -356,14 +356,13 @@ export class Map extends Camera {
     let width = 0;
     let height = 0;
     if (this.container) {
-      if(isMini) {
+      if (isMini) {
         width = (this.container as HTMLCanvasElement).width;
         height = (this.container as HTMLCanvasElement).height;
       } else {
         width = this.container.clientWidth;
         height = this.container.clientHeight;
       }
-      
     }
     return [width, height];
   }

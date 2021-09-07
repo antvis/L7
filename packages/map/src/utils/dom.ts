@@ -134,7 +134,7 @@ DOM.suppressClick = () => {
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
   // 暂时从 el 上获取 top/left， 后面需要动态获取
-  if(!isMini) {
+  if (!isMini) {
     const rect = el.getBoundingClientRect();
     return new Point(
       e.clientX - rect.left - el.clientLeft,
@@ -148,12 +148,11 @@ DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
       e.clientY - el.top - 0,
     );
   }
- 
 };
 
 DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
   // 暂时从 el 上获取 top/left， 后面需要动态获取
-  if(!isMini) {
+  if (!isMini) {
     const rect = el.getBoundingClientRect();
     const points = [];
     for (const touche of touches) {

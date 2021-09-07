@@ -314,12 +314,24 @@ export default class L7MapService implements IMapService<Map> {
       // 存在地图底图的模式（ L7Mini ）
       const center = this.map.getCenter();
       // 不同于高德地图，需要手动触发首次渲染
-      this.handleMiniCameraChanged(center.lng, center.lat, this.map.getZoom(), this.map.getBearing(), this.map.getPitch());
+      this.handleMiniCameraChanged(
+        center.lng,
+        center.lat,
+        this.map.getZoom(),
+        this.map.getBearing(),
+        this.map.getPitch(),
+      );
       $window.document.addEventListener('mapCameaParams', (event: any) => {
         const {
           e: { longitude, latitude, scale, bearing, pitch },
         } = event;
-        this.handleMiniCameraChanged(longitude, latitude, scale - 1.25, bearing, pitch);
+        this.handleMiniCameraChanged(
+          longitude,
+          latitude,
+          scale - 1.25,
+          bearing,
+          pitch,
+        );
       });
     }
   }
@@ -360,7 +372,7 @@ export default class L7MapService implements IMapService<Map> {
     lat: number,
     zoom: number,
     bearing: number,
-    pitch: number
+    pitch: number,
   ) => {
     const { offsetCoordinate = true } = this.config;
 
