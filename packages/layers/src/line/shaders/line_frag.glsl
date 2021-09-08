@@ -17,14 +17,11 @@ uniform vec2 u_textSize;
 // dash
 uniform float u_dash_offset : 0.0;
 uniform float u_dash_ratio : 0.1;
-varying float v_distance_ratio;
 varying vec4 v_dash_array;
-varying float v_side;
 
-varying float v_distance;
-varying vec2 v_offset;
-varying float v_a;
-varying float v_pixelLen;
+varying float v_v;
+varying vec4 v_dataset; // 数据集 - distance_ratio/distance/pixelLen/texV
+
 varying vec2 v_iconMapUV;
 
 uniform float u_linearColor: 0;
@@ -41,11 +38,10 @@ varying mat4 styleMappingMat;
 void main() {
   float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0; // 运动速度
-  
-  // gl_FragColor = v_color;
+  float d_distance_ratio = v_dataset.r; // 当前点位距离占线总长的比例
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
-    gl_FragColor = mix(u_sourceColor, u_targetColor, v_distance_ratio);
+    gl_FragColor = mix(u_sourceColor, u_targetColor, d_distance_ratio);
   } else { // 使用 color 方法传入的颜色
      gl_FragColor = v_color;
   }
@@ -55,7 +51,7 @@ void main() {
   gl_FragColor.a *= opacity; // 全局透明度
   if(u_aimate.x == Animate) {
       animateSpeed = u_time / u_aimate.y;
-      float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + animateSpeed);
+       float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + animateSpeed);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
@@ -63,17 +59,19 @@ void main() {
  // dash line
   if(u_line_type == LineTypeDash) {
     float flag = 0.;
-    float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
+    float dashLength = mod(d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
     if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
       flag = 1.;
     }
     gl_FragColor.a *=flag;
-    // gl_FragColor.a *=(1.0- step(v_dash_array.x, mod(v_distance_ratio, dashLength)));
   }
 
   if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
-    float u = fract(mod(v_distance, v_pixelLen)/v_pixelLen - animateSpeed);
-    float v = length(v_offset)/(v_a*2.0);
+    float aDistance = v_dataset.g;      // 当前顶点的距离
+    float d_texPixelLen = v_dataset.b;  // 贴图的像素长度，根据地图层级缩放
+    float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
+    float v = v_dataset.a;
+
     v = max(smoothstep(0.95, 1.0, v), v);
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, vec2(u, v)));
@@ -98,7 +96,7 @@ void main() {
   // if(rV < r || rV > 1.0 - r) {
   //   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
   // } 
-  // float v = length(v_offset)/(v_a*2.0);
+  // float v = v_v;
   // if(v > 0.9) {
   //   gl_FragColor = vec4(0.17647, 0.43921568, 0.2, 1.0);
   // } else if(v < 0.1) {
