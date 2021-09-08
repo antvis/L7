@@ -71,7 +71,10 @@ export default class InteractionService extends EventEmitter
     const $containter = this.mapService.getMapContainer();
     if ($containter) {
       if (isMini) {
-        $window.document.addEventListener('touchstart', this.handleMiniEvent.bind(this));
+        $window.document.addEventListener(
+          'touchstart',
+          this.handleMiniEvent.bind(this),
+        );
       }
       // const hammertime = new Hammer.Manager($containter);
       // $containter.addEventListener('mousemove', this.onHover);
@@ -105,7 +108,10 @@ export default class InteractionService extends EventEmitter
   }
   private removeEventListenerOnMap() {
     if (isMini) {
-      $window.document.removeEventListener('touchstart', this.handleMiniEvent.bind(this));
+      $window.document.removeEventListener(
+        'touchstart',
+        this.handleMiniEvent.bind(this),
+      );
     }
     // const $containter = this.mapService.getMapContainer();
     // if ($containter) {
