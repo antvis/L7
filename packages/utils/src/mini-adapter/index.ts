@@ -31,8 +31,10 @@ import { XMLHttpRequest } from './XMLHttpRequest';
 export const isMiniAli =
   // @ts-ignore
   typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
-  
-export const isMini = isMiniAli;
+
+export const isWeChatMiniProgram = typeof wx !== 'undefined' && wx !== null && (typeof wx.request !== 'undefined' || typeof wx.miniProgram !== 'undefined');
+
+export const isMini = isMiniAli || isWeChatMiniProgram;
 
 export const miniWindow = {
   atob,
