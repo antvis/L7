@@ -6,6 +6,7 @@ import {
   IParseDataItem,
   IParserCfg,
   IParserData,
+  ISource,
   ISourceCFG,
   ITransform,
   lazyInject,
@@ -66,7 +67,7 @@ export default class Source extends EventEmitter {
 
   private clusterIndex: Supercluster;
 
-  constructor(data: any, cfg?: ISourceCFG) {
+  constructor(data: any | ISource, cfg?: ISourceCFG) {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;

@@ -9,6 +9,7 @@ import {
   Zoom,
 } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
+import Source from '@antv/l7-source'
 import * as React from 'react';
 
 export default class World extends React.Component {
@@ -43,8 +44,10 @@ export default class World extends React.Component {
       autoFit: true,
     });
 
+    const dataSource = new Source(data);
+   
     layer
-      .source(data)
+      .source(dataSource)
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -65,7 +68,7 @@ export default class World extends React.Component {
     });
 
     linelayer
-      .source(data)
+      .source(dataSource)
       .color('#fff')
       .size(1)
       .shape('line')
