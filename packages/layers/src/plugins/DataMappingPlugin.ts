@@ -150,7 +150,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (typeof mappedData[0].coordinates[0] === 'number') {
         // 单个的点数据
         // @ts-ignore
-        mappedData.map((d) => {
+        mappedData
+        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        .filter((d) => !d.originCoordinates)
+        .map((d) => {
           d.version = 'GAODE2.x';
           // @ts-ignore
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
@@ -161,7 +164,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
       } else {
         // 连续的线、面数据
         // @ts-ignore
-        mappedData.map((d) => {
+        mappedData
+        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        .filter((d) => !d.originCoordinates)
+        .map((d) => {
           d.version = 'GAODE2.x';
           // @ts-ignore
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
