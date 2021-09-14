@@ -17,7 +17,7 @@ import BaseModel, {
   styleSingle,
 } from '../../core/BaseModel';
 import CollisionIndex from '../../utils/collision-index';
-import { calculteCentroid } from '../../utils/geo';
+import { calculateCentroid } from '../../utils/geo';
 import {
   anchorType,
   getGlyphQuads,
@@ -429,18 +429,18 @@ export default class TextModel extends BaseModel {
       feature.glyphQuads = glyphQuads;
       // feature.centroid = calculteCentroid(coordinates);
 
-      feature.centroid = calculteCentroid(feature.coordinates);
+      feature.centroid = calculateCentroid(feature.coordinates);
 
       // 此时地图高德2.0 originCentroid == centroid
       feature.originCentroid =
         feature.version === 'GAODE2.x'
-          ? calculteCentroid(feature.originCoordinates)
+          ? calculateCentroid(feature.originCoordinates)
           : (feature.originCentroid = feature.centroid);
 
       this.glyphInfoMap[id as number] = {
         shaping,
         glyphQuads,
-        centroid: calculteCentroid(feature.coordinates),
+        centroid: calculateCentroid(feature.coordinates),
       };
       return feature;
     });

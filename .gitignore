@@ -87,3 +87,4 @@ yarn.lock
 publish.sh
 latest.sh
 beta.sh
+mini.sh
