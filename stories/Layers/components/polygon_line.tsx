@@ -1,6 +1,7 @@
 // @ts-ignore
 import {
   Layers,
+  Source,
   LineLayer,
   PointLayer,
   PolygonLayer,
@@ -9,7 +10,6 @@ import {
   Zoom,
 } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
-import Source from '@antv/l7-source'
 import * as React from 'react';
 
 export default class World extends React.Component {
@@ -45,7 +45,7 @@ export default class World extends React.Component {
     });
 
     const dataSource = new Source(data);
-   
+
     layer
       .source(dataSource)
       .color('name', [

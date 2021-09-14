@@ -27,6 +27,7 @@
   "dependencies": {
     "@antv/l7-component": "^2.5.12",
     "@antv/l7-core": "^2.5.12",
+    "@antv/l7-source": "^2.5.12",
     "@antv/l7-layers": "^2.5.12",
     "@antv/l7-maps": "^2.5.12",
     "@antv/l7-scene": "^2.5.12",

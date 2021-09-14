@@ -36,7 +36,7 @@ function mergeCustomizer(objValue: any, srcValue: any) {
   }
 }
 
-export default class Source extends EventEmitter {
+export default class Source extends EventEmitter implements ISource {
   public data: IParserData;
 
   // 数据范围

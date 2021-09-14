@@ -451,8 +451,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
-  public source(data: any | ISource, options?: ISourceCFG): ILayer {
-    if(data instanceof Source) {
+  public source(data: any, options?: ISourceCFG): ILayer {
+    if (data?.data) { // 判断是否为source
       this.setSource(data);
       return this;
     }
