@@ -14,7 +14,7 @@ export interface ISceneService {
   init(config: IMapConfig & IRenderConfig): void;
   addLayer(layer: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;
-  render(): void;
+  render(type?: string): void;
   getSceneContainer(): HTMLDivElement;
   getMarkerContainer(): HTMLElement;
   exportPng(type?: 'png' | 'jpg'): string;
