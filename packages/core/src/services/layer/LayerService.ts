@@ -163,7 +163,10 @@ export default class LayerService implements ILayerService {
           // return false;
           //  TODO: picking 类型的渲染事件
           //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
-          if (this.lastRenderType === 'mapRender' || this.lastRenderType === 'animate') {
+          if (
+            this.lastRenderType === 'mapRender' ||
+            this.lastRenderType === 'animate'
+          ) {
             this.lastRenderType = 'picking';
             return false;
           } else {
