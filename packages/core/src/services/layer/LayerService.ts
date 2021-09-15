@@ -21,6 +21,8 @@ export default class LayerService implements ILayerService {
 
   private animateInstanceCount: number = 0;
 
+  private lastRenderTime: number = new Date().getTime();
+
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
 
@@ -69,7 +71,30 @@ export default class LayerService implements ILayerService {
     this.destroy();
   }
 
-  public renderLayers() {
+  // 渲染检测
+  private renderTest(type: string|undefined): boolean {
+    // 继续渲染事件
+    const renderTime = new Date().getTime();
+    if(type) {
+      switch(type) {
+        case 'picking':
+            // picking 类型的渲染事件 若是触发的时间与上次触发的间隔在 64 ms 之内，则放弃此次渲染
+            return !(renderTime - this.lastRenderTime < 64);
+        default:
+            return true;
+      }
+    }
+    this.lastRenderTime = renderTime;
+    return true;
+  }
+
+  public renderLayers(type?: string) {
+    // TODO: 每次渲染的时候都需要进行渲染判断，判断是否进行渲染
+    // 没有传递 type 参数时默认触发的是地图事件，优先级最高，直接渲染
+    if(!this.renderTest(type)) {
+      return
+    }
+
     if (this.alreadyInRendering) {
       return;
     }
