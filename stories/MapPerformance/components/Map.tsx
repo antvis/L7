@@ -165,8 +165,8 @@ export default class PointTest extends React.Component {
             opacity: 1.0,
           })
           .select(true)
-          .animate(true)
-          // .active(true);
+          .animate(true);
+        // .active(true);
 
         scene.on('loaded', () => {
           scene.addLayer(layer);

@@ -26,7 +26,6 @@ export default class LayerService implements ILayerService {
   // ---
   private stats: any;
   // ---
-    
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
@@ -124,7 +123,7 @@ export default class LayerService implements ILayerService {
   // @ts-ignore
   public startAnimate2(stats) {
     // @ts-ignore
-    this.stats = stats
+    this.stats = stats;
     if (this.animateInstanceCount++ === 0) {
       this.clock.start();
       this.runRender();
@@ -140,6 +139,18 @@ export default class LayerService implements ILayerService {
 
   public getOESTextureFloat() {
     return this.renderService.extensionObject.OES_texture_float;
+  }
+
+  // private runRender() {
+  //   this.renderLayers();
+  //   this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
+  // }
+
+  public runRender() {
+    // @ts-ignore
+    this?.stats?.update();
+    this.renderLayers();
+    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
   // 渲染检测
@@ -166,18 +177,6 @@ export default class LayerService implements ILayerService {
       stencil: 0,
       framebuffer: null,
     });
-  }
-
-  // private runRender() {
-  //   this.renderLayers();
-  //   this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
-  // }
-
-  public runRender() {
-    // @ts-ignore
-    this?.stats?.update()
-    this.renderLayers();
-    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
   private stopRender() {
