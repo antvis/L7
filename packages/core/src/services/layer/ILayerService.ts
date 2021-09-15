@@ -313,7 +313,7 @@ export interface ILayerService {
   remove(layer: ILayer): void;
   removeAllLayers(): void;
   updateRenderOrder(): void;
-  renderLayers(): void;
+  renderLayers(type?: string): void;
   getOESTextureFloat(): boolean;
   destroy(): void;
 }
