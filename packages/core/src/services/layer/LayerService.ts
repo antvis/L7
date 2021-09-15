@@ -21,7 +21,7 @@ export default class LayerService implements ILayerService {
 
   private animateInstanceCount: number = 0;
 
-  private lastRenderTime: number = new Date().getTime();
+  private lastRenderType: string;
 
   // ---
   private stats: any;
@@ -75,10 +75,10 @@ export default class LayerService implements ILayerService {
     this.destroy();
   }
 
-  public renderLayers(type?: string) {
+  public renderLayers(renderType?: string) {
     // TODO: 每次渲染的时候都需要进行渲染判断，判断是否进行渲染
     // 没有传递 type 参数时默认触发的是地图事件，优先级最高，直接渲染
-    if (!this.renderTest(type)) {
+    if (!this.renderTest(renderType)) {
       return;
     }
 
@@ -149,24 +149,43 @@ export default class LayerService implements ILayerService {
   public runRender() {
     // @ts-ignore
     this?.stats?.update();
-    this.renderLayers();
+    // this.renderLayers();
+    this.renderLayers('animate');
     this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
   // 渲染检测
-  private renderTest(type: string | undefined): boolean {
+  private renderTest(renderType: string | undefined): boolean {
     // 继续渲染事件
-    const renderTime = new Date().getTime();
-    if (type) {
-      switch (type) {
+    if (renderType) {
+      switch (renderType) {
         case 'picking':
-          // picking 类型的渲染事件 若是触发的时间与上次触发的间隔在 64 ms 之内，则放弃此次渲染
-          return !(renderTime - this.lastRenderTime < 64);
+          // return false;
+          //  TODO: picking 类型的渲染事件
+          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
+          if (this.lastRenderType === 'mapRender' || this.lastRenderType === 'animate') {
+            this.lastRenderType = 'picking';
+            return false;
+          } else {
+            this.lastRenderType = 'picking';
+            return true;
+          }
+        case 'animate':
+          // return false;
+          if (this.lastRenderType === 'mapRender') {
+            this.lastRenderType = 'animate';
+            return false;
+          } else {
+            this.lastRenderType = 'animate';
+            return true;
+          }
+        case 'mapRender':
+          this.lastRenderType = 'mapRender';
+          return true;
         default:
           return true;
       }
     }
-    this.lastRenderTime = renderTime;
     return true;
   }
 

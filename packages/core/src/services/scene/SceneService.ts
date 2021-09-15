@@ -232,7 +232,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.render();
   }
 
-  public async render() {
+  public async render(renderType?: string) {
     if (this.rendering || this.destroyed) {
       return;
     }
@@ -259,7 +259,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
 
     // 尝试初始化未初始化的图层
-    this.layerService.renderLayers();
+    this.layerService.renderLayers(renderType);
 
     // 组件需要等待layer 初始化完成之后添加
     this.rendering = false;
@@ -385,7 +385,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   private handleMapCameraChanged = (viewport: IViewport) => {
     this.cameraService.update(viewport);
-    this.render();
+    this.render('mapRender');
   };
 
   private addSceneEvent(target: IInteractionTarget) {
