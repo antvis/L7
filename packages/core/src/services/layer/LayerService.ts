@@ -129,25 +129,25 @@ export default class LayerService implements ILayerService {
 
   // 渲染检测
   private renderTest(renderType: string | undefined): boolean {
-    // 继续渲染事件  
+    // 继续渲染事件
     if (renderType) {
       switch (renderType) {
-        case 'picking':     
+        case 'picking':
           //  TODO: picking 类型的渲染事件
-          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染       
-          if(this.lastRenderType === 'mapRender') {
-            this.lastRenderType = 'picking'
-            return false
+          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
+          if (this.lastRenderType === 'mapRender') {
+            this.lastRenderType = 'picking';
+            return false;
           } else {
-            this.lastRenderType = 'picking'
-            return true
+            this.lastRenderType = 'picking';
+            return true;
           }
         case 'mapRender':
           this.lastRenderType = 'mapRender';
           return true;
         default:
           return true;
-      } 
+      }
     }
     return true;
   }
