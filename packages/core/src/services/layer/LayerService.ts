@@ -134,20 +134,29 @@ export default class LayerService implements ILayerService {
       switch (renderType) {
         case 'picking':
           //  TODO: picking 类型的渲染事件
-          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
-          if (this.lastRenderType === 'mapRender') {
+          //  若是上次触发为地图或动画触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
+          if (this.lastRenderType === 'mapRender' || this.lastRenderType === 'animate') {
             this.lastRenderType = 'picking';
             return false;
           } else {
             this.lastRenderType = 'picking';
             return true;
           }
+        case 'animate':
+            if (this.lastRenderType === 'mapRender') {
+              this.lastRenderType = 'animate';
+              return false;
+            } else {
+              this.lastRenderType = 'animate';
+              return true;
+            }
         case 'mapRender':
           this.lastRenderType = 'mapRender';
           return true;
         default:
           return true;
       }
+      // TODO: 地图触发的渲染优先级最高，动画其次，拾取最次
     }
     return true;
   }
@@ -162,7 +171,7 @@ export default class LayerService implements ILayerService {
   }
 
   private runRender() {
-    this.renderLayers();
+    this.renderLayers('animate');
     this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
