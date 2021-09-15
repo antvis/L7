@@ -29,7 +29,7 @@ export default class PointTest extends React.Component {
       }
       function k(a) {
         for (var d = 0; d < c.children.length; d++)
-        // @ts-ignore
+          // @ts-ignore
           c.children[d].style.display = d === a ? 'block' : 'none';
         l = a;
       }
