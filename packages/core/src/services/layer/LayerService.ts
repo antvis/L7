@@ -135,7 +135,10 @@ export default class LayerService implements ILayerService {
         case 'picking':
           //  TODO: picking 类型的渲染事件
           //  若是上次触发为地图或动画触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
-          if (this.lastRenderType === 'mapRender' || this.lastRenderType === 'animate') {
+          if (
+            this.lastRenderType === 'mapRender' ||
+            this.lastRenderType === 'animate'
+          ) {
             this.lastRenderType = 'picking';
             return false;
           } else {
@@ -143,13 +146,13 @@ export default class LayerService implements ILayerService {
             return true;
           }
         case 'animate':
-            if (this.lastRenderType === 'mapRender') {
-              this.lastRenderType = 'animate';
-              return false;
-            } else {
-              this.lastRenderType = 'animate';
-              return true;
-            }
+          if (this.lastRenderType === 'mapRender') {
+            this.lastRenderType = 'animate';
+            return false;
+          } else {
+            this.lastRenderType = 'animate';
+            return true;
+          }
         case 'mapRender':
           this.lastRenderType = 'mapRender';
           return true;
