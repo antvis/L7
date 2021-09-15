@@ -306,6 +306,9 @@ export interface ILayerService {
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
+  // ---
+  startAnimate2(state: any): void;
+  // ---
   stopAnimate(): void;
   getLayers(): ILayer[];
   getLayer(id: string): ILayer | undefined;

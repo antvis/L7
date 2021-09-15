@@ -23,6 +23,11 @@ export default class LayerService implements ILayerService {
 
   private lastRenderTime: number = new Date().getTime();
 
+  // ---
+  private stats: any;
+  // ---
+    
+
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
 
@@ -116,6 +121,16 @@ export default class LayerService implements ILayerService {
     }
   }
 
+  // @ts-ignore
+  public startAnimate2(stats) {
+    // @ts-ignore
+    this.stats = stats
+    if (this.animateInstanceCount++ === 0) {
+      this.clock.start();
+      this.runRender();
+    }
+  }
+
   public stopAnimate() {
     if (--this.animateInstanceCount === 0) {
       this.stopRender();
@@ -153,7 +168,14 @@ export default class LayerService implements ILayerService {
     });
   }
 
-  private runRender() {
+  // private runRender() {
+  //   this.renderLayers();
+  //   this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
+  // }
+
+  public runRender() {
+    // @ts-ignore
+    this?.stats?.update()
     this.renderLayers();
     this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
