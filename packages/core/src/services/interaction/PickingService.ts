@@ -144,7 +144,8 @@ export default class PickingService implements IPickingService {
     }
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
-    this.layerService.renderLayers();
+    // TODO: 触发图层更新渲染，同时传递更新类型
+    this.layerService.renderLayers('picking');
     this.alreadyInPicking = false;
   }
 
@@ -361,11 +362,13 @@ export default class PickingService implements IPickingService {
     layer: ILayer,
     pickedColors: Uint8Array | undefined,
   ) {
+    // @ts-ignore
     const [r, g, b] = pickedColors;
     layer.hooks.beforeHighlight.call([r, g, b]);
   }
 
   private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+    // @ts-ignore
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
   }
