@@ -81,7 +81,7 @@ export default class ScaleComponent extends React.Component {
     pointLayer.on('mouseout', (e) => {
       console.log(2, e);
     });
-    const scaleControl = new Scale();
+    // const scaleControl = new Scale();
     const layers = {
       点图层: pointLayer,
       面图层: layer,
@@ -91,12 +91,37 @@ export default class ScaleComponent extends React.Component {
       position: 'bottomright',
     });
 
-    scene.addControl(scaleControl);
+    // scene.addControl(scaleControl);
     scene.addControl(layerControl);
-    const zoomControl = new Zoom({
-      position: 'bottomright',
-    });
-    scene.addControl(zoomControl);
+    // const zoomControl = new Zoom({
+    //   position: 'bottomright',
+    // });
+    // scene.addControl(zoomControl);
+
+    setTimeout(() => {
+      const pointLayer3 = new PointLayer({
+        name: '02',
+        enablePropagation: true,
+      })
+        .source(pointsData, {
+          cluster: true,
+        })
+        .shape('circle')
+        .scale('point_count', {
+          type: 'quantile',
+        })
+        .size('point_count', [3])
+        .animate(false)
+        .active(false)
+        .color('red')
+        .style({
+          opacity: 0.5,
+          strokeWidth: 1,
+        });
+      scene.addLayer(pointLayer3);
+
+      layerControl.addVisualLayer(pointLayer3, 'pointLayer3');
+    }, 2000);
   }
 
   public render() {
