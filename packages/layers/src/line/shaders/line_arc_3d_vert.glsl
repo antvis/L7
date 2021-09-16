@@ -12,8 +12,7 @@ uniform mat4 u_Mvp;
 uniform float segmentNumber;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 varying vec4 v_color;
-varying vec2 v_normal;
-varying float v_distance_ratio;
+// varying vec2 v_normal;
 uniform float u_line_type: 0.0;
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 varying vec4 v_dash_array;
@@ -21,10 +20,9 @@ varying vec4 v_dash_array;
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
 varying float v_segmentIndex;
-varying float v_arcDistrance;
-varying float v_pixelLen;
-varying float v_a;
-varying vec2 v_offset;
+
+varying vec4 v_dataset; // 数据集
+
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
 
@@ -114,8 +112,9 @@ void main() {
   float segmentRatio = getSegmentRatio(segmentIndex);
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
 
+  float d_distance_ratio;
    if(u_line_type == LineTypeDash) {
-    v_distance_ratio = segmentIndex / segmentNumber;
+    d_distance_ratio = segmentIndex / segmentNumber;
     // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
     vec2 s = source;
     vec2 t = target;
@@ -128,24 +127,29 @@ void main() {
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
   }
     if(u_aimate.x == Animate) {
-      v_distance_ratio = segmentIndex / segmentNumber;
+      d_distance_ratio = segmentIndex / segmentNumber;
   }
+  v_dataset.g = d_distance_ratio; // 当前点位距离占线总长的比例
 
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   vec3 curr = getPos(source, target, segmentRatio);
   vec3 next = getPos(source, target, nextSegmentRatio);
   vec2 offset = getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y);
-  v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+  // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
 
 
   v_segmentIndex = a_Position.x;
   if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式  
-    v_arcDistrance = length(source - target);
-    v_pixelLen = project_pixel(u_icon_step);
+
+    float arcDistrance = length(source - target);
+    float pixelLen =  project_pixel(u_icon_step);
+    v_dataset.b = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
 
     vec2 projectOffset = project_pixel(offset);
-    v_offset = projectOffset + projectOffset * sign(a_Position.y);
-    v_a = project_pixel(a_Size);
+    float lineOffsetWidth = length(projectOffset + projectOffset * sign(a_Position.y)); // 线横向偏移的距离
+    float linePixelSize = project_pixel(a_Size);  // 定点位置偏移，按地图等级缩放后的距离
+    v_dataset.a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
+
     v_iconMapUV = a_iconMapUV;
   }
   

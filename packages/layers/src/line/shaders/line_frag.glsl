@@ -69,7 +69,7 @@ void main() {
     float aDistance = v_dataset.g;      // 当前顶点的距离
     float d_texPixelLen = v_dataset.b;  // 贴图的像素长度，根据地图层级缩放
     float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
-    float v = v_dataset.a;
+    float v = v_dataset.a;  // 线图层贴图部分的 v 坐标值
 
     v = max(smoothstep(0.95, 1.0, v), v);
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;

@@ -99,7 +99,7 @@ void main() {
   v_dataset.r = d_distance_ratio; // 当前点位距离占线总长的比例
   v_dataset.g = a_Distance;       // 当前顶点的距离
   v_dataset.b = d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
-  v_dataset.a = texV;
+  v_dataset.a = texV;             // 线图层贴图部分的 v 坐标值
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 
