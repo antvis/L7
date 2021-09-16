@@ -254,7 +254,7 @@ export default class Country extends React.Component {
           }}
           // onChange={this.handleProvinceChange}
           onChange={() => {
-            console.log('change')
+            console.log('change');
           }}
         >
           {ProvinceData.map((province, i) => {
@@ -283,7 +283,7 @@ export default class Country extends React.Component {
     this.setState({
       province: value,
     });
-    console.log('value', value)
+    console.log('value', value);
     this.provinceLayer.updateDistrict([value]);
   };
 }

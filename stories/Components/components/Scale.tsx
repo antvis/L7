@@ -120,8 +120,8 @@ export default class ScaleComponent extends React.Component {
         });
       scene.addLayer(pointLayer3);
 
-      layerControl.addVisualLayer(pointLayer3, 'pointLayer3')
-    }, 2000)
+      layerControl.addVisualLayer(pointLayer3, 'pointLayer3');
+    }, 2000);
   }
 
   public render() {

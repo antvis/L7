@@ -2,6 +2,7 @@ import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
+import { isEventCrash } from '../../utils/dom';
 import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
 import {
   IInteractionService,
@@ -14,7 +15,6 @@ import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
-import { isEventCrash } from '../../utils/dom'
 
 @injectable()
 export default class PickingService implements IPickingService {
