@@ -135,7 +135,7 @@ export default class Layers extends Control {
       this.addLayer(baseLayers[name], name, false);
     });
     Object.keys(overlayers).forEach((name: any, index: number) => {
-      overlayers[name].once('inited', this.update);
+      // overlayers[name].once('inited', this.update);
       this.addLayer(overlayers[name], name, true);
     });
   }
