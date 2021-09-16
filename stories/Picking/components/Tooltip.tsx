@@ -37,6 +37,7 @@ export default class Tooltip extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
+      .select(true)
       .style({
         opacity: 0.8,
       });

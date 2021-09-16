@@ -14,6 +14,7 @@ import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
+import { isEventCrash } from '../../utils/dom'
 
 @injectable()
 export default class PickingService implements IPickingService {
@@ -321,28 +322,9 @@ export default class PickingService implements IPickingService {
   ) {
     layer.emit(target.type, target);
     // 判断是否发生事件冲突
-    // if (this.isEventCrash(target)) {
-    //   layer.emit(target.type, target);
-    // }
-  }
-
-  /**
-   * 检测触发事件是否是在 marker/popup 上发生，若是则会发生冲突（发生冲突时 marker/popup 事件优先）
-   * @param obj
-   * @returns
-   */
-  private isEventCrash(obj: any) {
-    let notCrash = true;
-    obj.target.path.map((p: HTMLElement) => {
-      if (p.classList) {
-        p.classList.forEach((n: any) => {
-          if (n === 'l7-marker' || n === 'l7-popup') {
-            notCrash = false;
-          }
-        });
-      }
-    });
-    return notCrash;
+    if (isEventCrash(target)) {
+      layer.emit(target.type, target);
+    }
   }
 
   /**
