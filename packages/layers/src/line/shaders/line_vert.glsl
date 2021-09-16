@@ -29,8 +29,7 @@ varying vec4 v_dash_array;
 varying vec2 v_normal;
 
 varying vec4 v_dataset; // 数据集 - distance_ratio/distance/pixelLen/texV
-
-varying float v_v; // 线图层 - 贴图部分的 v 坐标（线的宽度方向）
+// texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 varying vec2 v_iconMapUV;
 uniform float u_linearColor: 0;
 
@@ -94,7 +93,6 @@ void main() {
 
   float lineOffsetWidth = length(offset + offset * sign(a_Miter)); // 线横向偏移的距离（向两侧偏移的和）
   float linePixelSize = project_pixel(a_Size.x) * 2.0;  // 定点位置偏移，按地图等级缩放后的距离 单侧 * 2
-  v_v = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
   float texV = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
 
   // 设置数据集的参数

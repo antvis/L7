@@ -19,7 +19,6 @@ uniform float u_dash_offset : 0.0;
 uniform float u_dash_ratio : 0.1;
 varying vec4 v_dash_array;
 
-varying float v_v;
 varying vec4 v_dataset; // 数据集 - distance_ratio/distance/pixelLen/texV
 
 varying vec2 v_iconMapUV;
@@ -96,7 +95,6 @@ void main() {
   // if(rV < r || rV > 1.0 - r) {
   //   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
   // } 
-  // float v = v_v;
   // if(v > 0.9) {
   //   gl_FragColor = vec4(0.17647, 0.43921568, 0.2, 1.0);
   // } else if(v < 0.1) {
