@@ -47,7 +47,6 @@ export default class Amap2demo_arcLine extends React.Component {
               // segmentNumber: 3,
               // lineType: 'dash',
               // dashArray: [5, 5],
-              
             });
           // .forward(false)
           scene.addLayer(layer);
