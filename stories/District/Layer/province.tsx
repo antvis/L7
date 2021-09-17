@@ -219,7 +219,7 @@ export default class Country extends React.Component {
         data,
         geoDataLevel: 1,
         joinBy: ['adcode', 'code'],
-        adcode: [province],
+        adcode: [],
         stroke: '#7096B3',
         depth: 2,
         showBorder: false,
@@ -244,7 +244,7 @@ export default class Country extends React.Component {
     return (
       <>
         <Select
-          defaultValue="黑龙江省"
+          defaultValue="北京市"
           style={{
             width: 120,
             zIndex: 2,
@@ -252,10 +252,7 @@ export default class Country extends React.Component {
             right: '10px',
             top: '10px',
           }}
-          // onChange={this.handleProvinceChange}
-          onChange={() => {
-            console.log('change');
-          }}
+          onChange={this.handleProvinceChange}
         >
           {ProvinceData.map((province, i) => {
             return (
@@ -283,7 +280,6 @@ export default class Country extends React.Component {
     this.setState({
       province: value,
     });
-    console.log('value', value);
     this.provinceLayer.updateDistrict([value]);
   };
 }
