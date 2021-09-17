@@ -1,5 +1,5 @@
-import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { Scene } from '@antv/l7';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
@@ -23,47 +23,16 @@ export default class GlTFThreeJSDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        center: [121.4, 31.258134],
+      map: new GaodeMapV2({
+        center: [111.4453125, 32.84267363195431],
         pitch: 45,
         rotation: 30,
         zoom: 15,
       }),
     });
-    scene.registerRenderService(ThreeRender);
     this.scene = scene;
-    scene.on('loaded', async () => {
-      // scene.registerRenderService(ThreeRender);
-      const response = await fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
-      );
-      scene.addImage(
-        '00',
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Rq6tQ5b4_JMAAAAAAAAAAABkARQnAQ',
-      );
-      scene.addImage(
-        '01',
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*0D0SQ6AgkRMAAAAAAAAAAABkARQnAQ',
-      );
-      scene.addImage(
-        '02',
-        'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
-      );
-      const data = await response.json();
-      const imageLayer = new PointLayer()
-        .source(data, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        // .shape('name', ['00', '01', '02'])
-        .shape('triangle')
-        .color('red')
-        .active(true)
-        .size(20);
-      scene.addLayer(imageLayer);
+    scene.registerRenderService(ThreeRender);
+    scene.on('loaded', () => {
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
@@ -83,18 +52,34 @@ export default class GlTFThreeJSDemo extends React.Component {
             // 'https://gw.alipayobjects.com/os/antvdemo/assets/gltf/man/CesiumMan.gltf',
             'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
             (gltf) => {
-              // 根据 GeoJSON 数据放置模型
+              // console.log(gltf)
+              const gltfScene = gltf.scene;
+              // gltfScene.rotation.set(90, 90, 0)
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene;
-                gltfScene.applyMatrix4(
-                  // 生成模型矩阵
-                  layer.getModelMatrix(
-                    [coordinates[0], coordinates[1]], // 经纬度坐标
-                    0, // 高度，单位米/
-                    [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
-                    [10, 10, 10], // 沿 XYZ 轴缩放比例
-                  ),
-                );
+
+                gltfScene.scale.set(10, 10, 10);
+                // gltfScene.applyMatrix4(
+                //   // 生成模型矩阵
+                //   layer.getModelMatrix(
+                //     [coordinates[0], coordinates[1]], // 经纬度坐标
+                //     0, // 高度，单位米/
+                //     [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
+                //     [100, 100, 100], // 沿 XYZ 轴缩放比例
+                //   ),
+                // );
+
+                //  gltfScene.applyMatrix4(
+                //   // 生成模型矩阵
+                //   layer.getModelMatrix(
+                //     // [coordinates[0], coordinates[1]], // 经纬度坐标
+                //     [0, 0], // 经纬度坐标
+                //     0, // 高度，单位米/
+                //     [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
+                //     [10000, 10000, 10000], // 沿 XYZ 轴缩放比例
+                //   ),
+                // );
+
                 const animations = gltf.animations;
                 if (animations && animations.length) {
                   const mixer = new THREE.AnimationMixer(gltfScene);
@@ -113,8 +98,10 @@ export default class GlTFThreeJSDemo extends React.Component {
                 }
 
                 // 向场景中添加模型
-                threeScene.add(gltfScene);
+                // threeScene.add(gltfScene);
               });
+
+              threeScene.add(gltfScene);
               // 重绘图层
               layer.render();
             },
@@ -129,7 +116,7 @@ export default class GlTFThreeJSDemo extends React.Component {
               properties: {},
               geometry: {
                 type: 'Point',
-                coordinates: [121.4, 31.258134],
+                coordinates: [111.4453125, 32.84267363195431],
               },
             },
           ],

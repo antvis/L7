@@ -29,6 +29,7 @@ export default class ThreeJSLayer
   implements IThreeJSLayer {
   public type: string = 'custom';
   protected threeRenderService: IThreeRenderService;
+  // 构建 threejs 的 scene
   private scene: Scene = new Scene();
   private renderer: WebGLRenderer;
   private animateMixer: AnimationMixer[] = [];
@@ -67,16 +68,23 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
+    // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
     const cullFace =
       this.mapService.constructor.name === 'AMapService' ? gl.BACK : gl.FRONT;
     gl.cullFace(cullFace);
+
+    // threejs 的 renderer
     const renderer = this.threeRenderService.renderer;
     renderer.state.reset();
     renderer.autoClear = false;
+
+    // 获取相机 （不同的地图获取对应的方式不同）
     const camera = this.threeRenderService.getRenderCamera();
+
     renderer.render(this.scene, camera);
+
     this.rendererService.setBaseState();
     this.animateMixer.forEach((mixer: AnimationMixer) => {
       mixer.update(this.getTime());
