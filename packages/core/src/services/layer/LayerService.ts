@@ -188,6 +188,7 @@ export default class LayerService implements ILayerService {
         default:
           return true;
       }
+      // TODO: 地图触发的渲染优先级最高，动画其次，拾取最次
     }
     return true;
   }

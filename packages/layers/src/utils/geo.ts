@@ -1,6 +1,6 @@
 type Position = number[];
 import { isNumber } from 'lodash';
-export function calculteCentroid(
+export function calculateCentroid(
   coord: Position | Position[] | Position[][],
 ): Position {
   // let pos = coord as Position;

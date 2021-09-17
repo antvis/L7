@@ -12,7 +12,7 @@ uniform mat4 u_Mvp;
 uniform float segmentNumber;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 varying vec4 v_color;
-varying vec2 v_normal;
+// varying vec2 v_normal;
 
 varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
@@ -21,11 +21,8 @@ varying vec4 v_dash_array;
 
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
-varying float v_segmentIndex;
-varying float v_arcDistrance;
-varying float v_pixelLen;
-varying vec2 v_offset;
-varying float v_a;
+
+varying vec4 v_dataset; // 数据集
 
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
@@ -183,27 +180,28 @@ void main() {
   v_distance_ratio = segmentIndex / segmentNumber;
   vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0));
   vec4 next = project_position(vec4(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0, 1.0));
-  v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
+  // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
   //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
 
-  v_segmentIndex = a_Position.x;
+  v_dataset.g = a_Position.x; // 该顶点在弧线上的分段排序
   if(LineTexture == u_line_texture) { // 开启贴图模式  
-    // v_arcDistrance = length(source - target);
     // float mapZoomScale = u_CoordinateSystem !== COORDINATE_SYSTEM_P20_2?10000000.0:1.0;
-    v_arcDistrance = length(source - target);
+    float d_arcDistrance = length(source - target);
     if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
-      v_arcDistrance = v_arcDistrance * 1000000.0;
+      d_arcDistrance = d_arcDistrance * 1000000.0;
     }
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) { // mapbox
-    //   v_arcDistrance *= 10.0;
-      v_arcDistrance = project_pixel_allmap(v_arcDistrance);
+      d_arcDistrance = project_pixel_allmap(d_arcDistrance);
     }
-    v_pixelLen = project_pixel(u_icon_step)/8.0;
+    float d_pixelLen = project_pixel(u_icon_step)/8.0;
+    v_dataset.b = floor(d_arcDistrance/d_pixelLen); // 贴图在弧线上重复的数量
 
-    v_a = project_pixel(a_Size);
-    v_offset = offset + offset * sign(a_Position.y);
+    float lineOffsetWidth = length(offset + offset * sign(a_Position.y)); // 线横向偏移的距离
+    float linePixelSize = project_pixel(a_Size);  // 定点位置偏移，按地图等级缩放后的距离
+    v_dataset.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
+
     v_iconMapUV = a_iconMapUV;
   }
 

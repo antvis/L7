@@ -6,8 +6,6 @@ attribute float a_Size;
 attribute vec4 a_Color;
 varying vec4 v_color;
 
-
-
 uniform float u_opacity : 1;
 uniform vec2 u_offsets;
 
