@@ -148,7 +148,7 @@ void main() {
     vec2 projectOffset = project_pixel(offset);
     float lineOffsetWidth = length(projectOffset + projectOffset * sign(a_Position.y)); // 线横向偏移的距离
     float linePixelSize = project_pixel(a_Size);  // 定点位置偏移，按地图等级缩放后的距离
-    v_dataset.a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
+    v_dataset.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
 
     v_iconMapUV = a_iconMapUV;
   }
