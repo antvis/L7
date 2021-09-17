@@ -9,7 +9,6 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float u_stroke_width : 1;
 uniform vec2 u_offsets;
-varying float v_size;
 
 uniform float u_opacity : 1;
 
@@ -64,7 +63,7 @@ void main() {
    v_color = a_Color;
    v_uv = a_Uv;
    vec4 project_pos = project_position(vec4(a_Position, 1.0));
-   v_size = a_Size;
+   
   //  vec2 offset = project_pixel(u_offsets);
   vec2 offset = project_pixel(textrueOffsets);
 
