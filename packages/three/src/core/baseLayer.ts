@@ -7,21 +7,14 @@ import {
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
+  Object3D
 } from 'three';
 import {
   IThreeRenderService,
   ThreeRenderServiceType,
 } from './threeRenderService';
+import { IThreeJSLayer, ILngLat } from './IThreeJSLayer'
 const DEG2RAD = Math.PI / 180;
-interface IThreeJSLayer extends ILayer {
-  getModelMatrix(
-    lnglat: [number, number],
-    altitude: number,
-    rotation: [number, number, number],
-    scale: [number, number, number],
-  ): Matrix4;
-  addAnimateMixer(mixer: AnimationMixer): void;
-}
 export default class ThreeJSLayer
   extends BaseLayer<{
     onAddMeshes: (threeScene: Scene, layer: ThreeJSLayer) => void;
@@ -36,10 +29,9 @@ export default class ThreeJSLayer
   // 地图中点墨卡托坐标
   private center: IMercator;
 
-  // 初始状态相机变换矩阵
 
   /**
-   * 根据模型
+   * 根据数据计算对应地图的模型矩阵 不同地图主要是点位偏移不同
    */
   public getModelMatrix(
     lnglat: [number, number],
@@ -58,7 +50,53 @@ export default class ThreeJSLayer
     );
   }
 
+  /**
+   * 获取平移矩阵
+   * @param lnglat 
+   * @param altitude 
+   * @returns 
+   */
+  public getTranslateMatrix( lnglat: ILngLat, altitude: number = 0,) {
+    return this.getModelMatrix( lnglat, altitude, [0, 0, 0], [1, 1, 1] )
+  }
+
+  /**
+   * 设置当前物体往经纬度和高度方向的移动
+   * @param object 
+   * @param lnglat 
+   * @param altitude 
+   */
+  public applyObjectLngLat(object: Object3D, lnglat: ILngLat, altitude = 0) {
+    let positionMatrix = this.getTranslateMatrix(lnglat, altitude)
+    object.applyMatrix4(positionMatrix)
+  }
+
+  /**
+   * 设置物体当前的经纬度和高度
+   * @param object 
+   * @param lnglat 
+   * @param altitude 
+   */
+  public setObjectLngLat(object: Object3D, lnglat: ILngLat, altitude = 0) {
+    // @ts-ignore
+    let [x, y] = this.mapService?.lngLatToCoord(lnglat)
+    // @ts-ignore
+    // console.log(this.mapService?.lngLatToCoord(lnglat))
+    // if(x && y) {
+      // console.log('------')
+      object.position.set(x, y, altitude)
+    // }
+  }
+
+  public getObjectLngLat(object: Object3D) {
+    //   let coord = [object.position.x, object.position.y];
+    //   // @ts-ignore
+    //  return this.mapService.coordToLngLat(coord);
+    return [0,0] as ILngLat
+  }
+
   public buildModels() {
+    // @ts-ignore
     this.threeRenderService = this.getContainer().get<IThreeRenderService>(
       ThreeRenderServiceType,
     );

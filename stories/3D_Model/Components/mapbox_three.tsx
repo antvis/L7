@@ -1,6 +1,6 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { ThreeLayer, ThreeRender } from '@antv/l7-three';
+import { ThreeLayer, ThreeRender, ILngLat } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
 import * as THREE from 'three';
@@ -73,8 +73,9 @@ export default class GlTFThreeJSDemo extends React.Component {
             // 'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
             (gltf) => {
               // 根据 GeoJSON 数据放置模型
+              const gltfScene = gltf.scene.clone();
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-                const gltfScene = gltf.scene.clone();
+                
                 gltfScene.applyMatrix4(
                   // 生成模型矩阵
                   layer.getModelMatrix(
@@ -105,6 +106,20 @@ export default class GlTFThreeJSDemo extends React.Component {
                 // 向场景中添加模型
                 threeScene.add(gltfScene);
               });
+
+              let center = scene.getCenter()
+              console.log(center)
+              console.log(layer.getObjectLngLat(gltfScene))
+              // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
+
+              //  let t = 0
+              // setInterval(() => {
+              //   t += 0.01
+              //   layer.setObjectLngLat(gltfScene, [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat, 0)
+              //   // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
+              // }, 16)
+
+
               // 重绘图层
               layer.render();
             },

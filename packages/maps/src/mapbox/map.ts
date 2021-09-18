@@ -236,6 +236,18 @@ export default class MapboxService
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     return this.map.project(lnglat);
   }
+
+  /**
+   * 将经纬度转成墨卡托坐标
+   * @param lnglat 
+   * @returns 
+   */
+  public lngLatToCoord(lnglat: [number, number]) {
+    // @ts-ignore
+    let { x, y } = this.lngLatToMercator(lnglat, 0);
+    return [x, y] as [number, number];
+  }
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
