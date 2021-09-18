@@ -23,6 +23,8 @@ export default class LayerService implements ILayerService {
 
   private lastRenderType: string;
 
+  private lastPickRenderTime: number;
+
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
 
@@ -129,6 +131,12 @@ export default class LayerService implements ILayerService {
 
   // 渲染检测
   private renderTest(renderType: string | undefined): boolean {
+    const now = new Date().getTime()
+    const betweenPickRenderTime = now - this.lastPickRenderTime;
+    if(renderType === 'picking') {
+      this.lastPickRenderTime = new Date().getTime();
+    }
+    
     // 继续渲染事件
     if (renderType) {
       switch (renderType) {
@@ -140,7 +148,12 @@ export default class LayerService implements ILayerService {
             this.lastRenderType === 'animate'
           ) {
             this.lastRenderType = 'picking';
-            return false;
+            // 如果上一次触发的事件在 48 ms 以上，则这一次不放弃触发
+            if(betweenPickRenderTime > 48) {
+              return true;
+            } else {
+              return false;
+            }
           } else {
             this.lastRenderType = 'picking';
             return true;
