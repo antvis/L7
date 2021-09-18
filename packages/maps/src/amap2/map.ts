@@ -370,10 +370,9 @@ export default class AMapService
     scale: [number, number, number] = [1, 1, 1],
     origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
-   
     // const flat = this.viewport.projectFlat(lnglat);
     // @ts-ignore
-    const flat = this.map.customCoords.lngLatToCoord(lnglat)
+    const flat = this.map.customCoords.lngLatToCoord(lnglat);
     // @ts-ignore
     const modelMatrix = mat4.create();
 

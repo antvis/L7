@@ -1,8 +1,5 @@
+import { Object3D } from 'three';
 import ThreeLayer from './core/baseLayer';
+import { ILngLat, IThreeJSLayer } from './core/IThreeJSLayer';
 import ThreeRender from './core/threeRender';
-import { IThreeJSLayer, ILngLat }  from './core/IThreeJSLayer';
-import {
- 
-    Object3D
-  } from 'three';
 export { ThreeLayer, ThreeRender, IThreeJSLayer, ILngLat, Object3D };

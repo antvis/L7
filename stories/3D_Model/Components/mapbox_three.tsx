@@ -75,7 +75,6 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               const gltfScene = gltf.scene.clone();
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-                
                 gltfScene.applyMatrix4(
                   // 生成模型矩阵
                   layer.getModelMatrix(
@@ -107,9 +106,9 @@ export default class GlTFThreeJSDemo extends React.Component {
                 threeScene.add(gltfScene);
               });
 
-              let center = scene.getCenter()
-              console.log(center)
-              console.log(layer.getObjectLngLat(gltfScene))
+              let center = scene.getCenter();
+              console.log(center);
+              console.log(layer.getObjectLngLat(gltfScene));
               // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
 
               //  let t = 0
@@ -118,7 +117,6 @@ export default class GlTFThreeJSDemo extends React.Component {
               //   layer.setObjectLngLat(gltfScene, [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat, 0)
               //   // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
               // }, 16)
-
 
               // 重绘图层
               layer.render();

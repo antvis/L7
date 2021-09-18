@@ -37,7 +37,7 @@ export default class GlTFThreeJSDemo extends React.Component {
         enableMultiPassRenderer: false,
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
           threeScene.add(new THREE.AmbientLight(0xffffff));
-          
+
           const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
           sunlight.position.set(0, 80000000, 100000000);
           sunlight.matrixWorldNeedsUpdate = true;
@@ -92,27 +92,34 @@ export default class GlTFThreeJSDemo extends React.Component {
                   // }
                   layer.addAnimateMixer(mixer);
                 }
-
               });
               // 向场景中添加模型
               threeScene.add(model);
 
-              let lnglat = [121.107, 30.267069] as [number, number]
-              let altitude = 0
-              let center = scene.getCenter()
+              let lnglat = [121.107, 30.267069] as [number, number];
+              let altitude = 0;
+              let center = scene.getCenter();
               // layer.setObjectLngLat(model, lnglat, altitude)
               // console.log()
               // layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
               // layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
 
-              layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
+              layer.setObjectLngLat(
+                model,
+                [center.lng + 0.05, center.lat] as ILngLat,
+                0,
+              );
 
-              let t = 0
+              let t = 0;
               setInterval(() => {
-                t += 0.01
-                layer.setObjectLngLat(model, [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat, 0)
+                t += 0.01;
+                layer.setObjectLngLat(
+                  model,
+                  [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat,
+                  0,
+                );
                 // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
-              }, 16)
+              }, 16);
 
               // 重绘图层
               layer.render();

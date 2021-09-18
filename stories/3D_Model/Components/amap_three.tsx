@@ -42,7 +42,6 @@ export default class GlTFThreeJSDemo extends React.Component {
           sunlight.matrixWorldNeedsUpdate = true;
           threeScene.add(sunlight);
 
-
           // threeScene.applyMatrix4(
           //   layer.getModelMatrix(
           //     [111.4453125, 32.84267363195431], // 经纬度坐标
@@ -91,17 +90,21 @@ export default class GlTFThreeJSDemo extends React.Component {
                   layer.addAnimateMixer(mixer);
                 }
                 // console.log(gltfScene.position)
-                let center = scene.getCenter()
-                console.log(center)
-                console.log(layer.getObjectLngLat(gltfScene))
+                let center = scene.getCenter();
+                console.log(center);
+                console.log(layer.getObjectLngLat(gltfScene));
                 // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
                 // layer.setObjectLngLat(gltfScene, [center.lng, center.lat] as ILngLat, 0)
-                let t = 0
+                let t = 0;
                 setInterval(() => {
-                  t += 0.01
-                  layer.setObjectLngLat(gltfScene, [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat, 0)
+                  t += 0.01;
+                  layer.setObjectLngLat(
+                    gltfScene,
+                    [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat,
+                    0,
+                  );
                   // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
-                }, 16)
+                }, 16);
 
                 // 向场景中添加模型
                 threeScene.add(gltfScene);
@@ -120,7 +123,7 @@ export default class GlTFThreeJSDemo extends React.Component {
               properties: {},
               geometry: {
                 type: 'Point',
-                coordinates: [111.4453125, 32.84267363195431]
+                coordinates: [111.4453125, 32.84267363195431],
               },
             },
           ],

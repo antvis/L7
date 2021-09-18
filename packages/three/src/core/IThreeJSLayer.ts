@@ -1,11 +1,7 @@
 import { ILayer } from '@antv/l7';
-import {
-    AnimationMixer,
-    Matrix4,
-    Object3D
-  } from 'three';
+import { AnimationMixer, Matrix4, Object3D } from 'three';
 
-export type ILngLat = [number, number]
+export type ILngLat = [number, number];
 
 export interface IThreeJSLayer extends ILayer {
   // 获取对应地图的经纬度模型矩阵

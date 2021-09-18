@@ -277,8 +277,8 @@ export default class AMapService
 
   public lngLatToCoord(lnglat: [number, number]): any {
     // @ts-ignore
-    let { x, y } = this.map.lngLatToGeodeticCoord(lnglat)
-    return [x, -y]
+    const { x, y } = this.map.lngLatToGeodeticCoord(lnglat);
+    return [x, -y];
   }
 
   public lngLatToMercator(

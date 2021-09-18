@@ -239,12 +239,12 @@ export default class MapboxService
 
   /**
    * 将经纬度转成墨卡托坐标
-   * @param lnglat 
-   * @returns 
+   * @param lnglat
+   * @returns
    */
   public lngLatToCoord(lnglat: [number, number]) {
     // @ts-ignore
-    let { x, y } = this.lngLatToMercator(lnglat, 0);
+    const { x, y } = this.lngLatToMercator(lnglat, 0);
     return [x, y] as [number, number];
   }
 
