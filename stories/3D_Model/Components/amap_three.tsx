@@ -49,11 +49,7 @@ export default class GlTFThreeJSDemo extends React.Component {
           let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
           let cubeMaterial = new THREE.MeshNormalMaterial();
           let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-          layer.setObjectLngLat(
-            cube,
-            [center.lng + 0.05, center.lat],
-            0,
-          );
+          layer.setObjectLngLat(cube, [center.lng + 0.05, center.lat], 0);
           threeScene.add(cube);
 
           // 使用 Three.js glTFLoader 加载模型

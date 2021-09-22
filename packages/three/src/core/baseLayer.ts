@@ -1,5 +1,5 @@
-import { BaseLayer } from '@antv/l7-layers'
-import { ILayer, IMercator } from '@antv/l7-core'
+import { ILayer, IMercator } from '@antv/l7-core';
+import { BaseLayer } from '@antv/l7-layers';
 import {
   AnimationMixer,
   Camera,
@@ -16,11 +16,12 @@ import {
   ThreeRenderServiceType,
 } from './threeRenderService';
 const DEG2RAD = Math.PI / 180;
-type ILngLat = [number, number]
+type ILngLat = [number, number];
 export default class ThreeJSLayer
   extends BaseLayer<{
     onAddMeshes: (threeScene: Scene, layer: ThreeJSLayer) => void;
-  }> implements ILayer {
+  }>
+  implements ILayer {
   public type: string = 'custom';
   protected threeRenderService: IThreeRenderService;
   // 构建 threejs 的 scene

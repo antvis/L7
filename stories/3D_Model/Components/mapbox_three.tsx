@@ -10,7 +10,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { animate, easeInOut } from 'popmotion';
 import { Object3D, Vector3 } from 'three';
 
-type ILngLat = [number, number]
+type ILngLat = [number, number];
 let isTravel = false;
 
 function travel(

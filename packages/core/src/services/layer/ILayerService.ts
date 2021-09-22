@@ -1,6 +1,7 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import { Container } from 'inversify';
+import { AnimationMixer, Matrix4, Object3D } from 'three';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
@@ -30,7 +31,6 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
-import { AnimationMixer, Matrix4, Object3D } from 'three';
 
 // import {
 //   IStyleAttributeUpdateOptions,
@@ -232,7 +232,11 @@ export interface ILayer {
   // getTranslateMatrix(lnglat: ILngLat, altitude?: number): Matrix4;
 
   // 设置模型对应地图在经纬度和高度方向的平移
-  applyObjectLngLat?(object: Object3D, lnglat: ILngLat, altitude?: number): void;
+  applyObjectLngLat?(
+    object: Object3D,
+    lnglat: ILngLat,
+    altitude?: number,
+  ): void;
 
   // 根据经纬度设置模型对应地图的平移
   setObjectLngLat?(object: Object3D, lnglat: ILngLat, altitude?: number): void;

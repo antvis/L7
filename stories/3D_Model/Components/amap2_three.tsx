@@ -92,11 +92,7 @@ export default class GlTFThreeJSDemo extends React.Component {
               // layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
               // layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
 
-              layer.setObjectLngLat(
-                model,
-                [center.lng + 0.05, center.lat],
-                0,
-              );
+              layer.setObjectLngLat(model, [center.lng + 0.05, center.lat], 0);
 
               let t = 0;
               setInterval(() => {
