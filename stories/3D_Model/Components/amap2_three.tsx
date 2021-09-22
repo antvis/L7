@@ -1,6 +1,6 @@
-import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { ThreeLayer, ThreeRender } from '@antv/l7-three';
+import { Scene } from '@antv/l7';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { ThreeLayer, ThreeRender, ILngLat, Object3D } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
 import * as THREE from 'three';
@@ -23,55 +23,27 @@ export default class GlTFThreeJSDemo extends React.Component {
 
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        center: [121.4, 31.258134],
+      map: new GaodeMapV2({
+        center: [111.4453125, 32.84267363195431],
         pitch: 45,
         rotation: 30,
-        zoom: 15,
+        zoom: 13,
       }),
     });
-    scene.registerRenderService(ThreeRender);
     this.scene = scene;
-    scene.on('loaded', async () => {
-      // scene.registerRenderService(ThreeRender);
-      const response = await fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
-      );
-      const data = await response.json();
-      const imageLayer = new PointLayer()
-        .source(
-          // [{
-          //   longitude: 120,
-          //   latitude: 30
-          // }]
-          data,
-          {
-            parser: {
-              type: 'json',
-              x: 'longitude',
-              y: 'latitude',
-            },
-          },
-        )
-        .shape('triangle')
-        .color('red')
-        .active(true)
-        .size(20)
-        .animate(true);
-      // scene.addLayer(imageLayer);
-
+    scene.registerRenderService(ThreeRender);
+    scene.on('loaded', () => {
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
           threeScene.add(new THREE.AmbientLight(0xffffff));
+
           const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
           sunlight.position.set(0, 80000000, 100000000);
           sunlight.matrixWorldNeedsUpdate = true;
           threeScene.add(sunlight);
+
           // 使用 Three.js glTFLoader 加载模型
-
-          let center = scene.getCenter();
-
           const loader = new GLTFLoader();
           loader.load(
             // 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
@@ -82,16 +54,16 @@ export default class GlTFThreeJSDemo extends React.Component {
             // 'https://gw.alipayobjects.com/os/antvdemo/assets/gltf/man/CesiumMan.gltf',
             'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
             (gltf) => {
-              // 根据 GeoJSON 数据放置模型
-              layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-                const gltfScene = gltf.scene;
+              const model: Object3D = gltf.scene;
 
-                layer.adjustMeshToMap(gltfScene);
-                layer.setMeshScale(gltfScene, 10, 10, 10);
+              layer.getSource().data.dataArray.forEach(({ coordinates }) => {
+                layer.adjustMeshToMap(model);
+                // model.scale.set(100, 100, 100)
+                layer.setMeshScale(model, 100, 100, 100);
 
                 const animations = gltf.animations;
                 if (animations && animations.length) {
-                  const mixer = new THREE.AnimationMixer(gltfScene);
+                  const mixer = new THREE.AnimationMixer(model);
                   // @ts-ignore
                   // for (let i = 0; i < 1; i++) {
                   const animation = animations[2];
@@ -105,21 +77,35 @@ export default class GlTFThreeJSDemo extends React.Component {
                   // }
                   layer.addAnimateMixer(mixer);
                 }
-
-                // 向场景中添加模型
-                threeScene.add(gltfScene);
-
-                // layer.setObjectLngLat(gltfScene, [120, 30], 0)
-                // @ts-ignore
-                // console.log(layer.mapService.lngLatToCoord([121.4, 31.258134]))
-
-                // let t = 0
-                // setInterval(() => {
-                //   t += 0.01
-                //   layer.setObjectLngLat(gltfScene, [center.lng, center.lat + Math.sin(t) * 0.005] as ILngLat, 0)
-                //   // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
-                // }, 16)
               });
+              // 向场景中添加模型
+              threeScene.add(model);
+
+              let lnglat = [121.107, 30.267069] as [number, number];
+              let altitude = 0;
+              let center = scene.getCenter();
+              // layer.setObjectLngLat(model, lnglat, altitude)
+              // console.log()
+              // layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
+              // layer.setObjectLngLat(model, [center.lng + 0.05, center.lat] as ILngLat, 0)
+
+              layer.setObjectLngLat(
+                model,
+                [center.lng + 0.05, center.lat] as ILngLat,
+                0,
+              );
+
+              let t = 0;
+              setInterval(() => {
+                t += 0.01;
+                layer.setObjectLngLat(
+                  model,
+                  [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat,
+                  0,
+                );
+                // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
+              }, 16);
+
               // 重绘图层
               layer.render();
             },
@@ -134,7 +120,8 @@ export default class GlTFThreeJSDemo extends React.Component {
               properties: {},
               geometry: {
                 type: 'Point',
-                coordinates: [121.4, 31.258134],
+                coordinates: [111.4453125, 32.84267363195431],
+                // coordinates: [121.107, 30.267069], // 该坐标点在钱塘江入海口附近
               },
             },
           ],

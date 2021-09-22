@@ -3,25 +3,19 @@ import {
   AnimationMixer,
   Camera,
   Matrix4,
+  Object3D,
   PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
+  Vector3,
   WebGLRenderer,
 } from 'three';
+import { ILngLat, IThreeJSLayer } from './IThreeJSLayer';
 import {
   IThreeRenderService,
   ThreeRenderServiceType,
 } from './threeRenderService';
 const DEG2RAD = Math.PI / 180;
-interface IThreeJSLayer extends ILayer {
-  getModelMatrix(
-    lnglat: [number, number],
-    altitude: number,
-    rotation: [number, number, number],
-    scale: [number, number, number],
-  ): Matrix4;
-  addAnimateMixer(mixer: AnimationMixer): void;
-}
 export default class ThreeJSLayer
   extends BaseLayer<{
     onAddMeshes: (threeScene: Scene, layer: ThreeJSLayer) => void;
@@ -29,16 +23,15 @@ export default class ThreeJSLayer
   implements IThreeJSLayer {
   public type: string = 'custom';
   protected threeRenderService: IThreeRenderService;
+  // 构建 threejs 的 scene
   private scene: Scene = new Scene();
   private renderer: WebGLRenderer;
   private animateMixer: AnimationMixer[] = [];
   // 地图中点墨卡托坐标
   private center: IMercator;
 
-  // 初始状态相机变换矩阵
-
   /**
-   * 根据模型
+   * 根据数据计算对应地图的模型矩阵 不同地图主要是点位偏移不同
    */
   public getModelMatrix(
     lnglat: [number, number],
@@ -57,7 +50,100 @@ export default class ThreeJSLayer
     );
   }
 
+  /**
+   * 获取平移矩阵
+   * @param lnglat
+   * @param altitude
+   * @returns
+   */
+  public getTranslateMatrix(lnglat: ILngLat, altitude: number = 0) {
+    return this.getModelMatrix(lnglat, altitude, [0, 0, 0], [1, 1, 1]);
+  }
+
+  /**
+   * 设置当前物体往经纬度和高度方向的移动
+   * @param object
+   * @param lnglat
+   * @param altitude
+   */
+  public applyObjectLngLat(object: Object3D, lnglat: ILngLat, altitude = 0) {
+    const positionMatrix = this.getTranslateMatrix(lnglat, altitude);
+    object.applyMatrix4(positionMatrix);
+  }
+
+  /**
+   * 设置物体当前的经纬度和高度
+   * @param object
+   * @param lnglat
+   * @param altitude
+   */
+  public setObjectLngLat(object: Object3D, lnglat: ILngLat, altitude = 0) {
+    // @ts-ignore
+    const [x, y] = this.lnglatToCoord(lnglat);
+    object.position.set(x, y, altitude);
+  }
+
+  /**
+   * 将经纬度转为 three 世界坐标
+   * @param lnglat
+   * @returns
+   */
+  public lnglatToCoord(lnglat: ILngLat) {
+    // @ts-ignore
+    const [x, y] = this.mapService?.lngLatToCoord(
+      lnglat,
+      // @ts-ignore
+      this.threeRenderService.center,
+    );
+    return [x, y];
+  }
+
+  /**
+   * 获取
+   * @param object
+   * @returns
+   */
+  public getObjectLngLat(object: Object3D) {
+    const coord = [object.position.x, object.position.y];
+    return [0, 0] as ILngLat;
+  }
+
+  /**
+   * 设置网格适配到地图坐标系
+   * @param object
+   */
+  public adjustMeshToMap(object: Object3D) {
+    object.up = new Vector3(0, 0, 1);
+    const defaultLngLat = this.mapService.getCenter();
+    const modelMatrix = this.getModelMatrix(
+      [defaultLngLat.lng, defaultLngLat.lat], // 经纬度坐标
+      0, // 高度，单位米/
+      [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
+      [1, 1, 1], // 沿 XYZ 轴缩放比例
+    );
+    object.applyMatrix4(modelMatrix);
+  }
+
+  /**
+   * 设置网格的缩放 （主要是抹平 mapbox 底图时的差异，若是高德底图则可以直接设置网格的 scale 属性/方法）
+   * @param object
+   * @param x
+   * @param y
+   * @param z
+   */
+  public setMeshScale(
+    object: Object3D,
+    x: number = 1,
+    y: number = 1,
+    z: number = 1,
+  ) {
+    const scaleMatrix = new Matrix4();
+    scaleMatrix.scale(new Vector3(x, y, z));
+    object.applyMatrix4(scaleMatrix);
+  }
+
   public buildModels() {
+    // @ts-ignore
     this.threeRenderService = this.getContainer().get<IThreeRenderService>(
       ThreeRenderServiceType,
     );
@@ -67,16 +153,23 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
+    // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
     const cullFace =
       this.mapService.constructor.name === 'AMapService' ? gl.BACK : gl.FRONT;
     gl.cullFace(cullFace);
+
+    // threejs 的 renderer
     const renderer = this.threeRenderService.renderer;
     renderer.state.reset();
     renderer.autoClear = false;
+
+    // 获取相机 （不同的地图获取对应的方式不同）
     const camera = this.threeRenderService.getRenderCamera();
+
     renderer.render(this.scene, camera);
+
     this.rendererService.setBaseState();
     this.animateMixer.forEach((mixer: AnimationMixer) => {
       mixer.update(this.getTime());

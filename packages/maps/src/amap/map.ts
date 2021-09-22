@@ -275,6 +275,12 @@ export default class AMapService
     };
   }
 
+  public lngLatToCoord(lnglat: [number, number]): any {
+    // @ts-ignore
+    const { x, y } = this.map.lngLatToGeodeticCoord(lnglat);
+    return [x, -y];
+  }
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
