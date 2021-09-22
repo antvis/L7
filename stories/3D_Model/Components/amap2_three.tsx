@@ -43,15 +43,6 @@ export default class GlTFThreeJSDemo extends React.Component {
           sunlight.matrixWorldNeedsUpdate = true;
           threeScene.add(sunlight);
 
-          // threeScene.applyMatrix4(
-          //            layer.getModelMatrix(
-          //             [111.4453125, 32.84267363195431], // 经纬度坐标
-          //           0, // 高度，单位米/
-          //           [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
-          //           [100, 100, 100], // 沿 XYZ 轴缩放比例
-          //         ),
-          // )
-
           // 使用 Three.js glTFLoader 加载模型
           const loader = new GLTFLoader();
           loader.load(
@@ -66,15 +57,10 @@ export default class GlTFThreeJSDemo extends React.Component {
               const model: Object3D = gltf.scene;
 
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-                model.applyMatrix4(
-                  // 生成模型矩阵
-                  layer.getModelMatrix(
-                    [coordinates[0], coordinates[1]], // 经纬度坐标
-                    0, // 高度，单位米/
-                    [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
-                    [100, 100, 100], // 沿 XYZ 轴缩放比例
-                  ),
-                );
+          
+                layer.adjustMeshToMap(model)
+                // model.scale.set(100, 100, 100)
+                layer.setMeshScale(model, 100, 100, 100)
 
                 const animations = gltf.animations;
                 if (animations && animations.length) {

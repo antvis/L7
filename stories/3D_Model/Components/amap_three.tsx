@@ -42,14 +42,14 @@ export default class GlTFThreeJSDemo extends React.Component {
           sunlight.matrixWorldNeedsUpdate = true;
           threeScene.add(sunlight);
 
-          // threeScene.applyMatrix4(
-          //   layer.getModelMatrix(
-          //     [111.4453125, 32.84267363195431], // 经纬度坐标
-          //     0, // 高度，单位米/
-          //     [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
-          //     [1, 1, 1], // 沿 XYZ 轴缩放比例
-          //   ),
-          // )
+          let center = scene.getCenter()
+
+          let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000)
+          let cubeMaterial = new THREE.MeshNormalMaterial()
+          let cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+          layer.setObjectLngLat(cube, [center.lng + 0.05, center.lat] as ILngLat, 0)
+          threeScene.add(cube)
+
           // 使用 Three.js glTFLoader 加载模型
           const loader = new GLTFLoader();
           loader.load(
@@ -64,15 +64,15 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene;
-                gltfScene.applyMatrix4(
-                  // 生成模型矩阵
-                  layer.getModelMatrix(
-                    [coordinates[0], coordinates[1]], // 经纬度坐标
-                    0, // 高度，单位米/
-                    [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
-                    [1000, 1000, 1000], // 沿 XYZ 轴缩放比例
-                  ),
-                );
+
+                layer.adjustMeshToMap(gltfScene)
+                // gltfScene.scale.set(1000, 1000, 1000)
+                layer.setMeshScale(gltfScene, 1000, 1000, 1000)
+
+                
+
+                layer.setObjectLngLat(gltfScene, [coordinates[0] + 0.02, coordinates[1]], 0)
+
                 const animations = gltf.animations;
                 if (animations && animations.length) {
                   const mixer = new THREE.AnimationMixer(gltfScene);
@@ -89,12 +89,7 @@ export default class GlTFThreeJSDemo extends React.Component {
                   // }
                   layer.addAnimateMixer(mixer);
                 }
-                // console.log(gltfScene.position)
-                let center = scene.getCenter();
-                console.log(center);
-                console.log(layer.getObjectLngLat(gltfScene));
                 // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
-                // layer.setObjectLngLat(gltfScene, [center.lng, center.lat] as ILngLat, 0)
                 let t = 0;
                 setInterval(() => {
                   t += 0.01;
@@ -103,7 +98,6 @@ export default class GlTFThreeJSDemo extends React.Component {
                     [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat,
                     0,
                   );
-                  // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
                 }, 16);
 
                 // 向场景中添加模型

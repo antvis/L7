@@ -37,33 +37,28 @@ export default class GlTFThreeJSDemo extends React.Component {
       const response = await fetch(
         'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
       );
-      scene.addImage(
-        '00',
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Rq6tQ5b4_JMAAAAAAAAAAABkARQnAQ',
-      );
-      scene.addImage(
-        '01',
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*0D0SQ6AgkRMAAAAAAAAAAABkARQnAQ',
-      );
-      scene.addImage(
-        '02',
-        'https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png',
-      );
       const data = await response.json();
       const imageLayer = new PointLayer()
-        .source(data, {
+        .source(
+          // [{
+          //   longitude: 120,
+          //   latitude: 30
+          // }]
+          data
+        , {
           parser: {
             type: 'json',
             x: 'longitude',
             y: 'latitude',
           },
         })
-        // .shape('name', ['00', '01', '02'])
         .shape('triangle')
         .color('red')
         .active(true)
-        .size(20);
-      scene.addLayer(imageLayer);
+        .size(20)
+        .animate(true)
+      // scene.addLayer(imageLayer);
+
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
@@ -73,6 +68,9 @@ export default class GlTFThreeJSDemo extends React.Component {
           sunlight.matrixWorldNeedsUpdate = true;
           threeScene.add(sunlight);
           // 使用 Three.js glTFLoader 加载模型
+
+          let center = scene.getCenter();
+
           const loader = new GLTFLoader();
           loader.load(
             // 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
@@ -86,15 +84,10 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene;
-                gltfScene.applyMatrix4(
-                  // 生成模型矩阵
-                  layer.getModelMatrix(
-                    [coordinates[0], coordinates[1]], // 经纬度坐标
-                    0, // 高度，单位米/
-                    [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
-                    [10, 10, 10], // 沿 XYZ 轴缩放比例
-                  ),
-                );
+                
+                layer.adjustMeshToMap(gltfScene)
+                layer.setMeshScale(gltfScene, 10, 10, 10)
+                
                 const animations = gltf.animations;
                 if (animations && animations.length) {
                   const mixer = new THREE.AnimationMixer(gltfScene);
@@ -114,6 +107,18 @@ export default class GlTFThreeJSDemo extends React.Component {
 
                 // 向场景中添加模型
                 threeScene.add(gltfScene);
+
+          
+                // layer.setObjectLngLat(gltfScene, [120, 30], 0)
+                // @ts-ignore
+                // console.log(layer.mapService.lngLatToCoord([121.4, 31.258134]))
+
+                // let t = 0
+                // setInterval(() => {
+                //   t += 0.01
+                //   layer.setObjectLngLat(gltfScene, [center.lng, center.lat + Math.sin(t) * 0.005] as ILngLat, 0)
+                //   // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)
+                // }, 16)
               });
               // 重绘图层
               layer.render();
