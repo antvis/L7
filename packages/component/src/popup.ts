@@ -44,6 +44,7 @@ export default class Popup extends EventEmitter implements IPopup {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
     this.mapsService.on('camerachange', this.update);
+    this.mapsService.on('viewchange', this.update);
     this.scene = scene;
     this.update();
     if (this.popupOption.closeOnClick) {
@@ -89,6 +90,7 @@ export default class Popup extends EventEmitter implements IPopup {
     }
     if (this.mapsService) {
       this.mapsService.on('camerachange', this.update);
+      this.mapsService.on('viewchange', this.update);
     }
     this.update();
     return this;
@@ -127,6 +129,7 @@ export default class Popup extends EventEmitter implements IPopup {
     if (this.mapsService) {
       // TODO: mapbox AMap 事件同步
       this.mapsService.off('camerachange', this.update);
+      this.mapsService.off('viewchange', this.update);
       this.mapsService.off('click', this.onClickClose);
       // @ts-ignore
       delete this.mapsService;
