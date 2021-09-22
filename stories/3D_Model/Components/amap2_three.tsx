@@ -57,10 +57,9 @@ export default class GlTFThreeJSDemo extends React.Component {
               const model: Object3D = gltf.scene;
 
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-          
-                layer.adjustMeshToMap(model)
+                layer.adjustMeshToMap(model);
                 // model.scale.set(100, 100, 100)
-                layer.setMeshScale(model, 100, 100, 100)
+                layer.setMeshScale(model, 100, 100, 100);
 
                 const animations = gltf.animations;
                 if (animations && animations.length) {

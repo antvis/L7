@@ -242,7 +242,10 @@ export default class MapboxService
    * @param lnglat
    * @returns
    */
-  public lngLatToCoord(lnglat: [number, number],origin: IMercator = { x: 0, y: 0, z: 0 }) {
+  public lngLatToCoord(
+    lnglat: [number, number],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ) {
     // @ts-ignore
     const { x, y } = this.lngLatToMercator(lnglat, 0);
     return [x - origin.x, y - origin.y] as [number, number];

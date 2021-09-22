@@ -42,13 +42,17 @@ export default class GlTFThreeJSDemo extends React.Component {
           sunlight.matrixWorldNeedsUpdate = true;
           threeScene.add(sunlight);
 
-          let center = scene.getCenter()
+          let center = scene.getCenter();
 
-          let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000)
-          let cubeMaterial = new THREE.MeshNormalMaterial()
-          let cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-          layer.setObjectLngLat(cube, [center.lng + 0.05, center.lat] as ILngLat, 0)
-          threeScene.add(cube)
+          let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
+          let cubeMaterial = new THREE.MeshNormalMaterial();
+          let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+          layer.setObjectLngLat(
+            cube,
+            [center.lng + 0.05, center.lat] as ILngLat,
+            0,
+          );
+          threeScene.add(cube);
 
           // 使用 Three.js glTFLoader 加载模型
           const loader = new GLTFLoader();
@@ -65,13 +69,15 @@ export default class GlTFThreeJSDemo extends React.Component {
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene;
 
-                layer.adjustMeshToMap(gltfScene)
+                layer.adjustMeshToMap(gltfScene);
                 // gltfScene.scale.set(1000, 1000, 1000)
-                layer.setMeshScale(gltfScene, 1000, 1000, 1000)
+                layer.setMeshScale(gltfScene, 1000, 1000, 1000);
 
-                
-
-                layer.setObjectLngLat(gltfScene, [coordinates[0] + 0.02, coordinates[1]], 0)
+                layer.setObjectLngLat(
+                  gltfScene,
+                  [coordinates[0] + 0.02, coordinates[1]],
+                  0,
+                );
 
                 const animations = gltf.animations;
                 if (animations && animations.length) {

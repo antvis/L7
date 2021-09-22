@@ -44,19 +44,20 @@ export default class GlTFThreeJSDemo extends React.Component {
           //   longitude: 120,
           //   latitude: 30
           // }]
-          data
-        , {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
+          data,
+          {
+            parser: {
+              type: 'json',
+              x: 'longitude',
+              y: 'latitude',
+            },
           },
-        })
+        )
         .shape('triangle')
         .color('red')
         .active(true)
         .size(20)
-        .animate(true)
+        .animate(true);
       // scene.addLayer(imageLayer);
 
       const threeJSLayer = new ThreeLayer({
@@ -84,10 +85,10 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 const gltfScene = gltf.scene;
-                
-                layer.adjustMeshToMap(gltfScene)
-                layer.setMeshScale(gltfScene, 10, 10, 10)
-                
+
+                layer.adjustMeshToMap(gltfScene);
+                layer.setMeshScale(gltfScene, 10, 10, 10);
+
                 const animations = gltf.animations;
                 if (animations && animations.length) {
                   const mixer = new THREE.AnimationMixer(gltfScene);
@@ -108,7 +109,6 @@ export default class GlTFThreeJSDemo extends React.Component {
                 // 向场景中添加模型
                 threeScene.add(gltfScene);
 
-          
                 // layer.setObjectLngLat(gltfScene, [120, 30], 0)
                 // @ts-ignore
                 // console.log(layer.mapService.lngLatToCoord([121.4, 31.258134]))

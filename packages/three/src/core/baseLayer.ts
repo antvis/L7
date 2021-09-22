@@ -3,11 +3,11 @@ import {
   AnimationMixer,
   Camera,
   Matrix4,
-  Vector3,
   Object3D,
   PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
+  Vector3,
   WebGLRenderer,
 } from 'three';
 import { ILngLat, IThreeJSLayer } from './IThreeJSLayer';
@@ -85,52 +85,61 @@ export default class ThreeJSLayer
 
   /**
    * 将经纬度转为 three 世界坐标
-   * @param lnglat 
-   * @returns 
+   * @param lnglat
+   * @returns
    */
   public lnglatToCoord(lnglat: ILngLat) {
     // @ts-ignore
-    const [x, y] = this.mapService?.lngLatToCoord(lnglat, this.threeRenderService.center);
+    const [x, y] = this.mapService?.lngLatToCoord(
+      lnglat,
+      // @ts-ignore
+      this.threeRenderService.center,
+    );
     return [x, y];
   }
 
   /**
    * 获取
-   * @param object 
-   * @returns 
+   * @param object
+   * @returns
    */
   public getObjectLngLat(object: Object3D) {
-    let coord = [object.position.x, object.position.y];
+    const coord = [object.position.x, object.position.y];
     return [0, 0] as ILngLat;
   }
 
   /**
    * 设置网格适配到地图坐标系
-   * @param object 
+   * @param object
    */
   public adjustMeshToMap(object: Object3D) {
-    object.up = new Vector3(0, 0, 1)
-    let defaultLngLat = this.mapService.getCenter()
-    let modelMatrix = this.getModelMatrix(
+    object.up = new Vector3(0, 0, 1);
+    const defaultLngLat = this.mapService.getCenter();
+    const modelMatrix = this.getModelMatrix(
       [defaultLngLat.lng, defaultLngLat.lat], // 经纬度坐标
       0, // 高度，单位米/
       [Math.PI / 2, -Math.PI, 0], // 沿 XYZ 轴旋转角度
       [1, 1, 1], // 沿 XYZ 轴缩放比例
-    )
+    );
     object.applyMatrix4(modelMatrix);
   }
 
   /**
    * 设置网格的缩放 （主要是抹平 mapbox 底图时的差异，若是高德底图则可以直接设置网格的 scale 属性/方法）
-   * @param object 
-   * @param x 
-   * @param y 
-   * @param z 
+   * @param object
+   * @param x
+   * @param y
+   * @param z
    */
-  public setMeshScale(object: Object3D, x: number = 1, y: number = 1, z: number = 1) {
-    let scaleMatrix = new Matrix4()
-    scaleMatrix.scale(new Vector3(x, y, z))
-    object.applyMatrix4(scaleMatrix)
+  public setMeshScale(
+    object: Object3D,
+    x: number = 1,
+    y: number = 1,
+    z: number = 1,
+  ) {
+    const scaleMatrix = new Matrix4();
+    scaleMatrix.scale(new Vector3(x, y, z));
+    object.applyMatrix4(scaleMatrix);
   }
 
   public buildModels() {

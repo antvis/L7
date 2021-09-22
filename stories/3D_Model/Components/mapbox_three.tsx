@@ -6,17 +6,24 @@ import * as React from 'react';
 import * as THREE from 'three';
 // tslint:disable-next-line:no-submodule-imports
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { animate, easeInOut } from 'popmotion'
+import { animate, easeInOut } from 'popmotion';
 import { Object3D, Vector3 } from 'three';
 
-let isTravel = false
+let isTravel = false;
 
-function travel(mesh: Object3D, path: Vector3[], duration: number,callback?: () => any) {
+function travel(
+  mesh: Object3D,
+  path: Vector3[],
+  duration: number,
+  callback?: () => any,
+) {
   if (path.length < 2 || isTravel) return;
   isTravel = true;
-  let startIndex = 0, len = path.length;
-  let currentP = path[0], nextP = path[1];
-  let t = duration/len;
+  let startIndex = 0,
+    len = path.length;
+  let currentP = path[0],
+    nextP = path[1];
+  let t = duration / len;
 
   move(currentP, nextP);
   function move(currentP: Vector3, nextP: Vector3) {
@@ -43,14 +50,14 @@ function travel(mesh: Object3D, path: Vector3[], duration: number,callback?: () 
           let currentP = path[startIndex],
             nextP = path[startIndex + 1];
           mesh.lookAt(nextP);
-         
+
           move(currentP, nextP);
         } else {
           isTravel = false;
           callback && callback();
         }
-      }
-    })
+      },
+    });
   }
 }
 
@@ -110,136 +117,55 @@ export default class GlTFThreeJSDemo extends React.Component {
           threeScene.add(sunlight);
 
           let lineData: ILngLat[] = [
-            [
-              116.71874999999999,
-              26.745610382199022
-            ],
-            [
-              117.3779296875,
-              28.8831596093235
-            ],
-            [
-              115.75195312499999,
-              31.466153715024294
-            ],
-            [
-              113.466796875,
-              33.32134852669881
-            ],
-            [
-              113.9501953125,
-              35.85343961959182
-            ],
-            [
-              115.400390625,
-              38.272688535980976
-            ],
-            [
-              116.5869140625,
-              40.3130432088809
-            ],
-            [
-              115.6201171875,
-              42.261049162113856
-            ],
-            [
-              112.236328125,
-              42.94033923363181
-            ],
-            [
-              109.3798828125,
-              41.04621681452063
-            ],
-            [
-              103.84277343749999,
-              39.80853604144591
-            ],
-            [
-              98.9208984375,
-              39.842286020743394
-            ],
-            [
-              95.2294921875,
-              40.713955826286046
-            ],
-            [
-              91.7138671875,
-              39.87601941962116
-            ],
-            [
-              90.8349609375,
-              37.125286284966805
-            ],
-            [
-              90.3076171875,
-              35.88905007936091
-            ],
-            [
-              90.703125,
-              33.284619968887675
-            ],
-            [
-              92.94433593749999,
-              31.98944183792288
-            ],
-            [
-              96.2841796875,
-              32.21280106801518
-            ],
-            [
-              98.87695312499999,
-              32.0639555946604
-            ],
-            [
-              102.919921875,
-              28.459033019728043
-            ],
-            [
-              107.9736328125,
-              28.497660832963472
-            ],
-            [
-              108.10546875,
-              24.206889622398023
-            ],
-            [
-              109.072265625,
-              23.039297747769726
-            ],
-            [
-              112.763671875,
-              24.44714958973082
-            ],
-            [
-              116.54296874999999,
-              25.958044673317843
-            ]
-          ]
+            [116.71874999999999, 26.745610382199022],
+            [117.3779296875, 28.8831596093235],
+            [115.75195312499999, 31.466153715024294],
+            [113.466796875, 33.32134852669881],
+            [113.9501953125, 35.85343961959182],
+            [115.400390625, 38.272688535980976],
+            [116.5869140625, 40.3130432088809],
+            [115.6201171875, 42.261049162113856],
+            [112.236328125, 42.94033923363181],
+            [109.3798828125, 41.04621681452063],
+            [103.84277343749999, 39.80853604144591],
+            [98.9208984375, 39.842286020743394],
+            [95.2294921875, 40.713955826286046],
+            [91.7138671875, 39.87601941962116],
+            [90.8349609375, 37.125286284966805],
+            [90.3076171875, 35.88905007936091],
+            [90.703125, 33.284619968887675],
+            [92.94433593749999, 31.98944183792288],
+            [96.2841796875, 32.21280106801518],
+            [98.87695312499999, 32.0639555946604],
+            [102.919921875, 28.459033019728043],
+            [107.9736328125, 28.497660832963472],
+            [108.10546875, 24.206889622398023],
+            [109.072265625, 23.039297747769726],
+            [112.763671875, 24.44714958973082],
+            [116.54296874999999, 25.958044673317843],
+          ];
 
           let lineCoordData = lineData.map((d: ILngLat) => {
-            return layer.lnglatToCoord(d)
-          })
+            return layer.lnglatToCoord(d);
+          });
           // console.log(lineCoordData)
 
           var material = new THREE.LineBasicMaterial({
-            color: 0x0000ff
+            color: 0x0000ff,
           });
-          
- 
 
-          var rawPoints: THREE.Vector3[] = []
-          lineCoordData.map(d => {
-            rawPoints.push(new THREE.Vector3(d[0], d[1], 0))
-          })
+          var rawPoints: THREE.Vector3[] = [];
+          lineCoordData.map((d) => {
+            rawPoints.push(new THREE.Vector3(d[0], d[1], 0));
+          });
           var curve = new THREE.CatmullRomCurve3(rawPoints);
-          var points = curve.getPoints( 200 );
-          var geometry = new THREE.BufferGeometry().setFromPoints( points );
+          var points = curve.getPoints(200);
+          var geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-          var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+          var material = new THREE.LineBasicMaterial({ color: 0xff0000 });
 
-      
-          var line = new THREE.LineLoop( geometry, material );
-          threeScene.add( line );
+          var line = new THREE.LineLoop(geometry, material);
+          threeScene.add(line);
 
           // console.log(line)
           // animate({
@@ -263,8 +189,8 @@ export default class GlTFThreeJSDemo extends React.Component {
               // 根据 GeoJSON 数据放置模型
               const gltfScene = gltf.scene.clone();
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-                layer.adjustMeshToMap(gltfScene)
-                gltfScene.scale.set(500000, 500000, 500000)
+                layer.adjustMeshToMap(gltfScene);
+                gltfScene.scale.set(500000, 500000, 500000);
 
                 // gltfScene.rotation.y = Math.PI
 
@@ -300,11 +226,11 @@ export default class GlTFThreeJSDemo extends React.Component {
               // }, 16)
 
               // travel(gltfScene, points, 5000)
-              travelLoop()
+              travelLoop();
               function travelLoop() {
                 travel(gltfScene, points, 5000, () => {
-                  travelLoop()
-                })
+                  travelLoop();
+                });
               }
               // 重绘图层
               layer.render();
