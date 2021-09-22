@@ -1,6 +1,7 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import { Container } from 'inversify';
+import { AnimationMixer, Matrix4, Object3D } from 'three';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
@@ -30,6 +31,7 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+
 // import {
 //   IStyleAttributeUpdateOptions,
 //   StyleAttributeField,
@@ -84,6 +86,8 @@ export interface IPickedFeature {
 export interface IActiveOption {
   color: string | number[];
 }
+
+type ILngLat = [number, number];
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -213,6 +217,41 @@ export interface ILayer {
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
   setAnimateStartTime(): void;
   getLayerAnimateTime(): number;
+
+  /**
+   * threejs 适配兼容相关的方法
+   * @param lnglat
+   * @param altitude
+   * @param rotation
+   * @param scale
+   */
+
+  // 获取对应地图的经纬度模型矩阵
+  getModelMatrix?(
+    lnglat: ILngLat,
+    altitude: number,
+    rotation: [number, number, number],
+    scale: [number, number, number],
+  ): Matrix4;
+
+  // 获取对应地图的经纬度平移矩阵
+  // getTranslateMatrix(lnglat: ILngLat, altitude?: number): Matrix4;
+
+  // 设置模型对应地图在经纬度和高度方向的平移
+  applyObjectLngLat?(
+    object: Object3D,
+    lnglat: ILngLat,
+    altitude?: number,
+  ): void;
+
+  // 根据经纬度设置模型对应地图的平移
+  setObjectLngLat?(object: Object3D, lnglat: ILngLat, altitude?: number): void;
+
+  // 返回物体在场景中的经纬度
+  getObjectLngLat?(object: Object3D): ILngLat;
+
+  // 增加加载模型的动画混合器
+  addAnimateMixer?(mixer: AnimationMixer): void;
 }
 
 /**
