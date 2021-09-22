@@ -220,10 +220,10 @@ export interface ILayer {
 
   /**
    * threejs 适配兼容相关的方法
-   * @param lnglat 
-   * @param altitude 
-   * @param rotation 
-   * @param scale 
+   * @param lnglat
+   * @param altitude
+   * @param rotation
+   * @param scale
    */
 
   // 获取对应地图的经纬度模型矩阵
