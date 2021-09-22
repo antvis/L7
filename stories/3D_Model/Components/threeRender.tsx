@@ -1,3 +1,4 @@
+// @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
@@ -62,6 +63,7 @@ export default class GlTFThreeJSDemo extends React.Component {
 
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
+        // @ts-ignore
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
           threeScene.add(new THREE.AmbientLight(0xffffff));
           const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);

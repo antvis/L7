@@ -1,6 +1,7 @@
+// @ts-ignore
 import { Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { ThreeLayer, ThreeRender, ILngLat } from '@antv/l7-three';
+import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
 import * as THREE from 'three';
@@ -35,6 +36,7 @@ export default class GlTFThreeJSDemo extends React.Component {
     scene.on('loaded', () => {
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
+        // @ts-ignore
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
           threeScene.add(new THREE.AmbientLight(0xffffff));
           const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
@@ -49,7 +51,7 @@ export default class GlTFThreeJSDemo extends React.Component {
           let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
           layer.setObjectLngLat(
             cube,
-            [center.lng + 0.05, center.lat] as ILngLat,
+            [center.lng + 0.05, center.lat],
             0,
           );
           threeScene.add(cube);
@@ -101,7 +103,7 @@ export default class GlTFThreeJSDemo extends React.Component {
                   t += 0.01;
                   layer.setObjectLngLat(
                     gltfScene,
-                    [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat,
+                    [center.lng, center.lat + Math.sin(t) * 0.1],
                     0,
                   );
                 }, 16);

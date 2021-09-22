@@ -1,6 +1,7 @@
+// @ts-ignore
 import { Scene } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
-import { ThreeLayer, ThreeRender, ILngLat, Object3D } from '@antv/l7-three';
+import { ThreeLayer, ThreeRender, Object3D } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
 import * as THREE from 'three';
@@ -35,6 +36,7 @@ export default class GlTFThreeJSDemo extends React.Component {
     scene.on('loaded', () => {
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
+        // @ts-ignore
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
           threeScene.add(new THREE.AmbientLight(0xffffff));
 
@@ -54,6 +56,7 @@ export default class GlTFThreeJSDemo extends React.Component {
             // 'https://gw.alipayobjects.com/os/antvdemo/assets/gltf/man/CesiumMan.gltf',
             'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
             (gltf) => {
+              // @ts-ignore
               const model: Object3D = gltf.scene;
 
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
@@ -91,7 +94,7 @@ export default class GlTFThreeJSDemo extends React.Component {
 
               layer.setObjectLngLat(
                 model,
-                [center.lng + 0.05, center.lat] as ILngLat,
+                [center.lng + 0.05, center.lat],
                 0,
               );
 
@@ -100,7 +103,7 @@ export default class GlTFThreeJSDemo extends React.Component {
                 t += 0.01;
                 layer.setObjectLngLat(
                   model,
-                  [center.lng, center.lat + Math.sin(t) * 0.1] as ILngLat,
+                  [center.lng, center.lat + Math.sin(t) * 0.1],
                   0,
                 );
                 // layer.setObjectLngLat(model, [center.lng + 0.2, center.lat], 0)

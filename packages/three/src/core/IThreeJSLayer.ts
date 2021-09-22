@@ -1,7 +1,7 @@
-import { ILayer } from '@antv/l7';
+import { ILayer } from '@antv/l7-core';
 import { AnimationMixer, Matrix4, Object3D } from 'three';
 
-export type ILngLat = [number, number];
+type ILngLat = [number, number];
 
 export interface IThreeJSLayer extends ILayer {
   // 获取对应地图的经纬度模型矩阵
@@ -19,7 +19,7 @@ export interface IThreeJSLayer extends ILayer {
   setObjectLngLat(object: Object3D, lnglat: ILngLat, altitude?: number): void;
 
   // 根据经纬度设置模型对应地图的平移
-  setObjectLngLat(object: Object3D, lnglat: ILngLat, altitude?: number): void;
+  applyObjectLngLat(object: Object3D, lnglat: ILngLat, altitude?: number): void;
 
   // 返回物体在场景中的经纬度
   getObjectLngLat(object: Object3D): ILngLat;

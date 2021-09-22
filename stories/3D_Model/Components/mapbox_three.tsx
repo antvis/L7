@@ -1,6 +1,7 @@
+// @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
-import { ThreeLayer, ThreeRender, ILngLat } from '@antv/l7-three';
+import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
 import * as THREE from 'three';
@@ -9,6 +10,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { animate, easeInOut } from 'popmotion';
 import { Object3D, Vector3 } from 'three';
 
+type ILngLat = [number, number]
 let isTravel = false;
 
 function travel(
@@ -108,6 +110,7 @@ export default class GlTFThreeJSDemo extends React.Component {
       scene.addLayer(polygonlayer);
       const threeJSLayer = new ThreeLayer({
         enableMultiPassRenderer: false,
+        // @ts-ignore
         onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
           // 添加光
           threeScene.add(new THREE.AmbientLight(0xffffff));
