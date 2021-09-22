@@ -417,6 +417,10 @@ export default class AMapService
 
   public destroy() {
     this.map.destroy();
+
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     // @ts-ignore
     delete window.initAMap;
     const $jsapi = document.getElementById(AMAP_SCRIPT_ID);
