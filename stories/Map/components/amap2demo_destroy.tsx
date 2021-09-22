@@ -92,12 +92,17 @@ export default class Amap2demo_destroy extends React.Component {
             bottom: 0,
           }}
         />
-        <button style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          zIndex: 10
-        }} onClick={() => this.scene.destroy()}>destroy</button>
+        <button
+          style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            zIndex: 10,
+          }}
+          onClick={() => this.scene.destroy()}
+        >
+          destroy
+        </button>
       </>
     );
   }

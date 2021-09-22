@@ -335,7 +335,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.markerService.destroy();
 
     // TODO: 销毁 container 容器
-    this.$container?.parentNode?.removeChild(this.$container)
+    this.$container?.parentNode?.removeChild(this.$container);
 
     this.removeAllListeners();
     this.inited = false;
