@@ -25,8 +25,8 @@ export default {
     commonjs({
       namedExports: {
         eventemitter3: [ 'EventEmitter' ],
-        lodash: [ 'merge' ],
-        inversify: [ 'inject', 'injectable' ]
+        lodash: [ 'merge' ]
+        // inversify: [ 'inject', 'injectable' ]
       },
       dynamicRequireTargets: [
         'node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js'
