@@ -235,7 +235,7 @@ export interface ILayer {
   ): Matrix4;
 
   // 获取对应地图的经纬度平移矩阵
-  // getTranslateMatrix(lnglat: ILngLat, altitude?: number): Matrix4;
+  getTranslateMatrix?(lnglat: ILngLat, altitude?: number): Matrix4;
 
   // 设置模型对应地图在经纬度和高度方向的平移
   applyObjectLngLat?(
@@ -249,6 +249,15 @@ export interface ILayer {
 
   // 返回物体在场景中的经纬度
   getObjectLngLat?(object: Object3D): ILngLat;
+
+  // 将经纬度转为 three 世界坐标
+  lnglatToCoord?(lnglat: ILngLat): ILngLat;
+
+  // 设置网格适配到地图坐标系
+  adjustMeshToMap?(object: Object3D): void;
+
+  // 设置网格的缩放 （主要是抹平 mapbox 底图时的差异，若是高德底图则可以直接设置网格的 scale 属性/方法）
+  setMeshScale?(object: Object3D, x: number, y: number, z: number): void;
 
   // 增加加载模型的动画混合器
   addAnimateMixer?(mixer: AnimationMixer): void;

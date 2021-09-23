@@ -96,7 +96,7 @@ export default class ThreeJSLayer
       // @ts-ignore
       this.threeRenderService.center,
     );
-    return [x, y];
+    return [x, y] as ILngLat;
   }
 
   /**
