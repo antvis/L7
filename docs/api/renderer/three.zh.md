@@ -45,7 +45,7 @@ const threeJSLayer = new ThreeLayer({
     let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
     let cubeMaterial = new THREE.MeshNormalMaterial();
     let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    
+
     layer.setObjectLngLat(cube, [center.lng + 0.05, center.lat], 0);
     threeScene.add(cube);
   },
@@ -63,46 +63,53 @@ L7 将 threejs 的引用封装成一个特殊的图层对象，在使用上与�
 ## 构造函数 new ThreeLayer
 
 ### onAddMeshes
+
 该方法接受两个参数 threeScene: THREE.Scene, layer: ThreeLayer
+
 - threeScene: 这是普通的 threejs 场景对象
 - layer: 这是 L7 提供的 threeLayer 对象，上面挂载了 threejs 空间适配到地图空间所需要的方法
 
-
 ## ThreeLayer
+
 用户新建的图层对象，同时也会在 onAddMesh 方法的第二个参数返回。
 
 以下是挂载在 ThreeLayer 实例上的适配方法。
 
 ### getModelMatrix(lnglat, altitude, rotation, scale): Matrix
-  - lnglat: [number, number]  经纬度
-  - altitude: number = 0      相对高度
-  - rotation: [number, number, number] = [0, 0, 0]  旋转角度
-  - scale: [number, number, number] = [1, 1, 1]     缩放比例
+
+- lnglat: [number, number] 经纬度
+- altitude: number = 0 相对高度
+- rotation: [number, number, number] = [0, 0, 0] 旋转角度
+- scale: [number, number, number] = [1, 1, 1] 缩放比例
 
 用户可以通过该方法计算在对应经纬度点位、相对高度、旋转角度和缩放的模型矩阵
 该方法的返回值是 THREE.Matrix4 类型的矩阵
 
 ### applyObjectLngLat(object, lnglat, altibute): void
-  - object: Object3D  threejs 对象
-  - lnglat: ILngLat[number, number]   经纬度
-  - altitude = 0  相对高度
+
+- object: Object3D threejs 对象
+- lnglat: ILngLat[number, number] 经纬度
+- altitude = 0 相对高度
 
 用户可以通过该方法将 object 对象从当前位置向指定位置移动（地图经纬度坐标）
 
 ### setObjectLngLat(object, lnglat, altibute): void
-  - object: Object3D  threejs 对象
-  - lnglat: ILngLat[number, number]   经纬度
-  - altitude = 0  相对高度
+
+- object: Object3D threejs 对象
+- lnglat: ILngLat[number, number] 经纬度
+- altitude = 0 相对高度
 
 用户可以通过该方法设置 object 对象的位置（地图经纬度坐标）
 
 ### lnglatToCoord(lnglat): [number, number]
-  - lnglat: ILngLat[number, number]   经纬度
+
+- lnglat: ILngLat[number, number] 经纬度
 
 用户可以通过该方法将经纬度坐标转化成 threejs 世界坐标
 
 ### adjustMeshToMap(object): void
-  - object: Object3D threejs 对象
+
+- object: Object3D threejs 对象
 
 用户在添加 threejs 对象的前可以通过该方法调整 3D 对象的姿态，保证添加对象能正确显示
 
@@ -111,10 +118,11 @@ L7 将 threejs 的引用封装成一个特殊的图层对象，在使用上与�
 ✨ 用户不一定使用该方法调整物体的姿态，也可以自己实现
 
 ### setMeshScale(object, x, y, z): void
-  - object: Object3D  threejs 对象
-  - x: number = 1     x 轴方向的缩放比例
-  - y: number = 1     y 轴方向的缩放比例
-  - z: number = 1     z 轴方向的缩放比例
+
+- object: Object3D threejs 对象
+- x: number = 1 x 轴方向的缩放比例
+- y: number = 1 y 轴方向的缩放比例
+- z: number = 1 z 轴方向的缩放比例
 
 用户可以通过该方法设置 threejs 对象缩放
 
@@ -123,7 +131,8 @@ L7 将 threejs 的引用封装成一个特殊的图层对象，在使用上与�
 ✨ 同样的，可以直接修改 threejs 的 position、rotation 等调整 3D 对象的姿态
 
 ### addAnimateMixer(mixer): void
-  - mixer: AnimationMixer threejs 的动画混合器
+
+- mixer: AnimationMixer threejs 的动画混合器
 
 用户通过该方法管理加载模型的动画
 
@@ -132,6 +141,7 @@ L7 将 threejs 的引用封装成一个特殊的图层对象，在使用上与�
 用户可以使用 threejs 提供的能力加载其支持的任意模型
 
 ### 简单案例
+
 ✨ 以加载 gltf 模型为例
 
 ```javascript
