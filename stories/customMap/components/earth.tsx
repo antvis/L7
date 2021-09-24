@@ -22,22 +22,24 @@ export default class ScaleComponent extends React.Component {
     });
 
     let pointlayer = new PointLayer()
-    .source([
-      {
-        lng: 121.107846,
-        lat: 30.267069,
-      }
-    ], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat',
-      },
-    })
-    .shape('circle')
-    .color('rgba(255, 0, 0, 1.0)')
-    .size(20)
-  
+      .source(
+        [
+          {
+            lng: 121.107846,
+            lat: 30.267069,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .color('rgba(255, 0, 0, 1.0)')
+      .size(20);
 
     const layer = new EarthLayer()
       .source(
@@ -58,8 +60,8 @@ export default class ScaleComponent extends React.Component {
       .animate(true);
 
     scene.on('loaded', () => {
-      // scene.addLayer(layer);
-      scene.addLayer(pointlayer)
+      scene.addLayer(layer);
+      scene.addLayer(pointlayer);
     });
   }
 

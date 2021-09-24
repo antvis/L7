@@ -58,10 +58,7 @@ class ScrollZoomHandler {
   /**
    * @private
    */
-  constructor(
-    map: Map | EarthMap,
-    handler: HandlerManager,
-  ) {
+  constructor(map: Map | EarthMap, handler: HandlerManager) {
     this.map = map;
     this.el = map.getCanvasContainer();
     this.handler = handler;

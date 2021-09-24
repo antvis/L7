@@ -312,30 +312,29 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   private handleCameraChanged = (e: any) => {
-    let rotateStep = 0.02
-    if(e.type && e.originalEvent) {
-      if(e.originalEvent.type === 'wheel') {
-        
-        this.viewport.scaleZoom(0.01 * Math.sign(e.originalEvent.wheelDelta))
+    const rotateStep = 0.02;
+    if (e.type && e.originalEvent) {
+      if (e.originalEvent.type === 'wheel') {
+        this.viewport.scaleZoom(0.01 * Math.sign(e.originalEvent.wheelDelta));
       }
 
-      if(Math.abs(e.originalEvent.movementX) > Math.abs(e.originalEvent.movementY)) {
-        if(e.originalEvent.movementX > 0) {
-          this.viewport.rotateY(rotateStep)
-        } else if(e.originalEvent.movementX < 0){
-          this.viewport.rotateY(-rotateStep)
+      if (
+        Math.abs(e.originalEvent.movementX) >
+        Math.abs(e.originalEvent.movementY)
+      ) {
+        if (e.originalEvent.movementX > 0) {
+          this.viewport.rotateY(rotateStep);
+        } else if (e.originalEvent.movementX < 0) {
+          this.viewport.rotateY(-rotateStep);
         }
       } else {
-        if(e.originalEvent.movementY > 0) {
-          this.viewport.rotateX(rotateStep)
-        } else if(e.originalEvent.movementY < 0){
-          this.viewport.rotateX(-rotateStep)
+        if (e.originalEvent.movementY > 0) {
+          this.viewport.rotateX(rotateStep);
+        } else if (e.originalEvent.movementY < 0) {
+          this.viewport.rotateX(-rotateStep);
         }
       }
-      
-      
     }
-
 
     const { offsetCoordinate = true } = this.config;
 
