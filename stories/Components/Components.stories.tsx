@@ -7,6 +7,7 @@ import MarkerLayerComponent from './components/markerlayer';
 import Popup from './components/Popup';
 import Scale from './components/Scale';
 import Zoom from './components/Zoom';
+import Position from './components/Position';
 // @ts-ignore
 storiesOf('UI 组件', module)
   .add('Zoom', () => <Zoom />)
@@ -15,4 +16,5 @@ storiesOf('UI 组件', module)
   .add('Chart', () => <Chart />)
   .add('Popup', () => <Popup />)
   .add('MarkerLayer', () => <MarkerLayerComponent />)
-  .add('ClusterMarkerLayer', () => <ClusterMarkerLayer />);
+  .add('ClusterMarkerLayer', () => <ClusterMarkerLayer />)
+  .add('Position', () => <Position />);
