@@ -63,6 +63,10 @@ export default class CameraService implements ICameraService {
     return this.jitteredProjectionMatrix || this.viewport.getProjectionMatrix();
   }
 
+  public getModelMatrix(): number[] {
+    return this.viewport.getModelMatrix();
+  }
+
   public getViewMatrix(): number[] {
     return this.viewport.getViewMatrix();
   }
