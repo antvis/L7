@@ -1,6 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
+import { EarthMap } from '../../earthmap';
 import LngLat from '../../geo/lng_lat';
 import Point from '../../geo/point';
 import { Map } from '../../map';
@@ -27,7 +28,7 @@ export default class MapMouseEvent extends Event {
   /**
    * The `Map` object that fired the event.
    */
-  public target: Map;
+  public target: Map | EarthMap;
 
   /**
    * The DOM event which caused the map event.
@@ -51,7 +52,7 @@ export default class MapMouseEvent extends Event {
    */
   constructor(
     type: string,
-    map: Map,
+    map: Map | EarthMap,
     originalEvent: MouseEvent,
     data: any = {},
   ) {

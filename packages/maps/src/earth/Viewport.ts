@@ -3,6 +3,13 @@ import { mat4, vec3 } from 'gl-matrix';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 export default class Viewport implements IViewport {
+  private xzReg: number = -Math.PI * 0.6;
+  private yReg: number = Math.PI * 0.3;
+  private earthRadius = 200;
+  private earthZoom: number = 1;
+
+  private eye: vec3 = vec3.create()
+
   private viewport: WebMercatorViewport;
 
   private projectionMatrix: mat4 = mat4.create();
@@ -13,17 +20,34 @@ export default class Viewport implements IViewport {
   private viewUncenteredMatrix: mat4 = mat4.create();
 
   public syncWithMapCamera(mapCamera: Partial<IMapCamera>) {
-    const aspect = 1;
+    let { viewportHeight = 1, viewportWidth = 1 } = mapCamera
+    const aspect = viewportWidth/viewportHeight;
     const near = 0.1;
     const far = 10000;
-    const fov = 40;
+    const fov = 20;
 
     // 计算透视投影矩阵 projectionMatrix
     mat4.perspective(this.projectionMatrix, fov, aspect, near, far);
     // 计算相机矩阵 viewMatrix
-    const eye = vec3.fromValues(100, 100, 100);
-    const up = vec3.fromValues(0, 1, 0);
-    mat4.lookAt(this.viewMatrix, eye, vec3.fromValues(0, 0, 0), up);
+    let x = this.earthRadius * Math.cos(this.xzReg)
+    let z = this.earthRadius * Math.sin(this.xzReg)
+    let y = this.earthRadius * Math.sin(this.yReg)
+
+    // const eye = vec3.fromValues(100, 100, 100);
+    this.eye = vec3.fromValues(x, y, z);
+    vec3.normalize(this.eye, this.eye)
+    vec3.multiply(this.eye, this.eye, vec3.fromValues(this.earthRadius, this.earthRadius, this.earthRadius))
+   
+    vec3.scale(this.eye, this.eye, this.earthZoom)
+    
+
+    let crossY = vec3.create()
+    vec3.cross(crossY, this.eye, vec3.fromValues(0, 1, 0))
+    
+    let up = vec3.fromValues(0, 1, 0);
+    vec3.cross(up, crossY, this.eye)
+
+    mat4.lookAt(this.viewMatrix, this.eye, vec3.fromValues(0, 0, 0), up);
     this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);
 
     mat4.multiply(
@@ -36,11 +60,21 @@ export default class Viewport implements IViewport {
       this.projectionMatrix,
       this.viewMatrix,
     );
+  }
 
-    // console.log('this.modelMatrix');
-    // setInterval(() => {
-    //   mat4.rotateY(this.modelMatrix, this.modelMatrix, 0.001);
-    // }, 20);
+  public rotateY(r: number) {
+    this.xzReg += r * Math.min(this.earthZoom * this.earthZoom, 1);
+  }
+
+  public rotateX(r: number) {
+    this.yReg += r * Math.min(this.earthZoom * this.earthZoom, 1);
+  }
+
+  public scaleZoom(z: number) {
+
+   
+    this.earthZoom += z
+    this.earthZoom = Math.max(this.earthZoom, 0.6)
   }
 
   public getZoom(): number {

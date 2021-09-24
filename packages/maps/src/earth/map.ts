@@ -275,7 +275,7 @@ export default class L7MapService implements IMapService<Map> {
     this.map.on('move', this.handleCameraChanged);
 
     // 不同于高德地图，需要手动触发首次渲染
-    this.handleCameraChanged();
+    this.handleCameraChanged({});
   }
 
   public destroy() {
@@ -311,14 +311,37 @@ export default class L7MapService implements IMapService<Map> {
     this.cameraChangedCallback = callback;
   }
 
-  private handleCameraChanged = () => {
-    const { lat, lng } = this.map.getCenter();
+  private handleCameraChanged = (e: any) => {
+    let rotateStep = 0.02
+    if(e.type && e.originalEvent) {
+      if(e.originalEvent.type === 'wheel') {
+        
+        this.viewport.scaleZoom(0.01 * Math.sign(e.originalEvent.wheelDelta))
+      }
+
+      if(Math.abs(e.originalEvent.movementX) > Math.abs(e.originalEvent.movementY)) {
+        if(e.originalEvent.movementX > 0) {
+          this.viewport.rotateY(rotateStep)
+        } else if(e.originalEvent.movementX < 0){
+          this.viewport.rotateY(-rotateStep)
+        }
+      } else {
+        if(e.originalEvent.movementY > 0) {
+          this.viewport.rotateX(rotateStep)
+        } else if(e.originalEvent.movementY < 0){
+          this.viewport.rotateX(-rotateStep)
+        }
+      }
+      
+      
+    }
+
+
     const { offsetCoordinate = true } = this.config;
 
     // resync
     this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),
-      center: [lng, lat],
       viewportHeight: this.map.transform.height,
       pitch: this.map.getPitch(),
       viewportWidth: this.map.transform.width,

@@ -1,3 +1,4 @@
+import { EarthMap } from '../earthmap';
 import { Map } from '../map';
 
 const defaultOptions = {
@@ -106,7 +107,7 @@ class KeyboardHandler {
     }
 
     return {
-      cameraAnimation: (map: Map) => {
+      cameraAnimation: (map: Map | EarthMap) => {
         const zoom = map.getZoom();
         map.easeTo(
           {

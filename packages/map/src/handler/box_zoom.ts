@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
 import DOM from '../utils/dom';
@@ -9,7 +10,7 @@ import { Event } from './events/event';
  * The bounding box is defined by clicking and holding `shift` while dragging the cursor.
  */
 class BoxZoomHandler {
-  private map: Map;
+  private map: Map | EarthMap;
   private el: HTMLElement;
   private container: HTMLElement;
   private enabled: boolean;
@@ -23,7 +24,7 @@ class BoxZoomHandler {
    * @private
    */
   constructor(
-    map: Map,
+    map: Map | EarthMap,
     options: {
       clickTolerance: number;
     },
@@ -179,8 +180,9 @@ class BoxZoomHandler {
     }
 
     DOM.enableDrag();
-
+    // @ts-ignore
     delete this.startPos;
+    // @ts-ignore
     delete this.lastPos;
   }
 

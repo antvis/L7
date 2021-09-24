@@ -391,7 +391,7 @@ function addDir(dirX: number, dirY: number) {
  * @returns
  */
 export function earthTriangulation() {
-  const mesh = primitiveSphere(100, { segments: 32 });
+  const mesh = primitiveSphere(100, { segments: 36 });
   const { positionsArr, indicesArr, normalArr } = mesh;
   return {
     vertices: positionsArr,

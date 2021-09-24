@@ -7,7 +7,7 @@ import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
 // @ts-ignore
 import Point, { PointLike } from './geo/point';
 import BoxZoomHandler from './handler/box_zoom';
-import HandlerManager from './handler/handler_manager';
+import HandlerManager from './handler/handler_manager'
 import KeyboardHandler from './handler/keyboard';
 
 import ScrollZoomHandler from './handler/scroll_zoom';
@@ -55,7 +55,6 @@ const DefaultOptions: IMapOptions = {
   renderWorldCopies: true,
 };
 export class EarthMap extends Camera {
-  public maptype: string = 'earthmap';
   public doubleClickZoom: DoubleClickZoomHandler;
   public dragRotate: DragRotateHandler;
   public dragPan: DragPanHandler;
@@ -78,7 +77,7 @@ export class EarthMap extends Camera {
     this.initContainer();
     this.resize();
     this.handlers = new HandlerManager(this, this.options);
-
+    
     if (typeof window !== 'undefined') {
       window.addEventListener('online', this.onWindowOnline, false);
       window.addEventListener('resize', this.onWindowResize, false);

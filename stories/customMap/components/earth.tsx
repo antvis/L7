@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Scene } from '@antv/l7';
-import { PolygonLayer, EarthLayer } from '@antv/l7-layers';
+import { PointLayer, EarthLayer } from '@antv/l7-layers';
 import { Earth } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -21,53 +21,26 @@ export default class ScaleComponent extends React.Component {
       }),
     });
 
-    const polygonlayer = new PolygonLayer({
-      name: '01',
+    let pointlayer = new PointLayer()
+    .source([
+      {
+        lng: 121.107846,
+        lat: 30.267069,
+      }
+    ], {
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat',
+      },
     })
-      .source({
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [91.845703125, 27.527758206861886],
-                  [116.630859375, 27.527758206861886],
-                  [116.630859375, 36.80928470205937],
-                  [91.845703125, 36.80928470205937],
-                  [91.845703125, 27.527758206861886],
-                ],
-              ],
-            },
-          },
-        ],
-      })
-      .color('#2E8AE6')
-      .shape('fill')
-      .style({
-        opacity: 1.0,
-      });
-    // .animate(true)
+    .shape('circle')
+    .color('rgba(255, 0, 0, 1.0)')
+    .size(20)
+  
 
-    const layer = new EarthLayer({
-      name: '01',
-    })
+    const layer = new EarthLayer()
       .source(
-        // [
-        //   {
-        //     lng: 121.107846,
-        //     lat: 30.267069
-        //   },
-        // ],{
-        //   parser: {
-        //     type: 'json',
-        //     x: 'lng',
-        //     y: 'lat',
-        //   },
-        // 'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
         'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',
         {
           parser: {
@@ -85,8 +58,8 @@ export default class ScaleComponent extends React.Component {
       .animate(true);
 
     scene.on('loaded', () => {
-      scene.addLayer(layer);
-      // scene.addLayer(polygonlayer)
+      // scene.addLayer(layer);
+      scene.addLayer(pointlayer)
     });
   }
 
