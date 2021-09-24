@@ -72,6 +72,7 @@ es/
 .DS_Store
 public
 .cache
+.idea
 
 package-lock.json
 git_log.sh
