@@ -1,7 +1,11 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
+// @ts-ignore
+import { identity, rotateY, rotateZ } from 'gl-mat4';
 import { vec3 } from 'gl-matrix';
+// @ts-ignore
+import { normalize, scale, transformMat4 } from 'gl-vec3';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import { calculateCentroid } from '../utils/geo';
 import extrudePolygon, {
@@ -123,7 +127,6 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
-
   return {
     indices: earcut(vertices, holes, dimensions),
     vertices,
@@ -137,7 +140,6 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
     coordinates,
     true,
   );
-
   return {
     vertices: positions, // [ x, y, z, uv.x,uv.y ]
     indices: index,
@@ -382,4 +384,127 @@ function addDir(dirX: number, dirY: number) {
   const x = (dirX + 1) / 2;
   const y = (dirY + 1) / 2;
   return [x, y];
+}
+
+/**
+ * 构建地球三角网格
+ * @returns
+ */
+export function earthTriangulation() {
+  const mesh = primitiveSphere(100, { segments: 32 });
+  const { positionsArr, indicesArr, normalArr } = mesh;
+  return {
+    vertices: positionsArr,
+    indices: indicesArr,
+    size: 5,
+    normals: normalArr,
+  };
+}
+
+interface IOpt {
+  segments: number;
+}
+
+const matRotY = identity([]);
+const matRotZ = identity([]);
+const up = [0, 1, 0];
+const tmpVec3 = [0, 0, 0];
+
+function primitiveSphere(radius: number, opt: IOpt) {
+  opt = opt || {};
+  radius = typeof radius !== 'undefined' ? radius : 1;
+  const segments = typeof opt.segments !== 'undefined' ? opt.segments : 32;
+
+  const totalZRotationSteps = 2 + segments;
+  const totalYRotationSteps = 2 * totalZRotationSteps;
+
+  const indices = [];
+  const indicesArr = [];
+  const positions = [];
+  const positionsArr = [];
+  const normals = [];
+  const normalArr = [];
+  const uvs = [];
+
+  for (
+    let zRotationStep = 0;
+    zRotationStep <= totalZRotationSteps;
+    zRotationStep++
+  ) {
+    const normalizedZ = zRotationStep / totalZRotationSteps;
+    const angleZ = normalizedZ * Math.PI;
+
+    for (
+      let yRotationStep = 0;
+      yRotationStep <= totalYRotationSteps;
+      yRotationStep++
+    ) {
+      const normalizedY = yRotationStep / totalYRotationSteps;
+      const angleY = normalizedY * Math.PI * 2;
+
+      identity(matRotZ);
+      rotateZ(matRotZ, matRotZ, -angleZ);
+
+      identity(matRotY);
+      rotateY(matRotY, matRotY, angleY);
+
+      transformMat4(tmpVec3, up, matRotZ);
+      transformMat4(tmpVec3, tmpVec3, matRotY);
+
+      scale(tmpVec3, tmpVec3, -radius);
+      positions.push(tmpVec3.slice());
+      positionsArr.push(...tmpVec3.slice());
+
+      normalize(tmpVec3, tmpVec3);
+      normals.push(tmpVec3.slice());
+      normalArr.push(...tmpVec3.slice());
+
+      uvs.push([normalizedY, 1 - normalizedZ]);
+
+      // position 和 uv 一起存储
+      positionsArr.push(normalizedY, 1 - normalizedZ);
+    }
+
+    if (zRotationStep > 0) {
+      const verticesCount = positions.length;
+      let firstIndex = verticesCount - 2 * (totalYRotationSteps + 1);
+      for (
+        ;
+        firstIndex + totalYRotationSteps + 2 < verticesCount;
+        firstIndex++
+      ) {
+        indices.push([
+          firstIndex,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 1,
+        ]);
+
+        indicesArr.push(
+          firstIndex,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 1,
+        );
+        indices.push([
+          firstIndex + totalYRotationSteps + 1,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 2,
+        ]);
+        indicesArr.push(
+          firstIndex + totalYRotationSteps + 1,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 2,
+        );
+      }
+    }
+  }
+
+  return {
+    cells: indices,
+    positions,
+    normals,
+    uvs,
+    positionsArr,
+    indicesArr,
+    normalArr,
+  };
 }
