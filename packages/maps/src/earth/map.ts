@@ -315,7 +315,9 @@ export default class L7MapService implements IMapService<Map> {
     const rotateStep = 0.02;
     if (e.type && e.originalEvent) {
       if (e.originalEvent.type === 'wheel') {
-        this.viewport.scaleZoom(0.01 * Math.sign(e.originalEvent.wheelDelta) * -1);
+        this.viewport.scaleZoom(
+          0.01 * Math.sign(e.originalEvent.wheelDelta) * -1,
+        );
       }
 
       if (
