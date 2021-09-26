@@ -78,7 +78,7 @@ Mapbox Map 地图配置项 [配置项](https://docs.mapbox.com/mapbox-gl-js/api/
 
 | option                | Type      | Default      | Description                                               |
 | --------------------- | --------- | ------------ | --------------------------------------------------------- |
-| logoPosition          | string    | `bottomleft` | logo 位置 `bottomright | topright | bottomleft | topleft` |
+| logoPosition          | string    | `bottomleft` | logo 位置 `bottomright | topright | bottomleft | topleft | topcenter | bottomcenter | leftcenter | rightcenter` |
 | logoVisible           | `boolean` | `true`       | 是否显示 logo                                             |
 | antialias             | `boolean` | `true`       | 是否开启抗锯齿                                            |
 | preserveDrawingBuffer | `boolean` | `false`      | 是否保留缓冲区数据                                        |
