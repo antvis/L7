@@ -185,8 +185,9 @@ export default class FillModel extends BaseModel {
             const n1 = vec3.fromValues(0, 0, 1);
             const n2 = vec3.fromValues(x, 0, z);
 
-            let xzReg = (x >= 0) ? (vec3.angle(n1, n2)) : (Math.PI * 2 - vec3.angle(n1, n2));
-  
+            const xzReg =
+              x >= 0 ? vec3.angle(n1, n2) : Math.PI * 2 - vec3.angle(n1, n2);
+
             const yReg = Math.PI * 2 - Math.asin(y / 100);
 
             const m = mat4.create();
