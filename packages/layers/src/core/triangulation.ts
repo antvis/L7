@@ -2,10 +2,7 @@ import { IEncodeFeature } from '@antv/l7-core';
 import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 // @ts-ignore
-import { identity, rotateY, rotateZ } from 'gl-mat4';
-import { vec3 } from 'gl-matrix';
-// @ts-ignore
-import { normalize, scale, transformMat4 } from 'gl-vec3';
+import { mat4, vec3 } from 'gl-matrix';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import { calculateCentroid } from '../utils/geo';
 import extrudePolygon, {
@@ -24,6 +21,10 @@ interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
 const GeometryCache: IGeometryCache = {};
+
+// 地球网格半径
+const EARTH_RADIUS = 100;
+const EARTH_SEGMENTS = 36;
 /**
  * 计算2D 填充点图顶点
  * @param feature 映射feature
@@ -36,6 +37,39 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
     indices: [0, 1, 2, 2, 3, 0],
     size: coordinates.length,
   };
+}
+/**
+ * 计算2D 填充点图顶点 (地球模式)
+ * @param feature 映射feature
+ */
+export function GlobelPointFillTriangulation(feature: IEncodeFeature) {
+  const coordinates = calculateCentroid(feature.coordinates);
+  const xyz = lglt2xyz(coordinates as [number, number]);
+  return {
+    vertices: [...xyz, ...xyz, ...xyz, ...xyz],
+    indices: [0, 1, 2, 2, 3, 0],
+    size: xyz.length,
+  };
+}
+
+function torad(deg: number) {
+  return (deg / 180) * Math.acos(-1);
+}
+/**
+ * 经纬度转xyz
+ * @param longitude 经度
+ * @param latitude 纬度
+ * @param radius 半径
+ */
+function lglt2xyz(lnglat: [number, number]) {
+  // TODO: + Math.PI/2 是为了对齐坐标
+  const lng = torad(lnglat[0]) + Math.PI / 2;
+  const lat = torad(lnglat[1]);
+
+  const z = EARTH_RADIUS * Math.cos(lat) * Math.cos(lng);
+  const x = EARTH_RADIUS * Math.cos(lat) * Math.sin(lng);
+  const y = EARTH_RADIUS * Math.sin(lat);
+  return [x, y, z];
 }
 
 /**
@@ -391,7 +425,7 @@ function addDir(dirX: number, dirY: number) {
  * @returns
  */
 export function earthTriangulation() {
-  const mesh = primitiveSphere(100, { segments: 36 });
+  const mesh = primitiveSphere(EARTH_RADIUS, { segments: EARTH_SEGMENTS });
   const { positionsArr, indicesArr, normalArr } = mesh;
   return {
     vertices: positionsArr,
@@ -401,16 +435,23 @@ export function earthTriangulation() {
   };
 }
 
-interface IOpt {
-  segments: number;
-}
+/**
+ * 构建地球球体网格
+ * @param radius
+ * @param opt
+ * @returns
+ */
+function primitiveSphere(
+  radius: number,
+  opt: {
+    segments: number;
+  },
+) {
+  const matRotY = mat4.create();
+  const matRotZ = mat4.create();
+  const up = vec3.fromValues(0, 1, 0);
+  const tmpVec3 = vec3.fromValues(0, 0, 0);
 
-const matRotY = identity([]);
-const matRotZ = identity([]);
-const up = [0, 1, 0];
-const tmpVec3 = [0, 0, 0];
-
-function primitiveSphere(radius: number, opt: IOpt) {
   opt = opt || {};
   radius = typeof radius !== 'undefined' ? radius : 1;
   const segments = typeof opt.segments !== 'undefined' ? opt.segments : 32;
@@ -442,20 +483,21 @@ function primitiveSphere(radius: number, opt: IOpt) {
       const normalizedY = yRotationStep / totalYRotationSteps;
       const angleY = normalizedY * Math.PI * 2;
 
-      identity(matRotZ);
-      rotateZ(matRotZ, matRotZ, -angleZ);
+      mat4.identity(matRotZ);
+      mat4.rotateZ(matRotZ, matRotZ, -angleZ);
 
-      identity(matRotY);
-      rotateY(matRotY, matRotY, angleY);
+      mat4.identity(matRotY);
+      mat4.rotateY(matRotY, matRotY, angleY);
 
-      transformMat4(tmpVec3, up, matRotZ);
-      transformMat4(tmpVec3, tmpVec3, matRotY);
+      vec3.transformMat4(tmpVec3, up, matRotZ);
+      vec3.transformMat4(tmpVec3, tmpVec3, matRotY);
 
-      scale(tmpVec3, tmpVec3, -radius);
+      vec3.scale(tmpVec3, tmpVec3, -radius);
+
       positions.push(tmpVec3.slice());
       positionsArr.push(...tmpVec3.slice());
 
-      normalize(tmpVec3, tmpVec3);
+      vec3.normalize(tmpVec3, tmpVec3);
       normals.push(tmpVec3.slice());
       normalArr.push(...tmpVec3.slice());
 

@@ -40,7 +40,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  */
 @injectable()
 export default class L7MapService implements IMapService<Map> {
-  public version: string = Version.L7MAP;
+  public version: string = Version.GLOBEL;
   public map: Map;
 
   @inject(TYPES.MapConfig)

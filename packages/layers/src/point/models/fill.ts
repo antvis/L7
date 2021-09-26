@@ -15,17 +15,24 @@ import BaseModel, {
   styleOffset,
   styleSingle,
 } from '../../core/BaseModel';
-import { PointFillTriangulation } from '../../core/triangulation';
+import {
+  GlobelPointFillTriangulation,
+  PointFillTriangulation,
+} from '../../core/triangulation';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
 import { isNumber, isString } from 'lodash';
+
+import { mat4, vec3 } from 'gl-matrix';
+
 interface IPointLayerStyleOptions {
   opacity: styleSingle;
   strokeWidth: styleSingle;
   stroke: styleColor;
   strokeOpacity: styleSingle;
   offsets: styleOffset;
+  isGlobel?: boolean;
 }
 // 判断当前使用的 style 中的变量属性是否需要进行数据映射
 export default class FillModel extends BaseModel {
@@ -36,6 +43,8 @@ export default class FillModel extends BaseModel {
       strokeWidth = 0,
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
+      // TODO: 判断当前图层是否为地球模式
+      isGlobel = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -85,6 +94,7 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
+      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
@@ -122,13 +132,18 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
+    const isGlobel = this.mapService.version === 'GLOBEL';
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointfill',
         vertexShader: pointFillVert,
         fragmentShader: pointFillFrag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
+        triangulation: isGlobel
+          ? GlobelPointFillTriangulation
+          : PointFillTriangulation,
+        // depth: { enable: false },
+        depth: { enable: isGlobel },
         blend: this.getBlend(),
       }),
     ];
@@ -142,6 +157,9 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
+    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
+    const isGlobel = this.mapService.version === 'GLOBEL';
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
@@ -153,16 +171,56 @@ export default class FillModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
+        size: 3,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const extrude = [1, 1, -1, 1, -1, -1, 1, -1];
-          const extrudeIndex = (attributeIdx % 4) * 2;
-          return [extrude[extrudeIndex], extrude[extrudeIndex + 1]];
+          let extrude;
+          // 地球模式
+          if (isGlobel) {
+            const [x, y, z] = vertex;
+            const n1 = vec3.fromValues(0, 0, 1);
+            const n2 = vec3.fromValues(x, 0, z);
+
+            let xzReg = (x >= 0) ? (vec3.angle(n1, n2)) : (Math.PI * 2 - vec3.angle(n1, n2));
+  
+            const yReg = Math.PI * 2 - Math.asin(y / 100);
+
+            const m = mat4.create();
+            mat4.rotateY(m, m, xzReg);
+            mat4.rotateX(m, m, yReg);
+
+            const v1 = vec3.fromValues(1, 1, 0);
+            vec3.transformMat4(v1, v1, m);
+            vec3.normalize(v1, v1);
+
+            const v2 = vec3.fromValues(-1, 1, 0);
+            vec3.transformMat4(v2, v2, m);
+            vec3.normalize(v2, v2);
+
+            const v3 = vec3.fromValues(-1, -1, 0);
+            vec3.transformMat4(v3, v3, m);
+            vec3.normalize(v3, v3);
+
+            const v4 = vec3.fromValues(1, -1, 0);
+            vec3.transformMat4(v4, v4, m);
+            vec3.normalize(v4, v4);
+
+            extrude = [...v1, ...v2, ...v3, ...v4];
+          } else {
+            // 平面模式
+            extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+          }
+
+          const extrudeIndex = (attributeIdx % 4) * 3;
+          return [
+            extrude[extrudeIndex],
+            extrude[extrudeIndex + 1],
+            extrude[extrudeIndex + 2],
+          ];
         },
       },
     });
