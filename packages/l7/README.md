@@ -10,9 +10,8 @@ L7 Large-scale WebGL-powered Geospatial data visualization analysis framework
 
 ### Installation
 
-```
+```bash
  npm install @antv/l7
-
 ```
 
 ### Features
