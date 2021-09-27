@@ -240,11 +240,7 @@ export interface ILayer {
   getTranslateMatrix?(lnglat: ILngLat, altitude?: number): any;
 
   // 设置模型对应地图在经纬度和高度方向的平移
-  applyObjectLngLat?(
-    object: any,
-    lnglat: ILngLat,
-    altitude?: number,
-  ): void;
+  applyObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
 
   // 根据经纬度设置模型对应地图的平移
   setObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
