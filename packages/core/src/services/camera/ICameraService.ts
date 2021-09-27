@@ -14,6 +14,7 @@ export const CameraUniform = {
 export interface IViewport {
   syncWithMapCamera(mapCamera: Partial<IMapCamera>): void;
   getProjectionMatrix(): number[];
+  getModelMatrix(): number[];
   getViewMatrix(): number[];
   getViewMatrixUncentered(): number[];
   getViewProjectionMatrixUncentered(): number[];

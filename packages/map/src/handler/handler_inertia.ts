@@ -3,6 +3,7 @@ import Point from '../geo/point';
 
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';
+import { EarthMap } from '../earthmap';
 import { Map } from '../map';
 import { bezier, clamp, now } from '../util';
 import { IDragPanOptions } from './shim/drag_pan';
@@ -54,13 +55,13 @@ export interface IInertiaOptions {
 export type InputEvent = MouseEvent | TouchEvent | KeyboardEvent | WheelEvent;
 
 export default class HandlerInertia {
-  private map: Map;
+  private map: Map | EarthMap;
   private inertiaBuffer: Array<{
     time: number;
     settings: { [key: string]: any };
   }>;
 
-  constructor(map: Map) {
+  constructor(map: Map | EarthMap) {
     this.map = map;
     this.clear();
   }

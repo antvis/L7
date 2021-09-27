@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
 import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';
@@ -6,14 +7,15 @@ import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';
 export default class MapEventHandler {
   private mousedownPos: Point;
   private clickTolerance: number;
-  private map: Map;
+  private map: Map | EarthMap;
 
-  constructor(map: Map, options: { clickTolerance: number }) {
+  constructor(map: Map | EarthMap, options: { clickTolerance: number }) {
     this.map = map;
     this.clickTolerance = options.clickTolerance;
   }
 
   public reset() {
+    // @ts-ignore
     delete this.mousedownPos;
   }
 

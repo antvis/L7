@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
 
@@ -17,7 +18,7 @@ export default class ClickZoomHandler {
   public dblclick(e: MouseEvent, point: Point) {
     e.preventDefault();
     return {
-      cameraAnimation: (map: Map) => {
+      cameraAnimation: (map: Map | EarthMap) => {
         map.easeTo(
           {
             duration: 300,

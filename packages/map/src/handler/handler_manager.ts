@@ -1,6 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
+import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
 import DOM from '../utils/dom';
@@ -62,7 +63,7 @@ export interface IHandlerOptions {
 }
 
 class HandlerManager {
-  private map: Map;
+  private map: Map | EarthMap;
   private el: HTMLElement;
   private handlers: Array<{
     handlerName: string;
@@ -82,7 +83,7 @@ class HandlerManager {
     [HTMLElement, string, void | { passive?: boolean; capture?: boolean }]
   >;
 
-  constructor(map: Map, options: IHandlerOptions) {
+  constructor(map: Map | EarthMap, options: IHandlerOptions) {
     this.map = map;
     this.el = this.map.getCanvasContainer();
     this.handlers = [];

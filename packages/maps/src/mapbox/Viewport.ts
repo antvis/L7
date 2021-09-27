@@ -45,6 +45,10 @@ export default class Viewport implements IViewport {
     return this.viewport.projectionMatrix;
   }
 
+  public getModelMatrix(): number[] {
+    return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+  }
+
   public getViewMatrix(): number[] {
     return this.viewport.viewMatrix;
   }

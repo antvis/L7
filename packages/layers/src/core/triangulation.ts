@@ -1,7 +1,8 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
-import { vec3 } from 'gl-matrix';
+// @ts-ignore
+import { mat4, vec3 } from 'gl-matrix';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import { calculateCentroid } from '../utils/geo';
 import extrudePolygon, {
@@ -20,6 +21,10 @@ interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
 const GeometryCache: IGeometryCache = {};
+
+// 地球网格半径
+const EARTH_RADIUS = 100;
+const EARTH_SEGMENTS = 36;
 /**
  * 计算2D 填充点图顶点
  * @param feature 映射feature
@@ -32,6 +37,39 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
     indices: [0, 1, 2, 2, 3, 0],
     size: coordinates.length,
   };
+}
+/**
+ * 计算2D 填充点图顶点 (地球模式)
+ * @param feature 映射feature
+ */
+export function GlobelPointFillTriangulation(feature: IEncodeFeature) {
+  const coordinates = calculateCentroid(feature.coordinates);
+  const xyz = lglt2xyz(coordinates as [number, number]);
+  return {
+    vertices: [...xyz, ...xyz, ...xyz, ...xyz],
+    indices: [0, 1, 2, 2, 3, 0],
+    size: xyz.length,
+  };
+}
+
+function torad(deg: number) {
+  return (deg / 180) * Math.acos(-1);
+}
+/**
+ * 经纬度转xyz
+ * @param longitude 经度
+ * @param latitude 纬度
+ * @param radius 半径
+ */
+function lglt2xyz(lnglat: [number, number]) {
+  // TODO: + Math.PI/2 是为了对齐坐标
+  const lng = torad(lnglat[0]) + Math.PI / 2;
+  const lat = torad(lnglat[1]);
+
+  const z = EARTH_RADIUS * Math.cos(lat) * Math.cos(lng);
+  const x = EARTH_RADIUS * Math.cos(lat) * Math.sin(lng);
+  const y = EARTH_RADIUS * Math.sin(lat);
+  return [x, y, z];
 }
 
 /**
@@ -123,7 +161,6 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
-
   return {
     indices: earcut(vertices, holes, dimensions),
     vertices,
@@ -137,7 +174,6 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
     coordinates,
     true,
   );
-
   return {
     vertices: positions, // [ x, y, z, uv.x,uv.y ]
     indices: index,
@@ -382,4 +418,135 @@ function addDir(dirX: number, dirY: number) {
   const x = (dirX + 1) / 2;
   const y = (dirY + 1) / 2;
   return [x, y];
+}
+
+/**
+ * 构建地球三角网格
+ * @returns
+ */
+export function earthTriangulation() {
+  const mesh = primitiveSphere(EARTH_RADIUS, { segments: EARTH_SEGMENTS });
+  const { positionsArr, indicesArr, normalArr } = mesh;
+  return {
+    vertices: positionsArr,
+    indices: indicesArr,
+    size: 5,
+    normals: normalArr,
+  };
+}
+
+/**
+ * 构建地球球体网格
+ * @param radius
+ * @param opt
+ * @returns
+ */
+function primitiveSphere(
+  radius: number,
+  opt: {
+    segments: number;
+  },
+) {
+  const matRotY = mat4.create();
+  const matRotZ = mat4.create();
+  const up = vec3.fromValues(0, 1, 0);
+  const tmpVec3 = vec3.fromValues(0, 0, 0);
+
+  opt = opt || {};
+  radius = typeof radius !== 'undefined' ? radius : 1;
+  const segments = typeof opt.segments !== 'undefined' ? opt.segments : 32;
+
+  const totalZRotationSteps = 2 + segments;
+  const totalYRotationSteps = 2 * totalZRotationSteps;
+
+  const indices = [];
+  const indicesArr = [];
+  const positions = [];
+  const positionsArr = [];
+  const normals = [];
+  const normalArr = [];
+  const uvs = [];
+
+  for (
+    let zRotationStep = 0;
+    zRotationStep <= totalZRotationSteps;
+    zRotationStep++
+  ) {
+    const normalizedZ = zRotationStep / totalZRotationSteps;
+    const angleZ = normalizedZ * Math.PI;
+
+    for (
+      let yRotationStep = 0;
+      yRotationStep <= totalYRotationSteps;
+      yRotationStep++
+    ) {
+      const normalizedY = yRotationStep / totalYRotationSteps;
+      const angleY = normalizedY * Math.PI * 2;
+
+      mat4.identity(matRotZ);
+      mat4.rotateZ(matRotZ, matRotZ, -angleZ);
+
+      mat4.identity(matRotY);
+      mat4.rotateY(matRotY, matRotY, angleY);
+
+      vec3.transformMat4(tmpVec3, up, matRotZ);
+      vec3.transformMat4(tmpVec3, tmpVec3, matRotY);
+
+      vec3.scale(tmpVec3, tmpVec3, -radius);
+
+      positions.push(tmpVec3.slice());
+      positionsArr.push(...tmpVec3.slice());
+
+      vec3.normalize(tmpVec3, tmpVec3);
+      normals.push(tmpVec3.slice());
+      normalArr.push(...tmpVec3.slice());
+
+      uvs.push([normalizedY, 1 - normalizedZ]);
+
+      // position 和 uv 一起存储
+      positionsArr.push(normalizedY, 1 - normalizedZ);
+    }
+
+    if (zRotationStep > 0) {
+      const verticesCount = positions.length;
+      let firstIndex = verticesCount - 2 * (totalYRotationSteps + 1);
+      for (
+        ;
+        firstIndex + totalYRotationSteps + 2 < verticesCount;
+        firstIndex++
+      ) {
+        indices.push([
+          firstIndex,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 1,
+        ]);
+
+        indicesArr.push(
+          firstIndex,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 1,
+        );
+        indices.push([
+          firstIndex + totalYRotationSteps + 1,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 2,
+        ]);
+        indicesArr.push(
+          firstIndex + totalYRotationSteps + 1,
+          firstIndex + 1,
+          firstIndex + totalYRotationSteps + 2,
+        );
+      }
+    }
+  }
+
+  return {
+    cells: indices,
+    positions,
+    normals,
+    uvs,
+    positionsArr,
+    indicesArr,
+    normalArr,
+  };
 }
