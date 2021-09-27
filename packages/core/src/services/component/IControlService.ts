@@ -4,13 +4,21 @@ export enum PositionType {
   'TOPLEFT' = 'topleft',
   'BOTTOMRIGHT' = 'bottomright',
   'BOTTOMLEFT' = 'bottomleft',
+  'TOPCENTER' = 'topcenter',
+  'BOTTOMCENTER' = 'bottomcenter',
+  'LEFTCENTER' = 'leftcenter',
+  'RIGHTCENTER' = 'rightcenter',
 }
 
 export type PositionName =
   | 'topright'
   | 'topleft'
   | 'bottomright'
-  | 'bottomleft';
+  | 'bottomleft'
+  | 'topcenter'
+  | 'bottomcenter'
+  | 'leftcenter'
+  | 'rightcenter';
 export interface IControlOption {
   name: string;
   position: PositionName;
