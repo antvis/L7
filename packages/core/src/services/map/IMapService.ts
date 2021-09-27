@@ -94,6 +94,16 @@ export interface IMapService<RawMap = {}> {
   // lngLatToCoords?(lnglatArray: any): any;
   getCustomCoordCenter?(): [number, number];
   exportMap(type: 'jpg' | 'png'): string;
+
+  // 地球模式下的地图方法/属性
+  rotateY?(
+    option:
+      | {
+          force?: boolean;
+          reg?: number;
+        }
+      | undefined,
+  ): void;
 }
 
 export const MapServiceEvent = ['mapload'];

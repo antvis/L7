@@ -3,12 +3,14 @@ import { mat4, vec3 } from 'gl-matrix';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 export default class Viewport implements IViewport {
+  // TODO: 初始化相机的姿态 看向地球
   private xzReg: number = -Math.PI * 0.6;
-  private yReg: number = Math.PI * 0.3;
-  private earthRadius = 200;
-  private earthZoom: number = 1;
+  private yReg: number = Math.PI * 0.2;
+  // 默认的地球相机半径、地球相机缩放层级
+  private earthCameraRadius: number = 200;
+  private earthCameraZoom: number = 1;
 
-  private eye: vec3 = vec3.create();
+  private cameraPosition: vec3 = vec3.create();
 
   private viewport: WebMercatorViewport;
 
@@ -29,28 +31,32 @@ export default class Viewport implements IViewport {
     // 计算透视投影矩阵 projectionMatrix
     mat4.perspective(this.projectionMatrix, fov, aspect, near, far);
     // 计算相机矩阵 viewMatrix
-    const x = this.earthRadius * Math.cos(this.xzReg);
-    const z = this.earthRadius * Math.sin(this.xzReg);
-    const y = this.earthRadius * Math.sin(this.yReg);
+    const x = this.earthCameraRadius * Math.cos(this.xzReg);
+    const z = this.earthCameraRadius * Math.sin(this.xzReg);
+    const y = this.earthCameraRadius * Math.sin(this.yReg);
 
-    // const eye = vec3.fromValues(100, 100, 100);
-    this.eye = vec3.fromValues(x, y, z);
-    vec3.normalize(this.eye, this.eye);
+    this.cameraPosition = vec3.fromValues(x, y, z);
+    vec3.normalize(this.cameraPosition, this.cameraPosition);
     vec3.multiply(
-      this.eye,
-      this.eye,
-      vec3.fromValues(this.earthRadius, this.earthRadius, this.earthRadius),
+      this.cameraPosition,
+      this.cameraPosition,
+      vec3.fromValues(
+        this.earthCameraRadius,
+        this.earthCameraRadius,
+        this.earthCameraRadius,
+      ),
     );
 
-    vec3.scale(this.eye, this.eye, this.earthZoom);
+    vec3.scale(this.cameraPosition, this.cameraPosition, this.earthCameraZoom);
 
     const crossY = vec3.create();
-    vec3.cross(crossY, this.eye, vec3.fromValues(0, 1, 0));
+    vec3.cross(crossY, this.cameraPosition, vec3.fromValues(0, 1, 0));
 
     const up = vec3.fromValues(0, 1, 0);
-    vec3.cross(up, crossY, this.eye);
+    vec3.cross(up, crossY, this.cameraPosition);
 
-    mat4.lookAt(this.viewMatrix, this.eye, vec3.fromValues(0, 0, 0), up);
+    const target = vec3.fromValues(0, 0, 0);
+    mat4.lookAt(this.viewMatrix, this.cameraPosition, target, up);
     this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);
 
     mat4.multiply(
@@ -65,17 +71,29 @@ export default class Viewport implements IViewport {
     );
   }
 
+  /**
+   * 旋转方法 Y 轴
+   * @param r
+   */
   public rotateY(r: number) {
-    this.xzReg += r * Math.min(this.earthZoom * this.earthZoom, 1);
+    this.xzReg += r * Math.min(this.earthCameraZoom * this.earthCameraZoom, 1);
   }
 
+  /**
+   * 旋转方法 X 轴
+   * @param r
+   */
   public rotateX(r: number) {
-    this.yReg += r * Math.min(this.earthZoom * this.earthZoom, 1);
+    this.yReg += r * Math.min(this.earthCameraZoom * this.earthCameraZoom, 1);
   }
 
+  /**
+   * 缩放方法
+   * @param z
+   */
   public scaleZoom(z: number) {
-    this.earthZoom += z;
-    this.earthZoom = Math.max(this.earthZoom, 0.6);
+    this.earthCameraZoom += z;
+    this.earthCameraZoom = Math.max(this.earthCameraZoom, 0.6);
   }
 
   public getZoom(): number {

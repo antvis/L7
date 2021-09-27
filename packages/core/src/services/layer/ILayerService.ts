@@ -71,6 +71,9 @@ export interface ILayerModel {
   initModels(): IModel[];
   needUpdate(): boolean;
   clearModels(): void;
+
+  // earth mode
+  setEarthTime?(time: number): void;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -261,6 +264,13 @@ export interface ILayer {
 
   // 增加加载模型的动画混合器
   addAnimateMixer?(mixer: AnimationMixer): void;
+
+  /**
+   * 地球模式相关的方法
+   */
+
+  // 设置当前地球时间 控制太阳角度
+  setEarthTime(time: number): void;
 }
 
 /**
@@ -336,7 +346,16 @@ export interface ILayerConfig {
    * 开启光照
    */
   enableLighting: boolean;
+
+  /**
+   * 动画参数
+   */
   animateOption: Partial<IAnimateOption>;
+
+  /**
+   * 地球模式参数
+   */
+  globelOtions: any;
   /**
    * layer point text 是否是 iconfont 模式
    */

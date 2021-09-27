@@ -374,12 +374,21 @@ export default class ScaleComponent extends React.Component {
       .style({
         opacity: 1.0,
         radius: 40,
+        globelOtions: {
+          ambientRatio: 0.6, // 环境光
+          diffuseRatio: 0.4, // 漫反射
+          specularRatio: 0.1, // 高光反射
+          // earthTime: 4.0
+          earthTime: 0.1,
+        },
       })
       .animate(true);
-
+    // earthlayer.setEarthTime(4.0)
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
       scene.addLayer(pointlayer);
+
+      earthlayer.setEarthTime(4.0);
     });
   }
 

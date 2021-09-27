@@ -19,7 +19,6 @@ import {
 } from '@antv/l7-core';
 import { EarthMap, Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
-import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
@@ -58,6 +57,9 @@ export default class L7MapService implements IMapService<Map> {
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
+  // T: 用于记录鼠标对相机的控制
+  private handleCameraChanging: boolean;
+  private handleCameraTimer: any;
 
   // init
   public addMarkerContainer(): void {
@@ -257,20 +259,15 @@ export default class L7MapService implements IMapService<Map> {
 
     this.viewport = new Viewport();
 
-    if (mapInstance) {
-      // @ts-ignore
-      this.map = mapInstance;
-      this.$mapContainer = this.map.getContainer();
-    } else {
-      this.$mapContainer = this.creatAmapContainer(id);
-      // @ts-ignore
-      this.map = new EarthMap({
-        container: this.$mapContainer,
-        style: this.getMapStyle(style),
-        bearing: rotation,
-        ...rest,
-      });
-    }
+    this.$mapContainer = this.creatAmapContainer(id);
+    // @ts-ignore
+    this.map = new EarthMap({
+      container: this.$mapContainer,
+      style: this.getMapStyle(style),
+      bearing: rotation,
+      ...rest,
+    });
+
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
 
@@ -311,7 +308,42 @@ export default class L7MapService implements IMapService<Map> {
     this.cameraChangedCallback = callback;
   }
 
+  /**
+   * 地球模式向外暴露的 Y 轴旋转方法
+   * @returns
+   */
+  public rotateY(option: { force: boolean; reg: number }) {
+    const { force = false, reg = 0.01 } = option || {};
+    // TODO: 让旋转方法与
+    if (this.handleCameraChanging && !force) {
+      return;
+    }
+
+    if (this.viewport) {
+      this.viewport.rotateY(reg);
+
+      this.viewport.syncWithMapCamera({
+        bearing: this.map.getBearing(),
+        viewportHeight: this.map.transform.height,
+        pitch: this.map.getPitch(),
+        viewportWidth: this.map.transform.width,
+        zoom: this.map.getZoom(),
+        // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+        cameraHeight: 0,
+      });
+    }
+  }
+
   private handleCameraChanged = (e: any) => {
+    const DELAY_TIME = 2000;
+    this.handleCameraChanging = true;
+    if (this.handleCameraTimer) {
+      clearTimeout(this.handleCameraTimer);
+    }
+    this.handleCameraTimer = setTimeout(() => {
+      this.handleCameraChanging = false;
+    }, DELAY_TIME);
+    // 定义鼠标相机控制
     const rotateStep = 0.02;
     if (e.type && e.originalEvent) {
       if (e.originalEvent.type === 'wheel') {
