@@ -1,14 +1,5 @@
 import { Scene } from '@antv/l7-scene';
 import {
-  AnimationMixer,
-  Camera,
-  Matrix4,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  Scene as ThreeScene,
-  WebGLRenderer,
-} from 'three';
-import {
   IThreeRenderService,
   ThreeRenderService,
   ThreeRenderServiceType,
