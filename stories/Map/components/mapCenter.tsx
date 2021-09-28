@@ -60,6 +60,7 @@ export default class GaodeMapComponent extends React.Component {
         storkeWidth: 2,
         // offsets: [100, 100],
       });
+      layer.on('click', () => console.log('click'))
     scene.addLayer(layer);
     scene.render();
     this.scene = scene;
