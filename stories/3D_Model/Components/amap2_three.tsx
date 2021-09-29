@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
-import { ThreeLayer, ThreeRender, Object3D } from '@antv/l7-three';
+import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as React from 'react';
 // import { DirectionalLight, Scene as ThreeScene } from 'three';
 import * as THREE from 'three';
@@ -57,7 +57,7 @@ export default class GlTFThreeJSDemo extends React.Component {
             'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
             (gltf) => {
               // @ts-ignore
-              const model: Object3D = gltf.scene;
+              const model = gltf.scene;
 
               layer.getSource().data.dataArray.forEach(({ coordinates }) => {
                 layer.adjustMeshToMap(model);

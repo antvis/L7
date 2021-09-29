@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../../earthmap';
 import LngLat from '../../geo/lng_lat';
 import Point from '../../geo/point';
 import { Map } from '../../map';
@@ -13,7 +14,7 @@ export default class MapTouchEvent extends Event {
   /**
    * The `Map` object that fired the event.
    */
-  public target: Map;
+  public target: Map | EarthMap;
 
   /**
    * The DOM event which caused the map event.
@@ -53,7 +54,7 @@ export default class MapTouchEvent extends Event {
   /**
    * @private
    */
-  constructor(type: string, map: Map, originalEvent: TouchEvent) {
+  constructor(type: string, map: Map | EarthMap, originalEvent: TouchEvent) {
     const touches =
       type === 'touchend'
         ? originalEvent.changedTouches

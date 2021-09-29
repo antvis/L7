@@ -86,8 +86,12 @@ L7 Logo 的显示位置 默认左下角
 
 - bottomright
 - topright
-- bottomleft,
-- topleft`
+- bottomleft
+- topleft
+- topcenter
+- bottomcenter
+- leftcenter
+- rightcenter
 
 ### logoVisible logo 是否可见
 

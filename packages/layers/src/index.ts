@@ -9,6 +9,8 @@ import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
 
+import EarthLayer from './earth';
+
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
@@ -137,4 +139,5 @@ export {
   ImageLayer,
   RasterLayer,
   HeatmapLayer,
+  EarthLayer,
 };

@@ -1,7 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import { Container } from 'inversify';
-import { AnimationMixer, Matrix4, Object3D } from 'three';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
@@ -71,6 +70,9 @@ export interface ILayerModel {
   initModels(): IModel[];
   needUpdate(): boolean;
   clearModels(): void;
+
+  // earth mode
+  setEarthTime?(time: number): void;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -232,35 +234,38 @@ export interface ILayer {
     altitude: number,
     rotation: [number, number, number],
     scale: [number, number, number],
-  ): Matrix4;
+  ): any;
 
   // 获取对应地图的经纬度平移矩阵
-  getTranslateMatrix?(lnglat: ILngLat, altitude?: number): Matrix4;
+  getTranslateMatrix?(lnglat: ILngLat, altitude?: number): any;
 
   // 设置模型对应地图在经纬度和高度方向的平移
-  applyObjectLngLat?(
-    object: Object3D,
-    lnglat: ILngLat,
-    altitude?: number,
-  ): void;
+  applyObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
 
   // 根据经纬度设置模型对应地图的平移
-  setObjectLngLat?(object: Object3D, lnglat: ILngLat, altitude?: number): void;
+  setObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
 
   // 返回物体在场景中的经纬度
-  getObjectLngLat?(object: Object3D): ILngLat;
+  getObjectLngLat?(object: any): ILngLat;
 
   // 将经纬度转为 three 世界坐标
   lnglatToCoord?(lnglat: ILngLat): ILngLat;
 
   // 设置网格适配到地图坐标系
-  adjustMeshToMap?(object: Object3D): void;
+  adjustMeshToMap?(object: any): void;
 
   // 设置网格的缩放 （主要是抹平 mapbox 底图时的差异，若是高德底图则可以直接设置网格的 scale 属性/方法）
-  setMeshScale?(object: Object3D, x: number, y: number, z: number): void;
+  setMeshScale?(object: any, x: number, y: number, z: number): void;
 
   // 增加加载模型的动画混合器
-  addAnimateMixer?(mixer: AnimationMixer): void;
+  addAnimateMixer?(mixer: any): void;
+
+  /**
+   * 地球模式相关的方法
+   */
+
+  // 设置当前地球时间 控制太阳角度
+  setEarthTime(time: number): void;
 }
 
 /**
@@ -336,7 +341,16 @@ export interface ILayerConfig {
    * 开启光照
    */
   enableLighting: boolean;
+
+  /**
+   * 动画参数
+   */
   animateOption: Partial<IAnimateOption>;
+
+  /**
+   * 地球模式参数
+   */
+  globelOtions: any;
   /**
    * layer point text 是否是 iconfont 模式
    */

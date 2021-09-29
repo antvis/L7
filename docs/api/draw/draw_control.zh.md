@@ -43,12 +43,12 @@ scene 对象
 
 control 配置项
 
-| name     | Type                                          | Default    | Description                     |
-| -------- | --------------------------------------------- | ---------- | ------------------------------- |
-| position | `bottomright、topright、 bottomleft’ topleft` | `topright` | 组件位置                        |
-| layout   | `horizontal、 vertical`                       | `vertical` | 组件布局 支持水平和垂直两种布局 |
-| controls | `controlOptions`                              |            | 设置 UI 组件添加哪些绘制工具    |
-| style    |                                               |            | 地图绘制样式                    |
+| name     | Type                                                                                              | Default    | Description                     |
+| -------- | ------------------------------------------------------------------------------------------------- | ---------- | ------------------------------- |
+| position | `bottomright、topright、 bottomleft 、topleft、 topcenter、bottomcenter、leftcenter、rightcenter` | `topright` | 组件位置                        |
+| layout   | `horizontal、 vertical`                                                                           | `vertical` | 组件布局 支持水平和垂直两种布局 |
+| controls | `controlOptions`                                                                                  |            | 设置 UI 组件添加哪些绘制工具    |
+| style    |                                                                                                   |            | 地图绘制样式                    |
 
 **controlOptions**
 UI 组件配置项
