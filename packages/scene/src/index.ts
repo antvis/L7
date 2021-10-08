@@ -323,8 +323,8 @@ class Scene
     this.mapService.panTo(p);
   }
 
-  public panBy(pixel: Point): void {
-    this.mapService.panBy(pixel);
+  public panBy(x: number, y: number): void {
+    this.mapService.panBy(x, y);
   }
 
   public getContainer() {

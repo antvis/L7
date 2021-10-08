@@ -51,7 +51,7 @@ export default interface IMapController {
   /**
    * 地图平移到指定点 `[x, y]`
    */
-  panBy(pixel: Point): void;
+  panBy(x: number, y: number): void;
 
   /**
    * 调整地图适合指定区域
