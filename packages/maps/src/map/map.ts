@@ -155,8 +155,8 @@ export default class L7MapService implements IMapService<Map> {
     this.map.panTo(p);
   }
 
-  public panBy(pixel: [number, number]): void {
-    this.panTo(pixel);
+  public panBy(x: number = 0, y: number = 0): void {
+    this.panTo([x, y]);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
