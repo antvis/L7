@@ -66,8 +66,8 @@ export default class GaodeMapComponent extends React.Component {
     this.scene = scene;
 
     setTimeout(() => {
-      console.log(this.scene.panBy(10, 10))
-    }, 1000)
+      console.log(this.scene.panBy(10, 10));
+    }, 1000);
   }
 
   public render() {
@@ -83,7 +83,6 @@ export default class GaodeMapComponent extends React.Component {
             bottom: 0,
           }}
         />
-        
       </>
     );
   }

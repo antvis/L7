@@ -239,7 +239,7 @@ export default class AMapService
       new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
     );
   }
-  
+
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
     this.map.setZoomAndCenter(zoom, center);
   }
