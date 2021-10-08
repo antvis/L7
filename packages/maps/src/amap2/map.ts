@@ -306,8 +306,8 @@ export default class AMapService
   public panTo(p: [number, number]): void {
     this.map.panTo(p);
   }
-  public panBy(pixel: [number, number]): void {
-    this.map.panTo(pixel);
+  public panBy(x: number = 0, y: number = 0): void {
+    this.map.panBy(x, y);
   }
   public fitBounds(extent: Bounds): void {
     this.map.setBounds(
