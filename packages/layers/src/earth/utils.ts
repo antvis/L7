@@ -20,17 +20,17 @@ function torad(deg: number) {
  * @param radius 半径
  */
 export function lglt2xyz(lnglat: [number, number]) {
-    // TODO: + Math.PI/2 是为了对齐坐标
-    const lng = torad(lnglat[0]) + Math.PI / 2;
-    const lat = torad(lnglat[1]);
+  // TODO: + Math.PI/2 是为了对齐坐标
+  const lng = torad(lnglat[0]) + Math.PI / 2;
+  const lat = torad(lnglat[1]);
 
-    // TODO: 手动增加一些偏移，减轻面的冲突
-    const radius = EARTH_RADIUS + (Math.random() * 0.4)
+  // TODO: 手动增加一些偏移，减轻面的冲突
+  const radius = EARTH_RADIUS + Math.random() * 0.4;
 
-    const z = radius * Math.cos(lat) * Math.cos(lng);
-    const x = radius * Math.cos(lat) * Math.sin(lng);
-    const y = radius * Math.sin(lat);
-    return [x, y, z];
+  const z = radius * Math.cos(lat) * Math.cos(lng);
+  const x = radius * Math.cos(lat) * Math.sin(lng);
+  const y = radius * Math.sin(lat);
+  return [x, y, z];
 }
 
 /**

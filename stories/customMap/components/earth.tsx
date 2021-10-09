@@ -407,8 +407,8 @@ export default class ScaleComponent extends React.Component {
           // earthTime: 4.0
           earthTime: 0.1,
         },
-      })
-      // .animate(true);
+      });
+    // .animate(true);
     // earthlayer.setEarthTime(4.0)
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
