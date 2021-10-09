@@ -257,6 +257,9 @@ export default class ScaleComponent extends React.Component {
     let pointlayer = new PointLayer()
       .source(
         d,
+        // [
+        //   {"lng":120,"lat":30}
+        // ],
         //   [
         //     {"lng":10,"lat":0},
         //     {"lng":20,"lat":0},
@@ -310,6 +313,27 @@ export default class ScaleComponent extends React.Component {
         //     {"lng":0,"lat":80},
         //     {"lng":0,"lat":90},
 
+        //     {"lng":0,"lat":100},
+        //     {"lng":0,"lat":110},
+        //     {"lng":0,"lat":120},
+        //     {"lng":0,"lat":130},
+        //     {"lng":0,"lat":140},
+        //     {"lng":0,"lat":150},
+        //     {"lng":0,"lat":160},
+        //     {"lng":0,"lat":170},
+        //     {"lng":0,"lat":180},
+
+        //     {"lng":0,"lat":190},
+        //     {"lng":0,"lat":200},
+        //     {"lng":0,"lat":210},
+        //     {"lng":0,"lat":220},
+        //     {"lng":0,"lat":230},
+        //     {"lng":0,"lat":240},
+        //     {"lng":0,"lat":250},
+        //     {"lng":0,"lat":260},
+        //     {"lng":0,"lat":270},
+
+
         //     {"lng":0,"lat":-10},
         //     {"lng":0,"lat":-20},
         //     {"lng":0,"lat":-30},
@@ -328,13 +352,15 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      .shape('circle')
-      // .shape('cylinder')
+      // .shape('circle')
+      .shape('cylinder')
       .color('#f00')
-      .size(10)
+      .size('', () => [1, 1, 10])
+      // .size(20)
       .style({
-        opacity: 0.6,
+        // opacity: 0.6,
       })
+      .animate(true)
       .active(true);
 
     // scene.addLayer(pointlayer);
@@ -387,6 +413,7 @@ export default class ScaleComponent extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
       scene.addLayer(pointlayer);
+      // console.log(pointlayer)
 
       earthlayer.setEarthTime(4.0);
     });
