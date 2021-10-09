@@ -3,6 +3,12 @@ import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 // @ts-ignore
 import { mat4, vec3 } from 'gl-matrix';
+import {
+  EARTH_RADIUS,
+  EARTH_SEGMENTS,
+  lglt2xyz,
+  primitiveSphere,
+} from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import { calculateCentroid } from '../utils/geo';
 import extrudePolygon, {
@@ -16,7 +22,6 @@ import {
   ShapeType2D,
   ShapeType3D,
 } from './shape/Path';
-import { EARTH_RADIUS, EARTH_SEGMENTS, lglt2xyz, primitiveSphere } from '../earth/utils'
 type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;

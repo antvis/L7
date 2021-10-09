@@ -333,7 +333,6 @@ export default class ScaleComponent extends React.Component {
         //     {"lng":0,"lat":260},
         //     {"lng":0,"lat":270},
 
-
         //     {"lng":0,"lat":-10},
         //     {"lng":0,"lat":-20},
         //     {"lng":0,"lat":-30},

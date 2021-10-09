@@ -2,7 +2,7 @@ import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { isNumber } from 'lodash';
 import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
-import { lglt2xyz } from '../../earth/utils'
+import { lglt2xyz } from '../../earth/utils';
 import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
@@ -159,9 +159,13 @@ export default class ExtrudeModel extends BaseModel {
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number) => {
           const coordinates = calculateCentroid(feature.coordinates);
-          if(isGlobel) {
+          if (isGlobel) {
             // TODO: 在地球模式下需要将传入 shader 的经纬度转化成对应的 xyz 坐标
-            return lglt2xyz([coordinates[0], coordinates[1]]) as [number, number, number];
+            return lglt2xyz([coordinates[0], coordinates[1]]) as [
+              number,
+              number,
+              number,
+            ];
           } else {
             return [coordinates[0], coordinates[1], 0];
           }
