@@ -15,4 +15,5 @@ export interface ILineLayerStyleOptions {
   textureBlend?: string; // 可选参数、供给纹理贴图使用(all)
   sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
   targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
+  thetaOffset?: number; // 可选参数、设置弧线的偏移量
 }
