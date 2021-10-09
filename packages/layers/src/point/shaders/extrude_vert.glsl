@@ -1,5 +1,6 @@
 precision highp float;
 
+#define pi 3.1415926535
 #define ambientRatio 0.5
 #define diffuseRatio 0.3
 #define specularRatio 0.2
@@ -10,6 +11,7 @@ attribute vec4 a_Color;
 attribute vec3 a_Size;
 attribute vec3 a_Normal;
 
+uniform float u_globel;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 varying vec4 v_color;
@@ -24,6 +26,22 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 #pragma include "projection"
 #pragma include "light"
 #pragma include "picking"
+
+float getYRadian(float x, float z) {
+  if(x > 0.0 && z > 0.0) {
+    return atan(x/z);
+  } else if(x > 0.0 && z <= 0.0){
+    return atan(-z/x) + pi/2.0;
+  } else if(x <= 0.0 && z <= 0.0) {
+    return  pi + atan(x/z); //atan(x/z) + 
+  } else {
+    return atan(z/-x) + pi*3.0/2.0;
+  }
+}
+
+float getXRadian(float y, float r) {
+  return atan(y/r);
+}
 
 void main() {
 
@@ -70,5 +88,32 @@ void main() {
   } else {
     gl_Position = project_common_position_to_clipspace(pos);
   }
+  
+  if(u_globel > 0.0) {
+    // 在地球模式下，将原本垂直于 xy 平面的圆柱调整姿态到适应圆的角度
+    //旋转矩阵mx，创建绕x轴旋转矩阵
+    float r = sqrt(a_Pos.z*a_Pos.z + a_Pos.x*a_Pos.x);
+    float xRadian = getXRadian(a_Pos.y, r);
+    float xcos = cos(xRadian);//求解旋转角度余弦值
+    float xsin = sin(xRadian);//求解旋转角度正弦值
+    mat4 mx = mat4(
+      1,0,0,0,  
+      0,xcos,-xsin,0,  
+      0,xsin,xcos,0,  
+      0,0,0,1);
+
+    //旋转矩阵my，创建绕y轴旋转矩阵
+    float yRadian = getYRadian(a_Pos.x, a_Pos.z);
+    float ycos = cos(yRadian);//求解旋转角度余弦值
+    float ysin = sin(yRadian);//求解旋转角度正弦值
+    mat4 my = mat4(
+      ycos,0,-ysin,0,  
+      0,1,0,0,  
+      ysin,0,ycos,0,  
+      0,0,0,1);
+
+    gl_Position = u_ViewProjectionMatrix * vec4(( my * mx *  vec4(a_Position * a_Size, 1.0)).xyz + a_Pos, 1.0);
+  }
+
   setPickingColor(a_PickingColor);
 }
