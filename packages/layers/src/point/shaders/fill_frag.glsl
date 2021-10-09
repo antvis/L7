@@ -93,6 +93,9 @@ void main() {
     gl_FragColor = vec4(gl_FragColor.xyz, intensity);
   }
 
+  // TODO: 避免多余片元绘制，同时也能避免有用片元在透明且重叠的情况下无法写入
+  if(gl_FragColor.a <= 0.0) discard;
+
   gl_FragColor = filterColor(gl_FragColor);
 
 }
