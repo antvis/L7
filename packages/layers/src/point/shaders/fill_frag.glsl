@@ -1,5 +1,6 @@
 #define Animate 0.0
 
+uniform float u_globel;
 uniform float u_blur : 0;
 // uniform float u_stroke_width : 1;
 
@@ -68,7 +69,14 @@ void main() {
     inner_df = sdVesica(v_data.xy, r * 1.1, r * 0.8);
   }
 
+  if(u_globel > 0.0) {
+    // TODO: 地球模式下避免多余片元绘制，同时也能避免有用片元在透明且重叠的情况下无法写入
+    // 付出的代价是边缘会有一些锯齿
+    if(outer_df > antialiased_blur + 0.018) discard;
+  }
   float opacity_t = smoothstep(0.0, antialiased_blur, outer_df);
+  
+ 
   // float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(
   //   antialiased_blur,
   //   0.0,
@@ -85,7 +93,6 @@ void main() {
 
   gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
 
-  
   gl_FragColor.a = gl_FragColor.a * opacity_t;
   if(u_aimate.x == Animate) {
     float d = length(v_data.xy);
@@ -93,9 +100,8 @@ void main() {
     gl_FragColor = vec4(gl_FragColor.xyz, intensity);
   }
 
-  // TODO: 避免多余片元绘制，同时也能避免有用片元在透明且重叠的情况下无法写入
-  if(gl_FragColor.a <= 0.0) discard;
-
   gl_FragColor = filterColor(gl_FragColor);
+
+  
 
 }
