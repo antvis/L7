@@ -22,6 +22,7 @@ export default class ScaleComponent extends React.Component {
     });
 
     var d = [
+      { lng: 110, lat: 30 },
       { lng: 127.657407, lat: 49.76027 },
       { lng: 129.397818, lat: 49.4406 },
       { lng: 130.582293, lat: 48.729687 },
@@ -351,15 +352,15 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      // .shape('circle')
-      .shape('cylinder')
+      .shape('circle')
+      // .shape('cylinder')
       .color('#f00')
-      .size('', () => [1, 1, 10])
-      // .size(20)
+      // .size('', () => [1, 1, 10])
+      .size(20)
       .style({
         // opacity: 0.6,
       })
-      .animate(true)
+      // .animate(true)
       .active(true);
 
     // scene.addLayer(pointlayer);
@@ -406,8 +407,8 @@ export default class ScaleComponent extends React.Component {
           // earthTime: 4.0
           earthTime: 0.1,
         },
-      })
-      .animate(true);
+      });
+    // .animate(true);
     // earthlayer.setEarthTime(4.0)
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);

@@ -24,9 +24,12 @@ export function lglt2xyz(lnglat: [number, number]) {
   const lng = torad(lnglat[0]) + Math.PI / 2;
   const lat = torad(lnglat[1]);
 
-  const z = EARTH_RADIUS * Math.cos(lat) * Math.cos(lng);
-  const x = EARTH_RADIUS * Math.cos(lat) * Math.sin(lng);
-  const y = EARTH_RADIUS * Math.sin(lat);
+  // TODO: 手动增加一些偏移，减轻面的冲突
+  const radius = EARTH_RADIUS + Math.random() * 0.4;
+
+  const z = radius * Math.cos(lat) * Math.cos(lng);
+  const x = radius * Math.cos(lat) * Math.sin(lng);
+  const y = radius * Math.sin(lat);
   return [x, y, z];
 }
 
