@@ -26,8 +26,8 @@ export default class ScaleComponent extends React.Component {
         lng1: 100,
         lat1: 30.0,
         lng2: 130,
-        lat2: 30
-      }
+        lat2: 30,
+      },
     ];
 
     const lineLayer = new LineLayer({
@@ -44,48 +44,53 @@ export default class ScaleComponent extends React.Component {
       })
       .size(2)
       .shape('arc3d')
-      .color('#8C1EB2')
-      // .animate(true)
+      .color('#8C1EB2');
+    // .animate(true)
     // .animate({
     //   duration: 50,
     //   interval: 0.2,
     //   trailLength: 0.05,
     // });
-    fetch('https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json')
-    .then(d => d.text())
-    .then(flyline => {
-      // @ts-ignore
-      const flydata = eval(flyline).map(item => {
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json',
+    )
+      .then((d) => d.text())
+      .then((flyline) => {
         // @ts-ignore
-        const latlng1 = item.from.split(',').map(e => { return e * 1; });
-        // @ts-ignore
-        const latlng2 = item.to.split(',').map(e => { return e * 1; });
-        return { coord: [ latlng1, latlng2 ] };
+        const flydata = eval(flyline).map((item) => {
+          // @ts-ignore
+          const latlng1 = item.from.split(',').map((e) => {
+            return e * 1;
+          });
+          // @ts-ignore
+          const latlng2 = item.to.split(',').map((e) => {
+            return e * 1;
+          });
+          return { coord: [latlng1, latlng2] };
+        });
+        const flyLine = new LineLayer({ blend: 'normal' })
+          .source(flydata, {
+            parser: {
+              type: 'json',
+              coordinates: 'coord',
+            },
+          })
+          .color('#b97feb')
+          .shape('arc3d')
+          .size(1)
+          .active(true)
+          .animate({
+            interval: 2,
+            trailLength: 2,
+            duration: 1,
+          })
+          .style({
+            opacity: 1,
+            segmentNumber: 60,
+            globalArcHeight: 20,
+          });
+        scene.addLayer(flyLine);
       });
-      const flyLine = new LineLayer({ blend: 'normal',})
-      .source(flydata, {
-        parser: {
-          type: 'json',
-          coordinates: 'coord'
-        }
-      })
-      .color('#b97feb')
-      .shape('arc3d')
-      .size(1)
-      .active(true)
-      .animate({
-        interval: 2,
-        trailLength: 2,
-        duration: 1
-      })
-      .style({
-        opacity: 1,
-        segmentNumber: 60,
-        globalArcHeight: 20
-      });
-      scene.addLayer(flyLine)
-    })
-
 
     const earthlayer = new EarthLayer()
       .source(

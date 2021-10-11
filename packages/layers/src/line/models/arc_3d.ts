@@ -13,9 +13,9 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
+import { EARTH_RADIUS } from '../../earth/utils';
 import line_arc_frag from '../shaders/line_arc_3d_frag.glsl';
 import line_arc_vert from '../shaders/line_arc_3d_vert.glsl';
-import { EARTH_RADIUS } from '../../earth/utils'
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -33,7 +33,7 @@ export default class Arc3DModel extends BaseModel {
       lineTexture = false,
       iconStep = 100,
       segmentNumber = 30,
-      globalArcHeight = 10
+      globalArcHeight = 10,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (dashArray.length === 2) {
@@ -143,7 +143,7 @@ export default class Arc3DModel extends BaseModel {
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
         blend: this.getBlend(),
-        segmentNumber
+        segmentNumber,
         // primitive: gl.POINTS,
       }),
     ];
