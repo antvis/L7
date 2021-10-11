@@ -153,6 +153,10 @@ class Scene
     return this.mapService.map;
   }
 
+  public setBgColor(color: string) {
+    this.mapService.setBgColor(color);
+  }
+
   // layer 管理
   public addLayer(layer: ILayer): void {
     // 为当前图层创建一个容器

@@ -21,6 +21,8 @@ export default class ScaleComponent extends React.Component {
       }),
     });
 
+    scene.setBgColor('#333');
+
     let data = [
       {
         lng1: 100,
@@ -102,7 +104,8 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      .color('#2E8AE6')
+      // .color('#2E8AE6')
+      .color('#f00')
       .shape('fill')
       .style({
         opacity: 1.0,
@@ -114,16 +117,43 @@ export default class ScaleComponent extends React.Component {
           // earthTime: 4.0
           earthTime: 0.1,
         },
-      });
-    // .animate(true);
+      })
+      .animate(true);
     // earthlayer.setEarthTime(4.0)
+
+    const atomLayer = new EarthLayer()
+      .source(
+        [
+          {
+            lng1: 100,
+            lat1: 30.0,
+            lng2: 130,
+            lat2: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng1',
+            y: 'lat1',
+            x1: 'lng2',
+            y1: 'lat2',
+          },
+        },
+      )
+      .color('#2E8AE6')
+      .shape('atomSphere')
+      .style({
+        opacity: 1.5,
+      });
+
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
       // scene.addLayer(pointlayer);
       // console.log(pointlayer)
 
       // earthlayer.setEarthTime(4.0);
-
+      scene.addLayer(atomLayer);
       scene.addLayer(lineLayer);
     });
   }

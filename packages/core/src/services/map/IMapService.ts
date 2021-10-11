@@ -32,6 +32,8 @@ export interface IMapWrapper {
 export interface IMapService<RawMap = {}> {
   version?: string;
   map: RawMap;
+  bgColor: string;
+  setBgColor(color: string): void;
   init(): void;
   initViewPort?(): void;
   destroy(): void;
@@ -104,6 +106,7 @@ export interface IMapService<RawMap = {}> {
         }
       | undefined,
   ): void;
+  clearColor?(): void;
 }
 
 export const MapServiceEvent = ['mapload'];
