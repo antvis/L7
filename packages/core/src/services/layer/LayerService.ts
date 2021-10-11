@@ -1,7 +1,7 @@
-import { rgb2arr } from '@antv/l7';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILayer } from '../..';
+import { rgb2arr } from '@antv/l7-utils';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
