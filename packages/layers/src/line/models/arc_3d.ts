@@ -15,6 +15,7 @@ import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/line_arc_3d_frag.glsl';
 import line_arc_vert from '../shaders/line_arc_3d_vert.glsl';
+import { EARTH_RADIUS } from '../../earth/utils'
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -32,6 +33,7 @@ export default class Arc3DModel extends BaseModel {
       lineTexture = false,
       iconStep = 100,
       segmentNumber = 30,
+      globalArcHeight = 10
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (dashArray.length === 2) {
@@ -83,6 +85,10 @@ export default class Arc3DModel extends BaseModel {
     }
 
     return {
+      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+      u_globel_radius: EARTH_RADIUS, // 地球半径
+      u_global_height: globalArcHeight,
+
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       // u_opacity: opacity === undefined ? 1 : opacity,
@@ -127,6 +133,9 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      segmentNumber = 30,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'arc3Dline',
@@ -134,6 +143,8 @@ export default class Arc3DModel extends BaseModel {
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
         blend: this.getBlend(),
+        segmentNumber
+        // primitive: gl.POINTS,
       }),
     ];
   }
