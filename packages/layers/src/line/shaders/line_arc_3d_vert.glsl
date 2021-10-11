@@ -7,6 +7,9 @@ attribute vec4 a_Instance;
 attribute vec4 a_Color;
 attribute float a_Size;
 
+uniform float u_globel;
+uniform float u_globel_radius;
+uniform float u_global_height: 10;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
@@ -76,6 +79,25 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
   // rotate by 90 degrees
   dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
   return reverse_offset_normal(vec3(dir_screenspace,1.0)).xy * sign(offset_direction);
+}
+
+float torad(float deg) {
+  return (deg / 180.0) * acos(-1.0);
+}
+
+vec3 lglt2xyz(vec2 lnglat) {
+  float pi = 3.1415926;
+  // TODO: + Math.PI/2 是为了对齐坐标
+  float lng = torad(lnglat.x) + pi / 2.0;
+  float lat = torad(lnglat.y);
+
+  // TODO: 手动增加一些偏移，减轻面的冲突
+  float radius = u_globel_radius;
+
+  float z = radius * cos(lat) * cos(lng);
+  float x = radius * cos(lat) * sin(lng);
+  float y = radius * sin(lat);
+  return vec3(x, y, z);
 }
 
 void main() {
@@ -160,5 +182,28 @@ void main() {
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
   }
+
+  // 地球模式
+  if(u_globel > 0.0) {
+    vec3 startLngLat = lglt2xyz(a_Instance.rg);
+    vec3 endLngLat = lglt2xyz(a_Instance.ba);
+    float globalRadius = length(startLngLat);
+
+    vec3 lineDir = normalize(endLngLat - startLngLat);
+    vec3 midPointDir = normalize((startLngLat + endLngLat)/2.0);
+
+    // 线的偏移
+    vec3 lnglatOffset = cross(lineDir, midPointDir) * a_Position.y;
+    // 计算起始点和终止点的距离
+    float lnglatLength = length(a_Instance.rg - a_Instance.ba)/50.0;
+    // 计算飞线各个节点相应的高度
+    float lineHeight = u_global_height * (-4.0*segmentRatio*segmentRatio + 4.0 * segmentRatio) * lnglatLength;
+    // 地球点位
+    vec3 globalPoint = normalize(mix(startLngLat, endLngLat, segmentRatio)) * (globalRadius + lineHeight) + lnglatOffset * a_Size;
+    
+    gl_Position = u_ViewProjectionMatrix * vec4(globalPoint, 1.0);
+  }
+ 
+
   setPickingColor(a_PickingColor);
 }
