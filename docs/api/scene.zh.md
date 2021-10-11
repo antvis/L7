@@ -490,6 +490,7 @@ scene.setPitch(pitch);
 ```
 
 ### setMapStatus 设置地图状态
+可用来关闭地图的一些交互操作
 
 参数 :
 
@@ -523,6 +524,49 @@ scene.fitBounds([
   [112, 32],
   [114, 35],
 ]);
+```
+
+### containerToLngLat
+
+画布坐标转经纬度坐标
+
+参数 :
+
+- pixel 画布的坐标 [x ,y ] {array }
+```
+scene.pixelToLngLat([10,10]);
+```
+
+### lngLatToContainer
+经纬度坐标转画布坐标
+
+参数 :
+- lnglat 经纬度坐标 [lng,lat ] {array }
+
+```
+scene.lngLatToPixel([120,10]);
+
+```
+### pixelToLngLat
+像素坐标：不同级别下地图上某点的位置
+地图像素坐标转经纬度坐标
+
+参数 :
+
+- pixel 画布的坐标 [x ,y ] {array }
+```
+scene.pixelToLngLat([10,10]);
+```
+
+### lngLatToPixel
+经纬度坐标转像素坐标
+
+参数 :
+- lnglat 经纬度坐标 [lng,lat ] {array }
+
+```
+scene.lngLatToPixel([120,10]);
+
 ```
 
 ### exportMap 导出地图图片
