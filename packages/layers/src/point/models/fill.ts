@@ -9,7 +9,6 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
 import BaseModel, {
   styleColor,
   styleOffset,
@@ -22,7 +21,7 @@ import {
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
-import { isNumber, isString } from 'lodash';
+import { isNumber } from 'lodash';
 
 import { mat4, vec3 } from 'gl-matrix';
 
@@ -32,7 +31,6 @@ interface IPointLayerStyleOptions {
   stroke: styleColor;
   strokeOpacity: styleSingle;
   offsets: styleOffset;
-  isGlobel?: boolean;
 }
 // 判断当前使用的 style 中的变量属性是否需要进行数据映射
 export default class FillModel extends BaseModel {
@@ -43,8 +41,6 @@ export default class FillModel extends BaseModel {
       strokeWidth = 0,
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
-      // TODO: 判断当前图层是否为地球模式
-      isGlobel = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (

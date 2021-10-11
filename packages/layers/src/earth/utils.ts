@@ -61,7 +61,6 @@ export function primitiveSphere(
   const indicesArr = [];
   const positions = [];
   const positionsArr = [];
-  const normals = [];
   const normalArr = [];
   const uvs = [];
 
@@ -96,7 +95,6 @@ export function primitiveSphere(
       positionsArr.push(...tmpVec3.slice());
 
       vec3.normalize(tmpVec3, tmpVec3);
-      normals.push(tmpVec3.slice());
       normalArr.push(...tmpVec3.slice());
 
       uvs.push([normalizedY, 1 - normalizedZ]);
@@ -141,7 +139,6 @@ export function primitiveSphere(
   return {
     cells: indices,
     positions,
-    normals,
     uvs,
     positionsArr,
     indicesArr,
