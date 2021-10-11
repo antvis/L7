@@ -89,6 +89,12 @@ export default class AMapService
 
   private cameraChangedCallback: (viewport: IViewport) => void;
 
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)'
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
+
   /**
    *   设置数据的绘制中心 高德2.0
    */

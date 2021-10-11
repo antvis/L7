@@ -78,6 +78,12 @@ export default class AMapService
 
   private viewport: Viewport;
 
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)'
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
+
   private cameraChangedCallback: (viewport: IViewport) => void;
 
   public addMarkerContainer(): void {

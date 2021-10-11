@@ -11,6 +11,7 @@ import {
   IMapService,
   IMercator,
   IPoint,
+  IRendererService,
   IStatusOptions,
   IViewport,
   MapServiceEvent,
@@ -51,6 +52,9 @@ export default class L7MapService implements IMapService<Map> {
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
 
+  @inject(TYPES.IRendererService)
+  private readonly renderService: IRendererService;
+
   @inject(TYPES.IEventEmitter)
   private eventEmitter: any;
   private viewport: Viewport;
@@ -61,6 +65,11 @@ export default class L7MapService implements IMapService<Map> {
   private handleCameraChanging: boolean;
   private handleCameraTimer: any;
 
+  // 背景色
+  public bgColor: string = '#000'
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
   // init
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
@@ -334,6 +343,10 @@ export default class L7MapService implements IMapService<Map> {
 
       this.cameraChangedCallback(this.viewport);
     }
+  }
+
+  public clearColor() {
+    this.renderService.clear({color: [0.0, 0.0, 0.0, 1.0]})
   }
 
   private handleCameraChanged = (e: any) => {

@@ -66,6 +66,12 @@ export default class MapboxService
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
 
+  // 背景色
+  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)'
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
+
   // init
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
