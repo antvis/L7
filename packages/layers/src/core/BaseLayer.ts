@@ -30,6 +30,7 @@ import {
   IScale,
   IScaleOptions,
   IShaderModuleService,
+  ISource,
   ISourceCFG,
   IStyleAttributeInitializationOptions,
   IStyleAttributeService,
@@ -451,6 +452,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public source(data: any, options?: ISourceCFG): ILayer {
+    if (data?.data) {
+      // 判断是否为source
+      this.setSource(data);
+      return this;
+    }
     this.sourceOption = {
       data,
       options,
