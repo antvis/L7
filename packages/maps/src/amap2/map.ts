@@ -70,6 +70,9 @@ export default class AMapService
   public sceneCenter!: [number, number]; // 一般使用用户数据的第一个
   public sceneCenterMKT!: [number, number]; // 莫卡托
 
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)';
+
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
@@ -88,9 +91,6 @@ export default class AMapService
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
-
-  // 背景色
-  public bgColor: string = 'rgba(0, 0, 0, 0)'
   public setBgColor(color: string) {
     this.bgColor = color;
   }

@@ -50,6 +50,9 @@ export default class MapboxService
   public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
 
+  // 背景色
+  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -65,9 +68,6 @@ export default class MapboxService
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
-
-  // 背景色
-  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)'
   public setBgColor(color: string) {
     this.bgColor = color;
   }

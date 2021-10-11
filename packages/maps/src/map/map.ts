@@ -43,6 +43,9 @@ export default class L7MapService implements IMapService<Map> {
   public version: string = Version.L7MAP;
   public map: Map;
 
+  // 背景色
+  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -58,9 +61,6 @@ export default class L7MapService implements IMapService<Map> {
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
-
-  // 背景色
-  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)'
   public setBgColor(color: string) {
     this.bgColor = color;
   }

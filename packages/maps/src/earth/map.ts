@@ -43,6 +43,9 @@ export default class L7MapService implements IMapService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
 
+  // 背景色
+  public bgColor: string = '#000';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -64,9 +67,6 @@ export default class L7MapService implements IMapService<Map> {
   // T: 用于记录鼠标对相机的控制
   private handleCameraChanging: boolean;
   private handleCameraTimer: any;
-
-  // 背景色
-  public bgColor: string = '#000'
   public setBgColor(color: string) {
     this.bgColor = color;
   }
@@ -346,7 +346,7 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public clearColor() {
-    this.renderService.clear({color: [0.0, 0.0, 0.0, 1.0]})
+    this.renderService.clear({ color: [0.0, 0.0, 0.0, 1.0] });
   }
 
   private handleCameraChanged = (e: any) => {

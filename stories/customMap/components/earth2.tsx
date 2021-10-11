@@ -21,7 +21,7 @@ export default class ScaleComponent extends React.Component {
       }),
     });
 
-    scene.setBgColor('#333')
+    scene.setBgColor('#333');
 
     let data = [
       {

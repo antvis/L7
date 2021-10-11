@@ -61,6 +61,9 @@ export default class AMapService
    */
   public map: AMap.Map & IAMapInstance;
 
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)';
+
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
@@ -78,13 +81,10 @@ export default class AMapService
 
   private viewport: Viewport;
 
-  // 背景色
-  public bgColor: string = 'rgba(0, 0, 0, 0)'
+  private cameraChangedCallback: (viewport: IViewport) => void;
   public setBgColor(color: string) {
     this.bgColor = color;
   }
-
-  private cameraChangedCallback: (viewport: IViewport) => void;
 
   public addMarkerContainer(): void {
     const mapContainer = this.map.getContainer();
