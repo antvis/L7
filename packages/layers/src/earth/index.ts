@@ -1,28 +1,24 @@
 import BaseLayer from '../core/BaseLayer';
+import EarthAtomSphereModel from './models/atmosphere';
 import BaseEarthModel from './models/base';
-import EarthAtomSphereModel from './models/atmosphere'
 
 interface IEarthLayerStyleOptions {
   setEarthTime(time: number): void;
 }
 
-export type EarthModelType =
-  | 'base'
-  | 'atomSphere';
+export type EarthModelType = 'base' | 'atomSphere';
 
 const EarthModels: { [key in EarthModelType]: any } = {
   base: BaseEarthModel,
-  atomSphere: EarthAtomSphereModel
+  atomSphere: EarthAtomSphereModel,
 };
 
-const earthLayerTypes = ['base', 'atomSphere']
-
+const earthLayerTypes = ['base', 'atomSphere'];
 
 export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
   public type: string = 'EarthLayer';
 
   public buildModels() {
-
     const shape = this.getModelType();
     this.layerModel = new EarthModels[shape](this);
     this.models = this.layerModel.initModels();
@@ -44,8 +40,8 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
-    let shape = (shapeAttribute?.scale?.field || 'base') as string
-    if(earthLayerTypes.indexOf(shape) < 0) {
+    let shape = (shapeAttribute?.scale?.field || 'base') as string;
+    if (earthLayerTypes.indexOf(shape) < 0) {
       shape = 'base';
     }
     return shape as EarthModelType;

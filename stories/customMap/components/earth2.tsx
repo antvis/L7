@@ -116,30 +116,33 @@ export default class ScaleComponent extends React.Component {
           earthTime: 0.1,
         },
       })
-    .animate(true);
+      .animate(true);
     // earthlayer.setEarthTime(4.0)
 
     const atomLayer = new EarthLayer()
-      .source([
+      .source(
+        [
+          {
+            lng1: 100,
+            lat1: 30.0,
+            lng2: 130,
+            lat2: 30,
+          },
+        ],
         {
-          lng1: 100,
-          lat1: 30.0,
-          lng2: 130,
-          lat2: 30,
+          parser: {
+            type: 'json',
+            x: 'lng1',
+            y: 'lat1',
+            x1: 'lng2',
+            y1: 'lat2',
+          },
         },
-      ],  {
-        parser: {
-          type: 'json',
-          x: 'lng1',
-          y: 'lat1',
-          x1: 'lng2',
-          y1: 'lat2',
-        }
-      })
+      )
       .color('#2E8AE6')
       .shape('atomSphere')
       .style({
-        opacity: 1.5
+        opacity: 1.5,
       });
 
     scene.on('loaded', () => {
@@ -148,8 +151,8 @@ export default class ScaleComponent extends React.Component {
       // console.log(pointlayer)
 
       // earthlayer.setEarthTime(4.0);
-      scene.addLayer(atomLayer)
-      scene.addLayer(lineLayer);  
+      scene.addLayer(atomLayer);
+      scene.addLayer(lineLayer);
     });
   }
 
