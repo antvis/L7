@@ -4,19 +4,14 @@ import {
   ILayerService,
   IMapService,
   IRendererService,
-  PositionName,
+  PositionType,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 
-export enum PositionType {
-  'TOPRIGHT' = 'topright',
-  'TOPLEFT' = 'topleft',
-  'BOTTOMRIGHT' = 'bottomright',
-  'BOTTOMLEFT' = 'bottomleft',
-}
+export { PositionType } from '@antv/l7-core';
 
 let controlId = 0;
 export default class Control extends EventEmitter {
@@ -45,7 +40,7 @@ export default class Control extends EventEmitter {
     };
   }
 
-  public setPosition(position: PositionName = 'bottomright') {
+  public setPosition(position: PositionType = PositionType.BOTTOMRIGHT) {
     // 考虑组件的自动布局，需要销毁重建
     const controlService = this.controlService;
     if (controlService) {

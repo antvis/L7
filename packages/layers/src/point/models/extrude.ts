@@ -2,6 +2,7 @@ import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { isNumber } from 'lodash';
 import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
+import { lglt2xyz } from '../../earth/utils';
 import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
@@ -51,6 +52,9 @@ export default class ExtrudeModel extends BaseModel {
             });
     }
     return {
+      // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
+      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       // u_opacity: opacity || 1.0,
@@ -70,6 +74,7 @@ export default class ExtrudeModel extends BaseModel {
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
         blend: this.getBlend(),
+        // primitive: gl.POINTS,
       }),
     ];
   }
@@ -77,6 +82,8 @@ export default class ExtrudeModel extends BaseModel {
     this.dataTexture?.destroy();
   }
   protected registerBuiltinAttributes() {
+    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
+    const isGlobel = this.mapService.version === 'GLOBEL';
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
@@ -104,7 +111,7 @@ export default class ExtrudeModel extends BaseModel {
                 size.length === 2 ? [size[0], size[0], size[1]] : size;
             }
             if (!Array.isArray(size)) {
-              buffersize = [size];
+              buffersize = [size, size, size];
             }
             return buffersize;
           } else {
@@ -152,7 +159,16 @@ export default class ExtrudeModel extends BaseModel {
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number) => {
           const coordinates = calculateCentroid(feature.coordinates);
-          return [coordinates[0], coordinates[1], 0];
+          if (isGlobel) {
+            // TODO: 在地球模式下需要将传入 shader 的经纬度转化成对应的 xyz 坐标
+            return lglt2xyz([coordinates[0], coordinates[1]]) as [
+              number,
+              number,
+              number,
+            ];
+          } else {
+            return [coordinates[0], coordinates[1], 0];
+          }
         },
       },
     });

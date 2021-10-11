@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.5.16",
+  "version": "2.5.29",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -44,7 +44,9 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7": "2.5.16",
+    "@antv/l7-core": "^2.5.29",
+    "@antv/l7-layers": "^2.5.29",
+    "@antv/l7-scene": "^2.5.29",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",
@@ -54,7 +56,7 @@
   "devDependencies": {
     "three": "^0.115.0"
   },
-  "gitHead": "347dc9a3a502ae8837625c1347830b7e9a334545",
+  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
     "access": "public"
   }

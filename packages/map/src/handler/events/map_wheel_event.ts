@@ -1,9 +1,10 @@
+import { EarthMap } from '../../earthmap';
 import { Map } from '../../map';
 import { Event } from './event';
 
 export interface IMapBoxZoomEvent {
   type: 'boxzoomstart' | 'boxzoomend' | 'boxzoomcancel';
-  target: Map;
+  target: Map | EarthMap;
   originalEvent: MouseEvent;
 }
 export default class MapWheelEvent extends Event {
@@ -22,12 +23,12 @@ export default class MapWheelEvent extends Event {
   /**
    * The `Map` object that fired the event.
    */
-  public target: Map;
+  public target: Map | EarthMap;
 
   /**
    * @private
    */
-  constructor(type: string, map: Map, originalEvent: WheelEvent) {
+  constructor(type: string, map: Map | EarthMap, originalEvent: WheelEvent) {
     super(type, { originalEvent });
     this.defaultPrevented = false;
   }

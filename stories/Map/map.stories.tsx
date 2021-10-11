@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import MapCenter from './components/mapCenter';
 import Amap2demo from './components/amap2demo'
+import Amap2demo_destroy from './components/amap2demo_destroy';
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
 import Amap2demo_text from './components/amap2demo_text'
@@ -118,3 +119,5 @@ storiesOf('地图方法', module)
 
         .add('高德地图 样式数据映射', () => <Amap2demo_styleMap/>)
         .add('高德地图 样式映射 文字偏移', () => <Amap2demo_textOffset/>)
+
+        .add('测试销毁', () => <Amap2demo_destroy/>)

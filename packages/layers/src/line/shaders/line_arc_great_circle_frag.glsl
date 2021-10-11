@@ -7,7 +7,7 @@ uniform float u_opacity;
 uniform float u_textureBlend;
 uniform float u_blur : 0.9;
 uniform float u_line_type: 0.0;
-varying vec2 v_normal;
+// varying vec2 v_normal;
 varying vec4 v_dash_array;
 varying float v_distance_ratio;
 varying vec4 v_color;
@@ -19,11 +19,9 @@ uniform float u_line_texture: 0.0;
 uniform sampler2D u_texture;
 uniform vec2 u_textSize;
 uniform float segmentNumber;
-varying float v_segmentIndex;
-varying float v_arcDistrance;
-varying float v_pixelLen;
-varying vec2 v_offset;
-varying float v_a;
+
+varying vec4 v_dataset; // 数据集
+
 varying vec2 v_iconMapUV;
 
 uniform float u_linearColor: 0;
@@ -39,10 +37,11 @@ varying mat4 styleMappingMat;
 void main() {
   float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0;
-  // gl_FragColor = v_color;
+  float d_segmentIndex = v_dataset.g;
   
+  // 设置弧线的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
-    gl_FragColor = mix(u_sourceColor, u_targetColor, v_segmentIndex/segmentNumber);
+    gl_FragColor = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
   } else { // 使用 color 方法传入的颜色
      gl_FragColor = v_color;
   }
@@ -59,6 +58,7 @@ void main() {
     gl_FragColor.a *=flag;
   }
 
+  // 设置弧线的动画模式
   if(u_aimate.x == Animate) {
       animateSpeed = u_time / u_aimate.y;
       float alpha =1.0 - fract( mod(1.0- smoothstep(0.0, 1.0, v_distance_ratio), u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
@@ -67,22 +67,23 @@ void main() {
       gl_FragColor.a *= alpha;
   }
 
-  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式
-    float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / (segmentNumber - 1.0)));
-    // float arcRadio = v_segmentIndex / (segmentNumber - 1.0);
-    float count = floor(v_arcDistrance/v_pixelLen);
+  // 设置弧线的贴图
+  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { 
+    float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / (segmentNumber - 1.0)));
+    // float arcRadio = d_segmentIndex / (segmentNumber - 1.0);
+    float count = v_dataset.b; // 贴图在弧线上重复的数量
     float u = fract(arcRadio * count - animateSpeed * count);
     // float u = fract(arcRadio * count - animateSpeed);
     if(u_aimate.x == Animate) {
       u = gl_FragColor.a/opacity;
     }
 
-    float v = length(v_offset)/(v_a); // 横向
+    float v = v_dataset.a; // 线图层贴图部分的 v 坐标值
 
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     vec4 pattern = texture2D(u_texture, uv);
     
-
+    // 设置贴图和底色的叠加模式
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);

@@ -19,7 +19,6 @@ uniform float u_dash_offset : 0.0;
 uniform float u_dash_ratio : 0.1;
 varying vec4 v_dash_array;
 
-varying float v_v;
 varying vec4 v_dataset; // 数据集 - distance_ratio/distance/pixelLen/texV
 
 varying vec2 v_iconMapUV;
@@ -70,7 +69,7 @@ void main() {
     float aDistance = v_dataset.g;      // 当前顶点的距离
     float d_texPixelLen = v_dataset.b;  // 贴图的像素长度，根据地图层级缩放
     float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
-    float v = v_dataset.a;
+    float v = v_dataset.a;  // 线图层贴图部分的 v 坐标值
 
     v = max(smoothstep(0.95, 1.0, v), v);
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
@@ -96,7 +95,6 @@ void main() {
   // if(rV < r || rV > 1.0 - r) {
   //   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
   // } 
-  // float v = v_v;
   // if(v > 0.9) {
   //   gl_FragColor = vec4(0.17647, 0.43921568, 0.2, 1.0);
   // } else if(v < 0.1) {

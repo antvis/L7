@@ -23,6 +23,8 @@ export default class LayerService implements ILayerService {
 
   private lastRenderType: string;
 
+  private lastPickRenderTime: number;
+
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
 
@@ -129,17 +131,39 @@ export default class LayerService implements ILayerService {
 
   // 渲染检测
   private renderTest(renderType: string | undefined): boolean {
+    const now = new Date().getTime();
+    const betweenPickRenderTime = now - this.lastPickRenderTime;
+    if (renderType === 'picking') {
+      this.lastPickRenderTime = new Date().getTime();
+    }
+
     // 继续渲染事件
     if (renderType) {
       switch (renderType) {
         case 'picking':
           //  TODO: picking 类型的渲染事件
-          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
-          if (this.lastRenderType === 'mapRender') {
+          //  若是上次触发为地图或动画触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
+          if (
+            this.lastRenderType === 'mapRender' ||
+            this.lastRenderType === 'animate'
+          ) {
             this.lastRenderType = 'picking';
-            return false;
+            // 如果上一次触发的事件在 48 ms 以上，则这一次不放弃触发
+            if (betweenPickRenderTime > 48) {
+              return true;
+            } else {
+              return false;
+            }
           } else {
             this.lastRenderType = 'picking';
+            return true;
+          }
+        case 'animate':
+          if (this.lastRenderType === 'mapRender') {
+            this.lastRenderType = 'animate';
+            return false;
+          } else {
+            this.lastRenderType = 'animate';
             return true;
           }
         case 'mapRender':
@@ -148,6 +172,7 @@ export default class LayerService implements ILayerService {
         default:
           return true;
       }
+      // TODO: 地图触发的渲染优先级最高，动画其次，拾取最次
     }
     return true;
   }
@@ -162,7 +187,7 @@ export default class LayerService implements ILayerService {
   }
 
   private runRender() {
-    this.renderLayers();
+    this.renderLayers('animate');
     this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 

@@ -19,7 +19,7 @@ export default class Amap2demo_lineDash extends React.Component {
         zoom: 10,
         rotation: 0,
         style: 'amap://styles/wine',
-        viewMode: '2D',
+        // viewMode: '2D',
       }),
     });
     this.scene = scene;

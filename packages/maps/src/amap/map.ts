@@ -229,17 +229,21 @@ export default class AMapService
   public panTo(p: [number, number]): void {
     this.map.panTo(p);
   }
-  public panBy(pixel: [number, number]): void {
-    this.map.panTo(pixel);
+
+  public panBy(x: number = 0, y: number = 0): void {
+    this.map.panBy(x, y);
   }
+
   public fitBounds(extent: Bounds): void {
     this.map.setBounds(
       new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
     );
   }
+
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
     this.map.setZoomAndCenter(zoom, center);
   }
+
   public setMapStyle(style: string): void {
     this.map.setMapStyle(this.getMapStyle(style));
   }
@@ -273,6 +277,12 @@ export default class AMapService
       x: pixel.getX(),
       y: pixel.getY(),
     };
+  }
+
+  public lngLatToCoord(lnglat: [number, number]): any {
+    // @ts-ignore
+    const { x, y } = this.map.lngLatToGeodeticCoord(lnglat);
+    return [x, -y];
   }
 
   public lngLatToMercator(
@@ -411,6 +421,10 @@ export default class AMapService
 
   public destroy() {
     this.map.destroy();
+
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     // @ts-ignore
     delete window.initAMap;
     const $jsapi = document.getElementById(AMAP_SCRIPT_ID);

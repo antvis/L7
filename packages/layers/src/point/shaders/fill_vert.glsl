@@ -1,11 +1,12 @@
 attribute vec4 a_Color;
 attribute vec3 a_Position;
-attribute vec2 a_Extrude;
+attribute vec3 a_Extrude;
 attribute float a_Size;
 attribute float a_Shape;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
+uniform float u_globel;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
@@ -29,7 +30,7 @@ uniform vec2 u_offsets;
 
 
 void main() {
-  vec2 extrude = a_Extrude;
+  vec3 extrude = a_Extrude;
   float shape_type = a_Shape;
   float newSize = setPickingSize(a_Size);
 
@@ -123,10 +124,11 @@ void main() {
   float antialiasblur = 1.0 / u_DevicePixelRatio / (newSize + u_stroke_width);
 
   // construct point coords
-  v_data = vec4(extrude, antialiasblur,shape_type);
+  // TODP: /abs(extrude.x) 是为了兼容地球模式
+  v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
   // vec2 offset = project_pixel(extrude * (newSize + u_stroke_width) + u_offsets);
-  vec2 offset = project_pixel(extrude * (newSize + u_stroke_width) + textrueOffsets);
+  vec2 offset = project_pixel(extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
@@ -136,6 +138,10 @@ void main() {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
   }
 
+  if(u_globel > 0.0) {
+    gl_Position = u_ViewProjectionMatrix * vec4(a_Position + extrude * newSize * 0.1, 1.0);
+  }
+ 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
 
   setPickingColor(a_PickingColor);

@@ -162,8 +162,8 @@ export default class MapboxService
     this.map.panTo(p);
   }
 
-  public panBy(pixel: [number, number]): void {
-    this.panTo(pixel);
+  public panBy(x: number, y: number): void {
+    this.panTo([x, y]);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
@@ -236,6 +236,21 @@ export default class MapboxService
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     return this.map.project(lnglat);
   }
+
+  /**
+   * 将经纬度转成墨卡托坐标
+   * @param lnglat
+   * @returns
+   */
+  public lngLatToCoord(
+    lnglat: [number, number],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ) {
+    // @ts-ignore
+    const { x, y } = this.lngLatToMercator(lnglat, 0);
+    return [x - origin.x, y - origin.y] as [number, number];
+  }
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
@@ -347,6 +362,9 @@ export default class MapboxService
   }
 
   public destroy() {
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();

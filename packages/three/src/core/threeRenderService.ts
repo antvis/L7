@@ -1,4 +1,4 @@
-import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7';
+import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 
@@ -25,6 +25,7 @@ export class ThreeRenderService implements IThreeRenderService {
   public renderer: WebGLRenderer;
   public camera: Camera;
   public center: IMercator;
+  public aspect: number;
   private scene: ThreeScene;
 
   // 初始状态相机变换矩阵
@@ -37,6 +38,7 @@ export class ThreeRenderService implements IThreeRenderService {
   private readonly mapService: IMapService;
 
   public init() {
+    // 从 L7 的 renderer 中获取可视化层的 canvas/gl
     const canvas = this.rendererService.getCanvas() as HTMLCanvasElement;
     const gl = this.rendererService.getGLContext();
     if (canvas && gl) {
@@ -48,6 +50,8 @@ export class ThreeRenderService implements IThreeRenderService {
     }
     const { x, y, z } = this.center;
     this.cameraTransform = new Matrix4().makeTranslation(x, y, z);
+
+    // 根据 L7 的 canvas/gl 构建 threejs 的 renderer
     this.renderer = new WebGLRenderer({
       canvas,
       context: gl,
@@ -61,12 +65,30 @@ export class ThreeRenderService implements IThreeRenderService {
     // this.renderer.shadowMap.type = PCFSoftShadowMap;
 
     this.scene = new ThreeScene();
-    this.camera = new PerspectiveCamera(45, 1, 1, 2000000);
+
+    this.aspect = gl.drawingBufferWidth / gl.drawingBufferHeight;
+    this.camera = new PerspectiveCamera(45, this.aspect, 1, 20000000);
   }
   public getRenderCamera(): Camera {
-    return this.mapService.constructor.name === 'AMapService'
-      ? this.AMapCamera()
-      : this.mapboxCamera();
+    /**
+     * map version
+     * GAODE1.x
+     * GAODE2.x
+     * MAPBOX
+     */
+    switch (this.mapService.version) {
+      case 'GAODE1.x':
+        return this.AMapCamera();
+      case 'GAODE2.x':
+        return this.AMap2Camera();
+      case 'MAPBOX':
+        return this.mapboxCamera();
+      default:
+        return this.AMapCamera();
+    }
+    // return this.mapService.constructor.name === 'AMapService'
+    //   ? this.AMapCamera()
+    //   : this.mapboxCamera();
   }
 
   private mapboxCamera(): Camera {
@@ -107,6 +129,38 @@ export class ThreeRenderService implements IThreeRenderService {
     camera.lookAt(0, 0, 0);
     camera.position.x += mapCamera.position.x;
     camera.position.y += -mapCamera.position.y;
+    return camera;
+  }
+
+  private AMap2Camera(): Camera {
+    // @ts-ignore
+    const customCoords = this.mapService.map.customCoords;
+    customCoords.getCenter();
+
+    const camera = this.camera;
+    const {
+      near,
+      far,
+      fov,
+      up,
+      lookAt,
+      position,
+    } = customCoords.getCameraParams();
+    // @ts-ignore
+    camera.near = near;
+    // @ts-ignore
+    camera.far = far;
+    // @ts-ignore
+    camera.fov = fov;
+    // @ts-ignore
+    camera.position.set(...position);
+    // @ts-ignore
+    camera.up.set(...up);
+    // @ts-ignore
+    camera.lookAt(...lookAt);
+    // @ts-ignore
+    camera.updateProjectionMatrix();
+
     return camera;
   }
 }

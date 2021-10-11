@@ -995,6 +995,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
   }
 
+  /**
+   * 继承空方法
+   * @param time
+   */
+  public setEarthTime(time: number) {
+    console.warn('empty fn');
+  }
+
   protected getConfigSchema() {
     throw new Error('Method not implemented.');
   }

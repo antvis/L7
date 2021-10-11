@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-map",
-  "version": "2.5.16",
+  "version": "2.5.29",
   "description": "l7 map",
   "keywords": [],
   "author": "thinkinggis <lzx199065@gmail.com>",
@@ -37,12 +37,12 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7-utils": "2.5.16",
+    "@antv/l7-utils": "^2.5.29",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",
     "eventemitter3": "^4.0.4",
     "lodash": "^4.17.15"
   },
-  "gitHead": "347dc9a3a502ae8837625c1347830b7e9a334545"
+  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
 }

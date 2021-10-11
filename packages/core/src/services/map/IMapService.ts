@@ -65,7 +65,7 @@ export interface IMapService<RawMap = {}> {
   zoomIn(option?: any, eventData?: any): void;
   zoomOut(option?: any, eventData?: any): void;
   panTo(p: Point): void;
-  panBy(pixel: Point): void;
+  panBy(x: number, y: number): void;
   fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
   setZoomAndCenter(zoom: number, center: Point): void;
   setCenter(center: [number, number], option?: ICameraOptions): void;
@@ -94,6 +94,16 @@ export interface IMapService<RawMap = {}> {
   // lngLatToCoords?(lnglatArray: any): any;
   getCustomCoordCenter?(): [number, number];
   exportMap(type: 'jpg' | 'png'): string;
+
+  // 地球模式下的地图方法/属性
+  rotateY?(
+    option:
+      | {
+          force?: boolean;
+          reg?: number;
+        }
+      | undefined,
+  ): void;
 }
 
 export const MapServiceEvent = ['mapload'];

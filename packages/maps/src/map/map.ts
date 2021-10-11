@@ -155,8 +155,8 @@ export default class L7MapService implements IMapService<Map> {
     this.map.panTo(p);
   }
 
-  public panBy(pixel: [number, number]): void {
-    this.panTo(pixel);
+  public panBy(x: number = 0, y: number = 0): void {
+    this.panTo([x, y]);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
@@ -279,6 +279,9 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public destroy() {
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();

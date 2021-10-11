@@ -182,6 +182,14 @@ module.exports = {
           en: 'Component'
         },
         order: 6
+      },
+      {
+        slug: 'api/renderer',
+        title: {
+          zh: '第三方引擎接入',
+          en: 'import other gl'
+        },
+        order: 3
       }
     ],
     examples: [

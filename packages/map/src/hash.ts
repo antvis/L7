@@ -1,6 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import throttle from 'lodash/throttle';
+import { EarthMap } from './earthmap';
 import { Map } from './map';
 
 /*
@@ -10,7 +11,7 @@ import { Map } from './map';
  * @returns {Hash} `this`
  */
 class Hash {
-  private map: Map;
+  private map: Map | EarthMap;
   private updateHash: () => number | void;
   private hashName?: string;
 
@@ -20,17 +21,19 @@ class Hash {
     // Mobile Safari doesn't allow updating the hash more than 100 times per 30 seconds.
     this.updateHash = throttle(this.updateHashUnthrottled, (30 * 1000) / 100);
   }
-  public addTo(map: Map) {
+  public addTo(map: Map | EarthMap) {
     this.map = map;
     window.addEventListener('hashchange', this.onHashChange, false);
+    // @ts-ignore
     this.map.on('moveend', this.updateHash);
     return this;
   }
   public remove() {
     window.removeEventListener('hashchange', this.onHashChange, false);
+    // @ts-ignore
     this.map.off('moveend', this.updateHash);
     // clearTimeout(this.updateHash());
-
+    // @ts-ignore
     delete this.map;
     return this;
   }

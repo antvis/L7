@@ -30,6 +30,7 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+
 // import {
 //   IStyleAttributeUpdateOptions,
 //   StyleAttributeField,
@@ -69,6 +70,9 @@ export interface ILayerModel {
   initModels(): IModel[];
   needUpdate(): boolean;
   clearModels(): void;
+
+  // earth mode
+  setEarthTime?(time: number): void;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -84,6 +88,8 @@ export interface IPickedFeature {
 export interface IActiveOption {
   color: string | number[];
 }
+
+type ILngLat = [number, number];
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -213,6 +219,53 @@ export interface ILayer {
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
   setAnimateStartTime(): void;
   getLayerAnimateTime(): number;
+
+  /**
+   * threejs 适配兼容相关的方法
+   * @param lnglat
+   * @param altitude
+   * @param rotation
+   * @param scale
+   */
+
+  // 获取对应地图的经纬度模型矩阵
+  getModelMatrix?(
+    lnglat: ILngLat,
+    altitude: number,
+    rotation: [number, number, number],
+    scale: [number, number, number],
+  ): any;
+
+  // 获取对应地图的经纬度平移矩阵
+  getTranslateMatrix?(lnglat: ILngLat, altitude?: number): any;
+
+  // 设置模型对应地图在经纬度和高度方向的平移
+  applyObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
+
+  // 根据经纬度设置模型对应地图的平移
+  setObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
+
+  // 返回物体在场景中的经纬度
+  getObjectLngLat?(object: any): ILngLat;
+
+  // 将经纬度转为 three 世界坐标
+  lnglatToCoord?(lnglat: ILngLat): ILngLat;
+
+  // 设置网格适配到地图坐标系
+  adjustMeshToMap?(object: any): void;
+
+  // 设置网格的缩放 （主要是抹平 mapbox 底图时的差异，若是高德底图则可以直接设置网格的 scale 属性/方法）
+  setMeshScale?(object: any, x: number, y: number, z: number): void;
+
+  // 增加加载模型的动画混合器
+  addAnimateMixer?(mixer: any): void;
+
+  /**
+   * 地球模式相关的方法
+   */
+
+  // 设置当前地球时间 控制太阳角度
+  setEarthTime(time: number): void;
 }
 
 /**
@@ -288,7 +341,16 @@ export interface ILayerConfig {
    * 开启光照
    */
   enableLighting: boolean;
+
+  /**
+   * 动画参数
+   */
   animateOption: Partial<IAnimateOption>;
+
+  /**
+   * 地球模式参数
+   */
+  globelOtions: any;
   /**
    * layer point text 是否是 iconfont 模式
    */

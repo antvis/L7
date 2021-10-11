@@ -7,7 +7,6 @@ uniform float u_opacity : 1;
 
 varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 
-varying float v_size;
 #pragma include "picking"
 void main(){
       float opacity = styleMappingMat[0][0];
