@@ -18,7 +18,10 @@ export default class DataSourcePlugin implements ILayerPlugin {
       const source = layer.getSource();
       if (!source) {
         // TODO: 允许用户不使用 layer 的 source 方法，在这里传入一个默认的替换的默认数据
-        const { data, options } = layer.sourceOption || { data: DEFAULT_DATA, options: DEFAULT_PARSER };
+        const { data, options } = layer.sourceOption || {
+          data: DEFAULT_DATA,
+          options: DEFAULT_PARSER,
+        };
         layer.setSource(new Source(data, options));
       }
 

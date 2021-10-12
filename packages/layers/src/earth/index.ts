@@ -4,8 +4,8 @@ import BaseEarthModel from './models/base';
 import EarthBloomSphereModel from './models/bloomsphere';
 
 interface IEarthLayerStyleOptions {
-  setEarthTime(time: number): void;
   opacity: number;
+  setEarthTime(time: number): void;
 }
 
 export type EarthModelType = 'base' | 'atomSphere' | 'bloomSphere';

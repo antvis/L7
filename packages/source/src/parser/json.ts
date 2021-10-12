@@ -56,7 +56,7 @@ export const defaultData = [
     lng2: 130,
     lat2: 30,
   },
-]
+];
 
 export const defaultParser = {
   parser: {
@@ -66,4 +66,4 @@ export const defaultParser = {
     x1: 'lng2',
     y1: 'lat2',
   },
-}
+};
