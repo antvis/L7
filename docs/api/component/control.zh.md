@@ -17,7 +17,7 @@ L7 目前支持 Control
 
 #### option
 
-position: `string` 控件位置支持是个方位
+position: `string` 控件位置支持8个方位
 
 - bottomright
 - topright

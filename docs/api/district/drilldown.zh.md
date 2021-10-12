@@ -36,13 +36,13 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 
 向下钻取的触发事件 ⛔customTrigger 为 true 时不生效
 
-### drillDownEvent 
+### drillDownEvent
 
-根据drillDownTriggerEvent类型下钻触发的回调事件 属性
+根据 drillDownTriggerEvent 类型下钻触发的回调事件 属性
 
 ### drillUpEvent
 
-根据drillUpTriggleEvent类型上钻触发的回调事件 属性
+根据 drillUpTriggleEvent 类型上钻触发的回调事件 属性
 
 ### drillUpTriggleEvent
 
