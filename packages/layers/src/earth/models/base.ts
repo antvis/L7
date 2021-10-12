@@ -91,6 +91,8 @@ export default class BaseEarthModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    // TODO: 调整图层的绘制顺序 地球大气层
+    this.layer.zIndex = -998
     return [
       this.layer.buildLayerModel({
         moduleName: 'baseEarth',
