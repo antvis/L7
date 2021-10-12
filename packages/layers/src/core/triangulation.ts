@@ -5,6 +5,7 @@ import earcut from 'earcut';
 import { mat4, vec3 } from 'gl-matrix';
 import {
   EARTH_RADIUS,
+  EARTH_RADIUS_OUTER,
   EARTH_SEGMENTS,
   lglt2xyz,
   primitiveSphere,
@@ -415,3 +416,15 @@ export function earthTriangulation() {
     normals: normalArr,
   };
 }
+
+ export function earthOuterTriangulation() {
+  const earthmesh = primitiveSphere(EARTH_RADIUS + EARTH_RADIUS_OUTER, { segments: EARTH_SEGMENTS });
+  const { positionsArr, indicesArr, normalArr } = earthmesh;
+  return {
+    vertices: positionsArr,
+    indices: indicesArr,
+    size: 5,
+    normals: normalArr,
+  };
+}
+

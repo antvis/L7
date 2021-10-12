@@ -1,19 +1,21 @@
 import BaseLayer from '../core/BaseLayer';
 import EarthAtomSphereModel from './models/atmosphere';
+import EarthBloomSphereModel from './models/bloomsphere';
 import BaseEarthModel from './models/base';
 
 interface IEarthLayerStyleOptions {
   setEarthTime(time: number): void;
 }
 
-export type EarthModelType = 'base' | 'atomSphere';
+export type EarthModelType = 'base' | 'atomSphere' | 'bloomSphere';
 
 const EarthModels: { [key in EarthModelType]: any } = {
   base: BaseEarthModel,
   atomSphere: EarthAtomSphereModel,
+  bloomSphere: EarthBloomSphereModel
 };
 
-const earthLayerTypes = ['base', 'atomSphere'];
+const earthLayerTypes = ['base', 'atomSphere', 'bloomSphere'];
 
 export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
   public type: string = 'EarthLayer';

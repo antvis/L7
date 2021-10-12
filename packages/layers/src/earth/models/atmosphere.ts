@@ -1,17 +1,13 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
-  ITexture2D,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
 import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
