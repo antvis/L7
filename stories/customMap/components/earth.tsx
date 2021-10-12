@@ -442,10 +442,7 @@ export default class ScaleComponent extends React.Component {
 
     const bloomLayer = new EarthLayer()
       .color('#fff')
-      .shape('bloomSphere')
-      .style({
-        // opacity: 0.6,
-      });
+      .shape('bloomSphere');
 
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
@@ -453,7 +450,6 @@ export default class ScaleComponent extends React.Component {
 
       scene.addLayer(atomLayer);
       scene.addLayer(bloomLayer);
-      // console.log(pointlayer)
 
       earthlayer.setEarthTime(4.0);
     });
