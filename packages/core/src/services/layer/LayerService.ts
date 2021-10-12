@@ -1,4 +1,4 @@
-import { rgb2arr } from '@antv/l7';
+import { rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILayer } from '../..';
