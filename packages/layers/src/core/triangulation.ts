@@ -417,8 +417,10 @@ export function earthTriangulation() {
   };
 }
 
- export function earthOuterTriangulation() {
-  const earthmesh = primitiveSphere(EARTH_RADIUS + EARTH_RADIUS_OUTER, { segments: EARTH_SEGMENTS });
+export function earthOuterTriangulation() {
+  const earthmesh = primitiveSphere(EARTH_RADIUS + EARTH_RADIUS_OUTER, {
+    segments: EARTH_SEGMENTS,
+  });
   const { positionsArr, indicesArr, normalArr } = earthmesh;
   return {
     vertices: positionsArr,
@@ -427,4 +429,3 @@ export function earthTriangulation() {
     normals: normalArr,
   };
 }
-
