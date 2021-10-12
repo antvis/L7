@@ -5,6 +5,7 @@ import EarthBloomSphereModel from './models/bloomsphere';
 
 interface IEarthLayerStyleOptions {
   setEarthTime(time: number): void;
+  opacity: number;
 }
 
 export type EarthModelType = 'base' | 'atomSphere' | 'bloomSphere';
