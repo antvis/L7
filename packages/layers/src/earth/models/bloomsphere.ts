@@ -8,18 +8,18 @@ import {
 import { isNumber } from 'lodash';
 
 import BaseModel from '../../core/BaseModel';
-import { earthTriangulation } from '../../core/triangulation';
-import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
-import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
-interface IAtmoLayerStyleOptions {
+import { earthOuterTriangulation } from '../../core/triangulation';
+import bloomSphereFrag from '../shaders/bloomsphere_frag.glsl';
+import bloomSphereVert from '../shaders/bloomsphere_vert.glsl';
+interface IBloomLayerStyleOptions {
   opacity: number;
 }
 
-export default class EarthAtomSphereModel extends BaseModel {
+export default class EarthBloomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-    } = this.layer.getLayerConfig() as IAtmoLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IBloomLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
@@ -34,12 +34,14 @@ export default class EarthAtomSphereModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    // TODO: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
+    this.layer.zIndex = -999;
     return [
       this.layer.buildLayerModel({
-        moduleName: 'earthAtmoSphere',
-        vertexShader: atmoSphereVert,
-        fragmentShader: atmoSphereFrag,
-        triangulation: earthTriangulation,
+        moduleName: 'earthBloomSphere',
+        vertexShader: bloomSphereVert,
+        fragmentShader: bloomSphereFrag,
+        triangulation: earthOuterTriangulation,
         depth: {
           enable: false,
         },

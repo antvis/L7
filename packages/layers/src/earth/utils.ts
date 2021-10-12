@@ -5,6 +5,8 @@ import { mat4, vec3 } from 'gl-matrix';
 export const EARTH_RADIUS = 100;
 export const EARTH_SEGMENTS = 36;
 
+export const EARTH_RADIUS_OUTER = 40;
+
 /**
  * 角度转弧度
  * @param deg
