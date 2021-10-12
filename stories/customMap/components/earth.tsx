@@ -440,9 +440,7 @@ export default class ScaleComponent extends React.Component {
         opacity: 1,
       });
 
-    const bloomLayer = new EarthLayer()
-      .color('#fff')
-      .shape('bloomSphere');
+    const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere');
 
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
