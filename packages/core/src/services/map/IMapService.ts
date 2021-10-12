@@ -32,6 +32,8 @@ export interface IMapWrapper {
 export interface IMapService<RawMap = {}> {
   version?: string;
   map: RawMap;
+  bgColor: string;
+  setBgColor(color: string): void;
   init(): void;
   initViewPort?(): void;
   destroy(): void;
@@ -65,7 +67,7 @@ export interface IMapService<RawMap = {}> {
   zoomIn(option?: any, eventData?: any): void;
   zoomOut(option?: any, eventData?: any): void;
   panTo(p: Point): void;
-  panBy(pixel: Point): void;
+  panBy(x: number, y: number): void;
   fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
   setZoomAndCenter(zoom: number, center: Point): void;
   setCenter(center: [number, number], option?: ICameraOptions): void;
@@ -104,6 +106,7 @@ export interface IMapService<RawMap = {}> {
         }
       | undefined,
   ): void;
+  clearColor?(): void;
 }
 
 export const MapServiceEvent = ['mapload'];

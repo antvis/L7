@@ -19,6 +19,7 @@ uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_lineDir: 1.0;
 varying vec4 v_dash_array;
 
+uniform float u_thetaOffset: 0.314;
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
 attribute vec2 a_iconMapUV;
@@ -41,36 +42,10 @@ float bezier3(vec3 arr, float t) {
   return (arr.x * ut + arr.y * t) * ut + (arr.y * ut + arr.z * t) * t;
 }
 vec2 midPoint(vec2 source, vec2 target) {
-  // cal style mapping - 数据纹理映射部分的计算
-  styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0
-  );
-
-  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
-  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
-  float columnWidth = 1.0/columnCount;  // 列宽
-  float rowHeight = 1.0/rowCount;       // 行高
-  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
-  float id = a_vertexId; // 第n个顶点
-  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
-  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
-  
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
-  textureOffset = opacityAndOffset.g;
-  // cal style mapping - 数据纹理映射部分的计算
-
   vec2 center = target - source;
   float r = length(center);
   float theta = atan(center.y, center.x);
-  float thetaOffset = 0.314;
+  float thetaOffset = u_thetaOffset;
   float r2 = r / 2.0 / cos(thetaOffset);
   float theta2 = theta + thetaOffset;
   vec2 mid = vec2(r2*cos(theta2) + source.x, r2*sin(theta2) + source.y);
@@ -111,6 +86,33 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 
 void main() {
   v_color = a_Color;
+
+  // cal style mapping - 数据纹理映射部分的计算
+  styleMappingMat = mat4(
+    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
+    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
+    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
+    0.0, 0.0, 0.0, 0.0
+  );
+
+  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
+  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
+  float columnWidth = 1.0/columnCount;  // 列宽
+  float rowHeight = 1.0/rowCount;       // 行高
+  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
+  float id = a_vertexId; // 第n个顶点
+  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
+  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
+  
+  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
+  // 按顺序从 cell 中取值、若没有则自动往下取值
+  float textureOffset = 0.0; // 在 cell 中取值的偏移量
+
+  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
+  styleMappingMat[0][0] = opacityAndOffset.r;
+  textureOffset = opacityAndOffset.g;
+  // cal style mapping - 数据纹理映射部分的计算
+
   
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点

@@ -66,6 +66,7 @@ export default class Amap2demo_arcLineLinear extends React.Component {
           // textureBlend: 'normal',
           sourceColor: '#f00',
           targetColor: '#0f0',
+          // thetaOffset: 0.5
         });
       // .animate({
       //   duration: 50,

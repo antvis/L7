@@ -70,6 +70,9 @@ export default class AMapService
   public sceneCenter!: [number, number]; // 一般使用用户数据的第一个
   public sceneCenterMKT!: [number, number]; // 莫卡托
 
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)';
+
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
@@ -88,6 +91,9 @@ export default class AMapService
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
 
   /**
    *   设置数据的绘制中心 高德2.0
@@ -306,8 +312,8 @@ export default class AMapService
   public panTo(p: [number, number]): void {
     this.map.panTo(p);
   }
-  public panBy(pixel: [number, number]): void {
-    this.map.panTo(pixel);
+  public panBy(x: number = 0, y: number = 0): void {
+    this.map.panBy(x, y);
   }
   public fitBounds(extent: Bounds): void {
     this.map.setBounds(

@@ -22,6 +22,29 @@ export default class ScaleComponent extends React.Component {
     });
 
     var d = [
+      { lng: 121.61865234375, lat: 25.29437116258816 },
+      { lng: 121.058349609375, lat: 25.015928763367857 },
+      { lng: 120.7177734375, lat: 24.587090339209634 },
+      { lng: 120.28930664062499, lat: 23.936054914599815 },
+      { lng: 120.12451171875, lat: 23.553916518321625 },
+      { lng: 120.08056640625, lat: 23.120153621695614 },
+      { lng: 120.234375, lat: 22.867317960075614 },
+      { lng: 120.43212890625, lat: 22.52270570348246 },
+      { lng: 120.65185546875, lat: 22.370396344320053 },
+      { lng: 120.750732421875, lat: 21.922663209325922 },
+      { lng: 120.948486328125, lat: 22.268764039073968 },
+      { lng: 121.124267578125, lat: 22.806567100271522 },
+      { lng: 121.56372070312499, lat: 23.915970370510227 },
+      { lng: 121.88232421875, lat: 24.557116164309626 },
+      { lng: 121.95922851562501, lat: 25.075648445630527 },
+      { lng: 109.97314453125, lat: 20.076570104545173 },
+      { lng: 108.896484375, lat: 19.663280219987662 },
+      { lng: 108.61083984375, lat: 18.979025953255267 },
+      { lng: 108.80859375, lat: 18.47960905583197 },
+      { lng: 109.599609375, lat: 18.35452552912664 },
+      { lng: 110.32470703125, lat: 18.771115062337024 },
+      { lng: 111.005859375, lat: 19.78738018198621 },
+      { lng: 110, lat: 30 },
       { lng: 127.657407, lat: 49.76027 },
       { lng: 129.397818, lat: 49.4406 },
       { lng: 130.582293, lat: 48.729687 },
@@ -257,6 +280,9 @@ export default class ScaleComponent extends React.Component {
     let pointlayer = new PointLayer()
       .source(
         d,
+        // [
+        //   {"lng":120,"lat":30}
+        // ],
         //   [
         //     {"lng":10,"lat":0},
         //     {"lng":20,"lat":0},
@@ -310,6 +336,26 @@ export default class ScaleComponent extends React.Component {
         //     {"lng":0,"lat":80},
         //     {"lng":0,"lat":90},
 
+        //     {"lng":0,"lat":100},
+        //     {"lng":0,"lat":110},
+        //     {"lng":0,"lat":120},
+        //     {"lng":0,"lat":130},
+        //     {"lng":0,"lat":140},
+        //     {"lng":0,"lat":150},
+        //     {"lng":0,"lat":160},
+        //     {"lng":0,"lat":170},
+        //     {"lng":0,"lat":180},
+
+        //     {"lng":0,"lat":190},
+        //     {"lng":0,"lat":200},
+        //     {"lng":0,"lat":210},
+        //     {"lng":0,"lat":220},
+        //     {"lng":0,"lat":230},
+        //     {"lng":0,"lat":240},
+        //     {"lng":0,"lat":250},
+        //     {"lng":0,"lat":260},
+        //     {"lng":0,"lat":270},
+
         //     {"lng":0,"lat":-10},
         //     {"lng":0,"lat":-20},
         //     {"lng":0,"lat":-30},
@@ -328,13 +374,15 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      .shape('circle')
-      // .shape('cylinder')
+      // .shape('circle')
+      .shape('cylinder')
       .color('#f00')
-      .size(10)
+      .size('', () => [1, 1, 10])
+      // .size(20)
       .style({
-        opacity: 0.6,
+        // opacity: 0.6,
       })
+      // .animate(true)
       .active(true);
 
     // scene.addLayer(pointlayer);
@@ -384,9 +432,22 @@ export default class ScaleComponent extends React.Component {
       })
       .animate(true);
     // earthlayer.setEarthTime(4.0)
+
+    const atomLayer = new EarthLayer()
+      .color('#2E8AE6')
+      .shape('atomSphere')
+      .style({
+        opacity: 1,
+      });
+
+    const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere');
+
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
       scene.addLayer(pointlayer);
+
+      scene.addLayer(atomLayer);
+      scene.addLayer(bloomLayer);
 
       earthlayer.setEarthTime(4.0);
     });

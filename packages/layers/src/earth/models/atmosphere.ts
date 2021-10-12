@@ -1,88 +1,31 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
-  ITexture2D,
 } from '@antv/l7-core';
+import { isNumber } from 'lodash';
 
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
+import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
+import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
+interface IAtmoLayerStyleOptions {
+  opacity: number;
+}
 
-import baseFrag from '../shaders/base_frag.glsl';
-import baseVert from '../shaders/base_vert.glsl';
-
-export default class BaseEarthModel extends BaseModel {
-  protected texture: ITexture2D;
-  // T: 当前的地球时间 - 控制太阳的方位
-  private earthTime: number = 3.4;
-  private sunX = 1000;
-  private sunY = 1000;
-  private sunZ = 1000;
-  private sunRadius = Math.sqrt(
-    this.sunX * this.sunX + this.sunY * this.sunY + this.sunZ * this.sunZ,
-  );
-
+export default class EarthAtomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const { animateOption, globelOtions } = this.layer.getLayerConfig();
-    if (animateOption?.enable) {
-      // @ts-ignore
-      // T: rotateY 方法只有在地球模式下存在
-      this.mapService.rotateY({
-        reg: 0.002,
-      });
-      this.earthTime += 0.02;
-
-      this.sunY = 10;
-      this.sunX = Math.cos(this.earthTime) * (this.sunRadius - this.sunY);
-      this.sunZ = Math.sin(this.earthTime) * (this.sunRadius - this.sunY);
-    }
-
+    const {
+      opacity = 1,
+    } = this.layer.getLayerConfig() as IAtmoLayerStyleOptions;
     return {
-      u_ambientRatio: globelOtions?.ambientRatio || 0.6, // 环境光
-      u_diffuseRatio: globelOtions?.diffuseRatio || 0.4, // 漫反射
-      u_specularRatio: globelOtions?.specularRatio || 0.1, // 高光反射
-      // u_sunLight: [120, 120, 120],
-      u_sunLight: [this.sunX, this.sunY, this.sunZ],
-
-      u_texture: this.texture,
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 
-  public setEarthTime(time: number) {
-    this.earthTime = time;
-
-    this.sunY = 10;
-    this.sunX = Math.cos(this.earthTime) * (this.sunRadius - this.sunY);
-    this.sunZ = Math.sin(this.earthTime) * (this.sunRadius - this.sunY);
-
-    this.layerService.renderLayers();
-  }
-
   public initModels(): IModel[] {
-    const { globelOtions } = this.layer.getLayerConfig();
-    if (globelOtions?.earthTime !== undefined) {
-      this.setEarthTime(globelOtions.earthTime);
-    }
-
-    const source = this.layer.getSource();
-    const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
-      height: 0,
-      width: 0,
-    });
-    source.data.images.then((imageData: HTMLImageElement[]) => {
-      this.texture = createTexture2D({
-        data: imageData[0],
-        width: imageData[0].width,
-        height: imageData[0].height,
-      });
-      this.layerService.renderLayers();
-    });
-
     return this.buildModels();
   }
 
@@ -92,14 +35,16 @@ export default class BaseEarthModel extends BaseModel {
 
   public buildModels(): IModel[] {
     // TODO: 调整图层的绘制顺序 地球大气层
-    this.layer.zIndex = -998;
+    this.layer.zIndex = -997;
     return [
       this.layer.buildLayerModel({
-        moduleName: 'baseEarth',
-        vertexShader: baseVert,
-        fragmentShader: baseFrag,
+        moduleName: 'earthAtmoSphere',
+        vertexShader: atmoSphereVert,
+        fragmentShader: atmoSphereFrag,
         triangulation: earthTriangulation,
-        depth: { enable: true },
+        depth: {
+          enable: false,
+        },
         blend: this.getBlend(),
       }),
     ];
