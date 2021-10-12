@@ -11,6 +11,7 @@ import {
   IMapService,
   IMercator,
   IPoint,
+  IRendererService,
   IStatusOptions,
   IViewport,
   MapServiceEvent,
@@ -42,6 +43,9 @@ export default class L7MapService implements IMapService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
 
+  // 背景色
+  public bgColor: string = '#000';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -50,6 +54,9 @@ export default class L7MapService implements IMapService<Map> {
 
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
+
+  @inject(TYPES.IRendererService)
+  private readonly renderService: IRendererService;
 
   @inject(TYPES.IEventEmitter)
   private eventEmitter: any;
@@ -60,7 +67,9 @@ export default class L7MapService implements IMapService<Map> {
   // T: 用于记录鼠标对相机的控制
   private handleCameraChanging: boolean;
   private handleCameraTimer: any;
-
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
   // init
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
@@ -331,7 +340,13 @@ export default class L7MapService implements IMapService<Map> {
         // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
         cameraHeight: 0,
       });
+
+      this.cameraChangedCallback(this.viewport);
     }
+  }
+
+  public clearColor() {
+    this.renderService.clear({ color: [0.0, 0.0, 0.0, 1.0] });
   }
 
   private handleCameraChanged = (e: any) => {

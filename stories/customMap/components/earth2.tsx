@@ -21,36 +21,8 @@ export default class ScaleComponent extends React.Component {
       }),
     });
 
-    let data = [
-      {
-        lng1: 100,
-        lat1: 30.0,
-        lng2: 130,
-        lat2: 30,
-      },
-    ];
+    scene.setBgColor('#333');
 
-    const lineLayer = new LineLayer({
-      blend: 'normal',
-    })
-      .source(data, {
-        parser: {
-          type: 'json',
-          x: 'lng1',
-          y: 'lat1',
-          x1: 'lng2',
-          y1: 'lat2',
-        },
-      })
-      .size(2)
-      .shape('arc3d')
-      .color('#8C1EB2');
-    // .animate(true)
-    // .animate({
-    //   duration: 50,
-    //   interval: 0.2,
-    //   trailLength: 0.05,
-    // });
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json',
     )
@@ -77,7 +49,7 @@ export default class ScaleComponent extends React.Component {
           })
           .color('#b97feb')
           .shape('arc3d')
-          .size(1)
+          .size(0.5)
           .active(true)
           .animate({
             interval: 2,
@@ -102,7 +74,8 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      .color('#2E8AE6')
+      // .color('#2E8AE6')
+      .color('#f00')
       .shape('fill')
       .style({
         opacity: 1.0,
@@ -114,17 +87,32 @@ export default class ScaleComponent extends React.Component {
           // earthTime: 4.0
           earthTime: 0.1,
         },
-      });
-    // .animate(true);
+      })
+      .animate(true);
     // earthlayer.setEarthTime(4.0)
+
+    const atomLayer = new EarthLayer()
+      .color('#2E8AE6')
+      .shape('atomSphere')
+      .style({
+        opacity: 1,
+      });
+
+    const bloomLayer = new EarthLayer()
+      .color('#fff')
+      .shape('bloomSphere')
+      .style({
+        opacity: 0.5,
+      });
+
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
       // scene.addLayer(pointlayer);
       // console.log(pointlayer)
 
       // earthlayer.setEarthTime(4.0);
-
-      scene.addLayer(lineLayer);
+      scene.addLayer(atomLayer);
+      scene.addLayer(bloomLayer);
     });
   }
 

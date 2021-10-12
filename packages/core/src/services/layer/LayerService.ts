@@ -1,9 +1,11 @@
+import { rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
+import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerModel, ILayerService } from './ILayerService';
 
@@ -27,6 +29,9 @@ export default class LayerService implements ILayerService {
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
+
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
@@ -178,8 +183,14 @@ export default class LayerService implements ILayerService {
   }
 
   private clear() {
+    const color = rgb2arr(this.mapService.bgColor) as [
+      number,
+      number,
+      number,
+      number,
+    ];
     this.renderService.clear({
-      color: [0, 0, 0, 0],
+      color,
       depth: 1,
       stencil: 0,
       framebuffer: null,
