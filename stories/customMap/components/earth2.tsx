@@ -23,36 +23,6 @@ export default class ScaleComponent extends React.Component {
 
     scene.setBgColor('#333');
 
-    let data = [
-      {
-        lng1: 100,
-        lat1: 30.0,
-        lng2: 130,
-        lat2: 30,
-      },
-    ];
-
-    const lineLayer = new LineLayer({
-      blend: 'normal',
-    })
-      .source(data, {
-        parser: {
-          type: 'json',
-          x: 'lng1',
-          y: 'lat1',
-          x1: 'lng2',
-          y1: 'lat2',
-        },
-      })
-      .size(2)
-      .shape('arc3d')
-      .color('#8C1EB2');
-    // .animate(true)
-    // .animate({
-    //   duration: 50,
-    //   interval: 0.2,
-    //   trailLength: 0.05,
-    // });
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json',
     )
@@ -79,7 +49,7 @@ export default class ScaleComponent extends React.Component {
           })
           .color('#b97feb')
           .shape('arc3d')
-          .size(1)
+          .size(0.5)
           .active(true)
           .animate({
             interval: 2,
@@ -143,7 +113,6 @@ export default class ScaleComponent extends React.Component {
       // earthlayer.setEarthTime(4.0);
       scene.addLayer(atomLayer);
       scene.addLayer(bloomLayer);
-      scene.addLayer(lineLayer);
     });
   }
 
