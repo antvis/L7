@@ -16,7 +16,7 @@ function travel(
   if (path.length < 2 || isTravel) return;
   isTravel = true;
   let startIndex = 0;
-  let len = path.length;
+  const len = path.length;
   const currentP = path[0],
     nextP = path[1];
   const t = duration / len;
