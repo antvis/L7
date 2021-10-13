@@ -14,11 +14,7 @@ export default class ScaleComponent extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Earth({
-        center: [120, 30],
-        pitch: 0,
-        zoom: 3,
-      }),
+      map: new Earth({}),
     });
 
     scene.setBgColor('#333');
@@ -70,16 +66,11 @@ export default class ScaleComponent extends React.Component {
         {
           parser: {
             type: 'image',
-            extent: [121.168, 30.2828, 121.384, 30.4219],
           },
         },
       )
-      // .color('#2E8AE6')
-      .color('#f00')
       .shape('fill')
       .style({
-        opacity: 1.0,
-        radius: 40,
         globelOtions: {
           ambientRatio: 0.6, // 环境光
           diffuseRatio: 0.4, // 漫反射
