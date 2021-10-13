@@ -106,7 +106,85 @@ export interface IMapService<RawMap = {}> {
         }
       | undefined,
   ): void;
-  clearColor?(): void;
+}
+
+export interface IEarthService<RawMap = {}> {
+  version?: string;
+  map: RawMap;
+  bgColor: string;
+  setBgColor(color: string): void;
+  init(): void;
+  initViewPort?(): void;
+  destroy(): void;
+  onCameraChanged(callback: (viewport: IViewport) => void): void;
+  // init map
+  addMarkerContainer(): void;
+  getMarkerContainer(): HTMLElement;
+  // MapEvent // 定义事件类型
+
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
+  // get dom
+  getContainer(): HTMLElement | null;
+  getSize(): [number, number];
+  // get map status method
+  getMinZoom(): number;
+  getMaxZoom(): number;
+  // get map params
+  getType(): string;
+  getZoom(): number;
+  getCenter(option?: ICameraOptions): ILngLat;
+  getPitch(): number;
+  getRotation(): number;
+  getBounds(): Bounds;
+  getMapContainer(): HTMLElement | null;
+  getMapCanvasContainer(): HTMLElement;
+
+  // control with raw map
+  setRotation(rotation: number): void;
+  zoomIn(option?: any, eventData?: any): void;
+  zoomOut(option?: any, eventData?: any): void;
+  panTo(p: Point): void;
+  panBy(x: number, y: number): void;
+  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
+  setZoomAndCenter(zoom: number, center: Point): void;
+  setCenter(center: [number, number], option?: ICameraOptions): void;
+  setPitch(pitch: number): void;
+  setZoom(zoom: number): void;
+  setMapStyle(style: any): void;
+  setMapStatus(option: Partial<IStatusOptions>): void;
+
+  // coordinates methods
+  pixelToLngLat(pixel: Point): ILngLat;
+  lngLatToPixel(lnglat: Point): IPoint;
+  containerToLngLat(pixel: Point): ILngLat;
+  lngLatToContainer(lnglat: Point): IPoint;
+  lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
+  getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number],
+    origin: IMercator,
+  ): number[];
+  lngLatToCoord?(lnglat: [number, number]): [number, number];
+  lngLatToCoords?(
+    lnglatArray: number[][][] | number[][],
+  ): number[][][] | number[][] | number[][][] | number[][];
+  // lngLatToCoords?(lnglatArray: any): any;
+  getCustomCoordCenter?(): [number, number];
+  exportMap(type: 'jpg' | 'png'): string;
+
+  // 地球模式下的地图方法/属性
+  rotateY?(
+    option:
+      | {
+          force?: boolean;
+          reg?: number;
+        }
+      | undefined,
+  ): void;
 }
 
 export const MapServiceEvent = ['mapload'];
