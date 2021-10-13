@@ -385,43 +385,17 @@ export default class ScaleComponent extends React.Component {
       // .animate(true)
       .active(true);
 
-    // scene.addLayer(pointlayer);
-
-    // let pointlayer = new PointLayer()
-    //   .source(
-    //     [
-    //       {
-    //         lng: 120,
-    //         lat: 30,
-    //       },
-    //     ],
-    //     {
-    //       parser: {
-    //         type: 'json',
-    //         x: 'lng',
-    //         y: 'lat',
-    //       },
-    //     },
-    //   )
-    //   .shape('circle')
-    //   .color('rgba(255, 0, 0, 1.0)')
-    //   .size(200);
-
     const earthlayer = new EarthLayer()
       .source(
         'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',
         {
           parser: {
             type: 'image',
-            extent: [121.168, 30.2828, 121.384, 30.4219],
           },
         },
       )
-      .color('#2E8AE6')
-      .shape('fill')
+      .shape('base')
       .style({
-        opacity: 1.0,
-        radius: 40,
         globelOtions: {
           ambientRatio: 0.6, // 环境光
           diffuseRatio: 0.4, // 漫反射
