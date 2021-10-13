@@ -7,7 +7,8 @@ export default function image(
   data: string | string[],
   cfg: IImageCfg,
 ): IParserData {
-  const { extent } = cfg;
+  // TODO: 为 extent 赋默认值
+  const { extent = [121.168, 30.2828, 121.384, 30.4219] } = cfg;
   const images = new Promise((resolve) => {
     loadData(data, (res: any) => {
       resolve(res);
