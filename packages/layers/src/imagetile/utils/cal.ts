@@ -1,7 +1,5 @@
-import { Bounds, Point, toLngLat, GeoCoordinates } from '@antv/geo-coord';
+import { Bounds, GeoCoordinates, Point, toLngLat } from '@antv/geo-coord';
 import { ILngLat } from '@antv/l7-core';
-
-
 
 export type ICrs = 'epsg3857';
 export interface ITileList {
@@ -45,12 +43,12 @@ export function calCurrentTiles(oprions: ICalCurrentTiles) {
     minZoom,
     maxZoom,
   } = oprions;
-  const currentCrs = (new GeoCoordinates.default({
-        start: {x: 0, y: 0},
-        end: {x: 0, y: 0},
-      projection: crstype
-    })).crs as any;
-  
+  const currentCrs = new GeoCoordinates.default({
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 0 },
+    projection: crstype,
+  }).crs as any;
+
   // 计算瓦片中心
   const centerPoint = currentCrs.lngLatToPoint(
     toLngLat(tileCenter.lng, tileCenter.lat),
