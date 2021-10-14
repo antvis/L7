@@ -37,7 +37,7 @@ scene.on('loaded', () => {
       };
       const layersControl = new Layers({
         overlayers,
-        position:'rightcenter'
+        position: 'rightcenter'
       });
 
       scene.addControl(layersControl);
