@@ -1,6 +1,6 @@
 // @ts-ignore
-import { ImageTileLayer, Scene } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { ImageTileLayer, Scene, PointLayer } from '@antv/l7';
+import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_imageTileLayer extends React.Component {
@@ -14,7 +14,7 @@ export default class Amap2demo_imageTileLayer extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Map({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
@@ -24,17 +24,52 @@ export default class Amap2demo_imageTileLayer extends React.Component {
     });
     this.scene = scene;
 
+    let originData = [
+      {
+        lng: 121.107846,
+        lat: 30.267069,
+      },
+      {
+        lng: 121.107,
+        lat: 30.267069,
+      },
+      {
+        lng: 121.107846,
+        lat: 30.26718,
+      },
+    ];
+
     scene.on('loaded', () => {
       const layer = new ImageTileLayer({});
-      layer.source(
-        'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
-        {
-          parser: {
-            type: 'image',
-            extent: [121.168, 30.2828, 121.384, 30.4219],
+      layer
+        .source(
+          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          {
+            parser: {
+              type: 'imagetile',
+            },
           },
-        },
-      );
+        )
+        .style({
+          resolution: 'low', // low height
+          // resolution: 'height'
+          maxSourceZoom: 17,
+        });
+
+      let pointlayer = new PointLayer()
+        .source(originData, {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        })
+        .shape('circle')
+        .color('rgba(255, 0, 0, 1.0)')
+        .size(10)
+        .active(true);
+
+      scene.addLayer(pointlayer);
       scene.addLayer(layer);
     });
   }

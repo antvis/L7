@@ -14,75 +14,76 @@ import {
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import ImageFrag from '../shaders/image_frag.glsl';
-import ImageVert from '../shaders/image_vert.glsl';
+import ImageTileFrag from './shaders/imagetile_frag.glsl';
+import ImageTileVert from './shaders/imagetile_vert.glsl';
 
-import { calCurrentTiles } from '../utils/cal';
+import Tile from '../utils/Tile';
 
 interface IImageLayerStyleOptions {
-  opacity: number;
+  resolution: string;
+  maxSourceZoom: number;
 }
+
 export default class ImageTileModel extends BaseModel {
-  protected tileList: {} = {};
-  protected updateTileList: [] = [];
-
-  protected texture: ITexture2D;
+  public tileLayer: any;
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
-
-    return {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
-    };
+    return {};
   }
 
   // 临时的瓦片测试方法
   public tile() {
-    // @ts-ignore
-    const viewPort = this.mapService.map.getBounds().toBounds();
-    // Tip: 目前只有 amap 1.x 支持这样获取值
-    const NE = viewPort.getNorthEast();
-    const SW = viewPort.getSouthWest();
-
-    calCurrentTiles({
+    const [WS, EN] = this.mapService.getBounds();
+    const NE = { lng: EN[0], lat: EN[1] };
+    const SW = { lng: WS[0], lat: WS[1] };
+    this.tileLayer.calCurrentTiles({
       NE,
       SW,
       tileCenter: this.mapService.getCenter(),
-      tileZoom: this.mapService.getZoom(),
-      crstype: 'epsg3857',
-      tileList: this.tileList,
-      updateTileList: this.updateTileList,
+      currentZoom: this.mapService.getZoom(),
+      minSourceZoom: this.mapService.getMinZoom(),
       minZoom: this.mapService.getMinZoom(),
       maxZoom: this.mapService.getMaxZoom(),
     });
   }
 
   public initModels() {
-    this.tile();
-    // @ts-ignore 目前只有 amap 1.x 支持这样监听地图变化
-    this.mapService.map.on('camerachange', () => {
-      this.tile();
-    });
-
+    // TODO: 瓦片组件默认在最下层
+    this.layer.zIndex = -999;
+    const {
+      resolution = 'low',
+      maxSourceZoom = 17,
+    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     const source = this.layer.getSource();
-    const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
-      height: 0,
-      width: 0,
-    });
-    source.data.images.then((imageData: HTMLImageElement[]) => {
-      this.texture = createTexture2D({
-        data: imageData[0],
-        width: imageData[0].width,
-        height: imageData[0].height,
+    // 当存在 url 的时候生效
+    if (source.data.tileurl) {
+      this.tileLayer = new Tile({
+        url: source.data.tileurl,
+        layerService: this.layerService,
+        layer: this.layer,
+        resolution,
+        maxSourceZoom,
+        // Tip: 当前为 default
+        crstype: 'epsg3857',
       });
-      this.layerService.renderLayers();
-    });
+
+      this.tile();
+      let t = new Date().getTime();
+      this.mapService.on('mapchange', () => {
+        const newT = new Date().getTime();
+        const cutT = newT - t;
+        t = newT;
+        if (cutT < 16) {
+          return;
+        }
+        this.tile();
+      });
+    }
+
     return [
       this.layer.buildLayerModel({
-        moduleName: 'RasterImage',
-        vertexShader: ImageVert,
-        fragmentShader: ImageFrag,
+        moduleName: 'ImageTileLayer',
+        vertexShader: ImageTileVert,
+        fragmentShader: ImageTileFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
@@ -90,20 +91,13 @@ export default class ImageTileModel extends BaseModel {
       }),
     ];
   }
-  public buildModels() {
-    return this.initModels();
+
+  public clearModels() {
+    this.tileLayer.removeTiles();
   }
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
+  public buildModels() {
+    return this.initModels();
   }
 
   protected registerBuiltinAttributes() {
