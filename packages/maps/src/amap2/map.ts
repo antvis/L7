@@ -154,7 +154,7 @@ export default class AMapService
       const amap = mapContainer.getElementsByClassName(
         'amap-maps',
       )[0] as HTMLElement;
-      amap.style.zIndex = '2'
+      amap.style.zIndex = '2';
       this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
       // this.markerContainer = DOM.create(
       //   'div',
