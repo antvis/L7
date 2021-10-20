@@ -293,7 +293,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public addLayer(layer: ILayer) {
-    this.layerService.sceneService = this
+    this.layerService.sceneService = this;
     this.layerService.add(layer);
     this.render();
   }

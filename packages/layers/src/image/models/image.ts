@@ -37,16 +37,15 @@ export default class ImageModel extends BaseModel {
       height: 0,
       width: 0,
     });
-   
- 
-    if(isMini) {
+
+    if (isMini) {
       // @ts-ignore
       const canvas = this.layerService.sceneService.getSceneConfig().canvas;
       const img = canvas.createImage();
       // let img = new Image()
       img.crossOrigin = 'anonymous';
-      img.src = source.data.originData
-    
+      img.src = source.data.originData;
+
       img.onload = () => {
         this.texture = createTexture2D({
           data: img,
@@ -54,7 +53,7 @@ export default class ImageModel extends BaseModel {
           height: img.height,
         });
         this.layerService.renderLayers();
-      }
+      };
     } else {
       source.data.images.then((imageData: HTMLImageElement[]) => {
         this.texture = createTexture2D({
@@ -65,9 +64,7 @@ export default class ImageModel extends BaseModel {
         this.layerService.renderLayers();
       });
     }
-   
-    
-    
+
     return [
       this.layer.buildLayerModel({
         moduleName: 'RasterImage',
