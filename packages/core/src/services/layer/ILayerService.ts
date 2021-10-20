@@ -367,6 +367,7 @@ export interface ILayerConfig {
 export interface ILayerService {
   clock: Clock;
   alreadyInRendering: boolean;
+  sceneService?: any;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
