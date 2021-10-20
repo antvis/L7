@@ -2,7 +2,6 @@
 // tslint:disable-next-line:no-submodule-imports
 import { $window } from '@antv/l7-utils';
 import { throttle } from 'lodash';
-import { EarthMap } from './earthmap';
 import { Map } from './map';
 
 /*
@@ -12,7 +11,7 @@ import { Map } from './map';
  * @returns {Hash} `this`
  */
 class Hash {
-  private map: Map | EarthMap;
+  private map: Map;
   private updateHash: () => number | void;
   private hashName?: string;
 
@@ -22,7 +21,7 @@ class Hash {
     // Mobile Safari doesn't allow updating the hash more than 100 times per 30 seconds.
     this.updateHash = throttle(this.updateHashUnthrottled, (30 * 1000) / 100);
   }
-  public addTo(map: Map | EarthMap) {
+  public addTo(map: Map) {
     this.map = map;
     $window.addEventListener('hashchange', this.onHashChange, false);
     this.map.on('moveend', this.updateHash);
