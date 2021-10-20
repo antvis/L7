@@ -1,5 +1,10 @@
 import { Bounds, GeoCoordinates, Point, toLngLat } from '@antv/geo-coord';
-import { createLayerContainer, ILngLat, ILayer, ILayerService } from '@antv/l7-core';
+import {
+  createLayerContainer,
+  ILayer,
+  ILayerService,
+  ILngLat,
+} from '@antv/l7-core';
 import { Container } from 'inversify';
 
 import ImageTile from './ImageTile';
@@ -242,8 +247,15 @@ export default class Tile {
     }
     let tile = this.tileCache.getTile(key);
     if (!tile) {
-      const container = createLayerContainer(this.layer.sceneContainer as Container);
-      tile = new ImageTile(key, this.url, container, this.layer.sceneContainer as Container);
+      const container = createLayerContainer(
+        this.layer.sceneContainer as Container,
+      );
+      tile = new ImageTile(
+        key,
+        this.url,
+        container,
+        this.layer.sceneContainer as Container,
+      );
       tile.name = key;
 
       t.current = true;

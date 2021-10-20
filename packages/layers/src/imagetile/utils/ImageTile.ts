@@ -16,7 +16,12 @@ export default class ImageTile {
   public tile: number[]; // 当前图片瓦片的索引
   public name: string;
   public imageLayer: any;
-  constructor(key: string, url: string, container: Container, sceneContainer: Container) {
+  constructor(
+    key: string,
+    url: string,
+    container: Container,
+    sceneContainer: Container,
+  ) {
     this.name = key;
     this.tile = key.split('_').map((v) => Number(v));
 
