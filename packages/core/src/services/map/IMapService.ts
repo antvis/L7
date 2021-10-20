@@ -193,7 +193,7 @@ export interface IEarthService<RawMap = {}> {
   ): void;
 }
 
-export const MapServiceEvent = ['mapload'];
+export const MapServiceEvent = ['mapload', 'mapchange'];
 
 /**
  * 地图初始化配置项

@@ -64,11 +64,20 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public remove(layer: ILayer): void {
-    const layerIndex = this.layers.indexOf(layer);
-    if (layerIndex > -1) {
-      this.layers.splice(layerIndex, 1);
+  public remove(layer: ILayer, parentLayer?: ILayer): void {
+    // Tip: layer.layerChildren 当 layer 存在子图层的情况
+    if (parentLayer) {
+      const layerIndex = parentLayer.layerChildren.indexOf(layer);
+      if (layerIndex > -1) {
+        parentLayer.layerChildren.splice(layerIndex, 1);
+      }
+    } else {
+      const layerIndex = this.layers.indexOf(layer);
+      if (layerIndex > -1) {
+        this.layers.splice(layerIndex, 1);
+      }
     }
+
     layer.emit('remove', null);
     layer.destroy();
     this.renderLayers();
@@ -91,17 +100,29 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     this.updateRenderOrder();
+
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
-        // trigger hooks
-        layer.hooks.beforeRenderData.call();
-        layer.hooks.beforeRender.call();
-        layer.render();
-        layer.hooks.afterRender.call();
+        // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
+        renderLayerEvent(layer.layerChildren);
+        renderLayerEvent([layer]);
       });
     this.alreadyInRendering = false;
+
+    function renderLayerEvent(layers: ILayer[]) {
+      layers
+        .filter((layer) => layer.inited)
+        .filter((layer) => layer.isVisible())
+        .forEach((layer) => {
+          // trigger hooks
+          layer.hooks.beforeRenderData.call();
+          layer.hooks.beforeRender.call();
+          layer.render();
+          layer.hooks.afterRender.call();
+        });
+    }
   }
 
   public updateRenderOrder() {
@@ -111,7 +132,14 @@ export default class LayerService implements ILayerService {
   }
 
   public destroy() {
-    this.layers.forEach((layer) => layer.destroy());
+    this.layers.forEach((layer) => {
+      // Tip: layer.layerChildren 当 layer 存在子图层的情况
+      if (layer.layerChildren) {
+        layer.layerChildren.forEach((child) => child.destroy());
+        layer.layerChildren = [];
+      }
+      layer.destroy();
+    });
     this.layers = [];
     this.renderLayers();
   }
