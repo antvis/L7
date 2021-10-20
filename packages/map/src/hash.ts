@@ -1,6 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import throttle from 'lodash/throttle';
+import { $window } from '@antv/l7-utils';
+import { throttle } from 'lodash';
 import { EarthMap } from './earthmap';
 import { Map } from './map';
 
@@ -23,16 +24,15 @@ class Hash {
   }
   public addTo(map: Map | EarthMap) {
     this.map = map;
-    window.addEventListener('hashchange', this.onHashChange, false);
-    // @ts-ignore
+    $window.addEventListener('hashchange', this.onHashChange, false);
     this.map.on('moveend', this.updateHash);
     return this;
   }
   public remove() {
-    window.removeEventListener('hashchange', this.onHashChange, false);
-    // @ts-ignore
+    $window.removeEventListener('hashchange', this.onHashChange, false);
     this.map.off('moveend', this.updateHash);
     // clearTimeout(this.updateHash());
+
     // @ts-ignore
     delete this.map;
     return this;

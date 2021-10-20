@@ -1,3 +1,4 @@
+import { $window, $XMLHttpRequest } from './mini-adapter';
 class AJAXError extends Error {
   private status: number;
   private url: string;
@@ -18,7 +19,7 @@ class AJAXError extends Error {
 }
 
 function makeRequest(requestParameters: any) {
-  const xhr = new XMLHttpRequest();
+  const xhr = new $XMLHttpRequest();
 
   xhr.open('GET', requestParameters.url, true);
   for (const k in requestParameters.headers) {
@@ -89,11 +90,11 @@ export const getArrayBuffer = (requestParameters: any, callback: any) => {
 };
 
 function sameOrigin(url: string) {
-  const a = window.document.createElement('a');
+  const a = $window.document.createElement('a');
   a.href = url;
   return (
-    a.protocol === window.document.location.protocol &&
-    a.host === window.document.location.host
+    a.protocol === $window.document.location.protocol &&
+    a.host === $window.document.location.host
   );
 }
 
@@ -107,14 +108,15 @@ export const getImage = (requestParameters: any, callback: any) => {
     if (err) {
       callback(err);
     } else if (imgData) {
-      const img = new window.Image();
+      const img = new $window.Image();
       img.crossOrigin = 'anonymous';
-      const URL = window.URL || window.webkitURL;
+      const URL = $window.URL || $window.webkitURL;
+      // @ts-ignore
       img.onload = () => {
         callback(null, img);
         URL.revokeObjectURL(img.src);
       };
-      const blob = new window.Blob([new Uint8Array(imgData.data)], {
+      const blob = new $window.Blob([new Uint8Array(imgData.data)], {
         type: 'image/png',
       });
       img.src = imgData.data.byteLength

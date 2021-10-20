@@ -21,6 +21,7 @@ import {
   ITexture2D,
   ITexture2DInitializationOptions,
 } from '@antv/l7-core';
+import { isMini } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import regl from 'l7regl';
 import 'reflect-metadata';
@@ -66,7 +67,7 @@ export default class ReglRendererService implements IRendererService {
         extensions: [
           'OES_element_index_uint',
           'OES_standard_derivatives', // wireframe
-          'angle_instanced_arrays', // VSM shadow map
+          'ANGLE_instanced_arrays', // VSM shadow map
         ],
         optionalExtensions: [
           'oes_texture_float_linear',
@@ -184,7 +185,11 @@ export default class ReglRendererService implements IRendererService {
   };
 
   public getContainer = () => {
-    return this.canvas?.parentElement;
+    if (isMini) {
+      return this.canvas;
+    } else {
+      return this.canvas?.parentElement;
+    }
   };
 
   public getCanvas = () => {

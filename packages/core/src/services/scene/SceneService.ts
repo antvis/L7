@@ -1,6 +1,6 @@
 // @ts-ignore
 import { AsyncParallelHook } from '@antv/async-hook';
-import { DOM } from '@antv/l7-utils';
+import { DOM, isMini } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
@@ -99,7 +99,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   /**
    * canvas 容器
    */
-  private $container: HTMLDivElement | null;
+  private $container: HTMLDivElement | null | HTMLCanvasElement;
 
   private canvas: HTMLCanvasElement;
 
@@ -164,7 +164,6 @@ export default class Scene extends EventEmitter implements ISceneService {
         await this.map.init();
         this.map.initViewPort();
       }
-      // this.controlService.addControls();
 
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
@@ -194,8 +193,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 添加marker container;
       this.$container = $container;
 
-      // this.addMarkerContainer();
-
       if ($container) {
         this.canvas = DOM.create('canvas', '', $container) as HTMLCanvasElement;
         this.setCanvas();
@@ -205,8 +202,6 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.configService.getSceneConfig(this.id) as IRenderConfig,
         );
 
-        // this.initContainer();
-        // window.addEventListener('resize', this.handleWindowResized);
         elementResizeEvent(
           this.$container as HTMLDivElement,
           this.handleWindowResized,
@@ -217,6 +212,76 @@ export default class Scene extends EventEmitter implements ISceneService {
       } else {
         console.error('容器 id 不存在');
       }
+      this.pickingService.init(this.id);
+    });
+    // TODO：init worker, fontAtlas...
+
+    // 执行异步并行初始化任务
+    // @ts-ignore
+    this.initPromise = this.hooks.init.promise();
+    this.render();
+  }
+
+  /**
+   * 小程序环境下初始化 Scene
+   * @param sceneConfig
+   */
+  public initMiniScene(sceneConfig: ISceneConfig) {
+    // 设置场景配置项
+    this.configService.setSceneConfig(this.id, sceneConfig);
+
+    // 初始化 ShaderModule
+    this.shaderModuleService.registerBuiltinModules();
+
+    // 初始化资源管理 图片
+    this.iconService.init();
+    // 字体资源
+    this.fontService.init();
+
+    /**
+     * 初始化底图
+     */
+    this.hooks.init.tapPromise('initMap', async () => {
+      // 等待首次相机同步
+      await new Promise<void>((resolve) => {
+        this.map.onCameraChanged((viewport: IViewport) => {
+          this.cameraService.init();
+          this.cameraService.update(viewport);
+          if (this.map.version !== 'GAODE2.x') {
+            // not amap2
+            resolve();
+          }
+        });
+        // @ts-ignore
+        this.map.initMiniMap();
+      });
+
+      // 重新绑定非首次相机更新事件
+      this.map.onCameraChanged(this.handleMapCameraChanged);
+
+      // 地图初始化之后 才能初始化 container 上的交互
+      this.interactionService.init();
+      this.interactionService.on(
+        InteractionEvent.Drag,
+        this.addSceneEvent.bind(this),
+      );
+    });
+
+    /**
+     * 初始化渲染引擎
+     */
+    this.hooks.init.tapPromise('initRenderer', async () => {
+      // 创建底图之上的 container
+      const $container = sceneConfig.canvas;
+
+      // 添加marker container;
+      this.$container = $container ? $container : null;
+      await this.rendererService.init(
+        // @ts-ignore
+        sceneConfig.canvas,
+        this.configService.getSceneConfig(this.id) as IRenderConfig,
+      );
+
       this.pickingService.init(this.id);
     });
     // TODO：init worker, fontAtlas...

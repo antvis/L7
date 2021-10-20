@@ -31,7 +31,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { ReglRendererService } from '@antv/l7-renderer';
-import { DOM } from '@antv/l7-utils';
+import { DOM, isMini } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import ILayerManager from './ILayerManager';
 import IMapController from './IMapController';
@@ -63,12 +63,12 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map } = config;
+    const { id, map, canvas, hasBaseMap } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
     // 绑定地图服务
-    map.setContainer(sceneContainer, id);
+    map.setContainer(sceneContainer, id, canvas, hasBaseMap);
 
     // 绑定渲染引擎服务
     sceneContainer
@@ -96,13 +96,17 @@ class Scene
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
 
-    this.initComponent(id);
+    if (isMini) {
+      this.sceneService.initMiniScene(config);
+    } else {
+      this.initComponent(id);
 
-    // 初始化 scene
-    this.sceneService.init(config);
-    // TODO: 初始化组件
+      // 初始化 scene
+      this.sceneService.init(config);
+      // TODO: 初始化组件
 
-    this.initControl();
+      this.initControl();
+    }
   }
   public getServiceContainer(): Container {
     return this.container;
@@ -215,7 +219,12 @@ class Scene
   }
 
   public addImage(id: string, img: IImage) {
-    this.iconService.addImage(id, img);
+    if (!isMini) {
+      this.iconService.addImage(id, img);
+    } else {
+      this.iconService.addImageMini(id, img, this.sceneService);
+    }
+    // this.iconService.addImage(id, img);
   }
 
   public hasImage(id: string) {

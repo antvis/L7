@@ -26,7 +26,12 @@ export interface IStatusOptions {
 }
 export type MapStyle = string | { [key: string]: any };
 export interface IMapWrapper {
-  setContainer(container: Container, id: string | HTMLDivElement): void;
+  setContainer(
+    container: Container,
+    id: string | HTMLDivElement,
+    canvas?: HTMLCanvasElement,
+    hasBaseMap?: boolean,
+  ): void;
 }
 
 export interface IMapService<RawMap = {}> {
@@ -35,6 +40,7 @@ export interface IMapService<RawMap = {}> {
   bgColor: string;
   setBgColor(color: string): void;
   init(): void;
+  initMiniMap?(): void;
   initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;

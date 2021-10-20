@@ -50,7 +50,7 @@
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-inline-webgl-constants": "^1.0.1",
     "babel-plugin-lodash": "^3.3.4",
-    "babel-plugin-transform-import-css-l7": "^0.0.4",
+    "babel-plugin-transform-import-css-l7": "^0.0.5",
     "babel-plugin-transform-import-styles": "^0.0.11",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-plugin-transform-node-env-inline": "^0.4.3",
@@ -197,5 +197,7 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "dependencies": {}
+  "dependencies": {
+    "l7-tiny-sdf": "^0.0.2"
+  }
 }

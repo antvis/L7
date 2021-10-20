@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import { ITexture2D } from '../renderer/ITexture2D';
+import { ISceneService } from '../scene/ISceneService';
 export type IImage = HTMLImageElement | File | string;
 export type Listener = (...args: any[]) => void;
 export interface IIconValue {
@@ -25,6 +26,7 @@ export interface IIconService {
   off(event: string, fn: EventEmitter.ListenerFn, context?: any): this;
   init(): void;
   addImage(id: string, image: IImage): void;
+  addImageMini(id: string, image: IImage, sceneService?: ISceneService): void;
   hasImage(id: string): boolean;
   removeImage(id: string): void;
   getTexture(): ITexture2D;
