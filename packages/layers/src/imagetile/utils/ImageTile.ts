@@ -1,4 +1,5 @@
 import { LngLatBounds, toBounds, toLngLatBounds } from '@antv/geo-coord';
+import { Container } from 'inversify';
 import ImageLayer from '../../image';
 
 interface IUrlParams {
@@ -13,10 +14,9 @@ const tileURLRegex = /\{([zxy])\}/g;
 
 export default class ImageTile {
   public tile: number[]; // 当前图片瓦片的索引
-  public lnglatBounds: LngLatBounds;
   public name: string;
   public imageLayer: any;
-  constructor(key: string, url: string, container: any) {
+  constructor(key: string, url: string, container: Container, sceneContainer: Container) {
     this.name = key;
     this.tile = key.split('_').map((v) => Number(v));
 
@@ -45,8 +45,8 @@ export default class ImageTile {
         },
       },
     );
-    // @ts-ignore
-    imageLayer.setContainer(container);
+
+    imageLayer.setContainer(container, sceneContainer);
     imageLayer.init();
 
     this.imageLayer = imageLayer;

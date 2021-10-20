@@ -1,9 +1,11 @@
 import { Bounds, GeoCoordinates, Point, toLngLat } from '@antv/geo-coord';
-import { createLayerContainer, ILngLat } from '@antv/l7-core';
+import { createLayerContainer, ILngLat, ILayer, ILayerService } from '@antv/l7-core';
+import { Container } from 'inversify';
 
 import ImageTile from './ImageTile';
 import TileCache from './tileCache';
 
+// Tip: 瓦片地图的存储上限
 const CacheLimit = 30;
 
 export default class Tile {
@@ -19,8 +21,8 @@ export default class Tile {
   public crstype: string;
   public currentCrs: any;
 
-  public layerService: any;
-  public layer: any;
+  public layerService: ILayerService;
+  public layer: ILayer;
   constructor(props: any) {
     this.layerService = props.layerService;
     this.layer = props.layer;
@@ -240,8 +242,8 @@ export default class Tile {
     }
     let tile = this.tileCache.getTile(key);
     if (!tile) {
-      const container = createLayerContainer(this.layer.sceneContainer);
-      tile = new ImageTile(key, this.url, container);
+      const container = createLayerContainer(this.layer.sceneContainer as Container);
+      tile = new ImageTile(key, this.url, container, this.layer.sceneContainer as Container);
       tile.name = key;
 
       t.current = true;

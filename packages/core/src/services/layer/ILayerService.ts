@@ -102,6 +102,7 @@ export interface ILayer {
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
   layerChildren: ILayer[]; // 在图层中添加子图层
+  sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
   hooks: {
