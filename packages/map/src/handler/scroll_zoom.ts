@@ -307,7 +307,7 @@ class ScrollZoomHandler {
   private onTimeout(initialEvent: any) {
     this.type = 'wheel';
     this.delta -= this.lastValue;
-    if (!this.active) {
+    if (!this.active && this.start) {
       this.start(initialEvent);
     }
   }

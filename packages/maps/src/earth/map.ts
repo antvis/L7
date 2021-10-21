@@ -5,10 +5,10 @@ import {
   Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  IEarthService,
   IGlobalConfigService,
   ILngLat,
   IMapConfig,
-  IMapService,
   IMercator,
   IPoint,
   IStatusOptions,
@@ -38,9 +38,12 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * AMapService
  */
 @injectable()
-export default class L7MapService implements IMapService<Map> {
+export default class L7EarthService implements IEarthService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
+
+  // 背景色
+  public bgColor: string = '#000';
 
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
@@ -60,7 +63,9 @@ export default class L7MapService implements IMapService<Map> {
   // T: 用于记录鼠标对相机的控制
   private handleCameraChanging: boolean;
   private handleCameraTimer: any;
-
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
   // init
   public addMarkerContainer(): void {
     const container = this.map.getCanvasContainer();
@@ -323,14 +328,11 @@ export default class L7MapService implements IMapService<Map> {
       this.viewport.rotateY(reg);
 
       this.viewport.syncWithMapCamera({
-        bearing: this.map.getBearing(),
         viewportHeight: this.map.transform.height,
-        pitch: this.map.getPitch(),
         viewportWidth: this.map.transform.width,
-        zoom: this.map.getZoom(),
-        // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-        cameraHeight: 0,
       });
+
+      this.cameraChangedCallback(this.viewport);
     }
   }
 
@@ -374,13 +376,8 @@ export default class L7MapService implements IMapService<Map> {
 
     // resync
     this.viewport.syncWithMapCamera({
-      bearing: this.map.getBearing(),
       viewportHeight: this.map.transform.height,
-      pitch: this.map.getPitch(),
       viewportWidth: this.map.transform.width,
-      zoom: this.map.getZoom(),
-      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-      cameraHeight: 0,
     });
     // set coordinate system
     if (

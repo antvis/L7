@@ -1,6 +1,7 @@
 // @ts-ignore
 import {
   Layers,
+  Source,
   LineLayer,
   PointLayer,
   PolygonLayer,
@@ -43,8 +44,10 @@ export default class World extends React.Component {
       autoFit: true,
     });
 
+    const dataSource = new Source(data);
+
     layer
-      .source(data)
+      .source(dataSource)
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -65,7 +68,7 @@ export default class World extends React.Component {
     });
 
     linelayer
-      .source(data)
+      .source(dataSource)
       .color('#fff')
       .size(1)
       .shape('line')
