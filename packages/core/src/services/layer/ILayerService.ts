@@ -260,6 +260,10 @@ export interface ILayer {
   // 增加加载模型的动画混合器
   addAnimateMixer?(mixer: any): void;
 
+  // 返回当前的 threejs camera
+  getRenderCamera?(): any;
+
+
   /**
    * 地球模式相关的方法
    */

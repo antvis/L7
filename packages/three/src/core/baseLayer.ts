@@ -198,6 +198,10 @@ export default class ThreeJSLayer
     return this;
   }
 
+  public getRenderCamera() {
+    return this.threeRenderService.getRenderCamera();
+  }
+
   public addAnimateMixer(mixer: AnimationMixer) {
     this.animateMixer.push(mixer);
   }
