@@ -17,8 +17,6 @@ uniform vec2 u_textSize;
 varying float v_segmentIndex;
 uniform float segmentNumber;
 
-varying vec4 v_dataset; // 数据集
-
 varying vec2 v_iconMapUV;
 
 uniform float u_time;
@@ -35,7 +33,7 @@ varying mat4 styleMappingMat;
 void main() {
   float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0; // 运动速度
-  float d_distance_ratio = v_dataset.g; // 当前点位距离占线总长的比例
+  float d_distance_ratio = styleMappingMat[3].g; // 当前点位距离占线总长的比例
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
     gl_FragColor = mix(u_sourceColor, u_targetColor, v_segmentIndex/segmentNumber);
@@ -68,7 +66,7 @@ void main() {
   if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
     // float arcRadio = smoothstep( 0.0, 1.0, (v_segmentIndex / segmentNumber));
     float arcRadio = v_segmentIndex / (segmentNumber - 1.0);
-    float count = v_dataset.b; // // 贴图在弧线上重复的数量
+    float count = styleMappingMat[3].b; // // 贴图在弧线上重复的数量
 
     float u = fract(arcRadio * count - animateSpeed * count);
  
@@ -76,7 +74,7 @@ void main() {
       u = gl_FragColor.a/opacity;
     }
 
-    float v = v_dataset.a;  // 线图层贴图部分的 v 坐标值
+    float v = styleMappingMat[3].a;  // 线图层贴图部分的 v 坐标值
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     vec4 pattern = texture2D(u_texture, uv);
 

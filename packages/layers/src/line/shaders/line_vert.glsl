@@ -28,9 +28,10 @@ varying vec4 v_color;
 varying vec4 v_dash_array;
 varying vec2 v_normal;
 
-varying vec4 v_dataset; // 数据集 - distance_ratio/distance/pixelLen/texV
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 varying vec2 v_iconMapUV;
+
+
 uniform float u_linearColor: 0;
 
 uniform float u_opacity: 1.0;
@@ -45,7 +46,7 @@ void main() {
     0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
     0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
     0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0
+    0.0, 0.0, 0.0, 0.0  // distance_ratio/distance/pixelLen/texV
   );
 
   float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
@@ -84,7 +85,6 @@ void main() {
   }
   v_normal = vec2(reverse_offset_normal(a_Normal) * sign(a_Miter));
 
-
   v_color = a_Color;
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
@@ -96,10 +96,10 @@ void main() {
   float texV = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
 
   // 设置数据集的参数
-  v_dataset.r = d_distance_ratio; // 当前点位距离占线总长的比例
-  v_dataset.g = a_Distance;       // 当前顶点的距离
-  v_dataset.b = d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
-  v_dataset.a = texV;             // 线图层贴图部分的 v 坐标值
+  styleMappingMat[3][0] = d_distance_ratio; // 当前点位距离占线总长的比例
+  styleMappingMat[3][1] = a_Distance;       // 当前顶点的距离
+  styleMappingMat[3][2] = d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
+  styleMappingMat[3][3] = texV;             // 线图层贴图部分的 v 坐标值
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 
