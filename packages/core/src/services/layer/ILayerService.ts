@@ -263,7 +263,6 @@ export interface ILayer {
   // 返回当前的 threejs camera
   getRenderCamera?(): any;
 
-
   /**
    * 地球模式相关的方法
    */
