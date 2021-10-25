@@ -352,7 +352,7 @@ export default class Aspace extends React.Component {
         currentView.pitch = scene.getPitch();
         currentView.zoom = scene.getZoom();
       });
-      
+
       scene.getMapService().on('mapchange', (e: any) => {
         // @ts-ignore
         currentCamera = threeJSLayer.threeRenderService.getRenderCamera();
