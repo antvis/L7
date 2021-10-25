@@ -146,7 +146,7 @@ scene.on('loaded', () => {
         layer.setObjectLngLat(plane, [ 120.1008, 30.2573 ], 0);
         plane.position.z = 10;
         threeScene.add(plane);
-        
+
         return '';
       };
 
