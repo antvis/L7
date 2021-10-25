@@ -362,7 +362,6 @@ export default class Aspace extends React.Component {
       scene?.map?.on('camerachange', (e: any) => {
         // @ts-ignore
         currentCamera = threeJSLayer.threeRenderService.getRenderCamera();
-        currentView.rotation = scene.getRotation();
         currentView.pitch = scene.getPitch();
       });
 
