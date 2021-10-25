@@ -18,6 +18,11 @@
       "filename": "mapbox_ant.js",
       "title": "mapbox 地图",
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*kflKRJvm3hYAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "space_click.js",
+      "title": "点击建筑",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*AY5vSIMeLy8AAAAAAAAAAAAAARQnAQ"
     }
   ]
 }
