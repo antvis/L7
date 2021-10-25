@@ -197,5 +197,7 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@antv/geo-coord": "^1.0.8"
+  }
 }

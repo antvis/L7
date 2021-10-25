@@ -459,6 +459,8 @@ export default class AMapService
       position,
     } = e.camera;
     const { lng, lat } = this.getCenter();
+    // Tip: 触发地图变化事件
+    this.emit('mapchange');
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)

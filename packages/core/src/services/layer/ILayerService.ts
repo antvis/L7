@@ -101,6 +101,8 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
+  layerChildren: ILayer[]; // 在图层中添加子图层
+  sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
   hooks: {
@@ -137,7 +139,7 @@ export interface ILayer {
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
-  setContainer(container: Container): void;
+  setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
   setCurrentSelectedId(id: number | null): void;
@@ -377,7 +379,7 @@ export interface ILayerService {
   getLayers(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  remove(layer: ILayer): void;
+  remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateRenderOrder(): void;
   renderLayers(type?: string): void;

@@ -320,7 +320,8 @@ export default class L7MapService implements IMapService<Map> {
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
     const { offsetCoordinate = true } = this.config;
-
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     // resync
     this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),

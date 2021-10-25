@@ -137,7 +137,6 @@ export default class Aspace extends React.Component {
               let r = heightData[i * 4];
               let g = heightData[i * 4 + 1];
               let b = heightData[i * 4 + 2];
-
               let h =
                 -10000.0 +
                 (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) *
@@ -168,7 +167,6 @@ export default class Aspace extends React.Component {
               const antModel = gltf.scene;
               layer.adjustMeshToMap(antModel);
               layer.setMeshScale(antModel, 20, 20, 20);
-
               layer.setObjectLngLat(
                 antModel,
                 [center.lng - 0.002, center.lat],
@@ -178,13 +176,9 @@ export default class Aspace extends React.Component {
               const animations = gltf.animations;
               if (animations && animations.length) {
                 const mixer = new THREE.AnimationMixer(antModel);
-
                 const animation = animations[1];
-
                 const action = mixer.clipAction(animation);
-
                 action.play();
-
                 layer.addAnimateMixer(mixer);
               }
               antModel.rotation.y = Math.PI;
@@ -358,8 +352,7 @@ export default class Aspace extends React.Component {
         currentView.pitch = scene.getPitch();
         currentView.zoom = scene.getZoom();
       });
-      // @ts-ignore
-      scene?.map?.on('camerachange', (e: any) => {
+      scene.getMapService().on('mapchange', (e: any) => {
         // @ts-ignore
         currentCamera = threeJSLayer.threeRenderService.getRenderCamera();
         currentView.pitch = scene.getPitch();
