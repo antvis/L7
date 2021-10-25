@@ -337,6 +337,8 @@ export default class L7EarthService implements IEarthService<Map> {
   }
 
   private handleCameraChanged = (e: any) => {
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     const DELAY_TIME = 2000;
     this.handleCameraChanging = true;
     if (this.handleCameraTimer) {
