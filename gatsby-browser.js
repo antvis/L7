@@ -12,6 +12,7 @@ window.l7District = require('@antv/l7-district');
 window.l7Three = require('@antv/l7-three');
 window.three = require('three');
 window.GLTFLoader = require('three/examples/jsm/loaders/GLTFLoader');
+window.FBXLoader = require('three/examples/jsm/loaders/FBXLoader');
 window.react = require('react');
 window.popmotion = require('popmotion');
 window.reactDom = require('react-dom');
