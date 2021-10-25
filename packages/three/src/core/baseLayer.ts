@@ -23,7 +23,7 @@ export default class ThreeJSLayer
   }>
   implements ILayer {
   public type: string = 'custom';
-  protected threeRenderService: IThreeRenderService;
+  public threeRenderService: IThreeRenderService;
   // 构建 threejs 的 scene
   private scene: Scene = new Scene();
   private renderer: WebGLRenderer;

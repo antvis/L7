@@ -228,6 +228,8 @@ export interface ILayer {
    * @param scale
    */
 
+   threeRenderService?: any;
+
   // 获取对应地图的经纬度模型矩阵
   getModelMatrix?(
     lnglat: ILngLat,
