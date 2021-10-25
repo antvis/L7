@@ -157,7 +157,7 @@ scene.on('loaded', () => {
         'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
         gltf => {
           const antModel = gltf.scene;
-          setDouble(antModel)
+          setDouble(antModel);
           // antModel.children[0].material.side = THREE.DoubleSide
           layer.adjustMeshToMap(antModel);
           layer.setMeshScale(antModel, 20, 20, 20);
@@ -428,9 +428,9 @@ scene.on('loaded', () => {
 });
 
 function setDouble(object) {
-  if(object.children && object.children.length && object.children.length > 0) {
-    object.children.map(child => setDouble(child))
-  } else if(object.material){
+  if (object.children && object.children.length && object.children.length > 0) {
+    object.children.map(child => setDouble(child));
+  } else if (object.material) {
     object.material.side = THREE.DoubleSide;
   }
 }

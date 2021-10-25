@@ -29,7 +29,7 @@ scene.on('loaded', () => {
       const center = scene.getCenter();
 
       const cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
-      const cubeMaterial = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
+      const cubeMaterial = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
       const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
       layer.setObjectLngLat(cube, [ center.lng + 0.05, center.lat ], 0);
       threeScene.add(cube);
@@ -42,7 +42,7 @@ scene.on('loaded', () => {
           // 根据 GeoJSON 数据放置模型
           layer.getSource().data.dataArray.forEach(({ coordinates }) => {
             const gltfScene = gltf.scene;
-            setDouble(gltfScene)
+            setDouble(gltfScene);
             layer.adjustMeshToMap(gltfScene);
             // gltfScene.scale.set(1000, 1000, 1000)
             layer.setMeshScale(gltfScene, 1000, 1000, 1000);
@@ -102,9 +102,9 @@ scene.on('loaded', () => {
 });
 
 function setDouble(object) {
-  if(object.children && object.children.length && object.children.length > 0) {
-    object.children.map(child => setDouble(child))
-  } else if(object.material){
+  if (object.children && object.children.length && object.children.length > 0) {
+    object.children.map(child => setDouble(child));
+  } else if (object.material) {
     object.material.side = THREE.DoubleSide;
   }
 }
