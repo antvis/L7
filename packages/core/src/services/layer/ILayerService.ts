@@ -124,6 +124,16 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+
+  /**
+   * threejs 适配兼容相关的方法
+   * @param lnglat
+   * @param altitude
+   * @param rotation
+   * @param scale
+   */
+
+  threeRenderService?: any;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
@@ -219,16 +229,6 @@ export interface ILayer {
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
   setAnimateStartTime(): void;
   getLayerAnimateTime(): number;
-
-  /**
-   * threejs 适配兼容相关的方法
-   * @param lnglat
-   * @param altitude
-   * @param rotation
-   * @param scale
-   */
-
-   threeRenderService?: any;
 
   // 获取对应地图的经纬度模型矩阵
   getModelMatrix?(
