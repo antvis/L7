@@ -162,6 +162,7 @@ scene.on('loaded', () => {
         gltf => {
           // 根据 GeoJSON 数据放置模型
           const gltfScene = gltf.scene.clone();
+          setDouble(gltfScene);
           layer.getSource().data.dataArray.forEach(() => {
             layer.adjustMeshToMap(gltfScene);
             gltfScene.scale.set(500000, 500000, 500000);
@@ -186,7 +187,6 @@ scene.on('loaded', () => {
             // 向场景中添加模型
             threeScene.add(gltfScene);
           });
-
 
           travelLoop();
           function travelLoop() {
@@ -216,3 +216,11 @@ scene.on('loaded', () => {
     .animate(true);
   scene.addLayer(threeJSLayer);
 });
+
+function setDouble(object) {
+  if (object.children && object.children.length && object.children.length > 0) {
+    object.children.map(child => setDouble(child));
+  } else if (object.material) {
+    object.material.side = THREE.DoubleSide;
+  }
+}
