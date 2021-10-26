@@ -61,6 +61,9 @@ export default class AMapService
    */
   public map: AMap.Map & IAMapInstance;
 
+  // TODO: 判断地图是否正在拖拽
+  public dragging: boolean = false;
+
   // 背景色
   public bgColor: string = 'rgba(0, 0, 0, 0)';
 
@@ -401,6 +404,16 @@ export default class AMapService
           pendingResolveQueue.push(resolveMap);
         }
       }
+    });
+
+    // TODO: 判断地图是否正在被拖拽
+    this.map.on('dragstart', () => {
+      this.dragging = true;
+      return '';
+    });
+    this.map.on('dragend', () => {
+      this.dragging = false;
+      return '';
     });
 
     this.viewport = new Viewport();

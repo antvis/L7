@@ -151,16 +151,6 @@ export default class LayerService implements ILayerService {
     }
   }
 
-  // @ts-ignore
-  public startAnimate2(stats) {
-    // @ts-ignore
-    this.stats = stats;
-    if (this.animateInstanceCount++ === 0) {
-      this.clock.start();
-      this.runRender();
-    }
-  }
-
   public stopAnimate() {
     if (--this.animateInstanceCount === 0) {
       this.stopRender();
@@ -172,16 +162,13 @@ export default class LayerService implements ILayerService {
     return this.renderService.extensionObject.OES_texture_float;
   }
 
-  // private runRender() {
-  //   this.renderLayers();
-  //   this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
-  // }
+  // TODO: 判断地图是否正在被拖动
+  public isMapDragging() {
+    return this.mapService.dragging;
+  }
 
-  public runRender() {
-    // @ts-ignore
-    this?.stats?.update();
-    // this.renderLayers();
-    this.renderLayers('animate');
+  private runRender() {
+    this.renderLayers();
     this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 

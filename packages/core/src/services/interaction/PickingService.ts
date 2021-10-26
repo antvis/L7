@@ -140,7 +140,11 @@ export default class PickingService implements IPickingService {
     return features;
   }
   private async pickingAllLayer(target: IInteractionTarget) {
-    if (this.alreadyInPicking || this.layerService.alreadyInRendering) {
+    if (
+      this.alreadyInPicking ||
+      this.layerService.alreadyInRendering ||
+      this.layerService.isMapDragging()
+    ) {
       return;
     }
     this.alreadyInPicking = true;

@@ -170,8 +170,6 @@ export default class PointTest extends React.Component {
 
         scene.on('loaded', () => {
           scene.addLayer(layer);
-          // @ts-ignore
-          // layer.layerService.startAnimate2(stats)
         });
       });
   }
