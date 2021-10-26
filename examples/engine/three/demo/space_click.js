@@ -140,7 +140,8 @@ scene.on('loaded', () => {
           // opacity: 0.6,
           map: new THREE.TextureLoader().load(
             'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ'
-          )
+          ),
+          side: THREE.DoubleSide
         });
         const plane = new THREE.Mesh(geometry, material);
         layer.setObjectLngLat(plane, [ 120.1008, 30.2573 ], 0);
@@ -156,6 +157,8 @@ scene.on('loaded', () => {
         'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
         gltf => {
           const antModel = gltf.scene;
+          setDouble(antModel);
+          // antModel.children[0].material.side = THREE.DoubleSide
           layer.adjustMeshToMap(antModel);
           layer.setMeshScale(antModel, 20, 20, 20);
           layer.setObjectLngLat(
@@ -203,7 +206,8 @@ scene.on('loaded', () => {
           }
         },
         vertexShader: v,
-        fragmentShader: f
+        fragmentShader: f,
+        side: THREE.DoubleSide
       });
 
       const fbxLoaded = new FBXLoader();
@@ -265,7 +269,8 @@ scene.on('loaded', () => {
           const fontMat = new THREE.MeshPhongMaterial({
             color: 0xcccccc,
             shininess: 60,
-            specular: 0xcccccc
+            specular: 0xcccccc,
+            side: THREE.DoubleSide
           });
 
           const testHeight = 900;
@@ -421,3 +426,12 @@ scene.on('loaded', () => {
   }
   return '';
 });
+
+function setDouble(object) {
+  if (object.children && object.children.length && object.children.length > 0) {
+    object.children.map(child => setDouble(child));
+  } else if (object.material) {
+    object.material.side = THREE.DoubleSide;
+  }
+}
+
