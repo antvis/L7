@@ -34,6 +34,7 @@ export default class ArcModel extends BaseModel {
       lineTexture = false,
       iconStep = 100,
       segmentNumber = 30,
+      thetaOffset = 0.314,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
@@ -85,6 +86,7 @@ export default class ArcModel extends BaseModel {
     }
 
     return {
+      u_thetaOffset: thetaOffset,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 

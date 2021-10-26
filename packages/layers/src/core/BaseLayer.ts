@@ -30,6 +30,7 @@ import {
   IScale,
   IScaleOptions,
   IShaderModuleService,
+  ISource,
   ISourceCFG,
   IStyleAttributeInitializationOptions,
   IStyleAttributeService,
@@ -111,6 +112,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   };
 
   public layerModel: ILayerModel;
+
+  // TODO: 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
+  public sceneContainer: Container | undefined;
+  // TODO: 用于保存子图层对象
+  public layerChildren: ILayer[] = [];
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -221,8 +227,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
    *  -> SceneContainer 1.*
    *   -> LayerContainer 1.*
    */
-  public setContainer(container: Container) {
+  public setContainer(container: Container, sceneContainer: Container) {
     this.container = container;
+    this.sceneContainer = sceneContainer;
   }
 
   public getContainer() {
@@ -451,6 +458,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public source(data: any, options?: ISourceCFG): ILayer {
+    if (data?.data) {
+      // 判断是否为source
+      this.setSource(data);
+      return this;
+    }
     this.sourceOption = {
       data,
       options,
@@ -987,6 +999,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         updateOptions,
       );
     }
+  }
+
+  /**
+   * 继承空方法
+   * @param time
+   */
+  public setEarthTime(time: number) {
+    console.warn('empty fn');
   }
 
   protected getConfigSchema() {

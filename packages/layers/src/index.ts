@@ -4,10 +4,13 @@ import BaseLayer from './core/BaseLayer';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
 import ImageLayer from './image';
+import ImageTileLayer from './imagetile';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
+
+import EarthLayer from './earth';
 
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -23,6 +26,7 @@ import RegisterStyleAttributePlugin from './plugins/RegisterStyleAttributePlugin
 import ShaderUniformPlugin from './plugins/ShaderUniformPlugin';
 import UpdateModelPlugin from './plugins/UpdateModelPlugin';
 import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
+
 /**
  * 校验传入参数配置项的正确性
  * @see /dev-docs/ConfigSchemaValidation.md
@@ -135,6 +139,8 @@ export {
   LineLayer,
   CityBuildingLayer,
   ImageLayer,
+  ImageTileLayer,
   RasterLayer,
   HeatmapLayer,
+  EarthLayer,
 };

@@ -72,16 +72,20 @@ export default class ControlService implements IControlService {
       this.container,
     ));
 
-    function createCorner(vSide: string, hSide: string) {
-      const className = l + vSide + ' ' + l + hSide;
-
-      corners[vSide + hSide] = DOM.create('div', className, container);
+    function createCorner(vSideList: string[] = []) {
+      const className = vSideList.map((item) => l + item).join(' ');
+      corners[vSideList.join('')] = DOM.create('div', className, container);
     }
 
-    createCorner('top', 'left');
-    createCorner('top', 'right');
-    createCorner('bottom', 'left');
-    createCorner('bottom', 'right');
+    createCorner(['top', 'left']);
+    createCorner(['top', 'right']);
+    createCorner(['bottom', 'left']);
+    createCorner(['bottom', 'right']);
+
+    createCorner(['top', 'center']);
+    createCorner(['right', 'center']);
+    createCorner(['left', 'center']);
+    createCorner(['bottom', 'center']);
   }
 
   private clearControlPos() {

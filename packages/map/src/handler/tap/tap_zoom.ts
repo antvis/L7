@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../../earthmap';
 import Point from '../../geo/point';
 import { Map } from '../../map';
 import TapRecognizer from './tap_recognizer';
@@ -48,7 +49,7 @@ export default class TapZoomHandler {
       e.preventDefault();
       setTimeout(() => this.reset(), 0);
       return {
-        cameraAnimation: (map: Map) =>
+        cameraAnimation: (map: Map | EarthMap) =>
           map.easeTo(
             {
               duration: 300,
@@ -63,7 +64,7 @@ export default class TapZoomHandler {
       e.preventDefault();
       setTimeout(() => this.reset(), 0);
       return {
-        cameraAnimation: (map: Map) =>
+        cameraAnimation: (map: Map | EarthMap) =>
           map.easeTo(
             {
               duration: 300,

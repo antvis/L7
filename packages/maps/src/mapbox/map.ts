@@ -50,6 +50,9 @@ export default class MapboxService
   public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
 
+  // 背景色
+  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -65,6 +68,9 @@ export default class MapboxService
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
 
   // init
   public addMarkerContainer(): void {
@@ -162,8 +168,8 @@ export default class MapboxService
     this.map.panTo(p);
   }
 
-  public panBy(pixel: [number, number]): void {
-    this.panTo(pixel);
+  public panBy(x: number, y: number): void {
+    this.panTo([x, y]);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
@@ -236,6 +242,21 @@ export default class MapboxService
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     return this.map.project(lnglat);
   }
+
+  /**
+   * 将经纬度转成墨卡托坐标
+   * @param lnglat
+   * @returns
+   */
+  public lngLatToCoord(
+    lnglat: [number, number],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ) {
+    // @ts-ignore
+    const { x, y } = this.lngLatToMercator(lnglat, 0);
+    return [x - origin.x, y - origin.y] as [number, number];
+  }
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
@@ -347,6 +368,9 @@ export default class MapboxService
   }
 
   public destroy() {
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();
@@ -379,7 +403,8 @@ export default class MapboxService
   private handleCameraChanged = () => {
     // @see https://github.com/mapbox/mapbox-gl-js/issues/2572
     const { lat, lng } = this.map.getCenter().wrap();
-
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     // resync
     this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),

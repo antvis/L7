@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../earthmap';
 import LngLat from '../geo/lng_lat';
 import Point from '../geo/point';
 import { Map } from '../map';
@@ -22,7 +23,7 @@ const maxScalePerFrame = 2;
  * The `ScrollZoomHandler` allows the user to zoom the map by scrolling.
  */
 class ScrollZoomHandler {
-  private map: Map;
+  private map: Map | EarthMap;
   private el: HTMLElement;
   private enabled: boolean;
   private active: boolean;
@@ -57,7 +58,7 @@ class ScrollZoomHandler {
   /**
    * @private
    */
-  constructor(map: Map, handler: HandlerManager) {
+  constructor(map: Map | EarthMap, handler: HandlerManager) {
     this.map = map;
     this.el = map.getCanvasContainer();
     this.handler = handler;
@@ -287,7 +288,9 @@ class ScrollZoomHandler {
       this.finishTimeout = setTimeout(() => {
         this.zooming = false;
         this.handler.triggerRenderFrame();
+        // @ts-ignore
         delete this.targetZoom;
+        // @ts-ignore
         delete this.finishTimeout;
       }, 200);
     }
@@ -304,7 +307,7 @@ class ScrollZoomHandler {
   private onTimeout(initialEvent: any) {
     this.type = 'wheel';
     this.delta -= this.lastValue;
-    if (!this.active) {
+    if (!this.active && this.start) {
       this.start(initialEvent);
     }
   }
@@ -325,6 +328,7 @@ class ScrollZoomHandler {
 
     if (this.finishTimeout) {
       clearTimeout(this.finishTimeout);
+      // @ts-ignore
       delete this.finishTimeout;
     }
 

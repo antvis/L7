@@ -43,6 +43,9 @@ export default class L7MapService implements IMapService<Map> {
   public version: string = Version.L7MAP;
   public map: Map;
 
+  // 背景色
+  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -58,6 +61,9 @@ export default class L7MapService implements IMapService<Map> {
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
 
   // init
   public addMarkerContainer(): void {
@@ -155,8 +161,8 @@ export default class L7MapService implements IMapService<Map> {
     this.map.panTo(p);
   }
 
-  public panBy(pixel: [number, number]): void {
-    this.panTo(pixel);
+  public panBy(x: number = 0, y: number = 0): void {
+    this.panTo([x, y]);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
@@ -279,6 +285,9 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public destroy() {
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();
@@ -311,7 +320,8 @@ export default class L7MapService implements IMapService<Map> {
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
     const { offsetCoordinate = true } = this.config;
-
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     // resync
     this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),

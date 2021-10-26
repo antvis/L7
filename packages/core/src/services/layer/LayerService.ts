@@ -1,9 +1,11 @@
+import { rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
+import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerModel, ILayerService } from './ILayerService';
 
@@ -23,12 +25,13 @@ export default class LayerService implements ILayerService {
 
   private lastRenderType: string;
 
-  // ---
-  private stats: any;
-  // ---
+  private lastPickRenderTime: number;
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
+
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
@@ -61,11 +64,20 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public remove(layer: ILayer): void {
-    const layerIndex = this.layers.indexOf(layer);
-    if (layerIndex > -1) {
-      this.layers.splice(layerIndex, 1);
+  public remove(layer: ILayer, parentLayer?: ILayer): void {
+    // Tip: layer.layerChildren 当 layer 存在子图层的情况
+    if (parentLayer) {
+      const layerIndex = parentLayer.layerChildren.indexOf(layer);
+      if (layerIndex > -1) {
+        parentLayer.layerChildren.splice(layerIndex, 1);
+      }
+    } else {
+      const layerIndex = this.layers.indexOf(layer);
+      if (layerIndex > -1) {
+        this.layers.splice(layerIndex, 1);
+      }
     }
+
     layer.emit('remove', null);
     layer.destroy();
     this.renderLayers();
@@ -88,17 +100,29 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     this.updateRenderOrder();
+
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
-        // trigger hooks
-        layer.hooks.beforeRenderData.call();
-        layer.hooks.beforeRender.call();
-        layer.render();
-        layer.hooks.afterRender.call();
+        // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
+        renderLayerEvent(layer.layerChildren);
+        renderLayerEvent([layer]);
       });
     this.alreadyInRendering = false;
+
+    function renderLayerEvent(layers: ILayer[]) {
+      layers
+        .filter((layer) => layer.inited)
+        .filter((layer) => layer.isVisible())
+        .forEach((layer) => {
+          // trigger hooks
+          layer.hooks.beforeRenderData.call();
+          layer.hooks.beforeRender.call();
+          layer.render();
+          layer.hooks.afterRender.call();
+        });
+    }
   }
 
   public updateRenderOrder() {
@@ -108,7 +132,14 @@ export default class LayerService implements ILayerService {
   }
 
   public destroy() {
-    this.layers.forEach((layer) => layer.destroy());
+    this.layers.forEach((layer) => {
+      // Tip: layer.layerChildren 当 layer 存在子图层的情况
+      if (layer.layerChildren) {
+        layer.layerChildren.forEach((child) => child.destroy());
+        layer.layerChildren = [];
+      }
+      layer.destroy();
+    });
     this.layers = [];
     this.renderLayers();
   }
@@ -156,6 +187,12 @@ export default class LayerService implements ILayerService {
 
   // 渲染检测
   private renderTest(renderType: string | undefined): boolean {
+    const now = new Date().getTime();
+    const betweenPickRenderTime = now - this.lastPickRenderTime;
+    if (renderType === 'picking') {
+      this.lastPickRenderTime = new Date().getTime();
+    }
+
     // 继续渲染事件
     if (renderType) {
       switch (renderType) {
@@ -168,7 +205,12 @@ export default class LayerService implements ILayerService {
             this.lastRenderType === 'animate'
           ) {
             this.lastRenderType = 'picking';
-            return false;
+            // 如果上一次触发的事件在 48 ms 以上，则这一次不放弃触发
+            if (betweenPickRenderTime > 48) {
+              return true;
+            } else {
+              return false;
+            }
           } else {
             this.lastRenderType = 'picking';
             return true;
@@ -194,8 +236,14 @@ export default class LayerService implements ILayerService {
   }
 
   private clear() {
+    const color = rgb2arr(this.mapService.bgColor) as [
+      number,
+      number,
+      number,
+      number,
+    ];
     this.renderService.clear({
-      color: [0, 0, 0, 0],
+      color,
       depth: 1,
       stencil: 0,
       framebuffer: null,

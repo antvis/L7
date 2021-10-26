@@ -19,12 +19,11 @@ uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_lineDir: 1.0;
 varying vec4 v_dash_array;
 
+uniform float u_thetaOffset: 0.314;
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
-
-varying vec4 v_dataset; // 数据集 - 用于合并单个的 varying 变量
 
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
@@ -41,36 +40,10 @@ float bezier3(vec3 arr, float t) {
   return (arr.x * ut + arr.y * t) * ut + (arr.y * ut + arr.z * t) * t;
 }
 vec2 midPoint(vec2 source, vec2 target) {
-  // cal style mapping - 数据纹理映射部分的计算
-  styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0
-  );
-
-  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
-  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
-  float columnWidth = 1.0/columnCount;  // 列宽
-  float rowHeight = 1.0/rowCount;       // 行高
-  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
-  float id = a_vertexId; // 第n个顶点
-  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
-  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
-  
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
-  textureOffset = opacityAndOffset.g;
-  // cal style mapping - 数据纹理映射部分的计算
-
   vec2 center = target - source;
   float r = length(center);
   float theta = atan(center.y, center.x);
-  float thetaOffset = 0.314;
+  float thetaOffset = u_thetaOffset;
   float r2 = r / 2.0 / cos(thetaOffset);
   float theta2 = theta + thetaOffset;
   vec2 mid = vec2(r2*cos(theta2) + source.x, r2*sin(theta2) + source.y);
@@ -111,6 +84,33 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 
 void main() {
   v_color = a_Color;
+
+  // cal style mapping - 数据纹理映射部分的计算
+  styleMappingMat = mat4(
+    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
+    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
+    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
+    0.0, 0.0, 0.0, 0.0  // dataset 数据集
+  );
+
+  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
+  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
+  float columnWidth = 1.0/columnCount;  // 列宽
+  float rowHeight = 1.0/rowCount;       // 行高
+  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
+  float id = a_vertexId; // 第n个顶点
+  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
+  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
+  
+  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
+  // 按顺序从 cell 中取值、若没有则自动往下取值
+  float textureOffset = 0.0; // 在 cell 中取值的偏移量
+
+  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
+  styleMappingMat[0][0] = opacityAndOffset.r;
+  textureOffset = opacityAndOffset.g;
+  // cal style mapping - 数据纹理映射部分的计算
+
   
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
@@ -142,7 +142,7 @@ void main() {
       }
   }
 
-  v_dataset.b = d_distance_ratio;
+   styleMappingMat[3].b = d_distance_ratio;
 
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));
@@ -153,7 +153,7 @@ void main() {
 
 
   float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
-  v_dataset.r = d_segmentIndex;
+  styleMappingMat[3].r = d_segmentIndex;
 
   if(LineTexture == u_line_texture) { // 开启贴图模式
 
@@ -169,11 +169,11 @@ void main() {
 
     float pixelLen = project_pixel(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
     float texCount = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
-    v_dataset.g = texCount;
+     styleMappingMat[3].g = texCount;
 
     float lineOffsetWidth = length(offset + offset * sign(a_Position.y)); // 线横向偏移的距离
     float linePixelSize = project_pixel(a_Size); // 定点位置偏移
-    v_dataset.a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
+     styleMappingMat[3].a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
   }
   
 

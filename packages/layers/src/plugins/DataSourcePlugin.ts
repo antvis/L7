@@ -5,9 +5,8 @@ import {
   IMapService,
   TYPES,
 } from '@antv/l7-core';
-import Source from '@antv/l7-source';
+import Source, { DEFAULT_DATA, DEFAULT_PARSER } from '@antv/l7-source';
 import { injectable } from 'inversify';
-import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
 
 @injectable()
@@ -18,7 +17,11 @@ export default class DataSourcePlugin implements ILayerPlugin {
     layer.hooks.init.tap('DataSourcePlugin', () => {
       const source = layer.getSource();
       if (!source) {
-        const { data, options } = layer.sourceOption;
+        // TODO: 允许用户不使用 layer 的 source 方法，在这里传入一个默认的替换的默认数据
+        const { data, options } = layer.sourceOption || {
+          data: DEFAULT_DATA,
+          options: DEFAULT_PARSER,
+        };
         layer.setSource(new Source(data, options));
       }
 

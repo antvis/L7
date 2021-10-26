@@ -1,7 +1,15 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
-import { vec3 } from 'gl-matrix';
+// @ts-ignore
+import { mat4, vec3 } from 'gl-matrix';
+import {
+  EARTH_RADIUS,
+  EARTH_RADIUS_OUTER,
+  EARTH_SEGMENTS,
+  lglt2xyz,
+  primitiveSphere,
+} from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import { calculateCentroid } from '../utils/geo';
 import extrudePolygon, {
@@ -20,6 +28,7 @@ interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
 const GeometryCache: IGeometryCache = {};
+
 /**
  * 计算2D 填充点图顶点
  * @param feature 映射feature
@@ -33,6 +42,19 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
     size: coordinates.length,
   };
 }
+/**
+ * 计算2D 填充点图顶点 (地球模式)
+ * @param feature 映射feature
+ */
+export function GlobelPointFillTriangulation(feature: IEncodeFeature) {
+  const coordinates = calculateCentroid(feature.coordinates);
+  const xyz = lglt2xyz(coordinates as [number, number]);
+  return {
+    vertices: [...xyz, ...xyz, ...xyz, ...xyz],
+    indices: [0, 1, 2, 2, 3, 0],
+    size: xyz.length,
+  };
+}
 
 /**
  * 计算3D 拉伸点图
@@ -40,7 +62,6 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
  */
 export function PointExtrudeTriangulation(feature: IEncodeFeature) {
   const { shape } = feature;
-  // console.log('PointExtrudeTriangulation', feature)
   const { positions, index, normals } = getGeometry(
     shape as ShapeType3D,
     false,
@@ -123,7 +144,6 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
-
   return {
     indices: earcut(vertices, holes, dimensions),
     vertices,
@@ -137,7 +157,6 @@ export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
     coordinates,
     true,
   );
-
   return {
     vertices: positions, // [ x, y, z, uv.x,uv.y ]
     indices: index,
@@ -293,7 +312,6 @@ function getGeometry(shape: ShapeType3D, needFlat = false): IExtrudeGeomety {
     : geometryShape.cylinder();
   const geometry = extrude_PolygonNormal([path], needFlat);
   GeometryCache[shape] = geometry;
-  // console.log('geometry', geometry)
   return geometry;
 }
 
@@ -382,4 +400,32 @@ function addDir(dirX: number, dirY: number) {
   const x = (dirX + 1) / 2;
   const y = (dirY + 1) / 2;
   return [x, y];
+}
+
+/**
+ * 构建地球三角网格
+ * @returns
+ */
+export function earthTriangulation() {
+  const earthmesh = primitiveSphere(EARTH_RADIUS, { segments: EARTH_SEGMENTS });
+  const { positionsArr, indicesArr, normalArr } = earthmesh;
+  return {
+    vertices: positionsArr,
+    indices: indicesArr,
+    size: 5,
+    normals: normalArr,
+  };
+}
+
+export function earthOuterTriangulation() {
+  const earthmesh = primitiveSphere(EARTH_RADIUS + EARTH_RADIUS_OUTER, {
+    segments: EARTH_SEGMENTS,
+  });
+  const { positionsArr, indicesArr, normalArr } = earthmesh;
+  return {
+    vertices: positionsArr,
+    indices: indicesArr,
+    size: 5,
+    normals: normalArr,
+  };
 }

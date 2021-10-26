@@ -182,6 +182,22 @@ module.exports = {
           en: 'Component'
         },
         order: 6
+      },
+      {
+        slug: 'api/renderer',
+        title: {
+          zh: '第三方引擎接入',
+          en: 'import other gl'
+        },
+        order: 3
+      },
+      {
+        slug: 'api/earth',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode'
+        },
+        order: 3
       }
     ],
     examples: [
@@ -215,6 +231,22 @@ module.exports = {
         title: {
           zh: '绘制组件',
           en: 'L7 Draw'
+        }
+      },
+      {
+        slug: 'engine',
+        icon: 'map',
+        title: {
+          zh: '第三方引擎',
+          en: 'other engine'
+        }
+      },
+      {
+        slug: 'earth',
+        icon: 'map',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode'
         }
       },
       {

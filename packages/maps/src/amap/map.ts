@@ -61,6 +61,9 @@ export default class AMapService
    */
   public map: AMap.Map & IAMapInstance;
 
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)';
+
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
@@ -79,6 +82,9 @@ export default class AMapService
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
 
   public addMarkerContainer(): void {
     const mapContainer = this.map.getContainer();
@@ -229,17 +235,21 @@ export default class AMapService
   public panTo(p: [number, number]): void {
     this.map.panTo(p);
   }
-  public panBy(pixel: [number, number]): void {
-    this.map.panTo(pixel);
+
+  public panBy(x: number = 0, y: number = 0): void {
+    this.map.panBy(x, y);
   }
+
   public fitBounds(extent: Bounds): void {
     this.map.setBounds(
       new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
     );
   }
+
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
     this.map.setZoomAndCenter(zoom, center);
   }
+
   public setMapStyle(style: string): void {
     this.map.setMapStyle(this.getMapStyle(style));
   }
@@ -273,6 +283,12 @@ export default class AMapService
       x: pixel.getX(),
       y: pixel.getY(),
     };
+  }
+
+  public lngLatToCoord(lnglat: [number, number]): any {
+    // @ts-ignore
+    const { x, y } = this.map.lngLatToGeodeticCoord(lnglat);
+    return [x, -y];
   }
 
   public lngLatToMercator(
@@ -411,6 +427,10 @@ export default class AMapService
 
   public destroy() {
     this.map.destroy();
+
+    // TODO: 销毁地图可视化层的容器
+    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+
     // @ts-ignore
     delete window.initAMap;
     const $jsapi = document.getElementById(AMAP_SCRIPT_ID);
@@ -439,6 +459,8 @@ export default class AMapService
       position,
     } = e.camera;
     const { lng, lat } = this.getCenter();
+    // Tip: 触发地图变化事件
+    this.emit('mapchange');
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)

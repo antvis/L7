@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import MapCenter from './components/mapCenter';
 import Amap2demo from './components/amap2demo'
+import Amap2demo_destroy from './components/amap2demo_destroy';
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
 import Amap2demo_text from './components/amap2demo_text'
@@ -37,6 +38,7 @@ import Amap2demo_heatmap_hexagon_world from './components/amap2demo_heatmap_hexa
 import Amap2demo_heatmap_grid from "./components/amap2demo_heatmap_grid"
 
 import Amap2demo_imageLayer from "./components/amap2demo_imagelayer"
+import Amap2demo_imageTileLayer from "./components/amap2demo_imageTileLayer"
 
 import Amap2demo_rasterLayer from "./components/amap2demo_rasterlayer"
 
@@ -98,7 +100,10 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 heatmap3D/hexagon', () => <Amap2demo_heatmap_hexagon />)
         .add('高德地图2.0 heatmap/hexagon/world', () => <Amap2demo_heatmap_hexagon_world />)
         .add('高德地图2.0 heatmap3D/grid', () => <Amap2demo_heatmap_grid />)
+
         .add('高德地图2.0 imageLayer', () => <Amap2demo_imageLayer />)
+        .add('高德地图2.0 imageTileLayer', () => <Amap2demo_imageTileLayer />)
+
         .add('高德地图2.0 rasterLayer', () => <Amap2demo_rasterLayer />)
         .add('高德地图2.0 citybuildLayer', () => <Amap2demo_citybuilding />)
 
@@ -118,3 +123,5 @@ storiesOf('地图方法', module)
 
         .add('高德地图 样式数据映射', () => <Amap2demo_styleMap/>)
         .add('高德地图 样式映射 文字偏移', () => <Amap2demo_textOffset/>)
+
+        .add('测试销毁', () => <Amap2demo_destroy/>)

@@ -1,18 +1,20 @@
 // @ts-ignore
+import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
 import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';
 export default class BlockableMapEventHandler {
-  private map: Map;
+  private map: Map | EarthMap;
   private delayContextMenu: boolean;
   private contextMenuEvent: MouseEvent;
 
-  constructor(map: Map) {
+  constructor(map: Map | EarthMap) {
     this.map = map;
   }
 
   public reset() {
     this.delayContextMenu = false;
+    // @ts-ignore
     delete this.contextMenuEvent;
   }
 
@@ -32,6 +34,7 @@ export default class BlockableMapEventHandler {
         'contextmenu',
         new MapMouseEvent('contextmenu', this.map, this.contextMenuEvent),
       );
+      // @ts-ignore
       delete this.contextMenuEvent;
     }
   }

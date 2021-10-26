@@ -1,13 +1,4 @@
-import { Scene } from '@antv/l7';
-import {
-  AnimationMixer,
-  Camera,
-  Matrix4,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  Scene as ThreeScene,
-  WebGLRenderer,
-} from 'three';
+import { Scene } from '@antv/l7-scene';
 import {
   IThreeRenderService,
   ThreeRenderService,
@@ -15,7 +6,7 @@ import {
 } from './threeRenderService';
 
 export default class ThreeRender {
-  private threeRenderService: IThreeRenderService;
+  public threeRenderService: IThreeRenderService;
   constructor(scene: Scene) {
     const sceneContainer = scene.getServiceContainer();
     sceneContainer

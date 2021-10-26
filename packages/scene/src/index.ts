@@ -153,12 +153,16 @@ class Scene
     return this.mapService.map;
   }
 
+  public setBgColor(color: string) {
+    this.mapService.setBgColor(color);
+  }
+
   // layer 管理
   public addLayer(layer: ILayer): void {
     // 为当前图层创建一个容器
     // TODO: 初始化的时候设置 容器
     const layerContainer = createLayerContainer(this.container);
-    layer.setContainer(layerContainer);
+    layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
   }
 
@@ -174,8 +178,8 @@ class Scene
     return this.layerService.getLayerByName(name);
   }
 
-  public removeLayer(layer: ILayer): void {
-    this.layerService.remove(layer);
+  public removeLayer(layer: ILayer, parentLayer?: ILayer): void {
+    this.layerService.remove(layer, parentLayer);
   }
 
   public removeAllLayer(): void {
@@ -323,8 +327,8 @@ class Scene
     this.mapService.panTo(p);
   }
 
-  public panBy(pixel: Point): void {
-    this.mapService.panBy(pixel);
+  public panBy(x: number, y: number): void {
+    this.mapService.panBy(x, y);
   }
 
   public getContainer() {

@@ -7,6 +7,9 @@ attribute vec4 a_Instance;
 attribute vec4 a_Color;
 attribute float a_Size;
 
+uniform float u_globel;
+uniform float u_globel_radius;
+uniform float u_global_height: 10;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
@@ -20,8 +23,6 @@ varying vec4 v_dash_array;
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
 varying float v_segmentIndex;
-
-varying vec4 v_dataset; // 数据集
 
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
@@ -78,13 +79,32 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
   return reverse_offset_normal(vec3(dir_screenspace,1.0)).xy * sign(offset_direction);
 }
 
+float torad(float deg) {
+  return (deg / 180.0) * acos(-1.0);
+}
+
+vec3 lglt2xyz(vec2 lnglat) {
+  float pi = 3.1415926;
+  // TODO: + Math.PI/2 是为了对齐坐标
+  float lng = torad(lnglat.x) + pi / 2.0;
+  float lat = torad(lnglat.y);
+
+  // TODO: 手动增加一些偏移，减轻面的冲突
+  float radius = u_globel_radius;
+
+  float z = radius * cos(lat) * cos(lng);
+  float x = radius * cos(lat) * sin(lng);
+  float y = radius * sin(lat);
+  return vec3(x, y, z);
+}
+
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
   styleMappingMat = mat4(
     0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
     0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
     0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0
+    0.0, 0.0, 0.0, 0.0  // dataset 数据集
   );
 
   float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
@@ -129,7 +149,7 @@ void main() {
     if(u_aimate.x == Animate) {
       d_distance_ratio = segmentIndex / segmentNumber;
   }
-  v_dataset.g = d_distance_ratio; // 当前点位距离占线总长的比例
+  styleMappingMat[3].g = d_distance_ratio; // 当前点位距离占线总长的比例
 
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   vec3 curr = getPos(source, target, segmentRatio);
@@ -143,12 +163,12 @@ void main() {
 
     float arcDistrance = length(source - target);
     float pixelLen =  project_pixel(u_icon_step);
-    v_dataset.b = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
+    styleMappingMat[3].b = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
 
     vec2 projectOffset = project_pixel(offset);
     float lineOffsetWidth = length(projectOffset + projectOffset * sign(a_Position.y)); // 线横向偏移的距离
     float linePixelSize = project_pixel(a_Size);  // 定点位置偏移，按地图等级缩放后的距离
-    v_dataset.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
+    styleMappingMat[3].a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
 
     v_iconMapUV = a_iconMapUV;
   }
@@ -160,5 +180,28 @@ void main() {
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
   }
+
+  // 地球模式
+  if(u_globel > 0.0) {
+    vec3 startLngLat = lglt2xyz(a_Instance.rg);
+    vec3 endLngLat = lglt2xyz(a_Instance.ba);
+    float globalRadius = length(startLngLat);
+
+    vec3 lineDir = normalize(endLngLat - startLngLat);
+    vec3 midPointDir = normalize((startLngLat + endLngLat)/2.0);
+
+    // 线的偏移
+    vec3 lnglatOffset = cross(lineDir, midPointDir) * a_Position.y;
+    // 计算起始点和终止点的距离
+    float lnglatLength = length(a_Instance.rg - a_Instance.ba)/50.0;
+    // 计算飞线各个节点相应的高度
+    float lineHeight = u_global_height * (-4.0*segmentRatio*segmentRatio + 4.0 * segmentRatio) * lnglatLength;
+    // 地球点位
+    vec3 globalPoint = normalize(mix(startLngLat, endLngLat, segmentRatio)) * (globalRadius + lineHeight) + lnglatOffset * a_Size;
+    
+    gl_Position = u_ViewProjectionMatrix * vec4(globalPoint, 1.0);
+  }
+ 
+
   setPickingColor(a_PickingColor);
 }

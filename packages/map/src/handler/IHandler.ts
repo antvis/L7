@@ -1,4 +1,5 @@
 // @ts-ignore
+import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
 export interface IHandlerResult {
@@ -8,7 +9,7 @@ export interface IHandlerResult {
   pitchDelta?: number;
   around?: Point | null;
   pinchAround?: Point | null;
-  cameraAnimation?: (map: Map) => any;
+  cameraAnimation?: (map: Map | EarthMap) => any;
   originalEvent?: any;
   // Makes the manager trigger a frame; allowing the handler to return multiple results over time (see scrollzoom).
   needsRenderFrame?: boolean;
