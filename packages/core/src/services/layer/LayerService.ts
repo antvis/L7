@@ -162,6 +162,16 @@ export default class LayerService implements ILayerService {
     return this.renderService.extensionObject.OES_texture_float;
   }
 
+  // TODO: 判断地图是否正在被拖动
+  public isMapDragging() {
+    return this.mapService.dragging;
+  }
+
+  private runRender() {
+    this.renderLayers();
+    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
+  }
+
   // 渲染检测
   private renderTest(renderType: string | undefined): boolean {
     const now = new Date().getTime();
@@ -174,8 +184,9 @@ export default class LayerService implements ILayerService {
     if (renderType) {
       switch (renderType) {
         case 'picking':
+          // return false;
           //  TODO: picking 类型的渲染事件
-          //  若是上次触发为地图或动画触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
+          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
           if (
             this.lastRenderType === 'mapRender' ||
             this.lastRenderType === 'animate'
@@ -192,6 +203,7 @@ export default class LayerService implements ILayerService {
             return true;
           }
         case 'animate':
+          // return false;
           if (this.lastRenderType === 'mapRender') {
             this.lastRenderType = 'animate';
             return false;
@@ -223,11 +235,6 @@ export default class LayerService implements ILayerService {
       stencil: 0,
       framebuffer: null,
     });
-  }
-
-  private runRender() {
-    this.renderLayers('animate');
-    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
   private stopRender() {

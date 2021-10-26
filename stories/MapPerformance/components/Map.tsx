@@ -1,3 +1,4 @@
+// @ts-nocheck
 // @ts-ignore
 import { Scene } from '@antv/l7';
 import { PointLayer } from '@antv/l7-layers';
@@ -169,32 +170,6 @@ export default class PointTest extends React.Component {
 
         scene.on('loaded', () => {
           scene.addLayer(layer);
-          // @ts-ignore
-          // layer.layerService.startAnimate2(stats)
-
-          // ILayerService
-          // ---
-          // startAnimate2(state: any): void;
-          // ---
-          // LayerService
-          // ---
-          // private stats: any;
-          // ---
-          // @ts-ignore
-          // public startAnimate2(stats) {
-          //   // @ts-ignore
-          //   this.stats = stats
-          //   if (this.animateInstanceCount++ === 0) {
-          //     this.clock.start();
-          //     this.runRender();
-          //   }
-          // }
-          // public runRender() {
-          //   // @ts-ignore
-          //   this.stats.update()
-          //   this.renderLayers();
-          //   this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
-          // }
         });
       });
   }
