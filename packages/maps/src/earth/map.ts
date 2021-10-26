@@ -42,6 +42,9 @@ export default class L7EarthService implements IEarthService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
 
+  // TODO: 判断地图是否正在拖拽
+  public dragging: boolean = false;
+
   // 背景色
   public bgColor: string = '#000';
 

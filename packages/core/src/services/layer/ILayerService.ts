@@ -384,5 +384,6 @@ export interface ILayerService {
   updateRenderOrder(): void;
   renderLayers(type?: string): void;
   getOESTextureFloat(): boolean;
+  isMapDragging(): boolean;
   destroy(): void;
 }
