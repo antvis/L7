@@ -18,7 +18,7 @@ export default class PointTest extends React.Component {
       map: new GaodeMap({
         center: [110.19382669582967, 30.258134],
         pitch: 0,
-        zoom: 4,
+        zoom: 5,
       }),
     });
 
@@ -28,7 +28,7 @@ export default class PointTest extends React.Component {
       .then((res) => res.text())
       .then((data) => {
         const lineLayer = new LineLayer({
-          autoFit: true,
+          // autoFit: true,
           blend: 'normal',
         })
           .source(data, {
