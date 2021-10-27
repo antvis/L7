@@ -79,7 +79,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           u_ModelMatrix: this.cameraService.getModelMatrix(),
           u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
           // TODO: 当前地图是否在拖动
-          u_Dragging: Number(this.mapService.dragging)
+          u_Dragging: Number(this.mapService.dragging),
         });
       });
 
