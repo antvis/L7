@@ -1,6 +1,7 @@
 varying vec4 v_PickingResult;
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
+uniform float u_Dragging;
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
@@ -42,5 +43,7 @@ vec4 filterPickingColor(vec4 color) {
  * highlight color if this item is selected, otherwise unmodified argument.
  */
 vec4 filterColor(vec4 color) {
+  // TODO: 过滤多余的 shader 计算
+  if(u_Dragging > 0.0) return color;
   return filterPickingColor(filterHighlightColor(color));
 }
