@@ -1,6 +1,4 @@
 import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
-import Source from '@antv/l7-source';
-import { encodePickingColor, rgb2arr } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 /**

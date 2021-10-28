@@ -18,8 +18,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Map } from '@antv/l7-map';
-import { DOM } from '@antv/l7-utils';
-import { mat4, vec2, vec3 } from 'gl-matrix';
+import { $window, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
@@ -297,6 +296,65 @@ export default class L7MapService implements IMapService<Map> {
     this.handleCameraChanged();
   }
 
+  // 初始化小程序地图
+  public async initMiniMap(): Promise<void> {
+    const {
+      id = 'map',
+      attributionControl = false,
+      style = 'light',
+      rotation = 0,
+      mapInstance,
+      canvas = null,
+      hasBaseMap = false,
+      ...rest
+    } = this.config;
+
+    this.viewport = new Viewport();
+
+    this.$mapContainer = canvas;
+
+    this.map = new Map({
+      container: this.$mapContainer as HTMLElement,
+      style: this.getMapStyle(style),
+      bearing: rotation,
+      // @ts-ignore
+      canvas,
+      ...rest,
+    });
+
+    if (!hasBaseMap) {
+      // 没有地图底图的模式
+      this.map.on('load', this.handleCameraChanged);
+      this.map.on('move', this.handleCameraChanged);
+
+      // 不同于高德地图，需要手动触发首次渲染
+      this.handleCameraChanged();
+    } else {
+      // 存在地图底图的模式（ L7Mini ）
+      const center = this.map.getCenter();
+      // 不同于高德地图，需要手动触发首次渲染
+      this.handleMiniCameraChanged(
+        center.lng,
+        center.lat,
+        this.map.getZoom(),
+        this.map.getBearing(),
+        this.map.getPitch(),
+      );
+      $window.document.addEventListener('mapCameaParams', (event: any) => {
+        const {
+          e: { longitude, latitude, scale, bearing, pitch },
+        } = event;
+        this.handleMiniCameraChanged(
+          longitude,
+          latitude,
+          scale - 1.25,
+          bearing,
+          pitch,
+        );
+      });
+    }
+  }
+
   public destroy() {
     // TODO: 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
@@ -329,6 +387,44 @@ export default class L7MapService implements IMapService<Map> {
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }
+
+  // TODO: 处理小程序中有底图模式下的相机跟新
+  private handleMiniCameraChanged = (
+    lng: number,
+    lat: number,
+    zoom: number,
+    bearing: number,
+    pitch: number,
+  ) => {
+    const { offsetCoordinate = true } = this.config;
+
+    // resync
+    this.viewport.syncWithMapCamera({
+      // bearing: this.map.getBearing(),
+      bearing,
+      center: [lng, lat],
+      viewportHeight: this.map.transform.height,
+      // pitch: this.map.getPitch(),
+      pitch,
+      viewportWidth: this.map.transform.width,
+      zoom,
+      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+      cameraHeight: 0,
+    });
+    // set coordinate system
+    if (
+      this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD &&
+      offsetCoordinate
+    ) {
+      this.coordinateSystemService.setCoordinateSystem(
+        CoordinateSystem.LNGLAT_OFFSET,
+      );
+    } else {
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
+    }
+
+    this.cameraChangedCallback(this.viewport);
+  };
 
   private handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();

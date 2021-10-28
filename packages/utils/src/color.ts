@@ -1,4 +1,5 @@
 import * as d3 from 'd3-color';
+import { $window, isMini } from './mini-adapter';
 export interface IColorRamp {
   positions: number[];
   colors: string[];
@@ -34,8 +35,16 @@ export function encodePickingColor(
   ];
 }
 
-export function generateColorRamp(colorRamp: IColorRamp): ImageData {
-  const canvas = document.createElement('canvas');
+export interface IImagedata {
+  data: Uint8ClampedArray;
+  width: number;
+  height: number;
+}
+
+export function generateColorRamp(
+  colorRamp: IColorRamp,
+): ImageData | IImagedata {
+  const canvas = window.document.createElement('canvas');
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
@@ -51,5 +60,7 @@ export function generateColorRamp(colorRamp: IColorRamp): ImageData {
   ctx.fillRect(0, 0, 256, 1);
   data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
 
-  return new ImageData(data, 256, 1);
+  return !isMini
+    ? new ImageData(data, 256, 1)
+    : { data, width: 256, height: 1 };
 }
