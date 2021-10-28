@@ -1,7 +1,7 @@
 import { $window, isMini } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
-import Hammer from 'l7hammerjs'; // l7 - mini
 import { inject, injectable } from 'inversify';
+import Hammer from 'l7hammerjs'; // l7 - mini
 import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
