@@ -1,6 +1,7 @@
 npm dist-tag add @antv/l7-component@2.5.37-mini12  mini
 npm dist-tag add @antv/l7-core@2.5.37-mini12  mini
 npm dist-tag add @antv/l7@2.5.37-mini12  mini
+npm dist-tag add @antv/l7-mini@2.5.37-mini12  mini
 npm dist-tag add @antv/l7-layers@2.5.37-mini12  mini
 npm dist-tag add @antv/l7-map@2.5.37-mini12  mini
 npm dist-tag add @antv/l7-maps@2.5.37-mini12  mini
