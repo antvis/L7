@@ -55,7 +55,7 @@ export default class MultiPolygon extends React.Component {
       scene.addLayer(circleLayer);
       scene.on('dragstart', (e: any) => {
         // @ts-ignore
-        scene.getMapService().setMapStatus({dragEnable: false})
+        scene.getMapService().setMapStatus({ dragEnable: false });
         startPoint = e.lngLat;
         const layer = new PointLayer()
           .source([startPoint], {
@@ -74,7 +74,8 @@ export default class MultiPolygon extends React.Component {
           });
         scene.addLayer(layer);
       });
-      scene.on('dragging', (e: any) => { //dragging - drag
+      scene.on('dragging', (e: any) => {
+        //dragging - drag
         // console.log('drag', startPoint, e.lngLat)
         // @ts-ignore
         const start = [startPoint.lng, startPoint.lat];
@@ -94,9 +95,9 @@ export default class MultiPolygon extends React.Component {
         scene.addPopup(popup);
       });
       scene.on('dragend', (e: any) => {
-        console.log('dragend')
+        console.log('dragend');
         // @ts-ignore
-        scene.getMapService().setMapStatus({dragEnable: true})
+        scene.getMapService().setMapStatus({ dragEnable: true });
       });
     });
   }
