@@ -1,7 +1,7 @@
-// @ts-ignore
-import { Scene } from '@antv/l7';
-import { PolygonLayer, PointLayer } from '@antv/l7-layers';
-import { Map } from '@antv/l7-maps';
+import { Scene, PolygonLayer, PointLayer, Map } from '@antv/l7-mini';
+// import { Scene } from '@antv/l7';
+// import { PolygonLayer, PointLayer } from '@antv/l7-layers';
+// import { Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
