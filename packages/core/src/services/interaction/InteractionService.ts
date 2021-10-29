@@ -1,7 +1,8 @@
 import { $window, isMini } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
+// import Hammer from 'l7hammerjs'; // l7 - mini
+import Hammer from 'hammerjs'; // l7 - mini
 import { inject, injectable } from 'inversify';
-import Hammer from 'l7hammerjs'; // l7 - mini
 import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
@@ -139,6 +140,7 @@ export default class InteractionService extends EventEmitter
   private onHammer = (target: HammerInput) => {
     target.srcEvent.stopPropagation();
     const interactionTarget = this.interactionEvent(target);
+    // console.log('hover2');
     this.emit(InteractionEvent.Hover, interactionTarget);
   };
   private onTouch = (target: TouchEvent) => {
@@ -219,6 +221,8 @@ export default class InteractionService extends EventEmitter
   };
 
   private isDoubleTap(x: number, y: number, lngLat: ILngLat) {
+    // console.log('x', x);
+    // console.log('y', y);
     const nowTime = new Date().getTime();
     let type = 'click';
     if (
@@ -239,6 +243,7 @@ export default class InteractionService extends EventEmitter
       // @ts-ignore
       this.clickTimer = setTimeout(() => {
         type = 'click';
+        // console.log('hover5');
         this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
       }, 400);
     }
