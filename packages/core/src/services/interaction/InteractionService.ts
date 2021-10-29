@@ -23,7 +23,7 @@ export default class InteractionService extends EventEmitter
   implements IInteractionService {
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
-  // @ts-ignore
+
   private hammertime: HammerManager;
 
   private lastClickTime: number = 0;
@@ -78,8 +78,6 @@ export default class InteractionService extends EventEmitter
         );
       } else {
         const hammertime = new Hammer.Manager($containter);
-        $containter.addEventListener('mousemove', this.onHover);
-        $containter.addEventListener('click', this.onHover);
         hammertime.add(
           new Hammer.Tap({
             event: 'dblclick',
@@ -103,10 +101,11 @@ export default class InteractionService extends EventEmitter
         $containter.addEventListener('mousedown', this.onHover, true);
         $containter.addEventListener('mouseup', this.onHover);
         $containter.addEventListener('contextmenu', this.onHover);
+
         this.hammertime = hammertime;
       }
 
-      // // TODO: 根据场景注册事件到 L7 canvas 上
+      // TODO: 根据场景注册事件到 L7 canvas 上
     }
   }
   private removeEventListenerOnMap() {
@@ -130,17 +129,14 @@ export default class InteractionService extends EventEmitter
       }
     }
   }
-  // @ts-ignore
   private onDrag = (target: HammerInput) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
-  // @ts-ignore
   private onHammer = (target: HammerInput) => {
     target.srcEvent.stopPropagation();
     const interactionTarget = this.interactionEvent(target);
-    // console.log('hover2');
     this.emit(InteractionEvent.Hover, interactionTarget);
   };
   private onTouch = (target: TouchEvent) => {
@@ -152,7 +148,6 @@ export default class InteractionService extends EventEmitter
       type: 'touch',
     });
   };
-  // @ts-ignore
   private interactionEvent(target: HammerInput) {
     const { type, pointerType } = target;
     let clientX;
@@ -194,7 +189,6 @@ export default class InteractionService extends EventEmitter
       }
     }
     const lngLat = this.mapService.containerToLngLat([x, y]);
-
     if (type === 'click') {
       if (!isMini) {
         // l7 - mini
@@ -221,8 +215,6 @@ export default class InteractionService extends EventEmitter
   };
 
   private isDoubleTap(x: number, y: number, lngLat: ILngLat) {
-    // console.log('x', x);
-    // console.log('y', y);
     const nowTime = new Date().getTime();
     let type = 'click';
     if (
@@ -243,7 +235,6 @@ export default class InteractionService extends EventEmitter
       // @ts-ignore
       this.clickTimer = setTimeout(() => {
         type = 'click';
-        // console.log('hover5');
         this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
       }, 400);
     }
