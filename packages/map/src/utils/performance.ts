@@ -1,9 +1,10 @@
+import { $window } from '@antv/l7-utils';
 let lastFrameTime: number | null = null;
 let frameTimes: number[] = [];
 
 const minFramerateTarget = 30;
 const frameTimeTarget = 1000 / minFramerateTarget;
-const performance = window.performance;
+const performance = $window.performance;
 
 export interface IPerformanceMetrics {
   loadTime: number;

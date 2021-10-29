@@ -1,3 +1,4 @@
+import { isMini } from '@antv/l7-utils';
 import { MousePanHandler } from '../mouse/';
 import { TouchPanHandler } from '../touch/';
 
@@ -53,7 +54,9 @@ export default class DragPanHandler {
     this.inertiaOptions = options || {};
     this.mousePan.enable();
     this.touchPan.enable();
-    this.el.classList.add('l7-touch-drag-pan');
+    if (!isMini) {
+      this.el.classList.add('l7-touch-drag-pan');
+    }
   }
 
   /**
@@ -65,7 +68,9 @@ export default class DragPanHandler {
   public disable() {
     this.mousePan.disable();
     this.touchPan.disable();
-    this.el.classList.remove('l7-touch-drag-pan');
+    if (!isMini) {
+      this.el.classList.remove('l7-touch-drag-pan');
+    }
   }
 
   /**

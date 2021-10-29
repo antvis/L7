@@ -12,7 +12,7 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
@@ -37,14 +37,34 @@ export default class ImageModel extends BaseModel {
       height: 0,
       width: 0,
     });
-    source.data.images.then((imageData: HTMLImageElement[]) => {
-      this.texture = createTexture2D({
-        data: imageData[0],
-        width: imageData[0].width,
-        height: imageData[0].height,
+
+    if (isMini) {
+      // @ts-ignore
+      const canvas = this.layerService.sceneService.getSceneConfig().canvas;
+      const img = canvas.createImage();
+      // let img = new Image()
+      img.crossOrigin = 'anonymous';
+      img.src = source.data.originData;
+
+      img.onload = () => {
+        this.texture = createTexture2D({
+          data: img,
+          width: img.width,
+          height: img.height,
+        });
+        this.layerService.renderLayers();
+      };
+    } else {
+      source.data.images.then((imageData: HTMLImageElement[]) => {
+        this.texture = createTexture2D({
+          data: imageData[0],
+          width: imageData[0].width,
+          height: imageData[0].height,
+        });
+        this.layerService.renderLayers();
       });
-      this.layerService.renderLayers();
-    });
+    }
+
     return [
       this.layer.buildLayerModel({
         moduleName: 'RasterImage',

@@ -2,6 +2,7 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  ILayer,
   IModel,
   IModelUniform,
   ITexture2D,

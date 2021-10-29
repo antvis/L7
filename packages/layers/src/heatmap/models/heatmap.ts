@@ -78,10 +78,6 @@ export default class HeatMapModel extends BaseModel {
         ? this.buildHeatmapColor() // 2D
         : this.build3dHeatMap(); // 3D
 
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
     const { width, height } = getViewportSize();
 
     // 初始化密度图纹理
