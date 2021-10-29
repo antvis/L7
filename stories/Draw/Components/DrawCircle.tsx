@@ -55,7 +55,7 @@ export default class MultiPolygon extends React.Component {
       scene.addLayer(circleLayer);
       scene.on('dragstart', (e: any) => {
         // @ts-ignore
-        scene.map.drag.disable();
+        scene.getMapService().setMapStatus({dragEnable: false})
         startPoint = e.lngLat;
         const layer = new PointLayer()
           .source([startPoint], {
@@ -74,7 +74,8 @@ export default class MultiPolygon extends React.Component {
           });
         scene.addLayer(layer);
       });
-      scene.on('drag', (e: any) => {
+      scene.on('dragging', (e: any) => { //dragging - drag
+        // console.log('drag', startPoint, e.lngLat)
         // @ts-ignore
         const start = [startPoint.lng, startPoint.lat];
         const dis = lnglatDistance(
@@ -82,17 +83,20 @@ export default class MultiPolygon extends React.Component {
           start,
           [e.lngLat.lng, e.lngLat.lat],
         );
+        // console.log('dis', dis)
         const circleData = createGeoJSONCircle(
           start as [number, number],
           dis / 1000,
         );
         circleLayer.setData(circleData.data);
+        // console.log('circleData.data', circleData.data)
         const popup = new Popup().setText(`${dis}`).setLnglat(e.lngLat);
         scene.addPopup(popup);
       });
       scene.on('dragend', (e: any) => {
+        console.log('dragend')
         // @ts-ignore
-        scene.map.dragdrag.enable();
+        scene.getMapService().setMapStatus({dragEnable: true})
       });
     });
   }
