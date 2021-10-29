@@ -78,7 +78,6 @@ export default class LayerService implements ILayerService {
       }
     }
 
-    layer.emit('remove', null);
     layer.destroy();
     this.renderLayers();
   }
