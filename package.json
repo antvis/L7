@@ -28,6 +28,7 @@
     "@commitlint/config-conventional": "^8.1.0",
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-inject": "^4.0.3",
     "@rollup/plugin-json": "^4.0.0",
     "@rollup/plugin-node-resolve": "^6.0.0",
     "@storybook/react": "^6.2.2",
