@@ -21,8 +21,6 @@ uniform vec2 u_textSize;
 uniform float segmentNumber;
 varying vec2 v_iconMapUV;
 
-varying vec4 v_dataset; // 数据集 - 用于合并单个的 varying 变量
-
 varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 
 uniform float u_linearColor: 0;
@@ -34,8 +32,8 @@ uniform vec4 u_targetColor;
 void main() {
   float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0; // 运动速度
-  float d_segmentIndex = v_dataset.r;   // 当前顶点在弧线中所处的分段位置
-  float d_distance_ratio = v_dataset.b; // 当前顶点在弧线中所处的分段比例
+  float d_segmentIndex = styleMappingMat[3].r;   // 当前顶点在弧线中所处的分段位置
+  float d_distance_ratio = styleMappingMat[3].b; // 当前顶点在弧线中所处的分段比例
 
   // 设置弧线的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
@@ -70,14 +68,14 @@ void main() {
     float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / segmentNumber));
     // float arcRadio = smoothstep( 0.0, 1.0, d_distance_ratio);
 
-    float d_texCount = v_dataset.g; // 贴图在弧线上重复的数量
+    float d_texCount = styleMappingMat[3].g; // 贴图在弧线上重复的数量
 
     float u = 1.0 - fract(arcRadio * d_texCount + animateSpeed);
 
     if(u_aimate.x == Animate) {
       u = gl_FragColor.a/opacity;
     }
-    float v = v_dataset.a; // 横向 v
+    float v = styleMappingMat[3].a; // 横向 v
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
 
     vec4 pattern = texture2D(u_texture, uv);

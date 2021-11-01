@@ -5,13 +5,12 @@ import {
   Bounds,
   CoordinateSystem,
   ICoordinateSystemService,
+  IEarthService,
   IGlobalConfigService,
   ILngLat,
   IMapConfig,
-  IMapService,
   IMercator,
   IPoint,
-  IRendererService,
   IStatusOptions,
   IViewport,
   MapServiceEvent,
@@ -39,9 +38,12 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * AMapService
  */
 @injectable()
-export default class L7MapService implements IMapService<Map> {
+export default class L7EarthService implements IEarthService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
+
+  // TODO: 判断地图是否正在拖拽
+  public dragging: boolean = false;
 
   // 背景色
   public bgColor: string = '#000';
@@ -54,9 +56,6 @@ export default class L7MapService implements IMapService<Map> {
 
   @inject(TYPES.ICoordinateSystemService)
   private readonly coordinateSystemService: ICoordinateSystemService;
-
-  @inject(TYPES.IRendererService)
-  private readonly renderService: IRendererService;
 
   @inject(TYPES.IEventEmitter)
   private eventEmitter: any;
@@ -332,24 +331,17 @@ export default class L7MapService implements IMapService<Map> {
       this.viewport.rotateY(reg);
 
       this.viewport.syncWithMapCamera({
-        bearing: this.map.getBearing(),
         viewportHeight: this.map.transform.height,
-        pitch: this.map.getPitch(),
         viewportWidth: this.map.transform.width,
-        zoom: this.map.getZoom(),
-        // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-        cameraHeight: 0,
       });
 
       this.cameraChangedCallback(this.viewport);
     }
   }
 
-  public clearColor() {
-    this.renderService.clear({ color: [0.0, 0.0, 0.0, 1.0] });
-  }
-
   private handleCameraChanged = (e: any) => {
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     const DELAY_TIME = 2000;
     this.handleCameraChanging = true;
     if (this.handleCameraTimer) {
@@ -389,13 +381,8 @@ export default class L7MapService implements IMapService<Map> {
 
     // resync
     this.viewport.syncWithMapCamera({
-      bearing: this.map.getBearing(),
       viewportHeight: this.map.transform.height,
-      pitch: this.map.getPitch(),
       viewportWidth: this.map.transform.width,
-      zoom: this.map.getZoom(),
-      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-      cameraHeight: 0,
     });
     // set coordinate system
     if (

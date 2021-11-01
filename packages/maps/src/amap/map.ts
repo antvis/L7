@@ -61,6 +61,9 @@ export default class AMapService
    */
   public map: AMap.Map & IAMapInstance;
 
+  // TODO: 判断地图是否正在拖拽
+  public dragging: boolean = false;
+
   // 背景色
   public bgColor: string = 'rgba(0, 0, 0, 0)';
 
@@ -403,6 +406,16 @@ export default class AMapService
       }
     });
 
+    // TODO: 判断地图是否正在被拖拽
+    this.map.on('dragstart', () => {
+      this.dragging = true;
+      return '';
+    });
+    this.map.on('dragend', () => {
+      this.dragging = false;
+      return '';
+    });
+
     this.viewport = new Viewport();
   }
 
@@ -459,6 +472,8 @@ export default class AMapService
       position,
     } = e.camera;
     const { lng, lat } = this.getCenter();
+    // Tip: 触发地图变化事件
+    this.emit('mapchange');
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)
