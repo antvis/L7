@@ -130,13 +130,13 @@ export default class InteractionService extends EventEmitter
       }
     }
   }
-  
+
   private onDrag = (target: any) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
-  
+
   private onHammer = (target: any) => {
     target.srcEvent.stopPropagation();
     const interactionTarget = this.interactionEvent(target);
@@ -151,7 +151,7 @@ export default class InteractionService extends EventEmitter
       type: 'touch',
     });
   };
-  
+
   private interactionEvent(target: any) {
     const { type, pointerType } = target;
     let clientX;
