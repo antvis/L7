@@ -1,9 +1,11 @@
+import { rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
+import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerModel, ILayerService } from './ILayerService';
 
@@ -27,6 +29,9 @@ export default class LayerService implements ILayerService {
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
+
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
@@ -59,11 +64,20 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public remove(layer: ILayer): void {
-    const layerIndex = this.layers.indexOf(layer);
-    if (layerIndex > -1) {
-      this.layers.splice(layerIndex, 1);
+  public remove(layer: ILayer, parentLayer?: ILayer): void {
+    // Tip: layer.layerChildren 当 layer 存在子图层的情况
+    if (parentLayer) {
+      const layerIndex = parentLayer.layerChildren.indexOf(layer);
+      if (layerIndex > -1) {
+        parentLayer.layerChildren.splice(layerIndex, 1);
+      }
+    } else {
+      const layerIndex = this.layers.indexOf(layer);
+      if (layerIndex > -1) {
+        this.layers.splice(layerIndex, 1);
+      }
     }
+
     layer.emit('remove', null);
     layer.destroy();
     this.renderLayers();
@@ -86,17 +100,29 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     this.updateRenderOrder();
+
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
-        // trigger hooks
-        layer.hooks.beforeRenderData.call();
-        layer.hooks.beforeRender.call();
-        layer.render();
-        layer.hooks.afterRender.call();
+        // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
+        renderLayerEvent(layer.layerChildren);
+        renderLayerEvent([layer]);
       });
     this.alreadyInRendering = false;
+
+    function renderLayerEvent(layers: ILayer[]) {
+      layers
+        .filter((layer) => layer.inited)
+        .filter((layer) => layer.isVisible())
+        .forEach((layer) => {
+          // trigger hooks
+          layer.hooks.beforeRenderData.call();
+          layer.hooks.beforeRender.call();
+          layer.render();
+          layer.hooks.afterRender.call();
+        });
+    }
   }
 
   public updateRenderOrder() {
@@ -106,7 +132,14 @@ export default class LayerService implements ILayerService {
   }
 
   public destroy() {
-    this.layers.forEach((layer) => layer.destroy());
+    this.layers.forEach((layer) => {
+      // Tip: layer.layerChildren 当 layer 存在子图层的情况
+      if (layer.layerChildren) {
+        layer.layerChildren.forEach((child) => child.destroy());
+        layer.layerChildren = [];
+      }
+      layer.destroy();
+    });
     this.layers = [];
     this.renderLayers();
   }
@@ -129,6 +162,16 @@ export default class LayerService implements ILayerService {
     return this.renderService.extensionObject.OES_texture_float;
   }
 
+  // TODO: 判断地图是否正在被拖动
+  public isMapDragging() {
+    return this.mapService.dragging;
+  }
+
+  private runRender() {
+    this.renderLayers();
+    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
+  }
+
   // 渲染检测
   private renderTest(renderType: string | undefined): boolean {
     const now = new Date().getTime();
@@ -141,8 +184,9 @@ export default class LayerService implements ILayerService {
     if (renderType) {
       switch (renderType) {
         case 'picking':
+          // return false;
           //  TODO: picking 类型的渲染事件
-          //  若是上次触发为地图或动画触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
+          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
           if (
             this.lastRenderType === 'mapRender' ||
             this.lastRenderType === 'animate'
@@ -159,6 +203,7 @@ export default class LayerService implements ILayerService {
             return true;
           }
         case 'animate':
+          // return false;
           if (this.lastRenderType === 'mapRender') {
             this.lastRenderType = 'animate';
             return false;
@@ -178,17 +223,18 @@ export default class LayerService implements ILayerService {
   }
 
   private clear() {
+    const color = rgb2arr(this.mapService.bgColor) as [
+      number,
+      number,
+      number,
+      number,
+    ];
     this.renderService.clear({
-      color: [0, 0, 0, 0],
+      color,
       depth: 1,
       stencil: 0,
       framebuffer: null,
     });
-  }
-
-  private runRender() {
-    this.renderLayers('animate');
-    this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
   }
 
   private stopRender() {

@@ -6,7 +6,7 @@ import {
 } from './threeRenderService';
 
 export default class ThreeRender {
-  private threeRenderService: IThreeRenderService;
+  public threeRenderService: IThreeRenderService;
   constructor(scene: Scene) {
     const sceneContainer = scene.getServiceContainer();
     sceneContainer

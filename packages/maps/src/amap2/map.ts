@@ -64,11 +64,17 @@ export default class AMapService
    */
   public map: AMap.Map & IAMapInstance;
 
+  // TODO: 判断地图是否正在拖拽
+  public dragging: boolean = false;
+
   /**
    * 用于 customCooords 数据的计算
    */
   public sceneCenter!: [number, number]; // 一般使用用户数据的第一个
   public sceneCenterMKT!: [number, number]; // 莫卡托
+
+  // 背景色
+  public bgColor: string = 'rgba(0, 0, 0, 0)';
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
@@ -88,6 +94,9 @@ export default class AMapService
   private viewport: Viewport;
 
   private cameraChangedCallback: (viewport: IViewport) => void;
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
 
   /**
    *   设置数据的绘制中心 高德2.0
@@ -145,15 +154,17 @@ export default class AMapService
     }
     const mapContainer = this.map.getContainer();
     if (mapContainer !== null) {
-      // const amap = mapContainer.getElementsByClassName(
-      //   'amap-maps',
-      // )[0] as HTMLElement;
-      // this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
-      this.markerContainer = DOM.create(
-        'div',
-        'l7-marker-container2',
-        mapContainer,
-      );
+      const amap = mapContainer.getElementsByClassName(
+        'amap-maps',
+      )[0] as HTMLElement;
+      // TODO: amap2 的 amap-maps 新增 z-index=0; 样式，让 marker 中 zIndex 失效
+      amap.style.zIndex = 'auto';
+      this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
+      // this.markerContainer = DOM.create(
+      //   'div',
+      //   'l7-marker-container2',
+      //   mapContainer,
+      // );
       // this.markerContainer = mapContainer;
     }
   }
@@ -486,6 +497,16 @@ export default class AMapService
         }
       }
     });
+
+    // TODO: 判断地图是否正在被拖拽
+    this.map.on('dragstart', () => {
+      this.dragging = true;
+      return '';
+    });
+    this.map.on('dragend', () => {
+      this.dragging = false;
+      return '';
+    });
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
@@ -550,6 +571,8 @@ export default class AMapService
       // left, right, bottom, top
       // @ts-ignore
     } = this.map.customCoords?.getCameraParams();
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     // // @ts-ignore
     // console.log('this.map.customCoords.getCameraParams()', this.map.customCoords.getCameraParams())
     // const { left, right, bottom, top, near, far, position } = this.map.customCoords.getCameraParams();
@@ -612,6 +635,9 @@ export default class AMapService
       // left, right, bottom, top
       // @ts-ignore
     } = this.map.customCoords.getCameraParams();
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
+
     const { zoom } = e;
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];

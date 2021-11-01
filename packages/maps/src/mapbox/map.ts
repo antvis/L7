@@ -50,6 +50,12 @@ export default class MapboxService
   public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
 
+  // TODO: 判断地图是否正在拖拽
+  public dragging: boolean = false;
+
+  // 背景色
+  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+
   @inject(TYPES.MapConfig)
   private readonly config: Partial<IMapConfig>;
 
@@ -65,6 +71,9 @@ export default class MapboxService
   private markerContainer: HTMLElement;
   private cameraChangedCallback: (viewport: IViewport) => void;
   private $mapContainer: HTMLElement | null;
+  public setBgColor(color: string) {
+    this.bgColor = color;
+  }
 
   // init
   public addMarkerContainer(): void {
@@ -357,6 +366,16 @@ export default class MapboxService
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
 
+    // TODO: 判断地图是否正在被拖拽
+    this.map.on('dragstart', () => {
+      this.dragging = true;
+      return '';
+    });
+    this.map.on('dragend', () => {
+      this.dragging = false;
+      return '';
+    });
+
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
   }
@@ -397,7 +416,8 @@ export default class MapboxService
   private handleCameraChanged = () => {
     // @see https://github.com/mapbox/mapbox-gl-js/issues/2572
     const { lat, lng } = this.map.getCenter().wrap();
-
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
     // resync
     this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),

@@ -2,7 +2,7 @@ import { registerParser, registerTransform } from './factory';
 import csv from './parser/csv';
 import geojson from './parser/geojson';
 import image from './parser/image';
-import json from './parser/json';
+import json, { defaultData, defaultParser } from './parser/json';
 import raster from './parser/raster';
 import Source from './source';
 import { cluster } from './transform/cluster';
@@ -31,3 +31,6 @@ export {
 } from './factory';
 
 export * from './interface';
+
+export const DEFAULT_DATA = defaultData;
+export const DEFAULT_PARSER = defaultParser;

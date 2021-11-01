@@ -2,6 +2,11 @@ import { IMapCamera, IViewport } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import WebMercatorViewport from 'viewport-mercator-project';
 
+export interface IEarthCamera {
+  viewportHeight: number;
+  viewportWidth: number;
+}
+
 export default class Viewport implements IViewport {
   // TODO: 初始化相机的姿态 看向地球
   private xzReg: number = -Math.PI * 0.6;
@@ -21,7 +26,7 @@ export default class Viewport implements IViewport {
   private ViewProjectionMatrixUncentered: mat4 = mat4.create();
   private viewUncenteredMatrix: mat4 = mat4.create();
 
-  public syncWithMapCamera(mapCamera: Partial<IMapCamera>) {
+  public syncWithMapCamera(mapCamera: Partial<IEarthCamera>) {
     const { viewportHeight = 1, viewportWidth = 1 } = mapCamera;
     const aspect = viewportWidth / viewportHeight;
     const near = 0.1;

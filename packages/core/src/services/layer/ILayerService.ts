@@ -101,6 +101,8 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
+  layerChildren: ILayer[]; // 在图层中添加子图层
+  sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
   hooks: {
@@ -124,10 +126,20 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+
+  /**
+   * threejs 适配兼容相关的方法
+   * @param lnglat
+   * @param altitude
+   * @param rotation
+   * @param scale
+   */
+
+  threeRenderService?: any;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
-  setContainer(container: Container): void;
+  setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
   setCurrentSelectedId(id: number | null): void;
@@ -220,14 +232,6 @@ export interface ILayer {
   setAnimateStartTime(): void;
   getLayerAnimateTime(): number;
 
-  /**
-   * threejs 适配兼容相关的方法
-   * @param lnglat
-   * @param altitude
-   * @param rotation
-   * @param scale
-   */
-
   // 获取对应地图的经纬度模型矩阵
   getModelMatrix?(
     lnglat: ILngLat,
@@ -259,6 +263,9 @@ export interface ILayer {
 
   // 增加加载模型的动画混合器
   addAnimateMixer?(mixer: any): void;
+
+  // 返回当前的 threejs camera
+  getRenderCamera?(): any;
 
   /**
    * 地球模式相关的方法
@@ -372,10 +379,11 @@ export interface ILayerService {
   getLayers(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  remove(layer: ILayer): void;
+  remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateRenderOrder(): void;
   renderLayers(type?: string): void;
   getOESTextureFloat(): boolean;
+  isMapDragging(): boolean;
   destroy(): void;
 }

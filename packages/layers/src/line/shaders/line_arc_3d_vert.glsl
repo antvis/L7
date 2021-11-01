@@ -24,8 +24,6 @@ uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
 varying float v_segmentIndex;
 
-varying vec4 v_dataset; // 数据集
-
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
 
@@ -106,7 +104,7 @@ void main() {
     0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
     0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
     0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0
+    0.0, 0.0, 0.0, 0.0  // dataset 数据集
   );
 
   float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
@@ -151,7 +149,7 @@ void main() {
     if(u_aimate.x == Animate) {
       d_distance_ratio = segmentIndex / segmentNumber;
   }
-  v_dataset.g = d_distance_ratio; // 当前点位距离占线总长的比例
+  styleMappingMat[3].g = d_distance_ratio; // 当前点位距离占线总长的比例
 
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   vec3 curr = getPos(source, target, segmentRatio);
@@ -165,12 +163,12 @@ void main() {
 
     float arcDistrance = length(source - target);
     float pixelLen =  project_pixel(u_icon_step);
-    v_dataset.b = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
+    styleMappingMat[3].b = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
 
     vec2 projectOffset = project_pixel(offset);
     float lineOffsetWidth = length(projectOffset + projectOffset * sign(a_Position.y)); // 线横向偏移的距离
     float linePixelSize = project_pixel(a_Size);  // 定点位置偏移，按地图等级缩放后的距离
-    v_dataset.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
+    styleMappingMat[3].a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
 
     v_iconMapUV = a_iconMapUV;
   }
