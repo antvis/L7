@@ -1,7 +1,7 @@
-// @ts-ignore
-import { Scene } from '@antv/l7';
-import { PolygonLayer, PointLayer } from '@antv/l7-layers';
-import { Map } from '@antv/l7-maps';
+import { Scene, PolygonLayer, PointLayer, Map } from '@antv/l7-mini';
+// import { Scene } from '@antv/l7';
+// import { PolygonLayer, PointLayer } from '@antv/l7-layers';
+// import { Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
@@ -101,14 +101,13 @@ export default class ScaleComponent extends React.Component {
             padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
             fontFamily: 'Times New Roman',
             textAllowOverlap: true,
-          });
+          })
+          .active(true);
         scene.addLayer(textLayer);
 
         const layer = new PolygonLayer({
           name: '01',
-        });
-
-        layer
+        })
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
           .color('name', [

@@ -618,7 +618,9 @@ export default class Camera extends EventEmitter {
   public stop(allowGestures?: boolean, easeId?: string) {
     if (this.easeFrameId) {
       this.cancelRenderFrame(this.easeFrameId);
+      // @ts-ignore
       delete this.easeFrameId;
+      // @ts-ignore
       delete this.onEaseFrame;
     }
 
@@ -627,6 +629,7 @@ export default class Camera extends EventEmitter {
       // animation, which sets a new _onEaseEnd. Ensure we don't delete
       // it unintentionally.
       const onEaseEnd = this.onEaseEnd;
+      // @ts-ignore
       delete this.onEaseEnd;
       onEaseEnd.call(this, easeId);
     }

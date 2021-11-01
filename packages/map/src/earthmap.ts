@@ -16,7 +16,6 @@ import DragPanHandler from './handler/shim/drag_pan';
 import DragRotateHandler from './handler/shim/drag_rotate';
 import TouchZoomRotateHandler from './handler/shim/touch_zoom_rotate';
 import { TouchPitchHandler } from './handler/touch';
-import Hash from './hash';
 import { IMapOptions } from './interface';
 import { renderframe } from './util';
 import { PerformanceUtils } from './utils/performance';
@@ -71,7 +70,7 @@ export class EarthMap extends Camera {
   private renderTaskQueue: TaskQueue = new TaskQueue();
   private frame: { cancel: () => void } | null;
   private trackResize: boolean = true;
-  private hash: Hash | undefined;
+
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
     this.initContainer();
@@ -82,30 +81,6 @@ export class EarthMap extends Camera {
       window.addEventListener('online', this.onWindowOnline, false);
       window.addEventListener('resize', this.onWindowResize, false);
       window.addEventListener('orientationchange', this.onWindowResize, false);
-    }
-
-    const hashName =
-      (typeof options.hash === 'string' && options.hash) || undefined;
-    if (options.hash) {
-      this.hash = new Hash(hashName).addTo(this) as Hash;
-    }
-
-    // don't set position from options if set through hash
-    if (!this.hash || !this.hash.onHashChange()) {
-      this.jumpTo({
-        center: options.center,
-        zoom: options.zoom,
-        bearing: options.bearing,
-        pitch: options.pitch,
-      });
-
-      if (options.bounds) {
-        this.resize();
-        this.fitBounds(
-          options.bounds,
-          merge({}, options.fitBoundsOptions, { duration: 0 }),
-        );
-      }
     }
   }
 

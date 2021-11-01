@@ -4,6 +4,7 @@ export interface IMapOptions {
   hash: boolean;
   style?: any;
   container?: HTMLElement | string;
+  canvas?: HTMLCanvasElement;
   center: [number, number];
   zoom: number;
   bearing: number;
