@@ -36,15 +36,17 @@ scene.on('loaded', () => {
         气泡图: pointLayer
       };
       const layersControl = new Layers({
-        overlayers
+        overlayers,
+        position: 'rightcenter'
       });
 
       scene.addControl(layersControl);
     });
 
   const zoomControl = new Zoom({
-    position: 'topright'
+    position: 'rightcenter'
   });
+
   const scaleControl = new Scale({
     position: 'bottomright'
   });
