@@ -1,5 +1,6 @@
+// @ts-ignore
 import { LineLayer, PointLayer, PolygonLayer, Popup, Scene } from '@antv/l7';
-import { DrawPolygon } from '@antv/l7-draw';
+import { DrawPolygon, DrawCircle } from '@antv/l7-draw';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 
 import * as React from 'react';
@@ -23,7 +24,7 @@ export default class Circle extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      const drawCircle = new DrawPolygon(scene);
+      const drawCircle = new DrawCircle(scene);
       drawCircle.enable();
       drawCircle.on('draw.create', (e: any) => {
         console.log(e);

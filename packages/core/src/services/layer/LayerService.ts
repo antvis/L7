@@ -1,4 +1,4 @@
-import { rgb2arr } from '@antv/l7-utils';
+import { $window, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILayer } from '../..';
@@ -238,6 +238,6 @@ export default class LayerService implements ILayerService {
   }
 
   private stopRender() {
-    cancelAnimationFrame(this.layerRenderID);
+    $window.cancelAnimationFrame(this.layerRenderID);
   }
 }
