@@ -25,7 +25,7 @@ import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
-import { getParser, getTransform } from './';
+import { getParser, getTransform } from './factory';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
