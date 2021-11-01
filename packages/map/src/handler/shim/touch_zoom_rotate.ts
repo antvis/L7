@@ -1,3 +1,4 @@
+import { isMini } from '@antv/l7-utils';
 import TapDragZoomHandler from '../tap/tap_drag_zoom';
 import { TouchRotateHandler, TouchZoomHandler } from '../touch';
 
@@ -50,7 +51,9 @@ export default class TouchZoomRotateHandler {
       this.touchRotate.enable(options);
     }
     this.tapDragZoom.enable();
-    this.el.classList.add('l7-touch-zoom-rotate');
+    if (!isMini) {
+      this.el.classList.add('l7-touch-zoom-rotate');
+    }
   }
 
   /**
@@ -63,7 +66,9 @@ export default class TouchZoomRotateHandler {
     this.touchZoom.disable();
     this.touchRotate.disable();
     this.tapDragZoom.disable();
-    this.el.classList.remove('l7-touch-zoom-rotate');
+    if (!isMini) {
+      this.el.classList.remove('l7-touch-zoom-rotate');
+    }
   }
 
   /**

@@ -9,6 +9,9 @@ import babel from 'rollup-plugin-babel';
 import glsl from './rollup-plugin-glsl';
 import postcss from 'rollup-plugin-postcss';
 import url from 'postcss-url';
+import miniAdapter from './rollup-plugin-miniapp';
+
+
 const { BUILD, MINIFY } = process.env;
 const minified = MINIFY === 'true';
 const production = BUILD === 'production';
@@ -17,6 +20,8 @@ const outputFile = !production
   : minified
     ? 'packages/l7/dist/l7.js'
     : 'packages/l7/dist/l7-dev.js';
+
+
 function resolveFile(filePath) {
   return path.join(__dirname, '..', filePath);
 }
@@ -61,6 +66,7 @@ module.exports = [
         [ '**/*.glsl' ],
         true
       ),
+      miniAdapter(),
       json(),
       postcss({
         extract: false,
