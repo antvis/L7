@@ -384,7 +384,7 @@ export default class TextModel extends BaseModel {
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
       let { shape = '' } = item;
-      shape = shape.toString();
+      shape = `${shape}`;
       if (characterSet.indexOf(shape) === -1) {
         characterSet.push(shape);
       }
