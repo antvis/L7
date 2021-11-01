@@ -23,7 +23,8 @@ export default class InteractionService extends EventEmitter
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
   // @ts-ignore
-  private hammertime: HammerManager;
+  // private hammertime: HammerManager;
+  private hammertime: any;
 
   private lastClickTime: number = 0;
 
@@ -129,14 +130,14 @@ export default class InteractionService extends EventEmitter
       }
     }
   }
-  // @ts-ignore
-  private onDrag = (target: HammerInput) => {
+  
+  private onDrag = (target: any) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
-  // @ts-ignore
-  private onHammer = (target: HammerInput) => {
+  
+  private onHammer = (target: any) => {
     target.srcEvent.stopPropagation();
     const interactionTarget = this.interactionEvent(target);
     this.emit(InteractionEvent.Hover, interactionTarget);
@@ -150,8 +151,8 @@ export default class InteractionService extends EventEmitter
       type: 'touch',
     });
   };
-  // @ts-ignore
-  private interactionEvent(target: HammerInput) {
+  
+  private interactionEvent(target: any) {
     const { type, pointerType } = target;
     let clientX;
     let clientY;
