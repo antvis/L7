@@ -77,8 +77,8 @@ export default class InteractionService extends EventEmitter
         );
       } else {
         const hammertime = new Hammer.Manager($containter);
-        $containter.addEventListener('mousemove', this.onHover);
-        $containter.addEventListener('click', this.onHover);
+        // $containter.addEventListener('mousemove', this.onHover);
+        // $containter.addEventListener('click', this.onHover);
         hammertime.add(
           new Hammer.Tap({
             event: 'dblclick',

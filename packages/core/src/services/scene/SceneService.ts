@@ -431,8 +431,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (canvas) {
       canvas.width = w * pixelRatio;
       canvas.height = h * pixelRatio;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
+      // canvas.style.width = `${w}px`;
+      // canvas.style.height = `${h}px`;
     }
     this.rendererService.viewport({
       x: 0,
@@ -449,8 +449,10 @@ export default class Scene extends EventEmitter implements ISceneService {
     const canvas = this.canvas;
     canvas.width = w * pixelRatio;
     canvas.height = h * pixelRatio;
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
+    // canvas.style.width = `${w}px`;
+    // canvas.style.height = `${h}px`;
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
   }
 
   private handleMapCameraChanged = (viewport: IViewport) => {
