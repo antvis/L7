@@ -490,6 +490,7 @@ scene.setPitch(pitch);
 ```
 
 ### setMapStatus 设置地图状态
+
 可用来关闭地图的一些交互操作
 
 可用来关闭地图的一些交互操作
@@ -535,6 +536,7 @@ scene.fitBounds([
 参数 :
 
 - pixel 画布的坐标 [x ,y ] {array }
+
 ```
 scene.pixelToLngLat([10,10]);
 ```
@@ -560,6 +562,7 @@ scene.lngLatToPixel([120,10]);
 参数 :
 
 - pixel 画布的坐标 [x ,y ] {array }
+
 ```
 scene.pixelToLngLat([10,10]);
 ```
