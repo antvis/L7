@@ -68,9 +68,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       const { dataArray } = layer.getSource().data;
-      // if (dataArray.length === 0) {
-      //   return;
-      // }
       this.caculateScalesForAttributes(attributes || [], dataArray);
       layer.layerModelNeedUpdate = true;
       return true;
