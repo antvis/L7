@@ -382,7 +382,7 @@ export interface ILayerService {
   getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
-  updateRenderOrder(): void;
+  updateLayerRenderList(): void;
   renderLayers(type?: string): void;
   getOESTextureFloat(): boolean;
   isMapDragging(): boolean;

@@ -17,15 +17,13 @@ export default class LayerService implements ILayerService {
 
   private layers: ILayer[] = [];
 
+  private layerList: ILayer[] = [];
+
   private layerRenderID: number;
 
   private sceneInited: boolean = false;
 
   private animateInstanceCount: number = 0;
-
-  private lastRenderType: string;
-
-  private lastPickRenderTime: number;
 
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
@@ -41,6 +39,7 @@ export default class LayerService implements ILayerService {
       layer.init();
     }
     this.layers.push(layer);
+    this.updateLayerRenderList();
   }
 
   public initLayers() {
@@ -50,6 +49,7 @@ export default class LayerService implements ILayerService {
         layer.init();
       }
     });
+    this.updateLayerRenderList();
   }
 
   public getLayers(): ILayer[] {
@@ -77,7 +77,7 @@ export default class LayerService implements ILayerService {
         this.layers.splice(layerIndex, 1);
       }
     }
-
+    this.updateLayerRenderList();
     layer.emit('remove', null);
     layer.destroy();
     this.renderLayers();
@@ -87,46 +87,41 @@ export default class LayerService implements ILayerService {
     this.destroy();
   }
 
-  public renderLayers(renderType?: string) {
-    // TODO: 每次渲染的时候都需要进行渲染判断，判断是否进行渲染
-    // 没有传递 type 参数时默认触发的是地图事件，优先级最高，直接渲染
-    if (!this.renderTest(renderType)) {
-      return;
-    }
-
+  public renderLayers() {    
     if (this.alreadyInRendering) {
       return;
     }
     this.alreadyInRendering = true;
     this.clear();
-    this.updateRenderOrder();
 
+    this.layerList.forEach((layer) => {
+      layer.hooks.beforeRenderData.call();
+      layer.hooks.beforeRender.call();
+      layer.render();
+      layer.hooks.afterRender.call();
+    })
+    this.alreadyInRendering = false;
+  }
+
+  public updateLayerRenderList() {
+    // TODO: 每次更新都是从 layers 重新构建
+    this.layerList = [];
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
+        this.layerList.push(layer)
+
         // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
-        renderLayerEvent(layer.layerChildren);
-        renderLayerEvent([layer]);
-      });
-    this.alreadyInRendering = false;
+        layer.layerChildren.filter((childlayer) => childlayer.inited)
+        .filter((childlayer) => childlayer.isVisible())
+        .forEach((childlayer) => {
+          this.layerList.push(childlayer)
+        })
+      })
 
-    function renderLayerEvent(layers: ILayer[]) {
-      layers
-        .filter((layer) => layer.inited)
-        .filter((layer) => layer.isVisible())
-        .forEach((layer) => {
-          // trigger hooks
-          layer.hooks.beforeRenderData.call();
-          layer.hooks.beforeRender.call();
-          layer.render();
-          layer.hooks.afterRender.call();
-        });
-    }
-  }
-
-  public updateRenderOrder() {
-    this.layers.sort((pre: ILayer, next: ILayer) => {
+    // 根据 zIndex 对渲染顺序进行排序
+    this.layerList.sort((pre: ILayer, next: ILayer) => {
       return pre.zIndex - next.zIndex;
     });
   }
@@ -141,6 +136,7 @@ export default class LayerService implements ILayerService {
       layer.destroy();
     });
     this.layers = [];
+    this.layerList = [];
     this.renderLayers();
   }
 
@@ -170,56 +166,6 @@ export default class LayerService implements ILayerService {
   private runRender() {
     this.renderLayers();
     this.layerRenderID = requestAnimationFrame(this.runRender.bind(this));
-  }
-
-  // 渲染检测
-  private renderTest(renderType: string | undefined): boolean {
-    const now = new Date().getTime();
-    const betweenPickRenderTime = now - this.lastPickRenderTime;
-    if (renderType === 'picking') {
-      this.lastPickRenderTime = new Date().getTime();
-    }
-
-    // 继续渲染事件
-    if (renderType) {
-      switch (renderType) {
-        case 'picking':
-          // return false;
-          //  TODO: picking 类型的渲染事件
-          //  若是上次触发为地图触发的渲染，则认为是地图事件与拾取事件在同时触发，放弃此次渲染
-          if (
-            this.lastRenderType === 'mapRender' ||
-            this.lastRenderType === 'animate'
-          ) {
-            this.lastRenderType = 'picking';
-            // 如果上一次触发的事件在 48 ms 以上，则这一次不放弃触发
-            if (betweenPickRenderTime > 48) {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            this.lastRenderType = 'picking';
-            return true;
-          }
-        case 'animate':
-          // return false;
-          if (this.lastRenderType === 'mapRender') {
-            this.lastRenderType = 'animate';
-            return false;
-          } else {
-            this.lastRenderType = 'animate';
-            return true;
-          }
-        case 'mapRender':
-          this.lastRenderType = 'mapRender';
-          return true;
-        default:
-          return true;
-      }
-      // TODO: 地图触发的渲染优先级最高，动画其次，拾取最次
-    }
-    return true;
   }
 
   private clear() {

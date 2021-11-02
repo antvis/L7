@@ -162,8 +162,7 @@ export default class PickingService implements IPickingService {
     }
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
-    // TODO: 触发图层更新渲染，同时传递更新类型
-    this.layerService.renderLayers('picking');
+    this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
 
