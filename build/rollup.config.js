@@ -9,7 +9,6 @@ import babel from 'rollup-plugin-babel';
 import glsl from './rollup-plugin-glsl';
 import postcss from 'rollup-plugin-postcss';
 import url from 'postcss-url';
-import miniAdapter from './rollup-plugin-miniapp';
 
 
 const { BUILD, MINIFY } = process.env;
@@ -66,7 +65,6 @@ module.exports = [
         [ '**/*.glsl' ],
         true
       ),
-      miniAdapter(),
       json(),
       postcss({
         extract: false,
