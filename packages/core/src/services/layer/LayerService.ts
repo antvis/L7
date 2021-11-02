@@ -87,7 +87,7 @@ export default class LayerService implements ILayerService {
     this.destroy();
   }
 
-  public renderLayers() {    
+  public renderLayers() {
     if (this.alreadyInRendering) {
       return;
     }
@@ -99,7 +99,7 @@ export default class LayerService implements ILayerService {
       layer.hooks.beforeRender.call();
       layer.render();
       layer.hooks.afterRender.call();
-    })
+    });
     this.alreadyInRendering = false;
   }
 
@@ -110,15 +110,16 @@ export default class LayerService implements ILayerService {
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .forEach((layer) => {
-        this.layerList.push(layer)
+        this.layerList.push(layer);
 
         // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
-        layer.layerChildren.filter((childlayer) => childlayer.inited)
-        .filter((childlayer) => childlayer.isVisible())
-        .forEach((childlayer) => {
-          this.layerList.push(childlayer)
-        })
-      })
+        layer.layerChildren
+          .filter((childlayer) => childlayer.inited)
+          .filter((childlayer) => childlayer.isVisible())
+          .forEach((childlayer) => {
+            this.layerList.push(childlayer);
+          });
+      });
 
     // 根据 zIndex 对渲染顺序进行排序
     this.layerList.sort((pre: ILayer, next: ILayer) => {
