@@ -23,7 +23,6 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/async-hook": "^2.1.0",
     "@antv/geo-coord": "^1.0.8",
     "@antv/l7-core": "^2.5.43",
     "@antv/l7-source": "^2.5.43",
