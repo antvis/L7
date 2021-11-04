@@ -44,6 +44,6 @@ vec4 filterPickingColor(vec4 color) {
  */
 vec4 filterColor(vec4 color) {
   // TODO: 过滤多余的 shader 计算
-  if(u_Dragging > 0.0) return color;
+  // if(u_Dragging > 0.0) return color;
   return filterPickingColor(filterHighlightColor(color));
 }

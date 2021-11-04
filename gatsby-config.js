@@ -9,6 +9,7 @@ module.exports = {
   ],
   siteMetadata: {
     title: 'L7',
+    isAntVSite: false,
     description: 'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.vision',
     githubUrl: 'https://github.com/antvis/L7',
