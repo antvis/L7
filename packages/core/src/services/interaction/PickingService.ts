@@ -15,7 +15,6 @@ import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
-
 @injectable()
 export default class PickingService implements IPickingService {
   @inject(TYPES.IRendererService)
@@ -46,10 +45,10 @@ export default class PickingService implements IPickingService {
       getViewportSize,
       getContainer,
     } = this.rendererService;
-    let {
-      width,
-      height,
-    } = (getContainer() as HTMLElement).getBoundingClientRect();
+
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
     width *= DOM.DPR;
     height *= DOM.DPR;
     this.pickBufferScale =
@@ -99,10 +98,9 @@ export default class PickingService implements IPickingService {
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
     const { getViewportSize, readPixels, getContainer } = this.rendererService;
-    let {
-      width,
-      height,
-    } = (getContainer() as HTMLElement).getBoundingClientRect();
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
     width *= DOM.DPR;
     height *= DOM.DPR;
     if (
@@ -139,6 +137,18 @@ export default class PickingService implements IPickingService {
     }
     return features;
   }
+
+  // 获取容器的大小 - 兼容小程序环境
+  private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
+    if (!!(container as HTMLCanvasElement).getContext) {
+      return {
+        width: (container as HTMLCanvasElement).width,
+        height: (container as HTMLCanvasElement).height,
+      };
+    } else {
+      return container.getBoundingClientRect();
+    }
+  }
   private async pickingAllLayer(target: IInteractionTarget) {
     if (
       // TODO: this.alreadyInPicking 避免多次重复拾取
@@ -152,17 +162,15 @@ export default class PickingService implements IPickingService {
     }
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
-    // TODO: 触发图层更新渲染，同时传递更新类型
-    this.layerService.renderLayers('picking');
+    this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
 
   private resizePickingFBO() {
     const { getContainer } = this.rendererService;
-    let {
-      width,
-      height,
-    } = (getContainer() as HTMLElement).getBoundingClientRect();
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
     width *= DOM.DPR;
     height *= DOM.DPR;
     if (this.width !== width || this.height !== height) {
@@ -211,10 +219,9 @@ export default class PickingService implements IPickingService {
   ) => {
     let isPicked = false;
     const { getViewportSize, readPixels, getContainer } = this.rendererService;
-    let {
-      width,
-      height,
-    } = (getContainer() as HTMLElement).getBoundingClientRect();
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
     width *= DOM.DPR;
     height *= DOM.DPR;
     const { enableHighlight, enableSelect } = layer.getLayerConfig();

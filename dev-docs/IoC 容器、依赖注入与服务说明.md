@@ -61,34 +61,6 @@ rootContainer
 * Shader 模块化服务。提供基本的 GLSL 模块化服务，基于字符串替换实现。
 * 配置项校验服务。[详见](./ConfigSchemaValidation.md)
 
-### 日志服务
-
-基于 `probe.gl` 实现，默认只输出 debug 级别以上的日志信息。开发模式下通过设置日志等级输出 debug 信息，另外 debug 信息会带上时间戳打点，类似这样：
-```bash
-L7:    403ms  map loaded
-L7:    405ms  add event listeners on canvas
-L7:    676ms  regenerate vertex attributes: color finished
-```
-
-通过 `logger` 引用，可使用 API 如下：
-
-| 方法名 | 参数 | 返回值 | 说明 |
-| -------- | ------------- | --------- | --------- |
-| debug  | `(message: string)` | 无 | 输出 debug 级别信息，会带上时间戳 |
-| info  | `(message: string)` | 无 | 输出 info 级别信息 |
-| warn  | `(message: string)` | 无 | 输出 warn 级别信息 |
-| error  | `(message: string)` | 无 | 输出 error 级别信息 |
-
-在自定义图层中使用示例如下：
-```typescript
-class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
-  protected renderModels() {
-    // 输出 debug 级别信息
-    this.logger.debug('start to render...');
-  }
-}
-```
-
 ### Shader 模块化服务
 
 通过 `shaderModuleService` 引用，可使用 API 如下：

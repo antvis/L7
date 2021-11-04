@@ -372,6 +372,7 @@ export interface ILayerConfig {
 export interface ILayerService {
   clock: Clock;
   alreadyInRendering: boolean;
+  sceneService?: any;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
@@ -381,7 +382,7 @@ export interface ILayerService {
   getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
-  updateRenderOrder(): void;
+  updateLayerRenderList(): void;
   renderLayers(type?: string): void;
   getOESTextureFloat(): boolean;
   isMapDragging(): boolean;

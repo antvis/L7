@@ -70,6 +70,10 @@ export default class Viewport implements IViewport {
     return 1;
   }
 
+  /**
+   * P20 坐标系，固定 scale
+   */
+
   public projectFlat(
     lngLat: [number, number],
     scale?: number | undefined,

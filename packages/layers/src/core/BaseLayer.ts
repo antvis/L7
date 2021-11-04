@@ -667,7 +667,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
   public setIndex(index: number): ILayer {
     this.zIndex = index;
-    this.layerService.updateRenderOrder();
+    this.layerService.updateLayerRenderList();
+    this.layerService.renderLayers();
     return this;
   }
 

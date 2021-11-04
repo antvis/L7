@@ -12,6 +12,10 @@ cd ./l7/
 npm publish
 cd ..
 
+cd ./mini/
+npm publish
+cd ..
+
 cd ./layers/
 npm publish
 cd ..

@@ -9,7 +9,7 @@ import {
   IRendererService,
   TYPES,
 } from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
+import { $window } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 
@@ -74,9 +74,9 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           u_SceneCenterMKT: sceneCenterMKT,
           // 其他参数，例如视口大小、DPR 等
           u_ViewportSize: [width, height],
-          u_DevicePixelRatio: window.devicePixelRatio,
-          // u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           u_ModelMatrix: this.cameraService.getModelMatrix(),
+          u_DevicePixelRatio: $window.devicePixelRatio,
+          // u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
           // TODO: 当前地图是否在拖动
           u_Dragging: Number(this.mapService.dragging),

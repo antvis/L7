@@ -15,6 +15,7 @@ export default function image(
     });
   });
   const resultData: IParserData = {
+    originData: data,
     images,
     _id: 1,
     dataArray: [
