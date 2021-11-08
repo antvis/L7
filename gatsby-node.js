@@ -12,6 +12,7 @@ exports.onCreateWebpackConfig = ({ getConfig }) => {
     ...config.resolve.alias,
     '@antv/l7': path.resolve(__dirname, 'packages/l7/src'),
     '@antv/l7-mini': path.resolve(__dirname, 'packages/mini/src'),
+    '@antv/l7-maps/lib/map': path.resolve(__dirname, 'packages/maps/src/map'),
     '@antv/l7-core': path.resolve(__dirname, 'packages/core/src'),
     '@antv/l7-component': path.resolve(__dirname, 'packages/component/src'),
     '@antv/l7-layers': path.resolve(__dirname, 'packages/layers/src'),

@@ -6,6 +6,8 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
+    "@antv/dipper": "^0.0.5",
+    "@antv/dipper-widgets": "^0.0.5",
     "@antv/g2": "^3.5.9",
     "@antv/gatsby-theme-antv": "^1.1.1",
     "@antv/l7-district": "^2.3.9",
@@ -31,7 +33,7 @@
     "@rollup/plugin-json": "^4.0.0",
     "@rollup/plugin-node-resolve": "^6.0.0",
     "@storybook/react": "^6.2.2",
-    "@turf/turf": "^5.1.6",
+    "@turf/turf": "^6.5.0",
     "@types/dat.gui": "^0.7.1",
     "@types/enzyme": "^3.1.14",
     "@types/enzyme-adapter-react-16": "^1.0.3",
