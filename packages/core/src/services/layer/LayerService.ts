@@ -166,7 +166,9 @@ export default class LayerService implements ILayerService {
 
   private runRender() {
     this.renderLayers();
-    this.layerRenderID = $window.requestAnimationFrame(this.runRender.bind(this));
+    this.layerRenderID = $window.requestAnimationFrame(
+      this.runRender.bind(this),
+    );
   }
 
   private clear() {

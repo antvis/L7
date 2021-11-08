@@ -80,7 +80,6 @@ export default class Amap2demo_destroy extends React.Component {
     // setTimeout(() => {
     //   this.scene.destroy()
     // }, 2000)
-    
   }
 
   public render() {
