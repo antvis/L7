@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { globalWindow } from './global';
 // 判断时候是支付宝小程序环境
 export const isMiniAli =
   // @ts-ignore
@@ -14,7 +15,7 @@ if (isMiniAli) {
   windowWidth = myOptions.windowWidth;
   windowHeight = myOptions.windowHeight;
 } else {
-  const { innerWidth, innerHeight } = window;
+  const { innerWidth, innerHeight } = globalWindow;
   screenWidth = innerWidth;
   screenHeight = innerHeight;
   windowWidth = innerWidth;
