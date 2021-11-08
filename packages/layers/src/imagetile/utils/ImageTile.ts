@@ -38,7 +38,7 @@ export default class ImageTile {
     const east = lnglatBounds.getEast();
     const north = lnglatBounds.getNorth();
 
-    const imageLayer = new ImageLayer({});
+    const imageLayer = new ImageLayer({ zIndex: -999 });
     imageLayer.source(
       // 'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
       imageSrc,

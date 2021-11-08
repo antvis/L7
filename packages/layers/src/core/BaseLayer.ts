@@ -1034,6 +1034,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private reRender() {
     if (this.inited) {
+      this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     }
   }

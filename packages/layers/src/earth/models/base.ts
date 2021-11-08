@@ -80,6 +80,7 @@ export default class BaseEarthModel extends BaseModel {
         width: imageData[0].width,
         height: imageData[0].height,
       });
+      this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     });
 
