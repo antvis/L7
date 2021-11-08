@@ -268,6 +268,7 @@ export default class Tile {
       this.tileCache.setTile(tile, key);
 
       this.pruneTiles();
+      this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     } else {
       // Tip: show 方法就是将相应的瓦片图片添加到渲染队列

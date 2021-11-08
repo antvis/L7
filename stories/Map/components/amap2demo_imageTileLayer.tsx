@@ -40,7 +40,7 @@ export default class Amap2demo_imageTileLayer extends React.Component {
     ];
 
     scene.on('loaded', () => {
-      const layer = new ImageTileLayer({});
+      const layer = new ImageTileLayer();
       layer
         .source(
           'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
