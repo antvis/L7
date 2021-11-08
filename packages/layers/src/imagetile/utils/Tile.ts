@@ -268,6 +268,7 @@ export default class Tile {
       this.tileCache.setTile(tile, key);
 
       this.pruneTiles();
+      this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     } else {
       // Tip: show 方法就是将相应的瓦片图片添加到渲染队列
@@ -324,6 +325,7 @@ export default class Tile {
 
     tile.imageLayer.emit('remove', null);
     tile.imageLayer.destroy();
+    this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
 
     // 清除 tileCache 中的存储 相当于 tileCache.setTile(tile, null)
@@ -352,6 +354,7 @@ export default class Tile {
     });
 
     this.layer.layerChildren = [];
+    this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
     this.tileList = {};
     this.tileCache.destory();

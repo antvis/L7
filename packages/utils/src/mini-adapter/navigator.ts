@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { globalWindow } from './global';
 export const isMiniAli =
   // @ts-ignore
   typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
@@ -13,7 +14,7 @@ if (isMiniAli) {
 } else {
   const browser = {
     versions: (() => {
-      const u = window.navigator.userAgent;
+      const u = globalWindow.navigator.userAgent;
       return {
         trident: u.indexOf('Trident') > -1, // IE内核
         presto: u.indexOf('Presto') > -1, // opera内核
@@ -30,7 +31,7 @@ if (isMiniAli) {
       };
     })(),
     language: (
-      window.navigator.browserLanguage || window.navigator.language
+      globalWindow.navigator.browserLanguage || globalWindow.navigator.language
     ).toLowerCase(),
   };
   if (browser.versions.android) {
@@ -58,7 +59,7 @@ if (isMiniAli) {
   } else if (browser.versions.qq) {
     platform = 'qq';
   }
-  system = window.navigator.userAgent;
+  system = globalWindow.navigator.userAgent;
   language = browser.language;
 }
 
