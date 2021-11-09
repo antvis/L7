@@ -1,6 +1,6 @@
 // @ts-ignore
 import { AsyncParallelHook } from '@antv/async-hook';
-import { DOM, isMini } from '@antv/l7-utils';
+import { $window, DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
@@ -206,9 +206,9 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.$container as HTMLDivElement,
           this.handleWindowResized,
         );
-        window
-          .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
-          .addListener(this.handleWindowResized);
+        $window
+          ?.matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
+          ?.addListener(this.handleWindowResized);
       } else {
         console.error('容器 id 不存在');
       }
@@ -407,9 +407,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.removeAllListeners();
     this.inited = false;
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    window
-      .matchMedia('screen and (min-resolution: 2dppx)')
-      .removeListener(this.handleWindowResized);
+    $window
+      ?.matchMedia('screen and (min-resolution: 2dppx)')
+      ?.removeListener(this.handleWindowResized);
   }
 
   private handleWindowResized = () => {
