@@ -742,6 +742,10 @@ export default class Transform {
    * @private
    */
   public pointLocation(p: Point) {
+    // if(p.x !== 0 && p.x !== 1001) {
+    //   console.log(p.x)
+    // }
+
     return this.coordinateLocation(this.pointCoordinate(p));
   }
 
@@ -935,40 +939,47 @@ export default class Transform {
     const nearZ = this.height / 50;
 
     // matrix for conversion from location to GL coordinates (-1 .. 1)
-    let m = mat4.create();
+    // TODO: 使用 Float64Array 的原因是为了避免计算精度问题、 mat4.create() 默认使用 Float32Array
+    let m = new Float64Array(16);
+    // @ts-ignore
     mat4.perspective(m, this._fov, this.width / this.height, nearZ, farZ);
 
     // Apply center of perspective offset
     m[8] = (-offset.x * 2) / this.width;
     m[9] = (offset.y * 2) / this.height;
 
+    // @ts-ignore
     mat4.scale(m, m, [1, -1, 1]);
+    // @ts-ignore
     mat4.translate(m, m, [0, 0, -this.cameraToCenterDistance]);
+    // @ts-ignore
     mat4.rotateX(m, m, this._pitch);
+    // @ts-ignore
     mat4.rotateZ(m, m, this.angle);
+    // @ts-ignore
     mat4.translate(m, m, [-x, -y, 0]);
 
     // The mercatorMatrix can be used to transform points from mercator coordinates
     // ([0, 0] nw, [1, 1] se) to GL coordinates.
-    this.mercatorMatrix = mat4.scale(mat4.create(), m, [
+    // @ts-ignore
+    this.mercatorMatrix = mat4.scale([], m, [
       this.worldSize,
       this.worldSize,
       this.worldSize,
     ]);
     // scale vertically to meters per pixel (inverse of ground resolution):
 
-    mat4.scale(
-      m,
-      m,
-      vec3.fromValues(
-        1,
-        1,
-        mercatorZfromAltitude(1, this.center.lat) * this.worldSize,
-      ),
-    );
-
+    // @ts-ignore
+    mat4.scale(m, m, [
+      1,
+      1,
+      mercatorZfromAltitude(1, this.center.lat) * this.worldSize,
+      1,
+    ]);
+    // @ts-ignore
     this.projMatrix = m;
-    this.invProjMatrix = mat4.invert(mat4.create(), this.projMatrix);
+    // @ts-ignore
+    this.invProjMatrix = mat4.invert([], this.projMatrix);
 
     // Make a second projection matrix that is aligned to a pixel grid for rendering raster tiles.
     // We're rounding the (floating point) x/y values to achieve to avoid rendering raster images to fractional
@@ -982,37 +993,52 @@ export default class Transform {
     const angleSin = Math.sin(this.angle);
     const dx = x - Math.round(x) + angleCos * xShift + angleSin * yShift;
     const dy = y - Math.round(y) + angleCos * yShift + angleSin * xShift;
-    const alignedM = mat4.clone(m);
+    // const alignedM = mat4.clone(m);
+    const alignedM = new Float64Array(m);
+    // @ts-ignore
     mat4.translate(alignedM, alignedM, [
       dx > 0.5 ? dx - 1 : dx,
       dy > 0.5 ? dy - 1 : dy,
       0,
     ]);
+    // @ts-ignore
     this.alignedProjMatrix = alignedM;
 
+    // @ts-ignore
     m = mat4.create();
+    // @ts-ignore
     mat4.scale(m, m, [this.width / 2, -this.height / 2, 1]);
+    // @ts-ignore
     mat4.translate(m, m, [1, -1, 0]);
+    // @ts-ignore
     this.labelPlaneMatrix = m;
 
+    // @ts-ignore
     m = mat4.create();
+    // @ts-ignore
     mat4.scale(m, m, [1, -1, 1]);
+    // @ts-ignore
     mat4.translate(m, m, [-1, -1, 0]);
+    // @ts-ignore
     mat4.scale(m, m, [2 / this.width, 2 / this.height, 1]);
+    // @ts-ignore
     this.glCoordMatrix = m;
 
     // matrix for conversion from location to screen coordinates
     this.pixelMatrix = mat4.multiply(
-      mat4.create(),
+      // @ts-ignore
+      new Float64Array(16),
       this.labelPlaneMatrix,
       this.projMatrix,
     );
 
     // inverse matrix for conversion from screen coordinaes to location
-    m = mat4.invert(mat4.create(), this.pixelMatrix);
+    // @ts-ignore
+    m = mat4.invert(new Float64Array(16), this.pixelMatrix);
     if (!m) {
       throw new Error('failed to invert matrix');
     }
+    // @ts-ignore
     this.pixelMatrixInverse = m;
 
     this.posMatrixCache = {};
