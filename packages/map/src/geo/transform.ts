@@ -745,7 +745,7 @@ export default class Transform {
     // if(p.x !== 0 && p.x !== 1001) {
     //   console.log(p.x)
     // }
-    
+
     return this.coordinateLocation(this.pointCoordinate(p));
   }
 
@@ -970,7 +970,12 @@ export default class Transform {
     // scale vertically to meters per pixel (inverse of ground resolution):
 
     // @ts-ignore
-    mat4.scale(m, m, [1, 1, mercatorZfromAltitude(1, this.center.lat) * this.worldSize, 1]);
+    mat4.scale(m, m, [
+      1,
+      1,
+      mercatorZfromAltitude(1, this.center.lat) * this.worldSize,
+      1,
+    ]);
     // @ts-ignore
     this.projMatrix = m;
     // @ts-ignore
