@@ -1,6 +1,6 @@
 // @ts-ignore
 import { AsyncParallelHook } from '@antv/async-hook';
-import { DOM, $window } from '@antv/l7-utils';
+import { $window, DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
