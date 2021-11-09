@@ -1,17 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  IModel,
-  IModelUniform,
-  IRasterParserDataItem,
-  IStyleAttributeService,
-  ITexture2D,
-  lazyInject,
-  TYPES,
-} from '@antv/l7-core';
+import { gl, IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageTileFrag from './shaders/imagetile_frag.glsl';
@@ -30,7 +17,7 @@ export default class ImageTileModel extends BaseModel {
     return {};
   }
 
-  // 临时的瓦片测试方法
+  // 瓦片方法
   public tile() {
     const [WS, EN] = this.mapService.getBounds();
     const NE = { lng: EN[0], lat: EN[1] };
@@ -66,13 +53,20 @@ export default class ImageTileModel extends BaseModel {
         crstype: 'epsg3857',
       });
 
+      // TODO: 首次加载的时候请求瓦片
       this.tile();
+
       let t = new Date().getTime();
       this.mapService.on('mapchange', () => {
         const newT = new Date().getTime();
         const cutT = newT - t;
         t = newT;
+        // TODO: 限制刷新频率
         if (cutT < 16) {
+          return;
+        }
+        // TODO: 瓦片地图最大层级为 2
+        if (this.mapService.getZoom() < 2.0) {
           return;
         }
         this.tile();
@@ -101,28 +95,6 @@ export default class ImageTileModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'uv',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Uv',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [vertex[3], vertex[4]];
-        },
-      },
-    });
+    return;
   }
 }
