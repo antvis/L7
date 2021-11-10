@@ -1,6 +1,6 @@
 // TODO: 解决 gastby 服务端构建过程中没有 window 全局变量的问题
 
-let globalWindow: any = window;
+let globalWindow: any;
 
 if (typeof window === 'undefined') {
   globalWindow = {
@@ -56,6 +56,8 @@ if (typeof window === 'undefined') {
     cancelAnimationFrame: () => true,
     clearTimeout: () => true,
   };
+} else {
+  globalWindow = window;
 }
 
 export { globalWindow };
