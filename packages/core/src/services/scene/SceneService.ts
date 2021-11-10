@@ -206,12 +206,11 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.$container as HTMLDivElement,
           this.handleWindowResized,
         );
-        if($window.matchMedia) {
+        if ($window.matchMedia) {
           $window
-          .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
-          ?.addListener(this.handleWindowResized);
+            .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
+            ?.addListener(this.handleWindowResized);
         }
-          
       } else {
         console.error('容器 id 不存在');
       }
@@ -410,12 +409,11 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.removeAllListeners();
     this.inited = false;
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    if($window.matchMedia) {
+    if ($window.matchMedia) {
       $window
-      .matchMedia('screen and (min-resolution: 2dppx)')
-      ?.removeListener(this.handleWindowResized);
+        .matchMedia('screen and (min-resolution: 2dppx)')
+        ?.removeListener(this.handleWindowResized);
     }
-     
   }
 
   private handleWindowResized = () => {
