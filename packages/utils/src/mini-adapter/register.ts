@@ -1,7 +1,7 @@
 // @ts-nocheck
 // tslint:disable
 import devicePixelRatio from './devicePixelRatio';
-import { document } from './document';
+// import { document } from './document';
 import * as Mixin from './util/mixin';
 
 declare let my: any;
@@ -29,18 +29,18 @@ function registerCanvas(c, id: string) {
 
   canvas.focus = function() {};
   canvas.blur = function() {};
+  // Tip: 小程序中无法动态注册事件
+  // canvas.addEventListener = function(type, listener, options = {}) {
+  //   document.addEventListener(type, listener, options);
+  // };
 
-  canvas.addEventListener = function(type, listener, options = {}) {
-    document.addEventListener(type, listener, options);
-  };
+  // canvas.removeEventListener = function(type, listener) {
+  //   document.removeEventListener(type, listener);
+  // };
 
-  canvas.removeEventListener = function(type, listener) {
-    document.removeEventListener(type, listener);
-  };
-
-  canvas.dispatchEvent = function(event: any) {
-    document.dispatchEvent(event);
-  };
+  // canvas.dispatchEvent = function(event: any) {
+  //   document.dispatchEvent(event);
+  // };
 }
 
 // 异步注册2Dcanvas
@@ -73,18 +73,18 @@ function registerCanvas2D(ctx, id: string) {
   };
   canvas2D.focus = function() {};
   canvas2D.blur = function() {};
+  // Tip: 小程序中无法动态注册事件
+  // canvas2D.addEventListener = function(type, listener, options = {}) {
+  //   document.addEventListener(type, listener, options);
+  // };
 
-  canvas2D.addEventListener = function(type, listener, options = {}) {
-    document.addEventListener(type, listener, options);
-  };
+  // canvas2D.removeEventListener = function(type, listener) {
+  //   document.removeEventListener(type, listener);
+  // };
 
-  canvas2D.removeEventListener = function(type, listener) {
-    document.removeEventListener(type, listener);
-  };
-
-  canvas2D.dispatchEvent = function(event: any) {
-    document.dispatchEvent(event);
-  };
+  // canvas2D.dispatchEvent = function(event: any) {
+  //   document.dispatchEvent(event);
+  // };
 }
 
 // 异步获取3Dcanvas

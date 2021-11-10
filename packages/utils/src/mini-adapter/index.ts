@@ -84,6 +84,7 @@ export const $window = isMini ? miniWindow : globalWindow;
 export const $XMLHttpRequest = isMini ? XMLHttpRequest: globalWindow.XMLHttpRequest;
 export const $location = isMini ? location : globalWindow.location;
 
-export { registerCanvas, registerCanvas2D } from './register';
+// TODO: 
+// export { registerCanvas, registerCanvas2D } from './register';
 
 export * from './EventIniter/index';
