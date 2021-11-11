@@ -23,7 +23,7 @@ function _changeReadyState(readyState, event = { readyState }) {
   _triggerEvent.call(this, 'readystatechange', event);
 }
 
-export class XMLHttpRequest extends EventTarget {
+export class $XMLHttpRequest extends EventTarget {
   public static UNSEND: number;
   public static OPENED: number;
   public static HEADERS_RECEIVED: number;
@@ -107,7 +107,7 @@ export class XMLHttpRequest extends EventTarget {
   public open(method, url /* GET/POST*/, flag) {
     this._method = method;
     this._url = url;
-    _changeReadyState.call(this, XMLHttpRequest.OPENED);
+    // _changeReadyState.call(this, XMLHttpRequest.OPENED);
   }
 
   public overrideMimeType() {}
@@ -130,45 +130,45 @@ export class XMLHttpRequest extends EventTarget {
       this.response = null;
 
       const onSuccess = ({ data, status, headers }) => {
-        status = status === undefined ? 200 : status;
+        // status = status === undefined ? 200 : status;
 
-        try {
-          if (
-            data == null ||
-            (data instanceof ArrayBuffer && data.byteLength == 0)
-          ) {
-            status = 404;
-          }
-        } catch (e) {}
+        // try {
+        //   if (
+        //     data == null ||
+        //     (data instanceof ArrayBuffer && data.byteLength == 0)
+        //   ) {
+        //     status = 404;
+        //   }
+        // } catch (e) {}
 
-        this.status = status;
-        if (headers) {
-          _responseHeader.set('responseHeader', headers);
-        }
-        _triggerEvent.call(this, 'loadstart');
-        _changeReadyState.call(this, XMLHttpRequest.HEADERS_RECEIVED);
-        _changeReadyState.call(this, XMLHttpRequest.LOADING);
+        // this.status = status;
+        // if (headers) {
+        //   _responseHeader.set('responseHeader', headers);
+        // }
+        // _triggerEvent.call(this, 'loadstart');
+        // // _changeReadyState.call(this, XMLHttpRequest.HEADERS_RECEIVED);
+        // // _changeReadyState.call(this, XMLHttpRequest.LOADING);
 
-        this.response = data;
+        // this.response = data;
 
-        if (data instanceof ArrayBuffer) {
-          // TODO temporary solution, fix native gc error.
-          this.response = data.slice(0);
-          Object.defineProperty(this, 'responseText', {
-            enumerable: true,
-            configurable: true,
-            get() {
-              throw new Error(
-                'InvalidStateError : responseType is ' + this._responseType,
-              );
-            },
-          });
-        } else {
-          this.responseText = data;
-        }
-        _changeReadyState.call(this, XMLHttpRequest.DONE);
-        _triggerEvent.call(this, 'load');
-        _triggerEvent.call(this, 'loadend');
+        // if (data instanceof ArrayBuffer) {
+        //   // TODO temporary solution, fix native gc error.
+        //   this.response = data.slice(0);
+        //   Object.defineProperty(this, 'responseText', {
+        //     enumerable: true,
+        //     configurable: true,
+        //     get() {
+        //       throw new Error(
+        //         'InvalidStateError : responseType is ' + this._responseType,
+        //       );
+        //     },
+        //   });
+        // } else {
+        //   this.responseText = data;
+        // }
+        // _changeReadyState.call(this, XMLHttpRequest.DONE);
+        // _triggerEvent.call(this, 'load');
+        // _triggerEvent.call(this, 'loadend');
       };
 
       const onFail = (e) => {
@@ -229,8 +229,8 @@ export class XMLHttpRequest extends EventTarget {
 }
 
 // TODO 没法模拟 HEADERS_RECEIVED 和 LOADING 两个状态
-XMLHttpRequest.UNSEND = 0;
-XMLHttpRequest.OPENED = 1;
-XMLHttpRequest.HEADERS_RECEIVED = 2;
-XMLHttpRequest.LOADING = 3;
-XMLHttpRequest.DONE = 4;
+$XMLHttpRequest.UNSEND = 0;
+$XMLHttpRequest.OPENED = 1;
+$XMLHttpRequest.HEADERS_RECEIVED = 2;
+$XMLHttpRequest.LOADING = 3;
+$XMLHttpRequest.DONE = 4;

@@ -13,7 +13,7 @@ import { HTMLMediaElement } from './HTMLMediaElement';
 import { HTMLVideoElement } from './HTMLVideoElement';
 import { Image } from './Image';
 import { ImageData } from './ImageData';
-import { location } from './location';
+import { $location } from './location';
 import { navigator } from './navigator';
 import { Node } from './Node';
 import { performance } from './performance';
@@ -25,7 +25,7 @@ import { screen } from './screen';
 import { URL } from './url';
 import { WebGLRenderingContext } from './WebGL';
 import { WebGL2RenderingContext } from './WebGL2';
-import { XMLHttpRequest } from './XMLHttpRequest';
+import { $XMLHttpRequest } from './XMLHttpRequest';
 
 import { globalWindow } from './global'
 
@@ -58,7 +58,7 @@ export const miniWindow = {
   requestAnimationFrame,
   cancelAnimationFrame,
   screen,
-  XMLHttpRequest,
+  XMLHttpRequest: $XMLHttpRequest,
   performance,
   URL,
   WebGLRenderingContext,
@@ -81,8 +81,8 @@ export const miniWindow = {
 } as Window & typeof globalThis;
 
 export const $window = isMini ? miniWindow : globalWindow;
-export const $XMLHttpRequest = isMini ? XMLHttpRequest: globalWindow.XMLHttpRequest;
-export const $location = isMini ? location : globalWindow.location;
+export const $XMLHttpRequest = isMini ? $XMLHttpRequest: globalWindow.XMLHttpRequest;
+export const $location = isMini ? $location : globalWindow.location;
 
 // TODO: 
 // export { registerCanvas, registerCanvas2D } from './register';
