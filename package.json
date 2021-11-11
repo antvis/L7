@@ -28,6 +28,7 @@
     "@babel/standalone": "^7.13.15",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
+    "@loadable/component": "^5.15.0",
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "^4.0.0",
