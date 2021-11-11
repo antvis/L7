@@ -25,7 +25,7 @@ import { screen } from './screen';
 import { URL } from './url';
 import { WebGLRenderingContext } from './WebGL';
 import { WebGL2RenderingContext } from './WebGL2';
-import { $XMLHttpRequest } from './XMLHttpRequest';
+import { $XMLHttpRequest as $XMLHttpRequest2 } from './XMLHttpRequest';
 
 import { globalWindow } from './global'
 
@@ -58,7 +58,7 @@ export const miniWindow = {
   requestAnimationFrame,
   cancelAnimationFrame,
   screen,
-  XMLHttpRequest: $XMLHttpRequest,
+  XMLHttpRequest: $XMLHttpRequest2,
   performance,
   URL,
   WebGLRenderingContext,
@@ -81,7 +81,7 @@ export const miniWindow = {
 } as Window & typeof globalThis;
 
 export const $window = isMini ? miniWindow : globalWindow;
-export const $XMLHttpRequest = isMini ? $XMLHttpRequest: globalWindow.XMLHttpRequest;
+export const $XMLHttpRequest = isMini ? $XMLHttpRequest2: globalWindow.XMLHttpRequest;
 export const $location = isMini ? $location : globalWindow.location;
 
 // TODO: 
