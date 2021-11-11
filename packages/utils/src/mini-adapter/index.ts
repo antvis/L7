@@ -3,7 +3,7 @@
 import { atob, btoa } from './atob';
 import { Blob } from './blob';
 import devicePixelRatio from './devicePixelRatio';
-import { document } from './document';
+import { $document } from './document';
 import { Element } from './Element';
 import { Event } from './Event';
 import EventTarget from './EventTarget';
@@ -43,7 +43,7 @@ export const miniWindow = {
   btoa,
   devicePixelRatio,
   Blob,
-  document,
+  document: $document,
   Element,
   Event,
   EventTarget,
@@ -64,13 +64,13 @@ export const miniWindow = {
   WebGLRenderingContext,
   WebGL2RenderingContext,
   addEventListener(type, listener, options = {}) {
-    document.addEventListener(type, listener, options);
+    $document.addEventListener(type, listener, options);
   },
   removeEventListener(type, listener,options) {
-    document.removeEventListener(type, listener);
+    $document.removeEventListener(type, listener);
   },
   dispatchEvent(event: Event) {
-    document.dispatchEvent(event);
+    $document.dispatchEvent(event);
   },
   innerWidth: screen.availWidth,
   innerHeight: screen.availHeight,
