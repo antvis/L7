@@ -113,94 +113,94 @@ export class $XMLHttpRequest extends EventTarget {
   public overrideMimeType() {}
 
   public send($data = '') {
-    if (this.readyState !== XMLHttpRequest.OPENED) {
-      throw new Error(
-        "Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED.",
-      );
-    } else {
-      const url = this._url;
-      const header = _requestHeader.get('requestHeader');
-      const responseType = this._responseType;
+    // if (this.readyState !== XMLHttpRequest.OPENED) {
+    //   throw new Error(
+    //     "Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED.",
+    //   );
+    // } else {
+    //   const url = this._url;
+    //   const header = _requestHeader.get('requestHeader');
+    //   const responseType = this._responseType;
 
-      if (contentTypes[responseType]) {
-        header['content-type'] = contentTypes[responseType];
-      }
+    //   if (contentTypes[responseType]) {
+    //     header['content-type'] = contentTypes[responseType];
+    //   }
 
-      delete this.response;
-      this.response = null;
+    //   delete this.response;
+    //   this.response = null;
 
-      const onSuccess = ({ data, status, headers }) => {
-        // status = status === undefined ? 200 : status;
+    //   const onSuccess = ({ data, status, headers }) => {
+    //     // status = status === undefined ? 200 : status;
 
-        // try {
-        //   if (
-        //     data == null ||
-        //     (data instanceof ArrayBuffer && data.byteLength == 0)
-        //   ) {
-        //     status = 404;
-        //   }
-        // } catch (e) {}
+    //     // try {
+    //     //   if (
+    //     //     data == null ||
+    //     //     (data instanceof ArrayBuffer && data.byteLength == 0)
+    //     //   ) {
+    //     //     status = 404;
+    //     //   }
+    //     // } catch (e) {}
 
-        // this.status = status;
-        // if (headers) {
-        //   _responseHeader.set('responseHeader', headers);
-        // }
-        // _triggerEvent.call(this, 'loadstart');
-        // // _changeReadyState.call(this, XMLHttpRequest.HEADERS_RECEIVED);
-        // // _changeReadyState.call(this, XMLHttpRequest.LOADING);
+    //     // this.status = status;
+    //     // if (headers) {
+    //     //   _responseHeader.set('responseHeader', headers);
+    //     // }
+    //     // _triggerEvent.call(this, 'loadstart');
+    //     // // _changeReadyState.call(this, XMLHttpRequest.HEADERS_RECEIVED);
+    //     // // _changeReadyState.call(this, XMLHttpRequest.LOADING);
 
-        // this.response = data;
+    //     // this.response = data;
 
-        // if (data instanceof ArrayBuffer) {
-        //   // TODO temporary solution, fix native gc error.
-        //   this.response = data.slice(0);
-        //   Object.defineProperty(this, 'responseText', {
-        //     enumerable: true,
-        //     configurable: true,
-        //     get() {
-        //       throw new Error(
-        //         'InvalidStateError : responseType is ' + this._responseType,
-        //       );
-        //     },
-        //   });
-        // } else {
-        //   this.responseText = data;
-        // }
-        // _changeReadyState.call(this, XMLHttpRequest.DONE);
-        // _triggerEvent.call(this, 'load');
-        // _triggerEvent.call(this, 'loadend');
-      };
+    //     // if (data instanceof ArrayBuffer) {
+    //     //   // TODO temporary solution, fix native gc error.
+    //     //   this.response = data.slice(0);
+    //     //   Object.defineProperty(this, 'responseText', {
+    //     //     enumerable: true,
+    //     //     configurable: true,
+    //     //     get() {
+    //     //       throw new Error(
+    //     //         'InvalidStateError : responseType is ' + this._responseType,
+    //     //       );
+    //     //     },
+    //     //   });
+    //     // } else {
+    //     //   this.responseText = data;
+    //     // }
+    //     // _changeReadyState.call(this, XMLHttpRequest.DONE);
+    //     // _triggerEvent.call(this, 'load');
+    //     // _triggerEvent.call(this, 'loadend');
+    //   };
 
-      const onFail = (e) => {
-        const errMsg = e.message || e.errorMessage;
-        // TODO 规范错误
-        if (!errMsg) {
-          return;
-        }
-        if (errMsg.indexOf('abort') !== -1) {
-          _triggerEvent.call(this, 'abort', {
-            message: errMsg + this._url,
-          });
-        } else {
-          _triggerEvent.call(this, 'error', {
-            message: errMsg + this._url,
-          });
-        }
-        _triggerEvent.call(this, 'loadend');
-      };
+    //   const onFail = (e) => {
+    //     const errMsg = e.message || e.errorMessage;
+    //     // TODO 规范错误
+    //     if (!errMsg) {
+    //       return;
+    //     }
+    //     if (errMsg.indexOf('abort') !== -1) {
+    //       _triggerEvent.call(this, 'abort', {
+    //         message: errMsg + this._url,
+    //       });
+    //     } else {
+    //       _triggerEvent.call(this, 'error', {
+    //         message: errMsg + this._url,
+    //       });
+    //     }
+    //     _triggerEvent.call(this, 'loadend');
+    //   };
 
-      const requestTask = my.request({
-        $data,
-        url,
-        method: this._method,
-        timeout: this.timeout ? this.timeout : 30000,
-        headers: header,
-        dataType: responseType,
-        success: onSuccess,
-        fail: onFail,
-      });
-      _requestTask.set('requestTask', requestTask);
-    }
+    //   const requestTask = my.request({
+    //     $data,
+    //     url,
+    //     method: this._method,
+    //     timeout: this.timeout ? this.timeout : 30000,
+    //     headers: header,
+    //     dataType: responseType,
+    //     success: onSuccess,
+    //     fail: onFail,
+    //   });
+    //   _requestTask.set('requestTask', requestTask);
+    // }
   }
 
   public setRequestHeader(header, value) {
