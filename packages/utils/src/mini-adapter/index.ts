@@ -13,7 +13,7 @@ import { HTMLMediaElement } from './HTMLMediaElement';
 import { HTMLVideoElement } from './HTMLVideoElement';
 import { Image } from './Image';
 import { ImageData } from './ImageData';
-import { $location } from './location';
+import { $location as $location2 } from './location';
 import { navigator } from './navigator';
 import { Node } from './Node';
 import { performance } from './performance';
@@ -82,7 +82,7 @@ export const miniWindow = {
 
 export const $window = isMini ? miniWindow : globalWindow;
 export const $XMLHttpRequest = isMini ? $XMLHttpRequest2: globalWindow.XMLHttpRequest;
-export const $location = isMini ? $location : globalWindow.location;
+export const $location = isMini ? $location2 : globalWindow.location;
 
 // TODO: 
 // export { registerCanvas, registerCanvas2D } from './register';
