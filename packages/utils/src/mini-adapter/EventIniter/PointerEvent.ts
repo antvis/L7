@@ -1,6 +1,6 @@
 // @ts-nocheck
 // tslint:disable
-import { document } from '../document';
+import { $document } from '../document';
 import { Event } from '../Event';
 import { getCanvas } from '../register';
 
@@ -188,7 +188,7 @@ function eventHandlerFactory(type) {
       }
 
       const event = touchToPointer(type, touch, rawEvent);
-      document.dispatchEvent(event);
+      $document.dispatchEvent(event);
     }
   };
 }

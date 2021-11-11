@@ -1,6 +1,6 @@
 // @ts-nocheck
 // tslint:disable
-import { document } from '../document';
+import { $document } from '../document';
 import { Event } from '../Event';
 
 class MouseEvent extends Event {
@@ -12,7 +12,7 @@ class MouseEvent extends Event {
 function eventHandlerFactory(type) {
   return (rawEvent) => {
     rawEvent.type = type;
-    document.dispatchEvent(rawEvent);
+    $document.dispatchEvent(rawEvent);
   };
 }
 

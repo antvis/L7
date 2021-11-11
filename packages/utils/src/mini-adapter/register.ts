@@ -1,7 +1,6 @@
 // @ts-nocheck
 // tslint:disable
 import devicePixelRatio from './devicePixelRatio';
-// import { document } from './document';
 import * as Mixin from './util/mixin';
 
 declare let my: any;

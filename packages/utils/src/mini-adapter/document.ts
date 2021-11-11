@@ -4,7 +4,6 @@ import { Event } from './Event';
 import { HTMLElement } from './HTMLElement';
 import { HTMLVideoElement } from './HTMLVideoElement';
 import { Image } from './Image';
-import { getCanvas, getCanvas2D } from './register';
 import { location } from './location';
 
 class Body extends HTMLElement {
@@ -15,15 +14,15 @@ class Body extends HTMLElement {
   }
 
   public addEventListener(type, listener, options = {}) {
-    document.addEventListener(type, listener, options);
+    // document.addEventListener(type, listener, options);
   }
 
   public removeEventListener(type, listener, options) {
-    document.removeEventListener(type, listener);
+    // document.removeEventListener(type, listener);
   }
 
   public dispatchEvent(event: Event) {
-    document.dispatchEvent(event);
+    // document.dispatchEvent(event);
   }
 }
 
@@ -33,21 +32,21 @@ class DocumentElement extends HTMLElement {
   }
 
   public addEventListener(type, listener, options = {}) {
-    document.addEventListener(type, listener, options);
+    // document.addEventListener(type, listener, options);
   }
 
   public removeEventListener(type, listener) {
-    document.removeEventListener(type, listener);
+    // document.removeEventListener(type, listener);
   }
 
   public dispatchEvent(event: Event) {
-    document.dispatchEvent(event);
+    // document.dispatchEvent(event);
   }
 }
 
 const events = {};
 
-export const document = {
+export const $document = {
   readyState: 'complete',
   visibilityState: 'visible', // 'visible' , 'hidden'
   hidden: false,
@@ -95,25 +94,11 @@ export const document = {
   },
 
   getElementById(id) {
-    const canvas = getCanvas();
-    const canvas2D = getCanvas2D();
-    if (id === canvas.id) {
-      return canvas;
-    } else if (id === canvas2D.id) {
-      return canvas2D;
-    }
     return null;
   },
 
   getElementsByTagName(tagName) {
     tagName = tagName.toLowerCase();
-    if (tagName === 'head') {
-      return [document.head];
-    } else if (tagName === 'body') {
-      return [document.body];
-    } else if (tagName === 'canvas') {
-      return [getCanvas(), getCanvas2D()];
-    }
     return [];
   },
 
@@ -122,43 +107,14 @@ export const document = {
   },
 
   getElementsByName(tagName) {
-    if (tagName === 'head') {
-      return [document.head];
-    } else if (tagName === 'body') {
-      return [document.body];
-    } else if (tagName === 'canvas') {
-      return [getCanvas(), getCanvas2D()];
-    }
     return [];
   },
 
   querySelector(query) {
-    const canvas = getCanvas();
-    const canvas2D = getCanvas2D();
-    if (query === 'head') {
-      return document.head;
-    } else if (query === 'meta[name="viewport"]') {
-      return undefined;
-    } else if (query === 'body') {
-      return document.body;
-    } else if (query === 'canvas') {
-      return canvas;
-    } else if (query === `#${canvas.id}`) {
-      return canvas;
-    } else if (query === `#${canvas2D.id}`) {
-      return canvas2D;
-    }
     return null;
   },
 
   querySelectorAll(query) {
-    if (query === 'head') {
-      return [document.head];
-    } else if (query === 'body') {
-      return [document.body];
-    } else if (query === 'canvas') {
-      return [getCanvas(), getCanvas2D()];
-    }
     return [];
   },
 
@@ -201,6 +157,6 @@ export const document = {
   },
 };
 
-document.documentElement = new DocumentElement();
-document.head = new HTMLElement('head');
-document.body = new Body();
+$document.documentElement = new DocumentElement();
+$document.head = new HTMLElement('head');
+$document.body = new Body();
