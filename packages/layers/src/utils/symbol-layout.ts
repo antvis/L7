@@ -174,7 +174,7 @@ function shapeLines(
     }
 
     x = 0;
-    y += lineHeight;
+    y -= lineHeight + 5;
   });
 
   const { horizontalAlign, verticalAlign } = getAnchorAlignment(textAnchor);
@@ -192,7 +192,7 @@ function shapeLines(
   const height = y - yOffset;
 
   shaping.top += -verticalAlign * height;
-  shaping.bottom = shaping.top + height;
+  shaping.bottom = shaping.top - height;
   shaping.left += -horizontalAlign * maxLineLength;
   shaping.right = shaping.left + maxLineLength;
 }
@@ -249,7 +249,7 @@ function shapeIconFont(
     }
 
     x = 0;
-    y += lineHeight;
+    y -= lineHeight + 5;
   });
 
   const { horizontalAlign, verticalAlign } = getAnchorAlignment(textAnchor);
@@ -267,7 +267,7 @@ function shapeIconFont(
   const height = y - yOffset;
 
   shaping.top += -verticalAlign * height;
-  shaping.bottom = shaping.top + height;
+  shaping.bottom = shaping.top - height;
   shaping.left += -horizontalAlign * maxLineLength;
   shaping.right = shaping.left + maxLineLength;
 }
