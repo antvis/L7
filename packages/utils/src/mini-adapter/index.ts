@@ -3,7 +3,7 @@
 import { atob, btoa } from './atob';
 import { Blob } from './blob';
 import devicePixelRatio from './devicePixelRatio';
-import { document } from './document';
+import { $document } from './document';
 import { Element } from './Element';
 import { Event } from './Event';
 import EventTarget from './EventTarget';
@@ -13,7 +13,7 @@ import { HTMLMediaElement } from './HTMLMediaElement';
 import { HTMLVideoElement } from './HTMLVideoElement';
 import { Image } from './Image';
 import { ImageData } from './ImageData';
-import { location } from './location';
+import { $location as $location2 } from './location';
 import { navigator } from './navigator';
 import { Node } from './Node';
 import { performance } from './performance';
@@ -25,7 +25,7 @@ import { screen } from './screen';
 import { URL } from './url';
 import { WebGLRenderingContext } from './WebGL';
 import { WebGL2RenderingContext } from './WebGL2';
-import { XMLHttpRequest } from './XMLHttpRequest';
+import { $XMLHttpRequest as $XMLHttpRequest2 } from './XMLHttpRequest';
 
 import { globalWindow } from './global'
 
@@ -43,7 +43,7 @@ export const miniWindow = {
   btoa,
   devicePixelRatio,
   Blob,
-  document,
+  document: $document,
   Element,
   Event,
   EventTarget,
@@ -58,19 +58,19 @@ export const miniWindow = {
   requestAnimationFrame,
   cancelAnimationFrame,
   screen,
-  XMLHttpRequest,
+  XMLHttpRequest: $XMLHttpRequest2,
   performance,
   URL,
   WebGLRenderingContext,
   WebGL2RenderingContext,
   addEventListener(type, listener, options = {}) {
-    document.addEventListener(type, listener, options);
+    $document.addEventListener(type, listener, options);
   },
   removeEventListener(type, listener,options) {
-    document.removeEventListener(type, listener);
+    $document.removeEventListener(type, listener);
   },
   dispatchEvent(event: Event) {
-    document.dispatchEvent(event);
+    $document.dispatchEvent(event);
   },
   innerWidth: screen.availWidth,
   innerHeight: screen.availHeight,
@@ -81,8 +81,8 @@ export const miniWindow = {
 } as Window & typeof globalThis;
 
 export const $window = isMini ? miniWindow : globalWindow;
-export const $XMLHttpRequest = isMini ? XMLHttpRequest: globalWindow.XMLHttpRequest;
-export const $location = isMini ? location : globalWindow.location;
+export const $XMLHttpRequest = isMini ? $XMLHttpRequest2: globalWindow.XMLHttpRequest;
+export const $location = isMini ? $location2 : globalWindow.location;
 
 // TODO: 
 // export { registerCanvas, registerCanvas2D } from './register';

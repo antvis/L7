@@ -1,6 +1,6 @@
 // @ts-nocheck
 // tslint:disable
-export let location = {
+export let $location = {
   href: '',
   protocol: '',
   host:''
