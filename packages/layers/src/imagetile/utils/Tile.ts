@@ -323,7 +323,6 @@ export default class Tile {
       this.layer.layerChildren.splice(layerIndex, 1);
     }
 
-    tile.imageLayer.emit('remove', null);
     tile.imageLayer.destroy();
     this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
@@ -349,7 +348,6 @@ export default class Tile {
 
   public removeTiles() {
     this.layer.layerChildren.forEach((layer: any) => {
-      layer.emit('remove', null);
       layer.destroy();
     });
 
