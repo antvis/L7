@@ -12,6 +12,7 @@ import MercatorCoordinate, {
   mercatorYfromLat,
   mercatorZfromAltitude,
 } from './mercator';
+import { isMini } from '@antv/l7-utils';
 export const EXTENT = 8192;
 export default class Transform {
   get minZoom(): number {
@@ -827,7 +828,6 @@ export default class Transform {
     let y2;
     const size = this.size;
     const unmodified = this.unmodified;
-
     if (this.latRange) {
       const latRange = this.latRange;
       minY = mercatorYfromLat(latRange[1]) * this.worldSize;
@@ -854,7 +854,12 @@ export default class Transform {
           sy ? (maxY + minY) / 2 : point.y,
         ),
       );
-      this.zoom += this.scaleZoom(s);
+      if(isMini) {
+        this.zoom = Math.max(this.zoom, Math.max(-1, this.minZoom));
+      } else {
+        this.zoom += this.scaleZoom(s);
+      }
+      
       this.unmodified = unmodified;
       this.constraining = false;
       return;
