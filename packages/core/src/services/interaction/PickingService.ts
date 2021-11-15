@@ -1,4 +1,4 @@
-import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
+import { decodePickingColor, DOM, encodePickingColor, isMini } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
@@ -142,8 +142,8 @@ export default class PickingService implements IPickingService {
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
     if (!!(container as HTMLCanvasElement).getContext) {
       return {
-        width: (container as HTMLCanvasElement).width,
-        height: (container as HTMLCanvasElement).height,
+        width: (container as HTMLCanvasElement).width / DOM.DPR,
+        height: (container as HTMLCanvasElement).height / DOM.DPR,
       };
     } else {
       return container.getBoundingClientRect();
@@ -171,8 +171,8 @@ export default class PickingService implements IPickingService {
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
     );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
+      width *= DOM.DPR;
+      height *= DOM.DPR;
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
