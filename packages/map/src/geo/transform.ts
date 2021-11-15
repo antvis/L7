@@ -1,4 +1,5 @@
 // @ts-ignore
+import { isMini } from '@antv/l7-utils';
 import { mat2, mat4, vec3, vec4 } from 'gl-matrix';
 import Point, { PointLike } from '../geo/point';
 import { clamp, interpolate, wrap } from '../util';
@@ -12,7 +13,6 @@ import MercatorCoordinate, {
   mercatorYfromLat,
   mercatorZfromAltitude,
 } from './mercator';
-import { isMini } from '@antv/l7-utils';
 export const EXTENT = 8192;
 export default class Transform {
   get minZoom(): number {
@@ -854,12 +854,12 @@ export default class Transform {
           sy ? (maxY + minY) / 2 : point.y,
         ),
       );
-      if(isMini) {
+      if (isMini) {
         this.zoom = Math.max(this.zoom, Math.max(-1, this.minZoom));
       } else {
         this.zoom += this.scaleZoom(s);
       }
-      
+
       this.unmodified = unmodified;
       this.constraining = false;
       return;
