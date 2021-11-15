@@ -278,7 +278,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       // 添加marker container;
       this.$container = $container ? $container : null;
-      if(this.$container) {
+      if (this.$container) {
         await this.rendererService.init(
           // @ts-ignore
           sceneConfig.canvas,
