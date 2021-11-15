@@ -357,8 +357,12 @@ export class Map extends Camera {
     let height = 0;
     if (this.container) {
       if (isMini) {
-        width = (this.container as HTMLCanvasElement).width;
-        height = (this.container as HTMLCanvasElement).height;
+        width =
+          (this.container as HTMLCanvasElement).width /
+          $window.devicePixelRatio;
+        height =
+          (this.container as HTMLCanvasElement).height /
+          $window.devicePixelRatio;
       } else {
         width = this.container.clientWidth;
         height = this.container.clientHeight;

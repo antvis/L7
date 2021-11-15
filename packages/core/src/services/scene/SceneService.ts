@@ -278,11 +278,15 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       // 添加marker container;
       this.$container = $container ? $container : null;
-      await this.rendererService.init(
-        // @ts-ignore
-        sceneConfig.canvas,
-        this.configService.getSceneConfig(this.id) as IRenderConfig,
-      );
+      if (this.$container) {
+        await this.rendererService.init(
+          // @ts-ignore
+          sceneConfig.canvas,
+          this.configService.getSceneConfig(this.id) as IRenderConfig,
+        );
+      } else {
+        console.error('容器 id 不存在');
+      }
 
       this.pickingService.init(this.id);
     });
