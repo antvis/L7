@@ -34,7 +34,7 @@ export default class Amap2demo_lineHeight extends React.Component {
             .size(1)
             .shape('line')
             .style({
-              vertexHeightScale: 30
+              vertexHeightScale: 30,
             })
             .color('#ccc');
 

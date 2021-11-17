@@ -104,7 +104,7 @@ export default class LineModel extends BaseModel {
       u_targetColor: targetColorArr,
 
       // 顶点高度 scale
-      u_vertexScale: vertexHeightScale
+      u_vertexScale: vertexHeightScale,
     };
   }
   public getAnimateUniforms(): IModelUniform {
