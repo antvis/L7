@@ -33,6 +33,7 @@ export default class LineModel extends BaseModel {
       dashArray = [10, 5, 0, 0],
       lineTexture = false,
       iconStep = 100,
+      vertexHeightScale = 20.0,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -101,6 +102,9 @@ export default class LineModel extends BaseModel {
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+
+      // 顶点高度 scale
+      u_vertexScale: vertexHeightScale
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -112,20 +116,6 @@ export default class LineModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-    // const { createTexture2D } = this.rendererService;
-    // this.texture = createTexture2D({
-    //   height: 0,
-    //   width: 0,
-    // });
-    // let url = 'https://gw-office.alipayobjects.com/bmw-prod/e91c3630-b79e-45a3-a2b9-feee4b4ccd41.svg'
-    // this.loadImage(url).then((img) => {
-    //   this.texture = createTexture2D({
-    //     data: img as HTMLImageElement,
-    //     width: (img as HTMLImageElement).width,
-    //     height: (img as HTMLImageElement).height,
-    //   });
-    //   this.layerService.renderLayers();
-    // })
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
