@@ -25,7 +25,7 @@ export default class Amap2demo_lineHeight extends React.Component {
     scene.on('loaded', () => {
       fetch(
         // 'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
-        'https://gw.alipayobjects.com/os/bmw-prod/65589ef3-7f1d-440f-ba5d-86b03ee6ba7e.json'
+        'https://gw.alipayobjects.com/os/bmw-prod/65589ef3-7f1d-440f-ba5d-86b03ee6ba7e.json',
       )
         .then((res) => res.json())
         .then((data) => {
@@ -34,7 +34,7 @@ export default class Amap2demo_lineHeight extends React.Component {
             .size(1)
             .shape('line')
             .color('#ccc');
-        
+
           scene.addLayer(layer);
         });
     });

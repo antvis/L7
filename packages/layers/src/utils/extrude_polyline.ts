@@ -210,18 +210,18 @@ export default class ExtrudePolyline {
         positions.push(
           last[0],
           last[1],
-          last[2]|0,
+          last[2] | 0,
           this.totalDistance - segmentDistance,
           -this.thickness,
-          last[2]|0,
+          last[2] | 0,
         );
         positions.push(
           last[0],
           last[1],
-          last[2]|0,
+          last[2] | 0,
           this.totalDistance - segmentDistance,
           this.thickness,
-          last[2]|0,
+          last[2] | 0,
         );
       } else {
         this.extrusions(
@@ -251,18 +251,18 @@ export default class ExtrudePolyline {
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           this.thickness,
-          cur[2]|0,
+          cur[2] | 0,
         );
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           this.thickness,
-          cur[2]|0,
+          cur[2] | 0,
         );
       } else {
         this.extrusions(
@@ -285,7 +285,10 @@ export default class ExtrudePolyline {
         vec2.add(
           next as vec2,
           cur as vec2,
-          vec2.normalize(next as vec2, vec2.subtract(next as vec2, cur as vec2, last as vec2)),
+          vec2.normalize(
+            next as vec2,
+            vec2.subtract(next as vec2, cur as vec2, last as vec2),
+          ),
         );
       }
       direction(lineB, next as vec2, cur as vec2);
@@ -317,18 +320,18 @@ export default class ExtrudePolyline {
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           -this.thickness * flip,
-          cur[2]|0,
+          cur[2] | 0,
         );
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           this.thickness * flip,
-          cur[2]|0,
+          cur[2] | 0,
         );
         indices.push(
           ...(this.lastFlip !== -flip
@@ -345,10 +348,10 @@ export default class ExtrudePolyline {
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           -this.thickness * flip,
-          cur[2]|0,
+          cur[2] | 0,
         );
         count += 3;
       } else {
@@ -417,18 +420,18 @@ export default class ExtrudePolyline {
         positions.push(
           last[0],
           last[1],
-          last[2]|0,
+          last[2] | 0,
           this.totalDistance - segmentDistance,
           -this.thickness,
-          last[2]|0,
+          last[2] | 0,
         );
         positions.push(
           last[0],
           last[1],
-          last[2]|0,
+          last[2] | 0,
           this.totalDistance - segmentDistance,
           this.thickness,
-          last[2]|0,
+          last[2] | 0,
         );
 
         // this.extrusions(positions, normals, last, out, this.thickness);
@@ -462,18 +465,18 @@ export default class ExtrudePolyline {
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           this.thickness,
-          cur[2]|0,
+          cur[2] | 0,
         );
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           this.thickness,
-          cur[2]|0,
+          cur[2] | 0,
         );
       } else {
         this.extrusions(
@@ -531,18 +534,18 @@ export default class ExtrudePolyline {
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           -this.thickness * flip,
-          cur[2]|0,
+          cur[2] | 0,
         );
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           this.thickness * flip,
-          cur[2]|0,
+          cur[2] | 0,
         );
         indices.push(
           ...(this.lastFlip !== -flip
@@ -559,10 +562,10 @@ export default class ExtrudePolyline {
         positions.push(
           cur[0],
           cur[1],
-          cur[2]|0,
+          cur[2] | 0,
           this.totalDistance,
           -this.thickness * flip,
-          cur[2]|0,
+          cur[2] | 0,
         );
         count += 3;
       } else {
@@ -600,8 +603,22 @@ export default class ExtrudePolyline {
   ) {
     normals.push(normal[0], normal[1], 0);
     normals.push(normal[0], normal[1], 0);
-    positions.push(point[0], point[1], point[2]|0, distanceRadio, -thickness, point[2]|0);
-    positions.push(point[0], point[1], point[2]|0, distanceRadio, thickness, point[2]|0);
+    positions.push(
+      point[0],
+      point[1],
+      point[2] | 0,
+      distanceRadio,
+      -thickness,
+      point[2] | 0,
+    );
+    positions.push(
+      point[0],
+      point[1],
+      point[2] | 0,
+      distanceRadio,
+      thickness,
+      point[2] | 0,
+    );
   }
   private lineSegmentDistance(b1: vec2, a1: vec2) {
     const dx = a1[0] - b1[0];
