@@ -22,7 +22,6 @@ L7Earth 相较于高德地图、mapbox 地图，是完全不同的一种表现�
 
 - 3D 弧线
 
-
 ## 使用
 
 ```javascript
