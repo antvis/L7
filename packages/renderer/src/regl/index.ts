@@ -201,6 +201,26 @@ export default class ReglRendererService implements IRendererService {
     return this.gl._gl;
   };
 
+  public setState() {
+    this.gl({
+      cull: {
+        enable: false,
+        face: 'back',
+      },
+      viewport: {
+        x: 0,
+        y: 0,
+        height: this.width,
+        width: this.height,
+      },
+      blend: {
+        enable: true,
+        equation: 'add',
+      },
+      framebuffer: null,
+    });
+  }
+
   public setBaseState() {
     this.gl({
       cull: {

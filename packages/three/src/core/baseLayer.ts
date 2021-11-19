@@ -171,11 +171,12 @@ export default class ThreeJSLayer
 
     renderer.render(this.scene, camera);
 
-    this.rendererService.setBaseState();
+    this.rendererService.setState();
     this.animateMixer.forEach((mixer: AnimationMixer) => {
       mixer.update(this.getTime());
     });
-    this.rendererService.setBaseState();
+    
+    this.rendererService.setState();
     this.rendererService.setDirty(true);
     return this;
   }
