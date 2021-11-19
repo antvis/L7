@@ -201,6 +201,7 @@ export default class ReglRendererService implements IRendererService {
     return this.gl._gl;
   };
 
+  // TODO: 临时方法
   public setState() {
     this.gl({
       cull: {

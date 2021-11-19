@@ -175,7 +175,7 @@ export default class ThreeJSLayer
     this.animateMixer.forEach((mixer: AnimationMixer) => {
       mixer.update(this.getTime());
     });
-    
+
     this.rendererService.setState();
     this.rendererService.setDirty(true);
     return this;
