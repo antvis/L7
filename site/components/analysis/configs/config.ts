@@ -4,30 +4,20 @@ export const config: Partial<IConfig> = {
   viewData: {
     global: {
       filterData: [],
-      sceneCode: 'iot_terminal_dominant',
       areaCode: '330100',
       view: 'task',
     },
     widgets: {
       citySelect: {
         options: CityList,
-        value: [330000, 330100],
+        value: ['330000', '330100'],
       },
     },
   },
   headerbar: {
     display: true,
-    logo: {
-      display: true,
-      value:
-        'https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*ObVJT4IxmlkAAAAAAAAAAAAAARQnAQ',
-      style: {
-        height: '24px',
-        width: '24px',
-      },
-    },
     title: {
-      value: '区代指挥中心',
+      value: '数据分析',
       display: true,
     },
     children: [
@@ -42,21 +32,6 @@ export const config: Partial<IConfig> = {
         },
       },
       {
-        display: true,
-        options: [
-          {
-            label: '热区分析',
-            value: 'hotspot',
-          },
-          {
-            label: '任务管理',
-            value: 'task',
-          },
-        ],
-        position: 'center',
-        type: 'navibar',
-      },
-      {
         display: false,
         position: 'right',
         type: 'publishbar',
@@ -69,24 +44,37 @@ export const config: Partial<IConfig> = {
   },
   panel: {
     display: true,
-    enableToggle: true,
-    defaultTitle: '所有网格',
-    opened: true,
-    width: 360,
+    options: {
+      enableToggle: true,
+      defaultTitle: '所有网格',
+      opened: true,
+      width: 426,
+    },
     position: 'right',
     children: [
       {
-        type: 'siderbartabcontent',
+        display: true,
+        type: 'meshName',
+        title: '网格名称',
+      },
+      {
+        display: true,
+        type: 'meshchart',
+        title: '所有网格数据',
+      },
+      {
+        display: false,
+        type: 'panelTabContent',
         title: '所有网格',
         children: [
           {
             display: true,
             type: 'mesh_indicator',
-            title: '数据查看',
+            title: '业务数据',
           },
           {
             type: 'total_data_panel',
-            title: '地图面板',
+            title: '人员数据',
           },
         ],
       },
@@ -106,8 +94,26 @@ export const config: Partial<IConfig> = {
     {
       display: true,
       position: 'topleft',
+      type: 'filter',
+      title: '筛选',
+    },
+    {
+      display: true,
+      position: 'bottomright',
+      type: 'location',
+      title: '定位',
+    },
+    {
+      display: true,
+      position: 'bottomright',
       type: 'mapStyle',
       title: '地图样式',
+    },
+    {
+      display: true,
+      position: 'topleft',
+      type: 'searchPlaces',
+      title: '地区搜索',
     },
   ],
   defaultcontrols: [
@@ -136,7 +142,7 @@ export const config: Partial<IConfig> = {
         },
         fill: {
           field: 'unit_price',
-          color: SingleSequentialColorScale.Blue,
+          color: ['#A9D3FF', '#82B1FF', '#6294FF', '#457BFF', '#2962FF'],
           bandNum: 5,
           scale: 'quantile',
           unknownName: '无类型',
