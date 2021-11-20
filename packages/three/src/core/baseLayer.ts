@@ -30,6 +30,13 @@ export default class ThreeJSLayer
   private animateMixer: AnimationMixer[] = [];
   // 地图中点墨卡托坐标
   private center: IMercator;
+  public isUpdate: boolean = false;
+  public update: (() => void) | null = null;
+
+  public setUpdate(callback: () => void) {
+    this.update = callback;
+    this.isUpdate = true;
+  }
 
   /**
    * 根据数据计算对应地图的模型矩阵 不同地图主要是点位偏移不同
@@ -154,6 +161,9 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
+    if(this.isUpdate && this.update) {
+      this.update()
+    }
     // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
