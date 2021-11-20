@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo, useCallback } from 'react';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
-import style from './index.module.css'
+import styles from './index.module.css'
 import { Input } from 'antd';
 import { useLayerGroup } from '@antv/dipper';
 
