@@ -34,20 +34,20 @@ const points = [
 ];
 
 function iniCylinder(size: number, height: number) {
-  const geometry = new THREE.CylinderGeometry( size, size, height, 32 );
-  const material = new THREE.MeshBasicMaterial( {
-    color: '#0ff', 
-    transparent: true, 
+  const geometry = new THREE.CylinderGeometry(size, size, height, 32);
+  const material = new THREE.MeshBasicMaterial({
+    color: '#0ff',
+    transparent: true,
     opacity: 0.5,
-    depthTest: false
-  } );
-  const cylinder = new THREE.Mesh( geometry, material );
+    depthTest: false,
+  });
+  const cylinder = new THREE.Mesh(geometry, material);
   return cylinder;
 }
 
 async function initPlane(text: string, src: string) {
   return new Promise((resolve, reject) => {
-    const image = new Image()
+    const image = new Image();
     image.src = src;
     image.crossOrigin = 'none';
     image.onload = function() {
@@ -57,31 +57,35 @@ async function initPlane(text: string, src: string) {
       canvas.width = width * 10;
       canvas.height = height * 10;
       const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-      ctx.globalAlpha = 0.4
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
-      ctx.globalAlpha = 1
+      ctx.globalAlpha = 0.4;
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
       ctx.fillStyle = 'rgb(30, 160, 30)';
-      ctx.font = `${canvas.height/3}px bold PingFang-SC-Bold`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(text, canvas.width/2, canvas.height/2);
-  
+      ctx.font = `${canvas.height / 3}px bold PingFang-SC-Bold`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
       const texture = new THREE.CanvasTexture(canvas);
       const size = 320000;
-      const planeGeometry = new THREE.PlaneBufferGeometry(size, size * height / width, 1)
-      const material = new THREE.MeshBasicMaterial( {
+      const planeGeometry = new THREE.PlaneBufferGeometry(
+        size,
+        (size * height) / width,
+        1,
+      );
+      const material = new THREE.MeshBasicMaterial({
         color: 0xffff00,
-        side: THREE.DoubleSide, 
+        side: THREE.DoubleSide,
         map: texture,
         blending: THREE.AdditiveBlending,
-      } );
-      
-      const plane = new THREE.Mesh( planeGeometry, material );
-      plane.renderOrder = 10
-  
-      resolve(plane)
-    }
-  })
+      });
+
+      const plane = new THREE.Mesh(planeGeometry, material);
+      plane.renderOrder = 10;
+
+      resolve(plane);
+    };
+  });
 }
 
 const taiwancity = [
@@ -89,33 +93,33 @@ const taiwancity = [
     // 台北
     lng: 121.5,
     lat: 25.05,
-    population: 2602418
+    population: 2602418,
   },
   {
     // 台中
     lng: 120.5804443359,
     lat: 24.2,
-    population: 2820787
+    population: 2820787,
   },
   {
     // 台南
     lng: 120.193176269531,
     lat: 22.9963233068,
-    population: 1874917
+    population: 1874917,
   },
   {
     // 高雄
     lng: 120.30578613281,
-    lat: 22.624152158090,
-    population: 2765932
+    lat: 22.62415215809,
+    population: 2765932,
   },
   {
     // 桃园
-    lng: 121.15, 
+    lng: 121.15,
     lat: 24.9,
-    population: 2268807
+    population: 2268807,
   },
-]
+];
 
 export default class Threemap extends React.Component {
   // @ts-ignore
@@ -129,19 +133,20 @@ export default class Threemap extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [120.5, 24.],
+        center: [120.5, 24],
         pitch: 60,
         rotation: 0,
         zoom: 8.2,
-        style: 'dark'
+        style: 'dark',
       }),
     });
     this.scene = scene;
 
     scene.registerRenderService(ThreeRender);
 
-    const img1 = 'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*zMw0T6gEIZYAAAAAAAAAAAAAARQnAQ'
-    
+    const img1 =
+      'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*zMw0T6gEIZYAAAAAAAAAAAAAARQnAQ';
+
     let plane0 = (await initPlane('台北：260.24万', img1)) as THREE.Object3D;
     let plane1 = (await initPlane('台中：282.07万', img1)) as THREE.Object3D;
     let plane2 = (await initPlane('台南：187.49万', img1)) as THREE.Object3D;
@@ -223,31 +228,37 @@ export default class Threemap extends React.Component {
           const mesh = new THREE.Mesh(geometry, [material, shader_material]);
           mesh.renderOrder = -1;
           threeScene.add(mesh);
-         
 
-          let planes = [plane0, plane1, plane2, plane3, plane4]
+          let planes = [plane0, plane1, plane2, plane3, plane4];
 
-          taiwancity.map((item: {lng: number, lat: number, population: number}, index) => {
+          taiwancity.map(
+            (item: { lng: number; lat: number; population: number }, index) => {
+              let cylinderSize = item.population / 50;
+              let cylinderHeight = item.population / 10;
 
-            let cylinderSize = item.population/50
-            let cylinderHeight = item.population/10
-          
-            planes[index].rotation.x = Math.PI/2
-            layer.setObjectLngLat(planes[index], [ item.lng, item.lat], cylinderHeight * 1.5);
-            threeScene.add(planes[index])
+              planes[index].rotation.x = Math.PI / 2;
+              layer.setObjectLngLat(
+                planes[index],
+                [item.lng, item.lat],
+                cylinderHeight * 1.5,
+              );
+              threeScene.add(planes[index]);
 
-            
-            let cylinder = iniCylinder(cylinderSize, cylinderHeight)
-            cylinder.rotation.x = Math.PI/2
-            layer.setObjectLngLat(cylinder, [ item.lng, item.lat], cylinderHeight/2);
-            threeScene.add(cylinder)
-          })
-         
+              let cylinder = iniCylinder(cylinderSize, cylinderHeight);
+              cylinder.rotation.x = Math.PI / 2;
+              layer.setObjectLngLat(
+                cylinder,
+                [item.lng, item.lat],
+                cylinderHeight / 2,
+              );
+              threeScene.add(cylinder);
+            },
+          );
+
           layer.setUpdate(() => {
-            let z = layer.getRenderCamera().rotation.z
-            planes.map(p => p.rotation.y = z);
-          
-          })
+            let z = layer.getRenderCamera().rotation.z;
+            planes.map((p) => (p.rotation.y = z));
+          });
         },
       })
         .source({

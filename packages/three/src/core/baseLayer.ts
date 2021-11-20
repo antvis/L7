@@ -24,14 +24,14 @@ export default class ThreeJSLayer
   implements ILayer {
   public type: string = 'custom';
   public threeRenderService: IThreeRenderService;
+  public isUpdate: boolean = false;
+  public update: (() => void) | null = null;
   // 构建 threejs 的 scene
   private scene: Scene = new Scene();
   private renderer: WebGLRenderer;
   private animateMixer: AnimationMixer[] = [];
   // 地图中点墨卡托坐标
   private center: IMercator;
-  public isUpdate: boolean = false;
-  public update: (() => void) | null = null;
 
   public setUpdate(callback: () => void) {
     this.update = callback;
@@ -161,8 +161,8 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
-    if(this.isUpdate && this.update) {
-      this.update()
+    if (this.isUpdate && this.update) {
+      this.update();
     }
     // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
