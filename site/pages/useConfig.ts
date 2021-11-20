@@ -54,35 +54,35 @@ export const useConfig = () => {
       {
         logo:
           'https://antv-2018.alipay.com/assets/image/icon/l7.svg',
-        title: t('地理分析应用开发框'),
+        title: t('指挥分配场景'),
         description: t(
-          '一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。',
+          '区域化网格化数据管理指挥分配场景',
         ),
-        link: `/${i18n.language}/examples/gallery/basic`,
+        link: `/${i18n.language}/task`,
         image:
-          'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*h1vhT6eSVPkAAAAAAAAAAABkARQnAQ',
+          'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*CLJESKDO1g4AAAAAAAAAAAAAARQnAQ',
       },
       {
         logo:
           'https://antv-2018.alipay.com/assets/image/icon/l7.svg',
-        title: t('Dipper 地理分析应用开发框架'),
+        title: t('地图数据分析'),
         description: t(
-          '一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。',
+          '区域化网格化数据分析场景',
         ),
-        link: `/${i18n.language}/examples/gallery/basic`,
+        link: `/${i18n.language}/view`,
         image:
-          'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*h1vhT6eSVPkAAAAAAAAAAABkARQnAQ',
+          'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*jb4tS7BiNo4AAAAAAAAAAAAAARQnAQ',
       },
       {
         logo:
-          'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
+          'https://gw.alipayobjects.com/zos/bmw-prod/222865fc-15e9-44b9-b726-444e1512d937.ico',
         title: t('地理分析工具'),
         description: t(
-          '一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。',
+          '地图可视化配置分析类场景',
         ),
         link: `/${i18n.language}/examples/gallery/basic`,
         image:
-          'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*h1vhT6eSVPkAAAAAAAAAAABkARQnAQ',
+          'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*MPWKQqh54vwAAAAAAAAAAAAAARQnAQ',
       },
     ]
 

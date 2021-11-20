@@ -30,38 +30,53 @@ const IndexPage = () => {
 
   const dipper = [
     {
-      title: t('指挥监控场景'),
+      title: t('配置化'),
       image: 'https://gw.alipayobjects.com/zos/bmw-prod/a8d32053-ef9d-485e-ae13-2b49535e6f4f.svg',
-      link: ''
+      link: `/${i18n.language}/view`
     },
     {
-      title: t('指挥分配场景'),
+      title: t('组件化'),
       image: 'https://gw.alipayobjects.com/zos/bmw-prod/4235cc53-ef5f-4a47-a33c-1623df19e4b7.svg',
-      link: ''
+      link: `/${i18n.language}/task`
     },
     {
-      title: t('可视化配置场景'),
+      title: t('自由定制'),
       image: 'https://gw.alipayobjects.com/zos/bmw-prod/29cbd68c-86ac-440c-a38d-792dbd8aea61.svg',
-      link: ''
+      link: 'https://dippermap.alipay.com'
     }
   ];
 
   const dippermap = [
     {
-      title: '点',
-      image: 'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*PYEFRqqXZ98AAAAAAAAAAAAAARQnAQ',
-      link: ''
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*6S8hQJAUB2oAAAAAAAAAAAAAARQnAQ',
+      alt: 'heat',
+      desc: '3D热力图',
     },
     {
-      title: '线',
-      image: 'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*5CdCTqtw4dgAAAAAAAAAAAAAARQnAQ',
-      link: ''
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*R8juSLJc86wAAAAAAAAAAAAAARQnAQ',
+      alt: '3DARC',
+      desc: '3D曲线',
     },
     {
-      title: '面',
-      image: 'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*o7fMQbQiNLEAAAAAAAAAAAAAARQnAQ',
-      link: ''
-    }
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*MDmtT6lRS6EAAAAAAAAAAAAAARQnAQ',
+      alt: 'trip',
+      desc: '路径图',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*lRdLQotjkKsAAAAAAAAAAAAAARQnAQ',
+      alt: 'point',
+      desc: '3D柱图',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*W_DMQ5DVmIsAAAAAAAAAAAAAARQnAQ',
+      alt: 'polygon',
+      desc: '中国3D地图',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*InJXT6G-l6UAAAAAAAAAAAAAARQnAQ',
+      alt: 'hex',
+      desc: '六边形图',
+    },
   ];
 
   return (
@@ -85,9 +100,8 @@ const IndexPage = () => {
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />
       <Features features={L7Features} style={{ width: '100%' }} />
-      <Cases cases={L7Case} />
-      <Companies title={t('周边生态')} companies={ecosystems} />
       <Dipper dipper={dipper} />
+      <Cases cases={L7Case} />
       <DipperMap dippermap={dippermap} />
       <Companies title={t('感谢信赖')} companies={companies} />
    

@@ -19,14 +19,14 @@ export function Dipper(props: DipperProps) {
 
   return (
     <div className='dippercontainer'>
-      <div className='title'>Dipper 地理可视化开发框架</div>
-      <div className='subtitle'>简单易用React 结合,一切皆组件,灵活配置,注册机制,任意扩展</div>
+      <div className='title'>Dipper 地理分析应用开发框架</div>
+      <div className='subtitle'>Dipper 是基于 L7 地理分析应用开发框架，用于快速构建和开发地理分析应用。用户通过组件化、模块化低代码的方式配置地图分析、指挥类应用。</div>
       <div className='dipperdemo'>
         {dipper.map(item => {
           return (
-            <div key={item.title} className='dipperitem' onClick={() => jumoDemo(item.link)}>
+            <div key={item.title} className='dipperitem' >
               <img className='dipperimg' src={item.image} />
-              <span className='dippertitle'>{item.title}</span>
+              <span style={{cursor:'pointer'}} className='dippertitle'>{item.title}</span>
             </div>
           );
         })}
