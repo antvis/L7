@@ -19,4 +19,5 @@ export interface ILineLayerStyleOptions {
   thetaOffset?: number; // 可选参数、设置弧线的偏移量
 
   globalArcHeight?: number; // 可选参数、地球模式下 3D 弧线的高度
+  vertexHeightScale?: number; // 可选参数、lineLayer vertex height scale
 }

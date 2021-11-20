@@ -21,6 +21,8 @@ uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 
+uniform float u_vertexScale: 1.0;
+
 #pragma include "projection"
 #pragma include "picking"
 
@@ -105,16 +107,20 @@ void main() {
 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 
+  float h = float((a_Position.z)) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况
+
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     // gl_Position = u_Mvp * (vec4(project_pos.xy + offset, a_Size.y, 1.0));
-    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, a_Size.y / 8.0, 1.0)); // 额外除 8.0 是为了和gaode1.x的高度兼容
+    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, a_Size.y / 8.0 + h, 1.0)); // 额外除 8.0 是为了和gaode1.x的高度兼容
   } else {
     float lineHeight = a_Size.y;
     // 兼容 mapbox 在线高度上的效果表现基本一致
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
       lineHeight = lineHeight*2.0/pow(2.0, 20.0 - u_Zoom);
     }
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, lineHeight, 1.0));
+    
+
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, lineHeight + h, 1.0));
   }
 
   setPickingColor(a_PickingColor);

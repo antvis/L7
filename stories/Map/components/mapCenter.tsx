@@ -65,9 +65,12 @@ export default class GaodeMapComponent extends React.Component {
     scene.render();
     this.scene = scene;
 
-    setTimeout(() => {
-      console.log(this.scene.panBy(10, 10));
-    }, 1000);
+    // setTimeout(() => {
+    //   // console.log(this.scene.panBy(10, 10));
+    //   console.log('===')
+    //   // layer.emit('remove', null)
+    //   scene.removeLayer(layer)
+    // }, 1000);
   }
 
   public render() {

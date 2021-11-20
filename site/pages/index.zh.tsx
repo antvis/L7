@@ -7,6 +7,8 @@ import SEO from '@antv/gatsby-theme-antv/site/components/Seo';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from './useConfig';
+import { Dipper } from '../components/Dipper';
+import { DipperMap } from '../components/DipperMap';
 import '../css/home.css';
 
 const IndexPage = () => {
@@ -25,6 +27,42 @@ const IndexPage = () => {
     },
   ];
 
+
+  const dipper = [
+    {
+      title: t('指挥监控场景'),
+      image: 'https://gw.alipayobjects.com/zos/bmw-prod/a8d32053-ef9d-485e-ae13-2b49535e6f4f.svg',
+      link: ''
+    },
+    {
+      title: t('指挥分配场景'),
+      image: 'https://gw.alipayobjects.com/zos/bmw-prod/4235cc53-ef5f-4a47-a33c-1623df19e4b7.svg',
+      link: ''
+    },
+    {
+      title: t('可视化配置场景'),
+      image: 'https://gw.alipayobjects.com/zos/bmw-prod/29cbd68c-86ac-440c-a38d-792dbd8aea61.svg',
+      link: ''
+    }
+  ];
+
+  const dippermap = [
+    {
+      title: '点',
+      image: 'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*PYEFRqqXZ98AAAAAAAAAAAAAARQnAQ',
+      link: ''
+    },
+    {
+      title: '线',
+      image: 'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*5CdCTqtw4dgAAAAAAAAAAAAAARQnAQ',
+      link: ''
+    },
+    {
+      title: '面',
+      image: 'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*o7fMQbQiNLEAAAAAAAAAAAAAARQnAQ',
+      link: ''
+    }
+  ];
 
   return (
     <>
@@ -49,6 +87,8 @@ const IndexPage = () => {
       <Features features={L7Features} style={{ width: '100%' }} />
       <Cases cases={L7Case} />
       <Companies title={t('周边生态')} companies={ecosystems} />
+      <Dipper dipper={dipper} />
+      <DipperMap dippermap={dippermap} />
       <Companies title={t('感谢信赖')} companies={companies} />
    
     </>

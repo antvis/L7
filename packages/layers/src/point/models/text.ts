@@ -419,7 +419,7 @@ export default class TextModel extends BaseModel {
         // @ts-ignore
         size,
         textAnchor,
-        'center',
+        'left',
         spacing,
         textOffset,
         iconfont,

@@ -1,6 +1,6 @@
 // @ts-nocheck
 // tslint:disable
-import { document } from '../document';
+import { $document } from '../document';
 import { Event } from '../Event';
 import { getCanvas } from '../register';
 
@@ -47,14 +47,14 @@ function eventHandlerFactory(type) {
     event.touches.forEach((e) => mapEvent(e));
     event.targetTouches.forEach((e) => mapEvent(e));
 
-    document.dispatchEvent(event);
+    $document.dispatchEvent(event);
   };
 }
 
 function eventMapHandlerFactory(type) {
   return function (rawEvent) {
     rawEvent.type = type;
-    document.dispatchEvent(rawEvent);
+    $document.dispatchEvent(rawEvent);
   };
 }
 
