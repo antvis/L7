@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { useLayerGroup } from '@antv/dipper'
 import { Alert, Button, Select } from 'antd'
 import { personOption, selectActivityItem } from '../../configs/mock'
-import style from './index.less'
+import style from './index.module.css'
 
 const { Option } = Select
 

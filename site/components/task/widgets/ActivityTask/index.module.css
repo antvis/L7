@@ -1,0 +1,54 @@
+.selectactivity {
+  padding: 0 0 20px 20px ;
+}
+.selectactivity .select {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.selectactivity .select .selectitem {
+  display: flex;
+  align-items: center;
+  width: 183px;
+  height: 64px;
+  margin: 0 15px 15px 0;
+  position: relative;
+  padding-left: 15px;
+}
+.selectactivity .select .selectitem .icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.selectactivity .select .selectitem .selecticon {
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(674px - 80px);
+  justify-content: center;
+}
+.empty img {
+  width: 216px;
+  height: 132px;
+  margin-left: 100px;
+}
+.empty span {
+  color: rgba(0, 0, 0, 0.55);
+  margin-top: 20px;
+}
+.submit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.task {
+  height: calc(674px - 130px);
+  position: relative;
+}

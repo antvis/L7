@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef } from 'react';
-import styles from './index.less'
+import styles from './index.module.css'
 import { MeshSplitSvg, MeshMergeSvg } from './SvgElement';
 import { useLayerGroup } from '@antv/dipper'
 import { Input, message, Modal, Popconfirm, Tooltip } from 'antd';

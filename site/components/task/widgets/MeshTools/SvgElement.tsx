@@ -1,3 +1,4 @@
+import React from 'react';
 export function MeshSplitSvg() {
   return (
     <div style={{ marginLeft: 4 }}>

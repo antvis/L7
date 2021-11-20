@@ -1,7 +1,7 @@
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Switch } from "antd";
 import React from "react";
-import style from './index.less'
+import style from './index.module.css'
 
 export function MapExhibit() {
   const onChange = (e) => {

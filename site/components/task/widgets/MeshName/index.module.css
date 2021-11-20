@@ -7,7 +7,7 @@
 .edit {
   display: flex;
   align-items: center;
-  span:hover {
-    color: #1890ff;
-  }
+}
+.edit span:hover {
+  color: #1890ff;
 }

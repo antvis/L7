@@ -2,6 +2,7 @@ import { initWidgets } from './widgets';
 import React, { useEffect, useState } from 'react';
 import { config } from './configs/config';
 import { DipperContainer, IConfig } from '@antv/dipper';
+import 'antd/dist/antd.css'
 
 interface IInitData {
   areaVOList: any[];
@@ -20,7 +21,7 @@ export default function RumbMap() {
   }, []);
 
   return (
-    <div style={{ height: 674 }}>
+    <div style={{ height: '100%',width:'100%',position:'absolute'}}>
       <DipperContainer<IInitData> cfg={mapConfig!} />
     </div>
   );

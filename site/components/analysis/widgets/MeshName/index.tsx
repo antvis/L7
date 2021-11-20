@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
-import styles from './index.less';
+import style from './index.module.css'
 import { Input } from 'antd';
 import { useLayerGroup, useConfigService } from '@antv/dipper';
 import _ from 'loadsh';
