@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLayerGroup } from '@antv/dipper'
 import { Button, List } from 'antd';
 import { multidimensionalChart, operation } from '../../configs/mock';
-import style from './index.module.css'
+import styles from './index.module.css'
 import { LineCahrt } from '../../components/Line';
 
 enum Sort {

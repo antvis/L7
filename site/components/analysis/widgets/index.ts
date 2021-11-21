@@ -29,7 +29,6 @@ export function initWidgets() {
   registerWidget('mesh_indicator', MeshIndicator);
   registerWidget('total_data_panel', TotalPanel);
   registerWidget('meshchart', MeshChart);
-
   registerWidget('draw', Draw);
   registerWidget('meshName',MeshName)
 }
