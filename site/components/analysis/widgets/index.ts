@@ -1,4 +1,4 @@
-import { registerWidget } from '@antv/dipper-core';
+import { registerWidget,getWidget } from '@antv/dipper-core';
 import {
   CitySelect,
   NavBar,
@@ -18,17 +18,14 @@ import { MeshChart } from './MeshChart';
 
 export function initWidgets() {
   registerWidget('citySelect', CitySelect);
-  registerWidget('navibar', NavBar);
   registerWidget('gridLayer', GridLayer);
-  registerWidget('classifyColor', ClassifyColor);
-  registerWidget('discreteColor', DiscreteColor);
   registerWidget('mapStyle', MapStyle);
   registerWidget('searchPlaces', SearchPlace);
-  registerWidget('location', Location);
   registerWidget('filter', Filter);
   registerWidget('mesh_indicator', MeshIndicator);
   registerWidget('total_data_panel', TotalPanel);
   registerWidget('meshchart', MeshChart);
-  registerWidget('draw', Draw);
   registerWidget('meshName',MeshName)
+  console.log(getWidget('mesh_indicator'))
 }
+

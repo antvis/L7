@@ -9,13 +9,13 @@ interface IInitData {
   areaCode: string;
   filterData: any[];
 }
-
+initWidgets();
 export default function RumbMap() {
   const [mapConfig, setMapConfig] = useState<IConfig<IInitData>>();
   // 初始化相关数据
-
+ 
   useEffect(() => {
-    initWidgets();
+
     setMapConfig(config);
   }, []);
 
