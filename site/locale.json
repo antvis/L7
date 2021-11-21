@@ -16,5 +16,8 @@
   "深版精彩案例": "Dark Theme",
   "感谢信赖":"WE ARE TRUSTED BY",
   "新版发布" : "New Version",
-  "一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。" : "We have summarized a series of story design templates from lots of real  geospatial data visualization cases, so that users can use them directly."
+  "一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。" : "We have summarized a series of story design templates from lots of real  geospatial data visualization cases, so that users can use them directly.",
+  "指挥监控场景": "Command monitoring scene",
+  "指挥分配场景": "Command distribution scenario",
+  "可视化配置场景": "Visual configuration scenario"
 }

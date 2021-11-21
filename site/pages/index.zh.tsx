@@ -6,75 +6,15 @@ import Features from '@antv/gatsby-theme-antv/site/components/Features';
 import SEO from '@antv/gatsby-theme-antv/site/components/Seo';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useConfig } from './useConfig';
+import { Dipper } from '../components/Dipper';
+import { DipperMap } from '../components/DipperMap';
 import '../css/home.css';
 
 const IndexPage = () => {
   const { t, i18n } = useTranslation();
+  const { L7Case, L7Features,notifications,companies, ecosystems} = useConfig();
 
-  const features = [
-    {
-      icon:
-        'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
-      title: t('架构灵活且自由'),
-      description: t('支持地图底图，渲染引擎，图层自由定制、扩展，组合'),
-    },
-    {
-      icon:
-        'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
-      title: t('业务专业且通用'),
-      description: t(
-        '以图形符号学地理设计体系理论基础，易用、易理解、专业、专注',
-      ),
-    },
-    {
-      icon:
-        'https://gw.alipayobjects.com/zos/basement_prod/fd232581-14b3-45ec-a85c-fb349c51b376.svg',
-      title: t('视觉酷炫且动感'),
-      description: t('支持海量数据，2D、3D，动态，可交互，高性能渲染'),
-    },
-  ];
-  const companies = [
-    {
-      name: '阿里云',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*V_xMRIvw2iwAAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: '支付宝',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*lYDrRZvcvD4AAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: '天猫',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*BQrxRK6oemMAAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: '淘宝网',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*1l8-TqUr7UcAAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: '网商银行',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*ZAKFQJ5Bz4MAAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: '盒马',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*ePJMQZCb8vkAAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: 'yunos',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*_js7SaNosUwAAAAAAAAAAABkARQnAQ',
-    },
-    {
-      name: '菜鸟',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*TgV-RZDODJIAAAAAAAAAAABkARQnAQ',
-    },
-  ];
   const bannerButtons = [
     {
       text: t('图表示例'),
@@ -87,43 +27,55 @@ const IndexPage = () => {
     },
   ];
 
-  const notifications = [
+
+  const dipper = [
     {
-      type: t('推荐'),
-      title: t('如何制作不一样的疫情世界地图-酷炫、动感的地理可视化'),
-      date: '2020.03.12',
-      link: 'https://www.yuque.com/antv/blog/wigku2',
+      title: t('配置化'),
+      image: 'https://gw.alipayobjects.com/zos/bmw-prod/a8d32053-ef9d-485e-ae13-2b49535e6f4f.svg',
+      link: `/${i18n.language}/view`
     },
     {
-      type: t('新版发布'),
-      title: t('L7 2.1 正式版'),
-      date: '2020.03.12',
-      link: ' https://www.yuque.com/antv/blog/ows55v',
+      title: t('组件化'),
+      image: 'https://gw.alipayobjects.com/zos/bmw-prod/4235cc53-ef5f-4a47-a33c-1623df19e4b7.svg',
+      link: `/${i18n.language}/task`
     },
+    {
+      title: t('自由定制'),
+      image: 'https://gw.alipayobjects.com/zos/bmw-prod/29cbd68c-86ac-440c-a38d-792dbd8aea61.svg',
+      link: 'https://dippermap.alipay.com'
+    }
   ];
 
-  const cases = [
+  const dippermap = [
     {
-      logo:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
-      title: t('浅版精彩案例'),
-      description: t(
-        '一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。',
-      ),
-      link: `/${i18n.language}/examples/gallery/basic`,
-      image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*h1vhT6eSVPkAAAAAAAAAAABkARQnAQ',
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*6S8hQJAUB2oAAAAAAAAAAAAAARQnAQ',
+      alt: 'heat',
+      desc: '3D热力图',
     },
     {
-      logo:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*gjBmT56SDgsAAAAAAAAAAABkARQnAQ',
-      title: t('深版精彩案例'),
-      description: t(
-        '一个个真实的地理数据可视化案例，将复杂的地理数据,通过简单，易用的API接口,让用户达到开箱即用的效果。',
-      ),
-      link: `/${i18n.language}/examples/gallery/basic`,
-      image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*-gtxQbUPoGQAAAAAAAAAAABkARQnAQ',
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*R8juSLJc86wAAAAAAAAAAAAAARQnAQ',
+      alt: '3DARC',
+      desc: '3D曲线',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*MDmtT6lRS6EAAAAAAAAAAAAAARQnAQ',
+      alt: 'trip',
+      desc: '路径图',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*lRdLQotjkKsAAAAAAAAAAAAAARQnAQ',
+      alt: 'point',
+      desc: '3D柱图',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*W_DMQ5DVmIsAAAAAAAAAAAAAARQnAQ',
+      alt: 'polygon',
+      desc: '中国3D地图',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*InJXT6G-l6UAAAAAAAAAAAAAARQnAQ',
+      alt: 'hex',
+      desc: '六边形图',
     },
   ];
 
@@ -140,16 +92,19 @@ const IndexPage = () => {
         }
         title={t('L7 空间数据可视分析')}
         description={t(
-          '蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。',
+          '蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
         )}
         buttons={bannerButtons}
         notifications={notifications}
         className="banner"
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />
-      <Features features={features} style={{ width: '100%' }} />
-      <Cases cases={cases} />
+      <Features features={L7Features} style={{ width: '100%' }} />
+      <Dipper dipper={dipper} />
+      <Cases cases={L7Case} />
+      <DipperMap dippermap={dippermap} />
       <Companies title={t('感谢信赖')} companies={companies} />
+   
     </>
   );
 };
