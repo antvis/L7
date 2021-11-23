@@ -1,5 +1,4 @@
 import Banner from '@antv/gatsby-theme-antv/site/components/Banner';
-import BannerSVG from '@antv/gatsby-theme-antv/site/components/BannerSVG';
 import Cases from '@antv/gatsby-theme-antv/site/components/Cases';
 import Companies from '@antv/gatsby-theme-antv/site/components/Companies';
 import Features from '@antv/gatsby-theme-antv/site/components/Features';
