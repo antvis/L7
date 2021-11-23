@@ -10,7 +10,7 @@
     "@antv/dipper-widgets": "0.0.6",
     "@antv/g2": "^3.5.9",
     "@antv/g2plot": "^2.3.40",
-    "@antv/gatsby-theme-antv": "^1.1.1",
+    "@antv/gatsby-theme-antv": "^1.1.15",
     "@antv/l7-district": "^2.3.9",
     "@antv/l7-draw": "^2.3.40",
     "@antv/l7-react": "^2.3.3",
