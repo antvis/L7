@@ -259,7 +259,23 @@ module.exports = {
           en: 'Earth Mode'
         },
         order: 3
-      }
+      },
+      {
+        slug: 'api/mini',
+        title: {
+          zh: '小程序',
+          en: 'mini'
+        },
+        order: 3
+      },
+      {
+        slug: 'api/mini/demos',
+        title: {
+          zh: '案例集合',
+          en: 'demos'
+        },
+        order: 5
+      },
     ],
     examples: [
       {

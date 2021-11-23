@@ -13,7 +13,6 @@ import '../css/home.css';
 
 const IndexPage = () => {
   const { t, i18n } = useTranslation();
-
   const L7Case = [
     {
       logo:
@@ -110,18 +109,13 @@ const IndexPage = () => {
       description: t('支持地图底图，渲染引擎，图层自由定制、扩展，组合'),
     },
     {
-      icon:
-        'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
-      title: t('业务专业且通用'),
-      description: t(
-        '以图形符号学地理设计体系理论基础，易用、易理解、专业、专注',
-      ),
+      text: t('图表示例'),
+      link: `/${i18n.language}/examples/gallery`,
+      type: 'primary',
     },
     {
-      icon:
-        'https://gw.alipayobjects.com/zos/basement_prod/fd232581-14b3-45ec-a85c-fb349c51b376.svg',
-      title: t('视觉酷炫且动感'),
-      description: t('支持海量数据，2D、3D，动态，可交互，高性能渲染'),
+      text: t('开始使用'),
+      link: `/${i18n.language}/docs/api/l7`,
     },
   ];
   const notifications = [{
@@ -214,7 +208,6 @@ const IndexPage = () => {
       <Cases cases={L7Case} />
       <DipperMap dippermap={dippermap} />
       <Companies title={t('感谢信赖')} companies={companies} />
-
     </>
   );
 };

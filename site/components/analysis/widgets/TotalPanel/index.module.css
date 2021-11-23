@@ -1,0 +1,37 @@
+.teamcontainer {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.orderlist {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  width: 378px;
+  background: #fafafa;
+  border-radius: 2px;
+  padding: 0 5px;
+}
+.orderlist .leftpart {
+  display: flex;
+  align-items: center;
+}
+.orderlist .leftpart > div {
+  padding-right: 15px;
+}
+.orderlist .leftpart .ordericon {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+.sort:hover {
+  color: #1e73f8;
+}
+.orderCon :global .ant-list-split .ant-list-item {
+  border: none !important;
+}
+.orderCon :global .ant-list-item {
+  padding: 5px 0 !important;
+}
