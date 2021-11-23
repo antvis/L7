@@ -22,9 +22,9 @@ const IndexPage = () => {
       description: t(
         '区域化网格化数据管理指挥分配场景',
       ),
-      link: `/${i18n.language}/task`,
+      link: `https://antv.vision/Dipper/~demos/docs-task`,
       image:
-        'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*CLJESKDO1g4AAAAAAAAAAAAAARQnAQ',
+        'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*scJBTq8PW7kAAAAAAAAAAAAAARQnAQ',
     },
     {
       logo:
@@ -33,9 +33,9 @@ const IndexPage = () => {
       description: t(
         '区域化网格化数据分析场景',
       ),
-      link: `/${i18n.language}/view`,
+      link: `https://antv.vision/Dipper/~demos/docs-analysis`,
       image:
-        'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*jb4tS7BiNo4AAAAAAAAAAAAAARQnAQ',
+        'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*OnGVRb_qWxcAAAAAAAAAAAAAARQnAQ',
     },
     {
       logo:
