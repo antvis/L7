@@ -98,10 +98,12 @@ void main() {
     float d = length(v_data.xy);
     float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);
     gl_FragColor = vec4(gl_FragColor.xyz, intensity);
+    // TODO: 优化在水波纹情况下的拾取（a == 0 时无法拾取）
+    if(d < 0.7) {
+      gl_FragColor.a = max(gl_FragColor.a, 0.001);
+    }
   }
-
-  gl_FragColor = filterColor(gl_FragColor);
-
   
-
+  gl_FragColor = filterColor(gl_FragColor);
+  
 }
