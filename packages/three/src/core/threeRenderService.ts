@@ -26,6 +26,7 @@ export class ThreeRenderService implements IThreeRenderService {
   public camera: Camera;
   public center: IMercator;
   public aspect: number;
+  public update: () => void;
   private scene: ThreeScene;
 
   // 初始状态相机变换矩阵

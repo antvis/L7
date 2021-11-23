@@ -532,6 +532,18 @@ layer.select(false);
 layer.setSelect(id);
 ```
 
+### getLegendItems
+
+获取图例配置
+
+#### 参数
+
+- name 获取的图例类型 `color|size`
+
+```ts
+layer.getLegendItems('color');
+```
+
 ## 鼠标事件
 
 鼠标事件回调参数 target
