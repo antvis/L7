@@ -51,8 +51,8 @@ import { isFunction, isObject } from 'lodash';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
-import baseLayerSchema from './schema';
 import { updateShape } from '../utils/updateShape';
+import baseLayerSchema from './schema';
 /**
  * 分配 layer id
  */
@@ -424,9 +424,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-
-    const lastShape = this.styleAttributeService?.getLayerStyleAttribute('shape')?.scale?.field;
-    const currentShape = field
+    const lastShape = this.styleAttributeService?.getLayerStyleAttribute(
+      'shape',
+    )?.scale?.field;
+    const currentShape = field;
     this.updateStyleAttribute('shape', field, values, updateOptions);
     // TODO: 根据 shape 判断是否需要更新 model
     updateShape(this, lastShape, currentShape);

@@ -23,8 +23,6 @@ export default class ShapeUpdate extends React.Component {
         animateEnable: false,
       }),
     });
- 
-
 
     this.pointLayer = new PointLayer()
       .source(
@@ -65,16 +63,15 @@ export default class ShapeUpdate extends React.Component {
 
   public updateShape() {
     this.pointLayer
-    .shape('cylinder')
-    // .shape('hexagon')
+      .shape('cylinder')
+      // .shape('hexagon')
+      // .shape('triangle')
+      // .shape('hexagram')
+      .size([10, 10, 50]);
+
     // .shape('triangle')
-    // .shape('hexagram')
-    .size([10, 10, 50])
-    
-    
-    // .shape('triangle')
-  
-    this.scene.render()
+
+    this.scene.render();
   }
 
   public render() {
@@ -92,14 +89,17 @@ export default class ShapeUpdate extends React.Component {
         />
         <button
           onClick={() => {
-            this.updateShape()
+            this.updateShape();
           }}
-         style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          zIndex: 10
-        }}>update shape</button>
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            zIndex: 10,
+          }}
+        >
+          update shape
+        </button>
       </>
     );
   }
