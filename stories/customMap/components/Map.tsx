@@ -32,9 +32,9 @@ export default class ScaleComponent extends React.Component {
       // canvas: this.el,
       map: new Map({
         hash: true,
-        center: [110.19382669582967, 30.258134],
+        center: [122.2215, 29.8325],
         pitch: 0,
-        zoom: 2,
+        zoom: 22,
       }),
     });
     scene.addImage(
