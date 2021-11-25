@@ -523,7 +523,7 @@ scene.setMapStatus({ dragEnable: false });
 - `color` {string}
 
 ```javascript
-scene.setBgColor([10,10]);
+scene.setBgColor('#f00');
 ```
 
 ### fitBounds 设置地图缩放范围
@@ -550,7 +550,7 @@ scene.fitBounds([
 - `pixel` 画布的坐标 [x ,y ] {array }
 
 ```javascript
-scene.pixelToLngLat([10,10]);
+scene.pixelToLngLat([10, 10]);
 ```
 
 ### lngLatToContainer 经纬度转画布坐标
@@ -562,8 +562,7 @@ scene.pixelToLngLat([10,10]);
 - `lnglat` 经纬度坐标 [lng,lat ] {array }
 
 ```javascript
-scene.lngLatToPixel([120,10]);
-
+scene.lngLatToPixel([120, 10]);
 ```
 
 ### pixelToLngLat 像素坐标转经纬度
@@ -576,7 +575,7 @@ scene.lngLatToPixel([120,10]);
 - `pixel` 画布的坐标 [x ,y ] {array }
 
 ```javascript
-scene.pixelToLngLat([10,10]);
+scene.pixelToLngLat([10, 10]);
 ```
 
 ### lngLatToPixel 经纬度转像素坐标
@@ -588,8 +587,7 @@ scene.pixelToLngLat([10,10]);
 - `lnglat` 经纬度坐标 [lng,lat ] {array }
 
 ```javascript
-scene.lngLatToPixel([120,10]);
-
+scene.lngLatToPixel([120, 10]);
 ```
 
 ### exportMap 导出地图图片
