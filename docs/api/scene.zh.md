@@ -514,6 +514,18 @@ scene.setMapStatus({ dragEnable: false });
 
 - `pitch` {number}
 
+### setBgColor 设置场景的背景色
+
+设置场景的背景色
+
+参数 :
+
+- `color` {string}
+
+```javascript
+scene.setBgColor('#f00');
+```
+
 ### fitBounds 设置地图缩放范围
 
 地图缩放到某个范围内
@@ -535,10 +547,10 @@ scene.fitBounds([
 
 参数 :
 
-- pixel 画布的坐标 [x ,y ] {array }
+- `pixel` 画布的坐标 [x ,y ] {array }
 
-```
-scene.pixelToLngLat([10,10]);
+```javascript
+scene.pixelToLngLat([10, 10]);
 ```
 
 ### lngLatToContainer 经纬度转画布坐标
@@ -547,11 +559,10 @@ scene.pixelToLngLat([10,10]);
 
 参数 :
 
-- lnglat 经纬度坐标 [lng,lat ] {array }
+- `lnglat` 经纬度坐标 [lng,lat ] {array }
 
-```
-scene.lngLatToPixel([120,10]);
-
+```javascript
+scene.lngLatToPixel([120, 10]);
 ```
 
 ### pixelToLngLat 像素坐标转经纬度
@@ -561,10 +572,10 @@ scene.lngLatToPixel([120,10]);
 
 参数 :
 
-- pixel 画布的坐标 [x ,y ] {array }
+- `pixel` 画布的坐标 [x ,y ] {array }
 
-```
-scene.pixelToLngLat([10,10]);
+```javascript
+scene.pixelToLngLat([10, 10]);
 ```
 
 ### lngLatToPixel 经纬度转像素坐标
@@ -573,18 +584,19 @@ scene.pixelToLngLat([10,10]);
 
 参数 :
 
-- lnglat 经纬度坐标 [lng,lat ] {array }
+- `lnglat` 经纬度坐标 [lng,lat ] {array }
 
-```
-scene.lngLatToPixel([120,10]);
-
+```javascript
+scene.lngLatToPixel([120, 10]);
 ```
 
 ### exportMap 导出地图图片
 
 导出地图，目前仅支持导出可视化层，不支持底图导出
 
-- 参数 type `png|jpg` 默认 png
+参数:
+
+- `type` `png|jpg` 默认 png
 
 ```javascript
 scene.exportMap('png');
