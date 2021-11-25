@@ -514,6 +514,18 @@ scene.setMapStatus({ dragEnable: false });
 
 - `pitch` {number}
 
+### setBgColor 设置场景的背景色
+
+设置场景的背景色
+
+参数 :
+
+- `color` {string}
+
+```javascript
+scene.setBgColor([10,10]);
+```
+
 ### fitBounds 设置地图缩放范围
 
 地图缩放到某个范围内
@@ -535,9 +547,9 @@ scene.fitBounds([
 
 参数 :
 
-- pixel 画布的坐标 [x ,y ] {array }
+- `pixel` 画布的坐标 [x ,y ] {array }
 
-```
+```javascript
 scene.pixelToLngLat([10,10]);
 ```
 
@@ -547,9 +559,9 @@ scene.pixelToLngLat([10,10]);
 
 参数 :
 
-- lnglat 经纬度坐标 [lng,lat ] {array }
+- `lnglat` 经纬度坐标 [lng,lat ] {array }
 
-```
+```javascript
 scene.lngLatToPixel([120,10]);
 
 ```
@@ -561,9 +573,9 @@ scene.lngLatToPixel([120,10]);
 
 参数 :
 
-- pixel 画布的坐标 [x ,y ] {array }
+- `pixel` 画布的坐标 [x ,y ] {array }
 
-```
+```javascript
 scene.pixelToLngLat([10,10]);
 ```
 
@@ -573,9 +585,9 @@ scene.pixelToLngLat([10,10]);
 
 参数 :
 
-- lnglat 经纬度坐标 [lng,lat ] {array }
+- `lnglat` 经纬度坐标 [lng,lat ] {array }
 
-```
+```javascript
 scene.lngLatToPixel([120,10]);
 
 ```
@@ -584,7 +596,9 @@ scene.lngLatToPixel([120,10]);
 
 导出地图，目前仅支持导出可视化层，不支持底图导出
 
-- 参数 type `png|jpg` 默认 png
+参数:
+
+- `type` `png|jpg` 默认 png
 
 ```javascript
 scene.exportMap('png');
