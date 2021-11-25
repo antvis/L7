@@ -8,22 +8,22 @@ const scene = new Scene({
   map: new GaodeMap({
     pitch: 60,
     style: 'light',
-    center: [120.7, 23.114887],
-    zoom: 8,
-  }),
+    center: [ 120.7, 23.114887 ],
+    zoom: 8
+  })
 });
 scene.on('loaded', () => {
   fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/65589ef3-7f1d-440f-ba5d-86b03ee6ba7e.json',
+    'https://gw.alipayobjects.com/os/bmw-prod/65589ef3-7f1d-440f-ba5d-86b03ee6ba7e.json'
   )
-    .then((res) => res.json())
-    .then((data) => {
+    .then(res => res.json())
+    .then(data => {
       const layer = new LineLayer({})
         .source(data)
         .size(1)
         .shape('line')
         .style({
-          vertexHeightScale: 30,
+          vertexHeightScale: 30
         })
         .color('#ccc');
 
