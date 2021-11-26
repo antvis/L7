@@ -107,7 +107,7 @@ export default class ScaleComponent extends React.Component {
 
         const layer = new PolygonLayer({
           name: '01',
-          autoFit: true
+          autoFit: true,
         })
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
@@ -126,7 +126,7 @@ export default class ScaleComponent extends React.Component {
           });
         scene.addLayer(layer);
 
-        window.onresize = () => layer.fitBounds()
+        window.onresize = () => layer.fitBounds();
       });
 
     scene.on('loaded', () => {

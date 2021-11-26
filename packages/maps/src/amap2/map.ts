@@ -447,13 +447,13 @@ export default class AMapService
           this.$mapContainer = this.creatAmapContainer(
             id as string | HTMLDivElement,
           );
-          let mapConstructorOptions = {
+          const mapConstructorOptions = {
             mapStyle: this.getMapStyle(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
-          }
-          if(mapConstructorOptions.zoom) {
+          };
+          if (mapConstructorOptions.zoom) {
             // TODO: 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
             mapConstructorOptions.zoom += 1;
           }
