@@ -46,7 +46,7 @@ export default class HeatMapModel extends BaseModel {
     if (this.layer.styleNeedUpdate) {
       this.updateColorTexture();
     }
-    this.drawColorMode()
+    this.drawColorMode();
   }
 
   public getUninforms(): IModelUniform {
@@ -64,11 +64,11 @@ export default class HeatMapModel extends BaseModel {
     const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
-  
+
     // 生成热力图密度图
     this.intensityModel = this.buildHeatMapIntensity();
     // 渲染到屏幕
-    this.colorModel = this.buildHeatmapColor()
+    this.colorModel = this.buildHeatmapColor();
 
     const { width, height } = getViewportSize();
 
@@ -241,7 +241,6 @@ export default class HeatMapModel extends BaseModel {
       },
     });
   }
-
 
   private updateColorTexture() {
     const { createTexture2D } = this.rendererService;

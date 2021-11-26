@@ -50,8 +50,7 @@ export default class HeatMapLayer extends BaseLayer<IWindMapLayerStyleOptions> {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
-    const shape =
-      (shapeAttribute?.scale?.field as WindModelType) || 'heatmap';
+    const shape = (shapeAttribute?.scale?.field as WindModelType) || 'heatmap';
     if (shape === 'heatmap' || shape === 'heatmap3d') {
       return 'heatmap';
     }
