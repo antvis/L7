@@ -142,7 +142,8 @@ export default class AMapService
   }
 
   public setZoom(zoom: number): void {
-    return this.map.setZoom(zoom);
+    // 统一设置 Mapbox 缩放等级
+    return this.map.setZoom(zoom + 1);
   }
 
   public getCenter(options?: ICameraOptions): ILngLat {
@@ -359,13 +360,18 @@ export default class AMapService
           this.$mapContainer = this.creatAmapContainer(
             id as string | HTMLDivElement,
           );
-
-          const map = new AMap.Map(this.$mapContainer, {
+          let mapConstructorOptions = {
             mapStyle: this.getMapStyle(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
-          });
+          }
+          if(mapConstructorOptions.zoom) {
+            // TODO: 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
+            mapConstructorOptions.zoom += 1;
+          }
+          // @ts-ignore
+          const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
           // 监听地图相机事件
           map.on('camerachange', this.handleCameraChanged);
           // @ts-ignore
