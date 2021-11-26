@@ -12,6 +12,8 @@ import RasterLayer from './raster';
 
 import EarthLayer from './earth';
 
+import Wind from './wind'
+
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
@@ -143,4 +145,5 @@ export {
   RasterLayer,
   HeatmapLayer,
   EarthLayer,
+  Wind,
 };
