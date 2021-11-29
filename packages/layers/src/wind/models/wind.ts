@@ -2,50 +2,60 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  IFramebuffer,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
+import { FrequencyController, isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { HeatmapTriangulation } from '../../core/triangulation';
-import heatmapColorFrag from '../shaders/heatmap_frag.glsl';
-import heatmapFrag from '../shaders/heatmap_framebuffer_frag.glsl';
-import heatmapVert from '../shaders/heatmap_framebuffer_vert.glsl';
-import heatmapColorVert from '../shaders/heatmap_vert.glsl';
+import { RasterImageTriangulation } from '../../core/triangulation';
+import WindFrag from '../shaders/wind_frag.glsl';
+import WindVert from '../shaders/wind_vert.glsl';
+import { IWind, IWindProps, Wind } from './windRender';
 
-interface IHeatMapLayerStyleOptions {
-  opacity: number;
-  intensity: number;
-  radius: number;
-  angle: number;
-  rampColors: IColorRamp;
+interface IWindLayerStyleOptions {
+  uMin?: number;
+  uMax?: number;
+  vMin?: number;
+  vMax?: number;
+  fadeOpacity?: number;
+  speedFactor?: number;
+  dropRate?: number;
+  dropRateBump?: number;
+  opacity?: number;
+  numParticles?: number;
+  rampColors?: {
+    [key: number]: string;
+  };
 }
-@injectable()
-export default class HeatMapModel extends BaseModel {
+
+const defaultRampColors = {
+  0.0: '#3288bd',
+  0.1: '#66c2a5',
+  0.2: '#abdda4',
+  0.3: '#e6f598',
+  0.4: '#fee08b',
+  0.5: '#fdae61',
+  0.6: '#f46d43',
+  1.0: '#d53e4f',
+};
+
+export default class WindModel extends BaseModel {
   protected texture: ITexture2D;
-  protected colorTexture: ITexture2D;
-  protected heatmapFramerBuffer: IFramebuffer;
-  private intensityModel: IModel;
+
   private colorModel: IModel;
+  private wind: IWind;
+  private sizeScale: number = 0.5;
+  // https://mapbox.github.io/webgl-wind/demo/
+  // source: 'http://nomads.ncep.noaa.gov',
+
+  private frequency = new FrequencyController(7.2);
 
   public render() {
-    const { clear, useFramebuffer } = this.rendererService;
-    useFramebuffer(this.heatmapFramerBuffer, () => {
-      clear({
-        color: [0, 0, 0, 0],
-        depth: 1,
-        stencil: 0,
-        framebuffer: this.heatmapFramerBuffer,
-      });
-      this.drawIntensityMode();
+    // TODO: 控制风场的平均更新频率
+    this.frequency.run(() => {
+      this.drawWind();
     });
-    if (this.layer.styleNeedUpdate) {
-      this.updateColorTexture();
-    }
     this.drawColorMode();
   }
 
@@ -53,53 +63,108 @@ export default class HeatMapModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public initModels(): IModel[] {
-    const {
-      createFramebuffer,
-      clear,
-      getViewportSize,
-      createTexture2D,
-      useFramebuffer,
-    } = this.rendererService;
-    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
+  public initModels() {
+    const { createTexture2D } = this.rendererService;
 
-    // 生成热力图密度图
-    this.intensityModel = this.buildHeatMapIntensity();
-    // 渲染到屏幕
-    this.colorModel = this.buildHeatmapColor();
-
-    const { width, height } = getViewportSize();
-
-    // 初始化密度图纹理
-    this.heatmapFramerBuffer = createFramebuffer({
-      color: createTexture2D({
-        width: Math.floor(width / 4),
-        height: Math.floor(height / 4),
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-        min: gl.LINEAR,
-        mag: gl.LINEAR,
-      }),
-      depth: false,
+    const source = this.layer.getSource();
+    this.texture = createTexture2D({
+      height: 0,
+      width: 0,
     });
 
-    this.updateColorTexture();
+    const glContext = this.rendererService.getGLContext();
 
-    return [this.intensityModel, this.colorModel];
+    source.data.images.then((imageData: HTMLImageElement[]) => {
+      const {
+        uMin = -21.32,
+        uMax = 26.8,
+        vMin = -21.57,
+        vMax = 21.42,
+        fadeOpacity = 0.996,
+        speedFactor = 0.25,
+        dropRate = 0.003,
+        dropRateBump = 0.01,
+        rampColors = defaultRampColors,
+      } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+
+      const p1 = this.mapService.lngLatToPixel(
+        source.data.dataArray[0].coordinates[0],
+      );
+      const p2 = this.mapService.lngLatToPixel(
+        source.data.dataArray[0].coordinates[1],
+      );
+
+      const imageWidth = Math.floor((p2.x - p1.x) * this.sizeScale);
+      const imageHeight = Math.floor((p1.y - p2.y) * this.sizeScale);
+
+      const options: IWindProps = {
+        glContext,
+        imageWidth,
+        imageHeight,
+        fadeOpacity,
+        speedFactor,
+        dropRate,
+        dropRateBump,
+        rampColors,
+      };
+
+      this.wind = new Wind(options);
+
+      // imageData[0] 风场图
+      this.wind.setWind({
+        uMin,
+        uMax,
+        vMin,
+        vMax,
+        image: imageData[0],
+      });
+
+      this.texture = createTexture2D({
+        data: imageData[0],
+        width: imageData[0].width,
+        height: imageData[0].height,
+      });
+
+      this.layerService.updateLayerRenderList();
+      this.layerService.renderLayers();
+    });
+
+    this.colorModel = this.layer.buildLayerModel({
+      moduleName: 'WindLayer',
+      vertexShader: WindVert,
+      fragmentShader: WindFrag,
+      triangulation: RasterImageTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      blend: this.getBlend(),
+    });
+
+    return [this.colorModel];
   }
 
-  public buildModels(): IModel[] {
+  public buildModels() {
     return this.initModels();
   }
 
+  protected getConfigSchema() {
+    return {
+      properties: {
+        opacity: {
+          type: 'number',
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+    };
+  }
+
   protected registerBuiltinAttributes() {
+    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
-      name: 'dir',
+      name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Dir',
+        name: 'a_Uv',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -117,150 +182,51 @@ export default class HeatMapModel extends BaseModel {
         },
       },
     });
-
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { size = 1 } = feature;
-          return [size as number];
-        },
-      },
-    });
-  }
-  private buildHeatMapIntensity(): IModel {
-    return this.layer.buildLayerModel({
-      moduleName: 'heatmapintensity',
-      vertexShader: heatmapVert,
-      fragmentShader: heatmapFrag,
-      triangulation: HeatmapTriangulation,
-      depth: {
-        enable: false,
-      },
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: gl.ONE,
-          srcAlpha: 1,
-          dstRGB: gl.ONE,
-          dstAlpha: 1,
-        },
-      },
-    });
   }
 
-  private buildHeatmapColor(): IModel {
-    this.shaderModuleService.registerModule('heatmapColor', {
-      vs: heatmapColorVert,
-      fs: heatmapColorFrag,
-    });
+  private drawWind() {
+    if (this.wind) {
+      const {
+        uMin = -21.32,
+        uMax = 26.8,
+        vMin = -21.57,
+        vMax = 21.42,
+        numParticles = 65535,
+        fadeOpacity = 0.996,
+        speedFactor = 0.25,
+        dropRate = 0.003,
+        dropRateBump = 0.01,
+        rampColors = defaultRampColors,
+      } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+      this.wind.updateWindDir(uMin, uMax, vMin, vMax);
 
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
-      'heatmapColor',
-    );
-    const {
-      createAttribute,
-      createElements,
-      createBuffer,
-      createModel,
-    } = this.rendererService;
-    return createModel({
-      vs,
-      fs,
-      attributes: {
-        a_Position: createAttribute({
-          buffer: createBuffer({
-            data: [-1, 1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0],
-            type: gl.FLOAT,
-          }),
-          size: 3,
-        }),
-        a_Uv: createAttribute({
-          buffer: createBuffer({
-            data: [0, 1, 1, 1, 0, 0, 1, 0],
-            type: gl.FLOAT,
-          }),
-          size: 2,
-        }),
-      },
-      uniforms: {
-        ...uniforms,
-      },
-      depth: {
-        enable: false,
-      },
-      blend: this.getBlend(),
-      count: 6,
-      elements: createElements({
-        data: [0, 2, 1, 2, 3, 1],
-        type: gl.UNSIGNED_INT,
-        count: 6,
-      }),
-    });
-  }
+      this.wind.updateParticelNum(numParticles);
 
-  private drawIntensityMode() {
-    const {
-      opacity,
-      intensity = 10,
-      radius = 5,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    this.intensityModel.draw({
-      uniforms: {
-        u_opacity: opacity || 1.0,
-        u_radius: radius,
-        u_intensity: intensity,
-      },
-    });
+      this.wind.updateColorRampTexture(rampColors);
+
+      this.wind.fadeOpacity = fadeOpacity;
+      this.wind.speedFactor = speedFactor;
+      this.wind.dropRate = dropRate;
+      this.wind.dropRateBump = dropRateBump;
+
+      const { d, w, h } = this.wind.draw();
+      // TODO: 恢复 L7 渲染流程中 gl 状态
+      this.rendererService.setBaseState();
+      this.texture.update({
+        data: d,
+        width: w,
+        height: h,
+      });
+    }
   }
 
   private drawColorMode() {
-    const {
-      opacity,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
     this.colorModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
-        u_colorTexture: this.colorTexture,
-        u_texture: this.heatmapFramerBuffer,
+        u_texture: this.texture,
       },
-    });
-  }
-
-  private updateColorTexture() {
-    const { createTexture2D } = this.rendererService;
-    if (this.texture) {
-      this.texture.destroy();
-    }
-
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: new Uint8Array(imageData.data),
-      width: imageData.width,
-      height: imageData.height,
-      wrapS: gl.CLAMP_TO_EDGE,
-      wrapT: gl.CLAMP_TO_EDGE,
-      min: gl.NEAREST,
-      mag: gl.NEAREST,
-      flipY: false,
     });
   }
 }

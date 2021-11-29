@@ -1,37 +1,36 @@
 import BaseLayer from '../core/BaseLayer';
 import WindModels, { WindModelType } from './models';
-interface IWindMapLayerStyleOptions {
-  opacity: number;
+interface IWindLayerStyleOptions {
+  uMin?: number;
+  uMax?: number;
+  vMin?: number;
+  vMax?: number;
+  fadeOpacity?: number;
+  speedFactor?: number;
+  dropRate?: number;
+  dropRateBump?: number;
+  opacity?: number;
+  numParticles?: number;
+  rampColors?: {
+    [key: number]: string;
+  };
 }
-export default class HeatMapLayer extends BaseLayer<IWindMapLayerStyleOptions> {
-  public type: string = 'HeatMapLayer';
-
+export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
+  public type: string = 'WindLayer';
   public buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new WindModels[shape](this);
+    const modelType = this.getModelType();
+    this.layerModel = new WindModels[modelType](this);
     this.models = this.layerModel.initModels();
   }
   public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
-  public renderModels() {
-    const shape = this.getModelType();
-    if (shape === 'heatmap') {
-      if (this.layerModel) {
-        this.layerModel.render(); // 独立的渲染流程
-      }
 
-      return this;
+  public renderModels() {
+    if (this.layerModel) {
+      this.layerModel.render(); // 独立的渲染流程
     }
-    if (this.layerModelNeedUpdate) {
-      this.models = this.layerModel.buildModels();
-      this.layerModelNeedUpdate = false;
-    }
-    this.models.forEach((model) =>
-      model.draw({
-        uniforms: this.layerModel.getUninforms(),
-      }),
-    );
+
     return this;
   }
   protected getConfigSchema() {
@@ -45,15 +44,15 @@ export default class HeatMapLayer extends BaseLayer<IWindMapLayerStyleOptions> {
       },
     };
   }
+  protected getDefaultConfig() {
+    const type = this.getModelType();
+    const defaultConfig = {
+      wind: {},
+    };
+    return defaultConfig[type];
+  }
 
   protected getModelType(): WindModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
-    const shape = (shapeAttribute?.scale?.field as WindModelType) || 'heatmap';
-    if (shape === 'heatmap' || shape === 'heatmap3d') {
-      return 'heatmap';
-    }
-    return 'heatmap';
+    return 'wind';
   }
 }

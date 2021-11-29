@@ -1,8 +1,7 @@
-import HeatMapModel from './wind';
-
-export type WindModelType = 'heatmap';
+import WindModel from './wind';
+export type WindModelType = 'wind';
 
 const WindModels: { [key in WindModelType]: any } = {
-  heatmap: HeatMapModel,
+  wind: WindModel,
 };
 export default WindModels;
