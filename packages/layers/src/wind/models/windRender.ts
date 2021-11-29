@@ -374,17 +374,17 @@ export class Wind {
 
   public draw() {
     if (this.windData?.image) {
-      const gl = this.gl;
+        const gl = this.gl;
 
-      glUtils.bindTexture(gl, this.windTexture, 0);
-      glUtils.bindTexture(gl, this.particleStateTexture0, 1);
+        glUtils.bindTexture(gl, this.windTexture, 0);
+        glUtils.bindTexture(gl, this.particleStateTexture0, 1);
 
-      this.drawScreen(); // draw Particles into framebuffer
-      this.updateParticles();
+        this.drawScreen(); // draw Particles into framebuffer
+        this.updateParticles();
 
       return { d: this.pixels, w: this.width, h: this.height };
     } else {
-      return { d: new Uint8Array([0, 0, 0, 0]), w: 1, h: 1 };
+        return { d: new Uint8Array([0, 0, 0, 0]), w: 1, h: 1 };
     }
   }
 
@@ -394,14 +394,12 @@ export class Wind {
     // draw the screen into a temporary framebuffer to retain it as the background on the next frame
     bindFramebuffer(gl, this.framebuffer, this.screenTexture);
 
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
     gl.viewport(0, 0, this.width, this.height);
 
     this.drawFullTexture(this.backgroundTexture, this.fadeOpacity);
     this.drawParticles();
 
-    gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+    gl.disable(gl.BLEND);
 
     this.pixels = new Uint8Array(4 * this.width * this.height);
     gl.readPixels(
@@ -415,6 +413,7 @@ export class Wind {
     );
 
     bindFramebuffer(gl, null, null);
+    gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 
     //   save the current screen as the background for the next frame
     const temp = this.backgroundTexture;
@@ -500,5 +499,7 @@ export class Wind {
     this.particleStateTexture1 = temp;
 
     bindFramebuffer(gl, null, null);
+
+    // gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
   }
 }

@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, WindLayer } from '@antv/l7';
+import { Scene, WindLayer, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 import * as dat from 'dat.gui';
@@ -29,7 +29,35 @@ export default class WindMap extends React.Component {
     });
     this.scene = scene;
 
+    const pointLayer = new PointLayer({ zIndex: 1 })
+    .source(
+      [
+        {
+          lng: 121.107846,
+          lat: 30.267069,
+        }
+      ],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      },
+    )
+    .shape('circle')
+    .color('#f00')
+    .active(true)
+    .size(40)
+    .style({
+      stroke: '#fff',
+      storkeWidth: 2,
+    });
+
+
     scene.on('loaded', () => {
+      scene.addLayer(pointLayer)
+
       const styleOptions = {
         uMin: -21.32,
         uMax: 26.8,
@@ -118,6 +146,9 @@ export default class WindMap extends React.Component {
           });
         });
     });
+
+    
+
   }
 
   public render() {
