@@ -30,33 +30,32 @@ export default class WindMap extends React.Component {
     this.scene = scene;
 
     const pointLayer = new PointLayer({ zIndex: 1 })
-    .source(
-      [
+      .source(
+        [
+          {
+            lng: 121.107846,
+            lat: 30.267069,
+          },
+        ],
         {
-          lng: 121.107846,
-          lat: 30.267069,
-        }
-      ],
-      {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
         },
-      },
-    )
-    .shape('circle')
-    .color('#f00')
-    .active(true)
-    .size(40)
-    .style({
-      stroke: '#fff',
-      storkeWidth: 2,
-    });
-
+      )
+      .shape('circle')
+      .color('#f00')
+      .active(true)
+      .size(40)
+      .style({
+        stroke: '#fff',
+        storkeWidth: 2,
+      });
 
     scene.on('loaded', () => {
-      scene.addLayer(pointLayer)
+      scene.addLayer(pointLayer);
 
       const styleOptions = {
         uMin: -21.32,
@@ -146,9 +145,6 @@ export default class WindMap extends React.Component {
           });
         });
     });
-
-    
-
   }
 
   public render() {

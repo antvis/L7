@@ -374,17 +374,17 @@ export class Wind {
 
   public draw() {
     if (this.windData?.image) {
-        const gl = this.gl;
+      const gl = this.gl;
 
-        glUtils.bindTexture(gl, this.windTexture, 0);
-        glUtils.bindTexture(gl, this.particleStateTexture0, 1);
+      glUtils.bindTexture(gl, this.windTexture, 0);
+      glUtils.bindTexture(gl, this.particleStateTexture0, 1);
 
-        this.drawScreen(); // draw Particles into framebuffer
-        this.updateParticles();
+      this.drawScreen(); // draw Particles into framebuffer
+      this.updateParticles();
 
       return { d: this.pixels, w: this.width, h: this.height };
     } else {
-        return { d: new Uint8Array([0, 0, 0, 0]), w: 1, h: 1 };
+      return { d: new Uint8Array([0, 0, 0, 0]), w: 1, h: 1 };
     }
   }
 
