@@ -74,6 +74,7 @@ export default class WindMap extends React.Component {
           0.6: '#f46d43', // f46d43
           1.0: '#d53e4f',
         },
+        sizeScale: 0.5,
       };
 
       const layer = new WindLayer({});
@@ -96,6 +97,7 @@ export default class WindMap extends React.Component {
           fadeOpacity: styleOptions.fadeOpacity,
           numParticles: styleOptions.numParticles,
           rampColors: styleOptions.rampColors,
+          sizeScale: styleOptions.sizeScale,
         });
       scene.addLayer(layer);
 
@@ -125,6 +127,14 @@ export default class WindMap extends React.Component {
         .onChange((num: number) => {
           layer.style({
             fadeOpacity: num,
+          });
+        });
+
+      pointFolder
+        .add(styleOptions, 'sizeScale', 0, 2, 0.01)
+        .onChange((num: number) => {
+          layer.style({
+            sizeScale: num,
           });
         });
 

@@ -14,6 +14,7 @@ interface IWindLayerStyleOptions {
   rampColors?: {
     [key: number]: string;
   };
+  sizeScale?: number;
 }
 export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
   public type: string = 'WindLayer';

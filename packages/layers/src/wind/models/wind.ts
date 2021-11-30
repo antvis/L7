@@ -5,6 +5,7 @@ import {
   IModel,
   IModelUniform,
   ITexture2D,
+  Point,
 } from '@antv/l7-core';
 import { FrequencyController, isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -27,6 +28,7 @@ interface IWindLayerStyleOptions {
   rampColors?: {
     [key: number]: string;
   };
+  sizeScale?: number;
 }
 
 const defaultRampColors = {
@@ -45,6 +47,7 @@ export default class WindModel extends BaseModel {
 
   private colorModel: IModel;
   private wind: IWind;
+  private imageCoords: [Point, Point];
   private sizeScale: number = 0.5;
   // https://mapbox.github.io/webgl-wind/demo/
   // source: 'http://nomads.ncep.noaa.gov',
@@ -73,6 +76,7 @@ export default class WindModel extends BaseModel {
     });
 
     const glContext = this.rendererService.getGLContext();
+    this.imageCoords = source.data.dataArray[0].coordinates as [Point, Point];
 
     source.data.images.then((imageData: HTMLImageElement[]) => {
       const {
@@ -85,17 +89,11 @@ export default class WindModel extends BaseModel {
         dropRate = 0.003,
         dropRateBump = 0.01,
         rampColors = defaultRampColors,
+        sizeScale = 0.5,
       } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+      this.sizeScale = sizeScale;
 
-      const p1 = this.mapService.lngLatToPixel(
-        source.data.dataArray[0].coordinates[0],
-      );
-      const p2 = this.mapService.lngLatToPixel(
-        source.data.dataArray[0].coordinates[1],
-      );
-
-      const imageWidth = Math.floor((p2.x - p1.x) * this.sizeScale);
-      const imageHeight = Math.floor((p1.y - p2.y) * this.sizeScale);
+      const { imageWidth, imageHeight } = this.getWindSize();
 
       const options: IWindProps = {
         glContext,
@@ -140,6 +138,15 @@ export default class WindModel extends BaseModel {
     });
 
     return [this.colorModel];
+  }
+
+  public getWindSize() {
+    const p1 = this.mapService.lngLatToPixel(this.imageCoords[0]);
+    const p2 = this.mapService.lngLatToPixel(this.imageCoords[1]);
+
+    const imageWidth = Math.floor((p2.x - p1.x) * this.sizeScale);
+    const imageHeight = Math.floor((p1.y - p2.y) * this.sizeScale);
+    return { imageWidth, imageHeight };
   }
 
   public buildModels() {
@@ -202,7 +209,14 @@ export default class WindModel extends BaseModel {
         dropRate = 0.003,
         dropRateBump = 0.01,
         rampColors = defaultRampColors,
+        sizeScale = 0.5,
       } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+      if (typeof sizeScale === 'number' && sizeScale !== this.sizeScale) {
+        this.sizeScale = sizeScale;
+        const { imageWidth, imageHeight } = this.getWindSize();
+        this.wind.reSize(imageWidth, imageHeight);
+      }
+
       this.wind.updateWindDir(uMin, uMax, vMin, vMax);
 
       this.wind.updateParticelNum(numParticles);
