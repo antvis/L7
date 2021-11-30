@@ -22,12 +22,12 @@ export default class GaodeMapComponent extends React.Component {
         animateEnable: false,
       }),
     });
-  // normal = 'normal',
-  // additive = 'additive',
-  // subtractive = 'subtractive',
-  // min = 'min',
-  // max = 'max',
-  // none = 'none',
+    // normal = 'normal',
+    // additive = 'additive',
+    // subtractive = 'subtractive',
+    // min = 'min',
+    // max = 'max',
+    // none = 'none',
     const layer = new PointLayer({ blend: 'additive' })
       .source(
         [
