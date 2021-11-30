@@ -86,6 +86,7 @@ export interface IWind {
   updateColorRampTexture: (rampColors: { [key: number]: string }) => void;
 
   reSize: (width: number, height: number) => void;
+  destroy: () => void;
 }
 
 export interface IWindProps {
@@ -135,18 +136,6 @@ export class Wind {
   private windData: IWindData;
 
   constructor(options: IWindProps) {
-    // context: WebGLRenderingContext;
-    // imageWidth: number;
-    // imageHeight: number;
-    // uMin: number;
-    // uMax: number;
-    // vMin: number;
-    // vMax: number;
-    // fadeOpacity: number;
-    // speedFactor: number;
-    // dropRate: number;
-    // dropRateBump: number;
-    // rampColors: {[key: number]: string;}
     this.gl = options.glContext;
     this.width = options.imageWidth;
     this.height = options.imageHeight;
@@ -501,5 +490,53 @@ export class Wind {
     bindFramebuffer(gl, null, null);
 
     // gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+  }
+
+  public destroy() {
+    // private drawProgram: WebGLProgram;
+    // private fullScreenProgram: WebGLProgram;
+    // private updateProgram: WebGLProgram;
+
+    // private quadBuffer: WebGLBuffer | null;
+    // private particleIndexBuffer: WebGLBuffer | null;
+
+    // private framebuffer: WebGLFramebuffer | null;
+
+    // private colorRampTexture: WebGLTexture | null;
+    // private backgroundTexture: WebGLTexture | null;
+    // private screenTexture: WebGLTexture | null;
+    // private particleStateTexture0: WebGLTexture | null;
+    // private particleStateTexture1: WebGLTexture | null;
+    // private windTexture: WebGLTexture | null;
+
+    this.gl.deleteBuffer(this.quadBuffer);
+    this.gl.deleteBuffer(this.particleIndexBuffer);
+
+    this.gl.deleteFramebuffer(this.framebuffer);
+
+    // @ts-ignore
+    this.gl.deleteShader(this.drawProgram.vertexShader);
+    // @ts-ignore
+    this.gl.deleteShader(this.drawProgram.fragmentShader);
+    this.gl.deleteProgram(this.drawProgram);
+
+    // @ts-ignore
+    this.gl.deleteShader(this.fullScreenProgram.vertexShader);
+    // @ts-ignore
+    this.gl.deleteShader(this.fullScreenProgram.fragmentShader);
+    this.gl.deleteProgram(this.fullScreenProgram);
+
+    // @ts-ignore
+    this.gl.deleteShader(this.updateProgram.vertexShader);
+    // @ts-ignore
+    this.gl.deleteShader(this.updateProgram.fragmentShader);
+    this.gl.deleteProgram(this.updateProgram);
+
+    this.gl.deleteTexture(this.colorRampTexture);
+    this.gl.deleteTexture(this.backgroundTexture);
+    this.gl.deleteTexture(this.screenTexture);
+    this.gl.deleteTexture(this.particleStateTexture0);
+    this.gl.deleteTexture(this.particleStateTexture1);
+    this.gl.deleteTexture(this.windTexture);
   }
 }

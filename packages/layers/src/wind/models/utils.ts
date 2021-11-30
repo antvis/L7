@@ -41,6 +41,10 @@ export function createProgram(gl, vshader, fshader) {
     const uniform = gl.getActiveUniform(program, i$1);
     program[uniform.name] = gl.getUniformLocation(program, uniform.name);
   }
+
+  program.vertexShader = vertexShader;
+  program.fragmentShader = fragmentShader;
+
   return program;
 }
 

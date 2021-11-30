@@ -146,6 +146,11 @@ export default class WindModel extends BaseModel {
     return this.initModels();
   }
 
+  public clearModels(): void {
+    this.texture?.destroy();
+    this.wind?.destroy();
+  }
+
   protected getConfigSchema() {
     return {
       properties: {
