@@ -17,13 +17,18 @@ export default class GaodeMapComponent extends React.Component {
       map: new GaodeMap({
         center: [121.107846, 30.267069],
         pitch: 0,
-        style: 'normal',
+        // style: 'normal',
         zoom: 20,
         animateEnable: false,
       }),
     });
-
-    const layer = new PointLayer()
+    // normal = 'normal',
+    // additive = 'additive',
+    // subtractive = 'subtractive',
+    // min = 'min',
+    // max = 'max',
+    // none = 'none',
+    const layer = new PointLayer({ blend: 'additive' })
       .source(
         [
           {
