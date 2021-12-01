@@ -1,7 +1,7 @@
 varying vec4 v_PickingResult;
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
-uniform float u_Dragging;
+uniform float u_shaderPick;
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
@@ -44,6 +44,11 @@ vec4 filterPickingColor(vec4 color) {
  */
 vec4 filterColor(vec4 color) {
   // TODO: 过滤多余的 shader 计算
-  // if(u_Dragging > 0.0) return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
-  return filterPickingColor(filterHighlightColor(color));
+  // return color;
+  if(u_shaderPick < 0.5) {
+    return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
+  } else {
+    return filterPickingColor(filterHighlightColor(color));
+  }
+  
 }
