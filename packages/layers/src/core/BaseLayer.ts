@@ -1009,6 +1009,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
   }
 
+  public getShaderPickStat() {
+    return this.layerService.getShaderPickStat();
+  }
+
   /**
    * 继承空方法
    * @param time
