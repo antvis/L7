@@ -25,6 +25,9 @@ export default class LayerService implements ILayerService {
 
   private animateInstanceCount: number = 0;
 
+  // TODO: 是否开启 shader 中的颜色拾取计算
+  private shaderPicking: boolean = true;
+
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
 
@@ -161,6 +164,19 @@ export default class LayerService implements ILayerService {
   // TODO: 判断地图是否正在被拖动
   public isMapDragging() {
     return this.mapService.dragging;
+  }
+
+  // 控制着色器颜色拾取计算
+  public enableShaderPick() {
+    this.shaderPicking = true;
+  }
+
+  public disableShaderPick() {
+    this.shaderPicking = false;
+  }
+
+  public getShaderPickStat() {
+    return this.shaderPicking;
   }
 
   private runRender() {
