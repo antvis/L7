@@ -4,9 +4,9 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    center: [ 116.475, 39.99 ],
+    center: [ 116.475, 39.985 ],
     pitch: 0,
-    zoom: 13,
+    zoom: 12.2,
     plugin: [ 'AMap.ToolBar', 'AMap.LineSearch' ]
   })
 });
