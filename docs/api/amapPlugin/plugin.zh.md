@@ -19,7 +19,7 @@ const scene = new Scene({
     pitch: 0,
     zoom: 13,
     plugin: ['AMap.ToolBar', 'AMap.LineSearch'],
-  })
+  }),
 });
 // plugin: ['AMap.ToolBar', 'AMap.LineSearch'],
 // 为了使用对应插件的能力，应该首先在 plugin 中注册对应的插件
@@ -44,6 +44,6 @@ scene.on('loaded', () => {
     });
   });
 });
-
 ```
+
 [高德插件案例](../../../examples/amapPlugin/bus#busStop)
