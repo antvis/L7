@@ -161,7 +161,7 @@ export default class PickingService implements IPickingService {
       // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
       this.layerService.alreadyInRendering ||
       // TODO: this.layerService.isMapDragging() 如果地图正在拖拽 则不进行拾取操作
-      this.layerService.isMapDragging() || 
+      this.layerService.isMapDragging() ||
       // TODO: 判断当前 是都进行 shader pick 拾取判断
       !this.layerService.getShaderPickStat()
     ) {
