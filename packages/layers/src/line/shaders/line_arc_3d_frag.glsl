@@ -53,7 +53,7 @@ void main() {
     gl_FragColor.a *=flag;
   }
 
-  if(u_aimate.x == Animate) {
+  if(u_aimate.x == Animate && u_line_texture != LineTexture) {
       animateSpeed = u_time / u_aimate.y;
       float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
 
@@ -61,6 +61,12 @@ void main() {
       // alpha = smoothstep(0., 1., alpha);
       alpha = clamp(alpha, 0.0, 1.0);
       gl_FragColor.a *= alpha;
+
+      // u_aimate 
+      // x enable
+      // y duration
+      // z interval
+      // w trailLength
   }
 
   if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
@@ -68,15 +74,26 @@ void main() {
     float arcRadio = v_segmentIndex / (segmentNumber - 1.0);
     float count = styleMappingMat[3].b; // // 贴图在弧线上重复的数量
 
-    float u = fract(arcRadio * count - animateSpeed * count);
- 
+    float time = 0.0;
     if(u_aimate.x == Animate) {
-      u = gl_FragColor.a/opacity;
+      time = u_time / u_aimate.y;
     }
+    float redioCount = arcRadio * count;
+
+    float u = fract(redioCount - time);
 
     float v = styleMappingMat[3].a;  // 线图层贴图部分的 v 坐标值
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     vec4 pattern = texture2D(u_texture, uv);
+
+    if(u_aimate.x == Animate) {
+      float currentPlane = floor(redioCount - time);
+      float textureStep = floor(count * u_aimate.z);
+      float a = mod(currentPlane, textureStep);
+      if(a < textureStep - 1.0) {
+        pattern = vec4(0.0);
+      }
+    }
 
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
@@ -94,6 +111,4 @@ void main() {
   } else {
     gl_FragColor = filterColor(gl_FragColor);
   }
-
-  // gl_FragColor = filterColor(gl_FragColor);
 }
