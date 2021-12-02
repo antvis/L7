@@ -57,7 +57,7 @@ void main() {
   }
 
   // 设置弧线的动画模式
-  if(u_aimate.x == Animate && u_line_texture != LineTexture) {
+  if(u_aimate.x == Animate) {
       animateSpeed = u_time / u_aimate.y;
       float alpha =1.0 - fract( mod(1.0- smoothstep(0.0, 1.0, v_distance_ratio), u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
@@ -67,29 +67,19 @@ void main() {
 
   // 设置弧线的贴图
   if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { 
-    float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / segmentNumber));
-    float count = styleMappingMat[3].g; // 贴图在弧线上重复的数量
-
-    float time = 0.0;
+    float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / (segmentNumber - 1.0)));
+    // float arcRadio = d_segmentIndex / (segmentNumber - 1.0);
+    float count = styleMappingMat[3].b; // 贴图在弧线上重复的数量
+    float u = fract(arcRadio * count - animateSpeed * count);
+    // float u = fract(arcRadio * count - animateSpeed);
     if(u_aimate.x == Animate) {
-      time = u_time / u_aimate.y;
+      u = gl_FragColor.a/opacity;
     }
-    float redioCount = arcRadio * count;
 
-    float u = fract(redioCount - time);
     float v = styleMappingMat[3].a; // 线图层贴图部分的 v 坐标值
 
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     vec4 pattern = texture2D(u_texture, uv);
-
-    if(u_aimate.x == Animate) {
-      float currentPlane = floor(redioCount - time);
-      float textureStep = floor(count * u_aimate.z);
-      float a = mod(currentPlane, textureStep);
-      if(a < textureStep - 1.0) {
-        pattern = vec4(0.0);
-      }
-    }
     
     // 设置贴图和底色的叠加模式
     if(u_textureBlend == 0.0) { // normal
