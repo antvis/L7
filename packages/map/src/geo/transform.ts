@@ -565,10 +565,12 @@ export default class Transform {
     // unproject two points to get a line and then find the point on that
     // line with z=0
 
-    const coord0 = new Float32Array([p.x, p.y, 0, 1]);
-    const coord1 = new Float32Array([p.x, p.y, 1, 1]);
+    const coord0 = new Float64Array([p.x, p.y, 0, 1]);
+    const coord1 = new Float64Array([p.x, p.y, 1, 1]);
 
+    // @ts-ignore
     vec4.transformMat4(coord0, coord0, this.pixelMatrixInverse);
+    // @ts-ignore
     vec4.transformMat4(coord1, coord1, this.pixelMatrixInverse);
 
     const w0 = coord0[3];

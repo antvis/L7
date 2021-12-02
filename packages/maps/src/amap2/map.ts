@@ -207,11 +207,13 @@ export default class AMapService
     return 'amap2';
   }
   public getZoom(): number {
-    return this.map.getZoom();
+    // 统一返回 Mapbox 缩放等级
+    return this.map.getZoom() - 1;
   }
 
   public setZoom(zoom: number): void {
-    return this.map.setZoom(zoom);
+    // 统一设置 Mapbox 缩放等级
+    return this.map.setZoom(zoom + 1);
   }
 
   public getCenter(options?: ICameraOptions): ILngLat {
@@ -445,12 +447,18 @@ export default class AMapService
           this.$mapContainer = this.creatAmapContainer(
             id as string | HTMLDivElement,
           );
-          const map = new AMap.Map(this.$mapContainer, {
+          const mapConstructorOptions = {
             mapStyle: this.getMapStyle(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
-          });
+          };
+          if (mapConstructorOptions.zoom) {
+            // TODO: 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
+            mapConstructorOptions.zoom += 1;
+          }
+          // @ts-ignore
+          const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
           // @ts-ignore
           this.map = map;
           // 在使用 map.customCoords 的时候必须使用

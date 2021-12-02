@@ -136,6 +136,8 @@ export interface ILayer {
    */
 
   threeRenderService?: any;
+
+  getShaderPickStat: () => boolean;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
@@ -373,6 +375,11 @@ export interface ILayerService {
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
+
+  // 控制着色器颜色拾取计算
+  enableShaderPick: () => void;
+  disableShaderPick: () => void;
+  getShaderPickStat: () => boolean;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
@@ -386,5 +393,6 @@ export interface ILayerService {
   renderLayers(type?: string): void;
   getOESTextureFloat(): boolean;
   isMapDragging(): boolean;
+
   destroy(): void;
 }

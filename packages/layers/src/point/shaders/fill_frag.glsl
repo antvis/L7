@@ -105,5 +105,6 @@ void main() {
   }
   
   gl_FragColor = filterColor(gl_FragColor);
+  gl_FragColor.rgb *= gl_FragColor.a;
   
 }

@@ -63,6 +63,7 @@ import Amap2demo_styleMap from "./components/amap2demo_styleMap"
 import Amap2demo_textOffset from "./components/amap2demo_textOffset"
 
 import ShapeUpdate from './components/shapeUpdate'
+import AmapPlugin from './components/plugin'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -129,3 +130,4 @@ storiesOf('地图方法', module)
         .add('测试销毁', () => <Amap2demo_destroy/>)
 
         .add('ShapeUpdate', () => <ShapeUpdate/>)
+        .add('AmapPlugin', () => <AmapPlugin/>)

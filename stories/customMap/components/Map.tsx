@@ -32,9 +32,9 @@ export default class ScaleComponent extends React.Component {
       // canvas: this.el,
       map: new Map({
         hash: true,
-        center: [110.19382669582967, 30.258134],
+        center: [122.2215, 29.8325],
         pitch: 0,
-        zoom: 2,
+        zoom: 22,
       }),
     });
     scene.addImage(
@@ -107,6 +107,7 @@ export default class ScaleComponent extends React.Component {
 
         const layer = new PolygonLayer({
           name: '01',
+          autoFit: true,
         })
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
@@ -124,6 +125,8 @@ export default class ScaleComponent extends React.Component {
             opacity: 1.0,
           });
         scene.addLayer(layer);
+
+        window.onresize = () => layer.fitBounds();
       });
 
     scene.on('loaded', () => {
