@@ -38,7 +38,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           testOpacity: 0.3,
         },
       ];
-  
+
       // const layer = new LineLayer({
       //   blend: 'normal',
       // })
@@ -69,7 +69,6 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
       //     // sourceColor: '#f00',
       //     // targetColor: '#0f0',
       //   });
-
 
       const layer = new LineLayer({
         blend: 'normal',
@@ -102,11 +101,11 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
           // sourceColor: '#f00',
           // targetColor: '#0f0',
         })
-      .animate({
-        duration: 0.2,
-        interval: 0.1,
-        trailLength: 0.5,
-      });
+        .animate({
+          duration: 0.2,
+          interval: 0.1,
+          trailLength: 0.5,
+        });
       scene.addLayer(layer);
     });
   }
