@@ -31,7 +31,7 @@ import { Marker} from '@antv/l7-react'
  option = {{
    color:'red'
  }}
- lnglat ={{[120,32]}}
+ lnglat ={[120,32]}
 />
 
 ```
