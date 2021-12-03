@@ -17,8 +17,12 @@ uniform mat4 u_Mvp;
 varying vec4 v_color;
 
 uniform float u_opacity : 1;
+uniform float u_lightEnable: 1;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
+
+varying float v_z;
+varying float v_lightWeight;
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -72,13 +76,17 @@ void main() {
   // cal style mapping - 数据纹理映射部分的计算
   vec3 size = a_Size * a_Position;
 
+  // a_Position.z 是在构建网格的时候传入的标准值 0 - 1，在插值器插值可以获取 0～1 线性渐变的值
+  v_z = a_Position.z;
+
   vec2 offset = project_pixel(size.xy);
 
   vec4 project_pos = project_position(vec4(a_Pos.xy, 0., 1.0));
 
   vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z), 1.0);
 
-  float lightWeight = calc_lighting(pos);
+  float lightWeight = u_lightEnable > 0.0 ? calc_lighting(pos): 1.0;
+  v_lightWeight = lightWeight;
   v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);
 
   // gl_Position = project_common_position_to_clipspace(pos);

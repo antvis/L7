@@ -64,6 +64,7 @@ import Amap2demo_textOffset from "./components/amap2demo_textOffset"
 
 import ShapeUpdate from './components/shapeUpdate'
 import AmapPlugin from './components/plugin'
+import PointUV from './components/pointUV'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -131,3 +132,4 @@ storiesOf('地图方法', module)
 
         .add('ShapeUpdate', () => <ShapeUpdate/>)
         .add('AmapPlugin', () => <AmapPlugin/>)
+        .add('PointUV', () => <PointUV/>)
