@@ -92,7 +92,7 @@ scene.on('loaded', () => {
       .size(20)
       // .active(true)
       .animate({
-        duration: 10,
+        duration: 1,
         interval: 0.2,
         trailLength: 0.05
       })

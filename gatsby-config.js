@@ -246,6 +246,14 @@ module.exports = {
         },
         order: 5
       },
+      {
+        slug: 'api/amapPlugin',
+        title: {
+          zh: '地图插件',
+          en: 'map plugin'
+        },
+        order: 5
+      },
     ],
     examples: [
       {
@@ -286,6 +294,14 @@ module.exports = {
         title: {
           zh: '第三方引擎',
           en: 'other engine'
+        }
+      },
+      {
+        slug: 'amapPlugin',
+        icon: 'map',
+        title: {
+          zh: '高德地图插件',
+          en: 'amapPlugin'
         }
       },
       {
