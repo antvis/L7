@@ -315,6 +315,7 @@ export interface ILayerConfig {
   fitBoundsOptions?: unknown;
   name: string; //
   blend: keyof typeof BlendType;
+  depth: boolean;
   pickedFeatureID: number;
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
