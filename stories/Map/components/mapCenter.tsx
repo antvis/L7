@@ -38,7 +38,7 @@ export default class GaodeMapComponent extends React.Component {
           {
             lng: 121.107,
             lat: 30.267069,
-          }
+          },
         ],
         {
           parser: {
@@ -57,43 +57,38 @@ export default class GaodeMapComponent extends React.Component {
         storkeWidth: 2,
         // offsets: [100, 100],
       });
-    
-    
+
     this.scene = scene;
 
-    const linelayer = new LineLayer({  })
-      .source(
-        {
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'MultiLineString',
-                coordinates: [
-                  [
-                    [121.107846, 30.267069],
-                    [121.107, 30.267069],
-                  ]
+    const linelayer = new LineLayer({})
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'MultiLineString',
+              coordinates: [
+                [
+                  [121.107846, 30.267069],
+                  [121.107, 30.267069],
                 ],
-              },
+              ],
             },
-          ],
-        }
-      )
+          },
+        ],
+      })
       .shape('line')
       .color('#0ff')
-      .size(10)
+      .size(10);
 
     scene.on('loaded', () => {
-      scene.addLayer(linelayer)
-      scene.addLayer(layer)
-      
-    })
+      scene.addLayer(linelayer);
+      scene.addLayer(layer);
+    });
     layer.on('click', () => console.log('point click'));
-    linelayer.on('click', () => console.log('line click'))
-
+    linelayer.on('click', () => console.log('line click'));
   }
 
   public render() {
