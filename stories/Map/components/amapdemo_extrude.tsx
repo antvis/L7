@@ -31,7 +31,7 @@ export default class Amapdemo_extrude extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          const pointLayer = new PointLayer({depth: false})
+          const pointLayer = new PointLayer({ depth: false })
             .source(data.list, {
               parser: {
                 type: 'json',
@@ -49,7 +49,7 @@ export default class Amapdemo_extrude extends React.Component {
               opacity: 0.8,
               opacityLinear: {
                 enable: true, // true - false
-                dir: 'up' // up - down
+                dir: 'up', // up - down
               },
               lightEnable: false,
             });
