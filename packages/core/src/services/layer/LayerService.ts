@@ -55,6 +55,10 @@ export default class LayerService implements ILayerService {
     this.updateLayerRenderList();
   }
 
+  public getRenderList(): ILayer[] {
+    return this.layerList;
+  }
+
   public getLayers(): ILayer[] {
     return this.layers;
   }

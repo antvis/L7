@@ -209,7 +209,7 @@ export default class PickingService implements IPickingService {
     this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
-      const layers = this.layerService.getLayers();
+      const layers = this.layerService.getRenderList();
       layers
         .filter((layer) => layer.needPick(target.type))
         .reverse()
