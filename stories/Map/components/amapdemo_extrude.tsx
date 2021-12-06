@@ -16,7 +16,7 @@ export default class Amapdemo_extrude extends React.Component {
       map: new GaodeMap({
         center: [121.107846, 30.267069],
         pitch: 35.210526315789465,
-        style: 'normal',
+        style: 'dark',
         zoom: 8,
         animateEnable: false,
       }),
@@ -31,7 +31,7 @@ export default class Amapdemo_extrude extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          const pointLayer = new PointLayer({})
+          const pointLayer = new PointLayer({depth: false})
             .source(data.list, {
               parser: {
                 type: 'json',
@@ -39,25 +39,19 @@ export default class Amapdemo_extrude extends React.Component {
                 y: 'w',
               },
             })
-            .shape('cylinder')
+            .shape('squareColumn') // cylinder triangleColumn hexagonColumn squareColumn
             .size('t', function(level) {
-              return [1, 2, level * 2 + 20];
+              return [1, 1, level * 2 + 20];
             })
             .active(true)
-            .color('t', [
-              '#094D4A',
-              '#146968',
-              '#1D7F7E',
-              '#289899',
-              '#34B6B7',
-              '#4AC5AF',
-              '#5FD3A6',
-              '#7BE39E',
-              '#A1EDB8',
-              '#CEF8D6',
-            ])
+            .color('#0ff')
             .style({
-              opacity: 1.0,
+              opacity: 0.8,
+              opacityLinear: {
+                enable: true, // true - false
+                dir: 'up' // up - down
+              },
+              lightEnable: false,
             });
           scene.addLayer(pointLayer);
         });
