@@ -64,7 +64,8 @@ export default class Amap2demo_meshStyleMap extends React.Component {
               // opacity: ['unit_price', (unit_price: any) => {
               //   return unit_price/100000
               // }],
-              opacity: ['unit_price', [0, 1]],
+              // opacity: ['unit_price', [0, 1]],
+              pickLight: true,
             })
             .active(true);
           scene.addLayer(filllayer);
