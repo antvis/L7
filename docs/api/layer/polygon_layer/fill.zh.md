@@ -23,4 +23,19 @@ layer.shape('fill');
 
 填充图无 size 不需要设置 size
 
+## 额外的 style 配置
+
+- opacityLinear 设置几何填充图的径向渐变
+
+```javascript
+style({
+  opacityLinear: {
+    enable: true, // true - false
+    dir: 'in'     // in - out
+  }
+})
+```
+[径向渐变 in](../../../../examples/polygon/fill#china_linear_in)  
+[径向渐变 out](../../../../examples/polygon/fill#china_linear_out)
+
 `markdown:docs/common/layer/base.md`
