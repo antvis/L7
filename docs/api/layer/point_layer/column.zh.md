@@ -58,4 +58,34 @@ const column = new PointLayer({})
     opacity: 1.0,
   });
 ```
+
+## 额外的 style 配置
+
+- sourceColor 设置 3D 柱图起始颜色（3D 柱图设置颜色渐变时会覆盖 color 设置的颜色）
+
+- targetColor 设置 3D 柱图终止颜色
+
+- opacityLinear 设置 3D 柱图透明度渐变
+
+```javascript
+style({
+  opacityLinear: {
+    enable: true, // true - false
+    dir: 'up'     // up - down
+  }
+})
+```
+
+- lightEnable 是否开启光照
+
+```javascript
+layer.style({
+  opacity: 0.8,
+  sourceColor: 'red',
+  targetColor: 'yellow',
+});
+```
+[光标柱图](../../../../examples/point/column#column_light)  
+[渐变柱图](../../../../examples/point/column#column_linear)
+
 `markdown:docs/common/layer/base.md`
