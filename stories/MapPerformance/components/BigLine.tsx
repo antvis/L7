@@ -21,7 +21,7 @@ export default class PointTest extends React.Component {
         zoom: 5,
       }),
     });
-    scene.diasbleShaderPick();
+    // scene.diasbleShaderPick();
     let address =
       'https://gw.alipayobjects.com/os/bmw-prod/3f2f9284-3fb1-4838-8baa-6ffd06738fcd.csv';
     fetch(address)
@@ -40,52 +40,20 @@ export default class PointTest extends React.Component {
               y1: 't_lat',
             },
           })
-          .shape('arcmini')
-          .size(2)
-          .color('rgb(13,64,140)')
-          .style({
-            segmentNumber: 30,
-          });
-
-        // lineLayer2
-        const lineLayer2 = new LineLayer({
-          // autoFit: true,
-          blend: 'normal',
-        })
-          .source(data, {
-            parser: {
-              type: 'csv',
-              x: 'f_lon',
-              y: 'f_lat',
-              x1: 't_lon',
-              y1: 't_lat',
-            },
-          })
+          // .shape('arcmini')
           .shape('arc')
+          // .shape('line')
           .size(2)
           .color('rgb(13,64,140)')
-          .style({
-            segmentNumber: 30,
-          })
-          .select({
-            color: '#ff0',
-          })
           .active({
             color: '#ff0',
+          })
+          .style({
+            segmentNumber: 30,
           });
-        lineLayer2.hide();
-        // scene.addLayer(lineLayer2);
 
         scene.addLayer(lineLayer);
 
-        window.onmousedown = () => {
-          // lineLayer2.hide()
-          lineLayer.show();
-        };
-        window.onmouseup = () => {
-          // lineLayer2.show()
-          lineLayer.hide();
-        };
       });
   }
 

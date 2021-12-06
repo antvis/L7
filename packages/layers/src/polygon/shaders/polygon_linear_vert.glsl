@@ -1,5 +1,8 @@
 attribute vec4 a_Color;
 attribute vec3 a_Position;
+
+
+
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
@@ -13,7 +16,18 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 #pragma include "projection"
 #pragma include "picking"
 
+uniform float u_opacitylinear: 0.0;
+
+attribute vec3 a_linear;
+varying vec3 v_linear;
+varying vec2 v_pos;
+
 void main() {
+  if(u_opacitylinear > 0.0) {
+    v_linear = a_linear;
+    v_pos = a_Position.xy;
+  }
+  
   // cal style mapping - 数据纹理映射部分的计算
 styleMappingMat = mat4(
     0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
@@ -52,4 +66,3 @@ styleMappingMat = mat4(
 
   setPickingColor(a_PickingColor);
 }
-

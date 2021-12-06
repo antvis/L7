@@ -11,7 +11,7 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
-import { calculateCentroid } from '../utils/geo';
+import { calculateCentroid, calculatePointsCenterAndRadius } from '../utils/geo';
 import extrudePolygon, {
   extrude_PolygonNormal,
   fillPolygon,
@@ -150,6 +150,31 @@ export function polygonTriangulation(feature: IEncodeFeature) {
     size: dimensions,
   };
 }
+
+// TODO：构建几何图形（带有中心点和大小）
+export function polygonTriangulationWithCenter(feature: IEncodeFeature) {
+  const { coordinates } = feature;
+  const flattengeo = earcut.flatten(coordinates as number[][][]);
+  const { vertices, dimensions, holes } = flattengeo;
+
+  return {
+    indices: earcut(vertices, holes, dimensions),
+    vertices: getVerticesWithCenter(vertices),
+    size: dimensions + 4,
+  };
+}
+
+function getVerticesWithCenter(vertices: number[]) {
+  let verticesWithCenter = []
+  const { center, radius } = calculatePointsCenterAndRadius(vertices);
+  for(let i = 0;i < vertices.length;i+=2) {
+    let lng = vertices[i];
+    let lat = vertices[i + 1];
+    verticesWithCenter.push(lng, lat, 0, ...center, radius)
+  }
+  return verticesWithCenter
+}
+
 
 export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as IPosition[][];
