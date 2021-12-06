@@ -4,11 +4,11 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 60,
-    style: 'dark',
-    center: [ 110, 31.847 ],
+    pitch: 70,
+    style: 'light',
+    center: [ 105, 31.847 ],
     rotation: 0,
-    zoom: 4
+    zoom: 4.2
   })
 });
 scene.on('loaded', () => {
@@ -30,11 +30,9 @@ scene.on('loaded', () => {
         .active(true)
         .color('#006CFF')
         .style({
-          opacity: 0.6,
-          opacityLinear: {
-            enable: true, // true - false
-            dir: 'up' // up - down
-          },
+          opacity: 0.8,
+          sourceColor: 'red',
+          targetColor: 'yellow',
           lightEnable: false
         });
       pointLayer.on('mousemove', e => {
