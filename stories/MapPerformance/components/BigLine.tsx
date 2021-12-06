@@ -53,7 +53,6 @@ export default class PointTest extends React.Component {
           });
 
         scene.addLayer(lineLayer);
-
       });
   }
 

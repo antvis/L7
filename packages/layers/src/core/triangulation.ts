@@ -11,7 +11,10 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
-import { calculateCentroid, calculatePointsCenterAndRadius } from '../utils/geo';
+import {
+  calculateCentroid,
+  calculatePointsCenterAndRadius,
+} from '../utils/geo';
 import extrudePolygon, {
   extrude_PolygonNormal,
   fillPolygon,
@@ -165,16 +168,15 @@ export function polygonTriangulationWithCenter(feature: IEncodeFeature) {
 }
 
 function getVerticesWithCenter(vertices: number[]) {
-  let verticesWithCenter = []
+  const verticesWithCenter = [];
   const { center, radius } = calculatePointsCenterAndRadius(vertices);
-  for(let i = 0;i < vertices.length;i+=2) {
-    let lng = vertices[i];
-    let lat = vertices[i + 1];
-    verticesWithCenter.push(lng, lat, 0, ...center, radius)
+  for (let i = 0; i < vertices.length; i += 2) {
+    const lng = vertices[i];
+    const lat = vertices[i + 1];
+    verticesWithCenter.push(lng, lat, 0, ...center, radius);
   }
-  return verticesWithCenter
+  return verticesWithCenter;
 }
-
 
 export function PolygonExtrudeTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as IPosition[][];

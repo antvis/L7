@@ -170,14 +170,14 @@ export default class PickingService implements IPickingService {
       return;
     }
     this.alreadyInPicking = true;
-    let t = new Date().getTime()
+    const t = new Date().getTime();
     // @ts-ignore
-    if(t - this.lastPickTime > 10) {
+    if (t - this.lastPickTime > 10) {
       await this.pickingLayers(target);
     }
     // await this.pickingLayers(target);
     // @ts-ignore
-    this.lastPickTime = t
+    this.lastPickTime = t;
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
@@ -262,11 +262,11 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-    
+
     // let pickedColors = new Uint8Array(4)
     // this.rendererService.getGLContext().readPixels(
-    //   Math.floor(xInDevicePixel / this.pickBufferScale), 
-    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale), 
+    //   Math.floor(xInDevicePixel / this.pickBufferScale),
+    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
     //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
     // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
 

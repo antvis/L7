@@ -28,8 +28,8 @@ export function calculateCentroid(
 
 /**
  * 计算
- * @param points 
- * @returns 
+ * @param points
+ * @returns
  */
 export function calculatePointsCenterAndRadius(points: number[]) {
   let maxX = points[0];
@@ -40,21 +40,21 @@ export function calculatePointsCenterAndRadius(points: number[]) {
   let yCount = 0;
   let pCount = 0;
 
-  for(let i = 0; i < points.length;i += 2) {
-    let x = points[i];
-    let y = points[i + 1];
-    if(x && y) {
+  for (let i = 0; i < points.length; i += 2) {
+    const x = points[i];
+    const y = points[i + 1];
+    if (x && y) {
       maxX = Math.max(x, maxX);
       maxY = Math.max(y, maxY);
       minX = Math.min(x, minX);
       minY = Math.min(y, minY);
       xCount += x;
       yCount += y;
-      pCount ++;
+      pCount++;
     }
   }
   return {
-    center: [xCount/pCount, yCount/pCount],
-    radius: Math.sqrt(Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2))/2
-  }
+    center: [xCount / pCount, yCount / pCount],
+    radius: Math.sqrt(Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2)) / 2,
+  };
 }

@@ -5,9 +5,7 @@ import { Scene, PolygonLayer, PointLayer, Map } from '@antv/l7-mini';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
-
   public async componentDidMount() {
-
     const scene = new Scene({
       id: 'map',
       map: new Map({
@@ -17,14 +15,13 @@ export default class ScaleComponent extends React.Component {
         zoom: 3,
       }),
     });
-    scene.setBgColor('#000')
-   
+    scene.setBgColor('#000');
+
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     )
       .then((res) => res.json())
       .then((data) => {
-
         const layer = new PolygonLayer({ blend: 'normal' })
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
@@ -40,10 +37,10 @@ export default class ScaleComponent extends React.Component {
           .select(true)
           .style({
             opacity: 0.8,
-            opacityLinear: { 
+            opacityLinear: {
               enable: true,
-              dir: 'in' // in - out
-            }
+              dir: 'in', // in - out
+            },
           });
         scene.addLayer(layer);
 
@@ -64,10 +61,7 @@ export default class ScaleComponent extends React.Component {
             opacity: 1.0,
           });
         scene.addLayer(layer2);
-
       });
-
-
   }
 
   public render() {
@@ -81,8 +75,7 @@ export default class ScaleComponent extends React.Component {
           right: 0,
           bottom: 0,
         }}
-      >
-      </div>
+      ></div>
     );
   }
 }
