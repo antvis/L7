@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class PointUV extends React.Component {

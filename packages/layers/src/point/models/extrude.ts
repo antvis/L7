@@ -111,6 +111,7 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    // GAODE1.x GAODE2.x MAPBOX
     const {
       depth = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -123,7 +124,7 @@ export default class ExtrudeModel extends BaseModel {
         blend: this.getBlend(),
         cull: {
           enable: true,
-          face: gl.BACK,
+          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
         },
         depth: {
           enable: depth,
