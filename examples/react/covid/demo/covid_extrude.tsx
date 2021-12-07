@@ -1,9 +1,6 @@
 import {
-  LineLayer,
   MapboxScene,
-  Marker,
   PolygonLayer,
-  Popup,
 } from '@antv/l7-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
@@ -114,7 +111,7 @@ const World = React.memo(function Map() {
             }}
             active={{
               option: {
-                color: '#0c2c84',
+                color: '#ff0',
               },
             }}
             color={{
@@ -144,26 +141,9 @@ const World = React.memo(function Map() {
             }}
             style={{
               opacity: 1,
+              pickLight: true
             }}
-          />,
-          <LineLayer
-            key={'2'}
-            source={{
-              data,
-            }}
-            size={{
-              values: 0.6,
-            }}
-            color={{
-              values: '#aaa',
-            }}
-            shape={{
-              values: 'line',
-            }}
-            style={{
-              opacity: 1,
-            }}
-          />,
+          />
         ]}
       </MapboxScene>
     </>
