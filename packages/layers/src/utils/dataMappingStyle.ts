@@ -13,6 +13,7 @@ import { isArray, isFunction, isNumber, isString } from 'lodash';
  */
 
 interface IConfigToUpdate {
+  thetaOffset?: any;
   opacity?: any;
   strokeOpacity?: any;
   stroke?: any;
@@ -46,9 +47,9 @@ function registerStyleAttribute(
  * @param layer
  */
 function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
+  
   if (configToUpdate.opacity) {
     // 处理 style 中 opacity 属性的数据映射
-
     handleStyleFloat('opacity', layer, configToUpdate.opacity);
   }
 
@@ -60,7 +61,6 @@ function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
 
   if (configToUpdate.strokeOpacity) {
     // 处理 style 中 strokeOpacity 属性的数据映射
-
     handleStyleFloat('strokeOpacity', layer, configToUpdate.strokeOpacity);
   }
 
@@ -77,6 +77,11 @@ function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
   if (configToUpdate.textOffset) {
     // 处理 style 中 textOffset 属性的数据映射
     handleStyleOffsets('textOffset', layer, configToUpdate.textOffset);
+  }
+
+  if (configToUpdate.thetaOffset) {
+    // 处理 style 中 thetaOffset 属性的数据映射
+    handleStyleFloat('thetaOffset', layer, configToUpdate.thetaOffset);
   }
 }
 

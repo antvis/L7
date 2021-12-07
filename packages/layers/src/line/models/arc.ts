@@ -37,8 +37,8 @@ export default class ArcModel extends BaseModel {
       thetaOffset = 0.314,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
-      this.judgeStyleAttributes({ opacity });
+    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity, thetaOffset })) {
+      this.judgeStyleAttributes({ opacity, thetaOffset });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
         this.cellLength,
@@ -86,10 +86,11 @@ export default class ArcModel extends BaseModel {
     }
 
     return {
-      u_thetaOffset: thetaOffset,
+      
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
+      u_thetaOffset: isNumber(thetaOffset) ? thetaOffset: 0.0,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,

@@ -70,6 +70,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected rowCount: number; // 计算得到的当前数据纹理有多少行（高度）
   protected cacheStyleProperties: {
     // 记录存储上一次样式字段的值
+    thetaOffset: styleSingle | undefined;
     opacity: styleSingle | undefined;
     strokeOpacity: styleSingle | undefined;
     strokeWidth: styleSingle | undefined;
@@ -81,6 +82,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected cellTypeLayout: number[];
   protected stylePropertyesExist: {
     // 记录 style 属性是否存在的中间变量
+    hasThetaOffset: number;
     hasOpacity: number;
     hasStrokeOpacity: number;
     hasStrokeWidth: number;
@@ -145,6 +147,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.cellLength = 0;
     this.cellProperties = [];
     this.cacheStyleProperties = {
+      thetaOffset: undefined,
       opacity: undefined,
       strokeOpacity: undefined,
       strokeWidth: undefined,
@@ -152,6 +155,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       offsets: undefined,
     };
     this.stylePropertyesExist = {
+      hasThetaOffset: 0,
       hasOpacity: 0,
       hasStrokeOpacity: 0,
       hasStrokeWidth: 0,
@@ -181,6 +185,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.cellLength = 0; // 清空上一次计算的 cell 的长度
     this.stylePropertyesExist = {
       // 全量清空上一次是否需要对 style 属性进行数据映射的判断
+      hasThetaOffset: 0,
       hasOpacity: 0,
       hasStrokeOpacity: 0,
       hasStrokeWidth: 0,
@@ -192,18 +197,22 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public getCellTypeLayout() {
     if (this.dataTextureTest) {
       return [
+        // 0
         this.rowCount, // 数据纹理有几行
         this.DATA_TEXTURE_WIDTH, // 数据纹理有几列
         0.0,
         0.0,
-        this.stylePropertyesExist.hasOpacity, // cell 中是否存在 opacity
+        // 1
+        this.stylePropertyesExist.hasOpacity,       // cell 中是否存在 opacity
         this.stylePropertyesExist.hasStrokeOpacity, // cell 中是否存在 strokeOpacity
-        this.stylePropertyesExist.hasStrokeWidth, // cell 中是否存在 strokeWidth
-        this.stylePropertyesExist.hasStroke, // cell 中是否存在 stroke
-        this.stylePropertyesExist.hasOffsets, // cell 中是否存在 offsets
+        this.stylePropertyesExist.hasStrokeWidth,   // cell 中是否存在 strokeWidth
+        this.stylePropertyesExist.hasStroke,        // cell 中是否存在 stroke
+        // 2
+        this.stylePropertyesExist.hasOffsets,       // cell 中是否存在 offsets
+        this.stylePropertyesExist.hasThetaOffset,   // cell 中是否存在 thetaOffset
         0.0,
         0.0,
-        0.0,
+        // 3
         0.0,
         0.0,
         0.0,
@@ -237,6 +246,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @returns
    */
   public dataTextureNeedUpdate(options: {
+    // TODO: thetaOffset 目前只有 lineLayer/arc 使用
+    thetaOffset?: styleSingle;
     opacity?: styleSingle;
     strokeOpacity?: styleSingle;
     strokeWidth?: styleSingle;
@@ -245,6 +256,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     textOffset?: styleOffset;
   }): boolean {
     let isUpdate = false;
+    if (!isEqual(options.thetaOffset, this.cacheStyleProperties.thetaOffset)) {
+      isUpdate = true;
+      this.cacheStyleProperties.thetaOffset = options.thetaOffset;
+    }
     if (!isEqual(options.opacity, this.cacheStyleProperties.opacity)) {
       isUpdate = true;
       this.cacheStyleProperties.opacity = options.opacity;
@@ -277,6 +292,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @param options
    */
   public judgeStyleAttributes(options: {
+    // TODO: 目前 thetaOffset 只有 lineLayer/arc 使用
+    thetaOffset?: styleSingle;
     opacity?: styleSingle;
     strokeOpacity?: styleSingle;
     strokeWidth?: styleSingle;
@@ -324,6 +341,13 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       this.cellProperties.push({ attr: 'offsets', count: 2 });
       this.stylePropertyesExist.hasOffsets = 1;
       this.cellLength += 2;
+    }
+
+    if (options.thetaOffset !== undefined && !isNumber(options.thetaOffset)) {
+      // 数据映射
+      this.cellProperties.push({ attr: 'thetaOffset', count: 1 });
+      this.stylePropertyesExist.hasThetaOffset = 1;
+      this.cellLength += 1;
     }
     // console.log('this.cellLength', this.cellLength)
   }
@@ -405,7 +429,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       const { attr, count } = layout;
 
       const value = cellData[attr];
-      if (value) {
+      if (value !== undefined) {
         // 数据中存在该属性
         if (attr === 'stroke') {
           d.push(...rgb2arr(value));

@@ -23,6 +23,10 @@ bool hasOffsets() { // 判断 cell 中是否存在 offsets 的数据
   return u_cellTypeLayout[2][0] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
 }
 
+bool hasThetaOffset() { // 判断 cell 中是否存在 thetaOffset 的数据
+  return u_cellTypeLayout[2][1] > 0.0 && u_cellTypeLayout[3][3] > 0.0;
+}
+
 // 根据坐标位置先是计算 uv ，然后根据 uv 从数据纹理中取值
 float pos2value(vec2 pos, float columnWidth, float rowHeight) {
   float u = (pos.r - 1.0) * columnWidth + columnWidth/2.0;
@@ -53,12 +57,13 @@ float calCellCount() {
   //   u_cellTypeLayout
   //   cal_height, WIDTH, 0.0, 0.0, // rowCount columnCount - 几行几列
   //   1.0, 1.0, 1.0, 0.0, // opacity strokeOpacity strokeWidth stroke - 1.0 表示有数据映射、0.0 表示没有
-  //   1.0, 0.0, 0.0, 0.0, // offsets
+  //   1.0, 1.0, 0.0, 0.0, // offsets thetaOffset
   //   0.0, 0.0, 0.0, 0.0
   
   return  u_cellTypeLayout[1][0] +        // opacity
           u_cellTypeLayout[1][1] +        // strokeOpacity
           u_cellTypeLayout[1][2] +        // strokeWidth
           u_cellTypeLayout[1][3] * 4.0 +  // stroke
-          u_cellTypeLayout[2][0] * 2.0;   // offsets
+          u_cellTypeLayout[2][0] * 2.0 +  // offsets
+          u_cellTypeLayout[2][1];         // thetaOffset
 }
