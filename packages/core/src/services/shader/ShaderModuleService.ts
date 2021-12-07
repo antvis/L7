@@ -17,6 +17,7 @@ import styleMapping from '../../shaders/styleMapping.glsl';
 import styleMappingCalOpacity from '../../shaders/styleMappingCalOpacity.glsl';
 import styleMappingCalStrokeOpacity from '../../shaders/styleMappingCalStrokeOpacity.glsl';
 import styleMappingCalStrokeWidth from '../../shaders/styleMappingCalStrokeWidth.glsl';
+import styleMappingCalThetaOffset from '../../shaders/styleMappingCalThetaOffset.glsl';
 
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
@@ -39,6 +40,10 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
     this.registerModule('styleMapping', { vs: styleMapping, fs: '' });
+    this.registerModule('styleMappingCalThetaOffset', {
+      vs: styleMappingCalThetaOffset,
+      fs: '',
+    });
     this.registerModule('styleMappingCalOpacity', {
       vs: styleMappingCalOpacity,
       fs: '',

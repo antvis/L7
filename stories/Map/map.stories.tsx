@@ -66,6 +66,7 @@ import ShapeUpdate from './components/shapeUpdate'
 import AmapPlugin from './components/plugin'
 import PointUV from './components/pointUV'
 import DestroyClear from './components/destroyClear'
+import PlaneLine from './components/planeLine'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -135,3 +136,4 @@ storiesOf('地图方法', module)
         .add('AmapPlugin', () => <AmapPlugin/>)
         .add('PointUV', () => <PointUV/>)
         .add('DestroyClear', () => <DestroyClear/>)
+        .add('PlaneLine', () => <PlaneLine/>)
