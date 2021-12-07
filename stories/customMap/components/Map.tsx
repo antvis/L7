@@ -44,6 +44,7 @@ export default class ScaleComponent extends React.Component {
           });
         scene.addLayer(layer);
 
+
         const layer2 = new PolygonLayer({ blend: 'normal' })
           .source(data)
           .size(1)
