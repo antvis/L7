@@ -22,7 +22,6 @@ export default class ScaleComponent extends React.Component {
     )
       .then((res) => res.json())
       .then((data) => {
-        const layer = new PolygonLayer({ blend: 'normal' })
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
           .color('name', [
@@ -43,6 +42,7 @@ export default class ScaleComponent extends React.Component {
             },
           });
         scene.addLayer(layer);
+
 
         const layer2 = new PolygonLayer({ blend: 'normal' })
           .source(data)

@@ -766,13 +766,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     this.multiPassRenderer.destroy();
 
-    // 清除所有属性以及关联的 vao
+    // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();
-    // 销毁所有 model
-    // this.models.forEach((model) => model.destroy());
+
+    // 执行每个图层单独的 clearModels 方法 （清除一些额外的 texture、program、buffer 等）
+    this.layerModel.clearModels();
 
     this.hooks.afterDestroy.call();
 
+    // TODO: 给外部使用
     // TODO: 清除各个图层自定义的 models 资源
     this.layerModel?.clearModels();
     // @ts-ignore
