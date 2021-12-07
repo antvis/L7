@@ -22,52 +22,46 @@ export default class DestroyClear extends React.Component {
     });
     this.scene = scene;
     let layer: any = null;
-   
-  
-       
-
-
 
     scene.on('loaded', () => {
-
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
       )
         .then((res) => res.json())
         .then((data) => {
-          let count = 1
+          let count = 1;
           let timer = setInterval(() => {
-           layer = new PolygonLayer({ blend: 'normal' })
-          .source(data)
-          .size('name', [0, 10000, 50000, 30000, 100000])
-          .color('name', [
-            '#2E8AE6',
-            '#69D1AB',
-            '#DAF291',
-            '#FFD591',
-            '#FF7A45',
-            '#CF1D49',
-          ])
-          .shape('fill')
-          .select(true)
-          .style({
-            opacity: 0.8,
-            opacityLinear: {
-              enable: true,
-              dir: 'in', // in - out
-            },
-          });
-          scene.addLayer(layer);
-            count++
+            layer = new PolygonLayer({ blend: 'normal' })
+              .source(data)
+              .size('name', [0, 10000, 50000, 30000, 100000])
+              .color('name', [
+                '#2E8AE6',
+                '#69D1AB',
+                '#DAF291',
+                '#FFD591',
+                '#FF7A45',
+                '#CF1D49',
+              ])
+              .shape('fill')
+              .select(true)
+              .style({
+                opacity: 0.8,
+                opacityLinear: {
+                  enable: true,
+                  dir: 'in', // in - out
+                },
+              });
+            scene.addLayer(layer);
+            count++;
             setTimeout(() => {
-              if(count > 10) {
-                clearInterval(timer)
+              if (count > 10) {
+                clearInterval(timer);
               }
-              scene.removeLayer(layer)
-              console.log(scene.getLayers())
-            }, 3500 )
-          }, 4000)
-        })
+              scene.removeLayer(layer);
+              console.log(scene.getLayers());
+            }, 3500);
+          }, 4000);
+        });
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt',
       )
@@ -102,8 +96,7 @@ export default class DestroyClear extends React.Component {
           //     console.log(scene.getLayers())
           //   }, 3500 )
           // }, 4000)
-        })
-       
+        });
     });
   }
 
