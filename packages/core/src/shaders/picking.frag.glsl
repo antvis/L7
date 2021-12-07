@@ -1,7 +1,7 @@
 varying vec4 v_PickingResult;
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
-uniform float u_Dragging;
+uniform float u_shaderPick;
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
@@ -11,7 +11,7 @@ uniform float u_Dragging;
 /*
  * Returns highlight color if this item is selected.
  */
-vec4 filterHighlightColor(vec4 color) {
+vec4 filterHighlightColor(vec4 color, float lightWeight) {
   bool selected = bool(v_PickingResult.a);
 
   if (selected) {
@@ -21,7 +21,7 @@ vec4 filterHighlightColor(vec4 color) {
     float highLightRatio = highLightAlpha / (highLightAlpha + color.a * (1.0 - highLightAlpha));
 
     vec3 resultRGB = mix(color.rgb, highLightColor.rgb, highLightRatio);
-    return vec4(resultRGB, color.a);
+    return vec4(resultRGB * lightWeight, color.a);
   } else {
     return color;
   }
@@ -44,6 +44,22 @@ vec4 filterPickingColor(vec4 color) {
  */
 vec4 filterColor(vec4 color) {
   // TODO: 过滤多余的 shader 计算
-  // if(u_Dragging > 0.0) return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
-  return filterPickingColor(filterHighlightColor(color));
+  // return color;
+  if(u_shaderPick < 0.5) {
+    return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
+  } else {
+    return filterPickingColor(filterHighlightColor(color, 1.0));
+  }
+  
 }
+
+vec4 filterColorWithLight(vec4 color, float lightWeight) {
+  // TODO: 过滤多余的 shader 计算
+  // return color;
+  if(u_shaderPick < 0.5) {
+    return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
+  } else {
+    return filterPickingColor(filterHighlightColor(color, lightWeight));
+  }
+}
+

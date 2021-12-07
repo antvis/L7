@@ -1,7 +1,5 @@
 attribute vec4 a_Color;
 attribute vec3 a_Position;
-attribute vec3 a_Normal;
-attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 

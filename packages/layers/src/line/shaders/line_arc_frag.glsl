@@ -54,7 +54,7 @@ void main() {
     gl_FragColor.a *=flag;
   }
 
-  if(u_aimate.x == Animate) {
+  if(u_aimate.x == Animate && u_line_texture != LineTexture) {
       animateSpeed = u_time / u_aimate.y;
       float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
       alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
@@ -68,17 +68,28 @@ void main() {
     float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / segmentNumber));
     // float arcRadio = smoothstep( 0.0, 1.0, d_distance_ratio);
 
-    float d_texCount = styleMappingMat[3].g; // 贴图在弧线上重复的数量
+    float count = styleMappingMat[3].g; // 贴图在弧线上重复的数量
 
-    float u = 1.0 - fract(arcRadio * d_texCount + animateSpeed);
-
+    float time = 0.0;
     if(u_aimate.x == Animate) {
-      u = gl_FragColor.a/opacity;
+      time = u_time / u_aimate.y;
     }
+    float redioCount = arcRadio * count;
+
+    float u = fract(redioCount - time);
     float v = styleMappingMat[3].a; // 横向 v
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
 
     vec4 pattern = texture2D(u_texture, uv);
+
+    if(u_aimate.x == Animate) {
+      float currentPlane = floor(redioCount - time);
+      float textureStep = floor(count * u_aimate.z);
+      float a = mod(currentPlane, textureStep);
+      if(a < textureStep - 1.0) {
+        pattern = vec4(0.0);
+      }
+    }
 
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
@@ -90,9 +101,6 @@ void main() {
         }
         gl_FragColor = filterColor(pattern);
     }
-    // gl_FragColor = vec4(1.0 - fract(arcRadio * 20000.0), 0.0, 0.0, 1.0);
-    // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
-    // gl_FragColor = filterColor(texture2D(u_texture, uv));
     
   } else {
      gl_FragColor = filterColor(gl_FragColor);

@@ -4,18 +4,18 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 48.62562,
-    style: 'light',
-    center: [ 104.026043, 31.847 ],
-    rotation: -0.76,
-    zoom: 4.48
+    pitch: 60,
+    style: 'dark',
+    center: [ 110, 31.847 ],
+    rotation: 0,
+    zoom: 4
   })
 });
 scene.on('loaded', () => {
   fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
     .then(res => res.json())
     .then(data => {
-      const pointLayer = new PointLayer({})
+      const pointLayer = new PointLayer({ depth: false })
         .source(data.list, {
           parser: {
             type: 'json',
@@ -25,12 +25,17 @@ scene.on('loaded', () => {
         })
         .shape('cylinder')
         .size('t', function(level) {
-          return [ 1, 2, level * 2 + 20 ];
+          return [ 1, 1, level * 2 + 20 ];
         })
         .active(true)
         .color('#006CFF')
         .style({
-          opacity: 1.0
+          opacity: 0.6,
+          opacityLinear: {
+            enable: true, // true - false
+            dir: 'up' // up - down
+          },
+          lightEnable: false
         });
       pointLayer.on('mousemove', e => {
         const popup = new Popup({

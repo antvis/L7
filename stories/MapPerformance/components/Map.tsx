@@ -145,8 +145,9 @@ export default class PointTest extends React.Component {
     // let address = 'https://gw.alipayobjects.com/os/bmw-prod/e76d89f4-aa69-4974-90b7-b236904a43b1.json' // 100
     // let address = 'https://gw.alipayobjects.com/os/bmw-prod/edc8219a-b095-4451-98e9-3e387e290087.json' // 10000
     // let address = 'https://gw.alipayobjects.com/os/bmw-prod/2c37f08b-3fe6-4c68-a699-dc15cfc217f1.json' // 50000
+    // let address = 'https://gw.alipayobjects.com/os/bmw-prod/8adff753-64e6-4ffa-9e7b-1f3dc6f4fd76.json'; // 100000
     let address =
-      'https://gw.alipayobjects.com/os/bmw-prod/8adff753-64e6-4ffa-9e7b-1f3dc6f4fd76.json'; // 100000
+      'https://gw.alipayobjects.com/os/bmw-prod/577a70fb-fc19-4582-83ed-7cddb7b77645.json'; // 20 0000
     fetch(address)
       .then((res) => res.json())
       .then((data) => {
@@ -168,6 +169,7 @@ export default class PointTest extends React.Component {
         // .animate(true)
         // .active(true);
 
+        scene.diasbleShaderPick();
         scene.on('loaded', () => {
           scene.addLayer(layer);
         });

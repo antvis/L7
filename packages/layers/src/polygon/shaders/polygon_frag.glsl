@@ -7,7 +7,6 @@ varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 void main() {
   float opacity = styleMappingMat[0][0];
   gl_FragColor = v_Color;
-  // gl_FragColor.a *= u_opacity;
   gl_FragColor.a *= opacity;
   gl_FragColor = filterColor(gl_FragColor);
 }

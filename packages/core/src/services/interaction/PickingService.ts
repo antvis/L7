@@ -43,6 +43,8 @@ export default class PickingService implements IPickingService {
 
   private pickBufferScale: number = 1.0;
 
+  private lastPickTime: number = new Date().getTime();
+
   public init(id: string) {
     const {
       createTexture2D,
@@ -161,12 +163,21 @@ export default class PickingService implements IPickingService {
       // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
       this.layerService.alreadyInRendering ||
       // TODO: this.layerService.isMapDragging() 如果地图正在拖拽 则不进行拾取操作
-      this.layerService.isMapDragging()
+      this.layerService.isMapDragging() ||
+      // TODO: 判断当前 是都进行 shader pick 拾取判断
+      !this.layerService.getShaderPickStat()
     ) {
       return;
     }
     this.alreadyInPicking = true;
-    await this.pickingLayers(target);
+    const t = new Date().getTime();
+    // @ts-ignore
+    if (t - this.lastPickTime > 10) {
+      await this.pickingLayers(target);
+    }
+    // await this.pickingLayers(target);
+    // @ts-ignore
+    this.lastPickTime = t;
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
@@ -198,7 +209,7 @@ export default class PickingService implements IPickingService {
     this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
-      const layers = this.layerService.getLayers();
+      const layers = this.layerService.getRenderList();
       layers
         .filter((layer) => layer.needPick(target.type))
         .reverse()
@@ -251,6 +262,14 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
+
+    // let pickedColors = new Uint8Array(4)
+    // this.rendererService.getGLContext().readPixels(
+    //   Math.floor(xInDevicePixel / this.pickBufferScale),
+    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
+    //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
+    // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
+
     if (
       pickedColors[0] !== 0 ||
       pickedColors[1] !== 0 ||

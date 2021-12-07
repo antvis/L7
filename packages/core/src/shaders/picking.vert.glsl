@@ -6,6 +6,7 @@ uniform vec4 u_HighlightColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
 uniform float u_PickingThreshold : 1.0;
 uniform float u_PickingBuffer: 0.0;
+uniform float u_shaderPick;
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
@@ -20,6 +21,9 @@ bool isVertexPicked(vec3 vertexColor) {
 }
 
 void setPickingColor(vec3 pickingColor) {
+  if(u_shaderPick < 0.5) {
+    return;
+  }
   // compares only in highlight stage
   v_PickingResult.a = float((u_PickingStage == PICKING_HIGHLIGHT) && isVertexPicked(pickingColor));
 
