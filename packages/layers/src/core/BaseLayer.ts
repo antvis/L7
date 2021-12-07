@@ -773,6 +773,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     this.hooks.afterDestroy.call();
 
+    // TODO: 清除各个图层自定义的 models 资源
+    this.layerModel?.clearModels()
+    // @ts-ignore
+    this.encodedData = null;
+
     this.emit('remove', {
       target: this,
       type: 'remove',
