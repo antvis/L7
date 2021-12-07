@@ -18,7 +18,7 @@ export default class PlaneLine extends React.Component {
         center: [110, 35.443],
         zoom: 5,
         viewMode: '3D',
-        style: 'dark'
+        style: 'dark',
       }),
     });
     this.scene = scene;
@@ -33,14 +33,14 @@ export default class PlaneLine extends React.Component {
       lat1: 29.72018042111331,
       lng2: 116.5883553580003,
       lat2: 40.07680509701226,
-    }
+    };
     scene.on('loaded', () => {
-      let data = []
-      for(let i = 0;i < 11;i++) {
+      let data = [];
+      for (let i = 0; i < 11; i++) {
         data.push({
-          thetaOffset: -0.5 + i*0.1,
-          ...originData
-        })
+          thetaOffset: -0.5 + i * 0.1,
+          ...originData,
+        });
       }
 
       const layer = new LineLayer({

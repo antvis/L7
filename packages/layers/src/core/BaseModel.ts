@@ -203,13 +203,13 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         0.0,
         0.0,
         // 1
-        this.stylePropertyesExist.hasOpacity,       // cell 中是否存在 opacity
+        this.stylePropertyesExist.hasOpacity, // cell 中是否存在 opacity
         this.stylePropertyesExist.hasStrokeOpacity, // cell 中是否存在 strokeOpacity
-        this.stylePropertyesExist.hasStrokeWidth,   // cell 中是否存在 strokeWidth
-        this.stylePropertyesExist.hasStroke,        // cell 中是否存在 stroke
+        this.stylePropertyesExist.hasStrokeWidth, // cell 中是否存在 strokeWidth
+        this.stylePropertyesExist.hasStroke, // cell 中是否存在 stroke
         // 2
-        this.stylePropertyesExist.hasOffsets,       // cell 中是否存在 offsets
-        this.stylePropertyesExist.hasThetaOffset,   // cell 中是否存在 thetaOffset
+        this.stylePropertyesExist.hasOffsets, // cell 中是否存在 offsets
+        this.stylePropertyesExist.hasThetaOffset, // cell 中是否存在 thetaOffset
         0.0,
         0.0,
         // 3

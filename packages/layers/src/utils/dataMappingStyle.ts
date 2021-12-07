@@ -47,7 +47,6 @@ function registerStyleAttribute(
  * @param layer
  */
 function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
-  
   if (configToUpdate.opacity) {
     // 处理 style 中 opacity 属性的数据映射
     handleStyleFloat('opacity', layer, configToUpdate.opacity);

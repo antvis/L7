@@ -14,10 +14,10 @@ import project from '../../shaders/project.glsl';
 import projection from '../../shaders/projection.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 import styleMapping from '../../shaders/styleMapping.glsl';
-import styleMappingCalThetaOffset from '../../shaders/styleMappingCalThetaOffset.glsl';
 import styleMappingCalOpacity from '../../shaders/styleMappingCalOpacity.glsl';
 import styleMappingCalStrokeOpacity from '../../shaders/styleMappingCalStrokeOpacity.glsl';
 import styleMappingCalStrokeWidth from '../../shaders/styleMappingCalStrokeWidth.glsl';
+import styleMappingCalThetaOffset from '../../shaders/styleMappingCalThetaOffset.glsl';
 
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
