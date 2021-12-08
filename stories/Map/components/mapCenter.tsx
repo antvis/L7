@@ -28,7 +28,7 @@ export default class GaodeMapComponent extends React.Component {
     // min = 'min',
     // max = 'max',
     // none = 'none',
-    const layer = new PointLayer({ zIndex: 2, blend: 'additive' }) // 
+    const layer = new PointLayer({ zIndex: 2, blend: 'additive' }) //
       .source(
         [
           {

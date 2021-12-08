@@ -972,9 +972,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         this.layerModelNeedUpdate = false;
       }
       this.models.forEach((model) => {
-        model.draw({
-          uniforms: this.layerModel.getUninforms(),
-        }, isPicking);
+        model.draw(
+          {
+            uniforms: this.layerModel.getUninforms(),
+          },
+          isPicking,
+        );
       });
     }
     return this;

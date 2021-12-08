@@ -7,7 +7,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { isPlainObject, isTypedArray, cloneDeep } from 'lodash';
+import { cloneDeep, isPlainObject, isTypedArray } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -94,18 +94,18 @@ export default class ReglModel implements IModel {
     this.initCullDrawParams({ cull }, drawParams);
 
     this.drawCommand = reGl(drawParams);
-    
-    const pickDrawParams = cloneDeep(drawParams)
+
+    const pickDrawParams = cloneDeep(drawParams);
     // @ts-ignore
     pickDrawParams.blend.enable = true;
     // @ts-ignore
     pickDrawParams.blend.func = {
-      dstAlpha: "one",
-      dstRGB: "one minus src alpha",
-      srcAlpha: "one",
-      srcRGB: "src alpha"
-    }
-    this.drawPickCommand = reGl(pickDrawParams)
+      dstAlpha: 'one',
+      dstRGB: 'one minus src alpha',
+      srcAlpha: 'one',
+      srcRGB: 'src alpha',
+    };
+    this.drawPickCommand = reGl(pickDrawParams);
     this.drawParams = drawParams;
   }
 
@@ -158,7 +158,7 @@ export default class ReglModel implements IModel {
       }
     });
     // TODO: 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
-    if(!pick) {
+    if (!pick) {
       this.drawCommand(reglDrawProps);
     } else {
       this.drawPickCommand(reglDrawProps);
