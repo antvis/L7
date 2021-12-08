@@ -1,28 +1,28 @@
 import { Scene, PolygonLayer, PointLayer, Map } from '@antv/l7-mini';
 // import { Scene } from '@antv/l7';
 // import { PolygonLayer, PointLayer } from '@antv/l7-layers';
-// import { Map } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Map({
+      map: new GaodeMap({
         hash: true,
         center: [105, 32],
         pitch: 0,
         zoom: 3,
       }),
     });
-    scene.setBgColor('#000');
+    // scene.setBgColor('#000');
 
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     )
       .then((res) => res.json())
       .then((data) => {
-        const layer = new PolygonLayer({ blend: 'normal' })
+        const layer = new PolygonLayer({ blend: 'normal' }) // autoFit: true
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
           .color('name', [
@@ -43,6 +43,11 @@ export default class ScaleComponent extends React.Component {
             },
           });
         scene.addLayer(layer);
+
+        scene.fitBounds([
+          [48.073279, 3.067261],
+          [160.573279, 54.003394],
+        ]);
 
         const layer2 = new PolygonLayer({ blend: 'normal' })
           .source(data)
