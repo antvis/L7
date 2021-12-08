@@ -147,7 +147,7 @@ export interface ILayer {
   setCurrentSelectedId(id: number | null): void;
   getCurrentSelectedId(): number | null;
   prepareBuildModel(): void;
-  renderModels(): void;
+  renderModels(isPicking?: boolean): void;
   buildModels(): void;
   rebuildModels(): void;
   buildLayerModel(
