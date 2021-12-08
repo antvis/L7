@@ -90,7 +90,7 @@ export default class ReglTexture2D implements ITexture2D {
   }
 
   public destroy() {
-    if(!this.isDistroy) {
+    if (!this.isDistroy) {
       this.texture.destroy();
     }
     this.isDistroy = true;

@@ -88,8 +88,8 @@ export default class GaodeMapComponent extends React.Component {
     });
     layer.on('click', () => console.log('point click'));
     layer.on('mousemove', (e) => {
-      console.log(e.feature)
-    })
+      console.log(e.feature);
+    });
     linelayer.on('click', () => console.log('line click'));
   }
 
