@@ -22,7 +22,7 @@ export default class ScaleComponent extends React.Component {
     )
       .then((res) => res.json())
       .then((data) => {
-        const layer = new PolygonLayer({ blend: 'normal',  }) // autoFit: true
+        const layer = new PolygonLayer({ blend: 'normal' }) // autoFit: true
           .source(data)
           .size('name', [0, 10000, 50000, 30000, 100000])
           .color('name', [
@@ -43,11 +43,11 @@ export default class ScaleComponent extends React.Component {
             },
           });
         scene.addLayer(layer);
-        
+
         scene.fitBounds([
-          [48.073279,3.067261],
-          [160.573279,54.003394]
-        ])
+          [48.073279, 3.067261],
+          [160.573279, 54.003394],
+        ]);
 
         const layer2 = new PolygonLayer({ blend: 'normal' })
           .source(data)
