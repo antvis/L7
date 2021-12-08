@@ -1,7 +1,7 @@
 import { Scene, PolygonLayer, PointLayer, Map } from '@antv/l7-mini';
 // import { Scene } from '@antv/l7';
 // import { PolygonLayer, PointLayer } from '@antv/l7-layers';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class ScaleComponent extends React.Component {
@@ -9,7 +9,6 @@ export default class ScaleComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        hash: true,
         center: [105, 32],
         pitch: 0,
         zoom: 3,
@@ -42,12 +41,6 @@ export default class ScaleComponent extends React.Component {
               dir: 'in', // in - out
             },
           });
-        scene.addLayer(layer);
-
-        scene.fitBounds([
-          [48.073279, 3.067261],
-          [160.573279, 54.003394],
-        ]);
 
         const layer2 = new PolygonLayer({ blend: 'normal' })
           .source(data)
@@ -65,7 +58,17 @@ export default class ScaleComponent extends React.Component {
           .style({
             opacity: 1.0,
           });
-        scene.addLayer(layer2);
+
+        scene.on('loaded', () => {
+          scene.addLayer(layer);
+          scene.addLayer(layer2);
+          scene.fitBounds([
+            [48.073279, 3.067261],
+            [160.573279, 54.003394],
+          ]);
+
+          console.log('getBounds', scene.getBounds());
+        });
       });
   }
 
