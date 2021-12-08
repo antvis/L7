@@ -221,7 +221,7 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
           layer.hooks.beforePickingEncode.call();
-          layer.renderModels();
+          layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);
           return isPicked && !layer.getLayerConfig().enablePropagation;

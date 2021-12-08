@@ -7,7 +7,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { isPlainObject, isTypedArray } from 'lodash';
+import { isPlainObject, isTypedArray, cloneDeep } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -29,6 +29,7 @@ export default class ReglModel implements IModel {
   private reGl: regl.Regl;
   private destroyed: boolean = false;
   private drawCommand: regl.DrawCommand;
+  private drawPickCommand: regl.DrawCommand;
   private drawParams: regl.DrawConfig;
   private options: IModelInitializationOptions;
   private uniforms: {
@@ -93,6 +94,18 @@ export default class ReglModel implements IModel {
     this.initCullDrawParams({ cull }, drawParams);
 
     this.drawCommand = reGl(drawParams);
+    
+    const pickDrawParams = cloneDeep(drawParams)
+    // @ts-ignore
+    pickDrawParams.blend.enable = true;
+    // @ts-ignore
+    pickDrawParams.blend.func = {
+      dstAlpha: "one",
+      dstRGB: "one minus src alpha",
+      srcAlpha: "one",
+      srcRGB: "src alpha"
+    }
+    this.drawPickCommand = reGl(pickDrawParams)
     this.drawParams = drawParams;
   }
 
@@ -103,7 +116,8 @@ export default class ReglModel implements IModel {
     };
   }
 
-  public draw(options: IModelDrawOptions) {
+  public draw(options: IModelDrawOptions, pick?: boolean) {
+    // console.log('options', this.drawParams)
     if (
       this.drawParams.attributes &&
       Object.keys(this.drawParams.attributes).length === 0
@@ -143,7 +157,14 @@ export default class ReglModel implements IModel {
           | ReglTexture2D).get();
       }
     });
-    this.drawCommand(reglDrawProps);
+    // TODO: 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
+    if(!pick) {
+      this.drawCommand(reglDrawProps);
+    } else {
+      this.drawPickCommand(reglDrawProps);
+    }
+    // this.drawCommand(reglDrawProps);
+    // this.drawPickCommand(reglDrawProps);
   }
 
   public destroy() {
