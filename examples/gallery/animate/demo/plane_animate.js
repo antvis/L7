@@ -97,7 +97,7 @@ scene.on('loaded', () => {
       .style({
         textureBlend: 'replace',
         lineTexture: true, // 开启线的贴图功能
-        iconStep: 10, // 设置贴图纹理的间距
+        iconStep: 6, // 设置贴图纹理的间距
         opacity: 1
       });
 
@@ -110,9 +110,7 @@ scene.on('loaded', () => {
       })
       .color('#ff6b34')
       .shape('arc3d')
-      // .shape('arc')
       .size(1)
-      // .active(true)
       .style({
         lineType: 'dash',
         dashArray: [ 5, 5 ],
