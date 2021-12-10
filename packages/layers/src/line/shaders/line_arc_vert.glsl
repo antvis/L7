@@ -173,7 +173,7 @@ void main() {
     }
     v_iconMapUV = a_iconMapUV;
 
-    float pixelLen = project_pixel(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
+    float pixelLen = project_pixel_texture(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
     float texCount = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
      styleMappingMat[3].g = texCount;
 

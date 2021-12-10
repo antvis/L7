@@ -162,7 +162,7 @@ void main() {
   if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式  
 
     float arcDistrance = length(source - target);
-    float pixelLen =  project_pixel(u_icon_step);
+    float pixelLen =  project_pixel_texture(u_icon_step);
     styleMappingMat[3].b = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
 
     vec2 projectOffset = project_pixel(offset);

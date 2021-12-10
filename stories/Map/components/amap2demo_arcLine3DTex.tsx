@@ -89,7 +89,7 @@ export default class Amap2demo_arcLine3DTex extends React.Component {
         .color('#8C1EB2')
         .style({
           lineTexture: true, // 开启线的贴图功能
-          iconStep: 10, // 设置贴图纹理的间距
+          iconStep: 4, // 设置贴图纹理的间距
           // opacity: 0,
           // opacity: ['testOpacity', ((d: any) => d*2)],
           // opacity: 'testOpacity',
