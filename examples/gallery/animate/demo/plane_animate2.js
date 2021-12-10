@@ -88,9 +88,7 @@ scene.on('loaded', () => {
       .color('#ff6b34')
       .texture('plane')
       .shape('arc')
-      // .shape('arc')
       .size(20)
-      // .active(true)
       .animate({
         duration: 1,
         interval: 0.2,
@@ -99,7 +97,7 @@ scene.on('loaded', () => {
       .style({
         textureBlend: 'replace',
         lineTexture: true, // 开启线的贴图功能
-        iconStep: 10, // 设置贴图纹理的间距
+        iconStep: 6, // 设置贴图纹理的间距
         opacity: 1
       });
 
