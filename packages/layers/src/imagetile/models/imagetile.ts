@@ -12,8 +12,8 @@ interface IImageLayerStyleOptions {
 }
 
 export default class ImageTileModel extends BaseModel {
-  private timestamp: number | null;
   public tileLayer: any;
+  private timestamp: number | null;
   public getUninforms(): IModelUniform {
     return {};
   }
@@ -58,18 +58,17 @@ export default class ImageTileModel extends BaseModel {
       this.tile();
 
       this.mapService.on('mapchange', (e) => {
-       
-        if(this.timestamp) {
+        if (this.timestamp) {
           clearTimeout(this.timestamp);
           this.timestamp = null;
         }
         // @ts-ignore 节流
-       this.timestamp = setTimeout(() => {
-            // TODO: 瓦片地图最大层级为 2
-            if (this.mapService.getZoom() >= 2.0) {
-              this.tile();
-            }
-        }, 500)
+        this.timestamp = setTimeout(() => {
+          // TODO: 瓦片地图最大层级为 2
+          if (this.mapService.getZoom() >= 2.0) {
+            this.tile();
+          }
+        }, 500);
       });
     }
 
