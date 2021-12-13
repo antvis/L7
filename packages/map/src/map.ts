@@ -122,7 +122,8 @@ export class Map extends Camera {
     const height = dimensions[1];
 
     this.transform.resize(width, height);
-    if (!isMini) {
+    // TODO: 小程序环境不需要执行后续动作
+    if (isMini) {
       return this;
     }
     const fireMoving = !this.moving;

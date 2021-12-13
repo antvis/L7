@@ -28,7 +28,9 @@ export default class GaodeMapComponent extends React.Component {
     // min = 'min',
     // max = 'max',
     // none = 'none',
-    const layer = new PointLayer({ zIndex: 2, blend: 'additive' }) //
+    // blend: 'additive'
+
+    let layer = new PointLayer({ zIndex: 2, blend: 'additive' })
       .source(
         [
           {
@@ -49,48 +51,26 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
-      // .shape('normal')
       .color('#1990FF')
-      .size(20)
+      .size(40)
       .style({
-        stroke: '#fff',
-        storkeWidth: 2,
-      });
+        stroke: '#f00',
+        strokeWidth: 3,
+        strokeOpacity: 1,
+      })
+      .animate(true)
+      .active({ color: '#ff0' });
 
     this.scene = scene;
 
-    const linelayer = new LineLayer({ blend: 'additive' })
-      .source({
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'MultiLineString',
-              coordinates: [
-                [
-                  [121.107846, 30.267069],
-                  [121.107, 30.267069],
-                ],
-              ],
-            },
-          },
-        ],
-      })
-      .shape('line')
-      .color('#78FFFF')
-      .size(10);
-
     scene.on('loaded', () => {
-      // scene.addLayer(linelayer);
       scene.addLayer(layer);
     });
     layer.on('click', () => console.log('point click'));
-    layer.on('mousemove', (e) => {
-      console.log(e.feature);
-    });
-    linelayer.on('click', () => console.log('line click'));
+    layer.on('contextmenu', () => console.log('contextmenu'));
+    // layer.on('mousemove', (e) => {
+    //   console.log(e.feature);
+    // });
   }
 
   public render() {

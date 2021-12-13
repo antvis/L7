@@ -1,8 +1,7 @@
 #define Animate 0.0
 
 uniform float u_globel;
-uniform float u_blur : 0;
-// uniform float u_stroke_width : 1;
+uniform float u_additive;
 
 varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 
@@ -33,8 +32,6 @@ void main() {
   vec4 strokeColor = textrueStroke == vec4(0) ? v_color : textrueStroke;
 
   lowp float antialiasblur = v_data.z;
-  float antialiased_blur = -max(u_blur, antialiasblur);
-  // float r = v_radius / (v_radius + u_stroke_width);
   float r = v_radius / (v_radius + strokeWidth);
 
   float outer_df;
@@ -72,18 +69,12 @@ void main() {
   if(u_globel > 0.0) {
     // TODO: 地球模式下避免多余片元绘制，同时也能避免有用片元在透明且重叠的情况下无法写入
     // 付出的代价是边缘会有一些锯齿
-    if(outer_df > antialiased_blur + 0.018) discard;
+    if(outer_df > antialiasblur + 0.018) discard;
   }
-  float opacity_t = smoothstep(0.0, antialiased_blur, outer_df);
-  
- 
-  // float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(
-  //   antialiased_blur,
-  //   0.0,
-  //   inner_df
-  // );
-   float color_t = strokeWidth < 0.01 ? 0.0 : smoothstep(
-    antialiased_blur,
+  float opacity_t = smoothstep(0.0, antialiasblur, outer_df); 
+
+  float color_t = strokeWidth < 0.01 ? 0.0 : smoothstep(
+    antialiasblur,
     0.0,
     inner_df
   );
@@ -93,21 +84,26 @@ void main() {
 
   gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
 
-  gl_FragColor.a = gl_FragColor.a * opacity_t;
   if(u_aimate.x == Animate) {
     float d = length(v_data.xy);
     float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);
-    gl_FragColor = vec4(gl_FragColor.xyz, intensity);
+    
+    // TODO: 根据叠加模式选择效果
+    if(u_additive > 0.0) {
+      gl_FragColor *= intensity;
+    } else {
+      gl_FragColor = vec4(gl_FragColor.xyz, intensity);
+    }
+  
     // TODO: 优化在水波纹情况下的拾取（a == 0 时无法拾取）
     if(d < 0.7) {
       gl_FragColor.a = max(gl_FragColor.a, 0.001);
     }
+
+    gl_FragColor = u_additive > 0.0 ？filterColorAnimate(gl_FragColor) : filterColor(gl_FragColor);
+  } else {
+    gl_FragColor = filterColor(gl_FragColor);
   }
-  
-  gl_FragColor = filterColor(gl_FragColor);
-  if(gl_FragColor.a == 0.00) {
-    gl_FragColor.rgb *= gl_FragColor.a;
-  }
-  // gl_FragColor.rgb *= gl_FragColor.a;
-  
+
+  gl_FragColor *= opacity_t;
 }
