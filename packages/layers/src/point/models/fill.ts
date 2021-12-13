@@ -42,7 +42,7 @@ export default class FillModel extends BaseModel {
       strokeWidth = 0,
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
-      blend
+      blend,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
