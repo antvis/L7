@@ -42,7 +42,7 @@ export default class ScaleComponent extends React.Component {
                 dir: 'in', // in - out
               },
             });
-  
+
           let layer2 = new PolygonLayer({ blend: 'normal' })
             .source(data)
             .size(1)
@@ -59,11 +59,11 @@ export default class ScaleComponent extends React.Component {
             .style({
               opacity: 1.0,
             });
-    
-            scene.addLayer(layer);
-            scene.addLayer(layer2);
+
+          scene.addLayer(layer);
+          scene.addLayer(layer2);
         });
-      });
+    });
   }
 
   public render() {
