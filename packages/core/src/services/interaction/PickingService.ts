@@ -171,8 +171,8 @@ export default class PickingService implements IPickingService {
     }
     this.alreadyInPicking = true;
     const t = new Date().getTime();
-    // @ts-ignore
-    if (t - this.lastPickTime > 10) {
+    // TODO: 优化拾取操作 在右键时 mousedown 和 contextmenu 几乎同时触发，所以不能舍去这一次的触发
+    if (t - this.lastPickTime > 10 || target.type === 'contextmenu') {
       await this.pickingLayers(target);
     }
     // await this.pickingLayers(target);
@@ -205,8 +205,6 @@ export default class PickingService implements IPickingService {
       clear,
       getContainer,
     } = this.rendererService;
-
-    this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();

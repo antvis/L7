@@ -31,6 +31,7 @@ interface IPointLayerStyleOptions {
   stroke: styleColor;
   strokeOpacity: styleSingle;
   offsets: styleOffset;
+  blend: string;
 }
 // 判断当前使用的 style 中的变量属性是否需要进行数据映射
 export default class FillModel extends BaseModel {
@@ -41,6 +42,7 @@ export default class FillModel extends BaseModel {
       strokeWidth = 0,
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
+      blend,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -90,6 +92,7 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
+      u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
