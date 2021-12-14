@@ -16,8 +16,8 @@ import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
 import heatmap3DVert from '../shaders/heatmap_3d_vert.glsl';
 import heatmapColorFrag from '../shaders/heatmap_frag.glsl';
-import heatmapFrag from '../shaders/heatmap_framebuffer_frag.glsl';
-import heatmapVert from '../shaders/heatmap_framebuffer_vert.glsl';
+import heatmapFramebufferFrag from '../shaders/heatmap_framebuffer_frag.glsl';
+import heatmapFramebufferVert from '../shaders/heatmap_framebuffer_vert.glsl';
 import heatmapColorVert from '../shaders/heatmap_vert.glsl';
 import { heatMap3DTriangulation } from '../triangulation';
 interface IHeatMapLayerStyleOptions {
@@ -154,8 +154,8 @@ export default class HeatMapModel extends BaseModel {
   private buildHeatMapIntensity(): IModel {
     return this.layer.buildLayerModel({
       moduleName: 'heatmapintensity',
-      vertexShader: heatmapVert,
-      fragmentShader: heatmapFrag,
+      vertexShader: heatmapFramebufferVert,
+      fragmentShader: heatmapFramebufferFrag,
       triangulation: HeatmapTriangulation,
       depth: {
         enable: false,

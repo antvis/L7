@@ -67,7 +67,7 @@ import AmapPlugin from './components/plugin'
 import PointUV from './components/pointUV'
 import DestroyClear from './components/destroyClear'
 import PlaneLine from './components/planeLine'
-
+import Slider from './components/slider'
 import WindMap from './components/amap2demo_wind'
 
 // @ts-ignore
@@ -141,3 +141,4 @@ storiesOf('地图方法', module)
         .add('PointUV', () => <PointUV/>)
         .add('DestroyClear', () => <DestroyClear/>)
         .add('PlaneLine', () => <PlaneLine/>)
+        .add('Slider', () => <Slider/>)
