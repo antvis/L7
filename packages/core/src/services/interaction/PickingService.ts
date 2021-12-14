@@ -189,6 +189,7 @@ export default class PickingService implements IPickingService {
     );
     width *= DOM.DPR;
     height *= DOM.DPR;
+
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
@@ -205,6 +206,7 @@ export default class PickingService implements IPickingService {
       clear,
       getContainer,
     } = this.rendererService;
+    this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();
@@ -238,6 +240,7 @@ export default class PickingService implements IPickingService {
     );
     width *= DOM.DPR;
     height *= DOM.DPR;
+
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
 
     const xInDevicePixel = x * DOM.DPR;

@@ -62,15 +62,15 @@ export default class Amap2demo_markerlayer extends React.Component {
     // })
 
     let f = 0;
-    setInterval(() => {
-      if (f === 0) {
-        markerLayer.hide();
-        f = 1;
-      } else {
-        markerLayer.show();
-        f = 0;
-      }
-    }, 800);
+    // setInterval(() => {
+    //   if (f === 0) {
+    //     markerLayer.hide();
+    //     f = 1;
+    //   } else {
+    //     markerLayer.show();
+    //     f = 0;
+    //   }
+    // }, 800);
     this.scene = scene;
   }
 
