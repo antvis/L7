@@ -2,8 +2,8 @@
 import { PointLayer, Scene, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
-import '../index.css'
-import { animate, easeInOut } from 'popmotion'
+import '../index.css';
+import { animate, easeInOut } from 'popmotion';
 
 const mapCenter = [121.107846, 30.267069] as [number, number];
 
@@ -22,9 +22,9 @@ export default class Slider extends React.Component {
 
   public async componentDidMount() {
     this.slider = document.getElementById('sliderwrap') as HTMLElement;
-      
+
     this.sliderWidth = this.slider.getBoundingClientRect().width;
-    
+
     const scene = new Scene({
       id: 'map',
       map: new GaodeMapV2({
@@ -60,28 +60,27 @@ export default class Slider extends React.Component {
       .color('blue')
       .size(10);
     scene.on('loaded', () => {
-      
-      
-      scene.addLayer(this.pointLayer) 
-  
-      scene.setCenter(mapCenter, { padding: [0, this.sliderWidth + this.sliderRight, 0, 0] })
+      scene.addLayer(this.pointLayer);
+
+      scene.setCenter(mapCenter, {
+        padding: [0, this.sliderWidth + this.sliderRight, 0, 0],
+      });
 
       scene.render();
-     
-    })
-  
+    });
+
     this.scene = scene;
   }
 
   public triggle() {
-    const lastPaddingRight = this.sliderWidth + this.sliderRight
+    const lastPaddingRight = this.sliderWidth + this.sliderRight;
     this.isShow = !this.isShow;
-    if(this.slider) {
-      this.slider.style.right = this.isShow ? '20px' : `-${this.sliderWidth}px`
-      this.sliderRight = this.isShow ? 20 : -this.sliderWidth
+    if (this.slider) {
+      this.slider.style.right = this.isShow ? '20px' : `-${this.sliderWidth}px`;
+      this.sliderRight = this.isShow ? 20 : -this.sliderWidth;
 
       const currentPaddingRight = this.sliderWidth + this.sliderRight;
-     
+
       animate({
         from: {
           v: lastPaddingRight,
@@ -92,10 +91,9 @@ export default class Slider extends React.Component {
         ease: easeInOut,
         duration: 500,
         onUpdate: (o) => {
-          this.scene.setCenter(mapCenter, { padding: [0, o.v, 0, 0] })
+          this.scene.setCenter(mapCenter, { padding: [0, o.v, 0, 0] });
         },
       });
-
     }
   }
 
@@ -110,29 +108,37 @@ export default class Slider extends React.Component {
             left: 0,
             right: 0,
             bottom: 0,
-            overflowX: 'hidden'
+            overflowX: 'hidden',
           }}
         />
-       <div id="sliderwrap" style={{
-         position: 'absolute',
-         top: '50px',
-         right: `20px`,
-         bottom: '50px',
-         width: '350px',
-         border: '1px solid',
-         borderRadius: '10px',
-         background: '#fff',
-         transition: '0.5s',
-       }}>
-         <div style={{
+        <div
+          id="sliderwrap"
+          style={{
             position: 'absolute',
-            top: '50%',
-            left: '-50px',
-            height: '0px',
-            width: '0px',
-            cursor: 'pointer'
-         }} onClick={() => this.triggle()}>{"<<"}</div>
-       </div>
+            top: '50px',
+            right: `20px`,
+            bottom: '50px',
+            width: '350px',
+            border: '1px solid',
+            borderRadius: '10px',
+            background: '#fff',
+            transition: '0.5s',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '-50px',
+              height: '0px',
+              width: '0px',
+              cursor: 'pointer',
+            }}
+            onClick={() => this.triggle()}
+          >
+            {'<<'}
+          </div>
+        </div>
       </>
     );
   }
