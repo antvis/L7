@@ -30,7 +30,7 @@ export default class GaodeMapComponent extends React.Component {
     // none = 'none',
     // blend: 'additive'
 
-    let layer = new PointLayer({ zIndex: 2,  }) // blend: 'additive'
+    let layer = new PointLayer({ zIndex: 2, blend: 'additive' })
       .source(
         [
           {
