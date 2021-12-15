@@ -100,7 +100,12 @@ void main() {
       gl_FragColor.a = max(gl_FragColor.a, 0.001);
     }
 
-    gl_FragColor = u_additive > 0.0 ？filterColorAnimate(gl_FragColor) : filterColor(gl_FragColor);
+    if(u_additive > 0.0) {
+      gl_FragColor = filterColorAnimate(gl_FragColor);
+    } else {
+      gl_FragColor = filterColor(gl_FragColor);
+    }
+
   } else {
     gl_FragColor = filterColor(gl_FragColor);
   }
