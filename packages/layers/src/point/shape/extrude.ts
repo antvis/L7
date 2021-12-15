@@ -1,5 +1,5 @@
 import earcut from 'earcut';
-import { IPath } from './Path';
+import { IPath } from '../../core/shape/Path';
 export interface IExtrudeGeomety {
   positions: number[];
   index: number[];
