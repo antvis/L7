@@ -50,7 +50,7 @@ export default class PopupComponent extends React.Component {
         lng: 120.19382669582967,
         lat: 30.258134,
       })
-      .setText('hello');
+      .setText('hello this is test text');
     scene.addPopup(popup);
   }
 

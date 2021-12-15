@@ -230,6 +230,7 @@ export default class Marker extends EventEmitter {
 
     if (element) {
       element.style.display = 'block';
+      element.style.whiteSpace = 'nowrap';
       const container = this.mapsService.getContainer();
       let containerWidth = 0;
       let containerHeight = 0;
