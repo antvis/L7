@@ -66,11 +66,11 @@ export default class GaodeMapComponent extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });
-    let c = 1
+    let c = 1;
     layer.on('click', () => {
       // @ts-ignore
-      c==1?scene.setEnableRender(false):scene.setEnableRender(true)
-      c = 0
+      c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
+      c = 0;
     });
     layer.on('contextmenu', () => console.log('contextmenu'));
     // layer.on('mousemove', (e) => {
