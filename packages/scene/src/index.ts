@@ -193,6 +193,10 @@ class Scene
     this.sceneService.render();
   }
 
+  public setEnableRender(flag: boolean) {
+    this.layerService.setEnableRender(flag);
+  }
+
   // asset method
   /**
    * 为 layer/point/text 支持 iconfont 模式支持

@@ -1,5 +1,5 @@
 import { CityBuildingLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_citybuilding extends React.Component {
@@ -30,13 +30,20 @@ export default class Amap2demo_citybuilding extends React.Component {
       .size('floor', [0, 500])
       .color('rgba(242,246,250,1.0)')
       .animate({
-        enable: false,
+        enable: true,
       })
+      .active(true)
       .style({
         opacity: 0.7,
         baseColor: 'rgb(16,16,16)',
         windowColor: 'rgb(30,60,89)',
         brightColor: 'rgb(255,176,38)',
+        // sweep: {
+        //   enable: true,
+        //   sweepRadius: 4,
+        //   sweepColor: 'rgb(0, 100, 100)',
+        //   sweepSpeed: 0.5
+        // }
       });
     scene.addLayer(pointLayer);
 
