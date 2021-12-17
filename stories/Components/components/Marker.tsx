@@ -18,7 +18,7 @@ export default class MarkerComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        style: 'dark',
+        // style: 'dark',
         center: [120.184824, 30.248341],
         pitch: 0,
         zoom: 18,
@@ -27,7 +27,7 @@ export default class MarkerComponent extends React.Component {
 
     const popup = new Popup({
       offsets: [0, 20],
-    }).setHTML('<h1 onclick= alert("12223")>11111</h1>');
+    }).setHTML('<h1 onclick= alert("12223")>111111111111</h1>');
 
     const marker = new Marker({
       offsets: [0, -20],
@@ -41,7 +41,7 @@ export default class MarkerComponent extends React.Component {
     scene.addMarker(marker);
 
     const el = document.createElement('h1');
-    el.innerHTML = 'Marker';
+    el.innerHTML = '<h1>111111111111</h1>';
     marker.setElement(el);
 
     const arr = [

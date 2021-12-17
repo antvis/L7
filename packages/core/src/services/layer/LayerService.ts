@@ -28,6 +28,8 @@ export default class LayerService implements ILayerService {
   // TODO: 是否开启 shader 中的颜色拾取计算
   private shaderPicking: boolean = true;
 
+  private enableRender: boolean = true;
+
   @inject(TYPES.IRendererService)
   private readonly renderService: IRendererService;
 
@@ -93,8 +95,12 @@ export default class LayerService implements ILayerService {
     this.destroy();
   }
 
+  public setEnableRender(flag: boolean) {
+    this.enableRender = flag;
+  }
+
   public renderLayers() {
-    if (this.alreadyInRendering) {
+    if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
     this.alreadyInRendering = true;
