@@ -33,8 +33,8 @@ export default class Amap2demo_citybuilding extends React.Component {
         enable: true,
       })
       .active({
-        color: "#0ff",
-        mix: 0.5
+        color: '#0ff',
+        mix: 0.5,
       })
       .style({
         opacity: 0.7,
@@ -45,8 +45,8 @@ export default class Amap2demo_citybuilding extends React.Component {
           enable: true,
           sweepRadius: 4,
           sweepColor: 'rgb(0, 100, 100)',
-          sweepSpeed: 0.5
-        }
+          sweepSpeed: 0.5,
+        },
       });
     scene.addLayer(pointLayer);
 

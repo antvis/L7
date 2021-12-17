@@ -96,7 +96,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingStage: PickingStage.HIGHLIGHT,
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
-            u_activeMix: activeMix
+            u_activeMix: activeMix,
           }),
         );
       },
@@ -118,7 +118,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingStage: PickingStage.HIGHLIGHT,
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
-            u_activeMix: selectMix
+            u_activeMix: selectMix,
           }),
         );
       },
