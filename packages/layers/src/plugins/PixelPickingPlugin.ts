@@ -83,7 +83,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     layer.hooks.beforeHighlight.tap(
       'PixelPickingPlugin',
       (pickedColor: number[]) => {
-        const { highlightColor } = layer.getLayerConfig();
+        const { highlightColor, activeMix = 0 } = layer.getLayerConfig();
         const highlightColorInArray =
           typeof highlightColor === 'string'
             ? rgb2arr(highlightColor)
@@ -96,6 +96,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingStage: PickingStage.HIGHLIGHT,
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
+            u_activeMix: activeMix
           }),
         );
       },
@@ -104,7 +105,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     layer.hooks.beforeSelect.tap(
       'PixelPickingPlugin',
       (pickedColor: number[]) => {
-        const { selectColor } = layer.getLayerConfig();
+        const { selectColor, selectMix = 0 } = layer.getLayerConfig();
         const highlightColorInArray =
           typeof selectColor === 'string'
             ? rgb2arr(selectColor)
@@ -117,6 +118,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingStage: PickingStage.HIGHLIGHT,
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
+            u_activeMix: selectMix
           }),
         );
       },

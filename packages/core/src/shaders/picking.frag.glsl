@@ -3,6 +3,8 @@ uniform vec4 u_HighlightColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
 uniform float u_shaderPick;
 
+uniform float u_activeMix: 0;
+
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
 #define PICKING_HIGHLIGHT 2.0
@@ -21,7 +23,7 @@ vec4 filterHighlightColor(vec4 color, float weight) {
     float highLightRatio = highLightAlpha / (highLightAlpha + color.a * (1.0 - highLightAlpha));
 
     vec3 resultRGB = mix(color.rgb, highLightColor.rgb, highLightRatio);
-    return vec4(resultRGB * weight, color.a);
+    return vec4(mix(resultRGB * weight, color.rgb, u_activeMix), color.a);
   } else {
     return color;
   }

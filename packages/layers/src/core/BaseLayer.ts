@@ -570,6 +570,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       if (options.color) {
         activeOption.highlightColor = options.color;
       }
+      if(options.mix) {
+        activeOption.activeMix = options.mix;
+      }
     } else {
       activeOption.enableHighlight = !!options;
     }
@@ -586,6 +589,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         highlightColor: isObject(options)
           ? options.color
           : this.getLayerConfig().highlightColor,
+        activeMix: isObject(options) ? options.mix : this.getLayerConfig().activeMix
       });
       this.pick({ x, y });
     } else {
@@ -594,6 +598,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         highlightColor: isObject(options)
           ? options.color
           : this.getLayerConfig().highlightColor,
+        activeMix: isObject(options) ? options.mix : this.getLayerConfig().activeMix
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
@@ -614,6 +619,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       if (option.color) {
         activeOption.selectColor = option.color;
       }
+      if(option.mix) {
+        activeOption.selectMix = option.mix;
+      }
     } else {
       activeOption.enableSelect = !!option;
     }
@@ -631,6 +639,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         selectColor: isObject(options)
           ? options.color
           : this.getLayerConfig().selectColor,
+          selectMix: isObject(options) ? options.mix : this.getLayerConfig().selectMix
       });
       this.pick({ x, y });
     } else {
@@ -639,6 +648,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         selectColor: isObject(options)
           ? options.color
           : this.getLayerConfig().selectColor,
+          selectMix: isObject(options) ? options.mix : this.getLayerConfig().selectMix
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
