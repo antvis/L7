@@ -133,6 +133,30 @@ float project_pixel_allmap(float pixel) {
   return pixel;
 }
 
+// 适配纹理贴图的等像素大小
+float project_pixel_texture(float pixel) {
+  // mapbox zoom > 12
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    return pixel * pow(0.5, u_Zoom);
+  }
+
+  // amap2 zoom > 12
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+  }
+
+  // amap zoom > 12
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
+    return pixel * pow(0.5, u_Zoom);
+  }
+  
+  // amap zoom < 12
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
+    return pixel * pow(2.0, (20.0 - u_Zoom));
+  }
+  return pixel * 2.0;
+}
+
 float project_pixel(float pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1

@@ -37,7 +37,8 @@
   background-color: rgba(#746CFF, 0.24);
   height: 180px;
   width: 180px;
-  padding: 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .dipperitem:hover .dipperimg{

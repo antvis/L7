@@ -13,12 +13,12 @@ export default class Amap2demo_arcLineTex extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         pitch: 40,
-        center: [107.77791556935472, 35.443286920228644],
-        zoom: 2.9142882493605033,
+        center: [65.6, 45],
+        zoom: 12.1,
         viewMode: '3D',
-        style: 'dark',
+        // style: 'dark',
       }),
     });
     this.scene = scene;

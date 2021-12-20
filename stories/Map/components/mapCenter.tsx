@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, Scene } from '@antv/l7';
+import { PointLayer, Scene, LineLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -17,13 +17,20 @@ export default class GaodeMapComponent extends React.Component {
       map: new GaodeMap({
         center: [121.107846, 30.267069],
         pitch: 0,
-        style: 'normal',
+        style: 'dark',
         zoom: 20,
         animateEnable: false,
       }),
     });
+    // normal = 'normal',
+    // additive = 'additive',
+    // subtractive = 'subtractive',
+    // min = 'min',
+    // max = 'max',
+    // none = 'none',
+    // blend: 'additive'
 
-    const layer = new PointLayer()
+    let layer = new PointLayer({ zIndex: 2, blend: 'additive' })
       .source(
         [
           {
@@ -33,14 +40,6 @@ export default class GaodeMapComponent extends React.Component {
           {
             lng: 121.107,
             lat: 30.267069,
-          },
-          {
-            lng: 120.107846,
-            lat: 30.267069,
-          },
-          {
-            lng: 38.54,
-            lat: 77.02,
           },
         ],
         {
@@ -52,25 +51,31 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
-      // .shape('normal')
-      .color('blue')
-      .size(10)
+      .color('#1990FF')
+      .size(40)
       .style({
-        stroke: '#fff',
-        storkeWidth: 2,
-        // offsets: [100, 100],
-      });
-    layer.on('click', () => console.log('click'));
-    scene.addLayer(layer);
-    scene.render();
+        stroke: '#f00',
+        strokeWidth: 3,
+        strokeOpacity: 1,
+      })
+      .animate(true)
+      .active({ color: '#ff0' });
+
     this.scene = scene;
 
-    // setTimeout(() => {
-    //   // console.log(this.scene.panBy(10, 10));
-    //   console.log('===')
-    //   // layer.emit('remove', null)
-    //   scene.removeLayer(layer)
-    // }, 1000);
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+    });
+    let c = 1;
+    layer.on('click', () => {
+      // @ts-ignore
+      c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
+      c = 0;
+    });
+    layer.on('contextmenu', () => console.log('contextmenu'));
+    // layer.on('mousemove', (e) => {
+    //   console.log(e.feature);
+    // });
   }
 
   public render() {

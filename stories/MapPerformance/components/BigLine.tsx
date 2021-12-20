@@ -21,7 +21,7 @@ export default class PointTest extends React.Component {
         zoom: 5,
       }),
     });
-
+    // scene.diasbleShaderPick();
     let address =
       'https://gw.alipayobjects.com/os/bmw-prod/3f2f9284-3fb1-4838-8baa-6ffd06738fcd.csv';
     fetch(address)
@@ -40,19 +40,17 @@ export default class PointTest extends React.Component {
               y1: 't_lat',
             },
           })
-          .shape('arcmini')
+          // .shape('arcmini')
+          .shape('arc')
+          // .shape('line')
           .size(2)
           .color('rgb(13,64,140)')
-          .style({
-            segmentNumber: 30,
-          })
-          .select({
-            color: '#ff0',
-          })
           .active({
             color: '#ff0',
+          })
+          .style({
+            segmentNumber: 30,
           });
-        // .animate(true)
 
         scene.addLayer(lineLayer);
       });

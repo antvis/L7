@@ -39,6 +39,36 @@ module.exports = {
         }
       }
     ],
+    ecosystems: [
+      {
+        name: {
+          zh: 'L7 React组件',
+          en: 'L7React L7 For React',
+        },
+        url: 'http://antv.vision/L7-react/',
+      },
+      {
+        name: {
+          zh: 'L7 地理围栏绘制组件库',
+          en: 'L7Draw',
+        },
+        url: 'http://antv.vision/L7-draw/',
+      },
+      {
+        name: {
+          zh: 'L7 行政区划可视化库',
+          en: 'L7Boundary',
+        },
+        url: 'http://antv.vision/L7-boundary/',
+      },
+      {
+        name: {
+          zh: 'Dipper 地理可视分开发框架',
+          en: 'Dipper',
+        },
+        url: 'http://antv.vision/Dipper',
+      },
+    ],
     docs: [
       {
         slug: 'api/l7',
@@ -199,7 +229,31 @@ module.exports = {
           en: 'Earth Mode'
         },
         order: 3
-      }
+      },
+      {
+        slug: 'api/mini',
+        title: {
+          zh: '小程序',
+          en: 'mini'
+        },
+        order: 3
+      },
+      {
+        slug: 'api/mini/demos',
+        title: {
+          zh: '案例集合',
+          en: 'demos'
+        },
+        order: 5
+      },
+      {
+        slug: 'api/amapPlugin',
+        title: {
+          zh: '地图插件',
+          en: 'map plugin'
+        },
+        order: 5
+      },
     ],
     examples: [
       {
@@ -240,6 +294,14 @@ module.exports = {
         title: {
           zh: '第三方引擎',
           en: 'other engine'
+        }
+      },
+      {
+        slug: 'amapPlugin',
+        icon: 'map',
+        title: {
+          zh: '高德地图插件',
+          en: 'amapPlugin'
         }
       },
       {

@@ -51,6 +51,9 @@ import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
  */
 class Scene
   implements IPostProcessingPassPluggable, IMapController, ILayerManager {
+  public get map() {
+    return this.mapService.map;
+  }
   private sceneService: ISceneService;
   private mapService: IMapService<unknown>;
   private controlService: IControlService;
@@ -153,10 +156,6 @@ class Scene
     }
   }
 
-  public get map() {
-    return this.mapService.map;
-  }
-
   public setBgColor(color: string) {
     this.mapService.setBgColor(color);
   }
@@ -192,6 +191,10 @@ class Scene
 
   public render(): void {
     this.sceneService.render();
+  }
+
+  public setEnableRender(flag: boolean) {
+    this.layerService.setEnableRender(flag);
   }
 
   // asset method
@@ -401,6 +404,16 @@ class Scene
       .to(constructor)
       .whenTargetNamed(name);
   }
+  // 资源管理
+
+  // 控制 shader pick 计算
+  public enableShaderPick() {
+    this.layerService.enableShaderPick();
+  }
+
+  public diasbleShaderPick() {
+    this.layerService.disableShaderPick();
+  }
 
   private initComponent(id: string | HTMLDivElement) {
     this.controlService.init(
@@ -419,7 +432,6 @@ class Scene
       this.addControl(new Logo({ position: logoPosition }));
     }
   }
-  // 资源管理
 }
 
 export { Scene };

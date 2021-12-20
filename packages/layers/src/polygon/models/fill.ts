@@ -12,17 +12,31 @@ import {
 } from '@antv/l7-core';
 import { isNumber } from 'lodash';
 import BaseModel, { styleSingle } from '../../core/BaseModel';
-import { polygonTriangulation } from '../../core/triangulation';
+import {
+  polygonTriangulation,
+  polygonTriangulationWithCenter,
+} from '../../core/triangulation';
 import polygon_frag from '../shaders/polygon_frag.glsl';
+import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
+import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
 import polygon_vert from '../shaders/polygon_vert.glsl';
 
 interface IPolygonLayerStyleOptions {
   opacity: styleSingle;
+
+  opacityLinear: {
+    enable: boolean;
+    dir: string;
+  };
 }
 export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
+      opacityLinear = {
+        enable: false,
+        dir: 'in',
+      },
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
@@ -58,6 +72,9 @@ export default class FillModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
       // u_opacity: opacity,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
+
+      u_opacitylinear: Number(opacityLinear.enable),
+      u_dir: opacityLinear.dir === 'in' ? 1.0 : 0.0,
     };
   }
 
@@ -66,12 +83,23 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      opacityLinear = {
+        enable: false,
+        dir: 'in',
+      },
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'polygon',
-        vertexShader: polygon_vert,
-        fragmentShader: polygon_frag,
-        triangulation: polygonTriangulation,
+        vertexShader: opacityLinear.enable ? polygon_linear_vert : polygon_vert,
+        fragmentShader: opacityLinear.enable
+          ? polygon_linear_frag
+          : polygon_frag,
+        // triangulation: polygonTriangulation,
+        triangulation: opacityLinear.enable
+          ? polygonTriangulationWithCenter
+          : polygonTriangulation,
         blend: this.getBlend(),
         depth: { enable: false },
       }),
@@ -83,6 +111,37 @@ export default class FillModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
+    const {
+      opacityLinear = {
+        enable: false,
+        dir: 'in',
+      },
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    if (opacityLinear.enable) {
+      this.styleAttributeService.registerStyleAttribute({
+        name: 'linear',
+        type: AttributeType.Attribute,
+        descriptor: {
+          name: 'a_linear',
+          buffer: {
+            // give the WebGL driver a hint that this buffer may change
+            usage: gl.STATIC_DRAW,
+            data: [],
+            type: gl.FLOAT,
+          },
+          size: 3,
+          update: (
+            feature: IEncodeFeature,
+            featureIdx: number,
+            vertex: number[],
+            attributeIdx: number,
+            normal: number[],
+          ) => {
+            // center[0] center[1] radius
+            return [vertex[3], vertex[4], vertex[5]];
+          },
+        },
+      });
+    }
   }
 }

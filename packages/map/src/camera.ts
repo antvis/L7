@@ -710,6 +710,7 @@ export default class Camera extends EventEmitter {
     if (this.easeId && easeId && this.easeId === easeId) {
       return;
     }
+    // @ts-ignore
     delete this.easeId;
 
     const wasZooming = this.zooming;

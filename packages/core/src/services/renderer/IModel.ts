@@ -244,6 +244,6 @@ export interface IModelDrawOptions {
  */
 export interface IModel {
   addUniforms(uniforms: { [key: string]: IUniform }): void;
-  draw(options: IModelDrawOptions): void;
+  draw(options: IModelDrawOptions, pick?: boolean): void;
   destroy(): void;
 }

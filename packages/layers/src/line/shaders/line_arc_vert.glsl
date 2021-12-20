@@ -30,6 +30,7 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
+#pragma include "styleMappingCalThetaOffset"
 
 #pragma include "projection"
 #pragma include "project"
@@ -39,11 +40,11 @@ float bezier3(vec3 arr, float t) {
   float ut = 1. - t;
   return (arr.x * ut + arr.y * t) * ut + (arr.y * ut + arr.z * t) * t;
 }
-vec2 midPoint(vec2 source, vec2 target) {
+vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   vec2 center = target - source;
   float r = length(center);
   float theta = atan(center.y, center.x);
-  float thetaOffset = u_thetaOffset;
+  float thetaOffset = arcThetaOffset;
   float r2 = r / 2.0 / cos(thetaOffset);
   float theta2 = theta + thetaOffset;
   vec2 mid = vec2(r2*cos(theta2) + source.x, r2*sin(theta2) + source.y);
@@ -59,9 +60,9 @@ vec2 midPoint(vec2 source, vec2 target) {
 float getSegmentRatio(float index) {
     return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
 }
-vec2 interpolate (vec2 source, vec2 target, float t) {
+vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation
-  vec2 mid = midPoint(source, target);
+  vec2 mid = midPoint(source, target, arcThetaOffset);
   vec3 x = vec3(source.x, mid.x, target.x);
   vec3 y = vec3(source.y, mid.y, target.y);
   return vec2(bezier3(x ,t), bezier3(y,t));
@@ -102,13 +103,17 @@ void main() {
   float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
   float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
   
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
+  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke -> thetaOffset... 
   // 按顺序从 cell 中取值、若没有则自动往下取值
   float textureOffset = 0.0; // 在 cell 中取值的偏移量
 
   vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
   styleMappingMat[0][0] = opacityAndOffset.r;
   textureOffset = opacityAndOffset.g;
+
+  vec2 thetaOffsetAndOffset = calThetaOffsetAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
+  styleMappingMat[0][1] = thetaOffsetAndOffset.r;
+  textureOffset = thetaOffsetAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
 
   
@@ -144,8 +149,9 @@ void main() {
 
    styleMappingMat[3].b = d_distance_ratio;
 
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio), 0.0, 1.0));
+  // styleMappingMat[0][1] - arcThetaOffset
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   //unProjCustomCoord
   
@@ -167,7 +173,7 @@ void main() {
     }
     v_iconMapUV = a_iconMapUV;
 
-    float pixelLen = project_pixel(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
+    float pixelLen = project_pixel_texture(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
     float texCount = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
      styleMappingMat[3].g = texCount;
 

@@ -20,6 +20,8 @@ uniform float u_stroke_width : 2;
 uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 uniform vec2 u_offsets;
 
+uniform float u_blur : 0.0;
+
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
 #pragma include "styleMappingCalStrokeOpacity"
@@ -121,7 +123,8 @@ void main() {
 
   // TODO: billboard
   // anti-alias
-  float antialiasblur = 1.0 / u_DevicePixelRatio / (newSize + u_stroke_width);
+  //  float antialiased_blur = -max(u_blur, antialiasblur);
+  float antialiasblur = -max(1.0 / u_DevicePixelRatio / (newSize + u_stroke_width), u_blur);
 
   // construct point coords
   // TODP: /abs(extrude.x) 是为了兼容地球模式

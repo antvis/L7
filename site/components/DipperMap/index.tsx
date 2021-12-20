@@ -5,34 +5,30 @@ import '../../css/dippermap.css';
 
 interface DipperMapProps {
   dippermap: {
-    title: string;
-    image: string;
-    link: string
+    desc: string;
+    img: string;
+    alt: string
   }[]
 }
 
 export function DipperMap(props: DipperMapProps) {
   const { dippermap } = props;
 
-  const jumpDipperMap = (url: string) => {
-    window.open(url, '_blank');
-  };
-
   return (
     <div className='dippermapcontainer'>
       <div className='title'>Dipper Map 地理可视化分析工具</div>
-      <div className='subtitle'>静态配置底图可视化平台，快速绘制地理数据图层，让地理数据可视化无边界、无门槛</div>
+      <div className='subtitle'>DipperMap 基于L7 地图可视分析工具，用户自由上传地理数据进行可视化化配置。</div>
       <div className='carousel'>
         <Carousel
-          // autoplay
+          autoplay
           effect='fade'
           dotPosition='right'
         >
           {dippermap.map(item => {
             return (
-              <div onClick={() => jumpDipperMap(item.link)}>
-                <div style={{ textAlign: 'center' }}>{item.title}</div>
-                <img key={item.link} src={item.image} />
+              <div>
+                <h3 style={{ textAlign: 'center' }}>{item.desc}</h3>
+                <img key={item.alt} alt={item.alt} src={item.img} />
               </div>
             );
           })}

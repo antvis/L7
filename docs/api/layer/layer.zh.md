@@ -79,7 +79,7 @@ layer 初始化完成之后，是否自动缩放到图层范围 {bool } default 
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换 可设置多个
 
-parser 和  transforms [见 source 文档](../source/source)
+parser 和  transforms [见 source 文档](../../source/source)
 
 ```javascript
 layer.source(data, {
@@ -530,6 +530,18 @@ layer.select(false);
 
 ```javascript
 layer.setSelect(id);
+```
+
+### getLegendItems
+
+获取图例配置
+
+#### 参数
+
+- name 获取的图例类型 `color|size`
+
+```ts
+layer.getLegendItems('color');
 ```
 
 ## 鼠标事件

@@ -24,12 +24,19 @@ export default class ThreeJSLayer
   implements ILayer {
   public type: string = 'custom';
   public threeRenderService: IThreeRenderService;
+  public isUpdate: boolean = false;
+  public update: (() => void) | null = null;
   // 构建 threejs 的 scene
   private scene: Scene = new Scene();
   private renderer: WebGLRenderer;
   private animateMixer: AnimationMixer[] = [];
   // 地图中点墨卡托坐标
   private center: IMercator;
+
+  public setUpdate(callback: () => void) {
+    this.update = callback;
+    this.isUpdate = true;
+  }
 
   /**
    * 根据数据计算对应地图的模型矩阵 不同地图主要是点位偏移不同
@@ -154,6 +161,9 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
+    if (this.isUpdate && this.update) {
+      this.update();
+    }
     // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
@@ -171,11 +181,12 @@ export default class ThreeJSLayer
 
     renderer.render(this.scene, camera);
 
-    this.rendererService.setBaseState();
+    this.rendererService.setState();
     this.animateMixer.forEach((mixer: AnimationMixer) => {
       mixer.update(this.getTime());
     });
-    this.rendererService.setBaseState();
+
+    this.rendererService.setState();
     this.rendererService.setDirty(true);
     return this;
   }

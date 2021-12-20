@@ -1,4 +1,5 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
@@ -7,13 +8,33 @@ import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
 interface IPointLayerStyleOptions {
+  depth: boolean;
   opacity: styleSingle;
   offsets: styleOffset;
+
+  sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
+  targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
+  opacityLinear?: {
+    enable: boolean;
+    dir: string;
+  };
+
+  lightEnable: boolean;
 }
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
+
+      sourceColor,
+      targetColor,
+
+      opacityLinear = {
+        enable: false,
+        dir: 'up',
+      },
+
+      lightEnable = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (
       this.dataTextureTest &&
@@ -51,6 +72,17 @@ export default class ExtrudeModel extends BaseModel {
               height: 1,
             });
     }
+
+    // 转化渐变色
+    let useLinearColor = 0; // 默认不生效
+    let sourceColorArr = [0, 0, 0, 0];
+    let targetColorArr = [0, 0, 0, 0];
+    if (sourceColor && targetColor) {
+      sourceColorArr = rgb2arr(sourceColor);
+      targetColorArr = rgb2arr(targetColor);
+      useLinearColor = 1;
+    }
+
     return {
       // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
       u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
@@ -60,6 +92,18 @@ export default class ExtrudeModel extends BaseModel {
       // u_opacity: opacity || 1.0,
       // u_offsets: offsets || [0, 0],
       u_opacity: isNumber(opacity) ? opacity : 1.0,
+
+      // 渐变色支持参数
+      u_linearColor: useLinearColor,
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
+
+      // 透明度渐变
+      u_opacitylinear: Number(opacityLinear.enable),
+      u_opacitylinear_dir: opacityLinear.dir === 'up' ? 1.0 : 0.0,
+
+      // 光照计算开关
+      u_lightEnable: Number(lightEnable),
     };
   }
   public initModels(): IModel[] {
@@ -67,6 +111,10 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    // GAODE1.x GAODE2.x MAPBOX
+    const {
+      depth = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointExtrude2',
@@ -74,6 +122,13 @@ export default class ExtrudeModel extends BaseModel {
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
         blend: this.getBlend(),
+        cull: {
+          enable: true,
+          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+        },
+        depth: {
+          enable: depth,
+        },
         // primitive: gl.POINTS,
       }),
     ];

@@ -7,7 +7,7 @@ const scene = new Scene({
     style: 'dark',
     pitch: 50,
     center: [ 118.8, 32.056 ],
-    zoom: 11
+    zoom: 10
   })
 });
 const colors = [
@@ -40,8 +40,8 @@ scene.on('loaded', () => {
         .color('unit_price', colors)
         .size('unit_price', unit_price => unit_price * 50)
         .style({
-
-          opacity: [ 'unit_price', [ 0, 1 ]]
+          opacity: [ 'unit_price', [ 0, 1 ]],
+          pickLight: true
         })
         .active(true);
       scene.addLayer(filllayer);

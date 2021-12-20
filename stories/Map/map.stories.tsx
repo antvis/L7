@@ -62,6 +62,14 @@ import Amap2demo_styleMap from "./components/amap2demo_styleMap"
 
 import Amap2demo_textOffset from "./components/amap2demo_textOffset"
 
+import ShapeUpdate from './components/shapeUpdate'
+import AmapPlugin from './components/plugin'
+import PointUV from './components/pointUV'
+import DestroyClear from './components/destroyClear'
+import PlaneLine from './components/planeLine'
+import Slider from './components/slider'
+import WindMap from './components/amap2demo_wind'
+
 // @ts-ignore
 storiesOf('地图方法', module)
         .add('高德地图 point/demo', () => <MapCenter />)
@@ -125,3 +133,12 @@ storiesOf('地图方法', module)
         .add('高德地图 样式映射 文字偏移', () => <Amap2demo_textOffset/>)
 
         .add('测试销毁', () => <Amap2demo_destroy/>)
+
+        .add('ShapeUpdate', () => <ShapeUpdate/>)
+
+        .add('WindMap', () => <WindMap/>)
+        .add('AmapPlugin', () => <AmapPlugin/>)
+        .add('PointUV', () => <PointUV/>)
+        .add('DestroyClear', () => <DestroyClear/>)
+        .add('PlaneLine', () => <PlaneLine/>)
+        .add('Slider', () => <Slider/>)

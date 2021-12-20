@@ -13,6 +13,7 @@ interface IImageLayerStyleOptions {
 
 export default class ImageTileModel extends BaseModel {
   public tileLayer: any;
+  private timestamp: number | null;
   public getUninforms(): IModelUniform {
     return {};
   }
@@ -56,20 +57,18 @@ export default class ImageTileModel extends BaseModel {
       // TODO: 首次加载的时候请求瓦片
       this.tile();
 
-      let t = new Date().getTime();
-      this.mapService.on('mapchange', () => {
-        const newT = new Date().getTime();
-        const cutT = newT - t;
-        t = newT;
-        // TODO: 限制刷新频率
-        if (cutT < 16) {
-          return;
+      this.mapService.on('mapchange', (e) => {
+        if (this.timestamp) {
+          clearTimeout(this.timestamp);
+          this.timestamp = null;
         }
-        // TODO: 瓦片地图最大层级为 2
-        if (this.mapService.getZoom() < 2.0) {
-          return;
-        }
-        this.tile();
+        // @ts-ignore 节流
+        this.timestamp = setTimeout(() => {
+          // TODO: 瓦片地图最大层级为 2
+          if (this.mapService.getZoom() >= 2.0) {
+            this.tile();
+          }
+        }, 500);
       });
     }
 

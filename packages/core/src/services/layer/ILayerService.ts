@@ -136,6 +136,8 @@ export interface ILayer {
    */
 
   threeRenderService?: any;
+
+  getShaderPickStat: () => boolean;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   getContainer(): Container;
@@ -145,7 +147,7 @@ export interface ILayer {
   setCurrentSelectedId(id: number | null): void;
   getCurrentSelectedId(): number | null;
   prepareBuildModel(): void;
-  renderModels(): void;
+  renderModels(isPicking?: boolean): void;
   buildModels(): void;
   rebuildModels(): void;
   buildLayerModel(
@@ -313,6 +315,7 @@ export interface ILayerConfig {
   fitBoundsOptions?: unknown;
   name: string; //
   blend: keyof typeof BlendType;
+  depth: boolean;
   pickedFeatureID: number;
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
@@ -373,18 +376,26 @@ export interface ILayerService {
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
+
+  // 控制着色器颜色拾取计算
+  enableShaderPick: () => void;
+  disableShaderPick: () => void;
+  getShaderPickStat: () => boolean;
   add(layer: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
   getLayers(): ILayer[];
+  getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;
   renderLayers(type?: string): void;
+  setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
   isMapDragging(): boolean;
+
   destroy(): void;
 }

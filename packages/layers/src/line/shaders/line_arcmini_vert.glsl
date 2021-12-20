@@ -101,5 +101,4 @@ void main() {
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
   }
-  setPickingColor(a_PickingColor);
 }

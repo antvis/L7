@@ -38,5 +38,4 @@ void main() {
       alpha = clamp(alpha, 0.0, 1.0);
       gl_FragColor.a *= alpha;
   }
-  gl_FragColor = filterColor(gl_FragColor);
 }

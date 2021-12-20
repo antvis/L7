@@ -19,7 +19,7 @@ void main(){
     float extrude_x = a_Dir.x * 2.0 -1.0;
     float extrude_y = a_Dir.y * 2.0 -1.0;
     vec2 extrude_dir = normalize(vec2(extrude_x,extrude_y));
-    float S = sqrt(-2.0 * log(ZERO / a_Size / u_intensity / GAUSS_COEF)) / 3.0;
+    float S = sqrt(-2.0 * log(ZERO / a_Size / u_intensity / GAUSS_COEF)) / 2.5;
     v_extrude = extrude_dir * S;
 
     vec2 offset = project_pixel(v_extrude * u_radius);

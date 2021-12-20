@@ -3,9 +3,13 @@ import { isNumber } from 'lodash';
 import BaseModel, { styleSingle } from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';
+import polygonExtrudePickLightFrag from '../shaders/polygon_extrude_picklight_frag.glsl';
+import polygonExtrudePickLightVert from '../shaders/polygon_extrude_picklight_vert.glsl';
 import polygonExtrudeVert from '../shaders/polygon_extrude_vert.glsl';
+
 interface IPolygonLayerStyleOptions {
   opacity: styleSingle;
+  pickLight: boolean;
 }
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
@@ -56,11 +60,18 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      pickLight = false,
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'polygonExtrude',
-        vertexShader: polygonExtrudeVert,
-        fragmentShader: polygonExtrudeFrag,
+        vertexShader: pickLight
+          ? polygonExtrudePickLightVert
+          : polygonExtrudeVert,
+        fragmentShader: pickLight
+          ? polygonExtrudePickLightFrag
+          : polygonExtrudeFrag,
         triangulation: PolygonExtrudeTriangulation,
       }),
     ];

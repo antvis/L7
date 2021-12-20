@@ -51,6 +51,7 @@ import { isFunction, isObject } from 'lodash';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
+import { updateShape } from '../utils/updateShape';
 import baseLayerSchema from './schema';
 /**
  * 分配 layer id
@@ -423,7 +424,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+    const lastShape = this.styleAttributeService?.getLayerStyleAttribute(
+      'shape',
+    )?.scale?.field;
+    const currentShape = field;
     this.updateStyleAttribute('shape', field, values, updateOptions);
+    // TODO: 根据 shape 判断是否需要更新 model
+    updateShape(this, lastShape, currentShape);
     return this;
   }
   public label(
@@ -759,12 +766,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     this.multiPassRenderer.destroy();
 
-    // 清除所有属性以及关联的 vao
+    // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();
-    // 销毁所有 model
-    // this.models.forEach((model) => model.destroy());
+
+    // 执行每个图层单独的 clearModels 方法 （清除一些额外的 texture、program、buffer 等）
 
     this.hooks.afterDestroy.call();
+
+    // TODO: 清除各个图层自定义的 models 资源
+    this.layerModel?.clearModels();
+    // @ts-ignore
+    this.encodedData = null;
 
     this.emit('remove', {
       target: this,
@@ -951,7 +963,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     throw new Error('Method not implemented.');
   }
 
-  public renderModels() {
+  public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length > 0) {
       if (this.layerModelNeedUpdate && this.layerModel) {
@@ -960,9 +972,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         this.layerModelNeedUpdate = false;
       }
       this.models.forEach((model) => {
-        model.draw({
-          uniforms: this.layerModel.getUninforms(),
-        });
+        model.draw(
+          {
+            uniforms: this.layerModel.getUninforms(),
+          },
+          isPicking,
+        );
       });
     }
     return this;
@@ -1000,6 +1015,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         updateOptions,
       );
     }
+  }
+
+  public getShaderPickStat() {
+    return this.layerService.getShaderPickStat();
   }
 
   /**
