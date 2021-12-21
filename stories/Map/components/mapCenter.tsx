@@ -23,7 +23,7 @@ export default class GaodeMapComponent extends React.Component {
         center: aspaceLnglat,
         pitch: 0,
         // style: 'dark',
-        zoom: 14,
+        zoom: 17,
       }),
     });
     // normal = 'normal',
@@ -78,7 +78,7 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
-      .color('#1990FF')
+      .color('#00f')
       .size(circleRadius)
       .style({
         stroke: '#f00',
@@ -87,13 +87,13 @@ export default class GaodeMapComponent extends React.Component {
         unit: 'meter',
       })
       // .animate(true)
-      .active({ color: '#ff0' });
+      .active({ color: '#00f' });
 
     this.scene = scene;
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      scene.addLayer(trufCircle);
+      // scene.addLayer(trufCircle);
     });
     let c = 1;
     layer.on('click', () => {

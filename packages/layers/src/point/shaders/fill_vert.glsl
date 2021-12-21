@@ -125,18 +125,21 @@ void main() {
   // TODO: billboard
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
-  float antialiasblur = -max(1.0 / u_DevicePixelRatio / (a_Size), u_blur);
-
-  // construct point coords
-  // TODP: /abs(extrude.x) 是为了兼容地球模式
-  v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
-
+  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, u_blur);
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
   if(u_isMeter < 1.0) {
     // 不以米为实际单位
     offset = project_pixel(offset);
+  } else {
+    // 以米为实际单位
+    antialiasblur *= pow(19.0 - u_Zoom, 2.0);
   }
+  
+  
+
+  // TODP: /abs(extrude.x) 是为了兼容地球模式
+  v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
