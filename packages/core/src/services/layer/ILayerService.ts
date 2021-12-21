@@ -87,6 +87,7 @@ export interface IPickedFeature {
 // 交互样式
 export interface IActiveOption {
   color: string | number[];
+  mix?: number;
 }
 
 type ILngLat = [number, number];
@@ -339,6 +340,8 @@ export interface ILayerConfig {
   selectColor: string | number[];
   active: boolean;
   activeColor: string | number[];
+  activeMix?: number;
+  selectMix?: number;
   /**
    * 开启 TAA
    */

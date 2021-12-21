@@ -97,6 +97,16 @@ export default class Amap2demo_image extends React.Component {
           },
         })
         .shape('name', ['00', '01', '02'])
+        // .active(true)
+        .active({
+          color: '#00f',
+          mix: 0.6,
+        })
+        // .select(true)
+        .select({
+          color: '#00f',
+          mix: 0.22,
+        })
         .size(20);
       scene.addLayer(this.imageLayer);
     });
