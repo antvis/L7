@@ -1,8 +1,10 @@
 // @ts-ignore
-import { PointLayer, Scene, LineLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { PointLayer, Scene, LineLayer, PolygonLayer } from '@antv/l7';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
+import * as turf from '@turf/turf'
 
+const aspaceLnglat = [120.1019811630249, 30.264701434772807] as [number, number]
 export default class GaodeMapComponent extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -15,11 +17,10 @@ export default class GaodeMapComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [121.107846, 30.267069],
+        center: aspaceLnglat,
         pitch: 0,
-        style: 'dark',
-        zoom: 20,
-        animateEnable: false,
+        // style: 'dark',
+        zoom: 14,
       }),
     });
     // normal = 'normal',
@@ -29,6 +30,27 @@ export default class GaodeMapComponent extends React.Component {
     // max = 'max',
     // none = 'none',
     // blend: 'additive'
+    var circleRadius = 100
+    var radius = circleRadius;
+    var data = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates:   turf.circle(aspaceLnglat, radius, {steps: 10, units: 'meters'}).geometry.coordinates
+          },
+        },
+      ],
+    }
+    let trufCircle = new PolygonLayer()
+    .size('name', [0, 10000, 50000, 30000, 100000])
+    .source(data)
+    .color('#f00')
+    .shape('fill')
 
     let layer = new PointLayer({ zIndex: 2, blend: 'additive' })
       .source(
@@ -38,9 +60,9 @@ export default class GaodeMapComponent extends React.Component {
             lat: 30.267069,
           },
           {
-            lng: 121.107,
-            lat: 30.267069,
-          },
+            lng: aspaceLnglat[0],
+            lat: aspaceLnglat[1]
+          }
         ],
         {
           parser: {
@@ -52,19 +74,21 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       .color('#1990FF')
-      .size(40)
+      .size(circleRadius)
       .style({
         stroke: '#f00',
-        strokeWidth: 3,
+        // strokeWidth: 10,
         strokeOpacity: 1,
+        unit: 'meter'
       })
-      .animate(true)
+      // .animate(true)
       .active({ color: '#ff0' });
 
     this.scene = scene;
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.addLayer(trufCircle)
     });
     let c = 1;
     layer.on('click', () => {

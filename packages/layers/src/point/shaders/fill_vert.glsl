@@ -9,6 +9,7 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 uniform float u_globel;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
+uniform float u_isMeter;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -124,14 +125,19 @@ void main() {
   // TODO: billboard
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
-  float antialiasblur = -max(1.0 / u_DevicePixelRatio / (newSize + u_stroke_width), u_blur);
+  float antialiasblur = -max(1.0 / u_DevicePixelRatio / (a_Size), u_blur);
 
   // construct point coords
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
-  // vec2 offset = project_pixel(extrude * (newSize + u_stroke_width) + u_offsets);
-  vec2 offset = project_pixel(extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
+
+  vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
+  if(u_isMeter < 1.0) {
+    // 不以米为实际单位
+    offset = project_pixel(offset);
+  }
+
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
