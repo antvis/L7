@@ -428,14 +428,17 @@ export default class AMapService
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
-    let meterDis = AMap.GeometryUtil.distance(new AMap.LngLat(...center), new AMap.LngLat(...outer));
+    const meterDis = AMap.GeometryUtil.distance(
+      new AMap.LngLat(...center),
+      new AMap.LngLat(...outer),
+    );
 
     // Tip: 三维世界坐标距离
     const [x1, y1] = this.lngLatToCoord(center);
-    const [x2, y2] = this.lngLatToCoord(outer)
+    const [x2, y2] = this.lngLatToCoord(outer);
     const coordDis = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
-    return coordDis/meterDis;
+    return coordDis / meterDis;
   }
 
   public exportMap(type: 'jpg' | 'png'): string {

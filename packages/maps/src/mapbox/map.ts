@@ -404,21 +404,28 @@ export default class MapboxService
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
-    let centerLnglat = new mapboxgl.LngLat(center[0], center[1]);
-    
-    let outerLnglat = new mapboxgl.LngLat(outer[0], outer[1]);
-    let meterDis = centerLnglat.distanceTo(outerLnglat);
+    const centerLnglat = new mapboxgl.LngLat(center[0], center[1]);
+
+    const outerLnglat = new mapboxgl.LngLat(outer[0], outer[1]);
+    const meterDis = centerLnglat.distanceTo(outerLnglat);
 
     // Tip: 三维世界坐标距离
 
-    const centerMercator = mapboxgl.MercatorCoordinate.fromLngLat({ lng: center[0], lat: center[1] });
-    const outerMercator =  mapboxgl.MercatorCoordinate.fromLngLat({ lng: outer[0], lat: outer[1] });
-    const { x: x1, y: y1 } = centerMercator
-    const { x: x2, y: y2 } = outerMercator
+    const centerMercator = mapboxgl.MercatorCoordinate.fromLngLat({
+      lng: center[0],
+      lat: center[1],
+    });
+    const outerMercator = mapboxgl.MercatorCoordinate.fromLngLat({
+      lng: outer[0],
+      lat: outer[1],
+    });
+    const { x: x1, y: y1 } = centerMercator;
+    const { x: x2, y: y2 } = outerMercator;
     // Math.pow(2, 22) 4194304
-    const coordDis = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) * 4194304 * 2;
+    const coordDis =
+      Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) * 4194304 * 2;
 
-    return coordDis/meterDis;
+    return coordDis / meterDis;
   }
 
   public exportMap(type: 'jpg' | 'png'): string {

@@ -24,7 +24,7 @@ import pointFillVert from '../shaders/fill_vert.glsl';
 import { isNumber } from 'lodash';
 
 import { mat4, vec3 } from 'gl-matrix';
-import { Version } from '../../../../maps/src/version'
+import { Version } from '../../../../maps/src/version';
 interface IPointLayerStyleOptions {
   opacity: styleSingle;
   strokeWidth: styleSingle;
@@ -36,8 +36,8 @@ interface IPointLayerStyleOptions {
 }
 // 判断当前使用的 style 中的变量属性是否需要进行数据映射
 export default class FillModel extends BaseModel {
-  private isMeter: boolean = false;
   public meter2coord: number = 1;
+  private isMeter: boolean = false;
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -132,26 +132,36 @@ export default class FillModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-    const { unit = 'l7size' } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { version } = this.mapService
-    if(unit === 'meter' && version !== Version.L7MAP && version !== Version.GLOBEL && version !== Version.MAPBOX) {
+    const {
+      unit = 'l7size',
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { version } = this.mapService;
+    if (
+      unit === 'meter' &&
+      version !== Version.L7MAP &&
+      version !== Version.GLOBEL &&
+      version !== Version.MAPBOX
+    ) {
       this.isMeter = true;
-      this.calMeter2Coord()
+      this.calMeter2Coord();
     }
-  
+
     return this.buildModels();
   }
 
   public calMeter2Coord() {
     // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
-    const center = [(minLng + maxLng)/2, (minLat + maxLat)/2];
+    const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
     // @ts-ignore
     const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
     // @ts-ignore
-    const m2 = this.mapService.meterToCoord(center, [maxLng === minLng ? maxLng + 0.1 : maxLng, maxLat === minLat ? minLat + 0.1 : maxLat]);
-    this.meter2coord = (m1 + m2)/2;
+    const m2 = this.mapService.meterToCoord(center, [
+      maxLng === minLng ? maxLng + 0.1 : maxLng,
+      maxLat === minLat ? minLat + 0.1 : maxLat,
+    ]);
+    this.meter2coord = (m1 + m2) / 2;
   }
 
   public buildModels(): IModel[] {
@@ -270,7 +280,9 @@ export default class FillModel extends BaseModel {
         ) => {
           const { size = 5 } = feature;
           // console.log('featureIdx', featureIdx, feature)
-          return (Array.isArray(size) ? [size[0] * this.meter2coord] : [(size as number) * this.meter2coord]);
+          return Array.isArray(size)
+            ? [size[0] * this.meter2coord]
+            : [(size as number) * this.meter2coord];
         },
       },
     });
