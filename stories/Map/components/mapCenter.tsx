@@ -78,13 +78,14 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
-      .color('#00f')
+      .color('#0f9')
       .size(circleRadius)
       .style({
         stroke: '#f00',
         // strokeWidth: 10,
+        strokeWidth: 0,
         strokeOpacity: 1,
-        unit: 'meter',
+        // unit: 'meter',
       })
       // .animate(true)
       .active({ color: '#00f' });

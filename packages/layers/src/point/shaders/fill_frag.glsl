@@ -71,7 +71,7 @@ void main() {
     // 付出的代价是边缘会有一些锯齿
     if(outer_df > antialiasblur + 0.018) discard;
   }
-  float opacity_t = smoothstep(0.0, antialiasblur, outer_df); 
+  float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
   float color_t = strokeWidth < 0.01 ? 0.0 : smoothstep(
     antialiasblur,
@@ -82,7 +82,13 @@ void main() {
   float N_RINGS = 3.0;
   float FREQ = 1.0;
 
-  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
+  if(strokeWidth < 0.01) {
+    gl_FragColor = vec4(v_color.rgb, v_color.a * opacity);
+  } else {
+    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
+  }
+
+  // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
 
   if(u_aimate.x == Animate) {
     float d = length(v_data.xy);
@@ -105,10 +111,14 @@ void main() {
     } else {
       gl_FragColor = filterColor(gl_FragColor);
     }
-
   } else {
     gl_FragColor = filterColor(gl_FragColor);
+    
   }
 
-  gl_FragColor *= opacity_t;
+  if(u_additive > 0.0) {
+    gl_FragColor *= opacity_t;
+  } else {
+    gl_FragColor.a *= opacity_t;
+  }
 }
