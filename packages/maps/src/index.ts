@@ -5,7 +5,8 @@ import Earth from './earth/';
 // import GaodeMapV2 from './amap2/';
 import Map from './map/';
 import Mapbox from './mapbox/';
+import { Version } from './version';
 
-export { GaodeMap, GaodeMapV2, Mapbox, Map, Earth };
+export { Version, GaodeMap, GaodeMapV2, Mapbox, Map, Earth };
 // export { GaodeMap, GaodeMapV2, Mapbox, Map };
 // export { Map };
