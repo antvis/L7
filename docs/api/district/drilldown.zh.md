@@ -80,7 +80,7 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 - 空间数据字段是 l7-district 内部自己定义的字段 NAME_CHN, adcode
 - joinBy 第二个值是我们传入的数据中的字段
 
-````javascript
+```javascript
   const data = [
       {
         customValue: '34.5',  // 自定义的值
@@ -92,7 +92,7 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
       },
       ...
     ]
-    ```
+```
 
 
 ### label
