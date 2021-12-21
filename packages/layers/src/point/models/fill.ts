@@ -24,7 +24,7 @@ import pointFillVert from '../shaders/fill_vert.glsl';
 import { isNumber } from 'lodash';
 
 import { mat4, vec3 } from 'gl-matrix';
-import { Version } from '../../../../maps/src/version';
+import { Version } from '@antv/l7-maps';
 interface IPointLayerStyleOptions {
   opacity: styleSingle;
   strokeWidth: styleSingle;
