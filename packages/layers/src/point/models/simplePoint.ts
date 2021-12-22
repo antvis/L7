@@ -10,13 +10,17 @@ import {
 
 import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel, { styleOffset, styleSingle, styleColor } from '../../core/BaseModel';
 import { BlendTypes } from '../../utils/blend';
 import simplePointFrag from '../shaders/simplePoint_frag.glsl';
 import simplePointVert from '../shaders/simplePoint_vert.glsl';
 interface IPointLayerStyleOptions {
   opacity: styleSingle;
   offsets: styleOffset;
+  blend: string;
+  strokeOpacity: styleSingle;
+  strokeWidth: styleSingle;
+  stroke: styleColor;
 }
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -37,6 +41,10 @@ export default class SimplePointModel extends BaseModel {
     const {
       opacity = 1,
       offsets = [0, 0],
+      blend,
+      strokeOpacity = 1,
+      strokeWidth = 0,
+      stroke = '#fff',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -79,16 +87,17 @@ export default class SimplePointModel extends BaseModel {
             });
     }
     return {
+      u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity,
-      // u_stroke_width: strokeWidth,
-      // u_stroke_color: rgb2arr(stroke),
-      // u_offsets: [-offsets[0], offsets[1]],
+      
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
+      u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
+      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_stroke_color: this.getStrokeColor(stroke),
     };
   }
 

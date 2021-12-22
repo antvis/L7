@@ -18,7 +18,7 @@ export default class SimplePoint extends React.Component {
         center: [121.107846, 30.267069],
         pitch: 0,
         // style: 'dark',
-        zoom: 17,
+        zoom: 15,
       }),
     });
     // normal = 'normal',
@@ -29,11 +29,15 @@ export default class SimplePoint extends React.Component {
     // none = 'none',
     // blend: 'additive'
 
-    let layer = new PointLayer({})
+    let layer = new PointLayer({blend: 'additive'})
       .source(
         [
           {
             lng: 121.107846,
+            lat: 30.267069,
+          },
+          {
+            lng: 121.10,
             lat: 30.267069,
           },
         ],
@@ -46,8 +50,14 @@ export default class SimplePoint extends React.Component {
         },
       )
       .shape('simple')
-      .color('#f00')
+      .color('#800')
       .size(50)
+      .style({
+        stroke: '#f00',
+        strokeOpacity: 0.5,
+        strokeWidth: 10,
+        opacity: 0.5
+      })
       .active({ color: '#00f' });
 
     this.scene = scene;

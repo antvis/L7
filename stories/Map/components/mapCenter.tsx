@@ -92,9 +92,19 @@ export default class GaodeMapComponent extends React.Component {
 
     this.scene = scene;
 
+    
+
     scene.on('loaded', () => {
       scene.addLayer(layer);
       // scene.addLayer(trufCircle);
+      // scene.on('movestart', e => console.log('e', e))
+      // scene.on('mapmove', e => console.log('e', e))
+      // scene.on('moveend', e => console.log('e', e))
+
+      // scene.on('zoomstart', e => console.log('e', e))
+      // scene.on('zoomchange', e => console.log('e', e))
+      // scene.on('zoomend', e => console.log('e', e))
+      // scene.on('mousedown', e => console.log('e', e))
     });
     let c = 1;
     layer.on('click', () => {

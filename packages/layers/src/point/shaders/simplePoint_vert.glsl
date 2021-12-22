@@ -8,9 +8,11 @@ varying vec4 v_color;
 
 uniform float u_opacity : 1;
 uniform vec2 u_offsets;
+uniform float u_stroke_width;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 varying float v_blur;
+varying float v_innerRadius;
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -21,6 +23,7 @@ varying float v_blur;
 void main() {
   v_color = a_Color;
   v_blur = 1.0 - 0.05;
+  v_innerRadius = max((a_Size - u_stroke_width) / a_Size, 0.0);
 
   // cal style mapping - 数据纹理映射部分的计算
 styleMappingMat = mat4(
