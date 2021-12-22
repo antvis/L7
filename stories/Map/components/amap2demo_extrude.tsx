@@ -15,7 +15,7 @@ export default class Amapdemo_extrude extends React.Component {
       id: 'map',
       map: new GaodeMap({
         center: [121.107846, 30.267069],
-        pitch: 35.210526315789465,
+        pitch: 40,
         style: 'normal',
         zoom: 8,
         animateEnable: false,
@@ -42,7 +42,7 @@ export default class Amapdemo_extrude extends React.Component {
             })
             .shape('cylinder')
             .size('t', function(level) {
-              return [1, 2, level * 2 + 20];
+              return [4, 4, level * 4 + 20];
             })
             .active(true)
             .color('t', [
@@ -57,6 +57,12 @@ export default class Amapdemo_extrude extends React.Component {
               '#A1EDB8',
               '#CEF8D6',
             ])
+            .animate(true)
+            // .animate({
+            //   enable: false,
+            //   // speed: 0.1,
+            //   // repeat: Infinity
+            // })
             .style({
               opacity: 1.0,
             });
