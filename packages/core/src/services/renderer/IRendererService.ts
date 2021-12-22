@@ -64,6 +64,7 @@ export interface IRendererService {
   getContainer(): HTMLElement | null;
   getCanvas(): HTMLCanvasElement | null;
   getGLContext(): WebGLRenderingContext;
+  getPointSizeRange(): Float32Array;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
   readPixels(options: IReadPixelsOptions): Uint8Array;
   setState(): void;

@@ -376,6 +376,11 @@ export default class Scene extends EventEmitter implements ISceneService {
     return this.configService.getSceneConfig(this.id as string);
   }
 
+  // get point size info
+  public getPointSizeRange() {
+    return this.rendererService.getPointSizeRange();
+  }
+
   public addMarkerContainer(): void {
     // @ts-ignore
     const mapContainer = this.$container.parentElement as HTMLElement;

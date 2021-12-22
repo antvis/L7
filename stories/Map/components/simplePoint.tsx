@@ -51,12 +51,12 @@ export default class SimplePoint extends React.Component {
       )
       .shape('simple')
       .color('#800')
-      .size(50)
+      .size(15)
       .style({
         stroke: '#f00',
         strokeOpacity: 0.5,
-        strokeWidth: 10,
-        opacity: 0.5,
+        // strokeWidth: 10,
+        // opacity: 0.5,
       })
       .active({ color: '#00f' });
 
@@ -64,6 +64,7 @@ export default class SimplePoint extends React.Component {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      console.log(scene.getPointSizeRange());
     });
   }
 

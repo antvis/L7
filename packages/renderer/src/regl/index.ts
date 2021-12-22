@@ -92,6 +92,10 @@ export default class ReglRendererService implements IRendererService {
     };
   }
 
+  public getPointSizeRange() {
+    return this.gl._gl.getParameter(this.gl._gl.ALIASED_POINT_SIZE_RANGE);
+  }
+
   public testExtension(name: string) {
     // OES_texture_float
     return !!this.getGLContext().getExtension(name);

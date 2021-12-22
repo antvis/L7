@@ -15,6 +15,7 @@ export interface ISceneService {
   initMiniScene(config: IMapConfig & IRenderConfig): void;
   addLayer(layer: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;
+  getPointSizeRange(): Float32Array;
   render(): void;
   getSceneContainer(): HTMLDivElement;
   getMarkerContainer(): HTMLElement;
