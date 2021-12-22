@@ -61,7 +61,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (shape === 'dot') {
         return 'normal';
       }
-      if(shape === 'simple') {
+      if (shape === 'simple') {
         return 'simplePoint';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {

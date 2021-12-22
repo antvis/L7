@@ -29,13 +29,13 @@ export default class SimplePoint extends React.Component {
     // none = 'none',
     // blend: 'additive'
 
-    let layer = new PointLayer({  })
+    let layer = new PointLayer({})
       .source(
         [
           {
             lng: 121.107846,
             lat: 30.267069,
-          }
+          },
         ],
         {
           parser: {
@@ -54,7 +54,7 @@ export default class SimplePoint extends React.Component {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-    })
+    });
   }
 
   public render() {
