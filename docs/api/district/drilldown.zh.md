@@ -94,7 +94,6 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
     ]
 ```
 
-
 ### label
 
 文本配置项 `labelOption`
@@ -219,7 +218,7 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
 
 ```javascirpt
   drillLayer.drillDown(['110100'])
-````
+```
 
 ### drillUp
 
