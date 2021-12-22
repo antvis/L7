@@ -33,6 +33,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       normal: {
         blend: 'additive',
       },
+      simplePoint: {},
       fill: { blend: 'normal' },
       extrude: {},
       image: {},
@@ -59,6 +60,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       const shape = item.shape;
       if (shape === 'dot') {
         return 'normal';
+      }
+      if(shape === 'simple') {
+        return 'simplePoint';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
         return 'fill';
