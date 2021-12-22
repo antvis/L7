@@ -92,8 +92,6 @@ export default class GaodeMapComponent extends React.Component {
 
     this.scene = scene;
 
-    
-
     scene.on('loaded', () => {
       scene.addLayer(layer);
       // scene.addLayer(trufCircle);

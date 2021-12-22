@@ -29,7 +29,7 @@ export default class SimplePoint extends React.Component {
     // none = 'none',
     // blend: 'additive'
 
-    let layer = new PointLayer({blend: 'additive'})
+    let layer = new PointLayer({ blend: 'additive' })
       .source(
         [
           {
@@ -37,7 +37,7 @@ export default class SimplePoint extends React.Component {
             lat: 30.267069,
           },
           {
-            lng: 121.10,
+            lng: 121.1,
             lat: 30.267069,
           },
         ],
@@ -56,7 +56,7 @@ export default class SimplePoint extends React.Component {
         stroke: '#f00',
         strokeOpacity: 0.5,
         strokeWidth: 10,
-        opacity: 0.5
+        opacity: 0.5,
       })
       .active({ color: '#00f' });
 

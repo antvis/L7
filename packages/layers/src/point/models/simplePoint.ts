@@ -10,7 +10,11 @@ import {
 
 import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle, styleColor } from '../../core/BaseModel';
+import BaseModel, {
+  styleColor,
+  styleOffset,
+  styleSingle,
+} from '../../core/BaseModel';
 import { BlendTypes } from '../../utils/blend';
 import simplePointFrag from '../shaders/simplePoint_frag.glsl';
 import simplePointVert from '../shaders/simplePoint_vert.glsl';
@@ -90,7 +94,7 @@ export default class SimplePointModel extends BaseModel {
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
