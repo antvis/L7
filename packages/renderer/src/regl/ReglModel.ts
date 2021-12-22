@@ -97,7 +97,7 @@ export default class ReglModel implements IModel {
 
     const pickDrawParams = cloneDeep(drawParams);
     // @ts-ignore
-    pickDrawParams.blend.enable = true;
+    pickDrawParams.blend.enable = false;
     // @ts-ignore
     pickDrawParams.blend.func = {
       dstAlpha: 'one',
