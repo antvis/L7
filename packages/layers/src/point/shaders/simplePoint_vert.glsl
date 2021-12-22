@@ -22,7 +22,7 @@ varying float v_innerRadius;
 #pragma include "project"
 void main() {
   v_color = a_Color;
-  v_blur = 1.0 - 0.05;
+  v_blur = 1.0 - max(2.0/a_Size, 0.05);
   v_innerRadius = max((a_Size - u_stroke_width) / a_Size, 0.0);
 
   // cal style mapping - 数据纹理映射部分的计算
