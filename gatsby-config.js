@@ -363,7 +363,7 @@ module.exports = {
       }
     ],
     playground: {
-      container: '<div style="justify-content: center; position: relative" id="map"/>',
+      container: '<div style="height: 100vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
         '@antv/l7-maps': 'latest'
