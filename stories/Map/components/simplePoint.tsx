@@ -64,7 +64,7 @@ export default class SimplePoint extends React.Component {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      console.log(scene.getPointSizeRange())
+      console.log(scene.getPointSizeRange());
     });
   }
 

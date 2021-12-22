@@ -50,7 +50,7 @@ export default class PointTest extends React.Component {
         // .animate(true)
         // .active(true);
         scene.on('loaded', () => {
-          console.log('loaded')
+          console.log('loaded');
           scene.addLayer(layer);
         });
       });
