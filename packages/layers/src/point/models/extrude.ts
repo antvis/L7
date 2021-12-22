@@ -1,4 +1,10 @@
-import { AttributeType, gl, IEncodeFeature, IModel, IAnimateOption } from '@antv/l7-core';
+import {
+  AttributeType,
+  gl,
+  IAnimateOption,
+  IEncodeFeature,
+  IModel,
+} from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { isBoolean, isNumber } from 'lodash';
 import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
@@ -8,7 +14,7 @@ import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
 interface IPointLayerStyleOptions {
-  animateOption: IAnimateOption,
+  animateOption: IAnimateOption;
   depth: boolean;
   opacity: styleSingle;
   offsets: styleOffset;
@@ -30,7 +36,7 @@ export default class ExtrudeModel extends BaseModel {
       animateOption = {
         enable: false,
         speed: 0.01,
-        repeat: false
+        repeat: false,
       },
       opacity = 1,
 
@@ -91,12 +97,12 @@ export default class ExtrudeModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if(this.raiseCount < 1 && this.raiserepeat > 0) {
-      if(animateOption.enable) {
+    if (this.raiseCount < 1 && this.raiserepeat > 0) {
+      if (animateOption.enable) {
         const { speed = 0.01, repeat = false } = animateOption;
         this.raiseCount += speed;
-        if(this.raiseCount >= 1) {
-          if(this.raiserepeat > 1) {
+        if (this.raiseCount >= 1) {
+          if (this.raiserepeat > 1) {
             this.raiseCount = 0;
             this.raiserepeat--;
           } else {
@@ -105,11 +111,9 @@ export default class ExtrudeModel extends BaseModel {
         }
       }
     }
-   
-    
 
     return {
-      u_r: (animateOption.enable && this.raiserepeat > 0) ? this.raiseCount : 1.0,
+      u_r: animateOption.enable && this.raiserepeat > 0 ? this.raiseCount : 1.0,
       // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
       u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
 
@@ -140,9 +144,7 @@ export default class ExtrudeModel extends BaseModel {
     // GAODE1.x GAODE2.x MAPBOX
     const {
       depth = true,
-      animateOption: {
-        repeat = 1
-      }
+      animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.raiserepeat = repeat;
     return [
