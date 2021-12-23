@@ -60,19 +60,19 @@ export default class Amap2demo_markerlayer extends React.Component {
     console.log('markerLayer', markerLayer);
 
     // console.log(markerLayer.getClusterMarker())
-
+    // console.log('markerLayer', markerLayer.getMarkers());
     scene.on('loaded', () => {
       //   markerLayer.hide()
       // console.log('markerLayer', markerLayer.getMarkers());
-      const markerList = markerLayer.getMarkers();
-      markerList.map((m) => {
-        // @ts-ignore
-        const { lngLat } = m;
-        m.setLnglat({
-          lng: lngLat.lng,
-          lat: lngLat.lat + 10,
-        });
-      });
+      // const markerList = markerLayer.getMarkers();
+      // markerList.map((m) => {
+      //   // @ts-ignore
+      //   const { lngLat } = m;
+      //   m.setLnglat({
+      //     lng: lngLat.lng,
+      //     lat: lngLat.lat + 10,
+      //   });
+      // });
       // // @ts-ignore
       // markerLayer.markers.map(m => {
       //   // @ts-ignore
