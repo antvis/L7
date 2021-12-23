@@ -83,12 +83,9 @@ export default class Amap2demo_markerlayer extends React.Component {
       //   //   lat: +(lnglat.lat) + 10
       //   // })
       // })
-
       // setTimeout(() => {
       //   markerLayer.clear()
-
       //   console.log('markerLayer', markerLayer.getMarkers());
-
       // }, 2000)
     });
 
