@@ -119,8 +119,8 @@ export default class MarkerLayer extends EventEmitter {
 
   public getMarkers() {
     const cluster = this.markerLayerOption.cluster;
-    
-    if(cluster) {
+
+    if (cluster) {
       this.update();
       return this.clusterMarkers;
     } else {

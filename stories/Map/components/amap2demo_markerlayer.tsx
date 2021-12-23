@@ -31,7 +31,7 @@ export default class Amap2demo_markerlayer extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json',
     );
     const nodes = await response.json();
-    const markerLayer = new MarkerLayer({cluster: true,});
+    const markerLayer = new MarkerLayer({ cluster: true });
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -57,23 +57,22 @@ export default class Amap2demo_markerlayer extends React.Component {
       markerLayer.addMarker(marker);
     }
     scene.addMarkerLayer(markerLayer);
-    console.log('markerLayer', markerLayer)
+    console.log('markerLayer', markerLayer);
 
-    
     // console.log(markerLayer.getClusterMarker())
 
     scene.on('loaded', () => {
-    //   markerLayer.hide()
+      //   markerLayer.hide()
       // console.log('markerLayer', markerLayer.getMarkers());
-      const markerList = markerLayer.getMarkers()
-      markerList.map(m => {
+      const markerList = markerLayer.getMarkers();
+      markerList.map((m) => {
         // @ts-ignore
         const { lngLat } = m;
         m.setLnglat({
           lng: lngLat.lng,
-          lat: lngLat.lat + 10
-        })
-      })
+          lat: lngLat.lat + 10,
+        });
+      });
       // // @ts-ignore
       // markerLayer.markers.map(m => {
       //   // @ts-ignore
@@ -91,7 +90,7 @@ export default class Amap2demo_markerlayer extends React.Component {
       //   console.log('markerLayer', markerLayer.getMarkers());
 
       // }, 2000)
-    })
+    });
 
     let f = 0;
     // setInterval(() => {
