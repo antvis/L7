@@ -62,7 +62,7 @@ export default class Amap2demo_markerlayer extends React.Component {
     // console.log(markerLayer.getClusterMarker())
     // console.log('markerLayer', markerLayer.getMarkers());
     scene.on('loaded', () => {
-        // markerLayer.hide()
+      // markerLayer.hide()
       // console.log('markerLayer', markerLayer.getMarkers());
       // const markerList = markerLayer.getMarkers();
       // markerList.map((m) => {
