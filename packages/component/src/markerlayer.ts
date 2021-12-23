@@ -106,6 +106,10 @@ export default class MarkerLayer extends EventEmitter {
     this.markers.map((m) => {
       m.getElement().style.opacity = '0';
     });
+
+    this.clusterMarkers.map((m) => {
+      m.getElement().style.opacity = '0';
+    });
   }
 
   /**
@@ -113,6 +117,10 @@ export default class MarkerLayer extends EventEmitter {
    */
   public show() {
     this.markers.map((m) => {
+      m.getElement().style.opacity = '1';
+    });
+
+    this.clusterMarkers.map((m) => {
       m.getElement().style.opacity = '1';
     });
   }
