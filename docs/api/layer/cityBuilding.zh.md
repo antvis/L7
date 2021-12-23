@@ -24,6 +24,13 @@ layer.animate(true);
 - baseColor 楼房颜色,
 - windowColor: 窗户颜色,
 - brightColor: 点亮窗户颜色
+- sweep: 圆形扫光扩散动画相关配置项
+  - enable: 是否开启扫光扩散
+  - sweepRadius: 扩散半径
+  - sweepCenter: 扩散中心店坐标
+  - sweepColor: 扩散颜色
+  - sweepSpeed: 扩散速度
+- baseColor: 开启sweep时的基础颜色
 
 其他 style 配置项同
 

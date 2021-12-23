@@ -40,6 +40,11 @@
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7XkWTYQMfPMAAAAAAAAAAABkARQnAQ"
     },
     {
+      "filename": "build_sweep.js",
+      "title": "圆形扫光城市",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ"
+    },
+    {
       "filename": "animate_line.js",
       "title": "轨迹动画",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jLo0RY0sDG4AAAAAAAAAAABkARQnAQ"
