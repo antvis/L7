@@ -85,7 +85,7 @@ export default class GaodeMapComponent extends React.Component {
         strokeOpacity: 1,
         // unit: 'meter',
       })
-      .animate(true)
+      // .animate(true)
       // .animate({
       //   enable: true,
       //   speed: 0.02,
@@ -114,6 +114,11 @@ export default class GaodeMapComponent extends React.Component {
       c = 0;
     });
     layer.on('contextmenu', () => console.log('contextmenu'));
+    layer.on('destroy', () => console.log('destroy'))
+
+    setTimeout(() => {
+      layer.destroy()
+    }, 2000)
     // layer.on('mousemove', (e) => {
     //   console.log(e.feature);
     // });
