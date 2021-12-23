@@ -75,7 +75,7 @@ export default class Amap2demo_image extends React.Component {
       '00',
       // 'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
       // 'https://gw.alipayobjects.com/zos/bmw-prod/a5b94b2e-f01f-4a18-aade-4b41070cff55.svg'
-      "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*qYtMTanpMOcAAAAAAAAAAAAAARQnAQ"
+      'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*qYtMTanpMOcAAAAAAAAAAAAAARQnAQ',
       // 'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*nGW2RZ3j8c8AAAAAAAAAAAAAARQnAQ'
       // 'https://gw.alipayobjects.com/zos/bmw-prod/8eee5dbd-c3f5-4806-a9b5-5c8e90d8510c.svg'
     );

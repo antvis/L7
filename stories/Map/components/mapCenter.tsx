@@ -114,11 +114,11 @@ export default class GaodeMapComponent extends React.Component {
       c = 0;
     });
     layer.on('contextmenu', () => console.log('contextmenu'));
-    layer.on('destroy', () => console.log('destroy'))
+    layer.on('destroy', () => console.log('destroy'));
 
     setTimeout(() => {
-      layer.destroy()
-    }, 2000)
+      layer.destroy();
+    }, 2000);
     // layer.on('mousemove', (e) => {
     //   console.log(e.feature);
     // });
