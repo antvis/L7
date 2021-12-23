@@ -73,6 +73,23 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
+  public cleanRemove(layer: ILayer, parentLayer?: ILayer) {
+    // Tip: layer.layerChildren 当 layer 存在子图层的情况
+    if (parentLayer) {
+      const layerIndex = parentLayer.layerChildren.indexOf(layer);
+      if (layerIndex > -1) {
+        parentLayer.layerChildren.splice(layerIndex, 1);
+      }
+    } else {
+      const layerIndex = this.layers.indexOf(layer);
+      if (layerIndex > -1) {
+        this.layers.splice(layerIndex, 1);
+      }
+    }
+    this.updateLayerRenderList();
+    this.renderLayers();
+  }
+
   public remove(layer: ILayer, parentLayer?: ILayer): void {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {
