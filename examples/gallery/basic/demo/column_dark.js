@@ -24,8 +24,9 @@ scene.on('loaded', () => {
         })
         .shape('cylinder')
         .size('t', function(level) {
-          return [ 1, 2, level * 2 + 20 ];
+          return [ 2, 2, level * 2 + 20 ];
         })
+        .animate(true)
         .active(true)
         .color('t', [
           '#094D4A',

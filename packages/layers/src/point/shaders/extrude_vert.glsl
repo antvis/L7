@@ -12,6 +12,7 @@ attribute vec3 a_Size;
 attribute vec3 a_Normal;
 
 uniform float u_globel;
+uniform float u_r;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 varying vec4 v_color;
@@ -83,8 +84,9 @@ void main() {
 
   vec4 project_pos = project_position(vec4(a_Pos.xy, 0., 1.0));
 
-  vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z), 1.0);
+  vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z) * u_r, 1.0);
 
+  // 圆柱光照效果
   float lightWeight = u_lightEnable > 0.0 ? calc_lighting(pos): 1.0;
   v_lightWeight = lightWeight;
   v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);

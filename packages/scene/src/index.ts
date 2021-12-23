@@ -404,7 +404,6 @@ class Scene
       .to(constructor)
       .whenTargetNamed(name);
   }
-  // 资源管理
 
   // 控制 shader pick 计算
   public enableShaderPick() {
@@ -413,6 +412,11 @@ class Scene
 
   public diasbleShaderPick() {
     this.layerService.disableShaderPick();
+  }
+
+  // get current point size info
+  public getPointSizeRange() {
+    return this.sceneService.getPointSizeRange();
   }
 
   private initComponent(id: string | HTMLDivElement) {

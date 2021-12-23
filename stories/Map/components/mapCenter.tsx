@@ -21,17 +21,15 @@ export default class GaodeMapComponent extends React.Component {
       id: 'map',
       map: new GaodeMap({
         center: aspaceLnglat,
-        pitch: 0,
+        // pitch: 0,
+        pitch: 40,
         // style: 'dark',
         zoom: 17,
       }),
     });
     // normal = 'normal',
     // additive = 'additive',
-    // subtractive = 'subtractive',
-    // min = 'min',
-    // max = 'max',
-    // none = 'none',
+    // cylinder circle
     // blend: 'additive'
     var circleRadius = 100;
     var radius = circleRadius;
@@ -79,7 +77,7 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       .color('#0f9')
-      .size(circleRadius)
+      .size([10, 10, 100])
       .style({
         stroke: '#f00',
         // strokeWidth: 10,
@@ -87,7 +85,12 @@ export default class GaodeMapComponent extends React.Component {
         strokeOpacity: 1,
         // unit: 'meter',
       })
-      // .animate(true)
+      .animate(true)
+      // .animate({
+      //   enable: true,
+      //   speed: 0.02,
+      //   repeat: 1
+      // })
       .active({ color: '#00f' });
 
     this.scene = scene;
@@ -95,6 +98,14 @@ export default class GaodeMapComponent extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
       // scene.addLayer(trufCircle);
+      // scene.on('movestart', e => console.log('e', e))
+      // scene.on('mapmove', e => console.log('e', e))
+      // scene.on('moveend', e => console.log('e', e))
+
+      // scene.on('zoomstart', e => console.log('e', e))
+      // scene.on('zoomchange', e => console.log('e', e))
+      // scene.on('zoomend', e => console.log('e', e))
+      // scene.on('mousedown', e => console.log('e', e))
     });
     let c = 1;
     layer.on('click', () => {

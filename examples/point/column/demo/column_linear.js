@@ -27,6 +27,7 @@ scene.on('loaded', () => {
         .size('t', function(level) {
           return [ 1, 1, level * 2 + 20 ];
         })
+        .animate(true)
         .active(true)
         .color('#006CFF')
         .style({
