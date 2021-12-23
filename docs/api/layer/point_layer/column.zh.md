@@ -58,7 +58,23 @@ const column = new PointLayer({})
     opacity: 1.0,
   });
 ```
+### animate
+ 3D 柱图支持生长动画  
+animate 方法支持的布尔值和对象参数
 
+ 
+```javascript
+animate(true)
+animate(false)
+
+animate(animateOptions)
+
+animateOptions: {
+  enable: boolean;
+  speed?: number = 0.01;
+  repeat?: number = 1;
+}
+```
 ## 额外的 style 配置
 
 - sourceColor 设置 3D 柱图起始颜色（3D 柱图设置颜色渐变时会覆盖 color 设置的颜色）

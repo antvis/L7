@@ -4,7 +4,7 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 35.210526315789465,
+    pitch: 40,
     style: 'dark',
     center: [ 104.288144, 31.239692 ],
     zoom: 4.4
@@ -24,8 +24,9 @@ scene.on('loaded', () => {
         })
         .shape('cylinder')
         .size('t', function(level) {
-          return [ 1, 2, level * 2 + 20 ];
+          return [ 2, 2, level * 2 + 20 ];
         })
+        .animate(true)
         .active(true)
         .color('t', [
           '#094D4A',

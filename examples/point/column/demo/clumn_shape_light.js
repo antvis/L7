@@ -31,6 +31,7 @@ scene.on('loaded', () => {
           'hexagonColumn',
           'squareColumn'
         ])
+        .animate(true)
         .active(true)
         .size('unit_price', h => {
           return [ 6, 6, h / 500 ];
