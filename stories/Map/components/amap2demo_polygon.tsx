@@ -164,13 +164,12 @@ export default class Amap2demo_polygon extends React.Component {
 
     setTimeout(() => {
       layer
-      .setData(data2)
-      .shape('fill')
-      .color('#0f0')
+        .setData(data2)
+        .shape('fill')
+        .color('#0f0');
 
-      scene.render()
-      
-    }, 1000)
+      scene.render();
+    }, 1000);
 
     // const layer2 = new PolygonLayer({
     //   autoFit: true,

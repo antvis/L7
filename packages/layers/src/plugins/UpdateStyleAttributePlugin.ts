@@ -44,7 +44,8 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const shape = styleAttributeService.getLayerStyleAttribute('shape');
     if (
-      (filter && filter.needRegenerateVertices) // ||
+      filter &&
+      filter.needRegenerateVertices // ||
       // (shape && shape.needRegenerateVertices) // TODO:Shape 更新重新build
     ) {
       layer.layerModelNeedUpdate = true;
