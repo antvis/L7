@@ -66,7 +66,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (attributesToRemapping.length) {
         // 过滤数据
         if (filter?.needRemapping) {
-          layer.setEncodedData(this.mapping(attributes, filterData, undefined, minimunColor));
+          layer.setEncodedData(
+            this.mapping(attributes, filterData, undefined, minimunColor),
+          );
           filter.needRemapping = false;
         } else {
           layer.setEncodedData(
@@ -74,7 +76,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
               attributesToRemapping,
               filterData,
               layer.getEncodedData(),
-              minimunColor
+              minimunColor,
             ),
           );
         }
@@ -100,14 +102,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return this.applyAttributeMapping(filter, record, minimunColor)[0];
       });
     }
-    layer.setEncodedData(this.mapping(attributes, filterData, undefined, minimunColor));
+    layer.setEncodedData(
+      this.mapping(attributes, filterData, undefined, minimunColor),
+    );
   }
 
   private mapping(
     attributes: IStyleAttribute[],
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
-    minimumColor?: string
+    minimumColor?: string,
   ): IEncodeFeature[] {
     // console.log('data', data)
     const mappedData = data.map((record: IParseDataItem, i) => {
@@ -123,7 +127,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
         .forEach((attribute: IStyleAttribute) => {
           // console.log('attribute', attribute)
           // console.log('record', record)
-          let values = this.applyAttributeMapping(attribute, record, minimumColor);
+          let values = this.applyAttributeMapping(
+            attribute,
+            record,
+            minimumColor,
+          );
           // console.log('values', values)
           attribute.needRemapping = false;
 
@@ -187,7 +195,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private applyAttributeMapping(
     attribute: IStyleAttribute,
     record: { [key: string]: unknown },
-    minimumColor?: string
+    minimumColor?: string,
   ) {
     if (!attribute.scale) {
       return [];
@@ -206,9 +214,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
     });
     // console.log('params', params)
     // console.log('attribute', attribute)
-    if(attribute.name === 'color') {
-      if(params.length === 0 || params[0] === '') {
-        return [minimumColor]
+    if (attribute.name === 'color') {
+      if (params.length === 0 || params[0] === '') {
+        return [minimumColor];
       }
     }
 
