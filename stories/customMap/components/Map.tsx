@@ -43,7 +43,7 @@ export default class ScaleComponent extends React.Component {
               },
             });
 
-          layer.setMinimunColor('#f00');
+          layer.setBottomColor('#f00');
 
           // let layer2 = new PolygonLayer({ blend: 'normal' })
           //   .source(data)

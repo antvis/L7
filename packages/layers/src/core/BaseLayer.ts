@@ -187,7 +187,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   private aniamateStatus: boolean = false;
 
   // TODO: layer 保底颜色
-  private minimunColor = 'rgba(0, 0, 0, 0)';
+  private bottomColor = 'rgba(0, 0, 0, 0)';
 
   // private pickingPassRender: IPass<'pixelPicking'>;
 
@@ -240,12 +240,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.container;
   }
 
-  public setMinimunColor(color: string) {
-    this.minimunColor = color;
+  public setBottomColor(color: string) {
+    this.bottomColor = color;
   }
 
-  public getMinimumColor() {
-    return this.minimunColor;
+  public getBottomColor() {
+    return this.bottomColor;
   }
 
   public addPlugin(plugin: ILayerPlugin): ILayer {

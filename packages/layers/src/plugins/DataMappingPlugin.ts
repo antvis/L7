@@ -49,7 +49,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (layer.layerModelNeedUpdate) {
         return;
       }
-      const minimunColor = layer.getMinimumColor();
+      const bottomColor = layer.getBottomColor();
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const filter = styleAttributeService.getLayerStyleAttribute('filter');
       const { dataArray } = layer.getSource().data;
@@ -60,14 +60,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
       // 数据过滤完 再执行数据映射
       if (filter?.needRemapping && filter?.scale) {
         filterData = dataArray.filter((record: IParseDataItem) => {
-          return this.applyAttributeMapping(filter, record, minimunColor)[0];
+          return this.applyAttributeMapping(filter, record, bottomColor)[0];
         });
       }
       if (attributesToRemapping.length) {
         // 过滤数据
         if (filter?.needRemapping) {
           layer.setEncodedData(
-            this.mapping(attributes, filterData, undefined, minimunColor),
+            this.mapping(attributes, filterData, undefined, bottomColor),
           );
           filter.needRemapping = false;
         } else {
@@ -76,7 +76,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
               attributesToRemapping,
               filterData,
               layer.getEncodedData(),
-              minimunColor,
+              bottomColor,
             ),
           );
         }
@@ -91,7 +91,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    const minimunColor = layer.getMinimumColor();
+    const bottomColor = layer.getBottomColor();
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
@@ -99,11 +99,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 数据过滤完 再执行数据映射
     if (filter?.scale) {
       filterData = dataArray.filter((record: IParseDataItem) => {
-        return this.applyAttributeMapping(filter, record, minimunColor)[0];
+        return this.applyAttributeMapping(filter, record, bottomColor)[0];
       });
     }
     layer.setEncodedData(
-      this.mapping(attributes, filterData, undefined, minimunColor),
+      this.mapping(attributes, filterData, undefined, bottomColor),
     );
   }
 
