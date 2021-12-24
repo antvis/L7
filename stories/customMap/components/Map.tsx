@@ -25,7 +25,7 @@ export default class ScaleComponent extends React.Component {
           let layer = new PolygonLayer({ blend: 'normal' }) // autoFit: true
             .source(data)
             .size('name', [0, 10000, 50000, 30000, 100000])
-            .color('name', [
+            .color('name1', [
               '#2E8AE6',
               '#69D1AB',
               '#DAF291',
@@ -43,25 +43,27 @@ export default class ScaleComponent extends React.Component {
               },
             });
 
-          let layer2 = new PolygonLayer({ blend: 'normal' })
-            .source(data)
-            .size(1)
-            .color('name', [
-              '#2E8AE6',
-              '#69D1AB',
-              '#DAF291',
-              '#FFD591',
-              '#FF7A45',
-              '#CF1D49',
-            ])
-            .shape('line')
-            .select(true)
-            .style({
-              opacity: 1.0,
-            });
+            layer.setMinimunColor('#f00')
+
+          // let layer2 = new PolygonLayer({ blend: 'normal' })
+          //   .source(data)
+          //   .size(1)
+          //   .color('name', [
+          //     '#2E8AE6',
+          //     '#69D1AB',
+          //     '#DAF291',
+          //     '#FFD591',
+          //     '#FF7A45',
+          //     '#CF1D49',
+          //   ])
+          //   .shape('line')
+          //   .select(true)
+          //   .style({
+          //     opacity: 1.0,
+          //   });
 
           scene.addLayer(layer);
-          scene.addLayer(layer2);
+          // scene.addLayer(layer2);
         });
     });
   }

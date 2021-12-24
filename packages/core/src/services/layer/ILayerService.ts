@@ -141,6 +141,8 @@ export interface ILayer {
   getShaderPickStat: () => boolean;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
+  setMinimunColor(color: string): void;
+  getMinimumColor(): string;
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
