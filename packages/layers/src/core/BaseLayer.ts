@@ -186,6 +186,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private aniamateStatus: boolean = false;
 
+  // TODO: layer 保底颜色
+  private bottomColor = 'rgba(0, 0, 0, 0)';
+
   // private pickingPassRender: IPass<'pixelPicking'>;
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
@@ -235,6 +238,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public getContainer() {
     return this.container;
+  }
+
+  public setBottomColor(color: string) {
+    this.bottomColor = color;
+  }
+
+  public getBottomColor() {
+    return this.bottomColor;
   }
 
   public addPlugin(plugin: ILayerPlugin): ILayer {
