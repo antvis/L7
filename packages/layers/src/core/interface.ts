@@ -20,4 +20,7 @@ export interface ILineLayerStyleOptions {
 
   globalArcHeight?: number; // 可选参数、地球模式下 3D 弧线的高度
   vertexHeightScale?: number; // 可选参数、lineLayer vertex height scale
+
+  borderWidth?: number; // 可选参数 线边框宽度
+  borderColor?: string; // 可选参数 线边框颜色
 }

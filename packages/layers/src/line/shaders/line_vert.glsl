@@ -28,7 +28,6 @@ uniform float u_vertexScale: 1.0;
 
 varying vec4 v_color;
 varying vec4 v_dash_array;
-varying vec2 v_normal;
 
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 varying vec2 v_iconMapUV;
@@ -85,8 +84,6 @@ void main() {
   if(u_aimate.x == Animate || u_linearColor == 1.0) {
       d_distance_ratio = a_Distance / a_Total_Distance;
   }
-  v_normal = vec2(reverse_offset_normal(a_Normal) * sign(a_Miter));
-
   v_color = a_Color;
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);

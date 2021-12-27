@@ -6,8 +6,10 @@ uniform float u_blur : 0.99;
 uniform float u_line_type: 0.0;
 uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
+
+uniform float u_borderWidth: 0.0;
+uniform vec4 u_borderColor;
 varying vec4 v_color;
-// varying vec2 v_normal;
 
 // line texture
 uniform float u_line_texture;
@@ -69,7 +71,7 @@ void main() {
     float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
     float v = styleMappingMat[3].a;  // 线图层贴图部分的 v 坐标值
 
-    v = max(smoothstep(0.95, 1.0, v), v);
+    // v = max(smoothstep(0.95, 1.0, v), v);
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     
     // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, vec2(u, v)));
@@ -87,19 +89,34 @@ void main() {
         gl_FragColor = filterColor(pattern);
     }
   } else {
+
+    float v = styleMappingMat[3].a;
+    float borderWidth = min(0.5, u_borderWidth);
+    // 绘制 border
+    if(borderWidth > 0.0) {
+      float borderOuterWidth = borderWidth/2.0;
+
+      if(v >= 1.0 - borderWidth || v <= borderWidth) {
+        if(v > borderWidth) {
+          float linear = smoothstep(0.0, 1.0, (v - (1.0 - borderWidth))/borderWidth);
+          gl_FragColor.rgb = mix(gl_FragColor.rgb, u_borderColor.rgb, linear);
+        } else if(v <= borderWidth) {
+          float linear = smoothstep(0.0, 1.0, v/borderWidth);
+          gl_FragColor.rgb = mix(u_borderColor.rgb, gl_FragColor.rgb, linear);
+        }
+      }
+
+      if(v < borderOuterWidth) {
+        gl_FragColor.a = mix(0.0, gl_FragColor.a, v/borderOuterWidth);
+      } else if(v > 1.0 - borderOuterWidth) {
+        gl_FragColor.a = mix(gl_FragColor.a, 0.0, (v - (1.0 - borderOuterWidth))/borderOuterWidth);
+      }
+    }
+
     gl_FragColor = filterColor(gl_FragColor);
   }
 
-  // gl_FragColor = (vec4(1.0, 0.0, 0.0, 1.0));
- 
-  // if(rV < r || rV > 1.0 - r) {
-  //   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  // } 
-  // if(v > 0.9) {
-    // gl_FragColor = vec4(0.17647, 0.43921568, 0.2, 1.0);
-  // } else if(v < 0.1) {
-  //   gl_FragColor = vec4(0.17647, 0.43921568, 0.2, 1.0);
-  // }
-
-  // gl_FragColor = filterColor(gl_FragColor);
+  
+  
+  
 }
