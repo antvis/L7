@@ -11,7 +11,7 @@ import {
   IStyleAttributeService,
   TYPES,
 } from '@antv/l7-core';
-import { rgb2arr, isColor, unProjectFlat } from '@antv/l7-utils';
+import { isColor, rgb2arr, unProjectFlat } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 import 'reflect-metadata';

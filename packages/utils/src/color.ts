@@ -6,7 +6,7 @@ export interface IColorRamp {
 }
 
 export function isColor(str: any) {
-  if(typeof str === 'string') {
+  if (typeof str === 'string') {
     return !!(d3.color(str) as d3.RGBColor);
   } else {
     return false;
