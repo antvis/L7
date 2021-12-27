@@ -86,14 +86,14 @@ export default class GaodeMapComponent extends React.Component {
         strokeWidth: 0,
         strokeOpacity: 1,
         // unit: 'meter',
-      })
-      // .animate(true)
-      // .animate({
-      //   enable: true,
-      //   speed: 0.02,
-      //   repeat: 1
-      // })
-      // .active({ color: '#00f' });
+      });
+    // .animate(true)
+    // .animate({
+    //   enable: true,
+    //   speed: 0.02,
+    //   repeat: 1
+    // })
+    // .active({ color: '#00f' });
 
     this.scene = scene;
 
