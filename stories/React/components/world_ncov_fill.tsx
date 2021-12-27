@@ -65,6 +65,7 @@ function joinData(geodata: any, ncovData: any) {
 }
 
 export default React.memo(function Map() {
+  const [showScene, setShowScene] = React.useState(true);
   const [data, setData] = React.useState();
   const [popupInfo, setPopupInfo] = React.useState<{
     lnglat: number[];
@@ -92,9 +93,14 @@ export default React.memo(function Map() {
     };
     fetchData();
   }, []);
+
+  setTimeout(() => {
+    // setShowScene(false)
+  }, 3000)
+
   return (
     <>
-      <AMapScene
+     {showScene &&  <AMapScene
         map={{
           center: [110.19382669582967, 50.258134],
           pitch: 0,
@@ -107,6 +113,12 @@ export default React.memo(function Map() {
           left: 0,
           right: 0,
           bottom: 0,
+        }}
+        onSceneLoaded={scene => {
+          // setTimeout(() => {
+          //   scene.removeAllLayer()
+          // }, 3000)
+          // setTimeout(() => scene.destroy(), 5000)
         }}
       >
         {popupInfo && (
@@ -200,7 +212,7 @@ export default React.memo(function Map() {
             }}
           />,
         ]}
-      </AMapScene>
+      </AMapScene>}
     </>
   );
 });
