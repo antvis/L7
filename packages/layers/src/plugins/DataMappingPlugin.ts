@@ -214,11 +214,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
     });
     // console.log('params', params)
     // console.log('attribute', attribute)
-    if (attribute.name === 'color') {
-      if (params.length === 0 || params[0] === '') {
-        return [minimumColor];
-      }
-    }
+    // if (attribute.name === 'color') {
+    //   if (params.length === 0 || params[0] === '') {
+    //     return [minimumColor];
+    //   }
+    // }
 
     return attribute.mapping ? attribute.mapping(params) : [];
   }
