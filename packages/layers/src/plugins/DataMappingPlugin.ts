@@ -11,7 +11,7 @@ import {
   IStyleAttributeService,
   TYPES,
 } from '@antv/l7-core';
-import { rgb2arr, unProjectFlat } from '@antv/l7-utils';
+import { isColor, rgb2arr, unProjectFlat } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
@@ -214,12 +214,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
     });
     // console.log('params', params)
     // console.log('attribute', attribute)
-    // if (attribute.name === 'color') {
-    //   if (params.length === 0 || params[0] === '') {
-    //     return [minimumColor];
-    //   }
-    // }
 
-    return attribute.mapping ? attribute.mapping(params) : [];
+
+    const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
+    if (attribute.name === 'color' && !isColor(mappingResult[0])) {
+      return [minimumColor];
+    }
+    return mappingResult;
+    // return attribute.mapping ? attribute.mapping(params) : [];
   }
 }
