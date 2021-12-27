@@ -792,7 +792,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public destroy() {
     // debugger
-    if(this.isDestroied) return;
+    if (this.isDestroied) {
+      return;
+    }
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);
