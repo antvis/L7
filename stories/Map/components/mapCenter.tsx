@@ -76,22 +76,24 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
-      .color('#0f9')
-      .size([10, 10, 100])
+      // .color('#0f9')
+      .color('#f00')
+      // .size([10, 10, 100])
+      .size(10)
       .style({
         stroke: '#f00',
         // strokeWidth: 10,
         strokeWidth: 0,
         strokeOpacity: 1,
         // unit: 'meter',
-      })
-      // .animate(true)
-      // .animate({
-      //   enable: true,
-      //   speed: 0.02,
-      //   repeat: 1
-      // })
-      .active({ color: '#00f' });
+      });
+    // .animate(true)
+    // .animate({
+    //   enable: true,
+    //   speed: 0.02,
+    //   repeat: 1
+    // })
+    // .active({ color: '#00f' });
 
     this.scene = scene;
 
@@ -113,12 +115,12 @@ export default class GaodeMapComponent extends React.Component {
       c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
       c = 0;
     });
-    layer.on('contextmenu', () => console.log('contextmenu'));
-    layer.on('destroy', (e) => console.log('destroy', e));
-    layer.on('remove', (e) => {
-      console.log('remove', e);
-      console.log(scene.getLayers());
-    });
+    // layer.on('contextmenu', () => console.log('contextmenu'));
+    // layer.on('destroy', (e) => console.log('destroy', e));
+    // layer.on('remove', (e) => {
+    //   console.log('remove', e);
+    //   console.log(scene.getLayers());
+    // });
 
     // setTimeout(() => {
     //   layer.destroy();
