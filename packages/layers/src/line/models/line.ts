@@ -34,6 +34,8 @@ export default class LineModel extends BaseModel {
       lineTexture = false,
       iconStep = 100,
       vertexHeightScale = 20.0,
+      borderWidth = 0.0,
+      borderColor = '#ccc'
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -97,6 +99,10 @@ export default class LineModel extends BaseModel {
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_icon_step: iconStep,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
+
+      // line border 参数
+      u_borderWidth: borderWidth,
+      u_borderColor: rgb2arr(borderColor),
 
       // 渐变色支持参数
       u_linearColor: useLinearColor,
