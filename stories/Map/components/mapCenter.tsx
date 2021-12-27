@@ -49,11 +49,11 @@ export default class GaodeMapComponent extends React.Component {
         },
       ],
     };
-    let trufCircle = new PolygonLayer()
-      .size('name', [0, 10000, 50000, 30000, 100000])
-      .source(data)
-      .color('#f00')
-      .shape('fill');
+    // let trufCircle = new PolygonLayer()
+    //   .size('name', [0, 10000, 50000, 30000, 100000])
+    //   .source(data)
+    //   .color('#f00')
+    //   .shape('fill');
 
     let layer = new PointLayer({ zIndex: 2, blend: 'additive' })
       .source(
