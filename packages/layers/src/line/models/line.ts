@@ -35,7 +35,7 @@ export default class LineModel extends BaseModel {
       iconStep = 100,
       vertexHeightScale = 20.0,
       borderWidth = 0.0,
-      borderColor = '#ccc'
+      borderColor = '#ccc',
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
