@@ -215,6 +215,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // console.log('params', params)
     // console.log('attribute', attribute)
 
+
     const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
     if (attribute.name === 'color' && !isColor(mappingResult[0])) {
       return [minimumColor];
