@@ -409,8 +409,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     setTimeout(() => {
       // Tip: 把这一部分销毁放到写下一个事件循环中执行，兼容 L7React 中 scene 和 layer 同时销毁的情况
       this.rendererService.destroy();
-    })
-    
+    });
+
     this.map.destroy();
 
     this.interactionService.destroy();
