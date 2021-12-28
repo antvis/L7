@@ -38,7 +38,7 @@ export default class Amap2demo_lineLinear extends React.Component {
                 [117, 30],
                 [117, 31],
                 [116, 30.5],
-              ]
+              ],
             ],
           },
         },
@@ -50,32 +50,32 @@ export default class Amap2demo_lineLinear extends React.Component {
     );
 
     scene.on('loaded', () => {
-       const layer = new LineLayer({})
-       .source(geoData)
-      //  .size(20000)
-      .size(20)
-       .shape('wall')
-       .texture('02')
-       .color('#25d8b7')
-       .animate({
-         interval: 1, // 间隔
-         duration: 1, // 持续时间，延时
-         trailLength: 2, // 流线长度
-       })
-       .style({
-         opacity: 'testOpacity',
-         lineTexture: true, // 开启线的贴图功能
-        //  iconStep: 40000, // 设置贴图纹理的间距
-        iconStep: 40, // 设置贴图纹理的间距
-         iconStepCount: 4,
-        //  heightfixed: true,
-        //  textureBlend: 'replace',
-        //  textureBlend: 'normal',
-         sourceColor: '#f00',
-         targetColor: 'rgba(0, 255, 0, 0.2)',
-       })
-       .active(true);
-     scene.addLayer(layer);
+      const layer = new LineLayer({})
+        .source(geoData)
+        //  .size(20000)
+        .size(20)
+        .shape('wall')
+        .texture('02')
+        .color('#25d8b7')
+        .animate({
+          interval: 1, // 间隔
+          duration: 1, // 持续时间，延时
+          trailLength: 2, // 流线长度
+        })
+        .style({
+          opacity: 'testOpacity',
+          lineTexture: true, // 开启线的贴图功能
+          //  iconStep: 40000, // 设置贴图纹理的间距
+          iconStep: 40, // 设置贴图纹理的间距
+          iconStepCount: 4,
+          //  heightfixed: true,
+          //  textureBlend: 'replace',
+          //  textureBlend: 'normal',
+          sourceColor: '#f00',
+          targetColor: 'rgba(0, 255, 0, 0.2)',
+        })
+        .active(true);
+      scene.addLayer(layer);
     });
   }
 

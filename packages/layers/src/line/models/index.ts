@@ -2,8 +2,8 @@ import ArcModel from './arc';
 import Arc3DModel from './arc_3d';
 import ArcMiniModel from './arcmini';
 import GreatCircleModel from './great_circle';
-import LineWallModel from './wall';
 import LineModel from './line';
+import LineWallModel from './wall';
 
 export type LineModelType =
   | 'arc'

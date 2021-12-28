@@ -32,7 +32,6 @@ export default class LineWallModel extends BaseModel {
       iconStepCount = 1,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
-
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
