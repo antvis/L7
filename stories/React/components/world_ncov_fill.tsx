@@ -100,7 +100,7 @@ export default React.memo(function Map() {
 
   return (
     <>
-      {showScene && (
+     {showScene && (
         <AMapScene
           map={{
             center: [110.19382669582967, 50.258134],
@@ -116,9 +116,11 @@ export default React.memo(function Map() {
             bottom: 0,
           }}
           onSceneLoaded={(scene) => {
-            // setTimeout(() => {
-            //   scene.removeAllLayer()
-            // }, 3000)
+            setTimeout(() => {
+              // scene.removeAllLayer()
+              // scene.destroy()
+              
+            }, 3000)
             // setTimeout(() => scene.destroy(), 5000)
           }}
         >
