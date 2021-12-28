@@ -116,9 +116,10 @@ export default React.memo(function Map() {
             bottom: 0,
           }}
           onSceneLoaded={(scene) => {
-            // setTimeout(() => {
-            //   scene.removeAllLayer()
-            // }, 3000)
+            setTimeout(() => {
+              // scene.removeAllLayer()
+              // scene.destroy()
+            }, 3000);
             // setTimeout(() => scene.destroy(), 5000)
           }}
         >
