@@ -2,7 +2,9 @@
 title: LineLayer
 order: 2
 ---
+
 `markdown:docs/common/style.md`
+
 ## 线图层
 
 ### shape
@@ -17,16 +19,15 @@ order: 2
 ⚠️ 弧线只需要设置起止点坐标即可
 
 ```javascript
-        new LineLayer()
-        .source(data, {
-          parser: {
-            type: 'csv',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2',
-          },
-        })
+new LineLayer().source(data, {
+  parser: {
+    type: 'csv',
+    x: 'lng1',
+    y: 'lat1',
+    x1: 'lng2',
+    y1: 'lat2',
+  },
+});
 ```
 
 如果 geojson 数据绘制弧线图 coordinates 第一对坐标为起点，第二对为终点
@@ -73,7 +74,6 @@ lineLayer.size([1, 2]); // 宽度为1，高度2
 
 线图层通过在 style 中设置起始颜色和终点颜色来设置颜色渐变，渐变色的优先级比 color 方法设置的颜色更高
 
-
 ```javascript
 const layer = new LineLayer({})
   .source(data, {
@@ -89,23 +89,24 @@ const layer = new LineLayer({})
   .shape('arc')
   .color('#8C1EB2')
   .style({
-    sourceColor: '#f00',  // 起点颜色
-    targetColor: '#0f0'   // 终点颜色
+    sourceColor: '#f00', // 起点颜色
+    targetColor: '#0f0', // 终点颜色
   });
 ```
 
 ### 设置顶点高度
+
 线图层支持给每个顶点赋予高度值，同时允许用户在 style 方法中通过 vertexHeightScale 属性设置高度比例。
 
 ```javascript
 const layer = new LineLayer({})
-.source(data)
-.size(1)
-.shape('line')
-.style({
-  vertexHeightScale: 30,
-})
-.color('#ccc');
+  .source(data)
+  .size(1)
+  .shape('line')
+  .style({
+    vertexHeightScale: 30,
+  })
+  .color('#ccc');
 
 scene.addLayer(layer);
 ```
@@ -118,25 +119,26 @@ scene.addLayer(layer);
 "name": "tw",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
-  { 
-    "type": "Feature", 
-    "properties": { }, 
-    "geometry": { 
-      "type": "LineString", "coordinates": 
+  {
+    "type": "Feature",
+    "properties": { },
+    "geometry": {
+      "type": "LineString", "coordinates":
       [
-        [ 121.519153647, 25.288692533, 41.0 ], 
-        [ 121.529153646999987, 25.288692533, 35.0 ], 
-        [ 121.539153647, 25.288692533, 27.0 ], 
-        [ 121.549153647, 25.288692533, 66.0 ], 
-        [ 121.559153646999988, 25.288692533, 83.0 ], 
-        [ 121.569153647, 25.288692533, 88.0 ] 
-      ] 
-    } 
+        [ 121.519153647, 25.288692533, 41.0 ],
+        [ 121.529153646999987, 25.288692533, 35.0 ],
+        [ 121.539153647, 25.288692533, 27.0 ],
+        [ 121.549153647, 25.288692533, 66.0 ],
+        [ 121.559153646999988, 25.288692533, 83.0 ],
+        [ 121.569153647, 25.288692533, 88.0 ]
+      ]
+    }
   },
 ...
 }
-  
+
 ```
+
 [使用完整 demo](../../../examples/line/isoline#height)
 
 `markdown:docs/common/layer/base.md`

@@ -2,6 +2,7 @@
 title: 3D填充图
 order: 1
 ---
+
 `markdown:docs/common/style.md`
 
 ## 使用
@@ -34,18 +35,18 @@ layer.size('floor', (floor) => {
 });
 ```
 
-## 额外的 style 配置  
+## 额外的 style 配置
 
-- pickLight 设置 3D 填充图  
+- pickLight 设置 3D 填充图
 
-pickLight 默认为 false 表示对拾取的颜色不进行光照计算，开启后会增加部分额外的计算。  
+pickLight 默认为 false 表示对拾取的颜色不进行光照计算，开启后会增加部分额外的计算。
 
 ```javascript
 style({
-  pickLight: true //  默认为 false
-})
-```  
+  pickLight: true, //  默认为 false
+});
+```
 
-[光照拾取](../../../../examples/react/covid#covid_extrude) 
+[光照拾取](../../../../examples/react/covid#covid_extrude)
 
 `markdown:docs/common/layer/base.md`

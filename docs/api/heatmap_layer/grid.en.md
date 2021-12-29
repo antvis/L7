@@ -2,6 +2,7 @@
 title: GridHeatMapLayer
 order: 1
 ---
+
 `markdown:docs/common/style.md`
 
 将一组点数据按照等大小的正方形网格进行聚合，一个正方形网格代表网格内所有点的统计值。方格热力图特点以方格网布局。
@@ -10,8 +11,7 @@ order: 1
 
 ```javascript
 import { HeatmapLayer } from '@antv/l7';
-
-````
+```
 
 ## source
 
@@ -147,4 +147,5 @@ const layer = new HeatmapLayer({})
 
 scene.addLayer(layer);
 ```
+
 `markdown:docs/common/layer/base.md`

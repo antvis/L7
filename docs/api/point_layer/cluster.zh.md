@@ -2,6 +2,7 @@
 title: 聚合图
 order: 5
 ---
+
 `markdown:docs/common/style.md`
 
 ## 使用

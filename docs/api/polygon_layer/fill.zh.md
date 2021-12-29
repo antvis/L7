@@ -2,6 +2,7 @@
 title: 填充图
 order: 1
 ---
+
 `markdown:docs/common/style.md`
 
 ## 使用
@@ -31,10 +32,11 @@ layer.shape('fill');
 style({
   opacityLinear: {
     enable: true, // true - false
-    dir: 'in'     // in - out
-  }
-})
+    dir: 'in', // in - out
+  },
+});
 ```
+
 [径向渐变 in](../../../examples/polygon/fill#china_linear_in)  
 [径向渐变 out](../../../examples/polygon/fill#china_linear_out)
 

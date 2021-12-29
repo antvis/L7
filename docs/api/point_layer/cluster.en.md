@@ -2,6 +2,7 @@
 title: Cluster Map
 order: 5
 ---
+
 `markdown:docs/api/point_layer/cluster.zh.md`
 
 ## 使用
@@ -70,4 +71,5 @@ const pointLayer = new PointLayer({})
     strokeWidth: 1,
   });
 ```
+
 `markdown:docs/common/layer/base.md`

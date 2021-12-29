@@ -2,6 +2,7 @@
 title: 气泡图
 order: 1
 ---
+
 `markdown:docs/common/style.md`
 气泡图地理区域上方会显示不同大小的圆点，圆形面积与其在数据集中的数值会成正比。
 
@@ -58,4 +59,3 @@ layer.animate(false);
 style 方法如果没有设置 stroke, 默认于气泡的填充色相同
 
 `markdown:docs/common/layer/base.md`
-

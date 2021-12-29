@@ -2,6 +2,7 @@
 title: 经典热力图
 order: 1
 ---
+
 `markdown:docs/common/style.md`
 
 ## 使用
@@ -64,4 +65,5 @@ heatmapLayer()
     },
   });
 ```
+
 `markdown:docs/common/layer/base.md`

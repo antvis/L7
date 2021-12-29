@@ -2,6 +2,7 @@
 title: 3D 柱图
 order: 5
 ---
+
 `markdown:docs/common/style.md`
 
 3D 柱图地理区域上方会显示不同高度的柱体，主题的高度与其在数据集中的数值会成正比。
@@ -58,11 +59,12 @@ const column = new PointLayer({})
     opacity: 1.0,
   });
 ```
+
 ### animate
- 3D 柱图支持生长动画  
+
+3D 柱图支持生长动画  
 animate 方法支持的布尔值和对象参数
 
- 
 ```javascript
 animate(true)
 animate(false)
@@ -75,6 +77,7 @@ animateOptions: {
   repeat?: number = 1;
 }
 ```
+
 ## 额外的 style 配置
 
 - sourceColor 设置 3D 柱图起始颜色（3D 柱图设置颜色渐变时会覆盖 color 设置的颜色）
@@ -87,9 +90,9 @@ animateOptions: {
 style({
   opacityLinear: {
     enable: true, // true - false
-    dir: 'up'     // up - down
-  }
-})
+    dir: 'up', // up - down
+  },
+});
 ```
 
 - lightEnable 是否开启光照
@@ -101,6 +104,7 @@ layer.style({
   targetColor: 'yellow',
 });
 ```
+
 [光标柱图](../../../../examples/point/column#column_light)  
 [渐变柱图](../../../../examples/point/column#column_linear)
 

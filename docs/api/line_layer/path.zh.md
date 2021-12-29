@@ -2,6 +2,7 @@
 title: 路径图
 order: 1
 ---
+
 `markdown:docs/common/style.md`
 用一组首尾不闭合的点坐标对来定位的线图层，通常用来表示轨迹，线路，道路等
 
@@ -30,7 +31,6 @@ layer.size('height', []);
 
 线图层通过在 style 中设置起始颜色和终点颜色来设置颜色渐变，渐变色的优先级比 color 方法设置的颜色更高
 
-
 ```javascript
 const layer = new LineLayer({})
   .source(data, {
@@ -46,8 +46,8 @@ const layer = new LineLayer({})
   .shape('arc')
   .color('#8C1EB2')
   .style({
-    sourceColor: '#f00',  // 起点颜色
-    targetColor: '#0f0'   // 终点颜色
+    sourceColor: '#f00', // 起点颜色
+    targetColor: '#0f0', // 终点颜色
   });
 ```
 

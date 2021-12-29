@@ -2,6 +2,7 @@
 title: PointLayer
 order: 0
 ---
+
 `markdown:docs/common/style.md`
 
 ## 简介
@@ -85,4 +86,5 @@ const layer = new PointLayer({
   .shape('local')
   .color('#0D408C');
 ```
+
 `markdown:docs/common/layer/base.md`
