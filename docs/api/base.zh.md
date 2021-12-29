@@ -31,10 +31,11 @@ scene.addLayer(layer);
 ```javascript
 const options = {
   name: 'xxx',
-  zIndex: 1
+  zIndex: 1,
 };
-const layer = new Layer(options); 
+const layer = new Layer(options);
 ```
+
 ### name
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
@@ -83,10 +84,10 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 
 图层元素混合效果
 
-- normal 正常效果 默认    发生遮挡的时候，只会显示前面的图层的颜色
-- additive 叠加模式      发生遮挡的时候，显示前后图层颜色的叠加
-- subtractive 相减模式   发生遮挡的时候，显示前后图层颜色的相减
-- max 最大值             发生遮挡的时候，显示图层颜色 rgb 的最大值
+- normal 正常效果 默认 发生遮挡的时候，只会显示前面的图层的颜色
+- additive 叠加模式 发生遮挡的时候，显示前后图层颜色的叠加
+- subtractive 相减模式 发生遮挡的时候，显示前后图层颜色的相减
+- max 最大值 发生遮挡的时候，显示图层颜色 rgb 的最大值
 
 # 方法
 
@@ -132,9 +133,10 @@ layer.source(data, {
 
 ### scale
 
-设置数据字段映射方法。  
+设置数据字段映射方法。
 
 用户在使用 color、size 或者是 style 中的数据映射字段的时候，若是使用了指定了按比例映射，则都需要处理字段到值的映射关系。scale 方法就可以设置字段到值的映射是按哪一种类型进行映射。
+
 ```javascript
 .color('key', ['#f00', '#0f0', '#00f'])
 
@@ -262,6 +264,7 @@ layer.color('type*value', (type, value) => {
 
 - 也可以直接指定某一个具体的颜色值 color，如 '#fff', 'white','rgba(255,0,0,0.5)' ,rgb(255,0,1) 等。
 
+
 示例
 
 ```javascript
@@ -306,9 +309,9 @@ layer.color('gender*age', (gender, age) => {
 通常一种图层可以有多种表现形式，shape 方法用于指定图层具体的表现形式，以 PointLayer 的 shape 为例：
 
 ```javascript
-shape('circle')     // 圆形
-shape('triangle')   // 三角形
-shape('cylinder')   // 圆柱
+shape('circle'); // 圆形
+shape('triangle'); // 三角形
+shape('cylinder'); // 圆柱
 ```
 
 **shape(shape)**
@@ -330,25 +333,25 @@ shape('cylinder')   // 圆柱
 ```javascript
 scene.addImage(
   '00',
-  'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg'
+  'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
 );
 scene.addImage(
   '01',
-  'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg'
+  'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg',
 );
 scene.addImage(
   '02',
-  'https://gw.alipayobjects.com/zos/basement_prod/7aa1f460-9f9f-499f-afdf-13424aa26bbf.svg'
+  'https://gw.alipayobjects.com/zos/basement_prod/7aa1f460-9f9f-499f-afdf-13424aa26bbf.svg',
 );
- const imageLayer = new PointLayer()
+const imageLayer = new PointLayer()
   .source(data, {
     parser: {
       type: 'json',
       x: 'longitude',
-      y: 'latitude'
-    }
+      y: 'latitude',
+    },
   })
-  .shape('name', [ '00', '01', '02' ])
+  .shape('name', ['00', '01', '02'])
   .size(20);
 scene.addLayer(imageLayer);
 ```
@@ -373,12 +376,12 @@ scene.addLayer(imageLayer);
 
 ### style
 
-style 方法通常用于描述图层具体的样式，大多数图层会支持一些比较通用的属性， 如 opacity 属性，同时每个图层也会有仅限本图层支持的属性，如只有 
+style 方法通常用于描述图层具体的样式，大多数图层会支持一些比较通用的属性， 如 opacity 属性，同时每个图层也会有仅限本图层支持的属性，如只有
 CityBuildingLayer 支持的 windowColor 属性，每个图层具体要如何配置属性请查看每个图层的详细文档。
 
-- opacity     设置透明度 大部分图层都支持
+- opacity 设置透明度 大部分图层都支持
 
-- stroke      线填充颜色 仅点图层支持
+- stroke 线填充颜色 仅点图层支持
 
 - strokeWidth 线的宽度 仅点图层支持
 
@@ -390,17 +393,16 @@ layer.style({
 ```
 
 - 样式数据映射
-在大多数情况下，用户需要将 source 中传入的数据映射到图层的元素中，以此来达到需要的可视化的效果，比如想要用柱形图表示各地的人口数据，代码可能是这个样子的：
+  在大多数情况下，用户需要将 source 中传入的数据映射到图层的元素中，以此来达到需要的可视化的效果，比如想要用柱形图表示各地的人口数据，代码可能是这个样子的：
 
 ```javascript
 const population = await getPopulation();
 const layer = new PointLayer()
-              .source(population)
-              .shape('cylinder')
-              .color('#f00')
-              .size('population'); // population 字段表示数据中的人口值
+  .source(population)
+  .shape('cylinder')
+  .color('#f00')
+  .size('population'); // population 字段表示数据中的人口值
 scene.addLayer(layer);
-
 ```
 
 而在一些特殊的业务场景下，我们可能需要将除了 size、color、以外的属性根据数据动态设置，如我们在绘制文本标注的时候需要根据文本的长短来设置偏移量，以保证文本位置的相对固定。在这种情况下，我们就需要使用图层样式数据纹理来完成这一项工作。
@@ -413,38 +415,38 @@ const pointLayer = new PointLayer({})
     parser: {
       type: 'json',
       x: 'j',
-      y: 'w'
-    }
+      y: 'w',
+    },
   })
   .shape('m', 'text')
   .size(12)
-  .color('w', [ '#0e0030', '#0e0030', '#0e0030' ])
+  .color('w', ['#0e0030', '#0e0030', '#0e0030'])
   .style({
     textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
     textOffset: 'textOffset', // 文本相对锚点的偏移量 [水平, 垂直]
     fontFamily,
     iconfont: true,
-    textAllowOverlap: true
+    textAllowOverlap: true,
   });
-```  
+```
 
 [在线案例](../../examples/point/text#styleMap)
 
-从 L7 2.5 开始，各图层样式将逐步支持样式数据映射  
+从 L7 2.5 开始，各图层样式将逐步支持样式数据映射
 
-| layer 类型/shape        | 支持的样式字段                                        | 备注                              |
-| ---------------------- | --------------------------------------------------- | --------------------------------- |
+| layer 类型/shape       | 支持的样式字段                                       | 备注                              |
+| ---------------------- | ---------------------------------------------------- | --------------------------------- |
 | pointLayer/fill        | opacity、strokeOpacity、strokeWidth、stroke、offsets | shape circle、triangle...         |
-| pointLayer/image       | opacity、offsets                                    | offsets 经纬度偏移                 |
-| pointLayer/normal      | opacity、offsets                                    |                                   |
-| pointLayer/text        | opacity、strokeWidth、stroke、textOffset             | textOffset 相对文字画布位置的偏移    |
-| pointLayer/extrude     | opacity                                             |                                   |
-| polygonLayer/fill      | opacity                                             |                                   |
-| polygonLayer/extrude   | opacity                                             |                                   |
-| lineLayer/line         | opacity                                             |                                   |
-| lineLayer/arc          | opacity、thetaOffset                                | thetaOffset 弧线的弯曲弧度           |
-| lineLayer/arc3d        | opacity                                             |                                   |
-| lineLayer/great_circle | opacity                                             |                                   |
+| pointLayer/image       | opacity、offsets                                     | offsets 经纬度偏移                |
+| pointLayer/normal      | opacity、offsets                                     |                                   |
+| pointLayer/text        | opacity、strokeWidth、stroke、textOffset             | textOffset 相对文字画布位置的偏移 |
+| pointLayer/extrude     | opacity                                              |                                   |
+| polygonLayer/fill      | opacity                                              |                                   |
+| polygonLayer/extrude   | opacity                                              |                                   |
+| lineLayer/line         | opacity                                              |                                   |
+| lineLayer/arc          | opacity、thetaOffset                                 | thetaOffset 弧线的弯曲弧度        |
+| lineLayer/arc3d        | opacity                                              |                                   |
+| lineLayer/great_circle | opacity                                              |                                   |
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*F_QoSr-W0BwAAAAAAAAAAAAAARQnAQ'>
 
@@ -637,6 +639,7 @@ layer.setActive(id);
 参数： selectOption | boolean
 
 selectOption
+
 - color 填充颜色
 
 ```javascript
@@ -680,7 +683,7 @@ layer.getLegendItems('size');
 鼠标事件回调参数 target
 
 ```javascript
-layer.on(eventName, target => console.log(target));
+layer.on(eventName, (target) => console.log(target));
 ```
 
 - x: number 鼠标  在地图位置 x 坐标
@@ -694,25 +697,24 @@ layer.on(eventName, target => console.log(target));
 
 点击事件
 
-
 ```javascript
-layer.on('click', e => console.log(e));
+layer.on('click', (e) => console.log(e));
 ```
+
 ### mousemove
 
 鼠标移动事件
 
 ```javascript
-layer.on('mousemove', e => console.log(e));
+layer.on('mousemove', (e) => console.log(e));
 ```
 
 ### mouseout
 
 鼠标移除
 
-
 ```javascript
-layer.on('mouseout', e => console.log(e));
+layer.on('mouseout', (e) => console.log(e));
 ```
 
 ### mouseup
@@ -720,16 +722,15 @@ layer.on('mouseout', e => console.log(e));
 鼠标抬起
 
 ```javascript
-layer.on('mouseup', e => console.log(e));
+layer.on('mouseup', (e) => console.log(e));
 ```
 
 ### mousedown
 
 鼠标按下
 
-
 ```javascript
-layer.on('mousedown', e => console.log(e));
+layer.on('mousedown', (e) => console.log(e));
 ```
 
 ### contextmenu
@@ -737,7 +738,7 @@ layer.on('mousedown', e => console.log(e));
 鼠标右键
 
 ```javascript
-layer.on('contextmenu', e => console.log(e));
+layer.on('contextmenu', (e) => console.log(e));
 ```
 
 ### unclick
@@ -745,7 +746,7 @@ layer.on('contextmenu', e => console.log(e));
 点击未拾取到元素
 
 ```javascript
-layer.on('unclick', e => console.log(e));
+layer.on('unclick', (e) => console.log(e));
 ```
 
 ### unmousemove
@@ -753,7 +754,7 @@ layer.on('unclick', e => console.log(e));
 鼠标移动未拾取到元素
 
 ```javascript
-layer.on('unmousemove', e => console.log(e));
+layer.on('unmousemove', (e) => console.log(e));
 ```
 
 ### unmouseup
@@ -761,7 +762,7 @@ layer.on('unmousemove', e => console.log(e));
 鼠标抬起未拾取到元素
 
 ```javascript
-layer.on('unmouseup', e => console.log(e));
+layer.on('unmouseup', (e) => console.log(e));
 ```
 
 ### unmousedown
@@ -769,16 +770,15 @@ layer.on('unmouseup', e => console.log(e));
 鼠标按下未拾取到元素
 
 ```javascript
-layer.on('unmousedown', e => console.log(e));
+layer.on('unmousedown', (e) => console.log(e));
 ```
 
 ### uncontextmenu
 
 鼠标右键位拾取到元素
 
-
 ```javascript
-layer.on('uncontextmenu', e => console.log(e));
+layer.on('uncontextmenu', (e) => console.log(e));
 ```
 
 ### unpick
@@ -786,7 +786,7 @@ layer.on('uncontextmenu', e => console.log(e));
 所有鼠标事件未拾取到
 
 ```javascript
-layer.on('unpick', e => console.log(e));
+layer.on('unpick', (e) => console.log(e));
 ```
 
 使用示例
@@ -833,9 +833,8 @@ layer.on('inited', (option) => {});
 - target 当前 layer
 - type 事件类型
 
-
 ```javascript
-layer.on('add', type => console.log(type));
+layer.on('add', (type) => console.log(type));
 ```
 
 ### remove
@@ -848,7 +847,7 @@ layer.on('add', type => console.log(type));
 - type 事件类型
 
 ```javascript
-layer.on('remove', type => console.log(type));
+layer.on('remove', (type) => console.log(type));
 ```
 
 ## 图层框选
