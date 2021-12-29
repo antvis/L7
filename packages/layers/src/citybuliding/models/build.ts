@@ -15,6 +15,7 @@ interface ICityBuildLayerStyleOptions {
     sweepRadius: number;
     sweepColor: string;
     sweepSpeed: number;
+    sweepCenter?: [number, number];
   };
 }
 export default class CityBuildModel extends BaseModel {
@@ -33,10 +34,11 @@ export default class CityBuildModel extends BaseModel {
         sweepRadius: 1,
         sweepColor: 'rgb(255, 255, 255)',
         sweepSpeed: 0.4,
+        sweepCenter: this.cityCenter,
       },
     } = this.layer.getLayerConfig() as ICityBuildLayerStyleOptions;
     return {
-      u_cityCenter: this.cityCenter,
+      u_cityCenter: sweep.sweepCenter || this.cityCenter,
       u_cityMinSize: this.cityMinSize * sweep.sweepRadius,
       u_circleSweep: sweep.enable ? 1.0 : 0.0,
       u_circleSweepColor: rgb2arr(sweep.sweepColor).slice(0, 3),
