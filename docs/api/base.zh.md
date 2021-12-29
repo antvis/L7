@@ -12,20 +12,29 @@ L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
 语法示例
 
 ```javascript
-const layer = new Layer(option)
-  .source()
-  .color()
-  .size()
-  .shape()
-  .style();
+const layer = new Layer(option) // option - 传入构造函数的参数对象，提供 layer 的初始状态
+  .source(...)    // 传入图层需要的数据以及相关的解析器
+  .shape(...)     // 为图层指定具体的形状，如：circle/triangle 等
+  .color(...)     // 指定图层的颜色配置
+  .texture(...)   // 指定图层引用的纹理
+  .size(...)      // 设置图层元素的大小
+  .animate(...)   // 设置图层元素的动画模式
+  .active(...)    // 指定图层元素是否支持划过选中
+  .select(...)    // 指定图层元素是否支持点击选中
+  .style(...);    // 指定图层自定义样式的配置
 
 scene.addLayer(layer);
 ```
 
-## 构造函数
+## options 配置项
 
-## 配置项
-
+```javascript
+const options = {
+  name: 'xxx',
+  zIndex: 1
+};
+const layer = new Layer(options); 
+```
 ### name
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
@@ -34,47 +43,58 @@ scene.addLayer(layer);
 
 ### visible
 
-图层是否可见   {bool } default true
+<description> _bool_ **optional** _default:_ true</description>
+
+图层是否可见
 
 ### zIndex
 
-图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级 {int}   default 0
+<description> _int_ **optional** _default:_ 0</description>
+
+图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级
 
 ### minZoom
 
-图层显示最小缩放等级，（0-18）   {number}  Mapbox （0-24） 高德 （2-19）
+<description> _number_ **optional** _default:_ Mapbox （0-24） 高德 （2-19)</description>
+
+图层显示最小缩放等级
 
 ### maxZoom
 
-图层显示最大缩放等级 （0-18）   {number}  Mapbox （0-24） 高德 （2-19）
+<description> _number_ **optional** _default:_ Mapbox （0-24） 高德 （2-19)</description>
+
+图层显示最大缩放等级
 
 ### autoFit
 
-layer 初始化完成之后，是否自动缩放到图层范围 {bool } default false
+<description> _bool_ **optional** _default:_ false</description>
+
+layer 初始化完成之后，地图是否自动缩放到图层范围
 
 ### pickingBuffer
 
-图层拾取缓存机制，如 1px 宽度的线鼠标很难拾取(点击)到, 通过设置该参数可扩大拾取的范围 {number} default 0
+<description> _bool_ **optional** _default:_ 0</description>
+
+图层拾取缓存机制，如 1px 宽度的线鼠标很难拾取(点击)到, 通过设置该参数可扩大拾取的范围（放大图层对象的尺寸）
 
 ### blend
 
+<description> _string_ **optional** _default:_ 'normal'</description>
+
 图层元素混合效果
 
-- normal 正常效果 默认
-- additive 叠加模式
-- subtractive 相减模式
-- max 最大值
+- normal 正常效果 默认    发生遮挡的时候，只会显示前面的图层的颜色
+- additive 叠加模式      发生遮挡的时候，显示前后图层颜色的叠加
+- subtractive 相减模式   发生遮挡的时候，显示前后图层颜色的相减
+- max 最大值             发生遮挡的时候，显示图层颜色 rgb 的最大值
 
 # 方法
 
 ### source
 
-数据源为 layer 设置数据 source(data,config)
+设置图层数据以及解析配置 source(data, config)
 
-- data {geojson|json|csv}
-
-源数据
-
+- data { geojson | json | csv }
 - config   可选   数据源配置项
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换 可设置多个
@@ -112,9 +132,20 @@ layer.source(data, {
 
 ### scale
 
-设置数据字段映射方法
+设置数据字段映射方法。  
 
-- `field` 字段名。
+用户在使用 color、size 或者是 style 中的数据映射字段的时候，若是使用了指定了按比例映射，则都需要处理字段到值的映射关系。scale 方法就可以设置字段到值的映射是按哪一种类型进行映射。
+```javascript
+.color('key', ['#f00', '#0f0', '#00f'])
+
+.size('key', [10, 20, 30])
+
+.style({
+  opacity: ['key', [0, 0.5, 1.0]]
+})
+```
+
+- `field` 指定 source 中传入的数据中用于映射的字段名
 
 - `scaleConfig` 列定义配置，对象类型，可配置的属性如下：
 
@@ -272,13 +303,19 @@ layer.color('gender*age', (gender, age) => {
 
 ### shape
 
-将数据值映射到图形的形状上的方法。
+通常一种图层可以有多种表现形式，shape 方法用于指定图层具体的表现形式，以 PointLayer 的 shape 为例：
+
+```javascript
+shape('circle')     // 圆形
+shape('triangle')   // 三角形
+shape('cylinder')   // 圆柱
+```
 
 **shape(shape)**
 
-参数`shape` string
+参数 `shape` string
 
-只支持接收一个参数，指定几何图像对象绘制的形状。下表列出了不同的 图层 几何图形对象支持的 shape 形状
+- 只支持接收一个参数，指定几何图像对象绘制的形状。下表列出了不同的 图层 几何图形对象支持的 shape 形状
 
 | layer 类型 | shape 类型                                                                             | 备注 |
 | ---------- | -------------------------------------------------------------------------------------- | ---- |
@@ -288,15 +325,60 @@ layer.color('gender*age', (gender, age) => {
 
 **shape(field, shapes)**
 
+- shape 根据字段指定行形状，比如根据字段指定 PointLayer/imageLayer 的 icon 类型
+
+```javascript
+scene.addImage(
+  '00',
+  'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg'
+);
+scene.addImage(
+  '01',
+  'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg'
+);
+scene.addImage(
+  '02',
+  'https://gw.alipayobjects.com/zos/basement_prod/7aa1f460-9f9f-499f-afdf-13424aa26bbf.svg'
+);
+ const imageLayer = new PointLayer()
+  .source(data, {
+    parser: {
+      type: 'json',
+      x: 'longitude',
+      y: 'latitude'
+    }
+  })
+  .shape('name', [ '00', '01', '02' ])
+  .size(20);
+scene.addLayer(imageLayer);
+```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ'>
+
+[在线案例](../../examples/point/image#image)
+
 **shape(field, callback)**
+
+- shape 也支持回调函数的写法
+
+```javascript
+.shape('key', value => {
+  if(value > 10) {
+    return 'circle';
+  } else {
+    return 'triangle';
+  }
+}
+```
 
 ### style
 
-全局设置图形显示属性
+style 方法通常用于描述图层具体的样式，大多数图层会支持一些比较通用的属性， 如 opacity 属性，同时每个图层也会有仅限本图层支持的属性，如只有 
+CityBuildingLayer 支持的 windowColor 属性，每个图层具体要如何配置属性请查看每个图层的详细文档。
 
-- opacity   设置透明度
+- opacity     设置透明度 大部分图层都支持
 
-- stroke 线填充颜色 仅点图层支持
+- stroke      线填充颜色 仅点图层支持
 
 - strokeWidth 线的宽度 仅点图层支持
 
@@ -307,31 +389,72 @@ layer.style({
 });
 ```
 
-## 通用样式数据纹理映射
+- 样式数据映射
+在大多数情况下，用户需要将 source 中传入的数据映射到图层的元素中，以此来达到需要的可视化的效果，比如想要用柱形图表示各地的人口数据，代码可能是这个样子的：
 
-从 L7 2.5 开始，各图层样式将逐步支持样式数据映射
+```javascript
+const population = await getPopulation();
+const layer = new PointLayer()
+              .source(population)
+              .shape('cylinder')
+              .color('#f00')
+              .size('population'); // population 字段表示数据中的人口值
+scene.addLayer(layer);
 
-| layer 类型        | 支持的样式字段                                       | 备注                              |
-| ----------------- | ---------------------------------------------------- | --------------------------------- |
-| point/fill        | opacity、strokeOpacity、strokeWidth、stroke、offsets | shape circle、triangle...         |
-| point/image       | opacity、offsets                                     | offsets 经纬度偏移                |
-| point/normal      | opacity、offsets                                     |                                   |
-| point/text        | opacity、strokeWidth、stroke、textOffset             | textOffset 相对文字画布位置的偏移 |
-| point/extrude     | opacity                                              |                                   |
-| polygon/fill      | opacity                                              |                                   |
-| polygon/extrude   | opacity                                              |                                   |
-| line/line         | opacity                                              |                                   |
-| line/arc          | opacity                                              |                                   |
-| line/arc3d        | opacity                                              |                                   |
-| line/great_circle | opacity                                              |                                   |
+```
 
-[DEMO 简单事例](../../../examples/point/scatter#scatterStyleMap)
+而在一些特殊的业务场景下，我们可能需要将除了 size、color、以外的属性根据数据动态设置，如我们在绘制文本标注的时候需要根据文本的长短来设置偏移量，以保证文本位置的相对固定。在这种情况下，我们就需要使用图层样式数据纹理来完成这一项工作。
 
-## 线图层纹理方法
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*LPoeTJ5tPxMAAAAAAAAAAAAAARQnAQ'>
 
-目前在线图层上单独加上了纹理方法的支持
+```javascript
+const pointLayer = new PointLayer({})
+  .source(data, {
+    parser: {
+      type: 'json',
+      x: 'j',
+      y: 'w'
+    }
+  })
+  .shape('m', 'text')
+  .size(12)
+  .color('w', [ '#0e0030', '#0e0030', '#0e0030' ])
+  .style({
+    textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+    textOffset: 'textOffset', // 文本相对锚点的偏移量 [水平, 垂直]
+    fontFamily,
+    iconfont: true,
+    textAllowOverlap: true
+  });
+```  
 
-### 为图层绑定纹理
+[在线案例](../../examples/point/text#styleMap)
+
+从 L7 2.5 开始，各图层样式将逐步支持样式数据映射  
+
+| layer 类型/shape        | 支持的样式字段                                        | 备注                              |
+| ---------------------- | --------------------------------------------------- | --------------------------------- |
+| pointLayer/fill        | opacity、strokeOpacity、strokeWidth、stroke、offsets | shape circle、triangle...         |
+| pointLayer/image       | opacity、offsets                                    | offsets 经纬度偏移                 |
+| pointLayer/normal      | opacity、offsets                                    |                                   |
+| pointLayer/text        | opacity、strokeWidth、stroke、textOffset             | textOffset 相对文字画布位置的偏移    |
+| pointLayer/extrude     | opacity                                             |                                   |
+| polygonLayer/fill      | opacity                                             |                                   |
+| polygonLayer/extrude   | opacity                                             |                                   |
+| lineLayer/line         | opacity                                             |                                   |
+| lineLayer/arc          | opacity、thetaOffset                                | thetaOffset 弧线的弯曲弧度           |
+| lineLayer/arc3d        | opacity                                             |                                   |
+| lineLayer/great_circle | opacity                                             |                                   |
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*F_QoSr-W0BwAAAAAAAAAAAAAARQnAQ'>
+
+[在线案例](../../examples/point/scatter#scatterStyleMap)
+
+### 纹理方法
+
+目前只在线图层上支持了纹理方法
+
+- textute 方法支持传入由 scene.addImage 方法添加的全局 icon 贴图资源
 
 ```javascript
 // 首先在全局加载图片资源
@@ -362,6 +485,10 @@ const layer = new LineLayer({
     textureBlend: 'replace', // 设置纹理混合方式，默认值为 normal，可选值有 normal/replace 两种
   });
 ```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*0UrUTakTFQsAAAAAAAAAAAAAARQnAQ'>
+
+[在线案例](../../examples/gallery/animate#animate_path_texture)
 
 ## 图层更新方法
 
@@ -497,6 +624,8 @@ layer.active(false);
 
 根据元素 ID 设置指定元素 hover 高亮
 
+- id 元素 ID
+
 ```javascript
 layer.setActive(id);
 ```
@@ -508,7 +637,7 @@ layer.setActive(id);
 参数： selectOption | boolean
 
 selectOption
--color 填充颜色
+- color 填充颜色
 
 ```javascript
 // 开启 Active  使用默认高亮颜色
@@ -528,6 +657,8 @@ layer.select(false);
 
 根据元素 ID 设置指定元素 click 选中 高亮
 
+- id 元素 ID
+
 ```javascript
 layer.setSelect(id);
 ```
@@ -536,19 +667,20 @@ layer.setSelect(id);
 
 获取图例配置
 
-#### 参数
+- type 图例类型
 
-- name 获取的图例类型 `color|size`
-
-```ts
+```javascript
 layer.getLegendItems('color');
+
+layer.getLegendItems('size');
 ```
 
 ## 鼠标事件
 
 鼠标事件回调参数 target
 
-```typescript
+```javascript
+layer.on(eventName, target => console.log(target));
 ```
 
 - x: number 鼠标  在地图位置 x 坐标
@@ -562,49 +694,100 @@ layer.getLegendItems('color');
 
 点击事件
 
+
+```javascript
+layer.on('click', e => console.log(e));
+```
 ### mousemove
 
 鼠标移动事件
+
+```javascript
+layer.on('mousemove', e => console.log(e));
+```
 
 ### mouseout
 
 鼠标移除
 
+
+```javascript
+layer.on('mouseout', e => console.log(e));
+```
+
 ### mouseup
 
-鼠标按下
+鼠标抬起
+
+```javascript
+layer.on('mouseup', e => console.log(e));
+```
 
 ### mousedown
 
-鼠标向下
+鼠标按下
+
+
+```javascript
+layer.on('mousedown', e => console.log(e));
+```
 
 ### contextmenu
 
 鼠标右键
 
+```javascript
+layer.on('contextmenu', e => console.log(e));
+```
+
 ### unclick
 
 点击未拾取到元素
+
+```javascript
+layer.on('unclick', e => console.log(e));
+```
 
 ### unmousemove
 
 鼠标移动未拾取到元素
 
+```javascript
+layer.on('unmousemove', e => console.log(e));
+```
+
 ### unmouseup
 
 鼠标抬起未拾取到元素
+
+```javascript
+layer.on('unmouseup', e => console.log(e));
+```
 
 ### unmousedown
 
 鼠标按下未拾取到元素
 
+```javascript
+layer.on('unmousedown', e => console.log(e));
+```
+
 ### uncontextmenu
 
 鼠标右键位拾取到元素
 
+
+```javascript
+layer.on('uncontextmenu', e => console.log(e));
+```
+
 ### unpick
 
 所有鼠标事件未拾取到
+
+```javascript
+layer.on('unpick', e => console.log(e));
+```
 
 使用示例
 
@@ -650,6 +833,11 @@ layer.on('inited', (option) => {});
 - target 当前 layer
 - type 事件类型
 
+
+```javascript
+layer.on('add', type => console.log(type));
+```
+
 ### remove
 
 图层移除时触发
@@ -658,6 +846,10 @@ layer.on('inited', (option) => {});
 
 - target 当前 layer
 - type 事件类型
+
+```javascript
+layer.on('remove', type => console.log(type));
+```
 
 ## 图层框选
 
