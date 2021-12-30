@@ -69,6 +69,8 @@ import DestroyClear from './components/destroyClear'
 import PlaneLine from './components/planeLine'
 import Slider from './components/slider'
 import WindMap from './components/amap2demo_wind'
+import SimplePoint from './components/simplePoint';
+import LineWall from './components/linewall'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -142,3 +144,5 @@ storiesOf('地图方法', module)
         .add('DestroyClear', () => <DestroyClear/>)
         .add('PlaneLine', () => <PlaneLine/>)
         .add('Slider', () => <Slider/>)
+        .add('SimplePoint', () => <SimplePoint/>)
+        .add('LineWall', () => <LineWall/>)

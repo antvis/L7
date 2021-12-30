@@ -8,7 +8,7 @@ const scene = new Scene({
     style: 'dark',
     center: [ 121.400257, 31.25287 ],
     zoom: 14.55,
-    rotation: 134.9507
+    rotation: 134.95
   })
 });
 scene.on('loaded', () => {
@@ -25,6 +25,7 @@ scene.on('loaded', () => {
             y: 'latitude'
           }
         })
+        .animate(true)
         .active(true)
         .shape('name', [
           'cylinder',

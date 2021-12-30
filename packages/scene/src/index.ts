@@ -193,6 +193,10 @@ class Scene
     this.sceneService.render();
   }
 
+  public setEnableRender(flag: boolean) {
+    this.layerService.setEnableRender(flag);
+  }
+
   // asset method
   /**
    * 为 layer/point/text 支持 iconfont 模式支持
@@ -400,7 +404,6 @@ class Scene
       .to(constructor)
       .whenTargetNamed(name);
   }
-  // 资源管理
 
   // 控制 shader pick 计算
   public enableShaderPick() {
@@ -409,6 +412,11 @@ class Scene
 
   public diasbleShaderPick() {
     this.layerService.disableShaderPick();
+  }
+
+  // get current point size info
+  public getPointSizeRange() {
+    return this.sceneService.getPointSizeRange();
   }
 
   private initComponent(id: string | HTMLDivElement) {

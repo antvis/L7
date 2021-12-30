@@ -15,9 +15,10 @@ export default class Amap2demo_road2 extends React.Component {
       id: 'map',
       map: new GaodeMap({
         center: [120.165, 30.25],
-        pitch: 50,
-        zoom: 16.8,
+        pitch: 0,
+        zoom: 15,
         viewMode: '3D',
+        style: 'dark',
       }),
     });
     this.scene = scene;
@@ -37,7 +38,7 @@ export default class Amap2demo_road2 extends React.Component {
             .source(data)
             .size(5)
             .shape('line')
-            .texture('02')
+            // .texture('02')
             // .color('#ccc')
             .color('rgb(20, 180, 90)')
             // .animate({
@@ -46,10 +47,13 @@ export default class Amap2demo_road2 extends React.Component {
             //   trailLength: 2, // 流线长度
             // })
             .style({
+              borderWidth: 0.35,
+              borderColor: '#fff',
               // opacity: 0.5,
-              lineTexture: true, // 开启线的贴图功能
-              iconStep: 80, // 设置贴图纹理的间距
-            });
+              // lineTexture: true, // 开启线的贴图功能
+              // iconStep: 80, // 设置贴图纹理的间距
+            })
+            .active(true);
           scene.addLayer(layer);
         });
     });

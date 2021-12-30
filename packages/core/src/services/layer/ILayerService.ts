@@ -87,6 +87,7 @@ export interface IPickedFeature {
 // 交互样式
 export interface IActiveOption {
   color: string | number[];
+  mix?: number;
 }
 
 type ILngLat = [number, number];
@@ -140,6 +141,8 @@ export interface ILayer {
   getShaderPickStat: () => boolean;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
+  setBottomColor(color: string): void;
+  getBottomColor(): string;
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
@@ -339,6 +342,8 @@ export interface ILayerConfig {
   selectColor: string | number[];
   active: boolean;
   activeColor: string | number[];
+  activeMix?: number;
+  selectMix?: number;
   /**
    * 开启 TAA
    */
@@ -389,10 +394,12 @@ export interface ILayerService {
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
+  cleanRemove(layer: ILayer, parentLayer?: ILayer): void;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;
   renderLayers(type?: string): void;
+  setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
   isMapDragging(): boolean;
 

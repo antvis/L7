@@ -10,8 +10,18 @@ interface ICityBuildLayerStyleOptions {
   brightColor: string;
   windowColor: string;
   time: number;
+  sweep: {
+    enable: boolean;
+    sweepRadius: number;
+    sweepColor: string;
+    sweepSpeed: number;
+    sweepCenter?: [number, number];
+  };
 }
 export default class CityBuildModel extends BaseModel {
+  private cityCenter: [number, number];
+  private cityMinSize: number;
+
   public getUninforms() {
     const {
       opacity = 1,
@@ -19,8 +29,21 @@ export default class CityBuildModel extends BaseModel {
       brightColor = 'rgb(255,176,38)',
       windowColor = 'rgb(30,60,89)',
       time = 0,
+      sweep = {
+        enable: false,
+        sweepRadius: 1,
+        sweepColor: 'rgb(255, 255, 255)',
+        sweepSpeed: 0.4,
+        sweepCenter: this.cityCenter,
+      },
     } = this.layer.getLayerConfig() as ICityBuildLayerStyleOptions;
     return {
+      u_cityCenter: sweep.sweepCenter || this.cityCenter,
+      u_cityMinSize: this.cityMinSize * sweep.sweepRadius,
+      u_circleSweep: sweep.enable ? 1.0 : 0.0,
+      u_circleSweepColor: rgb2arr(sweep.sweepColor).slice(0, 3),
+      u_circleSweepSpeed: sweep.sweepSpeed,
+
       u_opacity: opacity,
       u_baseColor: rgb2arr(baseColor),
       u_brightColor: rgb2arr(brightColor),
@@ -29,7 +52,32 @@ export default class CityBuildModel extends BaseModel {
     };
   }
 
+  public calCityGeo() {
+    // @ts-ignore
+    const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
+    if (this.mapService.version === 'GAODE2.x') {
+      // @ts-ignore
+      this.cityCenter = this.mapService.lngLatToCoord([
+        (maxLng + minLng) / 2,
+        (maxLat + minLat) / 2,
+      ]);
+      // @ts-ignore
+      const l1 = this.mapService.lngLatToCoord([maxLng, maxLat]);
+      // @ts-ignore
+      const l2 = this.mapService.lngLatToCoord([minLng, minLat]);
+      this.cityMinSize =
+        Math.sqrt(Math.pow(l1[0] - l2[0], 2) + Math.pow(l1[1] - l2[1], 2)) / 4;
+    } else {
+      const w = maxLng - minLng;
+      const h = maxLat - minLat;
+      this.cityCenter = [(maxLng + minLng) / 2, (maxLat + minLat) / 2];
+      this.cityMinSize = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 4;
+    }
+  }
+
   public initModels(): IModel[] {
+    this.calCityGeo();
+
     this.startModelAnimate();
     return [
       this.layer.buildLayerModel({

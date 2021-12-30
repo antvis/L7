@@ -238,6 +238,8 @@ export default class Popup extends EventEmitter implements IPopup {
           },
         );
       }
+
+      this.container.style.whiteSpace = 'nowrap';
     }
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {
       this.container.style.maxWidth = maxWidth;

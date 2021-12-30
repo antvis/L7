@@ -70,30 +70,10 @@ module.exports = {
       },
     ],
     docs: [
-      {
-        slug: 'api/l7',
-        title: {
-          zh: '简介 L7',
-          en: 'Introduction'
-        },
-        order: 0
-      },
-      {
-        slug: 'api/l7stable',
-        title: {
-          zh: '1.x 稳定版',
-          en: '1.x Stable'
-        },
-        order: 1
-      },
-      {
-        slug: 'tutorial',
-        title: {
-          zh: '快速入门',
-          en: 'QuickStart'
-        },
-        order: 0
-      },
+      // ****** tutorial
+      // quickStart 0
+      // demo 1
+      // data 2
       {
         slug: 'tutorial/map',
         title: {
@@ -103,34 +83,76 @@ module.exports = {
         order: 3
       },
       {
-        slug: 'api/scene',
+        slug: 'tutorial/interactive',
         title: {
-          zh: '场景 Scene',
-          en: 'Scene'
+          zh: '交互',
+          en: 'interactive'
         },
-        order: 1
+        order: 4
       },
+
+      // ****** api
       {
-        slug: 'api/district',
+        slug: 'api/base',
         title: {
-          zh: '行政区划',
-          en: 'District'
-        },
-        order: 2
-      },
-      {
-        slug: 'api/draw',
-        title: {
-          zh: '绘制组件',
-          en: 'Draw Component'
+          zh: '图层 base',
+          en: 'Layer'
         },
         order: 2
       },
       {
-        slug: 'api/react',
+        slug: 'api/point_layer',
         title: {
-          zh: 'React 组件',
-          en: 'React Component'
+          zh: '点图层',
+          en: 'PointLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/line_layer',
+        title: {
+          zh: '线图层',
+          en: 'LineLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/polygon_layer',
+        title: {
+          zh: '面图层',
+          en: 'PolygonLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/heatmap_layer',
+        title: {
+          zh: '热力图层',
+          en: 'HeatMapLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/imagelayer',
+        title: {
+          zh: '图片图层',
+          en: 'ImageLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/raster',
+        title: {
+          zh: '栅格图层',
+          en: 'RasterLayer'
+        },
+        order: 2
+      },
+      {
+        slug: 'api/cityBuilding',
+        title: {
+          zh: '城市图层',
+          en: 'CityBuildLayer'
         },
         order: 2
       },
@@ -143,68 +165,36 @@ module.exports = {
         order: 5
       },
       {
-        slug: 'api/layer/point_layer',
-        title: {
-          zh: '点图层',
-          en: 'PointLayer'
-        },
-        order: 1
-      },
-      {
-        slug: 'api/layer/line_layer',
-        title: {
-          zh: '线图层',
-          en: 'LineLayer'
-        },
-        order: 2
-      },
-      {
-        slug: 'api/layer/polygon_layer',
-        title: {
-          zh: '面图层',
-          en: 'PolygonLayer'
-        },
-        order: 3
-      },
-      {
-        slug: 'api/layer/heatmap_layer',
-        title: {
-          zh: '热力图',
-          en: 'HeatmapLayer'
-        },
-        order: 4
-      },
-      {
-        slug: 'api/layer/image_layer',
-        title: {
-          zh: '图片图层',
-          en: 'IMageLayer'
-        },
-        order: 5
-      },
-      {
-        slug: 'api/layer/raster_layer',
-        title: {
-          zh: '栅格图',
-          en: 'RasterLayer'
-        },
-        order: 6
-      },
-      {
-        slug: 'api/layer/cityBuilding',
-        title: {
-          zh: '城市建筑',
-          en: 'CityBuilding'
-        },
-        order: 8
-      },
-      {
         slug: 'api/source',
         title: {
           zh: '数据 Source',
           en: 'Source'
         },
         order: 5
+      },
+      {
+        slug: 'api/district',
+        title: {
+          zh: '行政区划',
+          en: 'District'
+        },
+        order: 6
+      },
+      {
+        slug: 'api/draw',
+        title: {
+          zh: '绘制组件',
+          en: 'Draw Component'
+        },
+        order: 6
+      },
+      {
+        slug: 'api/react',
+        title: {
+          zh: 'React 组件',
+          en: 'React Component'
+        },
+        order: 6
       },
       {
         slug: 'api/component',
@@ -363,7 +353,7 @@ module.exports = {
       }
     ],
     playground: {
-      container: '<div style="justify-content: center; position: relative" id="map"/>',
+      container: '<div style="height: 100vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
         '@antv/l7-maps': 'latest'

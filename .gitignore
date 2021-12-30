@@ -8,6 +8,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
 
 # Runtime data
 pids
@@ -82,7 +83,6 @@ packages/l7/package_bak.json
 stories/Test
 packages/draw/node_modules/@turf
 packages/district/src/data
-yarn.lock
 
 # npm command lines
 publish.sh

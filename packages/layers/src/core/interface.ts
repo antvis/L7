@@ -13,6 +13,7 @@ export interface ILineLayerStyleOptions {
   forward?: boolean; // 可选参数、是否反向(arcLine)
   lineTexture?: boolean; // 可选参数、是否开启纹理贴图功能(all)
   iconStep?: number; // 可选参数、纹理贴图步长(all)
+  iconStepCount?: number; // 可选参数、纹理贴图间隔
   textureBlend?: string; // 可选参数、供给纹理贴图使用(all)
   sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
   targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
@@ -20,4 +21,9 @@ export interface ILineLayerStyleOptions {
 
   globalArcHeight?: number; // 可选参数、地球模式下 3D 弧线的高度
   vertexHeightScale?: number; // 可选参数、lineLayer vertex height scale
+
+  borderWidth?: number; // 可选参数 线边框宽度
+  borderColor?: string; // 可选参数 线边框颜色
+
+  heightfixed?: boolean; // 可选参数 高度是否固定
 }

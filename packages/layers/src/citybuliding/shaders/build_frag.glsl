@@ -9,6 +9,13 @@ varying vec2 v_texCoord;
 uniform float u_Zoom : 1;
 uniform float u_time;
 
+uniform float u_circleSweep;
+uniform float u_cityMinSize;
+uniform vec3 u_circleSweepColor;
+uniform float u_circleSweepSpeed;
+
+varying float v_worldDis;
+
 #pragma include "picking"
 
 vec3 getWindowColor(float n, float hot, vec3 brightColor, vec3 darkColor) {
@@ -98,6 +105,13 @@ void main() {
 
         gl_FragColor = vec4(foggedColor,1.0);
   }
+
+
+  if(u_circleSweep > 0.0 && v_worldDis < u_cityMinSize) {
+    float r = fract(((v_worldDis/u_cityMinSize) - u_time * u_circleSweepSpeed) * 2.0);
+    gl_FragColor.rgb += r * r * u_circleSweepColor;
+  }
+   
   gl_FragColor.a *= u_opacity;
   gl_FragColor = filterColor(gl_FragColor);
 }

@@ -65,6 +65,7 @@ function joinData(geodata: any, ncovData: any) {
 }
 
 export default React.memo(function Map() {
+  const [showScene, setShowScene] = React.useState(true);
   const [data, setData] = React.useState();
   const [popupInfo, setPopupInfo] = React.useState<{
     lnglat: number[];
@@ -92,115 +93,129 @@ export default React.memo(function Map() {
     };
     fetchData();
   }, []);
+
+  setTimeout(() => {
+    // setShowScene(false)
+  }, 3000);
+
   return (
     <>
-      <AMapScene
-        map={{
-          center: [110.19382669582967, 50.258134],
-          pitch: 0,
-          style: 'blank',
-          zoom: 10,
-        }}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
-        {popupInfo && (
-          <Popup lnglat={popupInfo.lnglat}>
-            {popupInfo.feature.name}
-            <ul
+      {showScene && (
+        <AMapScene
+          map={{
+            center: [110.19382669582967, 50.258134],
+            pitch: 0,
+            style: 'blank',
+            zoom: 10,
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+          onSceneLoaded={(scene) => {
+            setTimeout(() => {
+              // scene.removeAllLayer()
+              // scene.destroy()
+            }, 3000);
+            // setTimeout(() => scene.destroy(), 5000)
+          }}
+        >
+          {popupInfo && (
+            <Popup lnglat={popupInfo.lnglat}>
+              {popupInfo.feature.name}
+              <ul
+                style={{
+                  margin: 0,
+                }}
+              >
+                <li>
+                  <button
+                    onClick={() => {
+                      alert('test');
+                    }}
+                    value="点击"
+                  >
+                    点击
+                  </button>
+                  现有确诊:{popupInfo.feature.currentConfirmedCount}
+                </li>
+                <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
+                <li>治愈:{popupInfo.feature.curedCount}</li>
+                <li>死亡:{popupInfo.feature.deadCount}</li>
+              </ul>
+            </Popup>
+          )}
+          {data && [
+            <PolygonLayer
+              key={'1'}
+              options={{
+                autoFit: true,
+                fitBoundsOptions: {
+                  duration: 0,
+                  animate: false,
+                },
+              }}
+              source={{
+                data,
+              }}
+              scale={{
+                values: {
+                  confirmedCount: {
+                    type: 'quantile',
+                  },
+                },
+              }}
+              active={{
+                option: {
+                  color: '#0c2c84',
+                },
+              }}
+              color={{
+                field: 'confirmedCount',
+                values: [
+                  '#732200',
+                  '#CC3D00',
+                  '#FF6619',
+                  '#FF9466',
+                  '#FFC1A6',
+                  '#FCE2D7',
+                ].reverse(),
+              }}
+              shape={{
+                values: 'fill',
+              }}
               style={{
-                margin: 0,
+                opacity: 1,
               }}
             >
-              <li>
-                <button
-                  onClick={() => {
-                    alert('test');
-                  }}
-                  value="点击"
-                >
-                  点击
-                </button>
-                现有确诊:{popupInfo.feature.currentConfirmedCount}
-              </li>
-              <li>累计确诊:{popupInfo.feature.confirmedCount}</li>
-              <li>治愈:{popupInfo.feature.curedCount}</li>
-              <li>死亡:{popupInfo.feature.deadCount}</li>
-            </ul>
-          </Popup>
-        )}
-        {data && [
-          <PolygonLayer
-            key={'1'}
-            options={{
-              autoFit: true,
-              fitBoundsOptions: {
-                duration: 0,
-                animate: false,
-              },
-            }}
-            source={{
-              data,
-            }}
-            scale={{
-              values: {
-                confirmedCount: {
-                  type: 'quantile',
-                },
-              },
-            }}
-            active={{
-              option: {
-                color: '#0c2c84',
-              },
-            }}
-            color={{
-              field: 'confirmedCount',
-              values: [
-                '#732200',
-                '#CC3D00',
-                '#FF6619',
-                '#FF9466',
-                '#FFC1A6',
-                '#FCE2D7',
-              ].reverse(),
-            }}
-            shape={{
-              values: 'fill',
-            }}
-            style={{
-              opacity: 1,
-            }}
-          >
-            <LayerEvent type="click" handler={showPopup} />
-            {/* <LayerEvent type="mouseout" handler={hidePopup} /> */}
-          </PolygonLayer>,
-          ,
-          <LineLayer
-            key={'2'}
-            source={{
-              data,
-            }}
-            size={{
-              values: 0.6,
-            }}
-            color={{
-              values: '#aaa',
-            }}
-            shape={{
-              values: 'line',
-            }}
-            style={{
-              opacity: 1,
-            }}
-          />,
-        ]}
-      </AMapScene>
+              <LayerEvent type="click" handler={showPopup} />
+              {/* <LayerEvent type="mouseout" handler={hidePopup} /> */}
+            </PolygonLayer>,
+            ,
+            <LineLayer
+              key={'2'}
+              source={{
+                data,
+              }}
+              size={{
+                values: 0.6,
+              }}
+              color={{
+                values: '#aaa',
+              }}
+              shape={{
+                values: 'line',
+              }}
+              style={{
+                opacity: 1,
+              }}
+            />,
+          ]}
+        </AMapScene>
+      )}
     </>
   );
 });

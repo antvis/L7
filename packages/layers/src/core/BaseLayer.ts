@@ -187,6 +187,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private aniamateStatus: boolean = false;
 
+  // TODO: layer 保底颜色
+  private bottomColor = 'rgba(0, 0, 0, 0)';
+
+  private isDestroied: boolean = false;
+
   // private pickingPassRender: IPass<'pixelPicking'>;
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
@@ -236,6 +241,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public getContainer() {
     return this.container;
+  }
+
+  public setBottomColor(color: string) {
+    this.bottomColor = color;
+  }
+
+  public getBottomColor() {
+    return this.bottomColor;
   }
 
   public addPlugin(plugin: ILayerPlugin): ILayer {
@@ -574,6 +587,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       if (options.color) {
         activeOption.highlightColor = options.color;
       }
+      if (options.mix) {
+        activeOption.activeMix = options.mix;
+      }
     } else {
       activeOption.enableHighlight = !!options;
     }
@@ -590,6 +606,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         highlightColor: isObject(options)
           ? options.color
           : this.getLayerConfig().highlightColor,
+        activeMix: isObject(options)
+          ? options.mix
+          : this.getLayerConfig().activeMix,
       });
       this.pick({ x, y });
     } else {
@@ -598,6 +617,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         highlightColor: isObject(options)
           ? options.color
           : this.getLayerConfig().highlightColor,
+        activeMix: isObject(options)
+          ? options.mix
+          : this.getLayerConfig().activeMix,
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
@@ -618,6 +640,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       if (option.color) {
         activeOption.selectColor = option.color;
       }
+      if (option.mix) {
+        activeOption.selectMix = option.mix;
+      }
     } else {
       activeOption.enableSelect = !!option;
     }
@@ -635,6 +660,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         selectColor: isObject(options)
           ? options.color
           : this.getLayerConfig().selectColor,
+        selectMix: isObject(options)
+          ? options.mix
+          : this.getLayerConfig().selectMix,
       });
       this.pick({ x, y });
     } else {
@@ -643,6 +671,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         selectColor: isObject(options)
           ? options.color
           : this.getLayerConfig().selectColor,
+        selectMix: isObject(options)
+          ? options.mix
+          : this.getLayerConfig().selectMix,
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
@@ -764,12 +795,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public destroy() {
+    // debugger
+    if (this.isDestroied) {
+      return;
+    }
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);
 
     this.multiPassRenderer.destroy();
-
+    // console.log(this.styleAttributeService.getAttributes())
     // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();
 
@@ -778,19 +813,27 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.hooks.afterDestroy.call();
 
     // TODO: 清除各个图层自定义的 models 资源
-    this.layerModel?.clearModels();
-    // @ts-ignore
-    this.encodedData = null;
+    // this.layerModel?.clearModels();
+
+    this.models = [];
+
+    this.layerService.cleanRemove(this);
 
     this.emit('remove', {
       target: this,
       type: 'remove',
     });
 
-    this.removeAllListeners();
+    this.emit('destroy', {
+      target: this,
+      type: 'destroy',
+    });
 
+    this.removeAllListeners();
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
+
+    this.isDestroied = true;
   }
   public clear() {
     this.styleAttributeService.clearAllAttributes();

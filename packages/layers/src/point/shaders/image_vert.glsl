@@ -46,6 +46,8 @@ void main() {
   styleMappingMat[0][0] = opacityAndOffset.r;
   textureOffset = opacityAndOffset.g;
 
+  styleMappingMat[1][0] = a_Size;
+
   vec2 textrueOffsets = vec2(0.0, 0.0);
   if(hasOffsets()) {
     vec2 valueXPos = nextPos(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset);
