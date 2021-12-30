@@ -10,6 +10,7 @@ order: 1
 l7-maps 提供 `Earth` 地图，相较于高德地图、mapbox 地图，是完全不同的一种表现形式，提供了全球视角下的可视化展示能力，为用户提供了更多的地理信息可视化表现形式。
 
 ✨ 为了区别普通的地图，l7-maps 提供了全新的 `Earth` 地图类型， L7 提供对应的 `EarthLayer` 图层
+
 ```js
 import { EarthLayer } from '@antv/l7';
 import { Earth } from '@antv/l7-maps';
@@ -111,8 +112,8 @@ function step() {
   mapService.rotateY({
     option: {
       force: true,
-      regScale: 350
-    }
+      regScale: 350,
+    },
   });
   requestAnimationFrame(step);
 }
@@ -121,7 +122,6 @@ scene.on('loaded', () => {
   scene.addLayer(earthlayer);
   requestAnimationFrame(step);
 });
-
 ```
 
 ## 地图图层 EarthLayer
@@ -132,16 +132,18 @@ scene.on('loaded', () => {
 ### 地球球体图层 baseLayer
 
 - source: 数据
+
   - map: 地球表面纹理贴图的地址
   - parser: 解析器，目前只需要写固定的对象值即可: `{ parser: { type: "image" } }`
 
 - shape: 图层类型
 
   默认值是 `base`, 目前支持的 `shape` 类型有:
+
   - base: 基础
   - atomSphere: 大气
   - bloomSphere: 辉光
-  
+
   当用户的 `shape` 参数不被识别时，自动降级为 `base` 类型
 
 - globelOtions: 图层样式
@@ -168,6 +170,7 @@ const earthlayer = new EarthLayer()
     },
   });
 ```
+
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i_TBRZRLSuYAAAAAAAAAAAAAARQnAQ" alt="L7 地球图层" width="300" height="300">
 
 ### 地球内发光/大气图层 atomLayer
@@ -198,4 +201,5 @@ const bloomLayer = new EarthLayer()
     opacity: 0.5,
   });
 ```
+
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FTniTZOZkNUAAAAAAAAAAAAAARQnAQ" alt="L7 地球图层辉光效果" width="300" height="300" >

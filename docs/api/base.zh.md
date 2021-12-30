@@ -264,7 +264,6 @@ layer.color('type*value', (type, value) => {
 
 - 也可以直接指定某一个具体的颜色值 color，如 '#fff', 'white','rgba(255,0,0,0.5)' ,rgb(255,0,1) 等。
 
-
 示例
 
 ```javascript

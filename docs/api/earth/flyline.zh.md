@@ -18,33 +18,39 @@ import { Scene, EarthLayer, LineLayer } from '@antv/l7';
 import { Earth } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
-  map: new Earth({})
+  map: new Earth({}),
 });
 
-const flydata = [{ coord: [[ 104.195397, 35.86166 ], [ 100.992541, 15.870032 ]] }];
+const flydata = [
+  {
+    coord: [
+      [104.195397, 35.86166],
+      [100.992541, 15.870032],
+    ],
+  },
+];
 const flyLine = new LineLayer({ blend: 'normal' })
   .source(flydata, {
     parser: {
       type: 'json',
-      coordinates: 'coord'
-    }
+      coordinates: 'coord',
+    },
   })
   .color('#b97feb')
   .shape('arc3d')
-  .size(0.5)
-
+  .size(0.5);
 
 const earthlayer = new EarthLayer()
   .source(
     'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',
     {
       parser: {
-        type: 'image'
-      }
-    }
+        type: 'image',
+      },
+    },
   )
   .color('#2E8AE6')
-  .shape('base')
+  .shape('base');
 
 scene.on('loaded', () => {
   scene.addLayer(earthlayer);
