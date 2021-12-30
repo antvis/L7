@@ -199,6 +199,14 @@ module.exports = {
         order: 8
       },
       {
+        slug: 'api/layer/wind',
+        title: {
+          zh: '风场图',
+          en: 'WindLayer'
+        },
+        order: 9
+      },
+      {
         slug: 'api/source',
         title: {
           zh: '数据 Source',
