@@ -7,7 +7,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { cloneDeep, isPlainObject, isTypedArray } from 'lodash';
+import { cloneDeep, extend, isPlainObject, isTypedArray } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -72,6 +72,7 @@ export default class ReglModel implements IModel {
       frag: fs,
       uniforms: reglUniforms,
       vert: vs,
+      blend: {},
       primitive:
         primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
     };
@@ -96,15 +97,12 @@ export default class ReglModel implements IModel {
     this.drawCommand = reGl(drawParams);
 
     const pickDrawParams = cloneDeep(drawParams);
-    // @ts-ignore
-    pickDrawParams.blend.enable = true;
-    // @ts-ignore
-    pickDrawParams.blend.func = {
-      dstAlpha: 'one',
-      dstRGB: 'one minus src alpha',
-      srcAlpha: 'one',
-      srcRGB: 'src alpha',
+
+    pickDrawParams.blend = {
+      ...pickDrawParams.blend,
+      enable: false,
     };
+
     this.drawPickCommand = reGl(pickDrawParams);
     this.drawParams = drawParams;
   }

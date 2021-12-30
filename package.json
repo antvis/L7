@@ -6,8 +6,6 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
-    "@antv/dipper": "0.0.6",
-    "@antv/dipper-widgets": "0.0.6",
     "@antv/g2": "^3.5.9",
     "@antv/g2plot": "^2.3.40",
     "@antv/gatsby-theme-antv": "^1.1.15",
@@ -40,11 +38,13 @@
     "@types/enzyme": "^3.1.14",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/gl": "^4.1.0",
+    "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "^25.2.1",
     "@types/node": "13.11.1",
+    "@types/react-router-dom": "^5.3.2",
     "@types/storybook__react": "^5.2.1",
     "@types/supercluster": "^5.0.1",
-    "antd": "^4.12.3",
+    "antd": "4.12.3",
     "awesome-typescript-loader": "^5.2.1",
     "babel-eslint": "8.2.5",
     "babel-jest": "^24.9.0",
@@ -197,7 +197,10 @@
   "resolutions": {
     "d3-array": "1",
     "monaco-editor-webpack-plugin": "2.0.0",
-    "monaco-editor": "0.21.0"
+    "monaco-editor": "0.21.0",
+    "electron": "11.4.6",
+    "react-router": "6.0.0",
+    "react-router-dom": "6.0.0"
   },
   "tnpm": {
     "mode": "yarn"

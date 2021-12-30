@@ -11,7 +11,6 @@ import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
 import { join } from './transform/join';
 import { map } from './transform/map';
-export default Source;
 registerParser('geojson', geojson);
 registerParser('image', image);
 registerParser('csv', csv);
@@ -34,3 +33,4 @@ export * from './interface';
 
 export const DEFAULT_DATA = defaultData;
 export const DEFAULT_PARSER = defaultParser;
+export default Source;
