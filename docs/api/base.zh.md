@@ -28,7 +28,7 @@ scene.addLayer(layer);
 
 ## options 配置项
 
-通过 options，我们可以在初始化的时候指定图层状态   
+通过 options，我们可以在初始化的时候指定图层状态
 
 ```javascript
 const options = {
@@ -58,7 +58,7 @@ scene.getLayerByName(name);
 
 <description> _int_ **optional** _default:_ 0</description>
 
-图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级  
+图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级
 
 L7 采用队列渲染的机制，所有的图层在内部保存在一个数组中，每一帧的渲染会将图层数组按照 zIndex 的值进行排序，然后遍历数组，将符合条件的图层渲染到场景中
 
@@ -273,7 +273,6 @@ layer.color('type*value', (type, value) => {
 - 映射至颜色属性的数据源字段名，如果数据源中不存在这个字段名的话，则按照常量进行解析，这个时候会使用 L7 默认提供的颜色。
 
 - 也可以直接指定某一个具体的颜色值 color，如 '#fff', 'white','rgba(255,0,0,0.5)' ,rgb(255,0,1) 等。
-
 
 示例
 
@@ -520,7 +519,7 @@ scene.render();
 ### shape 更新
 
 在在某些场景下切换 shape 的时候，我们需要重新构建图层元素的顶点构造。这意味着我们简单的改变当前图层的单一属性就达到更新图层的目的。  
-L7 已经为某些图层的 shape 切换做了额外的处理，如 PointLayer 的 "circle" 切换 "cylinder" 等，具体哪些图层盒支持直接切换则需要用户查阅具体图层的文档。  
+L7 已经为某些图层的 shape 切换做了额外的处理，如 PointLayer 的 "circle" 切换 "cylinder" 等，具体哪些图层盒支持直接切换则需要用户查阅具体图层的文档。
 
 🌟 在不支持直接切换 shape 的时候建议重新创建图层
 
@@ -544,7 +543,7 @@ layer.setData(data);
 设置图层叠加方法
 参数：
 
-- type blend 类型 normal｜additive ｜ subtractive ｜ max
+- type blend 类型 normal ｜ additive ｜ subtractive ｜ max
 
 ## 图层控制方法
 
@@ -622,7 +621,7 @@ layer.setMinZoom(zoom);
 
 ```javascript
 activeOption: {
-  color: '#f00' 
+  color: '#f00';
 }
 ```
 
@@ -642,10 +641,9 @@ layer.active(false);
 
 ### setActive(featureId: int)
 
-根据元素 ID 设置指定元素 hover 高亮  
+根据元素 ID 设置指定元素 hover 高亮
 
 🌟 指定元素高亮不等于图层高亮，一个图层包含多个元素，一般传入 source 的数据数组中有多少单条数据，一个图层就有多少元素
-
 
 ```javascript
 layer.setActive(featureId);
@@ -656,8 +654,8 @@ layer.setActive(featureId);
 开启或者关闭 mouseclick 元素选中高亮效果
 
 ```javascript
-selectOption : {
-  color: '#f00'
+selectOption: {
+  color: '#f00';
 }
 ```
 
