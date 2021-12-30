@@ -30,7 +30,7 @@ layer.animate(true);
   - sweepCenter: 扩散中心店坐标
   - sweepColor: 扩散颜色
   - sweepSpeed: 扩散速度
-- baseColor: 开启sweep时的基础颜色
+- baseColor: 开启 sweep 时的基础颜色
 
 其他 style 配置项同
 
