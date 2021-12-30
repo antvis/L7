@@ -7,12 +7,12 @@ order: 2
 
 ## 简介
 
-L7 Layer 接口设计遵循图形语法，所有图层都继承于该基类。
+L7 Layer 接口设计遵循图形语法，所有图层都继承于基类（baseLayer）。
 
 语法示例
 
 ```javascript
-const layer = new Layer(option) // option - 传入构造函数的参数对象，提供 layer 的初始状态
+const layer = new BaseLayer(option) // option - 传入构造函数的参数对象，提供 layer 的初始状态
   .source(...)    // 传入图层需要的数据以及相关的解析器
   .shape(...)     // 为图层指定具体的形状，如：circle/triangle 等
   .color(...)     // 指定图层的颜色配置
@@ -28,6 +28,8 @@ scene.addLayer(layer);
 
 ## options 配置项
 
+通过 options，我们可以在初始化的时候指定图层状态   
+
 ```javascript
 const options = {
   name: 'xxx',
@@ -40,7 +42,11 @@ const layer = new Layer(options);
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
 
-设置图层名称,可根据 name 获取 layer;
+设置图层名称,可根据 name 获取 layer
+
+```javascript
+scene.getLayerByName(name);
+```
 
 ### visible
 
@@ -52,7 +58,11 @@ const layer = new Layer(options);
 
 <description> _int_ **optional** _default:_ 0</description>
 
-图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级
+图层绘制顺序，数值大绘制在上层，可以控制图层绘制的上下层级  
+
+L7 采用队列渲染的机制，所有的图层在内部保存在一个数组中，每一帧的渲染会将图层数组按照 zIndex 的值进行排序，然后遍历数组，将符合条件的图层渲染到场景中
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*a5xKRZmhoogAAAAAAAAAAAAAARQnAQ'>
 
 ### minZoom
 
@@ -314,6 +324,8 @@ shape('triangle'); // 三角形
 shape('cylinder'); // 圆柱
 ```
 
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
+
 **shape(shape)**
 
 参数 `shape` string
@@ -505,7 +517,14 @@ layer.style({});
 scene.render();
 ```
 
-### setData
+### shape 更新
+
+在在某些场景下切换 shape 的时候，我们需要重新构建图层元素的顶点构造。这意味着我们简单的改变当前图层的单一属性就达到更新图层的目的。  
+L7 已经为某些图层的 shape 切换做了额外的处理，如 PointLayer 的 "circle" 切换 "cylinder" 等，具体哪些图层盒支持直接切换则需要用户查阅具体图层的文档。  
+
+🌟 在不支持直接切换 shape 的时候建议重新创建图层
+
+### setData(data, option?: {})
 
 更新 Source 数据
 
@@ -520,16 +539,16 @@ scene.render();
 layer.setData(data);
 ```
 
-### setBlend(type)
+### setBlend(type: string)
 
 设置图层叠加方法
 参数：
 
-- type blend 类型
+- type blend 类型 normal｜additive ｜ subtractive ｜ max
 
 ## 图层控制方法
 
-### show
+### show()
 
 图层显示
 
@@ -537,7 +556,7 @@ layer.setData(data);
 layer.show();
 ```
 
-### hide
+### hide()
 
 图层隐藏
 
@@ -545,17 +564,23 @@ layer.show();
 layer.hide();
 ```
 
-### isVisible
+### isVisible(): boolean
 
 图层是否可见
 
-return `true | false`
+```javascript
+layer.isVisible();
+```
 
-### setIndex
+### setIndex(zIndex: int)
 
 设置图层绘制顺序
 
-### fitBounds
+```javascript
+layer.setIndex(1);
+```
+
+### fitBounds()
 
 缩放到图层范围
 
@@ -563,25 +588,17 @@ return `true | false`
 layer.fitBounds();
 ```
 
-### setMinZoom
+### setMinZoom(zoom: number)
 
 设置图层最小缩放等级
-
-参数
-
-- zoom {number}
 
 ```javascript
 layer.setMinZoom(zoom);
 ```
 
-### setMaxZoom
+### setMaxZoom(zoom: number)
 
 设置图层最大缩放等级
-
-参数
-
-- zoom {number}
 
 ```javascript
 layer.setMinZoom(zoom);
@@ -599,14 +616,15 @@ layer.setMinZoom(zoom);
 
 ## 图层交互方法
 
-### active
+### active(activeOption | boolean)
 
 开启或者关闭 mousehover 元素高亮效果
 
-参数： activeOption | boolean
-
-activeOption
--color 填充颜色
+```javascript
+activeOption: {
+  color: '#f00' 
+}
+```
 
 ```javascript
 // 开启 Active  使用默认高亮颜色
@@ -622,25 +640,26 @@ layer.active({
 layer.active(false);
 ```
 
-### setActive
+### setActive(featureId: int)
 
-根据元素 ID 设置指定元素 hover 高亮
+根据元素 ID 设置指定元素 hover 高亮  
 
-- id 元素 ID
+🌟 指定元素高亮不等于图层高亮，一个图层包含多个元素，一般传入 source 的数据数组中有多少单条数据，一个图层就有多少元素
+
 
 ```javascript
-layer.setActive(id);
+layer.setActive(featureId);
 ```
 
-### select
+### select(selectOption | boolean)
 
 开启或者关闭 mouseclick 元素选中高亮效果
 
-参数： selectOption | boolean
-
-selectOption
-
-- color 填充颜色
+```javascript
+selectOption : {
+  color: '#f00'
+}
+```
 
 ```javascript
 // 开启 Active  使用默认高亮颜色
@@ -656,17 +675,17 @@ layer.select({
 layer.select(false);
 ```
 
-### setSelect
+### setSelect(featureId: int)
 
 根据元素 ID 设置指定元素 click 选中 高亮
 
-- id 元素 ID
+🌟 指定元素高亮不等于图层高亮，一个图层包含多个元素，一般传入 source 的数据数组中有多少单条数据，一个图层就有多少元素
 
 ```javascript
-layer.setSelect(id);
+layer.setSelect(featureId);
 ```
 
-### getLegendItems
+### getLegendItems(type: string)
 
 获取图例配置
 
