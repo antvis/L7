@@ -4,6 +4,15 @@ export interface IColorRamp {
   positions: number[];
   colors: string[];
 }
+
+export function isColor(str: any) {
+  if (typeof str === 'string') {
+    return !!(d3.color(str) as d3.RGBColor);
+  } else {
+    return false;
+  }
+}
+
 export function rgb2arr(str: string) {
   const color = d3.color(str) as d3.RGBColor;
   const arr = [0, 0, 0, 0];

@@ -186,6 +186,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   private aniamateStatus: boolean = false;
 
+  // TODO: layer 保底颜色
+  private bottomColor = 'rgba(0, 0, 0, 0)';
+
+  private isDestroied: boolean = false;
+
   // private pickingPassRender: IPass<'pixelPicking'>;
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
@@ -235,6 +240,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public getContainer() {
     return this.container;
+  }
+
+  public setBottomColor(color: string) {
+    this.bottomColor = color;
+  }
+
+  public getBottomColor() {
+    return this.bottomColor;
   }
 
   public addPlugin(plugin: ILayerPlugin): ILayer {
@@ -778,12 +791,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public destroy() {
+    // debugger
+    if (this.isDestroied) {
+      return;
+    }
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);
 
     this.multiPassRenderer.destroy();
-
+    // console.log(this.styleAttributeService.getAttributes())
     // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();
 
@@ -792,7 +809,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.hooks.afterDestroy.call();
 
     // TODO: 清除各个图层自定义的 models 资源
-    this.layerModel?.clearModels();
+    // this.layerModel?.clearModels();
 
     this.models = [];
 
@@ -811,6 +828,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.removeAllListeners();
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
+
+    this.isDestroied = true;
   }
   public clear() {
     this.styleAttributeService.clearAllAttributes();

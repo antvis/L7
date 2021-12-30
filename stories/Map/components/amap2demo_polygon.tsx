@@ -92,6 +92,64 @@ export default class Amap2demo_polygon extends React.Component {
       ],
     };
 
+    const data2 = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            testOpacity: 0.4,
+          },
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: [
+              [
+                [
+                  [110.5224609375, 32.731840896865684],
+                  [113.0712890625, 32.731840896865684],
+                  [113.0712890625, 34.56085936708384],
+                  [110.5224609375, 34.56085936708384],
+                  [110.5224609375, 32.731840896865684],
+                ],
+                [
+                  [111.26953125, 33.52307880890422],
+                  [111.26953125, 34.03445260967645],
+                  [112.03857421875, 34.03445260967645],
+                  [112.03857421875, 33.52307880890422],
+                  [111.26953125, 33.52307880890422],
+                ],
+              ],
+            ],
+          },
+        },
+        {
+          type: 'Feature',
+          properties: {
+            testOpacity: 0.8,
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [113.8623046875, 30.031055426540206],
+                [116.3232421875, 30.031055426540206],
+                [116.3232421875, 31.090574094954192],
+                [113.8623046875, 31.090574094954192],
+                [113.8623046875, 30.031055426540206],
+              ],
+              [
+                [117.26806640625, 32.13840869677249],
+                [118.36669921875, 32.13840869677249],
+                [118.36669921875, 32.47269502206151],
+                [117.26806640625, 32.47269502206151],
+                [117.26806640625, 32.13840869677249],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
     const layer = new PolygonLayer({
       autoFit: true,
     })
@@ -103,6 +161,15 @@ export default class Amap2demo_polygon extends React.Component {
         opacity: 'testOpacity',
       });
     scene.addLayer(layer);
+
+    setTimeout(() => {
+      layer
+        .setData(data2)
+        .shape('fill')
+        .color('#0f0');
+
+      scene.render();
+    }, 1000);
 
     // const layer2 = new PolygonLayer({
     //   autoFit: true,
