@@ -140,8 +140,8 @@ scene.on('loaded', () => {
 
   默认值是 `base`, 目前支持的 `shape` 类型有:
 
-  - base: 基础
-  - atomSphere: 大气
+  - base: 球体
+  - atomSphere: 大气层
   - bloomSphere: 辉光
 
   当用户的 `shape` 参数不被识别时，自动降级为 `base` 类型
