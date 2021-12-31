@@ -221,6 +221,14 @@ module.exports = {
         order: 3
       },
       {
+        slug: 'api/wind',
+        title: {
+          zh: '风场图层',
+          en: 'WindLayer'
+        },
+        order: 3
+      },
+      {
         slug: 'api/mini',
         title: {
           zh: '小程序',
@@ -243,7 +251,7 @@ module.exports = {
           en: 'map plugin'
         },
         order: 5
-      },
+      }
     ],
     examples: [
       {
@@ -341,6 +349,14 @@ module.exports = {
         title: {
           zh: '栅格图层',
           en: 'Raster Layer'
+        }
+      },
+      {
+        slug: 'wind',
+        icon: 'raster',
+        title: {
+          zh: '风场图层',
+          en: 'Wind Layer'
         }
       },
       {

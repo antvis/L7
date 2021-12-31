@@ -123,6 +123,30 @@ export default class WindMap extends React.Component {
         });
 
       pointFolder
+        .add(styleOptions, 'uMax', -100, 100, 1)
+        .onChange((num: number) => {
+          layer.style({
+            uMax: num,
+          });
+        });
+
+      pointFolder
+        .add(styleOptions, 'vMin', -100, 100, 1)
+        .onChange((num: number) => {
+          layer.style({
+            vMin: num,
+          });
+        });
+
+      pointFolder
+        .add(styleOptions, 'vMax', -100, 100, 1)
+        .onChange((num: number) => {
+          layer.style({
+            vMax: num,
+          });
+        });
+
+      pointFolder
         .add(styleOptions, 'fadeOpacity', 0.9, 1, 0.01)
         .onChange((num: number) => {
           layer.style({
