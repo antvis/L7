@@ -95,7 +95,7 @@ const scene = new Scene({
 提供了简单的方法控制地球系统的旋转（实际上控制的是相机的旋转，需要传入一个对象
 
 - force: `false` 判断是否强制生效，默认该方法的优先级比用户鼠标操作要低，当用户操作相机的时候，该方法会失效
-- regScale: `0.01` 旋转的角度（视觉上地球的旋转角度）， `regScale` 表示的并不是实际的旋转角度，而是单位旋转角度的比例  
+- reg: `0.01` 旋转的角度（视觉上地球的旋转角度）， `reg` 表示的并不是实际的旋转角度，而是单位旋转角度的比例  
   🌟 单位旋转角度 = Math.min(this.earthCameraZoom \* this.earthCameraZoom, 1)
 
 ```js
@@ -112,7 +112,7 @@ function step() {
   mapService.rotateY({
     option: {
       force: true,
-      regScale: 350,
+      reg: .1,
     },
   });
   requestAnimationFrame(step);
