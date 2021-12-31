@@ -71,7 +71,7 @@ const scene = new Scene({
 const buildingLayer = new CityBuildingLayer();
 buildingLayer.animate(false);
 
-let i = 0
+let i = 0;
 function step() {
   pointLayer.setLight(i++);
   scene.render();
@@ -80,7 +80,7 @@ function step() {
 
 scene.on('loaded', () => {
   step();
-})
+});
 ```
 
 #### 完整代码

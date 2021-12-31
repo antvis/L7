@@ -112,7 +112,7 @@ function step() {
   mapService.rotateY({
     option: {
       force: true,
-      reg: .1,
+      reg: 0.1,
     },
   });
   requestAnimationFrame(step);
