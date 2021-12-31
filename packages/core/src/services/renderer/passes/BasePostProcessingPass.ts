@@ -20,8 +20,8 @@ import { IUniform } from '../IUniform';
 @injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
   implements IPostProcessingPass<InitializationOptions> {
-  @inject(TYPES.IShaderModuleService)
-  protected readonly shaderModuleService: IShaderModuleService;
+  // @inject(TYPES.IShaderModuleService)
+  protected shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
 
@@ -68,6 +68,9 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
+    this.shaderModuleService = layer
+      .getContainer()
+      .get<IShaderModuleService>(TYPES.IShaderModuleService);
 
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     const { vs, fs, uniforms } = this.setupShaders();

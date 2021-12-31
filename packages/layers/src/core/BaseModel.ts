@@ -100,8 +100,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   // @lazyInject(TYPES.IFontService)
   // protected readonly fontService: IFontService;
 
-  @lazyInject(TYPES.IShaderModuleService)
-  protected readonly shaderModuleService: IShaderModuleService;
+  // @lazyInject(TYPES.IShaderModuleService)
+  protected shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
   protected iconService: IIconService;
@@ -118,6 +118,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
+    this.shaderModuleService = layer
+      .getContainer()
+      .get<IShaderModuleService>(TYPES.IShaderModuleService);
+
     this.styleAttributeService = layer
       .getContainer()
       .get<IStyleAttributeService>(TYPES.IStyleAttributeService);
