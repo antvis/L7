@@ -201,9 +201,11 @@ layer.scale({
 
 可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
 
+<img width="100%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PzoTRJnY-fIAAAAAAAAAAAAAARQnAQ'>
+
 ### size
 
-将数据值映射到图形的大小上的方法,具体 size 的表示具体意义可以查看对应图层的文档
+将数据值映射到图形的大小上的方法，size 方法具体的参数使用可以查看对应图层的详细文档
 
 ```javascript
 pointLayer.size(10); // 常量
