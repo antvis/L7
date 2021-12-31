@@ -8,6 +8,7 @@ order: 0
 ## 简介
 
 点数据的展示，根据经纬点绘制图形，数据源支持 JSON、GeoJSON、CSV 三种数据格式。
+
 - [GeoJSON](../source/geojson/#point)
 - [CSV](../source/csv/#parser)
 - [JSON](../source/json/#点数据)
@@ -95,7 +96,6 @@ PointLayer 图层支持多种 shape 类型，通过改变 shape 我们可以显�
 ```
 
 🌟 若是使用简单的圆点图层，建议使用 simple 代替 circle 以获得更好的性能
-
 
 ### 基本用法
 
