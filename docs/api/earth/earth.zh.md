@@ -120,7 +120,7 @@ function step() {
 
 scene.on('loaded', () => {
   scene.addLayer(earthlayer);
-  requestAnimationFrame(step);
+  step();
 });
 ```
 
@@ -171,7 +171,7 @@ const earthlayer = new EarthLayer()
   });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i_TBRZRLSuYAAAAAAAAAAAAAARQnAQ" alt="L7 地球图层" width="300" height="300">
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i_TBRZRLSuYAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层" width="300" height="300">
 
 ### 地球内发光/大气图层 atomLayer
 
@@ -187,7 +187,7 @@ const atomLayer = new EarthLayer()
   });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1MU_RZQyFTkAAAAAAAAAAAAAARQnAQ" alt="L7 地球图层大气效果" width="300" height="300" >
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1MU_RZQyFTkAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层大气效果" width="300" height="300" >
 
 ### 地球内外发光/辉光图层 bloomLayer
 
@@ -202,4 +202,4 @@ const bloomLayer = new EarthLayer()
   });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FTniTZOZkNUAAAAAAAAAAAAAARQnAQ" alt="L7 地球图层辉光效果" width="300" height="300" >
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FTniTZOZkNUAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层辉光效果" width="300" height="300" >

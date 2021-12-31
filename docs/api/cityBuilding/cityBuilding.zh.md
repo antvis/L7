@@ -54,14 +54,33 @@ layer.animatte({
 time : 时间 毫秒
 
 ```js
-import { CityBuildingLayer } from '@antv/l7';
+import { CityBuildingLayer, Scene } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 
+const scene = new Scene({
+  id: 'map',
+  map: new Mapbox({
+    style: 'dark',
+    center: [121.507674, 31.223043],
+    pitch: 65.59312320916906,
+    zoom: 15.4,
+    minZoom: 15,
+    maxZoom: 18,
+  }),
+});
 const buildingLayer = new CityBuildingLayer();
 buildingLayer.animate(false);
 
-setInterval(() => {
-  buildingLayer.setLight(Date.now());
-}, 2000);
+let i = 0
+function step() {
+  pointLayer.setLight(i++);
+  scene.render();
+  requestAnimationFrame(step);
+}
+
+scene.on('loaded', () => {
+  step();
+})
 ```
 
 #### 完整代码
