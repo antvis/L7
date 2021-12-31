@@ -126,7 +126,6 @@ export default class Scene extends EventEmitter implements ISceneService {
   public init(sceneConfig: ISceneConfig) {
     // 设置场景配置项
     this.configService.setSceneConfig(this.id, sceneConfig);
-
     // 初始化 ShaderModule
     this.shaderModuleService.registerBuiltinModules();
 
