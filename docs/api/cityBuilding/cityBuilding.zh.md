@@ -6,8 +6,8 @@ order: 6
 `markdown:docs/common/style.md`
 
 ## 简介
-`CityBuildingLayer` 用于构建城市建筑 3D 模型, 展示城市建筑
 
+`CityBuildingLayer` 用于构建城市建筑 3D 模型, 展示城市建筑
 
 ## 使用
 
@@ -23,8 +23,8 @@ import { CityBuildingLayer } from '@antv/l7';
 layer.animate(true);
 
 layer.animatte({
-  enable: true
-})
+  enable: true,
+});
 ```
 
 ### style
@@ -62,7 +62,6 @@ buildingLayer.animate(false);
 setInterval(() => {
   buildingLayer.setLight(Date.now());
 }, 2000);
-
 ```
 
 #### 完整代码
@@ -75,26 +74,22 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'dark',
-    center: [ 120.173104, 30.244072 ],
+    center: [120.173104, 30.244072],
     pitch: 70.41138037735848,
     zoom: 17.18,
     rotation: 2.24, // 358.7459759480504
-    minZoom: 14
-  })
+    minZoom: 14,
+  }),
 });
 
 scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/rmsportal/ggFwDClGjjvpSMBIrcEx.json'
-  )
-    .then(res => res.json())
-    .then(data => {
-      const layer = new CityBuildingLayer(
-        {
-          zIndex: 0
-        }
-      );
-      layer.source(data)
+  fetch('https://gw.alipayobjects.com/os/rmsportal/ggFwDClGjjvpSMBIrcEx.json')
+    .then((res) => res.json())
+    .then((data) => {
+      const layer = new CityBuildingLayer({
+        zIndex: 0,
+      });
+      layer.source(data);
       scene.addLayer(layer);
     });
 });
