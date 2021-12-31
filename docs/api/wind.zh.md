@@ -5,6 +5,8 @@ order: 3
 
 WindLayer 用于将存储风场信息的图片，设置其风速线采样相关参数，将采样后的风场线的走向、强度通过可视化的方式在地图上呈现出来。
 
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CPveRqBxBwkAAAAAAAAAAAAAARQnAQ' />
+
 ## 使用
 
 ```jsx
