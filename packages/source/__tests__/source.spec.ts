@@ -1,4 +1,4 @@
-import Source from '../src/source';
+import Source from '../src/';
 import Point from './data/point';
 import Polygon from './data/polygon';
 

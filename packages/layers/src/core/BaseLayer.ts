@@ -122,9 +122,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
 
-  @lazyInject(TYPES.IShaderModuleService)
-  protected readonly shaderModuleService: IShaderModuleService;
+  // @lazyInject(TYPES.IShaderModuleService)
+  // protected readonly shaderModuleService: IShaderModuleService;
 
+  protected shaderModuleService: IShaderModuleService;
   protected cameraService: ICameraService;
 
   protected coordinateService: ICoordinateSystemService;
@@ -292,6 +293,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     );
     this.coordinateService = this.container.get<ICoordinateSystemService>(
       TYPES.ICoordinateSystemService,
+    );
+    this.shaderModuleService = this.container.get<IShaderModuleService>(
+      TYPES.IShaderModuleService,
     );
     this.postProcessingPassFactory = this.container.get(
       TYPES.IFactoryPostProcessingPass,
