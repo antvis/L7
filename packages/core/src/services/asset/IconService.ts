@@ -32,6 +32,8 @@ export default class IconService extends EventEmitter implements IIconService {
     this.iconData = [];
     this.iconMap = {};
     this.canvas = $window.document.createElement('canvas');
+    this.canvas.width = 128;
+    this.canvas.height = 128;
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
