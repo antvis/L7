@@ -1,12 +1,12 @@
 `markdown:docs/common/style.md`
 
-## 配置项
-
 `markdown:docs/common/layer/options.md`
 
 `markdown:docs/common/layer/layer_encode.md`
 
 `markdown:docs/common/layer/layer_style.md`
+
+`markdown:docs/common/layer/layer_texture.md`
 
 `markdown:docs/common/layer/layer_update.md`
 

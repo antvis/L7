@@ -1,13 +1,14 @@
 ## 图层交互方法
 
-### active 鼠标滑过高亮
+### active(activeOption | boolean)
 
 开启或者关闭 mousehover 元素高亮效果
 
-参数： activeOption | boolean
-
-activeOption
--color 填充颜色
+```javascript
+activeOption: {
+  color: '#f00';
+}
+```
 
 ```javascript
 // 开启 Active  使用默认高亮颜色
@@ -23,22 +24,25 @@ layer.active({
 layer.active(false);
 ```
 
-### setActive 设置指定要素高亮
+### setActive(featureId: int)
 
 根据元素 ID 设置指定元素 hover 高亮
 
+🌟 指定元素高亮不等于图层高亮，一个图层包含多个元素，一般传入 source 的数据数组中有多少单条数据，一个图层就有多少元素
+
 ```javascript
-layer.setActive(id);
+layer.setActive(featureId);
 ```
 
-### select 鼠标选中高亮
+### select(selectOption | boolean)
 
 开启或者关闭 mouseclick 元素选中高亮效果
 
-参数： selectOption | boolean
-
-selectOption
--color 填充颜色
+```javascript
+selectOption: {
+  color: '#f00';
+}
+```
 
 ```javascript
 // 开启 Active  使用默认高亮颜色
@@ -54,10 +58,24 @@ layer.select({
 layer.select(false);
 ```
 
-### setSelect 设置指定要求选中
+### setSelect(featureId: int)
 
 根据元素 ID 设置指定元素 click 选中 高亮
 
+🌟 指定元素高亮不等于图层高亮，一个图层包含多个元素，一般传入 source 的数据数组中有多少单条数据，一个图层就有多少元素
+
 ```javascript
-layer.setSelect(id);
+layer.setSelect(featureId);
+```
+
+### getLegendItems(type: string)
+
+获取图例配置
+
+- type 图例类型
+
+```javascript
+layer.getLegendItems('color');
+
+layer.getLegendItems('size');
 ```

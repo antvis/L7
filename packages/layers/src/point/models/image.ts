@@ -175,10 +175,12 @@ export default class ImageModel extends BaseModel {
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.LINEAR,
-      min: gl.LINEAR,
+      // min: gl.LINEAR,
+      min: gl.LINEAR_MIPMAP_LINEAR,
       premultiplyAlpha: false,
       width: 1024,
       height: this.iconService.canvasHeight || 128,
+      mipmap: true,
     });
   };
 }
