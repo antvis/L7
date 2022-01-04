@@ -104,9 +104,9 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
             u_activeMix: activeMix,
-            u_CurrentSelectedId: currentSelectedId ? encodePickingColor(
-              layer.getCurrentSelectedId()!,
-            ) : [0, 0, 0],
+            u_CurrentSelectedId: currentSelectedId
+              ? encodePickingColor(layer.getCurrentSelectedId()!)
+              : [0, 0, 0],
             u_SelectColor: selectColorInArray.map((c) => c * 255),
           }),
         );
