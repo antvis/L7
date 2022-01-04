@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { camelCase, isNil, upperFirst } from 'lodash';
-import 'reflect-metadata';
-import { IShaderModuleService } from '../../shader/IShaderModuleService';
-import { gl } from '../gl';
-import { IModel } from '../IModel';
-import { IRendererService } from '../IRendererService';
-
+import {
+  gl,
+  IModel,
+  IRendererService,
+  IShaderModuleService,
+} from '../../../index';
 import quad from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
@@ -20,8 +20,8 @@ import { IUniform } from '../IUniform';
 @injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
   implements IPostProcessingPass<InitializationOptions> {
-  // @inject(TYPES.IShaderModuleService)
-  protected shaderModuleService: IShaderModuleService;
+  @inject(TYPES.IShaderModuleService)
+  protected readonly shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
 
@@ -68,9 +68,6 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
-    this.shaderModuleService = layer
-      .getContainer()
-      .get<IShaderModuleService>(TYPES.IShaderModuleService);
 
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     const { vs, fs, uniforms } = this.setupShaders();
@@ -88,9 +85,9 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
           size: 2,
         }),
       },
-      // @ts-ignore
+    
       uniforms: {
-        // @ts-ignore
+          // @ts-ignore
         u_Texture: null,
         ...uniforms,
         ...(this.config && this.convertOptionsToUniforms(this.config)),

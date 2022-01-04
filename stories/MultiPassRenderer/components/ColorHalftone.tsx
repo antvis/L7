@@ -37,6 +37,7 @@ export default class ColorHalftone extends React.Component {
     const layer = new PolygonLayer({
       enablePicking: true,
       enableHighlight: true,
+      enableMultiPassRenderer: true,
       passes: [
         [
           'colorHalftone',

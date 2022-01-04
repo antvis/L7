@@ -33,22 +33,6 @@ export default class GaodeMapComponent extends React.Component {
     // blend: 'additive'
     var circleRadius = 100;
     var radius = circleRadius;
-    var data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Polygon',
-            coordinates: turf.circle(aspaceLnglat, radius, {
-              steps: 10,
-              units: 'meters',
-            }).geometry.coordinates,
-          },
-        },
-      ],
-    };
     // let trufCircle = new PolygonLayer()
     //   .size('name', [0, 10000, 50000, 30000, 100000])
     //   .source(data)

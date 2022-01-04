@@ -1,5 +1,4 @@
 import { inject, injectable, postConstruct } from 'inversify';
-import 'reflect-metadata';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { gl } from '../gl';
@@ -80,23 +79,24 @@ export default class PostProcessor implements IPostProcessor {
 
   @postConstruct()
   private init() {
-    // const { createFramebuffer, createTexture2D } = this.rendererService;
-    // this.readFBO = createFramebuffer({
-    //   color: createTexture2D({
-    //     width: 1,
-    //     height: 1,
-    //     wrapS: gl.CLAMP_TO_EDGE,
-    //     wrapT: gl.CLAMP_TO_EDGE,
-    //   }),
-    // });
-    // this.writeFBO = createFramebuffer({
-    //   color: createTexture2D({
-    //     width: 1,
-    //     height: 1,
-    //     wrapS: gl.CLAMP_TO_EDGE,
-    //     wrapT: gl.CLAMP_TO_EDGE,
-    //   }),
-    // });
+    const { createFramebuffer, createTexture2D } = this.rendererService;
+    this.readFBO = createFramebuffer({
+      color: createTexture2D({
+        width: 1,
+        height: 1,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+      }),
+    });
+
+    this.writeFBO = createFramebuffer({
+      color: createTexture2D({
+        width: 1,
+        height: 1,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+      }),
+    });
   }
 
   private isLastEnabledPass(index: number): boolean {

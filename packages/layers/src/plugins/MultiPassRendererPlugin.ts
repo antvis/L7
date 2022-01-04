@@ -8,7 +8,6 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
 
 /**
  * 'blurH' -> ['blurH', {}]
@@ -58,7 +57,6 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
   ) {
     layer.hooks.init.tap('MultiPassRendererPlugin', () => {
       const { enableMultiPassRenderer, passes = [] } = layer.getLayerConfig();
-
       // SceneConfig 的 enableMultiPassRenderer 配置项可以统一关闭
       this.enabled =
         !!enableMultiPassRenderer &&
@@ -66,6 +64,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
 
       // 根据 LayerConfig passes 配置项初始化
       if (this.enabled) {
+
         layer.multiPassRenderer = this.createMultiPassRenderer(
           layer,
           passes,
@@ -77,11 +76,11 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     });
 
     layer.hooks.beforeRender.tap('MultiPassRendererPlugin', () => {
-      // if (this.enabled) {
-      //   // 渲染前根据 viewport 调整 FBO size
-      //   const { width, height } = rendererService.getViewportSize();
-      //   layer.multiPassRenderer.resize(width, height);
-      // }
+      if (this.enabled) {
+        // 渲染前根据 viewport 调整 FBO size
+        const { width, height } = rendererService.getViewportSize();
+        layer.multiPassRenderer.resize(width, height);
+      }
     });
   }
 
@@ -104,26 +103,26 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
     }
 
     // use TAA pass if enabled instead of render pass
-    // if (enableTAA) {
-    //   multiPassRenderer.add(normalPassFactory('taa'));
-    // } else {
-    //   // render all layers in this pass
-    //   multiPassRenderer.add(normalPassFactory('render'));
-    // }
+    if (enableTAA) {
+      multiPassRenderer.add(normalPassFactory('taa'));
+    } else {
+      // render all layers in this pass
+      multiPassRenderer.add(normalPassFactory('render'));
+    }
 
     // post processing
-    // normalizePasses(passes).forEach(
-    //   (pass: [string, { [key: string]: unknown }]) => {
-    //     const [passName, initializationOptions] = pass;
-    //     multiPassRenderer.add(
-    //       postProcessingPassFactory(passName),
-    //       initializationOptions,
-    //     );
-    //   },
-    // );
+    normalizePasses(passes).forEach(
+      (pass: [string, { [key: string]: unknown }]) => {
+        const [passName, initializationOptions] = pass;
+        multiPassRenderer.add(
+          postProcessingPassFactory(passName),
+          initializationOptions,
+        );
+      },
+    );
 
     // 末尾为固定的 CopyPass
-    // multiPassRenderer.add(postProcessingPassFactory('copy'));
+    multiPassRenderer.add(postProcessingPassFactory('copy'));
 
     return multiPassRenderer;
   }
