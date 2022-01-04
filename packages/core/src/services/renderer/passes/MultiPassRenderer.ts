@@ -59,7 +59,6 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
       await pass.render(this.layer);
     }
     await this.postProcessor.render(this.layer);
-  
   }
 
   public resize(width: number, height: number) {

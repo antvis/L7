@@ -64,7 +64,6 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
 
       // 根据 LayerConfig passes 配置项初始化
       if (this.enabled) {
-
         layer.multiPassRenderer = this.createMultiPassRenderer(
           layer,
           passes,

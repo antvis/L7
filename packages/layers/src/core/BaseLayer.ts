@@ -553,10 +553,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public render(): ILayer {
-    if (
-      this.multiPassRenderer &&
-      this.multiPassRenderer.getRenderFlag()
-    ) {
+    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       this.multiPassRenderer.render();
     } else if (this.multiPassRenderer) {
       this.renderModels();
