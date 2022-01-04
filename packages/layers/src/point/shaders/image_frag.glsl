@@ -16,6 +16,7 @@ void main(){
       vec4 textureColor;
 
       // Y = 0.299R + 0.587G + 0.114B // 亮度提取
+
      
       textureColor = texture2D(u_texture, pos);
 

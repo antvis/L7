@@ -69,7 +69,7 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      .shape('fill')
+      .shape('base')
       .style({
         globelOtions: {
           ambientRatio: 0.6, // 环境光

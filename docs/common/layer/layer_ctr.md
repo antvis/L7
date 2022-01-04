@@ -1,6 +1,6 @@
 ## 图层控制方法
 
-### show 显示
+### show()
 
 图层显示
 
@@ -8,7 +8,7 @@
 layer.show();
 ```
 
-### hide 隐藏
+### hide()
 
 图层隐藏
 
@@ -16,17 +16,23 @@ layer.show();
 layer.hide();
 ```
 
-### isVisible 是否可见
+### isVisible(): boolean
 
 图层是否可见
 
-return `true | false`
+```javascript
+layer.isVisible();
+```
 
-### setIndex 设置图层层级
+### setIndex(zIndex: int)
 
 设置图层绘制顺序
 
-### fitBounds 缩放到图层范围
+```javascript
+layer.setIndex(1);
+```
+
+### fitBounds()
 
 缩放到图层范围
 
@@ -34,24 +40,17 @@ return `true | false`
 layer.fitBounds();
 ```
 
-### setMinZoom 设置图层最小可见等级
+### setMinZoom(zoom: number)
 
 设置图层最小缩放等级
-
-参数
-
-- zoom {number}
 
 ```javascript
 layer.setMinZoom(zoom);
 ```
 
-### setMaxZoom 设置图层最大可见等级
+### setMaxZoom(zoom: number)
 
 设置图层最大缩放等级
-
-参数
-- zoom {number}
 
 ```javascript
 layer.setMinZoom(zoom);

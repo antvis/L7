@@ -1,16 +1,15 @@
-## 数据映射
+# 方法
 
-### source 数据
+### source
 
-数据源为 layer 设置数据 source(data,config)
+设置图层数据以及解析配置 source(data, config)
 
-- data {geojson|json|csv}
-源数据
+- data { geojson | json | csv }
 - config   可选   数据源配置项
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换 可设置多个
 
-parser 和  transforms [见 source 文档](../../api/source/source)
+parser 和  transforms [见 source 文档](../../source/source)
 
 ```javascript
 layer.source(data, {
@@ -22,7 +21,7 @@ layer.source(data, {
   transforms: [
     {
       type: 'map',
-      callback: function (item) {
+      callback: function(item) {
         const [x, y] = item.coordinates;
         item.lat = item.lat * 1;
         item.lng = item.lng * 1;
@@ -41,11 +40,23 @@ layer.source(data, {
 });
 ```
 
-### scale 度量
+### scale
 
-设置数据字段映射方法
+设置数据字段映射方法。
 
-- `field` 字段名。
+用户在使用 color、size 或者是 style 中的数据映射字段的时候，若是使用了指定了按比例映射，则都需要处理字段到值的映射关系。scale 方法就可以设置字段到值的映射是按哪一种类型进行映射。
+
+```javascript
+.color('key', ['#f00', '#0f0', '#00f'])
+
+.size('key', [10, 20, 30])
+
+.style({
+  opacity: ['key', [0, 0.5, 1.0]]
+})
+```
+
+- `field` 指定 source 中传入的数据中用于映射的字段名
 
 - `scaleConfig` 列定义配置，对象类型，可配置的属性如下：
 
@@ -84,11 +95,16 @@ layer.scale({
   },
 });
 ```
+
+## 视觉编码方法
+
 可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
 
-### size 大小
+<img width="100%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PzoTRJnY-fIAAAAAAAAAAAAAARQnAQ'>
 
-将数据值映射到图形的大小上的方法,具体 size 的表示具体意义可以查看对应图层的文档
+### size
+
+将数据值映射到图形的大小上的方法，size 方法具体的参数使用可以查看对应图层的详细文档
 
 ```javascript
 pointLayer.size(10); // 常量
@@ -103,15 +119,15 @@ pointLayer.size('type', (type) => {
 });
 ```
 
-#### size(value）常量
+#### size(value）
 
 传入数字常量，如  `pointLayer.size(20)`
 
-#### size(field) 
+#### size(field)
 
 根据 field 字段的值映射大小，使用默认的`最大值 max:10`  和`最小值 min: 1`。
 
-#### size(field, callback) 回调函数
+#### size(field, callback)
 
 使用回调函数控制图形大小。
 
@@ -126,7 +142,7 @@ pointLayer.size('age', (value) => {
 });
 ```
 
-### color 颜色
+### color
 
 将数据值映射到图形的颜色上的方法。
 
@@ -150,7 +166,7 @@ layer.color('type*value', (type, value) => {
 });
 ```
 
-#### color(value) 常量
+#### color(value)
 
 参数：`value` ：string
 只支持接收一个参数，value 可以是：
@@ -166,7 +182,7 @@ layer.color('name'); // 映射数据字段
 layer.color('white'); // 指定颜色
 ```
 
-#### color(field, colors) 字段映射
+#### color(field, colors)
 
 参数：
 
@@ -198,15 +214,23 @@ layer.color('gender*age', (gender, age) => {
 });
 ```
 
-### shape 形状
+### shape
 
-将数据值映射到图形的形状上的方法。
+通常一种图层可以有多种表现形式，shape 方法用于指定图层具体的表现形式，以 PointLayer 的 shape 为例：
+
+```javascript
+shape('circle'); // 圆形
+shape('triangle'); // 三角形
+shape('cylinder'); // 圆柱
+```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
 
 **shape(shape)**
 
-参数`shape` string
+参数 `shape` string
 
-只支持接收一个参数，指定几何图像对象绘制的形状。下表列出了不同的 图层 几何图形对象支持的 shape 形状
+- 只支持接收一个参数，指定几何图像对象绘制的形状。下表列出了不同的 图层 几何图形对象支持的 shape 形状
 
 | layer 类型 | shape 类型                                                                             | 备注 |
 | ---------- | -------------------------------------------------------------------------------------- | ---- |
@@ -216,5 +240,48 @@ layer.color('gender*age', (gender, age) => {
 
 **shape(field, shapes)**
 
+- shape 根据字段指定行形状，比如根据字段指定 PointLayer/imageLayer 的 icon 类型
+
+```javascript
+scene.addImage(
+  '00',
+  'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+);
+scene.addImage(
+  '01',
+  'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg',
+);
+scene.addImage(
+  '02',
+  'https://gw.alipayobjects.com/zos/basement_prod/7aa1f460-9f9f-499f-afdf-13424aa26bbf.svg',
+);
+const imageLayer = new PointLayer()
+  .source(data, {
+    parser: {
+      type: 'json',
+      x: 'longitude',
+      y: 'latitude',
+    },
+  })
+  .shape('name', ['00', '01', '02'])
+  .size(20);
+scene.addLayer(imageLayer);
+```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ'>
+
+[在线案例](../../examples/point/image#image)
+
 **shape(field, callback)**
 
+- shape 也支持回调函数的写法
+
+```javascript
+.shape('key', value => {
+  if(value > 10) {
+    return 'circle';
+  } else {
+    return 'triangle';
+  }
+}
+```

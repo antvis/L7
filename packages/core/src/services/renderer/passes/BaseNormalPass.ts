@@ -15,8 +15,8 @@ import { IRendererService } from '../IRendererService';
 @injectable()
 export default class BaseNormalPass<InitializationOptions = {}>
   implements IPass<InitializationOptions> {
-  @inject(TYPES.IShaderModuleService)
-  protected readonly shaderModuleService: IShaderModuleService;
+  // @inject(TYPES.IShaderModuleService)
+  protected shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
   protected cameraService: ICameraService;
@@ -49,6 +49,9 @@ export default class BaseNormalPass<InitializationOptions = {}>
     this.layerService = layer
       .getContainer()
       .get<ILayerService>(TYPES.ILayerService);
+    this.shaderModuleService = layer
+      .getContainer()
+      .get<IShaderModuleService>(TYPES.IShaderModuleService);
   }
 
   public render(layer: ILayer) {
