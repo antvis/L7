@@ -1,6 +1,6 @@
 ---
 title: 场景 Scene
-order: 2
+order: 1
 ---
 
 `markdown:docs/common/style.md`
@@ -40,6 +40,8 @@ L7 地理可视化侧重于地理数据的可视化表达，地图层需要依�
 
 - 高德地图 国内业务场景 合规中国地图
 - MapBox 国际业务，或者内网离线部署场景
+
+<img width="100%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*3wMCR7vIlCwAAAAAAAAAAAAAARQnAQ'>
 
 ### map
 
