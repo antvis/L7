@@ -88,15 +88,26 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           typeof highlightColor === 'string'
             ? rgb2arr(highlightColor)
             : highlightColor || [1, 0, 0, 1];
+
+        const { selectColor } = layer.getLayerConfig();
+        const selectColorInArray =
+          typeof selectColor === 'string'
+            ? rgb2arr(selectColor)
+            : selectColor || [1, 0, 0, 1];
         layer.updateLayerConfig({
           pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
         });
+        const currentSelectedId = layer.getCurrentSelectedId();
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
             u_activeMix: activeMix,
+            u_CurrentSelectedId: currentSelectedId ? encodePickingColor(
+              layer.getCurrentSelectedId()!,
+            ) : [0, 0, 0],
+            u_SelectColor: selectColorInArray.map((c) => c * 255),
           }),
         );
       },
@@ -119,6 +130,8 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingColor: pickedColor,
             u_HighlightColor: highlightColorInArray.map((c) => c * 255),
             u_activeMix: selectMix,
+            u_CurrentSelectedId: pickedColor,
+            u_SelectColor: highlightColorInArray.map((c) => c * 255),
           }),
         );
       },

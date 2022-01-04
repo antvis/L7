@@ -1,8 +1,11 @@
 attribute vec3 a_PickingColor;
 varying vec4 v_PickingResult;
+varying vec4 v_SelectResult;
 
 uniform vec3 u_PickingColor : [0, 0, 0];
+uniform vec3 u_CurrentSelectedId : [0, 0, 0];
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
+uniform vec4 u_SelectColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
 uniform float u_PickingThreshold : 1.0;
 uniform float u_PickingBuffer: 0.0;
@@ -20,12 +23,21 @@ bool isVertexPicked(vec3 vertexColor) {
     abs(vertexColor.b - u_PickingColor.b) < u_PickingThreshold;
 }
 
+bool isVertexSelected(vec3 vertexColor) {
+  return
+    abs(vertexColor.r - u_CurrentSelectedId.r) < u_PickingThreshold &&
+    abs(vertexColor.g - u_CurrentSelectedId.g) < u_PickingThreshold &&
+    abs(vertexColor.b - u_CurrentSelectedId.b) < u_PickingThreshold;
+}
+
 void setPickingColor(vec3 pickingColor) {
   if(u_shaderPick < 0.5) {
     return;
   }
   // compares only in highlight stage
   v_PickingResult.a = float((u_PickingStage == PICKING_HIGHLIGHT) && isVertexPicked(pickingColor));
+  // compares only in highlight stage
+  v_SelectResult.a = float((u_PickingStage == PICKING_HIGHLIGHT) && isVertexSelected(pickingColor));
 
   // Stores the picking color so that the fragment shader can render it during picking
   v_PickingResult.rgb = pickingColor * COLOR_SCALE;

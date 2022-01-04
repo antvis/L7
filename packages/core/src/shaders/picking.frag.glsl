@@ -1,5 +1,7 @@
 varying vec4 v_PickingResult;
+varying vec4 v_SelectResult;
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
+uniform vec4 u_SelectColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
 uniform float u_shaderPick;
 
@@ -15,15 +17,20 @@ uniform float u_activeMix: 0;
  */
 vec4 filterHighlightColor(vec4 color, float weight) {
   bool selected = bool(v_PickingResult.a);
+  bool clicked = bool(v_SelectResult.a);
 
-  if (selected) {
+  if (clicked) {
+    vec4 selectColor = u_SelectColor * COLOR_SCALE;
+
+    return selectColor;
+  } else if (selected) {
     vec4 highLightColor = u_HighlightColor * COLOR_SCALE;
 
     float highLightAlpha = highLightColor.a;
     float highLightRatio = highLightAlpha / (highLightAlpha + color.a * (1.0 - highLightAlpha));
 
     vec3 resultRGB = mix(color.rgb, highLightColor.rgb, highLightRatio);
-    return vec4(mix(resultRGB * weight, color.rgb, u_activeMix), color.a);
+    return vec4(mix(resultRGB * weight, color.rgb, u_activeMix), color.a);;
   } else {
     return color;
   }
