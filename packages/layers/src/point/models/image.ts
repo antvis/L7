@@ -180,7 +180,7 @@ export default class ImageModel extends BaseModel {
       premultiplyAlpha: false,
       width: 1024,
       height: this.iconService.canvasHeight || 128,
-      mipmap: true
+      mipmap: true,
     });
   };
 }
