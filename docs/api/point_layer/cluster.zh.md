@@ -11,6 +11,12 @@ order: 5
 
 数据聚合主要从数据层数据，因此需要在 Source 方法配置 cluster 参数
 
+```javascript
+import { PointLayer } from '@antv/l7';
+```
+
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*paQsRKykjL4AAAAAAAAAAABkARQnAQ'>
+
 ### Source
 
 [source 文档](../source/source)
@@ -85,7 +91,7 @@ const pointLayer = new PointLayer({})
   });
 ```
 
-[聚合图使用案例](../../../examples/point/cluster#cluster)
+[在线案例](../../../examples/point/cluster#cluster)
 
 ### FAQ
 

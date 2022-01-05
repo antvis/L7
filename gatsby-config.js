@@ -263,54 +263,6 @@ module.exports = {
         }
       },
       {
-        slug: 'react',
-        icon: 'map',
-        title: {
-          zh: 'React 组件',
-          en: 'React Demo'
-        }
-      },
-      {
-        slug: 'district',
-        icon: 'map',
-        title: {
-          zh: '行政区划',
-          en: 'L7 District'
-        }
-      },
-      {
-        slug: 'draw',
-        icon: 'map',
-        title: {
-          zh: '绘制组件',
-          en: 'L7 Draw'
-        }
-      },
-      {
-        slug: 'engine',
-        icon: 'map',
-        title: {
-          zh: '第三方引擎',
-          en: 'other engine'
-        }
-      },
-      {
-        slug: 'amapPlugin',
-        icon: 'map',
-        title: {
-          zh: '高德地图插件',
-          en: 'amapPlugin'
-        }
-      },
-      {
-        slug: 'earth',
-        icon: 'map',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode'
-        }
-      },
-      {
         slug: 'point',
         icon: 'point',
         title: {
@@ -352,11 +304,59 @@ module.exports = {
         }
       },
       {
+        slug: 'engine',
+        icon: 'map',
+        title: {
+          zh: '第三方引擎',
+          en: 'other engine'
+        }
+      },
+      {
+        slug: 'react',
+        icon: 'map',
+        title: {
+          zh: 'React 组件',
+          en: 'React Demo'
+        }
+      },
+      {
+        slug: 'amapPlugin',
+        icon: 'map',
+        title: {
+          zh: '高德地图插件',
+          en: 'amapPlugin'
+        }
+      },
+      {
+        slug: 'earth',
+        icon: 'map',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode'
+        }
+      },
+      {
         slug: 'wind',
         icon: 'raster',
         title: {
           zh: '风场图层',
           en: 'Wind Layer'
+        }
+      },
+      {
+        slug: 'district',
+        icon: 'map',
+        title: {
+          zh: '行政区划',
+          en: 'L7 District'
+        }
+      },
+      {
+        slug: 'draw',
+        icon: 'map',
+        title: {
+          zh: '绘制组件',
+          en: 'L7 Draw'
         }
       },
       {

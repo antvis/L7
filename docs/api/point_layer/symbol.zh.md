@@ -7,6 +7,12 @@ order: 4
 
 在地理区域上放置不同图片作为符号，通常表示不同地理要素分布情况
 
+```javascript
+import { PointLayer } from '@antv/l7';
+```
+
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ'>
+
 ## 使用
 
 符号图 通过 PointLayer 对象实例化，将 shape 设置成图片符号
@@ -43,5 +49,7 @@ const scatter = new PointLayer()
     strokeWidth: 1,
   });
 ```
+
+[在线案例](../../../examples/point/image#image)
 
 `markdown:docs/common/layer/base.md`

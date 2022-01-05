@@ -1,5 +1,5 @@
 ---
-title: 简单点图层
+title: 简单点
 order: 3
 ---
 
@@ -9,43 +9,37 @@ order: 3
 
 ## 使用
 
-### shape
-
-- dot 如果需要使用亮度图可以将 shape 设置为 dot,或者不设置 shape
-
-### color
-
-- 无权重
-  如果数据没有权重可以将颜色设置为常量，渲染时会自动进行颜色叠加，点越多颜色越亮
-- 有权重
-  如果数据有权重可以设置一组同一色相，不同亮度的色带，值越大亮度会越亮。
+气泡图通过 PointLayer 对象实例化，
 
 ```javascript
-const pointLayer = new PointLayer()
-  .source(data)
-  .size(2)
-  .shape('dot')
-  .color('h8', [
-    '#0A3663',
-    '#1558AC',
-    '#3771D9',
-    '#4D89E5',
-    '#64A5D3',
-    '#72BED6',
-    '#83CED6',
-    '#A6E1E0',
-    '#B8EFE2',
-    '#D7F9F0',
-  ])
-  .style({
-    opacity: 1,
-  });
+import { PointLayer } from '@antv/l7';
+```
 
-scene.addLayer(pointLayer);
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dVFmQIKh5TUAAAAAAAAAAAAAARQnAQ'>
+
+### shape
+
+- 简单点图层使用的 shape 参数是 simple
+
+### use
+
+- 简单点图层的使用和一般的点图层表现一致
+
+- 简单点图层的实质是精灵贴图，因此简单点图层始终面向相机（普通的 2D 点图层保持面向上）
+
+- 🌟 当用户对点图层的朝向没有要求或是对点图层的可视化效果要求比较简单，那么推荐尽量使用简单点图层，可以节省大量性能
+
+- 🌟 简单点图层由于实质是精灵贴图，因此有大小限制：一般是 [1, 64]，不同设备之间存在差异
+
+```javascript
+
+// L7 提供了查询方法快速查看
+
+scene.getPointSizeRange(); // Float32Array - [min, max]
 ```
 
 ## 相关 demo
 
-[城市亮度图](../../../examples/point/dot#normal2)
+[在线案例](../../../examples/point/dot#normal2)
 
 `markdown:docs/common/layer/base.md`

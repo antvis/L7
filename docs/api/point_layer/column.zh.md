@@ -11,6 +11,12 @@ order: 5
 
 3D 柱图通过 PointLayer 对象实例化，将 shape 设置成不同的 3Dshape
 
+```javascript
+import { PointLayer } from '@antv/l7';
+```
+
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RVw4QKTJe7kAAAAAAAAAAABkARQnAQ'>
+
 ### shape
 
 3D Shape 支持
@@ -105,7 +111,7 @@ layer.style({
 });
 ```
 
-[光标柱图](../../../../examples/point/column#column_light)  
-[渐变柱图](../../../../examples/point/column#column_linear)
+[光标柱图](../../../examples/point/column#column_light)  
+[渐变柱图](../../../examples/point/column#column_linear)
 
 `markdown:docs/common/layer/base.md`
