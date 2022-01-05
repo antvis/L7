@@ -15,6 +15,8 @@ L7 本身内部没有提供栅格数据格式 如 `tiff`,需要外部解析好�
 import { RasterLayer } from '@antv/l7';
 ```
 
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bUYqRb5esH4AAAAAAAAAAABkARQnAQ'>
+
 ## source
 
 见 [raster source](../source/raster)
@@ -39,3 +41,8 @@ import { RasterLayer } from '@antv/l7';
   } // 色带
 
   ⚠️ `color`, `position` 的长度要相同
+
+
+[在线案例](../../../examples/raster/basic#light)
+
+`markdown:docs/common/layer/base.md`

@@ -5,6 +5,7 @@ order: 1
 
 `markdown:docs/common/style.md`
 
+
 将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局
 
 ## 使用
@@ -12,6 +13,8 @@ order: 1
 ```javascript
 import { HeatmapLayer } from '@antv/l7';
 ```
+
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SLcGSbvZoEwAAAAAAAAAAABkARQnAQ'>
 
 ### source
 
@@ -131,5 +134,7 @@ const layer = new HeatmapLayer({
     coverage: 0.8,
   });
 ```
+
+[在线案例](../../../examples/heatmap/hexagon#light)
 
 `markdown:docs/common/layer/base.md`

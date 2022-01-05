@@ -50,6 +50,8 @@ const scatter = new PointLayer()
   });
 ```
 
+🌟 为了得到更好的现实效果（图片清晰，无明显锯齿），我们在选择图片以及设置图标大小的时候应保持相当，或者在 L7 图层中设置的图标大小略小于实际图片的像素大小。
+
 [在线案例](../../../examples/point/image#image)
 
 `markdown:docs/common/layer/base.md`

@@ -15,6 +15,8 @@ order: 6
 import { CityBuildingLayer } from '@antv/l7';
 ```
 
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ'>
+
 ### animate
 
 是否开启动画效果, 仅支持`boolean` 或`enable: boolean` 配置项
@@ -114,6 +116,6 @@ scene.on('loaded', () => {
 });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Fe40RYZYR0kAAAAAAAAAAAAAARQnAQ" alt="L7 建筑图层" height="300" width="300">
+[在线案例](../../../examples/gallery/animate#build_sweep)
 
 `markdown:docs/common/layer/base.md`

@@ -110,7 +110,7 @@ scene.on('loaded', () => {
         opacity: 1,
         thetaOffset: 'thetaOffset',
         lineTexture: true, // 开启线的贴图功能
-        iconStep: 20, // 设置贴图纹理的间距
+        iconStep: 10, // 设置贴图纹理的间距
         textureBlend: 'replace'
       })
       .animate({
