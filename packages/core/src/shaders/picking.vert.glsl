@@ -9,6 +9,7 @@ uniform float u_PickingStage : 0.0;
 uniform float u_PickingThreshold : 1.0;
 uniform float u_PickingBuffer: 0.0;
 uniform float u_shaderPick;
+uniform float u_EnableSelect: 0.0;
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0
@@ -39,7 +40,7 @@ void setPickingColor(vec3 pickingColor) {
     return;
   }
   // compares only in highlight stage
-  if (u_PickingStage == PICKING_HIGHLIGHT && isVertexSelected(pickingColor)) {
+  if (u_EnableSelect == 1.0 && u_PickingStage == PICKING_HIGHLIGHT && isVertexSelected(pickingColor)) {
     // 选中态
     v_PickingResult.a = SELECT;
   } else if (u_PickingStage == PICKING_HIGHLIGHT && isVertexPicked(pickingColor)) {
