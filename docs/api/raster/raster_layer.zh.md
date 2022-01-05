@@ -42,7 +42,6 @@ import { RasterLayer } from '@antv/l7';
 
   ⚠️ `color`, `position` 的长度要相同
 
-
 [在线案例](../../../examples/raster/basic#light)
 
 `markdown:docs/common/layer/base.md`

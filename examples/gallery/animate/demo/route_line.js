@@ -16,7 +16,7 @@ const scene = new Scene({
 const originData = { // 设置经纬度起点和终点数据
   lng1: 116.5883553580003,
   lat1: 40.07680509701226,
-  lng2: 55.7508, //2.663131,12.304181 
+  lng2: 55.7508, // 2.663131,12.304181
   lat2: 37.617255
 };
 
@@ -51,20 +51,20 @@ scene.on('loaded', () => {
     scene.addLayer(worldLine);
 
     const dotPoint = new PointLayer()
-    .source(data, {
-      parser: {
-        type: 'json',
-        x: 'lng2',
-        y: 'lat2'
-      }
-    })
-    .shape('circle')
-    .color('#ffed11')
-    .animate(true)
-    .size(40)
-    .style({
-      opacity: 1.0
-    });
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'lng2',
+          y: 'lat2'
+        }
+      })
+      .shape('circle')
+      .color('#ffed11')
+      .animate(true)
+      .size(40)
+      .style({
+        opacity: 1.0
+      });
     scene.addLayer(dotPoint);
 
 
