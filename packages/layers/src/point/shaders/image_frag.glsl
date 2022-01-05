@@ -11,12 +11,11 @@ varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 
 void main(){
       float opacity = styleMappingMat[0][0];
-      float size = max(styleMappingMat[1][0] - 2.0, 0.0);
+      float size = styleMappingMat[1][0];
       vec2 pos = v_uv / u_textSize + gl_PointCoord / u_textSize * 64.;
       vec4 textureColor;
 
       // Y = 0.299R + 0.587G + 0.114B // 亮度提取
-
      
       textureColor = texture2D(u_texture, pos);
 
