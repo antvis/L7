@@ -13,6 +13,8 @@ order: 1
 import { HeatmapLayer } from '@antv/l7';
 ```
 
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SLcGSbvZoEwAAAAAAAAAAABkARQnAQ'>
+
 ### source
 
 网格数据只支持点数据作为数据源，数据格式支持 csv、json、geojson.
@@ -131,5 +133,7 @@ const layer = new HeatmapLayer({
     coverage: 0.8,
   });
 ```
+
+[在线案例](../../../examples/heatmap/hexagon#light)
 
 `markdown:docs/common/layer/base.md`

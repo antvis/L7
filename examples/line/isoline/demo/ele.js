@@ -17,7 +17,7 @@ scene.on('loaded', () => {
       const layer = new LineLayer({})
         .source(data)
         .size('ELEV', h => {
-          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 20 ];
+          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 0.2 ];
         })
         .shape('line')
         .scale('ELEV', {
