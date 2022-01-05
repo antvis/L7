@@ -103,16 +103,19 @@ export default class ExtrudePolyline {
     let count = complex.startIndex;
     for (let i = 1; i < total; i++) {
       const last = points[i - 1];
-      last.push(originPoints[i-1][2] ?? 0)
+      last.push(originPoints[i - 1][2] ?? 0);
       // @ts-ignore
       const originLast = originPoints[i - 1] as vec3;
 
       const cur = points[i];
-      cur.push(originPoints[i][2] ?? 0)
+      cur.push(originPoints[i][2] ?? 0);
       // @ts-ignore
       const originCur = originPoints[i] as vec3;
 
-      const next = i < points.length - 1 ? [...points[i + 1], originPoints[i+1][2] ?? 0 ] : null;
+      const next =
+        i < points.length - 1
+          ? [...points[i + 1], originPoints[i + 1][2] ?? 0]
+          : null;
       const originNext =
         i < originPoints.length - 1 ? originPoints[i + 1] : null;
 
