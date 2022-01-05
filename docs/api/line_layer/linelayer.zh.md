@@ -1,11 +1,12 @@
 ---
 title: LineLayer
-order: 2
+order: 0
 ---
 
 `markdown:docs/common/style.md`
 
-## 线图层
+## 简介
+L7 支持各种类型的线图层，包括平面路径、平面弧线、平面虚线、平面动画、3D弧线等等。用户通过切换 shape 的参数，以及配置对应 shape 的线图层支持的 style 样式，可以得到各种类型的线。
 
 ### shape
 
