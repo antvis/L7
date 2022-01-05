@@ -138,7 +138,7 @@
   },
   "scripts": {
     "start": "yarn run site:clean && yarn run site:develop",
-    "site:develop": "cross-env BABEL_ENV=site  GATSBY_LOGGER=ink gatsby develop --open --host 127.0.0.1",
+    "site:develop": "cross-env BABEL_ENV=site  GATSBY_LOGGER=ink gatsby develop --open --host 127.0.0.1 -p 8848",
     "site:build": "yarn run site:clean && cross-env BABEL_ENV=site gatsby build --prefix-paths",
     "site:clean": "gatsby clean",
     "site:deploy": "yarn run site:build && gh-pages -d public",
