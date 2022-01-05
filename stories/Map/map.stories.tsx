@@ -63,6 +63,7 @@ import Amap2demo_styleMap from "./components/amap2demo_styleMap"
 import Amap2demo_textOffset from "./components/amap2demo_textOffset"
 
 import ShapeUpdate from './components/shapeUpdate'
+import BusLine from './components/busline'
 import AmapPlugin from './components/plugin'
 import PointUV from './components/pointUV'
 import DestroyClear from './components/destroyClear'
@@ -146,3 +147,4 @@ storiesOf('地图方法', module)
         .add('Slider', () => <Slider/>)
         .add('SimplePoint', () => <SimplePoint/>)
         .add('LineWall', () => <LineWall/>)
+        .add('BusLine', () => <BusLine/>)
