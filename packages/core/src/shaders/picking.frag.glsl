@@ -32,7 +32,7 @@ vec4 filterHighlightColor(vec4 color, float weight) {
     float highLightRatio = highLightAlpha / (highLightAlpha + color.a * (1.0 - highLightAlpha));
 
     vec3 resultRGB = mix(color.rgb, highLightColor.rgb, highLightRatio);
-    return vec4(mix(resultRGB * weight, color.rgb, u_activeMix), color.a);;
+    return vec4(mix(resultRGB * weight, color.rgb, u_activeMix), color.a);
   } else {
     return color;
   }
