@@ -1,6 +1,6 @@
 ---
-title: 弧线图
-order: 2
+title: 3D弧线图
+order: 3
 ---
 
 `markdown:docs/common/style.md`

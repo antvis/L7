@@ -11,6 +11,12 @@ order: 2
 
 散点图通过 PointLayer 对象实例化
 
+```javascript
+import { PointLayer } from '@antv/l7';
+```
+
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*LnlmQ7sFWigAAAAAAAAAAABkARQnAQ'>
+
 ### shape
 
 - circle
@@ -44,5 +50,7 @@ const scatter = new PointLayer()
     strokeWidth: 1,
   });
 ```
+
+[在线案例](../../../examples/point/scatter#scatter)
 
 `markdown:docs/common/layer/base.md`

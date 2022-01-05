@@ -27,7 +27,7 @@ scene.on('loaded', () => {
           }
         })
         .size('level', level => {
-          return [ 0.8, level * 1 ];
+          return [ 0.8, level * 0.1 ];
         })
         .shape('line')
         .color(

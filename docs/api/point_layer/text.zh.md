@@ -11,6 +11,12 @@ order: 4
 
 地图标注需要添加一个新的图层的实现
 
+```javascript
+import { PointLayer } from '@antv/l7';
+```
+
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7blvQ4v7Q1UAAAAAAAAAAABkARQnAQ'>
+
 ### shape
 
 - field 标注的字段名称
@@ -35,8 +41,6 @@ layer.shape('name', 'text');
 - textOffset `[number, number]` 文本偏移量
 - textAllowOverlap: `boolean` 是否允许文字遮盖
 
-## 相关 demo
-
-[文本标注](../../../examples/point/text#point_text)
+[在线案例](../../../examples/point/text#point_text)
 
 `markdown:docs/common/layer/base.md`

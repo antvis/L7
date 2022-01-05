@@ -1,6 +1,6 @@
 ---
-title: 弧线图
-order: 2
+title: 线纹理贴图
+order: 6
 ---
 
 `markdown:docs/common/style.md`

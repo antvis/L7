@@ -37,7 +37,7 @@ scene.on('loaded', () => {
           }
         })
         .shape('name', [ '00', '01', '02' ])
-        .size(20);
+        .size(25);
       scene.addLayer(imageLayer);
     });
 });
