@@ -15,7 +15,7 @@ order: 6
 import { CityBuildingLayer } from '@antv/l7';
 ```
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ'>
 
 ### animate
 
@@ -28,6 +28,9 @@ layer.animatte({
   enable: true,
 });
 ```
+
+✨ 在开启 animate 后默认会打开点亮窗户的动画  
+🌟 开启 animate 动画是打开扫光动画的前提
 
 ### style
 
@@ -75,7 +78,7 @@ buildingLayer.animate(false);
 
 let i = 0;
 function step() {
-  pointLayer.setLight(i++);
+  buildingLayer.setLight(i++);
   scene.render();
   requestAnimationFrame(step);
 }

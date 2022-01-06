@@ -14,9 +14,13 @@ order: 0
 - active 鼠标滑过高亮
 - select 鼠标选中高亮
 
-#### active
+#### active(activeOption | boolean)
 
-[layer active](../../api/layer/layer/#图层交互方法)
+- 开启或者关闭 mousehover 元素高亮效果
+- `activeOption`
+  - `color`: 高亮颜色
+  - `mix`: 可选参数，默认为 0，表示高亮颜色是指定纯色，最大有效值是1，表示高亮色全部是底色
+
 ```javascript
 // 开启 Active  使用默认高亮颜色
 layer.active(true)
@@ -24,7 +28,8 @@ layer.active(true)
 //  开启 Active  自定义高亮颜色
 
 layer.active({
-  color: 'red'
+  color: 'red',
+  mix: .6,
 })
 
 // 关闭高亮效果
@@ -32,8 +37,12 @@ layer.active(false)
 
 ```
 
-#### select
-[layer active](../../api/layer/layer/#图层交互方法)
+#### select(selectOption | boolean)
+
+- 开启或者关闭 mouseclick 元素选中高亮效果
+- selectOption
+  - `color`: 选中高亮颜色
+  - `mix`: 可选参数，默认为 0，表示选中高亮颜色是指定纯色，最大有效值是1，表示选中高亮色全部是底色
 
 ```javascript
 // 开启 Active  使用默认高亮颜色
@@ -42,7 +51,8 @@ layer.select(true)
 //  开启 Active  自定义高亮颜色
 
 layer.select({
-  color: 'red'
+  color: 'red',
+  mix: .6,
 })
 
 // 关闭高亮效果
