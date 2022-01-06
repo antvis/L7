@@ -31,8 +31,8 @@ const layer = new LineLayer({})
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*JjUcTZ8-PC8AAAAAAAAAAABkARQnAQ'>
 
-
 [在线案例](../../../examples/gallery/basic#arcCircle)
+
 ### 数据
 
 绘制弧线只需提供起止点坐标即可（起止点调换位置，弧线的形状会对称相反，飞线动画的方向也会相反）
@@ -49,8 +49,8 @@ source(data, {
 });
 ```
 
-`markdown:docs/api/line_layer/features/linear.zh.md`  
+`markdown:docs/api/line_layer/features/linear.zh.md`
 
-`markdown:docs/api/line_layer/features/animate.zh.md`  
+`markdown:docs/api/line_layer/features/animate.zh.md`
 
 `markdown:docs/common/layer/base.md`

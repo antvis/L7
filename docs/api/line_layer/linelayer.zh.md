@@ -7,9 +7,9 @@ order: 0
 
 ## 简介
 
-L7 支持各种类型的线图层，包括平面路径、平面弧线、平面虚线、平面动画、3D 弧线等等。用户通过切换 shape 的参数，以及配置对应 shape 的线图层支持的 style 样式，可以得到各种类型的线。  
+L7 支持各种类型的线图层，包括平面路径、平面弧线、平面虚线、平面动画、3D 弧线等等。用户通过切换 shape 的参数，以及配置对应 shape 的线图层支持的 style 样式，可以得到各种类型的线。
 
-✨  不同的 lineLayer 会支持不同的相关特性，具体的使用可以请查看详细的文档
+✨ 不同的 lineLayer 会支持不同的相关特性，具体的使用可以请查看详细的文档
 
 ### shape
 
@@ -75,13 +75,12 @@ lineLayer.size([1, 2]); // 宽度为1，高度2
 ```
 
 ### texture
+
 线图层支持了纹理贴图的能力，不同 shape 的图层对 texturte 的支持情况会存在细微的差别，详细使用请查看相关图层的文档
 
 `markdown:docs/api/line_layer/features/linear.zh.md`
 
-
 `markdown:docs/api/line_layer/features/animate.zh.md`
-
 
 [在线案例](../../../examples/line/isoline#height)
 

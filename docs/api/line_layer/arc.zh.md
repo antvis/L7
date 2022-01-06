@@ -6,6 +6,7 @@ order: 2
 `markdown:docs/common/style.md`
 
 绘制弧线 通过贝塞尔曲线算法技术弧线
+
 ## 使用
 
 ```javascript
@@ -32,13 +33,12 @@ source(data, {
 });
 ```
 
+`markdown:docs/api/line_layer/features/segmentNumber.zh.md`
 
-`markdown:docs/api/line_layer/features/segmentNumber.zh.md`  
+`markdown:docs/api/line_layer/features/thetaOffset.zh.md`
 
-`markdown:docs/api/line_layer/features/thetaOffset.zh.md`  
+`markdown:docs/api/line_layer/features/linear.zh.md`
 
-`markdown:docs/api/line_layer/features/linear.zh.md`  
-
-`markdown:docs/api/line_layer/features/animate.zh.md`  
+`markdown:docs/api/line_layer/features/animate.zh.md`
 
 `markdown:docs/common/layer/base.md`
