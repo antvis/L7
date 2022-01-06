@@ -9,6 +9,7 @@ order: 2
 
 ## 使用
 
+
 ```javascript
 import { LineLayer } from '@antv/l7';
 ```
@@ -16,6 +17,10 @@ import { LineLayer } from '@antv/l7';
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dUk8RbtjUDIAAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](../../../examples/line/animate#wind)
+
+### shape
+
+shape 设置成 arc 即可
 
 ### 数据
 
@@ -40,5 +45,7 @@ source(data, {
 `markdown:docs/api/line_layer/features/linear.zh.md`
 
 `markdown:docs/api/line_layer/features/animate.zh.md`
+
+`markdown:docs/api/line_layer/features/texture.zh.md`
 
 `markdown:docs/common/layer/base.md`
