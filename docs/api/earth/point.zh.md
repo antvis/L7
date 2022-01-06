@@ -11,7 +11,7 @@ order: 3
 
 ## 示例图片
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ck1XSZ4Vw0QAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球点图层" width="300" height="300" >
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ck1XSZ4Vw0QAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球点图层" width="60%" >
 
 ## 使用
 

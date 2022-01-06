@@ -13,7 +13,7 @@ order: 7
 import { PointLayer } from '@antv/l7';
 ```
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*2vBbRYT2bgIAAAAAAAAAAABkARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*2vBbRYT2bgIAAAAAAAAAAABkARQnAQ'>
 
 [Marker 文档](../component/marker)
 

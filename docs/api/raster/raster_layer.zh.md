@@ -15,7 +15,7 @@ L7 本身内部没有提供栅格数据格式 如 `tiff`,需要外部解析好�
 import { RasterLayer } from '@antv/l7';
 ```
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bUYqRb5esH4AAAAAAAAAAABkARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bUYqRb5esH4AAAAAAAAAAABkARQnAQ'>
 
 ## source
 

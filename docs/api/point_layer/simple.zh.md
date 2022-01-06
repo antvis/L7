@@ -15,7 +15,7 @@ order: 3
 import { PointLayer } from '@antv/l7';
 ```
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dVFmQIKh5TUAAAAAAAAAAAAAARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dVFmQIKh5TUAAAAAAAAAAAAAARQnAQ'>
 
 ### shape
 

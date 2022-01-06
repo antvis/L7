@@ -9,7 +9,7 @@ order: 3
 
 用户在地球模式下使用飞线图层无需做额外的操作，L7 会自动识别地球模式并相关的转化
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4ZCnQaH_nLIAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7地球飞线图层" width="300" height="300">
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4ZCnQaH_nLIAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7地球飞线图层" width="60%">
 
 ## 使用
 

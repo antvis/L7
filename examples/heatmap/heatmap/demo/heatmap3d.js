@@ -5,10 +5,10 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'dark',
-    pitch: 58.5,
-    center: [ 111.8759, 30.6942 ],
-    rotation: 0.519,
-    zoom: 3.6116
+    pitch: 50,
+    center: [ 100, 30.6942 ],
+    rotation: 10,
+    zoom: 2
   })
 });
 scene.on('loaded', () => {
@@ -23,8 +23,8 @@ scene.on('loaded', () => {
         .shape('heatmap3D')
       // weight映射通道
         .style({
-          intensity: 10,
-          radius: 5,
+          intensity: 5,
+          radius: 10,
           opacity: 1.0,
           rampColors: {
             colors: [

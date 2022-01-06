@@ -15,7 +15,7 @@ order: 6
 import { CityBuildingLayer } from '@antv/l7';
 ```
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ'>
 
 ### animate
 
@@ -75,7 +75,7 @@ buildingLayer.animate(false);
 
 let i = 0;
 function step() {
-  pointLayer.setLight(i++);
+  buildingLayer.setLight(i++);
   scene.render();
   requestAnimationFrame(step);
 }
