@@ -80,20 +80,20 @@ void main() {
 
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
-      gl_FragColor = filterColor(gl_FragColor + pattern);
+      gl_FragColor += pattern;
     } else { // replace
         pattern.a *= opacity;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }
-        gl_FragColor = filterColor(pattern);
+        gl_FragColor = pattern;
     }
-  } else {
+  } 
 
     float v = styleMappingMat[3].a;
     float borderWidth = min(0.5, u_borderWidth);
     // 绘制 border
-    if(borderWidth > 0.0) {
+    if(borderWidth > 0.01) {
       float borderOuterWidth = borderWidth/2.0;
 
       if(v >= 1.0 - borderWidth || v <= borderWidth) {
@@ -114,9 +114,4 @@ void main() {
     }
 
     gl_FragColor = filterColor(gl_FragColor);
-  }
-
-  
-  
-  
 }
