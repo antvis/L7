@@ -20,12 +20,19 @@ import { Earth } from '@antv/l7-maps';
 
 ### 点图层
 
-- 平面点: `shape: 'circle'`
-- 圆柱点: `shape: 'cylinder'`
+**平面点: circle**
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PD6fTbs7E3gAAAAAAAAAAAAAARQnAQ'>
+
+**圆柱点: cylinder**
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*n6tYQKceveUAAAAAAAAAAAAAARQnAQ'>
 
 ### 线图层
 
-- 3D 弧线: `shape: 'arc3d'`
+**3D 弧线: arc3d**
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FjhGT77aCaIAAAAAAAAAAAAAARQnAQ'>
 
 ## 使用
 
@@ -79,7 +86,7 @@ scene.on('loaded', () => {
 
 作为 l7-maps 的基础地图类型，`Earth` 提供了地球系统的相机系统，目前只需要传入一个空对象。
 
-- args: {}
+- args: **{}**
 
 ```js
 import { Scene, Earth } from '@antv/l7-maps';
@@ -171,7 +178,7 @@ const earthlayer = new EarthLayer()
   });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i_TBRZRLSuYAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层" width="300" height="300">
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*UByFSYTuyG4AAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层" width="300" height="300">
 
 ### 地球内发光/大气图层 atomLayer
 
@@ -187,7 +194,7 @@ const atomLayer = new EarthLayer()
   });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1MU_RZQyFTkAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层大气效果" width="300" height="300" >
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*am0GR6Dck3gAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层大气效果" width="300" height="300" >
 
 ### 地球内外发光/辉光图层 bloomLayer
 
@@ -202,4 +209,4 @@ const bloomLayer = new EarthLayer()
   });
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FTniTZOZkNUAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层辉光效果" width="300" height="300" >
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vTaMRZckmfQAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球图层辉光效果" width="300" height="300" >
