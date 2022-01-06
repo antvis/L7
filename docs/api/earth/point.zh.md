@@ -16,8 +16,9 @@ import { PointLayer, EarthLayer } from '@antv/l7';
 ```
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ck1XSZ4Vw0QAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7 地球点图层" width="60%" >
+
 [在线案例](../../../examples/earth/point#point)
 
 ### 配置项
 
-和 [`PontLayer`](../point_layer/pointlayer) 一致
+其余配置和 [PontLayer](../point_layer/pointlayer) 一致
