@@ -17,7 +17,7 @@ export default class Amap2demo_lineStreet extends React.Component {
         center: [120.19382669582967, 30.258134],
         pitch: 0,
         zoom: 16,
-        style: 'dark'
+        style: 'dark',
       }),
     });
     this.scene = scene;
@@ -62,7 +62,7 @@ export default class Amap2demo_lineStreet extends React.Component {
               // textureBlend: 'replace',
               // textureBlend: 'normal',
 
-              borderWidth: 0.4,   // 默认文 0，最大有效值为 0.5
+              borderWidth: 0.4, // 默认文 0，最大有效值为 0.5
               borderColor: '#fff', // 默认为 #ccc
             });
           scene.addLayer(layer);
