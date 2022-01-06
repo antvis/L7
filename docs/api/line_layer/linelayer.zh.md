@@ -11,6 +11,8 @@ L7 支持各种类型的线图层，包括平面路径、平面弧线、平面�
 
 ✨ 不同的 lineLayer 会支持不同的相关特性，具体的使用可以请查看详细的文档
 
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*MxnRTrzcawcAAAAAAAAAAAAAARQnAQ'>
+
 ### shape
 
 线图层支持 4 种 shape
