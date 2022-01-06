@@ -145,6 +145,7 @@ import { PolygonLayer } from '@antv/l7-react';
   active={{
     option: {
       color: 'red',
+      mix: .6,
     },
   }}
 />;
