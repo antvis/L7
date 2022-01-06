@@ -7,7 +7,6 @@ order: 3
 
 用户在地球模式下使用飞线图层无需做额外的操作，L7 会自动识别地球模式并相关的转化
 
-
 ## 使用
 
 地球飞线图通过 `LineLayer` 和 `EarthLayer` 实例化
@@ -23,6 +22,7 @@ import { EarthLayer, LineLayer } from '@antv/l7';
 地球飞线图层 shape 只支持 **arc3d**
 
 ### 其他配置
+
 剩下的配置和[线图层](../line_layer/linelayer)一致
 
 [在线案例](../../../examples/earth/arc3d#flyline)
