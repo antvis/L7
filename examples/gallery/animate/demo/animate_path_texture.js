@@ -32,6 +32,8 @@ scene.on('loaded', () => {
           trailLength: 2 // 流线长度
         })
         .style({
+          borderWidth: 0.35,   // 默认文 0，最大有效值为 0.5
+          borderColor: '#888', // 默认为 #ccc
           lineTexture: true, // 开启线的贴图功能
           iconStep: 20 // 设置贴图纹理的间距
         });
