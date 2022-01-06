@@ -35,7 +35,7 @@ layer.size([2, 10]); // 绘制宽度为2，高度为10的路径
 layer.size('height', []);
 ```
 
-✨  当用户在传入数据的第三个值可以用于表示当前点的高度
+✨ 当用户在传入数据的第三个值可以用于表示当前点的高度
 
 `markdown:docs/api/line_layer/features/vertexHeight.zh.md`
 

@@ -9,7 +9,6 @@ order: 2
 
 ## 使用
 
-
 ```javascript
 import { LineLayer } from '@antv/l7';
 ```
