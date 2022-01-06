@@ -72,7 +72,7 @@ void main() {
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
 
   v_iconMapUV = a_iconMapUV;
-  d_texPixelLen = project_pixel(u_icon_step);
+  d_texPixelLen = project_float_pixel(u_icon_step);
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     d_texPixelLen *= 10.0;
   }
