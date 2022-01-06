@@ -94,13 +94,13 @@ void main() {
 
   float originSize = a_Size.x;  // 固定高度
   if(u_heightfixed < 1.0) {     // 高度随 zoom 调整
-    originSize = project_pixel(a_Size.x);
+    originSize = project_float_pixel(a_Size.x);
   }
 
   float wallHeight = originSize * miter;
   float lightWeight = calc_lighting(vec4(project_pos.xy, wallHeight, 1.0));
 
-  v_blur = min(project_pixel(2.0) / originSize, 0.05);
+  v_blur = min(project_float_pixel(2.0) / originSize, 0.05);
 
   // v_lightWeight = lightWeight;
   v_color = vec4(a_Color.rgb * lightWeight, a_Color.w);
