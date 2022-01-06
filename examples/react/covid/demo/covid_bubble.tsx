@@ -226,6 +226,7 @@ const World = React.memo(function Map() {
             active={{
               option: {
                 color: '#0c2c84',
+                mix: .6,
               },
             }}
             size={{
