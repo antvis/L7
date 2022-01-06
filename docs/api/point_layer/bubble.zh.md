@@ -4,15 +4,18 @@ order: 1
 ---
 
 `markdown:docs/common/style.md`
+
 气泡图地理区域上方会显示不同大小的圆点，圆形面积与其在数据集中的数值会成正比。
 
-## 基础使用
+## 使用
 
 气泡图通过 PointLayer 对象实例化，
 
 ```javascript
 import { PointLayer } from '@antv/l7';
 ```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*fNGiS7YI1tIAAAAAAAAAAABkARQnAQ'>
 
 ### shape
 
@@ -57,5 +60,7 @@ layer.animate(false);
 如果 opacity 设置为 0.3 则所有的气泡都是 0.3
 
 style 方法如果没有设置 stroke, 默认于气泡的填充色相同
+
+[在线案例](../../../examples/point/bubble#point)
 
 `markdown:docs/common/layer/base.md`

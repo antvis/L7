@@ -7,9 +7,8 @@ const scene = new Scene({
   id: 'map',
   map: new Mapbox({
     center: [ 103.83735, 1.3602538 ],
-    pitch: 4.00000000000001,
-    zoom: 10.210275860702593,
-    rotation: 19.313180925794313,
+    zoom: 9.4678190476727,
+    pitch: 1.9999999999999982,
     style: 'dark'
   })
 });
@@ -27,7 +26,7 @@ scene.on('loaded', () => {
           }
         })
         .size('level', level => {
-          return [ 0.8, level * 1 ];
+          return [ 0.8, level * 0.1 ];
         })
         .shape('line')
         .color(

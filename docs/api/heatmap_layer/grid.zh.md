@@ -1,6 +1,6 @@
 ---
 title: 网格热力图
-order: 1
+order: 3
 ---
 
 `markdown:docs/common/style.md`
@@ -12,6 +12,8 @@ order: 1
 ```javascript
 import { HeatmapLayer } from '@antv/l7';
 ```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*XPBuSIPPgsgAAAAAAAAAAABkARQnAQ'>
 
 ## source
 
@@ -130,22 +132,12 @@ const layer = new HeatmapLayer({})
   })
   .color('count', [
     '#0B0030',
-    '#100243',
-    '#100243',
-    '#1B048B',
-    '#051FB7',
-    '#0350C1',
-    '#0350C1',
-    '#0072C4',
-    '#0796D3',
-    '#2BA9DF',
-    '#30C7C4',
-    '#6BD5A0',
-    '#A7ECB2',
-    '#D0F4CA',
+    ...
   ]);
 
 scene.addLayer(layer);
 ```
+
+[在线案例](../../../examples/heatmap/grid#china)
 
 `markdown:docs/common/layer/base.md`

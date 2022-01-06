@@ -112,6 +112,7 @@ const World = React.memo(function Map() {
             active={{
               option: {
                 color: '#ff0',
+                mix: .6,
               },
             }}
             color={{

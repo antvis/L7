@@ -9,6 +9,12 @@ order: 3
 
 ## 使用
 
+```javascript
+import { PointLayer } from '@antv/l7';
+```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*xr8BQouXGvoAAAAAAAAAAABkARQnAQ'>
+
 ### shape
 
 - dot 如果需要使用亮度图可以将 shape 设置为 dot,或者不设置 shape
@@ -44,8 +50,6 @@ const pointLayer = new PointLayer()
 scene.addLayer(pointLayer);
 ```
 
-## 相关 demo
-
-[城市亮度图](../../../examples/point/dot#normal2)
+[在线案例](../../../examples/point/dot#normal2)
 
 `markdown:docs/common/layer/base.md`

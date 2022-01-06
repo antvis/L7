@@ -11,6 +11,8 @@ order: 1
 import { HeatmapLayer } from '@antv/l7';
 ```
 
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*QstiQq4JBOIAAAAAAAAAAABkARQnAQ'>
+
 ### shape
 
 常量 heatmap
@@ -55,15 +57,13 @@ heatmapLayer()
     rampColors: {
       colors: [
         'rgba(33,102,172,0.0)',
-        'rgb(103,169,207)',
-        'rgb(209,229,240)',
-        'rgb(253,219,199)',
-        'rgb(239,138,98)',
-        'rgb(178,24,43,1.0)',
+        ...
       ],
       positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
     },
   });
 ```
+
+[在线案例](../../../examples/heatmap/heatmap#heatmap)
 
 `markdown:docs/common/layer/base.md`

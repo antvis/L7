@@ -7,7 +7,7 @@ order: 3
 
 平面点图层在开启动画模式的情况下，是一种特殊的图层类型：水波点。图层由一圈圈向外扩散的圆环构成。
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*pcp3RKnNK1oAAAAAAAAAAAAAARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*pcp3RKnNK1oAAAAAAAAAAAAAARQnAQ'>
 
 ## 使用
 
@@ -26,6 +26,11 @@ order: 3
   enable: true
 })
 ```
+
+#### 水波配置项
+
+- speed 水波速度
+- rings 水波环数
 
 ### size
 

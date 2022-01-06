@@ -1,6 +1,6 @@
 ---
 title: 蜂窝热力图
-order: 1
+order: 4
 ---
 
 `markdown:docs/common/style.md`
@@ -12,6 +12,8 @@ order: 1
 ```javascript
 import { HeatmapLayer } from '@antv/l7';
 ```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SLcGSbvZoEwAAAAAAAAAAABkARQnAQ'>
 
 ### source
 
@@ -131,5 +133,7 @@ const layer = new HeatmapLayer({
     coverage: 0.8,
   });
 ```
+
+[在线案例](../../../examples/heatmap/hexagon#light)
 
 `markdown:docs/common/layer/base.md`

@@ -1,0 +1,18 @@
+{
+  "title": {
+    "zh": "线路围墙",
+    "en": "LineWall"
+  },
+  "demos": [
+    {
+      "filename": "hangzhou_wall.js",
+      "title": "杭州区县围墙",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mLfxTb4mI6AAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "bus_wall.js",
+      "title": "公交线路围墙",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*biL5TpaZxd4AAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}
