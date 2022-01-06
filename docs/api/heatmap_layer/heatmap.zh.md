@@ -21,33 +21,32 @@ order: 0
 ```javascript
 import { HeatmapLayer } from '@antv/l7';
 
- const layer = new HeatmapLayer({})
-    .source(data)
-    .shape('heatmap')
-    .size('mag', [ 0, 1.0 ]) // weight映射通道
-    .style({
-        intensity: 2,
-        radius: 20,
-        opacity: 1.0,
-        rampColors: {
-        colors: [
-            '#FF4818',
-            '#F7B74A',
-            '#FFF598',
-            '#F27DEB',
-            '#8C1EB2',
-            '#421EB2'
-        ].reverse(),
-        positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
-        }
-    });
+const layer = new HeatmapLayer({})
+  .source(data)
+  .shape('heatmap')
+  .size('mag', [0, 1.0]) // weight映射通道
+  .style({
+    intensity: 2,
+    radius: 20,
+    opacity: 1.0,
+    rampColors: {
+      colors: [
+        '#FF4818',
+        '#F7B74A',
+        '#FFF598',
+        '#F27DEB',
+        '#8C1EB2',
+        '#421EB2',
+      ].reverse(),
+      positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+    },
+  });
 ```
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*UWhySqYeOqcAAAAAAAAAAAAAARQnAQ'>
 
-
 [在线案例 经典热力 classical](../../../examples/heatmap/heatmap#heatmap)  
 [在线案例 蜂窝热力 hexagon](../../../examples/heatmap/hexagon#light)  
-[在线案例 网格热力 grid](../../../examples/heatmap/grid#grid1)  
+[在线案例 网格热力 grid](../../../examples/heatmap/grid#grid1)
 
 `markdown:docs/common/layer/base.md`
