@@ -13,9 +13,6 @@ interface DipperProps {
 export function Dipper(props: DipperProps) {
   const { dipper } = props;
 
-  const jumoDemo = (url: string) => {
-    window.open(url, '_blank');
-  };
 
   return (
     <div className='dippercontainer'>
@@ -25,8 +22,10 @@ export function Dipper(props: DipperProps) {
         {dipper.map(item => {
           return (
             <div key={item.title} className='dipperitem' >
-              <img className='dipperimg' src={item.image} />
-              <span style={{cursor:'pointer'}} className='dippertitle'>{item.title}</span>
+              <div className='dipperimg'>
+                <img src={item.image} />
+              </div>
+              <span style={{ cursor: 'pointer' }} className='dippertitle'>{item.title}</span>
             </div>
           );
         })}

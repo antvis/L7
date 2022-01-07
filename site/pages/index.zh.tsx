@@ -22,7 +22,7 @@ const IndexPage = () => {
       ),
       link: `https://antv.vision/Dipper/~demos/docs-task`,
       image:
-        'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*scJBTq8PW7kAAAAAAAAAAAAAARQnAQ',
+        'https://gw.alipayobjects.com/zos/bmw-prod/37b183b4-cc1e-4659-b9fc-269632b4a15e.svg',
     },
     {
       logo:
@@ -33,7 +33,7 @@ const IndexPage = () => {
       ),
       link: `https://antv.vision/Dipper/~demos/docs-analysis`,
       image:
-        'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*OnGVRb_qWxcAAAAAAAAAAAAAARQnAQ',
+        'https://gw.alipayobjects.com/zos/bmw-prod/16bb4b93-e5e4-4ffe-bf83-3a31a7a38622.svg',
     },
     {
       logo:

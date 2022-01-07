@@ -20,11 +20,16 @@
       "title": "气泡图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*v5j_QZEL-1YAAAAAAAAAAABkARQnAQ"
 
-    }, {
+    },
+    {
       "filename": "scatter.js",
       "title": "气泡图动画",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*L-wETZt7WHwAAAAAAAAAAABkARQnAQ"
-
+    },
+    {
+      "filename": "meter.js",
+      "title": "等面积模式",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*d-tMRZ4ghLkAAAAAAAAAAAAAARQnAQ"
     }
 
   ]

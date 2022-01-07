@@ -28,6 +28,11 @@
       "filename": "road_dark_dash.js",
       "title": "路径虚线",
       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*cGw3T4LPx7YAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "border.js",
+      "title": "西湖游玩路径",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*epEtTath3RIAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }
