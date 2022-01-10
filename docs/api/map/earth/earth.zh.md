@@ -22,17 +22,17 @@ import { Earth } from '@antv/l7-maps';
 
 **平面点: circle**
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PD6fTbs7E3gAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PD6fTbs7E3gAAAAAAAAAAAAAARQnAQ'>
 
 **圆柱点: cylinder**
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*n6tYQKceveUAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*n6tYQKceveUAAAAAAAAAAAAAARQnAQ'>
 
 ### 线图层
 
 **3D 弧线: arc3d**
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FjhGT77aCaIAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FjhGT77aCaIAAAAAAAAAAAAAARQnAQ'>
 
 ## 使用
 
