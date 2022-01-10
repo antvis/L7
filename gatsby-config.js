@@ -90,8 +90,33 @@ module.exports = {
         },
         order: 4
       },
+      {
+        slug: 'tutorial/examples',
+        icon: 'map',
+        title: {
+          zh: '教程示例',
+          en: 'Tutorial demo'
+        },
+        order: 5
+      },
 
       // ****** api
+      {
+        slug: 'api/map',
+        title: {
+          zh: '地图 Map',
+          en: 'Map'
+        },
+        order: 1
+      },
+      {
+        slug: 'api/map/earth',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode'
+        },
+        order: 3
+      },
       {
         slug: 'api/base',
         title: {
@@ -213,14 +238,6 @@ module.exports = {
         order: 3
       },
       {
-        slug: 'api/earth',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode'
-        },
-        order: 3
-      },
-      {
         slug: 'api/wind',
         title: {
           zh: '风场图层',
@@ -241,14 +258,6 @@ module.exports = {
         title: {
           zh: '案例集合',
           en: 'demos'
-        },
-        order: 5
-      },
-      {
-        slug: 'api/amapPlugin',
-        title: {
-          zh: '地图插件',
-          en: 'map plugin'
         },
         order: 5
       }
@@ -374,6 +383,10 @@ module.exports = {
         '@antv/l7': 'latest',
         '@antv/l7-maps': 'latest'
       }
+    },
+    mdPlayground: {
+      // markdown 文档中的 playground 若干设置
+      splitPaneMainSize: '50%',
     },
     docsearchOptions: {
       apiKey: '97db146dbe490416af81ef3a8923bcaa',

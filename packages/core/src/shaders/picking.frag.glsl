@@ -1,5 +1,6 @@
 varying vec4 v_PickingResult;
 uniform vec4 u_HighlightColor : [0, 0, 0, 0];
+uniform vec4 u_SelectColor : [0, 0, 0, 0];
 uniform float u_PickingStage : 0.0;
 uniform float u_shaderPick;
 
@@ -10,13 +11,21 @@ uniform float u_activeMix: 0;
 #define PICKING_HIGHLIGHT 2.0
 #define COLOR_SCALE 1. / 255.
 
+#define HIGHLIGHT 1.0
+#define SELECT 2.0
+
 /*
  * Returns highlight color if this item is selected.
  */
 vec4 filterHighlightColor(vec4 color, float weight) {
-  bool selected = bool(v_PickingResult.a);
+  float selected = v_PickingResult.a;
 
-  if (selected) {
+  if (selected == SELECT) {
+    // 点击选中状态
+    vec4 selectColor = u_SelectColor * COLOR_SCALE;
+    return selectColor;
+  } else if (selected == HIGHLIGHT) {
+    // hover 高亮状态
     vec4 highLightColor = u_HighlightColor * COLOR_SCALE;
 
     float highLightAlpha = highLightColor.a;

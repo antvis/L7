@@ -1,6 +1,6 @@
 ---
 title: Amap Plugin
-order: 3
+order: 2
 ---
 
 `markdown:docs/api/amapPlugin/plugin.zh.md`

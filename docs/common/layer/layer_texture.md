@@ -2,7 +2,7 @@
 
 目前只在线图层上支持了纹理方法
 
-- textute 方法支持传入由 scene.addImage 方法添加的全局 icon 贴图资源
+- texture 方法支持传入由 scene.addImage 方法添加的全局 icon 贴图资源
 
 ```javascript
 // 首先在全局加载图片资源
@@ -34,6 +34,6 @@ const layer = new LineLayer({
   });
 ```
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*0UrUTakTFQsAAAAAAAAAAAAAARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i2fJSJHpVGcAAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](../../examples/gallery/animate#animate_path_texture)

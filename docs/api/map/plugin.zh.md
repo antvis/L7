@@ -1,6 +1,6 @@
 ---
 title: 高德插件
-order: 3
+order: 2
 ---
 
 `markdown:docs/common/style.md`
@@ -46,4 +46,6 @@ scene.on('loaded', () => {
 });
 ```
 
-[高德插件案例](../../../examples/amapPlugin/bus#busStop)
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ag-nSrIPPEUAAAAAAAAAAAAAARQnAQ'>
+
+[在线案例](../../../examples/amapPlugin/bus#busStop)

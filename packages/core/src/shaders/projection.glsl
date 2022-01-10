@@ -157,13 +157,30 @@ float project_pixel_texture(float pixel) {
   return pixel * 2.0;
 }
 
-float project_pixel(float pixel) {
+// 在不论什么底图下需要统一处理的时候使用
+float project_float_pixel(float pixel) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    // mapbox P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
+    return pixel * pow(2.0, (19.0 - u_Zoom));
+  }
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
-    // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
+    // amap P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
     return pixel * pow(2.0, (19.0 - u_Zoom));
   }
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
+    // amap2 P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+  }
+  return pixel;
+}
+
+float project_pixel(float pixel) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
+    // amap P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
+    return pixel * pow(2.0, (19.0 - u_Zoom));
+  }
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // amap2 P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
     return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
   }
   return pixel;

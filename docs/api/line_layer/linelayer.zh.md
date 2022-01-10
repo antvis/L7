@@ -11,14 +11,17 @@ L7 支持各种类型的线图层，包括平面路径、平面弧线、平面�
 
 ✨ 不同的 lineLayer 会支持不同的相关特性，具体的使用可以请查看详细的文档
 
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*MxnRTrzcawcAAAAAAAAAAAAAARQnAQ'>
+
 ### shape
 
-线图层支持 4 种 shape
+线图层支持 5 种 shape
 
 - line 绘制路径图，
 - arc 绘制弧线 通过贝塞尔曲线算法技术弧线
 - greatcircle 大圆航线，地图两个点的最近距离不是两个点连线，而是大圆航线
 - arc3d 3d 弧线地图 3D 视角
+- wall 基于线图层的一种特殊形式
 
 ⚠️ 弧线只需要设置起止点坐标即可
 

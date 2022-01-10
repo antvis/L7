@@ -224,6 +224,7 @@ export default class ReglRendererService implements IRendererService {
       },
       framebuffer: null,
     });
+    this.gl._refresh();
   }
 
   public setBaseState() {
