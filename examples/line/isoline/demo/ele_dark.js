@@ -8,7 +8,7 @@ const scene = new Scene({
     style: 'dark',
     center: [ 102.597971, 23.110479 ],
     zoom: 13.34,
-    rotation: 360,
+    rotation: 360
   })
 });
 
