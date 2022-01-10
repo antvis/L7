@@ -4,13 +4,14 @@ import { Mapbox } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({
-    pitch: 60,
+    pitch: 57.999999999999964,
     style: 'dark',
-    center: [ 104.34278, 41.12554 ],
-    zoom: 2.94888,
-    rotation: 42.3999
+    center: [ 101.94365594271085, 40.46139674355291 ],
+    zoom: 2.7484264183323437,
+    rotation: -21.600099999999884
   })
 });
+
 scene.on('loaded', () => {
   fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
     .then(res => res.text())
@@ -31,7 +32,7 @@ scene.on('loaded', () => {
         .style({
           opacity: 0.8,
           sourceColor: '#f00',
-          targetColor: '#0f0'
+          targetColor: '#6F19FF'
         });
       scene.addLayer(layer);
     });

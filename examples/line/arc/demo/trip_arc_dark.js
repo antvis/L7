@@ -12,23 +12,24 @@ const scene = new Scene({
   })
 });
 scene.on('loaded', () => {
-  fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
-    .then(res => res.text())
+  fetch('https://gw.alipayobjects.com/os/bmw-prod/e495c407-953b-44cc-8f77-87b9cf257578.json')
+    .then(res => res.json())
     .then(data => {
       const layer = new LineLayer({})
         .source(data, {
           parser: {
             type: 'csv',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2'
+            x: 'from_lon',
+            y: 'from_lat',
+            x1: 'to_lon',
+            y1: 'to_lat'
           }
         })
         .size(1)
-        .shape('arc3d')
+        .shape('arc')
         .color('#FF7C6A')
         .style({
+          segmentNumber: 15,
           opacity: 0.8
         });
       scene.addLayer(layer);

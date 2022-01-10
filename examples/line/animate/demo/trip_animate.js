@@ -7,10 +7,12 @@ const scene = new Scene({
     pitch: 60,
     type: 'mapbox',
     style: 'light',
-    center: [ -74.06967, 40.720399 ],
-    zoom: 12.45977
+    center: [ -74.05371169148452, 40.72573640479783 ],
+    zoom: 12.45977,
+    rotation: -38.39999999999969
   })
 });
+
 scene.on('loaded', () => {
   fetch(
     'https://gw.alipayobjects.com/os/basement_prod/bd33a685-a17e-4686-bc79-b0e6a89fd950.csv'

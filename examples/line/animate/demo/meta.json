@@ -5,26 +5,24 @@
   },
   "demos": [
     {
-      "filename": "wind.js",
-      "title": "风场弧线",
+      "filename": "wind_animate.js",
+      "title": "风场动画",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*LpcBTKiazZcAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "arcCircle.js",
-      "title": "大圆弧线",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6Qm_QY69sBMAAAAAAAAAAABkARQnAQ"
+      "filename": "line_animate.js",
+      "title": "直线动画",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*z5sLS4Tpl3kAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "trip_arc_dark.js",
-      "title": "3D 弧线",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*JjUcTZ8-PC8AAAAAAAAAAABkARQnAQ"
-
+      "filename": "trip_animate.js",
+      "title": "3D 弧线动画-亮",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*p8k2R5GpyQoAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "trip_arc.js",
-      "title": "3D 弧线",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*xvaaQo2c0gMAAAAAAAAAAABkARQnAQ"
-
+      "filename": "trip_animate_dark.js",
+      "title": "3D 弧线动画-暗",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*w-gDQra4KGMAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }
