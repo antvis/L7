@@ -19,7 +19,7 @@ export default class Amap2demo_lineStreet extends React.Component {
         zoom: 13.5,
         style: 'dark',
         pitchEnable: false,
-        rotation: -90
+        rotation: -90,
       }),
     });
     this.scene = scene;
@@ -69,94 +69,90 @@ export default class Amap2demo_lineStreet extends React.Component {
       'https://gw.alipayobjects.com/zos/bmw-prod/948e665d-ab1e-4010-b75a-236057837bec.svg',
     );
 
-  
-    
-
-   
-
     scene.on('loaded', () => {
+      fetch(
+        'https://gw.alipayobjects.com/os/bmw-prod/67130c6c-7f49-4680-915c-54e69730861d.json',
+      )
+        .then((data) => data.json())
+        .then(
+          ({
+            lakeBorderData,
+            lakeData,
+            landData,
+            westLakePoiData,
+            poiData,
+          }) => {
+            const lakeLayer = new PolygonLayer()
+              .source(lakeData)
+              .shape('fill')
+              .color('#1E90FF')
+              .style({
+                opacity: 0.4,
+                opacityLinear: {
+                  enable: true,
+                  dir: 'out', // in - out
+                },
+              });
+            const landLayer = new PolygonLayer()
+              .source(landData)
+              .shape('fill')
+              .color('#3CB371')
+              .style({
+                opacity: 0.4,
+                opacityLinear: {
+                  enable: true,
+                  dir: 'in', // in - out
+                },
+              });
 
-      fetch('https://gw.alipayobjects.com/os/bmw-prod/67130c6c-7f49-4680-915c-54e69730861d.json')
-      .then(data => data.json())
-      .then(({lakeBorderData, lakeData, landData, westLakePoiData, poiData}) => {
-        const lakeLayer = new PolygonLayer()
-        .source(lakeData)
-        .shape('fill')
-        .color('#1E90FF')
-        .style({
-          opacity: 0.4,
-          opacityLinear: {
-            enable: true,
-            dir: 'out', // in - out
+            const lakeBorderLayer = new PolygonLayer()
+              .source(lakeBorderData)
+              .shape('fill')
+              .color('#ccc')
+              .style({
+                opacity: 0.5,
+                opacityLinear: {
+                  enable: true,
+                  dir: 'in', // in - out
+                },
+              });
+
+            const westLakePoiLayer = new PointLayer({ zIndex: 1 })
+              .source(westLakePoiData, {
+                parser: {
+                  type: 'json',
+                  x: 'lng',
+                  y: 'lat',
+                },
+              })
+              .shape('type', (v) => v)
+              .size(40);
+
+            const poiLayer = new PointLayer({ zIndex: 1 })
+              .source(poiData, {
+                parser: {
+                  type: 'json',
+                  x: 'lng',
+                  y: 'lat',
+                },
+              })
+              .shape('type', (v) => v)
+              .size(10);
+
+            scene.addLayer(lakeLayer);
+            scene.addLayer(lakeBorderLayer);
+            scene.addLayer(landLayer);
+            scene.addLayer(westLakePoiLayer);
+            scene.addLayer(poiLayer);
           },
-        });
-      const landLayer = new PolygonLayer()
-        .source(landData)
-        .shape('fill')
-        .color('#3CB371')
-        .style({
-          opacity: 0.4,
-          opacityLinear: {
-            enable: true,
-            dir: 'in', // in - out
-          },
-        });
-
-      const lakeBorderLayer = new PolygonLayer()
-        .source(lakeBorderData)
-        .shape('fill')
-        .color('#ccc')
-        .style({
-          opacity: 0.5,
-          opacityLinear: {
-            enable: true,
-            dir: 'in', // in - out
-          },
-        });
-
-        const westLakePoiLayer = new PointLayer({zIndex: 1})
-        .source(westLakePoiData, {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat'
-            }
-          })
-        .shape('type', v => v)
-        .size(40)
-    
-        const poiLayer = new PointLayer({zIndex: 1})
-        .source(
-          poiData, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat'
-          }
-        })
-        .shape('type', v => v)
-        .size(10)
-
-        scene.addLayer(lakeLayer);
-        scene.addLayer(lakeBorderLayer);
-        scene.addLayer(landLayer);
-        scene.addLayer(westLakePoiLayer);
-        scene.addLayer(poiLayer);
-    })
-      
-     
+        );
 
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
       )
         .then((res) => res.json())
         .then((data) => {
-          
-          const colors = [
-            '#66c2a4',
-            '#2ca25f',
-            '#006d2c'
-          ]
+          const colors = ['#66c2a4', '#2ca25f', '#006d2c'];
           // @ts-ignore
           const layer = new LineLayer({})
             .source(data)
