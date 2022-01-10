@@ -1,5 +1,5 @@
 ---
-title: 地球模式
+title: Earth Mode
 order: 1
 ---
 

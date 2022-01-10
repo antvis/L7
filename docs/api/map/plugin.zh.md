@@ -1,6 +1,6 @@
 ---
 title: 高德插件
-order: 3
+order: 2
 ---
 
 `markdown:docs/common/style.md`
