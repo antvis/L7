@@ -38,6 +38,7 @@ export default class Point3D extends React.Component {
             })
             .shape('circle')
             .size(16)
+            .active(true)
             .select({
               color: 'red',
             })
