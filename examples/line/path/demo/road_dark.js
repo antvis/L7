@@ -19,9 +19,13 @@ scene.on('loaded', () => {
     .then(data => {
       const layer = new LineLayer({})
         .source(data)
-        .size(1.5)
+        .size(6)
         .shape('line')
-        .color('标准名称', [ '#5B8FF9', '#5CCEA1', '#F6BD16' ]);
+        .color('标准名称', [ '#5B8FF9', '#5CCEA1', '#F6BD16' ])
+        .style({
+          borderWidth: 1,
+          borderColor: '#fff'
+        });
       scene.addLayer(layer);
     });
 });
