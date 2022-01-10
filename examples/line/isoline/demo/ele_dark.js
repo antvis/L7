@@ -4,12 +4,14 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 26.842105263157915,
+    pitch: 45.06995336442376,
     style: 'dark',
-    center: [ 102.599436, 23.116371 ],
-    zoom: 14.78
+    center: [ 102.597971, 23.110479 ],
+    zoom: 13.34,
+    rotation: 360,
   })
 });
+
 scene.on('loaded', () => {
   fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
     .then(res => res.json())
