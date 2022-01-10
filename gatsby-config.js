@@ -97,6 +97,7 @@ module.exports = {
           zh: '教程示例',
           en: 'Tutorial demo'
         },
+        order: 5
       },
 
       // ****** api
@@ -114,7 +115,7 @@ module.exports = {
           zh: '地球模式',
           en: 'Earth Mode'
         },
-        order: 2
+        order: 3
       },
       {
         slug: 'api/base',

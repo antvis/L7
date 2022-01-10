@@ -2,4 +2,6 @@
 title: Layer
 order: 2
 ---
-How to use the map control
+Layer init and interaction
+
+<playground path='tutorial/layer/demo/layer_highlight.js' rid='map'></playground>
