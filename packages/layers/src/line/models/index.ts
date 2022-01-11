@@ -4,6 +4,7 @@ import ArcMiniModel from './arcmini';
 import GreatCircleModel from './great_circle';
 import LineModel from './line';
 import LineWallModel from './wall';
+import SimpleLineModel from './simpleLine';
 
 export type LineModelType =
   | 'arc'
@@ -11,6 +12,7 @@ export type LineModelType =
   | 'arc3d'
   | 'greatcircle'
   | 'wall'
+  | 'simpleline'
   | 'line';
 
 const LineModels: { [key in LineModelType]: any } = {
@@ -20,6 +22,7 @@ const LineModels: { [key in LineModelType]: any } = {
   greatcircle: GreatCircleModel,
   wall: LineWallModel,
   line: LineModel,
+  simpleline: SimpleLineModel
 };
 
 export default LineModels;

@@ -72,6 +72,7 @@ import Slider from './components/slider'
 import WindMap from './components/amap2demo_wind'
 import SimplePoint from './components/simplePoint';
 import LineWall from './components/linewall'
+import GridTile from './components/gridTile'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -148,3 +149,4 @@ storiesOf('地图方法', module)
         .add('SimplePoint', () => <SimplePoint/>)
         .add('LineWall', () => <LineWall/>)
         .add('BusLine', () => <BusLine/>)
+        .add('GridTile', () => <GridTile/>)

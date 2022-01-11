@@ -31,24 +31,24 @@ export default class GaodeMapComponent extends React.Component {
     // additive = 'additive',
     // cylinder circle
     // blend: 'additive'
-    var circleRadius = 100;
-    var radius = circleRadius;
-    var data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Polygon',
-            coordinates: turf.circle(aspaceLnglat, radius, {
-              steps: 10,
-              units: 'meters',
-            }).geometry.coordinates,
-          },
-        },
-      ],
-    };
+    // var circleRadius = 100;
+    // var radius = circleRadius;
+    // var data = {
+    //   type: 'FeatureCollection',
+    //   features: [
+    //     {
+    //       type: 'Feature',
+    //       properties: {},
+    //       geometry: {
+    //         type: 'Polygon',
+    //         coordinates: turf.circle(aspaceLnglat, radius, {
+    //           steps: 10,
+    //           units: 'meters',
+    //         }).geometry.coordinates,
+    //       },
+    //     },
+    //   ],
+    // };
     // let trufCircle = new PolygonLayer()
     //   .size('name', [0, 10000, 50000, 30000, 100000])
     //   .source(data)
@@ -59,7 +59,7 @@ export default class GaodeMapComponent extends React.Component {
       .source(
         [
           {
-            lng: 121.107846,
+            lng: 120,
             lat: 30.267069,
           },
           {
@@ -85,7 +85,7 @@ export default class GaodeMapComponent extends React.Component {
         // strokeWidth: 10,
         strokeWidth: 0,
         strokeOpacity: 1,
-        // unit: 'meter',
+        unit: 'meter',
       });
     // .animate(true)
     // .animate({
@@ -109,12 +109,12 @@ export default class GaodeMapComponent extends React.Component {
       // scene.on('zoomend', e => console.log('e', e))
       // scene.on('mousedown', e => console.log('e', e))
     });
-    let c = 1;
-    layer.on('click', () => {
-      // @ts-ignore
-      c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
-      c = 0;
-    });
+    // let c = 1;
+    // layer.on('click', () => {
+    //   // @ts-ignore
+    //   c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
+    //   c = 0;
+    // });
     // layer.on('contextmenu', () => console.log('contextmenu'));
     // layer.on('destroy', (e) => console.log('destroy', e));
     // layer.on('remove', (e) => {
