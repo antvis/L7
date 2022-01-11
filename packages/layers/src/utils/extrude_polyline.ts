@@ -489,9 +489,9 @@ export default class ExtrudePolyline {
     const indices = complex.indices;
     const positions = complex.positions;
     const normals = complex.normals;
-   
-    let segmentDistance = 0;
-    
+
+    const segmentDistance = 0;
+
     if (!this.started) {
       this.started = true;
 
@@ -503,11 +503,9 @@ export default class ExtrudePolyline {
         1,
         this.totalDistance - segmentDistance,
       );
-      
     }
 
     indices.push(index + 0, index + 1, index + 2);
-    
 
     if (!next) {
       this.extrusions(
@@ -526,18 +524,9 @@ export default class ExtrudePolyline {
       );
       count += 2;
     } else {
-     
       let flip = vec2.dot(tangent, [0, 0]) < 0 ? -1 : 1;
- 
-    
-      this.extrusions(
-        positions,
-        normals,
-        cur,
-        [0, 1],
-        1,
-        this.totalDistance,
-      );
+
+      this.extrusions(positions, normals, cur, [0, 1], 1, this.totalDistance);
       indices.push(
         ...(this.lastFlip === 1
           ? [index, index + 2, index + 3]
