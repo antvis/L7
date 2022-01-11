@@ -18,12 +18,12 @@ import { PointLayer } from '@antv/l7';
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*WdOfSI_uyxIAAAAAAAAAAAAAARQnAQ'>
 
 ```javascript
-
 // 指定 iconfont 映射为字体样式的名称
 const fontFamily = 'iconfont';
 
 // 指定 iconfont 字体文件
-const fontPath = '//at.alicdn.com/t/font_2534097_fcae9o2mxbv.woff2?t=1622200439140';
+const fontPath =
+  '//at.alicdn.com/t/font_2534097_fcae9o2mxbv.woff2?t=1622200439140';
 
 // 全局添加资源
 scene.addFontFace(fontFamily, fontPath);
@@ -33,36 +33,34 @@ scene.addIconFont('icon1', '&#xe6d4;');
 
 scene.on('loaded', () => {
   fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json'
+    'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json',
   )
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       const pointLayer = new PointLayer({})
         .source(data.list, {
           parser: {
             type: 'json',
             x: 'j',
-            y: 'w'
-          }
+            y: 'w',
+          },
         })
         .shape('icon', 'text') // 指定需要映射字段为 icon、shape 类型和普通的文字标注一样为 text
         .size(20)
-        .color('w', [ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99' ])
+        .color('w', ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99'])
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: [ 40, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
-          padding: [ 0, 0 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          textOffset: [40, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+          padding: [0, 0], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
           stroke: '#ffffff', // 描边颜色
           fontFamily,
           iconfont: true, // 开启 iconfont 映射
-          textAllowOverlap: true
+          textAllowOverlap: true,
         });
       scene.addLayer(pointLayer);
     });
 });
-
 ```
-
 
 🌟 关于 iconfont 资源使用可以前往 iconfont 官网 [官网传送门](https://iconfont.cn/)
 
