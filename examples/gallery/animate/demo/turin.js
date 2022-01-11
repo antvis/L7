@@ -44,7 +44,7 @@ scene.on('loaded', () => {
           case 'pedestrian':
             return '#FFF89A';
           case 'residential':
-            return '#348498';
+            return 'rgba(22, 119, 255, .5)';
           case 'road':
             return '#93FFD8';
           case 'path':
@@ -68,6 +68,11 @@ scene.on('loaded', () => {
         })
         .style({
           opacity: 1
+        })
+        .animate({
+          interval: 1, // 间隔
+          duration: 1, // 持续时间，延时
+          trailLength: 2 // 流线长度
         });
       scene.addLayer(layer);
     });
