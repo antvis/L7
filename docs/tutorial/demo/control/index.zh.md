@@ -1,7 +1,7 @@
 ---
-title: Control
-order: 2
+title: 组件
+order: 12
 ---
-How to use the map control
+如何使用组件
 
 <playground path='tutorial/control/demo/amap.js' rid='map'></playground>

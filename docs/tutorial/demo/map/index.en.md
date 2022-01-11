@@ -1,7 +1,8 @@
 ---
-title: 地图
-order: 0
+title: Map
+order: 12
 ---
-介绍如何初始化一个第三方底图
+
+how to  use L7 Initialize third-party maps
 
 <playground path='tutorial/map/demo/amap.js' rid='map'></playground>
