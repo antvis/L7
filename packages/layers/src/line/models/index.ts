@@ -3,8 +3,8 @@ import Arc3DModel from './arc_3d';
 import ArcMiniModel from './arcmini';
 import GreatCircleModel from './great_circle';
 import LineModel from './line';
-import LineWallModel from './wall';
 import SimpleLineModel from './simpleLine';
+import LineWallModel from './wall';
 
 export type LineModelType =
   | 'arc'
@@ -22,7 +22,7 @@ const LineModels: { [key in LineModelType]: any } = {
   greatcircle: GreatCircleModel,
   wall: LineWallModel,
   line: LineModel,
-  simpleline: SimpleLineModel
+  simpleline: SimpleLineModel,
 };
 
 export default LineModels;

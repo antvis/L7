@@ -80,7 +80,6 @@ export default class SimpleLineModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_opacity: isNumber(opacity) ? opacity : 1.0,
 
-
       // 渐变色支持参数
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
@@ -99,7 +98,6 @@ export default class SimpleLineModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-
     return this.buildModels();
   }
 
@@ -121,7 +119,6 @@ export default class SimpleLineModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
       type: AttributeType.Attribute,
@@ -166,7 +163,7 @@ export default class SimpleLineModel extends BaseModel {
         },
       },
     });
-    
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -239,6 +236,5 @@ export default class SimpleLineModel extends BaseModel {
         },
       },
     });
-
   }
 }

@@ -148,7 +148,6 @@ export default class LineModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
       type: AttributeType.Attribute,
@@ -193,7 +192,7 @@ export default class LineModel extends BaseModel {
         },
       },
     });
-    
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
