@@ -7,57 +7,43 @@
     {
       "filename": "grid.js",
       "title": "网格地图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*0UrUTakTFQsAAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "animate_path_texture.js",
-      "title": "路径贴图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*0UrUTakTFQsAAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "animate_path.js",
-      "title": "路径动画",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*VJX5Qo7ufaAAAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "world.js",
-      "title": "流向图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Sbx4S4w7nL8AAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "world2.js",
-      "title": "流向图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*u5BsQbn30pkAAAAAAAAAAABkARQnAQ"
-    },
-    {
-      "filename": "plane_animate.js",
-      "title": "航向图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*2anhRaQX3DsAAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "plane_animate2.js",
-      "title": "航向图（平面）",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*OGcHSYSbDz4AAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "route_line.js",
-      "title": "航线图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i6d6SqQgjAwAAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "build.js",
-      "title": "点亮城市",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7XkWTYQMfPMAAAAAAAAAAABkARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*HulgSKEJAKMAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "build_sweep.js",
       "title": "圆形扫光城市",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*LoxeSZHuqXwAAAAAAAAAAAAAARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KiwgTLrn0OkAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "animate_line.js",
-      "title": "轨迹动画",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jLo0RY0sDG4AAAAAAAAAAABkARQnAQ"
+      "filename": "wind.js",
+      "title": "风场图层",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Kp0XTrOMu8wAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "amap_car.js",
+      "title": "旅行轨迹",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*d7EtTpdsScIAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "animate_path_texture.js",
+      "title": "路径贴图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KEupSZ_p0pYAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "plane_animate.js",
+      "title": "航向图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*B645Q4K9PxYAAAAAAAAAAAAAARQnAQ"
+    },
+
+    {
+      "filename": "turin.js",
+      "title": "都灵道路图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CNzqRJDMh-oAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "cylinder.js",
+      "title": "地球圆柱",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*xjRPRJU5CKUAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

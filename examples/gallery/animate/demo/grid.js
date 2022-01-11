@@ -165,8 +165,8 @@ const scene = new Scene({
   map: new GaodeMap({
     center: [ 113, 29 ],
     pitch: 70,
-    zoom: 9,
-    rotation: 180,
+    zoom: 8.5,
+    rotation: 160,
     style: 'blank'
   })
 });
