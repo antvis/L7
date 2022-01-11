@@ -1,5 +1,5 @@
 import { LineLayer, Scene, PointLayer } from '@antv/l7';
-import { GaodeMap, Map } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 function getImageData(img: HTMLImageElement) {
@@ -129,7 +129,7 @@ export default class GridTile extends React.Component {
         .color('rgb(22, 119, 255)')
         .style({
           vertexHeightScale: 2000,
-          opacity: 0.6,
+          opacity: 0.3,
         });
       scene.addLayer(layer);
     };
@@ -154,7 +154,6 @@ export default class GridTile extends React.Component {
       .size(10000)
       .animate(true)
       .style({
-        stroke: '#f00',
         unit: 'meter',
       });
 

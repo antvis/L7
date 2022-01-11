@@ -3,26 +3,19 @@ import {
   gl,
   IAnimateOption,
   IEncodeFeature,
-  IImage,
   ILayerConfig,
   IModel,
   IModelUniform,
-  ITexture2D,
 } from '@antv/l7-core';
 
 import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
-import { LineTriangulation } from '../../core/triangulation';
+import { ILineLayerStyleOptions } from '../../core/interface';
+import { SimpleLineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/simpleline_frag.glsl';
 import line_vert from '../shaders/simpleline_vert.glsl';
-const lineStyleObj: { [key: string]: number } = {
-  solid: 0.0,
-  dash: 1.0,
-};
 export default class SimpleLineModel extends BaseModel {
-  protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       opacity,
@@ -30,10 +23,6 @@ export default class SimpleLineModel extends BaseModel {
       targetColor,
       vertexHeightScale = 20.0,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
-    if (this.rendererService.getDirty()) {
-      this.texture.bind();
-    }
 
     // 转化渐变色
     let useLinearColor = 0; // 默认不生效
@@ -111,7 +100,7 @@ export default class SimpleLineModel extends BaseModel {
         moduleName: 'line',
         vertexShader: line_vert,
         fragmentShader: line_frag,
-        triangulation: LineTriangulation,
+        triangulation: SimpleLineTriangulation,
         primitive: gl.LINES, // gl.LINES gl.TRIANGLES
         blend: this.getBlend(),
         depth: { enable: false },
