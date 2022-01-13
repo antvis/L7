@@ -237,7 +237,8 @@ export default class ExtrudePolyline {
     this.started = false;
     this.normal = null;
     this.totalDistance = 0;
-
+    // 去除数组里重复的点
+    // points = getArrayUnique(points);
     const total = points.length;
     let count = complex.startIndex;
     for (let i = 1; i < total; i++) {
@@ -247,7 +248,11 @@ export default class ExtrudePolyline {
       const amt = this.simpleSegment(complex, count, last, cur, next as vec3);
       count += amt;
     }
-
+    if (this.dash) {
+      for (let i = 0; i < complex.positions.length / 6; i++) {
+        complex.positions[i * 6 + 5] = this.totalDistance;
+      }
+    }
     complex.startIndex = complex.positions.length / 6;
     return complex;
   }
@@ -478,6 +483,7 @@ export default class ExtrudePolyline {
     }
     return count;
   }
+
   private simpleSegment(
     complex: any,
     index: number,
@@ -489,34 +495,53 @@ export default class ExtrudePolyline {
     const indices = complex.indices;
     const positions = complex.positions;
     const normals = complex.normals;
+    const flatCur = aProjectFlat([cur[0], cur[1]]) as [number, number];
+    const flatLast = aProjectFlat([last[0], last[1]]) as [number, number];
+    // @ts-ignore
+    direction(lineA, flatCur, flatLast);
+    let segmentDistance = 0;
+    if (this.dash) {
+      // @ts-ignore
+      segmentDistance = this.lineSegmentDistance(flatCur, flatLast);
+      this.totalDistance += segmentDistance;
+    }
 
-    const segmentDistance = 0;
-
+    if (!this.normal) {
+      this.normal = vec2.create();
+      computeNormal(this.normal, lineA);
+    }
     if (!this.started) {
       this.started = true;
 
+      // if the end cap is type square, we can just push the verts out a bit
+    
       this.extrusions(
         positions,
         normals,
         last,
-        [0, 0],
-        1,
+        this.normal,
+        this.thickness,
         this.totalDistance - segmentDistance,
       );
+      
     }
 
     indices.push(index + 0, index + 1, index + 2);
 
     if (!next) {
+      computeNormal(this.normal, lineA);
+     
       this.extrusions(
         positions,
         normals,
         cur,
-        [0, 0],
+        this.normal,
         this.thickness,
         this.totalDistance,
       );
+      
 
+      // this.extrusions(positions, normals, cur, this.normal, this.thickness);
       indices.push(
         ...(this.lastFlip === 1
           ? [index, index + 2, index + 3]
@@ -524,9 +549,37 @@ export default class ExtrudePolyline {
       );
       count += 2;
     } else {
-      let flip = vec2.dot(tangent, [0, 0]) < 0 ? -1 : 1;
+      const flatNext = aProjectFlat([next[0], next[1]]) as [number, number];
+      if (isPointEqual(flatCur, flatNext)) {
+        vec2.add(
+          flatNext,
+          flatCur,
+          vec2.normalize(flatNext, vec2.subtract(flatNext, flatCur, flatLast)),
+        );
+      }
+      direction(lineB, flatNext, flatCur);
 
-      this.extrusions(positions, normals, cur, [0, 1], 1, this.totalDistance);
+      // stores tangent & miter
+
+      const [miterLen, miter] = computeMiter(
+        tangent,
+        vec2.create(),
+        lineA,
+        lineB,
+        this.thickness,
+      );
+      // normal(tmp, lineA)
+
+      // get orientation
+      let flip = vec2.dot(tangent, this.normal) < 0 ? -1 : 1;
+      this.extrusions(
+        positions,
+        normals,
+        cur,
+        miter,
+        miterLen,
+        this.totalDistance,
+      );
       indices.push(
         ...(this.lastFlip === 1
           ? [index, index + 2, index + 3]
@@ -534,7 +587,11 @@ export default class ExtrudePolyline {
       );
 
       flip = -1;
+
+      // the miter is now the normal for our next join
+      vec2.copy(this.normal, miter);
       count += 2;
+      
       this.lastFlip = flip;
     }
     return count;
