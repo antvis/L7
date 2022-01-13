@@ -63,13 +63,12 @@ function getLngData(data: number[]) {
 function getR(data: Uint8ClampedArray) {
   const arr = [];
   for (let i = 0; i < data.length; i += 4) {
-    if(data[i] < 25) {
+    if (data[i] < 25) {
       // console.log(data[i])
       arr.push(20);
     } else {
       arr.push(data[i]);
     }
-    
   }
   return arr;
 }
@@ -176,8 +175,6 @@ export default class GridTile2 extends React.Component {
       },
     ];
 
-
-
     scene.addImage(
       'plane',
       'https://gw.alipayobjects.com/zos/bmw-prod/96327aa6-7fc5-4b5b-b1d8-65771e05afd8.svg',
@@ -267,7 +264,7 @@ export default class GridTile2 extends React.Component {
     img.src =
       // 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*UkvYRYS5jTAAAAAAAAAAAAAAARQnAQ';
       // 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*6dzKS42L8_8AAAAAAAAAAAAAARQnAQ'
-      'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dPgXQJ9eUtoAAAAAAAAAAAAAARQnAQ'
+      'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dPgXQJ9eUtoAAAAAAAAAAAAAARQnAQ';
     img.onload = function() {
       const data = getImageData(img);
       const rData = getR(data.data);
@@ -479,12 +476,12 @@ export default class GridTile2 extends React.Component {
         from: {
           pitch: 0,
           rotation: 0,
-          zoom: 6
+          zoom: 6,
         },
         to: {
           pitch: 75,
           rotation: -30,
-          zoom: 8.2
+          zoom: 8.2,
         },
         ease: easeInOut,
         duration: 1000,
@@ -493,11 +490,8 @@ export default class GridTile2 extends React.Component {
           scene.setRotation(rotation);
           scene.setZoom(zoom);
         },
-        onComplete: () => {
-          
-        },
+        onComplete: () => {},
       });
-
     });
   }
 
