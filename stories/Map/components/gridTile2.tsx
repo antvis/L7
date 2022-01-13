@@ -299,7 +299,9 @@ export default class GridTile2 extends React.Component {
         .color('rgb(22, 119, 255)')
         .style({
           vertexHeightScale: 2000,
-          opacity: 0.4,
+          // opacity: 0.4,
+          sourceColor: '#f00',
+          targetColor: '#0f0',
         });
       scene.addLayer(layer);
     };

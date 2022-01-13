@@ -7,6 +7,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dipper } from '../components/Dipper';
 import { DipperMap } from '../components/DipperMap';
+import { L7React } from '../components/L7React'
+import { L7Plot } from '../components/L7Plot'
+import { L7Draw } from '../components/L7Draw'
 import '../css/home.css';
 
 
@@ -187,6 +190,24 @@ const IndexPage = () => {
     },
   ];
 
+  const draw = [
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*jQKyTI4-hjAAAAAAAAAAAAAAARQnAQ',
+      alt: 'draw circle',
+      desc: '绘制圆形',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PPZ2RJy6XxEAAAAAAAAAAAAAARQnAQ',
+      alt: 'draw line',
+      desc: '绘制折线',
+    },
+    {
+      img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*f64USbxQhiwAAAAAAAAAAAAAARQnAQ',
+      alt: 'draw polygon',
+      desc: '绘制几何图形',
+    }
+  ];
+
   return (
     <>
       <SEO title={t('蚂蚁地理空间数据可视化')} lang={i18n.language} />
@@ -205,12 +226,23 @@ const IndexPage = () => {
         buttons={bannerButtons}
         notifications={notifications}
         className="banner"
+        // @ts-ignore
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />
       <Features features={L7Features} style={{ width: '100%' }} />
+
       <Dipper dipper={dipper} />
-      <Cases cases={L7Case} />
+
       <DipperMap dippermap={dippermap} />
+
+      <Cases cases={L7Case} />
+
+      <L7React />
+
+      <L7Plot dipper={dipper}/>
+
+      <L7Draw draw={draw}/>
+
       <Companies title={t('感谢信赖')} companies={companies} />
     </>
   );

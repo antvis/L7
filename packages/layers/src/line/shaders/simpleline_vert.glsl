@@ -17,8 +17,6 @@ uniform float u_vertexScale: 1.0;
 
 varying vec4 v_color;
 
-uniform float u_linearColor: 0;
-
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
@@ -56,8 +54,7 @@ void main() {
   v_color = a_Color;
 
   // 设置数据集的参数
-  styleMappingMat[3][0] = d_distance_ratio; // 当前点位距离占线总长的比例
-  styleMappingMat[3][1] = a_Distance;       // 当前顶点的距离
+  styleMappingMat[3][0] = a_Distance / a_Total_Distance; // 当前点位距离占线总长的比例
   
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));

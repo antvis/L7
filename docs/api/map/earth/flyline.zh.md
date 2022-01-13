@@ -1,6 +1,6 @@
 ---
 title: 飞线
-order: 3
+order: 2
 ---
 
 `markdown:docs/common/style.md`
@@ -15,7 +15,7 @@ order: 3
 import { EarthLayer, LineLayer } from '@antv/l7';
 ```
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4ZCnQaH_nLIAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7地球飞线图层" width="60%">
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4ZCnQaH_nLIAAAAAAAAAAAAAARQnAQ" style="display: block; margin: 0 auto" alt="L7地球飞线图层" width="450px">
 
 ### shape
 
@@ -23,6 +23,6 @@ import { EarthLayer, LineLayer } from '@antv/l7';
 
 ### 其他配置
 
-剩下的配置和[线图层](../line_layer/linelayer)一致
+剩下的配置和[线图层](../../line_layer/linelayer)一致
 
-[在线案例](../../../examples/earth/arc3d#flyline)
+[在线案例](../../../../examples/earth/arc3d#flyline)

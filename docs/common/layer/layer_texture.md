@@ -2,7 +2,7 @@
 
 目前只在线图层上支持了纹理方法
 
-- textute 方法支持传入由 scene.addImage 方法添加的全局 icon 贴图资源
+- texture 方法支持传入由 scene.addImage 方法添加的全局 icon 贴图资源
 
 ```javascript
 // 首先在全局加载图片资源
