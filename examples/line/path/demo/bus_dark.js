@@ -8,7 +8,7 @@ const scene = new Scene({
   map: new Mapbox({
     center: [ 103.83735, 1.3602538 ],
     zoom: 9.4678190476727,
-    pitch: 1.9999999999999982,
+    pitch: 20,
     style: 'dark'
   })
 });

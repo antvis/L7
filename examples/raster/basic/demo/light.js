@@ -7,7 +7,7 @@ const scene = new Scene({
   map: new GaodeMap({
     pitch: 0,
     style: 'dark',
-    center: [ 115.5268, 34.3628 ],
+    center: [ 110, 37.5 ],
     zoom: 3
   })
 });

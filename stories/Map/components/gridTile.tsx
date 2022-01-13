@@ -343,7 +343,7 @@ export default class GridTile extends React.Component {
       const layer = new LineLayer({})
         .source(geoData)
         .size(1)
-        .shape('simpleline')
+        .shape('simple')
         .color('rgb(22, 119, 255)')
         .style({
           vertexHeightScale: 2000,
