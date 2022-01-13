@@ -1,14 +1,13 @@
-import { Scene, CityBuildingLayer, LineLayer } from '@antv/l7';
+import { Scene, CityBuildingLayer, LineLayer, PolygonLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'dark',
-    center: [ 120.145319, 30.238915 ],
-    pitch: 45,
-    zoom: 12.91,
-    viewMode: '3D'
+    center: [ 120.145, 30.238915 ],
+    pitch: 60,
+    zoom: 13.2
   })
 });
 fetch(
@@ -41,6 +40,57 @@ fetch(
     });
   scene.addLayer(pointLayer);
 });
+
+fetch(
+  'https://gw.alipayobjects.com/os/bmw-prod/67130c6c-7f49-4680-915c-54e69730861d.json'
+)
+  .then(data => data.json())
+  .then(
+    ({
+      lakeBorderData,
+      lakeData,
+      landData
+    }) => {
+      const lakeLayer = new PolygonLayer()
+        .source(lakeData)
+        .shape('fill')
+        .color('#1E90FF')
+        .style({
+          opacity: 0.4,
+          opacityLinear: {
+            enable: true,
+            dir: 'out' // in - out
+          }
+        });
+      const landLayer = new PolygonLayer()
+        .source(landData)
+        .shape('fill')
+        .color('#3CB371')
+        .style({
+          opacity: 0.4,
+          opacityLinear: {
+            enable: true,
+            dir: 'in' // in - out
+          }
+        });
+
+      const lakeBorderLayer = new PolygonLayer()
+        .source(lakeBorderData)
+        .shape('fill')
+        .color('#ccc')
+        .style({
+          opacity: 0.5,
+          opacityLinear: {
+            enable: true,
+            dir: 'in' // in - out
+          }
+        });
+
+      scene.addLayer(lakeLayer);
+      scene.addLayer(lakeBorderLayer);
+      scene.addLayer(landLayer);
+    }
+  );
 
 fetch(
   'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json'

@@ -91,7 +91,7 @@ module.exports = {
         order: 4
       },
       {
-        slug: 'tutorial/examples',
+        slug: 'tutorial/demo',
         icon: 'map',
         title: {
           zh: '教程示例',
@@ -263,13 +263,15 @@ module.exports = {
       }
     ],
     examples: [
+      
       {
         slug: 'gallery',
         icon: 'gallery',
         title: {
           zh: '官方精品库',
           en: 'Featured'
-        }
+        },
+        order: 0
       },
       {
         slug: 'point',
@@ -277,7 +279,8 @@ module.exports = {
         title: {
           zh: '点图层',
           en: 'Point Layer'
-        }
+        },
+        order: 1
       },
       {
         slug: 'line',
@@ -285,7 +288,8 @@ module.exports = {
         title: {
           zh: '线图层',
           en: 'Line Layer'
-        }
+        },
+        order: 2
       },
       {
         slug: 'polygon',
@@ -293,7 +297,26 @@ module.exports = {
         title: {
           zh: '面图层',
           en: 'Polygon Layer'
-        }
+        },
+        order: 3
+      },
+      {
+        slug: 'earth',
+        icon: 'map',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode'
+        },
+        order: 4
+      },
+      {
+        slug: 'wind',
+        icon: 'raster',
+        title: {
+          zh: '风场图层',
+          en: 'Wind Layer'
+        },
+        order: 5
       },
       {
         slug: 'heatmap',
@@ -302,7 +325,7 @@ module.exports = {
           zh: '热力图',
           en: 'HeatMap Layer'
         },
-        order: 5
+        order: 6
       },
       {
         slug: 'raster',
@@ -310,7 +333,8 @@ module.exports = {
         title: {
           zh: '栅格图层',
           en: 'Raster Layer'
-        }
+        },
+        order: 7
       },
       {
         slug: 'engine',
@@ -318,7 +342,8 @@ module.exports = {
         title: {
           zh: '第三方引擎',
           en: 'other engine'
-        }
+        },
+        order: 8
       },
       {
         slug: 'react',
@@ -326,7 +351,8 @@ module.exports = {
         title: {
           zh: 'React 组件',
           en: 'React Demo'
-        }
+        },
+        order: 9
       },
       {
         slug: 'amapPlugin',
@@ -334,31 +360,18 @@ module.exports = {
         title: {
           zh: '高德地图插件',
           en: 'amapPlugin'
-        }
+        },
+        order: 10
       },
-      {
-        slug: 'earth',
-        icon: 'map',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode'
-        }
-      },
-      {
-        slug: 'wind',
-        icon: 'raster',
-        title: {
-          zh: '风场图层',
-          en: 'Wind Layer'
-        }
-      },
+     
       {
         slug: 'district',
         icon: 'map',
         title: {
           zh: '行政区划',
           en: 'L7 District'
-        }
+        },
+        order: 11
       },
       {
         slug: 'draw',
@@ -366,7 +379,8 @@ module.exports = {
         title: {
           zh: '绘制组件',
           en: 'L7 Draw'
-        }
+        },
+        order: 12
       },
       {
         slug: 'tutorial',

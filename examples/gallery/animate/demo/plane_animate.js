@@ -1,5 +1,5 @@
 /* eslint-disable no-eval */
-import { Scene, LineLayer, PointLayer } from '@antv/l7';
+import { Scene, LineLayer, PointLayer, PolygonLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -23,13 +23,14 @@ const scene = new Scene({
       ]
     },
     center: [ 3.438, 40.16797 ],
-    zoom: 0.51329
+    zoom: 1
   })
 });
+scene.setBgColor('#000');
 scene.on('loaded', () => {
   scene.addImage(
     'plane',
-    'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg'
+    'https://gw.alipayobjects.com/zos/bmw-prod/96327aa6-7fc5-4b5b-b1d8-65771e05afd8.svg'
   );
   Promise.all([
     fetch(
@@ -58,12 +59,24 @@ scene.on('loaded', () => {
 
     const worldLine = new LineLayer()
       .source(world)
-      .color('#41fc9d')
+      .color('rgb(22,119,255)')
       .size(0.5)
       .style({
         opacity: 0.4
       });
-    const dotPoint = new PointLayer()
+    const worldPolygon = new PolygonLayer()
+      .source(world)
+      .shape('fill')
+      .color('rgb(22,119,255)')
+      .size(0.5)
+      .style({
+        opacity: 0.4,
+        opacityLinear: {
+          enable: true,
+          dir: 'in' // in - out
+        }
+      });
+    const dotPoint = new PointLayer({ bland: 'additive' })
       .source(dotData, {
         parser: {
           type: 'json',
@@ -72,32 +85,32 @@ scene.on('loaded', () => {
         }
       })
       .shape('circle')
-      .color('#ffed11')
+      .color('rgb(22,119,255)')
       .animate(true)
       .size(40)
       .style({
         opacity: 1.0
       });
-    const flyLine = new LineLayer({ blend: 'normal' })
+    const flyLine = new LineLayer({ blend: 'additive', zIndex: 2 })
       .source(flydata, {
         parser: {
           type: 'json',
           coordinates: 'coord'
         }
       })
-      .color('#ff6b34')
+      .color('rgb(22,119,255)')
       .texture('plane')
       .shape('arc3d')
-      .size(20)
+      .size(25)
       .animate({
         duration: 1,
-        interval: 0.2,
+        interval: 0.5,
         trailLength: 0.05
       })
       .style({
         textureBlend: 'replace',
         lineTexture: true, // 开启线的贴图功能
-        iconStep: 6, // 设置贴图纹理的间距
+        iconStep: 8, // 设置贴图纹理的间距
         opacity: 1
       });
 
@@ -108,7 +121,7 @@ scene.on('loaded', () => {
           coordinates: 'coord'
         }
       })
-      .color('#ff6b34')
+      .color('rgb(22,119,255)')
       .shape('arc3d')
       .size(1)
       .style({
@@ -117,6 +130,7 @@ scene.on('loaded', () => {
         opacity: 0.5
       });
     scene.addLayer(worldLine);
+    scene.addLayer(worldPolygon);
     scene.addLayer(dotPoint);
     scene.addLayer(flyLine2);
     scene.addLayer(flyLine);

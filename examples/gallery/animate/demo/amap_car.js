@@ -1,4 +1,4 @@
-import { Scene, PolygonLayer } from '@antv/l7';
+import { Scene, PolygonLayer, LineLayer, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as THREE from 'three';
@@ -60,10 +60,10 @@ function travel(
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    center: [ 112, 35.39847 ],
-    pitch: 45,
-    rotation: 30,
-    zoom: 5
+    center: [ 110, 35.39847 ],
+    pitch: 20,
+    style: 'dark',
+    zoom: 3
   })
 });
 
@@ -75,28 +75,46 @@ scene.on('loaded', () => {
   )
     .then(d => d.json())
     .then(data => {
-      const polygonlayer = new PolygonLayer({
-        name: '01',
-        zIndex: -1
-      })
+      const textLayer = new PointLayer({ zIndex: 1 })
         .source(data)
-        .color('name', [
-          '#2E8AE6',
-          '#69D1AB',
-          '#DAF291',
-          '#FFD591',
-          '#FF7A45',
-          '#CF1D49'
-        ])
+        .color('rgb(22,119,255)')
+        .size(12)
+        .shape('name', 'text');
+
+
+      const polygonlayer = new PolygonLayer({})
+        .source(data)
+        .color('rgb(22,119,255)')
         .shape('fill')
-        .select(true)
+        .active({
+          enable: true,
+          blend: 0.5
+        })
         .style({
-          opacity: 1.0
+          opacity: 0.6,
+          opacityLinear: {
+            enable: true,
+            dir: 'out' // in - out
+          }
         });
+
+      const linelayer = new LineLayer({ })
+        .source(data)
+        .color('rgb(72,169,255)')
+        .shape('line')
+        .size(0.5)
+        .style({
+          opacity: 0.6
+        });
+
       scene.addLayer(polygonlayer);
+      scene.addLayer(textLayer);
+      scene.addLayer(linelayer);
     });
 
+
   const threeJSLayer = new ThreeLayer({
+    zIndex: 2,
     enableMultiPassRenderer: false,
     onAddMeshes: (threeScene, layer) => {
       // 添加光
@@ -149,7 +167,7 @@ scene.on('loaded', () => {
       const points = curve.getPoints(200);
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-      const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+      const material = new THREE.LineBasicMaterial({ color: new THREE.Color('rgb(22,119,255)') });
 
       const line = new THREE.LineLoop(geometry, material);
       threeScene.add(line);
@@ -162,7 +180,7 @@ scene.on('loaded', () => {
         gltf => {
           // 根据 GeoJSON 数据放置模型
           const gltfScene = gltf.scene.clone();
-          setDouble(gltfScene);
+          setMaterial(gltfScene);
           layer.getSource().data.dataArray.forEach(() => {
             layer.adjustMeshToMap(gltfScene);
             gltfScene.scale.set(500000, 500000, 500000);
@@ -217,9 +235,9 @@ scene.on('loaded', () => {
   scene.addLayer(threeJSLayer);
 });
 
-function setDouble(object) {
+function setMaterial(object) {
   if (object.children && object.children.length && object.children.length > 0) {
-    object.children.map(child => setDouble(child));
+    object.children.map(child => setMaterial(child));
   } else if (object.material) {
     object.material.side = THREE.DoubleSide;
   }

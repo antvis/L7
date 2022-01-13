@@ -144,6 +144,62 @@ export default class ExtrudePolyline {
     complex.startIndex = complex.positions.length / 6;
     return complex;
   }
+  public simpleExtrude_gaode2(points: number[][], originPoints: number[][]) {
+    const complex = this.complex;
+    if (points.length <= 1) {
+      return complex;
+    }
+    this.lastFlip = -1;
+    this.started = false;
+    this.normal = null;
+    this.totalDistance = 0;
+    // 去除数组里重复的点
+    // points = getArrayUnique(points);
+    const total = points.length;
+    let count = complex.startIndex;
+    for (let i = 1; i < total; i++) {
+      const last = points[i - 1];
+      last.push(originPoints[i - 1][2] ?? 0);
+      // @ts-ignore
+      const originLast = originPoints[i - 1] as vec3;
+
+      const cur = points[i];
+      cur.push(originPoints[i][2] ?? 0);
+      // @ts-ignore
+      const originCur = originPoints[i] as vec3;
+
+      const next =
+        i < points.length - 1
+          ? [...points[i + 1], originPoints[i + 1][2] ?? 0]
+          : null;
+      const originNext =
+        i < originPoints.length - 1 ? originPoints[i + 1] : null;
+
+      const amt = this.simpleSegment(
+        complex,
+        count,
+        // @ts-ignore
+        last as vec3,
+        // @ts-ignore
+        cur as vec3,
+        // @ts-ignore
+        next as vec3,
+        // @ts-ignore
+        originLast,
+        originCur,
+        // @ts-ignore
+        originNext as vec3,
+      );
+      count += amt;
+    }
+    if (this.dash) {
+      for (let i = 0; i < complex.positions.length / 6; i++) {
+        complex.positions[i * 6 + 5] = this.totalDistance;
+      }
+    }
+    complex.startIndex = complex.positions.length / 6;
+    return complex;
+  }
   public extrude(points: number[][]) {
     const complex = this.complex;
     if (points.length <= 1) {
@@ -164,6 +220,34 @@ export default class ExtrudePolyline {
       const amt = this.segment(complex, count, last, cur, next as vec3);
       count += amt;
     }
+    if (this.dash) {
+      for (let i = 0; i < complex.positions.length / 6; i++) {
+        complex.positions[i * 6 + 5] = this.totalDistance;
+      }
+    }
+    complex.startIndex = complex.positions.length / 6;
+    return complex;
+  }
+  public simpleExtrude(points: number[][]) {
+    const complex = this.complex;
+    if (points.length <= 1) {
+      return complex;
+    }
+    this.lastFlip = -1;
+    this.started = false;
+    this.normal = null;
+    this.totalDistance = 0;
+
+    const total = points.length;
+    let count = complex.startIndex;
+    for (let i = 1; i < total; i++) {
+      const last = points[i - 1] as vec3;
+      const cur = points[i] as vec3;
+      const next = i < points.length - 1 ? points[i + 1] : null;
+      const amt = this.simpleSegment(complex, count, last, cur, next as vec3);
+      count += amt;
+    }
+
     if (this.dash) {
       for (let i = 0; i < complex.positions.length / 6; i++) {
         complex.positions[i * 6 + 5] = this.totalDistance;
@@ -395,6 +479,111 @@ export default class ExtrudePolyline {
         vec2.copy(this.normal, miter);
         count += 2;
       }
+      this.lastFlip = flip;
+    }
+    return count;
+  }
+  private simpleSegment(
+    complex: any,
+    index: number,
+    last: vec3,
+    cur: vec3,
+    next: vec3,
+  ) {
+    let count = 0;
+    const indices = complex.indices;
+    const positions = complex.positions;
+    const normals = complex.normals;
+    const flatCur = aProjectFlat([cur[0], cur[1]]) as [number, number];
+    const flatLast = aProjectFlat([last[0], last[1]]) as [number, number];
+    // @ts-ignore
+    direction(lineA, flatCur, flatLast);
+    let segmentDistance = 0;
+    if (this.dash) {
+      // @ts-ignore
+      segmentDistance = this.lineSegmentDistance(flatCur, flatLast);
+      this.totalDistance += segmentDistance;
+    }
+
+    if (!this.normal) {
+      this.normal = vec2.create();
+      computeNormal(this.normal, lineA);
+    }
+    if (!this.started) {
+      this.started = true;
+
+      this.extrusions(
+        positions,
+        normals,
+        last,
+        this.normal,
+        this.thickness,
+        this.totalDistance - segmentDistance,
+      );
+    }
+
+    indices.push(index + 0, index + 1, index + 2);
+
+    if (!next) {
+      computeNormal(this.normal, lineA);
+      this.extrusions(
+        positions,
+        normals,
+        cur,
+        this.normal,
+        this.thickness,
+        this.totalDistance,
+      );
+
+      indices.push(
+        ...(this.lastFlip === 1
+          ? [index, index + 2, index + 3]
+          : [index + 2, index + 1, index + 3]),
+      );
+      count += 2;
+    } else {
+      const flatNext = aProjectFlat([next[0], next[1]]) as [number, number];
+      if (isPointEqual(flatCur, flatNext)) {
+        vec2.add(
+          flatNext,
+          flatCur,
+          vec2.normalize(flatNext, vec2.subtract(flatNext, flatCur, flatLast)),
+        );
+      }
+      direction(lineB, flatNext, flatCur);
+
+      // stores tangent & miter
+
+      const [miterLen, miter] = computeMiter(
+        tangent,
+        vec2.create(),
+        lineA,
+        lineB,
+        this.thickness,
+      );
+      // normal(tmp, lineA)
+
+      // get orientation
+      let flip = vec2.dot(tangent, this.normal) < 0 ? -1 : 1;
+      this.extrusions(
+        positions,
+        normals,
+        cur,
+        miter,
+        miterLen,
+        this.totalDistance,
+      );
+      indices.push(
+        ...(this.lastFlip === 1
+          ? [index, index + 2, index + 3]
+          : [index + 2, index + 1, index + 3]),
+      );
+
+      flip = -1;
+
+      // the miter is now the normal for our next join
+      vec2.copy(this.normal, miter);
+      count += 2;
       this.lastFlip = flip;
     }
     return count;
