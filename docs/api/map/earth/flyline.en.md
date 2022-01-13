@@ -1,6 +1,6 @@
 ---
 title: Earth Flyline
-order: 3
+order: 2
 ---
 
 `markdown:docs/api/earth/flyline.zh.md`
