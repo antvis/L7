@@ -1,5 +1,5 @@
 /* eslint-disable no-eval */
-import { Scene, LineLayer, PointLayer, PolygonLayer } from '@antv/l7';// 
+import { Scene, LineLayer, PointLayer, PolygonLayer } from '@antv/l7';//
 import { GaodeMap } from '@antv/l7-maps';
 
 
@@ -54,39 +54,39 @@ scene.on('loaded', () => {
     ).then(d => d.json())
   ]).then(function onLoad([ world ]) {
 
-    const data = []
+    const data = [];
 
     for (let i = 0; i < 99; i++) {
       data.push({
-        thetaOffset: -1/2 + i * (1/99), // 设置曲线的偏移量
+        thetaOffset: -1 / 2 + i * (1 / 99), // 设置曲线的偏移量
         ...originData
       });
     }
 
     for (let i = 0; i < 30; i++) {
       data.push({
-        thetaOffset: -1/2 + i * (1/30), // 设置曲线的偏移量
+        thetaOffset: -1 / 2 + i * (1 / 30), // 设置曲线的偏移量
         ...originData2
       });
     }
-    
+
     for (let i = 0; i < 15; i++) {
       data.push({
-        thetaOffset: -1/2 + i * (1/15), // 设置曲线的偏移量
+        thetaOffset: -1 / 2 + i * (1 / 15), // 设置曲线的偏移量
         ...originData3
       });
     }
 
     for (let i = 0; i < 11; i++) {
       data.push({
-        thetaOffset: -1/2 + i * (1/11), // 设置曲线的偏移量
+        thetaOffset: -1 / 2 + i * (1 / 11), // 设置曲线的偏移量
         ...originData4
       });
     }
 
     for (let i = 0; i < 60; i++) {
       data.push({
-        thetaOffset: -1/2 + i * (1/60), // 设置曲线的偏移量
+        thetaOffset: -1 / 2 + i * (1 / 60), // 设置曲线的偏移量
         ...originData5
       });
     }
@@ -101,20 +101,20 @@ scene.on('loaded', () => {
     scene.addLayer(worldLine);
 
     const worldFill = new PolygonLayer({ blend: 'normal' })
-    .source(world)
-    .size('name', [ 0, 10000, 50000, 30000, 100000 ])
-    .color('#1E90FF')
-    .shape('fill')
-    .active(true)
+      .source(world)
+      .size('name', [ 0, 10000, 50000, 30000, 100000 ])
+      .color('#1E90FF')
+      .shape('fill')
+      .active(true)
 
-    .style({
-      opacity: 0.2,
-      opacityLinear: {
-        enable: true,
-        dir: 'out' // in - out
-      }
-    });
-  scene.addLayer(worldFill);
+      .style({
+        opacity: 0.2,
+        opacityLinear: {
+          enable: true,
+          dir: 'out' // in - out
+        }
+      });
+    scene.addLayer(worldFill);
 
     const jsonParserOotion = {
       parser: {
@@ -122,7 +122,7 @@ scene.on('loaded', () => {
         x: 'lng',
         y: 'lat'
       }
-    }
+    };
 
     const jsonLineParserOotion = {
       parser: {
@@ -132,7 +132,7 @@ scene.on('loaded', () => {
         x1: 'lng2',
         y1: 'lat2'
       }
-    }
+    };
 
     const dotData = [
       { // CQ
@@ -141,10 +141,10 @@ scene.on('loaded', () => {
       },
       { // BJ
         lng: 116.5883553580003,
-        lat: 40.07680509701226,
+        lat: 40.07680509701226
       },
       { // HK
-        lng: 114.3072509765625, 
+        lng: 114.3072509765625,
         lat: 22.228090416784486
       },
       { // Herbin
@@ -159,14 +159,14 @@ scene.on('loaded', () => {
         lng: 87.57202148437499,
         lat: 43.82660134505382
       }
-    ]
+    ];
 
-    const dotPoint = new PointLayer({zIndex: 2})
+    const dotPoint = new PointLayer({ zIndex: 2 })
       .source(dotData, jsonParserOotion)
       .shape('circle')
       .color('#00FFFF')
       .animate(true)
-      .size(30)
+      .size(30);
     scene.addLayer(dotPoint);
 
     const layerPlaneLine = new LineLayer({ blend: 'normal' })
