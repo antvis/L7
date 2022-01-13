@@ -25,7 +25,6 @@ void main() {
   } else { // 使用 color 方法传入的颜色
      gl_FragColor = v_color;
   }
-
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
   gl_FragColor.a *= opacity; // 全局透明度

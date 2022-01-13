@@ -108,7 +108,6 @@ export default class SimpleLineModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-    const c = 0;
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
       type: AttributeType.Attribute,

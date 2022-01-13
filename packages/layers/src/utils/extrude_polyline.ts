@@ -237,8 +237,7 @@ export default class ExtrudePolyline {
     this.started = false;
     this.normal = null;
     this.totalDistance = 0;
-    // 去除数组里重复的点
-    // points = getArrayUnique(points);
+
     const total = points.length;
     let count = complex.startIndex;
     for (let i = 1; i < total; i++) {
@@ -248,6 +247,7 @@ export default class ExtrudePolyline {
       const amt = this.simpleSegment(complex, count, last, cur, next as vec3);
       count += amt;
     }
+
     if (this.dash) {
       for (let i = 0; i < complex.positions.length / 6; i++) {
         complex.positions[i * 6 + 5] = this.totalDistance;
@@ -483,7 +483,6 @@ export default class ExtrudePolyline {
     }
     return count;
   }
-
   private simpleSegment(
     complex: any,
     index: number,
@@ -513,8 +512,6 @@ export default class ExtrudePolyline {
     if (!this.started) {
       this.started = true;
 
-      // if the end cap is type square, we can just push the verts out a bit
-
       this.extrusions(
         positions,
         normals,
@@ -529,7 +526,6 @@ export default class ExtrudePolyline {
 
     if (!next) {
       computeNormal(this.normal, lineA);
-
       this.extrusions(
         positions,
         normals,
@@ -539,7 +535,6 @@ export default class ExtrudePolyline {
         this.totalDistance,
       );
 
-      // this.extrusions(positions, normals, cur, this.normal, this.thickness);
       indices.push(
         ...(this.lastFlip === 1
           ? [index, index + 2, index + 3]
@@ -589,7 +584,6 @@ export default class ExtrudePolyline {
       // the miter is now the normal for our next join
       vec2.copy(this.normal, miter);
       count += 2;
-
       this.lastFlip = flip;
     }
     return count;
