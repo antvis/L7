@@ -7,37 +7,37 @@
     {
       "filename": "point_text.js",
       "title": "点数据标注",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7blvQ4v7Q1UAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*9j1wR5V1580AAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "polygon_text.js",
       "title": "面数据标注",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*rCFqRp3iQosAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KmnXTK3jJkUAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "iconfont.js",
       "title": "图标标注",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*8PfqQ6-lQ0EAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sny8QaWLuuEAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "iconfonts.js",
       "title": "天气图标标注",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*JAhxTaabap4AAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*VQGpRrZCiIcAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "styleMap.js",
-      "title": "文本偏移映射",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*LPoeTJ5tPxMAAAAAAAAAAAAAARQnAQ"
+      "title": "文本动态偏移",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ob6QQ6KBftQAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "temperture.js",
       "title": "气温图标标注",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*36umQaf_hVEAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*aA66Q6LG-QAAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "updown.js",
       "title": "走势图标标注",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*P5plS5ZsYZkAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*excySJRz2K8AAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

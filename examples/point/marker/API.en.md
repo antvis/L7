@@ -1,1 +1,1 @@
-`markdown:docs/api/layer/point_layer/bubble.en.md`
+`markdown:docs/api/point_layer/marker.en.md`

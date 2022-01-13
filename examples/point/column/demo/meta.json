@@ -7,27 +7,27 @@
     {
       "filename": "column_light.js",
       "title": "3D柱图 光标",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*1gNLTq2D_i0AAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*_TDOQqKJSsIAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "column_linear.js",
       "title": "3D 渐变柱图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*dBX2T4fZjS0AAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*YW8FTrC_IKoAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "clumn_shape_light.js",
       "title": "3D 浅色柱图",
-       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RVw4QKTJe7kAAAAAAAAAAABkARQnAQ"
+       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*D5OLTLz79kQAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "column_dark.js",
       "title": "3D柱图 深色底图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7COqR4wCc6QAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GPSqRpn-_TAAAAAAAAAAAAAAARQnAQ"
     },
      {
       "filename": "clumn_shape.js",
       "title": "3D 深色柱图",
-       "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*tvpvQZLv_xYAAAAAAAAAAABkARQnAQ"
+       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*3aKjS56f6OYAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

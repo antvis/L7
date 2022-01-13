@@ -1,2 +1,1 @@
-`markdown:docs/api/layer/point_layer/text.zh.md`
-
+`markdown:docs/api/point_layer/text.zh.md`
