@@ -95,7 +95,6 @@ export default class SimpleLineModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-    
     return [
       this.layer.buildLayerModel({
         moduleName: 'line',
@@ -109,7 +108,7 @@ export default class SimpleLineModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-    let c = 0
+    const c = 0;
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
       type: AttributeType.Attribute,

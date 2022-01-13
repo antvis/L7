@@ -514,7 +514,7 @@ export default class ExtrudePolyline {
       this.started = true;
 
       // if the end cap is type square, we can just push the verts out a bit
-    
+
       this.extrusions(
         positions,
         normals,
@@ -523,14 +523,13 @@ export default class ExtrudePolyline {
         this.thickness,
         this.totalDistance - segmentDistance,
       );
-      
     }
 
     indices.push(index + 0, index + 1, index + 2);
 
     if (!next) {
       computeNormal(this.normal, lineA);
-     
+
       this.extrusions(
         positions,
         normals,
@@ -539,7 +538,6 @@ export default class ExtrudePolyline {
         this.thickness,
         this.totalDistance,
       );
-      
 
       // this.extrusions(positions, normals, cur, this.normal, this.thickness);
       indices.push(
@@ -591,7 +589,7 @@ export default class ExtrudePolyline {
       // the miter is now the normal for our next join
       vec2.copy(this.normal, miter);
       count += 2;
-      
+
       this.lastFlip = flip;
     }
     return count;
