@@ -97,7 +97,7 @@ export default class SimpleLineModel extends BaseModel {
   public buildModels(): IModel[] {
     return [
       this.layer.buildLayerModel({
-        moduleName: 'line',
+        moduleName: 'simpleline',
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: SimpleLineTriangulation,

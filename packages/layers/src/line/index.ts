@@ -29,7 +29,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     const type = this.getModelType();
     const defaultConfig = {
       line: {},
-      simpleline: {},
+      simple: {},
       wall: {},
       arc3d: { blend: 'additive' },
       arc: { blend: 'additive' },
