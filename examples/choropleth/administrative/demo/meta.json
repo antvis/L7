@@ -1,0 +1,72 @@
+{
+  "title": {
+    "zh": "分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "world-map.ts",
+      "title": {
+        "zh": "世界地图",
+        "en": "World Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/2W6xl7Y3wm/e7590fc4-f49b-43c0-ba3b-8b40a9ac3b39.png"
+    },
+    {
+      "filename": "china-map.ts",
+      "title": {
+        "zh": "中国地图",
+        "en": "China Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/qSFaP32j8q/4428acf4-9362-4705-90c9-de950be5a177.png"
+    },
+    {
+      "filename": "china-city.ts",
+      "title": {
+        "zh": "中国市级地图",
+        "en": "China Citys Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/GN35RftkmZ/c53bc5ab-189f-42a2-9288-7b34f616f18d.png"
+    },
+    {
+      "filename": "zhejiang-province.ts",
+      "title": {
+        "zh": "浙江省地图",
+        "en": "Zhejiang Province Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/tX2zfzui76/821b3d1d-421c-4f09-a44e-53422db302f6.png"
+    },
+    {
+      "filename": "zhejiang-province-district.ts",
+      "title": {
+        "zh": "浙江省县级地图",
+        "en": "Zhejiang District Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/YQU0%24nl0gh/c9a9a70d-8abc-42f6-8795-856646346326.png"
+    },
+    {
+      "filename": "hangzhou-city.ts",
+      "title": {
+        "zh": "杭州市地图",
+        "en": "Hangzhou City Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/kagsfItG%26g/49861247-bc88-4d64-b5b1-0913c8ff55f8.png"
+    },
+    {
+      "filename": "xihu-district.ts",
+      "title": {
+        "zh": "西湖区地图",
+        "en": "Xihu District Map"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/04xm5U4yvt/828e6055-f005-4dba-8936-aaf451487db9.png"
+    },
+    {
+      "filename": "administrative-switch.tsx",
+      "title": {
+        "zh": "行政区域切换",
+        "en": "Administrative Switch"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/qSFaP32j8q/4428acf4-9362-4705-90c9-de950be5a177.png"
+    }
+  ]
+}
