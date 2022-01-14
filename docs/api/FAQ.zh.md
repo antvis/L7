@@ -7,6 +7,8 @@ order: 16
 
 ### 项目中 L7 各个依赖包版本不一致导致报错
 
+Error: Cannot apply @injectable decorator multiple times.
+
 <img height="300px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*BsMyRZDuB54AAAAAAAAAAAAAARQnAQ'>
 
 🌟 解决方法：  
