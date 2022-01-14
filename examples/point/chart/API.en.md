@@ -1,1 +1,1 @@
-`markdown:docs/api/layer/point_layer/chart.en.md`
+`markdown:docs/api/point_layer/chart.en.md`
