@@ -131,7 +131,7 @@ module.exports = {
           zh: '点图层',
           en: 'PointLayer'
         },
-        order: 2
+        order: 3
       },
       {
         slug: 'api/line_layer',
@@ -139,7 +139,7 @@ module.exports = {
           zh: '线图层',
           en: 'LineLayer'
         },
-        order: 2
+        order: 4
       },
       {
         slug: 'api/polygon_layer',
@@ -147,7 +147,7 @@ module.exports = {
           zh: '面图层',
           en: 'PolygonLayer'
         },
-        order: 2
+        order: 5
       },
       {
         slug: 'api/heatmap_layer',
@@ -155,7 +155,7 @@ module.exports = {
           zh: '热力图层',
           en: 'HeatMapLayer'
         },
-        order: 2
+        order: 6
       },
       {
         slug: 'api/imagelayer',
@@ -163,7 +163,7 @@ module.exports = {
           zh: '图片图层',
           en: 'ImageLayer'
         },
-        order: 2
+        order: 7
       },
       {
         slug: 'api/raster',
@@ -171,55 +171,7 @@ module.exports = {
           zh: '栅格图层',
           en: 'RasterLayer'
         },
-        order: 2
-      },
-      {
-        slug: 'api/cityBuilding',
-        title: {
-          zh: '城市图层',
-          en: 'CityBuildLayer'
-        },
-        order: 2
-      },
-      {
-        slug: 'api/layer',
-        title: {
-          zh: '图层 Layer',
-          en: 'Layer'
-        },
-        order: 5
-      },
-      {
-        slug: 'api/source',
-        title: {
-          zh: '数据 Source',
-          en: 'Source'
-        },
-        order: 5
-      },
-      {
-        slug: 'api/district',
-        title: {
-          zh: '行政区划',
-          en: 'District'
-        },
-        order: 6
-      },
-      {
-        slug: 'api/draw',
-        title: {
-          zh: '绘制组件',
-          en: 'Draw Component'
-        },
-        order: 6
-      },
-      {
-        slug: 'api/react',
-        title: {
-          zh: 'React 组件',
-          en: 'React Component'
-        },
-        order: 6
+        order: 8
       },
       {
         slug: 'api/component',
@@ -227,7 +179,7 @@ module.exports = {
           zh: '组件 Component',
           en: 'Component'
         },
-        order: 6
+        order: 8
       },
       {
         slug: 'api/renderer',
@@ -235,7 +187,15 @@ module.exports = {
           zh: '第三方引擎接入',
           en: 'import other gl'
         },
-        order: 3
+        order: 8
+      },
+      {
+        slug: 'api/cityBuilding',
+        title: {
+          zh: '城市图层',
+          en: 'CityBuildLayer'
+        },
+        order: 9
       },
       {
         slug: 'api/wind',
@@ -243,7 +203,7 @@ module.exports = {
           zh: '风场图层',
           en: 'WindLayer'
         },
-        order: 3
+        order: 9
       },
       {
         slug: 'api/mini',
@@ -251,7 +211,39 @@ module.exports = {
           zh: '小程序',
           en: 'mini'
         },
-        order: 3
+        order: 9
+      },
+      {
+        slug: 'api/source',
+        title: {
+          zh: '数据 Source',
+          en: 'Source'
+        },
+        order: 10
+      },
+      {
+        slug: 'api/district',
+        title: {
+          zh: '行政区划',
+          en: 'District'
+        },
+        order: 11
+      },
+      {
+        slug: 'api/draw',
+        title: {
+          zh: '绘制组件',
+          en: 'Draw Component'
+        },
+        order: 12
+      },
+      {
+        slug: 'api/react',
+        title: {
+          zh: 'React 组件',
+          en: 'React Component'
+        },
+        order: 13
       },
       {
         slug: 'api/mini/demos',
@@ -259,7 +251,7 @@ module.exports = {
           zh: '案例集合',
           en: 'demos'
         },
-        order: 5
+        order: 14
       }
     ],
     examples: [
@@ -310,15 +302,6 @@ module.exports = {
         order: 4
       },
       {
-        slug: 'wind',
-        icon: 'raster',
-        title: {
-          zh: '风场图层',
-          en: 'Wind Layer'
-        },
-        order: 5
-      },
-      {
         slug: 'heatmap',
         icon: 'heatmap',
         title: {
@@ -333,6 +316,15 @@ module.exports = {
         title: {
           zh: '栅格图层',
           en: 'Raster Layer'
+        },
+        order: 7
+      },
+      {
+        slug: 'wind',
+        icon: 'raster',
+        title: {
+          zh: '风场图层',
+          en: 'Wind Layer'
         },
         order: 7
       },
