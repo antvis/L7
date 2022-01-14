@@ -3,14 +3,15 @@ module.exports = {
     {
       resolve: '@antv/gatsby-theme-antv',
       options: {
-        GATrackingId: 'UA-148148901-7'
-      }
-    }
+        GATrackingId: 'UA-148148901-7',
+      },
+    },
   ],
   siteMetadata: {
     title: 'L7',
     isAntVSite: false,
-    description: 'Large-scale WebGL-powered Geospatial data visualization analysis framework',
+    description:
+      'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.vision',
     githubUrl: 'https://github.com/antvis/L7',
     showChartResize: true, // 是否在demo页展示图表视图切换
@@ -20,32 +21,39 @@ module.exports = {
         slug: 'docs/api',
         title: {
           zh: '文档',
-          en: 'Document'
+          en: 'Document',
         },
-        redirect: 'api/l7'
+        redirect: 'api/l7',
       },
       {
         slug: 'docs/tutorial',
         title: {
           zh: '教程',
-          en: 'Tutorial'
-        }
+          en: 'Tutorial',
+        },
       },
       {
         slug: 'examples',
         title: {
           zh: '图表演示',
-          en: 'Examples'
-        }
-      }
+          en: 'Examples',
+        },
+      },
     ],
     ecosystems: [
       {
         name: {
-          zh: 'L7 React组件',
-          en: 'L7React L7 For React',
+          zh: 'L7 React 组件',
+          en: 'L7 For React',
         },
         url: 'http://antv.vision/L7-react/',
+      },
+      {
+        name: {
+          zh: 'L7 Plot 图表',
+          en: 'L7Plot',
+        },
+        url: 'https://l7plot.antv.vision/',
       },
       {
         name: {
@@ -78,26 +86,26 @@ module.exports = {
         slug: 'tutorial/map',
         title: {
           zh: '地图',
-          en: 'Map'
+          en: 'Map',
         },
-        order: 3
+        order: 3,
       },
       {
         slug: 'tutorial/interactive',
         title: {
           zh: '交互',
-          en: 'interactive'
+          en: 'interactive',
         },
-        order: 4
+        order: 4,
       },
       {
         slug: 'tutorial/demo',
         icon: 'map',
         title: {
           zh: '教程示例',
-          en: 'Tutorial demo'
+          en: 'Tutorial demo',
         },
-        order: 5
+        order: 5,
       },
 
       // ****** api
@@ -105,290 +113,298 @@ module.exports = {
         slug: 'api/map',
         title: {
           zh: '地图 Map',
-          en: 'Map'
+          en: 'Map',
         },
-        order: 1
+        order: 1,
       },
       {
         slug: 'api/map/earth',
         title: {
           zh: '地球模式',
-          en: 'Earth Mode'
+          en: 'Earth Mode',
         },
-        order: 3
+        order: 3,
       },
       {
         slug: 'api/base',
         title: {
           zh: '图层 base',
-          en: 'Layer'
+          en: 'Layer',
         },
-        order: 2
+        order: 2,
       },
       {
         slug: 'api/point_layer',
         title: {
           zh: '点图层',
-          en: 'PointLayer'
+          en: 'PointLayer',
         },
-        order: 3
+        order: 3,
       },
       {
         slug: 'api/line_layer',
         title: {
           zh: '线图层',
-          en: 'LineLayer'
+          en: 'LineLayer',
         },
-        order: 4
+        order: 4,
       },
       {
         slug: 'api/polygon_layer',
         title: {
           zh: '面图层',
-          en: 'PolygonLayer'
+          en: 'PolygonLayer',
         },
-        order: 5
+        order: 5,
       },
       {
         slug: 'api/heatmap_layer',
         title: {
           zh: '热力图层',
-          en: 'HeatMapLayer'
+          en: 'HeatMapLayer',
         },
-        order: 6
+        order: 6,
       },
       {
         slug: 'api/imagelayer',
         title: {
           zh: '图片图层',
-          en: 'ImageLayer'
+          en: 'ImageLayer',
         },
-        order: 7
+        order: 7,
       },
       {
         slug: 'api/raster',
         title: {
           zh: '栅格图层',
-          en: 'RasterLayer'
+          en: 'RasterLayer',
         },
-        order: 8
+        order: 8,
       },
       {
         slug: 'api/component',
         title: {
           zh: '组件 Component',
-          en: 'Component'
+          en: 'Component',
         },
-        order: 8
+        order: 8,
       },
       {
         slug: 'api/renderer',
         title: {
           zh: '第三方引擎接入',
-          en: 'import other gl'
+          en: 'import other gl',
         },
-        order: 8
+        order: 8,
       },
       {
         slug: 'api/cityBuilding',
         title: {
           zh: '城市图层',
-          en: 'CityBuildLayer'
+          en: 'CityBuildLayer',
         },
-        order: 9
+        order: 9,
       },
       {
         slug: 'api/wind',
         title: {
           zh: '风场图层',
-          en: 'WindLayer'
+          en: 'WindLayer',
         },
-        order: 9
+        order: 9,
       },
       {
         slug: 'api/mini',
         title: {
           zh: '小程序',
-          en: 'mini'
+          en: 'mini',
         },
-        order: 9
+        order: 9,
       },
       {
         slug: 'api/source',
         title: {
           zh: '数据 Source',
-          en: 'Source'
+          en: 'Source',
         },
-        order: 10
+        order: 10,
       },
       {
         slug: 'api/district',
         title: {
           zh: '行政区划',
-          en: 'District'
+          en: 'District',
         },
-        order: 11
+        order: 11,
       },
       {
         slug: 'api/draw',
         title: {
           zh: '绘制组件',
-          en: 'Draw Component'
+          en: 'Draw Component',
         },
-        order: 12
+        order: 12,
       },
       {
         slug: 'api/react',
         title: {
           zh: 'React 组件',
-          en: 'React Component'
+          en: 'React Component',
         },
-        order: 13
+        order: 13,
       },
       {
         slug: 'api/mini/demos',
         title: {
           zh: '案例集合',
-          en: 'demos'
+          en: 'demos',
         },
-        order: 14
-      }
+        order: 14,
+      },
     ],
     examples: [
-      
       {
         slug: 'gallery',
         icon: 'gallery',
         title: {
           zh: '官方精品库',
-          en: 'Featured'
+          en: 'Featured',
         },
-        order: 0
+        order: 0,
       },
       {
         slug: 'point',
         icon: 'point',
         title: {
           zh: '点图层',
-          en: 'Point Layer'
+          en: 'Point Layer',
         },
-        order: 1
+        order: 1,
       },
       {
         slug: 'line',
         icon: 'line',
         title: {
           zh: '线图层',
-          en: 'Line Layer'
+          en: 'Line Layer',
         },
-        order: 2
+        order: 2,
       },
       {
         slug: 'polygon',
         icon: 'polygon',
         title: {
           zh: '面图层',
-          en: 'Polygon Layer'
+          en: 'Polygon Layer',
         },
-        order: 3
+        order: 3,
       },
       {
         slug: 'earth',
         icon: 'map',
         title: {
           zh: '地球模式',
-          en: 'Earth Mode'
+          en: 'Earth Mode',
         },
-        order: 4
+        order: 4,
       },
       {
         slug: 'heatmap',
         icon: 'heatmap',
         title: {
           zh: '热力图',
-          en: 'HeatMap Layer'
+          en: 'HeatMap Layer',
         },
-        order: 6
+        order: 6,
       },
       {
         slug: 'raster',
         icon: 'raster',
         title: {
           zh: '栅格图层',
-          en: 'Raster Layer'
+          en: 'Raster Layer',
         },
-        order: 7
+        order: 7,
       },
       {
         slug: 'wind',
         icon: 'raster',
         title: {
           zh: '风场图层',
-          en: 'Wind Layer'
+          en: 'Wind Layer',
         },
-        order: 7
+        order: 7,
       },
       {
         slug: 'engine',
         icon: 'map',
         title: {
           zh: '第三方引擎',
-          en: 'other engine'
+          en: 'other engine',
         },
-        order: 8
+        order: 8,
       },
       {
         slug: 'react',
         icon: 'map',
         title: {
           zh: 'React 组件',
-          en: 'React Demo'
+          en: 'React Demo',
         },
-        order: 9
+        order: 9,
       },
       {
         slug: 'amapPlugin',
         icon: 'map',
         title: {
           zh: '高德地图插件',
-          en: 'amapPlugin'
+          en: 'amapPlugin',
         },
-        order: 10
+        order: 10,
       },
-     
       {
         slug: 'district',
         icon: 'map',
         title: {
           zh: '行政区划',
-          en: 'L7 District'
+          en: 'L7 District',
         },
-        order: 11
+        order: 11,
+      },
+      {
+        slug: 'choropleth',
+        icon: 'map',
+        title: {
+          zh: '行政区划 🌟',
+          en: 'Choropleth',
+        },
+        order: 11,
       },
       {
         slug: 'draw',
         icon: 'map',
         title: {
           zh: '绘制组件',
-          en: 'L7 Draw'
+          en: 'L7 Draw',
         },
-        order: 12
+        order: 12,
       },
       {
         slug: 'tutorial',
         icon: 'map',
         title: {
           zh: '教程示例',
-          en: 'Tutorial demo'
-        }
-      }
+          en: 'Tutorial demo',
+        },
+      },
     ],
     playground: {
-      container: '<div style="height: 100vh;justify-content: center; position: relative" id="map"/>',
+      container:
+        '<div style="height: 100vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
-        '@antv/l7-maps': 'latest'
-      }
+        '@antv/l7-maps': 'latest',
+      },
     },
     mdPlayground: {
       // markdown 文档中的 playground 若干设置
@@ -396,7 +412,7 @@ module.exports = {
     },
     docsearchOptions: {
       apiKey: '97db146dbe490416af81ef3a8923bcaa',
-      indexName: 'antv_l7'
-    }
-  }
+      indexName: 'antv_l7',
+    },
+  },
 };
