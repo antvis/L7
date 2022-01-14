@@ -7,42 +7,42 @@
     {
       "filename": "wind_animate.js",
       "title": "风场动画",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*LpcBTKiazZcAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*wH50SZfOywcAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "line_animate.js",
       "title": "直线动画",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*z5sLS4Tpl3kAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*eckNS70gTfwAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "plane_animate2.js",
       "title": "航向图（平面）",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*OGcHSYSbDz4AAAAAAAAAAAAAARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*2wDIS5hXKYwAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "trip_animate.js",
       "title": "3D 弧线动画-亮",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*p8k2R5GpyQoAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cmB1SLuyB1cAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "trip_animate_dark.js",
       "title": "3D 弧线动画-暗",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*w-gDQra4KGMAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*r0bPQKrJfJkAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "animate_line.js",
       "title": "轨迹动画",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*jLo0RY0sDG4AAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*d7PjSo0izNAAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "world.js",
       "title": "流向图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*Sbx4S4w7nL8AAAAAAAAAAABkARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*LKKcRY1G-bcAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "world2.js",
       "title": "流向图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*u5BsQbn30pkAAAAAAAAAAABkARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*MD7nRYqG5joAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

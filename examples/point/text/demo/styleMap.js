@@ -7,7 +7,7 @@ const scene = new Scene({
     center: [ 120.5, 30.2 ],
     pitch: 0,
     style: 'dark',
-    zoom: 8.5,
+    zoom: 7.5,
     zooms: [ 8, 10 ]
   })
 });

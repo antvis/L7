@@ -5,7 +5,7 @@ const scene = new Scene({
   id: 'map',
   map: new Mapbox({
     center: [ 116.3956, 39.9392 ],
-    pitch: 0,
+    pitch: 20,
     zoom: 10,
     rotation: 0,
     style: 'dark'
@@ -19,11 +19,11 @@ scene.on('loaded', () => {
     .then(data => {
       const layer = new LineLayer({})
         .source(data)
-        .size(6)
+        .size(4)
         .shape('line')
         .color('标准名称', [ '#5B8FF9', '#5CCEA1', '#F6BD16' ])
         .style({
-          borderWidth: 1,
+          borderWidth: 0.4,
           borderColor: '#fff'
         });
       scene.addLayer(layer);
