@@ -363,15 +363,6 @@ module.exports = {
         order: 10,
       },
       {
-        slug: 'district',
-        icon: 'map',
-        title: {
-          zh: '行政区划',
-          en: 'L7 District',
-        },
-        order: 11,
-      },
-      {
         slug: 'choropleth',
         icon: 'map',
         title: {
