@@ -23,4 +23,3 @@ Error: Cannot apply @injectable decorator multiple times.
 
 2. 加载完成后设置
    调用 scene 的 [setMapStatus](./scene/#setmapstatus) 方法
-

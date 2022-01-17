@@ -26,7 +26,6 @@ order: 15
 - 增加 pointLayer image mipmap 支持
 - 优化热力图在 radius 数值比较大时热力点边缘发生裁剪的现象
 
-
 ### 🐞 Bug Fixes
 
 - 修复线图层在存在高度的情况下，不同地图，不同场景下的效果兼容
