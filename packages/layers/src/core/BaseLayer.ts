@@ -73,6 +73,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public selectedFeatureID: number | null = null;
   public styleNeedUpdate: boolean = false;
   public rendering: boolean;
+  public clusterZoom: number = 0; // 聚合等级标记
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -491,6 +492,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       data,
       options,
     };
+    this.clusterZoom = 0;
     return this;
   }
   public setData(data: any, options?: ISourceCFG) {
@@ -862,6 +864,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
 
     this.layerSource = source;
+    this.clusterZoom = 0;
 
     // 已 inited 且启用聚合进行更新聚合数据
     if (this.inited && this.layerSource.cluster) {
@@ -1093,7 +1096,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (autoFit) {
       this.fitBounds(fitBoundsOptions);
     }
-
+    // 对外暴露事件
     this.emit('dataUpdate');
     this.reRender();
   };
