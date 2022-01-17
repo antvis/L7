@@ -31,45 +31,54 @@ export default class GaodeMapComponent extends React.Component {
     // additive = 'additive',
     // cylinder circle
     // blend: 'additive'
-    let line = new LineLayer({zIndex: 3})
-    .source([{
-      lng: aspaceLnglat[0],
-      lat: aspaceLnglat[1],
-      lng2: aspaceLnglat[0] + 0.00104,
-      lat2: aspaceLnglat[1],
-    }], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat',
-        x1: 'lng2',
-        y1: 'lat2',
-      }
-    })
-    .shape('line')
-    .size(2)
-    .color('#000')
-    
+    let line = new LineLayer({ zIndex: 3 })
+      .source(
+        [
+          {
+            lng: aspaceLnglat[0],
+            lat: aspaceLnglat[1],
+            lng2: aspaceLnglat[0] + 0.00104,
+            lat2: aspaceLnglat[1],
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+            x1: 'lng2',
+            y1: 'lat2',
+          },
+        },
+      )
+      .shape('line')
+      .size(2)
+      .color('#000');
+
     let text = new PointLayer({ zIndex: 2 })
-    .source([ {
-      lng: aspaceLnglat[0] + 0.0002,
-      lat: aspaceLnglat[1],
-    }], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat',
-      }
-    })
-    .shape('100m', 'text')
-    .size(25)
-    .color('#000')
-    .style({
-      textOffset: [50, 20]
-    })
+      .source(
+        [
+          {
+            lng: aspaceLnglat[0] + 0.0002,
+            lat: aspaceLnglat[1],
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('100m', 'text')
+      .size(25)
+      .color('#000')
+      .style({
+        textOffset: [50, 20],
+      });
 
-
-    let layer = new PointLayer({  })
+    let layer = new PointLayer({})
       .source(
         [
           {
