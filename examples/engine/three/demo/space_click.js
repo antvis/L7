@@ -364,14 +364,14 @@ scene.on('loaded', () => {
     lat: 30.251529,
     pitch: 83,
     rotation: 225,
-    zoom: 16
+    zoom: 15
   };
   const ZSpaceView = {
     lng: 120.112026,
     lat: 30.256881,
     pitch: 80,
     rotation: 220,
-    zoom: 16
+    zoom: 15
   };
 
   scene.on('click', ev => {

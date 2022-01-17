@@ -1,6 +1,6 @@
 ---
 title: 风场图层
-order: 3
+order: 7
 ---
 
 WindLayer 用于将存储风场信息的图片，设置其风速线采样相关参数，将采样后的风场线的走向、强度通过可视化的方式在地图上呈现出来。
@@ -11,9 +11,7 @@ WindLayer 用于将存储风场信息的图片，设置其风速线采样相关�
 import { WindLayer } from '@antv/l7';
 ```
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CPveRqBxBwkAAAAAAAAAAAAAARQnAQ' />
-
-## API
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ADr-SIxhM9AAAAAAAAAAAAAAARQnAQ' />
 
 ### source
 

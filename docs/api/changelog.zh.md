@@ -1,6 +1,6 @@
 ---
 title: 发布日志
-order: 10
+order: 15
 ---
 
 `markdown:docs/common/style.md`
