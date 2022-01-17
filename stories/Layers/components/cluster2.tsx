@@ -1,4 +1,4 @@
-import { PointLayer, Scene,Source } from '@antv/l7';
+import { PointLayer, Scene, Source } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
@@ -24,40 +24,42 @@ export default class Point3D extends React.Component {
     });
     scene.on('loaded', () => {
       const fontFamily = 'iconfont';
-      const fontPath = '//at.alicdn.com/t/font_2534097_fcae9o2mxbv.woff2?t=1622200439140';
+      const fontPath =
+        '//at.alicdn.com/t/font_2534097_fcae9o2mxbv.woff2?t=1622200439140';
       scene.addFontFace(fontFamily, fontPath);
       scene.addIconFont('icon1', '&#xe6d4;');
-      fetch('https://gw.alipayobjects.com/os/bmw-prod/87e40417-a5da-4fdb-8313-c796ea15f982.csv')
-        .then(res => res.text())
-        .then(data => {
+      fetch(
+        'https://gw.alipayobjects.com/os/bmw-prod/87e40417-a5da-4fdb-8313-c796ea15f982.csv',
+      )
+        .then((res) => res.text())
+        .then((data) => {
           const dataSource = new Source(data, {
             parser: {
               type: 'csv',
               x: 'lng',
-              y: 'lat'
-    
+              y: 'lat',
             },
-            cluster: true
+            cluster: true,
           });
           const pointLayer = new PointLayer({
-            autoFit: true
+            autoFit: true,
           })
             .source(dataSource)
             .shape('circle')
             .scale('point_count', {
-              type: 'quantile'
+              type: 'quantile',
             })
-            .size('point_count', [ 5, 10, 15, 20, 25 ])
+            .size('point_count', [5, 10, 15, 20, 25])
             .active(true)
             .color('rgb(73,167,86)')
             .style({
               opacity: 1,
               strokeWidth: 1,
-              stroke:'#333'
+              stroke: '#333',
             });
-    
+
           const pointLayerText = new PointLayer({
-            autoFit: true
+            autoFit: true,
           })
             .source(dataSource)
             .shape('point_count', 'text')
@@ -67,10 +69,9 @@ export default class Point3D extends React.Component {
             .style({
               opacity: 1,
               strokeWidth: 0,
-              stroke:'#fff'
-             
+              stroke: '#fff',
             });
-    
+
           scene.addLayer(pointLayer);
           scene.addLayer(pointLayerText);
         });

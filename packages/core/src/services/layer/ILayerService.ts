@@ -98,7 +98,7 @@ export interface ILayer {
   name: string; //
   inited: boolean; // 是否初始化完成
   zIndex: number;
-  clusterZoom:number;
+  clusterZoom: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
