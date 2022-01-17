@@ -18,7 +18,7 @@ import { WindLayer } from '@antv/l7';
 (data, options) => WindLayer, 设置风场相关信息的函数
 
 - data: string 存储风场信息的图片地址
-🌟 [数据获取](https://github.com/mapbox/webgl-wind#downloading-weather-data)
+  🌟 [数据获取](https://github.com/mapbox/webgl-wind#downloading-weather-data)
 - options:
 
 ```js
