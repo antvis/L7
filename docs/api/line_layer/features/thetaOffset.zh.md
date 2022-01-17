@@ -20,6 +20,6 @@ const layer = new LineLayer({})
     thetaOffset: 0.35,
   });
 ```
-<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i6d6SqQgjAwAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*qRFaR7Ko274AAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](../../../examples/gallery/animate#route_line)

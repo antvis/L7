@@ -29,7 +29,7 @@ L7 目前动画参数为相对单位，我们默认一条线段的长度为 1
 如果 interval = 0.2,则一条轨迹将会分成 5 段，如果 interval = 0.5 则为两段。
 
 
-<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*W-m5Q6yrL_UAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mo_7Q6sTqOIAAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](../../../examples/gallery/animate#plane_animate2)
 
