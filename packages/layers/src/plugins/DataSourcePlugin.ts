@@ -49,7 +49,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
       (dataSourceNeedUpdate || Math.abs(zoom - newZoom) > 1) &&
       maxZoom > zoom
     ) {
-      source.updateClusterData(Math.floor(newZoom));
+      source.updateClusterData(Math.round(newZoom));
       return true;
     }
     return false;
