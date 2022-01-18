@@ -5,6 +5,7 @@ import Arc2DLineDemo from './components/Arc2DLine';
 import ArcLineDemo from './components/Arcline';
 import CityBuildingLayerDemo from './components/citybuilding';
 import ClusterDemo from './components/cluster';
+import ClusterDemo2 from './components/cluster2';
 import Column from './components/column';
 import DashLineDemo from './components/dash';
 import DataUpdate from './components/data_update';
@@ -31,6 +32,7 @@ import TextLayerDemo from './components/Text';
 storiesOf('图层', module)
   .add('点图层', () => <PointDemo />)
   .add('聚合图', () => <ClusterDemo />)
+  .add('聚合图标注', () => <ClusterDemo2 />)
   .add('数据更新', () => <DataUpdate />)
   .add('点动画', () => <AnimatePoint />)
   .add('3D点', () => <Point3D />)
