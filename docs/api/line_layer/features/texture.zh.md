@@ -31,7 +31,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785
 - lineTexture   指定是否开启纹理贴图能力
 - iconStep      指定贴图在线图层上面排布的间隔
 
-<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i2fJSJHpVGcAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KEupSZ_p0pYAAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](../../../examples/gallery/animate#animate_path_texture)
 
@@ -67,5 +67,5 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785
 
 ```
 
-[在线案例](../../../examples/gallery/animate#route_line)
+[在线案例](../../../examples/line/animate#plane_animate2)
 
