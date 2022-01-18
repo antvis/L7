@@ -7,9 +7,9 @@
 - data { geojson | json | csv }
 - config   可选   数据源配置项
   - parser 数据解析，默认是解析层 geojson
-  - transforms [transform，transform ]  数据处理转换 可设置多个
+  - transforms [transform，transform ]  数据处理转换可设置多个
 
-parser 和  transforms [见 source 文档](../../source/source)
+parser 和  transforms [见 source 文档](/zh/docs/api/source/source)
 
 ```javascript
 layer.source(data, {

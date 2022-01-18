@@ -51,7 +51,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
     ) {
       // TODO 判断数据是否更新
       if (zoom !== Math.floor(newZoom)) {
-        source.updateClusterData(Math.floor(newZoom));
+        source.updateClusterData(Math.round(newZoom));
       }
       layer.clusterZoom = newZoom;
       return true;

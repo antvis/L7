@@ -74,6 +74,7 @@ import SimplePoint from './components/simplePoint';
 import LineWall from './components/linewall'
 import GridTile from './components/gridTile'
 import GridTile2 from './components/gridTile2'
+import Cluster from './components/cluster'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -152,3 +153,4 @@ storiesOf('地图方法', module)
         .add('BusLine', () => <BusLine/>)
         .add('GridTile', () => <GridTile/>)
         .add('GridTile2', () => <GridTile2/>)
+        .add('Cluster', () => <Cluster/>)
