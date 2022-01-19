@@ -132,13 +132,11 @@ export default class GridTile2 extends React.Component {
         lat: 26.852646,
       },
     ];
-   
 
     scene.addImage(
       'plane',
       'https://gw.alipayobjects.com/zos/bmw-prod/96327aa6-7fc5-4b5b-b1d8-65771e05afd8.svg',
     );
-
 
     const img: HTMLImageElement = new Image();
     img.crossOrigin = 'none';
@@ -184,8 +182,6 @@ export default class GridTile2 extends React.Component {
       scene.addLayer(layer);
     };
 
-  
-
     scene.addImage(
       'start',
       'https://gw.alipayobjects.com/zos/bmw-prod/ebb0af57-4a8a-46e0-a296-2d51f9fa8007.svg',
@@ -197,7 +193,7 @@ export default class GridTile2 extends React.Component {
             lng: 111.641101,
             lat: 28.91165,
             cityData: '城市数据',
-          }
+          },
         ],
         {
           parser: {
@@ -217,16 +213,15 @@ export default class GridTile2 extends React.Component {
         stroke: '#ffffff', // 描边颜色
         strokeWidth: 0.3, // 描边宽度
         strokeOpacity: 1.0,
-        
       });
 
-      const pointLayer = new PointLayer()
+    const pointLayer = new PointLayer()
       .source(
         [
           {
             lng: 111.641101,
             lat: 28.91165,
-          }
+          },
         ],
         {
           parser: {
@@ -239,11 +234,10 @@ export default class GridTile2 extends React.Component {
       .shape('circle')
       .size(35)
       .color('#fff')
-      .style({
-      });
-      const height = 200
-      const dom = document.createElement('div')
-      dom.innerHTML = `
+      .style({});
+    const height = 200;
+    const dom = document.createElement('div');
+    dom.innerHTML = `
       <div style="width:100px;height:${height}px;position:relative;">
         <div style="position: absolute;width: 8px;height: 8px;top: 10px;border-radius:5px;background: rgba(150, 238, 150, 1.0);"></div> 
         <div style="position: absolute;width: 2px;height: 100%;top: 10px;left: 3px;background-image: linear-gradient(rgba(150, 238, 150, 0.4), rgba(150, 238, 150, 0))"></div>
@@ -261,23 +255,21 @@ export default class GridTile2 extends React.Component {
           城市数据
         </div>
       </div>
-      `
+      `;
 
-      
-      const markerLayer = new MarkerLayer({
-      });
-      const marker = new Marker().setLnglat({
+    const markerLayer = new MarkerLayer({});
+    const marker = new Marker()
+      .setLnglat({
         lng: 111.641101,
         lat: 28.91165,
-      }).setElement(dom)
-      ;
-      markerLayer.addMarker(marker);
-      
+      })
+      .setElement(dom);
+    markerLayer.addMarker(marker);
 
     scene.on('loaded', () => {
       // scene.addLayer(pointLayer);
       // scene.addLayer(imageLayer);
-      scene.addMarkerLayer(markerLayer)
+      scene.addMarkerLayer(markerLayer);
 
       // scene.addLayer(waveLayer);
       // scene.addLayer(barLayer);
