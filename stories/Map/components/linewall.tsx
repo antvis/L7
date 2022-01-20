@@ -1,7 +1,6 @@
-import { LineLayer, Scene } from '@antv/l7';
+import { LineLayer, Scene, flow } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-
 export default class Amap2demo_lineLinear extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -75,6 +74,7 @@ export default class Amap2demo_lineLinear extends React.Component {
           targetColor: 'rgba(0, 255, 0, 0.2)',
         })
         .active(true);
+
       scene.addLayer(layer);
     });
   }
