@@ -106,7 +106,7 @@ export default class ReglModel implements IModel {
     pickDrawParams.stencil = {
       ...pickDrawParams.stencil,
       enable: false,
-    }
+    };
 
     this.drawPickCommand = reGl(pickDrawParams);
     this.drawParams = drawParams;

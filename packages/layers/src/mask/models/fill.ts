@@ -60,6 +60,6 @@ export default class MaskModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    return "";
+    return '';
   }
 }
