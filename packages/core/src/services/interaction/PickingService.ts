@@ -138,7 +138,11 @@ export default class PickingService implements IPickingService {
       const pickedFeatureIdx = decodePickingColor(color);
       if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
         const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
-        features.push(rawFeature);
+        features.push({
+          // @ts-ignore
+          ...rawFeature,
+          pickedFeatureIdx,
+        });
         featuresIdMap[pickedFeatureIdx] = true;
       }
     }
