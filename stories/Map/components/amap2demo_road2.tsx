@@ -32,44 +32,20 @@ export default class Amap2demo_road2 extends React.Component {
             coordinates: [
               [
                 [
-                  [
-                    120.16021728515624,
-                    30.259660295442085
-                  ],
-                  [
-                    120.15987396240234,
-                    30.25313608393673
-                  ],
-                  [
-                    120.16605377197266,
-                    30.253729211980726
-                  ],
-                  [
-                    120.1658821105957,
-                    30.258474107402265
-                  ]
+                  [120.16021728515624, 30.259660295442085],
+                  [120.15987396240234, 30.25313608393673],
+                  [120.16605377197266, 30.253729211980726],
+                  [120.1658821105957, 30.258474107402265],
                 ],
               ],
               [
                 [
-                  [
-                    120.1703453063965,
-                    30.258474107402265
-                  ],
-                  [
-                    120.17086029052733,
-                    30.254174055663515
-                  ],
-                  [
-                    120.17583847045898,
-                    30.254915457324778
-                  ],
-                  [
-                    120.17446517944336,
-                    30.258474107402265
-                  ]
-                ]
-              ]
+                  [120.1703453063965, 30.258474107402265],
+                  [120.17086029052733, 30.254174055663515],
+                  [120.17583847045898, 30.254915457324778],
+                  [120.17446517944336, 30.258474107402265],
+                ],
+              ],
             ],
           },
         },
@@ -86,18 +62,9 @@ export default class Amap2demo_road2 extends React.Component {
             coordinates: [
               [
                 [
-                  [
-                    120.16536712646484,
-                    30.26336704072365
-                  ],
-                  [
-                    120.16777038574219,
-                    30.2657392842738
-                  ],
-                  [
-                    120.17086029052733,
-                    30.26232916614846
-                  ]
+                  [120.16536712646484, 30.26336704072365],
+                  [120.16777038574219, 30.2657392842738],
+                  [120.17086029052733, 30.26232916614846],
                 ],
               ],
             ],
@@ -107,26 +74,23 @@ export default class Amap2demo_road2 extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const polygonlayer = new PolygonLayer({
-      })
+      const polygonlayer = new PolygonLayer({})
         .source(data)
         .shape('fill')
-        .color('red')
-        scene.addLayer(polygonlayer);
+        .color('red');
+      scene.addLayer(polygonlayer);
 
-        const polygonlayer2 = new PolygonLayer({
-        })
-          .source(data2)
-          .shape('fill')
-          .color('#ff0')
-          scene.addLayer(polygonlayer2);
-      
+      const polygonlayer2 = new PolygonLayer({})
+        .source(data2)
+        .shape('fill')
+        .color('#ff0');
+      scene.addLayer(polygonlayer2);
+
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
       )
         .then((res) => res.json())
         .then((data) => {
-         
           const layer = new LineLayer({})
             .source(data)
             .size(5)
@@ -148,7 +112,6 @@ export default class Amap2demo_road2 extends React.Component {
             })
             .active(true);
           scene.addLayer(layer);
-          
         });
     });
   }
