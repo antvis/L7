@@ -102,6 +102,21 @@ export default class FillModel extends BaseModel {
           : polygonTriangulation,
         blend: this.getBlend(),
         depth: { enable: false },
+
+        // stencil: {
+        //   enable: true,
+        //   mask: 0xff,
+        //   func: {
+        //       cmp: gl.ALWAYS,
+        //       ref: 1,
+        //       mask: 0xff
+        //   },
+        //   opFront: {
+        //       fail: gl.REPLACE,
+        //       zfail: gl.REPLACE,
+        //       zpass: gl.REPLACE
+        //   }
+        // }
       }),
     ];
   }

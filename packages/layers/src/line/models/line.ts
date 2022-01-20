@@ -144,6 +144,16 @@ export default class LineModel extends BaseModel {
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         depth: { enable: false },
+
+        // stencil: {
+        //   enable: true,
+        //   mask: 0xff,
+        //   func: {
+        //       cmp: gl.EQUAL,
+        //       ref: 1,
+        //       mask: 0xff
+        //   }
+        // }
       }),
     ];
   }

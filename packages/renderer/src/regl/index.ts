@@ -62,6 +62,8 @@ export default class ReglRendererService implements IRendererService {
           antialias: cfg.antialias,
           premultipliedAlpha: true,
           preserveDrawingBuffer: cfg.preserveDrawingBuffer,
+
+          // stencil: true
         },
         // TODO: use extensions
         extensions: [
