@@ -1,38 +1,45 @@
-import { LineLayer, Scene, PointLayer, flow, MarkerLayer, Marker } from '@antv/l7';
+import {
+  LineLayer,
+  Scene,
+  PointLayer,
+  flow,
+  MarkerLayer,
+  Marker,
+} from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 import { animate, linear } from 'popmotion';
 
 interface IObject {
-  [key: string]: any
+  [key: string]: any;
 }
 
 function parseCSV(data: string) {
-  let arr = data.split('\n')
-  if(arr && arr[0]) {
-      let columns = arr[0].replace('\r', '').split(',')
-      let rows = arr.slice(1).map((d: string) => d.split(','))
-  
-      let json = rows.map((row: string[]) => {
-          let object: IObject = {}
-           row.map((e: string, i: number) => {
-              let str = e.replace('\r','');
-              let key = columns[i].replace('\n', '');
-              // console.log('key', key)
-              object[key] = str;
-              return '';
-          })
-          return object
-      })
-      return json;
+  let arr = data.split('\n');
+  if (arr && arr[0]) {
+    let columns = arr[0].replace('\r', '').split(',');
+    let rows = arr.slice(1).map((d: string) => d.split(','));
+
+    let json = rows.map((row: string[]) => {
+      let object: IObject = {};
+      row.map((e: string, i: number) => {
+        let str = e.replace('\r', '');
+        let key = columns[i].replace('\n', '');
+        // console.log('key', key)
+        object[key] = str;
+        return '';
+      });
+      return object;
+    });
+    return json;
   }
-  return []
+  return [];
 }
 
 function getLngLat(data: any) {
   return data.map((d: any) => {
-    return [+d.lng, +d.lat]
-  })
+    return [+d.lng, +d.lat];
+  });
 }
 export default class Amap2demo_road extends React.Component {
   // @ts-ignore
@@ -60,7 +67,7 @@ export default class Amap2demo_road extends React.Component {
         .then((data) => {
           const jsonData = parseCSV(data);
           const lnglatData = getLngLat(jsonData);
-       
+
           const sd = {
             type: 'FeatureCollection',
             name: 'dl2',
@@ -101,7 +108,7 @@ export default class Amap2demo_road extends React.Component {
                       // [120.11773109436037, 30.249280664359304],
                       // [120.11507034301759, 30.249058231690526],
 
-                      ...lnglatData
+                      ...lnglatData,
 
                       // [
                       //   120.11507034301759,
@@ -117,31 +124,27 @@ export default class Amap2demo_road extends React.Component {
               },
             ],
           };
-    
 
-          const linelayer = new LineLayer({blend: 'normal'})
-          .source(sd)
-          .size(2)
-          .shape('line')
-          .color('#8C1EB2')
-          // .animate({
-          //   interval: 1, // 间隔
-          //   duration: 1, // 持续时间，延时
-          //   trailLength: 2, // 流线长度
-          // })
-          .style({
-            // opacity: 'opacity',
-            sourceColor: '#f00', // 起点颜色
-            targetColor: '#0f0', // 终点颜色
-          });
-          
-       
+          const linelayer = new LineLayer({ blend: 'normal' })
+            .source(sd)
+            .size(2)
+            .shape('line')
+            .color('#8C1EB2')
+            // .animate({
+            //   interval: 1, // 间隔
+            //   duration: 1, // 持续时间，延时
+            //   trailLength: 2, // 流线长度
+            // })
+            .style({
+              // opacity: 'opacity',
+              sourceColor: '#f00', // 起点颜色
+              targetColor: '#0f0', // 终点颜色
+            });
 
           linelayer.on('inited', () => {
-            
             const source = linelayer.getSource();
             const coords = source?.data?.dataArray[0]?.coordinates;
-            
+
             const path = flow(coords, 50000);
 
             runPath(path, 0);
@@ -152,7 +155,7 @@ export default class Amap2demo_road extends React.Component {
 
               if (!path) return;
               const { start, end, duration, rotation } = path;
-              let startRotation = 360 - scene.getRotation()
+              let startRotation = 360 - scene.getRotation();
               let timer0 = animate({
                 from: {
                   rotation: startRotation,
@@ -183,7 +186,6 @@ export default class Amap2demo_road extends React.Component {
                     duration,
                     onUpdate: (o) => {
                       scene.setCenter([o.lng, o.lat]);
-                     
                     },
                     onComplete: () => {
                       timer.stop();
@@ -191,7 +193,7 @@ export default class Amap2demo_road extends React.Component {
                       timer = null;
                       setTimeout(() => {
                         runPath(pathData, startIndex + 1);
-                      }, 500)
+                      }, 500);
                     },
                   });
                 },
@@ -200,8 +202,6 @@ export default class Amap2demo_road extends React.Component {
           });
 
           scene.addLayer(linelayer);
-
-          
         });
     });
   }

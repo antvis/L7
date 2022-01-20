@@ -1,37 +1,43 @@
-import { LineLayer, Scene, PointLayer, flow, MarkerLayer, Marker } from '@antv/l7';
+import {
+  LineLayer,
+  Scene,
+  PointLayer,
+  flow,
+  MarkerLayer,
+  Marker,
+} from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-import { cloneDeep } from 'lodash'
-
+import { cloneDeep } from 'lodash';
 
 interface IObject {
-  [key: string]: any
+  [key: string]: any;
 }
 
 function parseCSV(data: string) {
-  let arr = data.split('\n')
-  if(arr && arr[0]) {
-      let columns = arr[0].replace('\r', '').split(',')
-      let rows = arr.slice(1).map((d: string) => d.split(','))
-  
-      let json = rows.map((row: string[]) => {
-          let object: IObject = {}
-           row.map((e: string, i: number) => {
-              let str = e.replace('\r','');
-              let key = columns[i].replace('\n', '');
-              object[key] = str;
-              return '';
-          })
-          return object
-      })
-      return json;
+  let arr = data.split('\n');
+  if (arr && arr[0]) {
+    let columns = arr[0].replace('\r', '').split(',');
+    let rows = arr.slice(1).map((d: string) => d.split(','));
+
+    let json = rows.map((row: string[]) => {
+      let object: IObject = {};
+      row.map((e: string, i: number) => {
+        let str = e.replace('\r', '');
+        let key = columns[i].replace('\n', '');
+        object[key] = str;
+        return '';
+      });
+      return object;
+    });
+    return json;
   }
-  return []
+  return [];
 }
 
 function getLngLat2(data: any) {
-  let res = []
-  for(let i = 0;i < data.length - 1;i++) {
+  let res = [];
+  for (let i = 0; i < data.length - 1; i++) {
     let start = data[i];
     let end = data[i + 1];
     res.push({
@@ -40,12 +46,18 @@ function getLngLat2(data: any) {
       lng2: end.lng,
       lat2: end.lat,
       opacity: 0.6,
-    })
+    });
   }
   return res;
 }
 
-function createMarker(lng: number, lat: number, time: string, loc: string, event: string) {
+function createMarker(
+  lng: number,
+  lat: number,
+  time: string,
+  loc: string,
+  event: string,
+) {
   const dom = document.createElement('div');
   dom.innerHTML = `
     <div class="infoPlane" style="
@@ -79,10 +91,8 @@ function createMarker(lng: number, lat: number, time: string, loc: string, event
     
     </div>
     `;
-    const marker = new Marker()
-    .setLnglat({ lng, lat })
-    .setElement(dom);
-  return marker
+  const marker = new Marker().setLnglat({ lng, lat }).setElement(dom);
+  return marker;
 }
 export default class Amap2demo_road extends React.Component {
   // @ts-ignore
@@ -98,7 +108,7 @@ export default class Amap2demo_road extends React.Component {
       map: new GaodeMap({
         center: [116.35, 40],
         zoom: 3,
-        style: 'dark'
+        style: 'dark',
       }),
     });
     this.scene = scene;
@@ -111,68 +121,66 @@ export default class Amap2demo_road extends React.Component {
         .then((data) => {
           const jsonData = parseCSV(data);
           const lnglatData2 = getLngLat2(jsonData);
-          
+
           const pointLayers = new PointLayer()
-          .source(jsonData, {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat'
-            }
-          })
-          .shape('circle')
-          .size(5)
-          .color('#DC143C')
+            .source(jsonData, {
+              parser: {
+                type: 'json',
+                x: 'lng',
+                y: 'lat',
+              },
+            })
+            .shape('circle')
+            .size(5)
+            .color('#DC143C');
 
-          scene.addLayer(pointLayers)
+          scene.addLayer(pointLayers);
 
-          const linelayer = new LineLayer({blend: 'normal', autoFit: true})
-          .source(lnglatData2, {
-            parser: {
-              type: 'json',
-              x: 'lng1',
-              y: 'lat1',
-              x1: 'lng2',
-              y1: 'lat2',
-            },
-          })
-          .size(2)
-          .shape('arc')
-          .color('#DC143C')
-          .animate({
-            interval: 1, // 间隔
-            duration: 1, // 持续时间，延时
-            trailLength: 2, // 流线长度
-          })
-          .style({
-            opacity: 'opacity'
-          });
+          const linelayer = new LineLayer({ blend: 'normal', autoFit: true })
+            .source(lnglatData2, {
+              parser: {
+                type: 'json',
+                x: 'lng1',
+                y: 'lat1',
+                x1: 'lng2',
+                y1: 'lat2',
+              },
+            })
+            .size(2)
+            .shape('arc')
+            .color('#DC143C')
+            .animate({
+              interval: 1, // 间隔
+              duration: 1, // 持续时间，延时
+              trailLength: 2, // 流线长度
+            })
+            .style({
+              opacity: 'opacity',
+            });
           scene.addLayer(linelayer);
 
-            setTimeout(() => {
-              addMarker(jsonData, 0)
-            }, 600)
+          setTimeout(() => {
+            addMarker(jsonData, 0);
+          }, 600);
 
-            function addMarker(data: any[], index: number) {
-              let d = data[index];
-              if(!d) {
-                return
-              }
-              setTimeout(() => {
-                let m = createMarker(d.lng, d.lat, d.time, d.loc, d.do)
-                scene.addMarker(m)
-             
-                let lineData = cloneDeep(lnglatData2);
-                if(lineData[index]) {
-                  lineData[index].opacity = 1
-                  linelayer.setData(lineData)
-                }
-               
-                addMarker(data, index+1)
-
-
-              }, 400)
+          function addMarker(data: any[], index: number) {
+            let d = data[index];
+            if (!d) {
+              return;
             }
+            setTimeout(() => {
+              let m = createMarker(d.lng, d.lat, d.time, d.loc, d.do);
+              scene.addMarker(m);
+
+              let lineData = cloneDeep(lnglatData2);
+              if (lineData[index]) {
+                lineData[index].opacity = 1;
+                linelayer.setData(lineData);
+              }
+
+              addMarker(data, index + 1);
+            }, 400);
+          }
         });
     });
   }
