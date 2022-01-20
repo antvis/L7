@@ -1,0 +1,65 @@
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayer,
+  ILayerModel,
+  ILayerPlugin,
+  IModel,
+  IStyleAttributeService,
+  lazyInject,
+  TYPES,
+} from '@antv/l7-core';
+import { isNumber } from 'lodash';
+import BaseModel, { styleSingle } from '../../core/BaseModel';
+import { polygonTriangulation } from '../../core/triangulation';
+import mask_frag from '../shaders/mask_frag.glsl';
+import mask_vert from '../shaders/mask_vert.glsl';
+
+export default class MaskModel extends BaseModel {
+  public getUninforms() {
+    return {};
+  }
+
+  public initModels(): IModel[] {
+    // TODO: 瓦片组件默认在最下层
+    this.layer.zIndex = -999;
+    return this.buildModels();
+  }
+
+  public buildModels(): IModel[] {
+    return [
+      this.layer.buildLayerModel({
+        moduleName: 'mask',
+        vertexShader: mask_vert,
+        fragmentShader: mask_frag,
+        triangulation: polygonTriangulation,
+        blend: this.getBlend(),
+        depth: { enable: false },
+
+        stencil: {
+          enable: true,
+          mask: 0xff,
+          func: {
+            cmp: gl.ALWAYS,
+            ref: 1,
+            mask: 0xff,
+          },
+          opFront: {
+            fail: gl.REPLACE,
+            zfail: gl.REPLACE,
+            zpass: gl.REPLACE,
+          },
+        },
+      }),
+    ];
+  }
+
+  public clearModels() {
+    this.dataTexture?.destroy();
+  }
+
+  protected registerBuiltinAttributes() {
+    return "";
+  }
+}
