@@ -34,6 +34,6 @@ const layer = new LineLayer({
   });
 ```
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i2fJSJHpVGcAAAAAAAAAAAAAARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KEupSZ_p0pYAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](../../examples/gallery/animate#animate_path_texture)
+[在线案例](../../examples/line/animate#plane_animate2)

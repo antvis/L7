@@ -158,3 +158,4 @@ storiesOf('地图方法', module)
         .add('Cluster', () => <Cluster/>)
         .add('Hot1', () => <Hot/>)
         .add('Hot2', () => <Hot2/>)
+

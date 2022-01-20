@@ -140,4 +140,4 @@ marker.on('click', (e) => {});
 
 ## demo 地址
 
-[demo1](../../../examples/tutorial/marker)
+[demo1](../../../examples/tutorial/marker#amap)

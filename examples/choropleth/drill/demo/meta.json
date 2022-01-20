@@ -1,0 +1,40 @@
+{
+  "title": {
+    "zh": "分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "order-drill.ts",
+      "title": {
+        "zh": "省市区下钻",
+        "en": "Order Drill"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/ftd%248FdI08/zuanqu.gif"
+    },
+    {
+      "filename": "unorder-drill.ts",
+      "title": {
+        "zh": "跨粒度下钻",
+        "en": "Unorder Drill"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/w4VwQsFCgy/zuanqu.gif"
+    },
+    {
+      "filename": "drill-callback.ts",
+      "title": {
+        "zh": "下钻回调",
+        "en": "Drill Callback"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/kNXBgAN4%26Z/zuanqu2.gif"
+    },
+    {
+      "filename": "drill-intercept.ts",
+      "title": {
+        "zh": "下钻拦截",
+        "en": "Drill Intercept"
+      },
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/rftSqwzjdj/zuanqu3.gif"
+    }
+  ]
+}
