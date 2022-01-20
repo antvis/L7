@@ -141,7 +141,7 @@ export default class PickingService implements IPickingService {
         features.push({
           // @ts-ignore
           ...rawFeature,
-          pickedFeatureIdx
+          pickedFeatureIdx,
         });
         featuresIdMap[pickedFeatureIdx] = true;
       }
