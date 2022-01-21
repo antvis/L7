@@ -114,7 +114,11 @@ fetch(
       },
     });
 
-    scene.on('loaded', () => {
+    if (scene.loaded) {
       choropleth.addToScene(scene);
-    });
+    } else {
+      scene.on('loaded', () => {
+        choropleth.addToScene(scene);
+      });
+    }
   });
