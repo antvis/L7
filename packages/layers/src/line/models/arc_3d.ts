@@ -133,7 +133,7 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-     const {
+    const {
       segmentNumber = 30,
       mask = false,
       maskInside = true,

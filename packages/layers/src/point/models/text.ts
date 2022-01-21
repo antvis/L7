@@ -6,9 +6,10 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { boundsContains, padBounds, getMask } from '@antv/l7-utils';
+import { boundsContains, getMask, padBounds } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
 import { calculateCentroid } from '../../utils/geo';
 import {
@@ -18,7 +19,6 @@ import {
 } from '../../utils/symbol-layout';
 import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
-import { IPointLayerStyleOptions } from '../../core/interface'
 
 export function TextTriangulation(feature: IEncodeFeature) {
   // @ts-ignore

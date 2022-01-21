@@ -6,9 +6,9 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { getMask } from '@antv/l7-utils';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
@@ -92,7 +92,10 @@ export default class ImageModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-    const { mask = false, maskInside = true } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointImage',

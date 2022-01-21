@@ -9,13 +9,13 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import {
   GlobelPointFillTriangulation,
   PointFillTriangulation,
 } from '../../core/triangulation';
-import { getMask } from '@antv/l7-utils';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
@@ -157,7 +157,10 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-    const { mask = false, maskInside = true } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
     return [

@@ -1,4 +1,4 @@
-import { styleSingle, styleColor, styleOffset } from '../core/BaseModel';
+import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
 import {
   anchorType,
   getGlyphQuads,

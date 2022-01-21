@@ -8,9 +8,9 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 import { getMask } from '@antv/l7-utils';
-import { IPointLayerStyleOptions } from '../../core/interface';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
 
@@ -89,7 +89,10 @@ export default class NormalModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
-    const { mask = false, maskInside = true } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'normalpoint',

@@ -94,16 +94,16 @@ export default class MaskPoints extends React.Component {
       scene.addLayer(polygonlayer);
 
       const polygonlayer2 = new MaskLayer({})
-            .source(data2)
-            .shape('fill')
-            .color('#ff0')
-            .style({
-              opacity: 0.3,
-            });
-          scene.addLayer(polygonlayer2);
+        .source(data2)
+        .shape('fill')
+        .color('#ff0')
+        .style({
+          opacity: 0.3,
+        });
+      scene.addLayer(polygonlayer2);
 
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PointLayer({ zIndex: 2, mask: true, maskInside: true }) 
+      let points = new PointLayer({ zIndex: 2, mask: true, maskInside: true })
         .source(
           [
             {
@@ -152,7 +152,7 @@ export default class MaskPoints extends React.Component {
         .active({
           color: '#00f',
           mix: 0.6,
-        })
+        });
       scene.addLayer(points);
     });
   }
