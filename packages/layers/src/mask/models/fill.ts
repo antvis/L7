@@ -15,10 +15,17 @@ import BaseModel, { styleSingle } from '../../core/BaseModel';
 import { polygonTriangulation } from '../../core/triangulation';
 import mask_frag from '../shaders/mask_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';
-
+interface IMaskStyleOptions {
+  opacity: styleSingle;
+}
 export default class MaskModel extends BaseModel {
   public getUninforms() {
-    return {};
+    const {
+      opacity = 1
+    } = this.layer.getLayerConfig() as IMaskStyleOptions;
+    return {
+      u_opacity: isNumber(opacity) ? opacity : 1.0
+    };
   }
 
   public initModels(): IModel[] {

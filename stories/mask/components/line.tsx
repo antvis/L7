@@ -156,9 +156,6 @@ export default class Amap2demo_road2 extends React.Component {
             .style({
               borderWidth: 0.35,
               borderColor: '#fff',
-              // opacity: 0.5,
-              // lineTexture: true, // 开启线的贴图功能
-              // iconStep: 80, // 设置贴图纹理的间距
             })
             .active(true);
           scene.addLayer(layer);

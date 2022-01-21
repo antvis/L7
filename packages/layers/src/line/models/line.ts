@@ -10,7 +10,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
-import { rgb2arr } from '@antv/l7-utils';
+import { rgb2arr, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
@@ -36,7 +36,6 @@ export default class LineModel extends BaseModel {
       vertexHeightScale = 20.0,
       borderWidth = 0.0,
       borderColor = '#ccc',
-      mask = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -138,19 +137,8 @@ export default class LineModel extends BaseModel {
   public buildModels(): IModel[] {
     const {
       mask = false,
+      maskInside = true
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    let stencil = {};
-    if (mask) {
-      stencil = {
-        enable: true,
-        mask: 0xff,
-        func: {
-          cmp: gl.EQUAL,
-          ref: 1,
-          mask: 0xff,
-        },
-      };
-    }
     return [
       this.layer.buildLayerModel({
         moduleName: 'line',
@@ -160,7 +148,7 @@ export default class LineModel extends BaseModel {
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         depth: { enable: false },
-        stencil,
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

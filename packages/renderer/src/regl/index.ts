@@ -63,7 +63,7 @@ export default class ReglRendererService implements IRendererService {
           premultipliedAlpha: true,
           preserveDrawingBuffer: cfg.preserveDrawingBuffer,
 
-          stencil: true,
+          stencil: cfg.stencil,
         },
         // TODO: use extensions
         extensions: [

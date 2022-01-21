@@ -26,5 +26,7 @@ export interface ILineLayerStyleOptions {
   borderColor?: string; // 可选参数 线边框颜色
 
   heightfixed?: boolean; // 可选参数 高度是否固定
-  mask?: boolean; // 可选参数 时候允许蒙层
+
+  mask?: boolean;         // 可选参数 时候允许蒙层
+  maskInside?: boolean;   // 可选参数 控制图层是否显示在蒙层的内部
 }
