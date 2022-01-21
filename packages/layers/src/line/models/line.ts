@@ -148,12 +148,6 @@ export default class LineModel extends BaseModel {
     ];
   }
   protected registerBuiltinAttributes() {
-    // const lineType = this
-    // point layer size;
-    const {
-      lineType = 'solid',
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    // if (lineType === 'dash') {
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',
       type: AttributeType.Attribute,
@@ -198,7 +192,7 @@ export default class LineModel extends BaseModel {
         },
       },
     });
-    // }
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -296,24 +290,6 @@ export default class LineModel extends BaseModel {
           return [x, y];
         },
       },
-    });
-  }
-
-  private loadImage(url: IImage) {
-    return new Promise((resolve, reject) => {
-      if (url instanceof HTMLImageElement) {
-        resolve(url);
-        return;
-      }
-      const image = new Image();
-      image.crossOrigin = 'anonymous';
-      image.onload = () => {
-        resolve(image);
-      };
-      image.onerror = () => {
-        reject(new Error('Could not load image at ' + url));
-      };
-      image.src = url instanceof File ? URL.createObjectURL(url) : url;
     });
   }
 

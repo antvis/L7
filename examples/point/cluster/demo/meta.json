@@ -8,6 +8,11 @@
       "filename": "cluster.js",
       "title": "聚合图",
       "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*paQsRKykjL4AAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "cluster2.js",
+      "title": "充电桩分布聚合图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*dy0NSJHoRSYAAAAAAAAAAAAAARQnAQ"
     }
 
   ]

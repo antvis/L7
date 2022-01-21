@@ -51,9 +51,6 @@ import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
  */
 class Scene
   implements IPostProcessingPassPluggable, IMapController, ILayerManager {
-  public get map() {
-    return this.mapService.map;
-  }
   private sceneService: ISceneService;
   private mapService: IMapService<unknown>;
   private controlService: IControlService;
@@ -111,6 +108,15 @@ class Scene
       this.initControl();
     }
   }
+
+  public get map() {
+    return this.mapService.map;
+  }
+
+  public get loaded() {
+    return this.sceneService.loaded;
+  }
+
   public getServiceContainer(): Container {
     return this.container;
   }

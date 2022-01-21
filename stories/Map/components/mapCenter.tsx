@@ -31,35 +31,58 @@ export default class GaodeMapComponent extends React.Component {
     // additive = 'additive',
     // cylinder circle
     // blend: 'additive'
-    var circleRadius = 100;
-    var radius = circleRadius;
-    var data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Polygon',
-            coordinates: turf.circle(aspaceLnglat, radius, {
-              steps: 10,
-              units: 'meters',
-            }).geometry.coordinates,
-          },
-        },
-      ],
-    };
-    // let trufCircle = new PolygonLayer()
-    //   .size('name', [0, 10000, 50000, 30000, 100000])
-    //   .source(data)
-    //   .color('#f00')
-    //   .shape('fill');
-
-    let layer = new PointLayer({ zIndex: 2, blend: 'additive' })
+    let line = new LineLayer({ zIndex: 3 })
       .source(
         [
           {
-            lng: 121.107846,
+            lng: aspaceLnglat[0],
+            lat: aspaceLnglat[1],
+            lng2: aspaceLnglat[0] + 0.00104,
+            lat2: aspaceLnglat[1],
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+            x1: 'lng2',
+            y1: 'lat2',
+          },
+        },
+      )
+      .shape('line')
+      .size(2)
+      .color('#000');
+
+    let text = new PointLayer({ zIndex: 2 })
+      .source(
+        [
+          {
+            lng: aspaceLnglat[0] + 0.0002,
+            lat: aspaceLnglat[1],
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('100m', 'text')
+      .size(25)
+      .color('#000')
+      .style({
+        textOffset: [50, 20],
+      });
+
+    let layer = new PointLayer({})
+      .source(
+        [
+          {
+            lng: 120,
             lat: 30.267069,
           },
           {
@@ -79,13 +102,13 @@ export default class GaodeMapComponent extends React.Component {
       // .color('#0f9')
       .color('#f00')
       // .size([10, 10, 100])
-      .size(10)
+      .size(100)
       .style({
         stroke: '#f00',
         // strokeWidth: 10,
         strokeWidth: 0,
         strokeOpacity: 1,
-        // unit: 'meter',
+        unit: 'meter',
       });
     // .animate(true)
     // .animate({
@@ -99,6 +122,8 @@ export default class GaodeMapComponent extends React.Component {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.addLayer(text);
+      scene.addLayer(line);
       // scene.addLayer(trufCircle);
       // scene.on('movestart', e => console.log('e', e))
       // scene.on('mapmove', e => console.log('e', e))
@@ -109,12 +134,12 @@ export default class GaodeMapComponent extends React.Component {
       // scene.on('zoomend', e => console.log('e', e))
       // scene.on('mousedown', e => console.log('e', e))
     });
-    let c = 1;
-    layer.on('click', () => {
-      // @ts-ignore
-      c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
-      c = 0;
-    });
+    // let c = 1;
+    // layer.on('click', () => {
+    //   // @ts-ignore
+    //   c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
+    //   c = 0;
+    // });
     // layer.on('contextmenu', () => console.log('contextmenu'));
     // layer.on('destroy', (e) => console.log('destroy', e));
     // layer.on('remove', (e) => {

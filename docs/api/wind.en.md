@@ -1,6 +1,6 @@
 ---
 title: WindLayer
-order: 3
+order: 7
 ---
 
 `markdown:docs/api/wind.zh.md`

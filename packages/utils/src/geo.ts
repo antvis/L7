@@ -250,3 +250,92 @@ export function bBoxToBounds(b1: BBox): IBounds {
     [b1[2], b1[3]],
   ];
 }
+
+export function calDistance(p1: Point, p2: Point) {
+  return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
+}
+
+function dotMul(v1: Point, v2: Point) {
+  return v1[0] * v2[0] + v1[1] * v2[1];
+}
+
+function getMod(v: Point) {
+  return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
+}
+
+export function calAngle(v1: Point, v2: Point) {
+  return (
+    (Math.acos(dotMul(v1, v2) / (getMod(v1) * getMod(v2))) * 180) / Math.PI
+  );
+}
+
+export function getAngle(v1: Point, v2: Point) {
+  // if(v2[0] < 0) {
+  //   return calAngle(v1, v2) + 180
+  // } else {
+  //   return calAngle(v1, v2)
+  // }
+
+  if (v2[0] > 0) {
+    if (v2[1] > 0) {
+      // 1
+      return 90 - (Math.atan(v2[1] / v2[0]) * 180) / Math.PI;
+    } else {
+      // 2
+      return 90 + (Math.atan(-v2[1] / v2[0]) * 180) / Math.PI;
+    }
+  } else {
+    if (v2[1] < 0) {
+      // 3
+      return 180 + (90 - (Math.atan(v2[1] / v2[0]) * 180) / Math.PI);
+    } else {
+      // 4
+      return 270 + (Math.atan(v2[1] / -v2[0]) * 180) / Math.PI;
+    }
+  }
+}
+interface IPathPoint {
+  start: Point;
+  end: Point;
+  dis: number;
+  rotation: number;
+  duration: number;
+}
+
+export function flow(coords: Point[], time: number = 100) {
+  if (!coords || coords.length < 2) {
+    return;
+  }
+  const originVec2: Point = [0, 1];
+  let totalDis = 0;
+  const path: IPathPoint[] = [];
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p1: Point = coords[i];
+    const p2: Point = coords[i + 1];
+    const dis = calDistance(p1, p2);
+    totalDis += dis;
+
+    const direct: Point = [p1[0] - p2[0], p1[1] - p2[1]];
+    // const direct: Point = [p2[0] - p1[0], p2[1] - p1[1]];
+
+    let rotation = getAngle(originVec2, direct);
+    if (i > 0) {
+      const lastRotation = path[i - 1].rotation;
+      if (lastRotation - rotation > 360 - lastRotation + rotation) {
+        rotation = rotation + 360;
+      }
+    }
+
+    path.push({
+      start: p1,
+      end: p2,
+      dis,
+      rotation,
+      duration: 0,
+    });
+  }
+  path.map((point) => {
+    point.duration = time * (point.dis / totalDis);
+  });
+  return path;
+}

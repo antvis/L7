@@ -87,6 +87,6 @@ lineLayer.size([1, 2]); // 宽度为1，高度2
 
 `markdown:docs/api/line_layer/features/texture.zh.md`
 
-[在线案例](../../../examples/line/isoline#height)
+`markdown:docs/api/line_layer/features/vertexHeight.zh.md`
 
 `markdown:docs/common/layer/base.md`

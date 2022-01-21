@@ -239,7 +239,7 @@ const IndexPage = () => {
 
       <L7React />
 
-      <L7Plot dipper={dipper}/>
+      <L7Plot/>
 
       <L7Draw draw={draw}/>
 

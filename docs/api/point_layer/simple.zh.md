@@ -37,8 +37,6 @@ import { PointLayer } from '@antv/l7';
 scene.getPointSizeRange(); // Float32Array - [min, max]
 ```
 
-## 相关 demo
-
 [在线案例](../../../examples/point/dot#normal2)
 
 `markdown:docs/common/layer/base.md`

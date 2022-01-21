@@ -10,7 +10,7 @@ const scene = new Scene({
   id: 'map',
   map: new Mapbox({
     center: [ 116.3956, 39.9392 ],
-    pitch: 0,
+    pitch: 20,
     zoom: 10,
     rotation: 0,
     style: 'light'
