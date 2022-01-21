@@ -59,3 +59,9 @@ export interface IPointLayerStyleOptions {
   mask?: boolean;
   maskInside?: boolean;
 }
+
+export interface IImageLayerStyleOptions {
+  opacity: number;
+  mask?: boolean;
+  maskInside?: boolean;
+}

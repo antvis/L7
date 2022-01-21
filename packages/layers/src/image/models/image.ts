@@ -2,25 +2,16 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  IModel,
   IModelUniform,
-  IRasterParserDataItem,
-  IStyleAttributeService,
   ITexture2D,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
-import { isMini } from '@antv/l7-utils';
+import { isMini, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';
 
-interface IImageLayerStyleOptions {
-  opacity: number;
-}
 export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
@@ -31,6 +22,11 @@ export default class ImageModel extends BaseModel {
     };
   }
   public initModels() {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
@@ -76,6 +72,7 @@ export default class ImageModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }
