@@ -4,7 +4,7 @@ import {
   MaskLayer,
   PolygonLayer,
   PointLayer,
-  ImageLayer
+  ImageLayer,
 } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
@@ -110,9 +110,12 @@ export default class MaskPoints extends React.Component {
         {
           parser: {
             type: 'image',
-            extent: [120.14802932739258,
-              30.262773970881057, 120.17669677734374,
-              30.25239466884559],
+            extent: [
+              120.14802932739258,
+              30.262773970881057,
+              120.17669677734374,
+              30.25239466884559,
+            ],
           },
         },
       );

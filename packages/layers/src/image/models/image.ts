@@ -5,7 +5,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { isMini, getMask } from '@antv/l7-utils';
+import { getMask, isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
