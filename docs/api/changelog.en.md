@@ -1,6 +1,6 @@
 ---
 title: ChangeLog
-order: 10
+order: 15
 ---
 
 `markdown:docs/common/style.md`
