@@ -22,6 +22,6 @@ const layer = new LineLayer({})
   });
 ```
 
-<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*RZEgSYZLeJIAAAAAAAAAAAAAARQnAQ'>
+<img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*8DYQTZeQyZ4AAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](../../../examples/line/arc#trip_arc_dark_linear)

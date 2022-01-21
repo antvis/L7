@@ -47,6 +47,6 @@ style({
 });
 ```
 
-[光照拾取](../../../../examples/react/covid#covid_extrude)
+[光照拾取](/zh/examples/react/covid#covid_extrude)
 
 `markdown:docs/common/layer/base.md`
