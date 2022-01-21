@@ -8,7 +8,7 @@ import {
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_road2 extends React.Component {
+export default class MaskPoints extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -24,11 +24,14 @@ export default class Amap2demo_road2 extends React.Component {
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 15,
-        viewMode: '3D',
         style: 'dark',
       }),
     });
     this.scene = scene;
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
     const data = {
       type: 'FeatureCollection',
       features: [
@@ -80,19 +83,6 @@ export default class Amap2demo_road2 extends React.Component {
       ],
     };
 
-    const data3 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [[]],
-          },
-        },
-      ],
-    };
-
     scene.on('loaded', () => {
       const polygonlayer = new MaskLayer({})
         .source(data)
@@ -103,26 +93,41 @@ export default class Amap2demo_road2 extends React.Component {
         });
       scene.addLayer(polygonlayer);
 
-      let points = new PointLayer({ zIndex: 2 })
+      const polygonlayer2 = new MaskLayer({})
+            .source(data2)
+            .shape('fill')
+            .color('#ff0')
+            .style({
+              opacity: 0.3,
+            });
+          scene.addLayer(polygonlayer2);
+
+      // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
+      let points = new PointLayer({ zIndex: 2, mask: true, maskInside: true }) 
         .source(
           [
             {
+              name: 'n1',
               lng: 120.14871597290039,
               lat: 30.268407989758884,
             },
             {
+              name: 'n2',
               lng: 120.15352249145508,
               lat: 30.271669642392517,
             },
             {
+              name: 'n3',
               lng: 120.16502380371092,
               lat: 30.26944580007901,
             },
             {
+              name: 'n4',
               lng: 120.16485214233397,
               lat: 30.26425663877134,
             },
             {
+              name: 'n5',
               lng: 120.16073226928711,
               lat: 30.259067203213018,
             },
@@ -135,41 +140,20 @@ export default class Amap2demo_road2 extends React.Component {
             },
           },
         )
-        .shape('circle')
-        .size(25)
-        .color('#0ff')
+        // .shape('circle')
+        // .shape('text', 'test')
+        // .shape('00')
+        .shape('simple')
+        .size(30)
+        // .color('#0ff')
         .style({
-          opacity: 0.3,
-        });
+          opacity: 0.6,
+        })
+        .active({
+          color: '#00f',
+          mix: 0.6,
+        })
       scene.addLayer(points);
-
-      fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          // const layer = new LineLayer({ mask: true, maskInside: false }) // mask: true maskInside: true
-          const layer = new LineLayer({ mask: true, maskInside: true }) // mask: true maskInside: true
-            .source(data)
-            .size(5)
-            .shape('arc3d') // line arc greatcircle simple
-            .color('rgb(20, 180, 90)')
-            .style({
-              borderWidth: 0.35,
-              borderColor: '#fff',
-            })
-            .active(true);
-          scene.addLayer(layer);
-
-          const polygonlayer2 = new MaskLayer({})
-            .source(data2)
-            .shape('fill')
-            .color('#ff0')
-            .style({
-              opacity: 0.3,
-            });
-          scene.addLayer(polygonlayer2);
-        });
     });
   }
 

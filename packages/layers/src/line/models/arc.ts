@@ -9,7 +9,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
@@ -139,6 +139,8 @@ export default class ArcModel extends BaseModel {
   public buildModels(): IModel[] {
     const {
       segmentNumber = 30,
+      mask = false,
+      maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     return [
@@ -150,6 +152,7 @@ export default class ArcModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         segmentNumber,
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

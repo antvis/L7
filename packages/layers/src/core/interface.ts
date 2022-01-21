@@ -1,4 +1,10 @@
-import { styleSingle } from '../core/BaseModel';
+import { styleSingle, styleColor, styleOffset } from '../core/BaseModel';
+import {
+  anchorType,
+  getGlyphQuads,
+  IGlyphQuad,
+  shapeText,
+} from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
@@ -29,4 +35,27 @@ export interface ILineLayerStyleOptions {
 
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+}
+
+export interface IPointLayerStyleOptions {
+  opacity: number;
+  strokeOpacity: number;
+  strokeWidth: number;
+  stroke: string;
+
+  textOffset?: [number, number];
+  textAnchor?: anchorType;
+  spacing?: number;
+  padding?: [number, number];
+  halo?: number;
+  gamma?: number;
+  fontWeight?: string;
+  fontFamily?: string;
+  textAllowOverlap?: boolean;
+
+  offsets?: styleOffset;
+  blend?: string;
+  unit?: string;
+  mask?: boolean;
+  maskInside?: boolean;
 }

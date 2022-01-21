@@ -8,7 +8,7 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
@@ -95,6 +95,11 @@ export default class SimpleLineModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
     return [
       this.layer.buildLayerModel({
         moduleName: 'simpleline',
@@ -104,6 +109,7 @@ export default class SimpleLineModel extends BaseModel {
         primitive: gl.LINES, // gl.LINES gl.TRIANGLES
         blend: this.getBlend(),
         depth: { enable: false },
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }
