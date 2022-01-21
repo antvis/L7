@@ -10,7 +10,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
-import { rgb2arr, getMask } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
@@ -137,7 +137,7 @@ export default class LineModel extends BaseModel {
   public buildModels(): IModel[] {
     const {
       mask = false,
-      maskInside = true
+      maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return [
       this.layer.buildLayerModel({

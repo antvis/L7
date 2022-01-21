@@ -20,11 +20,9 @@ interface IMaskStyleOptions {
 }
 export default class MaskModel extends BaseModel {
   public getUninforms() {
-    const {
-      opacity = 1
-    } = this.layer.getLayerConfig() as IMaskStyleOptions;
+    const { opacity = 1 } = this.layer.getLayerConfig() as IMaskStyleOptions;
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1.0
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 

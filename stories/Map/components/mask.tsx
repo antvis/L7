@@ -99,7 +99,7 @@ export default class Amap2demo_road2 extends React.Component {
         .shape('fill')
         .color('red')
         .style({
-          opacity: 0.3
+          opacity: 0.3,
         });
       scene.addLayer(polygonlayer);
 
@@ -139,7 +139,7 @@ export default class Amap2demo_road2 extends React.Component {
         .size(25)
         .color('#0ff')
         .style({
-          opacity: 0.3
+          opacity: 0.3,
         });
       scene.addLayer(points);
 
@@ -168,7 +168,7 @@ export default class Amap2demo_road2 extends React.Component {
             .shape('fill')
             .color('#ff0')
             .style({
-              opacity: 0.3
+              opacity: 0.3,
             });
           scene.addLayer(polygonlayer2);
         });
