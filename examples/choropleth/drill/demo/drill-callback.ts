@@ -1,4 +1,15 @@
+import { Scene, Mapbox } from '@antv/l7';
 import { Choropleth } from '@antv/l7plot';
+
+const scene = new Scene({
+  id: 'map',
+  map: new Mapbox({
+    style: 'blank',
+    center: [120.19382669582967, 30.258134],
+    zoom: 3,
+    pitch: 0,
+  }),
+});
 
 fetch(
   `https://gw.alipayobjects.com/os/alisis/geo-data-v0.1.1/administrative-data/area-list.json`,
@@ -17,14 +28,7 @@ fetch(
       .filter(({ level }) => level === 'district')
       .map((item) => Object.assign({}, item, { value: Math.random() * 1000 }));
 
-    new Choropleth('map', {
-      map: {
-        type: 'mapbox',
-        style: 'blank',
-        center: [120.19382669582967, 30.258134],
-        zoom: 3,
-        pitch: 0,
-      },
+    const choropleth = new Choropleth({
       source: {
         data: data,
         joinBy: {
@@ -109,4 +113,12 @@ fetch(
         position: 'bottomleft',
       },
     });
+
+    if (scene.loaded) {
+      choropleth.addToScene(scene);
+    } else {
+      scene.on('loaded', () => {
+        choropleth.addToScene(scene);
+      });
+    }
   });

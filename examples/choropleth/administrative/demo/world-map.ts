@@ -1,13 +1,17 @@
+import { Scene, Mapbox } from '@antv/l7';
 import { Choropleth } from '@antv/l7plot';
 
-new Choropleth('map', {
-  map: {
-    type: 'mapbox',
+const scene = new Scene({
+  id: 'map',
+  map: new Mapbox({
     style: 'blank',
     center: [120.19382669582967, 30.258134],
     zoom: 3,
     pitch: 0,
-  },
+  }),
+});
+
+const choropleth = new Choropleth({
   source: {
     data: [],
     joinBy: {
@@ -60,4 +64,8 @@ new Choropleth('map', {
   legend: {
     position: 'bottomleft',
   },
+});
+
+scene.on('loaded', () => {
+  choropleth.addToScene(scene);
 });
