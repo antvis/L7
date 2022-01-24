@@ -1,14 +1,6 @@
 import {
-  AttributeType,
   gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  ILayerPlugin,
   IModel,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
 import { isNumber } from 'lodash';
 import BaseModel, { styleSingle } from '../../core/BaseModel';
@@ -20,9 +12,9 @@ interface IMaskStyleOptions {
 }
 export default class MaskModel extends BaseModel {
   public getUninforms() {
-    const { opacity = 1 } = this.layer.getLayerConfig() as IMaskStyleOptions;
+    const { opacity = 0 } = this.layer.getLayerConfig() as IMaskStyleOptions;
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: isNumber(opacity) ? opacity : 0.0,
     };
   }
 
