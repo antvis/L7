@@ -1,14 +1,6 @@
-import { IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
 import RasterModels, { RasterModelType } from './models/index';
-interface IRasterLayerStyleOptions {
-  opacity: number;
-  domain: [number, number];
-  noDataValue: number;
-  clampLow: boolean;
-  clampHigh: boolean;
-  rampColors: IColorRamp;
-}
+import { IRasterLayerStyleOptions } from '../core/interface';
 export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
   public buildModels() {

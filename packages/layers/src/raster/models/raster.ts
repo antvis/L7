@@ -2,30 +2,16 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  IModel,
-  IModelUniform,
-  IRasterParserDataItem,
-  IStyleAttributeService,
   ITexture2D,
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { getMask, generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import rasterFrag from '../shaders/raster_2d_frag.glsl';
 import rasterVert from '../shaders/raster_2d_vert.glsl';
-
-interface IRasterLayerStyleOptions {
-  opacity: number;
-  domain: [number, number];
-  noDataValue: number;
-  clampLow: boolean;
-  clampHigh: boolean;
-  rampColors: IColorRamp;
-}
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
@@ -50,6 +36,10 @@ export default class RasterModel extends BaseModel {
   }
 
   public initModels() {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
@@ -80,6 +70,7 @@ export default class RasterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

@@ -9,6 +9,7 @@ import Heatmap from './components/heatmap'
 import HeatmapGrid from './components/heatmapgrid'
 import HeatmapGrid3D from './components/heatmapgrid3d'
 import Hexgon from './components/hexgon'
+import Raster from './components/raster'
 
 storiesOf('Mask 方法', module)
         .add('Point', () => <Point/>)
@@ -19,3 +20,4 @@ storiesOf('Mask 方法', module)
         .add('HeatmapGrid', () => <HeatmapGrid/>)
         .add('HeatmapGrid3D', () => <HeatmapGrid3D/>)
         .add('Hexgon', () => <Hexgon/>)
+        .add('Raster', () => <Raster/>)

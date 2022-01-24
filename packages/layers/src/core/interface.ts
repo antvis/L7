@@ -78,3 +78,14 @@ export interface IHeatMapLayerStyleOptions {
 
   coverage?: number;
 }
+
+export interface IRasterLayerStyleOptions {
+  opacity: number;
+  domain: [number, number];
+  noDataValue: number;
+  clampLow: boolean;
+  clampHigh: boolean;
+  rampColors: IColorRamp;
+  mask?: boolean;
+  maskInside?: boolean;
+}
