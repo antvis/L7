@@ -13,11 +13,11 @@ const scene = new Scene({
 });
 scene.on('loaded', () => {
   fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+    'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json'
   )
-    .then((res) => res.json())
-    .then((data) => {
-      let layer = new MaskLayer({})
+    .then(res => res.json())
+    .then(data => {
+      const layer = new MaskLayer({})
         .source(data);
 
       scene.addLayer(layer);

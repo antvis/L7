@@ -9,8 +9,7 @@ order: 2
 
 ```javascript
 import { MaskLayer } from '@antv/l7';
-let layer = new MaskLayer()
-  .source(data);
+let layer = new MaskLayer().source(data);
 
 scene.addLayer(layer);
 ```
@@ -27,7 +26,7 @@ layer.shape('fill');
 
 设置颜色值
 
-### size 
+### size
 
 maskLayer 无 size 不需要设置 size
 
@@ -37,7 +36,7 @@ maskLayer 无 size 不需要设置 size
 
 ```javascript
 style({
-  opacity: 0.5
+  opacity: 0.5,
 });
 ```
 
@@ -69,10 +68,8 @@ const scene = new Scene({
 const layer = new RasterLayer({ mask: true });
 ```
 
-
 [在线案例](../../../examples/raster/basic#dem)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*jhWWS6dhKhYAAAAAAAAAAAAAARQnAQ">
-
 
 `markdown:docs/common/layer/base.md`
