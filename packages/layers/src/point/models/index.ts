@@ -1,4 +1,3 @@
-import { ILayerModel } from '@antv/l7-core';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import IconModel from './icon-font';

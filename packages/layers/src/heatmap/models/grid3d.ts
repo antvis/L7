@@ -5,16 +5,12 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { aProjectFlat, Satistics, unProjectFlat } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import heatmapGrid3dVert from '../shaders/hexagon_3d_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
-interface IHeatMapLayerStyleOptions {
-  opacity: number;
-  coverage: number;
-  angle: number;
-}
 export default class Grid3DModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
@@ -38,6 +34,10 @@ export default class Grid3DModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'grid3dheatmap',
@@ -46,6 +46,7 @@ export default class Grid3DModel extends BaseModel {
         triangulation: PointExtrudeTriangulation,
         depth: { enable: true },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

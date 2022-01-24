@@ -1,4 +1,5 @@
 import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
+import { getMask, generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import {
   anchorType,
   getGlyphQuads,
@@ -64,4 +65,16 @@ export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
   maskInside?: boolean;
+}
+
+export interface IHeatMapLayerStyleOptions {
+  opacity: number;
+  intensity: number;
+  radius: number;
+  angle: number;
+  rampColors: IColorRamp;
+  mask?: boolean;
+  maskInside?: boolean;
+
+  coverage?: number;
 }
