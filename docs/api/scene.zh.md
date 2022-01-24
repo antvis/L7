@@ -105,7 +105,13 @@ L7 Logo 的显示位置 默认左下角
 
 <description> _boolean_ **可选** _default: true_ </description>
 
-是否开始前抗锯齿 `boolean` `true`
+是否开始前抗锯齿
+
+### stencil 是否开启裁减
+
+<description> _boolean_ **可选** _default: false_ </description>
+
+是否开始开启裁剪
 
 ### preserveDrawingBuffer
 
