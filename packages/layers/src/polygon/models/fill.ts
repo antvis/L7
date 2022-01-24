@@ -1,11 +1,8 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  IModel,
-} from '@antv/l7-core';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
+import { IPolygonLayerStyleOptions } from '../../core/interface';
 import {
   polygonTriangulation,
   polygonTriangulationWithCenter,
@@ -14,8 +11,6 @@ import polygon_frag from '../shaders/polygon_frag.glsl';
 import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
 import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
 import polygon_vert from '../shaders/polygon_vert.glsl';
-import { IPolygonLayerStyleOptions } from '../../core/interface';
-import { getMask } from '@antv/l7-utils'
 export default class FillModel extends BaseModel {
   public getUninforms() {
     const {

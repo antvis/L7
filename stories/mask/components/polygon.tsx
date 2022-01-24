@@ -103,46 +103,29 @@ export default class MaskPoints extends React.Component {
       scene.addLayer(polygonlayer2);
 
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PolygonLayer({ mask: true, })
-      // let points = new PolygonLayer({ mask: true, maskInside: false })
-        .source(
-          {
-            "type": "FeatureCollection",
-            "features": [
-              {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                  "type": "Polygon",
-                  "coordinates": [
-                    [
-                      [
-                        120.13429641723633,
-                        30.22836979266676
-                      ],
-                      [
-                        120.19214630126953,
-                        30.22836979266676
-                      ],
-                      [
-                        120.19214630126953,
-                        30.276265423522855
-                      ],
-                      [
-                        120.13429641723633,
-                        30.276265423522855
-                      ],
-                      [
-                        120.13429641723633,
-                        30.22836979266676
-                      ]
-                    ]
-                  ]
-                }
-              }
-            ]
-          }
-        )
+      let points = new PolygonLayer({ mask: true })
+        // let points = new PolygonLayer({ mask: true, maskInside: false })
+        .source({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Polygon',
+                coordinates: [
+                  [
+                    [120.13429641723633, 30.22836979266676],
+                    [120.19214630126953, 30.22836979266676],
+                    [120.19214630126953, 30.276265423522855],
+                    [120.13429641723633, 30.276265423522855],
+                    [120.13429641723633, 30.22836979266676],
+                  ],
+                ],
+              },
+            },
+          ],
+        })
         // .shape('circle')
         // .shape('text', 'test')
         // .shape('00')
@@ -151,7 +134,7 @@ export default class MaskPoints extends React.Component {
         .color('#0ff')
         .style({
           opacity: 0.6,
-        })
+        });
       scene.addLayer(points);
     });
   }

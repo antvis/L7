@@ -1,7 +1,7 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import PolygonModels, { PolygonModelType } from './models/';
 import { IPolygonLayerStyleOptions } from '../core/interface';
+import PolygonModels, { PolygonModelType } from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';

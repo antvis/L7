@@ -1,13 +1,13 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
+import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';
 import polygonExtrudePickLightFrag from '../shaders/polygon_extrude_picklight_frag.glsl';
 import polygonExtrudePickLightVert from '../shaders/polygon_extrude_picklight_vert.glsl';
 import polygonExtrudeVert from '../shaders/polygon_extrude_vert.glsl';
-import { IPolygonLayerStyleOptions } from '../../core/interface';
-import { getMask } from '@antv/l7-utils'
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
     const {
