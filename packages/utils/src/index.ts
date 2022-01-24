@@ -8,5 +8,6 @@ export * from './lru_cache';
 export * from './event';
 export * from './color';
 export * from './anchor';
+export * from './stencli';
 import * as Satistics from './statistics';
 export { DOM, Satistics };

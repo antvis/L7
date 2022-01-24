@@ -7,17 +7,13 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
-import { BlendTypes } from '../../utils/blend';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-interface IPointLayerStyleOptions {
-  opacity: styleSingle;
-  offsets: styleOffset;
-}
+
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
   return {
@@ -81,10 +77,6 @@ export default class NormalModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity,
-      // u_stroke_width: strokeWidth,
-      // u_stroke_color: rgb2arr(stroke),
-      // u_offsets: [-offsets[0], offsets[1]],
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
@@ -97,6 +89,10 @@ export default class NormalModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'normalpoint',
@@ -106,6 +102,7 @@ export default class NormalModel extends BaseModel {
         depth: { enable: false },
         primitive: gl.POINTS,
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

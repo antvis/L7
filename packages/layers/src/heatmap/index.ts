@@ -1,9 +1,6 @@
-import { AttributeType, gl, IEncodeFeature, ILayer } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
+import { IHeatMapLayerStyleOptions } from '../core/interface';
 import HeatMapModels, { HeatMapModelType } from './models';
-interface IHeatMapLayerStyleOptions {
-  opacity: number;
-}
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 

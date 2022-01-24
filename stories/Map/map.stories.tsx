@@ -77,6 +77,7 @@ import GridTile2 from './components/gridTile2'
 import Cluster from './components/cluster'
 import Hot from './components/hot'
 import Hot2 from './components/hot2'
+import Mask from './components/mask'
 
 // @ts-ignore
 storiesOf('地图方法', module)
@@ -158,4 +159,4 @@ storiesOf('地图方法', module)
         .add('Cluster', () => <Cluster/>)
         .add('Hot1', () => <Hot/>)
         .add('Hot2', () => <Hot2/>)
-
+        .add('Mask', () => <Mask/>)

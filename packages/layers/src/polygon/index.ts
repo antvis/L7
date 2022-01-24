@@ -1,11 +1,7 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { PointType } from '../point/models/';
+import { IPolygonLayerStyleOptions } from '../core/interface';
 import PolygonModels, { PolygonModelType } from './models/';
-
-interface IPolygonLayerStyleOptions {
-  opacity: number;
-}
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';

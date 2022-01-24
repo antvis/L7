@@ -12,6 +12,7 @@ import RasterLayer from './raster';
 
 import EarthLayer from './earth';
 
+import MaskLayer from './mask';
 import WindLayer from './wind';
 
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
@@ -146,4 +147,5 @@ export {
   HeatmapLayer,
   EarthLayer,
   WindLayer,
+  MaskLayer,
 };

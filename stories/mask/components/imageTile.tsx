@@ -1,8 +1,15 @@
-import { LineLayer, Scene, PointLayer, PolygonLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import {
+  LineLayer,
+  Scene,
+  MaskLayer,
+  PolygonLayer,
+  ImageTileLayer,
+  ImageLayer,
+} from '@antv/l7';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class Amap2demo_road2 extends React.Component {
+export default class ImageTile extends React.Component {
   // @ts-ignore
   private scene: Scene;
 
@@ -13,15 +20,19 @@ export default class Amap2demo_road2 extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      // stencil: true,
+      map: new Map({
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 15,
-        viewMode: '3D',
         style: 'dark',
       }),
     });
     this.scene = scene;
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
     const data = {
       type: 'FeatureCollection',
       features: [
@@ -74,45 +85,41 @@ export default class Amap2demo_road2 extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const polygonlayer = new PolygonLayer({})
+      const polygonlayer = new MaskLayer({})
         .source(data)
         .shape('fill')
-        .color('red');
+        .color('red')
+        .style({
+          opacity: 0.3,
+        });
       scene.addLayer(polygonlayer);
 
-      const polygonlayer2 = new PolygonLayer({})
+      const polygonlayer2 = new MaskLayer({})
         .source(data2)
         .shape('fill')
-        .color('#ff0');
+        .color('#ff0')
+        .style({
+          opacity: 0.3,
+        });
       scene.addLayer(polygonlayer2);
 
-      fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json',
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const layer = new LineLayer({})
-            .source(data)
-            .size(5)
-            .shape('line')
-            // .texture('02')
-            // .color('#ccc')
-            .color('rgb(20, 180, 90)')
-            // .animate({
-            //   interval: 1, // 间隔
-            //   duration: 1, // 持续时间，延时
-            //   trailLength: 2, // 流线长度
-            // })
-            .style({
-              borderWidth: 0.35,
-              borderColor: '#fff',
-              // opacity: 0.5,
-              // lineTexture: true, // 开启线的贴图功能
-              // iconStep: 80, // 设置贴图纹理的间距
-            })
-            .active(true);
-          scene.addLayer(layer);
+      // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
+      const layer = new ImageTileLayer({});
+      layer
+        .source(
+          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          {
+            parser: {
+              type: 'imagetile',
+            },
+          },
+        )
+        .style({
+          resolution: 'low', // low height
+          // resolution: 'height'
+          maxSourceZoom: 17,
         });
+      scene.addLayer(layer);
     });
   }
 
