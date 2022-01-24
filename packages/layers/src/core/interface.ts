@@ -61,6 +61,19 @@ export interface IPointLayerStyleOptions {
   maskInside?: boolean;
 }
 
+export interface IPolygonLayerStyleOptions {
+  opacity: styleSingle;
+
+  opacityLinear: {
+    enable: boolean;
+    dir: string;
+  };
+
+  pickLight: boolean;
+  mask?: boolean;
+  maskInside?: boolean;
+}
+
 export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;

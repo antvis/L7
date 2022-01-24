@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 import Line from './components/line'
+import Polygon from './components/polygon'
 import Point from './components/point'
 import Image from './components/image'
 import ImageTile from './components/imageTile'
@@ -13,6 +14,7 @@ import Raster from './components/raster'
 
 storiesOf('Mask 方法', module)
         .add('Point', () => <Point/>)
+        .add('Polygon', () => <Polygon/>)
         .add('Line', () => <Line/>)
         .add('Image', () => <Image/>)
         .add('ImageTile', () => <ImageTile/>)

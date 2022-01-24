@@ -1,16 +1,13 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { isNumber } from 'lodash';
-import BaseModel, { styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/polygon_extrude_frag.glsl';
 import polygonExtrudePickLightFrag from '../shaders/polygon_extrude_picklight_frag.glsl';
 import polygonExtrudePickLightVert from '../shaders/polygon_extrude_picklight_vert.glsl';
 import polygonExtrudeVert from '../shaders/polygon_extrude_vert.glsl';
-
-interface IPolygonLayerStyleOptions {
-  opacity: styleSingle;
-  pickLight: boolean;
-}
+import { IPolygonLayerStyleOptions } from '../../core/interface';
+import { getMask } from '@antv/l7-utils'
 export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
     const {
@@ -62,6 +59,8 @@ export default class ExtrudeModel extends BaseModel {
   public buildModels(): IModel[] {
     const {
       pickLight = false,
+      mask = false,
+      maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
@@ -73,6 +72,7 @@ export default class ExtrudeModel extends BaseModel {
           ? polygonExtrudePickLightFrag
           : polygonExtrudeFrag,
         triangulation: PolygonExtrudeTriangulation,
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }
