@@ -1,7 +1,4 @@
-import {
-  gl,
-  IModel,
-} from '@antv/l7-core';
+import { gl, IModel } from '@antv/l7-core';
 import { isNumber } from 'lodash';
 import BaseModel, { styleSingle } from '../../core/BaseModel';
 import { polygonTriangulation } from '../../core/triangulation';
