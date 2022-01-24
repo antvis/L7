@@ -185,7 +185,10 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels = () => {
-    const { mask = false, maskInside = true } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
@@ -508,7 +511,10 @@ export default class TextModel extends BaseModel {
   }
 
   private reBuildModel() {
-    const { mask = false, maskInside = true } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     this.layer.models = [
       this.layer.buildLayerModel({
