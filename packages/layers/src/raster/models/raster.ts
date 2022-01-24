@@ -6,7 +6,7 @@ import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import { getMask, generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
