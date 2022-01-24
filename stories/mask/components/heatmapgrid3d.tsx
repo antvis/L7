@@ -23,9 +23,9 @@ export default class MaskPoints extends React.Component {
       map: new GaodeMap({
         style: 'light',
         pitch: 56.499,
-        center: [ 114.07737552216226, 22.542656745583486 ],
+        center: [114.07737552216226, 22.542656745583486],
         rotation: 39.19,
-        zoom: 12.47985
+        zoom: 12.47985,
       }),
     });
     this.scene = scene;
@@ -43,18 +43,9 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [
-                    113.94058227539062,
-                    22.67484735118852
-                  ],
-                  [
-                    113.83895874023438,
-                    22.62415215809042
-                  ],
-                  [
-                    113.9447021484375,
-                    22.55187920514417
-                  ]
+                  [113.94058227539062, 22.67484735118852],
+                  [113.83895874023438, 22.62415215809042],
+                  [113.9447021484375, 22.55187920514417],
                 ],
               ],
             ],
@@ -73,22 +64,10 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [
-                    114.11087036132811,
-                    22.669778674332314
-                  ],
-                  [
-                    114.02847290039062,
-                    22.59372606392931
-                  ],
-                  [
-                    114.11636352539062,
-                    22.485912942320958
-                  ],
-                  [
-                    114.22622680664062,
-                    22.51255695405145
-                  ]
+                  [114.11087036132811, 22.669778674332314],
+                  [114.02847290039062, 22.59372606392931],
+                  [114.11636352539062, 22.485912942320958],
+                  [114.22622680664062, 22.51255695405145],
                 ],
               ],
             ],
@@ -116,10 +95,10 @@ export default class MaskPoints extends React.Component {
         });
       scene.addLayer(polygonlayer2);
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json'
+        'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
       )
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           // const layer = new HeatmapLayer({ mask: true })
           const layer = new HeatmapLayer({ mask: true, maskInside: false })
             .source(data, {
@@ -128,16 +107,16 @@ export default class MaskPoints extends React.Component {
                   type: 'grid',
                   size: 100,
                   field: 'h12',
-                  method: 'sum'
-                }
-              ]
+                  method: 'sum',
+                },
+              ],
             })
-            .size('sum', [ 0, 600 ])
+            .size('sum', [0, 600])
             .shape('cylinder')
             .style({
               coverage: 0.8,
               angle: 0,
-              opacity: 1.0
+              opacity: 1.0,
             })
             .color(
               'sum',
@@ -151,13 +130,11 @@ export default class MaskPoints extends React.Component {
                 '#5FD3A6',
                 '#7BE39E',
                 '#A1EDB8',
-                '#CEF8D6'
-              ].reverse()
+                '#CEF8D6',
+              ].reverse(),
             );
           scene.addLayer(layer);
         });
-
-
     });
   }
 

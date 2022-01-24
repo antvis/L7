@@ -5,12 +5,12 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
 import heatmapGridVert from '../shaders/grid_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
-import { getMask } from '@antv/l7-utils';
 export default class GridModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {

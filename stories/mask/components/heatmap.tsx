@@ -42,38 +42,17 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [
-                    125.15625000000001,
-                    8.407168163601076
-                  ],
-                  [
-                    116.54296874999999,
-                    -21.289374355860424
-                  ],
-                  [
-                    156.26953125,
-                    -20.632784250388013
-                  ],
-                  [
-                    150.29296875,
-                    2.1088986592431382
-                  ]
+                  [125.15625000000001, 8.407168163601076],
+                  [116.54296874999999, -21.289374355860424],
+                  [156.26953125, -20.632784250388013],
+                  [150.29296875, 2.1088986592431382],
                 ],
               ],
               [
                 [
-                  [
-                    78.57421875,
-                    46.92025531537451
-                  ],
-                  [
-                    51.67968749999999,
-                    37.020098201368114
-                  ],
-                  [
-                    87.890625,
-                    28.76765910569123
-                  ]
+                  [78.57421875, 46.92025531537451],
+                  [51.67968749999999, 37.020098201368114],
+                  [87.890625, 28.76765910569123],
                 ],
               ],
             ],
@@ -92,22 +71,10 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [
-                    133.2421875,
-                    44.33956524809713
-                  ],
-                  [
-                    123.04687499999999,
-                    31.50362930577303
-                  ],
-                  [
-                    154.3359375,
-                    20.632784250388028
-                  ],
-                  [
-                    157.32421875,
-                    38.54816542304656
-                  ]
+                  [133.2421875, 44.33956524809713],
+                  [123.04687499999999, 31.50362930577303],
+                  [154.3359375, 20.632784250388028],
+                  [157.32421875, 38.54816542304656],
                 ],
               ],
             ],
@@ -141,7 +108,10 @@ export default class MaskPoints extends React.Component {
         .then((res) => res.json())
         .then((data) => {
           // const heatmapLayer = new HeatmapLayer({ mask: true, maskInside: true })
-          const heatmapLayer = new HeatmapLayer({ mask: true, maskInside: false })
+          const heatmapLayer = new HeatmapLayer({
+            mask: true,
+            maskInside: false,
+          })
             .source(data)
             .shape('heatmap3D') // heatmap3D heatmap
             .size('mag', [0, 1.0]) // weight映射通道
@@ -163,7 +133,6 @@ export default class MaskPoints extends React.Component {
             });
           scene.addLayer(heatmapLayer);
         });
-
     });
   }
 

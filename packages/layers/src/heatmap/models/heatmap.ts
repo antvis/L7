@@ -7,7 +7,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -52,7 +52,6 @@ export default class HeatMapModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-   
     const {
       createFramebuffer,
       clear,

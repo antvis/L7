@@ -1,5 +1,5 @@
+import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
-import { getMask, generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import {
   anchorType,
   getGlyphQuads,
