@@ -46,8 +46,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
     // 如果 dataSource 有更新，跳过 zoom 的判断，直接更新一次
     if (
       cluster &&
-      (dataSourceNeedUpdate || Math.abs(layer.clusterZoom - newZoom) >= 1) &&
-      maxZoom > layer.clusterZoom
+      (dataSourceNeedUpdate || Math.abs(layer.clusterZoom - newZoom) >= 1)
     ) {
       // TODO 判断数据是否更新
       if (zoom !== Math.floor(newZoom)) {
