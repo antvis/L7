@@ -14,6 +14,8 @@ let layer = new MaskLayer().source(data);
 scene.addLayer(layer);
 ```
 
+🌟 从 v2.7.2 版本开始支持
+
 ### shape
 
 maskLayer 默认 shape 为 'fill'，可不调用

@@ -113,6 +113,8 @@ L7 Logo 的显示位置 默认左下角
 
 是否开始开启裁剪
 
+🌟 从 v2.7.2 版本开始支持
+
 ### preserveDrawingBuffer
 
 <description> _boolean_ **可选** _default: false_ </description>
