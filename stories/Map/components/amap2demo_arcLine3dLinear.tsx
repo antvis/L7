@@ -30,7 +30,7 @@ export default class Amap2demo_arcLine3dLinear extends React.Component {
       // );
       Promise.all([
         fetch(
-          'https://gw.alipayobjects.com/os/basement_prod/dbd008f1-9189-461c-88aa-569357ffc07d.json',
+          'https://gw.alipayobjects.com/os/bmw-prod/2960e1fc-b543-480f-a65e-d14c229dd777.json',
         ).then((d) => d.json()),
         fetch(
           'https://gw.alipayobjects.com/os/basement_prod/4472780b-fea1-4fc2-9e4b-3ca716933dc7.json',

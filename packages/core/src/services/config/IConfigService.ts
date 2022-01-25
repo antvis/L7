@@ -13,6 +13,8 @@ export interface ISceneConfig extends IRenderConfig {
   animate?: boolean;
   fitBoundsOptions?: unknown;
   pickBufferScale?: number;
+  // TODO: 场景是否支持 stencil mask
+  stencil?: boolean;
 }
 
 // interface IValidateResult {

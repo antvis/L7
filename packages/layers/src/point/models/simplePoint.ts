@@ -8,24 +8,14 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, {
-  styleColor,
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
-import { BlendTypes } from '../../utils/blend';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
+
 import simplePointFrag from '../shaders/simplePoint_frag.glsl';
 import simplePointVert from '../shaders/simplePoint_vert.glsl';
-interface IPointLayerStyleOptions {
-  opacity: styleSingle;
-  offsets: styleOffset;
-  blend: string;
-  strokeOpacity: styleSingle;
-  strokeWidth: styleSingle;
-  stroke: styleColor;
-}
+
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
   return {
@@ -110,6 +100,10 @@ export default class SimplePointModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'simplepoint',
@@ -119,6 +113,7 @@ export default class SimplePointModel extends BaseModel {
         depth: { enable: false },
         primitive: gl.POINTS,
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

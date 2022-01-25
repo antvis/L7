@@ -18,7 +18,7 @@ scene.on('loaded', () => {
       const layer = new LineLayer({})
         .source(data, {
           parser: {
-            type: 'csv',
+            type: 'json',
             x: 'from_lon',
             y: 'from_lat',
             x1: 'to_lon',
@@ -26,7 +26,7 @@ scene.on('loaded', () => {
           }
         })
         .size(1)
-        .shape('arc')
+        .shape('arc3d')
         .color('#FF7C6A')
         .style({
           segmentNumber: 15,

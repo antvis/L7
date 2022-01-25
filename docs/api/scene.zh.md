@@ -105,7 +105,15 @@ L7 Logo 的显示位置 默认左下角
 
 <description> _boolean_ **可选** _default: true_ </description>
 
-是否开始前抗锯齿 `boolean` `true`
+是否开始前抗锯齿
+
+### stencil 是否开启裁减
+
+<description> _boolean_ **可选** _default: false_ </description>
+
+是否开始开启裁剪
+
+🌟 从 v2.7.2 版本开始支持
 
 ### preserveDrawingBuffer
 
@@ -803,15 +811,3 @@ scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
 ```
-
-## FAQ
-
-### 禁止地图交互
-
-1. 初始化的时候可以在 map 配置项设置
-
-- 高德地图可查看 https://lbs.amap.com/api/javascript-api/reference/map
-- mapbox https://docs.mapbox.com/mapbox-gl-js/api/#map
-
-2. 加载完成后设置
-   调用 scene 的 [setMapStatus](./scene/#setmapstatus) 方法

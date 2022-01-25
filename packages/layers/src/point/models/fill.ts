@@ -9,11 +9,9 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import BaseModel, {
-  styleColor,
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
+import { getMask } from '@antv/l7-utils';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import {
   GlobelPointFillTriangulation,
   PointFillTriangulation,
@@ -25,16 +23,6 @@ import { isNumber } from 'lodash';
 
 import { Version } from '@antv/l7-maps';
 import { mat4, vec3 } from 'gl-matrix';
-interface IPointLayerStyleOptions {
-  opacity: styleSingle;
-  strokeWidth: styleSingle;
-  stroke: styleColor;
-  strokeOpacity: styleSingle;
-  offsets: styleOffset;
-  blend: string;
-  unit: string;
-}
-// 判断当前使用的 style 中的变量属性是否需要进行数据映射
 export default class FillModel extends BaseModel {
   public meter2coord: number = 1;
   private isMeter: boolean = false;
@@ -169,6 +157,10 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
     return [
@@ -182,6 +174,7 @@ export default class FillModel extends BaseModel {
         // depth: { enable: false },
         depth: { enable: isGlobel },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

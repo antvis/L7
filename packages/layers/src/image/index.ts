@@ -1,8 +1,6 @@
 import BaseLayer from '../core/BaseLayer';
+import { IImageLayerStyleOptions } from '../core/interface';
 import ImageModels, { ImageModelType } from './models/index';
-interface IImageLayerStyleOptions {
-  opacity: number;
-}
 export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   public type: string = 'ImageLayer';
   public buildModels() {

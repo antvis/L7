@@ -71,3 +71,25 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 - additive 叠加模式 发生遮挡的时候，显示前后图层颜色的叠加
 - subtractive 相减模式 发生遮挡的时候，显示前后图层颜色的相减
 - max 最大值 发生遮挡的时候，显示图层颜色 rgb 的最大值
+
+### mask
+
+<description> _boolean_ **optional** _default:_ false</description>
+
+是否参与裁减
+
+🌟 从 v2.7.2 版本开始支持
+
+- false 不参与裁减
+- true 参与裁减
+
+[在线案例](../../examples/raster/basic#dem)
+
+### maskInside
+
+<description> _boolean_ **optional** _default:_ true</description>
+
+是否在 maskLayer 显示
+
+- true 在内部显示
+- false 在外部显示

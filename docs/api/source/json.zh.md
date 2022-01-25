@@ -41,7 +41,7 @@ layer.source(data, {
 });
 ```
 
-[JOSN 数据 demo 示例](../../../examples/gallery/basic)
+[JOSN 数据 demo 示例](../../../examples/gallery/animate#animate_path_texture)
 
 ### 通用解析方式
 

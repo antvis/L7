@@ -4,7 +4,7 @@ import React from 'react';
 export function L7Plot() {
   return (
     <div className='dippermapcontainer'>
-      <div className='title'>L7Plot 地理分析应用开发框架</div>
+      <div className='title'>L7Plot 地理空间可视化图表库</div>
       <div className='subtitle'>L7Plot 是基于 L7 的简单易用、图表丰富、支持定制的地理空间数据可视化地理图表库。</div>
       <div className='carousel' style={{
         width: '80%'

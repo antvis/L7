@@ -1,17 +1,8 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  ILayerPlugin,
-  IModel,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
-} from '@antv/l7-core';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
+import { IPolygonLayerStyleOptions } from '../../core/interface';
 import {
   polygonTriangulation,
   polygonTriangulationWithCenter,
@@ -20,15 +11,6 @@ import polygon_frag from '../shaders/polygon_frag.glsl';
 import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
 import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
 import polygon_vert from '../shaders/polygon_vert.glsl';
-
-interface IPolygonLayerStyleOptions {
-  opacity: styleSingle;
-
-  opacityLinear: {
-    enable: boolean;
-    dir: string;
-  };
-}
 export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
@@ -88,6 +70,8 @@ export default class FillModel extends BaseModel {
         enable: false,
         dir: 'in',
       },
+      mask = false,
+      maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
@@ -102,6 +86,8 @@ export default class FillModel extends BaseModel {
           : polygonTriangulation,
         blend: this.getBlend(),
         depth: { enable: false },
+
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }
