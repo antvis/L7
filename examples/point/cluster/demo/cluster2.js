@@ -22,9 +22,6 @@ scene.on('loaded', () => {
 
         },
         cluster: true,
-        clusterOptions:{
-          maxZoom: 8
-        }
       });
       const pointLayer = new PointLayer({
         autoFit: true
