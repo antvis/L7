@@ -20,7 +20,7 @@ import { IUniform } from '../IUniform';
 @injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
   implements IPostProcessingPass<InitializationOptions> {
-  // @inject(TYPES.IShaderModuleService)
+  @inject(TYPES.IShaderModuleService)
   protected shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
