@@ -68,16 +68,17 @@ export default class ColorHalftone extends React.Component {
 
     scene.addLayer(layer);
 
-    let pointLayer = new PointLayer({zIndex: 2})
-    .source([{lng:130, lat: 30}], {
-      parser: {
-        type: 'json',
-        x: 'lng',y: 'lat'
-      }
-    })
-    .shape('circle')
-    .size(20)
-    .color('red')
+    let pointLayer = new PointLayer({ zIndex: 2 })
+      .source([{ lng: 130, lat: 30 }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(20)
+      .color('red');
     scene.addLayer(pointLayer);
 
     this.scene = scene;
