@@ -101,6 +101,7 @@ export default class CustomPostProcessing extends React.Component {
     const layer = new PolygonLayer({
       enablePicking: true,
       enableHighlight: true,
+      enableMultiPassRenderer: true,
       passes: [
         [
           'dotScreenEffect',

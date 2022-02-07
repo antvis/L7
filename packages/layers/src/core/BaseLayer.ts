@@ -266,10 +266,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
-    const { enableMultiPassRenderer = false } = this.rawConfig;
-    this.configService.setLayerConfig(sceneId, this.id, {
-      enableMultiPassRenderer,
-    });
+    // const { enableMultiPassRenderer = false } = this.rawConfig;
+    // this.configService.setLayerConfig(sceneId, this.id, {
+    //   enableMultiPassRenderer,
+    // });
+    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
 
     // 全局容器服务
 
@@ -570,9 +571,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // } else {
     //   this.renderModels();
     // }
+
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length !== 0) {
-      this.renderModels();
+      if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
+        // multi render 开始执行 multiPassRender 的渲染流程
+        this.multiPassRenderer.render();
+      } else if (this.multiPassRenderer) {
+        // renderPass 触发的渲染
+        this.renderModels();
+      } else {
+        this.renderModels();
+      }
+
+      // this.renderModels();
     }
     // this.renderModels();
 

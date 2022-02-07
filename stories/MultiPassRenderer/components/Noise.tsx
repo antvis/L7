@@ -36,6 +36,7 @@ export default class Noise extends React.Component {
     const layer = new PolygonLayer({
       enablePicking: true,
       enableHighlight: true,
+      enableMultiPassRenderer: true,
       passes: ['noise'],
     });
 
