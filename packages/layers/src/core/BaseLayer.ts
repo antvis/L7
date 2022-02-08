@@ -52,7 +52,6 @@ import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import { updateShape } from '../utils/updateShape';
-import baseLayerSchema from './schema';
 /**
  * 分配 layer id
  */
@@ -892,6 +891,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
     if (scale) {
       if (scale.ticks) {
+        // 连续分段类型
         const items = scale.ticks().map((item: any) => {
           return {
             value: item,
@@ -900,10 +900,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         });
         return items;
       } else if (scale.invertExtent) {
+        // 连续类型
         const items = scale.range().map((item: any) => {
           return {
             value: scale.invertExtent(item),
             [name]: item,
+          };
+        });
+        return items;
+      } else if (scale?.domain) {
+        // 枚举类型
+        const items = scale.domain().map((item: string | number) => {
+          return {
+            // @ts-ignore
+            value: item || '无',
+            color: scale(item),
           };
         });
         return items;
