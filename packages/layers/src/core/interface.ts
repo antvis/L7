@@ -69,6 +69,8 @@ export interface IPolygonLayerStyleOptions {
     dir: string;
   };
 
+  heightfixed?: boolean;  // 挤出几何体高度是否固定（不随 zoom 发生变化）
+
   pickLight: boolean;
   mask?: boolean;
   maskInside?: boolean;
