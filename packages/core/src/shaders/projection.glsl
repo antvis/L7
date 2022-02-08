@@ -2,15 +2,15 @@
 #define PI 3.1415926536
 #define WORLD_SCALE TILE_SIZE / (PI * 2.0)
 
-#define COORDINATE_SYSTEM_LNGLAT 1.0
-#define COORDINATE_SYSTEM_LNGLAT_OFFSET 2.0
+#define COORDINATE_SYSTEM_LNGLAT 1.0        // mapbox
+#define COORDINATE_SYSTEM_LNGLAT_OFFSET 2.0 // mapbox offset
 #define COORDINATE_SYSTEM_VECTOR_TILE 3.0
 #define COORDINATE_SYSTEM_IDENTITY 4.0
-#define COORDINATE_SYSTEM_P20 5.0
-#define COORDINATE_SYSTEM_P20_OFFSET 6.0
+#define COORDINATE_SYSTEM_P20 5.0           // amap
+#define COORDINATE_SYSTEM_P20_OFFSET 6.0    // amap offset
 #define COORDINATE_SYSTEM_METER_OFFSET 7.0
 
-#define COORDINATE_SYSTEM_P20_2 8.0
+#define COORDINATE_SYSTEM_P20_2 8.0         // amap2.0
 
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_ProjectionMatrix;

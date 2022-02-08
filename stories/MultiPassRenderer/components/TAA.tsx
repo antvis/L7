@@ -36,6 +36,7 @@ export default class TAA extends React.Component {
     const layer = new PolygonLayer({
       enablePicking: true,
       enableHighlight: true,
+      enableMultiPassRenderer: true,
       enableTAA: true,
       jitterScale: 1,
     });

@@ -33,12 +33,19 @@ export default class PostProcessor implements IPostProcessor {
       const pass = this.passes[i];
       // last pass should render to screen
       pass.setRenderToScreen(this.isLastEnabledPass(i));
-      await pass.render(layer);
 
+      await pass.render(layer);
       // pingpong
       if (i !== this.passes.length - 1) {
         this.swap();
       }
+
+      // if (pass.getName() === 'bloom') {
+      //   await pass.render(layer);
+      //   this.swap();
+      //   await pass.render(layer);
+      //   this.swap();
+      // }
     }
   }
 
@@ -80,23 +87,23 @@ export default class PostProcessor implements IPostProcessor {
 
   @postConstruct()
   private init() {
-    // const { createFramebuffer, createTexture2D } = this.rendererService;
-    // this.readFBO = createFramebuffer({
-    //   color: createTexture2D({
-    //     width: 1,
-    //     height: 1,
-    //     wrapS: gl.CLAMP_TO_EDGE,
-    //     wrapT: gl.CLAMP_TO_EDGE,
-    //   }),
-    // });
-    // this.writeFBO = createFramebuffer({
-    //   color: createTexture2D({
-    //     width: 1,
-    //     height: 1,
-    //     wrapS: gl.CLAMP_TO_EDGE,
-    //     wrapT: gl.CLAMP_TO_EDGE,
-    //   }),
-    // });
+    const { createFramebuffer, createTexture2D } = this.rendererService;
+    this.readFBO = createFramebuffer({
+      color: createTexture2D({
+        width: 1,
+        height: 1,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+      }),
+    });
+    this.writeFBO = createFramebuffer({
+      color: createTexture2D({
+        width: 1,
+        height: 1,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+      }),
+    });
   }
 
   private isLastEnabledPass(index: number): boolean {

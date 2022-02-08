@@ -1,10 +1,9 @@
-// @ts-ignore
-import { PolygonLayer, Scene } from '@antv/l7';
+import { PolygonLayer, PointLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
-export default class Noise extends React.Component {
+export default class Bloom extends React.Component {
   private gui: dat.GUI;
   private $stats: Node;
   private scene: Scene;
@@ -27,17 +26,27 @@ export default class Noise extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+        // style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'blank',
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         zoom: 3,
       }),
     });
+    scene.setBgColor('#000');
     const layer = new PolygonLayer({
-      enablePicking: true,
-      enableHighlight: true,
+      zIndex: 0,
+      // enablePicking: true,
+      // enableHighlight: true,
       enableMultiPassRenderer: true,
-      passes: ['noise'],
+      passes: [
+        [
+          'bloom',
+          {
+            bloomRadius: 8,
+          },
+        ],
+      ],
     });
 
     layer
@@ -52,35 +61,27 @@ export default class Noise extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
+      .active(true)
       .style({
-        opacity: 0.8,
+        // opacity: 0.8,
       });
 
     scene.addLayer(layer);
 
-    this.scene = scene;
+    let pointLayer = new PointLayer({ zIndex: 1 })
+      .source([{ lng: 122, lat: 30 }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(20)
+      .color('red');
+    scene.addLayer(pointLayer);
 
-    /*** 运行时修改样式属性 ***/
-    const gui = new dat.GUI();
-    this.gui = gui;
-    const styleOptions = {
-      amount: 1,
-    };
-    const pointFolder = gui.addFolder('Noise 配置');
-    pointFolder.add(styleOptions, 'amount', 0, 1).onChange((amount: number) => {
-      layer.style({
-        passes: [
-          [
-            'noise',
-            {
-              amount,
-            },
-          ],
-        ],
-      });
-      scene.render();
-    });
-    pointFolder.open();
+    this.scene = scene;
   }
 
   public render() {
