@@ -33,10 +33,17 @@ export default class PostProcessor implements IPostProcessor {
       const pass = this.passes[i];
       // last pass should render to screen
       pass.setRenderToScreen(this.isLastEnabledPass(i));
+      
       await pass.render(layer);
-
       // pingpong
       if (i !== this.passes.length - 1) {
+        this.swap();
+      }
+
+      if(pass.getName() === 'bloom') {
+        await pass.render(layer);
+        this.swap();
+        await pass.render(layer);
         this.swap();
       }
     }

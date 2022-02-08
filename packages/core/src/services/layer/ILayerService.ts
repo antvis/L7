@@ -199,6 +199,9 @@ export interface ILayer {
   // animate(field: string, option: any): ILayer;
   renderLayers(): void;
   render(): ILayer;
+
+  renderMultiPass(): any;
+
   clear(): void;
   clearModels(): void;
   destroy(): void;
