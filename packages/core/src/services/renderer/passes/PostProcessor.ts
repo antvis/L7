@@ -40,12 +40,12 @@ export default class PostProcessor implements IPostProcessor {
         this.swap();
       }
 
-      if (pass.getName() === 'bloom') {
-        await pass.render(layer);
-        this.swap();
-        await pass.render(layer);
-        this.swap();
-      }
+      // if (pass.getName() === 'bloom') {
+      //   await pass.render(layer);
+      //   this.swap();
+      //   await pass.render(layer);
+      //   this.swap();
+      // }
     }
   }
 

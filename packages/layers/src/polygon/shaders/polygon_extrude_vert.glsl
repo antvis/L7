@@ -12,6 +12,7 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
 varying vec4 v_Color;
+uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
@@ -48,8 +49,16 @@ void main() {
   styleMappingMat[0][0] = opacityAndOffset.r;
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
+
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
   vec4 project_pos = project_position(pos);
+
+  if(u_heightfixed > 0.0) { // 判断几何体是否固定高度
+    project_pos.z = a_Position.z * a_Size;
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      project_pos.z *= 4.0/pow(2.0, 21.0 - u_Zoom);
+    }
+  }
 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 

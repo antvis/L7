@@ -12,6 +12,7 @@ export default class ExtrudeModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
+      heightfixed = false,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
@@ -45,6 +46,7 @@ export default class ExtrudeModel extends BaseModel {
     }
 
     return {
+      u_heightfixed: Number(heightfixed),
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
