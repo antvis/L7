@@ -560,37 +560,28 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public render(): ILayer {
-    // if (
-    //   this.needPick() &&
-    //   this.multiPassRenderer &&
-    //   this.multiPassRenderer.getRenderFlag()
-    // ) {
-    //   this.multiPassRenderer.render();
-    // } else if (this.needPick() && this.multiPassRenderer) {
-    //   this.renderModels();
-    // } else {
-    //   this.renderModels();
-    // }
-
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
+    if (this.getEncodedData().length !== 0) {
+      this.renderModels();
+    }
+    return this;
+  }
+
+  /**
+   * renderMultiPass 专门用于渲染支持 multipass 的 layer
+   */
+  public async renderMultiPass() {
     if (this.getEncodedData().length !== 0) {
       if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
         // multi render 开始执行 multiPassRender 的渲染流程
-        this.multiPassRenderer.render();
+        await this.multiPassRenderer.render();
       } else if (this.multiPassRenderer) {
         // renderPass 触发的渲染
         this.renderModels();
       } else {
         this.renderModels();
       }
-
-      // this.renderModels();
     }
-    // this.renderModels();
-
-    // this.multiPassRenderer.render();
-    // this.renderModels();
-    return this;
   }
 
   public active(options: IActiveOption | boolean) {
@@ -1023,6 +1014,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
   public rebuildModels() {
     throw new Error('Method not implemented.');
+  }
+
+  public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
+    await multiPassRenderer.render();
   }
 
   public renderModels(isPicking?: boolean) {

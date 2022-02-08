@@ -116,19 +116,31 @@ export default class LayerService implements ILayerService {
     this.enableRender = flag;
   }
 
-  public renderLayers() {
+  public async renderLayers() {
     if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
     this.alreadyInRendering = true;
     this.clear();
 
-    this.layerList.forEach((layer) => {
+    for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
-      layer.render();
+      if (layer.getLayerConfig().enableMultiPassRenderer) {
+        // multiPassRender 不是同步渲染完成的
+        await layer.renderMultiPass();
+      } else {
+        layer.render();
+      }
       layer.hooks.afterRender.call();
-    });
+    }
+
+    // this.layerList.forEach((layer) => {
+    //   layer.hooks.beforeRenderData.call();
+    //   layer.hooks.beforeRender.call();
+    //   layer.render();
+    //   layer.hooks.afterRender.call();
+    // });
     this.alreadyInRendering = false;
   }
 
