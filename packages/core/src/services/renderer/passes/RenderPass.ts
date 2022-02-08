@@ -36,14 +36,11 @@ export default class RenderPass<
       // render to post processor
       layer.multiPassRenderer.setRenderFlag(false);
       // layer.render();
-    
 
       layer.models.forEach((model) => {
-        model.draw(
-          {
-            uniforms: layer.layerModel.getUninforms(),
-          },
-        );
+        model.draw({
+          uniforms: layer.layerModel.getUninforms(),
+        });
       });
 
       layer.multiPassRenderer.setRenderFlag(true);

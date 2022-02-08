@@ -574,7 +574,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (this.getEncodedData().length !== 0) {
       if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
         // multi render 开始执行 multiPassRender 的渲染流程
-        await this.multiPassRenderer.render()
+        await this.multiPassRenderer.render();
       } else if (this.multiPassRenderer) {
         // renderPass 触发的渲染
         this.renderModels();
@@ -1017,7 +1017,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
-    await multiPassRenderer.render()
+    await multiPassRenderer.render();
   }
 
   public renderModels(isPicking?: boolean) {

@@ -33,7 +33,7 @@ export default class Bloom extends React.Component {
         zoom: 3,
       }),
     });
-    scene.setBgColor('#000')
+    scene.setBgColor('#000');
     const layer = new PolygonLayer({
       zIndex: 0,
       // enablePicking: true,
@@ -69,22 +69,19 @@ export default class Bloom extends React.Component {
     scene.addLayer(layer);
 
     let pointLayer = new PointLayer({ zIndex: 1 })
-    .source([{ lng: 122, lat: 30 }], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat',
-      },
-    })
-    .shape('circle')
-    .size(20)
-    .color('red');
-  scene.addLayer(pointLayer);
-
+      .source([{ lng: 122, lat: 30 }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(20)
+      .color('red');
+    scene.addLayer(pointLayer);
 
     this.scene = scene;
-
-  
   }
 
   public render() {

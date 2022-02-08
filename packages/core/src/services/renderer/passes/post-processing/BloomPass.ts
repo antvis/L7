@@ -12,7 +12,7 @@ export interface IBloomPassConfig {
 
 @injectable()
 export default class BloomPass extends BasePostProcessingPass<
-IBloomPassConfig
+  IBloomPassConfig
 > {
   protected setupShaders() {
     this.shaderModuleService.registerModule('blur-pass', {

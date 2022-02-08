@@ -123,10 +123,10 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
 
-    for (const layer of  this.layerList) {
+    for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
-      if(layer.getLayerConfig().enableMultiPassRenderer) {
+      if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
       } else {
