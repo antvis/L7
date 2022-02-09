@@ -57,6 +57,17 @@ export default class PostProcessor implements IPostProcessor {
       });
     });
   }
+  
+  public async renderBloomPass(layer: ILayer, pass: IPostProcessingPass<unknown>) {
+    const tex = (await this.getReadFBOTex()) as ITexture2D;
+    // count 定义 bloom 交替绘制的次数
+    let count = 0;
+    while(count <  4) {
+      await pass.render(layer, tex);
+      this.swap();
+      count++;
+    }
+  }
 
   public async render(layer: ILayer) {
     for (let i = 0; i < this.passes.length; i++) {
@@ -70,17 +81,7 @@ export default class PostProcessor implements IPostProcessor {
       //   this.swap();
       // }
       if (pass.getName() === 'bloom') {
-        const tex = (await this.getReadFBOTex()) as ITexture2D;
-
-        await pass.render(layer, tex);
-        this.swap();
-        await pass.render(layer, tex);
-        this.swap();
-        await pass.render(layer, tex);
-        this.swap();
-        await pass.render(layer, tex);
-        this.swap();
-        // await pass.render(layer, tex);this.swap();
+        await this.renderBloomPass(layer, pass);
       } else {
         await pass.render(layer);
         // pingpong
