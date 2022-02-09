@@ -7,7 +7,9 @@ import { IUniform } from '../../IUniform';
 import BasePostProcessingPass from '../BasePostProcessingPass';
 
 export interface IBloomPassConfig {
+  bloomBaseRadio: number;
   bloomRadius: number;
+  bloomIntensity: number;
 }
 
 @injectable()
@@ -46,6 +48,12 @@ export default class BloomPass extends BasePostProcessingPass<
 
     if (!isNil(options.bloomRadius)) {
       uniforms.u_radius = options.bloomRadius;
+    }
+    if (!isNil(options.bloomIntensity)) {
+      uniforms.u_intensity = options.bloomIntensity;
+    }
+    if (!isNil(options.bloomBaseRadio)) {
+      uniforms.u_baseRadio = options.bloomBaseRadio;
     }
 
     return uniforms;
