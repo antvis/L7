@@ -57,12 +57,15 @@ export default class PostProcessor implements IPostProcessor {
       });
     });
   }
-  
-  public async renderBloomPass(layer: ILayer, pass: IPostProcessingPass<unknown>) {
+
+  public async renderBloomPass(
+    layer: ILayer,
+    pass: IPostProcessingPass<unknown>,
+  ) {
     const tex = (await this.getReadFBOTex()) as ITexture2D;
     // count 定义 bloom 交替绘制的次数
     let count = 0;
-    while(count <  4) {
+    while (count < 4) {
       await pass.render(layer, tex);
       this.swap();
       count++;
