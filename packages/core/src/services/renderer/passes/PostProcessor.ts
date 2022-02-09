@@ -6,6 +6,7 @@ import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
 import { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
 import { IRendererService } from '../IRendererService';
+import { ITexture2D } from '../ITexture2D';
 
 /**
  * ported from Three.js EffectComposer
@@ -28,24 +29,65 @@ export default class PostProcessor implements IPostProcessor {
     return this.writeFBO;
   }
 
+  /**
+   * 从当前的 framebuffer 中获取贴图
+   * @returns
+   */
+  public getCurrentFBOTex() {
+    const { getViewportSize, createTexture2D } = this.rendererService;
+    const { width, height } = getViewportSize();
+    return createTexture2D({
+      x: 0,
+      y: 0,
+      width,
+      height,
+      copy: true,
+    });
+  }
+
+  /**
+   * 从 readFBO 中获取贴图
+   * @returns
+   */
+  public getReadFBOTex() {
+    const { useFramebuffer } = this.rendererService;
+    return new Promise((resolve, reject) => {
+      useFramebuffer(this.readFBO, async () => {
+        resolve(this.getCurrentFBOTex());
+      });
+    });
+  }
+
   public async render(layer: ILayer) {
     for (let i = 0; i < this.passes.length; i++) {
       const pass = this.passes[i];
       // last pass should render to screen
       pass.setRenderToScreen(this.isLastEnabledPass(i));
 
-      await pass.render(layer);
-      // pingpong
-      if (i !== this.passes.length - 1) {
-        this.swap();
-      }
-
-      // if (pass.getName() === 'bloom') {
-      //   await pass.render(layer);
-      //   this.swap();
-      //   await pass.render(layer);
+      // await pass.render(layer);
+      // // pingpong
+      // if (i !== this.passes.length - 1) {
       //   this.swap();
       // }
+      if (pass.getName() === 'bloom') {
+        const tex = (await this.getReadFBOTex()) as ITexture2D;
+
+        await pass.render(layer, tex);
+        this.swap();
+        await pass.render(layer, tex);
+        this.swap();
+        await pass.render(layer, tex);
+        this.swap();
+        await pass.render(layer, tex);
+        this.swap();
+        // await pass.render(layer, tex);this.swap();
+      } else {
+        await pass.render(layer);
+        // pingpong
+        if (i !== this.passes.length - 1) {
+          this.swap();
+        }
+      }
     }
   }
 

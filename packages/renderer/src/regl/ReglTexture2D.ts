@@ -36,6 +36,9 @@ export default class ReglTexture2D implements ITexture2D {
       mag = gl.NEAREST,
       min = gl.NEAREST,
       colorSpace = gl.BROWSER_DEFAULT_WEBGL,
+      x = 0,
+      y = 0,
+      copy = false,
     } = options;
     this.width = width;
     this.height = height;
@@ -56,6 +59,11 @@ export default class ReglTexture2D implements ITexture2D {
       colorSpace: colorSpaceMap[colorSpace],
       premultiplyAlpha,
       aniso,
+
+      // copy pixels from current bind framebuffer
+      x,
+      y,
+      copy,
     };
 
     if (data) {

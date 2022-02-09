@@ -26,14 +26,14 @@ export default class Bloom extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        // style: 'mapbox://styles/mapbox/streets-v9',
-        style: 'blank',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        // style: 'blank',
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         zoom: 3,
       }),
     });
-    scene.setBgColor('#000');
+    // scene.setBgColor('#000');
     const layer = new PolygonLayer({
       zIndex: 0,
       // enablePicking: true,
@@ -43,7 +43,9 @@ export default class Bloom extends React.Component {
         [
           'bloom',
           {
-            bloomRadius: 8,
+            // bloomBaseRadio: 0.5,
+            bloomRadius: 25,
+            bloomIntensity: 1,
           },
         ],
       ],
