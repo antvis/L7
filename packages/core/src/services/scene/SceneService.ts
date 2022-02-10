@@ -131,6 +131,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     // 初始化资源管理 图片
     this.iconService.init();
+    this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
 
@@ -236,6 +237,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     // 初始化资源管理 图片
     this.iconService.init();
+    this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
 
@@ -415,6 +417,8 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.interactionService.destroy();
     this.controlService.destroy();
     this.markerService.destroy();
+    this.fontService.destroy();
+    this.iconService.destroy();
 
     // TODO: 销毁 container 容器
     this.$container?.parentNode?.removeChild(this.$container);
