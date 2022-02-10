@@ -127,7 +127,7 @@ export default class FillModel extends BaseModel {
     if (
       unit === 'meter' &&
       version !== Version.L7MAP &&
-      version !== Version.GLOBEL 
+      version !== Version.GLOBEL
       // &&
       // version !== Version.MAPBOX
     ) {
@@ -139,22 +139,28 @@ export default class FillModel extends BaseModel {
   }
 
   public calMeter2Coord() {
-    
     // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
     const { version } = this.mapService;
-    if(version === Version.MAPBOX && window.mapboxgl.MercatorCoordinate) {
-      const coord = window.mapboxgl.MercatorCoordinate.fromLngLat({lng: center[0], lat: center[1]}, 0);
+    if (version === Version.MAPBOX && window.mapboxgl.MercatorCoordinate) {
+      const coord = window.mapboxgl.MercatorCoordinate.fromLngLat(
+        { lng: center[0], lat: center[1] },
+        0,
+      );
       const offsetInMeters = 1;
-      const offsetInMercatorCoordinateUnits = offsetInMeters * coord.meterInMercatorCoordinateUnits();
-      const westCoord = new window.mapboxgl.MercatorCoordinate(coord.x - offsetInMercatorCoordinateUnits, coord.y, coord.z);
-      const westLnglat = westCoord.toLngLat()
-  
+      const offsetInMercatorCoordinateUnits =
+        offsetInMeters * coord.meterInMercatorCoordinateUnits();
+      const westCoord = new window.mapboxgl.MercatorCoordinate(
+        coord.x - offsetInMercatorCoordinateUnits,
+        coord.y,
+        coord.z,
+      );
+      const westLnglat = westCoord.toLngLat();
+
       this.meter2coord = center[0] - westLnglat.lng;
-      return
-    
+      return;
     }
 
     // @ts-ignore
