@@ -128,20 +128,29 @@ void main() {
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, u_blur);
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
+  vec3 aPosition = a_Position;
   if(u_isMeter < 1.0) {
     // 不以米为实际单位
     offset = project_pixel(offset);
   } else {
     // 以米为实际单位
     antialiasblur *= pow(19.0 - u_Zoom, 2.0);
+    antialiasblur = max(antialiasblur, -0.01);
+    // offset *= 0.5;
+
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      aPosition.xy += offset;
+      offset.x = 0.0;
+      offset.y = 0.0;
+    }
   }
-  
-  
 
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
-  vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
+
+  // vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
+  vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
