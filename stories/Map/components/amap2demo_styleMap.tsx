@@ -26,7 +26,7 @@ export default class Amap2demo_styleMap extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          let layer = new PointLayer()
+          let layer = new PointLayer({  }) // blend: "additive"
             .source(data, {
               parser: {
                 type: 'json',
