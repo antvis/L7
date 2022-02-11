@@ -16,11 +16,11 @@ import {
   GlobelPointFillTriangulation,
   PointFillTriangulation,
 } from '../../core/triangulation';
+// animate pointLayer shader - support animate
+import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
-// animate pointLayer shader - support animate
-import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 
 import { isNumber } from 'lodash';
 
@@ -103,7 +103,9 @@ export default class FillModel extends BaseModel {
     };
   }
   public getAnimateUniforms(): IModelUniform {
-    const { animateOption = {enable: false} } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      animateOption = { enable: false },
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
       u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -141,7 +143,7 @@ export default class FillModel extends BaseModel {
 
   /**
    * 计算等面积点图层（unit meter）笛卡尔坐标标度与世界坐标标度的比例
-   * @returns 
+   * @returns
    */
   public calMeter2Coord() {
     // @ts-ignore
@@ -186,9 +188,9 @@ export default class FillModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      animateOption = {enable: false}
+      animateOption = { enable: false },
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders(animateOption)
+    const { frag, vert, type } = this.getShaders(animateOption);
 
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
@@ -210,32 +212,33 @@ export default class FillModel extends BaseModel {
 
   /**
    * 根据 animateOption 的值返回对应的 shader 代码
-   * @returns 
+   * @returns
    */
-  public getShaders(animateOption: IAnimateOption): {frag: string, vert: string, type: string} {
-    if(animateOption.enable) {
-      switch(animateOption.type) {
-        case 'wave': 
+  public getShaders(
+    animateOption: IAnimateOption,
+  ): { frag: string; vert: string; type: string } {
+    if (animateOption.enable) {
+      switch (animateOption.type) {
+        case 'wave':
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'wave'
-          }
+            type: 'wave',
+          };
         default:
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'wave'
-          }
+            type: 'wave',
+          };
       }
     } else {
       return {
         frag: pointFillFrag,
         vert: pointFillVert,
-        type: 'fill'
-      }
+        type: 'fill',
+      };
     }
-    
   }
 
   public clearModels() {

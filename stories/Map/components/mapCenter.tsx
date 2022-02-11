@@ -78,7 +78,7 @@ export default class GaodeMapComponent extends React.Component {
         textOffset: [50, 20],
       });
 
-    let layer = new PointLayer({  }) // blend: 'additive'
+    let layer = new PointLayer({}) // blend: 'additive'
       .source(
         [
           {
