@@ -110,7 +110,7 @@ export default class GaodeMapComponent extends React.Component {
         strokeWidth: 0,
         strokeOpacity: 1,
         unit: 'meter',
-      })
+      });
     // .animate(true)
     // .animate({
     //   enable: true,
