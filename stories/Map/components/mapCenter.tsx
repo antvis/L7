@@ -25,6 +25,7 @@ export default class GaodeMapComponent extends React.Component {
         pitch: 40,
         // style: 'dark',
         zoom: 17,
+        // dragEnable: false
       }),
     });
     // normal = 'normal',
@@ -158,6 +159,14 @@ export default class GaodeMapComponent extends React.Component {
     //   console.log('remove', e);
     //   console.log(scene.getLayers());
     // });
+
+    // layer.on('unclick', (e) => {
+    //   console.log('unclick');
+    // });
+
+    // layer.on('dbclick', () => {
+    //   console.log('dbclick')
+    // })
 
     // setTimeout(() => {
     //   layer.destroy();
