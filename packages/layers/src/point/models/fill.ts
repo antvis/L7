@@ -236,7 +236,7 @@ export default class FillModel extends BaseModel {
       return {
         frag: pointFillFrag,
         vert: pointFillVert,
-        type: 'fill',
+        type: 'normal',
       };
     }
   }
