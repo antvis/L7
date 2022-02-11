@@ -111,9 +111,9 @@ void main() {
     } else {
       gl_FragColor = filterColor(gl_FragColor);
     }
+    gl_FragColor.a *= opacity;
   } else {
     gl_FragColor = filterColor(gl_FragColor);
-    
   }
 
   if(u_additive > 0.0) {
