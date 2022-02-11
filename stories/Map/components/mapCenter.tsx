@@ -104,12 +104,13 @@ export default class GaodeMapComponent extends React.Component {
       // .size([10, 10, 100])
       .size(100)
       .style({
+        // opacity: 0.1,
         stroke: '#f00',
         // strokeWidth: 10,
         strokeWidth: 0,
         strokeOpacity: 1,
         unit: 'meter',
-      });
+      })
     // .animate(true)
     // .animate({
     //   enable: true,
