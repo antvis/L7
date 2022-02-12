@@ -23,10 +23,6 @@ varying vec4 v_dash_array;
 
 varying vec2 v_iconMapUV;
 
-uniform float u_linearColor: 0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
 #pragma include "picking"
 
 uniform float u_time;
@@ -38,13 +34,7 @@ void main() {
   float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0; // 运动速度
   float d_distance_ratio = styleMappingMat[3].r; // 当前点位距离占线总长的比例
-
-  if(u_linearColor == 1.0) { // 使用渐变颜色
-    gl_FragColor = mix(u_sourceColor, u_targetColor, d_distance_ratio);
-  } else { // 使用 color 方法传入的颜色
-     gl_FragColor = v_color;
-  }
-
+  gl_FragColor = v_color;
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
   gl_FragColor.a *= opacity; // 全局透明度

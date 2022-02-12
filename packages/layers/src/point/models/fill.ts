@@ -16,6 +16,9 @@ import {
   GlobelPointFillTriangulation,
   PointFillTriangulation,
 } from '../../core/triangulation';
+// animate pointLayer shader - support animate
+import waveFillFrag from '../shaders/animate/wave_frag.glsl';
+// static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
@@ -100,9 +103,11 @@ export default class FillModel extends BaseModel {
     };
   }
   public getAnimateUniforms(): IModelUniform {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    const {
+      animateOption = { enable: false },
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
@@ -128,8 +133,6 @@ export default class FillModel extends BaseModel {
       unit === 'meter' &&
       version !== Version.L7MAP &&
       version !== Version.GLOBEL
-      // &&
-      // version !== Version.MAPBOX
     ) {
       this.isMeter = true;
       this.calMeter2Coord();
@@ -138,6 +141,10 @@ export default class FillModel extends BaseModel {
     return this.buildModels();
   }
 
+  /**
+   * 计算等面积点图层（unit meter）笛卡尔坐标标度与世界坐标标度的比例
+   * @returns
+   */
   public calMeter2Coord() {
     // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
@@ -181,14 +188,17 @@ export default class FillModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      animateOption = { enable: false },
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { frag, vert, type } = this.getShaders(animateOption);
+
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
+        moduleName: 'pointfill-' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: isGlobel
           ? GlobelPointFillTriangulation
           : PointFillTriangulation,
@@ -200,10 +210,42 @@ export default class FillModel extends BaseModel {
     ];
   }
 
+  /**
+   * 根据 animateOption 的值返回对应的 shader 代码
+   * @returns
+   */
+  public getShaders(
+    animateOption: IAnimateOption,
+  ): { frag: string; vert: string; type: string } {
+    if (animateOption.enable) {
+      switch (animateOption.type) {
+        case 'wave':
+          return {
+            frag: waveFillFrag,
+            vert: pointFillVert,
+            type: 'wave',
+          };
+        default:
+          return {
+            frag: waveFillFrag,
+            vert: pointFillVert,
+            type: 'wave',
+          };
+      }
+    } else {
+      return {
+        frag: pointFillFrag,
+        vert: pointFillVert,
+        type: 'normal',
+      };
+    }
+  }
+
   public clearModels() {
     this.dataTexture?.destroy();
   }
 
+  // overwrite baseModel func
   protected animateOption2Array(option: IAnimateOption): number[] {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }

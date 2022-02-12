@@ -1,3 +1,4 @@
+import { IAnimateOption } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
 import {
@@ -59,6 +60,8 @@ export interface IPointLayerStyleOptions {
   unit?: string;
   mask?: boolean;
   maskInside?: boolean;
+
+  animateOption?: IAnimateOption;
 }
 
 export interface IPolygonLayerStyleOptions {

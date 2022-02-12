@@ -374,11 +374,11 @@ export default class ScaleComponent extends React.Component {
           },
         },
       )
-      // .shape('circle')
-      .shape('cylinder')
+      .shape('circle')
+      // .shape('cylinder')
       .color('#f00')
-      .size('', () => [1, 1, 10])
-      // .size(20)
+      // .size('', () => [1, 1, 10])
+      .size(20)
       .style({
         // opacity: 0.6,
       })

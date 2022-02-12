@@ -15,8 +15,12 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
+// other function shaders
+import linear_line_frag from '../shaders/frag/linear_frag.glsl';
+// basic line shader
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
+
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -139,11 +143,12 @@ export default class LineModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'line',
-        vertexShader: line_vert,
-        fragmentShader: line_frag,
+        moduleName: 'line' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: LineTriangulation,
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
@@ -152,6 +157,32 @@ export default class LineModel extends BaseModel {
       }),
     ];
   }
+
+  /**
+   * 根据参数获取不同的 shader 代码
+   * @returns
+   */
+  public getShaders(): { frag: string; vert: string; type: string } {
+    const {
+      sourceColor,
+      targetColor,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (sourceColor && targetColor) {
+      // 分离 linear 功能
+      return {
+        frag: linear_line_frag,
+        vert: line_vert,
+        type: 'linear',
+      };
+    } else {
+      return {
+        frag: line_frag,
+        vert: line_vert,
+        type: 'normal',
+      };
+    }
+  }
+
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',

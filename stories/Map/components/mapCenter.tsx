@@ -25,6 +25,7 @@ export default class GaodeMapComponent extends React.Component {
         pitch: 40,
         // style: 'dark',
         zoom: 17,
+        // dragEnable: false
       }),
     });
     // normal = 'normal',
@@ -78,7 +79,7 @@ export default class GaodeMapComponent extends React.Component {
         textOffset: [50, 20],
       });
 
-    let layer = new PointLayer({})
+    let layer = new PointLayer({}) // blend: 'additive'
       .source(
         [
           {
@@ -86,8 +87,12 @@ export default class GaodeMapComponent extends React.Component {
             lat: 30.267069,
           },
           {
-            lng: aspaceLnglat[0],
-            lat: aspaceLnglat[1],
+            lng: 120.1025,
+            lat: 30.264701434772807,
+          },
+          {
+            lng: 120.1019811630249,
+            lat: 30.264701434772807,
           },
         ],
         {
@@ -100,16 +105,23 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       // .color('#0f9')
-      .color('#f00')
+      .color('#4169E1')
       // .size([10, 10, 100])
       .size(100)
+      // .animate({
+      //   // enable: true,
+      //   enable: false,
+      //   // type: 'www'
+      // })
+      // .animate(true)
+      .active({ color: '#00f' })
       .style({
-        // opacity: 0.1,
+        // opacity: 0.5,
         stroke: '#f00',
         // strokeWidth: 10,
         strokeWidth: 0,
         strokeOpacity: 1,
-        unit: 'meter',
+        // unit: 'meter',
       });
     // .animate(true)
     // .animate({
@@ -147,6 +159,14 @@ export default class GaodeMapComponent extends React.Component {
     //   console.log('remove', e);
     //   console.log(scene.getLayers());
     // });
+
+    // layer.on('unclick', (e) => {
+    //   console.log('unclick');
+    // });
+
+    // layer.on('dbclick', () => {
+    //   console.log('dbclick')
+    // })
 
     // setTimeout(() => {
     //   layer.destroy();
