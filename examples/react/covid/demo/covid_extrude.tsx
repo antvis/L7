@@ -138,11 +138,12 @@ const World = React.memo(function Map() {
             }}
             size={{
               field: 'confirmedCount',
-              values: [0, 200000, 600000, 800000, 1000000],
+              values: [0, 1000000, 3000000, 4000000, 5000000],
             }}
             style={{
               opacity: 1,
-              pickLight: true
+              pickLight: true,
+              heightfixed: true
             }}
           />
         ]}
