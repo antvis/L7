@@ -120,6 +120,8 @@ export default class GaodeMapComponent extends React.Component {
       .active({ color: '#00f' })
       .style({
         heightfixed: true,
+        // pickLight: false,
+        pickLight: true,
         // lightEnable: true,
         // opacity: 0.5,
         stroke: '#f00',

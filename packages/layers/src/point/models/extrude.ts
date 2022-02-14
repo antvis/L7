@@ -1,13 +1,12 @@
 import {
   AttributeType,
   gl,
-  IAnimateOption,
   IEncodeFeature,
   IModel,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
-import { isBoolean, isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import { isNumber } from 'lodash';
+import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
@@ -30,6 +29,7 @@ export default class ExtrudeModel extends BaseModel {
       sourceColor,
       targetColor,
 
+      pickLight = false,
       heightfixed = false,
 
       opacityLinear = {
@@ -102,6 +102,8 @@ export default class ExtrudeModel extends BaseModel {
     }
 
     return {
+      // 圆柱体的拾取高亮是否要计算光照
+      u_pickLight: Number(pickLight),
       // 圆柱体是否固定高度
       u_heightfixed: Number(heightfixed),
 
