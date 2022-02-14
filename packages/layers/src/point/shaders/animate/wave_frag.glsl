@@ -44,7 +44,7 @@ void main() {
   gl_FragColor = vec4(v_color.xyz, v_color.a * opacity * intensity);
 
   // TODO: 优化在水波纹情况下的拾取
-  if(d < 0.45) {
+  if(d < 0.5) {
     gl_FragColor = filterColor(gl_FragColor);
   }
 }
