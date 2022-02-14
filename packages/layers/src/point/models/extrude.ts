@@ -1,33 +1,14 @@
-import {
-  AttributeType,
-  gl,
-  IAnimateOption,
-  IEncodeFeature,
-  IModel,
-} from '@antv/l7-core';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
-import { isBoolean, isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import { isNumber } from 'lodash';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
 import { calculateCentroid } from '../../utils/geo';
-import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
-import pointExtrudeVert from '../shaders/extrude_vert.glsl';
-interface IPointLayerStyleOptions {
-  animateOption: IAnimateOption;
-  depth: boolean;
-  opacity: styleSingle;
-  offsets: styleOffset;
+import pointExtrudeFrag from '../shaders/extrude/extrude_frag.glsl';
+import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 
-  sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
-  targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
-  opacityLinear?: {
-    enable: boolean;
-    dir: string;
-  };
-
-  lightEnable: boolean;
-}
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
   private raiserepeat: number = 0;
@@ -42,6 +23,9 @@ export default class ExtrudeModel extends BaseModel {
 
       sourceColor,
       targetColor,
+
+      pickLight = false,
+      heightfixed = false,
 
       opacityLinear = {
         enable: false,
@@ -113,6 +97,11 @@ export default class ExtrudeModel extends BaseModel {
     }
 
     return {
+      // 圆柱体的拾取高亮是否要计算光照
+      u_pickLight: Number(pickLight),
+      // 圆柱体是否固定高度
+      u_heightfixed: Number(heightfixed),
+
       u_r: animateOption.enable && this.raiserepeat > 0 ? this.raiseCount : 1.0,
       // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
       u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,

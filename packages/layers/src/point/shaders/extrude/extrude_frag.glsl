@@ -3,6 +3,7 @@ uniform float u_opacity: 1.0;
 
 varying float v_z;
 varying float v_lightWeight;
+uniform float u_pickLight: 0.0;
 
 #pragma include "picking"
 
@@ -35,5 +36,9 @@ void main() {
   }
 
   // picking
-  gl_FragColor = filterColor(gl_FragColor);
+  if(u_pickLight > 0.0) {
+    gl_FragColor = filterColorWithLight(gl_FragColor, v_lightWeight);
+  } else {
+    gl_FragColor = filterColor(gl_FragColor);
+  }
 }

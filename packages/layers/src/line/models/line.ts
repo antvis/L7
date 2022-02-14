@@ -15,6 +15,9 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
+// dash line shader
+import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
+import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
 // other function shaders
 import linear_line_frag from '../shaders/frag/linear_frag.glsl';
 // basic line shader
@@ -166,7 +169,18 @@ export default class LineModel extends BaseModel {
     const {
       sourceColor,
       targetColor,
+      lineType,
+      dashArray,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
+    if (lineType === 'dash' && dashArray) {
+      return {
+        frag: line_dash_frag,
+        vert: line_dash_vert,
+        type: 'dash',
+      };
+    }
+
     if (sourceColor && targetColor) {
       // 分离 linear 功能
       return {

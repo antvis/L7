@@ -55,13 +55,25 @@ export interface IPointLayerStyleOptions {
   fontFamily?: string;
   textAllowOverlap?: boolean;
 
+  // cylinder
+  pickLight?: boolean;
+  depth?: boolean;
+  sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
+  targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
+  opacityLinear?: {
+    enable: boolean;
+    dir: string;
+  };
+  lightEnable: boolean;
+  heightfixed?: boolean; // 圆柱体高度是否固定（不随 zoom 发生变化）
+
   offsets?: styleOffset;
   blend?: string;
   unit?: string;
   mask?: boolean;
   maskInside?: boolean;
 
-  animateOption?: IAnimateOption;
+  animateOption: IAnimateOption;
 }
 
 export interface IPolygonLayerStyleOptions {

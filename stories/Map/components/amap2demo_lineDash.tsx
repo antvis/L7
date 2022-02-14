@@ -35,6 +35,7 @@ export default class Amap2demo_lineDash extends React.Component {
             .size(1.5)
             .shape('line')
             .color('标准名称', ['#5B8FF9', '#5CCEA1', '#F6BD16'])
+            .active(true)
             .style({
               lineType: 'dash',
               dashArray: [5, 5],

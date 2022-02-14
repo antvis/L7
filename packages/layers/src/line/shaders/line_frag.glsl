@@ -1,9 +1,6 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
 uniform float u_blur : 0.99;
-uniform float u_line_type: 0.0;
 uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
 
@@ -15,11 +12,6 @@ varying vec4 v_color;
 uniform float u_line_texture;
 uniform sampler2D u_texture;
 uniform vec2 u_textSize;
-
-// dash
-uniform float u_dash_offset : 0.0;
-uniform float u_dash_ratio : 0.1;
-varying vec4 v_dash_array;
 
 varying vec2 v_iconMapUV;
 
@@ -45,17 +37,8 @@ void main() {
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
   }
- // dash line
-  if(u_line_type == LineTypeDash) {
-    float flag = 0.;
-    float dashLength = mod(d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
-    if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
-      flag = 1.;
-    }
-    gl_FragColor.a *=flag;
-  }
 
-  if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
+  if(u_line_texture == LineTexture) { // while load texture
     float aDistance = styleMappingMat[3].g;      // 当前顶点的距离
     float d_texPixelLen = styleMappingMat[3].b;  // 贴图的像素长度，根据地图层级缩放
     float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
@@ -80,28 +63,28 @@ void main() {
     }
   } 
 
-    float v = styleMappingMat[3].a;
-    float borderWidth = min(0.5, u_borderWidth);
-    // 绘制 border
-    if(borderWidth > 0.01) {
-      float borderOuterWidth = borderWidth/2.0;
+  float v = styleMappingMat[3].a;
+  float borderWidth = min(0.5, u_borderWidth);
+  // 绘制 border
+  if(borderWidth > 0.01) {
+    float borderOuterWidth = borderWidth/2.0;
 
-      if(v >= 1.0 - borderWidth || v <= borderWidth) {
-        if(v > borderWidth) {
-          float linear = smoothstep(0.0, 1.0, (v - (1.0 - borderWidth))/borderWidth);
-          gl_FragColor.rgb = mix(gl_FragColor.rgb, u_borderColor.rgb, linear);
-        } else if(v <= borderWidth) {
-          float linear = smoothstep(0.0, 1.0, v/borderWidth);
-          gl_FragColor.rgb = mix(u_borderColor.rgb, gl_FragColor.rgb, linear);
-        }
-      }
-
-      if(v < borderOuterWidth) {
-        gl_FragColor.a = mix(0.0, gl_FragColor.a, v/borderOuterWidth);
-      } else if(v > 1.0 - borderOuterWidth) {
-        gl_FragColor.a = mix(gl_FragColor.a, 0.0, (v - (1.0 - borderOuterWidth))/borderOuterWidth);
+    if(v >= 1.0 - borderWidth || v <= borderWidth) {
+      if(v > borderWidth) {
+        float linear = smoothstep(0.0, 1.0, (v - (1.0 - borderWidth))/borderWidth);
+        gl_FragColor.rgb = mix(gl_FragColor.rgb, u_borderColor.rgb, linear);
+      } else if(v <= borderWidth) {
+        float linear = smoothstep(0.0, 1.0, v/borderWidth);
+        gl_FragColor.rgb = mix(u_borderColor.rgb, gl_FragColor.rgb, linear);
       }
     }
 
-    gl_FragColor = filterColor(gl_FragColor);
+    if(v < borderOuterWidth) {
+      gl_FragColor.a = mix(0.0, gl_FragColor.a, v/borderOuterWidth);
+    } else if(v > 1.0 - borderOuterWidth) {
+      gl_FragColor.a = mix(gl_FragColor.a, 0.0, (v - (1.0 - borderOuterWidth))/borderOuterWidth);
+    }
+  }
+
+  gl_FragColor = filterColor(gl_FragColor);
 }
