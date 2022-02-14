@@ -1,9 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  IModel,
-} from '@antv/l7-core';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
