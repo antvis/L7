@@ -196,6 +196,17 @@ vec2 project_pixel(vec2 pixel) {
   }
   return pixel * -1.;
 }
+vec3 project_pixel(vec3 pixel) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
+    // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
+    return pixel * pow(2.0, (19.0 - u_Zoom));
+  }
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+  }
+  return pixel * -1.;
+}
 
 vec4 project_common_position_to_clipspace(vec4 position, mat4 viewProjectionMatrix, vec4 center) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_METER_OFFSET ||

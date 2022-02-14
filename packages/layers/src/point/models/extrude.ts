@@ -7,8 +7,8 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { isBoolean, isNumber } from 'lodash';
-import { IPointLayerStyleOptions } from '../../core/interface';
 import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
 import { calculateCentroid } from '../../utils/geo';
@@ -29,6 +29,8 @@ export default class ExtrudeModel extends BaseModel {
 
       sourceColor,
       targetColor,
+
+      heightfixed = false,
 
       opacityLinear = {
         enable: false,
@@ -100,6 +102,9 @@ export default class ExtrudeModel extends BaseModel {
     }
 
     return {
+      // 圆柱体是否固定高度
+      u_heightfixed: Number(heightfixed),
+
       u_r: animateOption.enable && this.raiserepeat > 0 ? this.raiseCount : 1.0,
       // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
       u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,

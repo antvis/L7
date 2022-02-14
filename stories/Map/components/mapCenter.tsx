@@ -108,6 +108,7 @@ export default class GaodeMapComponent extends React.Component {
       // .color('#0f9')
       // .color('#4169E1')
       .color('#4cfd47')
+      // .size([100, 100, 1000])
       .size([100, 100, 1000])
       // .size(100)
       // .animate({
@@ -118,6 +119,7 @@ export default class GaodeMapComponent extends React.Component {
       // .animate(true)
       .active({ color: '#00f' })
       .style({
+        heightfixed: true,
         // lightEnable: true,
         // opacity: 0.5,
         stroke: '#f00',

@@ -64,6 +64,7 @@ export interface IPointLayerStyleOptions {
     dir: string;
   };
   lightEnable: boolean;
+  heightfixed?: boolean; // 圆柱体高度是否固定（不随 zoom 发生变化）
 
   offsets?: styleOffset;
   blend?: string;
