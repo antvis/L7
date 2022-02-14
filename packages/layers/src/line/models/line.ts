@@ -20,6 +20,9 @@ import linear_line_frag from '../shaders/frag/linear_frag.glsl';
 // basic line shader
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
+// dash line shader
+import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
+import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
 
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -166,7 +169,18 @@ export default class LineModel extends BaseModel {
     const {
       sourceColor,
       targetColor,
+      lineType,
+      dashArray,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
+    if(lineType === 'dash' && dashArray) {
+      return {
+        frag: line_dash_frag,
+        vert: line_dash_vert,
+        type: 'dash',
+      }
+    }
+
     if (sourceColor && targetColor) {
       // 分离 linear 功能
       return {
