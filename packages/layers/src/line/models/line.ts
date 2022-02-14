@@ -15,14 +15,14 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
+// dash line shader
+import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
+import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
 // other function shaders
 import linear_line_frag from '../shaders/frag/linear_frag.glsl';
 // basic line shader
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
-// dash line shader
-import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
-import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
 
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -173,12 +173,12 @@ export default class LineModel extends BaseModel {
       dashArray,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
-    if(lineType === 'dash' && dashArray) {
+    if (lineType === 'dash' && dashArray) {
       return {
         frag: line_dash_frag,
         vert: line_dash_vert,
         type: 'dash',
-      }
+      };
     }
 
     if (sourceColor && targetColor) {
