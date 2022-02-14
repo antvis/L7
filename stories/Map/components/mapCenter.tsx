@@ -23,7 +23,7 @@ export default class GaodeMapComponent extends React.Component {
         center: aspaceLnglat,
         // pitch: 0,
         pitch: 40,
-        // style: 'dark',
+        style: 'dark',
         zoom: 17,
         // dragEnable: false
       }),
@@ -105,7 +105,8 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       // .color('#0f9')
-      .color('#4169E1')
+      // .color('#4169E1')
+      .color('#4cfd47')
       // .size([10, 10, 100])
       .size(100)
       // .animate({
@@ -113,7 +114,7 @@ export default class GaodeMapComponent extends React.Component {
       //   enable: false,
       //   // type: 'www'
       // })
-      // .animate(true)
+      .animate(true)
       .active({ color: '#00f' })
       .style({
         // opacity: 0.5,
