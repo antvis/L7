@@ -6,8 +6,8 @@ import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
 import { calculateCentroid } from '../../utils/geo';
-import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
-import pointExtrudeVert from '../shaders/extrude_vert.glsl';
+import pointExtrudeFrag from '../shaders/extrude/extrude_frag.glsl';
+import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
