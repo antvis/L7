@@ -7,27 +7,14 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { isBoolean, isNumber } from 'lodash';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
 import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude_vert.glsl';
-interface IPointLayerStyleOptions {
-  animateOption: IAnimateOption;
-  depth: boolean;
-  opacity: styleSingle;
-  offsets: styleOffset;
 
-  sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
-  targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
-  opacityLinear?: {
-    enable: boolean;
-    dir: string;
-  };
-
-  lightEnable: boolean;
-}
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
   private raiserepeat: number = 0;

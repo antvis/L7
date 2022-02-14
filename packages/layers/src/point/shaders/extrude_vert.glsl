@@ -80,15 +80,22 @@ void main() {
   // a_Position.z 是在构建网格的时候传入的标准值 0 - 1，在插值器插值可以获取 0～1 线性渐变的值
   v_z = a_Position.z;
 
-  vec2 offset = project_pixel(size.xy);
+  // vec2 offset = project_pixel(size.xy);
+  vec2 offset = (size.xy);
 
   vec4 project_pos = project_position(vec4(a_Pos.xy, 0., 1.0));
 
-  vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z) * u_r, 1.0);
+  // vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z) * u_r, 1.0);
+  vec4 pos = vec4(project_pos.xy + offset, (size.z) * u_r, 1.0);
 
   // 圆柱光照效果
-  float lightWeight = u_lightEnable > 0.0 ? calc_lighting(pos): 1.0;
+  // float lightWeight = u_lightEnable > 0.0 ? calc_lighting(pos): 1.0;
+  float lightWeight = 1.0;
+  if(u_lightEnable > 0.0) { // 取消三元表达式，增强健壮性
+    lightWeight = calc_lighting(pos);
+  }
   v_lightWeight = lightWeight;
+
   v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);
 
   // gl_Position = project_common_position_to_clipspace(pos);

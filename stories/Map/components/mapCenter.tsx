@@ -103,20 +103,22 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
-      .shape('circle')
+      // .shape('circle')
+      .shape('cylinder')
       // .color('#0f9')
       // .color('#4169E1')
       .color('#4cfd47')
-      // .size([10, 10, 100])
-      .size(100)
+      .size([100, 100, 1000])
+      // .size(100)
       // .animate({
       //   // enable: true,
       //   enable: false,
       //   // type: 'www'
       // })
-      .animate(true)
+      // .animate(true)
       .active({ color: '#00f' })
       .style({
+        // lightEnable: true,
         // opacity: 0.5,
         stroke: '#f00',
         // strokeWidth: 10,
