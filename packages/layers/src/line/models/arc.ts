@@ -14,11 +14,14 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-// normal arc line
+// arc normal line
 import arc_line_frag from '../shaders/line_arc_frag.glsl';
 import arc_line_vert from '../shaders/line_arc_vert.glsl';
+// arc dash line
+import arc_dash_frag from '../shaders/dash/arc_dash_frag.glsl';
+import arc_dash_vert from '../shaders/dash/arc_dash_vert.glsl';
+// arc linear line
 import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
-// linear arc line
 import arc_linear_vert from '../shaders/linear/arc_linear_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -143,7 +146,16 @@ export default class ArcModel extends BaseModel {
     const {
       sourceColor,
       targetColor,
+      lineType,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (lineType === 'dash') {
+      return {
+        frag: arc_dash_frag,
+        vert: arc_dash_vert,
+        type: 'dash',
+      };
+    }
+
     if (sourceColor && targetColor) {
       // 分离 linear 功能
       return {

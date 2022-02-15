@@ -1,5 +1,3 @@
-#define Animate 0.0
-#define LineTexture 1.0
 
 attribute vec4 a_Color;
 attribute vec3 a_Position;
@@ -8,16 +6,14 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 varying vec4 v_color;
 
+
+uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_lineDir: 1.0;
+varying vec4 v_dash_array;
 
 uniform float u_thetaOffset: 0.314;
-uniform float u_icon_step: 100;
-uniform float u_line_texture: 0.0;
-attribute vec2 a_iconMapUV;
-varying vec2 v_iconMapUV;
 
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
@@ -118,16 +114,20 @@ void main() {
 
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
-  float d_distance_ratio;
-  
-  if(u_aimate.x == Animate) {
-      d_distance_ratio = segmentIndex / segmentNumber;
-      if(u_lineDir != 1.0) {
-        d_distance_ratio = 1.0 - d_distance_ratio;
-      }
-  }
 
-   styleMappingMat[3].b = d_distance_ratio;
+  vec2 s = source;
+  vec2 t = target;
+  
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    s = unProjCustomCoord(source);
+    t = unProjCustomCoord(target);
+  }
+  float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+  
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
+  
+
+   styleMappingMat[3].b = segmentIndex / segmentNumber;
 
   // styleMappingMat[0][1] - arcThetaOffset
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
@@ -136,31 +136,6 @@ void main() {
   //unProjCustomCoord
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
-
-
-  float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
-  styleMappingMat[3].r = d_segmentIndex;
-
-  if(LineTexture == u_line_texture) { // 开启贴图模式
-
-    float arcDistrance = length(source - target); // 起始点和终点的距离
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
-      arcDistrance *= 1000000.0;
-    }
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) { // mapbox
-      // arcDistrance *= 8.0;
-      arcDistrance = project_pixel_allmap(arcDistrance);
-    }
-    v_iconMapUV = a_iconMapUV;
-
-    float pixelLen = project_pixel_texture(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
-    float texCount = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
-     styleMappingMat[3].g = texCount;
-
-    float lineOffsetWidth = length(offset + offset * sign(a_Position.y)); // 线横向偏移的距离
-    float linePixelSize = project_pixel(a_Size); // 定点位置偏移
-     styleMappingMat[3].a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
-  }
   
 
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));

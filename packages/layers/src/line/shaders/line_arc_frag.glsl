@@ -1,5 +1,4 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
+
 #define Animate 0.0
 #define LineTexture 1.0
 
@@ -33,17 +32,7 @@ void main() {
 
   gl_FragColor = v_color;
   
-  // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
-  // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
   gl_FragColor.a *= opacity;
-  if(u_line_type == LineTypeDash) {
-   float flag = 0.;
-    float dashLength = mod(d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
-    if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
-      flag = 1.;
-    }
-    gl_FragColor.a *=flag;
-  }
 
   if(u_aimate.x == Animate && u_line_texture != LineTexture) {
       animateSpeed = u_time / u_aimate.y;
@@ -55,7 +44,7 @@ void main() {
   }
 
   // 当存在贴图时在底色上贴上贴图
-  if(u_line_texture == LineTexture && u_line_type != LineTypeDash) { // while load texture
+  if(u_line_texture == LineTexture) { // while load texture
     float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / segmentNumber));
     // float arcRadio = smoothstep( 0.0, 1.0, d_distance_ratio);
 

@@ -170,10 +170,9 @@ export default class LineModel extends BaseModel {
       sourceColor,
       targetColor,
       lineType,
-      dashArray,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
-    if (lineType === 'dash' && dashArray) {
+    if (lineType === 'dash') {
       return {
         frag: line_dash_frag,
         vert: line_dash_vert,
