@@ -13,10 +13,10 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
-import simple_line_frag from '../shaders/simpleline_frag.glsl';
-import simple_line_vert from '../shaders/simpleline_vert.glsl';
 // linear simple line shader
 import simle_linear_frag from '../shaders/linear/simpleline_linear_frag.glsl';
+import simple_line_frag from '../shaders/simpleline_frag.glsl';
+import simple_line_vert from '../shaders/simpleline_vert.glsl';
 export default class SimpleLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
