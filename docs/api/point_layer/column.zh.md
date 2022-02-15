@@ -120,7 +120,7 @@ layer.style({
 
 - heightFixed 设置 3D 柱体的高度固定（保持固定的笛卡尔高度而不是等像素高度）
 
-🌟  3D 柱图在设置 heightFixed 为 true 后柱子的半径也会固定，从 v2.7.12 版本开始支持
+🌟 3D 柱图在设置 heightFixed 为 true 后柱子的半径也会固定，从 v2.7.12 版本开始支持
 
 ```javascript
 style({
@@ -130,7 +130,7 @@ style({
 
 - pickLight 设置 3D 柱体拾取高亮颜色是否支持光照计算
 
-🌟  3D 柱图支持通过设置 pickLight 来控制拾取高亮颜色的光照计算，从 v2.7.12 版本开始支持
+🌟 3D 柱图支持通过设置 pickLight 来控制拾取高亮颜色的光照计算，从 v2.7.12 版本开始支持
 
 ```javascript
 style({
