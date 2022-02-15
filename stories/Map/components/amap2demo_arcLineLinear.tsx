@@ -25,7 +25,6 @@ export default class Amap2demo_arcLineLinear extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-
       let data = [
         {
           lng1: 75.76171875,
@@ -70,8 +69,8 @@ export default class Amap2demo_arcLineLinear extends React.Component {
       scene.addLayer(layer);
 
       layer.on('click', (e) => {
-        console.log(e)
-      })
+        console.log(e);
+      });
     });
   }
 
