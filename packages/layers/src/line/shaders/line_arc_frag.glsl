@@ -23,10 +23,6 @@ varying vec2 v_iconMapUV;
 
 varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 
-uniform float u_linearColor: 0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
 #pragma include "picking"
 
 void main() {
@@ -35,12 +31,7 @@ void main() {
   float d_segmentIndex = styleMappingMat[3].r;   // 当前顶点在弧线中所处的分段位置
   float d_distance_ratio = styleMappingMat[3].b; // 当前顶点在弧线中所处的分段比例
 
-  // 设置弧线的底色
-  if(u_linearColor == 1.0) { // 使用渐变颜色
-    gl_FragColor = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
-  } else { // 使用 color 方法传入的颜色
-     gl_FragColor = v_color;
-  }
+  gl_FragColor = v_color;
   
   // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
