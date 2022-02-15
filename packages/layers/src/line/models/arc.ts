@@ -17,9 +17,9 @@ import { LineArcTriangulation } from '../../core/triangulation';
 // normal arc line
 import arc_line_frag from '../shaders/line_arc_frag.glsl';
 import arc_line_vert from '../shaders/line_arc_vert.glsl';
+import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
 // linear arc line
 import arc_linear_vert from '../shaders/linear/arc_linear_vert.glsl';
-import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
