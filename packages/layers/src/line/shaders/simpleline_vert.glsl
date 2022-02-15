@@ -11,13 +11,13 @@ attribute float a_Distance;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
+uniform float u_opacity: 1.0;
 uniform float u_vertexScale: 1.0;
 
 #pragma include "projection"
 
 varying vec4 v_color;
 
-uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
 #pragma include "styleMapping"
@@ -51,11 +51,7 @@ void main() {
   // cal style mapping - 数据纹理映射部分的计算
 
   float d_distance_ratio; // 当前点位距离占线总长的比例
-  v_color = a_Color;
-
-  // 设置数据集的参数
-  styleMappingMat[3][0] = a_Distance / a_Total_Distance; // 当前点位距离占线总长的比例
-  
+  v_color = a_Color;  
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 

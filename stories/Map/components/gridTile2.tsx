@@ -177,7 +177,7 @@ export default class GridTile2 extends React.Component {
         .style({
           vertexHeightScale: 2000,
           sourceColor: '#f00',
-          targetColor: '#0f0',
+          // targetColor: '#0f0',
         });
       scene.addLayer(layer);
     };
