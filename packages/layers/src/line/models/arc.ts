@@ -14,8 +14,12 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-import line_arc_frag from '../shaders/line_arc_frag.glsl';
-import line_arc2d_vert from '../shaders/line_arc_vert.glsl';
+// normal arc line
+import arc_line_frag from '../shaders/line_arc_frag.glsl';
+import arc_line_vert from '../shaders/line_arc_vert.glsl';
+// linear arc line
+import arc_linear_vert from '../shaders/linear/arc_linear_vert.glsl';
+import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -135,18 +139,39 @@ export default class ArcModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
+  public getShaders(): { frag: string; vert: string; type: string } {
+    const {
+      sourceColor,
+      targetColor,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (sourceColor && targetColor) {
+      // 分离 linear 功能
+      return {
+        frag: arc_linear_frag,
+        vert: arc_linear_vert,
+        type: 'linear',
+      };
+    } else {
+      return {
+        frag: arc_line_frag,
+        vert: arc_line_vert,
+        type: 'normal',
+      };
+    }
+  }
+
   public buildModels(): IModel[] {
     const {
       segmentNumber = 30,
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
+    const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'arc2dline',
-        vertexShader: line_arc2d_vert,
-        fragmentShader: line_arc_frag,
+        moduleName: 'arc2dline' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
