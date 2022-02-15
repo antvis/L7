@@ -19,7 +19,7 @@ import { LineTriangulation } from '../../core/triangulation';
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
 import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
 // other function shaders
-import linear_line_frag from '../shaders/frag/linear_frag.glsl';
+import linear_line_frag from '../shaders/linear/line_linear_frag.glsl';
 // basic line shader
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';

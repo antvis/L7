@@ -116,7 +116,6 @@ export default class ArcModel extends BaseModel {
 
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    // console.log('animateOption', animateOption)
     return {
       u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),

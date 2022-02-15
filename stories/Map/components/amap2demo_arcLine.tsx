@@ -44,7 +44,7 @@ export default class Amap2demo_arcLine extends React.Component {
             .style({
               opacity: 0.8,
               blur: 0.99,
-              // segmentNumber: 3,
+              segmentNumber: 3,
               // lineType: 'dash',
               // dashArray: [5, 5],
             });
