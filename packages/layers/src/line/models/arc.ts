@@ -14,12 +14,12 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-// arc normal line
-import arc_line_frag from '../shaders/line_arc_frag.glsl';
-import arc_line_vert from '../shaders/line_arc_vert.glsl';
 // arc dash line
 import arc_dash_frag from '../shaders/dash/arc_dash_frag.glsl';
 import arc_dash_vert from '../shaders/dash/arc_dash_vert.glsl';
+// arc normal line
+import arc_line_frag from '../shaders/line_arc_frag.glsl';
+import arc_line_vert from '../shaders/line_arc_vert.glsl';
 // arc linear line
 import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
 import arc_linear_vert from '../shaders/linear/arc_linear_vert.glsl';
