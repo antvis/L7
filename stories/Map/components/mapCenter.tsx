@@ -90,12 +90,12 @@ export default class GaodeMapComponent extends React.Component {
           {
             lng: 120.1025,
             lat: 30.264701434772807,
-            name: 'n2'
+            name: 'n2',
           },
           {
             lng: 120.1019811630249,
             lat: 30.264701434772807,
-            name: 'n3'
+            name: 'n3',
           },
         ],
         {
@@ -171,9 +171,9 @@ export default class GaodeMapComponent extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
 
-      let scale = layer.getScale('size')
-      console.log('scale n2', scale('n2'))
-      console.log('scale n3', scale('n3'))
+      let scale = layer.getScale('size');
+      console.log('scale n2', scale('n2'));
+      console.log('scale n3', scale('n3'));
 
       scene.addLayer(text);
       scene.addLayer(line);
