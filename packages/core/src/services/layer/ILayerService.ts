@@ -166,6 +166,7 @@ export interface ILayer {
   ): void;
   init(): ILayer;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
+  getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
