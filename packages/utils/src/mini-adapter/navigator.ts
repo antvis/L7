@@ -1,8 +1,11 @@
-// @ts-nocheck
+// @ts-nocheck 判断时候是支付宝小程序环境 （ my.isFRM == true smallfish H5+ ）
 import { globalWindow } from './global';
 export const isMiniAli =
   // @ts-ignore
-  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
+  typeof my !== 'undefined' &&
+  !!my &&
+  typeof my.showToast === 'function' &&
+  my.isFRM !== true;
 let system;
 let platform;
 let language;

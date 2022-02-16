@@ -29,10 +29,10 @@ import { $XMLHttpRequest as $XMLHttpRequest2 } from './XMLHttpRequest';
 
 import { globalWindow } from './global'
 
-// 判断时候是支付宝小程序环境
+// 判断时候是支付宝小程序环境 （ my.isFRM == true smallfish H5+ ）
 export const isMiniAli =
   // @ts-ignore
-  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function';
+  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function' && my.isFRM !== true;
 
 export const isWeChatMiniProgram = typeof wx !== 'undefined' && wx !== null && (typeof wx.request !== 'undefined' || typeof wx.miniProgram !== 'undefined');
 
