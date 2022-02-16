@@ -99,8 +99,8 @@ export default class CustomPostProcessing extends React.Component {
     // 注册自定义后处理效果
     scene.registerPostProcessingPass(DotScreenEffect, 'dotScreenEffect');
     const layer = new PolygonLayer({
-      enablePicking: true,
-      enableHighlight: true,
+      // enablePicking: true,
+      // enableHighlight: true,
       enableMultiPassRenderer: true,
       passes: [
         [
@@ -124,6 +124,7 @@ export default class CustomPostProcessing extends React.Component {
         '#FF7A45',
         '#CF1D49',
       ])
+      .active(true)
       .shape('fill')
       .style({
         opacity: 0.8,
