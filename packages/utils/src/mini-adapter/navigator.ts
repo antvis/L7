@@ -2,7 +2,10 @@
 import { globalWindow } from './global';
 export const isMiniAli =
   // @ts-ignore
-  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function' && my.isFRM !== true;
+  typeof my !== 'undefined' &&
+  !!my &&
+  typeof my.showToast === 'function' &&
+  my.isFRM !== true;
 let system;
 let platform;
 let language;
