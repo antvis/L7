@@ -890,6 +890,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public getEncodedData() {
     return this.encodedData;
   }
+
+  public getScale(name: string): any {
+    return this.styleAttributeService.getLayerAttributeScale(name);
+  }
+
   public getLegendItems(name: string): any {
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
     if (scale) {

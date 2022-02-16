@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, Scene, LineLayer, PolygonLayer } from '@antv/l7';
+import { PointLayer, Scene, LineLayer, PolygonLayer, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 import * as turf from '@turf/turf';
@@ -82,17 +82,20 @@ export default class GaodeMapComponent extends React.Component {
     let layer = new PointLayer({}) // blend: 'additive'
       .source(
         [
-          {
-            lng: 120,
-            lat: 30.267069,
-          },
+          // {
+          //   lng: 120,
+          //   lat: 30.267069,
+          //   name: 'n1'
+          // },
           {
             lng: 120.1025,
             lat: 30.264701434772807,
+            name: 'n2',
           },
           {
             lng: 120.1019811630249,
             lat: 30.264701434772807,
+            name: 'n3',
           },
         ],
         {
@@ -103,14 +106,16 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
-      // .shape('circle')
-      .shape('cylinder')
+      .shape('circle')
+      // .shape('cylinder')
       // .color('#0f9')
       // .color('#4169E1')
-      .color('#4cfd47')
+      // .color('#4cfd47')
+      .color('name', ['#f00', '#ff0'])
       // .size([100, 100, 1000])
-      .size([100, 100, 1000])
-      // .size(100)
+      // .size([100, 100, 1000])
+      // .size(10)
+      .size('name', [20, 40])
       // .animate({
       //   // enable: true,
       //   enable: false,
@@ -140,10 +145,40 @@ export default class GaodeMapComponent extends React.Component {
 
     this.scene = scene;
 
+    // console.log('layer', layer)
+
+    // let layer2 = new PointLayer({})
+    // .source([
+    //   {
+    //     lng: 120.1025,
+    //     lat: 30.264701434772807,
+    //     name: 'n2'
+    //   }
+    // ], {
+    //   parser: {
+    //     type: 'json',
+    //     x: 'lng',
+    //     y: 'lat',
+    //   },
+    // })
+    // .shape('circle')
+    // .size(10)
+    // .color('#00f')
+    // .style({
+    //   opacity: 0.5
+    // })
+
     scene.on('loaded', () => {
       scene.addLayer(layer);
+
+      let scale = layer.getScale('size');
+      console.log('scale n2', scale('n2'));
+      console.log('scale n3', scale('n3'));
+
       scene.addLayer(text);
       scene.addLayer(line);
+
+      // scene.addLayer(layer2);
       // scene.addLayer(trufCircle);
       // scene.on('movestart', e => console.log('e', e))
       // scene.on('mapmove', e => console.log('e', e))
