@@ -32,7 +32,7 @@
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
-    "l7-tiny-sdf": "^0.0.2",
+    "l7-tiny-sdf": "^0.0.3",
     "l7hammerjs": "^0.0.6",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
