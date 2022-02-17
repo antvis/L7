@@ -3,8 +3,6 @@ title: 文档链接
 order: 0
 ---
 
-## 关于
-
 旧版地图行政区划组件 - [L7Boundary](https://antv.vision/L7-boundary/)
 
 新版地图行政区划组件 - [L7Plot Choropleth](https://l7plot.antv.vision/zh/docs/api/plots/choropleth)
