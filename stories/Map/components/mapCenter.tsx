@@ -122,6 +122,7 @@ export default class GaodeMapComponent extends React.Component {
       //   // type: 'www'
       // })
       // .animate(true)
+      .select(true)
       .active({ color: '#00f' })
       .style({
         heightfixed: true,

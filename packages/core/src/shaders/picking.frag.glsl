@@ -18,14 +18,16 @@ uniform float u_activeMix: 0;
  * Returns highlight color if this item is selected.
  */
 vec4 filterHighlightColor(vec4 color, float weight) {
-  float selected = v_PickingResult.a;
+  // float selected = v_PickingResult.a;
+  bool selected = bool(v_PickingResult.a);
 
-  if (selected == SELECT) {
-    // 点击选中状态
-    vec4 selectColor = u_SelectColor * COLOR_SCALE;
-    return selectColor;
-  } else if (selected == HIGHLIGHT) {
-    // hover 高亮状态
+  // if (selected == SELECT) {
+  if (selected) {
+  //   // 点击选中状态
+  //   vec4 selectColor = u_SelectColor * COLOR_SCALE;
+  //   return selectColor;
+  // } else if (selected == HIGHLIGHT) {
+  //   // hover 高亮状态
     vec4 highLightColor = u_HighlightColor * COLOR_SCALE;
 
     float highLightAlpha = highLightColor.a;
