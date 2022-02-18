@@ -1,6 +1,6 @@
 ## Usage
 
-1. 按图表方式
+1. 按图表方式，[在线示例](https://l7plot.antv.vision/zh/examples/choropleth/administrative#china-map)
 
 ```js
 import { Choropleth } from '@antv/l7plot';
@@ -8,7 +8,7 @@ import { Choropleth } from '@antv/l7plot';
 const choropleth = new Choropleth('container', options);
 ```
 
-2. 按场景方式
+2. 按场景方式，[在线示例](/zh/examples/choropleth/administrative#china-map)
 
 ```js
 import { Scene, Mapbox } from '@antv/l7';
