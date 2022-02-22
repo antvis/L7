@@ -83,20 +83,59 @@ layer.on('click', (e) => {
 });
 ```
 
-### 方法
+#### setData
+更新source 数据
 
-#### getClustersLeaves(cluster_id)
+##### 参数
+- data 数据同source初始化参数
+- option 配置项同source初始化参数
 
-聚合图使用，获取聚合节点的原始数据
+#### getFeatureById
+根据featurID 获取 feature 要素
 
-参数：
-id 聚合节点的 cluster_id
+##### 参数
+  - id featureId，L7 内部编码的唯一要素ID
 
-```javascript
-layer.on('click', (e) => {
-  console.log(source.getClustersLeaves(e.feature.cluster_id));
-});
+```tsx
+const source = layer.getSource();
+source.getFeatureById(1);
+
 ```
+
+#### updateFeaturePropertiesById
+根据ID更新 source 的属性数据，会触发从新渲染
+
+##### 参数
+
+- id featureId，L7 内部编码的唯一要素ID
+-  Properties 需要更新属性数据，merge 操作
+
+```tsx
+const source = layer.getSource();
+ layer.on('click', (e) => {
+      source.updateFeaturePropertiesById(e.featureId, {
+        name: Math.random() * 10,
+      });
+    });
+```
+
+#### getFeatureId
+根据属性的key、value 获取要素 L7 编码featureId，确保该属性的value 是唯一值，如存在多个返回第一个。
+
+##### 参数
+- key: 属性字段
+- value: 对应的值
+
+```tsx
+const source = layer.getSource();
+source.getFeatureId('name','张三')
+
+```
+
+
+
+
+### 数据类型
 
 #### JSON
 

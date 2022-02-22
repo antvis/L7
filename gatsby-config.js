@@ -227,7 +227,7 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source',
         },
-        order: 10,
+        order: 2.1,
       },
       {
         slug: 'api/district',
