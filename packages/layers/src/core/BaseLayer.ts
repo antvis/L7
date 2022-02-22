@@ -899,7 +899,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
     if (scale) {
       if (scale.invertExtent) {
-        // 连续类型
+        // 分段类型  Quantize、Quantile、Threshold
         const items = scale.range().map((item: any) => {
           return {
             value: scale.invertExtent(item),
@@ -908,7 +908,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         });
         return items;
       } else if (scale.ticks) {
-        // 连续分段类型
+        // 连续类型 Continuous (Linear, Power, Log, Identity, Time)
         const items = scale.ticks().map((item: any) => {
           return {
             value: item,
@@ -917,7 +917,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         });
         return items;
       } else if (scale?.domain) {
-        // 枚举类型
+        // 枚举类型 Cat
         const items = scale.domain().map((item: string | number) => {
           return {
             // @ts-ignore
