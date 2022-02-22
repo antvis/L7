@@ -1,5 +1,4 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
+
 #define Animate 0.0
 
 attribute float a_Miter;
@@ -16,8 +15,6 @@ attribute float a_Distance;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform float u_line_type: 0.0;
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 
@@ -27,7 +24,6 @@ uniform float u_vertexScale: 1.0;
 #pragma include "picking"
 
 varying vec4 v_color;
-varying vec4 v_dash_array;
 
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 varying vec2 v_iconMapUV;
@@ -68,7 +64,6 @@ void main() {
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
 
-  float d_distance_ratio; // 当前点位距离占线总长的比例
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
 
   v_iconMapUV = a_iconMapUV;
@@ -77,13 +72,6 @@ void main() {
     d_texPixelLen *= 10.0;
   }
 
-  if(u_line_type == LineTypeDash) {
-    d_distance_ratio = a_Distance / a_Total_Distance;
-    v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
-  }
-  if(u_aimate.x == Animate || u_linearColor == 1.0) {
-      d_distance_ratio = a_Distance / a_Total_Distance;
-  }
   v_color = a_Color;
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
@@ -95,7 +83,7 @@ void main() {
   float texV = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
 
   // 设置数据集的参数
-  styleMappingMat[3][0] = d_distance_ratio; // 当前点位距离占线总长的比例
+  styleMappingMat[3][0] = a_Distance / a_Total_Distance;; // 当前点位距离占线总长的比例
   styleMappingMat[3][1] = a_Distance;       // 当前顶点的距离
   styleMappingMat[3][2] = d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
   styleMappingMat[3][3] = texV;             // 线图层贴图部分的 v 坐标值

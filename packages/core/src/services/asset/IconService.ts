@@ -121,6 +121,8 @@ export default class IconService extends EventEmitter implements IIconService {
     }
   }
   public destroy(): void {
+    // 在销毁的时候清除所有注册的监听
+    this.removeAllListeners('imageUpdate');
     this.iconData = [];
     this.iconMap = {};
   }

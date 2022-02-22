@@ -16,47 +16,47 @@ layer.style({
 });
 ```
 
-- 样式数据映射
-  在大多数情况下，用户需要将 source 中传入的数据映射到图层的元素中，以此来达到需要的可视化的效果，比如想要用柱形图表示各地的人口数据，代码可能是这个样子的：
+- 样式数据映射🌟  
+  在正常情况下，style 的参数会作用到一个图层上的所有图形，如一个 PointLayer 中有十个点，我们设置 opacity = 0.5， 这样十个点的透明度都是 0.5。   
+  而在特殊情况下，我们可能需要为每个点分别设置一个透明度，这时候按照原来的方式直接设置 style 方法的 opacity 的值就无法满足需求了，为此我们需要提供特殊的赋值方式。    
+  通常我们会根据传入图层的数据为图层的每个图形设置单独的值，因此我们称之为“样式数据映射”。      
+  我们支持几种设置 style 中的参数从 source 数据中动态取值的写法。   
 
 ```javascript
-const population = await getPopulation();
+// 根据数据中的 v 字段的值设置点图层各个点的透明度
+const data = [
+  {
+    lng: 120,
+    lat: 30,
+    v: 0.5
+  },
+  ...
+]
 const layer = new PointLayer()
-  .source(population)
-  .shape('cylinder')
-  .color('#f00')
-  .size('population'); // population 字段表示数据中的人口值
-scene.addLayer(layer);
-```
-
-而在一些特殊的业务场景下，我们可能需要将除了 size、color、以外的属性根据数据动态设置，如我们在绘制文本标注的时候需要根据文本的长短来设置偏移量，以保证文本位置的相对固定。在这种情况下，我们就需要使用图层样式数据纹理来完成这一项工作。
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*wZOKSb0YdjwAAAAAAAAAAAAAARQnAQ'>
-
-```javascript
-const pointLayer = new PointLayer({})
   .source(data, {
     parser: {
-      type: 'json',
-      x: 'j',
-      y: 'w',
-    },
+      x: 'lng',
+      y: 'lat'
+    }
   })
-  .shape('m', 'text')
-  .size(12)
-  .color('w', ['#0e0030', '#0e0030', '#0e0030'])
-  .style({
-    textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-    textOffset: 'textOffset', // 文本相对锚点的偏移量 [水平, 垂直]
-    fontFamily,
-    iconfont: true,
-    textAllowOverlap: true,
-  });
+  .shape('circle')
+  .color('#f00')
+  .size({
+    // 第一种写法 根据字段从 data 中直接取值
+    opacity: 'v'// opacity = 0.5
+
+    // 第二种写法 根据字段从 data 中取值，同时通过回调函数赋值（通常会在回调函数中写业务逻辑）
+    opacity: ['v', (v: number) => v] // opacity = 0.5
+
+    // 第三种写法 根据字段取值，然后映射到设置的值区间
+    opaicty: ['v', [0.1, 0.5]] // opacity 的值字啊 0.1 ～ 0.5 之间
+  }); 
+scene.addLayer(layer);
 ```
 
 [在线案例](../../examples/point/text#styleMap)
 
-从 L7 2.5 开始，各图层样式将逐步支持样式数据映射
+从 L7 2.5 开始，各图层样式将逐步支持样式数据映射，目前支持样式数据映射的 style 参数如下：
 
 | layer 类型/shape       | 支持的样式字段                                       | 备注                              |
 | ---------------------- | ---------------------------------------------------- | --------------------------------- |

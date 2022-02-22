@@ -1,16 +1,27 @@
-import { RasterLayer, Scene } from '@antv/l7';
+import { RasterLayer, Scene, MaskLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as GeoTIFF from 'geotiff';
 const scene = new Scene({
   id: 'map',
+  stencil: true,
   map: new GaodeMap({
     pitch: 0,
     style: 'dark',
-    center: [ 115.5268, 34.3628 ],
-    zoom: 3
+    center: [ 105, 37.5 ],
+    zoom: 2.5
   })
 });
 scene.on('loaded', () => {
+  fetch(
+    'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json'
+  )
+    .then(res => res.json())
+    .then(data => {
+      const layer = new MaskLayer({})
+        .source(data);
+
+      scene.addLayer(layer);
+    });
   addLayer();
 });
 async function getTiffData() {
@@ -35,7 +46,7 @@ async function getTiffData() {
 async function addLayer() {
   const tiffdata = await getTiffData();
 
-  const layer = new RasterLayer({});
+  const layer = new RasterLayer({ mask: true });
   layer
     .source(tiffdata.data, {
       parser: {

@@ -1,1 +1,1 @@
-`markdown:docs/api/layer/point_layer/scatter.en.md`
+`markdown:docs/api/point_layer/scatter.en.md`

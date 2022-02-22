@@ -9,15 +9,16 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import BaseModel, {
-  styleColor,
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
+import { getMask } from '@antv/l7-utils';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import {
   GlobelPointFillTriangulation,
   PointFillTriangulation,
 } from '../../core/triangulation';
+// animate pointLayer shader - support animate
+import waveFillFrag from '../shaders/animate/wave_frag.glsl';
+// static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
@@ -25,16 +26,6 @@ import { isNumber } from 'lodash';
 
 import { Version } from '@antv/l7-maps';
 import { mat4, vec3 } from 'gl-matrix';
-interface IPointLayerStyleOptions {
-  opacity: styleSingle;
-  strokeWidth: styleSingle;
-  stroke: styleColor;
-  strokeOpacity: styleSingle;
-  offsets: styleOffset;
-  blend: string;
-  unit: string;
-}
-// 判断当前使用的 style 中的变量属性是否需要进行数据映射
 export default class FillModel extends BaseModel {
   public meter2coord: number = 1;
   private isMeter: boolean = false;
@@ -112,9 +103,11 @@ export default class FillModel extends BaseModel {
     };
   }
   public getAnimateUniforms(): IModelUniform {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+    const {
+      animateOption = { enable: false },
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
@@ -139,8 +132,7 @@ export default class FillModel extends BaseModel {
     if (
       unit === 'meter' &&
       version !== Version.L7MAP &&
-      version !== Version.GLOBEL &&
-      version !== Version.MAPBOX
+      version !== Version.GLOBEL
     ) {
       this.isMeter = true;
       this.calMeter2Coord();
@@ -149,10 +141,34 @@ export default class FillModel extends BaseModel {
     return this.buildModels();
   }
 
+  /**
+   * 计算等面积点图层（unit meter）笛卡尔坐标标度与世界坐标标度的比例
+   * @returns
+   */
   public calMeter2Coord() {
     // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
+
+    const { version } = this.mapService;
+    if (version === Version.MAPBOX && window.mapboxgl.MercatorCoordinate) {
+      const coord = window.mapboxgl.MercatorCoordinate.fromLngLat(
+        { lng: center[0], lat: center[1] },
+        0,
+      );
+      const offsetInMeters = 1;
+      const offsetInMercatorCoordinateUnits =
+        offsetInMeters * coord.meterInMercatorCoordinateUnits();
+      const westCoord = new window.mapboxgl.MercatorCoordinate(
+        coord.x - offsetInMercatorCoordinateUnits,
+        coord.y,
+        coord.z,
+      );
+      const westLnglat = westCoord.toLngLat();
+
+      this.meter2coord = center[0] - westLnglat.lng;
+      return;
+    }
 
     // @ts-ignore
     const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
@@ -169,27 +185,67 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+      animateOption = { enable: false },
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { frag, vert, type } = this.getShaders(animateOption);
+
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
+        moduleName: 'pointfill-' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: isGlobel
           ? GlobelPointFillTriangulation
           : PointFillTriangulation,
         // depth: { enable: false },
         depth: { enable: isGlobel },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
+  }
+
+  /**
+   * 根据 animateOption 的值返回对应的 shader 代码
+   * @returns
+   */
+  public getShaders(
+    animateOption: IAnimateOption,
+  ): { frag: string; vert: string; type: string } {
+    if (animateOption.enable) {
+      switch (animateOption.type) {
+        case 'wave':
+          return {
+            frag: waveFillFrag,
+            vert: pointFillVert,
+            type: 'wave',
+          };
+        default:
+          return {
+            frag: waveFillFrag,
+            vert: pointFillVert,
+            type: 'wave',
+          };
+      }
+    } else {
+      return {
+        frag: pointFillFrag,
+        vert: pointFillVert,
+        type: 'normal',
+      };
+    }
   }
 
   public clearModels() {
     this.dataTexture?.destroy();
   }
 
+  // overwrite baseModel func
   protected animateOption2Array(option: IAnimateOption): number[] {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }

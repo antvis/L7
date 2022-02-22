@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.6.34",
+  "version": "2.7.18",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,7 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-utils": "^2.6.34",
+    "@antv/l7-utils": "^2.7.18",
     "@babel/runtime": "^7.7.7",
     "ajv": "^6.10.2",
     "element-resize-event": "^3.0.3",
@@ -32,8 +32,8 @@
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
-    "l7-tiny-sdf": "^0.0.2",
-    "l7hammerjs": "^0.0.6",
+    "l7-tiny-sdf": "^0.0.3",
+    "l7hammerjs": "^0.0.7",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "viewport-mercator-project": "^6.2.1"

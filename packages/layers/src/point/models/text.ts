@@ -1,46 +1,25 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { boundsContains, padBounds, rgb2arr } from '@antv/l7-utils';
-import { isNumber, isString } from 'lodash';
-import BaseModel, {
-  styleColor,
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
+import { boundsContains, getMask, padBounds } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
 import { calculateCentroid } from '../../utils/geo';
 import {
-  anchorType,
   getGlyphQuads,
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
 import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
-interface IPointTextLayerStyleOptions {
-  opacity: styleSingle;
-  strokeWidth: styleSingle;
-  stroke: styleColor;
-  textOffset: [number, number];
 
-  textAnchor: anchorType;
-  spacing: number;
-  padding: [number, number];
-  halo: number;
-  gamma: number;
-  fontWeight: string;
-  fontFamily: string;
-  textAllowOverlap: boolean;
-}
 export function TextTriangulation(feature: IEncodeFeature) {
   // @ts-ignore
   const that = this as TextModel;
@@ -113,7 +92,7 @@ export default class TextModel extends BaseModel {
   private extent: [[number, number], [number, number]];
   private textureHeight: number = 0;
   private textCount: number = 0;
-  private preTextStyle: Partial<IPointTextLayerStyleOptions> = {};
+  private preTextStyle: Partial<IPointLayerStyleOptions> = {};
   public getUninforms(): IModelUniform {
     const {
       opacity = 1.0,
@@ -123,7 +102,7 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
       this.updateTexture();
@@ -197,7 +176,7 @@ export default class TextModel extends BaseModel {
     const {
       textAnchor = 'center',
       textAllowOverlap = true,
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.preTextStyle = {
       textAnchor,
       textAllowOverlap,
@@ -206,6 +185,10 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels = () => {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
@@ -218,13 +201,14 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   };
   public needUpdate() {
     const {
       textAllowOverlap = false,
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     // textAllowOverlap 发生改变
     const zoom = this.mapService.getZoom();
     const extent = this.mapService.getBounds();
@@ -285,7 +269,6 @@ export default class TextModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          // console.log([vertex[5], vertex[6]])
           return [vertex[5], vertex[6]];
         },
       },
@@ -351,7 +334,7 @@ export default class TextModel extends BaseModel {
     const {
       fontWeight = '400',
       fontFamily = 'sans-serif',
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
@@ -379,7 +362,7 @@ export default class TextModel extends BaseModel {
     const {
       fontWeight = '400',
       fontFamily = 'sans-serif',
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
@@ -407,7 +390,7 @@ export default class TextModel extends BaseModel {
       spacing = 2,
       textAnchor = 'center',
       // textOffset,
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
 
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
@@ -452,7 +435,7 @@ export default class TextModel extends BaseModel {
     const {
       padding = [4, 4],
       textAllowOverlap = false,
-    } = this.layer.getLayerConfig() as IPointTextLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (textAllowOverlap) {
       // 如果允许文本覆盖
       // this.layer.setEncodedData(this.glyphInfo);
@@ -528,6 +511,10 @@ export default class TextModel extends BaseModel {
   }
 
   private reBuildModel() {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     this.layer.models = [
       this.layer.buildLayerModel({
@@ -537,6 +524,7 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

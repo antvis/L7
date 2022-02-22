@@ -2,20 +2,17 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
-interface IImageLayerStyleOptions {
-  opacity: styleSingle;
-  offsets: styleOffset;
-}
 export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
@@ -23,7 +20,7 @@ export default class ImageModel extends BaseModel {
     const {
       opacity,
       offsets = [0, 0],
-    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
@@ -95,6 +92,10 @@ export default class ImageModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointImage',
@@ -104,6 +105,7 @@ export default class ImageModel extends BaseModel {
         primitive: gl.POINTS,
         depth: { enable: false },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

@@ -52,7 +52,6 @@ import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import { updateShape } from '../utils/updateShape';
-import baseLayerSchema from './schema';
 /**
  * 分配 layer id
  */
@@ -73,6 +72,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public selectedFeatureID: number | null = null;
   public styleNeedUpdate: boolean = false;
   public rendering: boolean;
+  public clusterZoom: number = 0; // 聚合等级标记
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -265,10 +265,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
-    const { enableMultiPassRenderer = false } = this.rawConfig;
-    this.configService.setLayerConfig(sceneId, this.id, {
-      enableMultiPassRenderer,
-    });
+    // const { enableMultiPassRenderer = false } = this.rawConfig;
+    // this.configService.setLayerConfig(sceneId, this.id, {
+    //   enableMultiPassRenderer,
+    // });
+    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
 
     // 全局容器服务
 
@@ -491,6 +492,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       data,
       options,
     };
+    this.clusterZoom = 0;
     return this;
   }
   public setData(data: any, options?: ISourceCFG) {
@@ -557,26 +559,28 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public render(): ILayer {
-    // if (
-    //   this.needPick() &&
-    //   this.multiPassRenderer &&
-    //   this.multiPassRenderer.getRenderFlag()
-    // ) {
-    //   this.multiPassRenderer.render();
-    // } else if (this.needPick() && this.multiPassRenderer) {
-    //   this.renderModels();
-    // } else {
-    //   this.renderModels();
-    // }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length !== 0) {
       this.renderModels();
     }
-    // this.renderModels();
-
-    // this.multiPassRenderer.render();
-    // this.renderModels();
     return this;
+  }
+
+  /**
+   * renderMultiPass 专门用于渲染支持 multipass 的 layer
+   */
+  public async renderMultiPass() {
+    if (this.getEncodedData().length !== 0) {
+      if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
+        // multi render 开始执行 multiPassRender 的渲染流程
+        await this.multiPassRenderer.render();
+      } else if (this.multiPassRenderer) {
+        // renderPass 触发的渲染
+        this.renderModels();
+      } else {
+        this.renderModels();
+      }
+    }
   }
 
   public active(options: IActiveOption | boolean) {
@@ -862,6 +866,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
 
     this.layerSource = source;
+    this.clusterZoom = 0;
 
     // 已 inited 且启用聚合进行更新聚合数据
     if (this.inited && this.layerSource.cluster) {
@@ -885,10 +890,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public getEncodedData() {
     return this.encodedData;
   }
+
+  public getScale(name: string): any {
+    return this.styleAttributeService.getLayerAttributeScale(name);
+  }
+
   public getLegendItems(name: string): any {
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
     if (scale) {
       if (scale.ticks) {
+        // 连续分段类型
         const items = scale.ticks().map((item: any) => {
           return {
             value: item,
@@ -897,10 +908,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         });
         return items;
       } else if (scale.invertExtent) {
+        // 连续类型
         const items = scale.range().map((item: any) => {
           return {
             value: scale.invertExtent(item),
             [name]: item,
+          };
+        });
+        return items;
+      } else if (scale?.domain) {
+        // 枚举类型
+        const items = scale.domain().map((item: string | number) => {
+          return {
+            // @ts-ignore
+            value: item || '无',
+            color: scale(item),
           };
         });
         return items;
@@ -1010,6 +1032,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     throw new Error('Method not implemented.');
   }
 
+  public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
+    await multiPassRenderer.render();
+  }
+
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length > 0) {
@@ -1093,7 +1119,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (autoFit) {
       this.fitBounds(fitBoundsOptions);
     }
-
+    // 对外暴露事件
     this.emit('dataUpdate');
     this.reRender();
   };

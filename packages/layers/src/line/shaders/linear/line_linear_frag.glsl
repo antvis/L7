@@ -1,0 +1,32 @@
+#define LineTypeSolid 0.0
+#define LineTypeDash 1.0
+#define Animate 0.0
+#define LineTexture 1.0
+uniform float u_blur : 0.99;
+uniform float u_line_type: 0.0;
+uniform float u_opacity : 1.0;
+
+varying vec4 v_color;
+
+uniform float u_linearColor: 0;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
+
+#pragma include "picking"
+
+
+varying mat4 styleMappingMat;
+// [animate, duration, interval, trailLength],
+void main() {
+  float opacity = styleMappingMat[0][0];
+  float d_distance_ratio = styleMappingMat[3].r; // 当前点位距离占线总长的比例
+
+  if(u_linearColor == 1.0) { // 使用渐变颜色
+    gl_FragColor = mix(u_sourceColor, u_targetColor, d_distance_ratio);
+  } else { // 使用 color 方法传入的颜色
+     gl_FragColor = v_color;
+  }
+
+  gl_FragColor.a *= opacity; // 全局透明度
+  gl_FragColor = filterColor(gl_FragColor);
+}

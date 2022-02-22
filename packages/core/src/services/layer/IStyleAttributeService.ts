@@ -76,6 +76,7 @@ export enum AttributeType {
 
 export interface IAnimateOption {
   enable: boolean;
+  type?: string;
   interval?: number;
   duration?: number;
   trailLength?: number;

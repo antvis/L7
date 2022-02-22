@@ -12,7 +12,7 @@ export type LineModelType =
   | 'arc3d'
   | 'greatcircle'
   | 'wall'
-  | 'simpleline'
+  | 'simple'
   | 'line';
 
 const LineModels: { [key in LineModelType]: any } = {
@@ -22,7 +22,7 @@ const LineModels: { [key in LineModelType]: any } = {
   greatcircle: GreatCircleModel,
   wall: LineWallModel,
   line: LineModel,
-  simpleline: SimpleLineModel,
+  simple: SimpleLineModel,
 };
 
 export default LineModels;

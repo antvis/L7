@@ -33,8 +33,9 @@ export default class Blur extends React.Component {
       }),
     });
     const layer = new PolygonLayer({
-      enablePicking: true,
-      enableHighlight: true,
+      // enablePicking: true,
+      // enableHighlight: true,
+      enableMultiPassRenderer: true,
       passes: [
         [
           'blurH',
@@ -63,11 +64,29 @@ export default class Blur extends React.Component {
         '#CF1D49',
       ])
       .shape('fill')
+      .active(true)
       .style({
         opacity: 0.8,
       });
 
     scene.addLayer(layer);
+
+    // const layer2 = new PolygonLayer()
+    // .source(data)
+    // .size('name', [0, 10000, 50000, 30000, 100000])
+    // .color('name', [
+    //   '#2E8AE6',
+    //   '#69D1AB',
+    //   '#DAF291',
+    //   '#FFD591',
+    //   '#FF7A45',
+    //   '#CF1D49',
+    // ])
+    // .shape('fill')
+    // .style({
+    //   opacity: 0.8,
+    // });
+    // scene.addLayer(layer2);
 
     this.scene = scene;
 

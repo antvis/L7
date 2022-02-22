@@ -10,13 +10,20 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
+// dash line shader
+import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
+import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
+// basic line shader
 import line_frag from '../shaders/line_frag.glsl';
 import line_vert from '../shaders/line_vert.glsl';
+// other function shaders
+import linear_line_frag from '../shaders/linear/line_linear_frag.glsl';
+
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -135,18 +142,60 @@ export default class LineModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'line',
-        vertexShader: line_vert,
-        fragmentShader: line_frag,
+        moduleName: 'line' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: LineTriangulation,
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         depth: { enable: false },
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }
+
+  /**
+   * 根据参数获取不同的 shader 代码
+   * @returns
+   */
+  public getShaders(): { frag: string; vert: string; type: string } {
+    const {
+      sourceColor,
+      targetColor,
+      lineType,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
+    if (lineType === 'dash') {
+      return {
+        frag: line_dash_frag,
+        vert: line_dash_vert,
+        type: 'dash',
+      };
+    }
+
+    if (sourceColor && targetColor) {
+      // 分离 linear 功能
+      return {
+        frag: linear_line_frag,
+        vert: line_vert,
+        type: 'linear',
+      };
+    } else {
+      return {
+        frag: line_frag,
+        vert: line_vert,
+        type: 'normal',
+      };
+    }
+  }
+
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'distance',

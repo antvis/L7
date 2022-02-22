@@ -8,14 +8,19 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import { EARTH_RADIUS } from '../../earth/utils';
-import line_arc_frag from '../shaders/line_arc_3d_frag.glsl';
-import line_arc_vert from '../shaders/line_arc_3d_vert.glsl';
+// arc3d line layer
+import arc3d_line_frag from '../shaders/line_arc_3d_frag.glsl';
+import arc3d_line_vert from '../shaders/line_arc_3d_vert.glsl';
+// arc3d linear layer
+import arc3d_linear_frag from '../shaders/linear/arc3d_linear_frag.glsl';
+import arc3d_linear_vert from '../shaders/linear/arc3d_linear_vert.glsl';
+
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -132,19 +137,46 @@ export default class Arc3DModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
+  public getShaders(): { frag: string; vert: string; type: string } {
+    const {
+      sourceColor,
+      targetColor,
+      lineType,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+
+    if (sourceColor && targetColor) {
+      // 分离 linear 功能
+      return {
+        frag: arc3d_linear_frag,
+        vert: arc3d_linear_vert,
+        type: 'linear',
+      };
+    } else {
+      return {
+        frag: arc3d_line_frag,
+        vert: arc3d_line_vert,
+        type: 'normal',
+      };
+    }
+  }
+
   public buildModels(): IModel[] {
     const {
       segmentNumber = 30,
+      mask = false,
+      maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'arc3Dline',
-        vertexShader: line_arc_vert,
-        fragmentShader: line_arc_frag,
+        moduleName: 'arc3Dline' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: LineArcTriangulation,
         blend: this.getBlend(),
         segmentNumber,
         // primitive: gl.POINTS,
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

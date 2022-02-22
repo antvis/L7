@@ -98,6 +98,7 @@ export interface ILayer {
   name: string; //
   inited: boolean; // 是否初始化完成
   zIndex: number;
+  clusterZoom: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
@@ -165,6 +166,7 @@ export interface ILayer {
   ): void;
   init(): ILayer;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
+  getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -198,6 +200,9 @@ export interface ILayer {
   // animate(field: string, option: any): ILayer;
   renderLayers(): void;
   render(): ILayer;
+
+  renderMultiPass(): any;
+
   clear(): void;
   clearModels(): void;
   destroy(): void;

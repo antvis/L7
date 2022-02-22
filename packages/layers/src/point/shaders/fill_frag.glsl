@@ -1,4 +1,3 @@
-#define Animate 0.0
 
 uniform float u_globel;
 uniform float u_additive;
@@ -8,8 +7,6 @@ varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
-uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 
 #pragma include "sdf_2d"
 #pragma include "picking"
@@ -18,7 +15,6 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 void main() {
   int shape = int(floor(v_data.w + 0.5));
 
- 
   vec4 textrueStroke = vec4(
     styleMappingMat[1][0],
     styleMappingMat[1][1],
@@ -78,9 +74,6 @@ void main() {
     0.0,
     inner_df
   );
-  float PI = 3.14159;
-  float N_RINGS = 3.0;
-  float FREQ = 1.0;
 
   if(strokeWidth < 0.01) {
     gl_FragColor = vec4(v_color.rgb, v_color.a * opacity);
@@ -88,37 +81,13 @@ void main() {
     gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
   }
 
-  // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
-
-  if(u_aimate.x == Animate) {
-    float d = length(v_data.xy);
-    float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);
-    
-    // TODO: 根据叠加模式选择效果
-    if(u_additive > 0.0) {
-      gl_FragColor *= intensity;
-    } else {
-      gl_FragColor = vec4(gl_FragColor.xyz, intensity);
-    }
-  
-    // TODO: 优化在水波纹情况下的拾取（a == 0 时无法拾取）
-    if(d < 0.7) {
-      gl_FragColor.a = max(gl_FragColor.a, 0.001);
-    }
-
-    if(u_additive > 0.0) {
-      gl_FragColor = filterColorAnimate(gl_FragColor);
-    } else {
-      gl_FragColor = filterColor(gl_FragColor);
-    }
-  } else {
-    gl_FragColor = filterColor(gl_FragColor);
-    
-  }
-
   if(u_additive > 0.0) {
     gl_FragColor *= opacity_t;
   } else {
     gl_FragColor.a *= opacity_t;
+  }
+
+  if(gl_FragColor.a > 0.0) {
+    gl_FragColor = filterColor(gl_FragColor);
   }
 }

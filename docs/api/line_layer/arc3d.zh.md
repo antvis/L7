@@ -29,9 +29,9 @@ const layer = new LineLayer({})
   });
 ```
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*JjUcTZ8-PC8AAAAAAAAAAABkARQnAQ'>
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*xvaaQo2c0gMAAAAAAAAAAABkARQnAQ'>
 
-[在线案例](../../../examples/gallery/basic#arcCircle)
+[在线案例](../../../examples/line/arc#trip_arc)
 
 ### shape
 

@@ -126,4 +126,23 @@ const layer = PointLayer({
   ]);
 ```
 
+### 等面积点
+
+点图层支持等面积点，点大小的单位是米，同样通过 size 方法设置大小
+
+```javascript
+import { PointLayer } from '@antv/l7';
+
+const layer = PointLayer()
+  .source(data)
+  .shape('circle')
+  .size(100)
+  .color('#f00')
+  .style({
+    unit: 'meter',
+  });
+```
+
+🌟 从 v2.7.9 版本开始支持高德地图、高德地图 2.0、Mapbox 地图
+
 `markdown:docs/common/layer/base.md`

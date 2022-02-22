@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import Bloom from './components/Bloom';
 import Blur from './components/Blur';
 import ColorHalftone from './components/ColorHalftone';
 import CustomPostProcessing from './components/CustomPostProcessing';
@@ -13,6 +14,7 @@ storiesOf('MultiPassRenderer', module)
   .add('ColorHalftone', () => <ColorHalftone />)
   .add('HexagonalPixelate', () => <HexagonalPixelate />)
   .add('Ink', () => <Ink />)
+  .add('Bloom', () => <Bloom />)
   .add('Blur', () => <Blur />)
   .add('Noise', () => <Noise />)
   .add('Sepia', () => <Sepia />)

@@ -57,7 +57,7 @@ const World = React.memo(function Map() {
             values: ['00', '01', '02'],
           }}
           size={{
-            values: 10,
+            values: 20,
           }}
           style={{
             opacity: 1,

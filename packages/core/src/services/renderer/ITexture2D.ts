@@ -76,6 +76,19 @@ export interface ITexture2DInitializationOptions {
   colorSpace?: gl.NONE | gl.BROWSER_DEFAULT_WEBGL;
 
   mipmap?: boolean | gl.DONT_CARE | gl.NICEST | gl.FASTEST;
+
+  /* 是否复制当前的 framebuffer */
+  x?: number;
+  y?: number;
+  copy?: boolean;
+  // From the pixels in the current frame buffer
+  // var copyPixels = regl.texture({
+  //   x: 5,
+  //   y: 1,
+  //   width: 10,
+  //   height: 10,
+  //   copy: true
+  // })
 }
 
 export interface ITexture2D {

@@ -9,12 +9,11 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-// import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc_frag from '../shaders/line_arc_great_circle_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
@@ -36,7 +35,6 @@ export default class GreatCircleModel extends BaseModel {
       iconStep = 100,
       segmentNumber = 30,
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
-    // console.log('opacity', opacity)
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
@@ -129,14 +127,19 @@ export default class GreatCircleModel extends BaseModel {
   }
 
   public buildModels(): IModel[] {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return [
       this.layer.buildLayerModel({
-        moduleName: 'arc2dline',
+        moduleName: 'greatcircleline',
         vertexShader: line_arc2d_vert,
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
       }),
     ];
   }

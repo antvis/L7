@@ -1,14 +1,6 @@
 import { PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
-
-import { mat4 } from 'gl-matrix';
-
-function convertRGB2Hex(rgb: number[]) {
-  return (
-    '#' + rgb.map((r) => ('0' + Math.floor(r).toString(16)).slice(-2)).join('')
-  );
-}
 
 export default class Amap2demo_polygon_extrude extends React.Component {
   private gui: dat.GUI;
@@ -27,7 +19,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         pitch: 0,
         // style: 'dark',
         center: [-44.40673828125, -18.375379094031825],
@@ -109,8 +101,11 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       // .shape('fill')
       .shape('extrude')
       .color('red')
-      .size(6000000)
+      .size(600000)
       .style({
+        // pickLight: true,
+        heightfixed: true,
+        // heightfixed: false,
         opacity: 'testOpacity',
       })
       .active(true);
