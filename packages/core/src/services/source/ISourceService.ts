@@ -67,6 +67,10 @@ export interface ISource {
   getFeatureId(field: string, value: any): number | undefined;
   getClusters(zoom: number): any;
   getClustersLeaves(id: number): any;
+  updateFeaturePropertiesById(
+    id: number,
+    properties: Record<string, any>,
+  ): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

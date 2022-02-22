@@ -134,6 +134,14 @@ module.exports = {
         order: 2,
       },
       {
+        slug: 'api/source',
+        title: {
+          zh: '数据 Source',
+          en: 'Source',
+        },
+        order: 2,
+      },
+      {
         slug: 'api/point_layer',
         title: {
           zh: '点图层',
@@ -220,14 +228,6 @@ module.exports = {
           en: 'mini',
         },
         order: 9,
-      },
-      {
-        slug: 'api/source',
-        title: {
-          zh: '数据 Source',
-          en: 'Source',
-        },
-        order: 10,
       },
       {
         slug: 'api/district',
