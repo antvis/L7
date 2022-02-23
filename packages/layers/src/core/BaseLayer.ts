@@ -920,7 +920,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       // 连续类型 Continuous (Linear, Power, Log, Identity, Time)
       const items: ILegendClassificaItem[] = scale
         .ticks()
-        .map((item: string | number) => {
+        .map((item: string) => {
           return {
             value: item,
             [name]: scale(item),
