@@ -72,8 +72,6 @@ export interface IPointLayerStyleOptions {
   unit?: string;
   mask?: boolean;
   maskInside?: boolean;
-
-  animateOption: IAnimateOption;
 }
 
 export interface IPolygonLayerStyleOptions {
