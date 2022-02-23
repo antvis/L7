@@ -126,6 +126,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                 ) {
                   const tick = scale.scale.ticks(attributeScale.values.length);
                   if (type === 'color') {
+                    // TODO: 这里改变了值域，获取图例的时候有问题
                     scale.scale.domain(tick);
                   }
                 }
