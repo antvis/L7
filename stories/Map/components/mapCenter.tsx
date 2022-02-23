@@ -145,7 +145,6 @@ export default class GaodeMapComponent extends React.Component {
     // // })
     // // .active({ color: '#00f' });
 
-
     this.scene = scene;
 
     // console.log('layer', layer)
