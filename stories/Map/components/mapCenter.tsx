@@ -177,52 +177,51 @@ export default class GaodeMapComponent extends React.Component {
       // console.log('scale n2', scale('n2'));
       // console.log('scale n3', scale('n3'));
 
-       let layer = new PointLayer({}) // blend: 'additive'
-      .source(
-        [
+      let layer = new PointLayer({}) // blend: 'additive'
+        .source(
+          [
+            {
+              lng: 120.1019811630249,
+              lat: 30.264701434772807,
+              name: 'n3',
+            },
+          ],
           {
-            lng: 120.1019811630249,
-            lat: 30.264701434772807,
-            name: 'n3',
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
           },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
-      .shape('circle')
-      .color('#ff0')
-      .size(20)
+        )
+        .shape('circle')
+        .color('#ff0')
+        .size(20);
       scene.addLayer(layer);
- 
 
       let text = new PointLayer({ zIndex: 2 })
-      .source(
-        [
+        .source(
+          [
+            {
+              lng: aspaceLnglat[0] + 0.0002,
+              lat: aspaceLnglat[1],
+            },
+          ],
           {
-            lng: aspaceLnglat[0] + 0.0002,
-            lat: aspaceLnglat[1],
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
           },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
-      // .shape('100m', 'text')
-       .shape('circle')
-      .size(25)
-      .color('#0f0')
-      .style({
-        textOffset: [50, 20],
-      });
+        )
+        // .shape('100m', 'text')
+        .shape('circle')
+        .size(25)
+        .color('#0f0')
+        .style({
+          textOffset: [50, 20],
+        });
 
       scene.addLayer(text);
       // scene.addLayer(line);
