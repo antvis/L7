@@ -135,7 +135,9 @@ export default class InteractionService extends EventEmitter
   private onDrag = (target: any) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
-    interactionTarget.type === 'dragging' ? this.indragging = true : this.indragging = false;
+    interactionTarget.type === 'dragging'
+      ? (this.indragging = true)
+      : (this.indragging = false);
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
 
