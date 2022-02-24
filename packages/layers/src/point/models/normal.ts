@@ -137,9 +137,7 @@ export default class NormalModel extends BaseModel {
     });
   }
 
-  private defaultStyleOptions(): Partial<
-    IPointLayerStyleOptions
-  > {
+  private defaultStyleOptions(): Partial<IPointLayerStyleOptions> {
     return {
       blend: BlendType.additive,
     };

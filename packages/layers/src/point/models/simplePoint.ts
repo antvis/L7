@@ -148,9 +148,7 @@ export default class SimplePointModel extends BaseModel {
     });
   }
 
-  private defaultStyleOptions(): Partial<
-    IPointLayerStyleOptions
-  > {
+  private defaultStyleOptions(): Partial<IPointLayerStyleOptions> {
     return {
       blend: BlendType.additive,
     };
