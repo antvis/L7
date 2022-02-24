@@ -3,7 +3,6 @@ import {
   BlendType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
@@ -24,7 +23,7 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class NormalModel extends BaseModel {
-  public getDefaultStyle(): Partial<IPointLayerStyleOptions & ILayerConfig> {
+  public getDefaultStyle(): Partial<IPointLayerStyleOptions> {
     return {
       blend: 'additive',
     };
@@ -138,9 +137,7 @@ export default class NormalModel extends BaseModel {
     });
   }
 
-  private defaultStyleOptions(): Partial<
-    IPointLayerStyleOptions & ILayerConfig
-  > {
+  private defaultStyleOptions(): Partial<IPointLayerStyleOptions> {
     return {
       blend: BlendType.additive,
     };

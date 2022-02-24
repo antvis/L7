@@ -92,6 +92,19 @@ export interface IActiveOption {
 
 type ILngLat = [number, number];
 
+// 分段图例
+export interface ILegendSegmentItem {
+  value: [number, number];
+  [key: string]: any;
+}
+// 分类图例
+export interface ILegendClassificaItem {
+  value: number | string;
+  [key: string]: any;
+}
+// 图层图例
+export type LegendItems = ILegendSegmentItem[] | ILegendClassificaItem[];
+
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
@@ -188,7 +201,7 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string): any;
+  getLegendItems(name: string): LegendItems;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;

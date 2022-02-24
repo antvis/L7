@@ -19,6 +19,8 @@ import {
   ILayerModelInitializationOptions,
   ILayerPlugin,
   ILayerService,
+  ILegendClassificaItem,
+  ILegendSegmentItem,
   IMapService,
   IModel,
   IModelInitializationOptions,
@@ -36,6 +38,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   lazyInject,
+  LegendItems,
   ScaleAttributeType,
   ScaleTypeName,
   ScaleTypes,
@@ -47,7 +50,7 @@ import Source from '@antv/l7-source';
 import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isFunction, isObject } from 'lodash';
+import { isFunction, isObject, isUndefined } from 'lodash';
 import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
@@ -895,41 +898,52 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this.styleAttributeService.getLayerAttributeScale(name);
   }
 
-  public getLegendItems(name: string): any {
+  public getLegendItems(name: string): LegendItems {
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
-    if (scale) {
-      if (scale.ticks) {
-        // 连续分段类型
-        const items = scale.ticks().map((item: any) => {
+
+    // 函数自定义映射，没有 scale 返回为空数组
+    if (!scale) {
+      return [];
+    }
+
+    if (scale.invertExtent) {
+      // 分段类型  Quantize、Quantile、Threshold
+      const items: ILegendSegmentItem[] = scale.range().map((item: number) => {
+        return {
+          value: scale.invertExtent(item),
+          [name]: item,
+        };
+      });
+
+      return items;
+    } else if (scale.ticks) {
+      // 连续类型 Continuous (Linear, Power, Log, Identity, Time)
+      const items: ILegendClassificaItem[] = scale
+        .ticks()
+        .map((item: string) => {
           return {
             value: item,
             [name]: scale(item),
           };
         });
-        return items;
-      } else if (scale.invertExtent) {
-        // 连续类型
-        const items = scale.range().map((item: any) => {
+
+      return items;
+    } else if (scale?.domain) {
+      // 枚举类型 Cat
+      const items: ILegendClassificaItem[] = scale
+        .domain()
+        .filter((item: string | number | undefined) => !isUndefined(item))
+        .map((item: string | number) => {
           return {
-            value: scale.invertExtent(item),
-            [name]: item,
+            value: item,
+            [name]: scale(item) as string,
           };
         });
-        return items;
-      } else if (scale?.domain) {
-        // 枚举类型
-        const items = scale.domain().map((item: string | number) => {
-          return {
-            // @ts-ignore
-            value: item || '无',
-            color: scale(item),
-          };
-        });
-        return items;
-      }
-    } else {
-      return [];
+
+      return items;
     }
+
+    return [];
   }
 
   public pick({ x, y }: { x: number; y: number }) {
