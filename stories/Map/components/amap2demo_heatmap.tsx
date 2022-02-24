@@ -17,10 +17,10 @@ export default class Amap2demo_heatmap extends React.Component {
         // pitch: 0,
         // center: [127.5671666579043, 7.445038892195569],
         // zoom: 2.632456779444394,
-        style: "dark",
+        style: 'dark',
         pitch: 0,
         center: [120, 30],
-        zoom: 4
+        zoom: 4,
       }),
     });
     this.scene = scene;
@@ -55,27 +55,25 @@ export default class Amap2demo_heatmap extends React.Component {
       //   });
 
       fetch(
-        "https://gw.alipayobjects.com/os/bmw-prod/95d5a2c3-f8fa-47f3-8664-ecb8459565ee.json"
+        'https://gw.alipayobjects.com/os/bmw-prod/95d5a2c3-f8fa-47f3-8664-ecb8459565ee.json',
       )
         .then((res) => res.json())
         .then((data) => {
           const layer = new HeatmapLayer({})
             .source(data)
-            .shape("heatmap")
-            .size("weight", [0, 1.0]) // weight映射通道
+            .shape('heatmap')
+            .size('weight', [0, 1.0]) // weight映射通道
             .style({
               intensity: 3,
               radius: 24,
               opacity: 1.0,
               rampColors: {
-                colors: ["#030EAB", "#0F41EB", "#40D785", "#F1D41A", "#FE0257"],
-                positions: [0, 0.25, 0.5, 0.75, 1.0]
-              }
+                colors: ['#030EAB', '#0F41EB', '#40D785', '#F1D41A', '#FE0257'],
+                positions: [0, 0.25, 0.5, 0.75, 1.0],
+              },
             });
           scene.addLayer(layer);
         });
-
-
     });
   }
 
