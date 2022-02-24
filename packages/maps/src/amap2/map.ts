@@ -64,9 +64,6 @@ export default class AMapService
    */
   public map: AMap.Map & IAMapInstance;
 
-  // TODO: 判断地图是否正在拖拽
-  public dragging: boolean = false;
-
   /**
    * 用于 customCooords 数据的计算
    */
@@ -504,16 +501,6 @@ export default class AMapService
           pendingResolveQueue.push(resolveMap);
         }
       }
-    });
-
-    // TODO: 判断地图是否正在被拖拽
-    this.map.on('dragstart', () => {
-      this.dragging = true;
-      return '';
-    });
-    this.map.on('dragend', () => {
-      this.dragging = false;
-      return '';
     });
   }
 

@@ -16,6 +16,7 @@ export interface IInteractionTarget {
 }
 
 export interface IInteractionService {
+  indragging: boolean;
   init(): void;
   destroy(): void;
   on(

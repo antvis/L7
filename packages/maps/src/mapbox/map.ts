@@ -50,9 +50,6 @@ export default class MapboxService
   public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
 
-  // TODO: 判断地图是否正在拖拽
-  public dragging: boolean = false;
-
   // 背景色
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
 
@@ -365,16 +362,6 @@ export default class MapboxService
     }
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
-
-    // TODO: 判断地图是否正在被拖拽
-    this.map.on('dragstart', () => {
-      this.dragging = true;
-      return '';
-    });
-    this.map.on('dragend', () => {
-      this.dragging = false;
-      return '';
-    });
 
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
