@@ -5,7 +5,6 @@ import {
   IAttribute,
   IElements,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
