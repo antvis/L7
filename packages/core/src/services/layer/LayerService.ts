@@ -200,11 +200,6 @@ export default class LayerService implements ILayerService {
     return this.renderService.extensionObject.OES_texture_float;
   }
 
-  // TODO: 判断地图是否正在被拖动
-  public isMapDragging() {
-    return this.mapService.dragging;
-  }
-
   // 控制着色器颜色拾取计算
   public enableShaderPick() {
     this.shaderPicking = true;

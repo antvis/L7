@@ -170,6 +170,11 @@ export default class GaodeMapComponent extends React.Component {
     //   opacity: 0.5
     // })
 
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
+
     scene.on('loaded', () => {
       // scene.addLayer(layer);
 
@@ -205,6 +210,7 @@ export default class GaodeMapComponent extends React.Component {
             {
               lng: aspaceLnglat[0] + 0.0002,
               lat: aspaceLnglat[1],
+              name: '00',
             },
           ],
           {
@@ -216,12 +222,18 @@ export default class GaodeMapComponent extends React.Component {
           },
         )
         // .shape('100m', 'text')
-        .shape('circle')
+        // .shape('circle')
+        .shape('name', ['00'])
         .size(25)
-        .color('#0f0')
+        // .color('#0f0')
+        // .select(true)
         .style({
-          textOffset: [50, 20],
+          // textOffset: [50, 20],
         });
+
+      text.on('click', () => {
+        alert('***');
+      });
 
       scene.addLayer(text);
       // scene.addLayer(line);

@@ -166,8 +166,8 @@ export default class PickingService implements IPickingService {
       this.alreadyInPicking ||
       // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
       this.layerService.alreadyInRendering ||
-      // TODO: this.layerService.isMapDragging() 如果地图正在拖拽 则不进行拾取操作
-      this.layerService.isMapDragging() ||
+      // Tip: this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
+      this.interactionService.indragging ||
       // TODO: 判断当前 是都进行 shader pick 拾取判断
       !this.layerService.getShaderPickStat()
     ) {
