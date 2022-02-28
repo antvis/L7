@@ -29,9 +29,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         return 'fill';
       }
 
-      if (values) {
+      if (values && values instanceof Array) {
         for (const v of values) {
-          if (iconMap.hasOwnProperty(values as string)) {
+          if (typeof v === 'string' && iconMap.hasOwnProperty(v as string)) {
             return 'image';
           }
         }
