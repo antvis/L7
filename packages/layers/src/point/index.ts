@@ -30,7 +30,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
 
       if (values) {
-        for(const v of values) {
+        for (const v of values) {
           if (iconMap.hasOwnProperty(values as string)) {
             return 'image';
           }
