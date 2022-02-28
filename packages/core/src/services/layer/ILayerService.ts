@@ -209,7 +209,7 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
-  setBlend(type: keyof typeof BlendType): void;
+  setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
   renderLayers(): void;
   render(): ILayer;

@@ -9,13 +9,19 @@ const data = {
       type: 'Feature',
       properties: {
         s: '海南',
-        m: '东方',
+        m: '海口',
       },
       geometry: {
         type: 'Point',
-        coordinates: [120.218258, 30.298216],
+        coordinates: [120.137195, 30.304203],
       },
     },
+  ],
+};
+
+const data2 = {
+  type: 'FeatureCollection',
+  features: [
     {
       type: 'Feature',
       properties: {
@@ -24,40 +30,7 @@ const data = {
       },
       geometry: {
         type: 'Point',
-        coordinates: [120.137195, 30.304203],
-      },
-    },
-    {
-      type: 'Feature',
-      properties: {
-        s: '广东',
-        m: '珠海',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [120.052108, 30.296719],
-      },
-    },
-    {
-      type: 'Feature',
-      properties: {
-        s: '广东',
-        m: '徐闻',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [120.20906, 30.201379],
-      },
-    },
-    {
-      type: 'Feature',
-      properties: {
-        s: '海南',
-        m: '琼海',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [120.119373, 30.1824],
+        coordinates: [120.1371, 30.304203],
       },
     },
   ],
@@ -81,7 +54,7 @@ export default class Amap2demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [120.2, 30.2],
         zoom: 9,
       }),
@@ -94,42 +67,43 @@ export default class Amap2demo extends React.Component {
       });
       const imageLayer = new PointLayer({
         name: 'image',
-      });
-
-      imageLayer
-        .source(data)
-        // @ts-ignore
+        blend: 'normal'
+      }).source(data)
         .size(20)
-        // @ts-ignore
+        .shape('s', (s) => s)
+        .fitBounds();
+      scene.addLayer(imageLayer);
+
+      const imageLayer2 = new PointLayer({
+        name: 'image',
+        blend: 'normal'
+      }).source(data2)
+        .size(20)
         .shape('s', (s) => s)
         .fitBounds();
 
+        
+      
+
+      imageLayer.on('click', () => {
+        // console.log(imageLayer2)
+        scene.addLayer(imageLayer2);
+      })
+
+
       const textLayer = new PointLayer({
         name: 'image',
-      });
-
-      textLayer
-        .source(data)
-        // @ts-ignore
+      }).source(data)
         .size(20)
         .color('#000000')
-        // @ts-ignore
         .shape('m', 'text')
         .style({
           stroke: '#ffffff',
           strokeWidth: 2,
           textOffset: [0, -40],
         });
-
       scene.addLayer(textLayer);
-
-      scene.addLayer(imageLayer);
-
-      [textLayer, imageLayer].forEach((layer) => {
-        layer.on('click', () => {
-          alert();
-        });
-      });
+     
     });
   }
 

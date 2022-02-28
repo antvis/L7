@@ -692,12 +692,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         });
     }
   }
-  public setBlend(type: keyof typeof BlendType): void {
+  public setBlend(type: keyof typeof BlendType): ILayer {
     this.updateLayerConfig({
       blend: type,
     });
     this.layerModelNeedUpdate = true;
     this.reRender();
+    return this;
   }
   public show(): ILayer {
     this.updateLayerConfig({
