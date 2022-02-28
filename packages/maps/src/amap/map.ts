@@ -331,6 +331,7 @@ export default class AMapService
 
     return (modelMatrix as unknown) as number[];
   }
+
   public async init(): Promise<void> {
     const {
       id,
@@ -370,7 +371,13 @@ export default class AMapService
           // @ts-ignore
           const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
           // 监听地图相机事件
-          map.on('camerachange', this.handleCameraChanged);
+          // map.on('camerachange', this.handleCameraChanged);
+          // Tip: 为了兼容开启 MultiPassRender 的情况
+          // 修复 MultiPassRender 在高德地图 1.x 的情况下，缩放地图改变 zoom 时存在可视化层和底图不同步的现象
+          map.on('camerachange', (e) => {
+            setTimeout(() => this.handleCameraChanged(e));
+          });
+
           // @ts-ignore
           this.map = map;
           setTimeout(() => {
@@ -483,6 +490,7 @@ export default class AMapService
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
+
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)
