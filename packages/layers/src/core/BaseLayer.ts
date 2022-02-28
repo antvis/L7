@@ -117,6 +117,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public layerModel: ILayerModel;
 
+  public shapeOption: {
+    field: any;
+    values: any;
+  };
+
   // TODO: 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
   public sceneContainer: Container | undefined;
   // TODO: 用于保存子图层对象
@@ -449,6 +454,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       'shape',
     )?.scale?.field;
     const currentShape = field;
+    this.shapeOption = {
+      field,
+      values,
+    };
     this.updateStyleAttribute('shape', field, values, updateOptions);
     // TODO: 根据 shape 判断是否需要更新 model
     updateShape(this, lastShape, currentShape);

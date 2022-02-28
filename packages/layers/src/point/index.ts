@@ -13,6 +13,32 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
+
+  /**
+   * 在未传入数据的时候判断点图层的 shape 类型
+   * @returns
+   */
+  public getModelTypeWillEmptyData(): PointType {
+    if (this.shapeOption) {
+      const { field, values } = this.shapeOption;
+      const { shape2d, shape3d } = this.getLayerConfig();
+
+      const iconMap = this.iconService.getIconMap();
+
+      if (field && shape2d?.indexOf(field as string) !== -1) {
+        return 'fill';
+      }
+
+      if (values) {
+        for(const v of values) {
+          if (iconMap.hasOwnProperty(values as string)) {
+            return 'image';
+          }
+        }
+      }
+    }
+    return 'normal';
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -52,7 +78,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       return fe.hasOwnProperty('shape');
     });
     if (!item) {
-      return 'normal';
+      // return 'normal';
+      return this.getModelTypeWillEmptyData();
     } else {
       const shape = item.shape;
       if (shape === 'dot') {

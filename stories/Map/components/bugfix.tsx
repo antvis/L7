@@ -2,47 +2,6 @@
 import React from 'react';
 import { Scene, GaodeMap, GaodeMapV2, PointLayer } from '@antv/l7';
 
-const data = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      properties: {
-        s: '海南',
-        m: '海口',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [120.137195, 30.304203],
-      },
-    },
-  ],
-};
-
-const data2 = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      properties: {
-        s: '海南',
-        m: '海口',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [120.1371, 30.304203],
-      },
-    },
-  ],
-};
-
-const img = {
-  海南:
-    'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-  广东:
-    'https://gw.alipayobjects.com/zos/basement_prod/30580bc9-506f-4438-8c1a-744e082054ec.svg',
-};
-
 export default class Amap2demo extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -55,55 +14,63 @@ export default class Amap2demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [120.2, 30.2],
-        zoom: 9,
+        center: [121.434765, 31.256735],
+        zoom: 14.83,
       }),
     });
     this.scene = scene;
 
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
+
     scene.on('loaded', () => {
-      Object.keys(img).forEach((key) => {
-        scene.addImage(key, img[key]);
-      });
-      const imageLayer = new PointLayer({
-        name: 'image',
-        blend: 'normal'
-      }).source(data)
-        .size(20)
-        .shape('s', (s) => s)
-        .fitBounds();
-      scene.addLayer(imageLayer);
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const imageLayer = new PointLayer()
+            .source(data, {
+              parser: {
+                type: 'json',
+                x: 'longitude',
+                y: 'latitude',
+              },
+            })
+            .shape('name', ['00'])
+            .size(10);
 
-      const imageLayer2 = new PointLayer({
-        name: 'image',
-        blend: 'normal'
-      }).source(data2)
-        .size(20)
-        .shape('s', (s) => s)
-        .fitBounds();
+          let d = {
+            coordinates: (2)[(121.4318415, 31.25682515)],
+            count: 2,
+            id: '5011000005647',
+            latitude: 31.25682515,
+            longitude: 121.4318415,
+            name: '石泉路140弄',
+            unit_price: 52256.3,
+          };
+          const imageLayer1 = new PointLayer()
+            .source([], {
+              parser: {
+                type: 'json',
+                x: 'longitude',
+                y: 'latitude',
+              },
+            })
+            .shape('name', ['00'])
+            .size(25);
 
-        
-      
+          scene.addLayer(imageLayer);
+          scene.addLayer(imageLayer1);
 
-      imageLayer.on('click', () => {
-        // console.log(imageLayer2)
-        scene.addLayer(imageLayer2);
-      })
-
-
-      const textLayer = new PointLayer({
-        name: 'image',
-      }).source(data)
-        .size(20)
-        .color('#000000')
-        .shape('m', 'text')
-        .style({
-          stroke: '#ffffff',
-          strokeWidth: 2,
-          textOffset: [0, -40],
+          imageLayer.on('click', (e) => {
+            // console.log(e);
+            // imageLayer1.setBlend('normal')
+            imageLayer1.setData([e.feature]);
+          });
         });
-      scene.addLayer(textLayer);
-     
     });
   }
 
