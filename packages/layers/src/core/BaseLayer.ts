@@ -76,6 +76,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public styleNeedUpdate: boolean = false;
   public rendering: boolean;
   public clusterZoom: number = 0; // 聚合等级标记
+  public layerType?: string | undefined;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -278,6 +279,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     //   enableMultiPassRenderer,
     // });
     this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
+    this.layerType = this.rawConfig.layerType;
 
     // 全局容器服务
 

@@ -141,6 +141,8 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+  // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
+  layerType?: string | undefined;
 
   /**
    * threejs 适配兼容相关的方法
@@ -341,6 +343,7 @@ export interface ILayerConfig {
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
+  layerType?: string | undefined;
   forward: boolean; // 正方向
 
   /**
