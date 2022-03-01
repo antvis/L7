@@ -69,8 +69,16 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected getModelType(): PointType {
-    const PointTypes = ["fill" , "image" , "normal" , "simplePoint" , "extrude" , "text" , "icon"];
-    if(this.layerType && PointTypes.includes(this.layerType)) {
+    const PointTypes = [
+      'fill',
+      'image',
+      'normal',
+      'simplePoint',
+      'extrude',
+      'text',
+      'icon',
+    ];
+    if (this.layerType && PointTypes.includes(this.layerType)) {
       return this.layerType as PointType;
     }
     // pointlayer
