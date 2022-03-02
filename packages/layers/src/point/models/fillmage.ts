@@ -1,19 +1,17 @@
 import {
   AttributeType,
   gl,
-  ITexture2D,
   IAttribute,
   IElements,
   IEncodeFeature,
   IModel,
   IModelUniform,
+  ITexture2D,
 } from '@antv/l7-core';
 import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import {
-  PointFillTriangulation,
-} from '../../core/triangulation';
+import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
@@ -23,8 +21,8 @@ import { isNumber } from 'lodash';
 import { Version } from '@antv/l7-maps';
 
 export default class FillImageModel extends BaseModel {
-  private texture: ITexture2D;
   public meter2coord: number = 1;
+  private texture: ITexture2D;
   private isMeter: boolean = false;
   public getUninforms(): IModelUniform {
     const {
@@ -39,7 +37,6 @@ export default class FillImageModel extends BaseModel {
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
-
 
     if (
       this.dataTextureTest &&
@@ -91,13 +88,12 @@ export default class FillImageModel extends BaseModel {
       u_isMeter: Number(this.isMeter),
 
       u_additive: blend === 'additive' ? 1.0 : 0.0,
-      
+
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
-
 
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
@@ -119,7 +115,6 @@ export default class FillImageModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
@@ -201,8 +196,7 @@ export default class FillImageModel extends BaseModel {
     ];
   }
 
-  public getShaders(
-  ): { frag: string; vert: string; type: string } {
+  public getShaders(): { frag: string; vert: string; type: string } {
     return {
       frag: pointFillFrag,
       vert: pointFillVert,
@@ -216,7 +210,6 @@ export default class FillImageModel extends BaseModel {
 
   // overwrite baseModel func
   protected registerBuiltinAttributes() {
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
@@ -261,7 +254,7 @@ export default class FillImageModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          let extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+          const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
 
           const extrudeIndex = (attributeIdx % 4) * 3;
           return [
@@ -300,8 +293,6 @@ export default class FillImageModel extends BaseModel {
         },
       },
     });
-
-   
   }
 
   private updateTexture = () => {

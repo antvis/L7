@@ -129,16 +129,15 @@ export default class Amap2demo extends React.Component {
     );
 
     scene.on('loaded', () => {
-    
       const imageLayer = new PointLayer({ layerType: 'fillImage' })
         .source(data)
         // .shape('fillImage', s => s)
-        .shape('s', s => s)
+        .shape('s', (s) => s)
         // .color('#f00')
         .size(100)
         .active({
           color: '#f00',
-          mix: 0.5
+          mix: 0.5,
         })
         .fitBounds();
 

@@ -1,11 +1,11 @@
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
+import FillImageModel from './fillmage';
 import IconModel from './icon-font';
 import IMageModel from './image';
 import NormalModel from './normal';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
-import FillImageModel from './fillmage';
 
 export type PointType =
   | 'fillImage'

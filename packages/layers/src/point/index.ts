@@ -102,7 +102,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (shape === 'simple') {
         return 'simplePoint';
       }
-      if(shape === 'fillImage') {
+      if (shape === 'fillImage') {
         return 'fillImage';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
