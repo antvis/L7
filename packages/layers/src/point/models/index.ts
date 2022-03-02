@@ -5,8 +5,10 @@ import IMageModel from './image';
 import NormalModel from './normal';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
+import FillImageModel from './fillmage';
 
 export type PointType =
+  | 'fillImage'
   | 'fill'
   | 'image'
   | 'normal'
@@ -16,6 +18,7 @@ export type PointType =
   | 'icon';
 
 const PointModels: { [key in PointType]: any } = {
+  fillImage: FillImageModel,
   fill: FillModel,
   image: IMageModel,
   normal: NormalModel,

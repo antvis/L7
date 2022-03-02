@@ -343,6 +343,7 @@ export interface ILayerConfig {
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
+  // layerType 指定 shape 的类型
   layerType?: string | undefined;
   forward: boolean; // 正方向
 
