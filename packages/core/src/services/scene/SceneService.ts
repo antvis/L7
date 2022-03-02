@@ -320,8 +320,15 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
       // @ts-ignore
       if (this.loadFont && document.fonts) {
-        // @ts-ignore
-        await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');
+        try {
+          // @ts-ignore
+          await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');
+        } catch(e) {
+          console.warn('当前环境不支持 document.fonts !')
+          console.warn('当前环境不支持 iconfont !');
+          console.warn(e);
+        }
+       
       }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.layerService.initLayers();
