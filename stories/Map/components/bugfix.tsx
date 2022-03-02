@@ -129,77 +129,19 @@ export default class Amap2demo extends React.Component {
     );
 
     scene.on('loaded', () => {
-      // fetch(
-      //   'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
-      // )
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     const imageLayer = new PointLayer()
-      //       .source(data, {
-      //         parser: {
-      //           type: 'json',
-      //           x: 'longitude',
-      //           y: 'latitude',
-      //         },
-      //       })
-      //       .shape('name', ['00'])
-      //       .size(10);
-
-      //     let d = {
-      //       coordinates: (2)[(121.4318415, 31.25682515)],
-      //       count: 2,
-      //       id: '5011000005647',
-      //       latitude: 31.25682515,
-      //       longitude: 121.4318415,
-      //       name: '石泉路140弄',
-      //       unit_price: 52256.3,
-      //     };
-      //     const imageLayer1 = new PointLayer()
-      //       .source([], {
-      //         parser: {
-      //           type: 'json',
-      //           x: 'longitude',
-      //           y: 'latitude',
-      //         },
-      //       })
-      //       .shape('name', ['00'])
-      //       .size(25);
-
-      //     scene.addLayer(imageLayer);
-      //     scene.addLayer(imageLayer1);
-
-      //     imageLayer.on('click', (e) => {
-      //       // console.log(e);
-      //       // imageLayer1.setBlend('normal')
-      //       imageLayer1.setData([e.feature]);
-      //     });
-      //   });
-
-      const imageLayer = new PointLayer()
+      const imageLayer = new PointLayer({ layerType: 'fillImage' })
         .source(data)
+        // .shape('fillImage', s => s)
         .shape('s', (s) => s)
-        .size(10)
+        // .color('#f00')
+        .size(100)
+        .active({
+          color: '#f00',
+          mix: 0.5,
+        })
         .fitBounds();
 
-      const imageLayer1 = new PointLayer({ layerType: 'image' })
-        .source({
-          features: [],
-          type: 'FeatureCollection',
-        })
-        .shape('s', (s) => s)
-        .size(20);
-
       scene.addLayer(imageLayer);
-      scene.addLayer(imageLayer1);
-
-      imageLayer.on('click', (e) => {
-        console.log(e.feature);
-
-        imageLayer1.setData({
-          features: [e.feature],
-          type: 'FeatureCollection',
-        });
-      });
     });
   }
 
