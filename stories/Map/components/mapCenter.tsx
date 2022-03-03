@@ -170,10 +170,10 @@ export default class GaodeMapComponent extends React.Component {
     //   opacity: 0.5
     // })
 
-    scene.addImage(
-      '00',
-      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-    );
+    // scene.addImage(
+    //   '00',
+    //   'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    // );
 
     scene.on('loaded', () => {
       // scene.addLayer(layer);
@@ -201,16 +201,17 @@ export default class GaodeMapComponent extends React.Component {
         )
         .shape('circle')
         .color('#ff0')
+        .animate(true)
         .size(20);
       scene.addLayer(layer);
 
-      let text = new PointLayer({ zIndex: 2 })
+      let layer2 = new PointLayer({}) // blend: 'additive'
         .source(
           [
             {
-              lng: aspaceLnglat[0] + 0.0002,
-              lat: aspaceLnglat[1],
-              name: '00',
+              lng: 120.1019811630249 + 0.0001,
+              lat: 30.264701434772807,
+              name: 'n3',
             },
           ],
           {
@@ -221,21 +222,44 @@ export default class GaodeMapComponent extends React.Component {
             },
           },
         )
-        // .shape('100m', 'text')
-        // .shape('circle')
-        .shape('name', ['00'])
-        .size(25)
-        // .color('#0f0')
-        // .select(true)
-        .style({
-          // textOffset: [50, 20],
-        });
+        .shape('circle')
+        .color('#ff0')
+        .animate(true)
+        .size(20);
+      scene.addLayer(layer2);
 
-      text.on('click', () => {
-        alert('***');
-      });
+      // let text = new PointLayer({ zIndex: 2 })
+      //   .source(
+      //     [
+      //       {
+      //         lng: aspaceLnglat[0] + 0.0002,
+      //         lat: aspaceLnglat[1],
+      //         name: '00',
+      //       },
+      //     ],
+      //     {
+      //       parser: {
+      //         type: 'json',
+      //         x: 'lng',
+      //         y: 'lat',
+      //       },
+      //     },
+      //   )
+      //   // .shape('100m', 'text')
+      //   // .shape('circle')
+      //   .shape('name', ['00'])
+      //   .size(25)
+      //   // .color('#0f0')
+      //   // .select(true)
+      //   .style({
+      //     // textOffset: [50, 20],
+      //   });
 
-      scene.addLayer(text);
+      // text.on('click', () => {
+      //   alert('***');
+      // });
+
+      // scene.addLayer(text);
       // scene.addLayer(line);
 
       // scene.addLayer(layer2);

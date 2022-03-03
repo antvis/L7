@@ -43,6 +43,10 @@ void main() {
   // TODO: 根据叠加水波效果
   gl_FragColor = vec4(v_color.xyz, v_color.a * opacity * intensity);
 
+  if(u_additive > 0.0) {
+    gl_FragColor *= gl_FragColor.a;
+  } 
+
   // TODO: 优化在水波纹情况下的拾取
   if(d < 0.5) {
     gl_FragColor = filterColor(gl_FragColor);
