@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amapdemo_extrude extends React.Component {
@@ -18,15 +18,12 @@ export default class Amapdemo_extrude extends React.Component {
         pitch: 40,
         style: 'normal',
         zoom: 8,
-        animateEnable: false,
-        viewMode: '3D',
       }),
     });
 
     this.scene = scene;
 
     scene.on('loaded', () => {
-      console.log('event test');
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',
       )
@@ -42,7 +39,9 @@ export default class Amapdemo_extrude extends React.Component {
             })
             .shape('cylinder')
             .size('t', function(level) {
+              // return [4000, 4000, level * 4000 + 20];
               return [4, 4, level * 4 + 20];
+              // return [4000, 4000, level * 4000 + 20];
             })
             .active(true)
             .color('t', [
@@ -57,7 +56,7 @@ export default class Amapdemo_extrude extends React.Component {
               '#A1EDB8',
               '#CEF8D6',
             ])
-            .animate(true)
+            // .animate(true)
             // .animate({
             //   enable: false,
             //   // speed: 0.1,
@@ -65,6 +64,7 @@ export default class Amapdemo_extrude extends React.Component {
             // })
             .style({
               opacity: 1.0,
+              // heightfixed: true
             });
           scene.addLayer(pointLayer);
         });
