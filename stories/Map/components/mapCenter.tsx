@@ -206,27 +206,27 @@ export default class GaodeMapComponent extends React.Component {
       scene.addLayer(layer);
 
       let layer2 = new PointLayer({}) // blend: 'additive'
-      .source(
-        [
+        .source(
+          [
+            {
+              lng: 120.1019811630249 + 0.0001,
+              lat: 30.264701434772807,
+              name: 'n3',
+            },
+          ],
           {
-            lng: 120.1019811630249 + 0.0001,
-            lat: 30.264701434772807,
-            name: 'n3',
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
           },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
-      .shape('circle')
-      .color('#ff0')
-      .animate(true)
-      .size(20);
-    scene.addLayer(layer2);
+        )
+        .shape('circle')
+        .color('#ff0')
+        .animate(true)
+        .size(20);
+      scene.addLayer(layer2);
 
       // let text = new PointLayer({ zIndex: 2 })
       //   .source(
