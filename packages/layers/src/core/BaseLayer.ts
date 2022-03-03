@@ -796,10 +796,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
-  public setAutoFit(autoFit: boolean) {
+  public setAutoFit(autoFit: boolean): ILayer {
     this.updateLayerConfig({
-      autoFit
+      autoFit,
     });
+    return this;
   }
 
   /**
