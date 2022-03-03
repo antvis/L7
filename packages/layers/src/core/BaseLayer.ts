@@ -795,6 +795,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
     return this;
   }
+
+  public setAutoFit(autoFit: boolean) {
+    this.updateLayerConfig({
+      autoFit
+    });
+  }
+
   /**
    * zoom to layer Bounds
    */

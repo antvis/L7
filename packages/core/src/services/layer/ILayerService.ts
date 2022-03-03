@@ -200,6 +200,7 @@ export interface ILayer {
     id: number | { x: number; y: number },
     option?: IActiveOption,
   ): void;
+  setAutoFit(autoFit: boolean): void;
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
