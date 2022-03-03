@@ -371,11 +371,11 @@ export default class AMapService
           // @ts-ignore
           const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
           // 监听地图相机事件
-          // map.on('camerachange', this.handleCameraChanged);
+          map.on('camerachange', this.handleCameraChanged);
           // Tip: 为了兼容开启 MultiPassRender 的情况
           // 修复 MultiPassRender 在高德地图 1.x 的情况下，缩放地图改变 zoom 时存在可视化层和底图不同步的现象
-          map.on('camerachange', (e) => {
-            setTimeout(() => this.handleCameraChanged(e));
+          map.on('camerachange', () => {
+            setTimeout(() => this.handleAfterMapChange());
           });
 
           // @ts-ignore
@@ -474,6 +474,10 @@ export default class AMapService
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
+  }
+
+  private handleAfterMapChange() {
+    this.emit('mapAfterFrameChange');
   }
 
   private handleCameraChanged = (e: IAMapEvent): void => {
