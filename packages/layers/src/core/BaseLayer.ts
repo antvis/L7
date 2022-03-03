@@ -271,8 +271,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public init() {
-
-   
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
@@ -301,12 +299,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       TYPES.IPickingService,
     );
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
-    const { enableMultiPassRenderer, passes } = this.getLayerConfig()
-    if(enableMultiPassRenderer && passes?.length && passes.length > 0) {
+    const { enableMultiPassRenderer, passes } = this.getLayerConfig();
+    if (enableMultiPassRenderer && passes?.length && passes.length > 0) {
       // Tip: 兼容 multiPassRender 在 amap1 时存在的图层不同步问题 zoom
       this.mapService.on('mapAfterFrameChange', () => {
-        this.renderLayers()
-      })
+        this.renderLayers();
+      });
     }
 
     this.cameraService = this.container.get<ICameraService>(

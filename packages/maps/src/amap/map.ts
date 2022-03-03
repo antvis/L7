@@ -377,7 +377,6 @@ export default class AMapService
           map.on('camerachange', () => {
             setTimeout(() => this.handleAfterMapChange());
           });
-         
 
           // @ts-ignore
           this.map = map;
@@ -478,7 +477,7 @@ export default class AMapService
   }
 
   private handleAfterMapChange() {
-    this.emit('mapAfterFrameChange')
+    this.emit('mapAfterFrameChange');
   }
 
   private handleCameraChanged = (e: IAMapEvent): void => {
