@@ -49,7 +49,8 @@ export default class Bloom extends React.Component {
           },
         ],
       ],
-    }).source(data)
+    })
+      .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
       .color('name', [
         '#2E8AE6',
@@ -68,9 +69,8 @@ export default class Bloom extends React.Component {
     scene.addLayer(layer);
 
     // console.log('layer', layer)
-    
 
-    let pointLayer = new PointLayer({ 
+    let pointLayer = new PointLayer({
       zIndex: 1,
       // blend:
       enableMultiPassRenderer: true,
@@ -82,7 +82,8 @@ export default class Bloom extends React.Component {
             bloomIntensity: 1,
           },
         ],
-      ], })
+      ],
+    })
       .source([{ lng: 122, lat: 30 }], {
         parser: {
           type: 'json',
