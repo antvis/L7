@@ -72,17 +72,16 @@ export default class Bloom extends React.Component {
 
     let pointLayer = new PointLayer({
       zIndex: 1,
-      // blend:
-      enableMultiPassRenderer: true,
-      passes: [
-        [
-          'bloom',
-          {
-            bloomRadius: 10,
-            bloomIntensity: 1,
-          },
-        ],
-      ],
+      enableMultiPassRenderer: false,
+      // passes: [
+      //   [
+      //     'bloom',
+      //     {
+      //       bloomRadius: 10,
+      //       bloomIntensity: 1,
+      //     },
+      //   ],
+      // ],
     })
       .source([{ lng: 122, lat: 30 }], {
         parser: {
@@ -95,6 +94,21 @@ export default class Bloom extends React.Component {
       .size(20)
       .color('red');
     scene.addLayer(pointLayer);
+
+    setTimeout(() => {
+      layer.setMultiPass(false);
+      pointLayer.setMultiPass(true, [
+        [
+          'bloom',
+          {
+            bloomRadius: 10,
+            bloomIntensity: 1,
+          },
+        ],
+      ]);
+
+      scene.render();
+    }, 1000);
 
     this.scene = scene;
   }
