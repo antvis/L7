@@ -774,9 +774,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     currentPasses?: Array<string | [string, { [key: string]: unknown }]>,
   ) {
     this.updateLayerConfig({
-      enableMultiPassRenderer: enableMultiPass,
-      passes: currentPasses || [],
+      enableMultiPassRenderer: enableMultiPass
     });
+    if(currentPasses) {
+      this.updateLayerConfig({
+        passes: currentPasses
+      })
+    }
 
     if (enableMultiPass) {
       const { passes = [] } = this.getLayerConfig();
