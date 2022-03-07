@@ -28,14 +28,6 @@ float luminance(vec4 color) {
 
 void main() {
   // vec4 baseColor = texture2D(u_Texture, v_UV);
-  // float lum = luminance(baseColor);
-  // baseColor.a *= lum;
-
-  // gl_FragColor = baseColor;
-
-  // if(u_BloomFinal > 0.0) { // 
-  //   gl_FragColor = baseColor; //-- 
-  // }
 
   float r = sqrt(u_radius);
 
@@ -55,64 +47,11 @@ void main() {
   if(u_BloomFinal > 0.0) {
     vec4 baseColor = texture2D(u_Texture2, v_UV);
     float baselum = luminance(baseColor);
-    // float lum = luminance(inbloomColor);
-    // vec4 bloom = vec4(lum);
-    // inbloomColor.a *= lum;
-    // gl_FragColor = inbloomColor * u_intensity + texture2D(u_Texture2, v_UV);
-    // gl_FragColor = inbloomColor * 0.5 + texture2D(u_Texture2, v_UV);
-    // gl_FragColor = baseColor;
-    // gl_FragColor = inbloomColor;
-    // vec4 mixColor = mix(baseColor, inbloomColor, max(u_intensity - 0.3, 0.0));
-    // mixColor.a = max(baseColor.a, mixColor.a);
-    gl_FragColor = mix(inbloomColor, baseColor, max(1.0 - u_intensity, u_baseRadio));
-    // gl_FragColor = mixColor;
-    // gl_FragColor = baseColor;
-    
-    if(baselum <= 0.0) {
-      // float lum = luminance(inbloomColor);
-      // inbloomColor.rgb *= lum;
-      gl_FragColor += inbloomColor * u_intensity;
+    gl_FragColor = mix(inbloomColor, baseColor, u_baseRadio);
+    if(baselum <= 0.2) {
+      gl_FragColor = inbloomColor * u_intensity;
     }
-    // gl_FragColor = inbloomColor * baseColor + baseColor;
-    // gl_FragColor = baseColor + bloom * 0.5;
   } else {
     gl_FragColor = inbloomColor;
   }
-  // gl_FragColor = inbloomColor;
-
-  // float h = 0.01;
-  
-  // vec4 color11 = texture2D( u_Texture, vec2( v_UV.x - 1.0 * h, v_UV.y + 1.0 * h) );
-  // vec4 color12 = texture2D( u_Texture, vec2( v_UV.x - 0.0 * h, v_UV.y + 1.0 * h) );
-  // vec4 color13 = texture2D( u_Texture, vec2( v_UV.x + 1.0 * h, v_UV.y + 1.0 * h) );
-
-  // vec4 color21 = texture2D( u_Texture, vec2( v_UV.x - 1.0 * h, v_UV.y) );
-  // vec4 color23 = texture2D( u_Texture, vec2( v_UV.x + 1.0 * h, v_UV.y) );
-
-  // vec4 color31 = texture2D( u_Texture, vec2( v_UV.x - 1.0 * h, v_UV.y-1.0*h) );
-  // vec4 color32 = texture2D( u_Texture, vec2( v_UV.x - 0.0 * h, v_UV.y-1.0*h) );
-  // vec4 color33 = texture2D( u_Texture, vec2( v_UV.x + 1.0 * h, v_UV.y-1.0*h) );
-
-  // vec4 bloomColor =
-  //   color11 + 
-  //   color12 + 
-  //   color13 + 
-  //   color21 + 
-  //   color21 + 
-  //   color23 + 
-  //   color31 + 
-  //   color32 + 
-  //   color33;
-
-  //   if(baseColor.a > 0.0) {
-      
-  //     gl_FragColor.r = min(bloomColor.r, baseColor.r);
-  //     gl_FragColor.g = min(bloomColor.g, baseColor.g);
-  //     gl_FragColor.b = min(bloomColor.b, baseColor.b);
-  //     gl_FragColor.a = min(bloomColor.a, baseColor.a);
-
-  //     gl_FragColor = mix(inbloomColor, gl_FragColor, 0.7);
-  //   } else {
-  //     gl_FragColor = bloomColor/9.0;
-  //   } 
 }

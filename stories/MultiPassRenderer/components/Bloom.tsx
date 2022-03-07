@@ -28,7 +28,7 @@ export default class Bloom extends React.Component {
       map: new Mapbox({
         style: 'mapbox://styles/mapbox/streets-v9',
         // style: 'blank',
-        center: [110.19382669582967, 50.258134],
+        center: [122, 30],
         pitch: 0,
         zoom: 3,
       }),
@@ -43,16 +43,13 @@ export default class Bloom extends React.Component {
         [
           'bloom',
           {
-            // bloomBaseRadio: 0.5,
-            bloomRadius: 25,
+            bloomBaseRadio: 0.5,
+            bloomRadius: 20,
             bloomIntensity: 1,
           },
         ],
       ],
-    });
-
-    layer
-      .source(data)
+    }).source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
       .color('name', [
         '#2E8AE6',
@@ -70,7 +67,22 @@ export default class Bloom extends React.Component {
 
     scene.addLayer(layer);
 
-    let pointLayer = new PointLayer({ zIndex: 1 })
+    // console.log('layer', layer)
+    
+
+    let pointLayer = new PointLayer({ 
+      zIndex: 1,
+      // blend:
+      enableMultiPassRenderer: true,
+      passes: [
+        [
+          'bloom',
+          {
+            bloomRadius: 10,
+            bloomIntensity: 1,
+          },
+        ],
+      ], })
       .source([{ lng: 122, lat: 30 }], {
         parser: {
           type: 'json',
