@@ -774,12 +774,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     currentPasses?: Array<string | [string, { [key: string]: unknown }]>,
   ) {
     this.updateLayerConfig({
-      enableMultiPassRenderer: enableMultiPass
+      enableMultiPassRenderer: enableMultiPass,
     });
-    if(currentPasses) {
+    if (currentPasses) {
       this.updateLayerConfig({
-        passes: currentPasses
-      })
+        passes: currentPasses,
+      });
     }
 
     if (enableMultiPass) {

@@ -35,7 +35,7 @@ export default class Bloom extends React.Component {
     });
     // @ts-ignore
     let selectLayer = null;
-    for(let i = 0;i < 10;i++) {
+    for (let i = 0; i < 10; i++) {
       let pointLayer = new PointLayer({
         zIndex: 1,
         enableMultiPassRenderer: false,
@@ -50,38 +50,36 @@ export default class Bloom extends React.Component {
           ],
         ],
       })
-        .source([{ lng: 120 + Math.random() * 10, lat: 20  + Math.random() * 10 }], {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
+        .source(
+          [{ lng: 120 + Math.random() * 10, lat: 20 + Math.random() * 10 }],
+          {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
           },
-        })
+        )
         .shape('circle')
         .size(20)
         .color('red');
       scene.addLayer(pointLayer);
-     
-      
     }
 
     scene.on('loaded', () => {
-      scene.getLayers().map(layer => {
+      scene.getLayers().map((layer) => {
         layer.on('click', () => {
           // @ts-ignore
-          if(selectLayer) {
+          if (selectLayer) {
             // @ts-ignore
             selectLayer.setMultiPass(false);
           }
           selectLayer = layer;
-          
-          layer.setMultiPass(true);
-        })
-      })
-    })
-    
 
-   
+          layer.setMultiPass(true);
+        });
+      });
+    });
 
     this.scene = scene;
   }
