@@ -51,9 +51,12 @@ import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
-import { normalizePasses } from '../plugins/MultiPassRendererPlugin';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
+import {
+  createMultiPassRenderer,
+  normalizePasses,
+} from '../utils/multiPassRender';
 import { updateShape } from '../utils/updateShape';
 /**
  * 分配 layer id
@@ -764,6 +767,35 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       maxZoom = Infinity,
     } = this.getLayerConfig();
     return !!visible && zoom >= minZoom && zoom <= maxZoom;
+  }
+
+  public setMultiPass(
+    enableMultiPass: boolean,
+    currentPasses?: Array<string | [string, { [key: string]: unknown }]>,
+  ) {
+    this.updateLayerConfig({
+      enableMultiPassRenderer: enableMultiPass,
+    });
+    if (currentPasses) {
+      this.updateLayerConfig({
+        passes: currentPasses,
+      });
+    }
+
+    if (enableMultiPass) {
+      const { passes = [] } = this.getLayerConfig();
+      this.multiPassRenderer = createMultiPassRenderer(
+        this,
+        passes,
+        this.postProcessingPassFactory,
+        this.normalPassFactory,
+      );
+      this.multiPassRenderer.setRenderFlag(true);
+      const { width, height } = this.rendererService.getViewportSize();
+      this.multiPassRenderer.resize(width, height);
+    }
+
+    return this;
   }
 
   public setMinZoom(minZoom: number): ILayer {

@@ -214,6 +214,11 @@ export interface ILayer {
   get(name: string): number;
   setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
+
+  setMultiPass(
+    multipass: boolean,
+    passes?: Array<string | [string, { [key: string]: unknown }]>,
+  ): ILayer;
   renderLayers(): void;
   render(): ILayer;
 
