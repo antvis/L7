@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { Scene, GaodeMap, GaodeMapV2, PointLayer } from '@antv/l7';
+import { Scene, GaodeMap, GaodeMapV2, Mapbox, Map, PointLayer } from '@antv/l7';
 const data = {
   type: 'FeatureCollection',
   features: [
@@ -138,6 +138,9 @@ export default class Amap2demo extends React.Component {
         .active({
           color: '#f00',
           mix: 0.5,
+        })
+        .style({
+          // rotation: 90
         })
         .fitBounds();
 

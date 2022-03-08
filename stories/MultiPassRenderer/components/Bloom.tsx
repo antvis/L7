@@ -35,9 +35,6 @@ export default class Bloom extends React.Component {
     });
     // scene.setBgColor('#000');
     const layer = new PolygonLayer({
-      zIndex: 0,
-      // enablePicking: true,
-      // enableHighlight: true,
       enableMultiPassRenderer: true,
       passes: [
         [
@@ -95,20 +92,20 @@ export default class Bloom extends React.Component {
       .color('red');
     scene.addLayer(pointLayer);
 
-    setTimeout(() => {
-      layer.setMultiPass(false);
-      pointLayer.setMultiPass(true, [
-        [
-          'bloom',
-          {
-            bloomRadius: 10,
-            bloomIntensity: 1,
-          },
-        ],
-      ]);
+    // setTimeout(() => {
+    //   layer.setMultiPass(false);
+    //   pointLayer.setMultiPass(true, [
+    //     [
+    //       'bloom',
+    //       {
+    //         bloomRadius: 10,
+    //         bloomIntensity: 1,
+    //       },
+    //     ],
+    //   ]);
 
-      scene.render();
-    }, 1000);
+    //   scene.render();
+    // }, 1000);
 
     this.scene = scene;
   }

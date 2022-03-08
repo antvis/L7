@@ -8,6 +8,7 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
+uniform mat2 u_RotateMatrix;
 uniform float u_isMeter;
 
 varying float v_radius;
@@ -78,7 +79,7 @@ void main() {
   // anti-alias
   
 
-  vec2 offset = (extrude.xy * (a_Size) + textrueOffsets);
+  vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
   vec3 aPosition = a_Position;
   if(u_isMeter < 1.0) {
     // 不以米为实际单位
