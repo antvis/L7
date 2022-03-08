@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.7.35",
+  "version": "2.7.36",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,13 +25,13 @@
   "author": "antv",
   "license": "MIT",
   "dependencies": {
-    "@antv/l7-component": "^2.7.35",
-    "@antv/l7-core": "^2.7.35",
-    "@antv/l7-layers": "^2.7.35",
-    "@antv/l7-maps": "^2.7.35",
-    "@antv/l7-scene": "^2.7.35",
-    "@antv/l7-source": "^2.7.35",
-    "@antv/l7-utils": "^2.7.35",
+    "@antv/l7-component": "^2.7.36",
+    "@antv/l7-core": "^2.7.36",
+    "@antv/l7-layers": "^2.7.36",
+    "@antv/l7-maps": "^2.7.36",
+    "@antv/l7-scene": "^2.7.36",
+    "@antv/l7-source": "^2.7.36",
+    "@antv/l7-utils": "^2.7.36",
     "@babel/runtime": "^7.7.7"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
