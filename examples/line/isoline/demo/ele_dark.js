@@ -16,7 +16,19 @@ scene.on('loaded', () => {
   fetch('https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json')
     .then(res => res.json())
     .then(data => {
-      const layer = new LineLayer({})
+      const layer = new LineLayer({
+        enableMultiPassRenderer: true,
+        passes: [
+          [
+            'bloom',
+            {
+              bloomBaseRadio: 0.8,
+              bloomRadius: 2,
+              bloomIntensity: 1,
+            },
+          ],
+        ]
+      })
         .source(data)
         .size('ELEV', h => {
           return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 0.2 ];

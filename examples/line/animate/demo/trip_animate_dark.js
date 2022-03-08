@@ -16,7 +16,18 @@ scene.on('loaded', () => {
     .then(res => res.text())
     .then(data => {
       const layer = new LineLayer({
-        blend: 'normal'
+        blend: 'normal',
+        enableMultiPassRenderer: true,
+        passes: [
+          [
+            'bloom',
+            {
+              bloomBaseRadio: 0.8,
+              bloomRadius: 2,
+              bloomIntensity: 1,
+            },
+          ],
+        ]
       })
         .source(data, {
           parser: {
