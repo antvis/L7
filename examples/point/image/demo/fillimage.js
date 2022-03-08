@@ -28,7 +28,7 @@ scene.on('loaded', () => {
         '02',
         'https://gw.alipayobjects.com/zos/basement_prod/7aa1f460-9f9f-499f-afdf-13424aa26bbf.svg'
       );
-      const imageLayer = new PointLayer({layerType: 'fillImage'})
+      const imageLayer = new PointLayer({ layerType: 'fillImage' })
         .source(data, {
           parser: {
             type: 'json',
@@ -45,7 +45,7 @@ scene.on('loaded', () => {
       scene.addLayer(imageLayer);
 
       let r = 0;
-      rotate()
+      rotate();
       function rotate() {
         r += 0.2;
         imageLayer.style({
