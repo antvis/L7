@@ -231,6 +231,14 @@ module.exports = {
         order: 9,
       },
       {
+        slug: 'api/pass',
+        title: {
+          zh: '后处理模块',
+          en: 'MultiPass',
+        },
+        order: 10,
+      },
+      {
         slug: 'api/district',
         title: {
           zh: '行政区划',
