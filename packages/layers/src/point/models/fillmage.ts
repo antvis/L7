@@ -55,8 +55,9 @@ export default class FillImageModel extends BaseModel {
       rotateFlag = -1;
     }
     // 控制图标的旋转角度（绕 Z 轴旋转）
-    this.radian = rotation ? ((rotateFlag * Math.PI * rotation) / 180) : ((rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180);
-   
+    this.radian = rotation
+      ? (rotateFlag * Math.PI * rotation) / 180
+      : (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
 
     if (
       this.dataTextureTest &&
