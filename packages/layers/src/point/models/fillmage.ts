@@ -24,6 +24,7 @@ export default class FillImageModel extends BaseModel {
   public meter2coord: number = 1;
   private texture: ITexture2D;
   private isMeter: boolean = false;
+  private radian: number = 0; // 旋转的弧度
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -32,11 +33,30 @@ export default class FillImageModel extends BaseModel {
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
       blend,
+      rotation,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
+
+    /**
+     *               rotateFlag
+     * L7MAP            1
+     * MAPBOX           1
+     * GAODE2.x         -1
+     * GAODE1.x         -1
+     */
+    let rotateFlag = 1;
+    if (
+      this.mapService.version === 'GAODE2.x' ||
+      this.mapService.version === 'GAODE1.x'
+    ) {
+      rotateFlag = -1;
+    }
+    // 控制图标的旋转角度（绕 Z 轴旋转）
+    this.radian = rotation ? ((rotateFlag * Math.PI * rotation) / 180) : ((rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180);
+   
 
     if (
       this.dataTextureTest &&
@@ -86,7 +106,12 @@ export default class FillImageModel extends BaseModel {
     }
     return {
       u_isMeter: Number(this.isMeter),
-
+      u_RotateMatrix: new Float32Array([
+        Math.cos(this.radian),
+        Math.sin(this.radian),
+        -Math.sin(this.radian),
+        Math.cos(this.radian),
+      ]),
       u_additive: blend === 'additive' ? 1.0 : 0.0,
 
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]

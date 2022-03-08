@@ -73,6 +73,8 @@ export interface IPointLayerStyleOptions {
   mask?: boolean;
   maskInside?: boolean;
 
+  rotation?: number; // angle
+
   animateOption: IAnimateOption;
 }
 
