@@ -54,4 +54,51 @@ const scatter = new PointLayer()
 
 [在线案例](../../../examples/point/image#image)
 
+### layerType = "fillImage"
+
+🌟 默认通过 PointLayer 实例化的 image 本质上是精灵贴图，因此有始终面向相机的特性，同时贴图的大小也收到设备的限制。  
+🌟 由于精灵始终面向相机，因此我们也无法自定义配置 image 的旋转角度
+
+为了解决上述的两个问题（1. 大小受限，2. 无法自定义旋转角度），我们单独提供了 fillimage 的模式。  
+只需要在初始化图层的时候提前指定 layerType 为 fillImage，其他使用与普通的 image 完全相同。
+
+```javascript
+const imageLayer = new PointLayer({ layerType: 'fillImage' })
+  .source(data, {
+    parser: {
+      type: 'json',
+      x: 'longitude',
+      y: 'latitude',
+    },
+  })
+  .shape('name', ['00', '01', '02'])
+  .style({
+    rotation: 0,
+  })
+  .active({
+    color: '#0ff',
+    mix: 0.5,
+  })
+  .size(45);
+scene.addLayer(imageLayer);
+
+let r = 0;
+rotate();
+function rotate() {
+  r += 0.2;
+  imageLayer.style({
+    rotation: r,
+  });
+  scene.render();
+  requestAnimationFrame(rotate);
+}
+```
+
+- rotation: number|undefined  
+  我们支持使用 rotation 自定义配置图标的旋转角度（顺时针方向、角度制）
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1kBZTaains4AAAAAAAAAAAAAARQnAQ'>
+
+[在线案例](../../../examples/point/image#fillimage)
+
 `markdown:docs/common/layer/base.md`
