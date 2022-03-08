@@ -24,9 +24,9 @@ scene.on('loaded', () => {
             {
               bloomBaseRadio: 0.8,
               bloomRadius: 2,
-              bloomIntensity: 1,
-            },
-          ],
+              bloomIntensity: 1
+            }
+          ]
         ]
       })
         .source(data, {
