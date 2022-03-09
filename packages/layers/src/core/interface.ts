@@ -93,7 +93,7 @@ export interface IPolygonLayerStyleOptions {
   maskInside?: boolean;
 
   // water
-  waterTexture?: string; 
+  waterTexture?: string;
   speed?: number;
 }
 

@@ -125,7 +125,9 @@ export default class WaterModel extends BaseModel {
   }
 
   private loadTexture() {
-    const { waterTexture } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const {
+      waterTexture,
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
@@ -134,16 +136,18 @@ export default class WaterModel extends BaseModel {
     });
     const image = new Image();
     image.crossOrigin = '';
-    if(waterTexture) {
+    if (waterTexture) {
       // custom texture
-      console.warn('L7 recommend：https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ');
+      console.warn(
+        'L7 recommend：https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ',
+      );
       image.src = waterTexture;
     } else {
       // default texture
       image.src =
-      'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ';
+        'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ';
     }
-   
+
     image.onload = () => {
       this.texture = createTexture2D({
         data: image,
