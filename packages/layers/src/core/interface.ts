@@ -91,6 +91,8 @@ export interface IPolygonLayerStyleOptions {
   pickLight: boolean;
   mask?: boolean;
   maskInside?: boolean;
+
+  speed?: number; // water
 }
 
 export interface IImageLayerStyleOptions {
