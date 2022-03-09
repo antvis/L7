@@ -8,7 +8,6 @@ export default class Amap2demo_polygon extends React.Component {
     this.scene.destroy();
   }
   public async componentDidMount() {
-  
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -44,22 +43,23 @@ export default class Amap2demo_polygon extends React.Component {
       ],
     };
 
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/67130c6c-7f49-4680-915c-54e69730861d.json')
-    .then(data => data.json())
-    .then(({ lakeData }) => {
-      const lakeLayer = new PolygonLayer({ autoFit: true })
-        .source(lakeData)
-        .shape('water')
-        .color('#1E90FF')
-        .style({
-          speed: 0.4
-        })
-        .animate(true);
+    fetch(
+      'https://gw.alipayobjects.com/os/bmw-prod/67130c6c-7f49-4680-915c-54e69730861d.json',
+    )
+      .then((data) => data.json())
+      .then(({ lakeData }) => {
+        const lakeLayer = new PolygonLayer({ autoFit: true })
+          .source(lakeData)
+          .shape('water')
+          .color('#1E90FF')
+          .style({
+            speed: 0.4,
+            // waterTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
+          })
+          .animate(true);
 
         scene.addLayer(lakeLayer);
-    })
-    
-
+      });
   }
 
   public render() {

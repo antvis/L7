@@ -1,11 +1,16 @@
-import { AttributeType, gl, IEncodeFeature, IModel, ITexture2D, IModelUniform } from '@antv/l7-core';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  IModel,
+  IModelUniform,
+  ITexture2D,
+} from '@antv/l7-core';
 import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
-import {
-  polygonTriangulation,
-} from '../../core/triangulation';
+import { polygonTriangulation } from '../../core/triangulation';
 import water_frag from '../shaders/water/polygon_water_frag.glsl';
 import water_vert from '../shaders/water/polygon_water_vert.glsl';
 export default class WaterModel extends BaseModel {
@@ -50,7 +55,6 @@ export default class WaterModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_speed: speed,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
-
     };
   }
 
@@ -60,38 +64,13 @@ export default class WaterModel extends BaseModel {
     };
   }
 
-  private loadTexture() {
-    const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
-      height: 0,
-      width: 0,
-    });
-    const image = new Image()
-    image.crossOrigin = '';
-    image.src = 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
-    image.onload = () => {
-      this.texture = createTexture2D({
-        data: image,
-        width: image.width,
-        height: image.height,
-        wrapS: gl.MIRRORED_REPEAT,
-        wrapT: gl.MIRRORED_REPEAT,
-        min: gl.LINEAR,
-        mag: gl.LINEAR,
-      })
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
-    }
-  }
-
   public initModels(): IModel[] {
-    this.loadTexture()
+    this.loadTexture();
     return this.buildModels();
   }
 
   public buildModels(): IModel[] {
     const {
-    
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
@@ -114,12 +93,11 @@ export default class WaterModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    
     const bbox = this.layer.getSource().extent;
     const [minLng, minLat, maxLng, maxLat] = bbox;
     const lngLen = maxLng - minLng;
     const latLen = maxLat - minLat;
-  
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'linear',
       type: AttributeType.Attribute,
@@ -140,9 +118,44 @@ export default class WaterModel extends BaseModel {
           normal: number[],
         ) => {
           const [lng, lat] = vertex;
-          return [(lng - minLng)/lngLen, (lat - minLat)/latLen];
+          return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
       },
     });
+  }
+
+  private loadTexture() {
+    const { waterTexture } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+
+    const { createTexture2D } = this.rendererService;
+    this.texture = createTexture2D({
+      height: 0,
+      width: 0,
+    });
+    const image = new Image();
+    image.crossOrigin = '';
+    if(waterTexture) {
+      // custom texture
+      console.warn('L7 recommend：https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ');
+      image.src = waterTexture;
+    } else {
+      // default texture
+      image.src =
+      'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ';
+    }
+   
+    image.onload = () => {
+      this.texture = createTexture2D({
+        data: image,
+        width: image.width,
+        height: image.height,
+        wrapS: gl.MIRRORED_REPEAT,
+        wrapT: gl.MIRRORED_REPEAT,
+        min: gl.LINEAR,
+        mag: gl.LINEAR,
+      });
+      this.layerService.updateLayerRenderList();
+      this.layerService.renderLayers();
+    };
   }
 }

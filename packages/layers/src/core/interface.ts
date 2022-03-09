@@ -92,7 +92,9 @@ export interface IPolygonLayerStyleOptions {
   mask?: boolean;
   maskInside?: boolean;
 
-  speed?: number; // water
+  // water
+  waterTexture?: string; 
+  speed?: number;
 }
 
 export interface IImageLayerStyleOptions {

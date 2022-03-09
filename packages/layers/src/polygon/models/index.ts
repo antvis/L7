@@ -28,7 +28,7 @@ const PolygonModels: { [key in PolygonModelType]: any } = {
   point_image: IMageModel,
   point_normal: NormalModel,
   point_extrude: PointExtrudeModel,
-  water: Water
+  water: Water,
 
   // point_fill: PointModels.fill,
 };
