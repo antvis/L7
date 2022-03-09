@@ -1,3 +1,4 @@
+import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export interface IParserCfg {
   type: string;
@@ -61,6 +62,7 @@ export interface ISource {
   data: IParserData;
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
+  extent: BBox;
   setData(data: any): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
