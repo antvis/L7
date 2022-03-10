@@ -2,100 +2,100 @@
 import { PointLayer, Scene, ILayer, LineLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-import { animate, easeInOut, linear } from 'popmotion'
+import { animate, easeInOut, linear } from 'popmotion';
 
 const path = [
   {
     lng: 168.3984375,
     lat: -4.565473550710278,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 165.05859375,
     lat: -5.7908968128719565,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 160.3125,
     lat: -5.7908968128719565,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 157.32421875,
     lat: -3.688855143147035,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 153.80859375,
     lat: -2.284550660236957,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 148.88671874999997,
     lat: -2.108898659243126,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 145.1953125,
     lat: -0.7031073524364783,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 140.44921875,
     lat: 0,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 135,
     lat: 1.4061088354351594,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 131.8359375,
     lat: 2.986927393334876,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 130.078125,
     lat: 5.965753671065536,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 128.49609375,
     lat: 9.102096738726456,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 127.265625,
     lat: 12.211180191503997,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 125.859375,
     lat: 15.453680224345835,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 123.92578125,
     lat: 18.312810846425442,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 121.11328124999999,
     lat: 19.80805412808859,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 117.94921874999999,
     lat: 20.96143961409684,
-    img: 'img'
+    img: 'img',
   },
   {
     lng: 115.31249999999999,
     lat: 22.917922936146045,
-    img: 'img'
-  }
-]
+    img: 'img',
+  },
+];
 export default class Amap2demo_polygon extends React.Component {
   private scene: Scene;
   private imageLayer: ILayer;
@@ -103,17 +103,16 @@ export default class Amap2demo_polygon extends React.Component {
     lng: number;
     lat: number;
     img: string;
-  }
+  };
   private lineLayer: ILayer;
   private lineData: any[] = [];
   private timer: any;
   private timer2: any;
   private pathCount: any = 0;
   private rotation: any = 0;
-  
-  
+
   public componentWillUnmount() {
-    cancelAnimationFrame(this.timer)
+    cancelAnimationFrame(this.timer);
     clearTimeout(this.timer2);
     this.scene.destroy();
   }
@@ -132,22 +131,20 @@ export default class Amap2demo_polygon extends React.Component {
       'img',
       'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*rd3kTp1VFxIAAAAAAAAAAAAAARQnAQ',
     );
-      this.imageData = {
-        lng: 168.3984375,
-        lat: -4.565473550710278,
-        img: 'img'
-      }
+    this.imageData = {
+      lng: 168.3984375,
+      lat: -4.565473550710278,
+      img: 'img',
+    };
     scene.on('loaded', () => {
       this.imageLayer = new PointLayer({ layerType: 'fillImage', zIndex: 2 })
-        .source([this.imageData ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
+        .source([this.imageData], {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
           },
-        )
+        })
         .shape('img', (img) => img)
         .size(60)
         .active({
@@ -161,100 +158,104 @@ export default class Amap2demo_polygon extends React.Component {
 
       scene.addLayer(this.imageLayer);
 
-
       const data = [
         {
           id: '1',
-          coord: this.lineData
-        }
+          coord: this.lineData,
+        },
       ];
       this.lineLayer = new LineLayer()
-      .source(data, {
-        parser: {
-          type: 'json',
-          coordinates: 'coord'
-        }
-      })
-      .shape('line')
-      .size(2)
-      .color('#f00')
-      .style({
-        targetColor: '#0DCCFF',
-        sourceColor: 'rbga(255,255,255, 0)',
-      })
+        .source(data, {
+          parser: {
+            type: 'json',
+            coordinates: 'coord',
+          },
+        })
+        .shape('line')
+        .size(2)
+        .color('#f00')
+        .style({
+          opacity: 0.8,
+          targetColor: '#0DCCFF',
+          sourceColor: 'rbga(255,255,255, 0)',
+        });
 
       scene.addLayer(this.lineLayer);
 
       const rotate = () => {
-        this.rotation -= 2
+        this.rotation -= 2;
         this.imageLayer.style({
-          rotation: this.rotation
-        })
-        scene.render()
-        this.timer = requestAnimationFrame(rotate)
-      }
-      rotate()
+          rotation: this.rotation,
+        });
+        scene.render();
+        this.timer = requestAnimationFrame(rotate);
+      };
+      rotate();
 
-      this.updateLocation()
+      this.updateLocation();
     });
   }
 
   updateLocation() {
     clearTimeout(this.timer2);
 
-    
-    if(this.pathCount < path.length) {
+    if (this.pathCount < path.length) {
       this.timer2 = setTimeout(() => {
         const data = path[this.pathCount];
 
         let t = animate({
           from: {
             lng: this.imageData.lng,
-            lat: this.imageData.lat
+            lat: this.imageData.lat,
           },
           to: {
-            lng:  data.lng,
-            lat:  data.lat
+            lng: data.lng,
+            lat: data.lat,
           },
-          ease:linear ,
+          ease: linear,
           duration: 500,
           onUpdate: (o) => {
             this.imageData.lng = o.lng;
             this.imageData.lat = o.lat;
-            this.imageLayer.setData([this.imageData ])
+            this.imageLayer.setData([this.imageData]);
 
-            if(this.pathCount > 1) {
-              this.lineData.push([o.lng, o.lat])
-              if(this.pathCount === path.length - 1) {
-                this.lineData = []
-              }
+            if (this.pathCount > 1) {
+              this.lineData.push([o.lng, o.lat]);
               this.lineLayer.setData([
                 {
                   id: '1',
-                  coord: this.lineData
-                }
-              ])
+                  coord: this.lineData,
+                },
+              ]);
             }
           },
           onComplete: () => {
-           t.stop()
+            t.stop();
+            if (this.pathCount === path.length - 1) {
+              this.lineData = [];
+              this.lineLayer.setData([
+                {
+                  id: '1',
+                  coord: this.lineData,
+                },
+              ]);
+            }
           },
-        })
+        });
 
         this.pathCount++;
-        this.updateLocation()
-      }, 500)
+        this.updateLocation();
+      }, 500);
     } else {
-      this.lineData = []
+      this.lineData = [];
       this.imageData = {
         lng: 168.3984375,
         lat: -4.565473550710278,
-        img: 'img'
-      }
+        img: 'img',
+      };
       this.pathCount = 0;
-      this.updateLocation()
+      this.updateLocation();
     }
-   
   }
 
   public render() {

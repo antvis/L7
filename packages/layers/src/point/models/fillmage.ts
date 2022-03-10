@@ -143,7 +143,6 @@ export default class FillImageModel extends BaseModel {
   public initModels(): IModel[] {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
-    
 
     const {
       unit = 'l7size',
