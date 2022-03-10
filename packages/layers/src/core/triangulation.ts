@@ -126,7 +126,7 @@ export function LineTriangulation(feature: IEncodeFeature) {
   } else {
     // 处理非高德2.0的几何体构建
     let path = coordinates as number[][][] | number[][];
-    if (!Array.isArray(path[0][0])) {
+    if (path[0] && !Array.isArray(path[0][0])) {
       path = [coordinates] as number[][][];
     }
     path.forEach((item: any) => {
@@ -171,7 +171,7 @@ export function SimpleLineTriangulation(feature: IEncodeFeature) {
   } else {
     // 处理非高德2.0的几何体构建
     let path = coordinates as number[][][] | number[][];
-    if (!Array.isArray(path[0][0])) {
+    if (path[0] && !Array.isArray(path[0][0])) {
       path = [coordinates] as number[][][];
     }
     path.forEach((item: any) => {
