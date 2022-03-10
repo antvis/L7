@@ -1,10 +1,10 @@
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
-import Radar from './radar';
 import FillImageModel from './fillmage';
 import IconModel from './icon-font';
 import IMageModel from './image';
 import NormalModel from './normal';
+import Radar from './radar';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
 

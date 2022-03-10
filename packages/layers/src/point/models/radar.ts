@@ -11,9 +11,7 @@ import {
 import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import {
-  PointFillTriangulation,
-} from '../../core/triangulation';
+import { PointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/radar/radar_frag.glsl';
 import pointFillVert from '../shaders/radar/radar_vert.glsl';
@@ -33,7 +31,7 @@ export default class RadarModel extends BaseModel {
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
       blend,
-      speed = 1
+      speed = 1,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -201,8 +199,7 @@ export default class RadarModel extends BaseModel {
    * 根据 animateOption 的值返回对应的 shader 代码
    * @returns
    */
-  public getShaders(
-  ): { frag: string; vert: string; type: string } {
+  public getShaders(): { frag: string; vert: string; type: string } {
     return {
       frag: pointFillFrag,
       vert: pointFillVert,
@@ -219,7 +216,6 @@ export default class RadarModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,

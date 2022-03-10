@@ -1,4 +1,4 @@
-import {PointLayer, Scene } from '@antv/l7';
+import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -17,31 +17,35 @@ export default class Amap2demo_polygon extends React.Component {
       }),
     });
     this.scene = scene;
- 
+
     const layer = new PointLayer()
-    .source([{
-      lng: 120,
-      lat: 30
-    }], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat'
-      }
-    })
-    .shape('radar')
-    .size(100)
-    .color('#d00')
-    .style({
-      // rotation: 90
-      speed: 5
-    })
-    .animate(true)
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('radar')
+      .size(100)
+      .color('#d00')
+      .style({
+        // rotation: 90
+        speed: 5,
+      })
+      .animate(true);
 
     scene.on('loaded', () => {
-      scene.addLayer(layer)
-    })
-   
+      scene.addLayer(layer);
+    });
   }
 
   public render() {
