@@ -215,11 +215,11 @@ export default class Amap2demo_polygon extends React.Component {
           ease: linear,
           duration: 500,
           onUpdate: (o) => {
-            this.imageData.lng = o.lng;
-            this.imageData.lat = o.lat;
-            this.imageLayer.setData([this.imageData]);
-
             if (this.pathCount > 1) {
+              this.imageData.lng = o.lng;
+              this.imageData.lat = o.lat;
+              this.imageLayer.setData([this.imageData]);
+
               this.lineData.push([o.lng, o.lat]);
               this.lineLayer.setData([
                 {
