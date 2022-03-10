@@ -143,6 +143,7 @@ export default class FillImageModel extends BaseModel {
   public initModels(): IModel[] {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
+    
 
     const {
       unit = 'l7size',
@@ -211,7 +212,7 @@ export default class FillImageModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill-' + type,
+        moduleName: 'pointfill_' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: PointFillTriangulation,
@@ -231,6 +232,8 @@ export default class FillImageModel extends BaseModel {
   }
 
   public clearModels() {
+    this.iconService.off('imageUpdate', this.updateTexture);
+    this.texture.destroy();
     this.dataTexture?.destroy();
   }
 
