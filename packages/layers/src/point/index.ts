@@ -57,6 +57,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       normal: {
         blend: 'additive',
       },
+      radar: {},
       simplePoint: {},
       fill: { blend: 'normal' },
       extrude: {},
@@ -73,6 +74,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     const PointTypes = [
       'fillImage',
       'fill',
+      'radar',
       'image',
       'normal',
       'simplePoint',
@@ -101,6 +103,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
       if (shape === 'simple') {
         return 'simplePoint';
+      }
+      if (shape === 'radar') {
+        return 'radar';
       }
       if (shape === 'fillImage') {
         return 'fillImage';
