@@ -1,5 +1,6 @@
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
+import Radar from './radar';
 import FillImageModel from './fillmage';
 import IconModel from './icon-font';
 import IMageModel from './image';
@@ -10,6 +11,7 @@ import TextModel from './text';
 export type PointType =
   | 'fillImage'
   | 'fill'
+  | 'radar'
   | 'image'
   | 'normal'
   | 'simplePoint'
@@ -20,6 +22,7 @@ export type PointType =
 const PointModels: { [key in PointType]: any } = {
   fillImage: FillImageModel,
   fill: FillModel,
+  radar: Radar,
   image: IMageModel,
   normal: NormalModel,
   simplePoint: SimplePopint,

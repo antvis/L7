@@ -19,28 +19,32 @@ export default class ScaleComponent extends React.Component {
     scene.on('loaded', () => {
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+        // 'https://gw.alipayobjects.com/os/alisis/geo-data-v0.1.1/choropleth-data/country/100000_country_province.json'
       )
         .then((res) => res.json())
         .then((data) => {
           let layer = new PolygonLayer({ blend: 'normal' }) // autoFit: true
             .source(data)
-            .size('name', [0, 10000, 50000, 30000, 100000])
-            .color('name1', [
-              '#2E8AE6',
-              '#69D1AB',
-              '#DAF291',
-              '#FFD591',
-              '#FF7A45',
-              '#CF1D49',
-            ])
-            .shape('fill')
-            .select(true)
+            // .size('name', [0, 10000, 50000, 30000, 100000])
+            .size(1)
+            // .color('name1', [
+            //   '#2E8AE6',
+            //   '#69D1AB',
+            //   '#DAF291',
+            //   '#FFD591',
+            //   '#FF7A45',
+            //   '#CF1D49',
+            // ])
+            .color('#000')
+            // .shape('fill')
+            .shape('line')
+            // .select(true)
             .style({
               opacity: 0.8,
-              opacityLinear: {
-                enable: true,
-                dir: 'in', // in - out
-              },
+              // opacityLinear: {
+              //   enable: true,
+              //   dir: 'in', // in - out
+              // },
             });
 
           layer.setBottomColor('#f00');
