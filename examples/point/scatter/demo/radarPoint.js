@@ -5,34 +5,34 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     pitch: 0,
-    center: [120, 30],
-    zoom: 13,
-  }),
+    center: [ 120, 30 ],
+    zoom: 13
+  })
 });
 
 const layer = new PointLayer()
-.source(
-  [
+  .source(
+    [
+      {
+        lng: 120,
+        lat: 30
+      }
+    ],
     {
-      lng: 120,
-      lat: 30,
-    },
-  ],
-  {
-    parser: {
-      type: 'json',
-      x: 'lng',
-      y: 'lat',
-    },
-  },
-)
-.shape('radar')
-.size(100)
-.color('#d00')
-.style({
-  speed: 5,
-})
-.animate(true);
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat'
+      }
+    }
+  )
+  .shape('radar')
+  .size(100)
+  .color('#d00')
+  .style({
+    speed: 5
+  })
+  .animate(true);
 
 scene.on('loaded', () => {
   scene.addLayer(layer);

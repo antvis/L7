@@ -16,6 +16,7 @@ order: 3
 - radar
 
 ### animate
+
 雷达图需要显示设置为 true
 
 ```javascript
