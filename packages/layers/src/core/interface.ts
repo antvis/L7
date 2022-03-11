@@ -95,6 +95,9 @@ export interface IPolygonLayerStyleOptions {
   // water
   waterTexture?: string;
   speed?: number;
+  // ocean
+  watercolor?: string;
+  watercolor2?: string;
 }
 
 export interface IImageLayerStyleOptions {
