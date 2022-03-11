@@ -10,6 +10,7 @@ order: 3
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*YJmVRpmW7FEAAAAAAAAAAAAAARQnAQ'>
 
 ## 使用
+🌟 从 v2.8.3 版本开始支持雷达图。 
 
 ### shape
 
