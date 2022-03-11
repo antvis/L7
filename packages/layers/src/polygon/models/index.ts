@@ -6,6 +6,7 @@ import NormalModel from '../../point/models/normal';
 import TextModel from '../../point/models/text';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
+import Ocean from './ocean';
 import Water from './water';
 
 export type PolygonModelType =
@@ -17,7 +18,8 @@ export type PolygonModelType =
   | 'point_normal'
   | 'point_extrude'
   | 'text'
-  | 'water';
+  | 'water'
+  | 'ocean';
 
 const PolygonModels: { [key in PolygonModelType]: any } = {
   fill: FillModel,
@@ -29,7 +31,7 @@ const PolygonModels: { [key in PolygonModelType]: any } = {
   point_normal: NormalModel,
   point_extrude: PointExtrudeModel,
   water: Water,
-
+  ocean: Ocean,
   // point_fill: PointModels.fill,
 };
 export default PolygonModels;
