@@ -23,6 +23,11 @@
       "filename": "animatePoint.js",
       "title": "水波散点",
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*uuT9Rox3eKoAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "radarPoint.js",
+      "title": "雷达图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*YJmVRpmW7FEAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }
