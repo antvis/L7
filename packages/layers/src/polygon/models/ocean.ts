@@ -21,7 +21,7 @@ export default class OceanModel extends BaseModel {
     const {
       opacity = 1,
       watercolor = '#6D99A8',
-      watercolor2 = '#0F121C'
+      watercolor2 = '#0F121C',
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
@@ -147,7 +147,7 @@ export default class OceanModel extends BaseModel {
       this.texture3 = initTex(images[2]);
       this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
-    })
+    });
 
     function initImage(callback: (loadedImages: HTMLImageElement[]) => void) {
       let loadedCount = 0;
@@ -155,8 +155,8 @@ export default class OceanModel extends BaseModel {
       const images = [
         'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ',
         'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*MJ22QbpuCzIAAAAAAAAAAAAAARQnAQ',
-        'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*-z2HSIVDsHIAAAAAAAAAAAAAARQnAQ'
-      ]
+        'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*-z2HSIVDsHIAAAAAAAAAAAAAARQnAQ',
+      ];
       images.map((imgSrc: string) => {
         const image = new Image();
         image.crossOrigin = '';
@@ -164,11 +164,11 @@ export default class OceanModel extends BaseModel {
         loadedImages.push(image);
         image.onload = () => {
           loadedCount++;
-          if(loadedCount === 3) {
-            callback(loadedImages)
+          if (loadedCount === 3) {
+            callback(loadedImages);
           }
-        }
-      })
+        };
+      });
     }
 
     function initTex(image: HTMLImageElement) {
