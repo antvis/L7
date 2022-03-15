@@ -1,5 +1,5 @@
 import { IEncodeFeature } from '@antv/l7-core';
-import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
+import { aProjectFlat, lngLatToMeters, parseWorker } from '@antv/l7-utils';
 import earcut from 'earcut';
 // @ts-ignore
 import { mat4, vec3 } from 'gl-matrix';
@@ -141,6 +141,19 @@ export function LineTriangulation(feature: IEncodeFeature) {
     normals: linebuffer.normals,
     size: 6,
   };
+}
+
+export async function excuteLineTriangulation(
+  data: IEncodeFeature,
+  iskorker: boolean = false,
+) {
+  if (iskorker) {
+    const workeResult = await parseWorker('line-triangulation', data, {});
+    return workeResult;
+  }
+
+  const result = await LineTriangulation(data);
+  return result;
 }
 
 export function SimpleLineTriangulation(feature: IEncodeFeature) {
