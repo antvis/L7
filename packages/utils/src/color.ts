@@ -67,9 +67,25 @@ export function generateColorRamp(
   }
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 256, 1);
-  data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
 
-  return !isMini
-    ? new ImageData(data, 256, 1)
-    : { data, width: 256, height: 1 };
+  // data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
+  // return !isMini
+  //   ? new ImageData(data, 256, 1)
+  //   : { data, width: 256, height: 1 };
+
+  if(!isMini) {
+    data = ctx.getImageData(0, 0, 256, 1).data;
+    // 使用 createImageData 替代 new ImageData、兼容 IE11
+    let imageData = ctx.createImageData(256, 1);
+    for (var i=0;i<imageData.data.length;i+=4) {
+      imageData.data[i+0]=data[i+0];
+      imageData.data[i+1]=data[i+1];
+      imageData.data[i+2]=data[i+2];
+      imageData.data[i+3]=data[i+3];
+    }
+    return imageData;
+  } else {
+    data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
+    return { data, width: 256, height: 1 };
+  }
 }
