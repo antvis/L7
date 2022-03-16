@@ -1118,6 +1118,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         this.hooks.beforeRender.call();
         this.layerModelNeedUpdate = false;
       }
+
+      if (this.layerModel.renderUpdate) {
+        this.layerModel.renderUpdate();
+      }
       this.models.forEach((model) => {
         model.draw(
           {

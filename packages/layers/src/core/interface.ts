@@ -1,4 +1,4 @@
-import { IAnimateOption } from '@antv/l7-core';
+import { IAnimateOption, IMapService } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
 import {
@@ -104,6 +104,20 @@ export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
   maskInside?: boolean;
+}
+
+export enum CanvasUpdateType {
+  'AWAYS' = 'aways',
+  'DRAGEND' = 'dragend',
+}
+export interface ICanvasLayerStyleOptions {
+  zIndex: number;
+  update: CanvasUpdateType | string;
+  drawingOnCanvas: (
+    ctx: CanvasRenderingContext2D,
+    mapService: IMapService,
+    size: [number, number],
+  ) => void;
 }
 
 export interface IHeatMapLayerStyleOptions {
