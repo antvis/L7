@@ -18,57 +18,53 @@ export default class ScaleComponent extends React.Component {
     // scene.setBgColor('#000');
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+        // 'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+        'https://gw.alipayobjects.com/os/bmw-prod/5dbc5dbf-76f1-47e6-b9e3-d2a1b7581f93.json',
         // 'https://gw.alipayobjects.com/os/alisis/geo-data-v0.1.1/choropleth-data/country/100000_country_province.json'
       )
         .then((res) => res.json())
         .then((data) => {
           let layer = new PolygonLayer({ blend: 'normal' }) // autoFit: true
             .source(data)
-            // .size('name', [0, 10000, 50000, 30000, 100000])
-            .size(1)
-            // .color('name1', [
-            //   '#2E8AE6',
-            //   '#69D1AB',
-            //   '#DAF291',
-            //   '#FFD591',
-            //   '#FF7A45',
-            //   '#CF1D49',
-            // ])
-            .color('#000')
-            // .shape('fill')
-            .shape('line')
+            .size('name', [0, 10000, 50000, 30000, 100000])
+            .color('name', [
+              '#2E8AE6',
+              '#69D1AB',
+              '#DAF291',
+              '#FFD591',
+              '#FF7A45',
+              '#CF1D49',
+            ])
+            // .color('#000')
+            .shape('fill')
+            // .shape('line')
             // .select(true)
             .style({
               opacity: 0.8,
-              // opacityLinear: {
-              //   enable: true,
-              //   dir: 'in', // in - out
-              // },
             });
-
-          layer.setBottomColor('#f00');
-
-          // let layer2 = new PolygonLayer({ blend: 'normal' })
-          //   .source(data)
-          //   .size(1)
-          //   .color('name', [
-          //     '#2E8AE6',
-          //     '#69D1AB',
-          //     '#DAF291',
-          //     '#FFD591',
-          //     '#FF7A45',
-          //     '#CF1D49',
-          //   ])
-          //   .shape('line')
-          //   .select(true)
-          //   .style({
-          //     opacity: 1.0,
-          //   });
-
           scene.addLayer(layer);
-          // scene.addLayer(layer2);
         });
+
+      // layer.setBottomColor('#f00');
+
+      // let layer2 = new PolygonLayer({ blend: 'normal' })
+      //   .source(data)
+      //   .size(1)
+      //   .color('name', [
+      //     '#2E8AE6',
+      //     '#69D1AB',
+      //     '#DAF291',
+      //     '#FFD591',
+      //     '#FF7A45',
+      //     '#CF1D49',
+      //   ])
+      //   .shape('line')
+      //   .select(true)
+      //   .style({
+      //     opacity: 1.0,
+      //   });
+
+      // scene.addLayer(layer2);
     });
   }
 
