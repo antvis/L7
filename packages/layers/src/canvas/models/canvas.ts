@@ -129,5 +129,7 @@ export default class CanvaModel extends BaseModel {
     return this.initModels();
   }
 
-  protected registerBuiltinAttributes() {return;}
+  protected registerBuiltinAttributes() {
+    return;
+  }
 }
