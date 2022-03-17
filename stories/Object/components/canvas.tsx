@@ -33,11 +33,11 @@ export default class Demo extends React.Component {
             zIndex: 10,
             update: 'aways',
             // update: 'dragend',
-            drawingOnCanvas: (
-              ctx: CanvasRenderingContext2D,
-              mapService: IMapService,
-              size: [number, number],
-            ) => {
+            drawingOnCanvas: ({
+                ctx,
+                mapService,
+                size
+              }) => {
               const [width, height] = size;
 
               ctx.clearRect(0, 0, width, height);

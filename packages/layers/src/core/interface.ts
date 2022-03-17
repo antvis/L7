@@ -110,13 +110,18 @@ export enum CanvasUpdateType {
   'AWAYS' = 'aways',
   'DRAGEND' = 'dragend',
 }
+
+export interface IDrawingOnCanvas {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  mapService: IMapService;
+  size: [number, number];
+}
 export interface ICanvasLayerStyleOptions {
   zIndex: number;
   update: CanvasUpdateType | string;
   drawingOnCanvas: (
-    ctx: CanvasRenderingContext2D,
-    mapService: IMapService,
-    size: [number, number],
+    option: IDrawingOnCanvas
   ) => void;
 }
 
