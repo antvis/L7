@@ -63,6 +63,7 @@ export interface ILayerModelInitializationOptions {
 
 export interface ILayerModel {
   render(): void;
+  renderUpdate?(): void;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;

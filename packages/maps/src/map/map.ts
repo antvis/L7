@@ -86,6 +86,7 @@ export default class L7MapService implements IMapService<Map> {
   }
   public off(type: string, handle: (...args: any[]) => void): void {
     this.map.off(EventMap[type] || type, handle);
+    this.eventEmitter.off(type, handle);
   }
 
   public getContainer(): HTMLElement | null {
