@@ -28,8 +28,8 @@ export default class CanvaModel extends BaseModel {
     this.mapService.off('mapchange', this.renderCanvas);
     this.mapService.off('zoomstart', this.clearCanvas);
     this.mapService.off('zoomend', this.renderCanvas);
-    this.mapService.off('dragstart', this.clearCanvas);
-    this.mapService.off('dragend', this.renderCanvas);
+    this.mapService.off('movestart', this.clearCanvas);
+    this.mapService.off('moveend', this.renderCanvas);
   };
 
   public bindListener = () => {
@@ -38,8 +38,8 @@ export default class CanvaModel extends BaseModel {
     } else {
       this.mapService.on('zoomstart', this.clearCanvas);
       this.mapService.on('zoomend', this.renderCanvas);
-      this.mapService.on('dragstart', this.clearCanvas);
-      this.mapService.on('dragend', this.renderCanvas);
+      this.mapService.on('movestart', this.clearCanvas);
+      this.mapService.on('moveend', this.renderCanvas);
     }
   };
 
