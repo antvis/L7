@@ -14,7 +14,7 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-      // map: new Mapbox({
+        // map: new Mapbox({
         pitch: 0,
         // style: 'dark',
         center: [96.99215001469588, 29.281597225674773],
