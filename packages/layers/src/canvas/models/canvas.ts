@@ -124,9 +124,9 @@ export default class CanvaModel extends BaseModel {
     if (this.ctx) {
       drawingOnCanvas({
         canvas: this.canvas,
-        ctx: this.ctx, 
-        mapService: this.mapService, 
-        size: [viewWidth, viewHeight]
+        ctx: this.ctx,
+        mapService: this.mapService,
+        size: [viewWidth, viewHeight],
       });
     }
   };

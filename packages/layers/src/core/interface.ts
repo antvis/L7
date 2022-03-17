@@ -120,9 +120,7 @@ export interface IDrawingOnCanvas {
 export interface ICanvasLayerStyleOptions {
   zIndex: number;
   update: CanvasUpdateType | string;
-  drawingOnCanvas: (
-    option: IDrawingOnCanvas
-  ) => void;
+  drawingOnCanvas: (option: IDrawingOnCanvas) => void;
 }
 
 export interface IHeatMapLayerStyleOptions {
