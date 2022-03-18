@@ -289,6 +289,7 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
     size: 5,
   };
 }
+
 /**
  *  计算3D弧线顶点
  * @param feature 映射数据

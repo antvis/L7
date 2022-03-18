@@ -106,6 +106,22 @@ export interface IImageLayerStyleOptions {
   maskInside?: boolean;
 }
 
+export interface IGeometryLayerStyleOptions {
+  opacity: number;
+  mask?: boolean;
+  maskInside?: boolean;
+
+  mapTexture?: string;
+
+  // planeGeometry
+  center?: [number, number];
+  width?: number;
+  height?: number;
+
+  widthSegments?: number;
+  heightSegments?: number;
+}
+
 export enum CanvasUpdateType {
   'AWAYS' = 'aways',
   'DRAGEND' = 'dragend',
