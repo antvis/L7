@@ -2,6 +2,7 @@ import BaseModel from '../../core/BaseModel';
 import {
   CanvasUpdateType,
   ICanvasLayerStyleOptions,
+  IDrawingOnCanvas,
 } from '../../core/interface';
 
 export default class CanvaModel extends BaseModel {
@@ -121,7 +122,12 @@ export default class CanvaModel extends BaseModel {
     } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
 
     if (this.ctx) {
-      drawingOnCanvas(this.ctx, this.mapService, [viewWidth, viewHeight]);
+      drawingOnCanvas({
+        canvas: this.canvas,
+        ctx: this.ctx,
+        mapService: this.mapService,
+        size: [viewWidth, viewHeight],
+      });
     }
   };
 

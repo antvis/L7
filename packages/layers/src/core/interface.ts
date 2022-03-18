@@ -106,18 +106,37 @@ export interface IImageLayerStyleOptions {
   maskInside?: boolean;
 }
 
+export interface IGeometryLayerStyleOptions {
+  opacity: number;
+  mask?: boolean;
+  maskInside?: boolean;
+
+  mapTexture?: string;
+
+  // planeGeometry
+  center?: [number, number];
+  width?: number;
+  height?: number;
+
+  widthSegments?: number;
+  heightSegments?: number;
+}
+
 export enum CanvasUpdateType {
   'AWAYS' = 'aways',
   'DRAGEND' = 'dragend',
 }
+
+export interface IDrawingOnCanvas {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  mapService: IMapService;
+  size: [number, number];
+}
 export interface ICanvasLayerStyleOptions {
   zIndex: number;
   update: CanvasUpdateType | string;
-  drawingOnCanvas: (
-    ctx: CanvasRenderingContext2D,
-    mapService: IMapService,
-    size: [number, number],
-  ) => void;
+  drawingOnCanvas: (option: IDrawingOnCanvas) => void;
 }
 
 export interface IHeatMapLayerStyleOptions {
