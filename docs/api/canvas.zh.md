@@ -9,17 +9,15 @@ L7 的自定义图层允许用户通过 canvas 绘制的方法自定义图层的
 
 ```jsx
 import { CanvasLayer } from '@antv/l7';
-const layer = new CanvasLayer({})
-      .style({
-        drawingOnCanvas: option => {
-          const { size, ctx, mapService } = option;
-          const [ width, height ] = size;
+const layer = new CanvasLayer({}).style({
+  drawingOnCanvas: (option) => {
+    const { size, ctx, mapService } = option;
+    const [width, height] = size;
 
-          ctx.clearRect(0, 0, width, height);
-          // canvas 绘制
-          
-        }
-      });
+    ctx.clearRect(0, 0, width, height);
+    // canvas 绘制
+  },
+});
 ```
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hUmNQJ1sAb8AAAAAAAAAAAAAARQnAQ'/>
@@ -27,9 +25,11 @@ const layer = new CanvasLayer({})
 [在线案例](../../examples/point/chart#custom)
 
 ### source
+
 🌟 CanvasLayer 不需要设置 source。
 
 ### Event
+
 🌟 CanvasLayer 暂不支持交互动作。
 
 ### animate
@@ -39,6 +39,7 @@ const layer = new CanvasLayer({})
 ```javascript
 layer.animate(true);
 ```
+
 [在线案例](../../examples/point/chart#custom)
 
 ### style
@@ -50,7 +51,8 @@ layer.animate(true);
 #### update
 
 指定 CanavsLayer 的更新方式，update 有两个值 'always'、'dragend'，默认为 'always'
-- always  总是更新
+
+- always 总是更新
 - dragend 地图拖动完后/缩放完后更新
 
 #### drawingOnCanvas(options)
@@ -59,15 +61,17 @@ layer.animate(true);
 options: {
   canvas: HTMLCanvasELement;
   ctx: CanvasRenderingContext2D;
-  mapService: IMapService
+  mapService: IMapService;
   size: [number, number];
 }
 ```
-  drawingOnCanvas，这是一个函数，接受相关参数，用户在该函数中写 canvas 的绘制逻辑
-  - canvas  CanvasLayer 生成的 canvas DOM 节点
-  - ctx 生成的 canvas DOM 的上下文
-  - mapService  当前地图的 mapService，主要提供 lngLatToContainer 方法
-  - size  当前视图的实际绘图范围的大小
+
+drawingOnCanvas，这是一个函数，接受相关参数，用户在该函数中写 canvas 的绘制逻辑
+
+- canvas CanvasLayer 生成的 canvas DOM 节点
+- ctx 生成的 canvas DOM 的上下文
+- mapService 当前地图的 mapService，主要提供 lngLatToContainer 方法
+- size 当前视图的实际绘图范围的大小
 
 #### lngLatToContainer([lng,lat]): {x: x, y: y}
 
