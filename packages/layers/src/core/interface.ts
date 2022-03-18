@@ -137,6 +137,7 @@ export interface ICanvasLayerStyleOptions {
   zIndex: number;
   update: CanvasUpdateType | string;
   drawingOnCanvas: (option: IDrawingOnCanvas) => void;
+  animateOption: IAnimateOption
 }
 
 export interface IHeatMapLayerStyleOptions {
