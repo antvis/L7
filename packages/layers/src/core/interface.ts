@@ -123,7 +123,7 @@ export interface IGeometryLayerStyleOptions {
 }
 
 export enum CanvasUpdateType {
-  'AWAYS' = 'aways',
+  'ALWAYS' = 'always',
   'DRAGEND' = 'dragend',
 }
 

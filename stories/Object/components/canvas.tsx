@@ -138,7 +138,7 @@ export default class Demo extends React.Component {
           const layer = new CanvasLayer({})
             .style({
               zIndex: 10,
-              update: 'aways',
+              update: 'always',
               // update: 'dragend',
               drawingOnCanvas: this.draw,
             })

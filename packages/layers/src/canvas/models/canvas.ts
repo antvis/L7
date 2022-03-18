@@ -7,7 +7,7 @@ import {
 } from '../../core/interface';
 
 export default class CanvaModel extends BaseModel {
-  protected updateMode: CanvasUpdateType = CanvasUpdateType.AWAYS;
+  protected updateMode: CanvasUpdateType = CanvasUpdateType.ALWAYS;
   protected canvas: HTMLCanvasElement;
   protected ctx: CanvasRenderingContext2D;
   protected prevSize: [number, number];
@@ -15,7 +15,7 @@ export default class CanvaModel extends BaseModel {
   public renderUpdate = () => {
     const {
       zIndex = 10,
-      update = CanvasUpdateType.AWAYS,
+      update = CanvasUpdateType.ALWAYS,
       animateOption = { enable: false, duration: 20 },
     } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
     if (+this.canvas.style.zIndex === zIndex) {
@@ -26,7 +26,7 @@ export default class CanvaModel extends BaseModel {
       this.unBindListener();
       this.bindListener();
     }
-    if (this.updateMode === CanvasUpdateType.AWAYS && animateOption.enable) {
+    if (this.updateMode === CanvasUpdateType.ALWAYS && animateOption.enable) {
       this.renderCanvas();
     }
   };
@@ -40,7 +40,7 @@ export default class CanvaModel extends BaseModel {
   };
 
   public bindListener = () => {
-    if (this.updateMode === CanvasUpdateType.AWAYS) {
+    if (this.updateMode === CanvasUpdateType.ALWAYS) {
       this.mapService.on('mapchange', this.renderCanvas);
     } else {
       this.mapService.on('zoomstart', this.clearCanvas);
@@ -61,7 +61,7 @@ export default class CanvaModel extends BaseModel {
 
   public initModels() {
     const {
-      update = CanvasUpdateType.AWAYS,
+      update = CanvasUpdateType.ALWAYS,
     } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
     this.updateMode = update as CanvasUpdateType;
     this.initCanvas();

@@ -119,7 +119,7 @@ scene.on('loaded', () => {
   const layer = new CanvasLayer({})
     .style({
       zIndex: 10,
-      update: 'aways',
+      update: 'always',
       drawingOnCanvas: draw
     })
     .animate({
