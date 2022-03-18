@@ -1,6 +1,4 @@
-import {
-  IModelUniform,
-} from '@antv/l7-core';
+import { IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import {
   CanvasUpdateType,
@@ -18,7 +16,7 @@ export default class CanvaModel extends BaseModel {
     const {
       zIndex = 10,
       update = CanvasUpdateType.AWAYS,
-      animateOption = { enable: false, duration: 20 }
+      animateOption = { enable: false, duration: 20 },
     } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
     if (+this.canvas.style.zIndex === zIndex) {
       this.canvas.style.zIndex = zIndex + '';
@@ -28,7 +26,7 @@ export default class CanvaModel extends BaseModel {
       this.unBindListener();
       this.bindListener();
     }
-    if(this.updateMode === CanvasUpdateType.AWAYS && animateOption.enable) {
+    if (this.updateMode === CanvasUpdateType.AWAYS && animateOption.enable) {
       this.renderCanvas();
     }
   };
