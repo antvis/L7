@@ -68,8 +68,8 @@ function draw(option) {
 
   points.map(point => {
     const pixelCenter = mapService.lngLatToContainer([ point.lng, point.lat ]);
-    pixelCenter.x *= window.devicePixelRatio
-    pixelCenter.y *= window.devicePixelRatio
+    pixelCenter.x *= window.devicePixelRatio;
+    pixelCenter.y *= window.devicePixelRatio;
     const rectStartX = pixelCenter.x - radius;
     const rectStartY = pixelCenter.y - radius;
 
