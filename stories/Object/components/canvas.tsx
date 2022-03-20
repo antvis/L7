@@ -18,7 +18,7 @@ export default class Demo extends React.Component {
     const [width, height] = size;
 
     let radius = 30,
-      rectWidth = radius * 2 * window.devicePixelRatio;
+      rectWidth = radius * 2;
     const rectHeight = rectWidth;
 
     ctx.clearRect(0, 0, width, height);
@@ -80,6 +80,8 @@ export default class Demo extends React.Component {
 
     points.map((point) => {
       let pixelCenter = mapService.lngLatToContainer([point.lng, point.lat]);
+      pixelCenter.x *= window.devicePixelRatio;
+      pixelCenter.y *= window.devicePixelRatio;
       let rectStartX = pixelCenter.x - radius;
       const rectStartY = pixelCenter.y - radius;
 

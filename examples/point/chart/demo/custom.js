@@ -6,7 +6,7 @@ function draw(option) {
   const [ width, height ] = size;
 
   const radius = 30,
-    rectWidth = radius * 2 * window.devicePixelRatio;
+    rectWidth = radius * 2;
   const rectHeight = rectWidth;
 
   ctx.clearRect(0, 0, width, height);
