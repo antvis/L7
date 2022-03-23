@@ -5,6 +5,7 @@ import {
   IAttribute,
   IElements,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
@@ -104,7 +105,7 @@ export default class FillModel extends BaseModel {
   public getAnimateUniforms(): IModelUniform {
     const {
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -188,7 +189,9 @@ export default class FillModel extends BaseModel {
       mask = false,
       maskInside = true,
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPointLayerStyleOptions
+    >;
     const { frag, vert, type } = this.getShaders(animateOption);
 
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
@@ -214,7 +217,7 @@ export default class FillModel extends BaseModel {
    * @returns
    */
   public getShaders(
-    animateOption: IAnimateOption,
+    animateOption: Partial<IAnimateOption>,
   ): { frag: string; vert: string; type: string } {
     if (animateOption.enable) {
       switch (animateOption.type) {
@@ -245,7 +248,7 @@ export default class FillModel extends BaseModel {
   }
 
   // overwrite baseModel func
-  protected animateOption2Array(option: IAnimateOption): number[] {
+  protected animateOption2Array(option: Partial<IAnimateOption>): number[] {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {

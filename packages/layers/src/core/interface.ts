@@ -1,12 +1,7 @@
-import { IAnimateOption, IMapService } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
-import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
-import {
-  anchorType,
-  getGlyphQuads,
-  IGlyphQuad,
-  shapeText,
-} from '../utils/symbol-layout';
+import { IMapService } from '@antv/l7-core';
+import { IColorRamp } from '@antv/l7-utils';
+import { styleOffset, styleSingle } from '../core/BaseModel';
+import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
@@ -75,7 +70,6 @@ export interface IPointLayerStyleOptions {
 
   rotation?: number; // angle
   speed?: number;
-  animateOption: IAnimateOption;
 }
 
 export interface IPolygonLayerStyleOptions {
@@ -137,7 +131,6 @@ export interface ICanvasLayerStyleOptions {
   zIndex: number;
   update: CanvasUpdateType | string;
   drawingOnCanvas: (option: IDrawingOnCanvas) => void;
-  animateOption: IAnimateOption;
 }
 
 export interface IHeatMapLayerStyleOptions {
