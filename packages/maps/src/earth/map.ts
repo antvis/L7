@@ -32,6 +32,7 @@ const EventMap: {
   dragging: 'drag',
 };
 import { MapTheme } from './theme';
+import { SimpleCoordinate } from '..';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
@@ -41,6 +42,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 export default class L7EarthService implements IEarthService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
+  public simpleMapCoord: SimpleCoordinate;
 
   // TODO: 判断地图是否正在拖拽
   public dragging: boolean = false;

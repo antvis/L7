@@ -23,6 +23,7 @@ import { DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
+import { SimpleCoordinate } from '..';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
@@ -56,6 +57,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE1.x'];
+  public simpleMapCoord: SimpleCoordinate;
   /**
    * 原始地图实例
    */

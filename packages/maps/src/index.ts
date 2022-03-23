@@ -6,7 +6,8 @@ import Earth from './earth/';
 import Map from './map/';
 import Mapbox from './mapbox/';
 import { Version } from './version';
+import SimpleCoordinate from './map/simpleMapCoord';
 
-export { Version, GaodeMap, GaodeMapV2, Mapbox, Map, Earth };
+export { SimpleCoordinate, Version, GaodeMap, GaodeMapV2, Mapbox, Map, Earth };
 // export { GaodeMap, GaodeMapV2, Mapbox, Map };
 // export { Map };
