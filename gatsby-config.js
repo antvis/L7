@@ -270,6 +270,14 @@ module.exports = {
         },
         order: 14,
       },
+      {
+        slug: 'api/experiment',
+        title: {
+          zh: '实验特性',
+          en: 'experiment',
+        },
+        order: 15,
+      },
     ],
     examples: [
       {
