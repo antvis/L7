@@ -123,7 +123,7 @@ export interface IGeometryLayerStyleOptions {
 }
 
 export enum CanvasUpdateType {
-  'AWAYS' = 'aways',
+  'ALWAYS' = 'always',
   'DRAGEND' = 'dragend',
 }
 
@@ -137,6 +137,7 @@ export interface ICanvasLayerStyleOptions {
   zIndex: number;
   update: CanvasUpdateType | string;
   drawingOnCanvas: (option: IDrawingOnCanvas) => void;
+  animateOption: IAnimateOption;
 }
 
 export interface IHeatMapLayerStyleOptions {
