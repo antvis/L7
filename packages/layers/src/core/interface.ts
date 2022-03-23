@@ -1,9 +1,7 @@
 import { IMapService } from '@antv/l7-core';
 import { IColorRamp } from '@antv/l7-utils';
 import { styleOffset, styleSingle } from '../core/BaseModel';
-import {
-  anchorType,
-} from '../utils/symbol-layout';
+import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,

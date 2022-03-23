@@ -189,7 +189,9 @@ export default class FillModel extends BaseModel {
       mask = false,
       maskInside = true,
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as Partial<ILayerConfig & IPointLayerStyleOptions>;
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPointLayerStyleOptions
+    >;
     const { frag, vert, type } = this.getShaders(animateOption);
 
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式

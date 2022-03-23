@@ -17,7 +17,9 @@ export default class CanvaModel extends BaseModel {
       zIndex = 10,
       update = CanvasUpdateType.ALWAYS,
       animateOption = { enable: false, duration: 20 },
-    } = this.layer.getLayerConfig() as Partial<ICanvasLayerStyleOptions & ILayerConfig>;
+    } = this.layer.getLayerConfig() as Partial<
+      ICanvasLayerStyleOptions & ILayerConfig
+    >;
     if (+this.canvas.style.zIndex === zIndex) {
       this.canvas.style.zIndex = zIndex + '';
     }
