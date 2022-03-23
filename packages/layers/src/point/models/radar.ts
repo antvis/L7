@@ -5,6 +5,7 @@ import {
   IAttribute,
   IElements,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
@@ -96,7 +97,7 @@ export default class RadarModel extends BaseModel {
   public getAnimateUniforms(): IModelUniform {
     const {
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -212,7 +213,7 @@ export default class RadarModel extends BaseModel {
   }
 
   // overwrite baseModel func
-  protected animateOption2Array(option: IAnimateOption): number[] {
+  protected animateOption2Array(option: Partial<IAnimateOption>): number[] {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
