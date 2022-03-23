@@ -1,4 +1,4 @@
-import { SimpleCoordinate } from '@antv/l7-maps';
+import { SimpleMapCoord } from '@antv/l7-maps';
 import { Container } from 'inversify';
 import { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
@@ -37,7 +37,7 @@ export interface IMapWrapper {
 
 export interface IMapService<RawMap = {}> {
   version?: string;
-  simpleMapCoord: SimpleCoordinate;
+  simpleMapCoord: SimpleMapCoord;
   map: RawMap;
   bgColor: string;
   setBgColor(color: string): void;
