@@ -1,4 +1,10 @@
-export default class SimpleMapCoord {
+export interface ISimpleMapCoord {
+  setSize(size: number): void;
+  getSize(): [number, number];
+  project(lnglat: [number, number]): [number, number];
+  unproject(xy: [number, number]): [number, number];
+}
+export class SimpleMapCoord implements ISimpleMapCoord {
   private size: number = 10000;
   constructor(size?: number) {
     this.size = size ? size : 10000;

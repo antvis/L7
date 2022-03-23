@@ -24,7 +24,7 @@ import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
-import SimpleMapCoord from '../simpleMapCoord';
+import { SimpleMapCoord, ISimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
 import './logo.css';
@@ -57,7 +57,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE1.x'];
-  public simpleMapCoord: SimpleMapCoord = new SimpleMapCoord();
+  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   /**
    * 原始地图实例
    */
