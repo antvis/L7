@@ -206,7 +206,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {
     if (mappedData.length > 0 && this.mapService.version === Version.SIMPLE) {
       mappedData.map((d) => {
-        d.coordinates = this.unProjectCoordinates(d.coordinates);
+        if (!d.simpleCoordinate) {
+          d.coordinates = this.unProjectCoordinates(d.coordinates);
+          d.simpleCoordinate = true;
+        }
       });
     }
   }
