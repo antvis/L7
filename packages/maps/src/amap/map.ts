@@ -25,12 +25,12 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { SimpleCoordinate } from '..';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import SimpleMapCoord from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
-import SimpleMapCoord from '../simpleMapCoord';
 let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
