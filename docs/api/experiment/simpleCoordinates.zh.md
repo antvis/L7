@@ -12,10 +12,11 @@ order: 1
 [在线案例](/zh/examples/point/text#simpleCoordinate)
 
 ### Map
+
 为了使用简单坐标系，我们需要是使用 L7 自定义的 Map 地图类型，同时制定 map 的 version 属性
 
 ```javascript
-import { Scene, ImageLayer, PointLayer, } from '@antv/l7';
+import { Scene, ImageLayer, PointLayer } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -35,17 +36,21 @@ const scene = new Scene({
 ```
 
 #### version
+
 用户在使用自定义坐标系的时候，需要将地图的类型设置成 'SIMPLE'
 
 #### mapSize: number
+
 用户在使用自定义坐标系的时候，可以设置绘图区域的大小。绘图区域默认是 10000 X 10000 的矩形区域，坐标起点是左下角，水平向右为 X 正方向，垂直向上是 Y 正方向。
 
 <img width="50%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*qimkTLy0P6IAAAAAAAAAAAAAARQnAQ'>
 
 #### pitchEnabled/rotateEnabled
+
 用户在使用自定义坐标系的时候，推荐将 pitchEnabled/rotateEnabled 设置为 false
 
 #### layer
+
 用户在使用自定义坐标系的时候，可以正常使用普通的图层，唯一的区别就是需要将原本的经纬度坐标转化为平面坐标
 
 ```javascript

@@ -193,7 +193,7 @@ export default class Demo extends React.Component {
             x: 393.5,
             y: 456,
             t: '别墅',
-          }
+          },
         ],
         {
           parser: {
@@ -207,7 +207,7 @@ export default class Demo extends React.Component {
       .size(12)
       .active({
         color: '#00f',
-        mix: 0.9
+        mix: 0.9,
       })
       // .color('#0e0030')
       .color('rgb(86, 156, 214)')
