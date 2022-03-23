@@ -20,6 +20,8 @@ export default class Demo extends React.Component {
         mapSize: 1000,
         maxZoom: 4,
         minZoom: 2,
+        pitchEnabled: false,
+        rotateEnabled: false,
       }),
     });
     scene.setBgColor('rgb(94, 182, 140)');
@@ -66,13 +68,11 @@ export default class Demo extends React.Component {
       .active(true)
       .color('#0e0030')
       .style({
-        // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-        // textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
+        textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
         spacing: 2, // 字符间距
-        // padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+        padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
         stroke: '#ffffff', // 描边颜色
         strokeWidth: 1.5, // 描边宽度
-        // strokeOpacity: 1.0,
         textAllowOverlap: true,
       });
 
@@ -87,7 +87,7 @@ export default class Demo extends React.Component {
     );
 
     scene.on('loaded', () => {
-      // scene.addLayer(imagelayer);
+      scene.addLayer(imagelayer);
 
       scene.addLayer(textlayer);
       // console.log(scene.mapService.getSize())

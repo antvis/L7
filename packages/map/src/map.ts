@@ -53,6 +53,8 @@ const DefaultOptions: IMapOptions = {
   pitchWithRotate: true,
   trackResize: true,
   renderWorldCopies: true,
+  pitchEnabled: true,
+  rotateEnabled: true,
 };
 export class Map extends Camera {
   public doubleClickZoom: DoubleClickZoomHandler;

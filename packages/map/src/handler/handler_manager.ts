@@ -61,6 +61,8 @@ export interface IHandlerOptions {
   bearingSnap: number;
   clickTolerance: number;
   pitchWithRotate: boolean;
+  pitchEnabled: boolean;
+  rotateEnabled: boolean;
 }
 
 class HandlerManager {
@@ -80,6 +82,8 @@ class HandlerManager {
   private changes: Array<[IHandlerResult, any, any]>;
   private previousActiveHandlers: { [key: string]: IHandler };
   private bearingChanged: boolean;
+  private rotateEnabled: boolean;
+  private pitchEnabled: boolean;
   private listeners: Array<
     [HTMLElement, string, void | { passive?: boolean; capture?: boolean }]
   >;
@@ -93,6 +97,8 @@ class HandlerManager {
 
     this.inertia = new HandlerInertia(map);
     this.bearingSnap = options.bearingSnap;
+    this.rotateEnabled = options.rotateEnabled;
+    this.pitchEnabled = options.pitchEnabled;
     this.previousActiveHandlers = {};
 
     // Track whether map is currently moving, to compute start/move/end events
@@ -548,10 +554,10 @@ class HandlerManager {
 
     around = around || map.transform.centerPoint;
     const loc = tr.pointLocation(panDelta ? around.sub(panDelta) : around);
-    if (bearingDelta) {
+    if (bearingDelta && this.rotateEnabled) {
       tr.bearing += bearingDelta;
     }
-    if (pitchDelta) {
+    if (pitchDelta && this.pitchEnabled) {
       tr.pitch += pitchDelta;
     }
     if (zoomDelta) {
