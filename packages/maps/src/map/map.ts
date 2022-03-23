@@ -21,7 +21,7 @@ import { Map } from '@antv/l7-map';
 import { $window, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import {ISimpleMapCoord, SimpleMapCoord} from '../simpleMapCoord';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { Version } from '../version';
 import Viewport from './Viewport';
 const EventMap: {

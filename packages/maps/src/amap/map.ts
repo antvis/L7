@@ -24,7 +24,7 @@ import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
-import { SimpleMapCoord, ISimpleMapCoord } from '../simpleMapCoord';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
 import './logo.css';

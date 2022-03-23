@@ -36,7 +36,7 @@ const EventMap: {
   zoomchange: 'zoom',
   dragging: 'drag',
 };
-import {ISimpleMapCoord, SimpleMapCoord} from '../simpleMapCoord';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { MapTheme } from './theme';
 let mapdivCount = 0;
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
