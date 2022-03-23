@@ -114,7 +114,7 @@ export interface IVertexAttributeDescriptor
   ) => number[];
 }
 
-type Position = number[];
+export type Position = number[];
 type Color = [number, number, number, number];
 type CallBack = (...args: any[]) => any;
 export type StyleAttributeField = string | string[] | number[];

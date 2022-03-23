@@ -1,49 +1,28 @@
 // @ts-nocheck
 import { Scene, PolygonLayer, PointLayer, Map } from '@antv/l7-mini';
-// import { Scene } from '@antv/l7';
-// import { PolygonLayer, PointLayer } from '@antv/l7-layers';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class ScaleComponent extends React.Component {
+export default class Demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
       map: new Map({
-        // center: [0, 0],
-        center: [5000, 5000],
+        center: [500, 500],
         pitch: 0,
         zoom: 0,
         version: 'SIMPLE',
+        mapSize: 1000,
         // zoom: 13,
         // zoom: 10,
       }),
     });
     // scene.setBgColor('#000');
-    const data = [
-      { x: 5000, y: 5000 },
-
-      // { lng: 120, lat: 30 },
-
-      // { lng: 0, lat: 0 },
-      // { lng: 0, lat: 85.05112 },
-      // { lng: 0, lat: -85.05112 },
-
-      // { lng: -90, lat: 0 },
-      // { lng: -180, lat: 0 },
-      // { lng: 90, lat: 0 },
-      // { lng: 180, lat: 0 },
-
-      // { lng: -90, lat: 85.05112 },
-      // { lng: -180, lat: 85.05112 },
-      // { lng: 90, lat: 85.05112 },
-      // { lng: 180, lat: 85.05112 },
-
-      // { lng: -90, lat: -85.05112 },
-      // { lng: -180, lat: -85.05112 },
-      // { lng: 90, lat: -85.05112 },
-      // { lng: 180, lat: -85.05112 },
-    ];
+    const data = [];
+    for (let i = 0; i <= 10; i++) {
+      for (let j = 0; j <= 10; j++) {
+        data.push({ x: i * 100, y: j * 100 });
+      }
+    }
     const layer = new PointLayer()
       .source(data, {
         parser: {
