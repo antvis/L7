@@ -24,7 +24,7 @@ import { DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { SimpleCoordinate } from '..';
+import SimpleMapCoord from '../simpleMapCoord';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
@@ -60,7 +60,7 @@ let pendingResolveQueue: Array<() => void> = [];
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE2.x'];
-  public simpleMapCoord: SimpleCoordinate;
+  public simpleMapCoord: SimpleMapCoord = new SimpleMapCoord();
   /**
    * 原始地图实例
    */

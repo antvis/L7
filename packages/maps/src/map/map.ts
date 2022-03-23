@@ -22,7 +22,7 @@ import { $window, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
-import SimpleMapCoord from './simpleMapCoord';
+import SimpleMapCoord from '../simpleMapCoord';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;

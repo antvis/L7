@@ -4,7 +4,7 @@ import GaodeMapV2 from './amap2/';
 import Earth from './earth/';
 // import GaodeMapV2 from './amap2/';
 import Map from './map/';
-import SimpleCoordinate from './map/simpleMapCoord';
+import SimpleCoordinate from './simpleMapCoord';
 import Mapbox from './mapbox/';
 import { Version } from './version';
 

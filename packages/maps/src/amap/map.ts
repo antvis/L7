@@ -30,6 +30,7 @@ import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
+import SimpleMapCoord from '../simpleMapCoord';
 let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
@@ -57,7 +58,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE1.x'];
-  public simpleMapCoord: SimpleCoordinate;
+  public simpleMapCoord: SimpleCoordinate = new SimpleMapCoord();
   /**
    * 原始地图实例
    */

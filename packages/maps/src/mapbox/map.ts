@@ -36,7 +36,7 @@ const EventMap: {
   zoomchange: 'zoom',
   dragging: 'drag',
 };
-import { SimpleCoordinate } from '..';
+import SimpleMapCoord from '../simpleMapCoord';
 import { MapTheme } from './theme';
 let mapdivCount = 0;
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
@@ -50,7 +50,7 @@ export default class MapboxService
   implements IMapService<Map & IMapboxInstance> {
   public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
-  public simpleMapCoord: SimpleCoordinate;
+  public simpleMapCoord: SimpleMapCoord = new SimpleMapCoord();
 
   // 背景色
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
