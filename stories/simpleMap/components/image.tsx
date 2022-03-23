@@ -16,9 +16,9 @@ export default class Demo extends React.Component {
       }),
     });
     const data = [];
-    for(let i = 0;i <= 10;i++) {
-      for(let j = 0;j <= 10;j++) {
-        data.push({x: i * 1000, y: j * 1000})
+    for (let i = 0; i <= 10; i++) {
+      for (let j = 0; j <= 10; j++) {
+        data.push({ x: i * 1000, y: j * 1000 });
       }
     }
     // const data = [
@@ -37,35 +37,28 @@ export default class Demo extends React.Component {
       .size(20)
       .color('#f00');
 
-      const imagelayer = new ImageLayer({}).source(
-        'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KrvXTrIAnWEAAAAAAAAAAAAAARQnAQ',
-        {
-          parser: {
-            type: 'image',
-            // extent: [
-            //   100, 100,
-            //   200, 500
-            // ],
-            extent: [
-              4000, 3500, 
-              6000, 6500
-            ],
-            // extent: [
-            //   -172.8, -84.38946720916285, 
-            //   -144, -80.73800862798672
-            // ],
-          
-          },
+    const imagelayer = new ImageLayer({}).source(
+      'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KrvXTrIAnWEAAAAAAAAAAAAAARQnAQ',
+      {
+        parser: {
+          type: 'image',
+          // extent: [
+          //   100, 100,
+          //   200, 500
+          // ],
+          extent: [4000, 3500, 6000, 6500],
+          // extent: [
+          //   -172.8, -84.38946720916285,
+          //   -144, -80.73800862798672
+          // ],
         },
-      );
-     
+      },
+    );
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
       scene.addLayer(imagelayer);
     });
-
-   
   }
 
   public render() {

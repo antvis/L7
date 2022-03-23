@@ -1,5 +1,5 @@
-import { Container } from 'inversify';
 import { SimpleCoordinate } from '@antv/l7-maps';
+import { Container } from 'inversify';
 import { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
 export type Bounds = [[number, number], [number, number]];

@@ -11,18 +11,16 @@ export default class Demo extends React.Component {
         pitch: 0,
         zoom: 0,
         version: 'SIMPLE',
-        mapSize: 1000
+        mapSize: 1000,
         // zoom: 13,
         // zoom: 10,
       }),
     });
     // scene.setBgColor('#000');
-    const data = [
-
-    ];
-    for(let i = 0;i <= 10;i++) {
-      for(let j = 0;j <= 10;j++) {
-        data.push({x: i * 100, y: j * 100})
+    const data = [];
+    for (let i = 0; i <= 10; i++) {
+      for (let j = 0; j <= 10; j++) {
+        data.push({ x: i * 100, y: j * 100 });
       }
     }
     const layer = new PointLayer()
@@ -40,8 +38,6 @@ export default class Demo extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });
-
-   
   }
 
   public render() {

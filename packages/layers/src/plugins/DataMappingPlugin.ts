@@ -169,7 +169,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
   private adjustData2Amap2Coordinates(mappedData: IEncodeFeature[]) {
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
-    if (mappedData.length > 0 && this.mapService.version === Version['GAODE2.x']) {
+    if (
+      mappedData.length > 0 &&
+      this.mapService.version === Version['GAODE2.x']
+    ) {
       if (typeof mappedData[0].coordinates[0] === 'number') {
         // 单个的点数据
         // @ts-ignore
@@ -202,41 +205,46 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {
     if (mappedData.length > 0 && this.mapService.version === Version.SIMPLE) {
-      mappedData
-          .map((d) => {
-            d.coordinates = this.unProjectCoordinates(d.coordinates)
-          });
+      mappedData.map((d) => {
+        d.coordinates = this.unProjectCoordinates(d.coordinates);
+      });
     }
   }
 
   private unProjectCoordinates(coordinates: any) {
-    if(typeof coordinates[0] === 'number') {
-      return this.mapService.simpleMapCoord.unproject(coordinates as [number, number])
+    if (typeof coordinates[0] === 'number') {
+      return this.mapService.simpleMapCoord.unproject(
+        coordinates as [number, number],
+      );
     }
 
-    if(coordinates[0] && coordinates[0][0] instanceof Array) {
+    if (coordinates[0] && coordinates[0][0] instanceof Array) {
       // @ts-ignore
       const coords = [];
       coordinates.map((coord: any) => {
         // @ts-ignore
         const c1 = [];
         coord.map((co: any) => {
-          c1.push(this.mapService.simpleMapCoord.unproject(co as [number, number]))
-        })
+          c1.push(
+            this.mapService.simpleMapCoord.unproject(co as [number, number]),
+          );
+        });
         // @ts-ignore
         coords.push(c1);
-      })
+      });
       // @ts-ignore
-     return coords;
+      return coords;
     } else {
       // @ts-ignore
       const coords = [];
       // @ts-ignore
-      coordinates.map(coord => {
-        coords.push(this.mapService.simpleMapCoord.unproject(coord as [number, number]))
-      })
+      coordinates.map((coord) => {
+        coords.push(
+          this.mapService.simpleMapCoord.unproject(coord as [number, number]),
+        );
+      });
       // @ts-ignore
-      return coords
+      return coords;
     }
   }
 

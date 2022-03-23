@@ -36,8 +36,8 @@ const EventMap: {
   zoomchange: 'zoom',
   dragging: 'drag',
 };
-import { MapTheme } from './theme';
 import { SimpleCoordinate } from '..';
+import { MapTheme } from './theme';
 let mapdivCount = 0;
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 const MAPBOX_API_KEY =

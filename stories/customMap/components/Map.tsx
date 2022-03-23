@@ -14,7 +14,7 @@ export default class ScaleComponent extends React.Component {
         center: [5000, 5000],
         pitch: 0,
         zoom: 0,
-        version: 'SIMPLE'
+        version: 'SIMPLE',
         // zoom: 13,
         // zoom: 10,
       }),
@@ -59,8 +59,6 @@ export default class ScaleComponent extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });
-
-   
   }
 
   public render() {

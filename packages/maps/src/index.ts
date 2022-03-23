@@ -4,9 +4,9 @@ import GaodeMapV2 from './amap2/';
 import Earth from './earth/';
 // import GaodeMapV2 from './amap2/';
 import Map from './map/';
+import SimpleCoordinate from './map/simpleMapCoord';
 import Mapbox from './mapbox/';
 import { Version } from './version';
-import SimpleCoordinate from './map/simpleMapCoord';
 
 export { SimpleCoordinate, Version, GaodeMap, GaodeMapV2, Mapbox, Map, Earth };
 // export { GaodeMap, GaodeMapV2, Mapbox, Map };

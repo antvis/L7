@@ -22,8 +22,8 @@ import { $window, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
-import Viewport from './Viewport';
 import SimpleMapCoord from './simpleMapCoord';
+import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;
 } = {
@@ -99,7 +99,7 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public getSize(): [number, number] {
-    if(this.version === Version.SIMPLE) {
+    if (this.version === Version.SIMPLE) {
       return this.simpleMapCoord.getSize();
     }
     const size = this.map.transform;
@@ -269,12 +269,13 @@ export default class L7MapService implements IMapService<Map> {
 
     this.viewport = new Viewport();
 
-    
     this.version = version;
     this.simpleMapCoord.setSize(mapSize);
     // console.log('this.config.center', this.config.center)
-    if(version === Version.SIMPLE && rest.center) {
-      rest.center = this.simpleMapCoord.unproject(rest.center as [number, number]);
+    if (version === Version.SIMPLE && rest.center) {
+      rest.center = this.simpleMapCoord.unproject(
+        rest.center as [number, number],
+      );
     }
     // console.log(this.simpleMapCoord.project(this.config.center as [number, number]))
     // console.log(this.simpleMapCoord.unproject([500, 500]))
@@ -283,8 +284,6 @@ export default class L7MapService implements IMapService<Map> {
 
     // console.log(this.simpleMapCoord.unproject([200, 200]))
     // console.log(this.simpleMapCoord.unproject([1000, 1000]))
-
-    
 
     if (mapInstance) {
       // @ts-ignore
@@ -300,8 +299,6 @@ export default class L7MapService implements IMapService<Map> {
         ...rest,
       });
     }
-
-    
 
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
