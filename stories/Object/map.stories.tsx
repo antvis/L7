@@ -6,6 +6,7 @@ import Taifong from './components/taifeng'
 import Radar from './components/radar';
 import CanvasDemo from './components/canvas';
 import Plane from './components/plane';
+import PlaneTerrain from './components/planeTerrain';
 
 storiesOf('Object', module)
         .add('water', () => <Water />)
@@ -14,3 +15,4 @@ storiesOf('Object', module)
         .add('Radar', () => <Radar/>)
         .add('CanvasDemo', () => <CanvasDemo/>)
         .add('Plane', () => <Plane/>)
+        .add('PlaneTerrain', () => <PlaneTerrain/>)

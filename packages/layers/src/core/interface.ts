@@ -106,6 +106,7 @@ export interface IGeometryLayerStyleOptions {
   maskInside?: boolean;
 
   mapTexture?: string;
+  terrainTexture?: string;
 
   // planeGeometry
   center?: [number, number];
@@ -114,6 +115,9 @@ export interface IGeometryLayerStyleOptions {
 
   widthSegments?: number;
   heightSegments?: number;
+
+  terrainClipHeight?: number;
+  rgb2height?: (r: number, g: number, b: number) => number;
 }
 
 export enum CanvasUpdateType {

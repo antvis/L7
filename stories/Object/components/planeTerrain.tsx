@@ -1,5 +1,5 @@
 import { GeometryLayer, Scene, IMapService } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Demo extends React.Component {
@@ -13,43 +13,42 @@ export default class Demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      // map: new GaodeMap({
-      map: new GaodeMapV2({
+      map: new GaodeMap({
+        // map: new GaodeMapV2({
         // map: new Mapbox({
-        pitch: 0,
-        // style: 'dark',
-        center: [120, 30],
-        zoom: 5,
+        pitch: 60,
+        center: [120.1025, 30.2594],
+        rotation: 220,
+        zoom: 14,
       }),
     });
     this.scene = scene;
 
     let layer = new GeometryLayer()
-      .source([{ lng: 120, lat: 30 }], {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
-      })
       .style({
-        width: 2,
-        height: 2,
-        opacity: 0.8,
-        widthSegments: 3,
-        heightSegments: 3,
-        center: [120, 30],
-        // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FG4fT7h5AYMAAAAAAAAAAAAAARQnAQ'
-      })
-      .active({
-        color: '#00f',
-        mix: 0.5,
+        width: 0.074,
+        height: 0.061,
+        center: [120.1025, 30.2594],
+        widthSegments: 200,
+        heightSegments: 200,
+        terrainClipHeight: 1,
+        mapTexture:
+          'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
+        terrainTexture:
+          'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ',
+        rgb2height: (r: number, g: number, b: number) => {
+          let h =
+            -10000.0 +
+            (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
+          h = h / 20 - 127600;
+          h = Math.max(0, h);
+          return h;
+        },
       })
       .color('#ff0');
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-
       // setTimeout(() => {
       //   // layer.style({
       //   //   mapTexture: ""
