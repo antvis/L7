@@ -116,6 +116,7 @@ export interface IGeometryLayerStyleOptions {
   widthSegments?: number;
   heightSegments?: number;
 
+  terrainClipHeight?: number;
   rgb2height?: (r: number, g: number, b: number) => number;
 }
 

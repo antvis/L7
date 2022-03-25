@@ -122,6 +122,8 @@ export default class PlaneModel extends BaseModel {
     const {
       opacity,
       mapTexture,
+      terrainClipHeight = 0,
+      terrainTexture,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     if (this.mapTexture !== mapTexture) {
       this.mapTexture = mapTexture;
@@ -131,7 +133,7 @@ export default class PlaneModel extends BaseModel {
     return {
       u_opacity: opacity || 1,
       u_mapFlag: mapTexture ? 1 : 0,
-
+      u_terrainClipHeight: terrainTexture?terrainClipHeight:-1,
       u_texture: this.texture,
       // u_ModelMatrix: mat4.translate(mat4.create(), mat4.create(), [1, 0, 0])
       // u_ModelMatrix: mat4.rotateZ(mat4.create(), mat4.create(), 10)

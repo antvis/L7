@@ -29,9 +29,9 @@ export default class Demo extends React.Component {
         width: 0.074,
         height: 0.061,
         center: [120.1025, 30.2594],
-        widthSegments: 100,
-        heightSegments: 100,
-
+        widthSegments: 200,
+        heightSegments: 200,
+        terrainClipHeight: 1,
         mapTexture:
           'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
         terrainTexture:
