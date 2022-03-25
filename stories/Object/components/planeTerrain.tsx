@@ -42,8 +42,6 @@ export default class Demo extends React.Component {
             (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
           h = h / 20 - 127600;
           h = Math.max(0, h);
-
-          // h *= 0.02;
           return h;
         },
       })
