@@ -25,25 +25,29 @@ export default class Demo extends React.Component {
     this.scene = scene;
 
     let layer = new GeometryLayer()
-    .style({
-      width: 0.074,
-      height: 0.061,
-      center: [120.1025, 30.2594],
-      widthSegments: 100,
-      heightSegments: 100,
-      
-      mapTexture: 'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
-      terrainTexture: 'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ',
-      rgb2height: (r: number, g: number, b: number) => {
-        let h = -10000.0 + (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
-        h = h / 20 - 127600;
-        h = Math.max(0, h);
+      .style({
+        width: 0.074,
+        height: 0.061,
+        center: [120.1025, 30.2594],
+        widthSegments: 100,
+        heightSegments: 100,
 
-        // h *= 0.02;
-        return h;
-      }
-    })
-    .color('#ff0');
+        mapTexture:
+          'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
+        terrainTexture:
+          'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ',
+        rgb2height: (r: number, g: number, b: number) => {
+          let h =
+            -10000.0 +
+            (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
+          h = h / 20 - 127600;
+          h = Math.max(0, h);
+
+          // h *= 0.02;
+          return h;
+        },
+      })
+      .color('#ff0');
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
