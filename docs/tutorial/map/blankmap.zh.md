@@ -1,5 +1,5 @@
 ---
-title: 使用无地图模式
+title: 使用无底图模式
 order: 2
 ---
 `markdown:docs/common/style.md`
