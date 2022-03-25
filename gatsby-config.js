@@ -175,6 +175,14 @@ module.exports = {
         order: 6,
       },
       {
+        slug: 'api/geometry_layer',
+        title: {
+          zh: '几何体图层',
+          en: 'GeometryLayer',
+        },
+        order: 6,
+      },
+      {
         slug: 'api/imagelayer',
         title: {
           zh: '图片图层',
@@ -349,6 +357,15 @@ module.exports = {
         title: {
           zh: '风场图层',
           en: 'Wind Layer',
+        },
+        order: 7,
+      },
+      {
+        slug: 'geometry',
+        icon: 'raster',
+        title: {
+          zh: '几何体图层',
+          en: 'Geometry Layer',
         },
         order: 7,
       },
