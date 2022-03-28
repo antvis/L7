@@ -1,4 +1,4 @@
-import { PolygonLayer, Scene } from '@antv/l7';
+import { PolygonLayer, Scene, LineLayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -13,17 +13,23 @@ export default class Amap2demo_polygon_extrude extends React.Component {
   }
 
   public async componentDidMount() {
-    const response = await fetch(
-      // 'https://gw.alipayobjects.com/os/basement_prod/f79485d8-d86f-4bb3-856d-537b586be06e.json',
-      'https://gw.alipayobjects.com/os/basement_prod/619a6f16-ecb0-4fca-9f9a-b06b67f6f02b.json',
-    );
+    // const response = await fetch(
+    //   // 'https://gw.alipayobjects.com/os/basement_prod/f79485d8-d86f-4bb3-856d-537b586be06e.json',
+    //   // 'https://gw.alipayobjects.com/os/basement_prod/619a6f16-ecb0-4fca-9f9a-b06b67f6f02b.json',
+    //   'https://gw.alipayobjects.com/os/bmw-prod/93a55259-328e-4e8b-8dc2-35e05844ed31.json'
+    // );
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        pitch: 0,
-        // style: 'dark',
-        center: [-44.40673828125, -18.375379094031825],
-        zoom: 13,
+      map: new GaodeMap({
+        // map: new GaodeMapV2({
+        // map: new Mapbox({
+        // pitch: 0,
+        style: 'dark',
+        // center: [-44.40673828125, -18.375379094031825],
+        // zoom: 13,
+        center: [120, 29.732983],
+        zoom: 6.2,
+        pitch: 60,
       }),
     });
     this.scene = scene;
@@ -94,22 +100,66 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       ],
     };
 
-    const layer = new PolygonLayer({
-      autoFit: true,
-    })
-      .source(data)
-      // .shape('fill')
-      .shape('extrude')
-      .color('red')
-      .size(600000)
-      .style({
-        // pickLight: true,
-        heightfixed: true,
-        // heightfixed: false,
-        opacity: 'testOpacity',
-      })
-      .active(true);
-    scene.addLayer(layer);
+    // const layer = new PolygonLayer({
+    //   autoFit: true,
+    // })
+    //   .source(data)
+    //   // .shape('fill')
+    //   .shape('extrude')
+    //   .color('red')
+    //   .size(600000)
+    //   .style({
+    //     // pickLight: true,
+    //     heightfixed: true,
+    //     // heightfixed: false,
+    //     opacity: 'testOpacity',
+    //   })
+    //   .active(true);
+    // scene.addLayer(layer);
+
+    fetch('https://geo.datav.aliyun.com/areas_v3/bound/330000.json')
+      .then((res) => res.json())
+      .then((data) => {
+        const lineLayer = new LineLayer()
+          .source(data)
+          .shape('wall')
+          .size(150000)
+          .style({
+            heightfixed: true,
+            opacity: 0.6,
+            sourceColor: '#0DCCFF',
+            targetColor: 'rbga(255,255,255, 0)',
+          });
+        scene.addLayer(lineLayer);
+
+        const provincelayer = new PolygonLayer({})
+          .source(data)
+          .size(150000)
+          .shape('extrude')
+          .color('#0DCCFF')
+          .active({
+            color: '#0DCCFF',
+          })
+          .style({
+            heightfixed: true,
+            raisingHeight: 200000,
+            opacity: 0.8,
+          });
+
+        scene.addLayer(provincelayer);
+
+        provincelayer.on('mousemove', () => {
+          provincelayer.style({
+            raisingHeight: 200000 + 100000,
+          });
+        });
+
+        provincelayer.on('unmousemove', () => {
+          provincelayer.style({
+            raisingHeight: 200000,
+          });
+        });
+      });
   }
 
   public render() {
