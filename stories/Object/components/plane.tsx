@@ -33,7 +33,7 @@ export default class Demo extends React.Component {
         heightSegments: 3,
         center: [120, 30],
         cursor: 'pointer',
-        cursorEnabled: true
+        cursorEnabled: true,
         // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FG4fT7h5AYMAAAAAAAAAAAAAARQnAQ'
       })
       .active({
@@ -42,7 +42,7 @@ export default class Demo extends React.Component {
       })
       .color('#ff0');
 
-      let layer2 = new GeometryLayer()
+    let layer2 = new GeometryLayer()
       .style({
         width: 2,
         height: 2,
@@ -51,7 +51,7 @@ export default class Demo extends React.Component {
         heightSegments: 3,
         center: [125, 30],
         cursor: 'wait',
-        cursorEnabled: true
+        cursorEnabled: true,
         // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FG4fT7h5AYMAAAAAAAAAAAAAARQnAQ'
       })
       .active({

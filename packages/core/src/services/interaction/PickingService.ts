@@ -152,6 +152,20 @@ export default class PickingService implements IPickingService {
     return features;
   }
 
+  // 动态设置鼠标光标
+  public handleCursor(layer: ILayer, type: string) {
+    const { cursor = '', cursorEnabled } = layer.getLayerConfig();
+    if (cursorEnabled) {
+      const domContainer = this.mapService.getMarkerContainer();
+      const defaultCursor = domContainer?.style.getPropertyValue('cursor');
+      if (type === 'unmousemove' && defaultCursor !== '') {
+        domContainer?.style.setProperty('cursor', '');
+      } else if (type === 'mousemove') {
+        domContainer?.style.setProperty('cursor', cursor);
+      }
+    }
+  }
+
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
     if (!!(container as HTMLCanvasElement).getContext) {
@@ -377,20 +391,6 @@ export default class PickingService implements IPickingService {
       this.handleCursor(layer, target.type);
 
       layer.emit(target.type, target);
-    }
-  }
-
-  // 动态设置鼠标光标
-  handleCursor(layer: ILayer, type: string) {
-    const { cursor = '', cursorEnabled } = layer.getLayerConfig();
-    if(cursorEnabled) {
-      const domContainer = this.mapService.getMarkerContainer();
-      const defaultCursor = domContainer?.style.getPropertyValue('cursor');
-      if(type === 'unmousemove' && defaultCursor !== '') {
-        domContainer?.style.setProperty('cursor', '');
-      } else if(type === 'mousemove') {
-        domContainer?.style.setProperty('cursor', cursor);
-      }
     }
   }
 
