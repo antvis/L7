@@ -102,6 +102,7 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
+      raisingHeight = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
@@ -158,6 +159,7 @@ export default class TextModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
+      u_raisingHeight: Number(raisingHeight),
 
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,

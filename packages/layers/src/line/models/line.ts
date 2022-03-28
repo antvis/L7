@@ -43,6 +43,7 @@ export default class LineModel extends BaseModel {
       vertexHeightScale = 20.0,
       borderWidth = 0.0,
       borderColor = '#ccc',
+      raisingHeight = 0,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -118,6 +119,7 @@ export default class LineModel extends BaseModel {
 
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
+      u_raisingHeight: Number(raisingHeight),
     };
   }
   public getAnimateUniforms(): IModelUniform {
