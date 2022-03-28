@@ -13,6 +13,7 @@ uniform mat4 u_Mvp;
 
 varying vec4 v_Color;
 uniform float u_heightfixed: 0.0; // 默认不固定
+uniform float u_raisingHeight: 0.0;
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
@@ -56,8 +57,11 @@ void main() {
 
   if(u_heightfixed > 0.0) { // 判断几何体是否固定高度
     project_pos.z = a_Position.z * a_Size;
+    project_pos.z += u_raisingHeight;
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-      project_pos.z *= 4.0/pow(2.0, 21.0 - u_Zoom);
+      float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+      project_pos.z *= mapboxZoomScale;
+      project_pos.z += u_raisingHeight * mapboxZoomScale;
     }
   }
 

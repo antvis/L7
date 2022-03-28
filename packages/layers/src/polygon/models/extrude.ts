@@ -61,23 +61,38 @@ export default class ExtrudeModel extends BaseModel {
 
   public buildModels(): IModel[] {
     const {
-      pickLight = false,
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+
+    const { frag, vert, type } = this.getShaders();
+
     return [
       this.layer.buildLayerModel({
-        moduleName: 'polygonExtrude',
-        vertexShader: pickLight
-          ? polygonExtrudePickLightVert
-          : polygonExtrudeVert,
-        fragmentShader: pickLight
-          ? polygonExtrudePickLightFrag
-          : polygonExtrudeFrag,
+        moduleName: type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: PolygonExtrudeTriangulation,
         stencil: getMask(mask, maskInside),
       }),
     ];
+  }
+
+  public getShaders() {
+    const { pickLight } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;  
+    if(pickLight) {
+      return {
+        frag: polygonExtrudePickLightFrag,
+        vert: polygonExtrudePickLightVert,
+        type: 'polygonExtrude'
+      }
+    } else {
+      return {
+        frag: polygonExtrudeFrag,
+        vert: polygonExtrudeVert,
+        type: 'polygonExtrude'
+      }
+    }
   }
 
   public clearModels() {
