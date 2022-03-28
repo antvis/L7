@@ -79,19 +79,21 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public getShaders() {
-    const { pickLight } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;  
-    if(pickLight) {
+    const {
+      pickLight,
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    if (pickLight) {
       return {
         frag: polygonExtrudePickLightFrag,
         vert: polygonExtrudePickLightVert,
-        type: 'polygonExtrude'
-      }
+        type: 'polygonExtrude',
+      };
     } else {
       return {
         frag: polygonExtrudeFrag,
         vert: polygonExtrudeVert,
-        type: 'polygonExtrude'
-      }
+        type: 'polygonExtrude',
+      };
     }
   }
 
