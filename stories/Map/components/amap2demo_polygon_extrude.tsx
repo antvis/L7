@@ -1,4 +1,4 @@
-import { PolygonLayer, Scene, LineLayer } from '@antv/l7';
+import { PolygonLayer, Scene, LineLayer, PointLayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -117,6 +117,65 @@ export default class Amap2demo_polygon_extrude extends React.Component {
     //   .active(true);
     // scene.addLayer(layer);
 
+    // @ts-ignore
+    let lineDown, lineUp, textLayer;
+
+    fetch('https://geo.datav.aliyun.com/areas_v3/bound/330000_full.json')
+    .then(res => res.json())
+    .then(data => {
+      let texts: any[] = [];
+      
+      data.features.map((option: any) => {
+        
+        const { name, center } = option.properties
+        const [ lng, lat ] = center;
+        texts.push({ name, lng, lat })
+      })
+      
+      textLayer = new PointLayer({zIndex: 2})
+      .source(texts, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat'
+        }
+      })
+      .shape('name', 'text')
+      .size(14)
+      .color('#0ff')
+      .style({
+        textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+        spacing: 2, // 字符间距
+        padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+        stroke: '#0ff', // 描边颜色
+        strokeWidth: 0.2, // 描边宽度
+        raisingHeight: 200000 + 150000 + 10000,
+        textAllowOverlap: true
+      })
+      scene.addLayer(textLayer);
+
+      lineDown = new LineLayer()
+      .source(data)
+      .shape('line')
+      .color('#0DCCFF')
+      .size(1)
+      .style({
+        raisingHeight: 200000
+      });
+
+      lineUp = new LineLayer({zIndex :1})
+      .source(data)
+      .shape('line')
+      .color('#0DCCFF')
+      .size(1)
+      .style({
+        raisingHeight: 200000 + 150000
+      });
+
+      scene.addLayer(lineDown);
+      scene.addLayer(lineUp);
+    })
+
     fetch('https://geo.datav.aliyun.com/areas_v3/bound/330000.json')
       .then((res) => res.json())
       .then((data) => {
@@ -139,7 +198,6 @@ export default class Amap2demo_polygon_extrude extends React.Component {
           .color('#0DCCFF')
           .active({
             color: 'rgb(100,230,255)',
-            // color: '#00FFFF',
           })
           .style({
             heightfixed: true,
@@ -154,12 +212,36 @@ export default class Amap2demo_polygon_extrude extends React.Component {
           provincelayer.style({
             raisingHeight: 200000 + 100000,
           });
+          // @ts-ignore
+          lineDown.style({
+            raisingHeight: 200000 + 100000,
+          });
+          // @ts-ignore
+          lineUp.style({
+            raisingHeight: 200000 + 150000 + 100000,
+          });
+          // @ts-ignore
+          textLayer.style({
+            raisingHeight: 200000 + 150000 + 10000 + 100000
+          })
         });
 
         provincelayer.on('unmousemove', () => {
           provincelayer.style({
             raisingHeight: 200000,
           });
+          // @ts-ignore
+          lineDown.style({
+            raisingHeight: 200000,
+          });
+          // @ts-ignore
+          lineUp.style({
+            raisingHeight: 200000 + 150000,
+          });
+          // @ts-ignore
+          textLayer.style({
+            raisingHeight: 200000 + 150000 + 10000
+          })
         });
       });
   }

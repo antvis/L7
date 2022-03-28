@@ -19,6 +19,7 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 
 uniform float u_vertexScale: 1.0;
+uniform float u_raisingHeight: 0.0;
 
 #pragma include "projection"
 #pragma include "picking"
@@ -94,14 +95,25 @@ void main() {
 
   float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况
 
+  // project_pos.z += u_raisingHeight;
+  // if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+  //   float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+  //   project_pos.z += u_raisingHeight * mapboxZoomScale;
+  // }
+
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, project_pixel(a_Size.y) + h * 0.2, 1.0));
+    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, project_pixel(a_Size.y) + h * 0.2 + u_raisingHeight, 1.0));
   } else {
     float lineHeight = a_Size.y;
     // 兼容 mapbox 在线高度上的效果表现基本一致
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
       // 保持高度相对不变
-      h *= 2.0/pow(2.0, 20.0 - u_Zoom);
+      // h *= 2.0/pow(2.0, 20.0 - u_Zoom);
+      float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+      h *= mapboxZoomScale;
+      h += u_raisingHeight * mapboxZoomScale;
+    } else {
+      h += u_raisingHeight;
     }
 
     // #define COORDINATE_SYSTEM_P20 5.0
