@@ -157,7 +157,10 @@ export default class PickingService implements IPickingService {
     const { cursor = '', cursorEnabled } = layer.getLayerConfig();
     if (cursorEnabled) {
       const version = this.mapService.version;
-      const domContainer = (version === 'GAODE2.x' ? this.mapService.getMapContainer():this.mapService.getMarkerContainer());
+      const domContainer =
+        version === 'GAODE2.x'
+          ? this.mapService.getMapContainer()
+          : this.mapService.getMarkerContainer();
       // const domContainer = this.mapService.getMarkerContainer();
       // const domContainer = this.mapService.getMapContainer();
       const defaultCursor = domContainer?.style.getPropertyValue('cursor');
