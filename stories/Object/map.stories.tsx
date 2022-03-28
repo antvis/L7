@@ -7,6 +7,7 @@ import Radar from './components/radar';
 import CanvasDemo from './components/canvas';
 import Plane from './components/plane';
 import PlaneTerrain from './components/planeTerrain';
+import Cursor from './components/cursor';
 
 storiesOf('Object', module)
         .add('water', () => <Water />)
@@ -16,3 +17,4 @@ storiesOf('Object', module)
         .add('CanvasDemo', () => <CanvasDemo/>)
         .add('Plane', () => <Plane/>)
         .add('PlaneTerrain', () => <PlaneTerrain/>)
+        .add('Cursor', () => <Cursor/>)

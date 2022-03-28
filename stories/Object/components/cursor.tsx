@@ -1,4 +1,4 @@
-import { GeometryLayer, Scene, IMapService } from '@antv/l7';
+import { GeometryLayer, PointLayer, Scene, IMapService } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -13,8 +13,8 @@ export default class Demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      // map: new GaodeMap({
-      map: new GaodeMapV2({
+      map: new GaodeMap({
+        // map: new GaodeMapV2({
         // map: new Mapbox({
         pitch: 0,
         // style: 'dark',
@@ -23,6 +23,40 @@ export default class Demo extends React.Component {
       }),
     });
     this.scene = scene;
+    let pointLayer = new PointLayer()
+      .source([{ lng: 120, lat: 33 }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(20)
+      .color('#f00')
+      .active(true)
+      .style({
+        cursor: 'move',
+        cursorEnabled: true,
+      });
+
+    let layer0 = new GeometryLayer()
+      .style({
+        width: 2,
+        height: 2,
+        opacity: 0.8,
+        widthSegments: 3,
+        heightSegments: 3,
+        center: [115, 30],
+        cursor:
+          "url('https://gw.alipayobjects.com/zos/bmw-prod/e2421e49-87b0-4b4d-aef7-03f4f93f0b54.ico'),pointer",
+        cursorEnabled: true,
+      })
+      .active({
+        color: '#00f',
+        mix: 0.5,
+      })
+      .color('#ff0');
 
     let layer = new GeometryLayer()
       .style({
@@ -34,7 +68,6 @@ export default class Demo extends React.Component {
         center: [120, 30],
         cursor: 'pointer',
         cursorEnabled: true,
-        // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FG4fT7h5AYMAAAAAAAAAAAAAARQnAQ'
       })
       .active({
         color: '#00f',
@@ -52,7 +85,6 @@ export default class Demo extends React.Component {
         center: [125, 30],
         cursor: 'wait',
         cursorEnabled: true,
-        // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FG4fT7h5AYMAAAAAAAAAAAAAARQnAQ'
       })
       .active({
         color: '#00f',
@@ -61,19 +93,10 @@ export default class Demo extends React.Component {
       .color('#ff0');
 
     scene.on('loaded', () => {
+      scene.addLayer(pointLayer);
+      scene.addLayer(layer0);
       scene.addLayer(layer);
       scene.addLayer(layer2);
-
-      // setTimeout(() => {
-      //   // layer.style({
-      //   //   mapTexture: ""
-      //   // })
-      //   layer.style({
-      //     mapTexture:
-      //       'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GJhASbfQTK8AAAAAAAAAAAAAARQnAQ',
-      //   });
-      //   scene.render();
-      // }, 2000);
     });
   }
 

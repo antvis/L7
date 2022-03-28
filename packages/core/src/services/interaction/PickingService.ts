@@ -15,13 +15,16 @@ import {
   InteractionEvent,
 } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-import { ILngLat } from '../map/IMapService';
+import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
+
   @inject(TYPES.IRendererService)
   private rendererService: IRendererService;
 
@@ -147,6 +150,20 @@ export default class PickingService implements IPickingService {
       }
     }
     return features;
+  }
+
+  // 动态设置鼠标光标
+  public handleCursor(layer: ILayer, type: string) {
+    const { cursor = '', cursorEnabled } = layer.getLayerConfig();
+    if (cursorEnabled) {
+      const domContainer = this.mapService.getMarkerContainer();
+      const defaultCursor = domContainer?.style.getPropertyValue('cursor');
+      if (type === 'unmousemove' && defaultCursor !== '') {
+        domContainer?.style.setProperty('cursor', '');
+      } else if (type === 'mousemove') {
+        domContainer?.style.setProperty('cursor', cursor);
+      }
+    }
   }
 
   // 获取容器的大小 - 兼容小程序环境
@@ -370,6 +387,9 @@ export default class PickingService implements IPickingService {
     // layer.emit(target.type, target);
     // 判断是否发生事件冲突
     if (isEventCrash(target)) {
+      // Tip: 允许用户动态设置鼠标光标
+      this.handleCursor(layer, target.type);
+
       layer.emit(target.type, target);
     }
   }
