@@ -352,6 +352,8 @@ export interface ILayerConfig {
 
   // layerType 指定 shape 的类型
   layerType?: string | undefined;
+  cursorEnabled?: boolean;
+  cursor?: string;
   forward: boolean; // 正方向
 
   /**
