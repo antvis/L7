@@ -156,7 +156,13 @@ export default class PickingService implements IPickingService {
   public handleCursor(layer: ILayer, type: string) {
     const { cursor = '', cursorEnabled } = layer.getLayerConfig();
     if (cursorEnabled) {
-      const domContainer = this.mapService.getMarkerContainer();
+      const version = this.mapService.version;
+      const domContainer =
+        version === 'GAODE2.x'
+          ? this.mapService.getMapContainer()
+          : this.mapService.getMarkerContainer();
+      // const domContainer = this.mapService.getMarkerContainer();
+      // const domContainer = this.mapService.getMapContainer();
       const defaultCursor = domContainer?.style.getPropertyValue('cursor');
       if (type === 'unmousemove' && defaultCursor !== '') {
         domContainer?.style.setProperty('cursor', '');
@@ -164,6 +170,8 @@ export default class PickingService implements IPickingService {
         domContainer?.style.setProperty('cursor', cursor);
       }
     }
+    // const domContainer = this.mapService.getMapContainer()
+    // domContainer?.style.setProperty('cursor', 'move');
   }
 
   // 获取容器的大小 - 兼容小程序环境
