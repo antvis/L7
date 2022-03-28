@@ -22,12 +22,12 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       id: 'map',
       map: new GaodeMap({
         // map: new GaodeMapV2({
-          // map: new Mapbox({
+        // map: new Mapbox({
         // pitch: 0,
         style: 'dark',
         // center: [-44.40673828125, -18.375379094031825],
         // zoom: 13,
-        center: [ 120, 29.732983 ],
+        center: [120, 29.732983],
         zoom: 6.2,
         pitch: 60,
       }),
@@ -117,50 +117,48 @@ export default class Amap2demo_polygon_extrude extends React.Component {
     //   .active(true);
     // scene.addLayer(layer);
 
-    fetch(
-      'https://geo.datav.aliyun.com/areas_v3/bound/330000.json'
-    )
-      .then(res => res.json())
-      .then(data => {
+    fetch('https://geo.datav.aliyun.com/areas_v3/bound/330000.json')
+      .then((res) => res.json())
+      .then((data) => {
         const lineLayer = new LineLayer()
-        .source(data)
-        .shape('wall')
-        .size(150000)
-        .style({
-          heightfixed: true,
-          opacity: 0.6,
-          sourceColor: '#0DCCFF',
-          targetColor: 'rbga(255,255,255, 0)'
-        });
+          .source(data)
+          .shape('wall')
+          .size(150000)
+          .style({
+            heightfixed: true,
+            opacity: 0.6,
+            sourceColor: '#0DCCFF',
+            targetColor: 'rbga(255,255,255, 0)',
+          });
         scene.addLayer(lineLayer);
-        
+
         const provincelayer = new PolygonLayer({})
           .source(data)
           .size(150000)
           .shape('extrude')
           .color('#0DCCFF')
           .active({
-            color: '#0DCCFF'
+            color: '#0DCCFF',
           })
           .style({
             heightfixed: true,
             raisingHeight: 200000,
-            opacity: 0.8
-          })
-       
+            opacity: 0.8,
+          });
+
         scene.addLayer(provincelayer);
 
         provincelayer.on('mousemove', () => {
           provincelayer.style({
-            raisingHeight: 200000 + 100000
-          })
-        })
+            raisingHeight: 200000 + 100000,
+          });
+        });
 
         provincelayer.on('unmousemove', () => {
           provincelayer.style({
-            raisingHeight: 200000
-          })
-        })
+            raisingHeight: 200000,
+          });
+        });
       });
   }
 
