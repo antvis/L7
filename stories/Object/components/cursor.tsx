@@ -48,8 +48,7 @@ export default class Demo extends React.Component {
         widthSegments: 3,
         heightSegments: 3,
         center: [115, 30],
-        cursor:
-          "url('https://gw.alipayobjects.com/zos/bmw-prod/e2421e49-87b0-4b4d-aef7-03f4f93f0b54.ico'),pointer",
+        cursor: "url('https://gw.alipayobjects.com/zos/bmw-prod/e2421e49-87b0-4b4d-aef7-03f4f93f0b54.ico'),pointer",
         cursorEnabled: true,
       })
       .active({
