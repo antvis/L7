@@ -78,6 +78,7 @@ import Cluster from './components/cluster'
 import Hot from './components/hot'
 import Hot2 from './components/hot2'
 import Mask from './components/mask'
+import PolygonExteudeTex from './components/polygon_extrudeTex';
 import BugFix from './components/bugfix'
 
 // @ts-ignore
@@ -161,5 +162,5 @@ storiesOf('地图方法', module)
         .add('Hot1', () => <Hot/>)
         .add('Hot2', () => <Hot2/>)
         .add('Mask', () => <Mask/>)
-
+        .add('PolygonExteudeTex', () => <PolygonExteudeTex/>)
         .add('BugFix', () => <BugFix/>)

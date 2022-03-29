@@ -83,7 +83,10 @@ export interface IPolygonLayerStyleOptions {
     dir: string;
   };
 
+  mapTexture?: string; // 挤出几何体顶面贴图
   raisingHeight?: number; // 挤出几何体抬升高度
+  sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
+  targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
   heightfixed?: boolean; // 挤出几何体高度是否固定（不随 zoom 发生变化）
 
   pickLight: boolean;

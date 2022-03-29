@@ -127,7 +127,7 @@ export default class PlaneModel extends BaseModel {
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     if (this.mapTexture !== mapTexture) {
       this.mapTexture = mapTexture;
-      this.texture.destroy();
+      this.texture?.destroy();
       this.updateTexture(mapTexture);
     }
     return {
@@ -143,7 +143,7 @@ export default class PlaneModel extends BaseModel {
   }
 
   public clearModels(): void {
-    this.texture.destroy();
+    this.texture?.destroy();
   }
 
   public initModels() {
