@@ -44,7 +44,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
             // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
             // opacity: 0.8,
             sourceColor: '#f00',
-            targetColor: '#ff0'
+            targetColor: '#ff0',
           });
 
         scene.addLayer(provincelayer);
