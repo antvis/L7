@@ -8,10 +8,11 @@ attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec3 a_Normal;
 attribute float a_Size;
+attribute vec3 a_uvs;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
-varying vec4 v_Color;
+// varying vec4 v_Color;
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_raisingHeight: 0.0;
 uniform float u_opacity: 1.0;
@@ -27,11 +28,17 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
   styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
+    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - a_Position.z(judge side by a_Position.z)
     0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0
+    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1] - u - v
+    0.0, 0.0, 0.0, 0.0  // sidey
   );
+  
+  styleMappingMat[0][3] = a_Position.z;
+  styleMappingMat[2][2] = a_uvs[0];
+  styleMappingMat[2][3] = 1.0 - a_uvs[1];
+  styleMappingMat[3][0] = a_uvs[2];
+
 
   float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
   float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
@@ -77,9 +84,9 @@ void main() {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   }
 
-  float lightWeight = calc_lighting(pos);
+  // float lightWeight = calc_lighting(pos);
   // v_Color = a_Color;
-  v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w);
+  // v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w);
 
   setPickingColor(a_PickingColor);
 }

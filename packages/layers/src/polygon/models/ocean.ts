@@ -107,7 +107,7 @@ export default class OceanModel extends BaseModel {
     const latLen = maxLat - minLat;
 
     this.styleAttributeService.registerStyleAttribute({
-      name: 'linear',
+      name: 'oceanUv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',

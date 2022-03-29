@@ -99,7 +99,7 @@ export default class WaterModel extends BaseModel {
     const latLen = maxLat - minLat;
 
     this.styleAttributeService.registerStyleAttribute({
-      name: 'linear',
+      name: 'waterUv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',

@@ -83,8 +83,9 @@ export interface IPolygonLayerStyleOptions {
     dir: string;
   };
 
+  mapTexture?: string;    // 挤出几何体顶面贴图
   raisingHeight?: number; // 挤出几何体抬升高度
-  heightfixed?: boolean; // 挤出几何体高度是否固定（不随 zoom 发生变化）
+  heightfixed?: boolean;  // 挤出几何体高度是否固定（不随 zoom 发生变化）
 
   pickLight: boolean;
   mask?: boolean;
