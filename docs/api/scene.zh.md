@@ -447,6 +447,7 @@ export interface ICameraOptions {
       };
 }
 ```
+[在线案例](/zh/examples/point/bubble#point)
 
 ### setZoomAndCenter 设置地图缩放等级和中心点
 
