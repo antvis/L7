@@ -88,7 +88,7 @@ export default class WaterModel extends BaseModel {
   }
 
   public clearModels() {
-    this.texture.destroy();
+    this.texture?.destroy();
     this.dataTexture?.destroy();
   }
 
