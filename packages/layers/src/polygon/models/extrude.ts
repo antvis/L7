@@ -152,32 +152,7 @@ export default class ExtrudeModel extends BaseModel {
       const [minLng, minLat, maxLng, maxLat] = bbox;
       const lngLen = maxLng - minLng;
       const latLen = maxLat - minLat;
-      // this.styleAttributeService.registerStyleAttribute({
-      //   name: 'extrudeTopUv',
-      //   type: AttributeType.Attribute,
-      //   descriptor: {
-      //     name: 'a_uv',
-      //     buffer: {
-      //       // give the WebGL driver a hint that this buffer may change
-      //       usage: gl.STATIC_DRAW,
-      //       data: [],
-      //       type: gl.FLOAT,
-      //     },
-      //     size: 2,
-      //     update: (
-      //       feature: IEncodeFeature,
-      //       featureIdx: number,
-      //       vertex: number[],
-      //       attributeIdx: number,
-      //       normal: number[],
-      //     ) => {
-      //       const lng = vertex[0];
-      //       const lat = vertex[1];
-      //       return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
-      //     },
-      //   },
-      // });
-      // 计算出来只有侧边值有效
+    
       this.styleAttributeService.registerStyleAttribute({
         name: 'uvs',
         type: AttributeType.Attribute,
