@@ -13,7 +13,6 @@ export default class Amap2demo_polygon_extrude extends React.Component {
   }
 
   public async componentDidMount() {
- 
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -25,12 +24,9 @@ export default class Amap2demo_polygon_extrude extends React.Component {
     });
     this.scene = scene;
 
-
     fetch('https://geo.datav.aliyun.com/areas_v3/bound/330000.json')
       .then((res) => res.json())
       .then((data) => {
-     
-
         const provincelayer = new PolygonLayer({})
           .source(data)
           .size(150000)
@@ -43,13 +39,15 @@ export default class Amap2demo_polygon_extrude extends React.Component {
             heightfixed: true,
             pickLight: true,
             raisingHeight: 200000,
-            mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SOUKQJpw1FYAAAAAAAAAAAAAARQnAQ'
+            mapTexture:
+              'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SOUKQJpw1FYAAAAAAAAAAAAAARQnAQ',
             // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
             // opacity: 0.8,
+            sourceColor: '#f00',
+            targetColor: '#ff0'
           });
 
         scene.addLayer(provincelayer);
-
       });
   }
 

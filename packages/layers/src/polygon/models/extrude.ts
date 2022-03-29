@@ -1,15 +1,21 @@
-import { AttributeType, gl, IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  IModel,
+  ITexture2D,
+} from '@antv/l7-core';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
-// texture
-import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.glsl';
-import polygonExtrudeTexFrag from '../shaders/extrude/polygon_extrudetex_frag.glsl';
+import polygonExtrudeFrag from '../shaders/extrude/polygon_extrude_frag.glsl';
 // extrude
 import polygonExtrudeVert from '../shaders/extrude/polygon_extrude_vert.glsl';
-import polygonExtrudeFrag from '../shaders/extrude/polygon_extrude_frag.glsl';
+import polygonExtrudeTexFrag from '../shaders/extrude/polygon_extrudetex_frag.glsl';
+// texture
+import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.glsl';
 // extrude picking
 
 import polygonExtrudePickLightFrag from '../shaders/extrude/polygon_extrude_picklight_frag.glsl';
@@ -22,6 +28,8 @@ export default class ExtrudeModel extends BaseModel {
       opacity = 1,
       heightfixed = false,
       raisingHeight = 0,
+      sourceColor,
+      targetColor,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
@@ -54,14 +62,23 @@ export default class ExtrudeModel extends BaseModel {
             });
     }
 
+    // 转化渐变色
+    let sourceColorArr = [1, 1, 1, 1];
+    let targetColorArr = [1, 1, 1, 1];
+    if (sourceColor && targetColor) {
+      sourceColorArr = rgb2arr(sourceColor);
+      targetColorArr = rgb2arr(targetColor);
+    }
+
     return {
       u_heightfixed: Number(heightfixed),
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_raisingHeight: Number(raisingHeight),
       u_opacity: isNumber(opacity) ? opacity : 1.0,
-
-      u_texture: this.texture
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
+      u_texture: this.texture,
     };
   }
 
@@ -87,8 +104,8 @@ export default class ExtrudeModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         cull: {
           enable: true,
-          face: gl.BACK, //gl.FRONT | gl.BACK;
-        }
+          face: gl.BACK, // gl.FRONT | gl.BACK;
+        },
       }),
     ];
   }
@@ -96,14 +113,14 @@ export default class ExtrudeModel extends BaseModel {
   public getShaders() {
     const {
       pickLight,
-      mapTexture
+      mapTexture,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    if(mapTexture) {
+    if (mapTexture) {
       return {
         frag: polygonExtrudeTexFrag,
         vert: polygonExtrudeTexVert,
-        type: 'polygonExtrudeTexture'
-      }
+        type: 'polygonExtrudeTexture',
+      };
     }
     if (pickLight) {
       return {
@@ -122,15 +139,15 @@ export default class ExtrudeModel extends BaseModel {
 
   public clearModels() {
     this.dataTexture?.destroy();
-    this.texture?.destroy()
+    this.texture?.destroy();
   }
 
   protected registerBuiltinAttributes() {
     const {
-      mapTexture
+      mapTexture,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
-    if(mapTexture) {
+    if (mapTexture) {
       const bbox = this.layer.getSource().extent;
       const [minLng, minLat, maxLng, maxLat] = bbox;
       const lngLen = maxLng - minLng;
@@ -182,7 +199,11 @@ export default class ExtrudeModel extends BaseModel {
           ) => {
             const lng = vertex[0];
             const lat = vertex[1];
-            return [(lng - minLng) / lngLen, (lat - minLat) / latLen, vertex[4]];
+            return [
+              (lng - minLng) / lngLen,
+              (lat - minLat) / latLen,
+              vertex[4],
+            ];
           },
         },
       });
@@ -247,11 +268,11 @@ export default class ExtrudeModel extends BaseModel {
       height: 0,
       width: 0,
     });
-    if(mapTexture) {
+    if (mapTexture) {
       const image = new Image();
       image.crossOrigin = '';
       image.src = mapTexture;
-  
+
       image.onload = () => {
         this.texture = createTexture2D({
           data: image,
@@ -266,6 +287,5 @@ export default class ExtrudeModel extends BaseModel {
         this.layerService.renderLayers();
       };
     }
-   
   }
 }
