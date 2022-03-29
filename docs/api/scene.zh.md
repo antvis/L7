@@ -427,21 +427,23 @@ scene.setCenter([lng, lat]);
 
 scene.setCenter([lng, lat], {
   padding: {
-    top: 100
-  }
+    top: 100,
+  },
 });
 ```
+
 padding 参数支持如下的三种传值方式，数值的单位是 px
+
 ```javascript
 export interface ICameraOptions {
   padding:
     | number
     | [number, number, number, number]
     | {
-        top?: number;
-        bottom?: number;
-        right?: number;
-        left?: number;
+        top?: number,
+        bottom?: number,
+        right?: number,
+        left?: number,
       };
 }
 ```
