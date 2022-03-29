@@ -152,7 +152,7 @@ export default class ExtrudeModel extends BaseModel {
       const [minLng, minLat, maxLng, maxLat] = bbox;
       const lngLen = maxLng - minLng;
       const latLen = maxLat - minLat;
-    
+
       this.styleAttributeService.registerStyleAttribute({
         name: 'uvs',
         type: AttributeType.Attribute,
