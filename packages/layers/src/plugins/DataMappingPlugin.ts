@@ -107,7 +107,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       this.mapping(attributes, filterData, undefined, bottomColor),
     );
     // 对外暴露事件
-    layer.emit('dataUpdate', null)
+    layer.emit('dataUpdate', null);
   }
 
   private mapping(
