@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask, getCullFace } from '@antv/l7-utils';
+import { getCullFace, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import {
@@ -210,7 +210,7 @@ export default class FillModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         cull: {
           enable: true,
-          face: getCullFace(this.mapService.version)
+          face: getCullFace(this.mapService.version),
         },
       }),
     ];

@@ -13,7 +13,7 @@ export default class Amap2demo_image extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Map({
+      map: new Mapbox({
         pitch: 0,
         style: 'light',
         center: [121.434765, 31.256735],

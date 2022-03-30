@@ -5,7 +5,7 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { rgb2arr, getCullFace } from '@antv/l7-utils';
+import { getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
