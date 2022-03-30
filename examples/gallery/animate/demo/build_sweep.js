@@ -98,7 +98,8 @@ fetch(
   .then(res => res.json())
   .then(data => {
     const layer = new LineLayer({
-      zIndex: 0
+      zIndex: 0,
+      depth: true
     })
       .source(data)
       .size(1)
