@@ -106,6 +106,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
     layer.setEncodedData(
       this.mapping(attributes, filterData, undefined, bottomColor),
     );
+    // 对外暴露事件
+    layer.emit('dataUpdate', null)
   }
 
   private mapping(
