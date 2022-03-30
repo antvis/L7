@@ -1,7 +1,11 @@
-import { gl } from '@antv/l7-core';
+
+const gl = {
+  BACK: 1029,
+  FRONT: 1028
+}
 export function getCullFace(
   mapVersion: string | undefined,
-): gl.FRONT | gl.BACK {
+):number {
   // 'GAODE1.x' = 'GAODE1.x',
   // 'GAODE2.x' = 'GAODE2.x',
   // 'MAPBOX' = 'MAPBOX',
