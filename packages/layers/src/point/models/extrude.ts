@@ -5,7 +5,7 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -153,7 +153,7 @@ export default class ExtrudeModel extends BaseModel {
         blend: this.getBlend(),
         cull: {
           enable: true,
-          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+          face: getCullFace(this.mapService.version),
         },
         depth: {
           enable: depth,

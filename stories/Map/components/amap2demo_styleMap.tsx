@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 export default class Amap2demo_styleMap extends React.Component {
   // @ts-ignore
@@ -12,7 +12,7 @@ export default class Amap2demo_styleMap extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [112, 30.267069],
         pitch: 0,
         style: 'dark',

@@ -1197,8 +1197,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (autoFit) {
       this.fitBounds(fitBoundsOptions);
     }
-    // 对外暴露事件
-    this.emit('dataUpdate');
+    // 对外暴露事件 迁移到 DataMappingPlugin generateMapping，保证在重新重新映射后触发
+    // this.emit('dataUpdate');
     this.reRender();
   };
 
