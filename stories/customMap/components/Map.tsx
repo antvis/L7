@@ -10,20 +10,20 @@ export default class ScaleComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Map({
-        // center: [0, 0],
-        center: [5000, 5000],
+        center: [120, 30],
+        // center: [5000, 5000],
         pitch: 0,
-        zoom: 0,
-        version: 'SIMPLE',
+        zoom: 1,
+        // version: 'SIMPLE',
         // zoom: 13,
         // zoom: 10,
       }),
     });
     // scene.setBgColor('#000');
     const data = [
-      { x: 5000, y: 5000 },
+      // { x: 5000, y: 5000 },
 
-      // { lng: 120, lat: 30 },
+      { lng: 120, lat: 30 },
 
       // { lng: 0, lat: 0 },
       // { lng: 0, lat: 85.05112 },
@@ -48,8 +48,8 @@ export default class ScaleComponent extends React.Component {
       .source(data, {
         parser: {
           type: 'json',
-          x: 'x',
-          y: 'y',
+          x: 'lng',
+          y: 'lat',
         },
       })
       .shape('circle')

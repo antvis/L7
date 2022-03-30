@@ -7,7 +7,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import { generateColorRamp, getMask, IColorRamp, getCullFace } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -160,7 +160,7 @@ export default class HeatMapModel extends BaseModel {
       },
       cull: {
         enable: true,
-        face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+        face: getCullFace(this.mapService.version),
       },
       blend: {
         enable: true,

@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_polygon extends React.Component {

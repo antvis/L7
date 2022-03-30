@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PointLayer, Scene, LineLayer, PolygonLayer, ILayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 import * as turf from '@turf/turf';
 

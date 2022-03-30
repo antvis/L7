@@ -8,7 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getMask, getCullFace } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
@@ -220,7 +220,7 @@ export default class FillImageModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         cull: {
           enable: true,
-          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+          face: getCullFace(this.mapService.version),
         },
       }),
     ];

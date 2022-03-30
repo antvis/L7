@@ -1,5 +1,5 @@
 import { CityBuildingLayer, Scene, LineLayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_citybuilding extends React.Component {
