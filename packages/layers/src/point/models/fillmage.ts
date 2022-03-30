@@ -218,6 +218,10 @@ export default class FillImageModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        cull: {
+          enable: true,
+          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+        },
       }),
     ];
   }

@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PointLayer, Scene, ILayer, LineLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 import { animate, easeInOut, linear } from 'popmotion';
 
@@ -119,7 +119,7 @@ export default class Amap2demo_polygon extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         pitch: 0,
         center: [120, 10],
         zoom: 2,

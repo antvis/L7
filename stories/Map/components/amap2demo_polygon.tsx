@@ -1,5 +1,5 @@
 import { PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_polygon extends React.Component {
@@ -17,7 +17,7 @@ export default class Amap2demo_polygon extends React.Component {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         pitch: 0,
         // style: 'dark',
         center: [-44.40673828125, -18.375379094031825],

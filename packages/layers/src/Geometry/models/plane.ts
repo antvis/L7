@@ -172,6 +172,10 @@ export default class PlaneModel extends BaseModel {
         depth: { enable: true },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        cull: {
+          enable: true,
+          face: gl.BACK, // gl.FRONT | gl.BACK;
+        },
       }),
     ];
   }
@@ -245,6 +249,10 @@ export default class PlaneModel extends BaseModel {
           depth: { enable: true },
           blend: this.getBlend(),
           stencil: getMask(mask, maskInside),
+          cull: {
+            enable: true,
+            face: gl.BACK,
+          },
         }),
       ];
       this.layerService.renderLayers();

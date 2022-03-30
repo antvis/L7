@@ -198,7 +198,7 @@ export default class FillModel extends BaseModel {
     const isGlobel = this.mapService.version === 'GLOBEL';
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill-' + type,
+        moduleName: 'pointfill_' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: isGlobel
@@ -208,6 +208,10 @@ export default class FillModel extends BaseModel {
         depth: { enable: isGlobel },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        cull: {
+          enable: true,
+          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+        },
       }),
     ];
   }

@@ -13,6 +13,7 @@ export interface ILineLayerStyleOptions {
   dashArray?: [number, number]; //  可选参数、虚线间隔
   segmentNumber?: number;
 
+  depth?: boolean;
   forward?: boolean; // 可选参数、是否反向(arcLine)
   lineTexture?: boolean; // 可选参数、是否开启纹理贴图功能(all)
   iconStep?: number; // 可选参数、纹理贴图步长(all)

@@ -147,7 +147,7 @@ export default class LineModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      depth = false
+      depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     return [

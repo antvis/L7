@@ -13,7 +13,7 @@ export default class Amap2demo_citybuilding extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         style: 'dark',
         center: [120.160514, 30.243209],
         pitch: 45,
@@ -29,24 +29,24 @@ export default class Amap2demo_citybuilding extends React.Component {
         .source(await res.json())
         .size('floor', [0, 500])
         .color('rgba(242,246,250,1.0)')
-        .animate({
-          enable: true,
-        })
+        // .animate({
+        //   enable: true,
+        // })
         .active({
           color: '#0ff',
           mix: 0.5,
         })
         .style({
-          opacity: 0.7,
+          // opacity: 0.7,
           baseColor: 'rgb(16, 16, 16)',
           windowColor: 'rgb(30, 60, 89)',
           brightColor: 'rgb(255, 176, 38)',
-          sweep: {
-            enable: true,
-            sweepRadius: 2,
-            sweepColor: '#1990FF',
-            sweepSpeed: 0.5,
-          },
+          // sweep: {
+          //   enable: true,
+          //   sweepRadius: 2,
+          //   sweepColor: '#1990FF',
+          //   sweepSpeed: 0.5,
+          // },
         });
       scene.addLayer(pointLayer);
     });
@@ -58,11 +58,15 @@ export default class Amap2demo_citybuilding extends React.Component {
       .then((data) => {
         const layer = new LineLayer({
           zIndex: 0,
+          // depth: true
         })
           .source(data)
           .size(1)
           .shape('line')
           .color('#1990FF')
+          .style({
+            depth: true,
+          })
           .animate({
             interval: 1, // 间隔
             duration: 2, // 持续时间，延时

@@ -158,6 +158,10 @@ export default class HeatMapModel extends BaseModel {
       depth: {
         enable: false,
       },
+      cull: {
+        enable: true,
+        face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+      },
       blend: {
         enable: true,
         func: {
