@@ -147,17 +147,19 @@ export default class LineModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      depth = false
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'line' + type,
+        moduleName: 'line_' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
-        depth: { enable: false },
+        depth: { enable: depth },
+        // depth: { enable: true },
         stencil: getMask(mask, maskInside),
       }),
     ];
