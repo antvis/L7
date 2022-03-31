@@ -27,7 +27,7 @@ export default class PointTest extends React.Component {
     // https://gw.alipayobjects.com/os/bmw-prod/b1dea29e-63b8-403f-804c-a08e1f85fd4e.csv // 30 w
     // https://gw.alipayobjects.com/os/bmw-prod/e465b87a-925a-48b4-9fb3-0952bb0b53c2.csv // 20 w
     let address =
-    'https://gw.alipayobjects.com/os/bmw-prod/28fc7ade-8cb5-4776-a41c-470bf18c48a1.csv'; // 40 w
+      'https://gw.alipayobjects.com/os/bmw-prod/28fc7ade-8cb5-4776-a41c-470bf18c48a1.csv'; // 40 w
     fetch(address)
       .then((res) => res.text())
       .then((data) => {

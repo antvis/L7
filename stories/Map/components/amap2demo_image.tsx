@@ -66,9 +66,9 @@ export default class Amap2demo_image extends React.Component {
           scene.addLayer(imageLayer);
 
           setTimeout(() => {
-            console.log('remove layer')
-            scene.removeLayer(imageLayer)
-          }, 2000)
+            console.log('remove layer');
+            scene.removeLayer(imageLayer);
+          }, 2000);
         });
     });
   }
