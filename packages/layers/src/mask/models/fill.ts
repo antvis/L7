@@ -16,8 +16,6 @@ export default class MaskModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-    // TODO: 瓦片组件默认在最下层
-    this.layer.zIndex = -1000;
     return this.buildModels();
   }
 

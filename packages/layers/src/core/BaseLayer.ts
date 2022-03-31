@@ -130,6 +130,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public sceneContainer: Container | undefined;
   // TODO: 用于保存子图层对象
   public layerChildren: ILayer[] = [];
+  public masks: ILayer[] = [];
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -211,6 +212,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
+  }
+
+  public addMaskLayer(maskLayer: ILayer) {
+    this.masks.push(maskLayer);
   }
 
   public getLayerConfig() {
@@ -866,6 +871,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (this.isDestroied) {
       return;
     }
+
+    // remove child layer
+    this.layerChildren.map((child: ILayer) => child.destroy());
+    this.masks.map((mask: ILayer) => mask.destroy());
+
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);

@@ -30,6 +30,7 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+import { IAddLayerOption } from '../scene/ISceneService'
 
 // import {
 //   IStyleAttributeUpdateOptions,
@@ -117,7 +118,8 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
-  layerChildren: ILayer[]; // 在图层中添加子图层
+  layerChildren: ILayer[];  // 在图层中添加子图层
+  masks: ILayer[];          // 图层的 mask 列表
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
@@ -154,6 +156,8 @@ export interface ILayer {
    */
 
   threeRenderService?: any;
+
+  addMaskLayer(maskLayer: ILayer): void;
 
   getShaderPickStat: () => boolean;
   needPick(type: string): boolean;
@@ -417,7 +421,7 @@ export interface ILayerService {
   enableShaderPick: () => void;
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
-  add(layer: ILayer): void;
+  add(layer: ILayer, option?:IAddLayerOption): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;

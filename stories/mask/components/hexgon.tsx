@@ -83,23 +83,23 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const polygonlayer = new MaskLayer({})
+      const mask1 = new MaskLayer({})
         .source(data)
         .shape('fill')
         .color('red')
         .style({
           opacity: 0.3,
         });
-      scene.addLayer(polygonlayer);
+      
 
-      const polygonlayer2 = new MaskLayer({})
+      const mask2 = new MaskLayer({})
         .source(data2)
         .shape('fill')
         .color('#ff0')
         .style({
           opacity: 0.3,
         });
-      scene.addLayer(polygonlayer2);
+       
 
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv',
@@ -147,6 +147,12 @@ export default class MaskPoints extends React.Component {
               '#ECFFB1',
             ]);
           scene.addLayer(layer);
+          scene.addLayer(mask1, {
+            parent: layer, mask :true
+          });
+          scene.addLayer(mask2, {
+            parent: layer, mask :true
+          });
         });
     });
   }

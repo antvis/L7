@@ -49,18 +49,7 @@ export default class MaskPoints extends React.Component {
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
 
-    scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          let layer = new MaskLayer({}) // autoFit: true
-            .source(data);
 
-          scene.addLayer(layer);
-        });
-    });
 
     const tiffdata = await this.getTiffData();
     const layer = new RasterLayer({ mask: true });
@@ -74,12 +63,6 @@ export default class MaskPoints extends React.Component {
           width: tiffdata.width,
           height: tiffdata.height,
           extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
-          // extent: [
-          //   73.4766000000000048,
-          //   18.1054999999999993,
-          //   135.1066187,
-          //   57.630046,
-          // ],
         },
       })
       .style({
@@ -98,6 +81,19 @@ export default class MaskPoints extends React.Component {
         },
       });
     scene.addLayer(layer);
+
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        let masklayer = new MaskLayer({}) // autoFit: true
+          .source(data);
+
+        scene.addLayer(masklayer, {
+          parent: layer, mask: true
+        });
+      });
   }
 
   public render() {

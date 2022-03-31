@@ -42,18 +42,10 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [120.16021728515624, 30.259660295442085],
-                  [120.15987396240234, 30.25313608393673],
-                  [120.16605377197266, 30.253729211980726],
-                  [120.1658821105957, 30.258474107402265],
-                ],
-              ],
-              [
-                [
-                  [120.1703453063965, 30.258474107402265],
-                  [120.17086029052733, 30.254174055663515],
-                  [120.17583847045898, 30.254915457324778],
-                  [120.17446517944336, 30.258474107402265],
+                  [120.160, 30.259660295442085],
+                  [120.160, 30.25313608393673],
+                  [120.17, 30.253729211980726],
+                  [120.17, 30.258474107402265],
                 ],
               ],
             ],
@@ -72,9 +64,10 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [120.16536712646484, 30.26336704072365],
-                  [120.16777038574219, 30.2657392842738],
-                  [120.17086029052733, 30.26232916614846],
+                  [120.17, 30.258474107402265],
+                  [120.17, 30.254174055663515],
+                  [120.175, 30.254915457324778],
+                  [120.175, 30.258474107402265],
                 ],
               ],
             ],
@@ -84,52 +77,32 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const polygonlayer = new MaskLayer({})
+      const mask1 = new MaskLayer({zIndex: 0})
         .source(data)
         .shape('fill')
         .color('red')
         .style({
           opacity: 0.3,
         });
-      scene.addLayer(polygonlayer);
+     
 
-      const polygonlayer2 = new MaskLayer({})
+      const mask2 = new MaskLayer({zIndex: 2})
         .source(data2)
         .shape('fill')
         .color('#ff0')
         .style({
           opacity: 0.3,
         });
-      scene.addLayer(polygonlayer2);
+       
 
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PointLayer({ zIndex: 2, mask: true, maskInside: true })
+      let points = new PointLayer({ zIndex: 1, mask: true, maskInside: true })
         .source(
           [
             {
-              name: 'n1',
-              lng: 120.14871597290039,
-              lat: 30.268407989758884,
-            },
-            {
-              name: 'n2',
-              lng: 120.15352249145508,
-              lat: 30.271669642392517,
-            },
-            {
-              name: 'n3',
-              lng: 120.16502380371092,
-              lat: 30.26944580007901,
-            },
-            {
-              name: 'n4',
-              lng: 120.16485214233397,
-              lat: 30.26425663877134,
-            },
-            {
               name: 'n5',
-              lng: 120.16073226928711,
-              lat: 30.259067203213018,
+              lng: 120.170,
+              lat: 30.255,
             },
           ],
           {
@@ -140,20 +113,47 @@ export default class MaskPoints extends React.Component {
             },
           },
         )
-        // .shape('circle')
-        // .shape('text', 'test')
-        // .shape('00')
         .shape('simple')
         .size(30)
-        // .color('#0ff')
         .style({
           opacity: 0.6,
         })
-        .active({
-          color: '#00f',
-          mix: 0.6,
-        });
+        .active(true)
+
+      let point2 = new PointLayer({ zIndex: 3, mask: true, maskInside: true })
+        .source(
+          [
+            {
+              name: 'n4',
+              lng: 120.170,
+              lat: 30.2565,
+            },
+          ],
+          {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
+          },
+        )
+        .shape('simple')
+        .size(30)
+        .color('#0f0')
+        .active(true)
+
       scene.addLayer(points);
+      scene.addLayer(point2);
+
+      scene.addLayer(mask1, {
+        parent: points,
+        mask: true
+      });
+      scene.addLayer(mask2, {
+        parent: point2,
+        mask: true
+      });
+
     });
   }
 

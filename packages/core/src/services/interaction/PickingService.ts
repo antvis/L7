@@ -254,6 +254,17 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
           layer.hooks.beforePickingEncode.call();
+
+          if(layer.masks.length > 0) {
+            // 若存在 mask，则在 pick 阶段的绘制也启用
+            layer.masks.map((m: ILayer) => {
+              m.hooks.beforeRenderData.call();
+              m.hooks.beforeRender.call();
+              m.render()
+              m.hooks.afterRender.call();
+            })
+          }
+
           layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);

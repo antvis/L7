@@ -94,14 +94,14 @@ export default class Amap2demo_road2 extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const polygonlayer = new MaskLayer({})
+      const mask = new MaskLayer({})
         .source(data)
         .shape('fill')
         .color('red')
         .style({
-          opacity: 0.3,
+          // opacity: 0.3,
         });
-      scene.addLayer(polygonlayer);
+      
 
       let points = new PointLayer({ zIndex: 2, mask: true })
         .source(
@@ -140,7 +140,8 @@ export default class Amap2demo_road2 extends React.Component {
         .color('#0ff')
         .style({
           opacity: 0.3,
-        });
+        })
+        .active(true);
       scene.addLayer(points);
 
       fetch(
@@ -161,14 +162,26 @@ export default class Amap2demo_road2 extends React.Component {
             .active(true);
           scene.addLayer(layer);
 
-          const polygonlayer2 = new MaskLayer({})
+          const mask2 = new MaskLayer({})
             .source(data2)
             .shape('fill')
             .color('#ff0')
             .style({
-              opacity: 0.3,
+              // opacity: 0.3,
             });
-          scene.addLayer(polygonlayer2);
+          scene.addLayer(mask2, {
+            parent: layer, mask: true
+          });
+
+          scene.addLayer(mask, {
+            parent: layer,
+            mask: true
+          });
+
+          scene.addLayer(mask, {
+            parent: points,
+            mask: true
+          });
         });
     });
   }

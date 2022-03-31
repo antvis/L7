@@ -8,6 +8,7 @@ import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerModel, ILayerService } from './ILayerService';
+import { IAddLayerOption } from '../scene/ISceneService'
 
 @injectable()
 export default class LayerService implements ILayerService {
@@ -39,11 +40,19 @@ export default class LayerService implements ILayerService {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  public add(layer: ILayer) {
+  public add(layer: ILayer, option?: IAddLayerOption) {
     if (this.sceneInited) {
       layer.init();
     }
-    this.layers.push(layer);
+    if(option) {
+      if(option.mask) {
+        option.parent.addMaskLayer(layer);
+      }
+      
+    } else {
+      this.layers.push(layer);
+    }
+    // this.layers.push(layer);
     this.updateLayerRenderList();
   }
 
@@ -126,6 +135,22 @@ export default class LayerService implements ILayerService {
     for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
+     
+      if(layer.masks.length > 0) {
+        // 启用 mask
+        this.renderService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        })
+        layer.masks.map((m: ILayer) => {
+          m.hooks.beforeRenderData.call();
+          m.hooks.beforeRender.call();
+          m.render()
+          m.hooks.afterRender.call();
+        })
+      }
+
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();

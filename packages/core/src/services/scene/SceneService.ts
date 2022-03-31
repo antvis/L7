@@ -25,7 +25,7 @@ import { ILayer, ILayerService } from '../layer/ILayerService';
 import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
-import { ISceneService } from './ISceneService';
+import { ISceneService, IAddLayerOption } from './ISceneService';
 
 /**
  * will emit `loaded` `resize` `destroy` event panstart panmove panend
@@ -299,9 +299,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.render();
   }
 
-  public addLayer(layer: ILayer) {
+  public addLayer(layer: ILayer, option?: IAddLayerOption) {
     this.layerService.sceneService = this;
-    this.layerService.add(layer);
+    this.layerService.add(layer, option);
     this.render();
   }
 
