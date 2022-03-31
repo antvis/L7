@@ -255,14 +255,14 @@ export default class PickingService implements IPickingService {
           });
           layer.hooks.beforePickingEncode.call();
 
-          if(layer.masks.length > 0) {
+          if (layer.masks.length > 0) {
             // 若存在 mask，则在 pick 阶段的绘制也启用
             layer.masks.map((m: ILayer) => {
               m.hooks.beforeRenderData.call();
               m.hooks.beforeRender.call();
-              m.render()
+              m.render();
               m.hooks.afterRender.call();
-            })
+            });
           }
 
           layer.renderModels(true);

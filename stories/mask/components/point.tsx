@@ -42,8 +42,8 @@ export default class MaskPoints extends React.Component {
             coordinates: [
               [
                 [
-                  [120.160, 30.259660295442085],
-                  [120.160, 30.25313608393673],
+                  [120.16, 30.259660295442085],
+                  [120.16, 30.25313608393673],
                   [120.17, 30.253729211980726],
                   [120.17, 30.258474107402265],
                 ],
@@ -77,23 +77,21 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const mask1 = new MaskLayer({zIndex: 0})
+      const mask1 = new MaskLayer({ zIndex: 0 })
         .source(data)
         .shape('fill')
         .color('red')
         .style({
           opacity: 0.3,
         });
-     
 
-      const mask2 = new MaskLayer({zIndex: 2})
+      const mask2 = new MaskLayer({ zIndex: 2 })
         .source(data2)
         .shape('fill')
         .color('#ff0')
         .style({
           opacity: 0.3,
         });
-       
 
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
       let points = new PointLayer({ zIndex: 1, mask: true, maskInside: true })
@@ -101,7 +99,7 @@ export default class MaskPoints extends React.Component {
           [
             {
               name: 'n5',
-              lng: 120.170,
+              lng: 120.17,
               lat: 30.255,
             },
           ],
@@ -118,14 +116,14 @@ export default class MaskPoints extends React.Component {
         .style({
           opacity: 0.6,
         })
-        .active(true)
+        .active(true);
 
       let point2 = new PointLayer({ zIndex: 3, mask: true, maskInside: true })
         .source(
           [
             {
               name: 'n4',
-              lng: 120.170,
+              lng: 120.17,
               lat: 30.2565,
             },
           ],
@@ -140,20 +138,19 @@ export default class MaskPoints extends React.Component {
         .shape('simple')
         .size(30)
         .color('#0f0')
-        .active(true)
+        .active(true);
 
       scene.addLayer(points);
       scene.addLayer(point2);
 
       scene.addLayer(mask1, {
         parent: points,
-        mask: true
+        mask: true,
       });
       scene.addLayer(mask2, {
         parent: point2,
-        mask: true
+        mask: true,
       });
-
     });
   }
 

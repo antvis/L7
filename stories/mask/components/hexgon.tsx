@@ -90,7 +90,6 @@ export default class MaskPoints extends React.Component {
         .style({
           opacity: 0.3,
         });
-      
 
       const mask2 = new MaskLayer({})
         .source(data2)
@@ -99,7 +98,6 @@ export default class MaskPoints extends React.Component {
         .style({
           opacity: 0.3,
         });
-       
 
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv',
@@ -148,10 +146,12 @@ export default class MaskPoints extends React.Component {
             ]);
           scene.addLayer(layer);
           scene.addLayer(mask1, {
-            parent: layer, mask :true
+            parent: layer,
+            mask: true,
           });
           scene.addLayer(mask2, {
-            parent: layer, mask :true
+            parent: layer,
+            mask: true,
           });
         });
     });

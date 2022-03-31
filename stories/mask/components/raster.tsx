@@ -49,8 +49,6 @@ export default class MaskPoints extends React.Component {
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
 
-
-
     const tiffdata = await this.getTiffData();
     const layer = new RasterLayer({ mask: true });
     // const layer = new RasterLayer({ mask: true, maskInside: false });
@@ -91,7 +89,8 @@ export default class MaskPoints extends React.Component {
           .source(data);
 
         scene.addLayer(masklayer, {
-          parent: layer, mask: true
+          parent: layer,
+          mask: true,
         });
       });
   }

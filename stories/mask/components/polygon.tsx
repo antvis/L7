@@ -91,7 +91,6 @@ export default class MaskPoints extends React.Component {
         .style({
           opacity: 0.1,
         });
-      
 
       const mask2 = new MaskLayer({})
         .source(data2)
@@ -100,7 +99,7 @@ export default class MaskPoints extends React.Component {
         .style({
           opacity: 0.1,
         });
-      
+
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
       let points = new PolygonLayer({ mask: true })
         // let points = new PolygonLayer({ mask: true, maskInside: false })
@@ -132,17 +131,16 @@ export default class MaskPoints extends React.Component {
         .shape('fill') // fill
         .size(10)
         .color('#0ff')
-        .active(true)
+        .active(true);
       scene.addLayer(points);
       scene.addLayer(mask1, {
         parent: points,
-        mask: true
+        mask: true,
       });
       scene.addLayer(mask2, {
         parent: points,
-        mask: true
+        mask: true,
       });
-
     });
   }
 

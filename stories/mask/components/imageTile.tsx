@@ -92,7 +92,6 @@ export default class ImageTile extends React.Component {
         .style({
           opacity: 0.3,
         });
-      
 
       const mask2 = new MaskLayer({})
         .source(data2)
@@ -102,7 +101,7 @@ export default class ImageTile extends React.Component {
           opacity: 0.3,
         });
 
-        // 暂时不支持
+      // 暂时不支持
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
       const layer = new ImageTileLayer({});
       layer
@@ -122,10 +121,12 @@ export default class ImageTile extends React.Component {
 
       scene.addLayer(layer);
       scene.addLayer(mask1, {
-        parent: layer, mask: true
+        parent: layer,
+        mask: true,
       });
       scene.addLayer(mask2, {
-        parent: layer, mask: true
+        parent: layer,
+        mask: true,
       });
     });
   }

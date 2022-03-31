@@ -25,7 +25,7 @@ import { ILayer, ILayerService } from '../layer/ILayerService';
 import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
-import { ISceneService, IAddLayerOption } from './ISceneService';
+import { IAddLayerOption, ISceneService } from './ISceneService';
 
 /**
  * will emit `loaded` `resize` `destroy` event panstart panmove panend

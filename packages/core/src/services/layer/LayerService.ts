@@ -7,8 +7,8 @@ import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
+import { IAddLayerOption } from '../scene/ISceneService';
 import { ILayerModel, ILayerService } from './ILayerService';
-import { IAddLayerOption } from '../scene/ISceneService'
 
 @injectable()
 export default class LayerService implements ILayerService {
@@ -44,11 +44,10 @@ export default class LayerService implements ILayerService {
     if (this.sceneInited) {
       layer.init();
     }
-    if(option) {
-      if(option.mask) {
+    if (option) {
+      if (option.mask) {
         option.parent.addMaskLayer(layer);
       }
-      
     } else {
       this.layers.push(layer);
     }
@@ -135,20 +134,20 @@ export default class LayerService implements ILayerService {
     for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
-     
-      if(layer.masks.length > 0) {
+
+      if (layer.masks.length > 0) {
         // 启用 mask
         this.renderService.clear({
           stencil: 0,
           depth: 1,
           framebuffer: null,
-        })
+        });
         layer.masks.map((m: ILayer) => {
           m.hooks.beforeRenderData.call();
           m.hooks.beforeRender.call();
-          m.render()
+          m.render();
           m.hooks.afterRender.call();
-        })
+        });
       }
 
       if (layer.getLayerConfig().enableMultiPassRenderer) {

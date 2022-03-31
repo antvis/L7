@@ -101,7 +101,6 @@ export default class Amap2demo_road2 extends React.Component {
         .style({
           // opacity: 0.3,
         });
-      
 
       let points = new PointLayer({ zIndex: 2, mask: true })
         .source(
@@ -170,17 +169,18 @@ export default class Amap2demo_road2 extends React.Component {
               // opacity: 0.3,
             });
           scene.addLayer(mask2, {
-            parent: layer, mask: true
+            parent: layer,
+            mask: true,
           });
 
           scene.addLayer(mask, {
             parent: layer,
-            mask: true
+            mask: true,
           });
 
           scene.addLayer(mask, {
             parent: points,
-            mask: true
+            mask: true,
           });
         });
     });
