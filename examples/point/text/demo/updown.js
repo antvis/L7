@@ -62,7 +62,7 @@ scene.on('loaded', () => {
         .color('count', n => (n > 0 ? '#0f0' : '#f00'))
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: [ 30, 5 ],
+          textOffset: [ -10, 5 ],
           padding: [ 2, 2 ],
           fontFamily,
           iconfont: true
