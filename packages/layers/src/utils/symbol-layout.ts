@@ -226,7 +226,13 @@ function shapeIconFont(
     if (glyph) {
       positionedGlyphs.push({
         glyph: iconfont,
-        x,
+        // x,
+        /**
+         * iconfont
+         * 在计算大小的时候计算的是 unicode 字符 如 &#xe6d4;
+         * 在布局计算 icon 位置的时候应该始终保持居中（且 icon 只占一个字符的位置）
+         */
+        x: glyph.advance / 2,
         y: y + baselineOffset,
         vertical: false, // TODO：目前只支持水平方向
         scale: 1,
