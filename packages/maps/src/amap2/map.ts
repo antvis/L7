@@ -157,7 +157,8 @@ export default class AMapService
         'amap-maps',
       )[0] as HTMLElement;
       // TODO: amap2 的 amap-maps 新增 z-index=0; 样式，让 marker 中 zIndex 失效
-      amap.style.zIndex = 'auto';
+      // * 设置 amap.style.zIndex = 'auto'; 会导致 GaodeMapV2 在移动端的事件失效
+      // amap.style.zIndex = 'auto';
       this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
       // this.markerContainer = DOM.create(
       //   'div',

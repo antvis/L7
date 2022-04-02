@@ -282,6 +282,9 @@ export class Map extends Camera {
   }
 
   public remove() {
+    this.container.removeChild(this.canvasContainer);
+    // @ts-ignore
+    this.canvasContainer = null;
     if (this.frame) {
       this.frame.cancel();
       this.frame = null;
