@@ -11,7 +11,6 @@ export default class Amap2demo extends React.Component {
   }
 
   public async componentDidMount() {
-   
     function initScene() {
       return new Promise((resolve, reject) => {
         const scene = new Scene({
@@ -27,18 +26,16 @@ export default class Amap2demo extends React.Component {
         });
         scene.on('loaded', () => {
           setTimeout(() => {
-            resolve(scene)
-          }, 200)
-        })
-      })
+            resolve(scene);
+          }, 200);
+        });
+      });
     }
 
-    
-   
-    for(let i = 0;i < 20;i ++) {
-      console.log('init ' + (i + 1))
-      let scene = await initScene()
-      scene.destroy()
+    for (let i = 0; i < 20; i++) {
+      console.log('init ' + (i + 1));
+      let scene = await initScene();
+      scene.destroy();
     }
   }
 

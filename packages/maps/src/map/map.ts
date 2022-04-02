@@ -367,7 +367,6 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public destroy() {
-
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();

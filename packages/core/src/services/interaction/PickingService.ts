@@ -174,6 +174,13 @@ export default class PickingService implements IPickingService {
     // domContainer?.style.setProperty('cursor', 'move');
   }
 
+  public destroy() {
+    this.pickingFBO.destroy();
+    // this.pickingFBO = null; 清除对 webgl 实例的引用
+    // @ts-ignore
+    this.pickingFBO = null;
+  }
+
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
     if (!!(container as HTMLCanvasElement).getContext) {
@@ -428,12 +435,5 @@ export default class PickingService implements IPickingService {
     // @ts-ignore
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
-  }
-
-  public destroy() {
-    this.pickingFBO.destroy();
-    // this.pickingFBO = null; 清除对 webgl 实例的引用
-    // @ts-ignore
-    this.pickingFBO = null;
   }
 }

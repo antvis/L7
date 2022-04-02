@@ -265,7 +265,7 @@ export default class ReglRendererService implements IRendererService {
   public destroy = () => {
     // this.canvas = null 清除对 webgl 实例的引用
     // @ts-ignore
-    this.canvas = null
+    this.canvas = null;
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
     this.gl.destroy();
 
