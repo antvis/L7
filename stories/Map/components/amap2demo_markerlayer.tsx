@@ -32,7 +32,7 @@ export default class Amap2demo_markerlayer extends React.Component {
     );
     const nodes = await response.json();
     // const markerLayer = new MarkerLayer({ cluster: true });
-    const markerLayer = new MarkerLayer({  });
+    const markerLayer = new MarkerLayer({});
     const scene = new Scene({
       id: 'map',
       map: new GaodeMapV2({
@@ -62,12 +62,10 @@ export default class Amap2demo_markerlayer extends React.Component {
       }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
 
       marker.on('click', () => {
-        console.log('marker click')
-      })
+        console.log('marker click');
+      });
 
       markerLayer.addMarker(marker);
-
-     
     }
     scene.addMarkerLayer(markerLayer);
     // console.log('markerLayer', markerLayer);
