@@ -1,5 +1,6 @@
 import {
   AMapScene,
+  AMapSceneV2,
   LayerContext,
   LayerEvent,
   LineLayer,
@@ -37,7 +38,7 @@ export default React.memo(function Map() {
   };
   return (
     <>
-      <AMapScene
+      <AMapSceneV2
         map={{
           center: [110.19382669582967, 50.258134],
           pitch: 0,
@@ -105,7 +106,7 @@ export default React.memo(function Map() {
             }}
           />
         </PolygonLayer>
-      </AMapScene>
+      </AMapSceneV2>
     </>
   );
 });

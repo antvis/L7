@@ -1,5 +1,5 @@
 import { MarkerLayer, Marker, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 export default class Amap2demo_markerlayer extends React.Component {
   // @ts-ignore
@@ -31,10 +31,11 @@ export default class Amap2demo_markerlayer extends React.Component {
       'https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json',
     );
     const nodes = await response.json();
-    const markerLayer = new MarkerLayer({ cluster: true });
+    // const markerLayer = new MarkerLayer({ cluster: true });
+    const markerLayer = new MarkerLayer({  });
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 3,
@@ -51,10 +52,22 @@ export default class Amap2demo_markerlayer extends React.Component {
       el.textContent = nodes[i].v + '℃';
       el.style.background = getColor(nodes[i].v);
       el.style.borderColor = getColor(nodes[i].v);
+
+      // el.addEventListener('click', e =>{
+      //   console.log(e)
+      // })
+
       const marker = new Marker({
         element: el,
       }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
+
+      marker.on('click', () => {
+        console.log('marker click')
+      })
+
       markerLayer.addMarker(marker);
+
+     
     }
     scene.addMarkerLayer(markerLayer);
     // console.log('markerLayer', markerLayer);
