@@ -11,51 +11,35 @@ export default class Amap2demo extends React.Component {
   }
 
   public async componentDidMount() {
-    const scene = new Scene({
-      id: 'map',
-      map: new GaodeMap({
-        // center: [121.434765, 31.256735],
-        // zoom: 14.83,
-        pitch: 0,
-        style: 'light',
-        center: [122.5, 30],
-        zoom: 4,
-      }),
-    });
-    this.scene = scene;
+   
+    function initScene() {
+      return new Promise((resolve, reject) => {
+        const scene = new Scene({
+          id: 'map',
+          map: new GaodeMapV2({
+            // center: [121.434765, 31.256735],
+            // zoom: 14.83,
+            pitch: 0,
+            style: 'light',
+            center: [122.5, 30],
+            zoom: 4,
+          }),
+        });
+        scene.on('loaded', () => {
+          setTimeout(() => {
+            resolve(scene)
+          }, 200)
+        })
+      })
+    }
 
-    const layer = new PointLayer()
-      .source(
-        [
-          { lng: 120, lat: 30, c: '#ff0' },
-          { lng: 125, lat: 30, c: '#0f0' },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
-      .shape('circle')
-      .size(20)
-      .color('c');
-
-    scene.on('loaded', () => {
-      scene.addLayer(layer);
-      // layer.on('dataUpdate', (e) => {
-      //   const le = layer.getLegendItems('color')
-      //   console.log(le)
-      // })
-      layer.on('dataUpdate', (e) => {
-        const le = layer.getLegendItems('color');
-        console.log('scale', le);
-      });
-      layer.setData([{ lng: 121, lat: 30, c: '#000' }]);
-      // layer.color('#f00')
-      scene.render();
-    });
+    
+   
+    for(let i = 0;i < 20;i ++) {
+      console.log('init ' + (i + 1))
+      let scene = await initScene()
+      scene.destroy()
+    }
   }
 
   public render() {

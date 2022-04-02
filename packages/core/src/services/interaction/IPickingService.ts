@@ -7,4 +7,5 @@ export interface IPickingService {
     box: [number, number, number, number],
     cb: (...args: any[]) => void,
   ): Promise<any>;
+  destroy(): void;
 }

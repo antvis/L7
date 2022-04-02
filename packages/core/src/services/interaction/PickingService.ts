@@ -429,4 +429,11 @@ export default class PickingService implements IPickingService {
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
   }
+
+  public destroy() {
+    this.pickingFBO.destroy();
+    // this.pickingFBO = null; 清除对 webgl 实例的引用
+    // @ts-ignore
+    this.pickingFBO = null;
+  }
 }
