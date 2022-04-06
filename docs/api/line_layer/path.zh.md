@@ -43,6 +43,17 @@ layer.size('height', []);
 
 ✨ 当用户在传入数据的第三个值可以用于表示当前点的高度，通过在 source 中传入的第三个参数我们可以的高度不等的线图层
 
+### style
+
+#### raisingHeight: number
+线图层的抬升高度，高度值和地图缩放层级无关。
+
+[在线案例](/zh/examples/polygon/3d#floatMap)
+#### heightfixed: boolean
+线图层的高度是否和地图缩放层级无关，默认为 false。
+
+[在线案例](/zh/examples/line/isoline#ele)
+
 `markdown:docs/api/line_layer/features/vertexHeight.zh.md`
 
 `markdown:docs/api/line_layer/features/linear.zh.md`
