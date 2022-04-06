@@ -18,6 +18,7 @@ uniform mat4 u_Mvp;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 
+uniform float u_heightfixed: 0.0;
 uniform float u_vertexScale: 1.0;
 uniform float u_raisingHeight: 0.0;
 
@@ -93,35 +94,37 @@ void main() {
 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 
-  float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况
-
-  // project_pos.z += u_raisingHeight;
-  // if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-  //   float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
-  //   project_pos.z += u_raisingHeight * mapboxZoomScale;
-  // }
+  float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况 vertex height
+  float lineHeight = a_Size.y; // size 第二个参数代表的高度 [linewidth, lineheight]
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, project_pixel(a_Size.y) + h * 0.2 + u_raisingHeight, 1.0));
+    lineHeight *= 0.2; // 保持和 amap/mapbox 一致的效果
+    h *= 0.2;
+    if(u_heightfixed < 1.0) {
+      lineHeight = project_pixel(a_Size.y);
+    }
+    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, lineHeight + h + u_raisingHeight, 1.0));
   } else {
-    float lineHeight = a_Size.y;
+    // mapbox -  amap
+    
     // 兼容 mapbox 在线高度上的效果表现基本一致
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      // mapbox
       // 保持高度相对不变
-      // h *= 2.0/pow(2.0, 20.0 - u_Zoom);
       float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
       h *= mapboxZoomScale;
       h += u_raisingHeight * mapboxZoomScale;
+      if(u_heightfixed > 0.0) {
+        lineHeight *= mapboxZoomScale;
+      }
+      
     } else {
+      // amap
       h += u_raisingHeight;
-    }
-
-    // #define COORDINATE_SYSTEM_P20 5.0
-    // #define COORDINATE_SYSTEM_P20_OFFSET 6.0
-    // amap1.x
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
-      // 保持高度相对不变
-      lineHeight *= pow(2.0, 20.0 - u_Zoom);
+      // lineHeight 顶点偏移高度
+      if(u_heightfixed < 1.0) {
+        lineHeight *= pow(2.0, 20.0 - u_Zoom);
+      }
     }
 
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, lineHeight + h, 1.0));

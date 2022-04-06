@@ -31,11 +31,14 @@ scene.on('loaded', () => {
       })
         .source(data)
         .size('ELEV', h => {
-          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 0.2 ];
+          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1400) * 20 ];
         })
         .shape('line')
         .scale('ELEV', {
           type: 'quantize'
+        })
+        .style({
+          heightfixed: true
         })
         .color('ELEV', [
           '#094D4A',

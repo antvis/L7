@@ -71,18 +71,18 @@ scene.on('loaded', () => {
       })
         .source(data)
         .shape('icon', 'text')
-        .size(30)
+        .size(25)
         .color('count', t => {
           const c = Number(t.replace('℃', ''));
           return colors[Math.floor(((c - 18) / 16) * 10)];
         })
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: [ 30, 5 ],
+          textOffset: [ -25, 15 ],
           padding: [ 2, 2 ],
           fontFamily,
-          iconfont: true
-          // textAllowOverlap: true
+          iconfont: true,
+          textAllowOverlap: true
         });
       scene.addLayer(pointLayer);
 
