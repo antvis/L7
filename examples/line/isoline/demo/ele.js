@@ -7,7 +7,7 @@ const scene = new Scene({
     pitch: 53.6305,
     style: 'light',
     center: [ 102.600579, 23.114887 ],
-    zoom: 14.66
+    zoom: 13.5
   })
 });
 scene.on('loaded', () => {
@@ -17,11 +17,14 @@ scene.on('loaded', () => {
       const layer = new LineLayer({})
         .source(data)
         .size('ELEV', h => {
-          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1300) * 0.2 ];
+          return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1400) * 20 ];
         })
         .shape('line')
         .scale('ELEV', {
           type: 'quantize'
+        })
+        .style({
+          heightfixed: true
         })
         .color(
           'ELEV',
