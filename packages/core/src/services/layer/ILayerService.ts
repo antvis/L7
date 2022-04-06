@@ -416,13 +416,13 @@ export interface ILayerService {
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
-
-  // 清除画布
-  clear(): void;
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
+
+  // 清除画布
+  clear(): void;
   add(layer: ILayer, option?: IAddLayerOption): void;
   initLayers(): void;
   startAnimate(): void;

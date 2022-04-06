@@ -1,9 +1,5 @@
 import { gl, IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { RasterImageTriangulation } from '../../core/triangulation';
-import ImageTileFrag from './shaders/imagetile_frag.glsl';
-import ImageTileVert from './shaders/imagetile_vert.glsl';
-
 import Tile from '../utils/Tile';
 
 interface IImageLayerStyleOptions {
@@ -72,17 +68,7 @@ export default class ImageTileModel extends BaseModel {
       });
     }
 
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'ImageTileLayer',
-        vertexShader: ImageTileVert,
-        fragmentShader: ImageTileFrag,
-        triangulation: RasterImageTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        blend: this.getBlend(),
-      }),
-    ];
+    return [];
   }
 
   public clearModels() {

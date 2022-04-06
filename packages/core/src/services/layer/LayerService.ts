@@ -237,13 +237,6 @@ export default class LayerService implements ILayerService {
     return this.shaderPicking;
   }
 
-  private runRender() {
-    this.renderLayers();
-    this.layerRenderID = $window.requestAnimationFrame(
-      this.runRender.bind(this),
-    );
-  }
-
   public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
       number,
@@ -257,6 +250,13 @@ export default class LayerService implements ILayerService {
       stencil: 0,
       framebuffer: null,
     });
+  }
+
+  private runRender() {
+    this.renderLayers();
+    this.layerRenderID = $window.requestAnimationFrame(
+      this.runRender.bind(this),
+    );
   }
 
   private stopRender() {

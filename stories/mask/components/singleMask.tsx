@@ -140,7 +140,7 @@ export default class MaskPoints extends React.Component {
       setTimeout(() => {
         scene.removeLayer(mask1);
         // scene.render();
-      }, 2000)
+      }, 2000);
     });
   }
 
