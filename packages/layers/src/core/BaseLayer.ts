@@ -80,6 +80,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public rendering: boolean;
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
+  public isLayerGroup: boolean = false;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -216,6 +217,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public addMaskLayer(maskLayer: ILayer) {
     this.masks.push(maskLayer);
+  }
+
+  public removeMaskLayer(maskLayer: ILayer) {
+    const layerIndex = this.masks.indexOf(maskLayer);
+    if (layerIndex > -1) {
+        this.masks.splice(layerIndex, 1);
+    }
+    maskLayer.destroy()
   }
 
   public getLayerConfig() {
@@ -539,6 +548,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public style(
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {
+    const lastConfig = this.getLayerConfig();
     const { passes, ...rest } = options;
 
     // passes 特殊处理
@@ -562,6 +572,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (this.container) {
       this.updateLayerConfig(this.rawConfig);
       this.styleNeedUpdate = true;
+    }
+
+    //@ts-ignore
+    if(lastConfig && lastConfig.mask === true && options.mask === false) {
+      this.clearModels();
+      this.models = this.layerModel.buildModels();
     }
     return this;
   }
@@ -874,6 +890,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy());
+    this.layerChildren = [];
+
     this.masks.map((mask: ILayer) => mask.destroy());
 
     this.hooks.beforeDestroy.call();
@@ -919,6 +937,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public clearModels() {
     this.models.forEach((model) => model.destroy());
     this.layerModel.clearModels();
+    this.models = [];
   }
 
   public isDirty() {

@@ -146,7 +146,7 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-
+  isLayerGroup: boolean;
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -160,6 +160,7 @@ export interface ILayer {
   getShaderPickStat: () => boolean;
 
   addMaskLayer(maskLayer: ILayer): void;
+  removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
@@ -309,6 +310,13 @@ export interface ILayer {
 
   // 设置当前地球时间 控制太阳角度
   setEarthTime(time: number): void;
+}
+
+export interface ILayerGroup extends ILayer {
+  
+  addChild(layer: ILayer): void;
+  removeChild(layer: ILayer): void;
+  clearChild(): void;
 }
 
 /**

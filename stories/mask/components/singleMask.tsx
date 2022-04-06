@@ -54,28 +54,6 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-    const data2 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [120.17, 30.258474107402265],
-                  [120.17, 30.254174055663515],
-                  [120.175, 30.254915457324778],
-                  [120.175, 30.258474107402265],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
-
     scene.on('loaded', () => {
       const mask1 = new MaskLayer({ zIndex: 0 })
         .source(data)
@@ -86,7 +64,7 @@ export default class MaskPoints extends React.Component {
         });
 
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PointLayer({ zIndex: 1, mask: true, maskInside: false })
+      let point1 = new PointLayer({ zIndex: 1, mask: true, maskInside: false })
         .source(
           [
             {
@@ -110,6 +88,7 @@ export default class MaskPoints extends React.Component {
         })
         .active(true);
 
+      // let point2 = new PointLayer({ zIndex: 3, mask: false, maskInside: true })
       let point2 = new PointLayer({ zIndex: 3, mask: true, maskInside: true })
         .source(
           [
@@ -132,14 +111,20 @@ export default class MaskPoints extends React.Component {
         .color('#0f0')
         .active(true);
 
-      scene.addLayer(points);
+      scene.addLayer(point1);
       scene.addLayer(point2);
 
       scene.addLayer(mask1);
 
       setTimeout(() => {
-        scene.removeLayer(mask1);
-        // scene.render();
+        // scene.removeLayer(mask1);
+
+        point1.style({mask: false})
+        point2.style({mask: false})
+
+        // scene.removeLayer(mask1);
+
+        scene.render();
       }, 2000);
     });
   }

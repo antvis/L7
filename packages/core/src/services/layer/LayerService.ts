@@ -136,7 +136,7 @@ export default class LayerService implements ILayerService {
       layer.hooks.beforeRender.call();
 
       if (layer.masks.length > 0) {
-        // 启用 mask
+        // 清除上一次的模版缓存
         this.renderService.clear({
           stencil: 0,
           depth: 1,
@@ -174,31 +174,33 @@ export default class LayerService implements ILayerService {
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
+      .sort((pre: ILayer, next: ILayer) => {
+        // 根据 zIndex 对渲染顺序进行排序
+        return pre.zIndex - next.zIndex;
+      })
       .forEach((layer) => {
-        this.layerList.push(layer);
-
-        // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
-        layer.layerChildren
+        if(layer.isLayerGroup) {
+          // layerGroup
+          // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
+          layer.layerChildren
           .filter((childlayer) => childlayer.inited)
           .filter((childlayer) => childlayer.isVisible())
+          .sort((pre: ILayer, next: ILayer) => {
+            // 根据 zIndex 对渲染顺序进行排序
+            return pre.zIndex - next.zIndex;
+          })
           .forEach((childlayer) => {
             this.layerList.push(childlayer);
           });
+        } else {
+          // baseLayer
+          this.layerList.push(layer);
+        }
       });
-
-    // 根据 zIndex 对渲染顺序进行排序
-    this.layerList.sort((pre: ILayer, next: ILayer) => {
-      return pre.zIndex - next.zIndex;
-    });
   }
 
   public destroy() {
     this.layers.forEach((layer) => {
-      // Tip: layer.layerChildren 当 layer 存在子图层的情况
-      if (layer.layerChildren) {
-        layer.layerChildren.forEach((child) => child.destroy());
-        layer.layerChildren = [];
-      }
       layer.destroy();
     });
     this.layers = [];
