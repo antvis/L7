@@ -46,10 +46,13 @@ layer.size('height', []);
 ### style
 
 #### raisingHeight: number
+
 线图层的抬升高度，高度值和地图缩放层级无关。
 
 [在线案例](/zh/examples/polygon/3d#floatMap)
+
 #### heightfixed: boolean
+
 线图层的高度是否和地图缩放层级无关，默认为 false。
 
 [在线案例](/zh/examples/line/isoline#ele)
