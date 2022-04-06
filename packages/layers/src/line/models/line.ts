@@ -44,6 +44,7 @@ export default class LineModel extends BaseModel {
       borderWidth = 0.0,
       borderColor = '#ccc',
       raisingHeight = 0,
+      heightfixed = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -116,6 +117,9 @@ export default class LineModel extends BaseModel {
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+
+      // 是否固定高度
+      u_heightfixed: Number(heightfixed),
 
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
