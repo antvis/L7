@@ -119,8 +119,8 @@ export default class MaskPoints extends React.Component {
       setTimeout(() => {
         // scene.removeLayer(mask1);
 
-        point1.style({mask: false})
-        point2.style({mask: false})
+        point1.style({ mask: false });
+        point2.style({ mask: false });
 
         // scene.removeLayer(mask1);
 

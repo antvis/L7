@@ -222,9 +222,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public removeMaskLayer(maskLayer: ILayer) {
     const layerIndex = this.masks.indexOf(maskLayer);
     if (layerIndex > -1) {
-        this.masks.splice(layerIndex, 1);
+      this.masks.splice(layerIndex, 1);
     }
-    maskLayer.destroy()
+    maskLayer.destroy();
   }
 
   public getLayerConfig() {
@@ -574,8 +574,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       this.styleNeedUpdate = true;
     }
 
-    //@ts-ignore
-    if(lastConfig && lastConfig.mask === true && options.mask === false) {
+    // @ts-ignore
+    if (lastConfig && lastConfig.mask === true && options.mask === false) {
       this.clearModels();
       this.models = this.layerModel.buildModels();
     }

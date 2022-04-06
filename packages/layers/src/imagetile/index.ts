@@ -1,9 +1,11 @@
-import LayerGroup from '../core/LayerGroup'
+import LayerGroup from '../core/LayerGroup';
 import ImageTileModels, { ImageTileModelType } from './models/index';
 interface IImageLayerStyleOptions {
   opacity: number;
 }
-export default class ImageTileLayer extends LayerGroup<IImageLayerStyleOptions> {
+export default class ImageTileLayer extends LayerGroup<
+  IImageLayerStyleOptions
+> {
   public type: string = 'ImageTileLayer';
   public buildModels() {
     const modelType = this.getModelType();
