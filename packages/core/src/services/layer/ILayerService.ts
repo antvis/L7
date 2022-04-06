@@ -417,6 +417,8 @@ export interface ILayerService {
   alreadyInRendering: boolean;
   sceneService?: any;
 
+  // 清除画布
+  clear(): void;
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;

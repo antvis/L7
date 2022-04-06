@@ -244,7 +244,7 @@ export default class LayerService implements ILayerService {
     );
   }
 
-  private clear() {
+  public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
       number,
       number,

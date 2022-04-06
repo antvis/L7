@@ -49,6 +49,7 @@ export default class MaskModel extends BaseModel {
 
   public clearModels() {
     this.dataTexture?.destroy();
+    this.layerService.clear();
   }
 
   protected registerBuiltinAttributes() {
