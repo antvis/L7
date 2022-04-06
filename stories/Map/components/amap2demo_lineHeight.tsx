@@ -42,34 +42,34 @@ export default class Amap2demo_lineHeight extends React.Component {
 
           scene.addLayer(layer);
           // -----
-        //   const layer = new LineLayer({})
-        //   .source(data)
-        //   .size('ELEV', h => {
-        //     return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1400) * 20 ]; // amap
-        //   })
-        //   .shape('line')
-        //   .scale('ELEV', {
-        //     type: 'quantize'
-        //   })
-        //   .style({
-        //     heightfixed: true
-        //   })
-        //   .color(
-        //     'ELEV',
-        //     [
-        //       '#E4682F',
-        //       '#FF8752',
-        //       '#FFA783',
-        //       '#FFBEA8',
-        //       '#FFDCD6',
-        //       '#EEF3FF',
-        //       '#C8D7F5',
-        //       '#A5C1FC',
-        //       '#7FA7F9',
-        //       '#5F8AE5'
-        //     ].reverse()
-        //   );
-        // scene.addLayer(layer);
+          //   const layer = new LineLayer({})
+          //   .source(data)
+          //   .size('ELEV', h => {
+          //     return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1400) * 20 ]; // amap
+          //   })
+          //   .shape('line')
+          //   .scale('ELEV', {
+          //     type: 'quantize'
+          //   })
+          //   .style({
+          //     heightfixed: true
+          //   })
+          //   .color(
+          //     'ELEV',
+          //     [
+          //       '#E4682F',
+          //       '#FF8752',
+          //       '#FFA783',
+          //       '#FFBEA8',
+          //       '#FFDCD6',
+          //       '#EEF3FF',
+          //       '#C8D7F5',
+          //       '#A5C1FC',
+          //       '#7FA7F9',
+          //       '#5F8AE5'
+          //     ].reverse()
+          //   );
+          // scene.addLayer(layer);
         });
     });
   }

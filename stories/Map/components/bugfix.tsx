@@ -1,6 +1,14 @@
 // @ts-nocheck
 import React from 'react';
-import { Scene, GaodeMap, GaodeMapV2, Mapbox, Map, PointLayer, LineLayer } from '@antv/l7';
+import {
+  Scene,
+  GaodeMap,
+  GaodeMapV2,
+  Mapbox,
+  Map,
+  PointLayer,
+  LineLayer,
+} from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
   // @ts-ignore
@@ -49,11 +57,13 @@ export default class Amap2demo extends React.Component {
         zoom: 4,
       }),
     });
-    scene.addImage( '00', 'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg');
+    scene.addImage(
+      '00',
+      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
+    );
 
     scene.on('loaded', () => {
-
-      for(let i = 0;i < 20;i++) {
+      for (let i = 0; i < 20; i++) {
         //   const layer = new PointLayer().source([
         //     { lng: 120, lat: 30, name: '00' }
         //   ], {
@@ -65,34 +75,36 @@ export default class Amap2demo extends React.Component {
         //   })
         //   .shape('name', ['00'])
         //   .size(20)
-    
+
         // scene.addLayer(layer);
 
         const lineLayer = new LineLayer()
-        .source([{
-          lng1: 120,
-          lat1: 30,
-          lng2: 122,
-          lat2: 30
-        }], {
-          parser: {
-            type: 'json',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2'
-          }
-        }).shape('line')
-        .size(2)
-        .color('#f00')
+          .source(
+            [
+              {
+                lng1: 120,
+                lat1: 30,
+                lng2: 122,
+                lat2: 30,
+              },
+            ],
+            {
+              parser: {
+                type: 'json',
+                x: 'lng1',
+                y: 'lat1',
+                x1: 'lng2',
+                y1: 'lat2',
+              },
+            },
+          )
+          .shape('line')
+          .size(2)
+          .color('#f00');
 
-        scene.addLayer(lineLayer)
+        scene.addLayer(lineLayer);
       }
-
-
-
     });
-
   }
 
   public render() {
