@@ -16,60 +16,60 @@ export default class Amap2demo_lineHeight extends React.Component {
       map: new Mapbox({
         pitch: 40,
         style: 'light',
-        center: [120, 23.114887],
-        // center: [ 102.600579, 23.114887 ],
-        zoom: 8,
-        // zoom: 14.66
+        // center: [120, 23.114887],
+        center: [ 102.600579, 23.114887 ],
+        // zoom: 8,
+        zoom: 14.66
       }),
     });
     this.scene = scene;
 
     scene.on('loaded', () => {
       fetch(
-        // 'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
-        'https://gw.alipayobjects.com/os/bmw-prod/65589ef3-7f1d-440f-ba5d-86b03ee6ba7e.json',
+        'https://gw.alipayobjects.com/os/rmsportal/ZVfOvhVCzwBkISNsuKCc.json',
+        // 'https://gw.alipayobjects.com/os/bmw-prod/65589ef3-7f1d-440f-ba5d-86b03ee6ba7e.json',
       )
         .then((res) => res.json())
         .then((data) => {
-          const layer = new LineLayer({})
-            .source(data)
-            .size(1)
-            .shape('line')
-            .style({
-              vertexHeightScale: 30,
-            })
-            .color('#ccc');
-
-          scene.addLayer(layer);
-          // -----
-          //   const layer = new LineLayer({})
+          // const layer = new LineLayer({})
           //   .source(data)
-          //   .size('ELEV', h => {
-          //     return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1400) * 20 ]; // amap
-          //   })
+          //   .size(1)
           //   .shape('line')
-          //   .scale('ELEV', {
-          //     type: 'quantize'
-          //   })
           //   .style({
-          //     heightfixed: true
+          //     vertexHeightScale: 30,
           //   })
-          //   .color(
-          //     'ELEV',
-          //     [
-          //       '#E4682F',
-          //       '#FF8752',
-          //       '#FFA783',
-          //       '#FFBEA8',
-          //       '#FFDCD6',
-          //       '#EEF3FF',
-          //       '#C8D7F5',
-          //       '#A5C1FC',
-          //       '#7FA7F9',
-          //       '#5F8AE5'
-          //     ].reverse()
-          //   );
+          //   .color('#ccc');
+
           // scene.addLayer(layer);
+          // -----
+            const layer = new LineLayer({})
+            .source(data)
+            .size('ELEV', h => {
+              return [ h % 50 === 0 ? 1.0 : 0.5, (h - 1400) * 20 ]; // amap
+            })
+            .shape('line')
+            .scale('ELEV', {
+              type: 'quantize'
+            })
+            .style({
+              heightfixed: true
+            })
+            .color(
+              'ELEV',
+              [
+                '#E4682F',
+                '#FF8752',
+                '#FFA783',
+                '#FFBEA8',
+                '#FFDCD6',
+                '#EEF3FF',
+                '#C8D7F5',
+                '#A5C1FC',
+                '#7FA7F9',
+                '#5F8AE5'
+              ].reverse()
+            );
+          scene.addLayer(layer);
         });
     });
   }
