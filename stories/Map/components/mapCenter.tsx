@@ -4,10 +4,7 @@ import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 import * as turf from '@turf/turf';
 
-const aspaceLnglat = [120.11, 30.264701434772807] as [
-  number,
-  number,
-];
+const aspaceLnglat = [120.11, 30.264701434772807] as [number, number];
 export default class GaodeMapComponent extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -92,7 +89,6 @@ export default class GaodeMapComponent extends React.Component {
       .select(true)
       // .active({ color: '#ff0' })
       .style({
-        
         // heightfixed: true,
         // pickLight: false,
         // pickLight: true,

@@ -62,7 +62,7 @@ export default class Amap2demo_image extends React.Component {
             // .rotate(Math.PI/2)
             .style({
               layerType: 'fillImage',
-              rotation: 0
+              rotation: 0,
             })
             .active({
               color: '#00f',
