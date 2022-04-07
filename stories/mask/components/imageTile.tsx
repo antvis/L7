@@ -120,14 +120,8 @@ export default class ImageTile extends React.Component {
         });
 
       scene.addLayer(layer);
-      scene.addLayer(mask1, {
-        parent: layer,
-        mask: true,
-      });
-      scene.addLayer(mask2, {
-        parent: layer,
-        mask: true,
-      });
+      scene.addMask(mask1, layer.id);
+      scene.addMask(mask2, layer.id);
     });
   }
 

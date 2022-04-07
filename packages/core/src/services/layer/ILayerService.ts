@@ -16,7 +16,6 @@ import {
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IUniform } from '../renderer/IUniform';
-import { IAddLayerOption } from '../scene/ISceneService';
 import { ISource, ISourceCFG } from '../source/ISourceService';
 import {
   IAnimateOption,
@@ -430,10 +429,12 @@ export interface ILayerService {
 
   // 清除画布
   clear(): void;
-  add(layer: ILayer, option?: IAddLayerOption): void;
+  add(layer: ILayer): void;
+  addMask(mask: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
+  getSceneInited(): boolean;
   getLayers(): ILayer[];
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;

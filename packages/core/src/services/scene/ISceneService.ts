@@ -3,10 +3,6 @@ import { ILayer } from '../layer/ILayerService';
 import { IMapConfig } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 
-export interface IAddLayerOption {
-  parent: ILayer;
-  mask?: boolean;
-}
 export interface ISceneService {
   destroyed: boolean;
   loaded: boolean;
@@ -18,7 +14,8 @@ export interface ISceneService {
   removeAllListeners(event?: string): this;
   init(config: IMapConfig & IRenderConfig): void;
   initMiniScene(config: IMapConfig & IRenderConfig): void;
-  addLayer(layer: ILayer, option?: IAddLayerOption): void;
+  addLayer(layer: ILayer): void;
+  addMask(mask: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;
   getPointSizeRange(): Float32Array;
   render(): void;

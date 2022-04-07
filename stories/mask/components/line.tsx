@@ -168,20 +168,11 @@ export default class Amap2demo_road2 extends React.Component {
             .style({
               // opacity: 0.3,
             });
-          scene.addLayer(mask2, {
-            parent: layer,
-            mask: true,
-          });
+          scene.addMask(mask2, layer.id);
 
-          scene.addLayer(mask, {
-            parent: layer,
-            mask: true,
-          });
+          scene.addMask(mask, layer.id);
 
-          scene.addLayer(mask, {
-            parent: points,
-            mask: true,
-          });
+          scene.addMask(mask, layer.id);
         });
     });
   }

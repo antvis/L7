@@ -133,14 +133,8 @@ export default class MaskPoints extends React.Component {
         .color('#0ff')
         .active(true);
       scene.addLayer(points);
-      scene.addLayer(mask1, {
-        parent: points,
-        mask: true,
-      });
-      scene.addLayer(mask2, {
-        parent: points,
-        mask: true,
-      });
+      scene.addMask(mask1, points.id);
+      scene.addMask(mask2, points.id);
     });
   }
 

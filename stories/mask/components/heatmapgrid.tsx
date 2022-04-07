@@ -148,14 +148,8 @@ export default class MaskPoints extends React.Component {
               ].reverse(),
             );
           scene.addLayer(heatmapLayer);
-          scene.addLayer(mask1, {
-            parent: heatmapLayer,
-            mask: true,
-          });
-          scene.addLayer(mask2, {
-            parent: heatmapLayer,
-            mask: true,
-          });
+          scene.addMask(mask1, heatmapLayer.id);
+          scene.addMask(mask2, heatmapLayer.id);
         });
     });
   }

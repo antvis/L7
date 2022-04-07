@@ -3,7 +3,6 @@ import {
   Bounds,
   createLayerContainer,
   createSceneContainer,
-  IAddLayerOption,
   ICameraOptions,
   IControl,
   IControlService,
@@ -168,12 +167,24 @@ class Scene
   }
 
   // layer 管理
-  public addLayer(layer: ILayer, option?: IAddLayerOption): void {
+  public addLayer(layer: ILayer): void {
     // 为当前图层创建一个容器
     // TODO: 初始化的时候设置 容器
     const layerContainer = createLayerContainer(this.container);
     layer.setContainer(layerContainer, this.container);
-    this.sceneService.addLayer(layer, option);
+    this.sceneService.addLayer(layer);
+  }
+
+  public addMask(mask: ILayer, layerId: string) {
+    const parent = this.getLayer(layerId);
+    if (parent) {
+      const layerContainer = createLayerContainer(this.container);
+      mask.setContainer(layerContainer, this.container);
+      parent.addMaskLayer(mask);
+      this.sceneService.addLayer(mask);
+    } else {
+      console.warn('parent layer not find!');
+    }
   }
 
   public getLayers(): ILayer[] {

@@ -7,7 +7,6 @@ import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { IAddLayerOption } from '../scene/ISceneService';
 import { ILayerModel, ILayerService } from './ILayerService';
 
 @injectable()
@@ -40,19 +39,19 @@ export default class LayerService implements ILayerService {
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
 
-  public add(layer: ILayer, option?: IAddLayerOption) {
+  public add(layer: ILayer) {
     if (this.sceneInited) {
       layer.init();
     }
-    if (option) {
-      if (option.mask) {
-        option.parent.addMaskLayer(layer);
-      }
-    } else {
-      this.layers.push(layer);
-    }
-    // this.layers.push(layer);
+
+    this.layers.push(layer);
     this.updateLayerRenderList();
+  }
+
+  public addMask(mask: ILayer) {
+    if (this.sceneInited) {
+      mask.init();
+    }
   }
 
   public initLayers() {
@@ -63,6 +62,10 @@ export default class LayerService implements ILayerService {
       }
     });
     this.updateLayerRenderList();
+  }
+
+  public getSceneInited() {
+    return this.sceneInited;
   }
 
   public getRenderList(): ILayer[] {

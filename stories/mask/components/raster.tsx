@@ -88,10 +88,7 @@ export default class MaskPoints extends React.Component {
         let masklayer = new MaskLayer({}) // autoFit: true
           .source(data);
 
-        scene.addLayer(masklayer, {
-          parent: layer,
-          mask: true,
-        });
+        scene.addMask(masklayer, layer.id);
       });
   }
 

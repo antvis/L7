@@ -126,14 +126,8 @@ export default class MaskPoints extends React.Component {
               // textAllowOverlap: true
             });
           scene.addLayer(pointLayer);
-          scene.addLayer(mask1, {
-            parent: pointLayer,
-            mask: true,
-          });
-          scene.addLayer(mask2, {
-            parent: pointLayer,
-            mask: true,
-          });
+          scene.addMask(mask1, pointLayer.id);
+          scene.addMask(mask2, pointLayer.id);
         });
     });
   }
