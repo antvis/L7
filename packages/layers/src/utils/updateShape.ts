@@ -23,10 +23,16 @@ export function updateShape(
     typeof currentShape === 'string' &&
     lastShape !== currentShape
   ) {
+    if(layer.type === 'PointLayer') {
+      layer.dataState.dataSourceNeedUpdate = true;
+      return;
+    }
+
     shapeUpdateList.map((shapes) => {
       if (shapes.includes(lastShape) && shapes.includes(currentShape)) {
         // TODO: dataSourceNeedUpdate 借用数据更新时更新 layer model 的工作流
         layer.dataState.dataSourceNeedUpdate = true;
+        return;
       }
     });
   }

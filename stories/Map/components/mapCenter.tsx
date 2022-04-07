@@ -70,6 +70,10 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
+      // - cylinder
+      // - triangleColumn
+      // - hexagonColumn
+      // - squareColumn,
       .shape('circle')
       // .shape('cylinder')
       // .color('#0f9')
@@ -107,6 +111,11 @@ export default class GaodeMapComponent extends React.Component {
     //   repeat: 1
     // })
     // .active({ color: '#00f' });
+
+    setTimeout(() => {
+      layer.shape('triangleColumn')
+      scene.render();
+    }, 2000)
 
     this.scene = scene;
 
