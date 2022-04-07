@@ -23,7 +23,7 @@ export function updateShape(
     typeof currentShape === 'string' &&
     lastShape !== currentShape
   ) {
-    if(layer.type === 'PointLayer') {
+    if (layer.type === 'PointLayer') {
       layer.dataState.dataSourceNeedUpdate = true;
       return;
     }

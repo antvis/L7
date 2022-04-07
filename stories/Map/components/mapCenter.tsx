@@ -113,9 +113,9 @@ export default class GaodeMapComponent extends React.Component {
     // .active({ color: '#00f' });
 
     setTimeout(() => {
-      layer.shape('triangleColumn')
+      layer.shape('triangleColumn');
       scene.render();
-    }, 2000)
+    }, 2000);
 
     this.scene = scene;
 
