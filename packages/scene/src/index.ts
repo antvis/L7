@@ -36,6 +36,7 @@ import { Container } from 'inversify';
 import ILayerManager from './ILayerManager';
 import IMapController from './IMapController';
 import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
+import { MaskLayer } from '@antv/l7-layers';
 
 /**
  * 暴露 Scene API
@@ -173,6 +174,21 @@ class Scene
     const layerContainer = createLayerContainer(this.container);
     layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
+
+    const { mask, maskfence, maskColor = '#000', maskOpacity = 0 } = layer.getLayerConfig();
+    if(mask) {
+      const maskInstance = new MaskLayer()
+      .source(maskfence)
+      .shape('fill')
+      .color(maskColor)
+      .style({
+        opacity: maskOpacity
+      });
+  
+      this.addMask(maskInstance, layer.id)
+    }
+    
+   
   }
 
   public addMask(mask: ILayer, layerId: string) {

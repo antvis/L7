@@ -32,7 +32,7 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -61,44 +61,8 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-    const data2 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [133.2421875, 44.33956524809713],
-                  [123.04687499999999, 31.50362930577303],
-                  [154.3359375, 20.632784250388028],
-                  [157.32421875, 38.54816542304656],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
 
     scene.on('loaded', () => {
-      const mask1 = new MaskLayer({})
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.3,
-        });
-
-      const mask2 = new MaskLayer({})
-        .source(data2)
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.3,
-        });
 
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
@@ -109,6 +73,9 @@ export default class MaskPoints extends React.Component {
           const heatmapLayer = new HeatmapLayer({
             mask: true,
             maskInside: false,
+            maskfence: maskData,
+            maskColor: '#fff',
+            maskOpacity: 0.5
           })
             .source(data)
             .shape('heatmap3D') // heatmap3D heatmap
@@ -129,20 +96,7 @@ export default class MaskPoints extends React.Component {
                 positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
               },
             });
-          // heatmapLayer.addMaskLayer(mask1);
           scene.addLayer(heatmapLayer);
-
-          // heatmapLayer.addMaskLayer(mask1);
-
-          // scene.addLayer(mask1, {
-          //   parent: heatmapLayer,
-          //   mask: true,
-          // });
-          scene.addMask(mask1, heatmapLayer.id);
-          // scene.addLayer(mask2, {
-          //   parent: heatmapLayer,
-          //   mask: true,
-          // });
         });
     });
   }

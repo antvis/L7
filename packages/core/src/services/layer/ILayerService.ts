@@ -337,6 +337,12 @@ export interface ILayerPlugin {
  * Layer 初始化参数
  */
 export interface ILayerConfig {
+  mask: boolean;
+  maskInside: boolean;
+  maskfence: any;
+  maskColor: string;
+  maskOpacity: number;
+
   colors: string[];
   size: number;
   shape: string;

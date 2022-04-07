@@ -29,7 +29,7 @@ export default class Amap2demo_road2 extends React.Component {
       }),
     });
     this.scene = scene;
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -58,51 +58,9 @@ export default class Amap2demo_road2 extends React.Component {
         },
       ],
     };
-
-    const data2 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [120.16536712646484, 30.26336704072365],
-                  [120.16777038574219, 30.2657392842738],
-                  [120.17086029052733, 30.26232916614846],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
-
-    const data3 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [[]],
-          },
-        },
-      ],
-    };
-
     scene.on('loaded', () => {
-      const mask = new MaskLayer({})
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          // opacity: 0.3,
-        });
 
-      let points = new PointLayer({ zIndex: 2, mask: true })
+      let points = new PointLayer({ zIndex: 2, mask: true, maskfence: maskData })
         .source(
           [
             {
@@ -149,7 +107,11 @@ export default class Amap2demo_road2 extends React.Component {
         .then((res) => res.json())
         .then((data) => {
           // const layer = new LineLayer({ mask: true, maskInside: false }) // mask: true maskInside: true
-          const layer = new LineLayer({ mask: true, maskInside: true }) // mask: true maskInside: true
+          const layer = new LineLayer({ 
+            mask: true, 
+            maskInside: true, 
+            maskfence: maskData 
+          }) // mask: true maskInside: true
             .source(data)
             .size(5)
             .shape('arc3d') // line arc greatcircle simple
@@ -160,19 +122,6 @@ export default class Amap2demo_road2 extends React.Component {
             })
             .active(true);
           scene.addLayer(layer);
-
-          const mask2 = new MaskLayer({})
-            .source(data2)
-            .shape('fill')
-            .color('#ff0')
-            .style({
-              // opacity: 0.3,
-            });
-          scene.addMask(mask2, layer.id);
-
-          scene.addMask(mask, layer.id);
-
-          scene.addMask(mask, layer.id);
         });
     });
   }

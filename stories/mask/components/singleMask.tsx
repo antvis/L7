@@ -32,7 +32,7 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -55,16 +55,9 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const mask1 = new MaskLayer({ zIndex: 0 })
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.3,
-        });
 
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let point1 = new PointLayer({ zIndex: 1, mask: true, maskInside: false })
+      let point1 = new PointLayer({ zIndex: 1, mask: true, maskInside: false, maskfence: maskData })
         .source(
           [
             {
@@ -89,7 +82,8 @@ export default class MaskPoints extends React.Component {
         .active(true);
 
       // let point2 = new PointLayer({ zIndex: 3, mask: false, maskInside: true })
-      let point2 = new PointLayer({ zIndex: 3, mask: true, maskInside: true })
+      let point2 = new PointLayer({ 
+        zIndex: 3, mask: true, maskInside: true, maskfence: maskData, maskColor: "#f00", maskOpacity: 0.5 })
         .source(
           [
             {
@@ -114,7 +108,7 @@ export default class MaskPoints extends React.Component {
       scene.addLayer(point1);
       scene.addLayer(point2);
 
-      scene.addLayer(mask1);
+      // scene.addLayer(mask1);
 
       setTimeout(() => {
         // scene.removeLayer(mask1);

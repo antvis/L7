@@ -50,45 +50,44 @@ export default class MaskPoints extends React.Component {
     );
 
     const tiffdata = await this.getTiffData();
-    const layer = new RasterLayer({ mask: true });
-    // const layer = new RasterLayer({ mask: true, maskInside: false });
-    const mindata = -0;
-    const maxdata = 8000;
-    layer
-      .source(tiffdata.data, {
-        parser: {
-          type: 'raster',
-          width: tiffdata.width,
-          height: tiffdata.height,
-          extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
-        },
-      })
-      .style({
-        opacity: 0.8,
-        domain: [mindata, maxdata],
-        clampLow: true,
-        rampColors: {
-          colors: [
-            'rgb(166,97,26)',
-            'rgb(223,194,125)',
-            'rgb(245,245,245)',
-            'rgb(128,205,193)',
-            'rgb(1,133,113)',
-          ],
-          positions: [0, 0.25, 0.5, 0.75, 1.0],
-        },
-      });
-    scene.addLayer(layer);
+  
 
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     )
       .then((res) => res.json())
-      .then((data) => {
-        let masklayer = new MaskLayer({}) // autoFit: true
-          .source(data);
+      .then((maskData) => {
 
-        scene.addMask(masklayer, layer.id);
+        const layer = new RasterLayer({ mask: true, maskfence: maskData });
+        // const layer = new RasterLayer({ mask: true, maskInside: false });
+        const mindata = -0;
+        const maxdata = 8000;
+        layer
+          .source(tiffdata.data, {
+            parser: {
+              type: 'raster',
+              width: tiffdata.width,
+              height: tiffdata.height,
+              extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+            },
+          })
+          .style({
+            opacity: 0.8,
+            domain: [mindata, maxdata],
+            clampLow: true,
+            rampColors: {
+              colors: [
+                'rgb(166,97,26)',
+                'rgb(223,194,125)',
+                'rgb(245,245,245)',
+                'rgb(128,205,193)',
+                'rgb(1,133,113)',
+              ],
+              positions: [0, 0.25, 0.5, 0.75, 1.0],
+            },
+          });
+        scene.addLayer(layer);
+
       });
   }
 

@@ -33,28 +33,8 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [113.94058227539062, 22.67484735118852],
-                  [113.83895874023438, 22.62415215809042],
-                  [113.9447021484375, 22.55187920514417],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
 
-    const data2 = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -77,21 +57,6 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const mask1 = new MaskLayer({})
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.3,
-        });
-
-      const mask2 = new MaskLayer({})
-        .source(data2)
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.3,
-        });
 
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
@@ -99,7 +64,13 @@ export default class MaskPoints extends React.Component {
         .then((res) => res.json())
         .then((data) => {
           // const layer = new HeatmapLayer({ mask: true })
-          const layer = new HeatmapLayer({ mask: true, maskInside: false })
+          const layer = new HeatmapLayer({ 
+            mask: true, 
+            maskInside: false,
+            maskColor: '#0f0',
+            maskfence: maskData,
+            maskOpacity: 0.3
+          })
             .source(data, {
               transforms: [
                 {
@@ -133,8 +104,6 @@ export default class MaskPoints extends React.Component {
               ].reverse(),
             );
           scene.addLayer(layer);
-          scene.addMask(mask1, layer.id);
-          scene.addMask(mask2, layer.id);
         });
     });
   }

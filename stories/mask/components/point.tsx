@@ -32,7 +32,7 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -54,7 +54,7 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-    const data2 = {
+    const maskData2 = {
       type: 'FeatureCollection',
       features: [
         {
@@ -77,24 +77,8 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-      const mask1 = new MaskLayer({ zIndex: 0 })
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.3,
-        });
-
-      const mask2 = new MaskLayer({ zIndex: 2 })
-        .source(data2)
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.3,
-        });
-
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PointLayer({ zIndex: 1, mask: true, maskInside: true })
+      let points = new PointLayer({ zIndex: 1, mask: true, maskInside: true, maskfence: maskData, maskOpacity: 0.2, maskColor: '#f00' })
         .source(
           [
             {
@@ -118,7 +102,14 @@ export default class MaskPoints extends React.Component {
         })
         .active(true);
 
-      let point2 = new PointLayer({ zIndex: 3, mask: true, maskInside: true })
+      let point2 = new PointLayer({ 
+          zIndex: 3,
+          mask: true, 
+          maskInside: true,
+          maskOpacity: 0.2,
+          maskColor: '#ff0',
+          maskfence: maskData2 
+        })
         .source(
           [
             {
@@ -142,9 +133,6 @@ export default class MaskPoints extends React.Component {
 
       scene.addLayer(points);
       scene.addLayer(point2);
-
-      scene.addMask(mask1, points.id);
-      scene.addMask(mask2, point2.id);
     });
   }
 
