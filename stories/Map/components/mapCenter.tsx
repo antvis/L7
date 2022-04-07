@@ -19,7 +19,7 @@ export default class GaodeMapComponent extends React.Component {
       map: new GaodeMap({
         center: aspaceLnglat,
         // pitch: 0,
-        pitch: 40,
+        // pitch: 40,
         style: 'dark',
         zoom: 17,
         // dragEnable: false
