@@ -4,7 +4,7 @@ import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 import * as turf from '@turf/turf';
 
-const aspaceLnglat = [120.1019811630249, 30.264701434772807] as [
+const aspaceLnglat = [120.11, 30.264701434772807] as [
   number,
   number,
 ];
@@ -22,7 +22,7 @@ export default class GaodeMapComponent extends React.Component {
       map: new GaodeMap({
         center: aspaceLnglat,
         // pitch: 0,
-        pitch: 40,
+        // pitch: 40,
         style: 'dark',
         zoom: 17,
         // dragEnable: false
@@ -60,7 +60,7 @@ export default class GaodeMapComponent extends React.Component {
       .source(
         [
           {
-            lng: 120.1019811630249,
+            lng: 120.11,
             lat: 30.264701434772807,
             name: 'n3',
           },
@@ -73,15 +73,15 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
-      // .shape('circle')
-      .shape('cylinder')
+      .shape('circle')
+      // .shape('cylinder')
       // .color('#0f9')
       // .color('#4169E1')
       .color('#4cfd47')
       // .color('name', ['#f00', '#ff0'])
       // .size([100, 100, 1000])
-      .size([20, 20, 200])
-      // .size(10)
+      // .size([20, 20, 200])
+      .size(20)
       // .size('name', [20, 40])
       // .animate({
       //   // enable: true,
@@ -90,17 +90,18 @@ export default class GaodeMapComponent extends React.Component {
       // })
       // .animate(true)
       .select(true)
-      .active({ color: '#ff0' })
+      // .active({ color: '#ff0' })
       .style({
+        
         // heightfixed: true,
         // pickLight: false,
         // pickLight: true,
         // lightEnable: true,
         // opacity: 0.5,
-        stroke: '#f00',
+        // stroke: '#f00',
         // strokeWidth: 10,
-        strokeWidth: 0,
-        strokeOpacity: 1,
+        // strokeWidth: 0,
+        // strokeOpacity: 1,
         // unit: 'meter',
       });
     // .animate(true)

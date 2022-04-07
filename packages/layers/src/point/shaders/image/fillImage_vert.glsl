@@ -3,6 +3,7 @@ attribute vec3 a_Position;
 attribute vec3 a_Extrude;
 attribute float a_Size;
 attribute vec2 a_Uv;
+attribute float a_Rotate;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
@@ -79,7 +80,12 @@ void main() {
   // anti-alias
   
 
-  vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
+  highp float angle_sin = sin(a_Rotate);
+  highp float angle_cos = cos(a_Rotate);
+  mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
+
+  // vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
+  vec2 offset = (rotation_matrix * u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
   vec3 aPosition = a_Position;
   if(u_isMeter < 1.0) {
     // 不以米为实际单位
