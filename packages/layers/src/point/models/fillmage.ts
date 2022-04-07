@@ -55,9 +55,10 @@ export default class FillImageModel extends BaseModel {
       rotateFlag = -1;
     }
     // 控制图标的旋转角度（绕 Z 轴旋转）
-    this.radian = rotation
-      ? (rotateFlag * Math.PI * rotation) / 180
-      : (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
+    this.radian =
+      rotation !== undefined
+        ? (rotateFlag * Math.PI * rotation) / 180
+        : (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
 
     if (
       this.dataTextureTest &&
@@ -242,6 +243,28 @@ export default class FillImageModel extends BaseModel {
 
   // overwrite baseModel func
   protected registerBuiltinAttributes() {
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'rotate',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Rotate',
+        buffer: {
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+        ) => {
+          const { rotate = 0 } = feature;
+          return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
+        },
+      },
+    });
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
