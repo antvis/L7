@@ -63,12 +63,15 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-
     scene.on('loaded', () => {
-  
-
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      const layer = new ImageLayer({ mask: true, maskInside: false, maskfence: maskData, maskOpacity: 0.5, maskColor: '#f00' });
+      const layer = new ImageLayer({
+        mask: true,
+        maskInside: false,
+        maskfence: maskData,
+        maskOpacity: 0.5,
+        maskColor: '#f00',
+      });
       layer.source(
         'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
         {
@@ -84,7 +87,6 @@ export default class MaskPoints extends React.Component {
         },
       );
       scene.addLayer(layer);
-     
     });
   }
 

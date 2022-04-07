@@ -61,19 +61,18 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv',
       )
         .then((res) => res.text())
         .then((data) => {
           // const layer = new HeatmapLayer({ mask: true })
-          const layer = new HeatmapLayer({ 
-            mask: true, 
-            maskInside: false, 
+          const layer = new HeatmapLayer({
+            mask: true,
+            maskInside: false,
             maskfence: maskData,
             maskOpacity: 0.5,
-            maskColor: '#00f'
+            maskColor: '#00f',
           })
             .source(data, {
               parser: {

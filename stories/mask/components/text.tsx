@@ -60,14 +60,18 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',
       )
         .then((res) => res.json())
         .then((data) => {
           // const pointLayer = new PointLayer({ mask: true })
-          const pointLayer = new PointLayer({ mask: true, maskInside: false, maskfence: maskData, maskOpacity: 0.2 })
+          const pointLayer = new PointLayer({
+            mask: true,
+            maskInside: false,
+            maskfence: maskData,
+            maskOpacity: 0.2,
+          })
             .source(data.list, {
               parser: {
                 type: 'json',

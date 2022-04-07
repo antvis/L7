@@ -59,8 +59,11 @@ export default class Amap2demo_road2 extends React.Component {
       ],
     };
     scene.on('loaded', () => {
-
-      let points = new PointLayer({ zIndex: 2, mask: true, maskfence: maskData })
+      let points = new PointLayer({
+        zIndex: 2,
+        mask: true,
+        maskfence: maskData,
+      })
         .source(
           [
             {
@@ -107,10 +110,10 @@ export default class Amap2demo_road2 extends React.Component {
         .then((res) => res.json())
         .then((data) => {
           // const layer = new LineLayer({ mask: true, maskInside: false }) // mask: true maskInside: true
-          const layer = new LineLayer({ 
-            mask: true, 
-            maskInside: true, 
-            maskfence: maskData 
+          const layer = new LineLayer({
+            mask: true,
+            maskInside: true,
+            maskfence: maskData,
           }) // mask: true maskInside: true
             .source(data)
             .size(5)

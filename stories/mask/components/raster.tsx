@@ -50,14 +50,12 @@ export default class MaskPoints extends React.Component {
     );
 
     const tiffdata = await this.getTiffData();
-  
 
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     )
       .then((res) => res.json())
       .then((maskData) => {
-
         const layer = new RasterLayer({ mask: true, maskfence: maskData });
         // const layer = new RasterLayer({ mask: true, maskInside: false });
         const mindata = -0;
@@ -68,7 +66,12 @@ export default class MaskPoints extends React.Component {
               type: 'raster',
               width: tiffdata.width,
               height: tiffdata.height,
-              extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+              extent: [
+                73.482190241,
+                3.82501784112,
+                135.106618732,
+                57.6300459963,
+              ],
             },
           })
           .style({
@@ -87,7 +90,6 @@ export default class MaskPoints extends React.Component {
             },
           });
         scene.addLayer(layer);
-
       });
   }
 

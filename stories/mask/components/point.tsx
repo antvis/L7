@@ -78,7 +78,14 @@ export default class MaskPoints extends React.Component {
 
     scene.on('loaded', () => {
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PointLayer({ zIndex: 1, mask: true, maskInside: true, maskfence: maskData, maskOpacity: 0.2, maskColor: '#f00' })
+      let points = new PointLayer({
+        zIndex: 1,
+        mask: true,
+        maskInside: true,
+        maskfence: maskData,
+        maskOpacity: 0.2,
+        maskColor: '#f00',
+      })
         .source(
           [
             {
@@ -102,14 +109,14 @@ export default class MaskPoints extends React.Component {
         })
         .active(true);
 
-      let point2 = new PointLayer({ 
-          zIndex: 3,
-          mask: true, 
-          maskInside: true,
-          maskOpacity: 0.2,
-          maskColor: '#ff0',
-          maskfence: maskData2 
-        })
+      let point2 = new PointLayer({
+        zIndex: 3,
+        mask: true,
+        maskInside: true,
+        maskOpacity: 0.2,
+        maskColor: '#ff0',
+        maskfence: maskData2,
+      })
         .source(
           [
             {

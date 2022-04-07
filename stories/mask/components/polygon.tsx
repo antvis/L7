@@ -63,9 +63,12 @@ export default class MaskPoints extends React.Component {
     };
 
     scene.on('loaded', () => {
-
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PolygonLayer({ mask: true, maskfence: maskData, maskOpacity: 0.3 })
+      let points = new PolygonLayer({
+        mask: true,
+        maskfence: maskData,
+        maskOpacity: 0.3,
+      })
         // let points = new PolygonLayer({ mask: true, maskInside: false })
         .source({
           type: 'FeatureCollection',

@@ -34,8 +34,6 @@ export default class ImageTile extends React.Component {
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
     scene.on('loaded', () => {
-  
-
       // 暂时不支持
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
       const layer = new ImageTileLayer({});
@@ -55,7 +53,6 @@ export default class ImageTile extends React.Component {
         });
 
       scene.addLayer(layer);
-  
     });
   }
 
