@@ -74,7 +74,7 @@ const imageLayer = new PointLayer()
   .shape('name', ['00', '01', '02'])
   .style({
     rotation: 0,
-    layerType: 'fillImage'
+    layerType: 'fillImage',
   })
   .active({
     color: '#0ff',
@@ -103,27 +103,27 @@ function rotate() {
 [在线案例](/zh/examples/point/image#fillimage)
 
 - rotate 方法
-符号图的 fillimage 模式支持 rotate 方法根据数据映射旋转角度。
-🌟 记得要把 style 中的 rotation 设为 0
+  符号图的 fillimage 模式支持 rotate 方法根据数据映射旋转角度。
+  🌟 记得要把 style 中的 rotation 设为 0
 
 ```javascript
-  const imageLayer = new PointLayer()
-      .source(data)
-      .shape('wind', wind => {
-        if (wind === 'up') {
-          return 'arrBlue';
-        }
-        return 'arrRed';
-
-      })
-      .rotate('r', r => Math.PI * r)
-      .size(15)
-      .style({
-        rotation: 0,
-        layerType: 'fillImage'
-      });
-    scene.addLayer(imageLayer);
+const imageLayer = new PointLayer()
+  .source(data)
+  .shape('wind', (wind) => {
+    if (wind === 'up') {
+      return 'arrBlue';
+    }
+    return 'arrRed';
+  })
+  .rotate('r', (r) => Math.PI * r)
+  .size(15)
+  .style({
+    rotation: 0,
+    layerType: 'fillImage',
+  });
+scene.addLayer(imageLayer);
 ```
+
 [在线案例](/zh/examples/point/image#monsoon)
 
 `markdown:docs/common/layer/base.md`
