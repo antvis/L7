@@ -49,21 +49,12 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
 }
 
 // TODO: 提供默认数据和解析器
-export const defaultData = [
-  {
-    lng1: 100,
-    lat1: 30.0,
-    lng2: 130,
-    lat2: 30,
-  },
-];
+export const defaultData = [];
 
 export const defaultParser = {
   parser: {
     type: 'json',
-    x: 'lng1',
-    y: 'lat1',
-    x1: 'lng2',
-    y1: 'lat2',
+    x: 'lng',
+    y: 'lat'
   },
 };

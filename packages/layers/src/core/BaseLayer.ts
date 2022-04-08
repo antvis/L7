@@ -50,7 +50,7 @@ import Source from '@antv/l7-source';
 import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isFunction, isObject, isUndefined } from 'lodash';
+import { isFunction, isObject, isUndefined, isEqual } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import {
@@ -521,11 +521,26 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
   public setData(data: any, options?: ISourceCFG) {
+    const currentSource = this.getSource()
     if (this.inited) {
-      this.layerSource.setData(data, options);
+      if(currentSource && !isEqual(currentSource.parser, options)) {
+        // 在 source 不一致的情况下，需要重新设置 source （parser/data 格式解析规则需要重新生成）
+        this.source(new Source(data, options));
+        this.sourceEvent();
+      } else {
+        this.layerSource.setData(data, options);
+      }
+      // this.layerSource.setData(data, options);
     } else {
       this.on('inited', () => {
-        this.layerSource.setData(data, options);
+        if(!currentSource) {
+          // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
+          this.source(new Source(data, options));
+          this.sourceEvent();
+        } else {
+          this.layerSource.setData(data, options);
+        }
+        // this.layerSource.setData(data, options);
       });
     }
 

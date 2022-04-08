@@ -19,7 +19,6 @@ export default class Amap2demo extends React.Component {
   }
 
   public async componentDidMount() {
-
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -31,59 +30,55 @@ export default class Amap2demo extends React.Component {
         zoom: 4,
       }),
     });
-    scene.addImage(
-      '00',
-      'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-    );
 
+    const data = {
+      "type": "FeatureCollection",
+      "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+      "features": [
+        { "type": "Feature", "properties": 
+          { "id": "ak16994521", "mag": 2.3, "time": 1507425650893, "felt": null, "tsunami": 0 }, 
+          "geometry": 
+          { 
+            "type": "Point", 
+          "coordinates": [ 120, 30, 0.0 ] 
+        } 
+      }]
+    }
+    const layer = new PointLayer()
+    // .source(data)
+    .source({
+      "type": "FeatureCollection",
+      "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+      "features": [
+        { "type": "Feature", "properties": 
+          { "id": "ak16994521", "mag": 2.3, "time": 1507425650893, "felt": null, "tsunami": 0 }, 
+          "geometry": 
+          { 
+            "type": "Point", 
+          "coordinates": [ 125, 30, 0.0 ] 
+        } 
+      }]
+    })
+    .shape('circle')
+    .size(40)
+    .color('#000')
+
+    
     scene.on('loaded', () => {
-
-        //   const layer = new PointLayer().source([
-        //     { lng: 120, lat: 30, name: '00' }
-        //   ], {
-        //     parser: {
-        //       type: 'json',
-        //       x: 'lng',
-        //       y: 'lat'
-        //     }
-        //   })
-        //   .shape('name', ['00'])
-        //   .size(20)
-
-        // scene.addLayer(layer);
-
-        setTimeout(() => {
-          scene.setZoom(4)
-          // scene.setZoomAndCenter(4, [120, 30])
-          console.log('rezoom')
-        }, 2000)
-
-        const lineLayer = new LineLayer()
-          .source(
-            [
-              {
-                lng1: 120,
-                lat1: 30,
-                lng2: 122,
-                lat2: 30,
-              },
-            ],
-            {
-              parser: {
-                type: 'json',
-                x: 'lng1',
-                y: 'lat1',
-                x1: 'lng2',
-                y1: 'lat2',
-              },
-            },
-          )
-          .shape('line')
-          .size(2)
-          .color('#f00');
-
-        scene.addLayer(lineLayer);
-     
+      
+      layer.setData([{
+        lng: 120, lat: 30
+      }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat'
+        }
+      })
+      // layer.setData(data)
+      
+      scene.addLayer(layer);
+    
     });
   }
 
