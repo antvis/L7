@@ -7,7 +7,7 @@ import {
   StyleAttributeOption,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
-import { isArray, isFunction, isNumber, isString } from 'lodash';
+import { isFunction, isNumber, isString } from 'lodash';
 /**
  * 该文件中的工具方法主要用于对 style 中的属性进行 数据映射
  */
@@ -96,14 +96,14 @@ function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
   } else if (isNumber(styleFloat)) {
     // 传入 number、默认值处理
     registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
-  } else if (isArray(styleFloat) && styleFloat.length === 2) {
+  } else if (Array.isArray(styleFloat) && styleFloat.length === 2) {
     // 传入的 styleFloat 是长度为 2 的数组
     if (isString(styleFloat[0]) && isFunction(styleFloat[1])) {
       // 字段回调函数 [string, callback]
       registerStyleAttribute(fieldName, layer, styleFloat[0], styleFloat[1]);
     } else if (
       isString(styleFloat[0]) &&
-      isArray(styleFloat[1]) &&
+      Array.isArray(styleFloat[1]) &&
       isNumber(styleFloat[1][0]) &&
       isNumber(styleFloat[1][1])
     ) {
@@ -135,7 +135,7 @@ function handleStyleOffsets(
       return value;
     });
   } else if (
-    isArray(styleOffsets) &&
+    Array.isArray(styleOffsets) &&
     styleOffsets.length === 2 &&
     isString(styleOffsets[0]) &&
     isFunction(styleOffsets[1])
@@ -143,7 +143,7 @@ function handleStyleOffsets(
     // 字段回调函数 [string, callback]
     registerStyleAttribute(fieldName, layer, styleOffsets[0], styleOffsets[1]);
   } else if (
-    isArray(styleOffsets) &&
+    Array.isArray(styleOffsets) &&
     styleOffsets.length === 2 &&
     isNumber(styleOffsets[0]) &&
     isNumber(styleOffsets[1])
@@ -166,14 +166,14 @@ function handleStyleColor(fieldName: string, layer: ILayer, styleColor: any) {
   if (isString(styleColor)) {
     // 如果传入的 styleColor 是 string 类型，那么就认为其是颜色值
     registerStyleAttribute(fieldName, layer, styleColor, undefined);
-  } else if (isArray(styleColor) && styleColor.length === 2) {
+  } else if (Array.isArray(styleColor) && styleColor.length === 2) {
     // 传入的 styleColor 是长度为 2 的数组
     if (isString(styleColor[0]) && isFunction(styleColor[1])) {
       // 字段回调函数 [string, callback]
       registerStyleAttribute(fieldName, layer, styleColor[0], styleColor[1]);
     } else if (
       isString(styleColor[0]) &&
-      isArray(styleColor[1]) &&
+      Array.isArray(styleColor[1]) &&
       styleColor[1].length > 0
     ) {
       // 字段映射 [string, [start: string, end: string]]
