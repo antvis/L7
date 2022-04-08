@@ -32,53 +32,76 @@ export default class Amap2demo extends React.Component {
     });
 
     const data = {
-      "type": "FeatureCollection",
-      "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-      "features": [
-        { "type": "Feature", "properties": 
-          { "id": "ak16994521", "mag": 2.3, "time": 1507425650893, "felt": null, "tsunami": 0 }, 
-          "geometry": 
-          { 
-            "type": "Point", 
-          "coordinates": [ 120, 30, 0.0 ] 
-        } 
-      }]
-    }
+      type: 'FeatureCollection',
+      crs: {
+        type: 'name',
+        properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' },
+      },
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            id: 'ak16994521',
+            mag: 2.3,
+            time: 1507425650893,
+            felt: null,
+            tsunami: 0,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [120, 30, 0.0],
+          },
+        },
+      ],
+    };
     const layer = new PointLayer()
-    // .source(data)
-    .source({
-      "type": "FeatureCollection",
-      "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-      "features": [
-        { "type": "Feature", "properties": 
-          { "id": "ak16994521", "mag": 2.3, "time": 1507425650893, "felt": null, "tsunami": 0 }, 
-          "geometry": 
-          { 
-            "type": "Point", 
-          "coordinates": [ 125, 30, 0.0 ] 
-        } 
-      }]
-    })
-    .shape('circle')
-    .size(40)
-    .color('#000')
-
-    
-    scene.on('loaded', () => {
-      
-      layer.setData([{
-        lng: 120, lat: 30
-      }], {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat'
-        }
+      // .source(data)
+      .source({
+        type: 'FeatureCollection',
+        crs: {
+          type: 'name',
+          properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' },
+        },
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              id: 'ak16994521',
+              mag: 2.3,
+              time: 1507425650893,
+              felt: null,
+              tsunami: 0,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [125, 30, 0.0],
+            },
+          },
+        ],
       })
+      .shape('circle')
+      .size(40)
+      .color('#000');
+
+    scene.on('loaded', () => {
+      layer.setData(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      );
       // layer.setData(data)
-      
+
       scene.addLayer(layer);
-    
     });
   }
 

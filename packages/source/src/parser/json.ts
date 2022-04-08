@@ -55,6 +55,6 @@ export const defaultParser = {
   parser: {
     type: 'json',
     x: 'lng',
-    y: 'lat'
+    y: 'lat',
   },
 };
