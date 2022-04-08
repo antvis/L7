@@ -103,7 +103,7 @@ export default class Amap2demo extends React.Component {
 
       scene.addLayer(layer);
 
-      layer.setData(data)
+      layer.setData(data);
     });
   }
 
