@@ -54,7 +54,7 @@ const scatter = new PointLayer()
 
 [在线案例](../../../examples/point/image#image)
 
-### layerType = "fillImage"
+### fillImage
 
 🌟 默认通过 PointLayer 实例化的 image 本质上是精灵贴图，因此有始终面向相机的特性，同时贴图的大小也收到设备的限制。  
 🌟 由于精灵始终面向相机，因此我们也无法自定义配置 image 的旋转角度
@@ -63,7 +63,7 @@ const scatter = new PointLayer()
 只需要在初始化图层的时候提前指定 layerType 为 fillImage，其他使用与普通的 image 完全相同。
 
 ```javascript
-const imageLayer = new PointLayer({ layerType: 'fillImage' })
+const imageLayer = new PointLayer()
   .source(data, {
     parser: {
       type: 'json',
@@ -74,6 +74,7 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
   .shape('name', ['00', '01', '02'])
   .style({
     rotation: 0,
+    layerType: 'fillImage'
   })
   .active({
     color: '#0ff',
@@ -99,6 +100,30 @@ function rotate() {
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1kBZTaains4AAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](../../../examples/point/image#fillimage)
+[在线案例](/zh/examples/point/image#fillimage)
+
+- rotate 方法
+符号图的 fillimage 模式支持 rotate 方法根据数据映射旋转角度。
+🌟 记得要把 style 中的 rotation 设为 0
+
+```javascript
+  const imageLayer = new PointLayer()
+      .source(data)
+      .shape('wind', wind => {
+        if (wind === 'up') {
+          return 'arrBlue';
+        }
+        return 'arrRed';
+
+      })
+      .rotate('r', r => Math.PI * r)
+      .size(15)
+      .style({
+        rotation: 0,
+        layerType: 'fillImage'
+      });
+    scene.addLayer(imageLayer);
+```
+[在线案例](/zh/examples/point/image#monsoon)
 
 `markdown:docs/common/layer/base.md`
