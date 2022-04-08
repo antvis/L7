@@ -328,7 +328,7 @@ export default class AMapService
     );
   }
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    this.map.setZoomAndCenter(zoom, center);
+    this.map.setZoomAndCenter(zoom + 1, center);
   }
   public setMapStyle(style: string): void {
     this.map.setMapStyle(this.getMapStyle(style));

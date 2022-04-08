@@ -19,32 +19,6 @@ export default class Amap2demo extends React.Component {
   }
 
   public async componentDidMount() {
-    function initScene() {
-      return new Promise((resolve, reject) => {
-        const scene = new Scene({
-          id: 'map',
-          map: new GaodeMapV2({
-            // center: [121.434765, 31.256735],
-            // zoom: 14.83,
-            pitch: 0,
-            style: 'light',
-            center: [120, 30],
-            zoom: 4,
-          }),
-        });
-        scene.on('loaded', () => {
-          setTimeout(() => {
-            resolve(scene);
-          }, 200);
-        });
-      });
-    }
-
-    // for (let i = 0; i < 20; i++) {
-    //   console.log('init ' + (i + 1));
-    //   let scene = await initScene();
-    //   scene.destroy();
-    // }
 
     const scene = new Scene({
       id: 'map',
@@ -63,7 +37,7 @@ export default class Amap2demo extends React.Component {
     );
 
     scene.on('loaded', () => {
-      for (let i = 0; i < 20; i++) {
+
         //   const layer = new PointLayer().source([
         //     { lng: 120, lat: 30, name: '00' }
         //   ], {
@@ -77,6 +51,12 @@ export default class Amap2demo extends React.Component {
         //   .size(20)
 
         // scene.addLayer(layer);
+
+        setTimeout(() => {
+          scene.setZoom(4)
+          // scene.setZoomAndCenter(4, [120, 30])
+          console.log('rezoom')
+        }, 2000)
 
         const lineLayer = new LineLayer()
           .source(
@@ -103,7 +83,7 @@ export default class Amap2demo extends React.Component {
           .color('#f00');
 
         scene.addLayer(lineLayer);
-      }
+     
     });
   }
 
