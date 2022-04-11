@@ -35,11 +35,6 @@ void main() {
   inner_df = sdCircle(v_data.xy, r);
 
 
-  if(u_globel > 0.0) {
-    // TODO: 地球模式下避免多余片元绘制，同时也能避免有用片元在透明且重叠的情况下无法写入
-    // 付出的代价是边缘会有一些锯齿
-    if(outer_df > antialiasblur + 0.018) discard;
-  }
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
   float color_t = smoothstep(
