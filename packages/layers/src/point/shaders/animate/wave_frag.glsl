@@ -12,7 +12,6 @@ uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 #pragma include "sdf_2d"
 #pragma include "picking"
 
-
 void main() {
 
   vec4 textrueStroke = vec4(
