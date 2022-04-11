@@ -23,32 +23,48 @@ void main() {
   );
 
   float opacity = styleMappingMat[0][0];
-  float stroke_opacity = styleMappingMat[0][1];
-  float strokeWidth = styleMappingMat[0][2];
-  vec4 strokeColor = textrueStroke == vec4(0) ? v_color : textrueStroke;
 
-  float r = v_radius / (v_radius + strokeWidth);
+  lowp float antialiasblur = v_data.z;
+  float r = v_radius / (v_radius);
 
-  // 'circle'
-  float outer_df = sdCircle(v_data.xy, 1.0);
-  float inner_df = sdCircle(v_data.xy, r);
- 
+  float outer_df;
+  float inner_df;
+  // 'circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'
+  
+  outer_df = sdCircle(v_data.xy, 1.0);
+  inner_df = sdCircle(v_data.xy, r);
+
+
+  if(u_globel > 0.0) {
+    // TODO: 地球模式下避免多余片元绘制，同时也能避免有用片元在透明且重叠的情况下无法写入
+    // 付出的代价是边缘会有一些锯齿
+    if(outer_df > antialiasblur + 0.018) discard;
+  }
+  float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
+
+  float color_t = smoothstep(
+    antialiasblur,
+    0.0,
+    inner_df
+  );
+  float PI = 3.14159;
+  float N_RINGS = 3.0;
+  float FREQ = 1.0;
+
+ gl_FragColor = vec4(v_color.rgb, v_color.a * opacity);
+
   float d = length(v_data.xy);
   if(d > 0.5) {
     discard;
   }
-  float PI = 3.14159;
   float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);
-
-  // TODO: 根据叠加水波效果
-  gl_FragColor = vec4(v_color.xyz, v_color.a * opacity * intensity);
-
+  
+  // TODO: 根据叠加模式选择效果
   if(u_additive > 0.0) {
-    gl_FragColor *= gl_FragColor.a;
-  } 
-
-  // TODO: 优化在水波纹情况下的拾取
-  if(d < 0.5) {
+    gl_FragColor *= intensity;
+    gl_FragColor = filterColorAnimate(gl_FragColor);
+  } else {
+    gl_FragColor = vec4(gl_FragColor.xyz, gl_FragColor.a * intensity);
     gl_FragColor = filterColor(gl_FragColor);
   }
 }
