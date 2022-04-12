@@ -251,6 +251,11 @@ export function bBoxToBounds(b1: BBox): IBounds {
   ];
 }
 
+export function normalize(v: Point) {
+  const len = calDistance(v, [0, 0]);
+  return [v[0]/len, v[1]/len];
+}
+
 export function calDistance(p1: Point, p2: Point) {
   return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
 }

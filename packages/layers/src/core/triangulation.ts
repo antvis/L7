@@ -134,11 +134,12 @@ export function LineTriangulation(feature: IEncodeFeature) {
     });
   }
 
-  const linebuffer = line.complex;
+  const linebuffer = line.complex; 
   return {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
     indices: linebuffer.indices,
     normals: linebuffer.normals,
+    indexs: linebuffer.indexs,
     size: 6,
   };
 }
