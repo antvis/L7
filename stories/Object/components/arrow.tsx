@@ -14,7 +14,7 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-      // map: new GaodeMapV2({
+        // map: new GaodeMapV2({
         // map: new Mapbox({
         pitch: 0,
         // style: 'dark',
@@ -25,74 +25,61 @@ export default class Demo extends React.Component {
     this.scene = scene;
 
     const layer = new LineLayer()
-    // .source([
-    //   {
-    //     lng1: 100,
-    //     lat1: 30.0,
-    //     lng2: 105,
-    //     lat2: 30,
-    //   },
-    //   {
-    //     lng1: 105,
-    //     lat1: 30.0,
-    //     lng2: 130,
-    //     lat2: 30,
-    //   },
-    // ], {
-    //   parser: {
-    //     type: 'json',
-    //     x: 'lng1',
-    //     y: 'lat1',
-    //     x1: 'lng2',
-    //     y1: 'lat2',
-    //   }
-    // })
-    .source({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                100,
-                30
+      // .source([
+      //   {
+      //     lng1: 100,
+      //     lat1: 30.0,
+      //     lng2: 105,
+      //     lat2: 30,
+      //   },
+      //   {
+      //     lng1: 105,
+      //     lat1: 30.0,
+      //     lng2: 130,
+      //     lat2: 30,
+      //   },
+      // ], {
+      //   parser: {
+      //     type: 'json',
+      //     x: 'lng1',
+      //     y: 'lat1',
+      //     x1: 'lng2',
+      //     y1: 'lat2',
+      //   }
+      // })
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [100, 30],
+                [120, 30],
+                [120, 25],
+                [125, 25],
               ],
-              [
-                120,
-                30
-              ],
-              [
-                120,
-                25
-              ],
-              [
-                125,
-                25
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .shape('line')
-    .size(10)
-    // .color('lng1', ['#f00', '#ff0'])
-    .color('#f00')
-    .style({
-      opacity: 0.3,
-      arrow: {
-        enable: true,
-        arrowWidth: 2,
-        arrowHeight: 3
-      }
-    })
+            },
+          },
+        ],
+      })
+      .shape('line')
+      .size(10)
+      // .color('lng1', ['#f00', '#ff0'])
+      .color('#f00')
+      .style({
+        opacity: 0.3,
+        arrow: {
+          enable: true,
+          arrowWidth: 2,
+          arrowHeight: 3,
+        },
+      });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      
     });
   }
 

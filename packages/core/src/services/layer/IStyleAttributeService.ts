@@ -111,7 +111,7 @@ export interface IVertexAttributeDescriptor
     vertex: number[],
     attributeIdx: number,
     normal: number[],
-    vertexIndex?: number
+    vertexIndex?: number,
   ) => number[];
 }
 

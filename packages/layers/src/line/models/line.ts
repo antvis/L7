@@ -48,8 +48,8 @@ export default class LineModel extends BaseModel {
       arrow = {
         enable: false,
         arrowWidth: 2,
-        arrowHeight: 3
-      }
+        arrowHeight: 3,
+      },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -133,7 +133,7 @@ export default class LineModel extends BaseModel {
       // arrow
       u_arrow: Number(arrow.enable),
       u_arrowHeight: arrow.arrowHeight || 3,
-      u_arrowWidth: arrow.arrowWidth || 2
+      u_arrowWidth: arrow.arrowWidth || 2,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -235,7 +235,9 @@ export default class LineModel extends BaseModel {
           normal: number[],
           vertexIndex?: number,
         ) => {
-          return vertexIndex===undefined?[vertex[3], 10]: [vertex[3], vertexIndex];
+          return vertexIndex === undefined
+            ? [vertex[3], 10]
+            : [vertex[3], vertexIndex];
         },
       },
     });
