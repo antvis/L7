@@ -45,6 +45,11 @@ export default class LineModel extends BaseModel {
       borderColor = '#ccc',
       raisingHeight = 0,
       heightfixed = false,
+      arrow = {
+        enable: false,
+        arrowWidth: 2,
+        arrowHeight: 3,
+      },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -124,6 +129,11 @@ export default class LineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
+
+      // arrow
+      u_arrow: Number(arrow.enable),
+      u_arrowHeight: arrow.arrowHeight || 3,
+      u_arrowWidth: arrow.arrowWidth || 2,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -216,14 +226,18 @@ export default class LineModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 2,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
+          normal: number[],
+          vertexIndex?: number,
         ) => {
-          return [vertex[3]];
+          return vertexIndex === undefined
+            ? [vertex[3], 10]
+            : [vertex[3], vertexIndex];
         },
       },
     });

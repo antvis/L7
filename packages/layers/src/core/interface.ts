@@ -7,6 +7,12 @@ export enum lineStyleType {
   'dash' = 1.0,
 }
 
+interface ILineArrow {
+  enable: boolean;
+  arrowWidth: number;
+  arrowHeight: number;
+}
+
 export interface ILineLayerStyleOptions {
   opacity: styleSingle;
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
@@ -34,6 +40,8 @@ export interface ILineLayerStyleOptions {
 
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+
+  arrow?: ILineArrow;
 }
 
 export interface IPointLayerStyleOptions {

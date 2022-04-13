@@ -11,6 +11,11 @@ import rewind from '@mapbox/geojson-rewind';
 export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
   const { x, y, x1, y1, coordinates } = cfg;
   const resultData: IParseDataItem[] = [];
+  if (!Array.isArray(data)) {
+    return {
+      dataArray: [],
+    };
+  }
   data.forEach((col: IJsonItem, featureIndex: number) => {
     let coords = [];
     if (x && y) {

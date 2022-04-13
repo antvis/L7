@@ -53,7 +53,7 @@ export default React.memo(function Map() {
           bottom: 0,
         }}
       >
-        <Popup
+        {/* <Popup
           option={{
             closeOnClick: false,
             stopPropagation: false,
@@ -61,16 +61,20 @@ export default React.memo(function Map() {
           lnglat={[115, 30.25] as number[]}
         >
           <p onClick={popupClick}>122224</p>
-        </Popup>
+        </Popup> */}
         <Marker lnglat={[100.1938, 27.25] as number[]}>
           <div
             style={{
               border: '1px solid #fff',
               background: '#FFF',
               fontSize: '24px',
+              width: '50px',
+              height: '150px',
             }}
+            // onClick={markerClick}
+            onTouchStart={markerClick}
           >
-            <p onClick={markerClick}>tes</p>
+            1
           </div>
         </Marker>
         <PolygonLayer

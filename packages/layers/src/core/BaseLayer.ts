@@ -50,7 +50,7 @@ import Source from '@antv/l7-source';
 import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isFunction, isObject, isUndefined } from 'lodash';
+import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import {
@@ -534,12 +534,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.clusterZoom = 0;
     return this;
   }
+
   public setData(data: any, options?: ISourceCFG) {
     if (this.inited) {
       this.layerSource.setData(data, options);
     } else {
       this.on('inited', () => {
-        this.layerSource.setData(data, options);
+        const currentSource = this.getSource();
+        if (!currentSource) {
+          // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
+          this.source(new Source(data, options));
+          this.sourceEvent();
+        } else {
+          this.layerSource.setData(data, options);
+        }
+        // this.layerSource.setData(data, options);
       });
     }
 
