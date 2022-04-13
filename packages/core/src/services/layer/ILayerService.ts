@@ -118,6 +118,7 @@ export interface ILayer {
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
   layerChildren: ILayer[]; // 在图层中添加子图层
+  masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
@@ -144,7 +145,7 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-
+  isLayerGroup: boolean;
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -156,6 +157,9 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
+
+  addMaskLayer(maskLayer: ILayer): void;
+  removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
@@ -308,6 +312,12 @@ export interface ILayer {
   setEarthTime(time: number): void;
 }
 
+export interface ILayerGroup extends ILayer {
+  addChild(layer: ILayer): void;
+  removeChild(layer: ILayer): void;
+  clearChild(): void;
+}
+
 /**
  * Layer 插件
  */
@@ -328,6 +338,12 @@ export interface ILayerPlugin {
  * Layer 初始化参数
  */
 export interface ILayerConfig {
+  mask: boolean;
+  maskInside: boolean;
+  maskfence: any;
+  maskColor: string;
+  maskOpacity: number;
+
   colors: string[];
   size: number;
   shape: string;
@@ -413,15 +429,19 @@ export interface ILayerService {
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
-
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
+
+  // 清除画布
+  clear(): void;
   add(layer: ILayer): void;
+  addMask(mask: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
+  getSceneInited(): boolean;
   getLayers(): ILayer[];
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;

@@ -13,7 +13,7 @@ export default class Amap2demo_image extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         pitch: 0,
         style: 'light',
         center: [121.434765, 31.256735],
@@ -70,6 +70,11 @@ export default class Amap2demo_image extends React.Component {
             })
             .size(30);
           scene.addLayer(imageLayer);
+
+          setTimeout(() => {
+            console.log('remove layer');
+            scene.removeLayer(imageLayer);
+          }, 2000);
         });
     });
   }
