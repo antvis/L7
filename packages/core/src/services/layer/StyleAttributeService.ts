@@ -53,6 +53,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       vertices: number[];
       normals: number[];
       offset: number;
+      indexes?: number[];
     }>;
   } = {
     sizePerElement: 0,
@@ -218,6 +219,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
+        indexes,
       } = this.triangulation(feature, segmentNumber);
       indicesForCurrentFeature.forEach((i) => {
         indices.push(i + verticesNum);
@@ -249,6 +251,12 @@ export default class StyleAttributeService implements IStyleAttributeService {
           vertexIdx * vertexSize,
           vertexIdx * vertexSize + vertexSize,
         );
+
+        let vertexIndex = 0;
+        if (indexes && indexes[vertexIdx] !== undefined) {
+          vertexIndex = indexes[vertexIdx];
+        }
+
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
             (descriptor.buffer.data as number[]).push(
@@ -258,6 +266,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
                 vertice,
                 vertexIdx, // 当前顶点所在feature索引
                 normal,
+                vertexIndex,
                 // TODO: 传入顶点索引 vertexIdx
               ),
             );

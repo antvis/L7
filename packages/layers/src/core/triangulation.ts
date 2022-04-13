@@ -139,6 +139,7 @@ export function LineTriangulation(feature: IEncodeFeature) {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
     indices: linebuffer.indices,
     normals: linebuffer.normals,
+    indexes: linebuffer.indexes,
     size: 6,
   };
 }

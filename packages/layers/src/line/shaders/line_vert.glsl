@@ -11,7 +11,7 @@ attribute vec2 a_iconMapUV;
 
 // dash line
 attribute float a_Total_Distance;
-attribute float a_Distance;
+attribute vec2 a_Distance;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
@@ -32,12 +32,57 @@ varying vec2 v_iconMapUV;
 
 
 uniform float u_linearColor: 0;
+uniform float u_arrow: 0.0;
+uniform float u_arrowHeight: 3.0;
+uniform float u_arrowWidth: 2.0;
 
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
+
+vec2 calculateArrow(vec2 offset) {
+  /*
+  * 在支持箭头的时候，第二、第三组顶点是额外插入用于构建顶点的
+  */
+  float arrowFlag = -1.0;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // 高德 2.0 的旋转角度不同
+    arrowFlag = 1.0;
+  }
+  float pi = arrowFlag * 3.1415926/2.;
+  if(a_Miter < 0.) {
+    // 根据线的两侧偏移不同、旋转的方向相反
+    pi = -pi;
+  }
+  highp float angle_sin = sin(pi);
+  highp float angle_cos = cos(pi);
+  // 计算垂直与线方向的旋转矩阵
+  mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
+  float arrowWidth = u_arrowWidth;
+  float arrowHeight = u_arrowHeight;
+
+  vec2 arrowOffset = vec2(0.0);
+  /*
+  * a_Distance.y 用于标记当前顶点属于哪一组（两个顶点一组，构成线的其实是矩形，最简需要四个顶点、两组顶点构成）
+  */
+  if(a_Distance.y == 0.0) {
+    // 箭头尖部
+    offset = vec2(0.0);
+  } else if(a_Distance.y == 1.0) {
+    // 箭头两侧
+    arrowOffset = rotation_matrix*(offset * arrowHeight);
+    offset += arrowOffset; // 沿线偏移
+    offset = offset * arrowWidth; // 垂直线向外偏移（是构建箭头两侧的顶点）
+  } else if(a_Distance.y == 2.0 || a_Distance.y == 3.0 || a_Distance.y == 4.0) {
+    // 偏移其余的点位（将长度让位给箭头）
+    arrowOffset = rotation_matrix*(offset * arrowHeight) * arrowWidth;
+    offset += arrowOffset;// 沿线偏移
+  }
+
+  return offset;
+}
 
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
@@ -79,14 +124,19 @@ void main() {
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
 
   vec2 offset = project_pixel(size.xy);
+ 
+  if(u_arrow > 0.0) {
+      //  计算箭头
+    offset = calculateArrow(offset);
+  }
 
   float lineOffsetWidth = length(offset + offset * sign(a_Miter)); // 线横向偏移的距离（向两侧偏移的和）
   float linePixelSize = project_pixel(a_Size.x) * 2.0;  // 定点位置偏移，按地图等级缩放后的距离 单侧 * 2
   float texV = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
 
   // 设置数据集的参数
-  styleMappingMat[3][0] = a_Distance / a_Total_Distance;; // 当前点位距离占线总长的比例
-  styleMappingMat[3][1] = a_Distance;       // 当前顶点的距离
+  styleMappingMat[3][0] = a_Distance.x / a_Total_Distance;; // 当前点位距离占线总长的比例
+  styleMappingMat[3][1] = a_Distance.x;       // 当前顶点的距离
   styleMappingMat[3][2] = d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
   styleMappingMat[3][3] = texV;             // 线图层贴图部分的 v 坐标值
 

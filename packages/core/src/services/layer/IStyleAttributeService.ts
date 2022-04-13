@@ -111,6 +111,7 @@ export interface IVertexAttributeDescriptor
     vertex: number[],
     attributeIdx: number,
     normal: number[],
+    vertexIndex?: number,
   ) => number[];
 }
 
@@ -168,6 +169,7 @@ export type Triangulation = (
   indices: number[];
   size: number;
   normals?: number[];
+  indexes?: number[];
 };
 
 export interface IStyleAttributeUpdateOptions {

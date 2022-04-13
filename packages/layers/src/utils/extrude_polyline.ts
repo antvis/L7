@@ -62,6 +62,7 @@ export default class ExtrudePolyline {
     indices: number[];
     normals: number[];
     startIndex: number;
+    indexes: number[];
   };
   private join: string;
   private cap: string;
@@ -73,6 +74,7 @@ export default class ExtrudePolyline {
   private started: boolean = false;
   private dash: boolean = false;
   private totalDistance: number = 0;
+  private currentIndex: number = 0;
 
   constructor(opts: Partial<IExtrudeLineOption> = {}) {
     this.join = opts.join || 'miter';
@@ -85,6 +87,7 @@ export default class ExtrudePolyline {
       indices: [],
       normals: [],
       startIndex: 0,
+      indexes: [],
     };
   }
 
@@ -313,6 +316,7 @@ export default class ExtrudePolyline {
           -this.thickness,
           last[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
         positions.push(
           last[0],
           last[1],
@@ -321,6 +325,8 @@ export default class ExtrudePolyline {
           this.thickness,
           last[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
       } else {
         this.extrusions(
           positions,
@@ -354,6 +360,7 @@ export default class ExtrudePolyline {
           this.thickness,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
         positions.push(
           cur[0],
           cur[1],
@@ -362,6 +369,8 @@ export default class ExtrudePolyline {
           this.thickness,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
       } else {
         this.extrusions(
           positions,
@@ -429,6 +438,7 @@ export default class ExtrudePolyline {
           -this.thickness * flip,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
         positions.push(
           cur[0],
           cur[1],
@@ -437,6 +447,8 @@ export default class ExtrudePolyline {
           this.thickness * flip,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
         indices.push(
           ...(this.lastFlip !== -flip
             ? [index, index + 2, index + 3]
@@ -457,6 +469,8 @@ export default class ExtrudePolyline {
           -this.thickness * flip,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
         count += 3;
       } else {
         this.extrusions(
@@ -636,6 +650,7 @@ export default class ExtrudePolyline {
           -this.thickness,
           last[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
         positions.push(
           last[0],
           last[1],
@@ -644,7 +659,8 @@ export default class ExtrudePolyline {
           this.thickness,
           last[2] | 0,
         );
-
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
         // this.extrusions(positions, normals, last, out, this.thickness);
         // last = capEnd;
       } else {
@@ -681,6 +697,7 @@ export default class ExtrudePolyline {
           this.thickness,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
         positions.push(
           cur[0],
           cur[1],
@@ -689,6 +706,8 @@ export default class ExtrudePolyline {
           this.thickness,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
       } else {
         this.extrusions(
           positions,
@@ -750,6 +769,7 @@ export default class ExtrudePolyline {
           -this.thickness * flip,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
         positions.push(
           cur[0],
           cur[1],
@@ -758,6 +778,8 @@ export default class ExtrudePolyline {
           this.thickness * flip,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
         indices.push(
           ...(this.lastFlip !== -flip
             ? [index, index + 2, index + 3]
@@ -778,6 +800,8 @@ export default class ExtrudePolyline {
           -this.thickness * flip,
           cur[2] | 0,
         );
+        this.complex.indexes.push(this.currentIndex);
+        this.currentIndex++;
         count += 3;
       } else {
         this.extrusions(
@@ -822,6 +846,7 @@ export default class ExtrudePolyline {
       -thickness,
       point[2] | 0,
     );
+    this.complex.indexes.push(this.currentIndex);
     positions.push(
       point[0],
       point[1],
@@ -830,6 +855,8 @@ export default class ExtrudePolyline {
       thickness,
       point[2] | 0,
     );
+    this.complex.indexes.push(this.currentIndex);
+    this.currentIndex++;
   }
   private lineSegmentDistance(b1: vec3, a1: vec3) {
     const dx = a1[0] - b1[0];
