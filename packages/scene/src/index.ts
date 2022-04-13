@@ -30,6 +30,7 @@ import {
   SceneEventList,
   TYPES,
 } from '@antv/l7-core';
+import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
 import { DOM, isMini } from '@antv/l7-utils';
 import { Container } from 'inversify';
@@ -173,6 +174,36 @@ class Scene
     const layerContainer = createLayerContainer(this.container);
     layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
+
+    const {
+      mask,
+      maskfence,
+      maskColor = '#000',
+      maskOpacity = 0,
+    } = layer.getLayerConfig();
+    if (mask) {
+      const maskInstance = new MaskLayer()
+        .source(maskfence)
+        .shape('fill')
+        .color(maskColor)
+        .style({
+          opacity: maskOpacity,
+        });
+
+      this.addMask(maskInstance, layer.id);
+    }
+  }
+
+  public addMask(mask: ILayer, layerId: string) {
+    const parent = this.getLayer(layerId);
+    if (parent) {
+      const layerContainer = createLayerContainer(this.container);
+      mask.setContainer(layerContainer, this.container);
+      parent.addMaskLayer(mask);
+      this.sceneService.addLayer(mask);
+    } else {
+      console.warn('parent layer not find!');
+    }
   }
 
   public getLayers(): ILayer[] {

@@ -94,9 +94,9 @@ export default class OceanModel extends BaseModel {
   }
 
   public clearModels() {
-    this.texture1.destroy();
-    this.texture2.destroy();
-    this.texture3.destroy();
+    this.texture1?.destroy();
+    this.texture2?.destroy();
+    this.texture3?.destroy();
     this.dataTexture?.destroy();
   }
 

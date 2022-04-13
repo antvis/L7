@@ -80,6 +80,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public rendering: boolean;
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
+  public isLayerGroup: boolean = false;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -130,6 +131,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public sceneContainer: Container | undefined;
   // TODO: 用于保存子图层对象
   public layerChildren: ILayer[] = [];
+  public masks: ILayer[] = [];
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -211,6 +213,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
+  }
+
+  public addMaskLayer(maskLayer: ILayer) {
+    this.masks.push(maskLayer);
+  }
+
+  public removeMaskLayer(maskLayer: ILayer) {
+    const layerIndex = this.masks.indexOf(maskLayer);
+    if (layerIndex > -1) {
+      this.masks.splice(layerIndex, 1);
+    }
+    maskLayer.destroy();
   }
 
   public getLayerConfig() {
@@ -543,6 +557,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public style(
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {
+    const lastConfig = this.getLayerConfig();
     const { passes, ...rest } = options;
 
     // passes 特殊处理
@@ -566,6 +581,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     if (this.container) {
       this.updateLayerConfig(this.rawConfig);
       this.styleNeedUpdate = true;
+    }
+
+    // @ts-ignore
+    if (lastConfig && lastConfig.mask === true && options.mask === false) {
+      this.clearModels();
+      this.models = this.layerModel.buildModels();
     }
     return this;
   }
@@ -871,10 +892,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public destroy() {
-    // debugger
     if (this.isDestroied) {
       return;
     }
+
+    // remove child layer
+    this.layerChildren.map((child: ILayer) => child.destroy());
+    this.layerChildren = [];
+
+    // remove mask list
+    this.masks.map((mask: ILayer) => mask.destroy());
+    this.masks = [];
+
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('update', this.sourceEvent);
@@ -889,7 +918,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.hooks.afterDestroy.call();
 
     // TODO: 清除各个图层自定义的 models 资源
-    // this.layerModel?.clearModels();
+    this.layerModel?.clearModels();
 
     this.models = [];
 
@@ -918,6 +947,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public clearModels() {
     this.models.forEach((model) => model.destroy());
     this.layerModel.clearModels();
+    this.models = [];
   }
 
   public isDirty() {

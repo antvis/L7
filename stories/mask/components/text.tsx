@@ -31,7 +31,7 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -59,54 +59,19 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-    const data2 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [116.71874999999999, 30.221101852485987],
-                  [113.90625, 24.686952411999155],
-                  [123.48632812499999, 23.725011735951796],
-                  [122.08007812499999, 28.22697003891834],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
-
     scene.on('loaded', () => {
-      const polygonlayer = new MaskLayer({})
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.3,
-        });
-      scene.addLayer(polygonlayer);
-
-      const polygonlayer2 = new MaskLayer({})
-        .source(data2)
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.3,
-        });
-      scene.addLayer(polygonlayer2);
-
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',
       )
         .then((res) => res.json())
         .then((data) => {
           // const pointLayer = new PointLayer({ mask: true })
-          const pointLayer = new PointLayer({ mask: true, maskInside: false })
+          const pointLayer = new PointLayer({
+            mask: true,
+            maskInside: false,
+            maskfence: maskData,
+            maskOpacity: 0.2,
+          })
             .source(data.list, {
               parser: {
                 type: 'json',

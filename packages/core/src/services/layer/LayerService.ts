@@ -43,8 +43,15 @@ export default class LayerService implements ILayerService {
     if (this.sceneInited) {
       layer.init();
     }
+
     this.layers.push(layer);
     this.updateLayerRenderList();
+  }
+
+  public addMask(mask: ILayer) {
+    if (this.sceneInited) {
+      mask.init();
+    }
   }
 
   public initLayers() {
@@ -55,6 +62,10 @@ export default class LayerService implements ILayerService {
       }
     });
     this.updateLayerRenderList();
+  }
+
+  public getSceneInited() {
+    return this.sceneInited;
   }
 
   public getRenderList(): ILayer[] {
@@ -126,6 +137,23 @@ export default class LayerService implements ILayerService {
     for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
+
+      // layerGroup 不支持 Mask
+      if (!layer.isLayerGroup && layer.masks.length > 0) {
+        // 清除上一次的模版缓存
+        this.renderService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        });
+        layer.masks.map((m: ILayer) => {
+          m.hooks.beforeRenderData.call();
+          m.hooks.beforeRender.call();
+          m.render();
+          m.hooks.afterRender.call();
+        });
+      }
+
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
@@ -150,31 +178,33 @@ export default class LayerService implements ILayerService {
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
+      .sort((pre: ILayer, next: ILayer) => {
+        // 根据 zIndex 对渲染顺序进行排序
+        return pre.zIndex - next.zIndex;
+      })
       .forEach((layer) => {
-        this.layerList.push(layer);
-
-        // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
-        layer.layerChildren
-          .filter((childlayer) => childlayer.inited)
-          .filter((childlayer) => childlayer.isVisible())
-          .forEach((childlayer) => {
-            this.layerList.push(childlayer);
-          });
+        if (layer.isLayerGroup) {
+          // layerGroup
+          // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
+          layer.layerChildren
+            .filter((childlayer) => childlayer.inited)
+            .filter((childlayer) => childlayer.isVisible())
+            .sort((pre: ILayer, next: ILayer) => {
+              // 根据 zIndex 对渲染顺序进行排序
+              return pre.zIndex - next.zIndex;
+            })
+            .forEach((childlayer) => {
+              this.layerList.push(childlayer);
+            });
+        } else {
+          // baseLayer
+          this.layerList.push(layer);
+        }
       });
-
-    // 根据 zIndex 对渲染顺序进行排序
-    this.layerList.sort((pre: ILayer, next: ILayer) => {
-      return pre.zIndex - next.zIndex;
-    });
   }
 
   public destroy() {
     this.layers.forEach((layer) => {
-      // Tip: layer.layerChildren 当 layer 存在子图层的情况
-      if (layer.layerChildren) {
-        layer.layerChildren.forEach((child) => child.destroy());
-        layer.layerChildren = [];
-      }
       layer.destroy();
     });
     this.layers = [];
@@ -213,14 +243,7 @@ export default class LayerService implements ILayerService {
     return this.shaderPicking;
   }
 
-  private runRender() {
-    this.renderLayers();
-    this.layerRenderID = $window.requestAnimationFrame(
-      this.runRender.bind(this),
-    );
-  }
-
-  private clear() {
+  public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
       number,
       number,
@@ -233,6 +256,13 @@ export default class LayerService implements ILayerService {
       stencil: 0,
       framebuffer: null,
     });
+  }
+
+  private runRender() {
+    this.renderLayers();
+    this.layerRenderID = $window.requestAnimationFrame(
+      this.runRender.bind(this),
+    );
   }
 
   private stopRender() {

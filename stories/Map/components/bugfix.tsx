@@ -7,7 +7,9 @@ import {
   Mapbox,
   Map,
   PointLayer,
-  LineLayer,
+  Marker,
+  MarkerLayer,
+  Popup,
 } from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
@@ -22,89 +24,64 @@ export default class Amap2demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        // center: [121.434765, 31.256735],
-        // zoom: 14.83,
         pitch: 0,
-        style: 'light',
-        center: [120, 30],
-        zoom: 4,
+        style: 'dark',
+        // center: [115, 30],
+
+        center: [105.790327, 36.495636],
+
+        zoom: 0,
+        // layers: [new window.AMap.TileLayer.Satellite()]
       }),
     });
 
-    const data = {
-      type: 'FeatureCollection',
-      crs: {
-        type: 'name',
-        properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' },
-      },
-      features: [
-        {
-          type: 'Feature',
-          properties: {
-            id: 'ak16994521',
-            mag: 2.3,
-            time: 1507425650893,
-            felt: null,
-            tsunami: 0,
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [125, 30, 0.0],
-          },
-        },
-      ],
-    };
-    const layer = new PointLayer()
-      // .source(data)
-      // .source({
-      //   type: 'FeatureCollection',
-      //   crs: {
-      //     type: 'name',
-      //     properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' },
-      //   },
-      //   features: [
-      //     {
-      //       type: 'Feature',
-      //       properties: {
-      //         id: 'ak16994521',
-      //         mag: 2.3,
-      //         time: 1507425650893,
-      //         felt: null,
-      //         tsunami: 0,
-      //       },
-      //       geometry: {
-      //         type: 'Point',
-      //         coordinates: [125, 30, 0.0],
-      //       },
-      //     },
-      //   ],
-      // })
-      .shape('circle')
-      .size(40)
-      .color('#000');
+    this.scene = scene;
 
     scene.on('loaded', () => {
-      // layer.setData(
-      //   [
-      //     {
-      //       lng: 125,
-      //       lat: 30,
-      //     },
-      //   ],
-      //   {
-      //     parser: {
-      //       type: 'json',
-      //       x: 'lng',
-      //       y: 'lat',
-      //     },
-      //   },
-      // );
-      // layer.setData(data)
+      // var xyzTileLayer = new window.AMap.TileLayer({
+      //   // 图块取图地址
+      //   getTileUrl:
+      //     'https://wprd0{1,2,3,4}.is.autonavi.com/appmaptile?x=[x]&y=[y]&z=[z]&size=1&scl=1&style=8&ltype=11',
+      //   zIndex: 100,
+      // });
+      // scene.getMapService().map.add(xyzTileLayer);
 
-      scene.addLayer(layer);
-
-      layer.setData(data);
+      addMarkers();
+      scene.render();
     });
+
+    function addMarkers() {
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json',
+      )
+        .then((res) => res.json())
+        .then((nodes) => {
+          const markerLayer = new MarkerLayer();
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].g !== '1' || nodes[i].v === '') {
+              continue;
+            }
+            const el = document.createElement('label');
+            el.className = 'labelclass';
+            el.textContent = nodes[i].v + '℃';
+            el.style.background = '#ff0';
+            el.style.borderColor = '#f00';
+
+            const popup = new Popup({
+              offsets: [0, 20],
+            }).setText('hello');
+
+            const marker = new Marker({
+              element: el,
+            })
+              .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y })
+              .setPopup(popup);
+
+            markerLayer.addMarker(marker);
+          }
+          scene.addMarkerLayer(markerLayer);
+        });
+    }
   }
 
   public render() {
