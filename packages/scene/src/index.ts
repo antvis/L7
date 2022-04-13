@@ -181,7 +181,7 @@ class Scene
       maskColor = '#000',
       maskOpacity = 0,
     } = layer.getLayerConfig();
-    if (mask) {
+    if (mask && maskfence) {
       const maskInstance = new MaskLayer()
         .source(maskfence)
         .shape('fill')
