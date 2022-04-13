@@ -43,33 +43,42 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 #pragma include "styleMappingCalOpacity"
 
 vec2 calculateArrow(vec2 offset) {
+  /*
+  * 在支持箭头的时候，第二、第三组顶点是额外插入用于构建顶点的
+  */
   float arrowFlag = -1.0;
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // 高德 2.0 的旋转角度不同
     arrowFlag = 1.0;
   }
   float pi = arrowFlag * 3.1415926/2.;
   if(a_Miter < 0.) {
+    // 根据线的两侧偏移不同、旋转的方向相反
     pi = -pi;
   }
   highp float angle_sin = sin(pi);
   highp float angle_cos = cos(pi);
+  // 计算垂直与线方向的旋转矩阵
   mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
   float arrowWidth = u_arrowWidth;
   float arrowHeight = u_arrowHeight;
 
   vec2 arrowOffset = vec2(0.0);
+  /*
+  * a_Distance.y 用于标记当前顶点属于哪一组（两个顶点一组，构成线的其实是矩形，最简需要四个顶点、两组顶点构成）
+  */
   if(a_Distance.y == 0.0) {
     // 箭头尖部
     offset = vec2(0.0);
   } else if(a_Distance.y == 1.0) {
     // 箭头两侧
     arrowOffset = rotation_matrix*(offset * arrowHeight);
-    offset += arrowOffset;
-    offset = offset * arrowWidth;
+    offset += arrowOffset; // 沿线偏移
+    offset = offset * arrowWidth; // 垂直线向外偏移（是构建箭头两侧的顶点）
   } else if(a_Distance.y == 2.0 || a_Distance.y == 3.0 || a_Distance.y == 4.0) {
     // 偏移其余的点位（将长度让位给箭头）
     arrowOffset = rotation_matrix*(offset * arrowHeight) * arrowWidth;
-    offset += arrowOffset;
+    offset += arrowOffset;// 沿线偏移
   }
 
   return offset;
