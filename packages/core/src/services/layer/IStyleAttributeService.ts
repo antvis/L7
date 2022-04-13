@@ -169,7 +169,7 @@ export type Triangulation = (
   indices: number[];
   size: number;
   normals?: number[];
-  indexs?: number[];
+  indexes?: number[];
 };
 
 export interface IStyleAttributeUpdateOptions {

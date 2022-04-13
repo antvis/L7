@@ -53,7 +53,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       vertices: number[];
       normals: number[];
       offset: number;
-      indexs?: number[];
+      indexes?: number[];
     }>;
   } = {
     sizePerElement: 0,
@@ -219,7 +219,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         vertices: verticesForCurrentFeature,
         normals: normalsForCurrentFeature,
         size: vertexSize,
-        indexs,
+        indexes,
       } = this.triangulation(feature, segmentNumber);
       indicesForCurrentFeature.forEach((i) => {
         indices.push(i + verticesNum);
@@ -253,8 +253,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
         );
 
         let vertexIndex = 0;
-        if (indexs && indexs[vertexIdx] !== undefined) {
-          vertexIndex = indexs[vertexIdx];
+        if (indexes && indexes[vertexIdx] !== undefined) {
+          vertexIndex = indexes[vertexIdx];
         }
 
         descriptors.forEach((descriptor, attributeIdx) => {
