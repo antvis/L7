@@ -883,7 +883,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public destroy() {
-    // debugger
     if (this.isDestroied) {
       return;
     }
@@ -892,7 +891,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.layerChildren.map((child: ILayer) => child.destroy());
     this.layerChildren = [];
 
+    // remove mask list
     this.masks.map((mask: ILayer) => mask.destroy());
+    this.masks = [];
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件

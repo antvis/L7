@@ -138,7 +138,8 @@ export default class LayerService implements ILayerService {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
 
-      if (layer.masks.length > 0) {
+      // layerGroup 不支持 Mask
+      if (!layer.isLayerGroup && layer.masks.length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
           stencil: 0,
