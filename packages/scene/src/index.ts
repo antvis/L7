@@ -175,22 +175,28 @@ class Scene
     layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
 
-    const {
-      mask,
-      maskfence,
-      maskColor = '#000',
-      maskOpacity = 0,
-    } = layer.getLayerConfig();
-    if (mask && maskfence) {
-      const maskInstance = new MaskLayer()
-        .source(maskfence)
-        .shape('fill')
-        .color(maskColor)
-        .style({
-          opacity: maskOpacity,
-        });
-
-      this.addMask(maskInstance, layer.id);
+    const layerConfig = layer.getLayerConfig();
+    if(layerConfig) {
+      // 若 layer 未初始化成功，则 layerConfig 为 undefined （scene loaded 尚未执行完成）
+      const {
+        mask,
+        maskfence,
+        maskColor = '#000',
+        maskOpacity = 0,
+      } = layerConfig;
+      if (mask && maskfence) {
+        const maskInstance = new MaskLayer()
+          .source(maskfence)
+          .shape('fill')
+          .color(maskColor)
+          .style({
+            opacity: maskOpacity,
+          });
+  
+        this.addMask(maskInstance, layer.id);
+      }
+    } else {
+      console.warn('addLayer should run after scene loaded!')
     }
   }
 
