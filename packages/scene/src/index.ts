@@ -176,7 +176,7 @@ class Scene
     this.sceneService.addLayer(layer);
 
     const layerConfig = layer.getLayerConfig();
-    if(layerConfig) {
+    if (layerConfig) {
       // 若 layer 未初始化成功，则 layerConfig 为 undefined （scene loaded 尚未执行完成）
       const {
         mask,
@@ -192,11 +192,11 @@ class Scene
           .style({
             opacity: maskOpacity,
           });
-  
+
         this.addMask(maskInstance, layer.id);
       }
     } else {
-      console.warn('addLayer should run after scene loaded!')
+      console.warn('addLayer should run after scene loaded!');
     }
   }
 
