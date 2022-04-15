@@ -159,7 +159,9 @@ export default class SpriteModel extends BaseModel {
     this.mapTexture = mapTexture;
     this.spriteTop = spriteTop;
     this.spriteUpdate = spriteUpdate;
-    spriteAnimate === 'up'?this.spriteAnimate = SPRITE_ANIMATE_DIR.UP:this.spriteAnimate = SPRITE_ANIMATE_DIR.DOWN
+    spriteAnimate === 'up'
+      ? (this.spriteAnimate = SPRITE_ANIMATE_DIR.UP)
+      : (this.spriteAnimate = SPRITE_ANIMATE_DIR.DOWN);
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
