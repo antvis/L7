@@ -1,4 +1,4 @@
-import { IMapService } from '@antv/l7-core';
+import { IAnimateOption, IMapService } from '@antv/l7-core';
 import { IColorRamp } from '@antv/l7-utils';
 import { styleOffset, styleSingle } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
@@ -134,6 +134,17 @@ export interface IGeometryLayerStyleOptions {
 
   terrainClipHeight?: number;
   rgb2height?: (r: number, g: number, b: number) => number;
+
+  // sprite
+  spriteAnimate?: string;
+  spriteRadius?: number;
+  spriteCount?: number;
+  spriteSpeed?: number;
+  spriteTop?: number;
+  spriteUpdate?: number;
+  spriteScale?: number;
+
+  animateOption?: IAnimateOption;
 }
 
 export enum CanvasUpdateType {

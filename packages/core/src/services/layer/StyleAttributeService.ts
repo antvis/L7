@@ -311,6 +311,118 @@ export default class StyleAttributeService implements IStyleAttributeService {
     };
     return this.attributesAndIndices;
   }
+
+  public createAttributes(
+    features: IEncodeFeature[],
+    triangulation: Triangulation,
+  ): {
+    attributes: {
+      [attributeName: string]: IAttribute;
+    };
+  } {
+    // 每次创建的初始化化 LayerOut
+    this.featureLayout = {
+      sizePerElement: 0,
+      elements: [],
+    };
+    if (triangulation) {
+      this.triangulation = triangulation;
+    }
+    const descriptors = this.attributes.map((attr) => {
+      attr.resetDescriptor();
+      return attr.descriptor;
+    });
+    let verticesNum = 0;
+    const indices: number[] = [];
+    let size = 3;
+    features.forEach((feature, featureIdx) => {
+      // 逐 feature 进行三角化
+      const {
+        indices: indicesForCurrentFeature,
+        vertices: verticesForCurrentFeature,
+        normals: normalsForCurrentFeature,
+        size: vertexSize,
+        indexes,
+      } = this.triangulation(feature);
+      indicesForCurrentFeature.forEach((i) => {
+        indices.push(i + verticesNum);
+      });
+      size = vertexSize;
+      const verticesNumForCurrentFeature =
+        verticesForCurrentFeature.length / vertexSize;
+
+      // 记录三角化结果，用于后续精确更新指定 feature
+      this.featureLayout.sizePerElement = size;
+      this.featureLayout.elements.push({
+        featureIdx,
+        vertices: verticesForCurrentFeature,
+        normals: normalsForCurrentFeature as number[],
+        offset: verticesNum,
+      });
+
+      verticesNum += verticesNumForCurrentFeature;
+      // 根据 position 顶点生成其他顶点数据
+      for (
+        let vertexIdx = 0;
+        vertexIdx < verticesNumForCurrentFeature;
+        vertexIdx++
+      ) {
+        const normal =
+          normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) ||
+          [];
+        const vertice = verticesForCurrentFeature.slice(
+          vertexIdx * vertexSize,
+          vertexIdx * vertexSize + vertexSize,
+        );
+
+        let vertexIndex = 0;
+        if (indexes && indexes[vertexIdx] !== undefined) {
+          vertexIndex = indexes[vertexIdx];
+        }
+
+        descriptors.forEach((descriptor, attributeIdx) => {
+          if (descriptor && descriptor.update) {
+            (descriptor.buffer.data as number[]).push(
+              ...descriptor.update(
+                feature,
+                featureIdx,
+                vertice,
+                vertexIdx, // 当前顶点所在feature索引
+                normal,
+                vertexIndex,
+                // TODO: 传入顶点索引 vertexIdx
+              ),
+            );
+          } // end if
+        }); // end for each
+      } // end for
+    }); // end features for Each
+    const { createAttribute, createBuffer } = this.rendererService;
+
+    const attributes: {
+      [attributeName: string]: IAttribute;
+    } = {};
+    descriptors.forEach((descriptor, attributeIdx) => {
+      if (descriptor) {
+        // IAttribute 参数透传
+        const { buffer, update, name, ...rest } = descriptor;
+
+        const vertexAttribute = createAttribute({
+          // IBuffer 参数透传
+          buffer: createBuffer(buffer),
+          ...rest,
+        });
+        attributes[descriptor.name || ''] = vertexAttribute;
+
+        // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+        this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+      }
+    });
+    return {
+      attributes,
+    };
+  }
+
   public clearAllAttributes() {
     // 销毁关联的 vertex attribute buffer objects
     this.attributes.forEach((attribute) => {

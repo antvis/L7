@@ -243,6 +243,7 @@ export interface IModelDrawOptions {
  * * 销毁资源，例如 buffer texture 等
  */
 export interface IModel {
+  updateAttributes(attributes: { [key: string]: IAttribute }): void;
   addUniforms(uniforms: { [key: string]: IUniform }): void;
   draw(options: IModelDrawOptions, pick?: boolean): void;
   destroy(): void;
