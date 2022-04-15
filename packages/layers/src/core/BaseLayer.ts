@@ -1093,6 +1093,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     });
   }
 
+  public createAttrubutes(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ) {
+    const { triangulation } = options;
+    // @ts-ignore
+    const { attributes } = this.styleAttributeService.createAttributes(
+      this.encodedData,
+      triangulation,
+    );
+    return attributes;
+  }
+
   public getTime() {
     return this.layerService.clock.getDelta();
   }

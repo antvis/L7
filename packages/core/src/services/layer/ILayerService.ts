@@ -4,6 +4,7 @@ import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
+import { IAttribute } from '../renderer/IAttribute';
 import {
   IBlendOptions,
   IModel,
@@ -178,6 +179,12 @@ export interface ILayer {
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
+  createAttrubutes(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ): {
+    [attributeName: string]: IAttribute;
+  };
   updateStyleAttribute(
     type: string,
     field: StyleAttributeField,

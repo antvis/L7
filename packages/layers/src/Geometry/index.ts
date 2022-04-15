@@ -30,11 +30,22 @@ export default class GeometryLayer extends BaseLayer<
     const type = this.getModelType();
     const defaultConfig = {
       plane: {},
+      sprite: {},
     };
     return defaultConfig[type];
   }
 
   protected getModelType(): GeometryModelType {
-    return 'plane';
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
+    const shape = shapeAttribute?.scale?.field as GeometryModelType;
+    if (shape === 'plane') {
+      return 'plane';
+    } else if (shape === 'sprite') {
+      return 'sprite';
+    } else {
+      return 'plane';
+    }
   }
 }

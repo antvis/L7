@@ -107,6 +107,24 @@ export default class ReglModel implements IModel {
     this.drawParams = drawParams;
   }
 
+  public updateAttributes(attributes: { [key: string]: IAttribute }) {
+    const reglAttributes: { [key: string]: regl.Attribute } = {};
+    Object.keys(attributes).forEach((name: string) => {
+      reglAttributes[name] = (attributes[name] as ReglAttribute).get();
+    });
+    this.drawParams.attributes = reglAttributes;
+    this.drawCommand = this.reGl(this.drawParams);
+
+    const pickDrawParams = cloneDeep(this.drawParams);
+
+    pickDrawParams.blend = {
+      ...pickDrawParams.blend,
+      enable: false,
+    };
+
+    this.drawPickCommand = this.reGl(pickDrawParams);
+  }
+
   public addUniforms(uniforms: { [key: string]: IUniform }) {
     this.uniforms = {
       ...this.uniforms,
