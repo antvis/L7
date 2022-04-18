@@ -11,6 +11,7 @@ interface ILineArrow {
   enable: boolean;
   arrowWidth: number;
   arrowHeight: number;
+  tailWidth: number;
 }
 
 export interface ILineLayerStyleOptions {
