@@ -37,7 +37,7 @@ color 可以根据数据的差异设置成不同颜色，表示数据的不同�
 
 ### size
 
-散点图一般等大小的图形,size 一般设置成常量
+散点图一般等大小的图形，size 一般设置成常量。
 
 ```javascript
 const scatter = new PointLayer()
@@ -51,6 +51,12 @@ const scatter = new PointLayer()
   });
 ```
 
-[在线案例](../../../examples/point/scatter#scatter)
+
+[在线案例](/zh/examples/point/scatter#scatter)
+
+### blur
+散点图的 style 样式支持配置 blur，调整模糊。
+
+[在线案例](/zh/examples/point/scatter#blur)
 
 `markdown:docs/common/layer/base.md`

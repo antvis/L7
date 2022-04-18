@@ -65,10 +65,10 @@ layer.size('height', []);
 // 配置箭头 IArrowOption
 layer.style({
   arrow: {
-    enable: true,   // 是否开启箭头、默认为 false
-    arrowWidth: 2,  // 箭头的宽度、默认值为 2、与线的 size 相关
+    enable: true, // 是否开启箭头、默认为 false
+    arrowWidth: 2, // 箭头的宽度、默认值为 2、与线的 size 相关
     arrowHeight: 3, // 箭头的高度、默认值为 3、与线的 size 相关
-    tailWidth: 1,   // 配置箭头的时候支持设置线尾部的宽度
+    tailWidth: 1, // 配置箭头的时候支持设置线尾部的宽度
   },
 });
 ```
