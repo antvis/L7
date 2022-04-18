@@ -65,16 +65,17 @@ layer.size('height', []);
 // 配置箭头 IArrowOption
 layer.style({
   arrow: {
-    enable: true, // 是否开启箭头、默认为 false
-    arrowWidth: 2, // 箭头的宽度、默认值为 2、与线的 size 相关
+    enable: true,   // 是否开启箭头、默认为 false
+    arrowWidth: 2,  // 箭头的宽度、默认值为 2、与线的 size 相关
     arrowHeight: 3, // 箭头的高度、默认值为 3、与线的 size 相关
+    tailWidth: 1,   // 配置箭头的时候支持设置线尾部的宽度
   },
 });
 ```
 
 [在线案例](/zh/examples/line/path#arrow)
 
-<img width="40%" style="display: block;margin: 0 auto;" alt="参数" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*bjjnQp7ZESoAAAAAAAAAAAAAARQnAQ'/>
+<img width="40%" style="display: block;margin: 0 auto;" alt="参数" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Muz8TLM2a0kAAAAAAAAAAAAAARQnAQ'/>
 
 为了构造箭头，我们会在处理数据的时候插入多余的节点用于构造节点（为了不增加额外的消耗，普通线不会进行插入操作）。
 

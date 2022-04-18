@@ -123,13 +123,14 @@ const lineLayer = new LineLayer({})
     ]
   }
   )
-  .size(1.5)
+  .size(2)
   .shape('line')
   .style({
     arrow: {
       enable: true,
       arrowWidth: 4,
-      arrowHeight: 6
+      arrowHeight: 4,
+      tailWidth: 0.4
     }
   })
   .color('#f00');
