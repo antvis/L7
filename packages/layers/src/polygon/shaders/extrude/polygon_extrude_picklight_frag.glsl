@@ -9,5 +9,5 @@ void main() {
   gl_FragColor = v_Color;
   // gl_FragColor.a *= u_opacity;
   gl_FragColor.a *= opacity;
-  gl_FragColor = filterColorWithLight(gl_FragColor, v_lightWeight);
+  gl_FragColor = filterColorAlpha(gl_FragColor, v_lightWeight);
 }

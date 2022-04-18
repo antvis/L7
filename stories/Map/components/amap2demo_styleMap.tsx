@@ -12,7 +12,7 @@ export default class Amap2demo_styleMap extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [112, 30.267069],
         pitch: 0,
         style: 'dark',
@@ -36,14 +36,18 @@ export default class Amap2demo_styleMap extends React.Component {
             })
             .shape('circle')
             .color('color')
+            // .color('#f00')
             .size('value', (v) => 5 + 15 * v)
             .style({
+              // blur: 2.5,
+
               stroke: 'strokeColor',
               // stroke: ['strokeColor', (d: any) => {
               //   return d
               // }],
 
               strokeWidth: 'strokeWidth',
+              // strokeWidth: 0,
               // strokeWidth: ["strokeWidth", (d: any) => {
               //   return d * 2
               // }],

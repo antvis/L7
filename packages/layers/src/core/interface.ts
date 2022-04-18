@@ -50,6 +50,9 @@ export interface IPointLayerStyleOptions {
   strokeWidth: number;
   stroke: string;
 
+  blur?: number;
+
+  // text
   textOffset?: [number, number];
   textAnchor?: anchorType;
   spacing?: number;
