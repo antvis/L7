@@ -74,7 +74,8 @@ export default class Demo extends React.Component {
         arrow: {
           enable: true,
           arrowWidth: 2,
-          arrowHeight: 3,
+          // arrowHeight: 3,
+          tailWidth: 0,
         },
       });
 

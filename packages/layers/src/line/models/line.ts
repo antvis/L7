@@ -49,6 +49,7 @@ export default class LineModel extends BaseModel {
         enable: false,
         arrowWidth: 2,
         arrowHeight: 3,
+        tailWidth: 1,
       },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
@@ -98,7 +99,6 @@ export default class LineModel extends BaseModel {
               height: 1,
             });
     }
-
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
@@ -134,6 +134,7 @@ export default class LineModel extends BaseModel {
       u_arrow: Number(arrow.enable),
       u_arrowHeight: arrow.arrowHeight || 3,
       u_arrowWidth: arrow.arrowWidth || 2,
+      u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -216,10 +217,10 @@ export default class LineModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
+      name: 'distanceAndIndex',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Distance',
+        name: 'a_DistanceAndIndex',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
