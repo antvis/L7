@@ -53,7 +53,7 @@ export default class GaodeMapComponent extends React.Component {
     //   .size(2)
     //   .color('#000');
 
-    let layer = new PointLayer({ }) // blend: 'additive'
+    let layer = new PointLayer({}) // blend: 'additive'
       .source(
         [
           {
