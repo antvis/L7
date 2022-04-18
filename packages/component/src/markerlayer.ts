@@ -87,6 +87,14 @@ export default class MarkerLayer extends EventEmitter {
     const cluster = this.markerLayerOption.cluster;
     if (cluster) {
       this.addPoint(marker, this.markers.length);
+      if(this.mapsService) { 
+        // 在新增 marker 的时候需要更新聚合信息（哪怕此时的 zoom 没有发生变化）
+        const zoom = this.mapsService.getZoom();
+        const bbox = this.mapsService.getBounds();
+        this.bbox = padBounds(bbox, 0.5);
+        this.zoom = Math.floor(zoom);
+        this.getClusterMarker(this.bbox, this.zoom);
+      }
     }
     this.markers.push(marker);
   }
@@ -165,6 +173,10 @@ export default class MarkerLayer extends EventEmitter {
       },
     };
     this.points.push(feature);
+    if(this.clusterIndex) {
+      // 在新增点的时候需要更新 cluster 的数据
+      this.clusterIndex.load(this.points);
+    }
   }
 
   private initCluster() {
@@ -243,6 +255,7 @@ export default class MarkerLayer extends EventEmitter {
   }
 
   private update() {
+    if(!this.mapsService) return;
     const zoom = this.mapsService.getZoom();
     const bbox = this.mapsService.getBounds();
     if (

@@ -52,34 +52,42 @@ export default class Amap2demo extends React.Component {
 
     function addMarkers() {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json',
+        "https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json"
       )
         .then((res) => res.json())
         .then((nodes) => {
-          const markerLayer = new MarkerLayer();
-          for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i].g !== '1' || nodes[i].v === '') {
-              continue;
-            }
-            const el = document.createElement('label');
-            el.className = 'labelclass';
-            el.textContent = nodes[i].v + '℃';
-            el.style.background = '#ff0';
-            el.style.borderColor = '#f00';
-
-            const popup = new Popup({
-              offsets: [0, 20],
-            }).setText('hello');
-
-            const marker = new Marker({
-              element: el,
-            })
-              .setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y })
-              .setPopup(popup);
-
+          const markerLayer = new MarkerLayer({
+            cluster: true
+          });
+          for (let i = 0; i < nodes.features.length; i++) {
+            const { coordinates } = nodes.features[i].geometry;
+            const marker = new Marker().setLnglat({
+              lng: coordinates[0],
+              lat: coordinates[1]
+            });
             markerLayer.addMarker(marker);
           }
           scene.addMarkerLayer(markerLayer);
+          // 模拟第二次查询（8条数据，坐标点是兰州）
+          // 注意看地图上兰州的位置，原本是3，放大后会变成11
+          const data = [
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] },
+            { coordinates: [103.823305441, 36.064225525] }
+          ];
+          for (let i = 0; i < data.length; i++) {
+            const { coordinates } = data[i];
+            const marker = new Marker().setLnglat({
+              lng: coordinates[0],
+              lat: coordinates[1]
+            });
+            markerLayer.addMarker(marker);
+          }
         });
     }
   }
