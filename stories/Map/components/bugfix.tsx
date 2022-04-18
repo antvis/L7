@@ -52,18 +52,18 @@ export default class Amap2demo extends React.Component {
 
     function addMarkers() {
       fetch(
-        "https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json"
+        'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )
         .then((res) => res.json())
         .then((nodes) => {
           const markerLayer = new MarkerLayer({
-            cluster: true
+            cluster: true,
           });
           for (let i = 0; i < nodes.features.length; i++) {
             const { coordinates } = nodes.features[i].geometry;
             const marker = new Marker().setLnglat({
               lng: coordinates[0],
-              lat: coordinates[1]
+              lat: coordinates[1],
             });
             markerLayer.addMarker(marker);
           }
@@ -78,13 +78,13 @@ export default class Amap2demo extends React.Component {
             { coordinates: [103.823305441, 36.064225525] },
             { coordinates: [103.823305441, 36.064225525] },
             { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] }
+            { coordinates: [103.823305441, 36.064225525] },
           ];
           for (let i = 0; i < data.length; i++) {
             const { coordinates } = data[i];
             const marker = new Marker().setLnglat({
               lng: coordinates[0],
-              lat: coordinates[1]
+              lat: coordinates[1],
             });
             markerLayer.addMarker(marker);
           }
