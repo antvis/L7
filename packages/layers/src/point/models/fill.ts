@@ -37,6 +37,7 @@ export default class FillModel extends BaseModel {
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
       blend,
+      blur = 0
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -87,6 +88,7 @@ export default class FillModel extends BaseModel {
     }
     return {
       u_isMeter: Number(this.isMeter),
+      u_blur: blur,
 
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_globel: this.mapService.version === Version.GLOBEL ? 1 : 0,

@@ -53,7 +53,7 @@ export default class GaodeMapComponent extends React.Component {
     //   .size(2)
     //   .color('#000');
 
-    let layer = new PointLayer({ blend: 'additive' }) // blend: 'additive'
+    let layer = new PointLayer({ }) // blend: 'additive'
       .source(
         [
           {
@@ -83,7 +83,8 @@ export default class GaodeMapComponent extends React.Component {
       // .shape('cylinder')
       // .color('#0f9')
       // .color('#4169E1')
-      .color('#66CCFF')
+      // .color('#66CCFF')
+      .color('#f00')
       // .color('name', ['#f00', '#ff0'])
       // .size([100, 100, 1000])
       // .size([20, 20, 200])
@@ -94,7 +95,7 @@ export default class GaodeMapComponent extends React.Component {
       //   enable: false,
       //   // type: 'www'
       // })
-      .animate(true)
+      // .animate(true)
       .active(true)
       // .active({ color: '#ff0' })
       .style({
@@ -102,7 +103,8 @@ export default class GaodeMapComponent extends React.Component {
         // pickLight: false,
         // pickLight: true,
         // lightEnable: true,
-        // opacity: 0.5,
+        // blur: 0.2,
+        // opacity: 0.3,
         // stroke: '#f00',
         // strokeWidth: 10,
         // strokeWidth: 0,
