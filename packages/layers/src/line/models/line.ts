@@ -49,7 +49,7 @@ export default class LineModel extends BaseModel {
         enable: false,
         arrowWidth: 2,
         arrowHeight: 3,
-        tailWidth: 1
+        tailWidth: 1,
       },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
@@ -134,7 +134,7 @@ export default class LineModel extends BaseModel {
       u_arrow: Number(arrow.enable),
       u_arrowHeight: arrow.arrowHeight || 3,
       u_arrowWidth: arrow.arrowWidth || 2,
-      u_tailWidth: arrow.tailWidth === undefined?1:arrow.tailWidth
+      u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
     };
   }
   public getAnimateUniforms(): IModelUniform {
