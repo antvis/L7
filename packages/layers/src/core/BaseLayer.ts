@@ -1,11 +1,11 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import {
-  IAttrubuteAndElements,
   BlendType,
   gl,
   IActiveOption,
   IAnimateOption,
+  IAttrubuteAndElements,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
