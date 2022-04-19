@@ -137,7 +137,6 @@ function mapping(
   data: IParseDataItem[],
   fontService: IFontService,
   mapService: IMapService,
-  predata?: IEncodeFeature[],
   minimumColor?: string,
   layer?: ILayer,
 ): IEncodeFeature[] {
@@ -146,16 +145,12 @@ function mapping(
       enable: false,
     },
   } = layer?.getLayerConfig() as ILineLayerStyleOptions;
-  const mappedData = data.map((record: IParseDataItem, i) => {
-    const preRecord = predata ? predata[i] : {};
+  const mappedData = data.map((record: IParseDataItem) => {
     const encodeRecord: IEncodeFeature = {
       id: record._id,
       coordinates: record.coordinates,
-      ...preRecord,
     };
-    //   console.log('preRecord', preRecord)
-    //   console.log('encodeRecord', encodeRecord)
-    //   console.log('attributes', attributes)
+    
     attributes
       .filter((attribute) => attribute.scale !== undefined)
       .forEach((attribute: IStyleAttribute) => {
@@ -181,8 +176,6 @@ function mapping(
         }
       });
 
-    // console.log('encodeRecord', encodeRecord)
-
     if (encodeRecord.shape === 'line' && arrow.enable) {
       // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
       const coords = encodeRecord.coordinates as Position[];
@@ -191,7 +184,6 @@ function mapping(
     }
     return encodeRecord;
   }) as IEncodeFeature[];
-
   // 调整数据兼容 Amap2.0
   adjustData2Amap2Coordinates(mappedData, mapService);
 
@@ -207,7 +199,7 @@ export function calculateData(
   mapService: IMapService,
   styleAttributeService: IStyleAttributeService,
   data: any,
-  options: ISourceCFG,
+  options: ISourceCFG|undefined,
 ): IEncodeFeature[] {
   const source = new Source(data, options);
   const bottomColor = layer.getBottomColor();
@@ -215,15 +207,14 @@ export function calculateData(
   const { dataArray } = source.data;
   const filterData = dataArray;
 
-  const d = mapping(
+  const mappedEncodeData = mapping(
     attributes,
     filterData,
     fontService,
     mapService,
-    layer.getEncodedData(),
     bottomColor,
     layer,
   );
   source.destroy();
-  return d;
+  return mappedEncodeData;
 }

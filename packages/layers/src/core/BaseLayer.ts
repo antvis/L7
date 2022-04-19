@@ -417,7 +417,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
   }
 
-  public calculateAttrubtueAndElements(data: any, option: ISourceCFG) {
+  public calculateAttrubtueAndElements(data: any, option?: ISourceCFG) {
     const calEncodeData = this.calculateEncodeData(data, option);
     const triangulation = this.triangulation;
     if (calEncodeData && triangulation) {
@@ -433,7 +433,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
   }
 
-  public calculateEncodeData(data: any, option: ISourceCFG) {
+  public calculateEncodeData(data: any, option?: ISourceCFG) {
     if (this.inited) {
       return calculateData(
         this,
