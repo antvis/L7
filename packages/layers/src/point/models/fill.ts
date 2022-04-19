@@ -198,6 +198,9 @@ export default class FillModel extends BaseModel {
 
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
+    this.layer.triangulation = isGlobel
+      ? GlobelPointFillTriangulation
+      : PointFillTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointfill_' + type,

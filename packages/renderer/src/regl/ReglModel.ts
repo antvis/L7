@@ -1,6 +1,7 @@
 import {
   gl,
   IAttribute,
+  IElements,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
@@ -105,6 +106,27 @@ export default class ReglModel implements IModel {
 
     this.drawPickCommand = reGl(pickDrawParams);
     this.drawParams = drawParams;
+  }
+
+  public updateAttributesAndElements(
+    attributes: { [key: string]: IAttribute },
+    elements: IElements,
+  ) {
+    const reglAttributes: { [key: string]: regl.Attribute } = {};
+    Object.keys(attributes).forEach((name: string) => {
+      reglAttributes[name] = (attributes[name] as ReglAttribute).get();
+    });
+    this.drawParams.attributes = reglAttributes;
+    this.drawParams.elements = (elements as ReglElements).get();
+
+    this.drawCommand = this.reGl(this.drawParams);
+    const pickDrawParams = cloneDeep(this.drawParams);
+    pickDrawParams.blend = {
+      ...pickDrawParams.blend,
+      enable: false,
+    };
+
+    this.drawPickCommand = this.reGl(pickDrawParams);
   }
 
   public updateAttributes(attributes: { [key: string]: IAttribute }) {
