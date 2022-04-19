@@ -150,7 +150,7 @@ function mapping(
       id: record._id,
       coordinates: record.coordinates,
     };
-    
+
     attributes
       .filter((attribute) => attribute.scale !== undefined)
       .forEach((attribute: IStyleAttribute) => {
@@ -199,7 +199,7 @@ export function calculateData(
   mapService: IMapService,
   styleAttributeService: IStyleAttributeService,
   data: any,
-  options: ISourceCFG|undefined,
+  options: ISourceCFG | undefined,
 ): IEncodeFeature[] {
   const source = new Source(data, options);
   const bottomColor = layer.getBottomColor();

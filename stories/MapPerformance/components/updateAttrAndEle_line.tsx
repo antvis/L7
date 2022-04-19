@@ -37,66 +37,45 @@ export default class Demo extends React.Component {
     // const data1 = this.generateData(1000);
     // const data2 = this.generateData(10000);
     const data1 = {
-      "type": "FeatureCollection",
-      "features": [
+      type: 'FeatureCollection',
+      features: [
         {
-          "type": "Feature",
-          "properties": {
-            "c": '#f00'
+          type: 'Feature',
+          properties: {
+            c: '#f00',
           },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                100.37109375,
-                32.32427558887655
-              ],
-              [
-                101.689453125,
-                28.844673680771795
-              ],
-              [
-                104.853515625,
-                30.524413269923986
-              ]
-            ]
-          }
-        }
-      ]
-    }
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+              [100.37109375, 32.32427558887655],
+              [101.689453125, 28.844673680771795],
+              [104.853515625, 30.524413269923986],
+            ],
+          },
+        },
+      ],
+    };
 
     const data2 = {
-      "type": "FeatureCollection",
-      "features": [
+      type: 'FeatureCollection',
+      features: [
         {
-          "type": "Feature",
-          "properties": {
-            "c": '#ff0'
+          type: 'Feature',
+          properties: {
+            c: '#ff0',
           },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                109.6875,
-                39.90973623453719
-              ],
-              [
-                115.75195312499999,
-                39.90973623453719
-              ],
-              [
-                109.3359375,
-                37.579412513438385
-              ],
-              [
-                115.57617187499999,
-                36.80928470205937
-              ]
-            ]
-          }
-        }
-      ]
-    }
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+              [109.6875, 39.90973623453719],
+              [115.75195312499999, 39.90973623453719],
+              [109.3359375, 37.579412513438385],
+              [115.57617187499999, 36.80928470205937],
+            ],
+          },
+        },
+      ],
+    };
 
     const layer = new LineLayer()
       .source(data1)
@@ -119,8 +98,8 @@ export default class Demo extends React.Component {
       // setInterval(() => {
       //   if (c === 0) {
       //     c = 1;
-          // layer.updateMudelsData(data2cache);
-          // scene.render();
+      // layer.updateMudelsData(data2cache);
+      // scene.render();
       //   } else {
       //     c = 0;
       //     layer.updateMudelsData(data1cache);
@@ -132,7 +111,7 @@ export default class Demo extends React.Component {
         let data2cache = layer.calculateAttrubtueAndElements(data2);
         layer.updateMudelsData(data2cache);
         scene.render();
-      }, 1000)
+      }, 1000);
     });
   }
 
