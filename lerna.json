@@ -14,7 +14,7 @@
       "message": "chore: publish"
     }
   },
-  "version": "2.8.29",
+  "version": "2.8.30",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {
