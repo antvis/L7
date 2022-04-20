@@ -148,40 +148,36 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-      const bbox = this.layer.getSource().extent;
-      const [minLng, minLat, maxLng, maxLat] = bbox;
-      const lngLen = maxLng - minLng;
-      const latLen = maxLat - minLat;
+    const bbox = this.layer.getSource().extent;
+    const [minLng, minLat, maxLng, maxLat] = bbox;
+    const lngLen = maxLng - minLng;
+    const latLen = maxLat - minLat;
 
-      this.styleAttributeService.registerStyleAttribute({
-        name: 'uvs',
-        type: AttributeType.Attribute,
-        descriptor: {
-          name: 'a_uvs',
-          buffer: {
-            // give the WebGL driver a hint that this buffer may change
-            usage: gl.STATIC_DRAW,
-            data: [],
-            type: gl.FLOAT,
-          },
-          size: 3,
-          update: (
-            feature: IEncodeFeature,
-            featureIdx: number,
-            vertex: number[],
-            attributeIdx: number,
-            normal: number[],
-          ) => {
-            const lng = vertex[0];
-            const lat = vertex[1];
-            return [
-              (lng - minLng) / lngLen,
-              (lat - minLat) / latLen,
-              vertex[4],
-            ];
-          },
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'uvs',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_uvs',
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
         },
-      });
+        size: 3,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+          normal: number[],
+        ) => {
+          const lng = vertex[0];
+          const lat = vertex[1];
+          return [(lng - minLng) / lngLen, (lat - minLat) / latLen, vertex[4]];
+        },
+      },
+    });
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',

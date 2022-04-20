@@ -34,7 +34,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
           .color('#0DCCFF')
           .active({
             color: 'rgb(255,255,255)',
-            mix: 0.5
+            mix: 0.5,
           })
           .style({
             heightfixed: true,
