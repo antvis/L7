@@ -275,6 +275,8 @@ export default class PickingService implements IPickingService {
           layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);
+          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
+
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
     });
@@ -415,7 +417,6 @@ export default class PickingService implements IPickingService {
     if (isEventCrash(target)) {
       // Tip: 允许用户动态设置鼠标光标
       this.handleCursor(layer, target.type);
-
       layer.emit(target.type, target);
     }
   }

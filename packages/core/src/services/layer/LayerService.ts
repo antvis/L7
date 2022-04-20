@@ -11,6 +11,8 @@ import { ILayerModel, ILayerService } from './ILayerService';
 
 @injectable()
 export default class LayerService implements ILayerService {
+  // pickedLayerId 参数用于指定当前存在被选中的 layer
+  public pickedLayerId: number = -1;
   public clock = new Clock();
 
   public alreadyInRendering: boolean = false;

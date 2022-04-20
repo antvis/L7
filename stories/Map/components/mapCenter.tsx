@@ -53,6 +53,28 @@ export default class GaodeMapComponent extends React.Component {
     //   .size(2)
     //   .color('#000');
 
+    let layer0 = new PointLayer({zIndex: 2})
+    .source( 
+      [
+      {
+        lng: 120.11,
+        lat: 30.27,
+      }],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .color('#ff0')
+      .shape('circle')
+      .size(30)
+
+      // layer0.on('mouseout', () => {})
+      // layer0.on('mousemove', () => {})
+      layer0.on('click', () => {})
+
     let layer = new PointLayer({}) // blend: 'additive'
       .source(
         [
@@ -75,6 +97,7 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
+      
       // - cylinder
       // - triangleColumn
       // - hexagonColumn
@@ -97,6 +120,11 @@ export default class GaodeMapComponent extends React.Component {
       // })
       // .animate(true)
       .active(true)
+      // .active({
+      //   color: '#f00',
+      //   mix: 0
+      // })
+      .select(true)
       // .active({ color: '#ff0' })
       .style({
         // heightfixed: true,
@@ -105,8 +133,8 @@ export default class GaodeMapComponent extends React.Component {
         // lightEnable: true,
         // blur: 0.2,
         // opacity: 0.3,
-        // stroke: '#f00',
-        // strokeWidth: 10,
+        stroke: '#ff0',
+        strokeWidth: 10,
         // strokeWidth: 0,
         // strokeOpacity: 1,
         // unit: 'meter',
@@ -143,8 +171,12 @@ export default class GaodeMapComponent extends React.Component {
     // );
 
     scene.on('loaded', () => {
+      scene.addLayer(layer0);
       scene.addLayer(layer);
 
+      scene.on('click', (e) => {
+        console.log(scene.getPickedLayer())
+      })
       // let scale = layer.getScale('size');
       // console.log('scale n2', scale('n2'));
       // console.log('scale n3', scale('n3'));
