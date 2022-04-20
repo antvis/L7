@@ -117,6 +117,8 @@ export default class Amap2demo_polygon_extrude extends React.Component {
     //   .active(true);
     // scene.addLayer(layer);
 
+    scene.on('loaded', () => {
+
     // @ts-ignore
     let lineDown, lineUp, textLayer;
 
@@ -190,58 +192,65 @@ export default class Amap2demo_polygon_extrude extends React.Component {
           });
         scene.addLayer(lineLayer);
 
-        const provincelayer = new PolygonLayer({})
-          .source(data)
-          .size(150000)
-          .shape('extrude')
-          .color('#0DCCFF')
-          .active({
-            color: 'rgb(100,230,255)',
-          })
-          .style({
-            heightfixed: true,
-            pickLight: true,
-            raisingHeight: 200000,
-            opacity: 0.8,
-          });
+       
 
-        scene.addLayer(provincelayer);
+         
+            const provincelayer = new PolygonLayer({})
+            .source(data)
+            .size(150000)
+            .shape('extrude')
+            .color('#0DCCFF')
+            .active({
+              color: 'rgb(100,230,255)',
+            })
+            .style({
+              heightfixed: true,
+              pickLight: true,
+              raisingHeight: 200000,
+              opacity: 0.8,
+            });
+            scene.addLayer(provincelayer);
 
-        provincelayer.on('mousemove', () => {
-          provincelayer.style({
-            raisingHeight: 200000 + 100000,
-          });
-          // @ts-ignore
-          lineDown.style({
-            raisingHeight: 200000 + 100000,
-          });
-          // @ts-ignore
-          lineUp.style({
-            raisingHeight: 200000 + 150000 + 100000,
-          });
-          // @ts-ignore
-          textLayer.style({
-            raisingHeight: 200000 + 150000 + 10000 + 100000,
-          });
-        });
+            provincelayer.on('mousemove', () => {
+              provincelayer.style({
+                raisingHeight: 200000 + 100000,
+              });
+              // @ts-ignore
+              lineDown.style({
+                raisingHeight: 200000 + 100000,
+              });
+              // @ts-ignore
+              lineUp.style({
+                raisingHeight: 200000 + 150000 + 100000,
+              });
+              // @ts-ignore
+              textLayer.style({
+                raisingHeight: 200000 + 150000 + 10000 + 100000,
+              });
+            });
+    
+            provincelayer.on('unmousemove', () => {
+              provincelayer.style({
+                raisingHeight: 200000,
+              });
+              // @ts-ignore
+              lineDown.style({
+                raisingHeight: 200000,
+              });
+              // @ts-ignore
+              lineUp.style({
+                raisingHeight: 200000 + 150000,
+              });
+              // @ts-ignore
+              textLayer.style({
+                raisingHeight: 200000 + 150000 + 10000,
+              });
+            });
+          }) 
 
-        provincelayer.on('unmousemove', () => {
-          provincelayer.style({
-            raisingHeight: 200000,
-          });
-          // @ts-ignore
-          lineDown.style({
-            raisingHeight: 200000,
-          });
-          // @ts-ignore
-          lineUp.style({
-            raisingHeight: 200000 + 150000,
-          });
-          // @ts-ignore
-          textLayer.style({
-            raisingHeight: 200000 + 150000 + 10000,
-          });
-        });
+        
+
+       
       });
   }
 

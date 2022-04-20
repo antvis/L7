@@ -32,15 +32,16 @@ export default class Amap2demo_polygon_extrude extends React.Component {
           .size(150000)
           .shape('extrude')
           .color('#0DCCFF')
-          // .active({
-          //   color: 'rgb(100,230,255)',
-          // })
+          .active({
+            color: 'rgb(255,255,255)',
+            mix: 0.5
+          })
           .style({
             heightfixed: true,
             pickLight: true,
             raisingHeight: 200000,
-            mapTexture:
-              'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SOUKQJpw1FYAAAAAAAAAAAAAARQnAQ',
+            // mapTexture:
+            //   'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SOUKQJpw1FYAAAAAAAAAAAAAARQnAQ',
             // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
             // opacity: 0.8,
             sourceColor: '#f00',
