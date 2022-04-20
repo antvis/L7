@@ -53,27 +53,29 @@ export default class GaodeMapComponent extends React.Component {
     //   .size(2)
     //   .color('#000');
 
-    let layer0 = new PointLayer({zIndex: 2})
-    .source( 
-      [
-      {
-        lng: 120.11,
-        lat: 30.27,
-      }],
-      {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
+    let layer0 = new PointLayer({ zIndex: 2 })
+      .source(
+        [
+          {
+            lng: 120.11,
+            lat: 30.27,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
         },
-      })
+      )
       .color('#ff0')
       .shape('circle')
-      .size(30)
+      .size(30);
 
-      // layer0.on('mouseout', () => {})
-      // layer0.on('mousemove', () => {})
-      layer0.on('click', () => {})
+    // layer0.on('mouseout', () => {})
+    // layer0.on('mousemove', () => {})
+    layer0.on('click', () => {});
 
     let layer = new PointLayer({}) // blend: 'additive'
       .source(
@@ -97,7 +99,7 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
-      
+
       // - cylinder
       // - triangleColumn
       // - hexagonColumn
@@ -175,8 +177,8 @@ export default class GaodeMapComponent extends React.Component {
       scene.addLayer(layer);
 
       scene.on('click', (e) => {
-        console.log(scene.getPickedLayer())
-      })
+        console.log(scene.getPickedLayer());
+      });
       // let scale = layer.getScale('size');
       // console.log('scale n2', scale('n2'));
       // console.log('scale n3', scale('n3'));
