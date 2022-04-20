@@ -21,12 +21,10 @@ export default class GaodeMapComponent extends React.Component {
   public async componentDidMount() {
     // console.log('zlib', zlib)
 
-  //   zlib.gunzip('http://localhost:3000/file.mbtiles/7/99/52.pbf', function(err, buffer) {
-  //     // var tile = new VectorTile(new Protobuf(buffer));
-  //     console.log(new Protobuf(buffer))
-  // });
-
-
+    //   zlib.gunzip('http://localhost:3000/file.mbtiles/7/99/52.pbf', function(err, buffer) {
+    //     // var tile = new VectorTile(new Protobuf(buffer));
+    //     console.log(new Protobuf(buffer))
+    // });
 
     // console.log(new Protobuf('http://localhost:3000/file.mbtiles/7/99/52.pbf'))
     const scene = new Scene({
@@ -161,33 +159,30 @@ export default class GaodeMapComponent extends React.Component {
       scene.addLayer(layer);
 
       fetch('http://localhost:3000/file.mbtiles/7/99/52.pbf')
-      .then(res => res.arrayBuffer())
-      .then(r => {
-      
-        var tile = new VectorTile(new Protobuf(r))
-        console.log(tile)
-        
-        // console.log(tile.layers.city.feature(0).loadGeometry())
-       
-        const pdata = tile.layers.city.feature(0).toGeoJSON(99, 52, 7)
-          console.log(pdata)
-        const polygonLayer = new PolygonLayer({autoFit: true})
-        .source({
-          "type": "FeatureCollection",
-          "features": [
-            pdata
-          ]
-        })
-        .size('NAME_CHN', [0, 10000, 50000, 30000, 100000])
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.5
-        })
+        .then((res) => res.arrayBuffer())
+        .then((r) => {
+          var tile = new VectorTile(new Protobuf(r));
+          console.log(tile);
 
-        scene.addLayer(polygonLayer)
-        // tile.layers.city.feature(0).loadGeometry()
-      })
+          // console.log(tile.layers.city.feature(0).loadGeometry())
+
+          const pdata = tile.layers.city.feature(0).toGeoJSON(99, 52, 7);
+          console.log(pdata);
+          const polygonLayer = new PolygonLayer({ autoFit: true })
+            .source({
+              type: 'FeatureCollection',
+              features: [pdata],
+            })
+            .size('NAME_CHN', [0, 10000, 50000, 30000, 100000])
+            .shape('fill')
+            .color('#ff0')
+            .style({
+              opacity: 0.5,
+            });
+
+          scene.addLayer(polygonLayer);
+          // tile.layers.city.feature(0).loadGeometry()
+        });
 
       // let scale = layer.getScale('size');
       // console.log('scale n2', scale('n2'));
