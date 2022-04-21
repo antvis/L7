@@ -1,3 +1,0 @@
-# Always validate the PR title, and ignore the commits
-enabled: true
-titleOnly: true
