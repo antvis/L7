@@ -11,104 +11,7 @@ const scene = new Scene({
     zooms: [ 8, 10 ]
   })
 });
-const originData = [
-  {
-    lng: 120,
-    lat: 30,
-    iconType: 'sun',
-    iconColor: '#FFA500',
-    weather: '晴朗',
-    textOffset: [ 10, 0 ]
-  },
-  {
-    lng: 120.2,
-    lat: 30.5,
-    iconType: 'sun',
-    iconColor: '#FFA500',
-    weather: '晴朗 - 高温预警',
-    textOffset: [ -25, 0 ]
-  },
-  {
-    lng: 121.5,
-    lat: 31.4,
-    iconType: 'cloud',
-    iconColor: '#F0F8FF',
-    weather: '多云',
-    textOffset: [ 10, 0 ]
-  },
-  {
-    lng: 120,
-    lat: 31,
-    iconType: 'cloud',
-    iconColor: '#F0F8FF',
-    weather: '多云 - 温度适宜',
-    textOffset: [ -25, 0 ]
-  },
-  {
-    lng: 120.6,
-    lat: 30.8,
-    iconType: 'cloud',
-    iconColor: '#F0F8FF',
-    weather: '多云',
-    textOffset: [ 10, 0 ]
-  },
-  {
-    lng: 120.5,
-    lat: 31.3,
-    iconType: 'cloud',
-    iconColor: '#F0F8FF',
-    weather: '多云 - 今日适宜出门',
-    textOffset: [ -40, 0 ]
-  },
-  {
-    lng: 121.3,
-    lat: 30.2,
-    iconType: 'smallRain',
-    iconColor: '#6EA0FF',
-    weather: '中雨转小雨',
-    textOffset: [ -10, 0 ]
-  },
-  {
-    lng: 121,
-    lat: 30.5,
-    iconType: 'smallRain',
-    iconColor: '#6EA0FF',
-    weather: '小雨',
-    textOffset: [ 10, 0 ]
-  },
-  {
-    lng: 120.6,
-    lat: 30,
-    iconType: 'middleRain',
-    iconColor: '#6495ED',
-    weather: '中雨',
-    textOffset: [ 10, 0 ]
-  },
-  {
-    lng: 120.2,
-    lat: 29.7,
-    iconType: 'smallRain',
-    iconColor: '#6EA0FF',
-    weather: '小雨',
-    textOffset: [ 10, 0 ]
-  },
-  {
-    lng: 121.7,
-    lat: 29.8,
-    iconType: 'middleRain',
-    iconColor: '#6495ED',
-    weather: '大雨转中雨',
-    textOffset: [ -15, 0 ]
-  },
-  {
-    lng: 121.5,
-    lat: 30,
-    iconType: 'hugeRain',
-    iconColor: '#4678D2',
-    weather: '大雨',
-    textOffset: [ 10, 0 ]
-  }
-];
+
 const fontFamily = 'iconfont';
 const fontPath =
   '//at.alicdn.com/t/font_2534097_ao9soua2obv.woff2?t=1622021146076';
@@ -121,8 +24,12 @@ scene.addIconFonts([
 ]);
 scene.addFontFace(fontFamily, fontPath);
 scene.on('loaded', () => {
-  const pointIconFontLayer = new PointLayer({})
-    .source(originData, {
+
+  fetch('https://gw.alipayobjects.com/os/bmw-prod/f7d083e2-ad55-44fd-b324-15e1b549948a.json')
+  .then(res => res.json())
+  .then(data => {
+    const pointIconFontLayer = new PointLayer({})
+    .source(data, {
       parser: {
         type: 'json',
         x: 'lng',
@@ -142,7 +49,7 @@ scene.on('loaded', () => {
   scene.addLayer(pointIconFontLayer);
 
   const textLayer = new PointLayer({})
-    .source(originData, {
+    .source(data, {
       parser: {
         type: 'json',
         x: 'lng',
@@ -161,4 +68,6 @@ scene.on('loaded', () => {
       textAllowOverlap: true
     });
   scene.addLayer(textLayer);
+  })
+  
 });

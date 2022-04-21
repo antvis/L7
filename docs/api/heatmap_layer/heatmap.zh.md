@@ -47,6 +47,6 @@ const layer = new HeatmapLayer({})
 
 [在线案例 经典热力 classical](../../../examples/heatmap/heatmap#heatmap)  
 [在线案例 蜂窝热力 hexagon](../../../examples/heatmap/hexagon#light)  
-[在线案例 网格热力 grid](../../../examples/heatmap/grid#grid1)
+[在线案例 网格热力 grid](/zh/examples/heatmap/grid#china)
 
 `markdown:docs/common/layer/base.md`
