@@ -40,26 +40,26 @@ const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere')
 
 scene.on('loaded', () => {
   scene.addLayer(earthlayer);
-  
+
   fetch('https://gw.alipayobjects.com/os/bmw-prod/efef6c2b-2922-4c03-b9e0-d3743f68eaf2.json')
-  .then(res => res.json())
-  .then(data => {
-    const pointlayer = new PointLayer()
-    .source(data,
-      {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat'
-        }
-      }
-    )
-    .shape('cylinder')
-    .color('#f00')
-    .size('', () => [ 1, 1, 10 ])
-    .active(true);
-    scene.addLayer(pointlayer);
-  })
+    .then(res => res.json())
+    .then(data => {
+      const pointlayer = new PointLayer()
+        .source(data,
+          {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat'
+            }
+          }
+        )
+        .shape('cylinder')
+        .color('#f00')
+        .size('', () => [ 1, 1, 10 ])
+        .active(true);
+      scene.addLayer(pointlayer);
+    });
 
   scene.addLayer(atomLayer);
   scene.addLayer(bloomLayer);

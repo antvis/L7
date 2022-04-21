@@ -47,31 +47,31 @@ scene.on('loaded', () => {
   scene.addLayer(bloomLayer);
 
   fetch('https://gw.alipayobjects.com/os/bmw-prod/20a69b46-3d6d-4ab5-b8b5-150b6aa52c88.json')
-  .then(res => res.json())
-  .then(flydata => {
-    const flyLine = new LineLayer({ blend: 'normal' })
-    .source(flydata, {
-      parser: {
-        type: 'json',
-        coordinates: 'coord'
-      }
-    })
-    .color('#b97feb')
-    .shape('arc3d')
-    .size(0.5)
-    .active(true)
-    .animate({
-      interval: 2,
-      trailLength: 2,
-      duration: 1
-    })
-    .style({
-      opacity: 1,
-      segmentNumber: 60,
-      globalArcHeight: 20
+    .then(res => res.json())
+    .then(flydata => {
+      const flyLine = new LineLayer({ blend: 'normal' })
+        .source(flydata, {
+          parser: {
+            type: 'json',
+            coordinates: 'coord'
+          }
+        })
+        .color('#b97feb')
+        .shape('arc3d')
+        .size(0.5)
+        .active(true)
+        .animate({
+          interval: 2,
+          trailLength: 2,
+          duration: 1
+        })
+        .style({
+          opacity: 1,
+          segmentNumber: 60,
+          globalArcHeight: 20
+        });
+      scene.addLayer(flyLine);
     });
-    scene.addLayer(flyLine);
-  })
 
   earthlayer.setEarthTime(4.0);
 });
