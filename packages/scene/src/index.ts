@@ -212,6 +212,10 @@ class Scene
     }
   }
 
+  public getPickedLayer() {
+    return this.layerService.pickedLayerId;
+  }
+
   public getLayers(): ILayer[] {
     return this.layerService.getLayers();
   }

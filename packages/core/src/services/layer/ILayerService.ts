@@ -433,6 +433,7 @@ export interface ILayerConfig {
  * 提供 Layer 管理服务
  */
 export interface ILayerService {
+  pickedLayerId: number;
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
