@@ -9,18 +9,17 @@ varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 void main() {
   float opacity = styleMappingMat[0][0];
   float isSide = styleMappingMat[0][3];
-  
+  float lightWeight = styleMappingMat[3][1];
   float topU = styleMappingMat[2][2];
   float topV = styleMappingMat[2][3];
 
   float sidey = styleMappingMat[3][0];
   if(isSide < 1.0) {
     gl_FragColor = mix(u_targetColor, u_sourceColor, sidey);
+    gl_FragColor.rgb *= lightWeight;
   } else {
     gl_FragColor = texture2D(u_texture, vec2(topU, topV));
   }
-
-  // gl_FragColor = v_Color;
   
 
   gl_FragColor.a *= opacity;

@@ -4,7 +4,6 @@ precision highp float;
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
-attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec3 a_Normal;
 attribute float a_Size;
@@ -84,9 +83,8 @@ void main() {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   }
 
-  // float lightWeight = calc_lighting(pos);
-  // v_Color = a_Color;
-  // v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w);
+  float lightWeight = calc_lighting(pos);
+  styleMappingMat[3][1] = lightWeight;
 
   setPickingColor(a_PickingColor);
 }
