@@ -1,10 +1,10 @@
 import {
   AttributeType,
   gl,
+  IAttrubuteAndElements,
   IEncodeFeature,
   IModelUniform,
   ITexture2D,
-  IAttrubuteAndElements
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 import { getMask, isMini } from '@antv/l7-utils';
@@ -168,6 +168,67 @@ export default class PlaneModel extends BaseModel {
     ];
   }
 
+  public buildModels() {
+    return this.initModels();
+  }
+
+  public initModelData(options?: any) {
+    if (options) {
+      const {
+        widthSegments: oldwidthSegments,
+        heightSegments: oldheightSegments,
+        width: oldwidth,
+        height: oldheight,
+      } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+      const {
+        widthSegments,
+        heightSegments,
+        width,
+        height,
+      } = options as IGeometryLayerStyleOptions;
+      this.layer.style({
+        widthSegments:
+          widthSegments !== undefined ? widthSegments : oldwidthSegments,
+        heightSegments:
+          heightSegments !== undefined ? heightSegments : oldheightSegments,
+        width: width !== undefined ? width : oldwidth,
+        height: height !== undefined ? height : oldheight,
+      });
+    }
+    const oldFeatures = this.layer.getEncodedData();
+    const res = this.styleAttributeService.createAttributesAndIndices(
+      oldFeatures,
+      this.planeGeometryTriangulation,
+    );
+    return res;
+  }
+
+  public updateTexture(mapTexture: string | undefined): void {
+    const { createTexture2D } = this.rendererService;
+
+    if (mapTexture) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        this.texture = createTexture2D({
+          data: img,
+          width: img.width,
+          height: img.height,
+          wrapS: gl.CLAMP_TO_EDGE,
+          wrapT: gl.CLAMP_TO_EDGE,
+        });
+        this.layerService.updateLayerRenderList();
+        this.layerService.renderLayers();
+      };
+      img.src = mapTexture;
+    } else {
+      this.texture = createTexture2D({
+        width: 0,
+        height: 0,
+      });
+    }
+  }
+
   protected getImageData(img: HTMLImageElement) {
     const canvas: HTMLCanvasElement = document.createElement('canvas');
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -181,7 +242,14 @@ export default class PlaneModel extends BaseModel {
     return imageData;
   }
 
-  protected translateVertex(positions: number[], indices: number[], image: HTMLImageElement, widthSegments: number, heightSegments: number, rgb2height:(r: number, g: number, b: number) => number) {
+  protected translateVertex(
+    positions: number[],
+    indices: number[],
+    image: HTMLImageElement,
+    widthSegments: number,
+    heightSegments: number,
+    rgb2height: (r: number, g: number, b: number) => number,
+  ) {
     const imgWidth = image.width;
     const imgHeight = image.height;
     const imageData = this.getImageData(image).data;
@@ -213,14 +281,17 @@ export default class PlaneModel extends BaseModel {
     }
 
     const oldFeatures = this.layer.getEncodedData();
-    const modelData = this.styleAttributeService.createAttributesAndIndices(oldFeatures, () => {
-      return {
-        vertices: positions,
-        indices: indices,
-        size: 5,
-      };
-    })
-    this.layer.updateMudelsData(modelData as IAttrubuteAndElements)
+    const modelData = this.styleAttributeService.createAttributesAndIndices(
+      oldFeatures,
+      () => {
+        return {
+          vertices: positions,
+          indices,
+          size: 5,
+        };
+      },
+    );
+    this.layer.updateMudelsData(modelData as IAttrubuteAndElements);
     this.layerService.renderLayers();
   }
 
@@ -234,16 +305,29 @@ export default class PlaneModel extends BaseModel {
       terrainTexture,
       rgb2height = (r: number, g: number, b: number) => r + g + b,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
-    if(this.terrainImage) {
+    if (this.terrainImage) {
       // 若当前已经存在 image，直接进行偏移计算（LOD）
-      if(this.terrainImageLoaded) {
-        this.translateVertex(positions, indices, this.terrainImage, widthSegments, heightSegments, rgb2height)
+      if (this.terrainImageLoaded) {
+        this.translateVertex(
+          positions,
+          indices,
+          this.terrainImage,
+          widthSegments,
+          heightSegments,
+          rgb2height,
+        );
       } else {
         this.terrainImage.onload = () => {
-          this.translateVertex(positions, indices, this.terrainImage, widthSegments, heightSegments, rgb2height)
-        }
+          this.translateVertex(
+            positions,
+            indices,
+            this.terrainImage,
+            widthSegments,
+            heightSegments,
+            rgb2height,
+          );
+        };
       }
-      
     } else {
       // 加载地形贴图、根据地形贴图对 planeGeometry 进行偏移
       const terrainImage = new Image();
@@ -253,56 +337,16 @@ export default class PlaneModel extends BaseModel {
         this.terrainImageLoaded = true;
         // 图片加载完，触发事件，可以进行地形图的顶点计算存储
         setTimeout(() => this.layer.emit('terrainImageLoaded', null));
-        this.translateVertex(positions, indices, terrainImage, widthSegments, heightSegments, rgb2height)
+        this.translateVertex(
+          positions,
+          indices,
+          terrainImage,
+          widthSegments,
+          heightSegments,
+          rgb2height,
+        );
       };
       terrainImage.src = terrainTexture as string;
-    }
-  }
-
-  public buildModels() {
-    return this.initModels();
-  }
-
-  public initModelData(options?: any) {
-    
-    if(options) {
-      const { widthSegments: oldwidthSegments, heightSegments: oldheightSegments, width: oldwidth, height: oldheight } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
-      const { widthSegments, heightSegments, width, height } = options as IGeometryLayerStyleOptions;
-      this.layer.style({
-        widthSegments: widthSegments!==undefined?widthSegments:oldwidthSegments,
-        heightSegments: heightSegments!==undefined?heightSegments:oldheightSegments,
-        width: width!==undefined?width:oldwidth,
-        height: height!==undefined?height:oldheight, 
-      })
-    }
-    const oldFeatures = this.layer.getEncodedData();
-    const res = this.styleAttributeService.createAttributesAndIndices(oldFeatures, this.planeGeometryTriangulation)
-    return res;
-  }
-
-  public updateTexture(mapTexture: string | undefined): void {
-    const { createTexture2D } = this.rendererService;
-
-    if (mapTexture) {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        this.texture = createTexture2D({
-          data: img,
-          width: img.width,
-          height: img.height,
-          wrapS: gl.CLAMP_TO_EDGE,
-          wrapT: gl.CLAMP_TO_EDGE,
-        });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
-      };
-      img.src = mapTexture;
-    } else {
-      this.texture = createTexture2D({
-        width: 0,
-        height: 0,
-      });
     }
   }
 

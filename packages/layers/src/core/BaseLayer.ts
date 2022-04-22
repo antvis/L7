@@ -418,9 +418,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public initModelData(data: any, option?: ISourceCFG) {
-    if(this.layerModel.initModelData) {
+    if (this.layerModel.initModelData) {
       // 在某些特殊图层中单独构建 attribute & elements
-      return this.layerModel.initModelData(option)
+      return this.layerModel.initModelData(option);
     }
     const calEncodeData = this.calculateEncodeData(data, option);
     const triangulation = this.triangulation;

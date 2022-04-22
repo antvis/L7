@@ -1,7 +1,12 @@
 // @ts-nocheck
 // @ts-ignore
 import { Scene } from '@antv/l7';
-import { PointLayer, LineLayer, PolygonLayer, GeometryLayer } from '@antv/l7-layers';
+import {
+  PointLayer,
+  LineLayer,
+  PolygonLayer,
+  GeometryLayer,
+} from '@antv/l7-layers';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -45,7 +50,7 @@ export default class Demo extends React.Component {
         // widthSegments: 10,
         // heightSegments: 10,
         mapTexture:
-        'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
+          'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
         terrainTexture:
           'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ',
         rgb2height: (r: number, g: number, b: number) => {
@@ -62,39 +67,40 @@ export default class Demo extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
 
-      let cache10 = null, cache100 = null
+      let cache10 = null,
+        cache100 = null;
 
       layer.on('terrainImageLoaded', () => {
-        console.log('terrainImageLoaded')
-      
+        console.log('terrainImageLoaded');
+
         cache10 = layer.initModelData([], {
           widthSegments: 10,
-          heightSegments: 10
-        })
-     
+          heightSegments: 10,
+        });
+
         cache100 = layer.initModelData([], {
           widthSegments: 100,
           heightSegments: 100,
-        })
-      })
+        });
+      });
 
-      let currentCache = 'cache100'
-      scene.on('zoom', ({value}) => {
-        if(!cache10 || !cache100) return;
-        if(value < 14.5) {
-          if(currentCache !== 'cache10') {
-            console.log('set cache10')
+      let currentCache = 'cache100';
+      scene.on('zoom', ({ value }) => {
+        if (!cache10 || !cache100) return;
+        if (value < 14.5) {
+          if (currentCache !== 'cache10') {
+            console.log('set cache10');
             layer.updateMudelsData(cache10);
             currentCache = 'cache10';
           }
         } else {
-          if(currentCache !== 'cache100') {
-            console.log('set cache100')
+          if (currentCache !== 'cache100') {
+            console.log('set cache100');
             layer.updateMudelsData(cache100);
             currentCache = 'cache100';
           }
         }
-      })
+      });
     });
   }
 
