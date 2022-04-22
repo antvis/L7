@@ -23,6 +23,12 @@ export default function geoJSON(
 ): IParserData {
   const resultData: IParseDataItem[] = [];
   const featureKeys: IFeatureKey = {};
+  if(!data.features) {
+    data.features = [];
+    return {
+      dataArray: []
+    };
+  }
   data.features = data.features.filter((item: Feature) => {
     const geometry: Geometry | null = item.geometry as Geometry;
     return (

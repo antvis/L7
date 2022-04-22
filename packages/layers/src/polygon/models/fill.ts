@@ -73,6 +73,7 @@ export default class FillModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    this.layer.triangulation = opacityLinear.enable?polygonTriangulationWithCenter:polygonTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'polygon',

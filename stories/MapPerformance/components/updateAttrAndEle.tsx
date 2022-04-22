@@ -54,7 +54,7 @@ export default class Demo extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
 
-      let data1cache = layer.calculateAttrubtueAndElements(data1, {
+      let data1cache = layer.initModelData(data1, {
         parser: {
           type: 'json',
           x: 'lng',
@@ -64,7 +64,7 @@ export default class Demo extends React.Component {
 
       console.log(data1cache);
 
-      let data2cache = layer.calculateAttrubtueAndElements(data2, {
+      let data2cache = layer.initModelData(data2, {
         parser: {
           type: 'json',
           x: 'lng',
