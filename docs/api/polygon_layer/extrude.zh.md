@@ -93,6 +93,12 @@ const provincelayer = new PolygonLayer({})
   });
 ```
 
+- topsurface: boolean
+控制顶面的显隐，默认为 true
+
+- sidesurface: boolean
+控制侧面的显隐，默认为 true
+
 [在线案例](/zh/examples/polygon/3d#texture3D)
 
 `markdown:docs/common/layer/base.md`
