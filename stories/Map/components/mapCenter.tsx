@@ -67,8 +67,7 @@ export default class GaodeMapComponent extends React.Component {
       .shape('circle')
       .size(30);
 
-
-      let layer01 = new PointLayer({ zIndex: 2 })
+    let layer01 = new PointLayer({ zIndex: 2 })
       .source(
         [
           {
@@ -89,33 +88,33 @@ export default class GaodeMapComponent extends React.Component {
       .size(30)
       .style({
         // raisingHeight: 50
-        raisingHeight: 5000
-      })
+        raisingHeight: 5000,
+      });
 
     layer0.on('click', () => {});
 
     let layer2 = new PointLayer({}) // blend: 'additive'
-    .source(
-      [
+      .source(
+        [
+          {
+            lng: 120.11,
+            lat: 30.264701434772807,
+            name: 'n3',
+          },
+          {
+            lng: 120.111,
+            lat: 30.264701434772807,
+            name: 'n3',
+          },
+        ],
         {
-          lng: 120.11,
-          lat: 30.264701434772807,
-          name: 'n3',
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
         },
-        {
-          lng: 120.111,
-          lat: 30.264701434772807,
-          name: 'n3',
-        },
-      ],
-      {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
-      },
-    )
+      );
 
     let layer = new PointLayer({}) // blend: 'additive'
       .source(
@@ -182,14 +181,15 @@ export default class GaodeMapComponent extends React.Component {
         // unit: 'meter',
       });
 
-      layer2.shape('circle')
+    layer2
+      .shape('circle')
       .color('#f00')
       .size(50)
       .animate(true)
       .active(true)
       .style({
-        raisingHeight: 5000
-      })
+        raisingHeight: 5000,
+      });
 
     this.scene = scene;
 

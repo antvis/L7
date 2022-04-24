@@ -89,7 +89,7 @@ export default class FillModel extends BaseModel {
     }
     return {
       u_raisingHeight: Number(raisingHeight),
-      
+
       u_isMeter: Number(this.isMeter),
       u_blur: blur,
 
