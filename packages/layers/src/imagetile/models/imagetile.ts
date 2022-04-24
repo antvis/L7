@@ -1,8 +1,8 @@
 import { gl, IModelUniform } from '@antv/l7-core';
-import BaseModel from '../../core/BaseModel';
-import Tile from '../utils/Tile';
-import { ITileLayerStyleOptions } from '../../core/interface';
 import { ITileParserCFG } from '@antv/l7-source';
+import BaseModel from '../../core/BaseModel';
+import { ITileLayerStyleOptions } from '../../core/interface';
+import Tile from '../utils/Tile';
 export default class ImageTileModel extends BaseModel {
   public tileLayer: any;
   private timestamp: number | null;
@@ -32,7 +32,14 @@ export default class ImageTileModel extends BaseModel {
     const source = this.layer.getSource();
     // 当存在 url 的时候生效
     if (source.data.tileUrls) {
-      const { resolution, tileSize, maxZoom, minZoom, zoomOffset, extent } = source.data as ITileParserCFG;
+      const {
+        resolution,
+        tileSize,
+        maxZoom,
+        minZoom,
+        zoomOffset,
+        extent,
+      } = source.data as ITileParserCFG;
       this.tileLayer = new Tile({
         url: source.data.tileUrls[0],
         layerService: this.layerService,

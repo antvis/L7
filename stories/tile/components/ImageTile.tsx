@@ -43,7 +43,9 @@ export default class Amap2demo_imageTileLayer extends React.Component {
       const layer = new ImageTileLayer();
       layer
         .source(
-          ['http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'],
+          [
+            'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          ],
           {
             parser: {
               type: 'rasterTile',
@@ -55,12 +57,7 @@ export default class Amap2demo_imageTileLayer extends React.Component {
               extent: [-180, -85.051129, 180, 85.051129],
             },
           },
-        )
-        .style({
-          resolution: 'low', // low height
-          // resolution: 'height'
-          maxZoom: 17,
-        });
+        );
 
       let pointlayer = new PointLayer()
         .source(originData, {
