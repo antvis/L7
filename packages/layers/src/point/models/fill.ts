@@ -38,6 +38,7 @@ export default class FillModel extends BaseModel {
       offsets = [0, 0],
       blend,
       blur = 0,
+      raisingHeight = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -87,6 +88,8 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
+      u_raisingHeight: Number(raisingHeight),
+      
       u_isMeter: Number(this.isMeter),
       u_blur: blur,
 
