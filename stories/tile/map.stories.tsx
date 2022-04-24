@@ -3,5 +3,5 @@ import * as React from 'react';
 
 import ImageTile from './components/ImageTile'
 
-storiesOf('LayerGroup', module)
+storiesOf('tile', module)
         .add('ImageTile', () => <ImageTile/>)

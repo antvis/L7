@@ -1,12 +1,8 @@
 import { gl, IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import Tile from '../utils/Tile';
-
-interface IImageLayerStyleOptions {
-  resolution: string;
-  maxSourceZoom: number;
-}
-
+import { ITileLayerStyleOptions } from '../../core/interface';
+import { ITileParserCFG } from '@antv/l7-source';
 export default class ImageTileModel extends BaseModel {
   public tileLayer: any;
   private timestamp: number | null;
@@ -33,19 +29,16 @@ export default class ImageTileModel extends BaseModel {
   public initModels() {
     // TODO: 瓦片组件默认在最下层
     this.layer.zIndex = -999;
-    const {
-      resolution = 'low',
-      maxSourceZoom = 17,
-    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     const source = this.layer.getSource();
     // 当存在 url 的时候生效
-    if (source.data.tileurl) {
+    if (source.data.tileUrls) {
+      const { resolution, tileSize, maxZoom, minZoom, zoomOffset, extent } = source.data as ITileParserCFG;
       this.tileLayer = new Tile({
-        url: source.data.tileurl,
+        url: source.data.tileUrls[0],
         layerService: this.layerService,
         layer: this.layer,
         resolution,
-        maxSourceZoom,
+        maxZoom,
         // Tip: 当前为 default
         crstype: 'epsg3857',
       });

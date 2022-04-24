@@ -23,7 +23,7 @@ export default class Tile {
   public noPruneRange: any;
   public url: string;
   public resolution: number;
-  public maxSourceZoom: number;
+  public maxZoom: number;
   public crstype: string;
   public currentCrs: any;
 
@@ -34,7 +34,7 @@ export default class Tile {
     this.layer = props.layer;
     this.url = props.url;
     this.resolution = props.resolution === 'low' ? -1 : 0;
-    this.maxSourceZoom = props.maxSourceZoom;
+    this.maxZoom = props.maxZoom;
     this.crstype = props.crstype;
 
     this.currentCrs = new GeoCoordinates.default({
@@ -62,12 +62,12 @@ export default class Tile {
       maxZoom,
     } = oprions;
     // TODO: 当前瓦片的层级要比地图底图的层级低
-    if (currentZoom >= this.maxSourceZoom) {
+    if (currentZoom >= this.maxZoom) {
       return;
     }
     const zoom = Math.floor(currentZoom) + this.resolution;
 
-    this.tileZoom = zoom > this.maxSourceZoom ? this.maxSourceZoom : zoom;
+    this.tileZoom = zoom > this.maxZoom ? this.maxZoom : zoom;
 
     if (
       currentZoom < minZoom ||

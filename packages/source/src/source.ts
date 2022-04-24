@@ -230,14 +230,6 @@ export default class Source extends EventEmitter implements ISource {
   private excuteParser(): void {
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
-    // TODO: 图片瓦片地图组件只需要使用 url 参数
-    if (type === 'imagetile') {
-      this.data = {
-        tileurl: this.originData,
-        dataArray: [],
-      };
-      return;
-    }
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
     // 计算范围

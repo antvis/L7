@@ -5,7 +5,6 @@ import Line from './components/line'
 import Polygon from './components/polygon'
 import Point from './components/point'
 import Image from './components/image'
-import ImageTile from './components/imageTile'
 import Heatmap from './components/heatmap'
 import HeatmapGrid from './components/heatmapgrid'
 import HeatmapGrid3D from './components/heatmapgrid3d'
@@ -20,7 +19,6 @@ storiesOf('Mask 方法', module)
         .add('Polygon', () => <Polygon/>)
         .add('Line', () => <Line/>)
         .add('Image', () => <Image/>)
-        .add('ImageTile', () => <ImageTile/>)
         .add('Heatmap', () => <Heatmap/>)
         .add('HeatmapGrid', () => <HeatmapGrid/>)
         .add('HeatmapGrid3D', () => <HeatmapGrid3D/>)

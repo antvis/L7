@@ -20,6 +20,16 @@ export interface IParserData {
   // 瓦片地图数据字典
   featureKeys?: IFeatureKey;
 }
+
+export interface ITileParserCFG {
+  // tile parser cfg
+  resolution?: string;
+  tileSize?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  zoomOffset?: number;
+  extent?: [number, number, number, number];
+}
 export interface IJsonItem {
   [key: string]: any;
 }
