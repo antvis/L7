@@ -56,7 +56,7 @@ export default class FillModel extends BaseModel {
       // u_opacity: opacity,
 
       u_raisingHeight: Number(raisingHeight),
-      
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
 
       u_opacitylinear: Number(opacityLinear.enable),

@@ -11,7 +11,6 @@ export default class Amap2demo_polygon extends React.Component {
   }
 
   public async componentDidMount() {
-  
     const scene = new Scene({
       id: 'map',
       map: new GaodeMapV2({
@@ -38,7 +37,7 @@ export default class Amap2demo_polygon extends React.Component {
                 [116.3232421875, 31.090574094954192],
                 [113.8623046875, 31.090574094954192],
                 [113.8623046875, 30.031055426540206],
-              ]
+              ],
             ],
           },
         },
@@ -71,7 +70,7 @@ export default class Amap2demo_polygon extends React.Component {
         //   enable: true,
         //   dir: 'out',
         // },
-        raisingHeight: 50000
+        raisingHeight: 50000,
       });
     scene.addLayer(layer2);
   }
