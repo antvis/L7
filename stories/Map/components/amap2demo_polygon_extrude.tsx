@@ -23,10 +23,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
       map: new GaodeMap({
         // map: new GaodeMapV2({
         // map: new Mapbox({
-        // pitch: 0,
         style: 'dark',
-        // center: [-44.40673828125, -18.375379094031825],
-        // zoom: 13,
         center: [120, 29.732983],
         zoom: 6.2,
         pitch: 60,
@@ -34,31 +31,42 @@ export default class Amap2demo_polygon_extrude extends React.Component {
     });
     this.scene = scene;
 
-    const wavePoints = new PointLayer({zIndex: 2})
-    .source([{
-      lng: 120, lat: 30
-    }, {
-      lng: 120, lat: 29
-    }, {
-      lng: 120, lat: 28
-    }, {
-      lng: 120, lat: 27
-    }], {
-      parser:{
-        type: 'json',
-        x: 'lng',
-        y: 'lat'
-      }
-    })
-    .shape('circle')
-    .color('#ff0')
-    .size(50)
-    .animate(true)
-    .active(true)
-    .style({
-      raisingHeight: 200000 + 150000,
-    })
-   
+    const wavePoints = new PointLayer({ zIndex: 2 })
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+          {
+            lng: 120,
+            lat: 29,
+          },
+          {
+            lng: 120,
+            lat: 28,
+          },
+          {
+            lng: 120,
+            lat: 27,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .color('#ff0')
+      .size(50)
+      .animate(true)
+      .active(true)
+      .style({
+        raisingHeight: 200000 + 150000,
+      });
 
     scene.on('loaded', () => {
       scene.addLayer(wavePoints);
@@ -148,7 +156,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
               pickLight: true,
               raisingHeight: 200000,
               opacity: 0.8,
-              topsurface: false
+              topsurface: false,
             });
           scene.addLayer(provincelayerSide);
 
@@ -165,7 +173,7 @@ export default class Amap2demo_polygon_extrude extends React.Component {
               pickLight: true,
               raisingHeight: 200000,
               opacity: 0.8,
-              sidesurface: false
+              sidesurface: false,
             });
           scene.addLayer(provincelayerTop);
 
