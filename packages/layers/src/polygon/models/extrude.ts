@@ -28,6 +28,8 @@ export default class ExtrudeModel extends BaseModel {
       opacity = 1,
       heightfixed = false,
       raisingHeight = 0,
+      topsurface = true,
+      sidesurface = true,
       sourceColor,
       targetColor,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
@@ -73,6 +75,10 @@ export default class ExtrudeModel extends BaseModel {
     }
 
     return {
+      // 控制侧面和顶面的显示隐藏
+      u_topsurface: Number(topsurface),
+      u_sidesurface: Number(sidesurface),
+
       u_heightfixed: Number(heightfixed),
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),

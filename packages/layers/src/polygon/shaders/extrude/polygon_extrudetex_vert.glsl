@@ -4,6 +4,7 @@ precision highp float;
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
+attribute vec4 a_Color;
 attribute vec3 a_Position;
 attribute vec3 a_Normal;
 attribute float a_Size;
@@ -11,7 +12,7 @@ attribute vec3 a_uvs;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
-// varying vec4 v_Color;
+varying vec4 v_Color;
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_raisingHeight: 0.0;
 uniform float u_opacity: 1.0;
@@ -25,6 +26,8 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 #pragma include "picking"
 
 void main() {
+  v_Color = a_Color;
+
   // cal style mapping - 数据纹理映射部分的计算
   styleMappingMat = mat4(
     0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - a_Position.z(judge side by a_Position.z)
