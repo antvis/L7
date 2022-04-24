@@ -45,4 +45,6 @@ style({
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Ob62Q7JDpZ4AAAAAAAAAAAAAARQnAQ">
 
+- raisingHeight 设置 3D 填充图的抬升高度
+
 `markdown:docs/common/layer/base.md`
