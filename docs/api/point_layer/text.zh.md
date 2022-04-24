@@ -43,4 +43,8 @@ layer.shape('name', 'text');
 
 [在线案例](../../../examples/point/text#point_text)
 
+## 额外的 style 配置
+
+- raisingHeight 设置 3D 填充图的抬升高度
+
 `markdown:docs/common/layer/base.md`
