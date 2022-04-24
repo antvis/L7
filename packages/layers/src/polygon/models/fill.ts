@@ -14,6 +14,7 @@ import polygon_vert from '../shaders/polygon_vert.glsl';
 export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
+      raisingHeight = 0,
       opacity = 1,
       opacityLinear = {
         enable: false,
@@ -53,6 +54,9 @@ export default class FillModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       // u_opacity: opacity,
+
+      u_raisingHeight: Number(raisingHeight),
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
 
       u_opacitylinear: Number(opacityLinear.enable),
