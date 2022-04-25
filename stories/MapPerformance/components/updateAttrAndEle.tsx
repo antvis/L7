@@ -48,7 +48,8 @@ export default class Demo extends React.Component {
       .size(10)
       // .color('#f00')
       .color('c', (v) => v)
-      .shape('circle')
+      // .shape('circle')
+      .shape('simple')
       .active(true);
 
     scene.on('loaded', () => {
