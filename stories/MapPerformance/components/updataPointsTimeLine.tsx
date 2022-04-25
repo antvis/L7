@@ -4,7 +4,7 @@ import { PointLayer } from '@antv/l7-layers';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 import { csvParse } from 'd3-dsv';
-import {styled, withStyles} from '@material-ui/core/styles';
+import { styled, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 
 export default class Demo extends React.Component {
@@ -13,52 +13,53 @@ export default class Demo extends React.Component {
 
   constructor() {
     this.state = {
-        currentYear: 50,
-        modelDatas: undefined
-    }
+      currentYear: 50,
+      modelDatas: undefined,
+    };
   }
   public componentWillUnmount() {
     this.scene.destroy();
   }
 
-  public getSortedData(dataList: {DateTime: string}[]) {
-    const res = {}, years = []
+  public getSortedData(dataList: { DateTime: string }[]) {
+    const res = {},
+      years = [];
     dataList.map((data) => {
-        const { DateTime } = data
-        const year = DateTime.slice(0, 4)
-        if(res[year]) {
-            res[year].push({
-                Latitude: Number(data.Latitude),
-                Longitude: Number(data.Longitude),
-                Depth: Number(data.Depth),
-                Magnitude: Number(data.Magnitude),
-            });
-        } else {
-            years.push(year);
-            res[year] = [];
-            res[year].push({
-                Latitude: Number(data.Latitude),
-                Longitude: Number(data.Longitude),
-                Depth: Number(data.Depth),
-                Magnitude: Number(data.Magnitude),
-            });
-        }
-    })
+      const { DateTime } = data;
+      const year = DateTime.slice(0, 4);
+      if (res[year]) {
+        res[year].push({
+          Latitude: Number(data.Latitude),
+          Longitude: Number(data.Longitude),
+          Depth: Number(data.Depth),
+          Magnitude: Number(data.Magnitude),
+        });
+      } else {
+        years.push(year);
+        res[year] = [];
+        res[year].push({
+          Latitude: Number(data.Latitude),
+          Longitude: Number(data.Longitude),
+          Depth: Number(data.Depth),
+          Magnitude: Number(data.Magnitude),
+        });
+      }
+    });
     return {
-        res,
-        years
+      res,
+      years,
     };
   }
 
   public getModelDatas(layer, sortedData, years, parser) {
-    const modelDatas = {}
-    years.map(year => {
-        modelDatas[year] = layer.initModelData(sortedData[year], parser)
-    })
-    
+    const modelDatas = {};
+    years.map((year) => {
+      modelDatas[year] = layer.initModelData(sortedData[year], parser);
+    });
+
     this.setState({
-        modelDatas
-    })
+      modelDatas,
+    });
   }
 
   public generateData(size) {
@@ -74,7 +75,6 @@ export default class Demo extends React.Component {
   }
 
   public async componentDidMount() {
-      
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -86,53 +86,52 @@ export default class Demo extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
+      fetch(
+        'https://gw.alipayobjects.com/os/bmw-prod/6b15fe03-9d5b-4779-831d-ec30aa2e4738.csv',
+      )
+        .then((res) => res.text())
+        .then((res) => {
+          const originData = csvParse(res);
+          const { res: sortedData, years } = this.getSortedData(originData);
+          const parser = {
+            parser: {
+              type: 'json',
+              x: 'Longitude',
+              y: 'Latitude',
+            },
+          };
 
-        fetch('https://gw.alipayobjects.com/os/bmw-prod/6b15fe03-9d5b-4779-831d-ec30aa2e4738.csv')
-        .then(res => res.text())
-        .then(res => {
-            const originData = csvParse(res)
-            const { res: sortedData, years } = this.getSortedData(originData);
-            const parser = {
-                parser: {
-                    type: 'json',
-                    x: 'Longitude',
-                    y: 'Latitude'
-                }
-            }
-        
-            let layer = new PointLayer()
+          let layer = new PointLayer()
             .source(sortedData[years[0]], parser)
             .shape('simple')
-            .size('Magnitude', v => Math.pow(v, 2))
+            .size('Magnitude', (v) => Math.pow(v, 2))
             .color('Magnitude', [
-                '#ffffb2',
-                '#fed976',
-                '#feb24c',
-                '#fd8d3c',
-                '#f03b20',
-                '#bd0026'
+              '#ffffb2',
+              '#fed976',
+              '#feb24c',
+              '#fd8d3c',
+              '#f03b20',
+              '#bd0026',
             ])
             .style({
-                opacity: 0.5
-            })
+              opacity: 0.5,
+            });
 
-            scene.addLayer(layer)
-            this.layer = layer;
-         
-            this.getModelDatas(layer, sortedData, years, parser)
-          
-        })
-        
+          scene.addLayer(layer);
+          this.layer = layer;
+
+          this.getModelDatas(layer, sortedData, years, parser);
+        });
     });
   }
 
   public timelinechange(time) {
-    if(time !== this.state.currentYear) {
-        this.layer.updateModelData(this.state.modelDatas[time])
-        this.scene.render();
-        this.setState({
-            currentYear: time
-        })
+    if (time !== this.state.currentYear) {
+      this.layer.updateModelData(this.state.modelDatas[time]);
+      this.scene.render();
+      this.setState({
+        currentYear: time,
+      });
     }
   }
 
@@ -148,20 +147,18 @@ export default class Demo extends React.Component {
           bottom: 0,
         }}
       >
-        {
-            this.state.modelDatas !== undefined && <RangeInput
+        {this.state.modelDatas !== undefined && (
+          <RangeInput
             min={1988}
             max={2018}
             value={this?.state?.currentYear || 1988}
-            onChange = {(e) => this.timelinechange(e)}
-        />
-        }
+            onChange={(e) => this.timelinechange(e)}
+          />
+        )}
       </div>
     );
   }
 }
-
-
 
 const PositionContainer = styled('div')({
   position: 'absolute',
@@ -170,23 +167,23 @@ const PositionContainer = styled('div')({
   width: '100%',
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
 });
 
 const SliderInput = withStyles({
   root: {
     marginLeft: 12,
-    width: '40%'
+    width: '40%',
   },
   valueLabel: {
     '& span': {
       background: 'none',
-      color: '#000'
-    }
-  }
+      color: '#000',
+    },
+  },
 })(Slider);
 
-function RangeInput({min, max, value, onChange}) {
+function RangeInput({ min, max, value, onChange }) {
   return (
     <PositionContainer>
       <SliderInput
@@ -195,9 +192,8 @@ function RangeInput({min, max, value, onChange}) {
         value={value}
         onChange={(event, newValue) => onChange(newValue)}
         valueLabelDisplay="auto"
-        valueLabelFormat={t => t}
+        valueLabelFormat={(t) => t}
       />
     </PositionContainer>
   );
 }
-
