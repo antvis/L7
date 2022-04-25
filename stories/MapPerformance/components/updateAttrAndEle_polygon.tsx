@@ -92,7 +92,7 @@ export default class Demo extends React.Component {
       scene.addLayer(layer);
 
       setTimeout(() => {
-        let data2cache = layer.initModelData(data2);
+        let data2cache = layer.createModelData(data2);
         layer.updateModelData(data2cache);
         scene.render();
       }, 1000);

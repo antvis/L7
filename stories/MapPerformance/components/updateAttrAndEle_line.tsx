@@ -87,11 +87,11 @@ export default class Demo extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
 
-      // let data1cache = layer.initModelData(data1, {});
+      // let data1cache = layer.createModelData(data1, {});
 
       // console.log(data1cache);
 
-      // let data2cache = layer.initModelData(data2, {});
+      // let data2cache = layer.createModelData(data2, {});
       // console.log('data2cache', data2cache)
 
       // let c = 0;
@@ -108,7 +108,7 @@ export default class Demo extends React.Component {
       // }, 1000);
 
       setTimeout(() => {
-        let data2cache = layer.initModelData(data2);
+        let data2cache = layer.createModelData(data2);
         layer.updateModelData(data2cache);
         scene.render();
       }, 1000);

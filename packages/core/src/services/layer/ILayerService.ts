@@ -75,7 +75,7 @@ export interface ILayerModel {
 
   // earth mode
   setEarthTime?(time: number): void;
-  initModelData?(options?: any): any;
+  createModelData?(options?: any): any;
 }
 export interface IModelUniform {
   [key: string]: IUniform;

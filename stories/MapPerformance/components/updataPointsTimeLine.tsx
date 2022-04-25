@@ -54,7 +54,7 @@ export default class Demo extends React.Component {
   public getModelDatas(layer, sortedData, years, parser) {
     const modelDatas = {};
     years.map((year) => {
-      modelDatas[year] = layer.initModelData(sortedData[year], parser);
+      modelDatas[year] = layer.createModelData(sortedData[year], parser);
     });
 
     this.setState({

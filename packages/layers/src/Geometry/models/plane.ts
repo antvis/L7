@@ -172,7 +172,7 @@ export default class PlaneModel extends BaseModel {
     return this.initModels();
   }
 
-  public initModelData(options?: any) {
+  public createModelData(options?: any) {
     if (options) {
       const {
         widthSegments: oldwidthSegments,

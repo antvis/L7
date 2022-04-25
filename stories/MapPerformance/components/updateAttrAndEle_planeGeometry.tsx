@@ -73,12 +73,12 @@ export default class Demo extends React.Component {
       layer.on('terrainImageLoaded', () => {
         console.log('terrainImageLoaded');
 
-        cache10 = layer.initModelData([], {
+        cache10 = layer.createModelData([], {
           widthSegments: 10,
           heightSegments: 10,
         });
 
-        cache100 = layer.initModelData([], {
+        cache100 = layer.createModelData([], {
           widthSegments: 100,
           heightSegments: 100,
         });

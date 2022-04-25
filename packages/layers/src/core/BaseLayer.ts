@@ -417,10 +417,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
   }
 
-  public initModelData(data: any, option?: ISourceCFG) {
-    if (this.layerModel.initModelData) {
+  public createModelData(data: any, option?: ISourceCFG) {
+    if (this.layerModel.createModelData) {
       // 在某些特殊图层中单独构建 attribute & elements
-      return this.layerModel.initModelData(option);
+      return this.layerModel.createModelData(option);
     }
     const calEncodeData = this.calculateEncodeData(data, option);
     const triangulation = this.triangulation;
