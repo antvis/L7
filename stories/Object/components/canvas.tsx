@@ -133,15 +133,15 @@ export default class Demo extends React.Component {
 
     scene.on('loaded', () => {
       const layer = new CanvasLayer({})
-      .style({
-        zIndex: 10,
-        update: 'always',
-        // update: 'dragend',
-        drawingOnCanvas: this.draw,
-      })
-      .animate({
-        enable: true,
-      });
+        .style({
+          zIndex: 10,
+          update: 'always',
+          // update: 'dragend',
+          drawingOnCanvas: this.draw,
+        })
+        .animate({
+          enable: true,
+        });
       scene.addLayer(layer);
 
       setInterval(() => {
@@ -161,8 +161,6 @@ export default class Demo extends React.Component {
       // setTimeout(() => {
       //   scene.removeLayer(layer)
       // }, 2000)
-
-
     });
   }
 
