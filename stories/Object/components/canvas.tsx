@@ -151,19 +151,17 @@ export default class Demo extends React.Component {
 
           setInterval(() => {
             x += 0.1;
-            layer.style({
-              drawingOnCanvas: this.draw,
-            });
-            scene.render();
           }, 30);
 
-          // setTimeout(() => {
-          //   console.log('reSet');
-          //   layer.style({
-          //     update: 'dragend',
-          //   });
-          //   scene.render();
-          // }, 3000);
+          setTimeout(() => {
+            console.log('time out hide');
+            layer.hide()
+          }, 2000);
+
+          setTimeout(() => {
+            console.log('show')
+            layer.show();
+          }, 3000)
         });
     });
   }
