@@ -54,7 +54,7 @@ export default class CanvaModel extends BaseModel {
 
   public clearModels(): void {
     if (this.canvas) {
-      document.removeChild(this.canvas);
+      this.mapService.getContainer()?.removeChild(this.canvas);
       // @ts-ignore
       this.canvas = null;
     }

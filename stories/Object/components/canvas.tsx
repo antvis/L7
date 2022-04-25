@@ -132,39 +132,35 @@ export default class Demo extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const layer = new CanvasLayer({})
-            .style({
-              zIndex: 10,
-              update: 'always',
-              // update: 'dragend',
-              drawingOnCanvas: this.draw,
-            })
-            .animate({
-              enable: true,
-            });
-          scene.addLayer(layer);
-
-          setInterval(() => {
-            x += 0.1;
-            layer.style({
-              drawingOnCanvas: this.draw,
-            });
-            scene.render();
-          }, 30);
-
-          // setTimeout(() => {
-          //   console.log('reSet');
-          //   layer.style({
-          //     update: 'dragend',
-          //   });
-          //   scene.render();
-          // }, 3000);
+      const layer = new CanvasLayer({})
+        .style({
+          zIndex: 10,
+          update: 'always',
+          // update: 'dragend',
+          drawingOnCanvas: this.draw,
+        })
+        .animate({
+          enable: true,
         });
+      scene.addLayer(layer);
+
+      setInterval(() => {
+        x += 0.1;
+      }, 30);
+
+      setTimeout(() => {
+        console.log('time out hide');
+        layer.hide();
+      }, 2000);
+
+      setTimeout(() => {
+        console.log('show');
+        layer.show();
+      }, 3000);
+
+      // setTimeout(() => {
+      //   scene.removeLayer(layer)
+      // }, 2000)
     });
   }
 

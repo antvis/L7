@@ -73,6 +73,9 @@ export interface ILayerModel {
   needUpdate(): boolean;
   clearModels(): void;
 
+  // canvasLayer
+  clearCanvas?(): void;
+
   // earth mode
   setEarthTime?(time: number): void;
   createModelData?(options?: any): any;

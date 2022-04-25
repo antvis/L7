@@ -3,8 +3,6 @@ import { PointLayer, Scene, LineLayer, PolygonLayer, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 import * as turf from '@turf/turf';
-
-const aspaceLnglat = [120.11, 30.264701434772807] as [number, number];
 export default class GaodeMapComponent extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -17,12 +15,8 @@ export default class GaodeMapComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: aspaceLnglat,
-        // pitch: 0,
-        // pitch: 40,
-        // style: 'dark',
+        center: [120.11, 30.264701434772807],
         zoom: 14,
-        // dragEnable: false
       }),
     });
     // normal = 'normal',
@@ -73,9 +67,54 @@ export default class GaodeMapComponent extends React.Component {
       .shape('circle')
       .size(30);
 
-    // layer0.on('mouseout', () => {})
-    // layer0.on('mousemove', () => {})
+    let layer01 = new PointLayer({ zIndex: 2 })
+      .source(
+        [
+          {
+            lng: 120.11,
+            lat: 30.27,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .color('#ff0')
+      .shape('circle')
+      .size(30)
+      .style({
+        // raisingHeight: 50
+        raisingHeight: 5000,
+      });
+
     layer0.on('click', () => {});
+
+    let layer2 = new PointLayer({}) // blend: 'additive'
+      .source(
+        [
+          {
+            lng: 120.11,
+            lat: 30.264701434772807,
+            name: 'n3',
+          },
+          {
+            lng: 120.111,
+            lat: 30.264701434772807,
+            name: 'n3',
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      );
 
     let layer = new PointLayer({}) // blend: 'additive'
       .source(
@@ -120,7 +159,7 @@ export default class GaodeMapComponent extends React.Component {
       //   enable: false,
       //   // type: 'www'
       // })
-      // .animate(true)
+      .animate(true)
       .active(true)
       // .active({
       //   color: '#f00',
@@ -142,39 +181,23 @@ export default class GaodeMapComponent extends React.Component {
         // unit: 'meter',
       });
 
+    layer2
+      .shape('circle')
+      .color('#f00')
+      .size(50)
+      .animate(true)
+      .active(true)
+      .style({
+        raisingHeight: 5000,
+      });
+
     this.scene = scene;
-
-    // console.log('layer', layer)
-
-    // let layer2 = new PointLayer({})
-    // .source([
-    //   {
-    //     lng: 120.1025,
-    //     lat: 30.264701434772807,
-    //     name: 'n2'
-    //   }
-    // ], {
-    //   parser: {
-    //     type: 'json',
-    //     x: 'lng',
-    //     y: 'lat',
-    //   },
-    // })
-    // .shape('circle')
-    // .size(10)
-    // .color('#00f')
-    // .style({
-    //   opacity: 0.5
-    // })
-
-    // scene.addImage(
-    //   '00',
-    //   'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-    // );
 
     scene.on('loaded', () => {
       scene.addLayer(layer0);
+      scene.addLayer(layer01);
       scene.addLayer(layer);
+      scene.addLayer(layer2);
 
       scene.on('click', (e) => {
         console.log(scene.getPickedLayer());

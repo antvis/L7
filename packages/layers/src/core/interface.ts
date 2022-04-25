@@ -96,6 +96,9 @@ export interface IPolygonLayerStyleOptions {
     dir: string;
   };
 
+  topsurface?: boolean;
+  sidesurface?: boolean;
+
   mapTexture?: string; // 挤出几何体顶面贴图
   raisingHeight?: number; // 挤出几何体抬升高度
   sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)

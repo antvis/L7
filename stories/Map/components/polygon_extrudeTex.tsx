@@ -38,14 +38,17 @@ export default class Amap2demo_polygon_extrude extends React.Component {
           })
           .style({
             heightfixed: true,
-            pickLight: true,
+            // pickLight: true,
             raisingHeight: 200000,
-            // mapTexture:
-            //   'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SOUKQJpw1FYAAAAAAAAAAAAAARQnAQ',
+            mapTexture:
+              'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SOUKQJpw1FYAAAAAAAAAAAAAARQnAQ',
             // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
             // opacity: 0.8,
             sourceColor: '#f00',
             targetColor: '#ff0',
+
+            // topsurface: false,
+            // sidesurface: false
           });
 
         scene.addLayer(provincelayer);
