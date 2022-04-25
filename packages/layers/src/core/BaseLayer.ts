@@ -5,6 +5,7 @@ import {
   gl,
   IActiveOption,
   IAnimateOption,
+  IAttrubuteAndElements,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
@@ -44,6 +45,7 @@ import {
   ScaleTypes,
   StyleAttributeField,
   StyleAttributeOption,
+  Triangulation,
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
@@ -53,6 +55,7 @@ import { Container } from 'inversify';
 import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
+import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
   normalizePasses,
@@ -81,6 +84,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
   public isLayerGroup: boolean = false;
+  public triangulation?: Triangulation | undefined;
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -399,7 +403,54 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       target: this,
       type: 'add',
     });
+
     return this;
+  }
+
+  public updateModelData(data: IAttrubuteAndElements) {
+    if (data.attributes && data.elements) {
+      this.models.map((m) => {
+        m.updateAttributesAndElements(data.attributes, data.elements);
+      });
+    } else {
+      console.warn('data error');
+    }
+  }
+
+  public createModelData(data: any, option?: ISourceCFG) {
+    if (this.layerModel.createModelData) {
+      // 在某些特殊图层中单独构建 attribute & elements
+      return this.layerModel.createModelData(option);
+    }
+    const calEncodeData = this.calculateEncodeData(data, option);
+    const triangulation = this.triangulation;
+    if (calEncodeData && triangulation) {
+      return this.styleAttributeService.createAttributesAndIndices(
+        calEncodeData,
+        triangulation,
+      );
+    } else {
+      return {
+        attributes: undefined,
+        elements: undefined,
+      };
+    }
+  }
+
+  public calculateEncodeData(data: any, option?: ISourceCFG) {
+    if (this.inited) {
+      return calculateData(
+        this,
+        this.fontService,
+        this.mapService,
+        this.styleAttributeService,
+        data,
+        option,
+      );
+    } else {
+      console.warn('layer not inited!');
+      return null;
+    }
   }
   /**
    * Model初始化前需要更新Model样式
