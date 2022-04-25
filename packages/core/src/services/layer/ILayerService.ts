@@ -78,6 +78,7 @@ export interface ILayerModel {
 
   // earth mode
   setEarthTime?(time: number): void;
+  createModelData?(options?: any): any;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -109,6 +110,11 @@ export interface ILegendClassificaItem {
 }
 // 图层图例
 export type LegendItems = ILegendSegmentItem[] | ILegendClassificaItem[];
+
+export interface IAttrubuteAndElements {
+  attributes: any;
+  elements: any;
+}
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -150,6 +156,7 @@ export interface ILayer {
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
   isLayerGroup: boolean;
+  triangulation?: Triangulation | undefined;
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -161,6 +168,7 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
+  updateModelData(data: IAttrubuteAndElements): void;
 
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;

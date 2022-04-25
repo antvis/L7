@@ -165,6 +165,7 @@ export default class LineModel extends BaseModel {
       depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
+    this.layer.triangulation = LineTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'line_' + type,

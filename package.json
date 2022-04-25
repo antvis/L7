@@ -88,6 +88,8 @@
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-electron": "^0.1.11",
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
     "jest-styled-components": "^6.2.1",
     "lerna": "^3.16.4",
     "lint-staged": "^9.2.4",
