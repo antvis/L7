@@ -53,3 +53,5 @@ layer.boxSelect(box, cb);
 // (x1, y1), (x2, y2) 框选的方框左上角和右下角相对于地图左上角的像素坐标
 // cb 是传入的回调函数，回调函数返回的参数是选中的 feature 对象数组，对象的字段和用户传入的数据相关
 ```
+
+[在线案例](/zh/examples/gallery/animate#box_select)
