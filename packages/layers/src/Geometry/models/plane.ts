@@ -291,7 +291,7 @@ export default class PlaneModel extends BaseModel {
         };
       },
     );
-    this.layer.updateMudelsData(modelData as IAttrubuteAndElements);
+    this.layer.updateModelData(modelData as IAttrubuteAndElements);
     this.layerService.renderLayers();
   }
 

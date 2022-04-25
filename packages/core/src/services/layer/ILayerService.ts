@@ -165,7 +165,7 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
-  updateMudelsData(data: IAttrubuteAndElements): void;
+  updateModelData(data: IAttrubuteAndElements): void;
 
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;

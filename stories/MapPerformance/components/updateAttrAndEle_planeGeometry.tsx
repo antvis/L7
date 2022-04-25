@@ -90,13 +90,13 @@ export default class Demo extends React.Component {
         if (value < 14.5) {
           if (currentCache !== 'cache10') {
             console.log('set cache10');
-            layer.updateMudelsData(cache10);
+            layer.updateModelData(cache10);
             currentCache = 'cache10';
           }
         } else {
           if (currentCache !== 'cache100') {
             console.log('set cache100');
-            layer.updateMudelsData(cache100);
+            layer.updateModelData(cache100);
             currentCache = 'cache100';
           }
         }

@@ -76,11 +76,11 @@ export default class Demo extends React.Component {
       setInterval(() => {
         if (c === 0) {
           c = 1;
-          layer.updateMudelsData(data2cache);
+          layer.updateModelData(data2cache);
           scene.render();
         } else {
           c = 0;
-          layer.updateMudelsData(data1cache);
+          layer.updateModelData(data1cache);
           scene.render();
         }
       }, 1000);

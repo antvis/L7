@@ -407,7 +407,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
-  public updateMudelsData(data: IAttrubuteAndElements) {
+  public updateModelData(data: IAttrubuteAndElements) {
     if (data.attributes && data.elements) {
       this.models.map((m) => {
         m.updateAttributesAndElements(data.attributes, data.elements);
