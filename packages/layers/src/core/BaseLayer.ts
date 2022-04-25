@@ -761,7 +761,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public hide(): ILayer {
-    if(this.type === 'CanvasLayer' && this.layerModel.clearCanvas) {
+    if (this.type === 'CanvasLayer' && this.layerModel.clearCanvas) {
       // 对 canvasLayer 的 hide 操作做特殊处理
       this.layerModel.clearCanvas();
     }
