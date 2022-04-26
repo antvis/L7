@@ -31,7 +31,7 @@ export default class Demo extends React.Component {
         center: [120.1025, 30.2594],
         widthSegments: 200,
         heightSegments: 200,
-        terrainClipHeight: 1,
+        // terrainClipHeight: 1,
         mapTexture:
           'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ',
         terrainTexture:
