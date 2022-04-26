@@ -83,7 +83,7 @@ function setDragBar() {
       ox = 0,
       left = 0,
       bgleft = 0;
-    let $ = window.$;
+    const $ = window.$;
     $('.progress_btn').mousedown(function(e) {
       ox = e.pageX - left;
       tag = true;
@@ -118,7 +118,7 @@ function setDragBar() {
     } else if (left > barWidth) {
       left = barWidth;
     }
-    let $ = window.$;
+    const $ = window.$;
     $('.progress_btn').css('left', left);
 
     const time = parseInt((left / barWidth) * 48);
