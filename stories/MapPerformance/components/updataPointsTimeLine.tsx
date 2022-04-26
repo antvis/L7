@@ -21,15 +21,15 @@ export default class Demo extends React.Component {
   }
 
   public getTimeKey(time) {
-    const half = Math.floor(time/2)
+    const half = Math.floor(time / 2);
     const res = '';
-    if(half < 10) {
+    if (half < 10) {
       res += '0';
     }
-    if(time/2 > half) {
-      res += (half + '30');
+    if (time / 2 > half) {
+      res += half + '30';
     } else {
-      res += (half + '00');
+      res += half + '00';
     }
     return res;
   }
@@ -52,27 +52,29 @@ export default class Demo extends React.Component {
         center: [120.2, 36.1],
         pitch: 0,
         zoom: 10,
-        style: 'dark'
+        style: 'dark',
       }),
     });
     this.scene = scene;
     // 公交出行需求量的时序数据
     scene.on('loaded', () => {
-      fetch('https://gw.alipayobjects.com/os/bmw-prod/82d85bb6-db7c-4583-af26-35b11c7b2d0d.json')
-      .then(res => res.json())
-      .then(originData => {
-        const times = Object.keys(originData);
-        const parser = {
-          parser: {
-            type: 'json',
-            x: 'o',
-            y: 'a',
-          },
-        };
-        let layer = new PointLayer({})
+      fetch(
+        'https://gw.alipayobjects.com/os/bmw-prod/82d85bb6-db7c-4583-af26-35b11c7b2d0d.json',
+      )
+        .then((res) => res.json())
+        .then((originData) => {
+          const times = Object.keys(originData);
+          const parser = {
+            parser: {
+              type: 'json',
+              x: 'o',
+              y: 'a',
+            },
+          };
+          let layer = new PointLayer({})
             .source(originData[times[0]], parser)
             .shape('simple')
-            .size('v', (v) => Math.sqrt(v)/5)
+            .size('v', (v) => Math.sqrt(v) / 5)
             .color('v', [
               '#ffffb2',
               '#fed976',
@@ -89,8 +91,7 @@ export default class Demo extends React.Component {
           this.layer = layer;
 
           this.getModelDatas(layer, originData, times, parser);
-
-      })
+        });
     });
   }
 
@@ -162,15 +163,15 @@ function RangeInput({ min, max, value, onChange }) {
         onChange={(event, newValue) => onChange(newValue)}
         valueLabelDisplay="auto"
         valueLabelFormat={(t) => {
-          const half = Math.floor(t/2)
+          const half = Math.floor(t / 2);
           const res = '';
-          if(half < 10) {
+          if (half < 10) {
             res += '0';
           }
-          if(t/2 > half) {
-            res += (half + ':30');
+          if (t / 2 > half) {
+            res += half + ':30';
           } else {
-            res += (half + ':00');
+            res += half + ':00';
           }
           return res;
         }}
