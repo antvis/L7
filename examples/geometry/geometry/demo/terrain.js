@@ -11,7 +11,8 @@ const scene = new Scene({
     zoom: 14
   })
 });
-let currentZoom = 14, currentModelData = '100x100'
+let currentZoom = 14,
+  currentModelData = '100x100';
 
 scene.on('loaded', () => {
   const layer = new GeometryLayer()
@@ -38,48 +39,50 @@ scene.on('loaded', () => {
     });
   scene.addLayer(layer);
 
-   let modelData10, modelData20 = null, modelData100;
+  let modelData10,
+    modelData20 = null,
+    modelData100;
 
-      layer.on('terrainImageLoaded', () => {
+  layer.on('terrainImageLoaded', () => {
 
-        modelData10 = layer.createModelData([], {
-          widthSegments: 10,
-          heightSegments: 10,
-        });
+    modelData10 = layer.createModelData([], {
+      widthSegments: 10,
+      heightSegments: 10
+    });
 
-        modelData20 = layer.createModelData([], {
-          widthSegments: 20,
-          heightSegments: 20,
-        });
+    modelData20 = layer.createModelData([], {
+      widthSegments: 20,
+      heightSegments: 20
+    });
 
-        modelData100 = layer.createModelData([], {
-          widthSegments: 100,
-          heightSegments: 100,
-        });
-      });
+    modelData100 = layer.createModelData([], {
+      widthSegments: 100,
+      heightSegments: 100
+    });
+  });
 
 
-  scene.on('zoom', ({value}) =>{
+  scene.on('zoom', ({ value }) => {
     const zoom = Math.floor(value);
-    if(currentZoom !== zoom) {    
-      if(zoom > 13) {
-        if(currentModelData !== '100x100') {
+    if (currentZoom !== zoom) {
+      if (zoom > 13) {
+        if (currentModelData !== '100x100') {
           layer.updateModelData(modelData100);
-          currentModelData = '100x100'
+          currentModelData = '100x100';
         }
-      } else if(zoom > 12) {
-        if(currentModelData !== '20x20') {
+      } else if (zoom > 12) {
+        if (currentModelData !== '20x20') {
           layer.updateModelData(modelData20);
-          currentModelData = '20x20'
+          currentModelData = '20x20';
         }
       } else {
-        if(currentModelData !== '10x10') {
+        if (currentModelData !== '10x10') {
           layer.updateModelData(modelData10);
-          currentModelData = '10x10'
+          currentModelData = '10x10';
         }
       }
       currentZoom = zoom;
     }
     return '';
-  })
+  });
 });
