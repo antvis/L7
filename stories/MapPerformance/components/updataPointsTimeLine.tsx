@@ -3,7 +3,6 @@ import { Scene, json } from '@antv/l7';
 import { PointLayer } from '@antv/l7-layers';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
-import { csvParse } from 'd3-dsv';
 import { styled, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 
@@ -13,7 +12,7 @@ export default class Demo extends React.Component {
 
   constructor() {
     this.state = {
-      currentYear: 50,
+      currentYear: 24,
       modelDatas: undefined,
     };
   }
@@ -21,34 +20,18 @@ export default class Demo extends React.Component {
     this.scene.destroy();
   }
 
-  public getSortedData(dataList: { DateTime: string }[]) {
-    const res = {},
-      years = [];
-    dataList.map((data) => {
-      const { DateTime } = data;
-      const year = DateTime.slice(0, 4);
-      if (res[year]) {
-        res[year].push({
-          Latitude: Number(data.Latitude),
-          Longitude: Number(data.Longitude),
-          Depth: Number(data.Depth),
-          Magnitude: Number(data.Magnitude),
-        });
-      } else {
-        years.push(year);
-        res[year] = [];
-        res[year].push({
-          Latitude: Number(data.Latitude),
-          Longitude: Number(data.Longitude),
-          Depth: Number(data.Depth),
-          Magnitude: Number(data.Magnitude),
-        });
-      }
-    });
-    return {
-      res,
-      years,
-    };
+  public getTimeKey(time) {
+    const half = Math.floor(time/2)
+    const res = '';
+    if(half < 10) {
+      res += '0';
+    }
+    if(time/2 > half) {
+      res += (half + '30');
+    } else {
+      res += (half + '00');
+    }
+    return res;
   }
 
   public getModelDatas(layer, sortedData, years, parser) {
@@ -62,50 +45,35 @@ export default class Demo extends React.Component {
     });
   }
 
-  public generateData(size) {
-    let data = [];
-    for (let i = 0; i < size; i++) {
-      data.push({
-        lng: Math.random() * 180,
-        lat: Math.random() * 80 - 40,
-        c: Math.random() > 0.5 ? '#f00' : '#ff0',
-      });
-    }
-    return data;
-  }
-
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [-120, 36],
+        center: [120.2, 36.1],
         pitch: 0,
-        zoom: 6,
+        zoom: 10,
+        style: 'dark'
       }),
     });
     this.scene = scene;
-
+    // 公交出行需求量的时序数据
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/6b15fe03-9d5b-4779-831d-ec30aa2e4738.csv',
-      )
-        .then((res) => res.text())
-        .then((res) => {
-          const originData = csvParse(res);
-          const { res: sortedData, years } = this.getSortedData(originData);
-          const parser = {
-            parser: {
-              type: 'json',
-              x: 'Longitude',
-              y: 'Latitude',
-            },
-          };
-
-          let layer = new PointLayer()
-            .source(sortedData[years[0]], parser)
+      fetch('https://gw.alipayobjects.com/os/bmw-prod/82d85bb6-db7c-4583-af26-35b11c7b2d0d.json')
+      .then(res => res.json())
+      .then(originData => {
+        const times = Object.keys(originData);
+        const parser = {
+          parser: {
+            type: 'json',
+            x: 'o',
+            y: 'a',
+          },
+        };
+        let layer = new PointLayer({})
+            .source(originData[times[0]], parser)
             .shape('simple')
-            .size('Magnitude', (v) => Math.pow(v, 2))
-            .color('Magnitude', [
+            .size('v', (v) => Math.sqrt(v)/5)
+            .color('v', [
               '#ffffb2',
               '#fed976',
               '#feb24c',
@@ -114,20 +82,21 @@ export default class Demo extends React.Component {
               '#bd0026',
             ])
             .style({
-              opacity: 0.5,
+              opacity: 0.6,
             });
 
           scene.addLayer(layer);
           this.layer = layer;
 
-          this.getModelDatas(layer, sortedData, years, parser);
-        });
+          this.getModelDatas(layer, originData, times, parser);
+
+      })
     });
   }
 
   public timelinechange(time) {
     if (time !== this.state.currentYear) {
-      this.layer.updateModelData(this.state.modelDatas[time]);
+      this.layer.updateModelData(this.state.modelDatas[this.getTimeKey(time)]);
       this.scene.render();
       this.setState({
         currentYear: time,
@@ -149,9 +118,9 @@ export default class Demo extends React.Component {
       >
         {this.state.modelDatas !== undefined && (
           <RangeInput
-            min={1988}
-            max={2018}
-            value={this?.state?.currentYear || 1988}
+            min={0}
+            max={48}
+            value={this?.state?.currentYear || 0}
             onChange={(e) => this.timelinechange(e)}
           />
         )}
@@ -162,7 +131,7 @@ export default class Demo extends React.Component {
 
 const PositionContainer = styled('div')({
   position: 'absolute',
-  zIndex: 1,
+  zIndex: 2,
   bottom: '40px',
   width: '100%',
   display: 'flex',
@@ -173,12 +142,12 @@ const PositionContainer = styled('div')({
 const SliderInput = withStyles({
   root: {
     marginLeft: 12,
-    width: '40%',
+    width: '60%',
   },
   valueLabel: {
     '& span': {
       background: 'none',
-      color: '#000',
+      color: '#fff',
     },
   },
 })(Slider);
@@ -192,7 +161,19 @@ function RangeInput({ min, max, value, onChange }) {
         value={value}
         onChange={(event, newValue) => onChange(newValue)}
         valueLabelDisplay="auto"
-        valueLabelFormat={(t) => t}
+        valueLabelFormat={(t) => {
+          const half = Math.floor(t/2)
+          const res = '';
+          if(half < 10) {
+            res += '0';
+          }
+          if(t/2 > half) {
+            res += (half + ':30');
+          } else {
+            res += (half + ':00');
+          }
+          return res;
+        }}
       />
     </PositionContainer>
   );
