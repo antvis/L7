@@ -11,7 +11,7 @@
     },
     {
       "filename": "terrain.js",
-      "title": "自定义 3D 地形",
+      "title": "自定义 3D 地形（LOD）",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*DIb4TaijKIAAAAAAAAAAAAAAARQnAQ"
     },
     {
