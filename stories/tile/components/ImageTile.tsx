@@ -42,7 +42,7 @@ export default class Amap2demo_imageTileLayer extends React.Component {
     scene.on('loaded', () => {
       const layer = new ImageTileLayer();
       layer.source(
-        ['http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'],
+        'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
         {
           parser: {
             type: 'rasterTile',
@@ -50,7 +50,6 @@ export default class Amap2demo_imageTileLayer extends React.Component {
             minzoom: 6,
             maxZoom: 17,
             zoomOffset: 0,
-            resolution: 'low',
             extent: [-180, -85.051129, 180, 85.051129],
           },
         },

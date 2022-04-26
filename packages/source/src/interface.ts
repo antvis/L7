@@ -21,15 +21,15 @@ export interface IParserData {
   featureKeys?: IFeatureKey;
 }
 
-export interface ITileParserCFG {
-  // tile parser cfg
-  resolution?: string;
+// 栅格瓦片解析配置项
+export interface IRasterTileParserCFG {
   tileSize?: number;
   minZoom?: number;
   maxZoom?: number;
   zoomOffset?: number;
   extent?: [number, number, number, number];
 }
+
 export interface IJsonItem {
   [key: string]: any;
 }

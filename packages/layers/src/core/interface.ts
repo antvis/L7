@@ -117,14 +117,9 @@ export interface IPolygonLayerStyleOptions {
   watercolor2?: string;
 }
 
+// 瓦片图层
 export interface ITileLayerStyleOptions {
-  // 瓦片图层参数
-  resolution?: string; // 可选 瓦片地图的清晰度类型 low/high
-  tileSize?: number; // 可选 瓦片大小
-  maxZoom?: number; // 可选 瓦片最大层级
-  minZoom?: number; // 可选 瓦片最小层级
-  zoomOffset?: number; // 可选 瓦片层级偏移量
-  extent?: [number, number, number, number]; // 可选 瓦片范围
+  opacity: number;
 }
 
 export interface IImageLayerStyleOptions {
