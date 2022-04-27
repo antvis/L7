@@ -33,7 +33,7 @@ export default class ImageTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',

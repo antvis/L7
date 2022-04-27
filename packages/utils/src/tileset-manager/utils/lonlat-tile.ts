@@ -27,9 +27,9 @@ export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
  * 获取当前瓦片的经纬度边界
  */
 export const tileToBoundingBox = (x: number, y: number, z: number) => {
-  const [west, north] = osmTileXY2LonLat(x, y, z);
-  const [east, south] = osmTileXY2LonLat(x + 1, y + 1, z);
-  return { west, north, east, south };
+  const [minLng, maxLat] = osmTileXY2LonLat(x, y, z);
+  const [maxLng, minLat] = osmTileXY2LonLat(x + 1, y + 1, z);
+  return [minLng, minLat, maxLng, maxLat] as const;
 };
 
 /**
@@ -76,13 +76,11 @@ export function getTileIndices({
 
   const indices = [];
 
-  // debugger;
-
   const [minX, maxY] = osmLonLat2TileXY(bounds[0], bounds[1], z);
   const [maxX, minY] = osmLonLat2TileXY(bounds[2], bounds[3], z);
 
-  for (let x = minX; x < maxX; x++) {
-    for (let y = minY; y < maxY; y++) {
+  for (let x = minX; x <= maxX; x++) {
+    for (let y = minY; y <= maxY; y++) {
       indices.push({ x, y, z });
     }
   }

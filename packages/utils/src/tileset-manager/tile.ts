@@ -1,3 +1,4 @@
+import { bboxPolygon } from '@turf/turf';
 import { tileToBoundingBox } from './utils/lonlat-tile';
 
 type TileOptions = { x: number; y: number; z: number; tileSize: number };
@@ -76,6 +77,22 @@ export class Tile {
   // 瓦片的经纬度边界
   public get bbox() {
     return tileToBoundingBox(this.x, this.y, this.z);
+  }
+
+  // 瓦片边界面
+  public get bboxPolygon() {
+    const polygon = bboxPolygon(this.bbox as [number, number, number, number], {
+      properties: {
+        key: this.key,
+        bbox: this.bbox,
+        meta: `
+      ${this.key}
+      `,
+        // ${this.bbox.slice(0, 2)}
+        // ${this.bbox.slice(2)}
+      },
+    });
+    return polygon;
   }
 
   // 瓦片的 key

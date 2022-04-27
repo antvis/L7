@@ -1,7 +1,6 @@
 import {
   getURLFromTemplate,
   Tile,
-  TilesetManager,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
 import { IParserData, IRasterTileParserCFG } from '../interface';
@@ -24,20 +23,15 @@ export default function rasterTile(
   data: string,
   cfg?: IRasterTileParserCFG,
 ): IParserData {
-  const config = { ...DEFAULT_CONFIG, ...cfg };
   const getTileData = (tile: Tile) => {
     const url = getURLFromTemplate(data, tile);
     return url;
   };
-  const tilesetManager = new TilesetManager({
-    ...config,
-    getTileData,
-  });
+  const tilesetOptions = { ...DEFAULT_CONFIG, getTileData, ...cfg };
 
   return {
     url: data,
-    tilesetManager,
     dataArray: [],
-    ...config,
+    tilesetOptions,
   };
 }

@@ -26,7 +26,7 @@ export class TilesetManager extends EventEmitter {
   public get isLoaded() {
     return this.currentTiles.every((tile) => tile.isLoaded);
   }
-
+  // 缓存的瓦片数组
   public get tiles() {
     // 通过 zoom 层级排序，最小的层级在上面
     const tiles = Array.from(this.cacheTiles.values()).sort(
@@ -34,12 +34,17 @@ export class TilesetManager extends EventEmitter {
     );
     return tiles;
   }
+  // 当前层级的瓦片
+  public currentTiles: Tile[] = [];
   // 配置项
   protected options: TilesetManagerOptions;
-  // 当前层级的瓦片
-  protected currentTiles: Tile[] = [];
   // 缓存的瓦片，key 为 {z}-{x}-{y}
   private cacheTiles = new Map<string, Tile>();
+  // 上一次视野状态
+  private lastViewStates: {
+    zoom: number;
+    latLonBounds: [number, number, number, number];
+  };
 
   constructor(options: Partial<TilesetManagerOptions>) {
     super();
@@ -71,6 +76,16 @@ export class TilesetManager extends EventEmitter {
   // 更新
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
   public update(zoom: number, latLonBounds: [number, number, number, number]) {
+    if (
+      this.lastViewStates &&
+      this.lastViewStates.zoom === zoom &&
+      this.lastViewStates.latLonBounds.toString() === latLonBounds.toString()
+    ) {
+      return;
+    }
+
+    this.lastViewStates = { zoom, latLonBounds };
+
     let isAddTile = false;
     const tileIndices = this.getTileIndices(zoom, latLonBounds);
 
@@ -101,6 +116,7 @@ export class TilesetManager extends EventEmitter {
     for (const [tileId, tile] of this.cacheTiles) {
       if (!this.currentTiles.includes(tile)) {
         this.cacheTiles.delete(tileId);
+        this.onTileUnload(tile);
       } else {
         this.currentTiles = this.currentTiles.map((currentTile) => {
           currentTile.loadData({

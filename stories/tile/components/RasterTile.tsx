@@ -14,7 +14,7 @@ export default class RasterTile extends React.Component {
   private updateGridLayer = () => {
     const bounds = this.scene['mapService'].getBounds();
     const bbox = [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]];
-    console.log('bbox: ', bbox);
+    // console.log('bbox: ', bbox);
     const poly = turf.bboxPolygon(bbox as [number, number, number, number]);
     const data = { type: 'FeatureCollection', features: [poly] };
 
@@ -37,7 +37,7 @@ export default class RasterTile extends React.Component {
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
-        zoom: 10,
+        zoom: 2,
         viewMode: '3D',
       }),
     });
@@ -52,7 +52,7 @@ export default class RasterTile extends React.Component {
           parser: {
             type: 'rasterTile',
             tileSize: 256,
-            minzoom: 6,
+            minzoom: 1,
             maxZoom: 17,
             zoomOffset: 0,
             extent: [-180, -85.051129, 180, 85.051129],
