@@ -10,13 +10,13 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 
-import { getMask, generateColorRamp, IColorRamp, } from '@antv/l7-utils';
+import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
-import linear_line_vert from '../shaders/linearLine/line_linear_vert.glsl'
 import linear_line_frag from '../shaders/linearLine/line_linear_frag.glsl';
+import linear_line_vert from '../shaders/linearLine/line_linear_vert.glsl';
 
 export default class LinearLineModel extends BaseModel {
   protected colorTexture: ITexture2D;
@@ -75,10 +75,8 @@ export default class LinearLineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
-
     };
   }
-
 
   public initModels(): IModel[] {
     this.updateTexture();
