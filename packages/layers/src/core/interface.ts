@@ -43,6 +43,8 @@ export interface ILineLayerStyleOptions {
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
 
   arrow?: ILineArrow;
+
+  rampColors?: IColorRamp;
 }
 
 export interface IPointLayerStyleOptions {

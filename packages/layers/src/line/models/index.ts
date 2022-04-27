@@ -5,6 +5,7 @@ import GreatCircleModel from './great_circle';
 import LineModel from './line';
 import SimpleLineModel from './simpleLine';
 import LineWallModel from './wall';
+import LinearLine from './linearline';
 
 export type LineModelType =
   | 'arc'
@@ -13,7 +14,8 @@ export type LineModelType =
   | 'greatcircle'
   | 'wall'
   | 'simple'
-  | 'line';
+  | 'line'
+  | 'linearline';
 
 const LineModels: { [key in LineModelType]: any } = {
   arc: ArcModel,
@@ -23,6 +25,7 @@ const LineModels: { [key in LineModelType]: any } = {
   wall: LineWallModel,
   line: LineModel,
   simple: SimpleLineModel,
+  linearline: LinearLine,
 };
 
 export default LineModels;
