@@ -1,7 +1,9 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import ImageTile from './components/ImageTile'
+import ImageTile from './components/ImageTile';
+import RasterTile from './components/RasterTile';
 
-storiesOf('tile', module)
-        .add('ImageTile', () => <ImageTile/>)
+storiesOf('瓦片', module)
+  .add('ImageTile', () => <ImageTile />)
+  .add('RasterTile', () => <RasterTile />);

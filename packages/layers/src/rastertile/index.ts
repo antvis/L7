@@ -1,15 +1,14 @@
 import { IRasterTileLayerStyleOptions } from '../core/interface';
 import LayerGroup from '../core/LayerGroup';
-import ImageTileModels, { ImageTileModelType } from './models/index';
+import RasterTileModel from './models/raste-tile';
 
-export default class ImageTileLayer extends LayerGroup<
+export default class RasterTileLayer extends LayerGroup<
   IRasterTileLayerStyleOptions
 > {
-  public type: string = 'ImageTileLayer';
+  public type: string = 'RasterTileLayer';
 
   public buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new ImageTileModels[modelType](this);
+    this.layerModel = new RasterTileModel(this);
     this.models = this.layerModel.initModels();
   }
 
@@ -30,14 +29,11 @@ export default class ImageTileLayer extends LayerGroup<
   }
 
   protected getDefaultConfig() {
-    const type = this.getModelType();
-    const defaultConfig = {
-      imageTile: {},
-    };
-    return defaultConfig[type];
+    const defaultConfig = {};
+    return defaultConfig;
   }
 
-  protected getModelType(): ImageTileModelType {
-    return 'imageTile';
+  protected getModelType() {
+    return 'rasterTile';
   }
 }

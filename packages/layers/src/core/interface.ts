@@ -117,9 +117,10 @@ export interface IPolygonLayerStyleOptions {
   watercolor2?: string;
 }
 
-// 瓦片图层
-export interface ITileLayerStyleOptions {
-  opacity: number;
+// 栅格瓦片图层
+export interface IRasterTileLayerStyleOptions {
+  // TODO: define
+  xx: number;
 }
 
 export interface IImageLayerStyleOptions {

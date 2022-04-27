@@ -11,6 +11,7 @@ import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
+import RasterTileLayer from './rastertile';
 
 import EarthLayer from './earth';
 
@@ -147,6 +148,7 @@ export {
   CanvasLayer,
   ImageLayer,
   ImageTileLayer,
+  RasterTileLayer,
   RasterLayer,
   HeatmapLayer,
   EarthLayer,

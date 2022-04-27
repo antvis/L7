@@ -1,9 +1,9 @@
-import * as turf from '@turf/turf';
-import { ImageTileLayer, Scene, LineLayer, ILayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
+import * as turf from '@turf/turf';
+import { RasterTileLayer, Scene, LineLayer, ILayer } from '@antv/l7';
+import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
-export default class ImageTile extends React.Component {
+export default class RasterTile extends React.Component {
   private scene: Scene;
   private gridLayer: ILayer;
 
@@ -33,7 +33,7 @@ export default class ImageTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
@@ -45,7 +45,7 @@ export default class ImageTile extends React.Component {
     this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const layer = new ImageTileLayer();
+      const layer = new RasterTileLayer();
       layer.source(
         'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
         {
