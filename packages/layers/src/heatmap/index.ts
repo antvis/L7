@@ -44,7 +44,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       console.warn('data error');
     }
   }
-  
+
   protected getConfigSchema() {
     return {
       properties: {
