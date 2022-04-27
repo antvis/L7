@@ -409,9 +409,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   public updateModelData(data: IAttrubuteAndElements) {
     if (data.attributes && data.elements) {
-      if(this.type === "HeatMapLayer" && this.models[0]) {
+      if (this.type === 'HeatMapLayer' && this.models[0]) {
         // 经典热力图只需要更新绘制 Intensity 的 model
-        this.models[0].updateAttributesAndElements(data.attributes, data.elements)
+        this.models[0].updateAttributesAndElements(
+          data.attributes,
+          data.elements,
+        );
       } else {
         this.models.map((m) => {
           m.updateAttributesAndElements(data.attributes, data.elements);

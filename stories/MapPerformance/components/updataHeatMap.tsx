@@ -21,22 +21,20 @@ export default class Demo extends React.Component {
       }),
     });
 
-
     scene.on('loaded', () => {
-
-      let heatData1 = [{lat: 39.866973, lng: 116.49114, count: 48}]
+      let heatData1 = [{ lat: 39.866973, lng: 116.49114, count: 48 }];
       let heatData2 = [
-        {lat: 39.866973, lng: 116.49114, count: 48},
-        {lat: 39.87, lng: 116.45, count: 48}
-      ]
-      
+        { lat: 39.866973, lng: 116.49114, count: 48 },
+        { lat: 39.87, lng: 116.45, count: 48 },
+      ];
+
       const parser = {
         parser: {
           type: 'json',
           x: 'lng',
           y: 'lat',
         },
-      }
+      };
       const heatmaplayer = new HeatmapLayer()
         .source(heatData1, parser)
         .size('count', [0, 1])
@@ -58,12 +56,12 @@ export default class Demo extends React.Component {
           },
         });
       scene.addLayer(heatmaplayer);
-        // console.log(heatmaplayer)
-      let modelData = heatmaplayer.createModelData(heatData2, parser)
-        setTimeout(() => {
-          heatmaplayer.updateModelData(modelData)
-          scene.render()
-        }, 1000)
+      // console.log(heatmaplayer)
+      let modelData = heatmaplayer.createModelData(heatData2, parser);
+      setTimeout(() => {
+        heatmaplayer.updateModelData(modelData);
+        scene.render();
+      }, 1000);
     });
   }
 
