@@ -112,8 +112,8 @@ export default class Demo extends React.Component {
         });
         billboard.active({
           color: '#0ff',
-          mix: 0.5
-        })
+          mix: 0.5,
+        });
         scene.addLayer(billboard);
       };
       img.src =
