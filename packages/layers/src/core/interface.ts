@@ -120,7 +120,7 @@ export interface IPolygonLayerStyleOptions {
 // 栅格瓦片图层
 export interface IRasterTileLayerStyleOptions {
   // TODO: define
-  xx: number;
+  zIndex?: number;
 }
 
 export interface IImageLayerStyleOptions {

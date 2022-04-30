@@ -3,7 +3,7 @@ import * as turf from '@turf/turf';
 import { RasterTileLayer, Scene, LineLayer, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
-export default class RasterTile extends React.Component {
+export default class OsmRasterTile extends React.Component {
   private scene: Scene;
   private gridLayer: ILayer;
 
@@ -47,22 +47,21 @@ export default class RasterTile extends React.Component {
     this.scene.on('loaded', () => {
       const layer = new RasterTileLayer({
         zIndex: 99,
-        // minZoom: 1,
-        // maxZoom: 16,
       });
-      layer.source(
-        'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-        {
-          parser: {
-            type: 'rasterTile',
-            tileSize: 256,
-            // minZoom: 6,
-            // maxZoom: 15,
-            zoomOffset: 0,
-            extent: [-180, -85.051129, 179, 85.051129],
-          },
+      layer.source('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        parser: {
+          type: 'rasterTile',
+          tileSize: 256,
+          minZoom: 0,
+          maxZoom: 19,
+          zoomOffset: 0,
+          updateStrategy: 'overlap',
+          // extent: [-180, -85.051129, 175, 85.051129],
         },
-      );
+      });
+      layer.on('tiles-loaded', (tiles) => {
+        console.log('tiles-loaded', tiles.length);
+      });
 
       this.scene.addLayer(layer);
       this.updateGridLayer();

@@ -16,11 +16,18 @@ export default class RasterTileModel extends BaseModel {
   public initedTileset = false;
   // 瓦片数据管理器
   public tilesetManager: TilesetManager | undefined;
+  // 是否开启瓦片网格子图层，用于调试
   public showGrid = true;
   // 瓦片网格子图层，用于调试
   private subGridLayer: ILayer;
   // 瓦片网格文本子图层，用于调试
   private subTextLayer: ILayer;
+  // 上一次视野状态
+  private lastViewStates: {
+    zoom: number;
+    latLonBounds: [number, number, number, number];
+  };
+  private timer: any;
 
   public getUninforms(): IModelUniform {
     return {};
@@ -38,6 +45,10 @@ export default class RasterTileModel extends BaseModel {
     const { latLonBounds, zoom } = this.getCurrentView();
     this.tilesetManager?.update(zoom, latLonBounds);
 
+    if (this.showGrid) {
+      this.renderSubGridLayer();
+    }
+
     return this.buildModels();
   }
 
@@ -48,40 +59,6 @@ export default class RasterTileModel extends BaseModel {
   public clearModels() {
     this.tilesetManager?.destroy();
   }
-
-  // 渲染更新子图层
-  public renderSubLayers = () => {
-    if (!this.tilesetManager) {
-      return;
-    }
-    const layerChildren = this.tilesetManager.tiles
-      .filter((tile) => tile.isLoaded && tile.data)
-      .map((tile) => {
-        if (tile.layer) {
-          this.layer.updateLayerConfig({
-            visible: tile.isVisible,
-          });
-        } else {
-          tile.layer = this.creatSubLayer(tile);
-        }
-
-        return tile.layer;
-      });
-
-    this.layer.layerChildren = layerChildren;
-
-    if (this.showGrid) {
-      this.renderSubGridLayer();
-      this.layer.layerChildren = layerChildren.concat(
-        this.subGridLayer,
-        this.subTextLayer,
-      );
-      // this.layer.layerChildren = [this.subGridLayer, this.subTextLayer];
-    }
-
-    this.layerService.updateLayerRenderList();
-    this.layerService.renderLayers();
-  };
 
   // 渲染瓦片网格图层方便调试
   public renderSubGridLayer() {
@@ -105,7 +82,7 @@ export default class RasterTileModel extends BaseModel {
       .source(data)
       .size(1)
       .color('red')
-      .shape('line')
+      .shape('simple')
       .style({ lineType: 'dash', dashArray: [1, 2] });
 
     this.subTextLayer = new PointLayer({ autoFit: false })
@@ -131,15 +108,68 @@ export default class RasterTileModel extends BaseModel {
     this.subTextLayer.init();
   }
 
+  protected registerBuiltinAttributes() {
+    //
+  }
+
+  // 监听瓦片管理器
+  private bindTilesetEvent() {
+    if (!this.tilesetManager) {
+      return;
+    }
+    // 瓦片数据加载成功
+    this.tilesetManager.on('tile-loaded', (tile: Tile) => {
+      // todo: 将事件抛出，图层上可以监听使用
+    });
+
+    // 瓦片数据从缓存删除或被执行重新加载
+    this.tilesetManager.on('tile-unload', (tile: Tile) => {
+      // todo: 将事件抛出，图层上可以监听使用
+      this.destroySubLayer(tile);
+    });
+
+    // 瓦片数据加载失败
+    this.tilesetManager.on('tile-error', (error, tile: Tile) => {
+      // todo: 将事件抛出，图层上可以监听使用
+    });
+
+    // 瓦片显隐状态更新
+    this.tilesetManager.on('tile-update', this.renderSubLayers);
+
+    // 地图视野发生改变
+    this.mapService.on('mapchange', (e) => {
+      const { latLonBounds, zoom } = this.getCurrentView();
+      if (
+        this.lastViewStates &&
+        this.lastViewStates.zoom === zoom &&
+        this.lastViewStates.latLonBounds.toString() === latLonBounds.toString()
+      ) {
+        return;
+      }
+      this.lastViewStates = { zoom, latLonBounds };
+
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+
+      this.timer = setTimeout(() => {
+        this.tilesetManager?.update(zoom, latLonBounds);
+        if (this.showGrid) {
+          this.renderSubGridLayer();
+        }
+      }, 250);
+    });
+  }
+
   // 创建子图层
-  public creatSubLayer(tile: Tile) {
+  private creatSubLayer(tile: Tile) {
     const layer = new ImageLayer({
-      zIndex: -999,
       visible: tile.isVisible,
     }).source(tile.data, {
       parser: {
         type: 'image',
-        extent: tile.bbox,
+        extent: tile.bounds,
       },
     });
     const container = createLayerContainer(
@@ -151,8 +181,46 @@ export default class RasterTileModel extends BaseModel {
     return layer;
   }
 
-  protected registerBuiltinAttributes() {
-    //
+  // 更新子图层
+  private renderSubLayers = () => {
+    if (!this.tilesetManager) {
+      return;
+    }
+
+    const layerChildren = this.tilesetManager.tiles
+      .filter((tile) => tile.isLoaded)
+      .map((tile) => {
+        if (!tile.layer) {
+          tile.layer = this.creatSubLayer(tile);
+        } else {
+          // 显隐藏控制
+          tile.layer.updateLayerConfig({
+            visible: tile.isVisible,
+          });
+        }
+        return tile.layer;
+      });
+
+    this.layer.layerChildren = this.showGrid
+      ? layerChildren.concat(this.subGridLayer, this.subTextLayer)
+      : layerChildren;
+
+    this.layerService.updateLayerRenderList();
+    this.layerService.renderLayers();
+
+    if (this.tilesetManager.isLoaded) {
+      // 将事件抛出，图层上可以使用瓦片
+      this.layer.emit('tiles-loaded', this.tilesetManager.currentTiles);
+    }
+  };
+
+  // 摧毁子图层
+  private destroySubLayer(tile: Tile) {
+    if (tile.layer) {
+      const layerGroup = this.layer as ILayerGroup;
+      layerGroup.removeChild(tile.layer);
+      layerGroup.destroy();
+    }
   }
 
   // 获取当前视野参数
@@ -167,32 +235,5 @@ export default class RasterTileModel extends BaseModel {
     const zoom = this.mapService.getZoom();
 
     return { latLonBounds, zoom };
-  }
-
-  // 监听瓦片管理器
-  private bindTilesetEvent() {
-    if (!this.tilesetManager) {
-      return;
-    }
-
-    this.tilesetManager.on('tile-load', (tile: Tile) => {
-      tile.layer?.destroy();
-      // console.log('tile-load: ', tile);
-    });
-    this.tilesetManager.on('tile-unload', (tile: Tile) => {
-      tile.layer?.destroy();
-      // console.log('tile-unload: ', tile);
-    });
-    this.tilesetManager.on('tile-error', (error, tile: Tile) => {
-      tile.layer?.destroy();
-      // console.log('tile-error', error, tile);
-    });
-    this.tilesetManager.on('tile-update', this.renderSubLayers);
-
-    // 地图视野发生改变
-    this.mapService.on('mapchange', (e) => {
-      const { latLonBounds, zoom } = this.getCurrentView();
-      this.tilesetManager?.update(zoom, latLonBounds);
-    });
   }
 }

@@ -1,4 +1,5 @@
-import { DEFAULT_EXTENT, TILE_SIZE } from '../const';
+import { DEFAULT_EXTENT } from '../const';
+import { Bounds } from '../types';
 
 // // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#ECMAScript_.28JavaScript.2FActionScript.2C_etc..29
 export function osmLonLat2TileXY(lon: number, lat: number, zoom: number) {
@@ -26,10 +27,10 @@ export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
 /**
  * 获取当前瓦片的经纬度边界
  */
-export const tileToBoundingBox = (x: number, y: number, z: number) => {
+export const tileToBounds = (x: number, y: number, z: number) => {
   const [minLng, maxLat] = osmTileXY2LonLat(x, y, z);
   const [maxLng, minLat] = osmTileXY2LonLat(x + 1, y + 1, z);
-  return [minLng, minLat, maxLng, maxLat] as const;
+  return [minLng, minLat, maxLng, maxLat] as Bounds;
 };
 
 /**
@@ -46,14 +47,13 @@ export function getTileIndices({
   minZoom = 0,
   zoomOffset = 0,
   extent = DEFAULT_EXTENT,
-  tileSize = TILE_SIZE,
 }: {
   zoom: number;
-  latLonBounds: [number, number, number, number];
+  latLonBounds: Bounds;
   maxZoom: number;
   minZoom: number;
   zoomOffset: number;
-  extent: [number, number, number, number];
+  extent: Bounds;
   tileSize: number;
 }) {
   let z = Math.ceil(zoom) + zoomOffset;
@@ -87,3 +87,26 @@ export function getTileIndices({
 
   return indices;
 }
+
+export const getTileWarpXY = (x: number, y: number, z: number) => {
+  const scale = Math.pow(2, z);
+  const maxIndex = scale - 1;
+  const distance = scale;
+
+  let warpX = x;
+  const warpY = y;
+
+  if (warpX < 0) {
+    warpX = warpX + distance;
+  } else if (warpX > maxIndex) {
+    warpX = warpX % distance;
+  }
+
+  // if (warpY < 0) {
+  //   warpY = warpY + distance;
+  // } else if (warpY > maxIndex) {
+  //   warpY = Math.abs(warpY % distance);
+  // }
+
+  return { warpX, warpY };
+};

@@ -1,10 +1,16 @@
 import { bboxPolygon } from '@turf/turf';
-import { tileToBoundingBox } from './utils/lonlat-tile';
+import { Bounds } from './types';
+import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
 
 type TileOptions = { x: number; y: number; z: number; tileSize: number };
 
-type LoadTileDataOptions = {
-  getData: (tile: Tile) => Promise<any>;
+export type TileLoadParams = TileOptions & {
+  bounds: Bounds;
+  signal: AbortSignal;
+};
+
+type TileLoadDataOptions = {
+  getData: (tile: TileLoadParams) => Promise<any>;
   onLoad: (tile: Tile) => void;
   onError: (error: Error, tile: Tile) => void;
 };
@@ -12,6 +18,7 @@ type LoadTileDataOptions = {
 enum LoadTileDataStatus {
   Loading = 'Loading',
   Loaded = 'Loaded',
+  Failure = 'Failure',
   Cancelled = 'Cancelled',
 }
 
@@ -44,8 +51,6 @@ export class Tile {
   public properties: Record<string, any> = {};
   // 瓦片请求状态
   private loadStatus: LoadTileDataStatus;
-  // 是否需要重新请求瓦片
-  // private needsReload = false;
   // 瓦片数据 Web 请求控制器
   private abortController: AbortController;
   // 瓦片序号
@@ -74,17 +79,30 @@ export class Tile {
     return this.loadStatus === LoadTileDataStatus.Cancelled;
   }
 
+  // 是否数据请求结束
+  public get isDone() {
+    return [
+      LoadTileDataStatus.Loaded,
+      LoadTileDataStatus.Cancelled,
+      LoadTileDataStatus.Failure,
+    ].includes(this.loadStatus);
+  }
+
   // 瓦片的经纬度边界
-  public get bbox() {
-    return tileToBoundingBox(this.x, this.y, this.z);
+  public get bounds() {
+    return tileToBounds(this.x, this.y, this.z);
   }
 
   // 瓦片边界面
   public get bboxPolygon() {
-    const polygon = bboxPolygon(this.bbox as [number, number, number, number], {
+    const [minLng, minLat, maxLng, maxLat] = this.bounds;
+    const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
+
+    const polygon = bboxPolygon(this.bounds as Bounds, {
       properties: {
         key: this.key,
-        bbox: this.bbox,
+        bbox: this.bounds,
+        center,
         meta: `
       ${this.key}
       `,
@@ -101,13 +119,8 @@ export class Tile {
     return key;
   }
 
-  // 瓦片数据 Web 请求控制器实例
-  public get signal() {
-    return this.abortController?.signal;
-  }
-
   // 请求瓦片数据
-  public async loadData({ getData, onLoad, onError }: LoadTileDataOptions) {
+  public async loadData({ getData, onLoad, onError }: TileLoadDataOptions) {
     this.loadDataId++;
     const loadDataId = this.loadDataId;
     // 如果重复请求，执行最新请求
@@ -121,7 +134,13 @@ export class Tile {
     let tileData = null;
     let error;
     try {
-      tileData = await getData(this);
+      const { x, y, z, bounds, tileSize } = this;
+      // wrap
+      const { warpX, warpY } = getTileWarpXY(x, y, z);
+      const { signal } = this.abortController;
+      const params = { x: warpX, y: warpY, z, bounds, tileSize, signal };
+
+      tileData = await getData(params);
     } catch (err) {
       error = err;
     }
@@ -136,26 +155,25 @@ export class Tile {
       return;
     }
 
+    // 如果请求出错或数据为空
+    if (error || !tileData) {
+      this.loadStatus = LoadTileDataStatus.Failure;
+      onError(error, this);
+      return;
+    }
+
     this.loadStatus = LoadTileDataStatus.Loaded;
     this.data = tileData;
 
-    // reloadData 加载场景，加载成功与失败都清空挂载的图层
-    this.layer = null;
-    this.layers = [];
-
-    if (error) {
-      onError(error, this);
-    } else {
-      onLoad(this);
-    }
+    onLoad(this);
   }
 
   // 重新请求瓦片数据
-  public reloadData() {
+  public reloadData(params: TileLoadDataOptions) {
     if (this.isLoading) {
       this.abortLoad();
     }
-    // this.loadData();
+    this.loadData(params);
   }
 
   // 取消请求瓦片数据
