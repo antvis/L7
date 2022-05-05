@@ -197,6 +197,7 @@ export default class Source extends EventEmitter implements ISource {
     this.clusterIndex = null;
     // @ts-ignore
     this.data = null;
+    this.tileset?.destroy();
   }
 
   private initCfg(option?: ISourceCFG) {

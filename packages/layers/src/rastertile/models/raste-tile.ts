@@ -57,7 +57,7 @@ export default class RasterTileModel extends BaseModel {
   }
 
   public clearModels() {
-    this.tilesetManager?.destroy();
+    //
   }
 
   // 渲染瓦片网格图层方便调试
