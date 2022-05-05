@@ -31,6 +31,7 @@ export default class GeometryLayer extends BaseLayer<
     const defaultConfig = {
       plane: {},
       sprite: {},
+      billboard: {},
     };
     return defaultConfig[type];
   }
@@ -44,6 +45,8 @@ export default class GeometryLayer extends BaseLayer<
       return 'plane';
     } else if (shape === 'sprite') {
       return 'sprite';
+    } else if (shape === 'billboard') {
+      return 'billboard';
     } else {
       return 'plane';
     }
