@@ -144,6 +144,12 @@ export interface IGeometryLayerStyleOptions {
   terrainClipHeight?: number;
   rgb2height?: (r: number, g: number, b: number) => number;
 
+  // billboard
+  raisingHeight?: number; // 抬升高度
+  canvasWidth?: number;
+  canvasHeight?: number;
+  drawCanvas?: (canvas: HTMLCanvasElement) => void;
+
   // sprite
   spriteAnimate?: string;
   spriteRadius?: number;
