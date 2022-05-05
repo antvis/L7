@@ -28,7 +28,7 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
-import { isArray, isEqual, isFunction, isNumber, isString } from 'lodash';
+import { isEqual, isFunction, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 
 export type styleSingle =
@@ -170,7 +170,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     // 只有在不支持数据纹理的情况下进行赋值
     if (!this.dataTextureTest) {
       this.dataTexture = this.createTexture2D({
-        data: new Uint8ClampedArray(4),
+        // data: new Uint8ClampedArray(4),
+        // 使用 Uint8ClampedArray 在 支付宝 环境中可能存在问题 UC 内核对格式有要求 L7 v2.7.18 版本发现
+        // Uint8ClampedArray 和 Uint8Array 没有实质性的区别
+        data: new Uint8Array(4),
         mag: gl.NEAREST,
         min: gl.NEAREST,
         width: 1,
@@ -396,7 +399,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    */
   public isOffsetStatic(offsets: styleOffset) {
     if (
-      isArray(offsets) &&
+      Array.isArray(offsets) &&
       offsets.length === 2 &&
       isNumber(offsets[0]) &&
       isNumber(offsets[1])

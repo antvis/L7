@@ -43,6 +43,8 @@ source(data, {
 
 `markdown:docs/api/line_layer/features/linear.zh.md`
 
+`markdown:docs/api/line_layer/features/dash.zh.md`
+
 `markdown:docs/api/line_layer/features/animate.zh.md`
 
 `markdown:docs/api/line_layer/features/texture.zh.md`

@@ -22,16 +22,16 @@ export default class Amap2demo_text extends React.Component {
     //         src: url('${fontpath}') format('woff2')
     //     }`
     // document.getElementsByTagName('head')[0].appendChild(style)
-    var mask = [
-      [
-        [
-          [110, 40],
-          [130, 40],
-          [130, 20],
-          [110, 20],
-        ],
-      ],
-    ];
+    // var mask = [
+    //   [
+    //     [
+    //       [110, 40],
+    //       [130, 40],
+    //       [130, 20],
+    //       [110, 20],
+    //     ],
+    //   ],
+    // ];
 
     const scene = new Scene({
       id: 'map',
@@ -45,7 +45,7 @@ export default class Amap2demo_text extends React.Component {
       }),
     });
     this.scene = scene;
-    scene.addIconFont('icon1', '&#xe98c;');
+    // scene.addIconFont('icon1', '&#xe98c;');
     // scene.addIconFont("icon2", "&#xe64c;")
 
     // scene.addIconFonts([
@@ -55,37 +55,37 @@ export default class Amap2demo_text extends React.Component {
 
     scene.addFontFace(fontFamily, fontPath);
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json',
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const pointLayer = new PointLayer({})
-            .source(data.list, {
-              parser: {
-                type: 'json',
-                x: 'j',
-                y: 'w',
-              },
-            })
-            .shape('icon', 'text')
-            .size(12)
-            .color('w', ['#f00', '#f00', '#0f0'])
-            .style({
-              textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-              textOffset: [-10, 0], // 文本相对锚点的偏移量 [水平, 垂直]
-              spacing: 2, // 字符间距
-              padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-              stroke: '#ffffff', // 描边颜色
-              strokeWidth: 0.3, // 描边宽度
-              strokeOpacity: 1.0,
-              fontFamily,
-              // fontFamily: "Times New Roman",
-              iconfont: true,
-              // textAllowOverlap: true,
-            });
-          scene.addLayer(pointLayer);
-        });
+      // fetch(
+      //   'https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json',
+      // )
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     const pointLayer = new PointLayer({})
+      //       .source(data.list, {
+      //         parser: {
+      //           type: 'json',
+      //           x: 'j',
+      //           y: 'w',
+      //         },
+      //       })
+      //       .shape('icon', 'text')
+      //       .size(12)
+      //       .color('w', ['#f00', '#f00', '#0f0'])
+      //       .style({
+      //         textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+      //         textOffset: [-10, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+      //         spacing: 2, // 字符间距
+      //         padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+      //         stroke: '#ffffff', // 描边颜色
+      //         strokeWidth: 0.3, // 描边宽度
+      //         strokeOpacity: 1.0,
+      //         fontFamily,
+      //         // fontFamily: "Times New Roman",
+      //         iconfont: true,
+      //         // textAllowOverlap: true,
+      //       });
+      //     // scene.addLayer(pointLayer);
+      //   });
 
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',

@@ -20,11 +20,6 @@
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*92cnRJiUIf4AAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "road_light.js",
-      "title": "路径light",
-      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*oJdZR5mnocwAAAAAAAAAAAAAARQnAQ"
-    },
-    {
       "filename": "road_dark.js",
       "title": "路径边框",
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Zq3ORrdexZwAAAAAAAAAAAAAARQnAQ"
@@ -33,6 +28,11 @@
       "filename": "road_dark_dash.js",
       "title": "路径虚线",
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vZFUTaBCGoEAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "arrow.js",
+      "title": "箭头路径",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*glWTSoFfy1sAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

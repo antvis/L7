@@ -7,7 +7,12 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import {
+  generateColorRamp,
+  getCullFace,
+  getMask,
+  IColorRamp,
+} from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -16,10 +21,14 @@ import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
 import heatmap3DVert from '../shaders/heatmap_3d_vert.glsl';
+
+// 绘制平面热力的 shader
 import heatmapColorFrag from '../shaders/heatmap_frag.glsl';
+import heatmapColorVert from '../shaders/heatmap_vert.glsl';
+
 import heatmapFramebufferFrag from '../shaders/heatmap_framebuffer_frag.glsl';
 import heatmapFramebufferVert from '../shaders/heatmap_framebuffer_vert.glsl';
-import heatmapColorVert from '../shaders/heatmap_vert.glsl';
+
 import { heatMap3DTriangulation } from '../triangulation';
 @injectable()
 export default class HeatMapModel extends BaseModel {
@@ -146,6 +155,7 @@ export default class HeatMapModel extends BaseModel {
     });
   }
   private buildHeatMapIntensity(): IModel {
+    this.layer.triangulation = HeatmapTriangulation;
     return this.layer.buildLayerModel({
       moduleName: 'heatmapintensity',
       vertexShader: heatmapFramebufferVert,
@@ -153,6 +163,10 @@ export default class HeatMapModel extends BaseModel {
       triangulation: HeatmapTriangulation,
       depth: {
         enable: false,
+      },
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
       },
       blend: {
         enable: true,

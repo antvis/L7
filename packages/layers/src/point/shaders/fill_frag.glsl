@@ -83,11 +83,9 @@ void main() {
 
   if(u_additive > 0.0) {
     gl_FragColor *= opacity_t;
+    gl_FragColor = filterColorAlpha(gl_FragColor, gl_FragColor.a);
   } else {
     gl_FragColor.a *= opacity_t;
-  }
-
-  if(gl_FragColor.a > 0.0) {
     gl_FragColor = filterColor(gl_FragColor);
   }
 }

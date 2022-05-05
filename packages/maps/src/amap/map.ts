@@ -24,6 +24,7 @@ import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
 import './logo.css';
@@ -56,13 +57,11 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE1.x'];
+  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   /**
    * 原始地图实例
    */
   public map: AMap.Map & IAMapInstance;
-
-  // TODO: 判断地图是否正在拖拽
-  public dragging: boolean = false;
 
   // 背景色
   public bgColor: string = 'rgba(0, 0, 0, 0)';
@@ -251,7 +250,7 @@ export default class AMapService
   }
 
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    this.map.setZoomAndCenter(zoom, center);
+    this.map.setZoomAndCenter(zoom + 1, center);
   }
 
   public setMapStyle(style: string): void {
@@ -334,6 +333,7 @@ export default class AMapService
 
     return (modelMatrix as unknown) as number[];
   }
+
   public async init(): Promise<void> {
     const {
       id,
@@ -374,6 +374,12 @@ export default class AMapService
           const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
           // 监听地图相机事件
           map.on('camerachange', this.handleCameraChanged);
+          // Tip: 为了兼容开启 MultiPassRender 的情况
+          // 修复 MultiPassRender 在高德地图 1.x 的情况下，缩放地图改变 zoom 时存在可视化层和底图不同步的现象
+          map.on('camerachange', () => {
+            setTimeout(() => this.handleAfterMapChange());
+          });
+
           // @ts-ignore
           this.map = map;
           setTimeout(() => {
@@ -410,16 +416,6 @@ export default class AMapService
           pendingResolveQueue.push(resolveMap);
         }
       }
-    });
-
-    // TODO: 判断地图是否正在被拖拽
-    this.map.on('dragstart', () => {
-      this.dragging = true;
-      return '';
-    });
-    this.map.on('dragend', () => {
-      this.dragging = false;
-      return '';
     });
 
     this.viewport = new Viewport();
@@ -482,6 +478,10 @@ export default class AMapService
     this.cameraChangedCallback = callback;
   }
 
+  private handleAfterMapChange() {
+    this.emit('mapAfterFrameChange');
+  }
+
   private handleCameraChanged = (e: IAMapEvent): void => {
     const {
       fov,
@@ -496,6 +496,7 @@ export default class AMapService
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
+
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)

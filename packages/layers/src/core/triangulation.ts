@@ -126,7 +126,7 @@ export function LineTriangulation(feature: IEncodeFeature) {
   } else {
     // 处理非高德2.0的几何体构建
     let path = coordinates as number[][][] | number[][];
-    if (!Array.isArray(path[0][0])) {
+    if (path[0] && !Array.isArray(path[0][0])) {
       path = [coordinates] as number[][][];
     }
     path.forEach((item: any) => {
@@ -139,6 +139,7 @@ export function LineTriangulation(feature: IEncodeFeature) {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
     indices: linebuffer.indices,
     normals: linebuffer.normals,
+    indexes: linebuffer.indexes,
     size: 6,
   };
 }
@@ -171,7 +172,7 @@ export function SimpleLineTriangulation(feature: IEncodeFeature) {
   } else {
     // 处理非高德2.0的几何体构建
     let path = coordinates as number[][][] | number[][];
-    if (!Array.isArray(path[0][0])) {
+    if (path[0] && !Array.isArray(path[0][0])) {
       path = [coordinates] as number[][][];
     }
     path.forEach((item: any) => {
@@ -289,6 +290,7 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
     size: 5,
   };
 }
+
 /**
  *  计算3D弧线顶点
  * @param feature 映射数据

@@ -1,13 +1,8 @@
 // @ts-ignore
 import { PointLayer, Scene, LineLayer, PolygonLayer, ILayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 import * as turf from '@turf/turf';
-
-const aspaceLnglat = [120.1019811630249, 30.264701434772807] as [
-  number,
-  number,
-];
 export default class GaodeMapComponent extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -20,48 +15,44 @@ export default class GaodeMapComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: aspaceLnglat,
-        // pitch: 0,
-        pitch: 40,
-        style: 'dark',
-        zoom: 17,
-        // dragEnable: false
+        center: [120.11, 30.264701434772807],
+        zoom: 14,
       }),
     });
     // normal = 'normal',
     // additive = 'additive',
     // cylinder circle
     // blend: 'additive'
-    let line = new LineLayer({ zIndex: 3 })
-      .source(
-        [
-          {
-            lng: aspaceLnglat[0],
-            lat: aspaceLnglat[1],
-            lng2: aspaceLnglat[0] + 0.00104,
-            lat2: aspaceLnglat[1],
-          },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-            x1: 'lng2',
-            y1: 'lat2',
-          },
-        },
-      )
-      .shape('line')
-      .size(2)
-      .color('#000');
+    // let line = new LineLayer({ zIndex: 3 })
+    //   .source(
+    //     [
+    //       {
+    //         lng: aspaceLnglat[0],
+    //         lat: aspaceLnglat[1],
+    //         lng2: aspaceLnglat[0] + 0.00104,
+    //         lat2: aspaceLnglat[1],
+    //       },
+    //     ],
+    //     {
+    //       parser: {
+    //         type: 'json',
+    //         x: 'lng',
+    //         y: 'lat',
+    //         x1: 'lng2',
+    //         y1: 'lat2',
+    //       },
+    //     },
+    //   )
+    //   .shape('line')
+    //   .size(2)
+    //   .color('#000');
 
-    let text = new PointLayer({ zIndex: 2 })
+    let layer0 = new PointLayer({ zIndex: 2 })
       .source(
         [
           {
-            lng: aspaceLnglat[0] + 0.0002,
-            lat: aspaceLnglat[1],
+            lng: 120.11,
+            lat: 30.27,
           },
         ],
         {
@@ -72,28 +63,69 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
-      .shape('100m', 'text')
-      .size(25)
-      .color('#000')
+      .color('#ff0')
+      .shape('circle')
+      .size(30);
+
+    let layer01 = new PointLayer({ zIndex: 2 })
+      .source(
+        [
+          {
+            lng: 120.11,
+            lat: 30.27,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .color('#ff0')
+      .shape('circle')
+      .size(30)
       .style({
-        textOffset: [50, 20],
+        // raisingHeight: 50
+        raisingHeight: 5000,
       });
+
+    layer0.on('click', () => {});
+
+    let layer2 = new PointLayer({}) // blend: 'additive'
+      .source(
+        [
+          {
+            lng: 120.11,
+            lat: 30.264701434772807,
+            name: 'n3',
+          },
+          {
+            lng: 120.111,
+            lat: 30.264701434772807,
+            name: 'n3',
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      );
 
     let layer = new PointLayer({}) // blend: 'additive'
       .source(
         [
-          // {
-          //   lng: 120,
-          //   lat: 30.267069,
-          //   name: 'n1'
-          // },
           {
-            lng: 120.1025,
+            lng: 120.11,
             lat: 30.264701434772807,
-            name: 'n2',
+            name: 'n3',
           },
           {
-            lng: 120.1019811630249,
+            lng: 120.111,
             lat: 30.264701434772807,
             name: 'n3',
           },
@@ -106,78 +138,107 @@ export default class GaodeMapComponent extends React.Component {
           },
         },
       )
+
+      // - cylinder
+      // - triangleColumn
+      // - hexagonColumn
+      // - squareColumn,
       .shape('circle')
       // .shape('cylinder')
       // .color('#0f9')
       // .color('#4169E1')
-      // .color('#4cfd47')
-      .color('name', ['#f00', '#ff0'])
+      // .color('#66CCFF')
+      .color('#f00')
+      // .color('name', ['#f00', '#ff0'])
       // .size([100, 100, 1000])
-      // .size([100, 100, 1000])
-      // .size(10)
-      .size('name', [20, 40])
+      // .size([20, 20, 200])
+      .size(50)
+      // .size('name', [20, 40])
       // .animate({
       //   // enable: true,
       //   enable: false,
       //   // type: 'www'
       // })
-      // .animate(true)
+      .animate(true)
+      .active(true)
+      // .active({
+      //   color: '#f00',
+      //   mix: 0
+      // })
       .select(true)
-      .active({ color: '#00f' })
+      // .active({ color: '#ff0' })
       .style({
-        heightfixed: true,
+        // heightfixed: true,
         // pickLight: false,
-        pickLight: true,
+        // pickLight: true,
         // lightEnable: true,
-        // opacity: 0.5,
-        stroke: '#f00',
-        // strokeWidth: 10,
-        strokeWidth: 0,
-        strokeOpacity: 1,
+        // blur: 0.2,
+        // opacity: 0.3,
+        stroke: '#ff0',
+        strokeWidth: 10,
+        // strokeWidth: 0,
+        // strokeOpacity: 1,
         // unit: 'meter',
       });
-    // .animate(true)
-    // .animate({
-    //   enable: true,
-    //   speed: 0.02,
-    //   repeat: 1
-    // })
-    // .active({ color: '#00f' });
+
+    layer2
+      .shape('circle')
+      .color('#f00')
+      .size(50)
+      .animate(true)
+      .active(true)
+      .style({
+        raisingHeight: 5000,
+      });
 
     this.scene = scene;
 
-    // console.log('layer', layer)
-
-    // let layer2 = new PointLayer({})
-    // .source([
-    //   {
-    //     lng: 120.1025,
-    //     lat: 30.264701434772807,
-    //     name: 'n2'
-    //   }
-    // ], {
-    //   parser: {
-    //     type: 'json',
-    //     x: 'lng',
-    //     y: 'lat',
-    //   },
-    // })
-    // .shape('circle')
-    // .size(10)
-    // .color('#00f')
-    // .style({
-    //   opacity: 0.5
-    // })
-
     scene.on('loaded', () => {
+      scene.addLayer(layer0);
+      scene.addLayer(layer01);
       scene.addLayer(layer);
+      scene.addLayer(layer2);
 
-      let scale = layer.getScale('size');
-      console.log('scale n2', scale('n2'));
-      console.log('scale n3', scale('n3'));
+      scene.on('click', (e) => {
+        console.log(scene.getPickedLayer());
+      });
+      // let scale = layer.getScale('size');
+      // console.log('scale n2', scale('n2'));
+      // console.log('scale n3', scale('n3'));
 
-      scene.addLayer(text);
-      scene.addLayer(line);
+      // let text = new PointLayer({ zIndex: 2 })
+      //   .source(
+      //     [
+      //       {
+      //         lng: aspaceLnglat[0] + 0.0002,
+      //         lat: aspaceLnglat[1],
+      //         name: '00',
+      //       },
+      //     ],
+      //     {
+      //       parser: {
+      //         type: 'json',
+      //         x: 'lng',
+      //         y: 'lat',
+      //       },
+      //     },
+      //   )
+      //   // .shape('100m', 'text')
+      //   // .shape('circle')
+      //   .shape('name', ['00'])
+      //   .size(25)
+      //   // .color('#0f0')
+      //   // .select(true)
+      //   .style({
+      //     // textOffset: [50, 20],
+      //   });
+
+      // text.on('click', () => {
+      //   alert('***');
+      // });
+
+      // scene.addLayer(text);
+      // scene.addLayer(line);
 
       // scene.addLayer(layer2);
       // scene.addLayer(trufCircle);

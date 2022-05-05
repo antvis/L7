@@ -6,24 +6,23 @@
   "demos": [
     {
       "filename": "point.js",
-      "title": "气泡图",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*fNGiS7YI1tIAAAAAAAAAAABkARQnAQ"
-
+      "title": "气泡图（点击拾取）",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*BGJfT5GYaZAAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "color.js",
       "title": "形状映射",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*p48-TK_yGZ8AAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "world.js",
       "title": "气泡图",
-      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*v5j_QZEL-1YAAAAAAAAAAABkARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ecV4T63Yk40AAAAAAAAAAAAAARQnAQ"
 
     }, {
       "filename": "scatter.js",
       "title": "气泡图动画",
-      "screenshot":"https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*L-wETZt7WHwAAAAAAAAAAABkARQnAQ"
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Jd4HQpnWQaQAAAAAAAAAAAAAARQnAQ"
 
     }
 

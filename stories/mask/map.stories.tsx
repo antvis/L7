@@ -12,8 +12,10 @@ import HeatmapGrid3D from './components/heatmapgrid3d'
 import Hexgon from './components/hexgon'
 import Raster from './components/raster'
 import Text from './components/text'
+import SingleMask from './components/singleMask';
 
 storiesOf('Mask 方法', module)
+        .add('SingleMask', () => <SingleMask/>)
         .add('Point', () => <Point/>)
         .add('Polygon', () => <Polygon/>)
         .add('Line', () => <Line/>)

@@ -30,4 +30,6 @@ export interface IMapOptions {
   bearingSnap: number;
   clickTolerance: number;
   pitchWithRotate: boolean;
+  pitchEnabled: boolean;
+  rotateEnabled: boolean;
 }

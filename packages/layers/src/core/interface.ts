@@ -1,15 +1,17 @@
-import { IAnimateOption } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
-import { styleColor, styleOffset, styleSingle } from '../core/BaseModel';
-import {
-  anchorType,
-  getGlyphQuads,
-  IGlyphQuad,
-  shapeText,
-} from '../utils/symbol-layout';
+import { IAnimateOption, IMapService } from '@antv/l7-core';
+import { IColorRamp } from '@antv/l7-utils';
+import { styleOffset, styleSingle } from '../core/BaseModel';
+import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
+}
+
+interface ILineArrow {
+  enable: boolean;
+  arrowWidth: number;
+  arrowHeight: number;
+  tailWidth: number;
 }
 
 export interface ILineLayerStyleOptions {
@@ -18,6 +20,7 @@ export interface ILineLayerStyleOptions {
   dashArray?: [number, number]; //  可选参数、虚线间隔
   segmentNumber?: number;
 
+  depth?: boolean;
   forward?: boolean; // 可选参数、是否反向(arcLine)
   lineTexture?: boolean; // 可选参数、是否开启纹理贴图功能(all)
   iconStep?: number; // 可选参数、纹理贴图步长(all)
@@ -34,9 +37,14 @@ export interface ILineLayerStyleOptions {
   borderColor?: string; // 可选参数 线边框颜色
 
   heightfixed?: boolean; // 可选参数 高度是否固定
+  raisingHeight?: number; // 线图层抬升高度
 
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+
+  arrow?: ILineArrow;
+
+  rampColors?: IColorRamp;
 }
 
 export interface IPointLayerStyleOptions {
@@ -45,6 +53,9 @@ export interface IPointLayerStyleOptions {
   strokeWidth: number;
   stroke: string;
 
+  blur?: number;
+
+  // text
   textOffset?: [number, number];
   textAnchor?: anchorType;
   spacing?: number;
@@ -54,6 +65,8 @@ export interface IPointLayerStyleOptions {
   fontWeight?: string;
   fontFamily?: string;
   textAllowOverlap?: boolean;
+
+  raisingHeight?: number; // 线图层抬升高度
 
   // cylinder
   pickLight?: boolean;
@@ -73,7 +86,8 @@ export interface IPointLayerStyleOptions {
   mask?: boolean;
   maskInside?: boolean;
 
-  animateOption: IAnimateOption;
+  rotation?: number; // angle
+  speed?: number;
 }
 
 export interface IPolygonLayerStyleOptions {
@@ -84,17 +98,85 @@ export interface IPolygonLayerStyleOptions {
     dir: string;
   };
 
+  topsurface?: boolean;
+  sidesurface?: boolean;
+
+  mapTexture?: string; // 挤出几何体顶面贴图
+  raisingHeight?: number; // 挤出几何体抬升高度
+  sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
+  targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
   heightfixed?: boolean; // 挤出几何体高度是否固定（不随 zoom 发生变化）
 
   pickLight: boolean;
   mask?: boolean;
   maskInside?: boolean;
+
+  // water
+  waterTexture?: string;
+  speed?: number;
+  // ocean
+  watercolor?: string;
+  watercolor2?: string;
 }
 
 export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
   maskInside?: boolean;
+}
+
+export interface IGeometryLayerStyleOptions {
+  opacity: number;
+  mask?: boolean;
+  maskInside?: boolean;
+
+  mapTexture?: string;
+  terrainTexture?: string;
+
+  // planeGeometry
+  center?: [number, number];
+  width?: number;
+  height?: number;
+
+  widthSegments?: number;
+  heightSegments?: number;
+
+  terrainClipHeight?: number;
+  rgb2height?: (r: number, g: number, b: number) => number;
+
+  // billboard
+  raisingHeight?: number; // 抬升高度
+  canvasWidth?: number;
+  canvasHeight?: number;
+  drawCanvas?: (canvas: HTMLCanvasElement) => void;
+
+  // sprite
+  spriteAnimate?: string;
+  spriteRadius?: number;
+  spriteCount?: number;
+  spriteSpeed?: number;
+  spriteTop?: number;
+  spriteUpdate?: number;
+  spriteScale?: number;
+
+  animateOption?: IAnimateOption;
+}
+
+export enum CanvasUpdateType {
+  'ALWAYS' = 'always',
+  'DRAGEND' = 'dragend',
+}
+
+export interface IDrawingOnCanvas {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  mapService: IMapService;
+  size: [number, number];
+}
+export interface ICanvasLayerStyleOptions {
+  zIndex: number;
+  update: CanvasUpdateType | string;
+  drawingOnCanvas: (option: IDrawingOnCanvas) => void;
 }
 
 export interface IHeatMapLayerStyleOptions {

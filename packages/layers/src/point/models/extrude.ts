@@ -1,5 +1,11 @@
-import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayerConfig,
+  IModel,
+} from '@antv/l7-core';
+import { getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -33,7 +39,9 @@ export default class ExtrudeModel extends BaseModel {
       },
 
       lightEnable = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPointLayerStyleOptions
+    >;
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
@@ -134,7 +142,7 @@ export default class ExtrudeModel extends BaseModel {
     const {
       depth = true,
       animateOption: { repeat = 1 },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
     return [
       this.layer.buildLayerModel({
@@ -145,7 +153,7 @@ export default class ExtrudeModel extends BaseModel {
         blend: this.getBlend(),
         cull: {
           enable: true,
-          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+          face: getCullFace(this.mapService.version),
         },
         depth: {
           enable: depth,

@@ -37,7 +37,7 @@ void main() {
 
   // picking
   if(u_pickLight > 0.0) {
-    gl_FragColor = filterColorWithLight(gl_FragColor, v_lightWeight);
+    gl_FragColor = filterColorAlpha(gl_FragColor, v_lightWeight);
   } else {
     gl_FragColor = filterColor(gl_FragColor);
   }

@@ -25,6 +25,7 @@ import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
 import './logo.css';
@@ -59,13 +60,11 @@ let pendingResolveQueue: Array<() => void> = [];
 export default class AMapService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE2.x'];
+  public simpleMapCoord: SimpleMapCoord = new SimpleMapCoord();
   /**
    * 原始地图实例
    */
   public map: AMap.Map & IAMapInstance;
-
-  // TODO: 判断地图是否正在拖拽
-  public dragging: boolean = false;
 
   /**
    * 用于 customCooords 数据的计算
@@ -328,7 +327,7 @@ export default class AMapService
     );
   }
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    this.map.setZoomAndCenter(zoom, center);
+    this.map.setZoomAndCenter(zoom + 1, center);
   }
   public setMapStyle(style: string): void {
     this.map.setMapStyle(this.getMapStyle(style));
@@ -504,16 +503,6 @@ export default class AMapService
           pendingResolveQueue.push(resolveMap);
         }
       }
-    });
-
-    // TODO: 判断地图是否正在被拖拽
-    this.map.on('dragstart', () => {
-      this.dragging = true;
-      return '';
-    });
-    this.map.on('dragend', () => {
-      this.dragging = false;
-      return '';
     });
   }
 

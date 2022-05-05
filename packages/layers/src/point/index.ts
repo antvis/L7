@@ -13,6 +13,32 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public rebuildModels() {
     this.models = this.layerModel.buildModels();
   }
+
+  /**
+   * 在未传入数据的时候判断点图层的 shape 类型
+   * @returns
+   */
+  public getModelTypeWillEmptyData(): PointType {
+    if (this.shapeOption) {
+      const { field, values } = this.shapeOption;
+      const { shape2d, shape3d } = this.getLayerConfig();
+
+      const iconMap = this.iconService.getIconMap();
+
+      if (field && shape2d?.indexOf(field as string) !== -1) {
+        return 'fill';
+      }
+
+      if (values && values instanceof Array) {
+        for (const v of values) {
+          if (typeof v === 'string' && iconMap.hasOwnProperty(v as string)) {
+            return 'image';
+          }
+        }
+      }
+    }
+    return 'normal';
+  }
   protected getConfigSchema() {
     return {
       properties: {
@@ -27,9 +53,11 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   protected getDefaultConfig() {
     const type = this.getModelType();
     const defaultConfig = {
+      fillImage: {},
       normal: {
         blend: 'additive',
       },
+      radar: {},
       simplePoint: {},
       fill: { blend: 'normal' },
       extrude: {},
@@ -43,6 +71,20 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected getModelType(): PointType {
+    const PointTypes = [
+      'fillImage',
+      'fill',
+      'radar',
+      'image',
+      'normal',
+      'simplePoint',
+      'extrude',
+      'text',
+      'icon',
+    ];
+    if (this.layerType && PointTypes.includes(this.layerType)) {
+      return this.layerType as PointType;
+    }
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
@@ -52,7 +94,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       return fe.hasOwnProperty('shape');
     });
     if (!item) {
-      return 'normal';
+      // return 'normal';
+      return this.getModelTypeWillEmptyData();
     } else {
       const shape = item.shape;
       if (shape === 'dot') {
@@ -60,6 +103,12 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
       if (shape === 'simple') {
         return 'simplePoint';
+      }
+      if (shape === 'radar') {
+        return 'radar';
+      }
+      if (shape === 'fillImage') {
+        return 'fillImage';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
         return 'fill';

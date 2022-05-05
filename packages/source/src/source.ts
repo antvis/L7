@@ -60,6 +60,8 @@ export default class Source extends EventEmitter implements ISource {
   // 是否有效范围
   private invalidExtent: boolean = false;
 
+  private dataArrayChanged: boolean = false;
+
   // 原始数据
   private originData: any;
   private rawData: any;
@@ -86,8 +88,8 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public setData(data: any, options?: ISourceCFG) {
-    this.rawData = data;
     this.originData = data;
+    this.dataArrayChanged = false;
     this.initCfg(options);
     this.init();
     this.emit('update');
@@ -145,7 +147,9 @@ export default class Source extends EventEmitter implements ISource {
           ? this.originData.features[id]
           : 'null';
       const newFeature = cloneDeep(feature);
-      if (this.transforms.length !== 0) {
+
+      if (this.transforms.length !== 0 || this.dataArrayChanged) {
+        // 如果数据进行了transforms 属性会发生改变 或者数据dataArray发生更新
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;
         });
@@ -157,9 +161,28 @@ export default class Source extends EventEmitter implements ISource {
     }
   }
 
+  public updateFeaturePropertiesById(
+    id: number,
+    properties: Record<string, any>,
+  ) {
+    this.data.dataArray = this.data.dataArray.map(
+      (dataItem: IParseDataItem) => {
+        if (dataItem._id === id) {
+          return {
+            ...dataItem,
+            ...properties,
+          };
+        }
+        return dataItem;
+      },
+    );
+    this.dataArrayChanged = true;
+    this.emit('update');
+  }
+
   public getFeatureId(field: string, value: any): number | undefined {
     const feature = this.data.dataArray.find((dataItem: IParseDataItem) => {
-      return dataItem[field] === name;
+      return dataItem[field] === value;
     });
     return feature?._id;
   }

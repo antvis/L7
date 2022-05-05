@@ -53,6 +53,8 @@ const DefaultOptions: IMapOptions = {
   pitchWithRotate: true,
   trackResize: true,
   renderWorldCopies: true,
+  pitchEnabled: true,
+  rotateEnabled: true,
 };
 export class Map extends Camera {
   public doubleClickZoom: DoubleClickZoomHandler;
@@ -280,6 +282,9 @@ export class Map extends Camera {
   }
 
   public remove() {
+    this.container.removeChild(this.canvasContainer);
+    // @ts-ignore
+    this.canvasContainer = null;
     if (this.frame) {
       this.frame.cancel();
       this.frame = null;

@@ -91,7 +91,21 @@ scene.on('loaded', () => {
       .style({
         opacity: 1.0
       });
-    const flyLine = new LineLayer({ blend: 'additive', zIndex: 2 })
+    const flyLine = new LineLayer({
+      blend: 'additive',
+      zIndex: 2,
+      enableMultiPassRenderer: true,
+      passes: [
+        [
+          'bloom',
+          {
+            bloomBaseRadio: 0.8,
+            bloomRadius: 2,
+            bloomIntensity: 1
+          }
+        ]
+      ]
+    })
       .source(flydata, {
         parser: {
           type: 'json',

@@ -15,13 +15,16 @@ import {
   InteractionEvent,
 } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-import { ILngLat } from '../map/IMapService';
+import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
+
   @inject(TYPES.IRendererService)
   private rendererService: IRendererService;
 
@@ -149,6 +152,35 @@ export default class PickingService implements IPickingService {
     return features;
   }
 
+  // 动态设置鼠标光标
+  public handleCursor(layer: ILayer, type: string) {
+    const { cursor = '', cursorEnabled } = layer.getLayerConfig();
+    if (cursorEnabled) {
+      const version = this.mapService.version;
+      const domContainer =
+        version === 'GAODE2.x'
+          ? this.mapService.getMapContainer()
+          : this.mapService.getMarkerContainer();
+      // const domContainer = this.mapService.getMarkerContainer();
+      // const domContainer = this.mapService.getMapContainer();
+      const defaultCursor = domContainer?.style.getPropertyValue('cursor');
+      if (type === 'unmousemove' && defaultCursor !== '') {
+        domContainer?.style.setProperty('cursor', '');
+      } else if (type === 'mousemove') {
+        domContainer?.style.setProperty('cursor', cursor);
+      }
+    }
+    // const domContainer = this.mapService.getMapContainer()
+    // domContainer?.style.setProperty('cursor', 'move');
+  }
+
+  public destroy() {
+    this.pickingFBO.destroy();
+    // this.pickingFBO = null; 清除对 webgl 实例的引用
+    // @ts-ignore
+    this.pickingFBO = null;
+  }
+
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
     if (!!(container as HTMLCanvasElement).getContext) {
@@ -166,8 +198,8 @@ export default class PickingService implements IPickingService {
       this.alreadyInPicking ||
       // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
       this.layerService.alreadyInRendering ||
-      // TODO: this.layerService.isMapDragging() 如果地图正在拖拽 则不进行拾取操作
-      this.layerService.isMapDragging() ||
+      // Tip: this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
+      this.interactionService.indragging ||
       // TODO: 判断当前 是都进行 shader pick 拾取判断
       !this.layerService.getShaderPickStat()
     ) {
@@ -229,9 +261,22 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
           layer.hooks.beforePickingEncode.call();
+
+          if (layer.masks.length > 0) {
+            // 若存在 mask，则在 pick 阶段的绘制也启用
+            layer.masks.map((m: ILayer) => {
+              m.hooks.beforeRenderData.call();
+              m.hooks.beforeRender.call();
+              m.render();
+              m.hooks.afterRender.call();
+            });
+          }
+
           layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);
+          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
+
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
     });
@@ -370,6 +415,8 @@ export default class PickingService implements IPickingService {
     // layer.emit(target.type, target);
     // 判断是否发生事件冲突
     if (isEventCrash(target)) {
+      // Tip: 允许用户动态设置鼠标光标
+      this.handleCursor(layer, target.type);
       layer.emit(target.type, target);
     }
   }

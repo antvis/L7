@@ -111,10 +111,11 @@ export interface IVertexAttributeDescriptor
     vertex: number[],
     attributeIdx: number,
     normal: number[],
+    vertexIndex?: number,
   ) => number[];
 }
 
-type Position = number[];
+export type Position = number[];
 type Color = [number, number, number, number];
 type CallBack = (...args: any[]) => any;
 export type StyleAttributeField = string | string[] | number[];
@@ -168,6 +169,7 @@ export type Triangulation = (
   indices: number[];
   size: number;
   normals?: number[];
+  indexes?: number[];
 };
 
 export interface IStyleAttributeUpdateOptions {

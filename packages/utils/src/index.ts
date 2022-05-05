@@ -9,5 +9,6 @@ export * from './event';
 export * from './color';
 export * from './anchor';
 export * from './stencli';
+export * from './cull';
 import * as Satistics from './statistics';
 export { DOM, Satistics };

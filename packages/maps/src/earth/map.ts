@@ -31,6 +31,7 @@ const EventMap: {
   zoomchange: 'zoom',
   dragging: 'drag',
 };
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { MapTheme } from './theme';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
@@ -41,6 +42,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 export default class L7EarthService implements IEarthService<Map> {
   public version: string = Version.GLOBEL;
   public map: Map;
+  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
 
   // TODO: 判断地图是否正在拖拽
   public dragging: boolean = false;
@@ -91,6 +93,7 @@ export default class L7EarthService implements IEarthService<Map> {
   }
   public off(type: string, handle: (...args: any[]) => void): void {
     this.map.off(EventMap[type] || type, handle);
+    this.eventEmitter.off(type, handle);
   }
 
   public getContainer(): HTMLElement | null {

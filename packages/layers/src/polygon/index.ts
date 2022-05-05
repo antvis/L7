@@ -34,6 +34,10 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       return 'fill';
     } else if (shape === 'extrude') {
       return 'extrude';
+    } else if (shape === 'water') {
+      return 'water';
+    } else if (shape === 'ocean') {
+      return 'ocean';
     } else if (shape === 'line') {
       return 'line';
     } else {

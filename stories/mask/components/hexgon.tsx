@@ -32,7 +32,7 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -60,54 +60,20 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-    const data2 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [121.4208984375, 30.486550842588485],
-                  [120.7177734375, 30.183121842195515],
-                  [121.06933593749999, 29.248063243796576],
-                  [121.75048828124999, 29.57345707301757],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
-
     scene.on('loaded', () => {
-      const polygonlayer = new MaskLayer({})
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.3,
-        });
-      scene.addLayer(polygonlayer);
-
-      const polygonlayer2 = new MaskLayer({})
-        .source(data2)
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.3,
-        });
-      scene.addLayer(polygonlayer2);
-
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv',
       )
         .then((res) => res.text())
         .then((data) => {
           // const layer = new HeatmapLayer({ mask: true })
-          const layer = new HeatmapLayer({ mask: true, maskInside: false })
+          const layer = new HeatmapLayer({
+            mask: true,
+            maskInside: false,
+            maskfence: maskData,
+            maskOpacity: 0.5,
+            maskColor: '#00f',
+          })
             .source(data, {
               parser: {
                 type: 'csv',

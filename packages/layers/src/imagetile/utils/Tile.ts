@@ -2,6 +2,7 @@ import { Bounds, GeoCoordinates, Point, toLngLat } from '@antv/geo-coord';
 import {
   createLayerContainer,
   ILayer,
+  ILayerGroup,
   ILayerService,
   ILngLat,
 } from '@antv/l7-core';
@@ -27,7 +28,7 @@ export default class Tile {
   public currentCrs: any;
 
   public layerService: ILayerService;
-  public layer: ILayer;
+  public layer: ILayerGroup;
   constructor(props: any) {
     this.layerService = props.layerService;
     this.layer = props.layer;
@@ -263,7 +264,7 @@ export default class Tile {
       t.active = true;
 
       // 往 imageTileLayer 中添加子图层
-      this.layer.layerChildren.push(tile.imageLayer);
+      this.layer.addChild(tile.imageLayer);
 
       this.tileCache.setTile(tile, key);
 
@@ -318,12 +319,7 @@ export default class Tile {
   }
 
   public destroyTile(tile: any) {
-    const layerIndex = this.layer.layerChildren.indexOf(tile.imageLayer);
-    if (layerIndex > -1) {
-      this.layer.layerChildren.splice(layerIndex, 1);
-    }
-
-    tile.imageLayer.destroy();
+    this.layer.removeChild(tile.imageLayer);
     this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
 
@@ -347,11 +343,7 @@ export default class Tile {
   }
 
   public removeTiles() {
-    this.layer.layerChildren.forEach((layer: any) => {
-      layer.destroy();
-    });
-
-    this.layer.layerChildren = [];
+    this.layer.clearChild();
     this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
     this.tileList = {};

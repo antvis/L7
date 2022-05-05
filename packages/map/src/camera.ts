@@ -61,6 +61,8 @@ export default class Camera extends EventEmitter {
   private onEaseFrame: (_: number) => void;
   private onEaseEnd: (easeId?: string) => void;
   private easeFrameId: number;
+  private pitchEnabled: boolean;
+  private rotateEnabled: boolean;
 
   constructor(options: IMapOptions) {
     super();
@@ -69,6 +71,8 @@ export default class Camera extends EventEmitter {
     this.moving = false;
     this.zooming = false;
     this.bearingSnap = options.bearingSnap;
+    this.pitchEnabled = options.pitchEnabled;
+    this.rotateEnabled = options.rotateEnabled;
     this.transform = new Transform(
       minZoom,
       maxZoom,
@@ -363,10 +367,10 @@ export default class Camera extends EventEmitter {
         if (this.zooming) {
           tr.zoom = interpolate(startZoom, zoom, k);
         }
-        if (this.rotating) {
+        if (this.rotating && this.rotateEnabled) {
           tr.bearing = interpolate(startBearing, bearing, k);
         }
-        if (this.pitching) {
+        if (this.pitching && this.pitchEnabled) {
           tr.pitch = interpolate(startPitch, pitch, k);
         }
         if (this.padding) {

@@ -40,7 +40,7 @@ scene.on('loaded', () => {
           duration: 5
         })
         .style({
-          opacity: 1
+          opacity: 0.5
         });
       scene.addLayer(layer);
     });

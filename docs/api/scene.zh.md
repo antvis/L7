@@ -416,15 +416,39 @@ scene.setMapStyle(
 );
 ```
 
-### setCenter() 设置地图中心点
+### setCenter(center: [number, number], option?: ICameraOptions) 设置地图中心点
 
-设置地图中心点坐标
+参数：`center` {LngLat} 地图中心点
+
+设置地图中心点坐标。L7 提供了 setCenter 方法，允许用户动态的设置地图的中心点位，同时允许通过可选的 options 属性设置偏移。
 
 ```javascript
 scene.setCenter([lng, lat]);
+
+scene.setCenter([lng, lat], {
+  padding: {
+    top: 100,
+  },
+});
 ```
 
-参数：`center` {LngLat} 地图中心点
+padding 参数支持如下的三种传值方式，数值的单位是 px
+
+```javascript
+export interface ICameraOptions {
+  padding:
+    | number
+    | [number, number, number, number]
+    | {
+        top?: number,
+        bottom?: number,
+        right?: number,
+        left?: number,
+      };
+}
+```
+
+[在线案例](/zh/examples/point/bubble#point)
 
 ### setZoomAndCenter 设置地图缩放等级和中心点
 
@@ -462,7 +486,7 @@ scene.zoomIn();
 地图缩小一级
 
 ```javascript
-scene.ZoomOUt();
+scene.ZoomOut();
 ```
 
 ### panTo 地图移动到

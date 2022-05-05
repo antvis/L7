@@ -1,6 +1,8 @@
 import { container, ILayerPlugin, TYPES } from '@antv/l7-core';
+import CanvasLayer from './canvas';
 import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
+import GeometryLayer from './Geometry'; // 逐步替换为 Geometry
 import './glsl.d';
 import HeatmapLayer from './heatmap';
 import ImageLayer from './image';
@@ -141,6 +143,8 @@ export {
   PolygonLayer,
   LineLayer,
   CityBuildingLayer,
+  GeometryLayer,
+  CanvasLayer,
   ImageLayer,
   ImageTileLayer,
   RasterLayer,

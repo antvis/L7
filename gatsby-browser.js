@@ -19,3 +19,4 @@ window.react = require('react');
 window.popmotion = require('popmotion');
 window.reactDom = require('react-dom');
 window.antd = require('antd');
+window.materialUICore = require('@material-ui/core')

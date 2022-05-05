@@ -1,5 +1,5 @@
 import { PointLayer, Scene, LineLayer, PolygonLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 export default class Amap2demo_image extends React.Component {
   // @ts-ignore
@@ -58,12 +58,23 @@ export default class Amap2demo_image extends React.Component {
               },
             })
             .shape('name', ['00', '01', '02'])
+            .rotate('name', () => Math.random() * Math.PI)
+            // .rotate(Math.PI/2)
+            .style({
+              layerType: 'fillImage',
+              rotation: 0,
+            })
             .active({
               color: '#00f',
               mix: 0.6,
             })
-            .size(20);
+            .size(30);
           scene.addLayer(imageLayer);
+
+          setTimeout(() => {
+            console.log('remove layer');
+            scene.removeLayer(imageLayer);
+          }, 2000);
         });
     });
   }

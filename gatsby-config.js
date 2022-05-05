@@ -14,6 +14,7 @@ module.exports = {
       'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.vision',
     githubUrl: 'https://github.com/antvis/L7',
+    keywords: 'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: true, // 是否在demo页展示API文档
     navs: [
@@ -134,6 +135,14 @@ module.exports = {
         order: 2,
       },
       {
+        slug: 'api/source',
+        title: {
+          zh: '数据 Source',
+          en: 'Source',
+        },
+        order: 2,
+      },
+      {
         slug: 'api/point_layer',
         title: {
           zh: '点图层',
@@ -162,6 +171,14 @@ module.exports = {
         title: {
           zh: '热力图层',
           en: 'HeatMapLayer',
+        },
+        order: 6,
+      },
+      {
+        slug: 'api/geometry_layer',
+        title: {
+          zh: '几何体图层',
+          en: 'GeometryLayer',
         },
         order: 6,
       },
@@ -222,10 +239,10 @@ module.exports = {
         order: 9,
       },
       {
-        slug: 'api/source',
+        slug: 'api/pass',
         title: {
-          zh: '数据 Source',
-          en: 'Source',
+          zh: '后处理模块',
+          en: 'MultiPass',
         },
         order: 10,
       },
@@ -260,6 +277,14 @@ module.exports = {
           en: 'demos',
         },
         order: 14,
+      },
+      {
+        slug: 'api/experiment',
+        title: {
+          zh: '实验特性',
+          en: 'experiment',
+        },
+        order: 15,
       },
     ],
     examples: [
@@ -332,6 +357,15 @@ module.exports = {
         title: {
           zh: '风场图层',
           en: 'Wind Layer',
+        },
+        order: 7,
+      },
+      {
+        slug: 'geometry',
+        icon: 'raster',
+        title: {
+          zh: '几何体图层',
+          en: 'Geometry Layer',
         },
         order: 7,
       },

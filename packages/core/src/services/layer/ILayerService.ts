@@ -4,6 +4,7 @@ import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
+import { IAttribute } from '../renderer/IAttribute';
 import {
   IBlendOptions,
   IModel,
@@ -63,6 +64,7 @@ export interface ILayerModelInitializationOptions {
 
 export interface ILayerModel {
   render(): void;
+  renderUpdate?(): void;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
@@ -71,8 +73,12 @@ export interface ILayerModel {
   needUpdate(): boolean;
   clearModels(): void;
 
+  // canvasLayer
+  clearCanvas?(): void;
+
   // earth mode
   setEarthTime?(time: number): void;
+  createModelData?(options?: any): any;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -92,6 +98,24 @@ export interface IActiveOption {
 
 type ILngLat = [number, number];
 
+// 分段图例
+export interface ILegendSegmentItem {
+  value: [number, number];
+  [key: string]: any;
+}
+// 分类图例
+export interface ILegendClassificaItem {
+  value: number | string;
+  [key: string]: any;
+}
+// 图层图例
+export type LegendItems = ILegendSegmentItem[] | ILegendClassificaItem[];
+
+export interface IAttrubuteAndElements {
+  attributes: any;
+  elements: any;
+}
+
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
@@ -104,6 +128,7 @@ export interface ILayer {
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
   layerChildren: ILayer[]; // 在图层中添加子图层
+  masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
@@ -128,7 +153,10 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
-
+  // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
+  layerType?: string | undefined;
+  isLayerGroup: boolean;
+  triangulation?: Triangulation | undefined;
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -140,6 +168,10 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
+  updateModelData(data: IAttrubuteAndElements): void;
+
+  addMaskLayer(maskLayer: ILayer): void;
+  removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
@@ -158,6 +190,12 @@ export interface ILayer {
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
+  createAttrubutes(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ): {
+    [attributeName: string]: IAttribute;
+  };
   updateStyleAttribute(
     type: string,
     field: StyleAttributeField,
@@ -169,6 +207,7 @@ export interface ILayer {
   getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  rotate(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -185,10 +224,11 @@ export interface ILayer {
     id: number | { x: number; y: number },
     option?: IActiveOption,
   ): void;
+  setAutoFit(autoFit: boolean): void;
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string): any;
+  getLegendItems(name: string): LegendItems;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
@@ -196,8 +236,13 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
-  setBlend(type: keyof typeof BlendType): void;
+  setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
+
+  setMultiPass(
+    multipass: boolean,
+    passes?: Array<string | [string, { [key: string]: unknown }]>,
+  ): ILayer;
   renderLayers(): void;
   render(): ILayer;
 
@@ -285,6 +330,12 @@ export interface ILayer {
   setEarthTime(time: number): void;
 }
 
+export interface ILayerGroup extends ILayer {
+  addChild(layer: ILayer): void;
+  removeChild(layer: ILayer): void;
+  clearChild(): void;
+}
+
 /**
  * Layer 插件
  */
@@ -305,6 +356,12 @@ export interface ILayerPlugin {
  * Layer 初始化参数
  */
 export interface ILayerConfig {
+  mask: boolean;
+  maskInside: boolean;
+  maskfence: any;
+  maskColor: string;
+  maskOpacity: number;
+
   colors: string[];
   size: number;
   shape: string;
@@ -328,6 +385,10 @@ export interface ILayerConfig {
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
+  // layerType 指定 shape 的类型
+  layerType?: string | undefined;
+  cursorEnabled?: boolean;
+  cursor?: string;
   forward: boolean; // 正方向
 
   /**
@@ -383,18 +444,23 @@ export interface ILayerConfig {
  * 提供 Layer 管理服务
  */
 export interface ILayerService {
+  pickedLayerId: number;
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
-
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
+
+  // 清除画布
+  clear(): void;
   add(layer: ILayer): void;
+  addMask(mask: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
+  getSceneInited(): boolean;
   getLayers(): ILayer[];
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
@@ -406,7 +472,6 @@ export interface ILayerService {
   renderLayers(type?: string): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
-  isMapDragging(): boolean;
 
   destroy(): void;
 }
