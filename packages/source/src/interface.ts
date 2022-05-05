@@ -28,6 +28,7 @@ export interface IRasterTileParserCFG {
   maxZoom?: number;
   zoomOffset?: number;
   extent?: [number, number, number, number];
+  updateStrategy: 'overlap' | 'replace';
 }
 
 export interface IJsonItem {
