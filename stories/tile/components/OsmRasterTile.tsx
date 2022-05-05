@@ -22,7 +22,7 @@ export default class OsmRasterTile extends React.Component {
       this.gridLayer.setData(data);
       return;
     }
-    this.gridLayer = new LineLayer({ autoFit: false })
+    this.gridLayer = new LineLayer({ autoFit: false, zIndex: 10 })
       .source(data)
       .size(2)
       .color('red')
@@ -46,7 +46,7 @@ export default class OsmRasterTile extends React.Component {
 
     this.scene.on('loaded', () => {
       const layer = new RasterTileLayer({
-        zIndex: 99,
+        zIndex: 9,
       });
       layer.source('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         parser: {

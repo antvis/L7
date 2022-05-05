@@ -205,7 +205,6 @@ export default class RasterTileModel extends BaseModel {
       ? layerChildren.concat(this.subGridLayer, this.subTextLayer)
       : layerChildren;
 
-    this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
 
     if (this.tilesetManager.isLoaded) {
@@ -219,7 +218,6 @@ export default class RasterTileModel extends BaseModel {
     if (tile.layer) {
       const layerGroup = this.layer as ILayerGroup;
       layerGroup.removeChild(tile.layer);
-      layerGroup.destroy();
     }
   }
 

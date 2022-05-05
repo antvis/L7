@@ -22,7 +22,7 @@ export default class RasterTile extends React.Component {
       this.gridLayer.setData(data);
       return;
     }
-    this.gridLayer = new LineLayer({ autoFit: false })
+    this.gridLayer = new LineLayer({ autoFit: false, zIndex: 19 })
       .source(data)
       .size(2)
       .color('red')
@@ -33,7 +33,7 @@ export default class RasterTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new Map({
+      map: new GaodeMapV2({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
@@ -46,7 +46,7 @@ export default class RasterTile extends React.Component {
 
     this.scene.on('loaded', () => {
       const layer = new RasterTileLayer({
-        zIndex: 99,
+        zIndex: 9,
         // minZoom: 1,
         // maxZoom: 16,
       });
