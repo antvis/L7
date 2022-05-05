@@ -17,7 +17,7 @@ export default class RasterTileModel extends BaseModel {
   // 瓦片数据管理器
   public tilesetManager: TilesetManager | undefined;
   // 是否开启瓦片网格子图层，用于调试
-  public showGrid = true;
+  public showGrid = false;
   // 瓦片网格子图层，用于调试
   private subGridLayer: ILayer;
   // 瓦片网格文本子图层，用于调试

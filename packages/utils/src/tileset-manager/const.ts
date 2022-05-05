@@ -5,7 +5,6 @@ import {
 } from './utils/strategies';
 
 export const TILE_SIZE = 256;
-// [-Infinity,-Infinity,Infinity,Infinity,]
 export const DEFAULT_EXTENT: Bounds = [
   -Infinity,
   -Infinity,
