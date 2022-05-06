@@ -123,6 +123,23 @@ export interface IMaskLayerStyleOptions {
   opacity: styleSingle;
 }
 
+export interface IWindLayerStyleOptions {
+  uMin?: number;
+  uMax?: number;
+  vMin?: number;
+  vMax?: number;
+  fadeOpacity?: number;
+  speedFactor?: number;
+  dropRate?: number;
+  dropRateBump?: number;
+  opacity?: number;
+  numParticles?: number;
+  rampColors?: {
+    [key: number]: string;
+  };
+  sizeScale?: number;
+}
+
 export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
