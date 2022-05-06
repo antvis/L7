@@ -1,4 +1,3 @@
-#define LineTypeSolid 0.0
 #define Animate 0.0
 #define LineTexture 1.0
 
@@ -12,10 +11,6 @@ varying vec4 v_color;
 uniform float u_line_texture;
 uniform sampler2D u_texture;
 uniform vec2 u_textSize;
-
-// dash
-uniform float u_dash_offset : 0.0;
-uniform float u_dash_ratio : 0.1;
 
 varying vec2 v_iconMapUV;
 varying float v_blur;
@@ -95,8 +90,4 @@ void main() {
   }
 
   gl_FragColor = filterColor(gl_FragColor);
-
-    
-  
-  
 }
