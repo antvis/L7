@@ -1,17 +1,13 @@
 import {
   AttributeType,
   gl,
-  IAnimateOption,
   IEncodeFeature,
-  IImage,
-  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
@@ -22,7 +18,7 @@ export default class LinearLineModel extends BaseModel {
   protected colorTexture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       vertexHeightScale = 20.0,
       raisingHeight = 0,
       heightfixed = false,
@@ -65,7 +61,7 @@ export default class LinearLineModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
       // 纹理支持参数
       u_texture: this.colorTexture, // 贴图
 
