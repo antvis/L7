@@ -1,17 +1,11 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "command": {
     "publish": {
-      "ignoreChanges": [
-        "*.md"
-      ],
-      "allowBranch": [
-        "publish",
-        "docs"
-      ],
-      "message": "chore: publish"
+      "ignoreChanges": ["*.md"],
+      "allowBranch": ["publish", "docs"],
+      "message": "chore: publish",
+      "registry": "https://registry.npmjs.org"
     }
   },
   "version": "2.8.35",

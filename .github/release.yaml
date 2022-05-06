@@ -1,0 +1,24 @@
+# for .github/workflows/release-label.yml
+
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - chore
+  categories:
+    - title: 🎉 New Features
+      labels:
+        - feature
+        - enhancement
+    - title: 📖 Documentation Changes
+      labels:
+        - documentation
+    - title: 🐛 Bug Fixes
+      labels:
+        - bugfix
+    - title: 🛠 Breaking Changes
+      labels:
+        - breaking
+    - title: Other Changes
+      labels:
+        - "*"
