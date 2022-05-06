@@ -60,7 +60,5 @@ void main() {
     radar_v = 1.0 - (radar_v - 0.99)/0.01;
   }
 
-
-
   gl_FragColor.a *= radar_v;
 }
