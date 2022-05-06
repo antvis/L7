@@ -44,13 +44,6 @@ export default class Amap2demo_image extends React.Component {
 
           const imageLayer = new PointLayer()
             .source(data, {
-              // .source([
-              //   {
-              //     longitude: 121.434765,
-              //     latitude: 31.256735,
-              //     name: ''
-              //   }
-              // ], {
               parser: {
                 type: 'json',
                 x: 'longitude',
@@ -71,10 +64,6 @@ export default class Amap2demo_image extends React.Component {
             .size(30);
           scene.addLayer(imageLayer);
 
-          setTimeout(() => {
-            console.log('remove layer');
-            scene.removeLayer(imageLayer);
-          }, 2000);
         });
     });
   }

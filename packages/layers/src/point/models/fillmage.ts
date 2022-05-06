@@ -15,31 +15,23 @@ import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
-
-import { isNumber } from 'lodash';
-
 import { Version } from '@antv/l7-maps';
 
 export default class FillImageModel extends BaseModel {
-  public meter2coord: number = 1;
+  private meter2coord: number = 1;
   private texture: ITexture2D;
   private isMeter: boolean = false;
   private radian: number = 0; // 旋转的弧度
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      strokeOpacity = 1,
-      strokeWidth = 0,
-      stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
-      blend,
       rotation,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
-
     /**
      *               rotateFlag
      * L7MAP            1
@@ -64,18 +56,12 @@ export default class FillImageModel extends BaseModel {
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
         opacity,
-        strokeOpacity,
-        strokeWidth,
-        stroke,
         offsets,
       })
     ) {
       // 判断当前的样式中哪些是需要进行数据映射的，哪些是常量，同时计算用于构建数据纹理的一些中间变量
       this.judgeStyleAttributes({
         opacity,
-        strokeOpacity,
-        strokeWidth,
-        stroke,
         offsets,
       });
 
@@ -114,7 +100,6 @@ export default class FillImageModel extends BaseModel {
         -Math.sin(this.radian),
         Math.cos(this.radian),
       ]),
-      u_additive: blend === 'additive' ? 1.0 : 0.0,
 
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
@@ -122,7 +107,7 @@ export default class FillImageModel extends BaseModel {
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
 
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
@@ -166,7 +151,6 @@ export default class FillImageModel extends BaseModel {
    * @returns
    */
   public calMeter2Coord() {
-    // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
@@ -212,7 +196,7 @@ export default class FillImageModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill_' + type,
+        moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: PointFillTriangulation,
@@ -231,7 +215,7 @@ export default class FillImageModel extends BaseModel {
     return {
       frag: pointFillFrag,
       vert: pointFillVert,
-      type: 'normal',
+      type: 'point_fillImage',
     };
   }
 
@@ -341,7 +325,6 @@ export default class FillImageModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
-          // console.log('featureIdx', featureIdx, feature)
           return Array.isArray(size)
             ? [size[0] * this.meter2coord]
             : [(size as number) * this.meter2coord];
@@ -367,7 +350,6 @@ export default class FillImageModel extends BaseModel {
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.LINEAR,
-      // min: gl.LINEAR,
       min: gl.LINEAR_MIPMAP_LINEAR,
       premultiplyAlpha: false,
       width: 1024,
