@@ -25,13 +25,13 @@ export default class Demo extends React.Component {
     this.scene = scene;
 
     let layer = new GeometryLayer()
-      .source([{ lng: 120, lat: 30 }], {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
-      })
+      // .source([{ lng: 120, lat: 30 }], {
+      //   parser: {
+      //     type: 'json',
+      //     x: 'lng',
+      //     y: 'lat',
+      //   },
+      // })
       .shape('sprite')
       .size(10)
       .style({

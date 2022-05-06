@@ -183,7 +183,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
    * 'w' => ['w']
    */
   private parseFields(
-    field: string[] | string | number[],
+    field: string[] | string | number[] | number,
   ): string[] | number[] {
     if (Array.isArray(field)) {
       return field;
