@@ -119,6 +119,10 @@ export interface IPolygonLayerStyleOptions {
   watercolor2?: string;
 }
 
+export interface IMaskLayerStyleOptions {
+  opacity: styleSingle;
+}
+
 export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
