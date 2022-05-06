@@ -25,7 +25,6 @@ export default class Amapdemo_extrude extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      console.log('event test');
       fetch(
         'https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json',
       )
@@ -39,19 +38,23 @@ export default class Amapdemo_extrude extends React.Component {
                 y: 'w',
               },
             })
-            .shape('squareColumn') // cylinder triangleColumn hexagonColumn squareColumn
+            // .shape('squareColumn') // cylinder triangleColumn hexagonColumn squareColumn
+            .shape('cylinder') // cylinder triangleColumn hexagonColumn squareColumn
             .size('t', function(level) {
               return [1, 1, level * 2 + 20];
+              // return [10, 10, level * 2 + 20];
             })
             .active(true)
             .color('#0ff')
             .style({
-              opacity: 0.8,
+              // opacity: 0.8,
               opacityLinear: {
                 enable: true, // true - false
                 dir: 'up', // up - down
               },
               lightEnable: false,
+              // sourceColor: '#f00',
+              // targetColor: "#0f0"
             });
           scene.addLayer(pointLayer);
         });

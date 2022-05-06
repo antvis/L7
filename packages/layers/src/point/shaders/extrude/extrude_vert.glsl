@@ -23,9 +23,6 @@ uniform float u_lightEnable: 1;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
-varying float v_z;
-varying float v_lightWeight;
-
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
 
@@ -54,8 +51,8 @@ void main() {
   // cal style mapping - 数据纹理映射部分的计算
   styleMappingMat = mat4(
     0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
+    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA - lightWeight
+    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1] - linearZ(垂直方向 0 - 1 的值)
     0.0, 0.0, 0.0, 0.0
   );
 
@@ -79,16 +76,11 @@ void main() {
   vec3 size = a_Size * a_Position;
 
   // a_Position.z 是在构建网格的时候传入的标准值 0 - 1，在插值器插值可以获取 0～1 线性渐变的值
-  v_z = a_Position.z;
-
- 
-
-  // vec2 offset = project_pixel(size.xy);
-  // vec2 offset = (size.xy);
+  styleMappingMat[2][3] =  a_Position.z;
 
   vec3 offset = size; // 控制圆柱体的大小 - 从标准单位圆柱体进行偏移
   if(u_heightfixed < 1.0) { // 圆柱体不固定高度
-    // offset = project_pixel(offset);
+    
     if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
       // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
       offset = offset * pow(2.0, (19.0 - u_Zoom));
@@ -106,17 +98,15 @@ void main() {
 
   vec4 project_pos = project_position(vec4(a_Pos.xy, 0., 1.0));
 
-  // vec4 pos = vec4(project_pos.xy + offset, project_pixel(size.z) * u_r, 1.0);
   // u_r 控制圆柱的生长
   vec4 pos = vec4(project_pos.xy + offset.xy, offset.z * u_r, 1.0);
 
   // 圆柱光照效果
-  // float lightWeight = u_lightEnable > 0.0 ? calc_lighting(pos): 1.0;
   float lightWeight = 1.0;
   if(u_lightEnable > 0.0) { // 取消三元表达式，增强健壮性
     lightWeight = calc_lighting(pos);
   }
-  v_lightWeight = lightWeight;
+  styleMappingMat[1][3] = lightWeight;
 
   v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);
 
