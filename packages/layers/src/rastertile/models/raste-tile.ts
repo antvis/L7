@@ -204,14 +204,14 @@ export default class RasterTileModel extends BaseModel {
         return tile.layer;
       });
 
-      if(this.showGrid) {
-        if(!rasteTileLayer.hasChild(this.subGridLayer)) {
-          rasteTileLayer.addChild(this.subGridLayer)
-        }
-        if(!rasteTileLayer.hasChild(this.subTextLayer)) {
-          rasteTileLayer.addChild(this.subTextLayer)
-        }
+    if (this.showGrid) {
+      if (!rasteTileLayer.hasChild(this.subGridLayer)) {
+        rasteTileLayer.addChild(this.subGridLayer);
       }
+      if (!rasteTileLayer.hasChild(this.subTextLayer)) {
+        rasteTileLayer.addChild(this.subTextLayer);
+      }
+    }
 
     this.layerService.renderLayers();
 
