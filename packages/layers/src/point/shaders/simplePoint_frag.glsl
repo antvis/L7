@@ -43,10 +43,6 @@ void main() {
   gl_FragColor.a *= opacity;
 
   gl_FragColor = filterColor(gl_FragColor);
-
-  
-
-  
   
   if(u_additive > 0.0) {
     gl_FragColor *= circleClipOpacity;
