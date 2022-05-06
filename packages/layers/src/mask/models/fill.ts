@@ -1,14 +1,16 @@
 import { gl, IModel } from '@antv/l7-core';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { polygonTriangulation } from '../../core/triangulation';
 import { IMaskLayerStyleOptions } from '../../core/interface';
+import { polygonTriangulation } from '../../core/triangulation';
 import mask_frag from '../shaders/mask_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';
 
 export default class MaskModel extends BaseModel {
   public getUninforms() {
-    const { opacity = 0 } = this.layer.getLayerConfig() as IMaskLayerStyleOptions;
+    const {
+      opacity = 0,
+    } = this.layer.getLayerConfig() as IMaskLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 0.0,
     };
