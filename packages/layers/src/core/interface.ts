@@ -91,9 +91,9 @@ export interface IPointLayerStyleOptions {
 }
 
 export interface IPolygonLayerStyleOptions {
-  opacity: styleSingle;
+  opacity?: number;
 
-  opacityLinear: {
+  opacityLinear?: {
     enable: boolean;
     dir: string;
   };
