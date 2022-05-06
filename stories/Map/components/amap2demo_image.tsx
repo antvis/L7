@@ -63,7 +63,6 @@ export default class Amap2demo_image extends React.Component {
             })
             .size(30);
           scene.addLayer(imageLayer);
-
         });
     });
   }

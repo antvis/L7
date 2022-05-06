@@ -8,6 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { Version } from '@antv/l7-maps';
 import { getCullFace, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -15,7 +16,6 @@ import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
-import { Version } from '@antv/l7-maps';
 
 export default class FillImageModel extends BaseModel {
   private meter2coord: number = 1;
