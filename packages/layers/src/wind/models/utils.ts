@@ -1,4 +1,8 @@
-export function createProgram(gl: WebGLRenderingContext, vshader: string, fshader: string) {
+export function createProgram(
+  gl: WebGLRenderingContext,
+  vshader: string,
+  fshader: string,
+) {
   // Create shader object
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader); // 创建顶点着色器对象
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fshader); // 创建片元着色器对象
@@ -51,7 +55,11 @@ export function createProgram(gl: WebGLRenderingContext, vshader: string, fshade
   return program;
 }
 
-export function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
+export function loadShader(
+  gl: WebGLRenderingContext,
+  type: number,
+  source: string,
+) {
   // Create shader object
   const shader = gl.createShader(type); // 生成着色器对象
   if (shader == null) {
@@ -123,7 +131,11 @@ export function createDataTexture(
   return texture;
 }
 
-export function bindTexture(gl: WebGLRenderingContext, texture: WebGLTexture, unit: number) {
+export function bindTexture(
+  gl: WebGLRenderingContext,
+  texture: WebGLTexture,
+  unit: number,
+) {
   gl.activeTexture(gl.TEXTURE0 + unit);
   gl.bindTexture(gl.TEXTURE_2D, texture);
 }
@@ -167,11 +179,17 @@ export function bindAttriIndicesBuffer(
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
   }
- 
+
   return buffer as WebGLBuffer;
 }
 
-export function bindUnifrom(gl: WebGLRenderingContext, unifromName: string, data: number|Float32List, program: WebGLProgram, vec: string) {
+export function bindUnifrom(
+  gl: WebGLRenderingContext,
+  unifromName: string,
+  data: number | Float32List,
+  program: WebGLProgram,
+  vec: string,
+) {
   const uniform = gl.getUniformLocation(program, unifromName);
   if (uniform === null || uniform < 0) {
     console.warn('无法获取 uniform 变量的存储位置');
@@ -181,7 +199,12 @@ export function bindUnifrom(gl: WebGLRenderingContext, unifromName: string, data
   return uniform;
 }
 
-export function setUnifrom(gl: WebGLRenderingContext, location: WebGLUniformLocation, data: number|Float32List, vec: string) {
+export function setUnifrom(
+  gl: WebGLRenderingContext,
+  location: WebGLUniformLocation,
+  data: number | Float32List,
+  vec: string,
+) {
   switch (vec) {
     case 'float':
       gl.uniform1f(location, data as number);

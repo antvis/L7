@@ -156,13 +156,21 @@ export class Wind {
     this.dropRate = 0.003; // how often the particles move to a random place
     this.dropRateBump = 0.01; // drop rate increase relative to individual particle speed
 
-    this.drawProgram = glUtils.createProgram(gl, drawVert, drawFrag) as WebGLProgram;
+    this.drawProgram = glUtils.createProgram(
+      gl,
+      drawVert,
+      drawFrag,
+    ) as WebGLProgram;
     this.fullScreenProgram = glUtils.createProgram(
       gl,
       fullScreenVert,
       fullScreenFrag,
     ) as WebGLProgram;
-    this.updateProgram = glUtils.createProgram(gl, updateVert, updateFrag) as WebGLProgram;
+    this.updateProgram = glUtils.createProgram(
+      gl,
+      updateVert,
+      updateFrag,
+    ) as WebGLProgram;
 
     this.quadBuffer = glUtils.createBuffer(
       gl,
