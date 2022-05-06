@@ -187,11 +187,14 @@ export default class RasterTileModel extends BaseModel {
       return;
     }
 
-    const layerChildren = this.tilesetManager.tiles
+    const rasteTileLayer = this.layer as ILayerGroup;
+
+    this.tilesetManager.tiles
       .filter((tile) => tile.isLoaded)
       .map((tile) => {
         if (!tile.layer) {
           tile.layer = this.creatSubLayer(tile);
+          rasteTileLayer.addChild(tile.layer);
         } else {
           // 显隐藏控制
           tile.layer.updateLayerConfig({
@@ -201,15 +204,20 @@ export default class RasterTileModel extends BaseModel {
         return tile.layer;
       });
 
-    this.layer.layerChildren = this.showGrid
-      ? layerChildren.concat(this.subGridLayer, this.subTextLayer)
-      : layerChildren;
+      if(this.showGrid) {
+        if(!rasteTileLayer.hasChild(this.subGridLayer)) {
+          rasteTileLayer.addChild(this.subGridLayer)
+        }
+        if(!rasteTileLayer.hasChild(this.subTextLayer)) {
+          rasteTileLayer.addChild(this.subTextLayer)
+        }
+      }
 
     this.layerService.renderLayers();
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片
-      this.layer.emit('tiles-loaded', this.tilesetManager.currentTiles);
+      rasteTileLayer.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
   };
 

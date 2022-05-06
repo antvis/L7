@@ -26,4 +26,8 @@ export default class LayerGroup<ChildLayerStyleOptions = {}> extends BaseLayer
 
     this.layerChildren = [];
   }
+
+  public hasChild(layer: ILayer) {
+    return this.layerChildren.includes(layer);
+  }
 }
