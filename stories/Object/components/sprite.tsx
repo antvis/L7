@@ -50,6 +50,7 @@ export default class Demo extends React.Component {
         spriteScale: 0.6,
         // spriteUpdate: 20000
       })
+      .active(true)
       .color('#f00');
 
     scene.on('loaded', () => {
