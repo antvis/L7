@@ -14,9 +14,6 @@ import planeVert from '../shaders/billboard_vert.glsl';
 
 export default class BillBoardModel extends BaseModel {
   protected texture: ITexture2D;
-  protected terrainImage: HTMLImageElement;
-  protected terrainImageLoaded: boolean = false;
-  protected mapTexture: string | undefined;
   private radian: number = 0; // 旋转的弧度
 
   public planeGeometryTriangulation = () => {
@@ -81,8 +78,6 @@ export default class BillBoardModel extends BaseModel {
   }
 
   public clearModels(): void {
-    // @ts-ignore
-    this.terrainImage = null;
     this.texture?.destroy();
   }
 
@@ -90,10 +85,8 @@ export default class BillBoardModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      mapTexture,
       drawCanvas,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
-    this.mapTexture = mapTexture;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
@@ -112,7 +105,6 @@ export default class BillBoardModel extends BaseModel {
         fragmentShader: planeFrag,
         triangulation: this.planeGeometryTriangulation,
         primitive: gl.TRIANGLES,
-        // primitive: gl.LINES,
         depth: { enable: true },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
