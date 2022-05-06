@@ -1,9 +1,6 @@
 import BaseLayer from '../core/BaseLayer';
+import { IMaskLayerStyleOptions } from '../core/interface';
 import MaskModels, { MaskModelType } from './models';
-
-interface IMaskLayerStyleOptions {
-  opacity: number;
-}
 
 export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
   public type: string = 'MaskLayer';

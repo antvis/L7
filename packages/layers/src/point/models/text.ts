@@ -7,7 +7,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { boundsContains, getMask, padBounds } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
@@ -161,8 +160,8 @@ export default class TextModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_raisingHeight: Number(raisingHeight),
 
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_opacity: Number(opacity),
+      u_stroke_width: Number(strokeWidth),
       u_stroke_color: this.getStrokeColor(stroke),
 
       u_sdf_map: this.texture,
@@ -227,6 +226,7 @@ export default class TextModel extends BaseModel {
   }
 
   public clearModels() {
+    this.texture?.destroy();
     this.dataTexture?.destroy();
     this.layer.off('remapping', this.buildModels);
   }

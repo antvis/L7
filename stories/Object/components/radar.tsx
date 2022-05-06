@@ -37,6 +37,7 @@ export default class Amap2demo_polygon extends React.Component {
       .shape('radar')
       .size(100)
       .color('#d00')
+      .active(true)
       .style({
         // rotation: 90
         speed: 5,

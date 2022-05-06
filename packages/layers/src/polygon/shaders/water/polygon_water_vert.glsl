@@ -13,7 +13,6 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 #pragma include "styleMappingCalOpacity"
 
 #pragma include "projection"
-#pragma include "picking"
 
 void main() {
   v_uv = a_uv;
@@ -52,7 +51,5 @@ styleMappingMat = mat4(
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   }
-
-  setPickingColor(a_PickingColor);
 }
 

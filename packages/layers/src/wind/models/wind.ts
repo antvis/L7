@@ -7,29 +7,13 @@ import {
   ITexture2D,
   Point,
 } from '@antv/l7-core';
-import { FrequencyController, isMini } from '@antv/l7-utils';
+import { FrequencyController } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import WindFrag from '../shaders/wind_frag.glsl';
 import WindVert from '../shaders/wind_vert.glsl';
 import { IWind, IWindProps, Wind } from './windRender';
-
-interface IWindLayerStyleOptions {
-  uMin?: number;
-  uMax?: number;
-  vMin?: number;
-  vMax?: number;
-  fadeOpacity?: number;
-  speedFactor?: number;
-  dropRate?: number;
-  dropRateBump?: number;
-  opacity?: number;
-  numParticles?: number;
-  rampColors?: {
-    [key: number]: string;
-  };
-  sizeScale?: number;
-}
 
 const defaultRampColors = {
   0.0: '#3288bd',

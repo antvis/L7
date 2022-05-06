@@ -91,9 +91,9 @@ export interface IPointLayerStyleOptions {
 }
 
 export interface IPolygonLayerStyleOptions {
-  opacity: styleSingle;
+  opacity?: number;
 
-  opacityLinear: {
+  opacityLinear?: {
     enable: boolean;
     dir: string;
   };
@@ -117,6 +117,27 @@ export interface IPolygonLayerStyleOptions {
   // ocean
   watercolor?: string;
   watercolor2?: string;
+}
+
+export interface IMaskLayerStyleOptions {
+  opacity: styleSingle;
+}
+
+export interface IWindLayerStyleOptions {
+  uMin?: number;
+  uMax?: number;
+  vMin?: number;
+  vMax?: number;
+  fadeOpacity?: number;
+  speedFactor?: number;
+  dropRate?: number;
+  dropRateBump?: number;
+  opacity?: number;
+  numParticles?: number;
+  rampColors?: {
+    [key: number]: string;
+  };
+  sizeScale?: number;
 }
 
 export interface IImageLayerStyleOptions {

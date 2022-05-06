@@ -51,10 +51,10 @@ export default class Amap2demo_polygon extends React.Component {
       .shape('fill')
       .color('red')
       .style({
-        // opacityLinear: {
-        //   enable: true,
-        //   dir: 'in',
-        // },
+        opacityLinear: {
+          enable: true,
+          dir: 'in',
+        },
       });
     scene.addLayer(layer);
 

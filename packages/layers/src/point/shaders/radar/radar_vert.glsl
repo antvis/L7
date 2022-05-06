@@ -8,7 +8,6 @@ uniform float u_time;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
-uniform float u_globel;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float u_isMeter;
@@ -18,12 +17,7 @@ varying vec4 v_color;
 varying float v_radius;
 
 uniform float u_opacity : 1;
-uniform float u_stroke_opacity : 1;
-uniform float u_stroke_width : 2;
-uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 uniform vec2 u_offsets;
-
-uniform float u_blur : 0.0;
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -90,12 +84,11 @@ void main() {
   // radius(16-bit)
   v_radius = newSize;
 
-  // TODO: billboard
   // anti-alias
-  //  float antialiased_blur = -max(u_blur, antialiasblur);
-  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, u_blur);
+  float blur = 0.0;
+  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, blur);
 
-  vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
+  vec2 offset = (extrude.xy * (newSize) + textrueOffsets);
   vec3 aPosition = a_Position;
   if(u_isMeter < 1.0) {
     // 不以米为实际单位
@@ -121,10 +114,6 @@ void main() {
     gl_Position = u_Mvp * vec4(project_pos.xy + offset, 0.0, 1.0);
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
-  }
-
-  if(u_globel > 0.0) {
-    gl_Position = u_ViewProjectionMatrix * vec4(a_Position + extrude * newSize * 0.1, 1.0);
   }
 
   setPickingColor(a_PickingColor);

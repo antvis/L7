@@ -12,7 +12,6 @@ uniform mat4 u_Mvp;
 uniform mat2 u_RotateMatrix;
 uniform float u_isMeter;
 
-varying float v_radius;
 varying vec2 v_uv; // 本身的 uv 坐标
 varying vec2 v_Iconuv; // icon 贴图的 uv 坐标
 
@@ -24,7 +23,6 @@ uniform vec2 u_offsets;
 
 #pragma include "projection"
 #pragma include "picking"
-
 
 void main() {
   vec3 extrude = a_Extrude;
@@ -72,13 +70,6 @@ void main() {
   }
 
   // cal style mapping
-
-  // radius(16-bit)
-  v_radius = a_Size;
-
-  // TODO: billboard
-  // anti-alias
-  
 
   highp float angle_sin = sin(a_Rotate);
   highp float angle_cos = cos(a_Rotate);

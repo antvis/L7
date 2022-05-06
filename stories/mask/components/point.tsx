@@ -113,7 +113,7 @@ export default class MaskPoints extends React.Component {
         zIndex: 3,
         mask: true,
         maskInside: true,
-        maskOpacity: 0.2,
+        // maskOpacity: 0.1,
         maskColor: '#ff0',
         maskfence: maskData2,
       })
