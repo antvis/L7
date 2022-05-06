@@ -11,9 +11,8 @@ import {
 } from '@antv/l7-core';
 
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
+import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
