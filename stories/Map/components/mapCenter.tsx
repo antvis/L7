@@ -29,7 +29,7 @@ export default class GaodeMapComponent extends React.Component {
     // console.log(new Protobuf('http://localhost:3000/file.mbtiles/7/99/52.pbf'))
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: aspaceLnglat,
         // pitch: 0,
         // pitch: 40,
@@ -38,142 +38,109 @@ export default class GaodeMapComponent extends React.Component {
         // dragEnable: false
       }),
     });
-    // normal = 'normal',
-    // additive = 'additive',
-    // cylinder circle
-    // blend: 'additive'
-    // let line = new LineLayer({ zIndex: 3 })
-    //   .source(
-    //     [
-    //       {
-    //         lng: aspaceLnglat[0],
-    //         lat: aspaceLnglat[1],
-    //         lng2: aspaceLnglat[0] + 0.00104,
-    //         lat2: aspaceLnglat[1],
-    //       },
-    //     ],
-    //     {
-    //       parser: {
-    //         type: 'json',
-    //         x: 'lng',
-    //         y: 'lat',
-    //         x1: 'lng2',
-    //         y1: 'lat2',
-    //       },
-    //     },
-    //   )
-    //   .shape('line')
-    //   .size(2)
-    //   .color('#000');
-
-    let layer = new PointLayer({}) // blend: 'additive'
-      .source(
-        [
-          {
-            lng: 120.11,
-            lat: 30.264701434772807,
-            name: 'n3',
-          },
-          {
-            lng: 120.111,
-            lat: 30.264701434772807,
-            name: 'n3',
-          },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
-      // - cylinder
-      // - triangleColumn
-      // - hexagonColumn
-      // - squareColumn,
-      .shape('circle')
-      // .shape('cylinder')
-      // .color('#0f9')
-      // .color('#4169E1')
-      // .color('#66CCFF')
-      .color('#f00')
-      // .color('name', ['#f00', '#ff0'])
-      // .size([100, 100, 1000])
-      // .size([20, 20, 200])
-      .size(50)
-      // .size('name', [20, 40])
-      // .animate({
-      //   // enable: true,
-      //   enable: false,
-      //   // type: 'www'
-      // })
-      // .animate(true)
-      .active(true)
-      // .active({ color: '#ff0' })
-      .style({
-        // heightfixed: true,
-        // pickLight: false,
-        // pickLight: true,
-        // lightEnable: true,
-        // blur: 0.2,
-        // opacity: 0.3,
-        // stroke: '#f00',
-        // strokeWidth: 10,
-        // strokeWidth: 0,
-        // strokeOpacity: 1,
-        // unit: 'meter',
-      });
 
     this.scene = scene;
 
-    // console.log('layer', layer)
+    var replacer = function(key: any, value: any) {
+      if (value.geometry) {
+        var type;
+        var rawType = value.type;
+        var geometry = value.geometry;
 
-    // let layer2 = new PointLayer({})
-    // .source([
-    //   {
-    //     lng: 120.1025,
-    //     lat: 30.264701434772807,
-    //     name: 'n2'
-    //   }
-    // ], {
-    //   parser: {
-    //     type: 'json',
-    //     x: 'lng',
-    //     y: 'lat',
-    //   },
-    // })
-    // .shape('circle')
-    // .size(10)
-    // .color('#00f')
-    // .style({
-    //   opacity: 0.5
-    // })
+        if (rawType === 1) {
+          type = geometry.length === 1 ? 'Point' : 'MultiPoint';
+        } else if (rawType === 2) {
+          type = geometry.length === 1 ? 'LineString' : 'MultiLineString';
+        } else if (rawType === 3) {
+          type = geometry.length === 1 ? 'Polygon' : 'MultiPolygon';
+        }
 
-    // scene.addImage(
-    //   '00',
-    //   'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-    // );
+        return {
+          'type': 'Feature',
+          'geometry': {
+            'type': type,
+            'coordinates': geometry.length == 1 ? geometry : [geometry]
+          },
+          'properties': value.tags
+        };
+      } else {
+        return value;
+      }
+    };
 
     scene.on('loaded', () => {
-      scene.addLayer(layer);
+      
 
       fetch('http://localhost:3000/file.mbtiles/7/99/52.pbf')
         .then((res) => res.arrayBuffer())
         .then((r) => {
-          var tile = new VectorTile(new Protobuf(r));
-          console.log(tile);
+          // var tile = new VectorTile(new Protobuf(r));
+          fetch('https://gw.alipayobjects.com/os/bmw-prod/7b3564b6-1e84-4e79-98c5-614b4842e76d.json')
+          .then(res => res.json())
+          .then(res => {
+            // console.log()
 
-          // console.log(tile.layers.city.feature(0).loadGeometry())
-
-          const pdata = tile.layers.city.feature(0).toGeoJSON(99, 52, 7);
-          console.log(pdata);
-          const polygonLayer = new PolygonLayer({ autoFit: true })
-            .source({
+            let r = {"features":[{"geometry":[[[3236,1610],[3289,1626],[3316,1667],[3278,1704],[3209,1673],[3236,1610]]],"type":3,"tags":{}}],"numPoints":6,"numSimplified":6,"numFeatures":1,"source":[{"id":null,"type":"Polygon","geometry":[[0.7900390625,0.39306640625000006,1,0.783447265625,0.408447265625,0.0001511138340212265,0.80029296875,0.416015625,0.0006318092346191381,0.8095703125,0.406982421875,0.00014775134482473615,0.802978515625,0.39697265625,0.000018723858046475082,0.7900390625,0.39306640625000006,1]],"tags":{},"minX":0.783447265625,"minY":0.39306640625000006,"maxX":0.8095703125,"maxY":0.416015625}],"x":0,"y":0,"z":0,"transformed":true,"minX":0.783447265625,"minY":0.39306640625000006,"maxX":0.8095703125,"maxY":0.416015625}
+            let replaceJSON = JSON.stringify({
               type: 'FeatureCollection',
-              features: [pdata],
+              features: r ? r.features : []
+            }, replacer)
+            let geojson = JSON.parse(replaceJSON)
+            // console.log(geojson)
+            let coordinates = geojson.features[0].geometry.coordinates[0]
+            // console.log(coordinates)
+            let coords: any[] = []
+            coordinates.map(([x, y]: [number, number]) => {
+              // console.log(unprojectX(x/4096))
+              // console.log(unprojectY(y/4096))
+              let lng = unprojectX(x/4096)
+              let lat = unprojectY(y/4096)
+              coords.push([lng, lat])
             })
-            .size('NAME_CHN', [0, 10000, 50000, 30000, 100000])
+            // console.log(JSON.stringify(coords))
+
+            function projectX(x: number) {
+                return x / 360 + 0.5;
+            }
+            
+            function unprojectX(x: number) {
+              return (x - 0.5) * 360
+            }
+
+            function projectY(y: number) {
+                var sin = Math.sin(y * Math.PI / 180);
+                var y2 = 0.5 - 0.25 * Math.log((1 + sin) / (1 - sin)) / Math.PI;
+                return y2 < 0 ? 0 : y2 > 1 ? 1 : y2; // clamp 0 - 1
+            }
+
+            function unprojectY(y: number) {
+              let n = Math.exp(4 * Math.PI * (0.5 - y));
+              let y2 = Math.asin((n - 1)/(n + 1)) * 180 / Math.PI;
+              if(y2 > 85) {
+                y2 = 85;
+              }
+              return y2
+            }
+
+            const polygonLayer = new PolygonLayer({ autoFit: true })
+            .source(
+              {
+                "type": "FeatureCollection",
+                "features": [
+                  {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        coords
+                      ]
+                    }
+                  }
+                ]
+              }
+                )
+            // .size('NAME_CHN', [0, 10000, 50000, 30000, 100000])
             .shape('fill')
             .color('#ff0')
             .style({
@@ -181,85 +148,37 @@ export default class GaodeMapComponent extends React.Component {
             });
 
           scene.addLayer(polygonLayer);
+            // var tile = new VectorTile(geojson);
+            // new VectorTileFeature(res)
+            
+            // console.log(new VectorTileFeature(res));
+          })
+          // var tile = new VectorTile(r);
+          // console.log(tile);
+
+          // console.log(tile.layers.city.feature(0).loadGeometry())
+
+          // const pdata = tile.layers.city.feature(0).toGeoJSON(99, 52, 7);
+          // console.log(pdata);
+          // const polygonLayer = new PolygonLayer({ autoFit: true })
+          //   .source({
+          //     type: 'FeatureCollection',
+          //     features: [pdata],
+          //   })
+          //   .size('NAME_CHN', [0, 10000, 50000, 30000, 100000])
+          //   .shape('fill')
+          //   .color('#ff0')
+          //   .style({
+          //     opacity: 0.5,
+          //   });
+
+          // scene.addLayer(polygonLayer);
           // tile.layers.city.feature(0).loadGeometry()
         });
 
-      // let scale = layer.getScale('size');
-      // console.log('scale n2', scale('n2'));
-      // console.log('scale n3', scale('n3'));
-
-      // let text = new PointLayer({ zIndex: 2 })
-      //   .source(
-      //     [
-      //       {
-      //         lng: aspaceLnglat[0] + 0.0002,
-      //         lat: aspaceLnglat[1],
-      //         name: '00',
-      //       },
-      //     ],
-      //     {
-      //       parser: {
-      //         type: 'json',
-      //         x: 'lng',
-      //         y: 'lat',
-      //       },
-      //     },
-      //   )
-      //   // .shape('100m', 'text')
-      //   // .shape('circle')
-      //   .shape('name', ['00'])
-      //   .size(25)
-      //   // .color('#0f0')
-      //   // .select(true)
-      //   .style({
-      //     // textOffset: [50, 20],
-      //   });
-
-      // text.on('click', () => {
-      //   alert('***');
-      // });
-
-      // scene.addLayer(text);
-      // scene.addLayer(line);
-
-      // scene.addLayer(layer2);
-      // scene.addLayer(trufCircle);
-      // scene.on('movestart', e => console.log('e', e))
-      // scene.on('mapmove', e => console.log('e', e))
-      // scene.on('moveend', e => console.log('e', e))
-
-      // scene.on('zoomstart', e => console.log('e', e))
-      // scene.on('zoomchange', e => console.log('e', e))
-      // scene.on('zoomend', e => console.log('e', e))
-      // scene.on('mousedown', e => console.log('e', e))
     });
-    // let c = 1;
-    // layer.on('click', () => {
-    //   // @ts-ignore
-    //   c == 1 ? scene.setEnableRender(false) : scene.setEnableRender(true);
-    //   c = 0;
-    // });
-    // layer.on('contextmenu', () => console.log('contextmenu'));
-    // layer.on('destroy', (e) => console.log('destroy', e));
-    // layer.on('remove', (e) => {
-    //   console.log('remove', e);
-    //   console.log(scene.getLayers());
-    // });
-
-    // layer.on('unclick', (e) => {
-    //   console.log('unclick');
-    // });
-
-    // layer.on('dbclick', () => {
-    //   console.log('dbclick')
-    // })
-
-    // setTimeout(() => {
-    //   layer.destroy();
-    // }, 2000);
-    // layer.on('mousemove', (e) => {
-    //   console.log(e.feature);
-    // });
+  
+   
   }
 
   public render() {
