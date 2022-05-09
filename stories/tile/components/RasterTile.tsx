@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterLayer, Scene, LineLayer, ILayer } from '@antv/l7';
+import { RasterLayer, Scene, LineLayer, ILayer, PointLayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
@@ -33,7 +33,7 @@ export default class RasterTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
@@ -45,8 +45,25 @@ export default class RasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
+      const point = new PointLayer({zIndex: 7})
+      .source([{
+        lng: 120, lat: 30
+      }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat'
+        }
+      })
+      .shape('circle')
+      .color('#f00')
+      .size(10)
+
+      this.scene.addLayer(point)
+
+
       const layer = new RasterLayer({
-        zIndex: 9,
+        zIndex: 6,
         // minZoom: 1,
         // maxZoom: 16,
       });
@@ -62,7 +79,10 @@ export default class RasterTile extends React.Component {
             extent: [-180, -85.051129, 179, 85.051129],
           },
         },
-      );
+      ).style({
+        // opacity: 0.5
+      })
+      ;
 
       this.scene.addLayer(layer);
       // this.updateGridLayer();

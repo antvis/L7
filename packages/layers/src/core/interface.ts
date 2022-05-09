@@ -121,6 +121,7 @@ export interface IPolygonLayerStyleOptions {
 export interface IRasterTileLayerStyleOptions {
   // TODO: define
   zIndex?: number;
+  opacity?: number;
 }
 
 export interface IImageLayerStyleOptions {
