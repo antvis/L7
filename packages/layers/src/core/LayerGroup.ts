@@ -3,7 +3,8 @@ import BaseLayer from './BaseLayer';
 
 // 定义 LayerGroup 继承 Baselayer
 
-export default class LayerGroup<ChildLayerStyleOptions = {}> extends BaseLayer
+export default class LayerGroup<ChildLayerStyleOptions = {}>
+  extends BaseLayer<ChildLayerStyleOptions>
   implements ILayerGroup {
   public isLayerGroup: boolean = true;
 
@@ -25,5 +26,9 @@ export default class LayerGroup<ChildLayerStyleOptions = {}> extends BaseLayer
     });
 
     this.layerChildren = [];
+  }
+
+  public hasChild(layer: ILayer) {
+    return this.layerChildren.includes(layer);
   }
 }

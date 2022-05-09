@@ -1,3 +1,4 @@
+import { TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export interface IParserCfg {
@@ -63,6 +64,7 @@ export interface ISource {
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
+  tileset: TilesetManager | undefined;
   setData(data: any): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;

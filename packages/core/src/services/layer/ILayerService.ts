@@ -334,6 +334,7 @@ export interface ILayerGroup extends ILayer {
   addChild(layer: ILayer): void;
   removeChild(layer: ILayer): void;
   clearChild(): void;
+  hasChild(layer: ILayer): boolean;
 }
 
 /**

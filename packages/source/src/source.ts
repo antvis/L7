@@ -9,17 +9,14 @@ import {
   ISource,
   ISourceCFG,
   ITransform,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
-import { bBoxToBounds, extent, padBounds } from '@antv/l7-utils';
 import {
-  BBox,
-  Feature,
-  FeatureCollection,
-  Geometries,
-  Properties,
-} from '@turf/helpers';
+  bBoxToBounds,
+  extent,
+  padBounds,
+  TilesetManager,
+} from '@antv/l7-utils';
+import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // @ts-ignore
@@ -56,6 +53,9 @@ export default class Source extends EventEmitter implements ISource {
     zoom: -99,
     method: 'count',
   };
+
+  // 瓦片数据管理器
+  public tileset: TilesetManager | undefined;
   private readonly mapService: IMapService;
   // 是否有效范围
   private invalidExtent: boolean = false;
@@ -87,19 +87,14 @@ export default class Source extends EventEmitter implements ISource {
     this.init();
   }
 
-  public setData(data: any, options?: ISourceCFG) {
-    this.originData = data;
-    this.dataArrayChanged = false;
-    this.initCfg(options);
-    this.init();
-    this.emit('update');
-  }
   public getClusters(zoom: number): any {
     return this.clusterIndex.getClusters(this.caculClusterExtent(2), zoom);
   }
+
   public getClustersLeaves(id: number): any {
     return this.clusterIndex.getLeaves(id, Infinity);
   }
+
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
     let data = this.clusterIndex.getClusters(
@@ -139,6 +134,7 @@ export default class Source extends EventEmitter implements ISource {
     });
     this.executeTrans();
   }
+
   public getFeatureById(id: number): unknown {
     const { type = 'geojson' } = this.parser;
     if (type === 'geojson' && !this.cluster) {
@@ -187,24 +183,21 @@ export default class Source extends EventEmitter implements ISource {
     return feature?._id;
   }
 
+  public setData(data: any, options?: ISourceCFG) {
+    this.originData = data;
+    this.dataArrayChanged = false;
+    this.initCfg(options);
+    this.init();
+    this.emit('update');
+  }
+
   public destroy() {
     this.removeAllListeners();
     this.originData = null;
     this.clusterIndex = null;
     // @ts-ignore
     this.data = null;
-  }
-
-  private caculClusterExtent(bufferRatio: number): any {
-    let newBounds = [
-      [-Infinity, -Infinity],
-      [Infinity, Infinity],
-    ];
-
-    if (!this.invalidExtent) {
-      newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
-    }
-    return newBounds[0].concat(newBounds[1]);
+    this.tileset?.destroy();
   }
 
   private initCfg(option?: ISourceCFG) {
@@ -227,24 +220,47 @@ export default class Source extends EventEmitter implements ISource {
       }
     }
   }
+
+  private init() {
+    this.hooks.init.call(this);
+  }
+
+  /**
+   * 数据解析
+   */
   private excuteParser(): void {
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
-    // TODO: 图片瓦片地图组件只需要使用 url 参数
-    if (type === 'imagetile') {
-      this.data = {
-        tileurl: this.originData,
-        dataArray: [],
-      };
-      return;
-    }
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
     // 计算范围
     this.extent = extent(this.data.dataArray);
     this.invalidExtent =
       this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
+    // 瓦片数据
+    this.tileset = this.initTileset();
   }
+
+  /**
+   * 瓦片数据管理器
+   */
+  private initTileset() {
+    const { tilesetOptions } = this.data;
+    if (!tilesetOptions) {
+      return;
+    }
+
+    if (this.tileset) {
+      this.tileset.updateOptions(tilesetOptions);
+      return this.tileset;
+    }
+
+    const tileset = new TilesetManager({
+      ...tilesetOptions,
+    });
+    return tileset;
+  }
+
   /**
    * 数据统计
    */
@@ -258,6 +274,9 @@ export default class Source extends EventEmitter implements ISource {
     });
   }
 
+  /**
+   * 数据聚合
+   */
   private initCluster() {
     if (!this.cluster) {
       return;
@@ -267,7 +286,15 @@ export default class Source extends EventEmitter implements ISource {
     this.clusterIndex = cluster(this.data, clusterOptions);
   }
 
-  private init() {
-    this.hooks.init.call(this);
+  private caculClusterExtent(bufferRatio: number): any {
+    let newBounds = [
+      [-Infinity, -Infinity],
+      [Infinity, Infinity],
+    ];
+
+    if (!this.invalidExtent) {
+      newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
+    }
+    return newBounds[0].concat(newBounds[1]);
   }
 }

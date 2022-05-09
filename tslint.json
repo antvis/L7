@@ -17,10 +17,9 @@
     "no-bitwise": false,
     "no-console": [true, "log"],
     "object-literal-sort-keys": false,
-    "no-implicit-dependencies": [
-      true,
-      "dev"
-    ]
+    "no-implicit-dependencies": [true, "dev"],
+    "interface-over-type-literal": false,
+    "no-this-assignment": false
   },
   "globals": {
     "AMap": true

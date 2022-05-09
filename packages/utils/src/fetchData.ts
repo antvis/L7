@@ -111,11 +111,17 @@ export const getImage = (requestParameters: any, callback: any) => {
       const img = new $window.Image();
       img.crossOrigin = 'anonymous';
       const URL = $window.URL || $window.webkitURL;
-      // @ts-ignore
       img.onload = () => {
         callback(null, img);
         URL.revokeObjectURL(img.src);
+        img.onload = null;
       };
+      img.onerror = () =>
+        callback(
+          new Error(
+            'Could not load image. Please make sure to use a supported image type such as PNG or JPEG. Note that SVGs are not supported.',
+          ),
+        );
       const blob = new $window.Blob([new Uint8Array(imgData.data)], {
         type: 'image/png',
       });

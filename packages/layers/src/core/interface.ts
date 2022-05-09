@@ -119,6 +119,12 @@ export interface IPolygonLayerStyleOptions {
   watercolor2?: string;
 }
 
+// 栅格瓦片图层
+export interface IRasterTileLayerStyleOptions {
+  // TODO: define
+  zIndex?: number;
+  opacity?: number;
+}
 export interface IMaskLayerStyleOptions {
   opacity: styleSingle;
 }

@@ -1,9 +1,9 @@
 // TODO: 解决 gastby 服务端构建过程中没有 window 全局变量的问题
 
-let globalWindow: any;
+let globalWindow: Window & typeof globalThis;
 
 if (typeof window === 'undefined') {
-  globalWindow = {
+  globalWindow = ({
     devicePixelRatio: 1,
     navigator: {
       userAgent:
@@ -55,7 +55,7 @@ if (typeof window === 'undefined') {
     requestAnimationFrame: () => true,
     cancelAnimationFrame: () => true,
     clearTimeout: () => true,
-  };
+  } as unknown) as Window & typeof globalThis;
 } else {
   globalWindow = window;
 }

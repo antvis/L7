@@ -20,6 +20,17 @@ export interface IParserData {
   // 瓦片地图数据字典
   featureKeys?: IFeatureKey;
 }
+
+// 栅格瓦片解析配置项
+export interface IRasterTileParserCFG {
+  tileSize?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  zoomOffset?: number;
+  extent?: [number, number, number, number];
+  updateStrategy?: 'overlap' | 'replace';
+}
+
 export interface IJsonItem {
   [key: string]: any;
 }

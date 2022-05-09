@@ -33,7 +33,7 @@
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "^4.0.0",
     "@rollup/plugin-node-resolve": "^6.0.0",
-    "@storybook/react": "^6.2.2",
+    "@storybook/react": "^6.4.22",
     "@turf/turf": "^6.5.0",
     "@types/dat.gui": "^0.7.1",
     "@types/enzyme": "^3.1.14",
