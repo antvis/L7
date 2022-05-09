@@ -45,44 +45,50 @@ export default class RasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({zIndex: 7})
-      .source([{
-        lng: 120, lat: 30
-      }], {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat'
-        }
-      })
-      .shape('circle')
-      .color('#f00')
-      .size(10)
+      const point = new PointLayer({ zIndex: 7 })
+        .source(
+          [
+            {
+              lng: 120,
+              lat: 30,
+            },
+          ],
+          {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
+          },
+        )
+        .shape('circle')
+        .color('#f00')
+        .size(10);
 
-      this.scene.addLayer(point)
-
+      this.scene.addLayer(point);
 
       const layer = new RasterLayer({
         zIndex: 6,
         // minZoom: 1,
         // maxZoom: 16,
       });
-      layer.source(
-        'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-        {
-          parser: {
-            type: 'rasterTile',
-            tileSize: 256,
-            // minZoom: 6,
-            // maxZoom: 15,
-            zoomOffset: 0,
-            extent: [-180, -85.051129, 179, 85.051129],
+      layer
+        .source(
+          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          {
+            parser: {
+              type: 'rasterTile',
+              tileSize: 256,
+              // minZoom: 6,
+              // maxZoom: 15,
+              zoomOffset: 0,
+              extent: [-180, -85.051129, 179, 85.051129],
+            },
           },
-        },
-      ).style({
-        // opacity: 0.5
-      })
-      ;
+        )
+        .style({
+          // opacity: 0.5
+        });
 
       this.scene.addLayer(layer);
       // this.updateGridLayer();

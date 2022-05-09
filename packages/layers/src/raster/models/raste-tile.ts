@@ -4,10 +4,10 @@ import {
   ILayerGroup,
   IModelUniform,
 } from '@antv/l7-core';
-import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import { Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import BaseModel from '../../core/BaseModel';
+import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import ImageLayer from '../../image';
 import LineLayer from '../../line';
 import PointLayer from '../../point';
@@ -177,19 +177,23 @@ export default class RasterTileModel extends BaseModel {
 
   // 创建子图层
   private creatSubLayer(tile: Tile) {
-    const { opacity = 1, zIndex = 0 } = this.layer.getLayerConfig() as IRasterTileLayerStyleOptions;
+    const {
+      opacity = 1,
+      zIndex = 0,
+    } = this.layer.getLayerConfig() as IRasterTileLayerStyleOptions;
     const layer = new ImageLayer({
       visible: tile.isVisible,
-      zIndex
-    }).source(tile.data, {
-      parser: {
-        type: 'image',
-        extent: tile.bounds,
-      },
+      zIndex,
     })
-    .style({
-      opacity
-    });
+      .source(tile.data, {
+        parser: {
+          type: 'image',
+          extent: tile.bounds,
+        },
+      })
+      .style({
+        opacity,
+      });
     const container = createLayerContainer(
       this.layer.sceneContainer as Container,
     );
