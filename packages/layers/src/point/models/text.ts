@@ -172,6 +172,7 @@ export default class TextModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.layer.on('remapping', this.buildModels);
     this.extent = this.textExtent();
     const {

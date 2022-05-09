@@ -7,6 +7,7 @@ import NormalModel from './normal';
 import Radar from './radar';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
+import VectorModel from './vector';
 
 export type PointType =
   | 'fillImage'
@@ -17,7 +18,8 @@ export type PointType =
   | 'simplePoint'
   | 'extrude'
   | 'text'
-  | 'icon';
+  | 'icon'
+  | 'vector';
 
 const PointModels: { [key in PointType]: any } = {
   fillImage: FillImageModel,
@@ -29,6 +31,7 @@ const PointModels: { [key in PointType]: any } = {
   extrude: ExtrudeModel,
   text: TextModel,
   icon: IconModel,
+  vector: VectorModel,
 };
 
 export default PointModels;
