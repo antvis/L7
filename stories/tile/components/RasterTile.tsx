@@ -38,7 +38,7 @@ export default class RasterTile extends React.Component {
         pitch: 0,
         style: 'normal',
         zoom: 5,
-        viewMode: '3D'
+        viewMode: '3D',
       }),
     });
 

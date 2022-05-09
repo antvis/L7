@@ -1,5 +1,5 @@
-import LayerGroup from '../core/LayerGroup';
 import { IRasterLayerStyleOptions } from '../core/interface';
+import LayerGroup from '../core/LayerGroup';
 import RasterModels, { RasterModelType } from './models/index';
 export default class RaterLayer extends LayerGroup<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
@@ -27,17 +27,20 @@ export default class RaterLayer extends LayerGroup<IRasterLayerStyleOptions> {
     const defaultConfig = {
       raster: {},
       raster3d: {},
-      rasterTile: {}
+      rasterTile: {},
     };
     return defaultConfig[type];
   }
 
   protected getModelType(): RasterModelType {
     // 根据 source 的类型判断 model type
-    switch(this.layerSource.parser.type) {
-      case 'raster': return 'raster';
-      case 'rasterTile': return 'rasterTile';
-      default: return 'raster';
+    switch (this.layerSource.parser.type) {
+      case 'raster':
+        return 'raster';
+      case 'rasterTile':
+        return 'rasterTile';
+      default:
+        return 'raster';
     }
     // return 'raster';
   }

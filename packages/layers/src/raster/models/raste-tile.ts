@@ -36,7 +36,6 @@ export default class RasterTileModel extends BaseModel {
   public initModels() {
     const source = this.layer.getSource();
     this.tilesetManager = source.tileset;
-    
 
     if (!this.initedTileset) {
       this.bindTilesetEvent();
@@ -140,18 +139,18 @@ export default class RasterTileModel extends BaseModel {
     // 地图视野发生改变
     this.mapService.on('mapchange', (e) => {
       const { latLonBounds, zoom } = this.getCurrentView();
-      
-      if( this.mapService.version === 'GAODE1.x') {
+
+      if (this.mapService.version === 'GAODE1.x') {
         const { visible } = this.layer.getLayerConfig();
-        if(zoom < 3 && visible) {
-          this.layer.updateLayerConfig({visible: false})
+        if (zoom < 3 && visible) {
+          this.layer.updateLayerConfig({ visible: false });
           this.layerService.updateLayerRenderList();
-        } else  if(zoom >= 3 && !visible) {
-          this.layer.updateLayerConfig({visible: true})
+        } else if (zoom >= 3 && !visible) {
+          this.layer.updateLayerConfig({ visible: true });
           this.layerService.updateLayerRenderList();
         }
-      } 
-  
+      }
+
       if (
         this.lastViewStates &&
         this.lastViewStates.zoom === zoom &&
@@ -200,7 +199,6 @@ export default class RasterTileModel extends BaseModel {
       return;
     }
 
- 
     const rasteTileLayer = this.layer as ILayerGroup;
 
     this.tilesetManager.tiles
