@@ -11,7 +11,6 @@ export default class RasterTile extends React.Component {
     this.scene.destroy();
   }
 
-
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
@@ -22,7 +21,6 @@ export default class RasterTile extends React.Component {
         zoom: 5,
       }),
     });
-
 
     this.scene.on('loaded', () => {
       const point = new PointLayer({ zIndex: 7 })
@@ -44,8 +42,6 @@ export default class RasterTile extends React.Component {
         .size(10);
 
       this.scene.addLayer(point);
-
-    
     });
   }
 

@@ -1,6 +1,6 @@
 import { IEncodeFeature } from '@antv/l7-core';
-import LayerGroup from '../core/LayerGroup';
 import { IPointLayerStyleOptions } from '../core/interface';
+import LayerGroup from '../core/LayerGroup';
 import PointModels, { PointType } from './models/index';
 
 export default class PointLayer extends LayerGroup<IPointLayerStyleOptions> {
@@ -66,7 +66,7 @@ export default class PointLayer extends LayerGroup<IPointLayerStyleOptions> {
       text: {
         blend: 'normal',
       },
-      vector: {}
+      vector: {},
     };
     return defaultConfig[type];
   }
@@ -82,13 +82,13 @@ export default class PointLayer extends LayerGroup<IPointLayerStyleOptions> {
       'extrude',
       'text',
       'icon',
-      'vector'
+      'vector',
     ];
     if (this.layerType && PointTypes.includes(this.layerType)) {
       return this.layerType as PointType;
     }
 
-    if(this.layerSource.parser.type === 'rasterTile') {
+    if (this.layerSource.parser.type === 'rasterTile') {
       return 'vector';
     }
 
