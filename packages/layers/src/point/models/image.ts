@@ -7,7 +7,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { getMask } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointImageTriangulation } from '../../core/triangulation';
@@ -18,7 +17,7 @@ export default class ImageModel extends BaseModel {
 
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       offsets = [0, 0],
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (this.rendererService.getDirty()) {
@@ -69,9 +68,7 @@ export default class ImageModel extends BaseModel {
 
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
-      // u_opacity: opacity || 1.0,
-      // u_offsets: [-offsets[0], offsets[1]],
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
@@ -172,7 +169,6 @@ export default class ImageModel extends BaseModel {
         min: 'linear mipmap nearest',
         mipmap: true,
       });
-      // this.layer.render();
       // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
       this.layer.renderLayers();
       return;
@@ -180,7 +176,6 @@ export default class ImageModel extends BaseModel {
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.LINEAR,
-      // min: gl.LINEAR,
       min: gl.LINEAR_MIPMAP_LINEAR,
       premultiplyAlpha: false,
       width: 1024,

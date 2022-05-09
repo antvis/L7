@@ -84,8 +84,3 @@ stories/Test
 packages/draw/node_modules/@turf
 packages/district/src/data
 
-# npm command lines
-publish.sh
-latest.sh
-beta.sh
-mini.sh

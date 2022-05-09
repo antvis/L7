@@ -1,12 +1,9 @@
 
-uniform float u_time;
+uniform float u_time: 0.0;
 uniform float u_opacity: 1.0;
 
-varying vec4 v_Color;
 varying vec2 v_uv;
 varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
-
-#pragma include "picking"
 
 float coast2water_fadedepth = 0.10;
 float large_waveheight      = .750; // change to adjust the "heavy" waves
@@ -247,8 +244,5 @@ void main() {
     
 
   float opacity = styleMappingMat[0][0];
-  gl_FragColor = vec4(col, opacity);
-
-  // gl_FragColor = v_Color;
-  
+  gl_FragColor = vec4(col, opacity);  
 }

@@ -39,3 +39,50 @@ layer.setData(data);
 参数：
 
 - type blend 类型 normal ｜ additive ｜ subtractive ｜ max
+
+### createModelData(data: any, option?: ISourceCFG)
+- data 原始数据
+- options 为可选参数，一般是解析数据的 parser，但是在某些特殊图层中还可能是其他的参数
+
+```javascript
+const modelData = layer.createModelData(data); // data 为 GeoJson
+
+const modelData = layer.createModelData(data, { // data 为 json 数据
+  parser: {
+    type: 'json',
+    x: 'lng',
+    y: 'lat',
+  },
+});
+
+const modelData = layer.createModelData([], { // 计算 planeGeometry 的 modelData
+  widthSegments: 100,	// planeGeometry 的顶点和 widthSegments/heightSegments 相关
+  heightSegments: 100,
+});
+```
+
+🌟	在计算某些图层的 modelData 的时候我们需要考虑对应的时机，如 planeGeometry 在加载地形的时候
+planeGeometry 的顶点位置和地形贴图相关，因此如果我们要计算实际地形顶点的模型数据，需要等待对应地形贴图加载完：
+
+```javascript
+let modelData10 = null, modelData100 = null;
+layer.on('terrainImageLoaded', () => {
+  modelData10 = layer.createModelData([], {
+    widthSegments: 10,
+    heightSegments: 10,
+  });
+
+  modelData100 = layer.createModelData([], {
+    widthSegments: 100,
+    heightSegments: 100,
+  });
+});
+```
+
+[在线案例](/zh/examples/geometry/geometry#terrain)
+### updateModelData(data: IAttrubuteAndElements)
+- data 是通过 createModelData 方法生成的图层的标准模型数据。        
+
+我们通过这个方法可以实时更新图层的模型数据。        
+
+[在线案例](/zh/examples/gallery/animate#timeline)

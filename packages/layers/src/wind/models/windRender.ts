@@ -156,13 +156,21 @@ export class Wind {
     this.dropRate = 0.003; // how often the particles move to a random place
     this.dropRateBump = 0.01; // drop rate increase relative to individual particle speed
 
-    this.drawProgram = glUtils.createProgram(gl, drawVert, drawFrag);
+    this.drawProgram = glUtils.createProgram(
+      gl,
+      drawVert,
+      drawFrag,
+    ) as WebGLProgram;
     this.fullScreenProgram = glUtils.createProgram(
       gl,
       fullScreenVert,
       fullScreenFrag,
-    );
-    this.updateProgram = glUtils.createProgram(gl, updateVert, updateFrag);
+    ) as WebGLProgram;
+    this.updateProgram = glUtils.createProgram(
+      gl,
+      updateVert,
+      updateFrag,
+    ) as WebGLProgram;
 
     this.quadBuffer = glUtils.createBuffer(
       gl,
@@ -365,8 +373,8 @@ export class Wind {
     if (this.windData?.image) {
       const gl = this.gl;
 
-      glUtils.bindTexture(gl, this.windTexture, 0);
-      glUtils.bindTexture(gl, this.particleStateTexture0, 1);
+      glUtils.bindTexture(gl, this.windTexture as WebGLTexture, 0);
+      glUtils.bindTexture(gl, this.particleStateTexture0 as WebGLTexture, 1);
 
       this.drawScreen(); // draw Particles into framebuffer
       this.updateParticles();
@@ -437,7 +445,7 @@ export class Wind {
     gl.useProgram(program);
 
     bindAttribute(gl, this.particleIndexBuffer, program.a_index, 1);
-    glUtils.bindTexture(gl, this.colorRampTexture, 2);
+    glUtils.bindTexture(gl, this.colorRampTexture as WebGLTexture, 2);
 
     gl.uniform1i(program.u_wind, 0);
     gl.uniform1i(program.u_particles, 1);

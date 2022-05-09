@@ -10,7 +10,6 @@ import {
 } from '@antv/l7-core';
 
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
@@ -25,7 +24,7 @@ export default class GreatCircleModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -86,8 +85,8 @@ export default class GreatCircleModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity === undefined ? 1 : opacity,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+
+      u_opacity: Number(opacity),
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
       u_line_type: lineStyleObj[lineType as string] || 0.0,

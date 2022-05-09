@@ -11,9 +11,8 @@ import {
 } from '@antv/l7-core';
 
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
+import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
@@ -32,7 +31,7 @@ export default class LineModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -102,8 +101,7 @@ export default class LineModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity === undefined ? 1 : opacity,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
@@ -303,7 +301,6 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
-        // @ts-ignore
         update: (
           feature: IEncodeFeature,
           featureIdx: number,

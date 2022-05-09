@@ -1,5 +1,8 @@
-// @ts-nocheck
-export function createProgram(gl, vshader, fshader) {
+export function createProgram(
+  gl: WebGLRenderingContext,
+  vshader: string,
+  fshader: string,
+) {
   // Create shader object
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader); // 创建顶点着色器对象
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fshader); // 创建片元着色器对象
@@ -33,22 +36,30 @@ export function createProgram(gl, vshader, fshader) {
 
   const numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
   for (let i = 0; i < numAttributes; i++) {
-    const attribute = gl.getActiveAttrib(program, i);
+    const attribute = gl.getActiveAttrib(program, i) as WebGLActiveInfo;
+    // @ts-ignore
     program[attribute.name] = gl.getAttribLocation(program, attribute.name);
   }
   const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
   for (let i$1 = 0; i$1 < numUniforms; i$1++) {
-    const uniform = gl.getActiveUniform(program, i$1);
+    const uniform = gl.getActiveUniform(program, i$1) as WebGLActiveInfo;
+    // @ts-ignore
     program[uniform.name] = gl.getUniformLocation(program, uniform.name);
   }
 
+  // @ts-ignore
   program.vertexShader = vertexShader;
+  // @ts-ignore
   program.fragmentShader = fragmentShader;
 
   return program;
 }
 
-export function loadShader(gl: WebGLRenderingContext, type, source) {
+export function loadShader(
+  gl: WebGLRenderingContext,
+  type: number,
+  source: string,
+) {
   // Create shader object
   const shader = gl.createShader(type); // 生成着色器对象
   if (shader == null) {
@@ -120,12 +131,16 @@ export function createDataTexture(
   return texture;
 }
 
-export function bindTexture(gl, texture, unit) {
+export function bindTexture(
+  gl: WebGLRenderingContext,
+  texture: WebGLTexture,
+  unit: number,
+) {
   gl.activeTexture(gl.TEXTURE0 + unit);
   gl.bindTexture(gl.TEXTURE_2D, texture);
 }
 
-export function createBuffer(gl, data) {
+export function createBuffer(gl: WebGLRenderingContext, data: Float32Array) {
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
@@ -135,9 +150,9 @@ export function createBuffer(gl, data) {
 export function bindAttriBuffer(
   gl: WebGLRenderingContext,
   attrName: string,
-  vertices,
-  count,
-  program,
+  vertices: number,
+  count: number,
+  program: WebGLProgram,
 ) {
   const buffer = gl.createBuffer();
   if (!buffer) {
@@ -160,47 +175,61 @@ export function bindAttriIndicesBuffer(
   const buffer = gl.createBuffer();
   if (!buffer) {
     console.warn('failed create vertex buffer');
+  } else {
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
   }
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
-  return buffer;
+
+  return buffer as WebGLBuffer;
 }
 
-export function bindUnifrom(gl, unifromName, data, program, vec) {
+export function bindUnifrom(
+  gl: WebGLRenderingContext,
+  unifromName: string,
+  data: number | Float32List,
+  program: WebGLProgram,
+  vec: string,
+) {
   const uniform = gl.getUniformLocation(program, unifromName);
-  if (uniform < 0) {
+  if (uniform === null || uniform < 0) {
     console.warn('无法获取 uniform 变量的存储位置');
+  } else {
+    setUnifrom(gl, uniform, data, vec);
   }
-  setUnifrom(gl, uniform, data, vec);
   return uniform;
 }
 
-export function setUnifrom(gl, location, data, vec) {
+export function setUnifrom(
+  gl: WebGLRenderingContext,
+  location: WebGLUniformLocation,
+  data: number | Float32List,
+  vec: string,
+) {
   switch (vec) {
     case 'float':
-      gl.uniform1f(location, data);
+      gl.uniform1f(location, data as number);
       break;
     case 'vec2':
-      gl.uniform2fv(location, data);
+      gl.uniform2fv(location, data as Float32List);
       break;
     case 'vec3':
-      gl.uniform3fv(location, data);
+      gl.uniform3fv(location, data as Float32List);
       break;
     case 'vec4':
-      gl.uniform4fv(location, data);
+      gl.uniform4fv(location, data as Float32List);
       break;
     case 'bool':
-      gl.uniform1i(location, data); // 1 - true    0 - false
+      gl.uniform1i(location, data as number); // 1 - true    0 - false
       break;
     case 'sampler2d':
       break;
     case 'mat4':
-      gl.uniformMatrix4fv(location, false, data);
+      gl.uniformMatrix4fv(location, false, data as Float32List);
       break;
   }
 }
 
-export function initFramebuffer(gl) {
+export function initFramebuffer(gl: WebGLRenderingContext) {
   const { drawingBufferWidth, drawingBufferHeight } = gl;
 
   const OFFER_SCREEN_WIDTH = drawingBufferWidth;
@@ -224,9 +253,11 @@ export function initFramebuffer(gl) {
   );
 
   const texture = gl.createTexture();
-  const textureSize = 1024;
+  // @ts-ignore
   FRAMEBUFFER.texture = texture;
+  // @ts-ignore
   FRAMEBUFFER.width = OFFER_SCREEN_WIDTH;
+  // @ts-ignore
   FRAMEBUFFER.height = OFFER_SCREEN_HEIGHT;
 
   gl.bindTexture(gl.TEXTURE_2D, texture);

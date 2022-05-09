@@ -118,7 +118,7 @@ export interface IVertexAttributeDescriptor
 export type Position = number[];
 type Color = [number, number, number, number];
 type CallBack = (...args: any[]) => any;
-export type StyleAttributeField = string | string[] | number[];
+export type StyleAttributeField = string | string[] | number[] | number;
 export type StyleAttributeOption = string | number | boolean | any[] | CallBack;
 export type StyleAttrField = string | string[] | number | number[];
 export interface IAttributeScale {

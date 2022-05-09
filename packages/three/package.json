@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.8.33",
+  "version": "2.8.35",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -34,7 +34,7 @@
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:cdn": "node_modules/.bin/rollup -c",
+    "build:cdn": "yarn rollup -c",
     "lint:ts": "run-p -c lint:ts-*",
     "test": "jest",
     "sync": "tnpm sync"
@@ -44,9 +44,9 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7-core": "^2.8.33",
-    "@antv/l7-layers": "^2.8.33",
-    "@antv/l7-scene": "^2.8.33",
+    "@antv/l7-core": "^2.8.35",
+    "@antv/l7-layers": "^2.8.35",
+    "@antv/l7-scene": "^2.8.35",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",

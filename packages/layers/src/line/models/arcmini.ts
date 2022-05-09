@@ -9,7 +9,6 @@ import {
 } from '@antv/l7-core';
 
 import { rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
@@ -19,7 +18,7 @@ import line_arcmini_vert from '../shaders/line_arcmini_vert.glsl';
 export default class ArcMiniModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       forward = true,
@@ -40,7 +39,7 @@ export default class ArcMiniModel extends BaseModel {
     return {
       u_thetaOffset: thetaOffset,
 
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
 
       segmentNumber,
       u_blur: 0.9,

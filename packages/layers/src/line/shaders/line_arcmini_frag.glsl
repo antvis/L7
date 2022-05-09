@@ -1,4 +1,3 @@
-#define LineTypeSolid 0.0
 #define Animate 0.0
 
 uniform float u_opacity;

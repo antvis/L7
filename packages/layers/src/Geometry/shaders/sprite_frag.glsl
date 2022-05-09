@@ -6,7 +6,6 @@ uniform float u_opacity;
 varying vec3 v_Color;
 varying float v_d;
 
-#pragma include "picking"
 void main() {
 
   if(v_d < 0.0) {
@@ -19,6 +18,4 @@ void main() {
   } else {
     gl_FragColor = vec4(v_Color, u_opacity);
   }
-
-  gl_FragColor = filterColor(gl_FragColor);
 }

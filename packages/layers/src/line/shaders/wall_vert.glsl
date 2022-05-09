@@ -1,5 +1,3 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
 #define Animate 0.0
 
 attribute float a_Miter;
@@ -9,7 +7,6 @@ attribute vec3 a_Normal;
 attribute vec3 a_Position;
 attribute vec2 a_iconMapUV;
 
-// dash line
 attribute float a_Total_Distance;
 attribute float a_Distance;
 
@@ -28,7 +25,6 @@ varying float v_blur;
 
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 varying vec2 v_iconMapUV;
-
 
 uniform float u_linearColor: 0;
 
@@ -102,7 +98,6 @@ void main() {
 
   v_blur = min(project_float_pixel(2.0) / originSize, 0.05);
 
-  // v_lightWeight = lightWeight;
   v_color = vec4(a_Color.rgb * lightWeight, a_Color.w);
   // v_color = a_Color;
 

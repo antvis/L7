@@ -155,6 +155,7 @@ export default class HeatMapModel extends BaseModel {
     });
   }
   private buildHeatMapIntensity(): IModel {
+    this.layer.triangulation = HeatmapTriangulation;
     return this.layer.buildLayerModel({
       moduleName: 'heatmapintensity',
       vertexShader: heatmapFramebufferVert,
