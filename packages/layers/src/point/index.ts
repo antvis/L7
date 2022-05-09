@@ -1,9 +1,9 @@
 import { IEncodeFeature } from '@antv/l7-core';
-import BaseLayer from '../core/BaseLayer';
 import { IPointLayerStyleOptions } from '../core/interface';
+import LayerGroup from '../core/LayerGroup';
 import PointModels, { PointType } from './models/index';
 
-export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
+export default class PointLayer extends LayerGroup<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
   public buildModels() {
     const modelType = this.getModelType();
@@ -66,6 +66,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       text: {
         blend: 'normal',
       },
+      vector: {},
     };
     return defaultConfig[type];
   }
@@ -81,10 +82,16 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'extrude',
       'text',
       'icon',
+      'vector',
     ];
     if (this.layerType && PointTypes.includes(this.layerType)) {
       return this.layerType as PointType;
     }
+
+    if (this.layerSource.parser.type === 'mvt') {
+      return 'vector';
+    }
+
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();

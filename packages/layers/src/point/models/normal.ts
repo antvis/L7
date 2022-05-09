@@ -83,6 +83,7 @@ export default class NormalModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     return this.buildModels();
   }
 

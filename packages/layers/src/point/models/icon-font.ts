@@ -30,6 +30,7 @@ export default class IconeModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.initIconFontGlyphs();
     this.registerBuiltinAttributes();
     this.updateTexture();

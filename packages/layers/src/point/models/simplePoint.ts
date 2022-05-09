@@ -94,6 +94,7 @@ export default class SimplePointModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     return this.buildModels();
   }
 

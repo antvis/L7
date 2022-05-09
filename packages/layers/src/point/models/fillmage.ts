@@ -127,6 +127,7 @@ export default class FillImageModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 

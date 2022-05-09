@@ -76,6 +76,7 @@ export default class ImageModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.registerBuiltinAttributes();
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);

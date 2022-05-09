@@ -87,6 +87,10 @@ export default class Source extends EventEmitter implements ISource {
     this.init();
   }
 
+  public getOriginData() {
+    return this.originData;
+  }
+
   public getClusters(zoom: number): any {
     return this.clusterIndex.getClusters(this.caculClusterExtent(2), zoom);
   }
