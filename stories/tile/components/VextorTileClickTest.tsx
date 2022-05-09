@@ -20,19 +20,19 @@ export default class GaodeMapComponent extends React.Component {
         zoom: 14,
       }),
     });
-  
-      let layer = new PointLayer({}) 
+
+    let layer = new PointLayer({})
       .source(
         [
           {
             lng: 120.111,
             lat: 30.264701434772807,
-            pid: 1001
+            pid: 1001,
           },
           {
             lng: 120.111,
             lat: 30.2635,
-            pid: 1002
+            pid: 1002,
           },
         ],
         {
@@ -45,15 +45,15 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       .color('#ff0')
-      .size(15)
+      .size(15);
 
-      let layer2 = new PointLayer({}) 
+    let layer2 = new PointLayer({})
       .source(
         [
           {
             lng: 120.11,
             lat: 30.264701434772807,
-            pid: 1001
+            pid: 1001,
           },
         ],
         {
@@ -66,15 +66,15 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       .color('#f00')
-      .size(15)
+      .size(15);
 
-      let layer3 = new PointLayer({}) 
+    let layer3 = new PointLayer({})
       .source(
         [
           {
             lng: 120.11,
             lat: 30.266,
-            pid: 1001
+            pid: 1001,
           },
         ],
         {
@@ -87,11 +87,11 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       .color('#0f0')
-      .size(15)
+      .size(15);
 
     this.scene = scene;
 
-    this.alllayers = [layer, layer2, layer3]
+    this.alllayers = [layer, layer2, layer3];
 
     scene.on('loaded', () => {
       scene.addLayer(layer3);
@@ -99,57 +99,62 @@ export default class GaodeMapComponent extends React.Component {
       scene.addLayer(layer);
       this.registAllLayers();
     });
-   
   }
 
   public registAllLayers() {
-      this.alllayers.map((layer: ILayer) => {
-        layer.on('click', (e) => {
-          // get current select pid
-          let selectPID = this.getLayerPID(layer, e.featureId)
-          if(selectPID !== this.currentSelectPID) {
-            // handle restLayers select state
-            this.handleRestLayerSelectState(layer, selectPID)
-            // handle current layer
-            layer.setSelect(e.featureId);
-            this.currentSelectPID = selectPID;
-          } else {
-            // handle restLayers select state
-            this.handleRestLayerSelectState(layer, selectPID)
-            // handle current layer
-            layer.setSelect(-1);
-            this.currentSelectPID = -1;
-          }
-           
-        })
-      })
+    this.alllayers.map((layer: ILayer) => {
+      layer.on('click', (e) => {
+        // get current select pid
+        let selectPID = this.getLayerPID(layer, e.featureId);
+        if (selectPID !== this.currentSelectPID) {
+          // handle restLayers select state
+          this.handleRestLayerSelectState(layer, selectPID);
+          // handle current layer
+          layer.setSelect(e.featureId);
+          this.currentSelectPID = selectPID;
+        } else {
+          // handle restLayers select state
+          this.handleRestLayerSelectState(layer, selectPID);
+          // handle current layer
+          layer.setSelect(-1);
+          this.currentSelectPID = -1;
+        }
+      });
+    });
   }
 
   public handleRestLayerSelectState(layer: ILayer, selectPID: number) {
-     // get rest layers
-     let restLayers = this.getRestLayers(this.alllayers, layer);
-     // set restLayers select state
-     this.setRestLayersSelectState(restLayers, selectPID)
+    // get rest layers
+    let restLayers = this.getRestLayers(this.alllayers, layer);
+    // set restLayers select state
+    this.setRestLayersSelectState(restLayers, selectPID);
   }
 
-  public setLayerSelectStateWithPID(layer: ILayer, featureId: number, selectPID: number) {
-    if(selectPID !== this.currentSelectPID) {
-      layer.setSelect(featureId)
+  public setLayerSelectStateWithPID(
+    layer: ILayer,
+    featureId: number,
+    selectPID: number,
+  ) {
+    if (selectPID !== this.currentSelectPID) {
+      layer.setSelect(featureId);
     } else {
-      layer.setSelect(-1)
+      layer.setSelect(-1);
     }
   }
 
   public setRestLayersSelectState(restLayers: ILayer[], selectPID: number) {
     restLayers.map((layer: ILayer) => {
-      let layerSource = layer.getSource()
-      let feature = this.getFeatureIdByPID(selectPID, layerSource.data.dataArray)[0]
-      if(feature) {
+      let layerSource = layer.getSource();
+      let feature = this.getFeatureIdByPID(
+        selectPID,
+        layerSource.data.dataArray,
+      )[0];
+      if (feature) {
         this.setLayerSelectStateWithPID(layer, feature._id, selectPID);
       } else {
         layer.setSelect(-1);
       }
-    })
+    });
   }
 
   public getRestLayers(allLayers: ILayer[], currentLayer: ILayer) {
@@ -164,7 +169,7 @@ export default class GaodeMapComponent extends React.Component {
   }
 
   public getFeatureIdByPID(PID: number, data: any) {
-    return data.filter((d: any) => d.pid === PID)
+    return data.filter((d: any) => d.pid === PID);
   }
 
   public render() {
