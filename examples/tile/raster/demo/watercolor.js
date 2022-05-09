@@ -1,4 +1,4 @@
-import { Scene, RasterTileLayer } from '@antv/l7';
+import { Scene, RasterLayer } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -11,7 +11,7 @@ const scene = new Scene({
 });
 
 scene.on('loaded', () => {
-  const layer = new RasterTileLayer({
+  const layer = new RasterLayer({
     zIndex: 1
   });
   layer.source(

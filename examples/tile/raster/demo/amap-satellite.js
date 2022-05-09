@@ -1,4 +1,4 @@
-import { Scene, RasterTileLayer } from '@antv/l7';
+import { Scene, RasterLayer } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -11,7 +11,7 @@ const scene = new Scene({
 
 scene.on('loaded', () => {
   // 影像底图服务
-  const baseLayer = new RasterTileLayer({
+  const baseLayer = new RasterLayer({
     zIndex: 1
   });
   baseLayer.source(
@@ -29,7 +29,7 @@ scene.on('loaded', () => {
   );
 
   // 影像注记服务
-  const annotionLayer = new RasterTileLayer({
+  const annotionLayer = new RasterLayer({
     zIndex: 2
   });
   annotionLayer.source(
