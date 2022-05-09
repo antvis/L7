@@ -9,7 +9,6 @@ import {
 } from '@antv/l7-core';
 
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
@@ -20,7 +19,7 @@ import simple_line_vert from '../shaders/simpleline_vert.glsl';
 export default class SimpleLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       vertexHeightScale = 20.0,
@@ -69,7 +68,7 @@ export default class SimpleLineModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
 
       // 渐变色支持参数
       u_linearColor: useLinearColor,
@@ -106,13 +105,13 @@ export default class SimpleLineModel extends BaseModel {
       return {
         frag: simle_linear_frag,
         vert: simple_line_vert,
-        type: 'linear',
+        type: 'simple_linear',
       };
     } else {
       return {
         frag: simple_line_frag,
         vert: simple_line_vert,
-        type: 'normal',
+        type: 'simple_normal',
       };
     }
   }
@@ -126,7 +125,7 @@ export default class SimpleLineModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
-        moduleName: 'simpleline' + type,
+        moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: SimpleLineTriangulation,

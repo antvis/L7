@@ -43,6 +43,8 @@ export interface ILineLayerStyleOptions {
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
 
   arrow?: ILineArrow;
+
+  rampColors?: IColorRamp;
 }
 
 export interface IPointLayerStyleOptions {
@@ -89,9 +91,9 @@ export interface IPointLayerStyleOptions {
 }
 
 export interface IPolygonLayerStyleOptions {
-  opacity: styleSingle;
+  opacity?: number;
 
-  opacityLinear: {
+  opacityLinear?: {
     enable: boolean;
     dir: string;
   };
@@ -117,11 +119,32 @@ export interface IPolygonLayerStyleOptions {
   watercolor2?: string;
 }
 
+
 // 栅格瓦片图层
 export interface IRasterTileLayerStyleOptions {
   // TODO: define
   zIndex?: number;
   opacity?: number;
+}
+export interface IMaskLayerStyleOptions {
+  opacity: styleSingle;
+}
+
+export interface IWindLayerStyleOptions {
+  uMin?: number;
+  uMax?: number;
+  vMin?: number;
+  vMax?: number;
+  fadeOpacity?: number;
+  speedFactor?: number;
+  dropRate?: number;
+  dropRateBump?: number;
+  opacity?: number;
+  numParticles?: number;
+  rampColors?: {
+    [key: number]: string;
+  };
+  sizeScale?: number;
 }
 
 export interface IImageLayerStyleOptions {
@@ -148,6 +171,12 @@ export interface IGeometryLayerStyleOptions {
 
   terrainClipHeight?: number;
   rgb2height?: (r: number, g: number, b: number) => number;
+
+  // billboard
+  raisingHeight?: number; // 抬升高度
+  canvasWidth?: number;
+  canvasHeight?: number;
+  drawCanvas?: (canvas: HTMLCanvasElement) => void;
 
   // sprite
   spriteAnimate?: string;

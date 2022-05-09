@@ -1,10 +1,7 @@
-
 attribute vec4 a_Color;
 attribute vec2 a_Size;
 attribute vec3 a_Position;
 
-
-// dash line
 attribute float a_Total_Distance;
 attribute float a_Distance;
 

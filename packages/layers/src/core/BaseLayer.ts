@@ -424,6 +424,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     }
     const calEncodeData = this.calculateEncodeData(data, option);
     const triangulation = this.triangulation;
+
     if (calEncodeData && triangulation) {
       return this.styleAttributeService.createAttributesAndIndices(
         calEncodeData,

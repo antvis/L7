@@ -1,0 +1,40 @@
+name: release
+
+on:
+  release:
+    types: [created, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: yarn
+      - run: yarn lint
+
+  publish-site:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: yarn
+      - run: yarn site:build
+      - run: |
+          cd public
+          git init
+          git config --local user.name antv
+          git config --local user.email antv@antfin.com
+          git add .
+          git commit -m "update by release action"
+      - uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          directory: public
+          branch: gh-pages
+          force: true

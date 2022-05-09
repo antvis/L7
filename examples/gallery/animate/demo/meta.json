@@ -48,6 +48,11 @@
       "filename": "box_select.js",
       "title": "框选要素",
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*G1lyQ6e5gKAAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "timeline.js",
+      "title": "公交站点时序数据",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*l2YoR56mK1EAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

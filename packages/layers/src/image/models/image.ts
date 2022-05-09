@@ -38,7 +38,6 @@ export default class ImageModel extends BaseModel {
       // @ts-ignore
       const canvas = this.layerService.sceneService.getSceneConfig().canvas;
       const img = canvas.createImage();
-      // let img = new Image()
       img.crossOrigin = 'anonymous';
       img.src = source.data.originData;
 

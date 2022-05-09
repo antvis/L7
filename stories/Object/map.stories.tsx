@@ -10,6 +10,7 @@ import Sprite from './components/sprite';
 import PlaneTerrain from './components/planeTerrain';
 import Cursor from './components/cursor';
 import Arrow from './components/arrow';
+import BillBoard from './components/billboard';
 
 storiesOf('Object', module)
         .add('water', () => <Water />)
@@ -18,6 +19,7 @@ storiesOf('Object', module)
         .add('Radar', () => <Radar/>)
         .add('CanvasDemo', () => <CanvasDemo/>)
         .add('Plane', () => <Plane/>)
+        .add('BillBoard', () => <BillBoard/>)
         .add('Sprite', () => <Sprite/>)
         .add('PlaneTerrain', () => <PlaneTerrain/>)
         .add('Cursor', () => <Cursor/>)

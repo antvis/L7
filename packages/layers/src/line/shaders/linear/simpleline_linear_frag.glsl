@@ -1,5 +1,3 @@
-
-
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
 

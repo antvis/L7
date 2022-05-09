@@ -6,7 +6,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
@@ -83,7 +82,7 @@ export default class ExtrudeModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_raisingHeight: Number(raisingHeight),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: Number(opacity),
 
       // 渐变色支持参数
       u_linearColor: useLinearColor,
@@ -137,7 +136,7 @@ export default class ExtrudeModel extends BaseModel {
       return {
         frag: polygonExtrudePickLightFrag,
         vert: polygonExtrudePickLightVert,
-        type: 'polygonExtrude',
+        type: 'polygonExtrudePickLight',
       };
     } else {
       return {

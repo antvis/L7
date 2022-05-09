@@ -22,8 +22,6 @@ import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
-import { isNumber } from 'lodash';
-
 import { Version } from '@antv/l7-maps';
 import { mat4, vec3 } from 'gl-matrix';
 export default class FillModel extends BaseModel {
@@ -98,9 +96,9 @@ export default class FillModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-      u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
-      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_opacity: Number(opacity),
+      u_stroke_opacity: Number(strokeOpacity),
+      u_stroke_width: Number(strokeWidth),
       u_stroke_color: this.getStrokeColor(stroke),
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
@@ -151,7 +149,6 @@ export default class FillModel extends BaseModel {
    * @returns
    */
   public calMeter2Coord() {
-    // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
@@ -212,7 +209,6 @@ export default class FillModel extends BaseModel {
         triangulation: isGlobel
           ? GlobelPointFillTriangulation
           : PointFillTriangulation,
-        // depth: { enable: false },
         depth: { enable: isGlobel },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),

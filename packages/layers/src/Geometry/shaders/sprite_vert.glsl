@@ -11,7 +11,6 @@ varying vec3 v_Color;
 varying float v_d;
 
 #pragma include "projection"
-#pragma include "picking"
 void main() {
    v_Color = a_Color;
   
@@ -26,6 +25,4 @@ void main() {
    }
 
    gl_PointSize = pow((u_Zoom - 1.0), 2.0) * u_Scale;
-
-   setPickingColor(a_PickingColor);
 }

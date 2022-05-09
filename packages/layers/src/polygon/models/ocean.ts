@@ -7,7 +7,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { create, isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
@@ -60,7 +59,7 @@ export default class OceanModel extends BaseModel {
       u_watercolor2: rgb2arr(watercolor2),
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: opacity,
     };
   }
 
@@ -87,7 +86,6 @@ export default class OceanModel extends BaseModel {
         fragmentShader: ocean_frag,
         triangulation: polygonTriangulation,
         depth: { enable: false },
-
         stencil: getMask(mask, maskInside),
       }),
     ];
