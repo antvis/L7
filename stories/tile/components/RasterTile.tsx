@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterTileLayer, Scene, LineLayer, ILayer } from '@antv/l7';
+import { RasterLayer, Scene, LineLayer, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
@@ -33,19 +33,19 @@ export default class RasterTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
         zoom: 5,
-        viewMode: '3D',
+        viewMode: '3D'
       }),
     });
 
-    this.scene.on('mapchange', this.updateGridLayer);
+    // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const layer = new RasterTileLayer({
+      const layer = new RasterLayer({
         zIndex: 9,
         // minZoom: 1,
         // maxZoom: 16,
@@ -65,7 +65,7 @@ export default class RasterTile extends React.Component {
       );
 
       this.scene.addLayer(layer);
-      this.updateGridLayer();
+      // this.updateGridLayer();
     });
   }
 

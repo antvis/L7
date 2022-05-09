@@ -6,12 +6,10 @@ import GeometryLayer from './Geometry';
 import './glsl.d';
 import HeatmapLayer from './heatmap';
 import ImageLayer from './image';
-import ImageTileLayer from './imagetile';
 import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
-import RasterTileLayer from './rastertile';
 
 import EarthLayer from './earth';
 
@@ -147,8 +145,6 @@ export {
   GeometryLayer,
   CanvasLayer,
   ImageLayer,
-  ImageTileLayer,
-  RasterTileLayer,
   RasterLayer,
   HeatmapLayer,
   EarthLayer,

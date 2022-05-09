@@ -36,6 +36,9 @@ export default class RasterModel extends BaseModel {
   }
 
   public initModels() {
+    // 指定当前 layer 当作普通的 layer 进行渲染
+    this.layer.isLayerGroup = false;
+    
     const {
       mask = false,
       maskInside = true,

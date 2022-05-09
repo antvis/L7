@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterTileLayer, Scene, LineLayer, ILayer } from '@antv/l7';
+import { RasterLayer, Scene, LineLayer, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class OsmRasterTile extends React.Component {
@@ -45,7 +45,7 @@ export default class OsmRasterTile extends React.Component {
     this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const layer = new RasterTileLayer({
+      const layer = new RasterLayer({
         zIndex: 9,
       });
       layer.source('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
