@@ -118,11 +118,27 @@ export interface IAttrubuteAndElements {
   elements: any;
 }
 
-export type LayerEventType = 
-'inited' | 'add' | 'remove' | 'destroy' | 'contextmenu' | 
- 'uncontextmenu' | 'unpick' | 'mousedown' | 'unmousedown'
-| 'unclick' | 'undblclick' | 'unmouseenter' | 'unmousemove' | 'mouseout' 
-| 'click' | 'dblclick' | 'mouseenter' | 'unmousemove' | 'mouseout' | any;
+export type LayerEventType =
+  | 'inited'
+  | 'add'
+  | 'remove'
+  | 'destroy'
+  | 'contextmenu'
+  | 'uncontextmenu'
+  | 'unpick'
+  | 'mousedown'
+  | 'unmousedown'
+  | 'unclick'
+  | 'undblclick'
+  | 'unmouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | 'click'
+  | 'dblclick'
+  | 'mouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | any;
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个

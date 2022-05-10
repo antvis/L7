@@ -67,7 +67,8 @@ import { updateShape } from '../utils/updateShape';
  */
 let layerIdCounter = 0;
 
-export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter<LayerEventType>
+export default class BaseLayer<ChildLayerStyleOptions = {}>
+  extends EventEmitter<LayerEventType>
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string = `${layerIdCounter}`;
