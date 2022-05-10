@@ -88,7 +88,7 @@ export default class PointLayer extends LayerGroup<IPointLayerStyleOptions> {
       return this.layerType as PointType;
     }
 
-    if (this.layerSource.parser.type === 'rasterTile') {
+    if (this.layerSource.parser.type === 'mvt') {
       return 'vector';
     }
 
