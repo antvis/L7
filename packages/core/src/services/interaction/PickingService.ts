@@ -48,6 +48,9 @@ export default class PickingService implements IPickingService {
 
   private lastPickTime: number = new Date().getTime();
 
+  // currentPickedColor 用于记录当前拾取到的颜色。
+  private currentPickedColor: Uint8Array;
+
   public init(id: string) {
     const {
       createTexture2D,
@@ -276,8 +279,17 @@ export default class PickingService implements IPickingService {
           layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
+          // return isPicked && !layer.getLayerConfig().enablePropagation;
 
-          return isPicked && !layer.getLayerConfig().enablePropagation;
+          const result = isPicked && !layer.getLayerConfig().enablePropagation;
+          const isVectorLayer = false;
+          if (result && isVectorLayer) {
+            layers.map((restlayer) => {
+              this.noticeLayer(restlayer, target);
+            });
+          }
+
+          return result;
         });
     });
   }
@@ -316,7 +328,8 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-
+    // cache picked color
+    this.currentPickedColor = pickedColors;
     // let pickedColors = new Uint8Array(4)
     // this.rendererService.getGLContext().readPixels(
     //   Math.floor(xInDevicePixel / this.pickBufferScale),
@@ -401,6 +414,85 @@ export default class PickingService implements IPickingService {
     }
     return isPicked;
   };
+
+  private noticeLayer = (
+    layer: ILayer,
+    { x, y, lngLat, type, target }: IInteractionTarget,
+  ) => {
+    const { enableHighlight, enableSelect } = layer.getLayerConfig();
+
+    const pickedColors = this.currentPickedColor;
+    if (
+      pickedColors[0] !== 0 ||
+      pickedColors[1] !== 0 ||
+      pickedColors[2] !== 0
+    ) {
+      const pickedFeatureIdx = decodePickingColor(pickedColors);
+      const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+      if (
+        pickedFeatureIdx !== layer.getCurrentPickId() &&
+        type === 'mousemove'
+      ) {
+        type = 'mouseenter';
+      }
+
+      const layerTarget = {
+        x,
+        y,
+        type,
+        lngLat,
+        featureId: pickedFeatureIdx,
+        feature: rawFeature,
+        target,
+      };
+      if (rawFeature) {
+        layer.setCurrentPickId(pickedFeatureIdx);
+        this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
+      }
+    } else {
+      // 未选中
+      const layerTarget = {
+        x,
+        y,
+        lngLat,
+        type:
+          layer.getCurrentPickId() !== null && type === 'mousemove'
+            ? 'mouseout'
+            : 'un' + type,
+        featureId: null,
+        target,
+        feature: null,
+      };
+      this.triggerHoverOnLayer(layer, {
+        ...layerTarget,
+        type: 'unpick',
+      });
+      this.triggerHoverOnLayer(layer, layerTarget);
+      layer.setCurrentPickId(null);
+    }
+
+    if (enableHighlight) {
+      this.highlightPickedFeature(layer, pickedColors);
+    }
+    if (
+      enableSelect &&
+      type === 'click' &&
+      pickedColors?.toString() !== [0, 0, 0, 0].toString()
+    ) {
+      const selectedId = decodePickingColor(pickedColors);
+      if (
+        layer.getCurrentSelectedId() === null ||
+        selectedId !== layer.getCurrentSelectedId()
+      ) {
+        this.selectFeature(layer, pickedColors);
+        layer.setCurrentSelectedId(selectedId);
+      } else {
+        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.setCurrentSelectedId(null);
+      }
+    }
+  };
+
   private triggerHoverOnLayer(
     layer: ILayer,
     target: {

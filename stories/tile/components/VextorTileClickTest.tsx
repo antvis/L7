@@ -44,6 +44,7 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
+      .active(true)
       .color('#ff0')
       .size(15);
 
@@ -65,6 +66,7 @@ export default class GaodeMapComponent extends React.Component {
         },
       )
       .shape('circle')
+      .active(true)
       .color('#f00')
       .size(15);
 
@@ -87,6 +89,7 @@ export default class GaodeMapComponent extends React.Component {
       )
       .shape('circle')
       .color('#0f0')
+      .active(true)
       .size(15);
 
     this.scene = scene;
@@ -97,7 +100,7 @@ export default class GaodeMapComponent extends React.Component {
       scene.addLayer(layer3);
       scene.addLayer(layer2);
       scene.addLayer(layer);
-      this.registAllLayers();
+      // this.registAllLayers();
     });
   }
 
