@@ -6,11 +6,12 @@ type TileOptions = { x: number; y: number; z: number; tileSize: number };
 
 export type TileLoadParams = TileOptions & {
   bounds: Bounds;
+  // fetch signal
   signal: AbortSignal;
 };
 
 type TileLoadDataOptions = {
-  getData: (tile: TileLoadParams) => Promise<any>;
+  getData: (params: TileLoadParams, tile: Tile) => Promise<any>;
   onLoad: (tile: Tile) => void;
   onError: (error: Error, tile: Tile) => void;
 };
@@ -27,43 +28,6 @@ enum LoadTileDataStatus {
  * 负责瓦片数据加载、缓存数据、缓存图层
  */
 export class Tile {
-  // 瓦片索引
-  public x: number;
-  public y: number;
-  public z: number;
-  // 瓦片大小
-  public tileSize = 256;
-  // 是否可以见
-  public isVisible = false;
-  // 是否是当前层级的瓦片
-  public isCurrent = false;
-  // 瓦片挂载的图层
-  public layer: any = null;
-  // 瓦片挂载的图层组
-  public layers = [];
-  // 瓦片的父级瓦片
-  public parent: Tile | null = null;
-  // 瓦片的子级瓦片
-  public children: Tile[] = [];
-  // 瓦片数据
-  public data: any = null;
-  // 瓦片属性
-  public properties: Record<string, any> = {};
-  // 瓦片请求状态
-  private loadStatus: LoadTileDataStatus;
-  // 瓦片数据 Web 请求控制器
-  private abortController: AbortController;
-  // 瓦片序号
-  private loadDataId = 0;
-
-  constructor(options: TileOptions) {
-    const { x, y, z, tileSize } = options;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.tileSize = tileSize;
-  }
-
   // 是否正在请求瓦片
   public get isLoading() {
     return this.loadStatus === LoadTileDataStatus.Loading;
@@ -118,6 +82,44 @@ export class Tile {
     const key = `${this.x},${this.y},${this.z}`;
     return key;
   }
+  // 瓦片索引
+  public x: number;
+  public y: number;
+  public z: number;
+  // 瓦片大小
+  public tileSize = 256;
+  // 是否可以见
+  public isVisible = false;
+  // 是否是当前层级的瓦片
+  public isCurrent = false;
+  // 瓦片挂载的图层
+  public layer: any = null;
+  // 瓦片挂载的图层组
+  public layers = [];
+  // 瓦片的父级瓦片
+  public parent: Tile | null = null;
+  // 瓦片的子级瓦片
+  public children: Tile[] = [];
+  // 瓦片数据
+  public data: any = null;
+  // 瓦片属性
+  public properties: Record<string, any> = {};
+  // XMLHttpRequest cancel
+  public xhrCancel?: () => void;
+  // 瓦片请求状态
+  private loadStatus: LoadTileDataStatus;
+  // 瓦片数据 Web 请求控制器
+  private abortController: AbortController;
+  // 瓦片序号
+  private loadDataId = 0;
+
+  constructor(options: TileOptions) {
+    const { x, y, z, tileSize } = options;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.tileSize = tileSize;
+  }
 
   // 请求瓦片数据
   public async loadData({ getData, onLoad, onError }: TileLoadDataOptions) {
@@ -140,7 +142,7 @@ export class Tile {
       const { signal } = this.abortController;
       const params = { x: warpX, y: warpY, z, bounds, tileSize, signal };
 
-      tileData = await getData(params);
+      tileData = await getData(params, this);
     } catch (err) {
       error = err;
     }
@@ -184,5 +186,8 @@ export class Tile {
 
     this.loadStatus = LoadTileDataStatus.Cancelled;
     this.abortController.abort();
+    if (this.xhrCancel) {
+      this.xhrCancel();
+    }
   }
 }

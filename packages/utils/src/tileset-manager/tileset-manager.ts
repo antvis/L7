@@ -15,7 +15,7 @@ export type TilesetManagerOptions = {
   minZoom: number;
   maxZoom: number;
   extent: Bounds;
-  getTileData: (tile: TileLoadParams) => any;
+  getTileData: (params: TileLoadParams, tile: Tile) => any;
   updateStrategy: UpdateTileStrategy | ((tiles: Tile[]) => void);
 };
 
