@@ -186,7 +186,7 @@ export default class VertexTileModel extends BaseModel {
     } = this.layer.getLayerConfig() as IRasterTileLayerStyleOptions;
 
     const layerName = tileLayerName[0]; // 'place_label'
-    
+
     const features = tile.data.layers[layerName]?.features;
     if (!features) {
       return null;
