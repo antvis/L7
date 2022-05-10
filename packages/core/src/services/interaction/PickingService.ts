@@ -281,7 +281,7 @@ export default class PickingService implements IPickingService {
           // Tip: clear last picked layer state
           this.pickedLayers.map((pickedlayer) => {
             this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
-          })
+          });
 
           const isPicked = this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
