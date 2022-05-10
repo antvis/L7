@@ -24,7 +24,7 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
+      const point = new LineLayer({ zIndex: 7 })
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           // 'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
@@ -40,11 +40,11 @@ export default class RasterTile extends React.Component {
             },
           },
         )
-        .shape('circle')
-        .color('#f00')
+        .shape('line')
         .style({
-          tileLayerName: ['place_label'],
+          tileLayerName: ['path'],
         })
+        .color('#f00')
         .size(10);
 
       this.scene.addLayer(point);

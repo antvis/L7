@@ -1,6 +1,13 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterLayer, Scene, LineLayer, ILayer, PointLayer } from '@antv/l7';
+import {
+  RasterLayer,
+  Scene,
+  LineLayer,
+  ILayer,
+  PointLayer,
+  PolygonLayer,
+} from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
@@ -24,7 +31,7 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
+      const point = new PolygonLayer({ zIndex: 7 })
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           // 'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
@@ -40,11 +47,11 @@ export default class RasterTile extends React.Component {
             },
           },
         )
-        .shape('circle')
-        .color('#f00')
+        .shape('line')
         .style({
-          tileLayerName: ['place_label'],
+          tileLayerName: ['water'],
         })
+        .color('#f00')
         .size(10);
 
       this.scene.addLayer(point);

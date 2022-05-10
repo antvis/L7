@@ -69,6 +69,7 @@ export default class FillModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     return this.buildModels();
   }
 

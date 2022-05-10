@@ -75,6 +75,7 @@ export default class LinearLineModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.updateTexture();
     return this.buildModels();
   }

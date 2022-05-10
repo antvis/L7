@@ -160,7 +160,7 @@ export class Tile {
     // 如果请求出错或数据为空
     if (error || !tileData) {
       this.loadStatus = LoadTileDataStatus.Failure;
-      onError(error, this);
+      onError(error as Error, this);
       return;
     }
 

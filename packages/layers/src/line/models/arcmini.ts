@@ -61,6 +61,7 @@ export default class ArcMiniModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     return this.buildModels();
   }
 

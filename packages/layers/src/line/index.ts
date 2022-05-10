@@ -1,8 +1,8 @@
-import BaseLayer from '../core/BaseLayer';
 import { ILineLayerStyleOptions } from '../core/interface';
+import LayerGroup from '../core/LayerGroup';
 import LineModels, { LineModelType } from './models';
 
-export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
+export default class LineLayer extends LayerGroup<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
 
   public buildModels() {
@@ -36,6 +36,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       arc: { blend: 'additive' },
       arcmini: { blend: 'additive' },
       greatcircle: { blend: 'additive' },
+      vector: {},
     };
     return defaultConfig[type];
   }
@@ -43,6 +44,10 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
+    if (this.layerSource.parser.type === 'mvt') {
+      return 'vector';
+    }
+
     const shape = shapeAttribute?.scale?.field as LineModelType;
     return shape || 'line';
   }

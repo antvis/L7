@@ -93,6 +93,7 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.loadTexture();
     return this.buildModels();
   }

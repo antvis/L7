@@ -235,6 +235,7 @@ export default class RasterTileModel extends BaseModel {
       }
     }
 
+    this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
 
     if (this.tilesetManager.isLoaded) {

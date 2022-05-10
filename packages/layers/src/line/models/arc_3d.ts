@@ -123,6 +123,7 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 

@@ -50,7 +50,6 @@ const getVectorTile = async (
           }
           vectorTile.layers[layerName].features = features;
         }
-
         resolve(vectorTile);
       }
     });

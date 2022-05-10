@@ -117,7 +117,7 @@ export default class Amap2demo_road2 extends React.Component {
           }) // mask: true maskInside: true
             .source(data)
             .size(5)
-            .shape('arc3d') // line arc greatcircle simple
+            .shape('line') // line arc greatcircle simple
             .color('rgb(20, 180, 90)')
             .style({
               borderWidth: 0.35,

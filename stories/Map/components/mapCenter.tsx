@@ -67,6 +67,10 @@ export default class GaodeMapComponent extends React.Component {
       .shape('circle')
       .size(30);
 
+    layer0.on('add', () => {
+      console.log('add***');
+    });
+
     let layer01 = new PointLayer({ zIndex: 2 })
       .source(
         [

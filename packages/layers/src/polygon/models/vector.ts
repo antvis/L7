@@ -185,14 +185,13 @@ export default class VertexTileModel extends BaseModel {
       tileLayerName = [],
     } = this.layer.getLayerConfig() as IRasterTileLayerStyleOptions;
 
-    const layerName = tileLayerName[0]; // 'place_label'
-    
+    const layerName = tileLayerName[0]; // 'water'
+    // console.log(tile)
     const features = tile.data.layers[layerName]?.features;
     if (!features) {
       return null;
     }
-
-    const layer = new PointLayer({
+    const layer = new PolygonLayer({
       visible: tile.isVisible,
       zIndex,
       mask: true,
@@ -201,9 +200,9 @@ export default class VertexTileModel extends BaseModel {
         type: 'FeatureCollection',
         features,
       })
-      .shape('circle')
+      .shape('fill')
       .color('#00f')
-      .size(10)
+      .size(1)
       .style({
         opacity,
       });

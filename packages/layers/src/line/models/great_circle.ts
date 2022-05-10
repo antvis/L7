@@ -113,6 +113,7 @@ export default class GreatCircleModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 

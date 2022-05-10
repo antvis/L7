@@ -11,7 +11,6 @@ import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import LineLayer from '../../line';
 import MaskLayer from '../../mask';
 import PointLayer from '../../point';
-import PolygonLayer from '../../polygon';
 
 export default class VertexTileModel extends BaseModel {
   // 瓦片是否加载成功
@@ -185,14 +184,13 @@ export default class VertexTileModel extends BaseModel {
       tileLayerName = [],
     } = this.layer.getLayerConfig() as IRasterTileLayerStyleOptions;
 
-    const layerName = tileLayerName[0]; // 'place_label'
-    
+    const layerName = tileLayerName[0];
+    // console.log(tile)
     const features = tile.data.layers[layerName]?.features;
     if (!features) {
       return null;
     }
-
-    const layer = new PointLayer({
+    const layer = new LineLayer({
       visible: tile.isVisible,
       zIndex,
       mask: true,
@@ -201,9 +199,9 @@ export default class VertexTileModel extends BaseModel {
         type: 'FeatureCollection',
         features,
       })
-      .shape('circle')
+      .shape('line')
       .color('#00f')
-      .size(10)
+      .size(1)
       .style({
         opacity,
       });

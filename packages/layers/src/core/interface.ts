@@ -124,6 +124,7 @@ export interface IRasterTileLayerStyleOptions {
   // TODO: define
   zIndex?: number;
   opacity?: number;
+  tileLayerName?: string[];
 }
 export interface IMaskLayerStyleOptions {
   opacity: styleSingle;

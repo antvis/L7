@@ -70,6 +70,7 @@ export default class OceanModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
+    this.layer.isLayerGroup = false;
     this.loadTexture();
     return this.buildModels();
   }

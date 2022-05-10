@@ -1,9 +1,11 @@
 import { IEncodeFeature } from '@antv/l7-core';
-import BaseLayer from '../core/BaseLayer';
 import { IPolygonLayerStyleOptions } from '../core/interface';
+import LayerGroup from '../core/LayerGroup';
 import PolygonModels, { PolygonModelType } from './models/';
 
-export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
+export default class PolygonLayer extends LayerGroup<
+  IPolygonLayerStyleOptions
+> {
   public type: string = 'PolygonLayer';
   public buildModels() {
     const shape = this.getModelType();
@@ -29,6 +31,9 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
+    if (this.layerSource.parser.type === 'mvt') {
+      return 'vector';
+    }
     const shape = shapeAttribute?.scale?.field as PolygonModelType;
     if (shape === 'fill') {
       return 'fill';
