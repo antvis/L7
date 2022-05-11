@@ -13,7 +13,7 @@ export default class Amap2demo_polygon extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         pitch: 40,
         center: [120, 30],
         zoom: 13,
@@ -44,33 +44,59 @@ export default class Amap2demo_polygon extends React.Component {
       ],
     };
 
+    const data2 = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            testOpacity: 0.8,
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [113.8623046875 + 1, 30.031055426540206],
+                [116.3232421875 + 1, 30.031055426540206],
+                [116.3232421875 + 1, 31.090574094954192],
+                [113.8623046875 + 1, 31.090574094954192],
+                [113.8623046875 + 1, 30.031055426540206],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
     const layer = new PolygonLayer({
       autoFit: true,
     })
       .source(data)
       .shape('fill')
       .color('red')
+      .active(true)
       .style({
-        opacityLinear: {
-          enable: true,
-          dir: 'in',
-        },
+        // opacityLinear: {
+        //   enable: true,
+        //   dir: 'in',
+        // },
       });
     scene.addLayer(layer);
 
     const layer2 = new PolygonLayer({
       autoFit: true,
     })
-      .source(data)
+      .source(data2)
       .shape('fill')
-      .color('red')
+      .color('#ff0')
+      .active(true)
       .style({
-        opacity: 0.4,
+        // opacity: 0.4,
         // opacityLinear: {
         //   enable: true,
         //   dir: 'out',
         // },
-        raisingHeight: 50000,
+        // raisingHeight: 50000,
       });
     scene.addLayer(layer2);
   }
