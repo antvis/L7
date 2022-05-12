@@ -3,21 +3,14 @@ import {
   ILayerService,
   IMapService,
   ISource,
-  ISubLayerInitOptions,
   ITileLayer,
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-utils';
-import { TileLayerManager } from './manager/tileLayerManager';
-import { getTileFactory, ITileFactory, TileType } from './tileFactory';
+import { TileLayerManager } from '../manager/tileLayerManager';
 
-const DefaultSunLayerInitOptions: ISubLayerInitOptions = {
-  zIndex: 0,
-  opacity: 1,
-};
-
-export default class TileLayer implements ITileLayer {
+export default class BaseTileLayer implements ITileLayer {
   public parent: ILayer;
   // 瓦片是否加载成功
   public initedTileset: boolean = false;
@@ -39,14 +32,55 @@ export default class TileLayer implements ITileLayer {
     rendererService,
     mapService,
     layerService,
+    pickingService,
   }: ITileLayerOPtions) {
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;
 
-    this.tileLayerManager = new TileLayerManager(parent, rendererService);
+    this.tileLayerManager = new TileLayerManager(
+      parent,
+      rendererService,
+      pickingService,
+    );
 
     this.initTileSetManager();
+  }
+
+  public tileLoaded(tile: Tile) {
+    // console.log(tile.key + ' - loaded')
+  }
+
+  public tileError(error: Error) {
+    console.warn('error:', error);
+  }
+  public tileUnLoad(tile: Tile) {
+    this.tileLayerManager.removeChilds(tile.layerIDList);
+  }
+  public tileUpdate() {
+    if (!this.tilesetManager) {
+      return;
+    }
+
+    this.tilesetManager.tiles
+      .filter((tile) => tile.isLoaded)
+      .map((tile) => {
+        if (tile.layerIDList.length === 0) {
+          const { layers, layerIDList } = this.tileLayerManager.createTile(
+            tile,
+          );
+          tile.layerIDList = layerIDList;
+          this.tileLayerManager.addChilds(layers);
+        } else {
+          const layers = this.tileLayerManager.getChilds(tile.layerIDList);
+          this.tileLayerManager.updateLayerConfig(layers, tile.isVisible);
+        }
+      });
+
+    if (this.tilesetManager.isLoaded) {
+      // 将事件抛出，图层上可以使用瓦片
+      this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
+    }
   }
 
   private initTileSetManager() {
@@ -74,16 +108,19 @@ export default class TileLayer implements ITileLayer {
     // 瓦片数据从缓存删除或被执行重新加载
     this.tilesetManager.on('tile-unload', (tile: Tile) => {
       // todo: 将事件抛出，图层上可以监听使用
-      this.tileLayerManager.removeChilds(tile.layerIDList);
+      this.tileUnLoad(tile);
     });
 
     // 瓦片数据加载失败
     this.tilesetManager.on('tile-error', (error, tile: Tile) => {
       // todo: 将事件抛出，图层上可以监听使用
+      this.tileError(error);
     });
 
     // 瓦片显隐状态更新
-    this.tilesetManager.on('tile-update', this.renderSubLayers);
+    this.tilesetManager.on('tile-update', () => {
+      this.tileUpdate();
+    });
 
     // 地图视野发生改变
     this.mapService.on('mapchange', (e) => {
@@ -119,34 +156,6 @@ export default class TileLayer implements ITileLayer {
       }, 250);
     });
   }
-
-  private renderSubLayers = () => {
-    if (!this.tilesetManager) {
-      return;
-    }
-
-    this.tilesetManager.tiles
-      .filter((tile) => tile.isLoaded)
-      .map((tile) => {
-        if (tile.layerIDList.length === 0) {
-          const { layers, layerIDList } = this.tileLayerManager.createTile(
-            tile,
-          );
-          tile.layerIDList = layerIDList;
-          this.tileLayerManager.addChilds(layers);
-        } else {
-          const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayerConfig(layers, tile.isVisible);
-        }
-      });
-
-    this.layerService.renderLayers();
-
-    if (this.tilesetManager.isLoaded) {
-      // 将事件抛出，图层上可以使用瓦片
-      this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
-    }
-  };
 
   private getCurrentView() {
     const bounds = this.mapService.getBounds();

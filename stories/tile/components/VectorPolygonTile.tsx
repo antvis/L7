@@ -1,6 +1,13 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterLayer, Scene, LineLayer, ILayer, PointLayer } from '@antv/l7';
+import {
+  RasterLayer,
+  Scene,
+  LineLayer,
+  ILayer,
+  PointLayer,
+  PolygonLayer,
+} from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
@@ -13,6 +20,7 @@ export default class RasterTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
+      stencil: true,
       map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,
@@ -25,38 +33,39 @@ export default class RasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: -7 })
-        .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-            },
-          ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
-        )
-        .shape('circle')
-        .color('#f00')
-        .active(true)
-        .size(10);
+      // const point = new PointLayer({ zIndex: 7 })
+      //   .source(
+      //     [
+      //       {
+      //         lng: 120,
+      //         lat: 30,
+      //       },
+      //     ],
+      //     {
+      //       parser: {
+      //         type: 'json',
+      //         x: 'lng',
+      //         y: 'lat',
+      //       },
+      //     },
+      //   )
+      //   .shape('circle')
+      //   .color('#ff0')
+      //   .active(true)
+      //   .size(10);
 
-      this.scene.addLayer(point);
+      // this.scene.addLayer(point);
 
-      const layer = new RasterLayer({
+      const layer = new PolygonLayer({
         zIndex: -1,
       });
       layer
         .source(
-          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
           {
             parser: {
-              type: 'rasterTile',
+              type: 'mvt',
               tileSize: 256,
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
@@ -64,8 +73,9 @@ export default class RasterTile extends React.Component {
           },
         )
         .style({
-          // opacity: 0.5
-        });
+          opacity: 0.4,
+        })
+        .active(true);
 
       this.scene.addLayer(layer);
     });

@@ -1,12 +1,16 @@
 import {
+  IInteractionTarget,
   ILayer,
+  IPickingService,
   IRendererService,
   ISource,
   ISubLayerInitOptions,
   ITileLayerManager,
+  ITilePickManager,
 } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
+import TilePickManager from './tilePickerManager';
 
 const DefaultSunLayerInitOptions: ISubLayerInitOptions = {
   zIndex: 0,
@@ -15,15 +19,22 @@ const DefaultSunLayerInitOptions: ISubLayerInitOptions = {
 
 export class TileLayerManager implements ITileLayerManager {
   public parent: ILayer;
-  private children: ILayer[];
-  private rendererService: IRendererService;
+  public children: ILayer[];
+  public tilePickManager: ITilePickManager;
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions = DefaultSunLayerInitOptions;
-  constructor(parent: ILayer, rendererService: IRendererService) {
+  constructor(
+    parent: ILayer,
+    rendererService: IRendererService,
+    pickingService: IPickingService,
+  ) {
     this.parent = parent;
     this.children = parent.layerChildren;
-    this.rendererService = rendererService;
-
+    this.tilePickManager = new TilePickManager(
+      rendererService,
+      pickingService,
+      this.children,
+    );
     this.setSubLayerInitOptipn();
     this.initTileFactory();
   }
@@ -90,34 +101,16 @@ export class TileLayerManager implements ITileLayerManager {
     return this.children.includes(layer);
   }
 
-  public render(): void {
-    this.children
-      .filter((childlayer) => childlayer.inited)
-      .filter((childlayer) => childlayer.isVisible())
-      .sort((pre: ILayer, next: ILayer) => {
-        // 根据 zIndex 对渲染顺序进行排序
-        return pre.zIndex - next.zIndex;
-      })
-      .map((layer) => {
-        layer.hooks.beforeRenderData.call();
-        layer.hooks.beforeRender.call();
-        if (!layer.isLayerGroup && layer.masks.length > 0) {
-          // 清除上一次的模版缓存
-          this.rendererService.clear({
-            stencil: 0,
-            depth: 1,
-            framebuffer: null,
-          });
-          layer.masks.map((m: ILayer) => {
-            m.hooks.beforeRenderData.call();
-            m.hooks.beforeRender.call();
-            m.render();
-            m.hooks.afterRender.call();
-          });
-        }
-        layer.render();
-        layer.hooks.afterRender.call();
-      });
+  public render(isPicking: false): void {
+    if (!isPicking) {
+      this.tilePickManager.normalRenderLayer(this.children);
+    } else {
+      this.tilePickManager.pickRenderLayer(this.children);
+    }
+  }
+
+  public renderPicker(target: IInteractionTarget) {
+    return this.tilePickManager.pickTileRenderLayer(this.children, target);
   }
 
   private setSubLayerInitOptipn() {
@@ -125,8 +118,15 @@ export class TileLayerManager implements ITileLayerManager {
       zIndex,
       opacity,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
+
+    // TODO: get vector layer name
+    const layerName = 'city';
+
     this.initOptions.zIndex = zIndex;
     this.initOptions.opacity = opacity;
+    if (layerName) {
+      this.initOptions.layerName = layerName;
+    }
   }
 
   private initTileFactory() {

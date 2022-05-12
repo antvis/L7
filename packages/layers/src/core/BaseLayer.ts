@@ -14,6 +14,7 @@ import {
   IGlobalConfigService,
   IIconService,
   IInteractionService,
+  IInteractionTarget,
   ILayer,
   ILayerConfig,
   ILayerModel,
@@ -61,6 +62,7 @@ import {
   normalizePasses,
 } from '../utils/multiPassRender';
 import { updateShape } from '../utils/updateShape';
+import AdaptorLayer from './adaptor';
 /**
  * 分配 layer id
  */
@@ -666,14 +668,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.rendering = false;
   }
 
-  public render(): ILayer {
+  public render(isPicking = false): ILayer {
     if (this.tileLayer !== undefined) {
-      this.tileLayer.tileLayerManager.render();
+      this.tileLayer.tileLayerManager.render(isPicking);
       return this;
     }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length !== 0) {
-      this.renderModels();
+      this.renderModels(isPicking);
     }
     return this;
   }
@@ -858,6 +860,33 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
       maxZoom = Infinity,
     } = this.getLayerConfig();
     return !!visible && zoom >= minZoom && zoom <= maxZoom;
+  }
+
+  // set pick
+  public renderPick(target: IInteractionTarget) {
+    if (this.tileLayer) {
+      return this.tileLayer.tileLayerManager.renderPicker(target);
+    } else {
+      this.render(true);
+    }
+  }
+
+  public highlightPickedFeature(pickedColor: any) {
+    if (this.tileLayer) {
+      this.tileLayer.tileLayerManager.tilePickManager.beforeHighlight(
+        pickedColor,
+      );
+    } else {
+      this.hooks.beforeHighlight.call(pickedColor);
+    }
+  }
+
+  public selectFeature(pickedColor: any) {
+    if (this.tileLayer) {
+      this.tileLayer.tileLayerManager.tilePickManager.beforeSelect(pickedColor);
+    } else {
+      this.hooks.beforeSelect.call(pickedColor);
+    }
   }
 
   public setMultiPass(

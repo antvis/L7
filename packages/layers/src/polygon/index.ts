@@ -26,6 +26,9 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   }
 
   protected getModelType(): PolygonModelType {
+    if (this.layerSource.parser.type === 'mvt') {
+      return 'vectorpolygon';
+    }
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

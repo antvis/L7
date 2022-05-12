@@ -5,6 +5,10 @@ export interface ITileFactoryOptions {
   parent: ILayer;
 }
 
+export interface ITileStyles {
+  [key: string]: any;
+}
+
 export interface ITileFactory {
   createTile(
     tile: Tile,
@@ -13,6 +17,8 @@ export interface ITileFactory {
     layers: ILayer[];
     layerIDList: string[];
   };
+
+  updateStyle(styles: ITileStyles): void;
 }
 
 export default class TileFactory implements ITileFactory {
@@ -26,5 +32,9 @@ export default class TileFactory implements ITileFactory {
       layers: [] as ILayer[],
       layerIDList: [] as string[],
     };
+  }
+
+  public updateStyle(styles: ITileStyles) {
+    return '';
   }
 }

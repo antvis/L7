@@ -1,6 +1,7 @@
 import {
   getImage,
   getURLFromTemplate,
+  Tile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
@@ -15,18 +16,20 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
 
 const getTileImage = async (
   url: string,
-  tile: TileLoadParams,
-): Promise<HTMLImageElement> => {
-  const imgUrl = getURLFromTemplate(url, tile);
+  tileParams: TileLoadParams,
+  tile: Tile,
+): Promise<HTMLImageElement | ImageBitmap> => {
+  const imgUrl = getURLFromTemplate(url, tileParams);
 
   return new Promise((resolve, reject) => {
-    getImage({ url: imgUrl }, (err: any, img: HTMLImageElement) => {
+    const xhr = getImage({ url: imgUrl }, (err, img) => {
       if (err) {
         reject(err);
-      } else {
+      } else if (img) {
         resolve(img);
       }
     });
+    tile.xhrCancel = () => xhr.abort();
   });
 };
 
@@ -34,7 +37,8 @@ export default function rasterTile(
   data: string,
   cfg?: IRasterTileParserCFG,
 ): IParserData {
-  const getTileData = (tile: TileLoadParams) => getTileImage(data, tile);
+  const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
+    getTileImage(data, tileParams, tile);
   const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
 
   return {

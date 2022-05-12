@@ -6,11 +6,12 @@ type TileOptions = { x: number; y: number; z: number; tileSize: number };
 
 export type TileLoadParams = TileOptions & {
   bounds: Bounds;
+  // fetch signal
   signal: AbortSignal;
 };
 
 type TileLoadDataOptions = {
-  getData: (tile: TileLoadParams) => Promise<any>;
+  getData: (params: TileLoadParams, tile: Tile) => Promise<any>;
   onLoad: (tile: Tile) => void;
   onError: (error: Error, tile: Tile) => void;
 };
@@ -37,10 +38,6 @@ export class Tile {
   public isVisible = false;
   // 是否是当前层级的瓦片
   public isCurrent = false;
-  // 瓦片挂载的图层
-  public layer: any = null;
-  // 瓦片挂载的图层组
-  public layers = [];
   public layerIDList: string[] = [];
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
@@ -50,6 +47,8 @@ export class Tile {
   public data: any = null;
   // 瓦片属性
   public properties: Record<string, any> = {};
+  // XMLHttpRequest cancel
+  public xhrCancel?: () => void;
   // 瓦片请求状态
   private loadStatus: LoadTileDataStatus;
   // 瓦片数据 Web 请求控制器
@@ -141,7 +140,7 @@ export class Tile {
       const { signal } = this.abortController;
       const params = { x: warpX, y: warpY, z, bounds, tileSize, signal };
 
-      tileData = await getData(params);
+      tileData = await getData(params, this);
     } catch (err) {
       error = err;
     }
@@ -185,5 +184,8 @@ export class Tile {
 
     this.loadStatus = LoadTileDataStatus.Cancelled;
     this.abortController.abort();
+    if (this.xhrCancel) {
+      this.xhrCancel();
+    }
   }
 }

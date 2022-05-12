@@ -4,6 +4,7 @@ import PointFillModel from '../../point/models/fill';
 import IMageModel from '../../point/models/image';
 import NormalModel from '../../point/models/normal';
 import TextModel from '../../point/models/text';
+import TileModel from '../../tile/models/tileModel';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import Ocean from './ocean';
@@ -19,7 +20,8 @@ export type PolygonModelType =
   | 'point_extrude'
   | 'text'
   | 'water'
-  | 'ocean';
+  | 'ocean'
+  | 'vectorpolygon';
 
 const PolygonModels: { [key in PolygonModelType]: any } = {
   fill: FillModel,
@@ -33,5 +35,6 @@ const PolygonModels: { [key in PolygonModelType]: any } = {
   water: Water,
   ocean: Ocean,
   // point_fill: PointModels.fill,
+  vectorpolygon: TileModel,
 };
 export default PolygonModels;

@@ -4,6 +4,8 @@ import { Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
+import { IInteractionTarget } from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
 import {
@@ -123,10 +125,23 @@ export interface ISubLayerInitOptions {
   // source
   // style
   opacity: number;
+  // layerName
+  layerName?: string;
+}
+
+export interface ITilePickManager {
+  normalRenderLayer(layers: ILayer[]): void;
+  pickRenderLayer(layers: ILayer[]): void;
+  beforeHighlight(pickedColors: any): void;
+  beforeSelect(pickedColors: any): void;
+
+  pickTileRenderLayer(layers: ILayer[], target: IInteractionTarget): boolean;
 }
 
 export interface ITileLayerManager {
   parent: ILayer;
+  children: ILayer[];
+  tilePickManager: ITilePickManager;
 
   createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
 
@@ -137,7 +152,9 @@ export interface ITileLayerManager {
   removeChilds(layerIDList: string[]): void;
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
-  render(): void;
+  render(isPicking?: boolean): void;
+
+  renderPicker(target: IInteractionTarget): boolean;
 
   updateLayerConfig(layers: ILayer[], isVisible: boolean): void;
 }
@@ -153,6 +170,7 @@ export interface ITileLayerOPtions {
   rendererService: IRendererService;
   mapService: IMapService;
   layerService: ILayerService;
+  pickingService: IPickingService;
 }
 
 export interface ILayer {
@@ -271,6 +289,11 @@ export interface ILayer {
   getLegendItems(name: string): LegendItems;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
+  // set pick
+  renderPick(target: IInteractionTarget): void;
+  highlightPickedFeature(pickedColor: any): void;
+  selectFeature(pickedColor: any): void;
+
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;
   getMinZoom(): number;
@@ -284,7 +307,7 @@ export interface ILayer {
     passes?: Array<string | [string, { [key: string]: unknown }]>,
   ): ILayer;
   renderLayers(): void;
-  render(): ILayer;
+  render(isPicking?: boolean): ILayer;
 
   renderMultiPass(): any;
 
