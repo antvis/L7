@@ -41,6 +41,7 @@ export class Tile {
   public layer: any = null;
   // 瓦片挂载的图层组
   public layers = [];
+  public layerIDList: string[] = [];
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
   // 瓦片的子级瓦片
@@ -158,7 +159,7 @@ export class Tile {
     // 如果请求出错或数据为空
     if (error || !tileData) {
       this.loadStatus = LoadTileDataStatus.Failure;
-      onError(error, this);
+      onError(error as Error, this);
       return;
     }
 

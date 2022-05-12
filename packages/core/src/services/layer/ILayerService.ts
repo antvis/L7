@@ -1,5 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
@@ -116,6 +117,44 @@ export interface IAttrubuteAndElements {
   elements: any;
 }
 
+export interface ISubLayerInitOptions {
+  // options
+  zIndex: number;
+  // source
+  // style
+  opacity: number;
+}
+
+export interface ITileLayerManager {
+  parent: ILayer;
+
+  createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+
+  addChild(layer: ILayer): void;
+  addChilds(layers: ILayer[]): void;
+  getChilds(layerIDList: string[]): ILayer[];
+  removeChild(layer: ILayer): void;
+  removeChilds(layerIDList: string[]): void;
+  clearChild(): void;
+  hasChild(layer: ILayer): boolean;
+  render(): void;
+
+  updateLayerConfig(layers: ILayer[], isVisible: boolean): void;
+}
+
+export interface ITileLayer {
+  parent: ILayer;
+  tileLayerManager: ITileLayerManager;
+  tilesetManager: TilesetManager | undefined;
+}
+
+export interface ITileLayerOPtions {
+  parent: ILayer;
+  rendererService: IRendererService;
+  mapService: IMapService;
+  layerService: ILayerService;
+}
+
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
@@ -127,6 +166,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
+  tileLayer: ITileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;

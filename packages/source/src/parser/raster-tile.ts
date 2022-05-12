@@ -41,5 +41,6 @@ export default function rasterTile(
     data,
     dataArray: [],
     tilesetOptions,
+    isTile: true,
   };
 }

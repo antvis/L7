@@ -64,6 +64,7 @@ export interface ISource {
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
+  parser: IParserCfg;
   tileset: TilesetManager | undefined;
   setData(data: any): void;
   updateClusterData(zoom: number): void;

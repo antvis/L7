@@ -133,6 +133,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
 
   // TODO: 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
   public sceneContainer: Container | undefined;
+  public tileLayer: any | undefined;
   // TODO: 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
@@ -666,6 +667,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   }
 
   public render(): ILayer {
+    if (this.tileLayer !== undefined) {
+      this.tileLayer.tileLayerManager.render();
+      return this;
+    }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length !== 0) {
       this.renderModels();
