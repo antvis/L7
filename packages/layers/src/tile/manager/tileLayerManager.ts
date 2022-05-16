@@ -149,28 +149,37 @@ export class TileLayerManager implements ITileLayerManager {
     this.tileConfigManager.on('updateConfig', (updateConfigs) => {
       const layerConfig = this.parent.getLayerConfig() as IRasterTileLayerStyleOptions;
       updateConfigs.map((key: string) => {
-        if (key === 'color' || key === 'size') {
-          const scaleValue = this.parent.getAttribute(key)?.scale;
-          if(key === 'color' && scaleValue) {
-            this.children.map((child) => {
-              this.tileFactory.setColor(child, scaleValue);
-              return '';
-            });
-          }
-         if(key === 'size' && scaleValue) {
-          this.children.map((child) => {
-            this.tileFactory.setSize(child, scaleValue);
-            return '';
-          });
-         }
-            
+        if(key === 'color') {
+          this.updateColor()
           return;
         }
+       if(key === 'size') {
+         this.updateSize();
+         return;
+       }
         // @ts-ignore
         const config = layerConfig[key];
         this.updateLayersConfig(this.children, key, config);
         return '';
       });
+    });
+  }
+
+  private updateColor() {
+    const scaleValue = this.parent.getAttribute('color')?.scale;
+    if(!scaleValue) return;
+    this.children.map((child) => {
+      this.tileFactory.setColor(child, scaleValue);
+      return '';
+    });
+  }
+
+  private updateSize() {
+    const scaleValue = this.parent.getAttribute('size')?.scale;
+    if(!scaleValue) return;
+    this.children.map((child) => {
+      this.tileFactory.setSize(child, scaleValue);
+      return '';
     });
   }
 
