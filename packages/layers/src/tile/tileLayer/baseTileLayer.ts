@@ -1,4 +1,5 @@
 import {
+  IInteractionTarget,
   ILayer,
   ILayerService,
   IMapService,
@@ -11,6 +12,8 @@ import { Tile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/tileLayerManager';
 
 export default class BaseTileLayer implements ITileLayer {
+  public type: string = 'baseTile';
+  public layerName: string;
   public parent: ILayer;
   // 瓦片是否加载成功
   public initedTileset: boolean = false;
@@ -34,6 +37,7 @@ export default class BaseTileLayer implements ITileLayer {
     layerService,
     pickingService,
   }: ITileLayerOPtions) {
+    this.layerName = parent.name;
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;
@@ -47,8 +51,16 @@ export default class BaseTileLayer implements ITileLayer {
     this.initTileSetManager();
   }
 
+  public render(isPicking = false) {
+    this.tileLayerManager.render(isPicking);
+  }
+
+  public renderPicker(target: IInteractionTarget) {
+    return this.tileLayerManager.renderPicker(target);
+  }
+
   public tileLoaded(tile: Tile) {
-    // console.log(tile.key + ' - loaded')
+    //
   }
 
   public tileError(error: Error) {
@@ -73,7 +85,11 @@ export default class BaseTileLayer implements ITileLayer {
           this.tileLayerManager.addChilds(layers);
         } else {
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayerConfig(layers, tile.isVisible);
+          this.tileLayerManager.updateLayersConfig(
+            layers,
+            'visible',
+            tile.isVisible,
+          );
         }
       });
 

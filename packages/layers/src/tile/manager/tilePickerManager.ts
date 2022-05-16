@@ -73,7 +73,7 @@ export default class TilePickManager implements ITilePickManager {
   }
 
   public pickTileRenderLayer(layers: ILayer[], target: IInteractionTarget) {
-    return layers
+    const isPicked = layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .some((layer) => {
@@ -97,6 +97,15 @@ export default class TilePickManager implements ITilePickManager {
 
         return this.pickingService.pickFromPickingFBO(layer, target);
       });
+    if (isPicked) {
+      // @ts-ignore
+      const [r, g, b] = this.pickingService.pickedColors;
+
+      this.beforeHighlight([r, g, b]);
+    } else {
+      this.beforeHighlight([0, 0, 0]);
+    }
+    return isPicked;
   }
 
   public beforeHighlight(pickedColors: any) {

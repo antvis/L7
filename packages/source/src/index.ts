@@ -4,6 +4,7 @@ import geojson from './parser/geojson';
 import image from './parser/image';
 import json, { defaultData, defaultParser } from './parser/json';
 import mapboxVectorTile from './parser/mvt';
+import mvtgeojson from './parser/mvtgeojson';
 import raster from './parser/raster';
 import rasterTile from './parser/raster-tile';
 import Source from './source';
@@ -16,6 +17,7 @@ import { map } from './transform/map';
 
 registerParser('rasterTile', rasterTile);
 registerParser('mvt', mapboxVectorTile);
+registerParser('mvtgeojson', mvtgeojson);
 registerParser('geojson', geojson);
 registerParser('image', image);
 registerParser('csv', csv);

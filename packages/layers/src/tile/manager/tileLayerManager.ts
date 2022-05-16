@@ -3,26 +3,25 @@ import {
   ILayer,
   IPickingService,
   IRendererService,
+  IScaleValue,
   ISource,
   ISubLayerInitOptions,
   ITileLayerManager,
   ITilePickManager,
 } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
+import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
+import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
-
-const DefaultSunLayerInitOptions: ISubLayerInitOptions = {
-  zIndex: 0,
-  opacity: 1,
-};
-
 export class TileLayerManager implements ITileLayerManager {
+  public layerName: string;
   public parent: ILayer;
   public children: ILayer[];
   public tilePickManager: ITilePickManager;
+  public tileConfigManager: ITileConfigManager;
   private tileFactory: ITileFactory;
-  private initOptions: ISubLayerInitOptions = DefaultSunLayerInitOptions;
+  private initOptions: ISubLayerInitOptions;
   constructor(
     parent: ILayer,
     rendererService: IRendererService,
@@ -35,7 +34,10 @@ export class TileLayerManager implements ITileLayerManager {
       pickingService,
       this.children,
     );
+    this.tileConfigManager = new TileConfigManager();
+
     this.setSubLayerInitOptipn();
+    this.setConfigListener();
     this.initTileFactory();
   }
 
@@ -43,10 +45,10 @@ export class TileLayerManager implements ITileLayerManager {
     return this.tileFactory.createTile(tile, this.initOptions);
   }
 
-  public updateLayerConfig(layers: ILayer[], isVisible: boolean) {
+  public updateLayersConfig(layers: ILayer[], key: string, value: any) {
     layers.map((layer) => {
       layer.updateLayerConfig({
-        visible: isVisible,
+        [key]: value,
       });
     });
   }
@@ -103,6 +105,7 @@ export class TileLayerManager implements ITileLayerManager {
 
   public render(isPicking: false): void {
     if (!isPicking) {
+      this.tileConfigManager.checkConfig(this.parent);
       this.tilePickManager.normalRenderLayer(this.children);
     } else {
       this.tilePickManager.pickRenderLayer(this.children);
@@ -115,18 +118,60 @@ export class TileLayerManager implements ITileLayerManager {
 
   private setSubLayerInitOptipn() {
     const {
+      zIndex = 0,
+      opacity = 1,
+    } = this.parent.getLayerConfig() as ISubLayerInitOptions;
+    const colorValue = this.tileConfigManager.getAttributeScale(
+      this.parent,
+      'color',
+    );
+    this.initOptions = {
       zIndex,
       opacity,
+      layerName: this.parent.name,
+      color: colorValue,
+    };
+  }
+
+  private setConfigListener() {
+    const {
+      zIndex = 0,
+      opacity = 1,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
-    // TODO: get vector layer name
-    const layerName = 'city';
+    this.tileConfigManager.setConfig('opacity', opacity);
+    this.tileConfigManager.setConfig('zIndex', zIndex);
+    this.tileConfigManager.setConfig(
+      'color',
+      this.parent.getAttribute('color')?.scale,
+    );
 
-    this.initOptions.zIndex = zIndex;
-    this.initOptions.opacity = opacity;
-    if (layerName) {
-      this.initOptions.layerName = layerName;
-    }
+    this.tileConfigManager.on('updateConfig', (updateConfigs) => {
+      const layerConfig = this.parent.getLayerConfig() as IRasterTileLayerStyleOptions;
+      updateConfigs.map((key: string) => {
+        if (key === 'color' || key === 'size') {
+          const scaleValue = this.parent.getAttribute(key)?.scale;
+          if(key === 'color' && scaleValue) {
+            this.children.map((child) => {
+              this.tileFactory.setColor(child, scaleValue);
+              return '';
+            });
+          }
+         if(key === 'size' && scaleValue) {
+          this.children.map((child) => {
+            this.tileFactory.setSize(child, scaleValue);
+            return '';
+          });
+         }
+            
+          return;
+        }
+        // @ts-ignore
+        const config = layerConfig[key];
+        this.updateLayersConfig(this.children, key, config);
+        return '';
+      });
+    });
   }
 
   private initTileFactory() {

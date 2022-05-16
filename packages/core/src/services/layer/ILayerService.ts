@@ -26,6 +26,8 @@ import {
   IEncodeFeature,
   IScale,
   IScaleOptions,
+  IScaleValue,
+  IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   ScaleAttributeType,
@@ -125,8 +127,9 @@ export interface ISubLayerInitOptions {
   // source
   // style
   opacity: number;
+  color: IScaleValue;
   // layerName
-  layerName?: string;
+  layerName: string;
 }
 
 export interface ITilePickManager {
@@ -139,6 +142,7 @@ export interface ITilePickManager {
 }
 
 export interface ITileLayerManager {
+  layerName: string;
   parent: ILayer;
   children: ILayer[];
   tilePickManager: ITilePickManager;
@@ -156,13 +160,17 @@ export interface ITileLayerManager {
 
   renderPicker(target: IInteractionTarget): boolean;
 
-  updateLayerConfig(layers: ILayer[], isVisible: boolean): void;
+  updateLayersConfig(layers: ILayer[], key: string, value: any): void;
 }
 
 export interface ITileLayer {
+  type: string;
+  layerName: string;
   parent: ILayer;
   tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;
+  render(isPicking?: boolean): void;
+  renderPicker(target: IInteractionTarget): boolean;
 }
 
 export interface ITileLayerOPtions {
@@ -231,6 +239,7 @@ export interface ILayer {
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
+  getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
   getBottomColor(): string;
@@ -289,10 +298,6 @@ export interface ILayer {
   getLegendItems(name: string): LegendItems;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
-  // set pick
-  renderPick(target: IInteractionTarget): void;
-  highlightPickedFeature(pickedColor: any): void;
-  selectFeature(pickedColor: any): void;
 
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;

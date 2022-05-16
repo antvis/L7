@@ -21,12 +21,14 @@ export default class RasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new Mapbox({
+      map: new GaodeMap({
+        // map: new Mapbox({
         center: [121.268, 30.3628],
-        pitch: 0,
         style: 'normal',
         zoom: 5,
-        viewMode: '3D',
+
+        // zoom: 13,
+        // center: [-122.447303, 37.753574],
       }),
     });
 
@@ -57,12 +59,15 @@ export default class RasterTile extends React.Component {
       // this.scene.addLayer(point);
 
       const layer = new PolygonLayer({
+        name: 'ecoregions2', // contour ecoregions city
         zIndex: -1,
       });
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
+          'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          // 'https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
+          // 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/{z}/{x}/{y}.vector.pbf?sku=101lazXpJZeM7&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           {
             parser: {
               type: 'mvt',
@@ -72,12 +77,25 @@ export default class RasterTile extends React.Component {
             },
           },
         )
+        // .color('#f00')
+        // .color('v', v => '#ff0')
+        .color('COLOR')
         .style({
-          opacity: 0.4,
+          // color: "#ff0"
+          // opacity: 0.4,
         })
         .active(true);
 
       this.scene.addLayer(layer);
+
+      // setTimeout(() => {
+      //   layer.style({
+      //     opacity: 0.4
+      //   })
+      //   layer.color('#f00')
+      //   // layer.color('v', v => '#ff0')
+      //   this.scene.render()
+      // }, 2000)
     });
   }
 

@@ -142,6 +142,12 @@ export interface IStyleAttributeInitializationOptions {
   descriptor: IVertexAttributeDescriptor;
 }
 
+export interface IScaleValue {
+  field: StyleAttributeField | undefined;
+  values: unknown[] | string | undefined;
+  callback?: (...args: any[]) => [] | undefined;
+}
+
 export interface IFeatureRange {
   startIndex: number;
   endIndex: number;

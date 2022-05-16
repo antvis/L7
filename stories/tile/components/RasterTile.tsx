@@ -25,7 +25,7 @@ export default class RasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: -7 })
+      const point = new PointLayer({ zIndex: 2 })
         .source(
           [
             {

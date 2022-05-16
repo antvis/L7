@@ -22,6 +22,7 @@ import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
+  public pickedColors: Uint8Array | undefined;
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
@@ -218,6 +219,7 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
+    this.pickedColors = pickedColors;
 
     // let pickedColors = new Uint8Array(4)
     // this.rendererService.getGLContext().readPixels(
@@ -232,7 +234,6 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-      // console.log('pickedFeatureIdx', pickedFeatureIdx);
       const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
@@ -259,7 +260,6 @@ export default class PickingService implements IPickingService {
         isPicked = true;
         layer.setCurrentPickId(pickedFeatureIdx);
         this.pickedLayers = [layer];
-        // console.log(layerTarget.feature);
         this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
       }
     } else {
@@ -389,9 +389,13 @@ export default class PickingService implements IPickingService {
           });
 
           // Tip: clear last picked layer state
-          // this.pickedLayers.map((pickedlayer) => {
-          //   this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
-          // });
+          this.pickedLayers.map((pickedlayer) => {
+            this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
+          });
+
+          if (layer.tileLayer) {
+            return layer.tileLayer.renderPicker(target);
+          }
 
           layer.hooks.beforePickingEncode.call();
 
@@ -404,16 +408,10 @@ export default class PickingService implements IPickingService {
               m.hooks.afterRender.call();
             });
           }
+          layer.render(true);
+
+          layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
-
-          // layer.renderPick(target);
-          if (layer.tileLayer) {
-            return layer.tileLayer.tileLayerManager.renderPicker(target);
-          } else {
-            layer.render(true);
-          }
-
-          // layer.render(true);
 
           const isPicked = this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
@@ -461,20 +459,12 @@ export default class PickingService implements IPickingService {
   ) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    // layer.highlightPickedFeature([r, g, b]);
-    layer.tileLayer
-      ? layer.tileLayer.tileLayerManager.tilePickManager.beforeHighlight([
-          r,
-          g,
-          b,
-        ])
-      : layer.hooks.beforeHighlight.call([r, g, b]);
+    layer.hooks.beforeHighlight.call([r, g, b]);
   }
 
   private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    layer.selectFeature([r, g, b]);
-    // layer.tileLayer?layer.tileLayer.tileLayerManager.tilePickManager.beforeSelect([r, g, b]):layer.hooks.beforeSelect.call([r, g, b]);
+    layer.hooks.beforeSelect.call([r, g, b]);
   }
 }
