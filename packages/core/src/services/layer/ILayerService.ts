@@ -221,7 +221,6 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-  isLayerGroup: boolean;
   triangulation?: Triangulation | undefined;
   /**
    * threejs 适配兼容相关的方法
@@ -395,13 +394,6 @@ export interface ILayer {
 
   // 设置当前地球时间 控制太阳角度
   setEarthTime(time: number): void;
-}
-
-export interface ILayerGroup extends ILayer {
-  addChild(layer: ILayer): void;
-  removeChild(layer: ILayer): void;
-  clearChild(): void;
-  hasChild(layer: ILayer): boolean;
 }
 
 /**

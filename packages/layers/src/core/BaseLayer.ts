@@ -83,7 +83,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public rendering: boolean;
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
-  public isLayerGroup: boolean = false;
   public triangulation?: Triangulation | undefined;
 
   public dataState: IDataState = {
