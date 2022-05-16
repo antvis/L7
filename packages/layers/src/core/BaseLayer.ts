@@ -14,7 +14,6 @@ import {
   IGlobalConfigService,
   IIconService,
   IInteractionService,
-  IInteractionTarget,
   ILayer,
   ILayerConfig,
   ILayerModel,

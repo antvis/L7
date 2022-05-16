@@ -298,7 +298,6 @@ export interface ILayer {
   getLegendItems(name: string): LegendItems;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
-
   setMaxZoom(min: number): ILayer;
   setMinZoom(max: number): ILayer;
   getMinZoom(): number;
