@@ -1,9 +1,9 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
-import MaskLayer from '../../mask';
 import { registerLayers } from '../utils';
 import TileFactory, { ITileFactoryOptions, ITileStyles } from './base';
 import VectorLayer from './vectorLayer';
+
 export default class VectorPolygonTile extends TileFactory {
   public parentLayer: ILayer;
   private layers: ILayer[];
@@ -27,10 +27,9 @@ export default class VectorPolygonTile extends TileFactory {
     const layer = new VectorLayer({
       visible: tile.isVisible,
       zIndex,
-      mask: true,
-      layerType: 'PolygonLayer',
+      layerType: 'PointLayer',
     });
-    layer.type = 'PolygonLayer';
+    layer.type = 'PointLayer';
     layer
       .source(
         {
@@ -44,23 +43,15 @@ export default class VectorPolygonTile extends TileFactory {
           },
         },
       )
-      .shape('fill')
+      .shape('circle')
+      .size(10)
       .style({
         opacity,
       });
 
     this.setColor(layer, color);
 
-    const mask = new MaskLayer()
-      .source({
-        type: 'FeatureCollection',
-        features: [tile.bboxPolygon],
-      })
-      .shape('fill');
-
-    registerLayers(this.parentLayer, [layer, mask]);
-
-    layer.addMaskLayer(mask);
+    registerLayers(this.parentLayer, [layer]);
 
     this.layers = [layer];
 

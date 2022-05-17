@@ -4,7 +4,7 @@ import PointFillModel from '../../point/models/fill';
 import IMageModel from '../../point/models/image';
 import NormalModel from '../../point/models/normal';
 import TextModel from '../../point/models/text';
-import TileModel from '../../tile/models/tileModel';
+import PolygonTileModel from '../../tile/models/tileModel';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import Ocean from './ocean';
@@ -35,6 +35,6 @@ const PolygonModels: { [key in PolygonModelType]: any } = {
   water: Water,
   ocean: Ocean,
   // point_fill: PointModels.fill,
-  vectorpolygon: TileModel,
+  vectorpolygon: PolygonTileModel,
 };
 export default PolygonModels;

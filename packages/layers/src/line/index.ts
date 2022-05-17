@@ -36,10 +36,14 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       arc: { blend: 'additive' },
       arcmini: { blend: 'additive' },
       greatcircle: { blend: 'additive' },
+      vectorline: {},
     };
     return defaultConfig[type];
   }
   protected getModelType(): LineModelType {
+    if (this.layerSource.parser.type === 'mvt') {
+      return 'vectorline';
+    }
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

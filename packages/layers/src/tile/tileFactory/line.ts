@@ -4,6 +4,7 @@ import MaskLayer from '../../mask';
 import { registerLayers } from '../utils';
 import TileFactory, { ITileFactoryOptions, ITileStyles } from './base';
 import VectorLayer from './vectorLayer';
+
 export default class VectorPolygonTile extends TileFactory {
   public parentLayer: ILayer;
   private layers: ILayer[];
@@ -28,9 +29,9 @@ export default class VectorPolygonTile extends TileFactory {
       visible: tile.isVisible,
       zIndex,
       mask: true,
-      layerType: 'PolygonLayer',
+      layerType: 'LineLayer',
     });
-    layer.type = 'PolygonLayer';
+    layer.type = 'LineLayer';
     layer
       .source(
         {
@@ -44,11 +45,11 @@ export default class VectorPolygonTile extends TileFactory {
           },
         },
       )
-      .shape('fill')
+      .shape('line')
+      .size(2)
       .style({
         opacity,
       });
-
     this.setColor(layer, color);
 
     const mask = new MaskLayer()

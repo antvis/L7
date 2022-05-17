@@ -3,8 +3,6 @@ import {
   ILayer,
   IPickingService,
   IRendererService,
-  IScaleValue,
-  ISource,
   ISubLayerInitOptions,
   ITileLayerManager,
   ITilePickManager,
@@ -30,6 +28,7 @@ export class TileLayerManager implements ITileLayerManager {
     this.parent = parent;
     this.children = parent.layerChildren;
     this.tilePickManager = new TilePickManager(
+      parent,
       rendererService,
       pickingService,
       this.children,
@@ -188,9 +187,7 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   private initTileFactory() {
-    const source: ISource = this.parent.getSource();
-    const tileType = source.parser.type as TileType;
-    const TileFactory = getTileFactory(tileType);
+    const TileFactory = getTileFactory(this.parent.type as TileType);
     this.tileFactory = new TileFactory({
       parent: this.parent,
     });

@@ -1,3 +1,4 @@
+import LineTileModel from '../../tile/models/tileModel';
 import ArcModel from './arc';
 import Arc3DModel from './arc_3d';
 import ArcMiniModel from './arcmini';
@@ -15,7 +16,8 @@ export type LineModelType =
   | 'wall'
   | 'simple'
   | 'line'
-  | 'linearline';
+  | 'linearline'
+  | 'vectorline';
 
 const LineModels: { [key in LineModelType]: any } = {
   arc: ArcModel,
@@ -26,6 +28,7 @@ const LineModels: { [key in LineModelType]: any } = {
   line: LineModel,
   simple: SimpleLineModel,
   linearline: LinearLine,
+  vectorline: LineTileModel,
 };
 
 export default LineModels;

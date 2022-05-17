@@ -1,21 +1,27 @@
 import { ITileFactory } from './base';
+import VectorLineTile from './line';
+import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';
 import RasterTileFactory from './raster';
 
 export type TileType =
-  | 'rasterTile'
-  | 'mvt'
-  | 'vectorPoint'
-  | 'rasterLine'
-  | 'rasterPolygon';
+  | 'PolygonLayer'
+  | 'PointLayer'
+  | 'LineLayer'
+  | 'RasterLayer';
 
 export function getTileFactory(tileType: TileType) {
   switch (tileType) {
-    case 'rasterTile':
-      return RasterTileFactory;
-    case 'mvt':
+    case 'PolygonLayer':
       return VectorPolygonTile;
+    case 'LineLayer':
+      return VectorLineTile;
+    case 'PointLayer':
+      return VectorPointLayer;
+    case 'RasterLayer':
+      return RasterTileFactory;
     default:
+      console.warn('Current Tile Not Exist!');
       return RasterTileFactory;
   }
 }

@@ -4,8 +4,12 @@ import * as React from 'react';
 import RasterTile from './components/RasterTile';
 import OsmRasterTile from './components/OsmRasterTile';
 import VectorPolygonTile from './components/VectorPolygonTile';
+import VectorLineTile from './components/VectorLineTile';
+import VectorPointTile from './components/VectorPointTile';
 
 storiesOf('瓦片', module)
   .add('RasterTile', () => <RasterTile />)
   .add('OsmRasterTile', () => <OsmRasterTile />)
   .add('VectorPolygonTile', () => <VectorPolygonTile />)
+  .add('VectorLineTile', () => <VectorLineTile />)
+  .add('VectorPointTile', () => <VectorPointTile />)
