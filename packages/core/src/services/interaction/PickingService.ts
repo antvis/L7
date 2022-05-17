@@ -214,7 +214,8 @@ export default class PickingService implements IPickingService {
     if (
       t - this.lastPickTime > 10 ||
       target.type === 'contextmenu' ||
-      target.type === 'click'
+      target.type === 'click' ||
+      target.type === 'mouseup'
     ) {
       await this.pickingLayers(target);
     }
