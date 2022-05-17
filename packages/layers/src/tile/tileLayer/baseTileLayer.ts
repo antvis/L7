@@ -37,7 +37,7 @@ export default class BaseTileLayer implements ITileLayer {
     layerService,
     pickingService,
   }: ITileLayerOPtions) {
-    this.layerName = parent.name;
+    this.layerName = parent.getSource().data.layerName;
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;
@@ -53,6 +53,10 @@ export default class BaseTileLayer implements ITileLayer {
 
   public render(isPicking = false) {
     this.tileLayerManager.render(isPicking);
+  }
+
+  public clearPick() {
+    this.tileLayerManager.tilePickManager.beforeSelect([0, 0, 0]);
   }
 
   public renderPicker(target: IInteractionTarget) {

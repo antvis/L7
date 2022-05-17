@@ -35,31 +35,30 @@ export default class RasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      // const point = new PointLayer({ zIndex: 7 })
-      //   .source(
-      //     [
-      //       {
-      //         lng: 120,
-      //         lat: 30,
-      //       },
-      //     ],
-      //     {
-      //       parser: {
-      //         type: 'json',
-      //         x: 'lng',
-      //         y: 'lat',
-      //       },
-      //     },
-      //   )
-      //   .shape('circle')
-      //   .color('#ff0')
-      //   .active(true)
-      //   .size(10);
+      const point = new PointLayer({ zIndex: 7 })
+        .source(
+          [
+            {
+              lng: 120,
+              lat: 30,
+            },
+          ],
+          {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
+          },
+        )
+        .shape('circle')
+        .color('#ff0')
+        .active(true)
+        .size(10);
 
-      // this.scene.addLayer(point);
+      this.scene.addLayer(point);
 
       const layer = new PolygonLayer({
-        name: 'ecoregions2', // contour ecoregions city
         zIndex: -1,
       });
       layer
@@ -74,6 +73,8 @@ export default class RasterTile extends React.Component {
               tileSize: 256,
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
+              featureId: 'COLOR',
+              layerName: 'ecoregions2', // contour ecoregions city
             },
           },
         )

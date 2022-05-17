@@ -71,5 +71,7 @@ export default function mapboxVectorTile(
     dataArray: [],
     tilesetOptions,
     isTile: true,
+    featureId: cfg?.featureId,
+    layerName: cfg?.layerName,
   };
 }

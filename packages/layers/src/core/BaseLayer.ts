@@ -669,14 +669,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.rendering = false;
   }
 
-  public render(isPicking = false): ILayer {
+  public render(): ILayer {
     if (this.tileLayer !== undefined) {
-      this.tileLayer.render(isPicking);
+      this.tileLayer.render();
       return this;
     }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length !== 0) {
-      this.renderModels(isPicking);
+      this.renderModels();
     }
     return this;
   }

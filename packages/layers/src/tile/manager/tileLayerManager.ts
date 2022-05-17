@@ -102,13 +102,9 @@ export class TileLayerManager implements ITileLayerManager {
     return this.children.includes(layer);
   }
 
-  public render(isPicking: false): void {
-    if (!isPicking) {
-      this.tileConfigManager.checkConfig(this.parent);
-      this.tilePickManager.normalRenderLayer(this.children);
-    } else {
-      this.tilePickManager.pickRenderLayer(this.children);
-    }
+  public render(): void {
+    this.tileConfigManager.checkConfig(this.parent);
+    this.tilePickManager.normalRenderLayer(this.children);
   }
 
   public renderPicker(target: IInteractionTarget) {
@@ -124,11 +120,14 @@ export class TileLayerManager implements ITileLayerManager {
       this.parent,
       'color',
     );
+    const source = this.parent.getSource();
+
     this.initOptions = {
       zIndex,
       opacity,
-      layerName: this.parent.name,
+      layerName: source.data.layerName,
       color: colorValue,
+      featureId: source.data.featureId,
     };
   }
 

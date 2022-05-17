@@ -29,6 +29,10 @@ export interface IRasterTileParserCFG {
   zoomOffset?: number;
   extent?: [number, number, number, number];
   updateStrategy?: 'overlap' | 'replace';
+  // 指定 feature 编码 id
+  featureId?: string;
+  // 指定矢量瓦片的数据分类
+  layerName?: string;
 }
 
 export interface IJsonItem {

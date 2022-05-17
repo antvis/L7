@@ -23,6 +23,7 @@ import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
   public pickedColors: Uint8Array | undefined;
+  public pickedTileLayers: ILayer[] = [];
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
@@ -392,6 +393,9 @@ export default class PickingService implements IPickingService {
           this.pickedLayers.map((pickedlayer) => {
             this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
           });
+          this.pickedTileLayers.map((pickedTileLayer) =>
+            pickedTileLayer.tileLayer.clearPick(),
+          );
 
           if (layer.tileLayer) {
             return layer.tileLayer.renderPicker(target);
@@ -408,11 +412,11 @@ export default class PickingService implements IPickingService {
               m.hooks.afterRender.call();
             });
           }
-          layer.render(true);
-          // layer.renderModels(true);
+          layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
 
           const isPicked = this.pickFromPickingFBO(layer, target);
+
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });

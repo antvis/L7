@@ -13,7 +13,7 @@ export default class VectorPolygonTile extends TileFactory {
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { zIndex, opacity, layerName, color } = initOptions;
+    const { zIndex, opacity, layerName, color, featureId } = initOptions;
 
     const features = tile.data.layers[layerName]?.features;
     if (!features || !layerName) {
@@ -39,7 +39,7 @@ export default class VectorPolygonTile extends TileFactory {
         {
           parser: {
             type: 'mvtgeojson',
-            featureId: 'COLOR',
+            featureId,
           },
         },
       )

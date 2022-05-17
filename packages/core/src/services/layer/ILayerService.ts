@@ -130,11 +130,12 @@ export interface ISubLayerInitOptions {
   color: IScaleValue;
   // layerName
   layerName: string;
+  featureId: string;
 }
 
 export interface ITilePickManager {
+  isLastPicked: boolean;
   normalRenderLayer(layers: ILayer[]): void;
-  pickRenderLayer(layers: ILayer[]): void;
   beforeHighlight(pickedColors: any): void;
   beforeSelect(pickedColors: any): void;
 
@@ -171,6 +172,7 @@ export interface ITileLayer {
   tilesetManager: TilesetManager | undefined;
   render(isPicking?: boolean): void;
   renderPicker(target: IInteractionTarget): boolean;
+  clearPick(): void;
 }
 
 export interface ITileLayerOPtions {
@@ -310,7 +312,7 @@ export interface ILayer {
     passes?: Array<string | [string, { [key: string]: unknown }]>,
   ): ILayer;
   renderLayers(): void;
-  render(isPicking?: boolean): ILayer;
+  render(): ILayer;
 
   renderMultiPass(): any;
 

@@ -36,7 +36,6 @@ export default class RasterTile extends React.Component {
 
     this.scene.on('loaded', () => {
       const layer = new LineLayer({
-        name: 'ecoregions2', // contour ecoregions city
         zIndex: -1,
       });
       layer
@@ -51,6 +50,8 @@ export default class RasterTile extends React.Component {
               tileSize: 256,
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
+              featureId: 'COLOR',
+              layerName: 'ecoregions2', // contour ecoregions city
             },
           },
         )
