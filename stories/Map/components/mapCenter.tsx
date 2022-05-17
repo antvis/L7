@@ -195,11 +195,9 @@ export default class GaodeMapComponent extends React.Component {
 
     scene.on('loaded', () => {
       scene.addLayer(layer0);
-      // scene.addLayer(layer01);
-      // scene.addLayer(layer);
-      // scene.addLayer(layer2);
-
-      layer0.on('mouseup', () => console);
+      scene.addLayer(layer01);
+      scene.addLayer(layer);
+      scene.addLayer(layer2);
 
       scene.on('click', (e) => {
         console.log(scene.getPickedLayer());
