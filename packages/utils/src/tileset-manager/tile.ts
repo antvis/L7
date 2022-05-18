@@ -1,4 +1,4 @@
-import { bboxPolygon as BboxPolygon } from '@turf/turf';
+import { bboxPolygon } from '@turf/turf';
 import { Bounds } from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
 
@@ -94,11 +94,11 @@ export class Tile {
   }
 
   // 瓦片边界面
-  public get bboxPolygon() {
+  public get tilebboxPolygon() {
     const [minLng, minLat, maxLng, maxLat] = this.bounds;
     const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
 
-    const polygon = BboxPolygon(this.bounds as Bounds, {
+    const polygon = bboxPolygon(this.bounds as Bounds, {
       properties: {
         key: this.key,
         bbox: this.bounds,
