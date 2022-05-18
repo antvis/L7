@@ -337,6 +337,13 @@ export interface ILayerGroup extends ILayer {
   hasChild(layer: ILayer): boolean;
 }
 
+type Bounds = [number, number, number, number];
+type TileOptions = { x: number; y: number; z: number; tileSize: number };
+export type TileLoadParams = TileOptions & {
+  bounds: Bounds;
+  signal: AbortSignal;
+};
+
 /**
  * Layer 插件
  */

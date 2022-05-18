@@ -1,3 +1,3 @@
 export * from './utils/tile-url';
-export { Tile, TileLoadParams } from './tile';
+export { Tile } from './tile';
 export { TilesetManager, TilesetManagerOptions } from './tileset-manager';
