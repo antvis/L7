@@ -65,7 +65,7 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   tileset: TilesetManager | undefined;
-  setData(data: any): void;
+  setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
   getFeatureId(field: string, value: any): number | undefined;
