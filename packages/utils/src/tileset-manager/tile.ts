@@ -1,4 +1,4 @@
-import { bboxPolygon } from '@turf/turf';
+import bboxPolygon from '@turf/bbox-polygon';
 import { Bounds } from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
 
