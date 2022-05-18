@@ -88,6 +88,9 @@ module.exports = [
             'isString',
             'isNumber',
             'merge'
+          ],
+          '@turf/turf': [
+            'bboxPolygon',
           ]
         },
         dynamicRequireTargets: [
