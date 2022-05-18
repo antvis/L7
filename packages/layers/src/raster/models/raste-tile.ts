@@ -68,7 +68,7 @@ export default class RasterTileModel extends BaseModel {
     }
 
     const features = this.tilesetManager.currentTiles.map(
-      (tile) => tile.tilebboxPolygon,
+      (tile) => tile.bboxPolygon,
     );
 
     const data = { type: 'FeatureCollection', features };
