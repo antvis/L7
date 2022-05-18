@@ -1,5 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { Tile } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
@@ -342,6 +343,23 @@ type TileOptions = { x: number; y: number; z: number; tileSize: number };
 export type TileLoadParams = TileOptions & {
   bounds: Bounds;
   signal: AbortSignal;
+};
+
+enum UpdateTileStrategy {
+  // 渐近更新策略
+  Overlap = 'overlap',
+  // 全部替换策略
+  Replace = 'replace',
+}
+
+export type TilesetManagerOptions = {
+  tileSize: number;
+  zoomOffset: number;
+  minZoom: number;
+  maxZoom: number;
+  extent: Bounds;
+  getTileData: (tile: TileLoadParams) => any;
+  updateStrategy: UpdateTileStrategy | ((tiles: Tile[]) => void);
 };
 
 /**

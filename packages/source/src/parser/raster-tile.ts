@@ -1,8 +1,7 @@
-import { TileLoadParams } from '@antv/l7-core';
+import { TileLoadParams, TilesetManagerOptions } from '@antv/l7-core';
 import {
   getImage,
   getURLFromTemplate,
-  TilesetManagerOptions,
 } from '@antv/l7-utils';
 import { IParserData, IRasterTileParserCFG } from '../interface';
 
