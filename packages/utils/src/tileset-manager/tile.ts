@@ -94,7 +94,7 @@ export class Tile {
   }
 
   // 瓦片边界面
-  public get tilebboxPolygon() {
+  public get bboxPolygon() {
     const [minLng, minLat, maxLng, maxLat] = this.bounds;
     const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
 
