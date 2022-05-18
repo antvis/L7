@@ -1,4 +1,4 @@
-import { bboxPolygon } from '@turf/turf';
+import { bboxPolygon as BboxPolygon } from '@turf/turf';
 import { Bounds } from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
 
@@ -98,7 +98,7 @@ export class Tile {
     const [minLng, minLat, maxLng, maxLat] = this.bounds;
     const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
 
-    const polygon = bboxPolygon(this.bounds as Bounds, {
+    const polygon = BboxPolygon(this.bounds as Bounds, {
       properties: {
         key: this.key,
         bbox: this.bounds,
@@ -158,7 +158,7 @@ export class Tile {
     // 如果请求出错或数据为空
     if (error || !tileData) {
       this.loadStatus = LoadTileDataStatus.Failure;
-      onError(error, this);
+      onError(error as Error, this);
       return;
     }
 
