@@ -61,6 +61,7 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   data: IParserData;
+  parser: IParserCfg;
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
