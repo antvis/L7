@@ -151,3 +151,5 @@ export {
   WindLayer,
   MaskLayer,
 };
+
+export * from './core/interface';
