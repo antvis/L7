@@ -98,7 +98,10 @@ function GetGeoJSON(z: number, vectorTileFeature: VectorTileFeature) {
   function project(line: any[]) {
     for (let index = 0; index < line.length; index++) {
       const point = line[index];
-      line[index] = [(point.x / size) * TILE_SIZE, (point.y / size) * TILE_SIZE];
+      line[index] = [
+        (point.x / size) * TILE_SIZE,
+        (point.y / size) * TILE_SIZE,
+      ];
     }
   }
 
