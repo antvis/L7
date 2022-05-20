@@ -14,16 +14,15 @@ export default class VectorPolygonTile extends TileFactory {
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     const { zIndex, opacity, layerName, color, featureId } = initOptions;
-
-    const features = tile.data.layers[layerName]?.features;
-    if (!features || !layerName) {
-      console.warn('Layer Data not exist! Please check Layer Name & Data!');
+    const vectorTileLayer = tile.data.layers[layerName];
+    const features = vectorTileLayer?.features;
+    if (!(Array.isArray(features) && features.length > 0)) {
       return {
         layers: [],
         layerIDList: [],
       };
     }
-
+    const { l7TileOrigin, l7TileCoord } = vectorTileLayer;
     const layer = new VectorLayer({
       visible: tile.isVisible,
       zIndex,
@@ -38,7 +37,7 @@ export default class VectorPolygonTile extends TileFactory {
         },
         {
           parser: {
-            type: 'mvtgeojson',
+            type: 'geojson',
             featureId,
           },
         },
@@ -47,6 +46,8 @@ export default class VectorPolygonTile extends TileFactory {
       .size(10)
       .style({
         opacity,
+        tileOrigin: l7TileOrigin,
+        coord: l7TileCoord,
       });
 
     this.setColor(layer, color);

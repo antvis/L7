@@ -4,9 +4,9 @@ import {
   IPointLayerStyleOptions,
   IPolygonLayerStyleOptions,
 } from '../../core/interface';
-import lineFillModel from '../../line/models/line';
-import pointFillModel from '../../point/models/fill';
-import polygonFillModel from '../../polygon/models/fill';
+import lineFillModel from '../../line/models/tile';
+import pointFillModel from '../../point/models/tile';
+import polygonFillModel from '../../polygon/models/tile';
 
 export default class VectorLayer extends BaseLayer<
   Partial<

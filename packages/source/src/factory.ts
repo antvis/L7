@@ -1,6 +1,6 @@
 import { IParserData } from './interface';
 
-type ParserFunction = (data: any, cfg?: any) => IParserData;
+type ParserFunction = (data: any, cfg?: any, layerCfg?: any) => IParserData;
 type transformFunction = (data: IParserData, cfg?: any) => IParserData;
 const TRANSFORMS: {
   [type: string]: transformFunction;

@@ -116,18 +116,21 @@ export class TileLayerManager implements ITileLayerManager {
       zIndex = 0,
       opacity = 1,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
+
     const colorValue = this.tileConfigManager.getAttributeScale(
       this.parent,
       'color',
     );
     const source = this.parent.getSource();
+    const { layerName, coords, featureId } = source.data.tilesetOptions;
 
     this.initOptions = {
       zIndex,
       opacity,
-      layerName: source.data.layerName,
+      layerName,
+      coords,
+      featureId,
       color: colorValue,
-      featureId: source.data.featureId,
     };
   }
 

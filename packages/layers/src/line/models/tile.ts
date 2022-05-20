@@ -1,9 +1,7 @@
 import {
   AttributeType,
   gl,
-  IAnimateOption,
   IEncodeFeature,
-  IImage,
   ILayerConfig,
   IModel,
   IModelUniform,
@@ -14,14 +12,9 @@ import { getMask, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
-// dash line shader
-import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
-import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
-// basic line shader
-import line_frag from '../shaders/line_frag.glsl';
-import line_vert from '../shaders/line_vert.glsl';
-// other function shaders
-import linear_line_frag from '../shaders/linear/line_linear_frag.glsl';
+
+import line_tile_frag from '../shaders/tile/line_tile_frag.glsl';
+import line_tile_vert from '../shaders/tile/line_tile_vert.glsl';
 
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -50,11 +43,9 @@ export default class LineModel extends BaseModel {
         arrowHeight: 3,
         tailWidth: 1,
       },
+      coord = 'lnglat',
       tileOrigin,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    if (dashArray.length === 2) {
-      dashArray.push(0, 0);
-    }
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
@@ -101,6 +92,7 @@ export default class LineModel extends BaseModel {
     }
     return {
       u_tileOrigin: tileOrigin || [0, 0],
+      u_coord: coord === 'lnglat' ? 1.0 : 0.0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_opacity: Number(opacity),
@@ -137,13 +129,6 @@ export default class LineModel extends BaseModel {
       u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
     };
   }
-  public getAnimateUniforms(): IModelUniform {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
-      u_time: this.layer.getLayerAnimateTime(),
-    };
-  }
 
   public initModels(): IModel[] {
     this.updateTexture();
@@ -168,7 +153,7 @@ export default class LineModel extends BaseModel {
     this.layer.triangulation = LineTriangulation;
     return [
       this.layer.buildLayerModel({
-        moduleName: 'line_' + type,
+        moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
@@ -186,34 +171,11 @@ export default class LineModel extends BaseModel {
    * @returns
    */
   public getShaders(): { frag: string; vert: string; type: string } {
-    const {
-      sourceColor,
-      targetColor,
-      lineType,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
-    if (lineType === 'dash') {
-      return {
-        frag: line_dash_frag,
-        vert: line_dash_vert,
-        type: 'dash',
-      };
-    }
-
-    if (sourceColor && targetColor) {
-      // 分离 linear 功能
-      return {
-        frag: linear_line_frag,
-        vert: line_vert,
-        type: 'linear',
-      };
-    } else {
-      return {
-        frag: line_frag,
-        vert: line_vert,
-        type: 'normal',
-      };
-    }
+    return {
+      frag: line_tile_frag,
+      vert: line_tile_vert,
+      type: 'line_tile',
+    };
   }
 
   protected registerBuiltinAttributes() {

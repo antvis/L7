@@ -121,6 +121,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   public sourceOption: {
     data: any;
     options?: ISourceCFG;
+    layerCfg?: any;
   };
 
   public layerModel: ILayerModel;
@@ -577,7 +578,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     return this;
   }
 
-  public source(data: any, options?: ISourceCFG): ILayer {
+  public source(data: any, options?: ISourceCFG, layerCfg?: any): ILayer {
     if (data?.data) {
       // 判断是否为source
       this.setSource(data);
@@ -586,12 +587,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     this.sourceOption = {
       data,
       options,
+      layerCfg,
     };
     this.clusterZoom = 0;
     return this;
   }
 
-  public setData(data: any, options?: ISourceCFG) {
+  public setData(data: any, options?: ISourceCFG, layerCfg?: any) {
     if (this.inited) {
       this.layerSource.setData(data, options);
     } else {
@@ -599,7 +601,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
         const currentSource = this.getSource();
         if (!currentSource) {
           // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
-          this.source(new Source(data, options));
+          this.source(new Source(data, options, layerCfg));
           this.sourceEvent();
         } else {
           this.layerSource.setData(data, options);

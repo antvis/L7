@@ -21,6 +21,12 @@ export interface IParserData {
   featureKeys?: IFeatureKey;
 }
 
+export interface IMVTLayerParser {
+  featureId?: string;
+  layerName?: string;
+  coord?: string;
+}
+
 // 栅格瓦片解析配置项
 export interface IRasterTileParserCFG {
   tileSize?: number;
@@ -33,6 +39,7 @@ export interface IRasterTileParserCFG {
   featureId?: string;
   // 指定矢量瓦片的数据分类
   layerName?: string;
+  coord?: string;
 }
 
 export interface IJsonItem {

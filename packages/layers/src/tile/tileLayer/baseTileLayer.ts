@@ -37,7 +37,9 @@ export default class BaseTileLayer implements ITileLayer {
     layerService,
     pickingService,
   }: ITileLayerOPtions) {
-    this.layerName = parent.getSource().data.layerName;
+    const parentSource = parent.getSource();
+    const { layerName, coords, featureId } = parentSource.data.tilesetOptions;
+    this.layerName = layerName;
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;

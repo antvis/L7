@@ -67,6 +67,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         blend: 'normal',
       },
       vectorpoint: {},
+      tile: {},
     };
     return defaultConfig[type];
   }
@@ -83,6 +84,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'text',
       'icon',
       'vectorpoint',
+      'tile',
     ];
     if (this.layerSource.parser.type === 'mvt') {
       return 'vectorpoint';

@@ -8,6 +8,7 @@ import PolygonTileModel from '../../tile/models/tileModel';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import Ocean from './ocean';
+import TilePolygonModel from './tile';
 import Water from './water';
 
 export type PolygonModelType =
@@ -21,7 +22,8 @@ export type PolygonModelType =
   | 'text'
   | 'water'
   | 'ocean'
-  | 'vectorpolygon';
+  | 'vectorpolygon'
+  | 'tile';
 
 const PolygonModels: { [key in PolygonModelType]: any } = {
   fill: FillModel,
@@ -36,5 +38,6 @@ const PolygonModels: { [key in PolygonModelType]: any } = {
   ocean: Ocean,
   // point_fill: PointModels.fill,
   vectorpolygon: PolygonTileModel,
+  tile: TilePolygonModel,
 };
 export default PolygonModels;

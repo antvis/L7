@@ -129,8 +129,9 @@ export interface ISubLayerInitOptions {
   opacity: number;
   color: IScaleValue;
   // layerName
+  coords?: string;
   layerName: string;
-  featureId: string;
+  featureId?: string;
 }
 
 export interface ITilePickManager {
@@ -219,6 +220,7 @@ export interface ILayer {
   sourceOption: {
     data: any;
     options?: ISourceCFG;
+    layerCfg?: any;
   };
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
@@ -319,8 +321,8 @@ export interface ILayer {
   clear(): void;
   clearModels(): void;
   destroy(): void;
-  source(data: any, option?: ISourceCFG): ILayer;
-  setData(data: any, option?: ISourceCFG): ILayer;
+  source(data: any, option?: ISourceCFG, layerCfg?: any): ILayer;
+  setData(data: any, option?: ISourceCFG, layerCfg?: any): ILayer;
   fitBounds(fitBoundsOptions?: unknown): ILayer;
   /**
    * 向当前图层注册插件

@@ -15,6 +15,9 @@ interface ILineArrow {
 }
 
 export interface ILineLayerStyleOptions {
+  tileOrigin?: number[];
+  coord?: string;
+
   opacity: styleSingle;
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
   dashArray?: [number, number]; //  可选参数、虚线间隔
@@ -48,6 +51,8 @@ export interface ILineLayerStyleOptions {
 }
 
 export interface IPointLayerStyleOptions {
+  tileOrigin?: number[];
+  coord?: string;
   opacity: number;
   strokeOpacity: number;
   strokeWidth: number;
@@ -91,6 +96,8 @@ export interface IPointLayerStyleOptions {
 }
 
 export interface IPolygonLayerStyleOptions {
+  tileOrigin?: number[];
+  coord?: string;
   opacity?: number;
 
   opacityLinear?: {

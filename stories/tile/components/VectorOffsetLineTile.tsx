@@ -23,11 +23,11 @@ export default class RasterTile extends React.Component {
       stencil: true,
       // map: new GaodeMap({
       map: new Mapbox({
+        center: [122.77, 43.333172],
         // center: [121.268, 30.3628],
-        // center: [122.76391708791607, 43.343389123718815],
-        center: [120, 30],
-        style: 'normal',
-        zoom: 6,
+        // style: 'normal',
+        style: 'blank',
+        zoom: 19,
         zooms: [0, 25],
         maxZoom: 25,
         // zoom: 13,
@@ -35,40 +35,17 @@ export default class RasterTile extends React.Component {
       }),
     });
 
+    this.scene.on('zoom', () => console.log(this.scene.getZoom()));
+
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
-        .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-            },
-          ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
-        )
-        .shape('circle')
-        .color('#ff0')
-        .active(true)
-        .size(10);
-
-      this.scene.addLayer(point);
-
-      this.scene.on('zoom', () => console.log(this.scene.getZoom()));
-
-      const layer = new PolygonLayer();
+      const layer = new LineLayer({
+        zIndex: -1,
+      });
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
-          // 'http://localhost:3000/woods.mbtiles/{z}/{x}/{y}.pbf',
-          // 'http://localhost:3000/zhoushan.mbtiles/{z}/{x}/{y}.pbf',
-          // 'http://localhost:3000/woods.mbtiles/14/13779/5999.pbf'
+          // 'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          'http://localhost:3000/woods.mbtiles/{z}/{x}/{y}.pbf',
           // 'https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           // 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/{z}/{x}/{y}.vector.pbf?sku=101lazXpJZeM7&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           {
@@ -76,25 +53,24 @@ export default class RasterTile extends React.Component {
               type: 'mvt',
               tileSize: 256,
               zoomOffset: 0,
-              maxZoom: 9,
+              maxZoom: 20,
               extent: [-180, -85.051129, 179, 85.051129],
             },
           },
           {
             featureId: 'COLOR',
-            layerName: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
-            // coord: 'offset'
+            layerName: 'woods', // contour ecoregions city ecoregions2
+            coord: 'offset',
           },
         )
-        .color('COLOR')
-        // .color('#f00')
+        .color('#f00')
         // .color('v', v => '#ff0')
-        // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
+        // .color('COLOR')
         .style({
           // color: "#ff0"
           // opacity: 0.4,
-        });
-      // .active(true);
+        })
+        .active(true);
 
       this.scene.addLayer(layer);
     });

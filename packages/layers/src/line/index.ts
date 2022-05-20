@@ -37,6 +37,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       arcmini: { blend: 'additive' },
       greatcircle: { blend: 'additive' },
       vectorline: {},
+      tileLine: {},
     };
     return defaultConfig[type];
   }

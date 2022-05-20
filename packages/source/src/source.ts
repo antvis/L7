@@ -66,14 +66,15 @@ export default class Source extends EventEmitter implements ISource {
   private originData: any;
   private rawData: any;
   private cfg: any = {};
+  private layerCfg: any = {};
 
   private clusterIndex: Supercluster;
 
-  constructor(data: any | ISource, cfg?: ISourceCFG) {
+  constructor(data: any | ISource, cfg?: ISourceCFG, layerCfg?: any) {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;
-    this.initCfg(cfg);
+    this.initCfg(cfg, layerCfg);
 
     this.hooks.init.tap('parser', () => {
       this.excuteParser();
@@ -200,8 +201,9 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset?.destroy();
   }
 
-  private initCfg(option?: ISourceCFG) {
+  private initCfg(option?: ISourceCFG, layerCfg?: any) {
     this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
+    this.layerCfg = mergeWith(this.layerCfg, layerCfg, mergeCustomizer);
     const cfg = this.cfg;
     if (cfg) {
       if (cfg.parser) {
@@ -232,7 +234,7 @@ export default class Source extends EventEmitter implements ISource {
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
     const sourceParser = getParser(type);
-    this.data = sourceParser(this.originData, parser);
+    this.data = sourceParser(this.originData, parser, this.layerCfg);
     // 计算范围
     this.extent = extent(this.data.dataArray);
     this.invalidExtent =
