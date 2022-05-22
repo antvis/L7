@@ -115,21 +115,21 @@ export default class BaseTileLayer implements ITileLayer {
 
   private bindSubLayerEvent() {
     /**
-      * layer.on('click', (ev) => {}); // 鼠标左键点击图层事件
-      * layer.on('mouseenter', (ev) => {}); // 鼠标进入图层要素
-      * layer.on('mousemove', (ev) => {}); // 鼠标在图层上移动时触发
-      * layer.on('mouseout', (ev) => {}); // 鼠标移出图层要素时触发
-      * layer.on('mouseup', (ev) => {}); // 鼠标在图层上单击抬起时触发
-      * layer.on('mousedown', (ev) => {}); // 鼠标在图层上单击按下时触发
-      * layer.on('contextmenu', (ev) => {}); // 图层要素点击右键菜单
-      * 
-      *  鼠标在图层外的事件
-      * layer.on('unclick', (ev) => {}); // 图层外点击
-      * layer.on('unmousemove', (ev) => {}); // 图层外移动
-      * layer.on('unmouseup', (ev) => {}); // 图层外鼠标抬起
-      * layer.on('unmousedown', (ev) => {}); // 图层外单击按下时触发
-      * layer.on('uncontextmenu', (ev) => {}); // 图层外点击右键
-      * layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
+     * layer.on('click', (ev) => {}); // 鼠标左键点击图层事件
+     * layer.on('mouseenter', (ev) => {}); // 鼠标进入图层要素
+     * layer.on('mousemove', (ev) => {}); // 鼠标在图层上移动时触发
+     * layer.on('mouseout', (ev) => {}); // 鼠标移出图层要素时触发
+     * layer.on('mouseup', (ev) => {}); // 鼠标在图层上单击抬起时触发
+     * layer.on('mousedown', (ev) => {}); // 鼠标在图层上单击按下时触发
+     * layer.on('contextmenu', (ev) => {}); // 图层要素点击右键菜单
+     *
+     *  鼠标在图层外的事件
+     * layer.on('unclick', (ev) => {}); // 图层外点击
+     * layer.on('unmousemove', (ev) => {}); // 图层外移动
+     * layer.on('unmouseup', (ev) => {}); // 图层外鼠标抬起
+     * layer.on('unmousedown', (ev) => {}); // 图层外单击按下时触发
+     * layer.on('uncontextmenu', (ev) => {}); // 图层外点击右键
+     * layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
      */
     this.parent.on('subLayerClick', (e) => this.parent.emit('click', { ...e }));
     this.parent.on('subLayerMouseMove', (e) =>
