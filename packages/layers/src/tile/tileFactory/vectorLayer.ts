@@ -13,6 +13,7 @@ export default class VectorLayer extends BaseLayer<
     IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions
   >
 > {
+  public isVector: boolean = true;
   public type: string = this.layerType as string;
   public buildModels() {
     const model = this.getModelType();

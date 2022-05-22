@@ -1,6 +1,7 @@
 import {
   IInteractionTarget,
   ILayer,
+  ILayerService,
   IPickingService,
   IRendererService,
   ISubLayerInitOptions,
@@ -24,6 +25,7 @@ export class TileLayerManager implements ITileLayerManager {
     parent: ILayer,
     rendererService: IRendererService,
     pickingService: IPickingService,
+    layerService: ILayerService,
   ) {
     this.parent = parent;
     this.children = parent.layerChildren;
@@ -32,6 +34,7 @@ export class TileLayerManager implements ITileLayerManager {
       rendererService,
       pickingService,
       this.children,
+      layerService,
     );
     this.tileConfigManager = new TileConfigManager();
 

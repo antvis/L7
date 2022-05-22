@@ -54,12 +54,13 @@ export default class RasterTile extends React.Component {
         )
         .shape('circle')
         .color('#ff0')
-        .active(true)
+        // .active(true)
+        .select(true)
         .size(10);
 
       this.scene.addLayer(point);
 
-      this.scene.on('zoom', () => console.log(this.scene.getZoom()));
+      // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
       const layer = new PolygonLayer();
       layer
@@ -93,8 +94,17 @@ export default class RasterTile extends React.Component {
         .style({
           // color: "#ff0"
           // opacity: 0.4,
-        });
-      // .active(true);
+        })
+        .select(true);
+      // .active(true)
+
+      // layer.on('click', e => { console.log(e) })
+      // layer.on('mousemove', e => console.log(e))
+      // layer.on('unmousemove', e => console.log(e))
+      // layer.on('mouseenter', e => console.log(e))
+      // layer.on('mouseout', e => console.log(e))
+      // layer.on('mousedown', e => console.log(e))
+      // layer.on('contextmenu', e => console.log(e))
 
       this.scene.addLayer(layer);
     });

@@ -305,6 +305,18 @@ export default class PickingService implements IPickingService {
         this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
       }
+      if (!layer.isVector) {
+        // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
+        this.layerService
+          .getLayers()
+          .filter((l) => l.tileLayer)
+          .map((l) => {
+            l.tileLayer.children.map((child) => {
+              this.selectFeature(child, new Uint8Array([0, 0, 0, 0]));
+              child.setCurrentSelectedId(null);
+            });
+          });
+      }
     }
     return isPicked;
   };
@@ -390,11 +402,13 @@ export default class PickingService implements IPickingService {
           });
 
           // Tip: clear last picked layer state
-          this.pickedLayers.map((pickedlayer) => {
-            this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
-          });
+          this.pickedLayers
+            .filter((pickedlayer) => !pickedlayer.isVector)
+            .map((pickedlayer) => {
+              this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
+            });
           this.pickedTileLayers.map((pickedTileLayer) =>
-            pickedTileLayer.tileLayer.clearPick(),
+            pickedTileLayer.tileLayer.clearPick(target.type),
           );
 
           if (layer.tileLayer) {

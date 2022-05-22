@@ -139,7 +139,7 @@ export interface ITilePickManager {
   normalRenderLayer(layers: ILayer[]): void;
   beforeHighlight(pickedColors: any): void;
   beforeSelect(pickedColors: any): void;
-
+  clearPick(): void;
   pickTileRenderLayer(layers: ILayer[], target: IInteractionTarget): boolean;
 }
 
@@ -171,9 +171,10 @@ export interface ITileLayer {
   parent: ILayer;
   tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;
+  children: ILayer[];
   render(isPicking?: boolean): void;
   renderPicker(target: IInteractionTarget): boolean;
-  clearPick(): void;
+  clearPick(type: string): void;
 }
 
 export interface ITileLayerOPtions {
@@ -225,6 +226,7 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
+  isVector?: boolean;
   triangulation?: Triangulation | undefined;
   /**
    * threejs 适配兼容相关的方法

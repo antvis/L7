@@ -1,15 +1,18 @@
 import {
   IInteractionTarget,
   ILayer,
+  ILayerService,
   IPickingService,
   IRendererService,
   ITilePickManager,
 } from '@antv/l7-core';
+import { decodePickingColor } from '@antv/l7-utils';
 
 export default class TilePickManager implements ITilePickManager {
   public isLastPicked: boolean = false;
   private rendererService: IRendererService;
   private pickingService: IPickingService;
+  private layerService: ILayerService;
   private children: ILayer[];
   private parent: ILayer;
 
@@ -18,10 +21,12 @@ export default class TilePickManager implements ITilePickManager {
     rendererService: IRendererService,
     pickingService: IPickingService,
     children: ILayer[],
+    layerService: ILayerService,
   ) {
     this.parent = parent;
     this.rendererService = rendererService;
     this.pickingService = pickingService;
+    this.layerService = layerService;
     this.children = children;
   }
 
@@ -79,21 +84,77 @@ export default class TilePickManager implements ITilePickManager {
         layer.renderModels(true);
         layer.hooks.afterPickingEncode.call();
 
-        return this.pickingService.pickFromPickingFBO(layer, target);
-      });
-    if (isPicked) {
-      this.pickingService.pickedTileLayers = [this.parent];
-      // @ts-ignore
-      const [r, g, b] = this.pickingService.pickedColors;
+        const layerPicked = this.pickingService.pickFromPickingFBO(
+          layer,
+          target,
+        );
+        if (layerPicked) {
+          const restLayers = this.children.filter((child) => child !== layer);
+          // @ts-ignore
+          const [r, g, b] = this.pickingService.pickedColors;
+          this.pickingService.pickedTileLayers = [this.parent];
+          if (target.type === 'click') {
+            this.handleSelect(restLayers, [r, g, b]);
+          } else {
+            this.beforeHighlight([r, g, b]);
+          }
+        }
 
-      this.beforeHighlight([r, g, b]);
-    } else if (this.isLastPicked) {
-      this.pickingService.pickedTileLayers = [];
+        return layerPicked;
+      });
+
+    if (!isPicked && this.isLastPicked && target.type !== 'click') {
       // 只有上一次有被高亮选中，本次未选中的时候才需要清除选中状态
+      this.pickingService.pickedTileLayers = [];
       this.beforeHighlight([0, 0, 0]);
     }
     this.isLastPicked = isPicked;
     return isPicked;
+  }
+
+  public handleSelect(layers: ILayer[], pickedColors: any) {
+    layers.map((child) => {
+      const { enableSelect } = child.getLayerConfig();
+      if (
+        enableSelect &&
+        pickedColors?.toString() !== [0, 0, 0, 0].toString()
+      ) {
+        const selectedId = decodePickingColor(pickedColors);
+
+        if (
+          child.getCurrentSelectedId() === null ||
+          selectedId !== child.getCurrentSelectedId()
+        ) {
+          this.selectFeature(child, pickedColors);
+          child.setCurrentSelectedId(selectedId);
+        } else {
+          this.selectFeature(child, new Uint8Array([0, 0, 0, 0])); // toggle select
+          child.setCurrentSelectedId(null);
+        }
+      }
+    });
+    // unselect normal layer
+    const renderList = this.layerService.getRenderList();
+    renderList
+      .filter((layer) => layer.needPick('click'))
+      .map((layer) => {
+        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0]));
+        layer.setCurrentSelectedId(null);
+      });
+  }
+
+  public highLightLayers(layers: ILayer[]) {
+    // @ts-ignore
+    const [r, g, b] = this.pickingService.pickedColors;
+    layers.map((layer) => {
+      layer.hooks.beforeHighlight.call([r, g, b]);
+    });
+  }
+
+  public clearPick() {
+    this.children.map((layer) => {
+      layer.hooks.beforeSelect.call([0, 0, 0]);
+    });
   }
 
   public beforeHighlight(pickedColors: any) {
@@ -106,5 +167,11 @@ export default class TilePickManager implements ITilePickManager {
     this.children.map((layer) => {
       layer.hooks.beforeSelect.call(pickedColors);
     });
+  }
+
+  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+    // @ts-ignore
+    const [r, g, b] = pickedColors;
+    layer.hooks.beforeSelect.call([r, g, b]);
   }
 }

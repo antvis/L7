@@ -137,6 +137,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
   // TODO: 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
+  // Tip: 用于标识矢量图层
+  public isVector: boolean = false;
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -398,7 +400,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
     // this.pickingPassRender = this.normalPassFactory('pixelPicking');
     // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
-
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,

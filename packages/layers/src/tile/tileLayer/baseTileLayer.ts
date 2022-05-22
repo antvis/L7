@@ -30,6 +30,10 @@ export default class BaseTileLayer implements ITileLayer {
   private mapService: IMapService;
   private layerService: ILayerService;
 
+  public get children() {
+    return this.tileLayerManager.children;
+  }
+
   constructor({
     parent,
     rendererService,
@@ -48,17 +52,21 @@ export default class BaseTileLayer implements ITileLayer {
       parent,
       rendererService,
       pickingService,
+      layerService,
     );
 
     this.initTileSetManager();
+    this.bindSubLayerEvent();
   }
 
   public render(isPicking = false) {
     this.tileLayerManager.render(isPicking);
   }
 
-  public clearPick() {
-    this.tileLayerManager.tilePickManager.beforeSelect([0, 0, 0]);
+  public clearPick(type: string) {
+    if (type === 'mousemove') {
+      this.tileLayerManager.tilePickManager.clearPick();
+    }
   }
 
   public renderPicker(target: IInteractionTarget) {
@@ -103,6 +111,47 @@ export default class BaseTileLayer implements ITileLayer {
       // 将事件抛出，图层上可以使用瓦片
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
+  }
+
+  private bindSubLayerEvent() {
+    /**
+      * layer.on('click', (ev) => {}); // 鼠标左键点击图层事件
+      * layer.on('mouseenter', (ev) => {}); // 鼠标进入图层要素
+      * layer.on('mousemove', (ev) => {}); // 鼠标在图层上移动时触发
+      * layer.on('mouseout', (ev) => {}); // 鼠标移出图层要素时触发
+      * layer.on('mouseup', (ev) => {}); // 鼠标在图层上单击抬起时触发
+      * layer.on('mousedown', (ev) => {}); // 鼠标在图层上单击按下时触发
+      * layer.on('contextmenu', (ev) => {}); // 图层要素点击右键菜单
+      * 
+      *  鼠标在图层外的事件
+      * layer.on('unclick', (ev) => {}); // 图层外点击
+      * layer.on('unmousemove', (ev) => {}); // 图层外移动
+      * layer.on('unmouseup', (ev) => {}); // 图层外鼠标抬起
+      * layer.on('unmousedown', (ev) => {}); // 图层外单击按下时触发
+      * layer.on('uncontextmenu', (ev) => {}); // 图层外点击右键
+      * layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
+     */
+    this.parent.on('subLayerClick', (e) => this.parent.emit('click', { ...e }));
+    this.parent.on('subLayerMouseMove', (e) =>
+      this.parent.emit('mousemove', { ...e }),
+    );
+    this.parent.on('subLayerUnMouseMove', (e) =>
+      this.parent.emit('unmousemove', { ...e }),
+    );
+    this.parent.on('subLayerMouseEnter', (e) =>
+      this.parent.emit('mouseenter', { ...e }),
+    );
+    this.parent.on('subLayerMouseOut', (e) =>
+      this.parent.emit('mouseout', { ...e }),
+    );
+    this.parent.on('subLayerMouseDown', (e) =>
+      this.parent.emit('mousedown', { ...e }),
+    );
+    this.parent.on('subLayerContextmenu', (e) =>
+      this.parent.emit('contextmenu', { ...e }),
+    );
+
+    // vector layer 不支持图层外事件
   }
 
   private initTileSetManager() {

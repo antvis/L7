@@ -81,4 +81,41 @@ export default class TileFactory implements ITileFactory {
     }
     return [];
   }
+
+  protected emitEvent(layers: ILayer[]) {
+    layers.map((layer) => {
+      layer.once('inited', () => {
+        layer.on('click', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerClick', e),
+        );
+        layer.on('mousemove', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e),
+        );
+        layer.on('unmousemove', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerUnMouseMove', e),
+        );
+        layer.on('mouseenter', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e),
+        );
+        layer.on('mouseout', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseOut', e),
+        );
+        layer.on('mousedown', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseDown', e),
+        );
+        layer.on('contextmenu', (e) =>
+          this.getFeatureAndEmitEvent(layer, 'subLayerContextmenu', e),
+        );
+      });
+    });
+  }
+
+  protected getFeatureAndEmitEvent(layer: ILayer, eventName: string, e: any) {
+    const featureId = e.featureId;
+    const features = layer
+      .getSource()
+      .data.dataArray.filter((feature) => feature._id === featureId);
+    e.feature = features;
+    this.parentLayer.emit(eventName, e);
+  }
 }
