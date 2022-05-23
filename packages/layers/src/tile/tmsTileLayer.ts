@@ -20,7 +20,7 @@ export class TMSTileLayer extends BaseTileLayer {
           );
           tile.layerIDList = layerIDList;
           this.tileLayerManager.addChilds(layers);
-          this.setPickState(layers)
+          this.setPickState(layers);
         } else {
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
           this.tileLayerManager.updateLayersConfig(
@@ -28,7 +28,7 @@ export class TMSTileLayer extends BaseTileLayer {
             'visible',
             tile.isVisible,
           );
-          this.setPickState(layers)
+          this.setPickState(layers);
         }
       });
 

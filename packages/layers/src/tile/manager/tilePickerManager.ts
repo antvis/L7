@@ -7,7 +7,8 @@ import {
   ITilePickManager,
 } from '@antv/l7-core';
 import { EventEmitter } from 'eventemitter3';
-export default class TilePickManager  extends EventEmitter implements ITilePickManager {
+export default class TilePickManager extends EventEmitter
+  implements ITilePickManager {
   public isLastPicked: boolean = false;
   private rendererService: IRendererService;
   private pickingService: IPickingService;
@@ -91,8 +92,8 @@ export default class TilePickManager  extends EventEmitter implements ITilePickM
           this.emit('pick', {
             type: target.type,
             pickedColors: this.pickingService.pickedColors,
-            layer
-          })
+            layer,
+          });
           this.pickingService.pickedTileLayers = [this.parent];
         }
 
@@ -102,7 +103,7 @@ export default class TilePickManager  extends EventEmitter implements ITilePickM
     if (!isPicked && this.isLastPicked && target.type !== 'click') {
       // 只有上一次有被高亮选中，本次未选中的时候才需要清除选中状态
       this.pickingService.pickedTileLayers = [];
-      this.emit('unpick', {})
+      this.emit('unpick', {});
       this.beforeHighlight([0, 0, 0]);
     }
     this.isLastPicked = isPicked;
@@ -111,26 +112,26 @@ export default class TilePickManager  extends EventEmitter implements ITilePickM
 
   public clearPick() {
     this.children
-    .filter(child => child.inited && child.isVisible())
-    .map((layer) => {
-      layer.hooks.beforeSelect.call([0, 0, 0]);
-    });
+      .filter((child) => child.inited && child.isVisible())
+      .map((layer) => {
+        layer.hooks.beforeSelect.call([0, 0, 0]);
+      });
     this.pickingService.pickedTileLayers = [];
   }
 
   public beforeHighlight(pickedColors: any) {
     this.children
-    .filter(child => child.inited && child.isVisible())
-    .map((layer) => {
-      layer.hooks.beforeHighlight.call(pickedColors);
-    });
+      .filter((child) => child.inited && child.isVisible())
+      .map((layer) => {
+        layer.hooks.beforeHighlight.call(pickedColors);
+      });
   }
 
   public beforeSelect(pickedColors: any) {
     this.children
-    .filter(child => child.inited && child.isVisible())
-    .map((layer) => {
-      layer.hooks.beforeSelect.call(pickedColors);
-    });
+      .filter((child) => child.inited && child.isVisible())
+      .map((layer) => {
+        layer.hooks.beforeSelect.call(pickedColors);
+      });
   }
 }

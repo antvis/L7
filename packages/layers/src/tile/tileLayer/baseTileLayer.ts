@@ -8,10 +8,13 @@ import {
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
-import { Tile, TilesetManager, decodePickingColor } from '@antv/l7-utils';
+import { decodePickingColor, Tile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/tileLayerManager';
 
 export default class BaseTileLayer implements ITileLayer {
+  public get children() {
+    return this.tileLayerManager.children;
+  }
   public type: string = 'baseTile';
   public layerName: string;
   public parent: ILayer;
@@ -34,12 +37,8 @@ export default class BaseTileLayer implements ITileLayer {
     active: any;
   } = {
     select: null,
-    active: null
-  }
-
-  public get children() {
-    return this.tileLayerManager.children;
-  }
+    active: null,
+  };
 
   constructor({
     parent,
@@ -101,9 +100,11 @@ export default class BaseTileLayer implements ITileLayer {
       .map((tile) => {
         const vectorTileLayer = tile.data.layers[this.layerName];
         const features = vectorTileLayer?.features;
-        if (!(Array.isArray(features) && features.length > 0)) return;
+        if (!(Array.isArray(features) && features.length > 0)) {
+          return;
+        }
 
-        if (tile.layerIDList.length === 0) {  
+        if (tile.layerIDList.length === 0) {
           const { layers, layerIDList } = this.tileLayerManager.createTile(
             tile,
           );
@@ -125,34 +126,54 @@ export default class BaseTileLayer implements ITileLayer {
     }
   }
 
-  private bindSubLayerPick() {
-    this.tileLayerManager.tilePickManager.on('pick', e => {
-       // @ts-ignore
-       const [r, g, b] = e.pickedColors;
+  protected setPickState(layers: ILayer[]) {
+    if (this.pickColors.select) {
+      const selectedId = decodePickingColor(this.pickColors.select);
+      layers.map((layer) => {
+        this.selectFeature(layer, this.pickColors.select);
+        layer.setCurrentSelectedId(selectedId);
+      });
+    }
 
-      if(e.type === 'click') {
+    if (this.pickColors.active) {
+      const selectedId = decodePickingColor(this.pickColors.active);
+      layers
+        .filter((layer) => layer.inited && layer.isVisible())
+        .map((layer) => {
+          layer.hooks.beforeHighlight.call(this.pickColors.active);
+          layer.setCurrentPickId(selectedId);
+        });
+    }
+  }
+
+  private bindSubLayerPick() {
+    this.tileLayerManager.tilePickManager.on('pick', (e) => {
+      // @ts-ignore
+      const [r, g, b] = e.pickedColors;
+
+      if (e.type === 'click') {
         const restLayers = this.children
-        .filter(child => child.inited && child.isVisible())
-        .filter((child) => child !== e.layer);
+          .filter((child) => child.inited && child.isVisible())
+          .filter((child) => child !== e.layer);
 
         this.setSelect(restLayers, [r, g, b]);
       } else {
         this.setHighlight([r, g, b]);
       }
-    })
+    });
 
     this.tileLayerManager.tilePickManager.on('unpick', () => {
       this.pickColors.active = null;
-    })
+    });
   }
 
   private setHighlight(pickedColors: any) {
     this.pickColors.active = pickedColors;
     this.children
-    .filter(child => child.inited && child.isVisible())
-    .map((child) => {
-      child.hooks.beforeHighlight.call(pickedColors);
-    });
+      .filter((child) => child.inited && child.isVisible())
+      .map((child) => {
+        child.hooks.beforeHighlight.call(pickedColors);
+      });
   }
 
   private setSelect(layers: ILayer[], pickedColors: any) {
@@ -174,8 +195,14 @@ export default class BaseTileLayer implements ITileLayer {
     // unselect normal layer
     const renderList = this.layerService.getRenderList();
     renderList
-      .filter((layer) => layer.inited && !layer.isVector && layer.isVisible() && layer.needPick('click'))
-      .filter(layer => layer.getCurrentSelectedId() !== null)
+      .filter(
+        (layer) =>
+          layer.inited &&
+          !layer.isVector &&
+          layer.isVisible() &&
+          layer.needPick('click'),
+      )
+      .filter((layer) => layer.getCurrentSelectedId() !== null)
       .map((layer) => {
         this.selectFeature(layer, new Uint8Array([0, 0, 0, 0]));
         layer.setCurrentSelectedId(null);
@@ -187,30 +214,6 @@ export default class BaseTileLayer implements ITileLayer {
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
   }
-
-  protected setPickState(layers: ILayer[]) {
-    
-    if(this.pickColors.select) {
-      const selectedId = decodePickingColor(this.pickColors.select);
-      layers.map(layer => {
-        this.selectFeature(layer, this.pickColors.select);
-        layer.setCurrentSelectedId(selectedId);
-      })
-      
-    }
-
-    if(this.pickColors.active) {
-      const selectedId = decodePickingColor(this.pickColors.active);
-      layers
-      .filter(layer => layer.inited && layer.isVisible())
-      .map((layer) => {
-        layer.hooks.beforeHighlight.call(this.pickColors.active);
-        layer.setCurrentPickId(selectedId);
-      });
-      
-    }
-  }
-
 
   private bindSubLayerEvent() {
     /**
