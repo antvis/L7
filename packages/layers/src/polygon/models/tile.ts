@@ -82,7 +82,7 @@ export default class FillModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // 
+    //
   }
 
   private getModelParams(): {
