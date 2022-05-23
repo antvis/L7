@@ -88,6 +88,8 @@ export default class RasterTile extends React.Component {
           },
         )
         .color('COLOR')
+        .size(1)
+        // .size('v', v => 5)
         // .color('#f00')
         // .color('v', v => '#ff0')
         // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
@@ -114,6 +116,11 @@ export default class RasterTile extends React.Component {
       // layer.on('uncontextmenu', e => console.log(e))
 
       this.scene.addLayer(layer);
+
+      setTimeout(() => {
+        layer.size(5);
+        this.scene.render();
+      }, 4000);
     });
   }
 

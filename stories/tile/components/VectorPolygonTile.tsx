@@ -114,6 +114,13 @@ export default class RasterTile extends React.Component {
       // layer.on('uncontextmenu', e => console.log(e))
 
       this.scene.addLayer(layer);
+
+      setTimeout(() => {
+        layer.style({
+          opacity: 0.3,
+        });
+        this.scene.render();
+      }, 3000);
     });
   }
 

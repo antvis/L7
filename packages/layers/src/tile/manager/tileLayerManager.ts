@@ -124,6 +124,10 @@ export class TileLayerManager implements ITileLayerManager {
       this.parent,
       'color',
     );
+    const sizeValue = this.tileConfigManager.getAttributeScale(
+      this.parent,
+      'size',
+    );
     const source = this.parent.getSource();
     const { layerName, coords, featureId } = source.data.tilesetOptions;
 
@@ -134,6 +138,7 @@ export class TileLayerManager implements ITileLayerManager {
       coords,
       featureId,
       color: colorValue,
+      size: sizeValue,
     };
   }
 
@@ -149,46 +154,38 @@ export class TileLayerManager implements ITileLayerManager {
       'color',
       this.parent.getAttribute('color')?.scale,
     );
+    this.tileConfigManager.setConfig(
+      'size',
+      this.parent.getAttribute('size')?.scale,
+    );
 
     this.tileConfigManager.on('updateConfig', (updateConfigs) => {
-      const layerConfig = this.parent.getLayerConfig() as IRasterTileLayerStyleOptions;
       updateConfigs.map((key: string) => {
-        if (key === 'color') {
-          this.updateColor();
-          return;
-        }
-        if (key === 'size') {
-          this.updateSize();
-          return;
-        }
-        // @ts-ignore
-        const config = layerConfig[key];
-        this.updateLayersConfig(this.children, key, config);
+        this.updateStyle(key);
         return '';
       });
     });
   }
 
-  private updateColor() {
-    const scaleValue = this.parent.getAttribute('color')?.scale;
-    if (!scaleValue) {
-      return;
+  private updateStyle(style: string) {
+    if (style === 'size' || style === 'color') {
+      const scaleValue = this.parent.getAttribute(style)?.scale;
+      if (!scaleValue) {
+        return;
+      }
+      this.initOptions[style] = scaleValue;
+      this.children.map((child) => {
+        this.tileFactory.setStyle(child, style, scaleValue);
+        return '';
+      });
+    } else {
+      const layerConfig = this.parent.getLayerConfig() as IRasterTileLayerStyleOptions;
+      // @ts-ignore
+      const config = layerConfig[style];
+      // @ts-ignore
+      this.initOptions[style] = config;
+      this.updateLayersConfig(this.children, style, config);
     }
-    this.children.map((child) => {
-      this.tileFactory.setColor(child, scaleValue);
-      return '';
-    });
-  }
-
-  private updateSize() {
-    const scaleValue = this.parent.getAttribute('size')?.scale;
-    if (!scaleValue) {
-      return;
-    }
-    this.children.map((child) => {
-      this.tileFactory.setSize(child, scaleValue);
-      return '';
-    });
   }
 
   private initTileFactory() {

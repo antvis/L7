@@ -128,6 +128,7 @@ export interface ISubLayerInitOptions {
   // style
   opacity: number;
   color: IScaleValue;
+  size?: IScaleValue;
   // layerName
   coords?: string;
   layerName: string;

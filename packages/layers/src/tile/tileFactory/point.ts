@@ -13,7 +13,7 @@ export default class VectorPolygonTile extends TileFactory {
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { zIndex, opacity, layerName, color, featureId } = initOptions;
+    const { zIndex, opacity, layerName, color, size, featureId } = initOptions;
     const vectorTileLayer = tile.data.layers[layerName];
     const features = vectorTileLayer?.features;
     if (!(Array.isArray(features) && features.length > 0)) {
@@ -44,7 +44,6 @@ export default class VectorPolygonTile extends TileFactory {
         },
       )
       .shape('circle')
-      .size(10)
       .select(true)
       .style({
         opacity,
@@ -53,6 +52,7 @@ export default class VectorPolygonTile extends TileFactory {
       });
 
     this.setColor(layer, color);
+    this.setSize(layer, size);
 
     registerLayers(this.parentLayer, [layer]);
 

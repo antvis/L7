@@ -97,8 +97,8 @@ export default class RasterTile extends React.Component {
         .style({
           // color: "#ff0"
           // opacity: 0.4,
-        });
-      // .active(true);
+        })
+        .active(true);
 
       this.scene.addLayer(layer);
     });

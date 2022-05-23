@@ -24,6 +24,7 @@ export interface ITileFactory {
   };
 
   updateStyle(styles: ITileStyles): string;
+  setStyle(layer: ILayer, type: 'color' | 'size', value: IScaleValue): void;
   setColor(layer: ILayer, scaleValue: IScaleValue): ILayer;
   setSize(layer: ILayer, scaleValue: IScaleValue): ILayer;
 }
@@ -61,6 +62,14 @@ export default class TileFactory implements ITileFactory {
     return '';
   }
 
+  public setStyle(layer: ILayer, type: 'color' | 'size', value: IScaleValue) {
+    if (type === 'color') {
+      this.setColor(layer, value);
+    } else if (type === 'size') {
+      this.setSize(layer, value);
+    }
+  }
+
   public setColor(layer: ILayer, colorValue: IScaleValue) {
     const parseValueList = this.parseScaleValue(colorValue);
     if (parseValueList.length === 2) {
@@ -73,21 +82,25 @@ export default class TileFactory implements ITileFactory {
     return layer;
   }
 
-  public setSize(layer: ILayer, colorValue: IScaleValue) {
-    const parseValueList = this.parseScaleValue(colorValue);
+  public setSize(layer: ILayer, sizeValue?: IScaleValue) {
+    if (!sizeValue) {
+      layer.size(2);
+      return layer;
+    }
+    const parseValueList = this.parseScaleValue(sizeValue);
     if (parseValueList.length === 2) {
       layer.size(parseValueList[0] as StyleAttrField, parseValueList[1]);
     } else if (parseValueList.length === 1) {
       layer.size(parseValueList[0] as StyleAttrField);
     } else {
-      layer.size(1);
+      layer.size(2);
     }
     return layer;
   }
 
   protected parseScaleValue(scaleValue: IScaleValue) {
     const { field, values, callback } = scaleValue;
-    if (field && values) {
+    if (field && values && Array.isArray(values)) {
       return [field, values];
     } else if (field && callback) {
       return [field, callback];
@@ -131,7 +144,6 @@ export default class TileFactory implements ITileFactory {
         layer.on('unclick', (e) =>
           this.handleOutsideEvent('click', 'subLayerUnClick', layer, e),
         );
-        // layer.on('unmousemove', (e) => this.handleOutsideEvent('mousemove', 'subLayerUnMouseMove', layer, e))
         layer.on('unmouseup', (e) =>
           this.handleOutsideEvent('mouseup', 'subLayerUnMouseUp', layer, e),
         );

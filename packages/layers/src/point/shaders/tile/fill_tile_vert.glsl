@@ -152,7 +152,7 @@ void main() {
 
 if(u_coord > 0.0) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raiseHeight, 1.0);
+    gl_Position = u_Mvp * vec4(project_pos.xy + offset, 0.0, 1.0);
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
   }
