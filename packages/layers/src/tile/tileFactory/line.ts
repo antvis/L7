@@ -30,6 +30,7 @@ export default class VectorPolygonTile extends TileFactory {
       mask: true,
       layerType: 'LineLayer',
     });
+    this.emitEvent([layer]);
     layer.type = 'LineLayer';
     layer
       .source(
@@ -46,6 +47,7 @@ export default class VectorPolygonTile extends TileFactory {
       )
       .shape('tileLine')
       .size(2)
+      .select(true)
       .style({
         opacity,
         tileOrigin: l7TileOrigin,

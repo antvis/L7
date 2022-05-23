@@ -54,15 +54,15 @@ export default class RasterTile extends React.Component {
         )
         .shape('circle')
         .color('#ff0')
-        .active(true)
-        // .select(true)
+        // .active(true)
+        .select(true)
         .size(10);
 
       this.scene.addLayer(point);
 
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
-      const layer = new PolygonLayer();
+      const layer = new LineLayer();
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
@@ -95,8 +95,8 @@ export default class RasterTile extends React.Component {
           // color: "#ff0"
           // opacity: 0.4,
         })
-        // .select(true);
-        .active(true)
+        .select(true);
+      // .active(true)
 
       // layer.on('click', e => { console.log(e) })
       // layer.on('mousemove', e => console.log(e))

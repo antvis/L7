@@ -28,6 +28,7 @@ export default class VectorPolygonTile extends TileFactory {
       zIndex,
       layerType: 'PointLayer',
     });
+    this.emitEvent([layer]);
     layer.type = 'PointLayer';
     layer
       .source(
@@ -44,6 +45,7 @@ export default class VectorPolygonTile extends TileFactory {
       )
       .shape('circle')
       .size(10)
+      .select(true)
       .style({
         opacity,
         tileOrigin: l7TileOrigin,

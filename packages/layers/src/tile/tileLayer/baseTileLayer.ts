@@ -8,7 +8,7 @@ import {
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile, TilesetManager, decodePickingColor } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/tileLayerManager';
 
 export default class BaseTileLayer implements ITileLayer {
@@ -29,6 +29,13 @@ export default class BaseTileLayer implements ITileLayer {
   private timer: any;
   private mapService: IMapService;
   private layerService: ILayerService;
+  private pickColors: {
+    select: any;
+    active: any;
+  } = {
+    select: null,
+    active: null
+  }
 
   public get children() {
     return this.tileLayerManager.children;
@@ -57,10 +64,11 @@ export default class BaseTileLayer implements ITileLayer {
 
     this.initTileSetManager();
     this.bindSubLayerEvent();
+    this.bindSubLayerPick();
   }
 
-  public render(isPicking = false) {
-    this.tileLayerManager.render(isPicking);
+  public render() {
+    this.tileLayerManager.render();
   }
 
   public clearPick(type: string) {
@@ -91,7 +99,11 @@ export default class BaseTileLayer implements ITileLayer {
     this.tilesetManager.tiles
       .filter((tile) => tile.isLoaded)
       .map((tile) => {
-        if (tile.layerIDList.length === 0) {
+        const vectorTileLayer = tile.data.layers[this.layerName];
+        const features = vectorTileLayer?.features;
+        if (!(Array.isArray(features) && features.length > 0)) return;
+
+        if (tile.layerIDList.length === 0) {  
           const { layers, layerIDList } = this.tileLayerManager.createTile(
             tile,
           );
@@ -112,6 +124,93 @@ export default class BaseTileLayer implements ITileLayer {
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
   }
+
+  private bindSubLayerPick() {
+    this.tileLayerManager.tilePickManager.on('pick', e => {
+       // @ts-ignore
+       const [r, g, b] = e.pickedColors;
+
+      if(e.type === 'click') {
+        const restLayers = this.children
+        .filter(child => child.inited && child.isVisible())
+        .filter((child) => child !== e.layer);
+
+        this.setSelect(restLayers, [r, g, b]);
+      } else {
+        this.setHighlight([r, g, b]);
+      }
+    })
+
+    this.tileLayerManager.tilePickManager.on('unpick', () => {
+      this.pickColors.active = null;
+    })
+  }
+
+  private setHighlight(pickedColors: any) {
+    this.pickColors.active = pickedColors;
+    this.children
+    .filter(child => child.inited && child.isVisible())
+    .map((child) => {
+      child.hooks.beforeHighlight.call(pickedColors);
+    });
+  }
+
+  private setSelect(layers: ILayer[], pickedColors: any) {
+    const selectedId = decodePickingColor(pickedColors);
+    layers.map((layer) => {
+      if (
+        layer.getCurrentSelectedId() === null ||
+        selectedId !== layer.getCurrentSelectedId()
+      ) {
+        this.selectFeature(layer, pickedColors);
+        layer.setCurrentSelectedId(selectedId);
+        this.pickColors.select = pickedColors;
+      } else {
+        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.setCurrentSelectedId(null);
+        this.pickColors.select = null;
+      }
+    });
+    // unselect normal layer
+    const renderList = this.layerService.getRenderList();
+    renderList
+      .filter((layer) => layer.inited && !layer.isVector && layer.isVisible() && layer.needPick('click'))
+      .filter(layer => layer.getCurrentSelectedId() !== null)
+      .map((layer) => {
+        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0]));
+        layer.setCurrentSelectedId(null);
+      });
+  }
+
+  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+    // @ts-ignore
+    const [r, g, b] = pickedColors;
+    layer.hooks.beforeSelect.call([r, g, b]);
+  }
+
+  protected setPickState(layers: ILayer[]) {
+    
+    if(this.pickColors.select) {
+      const selectedId = decodePickingColor(this.pickColors.select);
+      layers.map(layer => {
+        this.selectFeature(layer, this.pickColors.select);
+        layer.setCurrentSelectedId(selectedId);
+      })
+      
+    }
+
+    if(this.pickColors.active) {
+      const selectedId = decodePickingColor(this.pickColors.active);
+      layers
+      .filter(layer => layer.inited && layer.isVisible())
+      .map((layer) => {
+        layer.hooks.beforeHighlight.call(this.pickColors.active);
+        layer.setCurrentPickId(selectedId);
+      });
+      
+    }
+  }
+
 
   private bindSubLayerEvent() {
     /**

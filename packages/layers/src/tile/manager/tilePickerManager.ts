@@ -6,9 +6,8 @@ import {
   IRendererService,
   ITilePickManager,
 } from '@antv/l7-core';
-import { decodePickingColor } from '@antv/l7-utils';
-
-export default class TilePickManager implements ITilePickManager {
+import { EventEmitter } from 'eventemitter3';
+export default class TilePickManager  extends EventEmitter implements ITilePickManager {
   public isLastPicked: boolean = false;
   private rendererService: IRendererService;
   private pickingService: IPickingService;
@@ -23,6 +22,7 @@ export default class TilePickManager implements ITilePickManager {
     children: ILayer[],
     layerService: ILayerService,
   ) {
+    super();
     this.parent = parent;
     this.rendererService = rendererService;
     this.pickingService = pickingService;
@@ -32,7 +32,7 @@ export default class TilePickManager implements ITilePickManager {
 
   public normalRenderLayer(layers: ILayer[]) {
     layers
-      .filter((layer) => layer.inited)
+      .filter((layer) => layer.inited && layer.isVector)
       .filter((layer) => layer.isVisible())
       .map((layer) => {
         layer.hooks.beforeRenderData.call();
@@ -45,7 +45,6 @@ export default class TilePickManager implements ITilePickManager {
             framebuffer: null,
           });
           layer.masks.map((m: ILayer) => {
-            m.hooks.beforeRenderData.call();
             m.hooks.beforeRender.call();
             m.render();
             m.hooks.afterRender.call();
@@ -62,6 +61,7 @@ export default class TilePickManager implements ITilePickManager {
         (layer) =>
           this.parent.needPick(target.type) &&
           layer.inited &&
+          layer.isVector &&
           layer.isVisible(),
       )
       .some((layer) => {
@@ -75,7 +75,6 @@ export default class TilePickManager implements ITilePickManager {
           });
 
           layer.masks.map((m: ILayer) => {
-            m.hooks.beforeRenderData.call();
             m.hooks.beforeRender.call();
             m.render();
             m.hooks.afterRender.call();
@@ -89,15 +88,12 @@ export default class TilePickManager implements ITilePickManager {
           target,
         );
         if (layerPicked) {
-          const restLayers = this.children.filter((child) => child !== layer);
-          // @ts-ignore
-          const [r, g, b] = this.pickingService.pickedColors;
+          this.emit('pick', {
+            type: target.type,
+            pickedColors: this.pickingService.pickedColors,
+            layer
+          })
           this.pickingService.pickedTileLayers = [this.parent];
-          if (target.type === 'click') {
-            this.handleSelect(restLayers, [r, g, b]);
-          } else {
-            this.beforeHighlight([r, g, b]);
-          }
         }
 
         return layerPicked;
@@ -106,72 +102,35 @@ export default class TilePickManager implements ITilePickManager {
     if (!isPicked && this.isLastPicked && target.type !== 'click') {
       // 只有上一次有被高亮选中，本次未选中的时候才需要清除选中状态
       this.pickingService.pickedTileLayers = [];
+      this.emit('unpick', {})
       this.beforeHighlight([0, 0, 0]);
     }
     this.isLastPicked = isPicked;
     return isPicked;
   }
 
-  public handleSelect(layers: ILayer[], pickedColors: any) {
-    layers.map((child) => {
-      const { enableSelect } = child.getLayerConfig();
-      if (
-        enableSelect &&
-        pickedColors?.toString() !== [0, 0, 0, 0].toString()
-      ) {
-        const selectedId = decodePickingColor(pickedColors);
-
-        if (
-          child.getCurrentSelectedId() === null ||
-          selectedId !== child.getCurrentSelectedId()
-        ) {
-          this.selectFeature(child, pickedColors);
-          child.setCurrentSelectedId(selectedId);
-        } else {
-          this.selectFeature(child, new Uint8Array([0, 0, 0, 0])); // toggle select
-          child.setCurrentSelectedId(null);
-        }
-      }
-    });
-    // unselect normal layer
-    const renderList = this.layerService.getRenderList();
-    renderList
-      .filter((layer) => layer.needPick('click'))
-      .map((layer) => {
-        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0]));
-        layer.setCurrentSelectedId(null);
-      });
-  }
-
-  public highLightLayers(layers: ILayer[]) {
-    // @ts-ignore
-    const [r, g, b] = this.pickingService.pickedColors;
-    layers.map((layer) => {
-      layer.hooks.beforeHighlight.call([r, g, b]);
-    });
-  }
-
   public clearPick() {
-    this.children.map((layer) => {
+    this.children
+    .filter(child => child.inited && child.isVisible())
+    .map((layer) => {
       layer.hooks.beforeSelect.call([0, 0, 0]);
     });
+    this.pickingService.pickedTileLayers = [];
   }
 
   public beforeHighlight(pickedColors: any) {
-    this.children.map((layer) => {
+    this.children
+    .filter(child => child.inited && child.isVisible())
+    .map((layer) => {
       layer.hooks.beforeHighlight.call(pickedColors);
     });
   }
 
   public beforeSelect(pickedColors: any) {
-    this.children.map((layer) => {
+    this.children
+    .filter(child => child.inited && child.isVisible())
+    .map((layer) => {
       layer.hooks.beforeSelect.call(pickedColors);
     });
-  }
-
-  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
   }
 }

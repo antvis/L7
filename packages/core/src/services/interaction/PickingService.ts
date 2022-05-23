@@ -311,7 +311,9 @@ export default class PickingService implements IPickingService {
           .getLayers()
           .filter((l) => l.tileLayer)
           .map((l) => {
-            l.tileLayer.children.map((child) => {
+            l.tileLayer.children
+            .filter(child => child.inited && child.isVisible())
+            .map((child) => {
               this.selectFeature(child, new Uint8Array([0, 0, 0, 0]));
               child.setCurrentSelectedId(null);
             });

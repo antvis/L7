@@ -8,6 +8,7 @@ import VectorOffsetLineTile from './components/VectorOffsetLineTile';
 import VectorOffssetPointTile from './components/VectorOffssetPointTile';
 import VectorPointTile from './components/VectorPointTile';
 import VectorPolygonTile from './components/VectorPolygonTile';
+import VectorLineTile from './components/VectorLineTile';
 
 
 storiesOf('瓦片', module)
@@ -18,3 +19,4 @@ storiesOf('瓦片', module)
   .add('VectorOffssetPointTile', () => <VectorOffssetPointTile />)
   .add('VectorPointTile', () => <VectorPointTile />)
   .add('VectorPolygonTile', () => <VectorPolygonTile />)
+  .add('VectorLineTile', () => <VectorLineTile />)

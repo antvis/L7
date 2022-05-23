@@ -13,7 +13,7 @@ import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
-export class TileLayerManager implements ITileLayerManager {
+export class TileLayerManager implements ITileLayerManager{
   public layerName: string;
   public parent: ILayer;
   public children: ILayer[];
