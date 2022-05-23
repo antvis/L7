@@ -1,11 +1,11 @@
-import { Bounds, UpdateTileStrategy } from './types';
+import { TileBounds, UpdateTileStrategy } from './types';
 import {
   updateTileStateOverlap,
   updateTileStateReplace,
 } from './utils/strategies';
 
 export const TILE_SIZE = 256;
-export const DEFAULT_EXTENT: Bounds = [
+export const DEFAULT_EXTENT: TileBounds = [
   -Infinity,
   -Infinity,
   Infinity,

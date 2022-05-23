@@ -1,5 +1,5 @@
 import { DEFAULT_EXTENT } from '../const';
-import { Bounds } from '../types';
+import { TileBounds } from '../types';
 
 // // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#ECMAScript_.28JavaScript.2FActionScript.2C_etc..29
 export function osmLonLat2TileXY(lon: number, lat: number, zoom: number) {
@@ -30,7 +30,7 @@ export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
 export const tileToBounds = (x: number, y: number, z: number) => {
   const [minLng, maxLat] = osmTileXY2LonLat(x, y, z);
   const [maxLng, minLat] = osmTileXY2LonLat(x + 1, y + 1, z);
-  return [minLng, minLat, maxLng, maxLat] as Bounds;
+  return [minLng, minLat, maxLng, maxLat] as TileBounds;
 };
 
 /**
@@ -49,11 +49,11 @@ export function getTileIndices({
   extent = DEFAULT_EXTENT,
 }: {
   zoom: number;
-  latLonBounds: Bounds;
+  latLonBounds: TileBounds;
   maxZoom: number;
   minZoom: number;
   zoomOffset: number;
-  extent: Bounds;
+  extent: TileBounds;
   tileSize: number;
 }) {
   let z = Math.ceil(zoom) + zoomOffset;
