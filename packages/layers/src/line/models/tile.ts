@@ -16,26 +16,17 @@ import { LineTriangulation } from '../../core/triangulation';
 import line_tile_frag from '../shaders/tile/line_tile_frag.glsl';
 import line_tile_vert from '../shaders/tile/line_tile_vert.glsl';
 
-const lineStyleObj: { [key: string]: number } = {
-  solid: 0.0,
-  dash: 1.0,
-};
 export default class LineModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      sourceColor,
-      targetColor,
       textureBlend = 'normal',
-      lineType = 'solid',
-      dashArray = [10, 5, 0, 0],
       lineTexture = false,
       iconStep = 100,
       vertexHeightScale = 20.0,
       borderWidth = 0.0,
       borderColor = '#ccc',
-      raisingHeight = 0,
       heightfixed = false,
       arrow = {
         enable: false,
@@ -49,16 +40,6 @@ export default class LineModel extends BaseModel {
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
-    }
-
-    // 转化渐变色
-    let useLinearColor = 0; // 默认不生效
-    let sourceColorArr = [0, 0, 0, 0];
-    let targetColorArr = [0, 0, 0, 0];
-    if (sourceColor && targetColor) {
-      sourceColorArr = rgb2arr(sourceColor);
-      targetColorArr = rgb2arr(targetColor);
-      useLinearColor = 1;
     }
 
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
@@ -97,8 +78,6 @@ export default class LineModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_opacity: Number(opacity),
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-      u_line_type: lineStyleObj[lineType],
-      u_dash_array: dashArray,
 
       // 纹理支持参数
       u_texture: this.texture, // 贴图
@@ -110,17 +89,11 @@ export default class LineModel extends BaseModel {
       u_borderWidth: borderWidth,
       u_borderColor: rgb2arr(borderColor),
 
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-
       // 是否固定高度
       u_heightfixed: Number(heightfixed),
 
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
-      u_raisingHeight: Number(raisingHeight),
 
       // arrow
       u_arrow: Number(arrow.enable),

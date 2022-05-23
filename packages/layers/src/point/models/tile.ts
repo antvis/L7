@@ -1,7 +1,6 @@
 import {
   AttributeType,
   gl,
-  IAnimateOption,
   IAttribute,
   IElements,
   IEncodeFeature,
@@ -18,7 +17,6 @@ import point_tile_frag from '../shaders/tile/fill_tile_frag.glsl';
 import point_tile_vert from '../shaders/tile/fill_tile_vert.glsl';
 
 import { Version } from '@antv/l7-maps';
-import { mat4, vec3 } from 'gl-matrix';
 export default class FillModel extends BaseModel {
   public meter2coord: number = 1;
   private isMeter: boolean = false;
@@ -31,7 +29,6 @@ export default class FillModel extends BaseModel {
       offsets = [0, 0],
       blend,
       blur = 0,
-      raisingHeight = 0,
       coord = 'lnglat',
       tileOrigin,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -85,7 +82,6 @@ export default class FillModel extends BaseModel {
     return {
       u_tileOrigin: tileOrigin || [0, 0],
       u_coord: coord === 'lnglat' ? 1.0 : 0.0,
-      u_raisingHeight: Number(raisingHeight),
 
       u_isMeter: Number(this.isMeter),
       u_blur: blur,
@@ -221,9 +217,6 @@ export default class FillModel extends BaseModel {
 
   // overwrite baseModel func
   protected registerBuiltinAttributes() {
-    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
-    const isGlobel = this.mapService.version === 'GLOBEL';
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
@@ -242,43 +235,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          let extrude;
-          // 地球模式
-          if (isGlobel) {
-            const [x, y, z] = vertex;
-            const n1 = vec3.fromValues(0, 0, 1);
-            const n2 = vec3.fromValues(x, 0, z);
-
-            const xzReg =
-              x >= 0 ? vec3.angle(n1, n2) : Math.PI * 2 - vec3.angle(n1, n2);
-
-            const yReg = Math.PI * 2 - Math.asin(y / 100);
-
-            const m = mat4.create();
-            mat4.rotateY(m, m, xzReg);
-            mat4.rotateX(m, m, yReg);
-
-            const v1 = vec3.fromValues(1, 1, 0);
-            vec3.transformMat4(v1, v1, m);
-            vec3.normalize(v1, v1);
-
-            const v2 = vec3.fromValues(-1, 1, 0);
-            vec3.transformMat4(v2, v2, m);
-            vec3.normalize(v2, v2);
-
-            const v3 = vec3.fromValues(-1, -1, 0);
-            vec3.transformMat4(v3, v3, m);
-            vec3.normalize(v3, v3);
-
-            const v4 = vec3.fromValues(1, -1, 0);
-            vec3.transformMat4(v4, v4, m);
-            vec3.normalize(v4, v4);
-
-            extrude = [...v1, ...v2, ...v3, ...v4];
-          } else {
-            // 平面模式
-            extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
-          }
+          const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
 
           const extrudeIndex = (attributeIdx % 4) * 3;
           return [

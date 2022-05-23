@@ -24,7 +24,6 @@ uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 uniform vec2 u_offsets;
 
 uniform float u_blur : 0.0;
-uniform float u_raisingHeight: 0.0;
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -147,17 +146,15 @@ void main() {
 
   vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
 
-  float raiseHeight = u_raisingHeight;
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
     float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
-    raiseHeight = u_raisingHeight * mapboxZoomScale;
   }
 
 if(u_coord > 0.0) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * vec4(project_pos.xy + offset, raiseHeight, 1.0);
   } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, u_raisingHeight, 1.0));
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
   }
 } else {
   gl_PointSize = 24.0;

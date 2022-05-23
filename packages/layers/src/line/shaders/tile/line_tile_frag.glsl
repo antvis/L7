@@ -16,7 +16,6 @@ varying vec2 v_iconMapUV;
 
 #pragma include "picking"
 
-
 varying mat4 styleMappingMat;
 
 void main() {

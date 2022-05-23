@@ -20,7 +20,6 @@ uniform float u_icon_step: 100;
 
 uniform float u_heightfixed: 0.0;
 uniform float u_vertexScale: 1.0;
-uniform float u_raisingHeight: 0.0;
 
 #pragma include "projection"
 #pragma include "picking"
@@ -162,7 +161,7 @@ if(u_coord > 0.0) {
     if(u_heightfixed < 1.0) {
       lineHeight = project_pixel(a_Size.y);
     }
-    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, lineHeight + h + u_raisingHeight, 1.0));
+    gl_Position = u_Mvp * (vec4(project_pos.xy + offset, lineHeight + h, 1.0));
   } else {
     // mapbox -  amap
     
@@ -172,14 +171,12 @@ if(u_coord > 0.0) {
       // 保持高度相对不变
       float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
       h *= mapboxZoomScale;
-      h += u_raisingHeight * mapboxZoomScale;
       if(u_heightfixed > 0.0) {
         lineHeight *= mapboxZoomScale;
       }
       
     } else {
       // amap
-      h += u_raisingHeight;
       // lineHeight 顶点偏移高度
       if(u_heightfixed < 1.0) {
         lineHeight *= pow(2.0, 20.0 - u_Zoom);

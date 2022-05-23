@@ -5,7 +5,6 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
 uniform float u_opacity: 1.0;
-uniform float u_raisingHeight: 0.0;
 
 uniform vec2 u_tileOrigin;
 uniform float u_coord;
@@ -49,12 +48,10 @@ styleMappingMat = mat4(
   v_Color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
 
-  project_pos.z += u_raisingHeight;
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
     float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
     project_pos.z *= mapboxZoomScale;
-    project_pos.z += u_raisingHeight * mapboxZoomScale;
   }
 
 if(u_coord > 0.0) {
