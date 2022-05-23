@@ -61,12 +61,14 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   data: IParserData;
+  parser: IParserCfg;
+  transforms: ITransform[];
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   parser: IParserCfg;
   tileset: TilesetManager | undefined;
-  setData(data: any): void;
+  setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
   getFeatureId(field: string, value: any): number | undefined;
@@ -76,6 +78,7 @@ export interface ISource {
     id: number,
     properties: Record<string, any>,
   ): void;
+  destroy(): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

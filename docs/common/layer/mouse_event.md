@@ -20,6 +20,13 @@ layer.on(eventName, (target) => console.log(target));
 ```javascript
 layer.on('click', (e) => console.log(e));
 ```
+### dblclick
+
+双击
+
+```javascript
+layer.on('dblclick', (e) => console.log(e));
+```
 
 ### mousemove
 
@@ -59,6 +66,14 @@ layer.on('mousedown', (e) => console.log(e));
 
 ```javascript
 layer.on('contextmenu', (e) => console.log(e));
+```
+
+### dblclick
+
+双击未拾取到元素
+
+```javascript
+layer.on('dblclick', (e) => console.log(e));
 ```
 
 ### unclick

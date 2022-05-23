@@ -38,6 +38,7 @@ import {
   IStyleAttributeInitializationOptions,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  LayerEventType,
   lazyInject,
   LegendItems,
   ScaleAttributeType,
@@ -52,7 +53,7 @@ import Source from '@antv/l7-source';
 import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
+import { isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { handleStyleDataMapping } from '../utils/dataMappingStyle';
 import { calculateData } from '../utils/layerData';
@@ -66,7 +67,8 @@ import { updateShape } from '../utils/updateShape';
  */
 let layerIdCounter = 0;
 
-export default class BaseLayer<ChildLayerStyleOptions = {}> extends EventEmitter
+export default class BaseLayer<ChildLayerStyleOptions = {}>
+  extends EventEmitter<LayerEventType>
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string = `${layerIdCounter}`;

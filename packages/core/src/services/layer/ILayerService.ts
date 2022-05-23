@@ -120,7 +120,6 @@ export interface IAttrubuteAndElements {
   attributes: any;
   elements: any;
 }
-
 export interface ISubLayerInitOptions {
   // options
   zIndex: number;
@@ -186,6 +185,28 @@ export interface ITileLayerOPtions {
   layerService: ILayerService;
   pickingService: IPickingService;
 }
+
+export type LayerEventType =
+  | 'inited'
+  | 'add'
+  | 'remove'
+  | 'destroy'
+  | 'contextmenu'
+  | 'uncontextmenu'
+  | 'unpick'
+  | 'mousedown'
+  | 'unmousedown'
+  | 'unclick'
+  | 'undblclick'
+  | 'unmouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | 'click'
+  | 'dblclick'
+  | 'mouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | any;
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -342,10 +363,10 @@ export interface ILayer {
   /**
    * 事件
    */
-  on(type: string, handler: (...args: any[]) => void): void;
-  off(type: string, handler: (...args: any[]) => void): void;
-  emit(type: string, handler: unknown): void;
-  once(type: string, handler: (...args: any[]) => void): void;
+  on(type: LayerEventType, handler: (...args: any[]) => void): void;
+  off(type: LayerEventType, handler: (...args: any[]) => void): void;
+  emit(type: LayerEventType, handler: unknown): void;
+  once(type: LayerEventType, handler: (...args: any[]) => void): void;
 
   isDirty(): boolean;
   /**

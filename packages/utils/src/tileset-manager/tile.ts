@@ -1,27 +1,11 @@
-import { bboxPolygon } from '@turf/turf';
-import { Bounds } from './types';
+import bboxPolygon from '@turf/bbox-polygon';
+import {
+  LoadTileDataStatus,
+  TileBounds,
+  TileLoadDataOptions,
+  TileOptions,
+} from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
-
-type TileOptions = { x: number; y: number; z: number; tileSize: number };
-
-export type TileLoadParams = TileOptions & {
-  bounds: Bounds;
-  // fetch signal
-  signal: AbortSignal;
-};
-
-type TileLoadDataOptions = {
-  getData: (params: TileLoadParams, tile: Tile) => Promise<any>;
-  onLoad: (tile: Tile) => void;
-  onError: (error: Error, tile: Tile) => void;
-};
-
-enum LoadTileDataStatus {
-  Loading = 'Loading',
-  Loaded = 'Loaded',
-  Failure = 'Failure',
-  Cancelled = 'Cancelled',
-}
 
 /**
  * 单个瓦片
@@ -98,7 +82,7 @@ export class Tile {
     const [minLng, minLat, maxLng, maxLat] = this.bounds;
     const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
 
-    const polygon = bboxPolygon(this.bounds as Bounds, {
+    const polygon = bboxPolygon(this.bounds as TileBounds, {
       properties: {
         key: this.key,
         bbox: this.bounds,
