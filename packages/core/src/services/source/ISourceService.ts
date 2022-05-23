@@ -62,6 +62,7 @@ export type IJsonData = IJsonItem[];
 export interface ISource {
   data: IParserData;
   parser: IParserCfg;
+  transforms: ITransform[];
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
@@ -76,6 +77,7 @@ export interface ISource {
     id: number,
     properties: Record<string, any>,
   ): void;
+  destroy(): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

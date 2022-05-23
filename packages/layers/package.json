@@ -23,7 +23,6 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/geo-coord": "^1.0.8",
     "@antv/l7-core": "^2.8.35",
     "@antv/l7-source": "^2.8.35",
     "@antv/l7-utils": "^2.8.35",
