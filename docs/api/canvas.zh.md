@@ -3,7 +3,7 @@ title: 自定义图层
 order: 7
 ---
 
-L7 的自定义图层允许用户通过 canvas 绘制的方法自定义图层的内容和样式。相比于 Marker 通过创建实际 DOM 的方式，CanvasLayer 无疑有更加的性能。
+L7 的自定义图层允许用户通过 canvas 绘制的方法自定义图层的内容和样式。相比于 Marker 通过创建实际 DOM 的方式，CanvasLayer 无疑有更佳的性能。
 
 ## 使用
 
