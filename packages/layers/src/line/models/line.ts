@@ -50,7 +50,6 @@ export default class LineModel extends BaseModel {
         arrowHeight: 3,
         tailWidth: 1,
       },
-      tileOrigin,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -100,7 +99,6 @@ export default class LineModel extends BaseModel {
             });
     }
     return {
-      u_tileOrigin: tileOrigin || [0, 0],
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_opacity: Number(opacity),
