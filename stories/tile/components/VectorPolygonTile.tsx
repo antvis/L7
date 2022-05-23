@@ -100,11 +100,18 @@ export default class RasterTile extends React.Component {
 
       // layer.on('click', e => { console.log(e) })
       // layer.on('mousemove', e => console.log(e))
+      // layer.on('mouseup', e => console.log(e))
       // layer.on('unmousemove', e => console.log(e))
       // layer.on('mouseenter', e => console.log(e))
       // layer.on('mouseout', e => console.log(e))
       // layer.on('mousedown', e => console.log(e))
       // layer.on('contextmenu', e => console.log(e))
+
+      // layer.on('unclick', e => { console.log(e) })
+      // layer.on('unmousemove', e => { console.log(e) })
+      // layer.on('unmouseup', e => { console.log(e) })
+      // layer.on('unmousedown', e => { console.log(e) })
+      // layer.on('uncontextmenu', e => console.log(e))
 
       this.scene.addLayer(layer);
     });
