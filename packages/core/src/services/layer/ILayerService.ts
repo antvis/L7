@@ -1,8 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
-import { EventEmitterStatic } from 'eventemitter3';
 import { Container } from 'inversify';
-import { type } from 'os';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
