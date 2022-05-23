@@ -33,7 +33,7 @@ export default class TilePickManager extends EventEmitter
 
   public normalRenderLayer(layers: ILayer[]) {
     layers
-      .filter((layer) => layer.inited && layer.isVector)
+      .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .map((layer) => {
         layer.hooks.beforeRenderData.call();

@@ -10,10 +10,18 @@ export class TMSTileLayer extends BaseTileLayer {
     if (!this.tilesetManager) {
       return;
     }
-
     this.tilesetManager.tiles
       .filter((tile) => tile.isLoaded)
       .map((tile) => {
+        if(tile.data?.layers && this.layerName) {
+          // vector
+          const vectorTileLayer = tile.data.layers[this.layerName];
+          const features = vectorTileLayer?.features;
+          if (!(Array.isArray(features) && features.length > 0)) {
+            return;
+          }
+        }
+
         if (tile.layerIDList.length === 0) {
           const { layers, layerIDList } = this.tileLayerManager.createTile(
             tile,
