@@ -98,7 +98,6 @@ export default class BaseTileLayer implements ITileLayer {
     this.tilesetManager.tiles
       .filter((tile) => tile.isLoaded)
       .map((tile) => {
-
         if (tile.layerIDList.length === 0) {
           const { layers, layerIDList } = this.tileLayerManager.createTile(
             tile,

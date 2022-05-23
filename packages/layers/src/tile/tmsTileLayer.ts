@@ -13,7 +13,7 @@ export class TMSTileLayer extends BaseTileLayer {
     this.tilesetManager.tiles
       .filter((tile) => tile.isLoaded)
       .map((tile) => {
-        if(tile.data?.layers && this.layerName) {
+        if (tile.data?.layers && this.layerName) {
           // vector
           const vectorTileLayer = tile.data.layers[this.layerName];
           const features = vectorTileLayer?.features;
