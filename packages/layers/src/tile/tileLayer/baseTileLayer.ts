@@ -132,7 +132,7 @@ export default class BaseTileLayer implements ITileLayer {
      * layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
      */
     this.parent.on('subLayerClick', (e) => {
-      this.parent.emit('click', { ...e })
+      this.parent.emit('click', { ...e });
     });
     this.parent.on('subLayerMouseMove', (e) =>
       this.parent.emit('mousemove', { ...e }),
@@ -154,11 +154,21 @@ export default class BaseTileLayer implements ITileLayer {
     );
 
     // vector layer 图层外事件
-    this.parent.on('subLayerUnClick', e => this.parent.emit('unclick', { ...e }))
-    this.parent.on('subLayerUnMouseMove', e => this.parent.emit('unmousemove', { ...e }))
-    this.parent.on('subLayerUnMouseUp', e => this.parent.emit('unmouseup', { ...e }))
-    this.parent.on('subLayerUnMouseDown', e => this.parent.emit('unmousedown', { ...e }))
-    this.parent.on('subLayerUnContextmenu', e => this.parent.emit('uncontextmenu', { ...e }))
+    this.parent.on('subLayerUnClick', (e) =>
+      this.parent.emit('unclick', { ...e }),
+    );
+    this.parent.on('subLayerUnMouseMove', (e) =>
+      this.parent.emit('unmousemove', { ...e }),
+    );
+    this.parent.on('subLayerUnMouseUp', (e) =>
+      this.parent.emit('unmouseup', { ...e }),
+    );
+    this.parent.on('subLayerUnMouseDown', (e) =>
+      this.parent.emit('unmousedown', { ...e }),
+    );
+    this.parent.on('subLayerUnContextmenu', (e) =>
+      this.parent.emit('uncontextmenu', { ...e }),
+    );
   }
 
   private initTileSetManager() {

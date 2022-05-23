@@ -28,11 +28,16 @@ export interface ITileFactory {
   setSize(layer: ILayer, scaleValue: IScaleValue): ILayer;
 }
 type Timeout = any;
-type CacheEvent = 'click'|'mousemove'|'mouseup'|'mousedown'|'contextmenu'
+type CacheEvent =
+  | 'click'
+  | 'mousemove'
+  | 'mouseup'
+  | 'mousedown'
+  | 'contextmenu';
 export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
-  public outSideEventTimer: Timeout|null = null;
+  public outSideEventTimer: Timeout | null = null;
   // 用于记录图层内事件，辅助判断图层外事件逻辑
   private eventCache = {
     click: 0,
@@ -40,7 +45,7 @@ export default class TileFactory implements ITileFactory {
     mouseup: 0,
     mousedown: 0,
     contextmenu: 0,
-  }
+  };
   constructor(option: ITileFactoryOptions) {
     this.parentLayer = option.parent;
   }
@@ -95,62 +100,82 @@ export default class TileFactory implements ITileFactory {
   protected emitEvent(layers: ILayer[]) {
     layers.map((layer) => {
       layer.once('inited', () => {
-        layer.on('click', (e) =>{
-            this.eventCache.click = 1;
-            this.getFeatureAndEmitEvent(layer, 'subLayerClick', e)
-          });
-        layer.on('mousemove', (e) =>{
-          this.eventCache.mousemove = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e)
+        layer.on('click', (e) => {
+          this.eventCache.click = 1;
+          this.getFeatureAndEmitEvent(layer, 'subLayerClick', e);
         });
-        layer.on('mouseup', (e) =>{
+        layer.on('mousemove', (e) => {
+          this.eventCache.mousemove = 1;
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e);
+        });
+        layer.on('mouseup', (e) => {
           this.eventCache.mouseup = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseUp', e)
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseUp', e);
         });
         layer.on('mouseenter', (e) => {
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e)
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e);
         });
         layer.on('mouseout', (e) => {
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseOut', e)
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseOut', e);
         });
         layer.on('mousedown', (e) => {
           this.eventCache.mousedown = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseDown', e)
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseDown', e);
         });
         layer.on('contextmenu', (e) => {
           this.eventCache.contextmenu = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerContextmenu', e)
+          this.getFeatureAndEmitEvent(layer, 'subLayerContextmenu', e);
         });
 
-        // out side 
-        layer.on('unclick', (e) => this.handleOutsideEvent('click', 'subLayerUnClick', layer, e));
+        // out side
+        layer.on('unclick', (e) =>
+          this.handleOutsideEvent('click', 'subLayerUnClick', layer, e),
+        );
         // layer.on('unmousemove', (e) => this.handleOutsideEvent('mousemove', 'subLayerUnMouseMove', layer, e))
-        layer.on('unmouseup', (e) => this.handleOutsideEvent('mouseup', 'subLayerUnMouseUp', layer, e));
-        layer.on('unmousedown', (e) => this.handleOutsideEvent('mousedown', 'subLayerUnMouseDown', layer, e));
-        layer.on('uncontextmenu', (e) => this.handleOutsideEvent('contextmenu', 'subLayerUnContextmenu', layer, e));
+        layer.on('unmouseup', (e) =>
+          this.handleOutsideEvent('mouseup', 'subLayerUnMouseUp', layer, e),
+        );
+        layer.on('unmousedown', (e) =>
+          this.handleOutsideEvent('mousedown', 'subLayerUnMouseDown', layer, e),
+        );
+        layer.on('uncontextmenu', (e) =>
+          this.handleOutsideEvent(
+            'contextmenu',
+            'subLayerUnContextmenu',
+            layer,
+            e,
+          ),
+        );
       });
     });
-  }
-
-  private handleOutsideEvent(type: CacheEvent, emitType: string, layer: ILayer, e: any) {
-    if(this.outSideEventTimer) {
-      clearTimeout(this.outSideEventTimer);
-      this.outSideEventTimer = null;
-    }
-    this.outSideEventTimer = setTimeout(() => {
-      if(this.eventCache[type] > 0) {
-        this.eventCache[type] = 0;
-      } else {
-        this.getFeatureAndEmitEvent(layer, emitType, e);
-      }
-    }, 64);
   }
 
   protected getFeatureAndEmitEvent(layer: ILayer, eventName: string, e: any) {
     const featureId = e.featureId;
     const source = layer.getSource();
-    const features =  source.data.dataArray.filter((feature) => feature._id === featureId);
+    const features = source.data.dataArray.filter(
+      (feature) => feature._id === featureId,
+    );
     e.feature = features;
     this.parentLayer.emit(eventName, e);
+  }
+
+  private handleOutsideEvent(
+    type: CacheEvent,
+    emitType: string,
+    layer: ILayer,
+    e: any,
+  ) {
+    if (this.outSideEventTimer) {
+      clearTimeout(this.outSideEventTimer);
+      this.outSideEventTimer = null;
+    }
+    this.outSideEventTimer = setTimeout(() => {
+      if (this.eventCache[type] > 0) {
+        this.eventCache[type] = 0;
+      } else {
+        this.getFeatureAndEmitEvent(layer, emitType, e);
+      }
+    }, 64);
   }
 }
