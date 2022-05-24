@@ -132,6 +132,8 @@ export interface ISubLayerInitOptions {
   coords?: string;
   layerName: string;
   featureId?: string;
+
+  mask?: boolean;
 }
 
 export interface ITilePickManager {

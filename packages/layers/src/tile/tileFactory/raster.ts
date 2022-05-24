@@ -12,11 +12,11 @@ export default class RasterTile extends TileFactory {
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { zIndex, opacity } = initOptions;
-
+    const { zIndex, opacity, mask = false } = initOptions;
     const layer = new ImageLayer({
       visible: tile.isVisible,
       zIndex,
+      mask
     })
       .source(tile.data, {
         parser: {
