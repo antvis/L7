@@ -71,28 +71,28 @@ export default class Amap2demo extends React.Component {
         .shape('line')
         .size(2)
         .color('#f00');
-        scene.addLayer(rect);
-        let rect2 = new LineLayer()
-          .source(data2)
-          .shape('line')
-          .size(2)
-          .color('#f00');
-          scene.addLayer(rect2);
-          const mapService = scene.getMapService();
-        // setTimeout(() => {
-        //     scene.setCenter([122.692587367181758, 43.377451929339649]);
-        //     // // @ts-ignore
-        //     // mapService.map.customCoords?.setCenter([
-        //     //   122.692587367181758,
-        //     //   43.377451929339649,
-        //     // ]);
-        //     // // @ts-ignore
-        //     // mapService.setCustomCoordCenter([
-        //     //   122.692587367181758,
-        //     //   43.377451929339649,
-        //     // ]);
-        //     // rect.dataState.dataSourceNeedUpdate = true;
-        //   }, 2000);
+      scene.addLayer(rect);
+      let rect2 = new LineLayer()
+        .source(data2)
+        .shape('line')
+        .size(2)
+        .color('#f00');
+      scene.addLayer(rect2);
+      const mapService = scene.getMapService();
+      // setTimeout(() => {
+      //     scene.setCenter([122.692587367181758, 43.377451929339649]);
+      //     // // @ts-ignore
+      //     // mapService.map.customCoords?.setCenter([
+      //     //   122.692587367181758,
+      //     //   43.377451929339649,
+      //     // ]);
+      //     // // @ts-ignore
+      //     // mapService.setCustomCoordCenter([
+      //     //   122.692587367181758,
+      //     //   43.377451929339649,
+      //     // ]);
+      //     // rect.dataState.dataSourceNeedUpdate = true;
+      //   }, 2000);
     });
   }
 

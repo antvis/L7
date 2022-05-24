@@ -146,7 +146,7 @@ export default class AMapService
       }
     });
   }
-  
+
   /**
    * 根据数据的绘制中心转换经纬度数据 高德2.0
    */

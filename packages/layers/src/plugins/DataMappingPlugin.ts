@@ -110,7 +110,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       });
     }
     layer.setEncodedData(
-      this.mapping(layer, attributes, filterData, undefined, bottomColor, ),
+      this.mapping(layer, attributes, filterData, undefined, bottomColor),
     );
     // 对外暴露事件
     layer.emit('dataUpdate', null);
@@ -195,7 +195,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
     return mappedData;
   }
 
-  private adjustData2Amap2Coordinates(mappedData: IEncodeFeature[], layer: ILayer) {
+  private adjustData2Amap2Coordinates(
+    mappedData: IEncodeFeature[],
+    layer: ILayer,
+  ) {
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
     if (
       mappedData.length > 0 &&
