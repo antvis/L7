@@ -42,8 +42,8 @@ export default class Amap2demo extends React.Component {
           },
         },
       ],
-    }
-    let cut = 0.0002
+    };
+    let cut = 0.0002;
     let data2 = {
       type: 'FeatureCollection',
       features: [
@@ -64,7 +64,7 @@ export default class Amap2demo extends React.Component {
           },
         },
       ],
-    }
+    };
     scene.on('loaded', () => {
       let rect = new LineLayer()
         .source(data)
