@@ -73,17 +73,17 @@ export default class DataMappingPlugin implements ILayerPlugin {
         // 过滤数据
         if (filter?.needRemapping) {
           layer.setEncodedData(
-            this.mapping(attributes, filterData, undefined, bottomColor, layer),
+            this.mapping(layer, attributes, filterData, undefined, bottomColor),
           );
           filter.needRemapping = false;
         } else {
           layer.setEncodedData(
             this.mapping(
+              layer,
               attributesToRemapping,
               filterData,
               layer.getEncodedData(),
               bottomColor,
-              layer,
             ),
           );
         }
@@ -110,7 +110,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       });
     }
     layer.setEncodedData(
-      this.mapping(attributes, filterData, undefined, bottomColor, layer),
+      this.mapping(layer, attributes, filterData, undefined, bottomColor, ),
     );
     // 对外暴露事件
     layer.emit('dataUpdate', null);
@@ -127,17 +127,17 @@ export default class DataMappingPlugin implements ILayerPlugin {
   }
 
   private mapping(
+    layer: ILayer,
     attributes: IStyleAttribute[],
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
     minimumColor?: string,
-    layer?: ILayer,
   ): IEncodeFeature[] {
     const {
       arrow = {
         enable: false,
       },
-    } = layer?.getLayerConfig() as ILineLayerStyleOptions;
+    } = layer.getLayerConfig() as ILineLayerStyleOptions;
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -187,7 +187,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // console.log('mappedData', mappedData)
 
     // 调整数据兼容 Amap2.0
-    this.adjustData2Amap2Coordinates(mappedData);
+    this.adjustData2Amap2Coordinates(mappedData, layer);
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
@@ -195,12 +195,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
     return mappedData;
   }
 
-  private adjustData2Amap2Coordinates(mappedData: IEncodeFeature[]) {
+  private adjustData2Amap2Coordinates(mappedData: IEncodeFeature[], layer: ILayer) {
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
     if (
       mappedData.length > 0 &&
       this.mapService.version === Version['GAODE2.x']
     ) {
+      const layerCenter = this.getLayerCenter(layer);
       if (typeof mappedData[0].coordinates[0] === 'number') {
         // 单个的点数据
         // @ts-ignore
@@ -212,7 +213,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
             // @ts-ignore
             d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
             // @ts-ignore
-            d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+            // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+            d.coordinates = this.mapService.lngLatToCoordByLayer(
+              d.coordinates,
+              layerCenter,
+            );
           });
       } else {
         // 连续的线、面数据
@@ -225,10 +230,19 @@ export default class DataMappingPlugin implements ILayerPlugin {
             // @ts-ignore
             d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
             // @ts-ignore
-            d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
+            // d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
+            d.coordinates = this.mapService.lngLatToCoordsByLayer(
+              d.coordinates,
+              layerCenter,
+            );
           });
       }
     }
+  }
+
+  private getLayerCenter(layer: ILayer) {
+    const source = layer.getSource();
+    return source.center;
   }
 
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {

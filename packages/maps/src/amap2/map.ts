@@ -112,6 +112,41 @@ export default class AMapService
   public getCustomCoordCenter(): [number, number] {
     return this.sceneCenterMKT;
   }
+
+  public lngLatToCoordByLayer(
+    lnglat: [number, number],
+    layerCenter: [number, number],
+  ) {
+    // @ts-ignore
+    const proj = this.map.getProjection();
+    const project = proj.project;
+    const layerCenterFlat = project(...layerCenter);
+    return this._sub(project(lnglat[0], lnglat[1]), layerCenterFlat);
+  }
+
+  public lngLatToCoordsByLayer(
+    lnglatArray: number[][][] | number[][],
+    layerCenter: [number, number],
+  ): number[][][] | number[][] {
+    // @ts-ignore
+    return lnglatArray.map((lnglats) => {
+      if (typeof lnglats[0] === 'number') {
+        return this.lngLatToCoordByLayer(
+          lnglats as [number, number],
+          layerCenter,
+        );
+      } else {
+        // @ts-ignore
+        return lnglats.map((lnglat) => {
+          return this.lngLatToCoordByLayer(
+            lnglat as [number, number],
+            layerCenter,
+          );
+        });
+      }
+    });
+  }
+  
   /**
    * 根据数据的绘制中心转换经纬度数据 高德2.0
    */
