@@ -49,10 +49,10 @@ export class TileLayerManager implements ITileLayerManager {
 
   public updateLayersConfig(layers: ILayer[], key: string, value: any) {
     layers.map((layer) => {
-      if(key === 'mask') {
+      if (key === 'mask') {
         layer.style({
-          mask: value
-        })
+          mask: value,
+        });
       } else {
         layer.updateLayerConfig({
           [key]: value,
@@ -124,7 +124,7 @@ export class TileLayerManager implements ITileLayerManager {
     const {
       zIndex = 0,
       opacity = 1,
-      mask = false
+      mask = false,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -146,7 +146,7 @@ export class TileLayerManager implements ITileLayerManager {
       featureId,
       color: colorValue,
       size: sizeValue,
-      mask
+      mask,
     };
   }
 
@@ -154,7 +154,7 @@ export class TileLayerManager implements ITileLayerManager {
     const {
       zIndex = 0,
       opacity = 1,
-      mask = false
+      mask = false,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     this.tileConfigManager.setConfig('opacity', opacity);

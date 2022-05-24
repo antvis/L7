@@ -1,6 +1,13 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterLayer, Scene, LineLayer, ILayer, PointLayer, MaskLayer } from '@antv/l7';
+import {
+  RasterLayer,
+  Scene,
+  LineLayer,
+  ILayer,
+  PointLayer,
+  MaskLayer,
+} from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
@@ -68,50 +75,49 @@ export default class RasterTile extends React.Component {
       //     // opacity: 0.5
       //   });
 
-        fetch(
-          'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json'
-        )
-          .then(res => res.json())
-          .then(data => {
-
-            const layer = new RasterLayer({
-              mask: true,
-              maskfence: data
-            });
-            layer
-              .source(
-                'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-                {
-                  parser: {
-                    type: 'rasterTile',
-                    tileSize: 256,
-                    zoomOffset: 0,
-                    extent: [-180, -85.051129, 179, 85.051129],
-                  },
-                },
-              )
-              .style({
-                // opacity: 0.5
-              });
-            // const layer = new MaskLayer({zIndex: -1})
-            //   .source(data);
-      
-              this.scene.addLayer(layer);
-
-              // setTimeout(() => {
-              //   layer.style({
-              //     mask: false
-              //   })
-              //   this.scene.render()
-
-              //   // setTimeout(() => {
-              //   //   layer.style({
-              //   //     mask: true
-              //   //   })
-              //   //   this.scene.render()
-              //   // }, 1000)
-              // }, 2000)
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const layer = new RasterLayer({
+            mask: true,
+            maskfence: data,
           });
+          layer
+            .source(
+              'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              {
+                parser: {
+                  type: 'rasterTile',
+                  tileSize: 256,
+                  zoomOffset: 0,
+                  extent: [-180, -85.051129, 179, 85.051129],
+                },
+              },
+            )
+            .style({
+              // opacity: 0.5
+            });
+          // const layer = new MaskLayer({zIndex: -1})
+          //   .source(data);
+
+          this.scene.addLayer(layer);
+
+          // setTimeout(() => {
+          //   layer.style({
+          //     mask: false
+          //   })
+          //   this.scene.render()
+
+          //   // setTimeout(() => {
+          //   //   layer.style({
+          //   //     mask: true
+          //   //   })
+          //   //   this.scene.render()
+          //   // }, 1000)
+          // }, 2000)
+        });
 
       // this.scene.addLayer(layer);
     });

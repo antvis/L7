@@ -16,7 +16,7 @@ export default class RasterTile extends TileFactory {
     const layer = new ImageLayer({
       visible: tile.isVisible,
       zIndex,
-      mask
+      mask,
     })
       .source(tile.data, {
         parser: {
