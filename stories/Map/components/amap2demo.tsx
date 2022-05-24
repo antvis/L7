@@ -13,7 +13,7 @@ export default class Amap2demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMapV2({
-        center: [120, 30],
+        center: [120.692587367181758, 30.377451929339649],
         // center: [122.692587367181758, 43.377451929339649],
         style: 'normal',
         zoom: 20,
@@ -43,7 +43,7 @@ export default class Amap2demo extends React.Component {
         },
       ],
     };
-    let cut = 0.0002;
+    // let cut = 0.0002;
     let data2 = {
       type: 'FeatureCollection',
       features: [
@@ -54,11 +54,11 @@ export default class Amap2demo extends React.Component {
             type: 'Polygon',
             coordinates: [
               [
-                [122.692587367181758, 43.377451929339649 - cut],
-                [122.692587367181758, 43.377465856847415 - cut],
-                [122.692574277855613, 43.377465856847415 - cut],
-                [122.692574277855613, 43.377451929339649 - cut],
-                [122.692587367181758, 43.377451929339649 - cut],
+                [120.692587367181758, 30.377451929339649],
+                [120.692587367181758, 30.377465856847415],
+                [120.692574277855613, 30.377465856847415],
+                [120.692574277855613, 30.377451929339649],
+                [120.692587367181758, 30.377451929339649],
               ],
             ],
           },
@@ -73,13 +73,13 @@ export default class Amap2demo extends React.Component {
         .color('#f00');
 
       scene.addLayer(rect);
-      // let rect2 = new LineLayer()
-      //   .source(data2)
-      //   .shape('line')
-      //   .size(2)
-      //   .color('#f00');
+      let rect2 = new LineLayer()
+        .source(data2)
+        .shape('line')
+        .size(2)
+        .color('#f00');
 
-      // scene.addLayer(rect2);
+      scene.addLayer(rect2);
       const mapService = scene.getMapService();
 
       setTimeout(() => {

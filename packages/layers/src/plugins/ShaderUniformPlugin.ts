@@ -46,9 +46,13 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       this.coordinateSystemService.refresh(offset);
 
       if (version === 'GAODE2.x') {
+        const layerCenter = this.getLayerCenter(layer);
+        // @ts-ignore
+        this.mapService.map.customCoords.setCenter(layerCenter);
+        // @ts-ignore
+        this.mapService.setCustomCoordCenter(layerCenter);
         // @ts-ignore
         mvp = this.mapService.map.customCoords.getMVPMatrix();
-        // mvp = amapCustomCoords.getMVPMatrix()
         // @ts-ignore
         sceneCenterMKT = this.mapService.getCustomCoordCenter();
       }
@@ -87,5 +91,10 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
 
       // TODO：脏检查，决定是否需要渲染
     });
+  }
+
+  private getLayerCenter(layer: ILayer) {
+    const source = layer.getSource();
+    return source.center;
   }
 }

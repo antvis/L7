@@ -35,7 +35,7 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 
 export default class Source extends EventEmitter implements ISource {
   public data: IParserData;
-
+  public center: [number, number];
   // 数据范围
   public extent: BBox;
   // 生命周期钩子
@@ -237,10 +237,15 @@ export default class Source extends EventEmitter implements ISource {
     this.data = sourceParser(this.originData, parser, this.layerCfg);
     // 计算范围
     this.extent = extent(this.data.dataArray);
+    this.setCenter(this.extent);
     this.invalidExtent =
       this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
     // 瓦片数据
     this.tileset = this.initTileset();
+  }
+
+  private setCenter(bbox: BBox) {
+    this.center = [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2];
   }
 
   /**
