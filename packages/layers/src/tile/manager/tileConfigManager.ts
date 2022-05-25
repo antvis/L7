@@ -37,22 +37,21 @@ export default class TileConfigManager extends EventEmitter {
     if (!layer.inited) {
       return;
     }
-    const layerConfig = layer.getLayerConfig() as IRasterTileLayerStyleOptions;
 
+    const layerConfig = layer.getLayerConfig() as IRasterTileLayerStyleOptions;
     const updateConfigs: string[] = [];
     this.checkConfigList.map((key) => {
       const cacheConfig = this.cacheConfig.get(key);
       let currentConfig;
-      if (key === 'color' || key === 'size') {
+      if (['color', 'size', 'shape'].includes(key)) {
         currentConfig = layer.getAttribute(key)?.scale;
       } else {
-        // @ts-ignore
-        currentConfig = layerConfig[key];
-        if (currentConfig === undefined) {
+        if (!(key in layerConfig)) {
           return;
         }
+        // @ts-ignore
+        currentConfig = layerConfig[key];
       }
-
       if (!isEqual(cacheConfig, currentConfig)) {
         updateConfigs.push(key);
         this.setConfig(key, currentConfig);

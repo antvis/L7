@@ -9,3 +9,37 @@ export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
     layer.init();
   });
 }
+
+export function getLayerShape(layerType: string, layer: ILayer) {
+  const layerShape = layer.getAttribute('shape');
+  if (layerShape && layerShape.scale?.field) {
+    return layerShape.scale.field as string;
+  }
+  switch (layerType) {
+    case 'PolygonLayer':
+      return 'fill';
+    case 'LineLayer':
+      return 'tileline';
+    case 'PointLayer':
+      return 'circle';
+    case 'RasterLayer':
+      return 'image';
+    default:
+      return '';
+  }
+}
+
+export function getMaskValue(layerType: string, mask: boolean) {
+  switch (layerType) {
+    case 'PolygonLayer':
+      return true;
+    case 'LineLayer':
+      return true;
+    case 'PointLayer':
+      return false;
+    case 'RasterLayer':
+      return mask;
+    default:
+      return mask;
+  }
+}

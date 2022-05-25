@@ -1,7 +1,8 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { Tile } from '@antv/l7-utils';
-import TileFactory, { ITileFactoryOptions, ITileStyles } from './base';
+import { ITileFactoryOptions, ITileStyles } from '../interface';
+import TileFactory from './base';
 
 export default class VectorPolygonTile extends TileFactory {
   public parentLayer: ILayer;

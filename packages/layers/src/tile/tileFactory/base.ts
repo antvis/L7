@@ -1,54 +1,24 @@
 import {
   ILayer,
   IScaleValue,
-  ISource,
   ISubLayerInitOptions,
+  ScaleAttributeType,
   StyleAttrField,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { Tile } from '@antv/l7-utils';
 import MaskLayer from '../../mask';
-import { registerLayers } from '../utils';
+import { getLayerShape, registerLayers } from '../utils';
 import VectorLayer from './vectorLayer';
-export interface ITileFactoryOptions {
-  parent: ILayer;
-}
 
-export interface ITileStyles {
-  [key: string]: any;
-}
-
-export interface ILayerTileConfig {
-  L7Layer?: any;
-  tile: Tile;
-  initOptions: ISubLayerInitOptions;
-  vectorTileLayer?: any;
-  source: ISource;
-}
-
-export interface ITileFactory {
-  createTile(
-    tile: Tile,
-    initOptions: ISubLayerInitOptions,
-  ): {
-    layers: ILayer[];
-    layerIDList: string[];
-  };
-
-  createLayer(option: ILayerTileConfig): ILayer;
-
-  updateStyle(styles: ITileStyles): string;
-  setStyle(layer: ILayer, type: 'color' | 'size', value: IScaleValue): void;
-  setColor(layer: ILayer, scaleValue: IScaleValue): ILayer;
-  setSize(layer: ILayer, scaleValue: IScaleValue): ILayer;
-}
-type Timeout = any;
-type CacheEvent =
-  | 'click'
-  | 'mousemove'
-  | 'mouseup'
-  | 'mousedown'
-  | 'contextmenu';
+import {
+  CacheEvent,
+  ILayerTileConfig,
+  ITileFactory,
+  ITileFactoryOptions,
+  ITileStyles,
+  Timeout,
+} from '../interface';
 export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
@@ -134,9 +104,11 @@ export default class TileFactory implements ITileFactory {
       layer.select(true);
     }
 
+    // set source
     layer.source(source);
-    layer.shape(shape);
 
+    // set scale attribute field
+    this.setShape(layer, shape);
     this.setColor(layer, color);
     this.setSize(layer, size);
 
@@ -166,12 +138,33 @@ export default class TileFactory implements ITileFactory {
     return '';
   }
 
-  public setStyle(layer: ILayer, type: 'color' | 'size', value: IScaleValue) {
-    if (type === 'color') {
-      this.setColor(layer, value);
-    } else if (type === 'size') {
-      this.setSize(layer, value);
+  public setStyleAttributeField(
+    layer: ILayer,
+    type: ScaleAttributeType,
+    value: IScaleValue,
+  ) {
+    switch (type) {
+      case 'color':
+        this.setColor(layer, value);
+        return;
+      case 'size':
+        this.setSize(layer, value);
+        return;
+      case 'shape':
+        this.setShape(layer, value);
     }
+  }
+
+  public setShape(layer: ILayer, shapeValue?: IScaleValue | string) {
+    if (typeof shapeValue === 'string') {
+      layer.shape(shapeValue);
+      return layer;
+    } else if (shapeValue?.field) {
+      layer.shape(shapeValue.field);
+    } else {
+      layer.shape(getLayerShape(this.parentLayer.type, layer));
+    }
+    return layer;
   }
 
   public setColor(layer: ILayer, colorValue?: IScaleValue) {

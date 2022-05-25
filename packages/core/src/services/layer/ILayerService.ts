@@ -126,12 +126,16 @@ export interface ISubLayerStyles {
 }
 export interface ISubLayerInitOptions {
   layerType: string;
-  shape?: string;
+  shape?: string | IScaleValue;
   // options
   zIndex: number;
   mask: boolean;
   // source
   // style
+  stroke?: string;
+  strokeWidth?: number;
+  strokeOpacity?: number;
+
   opacity: number;
   color?: IScaleValue;
   size?: IScaleValue;

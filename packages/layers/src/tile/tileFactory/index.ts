@@ -1,4 +1,4 @@
-import { ITileFactory } from './base';
+import { ITileFactory } from '../interface';
 import VectorLineTile from './line';
 import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';

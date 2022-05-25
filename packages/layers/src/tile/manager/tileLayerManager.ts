@@ -11,6 +11,7 @@ import {
 import { Tile } from '@antv/l7-utils';
 import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
+import { getLayerShape, getMaskValue } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
 export class TileLayerManager implements ITileLayerManager {
@@ -125,6 +126,9 @@ export class TileLayerManager implements ITileLayerManager {
       zIndex = 0,
       opacity = 1,
       mask = false,
+      stroke = '#fff',
+      strokeWidth = 0,
+      strokeOpacity = 1,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -137,9 +141,11 @@ export class TileLayerManager implements ITileLayerManager {
     );
     const source = this.parent.getSource();
     const { layerName, coords, featureId } = source.data.tilesetOptions;
+    const layerShape = getLayerShape(this.parent.type, this.parent);
+
     this.initOptions = {
       layerType: this.parent.type,
-      shape: this.getLayerShape(this.parent.type),
+      shape: layerShape,
       zIndex,
       opacity,
       layerName,
@@ -147,53 +153,33 @@ export class TileLayerManager implements ITileLayerManager {
       featureId,
       color: colorValue,
       size: sizeValue,
-      mask: this.getMask(this.parent.type, mask),
+      mask: getMaskValue(this.parent.type, mask),
+      stroke,
+      strokeWidth,
+      strokeOpacity,
     };
   }
 
-  private getLayerShape(layerType: string) {
-    switch (layerType) {
-      case 'PolygonLayer':
-        return 'fill';
-      case 'LineLayer':
-        return 'tileline';
-      case 'PointLayer':
-        return 'circle';
-      case 'RasterLayer':
-        return 'image';
-      default:
-        return '';
-    }
-  }
-
-  private getMask(layerType: string, mask: boolean) {
-    switch (layerType) {
-      case 'PolygonLayer':
-        return true;
-      case 'LineLayer':
-        return true;
-      case 'PointLayer':
-        return false;
-      case 'RasterLayer':
-        return mask;
-      default:
-        return mask;
-    }
-  }
-
   private setConfigListener() {
-    const {
-      zIndex = 0,
-      opacity = 1,
-      mask = false,
-    } = this.parent.getLayerConfig() as ISubLayerInitOptions;
-
-    this.tileConfigManager.setConfig('opacity', opacity);
-    this.tileConfigManager.setConfig('zIndex', zIndex);
-    this.tileConfigManager.setConfig('mask', mask);
+    this.tileConfigManager.setConfig('opacity', this.initOptions.opacity);
+    this.tileConfigManager.setConfig('zIndex', this.initOptions.zIndex);
+    this.tileConfigManager.setConfig('mask', this.initOptions.mask);
+    this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);
+    this.tileConfigManager.setConfig(
+      'strokeWidth',
+      this.initOptions.strokeWidth,
+    );
+    this.tileConfigManager.setConfig(
+      'strokeOpacity',
+      this.initOptions.strokeOpacity,
+    );
     this.tileConfigManager.setConfig(
       'color',
       this.parent.getAttribute('color')?.scale,
+    );
+    this.tileConfigManager.setConfig(
+      'shape',
+      this.parent.getAttribute('shape')?.scale,
     );
     this.tileConfigManager.setConfig(
       'size',
@@ -209,24 +195,30 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   private updateStyle(style: string) {
-    if (style === 'size' || style === 'color') {
+    let updateValue = null;
+    if (style === 'size' || style === 'color' || style === 'shape') {
       const scaleValue = this.parent.getAttribute(style)?.scale;
       if (!scaleValue) {
         return;
       }
-      this.initOptions[style] = scaleValue;
+
+      updateValue = scaleValue;
       this.children.map((child) => {
-        this.tileFactory.setStyle(child, style, scaleValue);
+        this.tileFactory.setStyleAttributeField(child, style, scaleValue);
         return '';
       });
     } else {
       const layerConfig = this.parent.getLayerConfig() as IRasterTileLayerStyleOptions;
+      if (!(style in layerConfig)) {
+        return;
+      }
       // @ts-ignore
       const config = layerConfig[style];
-      // @ts-ignore
-      this.initOptions[style] = config;
+      updateValue = config;
       this.updateLayersConfig(this.children, style, config);
     }
+    // @ts-ignore
+    this.initOptions[style] = updateValue;
   }
 
   private initTileFactory() {
