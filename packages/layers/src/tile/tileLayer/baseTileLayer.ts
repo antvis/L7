@@ -78,12 +78,12 @@ export default class BaseTileLayer implements ITileLayer {
 
   public clearPickState() {
     this.children
-    .filter((child) => child.inited && child.isVisible())
-    .filter((child) => child.getCurrentSelectedId() !== null)
-    .map((child) => {
-      this.selectFeature(child, new Uint8Array([0, 0, 0, 0]));
-      child.setCurrentSelectedId(null);
-    });
+      .filter((child) => child.inited && child.isVisible())
+      .filter((child) => child.getCurrentSelectedId() !== null)
+      .map((child) => {
+        this.selectFeature(child, new Uint8Array([0, 0, 0, 0]));
+        child.setCurrentSelectedId(null);
+      });
   }
 
   public renderPicker(target: IInteractionTarget) {

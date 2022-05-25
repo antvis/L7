@@ -96,7 +96,7 @@ export default class RasterTile extends React.Component {
           opacity: 0.6,
         })
         .select(true);
-        // .active(true);
+      // .active(true);
 
       // layer.on('click', e => { console.log(e) })
       // layer.on('mousemove', e => console.log(e))
