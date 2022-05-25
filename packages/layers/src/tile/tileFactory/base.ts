@@ -5,11 +5,11 @@ import {
   ISubLayerInitOptions,
   StyleAttrField,
 } from '@antv/l7-core';
+import Source from '@antv/l7-source';
 import { Tile } from '@antv/l7-utils';
-import VectorLayer from './vectorLayer';
 import MaskLayer from '../../mask';
 import { registerLayers } from '../utils';
-import Source from '@antv/l7-source';
+import VectorLayer from './vectorLayer';
 export interface ITileFactoryOptions {
   parent: ILayer;
 }
@@ -78,83 +78,81 @@ export default class TileFactory implements ITileFactory {
       features: [],
       featureId: null,
       vectorTileLayer: null,
-      source: null
-    }
-    const { layerName, featureId, } = initOptions;
-    if(!layerName) {
-      return emptyData
+      source: null,
+    };
+    const { layerName, featureId } = initOptions;
+    if (!layerName) {
+      return emptyData;
     }
     const vectorTileLayer = tile.data.layers[layerName];
     const features = vectorTileLayer?.features;
     if (!(Array.isArray(features) && features.length > 0)) {
-        return emptyData;
+      return emptyData;
     } else {
-      const source = new Source({
-        type: 'FeatureCollection',
-        features,
-      }, {
-        parser: {
-          type: 'geojson',
-          featureId,
+      const source = new Source(
+        {
+          type: 'FeatureCollection',
+          features,
         },
-      })
+        {
+          parser: {
+            type: 'geojson',
+            featureId,
+          },
+        },
+      );
 
       return {
-        features: features,
-        featureId: featureId,
+        features,
+        featureId,
         vectorTileLayer,
-        source
-      }
+        source,
+      };
     }
   }
 
-  private getrLayerInitOption(initOptions: ISubLayerInitOptions) {
-    const option = {...initOptions};
-    delete option.color
-    delete option.shape
-    delete option.size
-    delete option.coords
-    delete option.layerName
-    delete option.coords
-    return option;
-  }
-
   public createLayer(tileLayerOption: ILayerTileConfig) {
-    const { L7Layer, tile, initOptions, vectorTileLayer, source} = tileLayerOption;
+    const {
+      L7Layer,
+      tile,
+      initOptions,
+      vectorTileLayer,
+      source,
+    } = tileLayerOption;
     const { mask, color, layerType, size, shape } = initOptions;
-    const FactoryTileLayer = L7Layer?L7Layer:VectorLayer;
+    const FactoryTileLayer = L7Layer ? L7Layer : VectorLayer;
     const layer = new FactoryTileLayer({
       visible: tile.isVisible,
       tileOrigin: vectorTileLayer?.l7TileOrigin,
       coord: vectorTileLayer?.l7TileCoord,
-      ...this.getrLayerInitOption(initOptions)
+      ...this.getrLayerInitOption(initOptions),
     });
     // vector layer set config
-    if(layer.isVector) {
+    if (layer.isVector) {
       this.emitEvent([layer]);
       layer.type = layerType;
-      layer.select(true)
+      layer.select(true);
     }
-    
-    layer.source(source)
-    layer.shape(shape)
+
+    layer.source(source);
+    layer.shape(shape);
 
     this.setColor(layer, color);
-    if(size) {
+    if (size) {
       this.setSize(layer, size);
     }
 
     // set mask
-    const layers = [layer]
-    if(mask) {
+    const layers = [layer];
+    if (mask) {
       const masklayer = new MaskLayer()
-      .source({
-        type: 'FeatureCollection',
-        features: [tile.bboxPolygon],
-      })
-      .shape('fill');
+        .source({
+          type: 'FeatureCollection',
+          features: [tile.bboxPolygon],
+        })
+        .shape('fill');
 
-      layers.push(masklayer as VectorLayer)
+      layers.push(masklayer as VectorLayer);
 
       layer.addMaskLayer(masklayer);
     }
@@ -163,7 +161,7 @@ export default class TileFactory implements ITileFactory {
 
     this.layers = [layer];
 
-    return layer
+    return layer;
   }
 
   public updateStyle(styles: ITileStyles) {
@@ -282,6 +280,17 @@ export default class TileFactory implements ITileFactory {
     );
     e.feature = features;
     this.parentLayer.emit(eventName, e);
+  }
+
+  private getrLayerInitOption(initOptions: ISubLayerInitOptions) {
+    const option = { ...initOptions };
+    delete option.color;
+    delete option.shape;
+    delete option.size;
+    delete option.coords;
+    delete option.layerName;
+    delete option.coords;
+    return option;
   }
 
   private handleOutsideEvent(

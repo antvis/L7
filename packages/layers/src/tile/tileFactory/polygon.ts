@@ -4,15 +4,18 @@ import { Tile } from '@antv/l7-utils';
 import TileFactory, { ITileFactoryOptions, ITileStyles } from './base';
 export default class VectorPolygonTile extends TileFactory {
   public parentLayer: ILayer;
-  
+
   constructor(option: ITileFactoryOptions) {
     super(option);
     this.parentLayer = option.parent;
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { features, vectorTileLayer, source } = this.getFeatureData(tile, initOptions);
-    if(features.length === 0) {
+    const { features, vectorTileLayer, source } = this.getFeatureData(
+      tile,
+      initOptions,
+    );
+    if (features.length === 0) {
       return {
         layers: [],
         layerIDList: [],
@@ -20,11 +23,11 @@ export default class VectorPolygonTile extends TileFactory {
     }
 
     const layer = this.createLayer({
-      tile, 
-      initOptions, 
-      vectorTileLayer, 
-      source: source as Source
-    })
+      tile,
+      initOptions,
+      vectorTileLayer,
+      source: source as Source,
+    });
 
     return {
       layers: [layer],

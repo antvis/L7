@@ -152,30 +152,32 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   private getLayerShape(layerType: string) {
-    switch(layerType) {
-      case 'PolygonLayer': 
+    switch (layerType) {
+      case 'PolygonLayer':
         return 'fill';
-      case 'LineLayer': 
+      case 'LineLayer':
         return 'tileline';
       case 'PointLayer':
         return 'circle';
       case 'RasterLayer':
         return 'image';
-      default: return '';
+      default:
+        return '';
     }
   }
 
   private getMask(layerType: string, mask: boolean) {
-    switch(layerType) {
-      case 'PolygonLayer': 
+    switch (layerType) {
+      case 'PolygonLayer':
         return true;
-      case 'LineLayer': 
+      case 'LineLayer':
         return true;
       case 'PointLayer':
         return false;
       case 'RasterLayer':
         return mask;
-      default: return mask;
+      default:
+        return mask;
     }
   }
 

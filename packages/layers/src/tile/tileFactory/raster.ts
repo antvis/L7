@@ -1,6 +1,6 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
-import { Tile, TilesetManager } from '@antv/l7-utils';
 import Source from '@antv/l7-source';
+import { Tile, TilesetManager } from '@antv/l7-utils';
 import ImageLayer from '../../image';
 import TileFactory, { ITileFactoryOptions } from './base';
 
@@ -17,15 +17,15 @@ export default class RasterTile extends TileFactory {
         type: 'image',
         extent: tile.bounds,
       },
-    })
+    });
 
     const layer = this.createLayer({
       L7Layer: ImageLayer,
-      tile, 
-      initOptions, 
-      source
-    })
-    
+      tile,
+      initOptions,
+      source,
+    });
+
     return {
       layers: [layer],
       layerIDList: [layer.id],
