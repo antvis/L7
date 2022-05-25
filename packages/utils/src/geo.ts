@@ -186,6 +186,19 @@ export function unProjectFlat(px: number[]): [number, number] {
   const lng = x / d;
   return [lng, lat];
 }
+
+export function amap2Project (t: number, e: number): [number, number] {
+  const r=85.0511287798;
+  const Rg = Math.PI/180;
+  const Tg = 6378137;
+   
+  e = Math.max(Math.min(r,e),-r);
+  t*=Rg;
+  e*=Rg;
+  e=Math.log(Math.tan(Math.PI/4+e/2));
+  return [t*Tg,e*Tg];
+}
+
 export function lnglatDistance(
   coordinates1: [number, number],
   coordinates2: [number, number],
