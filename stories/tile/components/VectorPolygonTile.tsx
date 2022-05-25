@@ -93,7 +93,7 @@ export default class RasterTile extends React.Component {
         // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
         .style({
           // color: "#ff0"
-          // opacity: 0.4,
+          opacity: 0.6,
         })
         // .select(true);
         .active(true);

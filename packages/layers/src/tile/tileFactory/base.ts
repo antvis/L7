@@ -1,17 +1,29 @@
 import {
   ILayer,
   IScaleValue,
+  ISource,
   ISubLayerInitOptions,
   StyleAttrField,
 } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
-
+import VectorLayer from './vectorLayer';
+import MaskLayer from '../../mask';
+import { registerLayers } from '../utils';
+import Source from '@antv/l7-source';
 export interface ITileFactoryOptions {
   parent: ILayer;
 }
 
 export interface ITileStyles {
   [key: string]: any;
+}
+
+export interface ILayerTileConfig {
+  L7Layer?: any;
+  tile: Tile;
+  initOptions: ISubLayerInitOptions;
+  vectorTileLayer?: any;
+  source: ISource;
 }
 
 export interface ITileFactory {
@@ -22,6 +34,8 @@ export interface ITileFactory {
     layers: ILayer[];
     layerIDList: string[];
   };
+
+  createLayer(option: ILayerTileConfig): ILayer;
 
   updateStyle(styles: ITileStyles): string;
   setStyle(layer: ILayer, type: 'color' | 'size', value: IScaleValue): void;
@@ -39,6 +53,7 @@ export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
   public outSideEventTimer: Timeout | null = null;
+  protected layers: ILayer[];
   // 用于记录图层内事件，辅助判断图层外事件逻辑
   private eventCache = {
     click: 0,
@@ -58,6 +73,99 @@ export default class TileFactory implements ITileFactory {
     };
   }
 
+  public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
+    const emptyData = {
+      features: [],
+      featureId: null,
+      vectorTileLayer: null,
+      source: null
+    }
+    const { layerName, featureId, } = initOptions;
+    if(!layerName) {
+      return emptyData
+    }
+    const vectorTileLayer = tile.data.layers[layerName];
+    const features = vectorTileLayer?.features;
+    if (!(Array.isArray(features) && features.length > 0)) {
+        return emptyData;
+    } else {
+      const source = new Source({
+        type: 'FeatureCollection',
+        features,
+      }, {
+        parser: {
+          type: 'geojson',
+          featureId,
+        },
+      })
+
+      return {
+        features: features,
+        featureId: featureId,
+        vectorTileLayer,
+        source
+      }
+    }
+  }
+
+  private getrLayerInitOption(initOptions: ISubLayerInitOptions) {
+    const option = {...initOptions};
+    delete option.color
+    delete option.shape
+    delete option.size
+    delete option.coords
+    delete option.layerName
+    delete option.coords
+    return option;
+  }
+
+  public createLayer(tileLayerOption: ILayerTileConfig) {
+    const { L7Layer, tile, initOptions, vectorTileLayer, source} = tileLayerOption;
+    const { mask, color, layerType, size, shape } = initOptions;
+    const FactoryTileLayer = L7Layer?L7Layer:VectorLayer;
+    const layer = new FactoryTileLayer({
+      visible: tile.isVisible,
+      tileOrigin: vectorTileLayer?.l7TileOrigin,
+      coord: vectorTileLayer?.l7TileCoord,
+      ...this.getrLayerInitOption(initOptions)
+    });
+    // vector layer set config
+    if(layer.isVector) {
+      this.emitEvent([layer]);
+      layer.type = layerType;
+      layer.select(true)
+    }
+    
+    layer.source(source)
+    layer.shape(shape)
+
+    this.setColor(layer, color);
+    if(size) {
+      this.setSize(layer, size);
+    }
+
+    // set mask
+    const layers = [layer]
+    if(mask) {
+      const masklayer = new MaskLayer()
+      .source({
+        type: 'FeatureCollection',
+        features: [tile.bboxPolygon],
+      })
+      .shape('fill');
+
+      layers.push(masklayer as VectorLayer)
+
+      layer.addMaskLayer(masklayer);
+    }
+    // regist layer
+    registerLayers(this.parentLayer, layers);
+
+    this.layers = [layer];
+
+    return layer
+  }
+
   public updateStyle(styles: ITileStyles) {
     return '';
   }
@@ -70,7 +178,11 @@ export default class TileFactory implements ITileFactory {
     }
   }
 
-  public setColor(layer: ILayer, colorValue: IScaleValue) {
+  public setColor(layer: ILayer, colorValue?: IScaleValue) {
+    if (!colorValue) {
+      layer.color('#fff');
+      return layer;
+    }
     const parseValueList = this.parseScaleValue(colorValue);
     if (parseValueList.length === 2) {
       layer.color(parseValueList[0] as StyleAttrField, parseValueList[1]);

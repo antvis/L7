@@ -120,20 +120,25 @@ export interface IAttrubuteAndElements {
   attributes: any;
   elements: any;
 }
+
+export interface ISubLayerStyles {
+  opacity: number;
+}
 export interface ISubLayerInitOptions {
+  layerType: string;
+  shape?: string;
   // options
   zIndex: number;
+  mask: boolean;
   // source
   // style
   opacity: number;
-  color: IScaleValue;
+  color?: IScaleValue;
   size?: IScaleValue;
   // layerName
   coords?: string;
-  layerName: string;
+  layerName?: string;
   featureId?: string;
-
-  mask?: boolean;
 }
 
 export interface ITilePickManager {

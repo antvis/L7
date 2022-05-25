@@ -1,7 +1,7 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-utils';
+import Source from '@antv/l7-source';
 import ImageLayer from '../../image';
-import { registerLayers } from '../utils';
 import TileFactory, { ITileFactoryOptions } from './base';
 
 export default class RasterTile extends TileFactory {
@@ -12,22 +12,20 @@ export default class RasterTile extends TileFactory {
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { zIndex, opacity, mask = false } = initOptions;
-    const layer = new ImageLayer({
-      visible: tile.isVisible,
-      zIndex,
-      mask,
+    const source = new Source(tile.data, {
+      parser: {
+        type: 'image',
+        extent: tile.bounds,
+      },
     })
-      .source(tile.data, {
-        parser: {
-          type: 'image',
-          extent: tile.bounds,
-        },
-      })
-      .style({
-        opacity,
-      });
-    registerLayers(this.parentLayer, [layer]);
+
+    const layer = this.createLayer({
+      L7Layer: ImageLayer,
+      tile, 
+      initOptions, 
+      source
+    })
+    
     return {
       layers: [layer],
       layerIDList: [layer.id],

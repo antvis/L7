@@ -137,8 +137,9 @@ export class TileLayerManager implements ITileLayerManager {
     );
     const source = this.parent.getSource();
     const { layerName, coords, featureId } = source.data.tilesetOptions;
-
     this.initOptions = {
+      layerType: this.parent.type,
+      shape: this.getLayerShape(this.parent.type),
       zIndex,
       opacity,
       layerName,
@@ -146,8 +147,36 @@ export class TileLayerManager implements ITileLayerManager {
       featureId,
       color: colorValue,
       size: sizeValue,
-      mask,
+      mask: this.getMask(this.parent.type, mask),
     };
+  }
+
+  private getLayerShape(layerType: string) {
+    switch(layerType) {
+      case 'PolygonLayer': 
+        return 'fill';
+      case 'LineLayer': 
+        return 'tileline';
+      case 'PointLayer':
+        return 'circle';
+      case 'RasterLayer':
+        return 'image';
+      default: return '';
+    }
+  }
+
+  private getMask(layerType: string, mask: boolean) {
+    switch(layerType) {
+      case 'PolygonLayer': 
+        return true;
+      case 'LineLayer': 
+        return true;
+      case 'PointLayer':
+        return false;
+      case 'RasterLayer':
+        return mask;
+      default: return mask;
+    }
   }
 
   private setConfigListener() {
