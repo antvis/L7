@@ -187,6 +187,7 @@ export interface ITileLayer {
   render(isPicking?: boolean): void;
   renderPicker(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
+  clearPickState(): void;
 }
 
 export interface ITileLayerOPtions {
