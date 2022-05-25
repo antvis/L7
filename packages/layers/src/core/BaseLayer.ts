@@ -547,7 +547,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     };
     this.updateStyleAttribute('shape', field, values, updateOptions);
     // TODO: 根据 shape 判断是否需要更新 model
-    if(!this.isVector) {
+    if (!this.isVector) {
       updateShape(this, lastShape, currentShape);
     }
     return this;
