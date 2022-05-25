@@ -78,6 +78,12 @@ export default class RasterModel extends BaseModel {
   public buildModels() {
     return this.initModels();
   }
+
+  public clearModels(): void {
+    this.texture?.destroy();
+    this.colorTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
