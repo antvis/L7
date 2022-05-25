@@ -138,9 +138,7 @@ export default class TileFactory implements ITileFactory {
     layer.shape(shape);
 
     this.setColor(layer, color);
-    if (size) {
-      this.setSize(layer, size);
-    }
+    this.setSize(layer, size);
 
     // set mask
     const layers = [layer];
