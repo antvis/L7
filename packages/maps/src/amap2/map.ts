@@ -129,6 +129,7 @@ export default class AMapService
           layerCenter,
         );
       } else {
+        // @ts-ignore
         return lnglats.map((lnglat) => {
           return this.lngLatToCoordByLayer(
             lnglat as [number, number],
