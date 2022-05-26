@@ -48,6 +48,9 @@ export default class PickingService implements IPickingService {
 
   private lastPickTime: number = new Date().getTime();
 
+  // Tip: 记录当前拾取中的 layers
+  private pickedLayers: ILayer[] = [];
+
   public init(id: string) {
     const {
       createTexture2D,
@@ -210,8 +213,7 @@ export default class PickingService implements IPickingService {
     // TODO: 优化拾取操作 在右键时 mousedown 和 contextmenu 几乎同时触发，所以不能舍去这一次的触发
     if (
       t - this.lastPickTime > 10 ||
-      target.type === 'contextmenu' ||
-      target.type === 'click'
+      ['contextmenu', 'click', 'mouseup'].includes(target.type)
     ) {
       await this.pickingLayers(target);
     }
@@ -274,6 +276,12 @@ export default class PickingService implements IPickingService {
 
           layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
+
+          // Tip: clear last picked layer state
+          this.pickedLayers.map((pickedlayer) => {
+            this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
+          });
+
           const isPicked = this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
 
@@ -355,6 +363,7 @@ export default class PickingService implements IPickingService {
         // trigger onHover/Click callback on layer
         isPicked = true;
         layer.setCurrentPickId(pickedFeatureIdx);
+        this.pickedLayers = [layer];
         this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
       }
     } else {
@@ -377,6 +386,7 @@ export default class PickingService implements IPickingService {
       });
       this.triggerHoverOnLayer(layer, layerTarget);
       layer.setCurrentPickId(null);
+      this.pickedLayers = [];
     }
 
     if (enableHighlight) {

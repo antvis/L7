@@ -243,7 +243,6 @@ export default class Quantize extends React.Component {
             .scale({
               value: {
                 type: 'threshold',
-                nice: true,
                 domain: [5, 13, 24, 40],
               },
             })
@@ -256,22 +255,22 @@ export default class Quantize extends React.Component {
             ])
             .shape('fill');
 
-          // const textLayer = new PolygonLayer({
-          //   autoFit: false,
-          // })
-          //   .source(data, {
-          //     transforms: [
-          //       {
-          //         type: 'join',
-          //         sourceField: 'province_adName',
-          //         targetField: 'name', // data 对应字段名 绑定到的地理数据
-          //         data: list,
-          //       },
-          //     ],
-          //   })
-          //   .size(10)
-          //   .color('#f00')
-          //   .shape('value', 'text');
+          const textLayer = new PolygonLayer({
+            autoFit: false,
+          })
+            .source(data, {
+              transforms: [
+                {
+                  type: 'join',
+                  sourceField: 'province_adName',
+                  targetField: 'name', // data 对应字段名 绑定到的地理数据
+                  data: list,
+                },
+              ],
+            })
+            .size(10)
+            .color('#f00')
+            .shape('value', 'text');
 
           chinaPolygonLayer.on('add', (type) => {
             console.log(
@@ -291,7 +290,7 @@ export default class Quantize extends React.Component {
           });
 
           scene.addLayer(chinaPolygonLayer);
-          // scene.addLayer(textLayer);
+          scene.addLayer(textLayer);
         });
 
       this.scene = scene;

@@ -10,4 +10,3 @@ storiesOf('数据映射', module)
   .add('颜色范围等分', () => <Quantize />)
   .add('离散', () => <Diverging />)
   .add('自定义范围', () => <Threshold />);
-
