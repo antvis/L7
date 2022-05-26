@@ -1,12 +1,11 @@
+import { getImage } from '@antv/l7-utils';
+import { IParserData, IRasterTileParserCFG } from '../interface';
 import {
-  getImage,
- 
-} from '@antv/l7-utils';
-import { getURLFromTemplate,
+  getURLFromTemplate,
   Tile,
   TileLoadParams,
-  TilesetManagerOptions,} from '../tileset-manager'
-import { IParserData, IRasterTileParserCFG } from '../interface';
+  TilesetManagerOptions,
+} from '../tileset-manager';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

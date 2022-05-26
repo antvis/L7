@@ -1,13 +1,4 @@
-import {
-  getArrayBuffer,
-
-} from '@antv/l7-utils';
-import {
-  getURLFromTemplate,
-  Tile,
-  TileLoadParams,
-  TilesetManagerOptions,
-} from '../tileset-manager'
+import { getArrayBuffer } from '@antv/l7-utils';
 import {
   VectorTile,
   VectorTileFeature,
@@ -20,6 +11,12 @@ import {
   IParserData,
   IRasterTileParserCFG,
 } from '../interface';
+import {
+  getURLFromTemplate,
+  Tile,
+  TileLoadParams,
+  TilesetManagerOptions,
+} from '../tileset-manager';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

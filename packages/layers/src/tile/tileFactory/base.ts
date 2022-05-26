@@ -5,7 +5,7 @@ import {
   ScaleAttributeType,
   StyleAttrField,
 } from '@antv/l7-core';
-import Source, {Tile} from '@antv/l7-source';
+import Source, { Tile } from '@antv/l7-source';
 import MaskLayer from '../../mask';
 import { getLayerShape, registerLayers } from '../utils';
 import VectorLayer from './vectorLayer';

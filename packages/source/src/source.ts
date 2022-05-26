@@ -10,12 +10,7 @@ import {
   ISourceCFG,
   ITransform,
 } from '@antv/l7-core';
-import {
-  bBoxToBounds,
-  extent,
-  padBounds,
-} from '@antv/l7-utils';
-import { TilesetManager } from './tileset-manager';
+import { bBoxToBounds, extent, padBounds } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
@@ -23,6 +18,7 @@ import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './factory';
+import { TilesetManager } from './tileset-manager';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
