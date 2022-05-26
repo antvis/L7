@@ -8,7 +8,8 @@ import {
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
-import { decodePickingColor, Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile, TilesetManager } from '@antv/l7-source';
+import { decodePickingColor } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/tileLayerManager';
 
 export default class BaseTileLayer implements ITileLayer {

@@ -1,10 +1,11 @@
 import {
   getImage,
-  getURLFromTemplate,
+ 
+} from '@antv/l7-utils';
+import { getURLFromTemplate,
   Tile,
   TileLoadParams,
-  TilesetManagerOptions,
-} from '@antv/l7-utils';
+  TilesetManagerOptions,} from '../tileset-manager'
 import { IParserData, IRasterTileParserCFG } from '../interface';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {

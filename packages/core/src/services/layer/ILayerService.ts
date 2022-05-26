@@ -1,6 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile, TilesetManager } from '@antv/l7-source';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';

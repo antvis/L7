@@ -8,7 +8,7 @@ import {
   ITileLayerManager,
   ITilePickManager,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-utils';
+import { Tile } from '@antv/l7-source';
 import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';

@@ -5,7 +5,7 @@ import {
   ISubLayerInitOptions,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-utils';
+import { Tile } from '@antv/l7-source';
 
 export type Timeout = any;
 export type CacheEvent =

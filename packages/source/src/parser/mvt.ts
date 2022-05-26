@@ -1,10 +1,13 @@
 import {
   getArrayBuffer,
+
+} from '@antv/l7-utils';
+import {
   getURLFromTemplate,
   Tile,
   TileLoadParams,
   TilesetManagerOptions,
-} from '@antv/l7-utils';
+} from '../tileset-manager'
 import {
   VectorTile,
   VectorTileFeature,

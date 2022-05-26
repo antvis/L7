@@ -14,8 +14,8 @@ import {
   bBoxToBounds,
   extent,
   padBounds,
-  TilesetManager,
 } from '@antv/l7-utils';
+import { TilesetManager } from './tileset-manager';
 import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
