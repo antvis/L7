@@ -662,8 +662,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     } else {
       this.scaleOptions[field] = cfg;
     }
-    if(this.tileLayer) {
-      this.tileLayer.scale(field, cfg)
+    if (this.tileLayer) {
+      this.tileLayer.scale(field, cfg);
     }
     return this;
   }

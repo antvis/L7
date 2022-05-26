@@ -3,12 +3,12 @@ import {
   ILayer,
   ILayerService,
   IMapService,
+  IScale,
+  IScaleOptions,
   ISource,
   ITileLayer,
   ITileLayerManager,
   ITileLayerOPtions,
-  IScaleOptions,
-  IScale
 } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-source';
 import { decodePickingColor } from '@antv/l7-utils';
@@ -70,9 +70,9 @@ export default class BaseTileLayer implements ITileLayer {
   }
 
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
-    this.children.map(child => {
+    this.children.map((child) => {
       child.scale(field, cfg);
-    })
+    });
   }
 
   public render() {
