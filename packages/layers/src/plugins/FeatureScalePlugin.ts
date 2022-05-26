@@ -271,7 +271,11 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       cfg.domain = values;
     } else if (type === ScaleTypes.DIVERGING) {
       const minMax = extent(values);
-      cfg.domain = [minMax[0], (minMax[0] + minMax[1]) / 2, minMax[1]];
+      const neutral =
+        scaleOption?.neutral !== undefined
+          ? scaleOption?.neutral
+          : (minMax[0] + minMax[1]) / 2;
+      cfg.domain = [minMax[0], neutral, minMax[1]];
     }
     return { ...cfg, ...scaleOption };
   }

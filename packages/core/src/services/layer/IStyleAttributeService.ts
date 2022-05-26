@@ -43,6 +43,7 @@ export type ScaleTypeName =
 export type ScaleAttributeType = 'color' | 'size' | 'shape';
 export interface IScale {
   type: ScaleTypeName;
+  neutral?: number;
   field?: string;
   unknown?: string;
   ticks?: any[];
