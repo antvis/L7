@@ -109,9 +109,9 @@ export default class TileFactory implements ITileFactory {
     layer.source(source);
 
     // set scale attribute field
-    this.setStyleAttributeField(layer, 'shape', shape)
-    this.setStyleAttributeField(layer, 'color', color)
-    this.setStyleAttributeField(layer, 'size', size)
+    this.setStyleAttributeField(layer, 'shape', shape);
+    this.setStyleAttributeField(layer, 'color', color);
+    this.setStyleAttributeField(layer, 'size', size);
 
     // set mask
     const layers = [layer];
@@ -140,13 +140,13 @@ export default class TileFactory implements ITileFactory {
   }
 
   public getDefautStyleAttributeField(layer: ILayer, type: string) {
-    switch(type) {
+    switch (type) {
       case 'size':
         return 2;
       case 'color':
         return '#fff';
       case 'shape':
-        return getLayerShape(this.parentLayer.type, layer)
+        return getLayerShape(this.parentLayer.type, layer);
       default:
         return '';
     }
@@ -155,9 +155,9 @@ export default class TileFactory implements ITileFactory {
   public setStyleAttributeField(
     layer: ILayer,
     type: ScaleAttributeType,
-    value: IScaleValue|undefined|string,
+    value: IScaleValue | undefined | string,
   ) {
-    if(typeof value === 'string') {
+    if (typeof value === 'string') {
       layer[type](value);
       return;
     }
@@ -166,21 +166,21 @@ export default class TileFactory implements ITileFactory {
       layer[type](defaultValue);
       return layer;
     }
-    const params = this.parseScaleValue(value, type)
-    if(params.length === 0) {
+    const params = this.parseScaleValue(value, type);
+    if (params.length === 0) {
       layer[type](defaultValue);
-    } else{
+    } else {
       // @ts-ignore
       layer[type](...params);
     }
   }
 
-  protected parseScaleValue(value: IScaleValue|string, type: string) {
-    if(type === 'shape') {  
-      if(typeof value === 'string') {
+  protected parseScaleValue(value: IScaleValue | string, type: string) {
+    if (type === 'shape') {
+      if (typeof value === 'string') {
         return [value];
-      }else if (value?.field) {
-        return [value?.field]
+      } else if (value?.field) {
+        return [value?.field];
       } else {
         return [];
       }

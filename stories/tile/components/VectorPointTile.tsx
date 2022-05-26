@@ -82,13 +82,13 @@ export default class RasterTile extends React.Component {
       setTimeout(() => {
         layer.shape('circle');
 
-          layer.size(20)
+        layer.size(20);
         // layer.style({
         //   // opacity: 0.4
         //   strokeWidth: 2
         // })
         // layer.select(true)
-          layer.color('#f00')
+        layer.color('#f00');
         //   // layer.color('v', v => '#ff0')
         this.scene.render();
       }, 2000);
