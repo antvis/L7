@@ -48,6 +48,4 @@ export interface ITileFactory {
     type: ScaleAttributeType,
     value: IScaleValue,
   ): void;
-  setColor(layer: ILayer, scaleValue: IScaleValue): ILayer;
-  setSize(layer: ILayer, scaleValue: IScaleValue): ILayer;
 }

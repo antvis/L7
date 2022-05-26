@@ -19,6 +19,7 @@ import {
   ITileStyles,
   Timeout,
 } from '../interface';
+
 export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
@@ -108,9 +109,9 @@ export default class TileFactory implements ITileFactory {
     layer.source(source);
 
     // set scale attribute field
-    this.setShape(layer, shape);
-    this.setColor(layer, color);
-    this.setSize(layer, size);
+    this.setStyleAttributeField(layer, 'shape', shape)
+    this.setStyleAttributeField(layer, 'color', color)
+    this.setStyleAttributeField(layer, 'size', size)
 
     // set mask
     const layers = [layer];
@@ -138,69 +139,53 @@ export default class TileFactory implements ITileFactory {
     return '';
   }
 
+  public getDefautStyleAttributeField(layer: ILayer, type: string) {
+    switch(type) {
+      case 'size':
+        return 2;
+      case 'color':
+        return '#fff';
+      case 'shape':
+        return getLayerShape(this.parentLayer.type, layer)
+      default:
+        return '';
+    }
+  }
+
   public setStyleAttributeField(
     layer: ILayer,
     type: ScaleAttributeType,
-    value: IScaleValue,
+    value: IScaleValue|undefined|string,
   ) {
-    switch (type) {
-      case 'color':
-        this.setColor(layer, value);
-        return;
-      case 'size':
-        this.setSize(layer, value);
-        return;
-      case 'shape':
-        this.setShape(layer, value);
+    if(typeof value === 'string') {
+      layer[type](value);
+      return;
     }
-  }
-
-  public setShape(layer: ILayer, shapeValue?: IScaleValue | string) {
-    if (typeof shapeValue === 'string') {
-      layer.shape(shapeValue);
-      return layer;
-    } else if (shapeValue?.field) {
-      layer.shape(shapeValue.field);
-    } else {
-      layer.shape(getLayerShape(this.parentLayer.type, layer));
-    }
-    return layer;
-  }
-
-  public setColor(layer: ILayer, colorValue?: IScaleValue) {
-    if (!colorValue) {
-      layer.color('#fff');
+    const defaultValue = this.getDefautStyleAttributeField(layer, type);
+    if (!value) {
+      layer[type](defaultValue);
       return layer;
     }
-    const parseValueList = this.parseScaleValue(colorValue);
-    if (parseValueList.length === 2) {
-      layer.color(parseValueList[0] as StyleAttrField, parseValueList[1]);
-    } else if (parseValueList.length === 1) {
-      layer.color(parseValueList[0] as StyleAttrField);
-    } else {
-      layer.color('#fff');
+    const params = this.parseScaleValue(value, type)
+    if(params.length === 0) {
+      layer[type](defaultValue);
+    } else{
+      // @ts-ignore
+      layer[type](...params);
     }
-    return layer;
   }
 
-  public setSize(layer: ILayer, sizeValue?: IScaleValue) {
-    if (!sizeValue) {
-      layer.size(2);
-      return layer;
+  protected parseScaleValue(value: IScaleValue|string, type: string) {
+    if(type === 'shape') {  
+      if(typeof value === 'string') {
+        return [value];
+      }else if (value?.field) {
+        return [value?.field]
+      } else {
+        return [];
+      }
     }
-    const parseValueList = this.parseScaleValue(sizeValue);
-    if (parseValueList.length === 2) {
-      layer.size(parseValueList[0] as StyleAttrField, parseValueList[1]);
-    } else if (parseValueList.length === 1) {
-      layer.size(parseValueList[0] as StyleAttrField);
-    } else {
-      layer.size(2);
-    }
-    return layer;
-  }
-
-  protected parseScaleValue(scaleValue: IScaleValue) {
-    const { field, values, callback } = scaleValue;
+    const { field, values, callback } = value as IScaleValue;
     if (field && values && Array.isArray(values)) {
       return [field, values];
     } else if (field && callback) {
