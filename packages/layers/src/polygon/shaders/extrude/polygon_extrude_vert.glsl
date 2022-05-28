@@ -54,13 +54,6 @@ void main() {
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
 
-  if(styleMappingMat[0][3] < 1.0 ) {
-    // side
-    styleMappingMat[0][0] = 0.0;
-  } else {
-
-  }
-
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
   vec4 project_pos = project_position(pos);
 

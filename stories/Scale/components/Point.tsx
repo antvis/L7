@@ -76,6 +76,7 @@ export default class PointScale extends React.Component {
         .scale({
           type: {
             type: 'cat',
+            unknown: '#eee',
             domain: ['C', 'B', 'A'],
           },
         })

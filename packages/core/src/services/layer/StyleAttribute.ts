@@ -81,7 +81,7 @@ export default class StyleAttribute implements IStyleAttribute {
     }
     return params.map((param, idx) => {
       const scaleFunc = this.scale?.scalers![idx].func;
-      // @ts-ignore
+      // @ts-ignore // TODO 支持双变量映射
       const value = scaleFunc(param);
       return value;
     });

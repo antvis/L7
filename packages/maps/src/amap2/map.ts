@@ -20,7 +20,7 @@ import {
   Point,
   TYPES,
 } from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
+import { amap2Project, DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -102,30 +102,55 @@ export default class AMapService
    */
   public setCustomCoordCenter(center: [number, number]) {
     this.sceneCenter = center;
-    // @ts-ignore
-    this.sceneCenterMKT = this.map
-      // @ts-ignore
-      .getProjection()
-      .project(...this.sceneCenter);
+    this.sceneCenterMKT = amap2Project(...center);
   }
 
   public getCustomCoordCenter(): [number, number] {
     return this.sceneCenterMKT;
   }
+
+  public lngLatToCoordByLayer(
+    lnglat: [number, number],
+    layerCenter: [number, number],
+  ) {
+    const layerCenterFlat = amap2Project(...layerCenter);
+    return this._sub(amap2Project(lnglat[0], lnglat[1]), layerCenterFlat);
+  }
+
+  public lngLatToCoordsByLayer(
+    lnglatArray: number[][][] | number[][],
+    layerCenter: [number, number],
+  ): number[][][] | number[][] {
+    // @ts-ignore
+    return lnglatArray.map((lnglats) => {
+      if (typeof lnglats[0] === 'number') {
+        return this.lngLatToCoordByLayer(
+          lnglats as [number, number],
+          layerCenter,
+        );
+      } else {
+        // @ts-ignore
+        return lnglats.map((lnglat) => {
+          return this.lngLatToCoordByLayer(
+            lnglat as [number, number],
+            layerCenter,
+          );
+        });
+      }
+    });
+  }
+
   /**
    * 根据数据的绘制中心转换经纬度数据 高德2.0
    */
   public lngLatToCoord(lnglat: [number, number]) {
-    // @ts-ignore
-    const proj = this.map.getProjection();
-    const project = proj.project;
     // 单点
     if (!this.sceneCenter) {
       // @ts-ignore
       this.map.customCoords.setCenter(lnglat);
       this.setCustomCoordCenter(lnglat);
     }
-    return this._sub(project(lnglat[0], lnglat[1]), this.sceneCenterMKT);
+    return this._sub(amap2Project(lnglat[0], lnglat[1]), this.sceneCenterMKT);
   }
 
   /**
