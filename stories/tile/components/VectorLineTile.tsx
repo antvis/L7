@@ -117,10 +117,10 @@ export default class RasterTile extends React.Component {
 
       this.scene.addLayer(layer);
 
-      setTimeout(() => {
-        layer.size(5);
-        this.scene.render();
-      }, 4000);
+      // setTimeout(() => {
+      //   layer.size(5);
+      //   this.scene.render();
+      // }, 4000);
     });
   }
 

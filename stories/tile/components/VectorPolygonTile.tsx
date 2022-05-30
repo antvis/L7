@@ -67,6 +67,7 @@ export default class RasterTile extends React.Component {
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          // 'http://localhost:3333/tilesource/{z}/{x}/{y}.pbf',
           // 'http://localhost:3000/woods.mbtiles/{z}/{x}/{y}.pbf',
           // 'http://localhost:3000/zhoushan.mbtiles/{z}/{x}/{y}.pbf',
           // 'http://localhost:3000/woods.mbtiles/14/13779/5999.pbf'

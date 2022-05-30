@@ -65,7 +65,7 @@ export default class RasterTile extends React.Component {
             },
           },
         )
-        .shape('triangle')
+        // .shape('triangle')
         // .color('#f00')
         // .color('v', v => '#ff0')
         .color('COLOR')
@@ -79,19 +79,19 @@ export default class RasterTile extends React.Component {
 
       this.scene.addLayer(layer);
 
-      setTimeout(() => {
-        layer.shape('circle');
+      // setTimeout(() => {
+      //   layer.shape('circle');
 
-        layer.size(20);
-        // layer.style({
-        //   // opacity: 0.4
-        //   strokeWidth: 2
-        // })
-        // layer.select(true)
-        layer.color('#f00');
-        //   // layer.color('v', v => '#ff0')
-        this.scene.render();
-      }, 2000);
+      //   layer.size(20);
+      //   // layer.style({
+      //   //   // opacity: 0.4
+      //   //   strokeWidth: 2
+      //   // })
+      //   // layer.select(true)
+      //   layer.color('#f00');
+      //   //   // layer.color('v', v => '#ff0')
+      //   this.scene.render();
+      // }, 2000);
     });
   }
 
