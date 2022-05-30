@@ -63,13 +63,12 @@ export default class RasterTile extends React.Component {
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
       function getRandomColor() {
-        let r = Math.floor(Math.random() * 10)
-        let g = Math.floor(Math.random() * 10)
-        let b = Math.floor(Math.random() * 10)
-        return  '#' + r + g + b;
+        let r = Math.floor(Math.random() * 10);
+        let g = Math.floor(Math.random() * 10);
+        let b = Math.floor(Math.random() * 10);
+        return '#' + r + g + b;
       }
-      const colors = {}
-
+      const colors = {};
 
       const layer = new PolygonLayer();
       layer
@@ -99,7 +98,7 @@ export default class RasterTile extends React.Component {
         )
         .color('citycode', (v: string) => {
           // @ts-ignore
-          if(colors[v]) {
+          if (colors[v]) {
             // @ts-ignore
             return colors[v];
           } else {
