@@ -11,6 +11,8 @@ import VectorPointTile from './components/VectorPointTile';
 import VectorPolygonTile from './components/VectorPolygonTile';
 import VectorLineTile from './components/VectorLineTile';
 
+import VectorProvince from './components/VectorProvince';
+
 
 storiesOf('瓦片', module)
   .add('RasterTile', () => <RasterTile />)
@@ -22,3 +24,5 @@ storiesOf('瓦片', module)
   .add('VectorPointTile', () => <VectorPointTile />)
   .add('VectorPolygonTile', () => <VectorPolygonTile />)
   .add('VectorLineTile', () => <VectorLineTile />)
+
+  .add('VectorProvince', () => <VectorProvince />)
