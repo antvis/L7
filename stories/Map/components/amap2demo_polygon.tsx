@@ -73,7 +73,7 @@ export default class Amap2demo_polygon extends React.Component {
       ],
     };
 
-    const source = new Source(emptyData)
+    const source = new Source(emptyData);
 
     const layer = new PolygonLayer({
       // autoFit: true,
@@ -91,17 +91,15 @@ export default class Amap2demo_polygon extends React.Component {
         // },
       });
 
-      scene.on('loaded', () => {
-        scene.addLayer(layer);
-        scene.render()
-        setTimeout(() => {
-          layer.setData(data)
-          scene.render()
-        }, 3000)
-      })
-   
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+      scene.render();
+      setTimeout(() => {
+        layer.setData(data);
+        scene.render();
+      }, 3000);
+    });
 
-   
     // const layer2 = new PolygonLayer({
     //   autoFit: true,
     // })
