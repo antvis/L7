@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.8.40",
+  "version": "2.8.41",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,7 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-utils": "^2.8.40",
+    "@antv/l7-utils": "^2.8.41",
     "@babel/runtime": "^7.7.7",
     "ajv": "^6.10.2",
     "element-resize-event": "^3.0.3",
