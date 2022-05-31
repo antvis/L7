@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "./es/index.js"
+  ],
   "files": [
     "lib",
     "es",
@@ -31,8 +33,8 @@
     "@turf/meta": "^6.0.2",
     "d3-array": "1",
     "d3-color": "^1.4.0",
-    "d3-interpolate": "2",
     "d3-scale": "2",
+    "d3-interpolate":"1.4.0",
     "earcut": "^2.2.1",
     "eventemitter3": "^4.0.0",
     "extrude-polyline": "^1.0.6",
