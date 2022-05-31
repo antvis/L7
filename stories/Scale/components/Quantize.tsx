@@ -1,5 +1,5 @@
 import { PolygonLayer, Scene, Popup } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 
 const list = [
@@ -214,7 +214,7 @@ export default class Quantize extends React.Component {
     const scene = new Scene({
       id: 'map',
       pickBufferScale: 1.0,
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         style: 'light',
         center: [-121.24357, 37.58264],
         pitch: 0,
@@ -240,12 +240,12 @@ export default class Quantize extends React.Component {
                 },
               ],
             })
-            .scale({
-              value: {
-                type: 'quantize',
-                // nice: false,
-              },
-            })
+            // .scale({
+            //   value: {
+            //     type: 'quantize',
+            //     // nice: false,
+            //   },
+            // })
             .color('value', [
               '#35E0CC',
               '#31C4DC',
@@ -254,7 +254,7 @@ export default class Quantize extends React.Component {
               '#204CCF',
             ])
             .shape('fill');
-
+          console.log(chinaPolygonLayer);
           chinaPolygonLayer.on('add', (type) => {
             console.log(
               'getLegendItems: ',
