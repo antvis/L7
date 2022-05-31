@@ -49,7 +49,7 @@
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
-    "@types/d3-interpolate": "2.0.2",
+    "@types/d3-interpolate": "1.4.0",
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5",
