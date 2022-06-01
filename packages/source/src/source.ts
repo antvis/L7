@@ -243,7 +243,7 @@ export default class Source extends EventEmitter implements ISource {
   private setCenter(bbox: BBox) {
     this.center = [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2];
     if (isNaN(this.center[0]) || isNaN(this.center[1])) {
-      // this.center = [Infinity, Infinity] // Infinity/Infinity = NaN
+      // this.center = [NaN, NaN] // Infinity - Infinity = NaN
       // 默认设置为大地原点
       this.center = [108.92361111111111, 34.54083333333333];
     }
