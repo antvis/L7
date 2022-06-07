@@ -1,4 +1,5 @@
 import BaseLayer from '../../core/BaseLayer';
+import { IEncodeFeature } from '@antv/l7-core';
 import {
   ILineLayerStyleOptions,
   IPointLayerStyleOptions,
@@ -6,6 +7,7 @@ import {
 } from '../../core/interface';
 import lineFillModel from '../../line/models/tile';
 import pointFillModel from '../../point/models/tile';
+import pointTextModel from '../../point/models/text';
 import polygonFillModel from '../../polygon/models/tile';
 
 export default class VectorLayer extends BaseLayer<
@@ -32,11 +34,31 @@ export default class VectorLayer extends BaseLayer<
       case 'LineLayer':
         return lineFillModel;
       case 'PointLayer':
-        return pointFillModel;
+        return this.getPointModel();
       default:
         return pointFillModel;
     }
   }
+
+  protected getPointModel() {
+    const layerData = this.getEncodedData();
+    const { shape2d } = this.getLayerConfig();
+    const item = layerData.find((fe: IEncodeFeature) => {
+      return fe.hasOwnProperty('shape');
+    });
+    // only support pointFill & pointText now
+    if(item) {
+      const shape = item.shape;
+      if (shape2d?.indexOf(shape as string) !== -1) {
+        return pointFillModel;
+      } else {
+        return pointTextModel;
+      }
+    } else {
+      return pointFillModel;
+    }
+  }
+
   protected getConfigSchema() {
     return {
       properties: {

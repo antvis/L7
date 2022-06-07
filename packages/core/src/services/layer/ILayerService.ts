@@ -126,7 +126,7 @@ export interface ISubLayerStyles {
 }
 export interface ISubLayerInitOptions {
   layerType: string;
-  shape?: string | IScaleValue;
+  shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
   mask: boolean;

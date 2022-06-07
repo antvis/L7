@@ -65,12 +65,15 @@ export default class RasterTile extends React.Component {
             },
           },
         )
-        // .shape('triangle')
-        // .color('#f00')
+        .shape('NNH_NAME', 'text')
+        .color('#f00')
         // .color('v', v => '#ff0')
-        .color('COLOR')
-        .size(12)
+        // .color('COLOR')
+        .size(18)
         .style({
+          stroke: '#00f',
+          strokeWidth: 1,
+          // textAllowOverlap: false
           // color: "#ff0"
           // opacity: 0.4,
         });

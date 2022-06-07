@@ -154,8 +154,13 @@ export default class TileFactory implements ITileFactory {
   public setStyleAttributeField(
     layer: ILayer,
     type: ScaleAttributeType,
-    value: IScaleValue | undefined | string,
+    value: IScaleValue | undefined | string | string[],
   ) {
+    if(Array.isArray(value)) {
+      // @ts-ignore
+      layer[type](...value);
+      return;
+    }
     if (typeof value === 'string') {
       layer[type](value);
       return;
