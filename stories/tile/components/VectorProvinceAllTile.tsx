@@ -68,7 +68,9 @@ export default class RasterTile extends React.Component {
       const colors = {};
 
       const polygonlayer = new PolygonLayer()
-      .source('http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',{
+        .source(
+          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
+          {
             parser: {
               type: 'mvt',
               tileSize: 256,
@@ -102,7 +104,9 @@ export default class RasterTile extends React.Component {
       this.scene.addLayer(polygonlayer);
 
       const linelayer = new LineLayer()
-      .source('http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',{
+        .source(
+          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
+          {
             parser: {
               type: 'mvt',
               tileSize: 256,
@@ -117,11 +121,13 @@ export default class RasterTile extends React.Component {
           },
         )
         .color('#f00')
-        .size(1)
+        .size(1);
       this.scene.addLayer(linelayer);
 
       const pointlayer = new PointLayer()
-      .source('http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',{
+        .source(
+          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
+          {
             parser: {
               type: 'mvt',
               tileSize: 256,
@@ -135,17 +141,15 @@ export default class RasterTile extends React.Component {
             layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
           },
         )
-        .shape('NAME_CHN', 'text') 
+        .shape('NAME_CHN', 'text')
         .color('#f00')
         .size(12)
         .style({
           stroke: '#fff',
           strokeWidth: 2,
-        })
-       
-      this.scene.addLayer(pointlayer);
+        });
 
- 
+      this.scene.addLayer(pointlayer);
     });
   }
 
