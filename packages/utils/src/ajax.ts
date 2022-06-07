@@ -1,5 +1,7 @@
 import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
+// @ts-ignore
+import * as GeoTIFF from 'geotiff';
 
 export type RequestParameters = {
   url: string;
@@ -270,3 +272,40 @@ export const getImage = (
     }
   });
 };
+
+
+const arrayBufferToTiffImage = async (
+  data: ArrayBuffer,
+  callback: (err?: Error | null, image?: any) => void,
+  rasterParser: any
+) => {
+  try {
+
+    const { rasterData, width, height } = await rasterParser(data)
+    const defaultMIN = 0;
+    const defaultMAX = 8000
+    callback(null, {
+      data: rasterData,
+      width,
+      height,
+      min: defaultMIN,
+      max: defaultMAX,
+    });
+  } catch(err) {
+    callback(null, new Error(''  + err));
+  }
+}
+
+export const getTiffImage = (
+  requestParameters: RequestParameters,
+  callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
+  rasterParser: any
+) => {
+  return getArrayBuffer(requestParameters, (err, imgData) => {
+    if (err) {
+      callback(err);
+    } else if (imgData) {
+      arrayBufferToTiffImage(imgData, callback, rasterParser)
+    }
+  });
+}

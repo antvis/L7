@@ -40,6 +40,8 @@ export interface IRasterTileParserCFG {
   // 指定矢量瓦片的数据分类
   layerName?: string;
   coord?: string;
+
+  rasterParser?: any
 }
 
 export interface IJsonItem {

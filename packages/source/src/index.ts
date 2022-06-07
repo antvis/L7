@@ -6,6 +6,7 @@ import json, { defaultData, defaultParser } from './parser/json';
 import mapboxVectorTile from './parser/mvt';
 import raster from './parser/raster';
 import rasterTile from './parser/raster-tile';
+import rasterTiff from './parser/raster-tiff';
 import Source from './source';
 import { cluster } from './transform/cluster';
 import { filter } from './transform/filter';
@@ -15,6 +16,7 @@ import { join } from './transform/join';
 import { map } from './transform/map';
 
 registerParser('rasterTile', rasterTile);
+registerParser('rasterTiff', rasterTiff);
 registerParser('mvt', mapboxVectorTile);
 registerParser('geojson', geojson);
 registerParser('image', image);

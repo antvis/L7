@@ -3,6 +3,7 @@ import VectorLineTile from './line';
 import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';
 import RasterTileFactory from './raster';
+import RasterTiffFactory from './rasterTiff';
 
 export type TileType =
   | 'PolygonLayer'
@@ -10,7 +11,10 @@ export type TileType =
   | 'LineLayer'
   | 'RasterLayer';
 
-export function getTileFactory(tileType: TileType) {
+export function getTileFactory(tileType: TileType, parserType: string) {
+  if(parserType === 'rasterTiff') {
+    return RasterTiffFactory;
+  }
   switch (tileType) {
     case 'PolygonLayer':
       return VectorPolygonTile;
