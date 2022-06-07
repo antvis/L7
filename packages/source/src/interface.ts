@@ -41,7 +41,7 @@ export interface IRasterTileParserCFG {
   layerName?: string;
   coord?: string;
 
-  rasterParser?: any
+  rasterParser?: any;
 }
 
 export interface IJsonItem {

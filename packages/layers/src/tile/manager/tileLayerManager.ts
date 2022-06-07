@@ -222,8 +222,11 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   private initTileFactory() {
-    const source = this.parent.getSource()
-    const TileFactory = getTileFactory(this.parent.type as TileType, source.parser.type);
+    const source = this.parent.getSource();
+    const TileFactory = getTileFactory(
+      this.parent.type as TileType,
+      source.parser.type,
+    );
     this.tileFactory = new TileFactory({
       parent: this.parent,
     });

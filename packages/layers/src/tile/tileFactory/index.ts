@@ -12,7 +12,7 @@ export type TileType =
   | 'RasterLayer';
 
 export function getTileFactory(tileType: TileType, parserType: string) {
-  if(parserType === 'rasterTiff') {
+  if (parserType === 'rasterTiff') {
     return RasterTiffFactory;
   }
   switch (tileType) {

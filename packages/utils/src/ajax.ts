@@ -1,7 +1,7 @@
-import { getReferrer } from './env';
-import { $window, $XMLHttpRequest } from './mini-adapter';
 // @ts-ignore
 import * as GeoTIFF from 'geotiff';
+import { getReferrer } from './env';
+import { $window, $XMLHttpRequest } from './mini-adapter';
 
 export type RequestParameters = {
   url: string;
@@ -273,17 +273,15 @@ export const getImage = (
   });
 };
 
-
 const arrayBufferToTiffImage = async (
   data: ArrayBuffer,
   callback: (err?: Error | null, image?: any) => void,
-  rasterParser: any
+  rasterParser: any,
 ) => {
   try {
-
-    const { rasterData, width, height } = await rasterParser(data)
+    const { rasterData, width, height } = await rasterParser(data);
     const defaultMIN = 0;
-    const defaultMAX = 8000
+    const defaultMAX = 8000;
     callback(null, {
       data: rasterData,
       width,
@@ -291,21 +289,21 @@ const arrayBufferToTiffImage = async (
       min: defaultMIN,
       max: defaultMAX,
     });
-  } catch(err) {
-    callback(null, new Error(''  + err));
+  } catch (err) {
+    callback(null, new Error('' + err));
   }
-}
+};
 
 export const getTiffImage = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
-  rasterParser: any
+  rasterParser: any,
 ) => {
   return getArrayBuffer(requestParameters, (err, imgData) => {
     if (err) {
       callback(err);
     } else if (imgData) {
-      arrayBufferToTiffImage(imgData, callback, rasterParser)
+      arrayBufferToTiffImage(imgData, callback, rasterParser);
     }
   });
-}
+};

@@ -3,7 +3,6 @@ import * as turf from '@turf/turf';
 import { RasterLayer, Scene, LineLayer, ILayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
-
 export default class OsmRasterTile extends React.Component {
   private scene: Scene;
   private gridLayer: ILayer;
@@ -44,7 +43,6 @@ export default class OsmRasterTile extends React.Component {
       // });
 
       this.scene.addLayer(layer);
-      
     });
   }
 

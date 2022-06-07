@@ -31,15 +31,13 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-     
-
       const layer = new RasterLayer();
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/${z}/${y}/${x}.tif',
           'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
-          
+
           {
             parser: {
               type: 'rasterTiff',
@@ -54,14 +52,14 @@ export default class RasterTile extends React.Component {
                 const width = image.getWidth();
                 const height = image.getHeight();
                 const values = await image.readRasters();
-                return { rasterData: values[0], width, height }
-              }
+                return { rasterData: values[0], width, height };
+              },
             },
           },
-        ).
-        style({
-          opacity: 0.8
-        })
+        )
+        .style({
+          opacity: 0.8,
+        });
 
       this.scene.addLayer(layer);
     });
