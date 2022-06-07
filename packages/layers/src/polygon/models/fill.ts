@@ -5,6 +5,7 @@ import {
   IModel,
   Triangulation,
 } from '@antv/l7-core';
+import { isNumber } from 'lodash';
 import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -61,7 +62,7 @@ export default class FillModel extends BaseModel {
 
       u_raisingHeight: Number(raisingHeight),
 
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
 
       u_opacitylinear: Number(opacityLinear.enable),
       u_dir: opacityLinear.dir === 'in' ? 1.0 : 0.0,

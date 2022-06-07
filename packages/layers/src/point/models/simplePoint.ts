@@ -6,7 +6,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-
+import { isNumber } from 'lodash';
 import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -83,12 +83,12 @@ export default class SimplePointModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
-      u_opacity: Number(opacity),
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
-      u_stroke_opacity: Number(strokeOpacity),
-      u_stroke_width: Number(strokeWidth),
+      u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
+      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
     };
   }

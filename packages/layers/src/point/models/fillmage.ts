@@ -8,6 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { isNumber } from 'lodash';
 import { Version } from '@antv/l7-maps';
 import { getCullFace, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -107,7 +108,7 @@ export default class FillImageModel extends BaseModel {
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
 
-      u_opacity: Number(opacity),
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
