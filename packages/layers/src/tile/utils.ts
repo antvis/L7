@@ -13,7 +13,7 @@ export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
 export function getLayerShape(layerType: string, layer: ILayer) {
   const layerShape = layer.getAttribute('shape');
   if (layerShape && layerShape.scale?.field) {
-    if(layerShape.scale?.values === 'text') {
+    if (layerShape.scale?.values === 'text') {
       return [layerShape.scale.field, layerShape.scale.values] as string[];
     }
     return layerShape.scale.field as string;

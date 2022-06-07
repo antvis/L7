@@ -156,7 +156,7 @@ export default class TileFactory implements ITileFactory {
     type: ScaleAttributeType,
     value: IScaleValue | undefined | string | string[],
   ) {
-    if(Array.isArray(value)) {
+    if (Array.isArray(value)) {
       // @ts-ignore
       layer[type](...value);
       return;
