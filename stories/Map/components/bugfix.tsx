@@ -38,58 +38,45 @@ export default class Amap2demo extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      // var xyzTileLayer = new window.AMap.TileLayer({
-      //   // 图块取图地址
-      //   getTileUrl:
-      //     'https://wprd0{1,2,3,4}.is.autonavi.com/appmaptile?x=[x]&y=[y]&z=[z]&size=1&scl=1&style=8&ltype=11',
-      //   zIndex: 100,
-      // });
-      // scene.getMapService().map.add(xyzTileLayer);
-
-      addMarkers();
-      scene.render();
-    });
-
-    function addMarkers() {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
       )
         .then((res) => res.json())
-        .then((nodes) => {
-          const markerLayer = new MarkerLayer({
-            cluster: true,
+        .then((data) => {
+          data.features = data.features.filter((item) => {
+            return item.properties.capacity > 800;
           });
-          for (let i = 0; i < nodes.features.length; i++) {
-            const { coordinates } = nodes.features[i].geometry;
-            const marker = new Marker().setLnglat({
-              lng: coordinates[0],
-              lat: coordinates[1],
+          data.features.forEach((item) => {
+            // console.log(item.properties.capacity);
+          });
+          const pointLayer = new PointLayer({})
+            .source(data)
+            .shape('capacity', (capacity) =>
+              capacity < 5000 ? 'circle' : 'triangle',
+            )
+            .size('capacity', [0, 16])
+            .color('capacity', [
+              '#34B6B7',
+              '#4AC5AF',
+              '#5FD3A6',
+              '#7BE39E',
+              '#A1EDB8',
+              '#CEF8D6',
+            ])
+            .active(true)
+            .style({
+              opacity: 0.5,
+              // strokeWidth: ["capacity", (capacity) => (capacity < 5000 ? 2 : 4)],
+              strokeWidth: ['capacity', [1, 2]],
+              stroke: [
+                'capacity',
+                (capacity) => (capacity < 5000 ? '#ff0000' : '#0000ff'),
+              ],
             });
-            markerLayer.addMarker(marker);
-          }
-          scene.addMarkerLayer(markerLayer);
-          // 模拟第二次查询（8条数据，坐标点是兰州）
-          // 注意看地图上兰州的位置，原本是3，放大后会变成11
-          const data = [
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-            { coordinates: [103.823305441, 36.064225525] },
-          ];
-          for (let i = 0; i < data.length; i++) {
-            const { coordinates } = data[i];
-            const marker = new Marker().setLnglat({
-              lng: coordinates[0],
-              lat: coordinates[1],
-            });
-            markerLayer.addMarker(marker);
-          }
+
+          scene.addLayer(pointLayer);
         });
-    }
+    });
   }
 
   public render() {
