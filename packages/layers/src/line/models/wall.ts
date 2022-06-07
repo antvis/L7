@@ -8,8 +8,8 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { isNumber } from 'lodash';
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';

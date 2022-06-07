@@ -5,8 +5,8 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { isNumber } from 'lodash';
 import { getCullFace, rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';

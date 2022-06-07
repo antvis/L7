@@ -6,8 +6,8 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { isNumber } from 'lodash';
 import { getMask } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 
