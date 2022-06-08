@@ -129,6 +129,20 @@ export class TileLayerManager implements ITileLayerManager {
       stroke = '#fff',
       strokeWidth = 0,
       strokeOpacity = 1,
+
+      clampLow = true,
+      clampHigh = true,
+      domain = [0, 1],
+      rampColors = {
+        colors: [
+          'rgb(166,97,26)',
+          'rgb(223,194,125)',
+          'rgb(245,245,245)',
+          'rgb(128,205,193)',
+          'rgb(1,133,113)',
+        ],
+        positions: [0, 0.25, 0.5, 0.75, 1.0],
+      }
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -157,6 +171,11 @@ export class TileLayerManager implements ITileLayerManager {
       stroke,
       strokeWidth,
       strokeOpacity,
+      // raster tiff
+      clampLow,
+      clampHigh,
+      domain,
+      rampColors
     };
   }
 
@@ -185,6 +204,12 @@ export class TileLayerManager implements ITileLayerManager {
       'size',
       this.parent.getAttribute('size')?.scale,
     );
+
+    // rasterLayer
+    this.tileConfigManager.setConfig('rampColors', this.initOptions.rampColors);
+    this.tileConfigManager.setConfig('domain', this.initOptions.domain);
+    this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
+    this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
 
     this.tileConfigManager.on('updateConfig', (updateConfigs) => {
       updateConfigs.map((key: string) => {

@@ -1,6 +1,7 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
 import { Tile, TilesetManager } from '@antv/l7-source';
+import { IColorRamp } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
@@ -139,6 +140,13 @@ export interface ISubLayerInitOptions {
   opacity: number;
   color?: IScaleValue;
   size?: IScaleValue;
+
+  // raster tiff
+  domain?: [number, number];
+  clampLow?: boolean;
+  clampHigh?: boolean;
+  rampColors?: IColorRamp;
+
   // layerName
   coords?: string;
   layerName?: string;

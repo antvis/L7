@@ -14,11 +14,8 @@ export default class RasterTiffTile extends TileFactory {
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { opacity } = initOptions;
+    const { opacity, domain, clampHigh, clampLow, rampColors } = initOptions;
     const tiffdata = tile.data;
-    const mindata = -0;
-    const maxdata = 500;
-
     const layer = new RasterTiffLayer({
       visible: tile.isVisible,
     })
@@ -27,24 +24,15 @@ export default class RasterTiffTile extends TileFactory {
           type: 'raster',
           width: tiffdata.width,
           height: tiffdata.height,
-          // extent: [0, -20, 180, 60],
           extent: tile.bboxPolygon.bbox,
         },
       })
       .style({
         opacity,
-        domain: [mindata, maxdata],
-        clampLow: true,
-        rampColors: {
-          colors: [
-            'rgb(166,97,26)',
-            'rgb(223,194,125)',
-            'rgb(245,245,245)',
-            'rgb(128,205,193)',
-            'rgb(1,133,113)',
-          ],
-          positions: [0, 0.25, 0.5, 0.75, 1.0],
-        },
+        domain,
+        clampHigh,
+        clampLow,
+        rampColors,
       });
 
     registerLayers(this.parentLayer, [layer]);
