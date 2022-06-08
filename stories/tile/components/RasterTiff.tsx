@@ -12,7 +12,6 @@ import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as GeoTIFF from 'geotiff';
 
-
 export default class RasterTile extends React.Component {
   private scene: Scene;
 
@@ -31,9 +30,9 @@ export default class RasterTile extends React.Component {
         zoom: 4,
       }),
     });
-    const canvas = document.createElement('canvas')
-    canvas.width = 256
-    canvas.height = 256
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
     const ctx = canvas.getContext('2d');
     this.scene.on('loaded', () => {
       const layer = new RasterLayer();
@@ -52,13 +51,14 @@ export default class RasterTile extends React.Component {
               // maxZoom: 0,
               // maxZoom: 10,
               rasterParser: async (data: any) => {
-
-                const blob: Blob = new Blob([new Uint8Array(data)], { type: 'image/png' });
-                const img = await createImageBitmap(blob)
+                const blob: Blob = new Blob([new Uint8Array(data)], {
+                  type: 'image/png',
+                });
+                const img = await createImageBitmap(blob);
                 // @ts-ignore
-                ctx.clearRect(0, 0, 256, 256)
+                ctx.clearRect(0, 0, 256, 256);
                 // @ts-ignore
-                ctx.drawImage(img, 0, 0, 256, 256)
+                ctx.drawImage(img, 0, 0, 256, 256);
 
                 // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
                 // const tiff = await GeoTIFF.fromArrayBuffer(data);
@@ -70,16 +70,16 @@ export default class RasterTile extends React.Component {
 
                 // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
                 // @ts-ignore
-                let imgData = ctx.getImageData(0,0, 256,256).data
-                let arr = []
-                for(let i = 0; i < imgData.length; i += 4) {
-                  arr.push(imgData[i])
+                let imgData = ctx.getImageData(0, 0, 256, 256).data;
+                let arr = [];
+                for (let i = 0; i < imgData.length; i += 4) {
+                  arr.push(imgData[i]);
                 }
                 return {
                   rasterData: arr,
                   width: 256,
-                  height: 256
-                }
+                  height: 256,
+                };
               },
             },
           },
@@ -103,7 +103,7 @@ export default class RasterTile extends React.Component {
               // 'rgb(255,0,0)',
             ],
             positions: [0, 0.25, 0.5, 0.75, 1.0],
-          }
+          },
         });
 
       this.scene.addLayer(layer);
@@ -125,10 +125,10 @@ export default class RasterTile extends React.Component {
               'rgb(255,0,0)',
             ],
             positions: [0, 0.25, 0.5, 0.75, 1.0],
-          }
-        })
-        this.scene.render()
-      }, 3000)
+          },
+        });
+        this.scene.render();
+      }, 3000);
     });
   }
 

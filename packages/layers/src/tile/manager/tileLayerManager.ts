@@ -142,7 +142,7 @@ export class TileLayerManager implements ITileLayerManager {
           'rgb(1,133,113)',
         ],
         positions: [0, 0.25, 0.5, 0.75, 1.0],
-      }
+      },
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -175,7 +175,7 @@ export class TileLayerManager implements ITileLayerManager {
       clampLow,
       clampHigh,
       domain,
-      rampColors
+      rampColors,
     };
   }
 
