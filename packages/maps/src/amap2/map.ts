@@ -676,7 +676,6 @@ export default class AMapService
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
 
-
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     if (this.cameraChangedCallback) {
