@@ -261,7 +261,7 @@ export class TileLayerManager implements ITileLayerManager {
     this.tileFactory = new TileFactory({
       parent: this.parent,
       mapService: this.mapService,
-      rendererService: this.rendererService
+      rendererService: this.rendererService,
     });
   }
 }

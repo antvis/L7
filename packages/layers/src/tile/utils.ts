@@ -59,7 +59,11 @@ export function getContainerSize(container: HTMLCanvasElement | HTMLElement) {
   }
 }
 
-export function readPixel(x: number, y: number, rendererService: IRendererService) {
+export function readPixel(
+  x: number,
+  y: number,
+  rendererService: IRendererService,
+) {
   const { readPixels, getContainer } = rendererService;
   const xInDevicePixel = x * DOM.DPR;
   const yInDevicePixel = y * DOM.DPR;
@@ -76,11 +80,11 @@ export function readPixel(x: number, y: number, rendererService: IRendererServic
   ) {
     return false;
   }
-  
+
   const pickedColors = readPixels({
     x: Math.floor(xInDevicePixel),
     // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-    y: Math.floor((height - (y + 1) * DOM.DPR)),
+    y: Math.floor(height - (y + 1) * DOM.DPR),
     width: 1,
     height: 1,
     data: new Uint8Array(1 * 1 * 4),

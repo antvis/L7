@@ -1,18 +1,25 @@
 import {
   ILayer,
   IMapService,
+  IParseDataItem,
   IRendererService,
   IScaleValue,
   ISubLayerInitOptions,
   ScaleAttributeType,
   StyleAttrField,
-  IParseDataItem
 } from '@antv/l7-core';
 import Source, { Tile } from '@antv/l7-source';
 import MaskLayer from '../../mask';
-import { getLayerShape, registerLayers, getContainerSize, readPixel } from '../utils';
+import {
+  getContainerSize,
+  getLayerShape,
+  readPixel,
+  registerLayers,
+} from '../utils';
 import VectorLayer from './vectorLayer';
 
+import * as turf from '@turf/helpers';
+import union from '@turf/union';
 import {
   CacheEvent,
   ILayerTileConfig,
@@ -21,8 +28,6 @@ import {
   ITileStyles,
   Timeout,
 } from '../interface';
-import union from '@turf/union';
-import * as turf from '@turf/helpers';
 
 export default class TileFactory implements ITileFactory {
   public type: string;
@@ -261,30 +266,17 @@ export default class TileFactory implements ITileFactory {
     });
   }
 
-  private getAllFeatures(featureId: number) {
-      const allLayers = this.parentLayer.tileLayer.children;
-      const features: IParseDataItem[] = [];
-      allLayers.map(layer => {
-        const source = layer.getSource();
-        source.data.dataArray.map(feature => {
-          if(feature._id === featureId) {
-            features.push(feature);
-          }
-        })
-      })
-      return features;
-  }
-
   protected getCombineFeature(features: IParseDataItem[]) {
     let p: any = null;
-    features.map(feature => {
+    features.map((feature) => {
       const polygon = turf.polygon(feature.coordinates);
-      if(p === null){
+      if (p === null) {
         p = polygon;
-      } {
+      }
+      {
         p = union(p, polygon);
       }
-    })
+    });
     return p;
   }
 
@@ -294,15 +286,29 @@ export default class TileFactory implements ITileFactory {
     e: any,
     isVector?: boolean,
   ) {
-
     const featureId = e.featureId;
-    const features = this.getAllFeatures(featureId)
+    const features = this.getAllFeatures(featureId);
     e.feature = this.getCombineFeature(features);
 
-    if(isVector === false) { // raster tile get rgb
-      e.pickedColors = readPixel(e.x, e.y, this.rendererService)
+    if (isVector === false) {
+      // raster tile get rgb
+      e.pickedColors = readPixel(e.x, e.y, this.rendererService);
     }
     this.parentLayer.emit(eventName, e);
+  }
+
+  private getAllFeatures(featureId: number) {
+    const allLayers = this.parentLayer.tileLayer.children;
+    const features: IParseDataItem[] = [];
+    allLayers.map((layer) => {
+      const source = layer.getSource();
+      source.data.dataArray.map((feature) => {
+        if (feature._id === featureId) {
+          features.push(feature);
+        }
+      });
+    });
+    return features;
   }
 
   private getrLayerInitOption(initOptions: ISubLayerInitOptions) {

@@ -100,8 +100,8 @@ export default class RasterTile extends React.Component {
         .select(true);
       // .active(true);
 
-      // layer.on('click', e => { 
-        
+      // layer.on('click', e => {
+
       //   console.log(e.feature[0].coordinates)
       //   console.log(turf.featureCollection(e.feature[0].coordinates))
       //  })
