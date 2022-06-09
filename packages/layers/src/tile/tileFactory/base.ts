@@ -252,7 +252,12 @@ export default class TileFactory implements ITileFactory {
     });
   }
 
-  protected getFeatureAndEmitEvent(layer: ILayer, eventName: string, e: any, isVector?: boolean) {
+  protected getFeatureAndEmitEvent(
+    layer: ILayer,
+    eventName: string,
+    e: any,
+    isVector?: boolean,
+  ) {
     // console.log('isVector', isVector)
     const featureId = e.featureId;
     const source = layer.getSource();
