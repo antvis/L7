@@ -200,16 +200,16 @@ export default class TileFactory implements ITileFactory {
     return [];
   }
 
-  protected emitEvent(layers: ILayer[]) {
+  protected emitEvent(layers: ILayer[], isVector?: boolean) {
     layers.map((layer) => {
       layer.once('inited', () => {
         layer.on('click', (e) => {
           this.eventCache.click = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerClick', e);
+          this.getFeatureAndEmitEvent(layer, 'subLayerClick', e, isVector);
         });
         layer.on('mousemove', (e) => {
           this.eventCache.mousemove = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e);
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e, isVector);
         });
         layer.on('mouseup', (e) => {
           this.eventCache.mouseup = 1;
@@ -252,13 +252,17 @@ export default class TileFactory implements ITileFactory {
     });
   }
 
-  protected getFeatureAndEmitEvent(layer: ILayer, eventName: string, e: any) {
+  protected getFeatureAndEmitEvent(layer: ILayer, eventName: string, e: any, isVector?: boolean) {
+    // console.log('isVector', isVector)
     const featureId = e.featureId;
     const source = layer.getSource();
     const features = source.data.dataArray.filter(
       (feature) => feature._id === featureId,
     );
     e.feature = features;
+    // if(!isVector) { // raster tile get rgb
+    //   // layer.getLa
+    // }
     this.parentLayer.emit(eventName, e);
   }
 

@@ -34,6 +34,7 @@ export default class RasterTiffTile extends TileFactory {
         clampLow,
         rampColors,
       });
+    this.emitEvent([layer], false);
 
     registerLayers(this.parentLayer, [layer]);
 

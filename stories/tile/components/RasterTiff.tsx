@@ -104,31 +104,34 @@ export default class RasterTile extends React.Component {
             ],
             positions: [0, 0.25, 0.5, 0.75, 1.0],
           },
-        });
+        })
+        .select(true);
 
       this.scene.addLayer(layer);
 
-      setTimeout(() => {
-        layer.style({
-          rampColors: {
-            colors: [
-              // 'rgb(166,97,26)',
-              // 'rgb(223,194,125)',
-              // 'rgb(245,245,245)',
-              // 'rgb(128,205,193)',
-              // 'rgb(1,133,113)',
+      layer.on('click', e => console.log(e))
 
-              'rgb(0,0,0)',
-              'rgb(0,0,0)',
-              'rgb(0,245,0)',
-              'rgb(255,0,0)',
-              'rgb(255,0,0)',
-            ],
-            positions: [0, 0.25, 0.5, 0.75, 1.0],
-          },
-        });
-        this.scene.render();
-      }, 3000);
+      // setTimeout(() => {
+      //   layer.style({
+      //     rampColors: {
+      //       colors: [
+      //         // 'rgb(166,97,26)',
+      //         // 'rgb(223,194,125)',
+      //         // 'rgb(245,245,245)',
+      //         // 'rgb(128,205,193)',
+      //         // 'rgb(1,133,113)',
+
+      //         'rgb(0,0,0)',
+      //         'rgb(0,0,0)',
+      //         'rgb(0,245,0)',
+      //         'rgb(255,0,0)',
+      //         'rgb(255,0,0)',
+      //       ],
+      //       positions: [0, 0.25, 0.5, 0.75, 1.0],
+      //     },
+      //   });
+      //   this.scene.render();
+      // }, 3000);
     });
   }
 
