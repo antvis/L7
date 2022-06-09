@@ -2,6 +2,7 @@ import {
   IInteractionTarget,
   ILayer,
   ILayerService,
+  IMapService,
   IPickingService,
   IRendererService,
   ISubLayerInitOptions,
@@ -18,18 +19,23 @@ export class TileLayerManager implements ITileLayerManager {
   public layerName: string;
   public parent: ILayer;
   public children: ILayer[];
+  public mapService: IMapService;
+  public rendererService: IRendererService;
   public tilePickManager: ITilePickManager;
   public tileConfigManager: ITileConfigManager;
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions;
   constructor(
     parent: ILayer,
+    mapService: IMapService,
     rendererService: IRendererService,
     pickingService: IPickingService,
     layerService: ILayerService,
   ) {
     this.parent = parent;
     this.children = parent.layerChildren;
+    this.mapService = mapService;
+    this.rendererService = rendererService;
     this.tilePickManager = new TilePickManager(
       parent,
       rendererService,
@@ -254,6 +260,8 @@ export class TileLayerManager implements ITileLayerManager {
     );
     this.tileFactory = new TileFactory({
       parent: this.parent,
+      mapService: this.mapService,
+      rendererService: this.rendererService
     });
   }
 }

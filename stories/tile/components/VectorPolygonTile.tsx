@@ -66,7 +66,8 @@ export default class RasterTile extends React.Component {
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          // 'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
           // 'http://localhost:3333/tilesource/{z}/{x}/{y}.pbf',
           // 'http://localhost:3000/woods.mbtiles/{z}/{x}/{y}.pbf',
           // 'http://localhost:3000/zhoushan.mbtiles/{z}/{x}/{y}.pbf',
@@ -99,7 +100,11 @@ export default class RasterTile extends React.Component {
         .select(true);
       // .active(true);
 
-      // layer.on('click', e => { console.log(e) })
+      // layer.on('click', e => { 
+        
+      //   console.log(e.feature[0].coordinates)
+      //   console.log(turf.featureCollection(e.feature[0].coordinates))
+      //  })
       // layer.on('mousemove', e => console.log(e))
       // layer.on('mouseup', e => console.log(e))
       // layer.on('unmousemove', e => console.log(e))

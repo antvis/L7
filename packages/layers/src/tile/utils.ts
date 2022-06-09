@@ -1,4 +1,5 @@
-import { createLayerContainer, ILayer } from '@antv/l7-core';
+import { createLayerContainer, ILayer, IRendererService } from '@antv/l7-core';
+import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
 export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
   layers.map((layer) => {
@@ -45,4 +46,44 @@ export function getMaskValue(layerType: string, mask: boolean) {
     default:
       return mask;
   }
+}
+
+export function getContainerSize(container: HTMLCanvasElement | HTMLElement) {
+  if (!!(container as HTMLCanvasElement).getContext) {
+    return {
+      width: (container as HTMLCanvasElement).width / DOM.DPR,
+      height: (container as HTMLCanvasElement).height / DOM.DPR,
+    };
+  } else {
+    return container.getBoundingClientRect();
+  }
+}
+
+export function readPixel(x: number, y: number, rendererService: IRendererService) {
+  const { readPixels, getContainer } = rendererService;
+  const xInDevicePixel = x * DOM.DPR;
+  const yInDevicePixel = y * DOM.DPR;
+  let { width, height } = getContainerSize(
+    getContainer() as HTMLCanvasElement | HTMLElement,
+  );
+  width *= DOM.DPR;
+  height *= DOM.DPR;
+  if (
+    xInDevicePixel > width - 1 * DOM.DPR ||
+    xInDevicePixel < 0 ||
+    yInDevicePixel > height - 1 * DOM.DPR ||
+    yInDevicePixel < 0
+  ) {
+    return false;
+  }
+  
+  const pickedColors = readPixels({
+    x: Math.floor(xInDevicePixel),
+    // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+    y: Math.floor((height - (y + 1) * DOM.DPR)),
+    width: 1,
+    height: 1,
+    data: new Uint8Array(1 * 1 * 4),
+  });
+  return pickedColors;
 }

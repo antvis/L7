@@ -1,13 +1,16 @@
 import {
   ILayer,
+  IMapService,
+  IRendererService,
   IScaleValue,
   ISubLayerInitOptions,
   ScaleAttributeType,
   StyleAttrField,
+  IParseDataItem
 } from '@antv/l7-core';
 import Source, { Tile } from '@antv/l7-source';
 import MaskLayer from '../../mask';
-import { getLayerShape, registerLayers } from '../utils';
+import { getLayerShape, registerLayers, getContainerSize, readPixel } from '../utils';
 import VectorLayer from './vectorLayer';
 
 import {
@@ -18,10 +21,14 @@ import {
   ITileStyles,
   Timeout,
 } from '../interface';
+import union from '@turf/union';
+import * as turf from '@turf/helpers';
 
 export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
+  public mapService: IMapService;
+  public rendererService: IRendererService;
   public outSideEventTimer: Timeout | null = null;
   protected layers: ILayer[];
   // 用于记录图层内事件，辅助判断图层外事件逻辑
@@ -34,6 +41,8 @@ export default class TileFactory implements ITileFactory {
   };
   constructor(option: ITileFactoryOptions) {
     this.parentLayer = option.parent;
+    this.mapService = option.mapService;
+    this.rendererService = option.rendererService;
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
@@ -252,22 +261,47 @@ export default class TileFactory implements ITileFactory {
     });
   }
 
+  private getAllFeatures(featureId: number) {
+      const allLayers = this.parentLayer.tileLayer.children;
+      const features: IParseDataItem[] = [];
+      allLayers.map(layer => {
+        const source = layer.getSource();
+        source.data.dataArray.map(feature => {
+          if(feature._id === featureId) {
+            features.push(feature);
+          }
+        })
+      })
+      return features;
+  }
+
+  protected getCombineFeature(features: IParseDataItem[]) {
+    let p: any = null;
+    features.map(feature => {
+      const polygon = turf.polygon(feature.coordinates);
+      if(p === null){
+        p = polygon;
+      } {
+        p = union(p, polygon);
+      }
+    })
+    return p;
+  }
+
   protected getFeatureAndEmitEvent(
     layer: ILayer,
     eventName: string,
     e: any,
     isVector?: boolean,
   ) {
-    // console.log('isVector', isVector)
+
     const featureId = e.featureId;
-    const source = layer.getSource();
-    const features = source.data.dataArray.filter(
-      (feature) => feature._id === featureId,
-    );
-    e.feature = features;
-    // if(!isVector) { // raster tile get rgb
-    //   // layer.getLa
-    // }
+    const features = this.getAllFeatures(featureId)
+    e.feature = this.getCombineFeature(features);
+
+    if(isVector === false) { // raster tile get rgb
+      e.pickedColors = readPixel(e.x, e.y, this.rendererService)
+    }
     this.parentLayer.emit(eventName, e);
   }
 

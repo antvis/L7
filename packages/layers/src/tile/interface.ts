@@ -1,5 +1,7 @@
 import {
   ILayer,
+  IMapService,
+  IRendererService,
   IScaleValue,
   ISource,
   ISubLayerInitOptions,
@@ -17,6 +19,8 @@ export type CacheEvent =
 
 export interface ITileFactoryOptions {
   parent: ILayer;
+  mapService: IMapService;
+  rendererService: IRendererService;
 }
 
 export interface ITileStyles {

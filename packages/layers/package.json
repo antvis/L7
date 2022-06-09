@@ -31,6 +31,8 @@
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
     "@turf/meta": "^6.0.2",
+    "@turf/helpers": "^6.1.4",
+    "@turf/union": "^6.1.4",
     "d3-array": "1",
     "d3-color": "^1.4.0",
     "d3-interpolate": "1.4.0",

@@ -59,6 +59,7 @@ export default class BaseTileLayer implements ITileLayer {
 
     this.tileLayerManager = new TileLayerManager(
       parent,
+      mapService,
       rendererService,
       pickingService,
       layerService,

@@ -48,7 +48,8 @@ export default class RasterTile extends React.Component {
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          // 'http://localhost:3000/file3.mbtiles/{z}/{x}/{y}.pbf',
+          'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
           // 'http://localhost:3000/woods.mbtiles/{z}/{x}/{y}.pbf',
           // 'https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           // 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/{z}/{x}/{y}.vector.pbf?sku=101lazXpJZeM7&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
@@ -73,8 +74,8 @@ export default class RasterTile extends React.Component {
         .style({
           // color: "#ff0"
           // opacity: 0.4,
-        });
-      // .select(true);
+        })
+      .select(true);
       // .active(true);
 
       this.scene.addLayer(layer);
