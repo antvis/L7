@@ -42,6 +42,7 @@ export default class BaseTileLayer implements ITileLayer {
     select: null,
     active: null,
   };
+  private highLayerId: number|null = null;
 
   constructor({
     parent,
@@ -192,9 +193,8 @@ export default class BaseTileLayer implements ITileLayer {
 
       if (e.type === 'click') {
         const restLayers = this.children
-          .filter((child) => child.inited && child.isVisible())
+          .filter((child) => child.inited && child.isVisible() && child.isVector)
           .filter((child) => child !== e.layer);
-
         this.setSelect(restLayers, [r, g, b]);
       } else {
         this.setHighlight([r, g, b]);
@@ -207,10 +207,16 @@ export default class BaseTileLayer implements ITileLayer {
   }
 
   private setHighlight(pickedColors: any) {
+    const pickId = decodePickingColor(pickedColors);
     this.pickColors.active = pickedColors;
     this.children
-      .filter((child) => child.inited && child.isVisible())
+      .filter((child) => child.inited && child.isVisible() && child.isVector)
+      // Tip: 使用 vectorLayer 上的 pickID 优化高亮操作（过滤重复操作）
+      // @ts-ignore
+      .filter(child => child.getPickID() !== pickId)
       .map((child) => {
+        // @ts-ignore
+        child.setPickID(pickId);
         child.hooks.beforeHighlight.call(pickedColors);
       });
   }

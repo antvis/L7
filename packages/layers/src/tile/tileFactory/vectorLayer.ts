@@ -17,6 +17,17 @@ export default class VectorLayer extends BaseLayer<
 > {
   public isVector: boolean = true;
   public type: string = this.layerType as string;
+  // Tip: 单独被 tile 瓦片的渲染链路使用
+  private pickedID: number|null = null;
+
+  public getPickID() {
+    return this.pickedID;
+  }
+
+  public setPickID() {
+    return this.pickedID;
+  }
+
   public buildModels() {
     const model = this.getModelType();
     this.layerModel = new model(this);

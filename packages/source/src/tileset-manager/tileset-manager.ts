@@ -149,7 +149,9 @@ export class TilesetManager extends EventEmitter {
     for (const tile of this.currentTiles) {
       tile.isCurrent = true;
       tile.isVisible = true;
-      tile.lastVisible === false ? (tile.isVisibleChanged = true) : (tile.isVisibleChanged = false);
+      tile.lastVisible === false
+        ? (tile.isVisibleChanged = true)
+        : (tile.isVisibleChanged = false);
 
       tile.lastVisible = true;
     }
