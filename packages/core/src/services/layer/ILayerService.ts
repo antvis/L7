@@ -180,7 +180,7 @@ export interface ITileLayerManager {
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
 
-  renderPicker(target: IInteractionTarget): boolean;
+  pickLayers(target: IInteractionTarget): boolean;
 
   updateLayersConfig(layers: ILayer[], key: string, value: any): void;
 }
@@ -193,7 +193,7 @@ export interface ITileLayer {
   tilesetManager: TilesetManager | undefined;
   children: ILayer[];
   render(isPicking?: boolean): void;
-  renderPicker(target: IInteractionTarget): boolean;
+  pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
 }

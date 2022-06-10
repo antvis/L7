@@ -123,7 +123,7 @@ export class TileLayerManager implements ITileLayerManager {
     this.tilePickManager.normalRenderLayer(this.children);
   }
 
-  public renderPicker(target: IInteractionTarget) {
+  public pickLayers(target: IInteractionTarget) {
     return this.tilePickManager.pickTileRenderLayer(this.children, target);
   }
 
@@ -160,7 +160,7 @@ export class TileLayerManager implements ITileLayerManager {
       'size',
     );
     const source = this.parent.getSource();
-    const { layerName, coords, featureId } = source.data.tilesetOptions;
+    const { layerName, coords, featureId } = source?.data?.tilesetOptions || {};
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
     this.initOptions = {

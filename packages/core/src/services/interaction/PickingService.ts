@@ -404,12 +404,14 @@ export default class PickingService implements IPickingService {
             .map((pickedlayer) => {
               this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
             });
+          // Tip: clear last picked tilelayer state
           this.pickedTileLayers.map((pickedTileLayer) =>
-            pickedTileLayer.tileLayer.clearPick(target.type),
+            pickedTileLayer.tileLayer?.clearPick(target.type),
           );
 
+          // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
           if (layer.tileLayer) {
-            return layer.tileLayer.renderPicker(target);
+            return layer.tileLayer.pickLayers(target);
           }
 
           layer.hooks.beforePickingEncode.call();

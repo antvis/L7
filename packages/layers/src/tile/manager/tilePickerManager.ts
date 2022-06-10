@@ -62,7 +62,7 @@ export default class TilePickManager extends EventEmitter
         (layer) =>
           this.parent.needPick(target.type) &&
           layer.inited &&
-          layer.isVector &&
+          layer.isVector && // 只有矢量图层支持拾取
           layer.isVisible(),
       )
       .some((layer) => {

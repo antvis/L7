@@ -51,7 +51,8 @@ export default class BaseTileLayer implements ITileLayer {
     pickingService,
   }: ITileLayerOPtions) {
     const parentSource = parent.getSource();
-    const { layerName, coords, featureId } = parentSource.data.tilesetOptions;
+    const { layerName, coords, featureId } =
+      parentSource?.data?.tilesetOptions || {};
     this.layerName = layerName;
     this.parent = parent;
     this.mapService = mapService;
@@ -70,14 +71,24 @@ export default class BaseTileLayer implements ITileLayer {
     this.bindSubLayerPick();
   }
 
+  /**
+   * 直接透传 scale 方法
+   * @param field
+   * @param cfg
+   */
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
     this.children.map((child) => {
       child.scale(field, cfg);
     });
   }
 
+  /**
+   * 渲染瓦片的图层
+   */
   public render() {
-    this.tileLayerManager.render();
+    if (this.tileLayerManager) {
+      this.tileLayerManager.render();
+    }
   }
 
   public clearPick(type: string) {
@@ -86,6 +97,9 @@ export default class BaseTileLayer implements ITileLayer {
     }
   }
 
+  /**
+   * 清除 select 的选中状态
+   */
   public clearPickState() {
     this.children
       .filter((child) => child.inited && child.isVisible())
@@ -96,8 +110,13 @@ export default class BaseTileLayer implements ITileLayer {
       });
   }
 
-  public renderPicker(target: IInteractionTarget) {
-    return this.tileLayerManager.renderPicker(target);
+  /**
+   * 瓦片图层独立的拾取逻辑
+   * @param target
+   * @returns
+   */
+  public pickLayers(target: IInteractionTarget) {
+    return this.tileLayerManager.pickLayers(target);
   }
 
   public tileLoaded(tile: Tile) {
@@ -107,10 +126,13 @@ export default class BaseTileLayer implements ITileLayer {
   public tileError(error: Error) {
     console.warn('error:', error);
   }
+
   public tileUnLoad(tile: Tile) {
     this.tileLayerManager.removeChilds(tile.layerIDList);
   }
+
   public tileUpdate() {
+    // Base Function
     if (!this.tilesetManager) {
       return;
     }
@@ -125,6 +147,9 @@ export default class BaseTileLayer implements ITileLayer {
           tile.layerIDList = layerIDList;
           this.tileLayerManager.addChilds(layers);
         } else {
+          if (!tile.isVisibleChanged) {
+            return;
+          }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
           this.tileLayerManager.updateLayersConfig(
             layers,
