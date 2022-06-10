@@ -21,7 +21,7 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
     case 'PointLayer':
       return VectorPointLayer;
     case 'RasterLayer':
-      if(parser.dataType === 'arraybuffer') {
+      if (parser.dataType === 'arraybuffer') {
         return RasterTiffFactory;
       } else {
         return RasterTileFactory;

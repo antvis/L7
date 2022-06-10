@@ -1,10 +1,14 @@
-import { IParserData, IRasterTileParserCFG, RasterTileType } from '../interface';
+import {
+  IParserData,
+  IRasterTileParserCFG,
+  RasterTileType,
+} from '../interface';
 import {
   Tile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '../tileset-manager';
-import { getTileImage, getTileBuffer, defaultFormat } from '../utils/getTile';
+import { defaultFormat, getTileBuffer, getTileImage } from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -19,13 +23,18 @@ export default function rasterTile(
 ): IParserData {
   const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
-    if(tileDataType === RasterTileType.IMAGE) {
+    if (tileDataType === RasterTileType.IMAGE) {
       return getTileImage(data, tileParams, tile);
     } else {
-      return getTileBuffer(data, tileParams, tile, cfg?.format || defaultFormat);
+      return getTileBuffer(
+        data,
+        tileParams,
+        tile,
+        cfg?.format || defaultFormat,
+      );
     }
-  }
-    
+  };
+
   const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
 
   return {

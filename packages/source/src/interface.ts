@@ -31,7 +31,7 @@ export interface IMVTLayerParser {
 
 export enum RasterTileType {
   IMAGE = 'image',
-  ARRAYBUFFER = 'arraybuffer'
+  ARRAYBUFFER = 'arraybuffer',
 }
 export interface IRasterTileParserCFG {
   tileSize?: number;
