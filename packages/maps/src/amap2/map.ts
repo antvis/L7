@@ -381,8 +381,7 @@ export default class AMapService
     };
   }
   public lngLatToContainer(lnglat: [number, number]): IPoint {
-    const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
-    const pixel = this.map.lngLatToContainer(ll);
+    const pixel = this.map.lngLatToContainer(lnglat);
     return {
       x: pixel.getX(),
       y: pixel.getY(),
