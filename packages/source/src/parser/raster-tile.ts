@@ -1,11 +1,10 @@
-import { getImage } from '@antv/l7-utils';
-import { IParserData, IRasterTileParserCFG } from '../interface';
+import { IParserData, IRasterTileParserCFG, RasterTileType } from '../interface';
 import {
-  getURLFromTemplate,
   Tile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '../tileset-manager';
+import { getTileImage, getTileBuffer, defaultFormat } from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -14,31 +13,19 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   zoomOffset: 0,
 };
 
-const getTileImage = async (
-  url: string,
-  tileParams: TileLoadParams,
-  tile: Tile,
-): Promise<HTMLImageElement | ImageBitmap> => {
-  const imgUrl = getURLFromTemplate(url, tileParams);
-
-  return new Promise((resolve, reject) => {
-    const xhr = getImage({ url: imgUrl }, (err, img) => {
-      if (err) {
-        reject(err);
-      } else if (img) {
-        resolve(img);
-      }
-    });
-    tile.xhrCancel = () => xhr.abort();
-  });
-};
-
 export default function rasterTile(
   data: string,
   cfg?: IRasterTileParserCFG,
 ): IParserData {
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
-    getTileImage(data, tileParams, tile);
+  const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
+  const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
+    if(tileDataType === RasterTileType.IMAGE) {
+      return getTileImage(data, tileParams, tile);
+    } else {
+      return getTileBuffer(data, tileParams, tile, cfg?.format || defaultFormat);
+    }
+  }
+    
   const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
 
   return {

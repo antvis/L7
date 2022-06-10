@@ -1,3 +1,4 @@
+import { IParserCfg } from '@antv/l7-core';
 import { ITileFactory } from '../interface';
 import VectorLineTile from './line';
 import VectorPointLayer from './point';
@@ -11,10 +12,7 @@ export type TileType =
   | 'LineLayer'
   | 'RasterLayer';
 
-export function getTileFactory(tileType: TileType, parserType: string) {
-  if (parserType === 'rasterTiff') {
-    return RasterTiffFactory;
-  }
+export function getTileFactory(tileType: TileType, parser: IParserCfg) {
   switch (tileType) {
     case 'PolygonLayer':
       return VectorPolygonTile;
@@ -23,7 +21,11 @@ export function getTileFactory(tileType: TileType, parserType: string) {
     case 'PointLayer':
       return VectorPointLayer;
     case 'RasterLayer':
-      return RasterTileFactory;
+      if(parser.dataType === 'arraybuffer') {
+        return RasterTiffFactory;
+      } else {
+        return RasterTileFactory;
+      }
     default:
       console.warn('Current Tile Not Exist!');
       return RasterTileFactory;

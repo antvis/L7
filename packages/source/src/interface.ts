@@ -28,6 +28,11 @@ export interface IMVTLayerParser {
 }
 
 // 栅格瓦片解析配置项
+
+export enum RasterTileType {
+  IMAGE = 'image',
+  ARRAYBUFFER = 'arraybuffer'
+}
 export interface IRasterTileParserCFG {
   tileSize?: number;
   minZoom?: number;
@@ -40,8 +45,10 @@ export interface IRasterTileParserCFG {
   // 指定矢量瓦片的数据分类
   layerName?: string;
   coord?: string;
+  // 指定栅格瓦片的类型
+  dataType?: RasterTileType;
 
-  rasterParser?: any;
+  format?: any;
 }
 
 export interface IJsonItem {

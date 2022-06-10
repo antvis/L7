@@ -256,7 +256,7 @@ export class TileLayerManager implements ITileLayerManager {
     const source = this.parent.getSource();
     const TileFactory = getTileFactory(
       this.parent.type as TileType,
-      source.parser.type,
+      source.parser,
     );
     this.tileFactory = new TileFactory({
       parent: this.parent,

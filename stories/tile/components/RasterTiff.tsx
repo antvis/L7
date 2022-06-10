@@ -43,14 +43,15 @@ export default class RasterTile extends React.Component {
           // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
           {
             parser: {
-              type: 'rasterTiff',
+              type: 'rasterTile',
+              dataType: 'arraybuffer',
               tileSize: 256,
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
               minZoom: 0,
               // maxZoom: 0,
               // maxZoom: 10,
-              rasterParser: async (data: any) => {
+              format: async (data: any) => {
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
                 });
