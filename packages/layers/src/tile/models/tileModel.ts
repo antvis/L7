@@ -7,8 +7,7 @@ export default class RasterTileModel extends BaseModel {
   }
 
   public initModels() {
-    if (this.layer.getSource().data.isTile) {
-      this.layer.isVector = true;
+    if (this.layer.getSource()?.data.isTile) {
       this.layer.tileLayer = new TMSTileLayer({
         parent: this.layer,
         rendererService: this.rendererService,

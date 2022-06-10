@@ -5,7 +5,6 @@ import RasterModel from '../../raster/models/raster';
 export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>
 > {
-  public isVector: boolean = true;
   public type: string = this.layerType as string;
   public buildModels() {
     const model = this.getModelType();
