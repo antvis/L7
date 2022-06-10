@@ -8,8 +8,8 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
@@ -79,7 +79,7 @@ export default class LineWallModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
-      u_opacity: Number(opacity),
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
 
       // 纹理支持参数

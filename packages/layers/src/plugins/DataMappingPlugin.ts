@@ -216,11 +216,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
             // @ts-ignore
             d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
             // @ts-ignore
-            d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
-            // d.coordinates = this.mapService.lngLatToCoordByLayer(
-            //   d.coordinates,
-            //   layerCenter,
-            // );
+            // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+            d.coordinates = this.mapService.lngLatToCoordByLayer(
+              d.coordinates,
+              layerCenter,
+            );
           });
       } else {
         // 连续的线、面数据
@@ -233,11 +233,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
             // @ts-ignore
             d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
             // @ts-ignore
-            d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
-            // d.coordinates = this.mapService.lngLatToCoordsByLayer(
-            //   d.coordinates,
-            //   layerCenter,
-            // );
+            // d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
+            d.coordinates = this.mapService.lngLatToCoordsByLayer(
+              d.coordinates,
+              layerCenter,
+            );
           });
       }
     }
