@@ -32,8 +32,8 @@ export default class TilePickManager extends EventEmitter
   }
 
   /**
-   * 
-   * @param layers 
+   *
+   * @param layers
    */
   public normalRender(layers: ILayer[]) {
     layers

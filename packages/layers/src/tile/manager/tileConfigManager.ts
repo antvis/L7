@@ -40,7 +40,7 @@ export default class TileConfigManager extends EventEmitter {
     const updateConfigs: string[] = [];
     this.checkConfigList.map((key) => {
       const cacheConfig = this.cacheConfig.get(key);
-      
+
       let currentConfig;
       if (['color', 'size', 'shape'].includes(key)) {
         currentConfig = layer.getAttribute(key)?.scale;
@@ -51,12 +51,11 @@ export default class TileConfigManager extends EventEmitter {
         // @ts-ignore
         currentConfig = layerConfig[key];
       }
-      
+
       if (!isEqual(cacheConfig, currentConfig)) {
         updateConfigs.push(key);
         this.setConfig(key, currentConfig);
       }
-     
     });
     if (updateConfigs.length > 0) {
       console.warn('tile config cache update!', updateConfigs);

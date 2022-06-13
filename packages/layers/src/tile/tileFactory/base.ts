@@ -9,11 +9,7 @@ import {
 } from '@antv/l7-core';
 import Source, { Tile } from '@antv/l7-source';
 import MaskLayer from '../../mask';
-import {
-  getLayerShape,
-  readPixel,
-  registerLayers,
-} from '../utils';
+import { getLayerShape, readPixel, registerLayers } from '../utils';
 import VectorLayer from './vectorLayer';
 
 import * as turf from '@turf/helpers';
@@ -298,8 +294,7 @@ export default class TileFactory implements ITileFactory {
   private getAllFeatures(featureId: number) {
     const allLayers: ILayer[] = this.parentLayer.tileLayer.children;
     const features: IParseDataItem[] = [];
-    allLayers
-    .map((layer) => {
+    allLayers.map((layer) => {
       const source = layer.getSource();
       source.data.dataArray.map((feature) => {
         if (feature._id === featureId) {

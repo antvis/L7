@@ -8,7 +8,7 @@ import {
   ISubLayerInitOptions,
   ITileLayerManager,
   ITilePickManager,
-  ScaleAttributeType
+  ScaleAttributeType,
 } from '@antv/l7-core';
 import { Tile } from '@antv/l7-source';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
@@ -190,10 +190,13 @@ export class TileLayerManager implements ITileLayerManager {
     this.tileConfigManager.setConfig('opacity', this.initOptions.opacity);
     this.tileConfigManager.setConfig('zIndex', this.initOptions.zIndex);
     this.tileConfigManager.setConfig('mask', this.initOptions.mask);
-    
-    if(this.parent.type === 'RasterLayer') {
+
+    if (this.parent.type === 'RasterLayer') {
       // Raster Tile Layer Need Listen
-      this.tileConfigManager.setConfig('rampColors', this.initOptions.rampColors);
+      this.tileConfigManager.setConfig(
+        'rampColors',
+        this.initOptions.rampColors,
+      );
       this.tileConfigManager.setConfig('domain', this.initOptions.domain);
       this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
       this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
@@ -239,7 +242,11 @@ export class TileLayerManager implements ITileLayerManager {
       }
       updateValue = scaleValue;
       this.children.map((child) => {
-        this.tileFactory.setStyleAttributeField(child, style as ScaleAttributeType, scaleValue);
+        this.tileFactory.setStyleAttributeField(
+          child,
+          style as ScaleAttributeType,
+          scaleValue,
+        );
         return '';
       });
     } else {

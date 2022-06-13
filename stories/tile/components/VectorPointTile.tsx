@@ -91,7 +91,7 @@ export default class RasterTile extends React.Component {
         // })
         // layer.select(true)
         // layer.color('#f00');
-        layer.color('v', v => '#ff0')
+        layer.color('v', (v) => '#ff0');
         this.scene.render();
       }, 4000);
     });
