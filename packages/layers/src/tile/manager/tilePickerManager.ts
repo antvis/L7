@@ -66,7 +66,6 @@ export default class TilePickManager extends EventEmitter
         (layer) =>
           this.parent.needPick(target.type) &&
           layer.inited &&
-          layer.isVector && // 只有矢量图层支持 pixel 拾取
           layer.isVisible(),
       )
       .some((layer) => {
@@ -87,7 +86,6 @@ export default class TilePickManager extends EventEmitter
         }
         layer.renderModels(true);
         layer.hooks.afterPickingEncode.call();
-
         const layerPicked = this.pickingService.pickFromPickingFBO(
           layer,
           target,
@@ -103,7 +101,6 @@ export default class TilePickManager extends EventEmitter
 
         return layerPicked;
       });
-
     if (!isPicked && this.isLastPicked && target.type !== 'click') {
       // 只有上一次有被高亮选中，本次未选中的时候才需要清除选中状态
       this.pickingService.pickedTileLayers = [];

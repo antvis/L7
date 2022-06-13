@@ -9,7 +9,7 @@ import {
 } from '@antv/l7-core';
 import Source, { Tile } from '@antv/l7-source';
 import MaskLayer from '../../mask';
-import { getLayerShape, readPixel, registerLayers } from '../utils';
+import { getLayerShape, readPixel, readRasterValue, registerLayers } from '../utils';
 import VectorLayer from './vectorLayer';
 
 import * as turf from '@turf/helpers';
@@ -208,16 +208,16 @@ export default class TileFactory implements ITileFactory {
     return [];
   }
 
-  protected emitEvent(layers: ILayer[], isVector?: boolean) {
+  protected emitEvent(layers: ILayer[], isVector?: boolean, tile?: any) {
     layers.map((layer) => {
       layer.once('inited', () => {
         layer.on('click', (e) => {
           this.eventCache.click = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerClick', e, isVector);
+          this.getFeatureAndEmitEvent(layer, 'subLayerClick', e, isVector, tile);
         });
         layer.on('mousemove', (e) => {
           this.eventCache.mousemove = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e, isVector);
+          this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e, isVector, tile);
         });
         layer.on('mouseup', (e) => {
           this.eventCache.mouseup = 1;
@@ -279,6 +279,7 @@ export default class TileFactory implements ITileFactory {
     eventName: string,
     e: any,
     isVector?: boolean,
+    tile?: any
   ) {
     const featureId = e.featureId;
     const features = this.getAllFeatures(featureId);
@@ -287,6 +288,8 @@ export default class TileFactory implements ITileFactory {
     if (isVector === false) {
       // raster tile get rgb
       e.pickedColors = readPixel(e.x, e.y, this.rendererService);
+      // raster tile origin value
+      e.value = readRasterValue(tile, this.mapService, e.x, e.y);
     }
     this.parentLayer.emit(eventName, e);
   }

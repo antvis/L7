@@ -91,17 +91,17 @@ export default class RasterTile extends React.Component {
           clampLow: true,
           rampColors: {
             colors: [
-              'rgb(166,97,26)',
-              'rgb(223,194,125)',
-              'rgb(245,245,245)',
-              'rgb(128,205,193)',
-              'rgb(1,133,113)',
+              // 'rgb(166,97,26)',
+              // 'rgb(223,194,125)',
+              // 'rgb(245,245,245)',
+              // 'rgb(128,205,193)',
+              // 'rgb(1,133,113)',
 
-              // 'rgb(0,0,255)',
-              // 'rgb(0,0,0)',
-              // 'rgb(0,255,0)',
-              // 'rgb(255,0,0)',
-              // 'rgb(255,0,0)',
+              'rgb(0,0,255)',
+              'rgb(0,0,0)',
+              'rgb(0,255,0)',
+              'rgb(255,0,0)',
+              'rgb(255,0,0)',
             ],
             positions: [0, 0.25, 0.5, 0.75, 1.0],
           },
@@ -110,30 +110,34 @@ export default class RasterTile extends React.Component {
 
       this.scene.addLayer(layer);
 
-      layer.on('click', (e) => console.log(e.pickedColors));
-      // layer.on('mousemove', e => console.log(e.pickedColors))
+      // layer.on('click', (e) => {
+      //   console.log('click')
+      //   // console.log(e.pickedColors)
+      //   console.log(e)
+      // });
+      layer.on('mousemove', e => console.log(e.value))
 
-      setTimeout(() => {
-        layer.style({
-          rampColors: {
-            colors: [
-              // 'rgb(166,97,26)',
-              // 'rgb(223,194,125)',
-              // 'rgb(245,245,245)',
-              // 'rgb(128,205,193)',
-              // 'rgb(1,133,113)',
+      // setTimeout(() => {
+      //   layer.style({
+      //     rampColors: {
+      //       colors: [
+      //         // 'rgb(166,97,26)',
+      //         // 'rgb(223,194,125)',
+      //         // 'rgb(245,245,245)',
+      //         // 'rgb(128,205,193)',
+      //         // 'rgb(1,133,113)',
 
-              'rgb(0,0,0)',
-              'rgb(0,0,0)',
-              'rgb(0,245,0)',
-              'rgb(255,0,0)',
-              'rgb(255,0,0)',
-            ],
-            positions: [0, 0.25, 0.5, 0.75, 1.0],
-          },
-        });
-        this.scene.render();
-      }, 3000);
+      //         'rgb(0,0,0)',
+      //         'rgb(0,0,0)',
+      //         'rgb(0,245,0)',
+      //         'rgb(255,0,0)',
+      //         'rgb(255,0,0)',
+      //       ],
+      //       positions: [0, 0.25, 0.5, 0.75, 1.0],
+      //     },
+      //   });
+      //   this.scene.render();
+      // }, 3000);
     });
   }
 
