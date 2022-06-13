@@ -14,11 +14,18 @@ export default class RasterTiffTile extends TileFactory {
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { opacity, domain, clampHigh, clampLow, rampColors, mask } = initOptions;
+    const {
+      opacity,
+      domain,
+      clampHigh,
+      clampLow,
+      rampColors,
+      mask,
+    } = initOptions;
     const tiffdata = tile.data;
     const layer = new RasterDataLayer({
       visible: tile.isVisible,
-      mask
+      mask,
     })
       .source(tiffdata.data, {
         parser: {
