@@ -2,8 +2,11 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 import RasterTile from './components/RasterTile';
-import RasterArrayBuffer from './components/RasterArrayBuffer';
 import OsmRasterTile from './components/OsmRasterTile';
+
+import RasterArrayBuffer from './components/RasterArrayBuffer';
+import RasterArrayBufferMask from './components/RasterArrayBufferMask';
+
 import TiffRasterTile from './components/TiffRasterTile';
 import VectorOffsetPolygonTile from './components/VectorOffsetPolygonTile';
 import VectorOffsetLineTile from './components/VectorOffsetLineTile';
@@ -19,8 +22,11 @@ import VectorProvinceAllTile from './components/VectorProvinceAllTile';
 
 storiesOf('瓦片', module)
   .add('RasterTile', () => <RasterTile />)
-  .add('RasterArrayBuffer', () => <RasterArrayBuffer />)
   .add('OsmRasterTile', () => <OsmRasterTile />)
+
+  .add('RasterArrayBuffer', () => <RasterArrayBuffer />)
+  .add('RasterArrayBufferMask', () => <RasterArrayBufferMask />)
+
   .add('TiffRasterTile', () => <TiffRasterTile />)
   .add('VectorOffsetPolygonTile', () => <VectorOffsetPolygonTile />)
   .add('VectorOffsetLineTile', () => <VectorOffsetLineTile />)

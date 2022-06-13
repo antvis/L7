@@ -13,6 +13,7 @@ export default class RasterTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
+      stencil: true,
       map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,
@@ -46,30 +47,38 @@ export default class RasterTile extends React.Component {
         .active(true)
         .size(10);
 
-      this.scene.addLayer(point);
+      // this.scene.addLayer(point);
 
-      const layer = new RasterLayer({
-        zIndex: -1,
-      });
-      layer
-        .source(
-          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
-          // 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
-          {
-            parser: {
-              type: 'rasterTile',
-              tileSize: 256,
-              zoomOffset: 0,
-              extent: [-180, -85.051129, 179, 85.051129],
-            },
-          },
-        )
-        .style({
-          opacity: 0.5,
+      fetch('https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json')
+      .then(res => res.json())
+      .then(data => {
+        const layer = new RasterLayer({
+          zIndex: -1,
+          mask: true,
+          maskfence: data
         });
+        layer
+          .source(
+            'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+            // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
+            // 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
+            {
+              parser: {
+                type: 'rasterTile',
+                tileSize: 256,
+                zoomOffset: 0,
+                extent: [-180, -85.051129, 179, 85.051129],
+              },
+            },
+          )
+          .style({
+            // opacity: 0.5,
+          });
+  
+        this.scene.addLayer(layer);
+      })
 
-      this.scene.addLayer(layer);
+      
     });
   }
 
