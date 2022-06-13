@@ -115,7 +115,7 @@ export default class RasterTile extends React.Component {
       //   // console.log(e.pickedColors)
       //   console.log(e)
       // });
-      layer.on('mousemove', e => console.log(e.value))
+      layer.on('mousemove', (e) => console.log(e.value));
 
       // setTimeout(() => {
       //   layer.style({

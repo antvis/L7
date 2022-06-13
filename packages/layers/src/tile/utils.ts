@@ -1,4 +1,9 @@
-import { createLayerContainer, ILayer, IMapService, IRendererService } from '@antv/l7-core';
+import {
+  createLayerContainer,
+  ILayer,
+  IMapService,
+  IRendererService,
+} from '@antv/l7-core';
 import { Tile } from '@antv/l7-source';
 import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
@@ -60,15 +65,26 @@ export function getContainerSize(container: HTMLCanvasElement | HTMLElement) {
   }
 }
 
-export function readRasterValue(tile: Tile, mapService: IMapService, x: number, y: number) {
+export function readRasterValue(
+  tile: Tile,
+  mapService: IMapService,
+  x: number,
+  y: number,
+) {
   const bbox = tile.bboxPolygon?.bbox || [0, 0, 10, -10];
   const [tileLng = 0, tileLat = 0, tileMaxLng = 10, tileMaxLat = -10] = bbox;
   const tileXY = mapService.lngLatToContainer([tileLng, tileLat]);
   const tileMaxXY = mapService.lngLatToContainer([tileMaxLng, tileMaxLat]);
-  const pos = [(x - tileXY.x) / (tileMaxXY.x - tileXY.x), (y - tileXY.y) / (tileMaxXY.y - tileXY.y)];
+  const pos = [
+    (x - tileXY.x) / (tileMaxXY.x - tileXY.x),
+    (y - tileXY.y) / (tileMaxXY.y - tileXY.y),
+  ];
   const tileWidth = tile.data.width || 1;
   const tileHeight = tile.data.height || 1;
-  const data = tile.data?.data[Math.floor(pos[0] * tileWidth) + Math.floor(pos[1] * tileHeight)];
+  const data =
+    tile.data?.data[
+      Math.floor(pos[0] * tileWidth) + Math.floor(pos[1] * tileHeight)
+    ];
   return data;
 }
 
