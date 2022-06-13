@@ -1,9 +1,9 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
-import Source, { Tile } from '@antv/l7-source';
-import { ITileFactoryOptions, ITileStyles } from '../interface';
+import { Tile } from '@antv/l7-source';
+import { ITileFactoryOptions } from '../interface';
 import { registerLayers } from '../utils';
 import TileFactory from './base';
-import RasterTiffLayer from './rasterTiffLayer';
+import RasterDataLayer from './rasterDataLayer';
 
 export default class RasterTiffTile extends TileFactory {
   public parentLayer: ILayer;
@@ -16,7 +16,7 @@ export default class RasterTiffTile extends TileFactory {
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     const { opacity, domain, clampHigh, clampLow, rampColors } = initOptions;
     const tiffdata = tile.data;
-    const layer = new RasterTiffLayer({
+    const layer = new RasterDataLayer({
       visible: tile.isVisible,
     })
       .source(tiffdata.data, {

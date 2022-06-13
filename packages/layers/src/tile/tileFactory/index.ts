@@ -4,7 +4,7 @@ import VectorLineTile from './line';
 import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';
 import RasterTileFactory from './raster';
-import RasterTiffFactory from './rasterTiff';
+import RasterDataFactory from './rasterData';
 
 export type TileType =
   | 'PolygonLayer'
@@ -22,7 +22,7 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
       return VectorPointLayer;
     case 'RasterLayer':
       if (parser.dataType === 'arraybuffer') {
-        return RasterTiffFactory;
+        return RasterDataFactory;
       } else {
         return RasterTileFactory;
       }

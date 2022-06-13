@@ -8,9 +8,9 @@ import {
   ISubLayerInitOptions,
   ITileLayerManager,
   ITilePickManager,
+  ScaleAttributeType
 } from '@antv/l7-core';
 import { Tile } from '@antv/l7-source';
-import { IRasterTileLayerStyleOptions } from '../../core/interface';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
@@ -57,6 +57,7 @@ export class TileLayerManager implements ITileLayerManager {
   public updateLayersConfig(layers: ILayer[], key: string, value: any) {
     layers.map((layer) => {
       if (key === 'mask') {
+        // Tip: 栅格瓦片生效、设置全局的 mask、瓦片被全局的 mask 影响
         layer.style({
           mask: value,
         });
@@ -73,9 +74,7 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   public addChilds(layers: ILayer[]) {
-    layers.map((layer) => {
-      this.children.push(layer);
-    });
+    this.children.push(...layers);
   }
 
   public removeChilds(layerIDList: string[]) {
@@ -119,12 +118,12 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   public render(): void {
-    this.tileConfigManager.checkConfig(this.parent);
-    this.tilePickManager.normalRenderLayer(this.children);
+    this.tileConfigManager?.checkConfig(this.parent);
+    this.tilePickManager?.normalRender(this.children);
   }
 
   public pickLayers(target: IInteractionTarget) {
-    return this.tilePickManager.pickTileRenderLayer(this.children, target);
+    return this.tilePickManager?.pickRender(this.children, target);
   }
 
   private setSubLayerInitOptipn() {
@@ -186,36 +185,42 @@ export class TileLayerManager implements ITileLayerManager {
   }
 
   private setConfigListener() {
+    // RasterLayer PolygonLayer LineLayer PointLayer
+    // All Tile Layer Need Listen
     this.tileConfigManager.setConfig('opacity', this.initOptions.opacity);
     this.tileConfigManager.setConfig('zIndex', this.initOptions.zIndex);
     this.tileConfigManager.setConfig('mask', this.initOptions.mask);
-    this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);
-    this.tileConfigManager.setConfig(
-      'strokeWidth',
-      this.initOptions.strokeWidth,
-    );
-    this.tileConfigManager.setConfig(
-      'strokeOpacity',
-      this.initOptions.strokeOpacity,
-    );
-    this.tileConfigManager.setConfig(
-      'color',
-      this.parent.getAttribute('color')?.scale,
-    );
-    this.tileConfigManager.setConfig(
-      'shape',
-      this.parent.getAttribute('shape')?.scale,
-    );
-    this.tileConfigManager.setConfig(
-      'size',
-      this.parent.getAttribute('size')?.scale,
-    );
-
-    // rasterLayer
-    this.tileConfigManager.setConfig('rampColors', this.initOptions.rampColors);
-    this.tileConfigManager.setConfig('domain', this.initOptions.domain);
-    this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
-    this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
+    
+    if(this.parent.type === 'RasterLayer') {
+      // Raster Tile Layer Need Listen
+      this.tileConfigManager.setConfig('rampColors', this.initOptions.rampColors);
+      this.tileConfigManager.setConfig('domain', this.initOptions.domain);
+      this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
+      this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
+    } else {
+      // Vector Tile Layer Need Listen
+      this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);
+      this.tileConfigManager.setConfig(
+        'strokeWidth',
+        this.initOptions.strokeWidth,
+      );
+      this.tileConfigManager.setConfig(
+        'strokeOpacity',
+        this.initOptions.strokeOpacity,
+      );
+      this.tileConfigManager.setConfig(
+        'color',
+        this.parent.getAttribute('color')?.scale,
+      );
+      this.tileConfigManager.setConfig(
+        'shape',
+        this.parent.getAttribute('shape')?.scale,
+      );
+      this.tileConfigManager.setConfig(
+        'size',
+        this.parent.getAttribute('size')?.scale,
+      );
+    }
 
     this.tileConfigManager.on('updateConfig', (updateConfigs) => {
       updateConfigs.map((key: string) => {
@@ -227,19 +232,18 @@ export class TileLayerManager implements ITileLayerManager {
 
   private updateStyle(style: string) {
     let updateValue = null;
-    if (style === 'size' || style === 'color' || style === 'shape') {
+    if (['size', 'color', 'shape'].includes(style)) {
       const scaleValue = this.parent.getAttribute(style)?.scale;
       if (!scaleValue) {
         return;
       }
-
       updateValue = scaleValue;
       this.children.map((child) => {
-        this.tileFactory.setStyleAttributeField(child, style, scaleValue);
+        this.tileFactory.setStyleAttributeField(child, style as ScaleAttributeType, scaleValue);
         return '';
       });
     } else {
-      const layerConfig = this.parent.getLayerConfig() as IRasterTileLayerStyleOptions;
+      const layerConfig = this.parent.getLayerConfig() as ISubLayerInitOptions;
       if (!(style in layerConfig)) {
         return;
       }

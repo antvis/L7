@@ -31,7 +31,11 @@ export default class TilePickManager extends EventEmitter
     this.children = children;
   }
 
-  public normalRenderLayer(layers: ILayer[]) {
+  /**
+   * 
+   * @param layers 
+   */
+  public normalRender(layers: ILayer[]) {
     layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
@@ -56,13 +60,13 @@ export default class TilePickManager extends EventEmitter
       });
   }
 
-  public pickTileRenderLayer(layers: ILayer[], target: IInteractionTarget) {
+  public pickRender(layers: ILayer[], target: IInteractionTarget) {
     const isPicked = layers
       .filter(
         (layer) =>
           this.parent.needPick(target.type) &&
           layer.inited &&
-          layer.isVector && // 只有矢量图层支持拾取
+          layer.isVector && // 只有矢量图层支持 pixel 拾取
           layer.isVisible(),
       )
       .some((layer) => {
@@ -122,8 +126,8 @@ export default class TilePickManager extends EventEmitter
   public beforeHighlight(pickedColors: any) {
     this.children
       .filter((child) => child.inited && child.isVisible())
-      .map((layer) => {
-        layer.hooks.beforeHighlight.call(pickedColors);
+      .map((child) => {
+        child.hooks.beforeHighlight.call(pickedColors);
       });
   }
 

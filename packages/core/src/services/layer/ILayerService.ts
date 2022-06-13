@@ -125,6 +125,10 @@ export interface IAttrubuteAndElements {
 export interface ISubLayerStyles {
   opacity: number;
 }
+
+/**
+ * For tile subLayer
+ */
 export interface ISubLayerInitOptions {
   layerType: string;
   shape?: string | string[] | IScaleValue;
@@ -156,11 +160,11 @@ export interface ISubLayerInitOptions {
 export interface ITilePickManager {
   isLastPicked: boolean;
   on(type: string, cb: (option: any) => void): void;
-  normalRenderLayer(layers: ILayer[]): void;
+  normalRender(layers: ILayer[]): void;
   beforeHighlight(pickedColors: any): void;
   beforeSelect(pickedColors: any): void;
   clearPick(): void;
-  pickTileRenderLayer(layers: ILayer[], target: IInteractionTarget): boolean;
+  pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
 }
 
 export interface ITileLayerManager {

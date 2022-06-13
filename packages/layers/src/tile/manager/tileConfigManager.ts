@@ -1,8 +1,6 @@
-import { ILayer, IScaleValue, ITileLayerOPtions } from '@antv/l7-core';
+import { ILayer, IScaleValue, ISubLayerInitOptions } from '@antv/l7-core';
 import EventEmitter from 'eventemitter3';
 import { isEqual } from 'lodash';
-import { IRasterTileLayerStyleOptions } from '../../core/interface';
-
 export interface ITileConfigManager {
   setConfig(key: string, value: any): void;
   checkConfig(layer: ILayer): void;
@@ -26,9 +24,9 @@ export default class TileConfigManager extends EventEmitter {
   }
 
   public removeConfig(key: string) {
-    this.cacheConfig.delete(key);
     const configIndex = this.checkConfigList.indexOf(key);
     if (configIndex > -1) {
+      this.cacheConfig.delete(key);
       this.checkConfigList.splice(configIndex, 1);
     }
   }
@@ -38,10 +36,11 @@ export default class TileConfigManager extends EventEmitter {
       return;
     }
 
-    const layerConfig = layer.getLayerConfig() as IRasterTileLayerStyleOptions;
+    const layerConfig = layer.getLayerConfig() as ISubLayerInitOptions;
     const updateConfigs: string[] = [];
     this.checkConfigList.map((key) => {
       const cacheConfig = this.cacheConfig.get(key);
+      
       let currentConfig;
       if (['color', 'size', 'shape'].includes(key)) {
         currentConfig = layer.getAttribute(key)?.scale;
@@ -52,10 +51,12 @@ export default class TileConfigManager extends EventEmitter {
         // @ts-ignore
         currentConfig = layerConfig[key];
       }
+      
       if (!isEqual(cacheConfig, currentConfig)) {
         updateConfigs.push(key);
         this.setConfig(key, currentConfig);
       }
+     
     });
     if (updateConfigs.length > 0) {
       console.warn('tile config cache update!', updateConfigs);

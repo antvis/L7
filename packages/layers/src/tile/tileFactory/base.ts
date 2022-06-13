@@ -6,12 +6,10 @@ import {
   IScaleValue,
   ISubLayerInitOptions,
   ScaleAttributeType,
-  StyleAttrField,
 } from '@antv/l7-core';
 import Source, { Tile } from '@antv/l7-source';
 import MaskLayer from '../../mask';
 import {
-  getContainerSize,
   getLayerShape,
   readPixel,
   registerLayers,
@@ -109,7 +107,7 @@ export default class TileFactory implements ITileFactory {
       visible: tile.isVisible,
       tileOrigin: vectorTileLayer?.l7TileOrigin,
       coord: vectorTileLayer?.l7TileCoord,
-      ...this.getrLayerInitOption(initOptions),
+      ...this.getLayerInitOption(initOptions),
     });
     // vector layer set config
     if (layer.isVector) {
@@ -298,9 +296,10 @@ export default class TileFactory implements ITileFactory {
   }
 
   private getAllFeatures(featureId: number) {
-    const allLayers = this.parentLayer.tileLayer.children;
+    const allLayers: ILayer[] = this.parentLayer.tileLayer.children;
     const features: IParseDataItem[] = [];
-    allLayers.map((layer) => {
+    allLayers
+    .map((layer) => {
       const source = layer.getSource();
       source.data.dataArray.map((feature) => {
         if (feature._id === featureId) {
@@ -311,7 +310,7 @@ export default class TileFactory implements ITileFactory {
     return features;
   }
 
-  private getrLayerInitOption(initOptions: ISubLayerInitOptions) {
+  private getLayerInitOption(initOptions: ISubLayerInitOptions) {
     const option = { ...initOptions };
     delete option.color;
     delete option.shape;
