@@ -60,15 +60,14 @@ export default class RasterTile extends React.Component {
               zoomOffset: 0,
               maxZoom: 20,
               extent: [-180, -85.051129, 179, 85.051129],
-            
+
               // coord: 'offset'
             },
-           
           },
           {
             featureId: 'COLOR',
             layerName: 'ecoregions2', // woods
-          }
+          },
         )
         .shape('NNH_NAME', 'text')
         // .color('#f00')

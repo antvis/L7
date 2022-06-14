@@ -22,6 +22,7 @@ import { PolygonLayer } from '@antv/l7';
 <img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*-FdGT60UpMkAAAAAAAAAAAAAARQnAQ'>
 
 ## source
+
 L7 的瓦片图层复用了原有的普通图层，在使用上通过 `source` 来进行区分。
 
 ```javascript
@@ -60,4 +61,3 @@ layer.source({
 ## 底图
 
 🌟 瓦片图层可以用作 L7 的地图底图，同时推荐使用 `L7Map`，这样我们就可以在一个 L7 实例中减少一个 `webgl` 实例。
-
