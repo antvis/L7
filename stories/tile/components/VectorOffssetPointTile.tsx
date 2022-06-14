@@ -41,8 +41,11 @@ export default class RasterTile extends React.Component {
 
     this.scene.on('loaded', () => {
       const layer = new PointLayer({
-        zIndex: -1,
-      });
+        featureId: 'COLOR',
+        // layerName: 'ecoregions2',
+        layerName: 'woods',
+        coord: 'offset',
+      },);
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',

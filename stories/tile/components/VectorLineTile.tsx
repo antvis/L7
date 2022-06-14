@@ -62,7 +62,11 @@ export default class RasterTile extends React.Component {
 
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
-      const layer = new LineLayer();
+      const layer = new LineLayer({
+        featureId: 'COLOR',
+        layerName: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
+        // coord: 'offset'
+      });
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',

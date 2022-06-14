@@ -70,7 +70,11 @@ export default class RasterTile extends React.Component {
       }
       const colors = {};
 
-      const layer = new PolygonLayer();
+      const layer = new PolygonLayer({
+        featureId: 'NAME_CHN',
+        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
+        // coord: 'offset'
+      });
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',

@@ -48,6 +48,8 @@ export interface ILineLayerStyleOptions {
   arrow?: ILineArrow;
 
   rampColors?: IColorRamp;
+  featureId?: string;
+  layerName?: string;
 }
 
 export interface IPointLayerStyleOptions {
@@ -93,6 +95,8 @@ export interface IPointLayerStyleOptions {
 
   rotation?: number; // angle
   speed?: number;
+  featureId?: string;
+  layerName?: string;
 }
 
 export interface IPolygonLayerStyleOptions {
@@ -124,6 +128,9 @@ export interface IPolygonLayerStyleOptions {
   // ocean
   watercolor?: string;
   watercolor2?: string;
+
+  featureId?: string;
+  layerName?: string;
 }
 
 // 栅格瓦片图层

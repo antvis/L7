@@ -67,7 +67,10 @@ export default class RasterTile extends React.Component {
       }
       const colors = {};
 
-      const polygonlayer = new PolygonLayer()
+      const polygonlayer = new PolygonLayer({
+        featureId: 'NAME_CHN',
+        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
+      })
         .source(
           'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
           {
@@ -103,7 +106,10 @@ export default class RasterTile extends React.Component {
         .select(true);
       this.scene.addLayer(polygonlayer);
 
-      const linelayer = new LineLayer()
+      const linelayer = new LineLayer( {
+        featureId: 'NAME_CHN',
+        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
+      })
         .source(
           'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
           {
@@ -124,7 +130,10 @@ export default class RasterTile extends React.Component {
         .size(1);
       this.scene.addLayer(linelayer);
 
-      const pointlayer = new PointLayer()
+      const pointlayer = new PointLayer({
+        featureId: 'NAME_CHN',
+        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
+      })
         .source(
           'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
           {

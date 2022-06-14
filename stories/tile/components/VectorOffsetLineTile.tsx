@@ -39,7 +39,9 @@ export default class RasterTile extends React.Component {
 
     this.scene.on('loaded', () => {
       const layer = new LineLayer({
-        zIndex: -1,
+        featureId: 'COLOR',
+        layerName: 'woods', // contour ecoregions city ecoregions2
+        coord: 'offset',
       });
       layer
         .source(
