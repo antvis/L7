@@ -14,7 +14,7 @@ export default class RasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new Mapbox({
+      map: new Map({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',

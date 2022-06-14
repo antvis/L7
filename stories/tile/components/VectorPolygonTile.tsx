@@ -7,6 +7,7 @@ import {
   ILayer,
   PointLayer,
   PolygonLayer,
+  Source,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
@@ -63,6 +64,15 @@ export default class RasterTile extends React.Component {
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
       const layer = new PolygonLayer();
+      // const tileSource = new Source('http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',{
+      //   parser: {
+      //     type: 'mvt',
+      //     tileSize: 256,
+      //     zoomOffset: 0,
+      //     maxZoom: 9,
+      //     extent: [-180, -85.051129, 179, 85.051129],
+      //   },
+      // })
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
