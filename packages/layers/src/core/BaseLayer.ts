@@ -123,7 +123,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public sourceOption: {
     data: any;
     options?: ISourceCFG;
-    layerCfg?: any;
   };
 
   public layerModel: ILayerModel;
@@ -583,7 +582,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
 
-  public source(data: any, options?: ISourceCFG, layerCfg?: any): ILayer {
+  public source(data: any, options?: ISourceCFG): ILayer {
     if (data?.data) {
       // 判断是否为source
       this.setSource(data);
@@ -592,13 +591,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.sourceOption = {
       data,
       options,
-      layerCfg,
     };
     this.clusterZoom = 0;
     return this;
   }
 
-  public setData(data: any, options?: ISourceCFG, layerCfg?: any) {
+  public setData(data: any, options?: ISourceCFG) {
     if (this.inited) {
       this.layerSource.setData(data, options);
     } else {
@@ -606,7 +604,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         const currentSource = this.getSource();
         if (!currentSource) {
           // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
-          this.source(new Source(data, options, layerCfg));
+          this.source(new Source(data, options));
           this.sourceEvent();
         } else {
           this.layerSource.setData(data, options);

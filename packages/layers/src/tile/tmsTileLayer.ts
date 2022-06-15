@@ -21,12 +21,12 @@ export class TMSTileLayer extends BaseTileLayer {
             return;
           }
         }
-
-        if (tile.layerIDList.length === 0) {
-          const { layers, layerIDList } = this.tileLayerManager.createTile(
+        if (!tile.layerIDList.includes(this.parent.id)) {
+          const { layers } = this.tileLayerManager.createTile(
             tile,
           );
-          tile.layerIDList = layerIDList;
+          tile.layerIDList.push(this.parent.id);
+          
           this.tileLayerManager.addChilds(layers);
           this.setPickState(layers);
         } else {

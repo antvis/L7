@@ -6,6 +6,7 @@ import {
   ILayer,
   PointLayer,
   PolygonLayer,
+  Source
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
@@ -67,26 +68,34 @@ export default class RasterTile extends React.Component {
       }
       const colors = {};
 
+      const tileSource = new Source('http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf', {
+        parser: {
+          type: 'mvt',
+          tileSize: 256,
+          zoomOffset: 0,
+          maxZoom: 9,
+          extent: [-180, -85.051129, 179, 85.051129],
+        },
+      },)
+
+      const linelayer = new LineLayer({
+        // zIndex: 1,
+        featureId: 'NAME_CHN',
+        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
+      })
+        .source(tileSource)
+        .color('#f00')
+        .size(1)
+        .style({
+          opacity: 0.5
+        })
+      this.scene.addLayer(linelayer);
+
       const polygonlayer = new PolygonLayer({
         featureId: 'NAME_CHN',
         layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
       })
-        .source(
-          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
-          {
-            parser: {
-              type: 'mvt',
-              tileSize: 256,
-              zoomOffset: 0,
-              maxZoom: 9,
-              extent: [-180, -85.051129, 179, 85.051129],
-            },
-          },
-          {
-            featureId: 'NAME_CHN',
-            layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
-          },
-        )
+        .source(tileSource )
         // .color('#f00')
         .color('citycode', (v: string) => {
           // @ts-ignore
@@ -106,50 +115,11 @@ export default class RasterTile extends React.Component {
         .select(true);
       this.scene.addLayer(polygonlayer);
 
-      const linelayer = new LineLayer( {
-        featureId: 'NAME_CHN',
-        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
-      })
-        .source(
-          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
-          {
-            parser: {
-              type: 'mvt',
-              tileSize: 256,
-              zoomOffset: 0,
-              maxZoom: 9,
-              extent: [-180, -85.051129, 179, 85.051129],
-            },
-          },
-          {
-            featureId: 'NAME_CHN',
-            layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
-          },
-        )
-        .color('#f00')
-        .size(1);
-      this.scene.addLayer(linelayer);
-
       const pointlayer = new PointLayer({
         featureId: 'NAME_CHN',
         layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
       })
-        .source(
-          'http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf',
-          {
-            parser: {
-              type: 'mvt',
-              tileSize: 256,
-              zoomOffset: 0,
-              maxZoom: 9,
-              extent: [-180, -85.051129, 179, 85.051129],
-            },
-          },
-          {
-            featureId: 'NAME_CHN',
-            layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
-          },
-        )
+        .source(tileSource)
         .shape('NAME_CHN', 'text')
         .color('#f00')
         .size(12)

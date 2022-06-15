@@ -21,11 +21,6 @@ export interface IParserData {
   featureKeys?: IFeatureKey;
 }
 
-export interface IMVTLayerParser {
-  featureId?: string;
-  layerName?: string;
-  coord?: string;
-}
 
 // 栅格瓦片解析配置项
 

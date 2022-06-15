@@ -58,12 +58,7 @@ export default class RasterTile extends React.Component {
               maxZoom: 20,
               extent: [-180, -85.051129, 179, 85.051129],
             },
-          },
-          {
-            featureId: 'COLOR',
-            layerName: 'woods', // contour ecoregions city ecoregions2
-            coord: 'offset',
-          },
+          }
         )
         .color('#f00')
         // .color('v', v => '#ff0')

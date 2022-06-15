@@ -94,11 +94,6 @@ export default class RasterTile extends React.Component {
               extent: [-180, -85.051129, 179, 85.051129],
             },
           },
-          {
-            featureId: 'NAME_CHN',
-            layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
-            // coord: 'offset'
-          },
         )
         .color('citycode', (v: string) => {
           // @ts-ignore

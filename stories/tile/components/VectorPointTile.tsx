@@ -44,7 +44,7 @@ export default class RasterTile extends React.Component {
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
       const layer = new PointLayer({
         featureId: 'COLOR',
-        layerName: 'ecoregions2'
+        layerName: 'ecoregions2',
       });
       layer
         .source(

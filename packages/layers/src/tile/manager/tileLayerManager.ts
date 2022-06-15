@@ -149,7 +149,7 @@ export class TileLayerManager implements ITileLayerManager {
         positions: [0, 0.25, 0.5, 0.75, 1.0],
       },
       featureId = 'id',
-      layerName
+      layerName,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(

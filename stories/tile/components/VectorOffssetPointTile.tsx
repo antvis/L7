@@ -45,7 +45,7 @@ export default class RasterTile extends React.Component {
         // layerName: 'ecoregions2',
         layerName: 'woods',
         coord: 'offset',
-      },);
+      });
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
@@ -61,12 +61,6 @@ export default class RasterTile extends React.Component {
               maxZoom: 20,
               extent: [-180, -85.051129, 179, 85.051129],
             },
-          },
-          {
-            featureId: 'COLOR',
-            // layerName: 'ecoregions2',
-            layerName: 'woods',
-            coord: 'offset',
           },
         )
         .color('#f00')

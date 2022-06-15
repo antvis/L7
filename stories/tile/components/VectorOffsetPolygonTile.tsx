@@ -87,11 +87,6 @@ export default class RasterTile extends React.Component {
               // coord: 'offset'
             },
           },
-          {
-            featureId: 'COLOR',
-            layerName: 'woods', // woods hillshade contour ecoregions ecoregions2 city
-            coord: 'offset',
-          },
         )
         .color('#f00')
         // .color('v', v => '#ff0')

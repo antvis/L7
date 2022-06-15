@@ -7,7 +7,6 @@ import {
 import { Feature } from 'geojson';
 import Protobuf from 'pbf';
 import {
-  IMVTLayerParser,
   IParserData,
   IRasterTileParserCFG,
 } from '../interface';
@@ -217,7 +216,6 @@ const getVectorTile = async (
 export default function mapboxVectorTile(
   data: string,
   cfg?: IRasterTileParserCFG,
-  layerCfg?: IMVTLayerParser,
 ): IParserData {
   const coord = cfg?.coord || 'lnglat'; // lnglat - offset
   const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
@@ -225,7 +223,6 @@ export default function mapboxVectorTile(
   const tilesetOptions = {
     ...DEFAULT_CONFIG,
     ...cfg,
-    ...layerCfg,
     getTileData,
   };
 
