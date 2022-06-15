@@ -16,4 +16,4 @@ export * from './anchor';
 export * from './stencli';
 export * from './cull';
 export * from './env';
-export * from './tileset-manager'
+export * from './tileset-manager';

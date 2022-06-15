@@ -1,4 +1,10 @@
-import { getImage, getTiffImage, getURLFromTemplate, Tile, TileLoadParams } from '@antv/l7-utils';
+import {
+  getImage,
+  getTiffImage,
+  getURLFromTemplate,
+  Tile,
+  TileLoadParams,
+} from '@antv/l7-utils';
 
 /**
  * 用于获取 raster data 的瓦片，如 tiff、lerc、dem 等

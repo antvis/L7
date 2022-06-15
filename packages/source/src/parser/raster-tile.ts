@@ -1,13 +1,9 @@
+import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
 import {
   IParserData,
   IRasterTileParserCFG,
   RasterTileType,
 } from '../interface';
-import {
-  Tile,
-  TileLoadParams,
-  TilesetManagerOptions,
-} from '@antv/l7-utils';
 import { defaultFormat, getTileBuffer, getTileImage } from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
