@@ -46,8 +46,6 @@ export default class PickingService implements IPickingService {
 
   private pickBufferScale: number = 1.0;
 
-  private lastPickTime: number = new Date().getTime();
-
   // Tip: 记录当前拾取中的 layers
   private pickedLayers: ILayer[] = [];
 
@@ -209,17 +207,7 @@ export default class PickingService implements IPickingService {
       return;
     }
     this.alreadyInPicking = true;
-    const t = new Date().getTime();
-    // TODO: 优化拾取操作 在右键时 mousedown 和 contextmenu 几乎同时触发，所以不能舍去这一次的触发
-    if (
-      t - this.lastPickTime > 10 ||
-      ['contextmenu', 'click', 'dblclick', 'mouseup'].includes(target.type)
-    ) {
-      await this.pickingLayers(target);
-    }
-    // await this.pickingLayers(target);
-    // @ts-ignore
-    this.lastPickTime = t;
+    await this.pickingLayers(target);
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
