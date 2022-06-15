@@ -213,7 +213,7 @@ export default class PickingService implements IPickingService {
     // TODO: 优化拾取操作 在右键时 mousedown 和 contextmenu 几乎同时触发，所以不能舍去这一次的触发
     if (
       t - this.lastPickTime > 10 ||
-      ['contextmenu', 'click', 'mouseup'].includes(target.type)
+      ['contextmenu', 'click', 'dblclick', 'mouseup'].includes(target.type)
     ) {
       await this.pickingLayers(target);
     }
