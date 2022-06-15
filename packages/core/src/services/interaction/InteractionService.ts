@@ -120,7 +120,7 @@ export default class InteractionService extends EventEmitter
       const $containter = this.mapService.getMapContainer();
       if ($containter) {
         $containter.removeEventListener('mousemove', this.onHover);
-        // this.hammertime.off('dblclick click', this.onHammer);
+        this.hammertime.off('dblclick click', this.onHammer);
         this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
         // $containter.removeEventListener('touchstart', this.onTouch);
         // $containter.removeEventListener('click', this.onHover);

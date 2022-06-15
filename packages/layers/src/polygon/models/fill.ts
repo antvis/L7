@@ -88,10 +88,6 @@ export default class FillModel extends BaseModel {
         triangulation,
         blend: this.getBlend(),
         depth: { enable: false },
-        cull: {
-          enable: true,
-          face: gl.BACK, // gl.FRONT | gl.BACK;
-        },
         stencil: getMask(mask, maskInside),
       }),
     ];
