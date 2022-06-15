@@ -48,8 +48,6 @@ export default class PickingService implements IPickingService {
 
   private pickBufferScale: number = 1.0;
 
-  private lastPickTime: number = new Date().getTime();
-
   // Tip: 记录当前拾取中的 layers
   private pickedLayers: ILayer[] = [];
 
