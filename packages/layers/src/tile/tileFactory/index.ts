@@ -30,3 +30,5 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
       return RasterTileFactory;
   }
 }
+
+export * from '../interface';
