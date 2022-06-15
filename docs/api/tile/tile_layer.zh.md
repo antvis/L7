@@ -54,16 +54,18 @@ layer.source(VectorTileSource)
 ```
 
 ## 🌟 初始化指定矢量图层数据参数
+
 在初始化矢量瓦片的时候往往需要我们提前设置矢量数据相关的参数。
 
 ```javascript
 const layer = new PointLayer({
-  featureId: 'id',  // 指定矢量图层拾取高亮时的编码参数
-  sourceLayer: 'wood' // 指定绘制矢量数据中那一图层数据
-})
+  featureId: 'id', // 指定矢量图层拾取高亮时的编码参数
+  sourceLayer: 'wood', // 指定绘制矢量数据中那一图层数据
+});
 ```
 
 ## 🌟 多图层复用地图服务
+
 在有些场景下，尤其是是矢量瓦片地图的场景，同一份瓦片数据会同时包含多图层的数据，此时我们需要让多图层复用同一个 `source` 对象。如下图所示，我们使用同一份数据绘制省市的面、边界和名称，此时我们就应该复用 `source` 对象。
 
 <img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*HejkTLRIUZYAAAAAAAAAAAAAARQnAQ'>

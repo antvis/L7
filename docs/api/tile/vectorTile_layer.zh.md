@@ -20,21 +20,21 @@ import { PolygonLayer } from '@antv/l7';
 
 ## option
 
-矢量瓦片图层可以在初始化的时候传入 `zIndex` 配置图层的渲染顺序。    
+矢量瓦片图层可以在初始化的时候传入 `zIndex` 配置图层的渲染顺序。  
 矢量瓦片图层需要在初始化的时候传入 `featureId` 和 `sourceLayer` 参数，`featureId` 用于指定瓦片的拾取高亮，`sourceLayer` 指定绘制矢量数据中那一图层数据。
 
 ```javascript
-const layer = new RasterLayer({ 
+const layer = new RasterLayer({
   zIndex: 1,
   featureId: 'id',
-  sourceLayer: 'water'
+  sourceLayer: 'water',
 });
 ```
 
 - featureId: string
-用于可以自定义指定。
+  用于可以自定义指定。
 - sourceLayer: string
-用于必须传入，且要在返回的矢量数据中存在。
+  用于必须传入，且要在返回的矢量数据中存在。
 
 ## source
 
@@ -59,6 +59,7 @@ layer.source(tileSource)
 ### parser
 
 矢量瓦片在 `parser` 中解析瓦片服务，配置瓦片的参数。
+
 #### type: string
 
 用于指定瓦片服务的解析方式，值为 `rasterTile` 和 `mvt`。  
@@ -92,25 +93,28 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 ## 矢量图层的鼠标事件
 
 在使用上，矢量图层绑定事件的操作和普通图层事件保持一致。
+
 ```javascript
 layer.on('click', e => {...})
 ```
-🌟 在事件的返回参数中，L7 内部对图形的数据做了合并的操作，以求获取到当前图层的完整数据。    
-🌟 目前矢量瓦片支持的事件如下：
-```javascript
-  layer.on('click', (e) => {});
-  layer.on('mousemove', (e) => {});
-  layer.on('mouseup', (e) => {});
-  layer.on('mouseenter', (e) => {});
-  layer.on('mouseout', (e) => {});
-  layer.on('mousedown', (e) => {});
-  layer.on('contextmenu', (e) => {});
 
-  // out side
-  layer.on('unclick', (e) => {});
-  layer.on('unmouseup', (e) => {});
-  layer.on('unmousedown', (e) => {});
-  layer.on('uncontextmenu', (e) => {});
+🌟 在事件的返回参数中，L7 内部对图形的数据做了合并的操作，以求获取到当前图层的完整数据。  
+🌟 目前矢量瓦片支持的事件如下：
+
+```javascript
+layer.on('click', (e) => {});
+layer.on('mousemove', (e) => {});
+layer.on('mouseup', (e) => {});
+layer.on('mouseenter', (e) => {});
+layer.on('mouseout', (e) => {});
+layer.on('mousedown', (e) => {});
+layer.on('contextmenu', (e) => {});
+
+// out side
+layer.on('unclick', (e) => {});
+layer.on('unmouseup', (e) => {});
+layer.on('unmousedown', (e) => {});
+layer.on('uncontextmenu', (e) => {});
 ```
 
 ## Mask
