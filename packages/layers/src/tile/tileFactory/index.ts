@@ -1,5 +1,4 @@
 import { IParserCfg } from '@antv/l7-core';
-import { ITileFactory } from '../interface';
 import VectorLineTile from './line';
 import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';
@@ -31,5 +30,3 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
       return RasterTileFactory;
   }
 }
-
-export { ITileFactory };
