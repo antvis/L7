@@ -42,8 +42,7 @@ export default class RasterTile extends React.Component {
     this.scene.on('loaded', () => {
       const layer = new PointLayer({
         featureId: 'COLOR',
-        // layerName: 'ecoregions2',
-        layerName: 'woods',
+        sourceLayer: 'woods',
         coord: 'offset',
       });
       layer

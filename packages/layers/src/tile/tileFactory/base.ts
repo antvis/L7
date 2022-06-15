@@ -63,11 +63,11 @@ export default class TileFactory implements ITileFactory {
       vectorTileLayer: null,
       source: null,
     };
-    const { layerName, featureId } = initOptions;
-    if (!layerName) {
+    const { sourceLayer, featureId } = initOptions;
+    if (!sourceLayer) {
       return emptyData;
     }
-    const vectorTileLayer = tile.data.layers[layerName];
+    const vectorTileLayer = tile.data.layers[sourceLayer];
     const features = vectorTileLayer?.features;
     if (!(Array.isArray(features) && features.length > 0)) {
       return emptyData;
@@ -331,7 +331,7 @@ export default class TileFactory implements ITileFactory {
     delete option.shape;
     delete option.size;
     delete option.coords;
-    delete option.layerName;
+    delete option.sourceLayer;
     delete option.coords;
     return option;
   }

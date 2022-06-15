@@ -21,7 +21,6 @@ export interface IParserData {
   featureKeys?: IFeatureKey;
 }
 
-
 // 栅格瓦片解析配置项
 
 export enum RasterTileType {
@@ -38,7 +37,7 @@ export interface IRasterTileParserCFG {
   // 指定 feature 编码 id
   featureId?: string;
   // 指定矢量瓦片的数据分类
-  layerName?: string;
+  sourceLayer?: string;
   coord?: string;
   // 指定栅格瓦片的类型
   dataType?: RasterTileType;

@@ -63,7 +63,7 @@ export default class RasterTile extends React.Component {
 
       const layer = new PolygonLayer({
         featureId: 'COLOR',
-        layerName: 'woods', // woods hillshade contour ecoregions ecoregions2 city
+        sourceLayer: 'woods', // woods hillshade contour ecoregions ecoregions2 city
         coord: 'offset',
       });
       layer
@@ -82,9 +82,6 @@ export default class RasterTile extends React.Component {
               zoomOffset: 0,
               maxZoom: 20,
               extent: [-180, -85.051129, 179, 85.051129],
-              // featureId: 'COLOR',
-              // layerName: 'woods', // woods hillshade contour ecoregions ecoregions2 city
-              // coord: 'offset'
             },
           },
         )

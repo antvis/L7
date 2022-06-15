@@ -151,9 +151,8 @@ export interface ISubLayerInitOptions {
   clampHigh?: boolean;
   rampColors?: IColorRamp;
 
-  // layerName
   coords?: string;
-  layerName?: string;
+  sourceLayer?: string;
   featureId?: string;
 }
 
@@ -168,7 +167,7 @@ export interface ITilePickManager {
 }
 
 export interface ITileLayerManager {
-  layerName: string;
+  sourceLayer: string;
   parent: ILayer;
   children: ILayer[];
   tilePickManager: ITilePickManager;
@@ -191,7 +190,7 @@ export interface ITileLayerManager {
 
 export interface ITileLayer {
   type: string;
-  layerName: string;
+  sourceLayer: string;
   parent: ILayer;
   tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;

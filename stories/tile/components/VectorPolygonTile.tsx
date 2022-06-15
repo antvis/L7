@@ -65,17 +65,20 @@ export default class RasterTile extends React.Component {
 
       const layer = new PolygonLayer({
         featureId: 'COLOR',
-        layerName: 'ecoregions2',
+        sourceLayer: 'ecoregions2',
       });
-      const tileSource = new Source('http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',{
-        parser: {
-          type: 'mvt',
-          tileSize: 256,
-          zoomOffset: 0,
-          maxZoom: 9,
-          extent: [-180, -85.051129, 179, 85.051129],
+      const tileSource = new Source(
+        'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+        {
+          parser: {
+            type: 'mvt',
+            tileSize: 256,
+            zoomOffset: 0,
+            maxZoom: 9,
+            extent: [-180, -85.051129, 179, 85.051129],
+          },
         },
-      })
+      );
       layer
         .source(tileSource)
         .color('COLOR')

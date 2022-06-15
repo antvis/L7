@@ -72,7 +72,7 @@ export default class RasterTile extends React.Component {
 
       const layer = new PolygonLayer({
         featureId: 'NAME_CHN',
-        layerName: 'city', // woods hillshade contour ecoregions ecoregions2 city
+        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
         // coord: 'offset'
       });
       layer

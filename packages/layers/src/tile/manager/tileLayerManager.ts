@@ -16,7 +16,7 @@ import { getLayerShape, getMaskValue } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
 export class TileLayerManager implements ITileLayerManager {
-  public layerName: string;
+  public sourceLayer: string;
   public parent: ILayer;
   public children: ILayer[];
   public mapService: IMapService;
@@ -149,7 +149,7 @@ export class TileLayerManager implements ITileLayerManager {
         positions: [0, 0.25, 0.5, 0.75, 1.0],
       },
       featureId = 'id',
-      layerName,
+      sourceLayer,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -162,7 +162,7 @@ export class TileLayerManager implements ITileLayerManager {
     );
     const source = this.parent.getSource();
     const { coords } = source?.data?.tilesetOptions || {};
-    
+
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
     this.initOptions = {
@@ -170,7 +170,7 @@ export class TileLayerManager implements ITileLayerManager {
       shape: layerShape,
       zIndex,
       opacity,
-      layerName,
+      sourceLayer,
       coords,
       featureId,
       color: colorValue,

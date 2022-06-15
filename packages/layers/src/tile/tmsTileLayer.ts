@@ -13,20 +13,18 @@ export class TMSTileLayer extends BaseTileLayer {
     this.tilesetManager.tiles
       .filter((tile) => tile.isLoaded)
       .map((tile) => {
-        if (tile.data?.layers && this.layerName) {
+        if (tile.data?.layers && this.sourceLayer) {
           // vector
-          const vectorTileLayer = tile.data.layers[this.layerName];
+          const vectorTileLayer = tile.data.layers[this.sourceLayer];
           const features = vectorTileLayer?.features;
           if (!(Array.isArray(features) && features.length > 0)) {
             return;
           }
         }
         if (!tile.layerIDList.includes(this.parent.id)) {
-          const { layers } = this.tileLayerManager.createTile(
-            tile,
-          );
+          const { layers } = this.tileLayerManager.createTile(tile);
           tile.layerIDList.push(this.parent.id);
-          
+
           this.tileLayerManager.addChilds(layers);
           this.setPickState(layers);
         } else {

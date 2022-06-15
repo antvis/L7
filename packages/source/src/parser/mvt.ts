@@ -6,10 +6,7 @@ import {
 } from '@mapbox/vector-tile';
 import { Feature } from 'geojson';
 import Protobuf from 'pbf';
-import {
-  IParserData,
-  IRasterTileParserCFG,
-} from '../interface';
+import { IParserData, IRasterTileParserCFG } from '../interface';
 import {
   getURLFromTemplate,
   Tile,
@@ -180,11 +177,11 @@ const getVectorTile = async (
         );
         const zoom = tileParams.z;
 
-        for (const layerName of Object.keys(vectorTile.layers)) {
+        for (const sourceLayer of Object.keys(vectorTile.layers)) {
           const features = [];
-          const vectorTileLayer = vectorTile.layers[layerName];
-          for (let i = 0; i < vectorTile.layers[layerName].length; i++) {
-            const vectorTileFeature = vectorTile.layers[layerName].feature(i);
+          const vectorTileLayer = vectorTile.layers[sourceLayer];
+          for (let i = 0; i < vectorTile.layers[sourceLayer].length; i++) {
+            const vectorTileFeature = vectorTile.layers[sourceLayer].feature(i);
             let feature;
             if (coord === 'lnglat') {
               feature = vectorTileFeature.toGeoJSON(

@@ -19,7 +19,7 @@ export default class BaseTileLayer implements ITileLayer {
     return this.tileLayerManager.children;
   }
   public type: string = 'baseTile';
-  public layerName: string;
+  public sourceLayer: string;
   public parent: ILayer;
   // 瓦片是否加载成功
   public initedTileset: boolean = false;
@@ -51,9 +51,9 @@ export default class BaseTileLayer implements ITileLayer {
     pickingService,
   }: ITileLayerOPtions) {
     const parentSource = parent.getSource();
-    const { layerName, coords, featureId } =
+    const { sourceLayer, coords, featureId } =
       parentSource?.data?.tilesetOptions || {};
-    this.layerName = layerName;
+    this.sourceLayer = sourceLayer;
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;

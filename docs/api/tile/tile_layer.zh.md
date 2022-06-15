@@ -49,7 +49,7 @@ layer.source({
   },
   {
     featureId: 'id',
-    layerName: 'water'
+    sourceLayer: 'water'
   }
 })
 ```

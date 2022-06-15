@@ -40,7 +40,7 @@ export default class RasterTile extends React.Component {
     this.scene.on('loaded', () => {
       const layer = new LineLayer({
         featureId: 'COLOR',
-        layerName: 'woods', // contour ecoregions city ecoregions2
+        sourceLayer: 'woods', // contour ecoregions city ecoregions2
         coord: 'offset',
       });
       layer
@@ -58,7 +58,7 @@ export default class RasterTile extends React.Component {
               maxZoom: 20,
               extent: [-180, -85.051129, 179, 85.051129],
             },
-          }
+          },
         )
         .color('#f00')
         // .color('v', v => '#ff0')
