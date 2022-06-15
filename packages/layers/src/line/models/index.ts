@@ -1,3 +1,4 @@
+import LineTileModel from '../../tile/models/tileModel';
 import ArcModel from './arc';
 import Arc3DModel from './arc_3d';
 import ArcMiniModel from './arcmini';
@@ -5,6 +6,7 @@ import GreatCircleModel from './great_circle';
 import LineModel from './line';
 import LinearLine from './linearline';
 import SimpleLineModel from './simpleLine';
+import TileLineModel from './tile';
 import LineWallModel from './wall';
 
 export type LineModelType =
@@ -15,7 +17,9 @@ export type LineModelType =
   | 'wall'
   | 'simple'
   | 'line'
-  | 'linearline';
+  | 'linearline'
+  | 'vectorline'
+  | 'tileLine';
 
 const LineModels: { [key in LineModelType]: any } = {
   arc: ArcModel,
@@ -26,6 +30,8 @@ const LineModels: { [key in LineModelType]: any } = {
   line: LineModel,
   simple: SimpleLineModel,
   linearline: LinearLine,
+  vectorline: LineTileModel,
+  tileLine: TileLineModel,
 };
 
 export default LineModels;

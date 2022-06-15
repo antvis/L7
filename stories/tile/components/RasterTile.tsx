@@ -5,39 +5,20 @@ import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
   private scene: Scene;
-  private gridLayer: ILayer;
 
   public componentWillUnmount() {
     this.scene.destroy();
   }
 
-  private updateGridLayer = () => {
-    const bounds = this.scene['mapService'].getBounds();
-    const bbox = [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]];
-    // console.log('bbox: ', bbox);
-    const poly = turf.bboxPolygon(bbox as [number, number, number, number]);
-    const data = { type: 'FeatureCollection', features: [poly] };
-
-    if (this.gridLayer) {
-      this.gridLayer.setData(data);
-      return;
-    }
-    this.gridLayer = new LineLayer({ autoFit: false, zIndex: 19 })
-      .source(data)
-      .size(2)
-      .color('red')
-      .shape('line');
-    this.scene.addLayer(this.gridLayer);
-  };
-
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      stencil: true,
+      map: new Map({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',
-        zoom: 5,
+        zoom: 4,
         viewMode: '3D',
       }),
     });
@@ -45,7 +26,7 @@ export default class RasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
+      const point = new PointLayer({ zIndex: 2 })
         .source(
           [
             {
@@ -63,35 +44,41 @@ export default class RasterTile extends React.Component {
         )
         .shape('circle')
         .color('#f00')
+        .active(true)
         .size(10);
 
-      this.scene.addLayer(point);
+      // this.scene.addLayer(point);
 
-      const layer = new RasterLayer({
-        zIndex: 6,
-        // minZoom: 1,
-        // maxZoom: 16,
-      });
-      layer
-        .source(
-          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          {
-            parser: {
-              type: 'rasterTile',
-              tileSize: 256,
-              // minZoom: 6,
-              // maxZoom: 15,
-              zoomOffset: 0,
-              extent: [-180, -85.051129, 179, 85.051129],
-            },
-          },
-        )
-        .style({
-          // opacity: 0.5
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const layer = new RasterLayer({
+            zIndex: -1,
+            mask: true,
+            maskfence: data,
+          });
+          layer
+            .source(
+              'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
+              // 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
+              {
+                parser: {
+                  type: 'rasterTile',
+                  tileSize: 256,
+                  zoomOffset: 0,
+                  extent: [-180, -85.051129, 179, 85.051129],
+                },
+              },
+            )
+            .style({
+              // opacity: 0.5,
+            });
+
+          this.scene.addLayer(layer);
         });
-
-      this.scene.addLayer(layer);
-      // this.updateGridLayer();
     });
   }
 

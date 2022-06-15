@@ -140,8 +140,7 @@ export default class LayerService implements ILayerService {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
 
-      // layerGroup 不支持 Mask
-      if (!layer.isLayerGroup && layer.masks.length > 0) {
+      if (layer.masks.length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
           stencil: 0,
@@ -185,23 +184,7 @@ export default class LayerService implements ILayerService {
         return pre.zIndex - next.zIndex;
       })
       .forEach((layer) => {
-        if (layer.isLayerGroup) {
-          // layerGroup
-          // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
-          layer.layerChildren
-            .filter((childlayer) => childlayer.inited)
-            .filter((childlayer) => childlayer.isVisible())
-            .sort((pre: ILayer, next: ILayer) => {
-              // 根据 zIndex 对渲染顺序进行排序
-              return pre.zIndex - next.zIndex;
-            })
-            .forEach((childlayer) => {
-              this.layerList.push(childlayer);
-            });
-        } else {
-          // baseLayer
-          this.layerList.push(layer);
-        }
+        this.layerList.push(layer);
       });
   }
 

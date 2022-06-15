@@ -35,6 +35,7 @@ export interface ITexture2DInitializationOptions {
     | undefined
     | HTMLCanvasElement
     | HTMLImageElement
+    | ImageBitmap
     | number[]
     | number[][]
     | Uint8Array

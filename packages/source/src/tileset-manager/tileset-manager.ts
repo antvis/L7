@@ -133,11 +133,15 @@ export class TilesetManager extends EventEmitter {
   public updateTileVisible() {
     const updateStrategy = this.options.updateStrategy;
     const beforeVisible = new Map<string, boolean>();
-
     // 重置显示状态
     for (const tile of this.cacheTiles.values()) {
       // 存储已经显示的瓦片
       beforeVisible.set(tile.key, tile.isVisible);
+      if (tile.isVisible) {
+        // 可见 -> 不可见
+        tile.isVisibleChanged = true;
+      }
+      tile.lastVisible = tile.isVisible;
       tile.isCurrent = false;
       tile.isVisible = false;
     }
@@ -145,6 +149,11 @@ export class TilesetManager extends EventEmitter {
     for (const tile of this.currentTiles) {
       tile.isCurrent = true;
       tile.isVisible = true;
+      tile.lastVisible === false
+        ? (tile.isVisibleChanged = true)
+        : (tile.isVisibleChanged = false);
+
+      tile.lastVisible = true;
     }
 
     const tiles = Array.from(this.cacheTiles.values());

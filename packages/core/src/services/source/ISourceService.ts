@@ -1,4 +1,4 @@
-import { TilesetManager } from '@antv/l7-utils';
+import { TilesetManager } from '@antv/l7-source';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export interface IParserCfg {

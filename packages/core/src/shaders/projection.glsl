@@ -80,6 +80,23 @@ vec3 reverse_offset_normal(vec3 vector) {
   return vector;
 }
 
+vec4 project_mvt_offset_position(vec4 position) {
+  float a = COORDINATE_SYSTEM_LNGLAT_OFFSET;
+  float b = COORDINATE_SYSTEM_P20_OFFSET;
+  float c = COORDINATE_SYSTEM_LNGLAT;
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
+    return project_offset(vec4(0.0, 0.0, position.z, position.w));
+  }
+  if (u_CoordinateSystem < COORDINATE_SYSTEM_LNGLAT + 0.01 && u_CoordinateSystem >COORDINATE_SYSTEM_LNGLAT - 0.01) {
+    return vec4(
+      project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale,
+      project_scale(position.z),
+      position.w
+    );
+  }
+  return position;
+}
+
 vec4 project_position(vec4 position) {
   float a = COORDINATE_SYSTEM_LNGLAT_OFFSET;
   float b = COORDINATE_SYSTEM_P20_OFFSET;

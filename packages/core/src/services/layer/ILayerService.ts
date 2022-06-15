@@ -1,8 +1,12 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { Tile, TilesetManager } from '@antv/l7-source';
+import { IColorRamp } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
+import { IInteractionTarget } from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
 import {
@@ -23,6 +27,8 @@ import {
   IEncodeFeature,
   IScale,
   IScaleOptions,
+  IScaleValue,
+  IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   ScaleAttributeType,
@@ -116,6 +122,93 @@ export interface IAttrubuteAndElements {
   elements: any;
 }
 
+export interface ISubLayerStyles {
+  opacity: number;
+}
+
+/**
+ * For tile subLayer
+ */
+export interface ISubLayerInitOptions {
+  layerType: string;
+  shape?: string | string[] | IScaleValue;
+  // options
+  zIndex: number;
+  mask: boolean;
+  // source
+  // style
+  stroke?: string;
+  strokeWidth?: number;
+  strokeOpacity?: number;
+
+  opacity: number;
+  color?: IScaleValue;
+  size?: IScaleValue;
+
+  // raster tiff
+  domain?: [number, number];
+  clampLow?: boolean;
+  clampHigh?: boolean;
+  rampColors?: IColorRamp;
+
+  coords?: string;
+  sourceLayer?: string;
+  featureId?: string;
+}
+
+export interface ITilePickManager {
+  isLastPicked: boolean;
+  on(type: string, cb: (option: any) => void): void;
+  normalRender(layers: ILayer[]): void;
+  beforeHighlight(pickedColors: any): void;
+  beforeSelect(pickedColors: any): void;
+  clearPick(): void;
+  pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
+}
+
+export interface ITileLayerManager {
+  sourceLayer: string;
+  parent: ILayer;
+  children: ILayer[];
+  tilePickManager: ITilePickManager;
+
+  createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+
+  addChild(layer: ILayer): void;
+  addChilds(layers: ILayer[]): void;
+  getChilds(layerIDList: string[]): ILayer[];
+  removeChild(layer: ILayer): void;
+  removeChilds(layerIDList: string[]): void;
+  clearChild(): void;
+  hasChild(layer: ILayer): boolean;
+  render(isPicking?: boolean): void;
+
+  pickLayers(target: IInteractionTarget): boolean;
+
+  updateLayersConfig(layers: ILayer[], key: string, value: any): void;
+}
+
+export interface ITileLayer {
+  type: string;
+  sourceLayer: string;
+  parent: ILayer;
+  tileLayerManager: ITileLayerManager;
+  tilesetManager: TilesetManager | undefined;
+  children: ILayer[];
+  render(isPicking?: boolean): void;
+  pickLayers(target: IInteractionTarget): boolean;
+  clearPick(type: string): void;
+  clearPickState(): void;
+}
+
+export interface ITileLayerOPtions {
+  parent: ILayer;
+  rendererService: IRendererService;
+  mapService: IMapService;
+  layerService: ILayerService;
+  pickingService: IPickingService;
+}
+
 export type LayerEventType =
   | 'inited'
   | 'add'
@@ -149,6 +242,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
+  tileLayer: ITileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
@@ -177,7 +271,7 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-  isLayerGroup: boolean;
+  isVector?: boolean;
   triangulation?: Triangulation | undefined;
   /**
    * threejs 适配兼容相关的方法
@@ -195,6 +289,7 @@ export interface ILayer {
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
+  getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
   getBottomColor(): string;
@@ -350,13 +445,6 @@ export interface ILayer {
 
   // 设置当前地球时间 控制太阳角度
   setEarthTime(time: number): void;
-}
-
-export interface ILayerGroup extends ILayer {
-  addChild(layer: ILayer): void;
-  removeChild(layer: ILayer): void;
-  clearChild(): void;
-  hasChild(layer: ILayer): boolean;
 }
 
 /**

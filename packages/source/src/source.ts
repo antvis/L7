@@ -10,12 +10,7 @@ import {
   ISourceCFG,
   ITransform,
 } from '@antv/l7-core';
-import {
-  bBoxToBounds,
-  extent,
-  padBounds,
-  TilesetManager,
-} from '@antv/l7-utils';
+import { bBoxToBounds, extent, padBounds } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
@@ -23,6 +18,7 @@ import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './factory';
+import { TilesetManager } from './tileset-manager';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
@@ -245,7 +241,7 @@ export default class Source extends EventEmitter implements ISource {
   private setCenter(bbox: BBox) {
     this.center = [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2];
     if (isNaN(this.center[0]) || isNaN(this.center[1])) {
-      // this.center = [Infinity, Infinity] // Infinity/Infinity = NaN
+      // this.center = [NaN, NaN] // Infinity - Infinity = NaN
       // 默认设置为大地原点
       this.center = [108.92361111111111, 34.54083333333333];
     }
