@@ -7,7 +7,7 @@ import {
   Tile,
   TileLoadParams,
   TilesetManagerOptions,
-} from '../tileset-manager';
+} from '@antv/l7-utils';
 import { defaultFormat, getTileBuffer, getTileImage } from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
