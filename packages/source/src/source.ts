@@ -10,7 +10,12 @@ import {
   ISourceCFG,
   ITransform,
 } from '@antv/l7-core';
-import { bBoxToBounds, extent, padBounds, TilesetManager } from '@antv/l7-utils';
+import {
+  bBoxToBounds,
+  extent,
+  padBounds,
+  TilesetManager,
+} from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
