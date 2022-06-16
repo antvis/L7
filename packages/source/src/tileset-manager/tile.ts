@@ -24,6 +24,7 @@ export class Tile {
   public isVisibleChanged = true;
   // 是否是当前层级的瓦片
   public isCurrent = false;
+  public parentLayerIDList: string[] = [];
   public layerIDList: string[] = [];
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
