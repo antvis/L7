@@ -1,4 +1,10 @@
-import { getArrayBuffer } from '@antv/l7-utils';
+import {
+  getArrayBuffer,
+  getURLFromTemplate,
+  Tile,
+  TileLoadParams,
+  TilesetManagerOptions,
+} from '@antv/l7-utils';
 import {
   VectorTile,
   VectorTileFeature,
@@ -7,12 +13,6 @@ import {
 import { Feature } from 'geojson';
 import Protobuf from 'pbf';
 import { IParserData, IRasterTileParserCFG } from '../interface';
-import {
-  getURLFromTemplate,
-  Tile,
-  TileLoadParams,
-  TilesetManagerOptions,
-} from '../tileset-manager';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

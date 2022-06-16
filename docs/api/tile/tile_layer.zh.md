@@ -68,7 +68,7 @@ const layer = new PointLayer({
 
 在有些场景下，尤其是是矢量瓦片地图的场景，同一份瓦片数据会同时包含多图层的数据，此时我们需要让多图层复用同一个 `source` 对象。如下图所示，我们使用同一份数据绘制省市的面、边界和名称，此时我们就应该复用 `source` 对象。
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*HejkTLRIUZYAAAAAAAAAAAAAARQnAQ'>
+<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cMFMTqF7WoIAAAAAAAAAAAAAARQnAQ'>
 
 ```javascript
   const tileSource = new Source(

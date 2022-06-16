@@ -10,7 +10,7 @@ import {
   ITilePickManager,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-source';
+import { Tile } from '@antv/l7-utils';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';

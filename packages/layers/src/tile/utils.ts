@@ -4,8 +4,7 @@ import {
   IMapService,
   IRendererService,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-source';
-import { DOM } from '@antv/l7-utils';
+import { DOM, Tile } from '@antv/l7-utils';
 import { Container } from 'inversify';
 export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
   layers.map((layer) => {

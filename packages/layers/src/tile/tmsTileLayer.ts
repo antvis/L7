@@ -1,4 +1,4 @@
-import { Tile, TilesetManager } from '@antv/l7-source';
+import { Tile, TilesetManager } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
 
 export class TMSTileLayer extends BaseTileLayer {
@@ -11,8 +11,8 @@ export class TMSTileLayer extends BaseTileLayer {
       return;
     }
     this.tilesetManager.tiles
-      .filter((tile) => tile.isLoaded)
-      .map((tile) => {
+      .filter((tile: Tile) => tile.isLoaded)
+      .map((tile: Tile) => {
         if (tile.data?.layers && this.sourceLayer) {
           // vector
           const vectorTileLayer = tile.data.layers[this.sourceLayer];

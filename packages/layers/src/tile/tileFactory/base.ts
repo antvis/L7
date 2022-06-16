@@ -7,7 +7,8 @@ import {
   ISubLayerInitOptions,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import Source, { Tile } from '@antv/l7-source';
+import Source from '@antv/l7-source';
+import { Tile } from '@antv/l7-utils';
 import MaskLayer from '../../mask';
 import {
   getLayerShape,
