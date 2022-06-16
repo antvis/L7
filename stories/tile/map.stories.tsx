@@ -5,6 +5,7 @@ import RasterTile from './components/RasterTile';
 import OsmRasterTile from './components/OsmRasterTile';
 
 import RasterArrayBuffer from './components/RasterArrayBuffer';
+import RasterArrayBuffer2 from './components/RasterArrayBuffer2';
 import RasterArrayBufferMask from './components/RasterArrayBufferMask';
 
 import TiffRasterTile from './components/TiffRasterTile';
@@ -25,6 +26,7 @@ storiesOf('瓦片', module)
   .add('OsmRasterTile', () => <OsmRasterTile />)
 
   .add('RasterArrayBuffer', () => <RasterArrayBuffer />)
+  .add('RasterArrayBuffer2', () => <RasterArrayBuffer2 />)
   .add('RasterArrayBufferMask', () => <RasterArrayBufferMask />)
 
   .add('TiffRasterTile', () => <TiffRasterTile />)

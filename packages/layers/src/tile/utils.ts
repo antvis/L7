@@ -70,20 +70,29 @@ export function readRasterValue(
   x: number,
   y: number,
 ) {
-  const bbox = tile.bboxPolygon?.bbox || [0, 0, 10, -10];
-  const [tileLng = 0, tileLat = 0, tileMaxLng = 10, tileMaxLat = -10] = bbox;
-  const tileXY = mapService.lngLatToContainer([tileLng, tileLat]);
-  const tileMaxXY = mapService.lngLatToContainer([tileMaxLng, tileMaxLat]);
+  const bbox = tile?.bboxPolygon?.bbox || [0, 0, 10, -10];
+
+  const [minLng = 0, minLat = 0, maxLng = 10, maxLat = -10] = bbox;
+
+  const tileXY = mapService.lngLatToContainer([minLng, minLat]);
+  const tileMaxXY = mapService.lngLatToContainer([maxLng, maxLat]);
+
+  const tilePixelWidth = tileMaxXY.x - tileXY.x;
+  const tilePixelHeight = tileXY.y - tileMaxXY.y;
   const pos = [
-    (x - tileXY.x) / (tileMaxXY.x - tileXY.x),
-    (y - tileXY.y) / (tileMaxXY.y - tileXY.y),
+    (x - tileXY.x) / tilePixelWidth, // x
+    (y - tileMaxXY.y) / tilePixelHeight, // y
   ];
-  const tileWidth = tile.data.width || 1;
-  const tileHeight = tile.data.height || 1;
-  const data =
-    tile.data?.data[
-      Math.floor(pos[0] * tileWidth) + Math.floor(pos[1] * tileHeight)
-    ];
+
+  const tileWidth = tile?.data?.width || 1;
+  const tileHeight = tile?.data?.height || 1;
+
+  const indexX = Math.floor(pos[0] * tileWidth);
+  const indexY = Math.floor(pos[1] * tileHeight);
+  const index = Math.max(0, indexY - 1) * tileWidth + indexX;
+
+  const data = tile?.data?.data[index];
+
   return data;
 }
 

@@ -8,7 +8,7 @@ import {
   ScaleAttributeType,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { Tile } from '@antv/l7-utils';
+import { osmLonLat2TileXY, Tile, TilesetManager } from '@antv/l7-utils';
 import MaskLayer from '../../mask';
 import {
   getLayerShape,
@@ -214,10 +214,29 @@ export default class TileFactory implements ITileFactory {
     return [];
   }
 
-  protected emitEvent(layers: ILayer[], isVector?: boolean, tile?: any) {
+  protected getTile(lng: number, lat: number) {
+    const source = this.parentLayer.getSource();
+    const zoomOffset = source.parser.zoomOffset || 0;
+    const tilesetManager = source.tileset as TilesetManager;
+    const zoom = this.mapService.getZoom();
+
+    const z = Math.ceil(zoom) + zoomOffset;
+    const xy = osmLonLat2TileXY(lng, lat, z);
+
+    const tiles = tilesetManager.tiles.filter(
+      (t) => t.key === `${xy[0]},${xy[1]},${z}`,
+    );
+    const tile = tiles[0];
+    return tile;
+  }
+
+  protected emitEvent(layers: ILayer[], isVector?: boolean) {
     layers.map((layer) => {
       layer.once('inited', () => {
         layer.on('click', (e) => {
+          const { lng, lat } = e.lngLat;
+          const tile = this.getTile(lng, lat);
+
           this.eventCache.click = 1;
           this.getFeatureAndEmitEvent(
             layer,
@@ -228,6 +247,9 @@ export default class TileFactory implements ITileFactory {
           );
         });
         layer.on('mousemove', (e) => {
+          const { lng, lat } = e.lngLat;
+          const tile = this.getTile(lng, lat);
+
           this.eventCache.mousemove = 1;
           this.getFeatureAndEmitEvent(
             layer,
