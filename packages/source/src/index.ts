@@ -40,6 +40,4 @@ export * from './interface';
 export const DEFAULT_DATA = defaultData;
 export const DEFAULT_PARSER = defaultParser;
 
-export * from './tileset-manager/index';
-
 export default Source;
