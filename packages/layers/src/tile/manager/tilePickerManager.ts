@@ -63,7 +63,7 @@ export default class TilePickManager extends EventEmitter
   public pickRender(layers: ILayer[], target: IInteractionTarget) {
     // Tip: 在进行拾取渲染的时候也需要先渲染一遍父组件然后再渲染子组件
     //  在 栅格瓦片存在 Mask 的时候发生的拾取，那么就需要先渲染父组件（渲染父组件的帧缓冲）
-    if(this.parent.type === 'RasterLayer') {
+    if (this.parent.type === 'RasterLayer') {
       this.normalRender([this.parent]);
     }
     const isPicked = layers
