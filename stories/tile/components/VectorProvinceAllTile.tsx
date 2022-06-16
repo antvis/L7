@@ -22,7 +22,7 @@ export default class RasterTile extends React.Component {
       id: 'map',
       stencil: true,
       map: new GaodeMap({
-      // map: new Mapbox({
+        // map: new Mapbox({
         center: [120, 30],
         style: 'blank',
         zoom: 6,
@@ -91,7 +91,7 @@ export default class RasterTile extends React.Component {
 
       const polygonlayer = new PolygonLayer({
         featureId: 'NAME_CHN',
-        sourceLayer: 'city', 
+        sourceLayer: 'city',
       })
         .source(tileSource)
         .color('citycode', (v: string) => {
