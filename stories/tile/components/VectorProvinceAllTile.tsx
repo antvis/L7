@@ -21,18 +21,13 @@ export default class RasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       stencil: true,
-      // map: new GaodeMap({
-      map: new Mapbox({
-        // center: [121.268, 30.3628],
-        // center: [122.76391708791607, 43.343389123718815],
+      map: new GaodeMap({
+      // map: new Mapbox({
         center: [120, 30],
-        // style: 'normal',
         style: 'blank',
         zoom: 6,
         zooms: [0, 25],
         maxZoom: 25,
-        // zoom: 13,
-        // center: [-122.447303, 37.753574],
       }),
     });
 
@@ -96,10 +91,9 @@ export default class RasterTile extends React.Component {
 
       const polygonlayer = new PolygonLayer({
         featureId: 'NAME_CHN',
-        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
+        sourceLayer: 'city', 
       })
         .source(tileSource)
-        // .color('#f00')
         .color('citycode', (v: string) => {
           // @ts-ignore
           if (colors[v]) {
@@ -120,7 +114,7 @@ export default class RasterTile extends React.Component {
 
       const pointlayer = new PointLayer({
         featureId: 'NAME_CHN',
-        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
+        sourceLayer: 'city',
       })
         .source(tileSource)
         .shape('NAME_CHN', 'text')
