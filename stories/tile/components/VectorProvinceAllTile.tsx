@@ -81,18 +81,18 @@ export default class RasterTile extends React.Component {
         },
       );
 
-      const linelayer = new LineLayer({
-        // zIndex: 1,
-        featureId: 'NAME_CHN',
-        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
-      })
-        .source(tileSource)
-        .color('#f00')
-        .size(1)
-        .style({
-          opacity: 0.5,
-        });
-      this.scene.addLayer(linelayer);
+      // const linelayer = new LineLayer({
+      //   // zIndex: 1,
+      //   featureId: 'NAME_CHN',
+      //   sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
+      // })
+      //   .source(tileSource)
+      //   .color('#f00')
+      //   .size(1)
+      //   .style({
+      //     opacity: 0.5,
+      //   });
+      // this.scene.addLayer(linelayer);
 
       const polygonlayer = new PolygonLayer({
         featureId: 'NAME_CHN',
@@ -118,20 +118,20 @@ export default class RasterTile extends React.Component {
         .select(true);
       this.scene.addLayer(polygonlayer);
 
-      const pointlayer = new PointLayer({
-        featureId: 'NAME_CHN',
-        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
-      })
-        .source(tileSource)
-        .shape('NAME_CHN', 'text')
-        .color('#f00')
-        .size(12)
-        .style({
-          stroke: '#fff',
-          strokeWidth: 2,
-        });
+      // const pointlayer = new PointLayer({
+      //   featureId: 'NAME_CHN',
+      //   sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
+      // })
+      //   .source(tileSource)
+      //   .shape('NAME_CHN', 'text')
+      //   .color('#f00')
+      //   .size(12)
+      //   .style({
+      //     stroke: '#fff',
+      //     strokeWidth: 2,
+      //   });
 
-      this.scene.addLayer(pointlayer);
+      // this.scene.addLayer(pointlayer);
     });
   }
 
