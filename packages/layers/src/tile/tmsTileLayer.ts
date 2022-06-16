@@ -22,9 +22,11 @@ export class TMSTileLayer extends BaseTileLayer {
           }
         }
         if (!tile.parentLayerIDList.includes(this.parent.id)) {
-          const { layers, layerIDList } = this.tileLayerManager.createTile(tile);
+          const { layers, layerIDList } = this.tileLayerManager.createTile(
+            tile,
+          );
           tile.parentLayerIDList.push(this.parent.id);
-          tile.layerIDList = layerIDList
+          tile.layerIDList.push(...layerIDList);
 
           this.tileLayerManager.addChilds(layers);
           this.setPickState(layers);
