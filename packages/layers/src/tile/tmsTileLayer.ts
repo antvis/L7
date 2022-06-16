@@ -21,9 +21,10 @@ export class TMSTileLayer extends BaseTileLayer {
             return;
           }
         }
-        if (!tile.layerIDList.includes(this.parent.id)) {
-          const { layers } = this.tileLayerManager.createTile(tile);
-          tile.layerIDList.push(this.parent.id);
+        if (!tile.parentLayerIDList.includes(this.parent.id)) {
+          const { layers, layerIDList } = this.tileLayerManager.createTile(tile);
+          tile.parentLayerIDList.push(this.parent.id);
+          tile.layerIDList.push(...layerIDList);
 
           this.tileLayerManager.addChilds(layers);
           this.setPickState(layers);
