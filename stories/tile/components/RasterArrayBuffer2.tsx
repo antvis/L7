@@ -132,12 +132,10 @@ export default class RasterTile extends React.Component {
       this.scene.addPopup(popup);
 
       layer.on('mousemove', (e) => {
-        
         // const rgb = `rgb(${e.pickedColors[0]}, ${e.pickedColors[1]}, ${e.pickedColors[2]})`
         popup.setLnglat(e.lngLat).setHTML(`
         <span>$当前海拔为 ${e.value} 米</span>
-        `
-        );
+        `);
       });
       // layer.on('mouseenter', (e) => {
       //   // console.log('-')
