@@ -35,6 +35,8 @@ export default class TileFactory implements ITileFactory {
   public mapService: IMapService;
   public rendererService: IRendererService;
   public outSideEventTimer: Timeout | null = null;
+  protected zoomOffset: number;
+  protected tilesetManager: TilesetManager;
   protected layers: ILayer[];
   // 用于记录图层内事件，辅助判断图层外事件逻辑
   private eventCache = {
@@ -48,6 +50,10 @@ export default class TileFactory implements ITileFactory {
     this.parentLayer = option.parent;
     this.mapService = option.mapService;
     this.rendererService = option.rendererService;
+
+    const source = this.parentLayer.getSource();
+    this.zoomOffset = source.parser.zoomOffset || 0;
+    this.tilesetManager = source.tileset as TilesetManager;
   }
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
@@ -215,15 +221,11 @@ export default class TileFactory implements ITileFactory {
   }
 
   protected getTile(lng: number, lat: number) {
-    const source = this.parentLayer.getSource();
-    const zoomOffset = source.parser.zoomOffset || 0;
-    const tilesetManager = source.tileset as TilesetManager;
     const zoom = this.mapService.getZoom();
-
-    const z = Math.ceil(zoom) + zoomOffset;
+    const z = Math.ceil(zoom) + this.zoomOffset;
     const xy = osmLonLat2TileXY(lng, lat, z);
 
-    const tiles = tilesetManager.tiles.filter(
+    const tiles = this.tilesetManager.tiles.filter(
       (t) => t.key === `${xy[0]},${xy[1]},${z}`,
     );
     const tile = tiles[0];
@@ -234,37 +236,61 @@ export default class TileFactory implements ITileFactory {
     layers.map((layer) => {
       layer.once('inited', () => {
         layer.on('click', (e) => {
-          const { lng, lat } = e.lngLat;
-          const tile = this.getTile(lng, lat);
-
           this.eventCache.click = 1;
-          this.getFeatureAndEmitEvent(
-            layer,
-            'subLayerClick',
-            e,
-            isVector,
-            tile,
-          );
+          if(this.parentLayer.type === 'RasterLayer') {
+            const { lng, lat } = e.lngLat;
+            const tile = this.getTile(lng, lat);
+            this.getFeatureAndEmitEvent(
+              layer,
+              'subLayerClick',
+              e,
+              isVector,
+              tile,
+            );
+          } else {
+            this.getFeatureAndEmitEvent(
+              layer,
+              'subLayerClick',
+              e,
+            );
+          }
+         
         });
+       
         layer.on('mousemove', (e) => {
-          const { lng, lat } = e.lngLat;
-          const tile = this.getTile(lng, lat);
-
           this.eventCache.mousemove = 1;
-          this.getFeatureAndEmitEvent(
-            layer,
-            'subLayerMouseMove',
-            e,
-            isVector,
-            tile,
-          );
+          if(this.parentLayer.type === 'RasterLayer') {
+            const { lng, lat } = e.lngLat;
+            const tile = this.getTile(lng, lat);
+            this.getFeatureAndEmitEvent(
+              layer,
+              'subLayerMouseMove',
+              e,
+              isVector,
+              tile,
+            );
+          } else {
+            this.getFeatureAndEmitEvent(
+              layer,
+              'subLayerMouseMove',
+              e,
+            );
+          }
+          
         });
         layer.on('mouseup', (e) => {
           this.eventCache.mouseup = 1;
           this.getFeatureAndEmitEvent(layer, 'subLayerMouseUp', e);
         });
         layer.on('mouseenter', (e) => {
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e);
+          if(this.parentLayer.type === 'RasterLayer') {
+            const { lng, lat } = e.lngLat;
+            const tile = this.getTile(lng, lat);
+            this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e, isVector, tile);
+          } else {
+            this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e);
+          }
+          
         });
         layer.on('mouseout', (e) => {
           this.getFeatureAndEmitEvent(layer, 'subLayerMouseOut', e);
@@ -321,15 +347,16 @@ export default class TileFactory implements ITileFactory {
     isVector?: boolean,
     tile?: any,
   ) {
-    const featureId = e.featureId;
-    const features = this.getAllFeatures(featureId);
-    e.feature = this.getCombineFeature(features);
-
     if (isVector === false) {
       // raster tile get rgb
       e.pickedColors = readPixel(e.x, e.y, this.rendererService);
       // raster tile origin value
       e.value = readRasterValue(tile, this.mapService, e.x, e.y);
+    } else {
+      // VectorLayer
+      const featureId = e.featureId;
+      const features = this.getAllFeatures(featureId);
+      e.feature = this.getCombineFeature(features);
     }
     this.parentLayer.emit(eventName, e);
   }

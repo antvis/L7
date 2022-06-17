@@ -7,6 +7,7 @@ import {
   ILayer,
   PointLayer,
   MaskLayer,
+  Popup
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
@@ -23,11 +24,11 @@ export default class RasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        center: [105, 30],
+        center: [105, 60],
         pitch: 0,
-        style: 'normal',
-        // style: 'blank',
-        zoom: 3,
+        // style: 'normal',
+        style: 'blank',
+        zoom: 5,
       }),
     });
     const canvas = document.createElement('canvas');
@@ -39,6 +40,7 @@ export default class RasterTile extends React.Component {
       layer
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+          // 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{zoom}/{x}/{y}.pngraw?sku=YOUR_MAPBOX_SKU_TOKEN&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
           // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
@@ -46,7 +48,7 @@ export default class RasterTile extends React.Component {
             parser: {
               type: 'rasterTile',
               dataType: 'arraybuffer',
-              tileSize: 512,
+              tileSize: 256,
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
               minZoom: 0,
@@ -79,8 +81,9 @@ export default class RasterTile extends React.Component {
                   const G = imgData[i + 1];
                   const B = imgData[i + 2];
                   const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
-                  arr.push(d);
+                  arr.push(d - 200);
                 }
+                // console.log(arr)
                 return {
                   rasterData: arr,
                   width: 256,
@@ -92,81 +95,70 @@ export default class RasterTile extends React.Component {
         )
         .style({
           // opacity: 0.5,
-          domain: [0, 1000],
+          domain: [0, 256],
           clampLow: true,
           rampColors: {
             colors: [
-              // '#f7fcf5',
-              // '#e5f5e0',
-              // '#c7e9c0',
-              // '#a1d99b',
-              // '#74c476',
-              // '#41ab5d',
-              // '#238b45',
-              // '#006d2c',
-              // '#00441b',
-              '#f00',
-              '#f00',
-              '#00f',
-              '#00f',
+              '#f7fcf5',
+              '#e5f5e0',
+              '#c7e9c0',
+              '#a1d99b',
+              '#74c476',
+              '#41ab5d',
+              '#238b45',
+              '#006d2c',
+              '#00441b',
+              // '#F00',
+              // '#F00',
             ],
-            // positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
-            positions: [0, 0.5, 0.5, 1.0],
+            positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+            // positions: [0, 1.0],
           },
         })
         .select(true);
 
       this.scene.addLayer(layer);
 
-      layer.on('click', (e) => {
-        // console.log('click')
-        // console.log(e.pickedColors)
-        console.log(e.value);
-        // console.log(e.lngLat.lat)
-        // const p  = new PointLayer()
-        // .source([
-        //   {
-        //     lng: e.lngLat.lng,
-        //     lat: e.lngLat.lat
-        //   }
-        // ], {
-        //   parser: {
-        //     type: 'json',
-        //     x: 'lng',
-        //     y: 'lat'
-        //   }
+      // layer.on('click', (e) => {
+      //   console.log('click')
+      //   // console.log(e.pickedColors)
+      //   console.log(e)
+      // });
+
+      const popup = new Popup({
+        offsets: [ 0, 0 ],
+        closeButton: false
+      })
+      .setHTML(`<span>$</span>`);
+      this.scene.addPopup(popup);
+
+      layer.on('mousemove', (e) => {
+        // console.log('-')
+        // console.log(e.value)
+        // this.setState({
+
+        //   text: e.value
         // })
-        // .shape('circle')
-        // .size(10)
-        // .color('#00f')
-
-        // this.scene.addLayer(p)
-        // this.scene.render()
+        // @ts-ignore
+        // console.log(new Date().getTime() - window.t)
+        // console.log(1)
+        popup .setLnglat(e.lngLat)
+        .setHTML(`<span>${e.value}</span>`);
       });
+      // layer.on('mouseenter', (e) => {
+      //   // console.log('-')
+      //   // console.log(e.value)
+      //   // this.setState({
 
-      // layer.on('mousemove', (e) => console.log(e.value));
+      //   //   text: e.value
+      //   // })
+      //   // @ts-ignore
+      //   // console.log(new Date().getTime() - window.t)
+      //   // console.log(1)
+      //   popup .setLnglat(e.lngLat)
+      //   .setHTML(`<span>${e.value}</span>`);
+      // });
 
-      // setTimeout(() => {
-      //   layer.style({
-      //     rampColors: {
-      //       colors: [
-      //         // 'rgb(166,97,26)',
-      //         // 'rgb(223,194,125)',
-      //         // 'rgb(245,245,245)',
-      //         // 'rgb(128,205,193)',
-      //         // 'rgb(1,133,113)',
-
-      //         'rgb(0,0,0)',
-      //         'rgb(0,0,0)',
-      //         'rgb(0,245,0)',
-      //         'rgb(255,0,0)',
-      //         'rgb(255,0,0)',
-      //       ],
-      //       positions: [0, 0.25, 0.5, 0.75, 1.0],
-      //     },
-      //   });
-      //   this.scene.render();
-      // }, 3000);
     });
   }
 
@@ -182,7 +174,18 @@ export default class RasterTile extends React.Component {
             right: 0,
             bottom: 0,
           }}
-        />
+        >
+          {/* <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100px',
+            height: '100px',
+            background: '#fff',
+            zIndex: 10
+            // @ts-ignore
+          }}>{this.state.text}</div> */}
+          </div>
       </>
     );
   }
