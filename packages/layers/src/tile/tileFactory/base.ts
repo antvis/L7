@@ -237,7 +237,7 @@ export default class TileFactory implements ITileFactory {
       layer.once('inited', () => {
         layer.on('click', (e) => {
           this.eventCache.click = 1;
-          if(this.parentLayer.type === 'RasterLayer') {
+          if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
             this.getFeatureAndEmitEvent(
@@ -248,18 +248,13 @@ export default class TileFactory implements ITileFactory {
               tile,
             );
           } else {
-            this.getFeatureAndEmitEvent(
-              layer,
-              'subLayerClick',
-              e,
-            );
+            this.getFeatureAndEmitEvent(layer, 'subLayerClick', e);
           }
-         
         });
-       
+
         layer.on('mousemove', (e) => {
           this.eventCache.mousemove = 1;
-          if(this.parentLayer.type === 'RasterLayer') {
+          if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
             this.getFeatureAndEmitEvent(
@@ -270,27 +265,27 @@ export default class TileFactory implements ITileFactory {
               tile,
             );
           } else {
-            this.getFeatureAndEmitEvent(
-              layer,
-              'subLayerMouseMove',
-              e,
-            );
+            this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e);
           }
-          
         });
         layer.on('mouseup', (e) => {
           this.eventCache.mouseup = 1;
           this.getFeatureAndEmitEvent(layer, 'subLayerMouseUp', e);
         });
         layer.on('mouseenter', (e) => {
-          if(this.parentLayer.type === 'RasterLayer') {
+          if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e, isVector, tile);
+            this.getFeatureAndEmitEvent(
+              layer,
+              'subLayerMouseMove',
+              e,
+              isVector,
+              tile,
+            );
           } else {
             this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e);
           }
-          
         });
         layer.on('mouseout', (e) => {
           this.getFeatureAndEmitEvent(layer, 'subLayerMouseOut', e);

@@ -7,7 +7,7 @@ import {
   ILayer,
   PointLayer,
   MaskLayer,
-  Popup
+  Popup,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
@@ -126,10 +126,9 @@ export default class RasterTile extends React.Component {
       // });
 
       const popup = new Popup({
-        offsets: [ 0, 0 ],
-        closeButton: false
-      })
-      .setHTML(`<span>$</span>`);
+        offsets: [0, 0],
+        closeButton: false,
+      }).setHTML(`<span>$</span>`);
       this.scene.addPopup(popup);
 
       layer.on('mousemove', (e) => {
@@ -142,8 +141,7 @@ export default class RasterTile extends React.Component {
         // @ts-ignore
         // console.log(new Date().getTime() - window.t)
         // console.log(1)
-        popup .setLnglat(e.lngLat)
-        .setHTML(`<span>${e.value}</span>`);
+        popup.setLnglat(e.lngLat).setHTML(`<span>${e.value}</span>`);
       });
       // layer.on('mouseenter', (e) => {
       //   // console.log('-')
@@ -158,7 +156,6 @@ export default class RasterTile extends React.Component {
       //   popup .setLnglat(e.lngLat)
       //   .setHTML(`<span>${e.value}</span>`);
       // });
-
     });
   }
 
@@ -185,7 +182,7 @@ export default class RasterTile extends React.Component {
             zIndex: 10
             // @ts-ignore
           }}>{this.state.text}</div> */}
-          </div>
+        </div>
       </>
     );
   }
