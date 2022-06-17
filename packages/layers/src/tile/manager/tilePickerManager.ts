@@ -64,7 +64,7 @@ export default class TilePickManager extends EventEmitter
     // Tip: 在进行拾取渲染的时候也需要先渲染一遍父组件然后再渲染子组件
     //  如需要在 栅格瓦片存在 Mask 的时候发生的拾取，那么就需要先渲染父组件（渲染父组件的帧缓冲）
     if (this.parent.type === 'RasterLayer') {
-      this.normalRender([this.parent]);
+      this.renderMask(this.parent);
     }
     const isPicked = layers
       .filter(
@@ -95,7 +95,8 @@ export default class TilePickManager extends EventEmitter
           layer,
           target,
         );
-        if (layerPicked) {
+        // RasterLayer 不参与拾取后的 shader 计算
+        if (layerPicked && this.parent.type !== 'RasterLayer') {
           this.emit('pick', {
             type: target.type,
             pickedColors: this.pickingService.pickedColors,
@@ -106,7 +107,12 @@ export default class TilePickManager extends EventEmitter
 
         return layerPicked;
       });
-    if (!isPicked && this.isLastPicked && target.type !== 'click') {
+    if (
+      this.parent.type !== 'RasterLayer' &&
+      !isPicked &&
+      this.isLastPicked &&
+      target.type !== 'click'
+    ) {
       // 只有上一次有被高亮选中，本次未选中的时候才需要清除选中状态
       this.pickingService.pickedTileLayers = [];
       this.emit('unpick', {});
@@ -139,5 +145,24 @@ export default class TilePickManager extends EventEmitter
       .map((layer) => {
         layer.hooks.beforeSelect.call(pickedColors);
       });
+  }
+
+  protected renderMask(layer: ILayer) {
+    if (layer.inited && layer.isVisible()) {
+      layer.hooks.beforeRender.call();
+      if (layer.masks.length > 0) {
+        this.rendererService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        });
+        layer.masks.map((m: ILayer) => {
+          m.hooks.beforeRender.call();
+          m.render();
+          m.hooks.afterRender.call();
+        });
+      }
+      layer.hooks.afterRender.call();
+    }
   }
 }

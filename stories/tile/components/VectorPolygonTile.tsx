@@ -92,11 +92,11 @@ export default class RasterTile extends React.Component {
         // .select(true);
         .active(true);
 
-      // layer.on('click', e => {
-
-      //   console.log(e.feature[0].coordinates)
-      //   console.log(turf.featureCollection(e.feature[0].coordinates))
-      //  })
+      layer.on('click', (e) => {
+        console.log(e);
+        // console.log(e.feature[0].coordinates)
+        // console.log(turf.featureCollection(e.feature[0].coordinates))
+      });
       // layer.on('mousemove', e => console.log(e))
       // layer.on('mouseup', e => console.log(e))
       // layer.on('unmousemove', e => console.log(e))
