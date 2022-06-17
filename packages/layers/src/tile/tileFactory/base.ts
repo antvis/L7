@@ -344,7 +344,7 @@ export default class TileFactory implements ITileFactory {
   ) {
     if (isVector === false) {
       // raster tile get rgb
-      e.pickedColors = readPixel(e.x, e.y, this.rendererService);
+      // e.pickedColors = readPixel(e.x, e.y, this.rendererService);
       // raster tile origin value
       e.value = readRasterValue(tile, this.mapService, e.x, e.y);
     } else {

@@ -81,7 +81,7 @@ export default class RasterTile extends React.Component {
                   const G = imgData[i + 1];
                   const B = imgData[i + 2];
                   const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
-                  arr.push(d - 200);
+                  arr.push(d);
                 }
                 // console.log(arr)
                 return {
@@ -95,7 +95,7 @@ export default class RasterTile extends React.Component {
         )
         .style({
           // opacity: 0.5,
-          domain: [0, 256],
+          domain: [0, 512],
           clampLow: true,
           rampColors: {
             colors: [
@@ -132,16 +132,12 @@ export default class RasterTile extends React.Component {
       this.scene.addPopup(popup);
 
       layer.on('mousemove', (e) => {
-        // console.log('-')
-        // console.log(e.value)
-        // this.setState({
-
-        //   text: e.value
-        // })
-        // @ts-ignore
-        // console.log(new Date().getTime() - window.t)
-        // console.log(1)
-        popup.setLnglat(e.lngLat).setHTML(`<span>${e.value}</span>`);
+        
+        // const rgb = `rgb(${e.pickedColors[0]}, ${e.pickedColors[1]}, ${e.pickedColors[2]})`
+        popup.setLnglat(e.lngLat).setHTML(`
+        <span>$当前海拔为 ${e.value} 米</span>
+        `
+        );
       });
       // layer.on('mouseenter', (e) => {
       //   // console.log('-')
