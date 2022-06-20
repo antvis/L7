@@ -27,10 +27,10 @@ export default class RasterTile extends React.Component {
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
         center: [120, 30],
-        style: 'normal',
-        zoom: 6,
-        zooms: [0, 25],
-        maxZoom: 25,
+        style: 'blank',
+        zoom: 2,
+        // zooms: [3.5, 19],
+        // maxZoom: 25,
         // zoom: 13,
         // center: [-122.447303, 37.753574],
       }),
@@ -75,14 +75,14 @@ export default class RasterTile extends React.Component {
             tileSize: 256,
             zoomOffset: 0,
             maxZoom: 9,
-            extent: [-180, -85.051129, 179, 85.051129],
+            // extent: [-180, -85.051129, 179, 85.051129],
           },
         },
       );
       layer
         .source(tileSource)
-        // .color('COLOR')
-        .color('#f00')
+        .color('COLOR')
+        // .color('#f00')
         // .color('v', v => '#ff0')
         // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
         .style({
