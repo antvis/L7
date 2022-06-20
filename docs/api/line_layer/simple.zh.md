@@ -32,4 +32,3 @@ shape 设置成 simple 即可
 
 🌟 简单线图层不支持动画和纹理
 
-`markdown:docs/common/layer/base.md`

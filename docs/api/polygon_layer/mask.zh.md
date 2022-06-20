@@ -74,4 +74,3 @@ const layer = new RasterLayer({ mask: true });
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*jhWWS6dhKhYAAAAAAAAAAAAAARQnAQ">
 
-`markdown:docs/common/layer/base.md`

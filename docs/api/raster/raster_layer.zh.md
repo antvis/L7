@@ -17,15 +17,15 @@ import { RasterLayer } from '@antv/l7';
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bUYqRb5esH4AAAAAAAAAAABkARQnAQ'>
 
-## source
+### source
 
 见 [raster source](../source/raster)
 
-## shape
+### shape
 
 仅支持 `raster`
 
-## style
+### style
 
 - `clampLow`: `Boolean` 默认 false, 设置为 true，低于 domain 的数据将不显示
 - `clampHigh`: `Boolean` 默认 false, 设置为 true，高于 domain 的数据将不显示
@@ -43,5 +43,3 @@ import { RasterLayer } from '@antv/l7';
   ⚠️ `color`, `position` 的长度要相同
 
 [在线案例](../../../examples/raster/basic#light)
-
-`markdown:docs/common/layer/base.md`

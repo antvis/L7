@@ -85,6 +85,7 @@ layer.style({
 
 ✨ 由于线图层在配置箭头/不配置箭头的这两种情况对顶点的处理不同，因此我们在切换这两种情况的时候需要重构线图层对象。
 
+
 `markdown:docs/api/line_layer/features/vertexHeight.zh.md`
 
 `markdown:docs/api/line_layer/features/linear.zh.md`
@@ -93,8 +94,7 @@ layer.style({
 
 `markdown:docs/api/line_layer/features/border.zh.md`
 
-`markdown:docs/api/line_layer/features/animate.zh.md`
-
 `markdown:docs/api/line_layer/features/texture.zh.md`
 
-`markdown:docs/common/layer/base.md`
+
+`markdown:docs/api/line_layer/features/animate.zh.md`
