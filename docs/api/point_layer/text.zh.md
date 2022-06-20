@@ -42,4 +42,3 @@ layer.shape('name', 'text');
 - raisingHeight 设置 3D 填充图的抬升高度
 
 [在线案例](../../../examples/point/text#point_text)
-

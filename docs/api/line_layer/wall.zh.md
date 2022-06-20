@@ -29,7 +29,6 @@ shape 设置成 wall 即可
 
 🌟 目前渐变色的方向为垂直向上
 
-
 `markdown:docs/api/line_layer/features/texture.zh.md`
 
 🌟 地理围栏支持了新的样式参数 iconStepCount

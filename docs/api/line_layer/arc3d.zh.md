@@ -54,8 +54,8 @@ source(data, {
 ```
 
 `markdown:docs/api/line_layer/features/animate.zh.md`
-### style
 
+### style
 
 `markdown:docs/api/line_layer/features/linear.zh.md`
 

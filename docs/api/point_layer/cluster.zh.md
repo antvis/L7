@@ -31,7 +31,6 @@ import { PointLayer } from '@antv/l7';
 
 数据聚合之后，数据会增加 point_count 属性，在可视化渲染时可以根据 point_count 进行数据映射。
 
-
 ### layer functions
 
 **getClusters(zoom: number)**

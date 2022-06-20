@@ -19,11 +19,12 @@ import { RasterLayer } from '@antv/l7';
 ### option
 
 #### mask
+
 栅格瓦片图层可以在初始化的时候配置瓦片的掩模。
 
 ```javascript
 const maskData = [...] // geojson
-const layer = new RasterLayer({ 
+const layer = new RasterLayer({
   mask: true,
   maskfence: maskData;
  });
@@ -94,26 +95,33 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 `zoomOffset` 的默认值为 0
 
 ### style
+
 栅格瓦片支持配置多种样式参数
+
 #### opacity: number
+
 ```javascript
 layer.style({
-  opacity: 0.5
-})
+  opacity: 0.5,
+});
 ```
+
 #### domain: [number, number]
+
 🌟 数据栅格瓦片
 
 设置数据映射的定义域。  
 ps：固定值域为 `[0, 1]`，我们将传入的值（domain） 映射到值域 `[0, 1]` 后从 `rampColor` 构建的色带上取颜色。
 
 #### clampLow/clampHigh: boolean
+
 🌟 数据栅格瓦片
 
 `clampLow` 的默认值为 `false`，设置为 `true`，低于 `domain` 的数据将不显示。  
 `clampHigh` 的默认值为 `false`，设置为 `true`，高于 `domain` 的数据将不显示。
 
 #### rampColors
+
 🌟 数据栅格瓦片
 
 配置瓦片值域映射颜色的色带。
@@ -134,16 +142,20 @@ ps：⚠️ color, position 的长度要相同
 🌟 数据栅格支持图层事件，目前图片栅格暂时不支持图层事件。
 
 ### 绑定事件
+
 🌟 数据栅格瓦片
+
 ```javascript
 // 绑定事件的方式和普通图层保持一致
 layer.on('click', e => {...})
 ```
 
 ### 事件参数
+
 🌟 数据栅格瓦片
 数据栅格瓦片的事件参数相比于普通图层的事件返回了新的参数。
 
 #### value: number
+
 🌟 数据栅格瓦片
 鼠标事件位置的瓦片的实际数值。

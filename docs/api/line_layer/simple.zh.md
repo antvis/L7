@@ -31,4 +31,3 @@ shape 设置成 simple 即可
 `markdown:docs/api/line_layer/features/linear.zh.md`
 
 🌟 简单线图层不支持动画和纹理
-

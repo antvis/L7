@@ -135,4 +135,3 @@ const layer = new HeatmapLayer({
 ```
 
 [在线案例](../../../examples/heatmap/hexagon#light)
-

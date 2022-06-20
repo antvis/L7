@@ -53,6 +53,4 @@ layer.animate(false);
 - speed 水波速度
 - rings 水波环数
 
-
 [在线案例](../../../examples/point/bubble#point)
-
