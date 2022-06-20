@@ -10,7 +10,7 @@ import {
   Marker,
   MarkerLayer,
   Popup,
-  HeatmapLayer
+  HeatmapLayer,
 } from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
@@ -40,29 +40,29 @@ export default class Amap2demo extends React.Component {
 
     scene.on('loaded', () => {
       const layer = new HeatmapLayer({})
-      .source([{lng: 120, lat: 30, mag: 1}], {parser: {type: 'json', x: 'lng', y: 'lat'}})
-      .shape('heatmap')
-      .size('mag', [ 0, 1.0 ]) // weight映射通道
-      .style({
-        intensity: 2,
-        radius: 20,
-        opacity: 1.0,
-        rampColors: {
-          colors: [
-            '#FF4818',
-            '#F7B74A',
-            '#FFF598',
-            '#F27DEB',
-            '#8C1EB2',
-            '#421EB2'
-          ].reverse(),
-          positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
-        }
-      });
+        .source([{ lng: 120, lat: 30, mag: 1 }], {
+          parser: { type: 'json', x: 'lng', y: 'lat' },
+        })
+        .shape('heatmap')
+        .size('mag', [0, 1.0]) // weight映射通道
+        .style({
+          intensity: 2,
+          radius: 20,
+          opacity: 1.0,
+          rampColors: {
+            colors: [
+              '#FF4818',
+              '#F7B74A',
+              '#FFF598',
+              '#F27DEB',
+              '#8C1EB2',
+              '#421EB2',
+            ].reverse(),
+            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+          },
+        });
 
-    
-
-    this.scene.addLayer(layer);
+      this.scene.addLayer(layer);
     });
   }
 
