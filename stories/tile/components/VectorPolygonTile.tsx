@@ -81,8 +81,8 @@ export default class RasterTile extends React.Component {
       );
       layer
         .source(tileSource)
-        .color('COLOR')
-        // .color('#f00')
+        // .color('COLOR')
+        .color('#f00')
         // .color('v', v => '#ff0')
         // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
         .style({
