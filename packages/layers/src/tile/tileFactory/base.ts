@@ -333,8 +333,8 @@ export default class TileFactory implements ITileFactory {
         p = union(p, polygon);
       }
     });
-    if(properties) {
-      p.properties = {...properties}
+    if (properties) {
+      p.properties = { ...properties };
     }
     return p;
   }
