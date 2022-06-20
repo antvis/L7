@@ -60,8 +60,8 @@ export default class RasterTile extends React.Component {
         .color('#00f')
         .size(0.5)
         .style({
-          opacity: 0.6
-        })
+          opacity: 0.6,
+        });
       this.scene.addLayer(linelayer);
 
       const polygonlayer = new PolygonLayer({
@@ -80,18 +80,16 @@ export default class RasterTile extends React.Component {
         offsets: [0, 0],
         closeButton: false,
       }).setHTML(`<span></span>`);
-   
 
       polygonlayer.on('mousemove', (e) => {
-        console.log(e)
+        console.log(e);
         const { feature, lngLat } = e;
         if (lngLat && feature.properties?.osm_id) {
-         
-          popup.setLnglat(lngLat)
+          popup.setLnglat(lngLat);
           let context = `
           <span> OSM ID: ${feature.properties?.NAME_CHN}</span>
-          `
-          if(feature.properties?.name) {
+          `;
+          if (feature.properties?.name) {
             context += `</br><span> Name: ${feature.properties?.name}</span>`;
           }
           popup.setHTML(context);
@@ -99,11 +97,9 @@ export default class RasterTile extends React.Component {
         }
       });
       polygonlayer.on('mouseout', () => {
-        popup.setLnglat([0, 0])
+        popup.setLnglat([0, 0]);
         popup.setHTML(`<span></span>`);
-      })
-
-    
+      });
     });
   }
 
