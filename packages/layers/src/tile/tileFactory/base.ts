@@ -323,6 +323,7 @@ export default class TileFactory implements ITileFactory {
 
   protected getCombineFeature(features: IParseDataItem[]) {
     let p: any = null;
+    const properties = features[0];
     features.map((feature) => {
       const polygon = turf.polygon(feature.coordinates);
       if (p === null) {
@@ -332,6 +333,9 @@ export default class TileFactory implements ITileFactory {
         p = union(p, polygon);
       }
     });
+    if (properties) {
+      p.properties = { ...properties };
+    }
     return p;
   }
 
