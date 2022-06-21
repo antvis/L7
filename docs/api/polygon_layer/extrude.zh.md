@@ -35,7 +35,7 @@ layer.size('floor', (floor) => {
 });
 ```
 
-### 额外的 style 配置
+### style
 
 - pickLight 设置 3D 填充图的高亮色是否计算光照
 
@@ -100,5 +100,3 @@ const provincelayer = new PolygonLayer({})
   控制侧面的显隐，默认为 true
 
 [在线案例](/zh/examples/polygon/3d#texture3D)
-
-`markdown:docs/common/layer/base.md`

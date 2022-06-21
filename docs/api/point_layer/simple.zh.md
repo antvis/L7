@@ -38,5 +38,3 @@ scene.getPointSizeRange(); // Float32Array - [min, max]
 ```
 
 [在线案例](../../../examples/point/dot#normal2)
-
-`markdown:docs/common/layer/base.md`

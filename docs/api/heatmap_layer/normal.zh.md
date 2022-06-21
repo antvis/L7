@@ -45,7 +45,7 @@ heatmap 需要设置 color 方法，样式通过 style 设置
 
   ⚠️ color, position 的长度要相同
 
-## 完整代码
+### demo
 
 ```javascript
 heatmapLayer()
@@ -65,5 +65,3 @@ heatmapLayer()
 ```
 
 [在线案例](../../../examples/heatmap/heatmap#heatmap)
-
-`markdown:docs/common/layer/base.md`

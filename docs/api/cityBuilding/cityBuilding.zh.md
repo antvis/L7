@@ -88,7 +88,7 @@ scene.on('loaded', () => {
 });
 ```
 
-#### 完整代码
+#### demo
 
 ```javascript
 import { Scene, CityBuildingLayer } from '@antv/l7';
@@ -120,5 +120,3 @@ scene.on('loaded', () => {
 ```
 
 [在线案例](../../../examples/gallery/animate#build_sweep)
-
-`markdown:docs/common/layer/base.md`
