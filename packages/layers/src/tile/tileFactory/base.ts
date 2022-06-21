@@ -357,11 +357,10 @@ export default class TileFactory implements ITileFactory {
       const features = this.getAllFeatures(featureId);
       try {
         e.feature = this.getCombineFeature(features);
-      } catch(err) {
-        console.warn('Combine Featuer Err! Return First Feature!')
+      } catch (err) {
+        console.warn('Combine Featuer Err! Return First Feature!');
         e.feature = features[0];
       }
-      
     }
     this.parentLayer.emit(eventName, e);
   }
