@@ -80,7 +80,7 @@ export default class RasterTile extends React.Component {
                   const G = imgData[i + 1];
                   const B = imgData[i + 2];
                   const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
-                  arr.push(d - 200);
+                  arr.push(d);
                 }
                 // console.log(arr)
                 return {
@@ -94,7 +94,7 @@ export default class RasterTile extends React.Component {
         )
         .style({
           // opacity: 0.5,
-          domain: [0, 256],
+          domain: [0, 2000],
           clampLow: true,
           rampColors: {
             colors: [
