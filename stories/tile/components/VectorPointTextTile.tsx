@@ -28,13 +28,16 @@ export default class RasterTile extends React.Component {
         // center: [121.268, 30.3628],
         // center: [122.77, 43.333172],
         // style: 'normal',
+        // center: [120, 30],
+        // style: 'normal',
+        // zoom: 6,
+        // // zoom: 5,
+        // // zoom: 19,
+        // zooms: [0, 22],
+        // maxZoom: 22,
         center: [120, 30],
-        style: 'normal',
-        zoom: 6,
-        // zoom: 5,
-        // zoom: 19,
-        zooms: [0, 22],
-        maxZoom: 22,
+        style: 'blank',
+        zoom: 2,
         // zoom: 13,
         // center: [-122.447303, 37.753574],
       }),
@@ -70,11 +73,11 @@ export default class RasterTile extends React.Component {
         // .color('#f00')
         // .color('v', v => '#ff0')
         .color('COLOR')
-        .size(14)
+        .size(12)
         .style({
           stroke: '#00f',
           strokeWidth: 1,
-          // textAllowOverlap: false
+          textAllowOverlap: false,
           // color: "#ff0"
           // opacity: 0.4,
         });
