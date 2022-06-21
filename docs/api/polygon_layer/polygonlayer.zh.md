@@ -15,7 +15,7 @@ order: 0
 import { PolygonLayer } from '@antv/l7';
 ```
 
-## shape 类型
+### shape
 
 `PolygonLayer` 填充图支持 3 种 shape
 
@@ -145,5 +145,3 @@ scene.on('loaded', () => {
     });
 });
 ```
-
-`markdown:docs/common/layer/base.md`

@@ -86,7 +86,7 @@ animateOptions: {
 }
 ```
 
-## 额外的 style 配置
+## style
 
 - sourceColor 设置 3D 柱图起始颜色（3D 柱图设置颜色渐变时会覆盖 color 设置的颜色）
 
@@ -137,5 +137,3 @@ style({
   pickLight: true, //  默认为 false
 });
 ```
-
-`markdown:docs/common/layer/base.md`

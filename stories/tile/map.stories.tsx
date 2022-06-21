@@ -20,6 +20,9 @@ import VectorLineTile from './components/VectorLineTile';
 import VectorProvince from './components/VectorProvince';
 import VectorProvinceAllTile from './components/VectorProvinceAllTile';
 
+import Germany from './components/germany';
+import Billboard from './components/billboard';
+
 
 storiesOf('瓦片', module)
   .add('RasterTile', () => <RasterTile />)
@@ -40,3 +43,6 @@ storiesOf('瓦片', module)
 
   .add('VectorProvince', () => <VectorProvince />)
   .add('VectorProvinceAllTile', () => <VectorProvinceAllTile />)
+
+  .add('Germany', () => <Germany />)
+  .add('Billboard', () => <Billboard />)

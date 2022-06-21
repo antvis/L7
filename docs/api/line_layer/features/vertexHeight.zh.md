@@ -1,4 +1,4 @@
-### 设置顶点高度
+#### vertex height
 
 线图层支持给每个顶点赋予高度值，同时允许用户在 style 方法中通过 vertexHeightScale 属性设置高度比例。
 

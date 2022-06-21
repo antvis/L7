@@ -6,22 +6,22 @@ order: 1
 
 ## 使用
 
-## shape
+### shape
 - text
 文本渲染需要将指定字段的shape设置成 text
 
 ```javascript
 layer.shape('name','text')
 ```
-## color 
+### color 
 
  同layer color
 
-## size 
+### size 
 
  同layer size
 
-## style
+### style
 
 - textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
 - textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]

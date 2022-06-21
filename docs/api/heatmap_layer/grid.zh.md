@@ -15,7 +15,7 @@ import { HeatmapLayer } from '@antv/l7';
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*XPBuSIPPgsgAAAAAAAAAAABkARQnAQ'>
 
-## source
+### source
 
 网格数据只支持点数据作为数据源，数据格式支持 csv、json、geojson.
 
@@ -46,11 +46,11 @@ layer.source(data, {
 });
 ```
 
-## shape
+### shape
 
 网格热力图虽然是以标准四边形网格进行数据聚合，但是展示效果上可以设置为其形状，形状只支持常量
 
-### 2d
+#### 2d
 
 - circle,
 - triangle
@@ -61,7 +61,7 @@ layer.source(data, {
 layer.shape('circle');
 ```
 
-### 3d
+#### 3d
 
 - cylinder
 - triangleColumn
@@ -72,7 +72,7 @@ layer.shape('circle');
 layer.shape('cylinder');
 ```
 
-## size
+### size
 
 ### 2D shape
 
@@ -88,11 +88,11 @@ layer.size('value', [10, 50]); // 根据value 字段映射大小
 layer.size('value', (value) => {}); // 回调函数设置高度
 ```
 
-## color
+### color
 
 同 layer color 方法
 
-## style
+### style
 
 - coverage 网格覆盖度 0 - 1
 - angle 网格旋转角度 0 - 360
@@ -106,7 +106,7 @@ layer.style({
 });
 ```
 
-## 完整实例代码
+### demo
 
 ```javascript
 const layer = new HeatmapLayer({})
@@ -139,5 +139,3 @@ scene.addLayer(layer);
 ```
 
 [在线案例](../../../examples/heatmap/grid#china)
-
-`markdown:docs/common/layer/base.md`
