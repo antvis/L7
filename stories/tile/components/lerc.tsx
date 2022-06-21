@@ -12,11 +12,13 @@ import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as GeoTIFF from 'geotiff';
 // @ts-ignore
-import * as Lerc from 'lerc'
+import * as Lerc from 'lerc';
 
-export default class RasterTile extends React.Component<any, {colorList: string[], positions: number[]}> {
+export default class RasterTile extends React.Component<
+  any,
+  { colorList: string[]; positions: number[] }
+> {
   private scene: Scene;
-
 
   public componentWillUnmount() {
     this.scene.destroy();
@@ -34,17 +36,15 @@ export default class RasterTile extends React.Component<any, {colorList: string[
         // zooms: [4, 19]
       }),
     });
-   
-    
+
     this.scene.on('loaded', () => {
       const layer = new RasterLayer();
       layer
         .source(
-        
           // 'https://alipay-cognition-dev.cn-hangzhou-alipay-b.oss-cdn.aliyun-inc.com/tile/tiff/landcover/{z}/{x}/{y}.tiff',
           // 'https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Esri_2020_Land_Cover_V2/ImageServer/tile/{z}/{y}/{x}',
           'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer/tile/{z}/{y}/{x}',
-   
+
           {
             parser: {
               type: 'rasterTile',
@@ -56,7 +56,7 @@ export default class RasterTile extends React.Component<any, {colorList: string[
               // maxZoom: 10,
               // maxZoom: 10,
               format: async (data: any) => {
-                console.log(data)
+                console.log(data);
                 // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
                 // const tiff = await GeoTIFF.fromArrayBuffer(data);
                 // const image = await tiff.getImage();
@@ -70,7 +70,11 @@ export default class RasterTile extends React.Component<any, {colorList: string[
                 //   // returnPixelInterleavedDims: false // only applicable to n-dim lerc2 blobs (default is false)
                 // });
                 const image = Lerc.decode(data);
-                return { rasterData: image.pixels[0], width: image.width, height: image.height };
+                return {
+                  rasterData: image.pixels[0],
+                  width: image.width,
+                  height: image.height,
+                };
               },
             },
           },
@@ -104,7 +108,7 @@ export default class RasterTile extends React.Component<any, {colorList: string[
   public render() {
     return (
       <>
-      {/* <Legent colorList = {this.state.colorList} positions = {this.state.positions}/> */}
+        {/* <Legent colorList = {this.state.colorList} positions = {this.state.positions}/> */}
         <div
           id="map"
           style={{
@@ -120,43 +124,53 @@ export default class RasterTile extends React.Component<any, {colorList: string[
   }
 }
 
-function Legent(props: {colorList: string[], positions: number[]}) {
-  const { colorList, positions } = props
-  
-  let data: any[] = []
+function Legent(props: { colorList: string[]; positions: number[] }) {
+  const { colorList, positions } = props;
+
+  let data: any[] = [];
 
   colorList.map((color, index) => {
     data.push({
       color: color,
-      text: positions[index]
-    })
-  })
-  return <div style={{
-    position: 'absolute',
-    left: '10px',
-    bottom: '30px',
-    zIndex: 10,
-  }}>
-    {
-      data.map(({ color, text }) => {
-        return  <div style={{
-          display: 'inline-block',
-          background: '#fff',
-          padding: '5px',
-        }}>
-          <div style={{
-            fontSize: '12px',
-            lineHeight: '12px'
-          }}>{text}</div>
-          <div style={{
-            width: '30px',
-            height: '8px',
-            background: color,
-          }}></div>
-       
-       </div>
-      })
-    }
-  
-  </div>
+      text: positions[index],
+    });
+  });
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: '10px',
+        bottom: '30px',
+        zIndex: 10,
+      }}
+    >
+      {data.map(({ color, text }) => {
+        return (
+          <div
+            style={{
+              display: 'inline-block',
+              background: '#fff',
+              padding: '5px',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '12px',
+                lineHeight: '12px',
+              }}
+            >
+              {text}
+            </div>
+            <div
+              style={{
+                width: '30px',
+                height: '8px',
+                background: color,
+              }}
+            ></div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }

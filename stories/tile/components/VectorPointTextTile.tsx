@@ -77,7 +77,7 @@ export default class RasterTile extends React.Component {
         .style({
           stroke: '#00f',
           strokeWidth: 1,
-          textAllowOverlap: false
+          textAllowOverlap: false,
           // color: "#ff0"
           // opacity: 0.4,
         });

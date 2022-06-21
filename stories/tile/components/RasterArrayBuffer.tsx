@@ -12,7 +12,10 @@ import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
 import * as GeoTIFF from 'geotiff';
 
-export default class RasterTile extends React.Component<any, {colorList: string[], positions: number[]}> {
+export default class RasterTile extends React.Component<
+  any,
+  { colorList: string[]; positions: number[] }
+> {
   private scene: Scene;
 
   constructor(props: any) {
@@ -29,8 +32,8 @@ export default class RasterTile extends React.Component<any, {colorList: string[
         '#006d2c',
         '#00441b',
       ],
-      positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
-    }
+      positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+    };
   }
 
   public componentWillUnmount() {
@@ -72,7 +75,7 @@ export default class RasterTile extends React.Component<any, {colorList: string[
               // maxZoom: 0,
               // maxZoom: 10,
               format: async (data: any) => {
-                console.log(data)
+                console.log(data);
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
                 });
@@ -132,10 +135,10 @@ export default class RasterTile extends React.Component<any, {colorList: string[
         .select(true);
 
       this.scene.addLayer(layer);
-      
+
       let count = 0;
       let colors = [
-        [ 
+        [
           '#f7fcf5',
           '#e5f5e0',
           '#c7e9c0',
@@ -146,7 +149,7 @@ export default class RasterTile extends React.Component<any, {colorList: string[
           '#006d2c',
           '#00441b',
         ],
-        [ 
+        [
           '#fff5f0',
           '#fee0d2',
           '#fcbba1',
@@ -155,9 +158,9 @@ export default class RasterTile extends React.Component<any, {colorList: string[
           '#ef3b2c',
           '#cb181d',
           '#a50f15',
-          '#67000d'
+          '#67000d',
         ],
-        [ 
+        [
           '#f7fbff',
           '#deebf7',
           '#c6dbef',
@@ -166,9 +169,9 @@ export default class RasterTile extends React.Component<any, {colorList: string[
           '#4292c6',
           '#2171b5',
           '#08519c',
-          '#08306b'
-        ]
-      ]
+          '#08306b',
+        ],
+      ];
       // setInterval(() => {
       //   const colorList = colors[count]
       //   this.setState({
@@ -193,7 +196,10 @@ export default class RasterTile extends React.Component<any, {colorList: string[
   public render() {
     return (
       <>
-      <Legent colorList = {this.state.colorList} positions = {this.state.positions}/>
+        <Legent
+          colorList={this.state.colorList}
+          positions={this.state.positions}
+        />
         <div
           id="map"
           style={{
@@ -209,43 +215,53 @@ export default class RasterTile extends React.Component<any, {colorList: string[
   }
 }
 
-function Legent(props: {colorList: string[], positions: number[]}) {
-  const { colorList, positions } = props
-  
-  let data: any[] = []
+function Legent(props: { colorList: string[]; positions: number[] }) {
+  const { colorList, positions } = props;
+
+  let data: any[] = [];
 
   colorList.map((color, index) => {
     data.push({
       color: color,
-      text: positions[index]
-    })
-  })
-  return <div style={{
-    position: 'absolute',
-    left: '10px',
-    bottom: '30px',
-    zIndex: 10,
-  }}>
-    {
-      data.map(({ color, text }) => {
-        return  <div style={{
-          display: 'inline-block',
-          background: '#fff',
-          padding: '5px',
-        }}>
-          <div style={{
-            fontSize: '12px',
-            lineHeight: '12px'
-          }}>{text}</div>
-          <div style={{
-            width: '30px',
-            height: '8px',
-            background: color,
-          }}></div>
-       
-       </div>
-      })
-    }
-  
-  </div>
+      text: positions[index],
+    });
+  });
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: '10px',
+        bottom: '30px',
+        zIndex: 10,
+      }}
+    >
+      {data.map(({ color, text }) => {
+        return (
+          <div
+            style={{
+              display: 'inline-block',
+              background: '#fff',
+              padding: '5px',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '12px',
+                lineHeight: '12px',
+              }}
+            >
+              {text}
+            </div>
+            <div
+              style={{
+                width: '30px',
+                height: '8px',
+                background: color,
+              }}
+            ></div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
