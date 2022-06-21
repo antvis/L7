@@ -43,8 +43,8 @@ export default class RasterTile extends React.Component<any, {colorList: string[
       map: new GaodeMap({
         center: [105, 60],
         pitch: 0,
-        // style: 'normal',
-        style: 'blank',
+        style: 'normal',
+        // style: 'blank',
         zoom: 4,
       }),
     });
@@ -58,7 +58,10 @@ export default class RasterTile extends React.Component<any, {colorList: string[
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           // 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{zoom}/{x}/{y}.pngraw?sku=YOUR_MAPBOX_SKU_TOKEN&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
-          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
+          // 'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
+          // https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Esri_2020_Land_Cover_V2/ImageServer/tile/7/28/193
+          // self
+          'https://alipay-cognition-dev.cn-hangzhou-alipay-b.oss-cdn.aliyun-inc.com/tile/tiff/landcover/{z}/{x}/{y}.tiff',
           // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
           // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
           {
@@ -72,41 +75,40 @@ export default class RasterTile extends React.Component<any, {colorList: string[
               // maxZoom: 0,
               // maxZoom: 10,
               format: async (data: any) => {
-                console.log(data)
-                const blob: Blob = new Blob([new Uint8Array(data)], {
-                  type: 'image/png',
-                });
-                const img = await createImageBitmap(blob);
-                // @ts-ignore
-                ctx.clearRect(0, 0, 256, 256);
-                // @ts-ignore
-                ctx.drawImage(img, 0, 0, 256, 256);
+                // const blob: Blob = new Blob([new Uint8Array(data)], {
+                //   type: 'image/png',
+                // });
+                // const img = await createImageBitmap(blob);
+                // // @ts-ignore
+                // ctx.clearRect(0, 0, 256, 256);
+                // // @ts-ignore
+                // ctx.drawImage(img, 0, 0, 256, 256);
 
                 // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
-                // const tiff = await GeoTIFF.fromArrayBuffer(data);
-                // const image = await tiff.getImage();
-                // const width = image.getWidth();
-                // const height = image.getHeight();
-                // const values = await image.readRasters();
-                // return { rasterData: values[0], width, height };
+                const tiff = await GeoTIFF.fromArrayBuffer(data);
+                const image = await tiff.getImage();
+                const width = image.getWidth();
+                const height = image.getHeight();
+                const values = await image.readRasters();
+                return { rasterData: values[0], width, height };
 
-                // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-                // @ts-ignore
-                let imgData = ctx.getImageData(0, 0, 256, 256).data;
-                let arr = [];
-                for (let i = 0; i < imgData.length; i += 4) {
-                  const R = imgData[i];
-                  const G = imgData[i + 1];
-                  const B = imgData[i + 2];
-                  const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
-                  arr.push(d);
-                }
-                // console.log(arr)
-                return {
-                  rasterData: arr,
-                  width: 256,
-                  height: 256,
-                };
+                // // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                // // @ts-ignore
+                // let imgData = ctx.getImageData(0, 0, 256, 256).data;
+                // let arr = [];
+                // for (let i = 0; i < imgData.length; i += 4) {
+                //   const R = imgData[i];
+                //   const G = imgData[i + 1];
+                //   const B = imgData[i + 2];
+                //   const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
+                //   arr.push(d);
+                // }
+                // // console.log(arr)
+                // return {
+                //   rasterData: arr,
+                //   width: 256,
+                //   height: 256,
+                // };
               },
             },
           },
@@ -133,42 +135,42 @@ export default class RasterTile extends React.Component<any, {colorList: string[
 
       this.scene.addLayer(layer);
       
-      let count = 0;
-      let colors = [
-        [ 
-          '#f7fcf5',
-          '#e5f5e0',
-          '#c7e9c0',
-          '#a1d99b',
-          '#74c476',
-          '#41ab5d',
-          '#238b45',
-          '#006d2c',
-          '#00441b',
-        ],
-        [ 
-          '#fff5f0',
-          '#fee0d2',
-          '#fcbba1',
-          '#fc9272',
-          '#fb6a4a',
-          '#ef3b2c',
-          '#cb181d',
-          '#a50f15',
-          '#67000d'
-        ],
-        [ 
-          '#f7fbff',
-          '#deebf7',
-          '#c6dbef',
-          '#9ecae1',
-          '#6baed6',
-          '#4292c6',
-          '#2171b5',
-          '#08519c',
-          '#08306b'
-        ]
-      ]
+      // let count = 0;
+      // let colors = [
+      //   [ 
+      //     '#f7fcf5',
+      //     '#e5f5e0',
+      //     '#c7e9c0',
+      //     '#a1d99b',
+      //     '#74c476',
+      //     '#41ab5d',
+      //     '#238b45',
+      //     '#006d2c',
+      //     '#00441b',
+      //   ],
+      //   [ 
+      //     '#fff5f0',
+      //     '#fee0d2',
+      //     '#fcbba1',
+      //     '#fc9272',
+      //     '#fb6a4a',
+      //     '#ef3b2c',
+      //     '#cb181d',
+      //     '#a50f15',
+      //     '#67000d'
+      //   ],
+      //   [ 
+      //     '#f7fbff',
+      //     '#deebf7',
+      //     '#c6dbef',
+      //     '#9ecae1',
+      //     '#6baed6',
+      //     '#4292c6',
+      //     '#2171b5',
+      //     '#08519c',
+      //     '#08306b'
+      //   ]
+      // ]
       // setInterval(() => {
       //   const colorList = colors[count]
       //   this.setState({
