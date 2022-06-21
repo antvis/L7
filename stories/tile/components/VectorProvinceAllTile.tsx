@@ -457,8 +457,8 @@ export default class RasterTile extends React.Component {
       this.scene.addLayer(linelayer);
 
       const polygonlayer = new PolygonLayer({
-        featureId: 'adcode',
-        sourceLayer: 'zhejiang', // woods hillshade contour ecoregions ecoregions2 city
+        featureId: 'NAME_CHN',
+        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
       })
         .source(tileSource)
         .color('NAME_CHN', (v: any) => {
@@ -493,6 +493,7 @@ export default class RasterTile extends React.Component {
             // @ts-ignore
             .setHTML(
               `<span>${feature.properties.NAME_CHN} 2021 GDP</span></br><span>${
+                // @ts-ignore
                 GDP[feature.properties.NAME_CHN]
               } 亿</span>`,
             );

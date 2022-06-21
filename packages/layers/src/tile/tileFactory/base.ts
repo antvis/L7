@@ -355,7 +355,13 @@ export default class TileFactory implements ITileFactory {
       // VectorLayer
       const featureId = e.featureId;
       const features = this.getAllFeatures(featureId);
-      e.feature = this.getCombineFeature(features);
+      try {
+        e.feature = this.getCombineFeature(features);
+      } catch(err) {
+        console.warn('Combine Featuer Err! Return First Feature!')
+        e.feature = features[0];
+      }
+      
     }
     this.parentLayer.emit(eventName, e);
   }
