@@ -8,7 +8,7 @@ import {
   PointLayer,
   MaskLayer,
   Popup,
-  PolygonLayer
+  PolygonLayer,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
@@ -43,27 +43,24 @@ export default class RasterTile extends React.Component {
     canvas.height = 256;
     const ctx = canvas.getContext('2d');
     this.scene.on('loaded', () => {
-
       fetch(
         // 'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
-        'https://gw.alipayobjects.com/os/bmw-prod/ecd1aaac-44c0-4232-b66c-c0ced76d5c7d.json'
+        'https://gw.alipayobjects.com/os/bmw-prod/ecd1aaac-44c0-4232-b66c-c0ced76d5c7d.json',
       )
         .then((res) => res.json())
         .then((data) => {
-
           const provincelayer = new LineLayer({})
-          .source(data)
-          .size(-300000)
-          .shape('wall')
-          .color('#0DCCFF')
-          .style({
-            // opacity: 0.8,
-            heightfixed: true,
-            sourceColor: 'rgb(0,109,44)',
-            targetColor: 'rgb(229,245,224)'
-          });
-          this.scene.addLayer(provincelayer)
-
+            .source(data)
+            .size(-300000)
+            .shape('wall')
+            .color('#0DCCFF')
+            .style({
+              // opacity: 0.8,
+              heightfixed: true,
+              sourceColor: 'rgb(0,109,44)',
+              targetColor: 'rgb(229,245,224)',
+            });
+          this.scene.addLayer(provincelayer);
 
           const layer = new RasterLayer({
             mask: true,
@@ -95,8 +92,7 @@ export default class RasterTile extends React.Component {
                     ctx.clearRect(0, 0, 256, 256);
                     // @ts-ignore
                     ctx.drawImage(img, 0, 0, 256, 256);
-    
-              
+
                     // @ts-ignore
                     let imgData = ctx.getImageData(0, 0, 256, 256).data;
                     let arr = [];
@@ -136,24 +132,21 @@ export default class RasterTile extends React.Component {
               },
             })
             .select(true);
-    
+
           this.scene.addLayer(layer);
-    
+
           layer.on('mousemove', (e) => {
             const popup = new Popup({
               offsets: [0, 0],
               closeButton: false,
             });
-            popup.setLnglat(e.lngLat)
-            .setHTML(` <span>$当前海拔为 ${e.value} 米</span> `);
-    
+            popup
+              .setLnglat(e.lngLat)
+              .setHTML(` <span>$当前海拔为 ${e.value} 米</span> `);
+
             this.scene.addPopup(popup);
-           
           });
-        
-      })
-     
-     
+        });
     });
   }
 

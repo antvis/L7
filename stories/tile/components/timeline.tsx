@@ -15,8 +15,8 @@ const parser = {
   parser: {
     type: 'json',
     x: 'o',
-    y: 'a'
-  }
+    y: 'a',
+  },
 };
 
 export default class Demo extends React.Component {
@@ -38,73 +38,74 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [ 120.2, 36.1 ],
-    zoom: 10,
-    style: 'dark'
+        center: [120.2, 36.1],
+        zoom: 10,
+        style: 'dark',
       }),
     });
-    this.scene = scene
+    this.scene = scene;
 
     scene.on('loaded', () => {
-
       fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/82d85bb6-db7c-4583-af26-35b11c7b2d0d.json'
+        'https://gw.alipayobjects.com/os/bmw-prod/82d85bb6-db7c-4583-af26-35b11c7b2d0d.json',
       )
-        .then(res => res.json())
-        .then(originData => {
+        .then((res) => res.json())
+        .then((originData) => {
           timeKeys = Object.keys(originData);
 
           this.layer = new HeatmapLayer()
-          .source(originData[currentTimeKey], parser)
-          .size('v', [0, 0.2, 0.4, 0.6, 0.8, 1])
-          .shape('heatmap')
-          .style({
-            intensity: 10,
-            radius: 25,
-            opacity: 1.0,
-            rampColors: {
-              colors: [
-                '#2E8AE6',
-                '#69D1AB',
-                '#DAF291',
-                '#FFD591',
-                '#FF7A45',
-                '#CF1D49',
-              ],
-              positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-            },
+            .source(originData[currentTimeKey], parser)
+            .size('v', [0, 0.2, 0.4, 0.6, 0.8, 1])
+            .shape('heatmap')
+            .style({
+              intensity: 10,
+              radius: 25,
+              opacity: 1.0,
+              rampColors: {
+                colors: [
+                  '#2E8AE6',
+                  '#69D1AB',
+                  '#DAF291',
+                  '#FFD591',
+                  '#FF7A45',
+                  '#CF1D49',
+                ],
+                positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+              },
+            });
+          scene.addLayer(this.layer);
+
+          timeKeys.map((timeKey) => {
+            modelDatas[timeKey] = this.layer.createModelData(
+              originData[timeKey],
+              parser,
+            );
           });
-        scene.addLayer(this.layer);
 
-        timeKeys.map(timeKey => {
-          modelDatas[timeKey] = this.layer.createModelData(originData[timeKey], parser);
+          let c = 0;
+          let t = setInterval(() => {
+            if (c > 47) {
+              clearInterval(t);
+            } else {
+              this.timelinechange(c);
+              c++;
+            }
+          }, 100);
         });
-
-        let c = 0
-        let t = setInterval(() => {
-          if(c > 47) {
-            clearInterval(t)
-          } else {
-            this.timelinechange(c)
-            c++
-          }
-        }, 100)
-      });
     });
   }
 
   public timelinechange(time) {
-    if(time !== this.state.currentTimeKey) {
-      if(this.layer) {
+    if (time !== this.state.currentTimeKey) {
+      if (this.layer) {
+        let currentTimeKey = this.getTimeKey(time, '');
 
-        let currentTimeKey = this.getTimeKey(time, "")
-        
-        this.layer.updateModelData(modelDatas[currentTimeKey+ ""]);
+        this.layer.updateModelData(modelDatas[currentTimeKey + '']);
         this.scene.render();
       }
       this.setState({
-        currentTimeKey: time
-      })
+        currentTimeKey: time,
+      });
     }
   }
 
@@ -134,15 +135,19 @@ export default class Demo extends React.Component {
           bottom: 0,
         }}
       >
-        <div style={{
-          position: 'absolute',
-          top: '100px',
-          left: '100px',
-          color: '#fff',
-          zIndex: 10,
-          fontSize: '36px',
-          fontFamily: 'STLiti'
-        }}>{'当前时间 ' + this.getTimeKey(this?.state?.currentTimeKey, ' : ')}</div>
+        <div
+          style={{
+            position: 'absolute',
+            top: '100px',
+            left: '100px',
+            color: '#fff',
+            zIndex: 10,
+            fontSize: '36px',
+            fontFamily: 'STLiti',
+          }}
+        >
+          {'当前时间 ' + this.getTimeKey(this?.state?.currentTimeKey, ' : ')}
+        </div>
         {this.state.modelDatas !== undefined && (
           <RangeInput
             min={0}

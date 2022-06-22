@@ -1,6 +1,13 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterLayer, Scene, LineLayer, ILayer, PointLayer, PolygonLayer } from '@antv/l7';
+import {
+  RasterLayer,
+  Scene,
+  LineLayer,
+  ILayer,
+  PointLayer,
+  PolygonLayer,
+} from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
@@ -19,40 +26,37 @@ export default class RasterTile extends React.Component {
         pitch: 60,
         // style: 'normal',
         zoom: 6.5,
-        style: 'blank'
+        style: 'blank',
       }),
     });
 
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-
-
       fetch(
         // 'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
-        'https://gw.alipayobjects.com/os/bmw-prod/ecd1aaac-44c0-4232-b66c-c0ced76d5c7d.json'
+        'https://gw.alipayobjects.com/os/bmw-prod/ecd1aaac-44c0-4232-b66c-c0ced76d5c7d.json',
       )
         .then((res) => res.json())
         .then((data) => {
-
           const provincelayer = new PolygonLayer({})
-          .source(data)
-          .size(-150000)
-          .shape('extrude')
-          .color('#0DCCFF')
-          // .active({
-          //   color: 'rgb(100,230,255)'
-          // })
-          .style({
-            heightfixed: true,
-            // pickLight: true,
-            // raisingHeight: 200000,
-            opacity: 0.8,
-            topsurface: false,
-            targetColor: '#a1d99b',
-            sourceColor: '#00441b',
-          });
-  
+            .source(data)
+            .size(-150000)
+            .shape('extrude')
+            .color('#0DCCFF')
+            // .active({
+            //   color: 'rgb(100,230,255)'
+            // })
+            .style({
+              heightfixed: true,
+              // pickLight: true,
+              // raisingHeight: 200000,
+              opacity: 0.8,
+              topsurface: false,
+              targetColor: '#a1d99b',
+              sourceColor: '#00441b',
+            });
+
           this.scene.addLayer(provincelayer);
 
           const layer = new RasterLayer({
@@ -61,25 +65,25 @@ export default class RasterTile extends React.Component {
             maskfence: data,
           });
           layer
-          .source(
-            'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-            // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
-            // 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
-            {
-              parser: {
-                type: 'rasterTile',
-                tileSize: 256,
-                zoomOffset: 0,
-                extent: [-180, -85.051129, 179, 85.051129],
+            .source(
+              'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
+              // 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
+              {
+                parser: {
+                  type: 'rasterTile',
+                  tileSize: 256,
+                  zoomOffset: 0,
+                  extent: [-180, -85.051129, 179, 85.051129],
+                },
               },
-            },
-          )
-          .style({
-            // opacity: 0.5,
-          });
+            )
+            .style({
+              // opacity: 0.5,
+            });
 
-        this.scene.addLayer(layer);
-      });
+          this.scene.addLayer(layer);
+        });
     });
   }
 
