@@ -56,7 +56,7 @@ export default class RasterTile extends React.Component<
               // maxZoom: 10,
               // maxZoom: 10,
               format: async (data: any) => {
-                console.log(data);
+                // console.log(data);
                 // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
                 // const tiff = await GeoTIFF.fromArrayBuffer(data);
                 // const image = await tiff.getImage();
