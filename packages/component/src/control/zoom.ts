@@ -1,6 +1,6 @@
 import { bindAll, DOM } from '@antv/l7-utils';
-import Control, { PositionType } from './BaseControl';
 import { IZoomControlOption } from '../interface';
+import Control, { PositionType } from './BaseControl';
 
 export default class Zoom extends Control {
   private disabled: boolean;

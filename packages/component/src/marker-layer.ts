@@ -13,8 +13,8 @@ import { merge } from 'lodash';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
-import Marker from './marker';
 import { IMarkerLayerOption, IMarkerStyleOption } from './interface';
+import Marker from './marker';
 
 interface IPointFeature {
   geometry: {
