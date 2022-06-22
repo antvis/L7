@@ -10,7 +10,7 @@ import {
   Source,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
-
+const cacheColors = {}
 export default class RasterTile extends React.Component {
   private scene: Scene;
 
@@ -26,9 +26,9 @@ export default class RasterTile extends React.Component {
       map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
-        center: [120, 30],
-        style: 'blank',
-        zoom: 2,
+        center: [260, 35],
+        style: 'dark',
+        zoom: 3,
         // zooms: [3.5, 19],
         // maxZoom: 25,
         // zoom: 13,
@@ -37,66 +37,64 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
-        .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-            },
-          ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
-        )
-        .shape('circle')
-        .color('#ff0')
-        // .active(true)
-        .select(true)
-        .size(10);
-
-      this.scene.addLayer(point);
-
-      // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
-
-      const layer = new PolygonLayer({
-        featureId: 'COLOR',
-        sourceLayer: 'ecoregions2',
-      });
+      
       const tileSource = new Source(
-        'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+        // 'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+        'http://localhost:3000/a.mbtiles/{z}/{x}/{y}.pbf',
+        // http://localhost:3000/a.mbtiles/5/8/12.pbf
         {
           parser: {
             type: 'mvt',
             tileSize: 256,
             zoomOffset: 0,
-            maxZoom: 9,
+            maxZoom: 8,
             // extent: [-180, -85.051129, 179, 85.051129],
           },
         },
       );
+
+//       const line = new LineLayer({
+//         featureId: 'ALAND10',
+//         sourceLayer: 'a',
+//       })
+//       .source(tileSource)
+//       .size(1)
+//       .color('#fff')
+// this.scene.addLayer(line)
+// console.log(line)
+
+      const layer = new PolygonLayer({
+        featureId: 'ALAND10',
+        sourceLayer: 'a',
+      });
+      // console.log(layer)
       layer
         .source(tileSource)
         // .color('COLOR')
-        .color('#f00')
+        // .color('#f00')
         // .color('v', v => '#ff0')
-        // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
-        .style({
-          // color: "#ff0"
-          opacity: 0.6,
+        .color('ALAND10', (v) => {
+          // // @ts-ignore
+          // if(cacheColors[v]) {
+          //   // @ts-ignore
+          //   return cacheColors[v];
+          // } else {
+          //   const c = this.getColor();
+          //   // @ts-ignore
+          //   cacheColors[v] = c
+          //   return c;
+          // }
+           return this.getColor();
         })
-        // .select(true);
-        .active(true);
 
-      layer.on('click', (e) => {
-        console.log(e);
-        // console.log(e.feature[0].coordinates)
-        // console.log(turf.featureCollection(e.feature[0].coordinates))
-      });
+        // .select(true);
+        // .active(true);
+
+      // layer.on('click', (e) => {
+      //   console.log(e);
+      //   // console.log(e.feature[0].coordinates)
+      //   // console.log(turf.featureCollection(e.feature[0].coordinates))
+      // });
       // layer.on('mousemove', e => console.log(e))
       // layer.on('mouseup', e => console.log(e))
       // layer.on('unmousemove', e => console.log(e))
@@ -113,13 +111,23 @@ export default class RasterTile extends React.Component {
 
       this.scene.addLayer(layer);
 
-      // setTimeout(() => {
-      //   layer.style({
-      //     opacity: 0.3,
-      //   });
-      //   this.scene.render();
-      // }, 3000);
+   
     });
+  }
+
+  getColor() {
+    const colors = [
+      '#f7f4f9',
+      '#e7e1ef',
+      '#d4b9da',
+      '#c994c7',
+      '#df65b0',
+      '#e7298a',
+      '#ce1256',
+      '#980043',
+      '#67001f',
+    ]
+    return colors[Math.floor(Math.random() * 10)]
   }
 
   public render() {
