@@ -14,24 +14,7 @@ import { merge } from 'lodash';
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import Marker from './marker';
-
-type CallBack = (...args: any[]) => any;
-export interface IMarkerStyleOption {
-  element?: CallBack;
-  style: { [key: string]: any } | CallBack;
-  className: string;
-  field?: string;
-  method?: 'sum' | 'max' | 'min' | 'mean';
-  radius: number;
-  maxZoom: number;
-  minZoom: number;
-  zoom: number;
-}
-
-export interface IMarkerLayerOption {
-  cluster: boolean;
-  clusterOption: Partial<IMarkerStyleOption>;
-}
+import { IMarkerLayerOption, IMarkerStyleOption } from './interface';
 
 interface IPointFeature {
   geometry: {

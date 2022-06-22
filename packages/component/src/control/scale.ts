@@ -1,13 +1,7 @@
-import { IControlOption } from '@antv/l7-core';
 import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
-
 import Control, { PositionType } from './BaseControl';
-export interface IScaleControlOption extends IControlOption {
-  maxWidth: number;
-  metric: boolean;
-  updateWhenIdle: boolean;
-  imperial: boolean;
-}
+import { IScaleControlOption } from '../interface';
+
 export default class Scale extends Control {
   private mScale: HTMLElement;
   private iScale: HTMLElement;

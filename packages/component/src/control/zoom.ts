@@ -1,12 +1,7 @@
-import { IControlOption } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
 import Control, { PositionType } from './BaseControl';
-export interface IZoomControlOption extends IControlOption {
-  zoomInText: string;
-  zoomInTitle: string;
-  zoomOutText: string;
-  zoomOutTitle: string;
-}
+import { IZoomControlOption } from '../interface';
+
 export default class Zoom extends Control {
   private disabled: boolean;
   private zoomInButton: HTMLElement;
