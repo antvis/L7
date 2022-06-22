@@ -25,6 +25,7 @@ import VectorProvinceAllTile from './components/VectorProvinceAllTile';
 import Germany from './components/germany';
 import Billboard from './components/billboard';
 import LinearLine from './components/linearLine';
+import TimeLine from './components/timeline';
 
 
 storiesOf('瓦片', module)
@@ -52,3 +53,4 @@ storiesOf('瓦片', module)
   .add('Germany', () => <Germany />)
   .add('Billboard', () => <Billboard />)
   .add('LinearLine', () => <LinearLine />)
+  .add('TimeLine', () => <TimeLine />)
