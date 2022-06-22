@@ -10,7 +10,7 @@ import {
   Source,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
-const cacheColors = {}
+const cacheColors = {};
 export default class RasterTile extends React.Component {
   private scene: Scene;
 
@@ -37,7 +37,6 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      
       const tileSource = new Source(
         // 'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
         'http://localhost:3000/a.mbtiles/{z}/{x}/{y}.pbf',
@@ -53,15 +52,15 @@ export default class RasterTile extends React.Component {
         },
       );
 
-//       const line = new LineLayer({
-//         featureId: 'ALAND10',
-//         sourceLayer: 'a',
-//       })
-//       .source(tileSource)
-//       .size(1)
-//       .color('#fff')
-// this.scene.addLayer(line)
-// console.log(line)
+      //       const line = new LineLayer({
+      //         featureId: 'ALAND10',
+      //         sourceLayer: 'a',
+      //       })
+      //       .source(tileSource)
+      //       .size(1)
+      //       .color('#fff')
+      // this.scene.addLayer(line)
+      // console.log(line)
 
       const layer = new PolygonLayer({
         featureId: 'ALAND10',
@@ -84,11 +83,11 @@ export default class RasterTile extends React.Component {
           //   cacheColors[v] = c
           //   return c;
           // }
-           return this.getColor();
-        })
+          return this.getColor();
+        });
 
-        // .select(true);
-        // .active(true);
+      // .select(true);
+      // .active(true);
 
       // layer.on('click', (e) => {
       //   console.log(e);
@@ -110,8 +109,6 @@ export default class RasterTile extends React.Component {
       // layer.on('uncontextmenu', e => console.log(e))
 
       this.scene.addLayer(layer);
-
-   
     });
   }
 
@@ -126,8 +123,8 @@ export default class RasterTile extends React.Component {
       '#ce1256',
       '#980043',
       '#67001f',
-    ]
-    return colors[Math.floor(Math.random() * 10)]
+    ];
+    return colors[Math.floor(Math.random() * 10)];
   }
 
   public render() {
