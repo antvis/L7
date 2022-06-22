@@ -478,16 +478,14 @@ export default class RasterTile extends React.Component {
         .active(true);
       this.scene.addLayer(polygonlayer);
 
-
       polygonlayer.on('mousemove', (e) => {
-       
         const { feature, lngLat } = e;
 
         if (lngLat && feature.properties?.NAME_CHN) {
           const popup = new Popup({
             offsets: [0, 0],
             closeButton: false,
-          })
+          });
           popup
             .setLnglat(lngLat)
             // @ts-ignore
@@ -498,7 +496,7 @@ export default class RasterTile extends React.Component {
               } 亿</span>`,
             );
 
-            this.scene.addPopup(popup);
+          this.scene.addPopup(popup);
         }
       });
     });

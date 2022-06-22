@@ -173,23 +173,22 @@ export default class RasterTile extends React.Component<
         ],
       ];
       setInterval(() => {
-        const colorList = colors[count]
+        const colorList = colors[count];
         this.setState({
-          colorList: colorList
-        })
+          colorList: colorList,
+        });
         layer.style({
           rampColors: {
             colors: colorList,
             positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
           },
-        })
-        this.scene.render()
+        });
+        this.scene.render();
         count++;
-        if(count > colors.length - 1) {
+        if (count > colors.length - 1) {
           count = 0;
         }
-
-      }, 2000)
+      }, 2000);
     });
   }
 
