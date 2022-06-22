@@ -14,8 +14,9 @@ import { merge } from 'lodash';
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import Marker from './marker';
+
 type CallBack = (...args: any[]) => any;
-interface IMarkerStyleOption {
+export interface IMarkerStyleOption {
   element?: CallBack;
   style: { [key: string]: any } | CallBack;
   className: string;
@@ -27,7 +28,7 @@ interface IMarkerStyleOption {
   zoom: number;
 }
 
-interface IMarkerLayerOption {
+export interface IMarkerLayerOption {
   cluster: boolean;
   clusterOption: Partial<IMarkerStyleOption>;
 }
@@ -39,6 +40,7 @@ interface IPointFeature {
   };
   properties: any;
 }
+
 export default class MarkerLayer extends EventEmitter {
   private markers: IMarker[] = [];
   private markerLayerOption: IMarkerLayerOption;
