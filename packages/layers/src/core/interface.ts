@@ -183,6 +183,7 @@ export interface IGeometryLayerStyleOptions {
   spriteCount?: number;
   spriteSpeed?: number;
   spriteTop?: number;
+  spriteBottom?: number;
   spriteUpdate?: number;
   spriteScale?: number;
 

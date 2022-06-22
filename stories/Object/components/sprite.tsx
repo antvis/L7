@@ -33,9 +33,9 @@ export default class Demo extends React.Component {
       //   },
       // })
       .shape('sprite')
-      .size(10)
+      .size(20)
       .style({
-        opacity: 0.3,
+        // opacity: 0.3,
         mapTexture:
           'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*zLQwQKBSagYAAAAAAAAAAAAAARQnAQ', // snow
         // mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*w2SFSZJp4nIAAAAAAAAAAAAAARQnAQ', // rain
@@ -45,10 +45,13 @@ export default class Demo extends React.Component {
         spriteCount: 60,
         spriteRadius: 10,
         spriteTop: 2500000,
-        // spriteTop: 1000000,
-        // spriteScale: 0.8,
-        spriteScale: 0.6,
-        // spriteUpdate: 20000
+        spriteUpdate: 10000,
+        spriteScale: 0.8,
+
+        // spriteTop: 1000,
+        // spriteUpdate: 5,
+        // spriteBottom: -10,
+        // spriteScale: 0.6,
       })
       .active(true)
       .color('#f00');
