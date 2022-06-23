@@ -169,6 +169,8 @@ const getVectorTile = async (
         const vectorTile = new VectorTile(
           new Protobuf(data),
         ) as MapboxVectorTile;
+        // check tile source layer
+        // console.log(vectorTile)
 
         const tileOrigin = osmTileXY2LonLat(
           tileParams.x,

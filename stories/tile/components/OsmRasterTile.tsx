@@ -55,8 +55,7 @@ export default class OsmRasterTile extends React.Component {
         // 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
         // 'https://a.tile.osm.org/{z}/{x}/{y}.png',
         // 'https://t1.tianditu.gov.cn/DataServer?T=vec_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
-        // 'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
-        'https://api.maptiler.com/tiles/hillshade/{z}/{x}/{y}.webp?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
+        'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
         {
           parser: {
             type: 'rasterTile',

@@ -11,7 +11,7 @@ import {
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
-const cacheColors = {}
+const cacheColors = {};
 export default class RasterTile extends React.Component {
   private scene: Scene;
 
@@ -23,14 +23,14 @@ export default class RasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       stencil: true,
-      // map: new GaodeMap({
-      map: new Mapbox({
+      map: new GaodeMap({
+      // map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
-        center: [-100, 35],
+        center: [-100, 37],
 
         style: 'dark',
-        zoom: 3,
+        zoom: 4,
         // zooms: [3.5, 19],
         // maxZoom: 25,
         // zoom: 13,
@@ -54,7 +54,6 @@ export default class RasterTile extends React.Component {
         },
       );
 
-
       const layer = new PolygonLayer({
         featureId: 'ALAND10',
         sourceLayer: 'a',
@@ -77,10 +76,8 @@ export default class RasterTile extends React.Component {
           //   return c;
           // }
 
-           return this.getColor();
-        })
-
-
+          return this.getColor();
+        });
 
       // layer.on('click', (e) => {
       //   console.log(e);
@@ -118,7 +115,6 @@ export default class RasterTile extends React.Component {
       '#67001f',
     ];
     return colors[Math.floor(Math.random() * 10)];
-
   }
 
   public render() {

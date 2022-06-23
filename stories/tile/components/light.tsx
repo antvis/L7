@@ -9,8 +9,6 @@ import {
   MaskLayer,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
-// @ts-ignore
-import * as GeoTIFF from 'geotiff';
 
 export default class RasterTile extends React.Component<
   any,
@@ -43,12 +41,13 @@ export default class RasterTile extends React.Component<
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
-        center: [105, 60],
+      map: new Mapbox({
+        center: [130, 30],
         pitch: 0,
         // style: 'normal',
-        style: 'blank',
-        zoom: 4,
+        style: 'dark',
+        // style: 'blank',
+        zoom: 2,
       }),
     });
     const canvas = document.createElement('canvas');
@@ -61,21 +60,21 @@ export default class RasterTile extends React.Component<
         .source(
           // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           // 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{zoom}/{x}/{y}.pngraw?sku=YOUR_MAPBOX_SKU_TOKEN&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
-          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
+          // 'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
           // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
           // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
+          'http://localhost:3333/Mapnik/{z}/{x}/{y}.png',
           {
             parser: {
               type: 'rasterTile',
               dataType: 'arraybuffer',
               tileSize: 256,
-              zoomOffset: 0,
-              extent: [-180, -85.051129, 179, 85.051129],
-              minZoom: 0,
+              zoomOffset: 1,
+              // extent: [-180, -85.051129, 179, 85.051129],
+              minZoom: 1,
               // maxZoom: 0,
-              // maxZoom: 10,
+              maxZoom: 7,
               format: async (data: any) => {
-                console.log(data);
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
                 });
@@ -85,26 +84,14 @@ export default class RasterTile extends React.Component<
                 // @ts-ignore
                 ctx.drawImage(img, 0, 0, 256, 256);
 
-                // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
-                // const tiff = await GeoTIFF.fromArrayBuffer(data);
-                // const image = await tiff.getImage();
-                // const width = image.getWidth();
-                // const height = image.getHeight();
-                // const values = await image.readRasters();
-                // return { rasterData: values[0], width, height };
-
-                // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              
                 // @ts-ignore
                 let imgData = ctx.getImageData(0, 0, 256, 256).data;
                 let arr = [];
                 for (let i = 0; i < imgData.length; i += 4) {
                   const R = imgData[i];
-                  const G = imgData[i + 1];
-                  const B = imgData[i + 2];
-                  const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
-                  arr.push(d);
+                  arr.push(R);
                 }
-                // console.log(arr)
                 return {
                   rasterData: arr,
                   width: 256,
@@ -115,90 +102,41 @@ export default class RasterTile extends React.Component<
           },
         )
         .style({
-          domain: [0, 1014],
-          clampLow: true,
+          // opacity: 0.6,
+          domain: [25, 160],
+          clampLow: false,
+          // clampHigh: false,
           rampColors: {
             colors: [
-              '#f7fcf5',
-              '#e5f5e0',
-              '#c7e9c0',
-              '#a1d99b',
-              '#74c476',
-              '#41ab5d',
-              '#238b45',
-              '#006d2c',
-              '#00441b',
+              '#2b9348',
+              '#55a630',
+              '#80b918',
+              '#aacc00',
+              '#bfd200',
+              '#d4d700',
+              '#dddf00',
+              '#eeef20',
+              '#ffff3f',
+              // '#ffffcc',
+              // '#ff0',
             ],
             positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+            // positions: [0,  1]
           },
         })
         .select(true);
 
       this.scene.addLayer(layer);
-
-      let count = 0;
-      let colors = [
-        [
-          '#f7fcf5',
-          '#e5f5e0',
-          '#c7e9c0',
-          '#a1d99b',
-          '#74c476',
-          '#41ab5d',
-          '#238b45',
-          '#006d2c',
-          '#00441b',
-        ],
-        [
-          '#fff5f0',
-          '#fee0d2',
-          '#fcbba1',
-          '#fc9272',
-          '#fb6a4a',
-          '#ef3b2c',
-          '#cb181d',
-          '#a50f15',
-          '#67000d',
-        ],
-        [
-          '#f7fbff',
-          '#deebf7',
-          '#c6dbef',
-          '#9ecae1',
-          '#6baed6',
-          '#4292c6',
-          '#2171b5',
-          '#08519c',
-          '#08306b',
-        ],
-      ];
-      setInterval(() => {
-        const colorList = colors[count];
-        this.setState({
-          colorList: colorList,
-        });
-        layer.style({
-          rampColors: {
-            colors: colorList,
-            positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
-          },
-        });
-        this.scene.render();
-        count++;
-        if (count > colors.length - 1) {
-          count = 0;
-        }
-      }, 2000);
     });
   }
 
   public render() {
     return (
       <>
-        <Legent
+        {/* <Legent
           colorList={this.state.colorList}
           positions={this.state.positions}
-        />
+        /> */}
         <div
           id="map"
           style={{
