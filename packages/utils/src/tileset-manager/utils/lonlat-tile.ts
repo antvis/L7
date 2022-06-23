@@ -85,6 +85,14 @@ export function getTileIndices({
     }
   }
 
+  // 计算中心瓦片索引
+  const centerX = (maxX + minX) / 2;
+  const centerY = (maxY + minY) / 2;
+  const distance = (x: number, y: number) =>
+    Math.abs(x - centerX) + Math.abs(y - centerY);
+  // 通过离中心瓦片距离排序，越近的排在前面
+  indices.sort((a, b) => distance(a.x, a.y) - distance(b.x, b.y));
+
   return indices;
 }
 

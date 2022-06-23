@@ -10,7 +10,8 @@ import {
   Source,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
-const cacheColors = {};
+
+const cacheColors = {}
 export default class RasterTile extends React.Component {
   private scene: Scene;
 
@@ -26,8 +27,8 @@ export default class RasterTile extends React.Component {
       map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
-        pitch: 0.1,
         center: [-100, 35],
+
         style: 'dark',
         zoom: 3,
         // zooms: [3.5, 19],
@@ -53,15 +54,6 @@ export default class RasterTile extends React.Component {
         },
       );
 
-      //       const line = new LineLayer({
-      //         featureId: 'ALAND10',
-      //         sourceLayer: 'a',
-      //       })
-      //       .source(tileSource)
-      //       .size(1)
-      //       .color('#fff')
-      // this.scene.addLayer(line)
-      // console.log(line)
 
       const layer = new PolygonLayer({
         featureId: 'ALAND10',
@@ -84,17 +76,11 @@ export default class RasterTile extends React.Component {
           //   cacheColors[v] = c
           //   return c;
           // }
-          return this.getColor();
-        });
 
-      // setTimeout(() => {
-      //   // console.log('update')
-      //   // layer.tileLayer.tilesetManager.updateTileVisible()
-      //   // this.scene.render()
-      // }, 5000)
+           return this.getColor();
+        })
 
-      // .select(true);
-      // .active(true);
+
 
       // layer.on('click', (e) => {
       //   console.log(e);
@@ -132,6 +118,7 @@ export default class RasterTile extends React.Component {
       '#67001f',
     ];
     return colors[Math.floor(Math.random() * 10)];
+
   }
 
   public render() {

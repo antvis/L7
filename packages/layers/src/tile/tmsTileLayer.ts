@@ -31,9 +31,6 @@ export class TMSTileLayer extends BaseTileLayer {
           this.tileLayerManager.addChilds(layers);
           this.setPickState(layers);
         } else {
-          if (!tile.isVisibleChanged) {
-            return;
-          }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
           this.tileLayerManager.updateLayersConfig(
             layers,
