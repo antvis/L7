@@ -146,7 +146,7 @@ export default class BaseTileLayer implements ITileLayer {
           tile.layerIDList = layerIDList;
           this.tileLayerManager.addChilds(layers);
         } else {
-          if (!tile.isVisibleChanged) {
+          if (!tile.isVisibleChange) {
             return;
           }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
@@ -386,9 +386,9 @@ export default class BaseTileLayer implements ITileLayer {
         this.timer = null;
       }
 
-      this.timer = setTimeout(() => {
-        this.tilesetManager?.update(zoom, latLonBounds);
-      }, 250);
+      // this.timer = setTimeout(() => {
+      this.tilesetManager?.update(zoom, latLonBounds);
+      // }, 250);
     });
   }
 
