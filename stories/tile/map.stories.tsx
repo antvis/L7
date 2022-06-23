@@ -26,7 +26,7 @@ import Germany from './components/germany';
 import Billboard from './components/billboard';
 import LinearLine from './components/linearLine';
 import TimeLine from './components/timeline';
-
+import Quxian from './components/QuXian';
 
 storiesOf('瓦片', module)
   .add('RasterTile', () => <RasterTile />)
@@ -54,3 +54,4 @@ storiesOf('瓦片', module)
   .add('Billboard', () => <Billboard />)
   .add('LinearLine', () => <LinearLine />)
   .add('TimeLine', () => <TimeLine />)
+  .add('Quxian', () => <Quxian />);
