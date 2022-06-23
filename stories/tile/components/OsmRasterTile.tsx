@@ -34,37 +34,47 @@ export default class OsmRasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       map: new Map({
-        center: [121.268, 30.3628],
+        center: [130, 30],
         pitch: 0,
         style: 'normal',
-        zoom: 5,
-        viewMode: '3D',
+        zoom: 1.5
       }),
     });
 
-    this.scene.on('mapchange', this.updateGridLayer);
+    // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
       const layer = new RasterLayer({
         zIndex: 9,
       });
-      layer.source('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      layer.source(
+        // 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+        // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+        // 'https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+        //'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
+        // 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+        // 'https://a.tile.osm.org/{z}/{x}/{y}.png',
+        // 'https://t1.tianditu.gov.cn/DataServer?T=vec_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
+        // 'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+        "https://api.maptiler.com/tiles/hillshade/{z}/{x}/{y}.webp?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ",
+        {
         parser: {
           type: 'rasterTile',
           tileSize: 256,
-          minZoom: 0,
-          maxZoom: 19,
+          // minZoom: 0,
+          // maxZoom: 19,
           zoomOffset: 0,
           updateStrategy: 'overlap',
           // extent: [-180, -85.051129, 175, 85.051129],
         },
       });
-      layer.on('tiles-loaded', (tiles) => {
-        console.log('tiles-loaded', tiles.length);
-      });
+      // layer.on('tiles-loaded', (tiles) => {
+      //   console.log('tiles-loaded', tiles.length);
+      // });
+
 
       this.scene.addLayer(layer);
-      this.updateGridLayer();
+      // this.updateGridLayer();
     });
   }
 

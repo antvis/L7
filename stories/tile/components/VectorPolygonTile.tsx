@@ -26,7 +26,8 @@ export default class RasterTile extends React.Component {
       map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
-        center: [260, 35],
+        pitch: 0.1,
+        center: [-100, 35],
         style: 'dark',
         zoom: 3,
         // zooms: [3.5, 19],
@@ -37,6 +38,7 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
+
       const tileSource = new Source(
         // 'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
         'http://localhost:3000/a.mbtiles/{z}/{x}/{y}.pbf',
@@ -85,6 +87,12 @@ export default class RasterTile extends React.Component {
           // }
           return this.getColor();
         });
+
+        // setTimeout(() => {
+        //   // console.log('update')
+        //   // layer.tileLayer.tilesetManager.updateTileVisible()
+        //   // this.scene.render()
+        // }, 5000)
 
       // .select(true);
       // .active(true);
