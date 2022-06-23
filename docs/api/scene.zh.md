@@ -226,6 +226,18 @@ scene.getLayers();
 scene.getLayerByName(name); // return Layer 图层对象
 ```
 
+### getLayerByNames(name) 根据图层名称获取对应的全部图层
+
+根据图层名称获取图层
+
+参数
+
+- `name` {string} layer 初始化可配置图层 name
+
+```javascript
+scene.getLayerByNames(name); // return Layer 图层对象
+```
+
 ### removeLayer 移除 layer 图层
 
 移除 layer 图层

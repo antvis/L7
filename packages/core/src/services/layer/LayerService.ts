@@ -86,6 +86,10 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
+  public getLayerByNames(name: string): ILayer[] | undefined {
+    return this.layers.filter((layer) => layer.name === name);
+  }
+
   public cleanRemove(layer: ILayer, parentLayer?: ILayer) {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {

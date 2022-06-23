@@ -21,6 +21,12 @@ const layer = new Layer(options);
 scene.getLayerByName(name);
 ```
 
+设置图层名称,可根据 name 获取全部的 layer
+
+```javascript
+scene.getLayerByNames(name);
+```
+
 ### visible
 
 <description> _bool_ **optional** _default:_ true</description>
