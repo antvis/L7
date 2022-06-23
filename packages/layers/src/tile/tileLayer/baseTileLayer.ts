@@ -25,6 +25,7 @@ export default class BaseTileLayer implements ITileLayer {
   // 瓦片数据管理器
   public tilesetManager: TilesetManager | undefined;
   public tileLayerManager: ITileLayerManager;
+  public scaleField: any;
 
   private lastViewStates: {
     zoom: number;
@@ -68,17 +69,8 @@ export default class BaseTileLayer implements ITileLayer {
     this.initTileSetManager();
     this.bindSubLayerEvent();
     this.bindSubLayerPick();
-  }
 
-  /**
-   * 直接透传 scale 方法
-   * @param field
-   * @param cfg
-   */
-  public scale(field: string | number | IScaleOptions, cfg?: IScale) {
-    this.children.map((child) => {
-      child.scale(field, cfg);
-    });
+    this.scaleField = this.parent.getScaleOptions();
   }
 
   /**

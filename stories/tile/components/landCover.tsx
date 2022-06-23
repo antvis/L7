@@ -14,7 +14,7 @@ import * as GeoTIFF from 'geotiff';
 
 export default class RasterTile extends React.Component<
   any,
-  { colorList: string[]; positions: number[] }
+  { colorList: string[]; positions: any[] }
 > {
   private scene: Scene;
 
@@ -22,17 +22,29 @@ export default class RasterTile extends React.Component<
     super(props);
     this.state = {
       colorList: [
-        '#2b9348',
-        '#55a630',
-        '#80b918',
-        '#aacc00',
-        '#bfd200',
-        '#d4d700',
-        '#dddf00',
-        '#eeef20',
-        '#ffff3f',
+        '#419bdf',
+        '#397d49',
+        '#88b053',
+        '#7a87c6',
+        '#e49635',
+        '#dfc35a',
+        '#c4281b',
+        '#a59b8f',
+        '#a8ebff',
+        '616161',
       ],
-      positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+      positions: [
+        'Water',
+        'Trees',
+        'Grass',
+        'Vegetation',
+        'Crops',
+        'Shrub',
+        'Built Area',
+        'Bare ground',
+        'Snow',
+        'Clouds',
+      ],
     };
   }
 
@@ -45,12 +57,12 @@ export default class RasterTile extends React.Component<
       id: 'map',
       stencil: true,
       map: new GaodeMap({
-        // center: [116, 27],
-        // zoom: 6.5,
-        center: [117, 35],
-        zoom: 5,
+        center: [116, 27],
+        zoom: 6.5,
+        // center: [117, 35],
+        // zoom: 5,
         // style: 'normal',
-        // style: 'dark',
+        style: 'dark',
         // style: 'blank',
       }),
     });
@@ -61,14 +73,14 @@ export default class RasterTile extends React.Component<
         .then((res) => res.json())
         .then((maskData) => {
           const layer = new RasterLayer({
-            // mask: true,
-            // maskfence: maskData,
+            mask: true,
+            maskfence: maskData,
           });
           layer
             .source(
-              'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
+              // 'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
               // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
-              // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
+              'http://30.230.85.41:8080/tiles/{z}/{x}/{y}.tiff',
               {
                 parser: {
                   type: 'rasterTile',
@@ -85,7 +97,7 @@ export default class RasterTile extends React.Component<
                     const width = image.getWidth();
                     const height = image.getHeight();
                     const values = await image.readRasters();
-                    console.log(values[0]);
+                    // console.log(values[0]);
                     return { rasterData: values[0], width, height };
                   },
                 },
@@ -98,36 +110,6 @@ export default class RasterTile extends React.Component<
               // clampHigh: false,
               rampColors: {
                 colors: [
-                  // '#49b6ff', // Water
-                  // '#49b6ff',
-
-                  // '#718355', // Tree
-                  // '#718355',
-
-                  // '#adf7b6', // Grass
-                  // '#adf7b6',
-
-                  // '#84c33f', // vegetation
-                  // '#84c33f',
-
-                  // '#fcbe2f', // Crops
-                  // '#fcbe2f',
-
-                  // '#84c33f', // shrub
-                  // '#84c33f',
-
-                  // '#ccc', // Built Area
-                  // '#ccc',
-
-                  // '#a7754d', // Bare ground
-                  // '#a7754d',
-
-                  // '#a3cef1', // Snow
-                  // '#a3cef1',
-
-                  // '#fff', // Clouds
-                  // '#fff',
-
                   '#419bdf', // Water
                   '#419bdf',
 
@@ -250,9 +232,11 @@ function Legent(props: { colorList: string[]; positions: number[] }) {
             </div>
             <div
               style={{
-                width: '30px',
+                marginTop: '5px',
+                width: '48px',
                 height: '8px',
                 background: color,
+                border: '1px solid',
               }}
             ></div>
           </div>

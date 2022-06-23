@@ -45,8 +45,39 @@ function getColor(num: number) {
   }
 }
 
-export default class RasterTile extends React.Component {
+export default class RasterTile extends React.Component<
+  any,
+  { colorList: string[]; positions: any[] }
+> {
   private scene: Scene;
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      colorList: [
+        '#f7fcf0',
+        '#e0f3db',
+        '#ccebc5',
+        '#a8ddb5',
+        '#7bccc4',
+        '#4eb3d3',
+        '#2b8cbe',
+        '#0868ac',
+        '#084081',
+      ].reverse(),
+      positions: [
+        '0m',
+        '50m',
+        '100m',
+        '200m',
+        '400m',
+        '600m',
+        '800m',
+        '1000m',
+        '2000m',
+      ],
+    };
+  }
 
   public componentWillUnmount() {
     this.scene.destroy();
@@ -61,7 +92,7 @@ export default class RasterTile extends React.Component {
         center: [119.48, 30.38],
         // style: 'blank',
         style: 'dark',
-        zoom: 15,
+        zoom: 11,
       }),
     });
 
@@ -125,6 +156,10 @@ export default class RasterTile extends React.Component {
   public render() {
     return (
       <>
+        <Legent
+          colorList={this.state.colorList}
+          positions={this.state.positions}
+        />
         <div
           id="map"
           style={{
@@ -138,4 +173,57 @@ export default class RasterTile extends React.Component {
       </>
     );
   }
+}
+
+function Legent(props: { colorList: string[]; positions: number[] }) {
+  const { colorList, positions } = props;
+
+  let data: any[] = [];
+
+  colorList.map((color, index) => {
+    data.push({
+      color: color,
+      text: positions[index],
+    });
+  });
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: '10px',
+        bottom: '30px',
+        zIndex: 10,
+      }}
+    >
+      {data.map(({ color, text }) => {
+        return (
+          <div
+            style={{
+              display: 'inline-block',
+              background: '#fff',
+              padding: '5px',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '12px',
+                lineHeight: '12px',
+              }}
+            >
+              {text}
+            </div>
+            <div
+              style={{
+                marginTop: '5px',
+                width: '48px',
+                height: '8px',
+                background: color,
+                border: '1px solid',
+              }}
+            ></div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
