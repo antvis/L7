@@ -27,7 +27,7 @@ export default class RasterTile extends React.Component {
       stencil: true,
       map: new GaodeMap({
         center: [120, 29.8],
-        pitch: 60,
+        // pitch: 60,
         // style: 'normal',
         zoom: 7,
 
@@ -49,18 +49,18 @@ export default class RasterTile extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          const provincelayer = new LineLayer({})
-            .source(data)
-            .size(-300000)
-            .shape('wall')
-            .color('#0DCCFF')
-            .style({
-              // opacity: 0.8,
-              heightfixed: true,
-              sourceColor: 'rgb(0,109,44)',
-              targetColor: 'rgb(229,245,224)',
-            });
-          this.scene.addLayer(provincelayer);
+          // const provincelayer = new LineLayer({})
+          //   .source(data)
+          //   .size(-300000)
+          //   .shape('wall')
+          //   .color('#0DCCFF')
+          //   .style({
+          //     // opacity: 0.8,
+          //     heightfixed: true,
+          //     sourceColor: 'rgb(0,109,44)',
+          //     targetColor: 'rgb(229,245,224)',
+          //   });
+          // this.scene.addLayer(provincelayer);
 
           const layer = new RasterLayer({
             mask: true,

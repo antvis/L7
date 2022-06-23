@@ -10,7 +10,8 @@ import {
   Source,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
-const cacheColors = {}
+
+const cacheColors = {};
 export default class RasterTile extends React.Component {
   private scene: Scene;
 
@@ -22,13 +23,14 @@ export default class RasterTile extends React.Component {
     this.scene = new Scene({
       id: 'map',
       stencil: true,
-      // map: new GaodeMap({
-      map: new Mapbox({
+      map: new GaodeMap({
+        // map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
-        center: [260, 35],
+        center: [-100, 37],
+
         style: 'dark',
-        zoom: 3,
+        zoom: 4,
         // zooms: [3.5, 19],
         // maxZoom: 25,
         // zoom: 13,
@@ -37,7 +39,6 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      
       const tileSource = new Source(
         // 'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
         'http://localhost:3000/a.mbtiles/{z}/{x}/{y}.pbf',
@@ -53,81 +54,49 @@ export default class RasterTile extends React.Component {
         },
       );
 
-//       const line = new LineLayer({
-//         featureId: 'ALAND10',
-//         sourceLayer: 'a',
-//       })
-//       .source(tileSource)
-//       .size(1)
-//       .color('#fff')
-// this.scene.addLayer(line)
-// console.log(line)
+      const line = new LineLayer({
+        featureId: 'ALAND10',
+        sourceLayer: 'a',
+      })
+        .source(tileSource)
+        .size(0.4)
+        .color('#fff');
+      this.scene.addLayer(line);
 
       const layer = new PolygonLayer({
         featureId: 'ALAND10',
         sourceLayer: 'a',
-      });
-      // console.log(layer)
-      layer
+      })
         .source(tileSource)
-        // .color('COLOR')
-        // .color('#f00')
-        // .color('v', v => '#ff0')
-        .color('ALAND10', (v) => {
-          // // @ts-ignore
-          // if(cacheColors[v]) {
-          //   // @ts-ignore
-          //   return cacheColors[v];
-          // } else {
-          //   const c = this.getColor();
-          //   // @ts-ignore
-          //   cacheColors[v] = c
-          //   return c;
-          // }
-           return this.getColor();
+        .style({
+          opacity: 0.8,
         })
-
-        // .select(true);
-        // .active(true);
-
-      // layer.on('click', (e) => {
-      //   console.log(e);
-      //   // console.log(e.feature[0].coordinates)
-      //   // console.log(turf.featureCollection(e.feature[0].coordinates))
-      // });
-      // layer.on('mousemove', e => console.log(e))
-      // layer.on('mouseup', e => console.log(e))
-      // layer.on('unmousemove', e => console.log(e))
-      // layer.on('mouseenter', e => console.log(e))
-      // layer.on('mouseout', e => console.log(e))
-      // layer.on('mousedown', e => console.log(e))
-      // layer.on('contextmenu', e => console.log(e))
-
-      // layer.on('unclick', e => { console.log(e) })
-      // layer.on('unmousemove', e => { console.log(e) })
-      // layer.on('unmouseup', e => { console.log(e) })
-      // layer.on('unmousedown', e => { console.log(e) })
-      // layer.on('uncontextmenu', e => console.log(e))
+        .color(
+          'ALAND10',
+          [
+            '#ffffd9',
+            '#edf8b1',
+            '#c7e9b4',
+            '#7fcdbb',
+            '#41b6c4',
+            '#1d91c0',
+            '#225ea8',
+            '#253494',
+            '#081d58',
+          ].reverse(),
+        )
+        .scale('ALAND10', {
+          type: 'quantize',
+          domain: [0, 2000000000],
+        });
 
       this.scene.addLayer(layer);
-
-   
     });
   }
 
   getColor() {
-    const colors = [
-      '#f7f4f9',
-      '#e7e1ef',
-      '#d4b9da',
-      '#c994c7',
-      '#df65b0',
-      '#e7298a',
-      '#ce1256',
-      '#980043',
-      '#67001f',
-    ]
-    return colors[Math.floor(Math.random() * 10)]
+    const colors = ['#fdbe85', '#fd8d3c', '#e6550d', '#a63603'];
+    return colors[Math.floor(Math.random() * 4)];
   }
 
   public render() {

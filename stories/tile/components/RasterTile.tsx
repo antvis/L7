@@ -23,7 +23,7 @@ export default class RasterTile extends React.Component {
       stencil: true,
       map: new GaodeMap({
         center: [120, 29.8],
-        pitch: 60,
+        // pitch: 60,
         // style: 'normal',
         zoom: 6.5,
         style: 'blank',
@@ -39,25 +39,25 @@ export default class RasterTile extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          const provincelayer = new PolygonLayer({})
-            .source(data)
-            .size(-150000)
-            .shape('extrude')
-            .color('#0DCCFF')
-            // .active({
-            //   color: 'rgb(100,230,255)'
-            // })
-            .style({
-              heightfixed: true,
-              // pickLight: true,
-              // raisingHeight: 200000,
-              opacity: 0.8,
-              topsurface: false,
-              targetColor: '#a1d99b',
-              sourceColor: '#00441b',
-            });
+          // const provincelayer = new PolygonLayer({})
+          //   .source(data)
+          //   .size(-150000)
+          //   .shape('extrude')
+          //   .color('#0DCCFF')
+          //   // .active({
+          //   //   color: 'rgb(100,230,255)'
+          //   // })
+          //   .style({
+          //     heightfixed: true,
+          //     // pickLight: true,
+          //     // raisingHeight: 200000,
+          //     opacity: 0.8,
+          //     topsurface: false,
+          //     targetColor: '#a1d99b',
+          //     sourceColor: '#00441b',
+          //   });
 
-          this.scene.addLayer(provincelayer);
+          // this.scene.addLayer(provincelayer);
 
           const layer = new RasterLayer({
             zIndex: 1,
