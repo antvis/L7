@@ -52,132 +52,140 @@ export default class RasterTile extends React.Component<
         // style: 'normal',
         // style: 'dark',
         // style: 'blank',
-        
       }),
     });
     this.scene.on('loaded', () => {
-
-      fetch('https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json')
-      .then(res => res.json())
-      .then(maskData => {
-        const layer = new RasterLayer({
-          // mask: true,
-          // maskfence: maskData,
-        });
-        layer
-          .source(
-            'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
-            // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
-            // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
-            {
-              parser: {
-                type: 'rasterTile',
-                dataType: 'arraybuffer',
-                tileSize: 256,
-                // zoomOffset: 1,
-                // extent: [-180, -85.051129, 179, 85.051129],
-                // minZoom: 10,
-                // maxZoom: 0,
-                maxZoom: 13.1,
-                format: async (data: any) => {
-                  const tiff = await GeoTIFF.fromArrayBuffer(data);
-                  const image = await tiff.getImage();
-                  const width = image.getWidth();
-                  const height = image.getHeight();
-                  const values = await image.readRasters();
-                  console.log(values[0])
-                  return { rasterData: values[0], width, height };                 
+      fetch(
+        'https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json',
+      )
+        .then((res) => res.json())
+        .then((maskData) => {
+          const layer = new RasterLayer({
+            // mask: true,
+            // maskfence: maskData,
+          });
+          layer
+            .source(
+              'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
+              // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
+              // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
+              {
+                parser: {
+                  type: 'rasterTile',
+                  dataType: 'arraybuffer',
+                  tileSize: 256,
+                  // zoomOffset: 1,
+                  // extent: [-180, -85.051129, 179, 85.051129],
+                  // minZoom: 10,
+                  // maxZoom: 0,
+                  maxZoom: 13.1,
+                  format: async (data: any) => {
+                    const tiff = await GeoTIFF.fromArrayBuffer(data);
+                    const image = await tiff.getImage();
+                    const width = image.getWidth();
+                    const height = image.getHeight();
+                    const values = await image.readRasters();
+                    console.log(values[0]);
+                    return { rasterData: values[0], width, height };
+                  },
                 },
               },
-            },
-          )
-          .style({
-            // opacity: 0.6,
-            domain: [0.001, 11.001],
-            clampLow: false,
-            // clampHigh: false,
-            rampColors: {
-              colors: [
-                // '#49b6ff', // Water
-                // '#49b6ff',
+            )
+            .style({
+              // opacity: 0.6,
+              domain: [0.001, 11.001],
+              clampLow: false,
+              // clampHigh: false,
+              rampColors: {
+                colors: [
+                  // '#49b6ff', // Water
+                  // '#49b6ff',
 
-                // '#718355', // Tree
-                // '#718355',
+                  // '#718355', // Tree
+                  // '#718355',
 
-                // '#adf7b6', // Grass
-                // '#adf7b6',
+                  // '#adf7b6', // Grass
+                  // '#adf7b6',
 
-                // '#84c33f', // vegetation
-                // '#84c33f',
+                  // '#84c33f', // vegetation
+                  // '#84c33f',
 
-                // '#fcbe2f', // Crops
-                // '#fcbe2f',
+                  // '#fcbe2f', // Crops
+                  // '#fcbe2f',
 
-                // '#84c33f', // shrub
-                // '#84c33f',
+                  // '#84c33f', // shrub
+                  // '#84c33f',
 
-                // '#ccc', // Built Area
-                // '#ccc',
+                  // '#ccc', // Built Area
+                  // '#ccc',
 
-                // '#a7754d', // Bare ground
-                // '#a7754d',
+                  // '#a7754d', // Bare ground
+                  // '#a7754d',
 
-                // '#a3cef1', // Snow
-                // '#a3cef1',
+                  // '#a3cef1', // Snow
+                  // '#a3cef1',
 
-                // '#fff', // Clouds
-                // '#fff',
+                  // '#fff', // Clouds
+                  // '#fff',
 
-                '#419bdf', // Water
-                '#419bdf',
+                  '#419bdf', // Water
+                  '#419bdf',
 
-                '#397d49', // Tree
-                '#397d49',
+                  '#397d49', // Tree
+                  '#397d49',
 
-                '#88b053', // Grass
-                '#88b053',
+                  '#88b053', // Grass
+                  '#88b053',
 
-                '#7a87c6', // vegetation
-                '#7a87c6',
+                  '#7a87c6', // vegetation
+                  '#7a87c6',
 
-                '#e49635', // Crops
-                '#e49635',
+                  '#e49635', // Crops
+                  '#e49635',
 
-                '#dfc35a', // shrub
-                '#dfc35a',
+                  '#dfc35a', // shrub
+                  '#dfc35a',
 
-                '#c4281b', // Built Area
-                '#c4281b',
+                  '#c4281b', // Built Area
+                  '#c4281b',
 
-                '#a59b8f', // Bare ground
-                '#a59b8f',
+                  '#a59b8f', // Bare ground
+                  '#a59b8f',
 
-                '#a8ebff', // Snow
-                '#a8ebff',
+                  '#a8ebff', // Snow
+                  '#a8ebff',
 
-                '#616161', // Clouds
-                '#616161',
-              ],
-              positions: [
-                0.0, 0.1,   // Water
-                0.1, 0.2,   // Tree
-                0.2, 0.3,   // Grass
-                0.3, 0.4,   // vegetation
-                0.4, 0.5, 
-                0.5, 0.6,
-                0.6, 0.7,
-                0.7, 0.8,
-                0.8, 0.9,
-                0.9, 1.0,
-              ],
-            },
-         
-          })
-          .select(true);
-  
-        this.scene.addLayer(layer);
-      })
-     
+                  '#616161', // Clouds
+                  '#616161',
+                ],
+                positions: [
+                  0.0,
+                  0.1, // Water
+                  0.1,
+                  0.2, // Tree
+                  0.2,
+                  0.3, // Grass
+                  0.3,
+                  0.4, // vegetation
+                  0.4,
+                  0.5,
+                  0.5,
+                  0.6,
+                  0.6,
+                  0.7,
+                  0.7,
+                  0.8,
+                  0.8,
+                  0.9,
+                  0.9,
+                  1.0,
+                ],
+              },
+            })
+            .select(true);
+
+          this.scene.addLayer(layer);
+        });
     });
   }
 

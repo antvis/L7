@@ -75,7 +75,6 @@ export default class RasterTile extends React.Component<
               // maxZoom: 0,
               // maxZoom: 10,
               format: async (data: any) => {
-             
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
                 });

@@ -7,7 +7,7 @@ import {
   ILayer,
   PointLayer,
   PolygonLayer,
-  Source
+  Source,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
@@ -58,7 +58,6 @@ export default class RasterTile extends React.Component {
       stencil: true,
       // map: new GaodeMap({
       map: new GaodeMap({
-       
         center: [119.48, 30.38],
         // style: 'blank',
         style: 'dark',
@@ -67,10 +66,10 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      const tileServe1 = 'http://localhost:3000/zjline.mbtiles/{z}/{x}/{y}.pbf' // 10 - 11
-      const tileServe2 = 'http://localhost:3000/zjline2.mbtiles/{z}/{x}/{y}.pbf' // 11.1 -14
-      const tileSource = new Source(tileServe2,
-      {
+      const tileServe1 = 'http://localhost:3000/zjline.mbtiles/{z}/{x}/{y}.pbf'; // 10 - 11
+      const tileServe2 =
+        'http://localhost:3000/zjline2.mbtiles/{z}/{x}/{y}.pbf'; // 11.1 -14
+      const tileSource = new Source(tileServe2, {
         parser: {
           type: 'mvt',
           tileSize: 256,
@@ -81,7 +80,7 @@ export default class RasterTile extends React.Component {
           minZoom: 11.1,
           maxZoom: 14,
         },
-      })
+      });
 
       // const tileSource2 = new Source('http://localhost:3000/zjline.mbtiles/{z}/{x}/{y}.pbf',
       // {
@@ -97,21 +96,20 @@ export default class RasterTile extends React.Component {
       const layer = new LineLayer({
         featureId: 'COLOR',
         sourceLayer: 'zhejiang', // woods hillshade contour ecoregions ecoregions2 city
-        
       })
         .source(tileSource)
-        .color('ELEV', v => getColor(v))
+        .color('ELEV', (v) => getColor(v))
         .size(0.4)
         .style({
           // color: "#ff0"
           // opacity: 0.4,
-        })
+        });
       this.scene.addLayer(layer);
 
       // const layer2 = new LineLayer({
       //   featureId: 'COLOR',
       //   sourceLayer: 'zhejiang', // woods hillshade contour ecoregions ecoregions2 city
-        
+
       // })
       //   .source(tileSource2)
       //   .color('#f00')

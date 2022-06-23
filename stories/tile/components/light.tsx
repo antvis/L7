@@ -84,7 +84,6 @@ export default class RasterTile extends React.Component<
                 // @ts-ignore
                 ctx.drawImage(img, 0, 0, 256, 256);
 
-              
                 // @ts-ignore
                 let imgData = ctx.getImageData(0, 0, 256, 256).data;
                 let arr = [];
