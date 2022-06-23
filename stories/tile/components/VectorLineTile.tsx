@@ -122,11 +122,10 @@ export default class RasterTile extends React.Component {
 
       layer.on('click', () => {
         // @ts-ignore
-        layer.tileLayer.children.map(l => {
-          console.log(l.isVisible())
-        })
-        
-      })
+        layer.tileLayer.children.map((l) => {
+          console.log(l.isVisible());
+        });
+      });
 
       // setTimeout(() => {
       //   layer.size(5);
