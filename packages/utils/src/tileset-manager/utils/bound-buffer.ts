@@ -1,4 +1,4 @@
-import { padBounds, bBoxToBounds, boundsContains } from '../../geo';
+import { bBoxToBounds, boundsContains, padBounds } from '../../geo';
 
 /**
  * 获取经纬度边界的缓存后的边界

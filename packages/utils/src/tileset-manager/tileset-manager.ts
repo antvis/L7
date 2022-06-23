@@ -1,18 +1,18 @@
 import EventEmitter from 'eventemitter3';
 import {
+  BOUNDS_BUFFER_SCALE,
   DEFAULT_CACHE_SCALE,
   DEFAULT_EXTENT,
   NOOP,
   UPDATE_TILE_STRATEGIES,
-  BOUNDS_BUFFER_SCALE,
 } from './const';
 import { Tile } from './tile';
 import { TilesetManagerOptions, UpdateTileStrategy } from './types';
-import { getTileIndices } from './utils/lonlat-tile';
 import {
   getLatLonBoundsBuffer,
   isLatLonBoundsContains,
 } from './utils/bound-buffer';
+import { getTileIndices } from './utils/lonlat-tile';
 
 /**
  * 管理瓦片数据
