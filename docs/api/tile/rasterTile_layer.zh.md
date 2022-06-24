@@ -14,7 +14,7 @@ L7 的栅格瓦片图层支持了图片栅格瓦片和数据栅格瓦片，其�
 import { RasterLayer } from '@antv/l7';
 ```
 
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*qn37Sbi_PTkAAAAAAAAAAAAAARQnAQ'>
+<img width="80%" style="display: block;margin: 0 auto;" alt="瓦片图层" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*V45WTKljz-YAAAAAAAAAAAAAARQnAQ'>
 
 ### option
 

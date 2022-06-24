@@ -63,4 +63,3 @@ storiesOf('瓦片', module)
   .add('LandCover', () => <LandCover />)
   .add('HeightLine', () => <HeightLine />)
   .add('Quxian', () => <Quxian />)
-
