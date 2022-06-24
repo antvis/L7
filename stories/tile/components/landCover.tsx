@@ -7,6 +7,7 @@ import {
   ILayer,
   PointLayer,
   MaskLayer,
+  Popup,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
@@ -78,9 +79,9 @@ export default class RasterTile extends React.Component<
           });
           layer
             .source(
-              // 'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
+              'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
               // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
-              'http://30.230.85.41:8080/tiles/{z}/{x}/{y}.tiff',
+              // 'http://30.230.85.41:8080/tiles/{z}/{x}/{y}.tiff',
               {
                 parser: {
                   type: 'rasterTile',
@@ -167,6 +168,30 @@ export default class RasterTile extends React.Component<
             .select(true);
 
           this.scene.addLayer(layer);
+          const land = [
+            'Water',
+            'Trees',
+            'Grass',
+            'Vegetation',
+            'Crops',
+            'Shrub',
+            'Built Area',
+            'Bare ground',
+            'Snow',
+            'Clouds',
+          ];
+
+          layer.on('mousemove', (e) => {
+            const popup = new Popup({
+              offsets: [0, 0],
+              closeButton: false,
+            });
+            popup
+              .setLnglat(e.lngLat)
+              .setHTML(` <span>${land[e.value - 1]} </span> `);
+
+            this.scene.addPopup(popup);
+          });
         });
     });
   }

@@ -5,6 +5,7 @@ import RasterTile from './components/RasterTile';
 import OsmRasterTile from './components/OsmRasterTile';
 
 import RasterArrayBuffer from './components/RasterArrayBuffer';
+import DemFilter from './components/demFilter';
 import RasterArrayBuffer2 from './components/RasterArrayBuffer2';
 import RasterArrayBufferMask from './components/RasterArrayBufferMask';
 import America from './components/america';
@@ -37,7 +38,8 @@ storiesOf('瓦片', module)
 
   .add('America', () => <America />)
   .add('Lerc', () => <Lerc />)
-  .add('RasterArrayBuffer', () => <RasterArrayBuffer />)
+  .add('DemColor', () => <RasterArrayBuffer />)
+  .add('DemFilter', () => <DemFilter />)
   .add('RasterArrayBuffer2', () => <RasterArrayBuffer2 />)
   .add('RasterArrayBufferMask', () => <RasterArrayBufferMask />)
 

@@ -27,14 +27,9 @@ export default class RasterTile extends React.Component {
         // map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
-        center: [-100, 37],
-
+        center: [-95, 37],
         style: 'dark',
-        zoom: 4,
-        // zooms: [3.5, 19],
-        // maxZoom: 25,
-        // zoom: 13,
-        // center: [-122.447303, 37.753574],
+        zoom: 4.2,
       }),
     });
 
@@ -47,7 +42,7 @@ export default class RasterTile extends React.Component {
           parser: {
             type: 'mvt',
             tileSize: 256,
-            zoomOffset: 0,
+            zoomOffset: -1,
             maxZoom: 8,
             // extent: [-180, -85.051129, 179, 85.051129],
           },

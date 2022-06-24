@@ -24,7 +24,7 @@ export default class RasterTile extends React.Component {
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      stencil: true,
+      // stencil: true,
       map: new GaodeMap({
         center: [120, 29.8],
         // pitch: 60,
