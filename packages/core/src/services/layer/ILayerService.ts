@@ -194,6 +194,7 @@ export interface ITileLayer {
   tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;
   children: ILayer[];
+  scaleField: any;
   render(isPicking?: boolean): void;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;

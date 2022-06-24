@@ -25,40 +25,43 @@ export default class RasterTile extends React.Component {
       map: new Mapbox({
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
+        // center: [120, 30],
+        // style: 'normal',
+        // zoom: 6,
+        // zooms: [0, 25],
+        // maxZoom: 25,
         center: [120, 30],
-        style: 'normal',
-        zoom: 6,
-        zooms: [0, 25],
-        maxZoom: 25,
+        style: 'blank',
+        zoom: 2,
         // zoom: 13,
         // center: [-122.447303, 37.753574],
       }),
     });
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
-        .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-            },
-          ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
-        )
-        .shape('circle')
-        .color('#ff0')
-        // .active(true)
-        .select(true)
-        .size(10);
+      // const point = new PointLayer({ zIndex: 7 })
+      //   .source(
+      //     [
+      //       {
+      //         lng: 120,
+      //         lat: 30,
+      //       },
+      //     ],
+      //     {
+      //       parser: {
+      //         type: 'json',
+      //         x: 'lng',
+      //         y: 'lat',
+      //       },
+      //     },
+      //   )
+      //   .shape('circle')
+      //   .color('#ff0')
+      //   // .active(true)
+      //   .select(true)
+      //   .size(10);
 
-      this.scene.addLayer(point);
+      // this.scene.addLayer(point);
 
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
@@ -88,7 +91,7 @@ export default class RasterTile extends React.Component {
           },
         )
         .color('COLOR')
-        .size(5)
+        .size(2)
         // .size('v', v => 5)
         // .color('#f00')
         // .color('v', v => '#ff0')
@@ -116,6 +119,13 @@ export default class RasterTile extends React.Component {
       // layer.on('uncontextmenu', e => console.log(e))
 
       this.scene.addLayer(layer);
+
+      layer.on('click', () => {
+        // @ts-ignore
+        layer.tileLayer.children.map((l) => {
+          console.log(l.isVisible());
+        });
+      });
 
       // setTimeout(() => {
       //   layer.size(5);

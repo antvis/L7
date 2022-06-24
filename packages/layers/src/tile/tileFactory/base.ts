@@ -127,6 +127,13 @@ export default class TileFactory implements ITileFactory {
     // set source
     layer.source(source);
 
+    // set scale
+    this.setScale(layer);
+    // console.log(this.parentLayer.getScaleOptions())
+    // console.log()
+
+    // console.log(this.parentLayer.tileLayer.scaleCfg)
+
     // set scale attribute field
     this.setStyleAttributeField(layer, 'shape', shape);
     this.setStyleAttributeField(layer, 'color', color);
@@ -355,9 +362,22 @@ export default class TileFactory implements ITileFactory {
       // VectorLayer
       const featureId = e.featureId;
       const features = this.getAllFeatures(featureId);
-      e.feature = this.getCombineFeature(features);
+      try {
+        e.feature = this.getCombineFeature(features);
+      } catch (err) {
+        console.warn('Combine Featuer Err! Return First Feature!');
+        e.feature = features[0];
+      }
     }
     this.parentLayer.emit(eventName, e);
+  }
+
+  private setScale(layer: ILayer) {
+    const scaleOptions = this.parentLayer.tileLayer.scaleField;
+    const scaleKeys = Object.keys(scaleOptions);
+    scaleKeys.map((key) => {
+      layer.scale(key, scaleOptions[key]);
+    });
   }
 
   private getAllFeatures(featureId: number) {
