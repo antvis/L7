@@ -57,43 +57,40 @@ export default class RasterTile extends React.Component<
     this.scene.on('loaded', () => {
       const layer = new RasterLayer();
       layer
-        .source(
-          'http://localhost:3333/Mapnik/{z}/{x}/{y}.png',
-          {
-            parser: {
-              type: 'rasterTile',
-              dataType: 'arraybuffer',
-              tileSize: 256,
-              zoomOffset: 1,
-              minZoom: 1,
-              // maxZoom: 0,
-              maxZoom: 7,
-              format: async (data: any) => {
-                const blob: Blob = new Blob([new Uint8Array(data)], {
-                  type: 'image/png',
-                });
-                const img = await createImageBitmap(blob);
-                // @ts-ignore
-                ctx.clearRect(0, 0, 256, 256);
-                // @ts-ignore
-                ctx.drawImage(img, 0, 0, 256, 256);
+        .source('http://localhost:3333/Mapnik/{z}/{x}/{y}.png', {
+          parser: {
+            type: 'rasterTile',
+            dataType: 'arraybuffer',
+            tileSize: 256,
+            zoomOffset: 1,
+            minZoom: 1,
+            // maxZoom: 0,
+            maxZoom: 7,
+            format: async (data: any) => {
+              const blob: Blob = new Blob([new Uint8Array(data)], {
+                type: 'image/png',
+              });
+              const img = await createImageBitmap(blob);
+              // @ts-ignore
+              ctx.clearRect(0, 0, 256, 256);
+              // @ts-ignore
+              ctx.drawImage(img, 0, 0, 256, 256);
 
-                // @ts-ignore
-                let imgData = ctx.getImageData(0, 0, 256, 256).data;
-                let arr = [];
-                for (let i = 0; i < imgData.length; i += 4) {
-                  const R = imgData[i];
-                  arr.push(R);
-                }
-                return {
-                  rasterData: arr,
-                  width: 256,
-                  height: 256,
-                };
-              },
+              // @ts-ignore
+              let imgData = ctx.getImageData(0, 0, 256, 256).data;
+              let arr = [];
+              for (let i = 0; i < imgData.length; i += 4) {
+                const R = imgData[i];
+                arr.push(R);
+              }
+              return {
+                rasterData: arr,
+                width: 256,
+                height: 256,
+              };
             },
           },
-        )
+        })
         .style({
           // opacity: 0.6,
           domain: [25, 160],

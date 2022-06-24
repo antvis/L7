@@ -7,7 +7,7 @@ import {
   ILayer,
   PointLayer,
   MaskLayer,
-  Popup
+  Popup,
 } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 // @ts-ignore
@@ -180,9 +180,9 @@ export default class RasterTile extends React.Component<
             'Bare ground',
             'Snow',
             'Clouds',
-          ]
+          ];
 
-          layer.on('mousemove', e => {
+          layer.on('mousemove', (e) => {
             const popup = new Popup({
               offsets: [0, 0],
               closeButton: false,
@@ -192,7 +192,7 @@ export default class RasterTile extends React.Component<
               .setHTML(` <span>${land[e.value - 1]} </span> `);
 
             this.scene.addPopup(popup);
-          })
+          });
         });
     });
   }

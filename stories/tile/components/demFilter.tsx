@@ -17,7 +17,7 @@ import Slider from '@material-ui/core/Slider';
 
 export default class RasterTile extends React.Component<
   any,
-  { colorList: string[]; positions: any[], lowClip: number }
+  { colorList: string[]; positions: any[]; lowClip: number }
 > {
   private scene: Scene;
   private layer: any;
@@ -25,9 +25,29 @@ export default class RasterTile extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      colorList: ['#fcfbfd','#efedf5','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#54278f','#3f007d'],
-      positions: ['0m', '200m', '300m', '400m', '500m', '600m', '700m', '800m', '1000m'],
-      lowClip: 0
+      colorList: [
+        '#fcfbfd',
+        '#efedf5',
+        '#dadaeb',
+        '#bcbddc',
+        '#9e9ac8',
+        '#807dba',
+        '#6a51a3',
+        '#54278f',
+        '#3f007d',
+      ],
+      positions: [
+        '0m',
+        '200m',
+        '300m',
+        '400m',
+        '500m',
+        '600m',
+        '700m',
+        '800m',
+        '1000m',
+      ],
+      lowClip: 0,
     };
   }
 
@@ -51,7 +71,7 @@ export default class RasterTile extends React.Component<
     canvas.height = 256;
     const ctx = canvas.getContext('2d');
     this.scene.on('loaded', () => {
-      const highClip = 1024
+      const highClip = 1024;
       const layer = new RasterLayer();
       this.layer = layer;
       layer
@@ -110,7 +130,17 @@ export default class RasterTile extends React.Component<
           domain: [0, highClip],
           clampLow: false,
           rampColors: {
-            colors: ['#fcfbfd','#efedf5','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#54278f','#3f007d'],
+            colors: [
+              '#fcfbfd',
+              '#efedf5',
+              '#dadaeb',
+              '#bcbddc',
+              '#9e9ac8',
+              '#807dba',
+              '#6a51a3',
+              '#54278f',
+              '#3f007d',
+            ],
             positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
           },
         })
@@ -118,41 +148,38 @@ export default class RasterTile extends React.Component<
 
       this.scene.addLayer(layer);
 
-    //  setTimeout(() => {
-    //   animate({
-    //     from: {
-    //       v: 0
-    //     },
-    //     to: {
-    //       v: 512
-    //     },
-    //     ease: easeInOut,
-    //     duration: 2000,
-    //     onUpdate: o => {
-    //       console.log('update')
-    //       layer.style({
-    //         domain: [o.v, highClip]
-    //       })
-    //       this.scene.render()
-    //     },
-    //   });
-    //  }, 2000)
-      
-     
+      //  setTimeout(() => {
+      //   animate({
+      //     from: {
+      //       v: 0
+      //     },
+      //     to: {
+      //       v: 512
+      //     },
+      //     ease: easeInOut,
+      //     duration: 2000,
+      //     onUpdate: o => {
+      //       console.log('update')
+      //       layer.style({
+      //         domain: [o.v, highClip]
+      //       })
+      //       this.scene.render()
+      //     },
+      //   });
+      //  }, 2000)
     });
   }
 
   public timelinechange(e: number) {
-    if(e !== this.state.lowClip) {
+    if (e !== this.state.lowClip) {
       this.layer.style({
-        domain: [e, 1024]
+        domain: [e, 1024],
       });
       this.scene.render();
       this.setState({
-        lowClip: e
+        lowClip: e,
       });
     }
-    
   }
 
   public render() {
@@ -172,13 +199,13 @@ export default class RasterTile extends React.Component<
             bottom: 0,
           }}
         />
-           <RangeInput
-            min={0}
-            max={1024}
-            value={this?.state?.lowClip || 0}
-            // @ts-ignore
-            onChange={(e) => this.timelinechange(e)}
-          />
+        <RangeInput
+          min={0}
+          max={1024}
+          value={this?.state?.lowClip || 0}
+          // @ts-ignore
+          onChange={(e) => this.timelinechange(e)}
+        />
       </>
     );
   }

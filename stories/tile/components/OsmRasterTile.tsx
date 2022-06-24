@@ -44,8 +44,7 @@ export default class OsmRasterTile extends React.Component {
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const layer = new RasterLayer({
-      }).source(
+      const layer = new RasterLayer({}).source(
         'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
         // 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
         // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
@@ -59,17 +58,16 @@ export default class OsmRasterTile extends React.Component {
           parser: {
             type: 'rasterTile',
             tileSize: 256,
-          
+
             zoomOffset: 0,
             updateStrategy: 'overlap',
           },
         },
       );
 
-
       this.scene.addLayer(layer);
 
-        // 注记服务
+      // 注记服务
       // const annotionLayer = new RasterLayer({
       //   zIndex: 2
       // });
