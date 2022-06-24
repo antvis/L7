@@ -168,7 +168,6 @@ export default class RasterTile extends React.Component<
             .select(true);
 
           this.scene.addLayer(layer);
-
           const land = [
             'Water',
             'Trees',
