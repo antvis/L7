@@ -92,7 +92,7 @@ export default class RasterTile extends React.Component<
         center: [119.48, 30.38],
         // style: 'blank',
         style: 'dark',
-        zoom: 11,
+        zoom: 14,
       }),
     });
 

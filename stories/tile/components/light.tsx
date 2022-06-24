@@ -20,15 +20,15 @@ export default class RasterTile extends React.Component<
     super(props);
     this.state = {
       colorList: [
-        '#f7fcf5',
-        '#e5f5e0',
-        '#c7e9c0',
-        '#a1d99b',
-        '#74c476',
-        '#41ab5d',
-        '#238b45',
-        '#006d2c',
-        '#00441b',
+        '#2b9348',
+        '#55a630',
+        '#80b918',
+        '#aacc00',
+        '#bfd200',
+        '#d4d700',
+        '#dddf00',
+        '#eeef20',
+        '#ffff3f',
       ],
       positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
     };
@@ -42,7 +42,7 @@ export default class RasterTile extends React.Component<
     this.scene = new Scene({
       id: 'map',
       map: new Mapbox({
-        center: [130, 30],
+        center: [130, 25],
         pitch: 0,
         // style: 'normal',
         style: 'dark',
@@ -58,11 +58,6 @@ export default class RasterTile extends React.Component<
       const layer = new RasterLayer();
       layer
         .source(
-          // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          // 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{zoom}/{x}/{y}.pngraw?sku=YOUR_MAPBOX_SKU_TOKEN&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
-          // 'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
-          // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
-          // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
           'http://localhost:3333/Mapnik/{z}/{x}/{y}.png',
           {
             parser: {
@@ -70,7 +65,6 @@ export default class RasterTile extends React.Component<
               dataType: 'arraybuffer',
               tileSize: 256,
               zoomOffset: 1,
-              // extent: [-180, -85.051129, 179, 85.051129],
               minZoom: 1,
               // maxZoom: 0,
               maxZoom: 7,
@@ -116,11 +110,8 @@ export default class RasterTile extends React.Component<
               '#dddf00',
               '#eeef20',
               '#ffff3f',
-              // '#ffffcc',
-              // '#ff0',
             ],
             positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
-            // positions: [0,  1]
           },
         })
         .select(true);
@@ -132,10 +123,10 @@ export default class RasterTile extends React.Component<
   public render() {
     return (
       <>
-        {/* <Legent
+        <Legent
           colorList={this.state.colorList}
           positions={this.state.positions}
-        /> */}
+        />
         <div
           id="map"
           style={{
