@@ -55,6 +55,7 @@ export default class RasterTile extends React.Component {
         .shape('circle')
         .color('#ff0')
         // .active(true)
+        // .animate(true)
         .select(true)
         .size(10);
 
@@ -92,6 +93,7 @@ export default class RasterTile extends React.Component {
               zoomOffset: 0,
               maxZoom: 9,
               extent: [-180, -85.051129, 179, 85.051129],
+              // updateStrategy: 'replace', //  'overlap' | 'replace';
             },
           },
         )

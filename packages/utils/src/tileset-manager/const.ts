@@ -11,6 +11,8 @@ export const DEFAULT_EXTENT: TileBounds = [
   Infinity,
   Infinity,
 ];
+
+export const BOUNDS_BUFFER_SCALE = 0.2;
 export const DEFAULT_CACHE_SCALE = 5;
 
 // 瓦片更新显示策略
