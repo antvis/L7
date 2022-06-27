@@ -75,9 +75,9 @@ export default class Demo extends React.Component {
             .source(originData[times[0]], parser)
             .shape('simple')
             .size('v', (v) => Math.sqrt(v) / 6)
-            .color('v', ['#ffffb2','#fecc5c','#fd8d3c','#e31a1c'])
+            .color('v', ['#ffffb2', '#fecc5c', '#fd8d3c', '#e31a1c'])
             .scale('v', {
-              type: 'quantize'
+              type: 'quantize',
             })
             .style({
               opacity: 0.8,
@@ -123,7 +123,7 @@ export default class Demo extends React.Component {
           bottom: 0,
         }}
       >
-                <div
+        <div
           style={{
             position: 'absolute',
             top: '100px',
