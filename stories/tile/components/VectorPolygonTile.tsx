@@ -28,7 +28,7 @@ export default class RasterTile extends React.Component {
         // center: [121.268, 30.3628],
         // center: [122.76391708791607, 43.343389123718815],
         center: [-95, 37],
-        style: 'dark',
+        // style: 'dark',
         zoom: 4.2,
       }),
     });
@@ -49,14 +49,15 @@ export default class RasterTile extends React.Component {
         },
       );
 
-      const line = new LineLayer({
-        featureId: 'ALAND10',
-        sourceLayer: 'a',
-      })
-        .source(tileSource)
-        .size(0.4)
-        .color('#fff');
-      this.scene.addLayer(line);
+      // const line = new LineLayer({
+      //   featureId: 'ALAND10',
+      //   sourceLayer: 'a',
+      // })
+      //   .source(tileSource)
+      //   // .size(0.4)
+      //   .size(1)
+      //   .color('#f00');
+      // this.scene.addLayer(line);
 
       const layer = new PolygonLayer({
         featureId: 'ALAND10',
@@ -64,21 +65,23 @@ export default class RasterTile extends React.Component {
       })
         .source(tileSource)
         .style({
-          opacity: 0.8,
+          // opacity: 0.6,
         })
         .color(
           'ALAND10',
-          [
-            '#ffffd9',
-            '#edf8b1',
-            '#c7e9b4',
-            '#7fcdbb',
-            '#41b6c4',
-            '#1d91c0',
-            '#225ea8',
-            '#253494',
-            '#081d58',
-          ].reverse(),
+          // [
+          //   '#ffffd9',
+          //   '#edf8b1',
+          //   '#c7e9b4',
+          //   '#7fcdbb',
+          //   '#41b6c4',
+          //   '#1d91c0',
+          //   '#225ea8',
+          //   '#253494',
+          //   '#081d58',
+          // ].reverse(),
+          // [ '#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15' ]
+          ['#227BA2','#1B9CD0','#22BAED','#61C9FF','#8AD4FF','#ABDFFF','#C9E9FF','#F2EAEA','#FFC5AC','#FF895D','#FFA884','#FF6836','#F3470D','#D13808','#A4300C']
         )
         .scale('ALAND10', {
           type: 'quantize',

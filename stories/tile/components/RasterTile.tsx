@@ -22,7 +22,7 @@ export default class RasterTile extends React.Component {
       id: 'map',
       // stencil: true,
       map: new GaodeMap({
-        center: [120, 29.8],
+        center: [121, 29.4],
         // pitch: 60,
         // style: 'normal',
         zoom: 6.5,

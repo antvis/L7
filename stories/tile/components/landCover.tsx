@@ -79,7 +79,8 @@ export default class RasterTile extends React.Component<
           });
           layer
             .source(
-              'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
+              // 'http://localhost:3333/tiles/{z}/{x}/{y}.tiff',
+              'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
               // 'http://30.230.85.41:8081/tiles/{z}/{x}/{y}.tiff',
               // 'http://30.230.85.41:8080/tiles/{z}/{x}/{y}.tiff',
               {
