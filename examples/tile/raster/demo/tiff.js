@@ -108,7 +108,7 @@ scene.on('loaded', () => {
       scene.addLayer(layer);
       return '';
     });
-    return '';
+  return '';
 });
 
 const wrap = document.getElementById('map');
