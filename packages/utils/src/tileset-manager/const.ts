@@ -1,6 +1,7 @@
 import { TileBounds, UpdateTileStrategy } from './types';
 import {
   updateTileStateOverlap,
+  updateTileStateRealtime,
   updateTileStateReplace,
 } from './utils/strategies';
 
@@ -15,6 +16,7 @@ export const DEFAULT_CACHE_SCALE = 5;
 
 // 瓦片更新显示策略
 export const UPDATE_TILE_STRATEGIES = {
+  [UpdateTileStrategy.Realtime]: updateTileStateRealtime,
   [UpdateTileStrategy.Overlap]: updateTileStateOverlap,
   [UpdateTileStrategy.Replace]: updateTileStateReplace,
 };

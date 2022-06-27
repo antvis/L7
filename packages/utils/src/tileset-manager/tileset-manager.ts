@@ -45,7 +45,7 @@ export class TilesetManager extends EventEmitter {
       zoomOffset: 0,
       extent: DEFAULT_EXTENT,
       getTileData: NOOP,
-      updateStrategy: UpdateTileStrategy.Overlap,
+      updateStrategy: UpdateTileStrategy.Replace,
     };
     this.updateOptions(options);
   }
