@@ -33,6 +33,21 @@
       "filename": "watercolor.js",
       "title": "三方水彩瓦片",
       "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/v%24zEKgSWSc/aced2778-0687-4b03-9573-1e2f6d9a1d07.png"
+    },
+    {
+      "filename": "dem.js",
+      "title": "png 高程栅格",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*MNYOSbk1-KIAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "lerc.js",
+      "title": "lerc 高程栅格",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Q2SlRZ8L2_sAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "tiff.js",
+      "title": "tiff 土地栅格",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*QUb2TY71GjIAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }
