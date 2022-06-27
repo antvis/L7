@@ -21,9 +21,31 @@ import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 #2b8cbe
 #0868ac
 #084081
+
+['#fff7f3','#fde0dd','#fcc5c0','#fa9fb5','#f768a1','#dd3497','#ae017e','#7a0177','#49006a']
  */
 
 function getColor(num: number) {
+  // if (num > 2000) {
+  //   return '#f7fcf0';
+  // } else if (num > 1000) {
+  //   return '#e0f3db';
+  // } else if (num > 800) {
+  //   return '#ccebc5';
+  // } else if (num > 600) {
+  //   return '#a8ddb5';
+  // } else if (num > 400) {
+  //   return '#7bccc4';
+  // } else if (num > 200) {
+  //   return '#4eb3d3';
+  // } else if (num > 100) {
+  //   return '#2b8cbe';
+  // } else if (num > 50) {
+  //   return '#0868ac';
+  // } else {
+  //   return ' #084081';
+  // }
+
   if (num > 2000) {
     return '#f7fcf0';
   } else if (num > 1000) {
@@ -55,16 +77,16 @@ export default class RasterTile extends React.Component<
     super(props);
     this.state = {
       colorList: [
-        '#f7fcf0',
-        '#e0f3db',
-        '#ccebc5',
-        '#a8ddb5',
-        '#7bccc4',
-        '#4eb3d3',
-        '#2b8cbe',
-        '#0868ac',
-        '#084081',
-      ].reverse(),
+        '#146968',
+        '#1D7F7E',
+        '#289899',
+        '#34B6B7',
+        '#4AC5AF',
+        '#5FD3A6',
+        '#7BE39E',
+        '#A1EDB8',
+        '#CEF8D6',
+      ],
       positions: [
         '0m',
         '50m',
@@ -92,7 +114,7 @@ export default class RasterTile extends React.Component<
         center: [119.48, 30.38],
         // style: 'blank',
         style: 'dark',
-        zoom: 14,
+        zoom: 15,
       }),
     });
 
@@ -129,8 +151,26 @@ export default class RasterTile extends React.Component<
         sourceLayer: 'zhejiang', // woods hillshade contour ecoregions ecoregions2 city
       })
         .source(tileSource)
-        .color('ELEV', (v) => getColor(v))
+        // .color('ELEV', (v) => getColor(v))
+        .color(
+          'ELEV',
+          [
+            '#146968',
+            '#1D7F7E',
+            '#289899',
+            '#34B6B7',
+            '#4AC5AF',
+            '#5FD3A6',
+            '#7BE39E',
+            '#A1EDB8',
+            '#CEF8D6',
+          ].reverse(),
+        )
         .size(0.4)
+        .scale('ELEV', {
+          type: 'quantize',
+          domain: [0, 2000],
+        })
         .style({
           // color: "#ff0"
           // opacity: 0.4,

@@ -45,7 +45,8 @@ export default class OsmRasterTile extends React.Component {
 
     this.scene.on('loaded', () => {
       const layer = new RasterLayer({}).source(
-        'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+        // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+        'http://t1.tianditu.gov.cn/DataServer?T=img_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
         // 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
         // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
         // 'https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
@@ -68,19 +69,19 @@ export default class OsmRasterTile extends React.Component {
       this.scene.addLayer(layer);
 
       // 注记服务
-      // const annotionLayer = new RasterLayer({
-      //   zIndex: 2
-      // });
-      // annotionLayer.source(
-      //   'https://t1.tianditu.gov.cn/DataServer?T=cva_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
-      //   {
-      //     parser: {
-      //       type: 'rasterTile',
-      //     }
-      //   }
-      // );
+      const annotionLayer = new RasterLayer({
+        zIndex: 2,
+      });
+      annotionLayer.source(
+        'https://t1.tianditu.gov.cn/DataServer?T=cia_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
+        {
+          parser: {
+            type: 'rasterTile',
+          },
+        },
+      );
 
-      // this.scene.addLayer(annotionLayer);
+      this.scene.addLayer(annotionLayer);
     });
   }
 
