@@ -5,6 +5,8 @@ export type TileBounds = [number, number, number, number];
 
 // 瓦片更新显示策略
 export enum UpdateTileStrategy {
+  // 实时更新策略
+  Realtime = 'realtime',
   // 渐近更新策略
   Overlap = 'overlap',
   // 全部替换策略
