@@ -36,30 +36,30 @@ export default class RasterTile extends React.Component {
     });
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
-        .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-            },
-          ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
-        )
-        .shape('circle')
-        .color('#ff0')
-        // .active(true)
-        // .animate(true)
-        .select(true)
-        .size(10);
+      // const point = new PointLayer({ zIndex: 7 })
+      //   .source(
+      //     [
+      //       {
+      //         lng: 120,
+      //         lat: 30,
+      //       },
+      //     ],
+      //     {
+      //       parser: {
+      //         type: 'json',
+      //         x: 'lng',
+      //         y: 'lat',
+      //       },
+      //     },
+      //   )
+      //   .shape('circle')
+      //   .color('#ff0')
+      //   // .active(true)
+      //   // .animate(true)
+      //   .select(true)
+      //   .size(10);
 
-      this.scene.addLayer(point);
+      // this.scene.addLayer(point);
 
       // this.scene.on('zoom', () => console.log(this.scene.getZoom()));
 
@@ -97,24 +97,24 @@ export default class RasterTile extends React.Component {
             },
           },
         )
-        .color('citycode', (v: string) => {
-          // @ts-ignore
-          if (colors[v]) {
-            // @ts-ignore
-            return colors[v];
-          } else {
-            let color = getRandomColor();
-            // @ts-ignore
-            colors[v] = color;
-            return color;
-          }
-        })
-        // .color('#f00')
+        // .color('citycode', (v: string) => {
+        //   // @ts-ignore
+        //   if (colors[v]) {
+        //     // @ts-ignore
+        //     return colors[v];
+        //   } else {
+        //     let color = getRandomColor();
+        //     // @ts-ignore
+        //     colors[v] = color;
+        //     return color;
+        //   }
+        // })
+        .color('#BED1E4')
         // .color('v', v => '#ff0')
         // .color('COLOR', ['#f00', '#ff0', '#00f', '#0ff'])
         .style({
           // color: "#ff0"
-          opacity: 0.6,
+          // opacity: 0.6,
         })
         .select(true);
       // .active(true);
@@ -136,6 +136,26 @@ export default class RasterTile extends React.Component {
 
       this.scene.addLayer(layer);
 
+      const line = new LineLayer({
+        featureId: 'NAME_CHN',
+        sourceLayer: 'city', // woods hillshade contour ecoregions ecoregions2 city
+        // coord: 'offset'
+      });
+      line
+        .source('http://localhost:3000/file.mbtiles/{z}/{x}/{y}.pbf', {
+          parser: {
+            type: 'mvt',
+            tileSize: 256,
+            zoomOffset: 0,
+            maxZoom: 9,
+            extent: [-180, -85.051129, 179, 85.051129],
+            // updateStrategy: 'replace', //  'overlap' | 'replace';
+          },
+        })
+        .size(1)
+        .color('#fff');
+
+      this.scene.addLayer(line);
       // setTimeout(() => {
       //   layer.style({
       //     opacity: 0.3,

@@ -22,16 +22,24 @@ export default class RasterTiffTile extends TileFactory {
       rampColors,
       mask,
     } = initOptions;
-    const tiffdata = tile.data;
+
+    const rasterdata = tile.data;
+    if (!rasterdata.data) {
+      console.warn('raster data not exist!');
+      return {
+        layers: [],
+        layerIDList: [],
+      };
+    }
     const layer = new RasterDataLayer({
       visible: tile.isVisible,
       mask,
     })
-      .source(tiffdata.data, {
+      .source(rasterdata.data, {
         parser: {
           type: 'raster',
-          width: tiffdata.width,
-          height: tiffdata.height,
+          width: rasterdata.width,
+          height: rasterdata.height,
           extent: tile.bboxPolygon.bbox,
         },
       })

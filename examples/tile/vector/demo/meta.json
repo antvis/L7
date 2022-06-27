@@ -1,0 +1,28 @@
+{
+  "title": {
+    "zh": "矢量瓦片图层",
+    "en": "Vector Tile"
+  },
+  "demos": [
+    {
+      "filename": "polygon.js",
+      "title": "矢量 polygon",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GgzeQoJdn80AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "line.js",
+      "title": "矢量 line",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*qGm9S756ggMAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "point.js",
+      "title": "矢量 point",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GlzySLqOgH8AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "text.js",
+      "title": "矢量 text",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0TVXSbkyKvsAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}
