@@ -81,7 +81,23 @@ export default class RasterTile extends React.Component {
           //   '#081d58',
           // ].reverse(),
           // [ '#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15' ]
-          ['#227BA2','#1B9CD0','#22BAED','#61C9FF','#8AD4FF','#ABDFFF','#C9E9FF','#F2EAEA','#FFC5AC','#FF895D','#FFA884','#FF6836','#F3470D','#D13808','#A4300C']
+          [
+            '#227BA2',
+            '#1B9CD0',
+            '#22BAED',
+            '#61C9FF',
+            '#8AD4FF',
+            '#ABDFFF',
+            '#C9E9FF',
+            '#F2EAEA',
+            '#FFC5AC',
+            '#FF895D',
+            '#FFA884',
+            '#FF6836',
+            '#F3470D',
+            '#D13808',
+            '#A4300C',
+          ],
         )
         .scale('ALAND10', {
           type: 'quantize',

@@ -85,7 +85,7 @@ export default class RasterTile extends React.Component<
         '#5FD3A6',
         '#7BE39E',
         '#A1EDB8',
-        '#CEF8D6'
+        '#CEF8D6',
       ],
       positions: [
         '0m',
@@ -152,21 +152,24 @@ export default class RasterTile extends React.Component<
       })
         .source(tileSource)
         // .color('ELEV', (v) => getColor(v))
-        .color('ELEV', [
-        '#146968',
-        '#1D7F7E',
-        '#289899',
-        '#34B6B7',
-        '#4AC5AF',
-        '#5FD3A6',
-        '#7BE39E',
-        '#A1EDB8',
-        '#CEF8D6']
-        .reverse())
+        .color(
+          'ELEV',
+          [
+            '#146968',
+            '#1D7F7E',
+            '#289899',
+            '#34B6B7',
+            '#4AC5AF',
+            '#5FD3A6',
+            '#7BE39E',
+            '#A1EDB8',
+            '#CEF8D6',
+          ].reverse(),
+        )
         .size(0.4)
         .scale('ELEV', {
           type: 'quantize',
-          domain: [0, 2000]
+          domain: [0, 2000],
         })
         .style({
           // color: "#ff0"

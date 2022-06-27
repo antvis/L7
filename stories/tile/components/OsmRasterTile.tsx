@@ -70,15 +70,15 @@ export default class OsmRasterTile extends React.Component {
 
       // 注记服务
       const annotionLayer = new RasterLayer({
-        zIndex: 2
+        zIndex: 2,
       });
       annotionLayer.source(
         'https://t1.tianditu.gov.cn/DataServer?T=cia_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
         {
           parser: {
             type: 'rasterTile',
-          }
-        }
+          },
+        },
       );
 
       this.scene.addLayer(annotionLayer);
