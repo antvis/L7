@@ -228,8 +228,8 @@ class Scene
     return this.layerService.getLayerByName(name);
   }
 
-  public getLayerByNames(name: string): ILayer[] | undefined {
-    return this.layerService.getLayerByNames(name);
+  public getLayersByName(name: string): ILayer[] | undefined {
+    return this.layerService.getLayersByName(name);
   }
 
   public removeLayer(layer: ILayer, parentLayer?: ILayer): void {

@@ -24,7 +24,7 @@ scene.getLayerByName(name);
 设置图层名称,可根据 name 获取全部的 layer
 
 ```javascript
-scene.getLayerByNames(name);
+scene.getLayersByName(name);
 ```
 
 ### visible

@@ -86,7 +86,7 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public getLayerByNames(name: string): ILayer[] | undefined {
+  public getLayersByName(name: string): ILayer[] | undefined {
     return this.layers.filter((layer) => layer.name === name);
   }
 
