@@ -97,11 +97,12 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 `zoomOffset` 的默认值为 0
 
 #### 🌟 format: func
+
 数据栅格支持额外的 format 参数用于解析栅格数据，需要将栅格数据解析成 L7 栅格图层接受的标准格式。
 
 ```javascript
 // 解析 png
-const tileSource = new Source( 
+const tileSource = new Source(
 'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=YOUR_TOKRN',
   parser: {
     type: 'rasterTile',
@@ -147,7 +148,9 @@ const tileSource = new Source(
   // const values = await image.readRasters();
   // return { rasterData: values[0], width, height };
 ```
+
 [在线案例](/zh/examples/tile/raster#dem)
+
 ### style
 
 栅格瓦片支持配置多种样式参数

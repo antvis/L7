@@ -21,6 +21,7 @@ import { PolygonLayer } from '@antv/l7';
 <img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0yJ8QYqOhCMAAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](/zh/examples/tile/vector#polygon)
+
 ### option
 
 矢量瓦片图层可以在初始化的时候传入 `zIndex` 配置图层的渲染顺序。  
