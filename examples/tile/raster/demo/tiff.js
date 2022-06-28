@@ -77,7 +77,7 @@ scene.on('loaded', () => {
         maskfence: maskData
       });
 
-      const tileSource = new Source('http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+      const tileSource = new Source('https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
         {
           parser: {
             type: 'rasterTile',

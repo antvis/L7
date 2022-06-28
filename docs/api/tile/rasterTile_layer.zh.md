@@ -16,6 +16,8 @@ import { RasterLayer } from '@antv/l7';
 
 <img width="80%" style="display: block;margin: 0 auto;" alt="瓦片图层" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*V45WTKljz-YAAAAAAAAAAAAAARQnAQ'>
 
+[在线案例](/zh/examples/tile/raster#amap-normal)
+
 ### option
 
 #### mask
@@ -93,6 +95,61 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 
 设置的值用于改变请求的瓦片数据的层级，通常在移动端可以请求更高一级的瓦片以获取更好的清晰度。
 `zoomOffset` 的默认值为 0
+
+#### 🌟 format: func
+
+数据栅格支持额外的 format 参数用于解析栅格数据，需要将栅格数据解析成 L7 栅格图层接受的标准格式。
+
+```javascript
+// 解析 png
+const tileSource = new Source(
+'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=YOUR_TOKRN',
+  parser: {
+    type: 'rasterTile',
+    dataType: 'arraybuffer',
+    tileSize: 256,
+    format: async (data: any) => {
+      const blob: Blob = new Blob([new Uint8Array(data)], {
+        type: 'image/png',
+      });
+      const img = await createImageBitmap(blob);
+      ctx.clearRect(0, 0, 256, 256);
+      ctx.drawImage(img, 0, 0, 256, 256);
+
+      let imgData = ctx.getImageData(0, 0, 256, 256).data;
+      let arr = [];
+      for (let i = 0; i < imgData.length; i += 4) {
+        const R = imgData[i];
+        const G = imgData[i + 1];
+        const B = imgData[i + 2];
+        const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
+        arr.push(d);
+      }
+      return {
+        rasterData: arr,
+        width: 256,
+        height: 256,
+      };
+    }
+  })
+  // 解析 Lerc
+  // const image = Lerc.decode(data);
+  // return {
+  //   rasterData: image.pixels[0],
+  //   width: image.width,
+  //   height: image.height,
+  // };
+
+  // 解析 Tiff
+  // const tiff = await GeoTIFF.fromArrayBuffer(data);
+  // const image = await tiff.getImage();
+  // const width = image.getWidth();
+  // const height = image.getHeight();
+  // const values = await image.readRasters();
+  // return { rasterData: values[0], width, height };
+```
+
+[在线案例](/zh/examples/tile/raster#dem)
 
 ### style
 
