@@ -1,4 +1,4 @@
-import { Scene, RasterLayer, Popup, Source } from '@antv/l7';
+import { Scene, RasterLayer, Source } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import * as Lerc from 'lerc';
 
@@ -40,19 +40,6 @@ scene.on('loaded', () => {
         positions
       }
     });
-
-  layer.on('mousemove', e => {
-    const popup = new Popup({
-      offsets: [ 0, 0 ],
-      closeButton: false
-    });
-    popup
-      .setLnglat(e.lngLat)
-      .setHTML(` <span>$当前海拔为 ${e.value} 米</span> `);
-
-    scene.addPopup(popup);
-    return '';
-  });
 
   scene.addLayer(layer);
   return '';

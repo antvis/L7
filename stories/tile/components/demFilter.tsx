@@ -125,8 +125,8 @@ export default class RasterTile extends React.Component<
             ],
             positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
           },
-        })
-        .select(true);
+        });
+      // .select(true);
 
       this.scene.addLayer(layer);
     });
