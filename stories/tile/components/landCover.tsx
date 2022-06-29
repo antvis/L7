@@ -182,17 +182,17 @@ export default class RasterTile extends React.Component<
             'Clouds',
           ];
 
-          layer.on('mousemove', (e) => {
-            const popup = new Popup({
-              offsets: [0, 0],
-              closeButton: false,
-            });
-            popup
-              .setLnglat(e.lngLat)
-              .setHTML(` <span>${land[e.value - 1]} </span> `);
+          // layer.on('mousemove', (e) => {
+          //   const popup = new Popup({
+          //     offsets: [0, 0],
+          //     closeButton: false,
+          //   });
+          //   popup
+          //     .setLnglat(e.lngLat)
+          //     .setHTML(` <span>${land[e.value - 1]} </span> `);
 
-            this.scene.addPopup(popup);
-          });
+          //   this.scene.addPopup(popup);
+          // });
         });
     });
   }

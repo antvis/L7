@@ -1,6 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
-import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
+import { IColorRamp, IImagedata, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
@@ -149,6 +149,8 @@ export interface ISubLayerInitOptions {
   clampLow?: boolean;
   clampHigh?: boolean;
   rampColors?: IColorRamp;
+  // 在初始化的时候使用
+  rampColorsData?: ImageData | IImagedata;
 
   coords?: string;
   sourceLayer?: string;
@@ -177,7 +179,7 @@ export interface ITileLayerManager {
   addChilds(layers: ILayer[]): void;
   getChilds(layerIDList: string[]): ILayer[];
   removeChild(layer: ILayer): void;
-  removeChilds(layerIDList: string[]): void;
+  removeChilds(layerIDList: string[], refresh?: boolean): void;
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
@@ -367,7 +369,7 @@ export interface ILayer {
 
   clear(): void;
   clearModels(): void;
-  destroy(): void;
+  destroy(refresh?: boolean): void;
   source(data: any, option?: ISourceCFG): ILayer;
   setData(data: any, option?: ISourceCFG): ILayer;
   fitBounds(fitBoundsOptions?: unknown): ILayer;
@@ -576,7 +578,7 @@ export interface ILayerService {
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  cleanRemove(layer: ILayer, parentLayer?: ILayer): void;
+  cleanRemove(layer: ILayer, refresh?: boolean): void;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;

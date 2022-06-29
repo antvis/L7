@@ -20,11 +20,6 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0zAwTZ4WfNYAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "mapbox-streets.js",
-      "title": "mapbox 街道瓦片",
-      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/oic8gzwY8Z/d047a27f-3d11-41dd-ab9e-22bcafcc3daf.png"
-    },
-    {
       "filename": "tianditu-normal.js",
       "title": "天地图全球瓦片",
       "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/PbsT2bl0KL/386a8233-322a-4c53-93fc-1eec39aa21f4.png"
@@ -33,16 +28,6 @@
       "filename": "tianditu-satellite.js",
       "title": "天地图卫星影像瓦片",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sV6gSYSdpl4AAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "open-street-map.js",
-      "title": "OSM 瓦片",
-      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/DacxQD9rO5/6da6d0f7-0a90-41f7-963c-48be8fb9050c.png"
-    },
-    {
-      "filename": "watercolor.js",
-      "title": "三方水彩瓦片",
-      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/v%24zEKgSWSc/aced2778-0687-4b03-9573-1e2f6d9a1d07.png"
     },
     {
       "filename": "dem.js",
