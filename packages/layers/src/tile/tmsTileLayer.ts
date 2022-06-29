@@ -4,7 +4,7 @@ import BaseTileLayer from './tileLayer/baseTileLayer';
 export class TMSTileLayer extends BaseTileLayer {
   public type: string = 'TMS';
   public tileUnLoad(tile: Tile) {
-    this.tileLayerManager.removeChilds(tile.layerIDList);
+    this.tileLayerManager.removeChilds(tile.layerIDList, false);
   }
   public tileUpdate() {
     if (!this.tilesetManager) {

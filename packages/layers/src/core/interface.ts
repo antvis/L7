@@ -1,5 +1,5 @@
 import { IAnimateOption, IMapService } from '@antv/l7-core';
-import { IColorRamp } from '@antv/l7-utils';
+import { IColorRamp, IImagedata } from '@antv/l7-utils';
 import { styleOffset, styleSingle } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
@@ -242,4 +242,5 @@ export interface IRasterLayerStyleOptions {
   rampColors: IColorRamp;
   mask?: boolean;
   maskInside?: boolean;
+  rampColorsData?: ImageData | IImagedata;
 }
