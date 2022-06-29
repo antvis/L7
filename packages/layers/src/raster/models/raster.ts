@@ -24,13 +24,13 @@ export default class RasterModel extends BaseModel {
       clampHigh = true,
       noDataValue = -9999999,
       domain = [0, 1],
-      rampColors
+      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    if(!isEqual(this.rampColors, rampColors)) {
+    if (!isEqual(this.rampColors, rampColors)) {
       this.updateColorTexure();
       this.rampColors = rampColors;
     }
-    
+
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
@@ -47,7 +47,7 @@ export default class RasterModel extends BaseModel {
       mask = false,
       maskInside = true,
       rampColorsData,
-      rampColors
+      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
@@ -60,7 +60,9 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
       // aniso: 4,
     });
-    const imageData = rampColorsData?rampColorsData:generateColorRamp(rampColors as IColorRamp);
+    const imageData = rampColorsData
+      ? rampColorsData
+      : generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: imageData.data,
       width: imageData.width,

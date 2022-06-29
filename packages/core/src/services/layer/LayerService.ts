@@ -91,7 +91,7 @@ export default class LayerService implements ILayerService {
     if (layerIndex > -1) {
       this.layers.splice(layerIndex, 1);
     }
-    if(refresh) {
+    if (refresh) {
       this.updateLayerRenderList();
       this.renderLayers();
     }

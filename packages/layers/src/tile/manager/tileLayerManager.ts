@@ -166,11 +166,11 @@ export class TileLayerManager implements ITileLayerManager {
 
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
-    if(rampColors) {
+    if (rampColors) {
       // 构建统一的色带贴图
       this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
     }
-    
+
     this.initOptions = {
       layerType: this.parent.type,
       shape: layerShape,
@@ -190,7 +190,7 @@ export class TileLayerManager implements ITileLayerManager {
       clampHigh,
       domain,
       rampColors,
-      rampColorsData: this.rampColorsData
+      rampColorsData: this.rampColorsData,
     };
   }
 
@@ -268,7 +268,7 @@ export class TileLayerManager implements ITileLayerManager {
       const config = layerConfig[style];
       updateValue = config;
       this.updateLayersConfig(this.children, style, config);
-      if(style === 'rampColors' && config) {
+      if (style === 'rampColors' && config) {
         this.rampColorsData = generateColorRamp(config as IColorRamp);
       }
     }
