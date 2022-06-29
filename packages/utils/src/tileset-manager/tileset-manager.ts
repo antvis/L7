@@ -119,9 +119,6 @@ export class TilesetManager extends EventEmitter {
       return tile;
     });
 
-    // 取消滞留请求中的瓦片
-    this.pruneRequests();
-
     if (isAddTile) {
       // 更新缓存
       this.resizeCacheTiles();
@@ -131,6 +128,8 @@ export class TilesetManager extends EventEmitter {
 
     // 更新瓦片显示状态
     this.updateTileVisible();
+    // 取消滞留请求中的瓦片
+    this.pruneRequests();
   }
 
   // 重新加载瓦片
