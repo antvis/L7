@@ -103,6 +103,14 @@ export class TilesetManager extends EventEmitter {
     this.currentTiles = tileIndices.map(({ x, y, z }) => {
       let tile = this.getTile(x, y, z);
       if (tile) {
+        const needsReload = tile?.isFailure || tile?.isCancelled;
+        if (needsReload) {
+          tile.loadData({
+            getData: this.options.getTileData,
+            onLoad: this.onTileLoad,
+            onError: this.onTileError,
+          });
+        }
         return tile;
       }
 
@@ -110,6 +118,9 @@ export class TilesetManager extends EventEmitter {
       isAddTile = true;
       return tile;
     });
+
+    // 取消滞留请求中的瓦片
+    this.pruneRequests();
 
     if (isAddTile) {
       // 更新缓存
@@ -135,6 +146,23 @@ export class TilesetManager extends EventEmitter {
         onLoad: this.onTileLoad,
         onError: this.onTileError,
       });
+    }
+  }
+
+  // 取消滞留请求中的瓦片
+  public pruneRequests() {
+    const abortCandidates: Tile[] = [];
+    for (const tile of this.cacheTiles.values()) {
+      if (tile.isLoading) {
+        if (!tile.isCurrent && !tile.isVisible) {
+          abortCandidates.push(tile);
+        }
+      }
+    }
+
+    while (abortCandidates.length > 0) {
+      const tile = abortCandidates.shift()!;
+      tile.abortLoad();
     }
   }
 

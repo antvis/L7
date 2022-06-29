@@ -61,6 +61,11 @@ export class Tile {
     return this.loadStatus === LoadTileDataStatus.Loaded;
   }
 
+  // 是否瓦片请求失败
+  public get isFailure() {
+    return this.loadStatus === LoadTileDataStatus.Failure;
+  }
+
   // 是否瓦片请求被取消
   public get isCancelled() {
     return this.loadStatus === LoadTileDataStatus.Cancelled;
