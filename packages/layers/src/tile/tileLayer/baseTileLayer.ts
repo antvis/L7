@@ -323,35 +323,8 @@ export default class BaseTileLayer implements ITileLayer {
     this.tilesetManager?.update(zoom, latLonBounds);
   }
 
-  private bindTilesetEvent() {
-    if (!this.tilesetManager) {
-      return;
-    }
-    // 瓦片数据加载成功
-    this.tilesetManager.on('tile-loaded', (tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
-    });
-
-    // 瓦片数据从缓存删除或被执行重新加载
-    this.tilesetManager.on('tile-unload', (tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
-      this.tileUnLoad(tile);
-    });
-
-    // 瓦片数据加载失败
-    this.tilesetManager.on('tile-error', (error, tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
-      this.tileError(error);
-    });
-
-    // 瓦片显隐状态更新
-    this.tilesetManager.on('tile-update', () => {
-      this.tileUpdate();
-    });
-
-    // 地图视野发生改变
-    this.mapService.on('mapchange', (e) => {
-      const { latLonBounds, zoom } = this.getCurrentView();
+  private mapchange() {
+    const { latLonBounds, zoom } = this.getCurrentView();
 
       if (this.mapService.version === 'GAODE1.x') {
         const { visible } = this.parent.getLayerConfig();
@@ -381,7 +354,37 @@ export default class BaseTileLayer implements ITileLayer {
       // this.timer = setTimeout(() => {
       this.tilesetManager?.update(zoom, latLonBounds);
       // }, 250);
+  }
+
+  private bindTilesetEvent() {
+    if (!this.tilesetManager) {
+      return;
+    }
+    // 瓦片数据加载成功
+    this.tilesetManager.on('tile-loaded', (tile: Tile) => {
+      // todo: 将事件抛出，图层上可以监听使用
     });
+
+    // 瓦片数据从缓存删除或被执行重新加载
+    this.tilesetManager.on('tile-unload', (tile: Tile) => {
+      // todo: 将事件抛出，图层上可以监听使用
+      this.tileUnLoad(tile);
+    });
+
+    // 瓦片数据加载失败
+    this.tilesetManager.on('tile-error', (error, tile: Tile) => {
+      // todo: 将事件抛出，图层上可以监听使用
+      this.tileError(error);
+    });
+
+    // 瓦片显隐状态更新
+    this.tilesetManager.on('tile-update', () => {
+      this.tileUpdate();
+    });
+
+    // 地图视野发生改变
+    this.mapService.on('zoomend', () => this.mapchange());
+    this.mapService.on('moveend', () => this.mapchange());
   }
 
   private getCurrentView() {
