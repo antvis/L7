@@ -58,11 +58,9 @@ export default class RasterTile extends React.Component<
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Map({
         center: [105, 60],
         pitch: 0,
-        // style: 'normal',
-        style: 'blank',
         zoom: 4,
       }),
     });
@@ -82,11 +80,6 @@ export default class RasterTile extends React.Component<
               type: 'rasterTile',
               dataType: 'arraybuffer',
               tileSize: 256,
-              zoomOffset: 0,
-              extent: [-180, -85.051129, 179, 85.051129],
-              minZoom: 0,
-              // maxZoom: 0,
-              // maxZoom: 10,
               format: async (data: any) => {
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
@@ -96,16 +89,6 @@ export default class RasterTile extends React.Component<
                 ctx.clearRect(0, 0, 256, 256);
                 // @ts-ignore
                 ctx.drawImage(img, 0, 0, 256, 256);
-
-                // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
-                // const tiff = await GeoTIFF.fromArrayBuffer(data);
-                // const image = await tiff.getImage();
-                // const width = image.getWidth();
-                // const height = image.getHeight();
-                // const values = await image.readRasters();
-                // return { rasterData: values[0], width, height };
-
-                // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
                 // @ts-ignore
                 let imgData = ctx.getImageData(0, 0, 256, 256).data;
                 let arr = [];
@@ -116,7 +99,6 @@ export default class RasterTile extends React.Component<
                   const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
                   arr.push(d);
                 }
-                // console.log(arr)
                 return {
                   rasterData: arr,
                   width: 256,
@@ -147,26 +129,6 @@ export default class RasterTile extends React.Component<
         .select(true);
 
       this.scene.addLayer(layer);
-
-      //  setTimeout(() => {
-      //   animate({
-      //     from: {
-      //       v: 0
-      //     },
-      //     to: {
-      //       v: 512
-      //     },
-      //     ease: easeInOut,
-      //     duration: 2000,
-      //     onUpdate: o => {
-      //       console.log('update')
-      //       layer.style({
-      //         domain: [o.v, highClip]
-      //       })
-      //       this.scene.render()
-      //     },
-      //   });
-      //  }, 2000)
     });
   }
 
