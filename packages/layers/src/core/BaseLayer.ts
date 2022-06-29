@@ -961,7 +961,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
 
-  public destroy() {
+  public destroy(refresh = true) {
     if (this.isDestroied) {
       return;
     }
@@ -992,7 +992,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.models = [];
 
-    this.layerService.cleanRemove(this);
+    this.layerService.cleanRemove(this, refresh);
 
     this.emit('remove', {
       target: this,

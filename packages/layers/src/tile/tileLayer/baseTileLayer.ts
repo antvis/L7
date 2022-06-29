@@ -119,7 +119,7 @@ export default class BaseTileLayer implements ITileLayer {
   }
 
   public tileUnLoad(tile: Tile) {
-    this.tileLayerManager.removeChilds(tile.layerIDList);
+    this.tileLayerManager.removeChilds(tile.layerIDList, false);
   }
 
   public tileUpdate() {

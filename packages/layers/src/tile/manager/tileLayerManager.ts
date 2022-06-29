@@ -10,7 +10,7 @@ import {
   ITilePickManager,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-utils';
+import { generateColorRamp, IColorRamp, Tile } from '@antv/l7-utils';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
@@ -25,6 +25,7 @@ export class TileLayerManager implements ITileLayerManager {
   public tileConfigManager: ITileConfigManager;
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions;
+  private rampColorsData: any;
   constructor(
     parent: ILayer,
     mapService: IMapService,
@@ -77,7 +78,7 @@ export class TileLayerManager implements ITileLayerManager {
     this.children.push(...layers);
   }
 
-  public removeChilds(layerIDList: string[]) {
+  public removeChilds(layerIDList: string[], refresh = true) {
     const remveLayerList: ILayer[] = [];
     const cacheLayerList: ILayer[] = [];
     this.children.filter((child) => {
@@ -85,7 +86,7 @@ export class TileLayerManager implements ITileLayerManager {
         ? remveLayerList.push(child)
         : cacheLayerList.push(child);
     });
-    remveLayerList.map((layer) => layer.destroy());
+    remveLayerList.map((layer) => layer.destroy(refresh));
     this.children = cacheLayerList;
   }
 
@@ -165,6 +166,11 @@ export class TileLayerManager implements ITileLayerManager {
 
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
+    if(rampColors) {
+      // 构建统一的色带贴图
+      this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
+    }
+    
     this.initOptions = {
       layerType: this.parent.type,
       shape: layerShape,
@@ -184,6 +190,7 @@ export class TileLayerManager implements ITileLayerManager {
       clampHigh,
       domain,
       rampColors,
+      rampColorsData: this.rampColorsData
     };
   }
 
@@ -261,6 +268,9 @@ export class TileLayerManager implements ITileLayerManager {
       const config = layerConfig[style];
       updateValue = config;
       this.updateLayersConfig(this.children, style, config);
+      if(style === 'rampColors' && config) {
+        this.rampColorsData = generateColorRamp(config as IColorRamp);
+      }
     }
     // @ts-ignore
     this.initOptions[style] = updateValue;

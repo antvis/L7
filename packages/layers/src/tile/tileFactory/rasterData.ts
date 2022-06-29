@@ -20,6 +20,7 @@ export default class RasterTiffTile extends TileFactory {
       clampHigh,
       clampLow,
       rampColors,
+      rampColorsData,
       mask,
     } = initOptions;
 
@@ -49,6 +50,7 @@ export default class RasterTiffTile extends TileFactory {
         clampHigh,
         clampLow,
         rampColors,
+        rampColorsData
       });
     this.emitEvent([layer], false);
 
