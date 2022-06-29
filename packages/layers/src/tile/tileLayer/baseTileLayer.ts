@@ -326,34 +326,34 @@ export default class BaseTileLayer implements ITileLayer {
   private mapchange() {
     const { latLonBounds, zoom } = this.getCurrentView();
 
-      if (this.mapService.version === 'GAODE1.x') {
-        const { visible } = this.parent.getLayerConfig();
-        if (zoom < 3 && visible) {
-          this.parent.updateLayerConfig({ visible: false });
-          this.layerService.updateLayerRenderList();
-        } else if (zoom >= 3 && !visible) {
-          this.parent.updateLayerConfig({ visible: true });
-          this.layerService.updateLayerRenderList();
-        }
+    if (this.mapService.version === 'GAODE1.x') {
+      const { visible } = this.parent.getLayerConfig();
+      if (zoom < 3 && visible) {
+        this.parent.updateLayerConfig({ visible: false });
+        this.layerService.updateLayerRenderList();
+      } else if (zoom >= 3 && !visible) {
+        this.parent.updateLayerConfig({ visible: true });
+        this.layerService.updateLayerRenderList();
       }
+    }
 
-      if (
-        this.lastViewStates &&
-        this.lastViewStates.zoom === zoom &&
-        this.lastViewStates.latLonBounds.toString() === latLonBounds.toString()
-      ) {
-        return;
-      }
-      this.lastViewStates = { zoom, latLonBounds };
+    if (
+      this.lastViewStates &&
+      this.lastViewStates.zoom === zoom &&
+      this.lastViewStates.latLonBounds.toString() === latLonBounds.toString()
+    ) {
+      return;
+    }
+    this.lastViewStates = { zoom, latLonBounds };
 
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
 
-      // this.timer = setTimeout(() => {
-      this.tilesetManager?.update(zoom, latLonBounds);
-      // }, 250);
+    // this.timer = setTimeout(() => {
+    this.tilesetManager?.update(zoom, latLonBounds);
+    // }, 250);
   }
 
   private bindTilesetEvent() {
