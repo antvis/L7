@@ -125,5 +125,3 @@ scene.addLayer(imageLayer);
 ```
 
 [在线案例](/zh/examples/point/image#monsoon)
-
-`markdown:docs/common/layer/base.md`

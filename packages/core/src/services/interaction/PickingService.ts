@@ -22,6 +22,8 @@ import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
+  public pickedColors: Uint8Array | undefined;
+  public pickedTileLayers: ILayer[] = [];
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
@@ -182,103 +184,7 @@ export default class PickingService implements IPickingService {
     this.pickingFBO = null;
   }
 
-  // 获取容器的大小 - 兼容小程序环境
-  private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-    if (!!(container as HTMLCanvasElement).getContext) {
-      return {
-        width: (container as HTMLCanvasElement).width / DOM.DPR,
-        height: (container as HTMLCanvasElement).height / DOM.DPR,
-      };
-    } else {
-      return container.getBoundingClientRect();
-    }
-  }
-  private async pickingAllLayer(target: IInteractionTarget) {
-    if (
-      // TODO: this.alreadyInPicking 避免多次重复拾取
-      this.alreadyInPicking ||
-      // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
-      this.layerService.alreadyInRendering ||
-      // Tip: this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
-      this.interactionService.indragging ||
-      // TODO: 判断当前 是都进行 shader pick 拾取判断
-      !this.layerService.getShaderPickStat()
-    ) {
-      return;
-    }
-    this.alreadyInPicking = true;
-    await this.pickingLayers(target);
-    this.layerService.renderLayers();
-    this.alreadyInPicking = false;
-  }
-
-  private resizePickingFBO() {
-    const { getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-
-    if (this.width !== width || this.height !== height) {
-      this.pickingFBO.resize({
-        width: Math.round(width / this.pickBufferScale),
-        height: Math.round(height / this.pickBufferScale),
-      });
-      this.width = width;
-      this.height = height;
-    }
-  }
-  private async pickingLayers(target: IInteractionTarget) {
-    const {
-      getViewportSize,
-      useFramebuffer,
-      clear,
-      getContainer,
-    } = this.rendererService;
-    this.resizePickingFBO();
-
-    useFramebuffer(this.pickingFBO, () => {
-      const layers = this.layerService.getRenderList();
-      layers
-        .filter((layer) => layer.needPick(target.type))
-        .reverse()
-        .some((layer) => {
-          clear({
-            framebuffer: this.pickingFBO,
-            color: [0, 0, 0, 0],
-            stencil: 0,
-            depth: 1,
-          });
-          layer.hooks.beforePickingEncode.call();
-
-          if (layer.masks.length > 0) {
-            // 若存在 mask，则在 pick 阶段的绘制也启用
-            layer.masks.map((m: ILayer) => {
-              m.hooks.beforeRenderData.call();
-              m.hooks.beforeRender.call();
-              m.render();
-              m.hooks.afterRender.call();
-            });
-          }
-
-          layer.renderModels(true);
-          layer.hooks.afterPickingEncode.call();
-
-          // Tip: clear last picked layer state
-          this.pickedLayers.map((pickedlayer) => {
-            this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
-          });
-
-          const isPicked = this.pickFromPickingFBO(layer, target);
-          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
-
-          return isPicked && !layer.getLayerConfig().enablePropagation;
-        });
-    });
-  }
-
-  private pickFromPickingFBO = (
+  public pickFromPickingFBO = (
     layer: ILayer,
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
@@ -312,6 +218,7 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
+    this.pickedColors = pickedColors;
 
     // let pickedColors = new Uint8Array(4)
     // this.rendererService.getGLContext().readPixels(
@@ -396,9 +303,125 @@ export default class PickingService implements IPickingService {
         this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
       }
+      if (!layer.isVector) {
+        // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
+        this.layerService
+          .getLayers()
+          .filter((l) => l.tileLayer)
+          .map((l) => {
+            l.tileLayer.clearPickState();
+          });
+      }
     }
     return isPicked;
   };
+
+  // 获取容器的大小 - 兼容小程序环境
+  private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
+    if (!!(container as HTMLCanvasElement).getContext) {
+      return {
+        width: (container as HTMLCanvasElement).width / DOM.DPR,
+        height: (container as HTMLCanvasElement).height / DOM.DPR,
+      };
+    } else {
+      return container.getBoundingClientRect();
+    }
+  }
+  private async pickingAllLayer(target: IInteractionTarget) {
+    if (
+      // TODO: this.alreadyInPicking 避免多次重复拾取
+      this.alreadyInPicking ||
+      // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
+      this.layerService.alreadyInRendering ||
+      // Tip: this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
+      this.interactionService.indragging ||
+      // TODO: 判断当前 是都进行 shader pick 拾取判断
+      !this.layerService.getShaderPickStat()
+    ) {
+      return;
+    }
+    this.alreadyInPicking = true;
+    await this.pickingLayers(target);
+    this.layerService.renderLayers();
+    this.alreadyInPicking = false;
+  }
+
+  private resizePickingFBO() {
+    const { getContainer } = this.rendererService;
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
+    width *= DOM.DPR;
+    height *= DOM.DPR;
+
+    if (this.width !== width || this.height !== height) {
+      this.pickingFBO.resize({
+        width: Math.round(width / this.pickBufferScale),
+        height: Math.round(height / this.pickBufferScale),
+      });
+      this.width = width;
+      this.height = height;
+    }
+  }
+  private async pickingLayers(target: IInteractionTarget) {
+    const {
+      getViewportSize,
+      useFramebuffer,
+      clear,
+      getContainer,
+    } = this.rendererService;
+    this.resizePickingFBO();
+
+    useFramebuffer(this.pickingFBO, () => {
+      const layers = this.layerService.getRenderList();
+      layers
+        .filter((layer) => layer.needPick(target.type))
+        .reverse()
+        .some((layer) => {
+          clear({
+            framebuffer: this.pickingFBO,
+            color: [0, 0, 0, 0],
+            stencil: 0,
+            depth: 1,
+          });
+
+          // Tip: clear last picked layer state
+          this.pickedLayers
+            .filter((pickedlayer) => !pickedlayer.isVector)
+            .map((pickedlayer) => {
+              this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
+            });
+          // Tip: clear last picked tilelayer state
+          this.pickedTileLayers.map((pickedTileLayer) =>
+            pickedTileLayer.tileLayer?.clearPick(target.type),
+          );
+
+          // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
+          if (layer.tileLayer) {
+            return layer.tileLayer.pickLayers(target);
+          }
+
+          layer.hooks.beforePickingEncode.call();
+
+          if (layer.masks.length > 0) {
+            // 若存在 mask，则在 pick 阶段的绘制也启用
+            layer.masks.map((m: ILayer) => {
+              m.hooks.beforeRenderData.call();
+              m.hooks.beforeRender.call();
+              m.render();
+              m.hooks.afterRender.call();
+            });
+          }
+          layer.renderModels(true);
+          layer.hooks.afterPickingEncode.call();
+
+          const isPicked = this.pickFromPickingFBO(layer, target);
+
+          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
+          return isPicked && !layer.getLayerConfig().enablePropagation;
+        });
+    });
+  }
   private triggerHoverOnLayer(
     layer: ILayer,
     target: {

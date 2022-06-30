@@ -17,11 +17,11 @@ import { PointLayer } from '@antv/l7';
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*paQsRKykjL4AAAAAAAAAAABkARQnAQ'>
 
-### Source
+### source
 
 [source 文档](../source/source)
 
-### 配置项
+### option
 
 - cluster **boolean** 是否聚合
 - clusterOption 聚合配置项
@@ -31,7 +31,7 @@ import { PointLayer } from '@antv/l7';
 
 数据聚合之后，数据会增加 point_count 属性，在可视化渲染时可以根据 point_count 进行数据映射。
 
-#### 方法
+### layer functions
 
 **getClusters(zoom: number)**
 
@@ -59,7 +59,7 @@ layer.source(pointsData, {
 });
 ```
 
-### 方法
+### origin data
 
 获取聚合节点的原始数据,通过 Source 的 getClustersLeaves 方法
 
@@ -71,7 +71,7 @@ layer.on('click', (e) => {
 });
 ```
 
-### 完整示例
+### demo
 
 ```javascript
 const pointLayer = new PointLayer({})
@@ -98,5 +98,3 @@ const pointLayer = new PointLayer({})
 PointLayer 的聚合图采用 WebGL 绘制，不支持自定义具体聚合样式，如果有自定义的需求可以使用 MarkerLayer 的聚合功能，你可以通过 Dom 完全自定义样式。
 
 [MarkerLayer 聚合](../component/markerLayer)
-
-`markdown:docs/common/layer/base.md`

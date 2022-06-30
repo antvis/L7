@@ -40,7 +40,7 @@ layer.aniamte(true);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="简单水面" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1kqvSYvWP3MAAAAAAAAAAAAAARQnAQ">
 
-### shape
+### shape## shape
 
 我们需要设置 shape 为 water
 
@@ -66,5 +66,3 @@ style({
   默认值是 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
 
 [在线案例](../../../examples/polygon/fill#water)
-
-`markdown:docs/common/layer/base.md`

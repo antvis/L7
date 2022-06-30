@@ -216,6 +216,14 @@ module.exports = {
         order: 8,
       },
       {
+        slug: 'api/tile',
+        title: {
+          zh: '瓦片',
+          en: 'tile',
+        },
+        order: 8,
+      },
+      {
         slug: 'api/cityBuilding',
         title: {
           zh: '城市图层',

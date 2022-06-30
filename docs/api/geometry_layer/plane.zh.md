@@ -9,7 +9,7 @@ order: 0
 
 PlaneGeometry 是 L7 提供的通用的平面几何体图形，表现为可以自定义为位置，大小和分段数的贴地矩形。
 
-### 基本用法
+### demo
 
 设置普通矩形
 
@@ -112,5 +112,3 @@ PlaneGeometry 高度贴图 URL，当存在该参数的时候 L7 会自动解析�
 这是一个回调函数，参数是 L7 解析出的地形贴图的 rgb 信息，用户可以使用该函数定义高度值的计算逻辑（不同的地形贴图计算逻辑不同）。
 
 🌟 widthSegments/heightSegments 指定 planeGeometry 的分段数，分段越多，地形越平滑，同时性能消耗越大。
-
-`markdown:docs/common/layer/base.md`
