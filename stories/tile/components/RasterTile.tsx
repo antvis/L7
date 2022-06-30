@@ -66,9 +66,12 @@ export default class RasterTile extends React.Component {
           });
           layer
             .source(
-              'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-              // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
-              // 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=get_your_own_key_rSw2Lu595oi7U6WngsFQ',
+              [
+                'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                'http://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                'http://webst03.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                'http://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              ],
               {
                 parser: {
                   type: 'rasterTile',
