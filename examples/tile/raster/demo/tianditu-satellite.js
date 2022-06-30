@@ -15,7 +15,10 @@ scene.on('loaded', () => {
     zIndex: 1
   });
   baseLayer.source(
-    'https://t1.tianditu.gov.cn/DataServer?T=img_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
+    [
+      'https://t1.tianditu.gov.cn/DataServer?T=img_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
+      'https://t2.tianditu.gov.cn/DataServer?T=img_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd'
+    ],
     {
       parser: {
         type: 'rasterTile',

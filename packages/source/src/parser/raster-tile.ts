@@ -14,7 +14,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
 };
 
 export default function rasterTile(
-  data: string,
+  data: string | string[],
   cfg?: IRasterTileParserCFG,
 ): IParserData {
   const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;

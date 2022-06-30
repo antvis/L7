@@ -153,7 +153,7 @@ export type MapboxVectorTile = {
 };
 
 const getVectorTile = async (
-  url: string,
+  url: string | string[],
   tileParams: TileLoadParams,
   tile: Tile,
   coord: string,
@@ -213,7 +213,7 @@ const getVectorTile = async (
 };
 
 export default function mapboxVectorTile(
-  data: string,
+  data: string | string[],
   cfg?: IRasterTileParserCFG,
 ): IParserData {
   const coord = cfg?.coord || 'lnglat'; // lnglat - offset
