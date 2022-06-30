@@ -15,7 +15,7 @@ import {
  * @returns
  */
 export const getTileBuffer = async (
-  url: string,
+  url: string | string[],
   tileParams: TileLoadParams,
   tile: Tile,
   rasterParser: any,
@@ -39,7 +39,7 @@ export const getTileBuffer = async (
 };
 
 export const getTileImage = async (
-  url: string,
+  url: string | string[],
   tileParams: TileLoadParams,
   tile: Tile,
 ): Promise<HTMLImageElement | ImageBitmap> => {
