@@ -22,10 +22,10 @@ export class Tile {
   public isVisible = false;
   // 是否是当前层级的瓦片
   public isCurrent = false;
-  // 瓦片挂载的图层
-  public layer: any = null;
-  // 瓦片挂载的图层组
-  public layers = [];
+  // 是否可以见发生变化
+  public isVisibleChange = false;
+  public parentLayerIDList: string[] = [];
+  public layerIDList: string[] = [];
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
   // 瓦片的子级瓦片
@@ -34,6 +34,8 @@ export class Tile {
   public data: any = null;
   // 瓦片属性
   public properties: Record<string, any> = {};
+  // XMLHttpRequest cancel
+  public xhrCancel?: () => void;
   // 瓦片请求状态
   private loadStatus: LoadTileDataStatus;
   // 瓦片数据 Web 请求控制器
@@ -57,6 +59,11 @@ export class Tile {
   // 是否瓦片请求成功
   public get isLoaded() {
     return this.loadStatus === LoadTileDataStatus.Loaded;
+  }
+
+  // 是否瓦片请求失败
+  public get isFailure() {
+    return this.loadStatus === LoadTileDataStatus.Failure;
   }
 
   // 是否瓦片请求被取消
@@ -125,7 +132,7 @@ export class Tile {
       const { signal } = this.abortController;
       const params = { x: warpX, y: warpY, z, bounds, tileSize, signal };
 
-      tileData = await getData(params);
+      tileData = await getData(params, this);
     } catch (err) {
       error = err;
     }
@@ -169,5 +176,8 @@ export class Tile {
 
     this.loadStatus = LoadTileDataStatus.Cancelled;
     this.abortController.abort();
+    if (this.xhrCancel) {
+      this.xhrCancel();
+    }
   }
 }

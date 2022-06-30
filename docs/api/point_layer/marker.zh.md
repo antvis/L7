@@ -18,5 +18,3 @@ import { MarkerLayer, Marker } from '@antv/l7';
 [Marker 文档](../component/marker)
 
 [MarkerLayer 文档](../component/markerLayer)
-
-<!-- `markdown:docs/common/layer/base.md` -->

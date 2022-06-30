@@ -65,13 +65,13 @@ export default class CoordinateSystemService
    * 重新计算当前坐标系参数
    * TODO: 使用 memoize 缓存参数以及计算结果
    */
-  public refresh(): void {
+  public refresh(offsetCenter?: [number, number]): void {
     // if (!this.needRefresh) {
     //   return;
     // }
     const zoom = this.cameraService.getZoom();
     const zoomScale = this.cameraService.getZoomScale();
-    const center = this.cameraService.getCenter();
+    const center = offsetCenter ? offsetCenter : this.cameraService.getCenter();
 
     // 计算像素到米以及经纬度之间的转换
     const { pixelsPerMeter, pixelsPerDegree } = getDistanceScales({

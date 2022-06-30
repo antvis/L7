@@ -1,4 +1,4 @@
-### thetaOffset 弧度参数
+#### thetaOffset
 
 thetaOffset 参数 表示 arc 弧线的弧度，默认值是 0.314
 

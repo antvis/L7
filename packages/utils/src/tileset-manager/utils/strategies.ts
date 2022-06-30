@@ -8,6 +8,19 @@ const TILE_STATE_VISITED = 1;
 const TILE_STATE_VISIBLE = 2;
 
 /*
+ * 瓦片更新状态策略 - 实时更新策略
+ * 当前视野 currentTile 请求到数据就立即显示
+ * 请求中的数据不显示不填补，渲染留白
+ */
+export function updateTileStateRealtime(tiles: Tile[]) {
+  tiles.forEach((tile) => {
+    if (tile.isCurrent) {
+      tile.isVisible = tile.isLoaded;
+    }
+  });
+}
+
+/*
  * 瓦片更新状态策略 - 渐近更新策略
  * 对于当前视野 currentTile 且数据请求中的瓦片
  * 用最近上级的瓦片作为占位符

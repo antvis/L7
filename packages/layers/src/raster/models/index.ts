@@ -1,4 +1,4 @@
-import RasterTileModel from './raste-tile';
+import RasterTileModel from '../../tile/models/tileModel';
 import RasterModel from './raster';
 export type RasterModelType = 'raster' | 'raster3d' | 'rasterTile';
 

@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import {
+  BOUNDS_BUFFER_SCALE,
   DEFAULT_CACHE_SCALE,
   DEFAULT_EXTENT,
   NOOP,
@@ -7,6 +8,10 @@ import {
 } from './const';
 import { Tile } from './tile';
 import { TilesetManagerOptions, UpdateTileStrategy } from './types';
+import {
+  getLatLonBoundsBuffer,
+  isLatLonBoundsContains,
+} from './utils/bound-buffer';
 import { getTileIndices } from './utils/lonlat-tile';
 
 /**
@@ -31,9 +36,10 @@ export class TilesetManager extends EventEmitter {
   // 缓存的瓦片，key 为 {z}-{x}-{y}
   private cacheTiles = new Map<string, Tile>();
   // 上一次视野状态
-  private lastViewStates: {
+  private lastViewStates?: {
     zoom: number;
     latLonBounds: [number, number, number, number];
+    latLonBoundsBuffer: [number, number, number, number];
   };
 
   constructor(options: Partial<TilesetManagerOptions>) {
@@ -45,7 +51,7 @@ export class TilesetManager extends EventEmitter {
       zoomOffset: 0,
       extent: DEFAULT_EXTENT,
       getTileData: NOOP,
-      updateStrategy: UpdateTileStrategy.Overlap,
+      updateStrategy: UpdateTileStrategy.Replace,
     };
     this.updateOptions(options);
   }
@@ -66,22 +72,45 @@ export class TilesetManager extends EventEmitter {
   // 更新
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
   public update(zoom: number, latLonBounds: [number, number, number, number]) {
+    // 校验层级，向上取整
+    const verifyZoom = Math.ceil(zoom);
     if (
       this.lastViewStates &&
-      this.lastViewStates.zoom === zoom &&
-      this.lastViewStates.latLonBounds.toString() === latLonBounds.toString()
+      this.lastViewStates.zoom === verifyZoom &&
+      isLatLonBoundsContains(
+        this.lastViewStates.latLonBoundsBuffer,
+        latLonBounds,
+      )
     ) {
       return;
     }
 
-    this.lastViewStates = { zoom, latLonBounds };
+    // 扩大缓存区的边界
+    const latLonBoundsBuffer = getLatLonBoundsBuffer(
+      latLonBounds,
+      BOUNDS_BUFFER_SCALE,
+    );
+
+    this.lastViewStates = {
+      zoom: verifyZoom,
+      latLonBounds,
+      latLonBoundsBuffer,
+    };
 
     let isAddTile = false;
-    const tileIndices = this.getTileIndices(zoom, latLonBounds);
+    const tileIndices = this.getTileIndices(verifyZoom, latLonBoundsBuffer);
 
     this.currentTiles = tileIndices.map(({ x, y, z }) => {
       let tile = this.getTile(x, y, z);
       if (tile) {
+        const needsReload = tile?.isFailure || tile?.isCancelled;
+        if (needsReload) {
+          tile.loadData({
+            getData: this.options.getTileData,
+            onLoad: this.onTileLoad,
+            onError: this.onTileError,
+          });
+        }
         return tile;
       }
 
@@ -99,6 +128,8 @@ export class TilesetManager extends EventEmitter {
 
     // 更新瓦片显示状态
     this.updateTileVisible();
+    // 取消滞留请求中的瓦片
+    this.pruneRequests();
   }
 
   // 重新加载瓦片
@@ -114,6 +145,23 @@ export class TilesetManager extends EventEmitter {
         onLoad: this.onTileLoad,
         onError: this.onTileError,
       });
+    }
+  }
+
+  // 取消滞留请求中的瓦片
+  public pruneRequests() {
+    const abortCandidates: Tile[] = [];
+    for (const tile of this.cacheTiles.values()) {
+      if (tile.isLoading) {
+        if (!tile.isCurrent && !tile.isVisible) {
+          abortCandidates.push(tile);
+        }
+      }
+    }
+
+    while (abortCandidates.length > 0) {
+      const tile = abortCandidates.shift()!;
+      tile.abortLoad();
     }
   }
 
@@ -133,7 +181,6 @@ export class TilesetManager extends EventEmitter {
   public updateTileVisible() {
     const updateStrategy = this.options.updateStrategy;
     const beforeVisible = new Map<string, boolean>();
-
     // 重置显示状态
     for (const tile of this.cacheTiles.values()) {
       // 存储已经显示的瓦片
@@ -156,9 +203,15 @@ export class TilesetManager extends EventEmitter {
     }
 
     // 检查瓦片显示状态是否发生改变
-    const isVisibleChange = Array.from(this.cacheTiles.values()).some(
-      (tile) => tile.isVisible !== beforeVisible.get(tile.key),
-    );
+    let isVisibleChange = false;
+    Array.from(this.cacheTiles.values()).forEach((tile) => {
+      if (tile.isVisible !== beforeVisible.get(tile.key)) {
+        tile.isVisibleChange = true;
+        isVisibleChange = true;
+      } else {
+        tile.isVisibleChange = false;
+      }
+    });
 
     if (isVisibleChange) {
       this.emit('tile-update');

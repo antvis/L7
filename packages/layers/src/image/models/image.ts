@@ -51,15 +51,17 @@ export default class ImageModel extends BaseModel {
         this.layerService.renderLayers();
       };
     } else {
-      source.data.images.then((imageData: HTMLImageElement[]) => {
-        this.texture = createTexture2D({
-          data: imageData[0],
-          width: imageData[0].width,
-          height: imageData[0].height,
-        });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
-      });
+      source.data.images.then(
+        (imageData: Array<HTMLImageElement | ImageBitmap>) => {
+          this.texture = createTexture2D({
+            data: imageData[0],
+            width: imageData[0].width,
+            height: imageData[0].height,
+          });
+          this.layerService.updateLayerRenderList();
+          this.layerService.renderLayers();
+        },
+      );
     }
 
     return [
