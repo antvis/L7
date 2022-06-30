@@ -4,22 +4,22 @@ import { Map } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new Map({
-    center: [90.268, 40.3628],
-    zoom: 3,
-  }),
+    center: [ 90.268, 40.3628 ],
+    zoom: 3
+  })
 });
 
 scene.on('loaded', () => {
   // 影像底图服务
   const baseLayer = new RasterLayer({
-    zIndex: 1,
+    zIndex: 1
   });
   baseLayer.source(
     [
       'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
       'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
       'https://webst03.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-      'https://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      'https://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
     ],
     {
       parser: {
@@ -27,15 +27,15 @@ scene.on('loaded', () => {
         tileSize: 256,
         // minZoom: 6,
         // maxZoom: 15,
-        zoomOffset: 0,
+        zoomOffset: 0
         // extent: [-180, -85.051129, 179, 85.051129],
-      },
-    },
+      }
+    }
   );
 
   // 影像注记服务
   const annotionLayer = new RasterLayer({
-    zIndex: 2,
+    zIndex: 2
   });
   annotionLayer.source(
     'https://webst01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',
@@ -45,10 +45,10 @@ scene.on('loaded', () => {
         tileSize: 256,
         // minZoom: 6,
         // maxZoom: 15,
-        zoomOffset: 0,
+        zoomOffset: 0
         // extent: [-180, -85.051129, 179, 85.051129],
-      },
-    },
+      }
+    }
   );
 
   scene.addLayer(baseLayer);
