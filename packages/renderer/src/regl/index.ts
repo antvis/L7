@@ -146,8 +146,7 @@ export default class ReglRendererService implements IRendererService {
       framebuffer === null
         ? framebuffer
         : (framebuffer as ReglFramebuffer).get();
-
-    this.gl.clear(reglClearOptions);
+    this.gl?.clear(reglClearOptions);
   };
 
   public viewport = ({
@@ -263,7 +262,7 @@ export default class ReglRendererService implements IRendererService {
   }
 
   public destroy = () => {
-    // this.canvas = null 清除对 webgl 实例的引用
+    // 清除对 webgl 实例的引用
     // @ts-ignore
     this.canvas = null;
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
