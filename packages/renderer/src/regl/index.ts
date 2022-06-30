@@ -147,7 +147,7 @@ export default class ReglRendererService implements IRendererService {
         ? framebuffer
         : (framebuffer as ReglFramebuffer).get();
 
-    this.gl.clear(reglClearOptions);
+    this.gl?.clear(reglClearOptions);
   };
 
   public viewport = ({
