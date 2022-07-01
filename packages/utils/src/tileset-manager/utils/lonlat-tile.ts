@@ -59,10 +59,12 @@ export function getTileIndices({
   let z = Math.ceil(zoom) + zoomOffset;
 
   // 如果当前 zoom 层级小于 minZoom
-  if (z < minZoom) {
-    z = minZoom;
-  } else if (z > maxZoom) {
-    // 如果当前 zoom 层级大于 maxZoom
+  if (Number.isFinite(minZoom) && z < minZoom) {
+    return [];
+  }
+
+  // 如果当前 zoom 层级大于 maxZoom
+  if (Number.isFinite(maxZoom) && z > maxZoom) {
     z = maxZoom;
   }
 
@@ -85,9 +87,20 @@ export function getTileIndices({
     }
   }
 
+  // 计算中心瓦片索引
+  const centerX = (maxX + minX) / 2;
+  const centerY = (maxY + minY) / 2;
+  const distance = (x: number, y: number) =>
+    Math.abs(x - centerX) + Math.abs(y - centerY);
+  // 通过离中心瓦片距离排序，越近的排在前面
+  indices.sort((a, b) => distance(a.x, a.y) - distance(b.x, b.y));
+
   return indices;
 }
 
+/**
+ * Warp 瓦片索引，支持对称子午线瓦片连续
+ */
 export const getTileWarpXY = (x: number, y: number, z: number) => {
   const scale = Math.pow(2, z);
   const maxIndex = scale - 1;

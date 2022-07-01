@@ -15,7 +15,7 @@
       "registry": "https://registry.npmjs.org"
     }
   },
-  "version": "2.8.36",
+  "version": "2.9.9",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {

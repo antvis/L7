@@ -27,7 +27,7 @@ import { WebGLRenderingContext } from './WebGL';
 import { WebGL2RenderingContext } from './WebGL2';
 import { $XMLHttpRequest as $XMLHttpRequest2 } from './XMLHttpRequest';
 
-import { globalWindow } from './global'
+import { globalWindow, l7globalThis } from './global'
 
 // 判断时候是支付宝小程序环境 （ my.isFRM == true smallfish H5+ ）
 export const isMiniAli =
@@ -78,7 +78,7 @@ export const miniWindow = {
   clearTimeout: clearTimeout,
   setInterval: setInterval,
   clearInterval: clearInterval
-} as Window & typeof globalThis;
+} as Window & typeof l7globalThis;
 
 export const $window = isMini ? miniWindow : globalWindow;
 export const $XMLHttpRequest = isMini ? $XMLHttpRequest2: globalWindow.XMLHttpRequest;

@@ -67,6 +67,7 @@ export default class ReglTexture2D implements ITexture2D {
     };
 
     if (data) {
+      // @ts-ignore
       textureOptions.data = data;
     }
 

@@ -7,6 +7,35 @@ order: 0
 
 ## 简介
 
+### demo
+
+```javascript
+import { PointLayer } from '@antv/l7';
+
+const layer = PointLayer({
+  zIndex: 2,
+})
+  .source(data.list, {
+    type: 'array',
+    x: 'j',
+    y: 'w',
+  })
+  .shape('cylinder')
+  .size('t', (level) => {
+    return [4, 4, level + 40];
+  })
+  .color('t', [
+    '#002466',
+    '#105CB3',
+    '#2894E0',
+    '#CFF6FF',
+    '#FFF5B8',
+    '#FFAB5C',
+    '#F27049',
+    '#730D1C',
+  ]);
+```
+
 点数据的展示，根据经纬点绘制图形，数据源支持 JSON、GeoJSON、CSV 三种数据格式。
 
 - [GeoJSON](../source/geojson/#point)
@@ -73,7 +102,7 @@ var layer = new PointLayer()
 })
 ```
 
-## shape 类型
+### shape
 
 PointLayer 图层支持多种 shape 类型，通过改变 shape 我们可以显示不同的点
 
@@ -97,36 +126,7 @@ PointLayer 图层支持多种 shape 类型，通过改变 shape 我们可以显�
 
 🌟 若是使用简单的圆点图层，建议使用 simple 代替 circle 以获得更好的性能
 
-### 基本用法
-
-```javascript
-import { PointLayer } from '@antv/l7';
-
-const layer = PointLayer({
-  zIndex: 2,
-})
-  .source(data.list, {
-    type: 'array',
-    x: 'j',
-    y: 'w',
-  })
-  .shape('cylinder')
-  .size('t', (level) => {
-    return [4, 4, level + 40];
-  })
-  .color('t', [
-    '#002466',
-    '#105CB3',
-    '#2894E0',
-    '#CFF6FF',
-    '#FFF5B8',
-    '#FFAB5C',
-    '#F27049',
-    '#730D1C',
-  ]);
-```
-
-### 等面积点
+### style
 
 点图层支持等面积点，点大小的单位是米，同样通过 size 方法设置大小
 
@@ -144,5 +144,3 @@ const layer = PointLayer()
 ```
 
 🌟 从 v2.7.9 版本开始支持高德地图、高德地图 2.0、Mapbox 地图
-
-`markdown:docs/common/layer/base.md`

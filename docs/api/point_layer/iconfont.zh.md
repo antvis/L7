@@ -84,5 +84,3 @@ layer.shape('iconfontField', 'text');
 ✨ iconfont 其他 style 参数的使用和普通的文本标注的参数保持一致
 
 [在线案例](../../../examples/point/text#iconfont)
-
-`markdown:docs/common/layer/base.md`

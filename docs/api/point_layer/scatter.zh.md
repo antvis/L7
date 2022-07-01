@@ -53,10 +53,14 @@ const scatter = new PointLayer()
 
 [在线案例](/zh/examples/point/scatter#scatter)
 
-### blur
+### style
+
+```javascript
+layer.style({
+  blur: 0.3,
+});
+```
 
 散点图的 style 样式支持配置 blur，调整模糊。
 
 [在线案例](/zh/examples/point/scatter#blur)
-
-`markdown:docs/common/layer/base.md`

@@ -21,11 +21,13 @@ import { LineLayer } from '@antv/l7';
 
 shape 设置成 wall 即可
 
+`markdown:docs/api/line_layer/features/animate.zh.md`
+
+### style
+
 `markdown:docs/api/line_layer/features/linear.zh.md`
 
 🌟 目前渐变色的方向为垂直向上
-
-`markdown:docs/api/line_layer/features/animate.zh.md`
 
 `markdown:docs/api/line_layer/features/texture.zh.md`
 
@@ -45,7 +47,7 @@ shape 设置成 wall 即可
 
 <img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*3f8ORIbjJmkAAAAAAAAAAAAAARQnAQ'>
 
-### heightfixed
+#### heightfixed
 
 wall 支持了固定高度配置 heightfixed
 
@@ -54,5 +56,3 @@ wall 支持了固定高度配置 heightfixed
      heightfixed: true // 默认为 false，开启后实际世界高度不变（注意调整尺寸）
  })
 ```
-
-`markdown:docs/common/layer/base.md`

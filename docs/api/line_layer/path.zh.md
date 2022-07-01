@@ -93,8 +93,6 @@ layer.style({
 
 `markdown:docs/api/line_layer/features/border.zh.md`
 
-`markdown:docs/api/line_layer/features/animate.zh.md`
-
 `markdown:docs/api/line_layer/features/texture.zh.md`
 
-`markdown:docs/common/layer/base.md`
+`markdown:docs/api/line_layer/features/animate.zh.md`

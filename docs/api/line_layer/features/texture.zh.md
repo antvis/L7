@@ -1,4 +1,4 @@
-### 线纹理
+#### texture
 
 线图层支持纹理贴图，同时支持用户选择多种纹理表现形式  
 
@@ -35,7 +35,7 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785
 
 [在线案例](../../../examples/gallery/animate#animate_path_texture)
 
-#### 高级用法
+#### texture advance
 
 ✨ animate  
 当线图层 (shape 为 arc/arc3d) 开启动画模式的时候，纹理在线图层上的分布还会和 animate 的参数相关     

@@ -1,5 +1,5 @@
 import { IAnimateOption, IMapService } from '@antv/l7-core';
-import { IColorRamp } from '@antv/l7-utils';
+import { IColorRamp, IImagedata } from '@antv/l7-utils';
 import { styleOffset, styleSingle } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
@@ -15,6 +15,9 @@ interface ILineArrow {
 }
 
 export interface ILineLayerStyleOptions {
+  tileOrigin?: number[];
+  coord?: string;
+
   opacity: styleSingle;
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
   dashArray?: [number, number]; //  可选参数、虚线间隔
@@ -45,9 +48,13 @@ export interface ILineLayerStyleOptions {
   arrow?: ILineArrow;
 
   rampColors?: IColorRamp;
+  featureId?: string;
+  sourceLayer?: string;
 }
 
 export interface IPointLayerStyleOptions {
+  tileOrigin?: number[];
+  coord?: string;
   opacity: number;
   strokeOpacity: number;
   strokeWidth: number;
@@ -88,9 +95,13 @@ export interface IPointLayerStyleOptions {
 
   rotation?: number; // angle
   speed?: number;
+  featureId?: string;
+  sourceLayer?: string;
 }
 
 export interface IPolygonLayerStyleOptions {
+  tileOrigin?: number[];
+  coord?: string;
   opacity?: number;
 
   opacityLinear?: {
@@ -117,6 +128,9 @@ export interface IPolygonLayerStyleOptions {
   // ocean
   watercolor?: string;
   watercolor2?: string;
+
+  featureId?: string;
+  sourceLayer?: string;
 }
 
 // 栅格瓦片图层
@@ -183,6 +197,7 @@ export interface IGeometryLayerStyleOptions {
   spriteCount?: number;
   spriteSpeed?: number;
   spriteTop?: number;
+  spriteBottom?: number;
   spriteUpdate?: number;
   spriteScale?: number;
 
@@ -227,4 +242,5 @@ export interface IRasterLayerStyleOptions {
   rampColors: IColorRamp;
   mask?: boolean;
   maskInside?: boolean;
+  rampColorsData?: ImageData | IImagedata;
 }

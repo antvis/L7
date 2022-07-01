@@ -254,7 +254,7 @@ export default class Quantize extends React.Component {
               '#204CCF',
             ])
             .shape('fill');
-            console.log(chinaPolygonLayer);
+          console.log(chinaPolygonLayer);
           chinaPolygonLayer.on('add', (type) => {
             console.log(
               'getLegendItems: ',
