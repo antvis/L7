@@ -23,7 +23,7 @@ jobs:
           # 注意替换为你的 Gitee 用户名
           gitee-username: thinkgis
           # 注意在 Settings->Secrets 配置 GITEE_PASSWORD
-          gitee-password: ${{ secrets.GITEE_PASSWORD }}
+          gitee-password: ${{ secrets.04ca6940-db4e-013a-ebdc-225acbb50d8a }}
           # 注意替换为你的 Gitee 仓库
           gitee-repo: antv-l7/antv-l7
           # 要部署的分支
