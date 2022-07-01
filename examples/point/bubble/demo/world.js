@@ -23,7 +23,7 @@ scene.on('loaded', () => {
       const pointLayer = new PointLayer({})
         .source(data)
         .shape('circle')
-        .size('capacity', [ 0, 16 ])
+        .size('capacity', [ 0,8,16 ])
         .color('capacity', [
           '#34B6B7',
           '#4AC5AF',
