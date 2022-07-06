@@ -10,65 +10,54 @@ export default class ScaleComponent extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new Map({
-        center: [105, 32],
+        center: [120, 30],
+        // center: [5000, 5000],
         pitch: 0,
-        zoom: 3,
+        zoom: 1,
+        // version: 'SIMPLE',
+        // zoom: 13,
+        // zoom: 10,
       }),
     });
     // scene.setBgColor('#000');
+    const data = [
+      // { x: 5000, y: 5000 },
+
+      { lng: 120, lat: 30 },
+
+      // { lng: 0, lat: 0 },
+      // { lng: 0, lat: 85.05112 },
+      // { lng: 0, lat: -85.05112 },
+
+      // { lng: -90, lat: 0 },
+      // { lng: -180, lat: 0 },
+      // { lng: 90, lat: 0 },
+      // { lng: 180, lat: 0 },
+
+      // { lng: -90, lat: 85.05112 },
+      // { lng: -180, lat: 85.05112 },
+      // { lng: 90, lat: 85.05112 },
+      // { lng: 180, lat: 85.05112 },
+
+      // { lng: -90, lat: -85.05112 },
+      // { lng: -180, lat: -85.05112 },
+      // { lng: 90, lat: -85.05112 },
+      // { lng: 180, lat: -85.05112 },
+    ];
+    const layer = new PointLayer()
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(20)
+      .color('#f00');
+
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
-        // 'https://gw.alipayobjects.com/os/alisis/geo-data-v0.1.1/choropleth-data/country/100000_country_province.json'
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          let layer = new PolygonLayer({ blend: 'normal' }) // autoFit: true
-            .source(data)
-            // .size('name', [0, 10000, 50000, 30000, 100000])
-            .size(1)
-            // .color('name1', [
-            //   '#2E8AE6',
-            //   '#69D1AB',
-            //   '#DAF291',
-            //   '#FFD591',
-            //   '#FF7A45',
-            //   '#CF1D49',
-            // ])
-            .color('#000')
-            // .shape('fill')
-            .shape('line')
-            // .select(true)
-            .style({
-              opacity: 0.8,
-              // opacityLinear: {
-              //   enable: true,
-              //   dir: 'in', // in - out
-              // },
-            });
-
-          layer.setBottomColor('#f00');
-
-          // let layer2 = new PolygonLayer({ blend: 'normal' })
-          //   .source(data)
-          //   .size(1)
-          //   .color('name', [
-          //     '#2E8AE6',
-          //     '#69D1AB',
-          //     '#DAF291',
-          //     '#FFD591',
-          //     '#FF7A45',
-          //     '#CF1D49',
-          //   ])
-          //   .shape('line')
-          //   .select(true)
-          //   .style({
-          //     opacity: 1.0,
-          //   });
-
-          scene.addLayer(layer);
-          // scene.addLayer(layer2);
-        });
+      scene.addLayer(layer);
     });
   }
 

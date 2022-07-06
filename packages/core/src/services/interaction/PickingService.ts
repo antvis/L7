@@ -15,13 +15,18 @@ import {
   InteractionEvent,
 } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-import { ILngLat } from '../map/IMapService';
+import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
+  public pickedColors: Uint8Array | undefined;
+  public pickedTileLayers: ILayer[] = [];
+  @inject(TYPES.IMapService)
+  private readonly mapService: IMapService;
+
   @inject(TYPES.IRendererService)
   private rendererService: IRendererService;
 
@@ -43,7 +48,8 @@ export default class PickingService implements IPickingService {
 
   private pickBufferScale: number = 1.0;
 
-  private lastPickTime: number = new Date().getTime();
+  // Tip: 记录当前拾取中的 layers
+  private pickedLayers: ILayer[] = [];
 
   public init(id: string) {
     const {
@@ -149,6 +155,167 @@ export default class PickingService implements IPickingService {
     return features;
   }
 
+  // 动态设置鼠标光标
+  public handleCursor(layer: ILayer, type: string) {
+    const { cursor = '', cursorEnabled } = layer.getLayerConfig();
+    if (cursorEnabled) {
+      const version = this.mapService.version;
+      const domContainer =
+        version === 'GAODE2.x'
+          ? this.mapService.getMapContainer()
+          : this.mapService.getMarkerContainer();
+      // const domContainer = this.mapService.getMarkerContainer();
+      // const domContainer = this.mapService.getMapContainer();
+      const defaultCursor = domContainer?.style.getPropertyValue('cursor');
+      if (type === 'unmousemove' && defaultCursor !== '') {
+        domContainer?.style.setProperty('cursor', '');
+      } else if (type === 'mousemove') {
+        domContainer?.style.setProperty('cursor', cursor);
+      }
+    }
+    // const domContainer = this.mapService.getMapContainer()
+    // domContainer?.style.setProperty('cursor', 'move');
+  }
+
+  public destroy() {
+    this.pickingFBO.destroy();
+    // this.pickingFBO = null; 清除对 webgl 实例的引用
+    // @ts-ignore
+    this.pickingFBO = null;
+  }
+
+  public pickFromPickingFBO = (
+    layer: ILayer,
+    { x, y, lngLat, type, target }: IInteractionTarget,
+  ) => {
+    let isPicked = false;
+    const { getViewportSize, readPixels, getContainer } = this.rendererService;
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
+    width *= DOM.DPR;
+    height *= DOM.DPR;
+
+    const { enableHighlight, enableSelect } = layer.getLayerConfig();
+
+    const xInDevicePixel = x * DOM.DPR;
+    const yInDevicePixel = y * DOM.DPR;
+    if (
+      xInDevicePixel > width - 1 * DOM.DPR ||
+      xInDevicePixel < 0 ||
+      yInDevicePixel > height - 1 * DOM.DPR ||
+      yInDevicePixel < 0
+    ) {
+      return false;
+    }
+    let pickedColors: Uint8Array | undefined;
+    pickedColors = readPixels({
+      x: Math.floor(xInDevicePixel / this.pickBufferScale),
+      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+      y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
+      width: 1,
+      height: 1,
+      data: new Uint8Array(1 * 1 * 4),
+      framebuffer: this.pickingFBO,
+    });
+    this.pickedColors = pickedColors;
+
+    // let pickedColors = new Uint8Array(4)
+    // this.rendererService.getGLContext().readPixels(
+    //   Math.floor(xInDevicePixel / this.pickBufferScale),
+    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
+    //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
+    // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
+
+    if (
+      pickedColors[0] !== 0 ||
+      pickedColors[1] !== 0 ||
+      pickedColors[2] !== 0
+    ) {
+      const pickedFeatureIdx = decodePickingColor(pickedColors);
+      const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+      if (
+        pickedFeatureIdx !== layer.getCurrentPickId() &&
+        type === 'mousemove'
+      ) {
+        type = 'mouseenter';
+      }
+
+      const layerTarget = {
+        x,
+        y,
+        type,
+        lngLat,
+        featureId: pickedFeatureIdx,
+        feature: rawFeature,
+        target,
+      };
+      if (!rawFeature) {
+        // this.logger.error(
+        //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
+        // );
+      } else {
+        // trigger onHover/Click callback on layer
+        isPicked = true;
+        layer.setCurrentPickId(pickedFeatureIdx);
+        this.pickedLayers = [layer];
+        this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
+      }
+    } else {
+      // 未选中
+      const layerTarget = {
+        x,
+        y,
+        lngLat,
+        type:
+          layer.getCurrentPickId() !== null && type === 'mousemove'
+            ? 'mouseout'
+            : 'un' + type,
+        featureId: null,
+        target,
+        feature: null,
+      };
+      this.triggerHoverOnLayer(layer, {
+        ...layerTarget,
+        type: 'unpick',
+      });
+      this.triggerHoverOnLayer(layer, layerTarget);
+      layer.setCurrentPickId(null);
+      this.pickedLayers = [];
+    }
+
+    if (enableHighlight) {
+      this.highlightPickedFeature(layer, pickedColors);
+    }
+    if (
+      enableSelect &&
+      type === 'click' &&
+      pickedColors?.toString() !== [0, 0, 0, 0].toString()
+    ) {
+      const selectedId = decodePickingColor(pickedColors);
+      if (
+        layer.getCurrentSelectedId() === null ||
+        selectedId !== layer.getCurrentSelectedId()
+      ) {
+        this.selectFeature(layer, pickedColors);
+        layer.setCurrentSelectedId(selectedId);
+      } else {
+        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.setCurrentSelectedId(null);
+      }
+      if (!layer.isVector) {
+        // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
+        this.layerService
+          .getLayers()
+          .filter((l) => l.tileLayer)
+          .map((l) => {
+            l.tileLayer.clearPickState();
+          });
+      }
+    }
+    return isPicked;
+  };
+
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
     if (!!(container as HTMLCanvasElement).getContext) {
@@ -174,18 +341,7 @@ export default class PickingService implements IPickingService {
       return;
     }
     this.alreadyInPicking = true;
-    const t = new Date().getTime();
-    // TODO: 优化拾取操作 在右键时 mousedown 和 contextmenu 几乎同时触发，所以不能舍去这一次的触发
-    if (
-      t - this.lastPickTime > 10 ||
-      target.type === 'contextmenu' ||
-      target.type === 'click'
-    ) {
-      await this.pickingLayers(target);
-    }
-    // await this.pickingLayers(target);
-    // @ts-ignore
-    this.lastPickTime = t;
+    await this.pickingLayers(target);
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
@@ -228,134 +384,44 @@ export default class PickingService implements IPickingService {
             stencil: 0,
             depth: 1,
           });
+
+          // Tip: clear last picked layer state
+          this.pickedLayers
+            .filter((pickedlayer) => !pickedlayer.isVector)
+            .map((pickedlayer) => {
+              this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
+            });
+          // Tip: clear last picked tilelayer state
+          this.pickedTileLayers.map((pickedTileLayer) =>
+            pickedTileLayer.tileLayer?.clearPick(target.type),
+          );
+
+          // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
+          if (layer.tileLayer) {
+            return layer.tileLayer.pickLayers(target);
+          }
+
           layer.hooks.beforePickingEncode.call();
+
+          if (layer.masks.length > 0) {
+            // 若存在 mask，则在 pick 阶段的绘制也启用
+            layer.masks.map((m: ILayer) => {
+              m.hooks.beforeRenderData.call();
+              m.hooks.beforeRender.call();
+              m.render();
+              m.hooks.afterRender.call();
+            });
+          }
           layer.renderModels(true);
           layer.hooks.afterPickingEncode.call();
+
           const isPicked = this.pickFromPickingFBO(layer, target);
+
+          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
     });
   }
-
-  private pickFromPickingFBO = (
-    layer: ILayer,
-    { x, y, lngLat, type, target }: IInteractionTarget,
-  ) => {
-    let isPicked = false;
-    const { getViewportSize, readPixels, getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-
-    const { enableHighlight, enableSelect } = layer.getLayerConfig();
-
-    const xInDevicePixel = x * DOM.DPR;
-    const yInDevicePixel = y * DOM.DPR;
-    if (
-      xInDevicePixel > width - 1 * DOM.DPR ||
-      xInDevicePixel < 0 ||
-      yInDevicePixel > height - 1 * DOM.DPR ||
-      yInDevicePixel < 0
-    ) {
-      return false;
-    }
-    let pickedColors: Uint8Array | undefined;
-    pickedColors = readPixels({
-      x: Math.floor(xInDevicePixel / this.pickBufferScale),
-      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
-      width: 1,
-      height: 1,
-      data: new Uint8Array(1 * 1 * 4),
-      framebuffer: this.pickingFBO,
-    });
-
-    // let pickedColors = new Uint8Array(4)
-    // this.rendererService.getGLContext().readPixels(
-    //   Math.floor(xInDevicePixel / this.pickBufferScale),
-    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
-    //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
-    // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
-
-    if (
-      pickedColors[0] !== 0 ||
-      pickedColors[1] !== 0 ||
-      pickedColors[2] !== 0
-    ) {
-      const pickedFeatureIdx = decodePickingColor(pickedColors);
-      const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
-      if (
-        pickedFeatureIdx !== layer.getCurrentPickId() &&
-        type === 'mousemove'
-      ) {
-        type = 'mouseenter';
-      }
-
-      const layerTarget = {
-        x,
-        y,
-        type,
-        lngLat,
-        featureId: pickedFeatureIdx,
-        feature: rawFeature,
-        target,
-      };
-      if (!rawFeature) {
-        // this.logger.error(
-        //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
-        // );
-      } else {
-        // trigger onHover/Click callback on layer
-        isPicked = true;
-        layer.setCurrentPickId(pickedFeatureIdx);
-        this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
-      }
-    } else {
-      // 未选中
-      const layerTarget = {
-        x,
-        y,
-        lngLat,
-        type:
-          layer.getCurrentPickId() !== null && type === 'mousemove'
-            ? 'mouseout'
-            : 'un' + type,
-        featureId: null,
-        target,
-        feature: null,
-      };
-      this.triggerHoverOnLayer(layer, {
-        ...layerTarget,
-        type: 'unpick',
-      });
-      this.triggerHoverOnLayer(layer, layerTarget);
-      layer.setCurrentPickId(null);
-    }
-
-    if (enableHighlight) {
-      this.highlightPickedFeature(layer, pickedColors);
-    }
-    if (
-      enableSelect &&
-      type === 'click' &&
-      pickedColors?.toString() !== [0, 0, 0, 0].toString()
-    ) {
-      const selectedId = decodePickingColor(pickedColors);
-      if (
-        layer.getCurrentSelectedId() === null ||
-        selectedId !== layer.getCurrentSelectedId()
-      ) {
-        this.selectFeature(layer, pickedColors);
-        layer.setCurrentSelectedId(selectedId);
-      } else {
-        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
-        layer.setCurrentSelectedId(null);
-      }
-    }
-    return isPicked;
-  };
   private triggerHoverOnLayer(
     layer: ILayer,
     target: {
@@ -370,6 +436,8 @@ export default class PickingService implements IPickingService {
     // layer.emit(target.type, target);
     // 判断是否发生事件冲突
     if (isEventCrash(target)) {
+      // Tip: 允许用户动态设置鼠标光标
+      this.handleCursor(layer, target.type);
       layer.emit(target.type, target);
     }
   }

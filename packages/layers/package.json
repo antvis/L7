@@ -1,11 +1,13 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.8.4",
+  "version": "2.9.10",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "./es/index.js"
+  ],
   "files": [
     "lib",
     "es",
@@ -23,15 +25,17 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/geo-coord": "^1.0.8",
-    "@antv/l7-core": "^2.8.4",
-    "@antv/l7-source": "^2.8.4",
-    "@antv/l7-utils": "^2.8.4",
+    "@antv/l7-core": "2.9.10",
+    "@antv/l7-source": "2.9.10",
+    "@antv/l7-utils": "2.9.10",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
+    "@turf/helpers": "^6.1.4",
     "@turf/meta": "^6.0.2",
+    "@turf/union": "^6.5.0",
     "d3-array": "1",
     "d3-color": "^1.4.0",
+    "d3-interpolate": "1.0.0",
     "d3-scale": "2",
     "earcut": "^2.2.1",
     "eventemitter3": "^4.0.0",
@@ -47,6 +51,7 @@
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
+    "@types/d3-interpolate": "1.1.6",
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5",

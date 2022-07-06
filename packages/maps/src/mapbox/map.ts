@@ -36,11 +36,13 @@ const EventMap: {
   zoomchange: 'zoom',
   dragging: 'drag',
 };
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { MapTheme } from './theme';
 let mapdivCount = 0;
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 const MAPBOX_API_KEY =
-  'pk.eyJ1IjoibHp4dWUiLCJhIjoiY2tvaWZuM2s4MWZuYjJ1dHI5ZGduYTlrdiJ9.DQCfMRbZzx0VSwecQ69McA';
+  // 'pk.eyJ1IjoibHp4dWUiLCJhIjoiY2tvaWZuM2s4MWZuYjJ1dHI5ZGduYTlrdiJ9.DQCfMRbZzx0VSwecQ69McA';
+  'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ';
 /**
  * AMapService
  */
@@ -49,6 +51,7 @@ export default class MapboxService
   implements IMapService<Map & IMapboxInstance> {
   public version: string = Version.MAPBOX;
   public map: Map & IMapboxInstance;
+  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
 
   // 背景色
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
@@ -94,6 +97,7 @@ export default class MapboxService
   }
   public off(type: string, handle: (...args: any[]) => void): void {
     this.map.off(EventMap[type] || type, handle);
+    this.eventEmitter.off(type, handle);
   }
 
   public getContainer(): HTMLElement | null {

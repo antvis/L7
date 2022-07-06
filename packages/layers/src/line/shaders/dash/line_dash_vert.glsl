@@ -12,7 +12,7 @@ attribute vec2 a_iconMapUV;
 
 // dash line
 attribute float a_Total_Distance;
-attribute float a_Distance;
+attribute vec2 a_DistanceAndIndex;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
@@ -66,8 +66,8 @@ void main() {
   vec2 offset = project_pixel(size.xy);
 
   // 设置数据集的参数
-  styleMappingMat[3][0] = a_Distance / a_Total_Distance; // 当前点位距离占线总长的比例
-  styleMappingMat[3][1] = a_Distance;       // 当前顶点的距离
+  styleMappingMat[3][0] = a_DistanceAndIndex.x / a_Total_Distance; // 当前点位距离占线总长的比例
+  styleMappingMat[3][1] = a_DistanceAndIndex.x;       // 当前顶点的距离
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 

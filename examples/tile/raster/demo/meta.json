@@ -1,0 +1,48 @@
+{
+  "title": {
+    "zh": "栅格瓦片图层",
+    "en": "Raster Tile"
+  },
+  "demos": [
+    {
+      "filename": "amap-normal.js",
+      "title": "高德全球瓦片",
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/OXTchKHLX5/1793d4ad-46f7-42a4-9d5a-ca093458f157.png"
+    },
+    {
+      "filename": "amap-satellite.js",
+      "title": "高德卫星影像瓦片",
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/oRfnb3AR05/7866c85b-2d33-4ad2-a276-c52cbde041b0.png"
+    },
+    {
+      "filename": "amap-satelliteMask.js",
+      "title": "高德卫星影像瓦片 + Mask",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0zAwTZ4WfNYAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "tianditu-normal.js",
+      "title": "天地图全球瓦片",
+      "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/PbsT2bl0KL/386a8233-322a-4c53-93fc-1eec39aa21f4.png"
+    },
+    {
+      "filename": "tianditu-satellite.js",
+      "title": "天地图卫星影像瓦片",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sV6gSYSdpl4AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "dem.js",
+      "title": "png 高程栅格",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*MNYOSbk1-KIAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "lerc.js",
+      "title": "lerc 高程栅格",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Q2SlRZ8L2_sAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "tiff.js",
+      "title": "tiff 土地栅格",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*QUb2TY71GjIAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

@@ -81,14 +81,13 @@ export default class WaterModel extends BaseModel {
         fragmentShader: water_frag,
         triangulation: polygonTriangulation,
         depth: { enable: false },
-
         stencil: getMask(mask, maskInside),
       }),
     ];
   }
 
   public clearModels() {
-    this.texture.destroy();
+    this.texture?.destroy();
     this.dataTexture?.destroy();
   }
 
@@ -99,7 +98,7 @@ export default class WaterModel extends BaseModel {
     const latLen = maxLat - minLat;
 
     this.styleAttributeService.registerStyleAttribute({
-      name: 'linear',
+      name: 'waterUv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',

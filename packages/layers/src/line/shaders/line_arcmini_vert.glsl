@@ -1,5 +1,3 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
 #define Animate 0.0
 
 attribute vec4 a_Color;
@@ -11,7 +9,6 @@ uniform mat4 u_Mvp;
 uniform float segmentNumber;
 uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
 varying vec4 v_color;
-// varying vec2 v_normal;
 
 uniform float u_lineDir: 1.0;
 

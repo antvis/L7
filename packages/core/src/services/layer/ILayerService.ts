@@ -1,9 +1,13 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { IColorRamp, IImagedata, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
+import { IInteractionTarget } from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
+import { IAttribute } from '../renderer/IAttribute';
 import {
   IBlendOptions,
   IModel,
@@ -22,6 +26,8 @@ import {
   IEncodeFeature,
   IScale,
   IScaleOptions,
+  IScaleValue,
+  IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   ScaleAttributeType,
@@ -63,6 +69,7 @@ export interface ILayerModelInitializationOptions {
 
 export interface ILayerModel {
   render(): void;
+  renderUpdate?(): void;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
@@ -71,8 +78,12 @@ export interface ILayerModel {
   needUpdate(): boolean;
   clearModels(): void;
 
+  // canvasLayer
+  clearCanvas?(): void;
+
   // earth mode
   setEarthTime?(time: number): void;
+  createModelData?(options?: any): any;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -105,6 +116,123 @@ export interface ILegendClassificaItem {
 // 图层图例
 export type LegendItems = ILegendSegmentItem[] | ILegendClassificaItem[];
 
+export interface IAttrubuteAndElements {
+  attributes: any;
+  elements: any;
+}
+
+export interface ISubLayerStyles {
+  opacity: number;
+}
+
+/**
+ * For tile subLayer
+ */
+export interface ISubLayerInitOptions {
+  layerType: string;
+  shape?: string | string[] | IScaleValue;
+  // options
+  zIndex: number;
+  mask: boolean;
+  // source
+  // style
+  stroke?: string;
+  strokeWidth?: number;
+  strokeOpacity?: number;
+
+  opacity: number;
+  color?: IScaleValue;
+  size?: IScaleValue;
+
+  // raster tiff
+  domain?: [number, number];
+  clampLow?: boolean;
+  clampHigh?: boolean;
+  rampColors?: IColorRamp;
+  // 在初始化的时候使用
+  rampColorsData?: ImageData | IImagedata;
+
+  coords?: string;
+  sourceLayer?: string;
+  featureId?: string;
+}
+
+export interface ITilePickManager {
+  isLastPicked: boolean;
+  on(type: string, cb: (option: any) => void): void;
+  normalRender(layers: ILayer[]): void;
+  beforeHighlight(pickedColors: any): void;
+  beforeSelect(pickedColors: any): void;
+  clearPick(): void;
+  pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
+}
+
+export interface ITileLayerManager {
+  sourceLayer: string;
+  parent: ILayer;
+  children: ILayer[];
+  tilePickManager: ITilePickManager;
+
+  createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+
+  addChild(layer: ILayer): void;
+  addChilds(layers: ILayer[]): void;
+  getChilds(layerIDList: string[]): ILayer[];
+  removeChild(layer: ILayer): void;
+  removeChilds(layerIDList: string[], refresh?: boolean): void;
+  clearChild(): void;
+  hasChild(layer: ILayer): boolean;
+  render(isPicking?: boolean): void;
+
+  pickLayers(target: IInteractionTarget): boolean;
+
+  updateLayersConfig(layers: ILayer[], key: string, value: any): void;
+}
+
+export interface ITileLayer {
+  type: string;
+  sourceLayer: string;
+  parent: ILayer;
+  tileLayerManager: ITileLayerManager;
+  tilesetManager: TilesetManager | undefined;
+  children: ILayer[];
+  scaleField: any;
+  render(isPicking?: boolean): void;
+  pickLayers(target: IInteractionTarget): boolean;
+  clearPick(type: string): void;
+  clearPickState(): void;
+}
+
+export interface ITileLayerOPtions {
+  parent: ILayer;
+  rendererService: IRendererService;
+  mapService: IMapService;
+  layerService: ILayerService;
+  pickingService: IPickingService;
+}
+
+export type LayerEventType =
+  | 'inited'
+  | 'add'
+  | 'remove'
+  | 'destroy'
+  | 'contextmenu'
+  | 'uncontextmenu'
+  | 'unpick'
+  | 'mousedown'
+  | 'unmousedown'
+  | 'unclick'
+  | 'undblclick'
+  | 'unmouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | 'click'
+  | 'dblclick'
+  | 'mouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | any;
+
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
@@ -116,7 +244,9 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
+  tileLayer: ITileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
+  masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   pickedFeatureID: number | null;
@@ -143,7 +273,8 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-
+  isVector?: boolean;
+  triangulation?: Triangulation | undefined;
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -155,7 +286,12 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
+  updateModelData(data: IAttrubuteAndElements): void;
+
+  addMaskLayer(maskLayer: ILayer): void;
+  removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
+  getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
   getBottomColor(): string;
@@ -173,6 +309,12 @@ export interface ILayer {
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): IModel;
+  createAttrubutes(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ): {
+    [attributeName: string]: IAttribute;
+  };
   updateStyleAttribute(
     type: string,
     field: StyleAttributeField,
@@ -184,6 +326,7 @@ export interface ILayer {
   getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  rotate(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -226,7 +369,7 @@ export interface ILayer {
 
   clear(): void;
   clearModels(): void;
-  destroy(): void;
+  destroy(refresh?: boolean): void;
   source(data: any, option?: ISourceCFG): ILayer;
   setData(data: any, option?: ISourceCFG): ILayer;
   fitBounds(fitBoundsOptions?: unknown): ILayer;
@@ -244,10 +387,10 @@ export interface ILayer {
   /**
    * 事件
    */
-  on(type: string, handler: (...args: any[]) => void): void;
-  off(type: string, handler: (...args: any[]) => void): void;
-  emit(type: string, handler: unknown): void;
-  once(type: string, handler: (...args: any[]) => void): void;
+  on(type: LayerEventType, handler: (...args: any[]) => void): void;
+  off(type: LayerEventType, handler: (...args: any[]) => void): void;
+  emit(type: LayerEventType, handler: unknown): void;
+  once(type: LayerEventType, handler: (...args: any[]) => void): void;
 
   isDirty(): boolean;
   /**
@@ -326,6 +469,12 @@ export interface ILayerPlugin {
  * Layer 初始化参数
  */
 export interface ILayerConfig {
+  mask: boolean;
+  maskInside: boolean;
+  maskfence: any;
+  maskColor: string;
+  maskOpacity: number;
+
   colors: string[];
   size: number;
   shape: string;
@@ -351,6 +500,8 @@ export interface ILayerConfig {
 
   // layerType 指定 shape 的类型
   layerType?: string | undefined;
+  cursorEnabled?: boolean;
+  cursor?: string;
   forward: boolean; // 正方向
 
   /**
@@ -406,23 +557,28 @@ export interface ILayerConfig {
  * 提供 Layer 管理服务
  */
 export interface ILayerService {
+  pickedLayerId: number;
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
-
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
+
+  // 清除画布
+  clear(): void;
   add(layer: ILayer): void;
+  addMask(mask: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
+  getSceneInited(): boolean;
   getLayers(): ILayer[];
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  cleanRemove(layer: ILayer, parentLayer?: ILayer): void;
+  cleanRemove(layer: ILayer, refresh?: boolean): void;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;

@@ -14,7 +14,8 @@ module.exports = {
       'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.vision',
     githubUrl: 'https://github.com/antvis/L7',
-    keywords: 'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
+    keywords:
+      'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: true, // 是否在demo页展示API文档
     navs: [
@@ -61,7 +62,7 @@ module.exports = {
           zh: 'L7 地理围栏绘制组件库',
           en: 'L7Draw',
         },
-        url: 'http://antv.vision/L7-draw/',
+        url: 'http://antv.vision/L7Draw/',
       },
       {
         name: {
@@ -175,6 +176,14 @@ module.exports = {
         order: 6,
       },
       {
+        slug: 'api/geometry_layer',
+        title: {
+          zh: '几何体图层',
+          en: 'GeometryLayer',
+        },
+        order: 6,
+      },
+      {
         slug: 'api/imagelayer',
         title: {
           zh: '图片图层',
@@ -203,6 +212,14 @@ module.exports = {
         title: {
           zh: '第三方引擎接入',
           en: 'import other gl',
+        },
+        order: 8,
+      },
+      {
+        slug: 'api/tile',
+        title: {
+          zh: '瓦片',
+          en: 'tile',
         },
         order: 8,
       },
@@ -270,6 +287,14 @@ module.exports = {
         },
         order: 14,
       },
+      {
+        slug: 'api/experiment',
+        title: {
+          zh: '实验特性',
+          en: 'experiment',
+        },
+        order: 15,
+      },
     ],
     examples: [
       {
@@ -327,6 +352,15 @@ module.exports = {
         order: 6,
       },
       {
+        slug: 'tile',
+        icon: 'raster',
+        title: {
+          zh: '瓦片图层',
+          en: 'Tile Layer',
+        },
+        order: 7,
+      },
+      {
         slug: 'raster',
         icon: 'raster',
         title: {
@@ -341,6 +375,15 @@ module.exports = {
         title: {
           zh: '风场图层',
           en: 'Wind Layer',
+        },
+        order: 7,
+      },
+      {
+        slug: 'geometry',
+        icon: 'raster',
+        title: {
+          zh: '几何体图层',
+          en: 'Geometry Layer',
         },
         order: 7,
       },
@@ -385,7 +428,7 @@ module.exports = {
         icon: 'map',
         title: {
           zh: '绘制组件',
-          en: 'L7 Draw',
+          en: 'L7Draw',
         },
         order: 12,
       },

@@ -1,5 +1,11 @@
-import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import {
+  AttributeType,
+  gl,
+  IEncodeFeature,
+  ILayerConfig,
+  IModel,
+} from '@antv/l7-core';
+import { getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -33,7 +39,9 @@ export default class ExtrudeModel extends BaseModel {
       },
 
       lightEnable = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPointLayerStyleOptions
+    >;
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
@@ -108,8 +116,7 @@ export default class ExtrudeModel extends BaseModel {
 
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity || 1.0,
-      // u_offsets: offsets || [0, 0],
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
 
       // 渐变色支持参数
@@ -134,7 +141,7 @@ export default class ExtrudeModel extends BaseModel {
     const {
       depth = true,
       animateOption: { repeat = 1 },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
     return [
       this.layer.buildLayerModel({
@@ -145,12 +152,11 @@ export default class ExtrudeModel extends BaseModel {
         blend: this.getBlend(),
         cull: {
           enable: true,
-          face: this.mapService.version === 'MAPBOX' ? gl.FRONT : gl.BACK,
+          face: getCullFace(this.mapService.version),
         },
         depth: {
           enable: depth,
         },
-        // primitive: gl.POINTS,
       }),
     ];
   }

@@ -1,5 +1,5 @@
 import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 
 function convertRGB2Hex(rgb: number[]) {
@@ -20,7 +20,7 @@ export default class UpdatePolygon extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         style: 'dark',
         center: [104.288144, 31.239692],
         zoom: 4.4,

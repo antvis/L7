@@ -1,10 +1,9 @@
 import { PointLayer, Scene, LineLayer, PolygonLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 export default class Amap2demo_image extends React.Component {
   // @ts-ignore
   private scene: Scene;
-  private imageLayer: any;
 
   public componentWillUnmount() {
     this.scene.destroy();
@@ -18,7 +17,6 @@ export default class Amap2demo_image extends React.Component {
         style: 'light',
         center: [121.434765, 31.256735],
         zoom: 12,
-        viewMode: '3D',
       }),
     });
     this.scene = scene;
@@ -44,13 +42,6 @@ export default class Amap2demo_image extends React.Component {
 
           const imageLayer = new PointLayer()
             .source(data, {
-              // .source([
-              //   {
-              //     longitude: 121.434765,
-              //     latitude: 31.256735,
-              //     name: ''
-              //   }
-              // ], {
               parser: {
                 type: 'json',
                 x: 'longitude',
@@ -58,11 +49,18 @@ export default class Amap2demo_image extends React.Component {
               },
             })
             .shape('name', ['00', '01', '02'])
-            .active({
-              color: '#00f',
-              mix: 0.6,
-            })
-            .size(20);
+            // .rotate('name', () => Math.random() * Math.PI)
+            // .rotate(Math.PI/2)
+            // .style({
+            //   // layerType: 'fillImage',
+            //   rotation: 0,
+            // })
+            // .active({
+            //   color: '#00f',
+            //   mix: 0.6,
+            // })
+            // .size(30);
+            .size(25);
           scene.addLayer(imageLayer);
         });
     });

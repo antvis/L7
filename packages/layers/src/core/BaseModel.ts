@@ -17,6 +17,7 @@ import {
   IMapService,
   IModel,
   IModelUniform,
+  IPickingService,
   IRendererService,
   IShaderModuleService,
   IStyleAttributeService,
@@ -28,7 +29,7 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
-import { isArray, isEqual, isFunction, isNumber, isString } from 'lodash';
+import { isEqual, isFunction, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 
 export type styleSingle =
@@ -110,6 +111,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected mapService: IMapService;
   protected cameraService: ICameraService;
   protected layerService: ILayerService;
+  protected pickingService: IPickingService;
 
   // style texture data mapping
 
@@ -118,6 +120,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
+    this.pickingService = layer
+      .getContainer()
+      .get<IPickingService>(TYPES.IPickingService);
+
     this.shaderModuleService = layer
       .getContainer()
       .get<IShaderModuleService>(TYPES.IShaderModuleService);
@@ -399,7 +405,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    */
   public isOffsetStatic(offsets: styleOffset) {
     if (
-      isArray(offsets) &&
+      Array.isArray(offsets) &&
       offsets.length === 2 &&
       isNumber(offsets[0]) &&
       isNumber(offsets[1])

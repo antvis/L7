@@ -7,6 +7,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import { isEqual } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -15,6 +16,7 @@ import rasterVert from '../shaders/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
+  private rampColors: any;
   public getUninforms() {
     const {
       opacity = 1,
@@ -22,8 +24,13 @@ export default class RasterModel extends BaseModel {
       clampHigh = true,
       noDataValue = -9999999,
       domain = [0, 1],
+      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    this.updateColorTexure();
+    if (!isEqual(this.rampColors, rampColors)) {
+      this.updateColorTexure();
+      this.rampColors = rampColors;
+    }
+
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
@@ -39,6 +46,8 @@ export default class RasterModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      rampColorsData,
+      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
@@ -51,10 +60,9 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
       // aniso: 4,
     });
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
+    const imageData = rampColorsData
+      ? rampColorsData
+      : generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: imageData.data,
       width: imageData.width,
@@ -78,6 +86,12 @@ export default class RasterModel extends BaseModel {
   public buildModels() {
     return this.initModels();
   }
+
+  public clearModels(): void {
+    this.texture?.destroy();
+    this.colorTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({

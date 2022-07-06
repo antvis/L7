@@ -1,18 +1,22 @@
 import { IParserData } from '@antv/l7-core';
-import { getImage } from '@antv/l7-utils';
+import { getImage, isImageBitmap } from '@antv/l7-utils';
 interface IImageCfg {
   extent: [number, number, number, number];
 }
 export default function image(
-  data: string | string[],
+  data: string | string[] | HTMLImageElement | ImageBitmap,
   cfg: IImageCfg,
 ): IParserData {
   // TODO: 为 extent 赋默认值
   const { extent = [121.168, 30.2828, 121.384, 30.4219] } = cfg;
   const images = new Promise((resolve) => {
-    loadData(data, (res: any) => {
-      resolve(res);
-    });
+    if (data instanceof HTMLImageElement || isImageBitmap(data)) {
+      resolve([data]);
+    } else {
+      loadData(data, (res: any) => {
+        resolve(res);
+      });
+    }
   });
   const resultData: IParserData = {
     originData: data,
@@ -30,21 +34,26 @@ export default function image(
   };
   return resultData;
 }
+
 function loadData(data: string | string[], done: any) {
   const url = data;
-  const imageDatas: HTMLImageElement[] = [];
+  const imageDatas: Array<HTMLImageElement | ImageBitmap> = [];
   if (typeof url === 'string') {
-    getImage({ url }, (err: string, img: HTMLImageElement) => {
-      imageDatas.push(img);
-      done(imageDatas);
+    getImage({ url }, (err, img) => {
+      if (img) {
+        imageDatas.push(img);
+        done(imageDatas);
+      }
     });
   } else {
     const imageCount = url.length;
     let imageindex = 0;
     url.forEach((item) => {
-      getImage({ url: item }, (err: any, img: HTMLImageElement) => {
+      getImage({ url: item }, (err, img) => {
         imageindex++;
-        imageDatas.push(img);
+        if (img) {
+          imageDatas.push(img);
+        }
         if (imageindex === imageCount) {
           done(imageDatas);
         }

@@ -1,6 +1,6 @@
 // @ts-ignore
 import { PointLayer, Scene, ILayer, LineLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 import { animate, easeInOut, linear } from 'popmotion';
 

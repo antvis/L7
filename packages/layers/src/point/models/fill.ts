@@ -5,10 +5,12 @@ import {
   IAttribute,
   IElements,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getCullFace, getMask } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import {
@@ -20,8 +22,6 @@ import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
-
-import { isNumber } from 'lodash';
 
 import { Version } from '@antv/l7-maps';
 import { mat4, vec3 } from 'gl-matrix';
@@ -36,6 +36,8 @@ export default class FillModel extends BaseModel {
       stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
       blend,
+      blur = 0,
+      raisingHeight = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (
@@ -85,7 +87,10 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
+      u_raisingHeight: Number(raisingHeight),
+
       u_isMeter: Number(this.isMeter),
+      u_blur: blur,
 
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_globel: this.mapService.version === Version.GLOBEL ? 1 : 0,
@@ -94,7 +99,7 @@ export default class FillModel extends BaseModel {
 
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
-      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
@@ -104,7 +109,7 @@ export default class FillModel extends BaseModel {
   public getAnimateUniforms(): IModelUniform {
     const {
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -145,7 +150,6 @@ export default class FillModel extends BaseModel {
    * @returns
    */
   public calMeter2Coord() {
-    // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
@@ -188,23 +192,31 @@ export default class FillModel extends BaseModel {
       mask = false,
       maskInside = true,
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPointLayerStyleOptions
+    >;
     const { frag, vert, type } = this.getShaders(animateOption);
 
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
+    this.layer.triangulation = isGlobel
+      ? GlobelPointFillTriangulation
+      : PointFillTriangulation;
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill-' + type,
+        moduleName: 'pointfill_' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: isGlobel
           ? GlobelPointFillTriangulation
           : PointFillTriangulation,
-        // depth: { enable: false },
         depth: { enable: isGlobel },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        cull: {
+          enable: true,
+          face: getCullFace(this.mapService.version),
+        },
       }),
     ];
   }
@@ -214,7 +226,7 @@ export default class FillModel extends BaseModel {
    * @returns
    */
   public getShaders(
-    animateOption: IAnimateOption,
+    animateOption: Partial<IAnimateOption>,
   ): { frag: string; vert: string; type: string } {
     if (animateOption.enable) {
       switch (animateOption.type) {
@@ -245,7 +257,7 @@ export default class FillModel extends BaseModel {
   }
 
   // overwrite baseModel func
-  protected animateOption2Array(option: IAnimateOption): number[] {
+  protected animateOption2Array(option: Partial<IAnimateOption>): number[] {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {

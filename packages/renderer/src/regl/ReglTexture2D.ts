@@ -67,6 +67,7 @@ export default class ReglTexture2D implements ITexture2D {
     };
 
     if (data) {
+      // @ts-ignore
       textureOptions.data = data;
     }
 
@@ -99,7 +100,7 @@ export default class ReglTexture2D implements ITexture2D {
 
   public destroy() {
     if (!this.isDistroy) {
-      this.texture.destroy();
+      this.texture?.destroy();
     }
     this.isDistroy = true;
   }

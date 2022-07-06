@@ -7,7 +7,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { getMask, rgb2arr } from '@antv/l7-utils';
-import { create, isNumber } from 'lodash';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
@@ -87,16 +87,15 @@ export default class OceanModel extends BaseModel {
         fragmentShader: ocean_frag,
         triangulation: polygonTriangulation,
         depth: { enable: false },
-
         stencil: getMask(mask, maskInside),
       }),
     ];
   }
 
   public clearModels() {
-    this.texture1.destroy();
-    this.texture2.destroy();
-    this.texture3.destroy();
+    this.texture1?.destroy();
+    this.texture2?.destroy();
+    this.texture3?.destroy();
     this.dataTexture?.destroy();
   }
 
@@ -107,7 +106,7 @@ export default class OceanModel extends BaseModel {
     const latLen = maxLat - minLat;
 
     this.styleAttributeService.registerStyleAttribute({
-      name: 'linear',
+      name: 'oceanUv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',

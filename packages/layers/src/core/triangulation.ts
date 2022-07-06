@@ -139,6 +139,7 @@ export function LineTriangulation(feature: IEncodeFeature) {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
     indices: linebuffer.indices,
     normals: linebuffer.normals,
+    indexes: linebuffer.indexes,
     size: 6,
   };
 }
@@ -302,6 +303,7 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
     size: 5,
   };
 }
+
 /**
  *  计算3D弧线顶点
  * @param feature 映射数据

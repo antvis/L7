@@ -1,5 +1,5 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_heatmap extends React.Component {
@@ -13,7 +13,7 @@ export default class Amap2demo_heatmap extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new Map({
         // pitch: 0,
         // center: [127.5671666579043, 7.445038892195569],
         // zoom: 2.632456779444394,

@@ -305,6 +305,12 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.render();
   }
 
+  public addMask(mask: ILayer) {
+    this.layerService.sceneService = this;
+    this.layerService.addMask(mask);
+    this.render();
+  }
+
   public async render() {
     if (this.rendering || this.destroyed) {
       return;
@@ -411,9 +417,14 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
     this.emit('destroy');
 
+    this.pickingService.destroy();
     this.layerService.destroy();
     // this.rendererService.destroy();
     setTimeout(() => {
+      this.$container?.removeChild(this.canvas);
+      // this.canvas = null 清除对 webgl 实例的引用
+      // @ts-ignore
+      this.canvas = null;
       // Tip: 把这一部分销毁放到写下一个事件循环中执行，兼容 L7React 中 scene 和 layer 同时销毁的情况
       this.rendererService.destroy();
     });

@@ -16,6 +16,7 @@ import { ILayer } from './ILayerService';
 
 export enum ScaleTypes {
   LINEAR = 'linear',
+  SEQUENTIAL = 'sequential',
   POWER = 'power',
   LOG = 'log',
   IDENTITY = 'identity',
@@ -24,6 +25,7 @@ export enum ScaleTypes {
   QUANTIZE = 'quantize',
   THRESHOLD = 'threshold',
   CAT = 'cat',
+  DIVERGING = 'diverging',
 }
 export type ScaleTypeName =
   | 'linear'
@@ -34,30 +36,30 @@ export type ScaleTypeName =
   | 'quantile'
   | 'quantize'
   | 'threshold'
+  | 'diverging'
+  | 'sequential'
   | 'cat';
 
 export type ScaleAttributeType = 'color' | 'size' | 'shape';
 export interface IScale {
   type: ScaleTypeName;
+  neutral?: number;
   field?: string;
+  unknown?: string;
   ticks?: any[];
   nice?: boolean;
+  clamp?: boolean;
   format?: () => any;
   domain?: any[];
+  range?: any[];
 }
 
 export enum StyleScaleType {
   CONSTANT = 'constant',
   VARIABLE = 'variable',
 }
-export interface IScaleOption {
-  field?: string;
+export interface IScaleOption extends IScale {
   attr?: ScaleAttributeType;
-  type: ScaleTypeName;
-  ticks?: any[];
-  nice?: boolean;
-  format?: () => any;
-  domain?: any[];
 }
 export interface IScaleOptions {
   [key: string]: IScale | undefined;
@@ -111,13 +113,14 @@ export interface IVertexAttributeDescriptor
     vertex: number[],
     attributeIdx: number,
     normal: number[],
+    vertexIndex?: number,
   ) => number[];
 }
 
-type Position = number[];
+export type Position = number[];
 type Color = [number, number, number, number];
 type CallBack = (...args: any[]) => any;
-export type StyleAttributeField = string | string[] | number[];
+export type StyleAttributeField = string | string[] | number[] | number;
 export type StyleAttributeOption = string | number | boolean | any[] | CallBack;
 export type StyleAttrField = string | string[] | number | number[];
 export interface IAttributeScale {
@@ -139,6 +142,12 @@ export interface IStyleAttributeInitializationOptions {
     scalers?: IAttributeScale[];
   };
   descriptor: IVertexAttributeDescriptor;
+}
+
+export interface IScaleValue {
+  field: StyleAttributeField | undefined;
+  values: unknown[] | string | undefined;
+  callback?: (...args: any[]) => [] | undefined;
 }
 
 export interface IFeatureRange {
@@ -168,6 +177,7 @@ export type Triangulation = (
   indices: number[];
   size: number;
   normals?: number[];
+  indexes?: number[];
 };
 
 export interface IStyleAttributeUpdateOptions {

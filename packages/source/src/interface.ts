@@ -20,6 +20,31 @@ export interface IParserData {
   // 瓦片地图数据字典
   featureKeys?: IFeatureKey;
 }
+
+// 栅格瓦片解析配置项
+
+export enum RasterTileType {
+  IMAGE = 'image',
+  ARRAYBUFFER = 'arraybuffer',
+}
+export interface IRasterTileParserCFG {
+  tileSize?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  zoomOffset?: number;
+  extent?: [number, number, number, number];
+  updateStrategy?: 'overlap' | 'replace';
+  // 指定 feature 编码 id
+  featureId?: string;
+  // 指定矢量瓦片的数据分类
+  sourceLayer?: string;
+  coord?: string;
+  // 指定栅格瓦片的类型
+  dataType?: RasterTileType;
+
+  format?: any;
+}
+
 export interface IJsonItem {
   [key: string]: any;
 }

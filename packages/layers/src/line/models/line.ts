@@ -9,11 +9,10 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-
 import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
+import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
@@ -32,7 +31,7 @@ export default class LineModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -43,6 +42,14 @@ export default class LineModel extends BaseModel {
       vertexHeightScale = 20.0,
       borderWidth = 0.0,
       borderColor = '#ccc',
+      raisingHeight = 0,
+      heightfixed = false,
+      arrow = {
+        enable: false,
+        arrowWidth: 2,
+        arrowHeight: 3,
+        tailWidth: 1,
+      },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -91,11 +98,9 @@ export default class LineModel extends BaseModel {
               height: 1,
             });
     }
-
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity === undefined ? 1 : opacity,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
@@ -116,8 +121,18 @@ export default class LineModel extends BaseModel {
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
 
+      // 是否固定高度
+      u_heightfixed: Number(heightfixed),
+
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
+      u_raisingHeight: Number(raisingHeight),
+
+      // arrow
+      u_arrow: Number(arrow.enable),
+      u_arrowHeight: arrow.arrowHeight || 3,
+      u_arrowWidth: arrow.arrowWidth || 2,
+      u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -145,17 +160,20 @@ export default class LineModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
+    this.layer.triangulation = LineTriangulation;
     return [
       this.layer.buildLayerModel({
-        moduleName: 'line' + type,
+        moduleName: 'line_' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
-        depth: { enable: false },
+        depth: { enable: depth },
+        // depth: { enable: true },
         stencil: getMask(mask, maskInside),
       }),
     ];
@@ -198,24 +216,28 @@ export default class LineModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
+      name: 'distanceAndIndex',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Distance',
+        name: 'a_DistanceAndIndex',
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 2,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
+          normal: number[],
+          vertexIndex?: number,
         ) => {
-          return [vertex[3]];
+          return vertexIndex === undefined
+            ? [vertex[3], 10]
+            : [vertex[3], vertexIndex];
         },
       },
     });
@@ -279,7 +301,6 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
-        // @ts-ignore
         update: (
           feature: IEncodeFeature,
           featureIdx: number,

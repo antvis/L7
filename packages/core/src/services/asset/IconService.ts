@@ -126,6 +126,24 @@ export default class IconService extends EventEmitter implements IIconService {
     this.iconData = [];
     this.iconMap = {};
   }
+
+  public loadImage(url: IImage) {
+    return new Promise((resolve, reject) => {
+      if (url instanceof HTMLImageElement) {
+        resolve(url);
+        return;
+      }
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = () => {
+        reject(new Error('Could not load image at ' + url));
+      };
+      image.src = url instanceof File ? URL.createObjectURL(url) : url;
+    });
+  }
   private update() {
     this.updateIconMap();
     this.updateIconAtlas();
@@ -170,24 +188,6 @@ export default class IconService extends EventEmitter implements IIconService {
     );
     this.iconMap = mapping;
     this.canvasHeight = canvasHeight;
-  }
-
-  private loadImage(url: IImage) {
-    return new Promise((resolve, reject) => {
-      if (url instanceof HTMLImageElement) {
-        resolve(url);
-        return;
-      }
-      const image = new Image();
-      image.crossOrigin = 'anonymous';
-      image.onload = () => {
-        resolve(image);
-      };
-      image.onerror = () => {
-        reject(new Error('Could not load image at ' + url));
-      };
-      image.src = url instanceof File ? URL.createObjectURL(url) : url;
-    });
   }
 
   /**

@@ -38,4 +38,6 @@ order: 3
 
 [在线案例](../../../examples/point/scatter#animatePoint)
 
-`markdown:docs/common/layer/base.md`
+### style
+
+- raisingHeight 设置 3D 填充图的抬升高度

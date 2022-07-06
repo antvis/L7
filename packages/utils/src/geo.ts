@@ -186,6 +186,19 @@ export function unProjectFlat(px: number[]): [number, number] {
   const lng = x / d;
   return [lng, lat];
 }
+
+export function amap2Project(lng: number, lat: number): [number, number] {
+  const r = 85.0511287798;
+  const Rg = Math.PI / 180;
+  const Tg = 6378137;
+
+  lat = Math.max(Math.min(r, lat), -r);
+  lng *= Rg;
+  lat *= Rg;
+  lat = Math.log(Math.tan(Math.PI / 4 + lat / 2));
+  return [lng * Tg, lat * Tg];
+}
+
 export function lnglatDistance(
   coordinates1: [number, number],
   coordinates2: [number, number],
@@ -249,6 +262,11 @@ export function bBoxToBounds(b1: BBox): IBounds {
     [b1[0], b1[1]],
     [b1[2], b1[3]],
   ];
+}
+
+export function normalize(v: Point) {
+  const len = calDistance(v, [0, 0]);
+  return [v[0] / len, v[1] / len];
 }
 
 export function calDistance(p1: Point, p2: Point) {

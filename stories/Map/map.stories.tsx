@@ -38,7 +38,6 @@ import Amap2demo_heatmap_hexagon_world from './components/amap2demo_heatmap_hexa
 import Amap2demo_heatmap_grid from "./components/amap2demo_heatmap_grid"
 
 import Amap2demo_imageLayer from "./components/amap2demo_imagelayer"
-import Amap2demo_imageTileLayer from "./components/amap2demo_imageTileLayer"
 
 import Amap2demo_rasterLayer from "./components/amap2demo_rasterlayer"
 
@@ -78,6 +77,7 @@ import Cluster from './components/cluster'
 import Hot from './components/hot'
 import Hot2 from './components/hot2'
 import Mask from './components/mask'
+import PolygonExteudeTex from './components/polygon_extrudeTex';
 import BugFix from './components/bugfix'
 
 // @ts-ignore
@@ -120,7 +120,6 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 heatmap3D/grid', () => <Amap2demo_heatmap_grid />)
 
         .add('高德地图2.0 imageLayer', () => <Amap2demo_imageLayer />)
-        .add('高德地图2.0 imageTileLayer', () => <Amap2demo_imageTileLayer />)
 
         .add('高德地图2.0 rasterLayer', () => <Amap2demo_rasterLayer />)
         .add('高德地图2.0 citybuildLayer', () => <Amap2demo_citybuilding />)
@@ -161,5 +160,5 @@ storiesOf('地图方法', module)
         .add('Hot1', () => <Hot/>)
         .add('Hot2', () => <Hot2/>)
         .add('Mask', () => <Mask/>)
-
+        .add('PolygonExteudeTex', () => <PolygonExteudeTex/>)
         .add('BugFix', () => <BugFix/>)

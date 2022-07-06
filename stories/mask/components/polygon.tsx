@@ -32,7 +32,7 @@ export default class MaskPoints extends React.Component {
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
-    const data = {
+    const maskData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -62,48 +62,13 @@ export default class MaskPoints extends React.Component {
       ],
     };
 
-    const data2 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-              [
-                [
-                  [120.16536712646484, 30.26336704072365],
-                  [120.16777038574219, 30.2657392842738],
-                  [120.17086029052733, 30.26232916614846],
-                ],
-              ],
-            ],
-          },
-        },
-      ],
-    };
-
     scene.on('loaded', () => {
-      const polygonlayer = new MaskLayer({})
-        .source(data)
-        .shape('fill')
-        .color('red')
-        .style({
-          opacity: 0.1,
-        });
-      scene.addLayer(polygonlayer);
-
-      const polygonlayer2 = new MaskLayer({})
-        .source(data2)
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.1,
-        });
-      scene.addLayer(polygonlayer2);
-
       // let points = new PointLayer({ zIndex: 2, mask: true, maskInside: false }) // maskInside: true
-      let points = new PolygonLayer({ mask: true })
+      let points = new PolygonLayer({
+        mask: true,
+        maskfence: maskData,
+        maskOpacity: 0.3,
+      })
         // let points = new PolygonLayer({ mask: true, maskInside: false })
         .source({
           type: 'FeatureCollection',
@@ -129,12 +94,11 @@ export default class MaskPoints extends React.Component {
         // .shape('circle')
         // .shape('text', 'test')
         // .shape('00')
-        .shape('extrude') // fill
-        .size(30)
+        // .shape('extrude') // fill
+        .shape('fill') // fill
+        .size(10)
         .color('#0ff')
-        .style({
-          opacity: 0.6,
-        });
+        .active(true);
       scene.addLayer(points);
     });
   }

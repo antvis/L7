@@ -8,13 +8,14 @@
         "*.md"
       ],
       "allowBranch": [
-        "master",
+        "publish",
         "docs"
       ],
-      "message": "chore: publish"
+      "message": "chore: publish",
+      "registry": "https://registry.npmjs.org"
     }
   },
-  "version": "2.8.4",
+  "version": "2.9.10",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {

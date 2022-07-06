@@ -7,7 +7,12 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import {
+  generateColorRamp,
+  getCullFace,
+  getMask,
+  IColorRamp,
+} from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -150,6 +155,7 @@ export default class HeatMapModel extends BaseModel {
     });
   }
   private buildHeatMapIntensity(): IModel {
+    this.layer.triangulation = HeatmapTriangulation;
     return this.layer.buildLayerModel({
       moduleName: 'heatmapintensity',
       vertexShader: heatmapFramebufferVert,
@@ -157,6 +163,10 @@ export default class HeatMapModel extends BaseModel {
       triangulation: HeatmapTriangulation,
       depth: {
         enable: false,
+      },
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
       },
       blend: {
         enable: true,

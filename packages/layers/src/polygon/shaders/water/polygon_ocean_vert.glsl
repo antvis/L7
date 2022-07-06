@@ -1,10 +1,8 @@
-attribute vec4 a_Color;
 attribute vec2 a_uv;
 attribute vec3 a_Position;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
-varying vec4 v_Color;
 varying vec2 v_uv;
 uniform float u_opacity: 1.0;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
@@ -13,7 +11,6 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 #pragma include "styleMappingCalOpacity"
 
 #pragma include "projection"
-#pragma include "picking"
 
 void main() {
   v_uv = a_uv;
@@ -43,7 +40,6 @@ styleMappingMat = mat4(
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
 
-  v_Color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
@@ -52,7 +48,5 @@ styleMappingMat = mat4(
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   }
-
-  setPickingColor(a_PickingColor);
 }
 

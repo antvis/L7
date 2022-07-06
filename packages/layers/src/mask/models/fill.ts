@@ -1,23 +1,22 @@
 import { gl, IModel } from '@antv/l7-core';
 import { isNumber } from 'lodash';
-import BaseModel, { styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
+import { IMaskLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import mask_frag from '../shaders/mask_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';
-interface IMaskStyleOptions {
-  opacity: styleSingle;
-}
+
 export default class MaskModel extends BaseModel {
   public getUninforms() {
-    const { opacity = 0 } = this.layer.getLayerConfig() as IMaskStyleOptions;
+    const {
+      opacity = 0,
+    } = this.layer.getLayerConfig() as IMaskLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 0.0,
     };
   }
 
   public initModels(): IModel[] {
-    // TODO: 瓦片组件默认在最下层
-    this.layer.zIndex = -1000;
     return this.buildModels();
   }
 
@@ -51,6 +50,7 @@ export default class MaskModel extends BaseModel {
 
   public clearModels() {
     this.dataTexture?.destroy();
+    this.layerService.clear();
   }
 
   protected registerBuiltinAttributes() {

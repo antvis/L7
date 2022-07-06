@@ -6,7 +6,6 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-
 import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -89,7 +88,7 @@ export default class SimplePointModel extends BaseModel {
         ? (offsets as [number, number])
         : [0, 0],
       u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
-      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
     };
   }
@@ -103,6 +102,7 @@ export default class SimplePointModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    this.layer.triangulation = PointTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'simplepoint',

@@ -21,6 +21,7 @@ import { Map } from '@antv/l7-map';
 import { $window, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { Version } from '../version';
 import Viewport from './Viewport';
 const EventMap: {
@@ -41,7 +42,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 export default class L7MapService implements IMapService<Map> {
   public version: string = Version.L7MAP;
   public map: Map;
-
+  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   // 背景色
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
 
@@ -86,6 +87,7 @@ export default class L7MapService implements IMapService<Map> {
   }
   public off(type: string, handle: (...args: any[]) => void): void {
     this.map.off(EventMap[type] || type, handle);
+    this.eventEmitter.off(type, handle);
   }
 
   public getContainer(): HTMLElement | null {
@@ -97,6 +99,9 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public getSize(): [number, number] {
+    if (this.version === Version.SIMPLE) {
+      return this.simpleMapCoord.getSize();
+    }
     const size = this.map.transform;
     return [size.width, size.height];
   }
@@ -257,10 +262,28 @@ export default class L7MapService implements IMapService<Map> {
       style = 'light',
       rotation = 0,
       mapInstance,
+      version = 'L7MAP',
+      mapSize = 10000,
       ...rest
     } = this.config;
 
     this.viewport = new Viewport();
+
+    this.version = version;
+    this.simpleMapCoord.setSize(mapSize);
+    // console.log('this.config.center', this.config.center)
+    if (version === Version.SIMPLE && rest.center) {
+      rest.center = this.simpleMapCoord.unproject(
+        rest.center as [number, number],
+      );
+    }
+    // console.log(this.simpleMapCoord.project(this.config.center as [number, number]))
+    // console.log(this.simpleMapCoord.unproject([500, 500]))
+    // console.log(this.simpleMapCoord.project([0, 0]))
+    // console.log(this.simpleMapCoord.unproject([5000, 5000]))
+
+    // console.log(this.simpleMapCoord.unproject([200, 200]))
+    // console.log(this.simpleMapCoord.unproject([1000, 1000]))
 
     if (mapInstance) {
       // @ts-ignore
@@ -276,6 +299,7 @@ export default class L7MapService implements IMapService<Map> {
         ...rest,
       });
     }
+
     this.map.on('load', this.handleCameraChanged);
     this.map.on('move', this.handleCameraChanged);
 
@@ -343,9 +367,6 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public destroy() {
-    // TODO: 销毁地图可视化层的容器
-    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
-
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();

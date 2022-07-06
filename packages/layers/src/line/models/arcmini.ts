@@ -7,7 +7,6 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-
 import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -19,7 +18,7 @@ import line_arcmini_vert from '../shaders/line_arcmini_vert.glsl';
 export default class ArcMiniModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       forward = true,

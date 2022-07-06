@@ -1,10 +1,13 @@
 attribute vec4 a_Color;
 attribute vec3 a_Position;
+
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
-varying vec4 v_Color;
 uniform float u_opacity: 1.0;
+uniform float u_raisingHeight: 0.0;
+
+varying vec4 v_Color;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
 #pragma include "styleMapping"
@@ -43,6 +46,14 @@ styleMappingMat = mat4(
   v_Color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+
+  project_pos.z += u_raisingHeight;
+
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+    project_pos.z *= mapboxZoomScale;
+    project_pos.z += u_raisingHeight * mapboxZoomScale;
+  }
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * (vec4(project_pos.xyz, 1.0));

@@ -8,11 +8,10 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-
 import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
+import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 // arc dash line
 import arc_dash_frag from '../shaders/dash/arc_dash_frag.glsl';
@@ -31,7 +30,7 @@ export default class ArcModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',

@@ -1,9 +1,27 @@
-// TODO: 解决 gastby 服务端构建过程中没有 window 全局变量的问题
+let l7globalThis: any;
 
-let globalWindow: any;
+const getGlobalThis = (): any => {
+  return (
+    l7globalThis ||
+    (l7globalThis =
+      typeof globalThis !== 'undefined'
+        ? globalThis
+        : typeof self !== 'undefined'
+        ? self
+        : typeof window !== 'undefined'
+        ? window
+        : typeof global !== 'undefined'
+        ? global
+        : {})
+  );
+};
+l7globalThis = getGlobalThis();
+
+// TODO: 解决 gastby 服务端构建过程中没有 window 全局变量的问题
+let globalWindow: Window & typeof l7globalThis;
 
 if (typeof window === 'undefined') {
-  globalWindow = {
+  globalWindow = ({
     devicePixelRatio: 1,
     navigator: {
       userAgent:
@@ -55,9 +73,9 @@ if (typeof window === 'undefined') {
     requestAnimationFrame: () => true,
     cancelAnimationFrame: () => true,
     clearTimeout: () => true,
-  };
+  } as unknown) as Window & typeof globalThis;
 } else {
   globalWindow = window;
 }
 
-export { globalWindow };
+export { globalWindow, getGlobalThis, l7globalThis };

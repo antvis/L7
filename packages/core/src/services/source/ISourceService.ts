@@ -1,3 +1,4 @@
+import { TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export interface IParserCfg {
@@ -60,10 +61,14 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   data: IParserData;
+  center: [number, number];
+  parser: IParserCfg;
+  transforms: ITransform[];
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
-  setData(data: any): void;
+  tileset: TilesetManager | undefined;
+  setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
   getFeatureId(field: string, value: any): number | undefined;
@@ -73,6 +78,7 @@ export interface ISource {
     id: number,
     properties: Record<string, any>,
   ): void;
+  destroy(): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

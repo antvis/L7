@@ -1,11 +1,7 @@
 uniform sampler2D u_texture;
 uniform vec2 u_textSize;
 
-uniform float u_additive;
-
 varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
-
-varying float v_radius;
 
 #pragma include "sdf_2d"
 #pragma include "picking"

@@ -5,18 +5,18 @@ import {
   IAttribute,
   IElements,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getCullFace, getMask } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/radar/radar_frag.glsl';
 import pointFillVert from '../shaders/radar/radar_vert.glsl';
-
-import { isNumber } from 'lodash';
 
 import { Version } from '@antv/l7-maps';
 
@@ -26,9 +26,6 @@ export default class RadarModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      strokeOpacity = 1,
-      strokeWidth = 0,
-      stroke = 'rgba(0,0,0,0)',
       offsets = [0, 0],
       blend,
       speed = 1,
@@ -38,18 +35,12 @@ export default class RadarModel extends BaseModel {
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
         opacity,
-        strokeOpacity,
-        strokeWidth,
-        stroke,
         offsets,
       })
     ) {
       // 判断当前的样式中哪些是需要进行数据映射的，哪些是常量，同时计算用于构建数据纹理的一些中间变量
       this.judgeStyleAttributes({
         opacity,
-        strokeOpacity,
-        strokeWidth,
-        stroke,
         offsets,
       });
 
@@ -96,7 +87,7 @@ export default class RadarModel extends BaseModel {
   public getAnimateUniforms(): IModelUniform {
     const {
       animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_aimate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -137,7 +128,6 @@ export default class RadarModel extends BaseModel {
    * @returns
    */
   public calMeter2Coord() {
-    // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
@@ -184,7 +174,7 @@ export default class RadarModel extends BaseModel {
 
     return [
       this.layer.buildLayerModel({
-        moduleName: 'pointfill_' + type,
+        moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: PointFillTriangulation,
@@ -203,7 +193,7 @@ export default class RadarModel extends BaseModel {
     return {
       frag: pointFillFrag,
       vert: pointFillVert,
-      type: 'radar',
+      type: 'point_radar',
     };
   }
 
@@ -212,7 +202,7 @@ export default class RadarModel extends BaseModel {
   }
 
   // overwrite baseModel func
-  protected animateOption2Array(option: IAnimateOption): number[] {
+  protected animateOption2Array(option: Partial<IAnimateOption>): number[] {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
@@ -267,7 +257,6 @@ export default class RadarModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
-          // console.log('featureIdx', featureIdx, feature)
           return Array.isArray(size)
             ? [size[0] * this.meter2coord]
             : [(size as number) * this.meter2coord];

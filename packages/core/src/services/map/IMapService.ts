@@ -34,8 +34,16 @@ export interface IMapWrapper {
   ): void;
 }
 
+interface ISimpleMapCoord {
+  setSize(size: number): void;
+  getSize(): [number, number];
+  project(lnglat: [number, number]): [number, number];
+  unproject(xy: [number, number]): [number, number];
+}
+
 export interface IMapService<RawMap = {}> {
   version?: string;
+  simpleMapCoord: ISimpleMapCoord;
   map: RawMap;
   bgColor: string;
   setBgColor(color: string): void;

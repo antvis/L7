@@ -11,6 +11,7 @@ attribute float a_Rotate;
 uniform vec2 u_sdf_map_size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
+uniform float u_raisingHeight: 0.0;
 
 varying vec2 v_uv;
 varying float v_gamma_scale;
@@ -109,14 +110,21 @@ void main() {
   
   // gl_Position = vec4(projected_position.xy / projected_position.w + rotation_matrix * a_textOffsets * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
 
-  vec4 projected_position;
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-   projected_position  = u_Mvp * (vec4(a_Position.xyz, 1.0));
-  } else { // else
-   projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
+  float raiseHeight = u_raisingHeight;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+    raiseHeight = u_raisingHeight * mapboxZoomScale;
   }
 
-  gl_Position = vec4(projected_position.xy / projected_position.w + rotation_matrix * a_textOffsets * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
+  vec4 projected_position;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+   projected_position  = u_Mvp * (vec4(a_Position.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
+  } else { // else
+   projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
+  }
+
+  gl_Position = vec4(
+    projected_position.xy / projected_position.w + rotation_matrix * a_textOffsets * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
   v_gamma_scale = gl_Position.w;
   setPickingColor(a_PickingColor);
 

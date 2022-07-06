@@ -92,6 +92,7 @@ export default class NormalModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    this.layer.triangulation = PointTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'normalpoint',

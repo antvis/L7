@@ -29,10 +29,8 @@ order: 3
 })
 ```
 
-#### style 配置项
+### style
 
 - speed 旋转速度，默认为 1，值越大转速越快
 
 [在线案例](../../../examples/point/scatter#radarPoint)
-
-`markdown:docs/common/layer/base.md`
