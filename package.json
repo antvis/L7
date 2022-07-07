@@ -29,6 +29,7 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@loadable/component": "^5.15.0",
+    "@material-ui/core": "^4.10.2",
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "^4.0.0",
@@ -74,6 +75,7 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",
+    "esbuild": "^0.14.48",
     "eslint": "^6.6.0",
     "eslint-config-egg": "^7.5.1",
     "eslint-plugin-html": "^6.0.0",
@@ -86,11 +88,10 @@
     "glsl-minifier": "^0.0.13",
     "html-webpack-plugin": "^4.3.0",
     "husky": "^3.0.9",
-    "lerc": "^3.0.0",
     "jest": "^24.9.0",
     "jest-electron": "^0.1.11",
-    "@material-ui/core": "^4.10.2",
     "jest-styled-components": "^6.2.1",
+    "lerc": "^3.0.0",
     "lerna": "^3.16.4",
     "lint-staged": "^9.2.4",
     "mockjs": "^1.1.0",
@@ -170,7 +171,7 @@
     "test-live": "cross-env BABEL_ENV=test DEBUG_MODE=1 jest --watch",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "tsc": "tsc",
-    "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs NODE_ENV=production babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs NODE_ENV=production babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments && lerna run worker",
     "bundle": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.js --environment BUILD:production,MINIFY:true",
     "bundle-dev": "cross-env BABEL_ENV=bundle yarn rollup -c  build/rollup.config.js  --environment BUILD:production,MINIFY:false",
     "bundle:watch": "cross-env BABEL_ENV=bundle yarn rollup -c build/rollup.config.js --watch",
@@ -208,6 +209,5 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

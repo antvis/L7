@@ -13,7 +13,10 @@ import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
-import { LineTriangulation } from '../../core/triangulation';
+import {
+  LineTriangulation,
+  excuteLineTriangulation,
+} from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
 import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
@@ -164,6 +167,7 @@ export default class LineModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
+    excuteLineTriangulation({ coordinates: [] }, true);
     return [
       this.layer.buildLayerModel({
         moduleName: 'line_' + type,

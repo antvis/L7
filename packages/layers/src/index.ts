@@ -16,6 +16,8 @@ import EarthLayer from './earth';
 import MaskLayer from './mask';
 import WindLayer from './wind';
 
+import './workers';
+
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
