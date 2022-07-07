@@ -35,29 +35,35 @@ export default class Amap2demo extends React.Component {
 
     scene.on('loaded', () => {
       const layer = new PointLayer()
-      .source([{
-        lng: 120, lat: 30
-      }], {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat'
-        }
-      })
-      .shape('circle')
-      .color('#f00')
-      .size(150)
-      .style({
-        unit: 'meter'
-      })
+        .source(
+          [
+            {
+              lng: 120,
+              lat: 30,
+            },
+          ],
+          {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
+          },
+        )
+        .shape('circle')
+        .color('#f00')
+        .size(150)
+        .style({
+          unit: 'meter',
+        });
       // setTimeout(() => {
       //   layer.style({
       //     opacity: 0.5,
       //     unit: ''
       //   })
       //   scene.render()
-      // }, 2000) 
-    scene.addLayer(layer);
+      // }, 2000)
+      scene.addLayer(layer);
     });
   }
 

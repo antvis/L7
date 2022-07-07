@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getCullFace, getMask, $window } from '@antv/l7-utils';
+import { $window, getCullFace, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -29,7 +29,7 @@ export default class FillModel extends BaseModel {
   private meter2coord: number = 1;
   private meteryScale: number = 1; // 兼容 mapbox
   private isMeter: boolean = false;
-  
+
   private unit: string = 'l7size';
   public getUninforms(): IModelUniform {
     const {
@@ -135,26 +135,6 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  /**
-   * 判断是否更新点图层的计量单位
-   * @param unit 
-   */
-  private updateUnit(unit: string) {
-    const { version } = this.mapService;
-    if(this.unit !== unit) {
-      // l7size => meter
-      if(this.unit !== 'meter' && unit === 'meter' && version !== Version.L7MAP && version !== Version.GLOBEL) {
-        this.isMeter = true;
-        this.calMeter2Coord();
-      // meter => l7size
-      } else if(this.unit === 'meter' && unit !== 'meter') {
-        this.isMeter = false;
-        this.meter2coord = 1;
-      }
-      this.unit = unit;
-    }
-  }
-
   public initModels(): IModel[] {
     this.updateUnit('l7size');
 
@@ -192,11 +172,11 @@ export default class FillModel extends BaseModel {
       const southLnglat = southCoord.toLngLat();
 
       this.meter2coord = center[0] - westLnglat.lng;
-      
-      this.meteryScale = (southLnglat.lat - center[1])/this.meter2coord;
+
+      this.meteryScale = (southLnglat.lat - center[1]) / this.meter2coord;
       return;
     }
- 
+
     const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
     const m2 = this.mapService.meterToCoord(center, [
       maxLng === minLng ? maxLng + 0.1 : maxLng,
@@ -368,9 +348,7 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
-          return Array.isArray(size)
-            ? [size[0]]
-            : [(size as number)];
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
@@ -401,5 +379,30 @@ export default class FillModel extends BaseModel {
         },
       },
     });
+  }
+
+  /**
+   * 判断是否更新点图层的计量单位
+   * @param unit
+   */
+  private updateUnit(unit: string) {
+    const { version } = this.mapService;
+    if (this.unit !== unit) {
+      // l7size => meter
+      if (
+        this.unit !== 'meter' &&
+        unit === 'meter' &&
+        version !== Version.L7MAP &&
+        version !== Version.GLOBEL
+      ) {
+        this.isMeter = true;
+        this.calMeter2Coord();
+        // meter => l7size
+      } else if (this.unit === 'meter' && unit !== 'meter') {
+        this.isMeter = false;
+        this.meter2coord = 1;
+      }
+      this.unit = unit;
+    }
   }
 }
