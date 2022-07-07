@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getCullFace, getMask } from '@antv/l7-utils';
+import { $window, getCullFace, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -26,8 +26,11 @@ import pointFillVert from '../shaders/fill_vert.glsl';
 import { Version } from '@antv/l7-maps';
 import { mat4, vec3 } from 'gl-matrix';
 export default class FillModel extends BaseModel {
-  public meter2coord: number = 1;
+  private meter2coord: number = 1;
+  private meteryScale: number = 1; // 兼容 mapbox
   private isMeter: boolean = false;
+
+  private unit: string = 'l7size';
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -38,7 +41,9 @@ export default class FillModel extends BaseModel {
       blend,
       blur = 0,
       raisingHeight = 0,
+      unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    this.updateUnit(unit);
 
     if (
       this.dataTextureTest &&
@@ -89,6 +94,8 @@ export default class FillModel extends BaseModel {
     return {
       u_raisingHeight: Number(raisingHeight),
 
+      u_meter2coord: this.meter2coord,
+      u_meteryScale: this.meteryScale,
       u_isMeter: Number(this.isMeter),
       u_blur: blur,
 
@@ -129,18 +136,7 @@ export default class FillModel extends BaseModel {
   }
 
   public initModels(): IModel[] {
-    const {
-      unit = 'l7size',
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { version } = this.mapService;
-    if (
-      unit === 'meter' &&
-      version !== Version.L7MAP &&
-      version !== Version.GLOBEL
-    ) {
-      this.isMeter = true;
-      this.calMeter2Coord();
-    }
+    this.updateUnit('l7size');
 
     return this.buildModels();
   }
@@ -154,28 +150,36 @@ export default class FillModel extends BaseModel {
     const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
     const { version } = this.mapService;
-    if (version === Version.MAPBOX && window.mapboxgl.MercatorCoordinate) {
-      const coord = window.mapboxgl.MercatorCoordinate.fromLngLat(
+    const mapboxContext = $window?.mapboxgl;
+    if (version === Version.MAPBOX && mapboxContext?.MercatorCoordinate) {
+      // 参考：
+      // https://docs.mapbox.com/mapbox-gl-js/api/geography/#mercatorcoordinate#meterinmercatorcoordinateunits
+      const coord = mapboxContext.MercatorCoordinate.fromLngLat(
         { lng: center[0], lat: center[1] },
         0,
       );
-      const offsetInMeters = 1;
-      const offsetInMercatorCoordinateUnits =
-        offsetInMeters * coord.meterInMercatorCoordinateUnits();
-      const westCoord = new window.mapboxgl.MercatorCoordinate(
+      const offsetInMercatorCoordinateUnits = coord.meterInMercatorCoordinateUnits();
+      const westCoord = new mapboxContext.MercatorCoordinate(
         coord.x - offsetInMercatorCoordinateUnits,
         coord.y,
         coord.z,
       );
       const westLnglat = westCoord.toLngLat();
 
+      const southCoord = new mapboxContext.MercatorCoordinate(
+        coord.x,
+        coord.y - offsetInMercatorCoordinateUnits,
+        coord.z,
+      );
+      const southLnglat = southCoord.toLngLat();
+
       this.meter2coord = center[0] - westLnglat.lng;
+
+      this.meteryScale = (southLnglat.lat - center[1]) / this.meter2coord;
       return;
     }
 
-    // @ts-ignore
     const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
-    // @ts-ignore
     const m2 = this.mapService.meterToCoord(center, [
       maxLng === minLng ? maxLng + 0.1 : maxLng,
       maxLat === minLat ? minLat + 0.1 : maxLat,
@@ -213,10 +217,6 @@ export default class FillModel extends BaseModel {
         depth: { enable: isGlobel },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
       }),
     ];
   }
@@ -350,10 +350,7 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
-          // console.log('featureIdx', featureIdx, feature)
-          return Array.isArray(size)
-            ? [size[0] * this.meter2coord]
-            : [(size as number) * this.meter2coord];
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
@@ -384,5 +381,30 @@ export default class FillModel extends BaseModel {
         },
       },
     });
+  }
+
+  /**
+   * 判断是否更新点图层的计量单位
+   * @param unit
+   */
+  private updateUnit(unit: string) {
+    const { version } = this.mapService;
+    if (this.unit !== unit) {
+      // l7size => meter
+      if (
+        this.unit !== 'meter' &&
+        unit === 'meter' &&
+        version !== Version.L7MAP &&
+        version !== Version.GLOBEL
+      ) {
+        this.isMeter = true;
+        this.calMeter2Coord();
+        // meter => l7size
+      } else if (this.unit === 'meter' && unit !== 'meter') {
+        this.isMeter = false;
+        this.meter2coord = 1;
+      }
+      this.unit = unit;
+    }
   }
 }
