@@ -152,6 +152,8 @@ export default class FillModel extends BaseModel {
     const { version } = this.mapService;
     const mapboxContext = $window?.mapboxgl;
     if (version === Version.MAPBOX && mapboxContext?.MercatorCoordinate) {
+      // 参考：
+      // https://docs.mapbox.com/mapbox-gl-js/api/geography/#mercatorcoordinate#meterinmercatorcoordinateunits
       const coord = mapboxContext.MercatorCoordinate.fromLngLat(
         { lng: center[0], lat: center[1] },
         0,
