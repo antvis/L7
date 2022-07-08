@@ -1,4 +1,4 @@
-import { WorkerType, IWorkOptions } from './interface';
+import { IWorkOptions, WorkerType } from './interface';
 import getMeshTask from './mesh';
 
 function WorkFactory(myTask: any) {
