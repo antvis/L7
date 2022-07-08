@@ -188,7 +188,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
   public createAttributesAndIndicesAscy(
     features: IEncodeFeature[],
-    triangulation: Triangulation,
     segmentNumber: number,
     layerOptions: any,
   ) {
@@ -197,23 +196,34 @@ export default class StyleAttributeService implements IStyleAttributeService {
       sizePerElement: 0,
       elements: [],
     };
-    if (triangulation) {
-      this.triangulation = triangulation;
-    }
+
     const descriptors = this.attributes.map((attr) => {
       attr.resetDescriptor();
       return attr.descriptor;
     });
 
     // worker test
+    const {
+      customFuncs,
+      params,
+      triangulation,
+      setValues,
+      ...restOptions
+    } = layerOptions;
+
     const myWorker = getWorker(WorkerType.MESH, {
       meshType: 'PointFill',
+      customFuncs,
+      params,
+      triangulation,
+      setValues,
     }) as Worker;
+
     const messages = {
       descriptors,
       features,
       segmentNumber,
-      ...layerOptions,
+      ...restOptions,
     };
 
     myWorker.postMessage(JSON.stringify(messages));

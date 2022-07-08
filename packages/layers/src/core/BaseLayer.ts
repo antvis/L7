@@ -1155,7 +1155,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.styleAttributeService
             .createAttributesAndIndicesAscy(
               this.encodedData,
-              triangulation,
               segmentNumber,
               layerOptions,
             )

@@ -1,20 +1,5 @@
-import { IMeshType, IWorkOptions } from '../interface';
+import { IWorkOptions } from '../interface';
 import { encodePickingColor, utils } from './common';
-import {
-  customFuncs as PointFillCustomFincs,
-  params as PointFillParams,
-  setValues as PointFillSetValues,
-  triangulation as PointFillTriangulation,
-} from './pointLayer/fill';
-
-const MeshList = {
-  PointFill: {
-    customFuncs: PointFillCustomFincs,
-    triangulation: PointFillTriangulation,
-    params: PointFillParams, // 参数
-    setValues: PointFillSetValues,
-  },
-};
 
 const meshTask = `
     ${utils}
@@ -135,10 +120,10 @@ const meshTask = `
 `;
 
 export default function getMeshTask(options: IWorkOptions) {
-  const { meshType } = options;
+  const { customFuncs, triangulation, params, setValues } = options;
   return meshTask
-    .replace('$customFuncs$', MeshList[meshType].customFuncs)
-    .replace('$triangulation$', MeshList[meshType].triangulation)
-    .replace('$params$', MeshList[meshType].params)
-    .replace('$setValues$', MeshList[meshType].setValues);
+    .replace('$customFuncs$', customFuncs)
+    .replace('$triangulation$', triangulation)
+    .replace('$params$', params)
+    .replace('$setValues$', setValues);
 }

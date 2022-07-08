@@ -218,7 +218,6 @@ export interface IStyleAttributeService {
   };
   createAttributesAndIndicesAscy(
     encodedFeatures: IEncodeFeature[],
-    triangulation?: Triangulation,
     segmentNumber?: number,
     layerOptions?: any,
   ): Promise<any>;
