@@ -243,16 +243,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.configService.getLayerConfig<ChildLayerStyleOptions>(this.id);
   }
 
-  private updateRawConfig(configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>) {
-    Object.keys(configToUpdate).map((key) => {
-      // @ts-ignore
-      if(this.rawConfig[key] && this.rawConfig[key] !== configToUpdate[key]) {
-        // @ts-ignore
-        this.rawConfig[key] = configToUpdate[key] ;
-      }
-    })
-  }
-
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
@@ -1323,6 +1313,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   protected getDefaultConfig() {
     return {};
+  }
+
+  private updateRawConfig(
+    configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
+  ) {
+    Object.keys(configToUpdate).map((key) => {
+      // @ts-ignore
+      if (this.rawConfig[key] && this.rawConfig[key] !== configToUpdate[key]) {
+        // @ts-ignore
+        this.rawConfig[key] = configToUpdate[key];
+      }
+    });
   }
 
   private sourceEvent = () => {
