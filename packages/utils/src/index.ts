@@ -14,7 +14,7 @@ export * from './event';
 export * from './color';
 export * from './anchor';
 export * from './stencli';
-export * from './worker';
+export * from './worker-helper';
 export * from './cull';
 export * from './env';
 export * from './tileset-manager';

@@ -1,7 +1,7 @@
 import {
+  assert,
   createWorker,
   WorkerFarm,
-  assert,
   WorkerObject,
   WorkerOptions,
 } from 'web-worker-helper';
@@ -30,7 +30,7 @@ function getWorkerURL(workerName: string, options: WorkerOptions = {}): string {
 
   let url;
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'production') {
     url = `${worker.module}/dist/${workerFileName}`;
   }
 
