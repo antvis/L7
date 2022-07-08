@@ -152,7 +152,7 @@ export default class SpriteModel extends BaseModel {
     cancelAnimationFrame(this.timer);
     this.texture?.destroy();
   }
-
+  // @ts-ignore
   public initModels() {
     const {
       mapTexture,
@@ -191,7 +191,7 @@ export default class SpriteModel extends BaseModel {
       }),
     ];
   }
-
+  // @ts-ignore
   public buildModels() {
     return this.initModels();
   }

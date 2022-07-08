@@ -216,6 +216,12 @@ export interface IStyleAttributeService {
     };
     elements: IElements;
   };
+  createAttributesAndIndicesAscy(
+    encodedFeatures: IEncodeFeature[],
+    triangulation?: Triangulation,
+    segmentNumber?: number,
+    layerOptions?: any,
+  ): Promise<any>;
   /**
    * 根据 feature range 更新指定属性
    */

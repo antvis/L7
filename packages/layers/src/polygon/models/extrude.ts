@@ -107,6 +107,7 @@ export default class ExtrudeModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
 
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: type,
         vertexShader: vert,

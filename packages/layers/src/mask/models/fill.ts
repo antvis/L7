@@ -22,6 +22,7 @@ export default class MaskModel extends BaseModel {
 
   public buildModels(): IModel[] {
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'mask',
         vertexShader: mask_vert,

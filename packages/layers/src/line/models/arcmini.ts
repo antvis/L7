@@ -70,6 +70,7 @@ export default class ArcMiniModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'arc2dminiline',
         vertexShader: line_arcmini_vert,

@@ -80,6 +80,7 @@ export default class CityBuildModel extends BaseModel {
 
     this.startModelAnimate();
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'cityBuilding',
         vertexShader: buildVert,

@@ -647,7 +647,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // @ts-ignore
     if (lastConfig && lastConfig.mask === true && options.mask === false) {
       this.clearModels();
-      this.models = this.layerModel.buildModels();
+      this.layerModel.buildModels((models) => {
+        this.models = models;
+      });
     }
     return this;
   }
@@ -1129,38 +1131,73 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): IModel {
+  ): any {
     const {
       moduleName,
       vertexShader,
       fragmentShader,
       triangulation,
       segmentNumber,
+      workerEnabled,
+      layerOptions,
       ...rest
     } = options;
+
     this.shaderModuleService.registerModule(moduleName, {
       vs: vertexShader,
       fs: fragmentShader,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    const {
-      attributes,
-      elements,
-    } = this.styleAttributeService.createAttributesAndIndices(
-      this.encodedData,
-      triangulation,
-      segmentNumber,
-    );
-    return createModel({
-      attributes,
-      uniforms,
-      fs,
-      vs,
-      elements,
-      blend: BlendTypes[BlendType.normal],
-      ...rest,
+    return new Promise((resolve, reject) => {
+      try {
+        if (workerEnabled) {
+          this.styleAttributeService
+            .createAttributesAndIndicesAscy(
+              this.encodedData,
+              triangulation,
+              segmentNumber,
+              layerOptions,
+            )
+            .then(({ attributes, elements }) => {
+              const m = createModel({
+                attributes,
+                uniforms,
+                fs,
+                vs,
+                elements,
+                blend: BlendTypes[BlendType.normal],
+                ...rest,
+              });
+              resolve(m);
+            })
+            .catch((err) => reject(err));
+        } else {
+          const {
+            attributes,
+            elements,
+          } = this.styleAttributeService.createAttributesAndIndices(
+            this.encodedData,
+            triangulation,
+            segmentNumber,
+          );
+          const m = createModel({
+            attributes,
+            uniforms,
+            fs,
+            vs,
+            elements,
+            blend: BlendTypes[BlendType.normal],
+            ...rest,
+          });
+          resolve(m);
+        }
+      } catch (err) {
+        reject(err);
+      }
     });
+
+    // return
   }
 
   public createAttrubutes(
@@ -1236,13 +1273,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length > 0) {
       if (this.layerModelNeedUpdate && this.layerModel) {
-        this.models = this.layerModel.buildModels();
-        this.hooks.beforeRender.call();
-        this.layerModelNeedUpdate = false;
+        this.layerModel.buildModels((models: IModel[]) => {
+          this.models = models;
+          this.hooks.beforeRender.call();
+          this.layerModelNeedUpdate = false;
+        });
       }
       if (this.layerModel.renderUpdate) {
         this.layerModel.renderUpdate();
       }
+
       this.models.forEach((model) => {
         model.draw(
           {

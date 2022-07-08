@@ -144,6 +144,7 @@ export default class ExtrudeModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'pointExtrude2',
         vertexShader: pointExtrudeVert,

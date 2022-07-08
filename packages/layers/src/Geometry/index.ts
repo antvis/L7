@@ -9,10 +9,13 @@ export default class GeometryLayer extends BaseLayer<
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new GeometryModels[modelType](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.renderLayers();
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => (this.models = models));
   }
 
   protected getConfigSchema() {

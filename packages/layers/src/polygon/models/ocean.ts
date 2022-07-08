@@ -81,6 +81,7 @@ export default class OceanModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'polygon_ocean',
         vertexShader: ocean_vert,

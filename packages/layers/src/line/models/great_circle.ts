@@ -131,6 +131,7 @@ export default class GreatCircleModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'greatcircleline',
         vertexShader: line_arc2d_vert,

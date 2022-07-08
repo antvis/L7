@@ -41,7 +41,7 @@ export default class RasterModel extends BaseModel {
       u_colorTexture: this.colorTexture,
     };
   }
-
+  // @ts-ignore
   public initModels() {
     const {
       mask = false,
@@ -82,7 +82,7 @@ export default class RasterModel extends BaseModel {
       }),
     ];
   }
-
+  // @ts-ignore
   public buildModels() {
     return this.initModels();
   }

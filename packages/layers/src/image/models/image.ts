@@ -21,6 +21,7 @@ export default class ImageModel extends BaseModel {
       u_texture: this.texture,
     };
   }
+  // @ts-ignore
   public initModels() {
     const {
       mask = false,
@@ -77,6 +78,7 @@ export default class ImageModel extends BaseModel {
       }),
     ];
   }
+  // @ts-ignore
   public buildModels() {
     return this.initModels();
   }

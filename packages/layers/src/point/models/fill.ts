@@ -128,7 +128,7 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -141,8 +141,7 @@ export default class FillModel extends BaseModel {
       this.isMeter = true;
       this.calMeter2Coord();
     }
-
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   /**
@@ -187,11 +186,14 @@ export default class FillModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public async buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
       animateOption = { enable: false },
+      workerEnabled = false,
+      enablePicking,
+      shape2d,
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
@@ -202,8 +204,15 @@ export default class FillModel extends BaseModel {
     this.layer.triangulation = isGlobel
       ? GlobelPointFillTriangulation
       : PointFillTriangulation;
-    return [
-      this.layer.buildLayerModel({
+
+    // layer 参数供给 mesh worker 使用
+    const layerOptions = {
+      enablePicking,
+      shape2d,
+    };
+
+    this.layer
+      .buildLayerModel({
         moduleName: 'pointfill_' + type,
         vertexShader: vert,
         fragmentShader: frag,
@@ -213,12 +222,37 @@ export default class FillModel extends BaseModel {
         depth: { enable: isGlobel },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions,
         cull: {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
+
+    // const models = await this.layer.buildLayerModel({
+    //   moduleName: 'pointfill_' + type,
+    //   vertexShader: vert,
+    //   fragmentShader: frag,
+    //   triangulation: isGlobel
+    //     ? GlobelPointFillTriangulation
+    //     : PointFillTriangulation,
+    //   depth: { enable: isGlobel },
+    //   blend: this.getBlend(),
+    //   stencil: getMask(mask, maskInside),
+    //   cull: {
+    //     enable: true,
+    //     face: getCullFace(this.mapService.version),
+    //   },
+    // })
+    // cb([models as IModel])
   }
 
   /**

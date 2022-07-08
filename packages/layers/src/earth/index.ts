@@ -24,7 +24,10 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new EarthModels[shape](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.renderLayers();
+    });
   }
 
   /**

@@ -104,6 +104,7 @@ export default class SimplePointModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'simplepoint',
         vertexShader: simplePointVert,

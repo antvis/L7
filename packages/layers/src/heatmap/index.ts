@@ -8,10 +8,13 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new HeatMapModels[shape](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.renderLayers();
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => (this.models = models));
   }
   public renderModels() {
     const shape = this.getModelType();
@@ -23,6 +26,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       return this;
     }
     if (this.layerModelNeedUpdate) {
+      // @ts-ignore
       this.models = this.layerModel.buildModels();
       this.layerModelNeedUpdate = false;
     }

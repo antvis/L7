@@ -1,4 +1,3 @@
-import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import CityBuildModel from './models/build';
 
@@ -6,10 +5,13 @@ export default class CityBuildingLayer extends BaseLayer {
   public type: string = 'PolygonLayer';
   public buildModels() {
     this.layerModel = new CityBuildModel(this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.renderLayers();
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => (this.models = models));
   }
   public setLight(t: number) {
     this.updateLayerConfig({

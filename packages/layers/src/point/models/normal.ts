@@ -94,6 +94,7 @@ export default class NormalModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'normalpoint',
         vertexShader: normalVert,
