@@ -1,4 +1,4 @@
-import { PointLayer, Scene,Source } from '@antv/l7';
+import { PointLayer, Scene, Source } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 import data1 from '../data/cluster1.json';
@@ -12,60 +12,57 @@ export default class Point3D extends React.Component {
   }
 
   public async componentDidMount() {
- 
     const scene = new Scene({
-      id: "map",
+      id: 'map',
       map: new Mapbox({
-        style: "light",
+        style: 'light',
         center: [33, 15],
-        zoom: 8
-      })
+        zoom: 8,
+      }),
     });
-    scene.on("loaded", () => {
-
+    scene.on('loaded', () => {
       // 模拟第一次渲染
       const dataSource = new Source(data1, {
         parser: {
-          type: "json",
-          x: "longtitude",
-          y: "latitide"
+          type: 'json',
+          x: 'longtitude',
+          y: 'latitide',
         },
-        cluster: true
+        cluster: true,
       });
       const pointLayer = new PointLayer({})
         // 这边传入 firstData 就不会有问题
         .source(dataSource)
-        .shape("circle")
-        .scale("point_count", {
-          type: "quantile"
+        .shape('circle')
+        .scale('point_count', {
+          type: 'quantile',
         })
-        .size("point_count", [15, 20, 25, 30, 35])
+        .size('point_count', [15, 20, 25, 30, 35])
         .active(true)
-        .color("#CC3D00")
+        .color('#CC3D00')
         .style({
-          opacity: 1
+          opacity: 1,
         });
       // 聚合图标注
       const pointLayerText = new PointLayer({})
         .source(dataSource)
-        .shape("point_count", "text")
+        .shape('point_count', 'text')
         .size(15)
-        .color("#fff")
+        .color('#fff')
         .style({
           opacity: 1,
           strokeWidth: 0,
-          stroke: "#fff"
+          stroke: '#fff',
         });
       scene.addLayer(pointLayer);
       scene.addLayer(pointLayerText);
       this.scene = scene;
       // 模拟第二次渲染,样式错乱了
       setTimeout(() => {
-        dataSource.setData(data2)
-        console.log(pointLayerText)
+        dataSource.setData(data2);
+        console.log(pointLayerText);
       }, 2000);
     });
-    
   }
 
   public render() {
