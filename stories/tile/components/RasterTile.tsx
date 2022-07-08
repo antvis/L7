@@ -1,97 +1,92 @@
 import * as React from 'react';
 import * as turf from '@turf/turf';
-import { RasterLayer, Scene, LineLayer, ILayer, PointLayer } from '@antv/l7';
+import {
+  RasterLayer,
+  Scene,
+  LineLayer,
+  ILayer,
+  PointLayer,
+  PolygonLayer,
+} from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map, Mapbox } from '@antv/l7-maps';
 
 export default class RasterTile extends React.Component {
   private scene: Scene;
-  private gridLayer: ILayer;
 
   public componentWillUnmount() {
     this.scene.destroy();
   }
 
-  private updateGridLayer = () => {
-    const bounds = this.scene['mapService'].getBounds();
-    const bbox = [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]];
-    // console.log('bbox: ', bbox);
-    const poly = turf.bboxPolygon(bbox as [number, number, number, number]);
-    const data = { type: 'FeatureCollection', features: [poly] };
-
-    if (this.gridLayer) {
-      this.gridLayer.setData(data);
-      return;
-    }
-    this.gridLayer = new LineLayer({ autoFit: false, zIndex: 19 })
-      .source(data)
-      .size(2)
-      .color('red')
-      .shape('line');
-    this.scene.addLayer(this.gridLayer);
-  };
-
   public async componentDidMount() {
     this.scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        center: [121.268, 30.3628],
-        pitch: 0,
-        style: 'normal',
-        zoom: 5,
-        viewMode: '3D',
+      // stencil: true,
+      map: new GaodeMap({
+        center: [121, 29.4],
+        // pitch: 60,
+        // style: 'normal',
+        zoom: 6.5,
+        style: 'blank',
       }),
     });
 
     // this.scene.on('mapchange', this.updateGridLayer);
 
     this.scene.on('loaded', () => {
-      const point = new PointLayer({ zIndex: 7 })
-        .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-            },
-          ],
-          {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
-        )
-        .shape('circle')
-        .color('#f00')
-        .size(10);
+      fetch(
+        // 'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+        'https://gw.alipayobjects.com/os/bmw-prod/ecd1aaac-44c0-4232-b66c-c0ced76d5c7d.json',
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // const provincelayer = new PolygonLayer({})
+          //   .source(data)
+          //   .size(-150000)
+          //   .shape('extrude')
+          //   .color('#0DCCFF')
+          //   // .active({
+          //   //   color: 'rgb(100,230,255)'
+          //   // })
+          //   .style({
+          //     heightfixed: true,
+          //     // pickLight: true,
+          //     // raisingHeight: 200000,
+          //     opacity: 0.8,
+          //     topsurface: false,
+          //     targetColor: '#a1d99b',
+          //     sourceColor: '#00441b',
+          //   });
 
-      this.scene.addLayer(point);
+          // this.scene.addLayer(provincelayer);
 
-      const layer = new RasterLayer({
-        zIndex: 6,
-        // minZoom: 1,
-        // maxZoom: 16,
-      });
-      layer
-        .source(
-          'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          {
-            parser: {
-              type: 'rasterTile',
-              tileSize: 256,
-              // minZoom: 6,
-              // maxZoom: 15,
-              zoomOffset: 0,
-              extent: [-180, -85.051129, 179, 85.051129],
-            },
-          },
-        )
-        .style({
-          // opacity: 0.5
+          const layer = new RasterLayer({
+            zIndex: 1,
+            mask: true,
+            maskfence: data,
+          });
+          layer
+            .source(
+              [
+                'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                'http://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                'http://webst03.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+                'http://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              ],
+              {
+                parser: {
+                  type: 'rasterTile',
+                  tileSize: 256,
+                  zoomOffset: 0,
+                  extent: [-180, -85.051129, 179, 85.051129],
+                },
+              },
+            )
+            .style({
+              // opacity: 0.5,
+            });
+
+          this.scene.addLayer(layer);
         });
-
-      this.scene.addLayer(layer);
-      // this.updateGridLayer();
     });
   }
 

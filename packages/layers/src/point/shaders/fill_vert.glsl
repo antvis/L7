@@ -9,6 +9,8 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 uniform float u_globel;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
+uniform float u_meter2coord;
+uniform float u_meteryScale;
 uniform float u_isMeter;
 
 varying vec4 v_data;
@@ -36,7 +38,12 @@ uniform float u_raisingHeight: 0.0;
 void main() {
   vec3 extrude = a_Extrude;
   float shape_type = a_Shape;
-  float newSize = setPickingSize(a_Size);
+  /*
+  *  setPickingSize 设置拾取大小
+  *  u_meter2coord 在等面积大小的时候设置单位
+  */
+  float newSize = setPickingSize(a_Size) * u_meter2coord;
+  // float newSize = setPickingSize(a_Size) * 0.00001038445708445579;
 
   // cal style mapping - 数据纹理映射部分的计算
   styleMappingMat = mat4(
@@ -126,7 +133,7 @@ void main() {
   // TODO: billboard
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
-  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, u_blur);
+  float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur);
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
   vec3 aPosition = a_Position;
@@ -135,14 +142,18 @@ void main() {
     offset = project_pixel(offset);
   } else {
     // 以米为实际单位
-    antialiasblur *= pow(19.0 - u_Zoom, 2.0);
-    antialiasblur = max(antialiasblur, -0.01);
-    // offset *= 0.5;
-
+    if(newSize * pow(2.0, u_Zoom) < 48.0) {
+      antialiasblur = max(antialiasblur, -0.05);
+    } else if(newSize * pow(2.0, u_Zoom) < 128.0) {
+      antialiasblur = max(antialiasblur, -0.6/pow(u_Zoom, 2.0));
+    } else {
+      antialiasblur = max(antialiasblur, -0.8/pow(u_Zoom, 2.0));
+    }
+    
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-      aPosition.xy += offset;
-      offset.x = 0.0;
-      offset.y = 0.0;
+      aPosition.x += offset.x / u_meteryScale;
+      aPosition.y += offset.y;
+      offset = vec2(0.0);
     }
   }
 

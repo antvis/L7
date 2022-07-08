@@ -53,14 +53,4 @@ layer.animate(false);
 - speed 水波速度
 - rings 水波环数
 
-## tips
-
-目前 style 的配置项只支持全局设置，不支持数据映射。
-
-如果 opacity 设置为 0.3 则所有的气泡都是 0.3
-
-style 方法如果没有设置 stroke, 默认于气泡的填充色相同
-
 [在线案例](../../../examples/point/bubble#point)
-
-`markdown:docs/common/layer/base.md`

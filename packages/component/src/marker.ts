@@ -210,6 +210,7 @@ export default class Marker extends EventEmitter {
     const { element, anchor } = this.markerOption;
     this.updatePosition();
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
+    
   }
 
   private onMapClick(e: MouseEvent) {

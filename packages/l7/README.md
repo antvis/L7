@@ -126,7 +126,7 @@ scene.addLayer(pointLayer);
 - [L7Plot](https://github.com/antvis/L7Plot)
 - [L7 React](https://github.com/antvis/L7-React)
 - [L7 Boundary](https://github.com/antvis/L7-boundary)
-- [L7 draw](https://github.com/antvis/L7-draw)
+- [L7Draw](https://github.com/antvis/L7Draw)
 
 ## ✅ License
 

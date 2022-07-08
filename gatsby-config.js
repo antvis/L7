@@ -62,7 +62,7 @@ module.exports = {
           zh: 'L7 地理围栏绘制组件库',
           en: 'L7Draw',
         },
-        url: 'http://antv.vision/L7-draw/',
+        url: 'http://antv.vision/L7Draw/',
       },
       {
         name: {
@@ -212,6 +212,14 @@ module.exports = {
         title: {
           zh: '第三方引擎接入',
           en: 'import other gl',
+        },
+        order: 8,
+      },
+      {
+        slug: 'api/tile',
+        title: {
+          zh: '瓦片',
+          en: 'tile',
         },
         order: 8,
       },
@@ -420,7 +428,7 @@ module.exports = {
         icon: 'map',
         title: {
           zh: '绘制组件',
-          en: 'L7 Draw',
+          en: 'L7Draw',
         },
         order: 12,
       },

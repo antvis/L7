@@ -1,4 +1,4 @@
-import { PolygonLayer, Scene } from '@antv/l7';
+import { PolygonLayer, Scene, Source } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 
@@ -13,13 +13,18 @@ export default class Amap2demo_polygon extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         pitch: 40,
-        center: [120, 30],
-        zoom: 13,
+        // center: [120, 30],
+        center: [113.8623046875, 30.031055426540206],
+        zoom: 8,
       }),
     });
     this.scene = scene;
+    const emptyData = {
+      type: 'FeatureCollection',
+      features: [],
+    };
     const data = {
       type: 'FeatureCollection',
       features: [
@@ -68,10 +73,14 @@ export default class Amap2demo_polygon extends React.Component {
       ],
     };
 
+    const source = new Source(emptyData);
+
     const layer = new PolygonLayer({
-      autoFit: true,
+      // autoFit: true,
     })
-      .source(data)
+      // .source(data)
+      .source(emptyData)
+      // .source(source)
       .shape('fill')
       .color('red')
       .active(true)
@@ -81,24 +90,32 @@ export default class Amap2demo_polygon extends React.Component {
         //   dir: 'in',
         // },
       });
-    scene.addLayer(layer);
 
-    const layer2 = new PolygonLayer({
-      autoFit: true,
-    })
-      .source(data2)
-      .shape('fill')
-      .color('#ff0')
-      .active(true)
-      .style({
-        // opacity: 0.4,
-        // opacityLinear: {
-        //   enable: true,
-        //   dir: 'out',
-        // },
-        // raisingHeight: 50000,
-      });
-    scene.addLayer(layer2);
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+      scene.render();
+      setTimeout(() => {
+        layer.setData(data);
+        scene.render();
+      }, 3000);
+    });
+
+    // const layer2 = new PolygonLayer({
+    //   autoFit: true,
+    // })
+    //   .source(data2)
+    //   .shape('fill')
+    //   .color('#ff0')
+    //   .active(true)
+    //   .style({
+    //     // opacity: 0.4,
+    //     // opacityLinear: {
+    //     //   enable: true,
+    //     //   dir: 'out',
+    //     // },
+    //     // raisingHeight: 50000,
+    //   });
+    // scene.addLayer(layer2);
   }
 
   public render() {

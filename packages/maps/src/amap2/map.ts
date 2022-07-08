@@ -381,8 +381,7 @@ export default class AMapService
     };
   }
   public lngLatToContainer(lnglat: [number, number]): IPoint {
-    const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
-    const pixel = this.map.lngLatToContainer(ll);
+    const pixel = this.map.lngLatToContainer(lnglat);
     return {
       x: pixel.getX(),
       y: pixel.getY(),
@@ -676,7 +675,6 @@ export default class AMapService
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
 
-    const { zoom } = e;
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     if (this.cameraChangedCallback) {
@@ -690,7 +688,7 @@ export default class AMapService
         up,
         near,
         // AMap 定义的缩放等级 与 Mapbox 相差 1
-        zoom: zoom - 1, // 与amap1.x对比相差一个级别
+        zoom: this.map.getZoom() - 1, // 与amap1.x对比相差一个级别
         center,
         offsetOrigin: [position[0], position[1]],
 

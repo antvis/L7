@@ -18,5 +18,3 @@ import { PointLayer } from '@antv/l7';
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6AR6Qq0Bq-MAAAAAAAAAAABkARQnAQ'>
 
 [在线案例](../../../examples/point/chart#bar)
-
-`markdown:docs/common/layer/base.md`

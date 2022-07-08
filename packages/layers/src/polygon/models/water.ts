@@ -7,6 +7,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { getMask } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
@@ -53,7 +54,7 @@ export default class WaterModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_speed: speed,
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 

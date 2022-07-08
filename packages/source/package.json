@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.8.36",
+  "version": "2.9.11",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,10 +26,11 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.1.0",
-    "@antv/l7-core": "^2.8.36",
-    "@antv/l7-utils": "^2.8.36",
+    "@antv/l7-core": "2.9.11",
+    "@antv/l7-utils": "2.9.11",
     "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.4.0",
+    "@mapbox/vector-tile": "^1.3.1",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
@@ -38,13 +39,16 @@
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
+    "pbf": "^3.2.1",
     "reflect-metadata": "^0.1.13",
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
     "@types/d3-dsv": "^1.0.36",
     "@types/d3-hexbin": "^0.2.3",
-    "@types/lodash": "^4.14.138"
+    "@types/lodash": "^4.14.138",
+    "@types/mapbox__vector-tile": "^1.3.0",
+    "@types/pbf": "^3.0.2"
   },
   "gitHead": "f63aea6c9140aac41f1e842fd7fef34502bfeec5",
   "publishConfig": {

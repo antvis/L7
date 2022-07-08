@@ -21,7 +21,7 @@ import { LineLayer } from '@antv/l7';
 
 shape 设置成 arc 即可
 
-### 数据
+### source
 
 绘制弧线只需提供起止点坐标即可（起止点调换位置，弧线的形状会对称相反，飞线动画的方向也会相反）
 
@@ -37,6 +37,10 @@ source(data, {
 });
 ```
 
+`markdown:docs/api/line_layer/features/animate.zh.md`
+
+### style
+
 `markdown:docs/api/line_layer/features/segmentNumber.zh.md`
 
 `markdown:docs/api/line_layer/features/thetaOffset.zh.md`
@@ -45,8 +49,4 @@ source(data, {
 
 `markdown:docs/api/line_layer/features/dash.zh.md`
 
-`markdown:docs/api/line_layer/features/animate.zh.md`
-
 `markdown:docs/api/line_layer/features/texture.zh.md`
-
-`markdown:docs/common/layer/base.md`

@@ -5,7 +5,7 @@ order: 2
 
 `markdown:docs/common/style.md`
 
-## 简介
+# 简介
 
 L7 Layer 接口设计遵循图形语法，所有图层都继承于基类（baseLayer）。
 
