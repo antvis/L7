@@ -243,9 +243,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.configService.getLayerConfig<ChildLayerStyleOptions>(this.id);
   }
 
+  private updateRawConfig(configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>) {
+    Object.keys(configToUpdate).map((key) => {
+      // @ts-ignore
+      if(this.rawConfig[key] && this.rawConfig[key] !== configToUpdate[key]) {
+        // @ts-ignore
+        this.rawConfig[key] = configToUpdate[key] ;
+      }
+    })
+  }
+
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
+    // 同步 options 记录
+    this.updateRawConfig(configToUpdate);
+
     if (!this.inited) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
