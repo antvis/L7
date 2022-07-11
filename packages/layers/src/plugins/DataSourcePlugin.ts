@@ -43,7 +43,8 @@ export default class DataSourcePlugin implements ILayerPlugin {
     const { zoom = 0 } = source.clusterOptions;
     const newZoom = this.mapService.getZoom() - 1;
     const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
-    if (cluster && dataSourceNeedUpdate) { // 数据发生更新
+    if (cluster && dataSourceNeedUpdate) {
+      // 数据发生更新
       source.updateClusterData(Math.floor(newZoom));
     }
     // 如果 dataSource 有更新，跳过 zoom 的判断，直接更新一次
