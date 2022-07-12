@@ -127,7 +127,6 @@ export default class LineModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    
     this.styleAttributeService.registerStyleAttribute({
       name: 'distanceAndIndex',
       type: AttributeType.Attribute,
@@ -173,10 +172,10 @@ export default class LineModel extends BaseModel {
           attributeIdx: number,
         ) => {
           // console.log(feature)
-          let startPoint = (feature.coordinates[0] || [0, 0]) as number[];
-          let endPoint = (feature.coordinates[3] || [0, 0]) as number[];
-         
-          return  [startPoint[0], startPoint[1], endPoint[0], endPoint[1]];
+          const startPoint = (feature.coordinates[0] || [0, 0]) as number[];
+          const endPoint = (feature.coordinates[3] || [0, 0]) as number[];
+
+          return [startPoint[0], startPoint[1], endPoint[0], endPoint[1]];
         },
       },
     });
