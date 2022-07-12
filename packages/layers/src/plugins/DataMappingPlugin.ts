@@ -176,10 +176,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
           }
         });
 
-      if (
-        encodeRecord.shape === 'line' ||
-        (encodeRecord.shape === 'halfLine' && arrow.enable)
-      ) {
+      if (arrow.enable && (encodeRecord.shape === 'line' || encodeRecord.shape === 'halfLine')) {
         // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
         const coords = encodeRecord.coordinates as Position[];
         const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
