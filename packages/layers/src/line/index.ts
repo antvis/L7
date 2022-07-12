@@ -38,6 +38,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       greatcircle: { blend: 'additive' },
       vectorline: {},
       tileLine: {},
+      halfLine: {},
     };
     return defaultConfig[type];
   }

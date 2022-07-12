@@ -8,6 +8,7 @@ import LinearLine from './linearline';
 import SimpleLineModel from './simpleLine';
 import TileLineModel from './tile';
 import LineWallModel from './wall';
+import LineHalfModel from './half';
 
 export type LineModelType =
   | 'arc'
@@ -17,6 +18,7 @@ export type LineModelType =
   | 'wall'
   | 'simple'
   | 'line'
+  | 'halfLine'
   | 'linearline'
   | 'vectorline'
   | 'tileLine';
@@ -28,6 +30,7 @@ const LineModels: { [key in LineModelType]: any } = {
   greatcircle: GreatCircleModel,
   wall: LineWallModel,
   line: LineModel,
+  halfLine: LineHalfModel,
   simple: SimpleLineModel,
   linearline: LinearLine,
   vectorline: LineTileModel,
