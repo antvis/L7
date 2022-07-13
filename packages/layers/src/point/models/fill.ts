@@ -333,7 +333,6 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
-
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
 
@@ -452,7 +451,17 @@ export default class FillModel extends BaseModel {
         ) => {
           const { shape = 2 } = feature;
           // const shape2d = this.layer.getLayerConfig().shape2d as string[];
-          const shape2d = ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'];
+          const shape2d = [
+            'circle',
+            'triangle',
+            'square',
+            'pentagon',
+            'hexagon',
+            'octogon',
+            'hexagram',
+            'rhombus',
+            'vesica',
+          ];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

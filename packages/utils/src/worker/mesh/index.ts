@@ -119,5 +119,5 @@ export default function getMeshTask(options: IWorkOptions) {
   const { customFuncs, triangulation } = options;
   return meshTask
     .replace('$customFuncs$', customFuncs)
-    .replace('$triangulation$', triangulation)
+    .replace('$triangulation$', triangulation);
 }
