@@ -8,7 +8,7 @@ import UpdateAttrAndEle_planeGeometry from './components/updateAttrAndEle_planeG
 import UpdateAttrTimeLine from './components/updataPointsTimeLine';
 import UpdateAttrShenZhen from './components/updateAttrAndEleShenZhen';
 import UpdateHeatMap from './components/updataHeatMap';
-import PointTest from './components/Map';
+import PointTest from './components/Points';
 import BigLine from './components/BigLine';
 import DataUpdate from './components/DataUpdate';
 

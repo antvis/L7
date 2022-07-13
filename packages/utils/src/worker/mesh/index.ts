@@ -3,8 +3,6 @@ import { encodePickingColor, utils } from './common';
 
 const meshTask = `
     ${utils}
-    // Mesh params
-    $params$
 
     // encode picking color
     ${encodePickingColor}
@@ -54,8 +52,6 @@ const meshTask = `
       };
 
       enablePicking = data.enablePicking;
-
-      $setValues$
 
       var verticesNum = 0;
       var indices = [];
@@ -120,10 +116,8 @@ const meshTask = `
 `;
 
 export default function getMeshTask(options: IWorkOptions) {
-  const { customFuncs, triangulation, params, setValues } = options;
+  const { customFuncs, triangulation } = options;
   return meshTask
     .replace('$customFuncs$', customFuncs)
     .replace('$triangulation$', triangulation)
-    .replace('$params$', params)
-    .replace('$setValues$', setValues);
 }

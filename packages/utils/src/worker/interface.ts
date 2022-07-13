@@ -9,7 +9,5 @@ export type IMeshType = 'PointFill';
 export interface IWorkOptions {
   meshType: IMeshType;
   customFuncs: string;
-  params: string;
   triangulation: string;
-  setValues: string;
 }

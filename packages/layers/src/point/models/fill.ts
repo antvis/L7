@@ -29,6 +29,8 @@ import { mat4, vec3 } from 'gl-matrix';
 export const customFuncs = `
 a_Shape: ( feature, featureIdx, vertex, attributeIdx ) => {
   var { shape = 2 } = feature;
+  // var shape2d = this.layer.getLayerConfig().shape2d as string[];
+  var shape2d = ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'];
   var shapeIndex = shape2d.indexOf(shape);
   return [shapeIndex];
 },
@@ -61,13 +63,6 @@ function triangulation(feature) {
 }
 `;
 
-export const params = `
-var shape2d = [];
-`;
-
-export const setValues = `
-shape2d = data.shape2d;
-`;
 export default class FillModel extends BaseModel {
   public meter2coord: number = 1;
   private isMeter: boolean = false;
@@ -236,7 +231,6 @@ export default class FillModel extends BaseModel {
       animateOption = { enable: false },
       workerEnabled = false,
       enablePicking,
-      shape2d,
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
@@ -251,11 +245,8 @@ export default class FillModel extends BaseModel {
     // layer 参数供给 mesh worker 使用
     const layerOptions = {
       enablePicking,
-      shape2d,
       customFuncs,
-      params,
       triangulation,
-      setValues,
     };
 
     this.layer
@@ -342,6 +333,7 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
+
     // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
     const isGlobel = this.mapService.version === 'GLOBEL';
 
@@ -459,7 +451,8 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = this.layer.getLayerConfig().shape2d as string[];
+          // const shape2d = this.layer.getLayerConfig().shape2d as string[];
+          const shape2d = ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },
