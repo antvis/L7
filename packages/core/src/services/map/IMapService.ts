@@ -91,6 +91,7 @@ export interface IMapService<RawMap = {}> {
   setMapStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
+  meterToCoord(center: number[], lnglat: number[]): number;
   pixelToLngLat(pixel: Point): ILngLat;
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
@@ -170,6 +171,7 @@ export interface IEarthService<RawMap = {}> {
   setMapStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
+  meterToCoord(center: number[], lnglat: number[]): number;
   pixelToLngLat(pixel: Point): ILngLat;
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;

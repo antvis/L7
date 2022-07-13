@@ -223,6 +223,11 @@ export default class L7MapService implements IMapService<Map> {
   public setMapStyle(style: any): void {
     this.map.setStyle(this.getMapStyle(style));
   }
+
+  public meterToCoord(center: [number, number], outer: [number, number]) {
+    return 1.0;
+  }
+
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     return this.map.unproject(pixel);

@@ -11,6 +11,7 @@ import {
   MarkerLayer,
   Popup,
   HeatmapLayer,
+  LineLayer,
 } from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
@@ -24,45 +25,83 @@ export default class Amap2demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
-        pitch: 0,
-        style: 'blank',
-        // center: [115, 30],
-
+      map: new Mapbox({
+        // map: new GaodeMap({
+        // map: new GaodeMapV2({
+        // map: new Map({
+        style: 'dark',
         center: [120, 30],
-
-        zoom: 0,
-        // layers: [new window.AMap.TileLayer.Satellite()]
+        zoom: 4,
       }),
     });
 
     this.scene = scene;
 
-    scene.on('loaded', () => {
-      const layer = new HeatmapLayer({})
-        .source([{ lng: 120, lat: 30, mag: 1 }], {
-          parser: { type: 'json', x: 'lng', y: 'lat' },
-        })
-        .shape('heatmap')
-        .size('mag', [0, 1.0]) // weight映射通道
-        .style({
-          intensity: 2,
-          radius: 20,
-          opacity: 1.0,
-          rampColors: {
-            colors: [
-              '#FF4818',
-              '#F7B74A',
-              '#FFF598',
-              '#F27DEB',
-              '#8C1EB2',
-              '#421EB2',
-            ].reverse(),
-            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+    const layer = new LineLayer()
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              color: '#0f0',
+            },
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [120, 40],
+                [100, 30],
+                [110, 20],
+              ],
+            },
           },
-        });
+          {
+            type: 'Feature',
+            properties: {
+              color: '#f00',
+            },
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [130, 30],
+                [100, 20],
+              ],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {
+              color: '#ff0',
+            },
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [100, 20],
+                [130, 30],
+              ],
+            },
+          },
+        ],
+      })
+      .shape('halfLine')
+      .size(20)
+      .color('color')
+      .active(true)
+      .style({
+        // opacity: 0.3,
+        sourceColor: '#f00',
+        targetColor: '#ff0',
+        arrow: {
+          enable: true,
+          arrowWidth: 2,
+          // arrowHeight: 3,
+          // tailWidth: 0,
+        },
+      });
 
-      this.scene.addLayer(layer);
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+      // console.log(scene.getMapService().lngLatToMercator([100, 30], 0))
     });
   }
 

@@ -17,14 +17,3 @@ jobs:
           # 注意替换为你的 Gitee 目标仓库地址
           destination-repo: 'git@gitee.com:antv-l7/antv-l7.git'
 
-      - name: ✅ Build Gitee Pages
-        uses: yanglbme/gitee-pages-action@master
-        with:
-          # 注意替换为你的 Gitee 用户名
-          gitee-username: afc163
-          # 注意在 Settings->Secrets 配置 GITEE_PASSWORD
-          gitee-password: ${{ secrets.GITEE_PASSWORD }}
-          # 注意替换为你的 Gitee 仓库
-          gitee-repo: antv-l7/antv-l7
-          # 要部署的分支
-          branch: gh-pages

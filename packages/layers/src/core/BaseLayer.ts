@@ -246,6 +246,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
+    // 同步 options 记录
+    this.updateRawConfig(configToUpdate);
+
     if (!this.inited) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
@@ -1349,6 +1352,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   protected getDefaultConfig() {
     return {};
+  }
+
+  private updateRawConfig(
+    configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
+  ) {
+    Object.keys(configToUpdate).map((key) => {
+      // @ts-ignore
+      if (this.rawConfig[key] && this.rawConfig[key] !== configToUpdate[key]) {
+        // @ts-ignore
+        this.rawConfig[key] = configToUpdate[key];
+      }
+    });
   }
 
   private sourceEvent = () => {

@@ -2,7 +2,8 @@ import { PointLayer, Scene, Source } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 // @ts-ignore
-import data from '../data/data.json';
+import data1 from '../data/cluster1.json';
+import data2 from '../data/cluster2.json';
 export default class Point3D extends React.Component {
   // @ts-ignore
   private scene: Scene;
