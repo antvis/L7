@@ -37,71 +37,39 @@ export default class Amap2demo extends React.Component {
 
     this.scene = scene;
 
-    const layer = new LineLayer()
-      .source({
-        type: 'FeatureCollection',
-        features: [
+    const layer = new PointLayer({
+      visible: false,
+    })
+      .source(
+        [
           {
-            type: 'Feature',
-            properties: {
-              color: '#0f0',
-            },
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [120, 40],
-                [100, 30],
-                [110, 20],
-              ],
-            },
-          },
-          {
-            type: 'Feature',
-            properties: {
-              color: '#f00',
-            },
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [130, 30],
-                [100, 20],
-              ],
-            },
-          },
-          {
-            type: 'Feature',
-            properties: {
-              color: '#ff0',
-            },
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [100, 20],
-                [130, 30],
-              ],
-            },
+            lng: 120,
+            lat: 30,
           },
         ],
-      })
-      .shape('halfLine')
-      .size(20)
-      .color('color')
-      .active(true)
-      .style({
-        // opacity: 0.3,
-        sourceColor: '#f00',
-        targetColor: '#ff0',
-        arrow: {
-          enable: true,
-          arrowWidth: 2,
-          // arrowHeight: 3,
-          // tailWidth: 0,
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
         },
-      });
+      )
+      .shape('circle')
+      .size(10)
+      .color('#f00');
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      // console.log(scene.getMapService().lngLatToMercator([100, 30], 0))
+
+      setTimeout(() => {
+        layer.show();
+        layer.style({
+          opacity: 1,
+        });
+
+        console.log(layer.isVisible());
+      }, 3000);
     });
   }
 

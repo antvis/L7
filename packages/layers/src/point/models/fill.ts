@@ -9,14 +9,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { $window, getCullFace, getMask } from '@antv/l7-utils';
+import { $window, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import {
-  GlobelPointFillTriangulation,
-  PointFillTriangulation,
-} from '../../core/triangulation';
+import { PointFillTriangulation } from '../../core/triangulation';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
@@ -24,7 +21,6 @@ import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
 import { Version } from '@antv/l7-maps';
-import { mat4, vec3 } from 'gl-matrix';
 
 export const customFuncs = `
 a_Shape: ( feature, featureIdx, vertex, attributeIdx ) => {
@@ -62,7 +58,6 @@ function triangulation(feature) {
   };
 }
 `;
-
 export default class FillModel extends BaseModel {
   private meter2coord: number = 1;
   private meteryScale: number = 1; // 兼容 mapbox
@@ -138,7 +133,6 @@ export default class FillModel extends BaseModel {
       u_blur: blur,
 
       u_additive: blend === 'additive' ? 1.0 : 0.0,
-      u_globel: this.mapService.version === Version.GLOBEL ? 1 : 0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
@@ -240,11 +234,7 @@ export default class FillModel extends BaseModel {
     >;
     const { frag, vert, type } = this.getShaders(animateOption);
 
-    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
-    const isGlobel = this.mapService.version === 'GLOBEL';
-    this.layer.triangulation = isGlobel
-      ? GlobelPointFillTriangulation
-      : PointFillTriangulation;
+    this.layer.triangulation = PointFillTriangulation;
 
     // layer 参数供给 mesh worker 使用
     const layerOptions = {
@@ -258,18 +248,12 @@ export default class FillModel extends BaseModel {
         moduleName: 'pointfill_' + type,
         vertexShader: vert,
         fragmentShader: frag,
-        triangulation: isGlobel
-          ? GlobelPointFillTriangulation
-          : PointFillTriangulation,
-        depth: { enable: isGlobel },
+        triangulation: PointFillTriangulation,
+        depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
         layerOptions,
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
       })
       .then((model) => {
         callbackModel([model as IModel]);
@@ -289,10 +273,6 @@ export default class FillModel extends BaseModel {
     //   depth: { enable: isGlobel },
     //   blend: this.getBlend(),
     //   stencil: getMask(mask, maskInside),
-    //   cull: {
-    //     enable: true,
-    //     face: getCullFace(this.mapService.version),
-    //   },
     // })
     // cb([models as IModel])
   }
@@ -337,9 +317,6 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
-    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
-    const isGlobel = this.mapService.version === 'GLOBEL';
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
@@ -358,44 +335,7 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          let extrude;
-          // 地球模式
-          if (isGlobel) {
-            const [x, y, z] = vertex;
-            const n1 = vec3.fromValues(0, 0, 1);
-            const n2 = vec3.fromValues(x, 0, z);
-
-            const xzReg =
-              x >= 0 ? vec3.angle(n1, n2) : Math.PI * 2 - vec3.angle(n1, n2);
-
-            const yReg = Math.PI * 2 - Math.asin(y / 100);
-
-            const m = mat4.create();
-            mat4.rotateY(m, m, xzReg);
-            mat4.rotateX(m, m, yReg);
-
-            const v1 = vec3.fromValues(1, 1, 0);
-            vec3.transformMat4(v1, v1, m);
-            vec3.normalize(v1, v1);
-
-            const v2 = vec3.fromValues(-1, 1, 0);
-            vec3.transformMat4(v2, v2, m);
-            vec3.normalize(v2, v2);
-
-            const v3 = vec3.fromValues(-1, -1, 0);
-            vec3.transformMat4(v3, v3, m);
-            vec3.normalize(v3, v3);
-
-            const v4 = vec3.fromValues(1, -1, 0);
-            vec3.transformMat4(v4, v4, m);
-            vec3.normalize(v4, v4);
-
-            extrude = [...v1, ...v2, ...v3, ...v4];
-          } else {
-            // 平面模式
-            extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
-          }
-
+          const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
           const extrudeIndex = (attributeIdx % 4) * 3;
           return [
             extrude[extrudeIndex],

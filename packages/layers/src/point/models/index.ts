@@ -1,4 +1,7 @@
 import PointTileModel from '../../tile/models/tileModel';
+import EarthExtrudeModel from './earthExtrude';
+// earth
+import EarthFillModel from './earthFill';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import FillImageModel from './fillmage';
@@ -21,7 +24,9 @@ export type PointType =
   | 'text'
   | 'icon'
   | 'vectorpoint'
-  | 'tile';
+  | 'tile'
+  | 'earthFill'
+  | 'earthExtrude';
 
 const PointModels: { [key in PointType]: any } = {
   fillImage: FillImageModel,
@@ -35,6 +40,8 @@ const PointModels: { [key in PointType]: any } = {
   icon: IconModel,
   vectorpoint: PointTileModel,
   tile: TileFillModel,
+  earthFill: EarthFillModel,
+  earthExtrude: EarthExtrudeModel,
 };
 
 export default PointModels;
