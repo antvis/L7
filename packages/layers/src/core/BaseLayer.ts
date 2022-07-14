@@ -246,6 +246,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
+    // 同步 rawConfig
+    Object.keys(configToUpdate).map(key => {
+      if(key in this.rawConfig) {
+        // @ts-ignore
+        this.rawConfig[key] = configToUpdate[key]
+      }
+    })
     if (!this.inited) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
@@ -635,13 +642,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       );
     }
 
-    // this.rawConfig = {
-    //   ...this.rawConfig,
-    //   ...rest,
-    // };
+    this.rawConfig = {
+      ...this.rawConfig,
+      ...rest,
+    };
     if (this.container) {
-      // this.updateLayerConfig(this.rawConfig);
-      this.updateLayerConfig(rest);
+      this.updateLayerConfig(this.rawConfig);
       this.styleNeedUpdate = true;
     }
 
