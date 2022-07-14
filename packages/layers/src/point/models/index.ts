@@ -9,6 +9,9 @@ import Radar from './radar';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
 import TileFillModel from './tile';
+// earth
+import EarthFillModel from './earthFill';
+import EarthExtrudeModel from './earthExtrude';
 
 export type PointType =
   | 'fillImage'
@@ -21,7 +24,9 @@ export type PointType =
   | 'text'
   | 'icon'
   | 'vectorpoint'
-  | 'tile';
+  | 'tile'
+  | 'earthFill'
+  | 'earthExtrude';
 
 const PointModels: { [key in PointType]: any } = {
   fillImage: FillImageModel,
@@ -35,6 +40,8 @@ const PointModels: { [key in PointType]: any } = {
   icon: IconModel,
   vectorpoint: PointTileModel,
   tile: TileFillModel,
+  earthFill: EarthFillModel,
+  earthExtrude: EarthExtrudeModel,
 };
 
 export default PointModels;

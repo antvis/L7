@@ -68,6 +68,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
       vectorpoint: {},
       tile: {},
+      earthFill: {},
+      earthExtrude: {},
     };
     return defaultConfig[type];
   }
@@ -85,6 +87,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'icon',
       'vectorpoint',
       'tile',
+      'earthFill',
+      'earthExtrude'
     ];
     if (this.layerSource.parser.type === 'mvt') {
       return 'vectorpoint';
