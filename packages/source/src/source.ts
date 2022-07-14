@@ -75,21 +75,8 @@ export default class Source extends EventEmitter implements ISource {
     // this.rawData = cloneDeep(data);
     this.originData = data;
     this.initCfg(cfg);
-    
-    this.init();
-  }
 
-  private handleData() {
-    return new Promise((resolve, reject) => {
-      try {
-        this.excuteParser();
-        this.initCluster();
-        this.executeTrans();
-        resolve({});
-      } catch(err) {
-        reject();
-      }
-    })
+    this.init();
   }
 
   public getClusters(zoom: number): any {
@@ -205,6 +192,19 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset?.destroy();
   }
 
+  private handleData() {
+    return new Promise((resolve, reject) => {
+      try {
+        this.excuteParser();
+        this.initCluster();
+        this.executeTrans();
+        resolve({});
+      } catch (err) {
+        reject();
+      }
+    });
+  }
+
   private initCfg(option?: ISourceCFG) {
     this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
     const cfg = this.cfg;
@@ -229,11 +229,10 @@ export default class Source extends EventEmitter implements ISource {
   private init() {
     // this.hooks.init.call(this);
     this.inited = false;
-    this.handleData()
-    .then(() => {
+    this.handleData().then(() => {
       this.inited = true;
-      this.emit('sourceInited')
-    })
+      this.emit('sourceInited');
+    });
   }
 
   /**

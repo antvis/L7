@@ -49,9 +49,9 @@ export default class PointTest extends React.Component {
           // .animate(true)
           .active(true);
         scene.on('loaded', () => {
-          let t = new Date().getTime()
+          let t = new Date().getTime();
           scene.addLayer(layer);
-          console.log(new Date().getTime() - t)
+          console.log(new Date().getTime() - t);
         });
       });
   }

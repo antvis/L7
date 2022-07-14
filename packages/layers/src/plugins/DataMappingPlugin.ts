@@ -39,32 +39,32 @@ export default class DataMappingPlugin implements ILayerPlugin {
     layer.hooks.init.tap('DataMappingPlugin', () => {
       // 初始化重新生成 map
       const source = layer.getSource();
-      if(source.inited) {
+      if (source.inited) {
         this.generateMaping(layer, { styleAttributeService });
       } else {
         // @ts-ignore
         source.once('sourceInited', () => {
           this.generateMaping(layer, { styleAttributeService });
-        })
+        });
       }
-    
+
       // this.generateMaping(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
       layer.dataState.dataMappingNeedUpdate = false;
       const source = layer.getSource();
-      if(source.inited ){
+      if (source.inited) {
         this.generateMaping(layer, { styleAttributeService });
       } else {
         // @ts-ignore
         source.once('sourceInited', () => {
           this.generateMaping(layer, { styleAttributeService });
-        })
+        });
       }
 
       // this.generateMaping(layer, { styleAttributeService });
-     
+
       return true;
     });
 

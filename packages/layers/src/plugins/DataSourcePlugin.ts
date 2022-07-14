@@ -23,20 +23,18 @@ export default class DataSourcePlugin implements ILayerPlugin {
           options: DEFAULT_PARSER,
         };
 
-        source = new Source(data, options)
+        source = new Source(data, options);
         layer.setSource(source);
-     
       }
-      if(source.inited) {
+      if (source.inited) {
         this.updateClusterData(layer);
       } else {
         // @ts-ignore
         source.once('sourceInited', () => {
           this.updateClusterData(layer);
-        })
+        });
       }
       // this.updateClusterData(layer);
-      
     });
 
     // 检测数据是否需要更新

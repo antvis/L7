@@ -6,7 +6,7 @@ import 'reflect-metadata';
  */
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
-  initLayerModel(layer: ILayer) {
+  public initLayerModel(layer: ILayer) {
     // 更新Model 配置项
     layer.prepareBuildModel();
     // 初始化 Model
@@ -14,7 +14,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
     layer.styleNeedUpdate = false;
   }
 
-  prepareLayerModel(layer: ILayer) {
+  public prepareLayerModel(layer: ILayer) {
     // 更新Model 配置项
     layer.prepareBuildModel();
 
@@ -27,28 +27,27 @@ export default class LayerModelPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.init.tap('LayerModelPlugin', () => {
       const source = layer.getSource();
-      if(source.inited) {
-        
-       this.initLayerModel(layer);
+      if (source.inited) {
+        this.initLayerModel(layer);
       } else {
         // @ts-ignore
         source.once('sourceInited', () => {
           this.initLayerModel(layer);
-        })
+        });
       }
     });
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
       const source = layer.getSource();
-      if(source.inited) {
+      if (source.inited) {
         this.prepareLayerModel(layer);
-       } else {
+      } else {
         // @ts-ignore
         source.once('sourceInited', () => {
           this.prepareLayerModel(layer);
-        })
-       }
-       return false;
+        });
+      }
+      return false;
     });
   }
 }
