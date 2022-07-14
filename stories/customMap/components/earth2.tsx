@@ -36,7 +36,10 @@ export default class ScaleComponent extends React.Component {
           });
           return { coord: [latlng1, latlng2] };
         });
-        const flyLine = new LineLayer({ blend: 'normal', layerType: 'earthArc3d' })
+        const flyLine = new LineLayer({
+          blend: 'normal',
+          layerType: 'earthArc3d',
+        })
           .source(flydata, {
             parser: {
               type: 'json',
