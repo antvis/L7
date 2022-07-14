@@ -247,12 +247,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
     // 同步 rawConfig
-    Object.keys(configToUpdate).map(key => {
-      if(key in this.rawConfig) {
+    Object.keys(configToUpdate).map((key) => {
+      if (key in this.rawConfig) {
         // @ts-ignore
-        this.rawConfig[key] = configToUpdate[key]
+        this.rawConfig[key] = configToUpdate[key];
       }
-    })
+    });
     if (!this.inited) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
