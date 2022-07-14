@@ -246,7 +246,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
-
     if (!this.inited) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,

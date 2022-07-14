@@ -38,32 +38,38 @@ export default class Amap2demo extends React.Component {
     this.scene = scene;
 
     const layer = new PointLayer({
-      visible: false
+      visible: false,
     })
-    .source([{
-      lng: 120, lat: 30
-    }], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat'
-      }
-    })
-    .shape('circle')
-    .size(10)
-    .color('#f00')
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .size(10)
+      .color('#f00');
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
 
       setTimeout(() => {
-        layer.show()
+        layer.show();
         layer.style({
-          opacity: 1
+          opacity: 1,
         });
 
-        console.log(layer.isVisible())
-      }, 3000) 
+        console.log(layer.isVisible());
+      }, 3000);
     });
   }
 
