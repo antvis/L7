@@ -34,6 +34,7 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 }
 
 export default class Source extends EventEmitter implements ISource {
+  public inited: boolean = false;
   public data: IParserData;
   public center: [number, number];
   // 数据范围
@@ -74,17 +75,21 @@ export default class Source extends EventEmitter implements ISource {
     // this.rawData = cloneDeep(data);
     this.originData = data;
     this.initCfg(cfg);
-
-    this.hooks.init.tap('parser', () => {
-      this.excuteParser();
-    });
-    this.hooks.init.tap('cluster', () => {
-      this.initCluster();
-    });
-    this.hooks.init.tap('transform', () => {
-      this.executeTrans();
-    });
+    
     this.init();
+  }
+
+  private handleData() {
+    return new Promise((resolve, reject) => {
+      try {
+        this.excuteParser();
+        this.initCluster();
+        this.executeTrans();
+        resolve({});
+      } catch(err) {
+        reject();
+      }
+    })
   }
 
   public getClusters(zoom: number): any {
@@ -222,7 +227,13 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private init() {
-    this.hooks.init.call(this);
+    // this.hooks.init.call(this);
+    this.inited = false;
+    this.handleData()
+    .then(() => {
+      this.inited = true;
+      this.emit('sourceInited')
+    })
   }
 
   /**

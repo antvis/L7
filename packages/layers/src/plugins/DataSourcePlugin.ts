@@ -15,17 +15,28 @@ export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tap('DataSourcePlugin', () => {
-      const source = layer.getSource();
+      let source = layer.getSource();
       if (!source) {
         // TODO: 允许用户不使用 layer 的 source 方法，在这里传入一个默认的替换的默认数据
         const { data, options } = layer.sourceOption || {
           data: DEFAULT_DATA,
           options: DEFAULT_PARSER,
         };
-        layer.setSource(new Source(data, options));
-      }
 
-      this.updateClusterData(layer);
+        source = new Source(data, options)
+        layer.setSource(source);
+     
+      }
+      if(source.inited) {
+        this.updateClusterData(layer);
+      } else {
+        // @ts-ignore
+        source.once('sourceInited', () => {
+          this.updateClusterData(layer);
+        })
+      }
+      // this.updateClusterData(layer);
+      
     });
 
     // 检测数据是否需要更新

@@ -10,6 +10,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     this.layerModel = new PointModels[modelType](this);
     this.layerModel.initModels((models) => {
       this.models = models;
+      this.layerService.updateLayerRenderList();
       this.renderLayers();
     });
   }
