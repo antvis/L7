@@ -163,8 +163,6 @@ export default class ExtrudeModel extends BaseModel {
     this.dataTexture?.destroy();
   }
   protected registerBuiltinAttributes() {
-    // TODO: 判断当前的点图层的模型是普通地图模式还是地球模式
-    const isGlobel = this.mapService.version === 'GLOBEL';
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
@@ -240,16 +238,11 @@ export default class ExtrudeModel extends BaseModel {
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number) => {
           const coordinates = calculateCentroid(feature.coordinates);
-          if (isGlobel) {
-            // TODO: 在地球模式下需要将传入 shader 的经纬度转化成对应的 xyz 坐标
-            return lglt2xyz([coordinates[0], coordinates[1]]) as [
-              number,
-              number,
-              number,
-            ];
-          } else {
-            return [coordinates[0], coordinates[1], 0];
-          }
+          return lglt2xyz([coordinates[0], coordinates[1]]) as [
+            number,
+            number,
+            number,
+          ];
         },
       },
     });
