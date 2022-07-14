@@ -8,9 +8,6 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform float u_meter2coord;
-uniform float u_meteryScale;
-uniform float u_isMeter;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -23,7 +20,6 @@ uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 uniform vec2 u_offsets;
 
 uniform float u_blur : 0.0;
-uniform float u_raisingHeight: 0.0;
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -39,9 +35,8 @@ void main() {
   float shape_type = a_Shape;
   /*
   *  setPickingSize 设置拾取大小
-  *  u_meter2coord 在等面积大小的时候设置单位
   */
-  float newSize = setPickingSize(a_Size) * u_meter2coord;
+  float newSize = setPickingSize(a_Size);
   // float newSize = setPickingSize(a_Size) * 0.00001038445708445579;
 
   // cal style mapping - 数据纹理映射部分的计算
@@ -108,19 +103,6 @@ void main() {
     }
   }
 
-  vec2 textrueOffsets = vec2(0.0, 0.0);
-  if(hasOffsets()) {
-    vec2 valueXPos = nextPos(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset);
-    textrueOffsets.r = pos2value(valueXPos, columnWidth, rowHeight); // x
-    textureOffset += 1.0;
-
-    vec2 valueYPos = nextPos(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset);
-    textrueOffsets.g = pos2value(valueYPos, columnWidth, rowHeight); // x
-    textureOffset += 1.0;
-  } else {
-    textrueOffsets = u_offsets;
-  }
-
   // cal style mapping
 
   // unpack color(vec2)
@@ -134,49 +116,11 @@ void main() {
   //  float antialiased_blur = -max(u_blur, antialiasblur);
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur);
 
-  vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
-  vec3 aPosition = a_Position;
-  if(u_isMeter < 1.0) {
-    // 不以米为实际单位
-    offset = project_pixel(offset);
-  } else {
-    // 以米为实际单位
-    if(newSize * pow(2.0, u_Zoom) < 48.0) {
-      antialiasblur = max(antialiasblur, -0.05);
-    } else if(newSize * pow(2.0, u_Zoom) < 128.0) {
-      antialiasblur = max(antialiasblur, -0.6/pow(u_Zoom, 2.0));
-    } else {
-      antialiasblur = max(antialiasblur, -0.8/pow(u_Zoom, 2.0));
-    }
-    
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-      aPosition.x += offset.x / u_meteryScale;
-      aPosition.y += offset.y;
-      offset = vec2(0.0);
-    }
-  }
-
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
 
-  // vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
-  vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
-
-  float raiseHeight = u_raisingHeight;
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
-    raiseHeight = u_raisingHeight * mapboxZoomScale;
-  }
-
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raiseHeight, 1.0);
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, u_raisingHeight, 1.0));
-  }
- 
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+  gl_Position = u_ViewProjectionMatrix * vec4(a_Position + extrude * newSize * 0.1, 1.0);
 
   setPickingColor(a_PickingColor);
 }

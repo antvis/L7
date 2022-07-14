@@ -2,31 +2,21 @@ import {
   AttributeType,
   gl,
   IAnimateOption,
-  IAttribute,
-  IElements,
   IEncodeFeature,
   ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { $window, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import { PointFillTriangulation } from '../../core/triangulation';
-// animate pointLayer shader - support animate
-import waveFillFrag from '../shaders/animate/wave_frag.glsl';
-// static pointLayer shader - not support animate
-import pointFillFrag from '../shaders/fill_frag.glsl';
-import pointFillVert from '../shaders/fill_vert.glsl';
+import { GlobelPointFillTriangulation } from '../../core/triangulation';
 
-import { Version } from '@antv/l7-maps';
+import pointFillFrag from '../shaders/earth/fill_frag.glsl';
+import pointFillVert from '../shaders/earth/fill_vert.glsl';
+
+import { mat4, vec3 } from 'gl-matrix';
 export default class FillModel extends BaseModel {
-  private meter2coord: number = 1;
-  private meteryScale: number = 1; // 兼容 mapbox
-  private isMeter: boolean = false;
-
-  private unit: string = 'l7size';
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -36,11 +26,7 @@ export default class FillModel extends BaseModel {
       offsets = [0, 0],
       blend,
       blur = 0,
-      raisingHeight = 0,
-      unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    this.updateUnit(unit);
-
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
@@ -88,11 +74,6 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
-      u_raisingHeight: Number(raisingHeight),
-
-      u_meter2coord: this.meter2coord,
-      u_meteryScale: this.meteryScale,
-      u_isMeter: Number(this.isMeter),
       u_blur: blur,
 
       u_additive: blend === 'additive' ? 1.0 : 0.0,
@@ -118,94 +99,21 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public getAttribute(): {
-    attributes: {
-      [attributeName: string]: IAttribute;
-    };
-    elements: IElements;
-  } {
-    return this.styleAttributeService.createAttributesAndIndices(
-      this.layer.getEncodedData(),
-      PointFillTriangulation,
-    );
-  }
-
   public initModels(): IModel[] {
-    this.updateUnit('l7size');
-
     return this.buildModels();
   }
 
-  /**
-   * 计算等面积点图层（unit meter）笛卡尔坐标标度与世界坐标标度的比例
-   * @returns
-   */
-  public calMeter2Coord() {
-    const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
-    const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
-
-    const { version } = this.mapService;
-    const mapboxContext = $window?.mapboxgl;
-    if (version === Version.MAPBOX && mapboxContext?.MercatorCoordinate) {
-      // 参考：
-      // https://docs.mapbox.com/mapbox-gl-js/api/geography/#mercatorcoordinate#meterinmercatorcoordinateunits
-      const coord = mapboxContext.MercatorCoordinate.fromLngLat(
-        { lng: center[0], lat: center[1] },
-        0,
-      );
-      const offsetInMercatorCoordinateUnits = coord.meterInMercatorCoordinateUnits();
-      const westCoord = new mapboxContext.MercatorCoordinate(
-        coord.x - offsetInMercatorCoordinateUnits,
-        coord.y,
-        coord.z,
-      );
-      const westLnglat = westCoord.toLngLat();
-
-      const southCoord = new mapboxContext.MercatorCoordinate(
-        coord.x,
-        coord.y - offsetInMercatorCoordinateUnits,
-        coord.z,
-      );
-      const southLnglat = southCoord.toLngLat();
-
-      this.meter2coord = center[0] - westLnglat.lng;
-
-      this.meteryScale = (southLnglat.lat - center[1]) / this.meter2coord;
-      return;
-    }
-
-    const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
-    const m2 = this.mapService.meterToCoord(center, [
-      maxLng === minLng ? maxLng + 0.1 : maxLng,
-      maxLat === minLat ? minLat + 0.1 : maxLat,
-    ]);
-    this.meter2coord = (m1 + m2) / 2;
-    if (!Boolean(this.meter2coord)) {
-      // Tip: 兼容单个数据导致的 m1、m2 为 NaN
-      this.meter2coord = 7.70681090738883;
-    }
-  }
-
   public buildModels(): IModel[] {
-    const {
-      mask = false,
-      maskInside = true,
-      animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as Partial<
-      ILayerConfig & IPointLayerStyleOptions
-    >;
-    const { frag, vert, type } = this.getShaders(animateOption);
-
-    this.layer.triangulation = PointFillTriangulation;
+    const { frag, vert, type } = this.getShaders();
+    this.layer.triangulation = GlobelPointFillTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointfill_' + type,
         vertexShader: vert,
         fragmentShader: frag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
+        triangulation: GlobelPointFillTriangulation,
+        depth: { enable: true },
         blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
       }),
     ];
   }
@@ -214,31 +122,12 @@ export default class FillModel extends BaseModel {
    * 根据 animateOption 的值返回对应的 shader 代码
    * @returns
    */
-  public getShaders(
-    animateOption: Partial<IAnimateOption>,
-  ): { frag: string; vert: string; type: string } {
-    if (animateOption.enable) {
-      switch (animateOption.type) {
-        case 'wave':
-          return {
-            frag: waveFillFrag,
-            vert: pointFillVert,
-            type: 'wave',
-          };
-        default:
-          return {
-            frag: waveFillFrag,
-            vert: pointFillVert,
-            type: 'wave',
-          };
-      }
-    } else {
-      return {
-        frag: pointFillFrag,
-        vert: pointFillVert,
-        type: 'normal',
-      };
-    }
+  public getShaders(): { frag: string; vert: string; type: string } {
+    return {
+      frag: pointFillFrag,
+      vert: pointFillVert,
+      type: 'point_earth_fill',
+    };
   }
 
   public clearModels() {
@@ -268,7 +157,36 @@ export default class FillModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+          const [x, y, z] = vertex;
+          const n1 = vec3.fromValues(0, 0, 1);
+          const n2 = vec3.fromValues(x, 0, z);
+
+          const xzReg =
+            x >= 0 ? vec3.angle(n1, n2) : Math.PI * 2 - vec3.angle(n1, n2);
+
+          const yReg = Math.PI * 2 - Math.asin(y / 100);
+
+          const m = mat4.create();
+          mat4.rotateY(m, m, xzReg);
+          mat4.rotateX(m, m, yReg);
+
+          const v1 = vec3.fromValues(1, 1, 0);
+          vec3.transformMat4(v1, v1, m);
+          vec3.normalize(v1, v1);
+
+          const v2 = vec3.fromValues(-1, 1, 0);
+          vec3.transformMat4(v2, v2, m);
+          vec3.normalize(v2, v2);
+
+          const v3 = vec3.fromValues(-1, -1, 0);
+          vec3.transformMat4(v3, v3, m);
+          vec3.normalize(v3, v3);
+
+          const v4 = vec3.fromValues(1, -1, 0);
+          vec3.transformMat4(v4, v4, m);
+          vec3.normalize(v4, v4);
+
+          const extrude = [...v1, ...v2, ...v3, ...v4];
           const extrudeIndex = (attributeIdx % 4) * 3;
           return [
             extrude[extrudeIndex],
@@ -330,30 +248,5 @@ export default class FillModel extends BaseModel {
         },
       },
     });
-  }
-
-  /**
-   * 判断是否更新点图层的计量单位
-   * @param unit
-   */
-  private updateUnit(unit: string) {
-    const { version } = this.mapService;
-    if (this.unit !== unit) {
-      // l7size => meter
-      if (
-        this.unit !== 'meter' &&
-        unit === 'meter' &&
-        version !== Version.L7MAP &&
-        version !== Version.GLOBEL
-      ) {
-        this.isMeter = true;
-        this.calMeter2Coord();
-        // meter => l7size
-      } else if (this.unit === 'meter' && unit !== 'meter') {
-        this.isMeter = false;
-        this.meter2coord = 1;
-      }
-      this.unit = unit;
-    }
   }
 }

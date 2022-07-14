@@ -60,6 +60,8 @@ void main() {
     inner_df = sdVesica(v_data.xy, r * 1.1, r * 0.8);
   }
 
+  if(outer_df > antialiasblur + 0.018) discard;
+
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
   float color_t = strokeWidth < 0.01 ? 0.0 : smoothstep(
