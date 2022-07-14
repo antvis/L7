@@ -9,6 +9,7 @@ import LinearLine from './linearline';
 import SimpleLineModel from './simpleLine';
 import TileLineModel from './tile';
 import LineWallModel from './wall';
+import EarthArc3DModel from './earthArc_3d';
 
 export type LineModelType =
   | 'arc'
@@ -21,7 +22,8 @@ export type LineModelType =
   | 'halfLine'
   | 'linearline'
   | 'vectorline'
-  | 'tileLine';
+  | 'tileLine'
+  | 'earthArc3d';
 
 const LineModels: { [key in LineModelType]: any } = {
   arc: ArcModel,
@@ -35,6 +37,7 @@ const LineModels: { [key in LineModelType]: any } = {
   linearline: LinearLine,
   vectorline: LineTileModel,
   tileLine: TileLineModel,
+  earthArc3d: EarthArc3DModel,
 };
 
 export default LineModels;
