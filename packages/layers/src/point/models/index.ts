@@ -1,4 +1,7 @@
 import PointTileModel from '../../tile/models/tileModel';
+import EarthExtrudeModel from './earthExtrude';
+// earth
+import EarthFillModel from './earthFill';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import FillImageModel from './fillmage';
@@ -9,9 +12,6 @@ import Radar from './radar';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
 import TileFillModel from './tile';
-// earth
-import EarthFillModel from './earthFill';
-import EarthExtrudeModel from './earthExtrude';
 
 export type PointType =
   | 'fillImage'

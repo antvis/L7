@@ -10,9 +10,7 @@ import {
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import {
-  GlobelPointFillTriangulation,
-} from '../../core/triangulation';
+import { GlobelPointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/earth/fill_frag.glsl';
 import pointFillVert from '../shaders/earth/fill_vert.glsl';
@@ -107,7 +105,7 @@ export default class FillModel extends BaseModel {
 
   public buildModels(): IModel[] {
     const { frag, vert, type } = this.getShaders();
-    this.layer.triangulation = GlobelPointFillTriangulation
+    this.layer.triangulation = GlobelPointFillTriangulation;
     return [
       this.layer.buildLayerModel({
         moduleName: 'pointfill_' + type,
@@ -124,8 +122,7 @@ export default class FillModel extends BaseModel {
    * 根据 animateOption 的值返回对应的 shader 代码
    * @returns
    */
-  public getShaders(
-  ): { frag: string; vert: string; type: string } {
+  public getShaders(): { frag: string; vert: string; type: string } {
     return {
       frag: pointFillFrag,
       vert: pointFillVert,
@@ -142,7 +139,6 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
