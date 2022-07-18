@@ -120,7 +120,6 @@ export default function getMeshTask(options: IWorkOptions) {
   const { modelType, attributesUpdateFunctions } = options;
   // get triangulation
   const triangulation = getTriangulation(modelType);
-  
 
   const customFuncs = `
   a_Shape: ( feature, featureIdx, vertex, attributeIdx ) => {
