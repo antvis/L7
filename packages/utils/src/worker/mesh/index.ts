@@ -1,4 +1,5 @@
-import { IWorkOptions } from '../interface';
+import { getTriangulation } from '../../triangulation';
+import { IModelType, IWorkOptions } from '../interface';
 import { encodePickingColor, utils } from './common';
 
 const meshTask = `
@@ -116,8 +117,49 @@ const meshTask = `
 `;
 
 export default function getMeshTask(options: IWorkOptions) {
-  const { customFuncs, triangulation } = options;
+  const { modelType, attributesUpdateFunctions } = options;
+  // get triangulation
+  const triangulation = getTriangulation(modelType);
+  
+
+  const customFuncs = `
+  a_Shape: ( feature, featureIdx, vertex, attributeIdx ) => {
+    var { shape = 2 } = feature;
+    // var shape2d = this.layer.getLayerConfig().shape2d as string[];
+    var shape2d = ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'];
+    var shapeIndex = shape2d.indexOf(shape);
+    return [shapeIndex];
+  },
+
+
+  a_Extrude: ( feature, featureIdx, vertex, attributeIdx ) => {
+    let extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+    var extrudeIndex = (attributeIdx % 4) * 3;
+    return [
+      extrude[extrudeIndex],
+      extrude[extrudeIndex + 1],
+      extrude[extrudeIndex + 2],
+    ];
+  },
+
+  a_Size: ( feature, featureIdx, vertex, attributeIdx ) => {
+    var { size = 5 } = feature;
+    return Array.isArray(size) ? [size[0]] : [size];
+  },
+  `;
+
+  const triangulationStr = `
+  function triangulation(feature) {
+    var coordinates = calculateCentroid(feature.coordinates);
+    return {
+      vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
+      indices: [0, 1, 2, 2, 3, 0],
+      size: coordinates.length,
+    };
+  }
+  `;
+
   return meshTask
     .replace('$customFuncs$', customFuncs)
-    .replace('$triangulation$', triangulation);
+    .replace('$triangulation$', triangulationStr);
 }

@@ -203,12 +203,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
     });
 
     // worker test
-    const { customFuncs, triangulation, ...restOptions } = layerOptions;
+    const { attributesUpdateFunctions, ...restOptions } = layerOptions;
 
     const myWorker = getWorker(WorkerType.MESH, {
-      meshType: 'PointFill',
-      customFuncs,
-      triangulation,
+      modelType: 'PointFill',
+      attributesUpdateFunctions,
     }) as Worker;
 
     const messages = {

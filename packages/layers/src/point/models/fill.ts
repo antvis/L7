@@ -22,42 +22,53 @@ import pointFillVert from '../shaders/fill_vert.glsl';
 
 import { Version } from '@antv/l7-maps';
 
-export const customFuncs = `
-a_Shape: ( feature, featureIdx, vertex, attributeIdx ) => {
-  var { shape = 2 } = feature;
-  // var shape2d = this.layer.getLayerConfig().shape2d as string[];
-  var shape2d = ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'];
-  var shapeIndex = shape2d.indexOf(shape);
-  return [shapeIndex];
-},
-
-
-a_Extrude: ( feature, featureIdx, vertex, attributeIdx ) => {
-  let extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
-  var extrudeIndex = (attributeIdx % 4) * 3;
-  return [
-    extrude[extrudeIndex],
-    extrude[extrudeIndex + 1],
-    extrude[extrudeIndex + 2],
-  ];
-},
-
-a_Size: ( feature, featureIdx, vertex, attributeIdx ) => {
-  var { size = 5 } = feature;
-  return Array.isArray(size) ? [size[0]] : [size];
-},
-`;
-
-export const triangulation = `
-function triangulation(feature) {
-  var coordinates = calculateCentroid(feature.coordinates);
-  return {
-    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-    indices: [0, 1, 2, 2, 3, 0],
-    size: coordinates.length,
-  };
-}
-`;
+const attributesUpdateFunctions = {
+  a_Shape: (
+    feature: IEncodeFeature,
+    featureIdx: number,
+    vertex: number[],
+    attributeIdx: number,
+  ) => {
+    const { shape = 2 } = feature;
+    // var shape2d = this.layer.getLayerConfig().shape2d as string[];
+    const shape2d = [
+      'circle',
+      'triangle',
+      'square',
+      'pentagon',
+      'hexagon',
+      'octogon',
+      'hexagram',
+      'rhombus',
+      'vesica',
+    ];
+    const shapeIndex = shape2d.indexOf(shape as string);
+    return [shapeIndex];
+  },
+  a_Extrude: (
+    feature: IEncodeFeature,
+    featureIdx: number,
+    vertex: number[],
+    attributeIdx: number,
+  ) => {
+    const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+    const extrudeIndex = (attributeIdx % 4) * 3;
+    return [
+      extrude[extrudeIndex],
+      extrude[extrudeIndex + 1],
+      extrude[extrudeIndex + 2],
+    ];
+  },
+  a_Size: (
+    feature: IEncodeFeature,
+    featureIdx: number,
+    vertex: number[],
+    attributeIdx: number,
+  ) => {
+    const { size = 5 } = feature;
+    return Array.isArray(size) ? [size[0]] : [size];
+  },
+};
 export default class FillModel extends BaseModel {
   private meter2coord: number = 1;
   private meteryScale: number = 1; // 兼容 mapbox
@@ -239,8 +250,7 @@ export default class FillModel extends BaseModel {
     // layer 参数供给 mesh worker 使用
     const layerOptions = {
       enablePicking,
-      customFuncs,
-      triangulation,
+      attributesUpdateFunctions,
     };
 
     this.layer
@@ -329,20 +339,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
-          const extrudeIndex = (attributeIdx % 4) * 3;
-          return [
-            extrude[extrudeIndex],
-            extrude[extrudeIndex + 1],
-            extrude[extrudeIndex + 2],
-          ];
-        },
+        update: attributesUpdateFunctions.a_Extrude,
       },
     });
 
@@ -359,15 +356,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { size = 5 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
+        update: attributesUpdateFunctions.a_Size,
       },
     });
 
@@ -384,28 +373,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { shape = 2 } = feature;
-          // const shape2d = this.layer.getLayerConfig().shape2d as string[];
-          const shape2d = [
-            'circle',
-            'triangle',
-            'square',
-            'pentagon',
-            'hexagon',
-            'octogon',
-            'hexagram',
-            'rhombus',
-            'vesica',
-          ];
-          const shapeIndex = shape2d.indexOf(shape as string);
-          return [shapeIndex];
-        },
+        update: attributesUpdateFunctions.a_Shape,
       },
     });
   }

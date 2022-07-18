@@ -4,10 +4,9 @@ export enum WorkerType {
   FETCH = 'fetch',
 }
 
-export type IMeshType = 'PointFill';
+export type IModelType = 'PointFill';
 
 export interface IWorkOptions {
-  meshType: IMeshType;
-  customFuncs: string;
-  triangulation: string;
+  modelType: IModelType;
+  attributesUpdateFunctions: any;
 }
