@@ -31,7 +31,7 @@
       "@antv/l7-utils": ["packages/utils/src"],
       "@antv/l7": ["packages/l7/src"],
       "*": ["packages", "typings/*"]
-    },
+    }
   },
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true,
@@ -40,5 +40,4 @@
   },
   "include": ["packages"],
   "exclude": ["node_modules", "packages/**/dist"]
-
 }

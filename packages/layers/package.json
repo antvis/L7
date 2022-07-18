@@ -9,6 +9,7 @@
     "./es/index.js"
   ],
   "files": [
+    "dist",
     "lib",
     "es",
     "README.md"
