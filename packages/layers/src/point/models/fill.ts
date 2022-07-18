@@ -249,6 +249,7 @@ export default class FillModel extends BaseModel {
 
     // layer 参数供给 mesh worker 使用
     const layerOptions = {
+      modelType: 'pointFill',
       enablePicking,
       attributesUpdateFunctions,
     };

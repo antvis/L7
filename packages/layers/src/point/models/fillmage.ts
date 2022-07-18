@@ -127,7 +127,7 @@ export default class FillImageModel extends BaseModel {
     );
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
@@ -144,7 +144,7 @@ export default class FillImageModel extends BaseModel {
       this.calMeter2Coord();
     }
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   /**
@@ -189,36 +189,38 @@ export default class FillImageModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders();
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
-      }),
-    ];
-  }
 
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: pointFillFrag,
-      vert: pointFillVert,
-      type: 'point_fillImage',
-    };
+    this.layer
+    .buildLayerModel({
+      moduleName: 'point_fillImage',
+      vertexShader: pointFillVert,
+      fragmentShader: pointFillFrag,
+      triangulation: PointFillTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
+      },
+      workerEnabled,
+      layerOptions: {
+        modelType: 'pointFillImage',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   public clearModels() {
