@@ -180,7 +180,6 @@ export default class Source extends EventEmitter implements ISource {
     this.dataArrayChanged = false;
     this.initCfg(options);
     this.init();
-    this.emit('update');
   }
 
   public destroy() {
@@ -231,7 +230,7 @@ export default class Source extends EventEmitter implements ISource {
     this.inited = false;
     this.handleData().then(() => {
       this.inited = true;
-      this.emit('sourceInited');
+      this.emit('sourceUpdate');
     });
   }
 

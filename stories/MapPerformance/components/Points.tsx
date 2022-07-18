@@ -1,6 +1,6 @@
 // @ts-nocheck
 // @ts-ignore
-import { Scene } from '@antv/l7';
+import { Scene, Source} from '@antv/l7';
 import { PointLayer } from '@antv/l7-layers';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
@@ -32,7 +32,19 @@ export default class PointTest extends React.Component {
     fetch(address)
       .then((res) => res.json())
       .then((data) => {
-        const layer = new PointLayer({ workerEnabled: true })
+
+        const source = new Source([{
+          lng: 120, lat: 30
+        }], {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        })
+
+
+          const layer = new PointLayer({ workerEnabled: true })
           .source(data, {
             parser: {
               type: 'json',
@@ -40,20 +52,35 @@ export default class PointTest extends React.Component {
               y: 'lat',
             },
           })
+          // .source(source)
           .size(10)
           .color('#f00')
-          // .shape('circle') // circle simple
           .shape('circle')
-
-          // .select(true);
-          // .animate(true)
           .active(true);
-        scene.on('loaded', () => {
-          let t = new Date().getTime();
-          scene.addLayer(layer);
-          console.log(new Date().getTime() - t);
+
+          scene.on('loaded', () => {
+            let t = new Date().getTime();
+            scene.addLayer(layer);
+            console.log(new Date().getTime() - t);
+  
+            // setTimeout(() => {
+            //   layer.setData([{
+            //     lng: 120, lat: 30
+            //   }])
+            // }, 2000)
+  
+            // layer.on('inited', () => {
+              // console.log('inited ***')
+              layer.setData([
+                { lng: 120, lat: 30 },
+                { lng: 130, lat: 30 }
+              ])
+            // })
+           
+          });
         });
-      });
+
+        
   }
 
   public render() {

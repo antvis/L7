@@ -43,7 +43,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         this.generateMaping(layer, { styleAttributeService });
       } else {
         // @ts-ignore
-        source.once('sourceInited', () => {
+        source.once('sourceUpdate', () => {
           this.generateMaping(layer, { styleAttributeService });
         });
       }
@@ -58,7 +58,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         this.generateMaping(layer, { styleAttributeService });
       } else {
         // @ts-ignore
-        source.once('sourceInited', () => {
+        source.once('sourceUpdate', () => {
           this.generateMaping(layer, { styleAttributeService });
         });
       }

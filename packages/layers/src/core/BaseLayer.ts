@@ -690,7 +690,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return this;
     }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.getEncodedData().length !== 0) {
+    if (this.getEncodedData() && this.getEncodedData().length !== 0) {
       this.renderModels();
     }
     return this;
@@ -985,7 +985,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
-    this.layerSource.off('update', this.sourceEvent);
+    this.layerSource.off('sourceUpdate', this.sourceEvent);
 
     this.multiPassRenderer.destroy();
     // console.log(this.styleAttributeService.getAttributes())
@@ -1025,7 +1025,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public clearModels() {
     this.models.forEach((model) => model.destroy());
-    this.layerModel.clearModels();
+    this.layerModel?.clearModels();
     this.models = [];
   }
 
@@ -1043,7 +1043,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public setSource(source: Source) {
     // 清除旧 sources 事件
     if (this.layerSource) {
-      this.layerSource.off('update', this.sourceEvent);
+      this.layerSource.off('sourceUpdate', this.sourceEvent);
     }
 
     this.layerSource = source;
@@ -1055,7 +1055,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.layerSource.updateClusterData(zoom);
     }
     // source 可能会复用，会在其它layer被修改
-    this.layerSource.on('update', this.sourceEvent);
+    this.layerSource.on('sourceUpdate', () => {
+      this.sourceEvent()
+    });
   }
   public getSource() {
     return this.layerSource;
@@ -1360,9 +1362,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
-    const { autoFit, fitBoundsOptions } = this.getLayerConfig();
-    if (autoFit) {
-      this.fitBounds(fitBoundsOptions);
+    const layerConfig = this.getLayerConfig();
+    if (layerConfig && layerConfig.autoFit) {
+      this.fitBounds(layerConfig.fitBoundsOptions);
     }
     // 对外暴露事件 迁移到 DataMappingPlugin generateMapping，保证在重新重新映射后触发
     // this.emit('dataUpdate');

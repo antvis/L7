@@ -30,7 +30,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
         this.updateClusterData(layer);
       } else {
         // @ts-ignore
-        source.once('sourceInited', () => {
+        source.once('sourceUpdate', () => {
           this.updateClusterData(layer);
         });
       }
