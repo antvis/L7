@@ -1056,7 +1056,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
     // source 可能会复用，会在其它layer被修改
     this.layerSource.on('sourceUpdate', () => {
-      this.sourceEvent()
+      this.sourceEvent();
     });
   }
   public getSource() {
