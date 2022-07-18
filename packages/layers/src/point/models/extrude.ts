@@ -128,7 +128,7 @@ export default class ExtrudeModel extends BaseModel {
       u_lightEnable: Number(lightEnable),
     };
   }
-  public initModels(callbackModel: (models: IModel[]) => void){
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.buildModels(callbackModel);
   }
 
@@ -137,7 +137,7 @@ export default class ExtrudeModel extends BaseModel {
     const {
       depth = true,
       animateOption: { repeat = 1 },
-      workerEnabled = false
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
 
@@ -160,10 +160,9 @@ export default class ExtrudeModel extends BaseModel {
           enable: depth,
         },
         workerEnabled,
-        layerOptions
+        layerOptions,
       })
       .then((model) => {
-        
         callbackModel([model as IModel]);
       })
       .catch((err) => {

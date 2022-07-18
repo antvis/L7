@@ -96,27 +96,27 @@ export default class NormalModel extends BaseModel {
     this.layer.triangulation = PointTriangulation;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointNormal',
-      vertexShader: normalVert,
-      fragmentShader: normalFrag,
-      triangulation: PointTriangulation,
-      depth: { enable: false },
-      primitive: gl.POINTS,
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointNormal',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointNormal',
+        vertexShader: normalVert,
+        fragmentShader: normalFrag,
+        triangulation: PointTriangulation,
+        depth: { enable: false },
+        primitive: gl.POINTS,
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointNormal',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

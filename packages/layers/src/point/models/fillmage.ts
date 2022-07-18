@@ -197,30 +197,30 @@ export default class FillImageModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'point_fillImage',
-      vertexShader: pointFillVert,
-      fragmentShader: pointFillFrag,
-      triangulation: PointFillTriangulation,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      cull: {
-        enable: true,
-        face: getCullFace(this.mapService.version),
-      },
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointFillImage',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'point_fillImage',
+        vertexShader: pointFillVert,
+        fragmentShader: pointFillFrag,
+        triangulation: PointFillTriangulation,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        cull: {
+          enable: true,
+          face: getCullFace(this.mapService.version),
+        },
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointFillImage',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

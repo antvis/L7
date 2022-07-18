@@ -185,7 +185,7 @@ export default class TextModel extends BaseModel {
     };
     this.buildModels(callbackModel);
   }
-  
+
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     const {
       mask = false,
@@ -202,24 +202,24 @@ export default class TextModel extends BaseModel {
     };
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointText',
-      vertexShader: textVert,
-      fragmentShader: textFrag,
-      triangulation: TextTriangulation.bind(this),
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      workerEnabled,
-      layerOptions
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointText',
+        vertexShader: textVert,
+        fragmentShader: textFrag,
+        triangulation: TextTriangulation.bind(this),
+        depth: { enable: false },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions,
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   };
   public needUpdate() {
     const {
@@ -535,25 +535,25 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointText',
-      vertexShader: textVert,
-      fragmentShader: textFrag,
-      triangulation: TextTriangulation.bind(this),
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointText',
-      }
-    })
-    .then((model) => {
-      this.layer.models = [model as IModel];
-    })
-    .catch((err) => {
-      console.warn(err);
-      this.layer.models = [];
-    });
+      .buildLayerModel({
+        moduleName: 'pointText',
+        vertexShader: textVert,
+        fragmentShader: textFrag,
+        triangulation: TextTriangulation.bind(this),
+        depth: { enable: false },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointText',
+        },
+      })
+      .then((model) => {
+        this.layer.models = [model as IModel];
+      })
+      .catch((err) => {
+        console.warn(err);
+        this.layer.models = [];
+      });
   }
 }

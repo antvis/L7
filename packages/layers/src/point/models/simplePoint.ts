@@ -101,7 +101,7 @@ export default class SimplePointModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      workerEnabled
+      workerEnabled,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 

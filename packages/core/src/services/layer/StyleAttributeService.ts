@@ -203,7 +203,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
     });
 
     // worker test
-    const { attributesUpdateFunctions, modelType, ...restOptions } = layerOptions;
+    const {
+      attributesUpdateFunctions,
+      modelType,
+      ...restOptions
+    } = layerOptions;
 
     const myWorker = getWorker(WorkerType.MESH, {
       modelType,
