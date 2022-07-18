@@ -1,67 +1,40 @@
-import {
-  assert,
-  createWorker,
-  WorkerFarm,
-  WorkerObject,
-  WorkerOptions,
-} from 'web-worker-helper';
+import { createWorker, WorkerFarm } from 'web-worker-helper';
+import { getWorkerSource, registerWorkerSource } from './worker-map';
 
-export { createWorker, WorkerObject };
+export { createWorker };
 
-const WorkerMap = new Map<string, WorkerObject>();
+const L7_WORKER_NAME = 'l7-worker';
 
-export function registerWorker(workerName: string, worker: WorkerObject) {
-  WorkerMap.set(workerName, worker);
+export function registerL7WorkerSource(workerSource: string) {
+  registerWorkerSource(L7_WORKER_NAME, workerSource);
 }
 
-export function getWorker(workerName: string) {
-  const worker = WorkerMap.get(workerName);
-  return worker;
+function getL7WorkerSource(): string {
+  const workerSource = getWorkerSource(L7_WORKER_NAME);
+
+  if (!workerSource) {
+    throw new Error(`get worker failed by workerName: ${L7_WORKER_NAME}.`);
+  }
+
+  return workerSource;
 }
 
-function getWorkerURL(workerName: string, options: WorkerOptions = {}): string {
-  const worker = getWorker(workerName);
-
-  if (!worker) {
-    throw new Error(`get worker failed by workerName: ${workerName}.`);
-  }
-
-  const workerFileName = `${worker.name}.js`;
-
-  let url;
-
-  if (process.env.NODE_ENV === 'production') {
-    url = `${worker.module}/dist/${workerFileName}`;
-  }
-
-  if (!url) {
-    const cdn = options.CDN || ' https://unpkg.com';
-    url = `${cdn}/${worker.module}/dist/${workerFileName}`;
-  }
-
-  assert(url);
-
-  return url;
-}
-
-export async function parseWorker(
-  workerName: string,
+export async function parseL7Worker(
+  workerType: string,
   data: any,
   options: Record<string, any> = { maxConcurrency: 3, reuseWorkers: true },
 ) {
-  const url = getWorkerURL(workerName, options);
-  // const source = 'codeString';
+  const source = getL7WorkerSource();
   const workerFarm = WorkerFarm.getWorkerFarm({
     maxConcurrency: options.maxConcurrency,
     reuseWorkers: options.reuseWorkers,
   });
-  const workerPool = workerFarm.getWorkerPool({ name: workerName, url });
-  // const workerPool = workerFarm.getWorkerPool({ name: workerName, source });
-  const job = await workerPool.startJob(workerName, (myJob, type, myData) =>
+  const workerPool = workerFarm.getWorkerPool({ name: L7_WORKER_NAME, source });
+  const job = await workerPool.startJob(L7_WORKER_NAME, (myJob, type, myData) =>
     myJob.done(myData),
   );
 
-  job.postMessage('process', { input: data });
+  job.postMessage('process', { input: { workerType, data } });
 
   const result = await job.result;
   return result.result;

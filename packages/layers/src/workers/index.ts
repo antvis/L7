@@ -1,10 +1,18 @@
-import { registerWorker, WorkerObject } from '@antv/l7-utils';
+import { createWorker } from '@antv/l7-utils/src/worker-helper';
+import { lineTriangulation } from './line-triangulation';
 
-const LineTriangulationWorker: WorkerObject = {
-  id: 'line-triangulation',
-  name: 'line-triangulation',
-  module: 'layers',
-  options: {},
+const workerTypes: Record<string, (data: any) => Promise<any>> = {
+  'line-triangulation': lineTriangulation,
 };
 
-registerWorker(LineTriangulationWorker.id, LineTriangulationWorker);
+async function worker({ workerType, data }: { workerType: string; data: any }) {
+  if (workerTypes[workerType]) {
+    return workerTypes[workerType](data);
+  }
+
+  return Promise.reject(
+    new Error(`Worker with type "${workerType}" non-existent.`),
+  );
+}
+
+export default createWorker(worker);

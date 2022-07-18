@@ -4,22 +4,21 @@ import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
-import analyze from 'rollup-plugin-analyzer';
+// import analyze from 'rollup-plugin-analyzer';
 import babel from 'rollup-plugin-babel';
 
 const { BUILD } = process.env;
 const production = BUILD === 'production';
-const outputFile = !production
-  ? 'packages/l7/dist/l7-dev-worker.js'
-  : 'packages/l7/dist/l7-worker.js';
-
+const outputFile = production
+  ? 'packages/l7/dist/l7.worker.js'
+  : 'packages/l7/dist/l7.worker.js';
 function resolveFile(filePath) {
   return path.join(__dirname, '..', filePath);
 }
 
 module.exports = [
   {
-    input: resolveFile('packages/layers/src/workers/line-triangulation.ts'),
+    input: resolveFile('packages/layers/src/workers/index.ts'),
     output: {
       file: resolveFile(outputFile),
       format: 'iife',
@@ -30,6 +29,10 @@ module.exports = [
       alias({
         resolve: ['.tsx', '.ts'],
         entries: [
+          {
+            find: /^@antv\/l7-(.*)\/src\/(.*)/,
+            replacement: resolveFile('packages/$1/src/$2'),
+          },
           {
             find: /^@antv\/l7-(.*)/,
             replacement: resolveFile('packages/$1/src'),
@@ -46,37 +49,15 @@ module.exports = [
         extensions: ['.js', '.ts'],
       }),
       json(),
-      // @see https://github.com/rollup/rollup-plugin-node-resolve#using-with-rollup-plugin-commonjs
-      commonjs({
-        namedExports: {
-          eventemitter3: ['EventEmitter'],
-          // inversify: [ 'inject', 'injectable', 'postConstruct', 'Container', 'decorate', 'interfaces' ],
-          // @see https://github.com/rollup/rollup-plugin-commonjs/issues/266
-          lodash: [
-            'isNil',
-            'uniq',
-            'clamp',
-            'isObject',
-            'isFunction',
-            'cloneDeep',
-            'isString',
-            'isNumber',
-            'merge',
-          ],
-        },
-        dynamicRequireTargets: [
-          'node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js',
-        ],
-      }),
+      commonjs(),
       babel({
         extensions: ['.js', '.ts'],
       }),
-      // terser(),
       production ? terser() : false,
-      analyze({
-        summaryOnly: true,
-        limit: 20,
-      }),
+      // analyze({
+      //   summaryOnly: true,
+      //   limit: 20,
+      // }),
     ],
   },
 ];
