@@ -38,24 +38,46 @@ export default class DataMappingPlugin implements ILayerPlugin {
   ) {
     layer.hooks.init.tap('DataMappingPlugin', () => {
       // 初始化重新生成 map
-      this.generateMaping(layer, { styleAttributeService });
+      const source = layer.getSource();
+      if (source.inited) {
+        this.generateMaping(layer, { styleAttributeService });
+      } else {
+        // @ts-ignore
+        source.once('sourceUpdate', () => {
+          this.generateMaping(layer, { styleAttributeService });
+        });
+      }
+
+      // this.generateMaping(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
       layer.dataState.dataMappingNeedUpdate = false;
-      this.generateMaping(layer, { styleAttributeService });
+      const source = layer.getSource();
+      if (source.inited) {
+        this.generateMaping(layer, { styleAttributeService });
+      } else {
+        // @ts-ignore
+        source.once('sourceUpdate', () => {
+          this.generateMaping(layer, { styleAttributeService });
+        });
+      }
+
+      // this.generateMaping(layer, { styleAttributeService });
+
       return true;
     });
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
-      if (layer.layerModelNeedUpdate) {
+      const source = layer.getSource();
+      if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;
       }
       const bottomColor = layer.getBottomColor();
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const filter = styleAttributeService.getLayerStyleAttribute('filter');
-      const { dataArray } = layer.getSource().data;
+      const { dataArray } = source.data;
 
       const attributesToRemapping = attributes.filter(
         (attribute) => attribute.needRemapping, // 如果filter变化
@@ -176,7 +198,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
           }
         });
 
-      if (encodeRecord.shape === 'line' && arrow.enable) {
+      if (
+        arrow.enable &&
+        (encodeRecord.shape === 'line' || encodeRecord.shape === 'halfLine')
+      ) {
         // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
         const coords = encodeRecord.coordinates as Position[];
         const arrowPoint = this.getArrowPoints(coords[0], coords[1]);

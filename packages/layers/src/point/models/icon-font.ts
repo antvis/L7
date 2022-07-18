@@ -38,6 +38,7 @@ export default class IconeModel extends BaseModel {
       this.layer.render(); // TODO 调用全局render
     });
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'pointiconImage',
         vertexShader: pointImageVert,

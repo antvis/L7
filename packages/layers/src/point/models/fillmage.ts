@@ -196,6 +196,7 @@ export default class FillImageModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: type,
         vertexShader: vert,

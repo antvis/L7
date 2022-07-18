@@ -183,9 +183,10 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
+    // @ts-ignore
     return this.buildModels();
   }
-
+  // @ts-ignore
   public buildModels = () => {
     const {
       mask = false,
@@ -196,6 +197,7 @@ export default class TextModel extends BaseModel {
     this.filterGlyphs();
     this.reBuildModel();
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
@@ -520,6 +522,7 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     this.layer.models = [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,

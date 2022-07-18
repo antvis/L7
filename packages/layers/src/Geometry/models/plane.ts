@@ -133,7 +133,7 @@ export default class PlaneModel extends BaseModel {
     this.terrainImage = null;
     this.texture?.destroy();
   }
-
+  // @ts-ignore
   public initModels() {
     const {
       mask = false,
@@ -167,7 +167,7 @@ export default class PlaneModel extends BaseModel {
       }),
     ];
   }
-
+  // @ts-ignore
   public buildModels() {
     return this.initModels();
   }

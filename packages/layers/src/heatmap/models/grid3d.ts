@@ -39,6 +39,7 @@ export default class Grid3DModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'grid3dheatmap',
         vertexShader: heatmapGrid3dVert,

@@ -95,6 +95,7 @@ export default class BaseEarthModel extends BaseModel {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'baseEarth',
         vertexShader: baseVert,

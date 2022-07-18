@@ -125,6 +125,7 @@ export default class LineModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: type,
         vertexShader: vert,

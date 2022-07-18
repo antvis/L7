@@ -65,6 +65,8 @@ export interface ILayerModelInitializationOptions {
   fragmentShader: string;
   triangulation: Triangulation;
   segmentNumber?: number;
+  workerEnabled?: boolean;
+  layerOptions?: any;
 }
 
 export interface ILayerModel {
@@ -73,8 +75,8 @@ export interface ILayerModel {
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
-  buildModels(): IModel[];
-  initModels(): IModel[];
+  buildModels(callbackModel: (models: IModel[]) => void): void;
+  initModels(callbackModel: (models: IModel[]) => void): void;
   needUpdate(): boolean;
   clearModels(): void;
 
@@ -275,6 +277,7 @@ export interface ILayer {
   layerType?: string | undefined;
   isVector?: boolean;
   triangulation?: Triangulation | undefined;
+
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -308,7 +311,7 @@ export interface ILayer {
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): IModel;
+  ): Promise<unknown>;
   createAttrubutes(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
@@ -549,6 +552,8 @@ export interface ILayerConfig {
    * layer point text 是否是 iconfont 模式
    */
   iconfont: boolean;
+
+  workerEnabled?: boolean;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }

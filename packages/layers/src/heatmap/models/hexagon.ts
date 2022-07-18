@@ -40,6 +40,7 @@ export default class HexagonModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'hexagonheatmap',
         vertexShader: heatmapGridVert,

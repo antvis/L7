@@ -75,6 +75,7 @@ export default class WaterModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'polygon_water',
         vertexShader: water_vert,

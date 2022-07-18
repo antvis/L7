@@ -11,6 +11,7 @@ import {
   MarkerLayer,
   Popup,
   HeatmapLayer,
+  LineLayer,
 } from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
@@ -24,45 +25,51 @@ export default class Amap2demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
-        pitch: 0,
-        style: 'blank',
-        // center: [115, 30],
-
+      map: new Mapbox({
+        // map: new GaodeMap({
+        // map: new GaodeMapV2({
+        // map: new Map({
+        style: 'dark',
         center: [120, 30],
-
-        zoom: 0,
-        // layers: [new window.AMap.TileLayer.Satellite()]
+        zoom: 4,
       }),
     });
 
     this.scene = scene;
 
-    scene.on('loaded', () => {
-      const layer = new HeatmapLayer({})
-        .source([{ lng: 120, lat: 30, mag: 1 }], {
-          parser: { type: 'json', x: 'lng', y: 'lat' },
-        })
-        .shape('heatmap')
-        .size('mag', [0, 1.0]) // weight映射通道
-        .style({
-          intensity: 2,
-          radius: 20,
-          opacity: 1.0,
-          rampColors: {
-            colors: [
-              '#FF4818',
-              '#F7B74A',
-              '#FFF598',
-              '#F27DEB',
-              '#8C1EB2',
-              '#421EB2',
-            ].reverse(),
-            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+    const layer = new PointLayer({
+      visible: false,
+    })
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
           },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .size(10)
+      .color('#f00');
+
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+
+      setTimeout(() => {
+        layer.show();
+        layer.style({
+          opacity: 1,
         });
 
-      this.scene.addLayer(layer);
+        console.log(layer.isVisible());
+      }, 3000);
     });
   }
 

@@ -65,6 +65,7 @@ export default class FillModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     this.layer.triangulation = triangulation;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: type,
         vertexShader: vert,

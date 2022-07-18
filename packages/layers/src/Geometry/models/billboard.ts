@@ -80,7 +80,7 @@ export default class BillBoardModel extends BaseModel {
   public clearModels(): void {
     this.texture?.destroy();
   }
-
+  // @ts-ignore
   public initModels() {
     const {
       mask = false,
@@ -111,7 +111,7 @@ export default class BillBoardModel extends BaseModel {
       }),
     ];
   }
-
+  // @ts-ignore
   public buildModels() {
     return this.initModels();
   }

@@ -110,7 +110,7 @@ export default class WindModel extends BaseModel {
       this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     });
-
+    // @ts-ignore
     this.colorModel = this.layer.buildLayerModel({
       moduleName: 'WindLayer',
       vertexShader: WindVert,

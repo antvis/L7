@@ -179,6 +179,7 @@ export default class ArcModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'arc2dline' + type,
         vertexShader: vert,

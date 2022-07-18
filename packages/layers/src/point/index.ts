@@ -8,10 +8,14 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.layerService.updateLayerRenderList();
+      this.renderLayers();
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => (this.models = models));
   }
 
   /**
@@ -68,6 +72,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
       vectorpoint: {},
       tile: {},
+      earthFill: {},
+      earthExtrude: {},
     };
     return defaultConfig[type];
   }
@@ -85,6 +91,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'icon',
       'vectorpoint',
       'tile',
+      'earthFill',
+      'earthExtrude',
     ];
     if (this.layerSource.parser.type === 'mvt') {
       return 'vectorpoint';

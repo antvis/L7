@@ -95,6 +95,7 @@ export default class ImageModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'pointImage',
         vertexShader: pointImageVert,

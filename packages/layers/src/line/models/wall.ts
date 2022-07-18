@@ -118,6 +118,7 @@ export default class LineWallModel extends BaseModel {
 
   public buildModels(): IModel[] {
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'linewall',
         vertexShader: line_vert,

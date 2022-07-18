@@ -1,3 +1,4 @@
+import { getWorker, WorkerType } from '@antv/l7-utils';
 import { inject, injectable, optional } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
@@ -183,6 +184,91 @@ export default class StyleAttributeService implements IStyleAttributeService {
         });
       }
     }
+  }
+
+  public createAttributesAndIndicesAscy(
+    features: IEncodeFeature[],
+    segmentNumber: number,
+    layerOptions: any,
+  ) {
+    // 每次创建的初始化化 LayerOut
+    this.featureLayout = {
+      sizePerElement: 0,
+      elements: [],
+    };
+
+    const descriptors = this.attributes.map((attr) => {
+      attr.resetDescriptor();
+      return attr.descriptor;
+    });
+
+    // worker test
+    const { attributesUpdateFunctions, ...restOptions } = layerOptions;
+
+    const myWorker = getWorker(WorkerType.MESH, {
+      modelType: 'PointFill',
+      attributesUpdateFunctions,
+    }) as Worker;
+
+    const messages = {
+      descriptors,
+      features,
+      segmentNumber,
+      ...restOptions,
+    };
+
+    myWorker.postMessage(JSON.stringify(messages));
+
+    const {
+      createAttribute,
+      createBuffer,
+      createElements,
+    } = this.rendererService;
+    const attributes: {
+      [attributeName: string]: IAttribute;
+    } = {};
+
+    return new Promise((resolve, reject) => {
+      try {
+        myWorker.onmessage = (e) => {
+          // work test
+          e.data.descriptors.forEach(
+            (descriptor: any, attributeIdx: number) => {
+              if (descriptor) {
+                // IAttribute 参数透传
+                const { buffer, update, name, ...rest } = descriptor;
+
+                const vertexAttribute = createAttribute({
+                  // IBuffer 参数透传
+                  buffer: createBuffer(buffer),
+                  ...rest,
+                });
+                attributes[descriptor.name || ''] = vertexAttribute;
+
+                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+              }
+            },
+          );
+          this.featureLayout = e.data.featureLayout;
+          // console.log( e.data.indices)
+          // console.log(indices)
+          const elements = createElements({
+            data: e.data.indices,
+            type: gl.UNSIGNED_INT,
+            count: e.data.indices.length,
+          });
+          this.attributesAndIndices = {
+            attributes,
+            elements,
+          };
+
+          resolve(this.attributesAndIndices);
+        };
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   public createAttributesAndIndices(

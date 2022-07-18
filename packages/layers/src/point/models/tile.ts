@@ -182,6 +182,7 @@ export default class FillModel extends BaseModel {
 
     this.layer.triangulation = PointFillTriangulation;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         // primitive: gl.POINTS,
         moduleName: type,

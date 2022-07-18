@@ -26,7 +26,7 @@ export default class Amap2demo_styleMap extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          let layer = new PointLayer({}) // blend: "additive"
+          let layer = new PointLayer({ workerEnabled: true }) // blend: "additive"
             .source(data, {
               parser: {
                 type: 'json',
@@ -36,7 +36,6 @@ export default class Amap2demo_styleMap extends React.Component {
             })
             .shape('circle')
             .color('color')
-            // .color('#f00')
             .size('value', (v) => 5 + 15 * v)
             .style({
               // blur: 2.5,

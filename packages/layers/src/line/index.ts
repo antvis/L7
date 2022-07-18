@@ -8,10 +8,13 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new LineModels[shape](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.renderLayers();
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => (this.models = models));
   }
 
   protected getConfigSchema() {
@@ -38,10 +41,15 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       greatcircle: { blend: 'additive' },
       vectorline: {},
       tileLine: {},
+      halfLine: {},
+      earthArc3d: {},
     };
     return defaultConfig[type];
   }
   protected getModelType(): LineModelType {
+    if (this.layerType) {
+      return this.layerType as LineModelType;
+    }
     if (this.layerSource.parser.type === 'mvt') {
       return 'vectorline';
     }

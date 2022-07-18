@@ -60,6 +60,7 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface ISource {
+  inited: boolean;
   data: IParserData;
   center: [number, number];
   parser: IParserCfg;

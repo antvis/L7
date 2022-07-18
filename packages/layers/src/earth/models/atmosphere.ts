@@ -37,6 +37,7 @@ export default class EarthAtomSphereModel extends BaseModel {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -997;
     return [
+      // @ts-ignore
       this.layer.buildLayerModel({
         moduleName: 'earthAtmoSphere',
         vertexShader: atmoSphereVert,
