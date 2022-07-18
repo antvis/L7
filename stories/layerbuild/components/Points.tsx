@@ -71,10 +71,10 @@ export default class PointTest extends React.Component {
 
           // layer.on('inited', () => {
           // console.log('inited ***')
-          layer.setData([
-            { lng: 120, lat: 30 },
-            { lng: 130, lat: 30 },
-          ]);
+          // layer.setData([
+          //   { lng: 120, lat: 30 },
+          //   { lng: 130, lat: 30 },
+          // ]);
           // })
         });
       });
