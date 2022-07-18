@@ -18,26 +18,30 @@ export default class PointTest extends React.Component {
       }),
     });
 
-  
     const layer = new PointLayer()
-          .source([ {
+      .source(
+        [
+          {
             lng: 120,
             lat: 30,
-          },], {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          })
-          .size([10, 10, 100])
-          .color('#f00')
-          .shape('cylinder')
-          .active(true);
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .size([10, 10, 100])
+      .color('#f00')
+      .shape('cylinder')
+      .active(true);
 
-        scene.on('loaded', () => {
-          scene.addLayer(layer);
-        });
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+    });
   }
 
   public render() {

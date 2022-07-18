@@ -22,31 +22,32 @@ export default class PointTest extends React.Component {
       'img',
       'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*rd3kTp1VFxIAAAAAAAAAAAAAARQnAQ',
     );
-    const imageData = [{
-      lng: 120,
-      lat: 30,
-      img: 'img',
-    }];
+    const imageData = [
+      {
+        lng: 120,
+        lat: 30,
+        img: 'img',
+      },
+    ];
 
-  
     const layer = new PointLayer({ layerType: 'fillImage' })
-        .source(imageData, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        })
-        .size(15)
-        .shape('img', ['img'])
-        .active({
-          color: '#f00',
-          mix: 0.5,
-        })
+      .source(imageData, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .size(15)
+      .shape('img', ['img'])
+      .active({
+        color: '#f00',
+        mix: 0.5,
+      });
 
-        scene.on('loaded', () => {
-          scene.addLayer(layer);
-        });
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+    });
   }
 
   public render() {
