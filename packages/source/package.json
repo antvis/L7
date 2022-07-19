@@ -29,7 +29,7 @@
     "@antv/l7-core": "2.9.14",
     "@antv/l7-utils": "2.9.14",
     "@babel/runtime": "^7.7.7",
-    "@mapbox/geojson-rewind": "^0.4.0",
+    "@mapbox/geojson-rewind": "^0.5.2",
     "@mapbox/vector-tile": "^1.3.1",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
