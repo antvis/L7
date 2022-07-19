@@ -1,5 +1,13 @@
-import { IWorkOptions, WorkerType } from './interface';
+
+import { WorkerType } from './interface';
 import getMeshTask from './mesh';
+
+export type IModelType = 'PointFill';
+
+export interface IWorkOptions {
+  modelType: IModelType;
+  attributesUpdateFunctions: any;
+}
 
 function WorkFactory(myTask: any) {
   const blob = new Blob([myTask]);

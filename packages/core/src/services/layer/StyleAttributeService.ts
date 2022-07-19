@@ -1,4 +1,5 @@
-import { getWorker, WorkerType } from '@antv/l7-utils';
+// import { getWorker, WorkerType } from '@antv/l7-utils';
+import { parseL7Worker } from '@antv/l7-utils';
 import { inject, injectable, optional } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
@@ -209,19 +210,13 @@ export default class StyleAttributeService implements IStyleAttributeService {
       ...restOptions
     } = layerOptions;
 
-    const myWorker = getWorker(WorkerType.MESH, {
-      modelType,
-      attributesUpdateFunctions,
-    }) as Worker;
-
     const messages = {
       descriptors,
       features,
       segmentNumber,
+      enablePicking: true,
       ...restOptions,
     };
-
-    myWorker.postMessage(JSON.stringify(messages));
 
     const {
       createAttribute,
@@ -234,41 +229,81 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
     return new Promise((resolve, reject) => {
       try {
-        myWorker.onmessage = (e) => {
-          // work test
-          e.data.descriptors.forEach(
-            (descriptor: any, attributeIdx: number) => {
-              if (descriptor) {
-                // IAttribute 参数透传
-                const { buffer, update, name, ...rest } = descriptor;
+        parseL7Worker('pointFill', messages)
+          .then((e) => {
+            
+            e.data.descriptors.forEach(
+              (descriptor: any, attributeIdx: number) => {
+                if (descriptor) {
+                  // IAttribute 参数透传
+                  const { buffer, update, name, ...rest } = descriptor;
 
-                const vertexAttribute = createAttribute({
-                  // IBuffer 参数透传
-                  buffer: createBuffer(buffer),
-                  ...rest,
-                });
-                attributes[descriptor.name || ''] = vertexAttribute;
+                  const vertexAttribute = createAttribute({
+                    // IBuffer 参数透传
+                    buffer: createBuffer(buffer),
+                    ...rest,
+                  });
+                  attributes[descriptor.name || ''] = vertexAttribute;
 
-                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
-              }
-            },
-          );
-          this.featureLayout = e.data.featureLayout;
-          // console.log( e.data.indices)
-          // console.log(indices)
-          const elements = createElements({
-            data: e.data.indices,
-            type: gl.UNSIGNED_INT,
-            count: e.data.indices.length,
+                  // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+                  this.attributes[
+                    attributeIdx
+                  ].vertexAttribute = vertexAttribute;
+                }
+              },
+            );
+            this.featureLayout = e.data.featureLayout;
+            const elements = createElements({
+              data: e.data.indices,
+              type: gl.UNSIGNED_INT,
+              count: e.data.indices.length,
+            });
+            this.attributesAndIndices = {
+              attributes,
+              elements,
+            };
+            
+            resolve(this.attributesAndIndices);
+          })
+          .catch((err) => {
+            console.warn(err);
           });
-          this.attributesAndIndices = {
-            attributes,
-            elements,
-          };
 
-          resolve(this.attributesAndIndices);
-        };
+        // myWorker.onmessage = (e) => {
+        //   // work test
+        //   e.data.descriptors.forEach(
+        //     (descriptor: any, attributeIdx: number) => {
+        //       if (descriptor) {
+        //         // IAttribute 参数透传
+        //         const { buffer, update, name, ...rest } = descriptor;
+
+        //         const vertexAttribute = createAttribute({
+        //           // IBuffer 参数透传
+        //           buffer: createBuffer(buffer),
+        //           ...rest,
+        //         });
+        //         attributes[descriptor.name || ''] = vertexAttribute;
+
+        //         // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+        //         this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+        //       }
+        //     },
+        //   );
+        //   this.featureLayout = e.data.featureLayout;
+        //   // console.log( e.data.indices)
+        //   // console.log(indices)
+        //   const elements = createElements({
+        //     data: e.data.indices,
+        //     type: gl.UNSIGNED_INT,
+        //     count: e.data.indices.length,
+        //   });
+        //   this.attributesAndIndices = {
+        //     attributes,
+        //     elements,
+        //   };
+
+        //   resolve(this.attributesAndIndices);
+        // };
       } catch (err) {
         reject(err);
       }
