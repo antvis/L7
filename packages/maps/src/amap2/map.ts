@@ -39,7 +39,7 @@ window.forceWebGL = true;
 // const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_API_KEY: string = 'ff533602d57df6f8ab3b0fea226ae52f';
 // const AMAP_VERSION: string = '1.4.15';
-const AMAP_VERSION: string = '2.0';
+const AMAP_VERSION: string = '2.0.5';
 /**
  * 确保多个场景只引入一个高德地图脚本
  */
