@@ -12,22 +12,35 @@ import {
   Popup,
   HeatmapLayer,
   LineLayer,
+  Source,
 } from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
-  // @ts-ignore
-  private scene: Scene;
-
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
   public async componentDidMount() {
-    const scene = new Scene({
+    const source = new Source(
+      [
+        {
+          lng: 120,
+          lat: 30,
+        },
+      ],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      },
+    );
+
+    let c = 0,
+      scene,
+      layer;
+    scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        // map: new GaodeMap({
-        // map: new GaodeMapV2({
+      // map: new Mapbox({
+      // map: new GaodeMap({
+      map: new GaodeMapV2({
         // map: new Map({
         style: 'dark',
         center: [120, 30],
@@ -35,41 +48,14 @@ export default class Amap2demo extends React.Component {
       }),
     });
 
-    this.scene = scene;
-
-    const layer = new PointLayer({
-      visible: false,
-    })
-      .source(
-        [
-          {
-            lng: 120,
-            lat: 30,
-          },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
+    const layer = new PointLayer()
+      .source(source)
       .shape('circle')
       .size(10)
       .color('#f00');
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-
-      setTimeout(() => {
-        layer.show();
-        layer.style({
-          opacity: 1,
-        });
-
-        console.log(layer.isVisible());
-      }, 3000);
     });
   }
 
