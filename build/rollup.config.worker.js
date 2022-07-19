@@ -24,6 +24,7 @@ module.exports = [
       format: 'iife',
       name: 'L7',
     },
+    context: 'self',
     treeshake: true,
     plugins: [
       alias({
