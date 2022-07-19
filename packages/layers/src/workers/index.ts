@@ -1,10 +1,8 @@
 import { createWorker } from '@antv/l7-utils/src/worker-helper';
-import { lineTriangulation } from './line-triangulation';
 import { pointFillWorker } from './pointFill';
 
 const workerTypes: Record<string, (data: any) => Promise<any>> = {
   pointFill: pointFillWorker,
-  'line-triangulation': lineTriangulation,
 };
 
 async function worker({ workerType, data }: { workerType: string; data: any }) {

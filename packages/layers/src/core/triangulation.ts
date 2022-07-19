@@ -144,19 +144,6 @@ export function LineTriangulation(feature: IEncodeFeature) {
   };
 }
 
-export async function excuteLineTriangulation(
-  data: IEncodeFeature,
-  iskorker: boolean = false,
-) {
-  if (iskorker) {
-    const workeResult = await parseL7Worker('line-triangulation', data);
-    return workeResult;
-  }
-
-  const result = await LineTriangulation(data);
-  return result;
-}
-
 export function SimpleLineTriangulation(feature: IEncodeFeature) {
   const { coordinates, originCoordinates, version } = feature;
 

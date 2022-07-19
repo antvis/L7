@@ -1,4 +1,3 @@
-// import { getWorker, WorkerType } from '@antv/l7-utils';
 import { parseL7Worker } from '@antv/l7-utils';
 import { inject, injectable, optional } from 'inversify';
 import 'reflect-metadata';
@@ -210,14 +209,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
       ...restOptions
     } = layerOptions;
 
-    const messages = {
-      descriptors,
-      features,
-      segmentNumber,
-      enablePicking: true,
-      ...restOptions,
-    };
-
     const {
       createAttribute,
       createBuffer,
@@ -226,36 +217,37 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const attributes: {
       [attributeName: string]: IAttribute;
     } = {};
-
     return new Promise((resolve, reject) => {
       try {
-        parseL7Worker('pointFill', messages)
+        parseL7Worker('pointFill', {
+          descriptors: this.getPureDescriptors(descriptors),
+          features,
+          segmentNumber,
+          enablePicking: true,
+          ...restOptions,
+        })
           .then((e) => {
-            e.data.descriptors.forEach(
-              (descriptor: any, attributeIdx: number) => {
-                if (descriptor) {
-                  // IAttribute 参数透传
-                  const { buffer, update, name, ...rest } = descriptor;
+            e.descriptors.forEach((descriptor: any, attributeIdx: number) => {
+              if (descriptor) {
+                // IAttribute 参数透传
+                const { buffer, update, name, ...rest } = descriptor;
 
-                  const vertexAttribute = createAttribute({
-                    // IBuffer 参数透传
-                    buffer: createBuffer(buffer),
-                    ...rest,
-                  });
-                  attributes[descriptor.name || ''] = vertexAttribute;
+                const vertexAttribute = createAttribute({
+                  // IBuffer 参数透传
+                  buffer: createBuffer(buffer),
+                  ...rest,
+                });
+                attributes[descriptor.name || ''] = vertexAttribute;
 
-                  // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-                  this.attributes[
-                    attributeIdx
-                  ].vertexAttribute = vertexAttribute;
-                }
-              },
-            );
-            this.featureLayout = e.data.featureLayout;
+                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+              }
+            });
+            this.featureLayout = e.featureLayout;
             const elements = createElements({
-              data: e.data.indices,
+              data: e.indices,
               type: gl.UNSIGNED_INT,
-              count: e.data.indices.length,
+              count: e.indices.length,
             });
             this.attributesAndIndices = {
               attributes,
@@ -267,42 +259,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
           .catch((err) => {
             console.warn(err);
           });
-
-        // myWorker.onmessage = (e) => {
-        //   // work test
-        //   e.data.descriptors.forEach(
-        //     (descriptor: any, attributeIdx: number) => {
-        //       if (descriptor) {
-        //         // IAttribute 参数透传
-        //         const { buffer, update, name, ...rest } = descriptor;
-
-        //         const vertexAttribute = createAttribute({
-        //           // IBuffer 参数透传
-        //           buffer: createBuffer(buffer),
-        //           ...rest,
-        //         });
-        //         attributes[descriptor.name || ''] = vertexAttribute;
-
-        //         // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-        //         this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
-        //       }
-        //     },
-        //   );
-        //   this.featureLayout = e.data.featureLayout;
-        //   // console.log( e.data.indices)
-        //   // console.log(indices)
-        //   const elements = createElements({
-        //     data: e.data.indices,
-        //     type: gl.UNSIGNED_INT,
-        //     count: e.data.indices.length,
-        //   });
-        //   this.attributesAndIndices = {
-        //     attributes,
-        //     elements,
-        //   };
-
-        //   resolve(this.attributesAndIndices);
-        // };
       } catch (err) {
         reject(err);
       }
@@ -557,5 +513,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
     this.attributesAndIndices?.elements.destroy();
     this.attributes = [];
+  }
+
+  private getPureDescriptors(descriptors: IVertexAttributeDescriptor[]) {
+    return descriptors.map((d) => {
+      return {
+        buffer: d.buffer,
+        name: d.name,
+        size: d.size,
+      };
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { IEncodeFeature } from '@antv/l7-core';
+import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 
 function encodePickingColor(featureIdx: number) {
   return [
@@ -38,146 +38,188 @@ function calculateCentroid(coord: any) {
 export const pointFillWorker = async ({
   descriptors,
   features,
-  segmentNumber,
   enablePicking,
 }: {
-  descriptors: any;
+  descriptors: IVertexAttributeDescriptor[];
   features: IEncodeFeature[];
-  segmentNumber: number;
   enablePicking: boolean;
 }) => {
-  // var updateFuncs = {
-  //   // fixed func
-  //   a_Color: (feature: IEncodeFeature, featureIdx: number) => {
-  //     const { color } = feature;
-  //     return !color || !color.length ? [1, 1, 1, 1] : color;
-  //   },
+  const updateFuncs = {
+    // fixed func
+    a_Color: (feature: IEncodeFeature, featureIdx: number) => {
+      const { color } = feature;
+      return !color || !color.length ? [1, 1, 1, 1] : color;
+    },
 
-  //   a_Position: (feature: IEncodeFeature, featureIdx: number, vertex: number[] ) => {
-  //     return vertex.length === 2
-  //       ? [vertex[0], vertex[1], 0]
-  //       : [vertex[0], vertex[1], vertex[2]];
-  //   },
-  //   filter: (feature: IEncodeFeature, featureIdx: number) => {
-  //     const { filter } = feature;
-  //     return filter ? [1] : [0];
-  //   },
-  //   a_vertexId: ( feature: IEncodeFeature, featureIdx: number, vertex: number[], attributeIdx: number ) => {
-  //     return [featureIdx];
-  //   },
-  //   a_PickingColor: (feature: IEncodeFeature, featureIdx: number) => {
-  //     var { id } = feature;
-  //     return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
-  //   },
-  //   a_Shape: ( feature: IEncodeFeature, featureIdx: number, vertex: number[], attributeIdx: number ) => {
-  //     var { shape = 2 } = feature;
-  //     // var shape2d = this.layer.getLayerConfig().shape2d as string[];
-  //     var shape2d = ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octogon', 'hexagram', 'rhombus', 'vesica'];
-  //     var shapeIndex = shape2d.indexOf(shape as string);
-  //     return [shapeIndex];
-  //   },
-  //   a_Extrude: ( feature: IEncodeFeature, featureIdx: number, vertex: number[], attributeIdx: number ) => {
-  //     let extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
-  //     var extrudeIndex = (attributeIdx % 4) * 3;
-  //     return [
-  //       extrude[extrudeIndex],
-  //       extrude[extrudeIndex + 1],
-  //       extrude[extrudeIndex + 2],
-  //     ];
-  //   },
-  //   a_Size: ( feature: IEncodeFeature, featureIdx: number, vertex: number, attributeIdx: number[] ) => {
-  //     console.log('feature', feature)
-  //     var { size = 5 } = feature;
-  //     return Array.isArray(size) ? [size[0]] : [size];
-  //   },
-  // }
-  // // triangle
-  // function triangulation(feature: IEncodeFeature, segmentNumber?: number) {
-  //     var coordinates = calculateCentroid(feature.coordinates);
-  //     return {
-  //       vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-  //       indices: [0, 1, 2, 2, 3, 0],
-  //       size: coordinates.length,
-  //     };
-  // }
+    a_Position: (
+      feature: IEncodeFeature,
+      featureIdx: number,
+      vertex: number[],
+    ) => {
+      return vertex.length === 2
+        ? [vertex[0], vertex[1], 0]
+        : [vertex[0], vertex[1], vertex[2]];
+    },
+    filter: (feature: IEncodeFeature, featureIdx: number) => {
+      const { filter } = feature;
+      return filter ? [1] : [0];
+    },
+    a_vertexId: (
+      feature: IEncodeFeature,
+      featureIdx: number,
+      vertex: number[],
+      attributeIdx: number,
+    ) => {
+      return [featureIdx];
+    },
+    a_PickingColor: (feature: IEncodeFeature, featureIdx: number) => {
+      const { id } = feature;
+      return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
+    },
+    a_Shape: (
+      feature: IEncodeFeature,
+      featureIdx: number,
+      vertex: number[],
+      attributeIdx: number,
+    ) => {
+      const { shape = 2 } = feature;
+      // var shape2d = this.layer.getLayerConfig().shape2d as string[];
+      const shape2d = [
+        'circle',
+        'triangle',
+        'square',
+        'pentagon',
+        'hexagon',
+        'octogon',
+        'hexagram',
+        'rhombus',
+        'vesica',
+      ];
+      const shapeIndex = shape2d.indexOf(shape as string);
+      return [shapeIndex];
+    },
+    a_Extrude: (
+      feature: IEncodeFeature,
+      featureIdx: number,
+      vertex: number[],
+      attributeIdx: number,
+    ) => {
+      const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+      const extrudeIndex = (attributeIdx % 4) * 3;
+      return [
+        extrude[extrudeIndex],
+        extrude[extrudeIndex + 1],
+        extrude[extrudeIndex + 2],
+      ];
+    },
+    a_Size: (
+      feature: IEncodeFeature,
+      featureIdx: number,
+      vertex: number,
+      attributeIdx: number[],
+    ) => {
+      const { size: pointSize = 5 } = feature;
+      return Array.isArray(pointSize) ? [pointSize[0]] : [pointSize];
+    },
+  };
+  // triangle
+  function triangulation(feature: IEncodeFeature) {
+    const coordinates = calculateCentroid(feature.coordinates);
+    return {
+      vertices: [
+        ...coordinates,
+        ...coordinates,
+        ...coordinates,
+        ...coordinates,
+      ],
+      indices: [0, 1, 2, 2, 3, 0],
+      size: coordinates.length,
+    };
+  }
 
-  // var featureLayout: {
-  // sizePerElement: number;
-  // elements: Array<{
-  //     featureIdx: number;
-  //     vertices: number[];
-  //     normals: number[];
-  //     offset: number;
-  //     indexes?: number[];
-  // }>;
-  // } = {
-  // sizePerElement: 0,
-  // elements: [],
-  // };
+  const featureLayout: {
+    sizePerElement: number;
+    elements: Array<{
+      featureIdx: number;
+      vertices: number[];
+      normals: number[];
+      offset: number;
+      indexes?: number[];
+    }>;
+  } = {
+    sizePerElement: 0,
+    elements: [],
+  };
 
-  // var verticesNum = 0;
-  // var indices: number[] = [];
-  // var size = 3;
-  // features.forEach((feature: IEncodeFeature, featureIdx: number) => {
-  // var {
-  //     indices: indicesForCurrentFeature,
-  //     vertices: verticesForCurrentFeature,
-  //     // @ts-ignore
-  //     normals: normalsForCurrentFeature,
-  //     size: vertexSize,
-  //     // @ts-ignore
-  //     indexes,
-  // } = triangulation(feature, segmentNumber);
-  // indicesForCurrentFeature.forEach((i) => {
-  //     indices.push(i + verticesNum);
-  // });
-  // size = vertexSize;
-  // var verticesNumForCurrentFeature = verticesForCurrentFeature.length / vertexSize;
+  let verticesNum = 0;
+  const indices: number[] = [];
+  let size = 3;
+  features.forEach((feature: IEncodeFeature, featureIdx: number) => {
+    const {
+      indices: indicesForCurrentFeature,
+      vertices: verticesForCurrentFeature,
+      // @ts-ignore
+      normals: normalsForCurrentFeature,
+      size: vertexSize,
+      // @ts-ignore
+      indexes,
+    } = triangulation(feature);
+    indicesForCurrentFeature.forEach((i) => {
+      indices.push(i + verticesNum);
+    });
+    size = vertexSize;
+    const verticesNumForCurrentFeature =
+      verticesForCurrentFeature.length / vertexSize;
 
-  // featureLayout.sizePerElement = size;
+    featureLayout.sizePerElement = size;
 
-  // featureLayout.elements.push({
-  //     featureIdx,
-  //     vertices: verticesForCurrentFeature,
-  //     normals: normalsForCurrentFeature,
-  //     offset: verticesNum,
-  // });
+    featureLayout.elements.push({
+      featureIdx,
+      vertices: verticesForCurrentFeature,
+      normals: normalsForCurrentFeature,
+      offset: verticesNum,
+    });
+    // console.log('**', descriptors)
+    verticesNum += verticesNumForCurrentFeature;
+    for (
+      let vertexIdx = 0;
+      vertexIdx < verticesNumForCurrentFeature;
+      vertexIdx++
+    ) {
+      const normal =
+        normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) || [];
+      const vertice = verticesForCurrentFeature.slice(
+        vertexIdx * vertexSize,
+        vertexIdx * vertexSize + vertexSize,
+      );
 
-  // verticesNum += verticesNumForCurrentFeature;
-  // for ( var vertexIdx = 0; vertexIdx < verticesNumForCurrentFeature; vertexIdx++ ) {
-  //     var normal = normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) || [];
-  //     var vertice = verticesForCurrentFeature.slice(
-  //     vertexIdx * vertexSize,
-  //     vertexIdx * vertexSize + vertexSize,
-  //     );
+      let vertexIndex = 0;
+      if (indexes && indexes[vertexIdx] !== undefined) {
+        vertexIndex = indexes[vertexIdx];
+      }
 
-  //     var vertexIndex = 0;
-  //     if (indexes && indexes[vertexIdx] !== undefined) {
-  //     vertexIndex = indexes[vertexIdx];
-  //     }
-  // // @ts-ignore
-  //     descriptors.forEach((descriptor, attributeIdx: number) => {
-  //     // @ts-ignore
-  //     if (descriptor && updateFuncs[descriptor.name]) {
-  //         (descriptor.buffer.data).push(
-  //         // @ts-ignore
-  //         ...updateFuncs[descriptor.name](
-  //             feature,
-  //             featureIdx,
-  //             vertice,
-  //             vertexIdx,
-  //             normal,
-  //             vertexIndex,
-  //         )
-  //         );
-  //     };
-  //     });
-  // };
-  // });
+      descriptors.forEach((descriptor, attributeIdx: number) => {
+        // @ts-ignore
+        if (descriptor && updateFuncs[descriptor.name]) {
+          // @ts-ignore
+          descriptor.buffer.data.push(
+            // @ts-ignore
+            ...updateFuncs[descriptor.name](
+              feature,
+              featureIdx,
+              vertice,
+              vertexIdx,
+              normal,
+              vertexIndex,
+            ),
+          );
+        }
+      });
+    }
+  });
   return {
-    // descriptors,
-    // featureLayout,
-    // indices
-    test: 1,
+    descriptors,
+    featureLayout,
+    indices,
   };
 };
