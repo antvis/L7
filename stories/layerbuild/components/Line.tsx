@@ -18,11 +18,7 @@ export default class PointTest extends React.Component {
       }),
     });
 
-   
-
-    scene.on('loaded', () => {
-    });
-      
+    scene.on('loaded', () => {});
   }
 
   public render() {
