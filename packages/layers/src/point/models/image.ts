@@ -76,11 +76,11 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.registerBuiltinAttributes();
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -89,24 +89,35 @@ export default class ImageModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'pointImage',
-        vertexShader: pointImageVert,
-        fragmentShader: pointImageFrag,
-        triangulation: PointImageTriangulation,
-        primitive: gl.POINTS,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
+
+    this.layer
+    .buildLayerModel({
+      moduleName: 'pointImage',
+      vertexShader: pointImageVert,
+      fragmentShader: pointImageFrag,
+      triangulation: PointImageTriangulation,
+      depth: { enable: false },
+      primitive: gl.POINTS,
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      workerEnabled,
+      layerOptions: {
+        modelType: 'pointImage',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
   protected registerBuiltinAttributes() {
     // point layer size;

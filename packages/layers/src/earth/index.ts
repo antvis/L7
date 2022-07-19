@@ -38,7 +38,7 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     if (this.layerModel && this.layerModel.setEarthTime) {
       this.layerModel.setEarthTime(time);
     } else {
-      console.error('请在 scene loaded 之后执行该方法！');
+      console.warn('请在 scene loaded 之后执行该方法！');
     }
   }
 

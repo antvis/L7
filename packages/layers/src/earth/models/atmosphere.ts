@@ -25,30 +25,36 @@ export default class EarthAtomSphereModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void){
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void){
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -997;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'earthAtmoSphere',
-        vertexShader: atmoSphereVert,
-        fragmentShader: atmoSphereFrag,
-        triangulation: earthTriangulation,
-        depth: {
-          enable: false,
-        },
-        blend: this.getBlend(),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: 'earthAtmoSphere',
+      vertexShader: atmoSphereVert,
+      fragmentShader: atmoSphereFrag,
+      triangulation: earthTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      layerOptions: {
+        modelType: 'earthAtmoSphere',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   protected registerBuiltinAttributes() {

@@ -66,7 +66,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       fill: { blend: 'normal' },
       extrude: {},
       image: {},
-      icon: {},
       text: {
         blend: 'normal',
       },
@@ -88,7 +87,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'simplePoint',
       'extrude',
       'text',
-      'icon',
       'vectorpoint',
       'tile',
       'earthFill',
@@ -133,9 +131,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       }
       if (iconMap.hasOwnProperty(shape as string)) {
         return 'image';
-      }
-      if (this.fontService.getGlyph(shape as string) !== '') {
-        return 'icon';
       }
       return 'text';
     }

@@ -201,8 +201,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
       attr.resetDescriptor();
       return attr.descriptor;
     });
-
-    // worker test
     const {
       attributesUpdateFunctions,
       modelType,
@@ -218,50 +216,48 @@ export default class StyleAttributeService implements IStyleAttributeService {
       [attributeName: string]: IAttribute;
     } = {};
     return new Promise((resolve, reject) => {
-      try {
-        parseL7Worker('pointFill', {
-          descriptors: this.getPureDescriptors(descriptors),
-          features,
-          segmentNumber,
-          enablePicking: true,
-          ...restOptions,
-        })
-          .then((e) => {
-            e.descriptors.forEach((descriptor: any, attributeIdx: number) => {
-              if (descriptor) {
-                // IAttribute 参数透传
-                const { buffer, update, name, ...rest } = descriptor;
+      parseL7Worker('pointFill', {
+        descriptors: this.getPureDescriptors(descriptors),
+        features,
+        segmentNumber,
+        enablePicking: true,
+        ...restOptions,
+      })
+        .then((e) => {
+          e.descriptors.forEach((descriptor: IVertexAttributeDescriptor, attributeIdx: number) => {
+            if (descriptor) {
+              // IAttribute 参数透传
+              const { buffer, update, name, ...rest } = descriptor;
 
-                const vertexAttribute = createAttribute({
-                  // IBuffer 参数透传
-                  buffer: createBuffer(buffer),
-                  ...rest,
-                });
-                attributes[descriptor.name || ''] = vertexAttribute;
+              const vertexAttribute = createAttribute({
+                // IBuffer 参数透传
+                buffer: createBuffer(buffer),
+                ...rest,
+              });
+              attributes[descriptor.name || ''] = vertexAttribute;
 
-                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
-              }
-            });
-            this.featureLayout = e.featureLayout;
-            const elements = createElements({
-              data: e.indices,
-              type: gl.UNSIGNED_INT,
-              count: e.indices.length,
-            });
-            this.attributesAndIndices = {
-              attributes,
-              elements,
-            };
-
-            resolve(this.attributesAndIndices);
-          })
-          .catch((err) => {
-            console.warn(err);
+              // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+              this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+            }
           });
-      } catch (err) {
-        reject(err);
-      }
+          this.featureLayout = e.featureLayout;
+          const elements = createElements({
+            data: e.indices,
+            type: gl.UNSIGNED_INT,
+            count: e.indices.length,
+          });
+          this.attributesAndIndices = {
+            attributes,
+            elements,
+          };
+
+          resolve(this.attributesAndIndices);
+        })
+        .catch((err) => {
+          console.warn(err);
+          reject(err);
+        });
+     
     });
   }
 

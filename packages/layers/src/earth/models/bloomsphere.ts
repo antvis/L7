@@ -25,30 +25,36 @@ export default class EarthBloomSphereModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     // TODO: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
     this.layer.zIndex = -999;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'earthBloomSphere',
-        vertexShader: bloomSphereVert,
-        fragmentShader: bloomSphereFrag,
-        triangulation: earthOuterTriangulation,
-        depth: {
-          enable: false,
-        },
-        blend: this.getBlend(),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: 'earthBloomSphere',
+      vertexShader: bloomSphereVert,
+      fragmentShader: bloomSphereFrag,
+      triangulation: earthOuterTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      layerOptions: {
+        modelType: 'earthBloomSphere',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   protected registerBuiltinAttributes() {

@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getCullFace, getMask } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -106,7 +106,7 @@ export default class RadarModel extends BaseModel {
     );
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -120,7 +120,7 @@ export default class RadarModel extends BaseModel {
       this.calMeter2Coord();
     }
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   /**
@@ -165,37 +165,34 @@ export default class RadarModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders();
 
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
-  }
-
-  /**
-   * 根据 animateOption 的值返回对应的 shader 代码
-   * @returns
-   */
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: pointFillFrag,
-      vert: pointFillVert,
-      type: 'point_radar',
-    };
+    this.layer
+    .buildLayerModel({
+      moduleName: 'pointRadar',
+      vertexShader: pointFillVert,
+      fragmentShader: pointFillFrag,
+      triangulation: PointFillTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      workerEnabled,
+      layerOptions: {
+        modelType: 'pointRadar',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   public clearModels() {

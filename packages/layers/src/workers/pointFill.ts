@@ -35,7 +35,7 @@ function calculateCentroid(coord: any) {
   }
 }
 
-export const pointFillWorker = async ({
+export const pointFill = async ({
   descriptors,
   features,
   enablePicking,

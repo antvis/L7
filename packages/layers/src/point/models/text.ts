@@ -173,7 +173,7 @@ export default class TextModel extends BaseModel {
   }
 
   public initModels(callbackModel: (models: IModel[]) => void) {
-    this.layer.on('remapping', this.buildModels);
+    this.layer.on('remapping', this.mapping);
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -186,16 +186,20 @@ export default class TextModel extends BaseModel {
     this.buildModels(callbackModel);
   }
 
+  private mapping = () => {
+    this.initGlyph();
+    this.updateTexture();
+    this.filterGlyphs();
+    this.reBuildModel();
+  }
+
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     const {
       mask = false,
       maskInside = true,
       workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    this.initGlyph();
-    this.updateTexture();
-    this.filterGlyphs();
-    this.reBuildModel();
+    this.mapping();
 
     const layerOptions = {
       modelType: 'pointText',
@@ -243,7 +247,7 @@ export default class TextModel extends BaseModel {
   public clearModels() {
     this.texture?.destroy();
     this.dataTexture?.destroy();
-    this.layer.off('remapping', this.buildModels);
+    this.layer.off('remapping', this.mapping);
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

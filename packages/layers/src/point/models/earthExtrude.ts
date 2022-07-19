@@ -130,34 +130,40 @@ export default class ExtrudeModel extends BaseModel {
       u_lightEnable: Number(lightEnable),
     };
   }
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     // GAODE1.x GAODE2.x MAPBOX
     const {
-      depth = true,
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'pointExtrude2',
-        vertexShader: pointExtrudeVert,
-        fragmentShader: pointExtrudeFrag,
-        triangulation: PointExtrudeTriangulation,
-        blend: this.getBlend(),
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
-        depth: {
-          enable: depth,
-        },
-      }),
-    ];
+
+    this.layer
+    .buildLayerModel({
+      moduleName: 'pointEarthExtrude',
+      vertexShader: pointExtrudeVert,
+      fragmentShader: pointExtrudeFrag,
+      triangulation: PointExtrudeTriangulation,
+      depth: { enable: true },
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
+      },
+      blend: this.getBlend(),
+      layerOptions: {
+        modelType: 'pointEarthExtrude',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
   public clearModels() {
     this.dataTexture?.destroy();
