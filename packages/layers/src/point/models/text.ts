@@ -172,7 +172,7 @@ export default class TextModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.layer.on('remapping', this.buildModels);
     this.extent = this.textExtent();
     const {
@@ -183,22 +183,26 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
-    // @ts-ignore
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
-  // @ts-ignore
-  public buildModels = () => {
+
+  public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
     this.reBuildModel();
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
+
+    const layerOptions = {
+      modelType: 'pointText',
+    };
+
+    this.layer
+      .buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
         fragmentShader: textFrag,
@@ -206,8 +210,16 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        layerOptions,
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   };
   public needUpdate() {
     const {
@@ -519,11 +531,11 @@ export default class TextModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
-    this.layer.models = [
-      // @ts-ignore
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
         fragmentShader: textFrag,
@@ -531,7 +543,17 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointText',
+        },
+      })
+      .then((model) => {
+        this.layer.models = [model as IModel];
+      })
+      .catch((err) => {
+        console.warn(err);
+        this.layer.models = [];
+      });
   }
 }

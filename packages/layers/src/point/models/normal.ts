@@ -83,20 +83,21 @@ export default class NormalModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'normalpoint',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointNormal',
         vertexShader: normalVert,
         fragmentShader: normalFrag,
         triangulation: PointTriangulation,
@@ -104,8 +105,18 @@ export default class NormalModel extends BaseModel {
         primitive: gl.POINTS,
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointNormal',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

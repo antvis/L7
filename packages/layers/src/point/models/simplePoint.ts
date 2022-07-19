@@ -93,20 +93,21 @@ export default class SimplePointModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'simplepoint',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointSimple',
         vertexShader: simplePointVert,
         fragmentShader: simplePointFrag,
         triangulation: PointTriangulation,
@@ -114,8 +115,18 @@ export default class SimplePointModel extends BaseModel {
         primitive: gl.POINTS,
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointSimple',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
