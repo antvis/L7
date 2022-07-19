@@ -107,26 +107,26 @@ export default class FillModel extends BaseModel {
     const { workerEnabled = false } = this.layer.getLayerConfig();
     this.layer.triangulation = GlobelPointFillTriangulation;
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointEarthFill',
-      vertexShader: pointFillVert,
-      fragmentShader: pointFillFrag,
-      triangulation: GlobelPointFillTriangulation,
-      depth: { enable: true },
-    
-      blend: this.getBlend(),
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointEarthFill',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointEarthFill',
+        vertexShader: pointFillVert,
+        fragmentShader: pointFillFrag,
+        triangulation: GlobelPointFillTriangulation,
+        depth: { enable: true },
+
+        blend: this.getBlend(),
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointEarthFill',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

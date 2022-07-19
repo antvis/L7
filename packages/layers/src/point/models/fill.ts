@@ -205,7 +205,7 @@ export default class FillModel extends BaseModel {
       modelType: 'pointFill',
       enablePicking,
     };
-    
+
     this.layer
       .buildLayerModel({
         moduleName: 'pointfill_' + type,
@@ -305,7 +305,7 @@ export default class FillModel extends BaseModel {
             extrude[extrudeIndex + 1],
             extrude[extrudeIndex + 2],
           ];
-        }
+        },
       },
     });
 

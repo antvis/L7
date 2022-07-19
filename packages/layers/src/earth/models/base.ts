@@ -96,24 +96,24 @@ export default class BaseEarthModel extends BaseModel {
     this.layer.zIndex = -998;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'baseEarth',
-      vertexShader: baseVert,
-      fragmentShader: baseFrag,
-      triangulation: earthTriangulation,
-      depth: { enable: true },
-      blend: this.getBlend(),
-      layerOptions: {
-        modelType: 'baseEarth',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'baseEarth',
+        vertexShader: baseVert,
+        fragmentShader: baseFrag,
+        triangulation: earthTriangulation,
+        depth: { enable: true },
+        blend: this.getBlend(),
+        layerOptions: {
+          modelType: 'baseEarth',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

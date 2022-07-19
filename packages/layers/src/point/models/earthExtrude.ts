@@ -142,28 +142,28 @@ export default class ExtrudeModel extends BaseModel {
     this.raiserepeat = repeat;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointEarthExtrude',
-      vertexShader: pointExtrudeVert,
-      fragmentShader: pointExtrudeFrag,
-      triangulation: PointExtrudeTriangulation,
-      depth: { enable: true },
-      cull: {
-        enable: true,
-        face: getCullFace(this.mapService.version),
-      },
-      blend: this.getBlend(),
-      layerOptions: {
-        modelType: 'pointEarthExtrude',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointEarthExtrude',
+        vertexShader: pointExtrudeVert,
+        fragmentShader: pointExtrudeFrag,
+        triangulation: PointExtrudeTriangulation,
+        depth: { enable: true },
+        cull: {
+          enable: true,
+          face: getCullFace(this.mapService.version),
+        },
+        blend: this.getBlend(),
+        layerOptions: {
+          modelType: 'pointEarthExtrude',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   public clearModels() {
     this.dataTexture?.destroy();

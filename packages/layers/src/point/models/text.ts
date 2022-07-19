@@ -186,13 +186,6 @@ export default class TextModel extends BaseModel {
     this.buildModels(callbackModel);
   }
 
-  private mapping = () => {
-    this.initGlyph();
-    this.updateTexture();
-    this.filterGlyphs();
-    this.reBuildModel();
-  }
-
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     const {
       mask = false,
@@ -344,6 +337,13 @@ export default class TextModel extends BaseModel {
       },
     });
   }
+
+  private mapping = () => {
+    this.initGlyph();
+    this.updateTexture();
+    this.filterGlyphs();
+    this.reBuildModel();
+  };
   private textExtent(): [[number, number], [number, number]] {
     const bounds = this.mapService.getBounds();
     return padBounds(bounds, 0.5);

@@ -21,7 +21,6 @@ export default class PointTest extends React.Component {
     const layer = new PointLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
-      
     });
     layer
       .source(

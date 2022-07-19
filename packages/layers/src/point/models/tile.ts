@@ -179,33 +179,33 @@ export default class FillModel extends BaseModel {
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
-    
+
     this.layer.triangulation = PointFillTriangulation;
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointFillTile',
-      vertexShader: point_tile_vert,
-      fragmentShader: point_tile_frag,
-      triangulation: PointFillTriangulation,
-      depth: { enable: false },
-      cull: {
-        enable: true,
-        face: getCullFace(this.mapService.version),
-      },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointFillTile',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointFillTile',
+        vertexShader: point_tile_vert,
+        fragmentShader: point_tile_frag,
+        triangulation: PointFillTriangulation,
+        depth: { enable: false },
+        cull: {
+          enable: true,
+          face: getCullFace(this.mapService.version),
+        },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointFillTile',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

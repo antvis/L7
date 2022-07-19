@@ -30,7 +30,7 @@ export default class PointTest extends React.Component {
       },
     ];
 
-    const layer = new PointLayer({ })
+    const layer = new PointLayer({})
       .source(imageData, {
         parser: {
           type: 'json',

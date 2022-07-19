@@ -224,22 +224,24 @@ export default class StyleAttributeService implements IStyleAttributeService {
         ...restOptions,
       })
         .then((e) => {
-          e.descriptors.forEach((descriptor: IVertexAttributeDescriptor, attributeIdx: number) => {
-            if (descriptor) {
-              // IAttribute 参数透传
-              const { buffer, update, name, ...rest } = descriptor;
+          e.descriptors.forEach(
+            (descriptor: IVertexAttributeDescriptor, attributeIdx: number) => {
+              if (descriptor) {
+                // IAttribute 参数透传
+                const { buffer, update, name, ...rest } = descriptor;
 
-              const vertexAttribute = createAttribute({
-                // IBuffer 参数透传
-                buffer: createBuffer(buffer),
-                ...rest,
-              });
-              attributes[descriptor.name || ''] = vertexAttribute;
+                const vertexAttribute = createAttribute({
+                  // IBuffer 参数透传
+                  buffer: createBuffer(buffer),
+                  ...rest,
+                });
+                attributes[descriptor.name || ''] = vertexAttribute;
 
-              // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-              this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
-            }
-          });
+                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+              }
+            },
+          );
           this.featureLayout = e.featureLayout;
           const elements = createElements({
             data: e.indices,
@@ -257,7 +259,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
           console.warn(err);
           reject(err);
         });
-     
     });
   }
 

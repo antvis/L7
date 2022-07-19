@@ -97,27 +97,27 @@ export default class ImageModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointImage',
-      vertexShader: pointImageVert,
-      fragmentShader: pointImageFrag,
-      triangulation: PointImageTriangulation,
-      depth: { enable: false },
-      primitive: gl.POINTS,
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointImage',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointImage',
+        vertexShader: pointImageVert,
+        fragmentShader: pointImageFrag,
+        triangulation: PointImageTriangulation,
+        depth: { enable: false },
+        primitive: gl.POINTS,
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointImage',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     // point layer size;

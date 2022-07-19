@@ -56,8 +56,7 @@ export default class PointTest extends React.Component {
           textAllowOverlap: true,
         });
       scene.addLayer(imageLayer);
-    })
-   
+    });
   }
 
   public render() {

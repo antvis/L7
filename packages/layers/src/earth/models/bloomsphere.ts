@@ -37,24 +37,24 @@ export default class EarthBloomSphereModel extends BaseModel {
     // TODO: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
     this.layer.zIndex = -999;
     this.layer
-    .buildLayerModel({
-      moduleName: 'earthBloomSphere',
-      vertexShader: bloomSphereVert,
-      fragmentShader: bloomSphereFrag,
-      triangulation: earthOuterTriangulation,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      layerOptions: {
-        modelType: 'earthBloomSphere',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'earthBloomSphere',
+        vertexShader: bloomSphereVert,
+        fragmentShader: bloomSphereFrag,
+        triangulation: earthOuterTriangulation,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        layerOptions: {
+          modelType: 'earthBloomSphere',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

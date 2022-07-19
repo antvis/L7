@@ -173,26 +173,26 @@ export default class RadarModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'pointRadar',
-      vertexShader: pointFillVert,
-      fragmentShader: pointFillFrag,
-      triangulation: PointFillTriangulation,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      workerEnabled,
-      layerOptions: {
-        modelType: 'pointRadar',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'pointRadar',
+        vertexShader: pointFillVert,
+        fragmentShader: pointFillFrag,
+        triangulation: PointFillTriangulation,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        layerOptions: {
+          modelType: 'pointRadar',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
