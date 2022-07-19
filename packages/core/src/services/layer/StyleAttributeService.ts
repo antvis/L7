@@ -231,7 +231,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
       try {
         parseL7Worker('pointFill', messages)
           .then((e) => {
-            
             e.data.descriptors.forEach(
               (descriptor: any, attributeIdx: number) => {
                 if (descriptor) {
@@ -262,7 +261,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
               attributes,
               elements,
             };
-            
+
             resolve(this.attributesAndIndices);
           })
           .catch((err) => {

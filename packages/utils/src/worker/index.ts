@@ -1,4 +1,3 @@
-
 import { WorkerType } from './interface';
 import getMeshTask from './mesh';
 
