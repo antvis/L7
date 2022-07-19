@@ -14,6 +14,8 @@ import PointTile from './components/PointsTile';
 import PointEarthFill from './components/PointsEarthFill';
 import PointEarthExtrude from './components/PointsEarthExtrude';
 
+import Line from './components/Line';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -27,3 +29,5 @@ storiesOf('图层渲染流程改造', module)
   .add('PointTile', () => <PointTile />)
   .add('PointEarthFill', () => <PointEarthFill />)
   .add('PointEarthExtrude', () => <PointEarthExtrude />)
+
+  .add('Line', () => <Line />)

@@ -37,7 +37,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       wall: {},
       arc3d: { blend: 'additive' },
       arc: { blend: 'additive' },
-      arcmini: { blend: 'additive' },
       greatcircle: { blend: 'additive' },
       vectorline: {},
       tileLine: {},
