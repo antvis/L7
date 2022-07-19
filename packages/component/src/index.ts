@@ -4,7 +4,7 @@ import Logo from './control/logo';
 import Scale from './control/scale';
 import Zoom from './control/zoom';
 import Marker from './marker';
-import MarkerLayer from './markerlayer';
+import MarkerLayer from './marker-layer';
 import Popup from './popup';
 
 // 引入样式
@@ -12,3 +12,5 @@ import Popup from './popup';
 import './css/l7.css';
 
 export { Control, Logo, Scale, Zoom, Layers, Marker, Popup, MarkerLayer };
+
+export * from './interface';

@@ -29,6 +29,7 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@loadable/component": "^5.15.0",
+    "@material-ui/core": "^4.10.2",
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "^4.0.0",
@@ -86,9 +87,9 @@
     "glsl-minifier": "^0.0.13",
     "html-webpack-plugin": "^4.3.0",
     "husky": "^3.0.9",
+    "lerc": "^3.0.0",
     "jest": "^24.9.0",
     "jest-electron": "^0.1.11",
-    "@material-ui/core": "^4.10.2",
     "jest-styled-components": "^6.2.1",
     "lerna": "^3.16.4",
     "lint-staged": "^9.2.4",
@@ -160,7 +161,7 @@
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
-    "version:prerelease": "lerna version --force-publish --conventional-prerelease",
+    "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
     "release-beta": "yarn run prerelease && lerna publish --dist-tag beta from-package --force-publish && lerna run sync",
     "release": "lerna publish from-package --force-publish && lerna run sync",
@@ -206,7 +207,5 @@
   },
   "tnpm": {
     "mode": "yarn"
-  },
-  "dependencies": {
   }
 }

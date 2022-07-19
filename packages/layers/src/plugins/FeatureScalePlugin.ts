@@ -129,26 +129,45 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           attributeScale.type = StyleScaleType.VARIABLE;
           scales.forEach((scale) => {
             // 如果设置了回调, 这不需要设置range
-            if (!attributeScale.callback) {
-              if (
-                attributeScale.values &&
-                attributeScale.values !== 'text' &&
-                scale.option?.type !== ScaleTypes.DIVERGING &&
-                scale.option?.type !== ScaleTypes.SEQUENTIAL
-              ) {
-                scale.scale.range(attributeScale.values); // 判断常量, 默认值
-              } else if (scale.option?.type === ScaleTypes.CAT) {
-                // 如果没有设置初值且 类型为cat，range ==domain;
-                scale.scale.range(scale.option.domain);
-              } else if (
-                scale.option?.type === ScaleTypes.DIVERGING ||
-                scale.option?.type === ScaleTypes.SEQUENTIAL
-              ) {
-                scale.scale.interpolator(
-                  // @ts-ignore
-                  d3interpolate.interpolateRgbBasis(attributeScale.values),
-                );
+            if (!attributeScale.callback && attributeScale.values !== 'text') {
+              switch (scale.option?.type) {
+                case ScaleTypes.LOG:
+                case ScaleTypes.LINEAR:
+                case ScaleTypes.POWER:
+                  if (
+                    attributeScale.values &&
+                    attributeScale.values.length > 2
+                  ) {
+                    const tick = scale.scale.ticks(
+                      attributeScale.values.length,
+                    );
+                    scale.scale.domain(tick);
+                  }
+                  attributeScale.values
+                    ? scale.scale.range(attributeScale.values)
+                    : scale.scale.range(scale.option.domain);
+                  break;
+                case ScaleTypes.QUANTILE:
+                case ScaleTypes.QUANTIZE:
+                case ScaleTypes.THRESHOLD:
+                  scale.scale.range(attributeScale.values); //
+                  break;
+                case ScaleTypes.CAT:
+                  attributeScale.values
+                    ? scale.scale.range(attributeScale.values)
+                    : scale.scale.range(scale.option.domain);
+                  break;
+                case ScaleTypes.DIVERGING:
+                case ScaleTypes.SEQUENTIAL:
+                  scale.scale.interpolator(
+                    // @ts-ignore
+                    d3interpolate.interpolateRgbBasis(attributeScale.values),
+                  );
+                  break;
               }
+            }
+            if (attributeScale.values === 'text') {
+              scale.scale.range(scale.option?.domain);
             }
           });
         } else {

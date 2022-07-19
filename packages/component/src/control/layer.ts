@@ -1,17 +1,12 @@
-import { IControlOption, PositionName, PositionType } from '@antv/l7-core';
-import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
+import { PositionType } from '@antv/l7-core';
+import { bindAll, DOM } from '@antv/l7-utils';
+import { ILayerControlOption } from '../interface';
 import Control from './BaseControl';
-export interface ILayerControlOption extends IControlOption {
-  collapsed: boolean;
-  autoZIndex: boolean;
-  hideSingleBase: boolean;
-  sortLayers: boolean;
 
-  sortFunction: (...args: any[]) => any;
-}
 interface IInputItem extends HTMLInputElement {
   layerId: string;
 }
+
 export default class Layers extends Control {
   private layerControlInputs: any[];
   private layers: any[];

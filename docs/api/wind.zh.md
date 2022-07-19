@@ -60,5 +60,3 @@ layer.animate(true);
   }
 
 [在线案例](../../examples/wind/basic#wind)
-
-`markdown:docs/common/layer/base.md`

@@ -17,6 +17,7 @@ import {
   IMapService,
   IModel,
   IModelUniform,
+  IPickingService,
   IRendererService,
   IShaderModuleService,
   IStyleAttributeService,
@@ -110,6 +111,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected mapService: IMapService;
   protected cameraService: ICameraService;
   protected layerService: ILayerService;
+  protected pickingService: IPickingService;
 
   // style texture data mapping
 
@@ -118,6 +120,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
+    this.pickingService = layer
+      .getContainer()
+      .get<IPickingService>(TYPES.IPickingService);
+
     this.shaderModuleService = layer
       .getContainer()
       .get<IShaderModuleService>(TYPES.IShaderModuleService);

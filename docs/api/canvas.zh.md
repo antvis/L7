@@ -28,7 +28,7 @@ const layer = new CanvasLayer({}).style({
 
 🌟 CanvasLayer 不需要设置 source。
 
-### Event
+### event
 
 🌟 CanvasLayer 暂不支持交互动作。
 
@@ -83,5 +83,3 @@ var centerXY = mapService.lngLatToContainer(center); // {x: 100, y: 100}
 // centerXY 表示距离视图左上角 x 轴方向 100px，y 轴方向 100px
 // canvas 绘图坐标系
 ```
-
-`markdown:docs/common/layer/base.md`

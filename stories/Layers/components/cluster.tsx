@@ -1,8 +1,8 @@
-import { PointLayer, Scene } from '@antv/l7';
+import { PointLayer, Scene, Source } from '@antv/l7';
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
-// @ts-ignore
-import data from '../data/data.json';
+import data1 from '../data/cluster1.json';
+import data2 from '../data/cluster2.json';
 export default class Point3D extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -14,55 +14,54 @@ export default class Point3D extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      pickBufferScale: 3.0,
-      map: new GaodeMap({
+      map: new Mapbox({
         style: 'light',
-        center: [-121.24357, 37.58264],
-        pitch: 0,
-        zoom: 10.45,
+        center: [33, 15],
+        zoom: 8,
       }),
     });
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/6c4bb5f2-850b-419d-afc4-e46032fc9f94.csv',
-      )
-        .then((res) => res.text())
-        .then((data) => {
-          const pointLayer = new PointLayer({})
-            .source(data, {
-              parser: {
-                type: 'csv',
-                x: 'Longitude',
-                y: 'Latitude',
-              },
-              cluster: true,
-            })
-            .shape('circle')
-            .size(8)
-            .active({
-              color: 'red',
-            })
-            .color('point_count', [
-              '#0A3663',
-              '#1558AC',
-              '#3771D9',
-              '#4D89E5',
-              '#64A5D3',
-              '#72BED6',
-              '#83CED6',
-              '#A6E1E0',
-              '#B8EFE2',
-              '#D7F9F0',
-            ])
-            .style({
-              opacity: 1,
-              strokeWidth: 0,
-              stroke: '#fff',
-            });
-
-          scene.addLayer(pointLayer);
-          this.scene = scene;
+      // 模拟第一次渲染
+      const dataSource = new Source(data1, {
+        parser: {
+          type: 'json',
+          x: 'longtitude',
+          y: 'latitide',
+        },
+        cluster: true,
+      });
+      const pointLayer = new PointLayer({})
+        // 这边传入 firstData 就不会有问题
+        .source(dataSource)
+        .shape('circle')
+        .scale('point_count', {
+          type: 'quantile',
+        })
+        .size('point_count', [15, 20, 25, 30, 35])
+        .active(true)
+        .color('#CC3D00')
+        .style({
+          opacity: 1,
         });
+      // 聚合图标注
+      const pointLayerText = new PointLayer({})
+        .source(dataSource)
+        .shape('point_count', 'text')
+        .size(15)
+        .color('#fff')
+        .style({
+          opacity: 1,
+          strokeWidth: 0,
+          stroke: '#fff',
+        });
+      scene.addLayer(pointLayer);
+      scene.addLayer(pointLayerText);
+      this.scene = scene;
+      // 模拟第二次渲染,样式错乱了
+      setTimeout(() => {
+        dataSource.setData(data2);
+        console.log(pointLayerText);
+      }, 2000);
     });
   }
 

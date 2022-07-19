@@ -1,7 +1,7 @@
+import BaseLayer from '../core/BaseLayer';
 import { IRasterLayerStyleOptions } from '../core/interface';
-import LayerGroup from '../core/LayerGroup';
 import RasterModels, { RasterModelType } from './models/index';
-export default class RaterLayer extends LayerGroup<IRasterLayerStyleOptions> {
+export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
   public buildModels() {
     const modelType = this.getModelType();

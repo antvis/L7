@@ -85,7 +85,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public rendering: boolean;
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
-  public isLayerGroup: boolean = false;
   public triangulation?: Triangulation | undefined;
 
   public dataState: IDataState = {
@@ -135,9 +134,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // TODO: 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
   public sceneContainer: Container | undefined;
+  public tileLayer: any | undefined;
   // TODO: 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
+  // Tip: 用于标识矢量图层
+  public isVector: boolean = false;
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -233,6 +235,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     maskLayer.destroy();
   }
 
+  public getAttribute(name: string) {
+    return this.styleAttributeService.getLayerStyleAttribute(name);
+  }
+
   public getLayerConfig() {
     return this.configService.getLayerConfig<ChildLayerStyleOptions>(this.id);
   }
@@ -240,6 +246,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateLayerConfig(
     configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
   ) {
+    // 同步 rawConfig
+    Object.keys(configToUpdate).map((key) => {
+      if (key in this.rawConfig) {
+        // @ts-ignore
+        this.rawConfig[key] = configToUpdate[key];
+      }
+    });
     if (!this.inited) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
@@ -395,7 +408,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // this.pickingPassRender = this.normalPassFactory('pixelPicking');
     // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
-
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -541,7 +553,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     };
     this.updateStyleAttribute('shape', field, values, updateOptions);
     // TODO: 根据 shape 判断是否需要更新 model
-    updateShape(this, lastShape, currentShape);
+    if (!this.tileLayer) {
+      updateShape(this, lastShape, currentShape);
+    }
     return this;
   }
   public label(
@@ -668,6 +682,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public render(): ILayer {
+    if (this.tileLayer !== undefined) {
+      // 瓦片图层执行单独的 render 渲染队列
+      this.tileLayer.render();
+      return this;
+    }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData().length !== 0) {
       this.renderModels();
@@ -949,7 +968,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
 
-  public destroy() {
+  public destroy(refresh = true) {
     if (this.isDestroied) {
       return;
     }
@@ -980,7 +999,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.models = [];
 
-    this.layerService.cleanRemove(this);
+    this.layerService.cleanRemove(this, refresh);
 
     this.emit('remove', {
       target: this,

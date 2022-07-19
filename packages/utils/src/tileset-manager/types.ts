@@ -5,6 +5,8 @@ export type TileBounds = [number, number, number, number];
 
 // 瓦片更新显示策略
 export enum UpdateTileStrategy {
+  // 实时更新策略
+  Realtime = 'realtime',
   // 渐近更新策略
   Overlap = 'overlap',
   // 全部替换策略
@@ -19,7 +21,7 @@ export type TileLoadParams = TileOptions & {
 };
 
 export type TileLoadDataOptions = {
-  getData: (tile: TileLoadParams) => Promise<any>;
+  getData: (params: TileLoadParams, tile: Tile) => Promise<any>;
   onLoad: (tile: Tile) => void;
   onError: (error: Error, tile: Tile) => void;
 };
@@ -37,6 +39,6 @@ export type TilesetManagerOptions = {
   minZoom: number;
   maxZoom: number;
   extent: TileBounds;
-  getTileData: (tile: TileLoadParams) => any;
+  getTileData: (params: TileLoadParams, tile: Tile) => any;
   updateStrategy: UpdateTileStrategy | ((tiles: Tile[]) => void);
 };

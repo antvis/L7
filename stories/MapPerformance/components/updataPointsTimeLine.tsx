@@ -20,16 +20,16 @@ export default class Demo extends React.Component {
     this.scene.destroy();
   }
 
-  public getTimeKey(time) {
+  public getTimeKey(time, str: string = '') {
     const half = Math.floor(time / 2);
     const res = '';
     if (half < 10) {
       res += '0';
     }
     if (time / 2 > half) {
-      res += half + '30';
+      res += half + str + '30';
     } else {
-      res += half + '00';
+      res += half + str + '00';
     }
     return res;
   }
@@ -74,23 +74,29 @@ export default class Demo extends React.Component {
           let layer = new PointLayer({})
             .source(originData[times[0]], parser)
             .shape('simple')
-            .size('v', (v) => Math.sqrt(v) / 5)
-            .color('v', [
-              '#ffffb2',
-              '#fed976',
-              '#feb24c',
-              '#fd8d3c',
-              '#f03b20',
-              '#bd0026',
-            ])
+            .size('v', (v) => Math.sqrt(v) / 6)
+            .color('v', ['#ffffb2', '#fecc5c', '#fd8d3c', '#e31a1c'])
+            .scale('v', {
+              type: 'quantize',
+            })
             .style({
-              opacity: 0.6,
+              opacity: 0.8,
             });
 
           scene.addLayer(layer);
           this.layer = layer;
 
           this.getModelDatas(layer, originData, times, parser);
+
+          let c = 0;
+          let t = setInterval(() => {
+            if (c > 47) {
+              clearInterval(t);
+            } else {
+              this.timelinechange(c);
+              c++;
+            }
+          }, 100);
         });
     });
   }
@@ -117,6 +123,19 @@ export default class Demo extends React.Component {
           bottom: 0,
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            top: '100px',
+            left: '100px',
+            color: '#fff',
+            zIndex: 10,
+            fontSize: '36px',
+            fontFamily: 'STLiti',
+          }}
+        >
+          {'当前时间 ' + this.getTimeKey(this?.state?.currentYear, ' : ')}
+        </div>
         {this.state.modelDatas !== undefined && (
           <RangeInput
             min={0}
