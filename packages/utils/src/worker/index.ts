@@ -3,7 +3,7 @@ import getMeshTask from './mesh';
 
 export type IModelType = 'PointFill';
 
-export interface IWorkOptions {
+interface IWorkOptions {
   modelType: IModelType;
   attributesUpdateFunctions: any;
 }
