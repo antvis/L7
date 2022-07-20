@@ -17,31 +17,25 @@ export default class Demo extends React.Component {
     });
 
     const layer = new LineLayer()
-    .source({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                95.625,
-                38.47939467327645
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [95.625, 38.47939467327645],
+                [115.48828125000001, 28.92163128242129],
               ],
-              [
-                115.48828125000001,
-                28.92163128242129
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .shape('earthArc3d')
-    .color('#f00')
-    .size(2)
+            },
+          },
+        ],
+      })
+      .shape('earthArc3d')
+      .color('#f00')
+      .size(2);
     const earthlayer = new EarthLayer()
       .source(
         'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',

@@ -16,44 +16,38 @@ export default class Demo extends React.Component {
       }),
     });
     const layer = new LineLayer()
-    .source({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                95.625,
-                38.47939467327645
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [95.625, 38.47939467327645],
+                [115.48828125000001, 28.92163128242129],
               ],
-              [
-                115.48828125000001,
-                28.92163128242129
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .shape('linearline')
-    .color('#f00')
-    .size(5)
-    .style({
-      rampColors: {
-        colors: [
-          '#FF4818',
-          '#F7B74A',
-          '#FFF598',
-          '#91EABC',
-          '#2EA9A1',
-          '#206C7C',
+            },
+          },
         ],
-        positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-      }
-    })
+      })
+      .shape('linearline')
+      .color('#f00')
+      .size(5)
+      .style({
+        rampColors: {
+          colors: [
+            '#FF4818',
+            '#F7B74A',
+            '#FFF598',
+            '#91EABC',
+            '#2EA9A1',
+            '#206C7C',
+          ],
+          positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+        },
+      });
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });

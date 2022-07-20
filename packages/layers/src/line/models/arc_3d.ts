@@ -167,27 +167,27 @@ export default class Arc3DModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'arc3dline' + type,
-      vertexShader: vert,
-      fragmentShader: frag,
-      triangulation: LineArcTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      segmentNumber,
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'arc3dline' + type,
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'arc3dline' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
+        triangulation: LineArcTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        segmentNumber,
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'arc3dline' + type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     // point layer size;

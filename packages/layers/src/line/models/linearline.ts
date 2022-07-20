@@ -94,26 +94,26 @@ export default class LinearLineModel extends BaseModel {
     this.layer.triangulation = LineTriangulation;
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'line_' + type,
-      vertexShader: vert,
-      fragmentShader: frag,
-      triangulation: LineTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: depth },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'line_' + type,
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'line_' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
+        triangulation: LineTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: depth },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'line_' + type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   /**

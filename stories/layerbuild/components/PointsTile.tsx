@@ -12,7 +12,7 @@ export default class Demo extends React.Component {
       map: new GaodeMap({
         center: [110.19382669582967, 30.258134],
         pitch: 0,
-        zoom: 2,
+        zoom: 4,
       }),
     });
 

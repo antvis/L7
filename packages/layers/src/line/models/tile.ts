@@ -147,8 +147,7 @@ export default class LineModel extends BaseModel {
     //     callbackModel([]);
     //   });
     // console.log('mask', mask)
-    let m  = await this.layer
-    .buildLayerModel({
+    const m = await this.layer.buildLayerModel({
       moduleName: 'lineTile',
       vertexShader: line_tile_vert,
       fragmentShader: line_tile_frag,
@@ -161,7 +160,7 @@ export default class LineModel extends BaseModel {
       layerOptions: {
         modelType: 'lineTile',
       },
-    })
+    });
     callbackModel([m as IModel]);
   }
 

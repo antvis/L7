@@ -16,31 +16,25 @@ export default class Demo extends React.Component {
       }),
     });
     const layer = new LineLayer()
-    .source({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                95.625,
-                38.47939467327645
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [95.625, 38.47939467327645],
+                [115.48828125000001, 28.92163128242129],
               ],
-              [
-                115.48828125000001,
-                28.92163128242129
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .shape('wall')
-    .color('#f00')
-    .size(40)
+            },
+          },
+        ],
+      })
+      .shape('wall')
+      .color('#f00')
+      .size(40);
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });

@@ -21,8 +21,8 @@ export default class MaskModel extends BaseModel {
   }
 
   public async buildModels(callbackModel: (models: IModel[]) => void) {
-  
-    this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: 'mask',
         vertexShader: mask_vert,
         fragmentShader: mask_frag,
@@ -47,13 +47,13 @@ export default class MaskModel extends BaseModel {
           modelType: 'mask',
         },
       })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

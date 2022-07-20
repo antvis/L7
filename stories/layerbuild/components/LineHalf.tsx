@@ -16,36 +16,30 @@ export default class Demo extends React.Component {
       }),
     });
     const layer = new LineLayer()
-    .source({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                95.625,
-                28
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [95.625, 28],
+                [115.48828125000001, 28],
               ],
-              [
-                115.48828125000001,
-                28
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .shape('halfLine')
-    .color('#f00')
-    .size(10)
-    .style({
-      arrow: {
-        enable: true
-      }
-    })
+            },
+          },
+        ],
+      })
+      .shape('halfLine')
+      .color('#f00')
+      .size(10)
+      .style({
+        arrow: {
+          enable: true,
+        },
+      });
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });

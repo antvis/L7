@@ -137,7 +137,7 @@ export default class TileFactory implements ITileFactory {
 
     // set mask
     const layers = [layer];
-    if (mask && layer.isVector) { 
+    if (mask && layer.isVector) {
       const masklayer = new MaskLayer()
         .source({
           type: 'FeatureCollection',

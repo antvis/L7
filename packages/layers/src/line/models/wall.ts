@@ -118,25 +118,25 @@ export default class LineWallModel extends BaseModel {
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
     this.layer
-    .buildLayerModel({
-      moduleName: 'linewall',
-      vertexShader: line_vert,
-      fragmentShader: line_frag,
-      triangulation: LineTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      layerOptions: {
-        modelType: 'linewall',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'linewall',
+        vertexShader: line_vert,
+        fragmentShader: line_frag,
+        triangulation: LineTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        layerOptions: {
+          modelType: 'linewall',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

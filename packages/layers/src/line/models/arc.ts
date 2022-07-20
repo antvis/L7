@@ -180,27 +180,27 @@ export default class ArcModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'arc2dline' + type,
-      vertexShader: vert,
-      fragmentShader: frag,
-      triangulation: LineArcTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      segmentNumber,
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'arc2dline' + type,
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'arc2dline' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
+        triangulation: LineArcTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        segmentNumber,
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'arc2dline' + type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

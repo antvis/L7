@@ -125,26 +125,26 @@ export default class SimpleLineModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
 
     this.layer
-    .buildLayerModel({
-      moduleName: type,
-      vertexShader: vert,
-      fragmentShader: frag,
-      triangulation: SimpleLineTriangulation,
-      primitive: gl.LINES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: type,
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: type,
+        vertexShader: vert,
+        fragmentShader: frag,
+        triangulation: SimpleLineTriangulation,
+        primitive: gl.LINES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
