@@ -9,38 +9,35 @@ export default class Demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
+      stencil: true,
       map: new GaodeMap({
-        center: [120, 30],
+        center: [110.19382669582967, 30.258134],
         pitch: 0,
-        zoom: 2,
+        zoom: 4,
       }),
     });
-    const layer = new LineLayer()
-    .source({
-      "type": "FeatureCollection",
-      "features": [
+
+    const layer = new LineLayer({
+      featureId: 'COLOR',
+      sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
+    });
+    layer
+      .source(
+        'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
         {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                95.625,
-                38.47939467327645
-              ],
-              [
-                115.48828125000001,
-                28.92163128242129
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .shape('line')
-    .color('#f00')
-    .size(5)
+          parser: {
+            type: 'mvt',
+            tileSize: 256,
+            zoomOffset: 0,
+            maxZoom: 9,
+            extent: [-180, -85.051129, 179, 85.051129],
+          },
+        },
+      )
+      .color('COLOR')
+      .size(2)
+      .select(true);
+
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });

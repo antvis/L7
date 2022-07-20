@@ -123,11 +123,11 @@ export default class Arc3DModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -158,26 +158,35 @@ export default class Arc3DModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       segmentNumber = 30,
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'arc3Dline' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineArcTriangulation,
-        blend: this.getBlend(),
-        segmentNumber,
-        // primitive: gl.POINTS,
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: 'arc3dline' + type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: LineArcTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: true },
+      blend: this.getBlend(),
+      segmentNumber,
+      stencil: getMask(mask, maskInside),
+      layerOptions: {
+        modelType: 'arc2dline' + type,
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
   protected registerBuiltinAttributes() {
     // point layer size;

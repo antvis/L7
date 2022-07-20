@@ -5,9 +5,7 @@ import { PointLayer } from '@antv/l7-layers';
 import { GaodeMap } from '@antv/l7-maps';
 import * as React from 'react';
 
-export default class PointTest extends React.Component {
-  private scene: Scene;
-
+export default class Demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',

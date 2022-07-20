@@ -15,6 +15,15 @@ import PointEarthFill from './components/PointsEarthFill';
 import PointEarthExtrude from './components/PointsEarthExtrude';
 
 import Line from './components/Line';
+import LineArc from './components/LineArc';
+import LineArc3d from './components/LineArc3d';
+import LineLinear from './components/LineLinear';
+import LineSimple from './components/LineSimple';
+import LineHalf from './components/LineHalf';
+import LineGreatCircle from './components/LineGreatCircle';
+import LineWall from './components/LineWall';
+import LineEarthArc3D from './components/LineEarthArc3D';
+import LineTile from './components/LineTile';
 
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
@@ -31,3 +40,12 @@ storiesOf('图层渲染流程改造', module)
   .add('PointEarthExtrude', () => <PointEarthExtrude />)
 
   .add('Line', () => <Line />)
+  .add('LineArc', () => <LineArc />)
+  .add('LineArc3d', () => <LineArc3d />)
+  .add('LineLinear', () => <LineLinear />)
+  .add('LineSimple', () => <LineSimple />)
+  .add('LineHalf', () => <LineHalf />)
+  .add('LineGreatCircle', () => <LineGreatCircle />)
+  .add('LineWall', () => <LineWall />)
+  .add('LineEarthArc3D', () => <LineEarthArc3D />)
+  .add('LineTile', () => <LineTile />)

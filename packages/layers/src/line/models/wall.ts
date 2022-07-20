@@ -103,11 +103,11 @@ export default class LineWallModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -116,19 +116,27 @@ export default class LineWallModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'linewall',
-        vertexShader: line_vert,
-        fragmentShader: line_frag,
-        triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
-        depth: { enable: false },
-      }),
-    ];
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.layer
+    .buildLayerModel({
+      moduleName: 'linewall',
+      vertexShader: line_vert,
+      fragmentShader: line_frag,
+      triangulation: LineTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      layerOptions: {
+        modelType: 'linewall',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

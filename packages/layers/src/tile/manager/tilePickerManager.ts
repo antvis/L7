@@ -50,6 +50,7 @@ export default class TilePickManager extends EventEmitter
             framebuffer: null,
           });
           layer.masks.map((m: ILayer) => {
+            m.hooks.beforeRenderData.call();
             m.hooks.beforeRender.call();
             m.render();
             m.hooks.afterRender.call();

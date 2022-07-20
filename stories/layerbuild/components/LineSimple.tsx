@@ -38,7 +38,7 @@ export default class Demo extends React.Component {
         }
       ]
     })
-    .shape('line')
+    .shape('simple')
     .color('#f00')
     .size(5)
     scene.on('loaded', () => {

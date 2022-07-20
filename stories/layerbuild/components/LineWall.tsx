@@ -10,9 +10,9 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [120, 30],
-        pitch: 0,
-        zoom: 2,
+        center: [105, 30],
+        pitch: 40,
+        zoom: 4,
       }),
     });
     const layer = new LineLayer()
@@ -38,9 +38,9 @@ export default class Demo extends React.Component {
         }
       ]
     })
-    .shape('line')
+    .shape('wall')
     .color('#f00')
-    .size(5)
+    .size(40)
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });

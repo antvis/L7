@@ -112,11 +112,11 @@ export default class GreatCircleModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -125,23 +125,31 @@ export default class GreatCircleModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'greatcircleline',
+    this.layer
+      .buildLayerModel({
+        moduleName: 'greatCircle',
         vertexShader: line_arc2d_vert,
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        layerOptions: {
+          modelType: 'greatCircle',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

@@ -129,10 +129,6 @@ export default class TileFactory implements ITileFactory {
 
     // set scale
     this.setScale(layer);
-    // console.log(this.parentLayer.getScaleOptions())
-    // console.log()
-
-    // console.log(this.parentLayer.tileLayer.scaleCfg)
 
     // set scale attribute field
     this.setStyleAttributeField(layer, 'shape', shape);
@@ -141,7 +137,7 @@ export default class TileFactory implements ITileFactory {
 
     // set mask
     const layers = [layer];
-    if (mask && layer.isVector) {
+    if (mask && layer.isVector) { 
       const masklayer = new MaskLayer()
         .source({
           type: 'FeatureCollection',

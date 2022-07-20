@@ -143,11 +143,11 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -156,7 +156,7 @@ export default class LineModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -164,21 +164,27 @@ export default class LineModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
-
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: 'line_' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
         primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
         depth: { enable: depth },
-        // depth: { enable: true },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        layerOptions: {
+          modelType: 'line_' + type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   /**

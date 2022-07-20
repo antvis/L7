@@ -27,20 +27,25 @@ export default class Demo extends React.Component {
             "coordinates": [
               [
                 95.625,
-                38.47939467327645
+                28
               ],
               [
                 115.48828125000001,
-                28.92163128242129
+                28
               ]
             ]
           }
         }
       ]
     })
-    .shape('line')
+    .shape('halfLine')
     .color('#f00')
-    .size(5)
+    .size(10)
+    .style({
+      arrow: {
+        enable: true
+      }
+    })
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });

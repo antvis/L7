@@ -29,11 +29,6 @@ export default class LayerModelPlugin implements ILayerPlugin {
       const source = layer.getSource();
       if (source.inited) {
         this.initLayerModel(layer);
-      } else {
-        // @ts-ignore
-        source.once('sourceUpdate', () => {
-          this.initLayerModel(layer);
-        });
       }
     });
 

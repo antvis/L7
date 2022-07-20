@@ -74,9 +74,9 @@ export default class LinearLineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -84,7 +84,7 @@ export default class LinearLineModel extends BaseModel {
     this.dataTexture?.destroy();
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -92,19 +92,28 @@ export default class LinearLineModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'line_' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
-        depth: { enable: depth },
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
+
+    this.layer
+    .buildLayerModel({
+      moduleName: 'line_' + type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: LineTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: depth },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      layerOptions: {
+        modelType: 'line_' + type,
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   /**
