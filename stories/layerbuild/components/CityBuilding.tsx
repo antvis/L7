@@ -10,27 +10,27 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [ 120.145, 30.238915 ],
+        center: [120.145, 30.238915],
         pitch: 60,
-        zoom: 13.2
+        zoom: 13.2,
       }),
     });
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/rmsportal/ggFwDClGjjvpSMBIrcEx.json'
-      ).then(async res => {
+        'https://gw.alipayobjects.com/os/rmsportal/ggFwDClGjjvpSMBIrcEx.json',
+      ).then(async (res) => {
         const pointLayer = new CityBuildingLayer();
         pointLayer
           .source(await res.json())
-          .size('floor', [ 0, 500 ])
+          .size('floor', [0, 500])
           .color('rgba(242,246,250,1.0)')
           .animate({
-            enable: true
+            enable: true,
           })
           .active({
             color: '#0ff',
-            mix: 0.5
+            mix: 0.5,
           })
           .style({
             opacity: 0.7,
@@ -42,8 +42,8 @@ export default class Demo extends React.Component {
               sweepRadius: 2,
               sweepColor: '#1990FF',
               sweepSpeed: 0.5,
-              sweepCenter: [ 120.145319, 30.238915 ]
-            }
+              sweepCenter: [120.145319, 30.238915],
+            },
           });
         scene.addLayer(pointLayer);
       });
