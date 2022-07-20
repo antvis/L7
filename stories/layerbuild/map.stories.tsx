@@ -37,6 +37,8 @@ import HeatmapGrid from './components/HeatmapGrid';
 import HeatmapGrid3d from './components/HeatmapGrid3d';
 import HeatmapHexagon from './components/HeatmapHexagon';
 
+import CityBuilding from './components/CityBuilding';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -73,3 +75,5 @@ storiesOf('图层渲染流程改造', module)
   .add('HeatmapGrid', () => <HeatmapGrid />)
   .add('HeatmapGrid3d', () => <HeatmapGrid3d />)
   .add('HeatmapHexagon', () => <HeatmapHexagon />)
+
+  .add('CityBuilding', () => <CityBuilding />)
