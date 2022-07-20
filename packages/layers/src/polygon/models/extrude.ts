@@ -106,23 +106,23 @@ export default class ExtrudeModel extends BaseModel {
 
     const { frag, vert, type } = this.getShaders();
     this.layer
-    .buildLayerModel({
-      moduleName: type,
-      vertexShader: vert,
-      fragmentShader: frag,
-      triangulation: PolygonExtrudeTriangulation,
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: type,
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: type,
+        vertexShader: vert,
+        fragmentShader: frag,
+        triangulation: PolygonExtrudeTriangulation,
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public getShaders() {

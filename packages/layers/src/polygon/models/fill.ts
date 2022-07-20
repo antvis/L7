@@ -85,7 +85,7 @@ export default class FillModel extends BaseModel {
         moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
-        triangulation: triangulation,
+        triangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),

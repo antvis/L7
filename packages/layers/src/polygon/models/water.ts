@@ -75,25 +75,25 @@ export default class WaterModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     this.layer
-    .buildLayerModel({
-      moduleName: 'polygonWater',
-      vertexShader: water_vert,
-      fragmentShader: water_frag,
-      triangulation: polygonTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'polygonWater',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'polygonWater',
+        vertexShader: water_vert,
+        fragmentShader: water_frag,
+        triangulation: polygonTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'polygonWater',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

@@ -17,45 +17,33 @@ export default class Demo extends React.Component {
     });
     const layer = new PolygonLayer()
       .source({
-        "type": "FeatureCollection",
-        "features": [
+        type: 'FeatureCollection',
+        features: [
           {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
                 [
-                  [
-                    104.4140625,
-                    35.460669951495305
-                  ],
-                  [
-                    98.7890625,
-                    24.206889622398023
-                  ],
-                  [
-                    111.796875,
-                    27.371767300523047
-                  ],
-                  [
-                    104.4140625,
-                    35.460669951495305
-                  ]
-                ]
-              ]
-            }
-          }
-        ]
+                  [104.4140625, 35.460669951495305],
+                  [98.7890625, 24.206889622398023],
+                  [111.796875, 27.371767300523047],
+                  [104.4140625, 35.460669951495305],
+                ],
+              ],
+            },
+          },
+        ],
       })
       .shape('water')
       .color('#1E90FF')
       .style({
-        speed: 0.4
+        speed: 0.4,
         // waterTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
       })
       .animate(true);
-      
+
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });
