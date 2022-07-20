@@ -18,30 +18,30 @@ export default class Demo extends React.Component {
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv'
+        'https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv',
       )
-        .then(res => res.text())
-        .then(data => {
+        .then((res) => res.text())
+        .then((data) => {
           const layer = new HeatmapLayer({})
             .source(data, {
               parser: {
                 type: 'csv',
                 x: 'lng',
-                y: 'lat'
+                y: 'lat',
               },
               transforms: [
                 {
                   type: 'grid',
                   size: 20000,
                   field: 'v',
-                  method: 'sum'
-                }
-              ]
+                  method: 'sum',
+                },
+              ],
             })
             .shape('square')
             .style({
               coverage: 1,
-              angle: 0
+              angle: 0,
             })
             .color(
               'count',
@@ -59,10 +59,10 @@ export default class Demo extends React.Component {
                 '#30C7C4',
                 '#6BD5A0',
                 '#A7ECB2',
-                '#D0F4CA'
-              ].reverse()
+                '#D0F4CA',
+              ].reverse(),
             );
-    
+
           scene.addLayer(layer);
         });
     });

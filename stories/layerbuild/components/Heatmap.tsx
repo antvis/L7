@@ -18,14 +18,14 @@ export default class Demo extends React.Component {
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json'
+        'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           const layer = new HeatmapLayer({})
             .source(data)
             .shape('heatmap')
-            .size('mag', [ 0, 1.0 ]) // weight映射通道
+            .size('mag', [0, 1.0]) // weight映射通道
             .style({
               intensity: 2,
               radius: 20,
@@ -37,10 +37,10 @@ export default class Demo extends React.Component {
                   '#FFF598',
                   '#F27DEB',
                   '#8C1EB2',
-                  '#421EB2'
+                  '#421EB2',
                 ].reverse(),
-                positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
-              }
+                positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+              },
             });
           scene.addLayer(layer);
         });

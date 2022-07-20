@@ -98,7 +98,7 @@ export default class HeatMapModel extends BaseModel {
 
     this.updateColorTexture();
 
-    callbackModel([this.intensityModel, this.colorModel])
+    callbackModel([this.intensityModel, this.colorModel]);
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
@@ -177,8 +177,8 @@ export default class HeatMapModel extends BaseModel {
           dstAlpha: 1,
         },
       },
-    })
-    return (model as IModel);
+    });
+    return model as IModel;
   }
 
   private buildHeatmapColor(): IModel {

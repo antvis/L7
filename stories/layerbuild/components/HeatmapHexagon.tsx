@@ -18,10 +18,10 @@ export default class Demo extends React.Component {
 
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'
+        'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
       )
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           const layer = new HeatmapLayer({})
             .source(data, {
               transforms: [
@@ -29,15 +29,15 @@ export default class Demo extends React.Component {
                   type: 'hexagon',
                   size: 90000,
                   field: 'capacity',
-                  method: 'sum'
-                }
-              ]
+                  method: 'sum',
+                },
+              ],
             })
             .shape('hexagon')
             .style({
               coverage: 0.9,
               angle: 0,
-              opacity: 1.0
+              opacity: 1.0,
             })
             .color(
               'sum',
@@ -53,8 +53,8 @@ export default class Demo extends React.Component {
                 '#0F62FF',
                 '#30B2E9',
                 '#30B2E9',
-                '#40C4CE'
-              ].reverse()
+                '#40C4CE',
+              ].reverse(),
             );
           scene.addLayer(layer);
         });
