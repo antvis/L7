@@ -70,27 +70,36 @@ export default class OceanModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.loadTexture();
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: 'polygon_ocean',
-        vertexShader: ocean_vert,
-        fragmentShader: ocean_frag,
-        triangulation: polygonTriangulation,
-        depth: { enable: false },
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: 'polygonOcean',
+      vertexShader: ocean_vert,
+      fragmentShader: ocean_frag,
+      triangulation: polygonTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      stencil: getMask(mask, maskInside),
+      layerOptions: {
+        modelType: 'polygonOcean',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   public clearModels() {

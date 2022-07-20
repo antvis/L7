@@ -93,29 +93,36 @@ export default class ExtrudeModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.loadTexture();
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { frag, vert, type } = this.getShaders();
-
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: PolygonExtrudeTriangulation,
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: PolygonExtrudeTriangulation,
+      stencil: getMask(mask, maskInside),
+      layerOptions: {
+        modelType: type,
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
 
   public getShaders() {

@@ -25,6 +25,12 @@ import LineWall from './components/LineWall';
 import LineEarthArc3D from './components/LineEarthArc3D';
 import LineTile from './components/LineTile';
 
+import PolygonFill from './components/Polygon';
+import PolygonExtrude from './components/PolygonExtrude';
+import PolygonOcean from './components/PolygonOcean';
+import PolygonWater from './components/PolygonWater';
+import PolygonTile from './components/PolygonTile';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -49,3 +55,9 @@ storiesOf('图层渲染流程改造', module)
   .add('LineWall', () => <LineWall />)
   .add('LineEarthArc3D', () => <LineEarthArc3D />)
   .add('LineTile', () => <LineTile />)
+
+  .add('PolygonFill', () => <PolygonFill />)
+  .add('PolygonExtrude', () => <PolygonExtrude />)
+  .add('PolygonOcean', () => <PolygonOcean />)
+  .add('PolygonWater', () => <PolygonWater />)
+  .add('PolygonTile', () => <PolygonTile />)

@@ -53,29 +53,38 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const { frag, vert, triangulation, type } = this.getModelParams();
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     this.layer.triangulation = triangulation;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
-        triangulation,
-        blend: this.getBlend(),
+        triangulation: triangulation,
+        primitive: gl.TRIANGLES,
         depth: { enable: false },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        layerOptions: {
+          modelType: type,
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
