@@ -31,6 +31,12 @@ import PolygonOcean from './components/PolygonOcean';
 import PolygonWater from './components/PolygonWater';
 import PolygonTile from './components/PolygonTile';
 
+import Heatmap from './components/Heatmap';
+import Heatmap3d from './components/Heatmap3d';
+import HeatmapGrid from './components/HeatmapGrid';
+import HeatmapGrid3d from './components/HeatmapGrid3d';
+import HeatmapHexagon from './components/HeatmapHexagon';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -61,3 +67,9 @@ storiesOf('图层渲染流程改造', module)
   .add('PolygonOcean', () => <PolygonOcean />)
   .add('PolygonWater', () => <PolygonWater />)
   .add('PolygonTile', () => <PolygonTile />)
+
+  .add('Heatmap', () => <Heatmap />)
+  .add('Heatmap3d', () => <Heatmap3d />)
+  .add('HeatmapGrid', () => <HeatmapGrid />)
+  .add('HeatmapGrid3d', () => <HeatmapGrid3d />)
+  .add('HeatmapHexagon', () => <HeatmapHexagon />)

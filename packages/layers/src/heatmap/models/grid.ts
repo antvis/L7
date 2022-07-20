@@ -29,28 +29,35 @@ export default class GridModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    return [
-      // @ts-ignore
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: 'gridheatmap',
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
-        depth: { enable: false },
         primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
+        depth: { enable: false },
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        layerOptions: {
+          modelType: 'gridheatmap',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

@@ -26,8 +26,9 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       return this;
     }
     if (this.layerModelNeedUpdate) {
+      this.layerModel.buildModels((models) => (this.models = models));
       // @ts-ignore
-      this.models = this.layerModel.buildModels();
+      // this.models = this.layerModel.buildModels();
       this.layerModelNeedUpdate = false;
     }
     this.models.forEach((model) =>
