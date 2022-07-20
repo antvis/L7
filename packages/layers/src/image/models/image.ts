@@ -2,9 +2,9 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  IModel,
   IModelUniform,
   ITexture2D,
-  IModel
 } from '@antv/l7-core';
 import { getMask, isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -67,27 +67,27 @@ export default class ImageModel extends BaseModel {
     }
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'RasterImage',
-      vertexShader: ImageVert,
-      fragmentShader: ImageFrag,
-      triangulation: RasterImageTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'RasterImage',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'RasterImage',
+        vertexShader: ImageVert,
+        fragmentShader: ImageFrag,
+        triangulation: RasterImageTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'RasterImage',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
-  
+
   public buildModels(callbackModel: (models: IModel[]) => void) {
     return this.initModels(callbackModel);
   }

@@ -21,9 +21,9 @@ export default class Demo extends React.Component {
       {
         parser: {
           type: 'image',
-          extent: [ 121.168, 30.2828, 121.384, 30.4219 ]
-        }
-      }
+          extent: [121.168, 30.2828, 121.384, 30.4219],
+        },
+      },
     );
 
     scene.on('loaded', () => {
