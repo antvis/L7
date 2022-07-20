@@ -6,7 +6,6 @@ export default function inlineWorker(include) {
     name: 'inline-worker',
     transform(code, id) {
       if (!filter(id)) return;
-      console.log('code: ', code);
 
       return {
         code: `export default ${JSON.stringify(code)};`,
