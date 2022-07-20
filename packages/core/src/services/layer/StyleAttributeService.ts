@@ -216,7 +216,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       [attributeName: string]: IAttribute;
     } = {};
     return new Promise((resolve, reject) => {
-    executeWorkerTask('pointFill', {
+      executeWorkerTask('pointFill', {
         descriptors: this.getPureDescriptors(descriptors),
         features,
         segmentNumber,
