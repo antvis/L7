@@ -10,6 +10,7 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 import { getCullFace, getMask } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
@@ -77,7 +78,7 @@ export default class RadarModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
-      u_opacity: Number(opacity),
+      u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
@@ -180,10 +181,6 @@ export default class RadarModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
       }),
     ];
   }

@@ -19,17 +19,11 @@ scene.on('loaded', () => {
       const color = [ 'rgb(255,255,217)', 'rgb(237,248,177)', 'rgb(199,233,180)', 'rgb(127,205,187)', 'rgb(65,182,196)', 'rgb(29,145,192)', 'rgb(34,94,168)', 'rgb(12,44,132)' ];
       const layer = new PolygonLayer({})
         .source(data)
+        .scale('density', {
+          type: 'quantize'
+        })
         .color(
-          'density', d => {
-            return d > 1000 ? color[7] :
-              d > 500 ? color[6] :
-                d > 200 ? color[5] :
-                  d > 100 ? color[4] :
-                    d > 50 ? color[3] :
-                      d > 20 ? color[2] :
-                        d > 10 ? color[1] :
-                          color[0];
-          }
+          'density', color
         )
         .shape('fill')
         .active(true)

@@ -40,8 +40,10 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     let mvp = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; // default matrix (for gaode2.x)
     let sceneCenterMKT = [0, 0];
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
+      // @ts-ignore
+      const offset = layer.getLayerConfig().tileOrigin;
       // 重新计算坐标系参数
-      this.coordinateSystemService.refresh();
+      this.coordinateSystemService.refresh(offset);
 
       if (version === 'GAODE2.x') {
         const layerCenter = this.getLayerCenter(layer);

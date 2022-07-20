@@ -36,7 +36,7 @@ import { MapTheme } from './theme';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
- * AMapService
+ * EarthService
  */
 @injectable()
 export default class L7EarthService implements IEarthService<Map> {
@@ -229,6 +229,10 @@ export default class L7EarthService implements IEarthService<Map> {
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     return this.map.unproject(pixel);
+  }
+
+  public meterToCoord(center: [number, number], outer: [number, number]) {
+    return 1.0;
   }
 
   public lngLatToPixel(lnglat: [number, number]): IPoint {

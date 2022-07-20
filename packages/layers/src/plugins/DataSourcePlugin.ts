@@ -40,15 +40,15 @@ export default class DataSourcePlugin implements ILayerPlugin {
   private updateClusterData(layer: ILayer): boolean {
     const source = layer.getSource();
     const cluster = source.cluster;
-    const { zoom = 0, maxZoom = 16 } = source.clusterOptions;
+    const { zoom = 0 } = source.clusterOptions;
     const newZoom = this.mapService.getZoom() - 1;
     const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
+    if (cluster && dataSourceNeedUpdate) {
+      // 数据发生更新
+      source.updateClusterData(Math.floor(newZoom));
+    }
     // 如果 dataSource 有更新，跳过 zoom 的判断，直接更新一次
-    if (
-      cluster &&
-      (dataSourceNeedUpdate || Math.abs(layer.clusterZoom - newZoom) >= 1)
-    ) {
-      // TODO 判断数据是否更新
+    if (cluster && Math.abs(layer.clusterZoom - newZoom) >= 1) {
       if (zoom !== Math.floor(newZoom)) {
         source.updateClusterData(Math.floor(newZoom));
       }

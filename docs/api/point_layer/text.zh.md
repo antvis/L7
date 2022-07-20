@@ -28,7 +28,6 @@ layer.shape('name', 'text');
 
 ### style
 
-- opacity `number`
 - textAnchor `string` 文本相对锚点的位置
   `'right' | 'top-right' | 'left' | 'bottom-right' | 'left' | 'top-left' | 'bottom-left' | 'bottom' | 'bottom-right' | 'bottom-left' | 'top' | 'top-right' | 'top-left' | 'center';`
 - padding: `number` 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
@@ -40,11 +39,6 @@ layer.shape('name', 'text');
 - fontFamily `string` 字号
 - textOffset `[number, number]` 文本偏移量
 - textAllowOverlap: `boolean` 是否允许文字遮盖
-
-[在线案例](../../../examples/point/text#point_text)
-
-## 额外的 style 配置
-
 - raisingHeight 设置 3D 填充图的抬升高度
 
-`markdown:docs/common/layer/base.md`
+[在线案例](../../../examples/point/text#point_text)
