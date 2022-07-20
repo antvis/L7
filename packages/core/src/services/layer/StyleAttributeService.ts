@@ -1,4 +1,4 @@
-import { parseL7Worker } from '@antv/l7-utils';
+import { executeWorkerTask } from '@antv/l7-utils';
 import { inject, injectable, optional } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
@@ -219,7 +219,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     } = {};
     return new Promise((resolve, reject) => {
       try {
-        parseL7Worker('pointFill', {
+        executeWorkerTask('pointFill', {
           descriptors: this.getPureDescriptors(descriptors),
           features,
           segmentNumber,

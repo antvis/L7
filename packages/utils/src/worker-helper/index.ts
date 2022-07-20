@@ -4,8 +4,10 @@ import { getWorkerSource, registerWorkerSource } from './worker-map';
 export { createWorker };
 
 const L7_WORKER_NAME = 'l7-worker';
+const WORKER_MAX_CONCURRENCY = 3;
+const WORKER_REUSE = true;
 
-export function registerL7WorkerSource(workerSource: string) {
+export function setL7WorkerSource(workerSource: string) {
   registerWorkerSource(L7_WORKER_NAME, workerSource);
 }
 
@@ -19,15 +21,11 @@ function getL7WorkerSource(): string {
   return workerSource;
 }
 
-export async function parseL7Worker(
-  workerType: string,
-  data: any,
-  options: Record<string, any> = { maxConcurrency: 3, reuseWorkers: true },
-) {
+export async function executeWorkerTask(workerType: string, data: any) {
   const source = getL7WorkerSource();
   const workerFarm = WorkerFarm.getWorkerFarm({
-    maxConcurrency: options.maxConcurrency,
-    reuseWorkers: options.reuseWorkers,
+    maxConcurrency: WORKER_MAX_CONCURRENCY,
+    reuseWorkers: WORKER_REUSE,
   });
   const workerPool = workerFarm.getWorkerPool({ name: L7_WORKER_NAME, source });
   const job = await workerPool.startJob(L7_WORKER_NAME, (myJob, type, myData) =>
