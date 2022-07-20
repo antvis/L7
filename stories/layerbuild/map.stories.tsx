@@ -39,6 +39,8 @@ import HeatmapHexagon from './components/HeatmapHexagon';
 
 import CityBuilding from './components/CityBuilding';
 
+import ImageLayer from './components/ImageLayer';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -77,3 +79,5 @@ storiesOf('图层渲染流程改造', module)
   .add('HeatmapHexagon', () => <HeatmapHexagon />)
 
   .add('CityBuilding', () => <CityBuilding />)
+
+  .add('ImageLayer', () => <ImageLayer />)
