@@ -11,6 +11,7 @@ import PointImage from './components/PointsImage';
 import PointIconFont from './components/PointsIconFont';
 import PointRader from './components/PointsRadar';
 import PointTile from './components/PointsTile';
+import PointsTextTile from './components/PointsTextTile';
 import PointEarthFill from './components/PointsEarthFill';
 import PointEarthExtrude from './components/PointsEarthExtrude';
 
@@ -49,6 +50,9 @@ import Plane from './components/Plane';
 
 import Wind from './components/Wind';
 
+import RasterImageTile from './components/RasterImageTile';
+import RasterDataTile from './components/RasterDataTile';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -59,7 +63,6 @@ storiesOf('图层渲染流程改造', module)
   .add('PointImage', () => <PointImage />)
   .add('PointIconFont', () => <PointIconFont />)
   .add('PointRader', () => <PointRader />)
-  .add('PointTile', () => <PointTile />)
   .add('PointEarthFill', () => <PointEarthFill />)
   .add('PointEarthExtrude', () => <PointEarthExtrude />)
 
@@ -72,13 +75,11 @@ storiesOf('图层渲染流程改造', module)
   .add('LineGreatCircle', () => <LineGreatCircle />)
   .add('LineWall', () => <LineWall />)
   .add('LineEarthArc3D', () => <LineEarthArc3D />)
-  .add('LineTile', () => <LineTile />)
 
   .add('PolygonFill', () => <PolygonFill />)
   .add('PolygonExtrude', () => <PolygonExtrude />)
   .add('PolygonOcean', () => <PolygonOcean />)
   .add('PolygonWater', () => <PolygonWater />)
-  .add('PolygonTile', () => <PolygonTile />)
 
   .add('Heatmap', () => <Heatmap />)
   .add('Heatmap3d', () => <Heatmap3d />)
@@ -97,3 +98,10 @@ storiesOf('图层渲染流程改造', module)
   .add('Plane', () => <Plane />)
 
   .add('Wind', () => <Wind />)
+
+  .add('TilePoint', () => <PointTile />)
+  .add('TileLine', () => <LineTile />)
+  .add('TilePolygon', () => <PolygonTile />)
+  .add('TilePointText', () => <PointsTextTile />)
+  .add('TileRasterImage', () => <RasterImageTile />)
+  .add('TileRasterData', () => <RasterDataTile />)
