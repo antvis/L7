@@ -12,8 +12,8 @@ export default class Demo extends React.Component {
       map: new GaodeMap({
         pitch: 90,
         style: 'dark',
-        center: [ 120, 30 ],
-        zoom: 6
+        center: [120, 30],
+        zoom: 6,
       }),
     });
 
@@ -23,13 +23,14 @@ export default class Demo extends React.Component {
         .size(10)
         .style({
           opacity: 0.3,
-          mapTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*w2SFSZJp4nIAAAAAAAAAAAAAARQnAQ', // rain
-          center: [ 120, 30 ],
+          mapTexture:
+            'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*w2SFSZJp4nIAAAAAAAAAAAAAARQnAQ', // rain
+          center: [120, 30],
           spriteCount: 120,
           spriteRadius: 10,
           spriteTop: 2500000,
           spriteUpdate: 20000,
-          spriteScale: 0.6
+          spriteScale: 0.6,
         });
       scene.addLayer(layer);
     });

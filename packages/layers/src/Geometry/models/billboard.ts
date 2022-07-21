@@ -3,9 +3,9 @@ import {
   gl,
   IAttrubuteAndElements,
   IEncodeFeature,
+  IModel,
   IModelUniform,
   ITexture2D,
-  IModel,
 } from '@antv/l7-core';
 import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -81,7 +81,7 @@ export default class BillBoardModel extends BaseModel {
   public clearModels(): void {
     this.texture?.destroy();
   }
-  
+
   public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
@@ -100,27 +100,27 @@ export default class BillBoardModel extends BaseModel {
     }
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'geometryBillboard',
-      vertexShader: planeVert,
-      fragmentShader: planeFrag,
-      triangulation: this.planeGeometryTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: true },
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'geometryBillboard',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'geometryBillboard',
+        vertexShader: planeVert,
+        fragmentShader: planeFrag,
+        triangulation: this.planeGeometryTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: true },
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'geometryBillboard',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
-  
+
   public buildModels(callbackModel: (models: IModel[]) => void) {
     this.initModels(callbackModel);
   }

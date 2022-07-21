@@ -4,9 +4,9 @@ import {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
+  IModel,
   IModelUniform,
   ITexture2D,
-  IModel,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 
@@ -153,7 +153,7 @@ export default class SpriteModel extends BaseModel {
     cancelAnimationFrame(this.timer);
     this.texture?.destroy();
   }
-  
+
   public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mapTexture,
@@ -181,27 +181,27 @@ export default class SpriteModel extends BaseModel {
     }, 100);
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'geometrySprite',
-      vertexShader: spriteVert,
-      fragmentShader: spriteFrag,
-      triangulation: this.planeGeometryTriangulation,
-      primitive: gl.POINTS,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      layerOptions: {
-        modelType: 'geometrySprite',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'geometrySprite',
+        vertexShader: spriteVert,
+        fragmentShader: spriteFrag,
+        triangulation: this.planeGeometryTriangulation,
+        primitive: gl.POINTS,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        layerOptions: {
+          modelType: 'geometrySprite',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
-  
+
   public buildModels(callbackModel: (models: IModel[]) => void) {
     this.initModels(callbackModel);
   }

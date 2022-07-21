@@ -3,9 +3,9 @@ import {
   gl,
   IAttrubuteAndElements,
   IEncodeFeature,
+  IModel,
   IModelUniform,
   ITexture2D,
-  IModel,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 import { getMask } from '@antv/l7-utils';
@@ -134,7 +134,7 @@ export default class PlaneModel extends BaseModel {
     this.terrainImage = null;
     this.texture?.destroy();
   }
-  
+
   public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
@@ -152,30 +152,30 @@ export default class PlaneModel extends BaseModel {
     this.updateTexture(mapTexture);
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'geometryPlane',
-      vertexShader: planeVert,
-      fragmentShader: planeFrag,
-      triangulation: this.planeGeometryTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: true },
-      stencil: getMask(mask, maskInside),
-      blend: this.getBlend(),
-      cull: {
-        enable: true,
-        face: gl.BACK, // gl.FRONT | gl.BACK;
-      },
-      layerOptions: {
-        modelType: 'geometryPlane',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'geometryPlane',
+        vertexShader: planeVert,
+        fragmentShader: planeFrag,
+        triangulation: this.planeGeometryTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: true },
+        stencil: getMask(mask, maskInside),
+        blend: this.getBlend(),
+        cull: {
+          enable: true,
+          face: gl.BACK, // gl.FRONT | gl.BACK;
+        },
+        layerOptions: {
+          modelType: 'geometryPlane',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
