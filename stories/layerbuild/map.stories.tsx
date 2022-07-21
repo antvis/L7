@@ -47,6 +47,8 @@ import Billboard from './components/Billboard';
 import Sprite from './components/Sprite';
 import Plane from './components/Plane';
 
+import Wind from './components/Wind';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -93,3 +95,5 @@ storiesOf('图层渲染流程改造', module)
   .add('Billboard', () => <Billboard />)
   .add('Sprite', () => <Sprite />)
   .add('Plane', () => <Plane />)
+
+  .add('Wind', () => <Wind />)

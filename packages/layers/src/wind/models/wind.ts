@@ -50,7 +50,7 @@ export default class WindModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public initModels() {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const { createTexture2D } = this.rendererService;
 
     const source = this.layer.getSource();
@@ -110,18 +110,28 @@ export default class WindModel extends BaseModel {
       this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     });
-    // @ts-ignore
-    this.colorModel = this.layer.buildLayerModel({
-      moduleName: 'WindLayer',
-      vertexShader: WindVert,
-      fragmentShader: WindFrag,
-      triangulation: RasterImageTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-    });
 
-    return [this.colorModel];
+    this.layer
+      .buildLayerModel({
+        moduleName: 'WindLayer',
+        vertexShader: WindVert,
+        fragmentShader: WindFrag,
+        triangulation: RasterImageTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        layerOptions: {
+          modelType: 'WindLayer',
+        },
+      })
+      .then((model) => {
+        this.colorModel = model as IModel;
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public getWindSize() {
@@ -133,8 +143,8 @@ export default class WindModel extends BaseModel {
     return { imageWidth, imageHeight };
   }
 
-  public buildModels() {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public clearModels(): void {
@@ -225,7 +235,7 @@ export default class WindModel extends BaseModel {
 
   private drawColorMode() {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-    this.colorModel.draw({
+    this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_texture: this.texture,
