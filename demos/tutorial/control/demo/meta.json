@@ -6,7 +6,7 @@
   "demos": [
     {
       "filename": "amap.js",
-      "title": "高德底图组件",
+      "title": "高德底图组件"
     },
     {
       "filename": "mapbox.js",

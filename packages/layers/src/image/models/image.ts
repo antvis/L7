@@ -22,7 +22,7 @@ export default class ImageModel extends BaseModel {
       u_texture: this.texture,
     };
   }
-  // @ts-ignore
+  
   public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,

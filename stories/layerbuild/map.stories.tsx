@@ -41,6 +41,8 @@ import CityBuilding from './components/CityBuilding';
 
 import ImageLayer from './components/ImageLayer';
 
+import RasterLayer from './components/RasterLayer';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -81,3 +83,5 @@ storiesOf('图层渲染流程改造', module)
   .add('CityBuilding', () => <CityBuilding />)
 
   .add('ImageLayer', () => <ImageLayer />)
+
+  .add('RasterLayer', () => <RasterLayer />)
