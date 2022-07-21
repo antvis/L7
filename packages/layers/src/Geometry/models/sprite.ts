@@ -6,6 +6,7 @@ import {
   ILayerConfig,
   IModelUniform,
   ITexture2D,
+  IModel,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 
@@ -152,8 +153,8 @@ export default class SpriteModel extends BaseModel {
     cancelAnimationFrame(this.timer);
     this.texture?.destroy();
   }
-  // @ts-ignore
-  public initModels() {
+  
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mapTexture,
       spriteTop = 5000000,
@@ -179,21 +180,30 @@ export default class SpriteModel extends BaseModel {
       this.updateModel();
     }, 100);
 
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'geometry_sprite',
-        vertexShader: spriteVert,
-        fragmentShader: spriteFrag,
-        triangulation: this.planeGeometryTriangulation,
-        primitive: gl.POINTS,
-        depth: { enable: false },
-        blend: this.getBlend(),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: 'geometrySprite',
+      vertexShader: spriteVert,
+      fragmentShader: spriteFrag,
+      triangulation: this.planeGeometryTriangulation,
+      primitive: gl.POINTS,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      layerOptions: {
+        modelType: 'geometrySprite',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
-  // @ts-ignore
-  public buildModels() {
-    return this.initModels();
+  
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public updateTexture(mapTexture: string | undefined): void {

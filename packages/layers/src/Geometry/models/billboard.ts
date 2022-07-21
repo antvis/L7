@@ -5,8 +5,9 @@ import {
   IEncodeFeature,
   IModelUniform,
   ITexture2D,
+  IModel,
 } from '@antv/l7-core';
-import { getMask, isMini } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/billboard_frag.glsl';
@@ -80,8 +81,8 @@ export default class BillBoardModel extends BaseModel {
   public clearModels(): void {
     this.texture?.destroy();
   }
-  // @ts-ignore
-  public initModels() {
+  
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -98,22 +99,30 @@ export default class BillBoardModel extends BaseModel {
       this.updateTexture(drawCanvas);
     }
 
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'geometry_billboard',
-        vertexShader: planeVert,
-        fragmentShader: planeFrag,
-        triangulation: this.planeGeometryTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: true },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
+    this.layer
+    .buildLayerModel({
+      moduleName: 'geometryBillboard',
+      vertexShader: planeVert,
+      fragmentShader: planeFrag,
+      triangulation: this.planeGeometryTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: true },
+      stencil: getMask(mask, maskInside),
+      layerOptions: {
+        modelType: 'geometryBillboard',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
-  // @ts-ignore
-  public buildModels() {
-    return this.initModels();
+  
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public updateTexture(drawCanvas: (canvas: HTMLCanvasElement) => void): void {

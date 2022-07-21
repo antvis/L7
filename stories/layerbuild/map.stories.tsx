@@ -43,6 +43,10 @@ import ImageLayer from './components/ImageLayer';
 
 import RasterLayer from './components/RasterLayer';
 
+import Billboard from './components/Billboard';
+import Sprite from './components/Sprite';
+import Plane from './components/Plane';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -85,3 +89,7 @@ storiesOf('图层渲染流程改造', module)
   .add('ImageLayer', () => <ImageLayer />)
 
   .add('RasterLayer', () => <RasterLayer />)
+
+  .add('Billboard', () => <Billboard />)
+  .add('Sprite', () => <Sprite />)
+  .add('Plane', () => <Plane />)

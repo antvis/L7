@@ -5,9 +5,10 @@ import {
   IEncodeFeature,
   IModelUniform,
   ITexture2D,
+  IModel,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { getMask, isMini } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 // import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
@@ -133,8 +134,8 @@ export default class PlaneModel extends BaseModel {
     this.terrainImage = null;
     this.texture?.destroy();
   }
-  // @ts-ignore
-  public initModels() {
+  
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -149,27 +150,36 @@ export default class PlaneModel extends BaseModel {
     });
 
     this.updateTexture(mapTexture);
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'geometry_plane',
-        vertexShader: planeVert,
-        fragmentShader: planeFrag,
-        triangulation: this.planeGeometryTriangulation,
-        primitive: gl.TRIANGLES,
-        // primitive: gl.LINES,
-        depth: { enable: true },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        cull: {
-          enable: true,
-          face: gl.BACK, // gl.FRONT | gl.BACK;
-        },
-      }),
-    ];
+
+    this.layer
+    .buildLayerModel({
+      moduleName: 'geometryPlane',
+      vertexShader: planeVert,
+      fragmentShader: planeFrag,
+      triangulation: this.planeGeometryTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: true },
+      stencil: getMask(mask, maskInside),
+      blend: this.getBlend(),
+      cull: {
+        enable: true,
+        face: gl.BACK, // gl.FRONT | gl.BACK;
+      },
+      layerOptions: {
+        modelType: 'geometryPlane',
+      },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
+    });
   }
-  // @ts-ignore
-  public buildModels() {
-    return this.initModels();
+
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public createModelData(options?: any) {
