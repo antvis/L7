@@ -30,14 +30,14 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [121.2680, 30.3628],
+        center: [121.268, 30.3628],
         zoom: 3,
       }),
     });
 
     async function addLayer() {
       const tiffdata = await getTiffData();
-    
+
       const layer = new RasterLayer({});
       layer
         .source(tiffdata.data, {
@@ -51,20 +51,26 @@ export default class Demo extends React.Component {
           },
         })
         .style({
-          heightRatio:100,
+          heightRatio: 100,
           opacity: 0.8,
           rampColors: {
-            colors: [ '#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C' ].reverse(),
-            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+            colors: [
+              '#FF4818',
+              '#F7B74A',
+              '#FFF598',
+              '#91EABC',
+              '#2EA9A1',
+              '#206C7C',
+            ].reverse(),
+            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
           },
         });
-        return layer;
+      return layer;
     }
 
     const layer = await addLayer();
 
     scene.on('loaded', () => {
-      
       scene.addLayer(layer);
     });
   }

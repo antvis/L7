@@ -2,8 +2,8 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ITexture2D,
   IModel,
+  ITexture2D,
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
@@ -42,7 +42,7 @@ export default class RasterModel extends BaseModel {
       u_colorTexture: this.colorTexture,
     };
   }
-  
+
   public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
@@ -72,27 +72,27 @@ export default class RasterModel extends BaseModel {
     });
 
     this.layer
-    .buildLayerModel({
-      moduleName: 'RasterImageData',
-      vertexShader: rasterVert,
-      fragmentShader: rasterFrag,
-      triangulation: RasterImageTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      stencil: getMask(mask, maskInside),
-      layerOptions: {
-        modelType: 'RasterImageData',
-      },
-    })
-    .then((model) => {
-      callbackModel([model as IModel]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+      .buildLayerModel({
+        moduleName: 'RasterImageData',
+        vertexShader: rasterVert,
+        fragmentShader: rasterFrag,
+        triangulation: RasterImageTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        stencil: getMask(mask, maskInside),
+        layerOptions: {
+          modelType: 'RasterImageData',
+        },
+      })
+      .then((model) => {
+        callbackModel([model as IModel]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
-  
+
   public buildModels(callbackModel: (models: IModel[]) => void) {
     this.initModels(callbackModel);
   }
