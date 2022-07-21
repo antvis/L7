@@ -133,7 +133,7 @@ const IndexPage = () => {
   },
   {
     type: t('L7 2.9 酷炫的可视化'),
-    title: t('瓦片地图'),
+    title: t('瓦片地图 矢量&栅格瓦片'),
     date: '2022.06.31',
     link: 'https://www.yuque.com/antv/blog/sq4ogr',
   },
