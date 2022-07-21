@@ -10,7 +10,7 @@ export default class Demo extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [ 105.732421875, 32.24997445586331 ],
+        center: [105.732421875, 32.24997445586331],
         pitch: 0,
         style: 'dark',
         zoom: 2,
@@ -25,9 +25,9 @@ export default class Demo extends React.Component {
           {
             parser: {
               type: 'image',
-              extent: [ -180, -85, 180, 85 ]
-            }
-          }
+              extent: [-180, -85, 180, 85],
+            },
+          },
         )
         .animate(true)
         .style({
@@ -44,8 +44,8 @@ export default class Demo extends React.Component {
             0.2: '#6baed6',
             0.3: '#4292c6',
             0.4: '#2171b5',
-            0.5: '#084594'
-          }
+            0.5: '#084594',
+          },
         });
       scene.addLayer(layer);
     });
