@@ -70,7 +70,7 @@ layer.on('contextmenu', (e) => console.log(e));
 
 ### dblclick
 
-双击未拾取到元素
+双击拾取元素
 
 ```javascript
 layer.on('dblclick', (e) => console.log(e));

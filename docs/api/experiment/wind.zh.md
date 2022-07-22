@@ -59,4 +59,4 @@ layer.animate(true);
   1.0: '#d53e4f'
   }
 
-[在线案例](../../examples/wind/basic#wind)
+[在线案例](/zh/examples/wind/basic#wind)
