@@ -1,5 +1,5 @@
 import { WorkerFarm } from 'web-worker-helper';
-import { WorkerSourceMap } from './source';
+import { WorkerSourceMap } from './workers';
 import { getWorkerSource, registerWorkerSource } from './worker-map';
 
 export { WorkerSourceMap };

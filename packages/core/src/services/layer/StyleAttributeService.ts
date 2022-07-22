@@ -200,7 +200,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const descriptors = this.attributes.map((attr) => {
       attr.resetDescriptor();
       return attr.descriptor;
-    });
+    }).filter(d => d);
     const { modelType, ...restOptions } = workerOptions;
 
     const {
@@ -212,7 +212,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       [attributeName: string]: IAttribute;
     } = {};
     return new Promise((resolve, reject) => {
-      executeWorkerTask('pointFill', {
+      executeWorkerTask(modelType, {
         descriptors: this.getPureDescriptors(descriptors),
         features,
         segmentNumber,
@@ -508,7 +508,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
   }
 
   private getPureDescriptors(descriptors: IVertexAttributeDescriptor[]) {
-    return descriptors.map((d) => {
+    return descriptors
+    .map((d) => {
       return {
         buffer: d.buffer,
         name: d.name,

@@ -9,11 +9,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { $window, getMask } from '@antv/l7-utils';
+import { $window, getMask, PointFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import { PointFillTriangulation } from '../../core/triangulation';
+// import { PointFillTriangulation } from '../../core/triangulation';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate

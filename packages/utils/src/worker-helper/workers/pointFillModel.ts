@@ -1,18 +1,10 @@
 import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 import { encodePickingColor } from '../../color';
-import { calculateCentroid } from '../../geo';
 import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
+import { PointFillTriangulation as triangulation } from './triangulation';
 
-function triangulation(feature: IEncodeFeature) {
-  const coordinates = calculateCentroid(feature.coordinates);
-  return {
-    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-    indices: [0, 1, 2, 2, 3, 0],
-    size: coordinates.length,
-  };
-}
 
-export const pointFill = async ({
+export const pointFillModel = async ({
   descriptors,
   features,
   enablePicking,

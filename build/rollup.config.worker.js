@@ -19,7 +19,7 @@ function resolveFile(filePath) {
 module.exports = [
   {
     // input: resolveFile('packages/layers/src/workers/index.ts'),
-    input: resolveFile('packages/utils/src/worker-helper/source/index.ts'),
+    input: resolveFile('packages/utils/src/worker-helper/workers/index.ts'),
     output: {
       file: resolveFile(outputFile),
       format: 'iife',

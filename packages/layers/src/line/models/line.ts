@@ -9,11 +9,11 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr, LineTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
-import { LineTriangulation } from '../../core/triangulation';
+// import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
 import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
@@ -161,6 +161,8 @@ export default class LineModel extends BaseModel {
       mask = false,
       maskInside = true,
       depth = false,
+      workerEnabled = false,
+      enablePicking
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
@@ -174,8 +176,11 @@ export default class LineModel extends BaseModel {
         depth: { enable: depth },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        workerEnabled,
         workerOptions: {
           modelType: 'line' + type,
+          enablePicking,
+          iconMap: this.iconService.getIconMap()
         },
       })
       .then((model) => {

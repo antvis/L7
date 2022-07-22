@@ -15,7 +15,7 @@ export default class Demo extends React.Component {
         zoom: 2,
       }),
     });
-    const layer = new LineLayer()
+    const layer = new LineLayer({ workerEnabled: true })
       .source({
         type: 'FeatureCollection',
         features: [
