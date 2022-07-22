@@ -3,7 +3,6 @@ import { encodePickingColor } from '../../color';
 import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
 import { LineTriangulation as triangulation } from './triangulation';
 
-
 export const lineModel = async ({
   descriptors,
   features,
@@ -29,15 +28,15 @@ export const lineModel = async ({
     // pointFill feature func
     a_DistanceAndIndex: (
       feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-          normal: number[],
-          vertexIndex?: number,
+      featureIdx: number,
+      vertex: number[],
+      attributeIdx: number,
+      normal: number[],
+      vertexIndex?: number,
     ) => {
       return vertexIndex === undefined
-      ? [vertex[3], 10]
-      : [vertex[3], vertexIndex];
+        ? [vertex[3], 10]
+        : [vertex[3], vertexIndex];
     },
     a_Total_Distance: (
       feature: IEncodeFeature,
@@ -54,7 +53,9 @@ export const lineModel = async ({
       attributeIdx: number,
     ) => {
       const { size: pointSize = 1 } = feature;
-      return Array.isArray(pointSize) ? [pointSize[0], pointSize[1]] : [pointSize as number, 0];
+      return Array.isArray(pointSize)
+        ? [pointSize[0], pointSize[1]]
+        : [pointSize as number, 0];
     },
     a_Normal: (
       feature: IEncodeFeature,
@@ -82,7 +83,7 @@ export const lineModel = async ({
       const { texture } = feature;
       const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
       return [x, y];
-    }
+    },
   };
 
   const featureLayout: {
@@ -165,7 +166,7 @@ export const lineModel = async ({
       });
     }
   });
-  
+
   return {
     descriptors,
     featureLayout,

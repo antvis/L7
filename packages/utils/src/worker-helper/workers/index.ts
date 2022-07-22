@@ -1,6 +1,6 @@
 import { createWorker, WorkerFarm } from 'web-worker-helper';
-import { pointFillModel } from './pointFillModel';
 import { lineModel } from './lineModel';
+import { pointFillModel } from './pointFillModel';
 
 // current support worker
 export const WorkerSourceMap = {

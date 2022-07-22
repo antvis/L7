@@ -3,7 +3,6 @@ import { encodePickingColor } from '../../color';
 import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
 import { PointFillTriangulation as triangulation } from './triangulation';
 
-
 export const pointFillModel = async ({
   descriptors,
   features,

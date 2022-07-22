@@ -9,7 +9,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, rgb2arr, LineTriangulation } from '@antv/l7-utils';
+import { getMask, LineTriangulation, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
@@ -162,7 +162,7 @@ export default class LineModel extends BaseModel {
       maskInside = true,
       depth = false,
       workerEnabled = false,
-      enablePicking
+      enablePicking,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
@@ -180,7 +180,7 @@ export default class LineModel extends BaseModel {
         workerOptions: {
           modelType: 'line' + type,
           enablePicking,
-          iconMap: this.iconService.getIconMap()
+          iconMap: this.iconService.getIconMap(),
         },
       })
       .then((model) => {

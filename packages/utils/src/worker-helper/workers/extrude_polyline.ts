@@ -1,5 +1,5 @@
-import { aProjectFlat } from '../../geo';
 import { vec2, vec3 } from 'gl-matrix';
+import { aProjectFlat } from '../../geo';
 const tmp = vec2.create();
 const capEnd = vec2.create();
 const lineA = vec2.create();
