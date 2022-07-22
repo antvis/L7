@@ -147,13 +147,13 @@ export default class Arc3DModel extends BaseModel {
       return {
         frag: arc3d_linear_frag,
         vert: arc3d_linear_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: arc3d_line_frag,
         vert: arc3d_line_vert,
-        type: 'normal',
+        type: 'Normal',
       };
     }
   }
@@ -168,7 +168,7 @@ export default class Arc3DModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'arc3dline' + type,
+        moduleName: 'lineArc3d' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineArcTriangulation,
@@ -178,7 +178,7 @@ export default class Arc3DModel extends BaseModel {
         segmentNumber,
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'arc3dline' + type,
+          modelType: 'lineArc3d' + type,
         },
       })
       .then((model) => {

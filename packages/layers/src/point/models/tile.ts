@@ -183,7 +183,7 @@ export default class FillModel extends BaseModel {
     this.layer.triangulation = PointFillTriangulation;
     this.layer
       .buildLayerModel({
-        moduleName: 'pointFillTile',
+        moduleName: 'pointTile',
         vertexShader: point_tile_vert,
         fragmentShader: point_tile_frag,
         triangulation: PointFillTriangulation,
@@ -196,7 +196,7 @@ export default class FillModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         workerEnabled,
         workerOptions: {
-          modelType: 'pointFillTile',
+          modelType: 'pointTile',
         },
       })
       .then((model) => {

@@ -38,14 +38,14 @@ export default class EarthAtomSphereModel extends BaseModel {
     this.layer.zIndex = -997;
     this.layer
       .buildLayerModel({
-        moduleName: 'earthAtmoSphere',
+        moduleName: 'earthAtmo',
         vertexShader: atmoSphereVert,
         fragmentShader: atmoSphereFrag,
         triangulation: earthTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
         workerOptions: {
-          modelType: 'earthAtmoSphere',
+          modelType: 'earthAtmo',
         },
       })
       .then((model) => {

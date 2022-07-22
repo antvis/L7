@@ -97,14 +97,14 @@ export default class BaseEarthModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'baseEarth',
+        moduleName: 'earthBase',
         vertexShader: baseVert,
         fragmentShader: baseFrag,
         triangulation: earthTriangulation,
         depth: { enable: true },
         blend: this.getBlend(),
         workerOptions: {
-          modelType: 'baseEarth',
+          modelType: 'earthBase',
         },
       })
       .then((model) => {

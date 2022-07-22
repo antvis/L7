@@ -157,7 +157,7 @@ export default class HeatMapModel extends BaseModel {
   private async buildHeatMapIntensity() {
     this.layer.triangulation = HeatmapTriangulation;
     const model = await this.layer.buildLayerModel({
-      moduleName: 'heatmapintensity',
+      moduleName: 'heatmapIntensity',
       vertexShader: heatmapFramebufferVert,
       fragmentShader: heatmapFramebufferFrag,
       triangulation: HeatmapTriangulation,

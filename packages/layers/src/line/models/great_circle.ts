@@ -132,7 +132,7 @@ export default class GreatCircleModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     this.layer
       .buildLayerModel({
-        moduleName: 'greatCircle',
+        moduleName: 'lineGreatCircle',
         vertexShader: line_arc2d_vert,
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
@@ -140,7 +140,7 @@ export default class GreatCircleModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'greatCircle',
+          modelType: 'lineGreatCircle',
         },
       })
       .then((model) => {

@@ -252,13 +252,13 @@ export default class FillModel extends BaseModel {
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'pointWaveFill',
+            type: 'pointWave',
           };
         default:
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'pointWaveFill',
+            type: 'pointWave',
           };
       }
     } else {

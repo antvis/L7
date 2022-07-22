@@ -73,7 +73,7 @@ export default class RasterModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'RasterImageData',
+        moduleName: 'rasterImageData',
         vertexShader: rasterVert,
         fragmentShader: rasterFrag,
         triangulation: RasterImageTriangulation,
@@ -81,7 +81,7 @@ export default class RasterModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'RasterImageData',
+          modelType: 'rasterImageData',
         },
       })
       .then((model) => {

@@ -40,7 +40,7 @@ export default class Grid3DModel extends BaseModel {
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.layer
       .buildLayerModel({
-        moduleName: 'grid3dheatmap',
+        moduleName: 'heatmapGrid3d',
         vertexShader: heatmapGrid3dVert,
         fragmentShader: heatmapGridFrag,
         triangulation: PointExtrudeTriangulation,
@@ -49,7 +49,7 @@ export default class Grid3DModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'grid3dheatmap',
+          modelType: 'heatmapGrid3d',
         },
       })
       .then((model) => {

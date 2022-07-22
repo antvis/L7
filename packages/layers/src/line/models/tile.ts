@@ -124,7 +124,8 @@ export default class LineModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     this.layer.triangulation = LineTriangulation;
-    const m = await this.layer.buildLayerModel({
+    
+    this.layer.buildLayerModel({
       moduleName: 'lineTile',
       vertexShader: line_tile_vert,
       fragmentShader: line_tile_frag,
@@ -137,8 +138,14 @@ export default class LineModel extends BaseModel {
       workerOptions: {
         modelType: 'lineTile',
       },
+    })
+    .then((model) => {
+      callbackModel([model as IModel]);
+    })
+    .catch((err) => {
+      console.warn(err);
+      callbackModel([]);
     });
-    callbackModel([m as IModel]);
   }
 
   protected registerBuiltinAttributes() {

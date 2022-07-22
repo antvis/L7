@@ -151,7 +151,7 @@ export default class ArcModel extends BaseModel {
       return {
         frag: arc_dash_frag,
         vert: arc_dash_vert,
-        type: 'dash',
+        type: 'Dash',
       };
     }
 
@@ -160,13 +160,13 @@ export default class ArcModel extends BaseModel {
       return {
         frag: arc_linear_frag,
         vert: arc_linear_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: arc_line_frag,
         vert: arc_line_vert,
-        type: 'normal',
+        type: 'Normal',
       };
     }
   }
@@ -181,7 +181,7 @@ export default class ArcModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'arc2dline' + type,
+        moduleName: 'lineArc2d' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineArcTriangulation,
@@ -191,7 +191,7 @@ export default class ArcModel extends BaseModel {
         segmentNumber,
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'arc2dline' + type,
+          modelType: 'lineArc2d' + type,
         },
       })
       .then((model) => {

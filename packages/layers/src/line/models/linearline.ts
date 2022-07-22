@@ -90,21 +90,21 @@ export default class LinearLineModel extends BaseModel {
       maskInside = true,
       depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders();
+  
     this.layer.triangulation = LineTriangulation;
 
     this.layer
       .buildLayerModel({
-        moduleName: 'line_' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
+        moduleName: 'lineRampColors',
+        vertexShader: linear_line_vert,
+        fragmentShader: linear_line_frag,
         triangulation: LineTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: depth },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'line_' + type,
+          modelType: 'lineRampColors',
         },
       })
       .then((model) => {
@@ -114,18 +114,6 @@ export default class LinearLineModel extends BaseModel {
         console.warn(err);
         callbackModel([]);
       });
-  }
-
-  /**
-   * 根据参数获取不同的 shader 代码
-   * @returns
-   */
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: linear_line_frag,
-      vert: linear_line_vert,
-      type: 'linear_rampColors',
-    };
   }
 
   protected registerBuiltinAttributes() {

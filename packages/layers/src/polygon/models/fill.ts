@@ -157,14 +157,14 @@ export default class FillModel extends BaseModel {
       return {
         frag: polygon_linear_frag,
         vert: polygon_linear_vert,
-        type: 'polygon_linear',
+        type: 'polygonLinear',
         triangulation: polygonTriangulationWithCenter,
       };
     } else {
       return {
         frag: polygon_frag,
         vert: polygon_vert,
-        type: 'polygon_fill',
+        type: 'polygonFill',
         triangulation: polygonTriangulation,
       };
     }

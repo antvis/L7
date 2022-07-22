@@ -58,24 +58,23 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
-    const { frag, vert, triangulation, type } = this.getModelParams();
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    this.layer.triangulation = triangulation;
+    this.layer.triangulation = polygonTriangulation;
     this.layer
       .buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation,
+        moduleName: 'polygonTile',
+        vertexShader: polygon_tile_vert,
+        fragmentShader: polygon_tile_frag,
+        triangulation: polygonTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: type,
+          modelType: 'polygonTile',
         },
       })
       .then((model) => {
@@ -93,19 +92,5 @@ export default class FillModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     //
-  }
-
-  private getModelParams(): {
-    frag: string;
-    vert: string;
-    type: string;
-    triangulation: Triangulation;
-  } {
-    return {
-      frag: polygon_tile_frag,
-      vert: polygon_tile_vert,
-      type: 'polygon_tile',
-      triangulation: polygonTriangulation,
-    };
   }
 }

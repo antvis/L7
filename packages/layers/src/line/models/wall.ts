@@ -119,7 +119,7 @@ export default class LineWallModel extends BaseModel {
   public buildModels(callbackModel: (models: IModel[]) => void) {
     this.layer
       .buildLayerModel({
-        moduleName: 'linewall',
+        moduleName: 'lineWall',
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: LineTriangulation,
@@ -127,7 +127,7 @@ export default class LineWallModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         workerOptions: {
-          modelType: 'linewall',
+          modelType: 'lineWall',
         },
       })
       .then((model) => {

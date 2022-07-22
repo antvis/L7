@@ -142,7 +142,7 @@ export default class ExtrudeModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'point_extrude',
+        moduleName: 'pointExtrude',
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,

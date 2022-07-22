@@ -166,7 +166,7 @@ export default class LineModel extends BaseModel {
     this.layer.triangulation = LineTriangulation;
     this.layer
       .buildLayerModel({
-        moduleName: 'line_' + type,
+        moduleName: 'line' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
@@ -175,7 +175,7 @@ export default class LineModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'line_' + type,
+          modelType: 'line' + type,
         },
       })
       .then((model) => {
@@ -202,7 +202,7 @@ export default class LineModel extends BaseModel {
       return {
         frag: line_dash_frag,
         vert: line_dash_vert,
-        type: 'dash',
+        type: 'Dash',
       };
     }
 
@@ -211,13 +211,13 @@ export default class LineModel extends BaseModel {
       return {
         frag: linear_line_frag,
         vert: line_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: line_frag,
         vert: line_vert,
-        type: 'normal',
+        type: 'Normal',
       };
     }
   }

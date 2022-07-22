@@ -103,7 +103,7 @@ export default class LineModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'line_half',
+        moduleName: 'lineHalf',
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
@@ -112,7 +112,7 @@ export default class LineModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'line_half',
+          modelType: 'lineHalf',
         },
       })
       .then((model) => {

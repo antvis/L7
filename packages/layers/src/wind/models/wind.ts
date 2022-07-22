@@ -113,7 +113,7 @@ export default class WindModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'WindLayer',
+        moduleName: 'wind',
         vertexShader: WindVert,
         fragmentShader: WindFrag,
         triangulation: RasterImageTriangulation,
@@ -121,7 +121,7 @@ export default class WindModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         workerOptions: {
-          modelType: 'WindLayer',
+          modelType: 'wind',
         },
       })
       .then((model) => {

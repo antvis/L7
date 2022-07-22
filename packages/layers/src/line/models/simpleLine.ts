@@ -105,13 +105,13 @@ export default class SimpleLineModel extends BaseModel {
       return {
         frag: simle_linear_frag,
         vert: simple_line_vert,
-        type: 'simple_linear',
+        type: 'lineSimpleLinear',
       };
     } else {
       return {
         frag: simple_line_frag,
         vert: simple_line_vert,
-        type: 'simple_normal',
+        type: 'lineSimpleNormal',
       };
     }
   }

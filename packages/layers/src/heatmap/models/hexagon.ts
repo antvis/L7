@@ -41,7 +41,7 @@ export default class HexagonModel extends BaseModel {
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.layer
       .buildLayerModel({
-        moduleName: 'hexagonheatmap',
+        moduleName: 'heatmapHexagon',
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
@@ -49,7 +49,7 @@ export default class HexagonModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'hexagonheatmap',
+          modelType: 'heatmapHexagon',
         },
       })
       .then((model) => {

@@ -90,7 +90,7 @@ export default class Arc3DModel extends BaseModel {
     }
 
     return {
-      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+      u_globel: 1,
       u_globel_radius: EARTH_RADIUS, // 地球半径
       u_global_height: globalArcHeight,
 
@@ -147,13 +147,13 @@ export default class Arc3DModel extends BaseModel {
       return {
         frag: arc3d_linear_frag,
         vert: arc3d_linear_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: arc3d_line_frag,
         vert: arc3d_line_vert,
-        type: 'normal',
+        type: 'Normal',
       };
     }
   }
@@ -167,7 +167,7 @@ export default class Arc3DModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     this.layer
       .buildLayerModel({
-        moduleName: 'arc3dline' + type,
+        moduleName: 'lineEarthArc3d' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineArcTriangulation,
@@ -177,7 +177,7 @@ export default class Arc3DModel extends BaseModel {
         segmentNumber,
         stencil: getMask(mask, maskInside),
         workerOptions: {
-          modelType: 'arc2dline' + type,
+          modelType: 'lineEarthArc3d' + type,
         },
       })
       .then((model) => {

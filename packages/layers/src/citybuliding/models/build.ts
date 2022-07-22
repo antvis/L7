@@ -92,7 +92,7 @@ export default class CityBuildModel extends BaseModel {
         triangulation: PolygonExtrudeTriangulation,
         depth: { enable: true },
         workerOptions: {
-          modelType: 'hexagonheatmap',
+          modelType: 'cityBuilding',
         },
         cull: {
           enable: true,

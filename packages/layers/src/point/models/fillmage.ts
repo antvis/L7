@@ -198,7 +198,7 @@ export default class FillImageModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'point_fillImage',
+        moduleName: 'pointFillImage',
         vertexShader: pointFillVert,
         fragmentShader: pointFillFrag,
         triangulation: PointFillTriangulation,

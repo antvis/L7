@@ -38,14 +38,14 @@ export default class EarthBloomSphereModel extends BaseModel {
     this.layer.zIndex = -999;
     this.layer
       .buildLayerModel({
-        moduleName: 'earthBloomSphere',
+        moduleName: 'earthBloom',
         vertexShader: bloomSphereVert,
         fragmentShader: bloomSphereFrag,
         triangulation: earthOuterTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
         workerOptions: {
-          modelType: 'earthBloomSphere',
+          modelType: 'earthBloom',
         },
       })
       .then((model) => {
