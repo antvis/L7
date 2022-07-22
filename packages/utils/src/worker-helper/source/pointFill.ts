@@ -1,7 +1,7 @@
 import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 import { encodePickingColor } from '../../color';
 import { calculateCentroid } from '../../geo';
-import { a_Color, a_Position, a_vertexId, a_filter } from './commonFeatureFunc';
+import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
 
 function triangulation(feature: IEncodeFeature) {
   const coordinates = calculateCentroid(feature.coordinates);
