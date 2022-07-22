@@ -126,16 +126,16 @@ const IndexPage = () => {
     },
   ];
   const notifications = [{
-    type: t('DipperMap'),
-    title: t('地理可视化工具'),
-    date: '2021.11.22',
-    link: 'https://dippermap.alipay.com/',
+    type: t('行政区划'),
+    title: t('如何绘制一幅标准的中国行政区划地图'),
+    date: '2022.07.20',
+    link: 'https://www.yuque.com/xiaofengcanyue/scpehq/fgcwge',
   },
   {
-    type: t('L7 一站式地理分析应用解决方案'),
-    title: t('L7Mini、Dipper、DipperMap'),
-    date: '2021.11.22',
-    link: 'https://www.yuque.com/antv/blog/xqslop',
+    type: t('L7 2.9 酷炫的可视化'),
+    title: t('瓦片地图 矢量&栅格瓦片'),
+    date: '2022.06.31',
+    link: 'https://www.yuque.com/antv/blog/sq4ogr',
   },
   ]
 
