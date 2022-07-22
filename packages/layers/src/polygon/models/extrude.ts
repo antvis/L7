@@ -112,7 +112,7 @@ export default class ExtrudeModel extends BaseModel {
         fragmentShader: frag,
         triangulation: PolygonExtrudeTriangulation,
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: type,
         },
       })

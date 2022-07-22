@@ -48,7 +48,7 @@ export default class Grid3DModel extends BaseModel {
         depth: { enable: true },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'grid3dheatmap',
         },
       })

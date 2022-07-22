@@ -165,7 +165,7 @@ export default class PlaneModel extends BaseModel {
           enable: true,
           face: gl.BACK, // gl.FRONT | gl.BACK;
         },
-        layerOptions: {
+        workerOptions: {
           modelType: 'geometryPlane',
         },
       })

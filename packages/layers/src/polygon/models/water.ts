@@ -83,7 +83,7 @@ export default class WaterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'polygonWater',
         },
       })

@@ -210,7 +210,7 @@ export default class FillImageModel extends BaseModel {
           face: getCullFace(this.mapService.version),
         },
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointFillImage',
         },
       })

@@ -43,7 +43,7 @@ export default class MaskModel extends BaseModel {
             zpass: gl.REPLACE,
           },
         },
-        layerOptions: {
+        workerOptions: {
           modelType: 'mask',
         },
       })

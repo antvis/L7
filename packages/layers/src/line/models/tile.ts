@@ -124,29 +124,6 @@ export default class LineModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     this.layer.triangulation = LineTriangulation;
-    // this.layer
-    //   .buildLayerModel({
-    //     moduleName: 'lineTile',
-    //     vertexShader: line_tile_vert,
-    //     fragmentShader: line_tile_frag,
-    //     triangulation: LineTriangulation,
-    //     primitive: gl.TRIANGLES,
-    //     blend: this.getBlend(),
-    //     depth: { enable: depth },
-    //     // depth: { enable: true },
-    //     stencil: getMask(mask, maskInside),
-    //     layerOptions: {
-    //       modelType: 'lineTile',
-    //     },
-    //   })
-    //   .then((model) => {
-    //     callbackModel([model as IModel]);
-    //   })
-    //   .catch((err) => {
-    //     console.warn(err);
-    //     callbackModel([]);
-    //   });
-    // console.log('mask', mask)
     const m = await this.layer.buildLayerModel({
       moduleName: 'lineTile',
       vertexShader: line_tile_vert,
@@ -157,7 +134,7 @@ export default class LineModel extends BaseModel {
       depth: { enable: depth },
       // depth: { enable: true },
       stencil: getMask(mask, maskInside),
-      layerOptions: {
+      workerOptions: {
         modelType: 'lineTile',
       },
     });

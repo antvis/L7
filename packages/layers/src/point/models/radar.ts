@@ -182,7 +182,7 @@ export default class RadarModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointRadar',
         },
       })

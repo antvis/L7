@@ -139,7 +139,7 @@ export default class GreatCircleModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'greatCircle',
         },
       })

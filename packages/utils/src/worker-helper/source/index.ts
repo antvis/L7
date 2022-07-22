@@ -1,8 +1,13 @@
 import { createWorker } from '@antv/l7-utils/src/worker-helper';
 import { pointFill } from './pointFill';
 
-const workerTypes: Record<string, (data: any) => Promise<any>> = {
+// current support worker
+export const WorkerSourceMap = {
   pointFill,
+}
+
+const workerTypes: Record<string, (data: any) => Promise<any>> = {
+  ...WorkerSourceMap,
 };
 
 async function worker({ workerType, data }: { workerType: string; data: any }) {

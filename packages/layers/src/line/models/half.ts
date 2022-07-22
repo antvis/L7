@@ -111,7 +111,7 @@ export default class LineModel extends BaseModel {
         depth: { enable: depth },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'line_half',
         },
       })

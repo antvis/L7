@@ -190,7 +190,7 @@ export default class ArcModel extends BaseModel {
         blend: this.getBlend(),
         segmentNumber,
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'arc2dline' + type,
         },
       })

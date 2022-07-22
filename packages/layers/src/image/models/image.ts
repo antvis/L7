@@ -75,7 +75,7 @@ export default class ImageModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'RasterImage',
         },
       })

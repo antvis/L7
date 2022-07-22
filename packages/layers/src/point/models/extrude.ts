@@ -141,10 +141,6 @@ export default class ExtrudeModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
 
-    const layerOptions = {
-      modelType: 'pointExtrude',
-    };
-
     this.layer
       .buildLayerModel({
         moduleName: 'point_extrude',
@@ -160,7 +156,9 @@ export default class ExtrudeModel extends BaseModel {
           enable: depth,
         },
         workerEnabled,
-        layerOptions,
+        workerOptions: {
+          modelType: 'pointExtrude',
+        },
       })
       .then((model) => {
         callbackModel([model as IModel]);

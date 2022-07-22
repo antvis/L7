@@ -194,10 +194,6 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.mapping();
 
-    const layerOptions = {
-      modelType: 'pointText',
-    };
-
     this.layer
       .buildLayerModel({
         moduleName: 'pointText',
@@ -208,7 +204,9 @@ export default class TextModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions,
+        workerOptions: {
+          modelType: 'pointText',
+        },
       })
       .then((model) => {
         callbackModel([model as IModel]);
@@ -548,7 +546,7 @@ export default class TextModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointText',
         },
       })

@@ -48,7 +48,7 @@ export default class HexagonModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'hexagonheatmap',
         },
       })

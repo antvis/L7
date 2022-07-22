@@ -116,7 +116,7 @@ export default class SimplePointModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointSimple',
         },
       })

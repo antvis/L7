@@ -126,7 +126,7 @@ export default class LineWallModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
-        layerOptions: {
+        workerOptions: {
           modelType: 'linewall',
         },
       })

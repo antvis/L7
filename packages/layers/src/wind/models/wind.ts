@@ -120,7 +120,7 @@ export default class WindModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
-        layerOptions: {
+        workerOptions: {
           modelType: 'WindLayer',
         },
       })

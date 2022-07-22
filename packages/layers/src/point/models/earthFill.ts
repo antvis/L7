@@ -116,7 +116,7 @@ export default class FillModel extends BaseModel {
 
         blend: this.getBlend(),
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointEarthFill',
         },
       })

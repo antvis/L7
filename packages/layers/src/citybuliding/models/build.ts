@@ -91,7 +91,7 @@ export default class CityBuildModel extends BaseModel {
         fragmentShader: buildFrag,
         triangulation: PolygonExtrudeTriangulation,
         depth: { enable: true },
-        layerOptions: {
+        workerOptions: {
           modelType: 'hexagonheatmap',
         },
         cull: {

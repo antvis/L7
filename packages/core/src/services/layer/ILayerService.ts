@@ -59,6 +59,11 @@ export interface IDataState {
   featureScaleNeedUpdate: boolean;
   StyleAttrNeedUpdate: boolean;
 }
+
+export interface IWorkerOption {
+  modelType: string;
+  [key: string]: any;
+}
 export interface ILayerModelInitializationOptions {
   moduleName: string;
   vertexShader: string;
@@ -66,7 +71,7 @@ export interface ILayerModelInitializationOptions {
   triangulation: Triangulation;
   segmentNumber?: number;
   workerEnabled?: boolean;
-  layerOptions?: any;
+  workerOptions?: IWorkerOption;
 }
 
 export interface ILayerModel {

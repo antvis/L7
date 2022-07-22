@@ -189,7 +189,7 @@ export default class SpriteModel extends BaseModel {
         primitive: gl.POINTS,
         depth: { enable: false },
         blend: this.getBlend(),
-        layerOptions: {
+        workerOptions: {
           modelType: 'geometrySprite',
         },
       })

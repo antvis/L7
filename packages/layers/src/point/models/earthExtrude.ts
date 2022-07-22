@@ -153,7 +153,7 @@ export default class ExtrudeModel extends BaseModel {
           face: getCullFace(this.mapService.version),
         },
         blend: this.getBlend(),
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointEarthExtrude',
         },
       })

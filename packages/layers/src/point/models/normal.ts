@@ -106,7 +106,7 @@ export default class NormalModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointNormal',
         },
       })

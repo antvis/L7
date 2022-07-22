@@ -90,7 +90,7 @@ export default class FillModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: type,
         },
       })

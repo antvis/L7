@@ -134,7 +134,7 @@ export default class SimpleLineModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: type,
         },
       })

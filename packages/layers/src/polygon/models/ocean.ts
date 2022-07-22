@@ -89,7 +89,7 @@ export default class OceanModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'polygonOcean',
         },
       })

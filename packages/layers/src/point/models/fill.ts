@@ -200,15 +200,9 @@ export default class FillModel extends BaseModel {
 
     this.layer.triangulation = PointFillTriangulation;
 
-    // layer 参数供给 mesh worker 使用
-    const layerOptions = {
-      modelType: 'pointFill',
-      enablePicking,
-    };
-
     this.layer
       .buildLayerModel({
-        moduleName: 'pointfill_' + type,
+        moduleName:  type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: PointFillTriangulation,
@@ -216,7 +210,10 @@ export default class FillModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions,
+        workerOptions: {
+          modelType: type,
+          enablePicking,
+        },
       })
       .then((model) => {
         callbackModel([model as IModel]);
@@ -253,20 +250,20 @@ export default class FillModel extends BaseModel {
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'wave',
+            type: 'pointWaveFill',
           };
         default:
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'wave',
+            type: 'pointWaveFill',
           };
       }
     } else {
       return {
         frag: pointFillFrag,
         vert: pointFillVert,
-        type: 'normal',
+        type: 'pointFill',
       };
     }
   }

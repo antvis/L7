@@ -50,7 +50,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor } from '@antv/l7-utils';
+import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
@@ -1148,7 +1148,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       triangulation,
       segmentNumber,
       workerEnabled,
-      layerOptions,
+      workerOptions,
       ...rest
     } = options;
 
@@ -1159,49 +1159,46 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
     return new Promise((resolve, reject) => {
-      try {
-        if (workerEnabled) {
-          this.styleAttributeService
-            .createAttributesAndIndicesAscy(
-              this.encodedData,
-              segmentNumber,
-              layerOptions,
-            )
-            .then(({ attributes, elements }) => {
-              const m = createModel({
-                attributes,
-                uniforms,
-                fs,
-                vs,
-                elements,
-                blend: BlendTypes[BlendType.normal],
-                ...rest,
-              });
-              resolve(m);
-            })
-            .catch((err) => reject(err));
-        } else {
-          const {
-            attributes,
-            elements,
-          } = this.styleAttributeService.createAttributesAndIndices(
+      // filter supported worker & worker enabled layer
+      if (workerOptions && workerOptions.modelType in WorkerSourceMap && workerEnabled) {
+        this.styleAttributeService
+          .createAttributesAndIndicesAscy(
             this.encodedData,
-            triangulation,
             segmentNumber,
-          );
-          const m = createModel({
-            attributes,
-            uniforms,
-            fs,
-            vs,
-            elements,
-            blend: BlendTypes[BlendType.normal],
-            ...rest,
-          });
-          resolve(m);
-        }
-      } catch (err) {
-        reject(err);
+            workerOptions,
+          )
+          .then(({ attributes, elements }) => {
+            const m = createModel({
+              attributes,
+              uniforms,
+              fs,
+              vs,
+              elements,
+              blend: BlendTypes[BlendType.normal],
+              ...rest,
+            });
+            resolve(m);
+          })
+          .catch((err) => reject(err));
+      } else {
+        const {
+          attributes,
+          elements,
+        } = this.styleAttributeService.createAttributesAndIndices(
+          this.encodedData,
+          triangulation,
+          segmentNumber,
+        );
+        const m = createModel({
+          attributes,
+          uniforms,
+          fs,
+          vs,
+          elements,
+          blend: BlendTypes[BlendType.normal],
+          ...rest,
+        });
+        resolve(m);
       }
     });
 

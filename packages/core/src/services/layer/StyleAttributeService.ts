@@ -7,7 +7,7 @@ import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
 import { IParseDataItem } from '../source/ISourceService';
-import { ILayer } from './ILayerService';
+import { ILayer, IWorkerOption } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,
@@ -189,7 +189,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public createAttributesAndIndicesAscy(
     features: IEncodeFeature[],
     segmentNumber: number,
-    layerOptions: any,
+    workerOptions: IWorkerOption,
   ) {
     // 每次创建的初始化化 LayerOut
     this.featureLayout = {
@@ -202,10 +202,9 @@ export default class StyleAttributeService implements IStyleAttributeService {
       return attr.descriptor;
     });
     const {
-      attributesUpdateFunctions,
       modelType,
       ...restOptions
-    } = layerOptions;
+    } = workerOptions;
 
     const {
       createAttribute,
@@ -220,7 +219,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
         descriptors: this.getPureDescriptors(descriptors),
         features,
         segmentNumber,
-        enablePicking: true,
         ...restOptions,
       })
         .then((e) => {

@@ -103,7 +103,7 @@ export default class BaseEarthModel extends BaseModel {
         triangulation: earthTriangulation,
         depth: { enable: true },
         blend: this.getBlend(),
-        layerOptions: {
+        workerOptions: {
           modelType: 'baseEarth',
         },
       })

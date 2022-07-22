@@ -108,7 +108,7 @@ export default class BillBoardModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: true },
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'geometryBillboard',
         },
       })

@@ -195,7 +195,7 @@ export default class FillModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
         workerEnabled,
-        layerOptions: {
+        workerOptions: {
           modelType: 'pointFillTile',
         },
       })

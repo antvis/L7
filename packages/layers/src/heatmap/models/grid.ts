@@ -47,7 +47,7 @@ export default class GridModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        layerOptions: {
+        workerOptions: {
           modelType: 'gridheatmap',
         },
       })

@@ -44,7 +44,7 @@ export default class EarthAtomSphereModel extends BaseModel {
         triangulation: earthTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
-        layerOptions: {
+        workerOptions: {
           modelType: 'earthAtmoSphere',
         },
       })
