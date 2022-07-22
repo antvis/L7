@@ -1160,7 +1160,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { createModel } = this.rendererService;
     return new Promise((resolve, reject) => {
       // filter supported worker & worker enabled layer
-      if (workerOptions && workerOptions.modelType in WorkerSourceMap && workerEnabled) {
+      if (
+        workerOptions &&
+        workerOptions.modelType in WorkerSourceMap &&
+        workerEnabled
+      ) {
         this.styleAttributeService
           .createAttributesAndIndicesAscy(
             this.encodedData,

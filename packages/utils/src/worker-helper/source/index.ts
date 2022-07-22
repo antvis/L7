@@ -4,7 +4,7 @@ import { pointFill } from './pointFill';
 // current support worker
 export const WorkerSourceMap = {
   pointFill,
-}
+};
 
 const workerTypes: Record<string, (data: any) => Promise<any>> = {
   ...WorkerSourceMap,

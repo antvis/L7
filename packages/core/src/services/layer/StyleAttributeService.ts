@@ -201,10 +201,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       attr.resetDescriptor();
       return attr.descriptor;
     });
-    const {
-      modelType,
-      ...restOptions
-    } = workerOptions;
+    const { modelType, ...restOptions } = workerOptions;
 
     const {
       createAttribute,

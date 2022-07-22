@@ -202,7 +202,7 @@ export default class FillModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName:  type,
+        moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: PointFillTriangulation,
