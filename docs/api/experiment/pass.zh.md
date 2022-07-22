@@ -37,7 +37,7 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PIXmQ6m1C10AAAAAAAAAAAAAARQnAQ' />
 
-[在线案例](../../examples/line/isoline#ele_dark)
+[在线案例](/zh/examples/line/isoline#ele_dark)
 
 ### 开启后处理
 
