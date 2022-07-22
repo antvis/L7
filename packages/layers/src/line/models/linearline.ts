@@ -90,7 +90,7 @@ export default class LinearLineModel extends BaseModel {
       maskInside = true,
       depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-  
+
     this.layer.triangulation = LineTriangulation;
 
     this.layer
