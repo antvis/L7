@@ -217,7 +217,7 @@ export default class LineModel extends BaseModel {
       return {
         frag: line_frag,
         vert: line_vert,
-        type: 'Normal',
+        type: '',
       };
     }
   }

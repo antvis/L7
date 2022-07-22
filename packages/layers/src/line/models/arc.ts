@@ -166,7 +166,7 @@ export default class ArcModel extends BaseModel {
       return {
         frag: arc_line_frag,
         vert: arc_line_vert,
-        type: 'Normal',
+        type: '',
       };
     }
   }

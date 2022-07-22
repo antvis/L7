@@ -153,7 +153,7 @@ export default class Arc3DModel extends BaseModel {
       return {
         frag: arc3d_line_frag,
         vert: arc3d_line_vert,
-        type: 'Normal',
+        type: '',
       };
     }
   }
