@@ -1,8 +1,8 @@
-import { createWorker, WorkerFarm } from 'web-worker-helper';
+import { WorkerFarm } from 'web-worker-helper';
 import { WorkerSourceMap } from './source';
 import { getWorkerSource, registerWorkerSource } from './worker-map';
 
-export { createWorker, WorkerSourceMap };
+export { WorkerSourceMap };
 
 const L7_WORKER_NAME = 'l7-worker';
 const WORKER_MAX_CONCURRENCY = 3;

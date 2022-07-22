@@ -1,4 +1,4 @@
-import { createWorker } from '@antv/l7-utils/src/worker-helper';
+import { createWorker, WorkerFarm } from 'web-worker-helper';
 import { pointFill } from './pointFill';
 
 // current support worker
@@ -20,4 +20,7 @@ async function worker({ workerType, data }: { workerType: string; data: any }) {
   );
 }
 
-export default createWorker(worker);
+createWorker(worker);
+
+// export default createWorker(worker);
+export { createWorker, worker };

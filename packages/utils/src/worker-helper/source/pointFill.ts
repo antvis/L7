@@ -1,81 +1,40 @@
 import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
+import { encodePickingColor } from '../../color';
+import { calculateCentroid } from '../../geo';
+import { a_Color, a_Position, a_vertexId, a_filter } from './commonFeatureFunc';
 
-function encodePickingColor(featureIdx: number) {
-  return [
-    (featureIdx + 1) & 255,
-    ((featureIdx + 1) >> 8) & 255,
-    (((featureIdx + 1) >> 8) >> 8) & 255,
-  ];
-}
-
-function isNumber(n: any) {
-  return typeof n === 'number';
-}
-
-function calculateCentroid(coord: any) {
-  if (isNumber(coord[0])) {
-    return coord;
-  } else if (isNumber(coord[0][0])) {
-    throw new Error('当前数据不支持标注');
-  } else if (isNumber(coord[0][0][0])) {
-    const coords = coord;
-    let xSum = 0;
-    let ySum = 0;
-    let len = 0;
-    coords.forEach((coor: any) => {
-      coor.forEach((pos: any) => {
-        xSum += pos[0];
-        ySum += pos[1];
-        len++;
-      });
-    });
-    return [xSum / len, ySum / len, 0];
-  } else {
-    throw new Error('当前数据不支持标注');
-  }
+function triangulation(feature: IEncodeFeature) {
+  const coordinates = calculateCentroid(feature.coordinates);
+  return {
+    vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
+    indices: [0, 1, 2, 2, 3, 0],
+    size: coordinates.length,
+  };
 }
 
 export const pointFill = async ({
   descriptors,
   features,
   enablePicking,
+  shape2d,
 }: {
   descriptors: IVertexAttributeDescriptor[];
   features: IEncodeFeature[];
   enablePicking: boolean;
+  shape2d: string[];
 }) => {
   const updateFuncs = {
-    // fixed func
-    a_Color: (feature: IEncodeFeature, featureIdx: number) => {
-      const { color } = feature;
-      return !color || !color.length ? [1, 1, 1, 1] : color;
-    },
-
-    a_Position: (
-      feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-    ) => {
-      return vertex.length === 2
-        ? [vertex[0], vertex[1], 0]
-        : [vertex[0], vertex[1], vertex[2]];
-    },
-    filter: (feature: IEncodeFeature, featureIdx: number) => {
-      const { filter } = feature;
-      return filter ? [1] : [0];
-    },
-    a_vertexId: (
-      feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
-    ) => {
-      return [featureIdx];
-    },
+    // fixed feature func
+    a_Color,
+    a_Position,
+    filter: a_filter,
+    a_vertexId,
     a_PickingColor: (feature: IEncodeFeature, featureIdx: number) => {
       const { id } = feature;
       return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
     },
+
+    // pointFill feature func
     a_Shape: (
       feature: IEncodeFeature,
       featureIdx: number,
@@ -83,18 +42,6 @@ export const pointFill = async ({
       attributeIdx: number,
     ) => {
       const { shape = 2 } = feature;
-      // var shape2d = this.layer.getLayerConfig().shape2d as string[];
-      const shape2d = [
-        'circle',
-        'triangle',
-        'square',
-        'pentagon',
-        'hexagon',
-        'octogon',
-        'hexagram',
-        'rhombus',
-        'vesica',
-      ];
       const shapeIndex = shape2d.indexOf(shape as string);
       return [shapeIndex];
     },
@@ -122,20 +69,6 @@ export const pointFill = async ({
       return Array.isArray(pointSize) ? [pointSize[0]] : [pointSize];
     },
   };
-  // triangle
-  function triangulation(feature: IEncodeFeature) {
-    const coordinates = calculateCentroid(feature.coordinates);
-    return {
-      vertices: [
-        ...coordinates,
-        ...coordinates,
-        ...coordinates,
-        ...coordinates,
-      ],
-      indices: [0, 1, 2, 2, 3, 0],
-      size: coordinates.length,
-    };
-  }
 
   const featureLayout: {
     sizePerElement: number;
@@ -179,7 +112,7 @@ export const pointFill = async ({
       normals: normalsForCurrentFeature,
       offset: verticesNum,
     });
-    // console.log('**', descriptors)
+
     verticesNum += verticesNumForCurrentFeature;
     for (
       let vertexIdx = 0;

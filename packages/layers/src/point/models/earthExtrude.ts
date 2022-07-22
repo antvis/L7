@@ -5,13 +5,12 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { getCullFace, rgb2arr } from '@antv/l7-utils';
+import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
-import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/earth/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/earth/extrude_vert.glsl';
 

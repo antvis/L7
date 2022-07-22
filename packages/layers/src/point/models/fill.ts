@@ -193,6 +193,7 @@ export default class FillModel extends BaseModel {
       animateOption = { enable: false },
       workerEnabled = false,
       enablePicking,
+      shape2d,
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
@@ -213,6 +214,7 @@ export default class FillModel extends BaseModel {
         workerOptions: {
           modelType: type,
           enablePicking,
+          shape2d,
         },
       })
       .then((model) => {
@@ -277,6 +279,8 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
+    const shape2d = this.layer.getLayerConfig().shape2d as string[];
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
@@ -351,18 +355,6 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          // var shape2d = this.layer.getLayerConfig().shape2d as string[];
-          const shape2d = [
-            'circle',
-            'triangle',
-            'square',
-            'pentagon',
-            'hexagon',
-            'octogon',
-            'hexagram',
-            'rhombus',
-            'vesica',
-          ];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

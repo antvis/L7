@@ -6,12 +6,16 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { boundsContains, getMask, padBounds } from '@antv/l7-utils';
+import {
+  boundsContains,
+  calculateCentroid,
+  getMask,
+  padBounds,
+} from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
-import { calculateCentroid } from '../../utils/geo';
 import {
   getGlyphQuads,
   IGlyphQuad,
