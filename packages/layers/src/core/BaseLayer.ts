@@ -1055,7 +1055,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.layerSource.updateClusterData(zoom);
     }
     // source 可能会复用，会在其它layer被修改
-    if(this.layerSource.inited) {
+    if (this.layerSource.inited) {
       this.sourceEvent();
     }
     // this.layerSource.inited 为 true 后，sourceUpdate 事件不会再触发
