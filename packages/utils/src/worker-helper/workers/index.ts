@@ -1,11 +1,13 @@
 import { createWorker, WorkerFarm } from 'web-worker-helper';
 import { lineModel } from './lineModel';
 import { pointFillModel } from './pointFillModel';
+import { polygonFillModel } from './polygonFillModel';
 
 // current support worker
 export const WorkerSourceMap = {
   pointFill: pointFillModel,
   line: lineModel,
+  polygonFill: polygonFillModel,
 };
 
 const workerTypes: Record<string, (data: any) => Promise<any>> = {

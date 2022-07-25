@@ -4,13 +4,13 @@ import {
   IEncodeFeature,
   IModel,
   Triangulation,
+  ILayerConfig,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getMask, polygonFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import {
-  polygonTriangulation,
   polygonTriangulationWithCenter,
 } from '../../core/triangulation';
 import polygon_frag from '../shaders/polygon_frag.glsl';
@@ -78,7 +78,11 @@ export default class FillModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+      workerEnabled = false,
+      enablePicking
+    } = this.layer.getLayerConfig() as Partial<
+    ILayerConfig & IPolygonLayerStyleOptions
+  >;
     this.layer.triangulation = triangulation;
     this.layer
       .buildLayerModel({
@@ -90,8 +94,10 @@ export default class FillModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        workerEnabled,
         workerOptions: {
           modelType: type,
+          enablePicking,
         },
       })
       .then((model) => {
@@ -165,7 +171,7 @@ export default class FillModel extends BaseModel {
         frag: polygon_frag,
         vert: polygon_vert,
         type: 'polygonFill',
-        triangulation: polygonTriangulation,
+        triangulation: polygonFillTriangulation,
       };
     }
   }

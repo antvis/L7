@@ -1,6 +1,7 @@
 import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 import { calculateCentroid } from '../../geo';
 import ExtrudePolyline from './extrude_polyline';
+import earcut from 'earcut';
 
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates, originCoordinates, version } = feature;
@@ -58,5 +59,16 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
     vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
     indices: [0, 1, 2, 2, 3, 0],
     size: coordinates.length,
+  };
+}
+
+export function polygonFillTriangulation(feature: IEncodeFeature) {
+  const { coordinates } = feature;
+  const flattengeo = earcut.flatten(coordinates as number[][][]);
+  const { vertices, dimensions, holes } = flattengeo;
+  return {
+    indices: earcut(vertices, holes, dimensions),
+    vertices,
+    size: dimensions,
   };
 }
