@@ -53,6 +53,8 @@ import Wind from './components/Wind';
 import RasterImageTile from './components/RasterImageTile';
 import RasterDataTile from './components/RasterDataTile';
 
+import SourceTest from './components/SourceTest';
+
 storiesOf('图层渲染流程改造', module)
   .add('pointFill', () => <PointFill />)
   .add('PointExtrue', () => <PointExtrue />)
@@ -105,3 +107,5 @@ storiesOf('图层渲染流程改造', module)
   .add('TilePointText', () => <PointsTextTile />)
   .add('TileRasterImage', () => <RasterImageTile />)
   .add('TileRasterData', () => <RasterDataTile />)
+
+  .add('SourceTest', () => <SourceTest />)
