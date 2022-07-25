@@ -193,7 +193,7 @@ export class TileLayerManager implements ITileLayerManager {
       rampColors,
       rampColorsData: this.rampColorsData,
       // worker
-      workerEnabled
+      workerEnabled,
     };
   }
 
