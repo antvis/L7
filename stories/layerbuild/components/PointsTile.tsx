@@ -19,6 +19,7 @@ export default class Demo extends React.Component {
     const layer = new PointLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
+      workerEnabled: true
     });
     layer
       .source(

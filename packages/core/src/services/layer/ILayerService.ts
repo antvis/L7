@@ -162,6 +162,8 @@ export interface ISubLayerInitOptions {
   coords?: string;
   sourceLayer?: string;
   featureId?: string;
+
+  workerEnabled?: boolean;
 }
 
 export interface ITilePickManager {
