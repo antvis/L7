@@ -1,18 +1,18 @@
 import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
-import { encodePickingColor } from '../../color';
+import { encodePickingColor } from '../color';
 import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
-import { LineTriangulation as triangulation } from './triangulation';
+import { PointFillTriangulation as triangulation } from './triangulation';
 
-export const lineModel = async ({
+export const pointFillModel = async ({
   descriptors,
   features,
   enablePicking,
-  iconMap,
+  shape2d,
 }: {
   descriptors: IVertexAttributeDescriptor[];
   features: IEncodeFeature[];
   enablePicking: boolean;
-  iconMap: any;
+  shape2d: string[];
 }) => {
   const updateFuncs = {
     // fixed feature func
@@ -26,63 +26,38 @@ export const lineModel = async ({
     },
 
     // pointFill feature func
-    a_DistanceAndIndex: (
+    a_Shape: (
       feature: IEncodeFeature,
       featureIdx: number,
       vertex: number[],
       attributeIdx: number,
-      normal: number[],
-      vertexIndex?: number,
     ) => {
-      return vertexIndex === undefined
-        ? [vertex[3], 10]
-        : [vertex[3], vertexIndex];
+      const { shape = 2 } = feature;
+      const shapeIndex = shape2d.indexOf(shape as string);
+      return [shapeIndex];
     },
-    a_Total_Distance: (
+    a_Extrude: (
       feature: IEncodeFeature,
       featureIdx: number,
       vertex: number[],
       attributeIdx: number,
     ) => {
-      return [vertex[5]];
+      const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+      const extrudeIndex = (attributeIdx % 4) * 3;
+      return [
+        extrude[extrudeIndex],
+        extrude[extrudeIndex + 1],
+        extrude[extrudeIndex + 2],
+      ];
     },
     a_Size: (
       feature: IEncodeFeature,
       featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
+      vertex: number,
+      attributeIdx: number[],
     ) => {
-      const { size: pointSize = 1 } = feature;
-      return Array.isArray(pointSize)
-        ? [pointSize[0], pointSize[1]]
-        : [pointSize as number, 0];
-    },
-    a_Normal: (
-      feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
-      normal: number[],
-    ) => {
-      return normal;
-    },
-    a_Miter: (
-      feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
-    ) => {
-      return [vertex[4]];
-    },
-    a_iconMapUV: (
-      feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
-    ) => {
-      const { texture } = feature;
-      const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
-      return [x, y];
+      const { size: pointSize = 5 } = feature;
+      return Array.isArray(pointSize) ? [pointSize[0]] : [pointSize];
     },
   };
 
@@ -166,7 +141,6 @@ export const lineModel = async ({
       });
     }
   });
-
   return {
     descriptors,
     featureLayout,

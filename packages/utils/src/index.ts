@@ -18,4 +18,4 @@ export * from './worker-helper';
 export * from './cull';
 export * from './env';
 export * from './tileset-manager';
-export * from './worker-helper/workers/triangulation';
+export * from './workers/triangulation';

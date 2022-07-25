@@ -1,6 +1,6 @@
 import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 import earcut from 'earcut';
-import { calculateCentroid } from '../../geo';
+import { calculateCentroid } from '../geo';
 import ExtrudePolyline from './extrude_polyline';
 
 export function LineTriangulation(feature: IEncodeFeature) {
