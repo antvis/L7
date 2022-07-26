@@ -36,7 +36,7 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:cdn": "yarn rollup -c",
     "lint:ts": "run-p -c lint:ts-*",
-    "test": "jest",
+    "test": "umi-test --passWithNoTests",
     "sync": "tnpm sync"
   },
   "bugs": {
