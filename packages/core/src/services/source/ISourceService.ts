@@ -80,6 +80,10 @@ export interface ISource {
     properties: Record<string, any>,
   ): void;
   destroy(): void;
+  // Event
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

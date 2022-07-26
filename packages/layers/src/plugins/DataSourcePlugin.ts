@@ -29,7 +29,6 @@ export default class DataSourcePlugin implements ILayerPlugin {
       if (source.inited) {
         this.updateClusterData(layer);
       } else {
-        // @ts-ignore
         source.once('sourceUpdate', () => {
           this.updateClusterData(layer);
           // TODO: layer.hooks.init.call();
