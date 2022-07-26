@@ -1,5 +1,4 @@
 import Source from '@antv/l7-source';
-import './worker';
 
 export * from '@antv/l7-core';
 export * from '@antv/l7-scene';

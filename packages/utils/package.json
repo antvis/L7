@@ -9,6 +9,7 @@
   "files": [
     "lib",
     "es",
+    "dist",
     "README.md"
   ],
   "scripts": {
