@@ -10,15 +10,14 @@ import babel from 'rollup-plugin-babel';
 const { BUILD } = process.env;
 const production = BUILD === 'production';
 const outputFile = production
-  ? 'packages/l7/dist/l7.worker.js'
-  : 'packages/l7/dist/l7.worker.js';
+  ? 'packages/utils/dist/l7-utils.worker.js'
+  : 'packages/utils/dist/l7-utils.worker.js';
 function resolveFile(filePath) {
   return path.join(__dirname, '..', filePath);
 }
 
 module.exports = [
   {
-    // input: resolveFile('packages/layers/src/workers/index.ts'),
     input: resolveFile('packages/utils/src/workers/index.ts'),
     output: {
       file: resolveFile(outputFile),
