@@ -123,7 +123,6 @@ export default class LineWallModel extends BaseModel {
         vertexShader: line_vert,
         fragmentShader: line_frag,
         triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
       })

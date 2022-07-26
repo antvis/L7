@@ -45,8 +45,9 @@ export default class HexagonModel extends BaseModel {
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
-        primitive: gl.TRIANGLES,
         depth: { enable: false },
+        primitive: gl.TRIANGLES,
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
       .then((model) => {

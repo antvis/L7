@@ -99,7 +99,6 @@ export default class LinearLineModel extends BaseModel {
         vertexShader: linear_line_vert,
         fragmentShader: linear_line_frag,
         triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
         depth: { enable: depth },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),

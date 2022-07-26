@@ -131,7 +131,6 @@ export default class LineModel extends BaseModel {
         vertexShader: line_tile_vert,
         fragmentShader: line_tile_frag,
         triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         depth: { enable: depth },
         // depth: { enable: true },

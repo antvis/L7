@@ -27,7 +27,8 @@ export default class Demo extends React.Component {
     // this.test6();
     // this.test7();
     // this.test8();
-    this.test9();
+    // this.test9();
+    this.test10();
   }
 
   private test1() {
@@ -351,6 +352,40 @@ export default class Demo extends React.Component {
         },
       },
     );
+    layer
+      .shape('circle')
+      .size(10)
+      .color('#f00');
+    source.on('sourceUpdate', () => {
+      setTimeout(() => {
+        layer.source(source);
+      }, 2000);
+    });
+    this.scene.addLayer(layer);
+  }
+
+  private test10() {
+    const source = new Source(
+      [
+        {
+          lng: 120,
+          lat: 30,
+        },
+        {
+          lng: 130,
+          lat: 30,
+        },
+      ],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      },
+    );
+
+    const layer = new PointLayer();
     layer
       .shape('circle')
       .size(10)

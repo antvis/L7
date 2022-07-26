@@ -199,7 +199,7 @@ export default class Source extends EventEmitter implements ISource {
         this.executeTrans();
         resolve({});
       } catch (err) {
-        reject();
+        reject(err);
       }
     });
   }

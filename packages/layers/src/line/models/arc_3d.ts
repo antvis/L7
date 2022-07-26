@@ -172,8 +172,6 @@ export default class Arc3DModel extends BaseModel {
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineArcTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
         blend: this.getBlend(),
         segmentNumber,
         stencil: getMask(mask, maskInside),
