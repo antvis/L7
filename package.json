@@ -92,8 +92,6 @@
     "html-webpack-plugin": "^4.3.0",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
-    "jest-electron": "^0.1.11",
-    "jest-puppeteer": "^6.1.1",
     "jest-styled-components": "^6.2.1",
     "lerc": "^3.0.0",
     "lerna": "^3.16.4",
@@ -105,11 +103,8 @@
     "postcss-plugin": "^1.0.0",
     "postcss-url": "^8.0.0",
     "prettier": "^1.19.1",
-    "puppeteer": "^15.5.0",
     "raw-loader": "^4.0.1",
-    "react": "^18.0.0",
     "react-docgen-typescript-loader": "^3.1.0",
-    "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
     "rollup": "^1.27.14",
     "rollup-plugin-analyzer": "^3.2.2",
@@ -155,13 +150,13 @@
     "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
     "storybook": "start-storybook -p 6006",
-    "prebuild": "run-p tsc lint",
+    "prebuild1": "run-p tsc lint",
     "build": "yarn clean && lerna run build",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna exec --stream --no-bail 'tsc --project ./tsconfig.build.json'",
     "fix": "run-p -c 'lint:ts-* --fix'",
     "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md  stories/**/**/*.tsx  *.md",
-    "lint:examples": "eslint examples --fix --ext .js",
+    "lint:examples": "eslint packages/site/examples --fix --ext .js",
     "lint:css": "stylelint 'packages/**/*.js{,x}'",
     "lint:ts-prod": "tslint --fix --config tslint.prod.json 'packages/**/*.ts{,x}'",
     "lint:ts-test": "tslint --fix --config tslint.json 'packages/**/*.{spec,story}.ts{,x}'",
@@ -209,8 +204,7 @@
   "resolutions": {
     "d3-array": "1",
     "monaco-editor-webpack-plugin": "2.0.0",
-    "monaco-editor": "0.21.0",
-    "electron": "11.4.6"
+    "monaco-editor": "0.21.0"
   },
   "tnpm": {
     "mode": "yarn"
