@@ -5,7 +5,11 @@ import {
   IMapService,
   TYPES,
 } from '@antv/l7-core';
-import Source, { DEFAULT_DATA, DEFAULT_PARSER, DEFAULT_SOURCE } from '@antv/l7-source';
+import Source, {
+  DEFAULT_DATA,
+  DEFAULT_PARSER,
+  DEFAULT_SOURCE,
+} from '@antv/l7-source';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
@@ -18,10 +22,12 @@ export default class DataSourcePlugin implements ILayerPlugin {
       let source = layer.getSource();
       if (!source) {
         // TODO: 允许用户不使用 layer 的 source 方法，在这里传入一个默认的替换的默认数据
-        const defaultSourceConfig = DEFAULT_SOURCE[layer.type as ('PointLayer' | 'LineLayer')] || {
+        const defaultSourceConfig = DEFAULT_SOURCE[
+          layer.type as 'PointLayer' | 'LineLayer'
+        ] || {
           data: DEFAULT_DATA,
           options: DEFAULT_PARSER,
-        }
+        };
         const { data, options } = layer.sourceOption || defaultSourceConfig;
         source = new Source(data, options);
         layer.setSource(source);

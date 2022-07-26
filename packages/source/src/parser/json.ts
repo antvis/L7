@@ -61,8 +61,8 @@ export const defaultSource = {
         type: 'json',
         x: 'lng',
         y: 'lat',
-      }
-    }
+      },
+    },
   },
   LineLayer: {
     data: [
@@ -81,9 +81,9 @@ export const defaultSource = {
         x1: 'lng2',
         y1: 'lat2',
       },
-    }
-  }
-}
+    },
+  },
+};
 
 // TODO: 提供默认数据和解析器
 export const defaultData = [
