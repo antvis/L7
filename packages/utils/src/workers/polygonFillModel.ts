@@ -1,4 +1,4 @@
-import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
+import { IEncodeFeature, IVertexAttributeDescriptor } from './interface';
 import { encodePickingColor } from '../color';
 import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
 import { polygonFillTriangulation as triangulation } from './triangulation';
