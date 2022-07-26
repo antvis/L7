@@ -136,12 +136,9 @@ export default class LineModel extends BaseModel {
         depth: { enable: depth },
         // depth: { enable: true },
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'lineTile',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

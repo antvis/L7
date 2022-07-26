@@ -1144,14 +1144,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): any {
+  ): Promise<IModel> {
     const {
       moduleName,
       vertexShader,
       fragmentShader,
       triangulation,
       segmentNumber,
-      workerEnabled,
+      workerEnabled = false,
       workerOptions,
       ...rest
     } = options;
@@ -1209,8 +1209,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         resolve(m);
       }
     });
-
-    // return
   }
 
   public createAttrubutes(

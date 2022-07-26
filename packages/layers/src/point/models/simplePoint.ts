@@ -101,7 +101,6 @@ export default class SimplePointModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      workerEnabled,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 
@@ -115,13 +114,9 @@ export default class SimplePointModel extends BaseModel {
         primitive: gl.POINTS,
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointSimple',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

@@ -75,12 +75,9 @@ export default class ImageModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'rasterImage',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

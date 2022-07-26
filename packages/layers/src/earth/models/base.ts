@@ -103,12 +103,9 @@ export default class BaseEarthModel extends BaseModel {
         triangulation: earthTriangulation,
         depth: { enable: true },
         blend: this.getBlend(),
-        workerOptions: {
-          modelType: 'earthBase',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

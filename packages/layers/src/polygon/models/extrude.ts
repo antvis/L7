@@ -112,12 +112,9 @@ export default class ExtrudeModel extends BaseModel {
         fragmentShader: frag,
         triangulation: PolygonExtrudeTriangulation,
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: type,
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

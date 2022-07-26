@@ -83,12 +83,9 @@ export default class WaterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'polygonWater',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

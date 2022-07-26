@@ -91,16 +91,13 @@ export default class CityBuildModel extends BaseModel {
         fragmentShader: buildFrag,
         triangulation: PolygonExtrudeTriangulation,
         depth: { enable: true },
-        workerOptions: {
-          modelType: 'cityBuilding',
-        },
         cull: {
           enable: true,
           face: gl.BACK,
         },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

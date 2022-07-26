@@ -126,12 +126,9 @@ export default class LineWallModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
-        workerOptions: {
-          modelType: 'lineWall',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

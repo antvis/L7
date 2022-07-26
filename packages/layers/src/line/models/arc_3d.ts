@@ -177,12 +177,9 @@ export default class Arc3DModel extends BaseModel {
         blend: this.getBlend(),
         segmentNumber,
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'lineArc3d' + type,
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

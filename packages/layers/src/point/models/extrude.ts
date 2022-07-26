@@ -136,7 +136,6 @@ export default class ExtrudeModel extends BaseModel {
     const {
       depth = true,
       animateOption: { repeat = 1 },
-      workerEnabled = false,
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
 
@@ -154,36 +153,14 @@ export default class ExtrudeModel extends BaseModel {
         depth: {
           enable: depth,
         },
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointExtrude',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);
         callbackModel([]);
       });
-
-    // return [
-    //   // @ts-ignore
-    //   this.layer.buildLayerModel({
-    //     moduleName: 'pointExtrude2',
-    //     vertexShader: pointExtrudeVert,
-    //     fragmentShader: pointExtrudeFrag,
-    //     triangulation: PointExtrudeTriangulation,
-    //     blend: this.getBlend(),
-    //     cull: {
-    //       enable: true,
-    //       face: getCullFace(this.mapService.version),
-    //     },
-    //     depth: {
-    //       enable: depth,
-    //     },
-    //   }),
-    // ];
   }
   public clearModels() {
     this.dataTexture?.destroy();

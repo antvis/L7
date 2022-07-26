@@ -193,7 +193,6 @@ export default class FillImageModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     this.layer
@@ -209,13 +208,9 @@ export default class FillImageModel extends BaseModel {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointFillImage',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

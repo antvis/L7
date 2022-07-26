@@ -184,7 +184,7 @@ export default class LineModel extends BaseModel {
         },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

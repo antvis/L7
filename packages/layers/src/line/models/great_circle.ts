@@ -139,12 +139,9 @@ export default class GreatCircleModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'lineGreatCircle',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

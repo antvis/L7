@@ -104,7 +104,6 @@ export default class FillModel extends BaseModel {
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
-    const { workerEnabled = false } = this.layer.getLayerConfig();
     this.layer.triangulation = GlobelPointFillTriangulation;
     this.layer
       .buildLayerModel({
@@ -115,13 +114,9 @@ export default class FillModel extends BaseModel {
         depth: { enable: true },
 
         blend: this.getBlend(),
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointEarthFill',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

@@ -318,7 +318,7 @@ export interface ILayer {
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): Promise<unknown>;
+  ): Promise<IModel>;
   createAttrubutes(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,

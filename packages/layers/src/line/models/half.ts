@@ -111,12 +111,9 @@ export default class LineModel extends BaseModel {
         depth: { enable: depth },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'lineHalf',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

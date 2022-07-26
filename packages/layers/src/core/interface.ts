@@ -99,8 +99,6 @@ export interface IPointLayerStyleOptions {
   speed?: number;
   featureId?: string;
   sourceLayer?: string;
-
-  workerEnabled?: boolean;
 }
 
 export interface IPolygonLayerStyleOptions {

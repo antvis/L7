@@ -120,13 +120,10 @@ export default class WindModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
-        workerOptions: {
-          modelType: 'wind',
-        },
       })
       .then((model) => {
-        this.colorModel = model as IModel;
-        callbackModel([model as IModel]);
+        this.colorModel = model;
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

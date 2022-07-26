@@ -44,12 +44,9 @@ export default class EarthBloomSphereModel extends BaseModel {
         triangulation: earthOuterTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
-        workerOptions: {
-          modelType: 'earthBloom',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

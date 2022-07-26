@@ -107,13 +107,11 @@ export default class BillBoardModel extends BaseModel {
         triangulation: this.planeGeometryTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: true },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'geometryBillboard',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

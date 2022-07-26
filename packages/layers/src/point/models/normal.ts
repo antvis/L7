@@ -91,7 +91,6 @@ export default class NormalModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 
@@ -105,13 +104,9 @@ export default class NormalModel extends BaseModel {
         primitive: gl.POINTS,
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointNormal',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

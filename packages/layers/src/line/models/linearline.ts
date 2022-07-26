@@ -103,12 +103,9 @@ export default class LinearLineModel extends BaseModel {
         depth: { enable: depth },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'lineRampColors',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

@@ -165,12 +165,9 @@ export default class PlaneModel extends BaseModel {
           enable: true,
           face: gl.BACK, // gl.FRONT | gl.BACK;
         },
-        workerOptions: {
-          modelType: 'geometryPlane',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

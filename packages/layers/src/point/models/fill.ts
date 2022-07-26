@@ -218,25 +218,12 @@ export default class FillModel extends BaseModel {
         },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);
         callbackModel([]);
       });
-
-    // const models = await this.layer.buildLayerModel({
-    //   moduleName: 'pointfill_' + type,
-    //   vertexShader: vert,
-    //   fragmentShader: frag,
-    //   triangulation: isGlobel
-    //     ? GlobelPointFillTriangulation
-    //     : PointFillTriangulation,
-    //   depth: { enable: isGlobel },
-    //   blend: this.getBlend(),
-    //   stencil: getMask(mask, maskInside),
-    // })
-    // cb([models as IModel])
   }
 
   /**

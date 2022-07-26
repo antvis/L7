@@ -200,7 +200,7 @@ export default class FillModel extends BaseModel {
         },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

@@ -178,7 +178,7 @@ export default class HeatMapModel extends BaseModel {
         },
       },
     });
-    return model as IModel;
+    return model;
   }
 
   private buildHeatmapColor(): IModel {

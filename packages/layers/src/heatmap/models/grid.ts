@@ -47,12 +47,9 @@ export default class GridModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: 'heatmapGrid',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

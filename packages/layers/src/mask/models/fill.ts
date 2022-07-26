@@ -43,12 +43,9 @@ export default class MaskModel extends BaseModel {
             zpass: gl.REPLACE,
           },
         },
-        workerOptions: {
-          modelType: 'mask',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);

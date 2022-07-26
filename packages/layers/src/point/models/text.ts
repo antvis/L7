@@ -194,7 +194,6 @@ export default class TextModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.mapping();
 
@@ -207,13 +206,9 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointText',
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);
@@ -537,7 +532,6 @@ export default class TextModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      workerEnabled = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     this.layer
@@ -549,13 +543,9 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: 'pointText',
-        },
       })
       .then((model) => {
-        this.layer.models = [model as IModel];
+        this.layer.models = [model];
       })
       .catch((err) => {
         console.warn(err);

@@ -134,12 +134,9 @@ export default class SimpleLineModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        workerOptions: {
-          modelType: type,
-        },
       })
       .then((model) => {
-        callbackModel([model as IModel]);
+        callbackModel([model]);
       })
       .catch((err) => {
         console.warn(err);
