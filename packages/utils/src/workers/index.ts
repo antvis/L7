@@ -1,4 +1,4 @@
-import { createWorker, WorkerFarm } from 'web-worker-helper';
+import { createWorker } from 'web-worker-helper';
 import { lineModel } from './lineModel';
 import { pointFillModel } from './pointFillModel';
 import { polygonFillModel } from './polygonFillModel';
