@@ -215,7 +215,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
     } = {};
     return new Promise((resolve, reject) => {
       executeWorkerTask(modelType, {
-        descriptors: this.getPureDescriptors(descriptors),
+        // Tip: worker 不支持传递 function 函数
+        descriptors: this.getDescriptorsWithOutFunc(descriptors),
         features,
         segmentNumber,
         ...restOptions,
@@ -509,7 +510,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     this.attributes = [];
   }
 
-  private getPureDescriptors(descriptors: IVertexAttributeDescriptor[]) {
+  private getDescriptorsWithOutFunc(descriptors: IVertexAttributeDescriptor[]) {
     return descriptors.map((d) => {
       return {
         buffer: d.buffer,
