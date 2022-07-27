@@ -1,5 +1,5 @@
 import PointLayer from '../';
-import  Map from '../../../../maps/src/map';
+import Map from '../../../../maps/src/map';
 import { Scene } from '../../../../scene/src';
 describe('pointLayer', () => {
   const el = document.createElement('div');

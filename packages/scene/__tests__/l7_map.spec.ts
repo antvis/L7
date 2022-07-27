@@ -1,4 +1,3 @@
-
 // @ts-ignore
 import { PolygonLayer } from '@antv/l7-layers';
 import { Map } from '@antv/l7-maps';
