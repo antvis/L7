@@ -79,7 +79,7 @@ export default class Amap2demo_arcLineDir extends React.Component {
         .color('#8C1EB2')
         .style({
           lineType: 'dash',
-          dashArray: [ 25, 5 ]
+          dashArray: [25, 5],
           // forward: false,
           // opacity: 'testOpacity',
           // segmentNumber: 5

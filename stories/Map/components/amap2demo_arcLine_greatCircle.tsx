@@ -48,7 +48,7 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
         .color('#ff0000')
         .style({
           lineType: 'dash',
-          dashArray: [ 5, 5 ],
+          dashArray: [5, 5],
           // opacity: 0.8,
           // blur: 0.99,
         });
