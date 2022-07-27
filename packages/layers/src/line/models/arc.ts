@@ -99,6 +99,7 @@ export default class ArcModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
 
       u_thetaOffset: isNumber(thetaOffset) ? thetaOffset : 0.0,
+      // u_thetaOffset:  0.0,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
@@ -180,6 +181,7 @@ export default class ArcModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     return [
       this.layer.buildLayerModel({
+        // primitive: gl.POINTS,
         moduleName: 'arc2dline' + type,
         vertexShader: vert,
         fragmentShader: frag,

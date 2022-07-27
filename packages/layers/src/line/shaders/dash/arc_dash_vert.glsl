@@ -48,7 +48,7 @@ vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   // return mid;
 }
 float getSegmentRatio(float index) {
-    return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+  return index / (segmentNumber - 1.);
 }
 vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation
@@ -123,11 +123,9 @@ void main() {
     t = unProjCustomCoord(target);
   }
   float total_Distance = pixelDistance(s, t) / 2.0 * PI;
-  
-  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
-  
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / total_Distance;
 
-   styleMappingMat[3].b = segmentIndex / segmentNumber;
+  styleMappingMat[3].b = segmentIndex / segmentNumber;
 
   // styleMappingMat[0][1] - arcThetaOffset
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
@@ -145,5 +143,6 @@ void main() {
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
   }
+  gl_PointSize = 5.0;
   setPickingColor(a_PickingColor);
 }
