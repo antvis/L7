@@ -33,12 +33,7 @@
       "*": ["packages", "typings/*"]
     },
   },
-  // "awesomeTypescriptLoaderOptions": {
-  //   "useBabel": true,
-  //   "babelCore": "@babel/core",
-  //   "useCache": false
-  // },
-  "include": ["packages/core/src"],
+  "include": ["packages"],
   "exclude": ["node_modules", "packages/**/dist","packages/site"]
 
 }
