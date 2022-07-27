@@ -92,6 +92,7 @@
     "html-webpack-plugin": "^4.3.0",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
+    "jest-canvas-mock": "^2.4.0",
     "jest-styled-components": "^6.2.1",
     "lerc": "^3.0.0",
     "lerna": "^3.16.4",
@@ -142,6 +143,7 @@
   },
   "scripts": {
     "dev": "dumi dev",
+    "dev-build": "dumi build",
     "dumi:build": "father build",
     "start": "yarn run site:clean && yarn run site:develop",
     "site:develop": "cross-env BABEL_ENV=site  GATSBY_LOGGER=ink gatsby develop --open -H 0.0.0.0",

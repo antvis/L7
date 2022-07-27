@@ -1,8 +1,8 @@
 module.exports = {
-  "preset": "jest-puppeteer",
-  "globalSetup": "jest-environment-puppeteer/setup",
-  "globalTeardown": "jest-environment-puppeteer/teardown",
-  "testEnvironment": "jest-environment-puppeteer",
+  // "preset": "jest-puppeteer",
+  // "globalSetup": "jest-environment-puppeteer/setup",
+  // "globalTeardown": "jest-environment-puppeteer/teardown",
+  // "testEnvironment": "jest-environment-puppeteer",
   // runner: 'jest-electron/runner',
   // testEnvironment: 'jest-electron/environment',
   // preset: 'ts-jest',
@@ -43,6 +43,6 @@ module.exports = {
     // @see https://github.com/kulshekhar/ts-jest/issues/1130
     '^.+\\.(ts|tsx)$': 'babel-jest'
   },
-  // setupFilesAfterEnv: [ '<rootDir>jest/setupTests.ts' ],
+  setupFilesAfterEnv: [ '<rootDir>jest/setupTests.ts' ],
   snapshotSerializers: [ 'enzyme-to-json/serializer' ]
 };

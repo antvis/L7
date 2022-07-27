@@ -10,7 +10,7 @@ export default defineConfig({
   },
   targets: {
     chrome: 58,
-    browsers: [ 'ie >= 11' ]
+    ie: 11,
   },
   extraBabelPresets:[
     '@babel/preset-typescript'
