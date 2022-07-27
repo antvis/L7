@@ -150,7 +150,7 @@
     "site:deploy": "yarn run site:build && gh-pages -d public",
     "site:publish": "gh-pages -d public",
     "storybook": "start-storybook -p 6006",
-    "prebuild1": "run-p tsc lint",
+    "prebuild": "run-p tsc lint",
     "build": "yarn clean && lerna run build",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna exec --stream --no-bail 'tsc --project ./tsconfig.build.json'",
