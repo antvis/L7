@@ -2,7 +2,6 @@ import { LineLayer, Scene, PointLayer, Marker, MarkerLayer } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
-
 export default class SimpleLine extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -15,10 +14,7 @@ export default class SimpleLine extends React.Component {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [
-          96.328125,
-          38.685509760012
-        ],
+        center: [96.328125, 38.685509760012],
         // pitch: 75,
         zoom: 4,
         // rotation: -30,
@@ -28,59 +24,35 @@ export default class SimpleLine extends React.Component {
     this.scene = scene;
 
     const layer = new LineLayer({})
-    .source({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                90.791015625,
-                38.75408327579141
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [90.791015625, 38.75408327579141],
+                [90.87890625, 33.797408767572485],
+                [95.185546875, 32.76880048488168],
+                [95.537109375, 34.08906131584994],
+                [96.328125, 38.685509760012],
+                [100.107421875, 38.34165619279595],
+                [101.953125, 36.80928470205937],
+                [100.107421875, 34.95799531086792],
               ],
-              [
-                90.87890625,
-                33.797408767572485
-              ],
-              [
-                95.185546875,
-                32.76880048488168
-              ],
-              [
-                95.537109375,
-                34.08906131584994
-              ],
-              [
-                96.328125,
-                38.685509760012
-              ],
-              [
-                100.107421875,
-                38.34165619279595
-              ],
-              [
-                101.953125,
-                36.80928470205937
-              ],
-              [
-                100.107421875,
-                34.95799531086792
-              ]
-            ]
-          }
-        }
-      ]
-    })
-    .size(1)
-    .shape('simple')
-    .color('rgb(22, 119, 255)')
-    .style({
-      sourceColor: '#f00',
-      targetColor: '#0f0',
-    });
+            },
+          },
+        ],
+      })
+      .size(1)
+      .shape('simple')
+      .color('rgb(22, 119, 255)')
+      .style({
+        sourceColor: '#f00',
+        targetColor: '#0f0',
+      });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
