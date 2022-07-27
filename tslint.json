@@ -26,6 +26,7 @@
   },
   "linterOptions": {
     "exclude": [
+      "stories/**",
       "**/*.d.ts",
       "**/data/*.ts",
       "**/*.{test,story}.ts{,x}",

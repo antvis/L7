@@ -6,6 +6,7 @@ export default {
   cjs: {
     output:'lib'
   },
+  transformer:'babel',
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
   },

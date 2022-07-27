@@ -12,6 +12,7 @@ export default defineConfig({
     chrome: 58,
     ie: 11,
   },
+  esbuild:false,
   extraBabelPresets:[
     '@babel/preset-typescript'
   ],
