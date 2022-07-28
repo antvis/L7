@@ -28,7 +28,8 @@ export default class Amap2demo_imageLayer extends React.Component {
       const layer = new ImageLayer({});
       layer
         .source(
-          'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
+          // 'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
+          'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Al3JR5Hdg0cAAAAAAAAAAAAAARQnAQ',
           {
             parser: {
               type: 'image',

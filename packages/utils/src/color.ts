@@ -53,8 +53,8 @@ export interface IImagedata {
 export function generateColorRamp(
   colorRamp: IColorRamp,
 ): ImageData | IImagedata {
-  const canvas = $window.document.createElement('canvas');
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  let canvas = $window.document.createElement('canvas');
+  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
   const gradient = ctx.createLinearGradient(0, 0, 256, 1);
@@ -83,9 +83,17 @@ export function generateColorRamp(
       imageData.data[i + 2] = data[i + 2];
       imageData.data[i + 3] = data[i + 3];
     }
+     // @ts-ignore
+     canvas = null;
+     // @ts-ignore
+     ctx = null
     return imageData;
   } else {
     data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
+    // @ts-ignore
+    canvas = null;
+    // @ts-ignore
+    ctx = null
     return { data, width: 256, height: 1 };
   }
 }

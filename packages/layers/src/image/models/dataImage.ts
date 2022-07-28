@@ -13,7 +13,7 @@ import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/dataImage_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';
 
-export default class ImageModel extends BaseModel {
+export default class ImageDataModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
   private rampColors: any;
@@ -37,7 +37,6 @@ export default class ImageModel extends BaseModel {
       this.updateColorTexure();
       this.rampColors = rampColors;
     }
-
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
