@@ -74,6 +74,7 @@ import SimpleLine from './components/simpleLine'
 import Cluster from './components/cluster'
 import Mask from './components/mask'
 import PolygonExteudeTex from './components/polygon_extrudeTex';
+import DataImagelayer from './components/dataImagelayer';
 import BugFix from './components/bugfix'
 
 // @ts-ignore
@@ -153,4 +154,5 @@ storiesOf('地图方法', module)
         .add('Cluster', () => <Cluster/>)
         .add('Mask', () => <Mask/>)
         .add('PolygonExteudeTex', () => <PolygonExteudeTex/>)
+        .add('DataImagelayer', () => <DataImagelayer/>)
         .add('BugFix', () => <BugFix/>)

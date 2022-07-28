@@ -167,6 +167,18 @@ export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
   maskInside?: boolean;
+
+  domain?: [number, number];
+  noDataValue?: number;
+  clampLow?: boolean;
+  clampHigh?: boolean;
+  rampColors?: IColorRamp;
+  rampColorsData?: ImageData | IImagedata;
+  pixelConstant?: number;
+  pixelConstantR?: number;
+  pixelConstantG?: number;
+  pixelConstantB?: number;
+  pixelConstantRGB?: number;
 }
 
 export interface IGeometryLayerStyleOptions {
