@@ -83,17 +83,17 @@ export function generateColorRamp(
       imageData.data[i + 2] = data[i + 2];
       imageData.data[i + 3] = data[i + 3];
     }
-     // @ts-ignore
-     canvas = null;
-     // @ts-ignore
-     ctx = null
+    // @ts-ignore
+    canvas = null;
+    // @ts-ignore
+    ctx = null;
     return imageData;
   } else {
     data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
     // @ts-ignore
     canvas = null;
     // @ts-ignore
-    ctx = null
+    ctx = null;
     return { data, width: 256, height: 1 };
   }
 }

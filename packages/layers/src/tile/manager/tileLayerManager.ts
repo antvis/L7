@@ -213,7 +213,6 @@ export class TileLayerManager implements ITileLayerManager {
     this.tileConfigManager.setConfig('zIndex', this.initOptions.zIndex);
     this.tileConfigManager.setConfig('mask', this.initOptions.mask);
 
-
     if (this.parent.type === 'RasterLayer') {
       // Raster Tile Layer Need Listen
       this.tileConfigManager.setConfig(
@@ -224,12 +223,26 @@ export class TileLayerManager implements ITileLayerManager {
       this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
       this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
 
-      this.tileConfigManager.setConfig('pixelConstant', this.initOptions.pixelConstant);
-      this.tileConfigManager.setConfig('pixelConstantR', this.initOptions.pixelConstantR);
-      this.tileConfigManager.setConfig('pixelConstantG', this.initOptions.pixelConstantG);
-      this.tileConfigManager.setConfig('pixelConstantB', this.initOptions.pixelConstantB);
-      this.tileConfigManager.setConfig('pixelConstantRGB', this.initOptions.pixelConstantRGB);
-
+      this.tileConfigManager.setConfig(
+        'pixelConstant',
+        this.initOptions.pixelConstant,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantR',
+        this.initOptions.pixelConstantR,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantG',
+        this.initOptions.pixelConstantG,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantB',
+        this.initOptions.pixelConstantB,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantRGB',
+        this.initOptions.pixelConstantRGB,
+      );
     } else {
       // Vector Tile Layer Need Listen
       this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);
