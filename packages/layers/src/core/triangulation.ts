@@ -11,11 +11,11 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
-import SimpleLine from '../utils/simpleLine';
 import {
   calculateCentroid,
   calculatePointsCenterAndRadius,
 } from '../utils/geo';
+import SimpleLine from '../utils/simpleLine';
 import extrudePolygon, {
   extrude_PolygonNormal,
   fillPolygon,

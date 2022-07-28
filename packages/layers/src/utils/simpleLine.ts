@@ -9,7 +9,6 @@ export function direction(out: vec2, a: vec2, b: vec2) {
   return out;
 }
 
-
 export default class ExtrudePolyline {
   public complex: {
     positions: number[];
@@ -18,9 +17,8 @@ export default class ExtrudePolyline {
     indexes: number[];
   };
 
-  
   private started: boolean = false;
-  
+
   private totalDistance: number = 0;
   private currentIndex: number = 0;
 
@@ -38,9 +36,9 @@ export default class ExtrudePolyline {
     if (points.length <= 1) {
       return complex;
     }
-    
+
     this.started = false;
-    
+
     this.totalDistance = 0;
 
     const total = points.length;
@@ -57,42 +55,27 @@ export default class ExtrudePolyline {
     }
     return complex;
   }
-  private simpleSegment(
-    complex: any,
-    index: number,
-    last: vec3,
-    cur: vec3,
-  ) {
+  private simpleSegment(complex: any, index: number, last: vec3, cur: vec3) {
     let count = 0;
     const indices = complex.indices;
     const positions = complex.positions;
     const flatCur = aProjectFlat([cur[0], cur[1]]) as [number, number];
     const flatLast = aProjectFlat([last[0], last[1]]) as [number, number];
-    
+
     direction(lineA, flatCur, flatLast);
-  
+
     const segmentDistance = this.lineSegmentDistance(flatCur, flatLast);
     this.totalDistance += segmentDistance;
 
     if (!this.started) {
       this.started = true;
-      this.extrusions(
-        positions,
-        last,
-        this.totalDistance - segmentDistance,
-      );
+      this.extrusions(positions, last, this.totalDistance - segmentDistance);
     }
 
-    
-    this.extrusions(
-      positions,
-      cur,
-      this.totalDistance,
-    );
+    this.extrusions(positions, cur, this.totalDistance);
     indices.push(index + 0, index + 1, index + 2);
-    indices.push(index + 2, index + 1, index + 3 );
+    indices.push(index + 2, index + 1, index + 3);
     count += 2;
-    
 
     return count;
   }
