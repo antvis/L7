@@ -7,7 +7,7 @@ import {
   ITexture2D,
   Point,
 } from '@antv/l7-core';
-import { FrequencyController } from '@antv/l7-utils';
+import { FrequencyController, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -28,7 +28,6 @@ const defaultRampColors = {
 
 export default class WindModel extends BaseModel {
   protected texture: ITexture2D;
-
   private colorModel: IModel;
   private wind: IWind;
   private imageCoords: [Point, Point];
@@ -51,8 +50,22 @@ export default class WindModel extends BaseModel {
   }
 
   public initModels() {
+    const {
+      uMin = -21.32,
+      uMax = 26.8,
+      vMin = -21.57,
+      vMax = 21.42,
+      fadeOpacity = 0.996,
+      speedFactor = 0.25,
+      dropRate = 0.003,
+      dropRateBump = 0.01,
+      rampColors = defaultRampColors,
+      sizeScale = 0.5,
+      // mask
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
     const { createTexture2D } = this.rendererService;
-
     const source = this.layer.getSource();
     this.texture = createTexture2D({
       height: 0,
@@ -63,18 +76,6 @@ export default class WindModel extends BaseModel {
     this.imageCoords = source.data.dataArray[0].coordinates as [Point, Point];
 
     source.data.images.then((imageData: HTMLImageElement[]) => {
-      const {
-        uMin = -21.32,
-        uMax = 26.8,
-        vMin = -21.57,
-        vMax = 21.42,
-        fadeOpacity = 0.996,
-        speedFactor = 0.25,
-        dropRate = 0.003,
-        dropRateBump = 0.01,
-        rampColors = defaultRampColors,
-        sizeScale = 0.5,
-      } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
       this.sizeScale = sizeScale;
 
       const { imageWidth, imageHeight } = this.getWindSize();
@@ -119,6 +120,7 @@ export default class WindModel extends BaseModel {
       primitive: gl.TRIANGLES,
       depth: { enable: false },
       blend: this.getBlend(),
+      // stencil: getMask(mask, maskInside),
     });
 
     return [this.colorModel];

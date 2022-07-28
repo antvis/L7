@@ -26,11 +26,22 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     const type = this.getModelType();
     const defaultConfig = {
       image: {},
+      dataImage: {},
     };
     return defaultConfig[type];
   }
 
   protected getModelType(): ImageModelType {
-    return 'image';
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
+    const shape = shapeAttribute?.scale?.field as ImageModelType;
+    if (shape === 'dataImage') {
+      return 'dataImage';
+    } else if (shape === 'image') {
+      return 'image';
+    } else {
+      return 'image';
+    }
   }
 }

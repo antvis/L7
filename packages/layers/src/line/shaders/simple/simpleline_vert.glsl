@@ -47,8 +47,9 @@ void main() {
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
 
-  float d_distance_ratio; // 当前点位距离占线总长的比例
-  v_color = a_Color;  
+  
+  v_color = a_Color; 
+  styleMappingMat[3][0] = a_Distance / a_Total_Distance;
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 

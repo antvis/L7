@@ -18,14 +18,14 @@ void main() {
   float d_distance_ratio = styleMappingMat[3].r; // 当前点位距离占线总长的比例
   gl_FragColor = v_color;
   gl_FragColor.a *= opacity; // 全局透明度
- // dash line
  
-  float flag = 0.;
   float dashLength = mod(d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
   if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
-    flag = 1.;
+    // 实线部分
+  } else {
+    // 虚线部分
+    discard
   }
-  gl_FragColor.a *=flag;
 
   gl_FragColor = filterColor(gl_FragColor);
 }

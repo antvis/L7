@@ -43,12 +43,14 @@ export default class Amap2demo_arcLine_greatCircle extends React.Component {
             },
           },
         )
-        .size(1)
+        .size(5)
         .shape('greatcircle')
         .color('#ff0000')
         .style({
-          opacity: 0.8,
-          blur: 0.99,
+          lineType: 'dash',
+          dashArray: [5, 5],
+          // opacity: 0.8,
+          // blur: 0.99,
         });
       scene.addLayer(layer);
     });

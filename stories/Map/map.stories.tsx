@@ -28,7 +28,6 @@ import Amap2demo_arcLineLinear from './components/amap2demo_arcLineLinear';
 import Amap2demo_arcLine3DTex from './components/amap2demo_arcLine3DTex';
 import Amap2demo_lineStreet from './components/amap2demo_lineStreet';
 import Amap2demo_lineLinear from './components/amap2demo_lineLinear';
-import Amap2demo_road from './components/amap2demo_road';
 import Amap2demo_road2 from './components/amap2demo_road2';
 
 import Amap2demo_heatmap from "./components/amap2demo_heatmap"
@@ -64,7 +63,6 @@ import Amap2demo_textOffset from "./components/amap2demo_textOffset"
 import ShapeUpdate from './components/shapeUpdate'
 import BusLine from './components/busline'
 import AmapPlugin from './components/plugin'
-import PointUV from './components/pointUV'
 import DestroyClear from './components/destroyClear'
 import PlaneLine from './components/planeLine'
 import Slider from './components/slider'
@@ -72,12 +70,11 @@ import WindMap from './components/amap2demo_wind'
 import SimplePoint from './components/simplePoint';
 import LineWall from './components/linewall'
 import GridTile from './components/gridTile'
-import GridTile2 from './components/gridTile2'
+import SimpleLine from './components/simpleLine'
 import Cluster from './components/cluster'
-import Hot from './components/hot'
-import Hot2 from './components/hot2'
 import Mask from './components/mask'
 import PolygonExteudeTex from './components/polygon_extrudeTex';
+import DataImagelayer from './components/dataImagelayer';
 import BugFix from './components/bugfix'
 
 // @ts-ignore
@@ -110,7 +107,6 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 line_winds', () => <Amap2demo_winds />)
         .add('高德地图2.0 line_Street', () => <Amap2demo_lineStreet />)
         .add('高德地图2.0 line_Linear', () => <Amap2demo_lineLinear />)
-        .add('高德地图2.0 road', () => <Amap2demo_road />)
         .add('高德地图2.0 road2', () => <Amap2demo_road2 />)
 
         .add('高德地图2.0 heatmap', () => <Amap2demo_heatmap />)
@@ -147,7 +143,6 @@ storiesOf('地图方法', module)
 
         .add('WindMap', () => <WindMap/>)
         .add('AmapPlugin', () => <AmapPlugin/>)
-        .add('PointUV', () => <PointUV/>)
         .add('DestroyClear', () => <DestroyClear/>)
         .add('PlaneLine', () => <PlaneLine/>)
         .add('Slider', () => <Slider/>)
@@ -155,10 +150,9 @@ storiesOf('地图方法', module)
         .add('LineWall', () => <LineWall/>)
         .add('BusLine', () => <BusLine/>)
         .add('GridTile', () => <GridTile/>)
-        .add('GridTile2', () => <GridTile2/>)
+        .add('SimpleLine', () => <SimpleLine/>)
         .add('Cluster', () => <Cluster/>)
-        .add('Hot1', () => <Hot/>)
-        .add('Hot2', () => <Hot2/>)
         .add('Mask', () => <Mask/>)
         .add('PolygonExteudeTex', () => <PolygonExteudeTex/>)
+        .add('DataImagelayer', () => <DataImagelayer/>)
         .add('BugFix', () => <BugFix/>)
