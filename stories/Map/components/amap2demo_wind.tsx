@@ -78,13 +78,13 @@ export default class WindMap extends React.Component {
       };
 
       fetch(
-        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json'
+        'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
       )
-        .then(res => res.json())
-        .then(maskData => {
+        .then((res) => res.json())
+        .then((maskData) => {
           const layer = new WindLayer({
             mask: true,
-            maskfence: maskData
+            maskfence: maskData,
           });
           layer
             .source(
@@ -108,87 +108,85 @@ export default class WindMap extends React.Component {
               sizeScale: styleOptions.sizeScale,
             });
           scene.addLayer(layer);
-  
-        /*** 运行时修改样式属性 ***/
-        const gui = new dat.GUI();
-        this.gui = gui;
-  
-        const pointFolder = gui.addFolder('风场数据');
-        pointFolder
-          .add(styleOptions, 'numParticles', 0, 65535, 1)
-          .onChange((num: number) => {
-            layer.style({
-              numParticles: num,
-            });
-          });
-  
-        pointFolder
-          .add(styleOptions, 'uMin', -100, 100, 1)
-          .onChange((num: number) => {
-            layer.style({
-              uMin: num,
-            });
-          });
-  
-        pointFolder
-          .add(styleOptions, 'uMax', -100, 100, 1)
-          .onChange((num: number) => {
-            layer.style({
-              uMax: num,
-            });
-          });
-  
-        pointFolder
-          .add(styleOptions, 'vMin', -100, 100, 1)
-          .onChange((num: number) => {
-            layer.style({
-              vMin: num,
-            });
-          });
-  
-        pointFolder
-          .add(styleOptions, 'vMax', -100, 100, 1)
-          .onChange((num: number) => {
-            layer.style({
-              vMax: num,
-            });
-          });
-  
-        pointFolder
-          .add(styleOptions, 'fadeOpacity', 0.9, 1, 0.01)
-          .onChange((num: number) => {
-            layer.style({
-              fadeOpacity: num,
-            });
-          });
-  
-        pointFolder
-          .add(styleOptions, 'sizeScale', 0, 2, 0.01)
-          .onChange((num: number) => {
-            layer.style({
-              sizeScale: num,
-            });
-          });
-  
-        pointFolder
-          .addColor(styleOptions.rampColors, '0.6')
-          .onChange((color: string) => {
-            layer.style({
-              rampColors: {
-                0.0: '#3288bd',
-                0.1: '#66c2a5',
-                0.2: '#abdda4',
-                0.3: '#e6f598',
-                0.4: '#fee08b',
-                0.5: '#fdae61',
-                0.6: color,
-                1.0: '#d53e4f',
-              },
-            });
-          });
-        });
 
-       
+          /*** 运行时修改样式属性 ***/
+          const gui = new dat.GUI();
+          this.gui = gui;
+
+          const pointFolder = gui.addFolder('风场数据');
+          pointFolder
+            .add(styleOptions, 'numParticles', 0, 65535, 1)
+            .onChange((num: number) => {
+              layer.style({
+                numParticles: num,
+              });
+            });
+
+          pointFolder
+            .add(styleOptions, 'uMin', -100, 100, 1)
+            .onChange((num: number) => {
+              layer.style({
+                uMin: num,
+              });
+            });
+
+          pointFolder
+            .add(styleOptions, 'uMax', -100, 100, 1)
+            .onChange((num: number) => {
+              layer.style({
+                uMax: num,
+              });
+            });
+
+          pointFolder
+            .add(styleOptions, 'vMin', -100, 100, 1)
+            .onChange((num: number) => {
+              layer.style({
+                vMin: num,
+              });
+            });
+
+          pointFolder
+            .add(styleOptions, 'vMax', -100, 100, 1)
+            .onChange((num: number) => {
+              layer.style({
+                vMax: num,
+              });
+            });
+
+          pointFolder
+            .add(styleOptions, 'fadeOpacity', 0.9, 1, 0.01)
+            .onChange((num: number) => {
+              layer.style({
+                fadeOpacity: num,
+              });
+            });
+
+          pointFolder
+            .add(styleOptions, 'sizeScale', 0, 2, 0.01)
+            .onChange((num: number) => {
+              layer.style({
+                sizeScale: num,
+              });
+            });
+
+          pointFolder
+            .addColor(styleOptions.rampColors, '0.6')
+            .onChange((color: string) => {
+              layer.style({
+                rampColors: {
+                  0.0: '#3288bd',
+                  0.1: '#66c2a5',
+                  0.2: '#abdda4',
+                  0.3: '#e6f598',
+                  0.4: '#fee08b',
+                  0.5: '#fdae61',
+                  0.6: color,
+                  1.0: '#d53e4f',
+                },
+              });
+            });
+        });
     });
   }
 

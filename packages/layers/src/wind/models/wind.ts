@@ -19,7 +19,7 @@ const defaultRampColors = {
   0.0: '#3288bd',
   0.1: '#66c2a5',
   0.2: '#abdda4',
-  0.3: '#e6f598', 
+  0.3: '#e6f598',
   0.4: '#fee08b',
   0.5: '#fdae61',
   0.6: '#f46d43',
@@ -76,7 +76,6 @@ export default class WindModel extends BaseModel {
     this.imageCoords = source.data.dataArray[0].coordinates as [Point, Point];
 
     source.data.images.then((imageData: HTMLImageElement[]) => {
-     
       this.sizeScale = sizeScale;
 
       const { imageWidth, imageHeight } = this.getWindSize();

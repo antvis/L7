@@ -46,27 +46,33 @@ export default class Amap2demo_rasterLayer extends React.Component {
     this.scene = scene;
 
     const point = new PointLayer()
-    .source([{
-      lng: 120, lat: 30
-    }], {
-      parser: {
-        type: 'json',
-        x: 'lng',
-        y: 'lat'
-      }
-    })
-    .shape('circle')
-    .size(10)
-    .color('#f00')
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .size(10)
+      .color('#f00');
 
-    scene.addLayer(point)
+    scene.addLayer(point);
 
     const tiffdata = await this.getTiffData();
-    
+
     const layer = new RasterLayer({});
     const mindata = -0;
     const maxdata = 8000;
-    
+
     layer
       .source(tiffdata.data, {
         parser: {
@@ -91,7 +97,7 @@ export default class Amap2demo_rasterLayer extends React.Component {
           positions: [0, 0.25, 0.5, 0.75, 1.0],
         },
       });
-      
+
     scene.addLayer(layer);
   }
 
