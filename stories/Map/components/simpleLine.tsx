@@ -1,5 +1,5 @@
 import { LineLayer, Scene, PointLayer, Marker, MarkerLayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Map } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class SimpleLine extends React.Component {
@@ -13,7 +13,7 @@ export default class SimpleLine extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [96.328125, 38.685509760012],
         // pitch: 75,
         zoom: 4,
@@ -41,6 +41,17 @@ export default class SimpleLine extends React.Component {
                 [100.107421875, 38.34165619279595],
                 [101.953125, 36.80928470205937],
                 [100.107421875, 34.95799531086792],
+              ],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [90.791015625, 38.75408327579141],
+                [95, 45],
               ],
             },
           },

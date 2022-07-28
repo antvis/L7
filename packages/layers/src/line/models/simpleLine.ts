@@ -1,9 +1,7 @@
 import {
   AttributeType,
   gl,
-  IAnimateOption,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
