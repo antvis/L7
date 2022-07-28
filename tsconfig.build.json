@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "noEmit": false,
     "declaration": true,
+    "emitDeclarationOnly": false,
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
@@ -21,3 +23,4 @@
   },
   "exclude": ["**/*.story.*", "**/__tests__/**/*", "**/*.spec.*", "dist"],
 }
+
