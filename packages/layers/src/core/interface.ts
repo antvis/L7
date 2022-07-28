@@ -158,6 +158,9 @@ export interface IWindLayerStyleOptions {
     [key: number]: string;
   };
   sizeScale?: number;
+
+  mask?: boolean;
+  maskInside?: boolean;
 }
 
 export interface IImageLayerStyleOptions {
