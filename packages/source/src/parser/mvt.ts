@@ -10,7 +10,7 @@ import {
   VectorTileFeature,
   VectorTileLayer,
 } from '@mapbox/vector-tile';
-import { Feature } from 'geojson';
+import { Feature } from '@turf/helpers';
 import Protobuf from 'pbf';
 import { IParserData, IRasterTileParserCFG } from '../interface';
 

@@ -51,7 +51,8 @@
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",
     "rollup": "^2.3.3",
-    "rollup-plugin-less": "^1.1.2"
+    "rollup-plugin-less": "^1.1.2",
+    "three": "^0.115.0"
   },
   "devDependencies": {
     "three": "^0.115.0"

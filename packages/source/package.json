@@ -14,11 +14,10 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.build.json",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
-     "build": "father build",
+    "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "lint:ts": "run-p -c lint:ts-*",
     "test": "umi-test --passWithNoTests",
     "sync": "tnpm sync"
   },
@@ -49,6 +48,7 @@
     "@types/lodash": "^4.14.138",
     "@types/mapbox__vector-tile": "^1.3.0",
     "@types/pbf": "^3.0.2"
+  
   },
   "gitHead": "f63aea6c9140aac41f1e842fd7fef34502bfeec5",
   "publishConfig": {

@@ -26,6 +26,7 @@
     "@babel/runtime": "^7.7.7",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.1.4",
+    "eventemitter3": "^4.0.0",
     "d3-color": "^1.4.0"
   },
   "devDependencies": {

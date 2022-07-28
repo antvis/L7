@@ -1,5 +1,3 @@
-// @ts-ignore
-import * as GeoTIFF from 'geotiff';
 import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
