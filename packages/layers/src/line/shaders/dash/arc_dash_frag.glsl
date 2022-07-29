@@ -21,7 +21,7 @@ void main() {
   float dashLength = mod(d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
   if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
     flag = 1.;
-  }
+  };
   gl_FragColor.a *=flag;
   
   gl_FragColor = filterColor(gl_FragColor);

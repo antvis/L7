@@ -54,7 +54,7 @@ void main() {
     } else {
       // 虚线部分
       discard;
-    }
+    };
   }
 
   // 设置弧线的动画模式
