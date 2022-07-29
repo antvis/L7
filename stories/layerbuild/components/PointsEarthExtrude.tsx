@@ -16,7 +16,7 @@ export default class Demo extends React.Component {
       }),
     });
 
-    const pointlayer = new PointLayer({ layerType: 'earthExtrude' })
+    const pointlayer = new PointLayer({ })
       .source(
         [
           { lng: 121.61865234375, lat: 25.29437116258816 },
