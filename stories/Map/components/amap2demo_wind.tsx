@@ -29,26 +29,25 @@ export default class WindMap extends React.Component {
     });
     this.scene = scene;
 
-     const styleOptions = {
-        uMin: -21.32,
-        uMax: 26.8,
-        vMin: -21.57,
-        vMax: 21.42,
-        numParticles: 65535 / 2,
-        fadeOpacity: 0.996,
-        rampColors: {
-          0.0: '#3288bd',
-          0.1: '#66c2a5',
-          0.2: '#abdda4',
-          0.3: '#e6f598',
-          0.4: '#fee08b',
-          0.5: '#fdae61',
-          0.6: '#f46d43', // f46d43
-          1.0: '#d53e4f',
-        },
-        sizeScale: 1,
-      };
-
+    const styleOptions = {
+      uMin: -21.32,
+      uMax: 26.8,
+      vMin: -21.57,
+      vMax: 21.42,
+      numParticles: 65535 / 2,
+      fadeOpacity: 0.996,
+      rampColors: {
+        0.0: '#3288bd',
+        0.1: '#66c2a5',
+        0.2: '#abdda4',
+        0.3: '#e6f598',
+        0.4: '#fee08b',
+        0.5: '#fdae61',
+        0.6: '#f46d43', // f46d43
+        1.0: '#d53e4f',
+      },
+      sizeScale: 1,
+    };
 
     // const pointLayer = new PointLayer({ zIndex: 1 })
     //   .source(

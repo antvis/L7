@@ -396,7 +396,6 @@ export class Wind {
     this.drawFullTexture(this.backgroundTexture, this.fadeOpacity);
     this.drawParticles();
 
-
     this.pixels = new Uint8Array(4 * this.width * this.height);
     gl.readPixels(
       0,

@@ -50,10 +50,6 @@ export default class WindModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  private getZoomScale() {
-    return Math.min(((this.cacheZoom + 4) / 30) * 2, 2);
-  }
-
   public initModels() {
     const {
       uMin = -21.32,
@@ -82,8 +78,8 @@ export default class WindModel extends BaseModel {
     this.imageCoords = source.data?.dataArray[0].coordinates as [Point, Point];
 
     source.data?.images?.then((imageData: HTMLImageElement[]) => {
-      this.sizeScale = sizeScale * this.getZoomScale()
-      
+      this.sizeScale = sizeScale * this.getZoomScale();
+
       const { imageWidth, imageHeight } = this.getWindSize();
 
       const options: IWindProps = {
@@ -108,8 +104,7 @@ export default class WindModel extends BaseModel {
         image: imageData[0],
       });
       this.texture?.destroy();
-      
-   
+
       this.texture = createTexture2D({
         width: imageWidth,
         height: imageHeight,
@@ -137,8 +132,14 @@ export default class WindModel extends BaseModel {
     const p1 = this.mapService.lngLatToPixel(this.imageCoords[0]);
     const p2 = this.mapService.lngLatToPixel(this.imageCoords[1]);
 
-    const imageWidth = Math.min(Math.floor((p2.x - p1.x) * this.sizeScale), 2048);
-    const imageHeight = Math.min(Math.floor((p1.y - p2.y) * this.sizeScale), 2048);
+    const imageWidth = Math.min(
+      Math.floor((p2.x - p1.x) * this.sizeScale),
+      2048,
+    );
+    const imageHeight = Math.min(
+      Math.floor((p1.y - p2.y) * this.sizeScale),
+      2048,
+    );
     return { imageWidth, imageHeight };
   }
 
@@ -189,6 +190,10 @@ export default class WindModel extends BaseModel {
     });
   }
 
+  private getZoomScale() {
+    return Math.min(((this.cacheZoom + 4) / 30) * 2, 2);
+  }
+
   private drawWind() {
     if (this.wind) {
       const {
@@ -206,7 +211,10 @@ export default class WindModel extends BaseModel {
       } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
       let newNumParticles = numParticles;
       const currentZoom = Math.floor(this.mapService.getZoom());
-      if ((typeof sizeScale === 'number' && sizeScale !== this.sizeScale) || currentZoom !== this.cacheZoom) {
+      if (
+        (typeof sizeScale === 'number' && sizeScale !== this.sizeScale) ||
+        currentZoom !== this.cacheZoom
+      ) {
         const zoomScale = this.getZoomScale();
         this.sizeScale = sizeScale;
         newNumParticles *= zoomScale;
@@ -225,7 +233,7 @@ export default class WindModel extends BaseModel {
       this.wind.speedFactor = speedFactor;
       this.wind.dropRate = dropRate;
       this.wind.dropRateBump = dropRateBump;
-      
+
       const { d, w, h } = this.wind.draw();
       // TODO: 恢复 L7 渲染流程中 gl 状态
       this.rendererService.setBaseState();
@@ -239,13 +247,13 @@ export default class WindModel extends BaseModel {
 
   private drawColorMode() {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-    
-    this.layer.masks.map(m => {
+
+    this.layer.masks.map((m) => {
       m.hooks.beforeRenderData.call();
       m.hooks.beforeRender.call();
       m.render();
       m.hooks.afterRender.call();
-    })
+    });
     this.colorModel.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
