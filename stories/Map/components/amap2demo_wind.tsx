@@ -19,64 +19,63 @@ export default class WindMap extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
+      stencil: true,
       map: new GaodeMap({
-        center: [40, 30.3628],
+        center: [105, 35],
         pitch: 0,
         style: 'normal',
-        zoom: 2,
-        viewMode: '3D',
+        zoom: 4,
       }),
     });
     this.scene = scene;
 
-    const pointLayer = new PointLayer({ zIndex: 1 })
-      .source(
-        [
-          {
-            lng: 121.107846,
-            lat: 30.267069,
-          },
-        ],
-        {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        },
-      )
-      .shape('circle')
-      .color('#f00')
-      .active(true)
-      .size(40)
-      .style({
-        stroke: '#fff',
-        storkeWidth: 2,
-      });
+    const styleOptions = {
+      uMin: -21.32,
+      uMax: 26.8,
+      vMin: -21.57,
+      vMax: 21.42,
+      numParticles: 65535 / 2,
+      fadeOpacity: 0.996,
+      rampColors: {
+        0.0: '#3288bd',
+        0.1: '#66c2a5',
+        0.2: '#abdda4',
+        0.3: '#e6f598',
+        0.4: '#fee08b',
+        0.5: '#fdae61',
+        0.6: '#f46d43', // f46d43
+        1.0: '#d53e4f',
+      },
+      sizeScale: 1,
+    };
+
+    // const pointLayer = new PointLayer({ zIndex: 1 })
+    //   .source(
+    //     [
+    //       {
+    //         lng: 121.107846,
+    //         lat: 30.267069,
+    //       },
+    //     ],
+    //     {
+    //       parser: {
+    //         type: 'json',
+    //         x: 'lng',
+    //         y: 'lat',
+    //       },
+    //     },
+    //   )
+    //   .shape('circle')
+    //   .color('#f00')
+    //   .active(true)
+    //   .size(40)
+    //   .style({
+    //     stroke: '#fff',
+    //     storkeWidth: 2,
+    //   });
 
     scene.on('loaded', () => {
-      scene.addLayer(pointLayer);
-
-      const styleOptions = {
-        uMin: -21.32,
-        uMax: 26.8,
-        vMin: -21.57,
-        vMax: 21.42,
-        numParticles: 65535,
-        fadeOpacity: 0.996,
-        rampColors: {
-          0.0: '#3288bd',
-          0.1: '#66c2a5',
-          0.2: '#abdda4',
-          0.3: '#e6f598',
-          0.4: '#fee08b',
-          0.5: '#fdae61',
-          0.6: '#f46d43', // f46d43
-          1.0: '#d53e4f',
-        },
-        sizeScale: 0.5,
-      };
-
+      // scene.addLayer(pointLayer);
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
       )
@@ -85,6 +84,8 @@ export default class WindMap extends React.Component {
           const layer = new WindLayer({
             mask: true,
             maskfence: maskData,
+            // maskColor: '#fff',
+            // maskOpacity: 0.5,
           });
           layer
             .source(
@@ -92,7 +93,8 @@ export default class WindMap extends React.Component {
               {
                 parser: {
                   type: 'image',
-                  extent: [-180, -85, 180, 85],
+                  // extent: [-180, -85, 180, 85],
+                  extent: [70, 16, 136, 54],
                 },
               },
             )

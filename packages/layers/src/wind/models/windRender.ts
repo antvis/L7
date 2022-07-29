@@ -368,7 +368,6 @@ export class Wind {
       );
     }
   }
-
   public draw() {
     if (this.windData?.image) {
       const gl = this.gl;
@@ -393,10 +392,9 @@ export class Wind {
 
     gl.viewport(0, 0, this.width, this.height);
 
+    gl.disable(gl.BLEND);
     this.drawFullTexture(this.backgroundTexture, this.fadeOpacity);
     this.drawParticles();
-
-    gl.disable(gl.BLEND);
 
     this.pixels = new Uint8Array(4 * this.width * this.height);
     gl.readPixels(
