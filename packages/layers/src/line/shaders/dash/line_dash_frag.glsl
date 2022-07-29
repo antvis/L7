@@ -24,8 +24,8 @@ void main() {
     // 实线部分
   } else {
     // 虚线部分
-    discard
-  }
+    discard;
+  };
 
   gl_FragColor = filterColor(gl_FragColor);
 }
