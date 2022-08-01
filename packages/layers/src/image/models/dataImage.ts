@@ -2,9 +2,9 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  IModel,
   IModelUniform,
   ITexture2D,
-  IModel,
 } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp, isMini } from '@antv/l7-utils';
 import { isEqual } from 'lodash';
@@ -110,23 +110,24 @@ export default class ImageDataModel extends BaseModel {
       flipY: false,
     });
 
-    this.layer.buildLayerModel({
-      moduleName: 'RasterImage',
-      vertexShader: ImageVert,
-      fragmentShader: ImageFrag,
-      triangulation: RasterImageTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-    })
-    .then((model) => {
-      callbackModel([model]);
-    })
-    .catch((err) => {
-      console.warn(err);
-      callbackModel([]);
-    });
+    this.layer
+      .buildLayerModel({
+        moduleName: 'RasterImage',
+        vertexShader: ImageVert,
+        fragmentShader: ImageFrag,
+        triangulation: RasterImageTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels(): void {
