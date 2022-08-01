@@ -152,6 +152,12 @@ export class TileLayerManager implements ITileLayerManager {
       featureId = 'id',
       workerEnabled = false,
       sourceLayer,
+
+      pixelConstant = 0,
+      pixelConstantR = 256 * 256,
+      pixelConstantG = 256,
+      pixelConstantB = 1,
+      pixelConstantRGB = 0.1,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -194,6 +200,12 @@ export class TileLayerManager implements ITileLayerManager {
       rampColorsData: this.rampColorsData,
       // worker
       workerEnabled,
+
+      pixelConstant,
+      pixelConstantR,
+      pixelConstantG,
+      pixelConstantB,
+      pixelConstantRGB,
     };
   }
 
@@ -213,6 +225,27 @@ export class TileLayerManager implements ITileLayerManager {
       this.tileConfigManager.setConfig('domain', this.initOptions.domain);
       this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
       this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
+
+      this.tileConfigManager.setConfig(
+        'pixelConstant',
+        this.initOptions.pixelConstant,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantR',
+        this.initOptions.pixelConstantR,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantG',
+        this.initOptions.pixelConstantG,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantB',
+        this.initOptions.pixelConstantB,
+      );
+      this.tileConfigManager.setConfig(
+        'pixelConstantRGB',
+        this.initOptions.pixelConstantRGB,
+      );
     } else {
       // Vector Tile Layer Need Listen
       this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);

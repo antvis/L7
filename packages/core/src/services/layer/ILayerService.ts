@@ -159,6 +159,12 @@ export interface ISubLayerInitOptions {
   // 在初始化的时候使用
   rampColorsData?: ImageData | IImagedata;
 
+  pixelConstant?: number;
+  pixelConstantR?: number;
+  pixelConstantG?: number;
+  pixelConstantB?: number;
+  pixelConstantRGB?: number;
+
   coords?: string;
   sourceLayer?: string;
   featureId?: string;

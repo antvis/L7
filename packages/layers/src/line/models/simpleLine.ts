@@ -1,9 +1,7 @@
 import {
   AttributeType,
   gl,
-  IAnimateOption,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
@@ -12,10 +10,10 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
+import simple_line_frag from '../shaders/simple/simpleline_frag.glsl';
 // linear simple line shader
-import simle_linear_frag from '../shaders/linear/simpleline_linear_frag.glsl';
-import simple_line_frag from '../shaders/simpleline_frag.glsl';
-import simple_line_vert from '../shaders/simpleline_vert.glsl';
+import simle_linear_frag from '../shaders/simple/simpleline_linear_frag.glsl';
+import simple_line_vert from '../shaders/simple/simpleline_vert.glsl';
 export default class SimpleLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
@@ -77,13 +75,6 @@ export default class SimpleLineModel extends BaseModel {
 
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
-    };
-  }
-  public getAnimateUniforms(): IModelUniform {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
-      u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
@@ -209,55 +200,6 @@ export default class SimpleLineModel extends BaseModel {
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
-        },
-      },
-    });
-
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'normal',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Normal',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 3,
-        // @ts-ignore
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-          normal: number[],
-        ) => {
-          return normal;
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Miter',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          return [vertex[4]];
         },
       },
     });
