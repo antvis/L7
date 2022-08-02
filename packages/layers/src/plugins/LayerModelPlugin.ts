@@ -11,6 +11,8 @@ export default class LayerModelPlugin implements ILayerPlugin {
     layer.prepareBuildModel();
     // 初始化 Model
     layer.buildModels();
+    // emit layer model loaded
+    layer.emit('modelLoaded', null);
     layer.styleNeedUpdate = false;
   }
 
@@ -20,6 +22,8 @@ export default class LayerModelPlugin implements ILayerPlugin {
     layer.clearModels();
     // 初始化 Model
     layer.buildModels();
+    // emit layer model loaded
+    layer.emit('modelLoaded', null);
     layer.layerModelNeedUpdate = false;
   }
 

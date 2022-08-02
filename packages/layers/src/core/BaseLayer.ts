@@ -432,7 +432,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public createModelData(data: any, option?: ISourceCFG) {
-    if (this.layerModel.createModelData) {
+    if (this.layerModel?.createModelData) {
       // 在某些特殊图层中单独构建 attribute & elements
       return this.layerModel.createModelData(option);
     }
