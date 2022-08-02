@@ -1,4 +1,4 @@
-import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
+import { IEncodeFeature } from './interface';
 
 export function a_Color(feature: IEncodeFeature, featureIdx: number) {
   const { color } = feature;

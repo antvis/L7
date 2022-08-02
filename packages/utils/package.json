@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.9.18",
+  "version": "2.9.19",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -28,8 +28,8 @@
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.1.4",
     "d3-color": "^1.4.0",
-    "web-worker-helper": "^0.0.3",
-    "earcut": "^2.2.1"
+    "earcut": "^2.2.1",
+    "web-worker-helper": "^0.0.3"
   },
   "devDependencies": {
     "@types/d3-color": "^1.2.2",

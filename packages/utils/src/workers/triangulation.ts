@@ -1,7 +1,7 @@
-import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 import earcut from 'earcut';
 import { calculateCentroid } from '../geo';
 import ExtrudePolyline from './extrude_polyline';
+import { IEncodeFeature } from './interface';
 
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates, originCoordinates, version } = feature;
