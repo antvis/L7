@@ -2,14 +2,14 @@
 // @ts-ignore
 import { Scene, Source } from '@antv/l7';
 import { PointLayer } from '@antv/l7-layers';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Demo extends React.Component {
   public async componentDidMount() {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Map({
         center: [110.19382669582967, 30.258134],
         pitch: 0,
         zoom: 4,
