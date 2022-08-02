@@ -88,7 +88,7 @@ export default class Demo extends React.Component {
 
           layer.on('modelLoaded', () => {
             this.getModelDatas(layer, originData, times, parser);
-          })
+          });
 
           let c = 0;
           let t = setInterval(() => {

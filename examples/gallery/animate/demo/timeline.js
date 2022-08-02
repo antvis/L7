@@ -1,8 +1,8 @@
 import { Scene, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
-let currentTimeKey = '0000';
+const currentTimeKey = '0000';
 let timeKeys = [];
-let wrap = null
+let wrap = null;
 let layer = null;
 const modelDatas = {};
 const parser = {
@@ -51,9 +51,9 @@ scene.on('loaded', () => {
       layer.on('modelLoaded', () => {
         getModelDatas(originData);
 
-        run()
-      })
-      
+        run();
+      });
+
       return '';
     });
   return '';
@@ -61,13 +61,13 @@ scene.on('loaded', () => {
 
 function run() {
   let count = 0;
-  let timer = setInterval(() => {
-    if(count > 47) {
+  const timer = setInterval(() => {
+    if (count > 47) {
       clearInterval(timer);
     }
-   
-    const key = getTimeKey(count, '')
-    const key2 = getTimeKey(count, ':')
+
+    const key = getTimeKey(count, '');
+    const key2 = getTimeKey(count, ':');
     const data = modelDatas[key];
     if (layer && scene && data) {
       layer.updateModelData(data);
@@ -75,8 +75,8 @@ function run() {
       scene.render();
     }
 
-    count++
-  }, 300)
+    count++;
+  }, 300);
 }
 
 function getModelDatas(originData) {
@@ -95,9 +95,9 @@ function insetDom() {
   wrap.style.top = '50px';
   wrap.style.left = '5%';
   wrap.style.right = '5%';
-  wrap.style.color = '#fff'
+  wrap.style.color = '#fff';
   wrap.style.fontSize = '18px';
-  wrap.innerHTML = `00:00`;
+  wrap.innerHTML = '00:00';
   mapContrainer.appendChild(wrap);
 }
 

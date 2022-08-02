@@ -93,7 +93,7 @@ scene.on('loaded', () => {
       });
     const flyLine = new LineLayer({
       blend: 'additive',
-      zIndex: 2,
+      zIndex: 2
     })
       .source(flydata, {
         parser: {
