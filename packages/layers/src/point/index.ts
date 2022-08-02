@@ -104,7 +104,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');
     });
-   
+
     if (!item) {
       return this.getModelTypeWillEmptyData();
     } else {

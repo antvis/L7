@@ -50,7 +50,7 @@ export default class Amap2demo_image extends React.Component {
             })
             .shape('name', ['00', '01', '02'])
             // .rotate('name', () => Math.random() * Math.PI)
-            .rotate(Math.PI/2)
+            .rotate(Math.PI / 2)
             .style({
               layerType: 'fillImage',
               // rotation: 90,
