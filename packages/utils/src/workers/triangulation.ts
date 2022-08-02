@@ -1,4 +1,4 @@
-import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
+import { IEncodeFeature } from './interface';
 import earcut from 'earcut';
 import { calculateCentroid } from '../geo';
 import ExtrudePolyline from './extrude_polyline';
