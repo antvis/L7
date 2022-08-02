@@ -13,6 +13,7 @@ import {
   HeatmapLayer,
   LineLayer,
   Source,
+  PolygonLayer,
 } from '@antv/l7';
 
 export default class Amap2demo extends React.Component {
@@ -33,29 +34,43 @@ export default class Amap2demo extends React.Component {
       },
     );
 
-    let c = 0,
-      scene,
-      layer;
-    scene = new Scene({
-      id: 'map',
-      // map: new Mapbox({
-      // map: new GaodeMap({
-      map: new GaodeMapV2({
-        // map: new Map({
-        style: 'dark',
-        center: [120, 30],
-        zoom: 4,
-      }),
-    });
-
-    const layer = new PointLayer()
-      .source(source)
-      .shape('circle')
-      .size(10)
-      .color('#f00');
+      const scene = new Scene({
+        id: 'map',
+        map: new Mapbox({
+          pitch: 0,
+          style: 'light',
+          center: [ -96, 37.8 ],
+          zoom: 3
+        })
+      });
 
     scene.on('loaded', () => {
-      scene.addLayer(layer);
+      fetch(
+        'https://gw.alipayobjects.com/os/basement_prod/d36ad90e-3902-4742-b8a2-d93f7e5dafa2.json'
+      )
+        .then(res => res.json())
+        .then(data => {
+          // console.log(data)
+          const color = [ 'rgb(255,255,217)', 'rgb(237,248,177)', 'rgb(199,233,180)', 'rgb(127,205,187)', 'rgb(65,182,196)', 'rgb(29,145,192)', 'rgb(34,94,168)', 'rgb(12,44,132)' ];
+          const layer = new PolygonLayer({})
+            .source(data)
+            .scale('density', {
+              type: 'quantile'
+            })
+            .color(
+              'density', color
+            )
+            .shape('fill')
+            .active(true)
+            .style({
+              opacity: 1.0
+            });
+        
+          scene.addLayer(layer);
+          console.log(layer)
+    
+         
+        });
     });
   }
 
