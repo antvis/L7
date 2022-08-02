@@ -546,6 +546,7 @@ export default class TextModel extends BaseModel {
       })
       .then((model) => {
         this.layer.models = [model];
+        this.layer.renderLayers();
       })
       .catch((err) => {
         console.warn(err);
