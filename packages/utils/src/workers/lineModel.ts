@@ -1,6 +1,6 @@
-import { IEncodeFeature, IVertexAttributeDescriptor } from '@antv/l7-core';
 import { encodePickingColor } from '../color';
 import { a_Color, a_filter, a_Position, a_vertexId } from './commonFeatureFunc';
+import { IEncodeFeature, IVertexAttributeDescriptor } from './interface';
 import { LineTriangulation as triangulation } from './triangulation';
 
 export const lineModel = async ({
