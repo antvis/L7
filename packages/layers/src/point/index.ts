@@ -104,7 +104,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');
     });
-
+   
     if (!item) {
       return this.getModelTypeWillEmptyData();
     } else {
@@ -118,7 +118,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (shape === 'radar') {
         return 'radar';
       }
-      if (shape === 'fillImage') {
+      if (this.layerType === 'fillImage') {
         return 'fillImage';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
