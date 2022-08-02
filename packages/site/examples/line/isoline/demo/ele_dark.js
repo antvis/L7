@@ -17,17 +17,6 @@ scene.on('loaded', () => {
     .then(res => res.json())
     .then(data => {
       const layer = new LineLayer({
-        enableMultiPassRenderer: true,
-        passes: [
-          [
-            'bloom',
-            {
-              bloomBaseRadio: 0.8,
-              bloomRadius: 2,
-              bloomIntensity: 1
-            }
-          ]
-        ]
       })
         .source(data)
         .size('ELEV', h => {

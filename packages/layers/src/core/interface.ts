@@ -50,6 +50,8 @@ export interface ILineLayerStyleOptions {
   rampColors?: IColorRamp;
   featureId?: string;
   sourceLayer?: string;
+  enablePicking?: boolean;
+  workerEnabled?: boolean;
 }
 
 export interface IPointLayerStyleOptions {
@@ -158,12 +160,27 @@ export interface IWindLayerStyleOptions {
     [key: number]: string;
   };
   sizeScale?: number;
+
+  mask?: boolean;
+  maskInside?: boolean;
 }
 
 export interface IImageLayerStyleOptions {
   opacity: number;
   mask?: boolean;
   maskInside?: boolean;
+
+  domain?: [number, number];
+  noDataValue?: number;
+  clampLow?: boolean;
+  clampHigh?: boolean;
+  rampColors?: IColorRamp;
+  rampColorsData?: ImageData | IImagedata;
+  pixelConstant?: number;
+  pixelConstantR?: number;
+  pixelConstantG?: number;
+  pixelConstantB?: number;
+  pixelConstantRGB?: number;
 }
 
 export interface IGeometryLayerStyleOptions {

@@ -9,11 +9,11 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { getMask, LineTriangulation, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
-import { LineTriangulation } from '../../core/triangulation';
+// import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
 import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
@@ -143,11 +143,11 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -156,27 +156,39 @@ export default class LineModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
       depth = false,
+      workerEnabled = false,
+      enablePicking,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'line_' + type,
+    this.layer
+      .buildLayerModel({
+        moduleName: 'line' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
         depth: { enable: depth },
-        // depth: { enable: true },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        workerOptions: {
+          modelType: 'line' + type,
+          enablePicking,
+          iconMap: this.iconService.getIconMap(),
+        },
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   /**
@@ -194,7 +206,7 @@ export default class LineModel extends BaseModel {
       return {
         frag: line_dash_frag,
         vert: line_dash_vert,
-        type: 'dash',
+        type: 'Dash',
       };
     }
 
@@ -203,13 +215,13 @@ export default class LineModel extends BaseModel {
       return {
         frag: linear_line_frag,
         vert: line_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: line_frag,
         vert: line_vert,
-        type: 'normal',
+        type: '',
       };
     }
   }

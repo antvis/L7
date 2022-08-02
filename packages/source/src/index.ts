@@ -2,7 +2,7 @@ import { registerParser, registerTransform } from './factory';
 import csv from './parser/csv';
 import geojson from './parser/geojson';
 import image from './parser/image';
-import json, { defaultData, defaultParser } from './parser/json';
+import json, { defaultData, defaultParser, defaultSource } from './parser/json';
 import mapboxVectorTile from './parser/mvt';
 import raster from './parser/raster';
 import rasterTile from './parser/raster-tile';
@@ -37,6 +37,7 @@ export {
 
 export * from './interface';
 
+export const DEFAULT_SOURCE = defaultSource;
 export const DEFAULT_DATA = defaultData;
 export const DEFAULT_PARSER = defaultParser;
 

@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.9.16",
+  "version": "2.9.19",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",

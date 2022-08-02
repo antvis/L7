@@ -6,12 +6,16 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { boundsContains, getMask, padBounds } from '@antv/l7-utils';
+import {
+  boundsContains,
+  calculateCentroid,
+  getMask,
+  padBounds,
+} from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
-import { calculateCentroid } from '../../utils/geo';
 import {
   getGlyphQuads,
   IGlyphQuad,
@@ -172,8 +176,8 @@ export default class TextModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    this.layer.on('remapping', this.buildModels);
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.layer.on('remapping', this.mapping);
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -183,20 +187,18 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
-  public buildModels = () => {
+  public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    this.initGlyph();
-    this.updateTexture();
-    this.filterGlyphs();
-    this.reBuildModel();
-    return [
-      this.layer.buildLayerModel({
+    this.mapping();
+
+    this.layer
+      .buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
         fragmentShader: textFrag,
@@ -204,8 +206,14 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   };
   public needUpdate() {
     const {
@@ -229,7 +237,7 @@ export default class TextModel extends BaseModel {
   public clearModels() {
     this.texture?.destroy();
     this.dataTexture?.destroy();
-    this.layer.off('remapping', this.buildModels);
+    this.layer.off('remapping', this.mapping);
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -326,6 +334,13 @@ export default class TextModel extends BaseModel {
       },
     });
   }
+
+  private mapping = () => {
+    this.initGlyph();
+    this.updateTexture();
+    this.filterGlyphs();
+    this.reBuildModel();
+  };
   private textExtent(): [[number, number], [number, number]] {
     const bounds = this.mapService.getBounds();
     return padBounds(bounds, 0.5);
@@ -519,8 +534,8 @@ export default class TextModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
-    this.layer.models = [
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
         fragmentShader: textFrag,
@@ -528,7 +543,14 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        this.layer.models = [model];
+        this.layer.renderLayers();
+      })
+      .catch((err) => {
+        console.warn(err);
+        this.layer.models = [];
+      });
   }
 }

@@ -129,10 +129,6 @@ export default class TileFactory implements ITileFactory {
 
     // set scale
     this.setScale(layer);
-    // console.log(this.parentLayer.getScaleOptions())
-    // console.log()
-
-    // console.log(this.parentLayer.tileLayer.scaleCfg)
 
     // set scale attribute field
     this.setStyleAttributeField(layer, 'shape', shape);

@@ -99,6 +99,7 @@ export default class ArcModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
 
       u_thetaOffset: isNumber(thetaOffset) ? thetaOffset : 0.0,
+      // u_thetaOffset:  0.0,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
@@ -128,11 +129,11 @@ export default class ArcModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -151,7 +152,7 @@ export default class ArcModel extends BaseModel {
       return {
         frag: arc_dash_frag,
         vert: arc_dash_vert,
-        type: 'dash',
+        type: 'Dash',
       };
     }
 
@@ -160,27 +161,28 @@ export default class ArcModel extends BaseModel {
       return {
         frag: arc_linear_frag,
         vert: arc_linear_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: arc_line_frag,
         vert: arc_line_vert,
-        type: 'normal',
+        type: '',
       };
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       segmentNumber = 30,
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'arc2dline' + type,
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineArc2d' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineArcTriangulation,
@@ -188,8 +190,14 @@ export default class ArcModel extends BaseModel {
         blend: this.getBlend(),
         segmentNumber,
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

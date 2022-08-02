@@ -7,7 +7,7 @@ import {
   ITexture2D,
   Point,
 } from '@antv/l7-core';
-import { FrequencyController } from '@antv/l7-utils';
+import { FrequencyController, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -28,7 +28,6 @@ const defaultRampColors = {
 
 export default class WindModel extends BaseModel {
   protected texture: ITexture2D;
-
   private colorModel: IModel;
   private wind: IWind;
   private imageCoords: [Point, Point];
@@ -37,9 +36,10 @@ export default class WindModel extends BaseModel {
   // source: 'http://nomads.ncep.noaa.gov',
 
   private frequency = new FrequencyController(7.2);
+  private cacheZoom: number;
 
   public render() {
-    // TODO: 控制风场的平均更新频率
+    // Tip: 控制风场的平均更新频率
     this.frequency.run(() => {
       this.drawWind();
     });
@@ -50,32 +50,35 @@ export default class WindModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public initModels() {
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      uMin = -21.32,
+      uMax = 26.8,
+      vMin = -21.57,
+      vMax = 21.42,
+      fadeOpacity = 0.996,
+      speedFactor = 0.25,
+      dropRate = 0.003,
+      dropRateBump = 0.01,
+      rampColors = defaultRampColors,
+      sizeScale = 0.5,
+      // mask
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
     const { createTexture2D } = this.rendererService;
-
     const source = this.layer.getSource();
     this.texture = createTexture2D({
       height: 0,
       width: 0,
     });
+    this.cacheZoom = Math.floor(this.mapService.getZoom());
 
     const glContext = this.rendererService.getGLContext();
-    this.imageCoords = source.data.dataArray[0].coordinates as [Point, Point];
+    this.imageCoords = source.data?.dataArray[0].coordinates as [Point, Point];
 
-    source.data.images.then((imageData: HTMLImageElement[]) => {
-      const {
-        uMin = -21.32,
-        uMax = 26.8,
-        vMin = -21.57,
-        vMax = 21.42,
-        fadeOpacity = 0.996,
-        speedFactor = 0.25,
-        dropRate = 0.003,
-        dropRateBump = 0.01,
-        rampColors = defaultRampColors,
-        sizeScale = 0.5,
-      } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-      this.sizeScale = sizeScale;
+    source.data?.images?.then((imageData: HTMLImageElement[]) => {
+      this.sizeScale = sizeScale * this.getZoomScale();
 
       const { imageWidth, imageHeight } = this.getWindSize();
 
@@ -100,41 +103,54 @@ export default class WindModel extends BaseModel {
         vMax,
         image: imageData[0],
       });
+      this.texture?.destroy();
 
       this.texture = createTexture2D({
-        data: imageData[0],
-        width: imageData[0].width,
-        height: imageData[0].height,
+        width: imageWidth,
+        height: imageHeight,
       });
 
       this.layerService.updateLayerRenderList();
       this.layerService.renderLayers();
     });
 
-    this.colorModel = this.layer.buildLayerModel({
-      moduleName: 'WindLayer',
-      vertexShader: WindVert,
-      fragmentShader: WindFrag,
-      triangulation: RasterImageTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-    });
-
-    return [this.colorModel];
+    this.layer
+      .buildLayerModel({
+        moduleName: 'wind',
+        vertexShader: WindVert,
+        fragmentShader: WindFrag,
+        triangulation: RasterImageTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+      })
+      .then((model) => {
+        this.colorModel = model;
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public getWindSize() {
     const p1 = this.mapService.lngLatToPixel(this.imageCoords[0]);
     const p2 = this.mapService.lngLatToPixel(this.imageCoords[1]);
 
-    const imageWidth = Math.floor((p2.x - p1.x) * this.sizeScale);
-    const imageHeight = Math.floor((p1.y - p2.y) * this.sizeScale);
+    const imageWidth = Math.min(
+      Math.floor((p2.x - p1.x) * this.sizeScale),
+      2048,
+    );
+    const imageHeight = Math.min(
+      Math.floor((p1.y - p2.y) * this.sizeScale),
+      2048,
+    );
     return { imageWidth, imageHeight };
   }
 
-  public buildModels() {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public clearModels(): void {
@@ -180,6 +196,10 @@ export default class WindModel extends BaseModel {
     });
   }
 
+  private getZoomScale() {
+    return Math.min(((this.cacheZoom + 4) / 30) * 2, 2);
+  }
+
   private drawWind() {
     if (this.wind) {
       const {
@@ -195,15 +215,23 @@ export default class WindModel extends BaseModel {
         rampColors = defaultRampColors,
         sizeScale = 0.5,
       } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-      if (typeof sizeScale === 'number' && sizeScale !== this.sizeScale) {
+      let newNumParticles = numParticles;
+      const currentZoom = Math.floor(this.mapService.getZoom());
+      if (
+        (typeof sizeScale === 'number' && sizeScale !== this.sizeScale) ||
+        currentZoom !== this.cacheZoom
+      ) {
+        const zoomScale = this.getZoomScale();
         this.sizeScale = sizeScale;
+        newNumParticles *= zoomScale;
         const { imageWidth, imageHeight } = this.getWindSize();
         this.wind.reSize(imageWidth, imageHeight);
+        this.cacheZoom = currentZoom;
       }
 
       this.wind.updateWindDir(uMin, uMax, vMin, vMax);
 
-      this.wind.updateParticelNum(numParticles);
+      this.wind.updateParticelNum(newNumParticles);
 
       this.wind.updateColorRampTexture(rampColors);
 
@@ -225,7 +253,15 @@ export default class WindModel extends BaseModel {
 
   private drawColorMode() {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-    this.colorModel.draw({
+
+    this.layer.masks.map((m) => {
+      m.hooks.beforeRenderData.call();
+      m.hooks.beforeRender.call();
+      m.render();
+      m.hooks.afterRender.call();
+    });
+
+    this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_texture: this.texture,

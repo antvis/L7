@@ -4,6 +4,7 @@ import {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
+  IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
@@ -153,7 +154,7 @@ export default class SpriteModel extends BaseModel {
     this.texture?.destroy();
   }
 
-  public initModels() {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mapTexture,
       spriteTop = 5000000,
@@ -179,21 +180,27 @@ export default class SpriteModel extends BaseModel {
       this.updateModel();
     }, 100);
 
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'geometry_sprite',
+    this.layer
+      .buildLayerModel({
+        moduleName: 'geometrySprite',
         vertexShader: spriteVert,
         fragmentShader: spriteFrag,
         triangulation: this.planeGeometryTriangulation,
         primitive: gl.POINTS,
         depth: { enable: false },
         blend: this.getBlend(),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
-  public buildModels() {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public updateTexture(mapTexture: string | undefined): void {

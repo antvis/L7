@@ -5,13 +5,12 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { getCullFace, rgb2arr } from '@antv/l7-utils';
+import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
-import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/earth/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/earth/extrude_vert.glsl';
 
@@ -130,33 +129,37 @@ export default class ExtrudeModel extends BaseModel {
       u_lightEnable: Number(lightEnable),
     };
   }
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     // GAODE1.x GAODE2.x MAPBOX
     const {
-      depth = true,
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'pointExtrude2',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointEarthExtrude',
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
-        blend: this.getBlend(),
+        depth: { enable: true },
         cull: {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-        depth: {
-          enable: depth,
-        },
-      }),
-    ];
+        blend: this.getBlend(),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   public clearModels() {
     this.dataTexture?.destroy();

@@ -18,7 +18,8 @@
     "object-literal-sort-keys": false,
     "no-implicit-dependencies": [true, "dev"],
     "interface-over-type-literal": false,
-    "no-this-assignment": false
+    "no-this-assignment": false,
+    "no-submodule-imports": false
   },
   "globals": {
     "AMap": true

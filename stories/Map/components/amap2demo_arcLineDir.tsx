@@ -1,5 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox, GaodeMapV2 } from '@antv/l7-maps';
 import * as React from 'react';
 
 export default class Amap2demo_arcLineDir extends React.Component {
@@ -31,20 +31,20 @@ export default class Amap2demo_arcLineDir extends React.Component {
           lat2: 37.373799,
           testOpacity: 0.4,
         },
-        {
-          lng1: 116.98242187499999,
-          lat1: 43.004647127794435,
-          lng2: 105.64453124999999,
-          lat2: 28.998531814051795,
-          testOpacity: 0.4,
-        },
-        {
-          lng1: 75.76171875,
-          lat1: 36.31512514748051,
-          lng2: 46.23046874999999,
-          lat2: 52.802761415419674,
-          testOpacity: 0.8,
-        },
+        // {
+        //   lng1: 116.98242187499999,
+        //   lat1: 43.004647127794435,
+        //   lng2: 105.64453124999999,
+        //   lat2: 28.998531814051795,
+        //   testOpacity: 0.4,
+        // },
+        // {
+        //   lng1: 75.76171875,
+        //   lat1: 36.31512514748051,
+        //   lng2: 46.23046874999999,
+        //   lat2: 52.802761415419674,
+        //   testOpacity: 0.8,
+        // },
       ];
       let data2 = [
         {
@@ -74,75 +74,78 @@ export default class Amap2demo_arcLineDir extends React.Component {
             y1: 'lat2',
           },
         })
-        .size(10)
+        .size(5)
         .shape('arc')
         .color('#8C1EB2')
         .style({
-          forward: false,
-          opacity: 'testOpacity',
+          lineType: 'dash',
+          dashArray: [25, 5],
+          // forward: false,
+          // opacity: 'testOpacity',
+          // segmentNumber: 5
         });
       scene.addLayer(layer);
 
-      const layer2 = new LineLayer({ blend: 'normal' })
-        .source(data, {
-          parser: {
-            type: 'json',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2',
-          },
-        })
-        .size(10)
-        .shape('arc')
-        .color('#8C1EB2')
-        .style({
-          opacity: 'testOpacity',
-        });
-      scene.addLayer(layer2);
+      // const layer2 = new LineLayer({ blend: 'normal' })
+      //   .source(data, {
+      //     parser: {
+      //       type: 'json',
+      //       x: 'lng1',
+      //       y: 'lat1',
+      //       x1: 'lng2',
+      //       y1: 'lat2',
+      //     },
+      //   })
+      //   .size(10)
+      //   .shape('arc')
+      //   .color('#8C1EB2')
+      //   .style({
+      //     opacity: 'testOpacity',
+      //   });
+      // scene.addLayer(layer2);
 
-      const layer3 = new LineLayer({ blend: 'normal' })
-        .source(data2, {
-          parser: {
-            type: 'json',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2',
-          },
-        })
-        .size(10)
-        .shape('arc')
-        .color('#8C1EB2')
-        .style({
-          opacity: 'testOpacity',
-        })
-        .animate(true);
-      scene.addLayer(layer3);
+      // const layer3 = new LineLayer({ blend: 'normal' })
+      //   .source(data2, {
+      //     parser: {
+      //       type: 'json',
+      //       x: 'lng1',
+      //       y: 'lat1',
+      //       x1: 'lng2',
+      //       y1: 'lat2',
+      //     },
+      //   })
+      //   .size(10)
+      //   .shape('arc')
+      //   .color('#8C1EB2')
+      //   .style({
+      //     opacity: 'testOpacity',
+      //   })
+      //   .animate(true);
+      // scene.addLayer(layer3);
 
-      const layer4 = new LineLayer({ blend: 'normal' })
-        .source(data2, {
-          parser: {
-            type: 'json',
-            x: 'lng1',
-            y: 'lat1',
-            x1: 'lng2',
-            y1: 'lat2',
-          },
-        })
-        .size(10)
-        .shape('arc')
-        .color('#8C1EB2')
-        .style({
-          forward: false,
-          opacity: 'testopacity',
-        })
-        .animate({
-          duration: 4,
-          interval: 0.3,
-          trailLength: 0.5,
-        });
-      scene.addLayer(layer4);
+      // const layer4 = new LineLayer({ blend: 'normal' })
+      //   .source(data2, {
+      //     parser: {
+      //       type: 'json',
+      //       x: 'lng1',
+      //       y: 'lat1',
+      //       x1: 'lng2',
+      //       y1: 'lat2',
+      //     },
+      //   })
+      //   .size(10)
+      //   .shape('arc')
+      //   .color('#8C1EB2')
+      //   .style({
+      //     forward: false,
+      //     opacity: 'testopacity',
+      //   })
+      //   .animate({
+      //     duration: 4,
+      //     interval: 0.3,
+      //     trailLength: 0.5,
+      //   });
+      // scene.addLayer(layer4);
     });
   }
 

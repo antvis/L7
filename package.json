@@ -12,7 +12,7 @@
     "@antv/l7-district": "^2.3.9",
     "@antv/l7-draw": "2.4.18",
     "@antv/l7-react": "^2.3.3",
-    "@antv/l7plot": "^0.0.4",
+    "@antv/l7plot": "^0.1.0",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-decorators": "^7.6.0",
@@ -156,9 +156,9 @@
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
     "storybook": "start-storybook -p 6006",
     "prebuild": "run-p tsc lint",
-    "build": "yarn clean && lerna run build",
+    "build": "yarn clean && yarn worker && lerna run build",
     "postbuild": "yarn build:declarations",
-    "build:declarations": "lerna exec --stream --no-bail 'tsc --project ./tsconfig.build.json'",
+    "build:declarations": "lerna run tsc --stream --no-bail",
     "fix": "run-p -c 'lint:ts-* --fix'",
     "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md  stories/**/**/*.tsx  *.md",
     "lint:examples": "eslint packages/site/examples --fix --ext .js",
@@ -171,21 +171,23 @@
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
-    "release-beta": "yarn run prerelease && lerna publish --dist-tag beta from-package --force-publish && lerna run sync",
-    "release": "lerna publish from-package --force-publish && lerna run sync",
+    "release-beta": "yarn run prerelease && lerna publish --dist-tag beta from-package --force-publish && yarn sync",
+    "release": "lerna publish from-package --force-publish && yarn sync",
     "release-cdn": "antv-bin upload -n @antv/l7",
     "test_bak": "cross-env BABEL_ENV=test jest",
     "test": "umi-test",
     "test-live": "cross-env BABEL_ENV=test DEBUG_MODE=1 jest --watch",
     "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "tsc": "tsc",
-    "watch": "yarn clean && lerna exec --parallel -- cross-env BABEL_ENV=cjs NODE_ENV=production babel --watch src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "bundle": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.js --environment BUILD:production,MINIFY:true",
-    "bundle-dev": "cross-env BABEL_ENV=bundle yarn rollup -c  build/rollup.config.js  --environment BUILD:production,MINIFY:false",
+    "watch": "yarn clean && yarn worker && lerna run watch --parallel",
+    "bundle": "yarn worker && cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.js --environment BUILD:production,MINIFY:true",
+    "bundle-dev": "yarn worker && cross-env BABEL_ENV=bundle yarn rollup -c  build/rollup.config.js  --environment BUILD:production,MINIFY:false",
     "bundle:watch": "cross-env BABEL_ENV=bundle yarn rollup -c build/rollup.config.js --watch",
     "glsl-minify": "yarn glsl-minifier -i build/example.frag -o build/example.min.frag",
-    "clean": "lerna run clean",
-    "sync": "lerna run sync"
+    "worker": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.worker.js --environment BUILD:production",
+    "worker:watch": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.worker.js --environment BUILD:development --watch",
+    "clean": "lerna run clean --parallel",
+    "sync": "lerna run sync --parallel"
   },
   "workspaces": [
     "packages/*",
@@ -213,5 +215,6 @@
   },
   "tnpm": {
     "mode": "yarn"
-  }
+  },
+  "dependencies": {}
 }

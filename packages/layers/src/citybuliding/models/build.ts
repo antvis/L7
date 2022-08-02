@@ -75,22 +75,34 @@ export default class CityBuildModel extends BaseModel {
     }
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.calCityGeo();
 
     this.startModelAnimate();
-    return [
-      this.layer.buildLayerModel({
+
+    this.buildModels(callbackModel);
+  }
+
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.layer
+      .buildLayerModel({
         moduleName: 'cityBuilding',
         vertexShader: buildVert,
         fragmentShader: buildFrag,
         triangulation: PolygonExtrudeTriangulation,
+        depth: { enable: true },
         cull: {
           enable: true,
           face: gl.BACK,
         },
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

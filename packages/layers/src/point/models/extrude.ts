@@ -5,12 +5,11 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { getCullFace, rgb2arr } from '@antv/l7-utils';
+import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
-import { calculateCentroid } from '../../utils/geo';
 import pointExtrudeFrag from '../shaders/extrude/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 
@@ -128,20 +127,21 @@ export default class ExtrudeModel extends BaseModel {
       u_lightEnable: Number(lightEnable),
     };
   }
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public async buildModels(callbackModel: (models: IModel[]) => void) {
     // GAODE1.x GAODE2.x MAPBOX
     const {
       depth = true,
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiserepeat = repeat;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'pointExtrude2',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointExtrude',
         vertexShader: pointExtrudeVert,
         fragmentShader: pointExtrudeFrag,
         triangulation: PointExtrudeTriangulation,
@@ -153,8 +153,14 @@ export default class ExtrudeModel extends BaseModel {
         depth: {
           enable: depth,
         },
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   public clearModels() {
     this.dataTexture?.destroy();

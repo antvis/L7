@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import RasterTile from './components/RasterTile';
 import OsmRasterTile from './components/OsmRasterTile';
+import RasterImageDataTile from './components/RasterImageDataTile';
 
 import RasterArrayBuffer from './components/RasterArrayBuffer';
 import DemFilter from './components/demFilter';
@@ -35,6 +36,7 @@ import Quxian from './components/QuXian';
 storiesOf('瓦片', module)
   .add('RasterTile', () => <RasterTile />)
   .add('OsmRasterTile', () => <OsmRasterTile />)
+  .add('RasterImageDataTile', () => <RasterImageDataTile />)
 
   .add('America', () => <America />)
   .add('Lerc', () => <Lerc />)

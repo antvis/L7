@@ -514,10 +514,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public needUpdate(): boolean {
     return false;
   }
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
   public clearModels() {

@@ -53,28 +53,34 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
-    const { frag, vert, triangulation, type } = this.getModelParams();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    this.layer.triangulation = triangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation,
-        blend: this.getBlend(),
+    this.layer.triangulation = polygonTriangulation;
+    this.layer
+      .buildLayerModel({
+        moduleName: 'polygonTile',
+        vertexShader: polygon_tile_vert,
+        fragmentShader: polygon_tile_frag,
+        triangulation: polygonTriangulation,
+        primitive: gl.TRIANGLES,
         depth: { enable: false },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
@@ -83,19 +89,5 @@ export default class FillModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     //
-  }
-
-  private getModelParams(): {
-    frag: string;
-    vert: string;
-    type: string;
-    triangulation: Triangulation;
-  } {
-    return {
-      frag: polygon_tile_frag,
-      vert: polygon_tile_vert,
-      type: 'polygon_tile',
-      triangulation: polygonTriangulation,
-    };
   }
 }

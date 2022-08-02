@@ -23,14 +23,12 @@ export default class VectorPolygonTile extends TileFactory {
         layerIDList: [],
       };
     }
-
     const layer = this.createLayer({
       tile,
       initOptions,
       vectorTileLayer,
       source: source as Source,
     });
-
     return {
       layers: [layer],
       layerIDList: [layer.id],

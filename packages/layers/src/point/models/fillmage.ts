@@ -127,7 +127,7 @@ export default class FillImageModel extends BaseModel {
     );
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
@@ -144,7 +144,7 @@ export default class FillImageModel extends BaseModel {
       this.calMeter2Coord();
     }
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   /**
@@ -189,17 +189,17 @@ export default class FillImageModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders();
-    return [
-      this.layer.buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointFillImage',
+        vertexShader: pointFillVert,
+        fragmentShader: pointFillFrag,
         triangulation: PointFillTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
@@ -208,16 +208,14 @@ export default class FillImageModel extends BaseModel {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-      }),
-    ];
-  }
-
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: pointFillFrag,
-      vert: pointFillVert,
-      type: 'point_fillImage',
-    };
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

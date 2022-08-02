@@ -90,7 +90,7 @@ export default class Arc3DModel extends BaseModel {
     }
 
     return {
-      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+      u_globel: 1,
       u_globel_radius: EARTH_RADIUS, // 地球半径
       u_global_height: globalArcHeight,
 
@@ -123,11 +123,11 @@ export default class Arc3DModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -147,36 +147,42 @@ export default class Arc3DModel extends BaseModel {
       return {
         frag: arc3d_linear_frag,
         vert: arc3d_linear_vert,
-        type: 'linear',
+        type: 'Linear',
       };
     } else {
       return {
         frag: arc3d_line_frag,
         vert: arc3d_line_vert,
-        type: 'normal',
+        type: '',
       };
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       segmentNumber = 30,
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'arc3Dline' + type,
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineEarthArc3d' + type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineArcTriangulation,
+        depth: { enable: true },
         blend: this.getBlend(),
         segmentNumber,
-        // primitive: gl.POINTS,
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     // point layer size;

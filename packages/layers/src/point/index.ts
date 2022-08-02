@@ -8,10 +8,14 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.models = models;
+      this.layerService.updateLayerRenderList();
+      this.renderLayers();
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => (this.models = models));
   }
 
   /**
@@ -62,7 +66,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       fill: { blend: 'normal' },
       extrude: {},
       image: {},
-      icon: {},
       text: {
         blend: 'normal',
       },
@@ -84,7 +87,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'simplePoint',
       'extrude',
       'text',
-      'icon',
       'vectorpoint',
       'tile',
       'earthFill',
@@ -93,9 +95,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     if (this.layerSource.parser.type === 'mvt') {
       return 'vectorpoint';
     }
-    if (this.layerType && PointTypes.includes(this.layerType)) {
-      return this.layerType as PointType;
-    }
+
     // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
@@ -104,8 +104,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');
     });
+
     if (!item) {
-      // return 'normal';
       return this.getModelTypeWillEmptyData();
     } else {
       const shape = item.shape;
@@ -118,20 +118,25 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (shape === 'radar') {
         return 'radar';
       }
-      if (shape === 'fillImage') {
+      if (this.layerType === 'fillImage') {
         return 'fillImage';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
-        return 'fill';
+        if (this.mapService.version === 'GLOBEL') {
+          return 'earthFill';
+        } else {
+          return 'fill';
+        }
       }
       if (shape3d?.indexOf(shape as string) !== -1) {
-        return 'extrude';
+        if (this.mapService.version === 'GLOBEL') {
+          return 'earthExtrude';
+        } else {
+          return 'extrude';
+        }
       }
       if (iconMap.hasOwnProperty(shape as string)) {
         return 'image';
-      }
-      if (this.fontService.getGlyph(shape as string) !== '') {
-        return 'icon';
       }
       return 'text';
     }

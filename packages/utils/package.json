@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.9.16",
+  "version": "2.9.19",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -9,6 +9,7 @@
   "files": [
     "lib",
     "es",
+    "dist",
     "README.md"
   ],
   "scripts": {
@@ -27,10 +28,15 @@
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.1.4",
     "eventemitter3": "^4.0.0",
-    "d3-color": "^1.4.0"
+    "d3-color": "^1.4.0",
+    "web-worker-helper":"^0.0.3",
+    "earcut":"^2.1.0",
+    "gl-matrix": "^3.1.0"
+
   },
   "devDependencies": {
-    "@types/d3-color": "^1.2.2"
+    "@types/d3-color": "^1.2.2",
+    "@types/earcut": "^2.1.0"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
