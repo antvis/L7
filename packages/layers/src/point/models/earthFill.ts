@@ -99,35 +99,29 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
-    const { frag, vert, type } = this.getShaders();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     this.layer.triangulation = GlobelPointFillTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'pointfill_' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointEarthFill',
+        vertexShader: pointFillVert,
+        fragmentShader: pointFillFrag,
         triangulation: GlobelPointFillTriangulation,
         depth: { enable: true },
-        blend: this.getBlend(),
-      }),
-    ];
-  }
 
-  /**
-   * 根据 animateOption 的值返回对应的 shader 代码
-   * @returns
-   */
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: pointFillFrag,
-      vert: pointFillVert,
-      type: 'point_earth_fill',
-    };
+        blend: this.getBlend(),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

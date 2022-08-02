@@ -9,11 +9,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { $window, getMask } from '@antv/l7-utils';
+import { $window, getMask, PointFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-import { PointFillTriangulation } from '../../core/triangulation';
+// import { PointFillTriangulation } from '../../core/triangulation';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
@@ -21,6 +21,7 @@ import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
 import { Version } from '@antv/l7-maps';
+
 export default class FillModel extends BaseModel {
   private meter2coord: number = 1;
   private meteryScale: number = 1; // 兼容 mapbox
@@ -130,10 +131,9 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateUnit('l7size');
-
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   /**
@@ -186,28 +186,44 @@ export default class FillModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public async buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
       animateOption = { enable: false },
+      workerEnabled = false,
+      enablePicking,
+      shape2d,
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
     const { frag, vert, type } = this.getShaders(animateOption);
 
     this.layer.triangulation = PointFillTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'pointfill_' + type,
+
+    this.layer
+      .buildLayerModel({
+        moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: PointFillTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        workerOptions: {
+          modelType: type,
+          enablePicking,
+          shape2d,
+        },
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   /**
@@ -223,20 +239,20 @@ export default class FillModel extends BaseModel {
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'wave',
+            type: 'pointWave',
           };
         default:
           return {
             frag: waveFillFrag,
             vert: pointFillVert,
-            type: 'wave',
+            type: 'pointWave',
           };
       }
     } else {
       return {
         frag: pointFillFrag,
         vert: pointFillVert,
-        type: 'normal',
+        type: 'pointFill',
       };
     }
   }
@@ -250,6 +266,8 @@ export default class FillModel extends BaseModel {
     return [option.enable ? 0 : 1.0, option.speed || 1, option.rings || 3, 0];
   }
   protected registerBuiltinAttributes() {
+    const shape2d = this.layer.getLayerConfig().shape2d as string[];
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
@@ -299,7 +317,7 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
+          return Array.isArray(size) ? [size[0]] : [size];
         },
       },
     });
@@ -324,7 +342,6 @@ export default class FillModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
-          const shape2d = this.layer.getLayerConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
         },

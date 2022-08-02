@@ -74,9 +74,9 @@ export default class LinearLineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -84,38 +84,32 @@ export default class LinearLineModel extends BaseModel {
     this.dataTexture?.destroy();
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
       depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders();
-    this.layer.triangulation = LineTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'line_' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
-        depth: { enable: depth },
-        stencil: getMask(mask, maskInside),
-      }),
-    ];
-  }
 
-  /**
-   * 根据参数获取不同的 shader 代码
-   * @returns
-   */
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: linear_line_frag,
-      vert: linear_line_vert,
-      type: 'linear_rampColors',
-    };
+    this.layer.triangulation = LineTriangulation;
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineRampColors',
+        vertexShader: linear_line_vert,
+        fragmentShader: linear_line_frag,
+        triangulation: LineTriangulation,
+        depth: { enable: depth },
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

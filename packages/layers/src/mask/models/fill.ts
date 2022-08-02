@@ -16,20 +16,19 @@ export default class MaskModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      this.layer.buildLayerModel({
+  public async buildModels(callbackModel: (models: IModel[]) => void) {
+    this.layer
+      .buildLayerModel({
         moduleName: 'mask',
         vertexShader: mask_vert,
         fragmentShader: mask_frag,
         triangulation: polygonTriangulation,
-        blend: this.getBlend(),
         depth: { enable: false },
-
+        blend: this.getBlend(),
         stencil: {
           enable: true,
           mask: 0xff,
@@ -44,8 +43,14 @@ export default class MaskModel extends BaseModel {
             zpass: gl.REPLACE,
           },
         },
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

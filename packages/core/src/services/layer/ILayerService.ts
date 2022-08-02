@@ -59,12 +59,19 @@ export interface IDataState {
   featureScaleNeedUpdate: boolean;
   StyleAttrNeedUpdate: boolean;
 }
+
+export interface IWorkerOption {
+  modelType: string;
+  [key: string]: any;
+}
 export interface ILayerModelInitializationOptions {
   moduleName: string;
   vertexShader: string;
   fragmentShader: string;
   triangulation: Triangulation;
   segmentNumber?: number;
+  workerEnabled?: boolean;
+  workerOptions?: IWorkerOption;
 }
 
 export interface ILayerModel {
@@ -73,8 +80,8 @@ export interface ILayerModel {
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
-  buildModels(): IModel[];
-  initModels(): IModel[];
+  buildModels(callbackModel: (models: IModel[]) => void): void;
+  initModels(callbackModel: (models: IModel[]) => void): void;
   needUpdate(): boolean;
   clearModels(): void;
 
@@ -161,6 +168,8 @@ export interface ISubLayerInitOptions {
   coords?: string;
   sourceLayer?: string;
   featureId?: string;
+
+  workerEnabled?: boolean;
 }
 
 export interface ITilePickManager {
@@ -281,6 +290,7 @@ export interface ILayer {
   layerType?: string | undefined;
   isVector?: boolean;
   triangulation?: Triangulation | undefined;
+
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -314,7 +324,7 @@ export interface ILayer {
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): IModel;
+  ): Promise<IModel>;
   createAttrubutes(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
@@ -555,6 +565,8 @@ export interface ILayerConfig {
    * layer point text 是否是 iconfont 模式
    */
   iconfont: boolean;
+
+  workerEnabled?: boolean;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }

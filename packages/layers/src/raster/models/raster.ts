@@ -2,6 +2,7 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  IModel,
   ITexture2D,
   lazyInject,
   TYPES,
@@ -42,7 +43,7 @@ export default class RasterModel extends BaseModel {
     };
   }
 
-  public initModels() {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -69,22 +70,28 @@ export default class RasterModel extends BaseModel {
       height: imageData.height,
       flipY: false,
     });
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'RasterImageData',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'rasterImageData',
         vertexShader: rasterVert,
         fragmentShader: rasterFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
-        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
-  public buildModels() {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public clearModels(): void {

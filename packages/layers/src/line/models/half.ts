@@ -84,15 +84,15 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
     this.dataTexture?.destroy();
   }
 
-  public buildModels(): IModel[] {
+  public async buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -100,18 +100,24 @@ export default class LineModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'line_half',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineHalf',
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
         depth: { enable: depth },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   /**

@@ -78,8 +78,8 @@ export default class SimpleLineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -96,36 +96,43 @@ export default class SimpleLineModel extends BaseModel {
       return {
         frag: simle_linear_frag,
         vert: simple_line_vert,
-        type: 'simple_linear',
+        type: 'lineSimpleLinear',
       };
     } else {
       return {
         frag: simple_line_frag,
         vert: simple_line_vert,
-        type: 'simple_normal',
+        type: 'lineSimpleNormal',
       };
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     const { frag, vert, type } = this.getShaders();
-    return [
-      this.layer.buildLayerModel({
+
+    this.layer
+      .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation: SimpleLineTriangulation,
-        primitive: gl.LINES, // gl.LINES gl.TRIANGLES
-        blend: this.getBlend(),
+        primitive: gl.LINES,
         depth: { enable: false },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

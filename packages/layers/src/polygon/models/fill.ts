@@ -2,17 +2,15 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   Triangulation,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getMask, polygonFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
-import {
-  polygonTriangulation,
-  polygonTriangulationWithCenter,
-} from '../../core/triangulation';
+import { polygonTriangulationWithCenter } from '../../core/triangulation';
 import polygon_frag from '../shaders/polygon_frag.glsl';
 import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
 import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
@@ -69,28 +67,44 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const { frag, vert, triangulation, type } = this.getModelParams();
     const {
       mask = false,
       maskInside = true,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+      workerEnabled = false,
+      enablePicking,
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPolygonLayerStyleOptions
+    >;
     this.layer.triangulation = triangulation;
-    return [
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
         fragmentShader: frag,
         triangulation,
-        blend: this.getBlend(),
+        primitive: gl.TRIANGLES,
         depth: { enable: false },
+        blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+        workerEnabled,
+        workerOptions: {
+          modelType: type,
+          enablePicking,
+        },
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
@@ -147,15 +161,15 @@ export default class FillModel extends BaseModel {
       return {
         frag: polygon_linear_frag,
         vert: polygon_linear_vert,
-        type: 'polygon_linear',
+        type: 'polygonLinear',
         triangulation: polygonTriangulationWithCenter,
       };
     } else {
       return {
         frag: polygon_frag,
         vert: polygon_vert,
-        type: 'polygon_fill',
-        triangulation: polygonTriangulation,
+        type: 'polygonFill',
+        triangulation: polygonFillTriangulation,
       };
     }
   }

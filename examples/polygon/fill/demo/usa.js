@@ -20,7 +20,7 @@ scene.on('loaded', () => {
       const layer = new PolygonLayer({})
         .source(data)
         .scale('density', {
-          type: 'quantize'
+          type: 'quantile'
         })
         .color(
           'density', color

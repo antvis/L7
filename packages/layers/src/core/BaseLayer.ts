@@ -50,7 +50,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor } from '@antv/l7-utils';
+import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
@@ -432,7 +432,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public createModelData(data: any, option?: ISourceCFG) {
-    if (this.layerModel.createModelData) {
+    if (this.layerModel?.createModelData) {
       // 在某些特殊图层中单独构建 attribute & elements
       return this.layerModel.createModelData(option);
     }
@@ -654,7 +654,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // @ts-ignore
     if (lastConfig && lastConfig.mask === true && options.mask === false) {
       this.clearModels();
-      this.models = this.layerModel.buildModels();
+      this.layerModel.buildModels((models) => {
+        this.models = models;
+      });
     }
     return this;
   }
@@ -688,7 +690,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return this;
     }
     // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.getEncodedData().length !== 0) {
+    if (this.getEncodedData() && this.getEncodedData().length !== 0) {
       this.renderModels();
     }
     return this;
@@ -698,7 +700,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    if (this.getEncodedData().length !== 0) {
+    if (this.getEncodedData() && this.getEncodedData().length !== 0) {
       if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
         // multi render 开始执行 multiPassRender 的渲染流程
         await this.multiPassRenderer.render();
@@ -983,7 +985,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
-    this.layerSource.off('update', this.sourceEvent);
+    this.layerSource.off('sourceUpdate', this.sourceEvent);
 
     this.multiPassRenderer.destroy();
     // console.log(this.styleAttributeService.getAttributes())
@@ -1023,7 +1025,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public clearModels() {
     this.models.forEach((model) => model.destroy());
-    this.layerModel.clearModels();
+    this.layerModel?.clearModels();
     this.models = [];
   }
 
@@ -1041,7 +1043,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public setSource(source: Source) {
     // 清除旧 sources 事件
     if (this.layerSource) {
-      this.layerSource.off('update', this.sourceEvent);
+      this.layerSource.off('sourceUpdate', this.sourceEvent);
     }
 
     this.layerSource = source;
@@ -1053,7 +1055,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.layerSource.updateClusterData(zoom);
     }
     // source 可能会复用，会在其它layer被修改
-    this.layerSource.on('update', this.sourceEvent);
+    if (this.layerSource.inited) {
+      this.sourceEvent();
+    }
+    // this.layerSource.inited 为 true 后，sourceUpdate 事件不会再触发
+    this.layerSource.on('sourceUpdate', () => {
+      this.sourceEvent();
+    });
   }
   public getSource() {
     return this.layerSource;
@@ -1136,37 +1144,70 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): IModel {
+  ): Promise<IModel> {
     const {
       moduleName,
       vertexShader,
       fragmentShader,
       triangulation,
       segmentNumber,
+      workerEnabled = false,
+      workerOptions,
       ...rest
     } = options;
+
     this.shaderModuleService.registerModule(moduleName, {
       vs: vertexShader,
       fs: fragmentShader,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    const {
-      attributes,
-      elements,
-    } = this.styleAttributeService.createAttributesAndIndices(
-      this.encodedData,
-      triangulation,
-      segmentNumber,
-    );
-    return createModel({
-      attributes,
-      uniforms,
-      fs,
-      vs,
-      elements,
-      blend: BlendTypes[BlendType.normal],
-      ...rest,
+    return new Promise((resolve, reject) => {
+      // filter supported worker & worker enabled layer
+      if (
+        workerOptions &&
+        workerOptions.modelType in WorkerSourceMap &&
+        workerEnabled
+      ) {
+        this.styleAttributeService
+          .createAttributesAndIndicesAscy(
+            this.encodedData,
+            segmentNumber,
+            workerOptions,
+          )
+          .then(({ attributes, elements }) => {
+            const m = createModel({
+              attributes,
+              uniforms,
+              fs,
+              vs,
+              elements,
+              blend: BlendTypes[BlendType.normal],
+              ...rest,
+            });
+            resolve(m);
+          })
+          .catch((err) => reject(err));
+      } else {
+        const {
+          attributes,
+          elements,
+        } = this.styleAttributeService.createAttributesAndIndices(
+          this.encodedData,
+          triangulation,
+          segmentNumber,
+        );
+        const m = createModel({
+          attributes,
+          uniforms,
+          fs,
+          vs,
+          elements,
+          blend: BlendTypes[BlendType.normal],
+          ...rest,
+        });
+        resolve(m);
+      }
     });
   }
 
@@ -1241,15 +1282,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.getEncodedData().length > 0) {
+    if (this.getEncodedData() && this.getEncodedData().length > 0) {
       if (this.layerModelNeedUpdate && this.layerModel) {
-        this.models = this.layerModel.buildModels();
-        this.hooks.beforeRender.call();
-        this.layerModelNeedUpdate = false;
+        this.layerModel.buildModels((models: IModel[]) => {
+          this.models = models;
+          this.hooks.beforeRender.call();
+          this.layerModelNeedUpdate = false;
+        });
       }
-      if (this.layerModel.renderUpdate) {
+      if (this?.layerModel?.renderUpdate) {
         this.layerModel.renderUpdate();
       }
+
       this.models.forEach((model) => {
         model.draw(
           {
@@ -1321,9 +1365,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
-    const { autoFit, fitBoundsOptions } = this.getLayerConfig();
-    if (autoFit) {
-      this.fitBounds(fitBoundsOptions);
+    const layerConfig = this.getLayerConfig();
+    if (layerConfig && layerConfig.autoFit) {
+      this.fitBounds(layerConfig.fitBoundsOptions);
     }
     // 对外暴露事件 迁移到 DataMappingPlugin generateMapping，保证在重新重新映射后触发
     // this.emit('dataUpdate');

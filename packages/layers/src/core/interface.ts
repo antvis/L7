@@ -50,6 +50,8 @@ export interface ILineLayerStyleOptions {
   rampColors?: IColorRamp;
   featureId?: string;
   sourceLayer?: string;
+  enablePicking?: boolean;
+  workerEnabled?: boolean;
 }
 
 export interface IPointLayerStyleOptions {

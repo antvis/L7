@@ -50,7 +50,7 @@ export default class WindModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public initModels() {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       uMin = -21.32,
       uMax = 26.8,
@@ -114,18 +114,24 @@ export default class WindModel extends BaseModel {
       this.layerService.renderLayers();
     });
 
-    this.colorModel = this.layer.buildLayerModel({
-      moduleName: 'WindLayer',
-      vertexShader: WindVert,
-      fragmentShader: WindFrag,
-      triangulation: RasterImageTriangulation,
-      primitive: gl.TRIANGLES,
-      depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
-    });
-
-    return [this.colorModel];
+    this.layer
+      .buildLayerModel({
+        moduleName: 'wind',
+        vertexShader: WindVert,
+        fragmentShader: WindFrag,
+        triangulation: RasterImageTriangulation,
+        primitive: gl.TRIANGLES,
+        depth: { enable: false },
+        blend: this.getBlend(),
+      })
+      .then((model) => {
+        this.colorModel = model;
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public getWindSize() {
@@ -143,8 +149,8 @@ export default class WindModel extends BaseModel {
     return { imageWidth, imageHeight };
   }
 
-  public buildModels() {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   public clearModels(): void {
@@ -254,7 +260,8 @@ export default class WindModel extends BaseModel {
       m.render();
       m.hooks.afterRender.call();
     });
-    this.colorModel.draw({
+
+    this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_texture: this.texture,

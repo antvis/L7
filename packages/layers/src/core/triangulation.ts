@@ -1,5 +1,10 @@
 import { IEncodeFeature } from '@antv/l7-core';
-import { aProjectFlat, lngLatToMeters } from '@antv/l7-utils';
+import {
+  aProjectFlat,
+  calculateCentroid,
+  calculatePointsCenterAndRadius,
+  lngLatToMeters,
+} from '@antv/l7-utils';
 import earcut from 'earcut';
 // @ts-ignore
 import { mat4, vec3 } from 'gl-matrix';
@@ -11,10 +16,6 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
-import {
-  calculateCentroid,
-  calculatePointsCenterAndRadius,
-} from '../utils/geo';
 import SimpleLine from '../utils/simpleLine';
 import extrudePolygon, {
   extrude_PolygonNormal,

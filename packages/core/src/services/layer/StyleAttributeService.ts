@@ -1,3 +1,4 @@
+import { executeWorkerTask } from '@antv/l7-utils';
 import { inject, injectable, optional } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
@@ -6,7 +7,7 @@ import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
 import { IParseDataItem } from '../source/ISourceService';
-import { ILayer } from './ILayerService';
+import { ILayer, IWorkerOption } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,
@@ -183,6 +184,80 @@ export default class StyleAttributeService implements IStyleAttributeService {
         });
       }
     }
+  }
+
+  public createAttributesAndIndicesAscy(
+    features: IEncodeFeature[],
+    segmentNumber: number,
+    workerOptions: IWorkerOption,
+  ) {
+    // 每次创建的初始化化 LayerOut
+    this.featureLayout = {
+      sizePerElement: 0,
+      elements: [],
+    };
+
+    const descriptors = this.attributes
+      .map((attr) => {
+        attr.resetDescriptor();
+        return attr.descriptor;
+      })
+      .filter((d) => d);
+    const { modelType, ...restOptions } = workerOptions;
+
+    const {
+      createAttribute,
+      createBuffer,
+      createElements,
+    } = this.rendererService;
+    const attributes: {
+      [attributeName: string]: IAttribute;
+    } = {};
+    return new Promise((resolve, reject) => {
+      executeWorkerTask(modelType, {
+        // Tip: worker 不支持传递 function 函数
+        descriptors: this.getDescriptorsWithOutFunc(descriptors),
+        features,
+        segmentNumber,
+        ...restOptions,
+      })
+        .then((e) => {
+          e.descriptors.forEach(
+            (descriptor: IVertexAttributeDescriptor, attributeIdx: number) => {
+              if (descriptor) {
+                // IAttribute 参数透传
+                const { buffer, update, name, ...rest } = descriptor;
+
+                const vertexAttribute = createAttribute({
+                  // IBuffer 参数透传
+                  buffer: createBuffer(buffer),
+                  ...rest,
+                });
+                attributes[descriptor.name || ''] = vertexAttribute;
+
+                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
+                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
+              }
+            },
+          );
+          this.featureLayout = e.featureLayout;
+          const elements = createElements({
+            data: e.indices,
+            type: gl.UNSIGNED_INT,
+            count: e.indices.length,
+          });
+          this.attributesAndIndices = {
+            attributes,
+            elements,
+          };
+
+          resolve(this.attributesAndIndices);
+        })
+        .catch((err: Error) => {
+          console.warn(err);
+          reject(err);
+        });
+    });
   }
 
   public createAttributesAndIndices(
@@ -433,5 +508,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
     this.attributesAndIndices?.elements.destroy();
     this.attributes = [];
+  }
+
+  private getDescriptorsWithOutFunc(descriptors: IVertexAttributeDescriptor[]) {
+    return descriptors.map((d) => {
+      return {
+        buffer: d.buffer,
+        name: d.name,
+        size: d.size,
+      };
+    });
   }
 }

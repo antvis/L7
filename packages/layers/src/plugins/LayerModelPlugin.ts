@@ -6,23 +6,45 @@ import 'reflect-metadata';
  */
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
+  public initLayerModel(layer: ILayer) {
+    // 更新Model 配置项
+    layer.prepareBuildModel();
+    // 初始化 Model
+    layer.buildModels();
+    // emit layer model loaded
+    layer.emit('modelLoaded', null);
+    layer.styleNeedUpdate = false;
+  }
+
+  public prepareLayerModel(layer: ILayer) {
+    // 更新Model 配置项
+    layer.prepareBuildModel();
+    layer.clearModels();
+    // 初始化 Model
+    layer.buildModels();
+    // emit layer model loaded
+    layer.emit('modelLoaded', null);
+    layer.layerModelNeedUpdate = false;
+  }
+
   public apply(layer: ILayer) {
     layer.hooks.init.tap('LayerModelPlugin', () => {
-      // 更新Model 配置项
-      layer.prepareBuildModel();
-      // 初始化 Model
-      layer.buildModels();
-      layer.styleNeedUpdate = false;
+      layer.inited = true;
+      const source = layer.getSource();
+      if (source.inited) {
+        this.initLayerModel(layer);
+      }
     });
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
-      // 更新Model 配置项
-      layer.prepareBuildModel();
-
-      layer.clearModels();
-      // 初始化 Model
-      layer.buildModels();
-      layer.layerModelNeedUpdate = false;
+      const source = layer.getSource();
+      if (source.inited) {
+        this.prepareLayerModel(layer);
+      } else {
+        source.once('sourceUpdate', () => {
+          this.prepareLayerModel(layer);
+        });
+      }
       return false;
     });
   }

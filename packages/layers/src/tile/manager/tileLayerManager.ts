@@ -150,6 +150,7 @@ export class TileLayerManager implements ITileLayerManager {
         positions: [0, 0.25, 0.5, 0.75, 1.0],
       },
       featureId = 'id',
+      workerEnabled = false,
       sourceLayer,
 
       pixelConstant = 0,
@@ -197,6 +198,8 @@ export class TileLayerManager implements ITileLayerManager {
       domain,
       rampColors,
       rampColorsData: this.rampColorsData,
+      // worker
+      workerEnabled,
 
       pixelConstant,
       pixelConstantR,

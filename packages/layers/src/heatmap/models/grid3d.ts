@@ -29,26 +29,33 @@ export default class Grid3DModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'grid3dheatmap',
+    this.layer
+      .buildLayerModel({
+        moduleName: 'heatmapGrid3d',
         vertexShader: heatmapGrid3dVert,
         fragmentShader: heatmapGridFrag,
         triangulation: PointExtrudeTriangulation,
+        primitive: gl.TRIANGLES,
         depth: { enable: true },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     // point layer size;

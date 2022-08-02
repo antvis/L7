@@ -30,18 +30,18 @@ export default class HexagonModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'hexagonheatmap',
+    this.layer
+      .buildLayerModel({
+        moduleName: 'heatmapHexagon',
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
@@ -49,8 +49,14 @@ export default class HexagonModel extends BaseModel {
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

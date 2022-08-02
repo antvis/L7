@@ -112,7 +112,7 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -126,7 +126,7 @@ export default class FillModel extends BaseModel {
       this.calMeter2Coord();
     }
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   /**
@@ -171,44 +171,41 @@ export default class FillModel extends BaseModel {
     }
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
+      workerEnabled = false,
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
-    const { frag, vert, type } = this.getShaders();
 
     this.layer.triangulation = PointFillTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        // primitive: gl.POINTS,
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointTile',
+        vertexShader: point_tile_vert,
+        fragmentShader: point_tile_frag,
         triangulation: PointFillTriangulation,
         depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
         cull: {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-      }),
-    ];
-  }
-
-  /**
-   * 根据 animateOption 的值返回对应的 shader 代码
-   * @returns
-   */
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: point_tile_frag,
-      vert: point_tile_vert,
-      type: 'point_fill_tile',
-    };
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        workerOptions: {
+          modelType: 'pointTile',
+        },
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {

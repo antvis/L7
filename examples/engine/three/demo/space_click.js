@@ -334,7 +334,7 @@ scene.on('loaded', () => {
     .animate(true);
   scene.addLayer(threeJSLayer);
   // @ts-ignore
-  let currentCamera = threeJSLayer.threeRenderService.getRenderCamera();
+  let currentCamera = threeJSLayer.threeRenderService?.getRenderCamera();
   const currentView = {
     lng: center.lng,
     lat: center.lat,

@@ -62,7 +62,7 @@ export default class BaseEarthModel extends BaseModel {
     this.layerService.renderLayers();
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     const { globelOtions } = this.layer.getLayerConfig();
     if (globelOtions?.earthTime !== undefined) {
       this.setEarthTime(globelOtions.earthTime);
@@ -84,26 +84,33 @@ export default class BaseEarthModel extends BaseModel {
       this.layerService.renderLayers();
     });
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'baseEarth',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'earthBase',
         vertexShader: baseVert,
         fragmentShader: baseFrag,
         triangulation: earthTriangulation,
         depth: { enable: true },
         blend: this.getBlend(),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

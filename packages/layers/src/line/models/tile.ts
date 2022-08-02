@@ -103,11 +103,11 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -116,39 +116,33 @@ export default class LineModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
+  public async buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
       depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    const { frag, vert, type } = this.getShaders();
+
     this.layer.triangulation = LineTriangulation;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineTile',
+        vertexShader: line_tile_vert,
+        fragmentShader: line_tile_frag,
         triangulation: LineTriangulation,
-        primitive: gl.TRIANGLES,
         blend: this.getBlend(),
         depth: { enable: depth },
         // depth: { enable: true },
         stencil: getMask(mask, maskInside),
-      }),
-    ];
-  }
-
-  /**
-   * 根据参数获取不同的 shader 代码
-   * @returns
-   */
-  public getShaders(): { frag: string; vert: string; type: string } {
-    return {
-      frag: line_tile_frag,
-      vert: line_tile_vert,
-      type: 'line_tile',
-    };
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {

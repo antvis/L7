@@ -105,7 +105,7 @@ export default class Amap2demo_text extends React.Component {
             .color('w', ['#0e0030', '#0e0030', '#0e0030'])
             .style({
               textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-              textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+              textOffset: [10, 0], // 文本相对锚点的偏移量 [水平, 垂直]
               spacing: 2, // 字符间距
               padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
               stroke: '#ffffff', // 描边颜色
