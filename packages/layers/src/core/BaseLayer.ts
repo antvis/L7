@@ -1290,7 +1290,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.layerModelNeedUpdate = false;
         });
       }
-      if (this.layerModel.renderUpdate) {
+      if (this?.layerModel?.renderUpdate) {
         this.layerModel.renderUpdate();
       }
 
