@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.9.18",
+  "version": "2.9.19",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -27,9 +27,9 @@
   "license": "ISC",
   "dependencies": {
     "@amap/amap-jsapi-loader": "^0.0.3",
-    "@antv/l7-core": "2.9.18",
-    "@antv/l7-map": "2.9.18",
-    "@antv/l7-utils": "2.9.18",
+    "@antv/l7-core": "2.9.19",
+    "@antv/l7-map": "2.9.19",
+    "@antv/l7-utils": "2.9.19",
     "@babel/runtime": "^7.7.7",
     "@types/amap-js-api": "^1.4.6",
     "@types/mapbox-gl": "^1.11.2",
