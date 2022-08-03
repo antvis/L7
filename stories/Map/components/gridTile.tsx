@@ -67,7 +67,6 @@ function getR(data: Uint8ClampedArray) {
   return arr;
 }
 
-
 export default class GridTile extends React.Component {
   // @ts-ignore
   private scene: Scene;
@@ -89,8 +88,6 @@ export default class GridTile extends React.Component {
       }),
     });
     this.scene = scene;
-
-
 
     const img: HTMLImageElement = new Image();
     img.crossOrigin = 'none';
@@ -137,15 +134,7 @@ export default class GridTile extends React.Component {
       scene.addLayer(layer);
     };
 
-
-
-
-    scene.on('loaded', () => {
-  
-     
-
-   
-    });
+    scene.on('loaded', () => {});
   }
 
   public render() {

@@ -181,7 +181,6 @@ export function SimpleLineTriangulation(feature: IEncodeFeature) {
     });
   }
 
- 
   const linebuffer = line.complex;
   return {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter, total ]
