@@ -49,6 +49,7 @@ export default class LineModel extends BaseModel {
       raisingHeight = 0,
       heightfixed = false,
       linearDir = LinearDir.VERTICAL, // 默认纵向
+      blur = [1, 1, 1],
       arrow = {
         enable: false,
         arrowWidth: 2,
@@ -110,6 +111,8 @@ export default class LineModel extends BaseModel {
       u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
+
+      u_blur: blur,
 
       // 纹理支持参数
       u_texture: this.texture, // 贴图

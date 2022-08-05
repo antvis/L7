@@ -61,32 +61,20 @@ export default class Amap2demo_lineLinear extends React.Component {
         .shape('line')
         .color('#0f0')
         .style({
-          linearDir: 'horizontal', // vertical horizontal
-          sourceColor: '#f00',
-          targetColor: '#0f0',
-          // sourceColor: 'rgba(0.0, 1.0, 0.0, 0.0)',
-          // targetColor: '#0f0',
+          opacity: 0.5,
+          blur: [0, 1, 0]
         });
       scene.addLayer(layer);
-      // const layer = new LineLayer({})
-      //   .source(geoData)
-      //   .size(25)
-      //   .shape('linearline')
-      //   .style({
-      //     linearDir: 'horizontal', // vertical horizontal
-      //     rampColors: {
-      //       colors: [
-      //         '#FF4818',
-      //         '#F7B74A',
-      //         '#FFF598',
-      //         '#91EABC',
-      //         '#2EA9A1',
-      //         '#206C7C',
-      //       ],
-      //       positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-      //     },
-      //   });
-      // scene.addLayer(layer);
+
+      const layer2 = new LineLayer({})
+      .source(geoData)
+      .size(5)
+      .shape('line')
+      .color('#0f0')
+      .style({
+      });
+    scene.addLayer(layer2);
+      
     });
   }
 
