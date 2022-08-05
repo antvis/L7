@@ -12,7 +12,7 @@ import {
 import { getMask, LineTriangulation, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions } from '../../core/interface';
+import { ILineLayerStyleOptions, TextureBlend, LinearDir } from '../../core/interface';
 // import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
 import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
@@ -44,6 +44,7 @@ export default class LineModel extends BaseModel {
       borderColor = '#ccc',
       raisingHeight = 0,
       heightfixed = false,
+      linearDir = LinearDir.VERTICAL, // 默认纵向
       arrow = {
         enable: false,
         arrowWidth: 2,
@@ -102,7 +103,7 @@ export default class LineModel extends BaseModel {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
       u_opacity: isNumber(opacity) ? opacity : 1.0,
-      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
+      u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
 
@@ -117,6 +118,7 @@ export default class LineModel extends BaseModel {
       u_borderColor: rgb2arr(borderColor),
 
       // 渐变色支持参数
+      u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
