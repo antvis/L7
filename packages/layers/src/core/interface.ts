@@ -21,7 +21,7 @@ export enum LinearDir {
 
 export enum TextureBlend {
   NORMAL = 'normal',
-  REPLACE = 'replace'
+  REPLACE = 'replace',
 }
 
 export interface ILineLayerStyleOptions {
