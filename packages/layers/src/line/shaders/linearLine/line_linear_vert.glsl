@@ -66,6 +66,7 @@ void main() {
 
   // 设置数据集的参数
   styleMappingMat[3][0] = currentLinePointRatio; // 当前点位距离占线总长的比例
+  styleMappingMat[3][3] = texV;             // 线图层贴图部分的 v 坐标值
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 

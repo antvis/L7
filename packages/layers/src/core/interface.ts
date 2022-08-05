@@ -14,6 +14,16 @@ interface ILineArrow {
   tailWidth: number;
 }
 
+export enum LinearDir {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
+
+export enum TextureBlend {
+  NORMAL = 'normal',
+  REPLACE = 'replace',
+}
+
 export interface ILineLayerStyleOptions {
   tileOrigin?: number[];
   coord?: string;
@@ -28,9 +38,12 @@ export interface ILineLayerStyleOptions {
   lineTexture?: boolean; // 可选参数、是否开启纹理贴图功能(all)
   iconStep?: number; // 可选参数、纹理贴图步长(all)
   iconStepCount?: number; // 可选参数、纹理贴图间隔
-  textureBlend?: string; // 可选参数、供给纹理贴图使用(all)
+  textureBlend?: TextureBlend; // 可选参数、供给纹理贴图使用(all)
+
+  linearDir?: LinearDir;
   sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
   targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
+
   thetaOffset?: number; // 可选参数、设置弧线的偏移量
 
   globalArcHeight?: number; // 可选参数、地球模式下 3D 弧线的高度
@@ -44,6 +57,8 @@ export interface ILineLayerStyleOptions {
 
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+
+  blur?: [number, number, number]; // 配置线图层的 blur 分布
 
   arrow?: ILineArrow;
 

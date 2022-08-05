@@ -1,10 +1,11 @@
 #define Animate 0.0
 #define LineTexture 1.0
-uniform float u_blur : 0.99;
 uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
 
 uniform float u_borderWidth: 0.0;
+
+uniform vec3 u_blur;
 uniform vec4 u_borderColor;
 varying vec4 v_color;
 
@@ -85,6 +86,15 @@ void main() {
       gl_FragColor.a = mix(gl_FragColor.a, 0.0, (v - (1.0 - borderOuterWidth))/borderOuterWidth);
     }
   }
+
+  // blur
+  float blurV = styleMappingMat[3][3];
+  if(blurV < 0.5) {
+    gl_FragColor.a *= mix(u_blur.r, u_blur.g, blurV/0.5);
+  } else {
+    gl_FragColor.a *= mix(u_blur.g, u_blur.b, (blurV - 0.5)/0.5);
+  }
+  
 
   gl_FragColor = filterColor(gl_FragColor);
 }
