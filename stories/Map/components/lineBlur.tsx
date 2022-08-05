@@ -62,19 +62,17 @@ export default class Amap2demo_lineLinear extends React.Component {
         .color('#0f0')
         .style({
           opacity: 0.5,
-          blur: [0, 1, 0]
+          blur: [0, 1, 0],
         });
       scene.addLayer(layer);
 
       const layer2 = new LineLayer({})
-      .source(geoData)
-      .size(5)
-      .shape('line')
-      .color('#0f0')
-      .style({
-      });
-    scene.addLayer(layer2);
-      
+        .source(geoData)
+        .size(5)
+        .shape('line')
+        .color('#0f0')
+        .style({});
+      scene.addLayer(layer2);
     });
   }
 
