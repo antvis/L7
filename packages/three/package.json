@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.9.21",
+  "version": "2.9.22-alpha.0",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -30,7 +30,7 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.build.json",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
-     "build": "father build",
+    "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
@@ -44,9 +44,9 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7-core": "2.9.21",
-    "@antv/l7-layers": "2.9.21",
-    "@antv/l7-scene": "2.9.21",
+    "@antv/l7-core": "2.9.22-alpha.0",
+    "@antv/l7-layers": "2.9.22-alpha.0",
+    "@antv/l7-scene": "2.9.22-alpha.0",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",

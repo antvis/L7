@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-map",
-  "version": "2.9.21",
+  "version": "2.9.22-alpha.0",
   "description": "l7 map",
   "keywords": [],
   "author": "thinkinggis <lzx199065@gmail.com>",
@@ -32,19 +32,19 @@
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "test": "umi-test --passWithNoTests",
-    "test-live":"umi-test --watch"
+    "test-live": "umi-test --watch"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "gl-matrix": "^3.1.0",
-    "@antv/l7-utils": "2.9.21",
+    "@antv/l7-utils": "2.9.22-alpha.0",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",
     "eventemitter3": "^4.0.4",
+    "gl-matrix": "^3.1.0",
     "lodash": "^4.17.15"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
