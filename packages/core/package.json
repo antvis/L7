@@ -24,6 +24,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
+    "@turf/helpers": "^6.1.4",
     "@antv/async-hook": "^2.1.0",
     "@turf/helpers": "^6.1.4",
     "@antv/l7-utils": "2.9.21",
