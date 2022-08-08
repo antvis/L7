@@ -1,5 +1,5 @@
 import PointLayer from '../';
-import { Mapbox } from '../../../../maps/src';
+import Map from '../../../../maps/src/map';
 import { Scene } from '../../../../scene/src';
 describe('pointLayer', () => {
   const el = document.createElement('div');
@@ -15,7 +15,7 @@ describe('pointLayer', () => {
   it('init', () => {
     const scene = new Scene({
       id: 'test-div-id',
-      map: new Mapbox({
+      map: new Map({
         style: 'dark',
         center: [110.19382669582967, 30.258134],
         pitch: 0,

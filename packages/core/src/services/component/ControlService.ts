@@ -97,7 +97,5 @@ export default class ControlService implements IControlService {
     if (this.controlContainer) {
       DOM.remove(this.controlContainer);
     }
-    delete this.controlCorners;
-    delete this.controlContainer;
   }
 }

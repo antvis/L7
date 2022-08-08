@@ -275,9 +275,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     const values = data?.map((item) => item[field]) || [];
     if (scaleOption?.domain) {
       cfg.domain = scaleOption?.domain;
-    }
-    // 默认类型为 Quantile Scales https://github.com/d3/d3-scale#quantile-scales
-    else if (
+    } else if (
       type !== ScaleTypes.CAT &&
       type !== ScaleTypes.QUANTILE &&
       type !== ScaleTypes.DIVERGING

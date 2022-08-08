@@ -1,5 +1,20 @@
-# don't ever lint node_modules
-node_modules
-# don't lint build output (make sure it's set to your correct build folder name)
-dist
-
+build/
+coverage/
+lib/
+dist/
+mocks/
+node_modules/
+demos/
+.cache
+public
+bin
+esm/
+es/
+tests/
+stories/
+gatsby-browser.js
+webpack.*.js
+gatsby-*.js
+global.d.ts
+jest.config.js
+.eslintrc.*

@@ -15,10 +15,10 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.build.json",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "build": "run-p build:*",
-    "build:cjs": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "cross-env BABEL_ENV=esm NODE_ENV=production babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+     "build": "father build",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "sync": "tnpm sync"
   },
   "author": "lzxue",
@@ -27,9 +27,12 @@
     "@babel/runtime": "^7.7.7",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.1.4",
+    "eventemitter3": "^4.0.0",
     "d3-color": "^1.4.0",
-    "earcut": "^2.2.1",
-    "web-worker-helper": "^0.0.3"
+    "web-worker-helper":"^0.0.3",
+    "earcut":"^2.1.0",
+    "gl-matrix": "^3.1.0"
+
   },
   "devDependencies": {
     "@types/d3-color": "^1.2.2",

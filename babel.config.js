@@ -9,6 +9,7 @@ module.exports = (api) => {
 
   if (isSite) {
     return {
+      skipEnvCheck: true,
       presets: [
         '@babel/preset-env',
         [
