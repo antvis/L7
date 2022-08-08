@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
+    "gl-matrix": "^3.1.0",
     "@antv/l7-utils": "2.9.21",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
