@@ -8,7 +8,9 @@ import {
   IControlCorners,
   IControlService,
   IControlServiceCfg,
+  PositionType,
 } from './IControlService';
+
 @injectable()
 export default class ControlService implements IControlService {
   public container: HTMLElement;
@@ -77,15 +79,15 @@ export default class ControlService implements IControlService {
       corners[vSideList.join('')] = DOM.create('div', className, container);
     }
 
-    createCorner(['top', 'left']);
-    createCorner(['top', 'right']);
-    createCorner(['bottom', 'left']);
-    createCorner(['bottom', 'right']);
+    function splitCornerKeys(positionType: string) {
+      return positionType
+        .replace(/^(top|bottom|left|right|center)/, '$1-')
+        .split('-');
+    }
 
-    createCorner(['top', 'center']);
-    createCorner(['right', 'center']);
-    createCorner(['left', 'center']);
-    createCorner(['bottom', 'center']);
+    Object.values(PositionType).forEach((position) => {
+      createCorner(splitCornerKeys(position));
+    });
   }
 
   private clearControlPos() {

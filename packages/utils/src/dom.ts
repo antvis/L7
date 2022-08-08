@@ -169,3 +169,7 @@ export function getViewPortScale() {
 }
 
 export const DPR = getViewPortScale() < 1 ? 1 : $window.devicePixelRatio;
+
+export function addStyle(el: ELType, style: string) {
+  el.setAttribute('style', `${el.style}; ${style}`);
+}
