@@ -30,7 +30,7 @@ export default class Demo extends React.Component {
     });
     this.scene = scene;
     let layer = new CustomPoint()
-    // @ts-ignore
+      // @ts-ignore
       .source(
         [
           {
