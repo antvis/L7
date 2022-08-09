@@ -1,19 +1,13 @@
 import { IControlOption, PositionType } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
-import { ControlEvent, ILayerControlOption } from '../interface';
+import { ILayerControlOption } from '../interface';
 import Control from './BaseControl';
 
 interface IInputItem extends HTMLInputElement {
   layerId: string;
 }
 
-export type LayerControlEvent =
-  | ControlEvent
-  | 'overlayadd'
-  | 'overlayremove'
-  | 'baselayerchange';
-
-export default class Layers extends Control<IControlOption, LayerControlEvent> {
+export default class Layers extends Control<IControlOption> {
   private layerControlInputs: any[];
   private layers: any[];
   private lastZIndex: number;

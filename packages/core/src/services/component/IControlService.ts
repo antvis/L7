@@ -36,7 +36,7 @@ export interface IControlCorners {
 }
 export interface IControl {
   controlOption: IControlOption;
-  setOption: (newOption: Partial<IControlOption>) => void;
+  setOptions: (newOption: Partial<IControlOption>) => void;
   addTo(sceneContainer: Container): void;
   onAdd(): HTMLElement;
   onRemove(): void;

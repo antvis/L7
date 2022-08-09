@@ -1,7 +1,5 @@
 import { IControlOption } from '@antv/l7-core';
 
-export type ControlEvent = 'show' | 'hide' | 'add' | 'remove';
-
 export interface ILayerControlOption extends IControlOption {
   collapsed: boolean;
   autoZIndex: boolean;
