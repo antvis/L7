@@ -1,2 +1,6 @@
 ### 点图层
-<code src="./circle.tsx"></code>
+#### point circle
+<code src="./point_circle.tsx"></code>
+
+#### point wave
+<code src="./point_wave.tsx"></code>
