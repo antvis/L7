@@ -16,6 +16,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: yarn config set registry https://registry.npmjs.org
     - run: yarn
+    - run: yarn run worker
     - run: yarn test-cover
     - name: Coveralls
       uses: coverallsapp/github-action@master
