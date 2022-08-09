@@ -32,16 +32,12 @@ copy node_modules/gl/deps/windows/dll/x64/*.dll c:\windows\system32
 
 ## 运行 DEMO
 
-启动各个 package 代码变更监听：
-```bash
-yarn watch
-```
 
-启动 Storybook，会自动打开 `http://localhost:6006/`：
-```bash
-yarn storybook
-```
 
+```bash
+yarn dev
+```
+打开  `http://localhost:6006/`：
 ## 运行测试
 
 运行单元测试：

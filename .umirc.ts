@@ -6,7 +6,8 @@ export default defineConfig({
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   outputPath: 'docs-dist',
   devServer:{
-    port:'6006'
+    port:'6006',
+   
   },
   resolve: {
     includes: ['dev-demos']
