@@ -38,6 +38,7 @@ export default class FillModel extends BaseModel {
       blend,
       blur = 0,
       raisingHeight = 0,
+      heightfixed = false,
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.updateUnit(unit);
@@ -89,6 +90,7 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
+      u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
 
       u_meter2coord: this.meter2coord,
