@@ -175,7 +175,7 @@
     "release": "lerna publish from-package --force-publish && yarn sync",
     "release-cdn": "antv-bin upload -n @antv/l7",
     "test": "umi-test",
-    "test:coverage": "umi-test --coverage",
+    "test-cover": "umi-test --coverage",
     "test-live": "umi-test --watch",
     "tsc": "tsc",
     "watch": "yarn clean && yarn worker && lerna run watch --parallel",

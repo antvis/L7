@@ -44,5 +44,13 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'babel-jest'
   },
   setupFilesAfterEnv: [ '<rootDir>jest/setupTests.ts' ],
-  snapshotSerializers: [ 'enzyme-to-json/serializer' ]
+  snapshotSerializers: [ 'enzyme-to-json/serializer' ],
+  coverageThreshold: {
+    global: {
+      branches: 8,
+      functions: 10,
+      lines: 13,
+      statements: 13,
+    },
+  },
 };
