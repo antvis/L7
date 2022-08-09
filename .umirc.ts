@@ -5,9 +5,9 @@ export default defineConfig({
   favicon: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   outputPath: 'docs-dist',
+  base:'/',
   devServer:{
-    port:'6006',
-   
+    port:'6006', 
   },
   resolve: {
     includes: ['dev-demos']
@@ -18,22 +18,19 @@ export default defineConfig({
   },
   mode: 'site',
   esbuild:false,
+  chainWebpack:(memo, { env, webpack, createCSSRule })=> {
+    // 设置 alias
+    memo.module
+    .rule('lint')
+      .test(/\.glsl$/)
+      .use('babel')
+      .loader('ts-shader-loader')
+      // 还可以创建具名use (loaders)
+  },
   extraBabelPresets:[
     '@babel/preset-typescript'
   ],
   extraBabelPlugins: [
-        // 开发模式下以原始文本引入，便于调试
-    [
-      // import glsl as raw text
-      'babel-plugin-inline-import',
-      {
-        extensions: [
-          // 由于使用了 TS 的 resolveJsonModule 选项，JSON 可以直接引入，不需要当作纯文本
-          // '.json',
-          '.glsl'
-        ]
-      }
-    ],
     [
       'transform-import-css-l7'
     ],
