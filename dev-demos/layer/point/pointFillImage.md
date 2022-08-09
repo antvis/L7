@@ -49,7 +49,8 @@ export default () => {
         .size(36)
         .active(true)
         .style({
-            raisingHeight: 1000
+            raisingHeight: 50,
+            heightfixed: true
         })
 
                    

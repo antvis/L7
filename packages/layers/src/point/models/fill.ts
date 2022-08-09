@@ -91,6 +91,7 @@ export default class FillModel extends BaseModel {
     }
     return {
       u_raisingHeight: Number(raisingHeight),
+      u_heightfixed: Number(heightfixed),
 
       u_meter2coord: this.meter2coord,
       u_meteryScale: this.meteryScale,

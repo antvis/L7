@@ -1,14 +1,14 @@
 ### point wave
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
     useEffect(() => {
         const scene = new Scene({
             id: 'point_wave',
-            map: new Mapbox({
+            map: new GaodeMapV2({
                 style: 'light',
                 center: [120, 30],
                 pitch: 60,
@@ -53,8 +53,8 @@ export default () => {
         .color('red')
         .animate(true)
         .style({
-            // raisingHeight: 1000
-            raisingHeight: 10
+            raisingHeight: 200,
+            heightfixed: true
         })
 
                    
