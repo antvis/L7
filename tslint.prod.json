@@ -2,7 +2,7 @@
 {
   "extends": ["./tslint.json"],
   "rules": {
-    "no-implicit-dependencies": true
+    "no-implicit-dependencies": [true, "dev"]
   },
   "linterOptions": {
     "exclude": [
