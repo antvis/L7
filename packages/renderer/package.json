@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.9.21",
+  "version": "2.9.22",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -20,8 +20,7 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "sync": "tnpm sync",
     "test": "umi-test --passWithNoTests",
-    "test-live":"umi-test --watch"
-
+    "test-live": "umi-test --watch"
   },
   "author": "xiaoiver",
   "license": "ISC",
@@ -29,13 +28,13 @@
     "gl": "^4.4.0"
   },
   "dependencies": {
-    "@antv/l7-utils": "2.9.21",
-    "@antv/l7-core": "2.9.21",
+    "@antv/l7-core": "2.9.22",
+    "@antv/l7-utils": "2.9.22",
     "@babel/runtime": "^7.7.7",
+    "gl": "^4.4.0",
     "inversify": "^5.0.1",
     "l7regl": "^0.0.20",
     "lodash": "^4.17.15",
-    "gl": "^4.4.0",
     "reflect-metadata": "^0.1.13"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
