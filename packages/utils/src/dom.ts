@@ -1,4 +1,6 @@
+import { pull } from 'lodash';
 import { $window, isMini } from './mini-adapter';
+
 type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
@@ -172,4 +174,18 @@ export const DPR = getViewPortScale() < 1 ? 1 : $window.devicePixelRatio;
 
 export function addStyle(el: ELType, style: string) {
   el.setAttribute('style', `${el.style}; ${style}`);
+}
+
+export function getStyleList(style: string): string[] {
+  return style
+    .split(';')
+    .map((item) => item.trim())
+    .filter((item) => item);
+}
+
+export function removeStyle(el: ELType, style: string) {
+  const oldStyleList = getStyleList(el.getAttribute('style') ?? '');
+  const targetStyleList = getStyleList(style);
+  const newStyleList = pull(oldStyleList, ...targetStyleList);
+  el.setAttribute('style', newStyleList.join('; '));
 }

@@ -11,8 +11,6 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { pick } from 'lodash';
-
 export { PositionType } from '@antv/l7-core';
 
 export default abstract class Control<
@@ -23,15 +21,11 @@ export default abstract class Control<
    * @protected
    */
   protected static controlCount = 0;
+
   /**
    * 当前控件实例配置
    */
   public controlOption: O;
-
-  /**
-   * 控件类型，需要子类手动实现
-   */
-  public type: string;
 
   /**
    * 控件的 DOM 容器
@@ -74,11 +68,11 @@ export default abstract class Control<
     if ('position' in newOptions && newOptions.position !== oldPosition) {
       this.setPosition(newOptions.position);
     }
-    if (
-      ('className' in newOptions && newOptions.className !== oldClassName) ||
-      ('style' in newOptions && newOptions.style !== oldStyle)
-    ) {
-      this.setContainerCSS(pick(newOptions, 'className', 'style'));
+    if ('className' in newOptions && newOptions.className !== oldClassName) {
+      this.setContainerClassName(newOptions.className);
+    }
+    if ('style' in newOptions && newOptions.style !== oldStyle) {
+      this.setContainerStyle(newOptions.style);
     }
     this.controlOption = {
       ...this.controlOption,
@@ -106,7 +100,9 @@ export default abstract class Control<
     // 初始化 container
     this.container = this.onAdd();
     DOM.addClass(this.container, 'l7-control');
-    this.setContainerCSS(this.controlOption);
+    const { className, style } = this.controlOption;
+    this.setContainerClassName(className);
+    this.setContainerStyle(style);
 
     // 将 container 插入容器中
     this.insertContainer();
@@ -124,8 +120,14 @@ export default abstract class Control<
     this.onRemove();
   }
 
+  /**
+   * Control 被添加的时候被调用，返回 Control 对应的 DOM 容器
+   */
   public abstract onAdd(): HTMLElement;
 
+  /**
+   * Control 被移除时调用
+   */
   public abstract onRemove(): void;
 
   /**
@@ -202,24 +204,32 @@ export default abstract class Control<
   }
 
   /**
-   * 设置容器 container 的样式相关位置，包含 className 和 style
-   * @param option
+   * 设置容器 container 的样式相关位置，包含 className
+   * @param className
    */
-  protected setContainerCSS(
-    option: Pick<IControlOption, 'className' | 'style'>,
-  ) {
-    const { className, style } = option;
-    if ('className' in option) {
-      const { className: oldClassName } = this.controlOption;
-      if (oldClassName) {
-        DOM.removeClass(this.container, oldClassName);
-      }
-      if (className) {
-        DOM.addClass(this.container, className);
-      }
+  protected setContainerClassName(className?: string | null) {
+    const container = this.container;
+    const { className: oldClassName } = this.controlOption;
+    if (oldClassName) {
+      DOM.removeClass(container, oldClassName);
+    }
+    if (className) {
+      DOM.addClass(container, className);
+    }
+  }
+
+  /**
+   * 设置容器 container 的样式相关位置，包含 style
+   * @param style
+   */
+  protected setContainerStyle(style?: string | null) {
+    const container = this.container;
+    const { style: oldStyle } = this.controlOption;
+    if (oldStyle) {
+      DOM.removeStyle(container, oldStyle);
     }
     if (style) {
-      DOM.addStyle(this.container, style);
+      DOM.addStyle(container, style);
     }
   }
 
