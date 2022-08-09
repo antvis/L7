@@ -1,7 +1,6 @@
 {
   "extends": [
     "tslint:latest",
-    "tslint-react",
     "tslint-plugin-prettier",
     "tslint-config-prettier"
   ],
@@ -27,6 +26,7 @@
   },
   "linterOptions": {
     "exclude": [
+      "stories/**",
       "**/*.d.ts",
       "**/data/*.ts",
       "**/*.{test,story}.ts{,x}",

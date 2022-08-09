@@ -29,6 +29,7 @@ import Amap2demo_arcLine3DTex from './components/amap2demo_arcLine3DTex';
 import Amap2demo_lineStreet from './components/amap2demo_lineStreet';
 import Amap2demo_lineLinear from './components/amap2demo_lineLinear';
 import Amap2demo_road2 from './components/amap2demo_road2';
+import LineBlur from './components/lineBlur';
 
 import Amap2demo_heatmap from "./components/amap2demo_heatmap"
 import Amap2demo_heatmap3D from "./components/amap2demo_heatmap3D"
@@ -108,6 +109,7 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 line_Street', () => <Amap2demo_lineStreet />)
         .add('高德地图2.0 line_Linear', () => <Amap2demo_lineLinear />)
         .add('高德地图2.0 road2', () => <Amap2demo_road2 />)
+        .add('LineBlur', () => <LineBlur />)
 
         .add('高德地图2.0 heatmap', () => <Amap2demo_heatmap />)
         .add('高德地图2.0 heatmap3D', () => <Amap2demo_heatmap3D />)

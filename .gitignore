@@ -84,3 +84,6 @@ stories/Test
 packages/draw/node_modules/@turf
 packages/district/src/data
 
+.umi-production/
+.umi/
+docs-dist

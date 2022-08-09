@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-map",
-  "version": "2.9.20",
+  "version": "2.9.21",
   "description": "l7 map",
   "keywords": [],
   "author": "thinkinggis <lzx199065@gmail.com>",
@@ -26,18 +26,21 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.build.json",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "build": "run-p build:*",
-    "build:cjs": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "cross-env BABEL_ENV=esm NODE_ENV=production babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "test": "jest"
+    "build": "father build",
+    "lint:ts": "run-p -c lint:ts-*",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "test": "umi-test --passWithNoTests",
+    "test-live":"umi-test --watch"
   },
   "bugs": {
     "url": "https://github.com/antvis/L7/issues"
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7-utils": "2.9.20",
+    "gl-matrix": "^3.1.0",
+    "@antv/l7-utils": "2.9.21",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",
