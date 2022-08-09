@@ -90,7 +90,6 @@ export default class FillModel extends BaseModel {
             });
     }
     return {
-      u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
 
       u_meter2coord: this.meter2coord,

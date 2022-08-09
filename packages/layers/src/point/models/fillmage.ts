@@ -28,6 +28,7 @@ export default class FillImageModel extends BaseModel {
       opacity = 1,
       offsets = [0, 0],
       rotation,
+      raisingHeight = 0.0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (this.rendererService.getDirty()) {
@@ -94,6 +95,7 @@ export default class FillImageModel extends BaseModel {
             });
     }
     return {
+      u_raisingHeight: Number(raisingHeight),
       u_isMeter: Number(this.isMeter),
       u_RotateMatrix: new Float32Array([
         Math.cos(this.radian),

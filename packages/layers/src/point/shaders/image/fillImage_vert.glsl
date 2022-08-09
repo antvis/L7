@@ -15,6 +15,7 @@ uniform float u_isMeter;
 varying vec2 v_uv; // 本身的 uv 坐标
 varying vec2 v_Iconuv; // icon 贴图的 uv 坐标
 
+uniform float u_raisingHeight: 0.0;
 uniform float u_opacity : 1;
 uniform vec2 u_offsets;
 
@@ -97,9 +98,10 @@ void main() {
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, 0.0, 1.0);
+    gl_Position = u_Mvp * vec4(project_pos.xy + offset, u_raisingHeight, 1.0);
   } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
+    // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, u_raisingHeight, 1.0));
   }
  
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
