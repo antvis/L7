@@ -9,14 +9,16 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
-import { EventEmitter } from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import { Container } from 'inversify';
 
 export { PositionType } from '@antv/l7-core';
 
+export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
+
 export default abstract class Control<
   O extends IControlOption = IControlOption
-> extends EventEmitter {
+> extends EventEmitter<ControlEvent> {
   /**
    * 当前类型控件实例个数
    * @protected
@@ -107,6 +109,7 @@ export default abstract class Control<
 
     // 将 container 插入容器中
     this.insertContainer();
+    this.emit('add', this);
     return this;
   }
 
@@ -119,6 +122,7 @@ export default abstract class Control<
     }
     DOM.remove(this.container);
     this.onRemove();
+    this.emit('remove', this);
   }
 
   /**
@@ -148,6 +152,7 @@ export default abstract class Control<
     const container = this.container;
     DOM.addClass(container, 'l7-control-hide');
     this.isShow = false;
+    this.emit('hide', this);
   }
 
   /**
