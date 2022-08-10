@@ -1,22 +1,13 @@
 import {
   BBox,
-  Coord,
   degreesToRadians,
-  isObject,
   radiansToLength,
   Units,
 } from '@turf/helpers';
 import { isNumber } from './math';
 
 export type IBounds = [[number, number], [number, number]];
-interface ILngLat {
-  lng: number;
-  lat: number;
-}
-interface IPoint {
-  x: number;
-  y: number;
-}
+
 const originShift = (2 * Math.PI * 6378137) / 2.0;
 type Point = number[];
 /**
@@ -254,7 +245,7 @@ export function boundsContains(b1: IBounds, b2: IBounds): boolean {
   );
 }
 /**
- * bbox 转换为Bounds
+ * bbox转换为Bounds
  * @param b1 bbox
  *
  */

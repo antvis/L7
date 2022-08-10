@@ -159,7 +159,7 @@ export default class RadarModel extends BaseModel {
       maxLat === minLat ? minLat + 0.1 : maxLat,
     ]);
     this.meter2coord = (m1 + m2) / 2;
-    if (!Boolean(this.meter2coord)) {
+    if (!this.meter2coord) {
       // Tip: 兼容单个数据导致的 m1、m2 为 NaN
       this.meter2coord = 7.70681090738883;
     }
@@ -217,8 +217,7 @@ export default class RadarModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          let extrude;
-          extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
+          const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
 
           const extrudeIndex = (attributeIdx % 4) * 3;
           return [
