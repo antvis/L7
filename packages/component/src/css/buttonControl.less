@@ -1,0 +1,25 @@
+@import 'variables.less';
+
+.l7-button-control {
+  min-width: @l7-btn-control-size;
+  height: @l7-btn-control-size;
+  background-color: @l7-control-bg-color;
+  border-width: 0;
+  border-radius: @l7-btn-control-border-radius;
+  outline: 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: @l7-btn-control-bg-hover-color;
+  }
+  &:active {
+    background-color: @l7-btn-control-bg-active-color;
+  }
+
+  * + .l7-button-control__text {
+    margin-left: 4px;
+  }
+}

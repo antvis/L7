@@ -1,0 +1,16 @@
+{
+  "id": "3580659",
+  "name": "L7",
+  "font_family": "l7-iconfont",
+  "css_prefix_text": "l7-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "12323755",
+      "name": "全屏",
+      "font_class": "quanping",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    }
+  ]
+}

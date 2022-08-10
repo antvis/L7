@@ -1,7 +1,7 @@
 import { IControlOption, PositionType } from '@antv/l7-core';
 import { bindAll, DOM } from '@antv/l7-utils';
 import { ILayerControlOption } from '../interface';
-import Control from './baseControl';
+import { Control } from './baseControl';
 
 interface IInputItem extends HTMLInputElement {
   layerId: string;

@@ -10,10 +10,10 @@
     "browser": true,
     "node": true
   },
-   "parser": "babel-eslint",
-   "parserOptions": {
-     "sourceType": "module"
-   },
+//   "parser": "babel-eslint",
+//   "parserOptions": {
+//     "sourceType": "module"
+//   },
   "plugins": [
     "html"
   ],

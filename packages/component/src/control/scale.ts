@@ -1,6 +1,6 @@
 import { bindAll, DOM, lnglatDistance } from '@antv/l7-utils';
 import { IScaleControlOption } from '../interface';
-import Control, { PositionType } from './baseControl';
+import { Control, PositionType } from './baseControl';
 
 export default class Scale extends Control {
   private mScale: HTMLElement;
