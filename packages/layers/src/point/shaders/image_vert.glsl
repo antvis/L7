@@ -10,6 +10,8 @@ uniform mat4 u_Mvp;
 uniform vec2 u_offsets;
 
 uniform float u_opacity : 1;
+uniform float u_raisingHeight: 0.0;
+uniform float u_heightfixed: 0.0;
 
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
@@ -61,21 +63,28 @@ void main() {
   }
 
   // cal style mapping - 数据纹理映射部分的计算
-   v_color = a_Color;
-   v_uv = a_Uv;
-   vec4 project_pos = project_position(vec4(a_Position, 1.0));
+  v_color = a_Color;
+  v_uv = a_Uv;
+  vec4 project_pos = project_position(vec4(a_Position, 1.0));
    
-  //  vec2 offset = project_pixel(u_offsets);
   vec2 offset = project_pixel(textrueOffsets);
 
-  //  gl_Position = project_common_position_to_clipspace(vec4(vec2(project_pos.xy + offset),project_pos.z, 1.0));
+  float raisingHeight = u_raisingHeight;
+  if(u_heightfixed < 1.0) { // false
+    raisingHeight = project_pixel(u_raisingHeight);
+  } else {
+     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+      raisingHeight = u_raisingHeight * mapboxZoomScale;
+    }
+  }
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(vec2(project_pos.xy + offset),project_pos.z, 1.0);
+    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
   } else {
-    gl_Position = project_common_position_to_clipspace(vec4(vec2(project_pos.xy + offset),project_pos.z, 1.0));
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
   }
-  gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
 
+  gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
   setPickingColor(a_PickingColor);
 }

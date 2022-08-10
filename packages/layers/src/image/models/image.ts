@@ -18,7 +18,7 @@ export default class ImageModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     return {
-      u_opacity: opacity || 1,
+      u_opacity: (opacity as number) || 1,
       u_texture: this.texture,
     };
   }
