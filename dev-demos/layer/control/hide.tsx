@@ -29,17 +29,22 @@ const Demo: FunctionComponent = () => {
     });
   }, []);
 
-  const onChangePosition = () => {
-    const randomIndex = Math.floor(Math.random() * POSITION_LIST.length);
-    zoom.setOptions({
-      position: POSITION_LIST[randomIndex],
-      className: `random-class-${Math.floor(Math.random() * 100)}`,
-    });
-  };
-
   return (
     <>
-      <button onClick={onChangePosition}>设置随机Options</button>
+      <button
+        onClick={() => {
+          zoom.show();
+        }}
+      >
+        展示
+      </button>
+      <button
+        onClick={() => {
+          zoom.hide();
+        }}
+      >
+        隐藏
+      </button>
       <div
         id="map"
         style={{

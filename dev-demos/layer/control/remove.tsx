@@ -6,14 +6,11 @@ import { FunctionComponent, useEffect } from 'react';
 const POSITION_LIST = Object.values(PositionType);
 
 const Demo: FunctionComponent = () => {
-  const [zoom, setZoom] = useState(() => {
-    return new Zoom({
-      position: 'topleft',
-    });
-  });
+  const [scene, setScene] = useState<Scene | null>(null);
+  const [zoom, setZoom] = useState<Zoom | null>(null);
 
   useEffect(() => {
-    const scene = new Scene({
+    const newScene = new Scene({
       id: 'map',
       map: new GaodeMap({
         style: 'dark',
@@ -24,22 +21,36 @@ const Demo: FunctionComponent = () => {
       // logoVisible: false,
     });
 
-    scene.on('loaded', () => {
-      scene.addControl(zoom);
+    newScene.on('loaded', () => {
+      setScene(newScene);
     });
   }, []);
 
-  const onChangePosition = () => {
-    const randomIndex = Math.floor(Math.random() * POSITION_LIST.length);
-    zoom.setOptions({
-      position: POSITION_LIST[randomIndex],
-      className: `random-class-${Math.floor(Math.random() * 100)}`,
-    });
-  };
-
   return (
     <>
-      <button onClick={onChangePosition}>设置随机Options</button>
+      <button
+        disabled={!!zoom}
+        onClick={() => {
+          if (!zoom) {
+            const newZoom = new Zoom();
+            scene?.addControl(newZoom);
+            setZoom(newZoom);
+          }
+        }}
+      >
+        插入
+      </button>
+      <button
+        disabled={!zoom}
+        onClick={() => {
+          if (zoom) {
+            scene?.removeControl(zoom);
+            setZoom(null);
+          }
+        }}
+      >
+        移除
+      </button>
       <div
         id="map"
         style={{
