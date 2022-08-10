@@ -20,7 +20,9 @@ export default () => {
             )
                 .then((res) => res.text())
                 .then((data) => {
-                    const pointLayer = new PointLayer({})
+                    const pointLayer = new PointLayer({
+                        autoFit:true
+                    })
                         .source(data.slice(0, 1000), {
                             parser: {
                                 type: 'csv',
