@@ -8,8 +8,24 @@ import {
   IControlCorners,
   IControlService,
   IControlServiceCfg,
+  PositionName,
   PositionType,
 } from './IControlService';
+
+const ControlDirectionConfig: Record<PositionName, 'column' | 'row'> = {
+  topleft: 'column',
+  topright: 'column',
+  bottomright: 'column',
+  bottomleft: 'column',
+  leftcenter: 'column',
+  rightcenter: 'column',
+  topcenter: 'row',
+  bottomcenter: 'row',
+  lefttop: 'row',
+  righttop: 'row',
+  leftbottom: 'row',
+  rightbottom: 'row',
+};
 
 @injectable()
 export default class ControlService implements IControlService {
@@ -76,17 +92,20 @@ export default class ControlService implements IControlService {
 
     function createCorner(vSideList: string[] = []) {
       const className = vSideList.map((item) => l + item).join(' ');
-      corners[vSideList.join('')] = DOM.create('div', className, container);
+      corners[
+        vSideList.filter((item) => !['row', 'column'].includes(item)).join('')
+      ] = DOM.create('div', className, container);
     }
 
-    function splitCornerKeys(positionType: string) {
-      return positionType
+    function getCornerClassList(positionName: PositionName) {
+      const positionList = positionName
         .replace(/^(top|bottom|left|right|center)/, '$1-')
         .split('-');
+      return [...positionList, ControlDirectionConfig[positionName]];
     }
 
     Object.values(PositionType).forEach((position) => {
-      createCorner(splitCornerKeys(position));
+      createCorner(getCornerClassList(position));
     });
   }
 

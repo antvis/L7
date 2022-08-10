@@ -11,6 +11,7 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
+
 export { PositionType } from '@antv/l7-core';
 
 export default abstract class Control<
