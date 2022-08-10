@@ -167,7 +167,6 @@
     "build:declarations": "lerna run tsc --stream --no-bail",
     "lint:fix": "prettier --write  packages/**/src/**/*.ts packages/site/docs/api/**/*.md packages/site/docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
     "lint:examples": "eslint packages/site/examples --fix --ext .js",
-    "lint:src": "eslint packages/*/src --fix --ext .ts",
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
