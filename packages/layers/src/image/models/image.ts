@@ -75,7 +75,7 @@ export default class ImageModel extends BaseModel {
         fragmentShader: ImageFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
-        blend: {
+        blend: { // Tip: 优化显示效果
           enable: false,
         },
         depth: { enable: false },
