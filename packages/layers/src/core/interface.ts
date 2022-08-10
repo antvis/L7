@@ -28,7 +28,7 @@ export enum TextureBlend {
  * 基础图层类型定义
  */
 export interface IBaseLayerStyleOptions {
-  opacity: styleSingle;
+  opacity?: number;
 
   depth?: boolean; // 是否开启深度检测
   blend?: string; // 混合方式
