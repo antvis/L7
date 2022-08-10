@@ -163,10 +163,10 @@
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
     "fix": "run-p -c 'lint:ts-* --fix'",
-    "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md  stories/**/**/*.tsx  *.md",
+    "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
     "lint:examples": "eslint packages/site/examples --fix --ext .js",
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",
-    "lint:ts-prod1": "tslint --fix --config tslint.prod.json 'packages/**/*.ts{,x}'",
+    "lint:ts-prod": "tslint --fix --config tslint.prod.json 'packages/**/*.ts{,x}'",
     "lint:ts-test": "tslint --fix --config tslint.json 'packages/**/*.{spec,story}.ts{,x}'",
     "lint:ts": "run-p -c lint:ts-*",
     "lint": "run-p -c lint:*",
@@ -194,11 +194,11 @@
   },
   "workspaces": [
     "packages/*",
-    "stories/*"
+    "dev-demos/*"
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run lint",
+      "pre-commit": "yarn run build && yarn run test-cover",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },

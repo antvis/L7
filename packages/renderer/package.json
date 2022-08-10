@@ -25,7 +25,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "devDependencies": {
-    "gl": "^4.4.0"
+    "gl": "^5.0.3"
   },
   "dependencies": {
     "@antv/l7-core": "2.9.23",

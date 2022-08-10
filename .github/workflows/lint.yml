@@ -1,6 +1,6 @@
 name: lint
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   lint:
@@ -15,4 +15,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn
-    - run: yarn lint
+    - run: yarn build
