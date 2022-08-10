@@ -18,7 +18,7 @@ export default class ImageModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     return {
-      u_opacity: (opacity as number) || 1,
+      u_opacity: opacity || 1,
       u_texture: this.texture,
     };
   }
@@ -59,6 +59,8 @@ export default class ImageModel extends BaseModel {
             data: imageData[0],
             width: imageData[0].width,
             height: imageData[0].height,
+            mag: gl.LINEAR,
+            min: gl.LINEAR,
           });
           this.layerService.updateLayerRenderList();
           this.layerService.renderLayers();
@@ -73,6 +75,10 @@ export default class ImageModel extends BaseModel {
         fragmentShader: ImageFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
+        blend: {
+          // Tip: 优化显示效果
+          enable: false,
+        },
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
