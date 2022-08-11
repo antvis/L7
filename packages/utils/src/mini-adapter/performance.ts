@@ -10,5 +10,5 @@ export const performance = {
       duration: 0,
     };
   },
-  now: () => { }
-};;
+  now: () => {},
+};

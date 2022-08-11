@@ -45,8 +45,8 @@ export function btoa(string: string) {
     b,
     c,
     result = '',
-    i = 0,
-    rest = string.length % 3; // To determine the final padding
+    i = 0;
+  const rest = string.length % 3; // To determine the final padding
 
   for (; i < string.length; ) {
     if (

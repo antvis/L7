@@ -54,7 +54,7 @@ export function getMaskValue(layerType: string, mask: boolean) {
 }
 
 export function getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-  if (!!(container as HTMLCanvasElement).getContext) {
+  if ((container as HTMLCanvasElement).getContext) {
     return {
       width: (container as HTMLCanvasElement).width / DOM.DPR,
       height: (container as HTMLCanvasElement).height / DOM.DPR,
