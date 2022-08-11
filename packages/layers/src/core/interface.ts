@@ -1,6 +1,6 @@
 import { IAnimateOption, IMapService } from '@antv/l7-core';
 import { IColorRamp, IImagedata } from '@antv/l7-utils';
-import { styleOffset, styleSingle } from '../core/BaseModel';
+import { styleOffset } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,

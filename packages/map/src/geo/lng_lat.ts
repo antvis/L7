@@ -1,5 +1,4 @@
 import { wrap } from '../util';
-import LngLatBounds from './lng_lat_bounds';
 export const earthRadius = 6371008.8;
 export type LngLatLike =
   | LngLat

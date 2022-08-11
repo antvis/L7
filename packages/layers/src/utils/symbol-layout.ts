@@ -1,5 +1,3 @@
-import { type } from 'os';
-
 interface IPoint {
   x: number;
   y: number;

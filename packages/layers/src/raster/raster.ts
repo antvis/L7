@@ -1,16 +1,4 @@
-import {
-  AttributeType,
-  gl,
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  IModelUniform,
-  IRasterParserDataItem,
-  IStyleAttributeService,
-  ITexture2D,
-  lazyInject,
-  TYPES,
-} from '@antv/l7-core';
+import { gl, IModelUniform, ITexture2D } from '@antv/l7-core';
 
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';

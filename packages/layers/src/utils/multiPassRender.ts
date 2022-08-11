@@ -1,12 +1,4 @@
-import {
-  IGlobalConfigService,
-  ILayer,
-  ILayerPlugin,
-  IPass,
-  IPostProcessingPass,
-  IRendererService,
-  TYPES,
-} from '@antv/l7-core';
+import { ILayer, IPass, IPostProcessingPass } from '@antv/l7-core';
 
 /**
  * 'blurH' -> ['blurH', {}]

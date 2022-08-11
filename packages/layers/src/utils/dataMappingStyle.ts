@@ -1,12 +1,9 @@
 import {
-  gl,
   ILayer,
   IStyleAttributeUpdateOptions,
-  ITexture2D,
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
 import { isFunction, isNumber, isString } from 'lodash';
 /**
  * 该文件中的工具方法主要用于对 style 中的属性进行 数据映射

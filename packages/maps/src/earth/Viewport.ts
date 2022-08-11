@@ -1,4 +1,4 @@
-import { IMapCamera, IViewport } from '@antv/l7-core';
+import { IViewport } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import WebMercatorViewport from 'viewport-mercator-project';
 
