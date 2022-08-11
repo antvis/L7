@@ -6,7 +6,6 @@ import {
   IMarker,
   IMarkerLayer,
   IMarkerService,
-  IMarkerServiceCfg,
 } from './IMarkerService';
 
 @injectable()

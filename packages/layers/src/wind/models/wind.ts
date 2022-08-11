@@ -7,7 +7,7 @@ import {
   ITexture2D,
   Point,
 } from '@antv/l7-core';
-import { FrequencyController, getMask } from '@antv/l7-utils';
+import { FrequencyController } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';

@@ -1,6 +1,6 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile } from '@antv/l7-utils';
 import ImageLayer from '../../image';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';

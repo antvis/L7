@@ -1,5 +1,5 @@
 import { anchorType } from '@antv/l7-utils';
-import { Container, injectable } from 'inversify';
+import { Container } from 'inversify';
 import { ILngLat, IMapService, IPoint } from '../map/IMapService';
 import { IPopup } from './IPopupService';
 export interface IMarkerScene {

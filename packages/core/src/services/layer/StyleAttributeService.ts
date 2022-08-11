@@ -1,13 +1,12 @@
 import { executeWorkerTask } from '@antv/l7-utils';
-import { inject, injectable, optional } from 'inversify';
+import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
-import { IParseDataItem } from '../source/ISourceService';
-import { ILayer, IWorkerOption } from './ILayerService';
+import { IWorkerOption } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,

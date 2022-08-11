@@ -1,7 +1,6 @@
 import {
   AttributeType,
   gl,
-  IAttrubuteAndElements,
   IEncodeFeature,
   IModel,
   IModelUniform,

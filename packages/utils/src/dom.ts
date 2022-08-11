@@ -1,4 +1,4 @@
-import { $window, isMini } from './mini-adapter';
+import { $window } from './mini-adapter';
 type ELType = HTMLElement | SVGElement;
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
