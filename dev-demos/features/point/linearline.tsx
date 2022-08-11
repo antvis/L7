@@ -1,4 +1,4 @@
-import { PointLayer, LineLayer, Scene, RasterLayer } from '@antv/l7';
+import { LineLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 

@@ -2,11 +2,8 @@ import { ILayer, IMercator } from '@antv/l7-core';
 import { BaseLayer } from '@antv/l7-layers';
 import {
   AnimationMixer,
-  Camera,
   Matrix4,
   Object3D,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
   Scene,
   Vector3,
   WebGLRenderer,

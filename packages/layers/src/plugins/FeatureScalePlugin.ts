@@ -13,7 +13,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
-import { extent, ticks } from 'd3-array';
+import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
 import { inject, injectable } from 'inversify';

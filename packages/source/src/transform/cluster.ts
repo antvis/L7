@@ -1,9 +1,4 @@
-import {
-  IClusterOptions,
-  IParserData,
-  ISourceCFG,
-  ITransform,
-} from '@antv/l7-core';
+import { IClusterOptions, IParserData } from '@antv/l7-core';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
