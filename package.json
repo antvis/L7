@@ -165,7 +165,7 @@
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
     "lint:fix": "prettier --write  packages/**/src/**/*.ts packages/site/docs/api/**/*.md packages/site/docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
-    "lint:src": "eslint packages/**/src/**/*.ts  dev-demos/**/**/*.tsx",
+    "lint:src": "eslint packages/**/src/**/*.ts dev-demos/**/**/*.tsx ",
     "lint:examples": "eslint packages/site/examples --fix --ext .js",
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",
     "lint": "run-p -c lint:*",
@@ -197,7 +197,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run lint && yarn run test-cover",
+      "pre-commit": "yarn run prebuild && yarn run test-cover",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
