@@ -8,7 +8,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { cloneDeep, extend, isPlainObject, isTypedArray } from 'lodash';
+import { cloneDeep, isPlainObject, isTypedArray } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,

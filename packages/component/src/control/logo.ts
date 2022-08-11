@@ -1,4 +1,3 @@
-import { IControlOption } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import Control, { PositionType } from './BaseControl';
 

@@ -18,3 +18,4 @@ gatsby-*.js
 global.d.ts
 jest.config.js
 .eslintrc.*
+packages/utils/src/mini-adapter/
