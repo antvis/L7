@@ -22,8 +22,11 @@ export default class TapDragZoomHandler {
 
   public reset() {
     this.active = false;
+    //@ts-ignore
     delete this.swipePoint;
+    //@ts-ignore
     delete this.swipeTouch;
+    //@ts-ignore
     delete this.tapTime;
     this.tap.reset();
   }

@@ -38,6 +38,7 @@ export default class FillModel extends BaseModel {
       blend,
       blur = 0,
       raisingHeight = 0,
+      heightfixed = false,
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.updateUnit(unit);
@@ -90,6 +91,7 @@ export default class FillModel extends BaseModel {
     }
     return {
       u_raisingHeight: Number(raisingHeight),
+      u_heightfixed: Number(heightfixed),
 
       u_meter2coord: this.meter2coord,
       u_meteryScale: this.meteryScale,
@@ -180,7 +182,7 @@ export default class FillModel extends BaseModel {
       maxLat === minLat ? minLat + 0.1 : maxLat,
     ]);
     this.meter2coord = (m1 + m2) / 2;
-    if (!Boolean(this.meter2coord)) {
+    if (!this.meter2coord) {
       // Tip: 兼容单个数据导致的 m1、m2 为 NaN
       this.meter2coord = 7.70681090738883;
     }

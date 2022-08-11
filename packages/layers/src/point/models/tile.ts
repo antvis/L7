@@ -165,7 +165,7 @@ export default class FillModel extends BaseModel {
       maxLat === minLat ? minLat + 0.1 : maxLat,
     ]);
     this.meter2coord = (m1 + m2) / 2;
-    if (!Boolean(this.meter2coord)) {
+    if (!this.meter2coord) {
       // Tip: 兼容单个数据导致的 m1、m2 为 NaN
       this.meter2coord = 7.70681090738883;
     }

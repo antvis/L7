@@ -41,8 +41,18 @@ module.exports = {
   transform: {
     // '^.+\\.(ts|tsx)$': 'ts-jest',
     // @see https://github.com/kulshekhar/ts-jest/issues/1130
-    '^.+\\.(ts|tsx)$': 'babel-jest'
+    '^.+\\.(ts|tsx)$': 'babel-jest',
+    '\\.(less|css)$': 'jest-less-loader'
   },
   setupFilesAfterEnv: [ '<rootDir>jest/setupTests.ts' ],
-  snapshotSerializers: [ 'enzyme-to-json/serializer' ]
+  snapshotSerializers: [ 'enzyme-to-json/serializer' ],
+  coverageReporters: ["html"],
+  coverageThreshold: {
+    global: {
+      branches: 8,
+      functions: 10,
+      lines: 13,
+      statements: 13,
+    },
+  },
 };

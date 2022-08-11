@@ -1,14 +1,9 @@
-import {
-  decodePickingColor,
-  DOM,
-  encodePickingColor,
-  isMini,
-} from '@antv/l7-utils';
+import { decodePickingColor, DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { isEventCrash } from '../../utils/dom';
-import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
+import { IGlobalConfigService } from '../config/IConfigService';
 import {
   IInteractionService,
   IInteractionTarget,
@@ -55,7 +50,6 @@ export default class PickingService implements IPickingService {
     const {
       createTexture2D,
       createFramebuffer,
-      getViewportSize,
       getContainer,
     } = this.rendererService;
 
@@ -110,7 +104,7 @@ export default class PickingService implements IPickingService {
       const tmpV = v < 0 ? 0 : v;
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
-    const { getViewportSize, readPixels, getContainer } = this.rendererService;
+    const { readPixels, getContainer } = this.rendererService;
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
     );
@@ -124,10 +118,10 @@ export default class PickingService implements IPickingService {
     ) {
       return [];
     }
-    let pickedColors: Uint8Array | undefined;
+
     const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
     const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
-    pickedColors = readPixels({
+    const pickedColors: Uint8Array | undefined = readPixels({
       x: xMin,
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
       y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
@@ -189,7 +183,7 @@ export default class PickingService implements IPickingService {
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
     let isPicked = false;
-    const { getViewportSize, readPixels, getContainer } = this.rendererService;
+    const { readPixels, getContainer } = this.rendererService;
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
     );
@@ -208,8 +202,8 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-    let pickedColors: Uint8Array | undefined;
-    pickedColors = readPixels({
+
+    const pickedColors: Uint8Array | undefined = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
       y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
@@ -318,7 +312,7 @@ export default class PickingService implements IPickingService {
 
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-    if (!!(container as HTMLCanvasElement).getContext) {
+    if ((container as HTMLCanvasElement).getContext) {
       return {
         width: (container as HTMLCanvasElement).width / DOM.DPR,
         height: (container as HTMLCanvasElement).height / DOM.DPR,

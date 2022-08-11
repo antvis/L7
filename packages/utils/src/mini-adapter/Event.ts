@@ -10,7 +10,7 @@ export class Event {
   public type: any;
   public timeStamp: number;
 
-  constructor(type: any,data) {
+  constructor(type: any, data) {
     this.cancelBubble = false;
     this.cancelable = false;
     this.target = null;

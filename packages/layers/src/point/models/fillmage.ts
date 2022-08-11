@@ -28,6 +28,8 @@ export default class FillImageModel extends BaseModel {
       opacity = 1,
       offsets = [0, 0],
       rotation,
+      raisingHeight = 0.0,
+      heightfixed = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (this.rendererService.getDirty()) {
@@ -94,6 +96,8 @@ export default class FillImageModel extends BaseModel {
             });
     }
     return {
+      u_raisingHeight: Number(raisingHeight),
+      u_heightfixed: Number(heightfixed),
       u_isMeter: Number(this.isMeter),
       u_RotateMatrix: new Float32Array([
         Math.cos(this.radian),
@@ -183,7 +187,7 @@ export default class FillImageModel extends BaseModel {
       maxLat === minLat ? minLat + 0.1 : maxLat,
     ]);
     this.meter2coord = (m1 + m2) / 2;
-    if (!Boolean(this.meter2coord)) {
+    if (!this.meter2coord) {
       // Tip: 兼容单个数据导致的 m1、m2 为 NaN
       this.meter2coord = 7.70681090738883;
     }
