@@ -40,8 +40,8 @@ const Demo: FunctionComponent = () => {
           const flag = Math.random() > 0.5;
           fullscreen?.setOptions({
             position: flag ? 'topleft' : 'topright',
-            icon: flag ? createL7Icon('l7-icon-quanping') : undefined,
-            text: !flag ? '全屏' : undefined,
+            btnIcon: flag ? createL7Icon('l7-icon-quanping') : undefined,
+            btnText: !flag ? '全屏' : undefined,
           });
         }}
       >

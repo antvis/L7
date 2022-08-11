@@ -12,11 +12,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  &:hover {
-    background-color: @l7-btn-control-bg-hover-color;
+  &:not(:disabled) {
+    &:hover {
+      background-color: @l7-btn-control-bg-hover-color;
+    }
+    &:active {
+      background-color: @l7-btn-control-bg-active-color;
+    }
   }
-  &:active {
-    background-color: @l7-btn-control-bg-active-color;
+  &:disabled {
+    background-color: @l7-btn-control-disabled-bg-color;
+    color: @l7-btn-control-disabled-font-color;
+    cursor: not-allowed;
+    &:hover {
+      background-color: @l7-btn-control-disabled-bg-color;
+    }
+    &:active {
+      background-color: @l7-btn-control-disabled-bg-color;
+    }
   }
 
   * + .l7-button-control__text {

@@ -5,22 +5,20 @@ import ButtonControl from './baseControl/buttonControl';
 export default class Fullscreen extends ButtonControl {
   protected isFullscreen = false;
 
-  get mapContainer() {
-    return 1;
-  }
+  // get mapContainer() {
+  //   return 1;
+  // }
 
-  public onClick(e: MouseEvent): void {
-    // if (this.isFullscreen) {
-    //
-    // } else {
-    //
-    // }
-  }
+  // public onAdd(): HTMLElement {
+  //   const button = super.onAdd();
+  //   return button;
+  // }
 
   public getDefault(): IButtonControlOption {
     return {
       ...super.getDefault(),
-      icon: createL7Icon('l7-icon-quanping'),
+      btnIcon: createL7Icon('l7-icon-quanping'),
+      btnText: '全屏',
       title: '全屏',
     };
   }

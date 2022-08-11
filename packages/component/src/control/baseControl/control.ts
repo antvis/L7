@@ -1,4 +1,5 @@
 import {
+  IControl,
   IControlOption,
   IControlService,
   ILayerService,
@@ -18,9 +19,9 @@ export { PositionType } from '@antv/l7-core';
 
 export { Control };
 
-export default abstract class Control<
-  O extends IControlOption = IControlOption
-> extends EventEmitter<ControlEvent> {
+export default abstract class Control<O extends IControlOption = IControlOption>
+  extends EventEmitter<ControlEvent>
+  implements IControl<O> {
   /**
    * 当前类型控件实例个数
    * @protected

@@ -3,8 +3,8 @@ import { IControlOption } from '@antv/l7-core';
 export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
 
 export interface IButtonControlOption extends IControlOption {
-  icon?: HTMLElement;
-  text?: string;
+  btnIcon?: HTMLElement;
+  btnText?: string;
   title?: string;
 }
 
