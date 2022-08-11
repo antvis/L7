@@ -1,6 +1,12 @@
-import { LineLayer, Scene, PointLayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Map } from '@antv/l7-maps';
-import * as React from 'react';
+import {
+  PointLayer,
+  LineLayer,
+  ImageLayer,
+  Scene,
+  RasterLayer,
+} from '@antv/l7';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
 
 function getImageData(img: HTMLImageElement) {
   let canvas: HTMLCanvasElement = document.createElement('canvas');
@@ -29,9 +35,10 @@ function getLatData(data: number[]) {
       let index = i + j * size;
       let x = startLng + lngStep * i;
       let y = startLat + latStep * j;
-
+      // @ts-ignore
       arr2.push([x, y, data[index]]);
     }
+    // @ts-ignore
     arr.push(arr2);
   }
   return arr;
@@ -51,9 +58,10 @@ function getLngData(data: number[]) {
       let index = i * size + j;
       let x = startLng + lngStep * j;
       let y = startLat + latStep * i;
-
+      // @ts-ignore
       arr2.push([x, y, data[index]]);
     }
+    // @ts-ignore
     arr.push(arr2);
   }
   return arr;
@@ -62,32 +70,90 @@ function getLngData(data: number[]) {
 function getR(data: Uint8ClampedArray) {
   const arr = [];
   for (let i = 0; i < data.length; i += 4) {
+    // @ts-ignore
     arr.push(data[i]);
   }
   return arr;
 }
 
-export default class GridTile extends React.Component {
-  // @ts-ignore
-  private scene: Scene;
-
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
-  public async componentDidMount() {
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [113, 29],
-        pitch: 70,
-        zoom: 9,
-        rotation: 180,
-        style: 'blank',
-        // style: 'dark',
+        center: [121.268, 30.3628],
+        pitch: 0,
+        // style: 'blank',
+        zoom: 3,
       }),
     });
-    this.scene = scene;
+
+    const layer = new LineLayer()
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'MultiLineString',
+              coordinates: [
+                [
+                  [80, 30, 5000],
+                  [150, 30, 5000],
+                  [150, 10, 5000],
+                ],
+                [
+                  [120, 50, 5000],
+                  [120, 30, 5000],
+                ],
+              ],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'MultiLineString',
+              coordinates: [
+                [
+                  [100, 35, 100],
+                  [120, 50, 100],
+                  [120, 20, 100],
+                  [130, 20, 100],
+                ],
+              ],
+            },
+          },
+        ],
+      })
+      // .source([
+      //   {
+      //     lng1: 120,
+      //     lat1: 30,
+      //     lng2: 130,
+      //     lat2: 30
+      //   }
+      // ], {
+      //   parser: {
+      //     type: 'json',
+      //     x: 'lng1',
+      //     y: 'lat1',
+      //     x1: 'lng2',
+      //     y1: 'lat2'
+      //   }
+      // })
+      .shape('simple')
+      .color('#f00')
+      .style({
+        vertexHeightScale: 2000,
+        sourceColor: '#f00',
+        targetColor: '#0f0',
+      });
+
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+    });
 
     const img: HTMLImageElement = new Image();
     img.crossOrigin = 'none';
@@ -120,12 +186,11 @@ export default class GridTile extends React.Component {
           },
         ],
       };
+      // console.log(geoData)
       const layer = new LineLayer({})
         .source(geoData)
         .size(1)
         .shape('simple')
-        // .shape('line')
-        // .color('rgb(22, 119, 255)')
         .color('#f00')
         .style({
           vertexHeightScale: 2000,
@@ -133,24 +198,14 @@ export default class GridTile extends React.Component {
         });
       scene.addLayer(layer);
     };
-
-    scene.on('loaded', () => {});
-  }
-
-  public render() {
-    return (
-      <>
-        <div
-          id="map"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
-      </>
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};

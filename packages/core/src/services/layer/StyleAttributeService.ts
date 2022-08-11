@@ -40,6 +40,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
+    count: number | null;
   };
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
@@ -249,6 +250,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
           this.attributesAndIndices = {
             attributes,
             elements,
+            count: null,
           };
 
           resolve(this.attributesAndIndices);
@@ -269,6 +271,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
+    count: number | null;
   } {
     // 每次创建的初始化化 LayerOut
     this.featureLayout = {
@@ -283,6 +286,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       return attr.descriptor;
     });
     let verticesNum = 0;
+    let vecticesCount = 0; // 在不使用 element 的时候记录顶点、图层所有顶点的总数
     const vertices: number[] = [];
     const indices: number[] = [];
     const normals: number[] = [];
@@ -295,7 +299,13 @@ export default class StyleAttributeService implements IStyleAttributeService {
         normals: normalsForCurrentFeature,
         size: vertexSize,
         indexes,
+        count,
       } = this.triangulation(feature, segmentNumber);
+
+      if (typeof count === 'number') {
+        vecticesCount += count;
+      }
+
       indicesForCurrentFeature.forEach((i) => {
         indices.push(i + verticesNum);
       });
@@ -383,6 +393,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     this.attributesAndIndices = {
       attributes,
       elements,
+      count: vecticesCount,
     };
     return this.attributesAndIndices;
   }

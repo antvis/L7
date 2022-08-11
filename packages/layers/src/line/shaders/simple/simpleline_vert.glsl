@@ -74,5 +74,6 @@ void main() {
     }
 
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy, lineHeight + h, 1.0));
+    gl_PointSize = 10.0;
   }
 }

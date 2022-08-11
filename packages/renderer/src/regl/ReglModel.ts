@@ -81,12 +81,12 @@ export default class ReglModel implements IModel {
       drawParams.instances = instances;
     }
 
+    // Tip:
     // elements 中可能包含 count，此时不应传入
+    // count 和 elements 相比、count 优先
     if (count) {
       drawParams.count = count;
-    }
-
-    if (elements) {
+    } else if (elements) {
       drawParams.elements = (elements as ReglElements).get();
     }
 

@@ -1192,12 +1192,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         const {
           attributes,
           elements,
+          count,
         } = this.styleAttributeService.createAttributesAndIndices(
           this.encodedData,
           triangulation,
           segmentNumber,
         );
-        const m = createModel({
+        const modeloptions = {
           attributes,
           uniforms,
           fs,
@@ -1205,7 +1206,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           elements,
           blend: BlendTypes[BlendType.normal],
           ...rest,
-        });
+        };
+        if (count) {
+          modeloptions.count = count;
+        }
+        const m = createModel(modeloptions);
         resolve(m);
       }
     });
