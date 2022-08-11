@@ -197,7 +197,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run build && yarn run test-cover",
+      "pre-commit": "yarn run lint && yarn run test-cover",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
