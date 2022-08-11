@@ -1,14 +1,5 @@
-import {
-  CameraUniform,
-  CoordinateUniform,
-  ICameraService,
-  ICoordinateSystemService,
-  ILayer,
-  ILayerPlugin,
-  IRendererService,
-  TYPES,
-} from '@antv/l7-core';
-import { inject, injectable } from 'inversify';
+import { ILayer, ILayerPlugin } from '@antv/l7-core';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 
 const lightTypeUniformMap = {

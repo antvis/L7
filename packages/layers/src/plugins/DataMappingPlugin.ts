@@ -4,7 +4,6 @@ import {
   IGlobalConfigService,
   ILayer,
   ILayerPlugin,
-  ILngLat,
   IMapService,
   IParseDataItem,
   IStyleAttribute,
@@ -13,7 +12,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { isColor, normalize, rgb2arr, unProjectFlat } from '@antv/l7-utils';
+import { isColor, normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 import 'reflect-metadata';

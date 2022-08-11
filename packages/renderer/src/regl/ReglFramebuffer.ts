@@ -1,5 +1,4 @@
 import {
-  gl,
   IFramebuffer,
   IFramebufferInitializationOptions,
   IRenderbuffer,

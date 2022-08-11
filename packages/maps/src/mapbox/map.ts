@@ -18,9 +18,9 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
-import { mat4, vec2, vec3 } from 'gl-matrix';
+import { mat4, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
-import mapboxgl, { IControl, Map } from 'mapbox-gl';
+import mapboxgl, { Map } from 'mapbox-gl';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';

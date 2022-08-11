@@ -1,4 +1,4 @@
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
 
 export class TMSTileLayer extends BaseTileLayer {

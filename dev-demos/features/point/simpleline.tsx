@@ -1,16 +1,15 @@
 import {
-  PointLayer,
   LineLayer,
-  ImageLayer,
   Scene,
-  RasterLayer,
+  // @ts-ignore
 } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+// @ts-ignore
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 function getImageData(img: HTMLImageElement) {
-  let canvas: HTMLCanvasElement = document.createElement('canvas');
-  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const canvas: HTMLCanvasElement = document.createElement('canvas');
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   const { width, height } = img;
   canvas.width = width;
   canvas.height = height;
@@ -25,16 +24,16 @@ function getLatData(data: number[]) {
   const size = Math.floor(Math.sqrt(data.length));
 
   const arr = [];
-  let startLng = 110,
-    lngStep = 5 / (size - 1);
-  let startLat = 30,
-    latStep = -5 / (size - 1);
+  const startLng = 110;
+  const lngStep = 5 / (size - 1);
+  const startLat = 30;
+  const latStep = -5 / (size - 1);
   for (let i = 0; i < size; i++) {
-    let arr2 = [];
+    const arr2 = [];
     for (let j = 0; j < size; j++) {
-      let index = i + j * size;
-      let x = startLng + lngStep * i;
-      let y = startLat + latStep * j;
+      const index = i + j * size;
+      const x = startLng + lngStep * i;
+      const y = startLat + latStep * j;
       // @ts-ignore
       arr2.push([x, y, data[index]]);
     }
@@ -47,17 +46,17 @@ function getLatData(data: number[]) {
 function getLngData(data: number[]) {
   const size = Math.floor(Math.sqrt(data.length));
   const arr = [];
-  let startLng = 110,
-    lngStep = 5 / (size - 1);
-  let startLat = 30,
-    latStep = -5 / (size - 1);
+  const startLng = 110;
+  const lngStep = 5 / (size - 1);
+  const startLat = 30;
+  const latStep = -5 / (size - 1);
 
   for (let i = 0; i < size; i++) {
-    let arr2 = [];
+    const arr2 = [];
     for (let j = 0; j < size; j++) {
-      let index = i * size + j;
-      let x = startLng + lngStep * j;
-      let y = startLat + latStep * i;
+      const index = i * size + j;
+      const x = startLng + lngStep * j;
+      const y = startLat + latStep * i;
       // @ts-ignore
       arr2.push([x, y, data[index]]);
     }
@@ -162,9 +161,8 @@ export default () => {
     img.onload = function() {
       const data = getImageData(img);
       const rData = getR(data.data);
-      let d1 = getLngData(rData);
-
-      let d2 = getLatData(rData);
+      const d1 = getLngData(rData);
+      const d2 = getLatData(rData);
       const geoData = {
         type: 'FeatureCollection',
         features: [

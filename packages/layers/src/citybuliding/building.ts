@@ -2,7 +2,7 @@ import BaseLayer from '../core/BaseLayer';
 import CityBuildModel from './models/build';
 
 export default class CityBuildingLayer extends BaseLayer {
-  public type: string = 'PolygonLayer';
+  public type: string = 'CityBuildingLayer';
   public buildModels() {
     this.layerModel = new CityBuildModel(this);
     this.layerModel.initModels((models) => {

@@ -3,10 +3,8 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 
 import {
-  AnimationMixer,
   Camera,
   Matrix4,
-  PCFSoftShadowMap,
   PerspectiveCamera,
   Scene as ThreeScene,
   WebGLRenderer,

@@ -27,14 +27,20 @@ import { WebGLRenderingContext } from './WebGL';
 import { WebGL2RenderingContext } from './WebGL2';
 import { $XMLHttpRequest as $XMLHttpRequest2 } from './XMLHttpRequest';
 
-import { globalWindow, l7globalThis } from './global'
+import { globalWindow, l7globalThis } from './global';
 
 // 判断时候是支付宝小程序环境 （ my.isFRM == true smallfish H5+ ）
 export const isMiniAli =
   // @ts-ignore
-  typeof my !== 'undefined' && !!my && typeof my.showToast === 'function' && my.isFRM !== true;
+  typeof my !== 'undefined' &&
+  !!my &&
+  typeof my.showToast === 'function' &&
+  my.isFRM !== true;
 
-export const isWeChatMiniProgram = typeof wx !== 'undefined' && wx !== null && (typeof wx.request !== 'undefined' || typeof wx.miniProgram !== 'undefined');
+export const isWeChatMiniProgram =
+  typeof wx !== 'undefined' &&
+  wx !== null &&
+  (typeof wx.request !== 'undefined' || typeof wx.miniProgram !== 'undefined');
 
 export const isMini = isMiniAli || isWeChatMiniProgram;
 
@@ -66,7 +72,7 @@ export const miniWindow = {
   addEventListener(type, listener, options = {}) {
     $document.addEventListener(type, listener, options);
   },
-  removeEventListener(type, listener,options) {
+  removeEventListener(type, listener, options) {
     $document.removeEventListener(type, listener);
   },
   dispatchEvent(event: Event) {
@@ -77,14 +83,16 @@ export const miniWindow = {
   setTimeout: setTimeout,
   clearTimeout: clearTimeout,
   setInterval: setInterval,
-  clearInterval: clearInterval
+  clearInterval: clearInterval,
 } as Window & typeof l7globalThis;
 
 export const $window = isMini ? miniWindow : globalWindow;
-export const $XMLHttpRequest = isMini ? $XMLHttpRequest2: globalWindow.XMLHttpRequest;
+export const $XMLHttpRequest = isMini
+  ? $XMLHttpRequest2
+  : globalWindow.XMLHttpRequest;
 export const $location = isMini ? $location2 : globalWindow.location;
 
-// TODO: 
+// TODO:
 // export { registerCanvas, registerCanvas2D } from './register';
 
 export * from './EventIniter/index';

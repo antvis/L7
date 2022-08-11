@@ -13,7 +13,9 @@ export default class TouchZoomHandler extends TwoTouchHandler {
 
   public reset() {
     super.reset();
+    //@ts-ignore
     delete this.distance;
+    //@ts-ignore
     delete this.startDistance;
   }
 

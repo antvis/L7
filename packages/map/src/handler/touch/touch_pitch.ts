@@ -16,7 +16,9 @@ export default class TouchPitchHandler extends TwoTouchHandler {
   public reset() {
     super.reset();
     this.valid = undefined;
+        //@ts-ignore
     delete this.firstMove;
+        //@ts-ignore
     delete this.lastPoints;
   }
 

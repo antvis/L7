@@ -1,10 +1,8 @@
 // @ts-ignore
 import { isMini } from '@antv/l7-utils';
-import { mat2, mat4, vec3, vec4 } from 'gl-matrix';
-import Point, { PointLike } from '../geo/point';
+import { mat2, mat4, vec4 } from 'gl-matrix';
+import Point from '../geo/point';
 import { clamp, interpolate, wrap } from '../util';
-import Aabb from '../utils/Aabb';
-import Frustum from '../utils/primitives';
 import EdgeInsets, { IPaddingOptions } from './edge_insets';
 import LngLat from './lng_lat';
 import LngLatBounds from './lng_lat_bounds';

@@ -1,8 +1,5 @@
 import {
-  CameraUniform,
-  CoordinateUniform,
   ICameraService,
-  ICoordinateSystemService,
   ILayer,
   ILayerPlugin,
   IModel,

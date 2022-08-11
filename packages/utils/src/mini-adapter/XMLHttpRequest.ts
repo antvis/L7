@@ -121,17 +121,13 @@ export class $XMLHttpRequest extends EventTarget {
     //   const url = this._url;
     //   const header = _requestHeader.get('requestHeader');
     //   const responseType = this._responseType;
-
     //   if (contentTypes[responseType]) {
     //     header['content-type'] = contentTypes[responseType];
     //   }
-
     //   delete this.response;
     //   this.response = null;
-
     //   const onSuccess = ({ data, status, headers }) => {
     //     // status = status === undefined ? 200 : status;
-
     //     // try {
     //     //   if (
     //     //     data == null ||
@@ -140,7 +136,6 @@ export class $XMLHttpRequest extends EventTarget {
     //     //     status = 404;
     //     //   }
     //     // } catch (e) {}
-
     //     // this.status = status;
     //     // if (headers) {
     //     //   _responseHeader.set('responseHeader', headers);
@@ -148,9 +143,7 @@ export class $XMLHttpRequest extends EventTarget {
     //     // _triggerEvent.call(this, 'loadstart');
     //     // // _changeReadyState.call(this, XMLHttpRequest.HEADERS_RECEIVED);
     //     // // _changeReadyState.call(this, XMLHttpRequest.LOADING);
-
     //     // this.response = data;
-
     //     // if (data instanceof ArrayBuffer) {
     //     //   // TODO temporary solution, fix native gc error.
     //     //   this.response = data.slice(0);
@@ -170,7 +163,6 @@ export class $XMLHttpRequest extends EventTarget {
     //     // _triggerEvent.call(this, 'load');
     //     // _triggerEvent.call(this, 'loadend');
     //   };
-
     //   const onFail = (e) => {
     //     const errMsg = e.message || e.errorMessage;
     //     // TODO 规范错误
@@ -188,7 +180,6 @@ export class $XMLHttpRequest extends EventTarget {
     //     }
     //     _triggerEvent.call(this, 'loadend');
     //   };
-
     //   const requestTask = my.request({
     //     $data,
     //     url,

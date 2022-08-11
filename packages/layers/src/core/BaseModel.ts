@@ -29,7 +29,7 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
-import { isEqual, isFunction, isNumber, isString } from 'lodash';
+import { isEqual, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 
 export type styleSingle =
