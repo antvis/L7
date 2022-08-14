@@ -1,8 +1,13 @@
 import { DOM } from '@antv/l7-utils';
-import { IButtonControlOption } from '../../interface';
-import Control from './control';
+import Control, { IControlOption } from './control';
 
 export { ButtonControl };
+
+export interface IButtonControlOption extends IControlOption {
+  btnIcon?: HTMLElement;
+  btnText?: string;
+  title?: string;
+}
 
 export default abstract class ButtonControl extends Control<
   IButtonControlOption
@@ -69,15 +74,15 @@ export default abstract class ButtonControl extends Control<
       this.button?.setAttribute('title', title ?? '');
     }
     if ('btnIcon' in newOptions) {
-      this.updateButtonIcon(btnIcon);
+      this.setBtnIcon(btnIcon);
     }
     if ('btnText' in newOptions) {
-      this.updateButtonText(btnText);
+      this.setBtnText(btnText);
     }
     super.setOptions(newOptions);
   }
 
-  protected updateButtonIcon(newIcon: IButtonControlOption['btnIcon']) {
+  public setBtnIcon(newIcon: IButtonControlOption['btnIcon']) {
     if (this.buttonIcon) {
       DOM.remove(this.buttonIcon);
     }
@@ -92,7 +97,7 @@ export default abstract class ButtonControl extends Control<
     }
   }
 
-  protected updateButtonText(newText: IButtonControlOption['btnText']) {
+  public setBtnText(newText: IButtonControlOption['btnText']) {
     if (newText) {
       let btnText = this.buttonText;
       if (!btnText) {

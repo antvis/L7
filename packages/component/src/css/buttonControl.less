@@ -8,10 +8,12 @@
   border-radius: @l7-btn-control-border-radius;
   outline: 0;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 (@l7-btn-control-size - @l7-btn-icon-size) / 2;
+  box-shadow: 0 0 6px @l7-btn-control-shadow-color;
   &:not(:disabled) {
     &:hover {
       background-color: @l7-btn-control-bg-hover-color;
@@ -34,5 +36,10 @@
 
   * + .l7-button-control__text {
     margin-left: 4px;
+  }
+
+  .l7-iconfont {
+    width: @l7-btn-icon-size;
+    height: @l7-btn-icon-size;
   }
 }

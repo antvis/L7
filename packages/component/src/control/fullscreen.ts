@@ -18,7 +18,7 @@ export default class Fullscreen extends ButtonControl {
     return {
       ...super.getDefault(),
       btnIcon: createL7Icon('l7-icon-quanping'),
-      btnText: '全屏',
+      // btnText: '全屏',
       title: '全屏',
     };
   }

@@ -17,7 +17,7 @@ import { ControlEvent } from '../../interface';
 
 export { PositionType } from '@antv/l7-core';
 
-export { Control };
+export { Control, IControlOption };
 
 export default abstract class Control<O extends IControlOption = IControlOption>
   extends EventEmitter<ControlEvent>
@@ -76,10 +76,10 @@ export default abstract class Control<O extends IControlOption = IControlOption>
       this.setPosition(newOptions.position);
     }
     if ('className' in newOptions && newOptions.className !== oldClassName) {
-      this.setContainerClassName(newOptions.className);
+      this.setClassName(newOptions.className);
     }
     if ('style' in newOptions && newOptions.style !== oldStyle) {
-      this.setContainerStyle(newOptions.style);
+      this.setStyle(newOptions.style);
     }
     this.controlOption = {
       ...this.controlOption,
@@ -197,7 +197,7 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    * 设置当前控件位置
    * @param position
    */
-  protected setPosition(
+  public setPosition(
     position: PositionType | PositionName = PositionType.TOPLEFT,
   ) {
     // 考虑组件的自动布局，需要销毁重建
@@ -216,7 +216,7 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    * 设置容器 container 的样式相关位置，包含 className
    * @param className
    */
-  protected setContainerClassName(className?: string | null) {
+  public setClassName(className?: string | null) {
     const container = this.container;
     const { className: oldClassName } = this.controlOption;
     if (oldClassName) {
@@ -231,7 +231,7 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    * 设置容器 container 的样式相关位置，包含 style
    * @param style
    */
-  protected setContainerStyle(style?: string | null) {
+  public setStyle(style?: string | null) {
     const container = this.container;
     const { style: oldStyle } = this.controlOption;
     if (oldStyle) {

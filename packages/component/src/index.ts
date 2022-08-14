@@ -13,9 +13,9 @@ import { createL7Icon } from './utils/icon';
 // TODO: 使用 Less 或者 Sass，每个组件单独引用自身样式
 import './css/index.less';
 
+export * from './control/baseControl';
+
 export {
-  Control,
-  ButtonControl,
   Logo,
   Scale,
   Zoom,
