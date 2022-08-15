@@ -130,8 +130,9 @@ void main() {
    styleMappingMat[3].b = d_distance_ratio;
 
   // styleMappingMat[0][1] - arcThetaOffset
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
+  float arcThetaOffset = styleMappingMat[0][1];
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, arcThetaOffset), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, arcThetaOffset), 0.0, 1.0));
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   //unProjCustomCoord
   
