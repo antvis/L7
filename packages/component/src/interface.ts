@@ -1,11 +1,6 @@
 import { IControlOption } from '@antv/l7-core';
 
 export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
-export interface IButtonControlOption extends IControlOption {
-  btnIcon?: HTMLElement;
-  btnText?: string;
-  title?: string;
-}
 
 export interface ILayerControlOption extends IControlOption {
   collapsed: boolean;

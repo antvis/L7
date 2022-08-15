@@ -1,4 +1,3 @@
-import { ButtonControl, Control } from './control/baseControl';
 import Fullscreen from './control/fullscreen';
 import Layers from './control/layer';
 import Logo from './control/logo';

@@ -1,6 +1,7 @@
-import { IButtonControlOption } from '../interface';
 import { createL7Icon } from '../utils/icon';
-import ButtonControl from './baseControl/buttonControl';
+import ButtonControl, {
+  IButtonControlOption,
+} from './baseControl/buttonControl';
 
 export default class Fullscreen extends ButtonControl {
   protected isFullscreen = false;
@@ -14,9 +15,11 @@ export default class Fullscreen extends ButtonControl {
   //   return button;
   // }
 
-  public getDefault(): IButtonControlOption {
+  public getDefault(
+    option?: Partial<IButtonControlOption>,
+  ): IButtonControlOption {
     return {
-      ...super.getDefault(),
+      ...super.getDefault(option),
       btnIcon: createL7Icon('l7-icon-quanping'),
       // btnText: '全屏',
       title: '全屏',

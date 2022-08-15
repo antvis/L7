@@ -52,11 +52,11 @@ export default abstract class Control<O extends IControlOption = IControlOption>
   protected layerService: ILayerService;
   protected controlService: IControlService;
 
-  constructor(option?: Partial<IControlOption>) {
+  constructor(option?: Partial<O>) {
     super();
     Control.controlCount++;
     this.controlOption = {
-      ...this.getDefault(),
+      ...this.getDefault(option),
       ...(option || {}),
     };
   }
@@ -161,7 +161,8 @@ export default abstract class Control<O extends IControlOption = IControlOption>
   /**
    * 获取默认构造器参数
    */
-  public getDefault(): O {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getDefault(option?: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
       position: PositionType.TOPRIGHT,

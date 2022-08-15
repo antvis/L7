@@ -9,9 +9,9 @@ export interface IButtonControlOption extends IControlOption {
   title?: string;
 }
 
-export default abstract class ButtonControl extends Control<
-  IButtonControlOption
-> {
+export default abstract class ButtonControl<
+  O extends IButtonControlOption = IButtonControlOption
+> extends Control<O> {
   /**
    * 当前按钮是否禁用
    * @protected
@@ -68,7 +68,7 @@ export default abstract class ButtonControl extends Control<
     this.isDisable = false;
   }
 
-  public setOptions(newOptions: Partial<IButtonControlOption>) {
+  public setOptions(newOptions: Partial<O>) {
     const { title, btnText, btnIcon } = newOptions;
     if ('title' in newOptions) {
       this.button?.setAttribute('title', title ?? '');
@@ -82,7 +82,7 @@ export default abstract class ButtonControl extends Control<
     super.setOptions(newOptions);
   }
 
-  public setBtnIcon(newIcon: IButtonControlOption['btnIcon']) {
+  public setBtnIcon(newIcon: O['btnIcon']) {
     if (this.buttonIcon) {
       DOM.remove(this.buttonIcon);
     }
@@ -97,7 +97,7 @@ export default abstract class ButtonControl extends Control<
     }
   }
 
-  public setBtnText(newText: IButtonControlOption['btnText']) {
+  public setBtnText(newText: O['btnText']) {
     if (newText) {
       let btnText = this.buttonText;
       if (!btnText) {
