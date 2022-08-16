@@ -200,7 +200,7 @@ export default abstract class SelectControl<
     } else {
       this.selectValue = [item.value];
       if (this.closeAfterSelect) {
-        this.popper.hide();
+        this.popper.setHideTimeout();
       }
     }
     this.setSelectValue(this.selectValue);

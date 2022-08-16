@@ -35,6 +35,7 @@ const Demo: FunctionComponent = () => {
       scene.addControl(
         new Select({
           position: 'topcenter',
+          popperTrigger: 'hover',
           options: [
             {
               img:

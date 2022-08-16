@@ -112,7 +112,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     this.emit('hide');
   }
 
-  protected onBtnMouseLeave = () => {
+  public setHideTimeout = () => {
     if (this.timeout) {
       return;
     }
@@ -122,7 +122,14 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
       }
       this.hide();
       this.timeout = null;
-    }, 200);
+    }, 500);
+  };
+
+  public clearHideTimeout = () => {
+    if (this.timeout) {
+      window.clearTimeout(this.timeout);
+      this.timeout = null;
+    }
   };
 
   protected init() {
@@ -174,13 +181,14 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     }
   };
 
+  protected onBtnMouseLeave = () => {
+    this.setHideTimeout();
+  };
+
   protected onBtnMouseMove = (e: MouseEvent) => {
+    this.clearHideTimeout();
     if (this.isShow) {
       return;
-    }
-    if (this.timeout) {
-      window.clearTimeout(this.timeout);
-      this.timeout = null;
     }
     this.show();
   };
