@@ -19,42 +19,33 @@ const Demo: FunctionComponent = () => {
     scene.on('loaded', () => {
       scene.addControl(
         new Popper({
-          position: 'rightcenter',
+          position: 'bottomcenter',
         }),
       );
-      // function createTestControl(position: PositionName) {
-      //   scene.addControl(
-      //     new Zoom({
-      //       position,
-      //     }),
-      //   );
-      //   scene.addControl(
-      //     new Scale({
-      //       position,
-      //     }),
-      //   );
-      //
-      //   scene.addControl(
-      //     new Logo({
-      //       position,
-      //     }),
-      //   );
-      // }
-      //
-      // createTestControl('topleft');
-      // createTestControl('topright');
-      // createTestControl('bottomleft');
-      // createTestControl('bottomright');
-      //
-      // createTestControl('lefttop');
-      // createTestControl('leftbottom');
-      // createTestControl('righttop');
-      // createTestControl('rightbottom');
-      //
-      // createTestControl('topcenter');
-      // createTestControl('leftcenter');
-      // createTestControl('rightcenter');
-      // createTestControl('bottomcenter');
+
+      scene.addControl(
+        new Popper({
+          position: 'bottomleft',
+        }),
+      );
+
+      scene.addControl(
+        new Popper({
+          position: 'bottomleft',
+        }),
+      );
+
+      scene.addControl(
+        new Popper({
+          position: 'bottomright',
+        }),
+      );
+
+      scene.addControl(
+        new Popper({
+          position: 'bottomright',
+        }),
+      );
     });
   }, []);
   return (

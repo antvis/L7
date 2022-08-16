@@ -31,10 +31,11 @@ export type PopperContent = string | HTMLElement | null;
 export interface IPopperOption {
   placement: PopperPlacement;
   trigger: PopperTrigger;
-  content: string | HTMLElement;
+  content?: string | HTMLElement;
   offset?: [number, number];
   className?: string;
   container: HTMLElement;
+  closeOther?: boolean;
 }
 
 export class Popper extends EventEmitter {
@@ -63,11 +64,16 @@ export class Popper extends EventEmitter {
 
   protected timeout: number | null = null;
 
+  protected static conflictPopperList: Popper[] = [];
+
   constructor(button: HTMLElement, option: IPopperOption) {
     super();
     this.button = button;
     this.option = option;
     this.init();
+    if (option.closeOther) {
+      Popper.conflictPopperList.push(this);
+    }
   }
 
   public setContent(content: PopperContent) {
@@ -80,12 +86,20 @@ export class Popper extends EventEmitter {
   }
 
   public show() {
-    if (this.isShow) {
+    if (this.isShow || !this.content.innerHTML) {
       return;
     }
     this.setPopperPosition();
     DOM.removeClass(this.popper, 'l7-popper-hide');
     this.isShow = true;
+
+    if (this.option.closeOther) {
+      Popper.conflictPopperList.forEach((popper) => {
+        if (popper !== this && popper.isShow) {
+          popper.hide();
+        }
+      });
+    }
   }
 
   public hide() {
@@ -126,6 +140,8 @@ export class Popper extends EventEmitter {
     this.button.removeEventListener('click', this.onBtnClick);
     this.button.removeEventListener('mousemove', this.onBtnMouseMove);
     this.button.removeEventListener('mousemove', this.onBtnMouseLeave);
+    this.popper.removeEventListener('mousemove', this.onBtnMouseMove);
+    this.popper.removeEventListener('mouseleave', this.onBtnMouseLeave);
     DOM.remove(this.popper);
   }
 
