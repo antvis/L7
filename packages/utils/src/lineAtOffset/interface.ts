@@ -7,9 +7,9 @@ export type Point = number[];
 export interface ILineAtOffset {
   offset: number;
   shape: ILineShape;
+  mapVersion: Version;
   thetaOffset?: IThetaOffset;
   featureId?: number | undefined;
-  mapVersion?: Version;
   segmentNumber?: number;
   autoFit?: boolean;
 }
