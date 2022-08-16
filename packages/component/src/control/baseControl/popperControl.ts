@@ -63,6 +63,13 @@ export default abstract class PopperControl<
       container: popperContainer,
       closeOther: true,
     });
+    this.popper
+      .on('show', () => {
+        this.emit('popperShow');
+      })
+      .on('hide', () => {
+        this.emit('popperHide');
+      });
     return button;
   }
 }

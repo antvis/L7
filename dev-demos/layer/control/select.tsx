@@ -1,7 +1,9 @@
 import { GaodeMap, Scene, SelectControl } from '@antv/l7';
 import { FunctionComponent, useEffect } from 'react';
 
-class Select extends SelectControl {}
+class SelectDemo extends SelectControl {
+  protected isMultiple = false;
+}
 
 const Demo: FunctionComponent = () => {
   useEffect(() => {
@@ -31,40 +33,47 @@ const Demo: FunctionComponent = () => {
       // );
       //
       // scene.addLayer(layer);
+      const newControl = new SelectDemo({
+        position: 'topcenter',
+        popperTrigger: 'hover',
+        options: [
+          {
+            img:
+              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*vky9QKrWjlwAAAAAAAAAAAAAARQnAQ',
+            value: 'normal',
+            text: 'normal',
+          },
+          {
+            img:
+              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UlP0Qp9Zwx0AAAAAAAAAAAAAARQnAQ',
+            value: 'light',
+            text: 'light',
+          },
+          {
+            img:
+              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
+            value: 'dark',
+            text: 'dark',
+          },
+          {
+            img:
+              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
+            value: 'dark1',
+            text: 'dark1',
+          },
+        ],
+        //   .map((item) => {
+        //   const { img, ...option } = item;
+        //   return option;
+        // })
+        defaultValue: 'normal',
+      });
 
-      scene.addControl(
-        new Select({
-          position: 'topcenter',
-          popperTrigger: 'hover',
-          options: [
-            {
-              img:
-                'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*vky9QKrWjlwAAAAAAAAAAAAAARQnAQ',
-              value: 'normal',
-              text: 'normal',
-            },
-            {
-              img:
-                'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UlP0Qp9Zwx0AAAAAAAAAAAAAARQnAQ',
-              value: 'light',
-              text: 'light',
-            },
-            {
-              img:
-                'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
-              value: 'dark',
-              text: 'dark',
-            },
-            {
-              img:
-                'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
-              value: 'dark1',
-              text: 'dark1',
-            },
-          ],
-          defaultValue: '1',
-        }),
-      );
+      newControl.on('selectChange', (e) => {
+        console.log(e);
+      });
+
+      scene.addControl(newControl);
     });
   }, []);
   return (

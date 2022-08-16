@@ -45,12 +45,6 @@ export default abstract class SelectControl<
   protected abstract isMultiple: boolean;
 
   /**
-   * 选中之后是否自动关闭 Popper（仅在单选模式下生效）
-   * @protected
-   */
-  protected abstract closeAfterSelect: boolean;
-
-  /**
    * 选项对应的 DOM 列表
    * @protected
    */
@@ -68,9 +62,6 @@ export default abstract class SelectControl<
   public onAdd() {
     const button = super.onAdd();
     this.popper.setContent(this.getPopperContent());
-    setTimeout(() => {
-      this.popper.show();
-    }, 100);
     return button;
   }
 
@@ -102,6 +93,7 @@ export default abstract class SelectControl<
       }
     });
     this.selectValue = finalValue;
+    this.emit('selectChange', this.isMultiple ? finalValue : finalValue[0]);
   }
 
   protected getPopperContent(): HTMLElement {
@@ -199,9 +191,6 @@ export default abstract class SelectControl<
       }
     } else {
       this.selectValue = [item.value];
-      if (this.closeAfterSelect) {
-        this.popper.setHideTimeout();
-      }
     }
     this.setSelectValue(this.selectValue);
   };

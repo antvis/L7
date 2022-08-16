@@ -122,7 +122,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
       }
       this.hide();
       this.timeout = null;
-    }, 500);
+    }, 300);
   };
 
   public clearHideTimeout = () => {
