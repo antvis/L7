@@ -77,10 +77,8 @@ export default () => {
       });
 
     source.on('sourceUpdate', () => {
-      // console.log(scene.getMapService().version)
-      // const midPoints = lineAtOffset(source, 0.3, 'arc', 'offset');
       const midPoints = lineAtOffset(source, {
-        offset: 2 / 30,
+        offset: 0.1,
         shape: 'arc',
         thetaOffset: 0.5,
         mapVersion: scene.getMapService().version,
@@ -102,13 +100,11 @@ export default () => {
     (async () => {
       // const midPoints = await lineAtOffsetAsyc(source, 0.1, 'arc', 'offset');
       const midPoints = await lineAtOffsetAsyc(source, {
-        // offset: 12.681/30,
-        // offset: 12/31,
-        // offset: 48/186,
         offset: 0.3,
         shape: 'arc',
         thetaOffset: 0.5,
         mapVersion: scene.getMapService().version,
+        featureId: 1
       });
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
         .source(midPoints, {

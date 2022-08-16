@@ -5,8 +5,9 @@ import { greatCircleLineAtOffset } from './greatCircle';
 export function lineAtOffset(source: Source, option: ILineAtOffset) {
   const { featureId } = option;
   let features = source.data.dataArray;
-  if (featureId) {
-    features = features.filter(({ id }: { id: number }) => id === featureId);
+  if (typeof featureId === 'number') {
+    console.log(features)
+    features = features.filter(({ _id }: { _id: number }) => _id === featureId);
   }
   return features.map((feature: any) => {
     const position = getLineOffsetPosition(feature, option);
