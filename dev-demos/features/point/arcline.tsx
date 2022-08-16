@@ -104,7 +104,7 @@ export default () => {
         shape: 'arc',
         thetaOffset: 0.5,
         mapVersion: scene.getMapService().version,
-        featureId: 1
+        featureId: 1,
       });
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
         .source(midPoints, {
