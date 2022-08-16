@@ -10,4 +10,6 @@ export interface ILineAtOffset {
   thetaOffset?: IThetaOffset;
   featureId?: number | undefined;
   mapVersion?: Version;
+  segmentNumber?: number;
+  autoFit?: boolean;
 }

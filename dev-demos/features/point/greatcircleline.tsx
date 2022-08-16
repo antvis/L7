@@ -68,12 +68,12 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(1)
-      .shape('arc')
+      .shape('greatcircle')
       .color('#f00')
       .style({
         // thetaOffset: 'offset'
         // segmentNumber: 10,
-        thetaOffset: 0.5,
+        // thetaOffset: 0.5,
       });
 
     source.on('sourceUpdate', () => {
@@ -81,8 +81,8 @@ export default () => {
       // const midPoints = lineAtOffset(source, 0.3, 'arc', 'offset');
       const midPoints = lineAtOffset(source, {
         offset: 2 / 30,
-        shape: 'arc',
-        thetaOffset: 0.5,
+        shape: 'greatcircle',
+        // thetaOffset: 0.5,
         mapVersion: scene.getMapService().version,
       });
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
@@ -106,8 +106,8 @@ export default () => {
         // offset: 12/31,
         // offset: 48/186,
         offset: 0.3,
-        shape: 'arc',
-        thetaOffset: 0.5,
+        shape: 'greatcircle',
+        // thetaOffset: 0.5,
         mapVersion: scene.getMapService().version,
       });
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })

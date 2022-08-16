@@ -1,6 +1,6 @@
 import { Source, ILineAtOffset } from './interface';
 import { arcLineAtOffset } from './arc';
-import { greatCorcleLineAtOffset } from './greatCircle';
+import { greatCircleLineAtOffset } from './greatCircle';
 
 export function lineAtOffset(source: Source, option: ILineAtOffset) {
   const { featureId } = option;
@@ -30,7 +30,14 @@ export function lineAtOffsetAsyc(source: Source, option: ILineAtOffset) {
 }
 
 function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
-  const { offset, shape, thetaOffset, mapVersion } = option;
+  const {
+    offset,
+    shape,
+    thetaOffset,
+    mapVersion,
+    segmentNumber = 30,
+    autoFit = true,
+  } = option;
   const { coordinates } = feature;
   const source = coordinates[0];
   const target = coordinates[1];
@@ -47,7 +54,7 @@ function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
       calFunc = arcLineAtOffset;
       break;
     case 'greatcircle':
-      calFunc = greatCorcleLineAtOffset;
+      calFunc = greatCircleLineAtOffset;
       break;
     default:
       calFunc = arcLineAtOffset;
@@ -58,6 +65,8 @@ function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
     offset,
     linetheatOffset,
     mapVersion,
+    segmentNumber,
+    autoFit,
   );
 
   return {

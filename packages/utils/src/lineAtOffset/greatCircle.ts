@@ -1,14 +1,24 @@
 import { Point } from './interface';
 import { calDistance } from '../geo';
-
+import { Version } from '../interface/map';
+import { degreesToRadians, radiansToDegrees } from '@turf/helpers';
 // arc
-export function greatCorcleLineAtOffset(
+export function greatCircleLineAtOffset(
   source: Point,
   target: Point,
   offset: number,
-  mapVersion: string | undefined,
+  thetaOffset: number | undefined,
+  mapVersion: Version | undefined,
+  segmentNumber: number = 30,
+  autoFit: boolean,
 ) {
-  return interpolate(source, target, offset, mapVersion);
+  let pointOffset = offset;
+  if (autoFit) {
+    // Tip: 自动偏移到线的节点位置
+    // greatcircle 暂时不支持配置 segmentNumber 和 thetaOffset
+    pointOffset = Math.round(offset * 29) / 29;
+  }
+  return interpolate(source, target, pointOffset, mapVersion);
 }
 
 function midPoint(source: Point, target: Point) {
@@ -43,11 +53,13 @@ function getAngularDist(source: Point, target: Point) {
 }
 
 export function interpolate(
-  source: Point,
-  target: Point,
+  s: Point,
+  t: Point,
   offset: number,
   mapVersion: string | undefined,
 ) {
+  const source = [degreesToRadians(s[0]), degreesToRadians(s[1])];
+  const target = [degreesToRadians(t[0]), degreesToRadians(t[1])];
   if (mapVersion === 'GAODE2.x') {
     // gaode2.x
     const mid = midPoint(source, target);
@@ -73,6 +85,9 @@ export function interpolate(
     const y =
       a * cos_source[1] * sin_source[0] + b * cos_target[1] * sin_target[0];
     const z = a * sin_source[1] + b * sin_target[1];
-    return [Math.atan2(y, x), Math.atan2(z, Math.sqrt(x * x + y * y))];
+    return [
+      radiansToDegrees(Math.atan2(y, x)),
+      radiansToDegrees(Math.atan2(z, Math.sqrt(x * x + y * y))),
+    ];
   }
 }

@@ -7,12 +7,22 @@ export function arcLineAtOffset(
   target: Point,
   offset: number,
   thetaOffset: number | undefined,
-  mapVersion?: Version,
+  mapVersion: Version | undefined,
+  segmentNumber: number = 30,
+  autoFit: boolean,
 ) {
+  let pointOffset = offset;
+
+  if (autoFit) {
+    // Tip: 自动偏移到线的节点位置
+    pointOffset =
+      Math.round(offset * (segmentNumber - 1)) / (segmentNumber - 1);
+  }
+
   if (!thetaOffset) {
-    return interpolate(source, target, offset, 0.314, mapVersion);
+    return interpolate(source, target, pointOffset, 0.314, mapVersion);
   } else {
-    return interpolate(source, target, offset, thetaOffset, mapVersion);
+    return interpolate(source, target, pointOffset, thetaOffset, mapVersion);
   }
 }
 
