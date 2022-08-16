@@ -1,4 +1,4 @@
-import { GaodeMap, RasterLayer, Scene, SelectControl } from '@antv/l7';
+import { GaodeMap, Scene, SelectControl } from '@antv/l7';
 import { FunctionComponent, useEffect } from 'react';
 
 class Select extends SelectControl {}
