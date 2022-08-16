@@ -204,3 +204,13 @@ export function getDiffRect(dom1Rect: any, dom2Rect: any) {
     bottom: dom2Rect.top + dom2Rect.height - dom1Rect.top - dom1Rect.height,
   };
 }
+
+export function setChecked(el: ELType, value: boolean) {
+  // @ts-ignore
+  el.checked = value;
+  if (value) {
+    el.setAttribute('checked', 'true');
+  } else {
+    el.removeAttribute('checked');
+  }
+}

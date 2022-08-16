@@ -38,10 +38,12 @@ export interface IPopperOption {
   closeOther?: boolean;
 }
 
-export class Popper extends EventEmitter {
+export class Popper extends EventEmitter<'show' | 'hide'> {
   protected get buttonRect() {
     return this.button.getBoundingClientRect();
   }
+
+  protected static conflictPopperList: Popper[] = [];
   /**
    * 按钮实体
    * @protected
@@ -63,8 +65,6 @@ export class Popper extends EventEmitter {
   protected content!: HTMLElement;
 
   protected timeout: number | null = null;
-
-  protected static conflictPopperList: Popper[] = [];
 
   constructor(button: HTMLElement, option: IPopperOption) {
     super();
@@ -100,6 +100,7 @@ export class Popper extends EventEmitter {
         }
       });
     }
+    this.emit('show');
   }
 
   public hide() {
@@ -108,6 +109,7 @@ export class Popper extends EventEmitter {
     }
     DOM.addClass(this.popper, 'l7-popper-hide');
     this.isShow = false;
+    this.emit('hide');
   }
 
   protected onBtnMouseLeave = () => {

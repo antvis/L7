@@ -1,0 +1,64 @@
+@import 'variables';
+
+.l7-select-control-normal {
+  .l7-select-control-item {
+    height: @l7-btn-control-size;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    > * + * {
+      margin-left: 6px;
+    }
+    &:hover {
+      background-color: @l7-btn-control-bg-hover-color;
+    }
+    &.l7-select-control-item-active {
+      color: @l7-select-active-color;
+    }
+  }
+}
+
+.l7-select-control-image {
+  padding: 12px 12px 0 12px;
+  width: @l7-select-image-popper-width;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  box-sizing: border-box;
+  .l7-select-control-item {
+    border-radius: @l7-btn-control-border-radius;
+    border: 2px solid @l7-popper-bg-color;
+    box-sizing: content-box;
+    width: calc((100% - 36px) / 3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 12px;
+    position: relative;
+    input[type='checkbox'] {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .l7-select-control-item-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 4px 0;
+      > * + * {
+        margin-left: 6px;
+      }
+    }
+    &.l7-select-control-item-active {
+      border-color: @l7-select-active-color;
+    }
+  }
+}
+
+.l7-select-control-item {
+  cursor: pointer;
+  input[type='checkbox'] {
+    margin: 0;
+    cursor: pointer;
+  }
+}
