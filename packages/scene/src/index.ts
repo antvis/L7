@@ -64,7 +64,7 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, hasBaseMap } = config;
+    const { id, map, canvas, hasBaseMap, } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;

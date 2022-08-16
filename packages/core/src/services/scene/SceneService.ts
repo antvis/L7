@@ -200,7 +200,9 @@ export default class Scene extends EventEmitter implements ISceneService {
           // @ts-ignore
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
+          sceneConfig.gl
         );
+        this.initContainer()
 
         elementResizeEvent(
           this.$container as HTMLDivElement,
@@ -284,6 +286,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           // @ts-ignore
           sceneConfig.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
+          undefined,
         );
       } else {
         console.error('容器 id 不存在');

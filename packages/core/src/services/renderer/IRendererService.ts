@@ -48,7 +48,7 @@ export interface IExtensions {
 
 export interface IRendererService {
   extensionObject: IExtensions;
-  init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void>;
+  init(canvas: HTMLCanvasElement, cfg: IRenderConfig,gl: any): Promise<void>;
   testExtension(name: string): boolean;
   clear(options: IClearOptions): void;
   createModel(options: IModelInitializationOptions): IModel;
