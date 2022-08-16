@@ -19,7 +19,7 @@ export type PopperPlacement =
   | 'right-end';
 
 /**
- * 气泡触发类型
+ * 气泡触发类型，当前支持 click 和 hover 两种类型
  */
 export type PopperTrigger = 'click' | 'hover';
 
@@ -29,13 +29,13 @@ export type PopperTrigger = 'click' | 'hover';
 export type PopperContent = string | HTMLElement | null;
 
 export interface IPopperOption {
-  placement: PopperPlacement;
-  trigger: PopperTrigger;
-  content?: string | HTMLElement;
-  offset?: [number, number];
-  className?: string;
-  container: HTMLElement;
-  closeOther?: boolean;
+  placement: PopperPlacement; // 气泡展示方向
+  trigger: PopperTrigger; // 气泡触发方式
+  content?: PopperContent; // 初始内容
+  offset?: [number, number]; // 气泡偏移
+  className?: string; // 容器自定义 className
+  container: HTMLElement; // 触发气泡的容器
+  unique?: boolean; // 当前气泡展示时，是否关闭其他该配置为 true 的气泡
 }
 
 export class Popper extends EventEmitter<'show' | 'hide'> {
@@ -60,10 +60,16 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
    */
   protected isShow: boolean = false;
 
+  // 气泡容器 DOM
   protected popper!: HTMLElement;
 
+  // 气泡中展示的内容容器 DOM
   protected content!: HTMLElement;
 
+  /**
+   * 关闭气泡的定时器
+   * @protected
+   */
   protected timeout: number | null = null;
 
   constructor(button: HTMLElement, option: IPopperOption) {
@@ -71,7 +77,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     this.button = button;
     this.option = option;
     this.init();
-    if (option.closeOther) {
+    if (option.unique) {
       Popper.conflictPopperList.push(this);
     }
   }
@@ -93,7 +99,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     DOM.removeClass(this.popper, 'l7-popper-hide');
     this.isShow = true;
 
-    if (this.option.closeOther) {
+    if (this.option.unique) {
       Popper.conflictPopperList.forEach((popper) => {
         if (popper !== this && popper.isShow) {
           popper.hide();
@@ -112,6 +118,9 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     this.emit('hide');
   }
 
+  /**
+   * 设置隐藏气泡的定时器
+   */
   public setHideTimeout = () => {
     if (this.timeout) {
       return;
@@ -125,6 +134,9 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     }, 300);
   };
 
+  /**
+   * 销毁隐藏气泡的定时器
+   */
   public clearHideTimeout = () => {
     if (this.timeout) {
       window.clearTimeout(this.timeout);

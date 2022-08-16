@@ -61,7 +61,7 @@ export default abstract class PopperControl<
       placement: popperPlacement,
       trigger: popperTrigger,
       container: popperContainer,
-      closeOther: true,
+      unique: true,
     });
     this.popper
       .on('show', () => {
