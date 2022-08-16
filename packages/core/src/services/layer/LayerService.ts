@@ -7,7 +7,7 @@ import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerModel, ILayerService } from './ILayerService';
+import { ILayerService } from './ILayerService';
 
 @injectable()
 export default class LayerService implements ILayerService {

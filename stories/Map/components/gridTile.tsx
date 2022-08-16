@@ -106,7 +106,7 @@ export default class GridTile extends React.Component {
             type: 'Feature',
             properties: {},
             geometry: {
-              type: 'LineString',
+              type: 'MultiLineString',
               coordinates: d1,
             },
           },
@@ -114,7 +114,7 @@ export default class GridTile extends React.Component {
             type: 'Feature',
             properties: {},
             geometry: {
-              type: 'LineString',
+              type: 'MultiLineString',
               coordinates: d2,
             },
           },

@@ -321,7 +321,7 @@ img.onload = function() {
         type: 'Feature',
         properties: {},
         geometry: {
-          type: 'LineString',
+          type: 'MultiLineString',
           coordinates: d1
         }
       },
@@ -329,7 +329,7 @@ img.onload = function() {
         type: 'Feature',
         properties: {},
         geometry: {
-          type: 'LineString',
+          type: 'MultiLineString',
           coordinates: d2
         }
       }

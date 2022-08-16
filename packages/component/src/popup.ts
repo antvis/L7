@@ -1,7 +1,6 @@
 import {
   ILngLat,
   IMapService,
-  IPoint,
   IPopup,
   IPopupOption,
   ISceneService,

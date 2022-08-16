@@ -4,8 +4,6 @@ import {
 } from '../renderer/IAttribute';
 import { IBufferInitializationOptions } from '../renderer/IBuffer';
 import { IElements } from '../renderer/IElements';
-import { IParseDataItem, IParserData } from '../source/ISourceService';
-import { ILayer } from './ILayerService';
 
 /**
  * 1. 提供各个 Layer 样式属性初始值的注册服务
@@ -178,6 +176,7 @@ export type Triangulation = (
   size: number;
   normals?: number[];
   indexes?: number[];
+  count?: number;
 };
 
 export interface IStyleAttributeUpdateOptions {
@@ -215,6 +214,7 @@ export interface IStyleAttributeService {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
+    count: number | null;
   };
   createAttributesAndIndicesAscy(
     encodedFeatures: IEncodeFeature[],

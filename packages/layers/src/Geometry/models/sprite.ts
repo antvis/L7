@@ -1,9 +1,5 @@
 import {
-  AttributeType,
   gl,
-  IAnimateOption,
-  IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,

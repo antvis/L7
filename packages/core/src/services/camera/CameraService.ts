@@ -1,5 +1,5 @@
 import { mat4 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { ICameraService, IViewport } from './ICameraService';
 

@@ -1,6 +1,4 @@
 import PointLayer from '../';
-import Map from '../../../../maps/src/map';
-import { Scene } from '../../../../scene/src';
 import extrudePolygon from '../shape/extrude';
 describe('pointLayer', () => {
   const layer = new PointLayer({
