@@ -3,8 +3,6 @@ import {
   ILayer,
   ILayerService,
   IMapService,
-  IScale,
-  IScaleOptions,
   ISource,
   ITileLayer,
   ITileLayerManager,

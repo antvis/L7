@@ -12,7 +12,6 @@ import { osmLonLat2TileXY, Tile, TilesetManager } from '@antv/l7-utils';
 import MaskLayer from '../../mask';
 import {
   getLayerShape,
-  readPixel,
   readRasterValue,
   registerLayers,
 } from '../utils';

@@ -1,4 +1,4 @@
-import { createVec3, getAngle } from '../math';
+import { getAngle } from '../math';
 
 describe('util.math', () => {
   it('should clamp angle with `getAngle()`', () => {

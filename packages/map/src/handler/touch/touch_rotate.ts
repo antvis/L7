@@ -1,6 +1,5 @@
 // @ts-ignore
 import Point from '../../geo/point';
-import DOM from '../../utils/dom';
 import TwoTouchHandler from './two_touch';
 
 const ROTATION_THRESHOLD = 25; // pixels along circumference of touch circle
