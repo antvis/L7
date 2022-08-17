@@ -30,7 +30,6 @@ import {
   IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
-  ScaleAttributeType,
   StyleAttrField,
   StyleAttributeField,
   StyleAttributeOption,

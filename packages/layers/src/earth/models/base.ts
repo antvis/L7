@@ -1,15 +1,13 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 
 import baseFrag from '../shaders/base_frag.glsl';

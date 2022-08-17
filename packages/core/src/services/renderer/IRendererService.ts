@@ -1,4 +1,3 @@
-import { ILayer } from '../layer/ILayerService';
 import { IAttribute, IAttributeInitializationOptions } from './IAttribute';
 import { IBuffer, IBufferInitializationOptions } from './IBuffer';
 import { IElements, IElementsInitializationOptions } from './IElements';
@@ -7,7 +6,7 @@ import {
   IFramebufferInitializationOptions,
 } from './IFramebuffer';
 import { IModel, IModelInitializationOptions } from './IModel';
-import { IMultiPassRenderer, IPass } from './IMultiPassRenderer';
+import { IPass } from './IMultiPassRenderer';
 import { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
 
 export interface IRenderConfig {

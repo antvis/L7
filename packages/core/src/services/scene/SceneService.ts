@@ -22,7 +22,7 @@ import {
 } from '../interaction/IInteractionService';
 import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
+import { IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
