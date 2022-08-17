@@ -1,5 +1,5 @@
 // @ts-ignore
-import TestScene from '../../utils/src/test/test-scene.ts'
+import { TestScene } from '@antv/l7-test-utils'
 
 
 describe('template', () => {

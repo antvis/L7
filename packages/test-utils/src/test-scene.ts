@@ -4,7 +4,7 @@ import regl from 'l7regl';
 import { IMapOptions } from '@antv/l7-map';
 import { Map } from '@antv/l7-maps';
 
-export default function TestScene(options?: Partial<IMapOptions>) {
+export function TestScene(options?: Partial<IMapOptions>) {
   const el = document.createElement('div');
   el.id = 'test-div-id';
   const body = document.querySelector('body') as HTMLBodyElement;

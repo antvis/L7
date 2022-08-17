@@ -1,5 +1,5 @@
 import Zoom from '../zoom';
-import TestScene from '../../../../utils/src/test/test-scene'
+import { TestScene } from '@antv/l7-test-utils'
 
 
 describe('zoom', () => {

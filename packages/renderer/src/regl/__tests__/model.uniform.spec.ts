@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import ReglFramebuffer from '../ReglFramebuffer';
 import ReglModel from '../ReglModel';
 import ReglTexture2D from '../ReglTexture2D';
-import createContext from './utils/create-context';
+import { createContext } from '@antv/l7-test-utils';
 
 describe('uniforms in ReglModel', () => {
   let gl;
