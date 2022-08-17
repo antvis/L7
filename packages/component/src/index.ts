@@ -1,6 +1,5 @@
 import Fullscreen from './control/fullscreen';
 import Layers from './control/layer';
-import Logo from './control/logo';
 import Scale from './control/scale';
 import Zoom from './control/zoom';
 import Marker from './marker';
@@ -13,9 +12,9 @@ import { createL7Icon } from './utils/icon';
 import './css/index.less';
 
 export * from './control/baseControl';
+export * from './control/logo';
 
 export {
-  Logo,
   Scale,
   Zoom,
   Layers,

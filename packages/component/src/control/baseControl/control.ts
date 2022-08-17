@@ -109,9 +109,15 @@ export default abstract class Control<O extends IControlOption = IControlOption>
     this.container = this.onAdd();
     DOM.addClass(this.container, 'l7-control');
 
+    const { className, style } = this.controlOption;
+    if (className) {
+      this.setClassName(className);
+    }
+    if (style) {
+      this.setStyle(style);
+    }
     // 将 container 插入容器中
     this.insertContainer();
-    this.setOptions(this.controlOption);
     this.emit('add', this);
     return this;
   }

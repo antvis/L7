@@ -39,7 +39,9 @@ export function create(
   container?: HTMLElement,
 ) {
   const el = $window.document.createElement(tagName);
-  el.className = className || '';
+  if (className) {
+    el.className = className || '';
+  }
 
   if (container) {
     container.appendChild(el);
@@ -213,4 +215,12 @@ export function setChecked(el: ELType, value: boolean) {
   } else {
     el.removeAttribute('checked');
   }
+}
+
+export function clearChildren(el: ELType) {
+  el.innerHTML = '';
+}
+
+export function setUnDraggable(el: ELType) {
+  el.setAttribute('draggable', 'false');
 }

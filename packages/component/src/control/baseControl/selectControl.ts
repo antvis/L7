@@ -59,9 +59,17 @@ export default abstract class SelectControl<
     }
   }
 
+  public setOptions(option: Partial<O>) {
+    super.setOptions(option);
+    const { options } = option;
+    if (options) {
+      this.popper.setContent(this.getPopperContent(options));
+    }
+  }
+
   public onAdd() {
     const button = super.onAdd();
-    this.popper.setContent(this.getPopperContent());
+    this.popper.setContent(this.getPopperContent(this.controlOption.options));
     return button;
   }
 
@@ -96,8 +104,7 @@ export default abstract class SelectControl<
     this.emit('selectChange', this.isMultiple ? finalValue : finalValue[0]);
   }
 
-  protected getPopperContent(): HTMLElement {
-    const options = this.controlOption.options;
+  protected getPopperContent(options: OptionItem[]): HTMLElement {
     const isImageOptions = this.isImageOptions();
     const content = DOM.create(
       'div',
@@ -155,6 +162,7 @@ export default abstract class SelectControl<
     ) as HTMLElement;
     const imgDOM = DOM.create('img') as HTMLElement;
     imgDOM.setAttribute('src', option.img);
+    DOM.setUnDraggable(imgDOM);
     optionDOM.appendChild(imgDOM);
     const rowDOM = DOM.create(
       'div',

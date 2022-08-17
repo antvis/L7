@@ -60,11 +60,17 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
    */
   protected isShow: boolean = false;
 
+  /**
+   * 当前气泡展示的内容
+   * @protected
+   */
+  protected content: PopperContent;
+
   // 气泡容器 DOM
-  protected popper!: HTMLElement;
+  protected popperDOM!: HTMLElement;
 
   // 气泡中展示的内容容器 DOM
-  protected content!: HTMLElement;
+  protected contentDOM!: HTMLElement;
 
   /**
    * 关闭气泡的定时器
@@ -82,21 +88,26 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     }
   }
 
+  public getContent() {
+    return this.content;
+  }
+
   public setContent(content: PopperContent) {
     if (typeof content === 'string') {
-      this.content.innerHTML = content;
+      this.contentDOM.innerHTML = content;
     } else if (content instanceof HTMLElement) {
-      this.content.innerHTML = '';
-      this.content.appendChild(content);
+      DOM.clearChildren(this.contentDOM);
+      this.contentDOM.appendChild(content);
     }
+    this.content = content;
   }
 
   public show() {
-    if (this.isShow || !this.content.innerHTML) {
+    if (this.isShow || !this.contentDOM.innerHTML) {
       return;
     }
     this.setPopperPosition();
-    DOM.removeClass(this.popper, 'l7-popper-hide');
+    DOM.removeClass(this.popperDOM, 'l7-popper-hide');
     this.isShow = true;
 
     if (this.option.unique) {
@@ -113,7 +124,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     if (!this.isShow) {
       return;
     }
-    DOM.addClass(this.popper, 'l7-popper-hide');
+    DOM.addClass(this.popperDOM, 'l7-popper-hide');
     this.isShow = false;
     this.emit('hide');
   }
@@ -144,26 +155,26 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     }
   };
 
-  protected init() {
+  public init() {
     const { trigger } = this.option;
-    this.popper = this.createPopper();
+    this.popperDOM = this.createPopper();
     if (trigger === 'click') {
       this.button.addEventListener('click', this.onBtnClick);
     } else {
       this.button.addEventListener('mousemove', this.onBtnMouseMove);
       this.button.addEventListener('mouseleave', this.onBtnMouseLeave);
-      this.popper.addEventListener('mousemove', this.onBtnMouseMove);
-      this.popper.addEventListener('mouseleave', this.onBtnMouseLeave);
+      this.popperDOM.addEventListener('mousemove', this.onBtnMouseMove);
+      this.popperDOM.addEventListener('mouseleave', this.onBtnMouseLeave);
     }
   }
 
-  protected destroy() {
+  public destroy() {
     this.button.removeEventListener('click', this.onBtnClick);
     this.button.removeEventListener('mousemove', this.onBtnMouseMove);
     this.button.removeEventListener('mousemove', this.onBtnMouseLeave);
-    this.popper.removeEventListener('mousemove', this.onBtnMouseMove);
-    this.popper.removeEventListener('mouseleave', this.onBtnMouseLeave);
-    DOM.remove(this.popper);
+    this.popperDOM.removeEventListener('mousemove', this.onBtnMouseMove);
+    this.popperDOM.removeEventListener('mouseleave', this.onBtnMouseLeave);
+    DOM.remove(this.popperDOM);
   }
 
   protected createPopper(): HTMLElement {
@@ -177,8 +188,8 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     popper.appendChild(popperContent);
     popper.appendChild(popperArrow);
     container.appendChild(popper);
-    this.popper = popper;
-    this.content = popperContent;
+    this.popperDOM = popper;
+    this.contentDOM = popperContent;
     if (content) {
       this.setContent(content);
     }
@@ -255,10 +266,10 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     const posList = placement.split('-');
     if (posList.length) {
       DOM.addClass(
-        this.popper,
+        this.popperDOM,
         posList.map((pos) => `l7-popper-${pos}`).join(' '),
       );
     }
-    DOM.addStyle(this.popper, DOM.css2Style(popperStyleObj));
+    DOM.addStyle(this.popperDOM, DOM.css2Style(popperStyleObj));
   }
 }

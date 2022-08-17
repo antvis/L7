@@ -1,11 +1,40 @@
 import { GaodeMap, Scene, SelectControl } from '@antv/l7';
-import { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 
 class SelectDemo extends SelectControl {
   protected isMultiple = false;
 }
 
+const options = [
+  {
+    img:
+      'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*vky9QKrWjlwAAAAAAAAAAAAAARQnAQ',
+    value: 'normal',
+    text: 'normal',
+  },
+  {
+    img:
+      'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UlP0Qp9Zwx0AAAAAAAAAAAAAARQnAQ',
+    value: 'light',
+    text: 'light',
+  },
+  {
+    img:
+      'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
+    value: 'dark',
+    text: 'dark',
+  },
+  {
+    img:
+      'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
+    value: 'dark1',
+    text: 'dark1',
+  },
+];
+
 const Demo: FunctionComponent = () => {
+  const [control, setControl] = useState<SelectDemo | null>(null);
+
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
@@ -36,32 +65,7 @@ const Demo: FunctionComponent = () => {
       const newControl = new SelectDemo({
         position: 'topcenter',
         popperTrigger: 'hover',
-        options: [
-          {
-            img:
-              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*vky9QKrWjlwAAAAAAAAAAAAAARQnAQ',
-            value: 'normal',
-            text: 'normal',
-          },
-          {
-            img:
-              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UlP0Qp9Zwx0AAAAAAAAAAAAAARQnAQ',
-            value: 'light',
-            text: 'light',
-          },
-          {
-            img:
-              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
-            value: 'dark',
-            text: 'dark',
-          },
-          {
-            img:
-              'https://gw.alipayobjects.com/mdn/rms_58ab56/afts/img/A*UitzS5mxpSwAAAAAAAAAAAAAARQnAQ',
-            value: 'dark1',
-            text: 'dark1',
-          },
-        ],
+        options,
         //   .map((item) => {
         //   const { img, ...option } = item;
         //   return option;
@@ -73,17 +77,33 @@ const Demo: FunctionComponent = () => {
         console.log(e);
       });
 
+      setControl(newControl);
       scene.addControl(newControl);
     });
   }, []);
   return (
-    <div
-      id="map"
-      style={{
-        height: '500px',
-        position: 'relative',
-      }}
-    />
+    <>
+      <div>
+        <button
+          onClick={() => {
+            control?.setOptions({
+              popperPlacement: 'right-start',
+              options: options.slice(0, 3),
+              options: options.slice(0, 3),
+            });
+          }}
+        >
+          变更配置
+        </button>
+      </div>
+      <div
+        id="map"
+        style={{
+          height: '500px',
+          position: 'relative',
+        }}
+      />
+    </>
   );
 };
 

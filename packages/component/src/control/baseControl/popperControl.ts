@@ -49,14 +49,24 @@ export default abstract class PopperControl<
   }
 
   public onAdd(): HTMLElement {
+    const button = super.onAdd();
+    this.initPopper();
+    return button;
+  }
+
+  public onRemove() {
+    this.popper.destroy();
+  }
+
+  public initPopper() {
     const {
       popperClassName,
       popperPlacement,
       popperTrigger,
     } = this.controlOption;
     const popperContainer = this.mapsService.getMapContainer()!;
-    const button = super.onAdd();
-    this.popper = new Popper(button, {
+
+    this.popper = new Popper(this.button!, {
       className: popperClassName,
       placement: popperPlacement,
       trigger: popperTrigger,
@@ -70,6 +80,21 @@ export default abstract class PopperControl<
       .on('hide', () => {
         this.emit('popperHide');
       });
-    return button;
+    return this.popper;
+  }
+
+  public setOptions(option: Partial<O>) {
+    super.setOptions(option);
+
+    if (
+      'popperPlacement' in option ||
+      'popperClassName' in option ||
+      'popperTrigger' in option
+    ) {
+      const content = this.popper.getContent();
+      this.popper.destroy();
+      this.initPopper();
+      this.popper.setContent(content);
+    }
   }
 }
