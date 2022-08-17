@@ -69,7 +69,7 @@ export default class TileFactory implements ITileFactory {
       vectorTileLayer: null,
       source: null,
     };
-    const { sourceLayer, featureId } = initOptions;
+    const { sourceLayer, featureId, transforms } = initOptions;
     if (!sourceLayer) {
       return emptyData;
     }
@@ -88,6 +88,7 @@ export default class TileFactory implements ITileFactory {
             type: 'geojson',
             featureId,
           },
+          transforms
         },
       );
 
