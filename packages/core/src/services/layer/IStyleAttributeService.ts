@@ -176,6 +176,7 @@ export type Triangulation = (
   size: number;
   normals?: number[];
   indexes?: number[];
+  count?: number;
 };
 
 export interface IStyleAttributeUpdateOptions {
@@ -213,6 +214,7 @@ export interface IStyleAttributeService {
       [attributeName: string]: IAttribute;
     };
     elements: IElements;
+    count: number | null;
   };
   createAttributesAndIndicesAscy(
     encodedFeatures: IEncodeFeature[],
