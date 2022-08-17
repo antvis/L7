@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, LineLayer } from '@antv/l7';
+import { Scene, PointLayer } from '@antv/l7';
 // @ts-ignore
 import { Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -68,7 +68,7 @@ export default () => {
       }),
     });
 
-    const layer = new LineLayer({
+    const layer = new PointLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
     });
@@ -93,10 +93,10 @@ export default () => {
           ],
         },
       )
-      .shape('simple')
+      // .shape('simple')
       // .shape('line')
       .color('COLOR')
-      .size(2)
+      .size(10)
       .select(true);
 
     scene.on('loaded', () => {
