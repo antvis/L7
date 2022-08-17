@@ -11,7 +11,7 @@ const list = [
     province_adcode: '630000',
     province_adName: '青海省',
     province: '青海省',
-    nnh: 2
+    nnh: 2,
   },
   {
     value: 29.0,
@@ -19,7 +19,7 @@ const list = [
     province_adcode: '640000',
     province_adName: '宁夏回族自治区',
     province: '宁夏回族自治区',
-    nnh: 3
+    nnh: 3,
   },
   {
     value: 60.0,
@@ -27,7 +27,7 @@ const list = [
     province_adcode: '650000',
     province_adName: '新疆维吾尔自治区',
     province: '新疆维吾尔自治区',
-    nnh: 4
+    nnh: 4,
   },
   {
     value: -31.0,
@@ -35,7 +35,7 @@ const list = [
     province_adcode: '710000',
     province_adName: '台湾省',
     province: '台湾省',
-    nnh: 4
+    nnh: 4,
   },
   {
     value: 80.0,
@@ -43,7 +43,7 @@ const list = [
     province_adcode: '810000',
     province_adName: '香港特别行政区',
     province: '香港特别行政区',
-    nnh: 4
+    nnh: 4,
   },
   {
     value: -33.0,
@@ -51,7 +51,7 @@ const list = [
     province_adcode: '820000',
     province_adName: '澳门特别行政区',
     province: '澳门特别行政区',
-    nnh: 4
+    nnh: 4,
   },
 ];
 
@@ -99,9 +99,9 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      layer.on('click', e => {
-        console.log(e)
-      })
+      layer.on('click', (e) => {
+        console.log(e);
+      });
     });
   }, []);
   return (
