@@ -2,6 +2,7 @@ import {
   IControl,
   IControlOption,
   IControlService,
+  IGlobalConfigService,
   ILayerService,
   IMapService,
   IRendererService,
@@ -51,6 +52,7 @@ export default abstract class Control<O extends IControlOption = IControlOption>
   protected renderService: IRendererService;
   protected layerService: ILayerService;
   protected controlService: IControlService;
+  protected configService: IGlobalConfigService;
 
   constructor(option?: Partial<O>) {
     super();
@@ -66,19 +68,13 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    * @param newOptions
    */
   public setOptions(newOptions: Partial<O>): void {
-    const {
-      position: oldPosition,
-      className: oldClassName,
-      style: oldStyle,
-    } = this.controlOption;
-
-    if ('position' in newOptions && newOptions.position !== oldPosition) {
+    if ('position' in newOptions) {
       this.setPosition(newOptions.position);
     }
-    if ('className' in newOptions && newOptions.className !== oldClassName) {
+    if ('className' in newOptions) {
       this.setClassName(newOptions.className);
     }
-    if ('style' in newOptions && newOptions.style !== oldStyle) {
+    if ('style' in newOptions) {
       this.setStyle(newOptions.style);
     }
     this.controlOption = {
@@ -100,6 +96,9 @@ export default abstract class Control<O extends IControlOption = IControlOption>
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
+    );
+    this.configService = sceneContainer.get<IGlobalConfigService>(
+      TYPES.IGlobalConfigService,
     );
     this.scene = sceneContainer.get<ISceneService>(TYPES.ISceneService);
     this.sceneContainer = sceneContainer;

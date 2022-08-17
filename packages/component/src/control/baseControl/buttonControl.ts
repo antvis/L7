@@ -59,6 +59,10 @@ export default abstract class ButtonControl<
   public onAdd(): HTMLElement {
     this.button = this.createButton();
     this.isDisable = false;
+    const { title, btnText, btnIcon } = this.controlOption;
+    this.setBtnText(title);
+    this.setBtnText(btnText);
+    this.setBtnIcon(btnIcon);
     return this.button;
   }
 
@@ -71,7 +75,7 @@ export default abstract class ButtonControl<
   public setOptions(newOptions: Partial<O>) {
     const { title, btnText, btnIcon } = newOptions;
     if ('title' in newOptions) {
-      this.button?.setAttribute('title', title ?? '');
+      this.setBtnTitle(title);
     }
     if ('btnIcon' in newOptions) {
       this.setBtnIcon(btnIcon);
@@ -80,6 +84,10 @@ export default abstract class ButtonControl<
       this.setBtnText(btnText);
     }
     super.setOptions(newOptions);
+  }
+
+  public setBtnTitle(title: O['title']) {
+    this.button?.setAttribute('title', title ?? '');
   }
 
   public setBtnIcon(newIcon: O['btnIcon']) {
