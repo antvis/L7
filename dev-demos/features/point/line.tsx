@@ -79,6 +79,7 @@ export default () => {
       .style({});
 
     source.on('sourceUpdate', () => {
+      console.log(source)
       const midPoints = lineAtOffset(source, {
         offset: 0.1,
         shape: 'line',
