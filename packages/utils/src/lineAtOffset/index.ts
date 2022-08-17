@@ -1,6 +1,7 @@
 import { Source, ILineAtOffset } from './interface';
 import { arcLineAtOffset } from './arc';
 import { greatCircleLineAtOffset } from './greatCircle';
+import { pathLineAtOffset } from './line';
 
 export function lineAtOffset(source: Source, option: ILineAtOffset) {
   const { featureId } = option;
@@ -39,6 +40,10 @@ function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
     autoFit = true,
   } = option;
   const { coordinates } = feature;
+  if (shape === 'line') {
+    return pathLineAtOffset(coordinates, offset);
+  }
+
   const source = coordinates[0];
   const target = coordinates[1];
   let linetheatOffset;
