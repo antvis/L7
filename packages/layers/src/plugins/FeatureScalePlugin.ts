@@ -109,7 +109,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
-        const type = attribute.name;
         attributeScale.names = this.parseFields(attribute!.scale!.field || []);
         const scales: IStyleScale[] = [];
         // 为每个字段创建 Scale
