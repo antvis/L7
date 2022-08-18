@@ -47,6 +47,7 @@ export default class BaseTileLayer implements ITileLayer {
     mapService,
     layerService,
     pickingService,
+    transforms
   }: ITileLayerOPtions) {
     const parentSource = parent.getSource();
     const { sourceLayer, coords, featureId } =
@@ -62,6 +63,7 @@ export default class BaseTileLayer implements ITileLayer {
       rendererService,
       pickingService,
       layerService,
+      transforms
     );
 
     this.initTileSetManager();
