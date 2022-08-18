@@ -1,0 +1,47 @@
+{
+  "name": "@antv/l7-test-utils",
+  "version": "2.9.23",
+  "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
+  "keywords": [],
+  "author": "lzxue <lzx199065@gmail.com>",
+  "license": "ISC",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "sideEffects": true,
+  "files": [
+    "lib",
+    "es",
+    "dist",
+    "README.md"
+  ],
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antvis/L7.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "build": "father build",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "sync": "tnpm sync"
+  },
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+ "devDependencies": {
+   "@antv/l7-map": "2.9.23",
+   "@antv/l7-maps": "2.9.23",
+   "@antv/l7-scene": "2.9.23",
+   "l7regl": "^0.0.20",
+   "gl": "^5.0.3"
+ },
+  "homepage": "https://github.com/antvis/L7#readme"
+}

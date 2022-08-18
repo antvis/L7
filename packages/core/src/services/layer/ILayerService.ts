@@ -20,7 +20,7 @@ import {
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
 import { IUniform } from '../renderer/IUniform';
-import { ISource, ISourceCFG } from '../source/ISourceService';
+import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import {
   IAnimateOption,
   IEncodeFeature,
@@ -136,6 +136,7 @@ export interface ISubLayerStyles {
  */
 export interface ISubLayerInitOptions {
   layerType: string;
+  transforms: ITransform[];
   shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
@@ -223,6 +224,7 @@ export interface ITileLayerOPtions {
   mapService: IMapService;
   layerService: ILayerService;
   pickingService: IPickingService;
+  transforms: ITransform[];
 }
 
 export type LayerEventType =

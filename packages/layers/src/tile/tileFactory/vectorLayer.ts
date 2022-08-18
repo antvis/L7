@@ -6,6 +6,8 @@ import {
   IPolygonLayerStyleOptions,
 } from '../../core/interface';
 import lineFillModel from '../../line/models/tile';
+import lineSimpleModel from '../../line/models/simpleLine';
+
 import pointTextModel from '../../point/models/text';
 import pointFillModel from '../../point/models/tile';
 import polygonFillModel from '../../polygon/models/tile';
@@ -46,11 +48,27 @@ export default class VectorLayer extends BaseLayer<
       case 'PolygonLayer':
         return polygonFillModel;
       case 'LineLayer':
-        return lineFillModel;
+        return this.getLineModel();
       case 'PointLayer':
         return this.getPointModel();
       default:
         return pointFillModel;
+    }
+  }
+
+  protected getLineModel() {
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
+      'shape',
+    );
+    const shape = shapeAttribute?.scale?.field;
+    switch(shape) {
+      case 'tileline':
+      case 'line':
+        return lineFillModel;
+      case 'simple':
+        return lineSimpleModel;
+      default:
+        return lineFillModel;
     }
   }
 
