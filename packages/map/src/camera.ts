@@ -10,14 +10,12 @@ import { Event } from './handler/events/event';
 import { IMapOptions } from './interface';
 type CallBack = (_: number) => void;
 import {
-  cancel,
   clamp,
   ease as defaultEasing,
   interpolate,
   now,
   pick,
   prefersReducedMotion,
-  raf,
   wrap,
 } from './util';
 

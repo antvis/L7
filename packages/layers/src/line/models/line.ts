@@ -3,7 +3,6 @@ import {
   gl,
   IAnimateOption,
   IEncodeFeature,
-  IImage,
   ILayerConfig,
   IModel,
   IModelUniform,

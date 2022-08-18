@@ -1,7 +1,6 @@
 import { isNil } from 'lodash';
 import {
   IAttributeScale,
-  IScaleOption,
   IStyleAttribute,
   StyleScaleType,
 } from '../layer/IStyleAttributeService';
@@ -11,7 +10,6 @@ import {
   IEncodeFeature,
   IFeatureRange,
   IStyleAttributeInitializationOptions,
-  IStyleScale,
   IVertexAttributeDescriptor,
 } from './IStyleAttributeService';
 

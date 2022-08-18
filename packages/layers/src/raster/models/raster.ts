@@ -4,8 +4,6 @@ import {
   IEncodeFeature,
   IModel,
   ITexture2D,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { isEqual } from 'lodash';

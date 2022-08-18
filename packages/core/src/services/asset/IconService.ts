@@ -1,6 +1,6 @@
 import { $window } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { buildIconMaping } from '../../utils/font_util';
 import { ITexture2D } from '../renderer/ITexture2D';
@@ -9,7 +9,6 @@ import {
   IIcon,
   IICONMap,
   IIconService,
-  IIconValue,
   IImage,
 } from './IIconService';
 const BUFFER = 3;

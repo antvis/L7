@@ -1,9 +1,8 @@
-import { ILayerConfig, IModelUniform } from '@antv/l7-core';
+import { ILayerConfig } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import {
   CanvasUpdateType,
   ICanvasLayerStyleOptions,
-  IDrawingOnCanvas,
 } from '../../core/interface';
 
 export default class CanvaModel extends BaseModel {

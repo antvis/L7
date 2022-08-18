@@ -1,11 +1,11 @@
 // import Ajv from 'ajv';
-import { injectable, postConstruct } from 'inversify';
+import { injectable } from 'inversify';
 import { merge } from 'lodash';
 import 'reflect-metadata';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
-import WarnInfo, { IWarnInfo } from './warnInfo';
+import WarnInfo from './warnInfo';
 
 /**
  * 场景默认配置项

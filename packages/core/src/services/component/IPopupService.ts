@@ -1,6 +1,6 @@
 import { anchorType } from '@antv/l7-utils';
 import { Container } from 'inversify';
-import { ILngLat, IMapService } from '../map/IMapService';
+import { ILngLat } from '../map/IMapService';
 
 export interface IPopupOption {
   closeButton: boolean;
