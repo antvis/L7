@@ -19,7 +19,8 @@
     "test": "__tests__"
   },
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com/"
+    "registry": "https://registry.npm.alibaba-inc.com/",
+    "access": "public"
   },
   "repository": {
     "type": "git",
