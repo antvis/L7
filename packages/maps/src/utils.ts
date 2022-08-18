@@ -42,8 +42,5 @@ export function toPaddingOptions(padding: IPadding = {}) {
     }
   }
 
-  return {
-    ...defaultPadding,
-    ...padding,
-  };
+  return Object.assign({},defaultPadding,padding)
 }

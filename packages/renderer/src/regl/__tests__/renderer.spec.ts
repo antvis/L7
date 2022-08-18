@@ -7,7 +7,7 @@ import { ReglRendererService } from '../../index';
 import ReglAttribute from '../ReglAttribute';
 import ReglBuffer from '../ReglBuffer';
 import checkPixels from './utils/check-pixels';
-import createContext from './utils/create-context';
+import { createContext } from '@antv/l7-test-utils';
 import globalDefaultprecision from './utils/default-precision';
 
 describe('ReglRendererService', () => {
