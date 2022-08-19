@@ -1,8 +1,8 @@
 @font-face {
   font-family: "l7-iconfont"; /* Project id 3580659 */
-  src: url('iconfont.woff2?t=1660826205387') format('woff2'),
-       url('iconfont.woff?t=1660826205387') format('woff'),
-       url('iconfont.ttf?t=1660826205387') format('truetype');
+  src: url('iconfont.woff2?t=1660886045943') format('woff2'),
+       url('iconfont.woff?t=1660886045943') format('woff'),
+       url('iconfont.ttf?t=1660886045943') format('truetype');
 }
 
 .l7-iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.l7-icon-gps-fixed:before {
+  content: "\e678";
 }
 
 .l7-icon-tupian:before {

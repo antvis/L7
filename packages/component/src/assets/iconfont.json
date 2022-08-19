@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1410363",
+      "name": "gps-fixed",
+      "font_class": "gps-fixed",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
       "icon_id": "11874505",
       "name": "图片",
       "font_class": "tupian",
