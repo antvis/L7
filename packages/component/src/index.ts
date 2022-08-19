@@ -1,4 +1,3 @@
-import Fullscreen from './control/fullscreen';
 import Layers from './control/layer';
 import Scale from './control/scale';
 import Zoom from './control/zoom';
@@ -13,16 +12,9 @@ import './css/index.less';
 
 export * from './control/baseControl';
 export * from './control/logo';
+export * from './control/fullscreen';
+export * from './control/exportImage';
 
-export {
-  Scale,
-  Zoom,
-  Layers,
-  Marker,
-  Popup,
-  MarkerLayer,
-  Fullscreen,
-  createL7Icon,
-};
+export { Scale, Zoom, Layers, Marker, Popup, MarkerLayer, createL7Icon };
 
 export * from './interface';

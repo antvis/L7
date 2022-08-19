@@ -60,7 +60,7 @@ export default abstract class ButtonControl<
     this.button = this.createButton();
     this.isDisable = false;
     const { title, btnText, btnIcon } = this.controlOption;
-    this.setBtnText(title);
+    this.setBtnTitle(title);
     this.setBtnText(btnText);
     this.setBtnIcon(btnIcon);
     return this.button;

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11874505",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
       "icon_id": "26850241",
       "name": "全屏",
       "font_class": "FullScreen",
