@@ -503,7 +503,7 @@ export default class AMapService
         }
         amapLoaded = true;
         plugin.push('Map3D');
-        if(window.AMap) {
+        if (window.AMap) {
           Promise.resolve().then(() => {
             resolveMap();
 
@@ -511,24 +511,24 @@ export default class AMapService
               pendingResolveQueue.forEach((r) => r());
               pendingResolveQueue = [];
             }
-          })
+          });
         } else {
           AMapLoader.load({
             key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
             version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
             plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
           })
-          .then((AMap) => {
-            resolveMap();
+            .then((AMap) => {
+              resolveMap();
 
-            if (pendingResolveQueue.length) {
-              pendingResolveQueue.forEach((r) => r());
-              pendingResolveQueue = [];
-            }
-          })
-          .catch((e) => {
-            throw new Error(e);
-          });
+              if (pendingResolveQueue.length) {
+                pendingResolveQueue.forEach((r) => r());
+                pendingResolveQueue = [];
+              }
+            })
+            .catch((e) => {
+              throw new Error(e);
+            });
         }
       } else {
         if ((amapLoaded && window.AMap) || mapInstance) {
