@@ -228,7 +228,7 @@ export default class MapboxService
   }
 
   public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyle(style));
+    this.map.setStyle(this.getMapStyleValue(style));
   }
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
@@ -358,7 +358,7 @@ export default class MapboxService
       // @ts-ignore
       this.map = new window.mapboxgl.Map({
         container: this.$mapContainer,
-        style: this.getMapStyle(style),
+        style: this.getMapStyleValue(style),
         attributionControl,
         bearing: rotation,
         ...rest,
@@ -485,7 +485,7 @@ export default class MapboxService
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
   }
-  private getMapStyle(name: MapStyle) {
+  private getMapStyleValue(name: MapStyle) {
     if (typeof name !== 'string') {
       return name;
     }

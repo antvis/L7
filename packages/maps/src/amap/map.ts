@@ -253,7 +253,7 @@ export default class AMapService
   }
 
   public setMapStyle(style: string): void {
-    this.map.setMapStyle(this.getMapStyle(style));
+    this.map.setMapStyle(this.getMapStyleValue(style));
   }
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
@@ -360,7 +360,7 @@ export default class AMapService
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
-            mapStyle: this.getMapStyle(style as string),
+            mapStyle: this.getMapStyleValue(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
@@ -531,7 +531,7 @@ export default class AMapService
     }
   };
 
-  private getMapStyle(name: string): string {
+  private getMapStyleValue(name: string): string {
     return MapTheme[name] ? MapTheme[name] : name;
   }
   private creatAmapContainer(id: string | HTMLDivElement) {

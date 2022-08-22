@@ -224,7 +224,7 @@ export default class L7EarthService implements IEarthService<Map> {
   }
 
   public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyle(style));
+    this.map.setStyle(this.getMapStyleValue(style));
   }
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
@@ -278,7 +278,7 @@ export default class L7EarthService implements IEarthService<Map> {
     // @ts-ignore
     this.map = new EarthMap({
       container: this.$mapContainer,
-      style: this.getMapStyle(style),
+      style: this.getMapStyleValue(style),
       bearing: rotation,
       ...rest,
     });
@@ -413,7 +413,7 @@ export default class L7EarthService implements IEarthService<Map> {
     }
     return $wrapper;
   }
-  private getMapStyle(name: MapStyle) {
+  private getMapStyleValue(name: MapStyle) {
     if (typeof name !== 'string') {
       return name;
     }

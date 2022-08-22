@@ -221,7 +221,7 @@ export default class L7MapService implements IMapService<Map> {
   }
 
   public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyle(style));
+    this.map.setStyle(this.getMapStyleValue(style));
   }
 
   public meterToCoord(center: [number, number], outer: [number, number]) {
@@ -299,7 +299,7 @@ export default class L7MapService implements IMapService<Map> {
       // @ts-ignore
       this.map = new Map({
         container: this.$mapContainer,
-        style: this.getMapStyle(style),
+        style: this.getMapStyleValue(style),
         bearing: rotation,
         ...rest,
       });
@@ -331,7 +331,7 @@ export default class L7MapService implements IMapService<Map> {
 
     this.map = new Map({
       container: this.$mapContainer as HTMLElement,
-      style: this.getMapStyle(style),
+      style: this.getMapStyleValue(style),
       bearing: rotation,
       // @ts-ignore
       canvas,
@@ -477,7 +477,7 @@ export default class L7MapService implements IMapService<Map> {
     }
     return $wrapper;
   }
-  private getMapStyle(name: MapStyle) {
+  private getMapStyleValue(name: MapStyle) {
     if (typeof name !== 'string') {
       return name;
     }
