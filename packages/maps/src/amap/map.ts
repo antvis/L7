@@ -392,7 +392,7 @@ export default class AMapService
         }
         amapLoaded = true;
         plugin.push('Map3D');
-        if(window.AMap) {
+        if(window.AMap && this.map !== undefined) {
           Promise.resolve().then(() => {
             resolveMap();
 
