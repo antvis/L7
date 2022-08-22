@@ -1,4 +1,4 @@
-import { IMapService, IMarker, TYPES } from '@antv/l7-core';
+import { IMapService, IMarker, IMarkerLayerCache, TYPES } from '@antv/l7-core';
 import {
   bindAll,
   boundsContains,
@@ -23,7 +23,6 @@ interface IPointFeature {
   };
   properties: any;
 }
-
 export default class MarkerLayer extends EventEmitter {
   private markers: IMarker[] = [];
   private markerLayerOption: IMarkerLayerOption;
@@ -65,11 +64,27 @@ export default class MarkerLayer extends EventEmitter {
       this.mapsService.on('camerachange', this.update); // amap1.x 更新事件
       this.mapsService.on('viewchange', this.update); // amap2.0 更新事件
     }
+    this.mapsService.on('camerachange', this.doCacheFn.bind(this)); // amap1.x 更新事件
+    this.mapsService.on('viewchange', this.doCacheFn.bind(this)); // amap2.0 更新事件
     this.addMarkers();
     return this;
   }
+  private cache: IMarkerLayerCache;
+  private doCacheFn() {
+    if (!this.mapsService) return;
+    const container = this.mapsService.getContainer();
+    this.cache = {
+      containerWidth: container?.scrollWidth || 0,
+      containerHeight: container?.scrollHeight || 0,
+      bounds: this.mapsService.getBounds(),
+    };
+  }
+  private getCache(): IMarkerLayerCache {
+    return this.cache;
+  }
   public addMarker(marker: IMarker) {
     const cluster = this.markerLayerOption.cluster;
+    marker.getMarkerLayerCache = this.getCache.bind(this);
     if (cluster) {
       this.addPoint(marker, this.markers.length);
       if (this.mapsService) {
@@ -136,6 +151,8 @@ export default class MarkerLayer extends EventEmitter {
       clusterMarker.remove();
     });
     this.mapsService.off('camerachange', this.update);
+    this.mapsService.off('camerachange', this.doCacheFn.bind(this));
+    this.mapsService.off('viewchange', this.doCacheFn.bind(this));
     this.markers = [];
     this.clusterMarkers = [];
   }
