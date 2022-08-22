@@ -2,15 +2,6 @@ import { IControlOption } from '@antv/l7-core';
 
 export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
 
-export interface ILayerControlOption extends IControlOption {
-  collapsed: boolean;
-  autoZIndex: boolean;
-  hideSingleBase: boolean;
-  sortLayers: boolean;
-
-  sortFunction: (...args: any[]) => any;
-}
-
 export interface IScaleControlOption extends IControlOption {
   maxWidth: number;
   metric: boolean;

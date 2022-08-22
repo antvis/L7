@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8821270",
+      "name": "图层-01",
+      "font_class": "tuceng",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "6537184",
+      "name": "地图",
+      "font_class": "ditu",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "9080696",
+      "name": "color",
+      "font_class": "color",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
       "icon_id": "1410363",
       "name": "gps-fixed",
       "font_class": "gps-fixed",

@@ -14,7 +14,7 @@ type ImageOptionItem = BaseOptionItem & {
   img: string;
 };
 
-type OptionItem = ImageOptionItem | NormalOptionItem;
+export type OptionItem = ImageOptionItem | NormalOptionItem;
 
 export interface ISelectControlOption extends IPopperControlOption {
   options: OptionItem[];
@@ -39,12 +39,6 @@ export default abstract class SelectControl<
   protected selectValue: string[] = [];
 
   /**
-   * 是否为多选
-   * @protected
-   */
-  protected abstract isMultiple: boolean;
-
-  /**
    * 选项对应的 DOM 列表
    * @protected
    */
@@ -53,7 +47,7 @@ export default abstract class SelectControl<
   constructor(option: Partial<O>) {
     super(option);
 
-    const { defaultValue } = option;
+    const { defaultValue } = this.controlOption;
     if (defaultValue) {
       this.selectValue = this.transSelectValue(defaultValue);
     }
@@ -74,7 +68,7 @@ export default abstract class SelectControl<
   }
 
   public getSelectValue() {
-    return this.isMultiple ? this.selectValue : this.selectValue[0];
+    return this.getIsMultiple() ? this.selectValue : this.selectValue[0];
   }
 
   public setSelectValue(value: string | string[]) {
@@ -83,7 +77,7 @@ export default abstract class SelectControl<
       const optionValue = optionDOM.getAttribute(
         SelectControlConstant.OptionValueAttrKey,
       )!;
-      const checkboxDOM = this.isMultiple
+      const checkboxDOM = this.getIsMultiple()
         ? optionDOM.querySelector('input[type=checkbox]')
         : undefined;
       if (finalValue.includes(optionValue)) {
@@ -101,8 +95,17 @@ export default abstract class SelectControl<
       }
     });
     this.selectValue = finalValue;
-    this.emit('selectChange', this.isMultiple ? finalValue : finalValue[0]);
+    this.emit(
+      'selectChange',
+      this.getIsMultiple() ? finalValue : finalValue[0],
+    );
   }
+
+  /**
+   * 是否为多选
+   * @protected
+   */
+  protected abstract getIsMultiple(): boolean;
 
   protected getPopperContent(options: OptionItem[]): HTMLElement {
     const isImageOptions = this.isImageOptions();
@@ -140,7 +143,7 @@ export default abstract class SelectControl<
         isSelect ? SelectControlConstant.ActiveOptionClassName : ''
       }`,
     ) as HTMLElement;
-    if (this.isMultiple) {
+    if (this.getIsMultiple()) {
       optionDOM.appendChild(this.createCheckbox(isSelect));
     }
     if (option.icon) {
@@ -168,7 +171,7 @@ export default abstract class SelectControl<
       'div',
       'l7-select-control-item-row',
     ) as HTMLElement;
-    if (this.isMultiple) {
+    if (this.getIsMultiple()) {
       optionDOM.appendChild(this.createCheckbox(isSelect));
     }
     const textDOM = DOM.create('span');
@@ -188,7 +191,7 @@ export default abstract class SelectControl<
   }
 
   protected onItemClick = (item: OptionItem) => {
-    if (this.isMultiple) {
+    if (this.getIsMultiple()) {
       const targetIndex = this.selectValue.findIndex(
         (value) => value === item.value,
       );

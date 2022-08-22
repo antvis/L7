@@ -245,6 +245,8 @@ export type LayerEventType =
   | 'mouseenter'
   | 'unmousemove'
   | 'mouseout'
+  | 'show'
+  | 'hide'
   | any;
 
 export interface ILayer {
