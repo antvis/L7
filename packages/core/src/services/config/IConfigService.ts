@@ -6,6 +6,7 @@ import { IRenderConfig } from '../renderer/IRendererService';
 export interface ISceneConfig extends IRenderConfig {
   id: string | HTMLDivElement;
   canvas?: HTMLCanvasElement;
+  gl?: any,
   hasBaseMap?: boolean;
   map: IMapWrapper;
   logoPosition?: PositionName;

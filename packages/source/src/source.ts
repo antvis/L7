@@ -136,7 +136,7 @@ export default class Source extends EventEmitter implements ISource {
           : 'null';
       const newFeature = cloneDeep(feature);
 
-      if (this.transforms.length !== 0 || this.dataArrayChanged) {
+      if (newFeature?.properties && (this.transforms.length !== 0 || this.dataArrayChanged)) {
         // 如果数据进行了transforms 属性会发生改变 或者数据dataArray发生更新
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;

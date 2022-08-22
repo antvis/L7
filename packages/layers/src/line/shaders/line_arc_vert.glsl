@@ -52,7 +52,8 @@ vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   // return mid;
 }
 float getSegmentRatio(float index) {
-    return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+    // return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+     return index / (segmentNumber - 1.);
 }
 vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation
@@ -130,8 +131,9 @@ void main() {
    styleMappingMat[3].b = d_distance_ratio;
 
   // styleMappingMat[0][1] - arcThetaOffset
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
+  float arcThetaOffset = styleMappingMat[0][1];
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, arcThetaOffset), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, arcThetaOffset), 0.0, 1.0));
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   //unProjCustomCoord
   

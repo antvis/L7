@@ -103,6 +103,7 @@ export default class L7MapService implements IMapService<Map> {
       return this.simpleMapCoord.getSize();
     }
     const size = this.map.transform;
+
     return [size.width, size.height];
   }
   // get mapStatus method

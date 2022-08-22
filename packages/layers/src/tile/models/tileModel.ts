@@ -7,13 +7,15 @@ export default class RasterTileModel extends BaseModel {
   }
 
   public initModels() {
-    if (this.layer.getSource()?.data.isTile) {
+    const source = this.layer.getSource();
+    if (source?.data.isTile) {
       this.layer.tileLayer = new TMSTileLayer({
         parent: this.layer,
         rendererService: this.rendererService,
         mapService: this.mapService,
         layerService: this.layerService,
         pickingService: this.pickingService,
+        transforms: source.transforms,
       });
     }
 
