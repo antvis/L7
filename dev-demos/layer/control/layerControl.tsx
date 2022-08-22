@@ -95,7 +95,7 @@ const Demo: FunctionComponent = () => {
           }),
       ]).then(() => {
         const newControl = new LayerControl({
-          layers,
+          // layers,
         });
         newScene.addControl(newControl);
       });

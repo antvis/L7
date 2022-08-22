@@ -1,4 +1,4 @@
-import { GaodeMapV2, Scene, MapStyle } from '@antv/l7';
+import { GaodeMapV2, Scene } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -23,9 +23,9 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      const newControl = new MapStyle({});
-      console.log(newScene);
-      newScene.addControl(newControl);
+      // const newControl = new MapStyle({});
+      // console.log(newScene);
+      // newScene.addControl(newControl);
     });
   }, []);
 

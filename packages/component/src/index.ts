@@ -14,7 +14,6 @@ export * from './control/logo';
 export * from './control/fullscreen';
 export * from './control/exportImage';
 export * from './control/navigation';
-export * from './control/mapType';
 export * from './control/mapStyleControl';
 export * from './control/layerControl';
 
