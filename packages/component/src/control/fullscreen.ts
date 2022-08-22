@@ -44,9 +44,8 @@ export default class Fullscreen extends ButtonControl<
   ): IFullscreenControlOption {
     return {
       ...super.getDefault(option),
-      btnIcon: createL7Icon('l7-icon-FullScreen'),
       title: '全屏',
-      btnText: '全屏',
+      btnIcon: createL7Icon('l7-icon-FullScreen'),
       exitTitle: '退出全屏',
       exitBtnIcon: createL7Icon('l7-icon-ExitFullScreen'),
     };
