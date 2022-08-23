@@ -20,6 +20,14 @@ export default class Fullscreen extends ButtonControl<
 
   protected mapContainer: HTMLElement;
 
+  constructor(option: Partial<IFullscreenControlOption>) {
+    super(option);
+
+    if (!ScreenFull.isEnabled) {
+      console.warn('当前浏览器环境不支持对地图全屏化');
+    }
+  }
+
   public onAdd(): HTMLElement {
     const button = super.onAdd();
     button.addEventListener('click', this.onClick);
