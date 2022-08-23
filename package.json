@@ -155,7 +155,7 @@
   },
   "scripts": {
     "dev": "npm run worker && dumi dev",
-    "dev-build": "npm run worker && COMPRESS=none dumi build",
+    "dev-build": "npm run worker && dumi build",
     "start": "lerna --scope @antv/l7-site exec yarn run site:develop",
     "site:build": "lerna --scope @antv/l7-site exec yarn run site:build",
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
