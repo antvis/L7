@@ -8,6 +8,7 @@ import {
   ISubLayerInitOptions,
   ITileLayerManager,
   ITilePickManager,
+  ITransform,
   ScaleAttributeType,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp, Tile } from '@antv/l7-utils';
@@ -26,17 +27,21 @@ export class TileLayerManager implements ITileLayerManager {
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions;
   private rampColorsData: any;
+  private transforms: ITransform[];
   constructor(
     parent: ILayer,
     mapService: IMapService,
     rendererService: IRendererService,
     pickingService: IPickingService,
     layerService: ILayerService,
+    transforms: ITransform[]
   ) {
     this.parent = parent;
     this.children = parent.layerChildren;
     this.mapService = mapService;
     this.rendererService = rendererService;
+    this.transforms = transforms;
+
     this.tilePickManager = new TilePickManager(
       parent,
       rendererService,
@@ -180,6 +185,7 @@ export class TileLayerManager implements ITileLayerManager {
 
     this.initOptions = {
       layerType: this.parent.type,
+      transforms: this.transforms,
       shape: layerShape,
       zIndex,
       opacity,

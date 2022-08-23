@@ -19,6 +19,7 @@ import VectorLayer from './vectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';
+import polygonToLineString from '@turf/polygon-to-line';
 import {
   CacheEvent,
   ILayerTileConfig,
@@ -69,7 +70,7 @@ export default class TileFactory implements ITileFactory {
       vectorTileLayer: null,
       source: null,
     };
-    const { sourceLayer, featureId } = initOptions;
+    const { sourceLayer, featureId, transforms, layerType, shape } = initOptions;
     if (!sourceLayer) {
       return emptyData;
     }
@@ -78,21 +79,40 @@ export default class TileFactory implements ITileFactory {
     if (!(Array.isArray(features) && features.length > 0)) {
       return emptyData;
     } else {
+      let geofeatures = [];
+      if(layerType === 'LineLayer' && shape === 'simple') {
+        features.map(feature => {
+          if(feature.geometry.type === 'MultiPolygon') {
+            // @ts-ignore
+            const linefeatures = polygonToLineString(feature).features
+            geofeatures.push(...linefeatures)
+          } else if(feature.geometry.type === 'Polygon') {
+            feature.geometry.type = 'MultiLineString'
+            geofeatures.push(feature);
+          } else {
+            geofeatures.push(feature);
+          }
+        })
+      } else {
+        geofeatures = features;
+      }
+     
       const source = new Source(
         {
           type: 'FeatureCollection',
-          features,
+          features: geofeatures,
         },
         {
           parser: {
             type: 'geojson',
             featureId,
           },
+          transforms
         },
       );
 
       return {
-        features,
+        features: geofeatures,
         featureId,
         vectorTileLayer,
         source,

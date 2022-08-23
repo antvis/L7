@@ -10,7 +10,7 @@ import ReglModel from '../ReglModel';
 import ReglRenderbuffer from '../ReglRenderbuffer';
 import ReglTexture2D from '../ReglTexture2D';
 import checkPixels from './utils/check-pixels';
-import createContext from './utils/create-context';
+import { createContext } from '@antv/l7-test-utils';
 
 describe('ReglFramebuffer', () => {
   let context;

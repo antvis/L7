@@ -191,6 +191,15 @@ export function amap2Project(lng: number, lat: number): [number, number] {
   return [lng * Tg, lat * Tg];
 }
 
+export function amap2UnProject(x: number, y: number): [number, number] {
+  const Rg = Math.PI / 180;
+  const Tg = 6378137;
+
+  const lng = (x/Tg) / Rg;
+  const lat = (2 * (Math.atan(Math.exp((y / Tg))) - Math.PI/4))/Rg;
+  return [lng, lat];
+}
+
 export function lnglatDistance(
   coordinates1: [number, number],
   coordinates2: [number, number],
