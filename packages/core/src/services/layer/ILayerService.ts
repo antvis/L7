@@ -574,6 +574,8 @@ export interface ILayerConfig {
   onClick(pickedFeature: IPickedFeature): void;
 }
 
+export type LayerServiceEvent = 'layerChange';
+
 /**
  * 提供 Layer 管理服务
  */
@@ -587,6 +589,9 @@ export interface ILayerService {
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
 
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   // 清除画布
   clear(): void;
   add(layer: ILayer): void;
