@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { FunctionComponent, useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
-  const [layer, setLayer] = useState<ILayer | null>(null);
+  const [layers, setLayers] = useState<ILayer[]>([]);
   const [scene, setScene] = useState<Scene | undefined>();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      const layers: ILayer[] = [];
+      const newLayers: ILayer[] = [];
       window.Promise.all([
         fetch(
           'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
@@ -50,9 +50,7 @@ const Demo: FunctionComponent = () => {
                 opacity: 0.3,
                 strokeWidth: 1,
               });
-            newScene.addLayer(pointLayer);
-            layers.push(pointLayer);
-            setLayer(pointLayer);
+            newLayers.push(pointLayer);
           }),
         fetch(
           // 'https://gw.alipayobjects.com/os/bmw-prod/1981b358-28d8-4a2f-9c74-a857d5925ef1.json' //  获取行政区划P噢利用
@@ -90,14 +88,18 @@ const Demo: FunctionComponent = () => {
 
             layer2.hide();
 
-            newScene.addLayer(chinaPolygonLayer);
-            newScene.addLayer(layer2);
+            newLayers.push(chinaPolygonLayer, layer2);
           }),
       ]).then(() => {
+        newLayers.forEach((layer) => {
+          newScene.addLayer(layer);
+        });
         const newControl = new LayerControl({
-          // layers,
+          layers: newLayers,
         });
         newScene.addControl(newControl);
+        setLayers(newLayers);
+        setScene(newScene);
       });
     });
   }, []);
@@ -106,6 +108,7 @@ const Demo: FunctionComponent = () => {
     <>
       <button
         onClick={() => {
+          const layer = layers[0];
           if (layer?.isVisible()) {
             layer?.hide();
           } else {

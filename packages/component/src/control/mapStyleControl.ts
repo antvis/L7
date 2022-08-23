@@ -4,7 +4,7 @@ import SelectControl, {
   OptionItem,
 } from './baseControl/selectControl';
 
-export interface MapStyleControlOption extends ISelectControlOption {
+export interface IMapStyleControlOption extends ISelectControlOption {
   mapType: string;
 }
 
@@ -27,15 +27,11 @@ const MapboxMapStyles: OptionItem[] = [
 ];
 
 export default class MapStyleControl extends SelectControl<
-  MapStyleControlOption
+  IMapStyleControlOption
 > {
-  public getIsMultiple(): boolean {
-    return false;
-  }
-
   public getDefault(
-    option?: Partial<MapStyleControlOption>,
-  ): MapStyleControlOption {
+    option?: Partial<IMapStyleControlOption>,
+  ): IMapStyleControlOption {
     return {
       ...super.getDefault(option),
       title: '地图样式',
@@ -60,5 +56,8 @@ export default class MapStyleControl extends SelectControl<
     // }
     const button = super.onAdd();
     return button;
+  }
+  protected getIsMultiple(): boolean {
+    return false;
   }
 }

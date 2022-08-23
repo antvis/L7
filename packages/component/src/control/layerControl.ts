@@ -1,5 +1,4 @@
 import { ILayer } from '@antv/l7-core';
-import { debounce } from 'lodash';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
   ISelectControlOption,
@@ -14,28 +13,7 @@ export { LayerControl };
 
 export default class LayerControl extends SelectControl<ILayerControlOption> {
   protected get layers() {
-    return this.controlOption.layers || this.layerService.getLayers();
-  }
-
-  public onSelectChange = debounce(() => {
-    this.layers.forEach((layer) => {
-      const needShow = this.selectValue.includes(layer.name);
-      const isShow = layer.isVisible();
-      if (needShow && !isShow) {
-        layer.show();
-      }
-      if (!needShow && isShow) {
-        layer.hide();
-      }
-    });
-  }, 16);
-
-  public onLayerVisibleChane = () => {
-    this.setSelectValue(this.getLayerVisible());
-  };
-
-  public getIsMultiple(): boolean {
-    return true;
+    return this.controlOption.layers || this.layerService.getLayers() || [];
   }
 
   public getDefault(
@@ -76,6 +54,7 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
       this.controlOption.defaultValue = this.selectValue = this.getLayerVisible();
     }
     this.on('selectChange', this.onSelectChange);
+    this.layerService.on('layerChange', this.onLayerChange);
     this.layers.forEach((layer) => {
       layer.on('show', this.onLayerVisibleChane);
       layer.on('hide', this.onLayerVisibleChane);
@@ -85,9 +64,41 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
 
   public onRemove() {
     this.off('selectChange', this.onSelectChange);
+    this.layerService.off('layerChange', this.onLayerChange);
     this.layers.forEach((layer) => {
       layer.off('show', this.onLayerVisibleChane);
       layer.off('hide', this.onLayerVisibleChane);
     });
+  }
+
+  protected onLayerChange = () => {
+    if (this.controlOption.layers?.length) {
+      return;
+    }
+    this.selectValue = this.getLayerVisible();
+    this.setOptions({
+      options: this.getLayerOptions(),
+    });
+  };
+
+  protected onLayerVisibleChane = () => {
+    this.setSelectValue(this.getLayerVisible());
+  };
+
+  protected onSelectChange = () => {
+    this.layers.forEach((layer) => {
+      const needShow = this.selectValue.includes(layer.name);
+      const isShow = layer.isVisible();
+      if (needShow && !isShow) {
+        layer.show();
+      }
+      if (!needShow && isShow) {
+        layer.hide();
+      }
+    });
+  };
+
+  protected getIsMultiple(): boolean {
+    return true;
   }
 }
