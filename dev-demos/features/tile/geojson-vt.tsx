@@ -29,9 +29,6 @@ export default () => {
             zoomOffset: 0,
             maxZoom: 9,
             extent: [-180, -85.051129, 179, 85.051129],
-            geojsonvtOptions: {
-              sourceName: 'testName',
-            },
           },
         });
 
@@ -45,10 +42,11 @@ export default () => {
 
         const polygon = new PolygonLayer({
           featureId: 'COLOR',
-          sourceLayer: 'testName', // woods hillshade contour ecoregions ecoregions2 city
+          // sourceLayer: 'testName', // woods hillshade contour ecoregions ecoregions2 city
         })
           .source(source)
-          .color('COLOR');
+          .color('COLOR')
+          .active(true)
         scene.addLayer(polygon);
 
         // const point = new PointLayer({

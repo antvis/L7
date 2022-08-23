@@ -157,11 +157,9 @@ const getVectorTile = async (
   tileIndex: any,
   tileParams: TileLoadParams,
   extent: number,
-  sourceName: string,
 ): Promise<MapboxVectorTile> => {
   return new Promise((resolve) => {
     const tileData = tileIndex.getTile(tile.z, tile.x, tile.y);
-    // console.log('tileData', tileData)
     // tileData
     const features: any = [];
     tileData.features.map((vectorTileFeature: any) => {
@@ -177,7 +175,8 @@ const getVectorTile = async (
 
     const vectorTile = {
       layers: {
-        [sourceName]: {
+        // Tip: fixed SourceLayer Name
+        "geojsonvt": {
           features,
         } as VectorTileLayer & {
           features: Feature[];
@@ -200,9 +199,8 @@ function getGeoJSONVTOptions(cfg?: ITileParserCFG) {
     buffer: 64, // tile buffer on each side
     lineMetrics: false, // whether to calculate line metrics
     promoteId: null, // name of a feature property to be promoted to feature.id
-    generateId: false, // whether to generate feature ids. Cannot be used with promoteId
+    generateId: true, // whether to generate feature ids. Cannot be used with promoteId
     debug: 0, // logging level (0, 1 or 2)
-    sourceName: '',
   };
 
   if (cfg === undefined || typeof cfg.geojsonvtOptions === 'undefined') {
@@ -228,8 +226,6 @@ function getGeoJSONVTOptions(cfg?: ITileParserCFG) {
       (defaultOptions.generateId = cfg.geojsonvtOptions.generateId);
     cfg.geojsonvtOptions.debug &&
       (defaultOptions.debug = cfg.geojsonvtOptions.debug);
-    cfg.geojsonvtOptions.sourceName &&
-      (defaultOptions.sourceName = cfg.geojsonvtOptions.sourceName);
     return defaultOptions;
   }
 }
@@ -240,13 +236,12 @@ export default function geojsonVTTile(
 ): IParserData {
   const geojsonOptions = getGeoJSONVTOptions(cfg) as geojsonvt.Options &
     IGeojsonvtOptions;
-  const sourceName = geojsonOptions.sourceName;
 
   const extent = geojsonOptions.extent || 4096;
   const tileIndex = geojsonvt(data, geojsonOptions);
 
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
-    return getVectorTile(tile, tileIndex, tileParams, extent, sourceName);
+    return getVectorTile(tile, tileIndex, tileParams, extent);
   };
 
   const tilesetOptions = {

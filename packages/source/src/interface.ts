@@ -29,8 +29,6 @@ export enum RasterTileType {
 }
 
 export interface IGeojsonvtOptions {
-  sourceName: string;       // set source layer name
-
   maxZoom: number;          // max zoom to preserve detail on
   indexMaxZoom: number;     // max zoom in the tile index
   indexMaxPoints: number;   // max number of points per tile in the tile index

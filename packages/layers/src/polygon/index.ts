@@ -2,6 +2,7 @@ import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IPolygonLayerStyleOptions } from '../core/interface';
 import PolygonModels, { PolygonModelType } from './models/';
+import { isVectorTile } from '../tile/utils';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
@@ -29,12 +30,11 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   }
 
   protected getModelType(): PolygonModelType {
-    if (
-      this.layerSource.parser.type === 'mvt' ||
-      this.layerSource.parser.type === 'geojsonvt'
-    ) {
+    const parserType = this.layerSource.getParserType();
+    if (isVectorTile(parserType) ) {
       return 'vectorpolygon';
     }
+  
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
