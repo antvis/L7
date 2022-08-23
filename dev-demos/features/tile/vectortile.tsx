@@ -4,57 +4,6 @@ import { Scene, LineLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
-const list = [
-  {
-    value: -28.0,
-    color1: 'orange',
-    province_adcode: '630000',
-    province_adName: '青海省',
-    province: '青海省',
-    nnh: 2,
-  },
-  {
-    value: 29.0,
-    color1: 'orange',
-    province_adcode: '640000',
-    province_adName: '宁夏回族自治区',
-    province: '宁夏回族自治区',
-    nnh: 3,
-  },
-  {
-    value: 60.0,
-    color1: 'orange',
-    province_adcode: '650000',
-    province_adName: '新疆维吾尔自治区',
-    province: '新疆维吾尔自治区',
-    nnh: 4,
-  },
-  {
-    value: -31.0,
-    color1: 'orange',
-    province_adcode: '710000',
-    province_adName: '台湾省',
-    province: '台湾省',
-    nnh: 4,
-  },
-  {
-    value: 80.0,
-    color1: 'orange',
-    province_adcode: '810000',
-    province_adName: '香港特别行政区',
-    province: '香港特别行政区',
-    nnh: 4,
-  },
-  {
-    value: -33.0,
-    color1: 'orange',
-    province_adcode: '820000',
-    province_adName: '澳门特别行政区',
-    province: '澳门特别行政区',
-    nnh: 4,
-  },
-];
-
 export default () => {
   useEffect(() => {
     const scene = new Scene({
@@ -83,18 +32,10 @@ export default () => {
             maxZoom: 9,
             extent: [-180, -85.051129, 179, 85.051129],
           },
-          transforms: [
-            {
-              type: 'join',
-              sourceField: 'nnh',
-              targetField: 'NNH', // data 对应字段名 绑定到的地理数据
-              data: list,
-            },
-          ],
         },
       )
       .shape('simple')
-      // .shape('line')
+
       .color('COLOR')
       .size(2)
       .select(true);

@@ -2,6 +2,7 @@ import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IPointLayerStyleOptions } from '../core/interface';
 import PointModels, { PointType } from './models/index';
+import { isVectorTile } from '../tile/utils';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
@@ -92,7 +93,8 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'earthFill',
       'earthExtrude',
     ];
-    if (this.layerSource.parser.type === 'mvt') {
+    const parserType = this.layerSource.getParserType();
+    if (isVectorTile(parserType)) {
       return 'vectorpoint';
     }
 
