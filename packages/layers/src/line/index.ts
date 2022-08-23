@@ -51,7 +51,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       return this.layerType as LineModelType;
     }
     const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType) ) {
+    if (isVectorTile(parserType)) {
       return 'vectorline';
     }
 

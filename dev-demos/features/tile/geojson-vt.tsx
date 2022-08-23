@@ -46,7 +46,7 @@ export default () => {
         })
           .source(source)
           .color('COLOR')
-          .active(true)
+          .active(true);
         scene.addLayer(polygon);
 
         // const point = new PointLayer({

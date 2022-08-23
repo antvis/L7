@@ -94,7 +94,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'earthExtrude',
     ];
     const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType) ) {
+    if (isVectorTile(parserType)) {
       return 'vectorpoint';
     }
 

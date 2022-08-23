@@ -176,7 +176,7 @@ const getVectorTile = async (
     const vectorTile = {
       layers: {
         // Tip: fixed SourceLayer Name
-        "geojsonvt": {
+        geojsonvt: {
           features,
         } as VectorTileLayer & {
           features: Feature[];

@@ -31,10 +31,10 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
 
   protected getModelType(): PolygonModelType {
     const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType) ) {
+    if (isVectorTile(parserType)) {
       return 'vectorpolygon';
     }
-  
+
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
