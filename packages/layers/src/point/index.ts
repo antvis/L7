@@ -92,7 +92,10 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       'earthFill',
       'earthExtrude',
     ];
-    if (this.layerSource.parser.type === 'mvt') {
+    if (
+      this.layerSource.parser.type === 'mvt' ||
+      this.layerSource.parser.type === 'geojsonvt'
+    ) {
       return 'vectorpoint';
     }
 

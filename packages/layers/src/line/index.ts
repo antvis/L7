@@ -49,7 +49,10 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     if (this.layerType) {
       return this.layerType as LineModelType;
     }
-    if (this.layerSource.parser.type === 'mvt') {
+    if (
+      this.layerSource.parser.type === 'mvt' ||
+      this.layerSource.parser.type === 'geojsonvt'
+    ) {
       return 'vectorline';
     }
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(

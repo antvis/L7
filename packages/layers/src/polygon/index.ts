@@ -29,7 +29,10 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   }
 
   protected getModelType(): PolygonModelType {
-    if (this.layerSource.parser.type === 'mvt') {
+    if (
+      this.layerSource.parser.type === 'mvt' ||
+      this.layerSource.parser.type === 'geojsonvt'
+    ) {
       return 'vectorpolygon';
     }
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
