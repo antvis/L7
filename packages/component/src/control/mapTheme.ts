@@ -8,7 +8,7 @@ export interface IMapStyleControlOption extends ISelectControlOption {
   mapType: string;
 }
 
-export { MapStyleControl };
+export { MapTheme };
 
 const GaodeMapStyles: OptionItem[] = [
   {
@@ -26,9 +26,7 @@ const MapboxMapStyles: OptionItem[] = [
   },
 ];
 
-export default class MapStyleControl extends SelectControl<
-  IMapStyleControlOption
-> {
+export default class MapTheme extends SelectControl<IMapStyleControlOption> {
   public getDefault(
     option?: Partial<IMapStyleControlOption>,
   ): IMapStyleControlOption {

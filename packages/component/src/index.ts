@@ -14,7 +14,7 @@ export * from './control/logo';
 export * from './control/fullscreen';
 export * from './control/exportImage';
 export * from './control/navigation';
-export * from './control/mapStyleControl';
+export * from './control/mapTheme';
 export * from './control/layerControl';
 
 export { Scale, Zoom, Marker, Popup, MarkerLayer, createL7Icon };
