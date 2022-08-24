@@ -2,7 +2,6 @@
 import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
-  IMapService,
   IParseDataItem,
   IParserCfg,
   IParserData,
@@ -57,7 +56,6 @@ export default class Source extends EventEmitter implements ISource {
 
   // 瓦片数据管理器
   public tileset: TilesetManager | undefined;
-  private readonly mapService: IMapService;
   // 是否有效范围
   private invalidExtent: boolean = false;
 
@@ -85,6 +83,10 @@ export default class Source extends EventEmitter implements ISource {
 
   public getClustersLeaves(id: number): any {
     return this.clusterIndex.getLeaves(id, Infinity);
+  }
+
+  public getParserType() {
+    return this.parser.type;
   }
 
   public updateClusterData(zoom: number): void {

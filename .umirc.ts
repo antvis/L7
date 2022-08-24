@@ -12,6 +12,12 @@ export default defineConfig({
   resolve: {
     includes: ['dev-demos']
   },
+  polyfill: {
+    imports: [
+      'element-remove',
+      'babel-polyfill',
+    ]
+  },
   targets: {
     chrome: 58,
     ie: 11,
@@ -30,6 +36,7 @@ export default defineConfig({
   extraBabelPresets:[
     '@babel/preset-typescript'
   ],
+  extraBabelIncludes: ['@umijs/preset-dumi','split-on-first','query-string','strict-uri-encode','copy-text-to-clipboard'],
   extraBabelPlugins: [
     [
       'transform-import-css-l7'
@@ -47,11 +54,15 @@ export default defineConfig({
     'react-dom': 'window.ReactDOM',
     antd: 'window.antd',
     lodash: '_',
+    fetch:"window.fetch"
   },
   links: ['https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd.css'],
   scripts: [
-    'https://gw.alipayobjects.com/os/lib/react/17.0.1/umd/react.development.js',
-    'https://gw.alipayobjects.com/os/lib/react-dom/17.0.1/umd/react-dom.development.js',
+    'https://gw.alipayobjects.com/os/lib/whatwg-fetch/3.6.2/dist/fetch.umd.js',
+    'https://gw.alipayobjects.com/os/lib/react/17.0.2/umd/react.profiling.min.js',
+    'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.profiling.min.js',
+    'https://gw.alipayobjects.com/os/lib/react/17.0.2/umd/react.production.min.js',
+    'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.production.min.js',
     // 'https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd-with-locales.js',
     'https://gw.alipayobjects.com/os/lib/antd/4.19.4/dist/antd.js',
     /** lodash */

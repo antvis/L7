@@ -73,6 +73,7 @@ export interface ISource {
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
   getFeatureId(field: string, value: any): number | undefined;
+  getParserType(): string;
   getClusters(zoom: number): any;
   getClustersLeaves(id: number): any;
   updateFeaturePropertiesById(

@@ -175,6 +175,7 @@ export class TileLayerManager implements ITileLayerManager {
     );
     const source = this.parent.getSource();
     const { coords } = source?.data?.tilesetOptions || {};
+    const parentParserType = source.getParserType();
 
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
@@ -189,7 +190,7 @@ export class TileLayerManager implements ITileLayerManager {
       shape: layerShape,
       zIndex,
       opacity,
-      sourceLayer,
+      sourceLayer: parentParserType === 'geojsonvt' ? 'geojsonvt' : sourceLayer,
       coords,
       featureId,
       color: colorValue,
