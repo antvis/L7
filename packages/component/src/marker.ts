@@ -1,7 +1,7 @@
 import {
   ILngLat,
   IMapService,
-  IMarkerLayerCache,
+  IMarkerContainerAndBounds,
   IMarkerOption,
   IPoint,
   IPopup,
@@ -27,6 +27,8 @@ export default class Marker extends EventEmitter {
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
+  public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
+
   constructor(option?: Partial<IMarkerOption>) {
     super();
     this.markerOption = {
@@ -218,12 +220,12 @@ export default class Marker extends EventEmitter {
       this.togglePopup();
     }
   }
-  public getMarkerLayerCache(): IMarkerLayerCache | void {}
-  private getCurrentVar() {
-    const container = this.mapsService.getContainer() as any;
+
+  private getCurrentContainerSize() {
+    const container = this.mapsService.getContainer();
     return {
-      containerHeight: container?.scrollHeight,
-      containerWidth: container?.scrollWidth,
+      containerHeight: container?.scrollHeight || 0,
+      containerWidth: container?.scrollWidth || 0,
       bounds: this.mapsService.getBounds(),
     };
   }
@@ -237,8 +239,9 @@ export default class Marker extends EventEmitter {
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
-      let cache = this.getMarkerLayerCache() || this.getCurrentVar();
-      let { containerHeight, containerWidth, bounds } = cache;
+      const { containerHeight, containerWidth, bounds } =
+        this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
+
       if (!bounds) return;
       // 当前可视区域包含跨日界线
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {

@@ -20,13 +20,13 @@ export interface IMarkerOption {
   style?: CSSStyleDeclaration;
 }
 
-export interface IMarkerLayerCache {
+export interface IMarkerContainerAndBounds {
   containerWidth: number;
   containerHeight: number;
   bounds: IBounds;
 }
+
 export interface IMarker {
-  getMarkerLayerCache: () => IMarkerLayerCache | void;
   addTo(scene: Container): void;
   remove(): void;
   setLnglat(lngLat: ILngLat | IPoint): this;
@@ -39,6 +39,7 @@ export interface IMarker {
   openPopup(): this;
   closePopup(): this;
   setElement(el: HTMLElement): this;
+  getMarkerLayerContainerSize: () => IMarkerContainerAndBounds | void;
 }
 export interface IMarkerService {
   container: HTMLElement;
