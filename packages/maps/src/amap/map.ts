@@ -256,6 +256,14 @@ export default class AMapService
     this.map.setMapStyle(this.getMapStyleValue(style));
   }
 
+  public getMapStyle(): string {
+    return this.map.getMapStyle();
+  }
+
+  public getMapStyleConfig() {
+    return MapTheme;
+  }
+
   public setMapStatus(option: Partial<IStatusOptions>): void {
     this.map.setStatus(option);
   }
@@ -392,7 +400,7 @@ export default class AMapService
         }
         amapLoaded = true;
         plugin.push('Map3D');
-        if(window.AMap && this.map !== undefined) {
+        if (window.AMap && this.map !== undefined) {
           Promise.resolve().then(() => {
             resolveMap();
 
@@ -400,24 +408,24 @@ export default class AMapService
               pendingResolveQueue.forEach((r) => r());
               pendingResolveQueue = [];
             }
-          })
+          });
         } else {
           AMapLoader.load({
             key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
             version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
             plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
           })
-          .then((AMap) => {
-            resolveMap();
+            .then((AMap) => {
+              resolveMap();
 
-            if (pendingResolveQueue.length) {
-              pendingResolveQueue.forEach((r) => r());
-              pendingResolveQueue = [];
-            }
-          })
-          .catch((e) => {
-            throw new Error(e);
-          });
+              if (pendingResolveQueue.length) {
+                pendingResolveQueue.forEach((r) => r());
+                pendingResolveQueue = [];
+              }
+            })
+            .catch((e) => {
+              throw new Error(e);
+            });
         }
       } else {
         if ((amapLoaded && window.AMap) || mapInstance) {
@@ -543,7 +551,8 @@ export default class AMapService
   };
 
   private getMapStyleValue(name: string): string {
-    return MapTheme[name] ? MapTheme[name] : name;
+    const mapTheme = this.getMapStyleConfig();
+    return mapTheme[name] || name;
   }
   private creatAmapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;

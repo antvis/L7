@@ -24,7 +24,15 @@ export interface IStatusOptions {
   zoomEnable: boolean;
   rotateEnable: boolean;
 }
-export type MapStyle = string | { [key: string]: any };
+
+export type MapStyleName = 'normal' | 'light' | 'dark' | string;
+
+export type MapStyleConfig = {
+  [key: MapStyleName]: MapStyleConfig | any;
+};
+
+export type MapStyle = MapStyleName | any;
+
 export interface IMapWrapper {
   setContainer(
     container: Container,
@@ -75,6 +83,8 @@ export interface IMapService<RawMap = {}> {
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
+  getMapStyleConfig(): MapStyleConfig;
+  getMapStyle(): string;
 
   // control with raw map
   setRotation(rotation: number): void;
@@ -155,6 +165,7 @@ export interface IEarthService<RawMap = {}> {
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
+  getMapStyleConfig(): MapStyleConfig;
 
   // control with raw map
   setRotation(rotation: number): void;

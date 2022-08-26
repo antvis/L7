@@ -1,3 +1,4 @@
+import { GaodeMapStyleConfig, MapboxMapStyleConfig } from '../constants';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
   ISelectControlOption,
@@ -9,22 +10,6 @@ export interface IMapStyleControlOption extends ISelectControlOption {
 }
 
 export { MapTheme };
-
-const GaodeMapStyles: OptionItem[] = [
-  {
-    text: '',
-    value: '',
-    img: '',
-  },
-];
-
-const MapboxMapStyles: OptionItem[] = [
-  {
-    text: '',
-    value: '',
-    img: '',
-  },
-];
 
 export default class MapTheme extends SelectControl<IMapStyleControlOption> {
   public getDefault(
@@ -38,23 +23,45 @@ export default class MapTheme extends SelectControl<IMapStyleControlOption> {
     };
   }
 
-  public onAdd(): any {
-    let { options } = this.controlOption;
-    if (!options.length) {
-      // tslint:disable-next-line:prefer-conditional-expression
-      if (this.mapsService.getType() === 'mapbox') {
-        this.controlOption.options = options = MapboxMapStyles;
-      } else {
-        this.controlOption.options = options = GaodeMapStyles;
-      }
-    }
-    // if (!defaultValue) {
-    //   console.log(this.scene);
-    //   console.log(this.sceneContainer);
-    // }
-    const button = super.onAdd();
-    return button;
+  public getStyleOptions(): OptionItem[] {
+    const mapStyleConfig =
+      this.mapsService.getType() === 'mapbox'
+        ? MapboxMapStyleConfig
+        : GaodeMapStyleConfig;
+    return Object.entries(this.mapsService.getMapStyleConfig())
+      .filter(([key, value]) => typeof value === 'string' && key !== 'blank')
+      .map(([key, value]) => {
+        // @ts-ignore
+        const { text, img } = mapStyleConfig[key] ?? {};
+        return {
+          text: text ?? key,
+          value,
+          img,
+        };
+      });
   }
+
+  public getMapStyle() {
+    return this.mapsService.getMapStyle();
+  }
+
+  public onAdd(): any {
+    if (!this.controlOption.options?.length) {
+      this.controlOption.options = this.getStyleOptions();
+    }
+    if (!this.controlOption.defaultValue) {
+      const defaultStyle = this.getMapStyle();
+      this.controlOption.defaultValue = defaultStyle;
+      this.selectValue = [defaultStyle];
+    }
+    this.on('selectChange', this.onMapThemeChange);
+    return super.onAdd();
+  }
+
+  protected onMapThemeChange = () => {
+    this.mapsService.setMapStyle(this.selectValue[0]);
+  };
+
   protected getIsMultiple(): boolean {
     return false;
   }

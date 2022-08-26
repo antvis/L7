@@ -230,6 +230,23 @@ export default class MapboxService
   public setMapStyle(style: any): void {
     this.map.setStyle(this.getMapStyleValue(style));
   }
+
+  public getMapStyle(): string {
+    try {
+      const styleUrl = this.map.getStyle().sprite ?? '';
+      if (/^mapbox:\/\/\w+\/\w+\/\w+\/\w+$/.test(styleUrl)) {
+        return styleUrl?.replace(/\/\w+$/, '');
+      }
+      return styleUrl;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  public getMapStyleConfig() {
+    return MapTheme;
+  }
+
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     return this.map.unproject(pixel);
@@ -489,6 +506,7 @@ export default class MapboxService
     if (typeof name !== 'string') {
       return name;
     }
-    return MapTheme[name] ? MapTheme[name] : name;
+    const mapTheme = this.getMapStyleConfig();
+    return mapTheme[name] || name;
   }
 }

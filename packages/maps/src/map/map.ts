@@ -225,6 +225,14 @@ export default class L7MapService implements IMapService<Map> {
     this.map.setStyle(this.getMapStyleValue(style));
   }
 
+  public getMapStyle(): string {
+    return this.map.getStyle();
+  }
+
+  public getMapStyleConfig() {
+    return MapTheme;
+  }
+
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }
@@ -482,6 +490,7 @@ export default class L7MapService implements IMapService<Map> {
     if (typeof name !== 'string') {
       return name;
     }
-    return MapTheme[name] ? MapTheme[name] : name;
+    const mapTheme = this.getMapStyleConfig();
+    return mapTheme[name] || name;
   }
 }

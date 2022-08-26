@@ -226,6 +226,15 @@ export default class L7EarthService implements IEarthService<Map> {
   public setMapStyle(style: any): void {
     this.map.setStyle(this.getMapStyleValue(style));
   }
+
+  public getMapStyle(): string {
+    return this.map.getStyle();
+  }
+
+  public getMapStyleConfig() {
+    return MapTheme;
+  }
+
   // TODO: 计算像素坐标
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     return this.map.unproject(pixel);
@@ -417,6 +426,7 @@ export default class L7EarthService implements IEarthService<Map> {
     if (typeof name !== 'string') {
       return name;
     }
-    return MapTheme[name] ? MapTheme[name] : name;
+    const mapTheme = this.getMapStyleConfig();
+    return mapTheme[name] || name;
   }
 }

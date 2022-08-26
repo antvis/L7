@@ -1,4 +1,4 @@
-import { GaodeMapV2, Scene } from '@antv/l7';
+import { Mapbox, Scene, MapTheme, GaodeMapV2, GaodeMap } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -9,23 +9,28 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
-        style: 'normal',
+      map: new Mapbox({
         center: [120, 30],
         pitch: 0,
         zoom: 6.45,
-        preserveDrawingBuffer: true,
-        // WebGLParams: {
-        //   preserveDrawingBuffer: true,
-        // },
       }),
-      // logoVisible: false,
+      // map: new GaodeMapV2({
+      //   style: 'dark',
+      //   center: [120, 30],
+      //   pitch: 0,
+      //   zoom: 6.45,
+      // }),
+      // map: new GaodeMap({
+      //   style: 'dark',
+      //   center: [120, 30],
+      //   pitch: 0,
+      //   zoom: 6.45,
+      // }),
     });
 
     newScene.on('loaded', () => {
-      // const newControl = new MapStyle({});
-      // console.log(newScene);
-      // newScene.addControl(newControl);
+      const newControl = new MapTheme({});
+      newScene.addControl(newControl);
     });
   }, []);
 
