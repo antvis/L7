@@ -1,4 +1,3 @@
-
 import { Scene, TileTestLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -24,7 +23,7 @@ export default () => {
           parser: {
             type: 'testTile',
             tileSize: 256,
-            updateStrategy: 'overlap'
+            updateStrategy: 'overlap',
           },
         },
       )
