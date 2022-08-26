@@ -226,7 +226,7 @@ export default class HeatMapModel extends BaseModel {
         enable: false,
       },
       blend: this.getBlend(),
-      count: 6,
+      // count: 6,
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
         type: gl.UNSIGNED_INT,
