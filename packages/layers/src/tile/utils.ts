@@ -10,7 +10,7 @@ import { Container } from 'inversify';
 export const tileVectorParser = ['mvt', 'geojsonvt'];
 
 export function isVectorTile(parserType: string) {
-  return tileVectorParser.indexOf(parserType) > 0;
+  return tileVectorParser.indexOf(parserType) >= 0;
 }
 
 export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
