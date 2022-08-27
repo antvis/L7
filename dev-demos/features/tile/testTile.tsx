@@ -17,27 +17,16 @@ export default () => {
 
     const layer = new TileTestLayer();
     layer
-      .source(
-        'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+      .source(null,
         {
           parser: {
             type: 'testTile',
-            tileSize: 256,
-            updateStrategy: 'overlap',
           },
         },
       )
-      .shape('simple')
-
-      .color('COLOR')
-      .size(2)
-      .select(true);
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      layer.on('click', (e) => {
-        console.log(e);
-      });
     });
   }, []);
   return (
