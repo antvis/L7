@@ -16,14 +16,11 @@ export default () => {
     });
 
     const layer = new TileTestLayer();
-    layer
-      .source(null,
-        {
-          parser: {
-            type: 'testTile',
-          },
-        },
-      )
+    layer.source(null, {
+      parser: {
+        type: 'testTile',
+      },
+    });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
