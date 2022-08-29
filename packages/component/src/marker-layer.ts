@@ -137,6 +137,7 @@ export default class MarkerLayer extends EventEmitter {
     });
     this.mapsService.off('camerachange', this.update);
     this.markers = [];
+    this.points = [];
     this.clusterMarkers = [];
   }
 
