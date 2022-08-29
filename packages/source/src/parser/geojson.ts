@@ -8,8 +8,9 @@ import {
   Properties,
 } from '@turf/helpers';
 import { getCoords } from '@turf/invariant';
-import * as turfMeta from '@turf/meta';
+import { flattenEach } from '@turf/meta';
 import { IFeatureKey, IParseDataItem, IParserData } from '../interface';
+
 interface IParserCFG {
   idField?: string;
   featureId?: string;
@@ -58,12 +59,14 @@ export default function geoJSON(
 ): IParserData {
   const resultData: IParseDataItem[] = [];
   const featureKeys: IFeatureKey = {};
+
   if (!data.features) {
     data.features = [];
     return {
       dataArray: [],
     };
   }
+
   data.features = data.features.filter((item: Feature) => {
     const geometry: Geometry | null = item.geometry as Geometry;
     return (
@@ -74,15 +77,18 @@ export default function geoJSON(
       geometry.coordinates.length > 0
     );
   });
+
   rewind(data, true); // 设置地理多边形方向 If clockwise is true, the outer ring is clockwise, otherwise it is counterclockwise.
+
   if (data.features.length === 0) {
     return {
       dataArray: [],
       featureKeys,
     };
   }
-  // multi polygon 拆分
-  turfMeta.flattenEach(
+
+  // multi feature 情况拆分
+  flattenEach(
     data,
     (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
       let featureId = getFeatureID(currentFeature, cfg?.featureId);
@@ -100,6 +106,7 @@ export default function geoJSON(
       resultData.push(dataItem);
     },
   );
+
   return {
     dataArray: resultData,
     featureKeys,

@@ -1,30 +1,54 @@
 // @ts-ignore
+import rewind from '@mapbox/geojson-rewind';
 import {
   IJsonData,
-  IJsonItem,
   IParseDataItem,
   IParserCfg,
   IParserData,
 } from '@antv/l7-core';
-// @ts-ignore
-import rewind from '@mapbox/geojson-rewind';
+import { flattenEach } from '@turf/meta';
+import { getCoords } from '@turf/invariant';
+import { Feature, Geometries, Properties } from '@turf/helpers';
+
 export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
   const { x, y, x1, y1, coordinates, geometry } = cfg;
   const resultData: IParseDataItem[] = [];
+
   if (!Array.isArray(data)) {
     return {
       dataArray: [],
     };
   }
-  data.forEach((col: IJsonItem, featureIndex: number) => {
+
+  for (let featureIndex = 0; featureIndex < data.length; featureIndex++) {
+    const col = data[featureIndex];
+
+    // GeoJson geometry 数据
+    if (geometry) {
+      const _geometry = { ...col[geometry] };
+      const rewindGeometry = rewind(_geometry, true);
+      // multi feature 情况拆分
+      flattenEach(
+        rewindGeometry,
+        (currentFeature: Feature<Geometries, Properties>) => {
+          const coord = getCoords(currentFeature);
+          const dataItem = {
+            ...col,
+            _id: featureIndex,
+            coordinates: coord,
+          };
+
+          resultData.push(dataItem);
+        },
+      );
+      continue;
+    }
+
     let coords = [];
 
-    if (geometry) {
-      // GeoJson geometry 数据
-      const rewindGeometry = rewind({ ...col[geometry] }, true);
-      coords = rewindGeometry.coordinates;
-    } else if (coordinates) {
-      // GeoJson coordinates 数据
+    // GeoJson coordinates 数据
+    // 仅支持 Point LineString Polygon 三种 coordinates
+    if (coordinates) {
       let type = 'Polygon';
       if (!Array.isArray(coordinates[0])) {
         type = 'Point';
@@ -54,7 +78,8 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
       coordinates: coords,
     };
     resultData.push(dataItem);
-  });
+  }
+
   return {
     dataArray: resultData,
   };
