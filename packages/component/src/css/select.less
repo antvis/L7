@@ -24,9 +24,9 @@
   width: @l7-select-image-popper-width;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   box-sizing: border-box;
   .l7-select-control-item {
+    margin-right: 12px;
     border-radius: @l7-btn-control-border-radius;
     border: 2px solid @l7-popper-bg-color;
     box-sizing: content-box;
@@ -52,6 +52,9 @@
     }
     &.l7-select-control-item-active {
       border-color: @l7-select-active-color;
+    }
+    &:nth-child(3n) {
+      margin-right: 0;
     }
   }
 }

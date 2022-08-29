@@ -4,6 +4,7 @@ import { IPopperControlOption, PopperControl } from './popperControl';
 type BaseOptionItem = {
   value: string;
   text: string;
+  [key: string]: string;
 };
 
 type NormalOptionItem = BaseOptionItem & {
@@ -46,11 +47,6 @@ export default abstract class SelectControl<
 
   constructor(option: Partial<O>) {
     super(option);
-
-    const { defaultValue } = this.controlOption;
-    if (defaultValue) {
-      this.selectValue = this.transSelectValue(defaultValue);
-    }
   }
 
   public setOptions(option: Partial<O>) {
@@ -63,6 +59,10 @@ export default abstract class SelectControl<
 
   public onAdd() {
     const button = super.onAdd();
+    const { defaultValue } = this.controlOption;
+    if (defaultValue) {
+      this.selectValue = this.transSelectValue(defaultValue);
+    }
     this.popper.setContent(this.getPopperContent(this.controlOption.options));
     return button;
   }
@@ -71,7 +71,7 @@ export default abstract class SelectControl<
     return this.getIsMultiple() ? this.selectValue : this.selectValue[0];
   }
 
-  public setSelectValue(value: string | string[]) {
+  public setSelectValue(value: string | string[], emitEvent = true) {
     const finalValue = this.transSelectValue(value);
     this.optionDOMList.forEach((optionDOM) => {
       const optionValue = optionDOM.getAttribute(
@@ -95,10 +95,12 @@ export default abstract class SelectControl<
       }
     });
     this.selectValue = finalValue;
-    this.emit(
-      'selectChange',
-      this.getIsMultiple() ? finalValue : finalValue[0],
-    );
+    if (emitEvent) {
+      this.emit(
+        'selectChange',
+        this.getIsMultiple() ? finalValue : finalValue[0],
+      );
+    }
   }
 
   /**

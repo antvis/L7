@@ -37,6 +37,7 @@ export default class MapTheme extends SelectControl<IMapStyleControlOption> {
           text: text ?? key,
           value,
           img,
+          key,
         };
       });
   }
@@ -45,14 +46,27 @@ export default class MapTheme extends SelectControl<IMapStyleControlOption> {
     return this.mapsService.getMapStyle();
   }
 
-  public onAdd(): any {
+  public onAdd(): HTMLElement {
     if (!this.controlOption.options?.length) {
       this.controlOption.options = this.getStyleOptions();
     }
-    if (!this.controlOption.defaultValue) {
+    if (this.controlOption.defaultValue) {
+      const defaultValue = this.controlOption.defaultValue as string;
+      this.controlOption.defaultValue =
+        this.controlOption.options.find((item) => item.key === defaultValue)
+          ?.value ?? defaultValue;
+    } else {
       const defaultStyle = this.getMapStyle();
-      this.controlOption.defaultValue = defaultStyle;
-      this.selectValue = [defaultStyle];
+      if (defaultStyle) {
+        this.controlOption.defaultValue = defaultStyle;
+      } else {
+        // @ts-ignore
+        this.mapsService.map.once('styledata', () => {
+          const mapboxStyle = this.mapsService.getMapStyle();
+          this.controlOption.defaultValue = mapboxStyle;
+          this.setSelectValue(mapboxStyle, false);
+        });
+      }
     }
     this.on('selectChange', this.onMapThemeChange);
     return super.onAdd();

@@ -51,7 +51,7 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
       this.controlOption.options = this.getLayerOptions();
     }
     if (!this.controlOption.defaultValue) {
-      this.controlOption.defaultValue = this.selectValue = this.getLayerVisible();
+      this.controlOption.defaultValue = this.getLayerVisible();
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);

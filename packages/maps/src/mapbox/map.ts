@@ -234,8 +234,9 @@ export default class MapboxService
   public getMapStyle(): string {
     try {
       const styleUrl = this.map.getStyle().sprite ?? '';
-      if (/^mapbox:\/\/\w+\/\w+\/\w+\/\w+$/.test(styleUrl)) {
-        return styleUrl?.replace(/\/\w+$/, '');
+      // 将 Mapbox 返回的样式字符串转成传入 style 保持一致
+      if (/^mapbox:\/\/sprites\/zcxduo\/\w+\/\w+$/.test(styleUrl)) {
+        return styleUrl?.replace(/\/\w+$/, '').replace(/sprites/, 'styles');
       }
       return styleUrl;
     } catch (e) {
