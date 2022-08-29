@@ -9,7 +9,7 @@ import {
 // @ts-ignore
 import rewind from '@mapbox/geojson-rewind';
 export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
-  const { x, y, x1, y1, coordinates } = cfg;
+  const { x, y, x1, y1, coordinates, geometry } = cfg;
   const resultData: IParseDataItem[] = [];
   if (!Array.isArray(data)) {
     return {
@@ -18,15 +18,13 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
   }
   data.forEach((col: IJsonItem, featureIndex: number) => {
     let coords = [];
-    if (x && y) {
-      coords = [parseFloat(col[x]), parseFloat(col[y])];
-    } // 点数据
-    if (x && y && x1 && y1) {
-      const from = [parseFloat(col[x]), parseFloat(col[y])];
-      const to = [parseFloat(col[x1]), parseFloat(col[y1])];
-      coords = [from, to];
-    }
-    if (coordinates) {
+
+    if (geometry) {
+      // GeoJson geometry 数据
+      const rewindGeometry = rewind({ ...col[geometry] }, true);
+      coords = rewindGeometry.coordinates;
+    } else if (coordinates) {
+      // GeoJson coordinates 数据
       let type = 'Polygon';
       if (!Array.isArray(coordinates[0])) {
         type = 'Point';
@@ -38,9 +36,18 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
         type,
         coordinates: [...col[coordinates]],
       };
-      rewind(geometry, true);
-      coords = geometry.coordinates;
+      const rewindGeometry = rewind(geometry, true);
+      coords = rewindGeometry.coordinates;
+    } else if (x && y && x1 && y1) {
+      // 起终点数据
+      const from = [parseFloat(col[x]), parseFloat(col[y])];
+      const to = [parseFloat(col[x1]), parseFloat(col[y1])];
+      coords = [from, to];
+    } else if (x && y) {
+      // 点数据
+      coords = [parseFloat(col[x]), parseFloat(col[y])];
     }
+
     const dataItem = {
       ...col,
       _id: featureIndex,
