@@ -54,18 +54,17 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     return new Promise((resolve, reject) => {
       const source = layer.getSource();
       try {
-        if(source.inited) {
-          resolve(source.data)
+        if (source.inited) {
+          resolve(source.data);
         } else {
           source.once('sourceUpdate', () => {
-            resolve(source.data)
-          })
+            resolve(source.data);
+          });
         }
-      } catch(err) {
+      } catch (err) {
         reject(err);
       }
-      
-    })
+    });
   }
 
   public apply(
@@ -77,24 +76,30 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     layer.hooks.init.tap('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      
+
       const dataArray = await this.getSourceData(layer);
       if (Array.isArray(dataArray) && dataArray.length === 0) {
         return;
       }
-      this.caculateScalesForAttributes(attributes || [], dataArray as IParseDataItem[]);
+      this.caculateScalesForAttributes(
+        attributes || [],
+        dataArray as IParseDataItem[],
+      );
     });
 
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tap('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      
+
       const dataArray = await this.getSourceData(layer);
       if (Array.isArray(dataArray) && dataArray.length === 0) {
         return;
       }
-      this.caculateScalesForAttributes(attributes || [], dataArray as IParseDataItem[]);
+      this.caculateScalesForAttributes(
+        attributes || [],
+        dataArray as IParseDataItem[],
+      );
       layer.layerModelNeedUpdate = true;
       return true;
     });
@@ -106,7 +111,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
-        
         const dataArray = await this.getSourceData(layer);
         if (Array.isArray(dataArray) && dataArray.length === 0) {
           return;
@@ -115,7 +119,10 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           (attribute) => attribute.needRescale,
         );
         if (attributesToRescale.length) {
-          this.caculateScalesForAttributes(attributesToRescale, dataArray as IParseDataItem[]);
+          this.caculateScalesForAttributes(
+            attributesToRescale,
+            dataArray as IParseDataItem[],
+          );
         }
       }
     });
