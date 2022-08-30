@@ -10,6 +10,7 @@ import NormalModel from './normal';
 import Radar from './radar';
 import SimplePopint from './simplePoint';
 import TextModel from './text';
+import TileTextModel from './tileText';
 import TileFillModel from './tile';
 
 export type PointType =
@@ -23,6 +24,7 @@ export type PointType =
   | 'text'
   | 'vectorpoint'
   | 'tile'
+  | 'tileText'
   | 'earthFill'
   | 'earthExtrude';
 
@@ -37,6 +39,7 @@ const PointModels: { [key in PointType]: any } = {
   text: TextModel,
   vectorpoint: PointTileModel,
   tile: TileFillModel,
+  tileText: TileTextModel,
   earthFill: EarthFillModel,
   earthExtrude: EarthExtrudeModel,
 };
