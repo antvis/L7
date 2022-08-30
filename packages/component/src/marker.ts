@@ -1,6 +1,7 @@
 import {
   ILngLat,
   IMapService,
+  IMarkerContainerAndBounds,
   IMarkerOption,
   IPoint,
   IPopup,
@@ -16,7 +17,6 @@ import {
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-
 //  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
@@ -27,6 +27,8 @@ export default class Marker extends EventEmitter {
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
+  public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
+
   constructor(option?: Partial<IMarkerOption>) {
     super();
     this.markerOption = {
@@ -219,25 +221,28 @@ export default class Marker extends EventEmitter {
     }
   }
 
+  private getCurrentContainerSize() {
+    const container = this.mapsService.getContainer();
+    return {
+      containerHeight: container?.scrollHeight || 0,
+      containerWidth: container?.scrollWidth || 0,
+      bounds: this.mapsService.getBounds(),
+    };
+  }
   private updatePosition() {
     if (!this.mapsService) {
       return;
     }
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
-    const bounds = this.mapsService.getBounds();
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
-
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
-      const container = this.mapsService.getContainer();
-      let containerWidth = 0;
-      let containerHeight = 0;
-      if (container) {
-        containerWidth = container.scrollWidth;
-        containerHeight = container.scrollHeight;
-      }
+      const { containerHeight, containerWidth, bounds } =
+        this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
+
+      if (!bounds) return;
       // 当前可视区域包含跨日界线
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
         if (pos.x > containerWidth) {
