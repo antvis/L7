@@ -11,7 +11,7 @@ import {
   ScaleTypes,
   StyleScaleType,
   TYPES,
-  IParserData
+  IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
 import { extent } from 'd3-array';
@@ -53,13 +53,13 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
     const source = layer.getSource();
-      if (source.inited) {
+    if (source.inited) {
+      callback(source.data);
+    } else {
+      source.once('sourceUpdate', () => {
         callback(source.data);
-      } else {
-        source.once('sourceUpdate', () => {
-          callback(source.data);
-        });
-      }
+      });
+    }
   }
 
   public apply(
@@ -72,16 +72,13 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
 
-      this.getSourceData(layer, ({dataArray}) => {
+      this.getSourceData(layer, ({ dataArray }) => {
         if (Array.isArray(dataArray) && dataArray.length === 0) {
           return;
         } else {
-          this.caculateScalesForAttributes(
-            attributes || [],
-            dataArray,
-          );
+          this.caculateScalesForAttributes(attributes || [], dataArray);
         }
-      })
+      });
       // const { dataArray } = layer.getSource().data;
       // if (dataArray.length === 0) {
       //   return;
@@ -97,16 +94,13 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
 
-      this.getSourceData(layer, ({dataArray}) => {
+      this.getSourceData(layer, ({ dataArray }) => {
         if (Array.isArray(dataArray) && dataArray.length === 0) {
           return;
         }
-        this.caculateScalesForAttributes(
-          attributes || [],
-          dataArray
-        );
+        this.caculateScalesForAttributes(attributes || [], dataArray);
         layer.layerModelNeedUpdate = true;
-      })
+      });
       // const { dataArray } = layer.getSource().data;
       // if (dataArray.length === 0) {
       //   return;
@@ -126,7 +120,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
-        this.getSourceData(layer, ({dataArray}) => {
+        this.getSourceData(layer, ({ dataArray }) => {
           if (dataArray.length === 0) {
             return;
           }
@@ -134,12 +128,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
             (attribute) => attribute.needRescale,
           );
           if (attributesToRescale.length) {
-            this.caculateScalesForAttributes(
-              attributesToRescale,
-              dataArray,
-            );
+            this.caculateScalesForAttributes(attributesToRescale, dataArray);
           }
-        })
+        });
 
         // const { dataArray } = layer.getSource().data;
         // if (dataArray.length === 0) {
