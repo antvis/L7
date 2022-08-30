@@ -50,48 +50,72 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private scaleOptions: IScaleOptions = {};
 
+  private async getSourceData(layer: ILayer) {
+    return new Promise((resolve, reject) => {
+      const source = layer.getSource();
+      try {
+        if(source.inited) {
+          resolve(source.data)
+        } else {
+          source.once('sourceUpdate', () => {
+            resolve(source.data)
+          })
+        }
+      } catch(err) {
+        reject(err);
+      }
+      
+    })
+  }
+
   public apply(
     layer: ILayer,
     {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('FeatureScalePlugin', () => {
+    layer.hooks.init.tap('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      if (dataArray.length === 0) {
+      
+      const dataArray = await this.getSourceData(layer);
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
         return;
       }
-      this.caculateScalesForAttributes(attributes || [], dataArray);
+      this.caculateScalesForAttributes(attributes || [], dataArray as IParseDataItem[]);
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
+    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      this.caculateScalesForAttributes(attributes || [], dataArray);
+      
+      const dataArray = await this.getSourceData(layer);
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
+      this.caculateScalesForAttributes(attributes || [], dataArray as IParseDataItem[]);
       layer.layerModelNeedUpdate = true;
       return true;
     });
 
-    layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
+    layer.hooks.beforeRender.tap('FeatureScalePlugin', async () => {
       if (layer.layerModelNeedUpdate) {
         return;
       }
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
-        const { dataArray } = layer.getSource().data;
-        if (dataArray.length === 0) {
+        
+        const dataArray = await this.getSourceData(layer);
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
           return;
         }
         const attributesToRescale = attributes.filter(
           (attribute) => attribute.needRescale,
         );
         if (attributesToRescale.length) {
-          this.caculateScalesForAttributes(attributesToRescale, dataArray);
+          this.caculateScalesForAttributes(attributesToRescale, dataArray as IParseDataItem[]);
         }
       }
     });
