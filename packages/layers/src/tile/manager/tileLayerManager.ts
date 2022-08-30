@@ -184,13 +184,14 @@ export class TileLayerManager implements ITileLayerManager {
       this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
     }
 
+
     this.initOptions = {
       layerType: this.parent.type,
       transforms: this.transforms,
       shape: layerShape,
       zIndex,
       opacity,
-      sourceLayer: parentParserType === 'geojsonvt' ? 'geojsonvt' : sourceLayer,
+      sourceLayer: this.getSourceLayer(parentParserType, sourceLayer),
       coords,
       featureId,
       color: colorValue,
@@ -214,6 +215,16 @@ export class TileLayerManager implements ITileLayerManager {
       pixelConstantB,
       pixelConstantRGB,
     };
+  }
+
+  private getSourceLayer(parentParserType: string, sourceLayer: string|undefined) {
+    if(parentParserType === 'geojsonvt') {
+      return 'geojsonvt';
+    } else if(parentParserType === 'testTile') {
+      return 'testTile';
+    } else {
+      return sourceLayer;
+    }
   }
 
   private setConfigListener() {

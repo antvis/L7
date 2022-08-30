@@ -7,7 +7,7 @@ import {
 import { DOM, Tile } from '@antv/l7-utils';
 import { Container } from 'inversify';
 
-export const tileVectorParser = ['mvt', 'geojsonvt'];
+export const tileVectorParser = ['mvt', 'geojsonvt', 'testTile'];
 
 export function isVectorTile(parserType: string) {
   return tileVectorParser.indexOf(parserType) >= 0;

@@ -2,11 +2,12 @@ import { registerParser, registerTransform } from './factory';
 import csv from './parser/csv';
 import geojson from './parser/geojson';
 import image from './parser/image';
-import json, { defaultData, defaultParser, defaultSource } from './parser/json';
+import json from './parser/json';
 import mapboxVectorTile from './parser/mvt';
 import geojsonVTTile from './parser/geojsonvt';
 import raster from './parser/raster';
 import rasterTile from './parser/raster-tile';
+import testTile from './parser/testTile';
 import Source from './source';
 import { cluster } from './transform/cluster';
 import { filter } from './transform/filter';
@@ -18,6 +19,7 @@ import { map } from './transform/map';
 registerParser('rasterTile', rasterTile);
 registerParser('mvt', mapboxVectorTile);
 registerParser('geojsonvt', geojsonVTTile);
+registerParser('testTile', testTile);
 registerParser('geojson', geojson);
 registerParser('image', image);
 registerParser('csv', csv);
@@ -38,9 +40,5 @@ export {
 } from './factory';
 
 export * from './interface';
-
-export const DEFAULT_SOURCE = defaultSource;
-export const DEFAULT_DATA = defaultData;
-export const DEFAULT_PARSER = defaultParser;
 
 export default Source;
