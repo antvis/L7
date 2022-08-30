@@ -163,6 +163,7 @@ export default class MarkerLayer extends EventEmitter {
     this.mapsService.off('camerachange', this.setContainerSize.bind(this));
     this.mapsService.off('viewchange', this.setContainerSize.bind(this));
     this.markers = [];
+    this.points=[];
     this.clusterMarkers = [];
   }
 

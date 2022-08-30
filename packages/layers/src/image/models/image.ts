@@ -77,7 +77,7 @@ export default class ImageModel extends BaseModel {
         primitive: gl.TRIANGLES,
         blend: {
           // Tip: 优化显示效果
-          enable: false,
+          enable: true,
         },
         depth: { enable: false },
         stencil: getMask(mask, maskInside),

@@ -1,7 +1,7 @@
 import { IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { TMSTileLayer } from '../tmsTileLayer';
-export default class RasterTileModel extends BaseModel {
+export default class TileModel extends BaseModel {
   public getUninforms(): IModelUniform {
     return {};
   }

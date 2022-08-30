@@ -19,6 +19,22 @@ export default () => {
       zIndex: 1,
     });
     layerTile.source(
+      '//t3.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=f1f2021a42d110057042177cd22d856f',
+      // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      {
+        parser: {
+          type: 'rasterTile',
+          tileSize: 256,
+          //   zoomOffset: 0
+          // zoomOffset: 1,
+        },
+      },
+    );
+
+    const layerTile2 = new RasterLayer({
+      zIndex: 0,
+    });
+    layerTile2.source(
       // '//t3.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=f1f2021a42d110057042177cd22d856f',
       'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
       {
@@ -33,6 +49,7 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layerTile);
+      scene.addLayer(layerTile2);
     });
   }, []);
   return (

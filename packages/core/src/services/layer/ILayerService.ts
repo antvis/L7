@@ -265,6 +265,10 @@ export interface ILayer {
   masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
+  defaultSourceConfig: {
+    data: any[],
+    options: ISourceCFG | undefined,
+  },
   pickedFeatureID: number | null;
   hooks: {
     init: SyncBailHook;

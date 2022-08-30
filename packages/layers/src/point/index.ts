@@ -6,6 +6,17 @@ import { isVectorTile } from '../tile/utils';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
+  public defaultSourceConfig = {
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat',
+      },
+    },
+  };
+
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
@@ -26,7 +37,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public getModelTypeWillEmptyData(): PointType {
     if (this.shapeOption) {
       const { field, values } = this.shapeOption;
-      const { shape2d, shape3d } = this.getLayerConfig();
+      const { shape2d } = this.getLayerConfig();
 
       const iconMap = this.iconService.getIconMap();
 
@@ -72,6 +83,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       },
       vectorpoint: {},
       tile: {},
+      tileText: {},
       earthFill: {},
       earthExtrude: {},
     };
@@ -79,20 +91,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected getModelType(): PointType {
-    const PointTypes = [
-      'fillImage',
-      'fill',
-      'radar',
-      'image',
-      'normal',
-      'simplePoint',
-      'extrude',
-      'text',
-      'vectorpoint',
-      'tile',
-      'earthFill',
-      'earthExtrude',
-    ];
     const parserType = this.layerSource.getParserType();
     if (isVectorTile(parserType)) {
       return 'vectorpoint';
