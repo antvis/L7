@@ -44,6 +44,12 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
   }
 
   protected static conflictPopperList: Popper[] = [];
+
+  // 气泡容器 DOM
+  public popperDOM!: HTMLElement;
+
+  // 气泡中展示的内容容器 DOM
+  public contentDOM!: HTMLElement;
   /**
    * 按钮实体
    * @protected
@@ -66,12 +72,6 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
    */
   protected content: PopperContent;
 
-  // 气泡容器 DOM
-  protected popperDOM!: HTMLElement;
-
-  // 气泡中展示的内容容器 DOM
-  protected contentDOM!: HTMLElement;
-
   /**
    * 关闭气泡的定时器
    * @protected
@@ -88,6 +88,14 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     }
   }
 
+  public getPopperDOM() {
+    return this.popperDOM;
+  }
+
+  public getIsShow() {
+    return this.isShow;
+  }
+
   public getContent() {
     return this.content;
   }
@@ -102,15 +110,16 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     this.content = content;
   }
 
-  public show() {
+  public show = () => {
     if (this.isShow || !this.contentDOM.innerHTML) {
-      return;
+      return this;
     }
-    this.setPopperPosition();
+    this.resetPopperPosition();
     DOM.removeClass(this.popperDOM, 'l7-popper-hide');
     this.isShow = true;
 
     if (this.option.unique) {
+      // console.log(Popper.conflictPopperList.length);
       Popper.conflictPopperList.forEach((popper) => {
         if (popper !== this && popper.isShow) {
           popper.hide();
@@ -118,16 +127,18 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
       });
     }
     this.emit('show');
-  }
+    return this;
+  };
 
-  public hide() {
+  public hide = () => {
     if (!this.isShow) {
-      return;
+      return this;
     }
     DOM.addClass(this.popperDOM, 'l7-popper-hide');
     this.isShow = false;
     this.emit('hide');
-  }
+    return this;
+  };
 
   /**
    * 设置隐藏气泡的定时器
@@ -177,46 +188,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     DOM.remove(this.popperDOM);
   }
 
-  protected createPopper(): HTMLElement {
-    const { container, className = '', content } = this.option;
-    const popper = DOM.create(
-      'div',
-      `l7-popper l7-popper-hide ${className}`,
-    ) as HTMLElement;
-    const popperContent = DOM.create('div', 'l7-popper-content') as HTMLElement;
-    const popperArrow = DOM.create('div', 'l7-popper-arrow') as HTMLElement;
-    popper.appendChild(popperContent);
-    popper.appendChild(popperArrow);
-    container.appendChild(popper);
-    this.popperDOM = popper;
-    this.contentDOM = popperContent;
-    if (content) {
-      this.setContent(content);
-    }
-    return popper;
-  }
-
-  protected onBtnClick = (e: MouseEvent) => {
-    if (this.isShow) {
-      this.hide();
-    } else {
-      this.show();
-    }
-  };
-
-  protected onBtnMouseLeave = () => {
-    this.setHideTimeout();
-  };
-
-  protected onBtnMouseMove = (e: MouseEvent) => {
-    this.clearHideTimeout();
-    if (this.isShow) {
-      return;
-    }
-    this.show();
-  };
-
-  protected setPopperPosition() {
+  public resetPopperPosition() {
     const popperStyleObj: any = {};
     const { container, offset = [0, 0], placement } = this.option;
     const [offsetX, offsetY] = offset;
@@ -272,4 +244,43 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     }
     DOM.addStyle(this.popperDOM, DOM.css2Style(popperStyleObj));
   }
+
+  protected createPopper(): HTMLElement {
+    const { container, className = '', content } = this.option;
+    const popper = DOM.create(
+      'div',
+      `l7-popper l7-popper-hide ${className}`,
+    ) as HTMLElement;
+    const popperContent = DOM.create('div', 'l7-popper-content') as HTMLElement;
+    const popperArrow = DOM.create('div', 'l7-popper-arrow') as HTMLElement;
+    popper.appendChild(popperContent);
+    popper.appendChild(popperArrow);
+    container.appendChild(popper);
+    this.popperDOM = popper;
+    this.contentDOM = popperContent;
+    if (content) {
+      this.setContent(content);
+    }
+    return popper;
+  }
+
+  protected onBtnClick = () => {
+    if (this.isShow) {
+      this.hide();
+    } else {
+      this.show();
+    }
+  };
+
+  protected onBtnMouseLeave = () => {
+    this.setHideTimeout();
+  };
+
+  protected onBtnMouseMove = () => {
+    this.clearHideTimeout();
+    if (this.isShow) {
+      return;
+    }
+    this.show();
+  };
 }

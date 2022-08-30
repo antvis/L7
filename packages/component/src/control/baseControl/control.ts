@@ -63,6 +63,10 @@ export default abstract class Control<O extends IControlOption = IControlOption>
     };
   }
 
+  public getOptions() {
+    return this.controlOption;
+  }
+
   /**
    * 更新配置的方法，子类如果有自己的配置，也需要重写该方法
    * @param newOptions

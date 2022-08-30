@@ -45,10 +45,6 @@ export default abstract class SelectControl<
    */
   protected optionDOMList: HTMLElement[];
 
-  constructor(option: Partial<O>) {
-    super(option);
-  }
-
   public setOptions(option: Partial<O>) {
     super.setOptions(option);
     const { options } = option;

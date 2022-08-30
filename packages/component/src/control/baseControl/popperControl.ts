@@ -34,6 +34,10 @@ export default abstract class PopperControl<
    */
   protected popper!: Popper;
 
+  public getPopper() {
+    return this.popper;
+  }
+
   /**
    * 获取默认配置
    * @param option
