@@ -68,7 +68,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('FeatureScalePlugin', async () => {
+    layer.hooks.init.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
 
@@ -90,7 +90,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', async () => {
+    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
 
@@ -113,7 +113,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       return true;
     });
 
-    layer.hooks.beforeRender.tap('FeatureScalePlugin', async () => {
+    layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
       if (layer.layerModelNeedUpdate) {
         return;
       }
