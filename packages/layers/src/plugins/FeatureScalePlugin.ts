@@ -11,6 +11,7 @@ import {
   ScaleTypes,
   StyleScaleType,
   TYPES,
+  IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
 import { extent } from 'd3-array';
@@ -50,6 +51,17 @@ export default class FeatureScalePlugin implements ILayerPlugin {
 
   private scaleOptions: IScaleOptions = {};
 
+  private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
+    const source = layer.getSource();
+    if (source.inited) {
+      callback(source.data);
+    } else {
+      source.once('sourceUpdate', () => {
+        callback(source.data);
+      });
+    }
+  }
+
   public apply(
     layer: ILayer,
     {
@@ -59,20 +71,45 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      if (dataArray.length === 0) {
-        return;
-      }
-      this.caculateScalesForAttributes(attributes || [], dataArray);
+
+      this.getSourceData(layer, ({ dataArray }) => {
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
+          return;
+        } else {
+          this.caculateScalesForAttributes(attributes || [], dataArray);
+        }
+      });
+      // const { dataArray } = layer.getSource().data;
+      // if (dataArray.length === 0) {
+      //   return;
+      // }
+      // this.caculateScalesForAttributes(
+      //   attributes || [],
+      //   dataArray as IParseDataItem[],
+      // );
     });
 
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      this.caculateScalesForAttributes(attributes || [], dataArray);
-      layer.layerModelNeedUpdate = true;
+
+      this.getSourceData(layer, ({ dataArray }) => {
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
+          return;
+        }
+        this.caculateScalesForAttributes(attributes || [], dataArray);
+        layer.layerModelNeedUpdate = true;
+      });
+      // const { dataArray } = layer.getSource().data;
+      // if (dataArray.length === 0) {
+      //   return;
+      // }
+      // this.caculateScalesForAttributes(
+      //   attributes || [],
+      //   dataArray
+      // );
+      // layer.layerModelNeedUpdate = true;
       return true;
     });
 
@@ -83,16 +120,31 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
-        const { dataArray } = layer.getSource().data;
-        if (dataArray.length === 0) {
-          return;
-        }
-        const attributesToRescale = attributes.filter(
-          (attribute) => attribute.needRescale,
-        );
-        if (attributesToRescale.length) {
-          this.caculateScalesForAttributes(attributesToRescale, dataArray);
-        }
+        this.getSourceData(layer, ({ dataArray }) => {
+          if (dataArray.length === 0) {
+            return;
+          }
+          const attributesToRescale = attributes.filter(
+            (attribute) => attribute.needRescale,
+          );
+          if (attributesToRescale.length) {
+            this.caculateScalesForAttributes(attributesToRescale, dataArray);
+          }
+        });
+
+        // const { dataArray } = layer.getSource().data;
+        // if (dataArray.length === 0) {
+        //   return;
+        // }
+        // const attributesToRescale = attributes.filter(
+        //   (attribute) => attribute.needRescale,
+        // );
+        // if (attributesToRescale.length) {
+        //   this.caculateScalesForAttributes(
+        //     attributesToRescale,
+        //     dataArray,
+        //   );
+        // }
       }
     });
   }
