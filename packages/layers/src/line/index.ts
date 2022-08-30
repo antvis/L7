@@ -22,8 +22,8 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
         x1: 'lng2',
         y1: 'lat2',
       },
-    }
-  }
+    },
+  };
 
   public buildModels() {
     const shape = this.getModelType();

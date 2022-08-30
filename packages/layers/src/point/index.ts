@@ -15,7 +15,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         y: 'lat',
       },
     },
-  }
+  };
 
   public buildModels() {
     const modelType = this.getModelType();

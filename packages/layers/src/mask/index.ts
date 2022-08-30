@@ -5,13 +5,13 @@ import MaskModels, { MaskModelType } from './models';
 export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
   public type: string = 'MaskLayer';
   public defaultSourceConfig: {
-    data: [],
+    data: [];
     options: {
       parser: {
-        type: 'geojson',        
-      },
-    },
-  }
+        type: 'geojson';
+      };
+    };
+  };
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new MaskModels[shape](this);

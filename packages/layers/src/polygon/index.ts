@@ -7,13 +7,13 @@ import { isVectorTile } from '../tile/utils';
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
   public defaultSourceConfig: {
-    data: [],
+    data: [];
     options: {
       parser: {
-        type: 'geojson',        
-      },
-    },
-  }
+        type: 'geojson';
+      };
+    };
+  };
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new PolygonModels[shape](this);

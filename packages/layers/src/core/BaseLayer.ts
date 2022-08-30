@@ -82,9 +82,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public triangulation?: Triangulation | undefined;
 
   public defaultSourceConfig: {
-    data: any[],
-    options: ISourceCFG | undefined,
-  }
+    data: any[];
+    options: ISourceCFG | undefined;
+  };
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
