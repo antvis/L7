@@ -147,7 +147,15 @@ export function LineTriangulation(feature: IEncodeFeature) {
 export function SimpleLineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const pos: any[] = [];
-
+  if(!Array.isArray(coordinates[0])) {
+    return {
+      vertices: [],
+      indices: [],
+      normals: [],
+      size: 6,
+      count: 0,
+    };
+  }
   const { results, totalDistance } = getSimpleLineVertices(
     coordinates as IPosition[],
   );
