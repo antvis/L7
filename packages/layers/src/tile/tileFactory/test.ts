@@ -43,22 +43,12 @@ export default class TestTile extends TileFactory {
         y: 'textLat'
       }
     })
-    // .source({
-    //   "type": "FeatureCollection",
-    //   "properties": {
-    //     "key": 'key'
-    //   },
-    //   "geometry": {
-    //     "type": "Point",
-    //     "coordinates": [properties.textLng, properties.textLat]
-    //   }
-    // })
     .shape('key', 'text')
-    // .shape('circle')
-    .size(10)
-    .color('#f00')
+    .size(20)
+    .color('#000')
     .style({
-      // textAnchor: 'left'
+      stroke: '#fff',
+      strokeWidth: 2
     })
 
     const line = new VectorLayer({ layerType: 'LineLayer' })
@@ -67,23 +57,13 @@ export default class TestTile extends TileFactory {
       features: features,
     })
     .shape('simple')
-    .color('#f00')
+    .color('#000')
 
     registerLayers(this.parentLayer, [line, text]);
-    // registerLayers(this.parentLayer, [line]);
-    // registerLayers(this.parentLayer, [text]);
 
     return {
       layers: [line, text],
       layerIDList: [line.id, text.id],
     };
-    // return {
-    //   layers: [text, text],
-    //   layerIDList: [text.id, text.id],
-    // };
-    // return {
-    //   layers: [line],
-    //   layerIDList: [line.id],
-    // };
   }
 }

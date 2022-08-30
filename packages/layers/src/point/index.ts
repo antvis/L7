@@ -6,6 +6,17 @@ import { isVectorTile } from '../tile/utils';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
+  public defaultSourceConfig = {
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat',
+      },
+    },
+  }
+
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);

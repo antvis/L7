@@ -1,9 +1,5 @@
 import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
-import Source, {
-  DEFAULT_DATA,
-  DEFAULT_PARSER,
-  DEFAULT_SOURCE,
-} from '@antv/l7-source';
+import Source  from '@antv/l7-source';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
@@ -15,14 +11,8 @@ export default class DataSourcePlugin implements ILayerPlugin {
     layer.hooks.init.tap('DataSourcePlugin', () => {
       let source = layer.getSource();
       if (!source) {
-        // TODO: 允许用户不使用 layer 的 source 方法，在这里传入一个默认的替换的默认数据
-        const defaultSourceConfig = DEFAULT_SOURCE[
-          layer.type as 'PointLayer' | 'LineLayer'
-        ] || {
-          data: DEFAULT_DATA,
-          options: DEFAULT_PARSER,
-        };
-        const { data, options } = layer.sourceOption || defaultSourceConfig;
+        // Tip: 用户没有传入 source 的时候使用图层的默认数据
+        const { data, options } = layer.sourceOption || layer.defaultSourceConfig;
         source = new Source(data, options);
         layer.setSource(source);
       }
@@ -31,7 +21,6 @@ export default class DataSourcePlugin implements ILayerPlugin {
       } else {
         source.once('sourceUpdate', () => {
           this.updateClusterData(layer);
-          // TODO: layer.hooks.init.call();
         });
       }
       // this.updateClusterData(layer);

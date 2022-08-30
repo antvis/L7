@@ -1,4 +1,4 @@
-import { Scene, TileTestLayer } from '@antv/l7';
+import { Scene, TileDebugLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
@@ -15,12 +15,7 @@ export default () => {
       }),
     });
 
-    const layer = new TileTestLayer();
-    layer.source(null, {
-      parser: {
-        type: 'testTile',
-      },
-    });
+    const layer = new TileDebugLayer();
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
