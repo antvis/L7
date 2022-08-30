@@ -16,6 +16,7 @@ export * from './control/exportImage';
 export * from './control/navigation';
 export * from './control/mapTheme';
 export * from './control/layerControl';
+export * from './control/mouseLocation';
 
 export { Scale, Zoom, Marker, Popup, MarkerLayer, createL7Icon };
 

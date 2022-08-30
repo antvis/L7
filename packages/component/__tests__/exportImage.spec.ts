@@ -4,6 +4,17 @@ import ExportImage from '../src/control/exportImage';
 describe('exportImage', () => {
   const scene = TestScene();
 
+  it('life cycle', () => {
+    const control = new ExportImage({});
+    scene.addControl(control);
+
+    const container = control.getContainer();
+    expect(container.parentElement).toBeInstanceOf(HTMLElement);
+
+    scene.removeControl(control);
+    expect(container.parentElement).not.toBeInstanceOf(HTMLElement);
+  });
+
   it('image', () => {
     const control = new ExportImage({
       onExport: (base64) => {

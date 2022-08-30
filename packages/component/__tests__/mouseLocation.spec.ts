@@ -1,11 +1,11 @@
 import { TestScene } from '@antv/l7-test-utils';
-import Fullscreen from '../src/control/fullscreen';
+import MouseLocation from '../src/control/mouseLocation';
 
-describe('fullscreen', () => {
+describe('buttonControl', () => {
   const scene = TestScene();
 
   it('life cycle', () => {
-    const control = new Fullscreen({});
+    const control = new MouseLocation({});
     scene.addControl(control);
 
     const container = control.getContainer();
@@ -15,13 +15,17 @@ describe('fullscreen', () => {
     expect(container.parentElement).not.toBeInstanceOf(HTMLElement);
   });
 
-  it('fullscreen', () => {
-    const control = new Fullscreen({});
+  it('life cycle', () => {
+    const control = new MouseLocation();
     scene.addControl(control);
 
-    const button = control.getContainer() as HTMLDivElement;
-    button.click();
+    (scene.getMapService().map as any).emit('mousemove', {
+      lngLat: {
+        lng: 120,
+        lat: 30,
+      },
+    });
 
-    expect(button.parentElement).toBeInstanceOf(HTMLElement);
+    expect(control.getLocation()).toEqual([120, 30]);
   });
 });
