@@ -19,6 +19,7 @@ import VectorLayer from './vectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';
+import clone from '@turf/clone';
 import polygonToLineString from '@turf/polygon-to-line';
 import {
   CacheEvent,
@@ -82,15 +83,16 @@ export default class TileFactory implements ITileFactory {
       let geofeatures = [];
       if(layerType === 'LineLayer' && shape === 'simple') {
         features.map(feature => {
-          if(feature.geometry.type === 'MultiPolygon') {
+          const cloneFeature = clone(feature);
+          if(cloneFeature.geometry.type === 'MultiPolygon') {
             // @ts-ignore
-            const linefeatures = polygonToLineString(feature).features
+            const linefeatures = polygonToLineString(cloneFeature).features
             geofeatures.push(...linefeatures)
-          } else if(feature.geometry.type === 'Polygon') {
-            feature.geometry.type = 'MultiLineString'
-            geofeatures.push(feature);
+          } else if(cloneFeature.geometry.type === 'Polygon') {
+            cloneFeature.geometry.type = 'MultiLineString'
+            geofeatures.push(cloneFeature);
           } else {
-            geofeatures.push(feature);
+            geofeatures.push(cloneFeature);
           }
         })
       } else {
