@@ -240,6 +240,14 @@ export default class Source extends EventEmitter implements ISource {
    * 数据解析
    */
   private excuteParser(): void {
+    // 耗时计算测试
+    // let t = new Date().getTime();
+    // let c = 0
+    // while(c < 100000000) {
+    //   c++
+    // }
+    // console.log('t', new Date().getTime() - t)
+
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
     const sourceParser = getParser(type);

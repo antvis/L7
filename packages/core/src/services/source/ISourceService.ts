@@ -8,6 +8,7 @@ export interface IParserCfg {
   x1?: string;
   y1?: string;
   coordinates?: string;
+  geometry?: string;
   [key: string]: any;
 }
 type CallBack = (...args: any[]) => any;
