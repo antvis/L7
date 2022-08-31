@@ -1,48 +1,40 @@
-import { bindAll, DOM } from '@antv/l7-utils';
-import { IZoomControlOption } from '../interface';
-import { Control, PositionType } from './baseControl';
+import { DOM } from '@antv/l7-utils';
+import { Control, IControlOption } from './baseControl';
 
-export default class Zoom extends Control {
+export interface IZoomControlOption extends IControlOption {
+  zoomInText: string;
+  zoomInTitle: string;
+  zoomOutText: string;
+  zoomOutTitle: string;
+}
+
+export { Zoom };
+
+export default class Zoom extends Control<IZoomControlOption> {
   private disabled: boolean;
   private zoomInButton: HTMLElement;
   private zoomOutButton: HTMLElement;
 
-  constructor(cfg?: Partial<IZoomControlOption>) {
-    super(cfg);
-    bindAll(['updateDisabled', 'zoomIn', 'zoomOut'], this);
-  }
-  public getDefault() {
+  public getDefault(option: Partial<IZoomControlOption>) {
     return {
-      position: PositionType.TOPLEFT,
+      ...super.getDefault(option),
+      name: 'zoom',
       zoomInText: '+',
       zoomInTitle: 'Zoom in',
       zoomOutText: '&#x2212;',
       zoomOutTitle: 'Zoom out',
-      name: 'zoom',
     };
+  }
+  public setOptions(newOptions: Partial<IZoomControlOption>) {
+    super.setOptions(newOptions);
+    this.resetButtonGroup(this.container);
   }
 
   public onAdd(): HTMLElement {
-    const zoomName = 'l7-control-zoom';
-    const container = DOM.create('div', zoomName + ' l7-bar');
-
-    this.zoomInButton = this.createButton(
-      this.controlOption.zoomInText,
-      this.controlOption.zoomInTitle,
-      zoomName + '-in',
-      container,
-      this.zoomIn,
-    );
-    this.zoomOutButton = this.createButton(
-      this.controlOption.zoomOutText,
-      this.controlOption.zoomOutTitle,
-      zoomName + '-out',
-      container,
-      this.zoomOut,
-    );
+    const container = DOM.create('div', 'l7-control-zoom');
+    this.resetButtonGroup(container);
     this.mapsService.on('zoomend', this.updateDisabled);
     this.mapsService.on('zoomchange', this.updateDisabled);
-    this.updateDisabled();
     return container;
   }
 
@@ -63,22 +55,43 @@ export default class Zoom extends Control {
     return this;
   }
 
-  private zoomIn() {
+  private resetButtonGroup(container: HTMLElement) {
+    DOM.clearChildren(container);
+    this.zoomInButton = this.createButton(
+      this.controlOption.zoomInText,
+      this.controlOption.zoomInTitle,
+      'l7-button-control',
+      container,
+      this.zoomIn,
+    );
+    this.zoomOutButton = this.createButton(
+      this.controlOption.zoomOutText,
+      this.controlOption.zoomOutTitle,
+      'l7-button-control',
+      container,
+      this.zoomOut,
+    );
+    this.updateDisabled();
+  }
+
+  private zoomIn = () => {
     if (
       !this.disabled &&
       this.mapsService.getZoom() < this.mapsService.getMaxZoom()
     ) {
       this.mapsService.zoomIn();
     }
-  }
-  private zoomOut() {
+  };
+
+  private zoomOut = () => {
     if (
       !this.disabled &&
       this.mapsService.getZoom() > this.mapsService.getMinZoom()
     ) {
       this.mapsService.zoomOut();
     }
-  }
+  };
+
   private createButton(
     html: string,
     tile: string,
@@ -86,23 +99,22 @@ export default class Zoom extends Control {
     container: HTMLElement,
     fn: (...arg: any[]) => any,
   ) {
-    const link = DOM.create('a', className, container) as HTMLLinkElement;
+    const link = DOM.create('button', className, container) as HTMLLinkElement;
     link.innerHTML = html;
     link.title = tile;
-    link.href = 'javascript:void(0)';
     link.addEventListener('click', fn);
     return link;
   }
-  private updateDisabled() {
+
+  private updateDisabled = () => {
     const mapsService = this.mapsService;
-    const className = 'l7-disabled';
-    DOM.removeClass(this.zoomInButton, className);
-    DOM.removeClass(this.zoomOutButton, className);
+    this.zoomInButton.removeAttribute('disabled');
+    this.zoomOutButton.removeAttribute('disabled');
     if (this.disabled || mapsService.getZoom() <= mapsService.getMinZoom()) {
-      DOM.addClass(this.zoomOutButton, className);
+      this.zoomOutButton.setAttribute('disabled', 'true');
     }
     if (this.disabled || mapsService.getZoom() >= mapsService.getMaxZoom()) {
-      DOM.addClass(this.zoomInButton, className);
+      this.zoomInButton.setAttribute('disabled', 'true');
     }
-  }
+  };
 }

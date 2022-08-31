@@ -8,14 +8,6 @@ export interface IScaleControlOption extends IControlOption {
   updateWhenIdle: boolean;
   imperial: boolean;
 }
-
-export interface IZoomControlOption extends IControlOption {
-  zoomInText: string;
-  zoomInTitle: string;
-  zoomOutText: string;
-  zoomOutTitle: string;
-}
-
 export interface IMarkerStyleOption {
   element?: (...args: any[]) => any;
   style: { [key: string]: any } | ((...args: any[]) => any);

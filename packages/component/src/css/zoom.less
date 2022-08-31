@@ -1,0 +1,15 @@
+@import 'variables';
+
+.l7-control-zoom {
+  box-shadow: 0 0 6px @l7-btn-control-shadow-color;
+  border-radius: @l7-btn-control-border-radius;
+  overflow: hidden;
+  .l7-button-control {
+    box-shadow: 0 0 0;
+    border-radius: 0;
+    font-size: @l7-btn-icon-size;
+    &:first-child {
+      border-bottom: 1px solid @l7-btn-border-color;
+    }
+  }
+}
