@@ -1,7 +1,7 @@
 // @ts-ignore
-import { Scene, LineLayer, Source, PolygonLayer, PointLayer } from '@antv/l7';
+import { Scene, LineLayer, Source, PolygonLayer, PointLayer, TileDebugLayer } from '@antv/l7';
 // @ts-ignore
-import { Mapbox } from '@antv/l7-maps';
+import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,10 +9,8 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new Mapbox({
+      map: new Map({
         center: [121.268, 30.3628],
-        pitch: 0,
-        style: 'blank',
         zoom: 7,
       }),
     });
@@ -25,9 +23,8 @@ export default () => {
       parser: {
         type: 'mvt',
         tileSize: 256,
-        zoomOffset: 0,
-        maxZoom: 9,
         extent: [-180, -85.051129, 179, 85.051129],
+        maxZoom: 12,
       },
     });
     /**
@@ -38,81 +35,113 @@ export default () => {
      * state_label
      * water
      * road
+     * road_label
      * landuse
+     * landuse_overlay
      * waterway
+     * tunnel
      */
 
     scene.on('loaded', () => {
-
       const admin = new LineLayer({
         sourceLayer: 'admin',
       })
-      .source(source)
-      .shape('simple')
-      .color('#f00')
+        .source(source)
+        .shape('simple')
+        .color('#696969');
       scene.addLayer(admin);
 
       const road = new LineLayer({
-        sourceLayer: 'road'
+        sourceLayer: 'road',
       })
-      .source(source)
-      .shape('simple')
-      .color('#FFA500')
+        .source(source)
+        .shape('simple')
+        .color('#FFA500');
       scene.addLayer(road);
 
+      // const landuse_overlay = new PolygonLayer({
+      //   sourceLayer: 'landuse_overlay',
+      // })
+      //   .source(source)
+      //   .color('#f00');
+      // scene.addLayer(landuse_overlay);
+
+
       const waterway = new LineLayer({
-        sourceLayer: 'waterway'
+        sourceLayer: 'waterway',
       })
-      .source(source)
-      .shape('simple')
-      .color('#87CEFA')
+        .source(source)
+        .shape('simple')
+        .color('#87CEFA');
       scene.addLayer(waterway);
 
-      const landuse = new PolygonLayer({
-        sourceLayer: 'landuse'
+      const tunnel = new LineLayer({
+        sourceLayer: 'tunnel',
       })
-      .source(source)
-      .color('#90EE90')
+        .source(source)
+        .shape('simple')
+        // .color('#A9A9A9');
+        .color('#f00');
+      scene.addLayer(tunnel);
+
+      const landuse = new PolygonLayer({
+        sourceLayer: 'landuse',
+      })
+        .source(source)
+        .color('#90EE90');
       scene.addLayer(landuse);
 
-      const planeLabel = new PointLayer({
-        sourceLayer: 'place_label',
-        zIndex: 1
+      const state_label = new PointLayer({
+        sourceLayer: 'state_label',
+        zIndex: 1,
       })
-      .source(source)
-      .shape('name', 'text')
-      .color('#000')
-      .size(8)
-      scene.addLayer(planeLabel);
+        .source(source)
+        .shape('name', 'text')
+        .color('#000')
+        .size(10);
+      scene.addLayer(state_label);
+
+      // const placeLabel = new PointLayer({
+      //   sourceLayer: 'place_label',
+      //   zIndex: 1,
+      // })
+      //   .source(source)
+      //   .shape('name', 'text')
+      //   .color('#000')
+      //   .size(8);
+      // scene.addLayer(placeLabel);
 
       const marineLabel = new PointLayer({
         sourceColor: 'marine_label',
-        zIndex: 1
+        zIndex: 1,
       })
-      .source(source)
-      .shape('name', 'text')
-      .color('#0ff')
-      .size(15)
-      scene.addLayer(marineLabel)
+        .source(source)
+        .shape('name', 'text')
+        .color('#0ff')
+        .size(15);
+      scene.addLayer(marineLabel);
 
       const countryLabel = new PointLayer({
         sourceLayer: 'country_label',
-        zIndex: 2
+        zIndex: 2,
       })
-      .source(source)
-      .shape('name', 'text')
-      .color('#f00')
-      .size(15)
+        .source(source)
+        .shape('name', 'text')
+        .color('#f00')
+        .size(15);
       scene.addLayer(countryLabel);
 
       const water = new PolygonLayer({
         sourceLayer: 'water',
       })
-      .source(source)
-      .color('#87CEFA');
+        .source(source)
+        .color('#87CEFA');
       scene.addLayer(water);
-      
 
+      const debugerLayer = new TileDebugLayer();
+      scene.addLayer(debugerLayer);
+      // scene.on('zoom', e => console.log(e))
+      
     });
   }, []);
   return (

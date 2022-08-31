@@ -49,6 +49,8 @@ export default () => {
           .active(true);
         scene.addLayer(polygon);
 
+        scene.on('zoom', e => console.log(scene.getZoom()))
+
         // const point = new PointLayer({
         //   featureId: 'COLOR',
         //   sourceLayer: 'testName', // woods hillshade contour ecoregions ecoregions2 city
