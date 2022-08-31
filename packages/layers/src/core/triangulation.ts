@@ -183,9 +183,7 @@ export function TileSimpleLineTriangulation(feature: IEncodeFeature) {
       count: 0,
     };
   }
-  const { results } = getTileSimpleLineVertices(
-    coordinates as IPosition[],
-  );
+  const { results } = getTileSimpleLineVertices(coordinates as IPosition[]);
   results.map((point) => {
     pos.push(point[0], point[1], point[2], point[3]);
   });
@@ -208,7 +206,7 @@ function pushDis(point: number[], n?: number) {
   if (point.length < 3) {
     point.push(0);
   }
-  if(n !== undefined) {
+  if (n !== undefined) {
     point.push(n);
   }
   return point;
@@ -265,11 +263,10 @@ function getTileSimpleLineVertices(points: number[][]) {
     }
     results.push(pushDis(points[points.length - 1]));
     return {
-      results
+      results,
     };
   }
 }
-
 
 export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
