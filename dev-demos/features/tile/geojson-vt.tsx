@@ -49,7 +49,7 @@ export default () => {
           .active(true);
         scene.addLayer(polygon);
 
-        scene.on('zoom', e => console.log(scene.getZoom()))
+        scene.on('zoom', (e) => console.log(scene.getZoom()));
 
         // const point = new PointLayer({
         //   featureId: 'COLOR',

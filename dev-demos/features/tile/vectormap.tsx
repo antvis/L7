@@ -1,5 +1,12 @@
 // @ts-ignore
-import { Scene, LineLayer, Source, PolygonLayer, PointLayer, TileDebugLayer } from '@antv/l7';
+import {
+  Scene,
+  LineLayer,
+  Source,
+  PolygonLayer,
+  PointLayer,
+  TileDebugLayer,
+} from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -65,7 +72,6 @@ export default () => {
       //   .source(source)
       //   .color('#f00');
       // scene.addLayer(landuse_overlay);
-
 
       const waterway = new LineLayer({
         sourceLayer: 'waterway',
@@ -141,7 +147,6 @@ export default () => {
       const debugerLayer = new TileDebugLayer();
       scene.addLayer(debugerLayer);
       // scene.on('zoom', e => console.log(e))
-      
     });
   }, []);
   return (
