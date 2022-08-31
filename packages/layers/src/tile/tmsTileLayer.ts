@@ -44,7 +44,7 @@ export class TMSTileLayer extends BaseTileLayer {
         }
       });
 
-    this.parent.renderLayers();
+    // this.parent.renderLayers();
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片
