@@ -49,9 +49,7 @@ export default class MouseLocation extends Control<
     if (transform) {
       position = transform(position);
     }
-    if (position) {
-      this.insertLocation2HTML(position);
-    }
+    this.insertLocation2HTML(position);
     this.emit('locationChange', position);
   };
 
