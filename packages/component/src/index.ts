@@ -1,4 +1,3 @@
-import Scale from './control/scale';
 import Marker from './marker';
 import MarkerLayer from './marker-layer';
 import Popup from './popup';
@@ -16,7 +15,8 @@ export * from './control/mapTheme';
 export * from './control/layerControl';
 export * from './control/mouseLocation';
 export * from './control/zoom';
+export * from './control/scale';
 
-export { Scale, Marker, Popup, MarkerLayer, createL7Icon };
+export { Marker, Popup, MarkerLayer, createL7Icon };
 
 export * from './interface';

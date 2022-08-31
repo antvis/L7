@@ -1,13 +1,5 @@
-import { IControlOption } from '@antv/l7-core';
-
 export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
 
-export interface IScaleControlOption extends IControlOption {
-  maxWidth: number;
-  metric: boolean;
-  updateWhenIdle: boolean;
-  imperial: boolean;
-}
 export interface IMarkerStyleOption {
   element?: (...args: any[]) => any;
   style: { [key: string]: any } | ((...args: any[]) => any);
