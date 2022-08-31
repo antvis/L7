@@ -8,7 +8,6 @@ import {
 } from '@antv/l7-core';
 import {
   calculateCentroid,
-  getMask,
   padBounds,
 } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
@@ -20,8 +19,8 @@ import {
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
-import textFrag from '../shaders/text_frag.glsl';
-import textVert from '../shaders/text_vert.glsl';
+import textFrag from '../shaders/tileText/text_frag.glsl';
+import textVert from '../shaders/tileText/text_vert.glsl';
 
 export function TextTriangulation(feature: IEncodeFeature) {
   // @ts-ignore
@@ -105,7 +104,6 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
-      raisingHeight = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
@@ -117,53 +115,7 @@ export default class TextModel extends BaseModel {
       textAllowOverlap,
     };
 
-    if (
-      this.dataTextureTest &&
-      this.dataTextureNeedUpdate({
-        opacity,
-        strokeWidth,
-        stroke,
-      })
-    ) {
-      this.judgeStyleAttributes({
-        opacity,
-        strokeWidth,
-        stroke,
-      });
-
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
-
     return {
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
-      u_raisingHeight: Number(raisingHeight),
-
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
@@ -190,21 +142,16 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.mapping();
 
     this.layer
       .buildLayerModel({
-        moduleName: 'pointText',
+        moduleName: 'pointTileText',
         vertexShader: textVert,
         fragmentShader: textFrag,
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
       })
       .then((model) => {
         callbackModel([model]);
@@ -217,39 +164,15 @@ export default class TextModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.dataTexture?.destroy();
     this.layer.off('remapping', this.mapping);
   }
   protected registerBuiltinAttributes() {
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'rotate',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Rotate',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { rotate = 0 } = feature;
-          return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
-        },
-      },
-    });
     this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_textOffsets',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -503,10 +426,6 @@ export default class TextModel extends BaseModel {
   }
 
   private reBuildModel() {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     this.layer
       .buildLayerModel({
@@ -516,7 +435,6 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
       })
       .then((model) => {
         this.layer.models = [model];

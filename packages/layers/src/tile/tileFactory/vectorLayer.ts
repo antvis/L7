@@ -6,7 +6,7 @@ import {
   IPolygonLayerStyleOptions,
 } from '../../core/interface';
 import lineFillModel from '../../line/models/tile';
-import lineSimpleModel from '../../line/models/simpleLine';
+import lineSimpleModel from '../../line/models/simpleTileLine';
 
 import pointTextModel from '../../point/models/tileText';
 import pointFillModel from '../../point/models/tile';
