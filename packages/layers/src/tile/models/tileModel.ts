@@ -8,7 +8,7 @@ export default class TileModel extends BaseModel {
 
   public initModels() {
     const source = this.layer.getSource();
-    if (source?.data.isTile) {
+    if (source?.data.isTile && !this.layer.tileLayer) {
       this.layer.tileLayer = new TMSTileLayer({
         parent: this.layer,
         rendererService: this.rendererService,

@@ -71,7 +71,7 @@ export default class TileFactory implements ITileFactory {
       vectorTileLayer: null,
       source: null,
     };
-    const { sourceLayer, featureId, transforms, layerType, shape } = initOptions;
+    const { sourceLayer, featureId, transforms, layerType, shape, usage } = initOptions;
     if (!sourceLayer) {
       return emptyData;
     }
@@ -108,6 +108,7 @@ export default class TileFactory implements ITileFactory {
           parser: {
             type: 'geojson',
             featureId,
+            usage,
           },
           transforms
         },

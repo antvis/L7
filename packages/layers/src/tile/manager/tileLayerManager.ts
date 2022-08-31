@@ -186,6 +186,7 @@ export class TileLayerManager implements ITileLayerManager {
 
 
     this.initOptions = {
+      usage: source.parser.usage,
       layerType: this.parent.type,
       transforms: this.transforms,
       shape: layerShape,

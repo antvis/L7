@@ -18,7 +18,8 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [121.268, 30.3628],
-        zoom: 7,
+        // zoom: 12,
+        zoom: 3,
       }),
     });
 
@@ -31,7 +32,7 @@ export default () => {
         type: 'mvt',
         tileSize: 256,
         extent: [-180, -85.051129, 179, 85.051129],
-        maxZoom: 12,
+        usage: 'basemap',
       },
     });
     /**
@@ -55,6 +56,7 @@ export default () => {
       })
         .source(source)
         .shape('simple')
+        .size(1)
         .color('#696969');
       scene.addLayer(admin);
 
@@ -73,22 +75,22 @@ export default () => {
       //   .color('#f00');
       // scene.addLayer(landuse_overlay);
 
-      const waterway = new LineLayer({
-        sourceLayer: 'waterway',
-      })
-        .source(source)
-        .shape('simple')
-        .color('#87CEFA');
-      scene.addLayer(waterway);
+      // const waterway = new LineLayer({
+      //   sourceLayer: 'waterway',
+      // })
+      //   .source(source)
+      //   .shape('simple')
+      //   .color('#87CEFA');
+      // scene.addLayer(waterway);
 
-      const tunnel = new LineLayer({
-        sourceLayer: 'tunnel',
-      })
-        .source(source)
-        .shape('simple')
-        // .color('#A9A9A9');
-        .color('#f00');
-      scene.addLayer(tunnel);
+      // const tunnel = new LineLayer({
+      //   sourceLayer: 'tunnel',
+      // })
+      //   .source(source)
+      //   .shape('simple')
+      //   // .color('#A9A9A9');
+      //   .color('#f00');
+      // scene.addLayer(tunnel);
 
       const landuse = new PolygonLayer({
         sourceLayer: 'landuse',
@@ -117,15 +119,15 @@ export default () => {
       //   .size(8);
       // scene.addLayer(placeLabel);
 
-      const marineLabel = new PointLayer({
-        sourceColor: 'marine_label',
-        zIndex: 1,
-      })
-        .source(source)
-        .shape('name', 'text')
-        .color('#0ff')
-        .size(15);
-      scene.addLayer(marineLabel);
+      // const marineLabel = new PointLayer({
+      //   sourceColor: 'marine_label',
+      //   zIndex: 1,
+      // })
+      //   .source(source)
+      //   .shape('name', 'text')
+      //   .color('#0ff')
+      //   .size(15);
+      // scene.addLayer(marineLabel);
 
       const countryLabel = new PointLayer({
         sourceLayer: 'country_label',
@@ -146,7 +148,10 @@ export default () => {
 
       const debugerLayer = new TileDebugLayer();
       scene.addLayer(debugerLayer);
-      // scene.on('zoom', e => console.log(e))
+
+      // scene.on('zoom', () => {
+      //   console.log(scene.getLayers().length)
+      // })
     });
   }, []);
   return (
