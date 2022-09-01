@@ -45,7 +45,7 @@ module.exports = {
   },
   setupFilesAfterEnv: [ '<rootDir>jest/setupTests.ts' ],
   snapshotSerializers: [ 'enzyme-to-json/serializer' ],
-  coverageReporters: ["html"],
+  coverageReporters: ['html', 'lcov', 'clover'],
   coverageThreshold: {
     global: {
       branches: 9,
