@@ -5,7 +5,7 @@ import {
   Source,
   PolygonLayer,
   PointLayer,
-  TileDebugLayer,
+  // TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
@@ -60,13 +60,13 @@ export default () => {
         .color('#696969');
       scene.addLayer(admin);
 
-      // const road = new LineLayer({
-      //   sourceLayer: 'road',
-      // })
-      //   .source(source)
-      //   .shape('simple')
-      //   .color('#FFA500');
-      // scene.addLayer(road);
+      const road = new LineLayer({
+        sourceLayer: 'road',
+      })
+        .source(source)
+        .shape('simple')
+        .color('#FFA500');
+      scene.addLayer(road);
 
       // const landuse_overlay = new PolygonLayer({
       //   sourceLayer: 'landuse_overlay',
@@ -146,8 +146,8 @@ export default () => {
         .color('#87CEFA');
       scene.addLayer(water);
 
-      const debugerLayer = new TileDebugLayer();
-      scene.addLayer(debugerLayer);
+      // const debugerLayer = new TileDebugLayer();
+      // scene.addLayer(debugerLayer);
 
       // scene.on('zoom', () => {
       //   console.log(scene.getLayers().length)
