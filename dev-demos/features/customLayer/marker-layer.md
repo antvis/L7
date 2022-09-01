@@ -43,10 +43,8 @@ export default () => {
     )
       .then((res) => res.json())
       .then((nodes) => {
-        const markerLayer = new MarkerLayer(
-          {cluster:true}
-        );
-        for (let i = 0; i < 400; i++) {
+        const markerLayer = new MarkerLayer({ cluster: true });
+        for (let i = 0; i < 1000; i++) {
           const { coordinates } = nodes.features[i].geometry;
           const el = document.createElement('label');
           el.textContent = coordinates[1];
