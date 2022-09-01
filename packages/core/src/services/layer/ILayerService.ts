@@ -606,6 +606,7 @@ export interface ILayerService {
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;
+  reRender(): void;
   renderLayers(type?: string): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;

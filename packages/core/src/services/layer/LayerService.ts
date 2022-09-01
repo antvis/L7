@@ -8,6 +8,7 @@ import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerService } from './ILayerService';
+import { throttle } from 'lodash';
 
 @injectable()
 export default class LayerService implements ILayerService {
@@ -40,6 +41,11 @@ export default class LayerService implements ILayerService {
 
   @inject(TYPES.IGlobalConfigService)
   private readonly configService: IGlobalConfigService;
+
+  public reRender =  throttle(() => {
+    this.updateLayerRenderList();
+    this.renderLayers();
+  }, 32)
 
   public add(layer: ILayer) {
     if (this.sceneInited) {

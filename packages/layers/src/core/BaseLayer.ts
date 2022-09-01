@@ -1380,8 +1380,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private reRender() {
     if (this.inited) {
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     }
   }
   private splitValuesAndCallbackInAttribute(
