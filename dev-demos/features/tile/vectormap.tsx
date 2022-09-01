@@ -5,7 +5,7 @@ import {
   Source,
   PolygonLayer,
   PointLayer,
-  // TileDebugLayer,
+  TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
@@ -19,7 +19,7 @@ export default () => {
       map: new Map({
         center: [121.268, 30.3628],
         // zoom: 12,
-        zoom: 3,
+        zoom: 7,
       }),
     });
 
@@ -119,15 +119,15 @@ export default () => {
       //   .size(8);
       // scene.addLayer(placeLabel);
 
-      // const marineLabel = new PointLayer({
-      //   sourceColor: 'marine_label',
-      //   zIndex: 1,
-      // })
-      //   .source(source)
-      //   .shape('name', 'text')
-      //   .color('#0ff')
-      //   .size(15);
-      // scene.addLayer(marineLabel);
+      const marineLabel = new PointLayer({
+        sourceColor: 'marine_label',
+        zIndex: 1,
+      })
+        .source(source)
+        .shape('name', 'text')
+        .color('#0ff')
+        .size(15);
+      scene.addLayer(marineLabel);
 
       const countryLabel = new PointLayer({
         sourceLayer: 'country_label',
@@ -146,8 +146,8 @@ export default () => {
         .color('#87CEFA');
       scene.addLayer(water);
 
-      // const debugerLayer = new TileDebugLayer();
-      // scene.addLayer(debugerLayer);
+      const debugerLayer = new TileDebugLayer();
+      scene.addLayer(debugerLayer);
 
       // scene.on('zoom', () => {
       //   console.log(scene.getLayers().length)

@@ -975,11 +975,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // remove child layer
-    this.layerChildren.map((child: ILayer) => child.destroy());
+    this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
 
     // remove mask list
-    this.masks.map((mask: ILayer) => mask.destroy());
+    this.masks.map((mask: ILayer) => mask.destroy(false));
     this.masks = [];
 
     this.hooks.beforeDestroy.call();
