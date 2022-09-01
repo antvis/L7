@@ -128,7 +128,6 @@ export default class TextModel extends BaseModel {
   }
 
   public initModels(callbackModel: (models: IModel[]) => void) {
-    this.layer.on('remapping', this.mapping);
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -164,7 +163,6 @@ export default class TextModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.layer.off('remapping', this.mapping);
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
