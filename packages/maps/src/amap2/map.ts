@@ -17,14 +17,15 @@ import {
   IViewport,
   MapServiceEvent,
   TYPES,
+  IMapCamera,
 } from '@antv/l7-core';
 import { amap2Project, DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapInstance } from '../../typings/index';
-import { SimpleMapCoord } from '../simpleMapCoord';
-import { toPaddingOptions } from '../utils';
+import { SimpleMapCoord } from '../utils/simpleMapCoord';
+import { toPaddingOptions } from '../utils/utils';
 import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
@@ -213,6 +214,7 @@ export default class AMapService
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
   }
+  public updateView(_viewOption: Partial<IMapCamera>): void {}
 
   public getMapCanvasContainer(): HTMLElement {
     return this.map
@@ -465,7 +467,7 @@ export default class AMapService
             resolve();
           }, 30);
         } else {
-          this.$mapContainer = this.creatAmapContainer(
+          this.$mapContainer = this.creatMapContainer(
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
@@ -527,6 +529,7 @@ export default class AMapService
         }
       }
     });
+    this.initViewPort();
   }
 
   public meterToCoord(center: [number, number], outer: [number, number]) {
@@ -586,7 +589,7 @@ export default class AMapService
     this.cameraChangedCallback = callback;
   }
 
-  public initViewPort() {
+  private initViewPort() {
     // @ts-ignore
     const {
       // @ts-ignore
@@ -704,7 +707,7 @@ export default class AMapService
     return MapTheme[name] ? MapTheme[name] : name;
   }
 
-  private creatAmapContainer(id: string | HTMLDivElement) {
+  private creatMapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {
       $wrapper = document.getElementById(id) as HTMLDivElement;

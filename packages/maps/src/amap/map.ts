@@ -17,14 +17,15 @@ import {
   IViewport,
   MapServiceEvent,
   TYPES,
+  IMapCamera,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
-import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
-import { toPaddingOptions } from '../utils';
+import { ISimpleMapCoord, SimpleMapCoord } from '../utils/simpleMapCoord';
+import { toPaddingOptions } from '../utils/utils';
 import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
@@ -356,7 +357,7 @@ export default class AMapService
             resolve();
           }, 30);
         } else {
-          this.$mapContainer = this.creatAmapContainer(
+          this.$mapContainer = this.creatMapContainer(
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
@@ -435,6 +436,8 @@ export default class AMapService
 
     return coordDis / meterDis;
   }
+
+  public updateView(viewOption: Partial<IMapCamera>): void {}
 
   public exportMap(type: 'jpg' | 'png'): string {
     const renderCanvas = this.getContainer()?.getElementsByClassName(
@@ -534,7 +537,7 @@ export default class AMapService
   private getMapStyle(name: string): string {
     return MapTheme[name] ? MapTheme[name] : name;
   }
-  private creatAmapContainer(id: string | HTMLDivElement) {
+  private creatMapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {
       $wrapper = document.getElementById(id) as HTMLDivElement;

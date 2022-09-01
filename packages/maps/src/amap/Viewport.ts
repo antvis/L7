@@ -115,10 +115,7 @@ export default class Viewport implements IViewport {
   /**
    * P20 坐标系，固定 scale
    */
-  public projectFlat(
-    lngLat: [number, number],
-    scale?: number | undefined,
-  ): [number, number] {
+  public projectFlat(lngLat: [number, number]): [number, number] {
     const maxs = 85.0511287798;
     const lat = Math.max(Math.min(maxs, lngLat[1]), -maxs);
     // tslint:disable-next-line:no-bitwise

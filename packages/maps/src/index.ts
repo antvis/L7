@@ -10,3 +10,5 @@ import { Version } from './version';
 export { Version, GaodeMap, GaodeMapV2, Mapbox, Map, Earth };
 // export { GaodeMap, GaodeMapV2, Mapbox, Map };
 // export { Map };
+
+export * from './utils'

@@ -17,7 +17,7 @@ export default class Viewport implements IViewport {
 
   private cameraPosition: vec3 = vec3.create();
 
-  private viewport: WebMercatorViewport;
+  protected viewport: WebMercatorViewport;
 
   private projectionMatrix: mat4 = mat4.create();
   private modelMatrix: mat4 = mat4.create();

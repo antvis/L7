@@ -151,7 +151,6 @@ export default class LineWallModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3]];
         },

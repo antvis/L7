@@ -26,7 +26,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/async-hook": "^2.1.0",
+       "@antv/async-hook": "^2.2.2",
     "@antv/l7-core": "2.9.25",
     "@antv/l7-maps": "2.9.25",
     "@antv/l7-source": "2.9.25",

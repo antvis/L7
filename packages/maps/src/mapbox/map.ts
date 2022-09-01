@@ -1,250 +1,34 @@
 /**
  * MapboxService
  */
-import {
-  Bounds,
-  CoordinateSystem,
-  ICoordinateSystemService,
-  IGlobalConfigService,
-  ILngLat,
-  IMapConfig,
-  IMapService,
-  IMercator,
-  IPoint,
-  IStatusOptions,
-  IViewport,
-  MapServiceEvent,
-  MapStyle,
-  TYPES,
-} from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
+import { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import mapboxgl, { Map } from 'mapbox-gl';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';
 import { IMapboxInstance } from '../../typings/index';
-import { Version } from '../version';
 import Viewport from './Viewport';
+import BaeMapService from '../utils/BaeMapService';
 window.mapboxgl = mapboxgl;
-const EventMap: {
-  [key: string]: any;
-} = {
-  mapmove: 'move',
-  camerachange: 'move',
-  zoomchange: 'zoom',
-  dragging: 'drag',
-};
-import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
-import { MapTheme } from './theme';
+
 let mapdivCount = 0;
-const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 const MAPBOX_API_KEY =
-  // 'pk.eyJ1IjoibHp4dWUiLCJhIjoiY2tvaWZuM2s4MWZuYjJ1dHI5ZGduYTlrdiJ9.DQCfMRbZzx0VSwecQ69McA';
   'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ';
 /**
  * AMapService
  */
 @injectable()
-export default class MapboxService
-  implements IMapService<Map & IMapboxInstance> {
-  public version: string = Version.MAPBOX;
-  public map: Map & IMapboxInstance;
-  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
-
-  // 背景色
-  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
-
-  @inject(TYPES.MapConfig)
-  private readonly config: Partial<IMapConfig>;
-
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.ICoordinateSystemService)
-  private readonly coordinateSystemService: ICoordinateSystemService;
-
-  @inject(TYPES.IEventEmitter)
-  private eventEmitter: any;
-  private viewport: Viewport;
-  private markerContainer: HTMLElement;
-  private cameraChangedCallback: (viewport: IViewport) => void;
-  private $mapContainer: HTMLElement | null;
-  public setBgColor(color: string) {
-    this.bgColor = color;
-  }
-
-  // init
-  public addMarkerContainer(): void {
-    const container = this.map.getCanvasContainer();
-    this.markerContainer = DOM.create('div', 'l7-marker-container', container);
-    this.markerContainer.setAttribute('tabindex', '-1');
-  }
-
-  public getMarkerContainer(): HTMLElement {
-    return this.markerContainer;
-  }
-
-  //  map event
-  public on(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.on(type, handle);
-    } else {
-      // 统一事件名称
-      this.map.on(EventMap[type] || type, handle);
-    }
-  }
-  public off(type: string, handle: (...args: any[]) => void): void {
-    this.map.off(EventMap[type] || type, handle);
-    this.eventEmitter.off(type, handle);
-  }
-
-  public getContainer(): HTMLElement | null {
-    return this.map.getContainer();
-  }
-
-  public getMapCanvasContainer(): HTMLElement {
-    return this.map.getCanvasContainer() as HTMLElement;
-  }
-
-  public getSize(): [number, number] {
-    const size = this.map.transform;
-    return [size.width, size.height];
-  }
+export default class MapboxService extends BaeMapService<
+  Map & IMapboxInstance
+> {
   // get mapStatus method
+
+  public viewport: Viewport;
 
   public getType() {
     return 'mapbox';
-  }
-
-  public getZoom(): number {
-    return this.map.getZoom();
-  }
-
-  public setZoom(zoom: number) {
-    return this.map.setZoom(zoom);
-  }
-
-  public getCenter(): ILngLat {
-    return this.map.getCenter();
-  }
-
-  public setCenter(lnglat: [number, number]): void {
-    this.map.setCenter(lnglat);
-  }
-
-  public getPitch(): number {
-    return this.map.getPitch();
-  }
-
-  public getRotation(): number {
-    return this.map.getBearing();
-  }
-
-  public getBounds(): Bounds {
-    return this.map.getBounds().toArray() as Bounds;
-  }
-
-  public getMinZoom(): number {
-    return this.map.getMinZoom();
-  }
-
-  public getMaxZoom(): number {
-    return this.map.getMaxZoom();
-  }
-
-  public setRotation(rotation: number): void {
-    this.map.setBearing(rotation);
-  }
-
-  public zoomIn(option?: any, eventData?: any): void {
-    this.map.zoomIn(option, eventData);
-  }
-  public zoomOut(option?: any, eventData?: any): void {
-    this.map.zoomOut(option, eventData);
-  }
-  public setPitch(pitch: number) {
-    return this.map.setPitch(pitch);
-  }
-
-  public panTo(p: [number, number]): void {
-    this.map.panTo(p);
-  }
-
-  public panBy(x: number, y: number): void {
-    this.panTo([x, y]);
-  }
-
-  public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
-    this.map.fitBounds(bound, fitBoundsOptions as mapboxgl.FitBoundsOptions);
-  }
-
-  public setMaxZoom(max: number): void {
-    this.map.setMaxZoom(max);
-  }
-
-  public setMinZoom(min: number): void {
-    this.map.setMinZoom(min);
-  }
-  public setMapStatus(option: Partial<IStatusOptions>): void {
-    if (option.doubleClickZoom === true) {
-      this.map.doubleClickZoom.enable();
-    }
-    if (option.doubleClickZoom === false) {
-      this.map.doubleClickZoom.disable();
-    }
-    if (option.dragEnable === false) {
-      this.map.dragPan.disable();
-    }
-    if (option.dragEnable === true) {
-      this.map.dragPan.enable();
-    }
-    if (option.rotateEnable === false) {
-      this.map.dragRotate.disable();
-    }
-    if (option.rotateEnable === true) {
-      this.map.dragRotate.enable();
-    }
-    if (option.keyboardEnable === false) {
-      this.map.keyboard.disable();
-    }
-    if (option.keyboardEnable === true) {
-      this.map.keyboard.enable();
-    }
-    if (option.zoomEnable === false) {
-      this.map.scrollZoom.disable();
-    }
-    if (option.zoomEnable === true) {
-      this.map.scrollZoom.enable();
-    }
-  }
-
-  public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    this.map.flyTo({
-      zoom,
-      center,
-    });
-  }
-
-  public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyle(style));
-  }
-  // TODO: 计算像素坐标
-  public pixelToLngLat(pixel: [number, number]): ILngLat {
-    return this.map.unproject(pixel);
-  }
-
-  public lngLatToPixel(lnglat: [number, number]): IPoint {
-    return this.map.project(lnglat);
-  }
-
-  public containerToLngLat(pixel: [number, number]): ILngLat {
-    return this.map.unproject(pixel);
-  }
-
-  public lngLatToContainer(lnglat: [number, number]): IPoint {
-    return this.map.project(lnglat);
   }
 
   /**
@@ -354,7 +138,7 @@ export default class MapboxService
       this.map = mapInstance;
       this.$mapContainer = this.map.getContainer();
     } else {
-      this.$mapContainer = this.creatAmapContainer(id);
+      this.$mapContainer = this.creatMapContainer(id);
       // @ts-ignore
       this.map = new window.mapboxgl.Map({
         container: this.$mapContainer,
@@ -427,49 +211,8 @@ export default class MapboxService
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
   }
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
-  }
 
-  private handleCameraChanged = () => {
-    // @see https://github.com/mapbox/mapbox-gl-js/issues/2572
-    const { lat, lng } = this.map.getCenter().wrap();
-    // Tip: 统一触发地图变化事件
-    this.emit('mapchange');
-    // resync
-    this.viewport.syncWithMapCamera({
-      bearing: this.map.getBearing(),
-      center: [lng, lat],
-      viewportHeight: this.map.transform.height,
-      pitch: this.map.getPitch(),
-      viewportWidth: this.map.transform.width,
-      zoom: this.map.getZoom(),
-      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-      cameraHeight: 0,
-    });
-
-    const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
-
-    // set coordinate system
-    if (this.viewport.getZoom() > offsetZoom) {
-      this.coordinateSystemService.setCoordinateSystem(
-        CoordinateSystem.LNGLAT_OFFSET,
-      );
-    } else {
-      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
-    }
-
-    this.cameraChangedCallback(this.viewport);
-  };
-
-  // private creatAmapContainer(id: string | HTMLDivElement) {
-  //   let $wrapper = id as HTMLDivElement;
-  //   if (typeof id === 'string') {
-  //     $wrapper = document.getElementById(id) as HTMLDivElement;
-  //   }
-  //   return $wrapper;
-  // }
-  private creatAmapContainer(id: string | HTMLDivElement) {
+  protected creatMapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {
       $wrapper = document.getElementById(id) as HTMLDivElement;
@@ -484,11 +227,5 @@ export default class MapboxService
     $amapdiv.id = 'l7_mapbox_div' + mapdivCount++;
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
-  }
-  private getMapStyle(name: MapStyle) {
-    if (typeof name !== 'string') {
-      return name;
-    }
-    return MapTheme[name] ? MapTheme[name] : name;
   }
 }
