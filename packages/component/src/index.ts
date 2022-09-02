@@ -1,6 +1,6 @@
 import Marker from './marker';
 import MarkerLayer from './marker-layer';
-import Popup from './popup';
+import Popup from './popup/popup';
 import { createL7Icon } from './utils/icon';
 
 // 引入样式

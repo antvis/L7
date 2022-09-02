@@ -16,12 +16,10 @@ import {
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 
-/** colse event */
-
 export default class Popup extends EventEmitter implements IPopup {
   private popupOption: IPopupOption;
   private mapsService: IMapService<unknown>;
-  private sceneSerive: ISceneService;
+  private sceneService: ISceneService;
   private lngLat: ILngLat;
   private content: HTMLElement;
   private closeButton: HTMLElement;
@@ -41,7 +39,7 @@ export default class Popup extends EventEmitter implements IPopup {
 
   public addTo(scene: Container) {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
-    this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
+    this.sceneService = scene.get<ISceneService>(TYPES.ISceneService);
     this.mapsService.on('camerachange', this.update);
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;

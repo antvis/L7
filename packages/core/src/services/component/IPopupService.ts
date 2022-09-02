@@ -12,6 +12,7 @@ export interface IPopupOption {
   offsets: number[];
   stopPropagation: boolean;
 }
+
 export interface IPopup {
   addTo(scene: Container): this;
   remove(): void;
@@ -24,6 +25,7 @@ export interface IPopup {
   open(): void;
   close(): void;
 }
+
 export interface IPopupService {
   addPopup(popup: IPopup): void;
   removePopup(popup: IPopup): void;
