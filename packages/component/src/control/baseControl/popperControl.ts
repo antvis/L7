@@ -38,6 +38,11 @@ export default abstract class PopperControl<
     return this.popper;
   }
 
+  public hide() {
+    this.popper.hide();
+    super.hide();
+  }
+
   /**
    * 获取默认配置
    * @param option

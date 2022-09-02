@@ -1,4 +1,4 @@
-import { GaodeMap, PositionType, Scene, Zoom } from '@antv/l7';
+import { GaodeMap, PositionType, Scene, MapTheme } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -7,7 +7,7 @@ const POSITION_LIST = Object.values(PositionType);
 
 const Demo: FunctionComponent = () => {
   const [zoom, setZoom] = useState(() => {
-    return new Zoom({
+    return new MapTheme({
       position: 'topleft',
     });
   });
