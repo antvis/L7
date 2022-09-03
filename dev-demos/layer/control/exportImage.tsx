@@ -6,6 +6,7 @@ import { FunctionComponent, useEffect } from 'react';
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | undefined>();
   const [imgSrc, setImgSrc] = useState('');
+  const [control, setControl] = useState<ExportImage | null>(null);
 
   useEffect(() => {
     const newScene = new Scene({
@@ -30,6 +31,7 @@ const Demo: FunctionComponent = () => {
         },
       });
       newScene.addControl(newControl);
+      setControl(newControl);
 
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
@@ -58,6 +60,15 @@ const Demo: FunctionComponent = () => {
 
   return (
     <>
+      <button
+        onClick={() => {
+          control?.setOptions({
+            imageType: 'jpg',
+          });
+        }}
+      >
+        设置导出格式为 JPG
+      </button>
       <div
         id="map"
         style={{
