@@ -96,9 +96,11 @@ export default abstract class PopperControl<
     super.setOptions(option);
 
     if (
-      'popperPlacement' in option ||
-      'popperClassName' in option ||
-      'popperTrigger' in option
+      this.checkUpdateOption(option, [
+        'popperPlacement',
+        'popperTrigger',
+        'popperClassName',
+      ])
     ) {
       const content = this.popper.getContent();
       this.popper.destroy();

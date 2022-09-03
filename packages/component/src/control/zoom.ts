@@ -27,7 +27,16 @@ export default class Zoom extends Control<IZoomControlOption> {
   }
   public setOptions(newOptions: Partial<IZoomControlOption>) {
     super.setOptions(newOptions);
-    this.resetButtonGroup(this.container);
+    if (
+      this.checkUpdateOption(newOptions, [
+        'zoomInText',
+        'zoomInTitle',
+        'zoomOutText',
+        'zoomOutTitle',
+      ])
+    ) {
+      this.resetButtonGroup(this.container);
+    }
   }
 
   public onAdd(): HTMLElement {

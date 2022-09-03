@@ -5,16 +5,12 @@ import SelectControl, {
   OptionItem,
 } from './baseControl/selectControl';
 
-export interface IMapStyleControlOption extends ISelectControlOption {
-  mapType: string;
-}
-
 export { MapTheme };
 
-export default class MapTheme extends SelectControl<IMapStyleControlOption> {
+export default class MapTheme extends SelectControl<ISelectControlOption> {
   public getDefault(
-    option?: Partial<IMapStyleControlOption>,
-  ): IMapStyleControlOption {
+    option?: Partial<ISelectControlOption>,
+  ): ISelectControlOption {
     return {
       ...super.getDefault(option),
       title: '地图样式',

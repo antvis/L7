@@ -46,6 +46,16 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
     });
   }
 
+  public setOptions(option: Partial<ILayerControlOption>) {
+    super.setOptions(option);
+    if (this.checkUpdateOption(option, ['layers'])) {
+      this.layers.forEach(this.bindLayerVisibleCallback);
+      this.selectValue = this.getLayerVisible();
+      this.controlOption.options = this.getLayerOptions();
+      this.popper.setContent(this.getPopperContent(this.controlOption.options));
+    }
+  }
+
   public onAdd(): HTMLElement {
     if (!this.controlOption.options?.length) {
       this.controlOption.options = this.getLayerOptions();
@@ -55,12 +65,16 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
-    this.layers.forEach((layer) => {
-      layer.on('show', this.onLayerVisibleChane);
-      layer.on('hide', this.onLayerVisibleChane);
-    });
+    this.layers.forEach(this.bindLayerVisibleCallback);
     return super.onAdd();
   }
+
+  public bindLayerVisibleCallback = (layer: ILayer) => {
+    layer.off('show', this.onLayerVisibleChane);
+    layer.off('hide', this.onLayerVisibleChane);
+    layer.on('show', this.onLayerVisibleChane);
+    layer.on('hide', this.onLayerVisibleChane);
+  };
 
   public onRemove() {
     this.off('selectChange', this.onSelectChange);

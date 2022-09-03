@@ -14,6 +14,8 @@ import { FunctionComponent, useEffect } from 'react';
 const Demo: FunctionComponent = () => {
   const [layers, setLayers] = useState<ILayer[]>([]);
   const [scene, setScene] = useState<Scene | undefined>();
+  const [newLayer, setNewLayer] = useState<ILayer | null>(null);
+  const [control, setControl] = useState<LayerControl | null>(null);
 
   useEffect(() => {
     const newScene = new Scene({
@@ -50,7 +52,8 @@ const Demo: FunctionComponent = () => {
                 opacity: 0.3,
                 strokeWidth: 1,
               });
-            newLayers.push(pointLayer);
+            setNewLayer(pointLayer);
+            newScene.addLayer(pointLayer);
           }),
         fetch(
           // 'https://gw.alipayobjects.com/os/bmw-prod/1981b358-28d8-4a2f-9c74-a857d5925ef1.json' //  获取行政区划P噢利用
@@ -88,15 +91,15 @@ const Demo: FunctionComponent = () => {
 
             layer2.hide();
 
+            newScene.addLayer(chinaPolygonLayer);
+            newScene.addLayer(layer2);
             newLayers.push(chinaPolygonLayer, layer2);
           }),
       ]).then(() => {
-        newLayers.forEach((layer) => {
-          newScene.addLayer(layer);
-        });
         const newControl = new LayerControl({
           layers: newLayers,
         });
+        setControl(newControl);
         newScene.addControl(newControl);
         setLayers(newLayers);
         setScene(newScene);
@@ -117,6 +120,19 @@ const Demo: FunctionComponent = () => {
         }}
       >
         切换点图层显隐
+      </button>
+      <button
+        onClick={() => {
+          if (newLayer && control && !layers.includes(newLayer)) {
+            const newLayers = [...layers, newLayer];
+            control?.setOptions({
+              layers: newLayers,
+            });
+            setLayers(newLayers);
+          }
+        }}
+      >
+        添加新的管理图层
       </button>
       <div
         id="map"

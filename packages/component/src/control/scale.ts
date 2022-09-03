@@ -48,7 +48,17 @@ export default class Scale extends Control<IScaleControlOption> {
 
   public setOptions(newOption: Partial<IScaleControlOption>) {
     super.setOptions(newOption);
-    this.resetScaleLines(this.container);
+    if (
+      this.checkUpdateOption(newOption, [
+        'lockWidth',
+        'maxWidth',
+        'metric',
+        'updateWhenIdle',
+        'imperial',
+      ])
+    ) {
+      this.resetScaleLines(this.container);
+    }
   }
 
   public update = () => {

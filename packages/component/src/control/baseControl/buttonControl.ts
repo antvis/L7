@@ -66,30 +66,41 @@ export default abstract class ButtonControl<
     return this.button;
   }
 
-  // tslint:disable-next-line:no-empty
   public onRemove(): void {
     this.button = this.buttonIcon = this.buttonText = undefined;
     this.isDisable = false;
   }
 
+  /**
+   * 更新配置方法
+   * @param newOptions
+   */
   public setOptions(newOptions: Partial<O>) {
     const { title, btnText, btnIcon } = newOptions;
-    if ('title' in newOptions) {
+    if (this.checkUpdateOption(newOptions, ['title'])) {
       this.setBtnTitle(title);
     }
-    if ('btnIcon' in newOptions) {
+    if (this.checkUpdateOption(newOptions, ['btnIcon'])) {
       this.setBtnIcon(btnIcon);
     }
-    if ('btnText' in newOptions) {
+    if (this.checkUpdateOption(newOptions, ['btnText'])) {
       this.setBtnText(btnText);
     }
     super.setOptions(newOptions);
   }
 
+  /**
+   * 设置按钮 title
+   * @param title
+   */
   public setBtnTitle(title: O['title']) {
     this.button?.setAttribute('title', title ?? '');
   }
 
+  /**
+   * 设置按钮 Icon
+   * @param newIcon
+   */
   public setBtnIcon(newIcon: O['btnIcon']) {
     if (this.buttonIcon) {
       DOM.remove(this.buttonIcon);
@@ -105,6 +116,10 @@ export default abstract class ButtonControl<
     }
   }
 
+  /**
+   * 设置按钮文本
+   * @param newText
+   */
   public setBtnText(newText: O['btnText']) {
     if (newText) {
       let btnText = this.buttonText;
