@@ -54,6 +54,7 @@ export interface IMapService<RawMap = {}> {
   // init map
   addMarkerContainer(): void;
   getMarkerContainer(): HTMLElement;
+  getOverlayContainer(): HTMLElement | undefined;
   // MapEvent // 定义事件类型
 
   on(type: string, handler: (...args: any[]) => void): void;

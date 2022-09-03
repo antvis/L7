@@ -438,7 +438,6 @@ export default class AMapService
   }
 
   public updateView(viewOption: Partial<IMapCamera>): void {}
-
   public getOverlayContainer(): HTMLElement | undefined {
     return undefined;
   }
@@ -548,11 +547,11 @@ export default class AMapService
     }
     const $amapdiv = document.createElement('div');
     $amapdiv.style.cssText += `
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 100%;
-    `;
+       position: absolute;
+       top: 0;
+       height: 100%;
+       width: 100%;
+     `;
     $amapdiv.id = 'l7_amap_div' + mapdivCount++;
     $wrapper.appendChild($amapdiv);
     return $amapdiv;

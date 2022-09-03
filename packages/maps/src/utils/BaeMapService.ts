@@ -76,6 +76,9 @@ export default abstract class BaeMapService<T> implements IMapService<Map & T> {
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
   }
+  public getOverlayContainer(): HTMLElement | undefined {
+    return undefined;
+  }
 
   //  map event
   public on(type: string, handle: (...args: any[]) => void): void {

@@ -216,6 +216,10 @@ export default class AMapService
   }
   public updateView(_viewOption: Partial<IMapCamera>): void {}
 
+  public getOverlayContainer(): HTMLElement | undefined {
+    return undefined;
+  }
+
   public getMapCanvasContainer(): HTMLElement {
     return this.map
       .getContainer()
