@@ -19,8 +19,6 @@ uniform float u_stroke_opacity : 1;
 uniform float u_stroke_width : 2;
 uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 
-uniform float u_blur : 0.0;
-
 #pragma include "projection"
 #pragma include "picking"
 
@@ -36,7 +34,7 @@ void main() {
 
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
-  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, u_blur);
+  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, 0.0);
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width));
   offset = project_pixel(offset);

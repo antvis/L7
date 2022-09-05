@@ -19,8 +19,8 @@ import {
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
-import textFrag from '../shaders/tileText/text_frag.glsl';
-import textVert from '../shaders/tileText/text_vert.glsl';
+import textFrag from '../shaders/tile/text_frag.glsl';
+import textVert from '../shaders/tile/text_vert.glsl';
 
 export function TextTriangulation(feature: IEncodeFeature) {
   // @ts-ignore
@@ -277,34 +277,9 @@ export default class TextModel extends BaseModel {
   }
 
   /**
-   * 生成 iconfont 纹理字典
-   */
-  private initIconFontTex() {
-    const {
-      fontWeight = '400',
-      fontFamily = 'sans-serif',
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const data = this.layer.getEncodedData();
-    const characterSet: string[] = [];
-    data.forEach((item: IEncodeFeature) => {
-      let { shape = '' } = item;
-      shape = `${shape}`;
-      if (characterSet.indexOf(shape) === -1) {
-        characterSet.push(shape);
-      }
-    });
-    this.fontService.setFontOptions({
-      characterSet,
-      fontWeight,
-      fontFamily,
-      iconfont: true,
-    });
-  }
-
-  /**
    * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
    */
-  private generateGlyphLayout(iconfont: boolean) {
+  private generateGlyphLayout() {
     // TODO:更新文字布局
     const { mapping } = this.fontService;
     const {
@@ -325,7 +300,7 @@ export default class TextModel extends BaseModel {
         'left',
         spacing,
         textOffset,
-        iconfont,
+        false,
       );
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
       feature.shaping = shaping;
@@ -397,12 +372,11 @@ export default class TextModel extends BaseModel {
    * 初始化文字布局
    */
   private initGlyph() {
-    const { iconfont = false } = this.layer.getLayerConfig();
-    // 1.生成文字纹理（或是生成 iconfont）
-    iconfont ? this.initIconFontTex() : this.initTextFont();
+    // 1.生成文字纹理
+    this.initTextFont();
 
     // 2.生成文字布局
-    this.generateGlyphLayout(iconfont);
+    this.generateGlyphLayout();
   }
   /**
    * 更新文字纹理

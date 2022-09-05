@@ -25,7 +25,6 @@ export default class FillModel extends BaseModel {
       stroke = 'rgba(0,0,0,0)',
     
       blend,
-      blur = 0,
       coord = 'lnglat',
       tileOrigin,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -33,8 +32,7 @@ export default class FillModel extends BaseModel {
     return {
       u_tileOrigin: tileOrigin || [0, 0],
       u_coord: coord === 'lnglat' ? 1.0 : 0.0,
-
-      u_blur: blur,
+      
       u_additive: blend === 'additive' ? 1.0 : 0.0,
     
       u_opacity: Number(opacity),
