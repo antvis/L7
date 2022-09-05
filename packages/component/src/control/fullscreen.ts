@@ -20,12 +20,28 @@ export default class Fullscreen extends ButtonControl<
 
   protected mapContainer: HTMLElement;
 
-  constructor(option: Partial<IFullscreenControlOption>) {
+  constructor(option?: Partial<IFullscreenControlOption>) {
     super(option);
 
     if (!ScreenFull.isEnabled) {
       console.warn('当前浏览器环境不支持对地图全屏化');
     }
+  }
+
+  public setOptions(newOptions: Partial<IFullscreenControlOption>) {
+    const { exitBtnText, exitBtnIcon, exitTitle } = newOptions;
+    if (this.isFullscreen) {
+      if (this.checkUpdateOption(newOptions, ['exitBtnIcon'])) {
+        this.setBtnIcon(exitBtnIcon);
+      }
+      if (this.checkUpdateOption(newOptions, ['exitBtnText'])) {
+        this.setBtnText(exitBtnText);
+      }
+      if (this.checkUpdateOption(newOptions, ['exitTitle'])) {
+        this.setBtnTitle(exitTitle);
+      }
+    }
+    super.setOptions(newOptions);
   }
 
   public onAdd(): HTMLElement {

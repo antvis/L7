@@ -34,8 +34,10 @@ export default class Logo extends Control<ILogoControlOption> {
 
   public setOptions(option: Partial<ILogoControlOption>) {
     super.setOptions(option);
-    DOM.clearChildren(this.container);
-    this.setLogoContent(this.container);
+    if (this.checkUpdateOption(option, ['img', 'href'])) {
+      DOM.clearChildren(this.container);
+      this.setLogoContent(this.container);
+    }
   }
 
   protected setLogoContent(container: HTMLElement) {

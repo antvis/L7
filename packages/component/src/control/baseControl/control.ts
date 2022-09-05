@@ -266,4 +266,14 @@ export default abstract class Control<O extends IControlOption = IControlOption>
       corner.appendChild(container);
     }
   }
+
+  /**
+   * 检查当前传入 option 是否包含 keys 字段
+   * @param option
+   * @param keys
+   * @protected
+   */
+  protected checkUpdateOption(option: Partial<O>, keys: Array<keyof O>) {
+    return keys.some((key) => key in option);
+  }
 }

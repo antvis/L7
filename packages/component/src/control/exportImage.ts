@@ -4,7 +4,7 @@ import ButtonControl, {
 } from './baseControl/buttonControl';
 
 export interface IExportImageControlOption extends IButtonControlOption {
-  imageType: 'png' | 'jpg';
+  imageType: 'png' | 'jpeg';
   onExport: (base64: string) => void;
 }
 
@@ -26,7 +26,7 @@ export default class ExportImage extends ButtonControl<
       ...super.getDefault(option),
       title: '导出图片',
       btnIcon: createL7Icon('l7-icon-tupian'),
-      imageType: 'jpg',
+      imageType: 'png',
     };
   }
 
@@ -64,6 +64,6 @@ export default class ExportImage extends ButtonControl<
     imgList.forEach((img) => {
       context?.drawImage(img, 0, 0, width, height);
     });
-    return canvas.toDataURL(imageType) as string;
+    return canvas.toDataURL(`image/${imageType}`) as string;
   };
 }
