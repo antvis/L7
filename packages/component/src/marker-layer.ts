@@ -1,4 +1,9 @@
-import { IMapService, IMarker, TYPES } from '@antv/l7-core';
+import {
+  IMapService,
+  IMarker,
+  IMarkerContainerAndBounds,
+  TYPES,
+} from '@antv/l7-core';
 import {
   bindAll,
   boundsContains,
@@ -23,7 +28,6 @@ interface IPointFeature {
   };
   properties: any;
 }
-
 export default class MarkerLayer extends EventEmitter {
   private markers: IMarker[] = [];
   private markerLayerOption: IMarkerLayerOption;
@@ -34,6 +38,7 @@ export default class MarkerLayer extends EventEmitter {
   private scene: Container;
   private zoom: number;
   private bbox: IBounds;
+  private containerSize: IMarkerContainerAndBounds;
 
   constructor(option?: Partial<IMarkerLayerOption>) {
     super();
@@ -65,11 +70,30 @@ export default class MarkerLayer extends EventEmitter {
       this.mapsService.on('camerachange', this.update); // amap1.x 更新事件
       this.mapsService.on('viewchange', this.update); // amap2.0 更新事件
     }
+    this.mapsService.on('camerachange', this.setContainerSize.bind(this)); // amap1.x 更新事件
+    this.mapsService.on('viewchange', this.setContainerSize.bind(this)); // amap2.0 更新事件
     this.addMarkers();
     return this;
   }
+
+  private setContainerSize() {
+    if (!this.mapsService) return;
+    const container = this.mapsService.getContainer();
+    this.containerSize = {
+      containerWidth: container?.scrollWidth || 0,
+      containerHeight: container?.scrollHeight || 0,
+      bounds: this.mapsService.getBounds(),
+    };
+  }
+
+  private getContainerSize() {
+    return this.containerSize;
+  }
+
   public addMarker(marker: IMarker) {
     const cluster = this.markerLayerOption.cluster;
+    marker.getMarkerLayerContainerSize = this.getContainerSize.bind(this);
+
     if (cluster) {
       this.addPoint(marker, this.markers.length);
       if (this.mapsService) {
@@ -136,7 +160,10 @@ export default class MarkerLayer extends EventEmitter {
       clusterMarker.remove();
     });
     this.mapsService.off('camerachange', this.update);
+    this.mapsService.off('camerachange', this.setContainerSize.bind(this));
+    this.mapsService.off('viewchange', this.setContainerSize.bind(this));
     this.markers = [];
+    this.points=[];
     this.clusterMarkers = [];
   }
 

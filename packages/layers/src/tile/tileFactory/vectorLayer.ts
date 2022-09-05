@@ -8,7 +8,7 @@ import {
 import lineFillModel from '../../line/models/tile';
 import lineSimpleModel from '../../line/models/simpleLine';
 
-import pointTextModel from '../../point/models/text';
+import pointTextModel from '../../point/models/tileText';
 import pointFillModel from '../../point/models/tile';
 import polygonFillModel from '../../polygon/models/tile';
 

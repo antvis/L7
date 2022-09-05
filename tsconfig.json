@@ -36,6 +36,6 @@
     }
   },
   "include": ["packages"],
-  "exclude": ["node_modules", "packages/**/dist","packages/site"]
+  "exclude": ["node_modules", "packages/**/dist","packages/site","packages/leaflet/**",]
 
 }

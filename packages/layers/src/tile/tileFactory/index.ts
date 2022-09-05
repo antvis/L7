@@ -4,12 +4,14 @@ import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';
 import RasterTileFactory from './raster';
 import RasterDataFactory from './rasterData';
+import TestTile from './test';
 
 export type TileType =
   | 'PolygonLayer'
   | 'PointLayer'
   | 'LineLayer'
-  | 'RasterLayer';
+  | 'RasterLayer'
+  | 'TileDebugLayer';
 
 export function getTileFactory(tileType: TileType, parser: IParserCfg) {
   switch (tileType) {
@@ -19,6 +21,8 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
       return VectorLineTile;
     case 'PointLayer':
       return VectorPointLayer;
+    case 'TileDebugLayer': 
+      return TestTile;
     case 'RasterLayer':
       if (parser.dataType === 'arraybuffer') {
         return RasterDataFactory;

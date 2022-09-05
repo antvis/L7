@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.9.25",
+  "version": "2.9.26",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,11 +26,11 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-       "@antv/async-hook": "^2.2.2",
-    "@antv/l7-core": "2.9.25",
-    "@antv/l7-maps": "2.9.25",
-    "@antv/l7-source": "2.9.25",
-    "@antv/l7-utils": "2.9.25",
+    "@antv/async-hook": "^2.2.2",
+    "@antv/l7-core": "2.9.26",
+    "@antv/l7-maps": "2.9.26",
+    "@antv/l7-source": "2.9.26",
+    "@antv/l7-utils": "2.9.26",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
     "@turf/helpers": "^6.1.4",
@@ -48,7 +48,6 @@
     "gl-vec2": "^1.3.0",
     "inversify": "^5.0.1",
     "lodash": "^4.17.15",
-    "merge-json-schemas": "1.0.0",
     "polyline-miter-util": "^1.0.1",
     "reflect-metadata": "^0.1.13"
   },

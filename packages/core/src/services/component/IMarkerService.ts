@@ -1,4 +1,4 @@
-import { anchorType } from '@antv/l7-utils';
+import { anchorType, IBounds } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import { ILngLat, IMapService, IPoint } from '../map/IMapService';
 import { IPopup } from './IPopupService';
@@ -19,6 +19,13 @@ export interface IMarkerOption {
   extData?: any;
   style?: CSSStyleDeclaration;
 }
+
+export interface IMarkerContainerAndBounds {
+  containerWidth: number;
+  containerHeight: number;
+  bounds: IBounds;
+}
+
 export interface IMarker {
   addTo(scene: Container): void;
   remove(): void;
@@ -32,6 +39,7 @@ export interface IMarker {
   openPopup(): this;
   closePopup(): this;
   setElement(el: HTMLElement): this;
+  getMarkerLayerContainerSize: () => IMarkerContainerAndBounds | void;
 }
 export interface IMarkerService {
   container: HTMLElement;
