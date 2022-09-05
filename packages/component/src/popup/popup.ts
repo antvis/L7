@@ -48,12 +48,6 @@ export default class Popup extends EventEmitter implements IPopup {
   protected lngLat: ILngLat;
 
   /**
-   * popup 内容容器
-   * @protected
-   */
-  protected content: HTMLElement;
-
-  /**
    * 关闭按钮对应的 DOM
    * @protected
    */
@@ -70,6 +64,12 @@ export default class Popup extends EventEmitter implements IPopup {
    * @protected
    */
   protected container: HTMLElement;
+
+  /**
+   * popup 内容容器
+   * @protected
+   */
+  protected content: HTMLElement;
 
   /**
    * 气泡箭头对应的 DOM

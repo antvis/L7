@@ -23,7 +23,6 @@ const Demo: FunctionComponent = () => {
       const newPopup = new Popup({
         closeOnClick: false,
         closeOnEsc: true,
-        followCursor: true,
         offsets: [0, 10],
       });
       newPopup.setLnglat({
