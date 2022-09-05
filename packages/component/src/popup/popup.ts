@@ -316,7 +316,6 @@ export default class Popup extends EventEmitter implements IPopup {
       maxWidth: '240px',
       offsets: [0, 0],
       anchor: anchorType.BOTTOM,
-      className: '',
       stopPropagation: true,
       autoPan: false,
       autoClose: true,
@@ -333,7 +332,7 @@ export default class Popup extends EventEmitter implements IPopup {
 
   protected update() {
     const hasPosition = !!this.lngLat;
-    const { className, maxWidth, anchor } = this.popupOption;
+    const { className, style, maxWidth, anchor } = this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
@@ -342,17 +341,16 @@ export default class Popup extends EventEmitter implements IPopup {
     if (!this.container && popupContainer) {
       this.container = DOM.create(
         'div',
-        'l7-popup',
+        `l7-popup ${className ?? ''}`,
         popupContainer as HTMLElement,
       );
 
+      if (style) {
+        this.container.setAttribute('style', style);
+      }
+
       this.tip = DOM.create('div', 'l7-popup-tip', this.container);
       this.container.appendChild(this.content);
-      if (className) {
-        className
-          .split(' ')
-          .forEach((name) => this.container.classList.add(name));
-      }
 
       // 高德地图需要阻止事件冒泡 // 测试mapbox 地图不需要添加
       const { stopPropagation } = this.popupOption;

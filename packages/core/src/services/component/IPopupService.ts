@@ -10,11 +10,12 @@ export interface IPopupOption {
   closeOnEsc: boolean;
   maxWidth: string;
   anchor: anchorType[any];
-  className: string;
   offsets: number[];
   stopPropagation: boolean;
   autoPan: boolean;
   autoClose: boolean;
+  className?: string;
+  style?: string;
 }
 
 export interface IPopup extends EventEmitter {
