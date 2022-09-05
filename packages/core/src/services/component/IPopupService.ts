@@ -7,6 +7,7 @@ export interface IPopupOption {
   closeButton: boolean;
   closeButtonOffsets?: [number, number];
   closeOnClick: boolean;
+  closeOnEsc: boolean;
   maxWidth: string;
   anchor: anchorType[any];
   className: string;
@@ -18,6 +19,7 @@ export interface IPopupOption {
 
 export interface IPopup extends EventEmitter {
   autoClose: boolean;
+  isDestroy: boolean;
   addTo(scene: Container): this;
   remove(): void;
   setLnglat(lngLat: ILngLat): this;

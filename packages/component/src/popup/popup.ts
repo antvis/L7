@@ -82,6 +82,10 @@ export default class Popup extends EventEmitter implements IPopup {
     return this.popupOption.autoClose;
   }
 
+  public get isDestroy() {
+    return !this.mapsService;
+  }
+
   public getIsShow() {
     return this.isShow;
   }
@@ -102,12 +106,20 @@ export default class Popup extends EventEmitter implements IPopup {
       }, 30) as unknown) as number;
     }
 
+    if (this.popupOption.closeOnEsc) {
+      this.bindEscEvent();
+    }
+
     this.emit('open');
     return this;
   }
 
   // 移除popup
   public remove() {
+    if (this.isDestroy) {
+      return;
+    }
+
     if (this.content) {
       DOM.remove(this.content);
     }
@@ -122,6 +134,7 @@ export default class Popup extends EventEmitter implements IPopup {
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
       this.mapsService.off('click', this.onClickClose);
+      window.removeEventListener('keypress', this.onKeyDown);
       // @ts-ignore
       delete this.mapsService;
     }
@@ -257,6 +270,18 @@ export default class Popup extends EventEmitter implements IPopup {
     }
   }
 
+  protected bindEscEvent() {
+    if (this.popupOption.closeOnEsc) {
+      window.addEventListener('keydown', this.onKeyDown);
+    }
+  }
+
+  protected onKeyDown = (e: KeyboardEvent) => {
+    if (e.keyCode === 27) {
+      this.remove();
+    }
+  };
+
   /**
    * 创建 Popup 内容容器的 DOM （在每次 setHTML 或 setText 时都会被调用）
    * @protected
@@ -295,6 +320,7 @@ export default class Popup extends EventEmitter implements IPopup {
       stopPropagation: true,
       autoPan: false,
       autoClose: true,
+      closeOnEsc: false,
     };
   }
 

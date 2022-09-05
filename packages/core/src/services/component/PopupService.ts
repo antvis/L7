@@ -16,7 +16,9 @@ export default class PopupService implements IPopupService {
   }
 
   public removePopup(popup: IPopup): void {
-    popup.remove();
+    if (!popup.isDestroy) {
+      popup.remove();
+    }
 
     const targetIndex = this.popups.indexOf(popup);
     if (targetIndex > -1) {
@@ -48,6 +50,10 @@ export default class PopupService implements IPopupService {
     } else {
       this.unAddPopups.push(popup);
     }
+
+    popup.on('close', () => {
+      this.removePopup(popup);
+    });
   }
   public initPopup() {
     if (this.unAddPopups.length) {

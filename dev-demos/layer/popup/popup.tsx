@@ -12,7 +12,7 @@ const Demo: FunctionComponent = () => {
       id: 'map',
       map: new GaodeMap({
         style: 'dark',
-        center: [120, 30],
+        center: [120.104697, 30.260704],
         pitch: 0,
         zoom: 15,
       }),
@@ -22,6 +22,7 @@ const Demo: FunctionComponent = () => {
     scene.on('loaded', () => {
       const newPopup = new Popup({
         closeOnClick: false,
+        closeOnEsc: true,
       });
       newPopup.setLnglat({
         lng: 120.104697,
