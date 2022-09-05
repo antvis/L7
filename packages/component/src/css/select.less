@@ -14,21 +14,21 @@
       background-color: @l7-btn-control-bg-hover-color;
     }
     &.l7-select-control-item-active {
-      color: @l7-select-active-color;
+      color: @l7-select-control-active-color;
     }
   }
 }
 
 .l7-select-control-image {
   padding: 12px 12px 0 12px;
-  width: @l7-select-image-popper-width;
+  width: @l7-select-control-image-popper-width;
   display: flex;
   flex-wrap: wrap;
   box-sizing: border-box;
   .l7-select-control-item {
     margin-right: 12px;
     border-radius: @l7-btn-control-border-radius;
-    border: 2px solid @l7-popper-bg-color;
+    border: 2px solid @l7-popper-control-bg-color;
     box-sizing: content-box;
     width: calc((100% - 36px) / 3);
     display: flex;
@@ -51,7 +51,7 @@
       }
     }
     &.l7-select-control-item-active {
-      border-color: @l7-select-active-color;
+      border-color: @l7-select-control-active-color;
     }
     &:nth-child(3n) {
       margin-right: 0;

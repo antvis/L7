@@ -1,4 +1,5 @@
 import { anchorType } from '@antv/l7-utils';
+import EventEmitter from 'eventemitter3';
 import { Container } from 'inversify';
 import { ILngLat } from '../map/IMapService';
 
@@ -13,12 +14,12 @@ export interface IPopupOption {
   stopPropagation: boolean;
 }
 
-export interface IPopup {
+export interface IPopup extends EventEmitter {
   addTo(scene: Container): this;
   remove(): void;
   setLnglat(lngLat: ILngLat): this;
   getLnglat(): ILngLat;
-  setHTML(html: string): this;
+  setHTML(html: string | HTMLElement | HTMLElement[]): this;
   setText(text: string): this;
   setMaxWidth(maxWidth: string): this;
   isOpen(): boolean;

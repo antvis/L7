@@ -1,3 +1,4 @@
+import { createL7Icon } from '@antv/l7-component';
 import {
   ILngLat,
   IMapService,
@@ -17,24 +18,68 @@ import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 
 export default class Popup extends EventEmitter implements IPopup {
-  private popupOption: IPopupOption;
-  private mapsService: IMapService<unknown>;
-  private sceneService: ISceneService;
-  private lngLat: ILngLat;
-  private content: HTMLElement;
-  private closeButton: HTMLElement;
-  private timeoutInstance: any;
-  private container: HTMLElement;
-  private tip: HTMLElement;
-  private scene: Container;
+  /**
+   * 配置
+   * @protected
+   */
+  protected popupOption: IPopupOption;
+  protected mapsService: IMapService;
+  protected sceneService: ISceneService;
+  protected scene: Container;
+
+  /**
+   * 当前气泡所在经纬度
+   * @protected
+   */
+  protected lngLat: ILngLat;
+
+  /**
+   * popup 内容容器
+   * @protected
+   */
+  protected content: HTMLElement;
+
+  /**
+   * 关闭按钮对应的 DOM
+   * @protected
+   */
+  protected closeButton?: HTMLElement;
+
+  /**
+   * 给 MapService 挂在 click 事件的定时器
+   * @protected
+   */
+  protected timeoutInstance?: number;
+
+  /**
+   * Popup 的总容器 DOM，包含 content 和 tip
+   * @protected
+   */
+  protected container: HTMLElement;
+
+  /**
+   * 气泡箭头对应的 DOM
+   * @protected
+   */
+  protected tip: HTMLElement;
+
+  /**
+   * 当前是否展示
+   * @protected
+   */
+  protected isShow: boolean = true;
 
   constructor(cfg?: Partial<IPopupOption>) {
     super();
     this.popupOption = {
-      ...this.getdefault(),
+      ...this.getDefault(),
       ...cfg,
     };
     bindAll(['update', 'onClickClose', 'remove'], this);
+  }
+
+  public getIsShow() {
+    return this.isShow;
   }
 
   public addTo(scene: Container) {
@@ -44,82 +89,27 @@ export default class Popup extends EventEmitter implements IPopup {
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
     this.update();
+
+    // 事件挂载
     if (this.popupOption.closeOnClick) {
-      this.timeoutInstance = setTimeout(() => {
-        this.mapsService.on('click', this.onClickClose);
-      }, 30);
+      this.timeoutInstance = (setTimeout(() => {
+        this.bindMapClickEvent();
+        this.timeoutInstance = undefined;
+      }, 30) as unknown) as number;
     }
+
     this.emit('open');
-    return this;
-  }
-
-  public close(): void {
-    this.remove();
-  }
-
-  public open(): void {
-    this.addTo(this.scene);
-  }
-
-  public setHTML(html: string) {
-    const frag = window.document.createDocumentFragment();
-    const temp = window.document.createElement('body');
-    let child: ChildNode | null;
-    temp.innerHTML = html;
-    while (true) {
-      child = temp.firstChild;
-      if (!child) {
-        break;
-      }
-      frag.appendChild(child);
-    }
-
-    return this.setDOMContent(frag);
-  }
-
-  public setLnglat(lngLat: ILngLat | number[]): this {
-    this.lngLat = lngLat as ILngLat;
-    if (Array.isArray(lngLat)) {
-      this.lngLat = {
-        lng: lngLat[0],
-        lat: lngLat[1],
-      };
-    }
-    if (this.mapsService) {
-      this.mapsService.on('camerachange', this.update);
-      this.mapsService.on('viewchange', this.update);
-    }
-    this.update();
-    return this;
-  }
-  public getLnglat(): ILngLat {
-    return this.lngLat;
-  }
-  public setText(text: string) {
-    return this.setDOMContent(window.document.createTextNode(text));
-  }
-
-  public setMaxWidth(maxWidth: string): this {
-    this.popupOption.maxWidth = maxWidth;
-    this.update();
-    return this;
-  }
-
-  public setDOMContent(htmlNode: ChildNode | DocumentFragment) {
-    this.createContent();
-    this.content.appendChild(htmlNode);
-    this.update();
     return this;
   }
 
   // 移除popup
   public remove() {
     if (this.content) {
-      this.removeDom(this.content);
+      DOM.remove(this.content);
     }
 
     if (this.container) {
-      this.removeDom(this.container);
+      DOM.remove(this.container);
       // @ts-ignore
       delete this.container;
     }
@@ -131,59 +121,160 @@ export default class Popup extends EventEmitter implements IPopup {
       // @ts-ignore
       delete this.mapsService;
     }
-    clearTimeout(this.timeoutInstance);
+    if (this.timeoutInstance) {
+      clearTimeout(this.timeoutInstance);
+    }
     this.emit('close');
     return this;
   }
+
+  public open(): void {
+    this.addTo(this.scene);
+  }
+
+  public close(): void {
+    this.remove();
+  }
+
+  public show(): void {
+    DOM.removeClass(this.container, 'l7-popup-hide');
+    this.isShow = true;
+    this.emit('show');
+  }
+
+  public hide(): void {
+    DOM.addClass(this.container, 'l7-popup-hide');
+    this.isShow = false;
+    this.emit('hide');
+  }
+
+  /**
+   * 设置 HTML 内容
+   * @param html
+   */
+  public setHTML(html: string | HTMLElement | HTMLElement[]) {
+    const frag = window.document.createDocumentFragment();
+    const temp = window.document.createElement('body');
+    let child: ChildNode | null;
+    if (typeof html === 'string') {
+      temp.innerHTML = html;
+    } else if (Array.isArray(html)) {
+      temp.append(...html);
+    } else if (html instanceof HTMLElement) {
+      temp.append(html);
+    }
+    while (true) {
+      child = temp.firstChild;
+      if (!child) {
+        break;
+      }
+      frag.appendChild(child);
+    }
+
+    return this.setDOMContent(frag);
+  }
+
+  /**
+   * 设置 Popup 所在经纬度
+   * @param lngLat
+   */
+  public setLnglat(lngLat: ILngLat | number[]): this {
+    this.lngLat = lngLat as ILngLat;
+    if (Array.isArray(lngLat)) {
+      this.lngLat = {
+        lng: lngLat[0],
+        lat: lngLat[1],
+      };
+    }
+    if (this.mapsService) {
+      this.mapsService.off('camerachange', this.update);
+      this.mapsService.off('viewchange', this.update);
+      this.mapsService.on('camerachange', this.update);
+      this.mapsService.on('viewchange', this.update);
+    }
+    this.update();
+    return this;
+  }
+
+  /**
+   * 获取 Popup 所在经纬度
+   */
+  public getLnglat(): ILngLat {
+    return this.lngLat;
+  }
+
+  /**
+   * 设置 Popup 展示文本
+   * @param text
+   */
+  public setText(text: string) {
+    return this.setDOMContent(window.document.createTextNode(text));
+  }
+
+  /**
+   * 设置 Popup 最大宽度
+   * @param maxWidth
+   */
+  public setMaxWidth(maxWidth: string): this {
+    this.popupOption.maxWidth = maxWidth;
+    this.update();
+    return this;
+  }
+
   public isOpen() {
     return !!this.mapsService;
   }
 
-  private createContent() {
+  /**
+   * 设置 Popup 内容 HTML
+   * @param htmlNode
+   */
+  protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
+    this.createContent();
+    this.content.appendChild(htmlNode);
+    this.update();
+    return this;
+  }
+
+  /**
+   * 绑定地图点击事件触发销毁 Popup
+   * @protected
+   */
+  protected bindMapClickEvent() {
+    this.mapsService.off('click', this.onClickClose);
+    if (!this.popupOption.closeOnClick) {
+      this.mapsService.on('click', this.onClickClose);
+    }
+  }
+
+  /**
+   * 创建 Popup 内容容器的 DOM （在每次 setHTML 或 setText 时都会被调用）
+   * @protected
+   */
+  protected createContent() {
     if (this.content) {
       DOM.remove(this.content);
     }
     this.content = DOM.create('div', 'l7-popup-content', this.container);
     if (this.popupOption.closeButton) {
-      this.closeButton = DOM.create(
-        'button',
-        'l7-popup-close-button',
-        this.content,
-      );
+      const closeButton = createL7Icon('l7-icon-guanbi l7-popup-close-button');
+      this.content.appendChild(closeButton);
 
       if (this.popupOption.closeButtonOffsets) {
         // 关闭按钮的偏移
-        this.closeButton.style.right =
-          this.popupOption.closeButtonOffsets[0] + 'px';
-        this.closeButton.style.top =
-          this.popupOption.closeButtonOffsets[1] + 'px';
+        closeButton.style.right = this.popupOption.closeButtonOffsets[0] + 'px';
+        closeButton.style.top = this.popupOption.closeButtonOffsets[1] + 'px';
       }
 
       // this.closeButton.type = 'button';
-      this.closeButton.setAttribute('aria-label', 'Close popup');
-      this.closeButton.innerHTML = '&#215;';
-      this.closeButton.addEventListener('click', this.onClickClose);
+      closeButton.setAttribute('aria-label', 'Close popup');
+      closeButton.addEventListener('click', this.onClickClose);
+
+      this.closeButton = closeButton;
     }
   }
 
-  private creatDom(tagName: string, className: string, container: HTMLElement) {
-    const el = window.document.createElement(tagName);
-    if (className !== undefined) {
-      el.className = className;
-    }
-    if (container) {
-      container.appendChild(el);
-    }
-    return el;
-  }
-
-  private removeDom(node: ChildNode) {
-    if (node.parentNode) {
-      node.parentNode.removeChild(node);
-    }
-  }
-
-  private getdefault() {
+  protected getDefault() {
     return {
       closeButton: true,
       closeOnClick: true,
@@ -195,28 +286,29 @@ export default class Popup extends EventEmitter implements IPopup {
     };
   }
 
-  private onClickClose(e: Event) {
+  protected onClickClose(e: Event) {
     if (e.stopPropagation) {
       e.stopPropagation();
     }
     this.remove();
   }
 
-  private update() {
-    const hasPosition = this.lngLat;
+  protected update() {
+    const hasPosition = !!this.lngLat;
     const { className, maxWidth, anchor } = this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
     const popupContainer = this.mapsService.getMarkerContainer();
+    // 如果当前没有创建 Popup 容器则创建
     if (!this.container && popupContainer) {
-      this.container = this.creatDom(
+      this.container = DOM.create(
         'div',
         'l7-popup',
         popupContainer as HTMLElement,
       );
 
-      this.tip = this.creatDom('div', 'l7-popup-tip', this.container);
+      this.tip = DOM.create('div', 'l7-popup-tip', this.container);
       this.container.appendChild(this.content);
       if (className) {
         className
@@ -238,16 +330,22 @@ export default class Popup extends EventEmitter implements IPopup {
 
       this.container.style.whiteSpace = 'nowrap';
     }
+
+    // 设置 Popup 的最大宽度
     if (maxWidth && this.container.style.maxWidth !== maxWidth) {
       this.container.style.maxWidth = maxWidth;
     }
 
-    this.updatePosition();
+    this.updateLngLatPosition();
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
     applyAnchorClass(this.container, anchor, 'popup');
   }
 
-  private updatePosition() {
+  /**
+   * 将经纬度转换成对应的像素偏移位置
+   * @protected
+   */
+  protected updateLngLatPosition() {
     if (!this.mapsService) {
       return;
     }

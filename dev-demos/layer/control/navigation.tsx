@@ -25,9 +25,6 @@ const Demo: FunctionComponent = () => {
     newScene.on('loaded', () => {
       const newControl = new Navigation({});
       newScene.addControl(newControl);
-      newScene.on('zoomchange', (e) => {
-        console.log(newScene.getZoom());
-      });
     });
   }, []);
 
