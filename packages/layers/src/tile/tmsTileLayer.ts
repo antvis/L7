@@ -97,7 +97,7 @@ export class TMSTileLayer extends BaseTileLayer {
         'visible',
         tile.isVisible,
       );
-      this.layerService.reRender()
+      this.layerService.reRender();
     });
   }
 }
