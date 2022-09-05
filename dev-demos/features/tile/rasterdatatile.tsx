@@ -14,8 +14,6 @@ export default () => {
       }),
     });
 
-   
-
     scene.on('loaded', () => {
       const layer = new RasterLayer({})
         .source(
