@@ -16,8 +16,22 @@ import {
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
+import { debounce } from 'lodash';
 
 export default class Popup extends EventEmitter implements IPopup {
+  /**
+   * 当前是否互斥气泡
+   */
+  public get autoClose() {
+    return this.popupOption.autoClose;
+  }
+
+  /**
+   * 当前 Popup 是否为销毁
+   */
+  public get isDestroy() {
+    return !this.mapsService;
+  }
   /**
    * 配置
    * @protected
@@ -69,6 +83,18 @@ export default class Popup extends EventEmitter implements IPopup {
    */
   protected isShow: boolean = true;
 
+  protected onMouseMove = debounce(
+    (e: MouseEvent) => {
+      const container = this.mapsService.getMapContainer();
+      const { left = 0, top = 0 } = container?.getBoundingClientRect() ?? {};
+      this.setPopupOffset(e.clientX - left, e.clientY - top);
+    },
+    16,
+    {
+      maxWait: 16,
+    },
+  );
+
   constructor(cfg?: Partial<IPopupOption>) {
     super();
     this.popupOption = {
@@ -76,14 +102,6 @@ export default class Popup extends EventEmitter implements IPopup {
       ...cfg,
     };
     bindAll(['update', 'onClickClose', 'remove'], this);
-  }
-
-  public get autoClose() {
-    return this.popupOption.autoClose;
-  }
-
-  public get isDestroy() {
-    return !this.mapsService;
   }
 
   public getIsShow() {
@@ -108,6 +126,12 @@ export default class Popup extends EventEmitter implements IPopup {
 
     if (this.popupOption.closeOnEsc) {
       this.bindEscEvent();
+    }
+
+    if (this.popupOption.followCursor) {
+      this.mapsService
+        .getContainer()
+        ?.addEventListener('mousemove', this.onMouseMove);
     }
 
     this.emit('open');
@@ -135,6 +159,9 @@ export default class Popup extends EventEmitter implements IPopup {
       this.mapsService.off('viewchange', this.update);
       this.mapsService.off('click', this.onClickClose);
       window.removeEventListener('keypress', this.onKeyDown);
+      this.mapsService
+        .getContainer()
+        ?.removeEventListener('mousemove', this.onMouseMove);
       // @ts-ignore
       delete this.mapsService;
     }
@@ -320,6 +347,7 @@ export default class Popup extends EventEmitter implements IPopup {
       autoPan: false,
       autoClose: true,
       closeOnEsc: false,
+      followCursor: false,
     };
   }
 
@@ -382,13 +410,17 @@ export default class Popup extends EventEmitter implements IPopup {
    * @protected
    */
   protected updateLngLatPosition() {
-    if (!this.mapsService) {
+    if (!this.mapsService && this.popupOption.followCursor) {
       return;
     }
     const { lng, lat } = this.lngLat;
+    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+    this.setPopupOffset(x, y);
+  }
+
+  protected setPopupOffset(left: number, top: number) {
     const { offsets } = this.popupOption;
-    const pos = this.mapsService.lngLatToContainer([lng, lat]);
-    this.container.style.left = pos.x + offsets[0] + 'px';
-    this.container.style.top = pos.y - offsets[1] + 'px';
+    this.container.style.left = left + offsets[0] + 'px';
+    this.container.style.top = top - offsets[1] + 'px';
   }
 }

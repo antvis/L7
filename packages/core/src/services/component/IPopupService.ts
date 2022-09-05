@@ -14,6 +14,7 @@ export interface IPopupOption {
   stopPropagation: boolean;
   autoPan: boolean;
   autoClose: boolean;
+  followCursor: boolean;
   className?: string;
   style?: string;
 }
