@@ -186,11 +186,11 @@ const getVectorTile = async (
             const vectorTileFeature = vectorTile.layers[sourceLayer].feature(i);
             // let feature;
             // if (coord === 'lnglat') {
-             const feature = vectorTileFeature.toGeoJSON(
-                tileParams.x,
-                tileParams.y,
-                tileParams.z,
-              );
+            const feature = vectorTileFeature.toGeoJSON(
+              tileParams.x,
+              tileParams.y,
+              tileParams.z,
+            );
             // } else {
             //   feature = GetGeoJSON(zoom, vectorTileFeature);
             //   // @ts-ignore
@@ -218,9 +218,9 @@ export default function mapboxVectorTile(
 ): IParserData {
   // const coord = cfg?.coord || 'lnglat'; // lnglat - offset
   const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
-  getVectorTile(data, tileParams, tile);
-    // getVectorTile(data, tileParams, tile, coord);
-    
+    getVectorTile(data, tileParams, tile);
+  // getVectorTile(data, tileParams, tile, coord);
+
   const tilesetOptions = {
     ...DEFAULT_CONFIG,
     ...cfg,
