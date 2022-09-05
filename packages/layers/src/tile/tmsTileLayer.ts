@@ -1,6 +1,7 @@
 import { ILayer } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
+import { tileAllLoad } from './utils';
 
 export class TMSTileLayer extends BaseTileLayer {
   public type: string = 'TMS';
@@ -47,44 +48,11 @@ export class TMSTileLayer extends BaseTileLayer {
     }
   }
 
-  public isTileLoaded(tile: Tile) {
-    return tile.layerIDList.length === tile.loadedLayers;
-  }
-
-  public isTileChildLoaded(tile: Tile) {
-    const childs = tile.children;
-    return (
-      childs.filter((child) => this.isTileLoaded(child)).length ===
-      childs.length
-    );
-  }
-
-  public isTileParentLoaded(tile: Tile) {
-    const parent = tile.parent;
-    if (!parent) {
-      return true;
-    } else {
-      return this.isTileLoaded(parent);
-    }
-  }
-
-  public tileAllLoad(tile: Tile, callback: () => void) {
-    const timer = window.setInterval(() => {
-      const isTileLoaded = this.isTileLoaded(tile);
-      const isTileChildLoaded = this.isTileChildLoaded(tile);
-      const isTIleParentLoaded = this.isTileParentLoaded(tile);
-      if (isTileLoaded && isTileChildLoaded && isTIleParentLoaded) {
-        callback();
-        window.clearInterval(timer);
-      }
-    }, 36);
-  }
-
   private emitTileVisibleEvent(tile: Tile, callback: () => void) {
     if (tile.isVisible) {
       callback();
     } else {
-      this.tileAllLoad(tile, () => {
+      tileAllLoad(tile, () => {
         callback();
       });
     }

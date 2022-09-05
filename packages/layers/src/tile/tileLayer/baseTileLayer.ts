@@ -130,28 +130,6 @@ export default class BaseTileLayer implements ITileLayer {
       return;
     }
 
-    this.tilesetManager.tiles
-      .filter((tile) => tile.isLoaded)
-      .map((tile) => {
-        if (tile.layerIDList.length === 0) {
-          const { layers, layerIDList } = this.tileLayerManager.createTile(
-            tile,
-          );
-          tile.layerIDList = layerIDList;
-          this.tileLayerManager.addChilds(layers);
-        } else {
-          if (!tile.isVisibleChange) {
-            return;
-          }
-          const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayersConfig(
-            layers,
-            'visible',
-            tile.isVisible,
-          );
-        }
-      });
-
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
@@ -353,9 +331,7 @@ export default class BaseTileLayer implements ITileLayer {
       this.timer = null;
     }
 
-    // this.timer = setTimeout(() => {
     this.tilesetManager?.update(zoom, latLonBounds);
-    // }, 250);
   }
 
   private bindTilesetEvent() {
@@ -390,7 +366,7 @@ export default class BaseTileLayer implements ITileLayer {
   }
 
   //  防抖操作
-  viewchange = debounce(this.mapchange, 240)
+  viewchange = debounce(this.mapchange, 200)
 
   private getCurrentView() {
     const bounds = this.mapService.getBounds();

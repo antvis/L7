@@ -167,8 +167,7 @@ export default class TileFactory implements ITileFactory {
         .source({
           type: 'FeatureCollection',
           features: [tile.bboxPolygon],
-        })
-        .shape('fill');
+        });
 
       layers.push(masklayer as VectorLayer);
 
@@ -189,7 +188,7 @@ export default class TileFactory implements ITileFactory {
   public getDefautStyleAttributeField(layer: ILayer, type: string) {
     switch (type) {
       case 'size':
-        return 2;
+        return 1;
       case 'color':
         return '#fff';
       case 'shape':
@@ -256,8 +255,7 @@ export default class TileFactory implements ITileFactory {
     const tiles = this.tilesetManager.tiles.filter(
       (t) => t.key === `${xy[0]},${xy[1]},${z}`,
     );
-    const tile = tiles[0];
-    return tile;
+    return tiles[0];
   }
 
   protected emitEvent(layers: ILayer[], isVector?: boolean) {
@@ -268,7 +266,7 @@ export default class TileFactory implements ITileFactory {
           if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(
+            tile && this.getFeatureAndEmitEvent(
               layer,
               'subLayerClick',
               e,
@@ -285,7 +283,7 @@ export default class TileFactory implements ITileFactory {
           if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(
+            tile && this.getFeatureAndEmitEvent(
               layer,
               'subLayerMouseMove',
               e,
@@ -304,7 +302,7 @@ export default class TileFactory implements ITileFactory {
           if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(
+            tile && this.getFeatureAndEmitEvent(
               layer,
               'subLayerMouseMove',
               e,
