@@ -17,13 +17,13 @@ export default class LineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-      coord = 'lnglat',
-      tileOrigin,
+      // coord = 'lnglat',
+      // tileOrigin,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     return {
-      u_tileOrigin: tileOrigin || [0, 0],
-      u_coord: coord === 'lnglat' ? 1.0 : 0.0,
+      // u_tileOrigin: tileOrigin || [0, 0],
+      // u_coord: coord === 'lnglat' ? 1.0 : 0.0,
       u_opacity: Number(opacity),
     };
   }

@@ -10,13 +10,13 @@ export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
-      tileOrigin,
-      coord = 'lnglat',
+      // tileOrigin,
+      // coord = 'lnglat',
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
    
     return {
-      u_tileOrigin: tileOrigin || [0, 0],
-      u_coord: coord === 'lnglat' ? 1.0 : 0.0,
+      // u_tileOrigin: tileOrigin || [0, 0],
+      // u_coord: coord === 'lnglat' ? 1.0 : 0.0,
       u_opacity: opacity,
     };
   }

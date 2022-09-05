@@ -7,8 +7,8 @@ attribute float a_Shape;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
-uniform vec2 u_tileOrigin;
-uniform float u_coord;
+// uniform vec2 u_tileOrigin;
+// uniform float u_coord;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -47,29 +47,29 @@ void main() {
     float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
   }
 
-if(u_coord > 0.0) {
+// if(u_coord > 0.0) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * vec4(project_pos.xy + offset, 0.0, 1.0);
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
   }
-} else {
-  gl_PointSize = 24.0;
-  vec2 pointPos = a_Position.xy;
-  vec4 world = vec4(project_mvt_offset_position(vec4(u_tileOrigin, 0.0, 1.0)).xyz, 1.0); // 瓦片起始点的世界坐标
+// } else {
 
-  vec2 pointOffset =  pointPos *  pow(2.0, u_Zoom); // 瓦片内的点的偏移坐标
+  // vec2 pointPos = a_Position.xy;
+  // vec4 world = vec4(project_mvt_offset_position(vec4(u_tileOrigin, 0.0, 1.0)).xyz, 1.0); // 瓦片起始点的世界坐标
+
+  // vec2 pointOffset =  pointPos *  pow(2.0, u_Zoom); // 瓦片内的点的偏移坐标
   
-  world.xy += offset;
-  world.xy += pointOffset;
+  // world.xy += offset;
+  // world.xy += pointOffset;
 
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_METER_OFFSET || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    // Needs to be divided with project_uCommonUnitsPerMeter
-    world.w *= u_PixelsPerMeter.z;
-  }
+  // if (u_CoordinateSystem == COORDINATE_SYSTEM_METER_OFFSET || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+  //   // Needs to be divided with project_uCommonUnitsPerMeter
+  //   world.w *= u_PixelsPerMeter.z;
+  // }
 
-  gl_Position = u_ViewProjectionMatrix * world + u_ViewportCenterProjection;
-}
+  // gl_Position = u_ViewProjectionMatrix * world + u_ViewportCenterProjection;
+// }
 
  
   setPickingColor(a_PickingColor);

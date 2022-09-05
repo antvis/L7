@@ -34,7 +34,7 @@ export default () => {
           },
         },
       )
-      .shape('simple')
+      // .shape('simple')
       .color('COLOR')
       .size(2)
       .select(true);

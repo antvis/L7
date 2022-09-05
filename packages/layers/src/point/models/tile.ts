@@ -25,13 +25,13 @@ export default class FillModel extends BaseModel {
       stroke = 'rgba(0,0,0,0)',
     
       blend,
-      coord = 'lnglat',
-      tileOrigin,
+      // coord = 'lnglat',
+      // tileOrigin,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
-      u_tileOrigin: tileOrigin || [0, 0],
-      u_coord: coord === 'lnglat' ? 1.0 : 0.0,
+      // u_tileOrigin: tileOrigin || [0, 0],
+      // u_coord: coord === 'lnglat' ? 1.0 : 0.0,
       
       u_additive: blend === 'additive' ? 1.0 : 0.0,
     
