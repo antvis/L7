@@ -12,7 +12,7 @@ const Demo: FunctionComponent = () => {
       id: 'map',
       map: new GaodeMap({
         style: 'dark',
-        center: [120.104697, 30.260704],
+        center: [120, 30],
         pitch: 0,
         zoom: 15,
       }),
@@ -30,6 +30,7 @@ const Demo: FunctionComponent = () => {
       const dom = document.createElement('div');
       dom.innerHTML = 'fadslifjsalkfjasdk';
       newPopup.setHTML(dom);
+      scene.addPopup(newPopup);
 
       const pointLayer = new PointLayer();
       pointLayer
@@ -37,7 +38,6 @@ const Demo: FunctionComponent = () => {
         .color('#ff0000')
         .size(10);
 
-      scene.addPopup(newPopup);
       scene.addLayer(pointLayer);
       setPopup(newPopup);
     });

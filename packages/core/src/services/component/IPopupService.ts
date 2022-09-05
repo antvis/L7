@@ -12,9 +12,12 @@ export interface IPopupOption {
   className: string;
   offsets: number[];
   stopPropagation: boolean;
+  autoPan: boolean;
+  autoClose: boolean;
 }
 
 export interface IPopup extends EventEmitter {
+  autoClose: boolean;
   addTo(scene: Container): this;
   remove(): void;
   setLnglat(lngLat: ILngLat): this;

@@ -78,6 +78,10 @@ export default class Popup extends EventEmitter implements IPopup {
     bindAll(['update', 'onClickClose', 'remove'], this);
   }
 
+  public get autoClose() {
+    return this.popupOption.autoClose;
+  }
+
   public getIsShow() {
     return this.isShow;
   }
@@ -186,6 +190,7 @@ export default class Popup extends EventEmitter implements IPopup {
         lat: lngLat[1],
       };
     }
+    const { lng, lat } = this.lngLat;
     if (this.mapsService) {
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
@@ -193,6 +198,11 @@ export default class Popup extends EventEmitter implements IPopup {
       this.mapsService.on('viewchange', this.update);
     }
     this.update();
+    setTimeout(() => {
+      if (this.popupOption.autoPan) {
+        this.mapsService.panTo([lng, lat]);
+      }
+    }, 0);
     return this;
   }
 
@@ -283,6 +293,8 @@ export default class Popup extends EventEmitter implements IPopup {
       anchor: anchorType.BOTTOM,
       className: '',
       stopPropagation: true,
+      autoPan: false,
+      autoClose: true,
     };
   }
 

@@ -7,33 +7,54 @@ import { IPopup, IPopupService } from './IPopupService';
 @injectable()
 export default class PopupService implements IPopupService {
   private scene: Container;
-  private popup: IPopup;
   private mapsService: IMapService;
-  private unAddPopup: IPopup | null;
+  private popups: IPopup[] = [];
+  private unAddPopups: IPopup[] = [];
+
+  public get isMarkerReady() {
+    return this.mapsService.map && this.mapsService.getMarkerContainer();
+  }
 
   public removePopup(popup: IPopup): void {
     popup.remove();
+
+    const targetIndex = this.popups.indexOf(popup);
+    if (targetIndex > -1) {
+      this.popups.splice(targetIndex, 1);
+    }
+
+    const targetUnAddIndex = this.unAddPopups.indexOf(popup);
+    if (targetUnAddIndex > -1) {
+      this.unAddPopups.splice(targetUnAddIndex, 1);
+    }
   }
 
   public destroy(): void {
-    this.popup.remove();
+    this.popups.forEach((popup) => popup.remove());
   }
 
   public addPopup(popup: IPopup) {
-    if (this.popup) {
-      this.popup.remove();
+    if (popup.autoClose) {
+      [...this.popups, ...this.unAddPopups].forEach((otherPopup) => {
+        if (otherPopup.autoClose) {
+          this.removePopup(popup);
+        }
+      });
     }
-    if (this.mapsService.map && this.mapsService.getMarkerContainer()) {
+
+    if (this.isMarkerReady) {
       popup.addTo(this.scene);
-      this.popup = popup;
+      this.popups.push(popup);
     } else {
-      this.unAddPopup = popup;
+      this.unAddPopups.push(popup);
     }
   }
   public initPopup() {
-    if (this.unAddPopup) {
-      this.addPopup(this.unAddPopup);
-      this.unAddPopup = null;
+    if (this.unAddPopups.length) {
+      this.unAddPopups.forEach((popup) => {
+        this.addPopup(popup);
+        this.unAddPopups = [];
+      });
     }
   }
 
