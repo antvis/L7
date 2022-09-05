@@ -21,13 +21,49 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tap('RegisterStyleAttributePlugin', () => {
-      this.registerBuiltinAttributes(styleAttributeService);
+      this.registerBuiltinAttributes(styleAttributeService, layer);
     });
   }
 
   private registerBuiltinAttributes(
     styleAttributeService: IStyleAttributeService,
+    layer: ILayer
   ) {
+    // 过滤 tileGroup layer （瓦片图层）
+    const source = layer.getSource();
+    switch(source.parser.type) {
+      case 'mvt':
+      case 'testTile':
+      case 'rasterTile':
+        // layer 仅作为 group 使用
+        return;
+    }
+
+    if(layer.type === 'MaskLayer') {
+      this.registerPositionAttribute(styleAttributeService);
+      return;
+    }
+    
+    if(layer.isTileLayer) {
+      this.registerPositionAttribute(styleAttributeService);
+      this.registerColorAttribute(styleAttributeService);
+      return;
+    }
+
+    const { usage } = layer.getLayerConfig();
+    if(usage === 'basemap ') {
+      this.registerPositionAttribute(styleAttributeService);
+      return;
+    }
+
+    // Tip: normal render layer
+    this.registerPositionAttribute(styleAttributeService);
+    this.registerFilterAttribute(styleAttributeService);
+    this.registerColorAttribute(styleAttributeService);
+    this.registerVertexIdAttribute(styleAttributeService);
+  }
+
+  private registerPositionAttribute(styleAttributeService: IStyleAttributeService,) {
     styleAttributeService.registerStyleAttribute({
       name: 'position',
       type: AttributeType.Attribute,
@@ -49,7 +85,9 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         },
       },
     });
+  }
 
+  private registerFilterAttribute(styleAttributeService: IStyleAttributeService,) {
     styleAttributeService.registerStyleAttribute({
       name: 'filter',
       type: AttributeType.Attribute,
@@ -68,6 +106,9 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         },
       },
     });
+  }
+
+  private registerColorAttribute(styleAttributeService: IStyleAttributeService,) {
     styleAttributeService.registerStyleAttribute({
       name: 'color',
       type: AttributeType.Attribute,
@@ -86,6 +127,9 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         },
       },
     });
+  }
+
+  private registerVertexIdAttribute(styleAttributeService: IStyleAttributeService,) {
     styleAttributeService.registerStyleAttribute({
       // 统一注册每个顶点的唯一编号（目前用于样式的数据映射计算使用）
       name: 'vertexId',

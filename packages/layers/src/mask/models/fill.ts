@@ -1,4 +1,5 @@
 import { gl, IModel } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IMaskLayerStyleOptions } from '../../core/interface';
@@ -10,9 +11,11 @@ export default class MaskModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 0,
+      color = '#000'
     } = this.layer.getLayerConfig() as IMaskLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 0.0,
+      u_color: rgb2arr(color),
     };
   }
 

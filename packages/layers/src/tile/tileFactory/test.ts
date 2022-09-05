@@ -59,6 +59,10 @@ export default class TestTile extends TileFactory {
     .shape('simple')
     .color('#000')
 
+    // Tip: sign tile layer
+    text.isTileLayer = true;
+    line.isTileLayer = true;
+
     registerLayers(this.parentLayer, [line, text]);
     text.once('modelLoaded', () => {
       tile.layerLoad();

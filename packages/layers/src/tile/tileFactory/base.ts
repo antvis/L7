@@ -139,6 +139,9 @@ export default class TileFactory implements ITileFactory {
       coord: vectorTileLayer?.l7TileCoord,
       ...this.getLayerInitOption(initOptions),
     });
+
+    // Tip: sign tile layer
+    layer.isTileLayer = true; // vector 、raster
     // vector layer set config
     if (layer.isVector) {
       this.emitEvent([layer]);

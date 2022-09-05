@@ -296,6 +296,7 @@ export interface ILayer {
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
   isVector?: boolean;
+  isTileLayer?: boolean;
   triangulation?: Triangulation | undefined;
 
   /**
@@ -526,6 +527,7 @@ export interface ILayerConfig {
   cursorEnabled?: boolean;
   cursor?: string;
   forward: boolean; // 正方向
+  usage?: string; // 指定图层的使用类型 - 用户地图底图绘制的优化
 
   /**
    * 开启拾取

@@ -159,6 +159,7 @@ export interface IRasterTileLayerStyleOptions extends IBaseLayerStyleOptions {
 export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
   // define
   opacity: number;
+  color: string;
 }
 
 export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {

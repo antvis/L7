@@ -1,7 +1,7 @@
 uniform float u_opacity;
-varying vec4 v_Color;
+uniform vec4 u_color;
 
 void main() {
-  gl_FragColor = v_Color;
+  gl_FragColor = u_color;
   gl_FragColor.a *= u_opacity;
 }
