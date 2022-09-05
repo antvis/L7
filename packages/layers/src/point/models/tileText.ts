@@ -142,7 +142,7 @@ export default class TextModel extends BaseModel {
 
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     this.mapping();
-
+    const usage = this.layer.getSource().parser.usage;
     this.layer
       .buildLayerModel({
         moduleName: 'pointTileText',
@@ -151,6 +151,7 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
+        usage
       })
       .then((model) => {
         callbackModel([model]);
@@ -424,6 +425,7 @@ export default class TextModel extends BaseModel {
   }
 
   private reBuildModel() {
+    const usage = this.layer.getSource().parser.usage;
     this.filterGlyphs();
     this.layer
       .buildLayerModel({
@@ -433,6 +435,7 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
+        usage
       })
       .then((model) => {
         this.layer.models = [model];

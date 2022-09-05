@@ -38,7 +38,7 @@ export default class LineModel extends BaseModel {
       maskInside = true,
       depth = false,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
+    const usage = this.layer.getSource().parser.usage;
     this.layer.triangulation = LineTriangulation;
 
     this.layer
@@ -50,6 +50,7 @@ export default class LineModel extends BaseModel {
         blend: this.getBlend(),
         depth: { enable: depth },
         stencil: getMask(mask, maskInside),
+        usage
       })
       .then((model) => {
         callbackModel([model]);

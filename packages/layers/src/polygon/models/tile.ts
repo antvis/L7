@@ -30,6 +30,7 @@ export default class FillModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const usage = this.layer.getSource().parser.usage;
     this.layer.triangulation = polygonTriangulation;
     this.layer
       .buildLayerModel({
@@ -40,6 +41,7 @@ export default class FillModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        usage
       })
       .then((model) => {
         callbackModel([model]);

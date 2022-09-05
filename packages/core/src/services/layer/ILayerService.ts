@@ -71,6 +71,7 @@ export interface ILayerModelInitializationOptions {
   segmentNumber?: number;
   workerEnabled?: boolean;
   workerOptions?: IWorkerOption;
+  usage?: string;
 }
 
 export interface ILayerModel {
@@ -82,7 +83,7 @@ export interface ILayerModel {
   buildModels(callbackModel: (models: IModel[]) => void): void;
   initModels(callbackModel: (models: IModel[]) => void): void;
   needUpdate(): boolean;
-  clearModels(): void;
+  clearModels(refresh?: boolean): void;
 
   // canvasLayer
   clearCanvas?(): void;

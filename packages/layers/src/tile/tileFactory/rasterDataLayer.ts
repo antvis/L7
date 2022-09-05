@@ -11,12 +11,16 @@ export default class RasterTiffLayer extends BaseLayer<
     this.layerModel = new model(this);
     this.layerModel.initModels((models) => {
       this.models = models;
+      this.emit('modelLoaded', null);
       this.renderLayers();
     });
   }
 
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.models = models;
+      this.emit('modelLoaded', null);
+    });
   }
 
   protected getModelType() {

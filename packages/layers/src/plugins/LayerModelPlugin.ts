@@ -12,7 +12,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
     // 初始化 Model
     layer.buildModels();
     // emit layer model loaded
-    layer.emit('modelLoaded', null);
+    // layer.emit('modelLoaded', null);
     layer.styleNeedUpdate = false;
   }
 
@@ -23,7 +23,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
     // 初始化 Model
     layer.buildModels();
     // emit layer model loaded
-    layer.emit('modelLoaded', null);
+    // layer.emit('modelLoaded', null);
     layer.layerModelNeedUpdate = false;
   }
 

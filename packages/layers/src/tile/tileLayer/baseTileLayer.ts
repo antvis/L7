@@ -10,6 +10,7 @@ import {
 } from '@antv/l7-core';
 import { decodePickingColor, Tile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/tileLayerManager';
+import { debounce } from 'lodash';
 
 export default class BaseTileLayer implements ITileLayer {
   public get children() {
@@ -24,6 +25,7 @@ export default class BaseTileLayer implements ITileLayer {
   public tilesetManager: TilesetManager | undefined;
   public tileLayerManager: ITileLayerManager;
   public scaleField: any;
+  public tileUpdateType: string = 'move';
 
   private lastViewStates: {
     zoom: number;
@@ -31,8 +33,8 @@ export default class BaseTileLayer implements ITileLayer {
   };
 
   private timer: any;
-  private mapService: IMapService;
-  private layerService: ILayerService;
+  protected mapService: IMapService;
+  protected layerService: ILayerService;
   private pickColors: {
     select: any;
     active: any;
@@ -383,9 +385,12 @@ export default class BaseTileLayer implements ITileLayer {
     });
 
     // 地图视野发生改变
-    this.mapService.on('zoomend', () => this.mapchange());
-    this.mapService.on('moveend', () => this.mapchange());
+    this.mapService.on('zoomend', () => this.viewchange());
+    this.mapService.on('moveend', () => this.viewchange());
   }
+
+  //  防抖操作
+  viewchange = debounce(this.mapchange, 240)
 
   private getCurrentView() {
     const bounds = this.mapService.getBounds();

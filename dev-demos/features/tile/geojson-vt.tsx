@@ -46,10 +46,13 @@ export default () => {
         })
           .source(source)
           .color('COLOR')
-          .active(true);
+          // .active(true)
+          .style({
+            opacity: 0.6,
+          });
         scene.addLayer(polygon);
 
-        scene.on('zoom', (e) => console.log(scene.getZoom()));
+        // scene.on('zoom', (e) => console.log(scene.getZoom()));
 
         // const point = new PointLayer({
         //   featureId: 'COLOR',

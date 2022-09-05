@@ -67,7 +67,7 @@ export default class FillModel extends BaseModel {
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
-
+    const usage = this.layer.getSource().parser.usage;
     this.layer.triangulation = PointFillTriangulation;
     this.layer
       .buildLayerModel({
@@ -85,6 +85,7 @@ export default class FillModel extends BaseModel {
         workerOptions: {
           modelType: 'pointTile',
         },
+        usage
       })
       .then((model) => {
         callbackModel([model]);

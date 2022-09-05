@@ -1,3 +1,4 @@
+import { ILayer } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
 
@@ -35,11 +36,11 @@ export class TMSTileLayer extends BaseTileLayer {
             return;
           }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayersConfig(
-            layers,
-            'visible',
-            tile.isVisible,
-          );
+          this.updateTileVisible(tile, layers);
+          // setTimeout(() => {
+          //   // 等待 layer 创建完
+          //   this.tileLayerManager.updateLayersConfig( layers, 'visible', tile.isVisible );
+          // }, 250)
           this.setPickState(layers);
         }
       });
@@ -49,6 +50,72 @@ export class TMSTileLayer extends BaseTileLayer {
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
+    }
+    setTimeout(() => {
+      this.parent.renderLayers();
+    }, 250);
+  }
+
+  public isTileLoaded(tile: Tile) {
+    return tile.layerIDList.length === tile.loadedLayers;
+  }
+
+  public isTileChildLoaded(tile: Tile) {
+    const childs = tile.children;
+    return (
+      childs.filter((child) => this.isTileLoaded(child)).length ===
+      childs.length
+    );
+  }
+
+  public isTileParentLoaded(tile: Tile) {
+    const parent = tile.parent;
+    if (!parent) {
+      return true;
+    } else {
+      return this.isTileLoaded(parent);
+    }
+  }
+
+  public tileLoadCB(tile: Tile, cb: () => void) {
+    const timer = window.setInterval(() => {
+      const isTileLoaded = this.isTileLoaded(tile);
+      const isTileChildLoaded = this.isTileChildLoaded(tile);
+      const isTIleParentLoaded = this.isTileParentLoaded(tile);
+      if (isTileLoaded && isTileChildLoaded && isTIleParentLoaded) {
+        cb();
+        window.clearInterval(timer);
+      }
+    }, 36);
+  }
+
+  private emitTileVisibleEvent(tile: Tile, callback: () => void) {
+    if (tile.isVisible) {
+      callback();
+    } else {
+      this.tileLoadCB(tile, () => {
+        callback();
+      });
+    }
+  }
+
+  private updateTileVisible(tile: Tile, layers: ILayer[]) {
+    const source = this.parent.getSource();
+    const isVector = this.parent.isVector;
+    if (isVector && source.parser?.usage === 'basemap') {
+      this.emitTileVisibleEvent(tile, () => {
+        this.tileLayerManager.updateLayersConfig(
+          layers,
+          'visible',
+          tile.isVisible,
+        );
+      });
+    } else {
+      this.tileLayerManager.updateLayersConfig(
+        layers,
+        'visible',
+        tile.isVisible,
+      );
     }
   }
 }

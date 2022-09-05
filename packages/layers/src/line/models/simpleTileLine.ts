@@ -32,7 +32,7 @@ export default class SimpleLineModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
+    const usage = this.layer.getSource().parser.usage;
     this.layer
       .buildLayerModel({
         moduleName: 'lineTileSimpleNormal',
@@ -43,6 +43,7 @@ export default class SimpleLineModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        usage
       })
       .then((model) => {
         callbackModel([model]);

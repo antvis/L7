@@ -520,7 +520,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public initModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
-  public clearModels() {
+  public clearModels(refresh = true) {
     return;
   }
   public getAttribute(): {
