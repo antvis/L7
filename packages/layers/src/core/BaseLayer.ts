@@ -1152,7 +1152,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       segmentNumber,
       workerEnabled = false,
       workerOptions,
-      usage,
       ...rest
     } = options;
 
@@ -1163,60 +1162,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
     return new Promise((resolve, reject) => {
-      if (usage === 'basemap') {
-        setTimeout(() => {
-          // filter supported worker & worker enabled layer
-          if (
-            workerOptions &&
-            workerOptions.modelType in WorkerSourceMap &&
-            workerEnabled
-          ) {
-            this.styleAttributeService
-              .createAttributesAndIndicesAscy(
-                this.encodedData,
-                segmentNumber,
-                workerOptions,
-              )
-              .then(({ attributes, elements }) => {
-                const m = createModel({
-                  attributes,
-                  uniforms,
-                  fs,
-                  vs,
-                  elements,
-                  blend: BlendTypes[BlendType.normal],
-                  ...rest,
-                });
-                resolve(m);
-              })
-              .catch((err) => reject(err));
-          } else {
-            const {
-              attributes,
-              elements,
-              count,
-            } = this.styleAttributeService.createAttributesAndIndices(
-              this.encodedData,
-              triangulation,
-              segmentNumber,
-            );
-            const modeloptions = {
-              attributes,
-              uniforms,
-              fs,
-              vs,
-              elements,
-              blend: BlendTypes[BlendType.normal],
-              ...rest,
-            };
-            if (count) {
-              modeloptions.count = count;
-            }
-            const m = createModel(modeloptions);
-            resolve(m);
-          }
-        });
-      } else {
+      setTimeout(() => {
         // filter supported worker & worker enabled layer
         if (
           workerOptions &&
@@ -1267,7 +1213,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           const m = createModel(modeloptions);
           resolve(m);
         }
-      }
+      });
     });
   }
 
