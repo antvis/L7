@@ -51,7 +51,7 @@ export class TMSTileLayer extends BaseTileLayer {
   // 节流渲染
   throttleRenderLayers = throttle(() => {
     this.parent.renderLayers();
-  }, 32)
+  }, 32);
 
   public isTileLoaded(tile: Tile) {
     return tile.layerIDList.length === tile.loadedLayers;

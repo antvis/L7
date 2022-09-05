@@ -60,7 +60,12 @@ export default class TestTile extends TileFactory {
     .color('#000')
 
     registerLayers(this.parentLayer, [line, text]);
-
+    text.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
+    line.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
     return {
       layers: [line, text],
       layerIDList: [line.id, text.id],

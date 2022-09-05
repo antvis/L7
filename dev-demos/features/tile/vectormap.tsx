@@ -5,7 +5,7 @@ import {
   Source,
   PolygonLayer,
   PointLayer,
-  // TileDebugLayer,
+  TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
@@ -31,7 +31,7 @@ export default () => {
       parser: {
         type: 'mvt',
         tileSize: 256,
-        extent: [-180, -85.051129, 179, 85.051129],
+        // extent: [-180, -85.051129, 179, 85.051129],
       },
     });
     /**
@@ -145,8 +145,8 @@ export default () => {
         .color('#87CEFA');
       scene.addLayer(water);
 
-      // const debugerLayer = new TileDebugLayer();
-      // scene.addLayer(debugerLayer);
+      const debugerLayer = new TileDebugLayer();
+      scene.addLayer(debugerLayer);
 
       // scene.on('zoom', () => {
       //   console.log(scene.getLayers().length)
