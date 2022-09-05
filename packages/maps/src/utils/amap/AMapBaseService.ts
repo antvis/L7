@@ -23,13 +23,13 @@ import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { IAMapEvent, IAMapInstance } from '../../typings/index';
-import { ISimpleMapCoord, SimpleMapCoord } from '../utils/simpleMapCoord';
-import { toPaddingOptions } from '../utils/utils';
-import { Version } from '../version';
+import { IAMapEvent, IAMapInstance } from '../../../typings/index';
+import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
+import { toPaddingOptions } from '../utils';
+import { Version } from '../../version';
+import Viewport from '../Viewport';
 import './logo.css';
-import { MapTheme } from './theme';
-import Viewport from './Viewport';
+import { MapTheme } from '../theme';
 let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
@@ -54,7 +54,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
  * AMapService
  */
 @injectable()
-export default class AMapService
+export default class AMapBaseService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE1.x'];
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
@@ -67,23 +67,23 @@ export default class AMapService
   public bgColor: string = 'rgba(0, 0, 0, 0)';
 
   @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  protected readonly configService: IGlobalConfigService;
 
   @inject(TYPES.MapConfig)
-  private readonly config: Partial<IMapConfig>;
+  protected readonly config: Partial<IMapConfig>;
 
   @inject(TYPES.ICoordinateSystemService)
-  private readonly coordinateSystemService: ICoordinateSystemService;
+  protected readonly coordinateSystemService: ICoordinateSystemService;
 
   @inject(TYPES.IEventEmitter)
-  private eventEmitter: any;
+  protected eventEmitter: any;
 
-  private markerContainer: HTMLElement;
-  private $mapContainer: HTMLElement | null;
+  protected markerContainer: HTMLElement;
+  protected $mapContainer: HTMLElement | null;
 
-  private viewport: Viewport;
+  protected viewport: IViewport;
 
-  private cameraChangedCallback: (viewport: IViewport) => void;
+  protected cameraChangedCallback: (viewport: IViewport) => void;
   public setBgColor(color: string) {
     this.bgColor = color;
   }
@@ -310,7 +310,7 @@ export default class AMapService
     altitude: number,
     rotate: [number, number, number],
     scale: [number, number, number] = [1, 1, 1],
-    origin: IMercator = { x: 0, y: 0, z: 0 },
+
   ): number[] {
     const flat = this.viewport.projectFlat(lnglat);
     // @ts-ignore
@@ -483,11 +483,11 @@ export default class AMapService
     this.cameraChangedCallback = callback;
   }
 
-  private handleAfterMapChange() {
+  protected handleAfterMapChange() {
     this.emit('mapAfterFrameChange');
   }
 
-  private handleCameraChanged = (e: IAMapEvent): void => {
+  protected handleCameraChanged = (e: IAMapEvent): void => {
     const {
       fov,
       near,
@@ -537,10 +537,10 @@ export default class AMapService
     }
   };
 
-  private getMapStyle(name: string): string {
+  protected getMapStyle(name: string): string {
     return MapTheme[name] ? MapTheme[name] : name;
   }
-  private creatMapContainer(id: string | HTMLDivElement) {
+  protected creatMapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {
       $wrapper = document.getElementById(id) as HTMLDivElement;
