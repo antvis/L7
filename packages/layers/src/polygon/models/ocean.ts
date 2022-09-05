@@ -151,8 +151,7 @@ export default class OceanModel extends BaseModel {
       this.texture1 = initTex(images[0]);
       this.texture2 = initTex(images[1]);
       this.texture3 = initTex(images[2]);
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     });
 
     function initImage(callback: (loadedImages: HTMLImageElement[]) => void) {

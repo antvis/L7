@@ -36,7 +36,7 @@ export default class VectorLayer extends BaseLayer<
     this.layerModel.initModels((models) => {
       this.models = models;
       this.emit('modelLoaded', null);
-      this.renderLayers();
+      this.layerService.throttleRenderLayers();
     });
   }
 

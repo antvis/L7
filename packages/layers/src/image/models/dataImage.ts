@@ -83,8 +83,7 @@ export default class ImageDataModel extends BaseModel {
           width: img.width,
           height: img.height,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
     } else {
       source.data.images.then(
@@ -94,8 +93,7 @@ export default class ImageDataModel extends BaseModel {
             width: imageData[0].width,
             height: imageData[0].height,
           });
-          this.layerService.updateLayerRenderList();
-          this.layerService.renderLayers();
+          this.layerService.reRender();
         },
       );
     }

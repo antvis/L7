@@ -47,6 +47,11 @@ export default class LayerService implements ILayerService {
     this.renderLayers();
   }, 32)
 
+  public throttleRenderLayers = throttle(() => {
+    this.renderLayers();
+  }, 16)
+  
+
   public add(layer: ILayer) {
     if (this.sceneInited) {
       layer.init();

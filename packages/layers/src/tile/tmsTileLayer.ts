@@ -1,7 +1,6 @@
 import { ILayer } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
-import { throttle } from 'lodash';
 
 export class TMSTileLayer extends BaseTileLayer {
   public type: string = 'TMS';
@@ -47,11 +46,6 @@ export class TMSTileLayer extends BaseTileLayer {
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
   }
-
-  // 节流渲染
-  throttleRenderLayers = throttle(() => {
-    this.parent.renderLayers();
-  }, 32);
 
   public isTileLoaded(tile: Tile) {
     return tile.layerIDList.length === tile.loadedLayers;
@@ -103,7 +97,7 @@ export class TMSTileLayer extends BaseTileLayer {
         'visible',
         tile.isVisible,
       );
-      this.throttleRenderLayers();
+      this.layerService.reRender()
     });
   }
 }

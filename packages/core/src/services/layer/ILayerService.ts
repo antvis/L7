@@ -610,6 +610,7 @@ export interface ILayerService {
   removeAllLayers(): void;
   updateLayerRenderList(): void;
   reRender(): void;
+  throttleRenderLayers(): void;
   renderLayers(type?: string): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;

@@ -164,8 +164,7 @@ export default class WaterModel extends BaseModel {
         min: gl.LINEAR,
         mag: gl.LINEAR,
       });
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     };
   }
 }

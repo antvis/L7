@@ -9,7 +9,7 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     this.layerModel.initModels((models) => {
       this.models = models;
       this.emit('modelLoaded', null);
-      this.renderLayers();
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {

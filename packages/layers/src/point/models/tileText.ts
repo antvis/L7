@@ -413,7 +413,7 @@ export default class TextModel extends BaseModel {
       })
       .then((model) => {
         this.layer.models = [model];
-        this.layer.renderLayers();
+        this.layerService.throttleRenderLayers();
       })
       .catch((err) => {
         console.warn(err);

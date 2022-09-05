@@ -11,7 +11,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     this.layerModel.initModels((models) => {
       this.models = models;
       this.emit('modelLoaded', null);
-      this.renderLayers();
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {

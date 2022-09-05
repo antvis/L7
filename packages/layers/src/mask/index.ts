@@ -18,7 +18,6 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
     this.layerModel.initModels((models) => {
       this.models = models;
       this.emit('modelLoaded', null);
-      this.renderLayers();
     });
   }
   public rebuildModels() {

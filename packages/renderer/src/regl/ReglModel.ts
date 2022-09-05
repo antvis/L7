@@ -207,11 +207,11 @@ export default class ReglModel implements IModel {
 
   public destroy() {
     // @ts-ignore
-    this.drawParams.elements.destroy();
+    this.drawParams?.elements?.destroy();
     if (this.options.attributes) {
       Object.values(this.options.attributes).forEach((attr: any) => {
         // @ts-ignore
-        (attr as ReglAttribute).destroy();
+        (attr as ReglAttribute)?.destroy();
       });
     }
     this.destroyed = true;

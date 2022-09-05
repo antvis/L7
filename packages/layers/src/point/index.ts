@@ -24,7 +24,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       this.models = models;
       this.layerService.updateLayerRenderList();
       this.emit('modelLoaded', null);
-      this.renderLayers();
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {

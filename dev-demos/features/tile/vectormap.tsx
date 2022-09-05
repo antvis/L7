@@ -59,13 +59,13 @@ export default () => {
         .color('#696969');
       scene.addLayer(admin);
 
-      // const road = new LineLayer({
-      //   sourceLayer: 'road',
-      // })
-      //   .source(source)
-      //   .shape('simple')
-      //   .color('#FFA500');
-      // scene.addLayer(road);
+      const road = new LineLayer({
+        sourceLayer: 'road',
+      })
+        .source(source)
+        .shape('simple')
+        .color('#FFA500');
+      scene.addLayer(road);
 
       // const landuse_overlay = new PolygonLayer({
       //   sourceLayer: 'landuse_overlay',
