@@ -179,7 +179,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   /**
    * 图层容器
    */
-  private container: Container;
+  protected container: Container;
 
   private encodedData: IEncodeFeature[];
 
@@ -187,14 +187,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private currentPickId: number | null = null;
 
-  private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
+  protected rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
    */
-  private pendingStyleAttributes: Array<{
+  protected pendingStyleAttributes: Array<{
     attributeName: string;
     attributeField: StyleAttributeField;
     attributeValues?: StyleAttributeOption;
@@ -208,7 +208,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private aniamateStatus: boolean = false;
 
-  // TODO: layer 保底颜色
+  // Tip: layer 保底颜色
   private bottomColor = 'rgba(0, 0, 0, 0)';
 
   private isDestroied: boolean = false;
@@ -986,7 +986,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // 清除sources事件
     this.layerSource.off('sourceUpdate', this.sourceEvent);
 
-    this.multiPassRenderer.destroy();
+    this.multiPassRenderer?.destroy();
 
     // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();
@@ -1369,7 +1369,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return {};
   }
 
-  private sourceEvent = () => {
+  protected sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
     const layerConfig = this.getLayerConfig();
     if (layerConfig && layerConfig.autoFit) {
@@ -1380,12 +1380,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.reRender();
   };
 
-  private reRender() {
+  protected reRender() {
     if (this.inited) {
       this.layerService.reRender();
     }
   }
-  private splitValuesAndCallbackInAttribute(
+  protected splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],
   ) {

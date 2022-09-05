@@ -30,6 +30,12 @@ import {
   Timeout,
 } from '../interface';
 
+const EMPTY_FEATURE_DATA = {
+  features: [],
+  featureId: null,
+  vectorTileLayer: null,
+  source: null,
+};
 export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
@@ -65,20 +71,14 @@ export default class TileFactory implements ITileFactory {
   }
 
   public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const emptyData = {
-      features: [],
-      featureId: null,
-      vectorTileLayer: null,
-      source: null,
-    };
     const { sourceLayer, featureId, transforms, layerType, shape, usage } = initOptions;
     if (!sourceLayer) {
-      return emptyData;
+      return EMPTY_FEATURE_DATA;
     }
     const vectorTileLayer = tile.data.layers[sourceLayer];
     const features = vectorTileLayer?.features;
     if (!(Array.isArray(features) && features.length > 0)) {
-      return emptyData;
+      return EMPTY_FEATURE_DATA;
     } else {
       let geofeatures = [];
       if(layerType === 'LineLayer' && shape === 'simple') {
