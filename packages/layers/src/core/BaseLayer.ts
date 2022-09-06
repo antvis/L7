@@ -131,10 +131,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values: any;
   };
 
-  // TODO: 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
+  // 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
   public sceneContainer: Container | undefined;
   public tileLayer: any | undefined;
-  // TODO: 用于保存子图层对象
+  // 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
   // Tip: 用于标识矢量图层
@@ -551,7 +551,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       values,
     };
     this.updateStyleAttribute('shape', field, values, updateOptions);
-    // TODO: 根据 shape 判断是否需要更新 model
+    // Tip: 根据 shape 判断是否需要更新 model
     if (!this.tileLayer) {
       updateShape(this, lastShape, currentShape);
     }
@@ -688,7 +688,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.tileLayer.render();
       return this;
     }
-    // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
+    // this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData() && this.getEncodedData().length !== 0) {
       this.renderModels();
     }
@@ -1287,7 +1287,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public renderModels(isPicking?: boolean) {
-    // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
+    // this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.getEncodedData() && this.getEncodedData().length > 0) {
       if (this.layerModelNeedUpdate && this.layerModel) {
         this.layerModel.buildModels((models: IModel[]) => {

@@ -279,7 +279,7 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   };
 }
 
-// TODO：构建几何图形（带有中心点和大小）
+// 构建几何图形（带有中心点和大小）
 export function polygonTriangulationWithCenter(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);

@@ -366,7 +366,7 @@ export default class AMapService
             ...rest,
           };
           if (mapConstructorOptions.zoom) {
-            // TODO: 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
+            // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
             mapConstructorOptions.zoom += 1;
           }
           // @ts-ignore
@@ -458,7 +458,7 @@ export default class AMapService
   public destroy() {
     this.map.destroy();
 
-    // TODO: 销毁地图可视化层的容器
+    // 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
 
     // @ts-ignore

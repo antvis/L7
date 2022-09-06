@@ -280,7 +280,6 @@ export default class TextModel extends BaseModel {
    * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
    */
   private generateGlyphLayout() {
-    // TODO:更新文字布局
     const { mapping } = this.fontService;
     const {
       spacing = 2,
@@ -356,7 +355,6 @@ export default class TextModel extends BaseModel {
         anchorPointY: pixels.y,
       });
       if (box && box.length) {
-        // TODO：featureIndex
         collisionIndex.insertCollisionBox(box, id);
         return true;
       } else {

@@ -107,7 +107,7 @@ export default class InteractionService extends EventEmitter
         this.hammertime = hammertime;
       }
 
-      // // TODO: 根据场景注册事件到 L7 canvas 上
+      // TODO: 根据场景注册事件到 L7 canvas 上
     }
   }
   private removeEventListenerOnMap() {

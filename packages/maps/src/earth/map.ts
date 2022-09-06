@@ -44,7 +44,7 @@ export default class L7EarthService implements IEarthService<Map> {
   public map: Map;
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
 
-  // TODO: 判断地图是否正在拖拽
+  // 判断地图是否正在拖拽
   public dragging: boolean = false;
 
   // 背景色
@@ -291,7 +291,7 @@ export default class L7EarthService implements IEarthService<Map> {
   }
 
   public destroy() {
-    // TODO: 销毁地图可视化层的容器
+    // 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
 
     this.eventEmitter.removeAllListeners();

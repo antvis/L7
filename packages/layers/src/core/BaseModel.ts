@@ -259,7 +259,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @returns
    */
   public dataTextureNeedUpdate(options: {
-    // TODO: thetaOffset 目前只有 lineLayer/arc 使用
+    // thetaOffset 目前只有 lineLayer/arc 使用
     thetaOffset?: styleSingle;
     opacity?: styleSingle;
     strokeOpacity?: styleSingle;

@@ -85,11 +85,11 @@ float torad(float deg) {
 
 vec3 lglt2xyz(vec2 lnglat) {
   float pi = 3.1415926;
-  // TODO: + Math.PI/2 是为了对齐坐标
+  // + Math.PI/2 是为了对齐坐标
   float lng = torad(lnglat.x) + pi / 2.0;
   float lat = torad(lnglat.y);
 
-  // TODO: 手动增加一些偏移，减轻面的冲突
+  // 手动增加一些偏移，减轻面的冲突
   float radius = u_globel_radius;
 
   float z = radius * cos(lat) * cos(lng);

@@ -402,7 +402,7 @@ export default class L7MapService implements IMapService<Map> {
     this.cameraChangedCallback = callback;
   }
 
-  // TODO: 处理小程序中有底图模式下的相机跟新
+  // 处理小程序中有底图模式下的相机跟新
   private handleMiniCameraChanged = (
     lng: number,
     lat: number,

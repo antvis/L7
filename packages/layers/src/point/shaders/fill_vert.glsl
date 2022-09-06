@@ -130,7 +130,6 @@ void main() {
   // radius(16-bit)
   v_radius = newSize;
 
-  // TODO: billboard
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur);

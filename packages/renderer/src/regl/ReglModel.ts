@@ -195,7 +195,7 @@ export default class ReglModel implements IModel {
           | ReglTexture2D).get();
       }
     });
-    // TODO: 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
+    // 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
     if (!pick) {
       this.drawCommand(reglDrawProps);
     } else {

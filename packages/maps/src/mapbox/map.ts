@@ -372,7 +372,7 @@ export default class MapboxService
   }
 
   public destroy() {
-    // TODO: 销毁地图可视化层的容器
+    // 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
 
     this.eventEmitter.removeAllListeners();

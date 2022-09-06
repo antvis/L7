@@ -5,7 +5,7 @@ const scene = new Scene({
   map: new Earth({})
 });
 
-// TODO: 地球模式下背景色默认为 #000 通过 setBgColor 方法我们可以设置可视化层的背景色
+// 地球模式下背景色默认为 #000 通过 setBgColor 方法我们可以设置可视化层的背景色
 scene.setBgColor('#333');
 
 const earthlayer = new EarthLayer()

@@ -438,7 +438,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.fontService.destroy();
     this.iconService.destroy();
 
-    // TODO: 销毁 container 容器
+    // 销毁 container 容器
     this.$container?.parentNode?.removeChild(this.$container);
 
     this.removeAllListeners();

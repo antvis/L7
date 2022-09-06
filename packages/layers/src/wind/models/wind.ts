@@ -240,7 +240,7 @@ export default class WindModel extends BaseModel {
       this.wind.dropRateBump = dropRateBump;
 
       const { d, w, h } = this.wind.draw();
-      // TODO: 恢复 L7 渲染流程中 gl 状态
+      // 恢复 L7 渲染流程中 gl 状态
       this.rendererService.setBaseState();
       this.texture.update({
         data: d,

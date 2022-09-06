@@ -53,10 +53,10 @@ void main() {
   }
   float intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_aimate.z - u_aimate.y * u_time)), 0.0, 1.0);
   
-  // TODO: 根据叠加模式选择效果
+  // 根据叠加模式选择效果
   if(u_additive > 0.0) {
     gl_FragColor *= intensity;
-    // TODO: 优化水波点 blend additive 模式下有的拾取效果 
+    // 优化水波点 blend additive 模式下有的拾取效果 
     gl_FragColor = filterColorAlpha(gl_FragColor, gl_FragColor.a);
   } else {
     gl_FragColor = vec4(gl_FragColor.xyz, gl_FragColor.a * intensity);

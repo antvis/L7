@@ -340,18 +340,18 @@ export default class BaseTileLayer implements ITileLayer {
     }
     // 瓦片数据加载成功
     this.tilesetManager.on('tile-loaded', (tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
+      // 将事件抛出，图层上可以监听使用
     });
 
     // 瓦片数据从缓存删除或被执行重新加载
     this.tilesetManager.on('tile-unload', (tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
+      // 将事件抛出，图层上可以监听使用
       this.tileUnLoad(tile);
     });
 
     // 瓦片数据加载失败
     this.tilesetManager.on('tile-error', (error, tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
+      // 将事件抛出，图层上可以监听使用
       this.tileError(error);
     });
 
