@@ -30,15 +30,13 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
     this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
     this.layerType = this.rawConfig.layerType;
 
-
     this.rendererService = this.container.get<IRendererService>(
       TYPES.IRendererService,
     );
     this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
 
-
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
-  
+
     this.cameraService = this.container.get<ICameraService>(
       TYPES.ICameraService,
     );
