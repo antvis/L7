@@ -13,6 +13,9 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
     },
   };
   public buildModels() {
+    this.updateLayerConfig({
+      usage: 'basemap'
+    })
     this.layerModel = new TileModel(this);
     this.layerModel.initModels((models) => {
       this.models = models;
