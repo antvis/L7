@@ -70,3 +70,12 @@ scene.on('loaded', () => {
       choropleth.addToScene(scene);
     });
 });
+
+// {
+//   "filename": "china-map.ts",
+//   "title": {
+//     "zh": "中国地图",
+//     "en": "China Map"
+//   },
+//   "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/qSFaP32j8q/4428acf4-9362-4705-90c9-de950be5a177.png"
+// },

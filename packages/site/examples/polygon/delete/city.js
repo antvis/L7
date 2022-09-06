@@ -1,4 +1,3 @@
-
 import { Scene, PolygonLayer, LineLayer, PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 
@@ -13,8 +12,7 @@ const scene = new Scene({
 });
 scene.on('loaded', () => {
   fetch(
-    // 'https://gw.alipayobjects.com/os/bmw-prod/1981b358-28d8-4a2f-9c74-a857d5925ef1.json' //  获取行政区划P噢利用
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json'
+    'https://gw.alipayobjects.com/os/bmw-prod/707cd4be-8ffe-4778-b863-3335eefd5fd5.json' //  获取行政区划P噢利用
   )
     .then(res => res.json())
     .then(data => {
@@ -24,20 +22,32 @@ scene.on('loaded', () => {
         .source(data)
         .color(
           'name',
-          [
-            'rgb(239,243,255)',
-            'rgb(189,215,231)',
-            'rgb(107,174,214)',
-            'rgb(49,130,189)',
-            'rgb(8,81,156)'
-          ]
+          [ '#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15' ]
         )
         .shape('fill')
         .style({
           opacity: 1
         });
-        //  图层边界
+      //  图层边界
       const layer2 = new LineLayer({
+        zIndex: 2
+      })
+        .source(data)
+        .color('#fff')
+        .size(0.5)
+        .style({
+          opacity: 1
+        });
+
+      scene.addLayer(chinaPolygonLayer);
+      scene.addLayer(layer2);
+    });
+
+  fetch(
+    'https://gw.alipayobjects.com/os/bmw-prod/ab42a860-f874-4452-a8b6-4168a36c1f2c.json' //  国界线
+  ).then(res => res.json())
+    .then(data => {
+      const boundaries = new LineLayer({
         zIndex: 2
       })
         .source(data)
@@ -47,11 +57,11 @@ scene.on('loaded', () => {
           opacity: 1
         });
 
-      scene.addLayer(chinaPolygonLayer);
-      scene.addLayer(layer2);
+      scene.addLayer(boundaries);
     });
+
   fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/c4a6aa9d-8923-4193-a695-455fd8f6638c.json' //  标注数据
+    'https://gw.alipayobjects.com/os/bmw-prod/d09a3567-8c0e-4711-b8b8-cd82e8870e4b.json' //  标注数据
   ).then(res => res.json())
     .then(data => {
       const labelLayer = new PointLayer({
@@ -77,3 +87,9 @@ scene.on('loaded', () => {
       scene.addLayer(labelLayer);
     });
 });
+
+// {
+//   "filename": "city.js",
+//   "title": "中国地图市级",
+//   "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*I-dVQ4kzmmoAAAAAAAAAAAAAARQnAQ"
+// },

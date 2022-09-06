@@ -148,3 +148,8 @@ scene.on('loaded', () => {
     });
 });
 
+// {
+//   "filename": "box_select.js",
+//   "title": "框选要素",
+//   "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*G1lyQ6e5gKAAAAAAAAAAAAAAARQnAQ"
+// },

@@ -32,3 +32,9 @@ scene.on('loaded', () => {
       scene.addLayer(provincelayer);
     });
 });
+
+// {
+//   "filename": "texture3D.js",
+//   "title": "手绘地图",
+//   "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*K18EQZoe4awAAAAAAAAAAAAAARQnAQ"
+// }

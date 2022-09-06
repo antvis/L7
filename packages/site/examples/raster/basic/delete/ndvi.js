@@ -65,3 +65,9 @@ async function addLayer() {
 
   scene.addLayer(layer);
 }
+
+// {
+//   "filename": "ndvi.js",
+//   "title": "NDVI",
+//   "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*lpWZQKaCu6cAAAAAAAAAAAAAARQnAQ"
+// },
