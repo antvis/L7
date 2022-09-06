@@ -90,7 +90,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (attributesToRemapping.length) {
         // 过滤数据
         if (filter?.needRemapping) {
-          const encodeData = this.mapping(layer, attributes, filterData, undefined, bottomColor)
+          const encodeData = this.mapping(
+            layer,
+            attributes,
+            filterData,
+            undefined,
+            bottomColor,
+          );
           layer.setEncodedData(encodeData);
           filter.needRemapping = false;
         } else {
@@ -125,13 +131,19 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return this.applyAttributeMapping(filter, record, bottomColor)[0];
       });
     }
-    const encodeData = this.mapping(layer, attributes, filterData, undefined, bottomColor);
+    const encodeData = this.mapping(
+      layer,
+      attributes,
+      filterData,
+      undefined,
+      bottomColor,
+    );
     layer.setEncodedData(encodeData);
     // 对外暴露事件
     layer.emit('dataUpdate', null);
   }
 
-  private mapping (
+  private mapping(
     layer: ILayer,
     attributes: IStyleAttribute[],
     data: IParseDataItem[],
@@ -142,12 +154,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
       arrow = {
         enable: false,
       },
-      usage
+      usage,
     } = layer.getLayerConfig() as ILineLayerStyleOptions;
-    if(usage === 'basemap') {
-      return this.mapLayerMapping(layer, attributes, data, predata)
+    if (usage === 'basemap') {
+      return this.mapLayerMapping(layer, attributes, data, predata);
     }
-    const usedAttributes = attributes.filter((attribute) => attribute.scale !== undefined);
+    const usedAttributes = attributes.filter(
+      (attribute) => attribute.scale !== undefined,
+    );
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -155,34 +169,33 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-      usedAttributes
-      .forEach((attribute: IStyleAttribute) => {
-          // console.log('record', record)
-          let values = this.applyAttributeMapping(
-            attribute,
-            record,
-            minimumColor,
+      usedAttributes.forEach((attribute: IStyleAttribute) => {
+        // console.log('record', record)
+        let values = this.applyAttributeMapping(
+          attribute,
+          record,
+          minimumColor,
+        );
+        // console.log('values', values)
+        attribute.needRemapping = false;
+
+        // TODO: 支持每个属性配置 postprocess
+        if (attribute.name === 'color') {
+          // console.log('attribute', attribute)
+          values = values.map((c: unknown) => {
+            return rgb2arr(c as string);
+          });
+        }
+        // @ts-ignore
+        encodeRecord[attribute.name] =
+          Array.isArray(values) && values.length === 1 ? values[0] : values;
+
+        // 增加对 layer/text/iconfont unicode 映射的解析
+        if (attribute.name === 'shape') {
+          encodeRecord.shape = this.fontService.getIconFontKey(
+            encodeRecord[attribute.name] as string,
           );
-          // console.log('values', values)
-          attribute.needRemapping = false;
-
-          // TODO: 支持每个属性配置 postprocess
-          if (attribute.name === 'color') {
-            // console.log('attribute', attribute)
-            values = values.map((c: unknown) => {
-              return rgb2arr(c as string);
-            });
-          }
-          // @ts-ignore
-          encodeRecord[attribute.name] =
-            Array.isArray(values) && values.length === 1 ? values[0] : values;
-
-          // 增加对 layer/text/iconfont unicode 映射的解析
-          if (attribute.name === 'shape') {
-            encodeRecord.shape = this.fontService.getIconFontKey(
-              encodeRecord[attribute.name] as string,
-            );
-          }
+        }
       });
 
       if (
@@ -212,7 +225,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
   ): IEncodeFeature[] {
-    const usedAttributes = attributes.filter((attribute) => attribute.scale !== undefined);
+    const usedAttributes = attributes.filter(
+      (attribute) => attribute.scale !== undefined,
+    );
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -220,41 +235,40 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-      
-      usedAttributes
-        .forEach((attribute: IStyleAttribute) => {
-          // @ts-ignore
-          if(attribute.name === 'shape' && layer.shapeOption?.field === 'simple') {
-            encodeRecord[attribute.name] = 'simple';
-            attribute.needRemapping = false;
-          } else {
-            const values = this.applyMapLayerAttributeMapping(
-              attribute,
-              record,
-            );
-            
-            attribute.needRemapping = false;
-          
-            // @ts-ignore
-            encodeRecord[attribute.name] =
-              Array.isArray(values) && values.length === 1 ? values[0] : values;
-  
-            // 增加对 layer/text/iconfont unicode 映射的解析
-            if (attribute.name === 'shape') {
-              encodeRecord.shape = this.fontService.getIconFontKey(
-                encodeRecord[attribute.name] as string,
-              );
-            }
-          }
-        });
 
-      if(encodeRecord.size === undefined) {
+      usedAttributes.forEach((attribute: IStyleAttribute) => {
+        if (
+          attribute.name === 'shape' &&
+          // @ts-ignore
+          layer.shapeOption?.field === 'simple'
+        ) {
+          encodeRecord[attribute.name] = 'simple';
+          attribute.needRemapping = false;
+        } else {
+          const values = this.applyMapLayerAttributeMapping(attribute, record);
+
+          attribute.needRemapping = false;
+
+          // @ts-ignore
+          encodeRecord[attribute.name] =
+            Array.isArray(values) && values.length === 1 ? values[0] : values;
+
+          // 增加对 layer/text/iconfont unicode 映射的解析
+          if (attribute.name === 'shape') {
+            encodeRecord.shape = this.fontService.getIconFontKey(
+              encodeRecord[attribute.name] as string,
+            );
+          }
+        }
+      });
+
+      if (encodeRecord.size === undefined) {
         // in case not set size
-        encodeRecord.size = 1
+        encodeRecord.size = 1;
       }
       return encodeRecord;
     }) as IEncodeFeature[];
-    
+
     // 调整数据兼容 Amap2.0
     this.adjustData2Amap2Coordinates(mappedData, layer);
 

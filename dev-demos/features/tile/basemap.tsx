@@ -56,23 +56,21 @@ export default () => {
       })
         .source(source)
         .shape('simple')
-        // .size(1)
         .style({
-          color: '#696969'
-        })
-        // .color('#696969');
+          color: '#696969',
+        });
       scene.addLayer(admin);
 
       const road = new LineLayer({
         sourceLayer: 'road',
-        usage: 'basemap'
+        usage: 'basemap',
       })
         .source(source)
         .shape('simple')
         .style({
           color: '#FFA500',
-          size: 2
-        })
+          size: 2,
+        });
       scene.addLayer(road);
 
       // const landuse_overlay = new PolygonLayer({
@@ -101,25 +99,25 @@ export default () => {
 
       const landuse = new PolygonLayer({
         sourceLayer: 'landuse',
-        usage: 'basemap'
+        usage: 'basemap',
       })
         .source(source)
         .style({
-          color: '#90EE90'
+          color: '#90EE90',
         });
       scene.addLayer(landuse);
 
       const state_label = new PointLayer({
         sourceLayer: 'state_label',
         zIndex: 1,
-        usage: 'basemap'
+        usage: 'basemap',
       })
         .source(source)
         .shape('name', 'text')
         .style({
-          color: "#000",
-          size: 16
-        })
+          color: '#000',
+          size: 16,
+        });
       scene.addLayer(state_label);
 
       // const placeLabel = new PointLayer({
@@ -156,12 +154,12 @@ export default () => {
 
       const water = new PolygonLayer({
         sourceLayer: 'water',
-        usage: 'basemap'
+        usage: 'basemap',
       })
         .source(source)
         .style({
-          color: '#87CEFA'
-        })
+          color: '#87CEFA',
+        });
       scene.addLayer(water);
 
       const debugerLayer = new TileDebugLayer();
