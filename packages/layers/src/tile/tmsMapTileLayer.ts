@@ -4,7 +4,7 @@ import BaseTileLayer from './tileLayer/baseMapTileLayer';
 import { tileAllLoad } from './utils';
 
 export class TMSBaseMapTileLayer extends BaseTileLayer {
-  public type: string = 'TMS';
+  public type: string = 'BaseMapTMS';
   public tileUnLoad(tile: Tile) {
     this.tileLayerManager.removeChilds(tile.layerIDList, false);
   }
@@ -31,14 +31,12 @@ export class TMSBaseMapTileLayer extends BaseTileLayer {
           tile.layerIDList.push(...layerIDList);
 
           this.tileLayerManager.addChilds(layers);
-          this.setPickState(layers);
         } else {
           if (!tile.isVisibleChange) {
             return;
           }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
           this.updateTileVisible(tile, layers);
-          this.setPickState(layers);
         }
       });
 

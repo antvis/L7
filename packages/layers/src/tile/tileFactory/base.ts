@@ -152,12 +152,12 @@ export default class TileFactory implements ITileFactory {
     // set source
     layer.source(source);
 
-    // set scale
-    this.setScale(layer);
-
     // set scale attribute field
     this.setStyleAttributeField(layer, 'shape', shape);
     if(usage !== 'basemap') {
+       // set scale
+      this.setScale(layer);
+
       this.setStyleAttributeField(layer, 'color', color);
       this.setStyleAttributeField(layer, 'size', size);
     } else {

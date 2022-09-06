@@ -9,12 +9,10 @@ import {
   ITileLayerManager,
   ITilePickManager,
   ITransform,
-  ScaleAttributeType,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp, Tile } from '@antv/l7-utils';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
-import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
 export class BaseMapTileLayerManager implements ITileLayerManager {
   public sourceLayer: string;
@@ -23,7 +21,6 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
   public mapService: IMapService;
   public rendererService: IRendererService;
   public tilePickManager: ITilePickManager;
-  public tileConfigManager: ITileConfigManager;
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions;
   private rampColorsData: any;
@@ -49,10 +46,8 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
       this.children,
       layerService,
     );
-    this.tileConfigManager = new TileConfigManager();
 
     this.setSubLayerInitOptipn();
-    this.setConfigListener();
     this.initTileFactory();
   }
 
@@ -124,12 +119,11 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
   }
 
   public render(): void {
-    this.tileConfigManager?.checkConfig(this.parent);
     this.tilePickManager?.normalRender(this.children);
   }
 
   public pickLayers(target: IInteractionTarget) {
-    return this.tilePickManager?.pickRender(this.children, target);
+    return false;
   }
 
   private setSubLayerInitOptipn() {
@@ -179,7 +173,6 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
       this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
     }
 
-
     this.initOptions = {
       usage,
       layerType: this.parent.type,
@@ -220,109 +213,6 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
     } else {
       return sourceLayer;
     }
-  }
-
-  private setConfigListener() {
-    // RasterLayer PolygonLayer LineLayer PointLayer
-    // All Tile Layer Need Listen
-    this.tileConfigManager.setConfig('opacity', this.initOptions.opacity);
-    this.tileConfigManager.setConfig('zIndex', this.initOptions.zIndex);
-    this.tileConfigManager.setConfig('mask', this.initOptions.mask);
-
-    if (this.parent.type === 'RasterLayer') {
-      // Raster Tile Layer Need Listen
-      this.tileConfigManager.setConfig(
-        'rampColors',
-        this.initOptions.rampColors,
-      );
-      this.tileConfigManager.setConfig('domain', this.initOptions.domain);
-      this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
-      this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
-
-      this.tileConfigManager.setConfig(
-        'pixelConstant',
-        this.initOptions.pixelConstant,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantR',
-        this.initOptions.pixelConstantR,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantG',
-        this.initOptions.pixelConstantG,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantB',
-        this.initOptions.pixelConstantB,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantRGB',
-        this.initOptions.pixelConstantRGB,
-      );
-    } else {
-      // Vector Tile Layer Need Listen
-      this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);
-      this.tileConfigManager.setConfig(
-        'strokeWidth',
-        this.initOptions.strokeWidth,
-      );
-      this.tileConfigManager.setConfig(
-        'strokeOpacity',
-        this.initOptions.strokeOpacity,
-      );
-      this.tileConfigManager.setConfig(
-        'color',
-        this.parent.getAttribute('color')?.scale,
-      );
-      this.tileConfigManager.setConfig(
-        'shape',
-        this.parent.getAttribute('shape')?.scale,
-      );
-      this.tileConfigManager.setConfig(
-        'size',
-        this.parent.getAttribute('size')?.scale,
-      );
-    }
-
-    this.tileConfigManager.on('updateConfig', (updateConfigs) => {
-      updateConfigs.map((key: string) => {
-        this.updateStyle(key);
-        return '';
-      });
-    });
-  }
-
-  private updateStyle(style: string) {
-    let updateValue = null;
-    if (['size', 'color', 'shape'].includes(style)) {
-      const scaleValue = this.parent.getAttribute(style)?.scale;
-      if (!scaleValue) {
-        return;
-      }
-      updateValue = scaleValue;
-      this.children.map((child) => {
-        this.tileFactory.setStyleAttributeField(
-          child,
-          style as ScaleAttributeType,
-          scaleValue,
-        );
-        return '';
-      });
-    } else {
-      const layerConfig = this.parent.getLayerConfig() as ISubLayerInitOptions;
-      if (!(style in layerConfig)) {
-        return;
-      }
-      // @ts-ignore
-      const config = layerConfig[style];
-      updateValue = config;
-      this.updateLayersConfig(this.children, style, config);
-      if (style === 'rampColors' && config) {
-        this.rampColorsData = generateColorRamp(config as IColorRamp);
-      }
-    }
-    // @ts-ignore
-    this.initOptions[style] = updateValue;
   }
 
   private initTileFactory() {

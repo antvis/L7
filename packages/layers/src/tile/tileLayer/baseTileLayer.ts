@@ -25,14 +25,12 @@ export default class BaseTileLayer implements ITileLayer {
   public tilesetManager: TilesetManager | undefined;
   public tileLayerManager: ITileLayerManager;
   public scaleField: any;
-  public tileUpdateType: string = 'move';
 
   private lastViewStates: {
     zoom: number;
     latLonBounds: [number, number, number, number];
   };
 
-  private timer: any;
   protected mapService: IMapService;
   protected layerService: ILayerService;
   private pickColors: {
@@ -325,11 +323,6 @@ export default class BaseTileLayer implements ITileLayer {
       return;
     }
     this.lastViewStates = { zoom, latLonBounds };
-
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
 
     this.tilesetManager?.update(zoom, latLonBounds);
   }

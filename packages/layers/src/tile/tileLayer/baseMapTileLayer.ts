@@ -8,7 +8,7 @@ import {
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
-import { decodePickingColor, Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile, TilesetManager } from '@antv/l7-utils';
 import { BaseMapTileLayerManager } from '../manager/baseMapTileLayerManager';
 import { debounce } from 'lodash';
 
@@ -25,23 +25,14 @@ export default class BaseTileLayer implements ITileLayer {
   public tilesetManager: TilesetManager | undefined;
   public tileLayerManager: ITileLayerManager;
   public scaleField: any;
-  public tileUpdateType: string = 'move';
 
   private lastViewStates: {
     zoom: number;
     latLonBounds: [number, number, number, number];
   };
 
-  private timer: any;
   protected mapService: IMapService;
   protected layerService: ILayerService;
-  private pickColors: {
-    select: any;
-    active: any;
-  } = {
-    select: null,
-    active: null,
-  };
 
   constructor({
     parent,
@@ -69,8 +60,6 @@ export default class BaseTileLayer implements ITileLayer {
     );
 
     this.initTileSetManager();
-
-    this.scaleField = this.parent.getScaleOptions();
   }
 
   /**
@@ -83,22 +72,12 @@ export default class BaseTileLayer implements ITileLayer {
   }
 
   public clearPick(type: string) {
-    if (type === 'mousemove') {
-      this.tileLayerManager.tilePickManager.clearPick();
-    }
   }
 
   /**
    * 清除 select 的选中状态
    */
   public clearPickState() {
-    this.children
-      .filter((child) => child.inited && child.isVisible())
-      .filter((child) => child.getCurrentSelectedId() !== null)
-      .map((child) => {
-        this.selectFeature(child, new Uint8Array([0, 0, 0, 0]));
-        child.setCurrentSelectedId(null);
-      });
   }
 
   /**
@@ -107,7 +86,7 @@ export default class BaseTileLayer implements ITileLayer {
    * @returns
    */
   public pickLayers(target: IInteractionTarget) {
-    return this.tileLayerManager.pickLayers(target);
+    return false;
   }
 
   public tileLoaded(tile: Tile) {
@@ -133,35 +112,6 @@ export default class BaseTileLayer implements ITileLayer {
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
   }
-
-  protected setPickState(layers: ILayer[]) {
-    if (this.pickColors.select) {
-      const selectedId = decodePickingColor(this.pickColors.select);
-      layers.map((layer) => {
-        this.selectFeature(layer, this.pickColors.select);
-        layer.setCurrentSelectedId(selectedId);
-      });
-    }
-
-    if (this.pickColors.active) {
-      const selectedId = decodePickingColor(this.pickColors.active);
-      layers
-        .filter((layer) => layer.inited && layer.isVisible())
-        .map((layer) => {
-          layer.hooks.beforeHighlight.call(this.pickColors.active);
-          layer.setCurrentPickId(selectedId);
-        });
-    }
-  }
-
-
-  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
-  }
-
-
 
   private initTileSetManager() {
     const source: ISource = this.parent.getSource();
@@ -198,11 +148,6 @@ export default class BaseTileLayer implements ITileLayer {
       return;
     }
     this.lastViewStates = { zoom, latLonBounds };
-
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
 
     this.tilesetManager?.update(zoom, latLonBounds);
   }
