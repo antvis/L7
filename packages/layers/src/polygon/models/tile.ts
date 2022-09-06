@@ -1,23 +1,28 @@
 import { IModel } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 
 import polygon_tile_frag from '../shaders/tile/polygon_tile_frag.glsl';
 import polygon_tile_vert from '../shaders/tile/polygon_tile_vert.glsl';
+import polygon_tile_map_frag from '../shaders/tile/polygon_tile_map_frag.glsl';
+import polygon_tile_map_vert from '../shaders/tile/polygon_tile_map_vert.glsl';
 export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 1,
       // tileOrigin,
       // coord = 'lnglat',
+      usage,
+      color = '#fff'
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
    
     return {
       // u_tileOrigin: tileOrigin || [0, 0],
       // u_coord: coord === 'lnglat' ? 1.0 : 0.0,
       u_opacity: opacity,
+      u_color: usage === 'basemap' ? rgb2arr(color): [0, 0, 0, 0]
     };
   }
 
@@ -29,19 +34,18 @@ export default class FillModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      usage
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    const usage = this.layer.getSource().parser.usage;
     this.layer.triangulation = polygonTriangulation;
     this.layer
       .buildLayerModel({
-        moduleName: 'polygonTile',
-        vertexShader: polygon_tile_vert,
-        fragmentShader: polygon_tile_frag,
+        moduleName: 'polygonTile' + usage,
+        vertexShader: usage === 'basemap' ? polygon_tile_map_vert : polygon_tile_vert,
+        fragmentShader: usage === 'basemap' ? polygon_tile_map_frag : polygon_tile_frag,
         triangulation: polygonTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        usage
       })
       .then((model) => {
         callbackModel([model]);

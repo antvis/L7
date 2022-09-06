@@ -71,7 +71,6 @@ export interface ILayerModelInitializationOptions {
   segmentNumber?: number;
   workerEnabled?: boolean;
   workerOptions?: IWorkerOption;
-  usage?: string;
 }
 
 export interface ILayerModel {
@@ -151,7 +150,9 @@ export interface ISubLayerInitOptions {
 
   opacity: number;
   color?: IScaleValue;
+  basemapColor?: string;
   size?: IScaleValue;
+  basemapSize?: number;
 
   // raster tiff
   domain?: [number, number];

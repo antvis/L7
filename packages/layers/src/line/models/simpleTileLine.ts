@@ -3,20 +3,26 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { TileSimpleLineTriangulation } from '../../core/triangulation';
 import simple_line_frag from '../shaders/tile/simpleline_frag.glsl';
 import simple_line_vert from '../shaders/tile/simpleline_vert.glsl';
-export default class SimpleLineModel extends BaseModel {
+
+import simple_line_map_frag from '../shaders/tile/simpleline_map_frag.glsl';
+import simple_line_map_vert from '../shaders/tile/simpleline_map_vert.glsl';
+export default class SimpleTileLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
+      usage,
+      color = '#fff'
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_color: usage === 'basemap' ? rgb2arr(color): [0, 0, 0, 0]
     };
   }
 
@@ -31,19 +37,18 @@ export default class SimpleLineModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
+      usage
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    const usage = this.layer.getSource().parser.usage;
     this.layer
       .buildLayerModel({
-        moduleName: 'lineTileSimpleNormal',
-        vertexShader: simple_line_vert,
-        fragmentShader: simple_line_frag,
+        moduleName: 'lineTileSimpleNormal_' + usage,
+        vertexShader: usage === 'basemap' ? simple_line_map_vert : simple_line_vert,
+        fragmentShader: usage === 'basemap' ? simple_line_map_frag : simple_line_frag,
         triangulation: TileSimpleLineTriangulation,
         primitive: gl.LINES,
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-        usage
       })
       .then((model) => {
         callbackModel([model]);
@@ -53,6 +58,7 @@ export default class SimpleLineModel extends BaseModel {
         callbackModel([]);
       });
   }
+
   protected registerBuiltinAttributes() {
   }
 }

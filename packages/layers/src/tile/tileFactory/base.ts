@@ -131,7 +131,7 @@ export default class TileFactory implements ITileFactory {
       vectorTileLayer,
       source,
     } = tileLayerOption;
-    const { mask, color, layerType, size, shape } = initOptions;
+    const { mask, color, layerType, size, shape, usage, basemapColor, basemapSize } = initOptions;
     const FactoryTileLayer = L7Layer ? L7Layer : VectorLayer;
     const layer = new FactoryTileLayer({
       visible: tile.isVisible,
@@ -157,8 +157,15 @@ export default class TileFactory implements ITileFactory {
 
     // set scale attribute field
     this.setStyleAttributeField(layer, 'shape', shape);
-    this.setStyleAttributeField(layer, 'color', color);
-    this.setStyleAttributeField(layer, 'size', size);
+    if(usage !== 'basemap') {
+      this.setStyleAttributeField(layer, 'color', color);
+      this.setStyleAttributeField(layer, 'size', size);
+    } else {
+      layer.style({
+        color: basemapColor,
+        size: basemapSize
+      })
+    }
 
     // set mask
     const layers = [layer];

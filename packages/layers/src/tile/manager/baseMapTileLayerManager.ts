@@ -16,7 +16,7 @@ import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
-export class TileLayerManager implements ITileLayerManager {
+export class BaseMapTileLayerManager implements ITileLayerManager {
   public sourceLayer: string;
   public parent: ILayer;
   public children: ILayer[];
@@ -163,20 +163,13 @@ export class TileLayerManager implements ITileLayerManager {
       pixelConstantG = 256,
       pixelConstantB = 1,
       pixelConstantRGB = 0.1,
-      
-      usage,
-    } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
-    const colorValue = this.tileConfigManager.getAttributeScale(
-      this.parent,
-      'color',
-    );
-    const sizeValue = this.tileConfigManager.getAttributeScale(
-      this.parent,
-      'size',
-    );
+      usage,
+      color,
+      size
+    } = this.parent.getLayerConfig() as ISubLayerInitOptions;
+   
     const source = this.parent.getSource();
-    const { coords } = source?.data?.tilesetOptions || {};
     const parentParserType = source.getParserType();
 
     const layerShape = getLayerShape(this.parent.type, this.parent);
@@ -195,10 +188,9 @@ export class TileLayerManager implements ITileLayerManager {
       zIndex,
       opacity,
       sourceLayer: this.getSourceLayer(parentParserType, sourceLayer),
-      coords,
       featureId,
-      color: colorValue,
-      size: sizeValue,
+      basemapColor: color as unknown as string,
+      basemapSize: size as unknown as number,
       mask: getMaskValue(this.parent.type, mask),
       stroke,
       strokeWidth,

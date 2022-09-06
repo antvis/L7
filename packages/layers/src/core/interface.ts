@@ -41,6 +41,10 @@ export interface IBaseLayerStyleOptions {
   // 蒙层
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+
+  usage?: string;
+  color?: string;
+  size?: number;
 }
 
 export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {

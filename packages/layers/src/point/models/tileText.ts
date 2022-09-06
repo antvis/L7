@@ -9,6 +9,7 @@ import {
 import {
   calculateCentroid,
   padBounds,
+  rgb2arr
 } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -19,8 +20,10 @@ import {
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
-import textFrag from '../shaders/tile/text_frag.glsl';
-import textVert from '../shaders/tile/text_vert.glsl';
+import text_frag from '../shaders/tile/text_frag.glsl';
+import text_vert from '../shaders/tile/text_vert.glsl';
+import text_map_frag from '../shaders/tile/text_map_frag.glsl';
+import text_map_vert from '../shaders/tile/text_map_vert.glsl';
 
 export function TextTriangulation(feature: IEncodeFeature) {
   // @ts-ignore
@@ -79,7 +82,6 @@ export function TextTriangulation(feature: IEncodeFeature) {
     size: 7,
   };
 }
-
 export default class TextModel extends BaseModel {
   public glyphInfo: IEncodeFeature[];
   public glyphInfoMap: {
@@ -104,6 +106,9 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
+      usage,
+      color = '#fff',
+      size = 1
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
@@ -124,6 +129,9 @@ export default class TextModel extends BaseModel {
       u_halo_blur: halo,
       u_gamma_scale: gamma,
       u_sdf_map_size: [canvas.width, canvas.height],
+
+      u_color: usage === 'basemap' ? rgb2arr(color): [0, 0, 0, 0],
+      u_size: usage === 'basemap' ? size : 1
     };
   }
 
@@ -142,16 +150,15 @@ export default class TextModel extends BaseModel {
 
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
     this.mapping();
-    const usage = this.layer.getSource().parser.usage;
+    const { usage } = this.layer.getLayerConfig();
     this.layer
       .buildLayerModel({
-        moduleName: 'pointTileText',
-        vertexShader: textVert,
-        fragmentShader: textFrag,
+        moduleName: 'pointTileText' + usage,
+        vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
+        fragmentShader: usage === 'basemap' ? text_map_frag : text_frag,
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
-        usage
       })
       .then((model) => {
         callbackModel([model]);
@@ -166,6 +173,7 @@ export default class TextModel extends BaseModel {
     this.texture?.destroy();
   }
   protected registerBuiltinAttributes() {
+    const { usage } = this.layer.getLayerConfig();
     this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
       type: AttributeType.Attribute,
@@ -188,32 +196,32 @@ export default class TextModel extends BaseModel {
       },
     });
 
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
+    if(usage !== 'basemap') {
+      this.styleAttributeService.registerStyleAttribute({
+        name: 'size',
+        type: AttributeType.Attribute,
+        descriptor: {
+          name: 'a_Size',
+          buffer: {
+            // give the WebGL driver a hint that this buffer may change
+            usage: gl.DYNAMIC_DRAW,
+            data: [],
+            type: gl.FLOAT,
+          },
+          size: 1,
+          update: (
+            feature: IEncodeFeature,
+            featureIdx: number,
+            vertex: number[],
+            attributeIdx: number,
+          ) => {
+            const { size = 12 } = feature;
+            return Array.isArray(size) ? [size[0]] : [size as number];
+          },
         },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { size = 12 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
-    // point layer size;
+      });
+    }
+    
     this.styleAttributeService.registerStyleAttribute({
       name: 'textUv',
       type: AttributeType.Attribute,
@@ -397,17 +405,17 @@ export default class TextModel extends BaseModel {
   }
 
   private reBuildModel() {
-    const usage = this.layer.getSource().parser.usage;
+    const { usage } = this.layer.getLayerConfig();
+    
     this.filterGlyphs();
     this.layer
       .buildLayerModel({
-        moduleName: 'pointTileText',
-        vertexShader: textVert,
-        fragmentShader: textFrag,
+        moduleName: 'pointTileText' + usage,
+        vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
+        fragmentShader: usage === 'basemap' ? text_map_frag : text_frag,
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
-        usage
       })
       .then((model) => {
         this.layer.models = [model];
