@@ -98,15 +98,14 @@ export default class ReglModel implements IModel {
 
     this.drawCommand = reGl(drawParams);
 
-    if(pick) {
-      console.log('pick')
+    if (pick) {
       const pickDrawParams = cloneDeep(drawParams);
 
       pickDrawParams.blend = {
         ...pickDrawParams.blend,
         enable: false,
       };
-  
+
       this.drawPickCommand = reGl(pickDrawParams);
     }
     this.drawParams = drawParams;
@@ -124,13 +123,13 @@ export default class ReglModel implements IModel {
     this.drawParams.elements = (elements as ReglElements).get();
 
     this.drawCommand = this.reGl(this.drawParams);
-    if(this.options.pick) {
+    if (this.options.pick) {
       const pickDrawParams = cloneDeep(this.drawParams);
       pickDrawParams.blend = {
         ...pickDrawParams.blend,
         enable: false,
       };
-  
+
       this.drawPickCommand = this.reGl(pickDrawParams);
     }
   }
@@ -143,14 +142,14 @@ export default class ReglModel implements IModel {
     this.drawParams.attributes = reglAttributes;
     this.drawCommand = this.reGl(this.drawParams);
 
-    if(this.options.pick) {
+    if (this.options.pick) {
       const pickDrawParams = cloneDeep(this.drawParams);
 
       pickDrawParams.blend = {
         ...pickDrawParams.blend,
         enable: false,
       };
-  
+
       this.drawPickCommand = this.reGl(pickDrawParams);
     }
   }
