@@ -42,8 +42,11 @@ export default class VectorLayer extends BaseLayer<
     this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
     this.layerType = this.rawConfig.layerType;
 
-    this.iconService = this.container.get<IIconService>(TYPES.IIconService);
-    this.fontService = this.container.get<IFontService>(TYPES.IFontService);
+    if(this.type === 'PointLayer') {
+      // Tip: iconService 和 fontService 只有在矢量点图层中才会被使用
+      this.iconService = this.container.get<IIconService>(TYPES.IIconService);
+      this.fontService = this.container.get<IFontService>(TYPES.IFontService);
+    }
 
     this.rendererService = this.container.get<IRendererService>(
       TYPES.IRendererService,
