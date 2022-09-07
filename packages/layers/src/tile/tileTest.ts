@@ -20,7 +20,6 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
     this.layerModel.initModels((models) => {
       this.models = models;
       this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
     });
   }
 }
