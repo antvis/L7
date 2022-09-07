@@ -58,7 +58,7 @@ export default () => {
         .source(source)
         .shape('simple')
         .color('#696969');
-     
+
       scene.addLayer(admin);
 
       const road = new LineLayer({
@@ -67,18 +67,18 @@ export default () => {
       })
         .source(source)
         .shape('simple')
-        .color('#FFA500')
+        .color('#FFA500');
       scene.addLayer(road);
 
       const poiLabel = new PointLayer({
         sourceLayer: 'poi_label',
         usage: 'basemap',
-        zIndex: 1
+        zIndex: 1,
       })
         .source(source)
         .shape('name', 'text')
         .color('#000')
-        .size(10)
+        .size(10);
       scene.addLayer(poiLabel);
 
       // const landuse_overlay = new PolygonLayer({
@@ -142,7 +142,7 @@ export default () => {
       const marineLabel = new PointLayer({
         sourceColor: 'marine_label',
         zIndex: 1,
-        usage: 'basemap'
+        usage: 'basemap',
       })
         .source(source)
         .shape('name', 'text')

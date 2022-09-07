@@ -488,11 +488,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    if(this.rawConfig.usage === 'basemap') {
+    if (this.rawConfig.usage === 'basemap') {
       this.style({
         // @ts-ignore
-        color: field
-      })
+        color: field,
+      });
       return this;
     }
 
@@ -524,11 +524,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    if(this.rawConfig.usage === 'basemap') {
+    if (this.rawConfig.usage === 'basemap') {
       // @ts-ignore
       this.style({
-        size: field
-      })
+        size: field,
+      });
       return this;
     }
     this.updateStyleAttribute('size', field, values, updateOptions);
