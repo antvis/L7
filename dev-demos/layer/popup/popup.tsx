@@ -1,4 +1,11 @@
-import { GaodeMap, PointLayer, Popup, Scene, Fullscreen } from '@antv/l7';
+import {
+  GaodeMap,
+  PointLayer,
+  Popup,
+  Scene,
+  Fullscreen,
+  // anchorType,
+} from '@antv/l7';
 import { featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
@@ -23,15 +30,23 @@ const Demo: FunctionComponent = () => {
       const newPopup = new Popup({
         closeOnClick: false,
         closeOnEsc: true,
-        offsets: [0, 10],
+        // offsets: [0, 10],
+        // followCursor: true,
+        // anchor: anchorType['BOTTOM-LEFT'],
+        lngLat: {
+          lng: 120.104697,
+          lat: 30.260704,
+        },
+        html: '123456',
       });
-      newPopup.setLnglat({
-        lng: 120.104697,
-        lat: 30.260704,
-      });
-      const dom = document.createElement('div');
-      dom.innerHTML = 'fadslifjsalkfjasdk';
-      newPopup.setHTML(dom);
+      // newPopup.setLnglat({
+      //   lng: 120.104697,
+      //   lat: 30.260704,
+      // });
+      // const dom = document.createElement('div');
+      // dom.innerHTML = 'fadslifjsalkfjasdk';
+      // // newPopup.setHTML(dom);
+      // newPopup.setText('fdksajfl');
       scene.addPopup(newPopup);
 
       const pointLayer = new PointLayer();

@@ -11,32 +11,20 @@ import {
   anchorTranslate,
   anchorType,
   applyAnchorClass,
-  bindAll,
   DOM,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { debounce } from 'lodash';
 
-export default class Popup extends EventEmitter implements IPopup {
-  /**
-   * 当前是否互斥气泡
-   */
-  public get autoClose() {
-    return this.popupOption.autoClose;
-  }
-
-  /**
-   * 当前 Popup 是否为销毁
-   */
-  public get isDestroy() {
-    return !this.mapsService;
-  }
+export default class Popup<O extends IPopupOption = IPopupOption>
+  extends EventEmitter
+  implements IPopup {
   /**
    * 配置
    * @protected
    */
-  protected popupOption: IPopupOption;
+  protected popupOption: O;
   protected mapsService: IMapService;
   protected sceneService: ISceneService;
   protected scene: Container;
@@ -54,12 +42,6 @@ export default class Popup extends EventEmitter implements IPopup {
   protected closeButton?: HTMLElement;
 
   /**
-   * 给 MapService 挂在 click 事件的定时器
-   * @protected
-   */
-  protected timeoutInstance?: number;
-
-  /**
    * Popup 的总容器 DOM，包含 content 和 tip
    * @protected
    */
@@ -70,6 +52,12 @@ export default class Popup extends EventEmitter implements IPopup {
    * @protected
    */
   protected content: HTMLElement;
+
+  /**
+   * popup 内容 DOM
+   * @protected
+   */
+  protected contentHTML: ChildNode | DocumentFragment;
 
   /**
    * 气泡箭头对应的 DOM
@@ -87,7 +75,7 @@ export default class Popup extends EventEmitter implements IPopup {
     (e: MouseEvent) => {
       const container = this.mapsService.getMapContainer();
       const { left = 0, top = 0 } = container?.getBoundingClientRect() ?? {};
-      this.setPopupOffset(e.clientX - left, e.clientY - top);
+      this.setPopupPosition(e.clientX - left, e.clientY - top);
     },
     16,
     {
@@ -95,13 +83,16 @@ export default class Popup extends EventEmitter implements IPopup {
     },
   );
 
-  constructor(cfg?: Partial<IPopupOption>) {
+  constructor(cfg?: Partial<O>) {
     super();
     this.popupOption = {
       ...this.getDefault(),
       ...cfg,
     };
-    bindAll(['update', 'onClickClose', 'remove'], this);
+    const { lngLat } = this.popupOption;
+    if (lngLat) {
+      this.lngLat = lngLat;
+    }
   }
 
   public getIsShow() {
@@ -116,31 +107,23 @@ export default class Popup extends EventEmitter implements IPopup {
     this.scene = scene;
     this.update();
 
-    // 事件挂载
-    if (this.popupOption.closeOnClick) {
-      this.timeoutInstance = (setTimeout(() => {
-        this.bindMapClickEvent();
-        this.timeoutInstance = undefined;
-      }, 30) as unknown) as number;
-    }
+    this.updateCloseOnClick();
+    this.updateCloseOnEsc();
+    this.updateFollowCursor();
 
-    if (this.popupOption.closeOnEsc) {
-      this.bindEscEvent();
+    const { html, text } = this.popupOption;
+    if (html) {
+      this.setHTML(html);
+    } else if (text) {
+      this.setText(text);
     }
-
-    if (this.popupOption.followCursor) {
-      this.mapsService
-        .getContainer()
-        ?.addEventListener('mousemove', this.onMouseMove);
-    }
-
     this.emit('open');
     return this;
   }
 
   // 移除popup
-  public remove() {
-    if (this.isDestroy) {
+  public remove = () => {
+    if (!this.isOpen()) {
       return;
     }
 
@@ -157,39 +140,58 @@ export default class Popup extends EventEmitter implements IPopup {
       // TODO: mapbox AMap 事件同步
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
-      this.mapsService.off('click', this.onClickClose);
-      window.removeEventListener('keypress', this.onKeyDown);
-      this.mapsService
-        .getContainer()
-        ?.removeEventListener('mousemove', this.onMouseMove);
+      this.updateCloseOnClick(true);
+      this.updateCloseOnEsc(true);
+      this.updateFollowCursor(true);
       // @ts-ignore
       delete this.mapsService;
     }
-    if (this.timeoutInstance) {
-      clearTimeout(this.timeoutInstance);
-    }
     this.emit('close');
+    return this;
+  };
+
+  /**
+   * 获取 option 配置
+   */
+  public getOption() {
+    return this.popupOption;
+  }
+
+  // public setOption(option: Partial<O>) {
+  //   if (this.checkUpdateOption(option, ['closeOnEsc'])) {
+  //     this.updateCloseOnEsc();
+  //   }
+  //   if (this.checkUpdateOption(option, ['closeOnClick'])) {
+  //     this.updateCloseOnClick();
+  //   }
+  //   if (this.checkUpdateOption(option, ['followCursor'])) {
+  //     this.updateFollowCursor();
+  //   }
+  //   return this;
+  // }
+
+  public open() {
+    this.addTo(this.scene);
     return this;
   }
 
-  public open(): void {
-    this.addTo(this.scene);
-  }
-
-  public close(): void {
+  public close() {
     this.remove();
+    return this;
   }
 
-  public show(): void {
+  public show() {
     DOM.removeClass(this.container, 'l7-popup-hide');
     this.isShow = true;
     this.emit('show');
+    return this;
   }
 
-  public hide(): void {
+  public hide() {
     DOM.addClass(this.container, 'l7-popup-hide');
     this.isShow = false;
     this.emit('hide');
+    return this;
   }
 
   /**
@@ -214,8 +216,28 @@ export default class Popup extends EventEmitter implements IPopup {
       }
       frag.appendChild(child);
     }
-
+    this.popupOption.html = html;
     return this.setDOMContent(frag);
+  }
+
+  /**
+   * 设置 Popup 展示文本
+   * @param text
+   */
+  public setText(text: string) {
+    this.popupOption.text = text;
+    return this.setDOMContent(window.document.createTextNode(text));
+  }
+
+  /**
+   * 将地图自动平移到气泡位置
+   */
+  public panToPopup() {
+    const { lng, lat } = this.lngLat;
+    if (this.popupOption.autoPan) {
+      this.mapsService.panTo([lng, lat]);
+    }
+    return this;
   }
 
   /**
@@ -230,7 +252,6 @@ export default class Popup extends EventEmitter implements IPopup {
         lat: lngLat[1],
       };
     }
-    const { lng, lat } = this.lngLat;
     if (this.mapsService) {
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
@@ -239,9 +260,7 @@ export default class Popup extends EventEmitter implements IPopup {
     }
     this.update();
     setTimeout(() => {
-      if (this.popupOption.autoPan) {
-        this.mapsService.panTo([lng, lat]);
-      }
+      this.panToPopup();
     }, 0);
     return this;
   }
@@ -251,14 +270,6 @@ export default class Popup extends EventEmitter implements IPopup {
    */
   public getLnglat(): ILngLat {
     return this.lngLat;
-  }
-
-  /**
-   * 设置 Popup 展示文本
-   * @param text
-   */
-  public setText(text: string) {
-    return this.setDOMContent(window.document.createTextNode(text));
   }
 
   /**
@@ -275,11 +286,28 @@ export default class Popup extends EventEmitter implements IPopup {
     return !!this.mapsService;
   }
 
+  protected getDefault(): O {
+    // tslint:disable-next-line:no-object-literal-type-assertion
+    return {
+      closeButton: true,
+      closeOnClick: true,
+      maxWidth: '240px',
+      offsets: [0, 0],
+      anchor: anchorType.BOTTOM,
+      stopPropagation: true,
+      autoPan: false,
+      autoClose: true,
+      closeOnEsc: false,
+      followCursor: false,
+    } as O;
+  }
+
   /**
    * 设置 Popup 内容 HTML
    * @param htmlNode
    */
   protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
+    this.contentHTML = htmlNode;
     this.createContent();
     this.content.appendChild(htmlNode);
     this.update();
@@ -290,16 +318,25 @@ export default class Popup extends EventEmitter implements IPopup {
    * 绑定地图点击事件触发销毁 Popup
    * @protected
    */
-  protected bindMapClickEvent() {
-    this.mapsService.off('click', this.onClickClose);
-    if (!this.popupOption.closeOnClick) {
-      this.mapsService.on('click', this.onClickClose);
+  protected updateCloseOnClick(onlyClear?: boolean) {
+    this.mapsService.off('click', this.onCloseButtonClick);
+    if (!this.popupOption.closeOnClick && !onlyClear) {
+      this.mapsService.on('click', this.onCloseButtonClick);
     }
   }
 
-  protected bindEscEvent() {
-    if (this.popupOption.closeOnEsc) {
+  protected updateCloseOnEsc(onlyClear?: boolean) {
+    window.removeEventListener('keydown', this.onKeyDown);
+    if (this.popupOption.closeOnEsc && !onlyClear) {
       window.addEventListener('keydown', this.onKeyDown);
+    }
+  }
+
+  protected updateFollowCursor(onlyClear?: boolean) {
+    const container = this.mapsService.getContainer()!;
+    container.removeEventListener('mousemove', this.onMouseMove);
+    if (this.popupOption.followCursor && !onlyClear) {
+      container.addEventListener('mousemove', this.onMouseMove);
     }
   }
 
@@ -330,37 +367,28 @@ export default class Popup extends EventEmitter implements IPopup {
 
       // this.closeButton.type = 'button';
       closeButton.setAttribute('aria-label', 'Close popup');
-      closeButton.addEventListener('click', this.onClickClose);
+      closeButton.addEventListener('click', this.onCloseButtonClick);
 
       this.closeButton = closeButton;
     }
   }
 
-  protected getDefault() {
-    return {
-      closeButton: true,
-      closeOnClick: true,
-      maxWidth: '240px',
-      offsets: [0, 0],
-      anchor: anchorType.BOTTOM,
-      stopPropagation: true,
-      autoPan: false,
-      autoClose: true,
-      closeOnEsc: false,
-      followCursor: false,
-    };
-  }
-
-  protected onClickClose(e: Event) {
+  protected onCloseButtonClick = (e: Event) => {
     if (e.stopPropagation) {
       e.stopPropagation();
     }
     this.remove();
-  }
+  };
 
-  protected update() {
+  protected update = () => {
     const hasPosition = !!this.lngLat;
-    const { className, style, maxWidth, anchor } = this.popupOption;
+    const {
+      className,
+      style,
+      maxWidth,
+      anchor,
+      stopPropagation,
+    } = this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }
@@ -381,7 +409,6 @@ export default class Popup extends EventEmitter implements IPopup {
       this.container.appendChild(this.content);
 
       // 高德地图需要阻止事件冒泡 // 测试mapbox 地图不需要添加
-      const { stopPropagation } = this.popupOption;
       if (stopPropagation) {
         ['mousemove', 'mousedown', 'mouseup', 'click', 'dblclick'].forEach(
           (type) => {
@@ -403,24 +430,40 @@ export default class Popup extends EventEmitter implements IPopup {
     this.updateLngLatPosition();
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
     applyAnchorClass(this.container, anchor, 'popup');
-  }
+  };
 
   /**
    * 将经纬度转换成对应的像素偏移位置
    * @protected
    */
   protected updateLngLatPosition() {
-    if (!this.mapsService && this.popupOption.followCursor) {
+    if (!this.mapsService || this.popupOption.followCursor) {
       return;
     }
     const { lng, lat } = this.lngLat;
     const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
-    this.setPopupOffset(x, y);
+    this.setPopupPosition(x, y);
   }
 
-  protected setPopupOffset(left: number, top: number) {
+  /**
+   * 设置 Popup 相对于地图容器的 Position
+   * @param left
+   * @param top
+   * @protected
+   */
+  protected setPopupPosition(left: number, top: number) {
     const { offsets } = this.popupOption;
     this.container.style.left = left + offsets[0] + 'px';
     this.container.style.top = top - offsets[1] + 'px';
+  }
+
+  /**
+   * 检查当前传入 option 是否包含 keys 字段
+   * @param option
+   * @param keys
+   * @protected
+   */
+  protected checkUpdateOption(option: Partial<O>, keys: Array<keyof O>) {
+    return keys.some((key) => key in option);
   }
 }
