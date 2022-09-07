@@ -101,7 +101,7 @@ export default () => {
 
       const tunnel = new LineLayer({
         sourceLayer: 'tunnel',
-         usage: 'basemap',
+        usage: 'basemap',
       })
         .source(source)
         .shape('simple')
@@ -153,7 +153,7 @@ export default () => {
       const countryLabel = new PointLayer({
         sourceLayer: 'country_label',
         zIndex: 2,
-        usage: 'basemap'
+        usage: 'basemap',
       })
         .source(source)
         .shape('name', 'text')
