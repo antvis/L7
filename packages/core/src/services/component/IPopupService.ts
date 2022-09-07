@@ -98,7 +98,8 @@ export interface IPopup extends EventEmitter {
   isOpen(): boolean;
   open(): this;
   close(): this;
-  getOption(): IPopupOption;
+  getOptions(): IPopupOption;
+  setOptions(option: Partial<IPopupOption>): this;
 }
 
 export interface IPopupService {

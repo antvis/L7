@@ -36,11 +36,10 @@ export default class PopupService implements IPopupService {
   }
 
   public addPopup(popup: IPopup) {
-    if (popup) {
+    if (popup && popup.getOptions().autoClose) {
       [...this.popups, ...this.unAddPopups].forEach((otherPopup) => {
-        const { autoClose } = otherPopup.getOption();
-        if (autoClose) {
-          this.removePopup(popup);
+        if (otherPopup.getOptions().autoClose) {
+          this.removePopup(otherPopup);
         }
       });
     }

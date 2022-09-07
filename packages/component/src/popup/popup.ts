@@ -1,4 +1,3 @@
-import { createL7Icon } from '@antv/l7-component';
 import {
   ILngLat,
   IMapService,
@@ -15,7 +14,7 @@ import {
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { debounce } from 'lodash';
+import { createL7Icon } from '../utils/icon';
 
 export default class Popup<O extends IPopupOption = IPopupOption>
   extends EventEmitter
@@ -54,12 +53,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected content: HTMLElement;
 
   /**
-   * popup 内容 DOM
-   * @protected
-   */
-  protected contentHTML: ChildNode | DocumentFragment;
-
-  /**
    * 气泡箭头对应的 DOM
    * @protected
    */
@@ -70,18 +63,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @protected
    */
   protected isShow: boolean = true;
-
-  protected onMouseMove = debounce(
-    (e: MouseEvent) => {
-      const container = this.mapsService.getMapContainer();
-      const { left = 0, top = 0 } = container?.getBoundingClientRect() ?? {};
-      this.setPopupPosition(e.clientX - left, e.clientY - top);
-    },
-    16,
-    {
-      maxWait: 16,
-    },
-  );
 
   constructor(cfg?: Partial<O>) {
     super();
@@ -153,22 +134,58 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   /**
    * 获取 option 配置
    */
-  public getOption() {
+  public getOptions() {
     return this.popupOption;
   }
 
-  // public setOption(option: Partial<O>) {
-  //   if (this.checkUpdateOption(option, ['closeOnEsc'])) {
-  //     this.updateCloseOnEsc();
-  //   }
-  //   if (this.checkUpdateOption(option, ['closeOnClick'])) {
-  //     this.updateCloseOnClick();
-  //   }
-  //   if (this.checkUpdateOption(option, ['followCursor'])) {
-  //     this.updateFollowCursor();
-  //   }
-  //   return this;
-  // }
+  public setOptions(option: Partial<O>) {
+    this.popupOption = {
+      ...this.popupOption,
+      ...option,
+    };
+    if (
+      this.checkUpdateOption(option, [
+        'closeButton',
+        'closeButtonOffsets',
+        'maxWidth',
+        'anchor',
+        'stopPropagation',
+        'className',
+        'style',
+        'lngLat',
+        'offsets',
+      ])
+    ) {
+      if (this.container) {
+        DOM.remove(this.container);
+        // @ts-ignore
+        this.container = undefined;
+      }
+      if (this.popupOption.html) {
+        this.setHTML(this.popupOption.html);
+      } else if (this.popupOption.text) {
+        this.setText(this.popupOption.text);
+      }
+    }
+    if (this.checkUpdateOption(option, ['closeOnEsc'])) {
+      this.updateCloseOnEsc();
+    }
+    if (this.checkUpdateOption(option, ['closeOnClick'])) {
+      this.updateCloseOnClick();
+    }
+    if (this.checkUpdateOption(option, ['followCursor'])) {
+      this.updateFollowCursor();
+    }
+    if (this.checkUpdateOption(option, ['html']) && option.html) {
+      this.setHTML(option.html);
+    } else if (this.checkUpdateOption(option, ['text']) && option.text) {
+      this.setText(option.text);
+    }
+    if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
+      this.setLnglat(option.lngLat);
+    }
+    return this;
+  }
 
   public open() {
     this.addTo(this.scene);
@@ -259,9 +276,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.mapsService.on('viewchange', this.update);
     }
     this.update();
-    setTimeout(() => {
-      this.panToPopup();
-    }, 0);
+    if (this.popupOption.autoPan) {
+      setTimeout(() => {
+        this.panToPopup();
+      }, 0);
+    }
     return this;
   }
 
@@ -286,6 +305,25 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     return !!this.mapsService;
   }
 
+  protected onMouseMove = (e: MouseEvent) => {
+    const container = this.mapsService.getMapContainer();
+    const { left = 0, top = 0 } = container?.getBoundingClientRect() ?? {};
+    this.setPopupPosition(e.clientX - left, e.clientY - top);
+  };
+
+  /**
+   * 将经纬度转换成对应的像素偏移位置
+   * @protected
+   */
+  protected updateLngLatPosition = () => {
+    if (!this.mapsService || this.popupOption.followCursor) {
+      return;
+    }
+    const { lng, lat } = this.lngLat;
+    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+    this.setPopupPosition(x, y);
+  };
+
   protected getDefault(): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
@@ -307,7 +345,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param htmlNode
    */
   protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
-    this.contentHTML = htmlNode;
     this.createContent();
     this.content.appendChild(htmlNode);
     this.update();
@@ -320,7 +357,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    */
   protected updateCloseOnClick(onlyClear?: boolean) {
     this.mapsService.off('click', this.onCloseButtonClick);
-    if (!this.popupOption.closeOnClick && !onlyClear) {
+    if (this.popupOption.closeOnClick && !onlyClear) {
       this.mapsService.on('click', this.onCloseButtonClick);
     }
   }
@@ -370,6 +407,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       closeButton.addEventListener('click', this.onCloseButtonClick);
 
       this.closeButton = closeButton;
+    } else {
+      this.closeButton = undefined;
     }
   }
 
@@ -431,19 +470,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
     applyAnchorClass(this.container, anchor, 'popup');
   };
-
-  /**
-   * 将经纬度转换成对应的像素偏移位置
-   * @protected
-   */
-  protected updateLngLatPosition() {
-    if (!this.mapsService || this.popupOption.followCursor) {
-      return;
-    }
-    const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
-    this.setPopupPosition(x, y);
-  }
 
   /**
    * 设置 Popup 相对于地图容器的 Position
