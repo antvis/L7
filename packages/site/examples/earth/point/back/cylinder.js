@@ -14,7 +14,7 @@ const earthlayer = new EarthLayer()
       }
     }
   )
-  .shape('base')
+  .shape('fill')
   .style({
     opacity: 1.0,
     radius: 40,
@@ -40,6 +40,7 @@ const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere')
 
 scene.on('loaded', () => {
   scene.addLayer(earthlayer);
+
   fetch('https://gw.alipayobjects.com/os/bmw-prod/efef6c2b-2922-4c03-b9e0-d3743f68eaf2.json')
     .then(res => res.json())
     .then(data => {
@@ -53,9 +54,9 @@ scene.on('loaded', () => {
             }
           }
         )
-        .shape('circle')
+        .shape('cylinder')
         .color('#f00')
-        .size(10)
+        .size('', () => [ 1, 1, 10 ])
         .active(true);
       scene.addLayer(pointlayer);
     });
@@ -65,3 +66,9 @@ scene.on('loaded', () => {
 
   earthlayer.setEarthTime(4.0);
 });
+
+// {
+//   "filename": "cylinder.js",
+//   "title": "圆柱图层",
+//   "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*v26ESpAZd1AAAAAAAAAAAAAAARQnAQ"
+// }
